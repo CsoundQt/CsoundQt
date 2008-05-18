@@ -25,6 +25,8 @@
 #include <QMainWindow>
 #include <QCloseEvent>
 
+#include <csound/CppSound.hpp>
+
 #include "types.h"
 
 class QAction;
@@ -32,6 +34,7 @@ class QMenu;
 class QTextEdit;
 
 class DockHelp;
+class Console;
 class OpEntryParser;
 class Options;
 class Highlighter;
@@ -44,6 +47,10 @@ class qutecsound:public QMainWindow
   public:
     qutecsound(QString fileName);
     ~qutecsound();
+    static void messageCallback_NoThread(CSOUND *csound,
+                                         int attr,
+                                         const char *fmt,
+                                         va_list args);
 
   public slots:
     void changeFont();
@@ -91,9 +98,10 @@ class qutecsound:public QMainWindow
     QTextEdit *textEdit;
     OpEntryParser *opcodeTree;
     Options *m_options;
+    Console *m_console;
     Highlighter *m_highlighter;
-
     DockHelp *helpPanel;
+
     QMenu *fileMenu;
     QMenu *recentMenu;
     QMenu *editMenu;
@@ -119,6 +127,7 @@ class qutecsound:public QMainWindow
     QAction *playAct;
     QAction *renderAct;
     QAction *showHelpAct;
+    QAction *showConsole;
     QAction *setHelpEntryAct;
     QAction *aboutAct;
     QAction *aboutQtAct;

@@ -311,6 +311,9 @@
        </item>
        <item>
         <widget class="QCheckBox" name="FilePlayFinishedCheckBox" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
          <property name="text" >
           <string>Play file when finished</string>
          </property>

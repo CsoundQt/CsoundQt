@@ -27,6 +27,7 @@
 #include <QTextCursor>
 
 #include "qutecsound.h"
+#include "console.h"
 #include "dockhelp.h"
 #include "opentryparser.h"
 #include "options.h"
@@ -34,7 +35,7 @@
 #include "configdialog.h"
 #include "configlists.h"
 
-#include <csound/CppSound.hpp>
+
 
 #include <string>
 
@@ -55,6 +56,9 @@ qutecsound::qutecsound(QString fileName)
 
   setCentralWidget(textEdit);
 
+  m_console = new Console(this);
+//   m_console->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+  addDockWidget(Qt::RightDockWidgetArea, m_console);
   helpPanel = new DockHelp(this);
   helpPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
   addDockWidget(Qt::RightDockWidgetArea, helpPanel);
@@ -95,6 +99,17 @@ qutecsound::qutecsound(QString fileName)
 qutecsound::~qutecsound()
 {
 
+}
+
+void qutecsound::messageCallback_NoThread(CSOUND *csound,
+                                          int attr,
+                                          const char *fmt,
+                                          va_list args)
+{
+  Console *console = (Console *) csoundGetHostData(csound);
+  QString msg;
+  msg = msg.vsprintf(fmt, args);
+  console->appendMessage(msg);
 }
 
 void qutecsound::changeFont()
@@ -244,10 +259,9 @@ void qutecsound::play(bool realtime)
     for (int index=0; index< argc; index++) {
       fprintf(stderr, "%s ",argv[index]);
     }
-    qDebug("");
-
-//     csound.setCSD(csdText.toStdString());
-//     csound.exportForPerformance();
+    qDebug("\n--------------------------------------");
+    csound.SetMessageCallback(&qutecsound::messageCallback_NoThread);
+    csound.SetHostData((void *)m_console);
     csound.compile(argc, argv);
     if (!csound.getIsCompiled()) {
       qDebug("Csound compile failed!");
@@ -329,10 +343,9 @@ void qutecsound::setHelpEntry()
 
 void qutecsound::about()
 {
-  QMessageBox::about(this, tr("About qutecsound"),
+  QMessageBox::about(this, tr("About QuteCsound"),
                      tr("by: Andres Cabrera\n"
-                         "Based on the QScintilla example\n"
-                         "Released under the GPL V3\n"));
+                        "Released under the GPL V3\n"));
 }
 
 void qutecsound::documentWasModified()
@@ -458,6 +471,13 @@ void qutecsound::createActions()
   showHelpAct->setChecked(true);
   connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
 
+  showConsole = new QAction(tr("Show Output Console"), this);
+//   playAct->setShortcut(tr("Ctrl+Q"));
+//   playAct->setStatusTip(tr("Play"));
+  showConsole->setCheckable(true);
+  showConsole->setChecked(true);
+  connect(showConsole, SIGNAL(toggled(bool)), m_console, SLOT(setVisible(bool)));
+
   setHelpEntryAct = new QAction(tr("Show Opcode Entry"), this);
   setHelpEntryAct->setShortcut(tr("Shift+F1"));
   setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
@@ -501,6 +521,7 @@ void qutecsound::createMenus()
 
   viewMenu = menuBar()->addMenu(tr("View"));
   viewMenu->addAction(showHelpAct);
+  viewMenu->addAction(showConsole);
 
   menuBar()->addSeparator();
 
