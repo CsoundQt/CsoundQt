@@ -85,8 +85,11 @@ qutecsound::qutecsound(QString fileName)
 
   if (fileName=="")
     newFile();
-  else
+  else {
     loadFile(fileName);
+    if (m_options->autoPlay)
+      play();
+  }
 }
 
 qutecsound::~qutecsound()
@@ -96,7 +99,7 @@ qutecsound::~qutecsound()
 
 void qutecsound::changeFont()
 {
-  textEdit->document()->setDefaultFont(QFont(m_options->font, m_options->fontPointSize));
+  textEdit->document()->setDefaultFont(QFont(m_options->font, (int) m_options->fontPointSize));
 }
 
 void qutecsound::closeEvent(QCloseEvent *event)
@@ -211,23 +214,47 @@ bool qutecsound::saveAs()
 
 void qutecsound::play(bool realtime)
 {
-  if (curFile.isEmpty() || textEdit->document()->isModified())
+  if (curFile.isEmpty()) {
     if (!saveAs())
       return;
+  }
+  else if (textEdit->document()->isModified()) {
+    if (m_options->saveChanges)
+      saveFile(curFile);
+  }
 
   if (m_options->useAPI) {
-    std::string csdText = textEdit->document()->toPlainText().toStdString();
-    qDebug("%s", csdText.c_str());
+    QTemporaryFile csdFile;
+    csdFile.setFileTemplate(QString("csound-tmpXXXXXXXX.csd"));
+    if (!csdFile.open()) {
+      QMessageBox::critical(this,
+                            tr("PostQC"),
+                            tr("Error creating temporary file."),
+                            QMessageBox::Ok);
+      return;
+    }
+    QString csdText = textEdit->document()->toPlainText();
+    QString fileName = csdFile.fileName();
+    csdFile.write(csdText.toAscii());
+    csdFile.flush();
     CppSound csound;
-//     int argc = 1;
-//     char *argv[] = {"csound"};
-//     csound.initialize(argc, argv, 0);
-    csound.setCSD(csdText);
-    csound.exportForPerformance();
-    csound.compile();
-    if (csound.getIsCompiled())
-      qDebug("IsCompiled");
-    csound.perform();
+    static char *argv[33];
+    int argc = m_options->generateCmdLine(argv, fileName, realtime);
+    qDebug("Command Line:");
+    for (int index=0; index< argc; index++) {
+      fprintf(stderr, "%s ",argv[index]);
+    }
+    qDebug("");
+
+//     csound.setCSD(csdText.toStdString());
+//     csound.exportForPerformance();
+    csound.compile(argc, argv);
+    if (!csound.getIsCompiled()) {
+      qDebug("Csound compile failed!");
+      return;
+    }
+    while(csound.performKsmps(true)==0) {
+    }
 //     int hold;
 //
 //     CsoundPerformanceThread thread(csound.GetCsound());
@@ -532,7 +559,7 @@ void qutecsound::readSettings()
   QSettings settings("csound", "qutecsound");
   settings.beginGroup("GUI");
   QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
-  QSize size = settings.value("size", QSize(400, 400)).toSize();
+  QSize size = settings.value("size", QSize(600, 500)).toSize();
   resize(size);
   move(pos);
   lastUsedDir = settings.value("lastuseddir", "").toString();
@@ -567,6 +594,8 @@ void qutecsound::readSettings()
   settings.beginGroup("Editor");
   m_options->font = settings.value("font", "Courier").toString();
   m_options->fontPointSize = settings.value("fontsize", 10).toDouble();
+  m_options->autoPlay = settings.value("autoplay", false).toBool();
+  m_options->saveChanges = settings.value("savechanges", true).toBool();
   settings.endGroup();
   settings.beginGroup("Run");
   m_options->useAPI = settings.value("useAPI", false).toBool();
@@ -633,6 +662,8 @@ void qutecsound::writeSettings()
   settings.beginGroup("Editor");
   settings.setValue("font", m_options->font );
   settings.setValue("fontsize", m_options->fontPointSize);
+  settings.setValue("autoplay", m_options->autoPlay);
+  settings.setValue("savechanges", m_options->saveChanges);
   settings.endGroup();
   settings.beginGroup("Run");
   settings.setValue("useAPI", m_options->useAPI);

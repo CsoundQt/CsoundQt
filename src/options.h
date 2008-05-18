@@ -30,10 +30,13 @@ class Options{
     ~Options();
 
     QString generateCmdLineFlags(bool rt = false);
+    int generateCmdLine(char **argv, QString fileName, bool rt = false);
 
 
     QString font;
     float fontPointSize;
+    bool autoPlay;
+    bool saveChanges;
 
     bool useAPI;
 

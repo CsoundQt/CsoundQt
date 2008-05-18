@@ -66,3 +66,21 @@ QString Options::generateCmdLineFlags(bool rt)
 
   return cmdline;
 }
+
+int Options::generateCmdLine(char **argv, QString fileName, bool rt)
+{
+  QString flags = generateCmdLineFlags(rt);
+  QStringList indFlags= flags.split(" ",QString::SkipEmptyParts);
+
+  argv[0] = (char *) calloc(7, sizeof(char));
+  strcpy(argv[0], "csound");
+  argv[1] = (char *) calloc(fileName.size()+1, sizeof(char));
+  strcpy(argv[1],fileName.toStdString().c_str());
+  int index = 2;
+  foreach (QString flag, indFlags) {
+    argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
+    strcpy(argv[index],flag.toStdString().c_str());
+    index++;
+  }
+  return index;
+}

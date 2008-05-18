@@ -41,6 +41,8 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
 
   fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
   fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));
+  autoplayCheckBox->setChecked(m_options->autoPlay);
+  saveChangesCheckBox->setChecked(m_options->saveChanges);
 
   if (m_options->useAPI)
     ApiRadioButton->setChecked(true);
@@ -123,6 +125,8 @@ void ConfigDialog::accept()
 
   m_options->font = fontComboBox->currentText();
   m_options->fontPointSize = fontSizeComboBox->currentText().toDouble();
+  m_options->autoPlay = autoplayCheckBox->isChecked();
+  m_options->saveChanges = saveChangesCheckBox->isChecked();
   emit(changeFont());
 
   m_options->useAPI = ApiRadioButton->isChecked();
