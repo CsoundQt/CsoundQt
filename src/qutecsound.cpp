@@ -218,22 +218,18 @@ void qutecsound::play(bool realtime)
   if (m_options->useAPI) {
     std::string csdText = textEdit->document()->toPlainText().toStdString();
     qDebug("%s", csdText.c_str());
-    /*create CppCsound class */
     CppSound csound;
 //     int argc = 1;
 //     char *argv[] = {"csound"};
 //     csound.initialize(argc, argv, 0);
-    /* set the csd text */
     csound.setCSD(csdText);
-    /* export csd text for performance */
     csound.exportForPerformance();
-    /* compile csd text */
     csound.compile();
     if (csound.getIsCompiled())
       qDebug("IsCompiled");
-//     csound.perform();
+    csound.perform();
 //     int hold;
-    /*create performance thread */
+//
 //     CsoundPerformanceThread thread(csound.GetCsound());
 //     cout << "Press 1 to play, 2 to pause and 0 to quit\n";
 //     while(1){
