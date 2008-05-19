@@ -25,12 +25,14 @@
 
 class Console : public QDockWidget
 {
+  Q_OBJECT
   public:
     Console(QWidget * parent);
 
     ~Console();
 
     void appendMessage(QString msg);
+    void clear();
   private:
     QTextEdit *text;
 

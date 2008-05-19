@@ -58,7 +58,7 @@ qutecsound::qutecsound(QString fileName)
 
   m_console = new Console(this);
 //   m_console->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
-  addDockWidget(Qt::RightDockWidgetArea, m_console);
+  addDockWidget(Qt::BottomDockWidgetArea, m_console);
   helpPanel = new DockHelp(this);
   helpPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
   addDockWidget(Qt::RightDockWidgetArea, helpPanel);
@@ -110,6 +110,7 @@ void qutecsound::messageCallback_NoThread(CSOUND *csound,
   QString msg;
   msg = msg.vsprintf(fmt, args);
   console->appendMessage(msg);
+  console->update();
 }
 
 void qutecsound::changeFont()
@@ -239,6 +240,7 @@ void qutecsound::play(bool realtime)
   }
 
   if (m_options->useAPI) {
+    m_console->clear();
     QTemporaryFile csdFile;
     csdFile.setFileTemplate(QString("csound-tmpXXXXXXXX.csd"));
     if (!csdFile.open()) {
@@ -268,6 +270,7 @@ void qutecsound::play(bool realtime)
       return;
     }
     while(csound.performKsmps(true)==0) {
+      qApp->processEvents();
     }
 //     int hold;
 //
@@ -288,7 +291,6 @@ void qutecsound::play(bool realtime)
   }
   else {
     QString script = generateScript(realtime);
-    qDebug("%s", script.toStdString().c_str());
     QFile file(SCRIPT_NAME);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
       return;

@@ -34,5 +34,11 @@ Console::~Console()
 
 void Console::appendMessage(QString msg)
 {
-  text->append(msg);
+  text->insertPlainText(msg);
+  text->moveCursor(QTextCursor::End);
+}
+
+void Console::clear()
+{
+  text->clear();
 }
