@@ -153,13 +153,13 @@
       <autokdesu>false</autokdesu>
       <envvars/>
       <runarguments>
-        <qutecsound></qutecsound>
+        <qutecsound/>
       </runarguments>
       <cwd>
         <qutecsound>/home/andres/src/pyclic/qutecsound</qutecsound>
       </cwd>
       <debugarguments>
-        <qutecsound></qutecsound>
+        <qutecsound/>
       </debugarguments>
     </run>
     <general>
