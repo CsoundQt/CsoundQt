@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   version="1"
+   x="0.00000000"
+   y="0.00000000"
+   width="24.000000pt"
+   height="24.000000pt"
+   id="svg548"
+   sodipodi:version="0.32"
+   sodipodi:docname="stock_cdplayer-play.svg"
+   sodipodi:docbase="/home/zeus/.icons/gartoon/scalable/stock-gar"
+   inkscape:version="0.40"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <metadata
+     id="metadata13">
+    <rdf:RDF
+       id="RDF14">
+      <cc:Work
+         rdf:about=""
+         id="Work15">
+        <dc:format
+           id="format16">image/svg+xml</dc:format>
+        <dc:type
+           id="type18"
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     id="base"
+     inkscape:zoom="9.6562500"
+     inkscape:cx="16.000000"
+     inkscape:cy="3.5224357"
+     inkscape:window-width="1014"
+     inkscape:window-height="696"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:current-layer="svg548" />
+  <defs
+     id="defs550">
+    <linearGradient
+       x1="0.00000000"
+       y1="0.00000000"
+       x2="1.00000000"
+       y2="0.00000000"
+       id="linearGradient556"
+       gradientUnits="objectBoundingBox"
+       spreadMethod="pad">
+      <stop
+         style="stop-color:#ff8700;stop-opacity:1;"
+         offset="0.00000000"
+         id="stop557" />
+      <stop
+         style="stop-color:#ffff8d;stop-opacity:0;"
+         offset="1.00000000"
+         id="stop558" />
+    </linearGradient>
+    <linearGradient
+       x1="0.00000000"
+       y1="0.00000000"
+       x2="1.00000000"
+       y2="0.00000000"
+       id="linearGradient559"
+       xlink:href="#linearGradient556"
+       gradientUnits="objectBoundingBox"
+       spreadMethod="pad" />
+  </defs>
+  <g
+     transform="matrix(-0.622937,0.855103,0.855103,0.622937,23.72580,-51.75950)"
+     style="font-size:12.000000"
+     id="g584">
+    <path
+       d="M 51.966500,36.048600 C 53.960200,37.045400 65.472400,34.771300 65.757200,32.635300 C 66.172581,27.312501 55.630700,20.715100 54.064200,20.145500 C 52.497700,19.575900 51.112100,20.063400 50.684900,21.060200 C 50.257700,22.057000 49.688100,35.336500 51.966500,36.048600 z "
+       transform="matrix(1.369638,0.000000,0.000000,1.207417,-21.85404,-4.997635)"
+       style="fill:#0d3c07;fill-rule:evenodd;stroke-width:1.0000000pt"
+       id="path582"
+       sodipodi:nodetypes="ccscc" />
+    <path
+       d="M 51.550600,35.458900 C 53.544300,36.455700 64.224700,34.889200 64.509500,32.753200 C 64.794300,30.617100 60.955464,29.668153 61.382664,28.244153 C 57.018216,23.149473 50.696200,21.360800 50.269000,22.357600 C 49.841800,23.354400 49.272200,34.746800 51.550600,35.458900 z "
+       style="fill:#2aaf18;fill-rule:evenodd;stroke-width:1.0000000pt"
+       id="path581"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       d="M 61.946200,28.338600 C 63.512600,29.620200 65.363900,32.753100 64.367100,33.607600 C 62.658300,35.174000 52.832300,36.313300 51.693000,35.743700 C 50.553800,35.174000 60.094900,33.465200 60.237300,31.044300 C 60.379700,28.623400 57.458082,27.995128 58.312482,26.571028 C 59.166882,25.147028 61.519000,27.769000 61.946200,28.338600 z "
+       style="fill:#208c11;fill-rule:evenodd;stroke-width:1.0000000pt"
+       id="path583"
+       sodipodi:nodetypes="cccccc" />
+  </g>
+  <path
+     d="M 19.911973,12.750842 C 19.911973,12.750842 14.931499,7.8178386 13.691157,7.4734354 C 12.450893,7.1291032 13.146765,9.4999931 13.146765,9.4999931 C 13.146765,9.4999931 19.447498,11.853296 19.911973,12.750842 z "
+     style="font-size:12.000000;fill:#ffffff;fill-rule:evenodd;stroke-width:1.0000000pt"
+     id="path589" />
+</svg>

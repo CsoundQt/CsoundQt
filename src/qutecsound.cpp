@@ -73,7 +73,7 @@ qutecsound::qutecsound(QString fileName)
   m_options = new Options();
 
   readSettings();
-  opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + "opcodes.xml"));
+  opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + ":/opcodes.xml"));
   m_highlighter = new Highlighter(textEdit->document());
   configureHighlighter();
   changeFont();
@@ -131,7 +131,7 @@ void qutecsound::closeEvent(QCloseEvent *event)
 void qutecsound::newFile()
 {
   if (maybeSave()) {
-    QFile file("default.csd");
+    QFile file(":/default.csd");
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
       QMessageBox::warning(this, tr("Application"),
                            tr("Cannot read default template:\n%1.")
@@ -269,7 +269,8 @@ void qutecsound::play(bool realtime)
       qDebug("Csound compile failed!");
       return;
     }
-    while(csound.performKsmps(true)==0) {
+    running = true;
+    while(csound.performKsmps(true)==0 && running) {
       qApp->processEvents();
     }
 //     int hold;
@@ -313,6 +314,11 @@ void qutecsound::play(bool realtime)
     }
   }
 
+}
+
+void qutecsound::stop()
+{
+  running = false;
 }
 
 void qutecsound::render()
@@ -389,17 +395,17 @@ void qutecsound::configure()
 void qutecsound::createActions()
 {
   //TODO improve and create missing actions
-  newAct = new QAction(QIcon(":/filenew.xpm"), tr("&New"), this);
+  newAct = new QAction(QIcon(":/images/gtk-new.png"), tr("&New"), this);
   newAct->setShortcut(tr("Ctrl+N"));
   newAct->setStatusTip(tr("Create a new file"));
   connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));
 
-  openAct = new QAction(QIcon(":/fileopen.xpm"), tr("&Open..."), this);
+  openAct = new QAction(QIcon(":/images/gnome-folder.png"), tr("&Open..."), this);
   openAct->setShortcut(tr("Ctrl+O"));
   openAct->setStatusTip(tr("Open an existing file"));
   connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
-  saveAct = new QAction(QIcon(":/filesave.xpm"), tr("&Save"), this);
+  saveAct = new QAction(QIcon(":/images/gnome-dev-floppy.png"), tr("&Save"), this);
   saveAct->setShortcut(tr("Ctrl+S"));
   saveAct->setStatusTip(tr("Save the document to disk"));
   connect(saveAct, SIGNAL(triggered()), this, SLOT(save()));
@@ -418,29 +424,29 @@ void qutecsound::createActions()
     connect(openRecentAct[i], SIGNAL(triggered()), this, SLOT(openRecent()));
   }
 
-  undoAct = new QAction(/*QIcon(":/editcut.xpm"),*/ tr("Undo"), this);
+  undoAct = new QAction(QIcon(":/images/gtk-undo.png"), tr("Undo"), this);
   undoAct->setShortcut(tr("Ctrl+Z"));
   undoAct->setStatusTip(tr("Undo last action"));
   connect(undoAct, SIGNAL(triggered()), textEdit, SLOT(undo()));
 
-  redoAct = new QAction(/*QIcon(":/editcut.xpm"),*/ tr("Redo"), this);
+  redoAct = new QAction(QIcon(":/images/gtk-redo.png"), tr("Redo"), this);
   redoAct->setShortcut(tr("Shift+Ctrl+Z"));
   redoAct->setStatusTip(tr("Redo last action"));
   connect(redoAct, SIGNAL(triggered()), textEdit, SLOT(redo()));
 
-  cutAct = new QAction(QIcon(":/editcut.xpm"), tr("Cu&t"), this);
+  cutAct = new QAction(QIcon(":/images/gtk-cut.png"), tr("Cu&t"), this);
   cutAct->setShortcut(tr("Ctrl+X"));
   cutAct->setStatusTip(tr("Cut the current selection's contents to the "
       "clipboard"));
   connect(cutAct, SIGNAL(triggered()), textEdit, SLOT(cut()));
 
-  copyAct = new QAction(QIcon(":/editcopy.xpm"), tr("&Copy"), this);
+  copyAct = new QAction(QIcon(":/images/gtk-copy.png"), tr("&Copy"), this);
   copyAct->setShortcut(tr("Ctrl+C"));
   copyAct->setStatusTip(tr("Copy the current selection's contents to the "
       "clipboard"));
   connect(copyAct, SIGNAL(triggered()), textEdit, SLOT(copy()));
 
-  pasteAct = new QAction(QIcon(":/editpaste.xpm"), tr("&Paste"), this);
+  pasteAct = new QAction(QIcon(":/images/gtk-paste.png"), tr("&Paste"), this);
   pasteAct->setShortcut(tr("Ctrl+V"));
   pasteAct->setStatusTip(tr("Paste the clipboard's contents into the current "
       "selection"));
@@ -456,14 +462,19 @@ void qutecsound::createActions()
   configureAct->setStatusTip(tr("Open configuration dialog"));
   connect(configureAct, SIGNAL(triggered()), this, SLOT(configure()));
 
-  playAct = new QAction(tr("Play"), this);
+  playAct = new QAction(QIcon(":/images/gtk-media-play-ltr.png"), tr("Play"), this);
 //   playAct->setShortcut(tr("Ctrl+Q"));
-//   playAct->setStatusTip(tr("Play"));
+  playAct->setStatusTip(tr("Play"));
   connect(playAct, SIGNAL(triggered()), this, SLOT(play()));
 
-  renderAct = new QAction(tr("Render"), this);
+  stopAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop"), this);
 //   playAct->setShortcut(tr("Ctrl+Q"));
-//   playAct->setStatusTip(tr("Play"));
+  playAct->setStatusTip(tr("Stop"));
+  connect(stopAct, SIGNAL(triggered()), this, SLOT(stop()));
+
+  renderAct = new QAction(QIcon(":/images/render.png"), tr("Render to file"), this);
+//   playAct->setShortcut(tr("Ctrl+Q"));
+  playAct->setStatusTip(tr("Render to file"));
   connect(renderAct, SIGNAL(triggered()), this, SLOT(render()));
 
   showHelpAct = new QAction(tr("Show Help Panel"), this);
@@ -569,6 +580,7 @@ void qutecsound::createToolBars()
 
   controlToolBar = addToolBar(tr("Control"));
   controlToolBar->addAction(playAct);
+  controlToolBar->addAction(stopAct);
   controlToolBar->addAction(renderAct);
 }
 

@@ -70,6 +70,7 @@ class qutecsound:public QMainWindow
     bool save();
     bool saveAs();
     void play(bool realtime=true);
+    void stop();
     void render();
     void setHelpEntry();
     void about();
@@ -125,6 +126,7 @@ class qutecsound:public QMainWindow
     QAction *autoCompleteAct;
     QAction *configureAct;
     QAction *playAct;
+    QAction *stopAct;
     QAction *renderAct;
     QAction *showHelpAct;
     QAction *showConsole;
@@ -137,6 +139,8 @@ class qutecsound:public QMainWindow
     viewMode m_mode;
     ConfigLists *m_configlists;
     QStringList recentFiles;
+
+    bool running;
 };
 
 #endif

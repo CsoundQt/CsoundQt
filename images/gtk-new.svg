@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Sodipodi ("http://www.sodipodi.com/") -->
+<svg
+   id="svg604"
+   sodipodi:version="0.32"
+   width="24.000000pt"
+   height="24.000000pt"
+   sodipodi:docbase="/home/zeus/.icons/gartoon/scalable/stock-gar"
+   sodipodi:docname="stock_new.svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="0.40"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <metadata
+     id="metadata11">
+    <rdf:RDF
+       id="RDF12">
+      <cc:Work
+         rdf:about=""
+         id="Work13">
+        <dc:format
+           id="format14">image/svg+xml</dc:format>
+        <dc:type
+           id="type16"
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs606">
+    <linearGradient
+       id="linearGradient612">
+      <stop
+         style="stop-color:#7fa8e3;stop-opacity:0.741176;"
+         offset="0.000000"
+         id="stop613" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1.000000"
+         id="stop614" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#linearGradient612"
+       id="linearGradient615"
+       x1="50.6438866"
+       y1="5.36792946"
+       x2="35.7520943"
+       y2="68.0443573"
+       gradientUnits="userSpaceOnUse"
+       spreadMethod="pad"
+       gradientTransform="matrix(0.320121,0.000000,0.000000,0.320121,0.167523,0.610006)" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     inkscape:zoom="5.0416667"
+     inkscape:cx="26.677686"
+     inkscape:cy="-0.49586777"
+     inkscape:window-width="968"
+     inkscape:window-height="786"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:current-layer="svg604" />
+  <path
+     style="fill:#3d4e67;fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+     d="M 6.6291140,29.146661 C 5.4701856,29.129679 3.5272581,28.421448 3.3576131,26.520902 C 2.7593656,24.600674 0.67967383,6.4512564 1.6832147,5.1871041 C 2.2017557,4.1918506 3.3309165,3.4612463 5.3398963,3.2079713 C 6.9837187,2.9560819 21.936125,0.98753125 23.038687,1.2930732 C 24.141280,1.5986353 25.009820,1.8570143 25.089136,3.3894102 C 25.007588,4.2227967 27.784820,21.221375 28.210885,22.223768 C 28.414181,23.397884 28.080461,25.038642 26.380288,25.579124 C 24.680146,26.119598 7.9712349,28.917265 6.6291140,29.146661 z "
+     id="path609"
+     sodipodi:nodetypes="ccccccccc" />
+  <path
+     style="fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+     d="M 7.9680113,27.133589 C 6.8444211,27.282031 5.2836959,27.592354 5.0972733,26.055049 C 4.3209858,22.415858 2.5411002,7.9928896 3.8093522,5.6490070 C 4.0926146,5.0978479 5.6305600,4.3497248 9.1241123,4.0374146 C 13.094173,3.6378194 21.240130,3.0301542 22.097351,3.0696274 C 22.954531,3.1091107 23.216767,3.0119832 23.403216,4.5493267 C 23.327497,6.1837695 25.913448,18.969489 26.066216,21.233237 C 26.185084,22.840238 26.389651,23.523018 25.340790,23.911514"
+     id="path608"
+     sodipodi:nodetypes="cccccccs" />
+  <path
+     style="fill:url(#linearGradient615);fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+     d="M 4.0904505,7.8253894 C 4.0904505,7.8253894 4.1915032,5.6443749 7.1002748,5.2100505 C 10.009037,4.7757388 21.529008,3.2953913 21.803497,4.0511541 C 22.077965,4.8069123 22.417786,9.7184068 22.502541,10.115735 C 22.587297,10.513047 12.835457,13.910748 10.157651,17.153339 C 7.4798360,20.395927 5.6044412,23.019777 5.6044412,23.019777 C 5.6044412,23.019777 4.0710479,11.583808 4.0904505,7.8253894 z "
+     id="path636" />
+</svg>

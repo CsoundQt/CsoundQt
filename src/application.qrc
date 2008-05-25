@@ -1,10 +1,18 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-      <file>editcopy.xpm</file>
-      <file>editcut.xpm</file>
-      <file>filenew.xpm</file>
-      <file>fileopen.xpm</file>
-      <file>editpaste.xpm</file>
+      <file>../images/gtk-copy.png</file>
+      <file>../images/gtk-cut.png</file>
+      <file>../images/gtk-new.png</file>
+      <file>../images/gnome-folder.png</file>
+      <file>../images/gnome-dev-floppy.png</file>
+      <file>../images/gtk-undo.png</file>
+      <file>../images/gtk-redo.png</file>
+      <file>../images/gtk-paste.png</file>
       <file>filesave.xpm</file>
+      <file>../images/gtk-media-play-ltr.png</file>
+      <file>../images/render.png</file>
+      <file>../images/gtk-media-stop.png</file>
+      <file>opcodes.xml</file>
+      <file>default.csd</file>
 </qresource>
 </RCC>

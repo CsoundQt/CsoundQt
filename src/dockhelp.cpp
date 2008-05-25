@@ -28,6 +28,7 @@
 DockHelp::DockHelp(QWidget *parent)
   : QDockWidget(parent)
 {
+  setWindowTitle("Opcode Help");
   text = new QTextEdit();
   setWidget (text);
   loadFile("/home/andres/src/manual/html/oscil.html");

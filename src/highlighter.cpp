@@ -137,6 +137,9 @@ void Highlighter::setLastRules()
   rule.pattern = QRegExp("\".*\"");
   rule.format = quotationFormat;
   highlightingRules.append(rule);
+  rule.pattern = QRegExp("\\{\\{.*\\}\\}");
+  rule.format = quotationFormat;
+  highlightingRules.append(rule);
 
 //      classFormat.setFontWeight(QFont::Bold);
 //      classFormat.setForeground(Qt::darkMagenta);
