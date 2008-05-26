@@ -24,6 +24,7 @@
 
 #include <QMainWindow>
 #include <QCloseEvent>
+#include <QTabWidget>
 
 #include <csound/CppSound.hpp>
 
@@ -39,6 +40,7 @@ class OpEntryParser;
 class Options;
 class Highlighter;
 class ConfigLists;
+class DocumentPage;
 
 class qutecsound:public QMainWindow
 {
@@ -54,6 +56,7 @@ class qutecsound:public QMainWindow
 
   public slots:
     void changeFont();
+    void changePage(int index);
 
   protected:
     void closeEvent(QCloseEvent *event);
@@ -69,6 +72,7 @@ class qutecsound:public QMainWindow
     void openRecent5();
     bool save();
     bool saveAs();
+    bool closeTab();
     void play(bool realtime=true);
     void stop();
     void render();
@@ -81,6 +85,7 @@ class qutecsound:public QMainWindow
 
   private:
     void createActions();
+    void connectActions();
     void createMenus();
     void fillFileMenu();
     void createToolBars();
@@ -92,10 +97,11 @@ class qutecsound:public QMainWindow
     void loadFile(const QString &fileName);
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
-    void setMode(viewMode mode);
     QString strippedName(const QString &fullFileName);
     QString generateScript(bool realtime = true);
 
+    QTabWidget *documentTabs;
+    QVector<DocumentPage *> documentPages;
     QTextEdit *textEdit;
     OpEntryParser *opcodeTree;
     Options *m_options;
@@ -116,6 +122,7 @@ class qutecsound:public QMainWindow
     QAction *openAct;
     QAction *saveAct;
     QAction *saveAsAct;
+    QAction *closeTabAct;
     QAction *exitAct;
     QList<QAction *> openRecentAct;
     QAction *undoAct;
@@ -134,7 +141,8 @@ class qutecsound:public QMainWindow
     QAction *aboutAct;
     QAction *aboutQtAct;
 
-    QString curFile;
+    int curPage;
+//     QString curFile;
     QString lastUsedDir;
     viewMode m_mode;
     ConfigLists *m_configlists;

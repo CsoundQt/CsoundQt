@@ -34,8 +34,7 @@
 #include "highlighter.h"
 #include "configdialog.h"
 #include "configlists.h"
-
-
+#include "documentpage.h"
 
 #include <string>
 
@@ -51,10 +50,12 @@ static const QString SCRIPT_NAME = "./qutecsound_run_script.sh";
 qutecsound::qutecsound(QString fileName)
 {
   resize(660,350);
-  textEdit = new QTextEdit;
-  m_configlists = new ConfigLists;
+  documentTabs = new QTabWidget (this);
+  connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
+  curPage = -1;
+  setCentralWidget(documentTabs);
 
-  setCentralWidget(textEdit);
+  m_configlists = new ConfigLists;
 
   m_console = new Console(this);
 //   m_console->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -74,22 +75,14 @@ qutecsound::qutecsound(QString fileName)
 
   readSettings();
   opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + ":/opcodes.xml"));
-  m_highlighter = new Highlighter(textEdit->document());
+  m_highlighter = new Highlighter();
   configureHighlighter();
   changeFont();
 
   fillFileMenu(); //Must be placed after readSettings to include recent Files
 
-  connect(textEdit, SIGNAL(textChanged()),
-          this, SLOT(documentWasModified()));
-  connect(textEdit, SIGNAL(textChanged()),
-          this, SLOT(syntaxCheck()));
-  connect(textEdit, SIGNAL(cursorPositionChanged()),
-          this, SLOT(syntaxCheck()));
-
-  if (fileName=="")
-    newFile();
-  else {
+  newFile();
+  if (fileName!="") {
     loadFile(fileName);
     if (m_options->autoPlay)
       play();
@@ -98,7 +91,6 @@ qutecsound::qutecsound(QString fileName)
 
 qutecsound::~qutecsound()
 {
-
 }
 
 void qutecsound::messageCallback_NoThread(CSOUND *csound,
@@ -115,7 +107,18 @@ void qutecsound::messageCallback_NoThread(CSOUND *csound,
 
 void qutecsound::changeFont()
 {
-  textEdit->document()->setDefaultFont(QFont(m_options->font, (int) m_options->fontPointSize));
+  for (int i = 0; i < documentPages.size(); i++) {
+    documentPages[i]->document()->setDefaultFont(QFont(m_options->font, (int) m_options->fontPointSize));
+  }
+}
+
+void qutecsound::changePage(int index)
+{
+  textEdit = documentPages[index];
+  m_highlighter->setDocument(textEdit->document());
+  curPage = index;
+  setCurrentFile(documentPages[curPage]->fileName);
+  connectActions();
 }
 
 void qutecsound::closeEvent(QCloseEvent *event)
@@ -130,18 +133,34 @@ void qutecsound::closeEvent(QCloseEvent *event)
 
 void qutecsound::newFile()
 {
+  for (int i = 0 ; i < documentPages.size(); i++) {
+    if (documentPages[i]->fileName == "") {
+      documentTabs->setCurrentIndex(i);
+      return;
+    }
+  }
   if (maybeSave()) {
     QFile file(":/default.csd");
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
-      QMessageBox::warning(this, tr("Application"),
+      QMessageBox::warning(this, tr("QuteCsound"),
                            tr("Cannot read default template:\n%1.")
                                .arg(file.errorString()));
       return;
     }
     QTextStream in(&file);
-    textEdit->setText(in.readAll());
+    DocumentPage *newPage = new DocumentPage(this);
+    documentPages.append(newPage);
+    documentTabs->addTab(newPage,"");
+    curPage = documentPages.size() - 1;
+    documentTabs->setCurrentIndex(curPage);
+    documentPages[curPage]->setText(in.readAll());
+    textEdit = newPage;
+    m_highlighter->setDocument(textEdit->document());
+    textEdit->document()->setModified(false);
+    documentPages[curPage]->fileName = "";
+    setWindowModified(false);
     setCurrentFile("");
-    setMode(VIEW_CSD);
+    connectActions();
   }
 }
 
@@ -210,10 +229,10 @@ void qutecsound::openRecent5()
 
 bool qutecsound::save()
 {
-  if (curFile.isEmpty()) {
+  if (documentPages[curPage]->fileName.isEmpty()) {
     return saveAs();
   } else {
-    return saveFile(curFile);
+    return saveFile(documentPages[curPage]->fileName);
   }
 }
 
@@ -228,15 +247,55 @@ bool qutecsound::saveAs()
   return saveFile(fileName);
 }
 
+bool qutecsound::closeTab()
+{
+  qDebug("qutecsound::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
+  if (documentPages[curPage]->document()->isModified()) {
+    int ret = QMessageBox::warning(this, tr("QuteCsound"),
+                                   tr("File has been modified.\nDo you want to save it?"),
+                                      QMessageBox::Yes | QMessageBox::Default,
+                                      QMessageBox::No,
+                                      QMessageBox::Cancel);
+    if (ret == QMessageBox::Cancel)
+      return false;
+    else if (ret == QMessageBox::Yes) {
+      if (!saveAs())
+        return false;
+    }
+  }
+  if (documentPages.size() <= 1) {
+    if (QMessageBox::warning(this, tr("QuteCsound"),
+        tr("Do you want to exit QuteCsound?"),
+           QMessageBox::Yes | QMessageBox::Default,
+           QMessageBox::No) == QMessageBox::Yes)
+    {
+      close();
+      return false;
+    }
+    return false;
+  }
+  documentPages.remove(curPage);
+  documentTabs->removeTab(curPage);
+  if (curPage > 0) {
+    curPage--;
+  }
+  documentTabs->setCurrentIndex(curPage);
+  textEdit = documentPages[curPage];
+  setCurrentFile(documentPages[curPage]->fileName);
+  m_highlighter->setDocument(documentPages[curPage]->document());
+  connectActions();
+  return true;
+}
+
 void qutecsound::play(bool realtime)
 {
-  if (curFile.isEmpty()) {
+  if (documentPages[curPage]->fileName.isEmpty()) {
     if (!saveAs())
       return;
   }
-  else if (textEdit->document()->isModified()) {
+  else if (documentPages[curPage]->document()->isModified()) {
     if (m_options->saveChanges)
-      saveFile(curFile);
+      saveFile(documentPages[curPage]->fileName);
   }
 
   if (m_options->useAPI) {
@@ -414,6 +473,11 @@ void qutecsound::createActions()
   saveAsAct->setStatusTip(tr("Save the document under a new name"));
   connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
 
+  closeTabAct = new QAction(tr("Close current tab"), this);
+  closeTabAct->setShortcut(tr("Ctrl+W"));
+  closeTabAct->setStatusTip(tr("Close current tab"));
+  connect(closeTabAct, SIGNAL(triggered()), this, SLOT(closeTab()));
+
   exitAct = new QAction(tr("E&xit"), this);
   exitAct->setShortcut(tr("Ctrl+Q"));
   exitAct->setStatusTip(tr("Exit the application"));
@@ -427,30 +491,25 @@ void qutecsound::createActions()
   undoAct = new QAction(QIcon(":/images/gtk-undo.png"), tr("Undo"), this);
   undoAct->setShortcut(tr("Ctrl+Z"));
   undoAct->setStatusTip(tr("Undo last action"));
-  connect(undoAct, SIGNAL(triggered()), textEdit, SLOT(undo()));
 
   redoAct = new QAction(QIcon(":/images/gtk-redo.png"), tr("Redo"), this);
   redoAct->setShortcut(tr("Shift+Ctrl+Z"));
   redoAct->setStatusTip(tr("Redo last action"));
-  connect(redoAct, SIGNAL(triggered()), textEdit, SLOT(redo()));
 
   cutAct = new QAction(QIcon(":/images/gtk-cut.png"), tr("Cu&t"), this);
   cutAct->setShortcut(tr("Ctrl+X"));
   cutAct->setStatusTip(tr("Cut the current selection's contents to the "
       "clipboard"));
-  connect(cutAct, SIGNAL(triggered()), textEdit, SLOT(cut()));
 
   copyAct = new QAction(QIcon(":/images/gtk-copy.png"), tr("&Copy"), this);
   copyAct->setShortcut(tr("Ctrl+C"));
   copyAct->setStatusTip(tr("Copy the current selection's contents to the "
       "clipboard"));
-  connect(copyAct, SIGNAL(triggered()), textEdit, SLOT(copy()));
 
   pasteAct = new QAction(QIcon(":/images/gtk-paste.png"), tr("&Paste"), this);
   pasteAct->setShortcut(tr("Ctrl+V"));
   pasteAct->setStatusTip(tr("Paste the clipboard's contents into the current "
       "selection"));
-  connect(pasteAct, SIGNAL(triggered()), textEdit, SLOT(paste()));
 
   autoCompleteAct = new QAction(tr("AutoComplete"), this);
   autoCompleteAct->setShortcut(tr("Ctrl+ "));
@@ -469,12 +528,12 @@ void qutecsound::createActions()
 
   stopAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop"), this);
 //   playAct->setShortcut(tr("Ctrl+Q"));
-  playAct->setStatusTip(tr("Stop"));
+  stopAct->setStatusTip(tr("Stop"));
   connect(stopAct, SIGNAL(triggered()), this, SLOT(stop()));
 
   renderAct = new QAction(QIcon(":/images/render.png"), tr("Render to file"), this);
 //   playAct->setShortcut(tr("Ctrl+Q"));
-  playAct->setStatusTip(tr("Render to file"));
+  renderAct->setStatusTip(tr("Render to file"));
   connect(renderAct, SIGNAL(triggered()), this, SLOT(render()));
 
   showHelpAct = new QAction(tr("Show Help Panel"), this);
@@ -506,10 +565,36 @@ void qutecsound::createActions()
 
   cutAct->setEnabled(false);
   copyAct->setEnabled(false);
+
+}
+
+void qutecsound::connectActions()
+{
+  disconnect(undoAct, 0, 0, 0);
+  disconnect(redoAct, 0, 0, 0);
+  disconnect(cutAct, 0, 0, 0);
+  disconnect(copyAct, 0, 0, 0);
+  disconnect(pasteAct, 0, 0, 0);
+  connect(undoAct, SIGNAL(triggered()), textEdit, SLOT(undo()));
+  connect(redoAct, SIGNAL(triggered()), textEdit, SLOT(redo()));
+  connect(cutAct, SIGNAL(triggered()), textEdit, SLOT(cut()));
+  connect(copyAct, SIGNAL(triggered()), textEdit, SLOT(copy()));
+  connect(pasteAct, SIGNAL(triggered()), textEdit, SLOT(paste()));
+  disconnect(textEdit, SIGNAL(copyAvailable(bool)), 0, 0);
+  disconnect(textEdit, SIGNAL(copyAvailable(bool)), 0, 0);
   connect(textEdit, SIGNAL(copyAvailable(bool)),
           cutAct, SLOT(setEnabled(bool)));
   connect(textEdit, SIGNAL(copyAvailable(bool)),
           copyAct, SLOT(setEnabled(bool)));
+
+  disconnect(textEdit, SIGNAL(textChanged()), 0, 0);
+  disconnect(textEdit, SIGNAL(cursorPositionChanged()), 0, 0);
+  connect(textEdit, SIGNAL(textChanged()),
+          this, SLOT(documentWasModified()));
+  connect(textEdit, SIGNAL(textChanged()),
+          this, SLOT(syntaxCheck()));
+  connect(textEdit, SIGNAL(cursorPositionChanged()),
+          this, SLOT(syntaxCheck()));
 }
 
 void qutecsound::createMenus()
@@ -552,6 +637,7 @@ void qutecsound::fillFileMenu()
   fileMenu->addAction(openAct);
   fileMenu->addAction(saveAct);
   fileMenu->addAction(saveAsAct);
+  fileMenu->addAction(closeTabAct);
   fileMenu->addSeparator();
   fileMenu->addAction(exitAct);
   fileMenu->addSeparator();
@@ -756,8 +842,10 @@ void qutecsound::configureHighlighter()
 
 bool qutecsound::maybeSave()
 {
+  if (textEdit != NULL)
+    return true;
   if (textEdit->document()->isModified()) {
-    int ret = QMessageBox::warning(this, tr("Application"),
+    int ret = QMessageBox::warning(this, tr("QuteCsound"),
                                    tr("The document has been modified.\n"
                                        "Do you want to save your changes?"),
                                        QMessageBox::Yes | QMessageBox::Default,
@@ -774,12 +862,8 @@ bool qutecsound::maybeSave()
 void qutecsound::loadFile(const QString &fileName)
 {
   QFile file(fileName);
-  if (fileName.endsWith(".csd"))
-    setMode(VIEW_CSD);
-  else
-    setMode(VIEW_ORC_SCO);
   if (!file.open(QFile::ReadOnly | QFile::Text)) {
-    QMessageBox::warning(this, tr("Application"),
+    QMessageBox::warning(this, tr("QuteCsound"),
                          tr("Cannot read file %1:\n%2.")
                              .arg(fileName)
                              .arg(file.errorString()));
@@ -788,9 +872,22 @@ void qutecsound::loadFile(const QString &fileName)
 
   QTextStream in(&file);
   QApplication::setOverrideCursor(Qt::WaitCursor);
+  if (documentPages[curPage]->fileName !="") {
+    DocumentPage *newPage = new DocumentPage(this);
+    documentPages.append(newPage);
+    documentTabs->addTab(newPage,"");
+    curPage = documentPages.size() - 1;
+    documentTabs->setCurrentIndex(curPage);
+    textEdit = newPage;
+    connectActions();
+  }
+  m_highlighter->setDocument(textEdit->document());
   textEdit->setText(in.readAll());
   QApplication::restoreOverrideCursor();
 
+  textEdit->document()->setModified(false);
+  documentPages[curPage]->fileName = fileName;
+  setWindowModified(false);
   setCurrentFile(fileName);
   lastUsedDir = fileName;
   lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/]")));
@@ -815,9 +912,12 @@ bool qutecsound::saveFile(const QString &fileName)
 
   QTextStream out(&file);
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  out << textEdit->toPlainText();
+  out << documentPages[curPage]->toPlainText();
   QApplication::restoreOverrideCursor();
 
+  textEdit->document()->setModified(false);
+  documentPages[curPage]->fileName = fileName;
+  setWindowModified(false);
   setCurrentFile(fileName);
   lastUsedDir = fileName;
   lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/\\]")));
@@ -832,25 +932,15 @@ bool qutecsound::saveFile(const QString &fileName)
 
 void qutecsound::setCurrentFile(const QString &fileName)
 {
-  curFile = fileName;
-  textEdit->document()->setModified(false);
-  setWindowModified(false);
-
   QString shownName;
-  if (curFile.isEmpty())
+  if (documentPages[curPage]->fileName.isEmpty())
     shownName = "untitled.csd";
   else
-    shownName = strippedName(curFile);
+    shownName = strippedName(documentPages[curPage]->fileName);
 
-  setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("Application")));
+  setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("QuteCsound")));
+  documentTabs->setTabText(curPage, shownName);
 }
-
-void qutecsound::setMode(viewMode mode)
-{
-  m_mode = mode;
-  //TODO: change csd -> orc/sco mode
-}
-
 
 QString qutecsound::strippedName(const QString &fullFileName)
 {
@@ -872,9 +962,10 @@ QString qutecsound::generateScript(bool realtime)
   if (m_options->ssdirActive)
     script += "export INCDIR=" + m_options->incdir + "\n";
 
-  script += "cd " + QFileInfo(curFile).absoluteFilePath() + "\n";
+  script += "cd " + QFileInfo(documentPages[curPage]->fileName).absoluteFilePath() + "\n";
 
-  cmdLine = "csound " + curFile + m_options->generateCmdLineFlags(realtime);
+  cmdLine = "csound " + documentPages[curPage]->fileName
+      + m_options->generateCmdLineFlags(realtime);
   script += "echo \"" + cmdLine + "\"\n";
   script += cmdLine + "\n";
   script += "echo \"\nPress return to continue\"\n";

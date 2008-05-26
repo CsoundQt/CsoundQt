@@ -6,7 +6,8 @@ SOURCES += qutecsound.cpp \
  highlighter.cpp \
  configdialog.cpp \
  configlists.cpp \
- console.cpp
+ console.cpp \
+ documentpage.cpp
 HEADERS += qutecsound.h \
  dockhelp.h \
  opentryparser.h \
@@ -15,7 +16,8 @@ HEADERS += qutecsound.h \
  types.h \
  configdialog.h \
  configlists.h \
- console.h
+ console.h \
+ documentpage.h
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \

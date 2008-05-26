@@ -42,7 +42,7 @@ void DockHelp::loadFile(QString fileName)
 {
   QFile file(fileName);
   if (!file.open(QFile::ReadOnly | QFile::Text)) {
-    QMessageBox::warning(this, tr("Application"),
+    QMessageBox::warning(this, tr("QuteCsound"),
                          tr("Cannot read file %1:\n%2.")
                              .arg(fileName)
                              .arg(file.errorString()));

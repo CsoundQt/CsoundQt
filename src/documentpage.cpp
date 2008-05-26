@@ -17,22 +17,17 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#include "documentpage.h"
 
-
-#include <QApplication>
-#include "qutecsound.h"
-
-int main(int argc, char *argv[])
+DocumentPage::DocumentPage(QWidget *parent):
+    QTextEdit(parent)
 {
-  QString fileName;
-
-  if (argc > 1)
-    fileName = QString(argv[1]);
-  qDebug("Opening %s", fileName.toStdString().c_str());
-  Q_INIT_RESOURCE(application);
-  QApplication app(argc, argv);
-  qutecsound * mw = new qutecsound(fileName);
-  mw->show();
-  return app.exec();
+  fileName = "";
 }
+
+
+DocumentPage::~DocumentPage()
+{
+}
+
 
