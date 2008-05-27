@@ -99,6 +99,7 @@ class qutecsound:public QMainWindow
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
     QString generateScript(bool realtime = true);
+    void getCompanionFileName();
 
     QTabWidget *documentTabs;
     QVector<DocumentPage *> documentPages;

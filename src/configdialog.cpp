@@ -122,7 +122,6 @@ ConfigDialog::~ConfigDialog()
 
 void ConfigDialog::accept()
 {
-
   m_options->font = fontComboBox->currentText();
   m_options->fontPointSize = fontSizeComboBox->currentText().toDouble();
   m_options->autoPlay = autoplayCheckBox->isChecked();
@@ -170,12 +169,7 @@ void ConfigDialog::accept()
   m_options->browser = BrowserLineEdit->text();
   m_options->waveeditor = WaveEditorLineEdit->text();
   m_options->waveplayer = WavePlayerLineEdit->text();
-  close();
-}
-
-void ConfigDialog::reject()
-{
-  close();
+  QDialog::accept();
 }
 
 void ConfigDialog::browseCsdocdir()

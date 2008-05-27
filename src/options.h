@@ -30,7 +30,10 @@ class Options{
     ~Options();
 
     QString generateCmdLineFlags(bool rt = false);
-    int generateCmdLine(char **argv, QString fileName, bool rt = false);
+    int generateCmdLine(char **argv,
+                        bool rt,
+                        QString fileName,
+                        QString fileName2);
 
 
     QString font;

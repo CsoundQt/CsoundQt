@@ -74,12 +74,10 @@ qutecsound::qutecsound(QString fileName)
   m_options = new Options();
 
   readSettings();
+  fillFileMenu(); //Must be placed after readSettings to include recent Files
   opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + ":/opcodes.xml"));
   m_highlighter = new Highlighter();
   configureHighlighter();
-  changeFont();
-
-  fillFileMenu(); //Must be placed after readSettings to include recent Files
 
   newFile();
   if (fileName!="") {
@@ -87,6 +85,7 @@ qutecsound::qutecsound(QString fileName)
     if (m_options->autoPlay)
       play();
   }
+  changeFont();
 }
 
 qutecsound::~qutecsound()
@@ -297,25 +296,35 @@ void qutecsound::play(bool realtime)
     if (m_options->saveChanges)
       saveFile(documentPages[curPage]->fileName);
   }
+  QString fileName, fileName2;
+  if (!documentPages[curPage]->fileName.endsWith(".csd")) {
+    fileName = documentPages[curPage]->fileName;
+    if (documentPages[curPage]->askForFile)
+      getCompanionFileName();
+    else
+      fileName2 = documentPages[curPage]->companionFile;
+  }
 
   if (m_options->useAPI) {
     m_console->clear();
-    QTemporaryFile csdFile;
-    csdFile.setFileTemplate(QString("csound-tmpXXXXXXXX.csd"));
-    if (!csdFile.open()) {
-      QMessageBox::critical(this,
-                            tr("PostQC"),
-                            tr("Error creating temporary file."),
-                            QMessageBox::Ok);
-      return;
+    if (documentPages[curPage]->fileName.endsWith(".csd")) {
+      QTemporaryFile csdFile;
+      csdFile.setFileTemplate(QString("csound-tmpXXXXXXXX.csd"));
+      if (!csdFile.open()) {
+        QMessageBox::critical(this,
+                              tr("PostQC"),
+                              tr("Error creating temporary file."),
+                              QMessageBox::Ok);
+        return;
+      }
+      QString csdText = textEdit->document()->toPlainText();
+      QString fileName = csdFile.fileName();
+      csdFile.write(csdText.toAscii());
+      csdFile.flush();
     }
-    QString csdText = textEdit->document()->toPlainText();
-    QString fileName = csdFile.fileName();
-    csdFile.write(csdText.toAscii());
-    csdFile.flush();
     CppSound csound;
     static char *argv[33];
-    int argc = m_options->generateCmdLine(argv, fileName, realtime);
+    int argc = m_options->generateCmdLine(argv, realtime, fileName, fileName2);
     qDebug("Command Line:");
     for (int index=0; index< argc; index++) {
       fprintf(stderr, "%s ",argv[index]);
@@ -372,7 +381,6 @@ void qutecsound::play(bool realtime)
             NULL);
     }
   }
-
 }
 
 void qutecsound::stop()
@@ -964,8 +972,18 @@ QString qutecsound::generateScript(bool realtime)
 
   script += "cd " + QFileInfo(documentPages[curPage]->fileName).absoluteFilePath() + "\n";
 
-  cmdLine = "csound " + documentPages[curPage]->fileName
-      + m_options->generateCmdLineFlags(realtime);
+  cmdLine = "csound ";
+  if (documentPages[curPage]->companionFile != "") {
+    if (documentPages[curPage]->fileName.endsWith(".orc"))
+      cmdLine += "\""  + documentPages[curPage]->fileName
+          + "\" \""+ documentPages[curPage]->companionFile + "\"";
+    else
+      cmdLine += "\""  + documentPages[curPage]->companionFile
+          + "\" \""+ documentPages[curPage]->fileName + "\"";
+  }
+  else if (documentPages[curPage]->fileName.endsWith(".csd"))
+    cmdLine += "\""  + documentPages[curPage]->fileName + "\"";
+  cmdLine += m_options->generateCmdLineFlags(realtime);
   script += "echo \"" + cmdLine + "\"\n";
   script += cmdLine + "\n";
   script += "echo \"\nPress return to continue\"\n";
@@ -975,3 +993,52 @@ QString qutecsound::generateScript(bool realtime)
   return script;
 }
 
+void qutecsound::getCompanionFileName()
+{
+  QString fileName = "";
+  QDialog dialog(this);
+  dialog.resize(400, 200);
+  dialog.setModal(true);
+  QPushButton *button = new QPushButton(tr("Ok"));
+
+  connect(button, SIGNAL(released()), &dialog, SLOT(accept()));
+//   QVBoxLayout *layout = new QVBoxLayout(this)
+//   layout->addWidget(button);
+
+  QSplitter *splitter = new QSplitter(&dialog);
+  QListWidget *list = new QListWidget(&dialog);
+  QCheckBox *checkbox = new QCheckBox(tr("Do not ask again"), &dialog);
+  splitter->addWidget(list);
+  splitter->addWidget(checkbox);
+  splitter->addWidget(button);
+  splitter->resize(400, 200);
+  splitter->setOrientation(Qt::Vertical);
+  QString extensionComplement = "";
+  if (documentPages[curPage]->fileName.endsWith(".orc"))
+    extensionComplement = ".sco";
+  else if (documentPages[curPage]->fileName.endsWith(".sco"))
+    extensionComplement = ".orc";
+
+  for (int i = 0; i < documentPages.size(); i++) {
+    QString name = documentPages[i]->fileName;
+    if (documentPages[i]->fileName.endsWith(extensionComplement))
+      list->addItem(documentPages[i]->fileName);
+  }
+  QList<QListWidgetItem *> itemList = list->findItems(documentPages[curPage]->companionFile,
+      Qt::MatchExactly);
+  if (itemList.size() > 0)
+    list->setCurrentItem(itemList[0]);
+  dialog.exec();
+  QListWidgetItem *item = list->currentItem();
+  QString itemText = item->text();
+  if (checkbox->isChecked())
+    documentPages[curPage]->askForFile = false;
+  documentPages[curPage]->companionFile = itemText;
+  for (int i = 0; i < documentPages.size(); i++) {
+    if (documentPages[i]->fileName == documentPages[curPage]->companionFile) {
+      documentPages[i]->companionFile = documentPages[curPage]->fileName;
+      documentPages[i]->askForFile = documentPages[curPage]->askForFile;
+      break;
+    }
+  }
+}

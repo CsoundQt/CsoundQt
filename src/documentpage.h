@@ -32,6 +32,8 @@ class DocumentPage : public QTextEdit
     ~DocumentPage();
 //     QTextDocument *textDocument;
     QString fileName;
+    QString companionFile;
+    bool askForFile;
 };
 
 #endif

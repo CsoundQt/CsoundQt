@@ -23,6 +23,8 @@ DocumentPage::DocumentPage(QWidget *parent):
     QTextEdit(parent)
 {
   fileName = "";
+  companionFile = "";
+  askForFile = true;
 }
 
 
