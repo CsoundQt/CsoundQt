@@ -850,7 +850,7 @@ void qutecsound::configureHighlighter()
 
 bool qutecsound::maybeSave()
 {
-  if (textEdit != NULL)
+  if (documentPages.size() < 1)
     return true;
   if (textEdit->document()->isModified()) {
     int ret = QMessageBox::warning(this, tr("QuteCsound"),
