@@ -76,11 +76,9 @@ int Options::generateCmdLine(char **argv,
   int index = 0;
   argv[index] = (char *) calloc(7, sizeof(char));
   strcpy(argv[index++], "csound");
-  fileName = "\"" + fileName + "\"";
   argv[index] = (char *) calloc(fileName.size()+1, sizeof(char));
   strcpy(argv[index++],fileName.toStdString().c_str());
   if (fileName2 != "") {
-    fileName2 = "\"" + fileName2 + "\"";
     argv[index] = (char *) calloc(fileName2.size()+1, sizeof(char));
     strcpy(argv[index++],fileName2.toStdString().c_str());
   }

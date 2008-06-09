@@ -138,37 +138,40 @@ void qutecsound::newFile()
       return;
     }
   }
-  if (maybeSave()) {
-    QFile file(":/default.csd");
-    if (!file.open(QFile::ReadOnly | QFile::Text)) {
-      QMessageBox::warning(this, tr("QuteCsound"),
-                           tr("Cannot read default template:\n%1.")
-                               .arg(file.errorString()));
+  if (documentPages.size() > 0)
+    if (maybeSave())
       return;
-    }
-    QTextStream in(&file);
-    DocumentPage *newPage = new DocumentPage(this);
-    documentPages.append(newPage);
-    documentTabs->addTab(newPage,"");
-    curPage = documentPages.size() - 1;
-    documentTabs->setCurrentIndex(curPage);
-    documentPages[curPage]->setText(in.readAll());
-    textEdit = newPage;
-    m_highlighter->setDocument(textEdit->document());
-    textEdit->document()->setModified(false);
-    documentPages[curPage]->fileName = "";
-    setWindowModified(false);
-    setCurrentFile("");
-    connectActions();
+  QFile file(":/default.csd");
+  if (!file.open(QFile::ReadOnly | QFile::Text)) {
+    QMessageBox::warning(this, tr("QuteCsound"),
+                          tr("Cannot read default template:\n%1.")
+                              .arg(file.errorString()));
+    return;
   }
+  QTextStream in(&file);
+  DocumentPage *newPage = new DocumentPage(this);
+  documentPages.append(newPage);
+  documentTabs->addTab(newPage,"");
+  curPage = documentPages.size() - 1;
+  documentTabs->setCurrentIndex(curPage);
+  documentPages[curPage]->setText(in.readAll());
+  textEdit = newPage;
+  m_highlighter->setDocument(textEdit->document());
+  textEdit->document()->setModified(false);
+  documentPages[curPage]->fileName = "";
+  setWindowModified(false);
+  setCurrentFile("");
+  connectActions();
 }
 
 void qutecsound::open()
 {
   if (maybeSave()) {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco)"));
-    if (!fileName.isEmpty())
+    if (!fileName.isEmpty()) {
+      loadCompanionFile(fileName);
       loadFile(fileName);
+    }
   }
 }
 
@@ -176,8 +179,10 @@ void qutecsound::openRecent0()
 {
   if (maybeSave()) {
     QString fileName = recentFiles[0];
-    if (!fileName.isEmpty())
+    if (!fileName.isEmpty()) {
+      loadCompanionFile(fileName);
       loadFile(fileName);
+    }
   }
 }
 
@@ -185,8 +190,10 @@ void qutecsound::openRecent1()
 {
   if (maybeSave()) {
     QString fileName = recentFiles[1];
-    if (!fileName.isEmpty())
+    if (!fileName.isEmpty()) {
+      loadCompanionFile(fileName);
       loadFile(fileName);
+    }
   }
 }
 
@@ -194,8 +201,10 @@ void qutecsound::openRecent2()
 {
   if (maybeSave()) {
     QString fileName = recentFiles[2];
-    if (!fileName.isEmpty())
+    if (!fileName.isEmpty()) {
+      loadCompanionFile(fileName);
       loadFile(fileName);
+    }
   }
 }
 
@@ -203,8 +212,10 @@ void qutecsound::openRecent3()
 {
   if (maybeSave()) {
     QString fileName = recentFiles[3];
-    if (!fileName.isEmpty())
+    if (!fileName.isEmpty()) {
+      loadCompanionFile(fileName);
       loadFile(fileName);
+    }
   }
 }
 
@@ -212,8 +223,10 @@ void qutecsound::openRecent4()
 {
   if (maybeSave()) {
     QString fileName = recentFiles[4];
-    if (!fileName.isEmpty())
+    if (!fileName.isEmpty()) {
+      loadCompanionFile(fileName);
       loadFile(fileName);
+    }
   }
 }
 
@@ -221,8 +234,10 @@ void qutecsound::openRecent5()
 {
   if (maybeSave()) {
     QString fileName = recentFiles[5];
-    if (!fileName.isEmpty())
+    if (!fileName.isEmpty()) {
+      loadCompanionFile(fileName);
       loadFile(fileName);
+    }
   }
 }
 
@@ -297,26 +312,25 @@ void qutecsound::play(bool realtime)
       saveFile(documentPages[curPage]->fileName);
   }
   QString fileName, fileName2;
-  if (!documentPages[curPage]->fileName.endsWith(".csd")) {
-    fileName = documentPages[curPage]->fileName;
+  fileName = documentPages[curPage]->fileName;
+  if (!fileName.endsWith(".csd")) {
     if (documentPages[curPage]->askForFile)
       getCompanionFileName();
-    else
-      fileName2 = documentPages[curPage]->companionFile;
+    fileName2 = documentPages[curPage]->companionFile;
   }
 
   if (m_options->useAPI) {
     m_console->clear();
+    QTemporaryFile csdFile;
+    csdFile.setFileTemplate(QString("csound-tmpXXXXXXXX.csd"));
+    if (!csdFile.open()) {
+      QMessageBox::critical(this,
+                            tr("PostQC"),
+                            tr("Error creating temporary file."),
+                            QMessageBox::Ok);
+      return;
+    }
     if (documentPages[curPage]->fileName.endsWith(".csd")) {
-      QTemporaryFile csdFile;
-      csdFile.setFileTemplate(QString("csound-tmpXXXXXXXX.csd"));
-      if (!csdFile.open()) {
-        QMessageBox::critical(this,
-                              tr("PostQC"),
-                              tr("Error creating temporary file."),
-                              QMessageBox::Ok);
-        return;
-      }
       QString csdText = textEdit->document()->toPlainText();
       QString fileName = csdFile.fileName();
       csdFile.write(csdText.toAscii());
@@ -850,8 +864,6 @@ void qutecsound::configureHighlighter()
 
 bool qutecsound::maybeSave()
 {
-  if (documentPages.size() < 1)
-    return true;
   if (textEdit->document()->isModified()) {
     int ret = QMessageBox::warning(this, tr("QuteCsound"),
                                    tr("The document has been modified.\n"
@@ -904,9 +916,24 @@ void qutecsound::loadFile(const QString &fileName)
     recentFiles.removeLast();
     fillFileMenu();
   }
+  changeFont();
   statusBar()->showMessage(tr("File loaded"), 2000);
 }
 
+void qutecsound::loadCompanionFile(const QString &fileName)
+{
+  QString companionFileName = fileName;
+  if (fileName.endsWith(".orc")) {
+    fileName.replace(".orc", ".sco");
+  }
+  else if (fileName.endsWith(".sco")) {
+    fileName.replace(".sco", ".orc");
+  }
+  else
+    return;
+  if (QFile::exists(companionFileName))
+    loadFile(companionFileName);
+}
 bool qutecsound::saveFile(const QString &fileName)
 {
   QFile file(fileName);

@@ -95,6 +95,7 @@ class qutecsound:public QMainWindow
     void configureHighlighter();
     bool maybeSave();
     void loadFile(const QString &fileName);
+    void loadCompanionFile(const QString &fileName);
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
