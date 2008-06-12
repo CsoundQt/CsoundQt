@@ -29,7 +29,15 @@ ConfigLists::ConfigLists()
       << "schar"<< "float"<< "long";
   fileFormatNames << "24 Bit" << "16 Bit (short)" << "unsigned 8-bit"
       << "signed 8-bit" << "32 bit float"<< "long (32-bit)";
+#ifdef LINUX
   rtaudioNames << "alsa" << "jack" << "portaudio";
+#endif
+#ifdef MACOSX
+  rtaudioNames << "coreaudio" << "portaudio";
+#endif
+#ifdef WIN32
+  rtaudioNames << "winmm" << "portaudio";
+#endif
 }
 
 

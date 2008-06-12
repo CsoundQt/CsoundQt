@@ -26,7 +26,7 @@
 #include <QCloseEvent>
 #include <QTabWidget>
 
-#include <csound/CppSound.hpp>
+#include <CppSound.hpp>
 
 #include "types.h"
 

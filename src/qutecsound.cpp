@@ -44,8 +44,19 @@ static const QString SCRIPT_NAME = "qutecsound_run_script.bat";
 static const QString SCRIPT_NAME = "./qutecsound_run_script.sh";
 #endif
 
+#ifdef LINUX
 #define DEFAULT_HTML_DIR "/home/andres/src/manual/html"
 #define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"
+#endif
+#ifdef MACOSX
+#define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib.framework/Versions/5.1/Resources/Manual"
+#define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal"
+#endif
+#ifdef WIN32
+#define DEFAULT_HTML_DIR "/home/andres/src/manual/html"
+#define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"
+#endif
+
 
 qutecsound::qutecsound(QString fileName)
 {
@@ -741,7 +752,7 @@ void qutecsound::readSettings()
   m_options->saveChanges = settings.value("savechanges", true).toBool();
   settings.endGroup();
   settings.beginGroup("Run");
-  m_options->useAPI = settings.value("useAPI", false).toBool();
+  m_options->useAPI = settings.value("useAPI", true).toBool();
   m_options->bufferSize = settings.value("bufferSize", 1024).toInt();
   m_options->bufferSizeActive = settings.value("bufferSizeActive", false).toBool();
   m_options->HwBufferSize = settings.value("HwBufferSize", 1024).toInt();
@@ -924,10 +935,10 @@ void qutecsound::loadCompanionFile(const QString &fileName)
 {
   QString companionFileName = fileName;
   if (fileName.endsWith(".orc")) {
-    fileName.replace(".orc", ".sco");
+   // fileName.replace(".orc", ".sco");
   }
   else if (fileName.endsWith(".sco")) {
-    fileName.replace(".sco", ".orc");
+    //fileName.replace(".sco", ".orc");
   }
   else
     return;

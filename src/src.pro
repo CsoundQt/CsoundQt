@@ -34,5 +34,26 @@ DISTFILES += default.csd \
 
 FORMS += configdialog.ui
 
+!macx {
 LIBS += -lcsound \
 -lcsnd
+}
+
+win {
+DEFINES +=WIN32
+}
+linux-g++ {
+DEFINES +=LINUX
+}
+
+macx {
+DEFINES +=MACOSX
+HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/CppSound.hpp
+LIBS += -framework QtXml
+LIBS += -framework QtGui
+LIBS += -framework QtCore
+LIBS += -framework CsoundLib -lcsnd
+LIBS += -L/Library/Frameworks/CsoundLib.framework/Versions/Current
+
+}
+
