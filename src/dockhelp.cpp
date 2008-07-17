@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "dockhelp.h"
 
-#include <QTextEdit>
+#include <QTextBrowser>
 #include <QTextDocument>
 #include <QTextStream>
 #include <QFile>
@@ -29,9 +29,11 @@ DockHelp::DockHelp(QWidget *parent)
   : QDockWidget(parent)
 {
   setWindowTitle("Opcode Help");
-  text = new QTextEdit();
+  text = new QTextBrowser();
+  text->setAcceptRichText(true);
   setWidget (text);
-  loadFile("/home/andres/src/manual/html/oscil.html");
+  QString index = QString(DEFAULT_HTML_DIR) + QString("/index.html");
+  loadFile(index);
 }
 
 DockHelp::~DockHelp()
@@ -49,5 +51,6 @@ void DockHelp::loadFile(QString fileName)
     return;
   }
   QTextStream in(&file);
-  text->setText(in.readAll());
+  text->setSource (fileName);
+  //text->setHtml(in.readAll());
 }

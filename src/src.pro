@@ -48,6 +48,7 @@ DEFINES +=LINUX
 
 macx {
 DEFINES +=MACOSX
+CONFIG += ppc i386
 HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/CppSound.hpp
 LIBS += -framework QtXml
 LIBS += -framework QtGui

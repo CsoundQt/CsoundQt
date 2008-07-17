@@ -59,7 +59,7 @@ QString Options::generateCmdLineFlags(bool rt)
     cmdline += ":" + m_configlists.fileFormatFlags[fileSampleFormat];
     if (fileInputFilenameActive)
       cmdline += " -i" + fileInputFilename;
-    if (fileOutputFilenameActive)
+    if (fileOutputFilename != "")
       cmdline += " -o" + fileOutputFilename;
 
   }

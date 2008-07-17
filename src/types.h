@@ -24,6 +24,19 @@
 #include <QString>
 #include <QStringList>
 
+#ifdef LINUX
+#define DEFAULT_HTML_DIR "/home/andres/src/manual/html"
+#define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"
+#endif
+#ifdef MACOSX
+#define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib.framework/Versions/5.1/Resources/Manual"
+#define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal"
+#endif
+#ifdef WIN32
+#define DEFAULT_HTML_DIR "/home/andres/src/manual/html"
+#define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"
+#endif
+
 enum viewMode {
   VIEW_CSD,
   VIEW_ORC_SCO

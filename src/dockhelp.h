@@ -21,8 +21,9 @@
 #define DOCKHELP_H
 
 #include <QDockWidget>
+#include "types.h"
 
-class QTextEdit;
+class QTextBrowser;
 
 class DockHelp : public QDockWidget
 {
@@ -35,7 +36,7 @@ class DockHelp : public QDockWidget
     void loadFile(QString fileName);
 
   private:
-    QTextEdit *text;
+    QTextBrowser *text;
 
 };
 

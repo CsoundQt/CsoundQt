@@ -28,6 +28,10 @@ int main(int argc, char *argv[])
 
   if (argc > 1)
     fileName = QString(argv[1]);
+#ifdef MACOSX
+  if (fileName.startsWith("-psn_"))
+	fileName = "";
+#endif
   qDebug("Opening %s", fileName.toStdString().c_str());
   Q_INIT_RESOURCE(application);
   QApplication app(argc, argv);

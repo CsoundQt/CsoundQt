@@ -83,7 +83,7 @@
     </rect>
    </property>
    <property name="currentIndex" >
-    <number>3</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab" >
     <attribute name="title" >
@@ -126,8 +126,8 @@
       <rect>
        <x>20</x>
        <y>20</y>
-       <width>251</width>
-       <height>53</height>
+       <width>328</width>
+       <height>56</height>
       </rect>
      </property>
      <layout class="QGridLayout" >
@@ -243,9 +243,9 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>110</y>
+        <y>100</y>
         <width>571</width>
-        <height>61</height>
+        <height>65</height>
        </rect>
       </property>
       <layout class="QGridLayout" >
@@ -290,7 +290,7 @@
        <rect>
         <x>10</x>
         <y>30</y>
-        <width>172</width>
+        <width>174</width>
         <height>72</height>
        </rect>
       </property>
@@ -369,37 +369,14 @@
      <widget class="QCheckBox" name="RtOverrideCheckBox" >
       <property name="geometry" >
        <rect>
-        <x>10</x>
-        <y>70</y>
+        <x>20</x>
+        <y>30</y>
         <width>161</width>
         <height>22</height>
        </rect>
       </property>
       <property name="text" >
        <string>Override CsOptions</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_3" >
-      <property name="geometry" >
-       <rect>
-        <x>10</x>
-        <y>20</y>
-        <width>121</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text" >
-       <string>RT Audio Module</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="RtModuleComboBox" >
-      <property name="geometry" >
-       <rect>
-        <x>150</x>
-        <y>20</y>
-        <width>121</width>
-        <height>24</height>
-       </rect>
       </property>
      </widget>
      <widget class="QWidget" name="layoutWidget" >
@@ -458,29 +435,28 @@
        </item>
       </layout>
      </widget>
-    </widget>
-    <widget class="QLineEdit" name="BufferSizeLineEdit" >
-     <property name="geometry" >
-      <rect>
-       <x>320</x>
-       <y>10</y>
-       <width>61</width>
-       <height>25</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="DitherCheckBox" >
-     <property name="geometry" >
-      <rect>
-       <x>390</x>
-       <y>40</y>
-       <width>71</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text" >
-      <string>Dither</string>
-     </property>
+     <widget class="QWidget" name="" >
+      <property name="geometry" >
+       <rect>
+        <x>20</x>
+        <y>60</y>
+        <width>251</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" >
+       <item>
+        <widget class="QLabel" name="label_3" >
+         <property name="text" >
+          <string>RT Audio Module</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="RtModuleComboBox" />
+       </item>
+      </layout>
+     </widget>
     </widget>
     <widget class="QWidget" name="layoutWidget" >
      <property name="geometry" >
@@ -488,7 +464,7 @@
        <x>20</x>
        <y>10</y>
        <width>111</width>
-       <height>72</height>
+       <height>81</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" >
@@ -518,67 +494,83 @@
       </item>
      </layout>
     </widget>
-    <widget class="QCheckBox" name="AdditionalFlagsCheckBox" >
-     <property name="geometry" >
-      <rect>
-       <x>140</x>
-       <y>70</y>
-       <width>241</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text" >
-      <string>Additional command line flags</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="AdditionalFlagsLineEdit" >
-     <property name="enabled" >
-      <bool>false</bool>
-     </property>
-     <property name="geometry" >
-      <rect>
-       <x>390</x>
-       <y>70</y>
-       <width>211</width>
-       <height>25</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="BufferSizeCheckBox" >
+    <widget class="QWidget" name="" >
      <property name="geometry" >
       <rect>
        <x>140</x>
        <y>10</y>
-       <width>141</width>
-       <height>22</height>
+       <width>311</width>
+       <height>61</height>
       </rect>
      </property>
-     <property name="text" >
-      <string>Buffer Size (-b)</string>
-     </property>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
+       <widget class="QCheckBox" name="BufferSizeCheckBox" >
+        <property name="text" >
+         <string>Buffer Size (-b)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QLineEdit" name="BufferSizeLineEdit" />
+      </item>
+      <item row="1" column="0" >
+       <widget class="QCheckBox" name="HwBufferSizeCheckBox" >
+        <property name="text" >
+         <string>HW Buffer Size (-B)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QLineEdit" name="HwBufferSizeLineEdit" />
+      </item>
+      <item row="1" column="3" >
+       <widget class="QCheckBox" name="DitherCheckBox" >
+        <property name="text" >
+         <string>Dither</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </widget>
-    <widget class="QCheckBox" name="HwBufferSizeCheckBox" >
+    <widget class="QWidget" name="" >
      <property name="geometry" >
       <rect>
        <x>140</x>
-       <y>40</y>
-       <width>171</width>
-       <height>22</height>
+       <y>80</y>
+       <width>461</width>
+       <height>29</height>
       </rect>
      </property>
-     <property name="text" >
-      <string>HW Buffer Size (-B)</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="HwBufferSizeLineEdit" >
-     <property name="geometry" >
-      <rect>
-       <x>320</x>
-       <y>40</y>
-       <width>61</width>
-       <height>25</height>
-      </rect>
-     </property>
+     <layout class="QHBoxLayout" >
+      <item>
+       <widget class="QCheckBox" name="AdditionalFlagsCheckBox" >
+        <property name="text" >
+         <string>Additional command line flags</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="AdditionalFlagsLineEdit" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_3" >

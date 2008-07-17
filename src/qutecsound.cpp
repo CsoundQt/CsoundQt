@@ -44,19 +44,6 @@ static const QString SCRIPT_NAME = "qutecsound_run_script.bat";
 static const QString SCRIPT_NAME = "./qutecsound_run_script.sh";
 #endif
 
-#ifdef LINUX
-#define DEFAULT_HTML_DIR "/home/andres/src/manual/html"
-#define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"
-#endif
-#ifdef MACOSX
-#define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib.framework/Versions/5.1/Resources/Manual"
-#define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal"
-#endif
-#ifdef WIN32
-#define DEFAULT_HTML_DIR "/home/andres/src/manual/html"
-#define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"
-#endif
-
 
 qutecsound::qutecsound(QString fileName)
 {
@@ -86,7 +73,15 @@ qutecsound::qutecsound(QString fileName)
 
   readSettings();
   fillFileMenu(); //Must be placed after readSettings to include recent Files
-  opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + ":/opcodes.xml"));
+  if (m_options->opcodexmldir == "") {
+#ifdef MACOSX
+    opcodeTree = new OpEntryParser(":/opcodes.xml");
+#else
+    opcodeTree = new OpEntryParser(":/opcodes.xml"));
+#endif
+  }
+  else
+    opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + "/opcodes.xml"));
   m_highlighter = new Highlighter();
   configureHighlighter();
 
@@ -152,7 +147,11 @@ void qutecsound::newFile()
   if (documentPages.size() > 0)
     if (maybeSave())
       return;
+#ifdef MACOSX
   QFile file(":/default.csd");
+#else
+  QFile file(":/default.csd");
+#endif
   if (!file.open(QFile::ReadOnly | QFile::Text)) {
     QMessageBox::warning(this, tr("QuteCsound"),
                           tr("Cannot read default template:\n%1.")
@@ -366,6 +365,8 @@ void qutecsound::play(bool realtime)
     while(csound.performKsmps(true)==0 && running) {
       qApp->processEvents();
     }
+	csound.Stop();
+	csound.cleanup();
 //     int hold;
 //
 //     CsoundPerformanceThread thread(csound.GetCsound());
