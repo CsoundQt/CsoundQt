@@ -44,13 +44,22 @@ QString Options::generateCmdLineFlags(bool rt)
   if (rt) {
     if (rtOverrideOptions)
       cmdline += " -+ignore_csopts=1";
-    cmdline += " -+rtaudio=" + m_configlists.rtaudioNames[rtAudioModule];
-    if (rtInputDevice != "")
-      cmdline += " -i" + rtInputDevice;
-    if (rtOutputDevice != "")
-      cmdline += " -o" + rtOutputDevice;
-    if (rtJackName != "")
-      cmdline += " -+jack_client=" + rtJackName;
+    if (m_configlists.rtAudioNames[rtAudioModule] != "none") {
+      cmdline += " -+rtaudio=" + m_configlists.rtAudioNames[rtAudioModule];
+      if (rtInputDevice != "")
+        cmdline += " -i" + rtInputDevice;
+      if (rtOutputDevice != "")
+        cmdline += " -o" + rtOutputDevice;
+      if (rtJackName != "")
+        cmdline += " -+jack_client=" + rtJackName;
+    }
+    if (m_configlists.rtMidiNames[rtMidiModule] != "none") {
+      cmdline += " -+rtmidi=" + m_configlists.rtMidiNames[rtMidiModule];
+      if (rtMidiInputDevice != "")
+        cmdline += " -M" + rtMidiInputDevice;
+      if (rtMidiOutputDevice != "")
+        cmdline += " -Q" + rtMidiOutputDevice;
+    }
   }
   else {
     if (fileOverrideOptions)

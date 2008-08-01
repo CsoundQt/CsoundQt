@@ -66,6 +66,9 @@ class Options{
     QString rtInputDevice;
     QString rtOutputDevice;
     QString rtJackName;
+    int rtMidiModule;
+    QString rtMidiInputDevice;
+    QString rtMidiOutputDevice;
 
     QString csdocdir;
     QString opcodedir;

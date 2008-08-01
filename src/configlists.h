@@ -31,7 +31,8 @@ class ConfigLists{
     QStringList fileTypeNames;
     QStringList fileFormatFlags;
     QStringList fileFormatNames;
-    QStringList rtaudioNames;
+    QStringList rtAudioNames;
+    QStringList rtMidiNames;
 
 };
 

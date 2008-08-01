@@ -35,8 +35,11 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   foreach (QString item, m_configlist->fileFormatNames) {
     FileFormatComboBox->addItem(item);
   }
-  foreach (QString item, m_configlist->rtaudioNames) {
+  foreach (QString item, m_configlist->rtAudioNames) {
     RtModuleComboBox->addItem(item);
+  }
+  foreach (QString item, m_configlist->rtMidiNames) {
+    RtMidiModuleComboBox->addItem(item);
   }
 
   fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
@@ -70,11 +73,14 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   OutputFilenameCheckBox->setChecked(m_options->fileOutputFilenameActive);
   OutputFilenameLineEdit->setText(m_options->fileOutputFilename);
   OutputFilenameLineEdit->setEnabled(m_options->fileOutputFilenameActive);
-  RtModuleComboBox->setCurrentIndex(m_options->rtAudioModule);
   RtOverrideCheckBox->setChecked(m_options->rtOverrideOptions);
+  RtModuleComboBox->setCurrentIndex(m_options->rtAudioModule);
   RtInputLineEdit->setText(m_options->rtInputDevice);
   RtOutputLineEdit->setText(m_options->rtOutputDevice);
   JackNameLineEdit->setText(m_options->rtJackName);
+  RtMidiModuleComboBox->setCurrentIndex(m_options->rtMidiModule);
+  RtMidiInputLineEdit->setText(m_options->rtMidiInputDevice);
+  RtMidiOutputLineEdit->setText(m_options->rtMidiOutputDevice);
 
   CsdocdirLineEdit->setText(m_options->csdocdir);
   OpcodedirCheckBox->setChecked(m_options->opcodedirActive);
@@ -92,12 +98,12 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   IncdirCheckBox->setChecked(m_options->incdirActive);
   IncdirLineEdit->setText(m_options->incdir);
   IncdirLineEdit->setEnabled(m_options->incdirActive);
-  opcodeXmlDirCheckBox->setChecked(m_options->opcodexmldirActive);
-  opcodeXmlDirLineEdit->setText(m_options->opcodexmldir);
-  opcodeXmlDirLineEdit->setEnabled(m_options->opcodexmldirActive);
+//   opcodeXmlDirCheckBox->setChecked(m_options->opcodexmldirActive);
+//   opcodeXmlDirLineEdit->setText(m_options->opcodexmldir);
+//   opcodeXmlDirLineEdit->setEnabled(m_options->opcodexmldirActive);
 
   TerminalLineEdit->setText(m_options->terminal);
-  BrowserLineEdit->setText(m_options->browser);
+//   BrowserLineEdit->setText(m_options->browser);
   WaveEditorLineEdit->setText(m_options->waveeditor);
   WavePlayerLineEdit->setText(m_options->waveplayer);
 
@@ -107,9 +113,9 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   connect(ssdirToolButton, SIGNAL(clicked()), this, SLOT(browseSsdir()));
   connect(sfdirToolButton, SIGNAL(clicked()), this, SLOT(browseSfdir()));
   connect(incdirToolButton, SIGNAL(clicked()), this, SLOT(browseIncdir()));
-  connect(opcodeXmlDirToolButton, SIGNAL(clicked()), this, SLOT(browseOpcodeXmlDir()));
+//   connect(opcodeXmlDirToolButton, SIGNAL(clicked()), this, SLOT(browseOpcodeXmlDir()));
   connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
-  connect(browserToolButton, SIGNAL(clicked()), this, SLOT(browseBrowser()));
+//   connect(browserToolButton, SIGNAL(clicked()), this, SLOT(browseBrowser()));
   connect(waveEditorToolButton, SIGNAL(clicked()), this, SLOT(browseWaveEditor()));
   connect(wavePlayerToolButton, SIGNAL(clicked()), this, SLOT(browseWavePlayer()));
   connect(this, SIGNAL(changeFont()), parent, SLOT(changeFont()));
@@ -145,11 +151,14 @@ void ConfigDialog::accept()
   m_options->fileInputFilename = InputFilenameLineEdit->text();
   m_options->fileOutputFilenameActive = OutputFilenameCheckBox->isChecked();
   m_options->fileOutputFilename = OutputFilenameLineEdit->text();
-  m_options->rtAudioModule = RtModuleComboBox->currentIndex();
   m_options->rtOverrideOptions = RtOverrideCheckBox->isChecked();
+  m_options->rtAudioModule = RtModuleComboBox->currentIndex();
   m_options->rtInputDevice = RtInputLineEdit->text();
   m_options->rtOutputDevice = RtOutputLineEdit->text();
   m_options->rtJackName = JackNameLineEdit->text();
+  m_options->rtMidiModule = RtMidiModuleComboBox->currentIndex();
+  m_options->rtMidiInputDevice = RtMidiInputLineEdit->text();
+  m_options->rtMidiOutputDevice = RtMidiOutputLineEdit->text();
 
   m_options->csdocdir = CsdocdirLineEdit->text();
   m_options->opcodedirActive = OpcodedirCheckBox->isChecked();
@@ -162,11 +171,11 @@ void ConfigDialog::accept()
   m_options->sfdir = SfdirLineEdit->text();
   m_options->incdirActive = IncdirCheckBox->isChecked();
   m_options->incdir = IncdirLineEdit->text();
-  m_options->opcodexmldirActive = opcodeXmlDirCheckBox->isChecked();
-  m_options->opcodexmldir = opcodeXmlDirLineEdit->text();
+//   m_options->opcodexmldirActive = opcodeXmlDirCheckBox->isChecked();
+//   m_options->opcodexmldir = opcodeXmlDirLineEdit->text();
 
   m_options->terminal = TerminalLineEdit->text();
-  m_options->browser = BrowserLineEdit->text();
+//   m_options->browser = BrowserLineEdit->text();
   m_options->waveeditor = WaveEditorLineEdit->text();
   m_options->waveplayer = WavePlayerLineEdit->text();
   QDialog::accept();
@@ -208,11 +217,11 @@ void ConfigDialog::browseIncdir()
   IncdirLineEdit->setText(m_options->incdir);
 }
 
-void ConfigDialog::browseOpcodeXmlDir()
-{
-  browseDir(m_options->opcodexmldir);
-  opcodeXmlDirLineEdit->setText(m_options->opcodexmldir);
-}
+// void ConfigDialog::browseOpcodeXmlDir()
+// {
+//   browseDir(m_options->opcodexmldir);
+//   opcodeXmlDirLineEdit->setText(m_options->opcodexmldir);
+// }
 
 void ConfigDialog::browseTerminal()
 {
@@ -220,11 +229,11 @@ void ConfigDialog::browseTerminal()
   TerminalLineEdit->setText(m_options->terminal);
 }
 
-void ConfigDialog::browseBrowser()
-{
-  browseFile(m_options->browser);
-  BrowserLineEdit->setText(m_options->browser);
-}
+// void ConfigDialog::browseBrowser()
+// {
+//   browseFile(m_options->browser);
+//   BrowserLineEdit->setText(m_options->browser);
+// }
 
 void ConfigDialog::browseWaveEditor()
 {

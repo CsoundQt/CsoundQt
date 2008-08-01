@@ -155,6 +155,7 @@
       [, ifreq1] [, ifreq2]</synopsis>
 <synopsis>ares <opcodename>barmodel</opcodename> kbcL, kbcR, iK, ib, kscan, iT30, ipos, ivel, iwid</synopsis>
 <synopsis>ares <opcodename>cabasa</opcodename> iamp, idettack [, inum] [, idamp] [, imaxshake]</synopsis>
+<synopsis>aI3, aV2, aV1 <opcodename>chuap</opcodename> kL, kR0, kC1, kG, kGa, kGb, kE, kC2, iI3, iV2, iV1, ktime_step</synopsis>
 <synopsis>ares <opcodename>crunch</opcodename> iamp, idettack [, inum] [, idamp] [, imaxshake]</synopsis>
 <synopsis>ares <opcodename>dripwater</opcodename> kamp, idettack [, inum] [, idamp] [, imaxshake] [, ifreq] \
       [, ifreq1] [, ifreq2]</synopsis>
@@ -441,9 +442,16 @@
       au, av [, abk, al, am, an, ao, ap, aq]]</synopsis><synopsis>ao1, ao2, ao3, ao4, ao5 <opcodename>bformdec</opcodename> isetup, aw, ax, ay, az [, ar, as, \
       at, au, av [, abk, al, am, an, ao, ap, aq]]</synopsis><synopsis>ao1, ao2, ao3, ao4, ao5, ao6, ao7, ao8 <opcodename>bformdec</opcodename> isetup, aw, ax, ay, az \
       [, ar, as, at, au, av [, abk, al, am, an, ao, ap, aq]]]</synopsis>
+<synopsis>ao1, ao2 <opcodename>bformdec1</opcodename> isetup, aw, ax, ay, az [, ar, as, at, au, av \
+      [, abk, al, am, an, ao, ap, aq]]</synopsis><synopsis>ao1, ao2, ao3, ao4 <opcodename>bformdec1</opcodename> isetup, aw, ax, ay, az [, ar, as, at, \
+      au, av [, abk, al, am, an, ao, ap, aq]]</synopsis><synopsis>ao1, ao2, ao3, ao4, ao5 <opcodename>bformdec1</opcodename> isetup, aw, ax, ay, az [, ar, as, \
+      at, au, av [, abk, al, am, an, ao, ap, aq]]</synopsis><synopsis>ao1, ao2, ao3, ao4, ao5, ao6, ao7, ao8 <opcodename>bformdec1</opcodename> isetup, aw, ax, ay, az \
+      [, ar, as, at, au, av [, abk, al, am, an, ao, ap, aq]]]</synopsis>
 <synopsis>aw, ax, ay, az <opcodename>bformenc</opcodename> asig, kalpha, kbeta, kord0, kord1</synopsis><synopsis>aw, ax, ay, az, ar, as, at, au, av <opcodename>bformenc</opcodename> asig, kalpha, kbeta, \
       kord0, kord1 , kord2</synopsis><synopsis>aw, ax, ay, az, ar, as, at, au, av, ak, al, am, an, ao, ap, aq <opcodename>bformenc</opcodename> \
       asig, kalpha, kbeta, kord0, kord1, kord2, kord3</synopsis>
+<synopsis>aw, ax, ay, az <opcodename>bformenc1</opcodename> asig, kalpha, kbeta</synopsis><synopsis>aw, ax, ay, az, ar, as, at, au, av <opcodename>bformenc1</opcodename> asig, kalpha, kbeta</synopsis><synopsis>aw, ax, ay, az, ar, as, at, au, av, ak, al, am, an, ao, ap, aq <opcodename>bformenc1</opcodename> \
+      asig, kalpha, kbeta</synopsis>
 <synopsis>aleft, aright <opcodename>hrtfer</opcodename> asig, kaz, kelev, <quote>HRTFcompact</quote></synopsis>
 <synopsis>aleft, aright <opcodename>hrtfmove</opcodename> asrc, kAz, kElev, ifilel, ifiler [, imode, ifade, isr]</synopsis>
 <synopsis>aleft, aright <opcodename>hrtfmove2</opcodename> asrc, kAz, kElev, ifilel, ifiler [,ioverlap, iradius, isr]</synopsis>
@@ -460,17 +468,17 @@
 <synopsis><opcodename>spat3dt</opcodename> ioutft, iX, iY, iZ, idist, ift, imode, irlen [, iftnocl]</synopsis>
 <synopsis>k1 <opcodename>spdist</opcodename> ifn, ktime, kx, ky</synopsis>
 <synopsis>a1, a2, a3, a4 <opcodename>spsend</opcodename></synopsis>
-<synopsis>ar1, ..., ar16 <opcodename>vbap16</opcodename> asig, kazim [, ielev] [, ispread]</synopsis>
+<synopsis>ar1, ..., ar16 <opcodename>vbap16</opcodename> asig, kazim [, kelev] [, kspread]</synopsis>
 <synopsis>ar1, ..., ar16 <opcodename>vbap16move</opcodename> asig, idur, ispread, ifldnum, ifld1 \
       [, ifld2] [...]</synopsis>
-<synopsis>ar1, ar2, ar3, ar4 <opcodename>vbap4</opcodename> asig, kazim [, ielev] [, ispread]</synopsis>
+<synopsis>ar1, ar2, ar3, ar4 <opcodename>vbap4</opcodename> asig, kazim [, kelev] [, kspread]</synopsis>
 <synopsis>ar1, ar2, ar3, ar4 <opcodename>vbap4move</opcodename> asig, idur, ispread, ifldnum, ifld1 \
       [, ifld2] [...]</synopsis>
-<synopsis>ar1, ..., ar8 <opcodename>vbap8</opcodename> asig, kazim [, ielev] [, ispread]</synopsis>
+<synopsis>ar1, ..., ar8 <opcodename>vbap8</opcodename> asig, kazim [, kelev] [, kspread]</synopsis>
 <synopsis>ar1, ..., ar8 <opcodename>vbap8move</opcodename> asig, idur, ispread, ifldnum, ifld1 \
       [, ifld2] [...]</synopsis>
 <synopsis><opcodename>vbaplsinit</opcodename> idim, ilsnum [, idir1] [, idir2] [...] [, idir32]</synopsis>
-<synopsis><opcodename>vbapz</opcodename> inumchnls, istartndx, asig, kazim [, ielev] [, ispread]</synopsis>
+<synopsis><opcodename>vbapz</opcodename> inumchnls, istartndx, asig, kazim [, kelev] [, kspread]</synopsis>
 <synopsis><opcodename>vbapzmove</opcodename> inumchnls, istartndx, asig, idur, ispread, ifldnum, ifld1, \
       ifld2, [...]</synopsis>
 </category>
@@ -624,7 +632,7 @@
 <synopsis><opcodename>schedule</opcodename> insnum, iwhen, idur [, ip4] [, ip5] [...]</synopsis><synopsis><opcodename>schedule</opcodename> &quot;insname&quot;, iwhen, idur [, ip4] [, ip5] [...]</synopsis>
 <synopsis><opcodename>schedwhen</opcodename> ktrigger, kinsnum, kwhen, kdur [, ip4] [, ip5] [...]</synopsis><synopsis><opcodename>schedwhen</opcodename> ktrigger, &quot;insname&quot;, kwhen, kdur [, ip4] [, ip5] [...]</synopsis>
 <synopsis><opcodename>scoreline</opcodename> Sin, ktring</synopsis>
-<synopsis><opcodename>scoreline_i</opcodename> Sin, ktring</synopsis>
+<synopsis><opcodename>scoreline_i</opcodename> Sin</synopsis>
 </category>
 <category name="Instrument Control:Program Flow Control"><synopsis><opcodename>cggoto</opcodename> condition, label</synopsis>
 <synopsis><opcodename>cigoto</opcodename> condition, label</synopsis>
@@ -849,6 +857,8 @@
 <synopsis><opcodename>~</opcodename> a  (bitwise NOT)</synopsis>
 <synopsis>a <opcodename>|</opcodename> b  (bitwise OR)</synopsis>
 
+<synopsis>a <opcodename>&lt;&lt;</opcodename> b  (bitshift left)</synopsis>
+<synopsis>a <opcodename>&gt;&gt;</opcodename> b  (bitshift left)</synopsis>
 <synopsis>a <opcodename>#</opcodename> b  (bitwise NON EQUIVALENCE)</synopsis>
 <synopsis>a <opcodename>||</opcodename> b  (logical OR; not audio-rate)</synopsis>
 
@@ -856,6 +866,9 @@
 
 <synopsis>a <opcodename>-</opcodename> b (no rate restriction)</synopsis>
 
+</category>
+<category name="Mathematical Operations:Comparators and Accumulators"><synopsis><opcodename>clear</opcodename> avar1 [, avar2] [, avar3] [...]</synopsis>
+<synopsis><opcodename>vincr</opcodename> accum, aincr</synopsis>
 </category>
 <category name="Mathematical Operations:Mathematical Functions"><synopsis><opcodename>abs</opcodename>(x) (no rate restriction)</synopsis>
 <synopsis><opcodename>ceil</opcodename>(x) (init-, control-, or audio-rate arg allowed)</synopsis>
@@ -949,6 +962,15 @@
 <synopsis><opcodename>outkpat</opcodename> kchn, knotenum, kvalue, kmin, kmax</synopsis>
 <synopsis><opcodename>outkpb</opcodename> kchn, kvalue, kmin, kmax</synopsis>
 <synopsis><opcodename>outkpc</opcodename> kchn, kprog, kmin, kmax</synopsis>
+</category>
+<category name="Real-time MIDI:Converters"><synopsis>iamp <opcodename>ampmidi</opcodename> iscal [, ifn]</synopsis>
+<synopsis>icps <opcodename>cpsmidi</opcodename></synopsis>
+<synopsis>icps <opcodename>cpsmidib</opcodename> [irange]</synopsis><synopsis>kcps <opcodename>cpsmidib</opcodename> [irange]</synopsis>
+<synopsis>icps <opcodename>cpstmid</opcodename> ifn</synopsis>
+<synopsis>ioct <opcodename>octmidi</opcodename></synopsis>
+<synopsis>ioct <opcodename>octmidib</opcodename> [irange]</synopsis><synopsis>koct <opcodename>octmidib</opcodename> [irange]</synopsis>
+<synopsis>ipch <opcodename>pchmidi</opcodename></synopsis>
+<synopsis>ipch <opcodename>pchmidib</opcodename> [irange]</synopsis><synopsis>kpch <opcodename>pchmidib</opcodename> [irange]</synopsis>
 </category>
 <category name="Real-time MIDI:Generic I/O"><synopsis>kstatus, kchan, kdata1, kdata2 <opcodename>midiin</opcodename></synopsis>
 <synopsis><opcodename>midiout</opcodename> kstatus, kchan, kdata1, kdata2</synopsis>

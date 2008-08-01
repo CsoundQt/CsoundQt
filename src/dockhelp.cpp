@@ -29,6 +29,7 @@ DockHelp::DockHelp(QWidget *parent)
   : QDockWidget(parent)
 {
   setWindowTitle("Opcode Help");
+  setMinimumSize(400,200);
   text = new QTextBrowser();
   text->setAcceptRichText(true);
   setWidget (text);
@@ -44,13 +45,18 @@ void DockHelp::loadFile(QString fileName)
 {
   QFile file(fileName);
   if (!file.open(QFile::ReadOnly | QFile::Text)) {
-    QMessageBox::warning(this, tr("QuteCsound"),
-                         tr("Cannot read file %1:\n%2.")
-                             .arg(fileName)
-                             .arg(file.errorString()));
+//     QMessageBox::warning(this, tr("QuteCsound"),
+//                          tr("Cannot read file %1:\n%2.")
+//                              .arg(fileName)
+//                              .arg(file.errorString()));
     return;
   }
-  QTextStream in(&file);
-  text->setSource (fileName);
+  if (externalBrowser) {
+    //TODO: open external browser
+  }
+  else {
+    QTextStream in(&file);
+    text->setSource (fileName);
   //text->setHtml(in.readAll());
+  }
 }

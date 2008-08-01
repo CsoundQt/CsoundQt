@@ -44,6 +44,28 @@ static const QString SCRIPT_NAME = "qutecsound_run_script.bat";
 static const QString SCRIPT_NAME = "./qutecsound_run_script.sh";
 #endif
 
+#ifdef LINUX
+#define DEFAULT_HTML_DIR "/home/andres/src/manual/html"
+#define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"
+// #define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
+#define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/bin/audacity"
+#define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/aplay"
+#endif
+#ifdef MACOSX
+#define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib.framework/Versions/5.1/Resources/Manual"
+#define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app"
+// #define DEFAULT_BROWSER_EXECUTABLE "/Applications/firefox.app"
+#define DEFAULT_WAVEEDITOR_EXECUTABLE "/Applications/Audacity.app"
+#define DEFAULT_WAVEPLAYER_EXECUTABLE "/Applications/QuickTime.app"
+#endif
+#ifdef WIN32
+#define DEFAULT_HTML_DIR ""
+#define DEFAULT_TERM_EXECUTABLE ""
+// #define DEFAULT_BROWSER_EXECUTABLE ""
+#define DEFAULT_WAVEEDITOR_EXECUTABLE ""
+#define DEFAULT_WAVEPLAYER_EXECUTABLE ""
+#endif
+
 
 qutecsound::qutecsound(QString fileName)
 {
@@ -77,7 +99,7 @@ qutecsound::qutecsound(QString fileName)
 #ifdef MACOSX
     opcodeTree = new OpEntryParser(":/opcodes.xml");
 #else
-    opcodeTree = new OpEntryParser(":/opcodes.xml"));
+    opcodeTree = new OpEntryParser(":/opcodes.xml");
 #endif
   }
   else
@@ -398,6 +420,14 @@ void qutecsound::play(bool realtime)
 
     pid_t pid = fork();
     if( pid == 0 )  {
+#ifdef MACOSX
+      //TODO: Fix for Mac (add "open")
+      execl(m_options->terminal.toStdString().c_str(),
+            m_options->terminal.toStdString().c_str(),
+            "-e",
+            SCRIPT_NAME.toStdString().c_str(),
+            NULL);
+#else
       //This has been tested to work with xterm and gnome-terminal
       // It doesn't work with konsole for some reason....
       execl(m_options->terminal.toStdString().c_str(),
@@ -405,6 +435,7 @@ void qutecsound::play(bool realtime)
             "-e",
             SCRIPT_NAME.toStdString().c_str(),
             NULL);
+#endif
     }
   }
 }
@@ -546,7 +577,7 @@ void qutecsound::createActions()
       "selection"));
 
   autoCompleteAct = new QAction(tr("AutoComplete"), this);
-  autoCompleteAct->setShortcut(tr("Ctrl+ "));
+  autoCompleteAct->setShortcut(tr("Alt+C"));
   autoCompleteAct->setStatusTip(tr("Autocomplete according to Status bar display"));
   connect(autoCompleteAct, SIGNAL(triggered()), this, SLOT(autoComplete()));
 
@@ -556,30 +587,28 @@ void qutecsound::createActions()
   connect(configureAct, SIGNAL(triggered()), this, SLOT(configure()));
 
   playAct = new QAction(QIcon(":/images/gtk-media-play-ltr.png"), tr("Play"), this);
-//   playAct->setShortcut(tr("Ctrl+Q"));
+  playAct->setShortcut(tr("Alt+R"));
   playAct->setStatusTip(tr("Play"));
   connect(playAct, SIGNAL(triggered()), this, SLOT(play()));
 
   stopAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop"), this);
-//   playAct->setShortcut(tr("Ctrl+Q"));
+  stopAct->setShortcut(tr("Alt+S"));
   stopAct->setStatusTip(tr("Stop"));
   connect(stopAct, SIGNAL(triggered()), this, SLOT(stop()));
 
   renderAct = new QAction(QIcon(":/images/render.png"), tr("Render to file"), this);
-//   playAct->setShortcut(tr("Ctrl+Q"));
+  renderAct->setShortcut(tr("Alt+F"));
   renderAct->setStatusTip(tr("Render to file"));
   connect(renderAct, SIGNAL(triggered()), this, SLOT(render()));
 
   showHelpAct = new QAction(tr("Show Help Panel"), this);
-//   playAct->setShortcut(tr("Ctrl+Q"));
-//   playAct->setStatusTip(tr("Play"));
+  showHelpAct->setShortcut(tr("Alt+W"));
   showHelpAct->setCheckable(true);
   showHelpAct->setChecked(true);
   connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
 
   showConsole = new QAction(tr("Show Output Console"), this);
-//   playAct->setShortcut(tr("Ctrl+Q"));
-//   playAct->setStatusTip(tr("Play"));
+  showConsole->setShortcut(tr("Alt+A"));
   showConsole->setCheckable(true);
   showConsole->setChecked(true);
   connect(showConsole, SIGNAL(toggled(bool)), m_console, SLOT(setVisible(bool)));
@@ -633,9 +662,9 @@ void qutecsound::connectActions()
 
 void qutecsound::createMenus()
 {
-  fileMenu = menuBar()->addMenu(tr("&File"));
+  fileMenu = menuBar()->addMenu(tr("File"));
 
-  editMenu = menuBar()->addMenu(tr("&Edit"));
+  editMenu = menuBar()->addMenu(tr("Edit"));
   editMenu->addAction(undoAct);
   editMenu->addAction(redoAct);
   editMenu->addSeparator();
@@ -657,7 +686,7 @@ void qutecsound::createMenus()
 
   menuBar()->addSeparator();
 
-  helpMenu = menuBar()->addMenu(tr("&Help"));
+  helpMenu = menuBar()->addMenu(tr("Help"));
   helpMenu->addAction(setHelpEntryAct);
   helpMenu->addSeparator();
   helpMenu->addAction(aboutAct);
@@ -761,21 +790,23 @@ void qutecsound::readSettings()
   m_options->dither = settings.value("dither", false).toBool();
   m_options->additionalFlags = settings.value("additionalFlags", "").toString();
   m_options->additionalFlagsActive = settings.value("additionalFlagsActive", false).toBool();
-  m_options->fileOverrideOptions = settings.value("fileOverrideOptions", false).toBool();
+  m_options->fileOverrideOptions = settings.value("fileOverrideOptions", true).toBool();
   m_options->fileAskFilename = settings.value("fileAskFilename", false).toBool();
   m_options->filePlayFinished = settings.value("filePlayFinished", false).toBool();
   m_options->fileFileType = settings.value("fileFileType", 0).toInt();
-  m_options->fileSampleFormat = settings.value("fileSampleFormat", 0).toInt();
+  m_options->fileSampleFormat = settings.value("fileSampleFormat", 1).toInt();
   m_options->fileInputFilenameActive = settings.value("fileInputFilenameActive", false).toBool();
   m_options->fileInputFilename = settings.value("fileInputFilename", "").toString();
   m_options->fileOutputFilenameActive = settings.value("fileOutputFilenameActive", false).toBool();
   m_options->fileOutputFilename = settings.value("fileOutputFilename", "").toString();
+  m_options->rtOverrideOptions = settings.value("rtOverrideOptions", true).toBool();
   m_options->rtAudioModule = settings.value("rtAudioModule", 0).toInt();
-  m_options->rtOverrideOptions = settings.value("rtOverrideOptions", false).toBool();
-  m_options->rtInputDevice = settings.value("rtInputDevice", "").toString();
-  m_options->rtOutputDevice = settings.value("rtOutputDevice", "").toString();
+  m_options->rtInputDevice = settings.value("rtInputDevice", "adc").toString();
+  m_options->rtOutputDevice = settings.value("rtOutputDevice", "dac").toString();
   m_options->rtJackName = settings.value("rtJackName", "").toString();
-  m_options->rtAudioModule = settings.value("rtAudioModule", 0).toInt();
+  m_options->rtMidiModule = settings.value("rtMidiModule", 0).toInt();
+  m_options->rtMidiInputDevice = settings.value("rtMidiInputDevice", "0").toString();
+  m_options->rtMidiOutputDevice = settings.value("rtMidiOutputDevice", "").toString();
   settings.endGroup();
   settings.beginGroup("Environment");
   m_options->csdocdir = settings.value("csdocdir", DEFAULT_HTML_DIR).toString();
@@ -794,9 +825,13 @@ void qutecsound::readSettings()
   settings.endGroup();
   settings.beginGroup("External");
   m_options->terminal = settings.value("terminal", DEFAULT_TERM_EXECUTABLE).toString();
-  m_options->browser = settings.value("browser", "/usr/bin/firefox").toString();
-  m_options->waveeditor = settings.value("waveeditor", "/usr/bin/audacity").toString();
-  m_options->waveplayer = settings.value("waveplayer", "/usr/bin/aplay").toString();
+//   m_options->browser = settings.value("browser", DEFAULT_BROWSER_EXECUTABLE).toString();
+  m_options->waveeditor = settings.value("waveeditor",
+                                         DEFAULT_WAVEEDITOR_EXECUTABLE
+                                        ).toString();
+  m_options->waveplayer = settings.value("waveplayer",
+                                         DEFAULT_WAVEPLAYER_EXECUTABLE
+                                        ).toString();
   settings.endGroup();
   settings.endGroup();
 }
@@ -838,12 +873,14 @@ void qutecsound::writeSettings()
   settings.setValue("fileInputFilename", m_options->fileInputFilename);
   settings.setValue("fileOutputFilenameActive", m_options->fileOutputFilenameActive);
   settings.setValue("fileOutputFilename", m_options->fileOutputFilename);
-  settings.setValue("rtAudioModule", m_options->rtAudioModule);
   settings.setValue("rtOverrideOptions", m_options->rtOverrideOptions);
+  settings.setValue("rtAudioModule", m_options->rtAudioModule);
   settings.setValue("rtInputDevice", m_options->rtInputDevice);
   settings.setValue("rtOutputDevice", m_options->rtOutputDevice);
   settings.setValue("rtJackName", m_options->rtJackName);
-  settings.setValue("rtAudioModule", m_options->rtAudioModule);
+  settings.setValue("rtMidiModule", m_options->rtMidiModule);
+  settings.setValue("rtMidiInputDevice", m_options->rtMidiInputDevice);
+  settings.setValue("rtMidiOutputDevice", m_options->rtMidiOutputDevice);
   settings.endGroup();
   settings.beginGroup("Environment");
   settings.setValue("csdocdir", m_options->csdocdir);
@@ -862,7 +899,7 @@ void qutecsound::writeSettings()
   settings.endGroup();
   settings.beginGroup("External");
   settings.setValue("terminal", m_options->terminal);
-  settings.setValue("browser", m_options->browser);
+//   settings.setValue("browser", m_options->browser);
   settings.setValue("waveeditor", m_options->waveeditor);
   settings.setValue("waveplayer", m_options->waveplayer);
   settings.endGroup();
