@@ -928,6 +928,13 @@ bool qutecsound::maybeSave()
   return true;
 }
 
+QString qutecsound::fixLineEndings(const QString &text)
+{
+  
+  qDebug("n = %i  r = %i", text.count("\n"), text.count("\r"));
+  return text;
+}
+
 void qutecsound::loadFile(const QString &fileName)
 {
   QFile file(fileName);
@@ -939,7 +946,8 @@ void qutecsound::loadFile(const QString &fileName)
     return;
   }
 
-  QTextStream in(&file);
+  //QTextStream in(&file);
+  
   QApplication::setOverrideCursor(Qt::WaitCursor);
   if (documentPages[curPage]->fileName !="") {
     DocumentPage *newPage = new DocumentPage(this);
@@ -950,8 +958,17 @@ void qutecsound::loadFile(const QString &fileName)
     textEdit = newPage;
     connectActions();
   }
+  QString text;
+  while (!file.atEnd()) {
+    QByteArray line = file.readLine().trimmed();
+	text = text + QString(line);
+	if (!line.contains("\n"))
+	  text += "\r\n";
+    qDebug("%s", line.data());
+  }
+  //textEdit->setPlainText(fixLineEndings(in.readAll()));
+  textEdit->setPlainText(text);
   m_highlighter->setDocument(textEdit->document());
-  textEdit->setText(in.readAll());
   QApplication::restoreOverrideCursor();
 
   textEdit->document()->setModified(false);

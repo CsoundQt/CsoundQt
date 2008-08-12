@@ -25,8 +25,6 @@ CONFIG += warn_on \
 TARGET = ../bin/qutecsound
 RESOURCES = application.qrc
 
-
-
 QT += xml
 
 DISTFILES += default.csd \
@@ -42,6 +40,7 @@ FORMS += configdialog.ui
 win {
     DEFINES +=WIN32
 }
+
 linux-g++ {
     DEFINES +=LINUX    
     INCLUDEPATH += /usr/local/include/csound/
@@ -55,6 +54,6 @@ macx {
     LIBS += -framework QtCore
     LIBS += -framework CsoundLib -lcsnd
     LIBS += -L/Library/Frameworks/CsoundLib.framework/Versions/Current
-
+	QMAKE_INFO_PLIST = MyInfo.plist
 }
 

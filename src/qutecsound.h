@@ -94,6 +94,7 @@ class qutecsound:public QMainWindow
     void writeSettings();
     void configureHighlighter();
     bool maybeSave();
+	QString fixLineEndings(const QString &text);
     void loadFile(const QString &fileName);
     void loadCompanionFile(const QString &fileName);
     bool saveFile(const QString &fileName);

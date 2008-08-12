@@ -100,7 +100,9 @@ void Highlighter::setLastRules()
       << "<CsOptions>" << "</CsOptions>"
       << "<CsInstruments>" << "</CsInstruments>"
       << "<CsScore>" << "</CsScore>"
-      << "<CsVersion>" << "</CsVersion>";
+      << "<CsVersion>" << "</CsVersion>"
+      << "<MacOptions>" << "</MacOptions>"
+      << "<MacGUI>" << "</MacGUI>";
   foreach (QString pattern, keywordPatterns) {
     rule.pattern = QRegExp(pattern);
     rule.format = csdtagFormat;
