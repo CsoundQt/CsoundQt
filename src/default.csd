@@ -11,7 +11,7 @@ nchnls = 2
 
 instr 1
 kfreq line 100, p3, 1000
-aout oscil 10000, p3, 1
+aout oscil 10000, kfreq, 1
 outs aout, aout
 endin
 
