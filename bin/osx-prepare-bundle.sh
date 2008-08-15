@@ -21,4 +21,8 @@ install_name_tool -id @executable_path/../Frameworks/QtXml.framework/Versions/4.
 install_name_tool -change  QtCore.framework/Versions/4/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore qutecsound.app/Contents/Frameworks/QtGui.framework/Versions/4.0/QtGui
 install_name_tool -change  QtCore.framework/Versions/4/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore qutecsound.app/Contents/Frameworks/QtXml.framework/Versions/4.0/QtXml
 
+rm qutecsound.app/Contents/Info.plist
+cp ../src/MyInfo.plist qutecsound.app/Contents/Info.plist
+
 otool -L qutecsound.app/Contents/MacOS/qutecsound
+
