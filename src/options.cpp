@@ -72,6 +72,7 @@ QString Options::generateCmdLineFlags(bool rt)
       cmdline += " -o" + fileOutputFilename;
 
   }
+  cmdline += " --env:CSNOSTOP=yes";
 
   return cmdline;
 }

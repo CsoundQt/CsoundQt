@@ -30,6 +30,11 @@
 
 #include "types.h"
 
+#ifdef MACOSX
+// Needed to be able to grab menus back from FLTK
+#include <Carbon/Carbon.h>
+#endif
+
 class QAction;
 class QMenu;
 class QTextEdit;
@@ -152,6 +157,10 @@ class qutecsound:public QMainWindow
     QStringList recentFiles;
 
     bool running;
+	
+#ifdef MACOSX
+	MenuBarHandle menuBarHandle;
+#endif
 };
 
 #endif

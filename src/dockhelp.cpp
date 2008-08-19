@@ -52,6 +52,8 @@ void DockHelp::loadFile(QString fileName)
     return;
   }
   if (externalBrowser) {
+    QTextStream in(&file);
+    text->setSource (fileName);
     //TODO: open external browser
   }
   else {

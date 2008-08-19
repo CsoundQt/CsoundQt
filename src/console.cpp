@@ -26,6 +26,7 @@ Console::Console(QWidget * parent)
   text = new QTextEdit();
   text->setReadOnly(true);
   setWidget (text);
+  text->document()->setDefaultFont(QFont("Courier", 10));
 }
 
 Console::~Console()

@@ -44,29 +44,6 @@ static const QString SCRIPT_NAME = "qutecsound_run_script.bat";
 static const QString SCRIPT_NAME = "./qutecsound_run_script.sh";
 #endif
 
-#ifdef LINUX
-#define DEFAULT_HTML_DIR "/home/andres/src/manual/html"
-#define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"
-// #define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
-#define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/bin/audacity"
-#define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/aplay"
-#endif
-#ifdef MACOSX
-#define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib.framework/Versions/5.1/Resources/Manual"
-#define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app"
-// #define DEFAULT_BROWSER_EXECUTABLE "/Applications/firefox.app"
-#define DEFAULT_WAVEEDITOR_EXECUTABLE "/Applications/Audacity.app"
-#define DEFAULT_WAVEPLAYER_EXECUTABLE "/Applications/QuickTime.app"
-#endif
-#ifdef WIN32
-#define DEFAULT_HTML_DIR ""
-#define DEFAULT_TERM_EXECUTABLE ""
-// #define DEFAULT_BROWSER_EXECUTABLE ""
-#define DEFAULT_WAVEEDITOR_EXECUTABLE ""
-#define DEFAULT_WAVEPLAYER_EXECUTABLE ""
-#endif
-
-
 qutecsound::qutecsound(QString fileName)
 {
   resize(660,350);
@@ -352,9 +329,18 @@ void qutecsound::play(bool realtime)
   }
 
   if (m_options->useAPI) {
+#ifdef MACOSX
+//Remember menu bar to set it after FLTK grabs it
+	menuBarHandle = GetMenuBar();
+#endif
     m_console->clear();
     QTemporaryFile csdFile;
-    csdFile.setFileTemplate(QString("csound-tmpXXXXXXXX.csd"));
+	QString tmpFileName = QDir::tempPath();
+	if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
+	  tmpFileName += QDir::separator();
+	}
+	tmpFileName += QString("csound-tmpXXXXXXXX.csd");
+    csdFile.setFileTemplate(tmpFileName);
     if (!csdFile.open()) {
       QMessageBox::critical(this,
                             tr("PostQC"),
@@ -405,6 +391,10 @@ void qutecsound::play(bool realtime)
 //
 //       }
 //     }
+#ifdef MACOSX
+// Put menu bar back
+    SetMenuBar(menuBarHandle);
+#endif
   }
   else {
     QString script = generateScript(realtime);
@@ -461,7 +451,7 @@ void qutecsound::setHelpEntry()
   QTextCursor cursor = textEdit->textCursor();
   cursor.select(QTextCursor::WordUnderCursor);
   if (m_options->csdocdir != "") {
-    QString file =  m_options->csdocdir + "/" +cursor.selectedText() + ".html";
+    QString file =  m_options->csdocdir + "/" + cursor.selectedText() + ".html";
     helpPanel->loadFile(file);
     helpPanel->show();
   }
@@ -777,7 +767,7 @@ void qutecsound::readSettings()
   settings.beginGroup("Options");
   settings.beginGroup("Editor");
   m_options->font = settings.value("font", "Courier").toString();
-  m_options->fontPointSize = settings.value("fontsize", 10).toDouble();
+  m_options->fontPointSize = settings.value("fontsize", 12).toDouble();
   m_options->autoPlay = settings.value("autoplay", false).toBool();
   m_options->saveChanges = settings.value("savechanges", true).toBool();
   settings.endGroup();
