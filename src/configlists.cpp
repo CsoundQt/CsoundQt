@@ -39,13 +39,13 @@ ConfigLists::ConfigLists()
   rtAudioNames << "winmm" << "portaudio" << "none";
 #endif
 #ifdef LINUX
-  rtMidiNames << "portmidi" << "alsa" << "virtual" << "none";
+  rtMidiNames << "none" << "portmidi" << "alsa" << "virtual";
 #endif
 #ifdef MACOSX
-  rtMidiNames << "portmidi" << "virtual" << "none";
+  rtMidiNames << "none" << "portmidi" << "virtual";
 #endif
 #ifdef WIN32
-  rtMidiNames << "winmm" << "portmidi" << "virtual" << "none";
+  rtMidiNames << "none" << "winmm" << "portmidi" << "virtual";
 #endif
 }
 

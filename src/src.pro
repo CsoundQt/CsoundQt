@@ -58,3 +58,5 @@ macx {
 
 }
 
+CONFIG -= stl
+

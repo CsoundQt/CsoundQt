@@ -44,6 +44,8 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
 
   fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
   fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));
+  consoleFontComboBox->setCurrentIndex(consoleFontComboBox->findText(m_options->consoleFont) );
+  consoleFontSizeComboBox->setCurrentIndex(consoleFontSizeComboBox->findText(QString::number((int) m_options->consoleFontPointSize)));
   autoplayCheckBox->setChecked(m_options->autoPlay);
   saveChangesCheckBox->setChecked(m_options->saveChanges);
 
@@ -130,6 +132,8 @@ void ConfigDialog::accept()
 {
   m_options->font = fontComboBox->currentText();
   m_options->fontPointSize = fontSizeComboBox->currentText().toDouble();
+  m_options->consoleFont = consoleFontComboBox->currentText();
+  m_options->consoleFontPointSize = consoleFontSizeComboBox->currentText().toDouble();
   m_options->autoPlay = autoplayCheckBox->isChecked();
   m_options->saveChanges = saveChangesCheckBox->isChecked();
   emit(changeFont());

@@ -33,6 +33,7 @@ class Console : public QDockWidget
 
     void appendMessage(QString msg);
     void clear();
+    void setDefaultFont(QFont font) {text->document()->setDefaultFont(font);}
   private:
     QTextEdit *text;
 

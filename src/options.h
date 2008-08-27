@@ -38,6 +38,8 @@ class Options{
 
     QString font;
     float fontPointSize;
+    QString consoleFont;
+    float consoleFontPointSize;
     bool autoPlay;
     bool saveChanges;
 

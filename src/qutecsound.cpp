@@ -114,6 +114,8 @@ void qutecsound::changeFont()
   for (int i = 0; i < documentPages.size(); i++) {
     documentPages[i]->document()->setDefaultFont(QFont(m_options->font, (int) m_options->fontPointSize));
   }
+  m_console->setDefaultFont(QFont(m_options->consoleFont,
+                                      (int) m_options->consoleFontPointSize));
 }
 
 void qutecsound::changePage(int index)
@@ -768,6 +770,8 @@ void qutecsound::readSettings()
   settings.beginGroup("Editor");
   m_options->font = settings.value("font", "Courier").toString();
   m_options->fontPointSize = settings.value("fontsize", 12).toDouble();
+  m_options->consoleFont = settings.value("consolefont", "Courier").toString();
+  m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
   m_options->autoPlay = settings.value("autoplay", false).toBool();
   m_options->saveChanges = settings.value("savechanges", true).toBool();
   settings.endGroup();
@@ -842,6 +846,8 @@ void qutecsound::writeSettings()
   settings.beginGroup("Editor");
   settings.setValue("font", m_options->font );
   settings.setValue("fontsize", m_options->fontPointSize);
+  settings.setValue("consolefont", m_options->consoleFont );
+  settings.setValue("consolefontsize", m_options->consoleFontPointSize);
   settings.setValue("autoplay", m_options->autoPlay);
   settings.setValue("savechanges", m_options->saveChanges);
   settings.endGroup();
