@@ -32,18 +32,17 @@ DISTFILES += default.csd \
 
 FORMS += configdialog.ui
 
-!macx {
-    LIBS += -lcsound \
--lcsnd
-}
-
-win {
+win32 {
     DEFINES +=WIN32
+	HEADERS += "C:/Archivos de programa/Csound/include/CppSound.hpp"
+    LIBS += "C:\Archivos de programa\Csound\bin\csnd.dll"
 }
 
 linux-g++ {
     DEFINES +=LINUX    
     INCLUDEPATH += /usr/local/include/csound/
+    LIBS += -lcsound \
+-lcsnd
 }
 
 macx {

@@ -399,6 +399,8 @@ void qutecsound::play(bool realtime)
 #endif
   }
   else {
+#ifdef WIN32
+#else
     QString script = generateScript(realtime);
     QFile file(SCRIPT_NAME);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -427,8 +429,9 @@ void qutecsound::play(bool realtime)
             "-e",
             SCRIPT_NAME.toStdString().c_str(),
             NULL);
-#endif
+#endif //MACOSX
     }
+#endif //WIN32
   }
 }
 
