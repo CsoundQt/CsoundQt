@@ -152,6 +152,7 @@ class qutecsound:public QMainWindow
     int curPage;
 //     QString curFile;
     QString lastUsedDir;
+    QString lastFileDir;
     viewMode m_mode;
     ConfigLists *m_configlists;
     QStringList recentFiles;

@@ -443,10 +443,15 @@ void qutecsound::stop()
 void qutecsound::render()
 {
   if (m_options->fileAskFilename) {
-    QString filename = QFileDialog::QFileDialog::getSaveFileName(this,tr("Output Filename"),m_options->ssdir);
-    if (filename == "")
-      return;
-    m_options->fileOutputFilename = filename;
+    QFileDialog dialog(this,tr("Output Filename"),lastFileDir);
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    QString filter = QString(m_configlists->fileTypeLongNames[m_options->fileFileType] + " Files ("
+        + m_configlists->fileTypeExtensions[m_options->fileFileType] + ")");
+    dialog.setFilter(filter);
+    if (dialog.exec()) {
+      m_options->fileOutputFilename = dialog.selectedFiles()[0];
+      lastFileDir = dialog.directory().path();
+    }
   }
   play(false);
 }
@@ -742,6 +747,7 @@ void qutecsound::readSettings()
   resize(size);
   move(pos);
   lastUsedDir = settings.value("lastuseddir", "").toString();
+  lastFileDir = settings.value("lastfiledir", "").toString();
   recentFiles.clear();
   QAction *newAct;
   recentFiles.append(settings.value("recentFiles0", "").toString());
@@ -840,6 +846,7 @@ void qutecsound::writeSettings()
   settings.setValue("pos", pos());
   settings.setValue("size", size());
   settings.setValue("lastuseddir", lastUsedDir);
+  settings.setValue("lastfiledir", lastFileDir);
   for (int i = 0; i < recentFiles.size();i++) {
     QString key = "recentFiles" + QString::number(i);
     settings.setValue(key, recentFiles[i]);
@@ -946,7 +953,6 @@ void qutecsound::loadFile(const QString &fileName)
   }
 
   //QTextStream in(&file);
-  
   QApplication::setOverrideCursor(Qt::WaitCursor);
   if (documentPages[curPage]->fileName !="") {
     DocumentPage *newPage = new DocumentPage(this);
@@ -960,10 +966,9 @@ void qutecsound::loadFile(const QString &fileName)
   QString text;
   while (!file.atEnd()) {
     QByteArray line = file.readLine().trimmed();
-	text = text + QString(line);
-	if (!line.contains("\n"))
-	  text += "\r\n";
-    qDebug("%s", line.data());
+    text = text + QString(line);
+    if (!line.contains("\n"))
+      text += "\r\n";
   }
   //textEdit->setPlainText(fixLineEndings(in.readAll()));
   textEdit->setPlainText(text);

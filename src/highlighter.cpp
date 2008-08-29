@@ -77,13 +77,46 @@ void Highlighter::setFirstRules()
 {
   highlightingRules.clear();
   HighlightingRule rule;
+  QString pattern;
+  QTextCharFormat irateFormat;
+  irateFormat.setForeground(QColor("darkCyan"));
+//   irateFormat.setFontWeight(QFont::Bold);
+  pattern = "\\bi[a-zA-Z0-9]*\\b";
+  rule.pattern = QRegExp(pattern);
+  rule.format = irateFormat;
+  highlightingRules.append(rule);
+
+  QTextCharFormat krateFormat;
+  krateFormat.setForeground(QColor("darkCyan"));
+//   krateFormat.setFontWeight(QFont::Bold);
+  pattern = "\\bk[a-zA-Z0-9]*\\b";
+  rule.pattern = QRegExp(pattern);
+  rule.format = krateFormat;
+  highlightingRules.append(rule);
+
+  QTextCharFormat arateFormat;
+  arateFormat.setForeground(QColor("darkCyan"));
+  arateFormat.setFontWeight(QFont::Bold);
+  pattern = "\\ba[a-zA-Z0-9]*\\b";
+  rule.pattern = QRegExp(pattern);
+  rule.format = arateFormat;
+  highlightingRules.append(rule);
+
+  QTextCharFormat stringVarFormat;
+  stringVarFormat.setForeground(QColor(Qt::darkYellow));
+  stringVarFormat.setFontWeight(QFont::Bold);
+  pattern = "\\bS[a-zA-Z0-9]*\\b";
+  rule.pattern = QRegExp(pattern);
+  rule.format = stringVarFormat;
+  highlightingRules.append(rule);
+
   opcodeFormat.setForeground(QColor("blue"));
   opcodeFormat.setFontWeight(QFont::Bold);
-  foreach (QString pattern, m_list) {
+  foreach (QString opPattern, m_list) {
 //     pattern = "[ \\t\\r\\n]" + pattern + "[ \\t\\r\\n]";
-    pattern = "\\b" + pattern + "\\b";
+    opPattern = "\\b" + opPattern + "\\b";
 //     qDebug("%s",pattern.toStdString().c_str());
-    rule.pattern = QRegExp(pattern);
+    rule.pattern = QRegExp(opPattern);
     rule.format = opcodeFormat;
     highlightingRules.append(rule);
   }

@@ -29,6 +29,8 @@ class ConfigLists{
     ~ConfigLists();
 
     QStringList fileTypeNames;
+    QStringList fileTypeExtensions;
+    QStringList fileTypeLongNames;
     QStringList fileFormatFlags;
     QStringList fileFormatNames;
     QStringList rtAudioNames;

@@ -24,6 +24,14 @@ ConfigLists::ConfigLists()
   fileTypeNames << "wav" << "aiff" << "au" << "avr" << "caf" << "flac"
       << "htk" << "ircam" << "mat4" << "mat5" << "nis" << "paf" << "pvf"
       << "raw" << "sd2" << "sds" << "svx" << "voc" << "w64" << "wavex";
+  fileTypeExtensions << "*.wav" << "*.aif;*.aiff" << "*.au" << "*.avr" << "*.caf"
+      << "*.flac" << "*.htk;*.*" << "*.ircam;*.*" << "*.mat4;*.*" << "*.mat5;*.*"
+      << "*.nis;*.*" << "*.paf;*.*" << "*.pvf" << "*.raw;*.*" << "*.sd2;*.*" << "*.sds;*.*"
+      << "*.svx;*.*" << "*.voc;*.*" << "*.w64;*.wav" << "*.wav;*.wavex";
+  fileTypeLongNames << "WAVE" << "AIFF" << "au" << "avr" << "CAF" << "FLAC"
+      << "htk" << "ircam" << "mat4" << "mat5" << "nis" << "paf" << "pvf"
+      << "Raw (Headerless)" << "Sound Designer II" << "sds" << "svx" << "voc"
+      << "WAVE (w64)" << "WAVE (wavex)";
 
   fileFormatFlags << "24bit" << "short"<< "uchar"
       << "schar"<< "float"<< "long";

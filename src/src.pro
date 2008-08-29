@@ -1,3 +1,7 @@
+#select CsoundLib or CsoundLib64 below for Mac version
+MAC_LIB=CsoundLib
+#MAC_LIB=CsoundLib64
+
 SOURCES += qutecsound.cpp \
            main.cpp \
  dockhelp.cpp \
@@ -28,14 +32,16 @@ RESOURCES = application.qrc
 QT += xml
 
 DISTFILES += default.csd \
- opcodes.xml
+ opcodes.xml \
+ qutecsound.rc
 
 FORMS += configdialog.ui
 
 win32 {
     DEFINES +=WIN32
-	HEADERS += "C:/Archivos de programa/Csound/include/CppSound.hpp"
+    HEADERS += "C:/Archivos de programa/Csound/include/CppSound.hpp"
     LIBS += "C:\Archivos de programa\Csound\bin\csnd.dll"
+    RC_FILE = qutecsound.rc
 }
 
 linux-g++ {
@@ -46,16 +52,16 @@ linux-g++ {
 }
 
 macx {
+    message(Building using $${MAC_LIB})
     DEFINES +=MACOSX
     HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/CppSound.hpp
     LIBS += -framework QtXml
     LIBS += -framework QtGui
     LIBS += -framework QtCore
-    LIBS += -framework CsoundLib -lcsnd
-    LIBS += -L/Library/Frameworks/CsoundLib.framework/Versions/Current
+    LIBS += -framework $${MAC_LIB} -lcsnd
+    LIBS += -L/Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
     QMAKE_INFO_PLIST = MyInfo.plist
-	ICON = ../images/qtcs.icns
-
+    ICON = ../images/qtcs.icns
 }
 
 CONFIG -= stl

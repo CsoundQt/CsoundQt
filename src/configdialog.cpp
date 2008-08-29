@@ -29,7 +29,7 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
 {
   setupUi(this);
 
-  foreach (QString item, m_configlist->fileTypeNames) {
+  foreach (QString item, m_configlist->fileTypeLongNames) {
     FileTypeComboBox->addItem(item);
   }
   foreach (QString item, m_configlist->fileFormatNames) {
