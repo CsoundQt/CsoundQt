@@ -2,16 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleExecutable</key>
-	<string>qutecsound</string>
-	<key>CFBundleGetInfoString</key>
-	<string>Created by Qt/QMake</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-
-    <key>CFBundleDocumentTypes</key>
+	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleTypeExtensions</key>
@@ -21,14 +12,26 @@
 				<string>csd</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>rtf.icns</string>
+			<string>qtcs.icns</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>TEXT</string>
+			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
 			<true/>
-<key>CFBundleTypeOSTypes</key><array><string>TEXT</string></array><key>CFBundleTypeRole</key><string>Editor</string><key>LSIsAppleDefaultForType</key><true/>
 		</dict>
-         </array>
-
+	</array>
+	<key>CFBundleExecutable</key>
+	<string>qutecsound</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Created by Qt/QMake</string>
+	<key>CFBundleIconFile</key>
+	<string>qtcs.icns</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
 </dict>
 </plist>

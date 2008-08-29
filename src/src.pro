@@ -54,6 +54,7 @@ macx {
     LIBS += -framework CsoundLib -lcsnd
     LIBS += -L/Library/Frameworks/CsoundLib.framework/Versions/Current
     QMAKE_INFO_PLIST = MyInfo.plist
+	ICON = ../images/qtcs.icns
 
 }
 
