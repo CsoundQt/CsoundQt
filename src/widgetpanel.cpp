@@ -17,53 +17,18 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef HIGHLIGHTER_H
-#define HIGHLIGHTER_H
+#include "widgetpanel.h"
 
-#include <QSyntaxHighlighter>
-
-#include <QHash>
-#include <QTextCharFormat>
-#include <QStringList>
-
-#include <QTextDocument>
-
- class Highlighter : public QSyntaxHighlighter
+WidgetPanel::WidgetPanel(QWidget *parent)
+  : QDockWidget(parent)
 {
-  Q_OBJECT
+  setWindowTitle("Widgets");
+//   setWidget(text);
+}
 
-  public:
-    Highlighter(QTextDocument *parent = 0);
-    ~Highlighter();
-    void setOpcodeNameList(QStringList list);
-    void setColorVariables(bool color);
 
-  protected:
-    void highlightBlock(const QString &text);
+WidgetPanel::~WidgetPanel()
+{
+}
 
-  private:
-    struct HighlightingRule
-    {
-      QRegExp pattern;
-      QTextCharFormat format;
-    };
-    QVector<HighlightingRule> highlightingRules;
 
-    QRegExp commentStartExpression;
-    QRegExp commentEndExpression;
-
-    QTextCharFormat csdtagFormat;
-    QTextCharFormat opcodeFormat;
-    QTextCharFormat singleLineCommentFormat;
-    QTextCharFormat multiLineCommentFormat;
-    QTextCharFormat quotationFormat;
-    QTextCharFormat functionFormat;
-
-    void setFirstRules();
-    void setLastRules();
-
-    QStringList m_list;
-    bool colorVariables;
-};
-
-#endif

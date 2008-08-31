@@ -40,6 +40,7 @@ class QMenu;
 class QTextEdit;
 
 class DockHelp;
+class WidgetPanel;
 class Console;
 class OpEntryParser;
 class Options;
@@ -87,6 +88,8 @@ class qutecsound:public QMainWindow
     void syntaxCheck();
     void autoComplete();
     void configure();
+    void applySettings(int);
+    void checkSelection();
 
   private:
     void createActions();
@@ -99,7 +102,7 @@ class qutecsound:public QMainWindow
     void writeSettings();
     void configureHighlighter();
     bool maybeSave();
-	QString fixLineEndings(const QString &text);
+    QString fixLineEndings(const QString &text);
     void loadFile(const QString &fileName);
     void loadCompanionFile(const QString &fileName);
     bool saveFile(const QString &fileName);
@@ -116,6 +119,7 @@ class qutecsound:public QMainWindow
     Console *m_console;
     Highlighter *m_highlighter;
     DockHelp *helpPanel;
+    WidgetPanel *widgetPanel;
 
     QMenu *fileMenu;
     QMenu *recentMenu;
@@ -158,6 +162,7 @@ class qutecsound:public QMainWindow
     QStringList recentFiles;
 
     bool running;
+    QIcon modIcon;
 	
 #ifdef MACOSX
 	MenuBarHandle menuBarHandle;

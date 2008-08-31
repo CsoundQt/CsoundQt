@@ -29,6 +29,7 @@
 #include "qutecsound.h"
 #include "console.h"
 #include "dockhelp.h"
+#include "widgetpanel.h"
 #include "opentryparser.h"
 #include "options.h"
 #include "highlighter.h"
@@ -60,6 +61,11 @@ qutecsound::qutecsound(QString fileName)
   helpPanel = new DockHelp(this);
   helpPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
   addDockWidget(Qt::RightDockWidgetArea, helpPanel);
+#ifdef DEBUG
+  widgetPanel = new WidgetPanel(this);
+  widgetPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
+  addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
+#endif
 
   helpPanel->show();
 
@@ -91,6 +97,8 @@ qutecsound::qutecsound(QString fileName)
       play();
   }
   changeFont();
+  modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
+  modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
 }
 
 qutecsound::~qutecsound()
@@ -121,6 +129,7 @@ void qutecsound::changeFont()
 void qutecsound::changePage(int index)
 {
   textEdit = documentPages[index];
+  m_highlighter->setColorVariables(m_options->colorVariables);
   m_highlighter->setDocument(textEdit->document());
   curPage = index;
   setCurrentFile(documentPages[curPage]->fileName);
@@ -167,10 +176,12 @@ void qutecsound::newFile()
   documentTabs->setCurrentIndex(curPage);
   documentPages[curPage]->setText(in.readAll());
   textEdit = newPage;
+  m_highlighter->setColorVariables(m_options->colorVariables);
   m_highlighter->setDocument(textEdit->document());
   textEdit->document()->setModified(false);
   documentPages[curPage]->fileName = "";
   setWindowModified(false);
+  documentTabs->setTabIcon(curPage, modIcon);
   setCurrentFile("");
   connectActions();
 }
@@ -307,6 +318,7 @@ bool qutecsound::closeTab()
   documentTabs->setCurrentIndex(curPage);
   textEdit = documentPages[curPage];
   setCurrentFile(documentPages[curPage]->fileName);
+  m_highlighter->setColorVariables(m_options->colorVariables);
   m_highlighter->setDocument(documentPages[curPage]->document());
   connectActions();
   return true;
@@ -483,6 +495,7 @@ void qutecsound::about()
 void qutecsound::documentWasModified()
 {
   setWindowModified(textEdit->document()->isModified());
+//   documentTabs->setTabIcon(curPage, QIcon(":/images/modIcon.png"));
 }
 
 void qutecsound::syntaxCheck()
@@ -513,12 +526,23 @@ void qutecsound::autoComplete()
 void qutecsound::configure()
 {
   ConfigDialog *dialog = new ConfigDialog(this, m_options, m_configlists);
+  connect(dialog, SIGNAL(finished(int)), this, SLOT(applySettings(int)));
   dialog->show();
+}
+
+void qutecsound::applySettings(int result)
+{
+  m_highlighter->setDocument(textEdit->document());
+  m_highlighter->setColorVariables(m_options->colorVariables);
+}
+
+void qutecsound::checkSelection()
+{
+  //TODO add highlighting of words
 }
 
 void qutecsound::createActions()
 {
-  //TODO improve and create missing actions
   newAct = new QAction(QIcon(":/images/gtk-new.png"), tr("&New"), this);
   newAct->setShortcut(tr("Ctrl+N"));
   newAct->setStatusTip(tr("Create a new file"));
@@ -658,6 +682,8 @@ void qutecsound::connectActions()
           this, SLOT(syntaxCheck()));
   connect(textEdit, SIGNAL(cursorPositionChanged()),
           this, SLOT(syntaxCheck()));
+  connect(textEdit, SIGNAL(selectionChanged()),
+          this, SLOT(checkSelection()));
 }
 
 void qutecsound::createMenus()
@@ -781,6 +807,7 @@ void qutecsound::readSettings()
   m_options->fontPointSize = settings.value("fontsize", 12).toDouble();
   m_options->consoleFont = settings.value("consolefont", "Courier").toString();
   m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
+  m_options->colorVariables = settings.value("colorvariables", true).toBool();
   m_options->autoPlay = settings.value("autoplay", false).toBool();
   m_options->saveChanges = settings.value("savechanges", true).toBool();
   settings.endGroup();
@@ -858,6 +885,7 @@ void qutecsound::writeSettings()
   settings.setValue("fontsize", m_options->fontPointSize);
   settings.setValue("consolefont", m_options->consoleFont );
   settings.setValue("consolefontsize", m_options->consoleFontPointSize);
+  settings.setValue("colorvariables", m_options->colorVariables);
   settings.setValue("autoplay", m_options->autoPlay);
   settings.setValue("savechanges", m_options->saveChanges);
   settings.endGroup();
@@ -919,24 +947,30 @@ void qutecsound::configureHighlighter()
 
 bool qutecsound::maybeSave()
 {
-  if (textEdit->document()->isModified()) {
-    int ret = QMessageBox::warning(this, tr("QuteCsound"),
-                                   tr("The document has been modified.\n"
-                                       "Do you want to save your changes?"),
-                                       QMessageBox::Yes | QMessageBox::Default,
-                                       QMessageBox::No,
-                                       QMessageBox::Cancel | QMessageBox::Escape);
-    if (ret == QMessageBox::Yes)
-      return save();
-    else if (ret == QMessageBox::Cancel)
-      return false;
+  for (int i = 0; i< documentPages.size(); i++) {
+    if (documentPages[i]->document()->isModified()) {
+      documentTabs->setCurrentIndex(i);
+      changePage(i);
+      QString message = tr("The document ") + documentPages[i]->fileName
+          + tr("\nhas been modified.\nDo you want to save the changes before closing?");
+      int ret = QMessageBox::warning(this, tr("QuteCsound"),
+                                     message,
+                                     QMessageBox::Yes | QMessageBox::Default,
+                                     QMessageBox::No,
+                                     QMessageBox::Cancel | QMessageBox::Escape);
+      if (ret == QMessageBox::Yes) {
+        save();
+        closeTab();
+      }
+      else if (ret == QMessageBox::Cancel)
+        return false;
+    }
   }
   return true;
 }
 
 QString qutecsound::fixLineEndings(const QString &text)
 {
-  
   qDebug("n = %i  r = %i", text.count("\n"), text.count("\r"));
   return text;
 }
@@ -951,7 +985,14 @@ void qutecsound::loadFile(const QString &fileName)
                              .arg(file.errorString()));
     return;
   }
-
+  for (int i=0; i < documentPages.size(); i++) {
+    if (fileName == documentPages[i]->fileName) {
+      documentTabs->setCurrentIndex(i);
+      changePage(i);
+      statusBar()->showMessage(tr("File already open"), 10000);
+      return;
+    }
+  }
   //QTextStream in(&file);
   QApplication::setOverrideCursor(Qt::WaitCursor);
   if (documentPages[curPage]->fileName !="") {
@@ -972,13 +1013,15 @@ void qutecsound::loadFile(const QString &fileName)
   }
   //textEdit->setPlainText(fixLineEndings(in.readAll()));
   textEdit->setPlainText(text);
+  m_highlighter->setColorVariables(m_options->colorVariables);
   m_highlighter->setDocument(textEdit->document());
   QApplication::restoreOverrideCursor();
 
   textEdit->document()->setModified(false);
   documentPages[curPage]->fileName = fileName;
-  setWindowModified(false);
   setCurrentFile(fileName);
+  setWindowModified(false);
+  documentTabs->setTabIcon(curPage, modIcon);
   lastUsedDir = fileName;
   lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/]")));
   if (recentFiles.count(fileName) == 0) {
@@ -1004,6 +1047,7 @@ void qutecsound::loadCompanionFile(const QString &fileName)
   if (QFile::exists(companionFileName))
     loadFile(companionFileName);
 }
+
 bool qutecsound::saveFile(const QString &fileName)
 {
   QFile file(fileName);
@@ -1022,8 +1066,9 @@ bool qutecsound::saveFile(const QString &fileName)
 
   textEdit->document()->setModified(false);
   documentPages[curPage]->fileName = fileName;
-  setWindowModified(false);
   setCurrentFile(fileName);
+  setWindowModified(false);
+  documentTabs->setTabIcon(curPage, QIcon());
   lastUsedDir = fileName;
   lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/\\]")));
   if (recentFiles.count(fileName) == 0) {

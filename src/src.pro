@@ -1,5 +1,5 @@
 #select CsoundLib or CsoundLib64 below for Mac version
-MAC_LIB=CsoundLib
+MAC_LIB = CsoundLib
 #MAC_LIB=CsoundLib64
 
 SOURCES += qutecsound.cpp \
@@ -11,7 +11,8 @@ SOURCES += qutecsound.cpp \
  configdialog.cpp \
  configlists.cpp \
  console.cpp \
- documentpage.cpp
+ documentpage.cpp \
+ widgetpanel.cpp
 HEADERS += qutecsound.h \
  dockhelp.h \
  opentryparser.h \
@@ -21,7 +22,8 @@ HEADERS += qutecsound.h \
  configdialog.h \
  configlists.h \
  console.h \
- documentpage.h
+ documentpage.h \
+ widgetpanel.h
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \
@@ -65,4 +67,6 @@ macx {
 }
 
 CONFIG -= stl
+
+QMAKE_CXXFLAGS_DEBUG += -DDEBUG
 

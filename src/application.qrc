@@ -11,6 +11,8 @@
       <file>../images/gtk-media-play-ltr.png</file>
       <file>../images/render.png</file>
       <file>../images/gtk-media-stop.png</file>
+      <file>../images/modIcon.png</file>
+      <file>../images/modIcon2.png</file>
       <file>opcodes.xml</file>
       <file>default.csd</file>
 </qresource>

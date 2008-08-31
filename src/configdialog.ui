@@ -785,7 +785,7 @@
        <x>10</x>
        <y>10</y>
        <width>351</width>
-       <height>201</height>
+       <height>261</height>
       </rect>
      </property>
      <property name="title" >
@@ -898,10 +898,20 @@
         <x>20</x>
         <y>130</y>
         <width>311</width>
-        <height>58</height>
+        <height>89</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
+       <item>
+        <widget class="QCheckBox" name="colorVariablesCheckBox" >
+         <property name="enabled" >
+          <bool>true</bool>
+         </property>
+         <property name="text" >
+          <string>Color Variables</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QCheckBox" name="autoplayCheckBox" >
          <property name="enabled" >
@@ -929,7 +939,7 @@
      <property name="geometry" >
       <rect>
        <x>10</x>
-       <y>220</y>
+       <y>270</y>
        <width>351</width>
        <height>121</height>
       </rect>

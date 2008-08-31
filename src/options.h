@@ -40,6 +40,7 @@ class Options{
     float fontPointSize;
     QString consoleFont;
     float consoleFontPointSize;
+    bool colorVariables;
     bool autoPlay;
     bool saveChanges;
 
