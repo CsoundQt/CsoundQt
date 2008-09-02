@@ -24,13 +24,14 @@
 #include <QTextStream>
 #include <QFile>
 #include <QMessageBox>
+#include <QDir>
 
 DockHelp::DockHelp(QWidget *parent)
   : QDockWidget(parent)
 {
   setWindowTitle("Opcode Help");
   setMinimumSize(400,200);
-  text = new QTextBrowser();
+  text = new QTextBrowser(this);
   text->setAcceptRichText(true);
   setWidget (text);
   QString index = QString(DEFAULT_HTML_DIR) + QString("/index.html");
@@ -51,14 +52,11 @@ void DockHelp::loadFile(QString fileName)
 //                              .arg(file.errorString()));
     return;
   }
-  if (externalBrowser) {
-    QTextStream in(&file);
-    text->setSource (fileName);
-    //TODO: open external browser
-  }
-  else {
-    QTextStream in(&file);
-    text->setSource (fileName);
-  //text->setHtml(in.readAll());
-  }
+  QTextStream in(&file);
+  //FIXME: Fix this hack so it works fine in windows as well...
+#ifdef WIN32
+  text->setHtml(in.readAll());
+#else
+  text->setSource (QDir::toNativeSeparators(fileName));
+#endif
 }
