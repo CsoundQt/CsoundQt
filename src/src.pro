@@ -68,8 +68,12 @@ linux-g++ {
 }
 
 macx {
-    build64 {MAC_LIB = CsoundLib64}
-	else {MAC_LIB = CsoundLib}
+    build64 {
+       MAC_LIB = CsoundLib64
+     }
+	else {
+         MAC_LIB = CsoundLib
+     }
     message(Building using $${MAC_LIB})
     DEFINES +=MACOSX
     HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/CppSound.hpp

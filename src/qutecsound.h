@@ -35,6 +35,8 @@
 #include <Carbon/Carbon.h>
 #endif
 
+// #include <windows.h>
+
 class QAction;
 class QMenu;
 class QTextEdit;
@@ -82,6 +84,8 @@ class qutecsound:public QMainWindow
     void play(bool realtime=true);
     void stop();
     void render();
+    void openExternalEditor();
+    void openExternalPlayer();
     void setHelpEntry();
     void about();
     void documentWasModified();
@@ -100,6 +104,7 @@ class qutecsound:public QMainWindow
     void createStatusBar();
     void readSettings();
     void writeSettings();
+    int execute(QString executable, QString options);
     void configureHighlighter();
     bool maybeSave();
     QString fixLineEndings(const QString &text);
@@ -147,6 +152,8 @@ class qutecsound:public QMainWindow
     QAction *playAct;
     QAction *stopAct;
     QAction *renderAct;
+    QAction *externalEditorAct;
+    QAction *externalPlayerAct;
     QAction *showHelpAct;
     QAction *showConsole;
     QAction *setHelpEntryAct;

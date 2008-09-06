@@ -411,8 +411,6 @@ void qutecsound::play(bool realtime)
 #endif
   }
   else {
-#ifdef WIN32
-#else
     QString script = generateScript(realtime);
     QFile file(SCRIPT_NAME);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -424,26 +422,17 @@ void qutecsound::play(bool realtime)
     file.close();
     file.setPermissions (QFile::ExeOwner| QFile::WriteOwner| QFile::ReadOwner);
 
-    pid_t pid = fork();
-    if( pid == 0 )  {
+    QString options;
+#ifdef LINUX
+    options = "-e " + SCRIPT_NAME;
+#endif
 #ifdef MACOSX
-      //TODO: Fix for Mac (add "open")
-      execl(m_options->terminal.toStdString().c_str(),
-            m_options->terminal.toStdString().c_str(),
-            "-e",
-            SCRIPT_NAME.toStdString().c_str(),
-            NULL);
-#else
-      //This has been tested to work with xterm and gnome-terminal
-      // It doesn't work with konsole for some reason....
-      execl(m_options->terminal.toStdString().c_str(),
-            m_options->terminal.toStdString().c_str(),
-            "-e",
-            SCRIPT_NAME.toStdString().c_str(),
-            NULL);
-#endif //MACOSX
-    }
-#endif //WIN32
+    options = SCRIPT_NAME;
+#endif
+#ifdef WIN32
+    options = SCRIPT_NAME;
+#endif
+    execute(m_options->terminal, options);
   }
 }
 
@@ -466,6 +455,21 @@ void qutecsound::render()
     }
   }
   play(false);
+}
+
+void qutecsound::openExternalEditor()
+{
+  //TODO check if opened file matches desired file in every circumstance
+  QString options;
+  options = m_options->fileOutputFilename;
+  execute(m_options->waveeditor, options);
+}
+
+void qutecsound::openExternalPlayer()
+{
+  QString options;
+  options = m_options->fileOutputFilename;
+  execute(m_options->waveplayer, options);
 }
 
 void qutecsound::setHelpEntry()
@@ -625,6 +629,21 @@ void qutecsound::createActions()
   renderAct->setStatusTip(tr("Render to file"));
   connect(renderAct, SIGNAL(triggered()), this, SLOT(render()));
 
+  externalPlayerAct = new QAction(tr("Play Audiofile"), this);
+//   externalPlayerAct->setShortcut(tr("Alt+F"));
+  externalPlayerAct->setStatusTip(tr("Play rendered audiofile in External Editor"));
+  connect(externalPlayerAct, SIGNAL(triggered()), this, SLOT(openExternalPlayer()));
+
+  externalEditorAct = new QAction(tr("Edit Audiofile"), this);
+//   externalEditorAct->setShortcut(tr("Alt+F"));
+  externalEditorAct->setStatusTip(tr("Edit rendered audiofile in External Editor"));
+  connect(externalEditorAct, SIGNAL(triggered()), this, SLOT(openExternalEditor()));
+
+  renderAct = new QAction(QIcon(":/images/render.png"), tr("Render to file"), this);
+  renderAct->setShortcut(tr("Alt+F"));
+  renderAct->setStatusTip(tr("Render to file"));
+  connect(renderAct, SIGNAL(triggered()), this, SLOT(render()));
+
   showHelpAct = new QAction(tr("Show Help Panel"), this);
   showHelpAct->setShortcut(tr("Alt+W"));
   showHelpAct->setCheckable(true);
@@ -705,6 +724,8 @@ void qutecsound::createMenus()
   controlMenu = menuBar()->addMenu(tr("Control"));
   controlMenu->addAction(playAct);
   controlMenu->addAction(renderAct);
+  controlMenu->addAction(externalEditorAct);
+  controlMenu->addAction(externalPlayerAct);
 
   viewMenu = menuBar()->addMenu(tr("View"));
   viewMenu->addAction(showHelpAct);
@@ -938,6 +959,47 @@ void qutecsound::writeSettings()
   settings.setValue("waveplayer", m_options->waveplayer);
   settings.endGroup();
   settings.endGroup();
+}
+
+int qutecsound::execute(QString executable, QString options)
+{
+  qDebug("qutecsound::execute %s %s", executable.toStdString().c_str(), options.toStdString().c_str());
+  QStringList optionlist;
+  optionlist = options.split(QRegExp("\\s+"));
+
+#ifdef MACOSX
+  // Mac can only take one command line option
+  pid_t pid = fork();
+  if( pid == 0 )  {
+    execl("open",
+          "-a",
+          executable.toStdString().c_str(),
+          optionlist[0].toStdString().c_str()
+         );
+  }
+#endif
+#ifdef LINUX
+      //This has been tested to work with xterm and gnome-terminal
+      // It doesn't work with konsole for some reason....
+  while (optionlist.size() < 3)
+    optionlist << "";
+  pid_t pid = fork();
+  if( pid == 0 )  {
+    execl(executable.toStdString().c_str(),
+          executable.toStdString().c_str(),
+          optionlist[0].toStdString().c_str(),
+          optionlist[1] != "" ? optionlist[1].toStdString().c_str() : NULL,
+          optionlist[2] != "" ? optionlist[1].toStdString().c_str() : NULL,
+          NULL
+        );
+  }
+#endif
+#ifdef WIN32
+  CreateProcess(executable.toStdString().c_str(),
+                options.toStdString().c_str()
+               );
+#endif
+
 }
 
 void qutecsound::configureHighlighter()

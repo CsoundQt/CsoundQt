@@ -40,10 +40,10 @@
 #endif
 #ifdef WIN32
 #define DEFAULT_HTML_DIR "C:/Program Files/Csound/doc/manual"
-#define DEFAULT_TERM_EXECUTABLE ""
+#define DEFAULT_TERM_EXECUTABLE "command"
 // #define DEFAULT_BROWSER_EXECUTABLE ""
-#define DEFAULT_WAVEEDITOR_EXECUTABLE ""
-#define DEFAULT_WAVEPLAYER_EXECUTABLE ""
+#define DEFAULT_WAVEEDITOR_EXECUTABLE "audacity"
+#define DEFAULT_WAVEPLAYER_EXECUTABLE "wmplayer"
 #endif
 
 enum viewMode {

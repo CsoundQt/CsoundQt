@@ -83,7 +83,7 @@
     </rect>
    </property>
    <property name="currentIndex" >
-    <number>2</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab_2" >
     <attribute name="title" >
@@ -726,7 +726,7 @@
        <item row="1" column="0" >
         <widget class="QLabel" name="label_16" >
          <property name="enabled" >
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text" >
           <string>Wave Editor</string>
@@ -736,7 +736,7 @@
        <item row="1" column="1" >
         <widget class="QLineEdit" name="WaveEditorLineEdit" >
          <property name="enabled" >
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -750,7 +750,7 @@
        <item row="2" column="0" >
         <widget class="QLabel" name="label_17" >
          <property name="enabled" >
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text" >
           <string>Wave Player</string>
@@ -760,7 +760,7 @@
        <item row="2" column="1" >
         <widget class="QLineEdit" name="WavePlayerLineEdit" >
          <property name="enabled" >
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
