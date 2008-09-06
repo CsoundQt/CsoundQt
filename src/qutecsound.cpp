@@ -48,6 +48,7 @@ static const QString SCRIPT_NAME = "./qutecsound_run_script.sh";
 qutecsound::qutecsound(QString fileName)
 {
   resize(660,350);
+  setWindowIcon(QIcon(":/images/qtcs.png"));
   documentTabs = new QTabWidget (this);
   connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
   curPage = -1;

@@ -13,6 +13,7 @@
       <file>../images/gtk-media-stop.png</file>
       <file>../images/modIcon.png</file>
       <file>../images/modIcon2.png</file>
+      <file>../images/qtcs.png</file>
       <file>opcodes.xml</file>
       <file>default.csd</file>
 </qresource>
