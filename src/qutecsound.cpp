@@ -61,6 +61,7 @@ qutecsound::qutecsound(QString fileName)
   helpPanel = new DockHelp(this);
   helpPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
   addDockWidget(Qt::RightDockWidgetArea, helpPanel);
+
 #ifdef DEBUG
   widgetPanel = new WidgetPanel(this);
   widgetPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
@@ -99,6 +100,10 @@ qutecsound::qutecsound(QString fileName)
   changeFont();
   modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
   modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
+    
+  helpPanel->docDir = m_options->csdocdir;
+  QString index = m_options->csdocdir + QString("/index.html");
+  helpPanel->loadFile(index);
 }
 
 qutecsound::~qutecsound()
@@ -478,6 +483,7 @@ void qutecsound::setHelpEntry()
   cursor.select(QTextCursor::WordUnderCursor);
   if (m_options->csdocdir != "") {
     QString file =  m_options->csdocdir + "/" + cursor.selectedText() + ".html";
+	helpPanel->docDir = m_options->csdocdir;
     helpPanel->loadFile(file);
     helpPanel->show();
   }
@@ -995,8 +1001,23 @@ int qutecsound::execute(QString executable, QString options)
   }
 #endif
 #ifdef WIN32
-  CreateProcess(executable.toStdString().c_str(),
-                options.toStdString().c_str()
+  STARTUPINFO         si;
+  PROCESS_INFORMATION pi;
+  ZeroMemory  (&si, sizeof(STARTUPINFO));
+
+  si.cb = sizeof(STARTUPINFO);
+  si.dwFlags = STARTF_USESHOWWINDOW;
+  si.wShowWindow = SW_SHOWNORMAL;
+  CreateProcess((WCHAR *) executable.toStdString().c_str(),
+                (WCHAR *) options.toStdString().c_str(),
+			    NULL,
+			    NULL,
+			    false,
+			    NORMAL_PRIORITY_CLASS,
+			    NULL,
+			    NULL,
+			    &si,
+			    &pi
                );
 #endif
 

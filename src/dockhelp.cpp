@@ -34,8 +34,6 @@ DockHelp::DockHelp(QWidget *parent)
   text = new QTextBrowser(this);
   text->setAcceptRichText(true);
   setWidget (text);
-  QString index = QString(DEFAULT_HTML_DIR) + QString("/index.html");
-  loadFile(index);
 }
 
 DockHelp::~DockHelp()
@@ -52,11 +50,16 @@ void DockHelp::loadFile(QString fileName)
 //                              .arg(file.errorString()));
     return;
   }
-  QTextStream in(&file);
   //FIXME: Fix this hack so it works fine in windows as well...
+  QStringList searchPaths;
+  searchPaths << docDir;
+  text->setSearchPaths(searchPaths);
 #ifdef WIN32
+  QTextStream in(&file);
+  in.setAutoDetectUnicode(true);
   text->setHtml(in.readAll());
 #else
-  text->setSource (QDir::toNativeSeparators(fileName));
+  text->setSource(QUrl(fileName));
 #endif
+
 }

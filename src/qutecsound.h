@@ -35,7 +35,10 @@
 #include <Carbon/Carbon.h>
 #endif
 
-// #include <windows.h>
+#ifdef WIN32
+// Needed for the CreateProcess function in execute()
+#include <windows.h>
+#endif
 
 class QAction;
 class QMenu;
