@@ -41,10 +41,10 @@ ConfigLists::ConfigLists()
   rtAudioNames << "alsa" << "jack" << "portaudio" << "none";
 #endif
 #ifdef MACOSX
-  rtAudioNames << "coreaudio" << "portaudio" << "none";
+  rtAudioNames << "portaudio" << "coreaudio" << "none";
 #endif
 #ifdef WIN32
-  rtAudioNames << "winmm" << "portaudio" << "none";
+  rtAudioNames << "portaudio" << "winmm" << "none";
 #endif
 #ifdef LINUX
   rtMidiNames << "none" << "portmidi" << "alsa" << "virtual";
