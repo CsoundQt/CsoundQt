@@ -38,6 +38,8 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
     void browseDir(QString &destination);
   private slots:
     virtual void accept();
+    void browseInputFilename();
+    void browseOutputFilename();
     void browseCsdocdir();
     void browseOpcodedir();
     void browseSadir();

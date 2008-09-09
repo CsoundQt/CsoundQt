@@ -36,7 +36,7 @@
 #define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app"
 // #define DEFAULT_BROWSER_EXECUTABLE "/Applications/firefox.app"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/Applications/Audacity.app"
-#define DEFAULT_WAVEPLAYER_EXECUTABLE "/Applications/QuickTime.app"
+#define DEFAULT_WAVEPLAYER_EXECUTABLE "/Applications/QuickTime Player.app"
 #endif
 #ifdef WIN32
 #define DEFAULT_HTML_DIR "C:/Program Files/Csound/doc/manual"

@@ -110,6 +110,8 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   WaveEditorLineEdit->setText(m_options->waveeditor);
   WavePlayerLineEdit->setText(m_options->waveplayer);
 
+  connect(inputFilenameToolButton, SIGNAL(clicked()), this, SLOT(browseInputFilename()));
+  connect(outputFilenameToolButton, SIGNAL(clicked()), this, SLOT(browseOutputFilename()));
   connect(csdocdirToolButton, SIGNAL(clicked()), this, SLOT(browseCsdocdir()));
   connect(opcodedirToolButton, SIGNAL(clicked()), this, SLOT(browseOpcodedir()));
   connect(sadirToolButton, SIGNAL(clicked()), this, SLOT(browseSadir()));
@@ -185,6 +187,18 @@ void ConfigDialog::accept()
   m_options->waveeditor = WaveEditorLineEdit->text();
   m_options->waveplayer = WavePlayerLineEdit->text();
   QDialog::accept();
+}
+
+void ConfigDialog::browseInputFilename()
+{
+  browseFile(m_options->fileInputFilename);
+  InputFilenameLineEdit->setText(m_options->fileInputFilename);
+}
+
+void ConfigDialog::browseOutputFilename()
+{
+  browseFile(m_options->fileOutputFilename);
+  OutputFilenameLineEdit->setText(m_options->fileOutputFilename);
 }
 
 void ConfigDialog::browseCsdocdir()

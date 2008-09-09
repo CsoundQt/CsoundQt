@@ -138,6 +138,7 @@ class qutecsound:public QMainWindow
     QToolBar *fileToolBar;
     QToolBar *editToolBar;
     QToolBar *controlToolBar;
+    QToolBar *configureToolBar;
     QAction *newAct;
     QAction *openAct;
     QAction *saveAct;

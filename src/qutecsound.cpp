@@ -452,11 +452,26 @@ void qutecsound::render()
   if (m_options->fileAskFilename) {
     QFileDialog dialog(this,tr("Output Filename"),lastFileDir);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
+	dialog.setConfirmOverwrite(false);
     QString filter = QString(m_configlists->fileTypeLongNames[m_options->fileFileType] + " Files ("
         + m_configlists->fileTypeExtensions[m_options->fileFileType] + ")");
     dialog.setFilter(filter);
     if (dialog.exec()) {
+	  QString extension = m_configlists->fileTypeExtensions[m_options->fileFileType];
+	  // Remove hte '*' from the extension
+	  extension.remove(0,1);
       m_options->fileOutputFilename = dialog.selectedFiles()[0];
+	  if (!m_options->fileOutputFilename.endsWith(extension))
+	    m_options->fileOutputFilename += extension;
+	  if (QFile::exists(m_options->fileOutputFilename)) {
+	    int ret = QMessageBox::warning(this, tr("QuteCsound"),
+                   tr("The file %1 \nalready exists.\n"
+                      "Do you want to overwrite it?").arg(m_options->fileOutputFilename),
+                   QMessageBox::Save | QMessageBox::Cancel,
+                   QMessageBox::Save);
+		if (ret == QMessageBox::Cancel)
+		  return;
+	  }
       lastFileDir = dialog.directory().path();
     }
   }
@@ -785,6 +800,11 @@ void qutecsound::createToolBars()
   controlToolBar->addAction(playAct);
   controlToolBar->addAction(stopAct);
   controlToolBar->addAction(renderAct);
+  controlToolBar->addAction(externalEditorAct);
+  controlToolBar->addAction(externalPlayerAct);
+
+  configureToolBar = addToolBar(tr("Configure"));
+  configureToolBar->addAction(configureAct);
 }
 
 void qutecsound::createStatusBar()
@@ -970,20 +990,12 @@ void qutecsound::writeSettings()
 
 int qutecsound::execute(QString executable, QString options)
 {
-  qDebug("qutecsound::execute %s %s", executable.toStdString().c_str(), options.toStdString().c_str());
   QStringList optionlist;
   optionlist = options.split(QRegExp("\\s+"));
 
 #ifdef MACOSX
-  // Mac can only take one command line option
-  pid_t pid = fork();
-  if( pid == 0 )  {
-    execl("open",
-          "-a",
-          executable.toStdString().c_str(),
-          optionlist[0].toStdString().c_str()
-         );
-  }
+  QString commandLine = "open -a '" + executable + "' '" + options + "'";
+  system(commandLine.toStdString().c_str());
 #endif
 #ifdef LINUX
       //This has been tested to work with xterm and gnome-terminal
@@ -996,12 +1008,14 @@ int qutecsound::execute(QString executable, QString options)
           executable.toStdString().c_str(),
           optionlist[0].toStdString().c_str(),
           optionlist[1] != "" ? optionlist[1].toStdString().c_str() : NULL,
-          optionlist[2] != "" ? optionlist[1].toStdString().c_str() : NULL,
+          optionlist[2] != "" ? optionlist[2].toStdString().c_str() : NULL,
           NULL
         );
   }
 #endif
 #ifdef WIN32
+//TODO This not working!
+  qDebug("qutecsound::execute %s %s", executable.toStdString().c_str(), options.toStdString().c_str());
   STARTUPINFO         si;
   PROCESS_INFORMATION pi;
   ZeroMemory  (&si, sizeof(STARTUPINFO));
@@ -1021,7 +1035,7 @@ int qutecsound::execute(QString executable, QString options)
 			    &pi
                );
 #endif
-
+  return 1;
 }
 
 void qutecsound::configureHighlighter()
