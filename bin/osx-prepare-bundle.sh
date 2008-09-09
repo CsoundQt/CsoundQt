@@ -4,6 +4,7 @@
 #cp ../src/default.csd qutecsound.app/Contents/MacOS
 #cp ../src/opcodes.xml qutecsound.app/Contents/MacOS
 
+zip -r QuteCsound-noQt qutecsound.app
 mkdir qutecsound.app/Contents/Frameworks
 
 cp -R /Library/Frameworks/QtCore.framework qutecsound.app/Contents/Frameworks/
@@ -25,4 +26,4 @@ rm qutecsound.app/Contents/Info.plist
 cp ../src/MyInfo.plist qutecsound.app/Contents/Info.plist
 
 otool -L qutecsound.app/Contents/MacOS/qutecsound
-
+zip -r QuteCsound-incQt qutecsound.app
