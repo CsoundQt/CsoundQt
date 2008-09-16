@@ -36,8 +36,9 @@
 #include "configdialog.h"
 #include "configlists.h"
 #include "documentpage.h"
+#include "utilitiesdialog.h"
 
-#include <string>
+//#include <string>
 
 #ifdef WIN32
 static const QString SCRIPT_NAME = "qutecsound_run_script.bat";
@@ -105,6 +106,10 @@ qutecsound::qutecsound(QString fileName)
   helpPanel->docDir = m_options->csdocdir;
   QString index = m_options->csdocdir + QString("/index.html");
   helpPanel->loadFile(index);
+  
+  utilitiesDialog = new UtilitiesDialog(this);
+  
+ // connect(utilitiesDialog, SIGNAL(triggered()), this, SLOT(utilitiesDialog()));
 }
 
 qutecsound::~qutecsound()
@@ -142,6 +147,11 @@ void qutecsound::changePage(int index)
   connectActions();
 }
 
+void qutecsound::runUtility(QString excutable, QString options)
+{
+  qDebug("qutecsound::runUtility");
+}
+
 void qutecsound::closeEvent(QCloseEvent *event)
 {
   if (maybeSave()) {
@@ -154,15 +164,15 @@ void qutecsound::closeEvent(QCloseEvent *event)
 
 void qutecsound::newFile()
 {
-  for (int i = 0 ; i < documentPages.size(); i++) {
+  /* for (int i = 0 ; i < documentPages.size(); i++) {
     if (documentPages[i]->fileName == "") {
-      documentTabs->setCurrentIndex(i);
-      return;
+	  documentTabs->setCurrentIndex(i);
+	  return;
     }
   }
   if (documentPages.size() > 0)
     if (maybeSave())
-      return;
+      return; */
 #ifdef MACOSX
   QFile file(":/default.csd");
 #else
@@ -188,6 +198,7 @@ void qutecsound::newFile()
   documentPages[curPage]->fileName = "";
   setWindowModified(false);
   documentTabs->setTabIcon(curPage, modIcon);
+  changeFont();
   setCurrentFile("");
   connectActions();
 }
@@ -511,6 +522,17 @@ void qutecsound::setHelpEntry()
   }
 }
 
+void qutecsound::utilitiesDialogOpen()
+{
+  qDebug("qutecsound::utilitiesDialog()");
+
+}
+
+void qutecsound::showWidgets()
+{
+  qDebug("qutecsound::showWidgets()");
+}
+
 void qutecsound::about()
 {
   QMessageBox::about(this, tr("About QuteCsound"),
@@ -682,6 +704,16 @@ void qutecsound::createActions()
   setHelpEntryAct->setShortcut(tr("Shift+F1"));
   setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
   connect(setHelpEntryAct, SIGNAL(triggered()), this, SLOT(setHelpEntry()));
+  
+  utilitiesAct = new QAction(tr("Utilities Dialog"), this);
+//   externalEditorAct->setShortcut(tr("Alt+F"));
+  utilitiesAct->setStatusTip(tr("Show Realtime Widgets"));
+  connect(utilitiesAct, SIGNAL(triggered()), this, SLOT(utilitiesDialog()));
+  
+  showWidgetsAct = new QAction(tr("Show Widgets"), this);
+//   externalEditorAct->setShortcut(tr("Alt+F"));
+  showWidgetsAct->setStatusTip(tr("Show Realtime Widgets"));
+  connect(showWidgetsAct, SIGNAL(triggered()), this, SLOT(showWidgets()));
 
   aboutAct = new QAction(tr("&About"), this);
   aboutAct->setStatusTip(tr("Show the application's About box"));

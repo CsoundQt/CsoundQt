@@ -52,6 +52,7 @@ class Options;
 class Highlighter;
 class ConfigLists;
 class DocumentPage;
+class UtilitiesDialog;
 
 class qutecsound:public QMainWindow
 {
@@ -68,6 +69,7 @@ class qutecsound:public QMainWindow
   public slots:
     void changeFont();
     void changePage(int index);
+	void runUtility(QString executable, QString options);
 
   protected:
     void closeEvent(QCloseEvent *event);
@@ -90,6 +92,8 @@ class qutecsound:public QMainWindow
     void openExternalEditor();
     void openExternalPlayer();
     void setHelpEntry();
+	void utilitiesDialogOpen();
+	void showWidgets();
     void about();
     void documentWasModified();
     void syntaxCheck();
@@ -161,6 +165,8 @@ class qutecsound:public QMainWindow
     QAction *showHelpAct;
     QAction *showConsole;
     QAction *setHelpEntryAct;
+	QAction *utilitiesAct;
+	QAction *showWidgetsAct;
     QAction *aboutAct;
     QAction *aboutQtAct;
 
@@ -171,6 +177,8 @@ class qutecsound:public QMainWindow
     viewMode m_mode;
     ConfigLists *m_configlists;
     QStringList recentFiles;
+	
+	UtilitiesDialog *utilitiesDialog;
 
     bool running;
     QIcon modIcon;

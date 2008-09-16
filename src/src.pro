@@ -18,6 +18,7 @@ SOURCES += qutecsound.cpp \
  configlists.cpp \
  console.cpp \
  documentpage.cpp \
+ utilitiesdialog.cpp \
  widgetpanel.cpp
 HEADERS += qutecsound.h \
  dockhelp.h \
@@ -29,6 +30,7 @@ HEADERS += qutecsound.h \
  configlists.h \
  console.h \
  documentpage.h \
+ utilitiesdialog.h \
  widgetpanel.h
 TEMPLATE = app
 CONFIG += warn_on \
@@ -43,7 +45,8 @@ DISTFILES += default.csd \
  opcodes.xml \
  qutecsound.rc
 
-FORMS += configdialog.ui
+FORMS += configdialog.ui \
+  utilitiesdialog.ui
 
 win32 {
     DEFINES +=WIN32
