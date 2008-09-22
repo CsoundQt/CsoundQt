@@ -55,6 +55,8 @@ qutecsound::qutecsound(QString fileName)
   curPage = -1;
   setCentralWidget(documentTabs);
 
+  m_options = new Options();
+  readSettings();
   m_configlists = new ConfigLists;
 
   m_console = new Console(this);
@@ -71,15 +73,15 @@ qutecsound::qutecsound(QString fileName)
 #endif
 
   helpPanel->show();
+  utilitiesDialog = new UtilitiesDialog(this, m_options, m_configlists);
+  connect(utilitiesDialog, SIGNAL(runUtility(QString)), this, SLOT(runUtility(QString)));
 
   createActions();
   createMenus();
   createToolBars();
   createStatusBar();
 
-  m_options = new Options();
 
-  readSettings();
   fillFileMenu(); //Must be placed after readSettings to include recent Files
   if (m_options->opcodexmldir == "") {
 #ifdef MACOSX
@@ -102,14 +104,10 @@ qutecsound::qutecsound(QString fileName)
   changeFont();
   modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
   modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
-    
+
   helpPanel->docDir = m_options->csdocdir;
   QString index = m_options->csdocdir + QString("/index.html");
   helpPanel->loadFile(index);
-  
-  utilitiesDialog = new UtilitiesDialog(this);
-  
- // connect(utilitiesDialog, SIGNAL(triggered()), this, SLOT(utilitiesDialog()));
 }
 
 qutecsound::~qutecsound()
@@ -145,11 +143,6 @@ void qutecsound::changePage(int index)
   curPage = index;
   setCurrentFile(documentPages[curPage]->fileName);
   connectActions();
-}
-
-void qutecsound::runUtility(QString excutable, QString options)
-{
-  qDebug("qutecsound::runUtility");
 }
 
 void qutecsound::closeEvent(QCloseEvent *event)
@@ -468,21 +461,21 @@ void qutecsound::render()
         + m_configlists->fileTypeExtensions[m_options->fileFileType] + ")");
     dialog.setFilter(filter);
     if (dialog.exec()) {
-	  QString extension = m_configlists->fileTypeExtensions[m_options->fileFileType];
-	  // Remove hte '*' from the extension
-	  extension.remove(0,1);
+      QString extension = m_configlists->fileTypeExtensions[m_options->fileFileType];
+      // Remove the '*' from the extension
+      extension.remove(0,1);
       m_options->fileOutputFilename = dialog.selectedFiles()[0];
-	  if (!m_options->fileOutputFilename.endsWith(extension))
-	    m_options->fileOutputFilename += extension;
-	  if (QFile::exists(m_options->fileOutputFilename)) {
-	    int ret = QMessageBox::warning(this, tr("QuteCsound"),
-                   tr("The file %1 \nalready exists.\n"
-                      "Do you want to overwrite it?").arg(m_options->fileOutputFilename),
-                   QMessageBox::Save | QMessageBox::Cancel,
-                   QMessageBox::Save);
-		if (ret == QMessageBox::Cancel)
-		  return;
-	  }
+      if (!m_options->fileOutputFilename.endsWith(extension))
+        m_options->fileOutputFilename += extension;
+      if (QFile::exists(m_options->fileOutputFilename)) {
+        int ret = QMessageBox::warning(this, tr("QuteCsound"),
+                tr("The file %1 \nalready exists.\n"
+                  "Do you want to overwrite it?").arg(m_options->fileOutputFilename),
+                QMessageBox::Save | QMessageBox::Cancel,
+                QMessageBox::Save);
+        if (ret == QMessageBox::Cancel)
+          return;
+      }
       lastFileDir = dialog.directory().path();
     }
   }
@@ -589,6 +582,88 @@ void qutecsound::checkSelection()
   //TODO add highlighting of words
 }
 
+void qutecsound::runUtility(QString flags)
+{
+  qDebug("qutecsound::runUtility");
+//   if (m_options->useAPI) {
+// #ifdef MACOSX
+// //Remember menu bar to set it after FLTK grabs it
+//     menuBarHandle = GetMenuBar();
+// #endif
+//     m_console->clear();
+//     CppSound csound;
+//     static char *argv[33];
+//     QStringList indFlags= flags.split(" ",QString::SkipEmptyParts);
+//     int index = 0;
+//     foreach (QString flag, indFlags) {
+//       argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
+//       strcpy(argv[index],flag.toStdString().c_str());
+//       index++;
+//     }
+//     int argc = indFlags.size();
+//
+//     csound.SetMessageCallback(&qutecsound::messageCallback_NoThread);
+//     csound.SetHostData((void *)m_console);
+//     csound.compile(argc, argv);
+//     if (!csound.getIsCompiled()) {
+//       qDebug("Csound compile failed!");
+//       csound.Stop();
+//       csound.cleanup();
+//       return;
+//     }
+//     running = true;
+//     csound.perform();
+//     csound.Stop();
+//     csound.cleanup();
+// #ifdef MACOSX
+// // Put menu bar back
+//     SetMenuBar(menuBarHandle);
+// #endif
+//   }
+//   else {
+    QString script = "#!/bin/sh\n";
+    QString cmdLine = "";
+    if (m_options->opcodedirActive)
+      script += "export OPCODEDIR=" + m_options->opcodedir + "\n";
+    if (m_options->sadirActive)
+      script += "export SADIR=" + m_options->sadir + "\n";
+    if (m_options->ssdirActive)
+      script += "export SSDIR=" + m_options->ssdir + "\n";
+    if (m_options->sfdirActive)
+      script += "export SFDIR=" + m_options->sfdir + "\n";
+    if (m_options->ssdirActive)
+      script += "export INCDIR=" + m_options->incdir + "\n";
+
+    script += "cd " + QFileInfo(documentPages[curPage]->fileName).absoluteFilePath() + "\n";
+    script += "csound " + flags + "\n";
+    script += "echo \"\nPress return to continue\"\n";
+    script += "dummy_var=\"\"\n";
+    script += "read dummy_var\n";
+    script += "rm $0\n";
+    QFile file(SCRIPT_NAME);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+      return;
+
+    QTextStream out(&file);
+    out << script;
+    file.flush();
+    file.close();
+    file.setPermissions (QFile::ExeOwner| QFile::WriteOwner| QFile::ReadOwner);
+
+    QString options;
+#ifdef LINUX
+    options = "-e " + SCRIPT_NAME;
+#endif
+#ifdef MACOSX
+    options = SCRIPT_NAME;
+#endif
+#ifdef WIN32
+    options = SCRIPT_NAME;
+#endif
+    execute(m_options->terminal, options);
+//   }
+}
+
 void qutecsound::createActions()
 {
   newAct = new QAction(QIcon(":/images/gtk-new.png"), tr("&New"), this);
@@ -620,10 +695,10 @@ void qutecsound::createActions()
   exitAct->setStatusTip(tr("Exit the application"));
   connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
-  for (int i = 0; i < recentFiles.size(); i++) {
-    openRecentAct[i] = new QAction(tr("Recent 0"), this);
-    connect(openRecentAct[i], SIGNAL(triggered()), this, SLOT(openRecent()));
-  }
+//   for (int i = 0; i < recentFiles.size(); i++) {
+//     openRecentAct[i] = new QAction(tr("Recent 0"), this);
+//     connect(openRecentAct[i], SIGNAL(triggered()), this, SLOT(openRecent()));
+//   }
 
   undoAct = new QAction(QIcon(":/images/gtk-undo.png"), tr("Undo"), this);
   undoAct->setShortcut(tr("Ctrl+Z"));
@@ -704,12 +779,13 @@ void qutecsound::createActions()
   setHelpEntryAct->setShortcut(tr("Shift+F1"));
   setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
   connect(setHelpEntryAct, SIGNAL(triggered()), this, SLOT(setHelpEntry()));
-  
-  utilitiesAct = new QAction(tr("Utilities Dialog"), this);
-//   externalEditorAct->setShortcut(tr("Alt+F"));
-  utilitiesAct->setStatusTip(tr("Show Realtime Widgets"));
-  connect(utilitiesAct, SIGNAL(triggered()), this, SLOT(utilitiesDialog()));
-  
+
+  showUtilitiesAct = new QAction(tr("Utilities Dialog"), this);
+//   showUtilitiesAct->setShortcut(tr("Alt+W"));
+  showUtilitiesAct->setCheckable(true);
+  showUtilitiesAct->setChecked(false);
+  connect(showUtilitiesAct, SIGNAL(triggered(bool)), utilitiesDialog, SLOT(setVisible(bool)));
+
   showWidgetsAct = new QAction(tr("Show Widgets"), this);
 //   externalEditorAct->setShortcut(tr("Alt+F"));
   showWidgetsAct->setStatusTip(tr("Show Realtime Widgets"));
@@ -784,6 +860,7 @@ void qutecsound::createMenus()
   viewMenu = menuBar()->addMenu(tr("View"));
   viewMenu->addAction(showHelpAct);
   viewMenu->addAction(showConsole);
+  viewMenu->addAction(showUtilitiesAct);
 
   menuBar()->addSeparator();
 
@@ -837,6 +914,7 @@ void qutecsound::createToolBars()
 
   configureToolBar = addToolBar(tr("Configure"));
   configureToolBar->addAction(configureAct);
+  configureToolBar->addAction(showUtilitiesAct);
 }
 
 void qutecsound::createStatusBar()
@@ -1030,20 +1108,8 @@ int qutecsound::execute(QString executable, QString options)
   system(commandLine.toStdString().c_str());
 #endif
 #ifdef LINUX
-      //This has been tested to work with xterm and gnome-terminal
-      // It doesn't work with konsole for some reason....
-  while (optionlist.size() < 3)
-    optionlist << "";
-  pid_t pid = fork();
-  if( pid == 0 )  {
-    execl(executable.toStdString().c_str(),
-          executable.toStdString().c_str(),
-          optionlist[0].toStdString().c_str(),
-          optionlist[1] != "" ? optionlist[1].toStdString().c_str() : NULL,
-          optionlist[2] != "" ? optionlist[2].toStdString().c_str() : NULL,
-          NULL
-        );
-  }
+  QString commandLine = executable + " " + options;
+  system(commandLine.toStdString().c_str());
 #endif
 #ifdef WIN32
 //TODO This not working!

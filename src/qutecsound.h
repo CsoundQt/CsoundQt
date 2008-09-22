@@ -65,11 +65,9 @@ class qutecsound:public QMainWindow
                                          int attr,
                                          const char *fmt,
                                          va_list args);
-
   public slots:
     void changeFont();
     void changePage(int index);
-	void runUtility(QString executable, QString options);
 
   protected:
     void closeEvent(QCloseEvent *event);
@@ -92,8 +90,8 @@ class qutecsound:public QMainWindow
     void openExternalEditor();
     void openExternalPlayer();
     void setHelpEntry();
-	void utilitiesDialogOpen();
-	void showWidgets();
+    void utilitiesDialogOpen();
+    void showWidgets();
     void about();
     void documentWasModified();
     void syntaxCheck();
@@ -101,6 +99,7 @@ class qutecsound:public QMainWindow
     void configure();
     void applySettings(int);
     void checkSelection();
+    void runUtility(QString flags);
 
   private:
     void createActions();
@@ -165,8 +164,8 @@ class qutecsound:public QMainWindow
     QAction *showHelpAct;
     QAction *showConsole;
     QAction *setHelpEntryAct;
-	QAction *utilitiesAct;
-	QAction *showWidgetsAct;
+    QAction *showUtilitiesAct;
+    QAction *showWidgetsAct;
     QAction *aboutAct;
     QAction *aboutQtAct;
 
@@ -177,12 +176,12 @@ class qutecsound:public QMainWindow
     viewMode m_mode;
     ConfigLists *m_configlists;
     QStringList recentFiles;
-	
+
 	UtilitiesDialog *utilitiesDialog;
 
     bool running;
     QIcon modIcon;
-	
+
 #ifdef MACOSX
 	MenuBarHandle menuBarHandle;
 #endif

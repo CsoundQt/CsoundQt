@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>804</width>
-    <height>445</height>
+    <width>860</width>
+    <height>440</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -17,23 +17,31 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>381</width>
+     <width>441</width>
      <height>441</height>
     </rect>
    </property>
    <property name="currentIndex" >
-    <number>4</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>437</width>
+      <height>412</height>
+     </rect>
+    </property>
     <attribute name="title" >
      <string>CVANAL</string>
     </attribute>
     <widget class="QWidget" name="layoutWidget_5" >
      <property name="geometry" >
       <rect>
-       <x>0</x>
+       <x>10</x>
        <y>370</y>
-       <width>361</width>
+       <width>421</width>
        <height>49</height>
       </rect>
      </property>
@@ -58,9 +66,9 @@
      <property name="geometry" >
       <rect>
        <x>10</x>
-       <y>140</y>
-       <width>351</width>
-       <height>178</height>
+       <y>120</y>
+       <width>181</width>
+       <height>227</height>
       </rect>
      </property>
      <layout class="QGridLayout" >
@@ -74,19 +82,9 @@
       <item row="1" column="0" >
        <widget class="QLineEdit" name="cvSrLineEdit" >
         <property name="text" >
-         <string>10000</string>
+         <string>44100</string>
         </property>
        </widget>
-      </item>
-      <item row="1" column="2" >
-       <widget class="QCheckBox" name="cvChannelCheckBox" >
-        <property name="text" >
-         <string>Channel (-c)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3" >
-       <widget class="QLineEdit" name="cvChannelLineEdit" />
       </item>
       <item row="2" column="0" >
        <widget class="QLabel" name="label_4" >
@@ -116,31 +114,15 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
+      <item row="6" column="0" >
+       <widget class="QLabel" name="label_59" >
+        <property name="text" >
+         <string>Channels (-c)</string>
         </property>
-        <property name="sizeHint" >
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
+       </widget>
       </item>
-      <item row="1" column="4" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
+      <item row="7" column="0" >
+       <widget class="QLineEdit" name="cvChannelLineEdit" />
       </item>
      </layout>
     </widget>
@@ -149,8 +131,8 @@
       <rect>
        <x>10</x>
        <y>0</y>
-       <width>351</width>
-       <height>91</height>
+       <width>421</width>
+       <height>101</height>
       </rect>
      </property>
      <layout class="QGridLayout" >
@@ -165,7 +147,11 @@
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QLineEdit" name="cvInputLineEdit" />
+       <widget class="QLineEdit" name="cvInputLineEdit" >
+        <property name="text" >
+         <string>input.wav</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="1" >
        <widget class="QToolButton" name="cvInputToolButton" >
@@ -182,7 +168,11 @@
        </widget>
       </item>
       <item row="3" column="0" >
-       <widget class="QLineEdit" name="cvOutputLineEdit" />
+       <widget class="QLineEdit" name="cvOutputLineEdit" >
+        <property name="text" >
+         <string>output.cv</string>
+        </property>
+       </widget>
       </item>
       <item row="3" column="1" >
        <widget class="QToolButton" name="cvOutputToolButton" >
@@ -195,15 +185,23 @@
     </widget>
    </widget>
    <widget class="QWidget" name="tab_2" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>437</width>
+      <height>412</height>
+     </rect>
+    </property>
     <attribute name="title" >
      <string>HETRO</string>
     </attribute>
     <widget class="QWidget" name="layoutWidget_6" >
      <property name="geometry" >
       <rect>
-       <x>0</x>
+       <x>10</x>
        <y>370</y>
-       <width>361</width>
+       <width>421</width>
        <height>49</height>
       </rect>
      </property>
@@ -227,9 +225,9 @@
     <widget class="QWidget" name="layoutWidget" >
      <property name="geometry" >
       <rect>
-       <x>180</x>
+       <x>230</x>
        <y>100</y>
-       <width>146</width>
+       <width>171</width>
        <height>261</height>
       </rect>
      </property>
@@ -247,7 +245,7 @@
       <item>
        <widget class="QLineEdit" name="hetPartialsLineEdit" >
         <property name="text" >
-         <string>10000</string>
+         <string>10</string>
         </property>
        </widget>
       </item>
@@ -259,9 +257,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="hetManxLineEdit" >
+       <widget class="QLineEdit" name="hetMaxLineEdit" >
         <property name="text" >
-         <string>1</string>
+         <string>32767</string>
         </property>
        </widget>
       </item>
@@ -275,7 +273,7 @@
       <item>
        <widget class="QLineEdit" name="hetMinLineEdit" >
         <property name="text" >
-         <string>0.0</string>
+         <string>64</string>
         </property>
        </widget>
       </item>
@@ -289,7 +287,7 @@
       <item>
        <widget class="QLineEdit" name="hetBreakpointsLineEdit" >
         <property name="text" >
-         <string>0.0</string>
+         <string>256</string>
         </property>
        </widget>
       </item>
@@ -303,7 +301,7 @@
       <item>
        <widget class="QLineEdit" name="hetCutoffLineEdit" >
         <property name="text" >
-         <string>0.0</string>
+         <string>0</string>
         </property>
        </widget>
       </item>
@@ -314,8 +312,8 @@
       <rect>
        <x>10</x>
        <y>0</y>
-       <width>351</width>
-       <height>90</height>
+       <width>421</width>
+       <height>101</height>
       </rect>
      </property>
      <layout class="QGridLayout" >
@@ -330,7 +328,11 @@
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QLineEdit" name="hetInputLineEdit" />
+       <widget class="QLineEdit" name="hetInputLineEdit" >
+        <property name="text" >
+         <string>input.wav</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="1" >
        <widget class="QToolButton" name="hetInputToolButton" >
@@ -347,7 +349,11 @@
        </widget>
       </item>
       <item row="3" column="0" >
-       <widget class="QLineEdit" name="hetOutputLineEdit" />
+       <widget class="QLineEdit" name="hetOutputLineEdit" >
+        <property name="text" >
+         <string>output.het</string>
+        </property>
+       </widget>
       </item>
       <item row="3" column="1" >
        <widget class="QToolButton" name="hetOutputToolButton" >
@@ -363,15 +369,12 @@
       <rect>
        <x>10</x>
        <y>100</y>
-       <width>131</width>
+       <width>181</width>
        <height>261</height>
       </rect>
      </property>
      <layout class="QGridLayout" >
-      <property name="horizontalSpacing" >
-       <number>0</number>
-      </property>
-      <property name="verticalSpacing" >
+      <property name="spacing" >
        <number>0</number>
       </property>
       <item row="0" column="0" >
@@ -384,7 +387,7 @@
       <item row="1" column="0" >
        <widget class="QLineEdit" name="hetSrLineEdit" >
         <property name="text" >
-         <string>10000</string>
+         <string>44100</string>
         </property>
        </widget>
       </item>
@@ -448,6 +451,14 @@
     </widget>
    </widget>
    <widget class="QWidget" name="tab_3" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>437</width>
+      <height>412</height>
+     </rect>
+    </property>
     <attribute name="title" >
      <string>LPANAL</string>
     </attribute>
@@ -456,8 +467,8 @@
       <rect>
        <x>10</x>
        <y>0</y>
-       <width>351</width>
-       <height>90</height>
+       <width>421</width>
+       <height>101</height>
       </rect>
      </property>
      <layout class="QGridLayout" >
@@ -472,7 +483,11 @@
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QLineEdit" name="lpInputLineEdit" />
+       <widget class="QLineEdit" name="lpInputLineEdit" >
+        <property name="text" >
+         <string>input.wav</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="1" >
        <widget class="QToolButton" name="lpInputToolButton" >
@@ -489,7 +504,11 @@
        </widget>
       </item>
       <item row="3" column="0" >
-       <widget class="QLineEdit" name="lpOutputLineEdit" />
+       <widget class="QLineEdit" name="lpOutputLineEdit" >
+        <property name="text" >
+         <string>output.lp</string>
+        </property>
+       </widget>
       </item>
       <item row="3" column="1" >
        <widget class="QToolButton" name="lpOutputToolButton" >
@@ -505,15 +524,12 @@
       <rect>
        <x>10</x>
        <y>100</y>
-       <width>131</width>
+       <width>181</width>
        <height>261</height>
       </rect>
      </property>
      <layout class="QGridLayout" >
-      <property name="horizontalSpacing" >
-       <number>0</number>
-      </property>
-      <property name="verticalSpacing" >
+      <property name="spacing" >
        <number>0</number>
       </property>
       <item row="0" column="0" >
@@ -526,7 +542,7 @@
       <item row="1" column="0" >
        <widget class="QLineEdit" name="lpSrLineEdit" >
         <property name="text" >
-         <string>10000</string>
+         <string>44100</string>
         </property>
        </widget>
       </item>
@@ -591,9 +607,9 @@
     <widget class="QWidget" name="layoutWidget_3" >
      <property name="geometry" >
       <rect>
-       <x>180</x>
+       <x>230</x>
        <y>100</y>
-       <width>160</width>
+       <width>171</width>
        <height>221</height>
       </rect>
      </property>
@@ -674,9 +690,9 @@
     <widget class="QCheckBox" name="lpAlternateCheckBox" >
      <property name="geometry" >
       <rect>
-       <x>180</x>
+       <x>230</x>
        <y>340</y>
-       <width>159</width>
+       <width>201</width>
        <height>21</height>
       </rect>
      </property>
@@ -690,9 +706,9 @@
     <widget class="QWidget" name="layoutWidget_7" >
      <property name="geometry" >
       <rect>
-       <x>0</x>
+       <x>10</x>
        <y>370</y>
-       <width>361</width>
+       <width>421</width>
        <height>49</height>
       </rect>
      </property>
@@ -715,15 +731,23 @@
     </widget>
    </widget>
    <widget class="QWidget" name="tab_4" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>437</width>
+      <height>412</height>
+     </rect>
+    </property>
     <attribute name="title" >
      <string>PVANAL</string>
     </attribute>
     <widget class="QWidget" name="layoutWidget_8" >
      <property name="geometry" >
       <rect>
-       <x>0</x>
+       <x>10</x>
        <y>370</y>
-       <width>361</width>
+       <width>421</width>
        <height>49</height>
       </rect>
      </property>
@@ -749,15 +773,12 @@
       <rect>
        <x>10</x>
        <y>100</y>
-       <width>131</width>
+       <width>181</width>
        <height>261</height>
       </rect>
      </property>
      <layout class="QGridLayout" >
-      <property name="horizontalSpacing" >
-       <number>0</number>
-      </property>
-      <property name="verticalSpacing" >
+      <property name="spacing" >
        <number>0</number>
       </property>
       <item row="0" column="0" >
@@ -770,7 +791,7 @@
       <item row="1" column="0" >
        <widget class="QLineEdit" name="pvSrLineEdit" >
         <property name="text" >
-         <string>10000</string>
+         <string>44100</string>
         </property>
        </widget>
       </item>
@@ -826,7 +847,7 @@
       <item row="9" column="0" >
        <widget class="QLineEdit" name="pvFrameLineEdit" >
         <property name="text" >
-         <string>34</string>
+         <string>256</string>
         </property>
        </widget>
       </item>
@@ -837,8 +858,8 @@
       <rect>
        <x>10</x>
        <y>0</y>
-       <width>351</width>
-       <height>90</height>
+       <width>421</width>
+       <height>101</height>
       </rect>
      </property>
      <layout class="QGridLayout" >
@@ -853,7 +874,11 @@
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QLineEdit" name="pvInputLineEdit" />
+       <widget class="QLineEdit" name="pvInputLineEdit" >
+        <property name="text" >
+         <string>input.wav</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="1" >
        <widget class="QToolButton" name="pvInputToolButton" >
@@ -870,7 +895,11 @@
        </widget>
       </item>
       <item row="3" column="0" >
-       <widget class="QLineEdit" name="pvOutputLineEdit" />
+       <widget class="QLineEdit" name="pvOutputLineEdit" >
+        <property name="text" >
+         <string>output.pvx</string>
+        </property>
+       </widget>
       </item>
       <item row="3" column="1" >
        <widget class="QToolButton" name="pvOutputToolButton" >
@@ -884,10 +913,10 @@
     <widget class="QWidget" name="layoutWidget_11" >
      <property name="geometry" >
       <rect>
-       <x>180</x>
+       <x>230</x>
        <y>100</y>
        <width>171</width>
-       <height>261</height>
+       <height>161</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" >
@@ -905,34 +934,6 @@
        <widget class="QLineEdit" name="pvOverlapLineEdit" >
         <property name="text" >
          <string>4</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_37" >
-        <property name="text" >
-         <string>Lowest freq (-P)</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="pvLowestLineEdit" >
-        <property name="text" >
-         <string>70</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_38" >
-        <property name="text" >
-         <string>Max freq (-Q)</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="pvMaxLineEdit" >
-        <property name="text" >
-         <string>200</string>
         </property>
        </widget>
       </item>
@@ -980,15 +981,23 @@
     </widget>
    </widget>
    <widget class="QWidget" name="tab_5" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>437</width>
+      <height>412</height>
+     </rect>
+    </property>
     <attribute name="title" >
      <string>ATSA</string>
     </attribute>
     <widget class="QWidget" name="layoutWidget_9" >
      <property name="geometry" >
       <rect>
-       <x>0</x>
+       <x>10</x>
        <y>370</y>
-       <width>361</width>
+       <width>421</width>
        <height>49</height>
       </rect>
      </property>
@@ -1014,8 +1023,8 @@
       <rect>
        <x>10</x>
        <y>0</y>
-       <width>351</width>
-       <height>90</height>
+       <width>421</width>
+       <height>101</height>
       </rect>
      </property>
      <layout class="QGridLayout" >
@@ -1030,7 +1039,11 @@
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QLineEdit" name="atsaInputLineEdit" />
+       <widget class="QLineEdit" name="atsaInputLineEdit" >
+        <property name="text" >
+         <string>input.wav</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="1" >
        <widget class="QToolButton" name="toolButton_9" >
@@ -1047,7 +1060,11 @@
        </widget>
       </item>
       <item row="3" column="0" >
-       <widget class="QLineEdit" name="atsaOutputLineEdit" />
+       <widget class="QLineEdit" name="atsaOutputLineEdit" >
+        <property name="text" >
+         <string>output.ats</string>
+        </property>
+       </widget>
       </item>
       <item row="3" column="1" >
        <widget class="QToolButton" name="toolButton_10" >
@@ -1063,98 +1080,95 @@
       <rect>
        <x>10</x>
        <y>100</y>
-       <width>109</width>
-       <height>262</height>
+       <width>131</width>
+       <height>272</height>
       </rect>
      </property>
      <layout class="QGridLayout" >
-      <property name="horizontalSpacing" >
+      <property name="spacing" >
        <number>0</number>
       </property>
-      <property name="verticalSpacing" >
-       <number>0</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="label_43" >
-        <property name="text" >
-         <string>Sample Rate (-s)</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0" >
-       <widget class="QLineEdit" name="atsaSrLineEdit" >
-        <property name="text" >
-         <string>10000</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QLabel" name="label_45" >
-        <property name="text" >
-         <string>Begin Time (-b)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" >
        <widget class="QLineEdit" name="atsaBeginLineEdit" >
         <property name="text" >
          <string>0.0</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="0" >
+      <item row="2" column="0" >
        <widget class="QLabel" name="label_46" >
         <property name="text" >
          <string>End time (-e)</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="0" >
+      <item row="3" column="0" >
        <widget class="QLineEdit" name="atsaEndLineEdit" >
         <property name="text" >
          <string>0.0</string>
         </property>
        </widget>
       </item>
-      <item row="8" column="0" >
+      <item row="6" column="0" >
        <widget class="QLabel" name="label_47" >
         <property name="text" >
          <string>Highest freq (-H)</string>
         </property>
        </widget>
       </item>
-      <item row="9" column="0" >
+      <item row="7" column="0" >
        <widget class="QLineEdit" name="atsaHighestLineEdit" >
         <property name="text" >
          <string>20000</string>
         </property>
        </widget>
       </item>
-      <item row="10" column="0" >
+      <item row="8" column="0" >
        <widget class="QLabel" name="label_48" >
         <property name="text" >
          <string>Freq. deviat. (-d)</string>
         </property>
        </widget>
       </item>
-      <item row="11" column="0" >
+      <item row="9" column="0" >
        <widget class="QLineEdit" name="atsaDeviationLineEdit" >
         <property name="text" >
          <string>0.1</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="0" >
+      <item row="4" column="0" >
        <widget class="QLabel" name="label_44" >
         <property name="text" >
          <string>Lowest freq (-l)</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="0" >
+      <item row="5" column="0" >
        <widget class="QLineEdit" name="atsaLowestLineEdit" >
         <property name="text" >
          <string>20</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label_45" >
+        <property name="text" >
+         <string>Begin Time (-b)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="0" >
+       <widget class="QLabel" name="label_49" >
+        <property name="text" >
+         <string>Win cycle (-c)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="0" >
+       <widget class="QLineEdit" name="atsaCycleLineEdit" >
+        <property name="text" >
+         <string>4</string>
         </property>
        </widget>
       </item>
@@ -1163,33 +1177,16 @@
     <widget class="QWidget" name="layoutWidget_14" >
      <property name="geometry" >
       <rect>
-       <x>130</x>
+       <x>150</x>
        <y>100</y>
-       <width>111</width>
-       <height>262</height>
+       <width>131</width>
+       <height>272</height>
       </rect>
      </property>
      <layout class="QGridLayout" >
-      <property name="horizontalSpacing" >
+      <property name="spacing" >
        <number>0</number>
       </property>
-      <property name="verticalSpacing" >
-       <number>0</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="label_49" >
-        <property name="text" >
-         <string>Win cycle (-c)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QLineEdit" name="atsaCycleLineEdit" >
-        <property name="text" >
-         <string>4</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0" >
        <widget class="QLabel" name="label_50" >
         <property name="text" >
@@ -1240,7 +1237,7 @@
        </widget>
       </item>
       <item row="11" column="0" >
-       <widget class="QLineEdit" name="atsaMinGapineEdit" >
+       <widget class="QLineEdit" name="atsaMinGapLineEdit" >
         <property name="text" >
          <string>3</string>
         </property>
@@ -1262,146 +1259,131 @@
       </item>
      </layout>
     </widget>
-    <widget class="QComboBox" name="atsaWindowComboBox" >
+    <widget class="QWidget" name="layoutWidget" >
      <property name="geometry" >
       <rect>
-       <x>250</x>
-       <y>340</y>
-       <width>123</width>
-       <height>26</height>
-      </rect>
-     </property>
-     <item>
-      <property name="text" >
-       <string>Blackman</string>
-      </property>
-     </item>
-    </widget>
-    <widget class="QComboBox" name="atsaFileTypeComboBox" >
-     <property name="geometry" >
-      <rect>
-       <x>250</x>
-       <y>250</y>
-       <width>123</width>
-       <height>26</height>
-      </rect>
-     </property>
-     <item>
-      <property name="text" >
-       <string>amp+freq</string>
-      </property>
-     </item>
-    </widget>
-    <widget class="QLabel" name="label_58" >
-     <property name="geometry" >
-      <rect>
-       <x>260</x>
-       <y>320</y>
-       <width>110</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text" >
-      <string>Window (-w)</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_55" >
-     <property name="geometry" >
-      <rect>
-       <x>250</x>
+       <x>290</x>
        <y>101</y>
-       <width>110</width>
-       <height>22</height>
+       <width>141</width>
+       <height>271</height>
       </rect>
      </property>
-     <property name="text" >
-      <string>SMR Thresh. (-T)</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="atsaThresholdLineEdit" >
-     <property name="geometry" >
-      <rect>
-       <x>251</x>
-       <y>123</y>
-       <width>109</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text" >
-      <string>30</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="atsaLastPeakLineEdit" >
-     <property name="geometry" >
-      <rect>
-       <x>251</x>
-       <y>167</y>
-       <width>109</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text" >
-      <string>0.0</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_56" >
-     <property name="geometry" >
-      <rect>
-       <x>250</x>
-       <y>145</y>
-       <width>110</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text" >
-      <string>Last pk. con. (-P)</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_57" >
-     <property name="geometry" >
-      <rect>
-       <x>250</x>
-       <y>189</y>
-       <width>110</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text" >
-      <string>SMR contr. (-M)</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="atsaSmrLineEdit" >
-     <property name="geometry" >
-      <rect>
-       <x>251</x>
-       <y>211</y>
-       <width>109</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text" >
-      <string>0.5</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_60" >
-     <property name="geometry" >
-      <rect>
-       <x>250</x>
-       <y>233</y>
-       <width>110</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text" >
-      <string>File type (-F)</string>
-     </property>
+     <layout class="QVBoxLayout" name="verticalLayout" >
+      <property name="spacing" >
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="label_55" >
+        <property name="text" >
+         <string>SMR Thresh. (-T)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="atsaThresholdLineEdit" >
+        <property name="text" >
+         <string>30</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_56" >
+        <property name="text" >
+         <string>Last pk. con. (-P)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="atsaLastPeakLineEdit" >
+        <property name="text" >
+         <string>0.0</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_57" >
+        <property name="text" >
+         <string>SMR contr. (-M)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="atsaSmrLineEdit" >
+        <property name="text" >
+         <string>0.5</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_60" >
+        <property name="text" >
+         <string>File type (-F)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="atsaFileTypeComboBox" >
+        <item>
+         <property name="text" >
+          <string>amp+freq</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>amp+frq+phs</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>amp+frq+res</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>all</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_58" >
+        <property name="text" >
+         <string>Window (-w)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="atsaWindowComboBox" >
+        <item>
+         <property name="text" >
+          <string>Blackman</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Blackman H</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Hanning</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Von Hamm</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
   </widget>
   <widget class="QTextBrowser" name="helpBrowser" >
    <property name="geometry" >
     <rect>
-     <x>380</x>
+     <x>440</x>
      <y>10</y>
      <width>421</width>
      <height>431</height>
@@ -1410,5 +1392,178 @@
   </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>cvResetPushButton</sender>
+   <signal>released()</signal>
+   <receiver>UtilitiesDialog</receiver>
+   <slot>resetCvanal()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>186</x>
+     <y>418</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>390</x>
+     <y>-9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cvRunPushButton</sender>
+   <signal>released()</signal>
+   <receiver>UtilitiesDialog</receiver>
+   <slot>runCvanal()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>314</x>
+     <y>419</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>455</x>
+     <y>6</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hetResetPushButton</sender>
+   <signal>released()</signal>
+   <receiver>UtilitiesDialog</receiver>
+   <slot>resetHetro()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>111</x>
+     <y>426</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>143</x>
+     <y>470</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hetRunPushButton</sender>
+   <signal>released()</signal>
+   <receiver>UtilitiesDialog</receiver>
+   <slot>runHetro()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>327</x>
+     <y>435</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>331</x>
+     <y>497</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lpResetPushButton</sender>
+   <signal>released()</signal>
+   <receiver>UtilitiesDialog</receiver>
+   <slot>resetLpanal()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>111</x>
+     <y>426</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>157</x>
+     <y>450</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lpRunPushButton</sender>
+   <signal>released()</signal>
+   <receiver>UtilitiesDialog</receiver>
+   <slot>runLpanal()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>327</x>
+     <y>435</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>385</x>
+     <y>499</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pvResetPushButton</sender>
+   <signal>released()</signal>
+   <receiver>UtilitiesDialog</receiver>
+   <slot>resetPvanal()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>111</x>
+     <y>426</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>141</x>
+     <y>449</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pvRunPushButton</sender>
+   <signal>released()</signal>
+   <receiver>UtilitiesDialog</receiver>
+   <slot>runPvanal()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>327</x>
+     <y>435</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>263</x>
+     <y>453</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>atsaResetPushButton</sender>
+   <signal>released()</signal>
+   <receiver>UtilitiesDialog</receiver>
+   <slot>resetAtsa()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>111</x>
+     <y>426</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>243</x>
+     <y>484</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>atsaRunPushButton</sender>
+   <signal>released()</signal>
+   <receiver>UtilitiesDialog</receiver>
+   <slot>runAtsa()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>327</x>
+     <y>435</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>354</x>
+     <y>469</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>resetCvanal()</slot>
+  <slot>runCvanal()</slot>
+  <slot>resetHetro()</slot>
+  <slot>runHetro()</slot>
+  <slot>runLpanal()</slot>
+  <slot>resetLpanal()</slot>
+  <slot>runPvanal()</slot>
+  <slot>resetPvanal()</slot>
+  <slot>runAtsa()</slot>
+  <slot>resetAtsa()</slot>
+ </slots>
 </ui>

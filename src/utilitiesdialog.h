@@ -29,84 +29,108 @@ class UtilitiesDialog : public QDialog, private Ui::UtilitiesDialog
 {
   Q_OBJECT
   public:
-    UtilitiesDialog(QWidget *parent = 0, Options *options = 0, ConfigLists *m_configlist = 0);
+    UtilitiesDialog(QWidget *parent, Options *options, ConfigLists *m_configlist);
 
     ~UtilitiesDialog();
-	
-	QString cvInput;
-	QString cvOutput;
-	QString cvSr;
-	QString cvBegin;
-	QString cvDuration;
-	bool cvUseChannel;
-	QString cvChannel;
-	
-	QString hetInput;
-	QString hetOutput;
-	QString hetSr;
-	QString hetChannel;
-	QString hetBegin;
-	QString hetDuration;
-	QString hetStart;
-	QString hetPartials;
-	QString hetMax;
-	QString hetMin;
-	QString hetBreakpoints;
-	QString hetCutoff;
-	
-	QString lpInput;
-	QString lpOutput;
-	QString lpSr;
-	QString lpChannel;
-	QString lpBegin;
-	QString lpDuration;
-	QString lpPoles;
-	QString lpHopSize;
-	QString lpLowest;
-	QString lpMax;
-	int lpVerbosity;
-	bool lpAlternate;
-	
-	QString pvInput;
-	QString pvOutput;
-	QString pvSr;
-	QString pvChannel;
-	QString pvBegin;
-	QString pvDuration;
-	QString pvFrame;
-	QString pvOverlap;
-	QString pvLowest;
-	QString pvMax;
-	int pvWindow;
-	QString pvBeta;
-	
-	QString atsaInput;
-	QString atsaOutput;
-	QString atsaSr;
-	QString atsaBegin;
-	QString atsaEnd;
-	QString atsaLowest;
-	QString atsaHighest;
-	QString atsaDeviation;
-	QString atsaCycle;
-	QString atsaHopSize;
-	QString atsaMagnitude;
-	QString atsalength;
-	QString atsaMinSegment;
-	QString atsaMinGap;
-	QString atsaThreshold;
-	QString atsaSmr;
-	int atsaFileType;
-	int atsaWindow;
+
+//     QString cvInput;
+//     QString cvOutput;
+//     QString cvSr;
+//     QString cvBegin;
+//     QString cvDuration;
+//     QString cvChannel;
+//
+//     QString hetInput;
+//     QString hetOutput;
+//     QString hetSr;
+//     QString hetChannel;
+//     QString hetBegin;
+//     QString hetDuration;
+//     QString hetStart;
+//     QString hetPartials;
+//     QString hetMax;
+//     QString hetMin;
+//     QString hetBreakpoints;
+//     QString hetCutoff;
+//
+//     QString lpInput;
+//     QString lpOutput;
+//     QString lpSr;
+//     QString lpChannel;
+//     QString lpBegin;
+//     QString lpDuration;
+//     QString lpPoles;
+//     QString lpHopSize;
+//     QString lpLowest;
+//     QString lpMax;
+//     int lpVerbosity;
+//     bool lpAlternate;
+//
+//     QString pvInput;
+//     QString pvOutput;
+//     QString pvSr;
+//     QString pvChannel;
+//     QString pvBegin;
+//     QString pvDuration;
+//     QString pvFrame;
+//     QString pvOverlap;
+//     QString pvLowest;
+//     QString pvMax;
+//     int pvWindow;
+//     QString pvBeta;
+//
+//     QString atsaInput;
+//     QString atsaOutput;
+//     QString atsaSr;
+//     QString atsaBegin;
+//     QString atsaEnd;
+//     QString atsaLowest;
+//     QString atsaHighest;
+//     QString atsaDeviation;
+//     QString atsaCycle;
+//     QString atsaHopSize;
+//     QString atsaMagnitude;
+//     QString atsalength;
+//     QString atsaMinSegment;
+//     QString atsaMinGap;
+//     QString atsaThreshold;
+//     QString atsaSmr;
+//     int atsaFileType;
+//     int atsaWindow;
 
   private:
     Options *m_options;
+    QString m_helpDir; // Html help directory
+
     void browseFile(QString &destination, QString extension ="");
     void browseDir(QString &destination);
+    void changeHelp(QString filename);
+
   private slots:
+    void changeTab(int tab);
+    void runAtsa();
+    void resetAtsa();
+    void runPvanal();
+    void resetPvanal();
+    void runHetro();
+    void resetHetro();
+    void runLpanal();
+    void resetLpanal();
+    void runCvanal();
+    void resetCvanal();
+    void browseAtsaInput();
+    void browseAtsaOutput();
+    void browsePvInput();
+    void browsePvOutput();
+    void browseHetInput();
+    void browseHetOutput();
+    void browseLpInput();
+    void browseLpOutput();
+    void browseCvInput();
+    void browseCvOutput();
 
   signals:
-    void changeFont();
+    void runUtility(QString flags);
 };
 
 #endif

@@ -20,6 +20,7 @@
 #include "options.h"
 #include "configlists.h"
 #include "types.h"
+#include "stdlib.h"
 
 Options::Options()
 {
