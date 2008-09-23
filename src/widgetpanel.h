@@ -27,8 +27,9 @@ class WidgetPanel : public QDockWidget
   Q_OBJECT
   public:
     WidgetPanel(QWidget *parent);
-
     ~WidgetPanel();
+
+    QVector< QPair<QString, int> > getValues();
 
   private:
     QVector<QWidget *> widgets;

@@ -2,7 +2,10 @@
 #the doubles version, run qmake "CONFIG += build64"
 #CONFIG += build64
 
-build64 : message(Building for doubles \(64-bit\) csound)
+build64 {
+    message(Building for doubles \(64-bit\) csound)
+    DEFINES += QUTECSOUND_DOUBLE
+}
 else {
     message(Building for float \(32-bit\) csound.)
     message(For doubles use qmake \"CONFIG += build64\")

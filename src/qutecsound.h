@@ -91,7 +91,7 @@ class qutecsound:public QMainWindow
     void openExternalPlayer();
     void setHelpEntry();
     void utilitiesDialogOpen();
-    void showWidgets();
+//     void showWidgets();
     void about();
     void documentWasModified();
     void syntaxCheck();

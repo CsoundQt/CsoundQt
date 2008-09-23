@@ -66,11 +66,9 @@ qutecsound::qutecsound(QString fileName)
   helpPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
   addDockWidget(Qt::RightDockWidgetArea, helpPanel);
 
-#ifdef DEBUG
   widgetPanel = new WidgetPanel(this);
   widgetPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
   addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
-#endif
 
   helpPanel->show();
   utilitiesDialog = new UtilitiesDialog(this, m_options, m_configlists);
@@ -380,6 +378,11 @@ void qutecsound::play(bool realtime)
     }
     CppSound csound;
     static char *argv[33];
+#ifdef QUTECSOUND_DOUBLE
+    double *pvalue;
+#else
+    float *pvalue;
+#endif
     int argc = m_options->generateCmdLine(argv, realtime, fileName, fileName2);
     qDebug("Command Line:");
     for (int index=0; index< argc; index++) {
@@ -396,9 +399,18 @@ void qutecsound::play(bool realtime)
     running = true;
     while(csound.performKsmps(true)==0 && running) {
       qApp->processEvents();
+      QVector< QPair<QString, int> > values = widgetPanel->getValues();
+      for (int i = 0; i<values.size(); i++) {
+        if(csoundGetChannelPtr(csound.getCsound(), &pvalue, values[i].first.toStdString().c_str(),
+          CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0)
+        {
+//           qDebug("%s-%i", values[i].first.toStdString().c_str(), values[i].second);
+          *pvalue = values[i].second;
+        }
+      }
     }
-	csound.Stop();
-	csound.cleanup();
+    csound.Stop();
+    csound.cleanup();
 //     int hold;
 //
 //     CsoundPerformanceThread thread(csound.GetCsound());
@@ -521,10 +533,10 @@ void qutecsound::utilitiesDialogOpen()
 
 }
 
-void qutecsound::showWidgets()
-{
-  qDebug("qutecsound::showWidgets()");
-}
+// void qutecsound::showWidgets()
+// {
+//   qDebug("qutecsound::showWidgets()");
+// }
 
 void qutecsound::about()
 {
@@ -787,9 +799,11 @@ void qutecsound::createActions()
   connect(showUtilitiesAct, SIGNAL(triggered(bool)), utilitiesDialog, SLOT(setVisible(bool)));
 
   showWidgetsAct = new QAction(tr("Show Widgets"), this);
+  showWidgetsAct->setCheckable(true);
+  showWidgetsAct->setChecked(true);
 //   externalEditorAct->setShortcut(tr("Alt+F"));
   showWidgetsAct->setStatusTip(tr("Show Realtime Widgets"));
-  connect(showWidgetsAct, SIGNAL(triggered()), this, SLOT(showWidgets()));
+  connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
 
   aboutAct = new QAction(tr("&About"), this);
   aboutAct->setStatusTip(tr("Show the application's About box"));
@@ -861,6 +875,7 @@ void qutecsound::createMenus()
   viewMenu->addAction(showHelpAct);
   viewMenu->addAction(showConsole);
   viewMenu->addAction(showUtilitiesAct);
+  viewMenu->addAction(showWidgetsAct);
 
   menuBar()->addSeparator();
 
@@ -914,6 +929,7 @@ void qutecsound::createToolBars()
 
   configureToolBar = addToolBar(tr("Configure"));
   configureToolBar->addAction(configureAct);
+  configureToolBar->addAction(showWidgetsAct);
   configureToolBar->addAction(showUtilitiesAct);
 }
 
@@ -1112,26 +1128,28 @@ int qutecsound::execute(QString executable, QString options)
   system(commandLine.toStdString().c_str());
 #endif
 #ifdef WIN32
-//TODO This not working!
-  qDebug("qutecsound::execute %s %s", executable.toStdString().c_str(), options.toStdString().c_str());
-  STARTUPINFO         si;
-  PROCESS_INFORMATION pi;
-  ZeroMemory  (&si, sizeof(STARTUPINFO));
-
-  si.cb = sizeof(STARTUPINFO);
-  si.dwFlags = STARTF_USESHOWWINDOW;
-  si.wShowWindow = SW_SHOWNORMAL;
-  CreateProcess((WCHAR *) executable.toStdString().c_str(),
-                (WCHAR *) options.toStdString().c_str(),
-			    NULL,
-			    NULL,
-			    false,
-			    NORMAL_PRIORITY_CLASS,
-			    NULL,
-			    NULL,
-			    &si,
-			    &pi
-               );
+  QString commandLine = executable + (executable.beginsWith("cmd")? " /k ": " ") + options;
+  system(commandLine.toStdString().c_str());
+// //TODO This not working!
+//   qDebug("qutecsound::execute %s %s", executable.toStdString().c_str(), options.toStdString().c_str());
+//   STARTUPINFO         si;
+//   PROCESS_INFORMATION pi;
+//   ZeroMemory  (&si, sizeof(STARTUPINFO));
+// 
+//   si.cb = sizeof(STARTUPINFO);
+//   si.dwFlags = STARTF_USESHOWWINDOW;
+//   si.wShowWindow = SW_SHOWNORMAL;
+//   CreateProcess((WCHAR *) executable.toStdString().c_str(),
+//                 (WCHAR *) options.toStdString().c_str(),
+// 			    NULL,
+// 			    NULL,
+// 			    false,
+// 			    NORMAL_PRIORITY_CLASS,
+// 			    NULL,
+// 			    NULL,
+// 			    &si,
+// 			    &pi
+//                );
 #endif
   return 1;
 }

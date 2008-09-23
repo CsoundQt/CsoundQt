@@ -40,7 +40,7 @@
 #endif
 #ifdef WIN32
 #define DEFAULT_HTML_DIR "C:/Program Files/Csound/doc/manual"
-#define DEFAULT_TERM_EXECUTABLE "command"
+#define DEFAULT_TERM_EXECUTABLE "cmd.exe"
 // #define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "audacity"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "wmplayer"
