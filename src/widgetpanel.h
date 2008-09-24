@@ -22,6 +22,8 @@
 
 #include <QDockWidget>
 
+#include <QLabel> //remove this
+
 class WidgetPanel : public QDockWidget
 {
   Q_OBJECT
@@ -33,6 +35,7 @@ class WidgetPanel : public QDockWidget
 
   private:
     QVector<QWidget *> widgets;
+	QLabel *label; //remove this widget
 
 };
 

@@ -46,6 +46,12 @@
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "wmplayer"
 #endif
 
+//#ifdef QUTECSOUND_DOUBLE
+//#define MYFLT double
+//#else
+//#define MYFLT float
+//#endif
+
 enum viewMode {
   VIEW_CSD,
   VIEW_ORC_SCO

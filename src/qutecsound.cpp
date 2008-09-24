@@ -378,11 +378,7 @@ void qutecsound::play(bool realtime)
     }
     CppSound csound;
     static char *argv[33];
-#ifdef QUTECSOUND_DOUBLE
-    double *pvalue;
-#else
-    float *pvalue;
-#endif
+    MYFLT *pvalue;
     int argc = m_options->generateCmdLine(argv, realtime, fileName, fileName2);
     qDebug("Command Line:");
     for (int index=0; index< argc; index++) {
@@ -633,8 +629,24 @@ void qutecsound::runUtility(QString flags)
 // #endif
 //   }
 //   else {
-    QString script = "#!/bin/sh\n";
-    QString cmdLine = "";
+    QString script;
+#ifdef WIN32
+    script = "";
+    if (m_options->opcodedirActive)
+      script += "set OPCODEDIR=" + m_options->opcodedir + "\n";
+    if (m_options->sadirActive)
+      script += "set SADIR=" + m_options->sadir + "\n";
+    if (m_options->ssdirActive)
+      script += "set SSDIR=" + m_options->ssdir + "\n";
+    if (m_options->sfdirActive)
+      script += "set SFDIR=" + m_options->sfdir + "\n";
+    if (m_options->ssdirActive)
+      script += "set INCDIR=" + m_options->incdir + "\n";
+
+    script += "cd " + QFileInfo(documentPages[curPage]->fileName).absoluteFilePath() + "\n";
+    script += "csound " + flags + "\n";
+#else
+    script = "#!/bin/sh\n";
     if (m_options->opcodedirActive)
       script += "export OPCODEDIR=" + m_options->opcodedir + "\n";
     if (m_options->sadirActive)
@@ -652,6 +664,7 @@ void qutecsound::runUtility(QString flags)
     script += "dummy_var=\"\"\n";
     script += "read dummy_var\n";
     script += "rm $0\n";
+#endif
     QFile file(SCRIPT_NAME);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
       return;
@@ -1128,7 +1141,7 @@ int qutecsound::execute(QString executable, QString options)
   system(commandLine.toStdString().c_str());
 #endif
 #ifdef WIN32
-  QString commandLine = executable + (executable.beginsWith("cmd")? " /k ": " ") + options;
+  QString commandLine = executable + (executable.startsWith("cmd")? " /k ": " ") + options;
   system(commandLine.toStdString().c_str());
 // //TODO This not working!
 //   qDebug("qutecsound::execute %s %s", executable.toStdString().c_str(), options.toStdString().c_str());

@@ -33,6 +33,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   layoutWidget2->setGeometry(QRect(5, 5, 20, 200));
   QSlider *slider = new QSlider(layoutWidget2);
   slider->setMinimumSize(20, 100);
+  slider->setRange(0,99);
   slider->setObjectName ("slider1");
   widgets.append(slider);
 
@@ -40,6 +41,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   layoutWidget2->setGeometry(QRect(45, 5, 20, 200));
   slider = new QSlider(layoutWidget2);
   slider->setMinimumSize(20, 100);
+  slider->setRange(0,99);
   slider->setObjectName ("slider2");
   widgets.append(slider);
 
@@ -47,6 +49,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   layoutWidget2->setGeometry(QRect(85, 5, 20, 200));
   slider = new QSlider(layoutWidget2);
   slider->setMinimumSize(20, 100);
+  slider->setRange(0,99);
   slider->setObjectName ("slider3");
   widgets.append(slider);
 
@@ -54,6 +57,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   layoutWidget2->setGeometry(QRect(125, 5, 20, 200));
   slider = new QSlider(layoutWidget2);
   slider->setMinimumSize(20, 100);
+  slider->setRange(0,99);
   slider->setObjectName ("slider4");
   widgets.append(slider);
 
@@ -61,9 +65,14 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   layoutWidget2->setGeometry(QRect(165, 5, 20, 200));
   slider = new QSlider(layoutWidget2);
   slider->setMinimumSize(20, 100);
+  slider->setRange(0,99);
   slider->setObjectName ("slider5");
   widgets.append(slider);
 
+  layoutWidget2 = new QWidget(layoutWidget);
+  layoutWidget2->setGeometry(QRect(5, 105, 20, 200));
+  label = new QLabel("test",layoutWidget2);
+  
   setWidget(layoutWidget);
   resize(200, 100);
 }
@@ -79,5 +88,6 @@ QVector< QPair<QString, int> > WidgetPanel::getValues()
   for (int i = 0; i < widgets.size(); i++) {
     values.append(qMakePair(widgets[i]->objectName (), ((QSlider *)widgets[i])->value() ));
   }
+  label->setText(QString::number(((QSlider *)widgets[0])->value() ));
   return values;
 }
