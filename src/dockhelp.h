@@ -39,6 +39,10 @@ class DockHelp : public QDockWidget
 
   private:
     QTextBrowser *text;
+    virtual void closeEvent(QCloseEvent * event);
+
+  signals:
+    void Close(bool visible);
 
 };
 

@@ -105,6 +105,7 @@ class UtilitiesDialog : public QDialog, private Ui::UtilitiesDialog
     void browseFile(QString &destination, QString extension ="");
     void browseDir(QString &destination);
     void changeHelp(QString filename);
+    virtual void closeEvent(QCloseEvent * event);
 
   private slots:
     void changeTab(int tab);
@@ -131,6 +132,7 @@ class UtilitiesDialog : public QDialog, private Ui::UtilitiesDialog
 
   signals:
     void runUtility(QString flags);
+    void Close(bool visible);
 };
 
 #endif

@@ -43,3 +43,8 @@ void Console::clear()
 {
   text->clear();
 }
+
+void Console::closeEvent(QCloseEvent * event)
+{
+  emit Close(false);
+}

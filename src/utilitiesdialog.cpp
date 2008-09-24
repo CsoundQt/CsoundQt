@@ -322,3 +322,8 @@ void UtilitiesDialog::changeTab(int tab)
       break;
   }
 }
+
+void UtilitiesDialog::closeEvent(QCloseEvent * event)
+{
+  emit Close(false);
+}

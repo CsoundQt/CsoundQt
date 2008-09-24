@@ -35,7 +35,12 @@ class WidgetPanel : public QDockWidget
 
   private:
     QVector<QWidget *> widgets;
+    virtual void closeEvent(QCloseEvent * event);
+
 	QLabel *label; //remove this widget
+
+  signals:
+    void Close(bool visible);
 
 };
 

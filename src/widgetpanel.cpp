@@ -91,3 +91,8 @@ QVector< QPair<QString, int> > WidgetPanel::getValues()
   label->setText(QString::number(((QSlider *)widgets[0])->value() ));
   return values;
 }
+
+void WidgetPanel::closeEvent(QCloseEvent * event)
+{
+  emit Close(false);
+}

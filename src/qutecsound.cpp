@@ -793,12 +793,14 @@ void qutecsound::createActions()
   showHelpAct->setCheckable(true);
   showHelpAct->setChecked(true);
   connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
+  connect(helpPanel, SIGNAL(Close(bool)), showHelpAct, SLOT(setChecked(bool)));
 
   showConsole = new QAction(tr("Show Output Console"), this);
   showConsole->setShortcut(tr("Alt+A"));
   showConsole->setCheckable(true);
   showConsole->setChecked(true);
   connect(showConsole, SIGNAL(toggled(bool)), m_console, SLOT(setVisible(bool)));
+  connect(m_console, SIGNAL(Close(bool)), showConsole, SLOT(setChecked(bool)));
 
   setHelpEntryAct = new QAction(tr("Show Opcode Entry"), this);
   setHelpEntryAct->setShortcut(tr("Shift+F1"));
@@ -810,6 +812,7 @@ void qutecsound::createActions()
   showUtilitiesAct->setCheckable(true);
   showUtilitiesAct->setChecked(false);
   connect(showUtilitiesAct, SIGNAL(triggered(bool)), utilitiesDialog, SLOT(setVisible(bool)));
+  connect(utilitiesDialog, SIGNAL(Close(bool)), showUtilitiesAct, SLOT(setChecked(bool)));
 
   showWidgetsAct = new QAction(tr("Show Widgets"), this);
   showWidgetsAct->setCheckable(true);
@@ -817,6 +820,7 @@ void qutecsound::createActions()
 //   externalEditorAct->setShortcut(tr("Alt+F"));
   showWidgetsAct->setStatusTip(tr("Show Realtime Widgets"));
   connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
+  connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
 
   aboutAct = new QAction(tr("&About"), this);
   aboutAct->setStatusTip(tr("Show the application's About box"));
@@ -959,6 +963,7 @@ void qutecsound::readSettings()
   QSize size = settings.value("size", QSize(600, 500)).toSize();
   resize(size);
   move(pos);
+  restoreState(settings.value("dockstate").toByteArray());
   lastUsedDir = settings.value("lastuseddir", "").toString();
   lastFileDir = settings.value("lastfiledir", "").toString();
   recentFiles.clear();
@@ -1059,6 +1064,7 @@ void qutecsound::writeSettings()
   settings.beginGroup("GUI");
   settings.setValue("pos", pos());
   settings.setValue("size", size());
+  settings.setValue("dockstate", saveState());
   settings.setValue("lastuseddir", lastUsedDir);
   settings.setValue("lastfiledir", lastFileDir);
   for (int i = 0; i < recentFiles.size();i++) {

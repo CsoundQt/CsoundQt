@@ -36,6 +36,10 @@ class Console : public QDockWidget
     void setDefaultFont(QFont font) {text->document()->setDefaultFont(font);}
   private:
     QTextEdit *text;
+    virtual void closeEvent(QCloseEvent * event);
+
+  signals:
+    void Close(bool visible);
 
 };
 
