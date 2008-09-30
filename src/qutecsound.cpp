@@ -659,7 +659,11 @@ void qutecsound::runUtility(QString flags)
       script += "export INCDIR=" + m_options->incdir + "\n";
 
     script += "cd " + QFileInfo(documentPages[curPage]->fileName).absoluteFilePath() + "\n";
+#ifdef MACOSX
+    script += "/usr/local/bin/csound " + flags + "\n";
+#else
     script += "csound " + flags + "\n";
+#endif
     script += "echo \"\nPress return to continue\"\n";
     script += "dummy_var=\"\"\n";
     script += "read dummy_var\n";
@@ -807,14 +811,14 @@ void qutecsound::createActions()
   setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
   connect(setHelpEntryAct, SIGNAL(triggered()), this, SLOT(setHelpEntry()));
 
-  showUtilitiesAct = new QAction(tr("Utilities Dialog"), this);
+  showUtilitiesAct = new QAction(tr("Utilities"), this);
 //   showUtilitiesAct->setShortcut(tr("Alt+W"));
   showUtilitiesAct->setCheckable(true);
   showUtilitiesAct->setChecked(false);
   connect(showUtilitiesAct, SIGNAL(triggered(bool)), utilitiesDialog, SLOT(setVisible(bool)));
   connect(utilitiesDialog, SIGNAL(Close(bool)), showUtilitiesAct, SLOT(setChecked(bool)));
 
-  showWidgetsAct = new QAction(tr("Show Widgets"), this);
+  showWidgetsAct = new QAction(tr("Widgets"), this);
   showWidgetsAct->setCheckable(true);
   showWidgetsAct->setChecked(true);
 //   externalEditorAct->setShortcut(tr("Alt+F"));
@@ -1346,8 +1350,11 @@ QString qutecsound::generateScript(bool realtime)
     script += "export INCDIR=" + m_options->incdir + "\n";
 
   script += "cd " + QFileInfo(documentPages[curPage]->fileName).absoluteFilePath() + "\n";
-
+#ifdef MACOSX
+  cmdLine = "/usr/local/bin/csound ";
+#else
   cmdLine = "csound ";
+#endif
   if (documentPages[curPage]->companionFile != "") {
     if (documentPages[curPage]->fileName.endsWith(".orc"))
       cmdLine += "\""  + documentPages[curPage]->fileName
