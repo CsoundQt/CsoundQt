@@ -22,7 +22,8 @@ SOURCES += qutecsound.cpp \
  console.cpp \
  documentpage.cpp \
  utilitiesdialog.cpp \
- widgetpanel.cpp
+ widgetpanel.cpp \
+ qutewidget.cpp
 HEADERS += qutecsound.h \
  dockhelp.h \
  opentryparser.h \
@@ -34,7 +35,8 @@ HEADERS += qutecsound.h \
  console.h \
  documentpage.h \
  utilitiesdialog.h \
- widgetpanel.h
+ widgetpanel.h \
+ qutewidget.h
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \

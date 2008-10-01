@@ -56,10 +56,11 @@ qutecsound::qutecsound(QString fileName)
   setCentralWidget(documentTabs);
 
   m_options = new Options();
-  readSettings();
+
   m_configlists = new ConfigLists;
 
   m_console = new Console(this);
+  m_console->setObjectName("m_console");
 //   m_console->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
   addDockWidget(Qt::BottomDockWidgetArea, m_console);
   helpPanel = new DockHelp(this);
@@ -68,9 +69,14 @@ qutecsound::qutecsound(QString fileName)
 
   widgetPanel = new WidgetPanel(this);
   widgetPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
+  widgetPanel->setObjectName("widgetPanel");
   addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
 
   helpPanel->show();
+  helpPanel->setObjectName("helpPanel");
+
+  readSettings();
+
   utilitiesDialog = new UtilitiesDialog(this, m_options, m_configlists);
   connect(utilitiesDialog, SIGNAL(runUtility(QString)), this, SLOT(runUtility(QString)));
 
@@ -106,6 +112,8 @@ qutecsound::qutecsound(QString fileName)
   helpPanel->docDir = m_options->csdocdir;
   QString index = m_options->csdocdir + QString("/index.html");
   helpPanel->loadFile(index);
+
+  applySettings();
 }
 
 qutecsound::~qutecsound()
@@ -357,11 +365,11 @@ void qutecsound::play(bool realtime)
 #endif
     m_console->clear();
     QTemporaryFile csdFile;
-	QString tmpFileName = QDir::tempPath();
-	if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
-	  tmpFileName += QDir::separator();
-	}
-	tmpFileName += QString("csound-tmpXXXXXXXX.csd");
+    QString tmpFileName = QDir::tempPath();
+    if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
+      tmpFileName += QDir::separator();
+    }
+    tmpFileName += QString("csound-tmpXXXXXXXX.csd");
     csdFile.setFileTemplate(tmpFileName);
     if (!csdFile.open()) {
       QMessageBox::critical(this,
@@ -395,13 +403,15 @@ void qutecsound::play(bool realtime)
     running = true;
     while(csound.performKsmps(true)==0 && running) {
       qApp->processEvents();
-      QVector< QPair<QString, int> > values = widgetPanel->getValues();
-      for (int i = 0; i<values.size(); i++) {
-        if(csoundGetChannelPtr(csound.getCsound(), &pvalue, values[i].first.toStdString().c_str(),
-          CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0)
-        {
-//           qDebug("%s-%i", values[i].first.toStdString().c_str(), values[i].second);
-          *pvalue = values[i].second;
+      if (realtime && m_options->rtEnableWidgets) {
+        QVector< QPair<QString, double> > values = widgetPanel->getValues();
+        for (int i = 0; i<values.size(); i++) {
+          if(csoundGetChannelPtr(csound.getCsound(), &pvalue, values[i].first.toStdString().c_str(),
+            CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0)
+          {
+  //           qDebug("%s-%i", values[i].first.toStdString().c_str(), values[i].second);
+            *pvalue = (MYFLT) values[i].second;
+          }
         }
       }
     }
@@ -492,7 +502,6 @@ void qutecsound::render()
 
 void qutecsound::openExternalEditor()
 {
-  //TODO check if opened file matches desired file in every circumstance
   QString options;
   options = m_options->fileOutputFilename;
   execute(m_options->waveeditor, options);
@@ -583,6 +592,7 @@ void qutecsound::applySettings(int result)
 {
   m_highlighter->setDocument(textEdit->document());
   m_highlighter->setColorVariables(m_options->colorVariables);
+  widgetPanel->setEnabled(m_options->rtEnableWidgets);
 }
 
 void qutecsound::checkSelection()
@@ -930,11 +940,13 @@ void qutecsound::fillFileMenu()
 void qutecsound::createToolBars()
 {
   fileToolBar = addToolBar(tr("File"));
+  fileToolBar->setObjectName("fileToolBar");
   fileToolBar->addAction(newAct);
   fileToolBar->addAction(openAct);
   fileToolBar->addAction(saveAct);
 
   editToolBar = addToolBar(tr("Edit"));
+  editToolBar->setObjectName("editToolBar");
   editToolBar->addAction(undoAct);
   editToolBar->addAction(redoAct);
   editToolBar->addAction(cutAct);
@@ -942,6 +954,7 @@ void qutecsound::createToolBars()
   editToolBar->addAction(pasteAct);
 
   controlToolBar = addToolBar(tr("Control"));
+  controlToolBar->setObjectName("controlToolBar");
   controlToolBar->addAction(playAct);
   controlToolBar->addAction(stopAct);
   controlToolBar->addAction(renderAct);
@@ -949,6 +962,7 @@ void qutecsound::createToolBars()
   controlToolBar->addAction(externalPlayerAct);
 
   configureToolBar = addToolBar(tr("Configure"));
+  configureToolBar->setObjectName("configureToolBar");
   configureToolBar->addAction(configureAct);
   configureToolBar->addAction(showWidgetsAct);
   configureToolBar->addAction(showUtilitiesAct);
@@ -1009,6 +1023,7 @@ void qutecsound::readSettings()
   settings.endGroup();
   settings.beginGroup("Run");
   m_options->useAPI = settings.value("useAPI", true).toBool();
+  m_options->thread = settings.value("thread", true).toBool();
   m_options->bufferSize = settings.value("bufferSize", 1024).toInt();
   m_options->bufferSizeActive = settings.value("bufferSizeActive", false).toBool();
   m_options->HwBufferSize = settings.value("HwBufferSize", 1024).toInt();
@@ -1026,6 +1041,7 @@ void qutecsound::readSettings()
   m_options->fileOutputFilenameActive = settings.value("fileOutputFilenameActive", false).toBool();
   m_options->fileOutputFilename = settings.value("fileOutputFilename", "").toString();
   m_options->rtOverrideOptions = settings.value("rtOverrideOptions", true).toBool();
+  m_options->rtEnableWidgets = settings.value("rtEnableWidgets", true).toBool();
   m_options->rtAudioModule = settings.value("rtAudioModule", 0).toInt();
   m_options->rtInputDevice = settings.value("rtInputDevice", "adc").toString();
   m_options->rtOutputDevice = settings.value("rtOutputDevice", "dac").toString();
@@ -1088,6 +1104,7 @@ void qutecsound::writeSettings()
   settings.endGroup();
   settings.beginGroup("Run");
   settings.setValue("useAPI", m_options->useAPI);
+  settings.setValue("thread", m_options->thread);
   settings.setValue("bufferSize", m_options->bufferSize);
   settings.setValue("bufferSizeActive", m_options->bufferSizeActive);
   settings.setValue("HwBufferSize",m_options->HwBufferSize);
@@ -1105,6 +1122,7 @@ void qutecsound::writeSettings()
   settings.setValue("fileOutputFilenameActive", m_options->fileOutputFilenameActive);
   settings.setValue("fileOutputFilename", m_options->fileOutputFilename);
   settings.setValue("rtOverrideOptions", m_options->rtOverrideOptions);
+  settings.setValue("rtEnableWidgets", m_options->rtEnableWidgets);
   settings.setValue("rtAudioModule", m_options->rtAudioModule);
   settings.setValue("rtInputDevice", m_options->rtInputDevice);
   settings.setValue("rtOutputDevice", m_options->rtOutputDevice);
@@ -1158,7 +1176,7 @@ int qutecsound::execute(QString executable, QString options)
 //   STARTUPINFO         si;
 //   PROCESS_INFORMATION pi;
 //   ZeroMemory  (&si, sizeof(STARTUPINFO));
-// 
+//
 //   si.cb = sizeof(STARTUPINFO);
 //   si.dwFlags = STARTF_USESHOWWINDOW;
 //   si.wShowWindow = SW_SHOWNORMAL;

@@ -22,7 +22,9 @@
 
 #include <QDockWidget>
 
-#include <QLabel> //remove this
+// #include <QLabel> //remove this
+
+class QuteWidget;
 
 class WidgetPanel : public QDockWidget
 {
@@ -31,13 +33,13 @@ class WidgetPanel : public QDockWidget
     WidgetPanel(QWidget *parent);
     ~WidgetPanel();
 
-    QVector< QPair<QString, int> > getValues();
+    QVector< QPair<QString, double> > getValues();
 
   private:
-    QVector<QWidget *> widgets;
+    QVector<QuteWidget *> widgets;
     virtual void closeEvent(QCloseEvent * event);
 
-	QLabel *label; //remove this widget
+//     QLabel *label; //remove this widget
 
   signals:
     void Close(bool visible);

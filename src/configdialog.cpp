@@ -4,7 +4,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
+ *   the Free Software Foundation; either version 3 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
@@ -55,6 +55,8 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   else
     ExternalRadioButton->setChecked(true);
 
+  threadCheckBox->setChecked(m_options->thread);
+
   BufferSizeLineEdit->setText(QString::number(m_options->bufferSize));
   BufferSizeCheckBox->setChecked(m_options->bufferSizeActive);
   BufferSizeLineEdit->setEnabled(m_options->bufferSizeActive);
@@ -77,6 +79,7 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   OutputFilenameLineEdit->setText(m_options->fileOutputFilename);
   OutputFilenameLineEdit->setEnabled(m_options->fileOutputFilenameActive);
   RtOverrideCheckBox->setChecked(m_options->rtOverrideOptions);
+  widgetsCheckBox->setChecked(m_options->rtEnableWidgets);
   RtModuleComboBox->setCurrentIndex(m_options->rtAudioModule);
   RtInputLineEdit->setText(m_options->rtInputDevice);
   RtOutputLineEdit->setText(m_options->rtOutputDevice);
@@ -143,6 +146,7 @@ void ConfigDialog::accept()
   emit(changeFont());
 
   m_options->useAPI = ApiRadioButton->isChecked();
+  m_options->thread = threadCheckBox->isChecked();
   m_options->bufferSize = BufferSizeLineEdit->text().toInt();
   m_options->bufferSizeActive = BufferSizeCheckBox->isChecked();
   m_options->HwBufferSize = HwBufferSizeLineEdit->text().toInt();
@@ -160,6 +164,7 @@ void ConfigDialog::accept()
   m_options->fileOutputFilenameActive = OutputFilenameCheckBox->isChecked();
   m_options->fileOutputFilename = OutputFilenameLineEdit->text();
   m_options->rtOverrideOptions = RtOverrideCheckBox->isChecked();
+  m_options->rtEnableWidgets = widgetsCheckBox->isChecked();
   m_options->rtAudioModule = RtModuleComboBox->currentIndex();
   m_options->rtInputDevice = RtInputLineEdit->text();
   m_options->rtOutputDevice = RtOutputLineEdit->text();

@@ -146,7 +146,7 @@
       <programargs/>
       <directoryradio>executable</directoryradio>
       <globaldebugarguments/>
-      <globalcwd/>
+      <globalcwd>/home/andres/src/qutecsound/trunk/qutecsound</globalcwd>
       <useglobalprogram>false</useglobalprogram>
       <terminal>false</terminal>
       <autocompile>false</autocompile>
@@ -192,7 +192,6 @@
     <filetypes/>
     <useglobaltypes>
       <type ext="ui" />
-      <type ext="qrc" />
       <type ext="cpp" />
       <type ext="h" />
       <type ext="ts" />

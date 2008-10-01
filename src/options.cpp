@@ -47,10 +47,8 @@ QString Options::generateCmdLineFlags(bool rt)
       cmdline += " -+ignore_csopts=1";
     if (m_configlists.rtAudioNames[rtAudioModule] != "none") {
       cmdline += " -+rtaudio=" + m_configlists.rtAudioNames[rtAudioModule];
-      if (rtInputDevice != "")
-        cmdline += " -i" + rtInputDevice;
-      if (rtOutputDevice != "")
-        cmdline += " -o" + rtOutputDevice;
+      cmdline += " -i" + (rtInputDevice == "" ? "adc":rtInputDevice);
+      cmdline += " -o" + (rtOutputDevice == "" ? "dac":rtOutputDevice);
       if (rtJackName != "")
         cmdline += " -+jack_client=" + rtJackName;
     }
@@ -69,7 +67,7 @@ QString Options::generateCmdLineFlags(bool rt)
     cmdline += ":" + m_configlists.fileFormatFlags[fileSampleFormat];
     if (fileInputFilenameActive)
       cmdline += " -i" + fileInputFilename;
-    if (fileOutputFilename != "")
+    if (fileOutputFilenameActive)
       cmdline += " -o" + fileOutputFilename;
 
   }

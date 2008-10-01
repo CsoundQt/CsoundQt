@@ -97,7 +97,7 @@ class qutecsound:public QMainWindow
     void syntaxCheck();
     void autoComplete();
     void configure();
-    void applySettings(int);
+    void applySettings(int result = 0);
     void checkSelection();
     void runUtility(QString flags);
 

@@ -45,6 +45,7 @@ class Options{
     bool saveChanges;
 
     bool useAPI;
+    bool thread;
 
     int bufferSize;
     bool bufferSizeActive;
@@ -65,6 +66,7 @@ class Options{
     QString fileOutputFilename;
 
     bool rtOverrideOptions;
+    bool rtEnableWidgets;
     int rtAudioModule;
     QString rtInputDevice;
     QString rtOutputDevice;

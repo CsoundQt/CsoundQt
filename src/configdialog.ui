@@ -77,14 +77,6 @@
     <number>0</number>
    </property>
    <widget class="QWidget" name="tab_2" >
-    <property name="geometry" >
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>617</width>
-      <height>512</height>
-     </rect>
-    </property>
     <attribute name="title" >
      <string>Run</string>
     </attribute>
@@ -395,6 +387,19 @@
        </item>
       </layout>
      </widget>
+     <widget class="QCheckBox" name="widgetsCheckBox" >
+      <property name="geometry" >
+       <rect>
+        <x>220</x>
+        <y>20</y>
+        <width>181</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Enable Widgets</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QLineEdit" name="BufferSizeLineEdit" >
      <property name="geometry" >
@@ -411,7 +416,7 @@
       <rect>
        <x>390</x>
        <y>40</y>
-       <width>71</width>
+       <width>211</width>
        <height>22</height>
       </rect>
      </property>
@@ -517,16 +522,24 @@
       </item>
      </layout>
     </widget>
+    <widget class="QCheckBox" name="threadCheckBox" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="geometry" >
+      <rect>
+       <x>390</x>
+       <y>10</y>
+       <width>211</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Run in separate thread</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="tab" >
-    <property name="geometry" >
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>617</width>
-      <height>512</height>
-     </rect>
-    </property>
     <attribute name="title" >
      <string>General</string>
     </attribute>
@@ -802,14 +815,6 @@
     </widget>
    </widget>
    <widget class="QWidget" name="tab_3" >
-    <property name="geometry" >
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>617</width>
-      <height>512</height>
-     </rect>
-    </property>
     <attribute name="title" >
      <string>Environment</string>
     </attribute>

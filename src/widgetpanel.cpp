@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "widgetpanel.h"
+#include "qutewidget.h"
 
 #include <QSlider>
 
@@ -29,50 +30,41 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   QWidget *layoutWidget = new QWidget(this);
   layoutWidget->setGeometry(QRect(0, 0, 200, 100));
 
-  QWidget *layoutWidget2 = new QWidget(layoutWidget);
-  layoutWidget2->setGeometry(QRect(5, 5, 20, 200));
-  QSlider *slider = new QSlider(layoutWidget2);
-  slider->setMinimumSize(20, 100);
-  slider->setRange(0,99);
-  slider->setObjectName ("slider1");
-  widgets.append(slider);
 
-  layoutWidget2 = new QWidget(layoutWidget);
-  layoutWidget2->setGeometry(QRect(45, 5, 20, 200));
-  slider = new QSlider(layoutWidget2);
-  slider->setMinimumSize(20, 100);
-  slider->setRange(0,99);
-  slider->setObjectName ("slider2");
-  widgets.append(slider);
+  QuteWidget *widget = new QuteWidget(layoutWidget, QUTE_SLIDER);
+  widget->setWidgetGeometry(QRect(5, 5, 20, 100));
+  widget->setRange(0,99);
+  widget->setChannelName ("slider1");
+  widgets.append(widget);
 
-  layoutWidget2 = new QWidget(layoutWidget);
-  layoutWidget2->setGeometry(QRect(85, 5, 20, 200));
-  slider = new QSlider(layoutWidget2);
-  slider->setMinimumSize(20, 100);
-  slider->setRange(0,99);
-  slider->setObjectName ("slider3");
-  widgets.append(slider);
+  widget = new QuteWidget(layoutWidget, QUTE_SLIDER);
+  widget->setWidgetGeometry(QRect(45, 5, 20, 100));
+  widget->setRange(0,99);
+  widget->setChannelName ("slider2");
+  widgets.append(widget);
 
-  layoutWidget2 = new QWidget(layoutWidget);
-  layoutWidget2->setGeometry(QRect(125, 5, 20, 200));
-  slider = new QSlider(layoutWidget2);
-  slider->setMinimumSize(20, 100);
-  slider->setRange(0,99);
-  slider->setObjectName ("slider4");
-  widgets.append(slider);
+  widget = new QuteWidget(layoutWidget, QUTE_SLIDER);
+  widget->setWidgetGeometry(QRect(85, 5, 20, 100));
+  widget->setRange(0,99);
+  widget->setChannelName ("slider3");
+  widgets.append(widget);
 
-  layoutWidget2 = new QWidget(layoutWidget);
-  layoutWidget2->setGeometry(QRect(165, 5, 20, 200));
-  slider = new QSlider(layoutWidget2);
-  slider->setMinimumSize(20, 100);
-  slider->setRange(0,99);
-  slider->setObjectName ("slider5");
-  widgets.append(slider);
+  widget = new QuteWidget(layoutWidget, QUTE_SLIDER);
+  widget->setWidgetGeometry(QRect(125, 5, 20, 100));
+  widget->setRange(0,99);
+  widget->setChannelName ("slider4");
+  widgets.append(widget);
 
-  layoutWidget2 = new QWidget(layoutWidget);
-  layoutWidget2->setGeometry(QRect(5, 105, 20, 200));
-  label = new QLabel("test",layoutWidget2);
-  
+  widget = new QuteWidget(layoutWidget, QUTE_SLIDER);
+  widget->setWidgetGeometry(QRect(165, 5, 20, 100));
+  widget->setRange(0,99);
+  widget->setChannelName ("slider5");
+  widgets.append(widget);
+
+//   layoutWidget2 = new QWidget(layoutWidget);
+//   layoutWidget2->setGeometry(QRect(5, 105, 20, 200));
+//   label = new QLabel("test",layoutWidget2);
+
   setWidget(layoutWidget);
   resize(200, 100);
 }
@@ -82,13 +74,13 @@ WidgetPanel::~WidgetPanel()
 {
 }
 
-QVector< QPair<QString, int> > WidgetPanel::getValues()
+QVector< QPair<QString, double> > WidgetPanel::getValues()
 {
-  QVector<QPair<QString, int> > values;
+  QVector<QPair<QString, double> > values;
   for (int i = 0; i < widgets.size(); i++) {
-    values.append(qMakePair(widgets[i]->objectName (), ((QSlider *)widgets[i])->value() ));
+    values.append(qMakePair(widgets[i]->getChannelName(), widgets[i]->getValue() ));
   }
-  label->setText(QString::number(((QSlider *)widgets[0])->value() ));
+//   label->setText(QString::number(((QSlider *)widgets[0])->value() ));
   return values;
 }
 
