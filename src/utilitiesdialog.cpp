@@ -31,7 +31,11 @@ UtilitiesDialog::UtilitiesDialog(QWidget *parent, Options *options, ConfigLists 
 
   qDebug("UtilitiesDialog::UtilitiesDialog");
   helpBrowser->setAcceptRichText(true);
-  helpBrowser->setSource(m_options->csdocdir + "/cvanal.html");
+  changeHelp(m_options->csdocdir + "/cvanal.html");
+  
+  QStringList searchPaths;
+  searchPaths << m_options->csdocdir;
+  helpBrowser->setSearchPaths(searchPaths);
   connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTab(int)));
 }
 
@@ -290,8 +294,23 @@ void UtilitiesDialog::browseDir(QString &destination)
 }
 
 void UtilitiesDialog::changeHelp(QString filename)
-{
-  helpBrowser->setSource(filename);
+{  
+  QFile file(filename);
+  if (!file.open(QFile::ReadOnly | QFile::Text)) {
+//     QMessageBox::warning(this, tr("QuteCsound"),
+//                          tr("Cannot read file %1:\n%2.")
+//                              .arg(fileName)
+//                              .arg(file.errorString()));
+    return;
+  }
+//FIXME: Fix this hack so it works fine in windows as well...  
+#ifdef WIN32
+  QTextStream in(&file);
+  in.setAutoDetectUnicode(true);
+  helpBrowser->setHtml(in.readAll());
+#else
+  helpBrowser->setSource(QUrl(filename));
+#endif
 }
 
 void UtilitiesDialog::changeTab(int tab)
