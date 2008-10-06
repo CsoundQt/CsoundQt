@@ -74,7 +74,7 @@
     </rect>
    </property>
    <property name="currentIndex" >
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab_2" >
     <attribute name="title" >
@@ -523,9 +523,6 @@
      </layout>
     </widget>
     <widget class="QCheckBox" name="threadCheckBox" >
-     <property name="enabled" >
-      <bool>false</bool>
-     </property>
      <property name="geometry" >
       <rect>
        <x>390</x>
@@ -662,7 +659,7 @@
         <x>20</x>
         <y>130</y>
         <width>311</width>
-        <height>89</height>
+        <height>104</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
@@ -693,6 +690,13 @@
          </property>
          <property name="text" >
           <string>Save changes automatically on run</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="rememberFileCheckBox" >
+         <property name="text" >
+          <string>Remember last file opened</string>
          </property>
         </widget>
        </item>

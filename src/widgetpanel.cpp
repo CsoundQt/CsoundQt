@@ -69,19 +69,25 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   resize(200, 100);
 }
 
-
 WidgetPanel::~WidgetPanel()
 {
 }
 
-QVector< QPair<QString, double> > WidgetPanel::getValues()
+unsigned int WidgetPanel::widgetCount()
 {
-  QVector<QPair<QString, double> > values;
+  return widgets.size();
+}
+
+void WidgetPanel::getValues(QVector<QString> *channelNames, QVector<double> *values)
+{
+  if (channelNames->size() < widgets.size())
+    return;
   for (int i = 0; i < widgets.size(); i++) {
-    values.append(qMakePair(widgets[i]->getChannelName(), widgets[i]->getValue() ));
+    (*channelNames)[i] = widgets[i]->getChannelName();
+    (*values)[i] = widgets[i]->getValue();
   }
 //   label->setText(QString::number(((QSlider *)widgets[0])->value() ));
-  return values;
+//   return values;
 }
 
 void WidgetPanel::closeEvent(QCloseEvent * event)

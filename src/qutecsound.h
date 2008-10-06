@@ -26,7 +26,7 @@
 #include <QCloseEvent>
 #include <QTabWidget>
 
-#include <CppSound.hpp>
+#include <csound.h>
 
 #include "types.h"
 
@@ -54,6 +54,21 @@ class ConfigLists;
 class DocumentPage;
 class UtilitiesDialog;
 
+class qutecsound;
+
+struct csoundUserData{
+  /*result of csoundCompile()*/
+  int result;
+  /*instance of csound*/
+  CSOUND *csound;
+  /*performance status*/
+  bool PERF_STATUS;
+  bool realtime;
+  /*pass main application to check widgets*/
+  qutecsound *qcs;
+};
+
+
 class qutecsound:public QMainWindow
 {
   Q_OBJECT
@@ -65,6 +80,8 @@ class qutecsound:public QMainWindow
                                          int attr,
                                          const char *fmt,
                                          va_list args);
+    static uintptr_t csThread(void *data);
+
   public slots:
     void changeFont();
     void changePage(int index);
@@ -122,6 +139,11 @@ class qutecsound:public QMainWindow
     QString generateScript(bool realtime = true);
     void getCompanionFileName();
 
+    CSOUND *csound;
+    void* ThreadID;
+    csoundUserData* ud;
+
+
     QTabWidget *documentTabs;
     QVector<DocumentPage *> documentPages;
     QTextEdit *textEdit;
@@ -176,14 +198,15 @@ class qutecsound:public QMainWindow
     viewMode m_mode;
     ConfigLists *m_configlists;
     QStringList recentFiles;
+    QString lastFile;
 
-	UtilitiesDialog *utilitiesDialog;
+    UtilitiesDialog *utilitiesDialog;
 
     bool running;
     QIcon modIcon;
 
 #ifdef MACOSX
-	MenuBarHandle menuBarHandle;
+    MenuBarHandle menuBarHandle;
 #endif
 };
 

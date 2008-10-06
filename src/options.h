@@ -43,6 +43,7 @@ class Options{
     bool colorVariables;
     bool autoPlay;
     bool saveChanges;
+    bool rememberFile;
 
     bool useAPI;
     bool thread;

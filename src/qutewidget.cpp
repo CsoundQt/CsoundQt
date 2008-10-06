@@ -68,7 +68,6 @@ double QuteWidget::getValue()
 
 }
 
-
 void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
 {
   QMenu menu(this);

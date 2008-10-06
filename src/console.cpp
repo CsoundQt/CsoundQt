@@ -35,8 +35,19 @@ Console::~Console()
 
 void Console::appendMessage(QString msg)
 {
+  if (msg.contains("B ") or msg.contains("rtevent", Qt::CaseInsensitive)) {
+    text->setTextColor(QColor("blue"));
+  }
+  if (msg.contains("error", Qt::CaseInsensitive)
+      or msg.contains("overall samples out of range")) {
+    text->setTextColor(QColor("red"));
+  }
+  if (msg.contains("warning", Qt::CaseInsensitive)) {
+    text->setTextColor(QColor("orange"));
+  }
   text->insertPlainText(msg);
   text->moveCursor(QTextCursor::End);
+  text->setTextColor(QColor("black"));
 }
 
 void Console::clear()

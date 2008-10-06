@@ -33,7 +33,9 @@ class WidgetPanel : public QDockWidget
     WidgetPanel(QWidget *parent);
     ~WidgetPanel();
 
-    QVector< QPair<QString, double> > getValues();
+    unsigned int widgetCount();
+    void getValues(QVector<QString> *channelNames, QVector<double> *values);
+//     QVector< QPair<QString, double> > getValues();
 
   private:
     QVector<QuteWidget *> widgets;

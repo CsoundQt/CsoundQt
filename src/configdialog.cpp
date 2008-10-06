@@ -49,6 +49,7 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   colorVariablesCheckBox->setChecked(m_options->colorVariables);
   autoplayCheckBox->setChecked(m_options->autoPlay);
   saveChangesCheckBox->setChecked(m_options->saveChanges);
+  rememberFileCheckBox->setChecked(m_options->rememberFile);
 
   if (m_options->useAPI)
     ApiRadioButton->setChecked(true);
@@ -143,6 +144,7 @@ void ConfigDialog::accept()
   m_options->colorVariables = colorVariablesCheckBox->isChecked();
   m_options->autoPlay = autoplayCheckBox->isChecked();
   m_options->saveChanges = saveChangesCheckBox->isChecked();
+  m_options->rememberFile = rememberFileCheckBox->isChecked();
   emit(changeFont());
 
   m_options->useAPI = ApiRadioButton->isChecked();
