@@ -89,24 +89,54 @@ void QuteWidget::openProperties()
   label->setText("X =");
   label->setAlignment(Qt::AlignRight);
   layout->addWidget(label, 0, 0, Qt::AlignCenter);
+  QSpinBox *spinBox = new QSpinBox(&dialog);
+  spinBox->setValue(this->x());
+  layout->addWidget(spinBox, 0, 1, Qt::AlignCenter);
   label = new QLabel(&dialog);
   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Y =");
   label->setAlignment(Qt::AlignRight);
   layout->addWidget(label, 0, 2, Qt::AlignCenter);
+  spinBox = new QSpinBox(&dialog);
+  spinBox->setValue(this->y());
+  layout->addWidget(spinBox, 0, 3, Qt::AlignCenter);
   label = new QLabel(&dialog);
   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Width =");
   label->setAlignment(Qt::AlignRight);
   layout->addWidget(label, 1, 0, Qt::AlignCenter);
+  spinBox = new QSpinBox(&dialog);
+  spinBox->setValue(this->width());
+  layout->addWidget(spinBox, 1, 1, Qt::AlignCenter);
   label = new QLabel(&dialog);
   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Height =");
   label->setAlignment(Qt::AlignRight);
   layout->addWidget(label, 1, 2, Qt::AlignCenter);
-  QPushButton *button = new QPushButton(tr("Ok"));
-  layout->addWidget(button, 3, 3, Qt::AlignCenter);
+  spinBox = new QSpinBox(&dialog);
+  spinBox->setValue(this->height());
+  layout->addWidget(spinBox, 1, 3, Qt::AlignCenter);
+  label = new QLabel(&dialog);
+  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  label->setText("Min =");
+  label->setAlignment(Qt::AlignRight);
+  layout->addWidget(label, 2, 0, Qt::AlignCenter);
+  label = new QLabel(&dialog);
+  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  label->setText("Max =");
+  label->setAlignment(Qt::AlignRight);
+  layout->addWidget(label, 2, 2, Qt::AlignCenter);
+  QPushButton *cancelButton = new QPushButton(tr("Cancel"));
+  layout->addWidget(cancelButton, 3, 2, Qt::AlignCenter);
+  QPushButton *acceptButton = new QPushButton(tr("Ok"));
+  layout->addWidget(acceptButton, 3, 3, Qt::AlignCenter);
 
-  connect(button, SIGNAL(released()), &dialog, SLOT(accept()));
+  connect(acceptButton, SIGNAL(released()), &dialog, SLOT(accept()));
+  connect(&dialog, SIGNAL(accepted()), this, SLOT(applyProperties()));
   dialog.exec();
+}
+
+void QuteWidget::applyProperties()
+{
+  qDebug("QuteWidget::applyProperties() Not implemented yet.");
 }

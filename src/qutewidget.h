@@ -75,6 +75,7 @@ class QuteWidget : public QWidget
 
   private slots:
     void openProperties();
+    void applyProperties();
 
 //     double m_min,m_max;
 //     double m_min2,m_max2;

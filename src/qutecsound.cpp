@@ -536,8 +536,8 @@ void qutecsound::stop()
   if (running) {
     if (m_options->thread) {
       ud->PERF_STATUS = 0;
-      csoundStop(udata->csound);
-      csoundCleanup(udata->csound);
+      csoundStop(csound);
+      csoundCleanup(csound);
       csoundJoinThread((void *) ThreadID);
       csoundDestroy(csound);  //Had to destroy csound every run otherwise FLTK widgets crash...
 //     csound = NULL;
@@ -1104,7 +1104,7 @@ void qutecsound::readSettings()
   settings.endGroup();
   settings.beginGroup("Run");
   m_options->useAPI = settings.value("useAPI", true).toBool();
-  m_options->thread = settings.value("thread", true).toBool();
+  m_options->thread = settings.value("thread", false).toBool();
   m_options->bufferSize = settings.value("bufferSize", 1024).toInt();
   m_options->bufferSizeActive = settings.value("bufferSizeActive", false).toBool();
   m_options->HwBufferSize = settings.value("HwBufferSize", 1024).toInt();
