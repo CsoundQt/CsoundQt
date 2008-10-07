@@ -85,7 +85,7 @@ macx {
     }
     message(Building using $${MAC_LIB})
     DEFINES +=MACOSX
-    HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/CppSound.hpp
+    HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.h
     LIBS += -framework QtXml
     LIBS += -framework QtGui
     LIBS += -framework QtCore
