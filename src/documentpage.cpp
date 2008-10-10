@@ -32,4 +32,38 @@ DocumentPage::~DocumentPage()
 {
 }
 
+int DocumentPage::setTextString(QString text)
+{
+  //TODO filter MacCsound elements
+  if (text.contains("<MacOptions>") and text.contains("</MacOptions>")) {
+    macOptions = text.right(text.size()-text.indexOf("<MacOptions>"));
+    macOptions.resize(macOptions.indexOf("</MacOptions>") + 13);
+    //Removes line breaks also
+    text.remove(text.indexOf("<MacOptions>") - 1, macOptions.size() + 1);
+    qDebug("<MacOptions> present.");
+  }
+  else {
+    macOptions = "";
+  }
+  if (text.contains("<MacGUI>") and text.contains("</MacGUI>")) {
+    macGUI = text.right(text.size()-text.indexOf("<MacGUI>"));
+    macGUI.resize(macGUI.indexOf("</MacGUI>") + 9);
+    //Removes line breaks also (there are two new lines at the end)
+    text.remove(text.indexOf("<MacGUI>") - 1, macGUI.size() + 2);
+    qDebug("<MacGUI> present.");
+  }
+  else {
+    macGUI = "";
+  }
+  setPlainText(text);
+}
 
+QString DocumentPage::getFullText()
+{
+  QString fullText;
+  fullText = document()->toPlainText();
+  if (!fullText.endsWith("\n"))
+    fullText += "\n";
+  fullText += macOptions + "\n" + macGUI + "\n";
+  return fullText;
+}

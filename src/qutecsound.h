@@ -146,7 +146,8 @@ class qutecsound:public QMainWindow
 
     QTabWidget *documentTabs;
     QVector<DocumentPage *> documentPages;
-    QTextEdit *textEdit;
+    //TODO remove this variable? or make it DocumentPage
+    DocumentPage *textEdit;
     OpEntryParser *opcodeTree;
     Options *m_options;
     Console *m_console;

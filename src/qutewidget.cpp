@@ -44,16 +44,70 @@ void QuteWidget::setChannelName(QString name)
   m_widget->setObjectName(name);
 }
 
+void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
+{
+  setWidgetGeometry(QRect(x,y,w,h));
+}
+
 void QuteWidget::setWidgetGeometry(QRect rect)
 {
   this->setGeometry(rect);
   m_widget->setMinimumSize(rect.width(), rect.height());
 }
 
-
 void QuteWidget::setRange(int min, int max)
 {
-  ((QSlider *)m_widget)->setRange(min,max);
+  switch (m_type) {
+    case QUTE_SLIDER:
+      //TODO qslider uses ints instead of doubles!
+      ((QSlider *)m_widget)->setRange(min,max);
+      break;
+    default:
+      qDebug("QuteWidget::setRange not implemented for widget type");
+  }
+}
+
+void QuteWidget::setValue(double value)
+{
+  switch (m_type) {
+    case QUTE_SLIDER:
+      //TODO qslider uses ints instead of doubles!
+      ((QSlider *)m_widget)->setValue(value);
+      break;
+    default:
+      qDebug("QuteWidget::setValue not implemented for widget type");
+  }
+}
+
+void QuteWidget::setResolution(double resolution)
+{
+  switch (m_type) {
+//     case QUTE_SLIDER:
+//       ((QSlider *)m_widget)->setValue(min,max);
+//       break;
+    default:
+      qDebug("QuteWidget::setResolution not implemented for widget type");
+  }
+}
+
+void QuteWidget::setChecked(bool checked)
+{
+  switch (m_type) {
+//     case QUTE_SLIDER:
+//       break;
+    default:
+      qDebug("QuteWidget::setChecked not implemented for widget type");
+  }
+}
+
+void QuteWidget::setText(QString text)
+{
+  switch (m_type) {
+//     case QUTE_SLIDER:
+//       break;
+    default:
+      qDebug("QuteWidget::setText not implemented for widget type");
+  }
 }
 
 QString QuteWidget::getChannelName()
@@ -63,9 +117,12 @@ QString QuteWidget::getChannelName()
 
 double QuteWidget::getValue()
 {
-  if (m_type == QUTE_SLIDER)
-    return ((QSlider *)m_widget)->value();
-
+  switch (m_type) {
+    case QUTE_SLIDER:
+      return ((QSlider *)m_widget)->value();
+    default:
+      return 0.0;
+  }
 }
 
 void QuteWidget::contextMenuEvent(QContextMenuEvent *event)

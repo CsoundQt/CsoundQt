@@ -4,7 +4,7 @@
 
 build64 {
     message(Building for doubles \(64-bit\) csound)
-    DEFINES += QUTECSOUND_DOUBLE
+    DEFINES += USE_DOUBLE
 }
 else {
     message(Building for float \(32-bit\) csound.)
@@ -40,8 +40,7 @@ HEADERS += qutecsound.h \
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \
-          qt \
- debug
+          qt
 TARGET = ../bin/qutecsound
 RESOURCES = application.qrc
 
@@ -85,7 +84,7 @@ macx {
     }
     message(Building using $${MAC_LIB})
     DEFINES +=MACOSX
-    HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.h
+    HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/CppSound.hpp
     LIBS += -framework QtXml
     LIBS += -framework QtGui
     LIBS += -framework QtCore
@@ -95,8 +94,7 @@ macx {
     ICON = ../images/qtcs.icns
 }
 
-CONFIG -= stl \
- release
+CONFIG -= debug
 
 #QMAKE_CXXFLAGS_DEBUG += -DDEBUG
 

@@ -27,10 +27,14 @@
 
 enum widgetType {
   QUTE_SLIDER,
+  QUTE_KNOB,
+  QUTE_CHECKBOX,
   QUTE_BUTTON,
   QUTE_LABEL,
+  QUTE_LINEEDIT,
+  QUTE_DISPLAY,
+  QUTE_SCROLLNUMBER,
   QUTE_COMBOBOX,
-  QUTE_TEXTEDIT,
   NONE
 };
 
@@ -53,8 +57,13 @@ class QuteWidget : public QWidget
     double value2() {return m_value2;}
 
     void setChannelName(QString name);
+    void setWidgetGeometry(int x, int y, int w, int h);
     void setWidgetGeometry(QRect rect);
     void setRange(int min, int max);
+    void setValue(double value);
+    void setResolution(double resolution);
+    void setChecked(bool checked);
+    void setText(QString text);
 
     QString getChannelName();
     double getValue();

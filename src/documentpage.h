@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <QTextEdit>
+#include <QDomElement>
 
 class DocumentPage : public QTextEdit
 {
@@ -30,10 +31,18 @@ class DocumentPage : public QTextEdit
     DocumentPage(QWidget *parent);
 
     ~DocumentPage();
+
+    int setTextString(QString text);
+    QString getFullText();
 //     QTextDocument *textDocument;
     QString fileName;
     QString companionFile;
+
     bool askForFile;
+  private:
+    QString macOptions;
+    QString macGUI;
+    QDomElement widgets;
 };
 
 #endif

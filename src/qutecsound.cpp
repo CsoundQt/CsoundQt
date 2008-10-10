@@ -433,6 +433,8 @@ void qutecsound::play(bool realtime)
 //       }
     }
     csoundReset(csound);
+    csoundSetHostData(csound, (void *)m_console);
+    csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
     int result=csoundCompile(csound,argc,argv);
 
     if (result!=CSOUND_SUCCESS) {
@@ -444,8 +446,6 @@ void qutecsound::play(bool realtime)
 //       csound = NULL;
       return;
     }
-    csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
-    csoundSetHostData(csound, (void *)m_console);
     qDebug("Command Line:");
     for (int index=0; index< argc; index++) {
       fprintf(stderr, "%s ",argv[index]);
@@ -629,6 +629,7 @@ void qutecsound::about()
 
 void qutecsound::documentWasModified()
 {
+  //TODO setWindowModified when widgets change
   setWindowModified(textEdit->document()->isModified());
 //   documentTabs->setTabIcon(curPage, QIcon(":/images/modIcon.png"));
 }
@@ -1330,7 +1331,8 @@ void qutecsound::loadFile(const QString &fileName)
       text += "\r\n";
   }
   //textEdit->setPlainText(fixLineEndings(in.readAll()));
-  textEdit->setPlainText(text);
+//   textEdit->setPlainText(text);
+  textEdit->setTextString(text);
   m_highlighter->setColorVariables(m_options->colorVariables);
   m_highlighter->setDocument(textEdit->document());
   QApplication::restoreOverrideCursor();
@@ -1379,7 +1381,7 @@ bool qutecsound::saveFile(const QString &fileName)
 
   QTextStream out(&file);
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  out << documentPages[curPage]->toPlainText();
+  out << documentPages[curPage]->getFullText();
   QApplication::restoreOverrideCursor();
 
   textEdit->document()->setModified(false);

@@ -90,6 +90,127 @@ void WidgetPanel::getValues(QVector<QString> *channelNames, QVector<double> *val
 //   return values;
 }
 
+int WidgetPanel::addWidget(QString widgetLine)
+{
+  QStringList parts = widgetLine.split("{}, ");
+  QStringList quoteParts = widgetLine.split('"');
+  if (parts[0]=="ioView") {
+    if (parts[1]=="background") {
+      QColor bgColor(parts[2].toDouble()/65535., parts[3].toDouble()/65535., parts[4].toDouble()/65535.);
+    //TODO set bg color;
+    }
+    else { // =="nobackground"
+    }
+    return 0;
+  }
+  else {
+    int x,y,width,height;
+    x = parts[1].toInt();
+    y = parts[2].toInt();
+    width = parts[3].toInt();
+    height = parts[4].toInt();
+    if (parts[0]=="ioSlider") {
+      QuteWidget *widget= new QuteWidget(this, QUTE_SLIDER);
+      widget->setWidgetGeometry(x,y,width, height);
+      widget->setRange(parts[5].toDouble(), parts[6].toDouble());
+      widget->setValue(parts[7].toDouble());
+      if (parts.size()>8) {
+        int i=8;
+        QString channelName = "";
+        while (parts.size()>i) {
+          channelName += parts[i] + " ";
+          i++;
+        }
+        channelName.chop(1);  //remove last space
+        widget->setChannelName(channelName);
+      }
+    }
+    else if (parts[0]=="ioKnob") {
+      QuteWidget *widget= new QuteWidget(this, QUTE_KNOB);
+      widget->setWidgetGeometry(x,y,width, height);
+      widget->setRange(parts[5].toDouble(), parts[6].toDouble());
+      widget->setResolution(parts[7].toDouble());
+      widget->setValue(parts[8].toDouble());
+      if (parts.size()>9) {
+        int i=9;
+        QString channelName = "";
+        while (parts.size()>i) {
+          channelName += parts[i] + " ";
+          i++;
+        }
+        channelName.chop(1);  //remove last space
+        widget->setChannelName(channelName);
+      }
+    }
+    else if (parts[0]=="ioCheckbox") {
+      QuteWidget *widget= new QuteWidget(this, QUTE_CHECKBOX);
+      widget->setWidgetGeometry(x,y,width, height);
+      widget->setChecked(parts[5]=="on");
+      if (parts.size()>5) {
+        int i=5;
+        QString channelName = "";
+        while (parts.size()>i) {
+          channelName += parts[i] + " ";
+          i++;
+        }
+        channelName.chop(1);  //remove last space
+        widget->setChannelName(channelName);
+      }
+    }
+    else if (parts[0]=="ioButton") {
+      QuteWidget *widget= new QuteWidget(this, QUTE_BUTTON);
+      widget->setWidgetGeometry(x,y,width, height);
+//       widget->setType(parts[5]);
+      widget->setValue(parts[6].toDouble());  //value produced by button
+      widget->setChannelName(quoteParts[1]);
+      widget->setText(quoteParts[3]);
+//       widget->setImage(quoteParts[5]);
+      if (quoteParts.size()>6) {
+        quoteParts[6].remove(0,1); //remove initial space
+        widget->setChannelName(quoteParts[6]);
+      }
+    }
+    else if (parts[0]=="ioText") {
+      if (parts[5]=="label") {
+        QuteWidget *widget= new QuteWidget(this, QUTE_LABEL);
+        widget->setWidgetGeometry(x,y,width, height);
+      }
+      else if (parts[5]=="edit") {
+        QuteWidget *widget= new QuteWidget(this, QUTE_LINEEDIT);
+        widget->setWidgetGeometry(x,y,width, height);
+      }
+      else if (parts[5]=="display") {
+        QuteWidget *widget= new QuteWidget(this, QUTE_DISPLAY);
+        widget->setWidgetGeometry(x,y,width, height);
+      }
+      else if (parts[5]=="scrolleditnum") {
+        QuteWidget *widget= new QuteWidget(this, QUTE_SCROLLNUMBER);
+        widget->setWidgetGeometry(x,y,width, height);
+      }
+    }
+    else if (parts[0]=="ioMenu") {
+      QuteWidget *widget= new QuteWidget(this, QUTE_COMBOBOX);
+      widget->setWidgetGeometry(x,y,width, height);
+      widget->setValue(parts[5].toInt());  //current Menu item
+//       widget->setSize(parts[6].toInt());  // can be 201, 202, 203, 204, 205
+      QStringList items= quoteParts[1].split(","); // menu items
+    //TODO add menu items
+      if (quoteParts.size()>2) {
+        quoteParts[2].remove(0,1); //remove initial space
+        widget->setChannelName(quoteParts[2]);
+      }
+    }
+    else if (parts[0]=="ioMeter") {
+//TODO implement MacCsound ioMeter
+    }
+    else {
+  // Unknown widget...
+    }
+  }
+
+    return 0;
+  }
+
 void WidgetPanel::closeEvent(QCloseEvent * event)
 {
   emit Close(false);
