@@ -49,6 +49,7 @@ int DocumentPage::setTextString(QString text)
     macGUI = text.right(text.size()-text.indexOf("<MacGUI>"));
     macGUI.resize(macGUI.indexOf("</MacGUI>") + 9);
     //Removes line breaks also (there are two new lines at the end)
+    //TODO something is odd here... some line breaks remain (possibly \r)
     text.remove(text.indexOf("<MacGUI>") - 1, macGUI.size() + 2);
     qDebug("<MacGUI> present.");
   }
@@ -56,6 +57,7 @@ int DocumentPage::setTextString(QString text)
     macGUI = "";
   }
   setPlainText(text);
+  return 0;
 }
 
 QString DocumentPage::getFullText()
