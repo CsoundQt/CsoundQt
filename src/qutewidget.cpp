@@ -42,6 +42,7 @@ void QuteWidget::setChannelName(QString name)
 {
   m_name = name;
   m_widget->setObjectName(name);
+//   qDebug("QuteWidget::setChannelName %s", m_name.toStdString().c_str());
 }
 
 void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
@@ -57,26 +58,12 @@ void QuteWidget::setWidgetGeometry(QRect rect)
 
 void QuteWidget::setRange(int min, int max)
 {
-  switch (m_type) {
-    case QUTE_SLIDER:
-      //TODO qslider uses ints instead of doubles!
-      ((QSlider *)m_widget)->setRange(min,max);
-      break;
-    default:
-      qDebug("QuteWidget::setRange not implemented for widget type");
-  }
+  qDebug("QuteWidget::setRange not implemented for widget type");
 }
 
 void QuteWidget::setValue(double value)
 {
-  switch (m_type) {
-    case QUTE_SLIDER:
-      //TODO qslider uses ints instead of doubles!
-      ((QSlider *)m_widget)->setValue(value);
-      break;
-    default:
-      qDebug("QuteWidget::setValue not implemented for widget type");
-  }
+  qDebug("QuteWidget::setValue not implemented for widget type");
 }
 
 void QuteWidget::setResolution(double resolution)
@@ -118,9 +105,11 @@ QString QuteWidget::getChannelName()
 double QuteWidget::getValue()
 {
   switch (m_type) {
-    case QUTE_SLIDER:
-      return ((QSlider *)m_widget)->value();
+//     case QUTE_SLIDER:
+// 
+//       break;
     default:
+      qDebug("QuteWidget::getValue not implemented for widget type");
       return 0.0;
   }
 }
@@ -180,16 +169,37 @@ void QuteWidget::openProperties()
   layout->addWidget(label, 2, 0, Qt::AlignCenter);
   label = new QLabel(&dialog);
   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  label->setText(QString::number(m_min,'f', 6));
+  label->setAlignment(Qt::AlignRight);
+  layout->addWidget(label, 2,1, Qt::AlignCenter);
+  label = new QLabel(&dialog);
+  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Max =");
   label->setAlignment(Qt::AlignRight);
   layout->addWidget(label, 2, 2, Qt::AlignCenter);
+  label = new QLabel(&dialog);
+  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  label->setText(QString::number(m_max,'f', 6));
+  label->setAlignment(Qt::AlignRight);
+  layout->addWidget(label, 2,3, Qt::AlignCenter);
+  label = new QLabel(&dialog);
+  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  label->setText("Channel name =");
+  label->setAlignment(Qt::AlignRight);
+  layout->addWidget(label, 3, 0, Qt::AlignCenter);
+  label = new QLabel(&dialog);
+  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  label->setText(getChannelName());
+  label->setAlignment(Qt::AlignRight);
+  layout->addWidget(label, 3, 1, Qt::AlignCenter);
   QPushButton *cancelButton = new QPushButton(tr("Cancel"));
-  layout->addWidget(cancelButton, 3, 2, Qt::AlignCenter);
+  layout->addWidget(cancelButton, 4, 2, Qt::AlignCenter);
   QPushButton *acceptButton = new QPushButton(tr("Ok"));
-  layout->addWidget(acceptButton, 3, 3, Qt::AlignCenter);
+  layout->addWidget(acceptButton, 4, 3, Qt::AlignCenter);
 
   connect(acceptButton, SIGNAL(released()), &dialog, SLOT(accept()));
   connect(&dialog, SIGNAL(accepted()), this, SLOT(applyProperties()));
+  connect(cancelButton, SIGNAL(released()), &dialog, SLOT(close()));
   dialog.exec();
 }
 

@@ -103,7 +103,6 @@ qutecsound::qutecsound(QString fileName)
   m_highlighter = new Highlighter();
   configureHighlighter();
 
-  newFile();
   if (fileName!="") {
     loadFile(fileName);
     if (m_options->autoPlay)
@@ -111,6 +110,9 @@ qutecsound::qutecsound(QString fileName)
   }
   else if (lastFile!="" and !lastFile.startsWith("untitled")) {
     loadFile(lastFile);
+  }
+  else {
+    newFile();
   }
 
   changeFont();
@@ -177,6 +179,11 @@ void qutecsound::changePage(int index)
   connectActions();
 }
 
+void qutecsound::updateWidgets()
+{
+  widgetPanel->loadWidgets(textEdit->getMacWidgetsText());
+}
+
 void qutecsound::closeEvent(QCloseEvent *event)
 {
   if (maybeSave()) {
@@ -209,22 +216,23 @@ void qutecsound::newFile()
                               .arg(file.errorString()));
     return;
   }
-  QTextStream in(&file);
-  DocumentPage *newPage = new DocumentPage(this);
-  documentPages.append(newPage);
-  documentTabs->addTab(newPage,"");
-  curPage = documentPages.size() - 1;
-  documentTabs->setCurrentIndex(curPage);
-  documentPages[curPage]->setText(in.readAll());
-  textEdit = newPage;
-  m_highlighter->setColorVariables(m_options->colorVariables);
-  m_highlighter->setDocument(textEdit->document());
-  textEdit->document()->setModified(false);
+//   QTextStream in(&file);
+//   DocumentPage *newPage = new DocumentPage(this);
+//   documentPages.append(newPage);
+//   documentTabs->addTab(newPage,"");
+//   curPage = documentPages.size() - 1;
+//   documentTabs->setCurrentIndex(curPage);
+//   documentPages[curPage]->setText(in.readAll());
+//   textEdit = newPage;
+//   m_highlighter->setColorVariables(m_options->colorVariables);
+//   m_highlighter->setDocument(textEdit->document());
+//   textEdit->document()->setModified(false);
+  loadFile(":/default.csd");
   documentPages[curPage]->fileName = "";
   setWindowModified(false);
   documentTabs->setTabIcon(curPage, modIcon);
-  changeFont();
-  setCurrentFile("");
+//   changeFont();
+//   setCurrentFile("");
   connectActions();
 }
 
@@ -429,7 +437,7 @@ void qutecsound::play(bool realtime)
       //TODO make sure that csound has been freed from threaded operation
 //       if (!csound) {
         csound=csoundCreate(0);
-        qDebug("Message level = %i", csoundGetMessageLevel(csound));
+//         qDebug("Message level = %i", csoundGetMessageLevel(csound));
 //       }
     }
     csoundReset(csound);
@@ -450,6 +458,7 @@ void qutecsound::play(bool realtime)
     for (int index=0; index< argc; index++) {
       fprintf(stderr, "%s ",argv[index]);
     }
+    fprintf(stderr, "\n");
     running = true;
     if(m_options->thread)
     {
@@ -1304,7 +1313,7 @@ void qutecsound::loadFile(const QString &fileName)
                              .arg(file.errorString()));
     return;
   }
-  for (int i=0; i < documentPages.size(); i++) {
+  for (int i = 0; i < documentPages.size(); i++) {
     if (fileName == documentPages[i]->fileName) {
       documentTabs->setCurrentIndex(i);
       changePage(i);
@@ -1314,7 +1323,7 @@ void qutecsound::loadFile(const QString &fileName)
   }
   //QTextStream in(&file);
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  if (documentPages[curPage]->fileName !="") {
+  if (documentPages.size() == 0 or documentPages[curPage]->fileName !="") {
     DocumentPage *newPage = new DocumentPage(this);
     documentPages.append(newPage);
     documentTabs->addTab(newPage,"");
@@ -1344,7 +1353,7 @@ void qutecsound::loadFile(const QString &fileName)
   documentTabs->setTabIcon(curPage, modIcon);
   lastUsedDir = fileName;
   lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/]")));
-  if (recentFiles.count(fileName) == 0) {
+  if (recentFiles.count(fileName) == 0 and fileName!=":/default.csd") {
     recentFiles.prepend(fileName);
     recentFiles.removeLast();
     fillFileMenu();
@@ -1410,6 +1419,7 @@ void qutecsound::setCurrentFile(const QString &fileName)
 
   setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("QuteCsound")));
   documentTabs->setTabText(curPage, shownName);
+  updateWidgets();
 }
 
 QString qutecsound::strippedName(const QString &fullFileName)

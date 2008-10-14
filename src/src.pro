@@ -23,7 +23,8 @@ SOURCES += qutecsound.cpp \
  documentpage.cpp \
  utilitiesdialog.cpp \
  widgetpanel.cpp \
- qutewidget.cpp
+ qutewidget.cpp \
+ quteslider.cpp
 HEADERS += qutecsound.h \
  dockhelp.h \
  opentryparser.h \
@@ -36,11 +37,13 @@ HEADERS += qutecsound.h \
  documentpage.h \
  utilitiesdialog.h \
  widgetpanel.h \
- qutewidget.h
+ qutewidget.h \
+ quteslider.h
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \
-          qt
+          qt \
+ debug_and_release
 TARGET = ../bin/qutecsound
 RESOURCES = application.qrc
 
@@ -94,7 +97,6 @@ macx {
     ICON = ../images/qtcs.icns
 }
 
-CONFIG -= debug
 
 #QMAKE_CXXFLAGS_DEBUG += -DDEBUG
 

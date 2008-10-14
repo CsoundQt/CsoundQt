@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include "widgetpanel.h"
 #include "qutewidget.h"
+#include "quteslider.h"
 
 #include <QSlider>
 
@@ -27,40 +28,15 @@ WidgetPanel::WidgetPanel(QWidget *parent)
 {
   setWindowTitle("Widgets");
   setMinimumSize(200, 140);
-  QWidget *layoutWidget = new QWidget(this);
-  layoutWidget->setGeometry(QRect(0, 0, 200, 100));
+  layoutWidget = new QWidget(this);
+  layoutWidget->setGeometry(QRect(0, 0, 800, 600));
 
 
-  QuteWidget *widget = new QuteWidget(layoutWidget, QUTE_SLIDER);
-  widget->setWidgetGeometry(QRect(5, 5, 20, 100));
-  widget->setRange(0,99);
-  widget->setChannelName ("slider1");
-  widgets.append(widget);
-
-  widget = new QuteWidget(layoutWidget, QUTE_SLIDER);
-  widget->setWidgetGeometry(QRect(45, 5, 20, 100));
-  widget->setRange(0,99);
-  widget->setChannelName ("slider2");
-  widgets.append(widget);
-
-  widget = new QuteWidget(layoutWidget, QUTE_SLIDER);
-  widget->setWidgetGeometry(QRect(85, 5, 20, 100));
-  widget->setRange(0,99);
-  widget->setChannelName ("slider3");
-  widgets.append(widget);
-
-  widget = new QuteWidget(layoutWidget, QUTE_SLIDER);
-  widget->setWidgetGeometry(QRect(125, 5, 20, 100));
-  widget->setRange(0,99);
-  widget->setChannelName ("slider4");
-  widgets.append(widget);
-
-  widget = new QuteWidget(layoutWidget, QUTE_SLIDER);
-  widget->setWidgetGeometry(QRect(165, 5, 20, 100));
-  widget->setRange(0,99);
-  widget->setChannelName ("slider5");
-  widgets.append(widget);
-
+//   QuteWidget *widget = new QuteWidget(layoutWidget, QUTE_SLIDER);
+//   widget->setWidgetGeometry(QRect(5, 5, 20, 100));
+//   widget->setRange(0,99);
+//   widget->setChannelName ("slider1");
+//   widgets.append(widget);
 //   layoutWidget2 = new QWidget(layoutWidget);
 //   layoutWidget2->setGeometry(QRect(5, 105, 20, 200));
 //   label = new QLabel("test",layoutWidget2);
@@ -90,9 +66,21 @@ void WidgetPanel::getValues(QVector<QString> *channelNames, QVector<double> *val
 //   return values;
 }
 
-int WidgetPanel::addWidget(QString widgetLine)
+int WidgetPanel::loadWidgets(QString macWidgets)
 {
-  QStringList parts = widgetLine.split("{}, ");
+  clearWidgets();
+  QStringList widgetLines = macWidgets.split(QRegExp("[\n\r]"), QString::SkipEmptyParts);
+  foreach (QString line, widgetLines) {
+    qDebug("WidgetLine: %s", line.toStdString().c_str());
+    if (line.startsWith("i"))
+      newWidget(line);
+  }
+  return 0;
+}
+
+int WidgetPanel::newWidget(QString widgetLine)
+{
+  QStringList parts = widgetLine.split(QRegExp("[\{\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
   if (parts[0]=="ioView") {
     if (parts[1]=="background") {
@@ -110,8 +98,10 @@ int WidgetPanel::addWidget(QString widgetLine)
     width = parts[3].toInt();
     height = parts[4].toInt();
     if (parts[0]=="ioSlider") {
-      QuteWidget *widget= new QuteWidget(this, QUTE_SLIDER);
+      qDebug("ioSlider x=%i y=%i w=%i h=%i", x,y, width, height);
+      QuteWidget *widget= new QuteSlider(layoutWidget);
       widget->setWidgetGeometry(x,y,width, height);
+      widgets.append(widget);
       widget->setRange(parts[5].toDouble(), parts[6].toDouble());
       widget->setValue(parts[7].toDouble());
       if (parts.size()>8) {
@@ -210,6 +200,16 @@ int WidgetPanel::addWidget(QString widgetLine)
 
     return 0;
   }
+
+int WidgetPanel::clearWidgets()
+{
+  qDebug("WidgetPanel::clearWidgets()");
+  foreach (QuteWidget *widget, widgets) {
+    delete widget;
+  }
+  widgets.clear();
+  return 0;
+}
 
 void WidgetPanel::closeEvent(QCloseEvent * event)
 {

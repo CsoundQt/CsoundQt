@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     fileName = QString(argv[1]);
 #ifdef MACOSX
   if (fileName.startsWith("-psn_"))
-	fileName = "";
+    fileName = "";
 #endif
   qDebug("Opening %s", fileName.toStdString().c_str());
   Q_INIT_RESOURCE(application);

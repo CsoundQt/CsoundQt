@@ -35,11 +35,14 @@ class WidgetPanel : public QDockWidget
 
     unsigned int widgetCount();
     void getValues(QVector<QString> *channelNames, QVector<double> *values);
-    int addWidget(QString widgetLine);
+    int loadWidgets(QString macWidgets);
+    int newWidget(QString widgetLine);
+    int clearWidgets();
 //     QVector< QPair<QString, double> > getValues();
 
   private:
     QVector<QuteWidget *> widgets;
+    QWidget *layoutWidget;
     virtual void closeEvent(QCloseEvent * event);
 
 //     QLabel *label; //remove this widget

@@ -35,6 +35,7 @@ DocumentPage::~DocumentPage()
 int DocumentPage::setTextString(QString text)
 {
   //TODO filter MacCsound elements
+  text.replace(QRegExp("^\n\r^\n"), "\r\n");
   if (text.contains("<MacOptions>") and text.contains("</MacOptions>")) {
     macOptions = text.right(text.size()-text.indexOf("<MacOptions>"));
     macOptions.resize(macOptions.indexOf("</MacOptions>") + 13);
@@ -51,7 +52,7 @@ int DocumentPage::setTextString(QString text)
     //Removes line breaks also (there are two new lines at the end)
     //TODO something is odd here... some line breaks remain (possibly \r)
     text.remove(text.indexOf("<MacGUI>") - 1, macGUI.size() + 2);
-    qDebug("<MacGUI> present.");
+    qDebug("<MacGUI> present.\n%s", macGUI.toStdString().c_str());
   }
   else {
     macGUI = "";
@@ -68,4 +69,9 @@ QString DocumentPage::getFullText()
     fullText += "\n";
   fullText += macOptions + "\n" + macGUI + "\n";
   return fullText;
+}
+
+QString DocumentPage::getMacWidgetsText()
+{
+  return macGUI;
 }

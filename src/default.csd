@@ -22,7 +22,7 @@ instr 2
 
 kslider1  chnget  "slider1"
 kslider2  chnget  "slider2"
-aout oscil kslider2*100, (kslider1+100)*2, 1
+aout oscil kslider2*10000, (kslider1+1)*200, 1
 outs aout, aout
 endin
 
@@ -34,3 +34,22 @@ i 2 2 20
 e
 </CsScore>
 </CsoundSynthesizer>
+<MacOptions>
+Version: 3
+Render: Real
+Ask: Yes
+Functions: ioObject
+Listing: Window
+WindowBounds: 72 179 850 930
+CurrentView: io
+IOViewEdit: On
+Options: -b128 -A -s -m167 -R 
+</MacOptions>
+<MacGUI>
+ioView nobackground {59352, 11885, 65535}
+ioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1
+ioSlider {45, 5} {20, 100} 0.000000 1.000000 0.000000 slider2
+ioSlider {85, 5} {20, 100} 0.000000 1.000000 0.000000 slider3
+ioSlider {125, 5} {20, 100} 0.000000 1.000000 0.000000 slider4
+ioSlider {165, 5} {20, 100} 0.000000 1.000000 0.000000 slider5
+</MacGUI>

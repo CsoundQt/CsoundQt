@@ -85,6 +85,7 @@ class qutecsound:public QMainWindow
   public slots:
     void changeFont();
     void changePage(int index);
+    void updateWidgets();
 
   protected:
     void closeEvent(QCloseEvent *event);

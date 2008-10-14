@@ -34,6 +34,7 @@ class DocumentPage : public QTextEdit
 
     int setTextString(QString text);
     QString getFullText();
+    QString getMacWidgetsText();
 //     QTextDocument *textDocument;
     QString fileName;
     QString companionFile;

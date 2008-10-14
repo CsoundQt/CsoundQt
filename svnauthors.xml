@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Use this file by running svn2cl -i MINUS MINUS 
-authors=svnauthors.xml -->
+authors=svnauthors.xml -r "HEAD:01" -->
 
 <authors>
   <author uid="mantaraya36">

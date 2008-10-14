@@ -42,7 +42,7 @@ class QuteWidget : public QWidget
 {
   Q_OBJECT
   public:
-    QuteWidget(QWidget* parent, widgetType type);
+    QuteWidget(QWidget* parent, widgetType type = QUTE_SLIDER);
 
     ~QuteWidget();
 
@@ -53,33 +53,33 @@ class QuteWidget : public QWidget
 //     const int width() {return widget->width();};
 //     const int height() {return widget->height();};
 
-    double value() {return m_value;}
-    double value2() {return m_value2;}
+//     double value() {return m_value;}
+//     double value2() {return m_value2;}
 
     void setChannelName(QString name);
     void setWidgetGeometry(int x, int y, int w, int h);
     void setWidgetGeometry(QRect rect);
-    void setRange(int min, int max);
-    void setValue(double value);
+    virtual void setRange(int min, int max);
+    virtual void setValue(double value);
     void setResolution(double resolution);
-    void setChecked(bool checked);
+    virtual void setChecked(bool checked);
     void setText(QString text);
 
     QString getChannelName();
-    double getValue();
+    virtual double getValue();
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
 
-  private:
     widgetType m_type;
     QWidget *m_layoutWidget;
     QWidget *m_widget;
 
     QString m_name;
-    double m_value;
-    double m_value2;
+    double m_min, m_max;
+    double m_value, m_value2;
 
+  private:
     QAction *propertiesAct;
 
   private slots:
