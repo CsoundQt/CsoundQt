@@ -143,9 +143,6 @@ qutecsound::qutecsound(QString fileName)
 
 qutecsound::~qutecsound()
 {
-  if (csound) {
-    csoundDestroy(csound);
-  }
 }
 
 void qutecsound::messageCallback_NoThread(CSOUND *csound,
@@ -186,6 +183,7 @@ void qutecsound::updateWidgets()
 
 void qutecsound::closeEvent(QCloseEvent *event)
 {
+  stop();
   if (maybeSave()) {
     writeSettings();
     event->accept();
@@ -551,6 +549,9 @@ void qutecsound::stop()
       csoundDestroy(csound);  //Had to destroy csound every run otherwise FLTK widgets crash...
 //     csound = NULL;
     }
+  }
+  else if (csound) {
+    csoundDestroy(csound);  //Had to destroy csound every run otherwise FLTK widgets crash...
   }
   running = false;
 }

@@ -59,7 +59,7 @@ FORMS += configdialog.ui \
 win32 {
     DEFINES +=WIN32
     INCLUDEPATH += "C:\Archivos de programa\Csound\include"
-    HEADERS += "C:\Archivos de programa\Csound\include\CppSound.hpp"
+    HEADERS += "C:\Archivos de programa\Csound\include\csound.h"
     build64 {
         LIBS += "C:\Archivos de programa\Csound\bin\Csound64.dll.5.1" \
 	   "C:\Archivos de programa\Csound\bin\csnd.dll" 
@@ -87,7 +87,7 @@ macx {
     }
     message(Building using $${MAC_LIB})
     DEFINES +=MACOSX
-    HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/CppSound.hpp
+    HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.h
     LIBS += -framework QtXml
     LIBS += -framework QtGui
     LIBS += -framework QtCore

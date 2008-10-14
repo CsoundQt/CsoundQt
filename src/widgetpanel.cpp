@@ -30,7 +30,9 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   setMinimumSize(200, 140);
   layoutWidget = new QWidget(this);
   layoutWidget->setGeometry(QRect(0, 0, 800, 600));
-
+  layoutWidget->setAutoFillBackground(true);
+//  QPalette palette(Qt::darkGreen);
+//  layoutWidget->setPalette(palette);
 
 //   QuteWidget *widget = new QuteWidget(layoutWidget, QUTE_SLIDER);
 //   widget->setWidgetGeometry(QRect(5, 5, 20, 100));
@@ -101,6 +103,7 @@ int WidgetPanel::newWidget(QString widgetLine)
       qDebug("ioSlider x=%i y=%i w=%i h=%i", x,y, width, height);
       QuteWidget *widget= new QuteSlider(layoutWidget);
       widget->setWidgetGeometry(x,y,width, height);
+      widget->show();
       widgets.append(widget);
       widget->setRange(parts[5].toDouble(), parts[6].toDouble());
       widget->setValue(parts[7].toDouble());
@@ -118,6 +121,8 @@ int WidgetPanel::newWidget(QString widgetLine)
     else if (parts[0]=="ioKnob") {
       QuteWidget *widget= new QuteWidget(this, QUTE_KNOB);
       widget->setWidgetGeometry(x,y,width, height);
+      widget->show();
+      widgets.append(widget);
       widget->setRange(parts[5].toDouble(), parts[6].toDouble());
       widget->setResolution(parts[7].toDouble());
       widget->setValue(parts[8].toDouble());
@@ -135,6 +140,8 @@ int WidgetPanel::newWidget(QString widgetLine)
     else if (parts[0]=="ioCheckbox") {
       QuteWidget *widget= new QuteWidget(this, QUTE_CHECKBOX);
       widget->setWidgetGeometry(x,y,width, height);
+      widget->show();
+      widgets.append(widget);
       widget->setChecked(parts[5]=="on");
       if (parts.size()>5) {
         int i=5;
@@ -150,6 +157,8 @@ int WidgetPanel::newWidget(QString widgetLine)
     else if (parts[0]=="ioButton") {
       QuteWidget *widget= new QuteWidget(this, QUTE_BUTTON);
       widget->setWidgetGeometry(x,y,width, height);
+      widget->show();
+      widgets.append(widget);
 //       widget->setType(parts[5]);
       widget->setValue(parts[6].toDouble());  //value produced by button
       widget->setChannelName(quoteParts[1]);
@@ -164,23 +173,33 @@ int WidgetPanel::newWidget(QString widgetLine)
       if (parts[5]=="label") {
         QuteWidget *widget= new QuteWidget(this, QUTE_LABEL);
         widget->setWidgetGeometry(x,y,width, height);
+        widget->show();
+        widgets.append(widget);
       }
       else if (parts[5]=="edit") {
         QuteWidget *widget= new QuteWidget(this, QUTE_LINEEDIT);
         widget->setWidgetGeometry(x,y,width, height);
+        widget->show();
+        widgets.append(widget);
       }
       else if (parts[5]=="display") {
         QuteWidget *widget= new QuteWidget(this, QUTE_DISPLAY);
         widget->setWidgetGeometry(x,y,width, height);
+        widget->show();
+        widgets.append(widget);
       }
       else if (parts[5]=="scrolleditnum") {
         QuteWidget *widget= new QuteWidget(this, QUTE_SCROLLNUMBER);
         widget->setWidgetGeometry(x,y,width, height);
+        widget->show();
+        widgets.append(widget);
       }
     }
     else if (parts[0]=="ioMenu") {
       QuteWidget *widget= new QuteWidget(this, QUTE_COMBOBOX);
       widget->setWidgetGeometry(x,y,width, height);
+      widget->show();
+	  widgets.append(widget);
       widget->setValue(parts[5].toInt());  //current Menu item
 //       widget->setSize(parts[6].toInt());  // can be 201, 202, 203, 204, 205
       QStringList items= quoteParts[1].split(","); // menu items
