@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.             *
  ***************************************************************************/
 
 #include <QtGui>
@@ -50,6 +50,7 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   autoplayCheckBox->setChecked(m_options->autoPlay);
   saveChangesCheckBox->setChecked(m_options->saveChanges);
   rememberFileCheckBox->setChecked(m_options->rememberFile);
+  saveWidgetsCheckBox->setChecked(m_options->saveWidgets);
 
   if (m_options->useAPI)
     ApiRadioButton->setChecked(true);
@@ -145,6 +146,7 @@ void ConfigDialog::accept()
   m_options->autoPlay = autoplayCheckBox->isChecked();
   m_options->saveChanges = saveChangesCheckBox->isChecked();
   m_options->rememberFile = rememberFileCheckBox->isChecked();
+  m_options->saveWidgets = saveWidgetsCheckBox->isChecked();
   emit(changeFont());
 
   m_options->useAPI = ApiRadioButton->isChecked();

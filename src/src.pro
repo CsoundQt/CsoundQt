@@ -24,7 +24,8 @@ SOURCES += qutecsound.cpp \
  utilitiesdialog.cpp \
  widgetpanel.cpp \
  qutewidget.cpp \
- quteslider.cpp
+ quteslider.cpp \
+ findreplace.cpp
 HEADERS += qutecsound.h \
  dockhelp.h \
  opentryparser.h \
@@ -38,7 +39,8 @@ HEADERS += qutecsound.h \
  utilitiesdialog.h \
  widgetpanel.h \
  qutewidget.h \
- quteslider.h
+ quteslider.h \
+ findreplace.h
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \
@@ -54,7 +56,8 @@ DISTFILES += default.csd \
  qutecsound.rc
 
 FORMS += configdialog.ui \
-  utilitiesdialog.ui
+  utilitiesdialog.ui \
+ findreplace.ui
 
 win32 {
     DEFINES +=WIN32
@@ -73,9 +76,14 @@ win32 {
 
 linux-g++ {
     DEFINES +=LINUX    
-    INCLUDEPATH += /usr/local/include/csound/
-    LIBS += -lcsound \
--lcsnd
+    INCLUDEPATH += /usr/local/include/csound/ /usr/include/csound/
+    LIBS += -lcsnd
+    build64 {
+        LIBS += -lcsound64
+    }
+    else {
+        LIBS += -lcsound
+    }
 }
 
 macx {

@@ -17,77 +17,29 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef QUTEWIDGET_H
-#define QUTEWIDGET_H
-
-#include <QString>
-// #include <QWidget>
+#ifndef FINDREPLACE_H
+#define FINDREPLACE_H
 
 #include <QtGui>
+#include "ui_findreplace.h"
 
-enum widgetType {
-  QUTE_SLIDER,
-  QUTE_KNOB,
-  QUTE_CHECKBOX,
-  QUTE_BUTTON,
-  QUTE_LABEL,
-  QUTE_LINEEDIT,
-  QUTE_DISPLAY,
-  QUTE_SCROLLNUMBER,
-  QUTE_COMBOBOX,
-  NONE
-};
+class DocumentPage;
 
-class QuteWidget : public QWidget
+class FindReplace : public QDialog, private Ui::FindReplace
 {
   Q_OBJECT
   public:
-    QuteWidget(QWidget* parent, widgetType type = QUTE_SLIDER);
+    FindReplace(QWidget *parent, DocumentPage *document);
 
-    ~QuteWidget();
-
-    widgetType type() {return m_type;}
-    const QString name() {return m_name;}
-//     const int x() {return widget->x();};
-//     const int y() {return widget->y();};
-//     const int width() {return widget->width();};
-//     const int height() {return widget->height();};
-
-//     double value() {return m_value;}
-//     double value2() {return m_value2;}
-
-    void setChannelName(QString name);
-    void setWidgetGeometry(int x, int y, int w, int h);
-    void setWidgetGeometry(QRect rect);
-    virtual void setRange(int min, int max);
-    virtual void setValue(double value);
-    void setResolution(double resolution);
-    virtual void setChecked(bool checked);
-    void setText(QString text);
-
-    QString getChannelName();
-    virtual double getValue();
-
-  protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event);
-
-    widgetType m_type;
-    QWidget *m_layoutWidget;
-    QWidget *m_widget;
-
-    QString m_name;
-    double m_min, m_max;
-    double m_value, m_value2;
+    ~FindReplace();
 
   private:
-    QAction *propertiesAct;
+    DocumentPage *m_document;
 
   private slots:
-    void openProperties();
-    void applyProperties();
-
-//     double m_min,m_max;
-//     double m_min2,m_max2;
+    void find();
+    void replace();
+    void replaceAll();
 
 };
 

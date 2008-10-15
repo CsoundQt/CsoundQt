@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andres Cabrera   *
- *   mantaraya36@gmail.com   *
+ *   Copyright (C) 2008 by Andres Cabrera                                  *
+ *   mantaraya36@gmail.com                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -15,55 +15,46 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef HIGHLIGHTER_H
-#define HIGHLIGHTER_H
+#include "findreplace.h"
+#include "documentpage.h"
 
-#include <QSyntaxHighlighter>
-
-#include <QHash>
-#include <QTextCharFormat>
-#include <QStringList>
-
-#include <QTextDocument>
-
- class Highlighter : public QSyntaxHighlighter
+FindReplace::FindReplace(QWidget *parent, DocumentPage *document)
+  : QDialog(parent), m_document(document)
 {
-  Q_OBJECT
+  setupUi(this);
+  connect(findPushButton, SIGNAL(released()), this, SLOT(find()));
+  connect(replacePushButton, SIGNAL(released()), this, SLOT(replace()));
+  connect(replaceAllPushButton, SIGNAL(released()), this, SLOT(replaceAll()));
+}
 
-  public:
-    Highlighter(QTextDocument *parent = 0);
-    ~Highlighter();
-    void setOpcodeNameList(QStringList list);
-    void setColorVariables(bool color);
+FindReplace::~FindReplace()
+{
+}
 
-  protected:
-    void highlightBlock(const QString &text);
+void FindReplace::find()
+{
+  if (caseCheckBox->isChecked()) {
+    m_document->find(findLineEdit->text(),
+                     QTextDocument::FindCaseSensitively);
+  }
+  else
+    m_document->find(findLineEdit->text());
+}
 
-  private:
-    struct HighlightingRule
-    {
-      QRegExp pattern;
-      QTextCharFormat format;
-    };
-    QVector<HighlightingRule> highlightingRules;
+void FindReplace::replace()
+{
+  if (m_document->textCursor().selectedText() == findLineEdit->text()) {
+    qDebug("Not implemented yet.");
+  }
+  else
+    find();
+}
 
-    QRegExp commentStartExpression;
-    QRegExp commentEndExpression;
+void FindReplace::replaceAll()
+{
+  qDebug("Not implemented yet.");
+}
 
-    QTextCharFormat csdtagFormat;
-    QTextCharFormat opcodeFormat;
-    QTextCharFormat singleLineCommentFormat;
-    QTextCharFormat multiLineCommentFormat;
-    QTextCharFormat quotationFormat;
-    QTextCharFormat functionFormat;
 
-    void setFirstRules();
-    void setLastRules();
-
-    QStringList m_list;
-    bool colorVariables;
-};
-
-#endif

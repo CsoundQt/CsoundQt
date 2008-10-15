@@ -45,11 +45,3 @@ CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R 
 </MacOptions>
-<MacGUI>
-ioView nobackground {59352, 11885, 65535}
-ioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1
-ioSlider {45, 5} {20, 100} 0.000000 1.000000 0.000000 slider2
-ioSlider {85, 5} {20, 100} 0.000000 1.000000 0.000000 slider3
-ioSlider {125, 5} {20, 100} 0.000000 1.000000 0.000000 slider4
-ioSlider {165, 5} {20, 100} 0.000000 1.000000 0.000000 slider5
-</MacGUI>

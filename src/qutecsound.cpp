@@ -4,7 +4,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
+ *   the Free Software Foundation; either version 3 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 
@@ -37,6 +37,7 @@
 #include "configlists.h"
 #include "documentpage.h"
 #include "utilitiesdialog.h"
+#include "findreplace.h"
 
 //#include <string>
 
@@ -51,6 +52,7 @@ uintptr_t csThread(void *clientData);
 
 qutecsound::qutecsound(QString fileName)
 {
+  setWindowTitle("QuteCsound[*]");
   resize(660,350);
   setWindowIcon(QIcon(":/images/qtcs.png"));
   documentTabs = new QTabWidget (this);
@@ -236,12 +238,31 @@ void qutecsound::newFile()
 
 void qutecsound::open()
 {
+  QString fileName = "";
   if (maybeSave()) {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco)"));
+    fileName = QFileDialog::getOpenFileName(this, tr("Open File"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco)"));
     if (!fileName.isEmpty()) {
       loadCompanionFile(fileName);
       loadFile(fileName);
     }
+  }
+  for (int i = 0; i < documentPages.size(); i++) {
+    if (fileName == documentPages[i]->fileName) {
+      documentTabs->setCurrentIndex(i);
+      changePage(i);
+      statusBar()->showMessage(tr("File already open"), 10000);
+      return;
+    }
+  }
+}
+
+void qutecsound::reload()
+{
+  if (documentPages[curPage]->document()->isModified()) {
+    QString fileName = documentPages[curPage]->fileName;
+    documentPages.remove(curPage);
+    documentTabs->removeTab(curPage);
+    loadFile(fileName);
   }
 }
 
@@ -370,6 +391,17 @@ bool qutecsound::closeTab()
   m_highlighter->setDocument(documentPages[curPage]->document());
   connectActions();
   return true;
+}
+
+void qutecsound::findReplace()
+{
+  FindReplace *dialog = new FindReplace(this, documentPages[curPage]);
+  dialog->show();
+}
+
+void qutecsound::join()
+{
+  qDebug("join() not implemented");
 }
 
 void qutecsound::play(bool realtime)
@@ -632,9 +664,9 @@ void qutecsound::utilitiesDialogOpen()
 
 void qutecsound::about()
 {
-  QMessageBox::about(this, tr("About QuteCsound"),
-                     tr("by: Andres Cabrera\n"
-                        "Released under the GPL V3\n"));
+  QString text = tr("by: Andres Cabrera\nReleased under the GPL V3\nVersion ");
+  text += QUTECSOUND_VERSION;
+  QMessageBox::about(this, tr("About QuteCsound"), text);
 }
 
 void qutecsound::documentWasModified()
@@ -803,6 +835,11 @@ void qutecsound::createActions()
   openAct->setStatusTip(tr("Open an existing file"));
   connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
+  reloadAct = new QAction(/*QIcon(":/images/gnome-folder.png"),*/ tr("Reload"), this);
+//   reloadAct->setShortcut(tr("Ctrl+O"));
+  reloadAct->setStatusTip(tr("Reload file from disk, discarding changes"));
+  connect(reloadAct, SIGNAL(triggered()), this, SLOT(reload()));
+
   saveAct = new QAction(QIcon(":/images/gnome-dev-floppy.png"), tr("&Save"), this);
   saveAct->setShortcut(tr("Ctrl+S"));
   saveAct->setStatusTip(tr("Save the document to disk"));
@@ -849,6 +886,16 @@ void qutecsound::createActions()
   pasteAct->setShortcut(tr("Ctrl+V"));
   pasteAct->setStatusTip(tr("Paste the clipboard's contents into the current "
       "selection"));
+
+  joinAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("&Join orc/sco"), this);
+//   joinAct->setShortcut(tr("Ctrl+V"));
+  joinAct->setStatusTip(tr("Join orc/sco files in a single csd file"));
+  connect(joinAct, SIGNAL(triggered()), this, SLOT(join()));
+
+  findAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("&Find and Replace"), this);
+  findAct->setShortcut(tr("Ctrl+F"));
+  findAct->setStatusTip(tr("Find and replace strings in file"));
+  connect(findAct, SIGNAL(triggered()), this, SLOT(findReplace()));
 
   autoCompleteAct = new QAction(tr("AutoComplete"), this);
   autoCompleteAct->setShortcut(tr("Alt+C"));
@@ -924,7 +971,7 @@ void qutecsound::createActions()
   connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
   connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
 
-  aboutAct = new QAction(tr("&About"), this);
+  aboutAct = new QAction(tr("&About QuteCsound"), this);
   aboutAct->setStatusTip(tr("Show the application's About box"));
   connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 
@@ -980,6 +1027,7 @@ void qutecsound::createMenus()
   editMenu->addAction(copyAct);
   editMenu->addAction(pasteAct);
   editMenu->addSeparator();
+  editMenu->addAction(findAct);
   editMenu->addAction(autoCompleteAct);
   editMenu->addSeparator();
   editMenu->addAction(configureAct);
@@ -1012,6 +1060,7 @@ void qutecsound::fillFileMenu()
   fileMenu->addAction(openAct);
   fileMenu->addAction(saveAct);
   fileMenu->addAction(saveAsAct);
+  fileMenu->addAction(reloadAct);
   fileMenu->addAction(closeTabAct);
   fileMenu->addSeparator();
   fileMenu->addAction(exitAct);
@@ -1111,6 +1160,7 @@ void qutecsound::readSettings()
   m_options->autoPlay = settings.value("autoplay", false).toBool();
   m_options->saveChanges = settings.value("savechanges", true).toBool();
   m_options->rememberFile = settings.value("rememberfile", true).toBool();
+  m_options->saveWidgets = settings.value("savewidgets", true).toBool();
   lastFile = settings.value("lastfile", "").toString();
   settings.endGroup();
   settings.beginGroup("Run");
@@ -1194,6 +1244,7 @@ void qutecsound::writeSettings()
   settings.setValue("autoplay", m_options->autoPlay);
   settings.setValue("savechanges", m_options->saveChanges);
   settings.setValue("rememberfile", m_options->rememberFile);
+  settings.setValue("savewidgets", m_options->saveWidgets);
   settings.setValue("lastfile", documentPages[curPage]->fileName);
   settings.endGroup();
   settings.beginGroup("Run");
@@ -1314,25 +1365,15 @@ void qutecsound::loadFile(const QString &fileName)
                              .arg(file.errorString()));
     return;
   }
-  for (int i = 0; i < documentPages.size(); i++) {
-    if (fileName == documentPages[i]->fileName) {
-      documentTabs->setCurrentIndex(i);
-      changePage(i);
-      statusBar()->showMessage(tr("File already open"), 10000);
-      return;
-    }
-  }
   //QTextStream in(&file);
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  if (documentPages.size() == 0 or documentPages[curPage]->fileName !="") {
-    DocumentPage *newPage = new DocumentPage(this);
-    documentPages.append(newPage);
-    documentTabs->addTab(newPage,"");
-    curPage = documentPages.size() - 1;
-    documentTabs->setCurrentIndex(curPage);
-    textEdit = newPage;
-    connectActions();
-  }
+  DocumentPage *newPage = new DocumentPage(this);
+  documentPages.append(newPage);
+  documentTabs->addTab(newPage,"");
+  curPage = documentPages.size() - 1;
+  documentTabs->setCurrentIndex(curPage);
+  textEdit = newPage;
+  connectActions();
   QString text;
   while (!file.atEnd()) {
     QByteArray line = file.readLine().trimmed();
@@ -1348,13 +1389,15 @@ void qutecsound::loadFile(const QString &fileName)
   QApplication::restoreOverrideCursor();
 
   textEdit->document()->setModified(false);
+  if (fileName == ":/default.csd")
+    fileName = "";
   documentPages[curPage]->fileName = fileName;
   setCurrentFile(fileName);
   setWindowModified(false);
   documentTabs->setTabIcon(curPage, modIcon);
   lastUsedDir = fileName;
   lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/]")));
-  if (recentFiles.count(fileName) == 0 and fileName!=":/default.csd") {
+  if (recentFiles.count(fileName) == 0 and fileName!="") {
     recentFiles.prepend(fileName);
     recentFiles.removeLast();
     fillFileMenu();
@@ -1391,7 +1434,10 @@ bool qutecsound::saveFile(const QString &fileName)
 
   QTextStream out(&file);
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  out << documentPages[curPage]->getFullText();
+  if (m_options->saveWidgets)
+    out << documentPages[curPage]->getFullText();
+  else
+    out << documentPages[curPage]->toPlainText();
   QApplication::restoreOverrideCursor();
 
   textEdit->document()->setModified(false);

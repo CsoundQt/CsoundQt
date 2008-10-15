@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 
@@ -39,6 +39,8 @@
 // Needed for the CreateProcess function in execute()
 #include <windows.h>
 #endif
+
+#define QUTECSOUND_VERSION "0.3.2"
 
 class QAction;
 class QMenu;
@@ -93,6 +95,7 @@ class qutecsound:public QMainWindow
   private slots:
     void newFile();
     void open();
+    void reload();
     void openRecent0();
     void openRecent1();
     void openRecent2();
@@ -102,6 +105,8 @@ class qutecsound:public QMainWindow
     bool save();
     bool saveAs();
     bool closeTab();
+    void findReplace();
+    void join();
     void play(bool realtime=true);
     void stop();
     void render();
@@ -168,6 +173,7 @@ class qutecsound:public QMainWindow
     QToolBar *configureToolBar;
     QAction *newAct;
     QAction *openAct;
+    QAction *reloadAct;
     QAction *saveAct;
     QAction *saveAsAct;
     QAction *closeTabAct;
@@ -178,6 +184,8 @@ class qutecsound:public QMainWindow
     QAction *cutAct;
     QAction *copyAct;
     QAction *pasteAct;
+    QAction *joinAct;
+    QAction *findAct;
     QAction *autoCompleteAct;
     QAction *configureAct;
     QAction *playAct;
