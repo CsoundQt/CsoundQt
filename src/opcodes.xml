@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Don't modify this file. It is generated automatically by opcodeparser.py-->
-<opcodes>
+This file is distributed under the GNU Free Documentation Licence<opcodes>
 <category name="Orchestra Syntax:Header"><synopsis><opcodename>kr</opcodename> = iarg</synopsis>
 <synopsis><opcodename>ksmps</opcodename> = iarg</synopsis>
 <synopsis><opcodename>nchnls</opcodename> = iarg</synopsis>
@@ -211,7 +211,7 @@
 <synopsis>ares <opcodename>randomi</opcodename> kmin, kmax, acps</synopsis><synopsis>kres <opcodename>randomi</opcodename> kmin, kmax, kcps</synopsis>
 <synopsis>ax <opcodename>rnd31</opcodename> kscl, krpow [, iseed]</synopsis><synopsis>ix <opcodename>rnd31</opcodename> iscl, irpow [, iseed]</synopsis><synopsis>kx <opcodename>rnd31</opcodename> kscl, krpow [, iseed]</synopsis>
 <synopsis><opcodename>seed</opcodename> ival</synopsis>
-<synopsis>kout <opcodename>trandom</opcodename> ktrig, min, max</synopsis>
+<synopsis>kout <opcodename>trandom</opcodename> ktrig, kmin, kmax</synopsis>
 <synopsis>ares <opcodename>trirand</opcodename> krange</synopsis><synopsis>ires <opcodename>trirand</opcodename> krange</synopsis><synopsis>kres <opcodename>trirand</opcodename> krange</synopsis>
 <synopsis>ares <opcodename>unirand</opcodename> krange</synopsis><synopsis>ires <opcodename>unirand</opcodename> krange</synopsis><synopsis>kres <opcodename>unirand</opcodename> krange</synopsis>
 <synopsis>aout = <opcodename>urd</opcodename>(ktableNum)</synopsis><synopsis>iout = <opcodename>urd</opcodename>(itableNum)</synopsis><synopsis>kout = <opcodename>urd</opcodename>(ktableNum)</synopsis>
@@ -260,10 +260,10 @@
 <synopsis>ar1, ar2 <opcodename>sflooper</opcodename> ivel, inotenum, kamp, kpitch, ipreindex, kloopstart, kloopend, kcrossfade, ifn \
       [, istart, imode, ifenv, iskip] </synopsis>
 <synopsis><opcodename>sfpassign</opcodename> istartindex, ifilhandle[, imsgs]</synopsis>
-<synopsis>ar1, ar2 <opcodename>sfplay</opcodename> ivel, inotenum, xamp, xfreq, ipreindex [, iflag] [, ioffset]</synopsis>
-<synopsis>ar1, ar2 <opcodename>sfplay3</opcodename> ivel, inotenum, xamp, xfreq, ipreindex [, iflag] [, ioffset]</synopsis>
-<synopsis>ares <opcodename>sfplay3m</opcodename> ivel, inotenum, xamp, xfreq, ipreindex [, iflag] [, ioffset]</synopsis>
-<synopsis>ares <opcodename>sfplaym</opcodename> ivel, inotenum, xamp, xfreq, ipreindex [, iflag] [, ioffset]</synopsis>
+<synopsis>ar1, ar2 <opcodename>sfplay</opcodename> ivel, inotenum, xamp, xfreq, ipreindex [, iflag] [, ioffset] [, ienv]</synopsis>
+<synopsis>ar1, ar2 <opcodename>sfplay3</opcodename> ivel, inotenum, xamp, xfreq, ipreindex [, iflag] [, ioffset] [, ienv]</synopsis>
+<synopsis>ares <opcodename>sfplay3m</opcodename> ivel, inotenum, xamp, xfreq, ipreindex [, iflag] [, ioffset] [, ienv]</synopsis>
+<synopsis>ares <opcodename>sfplaym</opcodename> ivel, inotenum, xamp, xfreq, ipreindex [, iflag] [, ioffset] [, ienv]</synopsis>
 <synopsis><opcodename>sfplist</opcodename> ifilhandle</synopsis>
 <synopsis>ir <opcodename>sfpreset</opcodename> iprog, ibank, ifilhandle, ipreindex</synopsis>
 <synopsis>asig, krec <opcodename>sndloop</opcodename> ain, kpitch, ktrig, idur, ifad</synopsis>
@@ -389,7 +389,7 @@
 <synopsis><opcodename>display</opcodename> xsig, iprd [, inprds] [, iwtflg]</synopsis>
 <synopsis><opcodename>flashtxt</opcodename>  iwhich, String</synopsis>
 <synopsis><opcodename>print</opcodename> iarg [, iarg1] [, iarg2] [...]</synopsis>
-<synopsis><opcodename>printf_i</opcodename> Sfmt, itrig, [xarg1[, xarg2[, ... ]]]</synopsis><synopsis><opcodename>printf</opcodename> Sfmt, ktrig, [xarg1[, xarg2[, ... ]]]</synopsis>
+<synopsis><opcodename>printf_i</opcodename> Sfmt, itrig, [iarg1[, iarg2[, ... ]]]</synopsis><synopsis><opcodename>printf</opcodename> Sfmt, ktrig, [xarg1[, xarg2[, ... ]]]</synopsis>
 <synopsis><opcodename>printk</opcodename> itime, kval [, ispace]</synopsis>
 <synopsis><opcodename>printk2</opcodename> kvar [, inumspaces]</synopsis>
 <synopsis><opcodename>printks</opcodename> &quot;string&quot;, itime [, kval1] [, kval2] [...]</synopsis>
@@ -575,6 +575,7 @@
 <synopsis>kres <opcodename>tonek</opcodename> ksig, khp [, iskip]</synopsis>
 </category>
 <category name="Signal Modifiers:Specialized Filters"><synopsis>ares <opcodename>dcblock</opcodename> ain [, igain]</synopsis>
+<synopsis>ares <opcodename>dcblock2</opcodename> ain [, iorder] [, iskip]</synopsis>
 <synopsis>asig <opcodename>eqfil</opcodename> ain, kcf, kbw, kgain[, istor]</synopsis>
 <synopsis>ares <opcodename>filter2</opcodename> asig, iM, iN, ib0, ib1, ..., ibM, ia1, ia2, ..., iaN</synopsis><synopsis>kres <opcodename>filter2</opcodename> ksig, iM, iN, ib0, ib1, ..., ibM, ia1, ia2, ..., iaN</synopsis>
 <synopsis>asig <opcodename>fofilter</opcodename> ain, kcf, kris, kdec[, istor]</synopsis>
@@ -624,6 +625,7 @@
 <category name="Instrument Control:Invocation"><synopsis><opcodename>event</opcodename> &quot;scorechar&quot;, kinsnum, kdelay, kdur, [, kp4] [, kp5] [, ...]</synopsis><synopsis><opcodename>event</opcodename> &quot;scorechar&quot;, &quot;insname&quot;, kdelay, kdur, [, kp4] [, kp5] [, ...]</synopsis>
 <synopsis><opcodename>event_i</opcodename> &quot;scorechar&quot;, iinsnum, idelay, idur, [, ip4] [, ip5] [, ...]</synopsis><synopsis><opcodename>event</opcodename> &quot;scorechar&quot;, &quot;insname&quot;, idelay, idur, [, ip4] [, ip5] [, ...]</synopsis>
 <synopsis><opcodename>mute</opcodename> insnum [, iswitch]</synopsis><synopsis><opcodename>mute</opcodename> &quot;insname&quot; [, iswitch]</synopsis>
+<synopsis><opcodename>remove</opcodename> insnum</synopsis>
 <synopsis><opcodename>schedkwhen</opcodename> ktrigger, kmintim, kmaxnum, kinsnum, kwhen, kdur \
       [, ip4] [, ip5] [...]</synopsis><synopsis><opcodename>schedkwhen</opcodename> ktrigger, kmintim, kmaxnum, &quot;insname&quot;, kwhen, kdur \
       [, ip4] [, ip5] [...]</synopsis>
@@ -686,11 +688,13 @@
 <synopsis>kcps, krms <opcodename>pitchamdf</opcodename> asig, imincps, imaxcps [, icps] [, imedi] \
       [, idowns] [, iexcps] [, irmsmedi]</synopsis>
 <synopsis>kcps, kamp <opcodename>ptrack</opcodename> asig, ihopsize[,ipeaks]</synopsis>
+<synopsis> <opcodename>rewindscore</opcodename></synopsis>
 <synopsis>kres <opcodename>rms</opcodename> asig [, ihp] [, iskip]</synopsis>
 <synopsis>kres[, kkeydown] <opcodename>sensekey</opcodename></synopsis>
 <synopsis>ktrig_out <opcodename>seqtime</opcodename> ktime_unit, kstart, kloop, kinitndx, kfn_times</synopsis>
 <synopsis>ktrig_out <opcodename>seqtime2</opcodename> ktrig_in, ktime_unit, kstart, kloop, kinitndx, kfn_times</synopsis>
 <synopsis><opcodename>setctrl</opcodename> inum, ival, itype</synopsis>
+<synopsis> <opcodename>setscorepos  ipos</opcodename></synopsis>
 <synopsis><opcodename>splitrig</opcodename> ktrig, kndx, imaxtics, ifn, kout1 [,kout2,...,koutN]</synopsis>
 <synopsis>ktemp <opcodename>tempest</opcodename> kin, iprd, imindur, imemdur, ihp, ithresh, ihtim, ixfdbak, \
       istartempo, ifn [, idisprd] [, itweek]</synopsis>
@@ -1279,7 +1283,8 @@
 <synopsis>kans <opcodename>OSClisten</opcodename> ihandle, idest, itype [, xdata1, xdata2, ...]</synopsis>
 <synopsis><opcodename>OSCsend</opcodename> kwhen, ihost, iport, idestination, itype [, kdata1, kdata2, ...]</synopsis>
 </category>
-<category name="Network"><synopsis>asig <opcodename>sockrecv</opcodename> iport, ilength</synopsis><synopsis>asigl, asigr <opcodename>sockrecvs</opcodename> iport, ilength</synopsis><synopsis>asig <opcodename>strecv</opcodename> Sipaddr, iport</synopsis>
+<category name="Network"><synopsis><opcodename>remoteport</opcodename> iportnum</synopsis>
+<synopsis>asig <opcodename>sockrecv</opcodename> iport, ilength</synopsis><synopsis>asigl, asigr <opcodename>sockrecvs</opcodename> iport, ilength</synopsis><synopsis>asig <opcodename>strecv</opcodename> Sipaddr, iport</synopsis>
 <synopsis><opcodename>socksend</opcodename> asig, Sipaddr, iport, ilength</synopsis><synopsis><opcodename>socksends</opcodename> asigl, asigr, Sipaddr, iport,
     ilength</synopsis><synopsis><opcodename>stsend</opcodename> asig, Sipaddr, iport</synopsis>
 </category>
