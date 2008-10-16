@@ -10,7 +10,15 @@
       <file>../images/gtk-paste.png</file>
       <file>../images/gtk-media-play-ltr.png</file>
       <file>../images/render.png</file>
+      <file>../images/editfile.png</file>
+      <file>../images/playfile.png</file>
       <file>../images/gtk-media-stop.png</file>
+      <file>../images/gtk-reload.png</file>
+      <file>../images/control-center2.png</file>
+      <file>../images/gksu-root-terminal.png</file>
+      <file>../images/gnome-devel.png</file>
+      <file>../images/gnome-mime-application-x-diagram.png</file>
+      <file>../images/gtk-info.png</file>
       <file>../images/modIcon.png</file>
       <file>../images/modIcon2.png</file>
       <file>../images/qtcs.png</file>

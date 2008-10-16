@@ -39,7 +39,7 @@
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/Applications/QuickTime Player.app"
 #endif
 #ifdef WIN32
-#define DEFAULT_HTML_DIR "C:/Program Files/Csound/doc/manual"
+#define DEFAULT_HTML_DIR "C:/%PROGRAMFILES%/Csound/doc/manual"
 #define DEFAULT_TERM_EXECUTABLE "cmd.exe"
 // #define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "audacity"

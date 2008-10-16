@@ -111,7 +111,8 @@ qutecsound::qutecsound(QString fileName)
       play();
   }
   else if (lastFile!="" and !lastFile.startsWith("untitled")) {
-    loadFile(lastFile);
+    if (!loadFile(lastFile))
+     newFile();
   }
   else {
     newFile();
@@ -835,7 +836,7 @@ void qutecsound::createActions()
   openAct->setStatusTip(tr("Open an existing file"));
   connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
-  reloadAct = new QAction(/*QIcon(":/images/gnome-folder.png"),*/ tr("Reload"), this);
+  reloadAct = new QAction(QIcon(":/images/gtk-reload.png"), tr("Reload"), this);
 //   reloadAct->setShortcut(tr("Ctrl+O"));
   reloadAct->setStatusTip(tr("Reload file from disk, discarding changes"));
   connect(reloadAct, SIGNAL(triggered()), this, SLOT(reload()));
@@ -902,7 +903,7 @@ void qutecsound::createActions()
   autoCompleteAct->setStatusTip(tr("Autocomplete according to Status bar display"));
   connect(autoCompleteAct, SIGNAL(triggered()), this, SLOT(autoComplete()));
 
-  configureAct = new QAction(tr("Configuration"), this);
+  configureAct = new QAction(QIcon(":/images/control-center2.png"), tr("Configuration"), this);
 //   autoCompleteAct->setShortcut(tr("Ctrl+ "));
   configureAct->setStatusTip(tr("Open configuration dialog"));
   connect(configureAct, SIGNAL(triggered()), this, SLOT(configure()));
@@ -922,12 +923,12 @@ void qutecsound::createActions()
   renderAct->setStatusTip(tr("Render to file"));
   connect(renderAct, SIGNAL(triggered()), this, SLOT(render()));
 
-  externalPlayerAct = new QAction(tr("Play Audiofile"), this);
+  externalPlayerAct = new QAction(QIcon(":/images/playfile.png"), tr("Play Audiofile"), this);
 //   externalPlayerAct->setShortcut(tr("Alt+F"));
   externalPlayerAct->setStatusTip(tr("Play rendered audiofile in External Editor"));
   connect(externalPlayerAct, SIGNAL(triggered()), this, SLOT(openExternalPlayer()));
 
-  externalEditorAct = new QAction(tr("Edit Audiofile"), this);
+  externalEditorAct = new QAction(QIcon(":/images/editfile.png"), tr("Edit Audiofile"), this);
 //   externalEditorAct->setShortcut(tr("Alt+F"));
   externalEditorAct->setStatusTip(tr("Edit rendered audiofile in External Editor"));
   connect(externalEditorAct, SIGNAL(triggered()), this, SLOT(openExternalEditor()));
@@ -937,33 +938,33 @@ void qutecsound::createActions()
   renderAct->setStatusTip(tr("Render to file"));
   connect(renderAct, SIGNAL(triggered()), this, SLOT(render()));
 
-  showHelpAct = new QAction(tr("Help Panel"), this);
+  showHelpAct = new QAction(QIcon(":/images/gtk-info.png"), tr("Help Panel"), this);
   showHelpAct->setShortcut(tr("Alt+W"));
   showHelpAct->setCheckable(true);
   showHelpAct->setChecked(true);
   connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
   connect(helpPanel, SIGNAL(Close(bool)), showHelpAct, SLOT(setChecked(bool)));
 
-  showConsole = new QAction(tr("Output Console"), this);
+  showConsole = new QAction(QIcon(":/images/gksu-root-terminal.png"), tr("Output Console"), this);
   showConsole->setShortcut(tr("Alt+A"));
   showConsole->setCheckable(true);
   showConsole->setChecked(true);
   connect(showConsole, SIGNAL(toggled(bool)), m_console, SLOT(setVisible(bool)));
   connect(m_console, SIGNAL(Close(bool)), showConsole, SLOT(setChecked(bool)));
 
-  setHelpEntryAct = new QAction(tr("Show Opcode Entry"), this);
+  setHelpEntryAct = new QAction(QIcon(":/images/gtk-info.png"), tr("Show Opcode Entry"), this);
   setHelpEntryAct->setShortcut(tr("Shift+F1"));
   setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
   connect(setHelpEntryAct, SIGNAL(triggered()), this, SLOT(setHelpEntry()));
 
-  showUtilitiesAct = new QAction(tr("Utilities"), this);
+  showUtilitiesAct = new QAction(QIcon(":/images/gnome-devel.png"), tr("Utilities"), this);
 //   showUtilitiesAct->setShortcut(tr("Alt+W"));
   showUtilitiesAct->setCheckable(true);
   showUtilitiesAct->setChecked(false);
   connect(showUtilitiesAct, SIGNAL(triggered(bool)), utilitiesDialog, SLOT(setVisible(bool)));
   connect(utilitiesDialog, SIGNAL(Close(bool)), showUtilitiesAct, SLOT(setChecked(bool)));
 
-  showWidgetsAct = new QAction(tr("Widgets"), this);
+  showWidgetsAct = new QAction(QIcon(":/images/gnome-mime-application-x-diagram.png"), tr("Widgets"), this);
   showWidgetsAct->setCheckable(true);
   showWidgetsAct->setChecked(true);
 //   externalEditorAct->setShortcut(tr("Alt+F"));
@@ -1355,7 +1356,7 @@ QString qutecsound::fixLineEndings(const QString &text)
   return text;
 }
 
-void qutecsound::loadFile(const QString &fileName)
+bool qutecsound::loadFile(QString fileName)
 {
   QFile file(fileName);
   if (!file.open(QFile::ReadOnly | QFile::Text)) {
@@ -1363,7 +1364,7 @@ void qutecsound::loadFile(const QString &fileName)
                          tr("Cannot read file %1:\n%2.")
                              .arg(fileName)
                              .arg(file.errorString()));
-    return;
+    return false;
   }
   //QTextStream in(&file);
   QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -1390,7 +1391,7 @@ void qutecsound::loadFile(const QString &fileName)
 
   textEdit->document()->setModified(false);
   if (fileName == ":/default.csd")
-    fileName = "";
+    fileName = QString("");
   documentPages[curPage]->fileName = fileName;
   setCurrentFile(fileName);
   setWindowModified(false);
@@ -1404,6 +1405,7 @@ void qutecsound::loadFile(const QString &fileName)
   }
   changeFont();
   statusBar()->showMessage(tr("File loaded"), 2000);
+  return true;
 }
 
 void qutecsound::loadCompanionFile(const QString &fileName)

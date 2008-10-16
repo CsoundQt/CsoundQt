@@ -137,7 +137,7 @@ class qutecsound:public QMainWindow
     void configureHighlighter();
     bool maybeSave();
     QString fixLineEndings(const QString &text);
-    void loadFile(const QString &fileName);
+    bool loadFile(QString fileName);
     void loadCompanionFile(const QString &fileName);
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
