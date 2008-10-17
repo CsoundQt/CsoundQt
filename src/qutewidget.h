@@ -56,6 +56,7 @@ class QuteWidget : public QWidget
 //     double value() {return m_value;}
 //     double value2() {return m_value2;}
 
+    void setWidgetLine(QString line);
     void setChannelName(QString name);
     void setWidgetGeometry(int x, int y, int w, int h);
     void setWidgetGeometry(QRect rect);
@@ -66,6 +67,7 @@ class QuteWidget : public QWidget
     void setText(QString text);
 
     QString getChannelName();
+    QString getWidgetLine();
     virtual double getValue();
 
   protected:
@@ -81,6 +83,7 @@ class QuteWidget : public QWidget
 
   private:
     QAction *propertiesAct;
+    QString m_line;
 
   private slots:
     void openProperties();

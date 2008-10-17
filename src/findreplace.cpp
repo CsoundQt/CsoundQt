@@ -46,7 +46,8 @@ void FindReplace::find()
 void FindReplace::replace()
 {
   if (m_document->textCursor().selectedText() == findLineEdit->text()) {
-    qDebug("Not implemented yet.");
+    m_document->insertPlainText(replaceLineEdit->text());
+    find();
   }
   else
     find();
@@ -54,7 +55,16 @@ void FindReplace::replace()
 
 void FindReplace::replaceAll()
 {
-  qDebug("Not implemented yet.");
+  int count = 0;
+  if (m_document->textCursor().selectedText() != findLineEdit->text())
+    find();
+  while (m_document->textCursor().selectedText() == findLineEdit->text()) {
+    m_document->insertPlainText(replaceLineEdit->text());
+    find();
+    count++;
+  }
+  QMessageBox::information (this, "Replace All", QString("String replaced %1 times").arg(count));
+  close();
 }
 
 

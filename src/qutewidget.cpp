@@ -38,6 +38,11 @@ QuteWidget::~QuteWidget()
 {
 }
 
+void QuteWidget::setWidgetLine(QString line)
+{
+  m_line = line;
+}
+
 void QuteWidget::setChannelName(QString name)
 {
   m_name = name;
@@ -100,6 +105,11 @@ void QuteWidget::setText(QString text)
 QString QuteWidget::getChannelName()
 {
   return m_name;
+}
+
+QString QuteWidget::getWidgetLine()
+{
+  return m_line;
 }
 
 double QuteWidget::getValue()

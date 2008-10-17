@@ -102,6 +102,7 @@ int WidgetPanel::newWidget(QString widgetLine)
     if (parts[0]=="ioSlider") {
       qDebug("ioSlider x=%i y=%i w=%i h=%i", x,y, width, height);
       QuteWidget *widget= new QuteSlider(layoutWidget);
+      widget->setWidgetLine(widgetLine);
       widget->setWidgetGeometry(x,y,width, height);
       widget->show();
       widgets.append(widget);
@@ -120,6 +121,7 @@ int WidgetPanel::newWidget(QString widgetLine)
     }
     else if (parts[0]=="ioKnob") {
       QuteWidget *widget= new QuteWidget(this, QUTE_KNOB);
+      widget->setWidgetLine(widgetLine);
       widget->setWidgetGeometry(x,y,width, height);
       widget->show();
       widgets.append(widget);
@@ -139,6 +141,7 @@ int WidgetPanel::newWidget(QString widgetLine)
     }
     else if (parts[0]=="ioCheckbox") {
       QuteWidget *widget= new QuteWidget(this, QUTE_CHECKBOX);
+      widget->setWidgetLine(widgetLine);
       widget->setWidgetGeometry(x,y,width, height);
       widget->show();
       widgets.append(widget);
@@ -156,6 +159,7 @@ int WidgetPanel::newWidget(QString widgetLine)
     }
     else if (parts[0]=="ioButton") {
       QuteWidget *widget= new QuteWidget(this, QUTE_BUTTON);
+      widget->setWidgetLine(widgetLine);
       widget->setWidgetGeometry(x,y,width, height);
       widget->show();
       widgets.append(widget);
@@ -172,24 +176,29 @@ int WidgetPanel::newWidget(QString widgetLine)
     else if (parts[0]=="ioText") {
       if (parts[5]=="label") {
         QuteWidget *widget= new QuteWidget(this, QUTE_LABEL);
-        widget->setWidgetGeometry(x,y,width, height);
+        widget->setWidgetLine(widgetLine);
+        widget->setWidgetGeometry(x,y,width, height);;
+//         widget->setText(quoteParts[3]);
         widget->show();
         widgets.append(widget);
       }
       else if (parts[5]=="edit") {
         QuteWidget *widget= new QuteWidget(this, QUTE_LINEEDIT);
+        widget->setWidgetLine(widgetLine);
         widget->setWidgetGeometry(x,y,width, height);
         widget->show();
         widgets.append(widget);
       }
       else if (parts[5]=="display") {
         QuteWidget *widget= new QuteWidget(this, QUTE_DISPLAY);
+        widget->setWidgetLine(widgetLine);
         widget->setWidgetGeometry(x,y,width, height);
         widget->show();
         widgets.append(widget);
       }
       else if (parts[5]=="scrolleditnum") {
         QuteWidget *widget= new QuteWidget(this, QUTE_SCROLLNUMBER);
+        widget->setWidgetLine(widgetLine);
         widget->setWidgetGeometry(x,y,width, height);
         widget->show();
         widgets.append(widget);
@@ -197,6 +206,7 @@ int WidgetPanel::newWidget(QString widgetLine)
     }
     else if (parts[0]=="ioMenu") {
       QuteWidget *widget= new QuteWidget(this, QUTE_COMBOBOX);
+      widget->setWidgetLine(widgetLine);
       widget->setWidgetGeometry(x,y,width, height);
       widget->show();
 	  widgets.append(widget);
