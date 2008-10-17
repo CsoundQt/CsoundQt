@@ -1,6 +1,83 @@
+2008-10-17 02:44  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* src/findreplace.cpp, src/findreplace.ui, src/qutewidget.cpp,
+	  src/qutewidget.h, src/widgetpanel.cpp: Implemented replace
+	  function.
+	  Added storing of original line of text to widgets (for
+	  unimplemented widgets and later saving)
+
+2008-10-16 01:52  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* src/opcodes.xml: Updated opcodes.xml for 5.09 version
+
+2008-10-16 01:47  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* BUILDING, COPYING, gpl-3.0.txt, images/control-center2.png,
+	  images/control-center2.svg, images/editfile.png,
+	  images/editfile.svg, images/gksu-root-terminal.png,
+	  images/gksu-root-terminal.svg, images/gnome-devel.png,
+	  images/gnome-devel.svg,
+	  images/gnome-mime-application-x-diagram.png,
+	  images/gnome-mime-application-x-diagram.svg, images/gtk-info.png,
+	  images/gtk-info.svg, images/playfile.png, images/playfile.svg,
+	  images/render.png, images/render.svg, src/application.qrc,
+	  src/qutecsound.cpp, src/qutecsound.h, src/types.h: Fixed crashing
+	  when last file was moved.
+	  Added icons.
+	  Added program files macro for windows (untested)
+
+2008-10-15 22:13  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* src/configdialog.cpp, src/configdialog.h, src/configdialog.ui,
+	  src/configlists.cpp, src/configlists.h, src/console.cpp,
+	  src/console.h, src/default.csd, src/dockhelp.cpp, src/dockhelp.h,
+	  src/documentpage.cpp, src/documentpage.h, src/findreplace.cpp,
+	  src/findreplace.h, src/findreplace.ui, src/highlighter.cpp,
+	  src/highlighter.h, src/main.cpp, src/opentryparser.cpp,
+	  src/opentryparser.h, src/options.cpp, src/options.h,
+	  src/qutecsound.cpp, src/qutecsound.h, src/quteslider.cpp,
+	  src/quteslider.h, src/qutewidget.cpp, src/qutewidget.h,
+	  src/src.pro, src/types.h, src/utilitiesdialog.cpp,
+	  src/utilitiesdialog.h, src/widgetpanel.cpp, src/widgetpanel.h,
+	  templates/cpp, templates/h: Corrected address for FSF in licence.
+	  (Thanks to Felipe Sateler)
+	  Corrected licence in all source files (all are GPv3 now) (Thanks
+	  to Felipe Sateler)
+	  Added option to save or discard widgets in csd file.
+	  Added find action.
+	  Default widgets are now shown for any file even if it doesn't
+	  have a widgets section originally.
+	  Added reload action.
+	  Added version number to about dialog.
+	  Improved behavior of untitled documents (they are not replaced
+	  when a file is opened or when a fie is reloaded)
+	  Fixed string error in widgetpanel (Thanks to Felipe Sateler)
+
+2008-10-14 15:38  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* src/qutecsound.cpp, src/quteslider.cpp, src/quteslider.h,
+	  src/src.pro, src/widgetpanel.cpp: Added missing quteslider class
+	  files
+	  Fixed switching widgets when panel switches (had to explicitly
+	  show the widgets)
+	  Fixed closign of csound when qutecsound closes
+
+2008-10-14 02:41  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* ChangeLog, src/default.csd, src/documentpage.cpp,
+	  src/documentpage.h, src/main.cpp, src/options.cpp,
+	  src/qutecsound.cpp, src/qutecsound.h, src/qutewidget.cpp,
+	  src/qutewidget.h, src/src.pro, src/widgetpanel.cpp,
+	  src/widgetpanel.h, svnauthors.xml: Implemented loading slider in
+	  MacCsound format.
+	  Implemented changing widgets depending on selected panel (not
+	  working properly yet)
+	  Many small fixes
+	  Output filename from browse dialog now works.
+
 2008-10-10 14:09  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r51] src/configdialog.h, src/configlists.cpp, src/configlists.h,
+	* src/configdialog.h, src/configlists.cpp, src/configlists.h,
 	  src/console.h, src/documentpage.cpp, src/documentpage.h,
 	  src/highlighter.cpp, src/highlighter.h, src/main.cpp,
 	  src/options.cpp, src/options.h, src/qutecsound.h, src/types.h,
@@ -9,27 +86,27 @@
 
 2008-10-10 13:21  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r50] qutecsound.kdevelop, src/documentpage.cpp,
-	  src/documentpage.h, src/qutecsound.cpp, src/qutecsound.h,
-	  src/qutewidget.cpp, src/qutewidget.h, src/src.pro, src/types.h,
-	  src/widgetpanel.cpp, src/widgetpanel.h: MacCsound sections are
-	  now hidden, but are preserved.
+	* qutecsound.kdevelop, src/documentpage.cpp, src/documentpage.h,
+	  src/qutecsound.cpp, src/qutecsound.h, src/qutewidget.cpp,
+	  src/qutewidget.h, src/src.pro, src/types.h, src/widgetpanel.cpp,
+	  src/widgetpanel.h: MacCsound sections are now hidden, but are
+	  preserved.
 	  Fixed printing of all messages to console.
 	  More internal work for widget support and compatibility with
 	  MacCsound
 
 2008-10-07 17:11  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r49] src/src.pro: Fixed build in OS X
+	* src/src.pro: Fixed build in OS X
 
 2008-10-07 02:11  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r48] src/qutecsound.cpp, src/qutewidget.cpp, src/qutewidget.h,
+	* src/qutecsound.cpp, src/qutewidget.cpp, src/qutewidget.h,
 	  src/widgetpanel.cpp: More internal work on widgets
 
 2008-10-06 21:20  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r47] src/configdialog.cpp, src/configdialog.ui, src/console.cpp,
+	* src/configdialog.cpp, src/configdialog.ui, src/console.cpp,
 	  src/options.h, src/qutecsound.cpp, src/qutecsound.h,
 	  src/qutewidget.cpp, src/src.pro, src/widgetpanel.cpp,
 	  src/widgetpanel.h: Csound can now be executed in its own thread.
@@ -43,60 +120,59 @@
 
 2008-10-01 12:31  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r46] qutecsound.kdevelop, src/configdialog.cpp,
-	  src/configdialog.ui, src/options.cpp, src/options.h,
-	  src/qutecsound.cpp, src/qutecsound.h, src/qutewidget.cpp,
-	  src/qutewidget.h, src/src.pro, src/widgetpanel.cpp,
-	  src/widgetpanel.h, templates/cpp, templates/h: Added option to
-	  bypass widgets.
+	* qutecsound.kdevelop, src/configdialog.cpp, src/configdialog.ui,
+	  src/options.cpp, src/options.h, src/qutecsound.cpp,
+	  src/qutecsound.h, src/qutewidget.cpp, src/qutewidget.h,
+	  src/src.pro, src/widgetpanel.cpp, src/widgetpanel.h,
+	  templates/cpp, templates/h: Added option to bypass widgets.
 	  Dock widgets and toolbar positions are now persistent.
 	  Internal changes: Added QuteWidget base class for all widgets.
 	  other minor fixes
 
 2008-10-01 12:22  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r45] src/utilitiesdialog.cpp: Hack for utilities documentation
-	  to work in Windows
+	* src/utilitiesdialog.cpp: Hack for utilities documentation to work
+	  in Windows
 
 2008-09-30 14:11  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r44] src/qutecsound.cpp: Fixed command line execution on OS X
+	* src/qutecsound.cpp: Fixed command line execution on OS X
 
 2008-09-27 13:01  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r43] ChangeLog, svnauthors.xml: Generated Changelog (from
-	  svn2cl), using svnauhors.xml file.
+	* ChangeLog, svnauthors.xml: Generated Changelog (from svn2cl),
+	  using svnauhors.xml file.
 
 2008-09-24 14:14  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r42] src/console.cpp, src/console.h, src/dockhelp.cpp,
-	  src/dockhelp.h, src/qutecsound.cpp, src/utilitiesdialog.cpp,
+	* src/console.cpp, src/console.h, src/dockhelp.cpp, src/dockhelp.h,
+	  src/qutecsound.cpp, src/utilitiesdialog.cpp,
 	  src/utilitiesdialog.h, src/widgetpanel.cpp, src/widgetpanel.h:
 	  Buttons now correctly reflect the state of the dock panels
 
 2008-09-24 02:22  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r41] src/qutecsound.cpp, src/types.h, src/utilitiesdialog.cpp,
+	* src/qutecsound.cpp, src/types.h, src/utilitiesdialog.cpp,
 	  src/widgetpanel.cpp, src/widgetpanel.h: Several minor changes to
 	  fix the Windows build
 
 2008-09-23 14:13  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r40] src/default.csd, src/qutecsound.cpp, src/qutecsound.h,
+	* src/default.csd, src/qutecsound.cpp, src/qutecsound.h,
 	  src/src.pro, src/types.h, src/widgetpanel.cpp, src/widgetpanel.h:
 	  Added preliminary support for widgets.
 	  Hopefully fixed launching windows command prompt.
 
 2008-09-22 01:44  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r39] qutecsound.kdevelop, src/configdialog.ui, src/default.csd,
+	* qutecsound.kdevelop, src/configdialog.ui, src/default.csd,
 	  src/options.cpp, src/qutecsound.cpp, src/qutecsound.h,
 	  src/src.pro, src/utilitiesdialog.cpp, src/utilitiesdialog.h,
 	  src/utilitiesdialog.ui: Implemented utilities dialog
 
 2008-09-16 16:32  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r38] src/qutecsound.cpp, src/qutecsound.h, src/src.pro,
+	* src/qutecsound.cpp, src/qutecsound.h, src/src.pro,
 	  src/utilitiesdialog.cpp, src/utilitiesdialog.h,
 	  src/utilitiesdialog.ui: New File action now creates a new file
 	  every time, instead of the previous "only one new file" behavior
@@ -104,19 +180,18 @@
 
 2008-09-12 18:14  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r37] src/utilitiesdialog.ui: Added utilities dialog file
+	* src/utilitiesdialog.ui: Added utilities dialog file
 
 2008-09-09 16:23  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r36] bin/osx-prepare-bundle.sh: OS X bundle script now prepares
-	  a zip file with and without Qt.
+	* bin/osx-prepare-bundle.sh: OS X bundle script now prepares a zip
+	  file with and without Qt.
 
 2008-09-09 16:21  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r35] src/configdialog.cpp, src/configdialog.h,
-	  src/configdialog.ui, src/qutecsound.cpp, src/qutecsound.h,
-	  src/types.h: Browse buttons for Input and output filename now
-	  work.
+	* src/configdialog.cpp, src/configdialog.h, src/configdialog.ui,
+	  src/qutecsound.cpp, src/qutecsound.h, src/types.h: Browse buttons
+	  for Input and output filename now work.
 	  Open external editor and player now works on OS X.
 	  Correct extension added when selecting output filename (when in
 	  ask every time mode)
@@ -126,39 +201,39 @@
 
 2008-09-07 02:42  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r34] src/configlists.cpp, src/src.pro,
-	  src/windows-installer.nsi: Set portaudio as default rtaudio
-	  module, as it seems to work better out of the box.
+	* src/configlists.cpp, src/src.pro, src/windows-installer.nsi: Set
+	  portaudio as default rtaudio module, as it seems to work better
+	  out of the box.
 	  Made windows installer.
 
 2008-09-06 15:28  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r33] qutecsound.kdevelop, src/application.qrc,
-	  src/qutecsound.cpp: Added new icon to main window
+	* qutecsound.kdevelop, src/application.qrc, src/qutecsound.cpp:
+	  Added new icon to main window
 
 2008-09-06 15:14  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r32] src/dockhelp.cpp, src/dockhelp.h, src/qutecsound.cpp,
+	* src/dockhelp.cpp, src/dockhelp.h, src/qutecsound.cpp,
 	  src/qutecsound.h: Fixed documentation panel for windows
 
 2008-09-06 14:09  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r31] src/configdialog.ui, src/options.h, src/qutecsound.cpp,
+	* src/configdialog.ui, src/options.h, src/qutecsound.cpp,
 	  src/qutecsound.h, src/src.pro, src/types.h: Improved external
 	  applications usage for other platforms
 
 2008-09-03 02:45  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r30] images/qtcs.icns, images/qtcs.ico, images/qtcs.png,
+	* images/qtcs.icns, images/qtcs.ico, images/qtcs.png,
 	  images/qtcs.svg: New green version of icons by Daniel Prieto
 
 2008-09-02 17:11  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r29] images/qtcs.icns: Added icon by Daniel Prieto
+	* images/qtcs.icns: Added icon by Daniel Prieto
 
 2008-09-02 02:12  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r28] src/dockhelp.cpp, src/src.pro, src/types.h: Added hack so
+	* src/dockhelp.cpp, src/src.pro, src/types.h: Added hack so
 	  Documentation shows up on windows (but links are not working and
 	  encoding is wrong...)
 	  Fixed src.pro to build floats or doubles version properly.
@@ -166,13 +241,12 @@
 
 2008-08-31 14:00  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r27] images/modIcon.png, images/modIcon.svg,
-	  images/modIcon2.png, images/modIcon2.svg, src/application.qrc,
-	  src/configdialog.cpp, src/configdialog.ui, src/highlighter.cpp,
-	  src/highlighter.h, src/options.h, src/qutecsound.cpp,
-	  src/qutecsound.h, src/src.pro, src/widgetpanel.cpp,
-	  src/widgetpanel.h: If opening a document that is alreadt open, go
-	  to that tab instead of opening again
+	* images/modIcon.png, images/modIcon.svg, images/modIcon2.png,
+	  images/modIcon2.svg, src/application.qrc, src/configdialog.cpp,
+	  src/configdialog.ui, src/highlighter.cpp, src/highlighter.h,
+	  src/options.h, src/qutecsound.cpp, src/qutecsound.h, src/src.pro,
+	  src/widgetpanel.cpp, src/widgetpanel.h: If opening a document
+	  that is alreadt open, go to that tab instead of opening again
 	  When closing qutecsound all documents are checked for
 	  modifications and request save
 	  Added more color to variables (global varibles)
@@ -182,7 +256,7 @@
 
 2008-08-29 22:47  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r26] images/qtcs.ico, src/configdialog.cpp, src/configlists.cpp,
+	* images/qtcs.ico, src/configdialog.cpp, src/configlists.cpp,
 	  src/configlists.h, src/highlighter.cpp, src/qutecsound.cpp,
 	  src/qutecsound.h, src/qutecsound.rc, src/src.pro: Added windows
 	  icon
@@ -193,29 +267,28 @@
 
 2008-08-29 19:53  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r25] src/MyInfo.plist, src/src.pro: Added icons by Jim Bates
+	* src/MyInfo.plist, src/src.pro: Added icons by Jim Bates
 
 2008-08-29 19:52  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r24] images/qtcs.icns, images/qtcs.png: Added icons by Jim Bates
+	* images/qtcs.icns, images/qtcs.png: Added icons by Jim Bates
 
 2008-08-28 20:03  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r23] src/qutecsound.cpp, src/src.pro: Disabled using external
-	  shell for windows as current code will not build.
+	* src/qutecsound.cpp, src/src.pro: Disabled using external shell
+	  for windows as current code will not build.
 	  Modified src.pro for windows
 
 2008-08-27 22:20  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r22] src/configdialog.cpp, src/configdialog.ui,
-	  src/configlists.cpp, src/console.h, src/options.h,
-	  src/qutecsound.cpp, src/src.pro: Added option to change console
-	  font
+	* src/configdialog.cpp, src/configdialog.ui, src/configlists.cpp,
+	  src/console.h, src/options.h, src/qutecsound.cpp, src/src.pro:
+	  Added option to change console font
 	  Set default MIDI rt module to "none"
 
 2008-08-19 17:46  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r21] src/console.cpp, src/dockhelp.cpp, src/options.cpp,
+	* src/console.cpp, src/dockhelp.cpp, src/options.cpp,
 	  src/qutecsound.cpp, src/qutecsound.h, src/types.h: Added
 	  workaround so menus are not lost on OS X
 	  Made console font smaller and default font larger
@@ -225,28 +298,27 @@
 
 2008-08-15 19:56  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r20] bin/osx-prepare-bundle.sh: Fixed mac os x script
+	* bin/osx-prepare-bundle.sh: Fixed mac os x script
 
 2008-08-15 19:45  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r19] src/default.csd, src/src.pro: Minor fixes
+	* src/default.csd, src/src.pro: Minor fixes
 
 2008-08-15 19:44  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r18] bin/osx-prepare-bundle.sh: Small fixes
+	* bin/osx-prepare-bundle.sh: Small fixes
 
 2008-08-12 16:35  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r17] src/MyInfo.plist, src/highlighter.cpp, src/qutecsound.cpp,
+	* src/MyInfo.plist, src/highlighter.cpp, src/qutecsound.cpp,
 	  src/qutecsound.h, src/src.pro: Fixed line endings for Mac.
 
 2008-08-01 02:44  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r16] src/configdialog.cpp, src/configdialog.h,
-	  src/configdialog.ui, src/configlists.cpp, src/configlists.h,
-	  src/dockhelp.cpp, src/dockhelp.h, src/opcodes.xml,
-	  src/options.cpp, src/options.h, src/qutecsound.cpp, src/src.pro:
-	  Added rtMidi options
+	* src/configdialog.cpp, src/configdialog.h, src/configdialog.ui,
+	  src/configlists.cpp, src/configlists.h, src/dockhelp.cpp,
+	  src/dockhelp.h, src/opcodes.xml, src/options.cpp, src/options.h,
+	  src/qutecsound.cpp, src/src.pro: Added rtMidi options
 	  Refactored setup dialog. Removed unused fields
 	  Improved setup defaults
 	  Updated opcodes.xml (there was a bug in the generator script)
@@ -254,26 +326,26 @@
 
 2008-07-17 23:40  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r15] bin, bin/osx-prepare-bundle.sh: Add OSX bundle script
+	* bin, bin/osx-prepare-bundle.sh: Add OSX bundle script
 
 2008-07-17 23:39  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r14] src/bin: Added bin directory
+	* src/bin: Added bin directory
 
 2008-07-17 23:36  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r13] src/configdialog.ui, src/dockhelp.cpp, src/dockhelp.h,
+	* src/configdialog.ui, src/dockhelp.cpp, src/dockhelp.h,
 	  src/main.cpp, src/options.cpp, src/qutecsound.cpp, src/src.pro,
 	  src/types.h: Improvements for Mac OSX
 
 2008-06-12 21:23  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r12] src/configlists.cpp, src/qutecsound.cpp, src/qutecsound.h,
+	* src/configlists.cpp, src/qutecsound.cpp, src/qutecsound.h,
 	  src/src.pro: Build on Mac OS X
 
 2008-06-09 19:46  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r11] qutecsound.kdevelop, src/options.cpp, src/qutecsound.cpp,
+	* qutecsound.kdevelop, src/options.cpp, src/qutecsound.cpp,
 	  src/qutecsound.h: Removed quotes from filenames for passing
 	  arguments
 	  Load companion orc or sco file
@@ -281,19 +353,18 @@
 
 2008-05-27 12:28  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r10] src/qutecsound.cpp: Fixed small bug
+	* src/qutecsound.cpp: Fixed small bug
 
 2008-05-27 02:25  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r9] src/configdialog.cpp, src/configdialog.h,
-	  src/documentpage.cpp, src/documentpage.h, src/options.cpp,
-	  src/options.h, src/qutecsound.cpp, src/qutecsound.h: Fixed for
-	  Qt4.4 (hopefully)
+	* src/configdialog.cpp, src/configdialog.h, src/documentpage.cpp,
+	  src/documentpage.h, src/options.cpp, src/options.h,
+	  src/qutecsound.cpp, src/qutecsound.h: Fixed for Qt4.4 (hopefully)
 	  Improved support for ors/sco file pairs
 
 2008-05-26 13:44  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r8] images/render.png, images/render.svg, src/application.qrc,
+	* images/render.png, images/render.svg, src/application.qrc,
 	  src/dockhelp.cpp, src/documentpage.cpp, src/documentpage.h,
 	  src/main.cpp, src/qutecsound.cpp, src/qutecsound.h, src/src.pro:
 	  Added support for opening multiple files in tabs
@@ -301,64 +372,63 @@
 
 2008-05-25 03:33  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r7] qutecsound.kdevelop: Added highlight support for {{}}
-	  strings
+	* qutecsound.kdevelop: Added highlight support for {{}} strings
 	  Embedded opcode.xml and default.csd
 	  Added new icons and removed old ones
 
 2008-05-25 03:31  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r6] images, images/gnome-dev-floppy.png,
-	  images/gnome-dev-floppy.svg, images/gnome-folder.png,
-	  images/gnome-folder.svg, images/gtk-copy.png,
-	  images/gtk-copy.svg, images/gtk-cut.png, images/gtk-cut.svg,
-	  images/gtk-media-pause.png, images/gtk-media-pause.svg,
-	  images/gtk-media-play-ltr.png, images/gtk-media-play-ltr.svg,
-	  images/gtk-media-stop.png, images/gtk-media-stop.svg,
-	  images/gtk-new.png, images/gtk-new.svg, images/gtk-paste.png,
-	  images/gtk-paste.svg, images/gtk-redo.png, images/gtk-redo.svg,
-	  images/gtk-reload.png, images/gtk-reload.svg,
-	  images/gtk-undo.png, images/gtk-undo.svg, images/render.png,
-	  images/render.svg, src/application.qrc, src/configdialog.ui,
-	  src/dockhelp.cpp, src/editcopy.xpm, src/editcut.xpm,
-	  src/editpaste.xpm, src/filenew.xpm, src/fileopen.xpm,
-	  src/filesave.xpm, src/highlighter.cpp, src/qutecsound.cpp,
-	  src/qutecsound.h: Added highlight support for {{}} strings
+	* images, images/gnome-dev-floppy.png, images/gnome-dev-floppy.svg,
+	  images/gnome-folder.png, images/gnome-folder.svg,
+	  images/gtk-copy.png, images/gtk-copy.svg, images/gtk-cut.png,
+	  images/gtk-cut.svg, images/gtk-media-pause.png,
+	  images/gtk-media-pause.svg, images/gtk-media-play-ltr.png,
+	  images/gtk-media-play-ltr.svg, images/gtk-media-stop.png,
+	  images/gtk-media-stop.svg, images/gtk-new.png,
+	  images/gtk-new.svg, images/gtk-paste.png, images/gtk-paste.svg,
+	  images/gtk-redo.png, images/gtk-redo.svg, images/gtk-reload.png,
+	  images/gtk-reload.svg, images/gtk-undo.png, images/gtk-undo.svg,
+	  images/render.png, images/render.svg, src/application.qrc,
+	  src/configdialog.ui, src/dockhelp.cpp, src/editcopy.xpm,
+	  src/editcut.xpm, src/editpaste.xpm, src/filenew.xpm,
+	  src/fileopen.xpm, src/filesave.xpm, src/highlighter.cpp,
+	  src/qutecsound.cpp, src/qutecsound.h: Added highlight support for
+	  {{}} strings
 	  Embedded opcode.xml and default.csd
 	  Added new icons and removed old ones
 
 2008-05-19 11:15  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r5] src/configdialog.ui, src/console.cpp, src/console.h,
+	* src/configdialog.ui, src/console.cpp, src/console.h,
 	  src/qutecsound.cpp: Improved API output console
 
 2008-05-18 17:42  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r4] src/configdialog.ui, src/console.cpp, src/console.h,
+	* src/configdialog.ui, src/console.cpp, src/console.h,
 	  src/qutecsound.cpp, src/qutecsound.h, src/src.pro: Added Console
 	  Output panel
 
 2008-05-18 14:40  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r3] src/configdialog.cpp, src/configdialog.ui, src/options.cpp,
+	* src/configdialog.cpp, src/configdialog.ui, src/options.cpp,
 	  src/options.h, src/qutecsound.cpp: Added Save Changes checkbox
 	  Fixed running from the API
 
 2008-05-18 02:32  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r2] src/qutecsound.cpp: minor cleanup
+	* src/qutecsound.cpp: minor cleanup
 
 2008-05-17 15:46  Andrés Cabrera <mantaraya36@gmail.com>
 
-	* [r1] ., COPYING, Doxyfile, qutecsound.kdevelop, qutecsound.pro,
-	  src, src/application.qrc, src/configdialog.cpp,
-	  src/configdialog.h, src/configdialog.ui, src/configlists.cpp,
-	  src/configlists.h, src/default.csd, src/dockhelp.cpp,
-	  src/dockhelp.h, src/editcopy.xpm, src/editcut.xpm,
-	  src/editpaste.xpm, src/filenew.xpm, src/fileopen.xpm,
-	  src/filesave.xpm, src/highlighter.cpp, src/highlighter.h,
-	  src/main.cpp, src/opcodes.xml, src/opentryparser.cpp,
-	  src/opentryparser.h, src/options.cpp, src/options.h,
-	  src/quickref.xml, src/qutecsound.cpp, src/qutecsound.h,
-	  src/src.pro, src/types.h, templates, templates/cpp, templates/h:
+	* ., COPYING, Doxyfile, qutecsound.kdevelop, qutecsound.pro, src,
+	  src/application.qrc, src/configdialog.cpp, src/configdialog.h,
+	  src/configdialog.ui, src/configlists.cpp, src/configlists.h,
+	  src/default.csd, src/dockhelp.cpp, src/dockhelp.h,
+	  src/editcopy.xpm, src/editcut.xpm, src/editpaste.xpm,
+	  src/filenew.xpm, src/fileopen.xpm, src/filesave.xpm,
+	  src/highlighter.cpp, src/highlighter.h, src/main.cpp,
+	  src/opcodes.xml, src/opentryparser.cpp, src/opentryparser.h,
+	  src/options.cpp, src/options.h, src/quickref.xml,
+	  src/qutecsound.cpp, src/qutecsound.h, src/src.pro, src/types.h,
+	  templates, templates/cpp, templates/h:
 

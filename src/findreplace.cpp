@@ -35,12 +35,25 @@ FindReplace::~FindReplace()
 
 void FindReplace::find()
 {
+  bool found = false;
   if (caseCheckBox->isChecked()) {
-    m_document->find(findLineEdit->text(),
+    found = m_document->find(findLineEdit->text(),
                      QTextDocument::FindCaseSensitively);
   }
   else
-    m_document->find(findLineEdit->text());
+    found = m_document->find(findLineEdit->text());
+  if (!found) {
+    int ret = QMessageBox::question(this, tr("Find and replace"),
+                                   tr("The string was not found.\n"
+                                      "Would you like to start from the top?"),
+                                      QMessageBox::Yes | QMessageBox::No,
+                                      QMessageBox::No
+                                   );
+    if (ret == QMessageBox::Yes) {
+      m_document->moveCursor(QTextCursor::Start);
+      find();
+    }
+  }
 }
 
 void FindReplace::replace()
@@ -49,8 +62,9 @@ void FindReplace::replace()
     m_document->insertPlainText(replaceLineEdit->text());
     find();
   }
-  else
+  else {
     find();
+  }
 }
 
 void FindReplace::replaceAll()
