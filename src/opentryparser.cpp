@@ -37,7 +37,7 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
   file.close();
   excludedOpcodes << "|" << "||" << "^" << "+" << "*" << "-" << "/"
       << "instr" << "endin" << "opcode" << "endop"
-      << "sr" << "kr" << "ksmps" << "nchnls";
+      << "sr" << "kr" << "ksmps" << "nchnls" << "0dbfs";
   QDomElement docElem = m_doc->documentElement();
 
   QDomNode n = docElem.firstChild();

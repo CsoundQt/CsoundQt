@@ -17,29 +17,95 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef QUTESLIDER_H
-#define QUTESLIDER_H
+#ifndef QUTETEXT_H
+#define QUTETEXT_H
 
 #include "qutewidget.h"
 
-class QuteSlider : public QuteWidget
+class QuteText : public QuteWidget
 {
+  Q_OBJECT
   public:
-    QuteSlider(QWidget *parent);
+    QuteText(QWidget *parent);
 
-    ~QuteSlider();
-
-    double getValue();
-    void setRange(int min, int max);
-    void setValue(double value);
+    ~QuteText();
 
     QString getWidgetLine();
+
+    double getValue();
+
+    void setResolution(double resolution);
+    void setAlignment(int alignment);
+    void setFont(QString font);
+    void setFontSize(int fontSize);
+    void setTextColor(QColor textColor);
+    void setBgColor(QColor bgColor);
+    void setBg(bool bg);
+    void setBorder(bool border);
+    void setText(QString text);
+
     virtual void createPropertiesDialog();
     virtual void applyProperties();
 
   private:
-    QDoubleSpinBox *minSpinBox;
-    QDoubleSpinBox *maxSpinBox;
+    double m_resolution;
+//     int m_alignment;
+    QString m_font;
+    int m_fontSize;
+//     QColor m_textColor;
+//     QColor m_bgColor;
+//     bool m_bg;
+//     bool m_border;
+
+    QLineEdit *text;
+    QPushButton *textColor;
+    QPushButton *bgColor;
+    QCheckBox *bg;
+    QCheckBox *border;
+
+  private slots:
+    void selectTextColor();
+    void selectBgColor();
+};
+
+class QuteTextEdit : public QTextEdit
+{
+  Q_OBJECT
+  public:
+    QuteTextEdit(QWidget* parent) : QTextEdit(parent)
+    {
+    }
+
+    ~QuteTextEdit() {};
+
+  protected:
+    virtual void contextMenuEvent(QContextMenuEvent *event)
+    {
+      emit(popUpMenu(event->globalPos()));
+    }
+
+  signals:
+    void popUpMenu(QPoint pos);
+};
+
+class QuteLabel : public QLabel
+{
+  Q_OBJECT
+  public:
+    QuteLabel(QWidget* parent) : QLabel(parent)
+    {
+    }
+
+    ~QuteLabel() {};
+
+  protected:
+    virtual void contextMenuEvent(QContextMenuEvent *event)
+    {
+      emit(popUpMenu(event->globalPos()));
+    }
+
+  signals:
+    void popUpMenu(QPoint pos);
 };
 
 #endif

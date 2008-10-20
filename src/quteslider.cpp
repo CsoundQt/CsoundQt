@@ -21,6 +21,7 @@
 
 QuteSlider::QuteSlider(QWidget *parent) : QuteWidget(parent)
 {
+  m_widget = new QSlider(this);
   m_max = 1.0;
   m_min = 0.0;
 }
@@ -34,17 +35,13 @@ double QuteSlider::getValue()
   QSlider *slider = (QSlider *)m_widget;
   double normalized = (double) (slider->value() - slider->minimum())
         / (double) (slider->maximum() - slider->minimum());
-  double value = m_min + (normalized * (m_max-m_min));
-  return value;
+  m_value = m_min + (normalized * (m_max-m_min));
+  return m_value;
 }
-
-// QString QuteSlider::getChannelName()
-// {
-//   return QuteWidget::getChannelName();
-// }
 
 void QuteSlider::setRange(int min, int max)
 {
+  // TODO when slider is resized, its internal range should be adjusted to accomodate one value per pixel. There are currently 100 values no matter how many pixels...
   m_min = min;
   m_max = max;
 }
@@ -56,3 +53,44 @@ void QuteSlider::setValue(double value)
   ((QSlider *)m_widget)->setValue(val);
 }
 
+QString QuteSlider::getWidgetLine()
+{
+  QString line = "ioSlider {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
+  line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
+  line += QString::number(m_min, 'f', 6) + " " + QString::number(m_max, 'f', 6) + " ";
+  line += QString::number(m_value, 'f', 6) + " " + m_name;
+  qDebug("QuteSlider::getWidgetLine() %s", line.toStdString().c_str());
+  return line;
+}
+
+void QuteSlider::createPropertiesDialog()
+{
+  QuteWidget::createPropertiesDialog();
+  QLabel *label = new QLabel(dialog);
+//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  label->setText("Min =");
+  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 2, 0, Qt::AlignRight|Qt::AlignVCenter);
+  minSpinBox = new QDoubleSpinBox(dialog);
+  minSpinBox->setDecimals(6);
+  minSpinBox->setRange(-99999.0, 99999.0);
+  minSpinBox->setValue(m_min);
+  layout->addWidget(minSpinBox, 2,1, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  label->setText("Max =");
+  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 2, 2, Qt::AlignRight|Qt::AlignVCenter);
+  maxSpinBox = new QDoubleSpinBox(dialog);
+  maxSpinBox->setDecimals(6);
+  maxSpinBox->setRange(-99999.0, 99999.0);
+  maxSpinBox->setValue(m_max);
+  layout->addWidget(maxSpinBox, 2,3, Qt::AlignLeft|Qt::AlignVCenter);
+}
+
+void QuteSlider::applyProperties()
+{
+  m_max = maxSpinBox->value();
+  m_min = minSpinBox->value();
+  QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
+}

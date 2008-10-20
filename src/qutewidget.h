@@ -48,13 +48,6 @@ class QuteWidget : public QWidget
 
     widgetType type() {return m_type;}
     const QString name() {return m_name;}
-//     const int x() {return widget->x();};
-//     const int y() {return widget->y();};
-//     const int width() {return widget->width();};
-//     const int height() {return widget->height();};
-
-//     double value() {return m_value;}
-//     double value2() {return m_value2;}
 
     void setWidgetLine(QString line);
     void setChannelName(QString name);
@@ -64,11 +57,12 @@ class QuteWidget : public QWidget
     virtual void setValue(double value);
     void setResolution(double resolution);
     virtual void setChecked(bool checked);
-    void setText(QString text);
 
     QString getChannelName();
-    QString getWidgetLine();
+    virtual QString getWidgetLine();
     virtual double getValue();
+    virtual void createPropertiesDialog();
+    virtual void applyProperties();
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
@@ -76,22 +70,35 @@ class QuteWidget : public QWidget
     widgetType m_type;
     QWidget *m_layoutWidget;
     QWidget *m_widget;
+    QDialog *dialog;
+    QGridLayout *layout;
 
     QString m_name;
     double m_min, m_max;
+//     double m_min2,m_max2;
     double m_value, m_value2;
 
   private:
     QAction *propertiesAct;
     QString m_line;
 
+    QSpinBox *xSpinBox;
+    QSpinBox *ySpinBox;
+    QSpinBox *wSpinBox;
+    QSpinBox *hSpinBox;
+    QLineEdit *nameLineEdit;
+    QPushButton *cancelButton;
+    QPushButton *acceptButton;
+
+  public slots:
+    void popUpMenu(QPoint pos);
+
   private slots:
+    void apply();
     void openProperties();
-    void applyProperties();
 
-//     double m_min,m_max;
-//     double m_min2,m_max2;
-
+  signals:
+    void widgetChanged();
 };
 
 #endif

@@ -44,6 +44,9 @@ class DocumentPage : public QTextEdit
     QString macOptions;
     QString macGUI;
     QDomElement widgets;
+
+  public slots:
+    void setMacWidgetsText(QString text);
 };
 
 #endif

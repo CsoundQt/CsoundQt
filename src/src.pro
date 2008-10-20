@@ -25,7 +25,8 @@ SOURCES += qutecsound.cpp \
  widgetpanel.cpp \
  qutewidget.cpp \
  quteslider.cpp \
- findreplace.cpp
+ findreplace.cpp \
+ qutetext.cpp
 HEADERS += qutecsound.h \
  dockhelp.h \
  opentryparser.h \
@@ -40,7 +41,8 @@ HEADERS += qutecsound.h \
  widgetpanel.h \
  qutewidget.h \
  quteslider.h \
- findreplace.h
+ findreplace.h \
+ qutetext.h
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \

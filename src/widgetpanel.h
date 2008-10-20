@@ -38,16 +38,25 @@ class WidgetPanel : public QDockWidget
     int loadWidgets(QString macWidgets);
     int newWidget(QString widgetLine);
     int clearWidgets();
-//     QVector< QPair<QString, double> > getValues();
+    QString widgetsText();
+
+  protected:
+    virtual void contextMenuEvent(QContextMenuEvent *event);
 
   private:
     QVector<QuteWidget *> widgets;
     QWidget *layoutWidget;
+
+    QAction *createSlider;
+    QAction *createLabel;
+
     virtual void closeEvent(QCloseEvent * event);
 
-//     QLabel *label; //remove this widget
+  public slots:
+    void widgetChanged();
 
   signals:
+    void widgetsChanged(QString text);
     void Close(bool visible);
 
 };

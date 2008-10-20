@@ -335,6 +335,7 @@ void qutecsound::openRecent5()
 
 bool qutecsound::save()
 {
+  widgetPanel->widgetChanged();  //To make sure the values of the widgets are stored
   if (documentPages[curPage]->fileName.isEmpty()) {
     return saveAs();
   } else {
@@ -378,7 +379,8 @@ bool qutecsound::closeTab()
       close();
       return false;
     }
-    return false;
+    newFile();
+    curPage = 0;
   }
   documentPages.remove(curPage);
   documentTabs->removeTab(curPage);
@@ -933,15 +935,11 @@ void qutecsound::createActions()
   externalEditorAct->setStatusTip(tr("Edit rendered audiofile in External Editor"));
   connect(externalEditorAct, SIGNAL(triggered()), this, SLOT(openExternalEditor()));
 
-  renderAct = new QAction(QIcon(":/images/render.png"), tr("Render to file"), this);
-  renderAct->setShortcut(tr("Alt+F"));
-  renderAct->setStatusTip(tr("Render to file"));
-  connect(renderAct, SIGNAL(triggered()), this, SLOT(render()));
-
   showHelpAct = new QAction(QIcon(":/images/gtk-info.png"), tr("Help Panel"), this);
   showHelpAct->setShortcut(tr("Alt+W"));
   showHelpAct->setCheckable(true);
   showHelpAct->setChecked(true);
+  showHelpAct->setStatusTip(tr("Show the Csound Manual Panel"));
   connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
   connect(helpPanel, SIGNAL(Close(bool)), showHelpAct, SLOT(setChecked(bool)));
 
@@ -949,6 +947,7 @@ void qutecsound::createActions()
   showConsole->setShortcut(tr("Alt+A"));
   showConsole->setCheckable(true);
   showConsole->setChecked(true);
+  showConsole->setStatusTip(tr("Show Csound's message console"));
   connect(showConsole, SIGNAL(toggled(bool)), m_console, SLOT(setVisible(bool)));
   connect(m_console, SIGNAL(Close(bool)), showConsole, SLOT(setChecked(bool)));
 
@@ -961,6 +960,7 @@ void qutecsound::createActions()
 //   showUtilitiesAct->setShortcut(tr("Alt+W"));
   showUtilitiesAct->setCheckable(true);
   showUtilitiesAct->setChecked(false);
+  showUtilitiesAct->setStatusTip(tr("Show the Csound Utilities dialog"));
   connect(showUtilitiesAct, SIGNAL(triggered(bool)), utilitiesDialog, SLOT(setVisible(bool)));
   connect(utilitiesDialog, SIGNAL(Close(bool)), showUtilitiesAct, SLOT(setChecked(bool)));
 
@@ -1014,6 +1014,10 @@ void qutecsound::connectActions()
           this, SLOT(syntaxCheck()));
   connect(textEdit, SIGNAL(selectionChanged()),
           this, SLOT(checkSelection()));
+
+  disconnect(widgetPanel, SIGNAL(widgetsChanged(QString)),0,0);
+  connect(widgetPanel, SIGNAL(widgetsChanged(QString)),
+          textEdit, SLOT(setMacWidgetsText(QString)) );
 }
 
 void qutecsound::createMenus()

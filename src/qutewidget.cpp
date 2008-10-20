@@ -25,7 +25,6 @@ QuteWidget::QuteWidget(QWidget *parent, widgetType type):
     QWidget(parent), m_type(type)
 {
   this->setGeometry(QRect(5, 5, 20, 200));
-  m_widget = new QSlider(this);
 
   propertiesAct = new QAction(/*QIcon(":/images/gtk-new.png"),*/ tr("&Properties"), this);
   propertiesAct->setShortcut(tr("Alt+P"));
@@ -57,8 +56,10 @@ void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 
 void QuteWidget::setWidgetGeometry(QRect rect)
 {
-  this->setGeometry(rect);
   m_widget->setMinimumSize(rect.width(), rect.height());
+  this->setGeometry(rect);
+  QRect wRect(0,0,rect.width(), rect.height() );
+  m_widget->setGeometry(wRect);
 }
 
 void QuteWidget::setRange(int min, int max)
@@ -73,33 +74,12 @@ void QuteWidget::setValue(double value)
 
 void QuteWidget::setResolution(double resolution)
 {
-  switch (m_type) {
-//     case QUTE_SLIDER:
-//       ((QSlider *)m_widget)->setValue(min,max);
-//       break;
-    default:
-      qDebug("QuteWidget::setResolution not implemented for widget type");
-  }
+  qDebug("QuteWidget::setResolution not implemented for widget type");
 }
 
 void QuteWidget::setChecked(bool checked)
 {
-  switch (m_type) {
-//     case QUTE_SLIDER:
-//       break;
-    default:
-      qDebug("QuteWidget::setChecked not implemented for widget type");
-  }
-}
-
-void QuteWidget::setText(QString text)
-{
-  switch (m_type) {
-//     case QUTE_SLIDER:
-//       break;
-    default:
-      qDebug("QuteWidget::setText not implemented for widget type");
-  }
+  qDebug("QuteWidget::setChecked not implemented for widget type");
 }
 
 QString QuteWidget::getChannelName()
@@ -114,106 +94,100 @@ QString QuteWidget::getWidgetLine()
 
 double QuteWidget::getValue()
 {
-  switch (m_type) {
-//     case QUTE_SLIDER:
-// 
-//       break;
-    default:
-      qDebug("QuteWidget::getValue not implemented for widget type");
-      return 0.0;
-  }
+  qDebug("QuteWidget::getValue not implemented for widget type");
+  return 0.0;
 }
 
 void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
+{
+  popUpMenu(event->globalPos());
+}
+
+void QuteWidget::popUpMenu(QPoint pos)
 {
   QMenu menu(this);
   menu.addAction(propertiesAct);
 //   menu.addAction(copyAct);
 //   menu.addAction(pasteAct);
-  menu.exec(event->globalPos());
+  menu.exec(pos);
 //   qDebug("menu");
 }
 
 void QuteWidget::openProperties()
 {
-  QDialog dialog(this);
-  dialog.resize(300, 300);
-  dialog.setModal(true);
-  QGridLayout *layout = new QGridLayout(&dialog);
-  QLabel *label = new QLabel(&dialog);
-  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  label->setText("X =");
-  label->setAlignment(Qt::AlignRight);
-  layout->addWidget(label, 0, 0, Qt::AlignCenter);
-  QSpinBox *spinBox = new QSpinBox(&dialog);
-  spinBox->setValue(this->x());
-  layout->addWidget(spinBox, 0, 1, Qt::AlignCenter);
-  label = new QLabel(&dialog);
-  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  label->setText("Y =");
-  label->setAlignment(Qt::AlignRight);
-  layout->addWidget(label, 0, 2, Qt::AlignCenter);
-  spinBox = new QSpinBox(&dialog);
-  spinBox->setValue(this->y());
-  layout->addWidget(spinBox, 0, 3, Qt::AlignCenter);
-  label = new QLabel(&dialog);
-  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  label->setText("Width =");
-  label->setAlignment(Qt::AlignRight);
-  layout->addWidget(label, 1, 0, Qt::AlignCenter);
-  spinBox = new QSpinBox(&dialog);
-  spinBox->setValue(this->width());
-  layout->addWidget(spinBox, 1, 1, Qt::AlignCenter);
-  label = new QLabel(&dialog);
-  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  label->setText("Height =");
-  label->setAlignment(Qt::AlignRight);
-  layout->addWidget(label, 1, 2, Qt::AlignCenter);
-  spinBox = new QSpinBox(&dialog);
-  spinBox->setValue(this->height());
-  layout->addWidget(spinBox, 1, 3, Qt::AlignCenter);
-  label = new QLabel(&dialog);
-  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  label->setText("Min =");
-  label->setAlignment(Qt::AlignRight);
-  layout->addWidget(label, 2, 0, Qt::AlignCenter);
-  label = new QLabel(&dialog);
-  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  label->setText(QString::number(m_min,'f', 6));
-  label->setAlignment(Qt::AlignRight);
-  layout->addWidget(label, 2,1, Qt::AlignCenter);
-  label = new QLabel(&dialog);
-  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  label->setText("Max =");
-  label->setAlignment(Qt::AlignRight);
-  layout->addWidget(label, 2, 2, Qt::AlignCenter);
-  label = new QLabel(&dialog);
-  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  label->setText(QString::number(m_max,'f', 6));
-  label->setAlignment(Qt::AlignRight);
-  layout->addWidget(label, 2,3, Qt::AlignCenter);
-  label = new QLabel(&dialog);
-  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  label->setText("Channel name =");
-  label->setAlignment(Qt::AlignRight);
-  layout->addWidget(label, 3, 0, Qt::AlignCenter);
-  label = new QLabel(&dialog);
-  label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  label->setText(getChannelName());
-  label->setAlignment(Qt::AlignRight);
-  layout->addWidget(label, 3, 1, Qt::AlignCenter);
-  QPushButton *cancelButton = new QPushButton(tr("Cancel"));
-  layout->addWidget(cancelButton, 4, 2, Qt::AlignCenter);
-  QPushButton *acceptButton = new QPushButton(tr("Ok"));
-  layout->addWidget(acceptButton, 4, 3, Qt::AlignCenter);
+  createPropertiesDialog();
 
-  connect(acceptButton, SIGNAL(released()), &dialog, SLOT(accept()));
-  connect(&dialog, SIGNAL(accepted()), this, SLOT(applyProperties()));
-  connect(cancelButton, SIGNAL(released()), &dialog, SLOT(close()));
-  dialog.exec();
+  connect(acceptButton, SIGNAL(released()), dialog, SLOT(accept()));
+  connect(dialog, SIGNAL(accepted()), this, SLOT(apply()));
+  connect(cancelButton, SIGNAL(released()), dialog, SLOT(close()));
+  dialog->exec();
+}
+
+void QuteWidget::createPropertiesDialog()
+{
+  dialog = new QDialog(this);
+  dialog->resize(300, 300);
+  dialog->setModal(true);
+  layout = new QGridLayout(dialog);
+  QLabel *label = new QLabel(dialog);
+//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  label->setText("X =");
+  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
+  xSpinBox = new QSpinBox(dialog);
+  xSpinBox->setMaximum(9999);
+  xSpinBox->setValue(this->x());
+  layout->addWidget(xSpinBox, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  label->setText("Y =");
+  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 0, 2, Qt::AlignRight|Qt::AlignVCenter);
+  ySpinBox = new QSpinBox(dialog);
+  ySpinBox->setMaximum(9999);
+  ySpinBox->setValue(this->y());
+  layout->addWidget(ySpinBox, 0, 3, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  label->setText("Width =");
+  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
+  wSpinBox = new QSpinBox(dialog);
+  wSpinBox->setMaximum(9999);
+  wSpinBox->setValue(this->width());
+  layout->addWidget(wSpinBox, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  label->setText("Height =");
+  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 1, 2, Qt::AlignRight|Qt::AlignVCenter);
+  hSpinBox = new QSpinBox(dialog);
+  hSpinBox->setMaximum(9999);
+  hSpinBox->setValue(this->height());
+  layout->addWidget(hSpinBox, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  label->setText("Channel name =");
+  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 3, 0, Qt::AlignLeft|Qt::AlignVCenter);
+  nameLineEdit = new QLineEdit(getChannelName(), dialog);
+  layout->addWidget(nameLineEdit, 3, 1, Qt::AlignRight|Qt::AlignVCenter);
+  cancelButton = new QPushButton(tr("Cancel"));
+  layout->addWidget(cancelButton, 9, 2, Qt::AlignCenter|Qt::AlignVCenter);
+  acceptButton = new QPushButton(tr("Ok"));
+  layout->addWidget(acceptButton, 9, 3, Qt::AlignCenter|Qt::AlignVCenter);
 }
 
 void QuteWidget::applyProperties()
 {
-  qDebug("QuteWidget::applyProperties() Not implemented yet.");
+  m_name = nameLineEdit->text();
+  QRect rect = QRect(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
+  setWidgetGeometry(rect);
+  qDebug("QuteWidget::applyProperties() Not fully implemented yet.");
+  emit(widgetChanged());
+}
+
+void QuteWidget::apply()
+{
+  applyProperties();
 }

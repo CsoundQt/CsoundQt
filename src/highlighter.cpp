@@ -200,7 +200,7 @@ void Highlighter::setLastRules()
   }
 
   QStringList headerPatterns;
-  headerPatterns << "\\bsr\\b" << "\\bkr\\b" << "\\bksmps\\b" << "\\bnchnls\\b";
+  headerPatterns << "\\bsr\\b" << "\\bkr\\b" << "\\bksmps\\b" << "\\bnchnls\\b" << "\\b0dbfs\\b";
   csdtagFormat.setForeground(QColor("brown"));
   csdtagFormat.setFontWeight(QFont::Bold);
   foreach (QString pattern, headerPatterns) {
