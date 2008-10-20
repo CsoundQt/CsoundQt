@@ -47,13 +47,23 @@ class WidgetPanel : public QDockWidget
     QVector<QuteWidget *> widgets;
     QWidget *layoutWidget;
 
-    QAction *createSlider;
-    QAction *createLabel;
+    QPoint currentPosition;
+    QAction *createSliderAct;
+    QAction *createLabelAct;
+
+
+	int createSlider(int x, int y, int width, int height, QString widgetLine);
+	int createLabel(int x, int y, int width, int height, QString widgetLine);
 
     virtual void closeEvent(QCloseEvent * event);
 
   public slots:
     void widgetChanged();
+	
+	void deleteWidget(QuteWidget *widget);
+	
+	void createLabel();
+	void createSlider();
 
   signals:
     void widgetsChanged(QString text);

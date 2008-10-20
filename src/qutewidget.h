@@ -49,7 +49,7 @@ class QuteWidget : public QWidget
     widgetType type() {return m_type;}
     const QString name() {return m_name;}
 
-    void setWidgetLine(QString line);
+    virtual void setWidgetLine(QString line);
     void setChannelName(QString name);
     void setWidgetGeometry(int x, int y, int w, int h);
     void setWidgetGeometry(QRect rect);
@@ -65,9 +65,8 @@ class QuteWidget : public QWidget
     virtual void applyProperties();
 
   protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event);
-
     widgetType m_type;
+    QString m_line;
     QWidget *m_layoutWidget;
     QWidget *m_widget;
     QDialog *dialog;
@@ -78,15 +77,18 @@ class QuteWidget : public QWidget
 //     double m_min2,m_max2;
     double m_value, m_value2;
 
+    virtual void contextMenuEvent(QContextMenuEvent *event);
+
   private:
     QAction *propertiesAct;
-    QString m_line;
+    QAction *deleteAct;
 
     QSpinBox *xSpinBox;
     QSpinBox *ySpinBox;
     QSpinBox *wSpinBox;
     QSpinBox *hSpinBox;
     QLineEdit *nameLineEdit;
+    QPushButton *applyButton;
     QPushButton *cancelButton;
     QPushButton *acceptButton;
 
@@ -96,9 +98,11 @@ class QuteWidget : public QWidget
   private slots:
     void apply();
     void openProperties();
+	void deleteWidget();
 
   signals:
     void widgetChanged();
+	void deleteThisWidget(QuteWidget *thisWidget);
 };
 
 #endif

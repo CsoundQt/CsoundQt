@@ -30,6 +30,10 @@ QuteWidget::QuteWidget(QWidget *parent, widgetType type):
   propertiesAct->setShortcut(tr("Alt+P"));
   propertiesAct->setStatusTip(tr("Open widget properties"));
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(openProperties()));
+
+  deleteAct = new QAction(/*QIcon(":/images/gtk-new.png"),*/ tr("Delete"), this);
+  deleteAct->setStatusTip(tr("Delete this widget"));
+  connect(deleteAct, SIGNAL(triggered()), this, SLOT(deleteWidget()));
 }
 
 
@@ -107,6 +111,8 @@ void QuteWidget::popUpMenu(QPoint pos)
 {
   QMenu menu(this);
   menu.addAction(propertiesAct);
+  menu.addSeparator();
+  menu.addAction(deleteAct);
 //   menu.addAction(copyAct);
 //   menu.addAction(pasteAct);
   menu.exec(pos);
@@ -119,8 +125,15 @@ void QuteWidget::openProperties()
 
   connect(acceptButton, SIGNAL(released()), dialog, SLOT(accept()));
   connect(dialog, SIGNAL(accepted()), this, SLOT(apply()));
+  connect(applyButton, SIGNAL(released()), this, SLOT(apply()));
   connect(cancelButton, SIGNAL(released()), dialog, SLOT(close()));
   dialog->exec();
+}
+
+void QuteWidget::deleteWidget()
+{
+qDebug("QuteWidget::deleteWidget()");
+  emit(deleteThisWidget(this));
 }
 
 void QuteWidget::createPropertiesDialog()
@@ -172,6 +185,8 @@ void QuteWidget::createPropertiesDialog()
   layout->addWidget(label, 3, 0, Qt::AlignLeft|Qt::AlignVCenter);
   nameLineEdit = new QLineEdit(getChannelName(), dialog);
   layout->addWidget(nameLineEdit, 3, 1, Qt::AlignRight|Qt::AlignVCenter);
+  applyButton = new QPushButton(tr("Apply"));
+  layout->addWidget(applyButton, 9, 1, Qt::AlignCenter|Qt::AlignVCenter);
   cancelButton = new QPushButton(tr("Cancel"));
   layout->addWidget(cancelButton, 9, 2, Qt::AlignCenter|Qt::AlignVCenter);
   acceptButton = new QPushButton(tr("Ok"));

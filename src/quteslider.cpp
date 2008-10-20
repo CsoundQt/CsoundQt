@@ -53,6 +53,11 @@ void QuteSlider::setValue(double value)
   ((QSlider *)m_widget)->setValue(val);
 }
 
+void QuteSlider::setWidgetLine(QString line)
+{
+  m_line = line;
+}
+
 QString QuteSlider::getWidgetLine()
 {
   QString line = "ioSlider {" + QString::number(x()) + ", " + QString::number(y()) + "} ";

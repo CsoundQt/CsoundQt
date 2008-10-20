@@ -32,7 +32,7 @@ class QuteSlider : public QuteWidget
     double getValue();
     void setRange(int min, int max);
     void setValue(double value);
-
+    virtual void setWidgetLine(QString line);
     QString getWidgetLine();
     virtual void createPropertiesDialog();
     virtual void applyProperties();

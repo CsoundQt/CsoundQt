@@ -32,8 +32,10 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   layoutWidget = new QWidget(this);
   layoutWidget->setGeometry(QRect(0, 0, 800, 600));
   layoutWidget->setAutoFillBackground(true);
-  createSlider = new QAction(tr("Create Slider"),this);
-  createLabel = new QAction(tr("Create Label"),this);
+  createSliderAct = new QAction(tr("Create Slider"),this);
+  connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createSlider()));
+  createLabelAct = new QAction(tr("Create Label"),this);
+  connect(createLabelAct, SIGNAL(triggered()), this, SLOT(createLabel()));
 
   setWidget(layoutWidget);
   resize(200, 100);
@@ -75,7 +77,7 @@ int WidgetPanel::loadWidgets(QString macWidgets)
 int WidgetPanel::newWidget(QString widgetLine)
 {
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-  QStringList quoteParts = widgetLine.split('"');
+  QStringList quoteParts = widgetLine.split('"'); //Remove this line whe not needed
   if (parts.size()<5)
     return -1;
   if (parts[0]=="ioView") {
@@ -94,65 +96,11 @@ int WidgetPanel::newWidget(QString widgetLine)
     width = parts[3].toInt();
     height = parts[4].toInt();
     if (parts[0]=="ioSlider") {
-      qDebug("ioSlider x=%i y=%i w=%i h=%i", x,y, width, height);
-      QuteSlider *widget= new QuteSlider(layoutWidget);
-      widget->setWidgetLine(widgetLine);
-      widget->setWidgetGeometry(x,y,width, height);
-      widget->show();
-      widgets.append(widget);
-      widget->setRange(parts[5].toDouble(), parts[6].toDouble());
-      widget->setValue(parts[7].toDouble());
-      if (parts.size()>8) {
-        int i=8;
-        QString channelName = "";
-        while (parts.size()>i) {
-          channelName += parts[i] + " ";
-          i++;
-        }
-        channelName.chop(1);  //remove last space
-        widget->setChannelName(channelName);
-      }
-      connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+	  return createSlider(x,y,width,height, widgetLine);
     }
     else if (parts[0]=="ioText") {
       if (parts[5]=="label") {
-        if (parts.size()<20 or quoteParts.size()>5)
-          return -1;
-        QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-        if (lastParts.size() < 9)
-          return -1;
-        QuteText *widget= new QuteText(layoutWidget);
-        widget->setWidgetLine(widgetLine);
-        widget->setWidgetGeometry(x,y,width, height);
-        widget->setResolution(parts[7].toDouble());
-        widget->setChannelName(quoteParts[1]);
-        if (parts[8] == "left")
-          widget->setAlignment(Qt::AlignLeft);
-        else if (parts[8] == "center")
-          widget->setAlignment(Qt::AlignCenter);
-        else if (parts[8] == "right")
-          widget->setAlignment(Qt::AlignRight);
-        widget->setFont(quoteParts[3]);
-        widget->setFontSize(lastParts[0].toInt());
-        widget->setTextColor(QColor(lastParts[1].toDouble()/256.0,
-                         lastParts[2].toDouble()/256.0,
-                         lastParts[3].toDouble()/256.0));
-        widget->setBgColor(QColor(lastParts[4].toDouble()/256.0,
-                           lastParts[5].toDouble()/256.0,
-                               lastParts[6].toDouble()/256.0));
-        widget->setBg(lastParts[7] == "background");
-        widget->setBorder(lastParts[8] == "border");
-        QString labelText = "";
-        int i = 9;
-        while (lastParts.size() > i) {
-          labelText += lastParts[i] + " ";
-          i++;
-        }
-        labelText.chop(1);
-        widget->setText(labelText);
-        widget->show();
-        widgets.append(widget);
-        connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+        return createLabel(x,y,width,height, widgetLine);
       }
       else if (parts[5]=="edit") {
         QuteWidget *widget= new QuteWidget(this, QUTE_LINEEDIT);
@@ -272,7 +220,7 @@ int WidgetPanel::clearWidgets()
   return 0;
 }
 
-void WidgetPanel::closeEvent(QCloseEvent * event)
+void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 {
   emit Close(false);
 }
@@ -287,14 +235,108 @@ QString WidgetPanel::widgetsText()
   return text;
 }
 
+void WidgetPanel::deleteWidget(QuteWidget *widget)
+{
+  int number = widgets.indexOf(widget);
+  
+  qDebug("WidgetPanel::deleteWidget %i", number);
+  widgets.remove(number);
+  widget->close();
+  widgetChanged();
+}
+
 void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 {
-//   
-//   popUpMenu(event->globalPos());
+  QMenu menu;
+  menu.addAction(createSliderAct);
+  menu.addAction(createLabelAct);
+  currentPosition = event->pos();
+  menu.exec(event->globalPos());
 }
 
 void WidgetPanel::widgetChanged()
 {
   QString text = widgetsText();
   emit widgetsChanged(text);
+}
+
+int WidgetPanel::createSlider(int x, int y, int width, int height, QString widgetLine)
+{
+  qDebug("ioSlider x=%i y=%i w=%i h=%i", x,y, width, height);
+  QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  QuteSlider *widget= new QuteSlider(layoutWidget);
+  widget->setWidgetLine(widgetLine);
+  widget->setWidgetGeometry(x,y,width, height);
+  widget->setRange(parts[5].toDouble(), parts[6].toDouble());
+  widget->setValue(parts[7].toDouble());
+  if (parts.size()>8) {
+	int i=8;
+	QString channelName = "";
+	while (parts.size()>i) {
+	  channelName += parts[i] + " ";
+	  i++;
+	}
+	channelName.chop(1);  //remove last space
+	widget->setChannelName(channelName);
+  }
+  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  widgets.append(widget);
+  widget->show();
+}
+
+int WidgetPanel::createLabel(int x, int y, int width, int height, QString widgetLine)
+{
+  QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  QStringList quoteParts = widgetLine.split('"');
+if (parts.size()<20 or quoteParts.size()>5)
+  return -1;
+QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+if (lastParts.size() < 9)
+  return -1;
+QuteText *widget= new QuteText(layoutWidget);
+widget->setWidgetLine(widgetLine);
+widget->setWidgetGeometry(x,y,width, height);
+widget->setResolution(parts[7].toDouble());
+widget->setChannelName(quoteParts[1]);
+if (parts[8] == "left")
+  widget->setAlignment(Qt::AlignLeft);
+else if (parts[8] == "center")
+  widget->setAlignment(Qt::AlignCenter);
+else if (parts[8] == "right")
+  widget->setAlignment(Qt::AlignRight);
+widget->setFont(quoteParts[3]);
+widget->setFontSize(lastParts[0].toInt());
+widget->setTextColor(QColor(lastParts[1].toDouble()/256.0,
+				 lastParts[2].toDouble()/256.0,
+				 lastParts[3].toDouble()/256.0));
+widget->setBgColor(QColor(lastParts[4].toDouble()/256.0,
+				   lastParts[5].toDouble()/256.0,
+					   lastParts[6].toDouble()/256.0));
+widget->setBg(lastParts[7] == "background");
+widget->setBorder(lastParts[8] == "border");
+QString labelText = "";
+int i = 9;
+while (lastParts.size() > i) {
+  labelText += lastParts[i] + " ";
+  i++;
+}
+labelText.chop(1);
+widget->setText(labelText);
+connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+widgets.append(widget);
+widget->show();
+
+}
+
+void WidgetPanel::createSlider()
+{
+  createSlider(currentPosition.x(), currentPosition.y(), 20, 100, QString("ioSlider {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y()) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(widgets.size())));
+}
+
+void WidgetPanel::createLabel()
+{
+  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y()) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Lucida Grande\" 10 {0, 0, 0} {65535, 65535, 65535} nobackground border New Label";
+  createLabel(currentPosition.x(), currentPosition.y(), 80, 25, line);
 }
