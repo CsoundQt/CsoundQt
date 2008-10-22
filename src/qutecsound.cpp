@@ -682,13 +682,19 @@ void qutecsound::documentWasModified()
 void qutecsound::syntaxCheck()
 {
   QTextCursor cursor = textEdit->textCursor();
-  cursor.select(QTextCursor::WordUnderCursor);
-  QString opcodeName = cursor.selectedText();
-  if (opcodeName=="")
-    return;
-  QString syntax = opcodeTree->getSyntax(opcodeName);
-//   qDebug("syntax %s",syntax.toStdString().c_str());
-  statusBar()->showMessage(syntax, 20000);
+  cursor.select(QTextCursor::LineUnderCursor);
+  QStringList words = cursor.selectedText().split(QRegExp("\\b"));
+  foreach( QString word, words) {
+       // We need to remove all not possibly opcode
+    word.remove(QRegExp("[^\\d\\w]"));
+    if(word=="")
+      continue;
+    QString syntax = opcodeTree->getSyntax(word);
+    if(syntax!="") {
+      statusBar()->showMessage(syntax, 20000);
+      return;
+    }
+  }
 }
 
 void qutecsound::autoComplete()
@@ -1336,7 +1342,8 @@ bool qutecsound::maybeSave()
     if (documentPages[i]->document()->isModified()) {
       documentTabs->setCurrentIndex(i);
       changePage(i);
-      QString message = tr("The document ") + documentPages[i]->fileName
+      QString message = tr("The document ")
+          + (documentPages[i]->fileName != "" ? documentPages[i]->fileName: "untitled.csd")
           + tr("\nhas been modified.\nDo you want to save the changes before closing?");
       int ret = QMessageBox::warning(this, tr("QuteCsound"),
                                      message,
