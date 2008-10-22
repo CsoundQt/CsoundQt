@@ -238,7 +238,6 @@ QString WidgetPanel::widgetsText()
 void WidgetPanel::deleteWidget(QuteWidget *widget)
 {
   int number = widgets.indexOf(widget);
-  
   qDebug("WidgetPanel::deleteWidget %i", number);
   widgets.remove(number);
   widget->close();
@@ -270,64 +269,65 @@ int WidgetPanel::createSlider(int x, int y, int width, int height, QString widge
   widget->setRange(parts[5].toDouble(), parts[6].toDouble());
   widget->setValue(parts[7].toDouble());
   if (parts.size()>8) {
-	int i=8;
-	QString channelName = "";
-	while (parts.size()>i) {
-	  channelName += parts[i] + " ";
-	  i++;
-	}
-	channelName.chop(1);  //remove last space
-	widget->setChannelName(channelName);
+    int i=8;
+    QString channelName = "";
+    while (parts.size()>i) {
+      channelName += parts[i] + " ";
+      i++;
+    }
+    channelName.chop(1);  //remove last space
+    widget->setChannelName(channelName);
   }
   connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   widgets.append(widget);
   widget->show();
+  return 1;
 }
 
 int WidgetPanel::createLabel(int x, int y, int width, int height, QString widgetLine)
 {
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
-if (parts.size()<20 or quoteParts.size()>5)
-  return -1;
-QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-if (lastParts.size() < 9)
-  return -1;
-QuteText *widget= new QuteText(layoutWidget);
-widget->setWidgetLine(widgetLine);
-widget->setWidgetGeometry(x,y,width, height);
-widget->setResolution(parts[7].toDouble());
-widget->setChannelName(quoteParts[1]);
-if (parts[8] == "left")
-  widget->setAlignment(Qt::AlignLeft);
-else if (parts[8] == "center")
-  widget->setAlignment(Qt::AlignCenter);
-else if (parts[8] == "right")
-  widget->setAlignment(Qt::AlignRight);
-widget->setFont(quoteParts[3]);
-widget->setFontSize(lastParts[0].toInt());
-widget->setTextColor(QColor(lastParts[1].toDouble()/256.0,
-				 lastParts[2].toDouble()/256.0,
-				 lastParts[3].toDouble()/256.0));
-widget->setBgColor(QColor(lastParts[4].toDouble()/256.0,
-				   lastParts[5].toDouble()/256.0,
-					   lastParts[6].toDouble()/256.0));
-widget->setBg(lastParts[7] == "background");
-widget->setBorder(lastParts[8] == "border");
-QString labelText = "";
-int i = 9;
-while (lastParts.size() > i) {
-  labelText += lastParts[i] + " ";
-  i++;
-}
-labelText.chop(1);
-widget->setText(labelText);
-connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
-connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-widgets.append(widget);
-widget->show();
-
+  if (parts.size()<20 or quoteParts.size()>5)
+    return -1;
+  QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  if (lastParts.size() < 9)
+    return -1;
+  QuteText *widget= new QuteText(layoutWidget);
+  widget->setWidgetLine(widgetLine);
+  widget->setWidgetGeometry(x,y,width, height);
+  widget->setResolution(parts[7].toDouble());
+  widget->setChannelName(quoteParts[1]);
+  if (quoteParts[2] == " left ")
+    widget->setAlignment(0);
+  else if (quoteParts[2] == " center ")
+    widget->setAlignment(1);
+  else if (quoteParts[2] == " right ")
+    widget->setAlignment(2);
+  widget->setFont(quoteParts[3]);
+  widget->setFontSize(lastParts[0].toInt());
+  widget->setTextColor(QColor(lastParts[1].toDouble()/256.0,
+                       lastParts[2].toDouble()/256.0,
+                                             lastParts[3].toDouble()/256.0));
+  widget->setBgColor(QColor(lastParts[4].toDouble()/256.0,
+                     lastParts[5].toDouble()/256.0,
+                                           lastParts[6].toDouble()/256.0));
+  widget->setBg(lastParts[7] == "background");
+  widget->setBorder(lastParts[8] == "border");
+  QString labelText = "";
+  int i = 9;
+  while (lastParts.size() > i) {
+    labelText += lastParts[i] + " ";
+    i++;
+  }
+  labelText.chop(1);
+  widget->setText(labelText);
+  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  widgets.append(widget);
+  widget->show();
+  return 1;
 }
 
 void WidgetPanel::createSlider()

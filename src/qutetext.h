@@ -52,6 +52,7 @@ class QuteText : public QuteWidget
 //     int m_alignment;
     QString m_font;
     int m_fontSize;
+    QString m_text;
 //     QColor m_textColor;
 //     QColor m_bgColor;
 //     bool m_bg;
@@ -62,6 +63,9 @@ class QuteText : public QuteWidget
     QPushButton *bgColor;
     QCheckBox *bg;
     QCheckBox *border;
+    QFontComboBox  *font;
+    QComboBox * fontSize;
+    QComboBox * alignment;
 
   private slots:
     void selectTextColor();

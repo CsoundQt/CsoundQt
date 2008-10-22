@@ -19,12 +19,24 @@
  ***************************************************************************/
 #include "qutetext.h"
 
+// Font point sizes equivalent for html
+// This seems necessary since qt rich text
+// only takes these values for font size
+#define QUTE_XXSMALL 4
+#define QUTE_XSMALL 6
+#define QUTE_SMALL 8
+#define QUTE_MEDIUM 10
+#define QUTE_LARGE 14
+#define QUTE_XLARGE 20
+#define QUTE_XXLARGE 24
+
 QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 {
   m_value = 0.0;
   m_widget = new QuteLabel(this);
   ((QuteLabel *)m_widget)->setWordWrap (true);
   ((QuteLabel *)m_widget)->setMargin (5);
+  ((QuteLabel *)m_widget)->setTextFormat(Qt::RichText);
 //   ((QuteTextEdit *)m_widget)->setReadOnly(true);
 //   ((QuteTextEdit *)m_widget)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   connect(((QuteLabel *)m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
@@ -47,7 +59,22 @@ void QuteText::setResolution(double resolution)
 
 void QuteText::setAlignment(int alignment)
 {
-//   ((QLabel *)m_widget)->setAlignment(alignment);
+  qDebug("QuteText::setAlignment %i", alignment);
+  Qt::Alignment align;
+  switch (alignment) {
+    case 0:
+      align = Qt::AlignLeft;
+      break;
+    case 1:
+      align = Qt::AlignCenter;
+      break;
+    case 2:
+      align = Qt::AlignRight;
+      break;
+    default:
+      align = Qt::AlignLeft;
+  }
+   ((QLabel *)m_widget)->setAlignment(align);
 }
 
 void QuteText::setFont(QString font)
@@ -90,6 +117,24 @@ void QuteText::setBorder(bool border)
 
 void QuteText::setText(QString text)
 {
+  m_text = text;
+  int size;
+  if (m_fontSize >= QUTE_XXLARGE)
+    size = 7;
+  else if (m_fontSize >= QUTE_XLARGE)
+    size = 6;
+  else if (m_fontSize >= QUTE_LARGE)
+    size = 5;
+  else if (m_fontSize >= QUTE_MEDIUM)
+    size = 4;
+  else if (m_fontSize >= QUTE_SMALL)
+    size = 3;
+  else if (m_fontSize >= QUTE_XSMALL)
+    size = 2;
+  else
+    size = 1;
+  text.prepend("<font face=\"" + m_font + "\" size=\"" + QString::number(size) + "\">");
+  text.append("</font>");
   ((QuteLabel *)m_widget)->setText(text);
 }
 
@@ -101,21 +146,22 @@ QString QuteText::getWidgetLine()
   line += "label ";
   line += QString::number(m_value, 'f', 6) + " 0.00100 \"" + m_name + "\" ";
   QString alignment = "";
-//   switch (((QLabel *)m_widget)->alignment()) {
-//     case Qt:AlignLeft:
-//       alignment = "left";
-//       break;
-//     case Qt:AlignRight:
-//       alignment = "right";
-//       break;
-//     case Qt:AlignCenter:
-//       alignment = "center";
-//       break;
-//       //Another possibility is Qt::AlignJustify
-//     default:
-//       alignment = "left";
-//   }
-  line += "left \"Lucida Grande\" 10 ";
+  switch (((QuteLabel *)m_widget)->alignment()) {
+    case Qt::AlignLeft:
+      alignment = "left";
+      break;
+    case Qt::AlignCenter:
+      alignment = "center";
+      break;
+    case Qt::AlignRight:
+      alignment = "right";
+      break;
+      //Another possibility is Qt::AlignJustify
+    default:
+      alignment = "left";
+  }
+  line += alignment + " ";
+  line += "\"" + m_font + "\" " + QString::number(m_fontSize) + " ";
   QColor color = ((QuteLabel *) m_widget)->palette().color(QPalette::WindowText);
   line += "{" + QString::number(color.red() * 256)
       + ", " + QString::number(color.green() * 256)
@@ -127,7 +173,7 @@ QString QuteText::getWidgetLine()
   line += ((QuteLabel *)m_widget)->autoFillBackground()? "background ":"nobackground ";
   line += ((QuteLabel *)m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
 //   line += ((QuteLabel *)m_widget)->toPlainText();
-  line += ((QuteLabel *)m_widget)->text();
+  line += m_text;
   qDebug("QuteSlider::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
@@ -142,7 +188,7 @@ void QuteText::createPropertiesDialog()
   layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
   text = new QLineEdit(dialog);
 //   text->setText(((QuteLabel *)m_widget)->toPlainText());
-  text->setText(((QuteLabel *)m_widget)->text());
+  text->setText(m_text);
   layout->addWidget(text, 4,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
   text->setMinimumWidth(320);
   label = new QLabel(dialog);
@@ -172,15 +218,71 @@ void QuteText::createPropertiesDialog()
   border = new QCheckBox("Border", dialog);
   border->setChecked(((QuteLabel *)m_widget)->frameShape() != QFrame::NoFrame);
   layout->addWidget(border, 6,2, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+  label->setText("Font");
+  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
+  font = new QFontComboBox(dialog);
+  font->setCurrentFont(QFont(m_font));
+  layout->addWidget(font, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+  label->setText("Font Size");
+  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+  fontSize = new QComboBox(dialog);
+  fontSize->addItem("XX-Small", QVariant((int) QUTE_XXSMALL));
+  fontSize->addItem("X-Small", QVariant((int) QUTE_XSMALL));
+  fontSize->addItem("Small", QVariant((int) QUTE_SMALL));
+  fontSize->addItem("Medium", QVariant((int) QUTE_MEDIUM));
+  fontSize->addItem("Large", QVariant((int) QUTE_LARGE));
+  fontSize->addItem("X-Large", QVariant((int) QUTE_XLARGE));
+  fontSize->addItem("XX-Large", QVariant((int) QUTE_XXLARGE));
+  int i = m_fontSize;
+  int index = -1;
+  while (i > 0 and index == -1) {
+    index = fontSize->findData(i);
+    i--;
+  }
+  if (index == -1)
+    index = 0;
+  fontSize->setCurrentIndex(index);
+  layout->addWidget(fontSize,7, 1, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+  label->setText("Alignment");
+  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
+  alignment = new QComboBox(dialog);
+  alignment->addItem("Left");
+  alignment->addItem("Center");
+  alignment->addItem("Right");
+  int align;
+  switch (((QLabel *)m_widget)->alignment()) {
+    case Qt::AlignLeft:
+      align = 0;
+      break;
+    case Qt::AlignCenter:
+      align = 1;
+      break;
+    case Qt::AlignRight:
+      align = 2;
+      break;
+    default:
+      align = 0;
+  }
+  alignment->setCurrentIndex(align);
+  layout->addWidget(alignment,7, 3, Qt::AlignLeft|Qt::AlignVCenter);
   connect(bgColor, SIGNAL(released()), this, SLOT(selectBgColor()));
-
 }
 
 void QuteText::applyProperties()
 {
-  ((QuteLabel *)m_widget)->setText(text->text());
+  m_font = font->currentFont().family();
+  m_fontSize = fontSize->itemData(fontSize->currentIndex()).toInt();
+//   ((QuteLabel *)m_widget)->setText(text->text());
+  setText(text->text());
   ((QuteLabel *)m_widget)->setAutoFillBackground(bg->isChecked());
   ((QuteLabel *)m_widget)->setFrameShape(border->isChecked()?  QFrame::Box : QFrame::NoFrame);
+  setAlignment(alignment->currentIndex());
 //   ((QuteLabel *)m_widget)->setPlainText(text->text());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
