@@ -174,7 +174,7 @@ QString QuteText::getWidgetLine()
   line += ((QuteLabel *)m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
 //   line += ((QuteLabel *)m_widget)->toPlainText();
   line += m_text;
-  qDebug("QuteSlider::getWidgetLine() %s", line.toStdString().c_str());
+  qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
 

@@ -47,4 +47,5 @@ ioSlider {85, 5} {20, 100} 0.000000 1.000000 0.000000 slider3
 ioSlider {125, 5} {20, 100} 0.000000 1.000000 0.000000 slider4
 ioSlider {165, 5} {20, 100} 0.000000 1.000000 0.000000 slider5
 ioText {200, 5} {140, 100} label 0.000000 0.001000 "chann" left "Lucida Grande" 6 {0, 0, 0} {65535, 65535, 65535} nobackground border Receive the values from widgets using chnget. Change a widget's properties by right-clicking.
+ioButton {5, 140} {100, 30} event 1.000000 "button1" "Button 1" "/" i1 0 10
 </MacGUI>

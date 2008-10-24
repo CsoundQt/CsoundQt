@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andres Cabrera   *
- *   mantaraya36@gmail.com   *
+ *   Copyright (C) 2008 by Andres Cabrera                                  *
+ *   mantaraya36@gmail.com                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,62 +17,45 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef WIDGETPANEL_H
-#define WIDGETPANEL_H
+#ifndef QUTEBUTTON_H
+#define QUTEBUTTON_H
 
-#include <QDockWidget>
+#include "qutewidget.h"
 
-#define QUTECSOUND_MAX_EVENTS 32
-
-class QuteWidget;
-
-class WidgetPanel : public QDockWidget
+class QuteButton : public QuteWidget
 {
   Q_OBJECT
   public:
-    WidgetPanel(QWidget *parent);
-    ~WidgetPanel();
+    QuteButton(QWidget *parent);
 
-    unsigned int widgetCount();
-    void getValues(QVector<QString> *channelNames, QVector<double> *values);
-    int loadWidgets(QString macWidgets);
-    int newWidget(QString widgetLine);
-    int clearWidgets();
-    QString widgetsText();
+    ~QuteButton();
 
-    QVector<QString> eventQueue;
-    int eventQueueSize;
+    virtual void setValue(double value); // Value of button when pressed
+    virtual double getValue(); // This value represents the state of the button
+    virtual QString getWidgetLine();
+    virtual void applyProperties();
+    virtual void createPropertiesDialog();
+//     virtual void setWidgetLine(QString line);
+    void setText(QString text);
+    void setEventLine(QString eventLine);
+    void popUpMenu(QPoint pos);
 
   protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event);
+    virtual void contextMenuEvent(QContextMenuEvent* event);
 
   private:
-    QVector<QuteWidget *> widgets;
-    QWidget *layoutWidget;
+    QString m_eventLine;
+    QString m_file;
 
-    QPoint currentPosition;
-    QAction *createSliderAct;
-    QAction *createLabelAct;
+    QDoubleSpinBox *valueBox;
+    QLineEdit *text;
+    QLineEdit *line;
 
-
-    int createSlider(int x, int y, int width, int height, QString widgetLine);
-    int createLabel(int x, int y, int width, int height, QString widgetLine);
-    int createButton(int x, int y, int width, int height, QString widgetLine);
-
-    virtual void closeEvent(QCloseEvent * event);
-
-  public slots:
-    void widgetChanged();
-    void deleteWidget(QuteWidget *widget);
-    void queueEvent(QString eventLine);
-    void createLabel();
-    void createSlider();
-    void createButton();
+  private slots:
+    void buttonReleased();
 
   signals:
-    void widgetsChanged(QString text);
-    void Close(bool visible);
-
+    void queueEvent(QString eventLine);
 };
 
 #endif

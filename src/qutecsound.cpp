@@ -171,6 +171,7 @@ void qutecsound::changeFont()
 
 void qutecsound::changePage(int index)
 {
+  stop();
   textEdit = documentPages[index];
   m_highlighter->setColorVariables(m_options->colorVariables);
   m_highlighter->setDocument(textEdit->document());
@@ -461,7 +462,7 @@ void qutecsound::play(bool realtime)
 //       if (!csound) {
         csound=csoundCreate(0);
         //TODO make sure csound has been freed when switched from non threaded
-//         csoundSetIsGraphable(csound, 1);
+//         csoundSetIsGraphable(csound, 0);
         ud->csound = csound;
         ud->realtime = realtime;
 //       }
@@ -469,7 +470,8 @@ void qutecsound::play(bool realtime)
     else {
       //TODO make sure that csound has been freed from threaded operation
 //       if (!csound) {
-        csound=csoundCreate(0);
+      csound=csoundCreate(0);
+//       csoundSetIsGraphable(csound, 1);
 //         qDebug("Message level = %i", csoundGetMessageLevel(csound));
 //       }
     }
@@ -1182,8 +1184,13 @@ void qutecsound::readSettings()
   m_options->HwBufferSize = settings.value("HwBufferSize", 1024).toInt();
   m_options->HwBufferSizeActive = settings.value("HwBufferSizeActive", false).toInt();
   m_options->dither = settings.value("dither", false).toBool();
-  m_options->additionalFlags = settings.value("additionalFlags", "").toString();
+  m_options->additionalFlags = settings.value("additionalFlags", "-d").toString();
+  // Suppress displays for Mac by default as it crashes running in a separate thread.
+#ifdef MACOSX
+  m_options->additionalFlagsActive = settings.value("additionalFlagsActive", true).toBool();
+#else
   m_options->additionalFlagsActive = settings.value("additionalFlagsActive", false).toBool();
+#endif
   m_options->fileOverrideOptions = settings.value("fileOverrideOptions", true).toBool();
   m_options->fileAskFilename = settings.value("fileAskFilename", false).toBool();
   m_options->filePlayFinished = settings.value("filePlayFinished", false).toBool();
@@ -1599,6 +1606,20 @@ uintptr_t qutecsound::csThread(void *data)
           {
     //           qDebug("%s-%i", values[i].first.toStdString().c_str(), values[i].second);
             *pvalue = (MYFLT) values[i];
+          }
+          while (udata->qcs->widgetPanel->eventQueueSize > 0) {
+            udata->qcs->widgetPanel->eventQueueSize--;
+            udata->qcs->widgetPanel->eventQueue[udata->qcs->widgetPanel->eventQueueSize];
+            char type = udata->qcs->widgetPanel->eventQueue[udata->qcs->widgetPanel->eventQueueSize][0].unicode();
+            QStringList eventElements = udata->qcs->widgetPanel->eventQueue[udata->qcs->widgetPanel->eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts);
+//             qDebug("type %c line: %s", type, udata->qcs->widgetPanel->eventQueue[udata->qcs->widgetPanel->eventQueueSize].toStdString().c_str());
+            MYFLT pFields[eventElements.size()];
+            for (int j = 0; j < eventElements.size(); j++) {
+              qDebug("%f", eventElements[j].toDouble());
+              pFields[j] = (MYFLT) eventElements[j].toDouble();
+            }
+            csoundScoreEvent(udata->csound,type ,pFields, eventElements.size());
+
           }
         }
       }

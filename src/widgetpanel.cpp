@@ -21,8 +21,8 @@
 #include "qutewidget.h"
 #include "quteslider.h"
 #include "qutetext.h"
+#include "qutebutton.h"
 
-#include <QSlider>
 
 WidgetPanel::WidgetPanel(QWidget *parent)
   : QDockWidget(parent)
@@ -39,6 +39,9 @@ WidgetPanel::WidgetPanel(QWidget *parent)
 
   setWidget(layoutWidget);
   resize(200, 100);
+
+  eventQueue.resize(QUTECSOUND_MAX_EVENTS);
+  eventQueueSize = 0;
 }
 
 WidgetPanel::~WidgetPanel()
@@ -108,7 +111,7 @@ int WidgetPanel::newWidget(QString widgetLine)
         widget->setWidgetGeometry(x,y,width, height);
         widget->show();
         widgets.append(widget);
-        connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+//         connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
       }
       else if (parts[5]=="display") {
         QuteWidget *widget= new QuteWidget(this, QUTE_DISPLAY);
@@ -116,7 +119,7 @@ int WidgetPanel::newWidget(QString widgetLine)
         widget->setWidgetGeometry(x,y,width, height);
         widget->show();
         widgets.append(widget);
-        connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+//         connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
       }
       else if (parts[5]=="scrolleditnum") {
         QuteWidget *widget= new QuteWidget(this, QUTE_SCROLLNUMBER);
@@ -124,8 +127,11 @@ int WidgetPanel::newWidget(QString widgetLine)
         widget->setWidgetGeometry(x,y,width, height);
         widget->show();
         widgets.append(widget);
-        connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+//         connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
       }
+    }
+    else if (parts[0]=="ioButton") {
+      return createButton(x,y,width,height, widgetLine);
     }
     else if (parts[0]=="ioKnob") {
       QuteWidget *widget= new QuteWidget(this, QUTE_KNOB);
@@ -133,20 +139,20 @@ int WidgetPanel::newWidget(QString widgetLine)
       widget->setWidgetGeometry(x,y,width, height);
       widget->show();
       widgets.append(widget);
-      widget->setRange(parts[5].toDouble(), parts[6].toDouble());
-      widget->setResolution(parts[7].toDouble());
-      widget->setValue(parts[8].toDouble());
-      if (parts.size()>9) {
-        int i=9;
-        QString channelName = "";
-        while (parts.size()>i) {
-          channelName += parts[i] + " ";
-          i++;
-        }
-        channelName.chop(1);  //remove last space
-        widget->setChannelName(channelName);
-      }
-      connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+//       widget->setRange(parts[5].toDouble(), parts[6].toDouble());
+//       widget->setResolution(parts[7].toDouble());
+//       widget->setValue(parts[8].toDouble());
+//       if (parts.size()>9) {
+//         int i=9;
+//         QString channelName = "";
+//         while (parts.size()>i) {
+//           channelName += parts[i] + " ";
+//           i++;
+//         }
+//         channelName.chop(1);  //remove last space
+//         widget->setChannelName(channelName);
+//       }
+//       connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
     }
     else if (parts[0]=="ioCheckbox") {
       QuteWidget *widget= new QuteWidget(this, QUTE_CHECKBOX);
@@ -154,35 +160,18 @@ int WidgetPanel::newWidget(QString widgetLine)
       widget->setWidgetGeometry(x,y,width, height);
       widget->show();
       widgets.append(widget);
-      widget->setChecked(parts[5]=="on");
-      if (parts.size()>5) {
-        int i=5;
-        QString channelName = "";
-        while (parts.size()>i) {
-          channelName += parts[i] + " ";
-          i++;
-        }
-        channelName.chop(1);  //remove last space
-        widget->setChannelName(channelName);
-      }
-      connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
-    }
-    else if (parts[0]=="ioButton") {
-      QuteWidget *widget= new QuteWidget(this, QUTE_BUTTON);
-      widget->setWidgetLine(widgetLine);
-      widget->setWidgetGeometry(x,y,width, height);
-      widget->show();
-      widgets.append(widget);
-//       widget->setType(parts[5]);
-      widget->setValue(parts[6].toDouble());  //value produced by button
-      widget->setChannelName(quoteParts[1]);
-//       widget->setText(quoteParts[3]);
-//       widget->setImage(quoteParts[5]);
-      if (quoteParts.size()>6) {
-        quoteParts[6].remove(0,1); //remove initial space
-        widget->setChannelName(quoteParts[6]);
-      }
-      connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+//       widget->setChecked(parts[5]=="on");
+//       if (parts.size()>5) {
+//         int i=5;
+//         QString channelName = "";
+//         while (parts.size()>i) {
+//           channelName += parts[i] + " ";
+//           i++;
+//         }
+//         channelName.chop(1);  //remove last space
+//         widget->setChannelName(channelName);
+//       }
+//       connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
     }
     else if (parts[0]=="ioMenu") {
       QuteWidget *widget= new QuteWidget(this, QUTE_COMBOBOX);
@@ -190,15 +179,15 @@ int WidgetPanel::newWidget(QString widgetLine)
       widget->setWidgetGeometry(x,y,width, height);
       widget->show();
       widgets.append(widget);
-      connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
-      widget->setValue(parts[5].toInt());  //current Menu item
-//       widget->setSize(parts[6].toInt());  // can be 201, 202, 203, 204, 205
-      QStringList items= quoteParts[1].split(","); // menu items
-    //TODO add menu items
-      if (quoteParts.size()>2) {
-        quoteParts[2].remove(0,1); //remove initial space
-        widget->setChannelName(quoteParts[2]);
-      }
+//       connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+//       widget->setValue(parts[5].toInt());  //current Menu item
+// //       widget->setSize(parts[6].toInt());  // can be 201, 202, 203, 204, 205
+//       QStringList items= quoteParts[1].split(","); // menu items
+//     //TODO add menu items
+//       if (quoteParts.size()>2) {
+//         quoteParts[2].remove(0,1); //remove initial space
+//         widget->setChannelName(quoteParts[2]);
+//       }
     }
     else if (parts[0]=="ioMeter") {
 //TODO implement MacCsound ioMeter
@@ -217,6 +206,7 @@ int WidgetPanel::clearWidgets()
     delete widget;
   }
   widgets.clear();
+  qDebug("WidgetPanel::clearWidgets()");
   return 0;
 }
 
@@ -242,6 +232,17 @@ void WidgetPanel::deleteWidget(QuteWidget *widget)
   widgets.remove(number);
   widget->close();
   widgetChanged();
+}
+
+void WidgetPanel::queueEvent(QString eventLine)
+{
+  qDebug("WidgetPanel::queueEvent %s", eventLine.toStdString().c_str());
+  if (eventQueueSize < QUTECSOUND_MAX_EVENTS) {
+    eventQueue[eventQueueSize] = eventLine;
+    eventQueueSize++;
+  }
+  else
+    qDebug("Warning: event queue full, event not processed");
 }
 
 void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
@@ -289,7 +290,7 @@ int WidgetPanel::createLabel(int x, int y, int width, int height, QString widget
 {
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
-  if (parts.size()<20 or quoteParts.size()>5)
+  if (parts.size()<20 or quoteParts.size()<5)
     return -1;
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   if (lastParts.size() < 9)
@@ -330,13 +331,49 @@ int WidgetPanel::createLabel(int x, int y, int width, int height, QString widget
   return 1;
 }
 
+int WidgetPanel::createButton(int x, int y, int width, int height, QString widgetLine)
+{
+  qDebug("WidgetPanel::createButton");
+  QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  QStringList quoteParts = widgetLine.split('"');
+//   if (parts.size()<20 or quoteParts.size()>5)
+//     return -1;
+  QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+//   if (lastParts.size() < 9)
+//     return -1;
+  QuteButton *widget= new QuteButton(this);
+  widget->setWidgetLine(widgetLine);
+  widget->setWidgetGeometry(x,y,width, height);
+  widget->show();
+  widgets.append(widget);
+//       widget->setType(parts[5]);
+  widget->setValue(parts[6].toDouble());  //value produced by button
+  widget->setChannelName(quoteParts[1]);
+  widget->setText(quoteParts[3]);
+//       widget->setImage(quoteParts[5]);
+  if (quoteParts.size()>6) {
+    quoteParts[6].remove(0,1); //remove initial space
+    widget->setEventLine(quoteParts[6]);
+  }
+  connect(widget, SIGNAL(queueEvent(QString)), this, SLOT(queueEvent(QString)));
+  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+
+  return 1;
+}
+
 void WidgetPanel::createSlider()
 {
-  createSlider(currentPosition.x(), currentPosition.y(), 20, 100, QString("ioSlider {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y()) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(widgets.size())));
+  createSlider(currentPosition.x(), currentPosition.y() - 20, 20, 100, QString("ioSlider {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(widgets.size())));
 }
 
 void WidgetPanel::createLabel()
 {
-  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y()) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Lucida Grande\" 10 {0, 0, 0} {65535, 65535, 65535} nobackground border New Label";
-  createLabel(currentPosition.x(), currentPosition.y(), 80, 25, line);
+  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border New Label";
+  createLabel(currentPosition.x(), currentPosition.y() - 20, 80, 25, line);
+}
+
+void WidgetPanel::createButton()
+{
+  QString line = "ioButton {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 30} event 1.000000 \"button1\" \"New Button\" \"/\" i1 0 10";
+  createButton(currentPosition.x(), currentPosition.y() - 20, 80, 30, line);
 }
