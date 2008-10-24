@@ -411,6 +411,7 @@ void qutecsound::join()
 void qutecsound::play(bool realtime)
 {
   stop();
+  widgetPanel->eventQueueSize = 0; //Do not pass events gathered while idle
   if (documentPages[curPage]->fileName.isEmpty()) {
     if (!saveAs())
       return;
