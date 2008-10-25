@@ -15,8 +15,8 @@ outs aout, aout
 endin
 
 instr 2
-kamp  chnget  "slider1"
-kfreq  chnget  "slider2"
+kamp  invalue  "slider1"
+kfreq  invalue  "slider2"
 aout oscil kamp, kfreq, 1
 outs aout, aout
 endin

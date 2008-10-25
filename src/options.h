@@ -46,6 +46,10 @@ class Options{
     bool rememberFile;
     bool saveWidgets;
 
+    bool enableWidgets;
+    bool invalueEnabled;
+    bool chngetEnabled;
+
     bool useAPI;
     bool thread;
 
@@ -68,7 +72,6 @@ class Options{
     QString fileOutputFilename;
 
     bool rtOverrideOptions;
-    bool rtEnableWidgets;
     int rtAudioModule;
     QString rtInputDevice;
     QString rtOutputDevice;

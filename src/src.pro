@@ -68,12 +68,10 @@ win32 {
     INCLUDEPATH += "C:\Archivos de programa\Csound\include"
     HEADERS += "C:\Archivos de programa\Csound\include\csound.h"
     build64 {
-        LIBS += "C:\Archivos de programa\Csound\bin\Csound64.dll.5.1" \
-	   "C:\Archivos de programa\Csound\bin\csnd.dll" 
+        LIBS += "C:\Archivos de programa\Csound\bin\Csound64.dll.5.1"
     }
     else {
-        LIBS += "C:\Archivos de programa\Csound\bin\Csound32.dll.5.1" \
-	   "C:\Archivos de programa\Csound\bin\csnd.dll" 
+        LIBS += "C:\Archivos de programa\Csound\bin\Csound32.dll.5.1"
     }
     RC_FILE = qutecsound.rc
 }
@@ -81,7 +79,6 @@ win32 {
 linux-g++ {
     DEFINES +=LINUX    
     INCLUDEPATH += /usr/local/include/csound/ /usr/include/csound/
-    LIBS += -lcsnd
     build64 {
         LIBS += -lcsound64
     }
@@ -103,7 +100,7 @@ macx {
     LIBS += -framework QtXml
     LIBS += -framework QtGui
     LIBS += -framework QtCore
-    LIBS += -framework $${MAC_LIB} -lcsnd
+    LIBS += -framework $${MAC_LIB}
     LIBS += -L/Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
     QMAKE_INFO_PLIST = MyInfo.plist
     ICON = ../images/qtcs.icns

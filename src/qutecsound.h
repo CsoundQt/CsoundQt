@@ -22,10 +22,7 @@
 #ifndef QUTECSOUND_H
 #define QUTECSOUND_H
 
-#include <QMainWindow>
-#include <QCloseEvent>
-#include <QTabWidget>
-
+#include <QtGui>
 #include <csound.h>
 
 #include "types.h"
@@ -58,13 +55,13 @@ class UtilitiesDialog;
 
 class qutecsound;
 
-struct csoundUserData{
+struct CsoundUserData{
   /*result of csoundCompile()*/
   int result;
   /*instance of csound*/
   CSOUND *csound;
   /*performance status*/
-  bool PERF_STATUS;
+  bool PERF_STATUS; //0= stopped 1=running
   bool realtime;
   /*pass main application to check widgets*/
   qutecsound *qcs;
@@ -83,6 +80,16 @@ class qutecsound:public QMainWindow
                                          const char *fmt,
                                          va_list args);
     static uintptr_t csThread(void *data);
+    static void outputValueCallback (CSOUND *csound,
+                                    const char *channelName,
+                                    MYFLT value);
+    static void inputValueCallback (CSOUND *csound,
+                                   const char *channelName,
+                                   MYFLT *value);
+    static void passWidgetValues(CsoundUserData *ud);
+
+    QVector<QString> channelNames;
+    QVector<double> values;
 
   public slots:
     void changeFont();
@@ -147,7 +154,7 @@ class qutecsound:public QMainWindow
 
     CSOUND *csound;
     void* ThreadID;
-    csoundUserData* ud;
+    CsoundUserData* ud;
 
 
     QTabWidget *documentTabs;
@@ -202,7 +209,6 @@ class qutecsound:public QMainWindow
     QAction *aboutQtAct;
 
     int curPage;
-//     QString curFile;
     QString lastUsedDir;
     QString lastFileDir;
     viewMode m_mode;
@@ -212,7 +218,6 @@ class qutecsound:public QMainWindow
 
     UtilitiesDialog *utilitiesDialog;
 
-    bool running;
     QIcon modIcon;
 
 #ifdef MACOSX

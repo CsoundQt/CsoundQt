@@ -51,6 +51,9 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   saveChangesCheckBox->setChecked(m_options->saveChanges);
   rememberFileCheckBox->setChecked(m_options->rememberFile);
   saveWidgetsCheckBox->setChecked(m_options->saveWidgets);
+  widgetsCheckBox->setChecked(m_options->enableWidgets);
+  invalueCheckBox->setChecked(m_options->invalueEnabled);
+  chngetCheckBox->setChecked(m_options->chngetEnabled);
 
   if (m_options->useAPI)
     ApiRadioButton->setChecked(true);
@@ -81,7 +84,6 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   OutputFilenameLineEdit->setText(m_options->fileOutputFilename);
   OutputFilenameLineEdit->setEnabled(m_options->fileOutputFilenameActive);
   RtOverrideCheckBox->setChecked(m_options->rtOverrideOptions);
-  widgetsCheckBox->setChecked(m_options->rtEnableWidgets);
   RtModuleComboBox->setCurrentIndex(m_options->rtAudioModule);
   RtInputLineEdit->setText(m_options->rtInputDevice);
   RtOutputLineEdit->setText(m_options->rtOutputDevice);
@@ -147,7 +149,9 @@ void ConfigDialog::accept()
   m_options->saveChanges = saveChangesCheckBox->isChecked();
   m_options->rememberFile = rememberFileCheckBox->isChecked();
   m_options->saveWidgets = saveWidgetsCheckBox->isChecked();
-  emit(changeFont());
+  m_options->enableWidgets = widgetsCheckBox->isChecked();
+  m_options->invalueEnabled = invalueCheckBox->isChecked();
+  m_options->chngetEnabled = chngetCheckBox->isChecked();
 
   m_options->useAPI = ApiRadioButton->isChecked();
   m_options->thread = threadCheckBox->isChecked();
@@ -168,7 +172,6 @@ void ConfigDialog::accept()
   m_options->fileOutputFilenameActive = OutputFilenameCheckBox->isChecked();
   m_options->fileOutputFilename = OutputFilenameLineEdit->text();
   m_options->rtOverrideOptions = RtOverrideCheckBox->isChecked();
-  m_options->rtEnableWidgets = widgetsCheckBox->isChecked();
   m_options->rtAudioModule = RtModuleComboBox->currentIndex();
   m_options->rtInputDevice = RtInputLineEdit->text();
   m_options->rtOutputDevice = RtOutputLineEdit->text();
@@ -195,6 +198,7 @@ void ConfigDialog::accept()
 //   m_options->browser = BrowserLineEdit->text();
   m_options->waveeditor = WaveEditorLineEdit->text();
   m_options->waveplayer = WavePlayerLineEdit->text();
+  emit(changeFont());
   QDialog::accept();
 }
 

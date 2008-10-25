@@ -18,13 +18,7 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-
 #include <QtGui>
-#include <QCloseEvent>
-#include <QFileDialog>
-
-#include <QTextEdit>
-#include <QTextCursor>
 
 #include "qutecsound.h"
 #include "console.h"
@@ -38,8 +32,6 @@
 #include "documentpage.h"
 #include "utilitiesdialog.h"
 #include "findreplace.h"
-
-//#include <string>
 
 #ifdef WIN32
 static const QString SCRIPT_NAME = "qutecsound_run_script.bat";
@@ -58,7 +50,6 @@ qutecsound::qutecsound(QString fileName)
   documentTabs = new QTabWidget (this);
   connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
   curPage = -1;
-  running = false;
   setCentralWidget(documentTabs);
 
   m_options = new Options();
@@ -90,7 +81,6 @@ qutecsound::qutecsound(QString fileName)
   createMenus();
   createToolBars();
   createStatusBar();
-
 
   fillFileMenu(); //Must be placed after readSettings to include recent Files
   if (m_options->opcodexmldir == "") {
@@ -129,7 +119,8 @@ qutecsound::qutecsound(QString fileName)
   applySettings();
 
   //TODO: free ud if switched to non threaded use
-  ud = (csoundUserData *)malloc(sizeof(csoundUserData));
+  ud = (CsoundUserData *)malloc(sizeof(CsoundUserData));
+  ud->PERF_STATUS = 0;
   ud->qcs = this;
   csound = NULL;
   int init = csoundInitialize(0,0,0);
@@ -137,7 +128,6 @@ qutecsound::qutecsound(QString fileName)
     qDebug("Error initializing Csound!");
     QMessageBox::warning(this, tr("QuteCsound"),
                          tr("Error initializing Csound!\nQutecsound will probably crash if you try to run Csound."));
-//     return;
   }
   else if (init>0) {
     qDebug("Csound already initialized.");
@@ -153,7 +143,8 @@ void qutecsound::messageCallback_NoThread(CSOUND *csound,
                                           const char *fmt,
                                           va_list args)
 {
-  Console *console = (Console *) csoundGetHostData(csound);
+  CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+  Console *console = ud->qcs->m_console;
   QString msg;
   msg = msg.vsprintf(fmt, args);
   console->appendMessage(msg);
@@ -198,15 +189,6 @@ void qutecsound::closeEvent(QCloseEvent *event)
 
 void qutecsound::newFile()
 {
-  /* for (int i = 0 ; i < documentPages.size(); i++) {
-    if (documentPages[i]->fileName == "") {
-	  documentTabs->setCurrentIndex(i);
-	  return;
-    }
-  }
-  if (documentPages.size() > 0)
-    if (maybeSave())
-      return; */
 #ifdef MACOSX
   QFile file(":/default.csd");
 #else
@@ -218,23 +200,11 @@ void qutecsound::newFile()
                               .arg(file.errorString()));
     return;
   }
-//   QTextStream in(&file);
-//   DocumentPage *newPage = new DocumentPage(this);
-//   documentPages.append(newPage);
-//   documentTabs->addTab(newPage,"");
-//   curPage = documentPages.size() - 1;
-//   documentTabs->setCurrentIndex(curPage);
-//   documentPages[curPage]->setText(in.readAll());
-//   textEdit = newPage;
-//   m_highlighter->setColorVariables(m_options->colorVariables);
-//   m_highlighter->setDocument(textEdit->document());
-//   textEdit->document()->setModified(false);
   loadFile(":/default.csd");
   documentPages[curPage]->fileName = "";
   setWindowModified(false);
   documentTabs->setTabIcon(curPage, modIcon);
-//   changeFont();
-//   setCurrentFile("");
+
   connectActions();
 }
 
@@ -411,7 +381,7 @@ void qutecsound::join()
 void qutecsound::play(bool realtime)
 {
   stop();
-  widgetPanel->eventQueueSize = 0; //Do not pass events gathered while idle
+  widgetPanel->eventQueueSize = 0; //Flush events gathered while idle
   if (documentPages[curPage]->fileName.isEmpty()) {
     if (!saveAs())
       return;
@@ -459,26 +429,14 @@ void qutecsound::play(bool realtime)
     MYFLT *pvalue;
     // TODO use: PUBLIC int csoundSetGlobalEnv(const char *name, const char *value);
     int argc = m_options->generateCmdLine(argv, realtime, fileName, fileName2);
-    if (m_options->thread) {
-//       if (!csound) {
-        csound=csoundCreate(0);
-        //TODO make sure csound has been freed when switched from non threaded
-//         csoundSetIsGraphable(csound, 0);
-        ud->csound = csound;
-        ud->realtime = realtime;
-//       }
-    }
-    else {
-      //TODO make sure that csound has been freed from threaded operation
-//       if (!csound) {
-      csound=csoundCreate(0);
-//       csoundSetIsGraphable(csound, 1);
-//         qDebug("Message level = %i", csoundGetMessageLevel(csound));
-//       }
-    }
+    csound=csoundCreate(0);
     csoundReset(csound);
-    csoundSetHostData(csound, (void *)m_console);
+    csoundSetHostData(csound, (void *) ud);
     csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
+    if (m_options->invalueEnabled) {
+      csoundSetInputValueCallback(csound, &qutecsound::inputValueCallback);
+      csoundSetOutputValueCallback(csound, &qutecsound::outputValueCallback);
+    }
     int result=csoundCompile(csound,argc,argv);
 
     if (result!=CSOUND_SUCCESS) {
@@ -486,8 +444,7 @@ void qutecsound::play(bool realtime)
       csoundStop(csound);
       free(argv);
       csoundCleanup(csound);
-      csoundDestroy(csound);  //Had to destroy csound every run otherwise FLTK widgets crash...
-//       csound = NULL;
+      csoundDestroy(csound);  //FIXME Had to destroy csound every run otherwise FLTK widgets crash...
       return;
     }
     qDebug("Command Line:");
@@ -495,38 +452,25 @@ void qutecsound::play(bool realtime)
       fprintf(stderr, "%s ",argv[index]);
     }
     fprintf(stderr, "\n");
-    running = true;
+    ud->csound = csound;
+    ud->realtime = realtime;
+    ud->result = result;
+    ud->PERF_STATUS=1;
     if(m_options->thread)
     {
-      ud->result = result;
-      ud->PERF_STATUS=1;
       ThreadID = csoundCreateThread(csThread, (void*)ud);
     }
     else {
       unsigned int numWidgets = widgetPanel->widgetCount();
-      QVector<QString> channelNames;
-      QVector<double> values;
-      channelNames.resize(numWidgets);
-      values.resize(numWidgets);
-      while(csoundPerformKsmps(csound)==0 && running) {
+      ud->qcs->channelNames.resize(numWidgets);
+      ud->qcs->values.resize(numWidgets);
+      while(csoundPerformKsmps(csound)==0 && ud->PERF_STATUS == 1) {
         qApp->processEvents();
-        if (realtime && m_options->rtEnableWidgets) {
-          widgetPanel->getValues(&channelNames, &values);
-          for (int i = 0; i<channelNames.size(); i++) {
-            if(csoundGetChannelPtr(csound, &pvalue, channelNames[i].toStdString().c_str(),
-              CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0)
-            {
-    //           qDebug("%s-%i", values[i].first.toStdString().c_str(), values[i].second);
-              *pvalue = (MYFLT) values[i];
-            }
-          }
-        }
+        passWidgetValues(ud);
       }
-      csoundStop(csound);
-      csoundCleanup(csound);
-      csoundDestroy(csound);  //Had to destroy csound every run otherwise FLTK widgets crash...
+      csoundDestroy(csound);  // FIXME Had to destroy csound every run otherwise FLTK widgets crash...
       csound = NULL;
-      running = false;
+      ud->PERF_STATUS=0;
     }
     free(argv);
 //     int hold;
@@ -578,20 +522,9 @@ void qutecsound::play(bool realtime)
 
 void qutecsound::stop()
 {
-  if (running) {
-    if (m_options->thread) {
-      ud->PERF_STATUS = 0;
-      csoundStop(csound);
-      csoundCleanup(csound);
-      csoundJoinThread((void *) ThreadID);
-      csoundDestroy(csound);  //Had to destroy csound every run otherwise FLTK widgets crash...
-//     csound = NULL;
-    }
+  if (ud->PERF_STATUS == 1) {
+    ud->PERF_STATUS = 0;
   }
-  else if (csound) {
-    csoundDestroy(csound);  //Had to destroy csound every run otherwise FLTK widgets crash...
-  }
-  running = false;
 }
 
 void qutecsound::render()
@@ -677,7 +610,6 @@ void qutecsound::about()
 
 void qutecsound::documentWasModified()
 {
-  //TODO setWindowModified when widgets change
   setWindowModified(textEdit->document()->isModified());
 //   documentTabs->setTabIcon(curPage, QIcon(":/images/modIcon.png"));
 }
@@ -724,7 +656,7 @@ void qutecsound::applySettings(int result)
 {
   m_highlighter->setDocument(textEdit->document());
   m_highlighter->setColorVariables(m_options->colorVariables);
-  widgetPanel->setEnabled(m_options->rtEnableWidgets);
+  widgetPanel->setEnabled(m_options->enableWidgets);
 }
 
 void qutecsound::checkSelection()
@@ -1175,6 +1107,8 @@ void qutecsound::readSettings()
   m_options->saveChanges = settings.value("savechanges", true).toBool();
   m_options->rememberFile = settings.value("rememberfile", true).toBool();
   m_options->saveWidgets = settings.value("savewidgets", true).toBool();
+  m_options->invalueEnabled = settings.value("invalueEnabled", true).toBool();
+  m_options->chngetEnabled = settings.value("chngetEnabled", false).toBool();
   lastFile = settings.value("lastfile", "").toString();
   settings.endGroup();
   settings.beginGroup("Run");
@@ -1186,7 +1120,7 @@ void qutecsound::readSettings()
   m_options->HwBufferSizeActive = settings.value("HwBufferSizeActive", false).toInt();
   m_options->dither = settings.value("dither", false).toBool();
   m_options->additionalFlags = settings.value("additionalFlags", "-d").toString();
-  // Suppress displays for Mac by default as it crashes running in a separate thread.
+  // FIXME Suppress displays for Mac by default as it crashes running in a separate thread.
 #ifdef MACOSX
   m_options->additionalFlagsActive = settings.value("additionalFlagsActive", true).toBool();
 #else
@@ -1202,7 +1136,7 @@ void qutecsound::readSettings()
   m_options->fileOutputFilenameActive = settings.value("fileOutputFilenameActive", false).toBool();
   m_options->fileOutputFilename = settings.value("fileOutputFilename", "").toString();
   m_options->rtOverrideOptions = settings.value("rtOverrideOptions", true).toBool();
-  m_options->rtEnableWidgets = settings.value("rtEnableWidgets", true).toBool();
+  m_options->enableWidgets = settings.value("enableWidgets", true).toBool();
   m_options->rtAudioModule = settings.value("rtAudioModule", 0).toInt();
   m_options->rtInputDevice = settings.value("rtInputDevice", "adc").toString();
   m_options->rtOutputDevice = settings.value("rtOutputDevice", "dac").toString();
@@ -1264,6 +1198,9 @@ void qutecsound::writeSettings()
   settings.setValue("savechanges", m_options->saveChanges);
   settings.setValue("rememberfile", m_options->rememberFile);
   settings.setValue("savewidgets", m_options->saveWidgets);
+  settings.setValue("enableWidgets", m_options->enableWidgets);
+  settings.setValue("invalueEnabled", m_options->invalueEnabled);
+  settings.setValue("chngetEnabled", m_options->chngetEnabled);
   settings.setValue("lastfile", documentPages[curPage]->fileName);
   settings.endGroup();
   settings.beginGroup("Run");
@@ -1286,7 +1223,6 @@ void qutecsound::writeSettings()
   settings.setValue("fileOutputFilenameActive", m_options->fileOutputFilenameActive);
   settings.setValue("fileOutputFilename", m_options->fileOutputFilename);
   settings.setValue("rtOverrideOptions", m_options->rtOverrideOptions);
-  settings.setValue("rtEnableWidgets", m_options->rtEnableWidgets);
   settings.setValue("rtAudioModule", m_options->rtAudioModule);
   settings.setValue("rtInputDevice", m_options->rtInputDevice);
   settings.setValue("rtOutputDevice", m_options->rtOutputDevice);
@@ -1385,7 +1321,6 @@ bool qutecsound::loadFile(QString fileName)
                              .arg(file.errorString()));
     return false;
   }
-  //QTextStream in(&file);
   QApplication::setOverrideCursor(Qt::WaitCursor);
   DocumentPage *newPage = new DocumentPage(this);
   documentPages.append(newPage);
@@ -1545,8 +1480,6 @@ void qutecsound::getCompanionFileName()
   QPushButton *button = new QPushButton(tr("Ok"));
 
   connect(button, SIGNAL(released()), &dialog, SLOT(accept()));
-//   QVBoxLayout *layout = new QVBoxLayout(this)
-//   layout->addWidget(button);
 
   QSplitter *splitter = new QSplitter(&dialog);
   QListWidget *list = new QListWidget(&dialog);
@@ -1586,47 +1519,76 @@ void qutecsound::getCompanionFileName()
   }
 }
 
+void qutecsound::passWidgetValues(CsoundUserData *ud)
+{
+  MYFLT* pvalue;
+  if (ud->realtime and ud->qcs->m_options->enableWidgets) {
+    if (ud->qcs->m_options->chngetEnabled) {
+      ud->qcs->widgetPanel->getValues(&ud->qcs->channelNames, &ud->qcs->values);
+      for (int i = 0; i < ud->qcs->channelNames.size(); i++) {
+        if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
+          CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+            *pvalue = (MYFLT) ud->qcs->values[i];
+          }
+      }
+    }
+    while (ud->qcs->m_options->invalueEnabled and ud->qcs->widgetPanel->eventQueueSize > 0) {
+      ud->qcs->widgetPanel->eventQueueSize--;
+      ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize];
+      char type = ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize][0].unicode();
+      QStringList eventElements = ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts);
+  //             qDebug("type %c line: %s", type, ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].toStdString().c_str());
+      MYFLT pFields[eventElements.size()];
+      for (int j = 0; j < eventElements.size(); j++) {
+        pFields[j] = (MYFLT) eventElements[j].toDouble();
+      }
+      csoundScoreEvent(ud->csound,type ,pFields, eventElements.size());
+
+    }
+  }
+}
 
 uintptr_t qutecsound::csThread(void *data)
 {
-  csoundUserData* udata = (csoundUserData*)data;
-  MYFLT* pvalue;
+  CsoundUserData* udata = (CsoundUserData*)data;
   if(!udata->result) {
     unsigned int numWidgets = udata->qcs->widgetPanel->widgetCount();
-    QVector<QString> channelNames;
-    QVector<double> values;
-    channelNames.resize(numWidgets);
-    values.resize(numWidgets);
+    udata->qcs->channelNames.resize(numWidgets);
+    udata->qcs->values.resize(numWidgets);
     while((csoundPerformKsmps(udata->csound) == 0)
         and (udata->PERF_STATUS == 1)) {
-      if (udata->realtime && udata->qcs->m_options->rtEnableWidgets) {
-        udata->qcs->widgetPanel->getValues(&channelNames, &values);
-        for (int i = 0; i<channelNames.size(); i++) {
-          if(csoundGetChannelPtr(udata->csound, &pvalue, channelNames[i].toStdString().c_str(),
-             CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0)
-          {
-    //           qDebug("%s-%i", values[i].first.toStdString().c_str(), values[i].second);
-            *pvalue = (MYFLT) values[i];
-          }
-          while (udata->qcs->widgetPanel->eventQueueSize > 0) {
-            udata->qcs->widgetPanel->eventQueueSize--;
-            udata->qcs->widgetPanel->eventQueue[udata->qcs->widgetPanel->eventQueueSize];
-            char type = udata->qcs->widgetPanel->eventQueue[udata->qcs->widgetPanel->eventQueueSize][0].unicode();
-            QStringList eventElements = udata->qcs->widgetPanel->eventQueue[udata->qcs->widgetPanel->eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts);
-//             qDebug("type %c line: %s", type, udata->qcs->widgetPanel->eventQueue[udata->qcs->widgetPanel->eventQueueSize].toStdString().c_str());
-            MYFLT pFields[eventElements.size()];
-            for (int j = 0; j < eventElements.size(); j++) {
-              qDebug("%f", eventElements[j].toDouble());
-              pFields[j] = (MYFLT) eventElements[j].toDouble();
-            }
-            csoundScoreEvent(udata->csound,type ,pFields, eventElements.size());
-
-          }
-        }
-      }
+      passWidgetValues(udata);
     }
     csoundStop(udata->csound);
     csoundCleanup(udata->csound);
+    csoundDestroy(udata->csound);
   }
   return 1;
+}
+
+void qutecsound::outputValueCallback (CSOUND *csound,
+                                     const char *channelName,
+                                     MYFLT value)
+{
+  //TODO implement receiving values from csound
+  CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+}
+
+void qutecsound::inputValueCallback (CSOUND *csound,
+                                     const char *channelName,
+                                     MYFLT *value)
+{
+  QVector<QString> channelNames;
+  QVector<double> values;
+  CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+  unsigned int numWidgets = ud->qcs->widgetPanel->widgetCount();
+  channelNames.resize(numWidgets);
+  values.resize(numWidgets);
+  ud->qcs->widgetPanel->getValues(&channelNames, &values);
+  int index = channelNames.indexOf(QString(channelName));
+  if (index>=0)
+    *value = (MYFLT) values[index];
+  else {
+    *value = 0;
+  }
 }

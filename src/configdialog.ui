@@ -83,7 +83,7 @@
     </rect>
    </property>
    <property name="currentIndex" >
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab_2" >
     <attribute name="title" >
@@ -396,19 +396,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QCheckBox" name="widgetsCheckBox" >
-      <property name="geometry" >
-       <rect>
-        <x>220</x>
-        <y>20</y>
-        <width>181</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <property name="text" >
-       <string>Enable Widgets</string>
-      </property>
-     </widget>
     </widget>
     <widget class="QLineEdit" name="BufferSizeLineEdit" >
      <property name="geometry" >
@@ -665,10 +652,10 @@
      <widget class="QWidget" name="layoutWidget" >
       <property name="geometry" >
        <rect>
-        <x>20</x>
-        <y>130</y>
-        <width>311</width>
-        <height>151</height>
+        <x>21</x>
+        <y>131</y>
+        <width>229</width>
+        <height>120</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
@@ -706,13 +693,6 @@
         <widget class="QCheckBox" name="rememberFileCheckBox" >
          <property name="text" >
           <string>Remember last file opened</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="saveWidgetsCheckBox" >
-         <property name="text" >
-          <string>Save widgets in csd file</string>
          </property>
         </widget>
        </item>
@@ -831,6 +811,71 @@
         </widget>
        </item>
       </layout>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_7" >
+     <property name="geometry" >
+      <rect>
+       <x>370</x>
+       <y>10</y>
+       <width>221</width>
+       <height>301</height>
+      </rect>
+     </property>
+     <property name="title" >
+      <string>Widgets</string>
+     </property>
+     <widget class="QCheckBox" name="widgetsCheckBox" >
+      <property name="geometry" >
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>191</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Enable Widgets</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="invalueCheckBox" >
+      <property name="geometry" >
+       <rect>
+        <x>30</x>
+        <y>60</y>
+        <width>181</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Enable invalue/outvalue</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chngetCheckBox" >
+      <property name="geometry" >
+       <rect>
+        <x>30</x>
+        <y>90</y>
+        <width>181</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Enable chnget/chnset</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="saveWidgetsCheckBox" >
+      <property name="geometry" >
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>191</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Save widgets in csd file</string>
+      </property>
      </widget>
     </widget>
    </widget>
@@ -1101,8 +1146,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>538</x>
-     <y>463</y>
+     <x>533</x>
+     <y>552</y>
     </hint>
     <hint type="destinationlabel" >
      <x>233</x>
@@ -1117,8 +1162,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>581</x>
-     <y>476</y>
+     <x>619</x>
+     <y>552</y>
     </hint>
     <hint type="destinationlabel" >
      <x>219</x>
@@ -1265,8 +1310,8 @@
      <y>265</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>121</x>
-     <y>265</y>
+     <x>249</x>
+     <y>286</y>
     </hint>
    </hints>
   </connection>
@@ -1277,12 +1322,44 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>88</x>
-     <y>265</y>
+     <x>91</x>
+     <y>318</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>121</x>
-     <y>265</y>
+     <x>249</x>
+     <y>320</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widgetsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>invalueCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>412</x>
+     <y>71</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>429</x>
+     <y>96</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widgetsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>chngetCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>393</x>
+     <y>73</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>440</x>
+     <y>120</y>
     </hint>
    </hints>
   </connection>
