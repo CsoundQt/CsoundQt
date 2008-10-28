@@ -57,6 +57,7 @@ qutecsound::qutecsound(QString fileName)
   ud = (CsoundUserData *)malloc(sizeof(CsoundUserData));
   ud->PERF_STATUS = 0;
   ud->qcs = this;
+  //threadLock = csoundCreateThreadLock();
 
   m_options = new Options();
 

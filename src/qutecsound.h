@@ -37,7 +37,7 @@
 #include <windows.h>
 #endif
 
-#define QUTECSOUND_VERSION "0.3.2"
+#define QUTECSOUND_VERSION "0.3.3"
 
 class QAction;
 class QMenu;
@@ -80,6 +80,7 @@ class qutecsound:public QMainWindow
                                          const char *fmt,
                                          va_list args);
     static uintptr_t csThread(void *data);
+	//static void *threadLock;
     static void outputValueCallback (CSOUND *csound,
                                     const char *channelName,
                                     MYFLT value);
