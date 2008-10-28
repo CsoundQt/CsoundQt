@@ -55,6 +55,7 @@ class WidgetPanel : public QDockWidget
     QPoint currentPosition;
     QAction *createSliderAct;
     QAction *createLabelAct;
+    QAction *createButtonAct;
 
 
     int createSlider(int x, int y, int width, int height, QString widgetLine);

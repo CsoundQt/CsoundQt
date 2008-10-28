@@ -36,6 +36,8 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createSlider()));
   createLabelAct = new QAction(tr("Create Label"),this);
   connect(createLabelAct, SIGNAL(triggered()), this, SLOT(createLabel()));
+  createButtonAct = new QAction(tr("Create Button"),this);
+  connect(createButtonAct, SIGNAL(triggered()), this, SLOT(createButton()));
 
   setWidget(layoutWidget);
   resize(200, 100);
@@ -264,6 +266,7 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   QMenu menu;
   menu.addAction(createSliderAct);
   menu.addAction(createLabelAct);
+  menu.addAction(createButtonAct);
   currentPosition = event->pos();
   menu.exec(event->globalPos());
 }
@@ -388,6 +391,6 @@ void WidgetPanel::createLabel()
 
 void WidgetPanel::createButton()
 {
-  QString line = "ioButton {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 30} event 1.000000 \"button1\" \"New Button\" \"/\" i1 0 10";
-  createButton(currentPosition.x(), currentPosition.y() - 20, 80, 30, line);
+  QString line = "ioButton {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {100, 40} event 1.000000 \"button1\" \"New Button\" \"/\" i1 0 10";
+  createButton(currentPosition.x(), currentPosition.y() - 20, 100, 40, line);
 }
