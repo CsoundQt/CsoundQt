@@ -62,7 +62,7 @@ struct CsoundUserData{
   CSOUND *csound;
   /*performance status*/
   bool PERF_STATUS; //0= stopped 1=running
-  bool realtime;
+//   bool realtime;
   /*pass main application to check widgets*/
   qutecsound *qcs;
 };
@@ -86,7 +86,9 @@ class qutecsound:public QMainWindow
     static void inputValueCallback (CSOUND *csound,
                                    const char *channelName,
                                    MYFLT *value);
-    static void passWidgetValues(CsoundUserData *ud);
+    static void readWidgetValues(CsoundUserData *ud);
+    static void writeWidgetValues(CsoundUserData *ud);
+    static void processEventQueue(CsoundUserData *ud);
 
     QVector<QString> channelNames;
     QVector<double> values;

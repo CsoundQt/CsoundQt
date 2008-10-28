@@ -61,8 +61,22 @@ void WidgetPanel::getValues(QVector<QString> *channelNames, QVector<double> *val
     (*channelNames)[i] = widgets[i]->getChannelName();
     (*values)[i] = widgets[i]->getValue();
   }
-//   label->setText(QString::number(((QSlider *)widgets[0])->value() ));
-//   return values;
+}
+
+void WidgetPanel::setValue(QString channelName, double value)
+{
+  for (int i = 0; i < widgets.size(); i++) {
+    if (widgets[i]->getChannelName() == channelName) {
+      widgets[i]->setValue(value);
+    }
+  }
+}
+
+void WidgetPanel::setValue(int index, double value)
+{
+  if (index>widgets.size())
+    return;
+  widgets[index]->setValue(value);
 }
 
 int WidgetPanel::loadWidgets(QString macWidgets)

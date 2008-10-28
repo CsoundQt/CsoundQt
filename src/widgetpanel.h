@@ -35,6 +35,8 @@ class WidgetPanel : public QDockWidget
 
     unsigned int widgetCount();
     void getValues(QVector<QString> *channelNames, QVector<double> *values);
+    void setValue(QString channelName, double value);
+    void setValue(int index, double value);
     int loadWidgets(QString macWidgets);
     int newWidget(QString widgetLine);
     int clearWidgets();

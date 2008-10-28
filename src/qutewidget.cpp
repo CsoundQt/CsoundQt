@@ -73,7 +73,8 @@ void QuteWidget::setRange(int min, int max)
 
 void QuteWidget::setValue(double value)
 {
-  qDebug("QuteWidget::setValue not implemented for widget type");
+//FIXME put this back when it's no longer a burden.
+//   qDebug("QuteWidget::setValue not implemented for widget type (value = %f)", value);
 }
 
 void QuteWidget::setResolution(double resolution)

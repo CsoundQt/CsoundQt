@@ -11,6 +11,7 @@ nchnls = 2
 instr 1
 kfreq line 100, p3, 1000
 aout oscil 0.2, kfreq, 1
+outvalue "slider3", kfreq/1000
 outs aout, aout
 endin
 

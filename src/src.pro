@@ -49,7 +49,7 @@ TEMPLATE = app
 CONFIG += warn_on \
 	  thread \
           qt \
- debug_and_release
+ debug
 TARGET = ../bin/qutecsound
 RESOURCES = application.qrc
 
@@ -108,4 +108,6 @@ macx {
 
 
 #QMAKE_CXXFLAGS_DEBUG += -DDEBUG
+
+CONFIG -= release
 

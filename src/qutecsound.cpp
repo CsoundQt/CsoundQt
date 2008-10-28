@@ -42,6 +42,7 @@ static const QString SCRIPT_NAME = "./qutecsound_run_script.sh";
 //csound performance thread function prototype
 uintptr_t csThread(void *clientData);
 
+//FIXME why does qutecsound not end when it receives a terminate signal?
 qutecsound::qutecsound(QString fileName)
 {
   setWindowTitle("QuteCsound[*]");
@@ -51,6 +52,11 @@ qutecsound::qutecsound(QString fileName)
   connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
   curPage = -1;
   setCentralWidget(documentTabs);
+
+  //TODO: free ud if switched to non threaded use
+  ud = (CsoundUserData *)malloc(sizeof(CsoundUserData));
+  ud->PERF_STATUS = 0;
+  ud->qcs = this;
 
   m_options = new Options();
 
@@ -118,10 +124,6 @@ qutecsound::qutecsound(QString fileName)
 
   applySettings();
 
-  //TODO: free ud if switched to non threaded use
-  ud = (CsoundUserData *)malloc(sizeof(CsoundUserData));
-  ud->PERF_STATUS = 0;
-  ud->qcs = this;
   csound = NULL;
   int init = csoundInitialize(0,0,0);
   if (init<0) {
@@ -433,10 +435,11 @@ void qutecsound::play(bool realtime)
     csoundReset(csound);
     csoundSetHostData(csound, (void *) ud);
     csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
-    if (m_options->invalueEnabled) {
-      csoundSetInputValueCallback(csound, &qutecsound::inputValueCallback);
-      csoundSetOutputValueCallback(csound, &qutecsound::outputValueCallback);
+    qDebug("Command Line:");
+    for (int index=0; index< argc; index++) {
+      fprintf(stderr, "%s ",argv[index]);
     }
+    fprintf(stderr, "\n");
     int result=csoundCompile(csound,argc,argv);
 
     if (result!=CSOUND_SUCCESS) {
@@ -447,30 +450,39 @@ void qutecsound::play(bool realtime)
       csoundDestroy(csound);  //FIXME Had to destroy csound every run otherwise FLTK widgets crash...
       return;
     }
-    qDebug("Command Line:");
-    for (int index=0; index< argc; index++) {
-      fprintf(stderr, "%s ",argv[index]);
+    if (m_options->invalueEnabled and m_options->enableWidgets) {
+      csoundSetInputValueCallback(csound, &qutecsound::inputValueCallback);
+      csoundSetOutputValueCallback(csound, &qutecsound::outputValueCallback);
     }
-    fprintf(stderr, "\n");
+    else {
+      csoundSetInputValueCallback(csound, NULL);
+      csoundSetOutputValueCallback(csound, NULL);
+    }
     ud->csound = csound;
-    ud->realtime = realtime;
+//     ud->realtime = realtime;
     ud->result = result;
     ud->PERF_STATUS=1;
-    if(m_options->thread)
-    {
+    unsigned int numWidgets = widgetPanel->widgetCount();
+    ud->qcs->channelNames.resize(numWidgets);
+    ud->qcs->values.resize(numWidgets);
+    if(m_options->thread) {
       ThreadID = csoundCreateThread(csThread, (void*)ud);
     }
     else {
-      unsigned int numWidgets = widgetPanel->widgetCount();
-      ud->qcs->channelNames.resize(numWidgets);
-      ud->qcs->values.resize(numWidgets);
       while(csoundPerformKsmps(csound)==0 && ud->PERF_STATUS == 1) {
         qApp->processEvents();
-        passWidgetValues(ud);
+        if (ud->qcs->m_options->enableWidgets) {
+          widgetPanel->getValues(&channelNames, &values);
+          if (ud->qcs->m_options->chngetEnabled) {
+            readWidgetValues(ud);
+            writeWidgetValues(ud);
+          }
+          processEventQueue(ud);
+        }
       }
-      csoundDestroy(csound);  // FIXME Had to destroy csound every run otherwise FLTK widgets crash...
-      csound = NULL;
       ud->PERF_STATUS=0;
+      csoundDestroy(csound);  // FIXME Had to destroy csound every run otherwise FLTK widgets crash...
+//       csound = NULL;
     }
     free(argv);
 //     int hold;
@@ -666,6 +678,7 @@ void qutecsound::checkSelection()
 
 void qutecsound::runUtility(QString flags)
 {
+  //TODO Run utilities from API using soundRunUtility(CSOUND *, const char *name, int argc, char **argv)
   qDebug("qutecsound::runUtility");
 //   if (m_options->useAPI) {
 // #ifdef MACOSX
@@ -1519,32 +1532,43 @@ void qutecsound::getCompanionFileName()
   }
 }
 
-void qutecsound::passWidgetValues(CsoundUserData *ud)
+void qutecsound::readWidgetValues(CsoundUserData *ud)
 {
   MYFLT* pvalue;
-  if (ud->realtime and ud->qcs->m_options->enableWidgets) {
-    if (ud->qcs->m_options->chngetEnabled) {
-      ud->qcs->widgetPanel->getValues(&ud->qcs->channelNames, &ud->qcs->values);
-      for (int i = 0; i < ud->qcs->channelNames.size(); i++) {
-        if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
-          CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-            *pvalue = (MYFLT) ud->qcs->values[i];
-          }
-      }
+  for (int i = 0; i < ud->qcs->channelNames.size(); i++) {
+    if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
+        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0)
+    {
+      *pvalue = (MYFLT) ud->qcs->values[i];
     }
-    while (ud->qcs->m_options->invalueEnabled and ud->qcs->widgetPanel->eventQueueSize > 0) {
-      ud->qcs->widgetPanel->eventQueueSize--;
-      ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize];
-      char type = ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize][0].unicode();
-      QStringList eventElements = ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts);
-  //             qDebug("type %c line: %s", type, ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].toStdString().c_str());
-      MYFLT pFields[eventElements.size()];
-      for (int j = 0; j < eventElements.size(); j++) {
-        pFields[j] = (MYFLT) eventElements[j].toDouble();
-      }
-      csoundScoreEvent(ud->csound,type ,pFields, eventElements.size());
+  }
+}
 
+void qutecsound::writeWidgetValues(CsoundUserData *ud)
+{
+  MYFLT* pvalue;
+  for (int i = 0; i < ud->qcs->channelNames.size(); i++) {
+    if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
+        CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0)
+    {
+      ud->qcs->widgetPanel->setValue(i,*pvalue);
     }
+  }
+}
+
+void qutecsound::processEventQueue(CsoundUserData *ud)
+{
+  while (ud->qcs->widgetPanel->eventQueueSize > 0) {
+    ud->qcs->widgetPanel->eventQueueSize--;
+    ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize];
+    char type = ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize][0].unicode();
+    QStringList eventElements = ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts);
+//             qDebug("type %c line: %s", type, ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].toStdString().c_str());
+    MYFLT pFields[eventElements.size()];
+    for (int j = 0; j < eventElements.size(); j++) {
+      pFields[j] = (MYFLT) eventElements[j].toDouble();
+    }
+    csoundScoreEvent(ud->csound,type ,pFields, eventElements.size());
   }
 }
 
@@ -1557,7 +1581,14 @@ uintptr_t qutecsound::csThread(void *data)
     udata->qcs->values.resize(numWidgets);
     while((csoundPerformKsmps(udata->csound) == 0)
         and (udata->PERF_STATUS == 1)) {
-      passWidgetValues(udata);
+      if (udata->qcs->m_options->enableWidgets) {
+        udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames, &udata->qcs->values);
+        if (udata->qcs->m_options->chngetEnabled) {
+          writeWidgetValues(udata);
+          readWidgetValues(udata);
+        }
+        processEventQueue(udata);
+      }
     }
     csoundStop(udata->csound);
     csoundCleanup(udata->csound);
@@ -1570,24 +1601,18 @@ void qutecsound::outputValueCallback (CSOUND *csound,
                                      const char *channelName,
                                      MYFLT value)
 {
-  //TODO implement receiving values from csound
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+  ud->qcs->widgetPanel->setValue(QString(channelName), value);
 }
 
 void qutecsound::inputValueCallback (CSOUND *csound,
                                      const char *channelName,
                                      MYFLT *value)
 {
-  QVector<QString> channelNames;
-  QVector<double> values;
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-  unsigned int numWidgets = ud->qcs->widgetPanel->widgetCount();
-  channelNames.resize(numWidgets);
-  values.resize(numWidgets);
-  ud->qcs->widgetPanel->getValues(&channelNames, &values);
-  int index = channelNames.indexOf(QString(channelName));
+  int index = ud->qcs->channelNames.indexOf(QString(channelName));
   if (index>=0)
-    *value = (MYFLT) values[index];
+    *value = (MYFLT) ud->qcs->values[index];
   else {
     *value = 0;
   }
