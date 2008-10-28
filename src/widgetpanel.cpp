@@ -190,7 +190,7 @@ int WidgetPanel::newWidget(QString widgetLine)
 //       connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
     }
     else if (parts[0]=="ioMenu") {
-      QuteWidget *widget= new QuteWidget(this, QUTE_COMBOBOX);
+      QuteWidget *widget= new QuteWidget(this, NONE);
       widget->setWidgetLine(widgetLine);
       widget->setWidgetGeometry(x,y,width, height);
       widget->show();
@@ -207,6 +207,11 @@ int WidgetPanel::newWidget(QString widgetLine)
     }
     else if (parts[0]=="ioMeter") {
 //TODO implement MacCsound ioMeter
+      QuteWidget *widget= new QuteWidget(this, QUTE_COMBOBOX);
+      widget->setWidgetLine(widgetLine);
+      widget->setWidgetGeometry(x,y,width, height);
+      widget->show();
+      widgets.append(widget);
     }
     else {
   // Unknown widget...

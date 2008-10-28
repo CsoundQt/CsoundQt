@@ -467,7 +467,7 @@ void qutecsound::play(bool realtime)
     ud->qcs->channelNames.resize(numWidgets);
     ud->qcs->values.resize(numWidgets);
     if(m_options->thread) {
-      ThreadID = csoundCreateThread(csThread, (void*)ud);
+      ThreadID = csoundCreateThread(qutecsound::csThread, (void*)ud);
     }
     else {
       while(csoundPerformKsmps(csound)==0 && ud->PERF_STATUS == 1) {

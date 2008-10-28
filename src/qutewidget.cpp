@@ -25,6 +25,8 @@ QuteWidget::QuteWidget(QWidget *parent, widgetType type):
     QWidget(parent), m_type(type)
 {
   this->setGeometry(QRect(5, 5, 20, 200));
+  //TODO: remove this line when all widgets are implemented (it leaks)
+  m_widget = new QWidget(this);
 
   propertiesAct = new QAction(/*QIcon(":/images/gtk-new.png"),*/ tr("&Properties"), this);
   propertiesAct->setShortcut(tr("Alt+P"));
