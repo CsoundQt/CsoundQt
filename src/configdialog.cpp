@@ -46,11 +46,13 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));
   consoleFontComboBox->setCurrentIndex(consoleFontComboBox->findText(m_options->consoleFont) );
   consoleFontSizeComboBox->setCurrentIndex(consoleFontSizeComboBox->findText(QString::number((int) m_options->consoleFontPointSize)));
+  tabWidthSpinBox->setValue(m_options->tabWidth);
   colorVariablesCheckBox->setChecked(m_options->colorVariables);
   autoplayCheckBox->setChecked(m_options->autoPlay);
   saveChangesCheckBox->setChecked(m_options->saveChanges);
   rememberFileCheckBox->setChecked(m_options->rememberFile);
   saveWidgetsCheckBox->setChecked(m_options->saveWidgets);
+  iconTextCheckBox->setChecked(m_options->iconText);
   widgetsCheckBox->setChecked(m_options->enableWidgets);
   invalueCheckBox->setChecked(m_options->invalueEnabled);
   chngetCheckBox->setChecked(m_options->chngetEnabled);
@@ -144,11 +146,13 @@ void ConfigDialog::accept()
   m_options->fontPointSize = fontSizeComboBox->currentText().toDouble();
   m_options->consoleFont = consoleFontComboBox->currentText();
   m_options->consoleFontPointSize = consoleFontSizeComboBox->currentText().toDouble();
+  m_options->tabWidth = tabWidthSpinBox->value();
   m_options->colorVariables = colorVariablesCheckBox->isChecked();
   m_options->autoPlay = autoplayCheckBox->isChecked();
   m_options->saveChanges = saveChangesCheckBox->isChecked();
   m_options->rememberFile = rememberFileCheckBox->isChecked();
   m_options->saveWidgets = saveWidgetsCheckBox->isChecked();
+  m_options->iconText = iconTextCheckBox->isChecked();
   m_options->enableWidgets = widgetsCheckBox->isChecked();
   m_options->invalueEnabled = invalueCheckBox->isChecked();
   m_options->chngetEnabled = chngetCheckBox->isChecked();

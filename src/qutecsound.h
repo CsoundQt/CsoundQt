@@ -22,6 +22,8 @@
 #ifndef QUTECSOUND_H
 #define QUTECSOUND_H
 
+#define QUTECSOUND_VERSION "0.3.3"
+
 #include <QtGui>
 #include <csound.h>
 
@@ -37,7 +39,10 @@
 #include <windows.h>
 #endif
 
-#define QUTECSOUND_VERSION "0.3.3"
+#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
+#include <csound.hpp>
+#include <csPerfThread.hpp>
+#endif
 
 class QAction;
 class QMenu;
@@ -79,7 +84,11 @@ class qutecsound:public QMainWindow
                                          int attr,
                                          const char *fmt,
                                          va_list args);
+#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
+    static void  csThread(void *data);
+#else
     static uintptr_t csThread(void *data);
+#endif
 	//static void *threadLock;
     static void outputValueCallback (CSOUND *csound,
                                     const char *channelName,
@@ -156,7 +165,11 @@ class qutecsound:public QMainWindow
     void getCompanionFileName();
 
     CSOUND *csound;
+#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
+    CsoundPerformanceThread *perfThread;
+#else
     void* ThreadID;
+#endif
     CsoundUserData* ud;
 
 

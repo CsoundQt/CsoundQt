@@ -25,7 +25,7 @@ Highlighter::Highlighter(QTextDocument *parent)
 {
      commentStartExpression = QRegExp("/\\*");
      commentEndExpression = QRegExp("\\*/");
-     colorVariables = true;
+//      colorVariables = true;
 }
 
 

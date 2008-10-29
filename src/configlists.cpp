@@ -38,16 +38,16 @@ ConfigLists::ConfigLists()
   fileFormatNames << "24 Bit" << "16 Bit (short)" << "unsigned 8-bit"
       << "signed 8-bit" << "32 bit float"<< "long (32-bit)";
 #ifdef LINUX
-  rtAudioNames << "alsa" << "jack" << "portaudio" << "none";
+  rtAudioNames << "alsa" << "jack" << "portaudio" << "pulse" << "none";
 #endif
 #ifdef MACOSX
   rtAudioNames << "portaudio" << "coreaudio" << "none";
 #endif
 #ifdef WIN32
-  rtAudioNames << "portaudio" << "winmm" << "none";
+  rtAudioNames << "portaudio" << "winmm" << "jack" <<  "none";
 #endif
 #ifdef LINUX
-  rtMidiNames << "none" << "portmidi" << "alsa" << "virtual";
+  rtMidiNames << "none" << "alsa"  << "portmidi"<< "virtual";
 #endif
 #ifdef MACOSX
   rtMidiNames << "none" << "portmidi" << "virtual";

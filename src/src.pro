@@ -2,6 +2,9 @@
 #the doubles version, run qmake "CONFIG += build64"
 #CONFIG += build64
 
+DEFINES += QUTE_USE_CSOUNDPERFORMANCETHREAD
+CONFIG += qute_cpp
+
 build64 {
     message(Building for doubles \(64-bit\) csound)
     DEFINES += USE_DOUBLE
@@ -67,6 +70,11 @@ win32 {
     DEFINES +=WIN32
     INCLUDEPATH += "C:\Archivos de programa\Csound\include"
     HEADERS += "C:\Archivos de programa\Csound\include\csound.h"
+    qute_cpp {
+        HEADERS += "C:\Archivos de programa\Csound\include\csound.hpp"
+        HEADERS += "C:\Archivos de programa\Csound\include\csPerfThread.hpp"
+        LIBS += "C:\Archivos de programa\Csound\bin\csnd.dll"
+    }
     build64 {
         LIBS += "C:\Archivos de programa\Csound\bin\Csound64.dll.5.1"
     }
@@ -79,6 +87,9 @@ win32 {
 linux-g++ {
     DEFINES +=LINUX    
     INCLUDEPATH += /usr/local/include/csound/ /usr/include/csound/
+    qute_cpp {
+        LIBS += -lcsnd
+    }
     build64 {
         LIBS += -lcsound64
     }
@@ -97,6 +108,10 @@ macx {
     message(Building using $${MAC_LIB})
     DEFINES +=MACOSX
     HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.h
+    qute_cpp {
+      HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.hpp
+      HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csPerfThread.hpp
+    }
     LIBS += -framework QtXml
     LIBS += -framework QtGui
     LIBS += -framework QtCore

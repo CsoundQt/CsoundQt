@@ -40,11 +40,13 @@ class Options{
     float fontPointSize;
     QString consoleFont;
     float consoleFontPointSize;
+    int tabWidth;
     bool colorVariables;
     bool autoPlay;
     bool saveChanges;
     bool rememberFile;
     bool saveWidgets;
+    bool iconText;
 
     bool enableWidgets;
     bool invalueEnabled;

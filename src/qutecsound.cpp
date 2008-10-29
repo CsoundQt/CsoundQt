@@ -167,6 +167,7 @@ void qutecsound::changePage(int index)
 {
   stop();
   textEdit = documentPages[index];
+  textEdit->setTabStopWidth(m_options->tabWidth);
   m_highlighter->setColorVariables(m_options->colorVariables);
   m_highlighter->setDocument(textEdit->document());
   curPage = index;
@@ -207,7 +208,7 @@ void qutecsound::newFile()
   documentPages[curPage]->fileName = "";
   setWindowModified(false);
   documentTabs->setTabIcon(curPage, modIcon);
-
+  documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
   connectActions();
 }
 
@@ -363,6 +364,7 @@ bool qutecsound::closeTab()
   }
   documentTabs->setCurrentIndex(curPage);
   textEdit = documentPages[curPage];
+  textEdit->setTabStopWidth(m_options->tabWidth);
   setCurrentFile(documentPages[curPage]->fileName);
   m_highlighter->setColorVariables(m_options->colorVariables);
   m_highlighter->setDocument(documentPages[curPage]->document());
@@ -383,7 +385,9 @@ void qutecsound::join()
 
 void qutecsound::play(bool realtime)
 {
-  stop();
+  if (ud->PERF_STATUS == 1) {
+    stop();
+  }
   widgetPanel->eventQueueSize = 0; //Flush events gathered while idle
   if (documentPages[curPage]->fileName.isEmpty()) {
     if (!saveAs())
@@ -467,7 +471,13 @@ void qutecsound::play(bool realtime)
     ud->qcs->channelNames.resize(numWidgets);
     ud->qcs->values.resize(numWidgets);
     if(m_options->thread) {
+#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
+      perfThread = new CsoundPerformanceThread(csound);
+      perfThread->SetProcessCallback(qutecsound::csThread, (void*)ud);
+      perfThread->Play();
+#else
       ThreadID = csoundCreateThread(qutecsound::csThread, (void*)ud);
+#endif
     }
     else {
       while(csoundPerformKsmps(csound)==0 && ud->PERF_STATUS == 1) {
@@ -537,6 +547,17 @@ void qutecsound::stop()
 {
   if (ud->PERF_STATUS == 1) {
     ud->PERF_STATUS = 0;
+  }
+  if (m_options->thread) {
+#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
+  perfThread->Stop();
+  perfThread->Join();
+#else
+  csoundStop(csound);
+  csoundJoinThread(ThreadID);
+//   csoundCleanup(csound);
+#endif
+  csoundDestroy(csound);
   }
 }
 
@@ -669,7 +690,14 @@ void qutecsound::applySettings(int result)
 {
   m_highlighter->setDocument(textEdit->document());
   m_highlighter->setColorVariables(m_options->colorVariables);
+  documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
   widgetPanel->setEnabled(m_options->enableWidgets);
+  Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
+      Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
+  fileToolBar->setToolButtonStyle(toolButtonStyle);
+  editToolBar->setToolButtonStyle(toolButtonStyle);
+  controlToolBar->setToolButtonStyle(toolButtonStyle);
+  configureToolBar->setToolButtonStyle(toolButtonStyle);
 }
 
 void qutecsound::checkSelection()
@@ -786,35 +814,42 @@ void qutecsound::createActions()
   newAct = new QAction(QIcon(":/images/gtk-new.png"), tr("&New"), this);
   newAct->setShortcut(tr("Ctrl+N"));
   newAct->setStatusTip(tr("Create a new file"));
+  newAct->setIconText("New");
   connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));
 
   openAct = new QAction(QIcon(":/images/gnome-folder.png"), tr("&Open..."), this);
   openAct->setShortcut(tr("Ctrl+O"));
   openAct->setStatusTip(tr("Open an existing file"));
+  openAct->setIconText("Open");
   connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
   reloadAct = new QAction(QIcon(":/images/gtk-reload.png"), tr("Reload"), this);
 //   reloadAct->setShortcut(tr("Ctrl+O"));
   reloadAct->setStatusTip(tr("Reload file from disk, discarding changes"));
+  reloadAct->setIconText("Reload");
   connect(reloadAct, SIGNAL(triggered()), this, SLOT(reload()));
 
   saveAct = new QAction(QIcon(":/images/gnome-dev-floppy.png"), tr("&Save"), this);
   saveAct->setShortcut(tr("Ctrl+S"));
   saveAct->setStatusTip(tr("Save the document to disk"));
+  saveAct->setIconText("Save");
   connect(saveAct, SIGNAL(triggered()), this, SLOT(save()));
 
   saveAsAct = new QAction(tr("Save &As..."), this);
   saveAsAct->setStatusTip(tr("Save the document under a new name"));
+  saveAsAct->setIconText("Save as");
   connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
 
   closeTabAct = new QAction(tr("Close current tab"), this);
   closeTabAct->setShortcut(tr("Ctrl+W"));
   closeTabAct->setStatusTip(tr("Close current tab"));
+  closeTabAct->setIconText("Close");
   connect(closeTabAct, SIGNAL(triggered()), this, SLOT(closeTab()));
 
   exitAct = new QAction(tr("E&xit"), this);
   exitAct->setShortcut(tr("Ctrl+Q"));
   exitAct->setStatusTip(tr("Exit the application"));
+  exitAct->setIconText("Exit");
   connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
 //   for (int i = 0; i < recentFiles.size(); i++) {
@@ -825,114 +860,135 @@ void qutecsound::createActions()
   undoAct = new QAction(QIcon(":/images/gtk-undo.png"), tr("Undo"), this);
   undoAct->setShortcut(tr("Ctrl+Z"));
   undoAct->setStatusTip(tr("Undo last action"));
+  exitAct->setIconText("Undo");
 
   redoAct = new QAction(QIcon(":/images/gtk-redo.png"), tr("Redo"), this);
   redoAct->setShortcut(tr("Shift+Ctrl+Z"));
   redoAct->setStatusTip(tr("Redo last action"));
+  redoAct->setIconText("Redo");
 
   cutAct = new QAction(QIcon(":/images/gtk-cut.png"), tr("Cu&t"), this);
   cutAct->setShortcut(tr("Ctrl+X"));
   cutAct->setStatusTip(tr("Cut the current selection's contents to the "
       "clipboard"));
+  cutAct->setIconText("Cut");
 
   copyAct = new QAction(QIcon(":/images/gtk-copy.png"), tr("&Copy"), this);
   copyAct->setShortcut(tr("Ctrl+C"));
   copyAct->setStatusTip(tr("Copy the current selection's contents to the "
       "clipboard"));
+  copyAct->setIconText("Copy");
 
   pasteAct = new QAction(QIcon(":/images/gtk-paste.png"), tr("&Paste"), this);
   pasteAct->setShortcut(tr("Ctrl+V"));
   pasteAct->setStatusTip(tr("Paste the clipboard's contents into the current "
       "selection"));
+  pasteAct->setIconText("Paste");
 
   joinAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("&Join orc/sco"), this);
 //   joinAct->setShortcut(tr("Ctrl+V"));
   joinAct->setStatusTip(tr("Join orc/sco files in a single csd file"));
+  joinAct->setIconText("Join");
   connect(joinAct, SIGNAL(triggered()), this, SLOT(join()));
 
   findAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("&Find and Replace"), this);
   findAct->setShortcut(tr("Ctrl+F"));
   findAct->setStatusTip(tr("Find and replace strings in file"));
+  findAct->setIconText("Find");
   connect(findAct, SIGNAL(triggered()), this, SLOT(findReplace()));
 
   autoCompleteAct = new QAction(tr("AutoComplete"), this);
   autoCompleteAct->setShortcut(tr("Alt+C"));
   autoCompleteAct->setStatusTip(tr("Autocomplete according to Status bar display"));
+  autoCompleteAct->setIconText("AutoComplete");
   connect(autoCompleteAct, SIGNAL(triggered()), this, SLOT(autoComplete()));
 
   configureAct = new QAction(QIcon(":/images/control-center2.png"), tr("Configuration"), this);
 //   autoCompleteAct->setShortcut(tr("Ctrl+ "));
   configureAct->setStatusTip(tr("Open configuration dialog"));
+  configureAct->setIconText("Configure");
   connect(configureAct, SIGNAL(triggered()), this, SLOT(configure()));
 
   playAct = new QAction(QIcon(":/images/gtk-media-play-ltr.png"), tr("Play"), this);
   playAct->setShortcut(tr("Alt+R"));
   playAct->setStatusTip(tr("Play"));
+  playAct->setIconText("Play");
   connect(playAct, SIGNAL(triggered()), this, SLOT(play()));
 
   stopAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop"), this);
   stopAct->setShortcut(tr("Alt+S"));
   stopAct->setStatusTip(tr("Stop"));
+  stopAct->setIconText("Stop");
   connect(stopAct, SIGNAL(triggered()), this, SLOT(stop()));
 
   renderAct = new QAction(QIcon(":/images/render.png"), tr("Render to file"), this);
   renderAct->setShortcut(tr("Alt+F"));
   renderAct->setStatusTip(tr("Render to file"));
+  renderAct->setIconText("Render");
   connect(renderAct, SIGNAL(triggered()), this, SLOT(render()));
 
   externalPlayerAct = new QAction(QIcon(":/images/playfile.png"), tr("Play Audiofile"), this);
 //   externalPlayerAct->setShortcut(tr("Alt+F"));
   externalPlayerAct->setStatusTip(tr("Play rendered audiofile in External Editor"));
+  externalPlayerAct->setIconText("External Player");
   connect(externalPlayerAct, SIGNAL(triggered()), this, SLOT(openExternalPlayer()));
 
   externalEditorAct = new QAction(QIcon(":/images/editfile.png"), tr("Edit Audiofile"), this);
 //   externalEditorAct->setShortcut(tr("Alt+F"));
   externalEditorAct->setStatusTip(tr("Edit rendered audiofile in External Editor"));
+  externalEditorAct->setIconText("External Editor");
   connect(externalEditorAct, SIGNAL(triggered()), this, SLOT(openExternalEditor()));
 
   showHelpAct = new QAction(QIcon(":/images/gtk-info.png"), tr("Help Panel"), this);
-  showHelpAct->setShortcut(tr("Alt+W"));
+  showHelpAct->setShortcut(tr("Alt+1"));
   showHelpAct->setCheckable(true);
   showHelpAct->setChecked(true);
   showHelpAct->setStatusTip(tr("Show the Csound Manual Panel"));
+  showHelpAct->setIconText("Manual");
   connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
   connect(helpPanel, SIGNAL(Close(bool)), showHelpAct, SLOT(setChecked(bool)));
 
   showConsole = new QAction(QIcon(":/images/gksu-root-terminal.png"), tr("Output Console"), this);
-  showConsole->setShortcut(tr("Alt+A"));
+  showConsole->setShortcut(tr("Alt+2"));
   showConsole->setCheckable(true);
   showConsole->setChecked(true);
   showConsole->setStatusTip(tr("Show Csound's message console"));
+  showConsole->setIconText("Console");
   connect(showConsole, SIGNAL(toggled(bool)), m_console, SLOT(setVisible(bool)));
   connect(m_console, SIGNAL(Close(bool)), showConsole, SLOT(setChecked(bool)));
 
   setHelpEntryAct = new QAction(QIcon(":/images/gtk-info.png"), tr("Show Opcode Entry"), this);
   setHelpEntryAct->setShortcut(tr("Shift+F1"));
   setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
+  setHelpEntryAct->setIconText("Manual for opcode");
   connect(setHelpEntryAct, SIGNAL(triggered()), this, SLOT(setHelpEntry()));
 
   showUtilitiesAct = new QAction(QIcon(":/images/gnome-devel.png"), tr("Utilities"), this);
-//   showUtilitiesAct->setShortcut(tr("Alt+W"));
+  showUtilitiesAct->setShortcut(tr("Alt+3"));
   showUtilitiesAct->setCheckable(true);
   showUtilitiesAct->setChecked(false);
   showUtilitiesAct->setStatusTip(tr("Show the Csound Utilities dialog"));
+  showUtilitiesAct->setIconText("Utilities");
   connect(showUtilitiesAct, SIGNAL(triggered(bool)), utilitiesDialog, SLOT(setVisible(bool)));
   connect(utilitiesDialog, SIGNAL(Close(bool)), showUtilitiesAct, SLOT(setChecked(bool)));
 
   showWidgetsAct = new QAction(QIcon(":/images/gnome-mime-application-x-diagram.png"), tr("Widgets"), this);
   showWidgetsAct->setCheckable(true);
   showWidgetsAct->setChecked(true);
-//   externalEditorAct->setShortcut(tr("Alt+F"));
+  showWidgetsAct->setShortcut(tr("Alt+4"));
   showWidgetsAct->setStatusTip(tr("Show Realtime Widgets"));
+  showWidgetsAct->setIconText("Widgets");
   connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
   connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
 
   aboutAct = new QAction(tr("&About QuteCsound"), this);
   aboutAct->setStatusTip(tr("Show the application's About box"));
+  aboutAct->setIconText("About");
   connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 
   aboutQtAct = new QAction(tr("About &Qt"), this);
   aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
+  aboutQtAct->setIconText("About Qt");
   connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
   cutAct->setEnabled(false);
@@ -1065,6 +1121,13 @@ void qutecsound::createToolBars()
   configureToolBar->addAction(showUtilitiesAct);
   configureToolBar->addAction(showConsole);
   configureToolBar->addAction(showHelpAct);
+
+  Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
+      Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
+  fileToolBar->setToolButtonStyle(toolButtonStyle);
+  editToolBar->setToolButtonStyle(toolButtonStyle);
+  controlToolBar->setToolButtonStyle(toolButtonStyle);
+  configureToolBar->setToolButtonStyle(toolButtonStyle);
 }
 
 void qutecsound::createStatusBar()
@@ -1116,11 +1179,13 @@ void qutecsound::readSettings()
   m_options->fontPointSize = settings.value("fontsize", 12).toDouble();
   m_options->consoleFont = settings.value("consolefont", "Courier").toString();
   m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
+  m_options->tabWidth = settings.value("tabWidth", 80).toInt();
   m_options->colorVariables = settings.value("colorvariables", true).toBool();
   m_options->autoPlay = settings.value("autoplay", false).toBool();
   m_options->saveChanges = settings.value("savechanges", true).toBool();
   m_options->rememberFile = settings.value("rememberfile", true).toBool();
   m_options->saveWidgets = settings.value("savewidgets", true).toBool();
+  m_options->iconText = settings.value("iconText", true).toBool();
   m_options->invalueEnabled = settings.value("invalueEnabled", true).toBool();
   m_options->chngetEnabled = settings.value("chngetEnabled", false).toBool();
   lastFile = settings.value("lastfile", "").toString();
@@ -1207,11 +1272,13 @@ void qutecsound::writeSettings()
   settings.setValue("fontsize", m_options->fontPointSize);
   settings.setValue("consolefont", m_options->consoleFont );
   settings.setValue("consolefontsize", m_options->consoleFontPointSize);
+  settings.setValue("tabWidth", m_options->tabWidth );
   settings.setValue("colorvariables", m_options->colorVariables);
   settings.setValue("autoplay", m_options->autoPlay);
   settings.setValue("savechanges", m_options->saveChanges);
   settings.setValue("rememberfile", m_options->rememberFile);
   settings.setValue("savewidgets", m_options->saveWidgets);
+  settings.setValue("iconText", m_options->iconText);
   settings.setValue("enableWidgets", m_options->enableWidgets);
   settings.setValue("invalueEnabled", m_options->invalueEnabled);
   settings.setValue("chngetEnabled", m_options->chngetEnabled);
@@ -1279,7 +1346,7 @@ int qutecsound::execute(QString executable, QString options)
   system(commandLine.toStdString().c_str());
 #endif
 #ifdef LINUX
-  QString commandLine = executable + " " + options;
+  QString commandLine = executable + " " + options + "&";
   system(commandLine.toStdString().c_str());
 #endif
 #ifdef WIN32
@@ -1342,6 +1409,7 @@ bool qutecsound::loadFile(QString fileName)
   curPage = documentPages.size() - 1;
   documentTabs->setCurrentIndex(curPage);
   textEdit = newPage;
+  textEdit->setTabStopWidth(m_options->tabWidth);
   connectActions();
   QString text;
   while (!file.atEnd()) {
@@ -1353,6 +1421,7 @@ bool qutecsound::loadFile(QString fileName)
   //textEdit->setPlainText(fixLineEndings(in.readAll()));
 //   textEdit->setPlainText(text);
   textEdit->setTextString(text);
+  textEdit->setTabStopWidth(m_options->tabWidth);
   m_highlighter->setColorVariables(m_options->colorVariables);
   m_highlighter->setDocument(textEdit->document());
   QApplication::restoreOverrideCursor();
@@ -1573,7 +1642,11 @@ void qutecsound::processEventQueue(CsoundUserData *ud)
   }
 }
 
+#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
+void qutecsound::csThread(void *data)
+#else
 uintptr_t qutecsound::csThread(void *data)
+#endif
 {
   CsoundUserData* udata = (CsoundUserData*)data;
   if(!udata->result) {
@@ -1591,11 +1664,11 @@ uintptr_t qutecsound::csThread(void *data)
         processEventQueue(udata);
       }
     }
-    csoundStop(udata->csound);
-    csoundCleanup(udata->csound);
-    csoundDestroy(udata->csound);
   }
+#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
+#else
   return 1;
+#endif
 }
 
 void qutecsound::outputValueCallback (CSOUND *csound,
