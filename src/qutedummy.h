@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andres Cabrera   *
- *   mantaraya36@gmail.com   *
+ *   Copyright (C) 2008 by Andres Cabrera                                  *
+ *   mantaraya36@gmail.com                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -15,39 +15,21 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef DOCUMENTPAGE_H
-#define DOCUMENTPAGE_H
+#ifndef QUTEDUMMY_H
+#define QUTEDUMMY_H
 
-#include <QWidget>
-#include <QTextEdit>
-#include <QDomElement>
+#include "qutewidget.h"
 
-class DocumentPage : public QTextEdit
+class QuteDummy : public QuteWidget
 {
   Q_OBJECT
   public:
-    DocumentPage(QWidget *parent);
+    QuteDummy(QWidget *parent);
 
-    ~DocumentPage();
+    ~QuteDummy();
 
-    int setTextString(QString text);
-    QString getFullText();
-    QString getMacWidgetsText();
-//     QTextDocument *textDocument;
-    QString fileName;
-    QString companionFile;
-
-    bool askForFile;
-  private:
-    QString macOptions;
-    QString macPresets;
-    QString macGUI;
-    QDomElement widgets;
-
-  public slots:
-    void setMacWidgetsText(QString text);
 };
 
 #endif

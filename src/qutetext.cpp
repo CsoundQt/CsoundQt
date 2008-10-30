@@ -59,7 +59,7 @@ void QuteText::setResolution(double resolution)
 
 void QuteText::setAlignment(int alignment)
 {
-  qDebug("QuteText::setAlignment %i", alignment);
+//   qDebug("QuteText::setAlignment %i", alignment);
   Qt::Alignment align;
   switch (alignment) {
     case 0:

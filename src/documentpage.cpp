@@ -46,6 +46,16 @@ int DocumentPage::setTextString(QString text)
   else {
     macOptions = "";
   }
+  if (text.contains("<MacPresets>") and text.contains("</MacPresets>")) {
+    macPresets = text.right(text.size()-text.indexOf("<MacPresets>"));
+    macPresets.resize(macPresets.indexOf("</MacPresets>") + 13);
+    //Removes line breaks also
+    text.remove(text.indexOf("<MacPresets>") - 1, macPresets.size() + 1);
+    qDebug("<MacPresets> present.");
+  }
+  else {
+    macPresets = "";
+  }
   if (text.contains("<MacGUI>") and text.contains("</MacGUI>")) {
     macGUI = text.right(text.size()-text.indexOf("<MacGUI>"));
     macGUI.resize(macGUI.indexOf("</MacGUI>") + 9);
@@ -67,7 +77,7 @@ QString DocumentPage::getFullText()
   fullText = document()->toPlainText();
   if (!fullText.endsWith("\n"))
     fullText += "\n";
-  fullText += macOptions + "\n" + macGUI + "\n";
+  fullText += macOptions + "\n" + macGUI + "\n" + macPresets + "\n";
   return fullText;
 }
 

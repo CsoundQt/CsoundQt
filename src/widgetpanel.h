@@ -56,11 +56,14 @@ class WidgetPanel : public QDockWidget
     QAction *createSliderAct;
     QAction *createLabelAct;
     QAction *createButtonAct;
+    QAction *createKnobAct;
 
 
     int createSlider(int x, int y, int width, int height, QString widgetLine);
     int createLabel(int x, int y, int width, int height, QString widgetLine);
     int createButton(int x, int y, int width, int height, QString widgetLine);
+    int createKnob(int x, int y, int width, int height, QString widgetLine);
+    int createDummy(int x, int y, int width, int height, QString widgetLine);
 
     virtual void closeEvent(QCloseEvent * event);
 
@@ -71,6 +74,7 @@ class WidgetPanel : public QDockWidget
     void createLabel();
     void createSlider();
     void createButton();
+    void createKnob();
 
   signals:
     void widgetsChanged(QString text);

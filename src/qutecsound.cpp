@@ -217,17 +217,17 @@ void qutecsound::open()
   QString fileName = "";
   if (maybeSave()) {
     fileName = QFileDialog::getOpenFileName(this, tr("Open File"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco)"));
+    for (int i = 0; i < documentPages.size(); i++) {
+      if (fileName == documentPages[i]->fileName) {
+        documentTabs->setCurrentIndex(i);
+        changePage(i);
+        statusBar()->showMessage(tr("File already open"), 10000);
+        return;
+      }
+    }
     if (!fileName.isEmpty()) {
       loadCompanionFile(fileName);
       loadFile(fileName);
-    }
-  }
-  for (int i = 0; i < documentPages.size(); i++) {
-    if (fileName == documentPages[i]->fileName) {
-      documentTabs->setCurrentIndex(i);
-      changePage(i);
-      statusBar()->showMessage(tr("File already open"), 10000);
-      return;
     }
   }
 }
@@ -548,6 +548,8 @@ void qutecsound::stop()
   if (ud->PERF_STATUS == 1) {
     ud->PERF_STATUS = 0;
   }
+  else
+    return;
   if (m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
   perfThread->Stop();

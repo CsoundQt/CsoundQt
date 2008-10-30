@@ -30,7 +30,9 @@ SOURCES += qutecsound.cpp \
  quteslider.cpp \
  findreplace.cpp \
  qutetext.cpp \
- qutebutton.cpp
+ qutebutton.cpp \
+ qutedummy.cpp \
+ quteknob.cpp
 HEADERS += qutecsound.h \
  dockhelp.h \
  opentryparser.h \
@@ -47,7 +49,9 @@ HEADERS += qutecsound.h \
  quteslider.h \
  findreplace.h \
  qutetext.h \
- qutebutton.h
+ qutebutton.h \
+ qutedummy.h \
+ quteknob.h
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \
@@ -109,8 +113,8 @@ macx {
     DEFINES +=MACOSX
     HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.h
     qute_cpp {
-      HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.hpp
-      HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csPerfThread.hpp
+        HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.hpp
+        HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csPerfThread.hpp
     }
     LIBS += -framework QtXml
     LIBS += -framework QtGui

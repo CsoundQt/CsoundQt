@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andres Cabrera   *
- *   mantaraya36@gmail.com   *
+ *   Copyright (C) 2008 by Andres Cabrera                                  *
+ *   mantaraya36@gmail.com                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -15,39 +15,18 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef DOCUMENTPAGE_H
-#define DOCUMENTPAGE_H
+#include "qutedummy.h"
 
-#include <QWidget>
-#include <QTextEdit>
-#include <QDomElement>
-
-class DocumentPage : public QTextEdit
+QuteDummy::QuteDummy(QWidget *parent) : QuteWidget(parent)
 {
-  Q_OBJECT
-  public:
-    DocumentPage(QWidget *parent);
+  m_widget = new QFrame(this);
+//   ((QFrame *)m_widget)->setFrameShape(QFrame::Box);
+  m_widget->setAutoFillBackground (true);
+  m_widget->setPalette(QPalette(Qt::gray));
+}
 
-    ~DocumentPage();
-
-    int setTextString(QString text);
-    QString getFullText();
-    QString getMacWidgetsText();
-//     QTextDocument *textDocument;
-    QString fileName;
-    QString companionFile;
-
-    bool askForFile;
-  private:
-    QString macOptions;
-    QString macPresets;
-    QString macGUI;
-    QDomElement widgets;
-
-  public slots:
-    void setMacWidgetsText(QString text);
-};
-
-#endif
+QuteDummy::~QuteDummy()
+{
+}

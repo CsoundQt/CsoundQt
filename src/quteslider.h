@@ -24,6 +24,7 @@
 
 class QuteSlider : public QuteWidget
 {
+  Q_OBJECT
   public:
     QuteSlider(QWidget *parent);
 

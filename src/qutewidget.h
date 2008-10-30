@@ -20,33 +20,31 @@
 #ifndef QUTEWIDGET_H
 #define QUTEWIDGET_H
 
-#include <QString>
-// #include <QWidget>
-
 #include <QtGui>
+// #include <QString>
 
-enum widgetType {
-  QUTE_SLIDER,
-  QUTE_KNOB,
-  QUTE_CHECKBOX,
-  QUTE_BUTTON,
-  QUTE_LABEL,
-  QUTE_LINEEDIT,
-  QUTE_DISPLAY,
-  QUTE_SCROLLNUMBER,
-  QUTE_COMBOBOX,
-  NONE
-};
+// enum widgetType {
+//   QUTE_SLIDER,
+//   QUTE_KNOB,
+//   QUTE_CHECKBOX,
+//   QUTE_BUTTON,
+//   QUTE_LABEL,
+//   QUTE_LINEEDIT,
+//   QUTE_DISPLAY,
+//   QUTE_SCROLLNUMBER,
+//   QUTE_COMBOBOX,
+//   NONE
+// };
 
 class QuteWidget : public QWidget
 {
   Q_OBJECT
   public:
-    QuteWidget(QWidget* parent, widgetType type = QUTE_SLIDER);
+    QuteWidget(QWidget* parent/*, widgetType type = QUTE_SLIDER*/);
 
     ~QuteWidget();
 
-    widgetType type() {return m_type;}
+//     widgetType type() {return m_type;}
     const QString name() {return m_name;}
 
     virtual void setWidgetLine(QString line);
@@ -65,7 +63,7 @@ class QuteWidget : public QWidget
     virtual void applyProperties();
 
   protected:
-    widgetType m_type;
+//     widgetType m_type;
     QString m_line;
     QWidget *m_layoutWidget;
     QWidget *m_widget;
@@ -74,6 +72,7 @@ class QuteWidget : public QWidget
 
     QString m_name;
     double m_min, m_max;
+    double m_resolution;
 //     double m_min2,m_max2;
     double m_value, m_value2;
 
@@ -98,11 +97,11 @@ class QuteWidget : public QWidget
   private slots:
     void apply();
     void openProperties();
-	void deleteWidget();
+    void deleteWidget();
 
   signals:
     void widgetChanged();
-	void deleteThisWidget(QuteWidget *thisWidget);
+    void deleteThisWidget(QuteWidget *thisWidget);
 };
 
 #endif
