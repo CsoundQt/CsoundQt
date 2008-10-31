@@ -135,6 +135,7 @@ void QuteText::setText(QString text)
     size = 1;
   text.prepend("<font face=\"" + m_font + "\" size=\"" + QString::number(size) + "\">");
   text.append("</font>");
+  text = text.replace("Â", "\n");
   ((QuteLabel *)m_widget)->setText(text);
 }
 

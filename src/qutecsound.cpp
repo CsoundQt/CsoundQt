@@ -150,6 +150,7 @@ void qutecsound::messageCallback_NoThread(CSOUND *csound,
   Console *console = ud->qcs->m_console;
   QString msg;
   msg = msg.vsprintf(fmt, args);
+  //FIXME Here's the problem
   console->appendMessage(msg);
   console->update();
 }
@@ -387,11 +388,14 @@ void qutecsound::play(bool realtime)
 {
   if (ud->PERF_STATUS == 1) {
     stop();
+    return;
   }
   widgetPanel->eventQueueSize = 0; //Flush events gathered while idle
   if (documentPages[curPage]->fileName.isEmpty()) {
-    if (!saveAs())
+    if (!saveAs()) {
+      playAct->setChecked(false);
       return;
+    }
   }
   else if (documentPages[curPage]->document()->isModified()) {
     if (m_options->saveChanges)
@@ -423,6 +427,7 @@ void qutecsound::play(bool realtime)
                             tr("PostQC"),
                             tr("Error creating temporary file."),
                             QMessageBox::Ok);
+      playAct->setChecked(false);
       return;
     }
     if (documentPages[curPage]->fileName.endsWith(".csd")) {
@@ -439,6 +444,7 @@ void qutecsound::play(bool realtime)
     csound=csoundCreate(0);
     csoundReset(csound);
     csoundSetHostData(csound, (void *) ud);
+    //FIXME Setting the callback makes threaded usage unstable
     csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
     qDebug("Command Line:");
     for (int index=0; index< argc; index++) {
@@ -453,6 +459,7 @@ void qutecsound::play(bool realtime)
       free(argv);
       csoundCleanup(csound);
       csoundDestroy(csound);  //FIXME Had to destroy csound every run otherwise FLTK widgets crash...
+      playAct->setChecked(false);
       return;
     }
     if (m_options->invalueEnabled and m_options->enableWidgets) {
@@ -491,9 +498,7 @@ void qutecsound::play(bool realtime)
           processEventQueue(ud);
         }
       }
-      ud->PERF_STATUS=0;
-      csoundDestroy(csound);  // FIXME Had to destroy csound every run otherwise FLTK widgets crash...
-//       csound = NULL;
+      stop();
     }
     free(argv);
 //     int hold;
@@ -540,11 +545,14 @@ void qutecsound::play(bool realtime)
     options = SCRIPT_NAME;
 #endif
     execute(m_options->terminal, options);
+    playAct->setChecked(false);
   }
 }
 
 void qutecsound::stop()
 {
+  qDebug("qutecsound::stop()");
+  playAct->setChecked(false);
   if (ud->PERF_STATUS == 1) {
     ud->PERF_STATUS = 0;
   }
@@ -559,8 +567,8 @@ void qutecsound::stop()
   csoundJoinThread(ThreadID);
 //   csoundCleanup(csound);
 #endif
-  csoundDestroy(csound);
   }
+  csoundDestroy(csound);
 }
 
 void qutecsound::render()
@@ -915,6 +923,7 @@ void qutecsound::createActions()
   playAct->setShortcut(tr("Alt+R"));
   playAct->setStatusTip(tr("Play"));
   playAct->setIconText("Play");
+  playAct->setCheckable(true);
   connect(playAct, SIGNAL(triggered()), this, SLOT(play()));
 
   stopAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop"), this);

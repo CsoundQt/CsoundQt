@@ -112,6 +112,8 @@ void QuteButton::createPropertiesDialog()
 
 void QuteButton::setText(QString text)
 {
+  //TODO use proper character symbol
+  text = text.replace("�", "\n");
   ((QPushButton *)m_widget)->setText(text);
 }
 

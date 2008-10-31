@@ -63,6 +63,7 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
     ExternalRadioButton->setChecked(true);
 
   threadCheckBox->setChecked(m_options->thread);
+  threadCheckBox->setEnabled(ApiRadioButton->isChecked());
 
   BufferSizeLineEdit->setText(QString::number(m_options->bufferSize));
   BufferSizeCheckBox->setChecked(m_options->bufferSizeActive);
