@@ -57,7 +57,7 @@ qutecsound::qutecsound(QString fileName)
   ud = (CsoundUserData *)malloc(sizeof(CsoundUserData));
   ud->PERF_STATUS = 0;
   ud->qcs = this;
-  //threadLock = csoundCreateThreadLock();
+  perfMutex = csoundCreateMutex(0);
 
   m_options = new Options();
 
@@ -150,9 +150,24 @@ void qutecsound::messageCallback_NoThread(CSOUND *csound,
   Console *console = ud->qcs->m_console;
   QString msg;
   msg = msg.vsprintf(fmt, args);
-  //FIXME Here's the problem
   console->appendMessage(msg);
   console->update();
+}
+
+void qutecsound::messageCallback_Thread(CSOUND *csound,
+                                          int attr,
+                                          const char *fmt,
+                                          va_list args)
+{
+  CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+  Console *console = ud->qcs->m_console;
+  QString msg;
+  msg = msg.vsprintf(fmt, args);
+  csoundLockMutex(ud->qcs->perfMutex);
+  //qApp->processEvents();
+  console->appendMessage(msg);
+  //console->repaint();
+  csoundUnlockMutex(ud->qcs->perfMutex);
 }
 
 void qutecsound::changeFont()
@@ -444,8 +459,12 @@ void qutecsound::play(bool realtime)
     csound=csoundCreate(0);
     csoundReset(csound);
     csoundSetHostData(csound, (void *) ud);
-    //FIXME Setting the callback makes threaded usage unstable
-    csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
+    if(m_options->thread) {
+      csoundSetMessageCallback(csound, &qutecsound::messageCallback_Thread);
+	}
+	else {
+      csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
+	}
     qDebug("Command Line:");
     for (int index=0; index< argc; index++) {
       fprintf(stderr, "%s ",argv[index]);
@@ -487,7 +506,7 @@ void qutecsound::play(bool realtime)
 #endif
     }
     else {
-      while(csoundPerformKsmps(csound)==0 && ud->PERF_STATUS == 1) {
+      while(ud->PERF_STATUS == 1 && csoundPerformKsmps(csound)==0) {
         qApp->processEvents();
         if (ud->qcs->m_options->enableWidgets) {
           widgetPanel->getValues(&channelNames, &values);
@@ -552,13 +571,14 @@ void qutecsound::play(bool realtime)
 void qutecsound::stop()
 {
   qDebug("qutecsound::stop()");
-  playAct->setChecked(false);
   if (ud->PERF_STATUS == 1) {
     ud->PERF_STATUS = 0;
   }
-  else
-    return;
-  if (m_options->thread) {
+  else {
+	return;
+  }
+  //csoundLockMutex(perfMutex);
+  if (m_options->thread) { 
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
   perfThread->Stop();
   perfThread->Join();
@@ -567,8 +587,11 @@ void qutecsound::stop()
   csoundJoinThread(ThreadID);
 //   csoundCleanup(csound);
 #endif
+
   }
+  playAct->setChecked(false);
   csoundDestroy(csound);
+  //csoundUnlockMutex(perfMutex);
 }
 
 void qutecsound::render()
@@ -923,7 +946,8 @@ void qutecsound::createActions()
   playAct->setShortcut(tr("Alt+R"));
   playAct->setStatusTip(tr("Play"));
   playAct->setIconText("Play");
-  playAct->setCheckable(true);
+  //FIXME this crashes on Mac on second playing
+  //playAct->setCheckable(true);
   connect(playAct, SIGNAL(triggered()), this, SLOT(play()));
 
   stopAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop"), this);
@@ -1460,10 +1484,10 @@ void qutecsound::loadCompanionFile(const QString &fileName)
 {
   QString companionFileName = fileName;
   if (fileName.endsWith(".orc")) {
-   // fileName.replace(".orc", ".sco");
+    companionFileName.replace(".orc", ".sco");
   }
   else if (fileName.endsWith(".sco")) {
-    //fileName.replace(".sco", ".orc");
+    companionFileName.replace(".sco", ".orc");
   }
   else
     return;
@@ -1640,6 +1664,7 @@ void qutecsound::writeWidgetValues(CsoundUserData *ud)
 void qutecsound::processEventQueue(CsoundUserData *ud)
 {
   while (ud->qcs->widgetPanel->eventQueueSize > 0) {
+    csoundLockMutex(ud->qcs->perfMutex);
     ud->qcs->widgetPanel->eventQueueSize--;
     ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize];
     char type = ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize][0].unicode();
@@ -1649,7 +1674,9 @@ void qutecsound::processEventQueue(CsoundUserData *ud)
     for (int j = 0; j < eventElements.size(); j++) {
       pFields[j] = (MYFLT) eventElements[j].toDouble();
     }
-    csoundScoreEvent(ud->csound,type ,pFields, eventElements.size());
+	if (ud->PERF_STATUS == 1)
+      csoundScoreEvent(ud->csound,type ,pFields, eventElements.size());
+    csoundUnlockMutex(ud->qcs->perfMutex);
   }
 }
 
@@ -1687,7 +1714,11 @@ void qutecsound::outputValueCallback (CSOUND *csound,
                                      MYFLT value)
 {
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-  ud->qcs->widgetPanel->setValue(QString(channelName), value);
+  //qApp->processEvents();
+  //csoundLockMutex(ud->qcs->perfMutex);
+  //if (ud->PERF_STATUS == 1)
+  //  ud->qcs->widgetPanel->setValue(QString(channelName), value);
+  //csoundUnlockMutex(ud->qcs->perfMutex);
 }
 
 void qutecsound::inputValueCallback (CSOUND *csound,

@@ -22,7 +22,7 @@
 #ifndef QUTECSOUND_H
 #define QUTECSOUND_H
 
-#define QUTECSOUND_VERSION "0.3.3"
+#define QUTECSOUND_VERSION "0.3.4"
 
 #include <QtGui>
 #include <csound.h>
@@ -84,12 +84,16 @@ class qutecsound:public QMainWindow
                                          int attr,
                                          const char *fmt,
                                          va_list args);
+    static void messageCallback_Thread(CSOUND *csound,
+                                         int attr,
+                                         const char *fmt,
+                                         va_list args);
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
     static void  csThread(void *data);
 #else
     static uintptr_t csThread(void *data);
 #endif
-	//static void *threadLock;
+	void *perfMutex;
     static void outputValueCallback (CSOUND *csound,
                                     const char *channelName,
                                     MYFLT value);

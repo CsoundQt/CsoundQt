@@ -25,7 +25,7 @@ Console::Console(QWidget * parent)
   setWindowTitle("Csound Output Console");
   text = new QTextEdit();
   text->setReadOnly(true);
-  setWidget (text);
+  setWidget(text);
   text->document()->setDefaultFont(QFont("Courier", 10));
 }
 
@@ -48,6 +48,7 @@ void Console::appendMessage(QString msg)
   text->insertPlainText(msg);
   text->moveCursor(QTextCursor::End);
   text->setTextColor(QColor("black"));
+  //text->repaint();
 }
 
 void Console::clear()

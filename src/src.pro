@@ -115,6 +115,7 @@ macx {
     qute_cpp {
         HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.hpp
         HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csPerfThread.hpp
+        LIBS += /Library/Frameworks/CsoundLib.framework/Versions/Current/lib_csnd.dylib
     }
     LIBS += -framework QtXml
     LIBS += -framework QtGui
