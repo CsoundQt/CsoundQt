@@ -49,8 +49,7 @@ class QuteWidget : public QWidget
 
     virtual void setWidgetLine(QString line);
     void setChannelName(QString name);
-    void setWidgetGeometry(int x, int y, int w, int h);
-    void setWidgetGeometry(QRect rect);
+    virtual void setWidgetGeometry(int x, int y, int w, int h);
     virtual void setRange(int min, int max);
     virtual void setValue(double value);
     void setResolution(double resolution);
@@ -64,6 +63,10 @@ class QuteWidget : public QWidget
 
   protected:
 //     widgetType m_type;
+    QSpinBox *xSpinBox;
+    QSpinBox *ySpinBox;
+    QSpinBox *wSpinBox;
+    QSpinBox *hSpinBox;
     QString m_line;
     QWidget *m_layoutWidget;
     QWidget *m_widget;
@@ -76,16 +79,13 @@ class QuteWidget : public QWidget
 //     double m_min2,m_max2;
     double m_value, m_value2;
 
+    void setWidgetGeometry(QRect rect);
     virtual void contextMenuEvent(QContextMenuEvent *event);
 
   private:
     QAction *propertiesAct;
     QAction *deleteAct;
 
-    QSpinBox *xSpinBox;
-    QSpinBox *ySpinBox;
-    QSpinBox *wSpinBox;
-    QSpinBox *hSpinBox;
     QLineEdit *nameLineEdit;
     QPushButton *applyButton;
     QPushButton *cancelButton;

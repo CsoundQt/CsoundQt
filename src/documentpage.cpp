@@ -34,7 +34,6 @@ DocumentPage::~DocumentPage()
 
 int DocumentPage::setTextString(QString text)
 {
-  //TODO filter MacCsound elements
   text.replace(QRegExp("^\n\r^\n"), "\r\n");
   if (text.contains("<MacOptions>") and text.contains("</MacOptions>")) {
     macOptions = text.right(text.size()-text.indexOf("<MacOptions>"));

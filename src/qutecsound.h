@@ -22,7 +22,7 @@
 #ifndef QUTECSOUND_H
 #define QUTECSOUND_H
 
-#define QUTECSOUND_VERSION "0.3.4"
+#define QUTECSOUND_VERSION "0.3.5"
 
 #include <QtGui>
 #include <csound.h>
@@ -103,6 +103,8 @@ class qutecsound:public QMainWindow
     static void readWidgetValues(CsoundUserData *ud);
     static void writeWidgetValues(CsoundUserData *ud);
     static void processEventQueue(CsoundUserData *ud);
+    void queueOutValue(QString channelName, double value);
+    void queueMessage(QString message);
 
     QVector<QString> channelNames;
     QVector<double> values;
@@ -146,6 +148,7 @@ class qutecsound:public QMainWindow
     void applySettings(int result = 0);
     void checkSelection();
     void runUtility(QString flags);
+    void dispatchQueues();
 
   private:
     void createActions();
@@ -176,7 +179,9 @@ class qutecsound:public QMainWindow
 #endif
     CsoundUserData* ud;
 
-
+    QHash<QString, double> outValueQueue;
+    QStringList messageQueue;
+    QTimer *queueTimer;
     QTabWidget *documentTabs;
     QVector<DocumentPage *> documentPages;
     //TODO remove this variable? or make it DocumentPage

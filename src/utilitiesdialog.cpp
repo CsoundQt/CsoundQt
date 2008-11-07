@@ -279,7 +279,7 @@ void UtilitiesDialog::browseCvOutput()
 {
 }
 
-void UtilitiesDialog::browseFile(QString &destination, QString extension)
+void UtilitiesDialog::browseFile(QString &destination, QString /*extension*/)
 {
   QString file =  QFileDialog::getOpenFileName(this,tr("Select File"),destination);
   if (file!="")
@@ -342,7 +342,7 @@ void UtilitiesDialog::changeTab(int tab)
   }
 }
 
-void UtilitiesDialog::closeEvent(QCloseEvent * event)
+void UtilitiesDialog::closeEvent(QCloseEvent * /*event*/)
 {
   emit Close(false);
 }

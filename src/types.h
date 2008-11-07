@@ -21,8 +21,11 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include <QString>
-#include <QStringList>
+// #include <QString>
+// #include <QStringList>
+
+// Time in milliseconds to process queue when threaded
+#define QCS_QUEUETIMER_TIME 30
 
 #ifdef LINUX
 #define DEFAULT_HTML_DIR "/home/andres/src/manual/html"

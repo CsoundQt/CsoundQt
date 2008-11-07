@@ -66,23 +66,23 @@ void QuteWidget::setWidgetGeometry(QRect rect)
   m_widget->setGeometry(wRect);
 }
 
-void QuteWidget::setRange(int min, int max)
+void QuteWidget::setRange(int /*min*/, int /*max*/)
 {
   qDebug("QuteWidget::setRange not implemented for widget type");
 }
 
-void QuteWidget::setValue(double value)
+void QuteWidget::setValue(double /*value*/)
 {
 //FIXME put this back when it's no longer a burden.
 //   qDebug("QuteWidget::setValue not implemented for widget type (value = %f)", value);
 }
 
-void QuteWidget::setResolution(double resolution)
+void QuteWidget::setResolution(double /*resolution*/)
 {
   qDebug("QuteWidget::setResolution not implemented for widget type");
 }
 
-void QuteWidget::setChecked(bool checked)
+void QuteWidget::setChecked(bool /*checked*/)
 {
   qDebug("QuteWidget::setChecked not implemented for widget type");
 }
@@ -99,7 +99,9 @@ QString QuteWidget::getWidgetLine()
 
 double QuteWidget::getValue()
 {
+#ifdef DEBUG
   qDebug("QuteWidget::getValue not implemented for widget type");
+#endif
   return 0.0;
 }
 

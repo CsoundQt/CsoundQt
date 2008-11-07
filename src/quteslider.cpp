@@ -24,6 +24,10 @@ QuteSlider::QuteSlider(QWidget *parent) : QuteWidget(parent)
   m_widget = new QSlider(this);
   m_max = 1.0;
   m_min = 0.0;
+  if (width() > height())
+    ((QSlider *)m_widget)->setOrientation(Qt::Horizontal);
+  else
+    ((QSlider *)m_widget)->setOrientation(Qt::Vertical);
 }
 
 QuteSlider::~QuteSlider()
@@ -51,6 +55,20 @@ void QuteSlider::setValue(double value)
   m_value = value;
   int val = (int) (((QSlider *)m_widget)->maximum() * (m_value - m_min)/(m_max-m_min));
   ((QSlider *)m_widget)->setValue(val);
+}
+
+void QuteSlider::setWidgetGeometry(int x, int y, int w, int h)
+{
+  setWidgetGeometry(QRect(x,y,w,h));
+  if (width() > height())
+    ((QSlider *)m_widget)->setOrientation(Qt::Horizontal);
+  else
+    ((QSlider *)m_widget)->setOrientation(Qt::Vertical);
+}
+
+void QuteSlider::setWidgetGeometry(QRect rect)
+{
+  QuteWidget::setWidgetGeometry(rect);
 }
 
 void QuteSlider::setWidgetLine(QString line)
