@@ -42,6 +42,8 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(createButtonAct, SIGNAL(triggered()), this, SLOT(createButton()));
   createKnobAct = new QAction(tr("Create Knob"),this);
   connect(createKnobAct, SIGNAL(triggered()), this, SLOT(createKnob()));
+  propertiesAct = new QAction(tr("Properties"),this);
+  connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
 
   setWidget(layoutWidget);
   resize(200, 100);
@@ -104,12 +106,13 @@ int WidgetPanel::newWidget(QString widgetLine)
   if (parts.size()<5)
     return -1;
   if (parts[0]=="ioView") {
-    if (parts[1]=="background") {
-      QColor bgColor(parts[2].toDouble()/65535., parts[3].toDouble()/65535., parts[4].toDouble()/65535.);
-    //TODO set bg color;
-    }
-    else { // =="nobackground"
-    }
+  // Colors in MacCsound have a range of 0-65535
+    setBackground(parts[1]=="background",
+                  QColor(parts[2].toInt()/256,
+                         parts[3].toInt()/256,
+                         parts[4].toInt()/256
+                        )
+                 );
     return 0;
   }
   else {
@@ -172,8 +175,8 @@ int WidgetPanel::newWidget(QString widgetLine)
       return createDummy(x,y,width, height, widgetLine);
     }
     else {
+      // Unknown widget...
       return createDummy(x,y,width, height, widgetLine);
-  // Unknown widget...
     }
   }
     return 0;
@@ -197,6 +200,11 @@ void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 QString WidgetPanel::widgetsText()
 {
   QString text = "<MacGUI>\n";
+  text += "ioView " + (autoFillBackground()? QString("background "):QString("nobackground "));
+  text += "{" + QString::number((int) (palette().button().color().redF()*65535.)) + ", ";
+  text +=  QString::number((int) (palette().button().color().greenF()*65535.)) + ", ";
+  text +=  QString::number((int) (palette().button().color().blueF()*65535.)) +"}\n";
+
   for (int i = 0; i < widgets.size(); i++) {
     text += widgets[i]->getWidgetLine() + "\n";
   }
@@ -231,6 +239,8 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   menu.addAction(createLabelAct);
   menu.addAction(createButtonAct);
   menu.addAction(createKnobAct);
+  menu.addSeparator();
+  menu.addAction(propertiesAct);
   currentPosition = event->pos();
   menu.exec(event->globalPos());
 }
@@ -327,17 +337,18 @@ int WidgetPanel::createButton(int x, int y, int width, int height, QString widge
   widget->setWidgetGeometry(x,y,width, height);
   widget->show();
   widgets.append(widget);
-//       widget->setType(parts[5]);
   widget->setValue(parts[6].toDouble());  //value produced by button
   widget->setChannelName(quoteParts[1]);
   widget->setText(quoteParts[3]);
-//       widget->setImage(quoteParts[5]);
+  widget->setFilename(quoteParts[5]);
+  widget->setType(parts[5]); // setType must come after setFilename so image is loaded
   if (quoteParts.size()>6) {
     quoteParts[6].remove(0,1); //remove initial space
     widget->setEventLine(quoteParts[6]);
   }
   connect(widget, SIGNAL(queueEvent(QString)), this, SLOT(queueEvent(QString)));
   connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
 
   return 1;
 }
@@ -379,6 +390,18 @@ int WidgetPanel::createDummy(int x, int y, int width, int height, QString widget
   return 1;
 }
 
+void WidgetPanel::setBackground(bool bg, QColor bgColor)
+{
+  if (bg) {
+    setPalette(QPalette(bgColor));
+    setAutoFillBackground(true);
+  }
+  else { // =="nobackground"
+    setPalette(QPalette());
+    setAutoFillBackground(false);
+  }
+}
+
 void WidgetPanel::createSlider()
 {
   createSlider(currentPosition.x(), currentPosition.y() - 20, 20, 100, QString("ioSlider {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(widgets.size())));
@@ -399,4 +422,54 @@ void WidgetPanel::createButton()
 void WidgetPanel::createKnob()
 {
   createKnob(currentPosition.x(), currentPosition.y() - 20, 80, 80, QString("ioKnob {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(widgets.size())));
+}
+
+void WidgetPanel::propertiesDialog()
+{
+  QDialog *dialog = new QDialog(this);
+  dialog->resize(300, 300);
+  dialog->setModal(true);
+  QGridLayout *layout = new QGridLayout(dialog);
+  bgCheckBox = new QCheckBox(dialog);
+  bgCheckBox->setText("Enable Background");
+  bgCheckBox->setChecked(autoFillBackground());
+  layout->addWidget(bgCheckBox, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
+  QLabel *label = new QLabel(dialog);
+//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  label->setText("Color");
+  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
+  bgButton = new QPushButton(dialog);
+  QPixmap pixmap(64,64);
+  pixmap.fill(palette().button().color());
+  bgButton->setIcon(pixmap);
+  layout->addWidget(bgButton, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);
+  QPushButton *applyButton = new QPushButton(tr("Apply"));
+  layout->addWidget(applyButton, 9, 1, Qt::AlignCenter|Qt::AlignVCenter);
+  QPushButton *cancelButton = new QPushButton(tr("Cancel"));
+  layout->addWidget(cancelButton, 9, 2, Qt::AlignCenter|Qt::AlignVCenter);
+  QPushButton *acceptButton = new QPushButton(tr("Ok"));
+  layout->addWidget(acceptButton, 9, 3, Qt::AlignCenter|Qt::AlignVCenter);
+  connect(acceptButton, SIGNAL(released()), dialog, SLOT(accept()));
+  connect(dialog, SIGNAL(accepted()), this, SLOT(applyProperties()));
+  connect(applyButton, SIGNAL(released()), this, SLOT(applyProperties()));
+  connect(cancelButton, SIGNAL(released()), dialog, SLOT(close()));
+  connect(bgButton, SIGNAL(released()), this, SLOT(selectBgColor()));
+  dialog->exec();
+}
+
+void WidgetPanel::applyProperties()
+{
+  setBackground(bgCheckBox->isChecked(), palette().button().color());
+}
+
+void WidgetPanel::selectBgColor()
+{
+  QColor color = QColorDialog::getColor(palette().button().color(), this);
+  if (color.isValid()) {
+    setPalette(QPalette(color));
+    QPixmap pixmap(64,64);
+    pixmap.fill(palette().button().color());
+    bgButton->setIcon(pixmap);
+  }
 }

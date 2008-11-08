@@ -20,7 +20,7 @@
 #ifndef WIDGETPANEL_H
 #define WIDGETPANEL_H
 
-#include <QDockWidget>
+#include <QtGui>
 
 #define QUTECSOUND_MAX_EVENTS 32
 
@@ -57,13 +57,19 @@ class WidgetPanel : public QDockWidget
     QAction *createLabelAct;
     QAction *createButtonAct;
     QAction *createKnobAct;
+    QAction *propertiesAct;
 
+    // For the properties dialog
+    QCheckBox *bgCheckBox;
+    QPushButton *bgButton;
 
     int createSlider(int x, int y, int width, int height, QString widgetLine);
     int createLabel(int x, int y, int width, int height, QString widgetLine);
     int createButton(int x, int y, int width, int height, QString widgetLine);
     int createKnob(int x, int y, int width, int height, QString widgetLine);
     int createDummy(int x, int y, int width, int height, QString widgetLine);
+
+    void setBackground(bool bg, QColor bgColor);
 
     virtual void closeEvent(QCloseEvent * event);
 
@@ -75,6 +81,9 @@ class WidgetPanel : public QDockWidget
     void createSlider();
     void createButton();
     void createKnob();
+    void propertiesDialog();
+    void applyProperties();
+    void selectBgColor();
 
   signals:
     void widgetsChanged(QString text);

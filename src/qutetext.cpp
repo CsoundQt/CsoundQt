@@ -135,13 +135,14 @@ void QuteText::setText(QString text)
     size = 1;
   text.prepend("<font face=\"" + m_font + "\" size=\"" + QString::number(size) + "\">");
   text.append("</font>");
-  text = text.replace("Â", "\n");
+  //TODO USE CORRECT CHARACTER for line break
+//   text = text.replace("ï¿½", "\n");
   ((QuteLabel *)m_widget)->setText(text);
 }
 
 QString QuteText::getWidgetLine()
 {
-  //TODO finish implementig all properties for label
+  //TODO finish implementing all properties for label
   QString line = "ioText {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += "label ";

@@ -36,7 +36,9 @@ class QuteButton : public QuteWidget
     virtual void applyProperties();
     virtual void createPropertiesDialog();
 //     virtual void setWidgetLine(QString line);
+    void setType(QString text);
     void setText(QString text);
+    void setFilename(QString filename);
     void setEventLine(QString eventLine);
     void popUpMenu(QPoint pos);
 
@@ -45,11 +47,16 @@ class QuteButton : public QuteWidget
 
   private:
     QString m_eventLine;
-    QString m_file;
+    QString m_type;  // can be event, value, pictevent, pictvalue, pict
+    QString m_filename;
 
+    QComboBox *typeComboBox;
     QDoubleSpinBox *valueBox;
     QLineEdit *text;
+    QLineEdit *filenameLineEdit;
     QLineEdit *line;
+
+    QIcon icon;
 
   private slots:
     void buttonReleased();
