@@ -121,8 +121,13 @@ void QuteButton::createPropertiesDialog()
   filenameLineEdit = new QLineEdit(dialog);
 //   text->setText(((QuteLabel *)m_widget)->toPlainText());
   filenameLineEdit->setText(m_filename);
-  layout->addWidget(filenameLineEdit, 6,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
   filenameLineEdit->setMinimumWidth(320);
+  layout->addWidget(filenameLineEdit, 6,1,1,2, Qt::AlignLeft|Qt::AlignVCenter);
+  QPushButton *browseButton = new QPushButton(dialog);
+  browseButton->setText("...");
+  layout->addWidget(browseButton, 6, 3, Qt::AlignCenter|Qt::AlignVCenter);
+  connect(browseButton, SIGNAL(released()), this, SLOT(browseFile()));
+
   label = new QLabel(dialog);
 //   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Event:");
@@ -142,8 +147,8 @@ void QuteButton::createPropertiesDialog()
 
 void QuteButton::setType(QString type)
 {
-  if (m_type == type)
-    return;
+//   if (m_type == type)
+//     return;
   m_type = type;
   if (m_type == "event" or m_type == "value") {
     icon = QIcon();
@@ -190,4 +195,13 @@ void QuteButton::buttonReleased()
   // Only produce events for event types
   if (m_type == "event" or m_type == "pictevent")
     emit(queueEvent(m_eventLine));
+}
+
+void QuteButton::browseFile()
+{
+  qDebug("QuteButton::browseFile()");
+  QString file =  QFileDialog::getOpenFileName(this,tr("Select File"));
+  if (file!="") {
+    filenameLineEdit->setText(file);
+  }
 }

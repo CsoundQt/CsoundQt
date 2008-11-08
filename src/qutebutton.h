@@ -60,6 +60,7 @@ class QuteButton : public QuteWidget
 
   private slots:
     void buttonReleased();
+    void browseFile();
 
   signals:
     void queueEvent(QString eventLine);
