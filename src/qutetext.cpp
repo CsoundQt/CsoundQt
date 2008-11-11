@@ -52,6 +52,18 @@ double QuteText::getValue()
   return m_value;
 }
 
+void QuteText::setValue(double value)
+{
+  if (m_type == "display")
+    setText(QString::number(value, 'f', 6));
+}
+
+void QuteText::setType(QString type)
+{
+qDebug("QuteText::setType %s", type.toStdString().c_str());
+  m_type = type;
+}
+
 void QuteText::setResolution(double resolution)
 {
   m_resolution = resolution;
@@ -145,7 +157,7 @@ QString QuteText::getWidgetLine()
   //TODO finish implementing all properties for label
   QString line = "ioText {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-  line += "label ";
+  line += m_type + " ";
   line += QString::number(m_value, 'f', 6) + " 0.00100 \"" + m_name + "\" ";
   QString alignment = "";
   switch (((QuteLabel *)m_widget)->alignment()) {
@@ -184,53 +196,65 @@ void QuteText::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
   QLabel *label = new QLabel(dialog);
+  label->setText("Type");
+  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
+//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  typeComboBox = new QComboBox(dialog);
+  typeComboBox->addItem("label");
+  typeComboBox->addItem("display");
+  //typeComboBox->addItem("edit");
+  //typeComboBox->addItem("scrolleditnum");
+  typeComboBox->setCurrentIndex(typeComboBox->findText(m_type));
+  layout->addWidget(typeComboBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
 //   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Text:");
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-  layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
   text = new QLineEdit(dialog);
 //   text->setText(((QuteLabel *)m_widget)->toPlainText());
   text->setText(m_text);
-  layout->addWidget(text, 4,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
+  layout->addWidget(text, 5,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
   text->setMinimumWidth(320);
   label = new QLabel(dialog);
 //   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Text Color");
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-  layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
   textColor = new QPushButton(dialog);
   QPalette palette(((QuteLabel *) m_widget)->palette().color(QPalette::WindowText));
   textColor->setPalette(palette);
 //   palette.color(QPalette::Window);
-  layout->addWidget(textColor, 5,1, Qt::AlignLeft|Qt::AlignVCenter);
+  layout->addWidget(textColor, 6,1, Qt::AlignLeft|Qt::AlignVCenter);
   connect(textColor, SIGNAL(released()), this, SLOT(selectTextColor()));
   label = new QLabel(dialog);
 //   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Background Color");
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-  layout->addWidget(label, 5, 2, Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
   bgColor = new QPushButton(dialog);
   palette = QPalette(((QuteLabel *) m_widget)->palette().color(QPalette::Window));
   bgColor->setPalette(palette);
 //   palette.color(QPalette::Window);
-  layout->addWidget(bgColor, 5,3, Qt::AlignLeft|Qt::AlignVCenter);
+  layout->addWidget(bgColor, 6,3, Qt::AlignLeft|Qt::AlignVCenter);
   bg = new QCheckBox("Background", dialog);
   bg->setChecked(((QuteLabel *)m_widget)->autoFillBackground());
-  layout->addWidget(bg, 6,3, Qt::AlignLeft|Qt::AlignVCenter);
+  layout->addWidget(bg, 7,3, Qt::AlignLeft|Qt::AlignVCenter);
   border = new QCheckBox("Border", dialog);
   border->setChecked(((QuteLabel *)m_widget)->frameShape() != QFrame::NoFrame);
-  layout->addWidget(border, 6,2, Qt::AlignLeft|Qt::AlignVCenter);
+  layout->addWidget(border, 7,2, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Font");
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-  layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
   font = new QFontComboBox(dialog);
   font->setCurrentFont(QFont(m_font));
-  layout->addWidget(font, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
+  layout->addWidget(font, 7, 1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Font Size");
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-  layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
   fontSize = new QComboBox(dialog);
   fontSize->addItem("XX-Small", QVariant((int) QUTE_XXSMALL));
   fontSize->addItem("X-Small", QVariant((int) QUTE_XSMALL));
@@ -248,11 +272,11 @@ void QuteText::createPropertiesDialog()
   if (index == -1)
     index = 0;
   fontSize->setCurrentIndex(index);
-  layout->addWidget(fontSize,7, 1, Qt::AlignLeft|Qt::AlignVCenter);
+  layout->addWidget(fontSize,8, 1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Alignment");
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-  layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
   alignment = new QComboBox(dialog);
   alignment->addItem("Left");
   alignment->addItem("Center");
@@ -272,7 +296,7 @@ void QuteText::createPropertiesDialog()
       align = 0;
   }
   alignment->setCurrentIndex(align);
-  layout->addWidget(alignment,7, 3, Qt::AlignLeft|Qt::AlignVCenter);
+  layout->addWidget(alignment,8, 3, Qt::AlignLeft|Qt::AlignVCenter);
   connect(bgColor, SIGNAL(released()), this, SLOT(selectBgColor()));
 }
 
@@ -281,6 +305,7 @@ void QuteText::applyProperties()
   m_font = font->currentFont().family();
   m_fontSize = fontSize->itemData(fontSize->currentIndex()).toInt();
 //   ((QuteLabel *)m_widget)->setText(text->text());
+  setType(typeComboBox->currentText());
   setText(text->text());
   ((QuteLabel *)m_widget)->setAutoFillBackground(bg->isChecked());
   ((QuteLabel *)m_widget)->setFrameShape(border->isChecked()?  QFrame::Box : QFrame::NoFrame);

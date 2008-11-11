@@ -966,8 +966,7 @@ void qutecsound::createActions()
   playAct->setShortcut(tr("Alt+R"));
   playAct->setStatusTip(tr("Play"));
   playAct->setIconText("Play");
-  //FIXME this crashes on Mac on second playing
-  //playAct->setCheckable(true);
+  playAct->setCheckable(true);
   connect(playAct, SIGNAL(triggered()), this, SLOT(play()));
 
   stopAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop"), this);

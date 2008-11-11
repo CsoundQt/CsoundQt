@@ -45,11 +45,20 @@ double QuteKnob::getValue()
   return m_value;
 }
 
-void QuteKnob::setRange(int min, int max)
+void QuteKnob::setRange(double min, double max)
 {
   // TODO when knob is resized, its internal range should be adjusted...
+  if (max < min) {
+    double temp = max;
+	max = min;
+	min = temp;
+  }
   m_min = min;
   m_max = max;
+  if (m_value > m_max)
+    m_value = m_max;
+  else if (m_value > m_min)
+    m_value = m_min;
 }
 
 void QuteKnob::setValue(double value)

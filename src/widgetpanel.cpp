@@ -125,16 +125,10 @@ int WidgetPanel::newWidget(QString widgetLine)
 	  return createSlider(x,y,width,height, widgetLine);
     }
     else if (parts[0]=="ioText") {
-      if (parts[5]=="label") {
+      if (parts[5]=="label" or parts[5]=="display") {
         return createLabel(x,y,width,height, widgetLine);
       }
-      else if (parts[5]=="edit") {
-        return createDummy(x,y,width, height, widgetLine);
-      }
-      else if (parts[5]=="display") {
-        return createDummy(x,y,width, height, widgetLine);
-      }
-      else if (parts[5]=="scrolleditnum") {
+      else if (parts[5]=="edit" or parts[5]=="scrolleditnum") {
         return createDummy(x,y,width, height, widgetLine);
       }
     }
@@ -289,6 +283,7 @@ int WidgetPanel::createLabel(int x, int y, int width, int height, QString widget
   QuteText *widget= new QuteText(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
+  widget->setType(parts[5]);
   widget->setResolution(parts[7].toDouble());
   widget->setChannelName(quoteParts[1]);
   if (quoteParts[2] == " left ")

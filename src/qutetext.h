@@ -33,7 +33,10 @@ class QuteText : public QuteWidget
     QString getWidgetLine();
 
     double getValue();
+	
+	void setValue(double value);
 
+    void setType(QString type);
     void setResolution(double resolution);
     void setAlignment(int alignment);
     void setFont(QString font);
@@ -49,6 +52,7 @@ class QuteText : public QuteWidget
 
   private:
     double m_resolution;
+	QString m_type;
 //     int m_alignment;
     QString m_font;
     int m_fontSize;
@@ -58,6 +62,7 @@ class QuteText : public QuteWidget
 //     bool m_bg;
 //     bool m_border;
 
+    QComboBox * typeComboBox;
     QLineEdit *text;
     QPushButton *textColor;
     QPushButton *bgColor;

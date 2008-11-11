@@ -43,11 +43,20 @@ double QuteSlider::getValue()
   return m_value;
 }
 
-void QuteSlider::setRange(int min, int max)
+void QuteSlider::setRange(double min, double max)
 {
   // TODO when slider is resized, its internal range should be adjusted to accomodate one value per pixel. There are currently 100 values no matter how many pixels...
+  if (max < min) {
+    double temp = max;
+	max = min;
+	min = temp;
+  }
   m_min = min;
   m_max = max;
+  if (m_value > m_max)
+    m_value = m_max;
+  else if (m_value > m_min)
+    m_value = m_min;
 }
 
 void QuteSlider::setValue(double value)
@@ -113,7 +122,6 @@ void QuteSlider::createPropertiesDialog()
 
 void QuteSlider::applyProperties()
 {
-  m_max = maxSpinBox->value();
-  m_min = minSpinBox->value();
+  setRange(maxSpinBox->value(), minSpinBox->value());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }

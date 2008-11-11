@@ -31,7 +31,7 @@ class QuteKnob : public QuteWidget
     ~QuteKnob();
 
     double getValue();
-    void setRange(int min, int max);
+    void setRange(double min, double max);
     void setValue(double value);
     virtual void setWidgetLine(QString line);
     QString getWidgetLine();

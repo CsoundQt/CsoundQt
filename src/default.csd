@@ -12,6 +12,7 @@ instr 1
 kfreq line 100, p3, 1000
 aout oscil 0.2, kfreq, 1
 outvalue "slider3", kfreq/1000
+outvalue "label", kfreq
 outs aout, aout
 endin
 
@@ -42,11 +43,13 @@ IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
+ioView background {44204, 62451, 65535}
 ioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1
 ioSlider {45, 5} {20, 100} 100.000000 1000.000000 0.000000 slider2
 ioSlider {85, 5} {20, 100} 0.000000 1.000000 0.000000 slider3
 ioSlider {125, 5} {20, 100} 0.000000 1.000000 0.000000 slider4
 ioSlider {165, 5} {20, 100} 0.000000 1.000000 0.000000 slider5
 ioText {200, 5} {140, 100} label 0.000000 0.001000 "chann" left "Lucida Grande" 6 {0, 0, 0} {65535, 65535, 65535} nobackground border Receive the values from widgets using chnget. Change a widget's properties by right-clicking.
+ioText {120, 115} {80, 25} display 0.000000 0.00100 "label" left "Lucida Grande" 8 {0, 0, 0} {64512, 36096, 65280} background border 0.998623
 ioButton {5, 140} {100, 30} event 1.000000 "button1" "Button 1" "/" i1 0 10
 </MacGUI>

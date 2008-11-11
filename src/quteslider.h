@@ -31,7 +31,7 @@ class QuteSlider : public QuteWidget
     ~QuteSlider();
 
     double getValue();
-    void setRange(int min, int max);
+    void setRange(double min, double max);
     void setValue(double value);
     virtual void setWidgetGeometry(int x, int y, int w, int h);
     virtual void setWidgetLine(QString line);
