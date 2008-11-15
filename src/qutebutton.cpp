@@ -49,7 +49,6 @@ double QuteButton::getValue()
 
 QString QuteButton::getWidgetLine()
 {
-  //TODO implement other types of buttons
   QString line = "ioButton {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += m_type + " ";

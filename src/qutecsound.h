@@ -140,6 +140,10 @@ class qutecsound:public QMainWindow
     void setHelpEntry();
     void utilitiesDialogOpen();
 //     void showWidgets();
+//     void comment();
+//     void uncomment();
+//     void indent();
+//     void unindent();
     void about();
     void documentWasModified();
     void syntaxCheck();
@@ -230,6 +234,10 @@ class qutecsound:public QMainWindow
     QAction *setHelpEntryAct;
     QAction *showUtilitiesAct;
     QAction *showWidgetsAct;
+    QAction *commentAct;
+    QAction *uncommentAct;
+    QAction *indentAct;
+    QAction *unindentAct;
     QAction *aboutAct;
     QAction *aboutQtAct;
 

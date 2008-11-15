@@ -581,7 +581,7 @@ void qutecsound::stop()
 	return;
   }
   //csoundLockMutex(perfMutex);
-  if (m_options->thread) { 
+  if (m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
   perfThread->Stop();
   perfThread->Join();
@@ -663,8 +663,23 @@ void qutecsound::setHelpEntry()
 void qutecsound::utilitiesDialogOpen()
 {
   qDebug("qutecsound::utilitiesDialog()");
-
 }
+
+// void qutecsound::comment()
+// {
+// }
+//
+// void qutecsound::uncomment()
+// {
+// }
+//
+// void qutecsound::indent()
+// {
+// }
+//
+// void qutecsound::unindent()
+// {
+// }
 
 // void qutecsound::showWidgets()
 // {
@@ -864,6 +879,8 @@ void qutecsound::dispatchQueues()
 
 void qutecsound::createActions()
 {
+  // Actions that are not connected here depend on the active document, so they are
+  // connected with connectActions() and are changed when the document changes.
   newAct = new QAction(QIcon(":/images/gtk-new.png"), tr("&New"), this);
   newAct->setShortcut(tr("Ctrl+N"));
   newAct->setStatusTip(tr("Create a new file"));
@@ -1035,10 +1052,34 @@ void qutecsound::createActions()
   connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
   connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
 
+  commentAct = new QAction(tr("Comment"), this);
+  commentAct->setStatusTip(tr("Comment selection"));
+  commentAct->setShortcut(tr("Ctrl+D"));
+  commentAct->setIconText("Comment");
+//   connect(commentAct, SIGNAL(triggered()), this, SLOT(comment()));
+
+  uncommentAct = new QAction(tr("Uncomment"), this);
+  uncommentAct->setStatusTip(tr("Uncomment selection"));
+  uncommentAct->setShortcut(tr("Shift+Ctrl+D"));
+  uncommentAct->setIconText("Uncomment");
+//   connect(uncommentAct, SIGNAL(triggered()), this, SLOT(uncomment()));
+
+  indentAct = new QAction(tr("Indent"), this);
+  indentAct->setStatusTip(tr("Indent selection"));
+  indentAct->setShortcut(tr("Ctrl+I"));
+  indentAct->setIconText("Indent");
+//   connect(indentAct, SIGNAL(triggered()), this, SLOT(indent()));
+
+  unindentAct = new QAction(tr("Unindent"), this);
+  unindentAct->setStatusTip(tr("Unindent selection"));
+  unindentAct->setShortcut(tr("Shift+Ctrl+I"));
+  unindentAct->setIconText("Unindent");
+//   connect(unindentAct, SIGNAL(triggered()), this, SLOT(unindent()));
+
   aboutAct = new QAction(tr("&About QuteCsound"), this);
   aboutAct->setStatusTip(tr("Show the application's About box"));
   aboutAct->setIconText("About");
-  connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
+//   connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 
   aboutQtAct = new QAction(tr("About &Qt"), this);
   aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
@@ -1062,6 +1103,16 @@ void qutecsound::connectActions()
   connect(cutAct, SIGNAL(triggered()), textEdit, SLOT(cut()));
   connect(copyAct, SIGNAL(triggered()), textEdit, SLOT(copy()));
   connect(pasteAct, SIGNAL(triggered()), textEdit, SLOT(paste()));
+
+  disconnect(commentAct, 0, 0, 0);
+  disconnect(uncommentAct, 0, 0, 0);
+  disconnect(indentAct, 0, 0, 0);
+  disconnect(unindentAct, 0, 0, 0);
+  connect(commentAct, SIGNAL(triggered()), textEdit, SLOT(comment()));
+  connect(uncommentAct, SIGNAL(triggered()), textEdit, SLOT(uncomment()));
+  connect(indentAct, SIGNAL(triggered()), textEdit, SLOT(indent()));
+  connect(unindentAct, SIGNAL(triggered()), textEdit, SLOT(unindent()));
+
   disconnect(textEdit, SIGNAL(copyAvailable(bool)), 0, 0);
   disconnect(textEdit, SIGNAL(copyAvailable(bool)), 0, 0);
   connect(textEdit, SIGNAL(copyAvailable(bool)),
@@ -1099,6 +1150,11 @@ void qutecsound::createMenus()
   editMenu->addSeparator();
   editMenu->addAction(findAct);
   editMenu->addAction(autoCompleteAct);
+  editMenu->addSeparator();
+  editMenu->addAction(commentAct);
+  editMenu->addAction(uncommentAct);
+  editMenu->addAction(indentAct);
+  editMenu->addAction(unindentAct);
   editMenu->addSeparator();
   editMenu->addAction(configureAct);
 

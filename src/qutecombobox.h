@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andres Cabrera   *
- *   mantaraya36@gmail.com   *
+ *   Copyright (C) 2008 by Andres Cabrera                                  *
+ *   mantaraya36@gmail.com                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -15,44 +15,38 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef DOCUMENTPAGE_H
-#define DOCUMENTPAGE_H
+#ifndef QUTECOMBOBOX_H
+#define QUTECOMBOBOX_H
 
-#include <QWidget>
-#include <QTextEdit>
-#include <QDomElement>
+#include "qutewidget.h"
 
-class DocumentPage : public QTextEdit
+class QuteComboBox : public QuteWidget
 {
   Q_OBJECT
   public:
-    DocumentPage(QWidget *parent);
+    QuteComboBox(QWidget *parent);
 
-    ~DocumentPage();
+    ~QuteComboBox();
 
-    int setTextString(QString text);
-    QString getFullText();
-    QString getMacWidgetsText();
+    virtual void setValue(double value); // Current item select index
+    virtual double getValue();
+    void setSize(int size);
+    virtual QString getWidgetLine();
+    virtual void applyProperties();
+    virtual void createPropertiesDialog();
+    void setText(QString text);
+    void popUpMenu(QPoint pos);
+    QString itemList();
 
-//     QTextDocument *textDocument;
-    QString fileName;
-    QString companionFile;
-    bool askForFile;
+  protected:
+    virtual void contextMenuEvent(QContextMenuEvent* event);
+
   private:
-    QString macOptions;
-    QString macPresets;
-    QString macGUI;
-    QDomElement widgets;
-
-  public slots:
-    void setMacWidgetsText(QString text);
-
-    void comment();
-    void uncomment();
-    void indent();
-    void unindent();
+    int m_size;
+    QLineEdit *text;
+    QLineEdit *line;
 };
 
 #endif

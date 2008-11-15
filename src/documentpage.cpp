@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andres Cabrera   *
- *   mantaraya36@gmail.com   *
+ *   Copyright (C) 2008 by Andres Cabrera                                  *
+ *   mantaraya36@gmail.com                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -90,4 +90,50 @@ void DocumentPage::setMacWidgetsText(QString text)
   qDebug("DocumentPage::setMacWidgetsText");
   macGUI = text;
   document()->setModified(true);
+}
+
+void DocumentPage::comment()
+{
+  QTextCursor cursor = textCursor();
+  QString text = cursor.selectedText();
+  text.prepend(";");
+  text.replace(QChar(QChar::ParagraphSeparator), QString("\n;"));
+  cursor.insertText(text);
+  setTextCursor(cursor);
+}
+
+void DocumentPage::uncomment()
+{
+  QTextCursor cursor = textCursor();
+  QString text = cursor.selectedText();
+  if (text.startsWith(";"))
+    text.remove(0,1);
+  text.replace(QChar(QChar::ParagraphSeparator), QString("\n"));
+  text.replace(QString("\n;"), QString("\n")); //TODO make more robust
+  cursor.insertText(text);
+  setTextCursor(cursor);
+}
+
+void DocumentPage::indent()
+{
+  qDebug("DocumentPage::indent");
+  QTextCursor cursor = textCursor();
+  QString text = cursor.selectedText();
+//   if (text[0] == '\n')
+  text.prepend("\t"); //TODO check if previous character is \n
+  text.replace(QChar(QChar::ParagraphSeparator), QString("\n\t"));
+  cursor.insertText(text);
+  setTextCursor(cursor);
+}
+
+void DocumentPage::unindent()
+{
+  QTextCursor cursor = textCursor();
+  QString text = cursor.selectedText();
+  if (text.startsWith("\t"))
+    text.remove(0,1);
+  text.replace(QChar(QChar::ParagraphSeparator), QString("\n"));
+  text.replace(QString("\n\t"), QString("\n")); //TODO make more robust
+  cursor.insertText(text);
+  setTextCursor(cursor);
 }
