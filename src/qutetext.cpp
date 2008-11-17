@@ -30,6 +30,9 @@
 #define QUTE_XLARGE 20
 #define QUTE_XXLARGE 24
 
+//number of decimal places shown on the widget
+#define QUTESLIDER_PRECISION 4
+
 QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 {
   m_value = 0.0;
@@ -55,7 +58,7 @@ double QuteText::getValue()
 void QuteText::setValue(double value)
 {
   if (m_type == "display")
-    setText(QString::number(value, 'f', 6));
+    setText(QString::number(value, 'f', QUTESLIDER_PRECISION));
 }
 
 void QuteText::setType(QString type)

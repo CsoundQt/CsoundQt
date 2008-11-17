@@ -21,7 +21,8 @@
 
 QuteComboBox::QuteComboBox(QWidget *parent) : QuteWidget(parent)
 {
-  m_widget = new QComboBox(this);
+  m_widget = new MyQComboBox(this);
+  connect(((MyQComboBox *)m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 //   ((QComboBox *)m_widget)->setIcon(icon);
 //   connect((QComboBox *)m_widget, SIGNAL(released()), this, SLOT(buttonReleased()));
 }
@@ -32,17 +33,16 @@ QuteComboBox::~QuteComboBox()
 
 void QuteComboBox::setValue(double value)
 {
+  qDebug("QuteComboBox::setValue %i", (int) value);
   // setValue sets the current index of the ioMenu
-  m_value = value;
+  ((QComboBox *)m_widget)->setCurrentIndex((int) value);
+  m_value = ((QComboBox *)m_widget)->currentIndex();  //This confines the value to valid indices
 }
 
 double QuteComboBox::getValue()
 {
   // Returns the current index
-  if ( ((QComboBox *)m_widget)->currentIndex() )
-    return m_value;
-  else
-    return 0.0;
+  return (float) ((QComboBox *)m_widget)->currentIndex();
 }
 
 void QuteComboBox::setSize(int size)
@@ -56,27 +56,31 @@ QString QuteComboBox::getWidgetLine()
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += QString::number(((QComboBox *)m_widget)->currentIndex()) + " ";
   line += QString::number(m_size) + " ";
-  line += "\"" + itemList() + "\"";
+  line += "\"" + itemList() + "\" ";
+  line += m_name;
   return line;
 }
 
 void QuteComboBox::applyProperties()
 {
   setText(text->text());
+  //TODO set size for Menu widget
+//   setSize
   setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
 
 void QuteComboBox::contextMenuEvent(QContextMenuEvent* event)
 {
+  qDebug("QuteComboBox::contextMenuEvent");
   QuteWidget::contextMenuEvent(event);
 }
 
 void QuteComboBox::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
-
   QLabel *label = new QLabel(dialog);
+  //TODO add size selection for combo box
 //   label->setText("Size");
 //   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
 //   layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
@@ -91,7 +95,7 @@ void QuteComboBox::createPropertiesDialog()
 //   layout->addWidget(typeComboBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
   label = new QLabel(dialog);
-  label->setText("Text:");
+  label->setText("Items (separated by commas):");
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
   text = new QLineEdit(dialog);
@@ -102,12 +106,20 @@ void QuteComboBox::createPropertiesDialog()
 
 void QuteComboBox::setText(QString text)
 {
-
+  ((QComboBox *)m_widget)->clear();
+  QStringList items = text.split(",");
+  foreach (QString item, items) {
+    ((QComboBox *)m_widget)->addItem(item);
+  }
 }
 
 QString QuteComboBox::itemList()
 {
   QString list = "";
+  for (int i = 0; i < ((QComboBox *)m_widget)->count(); i++) {
+    list += ((QComboBox *)m_widget)->itemText(i) + ",";
+  }
+  list.chop(1); //remove last comma
   return list;
 }
 

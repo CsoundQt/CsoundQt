@@ -33,8 +33,7 @@ class QuteText : public QuteWidget
     QString getWidgetLine();
 
     double getValue();
-	
-	void setValue(double value);
+    void setValue(double value);
 
     void setType(QString type);
     void setResolution(double resolution);
@@ -52,7 +51,7 @@ class QuteText : public QuteWidget
 
   private:
     double m_resolution;
-	QString m_type;
+    QString m_type;
 //     int m_alignment;
     QString m_font;
     int m_fontSize;
@@ -81,17 +80,12 @@ class QuteTextEdit : public QTextEdit
 {
   Q_OBJECT
   public:
-    QuteTextEdit(QWidget* parent) : QTextEdit(parent)
-    {
-    }
-
-    ~QuteTextEdit() {};
+    QuteTextEdit(QWidget* parent) : QTextEdit(parent) {}
+    ~QuteTextEdit() {}
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent *event)
-    {
-      emit(popUpMenu(event->globalPos()));
-    }
+    {emit(popUpMenu(event->globalPos()));}
 
   signals:
     void popUpMenu(QPoint pos);
@@ -101,17 +95,12 @@ class QuteLabel : public QLabel
 {
   Q_OBJECT
   public:
-    QuteLabel(QWidget* parent) : QLabel(parent)
-    {
-    }
-
-    ~QuteLabel() {};
+    QuteLabel(QWidget* parent) : QLabel(parent) {}
+    ~QuteLabel() {}
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent *event)
-    {
-      emit(popUpMenu(event->globalPos()));
-    }
+    {emit(popUpMenu(event->globalPos()));}
 
   signals:
     void popUpMenu(QPoint pos);

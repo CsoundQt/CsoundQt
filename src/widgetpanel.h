@@ -39,7 +39,6 @@ class WidgetPanel : public QDockWidget
     void setValue(int index, double value);
     int loadWidgets(QString macWidgets);
     int newWidget(QString widgetLine);
-    int clearWidgets();
     QString widgetsText();
 
     QVector<QString> eventQueue;
@@ -57,6 +56,10 @@ class WidgetPanel : public QDockWidget
     QAction *createLabelAct;
     QAction *createButtonAct;
     QAction *createKnobAct;
+    QAction *createCheckBoxAct;
+    QAction *createMenuAct;
+    QAction *createConsoleAct;
+    QAction *clearAct;
     QAction *propertiesAct;
 
     // For the properties dialog
@@ -67,6 +70,9 @@ class WidgetPanel : public QDockWidget
     int createLabel(int x, int y, int width, int height, QString widgetLine);
     int createButton(int x, int y, int width, int height, QString widgetLine);
     int createKnob(int x, int y, int width, int height, QString widgetLine);
+    int createCheckBox(int x, int y, int width, int height, QString widgetLine);
+    int createMenu(int x, int y, int width, int height, QString widgetLine);
+    int createConsole(int x, int y, int width, int height, QString widgetLine);
     int createDummy(int x, int y, int width, int height, QString widgetLine);
 
     void setBackground(bool bg, QColor bgColor);
@@ -81,7 +87,11 @@ class WidgetPanel : public QDockWidget
     void createSlider();
     void createButton();
     void createKnob();
+    void createCheckBox();
+    void createMenu();
+    void createConsole();
     void propertiesDialog();
+    void clearWidgets();
     void applyProperties();
     void selectBgColor();
 

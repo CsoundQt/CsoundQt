@@ -21,30 +21,15 @@
 #define QUTEWIDGET_H
 
 #include <QtGui>
-// #include <QString>
-
-// enum widgetType {
-//   QUTE_SLIDER,
-//   QUTE_KNOB,
-//   QUTE_CHECKBOX,
-//   QUTE_BUTTON,
-//   QUTE_LABEL,
-//   QUTE_LINEEDIT,
-//   QUTE_DISPLAY,
-//   QUTE_SCROLLNUMBER,
-//   QUTE_COMBOBOX,
-//   NONE
-// };
 
 class QuteWidget : public QWidget
 {
   Q_OBJECT
   public:
-    QuteWidget(QWidget* parent/*, widgetType type = QUTE_SLIDER*/);
+    QuteWidget(QWidget* parent);
 
     ~QuteWidget();
 
-//     widgetType type() {return m_type;}
     const QString name() {return m_name;}
 
     virtual void setWidgetLine(QString line);
@@ -62,11 +47,11 @@ class QuteWidget : public QWidget
     virtual void applyProperties();
 
   protected:
-//     widgetType m_type;
     QSpinBox *xSpinBox;
     QSpinBox *ySpinBox;
     QSpinBox *wSpinBox;
     QSpinBox *hSpinBox;
+    QLineEdit *nameLineEdit;
     QString m_line;
     QWidget *m_layoutWidget;
     QWidget *m_widget;
@@ -79,14 +64,13 @@ class QuteWidget : public QWidget
 //     double m_min2,m_max2;
     double m_value, m_value2;
 
-    void setWidgetGeometry(QRect rect);
+    virtual void setWidgetGeometry(QRect rect);
     virtual void contextMenuEvent(QContextMenuEvent *event);
 
   private:
     QAction *propertiesAct;
     QAction *deleteAct;
 
-    QLineEdit *nameLineEdit;
     QPushButton *applyButton;
     QPushButton *cancelButton;
     QPushButton *acceptButton;

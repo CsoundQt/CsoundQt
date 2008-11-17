@@ -23,6 +23,8 @@
 #include "qutetext.h"
 #include "qutebutton.h"
 #include "quteknob.h"
+#include "qutecheckbox.h"
+#include "qutecombobox.h"
 #include "qutedummy.h"
 
 
@@ -42,8 +44,16 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(createButtonAct, SIGNAL(triggered()), this, SLOT(createButton()));
   createKnobAct = new QAction(tr("Create Knob"),this);
   connect(createKnobAct, SIGNAL(triggered()), this, SLOT(createKnob()));
+  createMenuAct = new QAction(tr("Create Menu"),this);
+  connect(createMenuAct, SIGNAL(triggered()), this, SLOT(createMenu()));
+  createCheckBoxAct = new QAction(tr("Create Checkbox"),this);
+  connect(createCheckBoxAct, SIGNAL(triggered()), this, SLOT(createCheckBox()));
+  createConsoleAct = new QAction(tr("Create Console"),this);
+  connect(createConsoleAct, SIGNAL(triggered()), this, SLOT(createConsole()));
   propertiesAct = new QAction(tr("Properties"),this);
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
+  clearAct = new QAction(tr("Clear all widgets"), this);
+  connect(clearAct, SIGNAL(triggered()), this, SLOT(clearWidgets()));
 
   setWidget(layoutWidget);
   resize(200, 100);
@@ -139,36 +149,16 @@ int WidgetPanel::newWidget(QString widgetLine)
       return createKnob(x,y,width, height, widgetLine);
     }
     else if (parts[0]=="ioCheckbox") {
-      return createDummy(x,y,width, height, widgetLine);
-//       widget->setChecked(parts[5]=="on");
-//       if (parts.size()>5) {
-//         int i=5;
-//         QString channelName = "";
-//         while (parts.size()>i) {
-//           channelName += parts[i] + " ";
-//           i++;
-//         }
-//         channelName.chop(1);  //remove last space
-//         widget->setChannelName(channelName);
-//       }
-//       connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+      return createCheckBox(x,y,width, height, widgetLine);
     }
     else if (parts[0]=="ioMenu") {
-      return createDummy(x,y,width, height, widgetLine);
-//       connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
-//       widget->setValue(parts[5].toInt());  //current Menu item
-// //       widget->setSize(parts[6].toInt());  // can be 201, 202, 203, 204, 205
-//       QStringList items= quoteParts[1].split(","); // menu items
-//     //TODO add menu items
-//       if (quoteParts.size()>2) {
-//         quoteParts[2].remove(0,1); //remove initial space
-//         widget->setChannelName(quoteParts[2]);
-//       }
+      return createMenu(x,y,width, height, widgetLine);
     }
     else if (parts[0]=="ioMeter") {
       return createDummy(x,y,width, height, widgetLine);
     }
     else {
+      //TODO add create Console
       // Unknown widget...
       return createDummy(x,y,width, height, widgetLine);
     }
@@ -176,14 +166,13 @@ int WidgetPanel::newWidget(QString widgetLine)
     return 0;
   }
 
-int WidgetPanel::clearWidgets()
+void WidgetPanel::clearWidgets()
 {
   qDebug("WidgetPanel::clearWidgets()");
   foreach (QuteWidget *widget, widgets) {
     delete widget;
   }
   widgets.clear();
-  return 0;
 }
 
 void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
@@ -233,6 +222,11 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   menu.addAction(createLabelAct);
   menu.addAction(createButtonAct);
   menu.addAction(createKnobAct);
+  menu.addAction(createCheckBoxAct);
+  menu.addAction(createMenuAct);
+  menu.addAction(createConsoleAct);
+  menu.addSeparator();
+  menu.addAction(clearAct);
   menu.addSeparator();
   menu.addAction(propertiesAct);
   currentPosition = event->pos();
@@ -375,6 +369,68 @@ int WidgetPanel::createKnob(int x, int y, int width, int height, QString widgetL
   return 1;
 }
 
+int WidgetPanel::createCheckBox(int x, int y, int width, int height, QString widgetLine)
+{
+  qDebug("ioCheckBox x=%i y=%i w=%i h=%i", x,y, width, height);
+  QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  QuteCheckBox *widget= new QuteCheckBox(layoutWidget);
+  widget->setWidgetLine(widgetLine);
+  widget->setWidgetGeometry(x,y,width, height);
+  widget->setValue(parts[5]=="on");
+  if (parts.size()>6) {
+    int i=6;
+    QString channelName = "";
+    while (parts.size()>i) {
+      channelName += parts[i] + " ";
+      i++;
+    }
+    channelName.chop(1);  //remove last space
+    widget->setChannelName(channelName);
+  }
+  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  widgets.append(widget);
+  widget->show();
+  return 1;
+}
+
+int WidgetPanel::createMenu(int x, int y, int width, int height, QString widgetLine)
+{
+  qDebug("ioMenu x=%i y=%i w=%i h=%i", x,y, width, height);
+  QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  QStringList quoteParts = widgetLine.split('"');
+  QuteComboBox *widget= new QuteComboBox(layoutWidget);
+  widget->setWidgetLine(widgetLine);
+  widget->setWidgetGeometry(x,y,width, height);
+  widget->setSize(parts[6].toInt());
+  widget->setText(quoteParts[1]);
+  widget->setValue(parts[5].toDouble()); //setValue must be after setText otherwise ComboBox is empty
+  if (quoteParts.size() > 2)
+    widget->setChannelName(quoteParts[2].remove(0,1)); //remove initial space from channel name
+  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  widgets.append(widget);
+  widget->show();
+  return 1;
+}
+
+int WidgetPanel::createConsole(int x, int y, int width, int height, QString widgetLine)
+{
+  //TODO create console
+//   qDebug("ioKnob x=%i y=%i w=%i h=%i", x,y, width, height);
+//   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+//   QuteKnob *widget= new QuteKnob(layoutWidget);
+//   widget->setWidgetLine(widgetLine);
+//   widget->setWidgetGeometry(x,y,width, height);
+//   widget->setSize(parts[5].toInt());
+// //   widget->setText(parts[8].toDouble());
+//   connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+//   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+//   widgets.append(widget);
+//   widget->show();
+//   return 1;
+}
+
 int WidgetPanel::createDummy(int x, int y, int width, int height, QString widgetLine)
 {
   QuteWidget *widget= new QuteDummy(this);
@@ -417,6 +473,22 @@ void WidgetPanel::createButton()
 void WidgetPanel::createKnob()
 {
   createKnob(currentPosition.x(), currentPosition.y() - 20, 80, 80, QString("ioKnob {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(widgets.size())));
+}
+
+void WidgetPanel::createCheckBox()
+{
+  createCheckBox(currentPosition.x(), currentPosition.y() - 20, 30, 30, QString("ioCheckbox {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {30, 30} off checkbox" +QString::number(widgets.size())));
+}
+
+void WidgetPanel::createMenu()
+{
+  createMenu(currentPosition.x(), currentPosition.y() - 20, 80, 30, QString("ioMenu {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {80, 30} 1 303 \"item1,item2,item3\" menu" +QString::number(widgets.size())));
+}
+
+void WidgetPanel::createConsole()
+{
+  //TODO Create console widget
+//   createKnob(currentPosition.x(), currentPosition.y() - 20, 80, 80, QString("ioKnob {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(widgets.size())));
 }
 
 void WidgetPanel::propertiesDialog()

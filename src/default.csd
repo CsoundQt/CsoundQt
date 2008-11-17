@@ -43,13 +43,14 @@ IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
-ioView background {44204, 62451, 65535}
+ioView background {43690, 43690, 32639}
 ioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1
 ioSlider {45, 5} {20, 100} 100.000000 1000.000000 0.000000 slider2
 ioSlider {85, 5} {20, 100} 0.000000 1.000000 0.000000 slider3
 ioSlider {125, 5} {20, 100} 0.000000 1.000000 0.000000 slider4
 ioSlider {165, 5} {20, 100} 0.000000 1.000000 0.000000 slider5
 ioText {200, 5} {140, 100} label 0.000000 0.001000 "chann" left "Lucida Grande" 6 {0, 0, 0} {65535, 65535, 65535} nobackground border Receive the values from widgets using chnget. Change a widget's properties by right-clicking.
-ioText {120, 115} {80, 25} display 0.000000 0.00100 "label" left "Lucida Grande" 8 {0, 0, 0} {64512, 36096, 65280} background border 0.998623
+ioText {120, 118} {80, 30} display 0.000000 0.00100 "label" left "Lucida Grande" 8 {0, 0, 0} {50432, 44032, 17664} background border 0.998623
+
 ioButton {5, 140} {100, 30} event 1.000000 "button1" "Button 1" "/" i1 0 10
 </MacGUI>

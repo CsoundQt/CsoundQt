@@ -17,51 +17,28 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef QUTECOMBOBOX_H
-#define QUTECOMBOBOX_H
+#ifndef QUTECHECKBOX_H
+#define QUTECHECKBOX_H
 
 #include "qutewidget.h"
 
-class QuteComboBox : public QuteWidget
+class QuteCheckBox : public QuteWidget
 {
   Q_OBJECT
   public:
-    QuteComboBox(QWidget *parent);
+    QuteCheckBox(QWidget *parent);
 
-    ~QuteComboBox();
+    ~QuteCheckBox();
 
-    virtual void setValue(double value); // Current item select index
-    virtual double getValue();
-    void setSize(int size);
+    virtual void setValue(double value); // Value of button when pressed
+    virtual double getValue(); // This value represents the state of the button
     virtual QString getWidgetLine();
-    virtual void applyProperties();
-    virtual void createPropertiesDialog();
-    void setText(QString text);  //Text for this widget is the item list separated by commas
     void popUpMenu(QPoint pos);
-    QString itemList();
 
-  protected:
-    virtual void contextMenuEvent(QContextMenuEvent* event);
+//   protected:
+//     virtual void contextMenuEvent(QContextMenuEvent* event);
 
-  private:
-    int m_size;
-    QLineEdit *text;
-    QLineEdit *line;
-};
 
-class MyQComboBox : public QComboBox
-{
-  Q_OBJECT
-  public:
-    MyQComboBox(QWidget* parent) : QComboBox(parent) {}
-    ~MyQComboBox() {}
-
-  protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event)
-    {emit(popUpMenu(event->globalPos()));}
-
-  signals:
-    void popUpMenu(QPoint pos);
 };
 
 #endif

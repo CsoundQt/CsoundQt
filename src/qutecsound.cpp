@@ -68,11 +68,11 @@ qutecsound::qutecsound(QString fileName)
 //   m_console->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
   addDockWidget(Qt::BottomDockWidgetArea, m_console);
   helpPanel = new DockHelp(this);
-  helpPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+  helpPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea | Qt::LeftDockWidgetArea);
   addDockWidget(Qt::RightDockWidgetArea, helpPanel);
 
   widgetPanel = new WidgetPanel(this);
-  widgetPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
+  widgetPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea |Qt::LeftDockWidgetArea);
   widgetPanel->setObjectName("widgetPanel");
   addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
 
@@ -1289,7 +1289,7 @@ void qutecsound::readSettings()
   m_options->fontPointSize = settings.value("fontsize", 12).toDouble();
   m_options->consoleFont = settings.value("consolefont", "Courier").toString();
   m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
-  m_options->tabWidth = settings.value("tabWidth", 80).toInt();
+  m_options->tabWidth = settings.value("tabWidth", 60).toInt();
   m_options->colorVariables = settings.value("colorvariables", true).toBool();
   m_options->autoPlay = settings.value("autoplay", false).toBool();
   m_options->saveChanges = settings.value("savechanges", true).toBool();
@@ -1523,10 +1523,10 @@ bool qutecsound::loadFile(QString fileName)
   connectActions();
   QString text;
   while (!file.atEnd()) {
-    QByteArray line = file.readLine().trimmed();
+    QByteArray line = file.readLine();
     text = text + QString(line);
-    if (!line.contains("\n"))
-      text += "\r\n";
+    if (!line.endsWith("\n"))
+      text += "\n";
   }
   //textEdit->setPlainText(fixLineEndings(in.readAll()));
 //   textEdit->setPlainText(text);

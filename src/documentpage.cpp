@@ -61,7 +61,7 @@ int DocumentPage::setTextString(QString text)
     //Removes line breaks also (there are two new lines at the end)
     //TODO something is odd here... some line breaks remain (possibly \r)
     text.remove(text.indexOf("<MacGUI>") - 1, macGUI.size() + 2);
-    qDebug("<MacGUI> present.\n%s", macGUI.toStdString().c_str());
+    qDebug("<MacGUI> present.");
   }
   else {
     macGUI = "<MacGUI>\nioView nobackground {59352, 11885, 65535}\nioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1\nioSlider {45, 5} {20, 100} 0.000000 1.000000 0.000000 slider2\nioSlider {85, 5} {20, 100} 0.000000 1.000000 0.000000 slider3\nioSlider {125, 5} {20, 100} 0.000000 1.000000 0.000000 slider4\nioSlider {165, 5} {20, 100} 0.000000 1.000000 0.000000 slider5\n</MacGUI>";
