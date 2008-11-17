@@ -230,7 +230,9 @@ class qutecsound:public QMainWindow
     QAction *externalEditorAct;
     QAction *externalPlayerAct;
     QAction *showHelpAct;
-    QAction *showConsole;
+    QAction *showGenAct;
+    QAction *showOverviewAct;
+    QAction *showConsoleAct;
     QAction *setHelpEntryAct;
     QAction *showUtilitiesAct;
     QAction *showWidgetsAct;

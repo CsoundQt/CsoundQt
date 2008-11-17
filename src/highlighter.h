@@ -58,6 +58,7 @@
     QTextCharFormat multiLineCommentFormat;
     QTextCharFormat quotationFormat;
     QTextCharFormat functionFormat;
+    QTextCharFormat labelFormat;
 
     void setFirstRules();
     void setLastRules();

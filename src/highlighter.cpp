@@ -208,12 +208,6 @@ void Highlighter::setLastRules()
     rule.format = csdtagFormat;
     highlightingRules.append(rule);
   }
-  singleLineCommentFormat.setForeground(QColor("green"));
-  rule.pattern = QRegExp(";[^\n]*");
-  rule.format = singleLineCommentFormat;
-  highlightingRules.append(rule);
-
-  multiLineCommentFormat.setForeground(QColor("green"));
 
   quotationFormat.setForeground(Qt::red);
   rule.pattern = QRegExp("\".*\"");
@@ -222,6 +216,19 @@ void Highlighter::setLastRules()
   rule.pattern = QRegExp("\\{\\{.*\\}\\}");
   rule.format = quotationFormat;
   highlightingRules.append(rule);
+
+  labelFormat.setForeground(QColor("magenta"));
+  rule.pattern = QRegExp("[^\n]*\\:");
+  rule.format = labelFormat;
+  highlightingRules.append(rule);
+
+  singleLineCommentFormat.setForeground(QColor("green"));
+  singleLineCommentFormat.setFontItalic(true);
+  rule.pattern = QRegExp(";[^\n]*");
+  rule.format = singleLineCommentFormat;
+  highlightingRules.append(rule);
+
+  multiLineCommentFormat.setForeground(QColor("green"));
 
 //      classFormat.setFontWeight(QFont::Bold);
 //      classFormat.setForeground(Qt::darkMagenta);

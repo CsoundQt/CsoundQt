@@ -46,19 +46,6 @@ i 1 0 3600
 f 0 3600
 </CsScore>
 </CsoundSynthesizer>
-
-
-
-
-
-
-
-
-
-
-
-
-
 <MacOptions>
 Version: 3
 Render: Real
@@ -70,6 +57,7 @@ CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
+
 <MacGUI>
 ioView background {43690, 43690, 32639}
 ioMenu {25, 30} {120, 30} 1 303 "saw,square,triangle" wave

@@ -68,3 +68,15 @@ void DockHelp::closeEvent(QCloseEvent * event)
 {
   emit Close(false);
 }
+
+void DockHelp::showGen()
+{
+  this->setVisible(true);
+  this->loadFile(docDir + "/ScoreGenRef.html");
+}
+
+void DockHelp::showOverview()
+{
+  this->setVisible(true);
+  this->loadFile(docDir + "/PartOpcodesOverview.html");
+}

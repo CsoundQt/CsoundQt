@@ -648,7 +648,7 @@ void qutecsound::setHelpEntry()
   cursor.select(QTextCursor::WordUnderCursor);
   if (m_options->csdocdir != "") {
     QString file =  m_options->csdocdir + "/" + cursor.selectedText() + ".html";
-	helpPanel->docDir = m_options->csdocdir;
+    helpPanel->docDir = m_options->csdocdir;
     helpPanel->loadFile(file);
     helpPanel->show();
   }
@@ -1001,13 +1001,13 @@ void qutecsound::createActions()
   externalPlayerAct = new QAction(QIcon(":/images/playfile.png"), tr("Play Audiofile"), this);
 //   externalPlayerAct->setShortcut(tr("Alt+F"));
   externalPlayerAct->setStatusTip(tr("Play rendered audiofile in External Editor"));
-  externalPlayerAct->setIconText("External Player");
+  externalPlayerAct->setIconText("Ext. Player");
   connect(externalPlayerAct, SIGNAL(triggered()), this, SLOT(openExternalPlayer()));
 
   externalEditorAct = new QAction(QIcon(":/images/editfile.png"), tr("Edit Audiofile"), this);
 //   externalEditorAct->setShortcut(tr("Alt+F"));
   externalEditorAct->setStatusTip(tr("Edit rendered audiofile in External Editor"));
-  externalEditorAct->setIconText("External Editor");
+  externalEditorAct->setIconText("Ext. Editor");
   connect(externalEditorAct, SIGNAL(triggered()), this, SLOT(openExternalEditor()));
 
   showHelpAct = new QAction(QIcon(":/images/gtk-info.png"), tr("Help Panel"), this);
@@ -1019,14 +1019,25 @@ void qutecsound::createActions()
   connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
   connect(helpPanel, SIGNAL(Close(bool)), showHelpAct, SLOT(setChecked(bool)));
 
-  showConsole = new QAction(QIcon(":/images/gksu-root-terminal.png"), tr("Output Console"), this);
-  showConsole->setShortcut(tr("Alt+2"));
-  showConsole->setCheckable(true);
-  showConsole->setChecked(true);
-  showConsole->setStatusTip(tr("Show Csound's message console"));
-  showConsole->setIconText("Console");
-  connect(showConsole, SIGNAL(toggled(bool)), m_console, SLOT(setVisible(bool)));
-  connect(m_console, SIGNAL(Close(bool)), showConsole, SLOT(setChecked(bool)));
+
+  showGenAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("GEN Routines"), this);
+//   showGenAct->setShortcut(tr("Alt+1"));
+  showGenAct->setStatusTip(tr("Show the GEN Routines Manual page"));
+  connect(showGenAct, SIGNAL(triggered()), helpPanel, SLOT(showGen()));
+
+  showOverviewAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("Opcode Overview"), this);
+//   showOverviewAct->setShortcut(tr("Alt+1"));
+  showOverviewAct->setStatusTip(tr("Show opcode overview"));
+  connect(showOverviewAct, SIGNAL(triggered()), helpPanel, SLOT(showOverview()));
+
+  showConsoleAct = new QAction(QIcon(":/images/gksu-root-terminal.png"), tr("Output Console"), this);
+  showConsoleAct->setShortcut(tr("Alt+2"));
+  showConsoleAct->setCheckable(true);
+  showConsoleAct->setChecked(true);
+  showConsoleAct->setStatusTip(tr("Show Csound's message console"));
+  showConsoleAct->setIconText("Console");
+  connect(showConsoleAct, SIGNAL(toggled(bool)), m_console, SLOT(setVisible(bool)));
+  connect(m_console, SIGNAL(Close(bool)), showConsoleAct, SLOT(setChecked(bool)));
 
   setHelpEntryAct = new QAction(QIcon(":/images/gtk-info.png"), tr("Show Opcode Entry"), this);
   setHelpEntryAct->setShortcut(tr("Shift+F1"));
@@ -1166,7 +1177,7 @@ void qutecsound::createMenus()
 
   viewMenu = menuBar()->addMenu(tr("View"));
   viewMenu->addAction(showHelpAct);
-  viewMenu->addAction(showConsole);
+  viewMenu->addAction(showConsoleAct);
   viewMenu->addAction(showUtilitiesAct);
   viewMenu->addAction(showWidgetsAct);
 
@@ -1174,6 +1185,9 @@ void qutecsound::createMenus()
 
   helpMenu = menuBar()->addMenu(tr("Help"));
   helpMenu->addAction(setHelpEntryAct);
+  helpMenu->addSeparator();
+  helpMenu->addAction(showOverviewAct);
+  helpMenu->addAction(showGenAct);
   helpMenu->addSeparator();
   helpMenu->addAction(aboutAct);
   helpMenu->addAction(aboutQtAct);
@@ -1229,7 +1243,7 @@ void qutecsound::createToolBars()
   configureToolBar->addAction(configureAct);
   configureToolBar->addAction(showWidgetsAct);
   configureToolBar->addAction(showUtilitiesAct);
-  configureToolBar->addAction(showConsole);
+  configureToolBar->addAction(showConsoleAct);
   configureToolBar->addAction(showHelpAct);
 
   Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
@@ -1524,6 +1538,8 @@ bool qutecsound::loadFile(QString fileName)
   QString text;
   while (!file.atEnd()) {
     QByteArray line = file.readLine();
+    line.replace("\r\n", "\n");
+    line.replace("\r", "\n");  //Change Mac returns to line endings
     text = text + QString(line);
     if (!line.endsWith("\n"))
       text += "\n";

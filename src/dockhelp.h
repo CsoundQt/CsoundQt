@@ -35,7 +35,7 @@ class DockHelp : public QDockWidget
 
     void loadFile(QString fileName);
     bool externalBrowser;
-	QString docDir;
+    QString docDir;
 
   private:
     QTextBrowser *text;
@@ -44,6 +44,9 @@ class DockHelp : public QDockWidget
   signals:
     void Close(bool visible);
 
+  public slots:
+    void showGen();
+    void showOverview();
 };
 
 #endif
