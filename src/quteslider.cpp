@@ -61,7 +61,12 @@ void QuteSlider::setRange(double min, double max)
 
 void QuteSlider::setValue(double value)
 {
-  m_value = value;
+  if (value > m_max)
+    m_value = m_max;
+  else if (value > m_min)
+    m_value = m_min;
+  else
+    m_value = value;
   int val = (int) (((QSlider *)m_widget)->maximum() * (m_value - m_min)/(m_max-m_min));
   ((QSlider *)m_widget)->setValue(val);
 }

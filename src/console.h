@@ -23,24 +23,51 @@
 #include <QDockWidget>
 #include <QTextEdit>
 
-class Console : public QDockWidget
+class Console
 {
-  Q_OBJECT
   public:
-    Console(QWidget * parent);
+    Console();
 
     ~Console();
 
     void appendMessage(QString msg);
     void clear();
     void setDefaultFont(QFont font) {text->document()->setDefaultFont(font);}
-  private:
+  protected:
     QTextEdit *text;
-    virtual void closeEvent(QCloseEvent * event);
+};
 
+class DockConsole : public QDockWidget, public Console
+{
+  Q_OBJECT
+  public:
+    DockConsole(QWidget * parent): QDockWidget(parent)
+    {
+      setWindowTitle("Csound Output Console");
+      setWidget(text);
+    }
+
+    ~DockConsole() {;};
+  private:
+    virtual void closeEvent(QCloseEvent * event);
   signals:
     void Close(bool visible);
+};
 
+class ConsoleWidget : public QWidget, public Console
+{
+  Q_OBJECT
+  public:
+    ConsoleWidget(QWidget * parent): QWidget(parent)
+    {
+      setWindowTitle("Csound Output Console");
+    }
+
+    ~ConsoleWidget() {;};
+  private:
+    virtual void closeEvent(QCloseEvent * event);
+  signals:
+    void Close(bool visible);
 };
 
 #endif

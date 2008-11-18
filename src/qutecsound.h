@@ -50,7 +50,7 @@ class QTextEdit;
 
 class DockHelp;
 class WidgetPanel;
-class Console;
+class DockConsole;
 class OpEntryParser;
 class Options;
 class Highlighter;
@@ -192,7 +192,7 @@ class qutecsound:public QMainWindow
     DocumentPage *textEdit;
     OpEntryParser *opcodeTree;
     Options *m_options;
-    Console *m_console;
+    DockConsole *m_console;
     Highlighter *m_highlighter;
     DockHelp *helpPanel;
     WidgetPanel *widgetPanel;

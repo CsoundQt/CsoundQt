@@ -507,7 +507,7 @@ void WidgetPanel::propertiesDialog()
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
   bgButton = new QPushButton(dialog);
-  QPixmap pixmap(64,64);
+  pixmap = QPixmap(64,64);
   pixmap.fill(palette().button().color());
   bgButton->setIcon(pixmap);
   layout->addWidget(bgButton, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);

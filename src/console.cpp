@@ -19,13 +19,10 @@
  ***************************************************************************/
 #include "console.h"
 
-Console::Console(QWidget * parent)
-  : QDockWidget(parent)
+Console::Console()
 {
-  setWindowTitle("Csound Output Console");
   text = new QTextEdit();
   text->setReadOnly(true);
-  setWidget(text);
   text->document()->setDefaultFont(QFont("Courier", 10));
 }
 
@@ -56,7 +53,12 @@ void Console::clear()
   text->clear();
 }
 
-void Console::closeEvent(QCloseEvent * /*event*/)
+void DockConsole::closeEvent(QCloseEvent * /*event*/)
+{
+  emit Close(false);
+}
+
+void ConsoleWidget::closeEvent(QCloseEvent * /*event*/)
 {
   emit Close(false);
 }

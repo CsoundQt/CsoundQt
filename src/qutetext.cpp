@@ -22,10 +22,10 @@
 // Font point sizes equivalent for html
 // This seems necessary since qt rich text
 // only takes these values for font size
-#define QUTE_XXSMALL 4
-#define QUTE_XSMALL 6
-#define QUTE_SMALL 8
-#define QUTE_MEDIUM 10
+#define QUTE_XXSMALL 6
+#define QUTE_XSMALL 8
+#define QUTE_SMALL 10
+#define QUTE_MEDIUM 12
 #define QUTE_LARGE 14
 #define QUTE_XLARGE 20
 #define QUTE_XXLARGE 24
@@ -226,9 +226,12 @@ void QuteText::createPropertiesDialog()
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
   textColor = new QPushButton(dialog);
+  QPixmap pixmap(64,64);
+  pixmap.fill(((QuteLabel *) m_widget)->palette().color(QPalette::WindowText));
+  textColor->setIcon(pixmap);
   QPalette palette(((QuteLabel *) m_widget)->palette().color(QPalette::WindowText));
   textColor->setPalette(palette);
-//   palette.color(QPalette::Window);
+  palette.color(QPalette::Window);
   layout->addWidget(textColor, 6,1, Qt::AlignLeft|Qt::AlignVCenter);
   connect(textColor, SIGNAL(released()), this, SLOT(selectTextColor()));
   label = new QLabel(dialog);
@@ -237,9 +240,12 @@ void QuteText::createPropertiesDialog()
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
   bgColor = new QPushButton(dialog);
+//   QPixmap pixmap(64,64);
+  pixmap.fill(((QuteLabel *) m_widget)->palette().color(QPalette::Window));
+  bgColor->setIcon(pixmap);
   palette = QPalette(((QuteLabel *) m_widget)->palette().color(QPalette::Window));
   bgColor->setPalette(palette);
-//   palette.color(QPalette::Window);
+  palette.color(QPalette::Window);
   layout->addWidget(bgColor, 6,3, Qt::AlignLeft|Qt::AlignVCenter);
   bg = new QCheckBox("Background", dialog);
   bg->setChecked(((QuteLabel *)m_widget)->autoFillBackground());
@@ -323,6 +329,9 @@ void QuteText::selectTextColor()
   if (color.isValid()) {
     setTextColor(color);
     textColor->setPalette(QPalette(((QuteLabel *) m_widget)->palette().color(QPalette::WindowText)));
+    QPixmap pixmap(64,64);
+    pixmap.fill(((QuteLabel *) m_widget)->palette().color(QPalette::WindowText));
+    textColor->setIcon(pixmap);
 //     colorLabel->setAutoFillBackground(true);
   }
 }
@@ -333,6 +342,9 @@ void QuteText::selectBgColor()
   if (color.isValid()) {
     setBgColor(color);
     bgColor->setPalette(QPalette(((QuteLabel *) m_widget)->palette().color(QPalette::Window)));
+    QPixmap pixmap(64,64);
+    pixmap.fill(((QuteLabel *) m_widget)->palette().color(QPalette::Window));
+    bgColor->setIcon(pixmap);
 //     colorLabel->setAutoFillBackground(true);
   }
 }

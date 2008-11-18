@@ -63,7 +63,7 @@ qutecsound::qutecsound(QString fileName)
 
   m_configlists = new ConfigLists;
 
-  m_console = new Console(this);
+  m_console = new DockConsole(this);
   m_console->setObjectName("m_console");
 //   m_console->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
   addDockWidget(Qt::BottomDockWidgetArea, m_console);
@@ -135,6 +135,8 @@ qutecsound::qutecsound(QString fileName)
   else if (init>0) {
     qDebug("Csound already initialized.");
   }
+  queueTimer = new QTimer(this);
+  connect(queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
 }
 
 qutecsound::~qutecsound()
@@ -147,7 +149,7 @@ void qutecsound::messageCallback_NoThread(CSOUND *csound,
                                           va_list args)
 {
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-  Console *console = ud->qcs->m_console;
+  DockConsole *console = ud->qcs->m_console;
   QString msg;
   msg = msg.vsprintf(fmt, args);
   console->appendMessage(msg);
@@ -160,7 +162,7 @@ void qutecsound::messageCallback_Thread(CSOUND *csound,
                                           va_list args)
 {
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-  Console *console = ud->qcs->m_console;
+  DockConsole *console = ud->qcs->m_console;
   QString msg;
   msg = msg.vsprintf(fmt, args);
   csoundLockMutex(ud->qcs->perfMutex);
@@ -472,6 +474,7 @@ void qutecsound::play(bool realtime)
     fprintf(stderr, "\n");
     int result=csoundCompile(csound,argc,argv);
 
+    emit(dispatchQueues()); //To dispatch messages produced in compilation.
     if (result!=CSOUND_SUCCESS) {
       qDebug("Csound compile failed!");
       csoundStop(csound);
@@ -497,6 +500,7 @@ void qutecsound::play(bool realtime)
     ud->qcs->channelNames.resize(numWidgets);
     ud->qcs->values.resize(numWidgets);
     if(m_options->thread) {
+      queueTimer->start(QCS_QUEUETIMER_TIME);
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
       perfThread = new CsoundPerformanceThread(csound);
       perfThread->SetProcessCallback(qutecsound::csThread, (void*)ud);
@@ -504,9 +508,6 @@ void qutecsound::play(bool realtime)
 #else
       ThreadID = csoundCreateThread(qutecsound::csThread, (void*)ud);
 #endif
-      queueTimer = new QTimer(this);
-      connect(queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
-      queueTimer->start(QCS_QUEUETIMER_TIME);
     }
     else {
       while(ud->PERF_STATUS == 1 && csoundPerformKsmps(csound)==0) {
