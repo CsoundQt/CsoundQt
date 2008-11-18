@@ -20,8 +20,7 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
-#include <QDockWidget>
-#include <QTextEdit>
+#include <QtGui>
 
 class Console
 {
@@ -30,7 +29,7 @@ class Console
 
     ~Console();
 
-    void appendMessage(QString msg);
+    virtual void appendMessage(QString msg);
     void clear();
     void setDefaultFont(QFont font) {text->document()->setDefaultFont(font);}
   protected:
@@ -44,6 +43,9 @@ class DockConsole : public QDockWidget, public Console
     DockConsole(QWidget * parent): QDockWidget(parent)
     {
       setWindowTitle("Csound Output Console");
+      text = new QTextEdit(parent);
+      text->setReadOnly(true);
+      text->document()->setDefaultFont(QFont("Courier", 10));
       setWidget(text);
     }
 
@@ -54,6 +56,22 @@ class DockConsole : public QDockWidget, public Console
     void Close(bool visible);
 };
 
+
+class MyQTextEdit : public QTextEdit
+{
+  Q_OBJECT
+  public:
+    MyQTextEdit(QWidget* parent) : QTextEdit(parent) {}
+    ~MyQTextEdit() {}
+
+  protected:
+    virtual void contextMenuEvent(QContextMenuEvent *event)
+    {emit(popUpMenu(event->globalPos()));}
+
+  signals:
+    void popUpMenu(QPoint pos);
+};
+
 class ConsoleWidget : public QWidget, public Console
 {
   Q_OBJECT
@@ -61,13 +79,20 @@ class ConsoleWidget : public QWidget, public Console
     ConsoleWidget(QWidget * parent): QWidget(parent)
     {
       setWindowTitle("Csound Output Console");
+      text = new MyQTextEdit(parent);
+      text->setReadOnly(true);
+      text->document()->setDefaultFont(QFont("Courier", 10));
+      connect(text, SIGNAL(popUpMenu(QPoint)), this, SLOT(emitPopUpMenu(QPoint)));
     }
 
     ~ConsoleWidget() {;};
-  private:
-    virtual void closeEvent(QCloseEvent * event);
+  //protected:
+    //virtual void contextMenuEvent(QContextMenuEvent *event)
+    //{emit(popUpMenu(event->globalPos()));}
+  private slots:
+    void emitPopUpMenu(QPoint point) {emit(popUpMenu(point));}
   signals:
-    void Close(bool visible);
+    void popUpMenu(QPoint pos);
 };
 
 #endif

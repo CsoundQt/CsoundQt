@@ -25,6 +25,7 @@
 #define QUTECSOUND_MAX_EVENTS 32
 
 class QuteWidget;
+class QuteConsole;
 
 class WidgetPanel : public QDockWidget
 {
@@ -40,6 +41,7 @@ class WidgetPanel : public QDockWidget
     int loadWidgets(QString macWidgets);
     int newWidget(QString widgetLine);
     QString widgetsText();
+	void appendMessage(QString message);
 
     QVector<QString> eventQueue;
     int eventQueueSize;
@@ -49,6 +51,7 @@ class WidgetPanel : public QDockWidget
 
   private:
     QVector<QuteWidget *> widgets;
+	QVector<QuteConsole *> consoleWidgets;
     QWidget *layoutWidget;
 
     QPoint currentPosition;

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andres Cabrera   *
- *   mantaraya36@gmail.com   *
+ *   Copyright (C) 2008 by Andres Cabrera                                  *
+ *   mantaraya36@gmail.com                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -15,42 +15,47 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#include "console.h"
+#include "quteconsole.h"
 
-Console::Console()
+QuteConsole::QuteConsole(QWidget *parent) : QuteWidget(parent)
+{
+  m_widget = new ConsoleWidget(this);
+  m_widget->setAutoFillBackground(true);
+  connect(((ConsoleWidget *)m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+}
+
+QuteConsole::~QuteConsole()
 {
 }
 
-Console::~Console()
+void QuteConsole::setValue(double /*value*/)
 {
+  // No action
 }
 
-void Console::appendMessage(QString msg)
+double QuteConsole::getValue()
 {
-  if (msg.contains("B ") or msg.contains("rtevent", Qt::CaseInsensitive)) {
-    text->setTextColor(QColor("blue"));
-  }
-  if (msg.contains("error", Qt::CaseInsensitive)
-      or msg.contains("overall samples out of range")) {
-    text->setTextColor(QColor("red"));
-  }
-  if (msg.contains("warning", Qt::CaseInsensitive)) {
-    text->setTextColor(QColor("orange"));
-  }
-  text->insertPlainText(msg);
-  text->moveCursor(QTextCursor::End);
-  text->setTextColor(QColor("black"));
-  //text->repaint();
+//This widget has no value
+  return 0.0;
 }
 
-void Console::clear()
+QString QuteConsole::getWidgetLine()
 {
-  text->clear();
+  QString line = "ioListing {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
+  line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"}";
+  qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
+  return line;
 }
 
-void DockConsole::closeEvent(QCloseEvent * /*event*/)
+void QuteConsole::popUpMenu(QPoint pos)
 {
-  emit Close(false);
+  QuteWidget::popUpMenu(pos);
 }
+
+void QuteConsole::appendMessage(QString message)
+{
+  ((ConsoleWidget *)m_widget)->appendMessage(message);
+}
+

@@ -63,7 +63,7 @@ void QuteSlider::setValue(double value)
 {
   if (value > m_max)
     m_value = m_max;
-  else if (value > m_min)
+  else if (value < m_min)
     m_value = m_min;
   else
     m_value = value;

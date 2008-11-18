@@ -25,6 +25,7 @@
 #include "quteknob.h"
 #include "qutecheckbox.h"
 #include "qutecombobox.h"
+#include "quteconsole.h"
 #include "qutedummy.h"
 
 
@@ -154,6 +155,9 @@ int WidgetPanel::newWidget(QString widgetLine)
     else if (parts[0]=="ioMenu") {
       return createMenu(x,y,width, height, widgetLine);
     }
+    else if (parts[0]=="ioListing") {
+      return createConsole(x,y,width, height, widgetLine);
+    }
     else if (parts[0]=="ioMeter") {
       return createDummy(x,y,width, height, widgetLine);
     }
@@ -173,6 +177,7 @@ void WidgetPanel::clearWidgets()
     delete widget;
   }
   widgets.clear();
+  consoleWidgets.clear();
 }
 
 void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
@@ -195,12 +200,21 @@ QString WidgetPanel::widgetsText()
   return text;
 }
 
+void WidgetPanel::appendMessage(QString message)
+{
+  for (int i=0; i < consoleWidgets.size(); i++) {
+    consoleWidgets[i]->appendMessage(message);
+  }
+}
+
 void WidgetPanel::deleteWidget(QuteWidget *widget)
 {
   int number = widgets.indexOf(widget);
+  //if (consoleWidgets.contains((QuteConsole *)widget));
+  //  consoleWidgets.remove(consoleWidgets.indexOf((QuteConsole *)widget));
   qDebug("WidgetPanel::deleteWidget %i", number);
-  widgets.remove(number);
   widget->close();
+  widgets.remove(number);
   widgetChanged();
 }
 
@@ -416,19 +430,17 @@ int WidgetPanel::createMenu(int x, int y, int width, int height, QString widgetL
 
 int WidgetPanel::createConsole(int x, int y, int width, int height, QString widgetLine)
 {
-  //TODO create console
-//   qDebug("ioKnob x=%i y=%i w=%i h=%i", x,y, width, height);
-//   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-//   QuteKnob *widget= new QuteKnob(layoutWidget);
-//   widget->setWidgetLine(widgetLine);
-//   widget->setWidgetGeometry(x,y,width, height);
-//   widget->setSize(parts[5].toInt());
-// //   widget->setText(parts[8].toDouble());
-//   connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
-//   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-//   widgets.append(widget);
-//   widget->show();
-//   return 1;
+   qDebug("ioListing x=%i y=%i w=%i h=%i", x,y, width, height);
+   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+   QuteConsole *widget= new QuteConsole(layoutWidget);
+   widget->setWidgetLine(widgetLine);
+   widget->setWidgetGeometry(x,y,width, height);
+   connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+   widgets.append(widget);
+   widget->show();
+   consoleWidgets.append(widget);
+   return 1;
 }
 
 int WidgetPanel::createDummy(int x, int y, int width, int height, QString widgetLine)
@@ -487,8 +499,7 @@ void WidgetPanel::createMenu()
 
 void WidgetPanel::createConsole()
 {
-  //TODO Create console widget
-//   createKnob(currentPosition.x(), currentPosition.y() - 20, 80, 80, QString("ioKnob {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(widgets.size())));
+  createConsole(currentPosition.x(), currentPosition.y() - 20, 200, 400, QString("ioListing {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {200, 400}"));
 }
 
 void WidgetPanel::propertiesDialog()
@@ -507,7 +518,7 @@ void WidgetPanel::propertiesDialog()
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
   bgButton = new QPushButton(dialog);
-  pixmap = QPixmap(64,64);
+  QPixmap pixmap = QPixmap(64,64);
   pixmap.fill(palette().button().color());
   bgButton->setIcon(pixmap);
   layout->addWidget(bgButton, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);

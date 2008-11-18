@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andres Cabrera   *
- *   mantaraya36@gmail.com   *
+ *   Copyright (C) 2008 by Andres Cabrera                                  *
+ *   mantaraya36@gmail.com                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -15,42 +15,29 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
+#ifndef QUTECONSOLE_H
+#define QUTECONSOLE_H
+
+#include "qutewidget.h"
 #include "console.h"
 
-Console::Console()
+class QuteConsole : public QuteWidget
 {
-}
+  Q_OBJECT
+  public:
+    QuteConsole(QWidget *parent);
 
-Console::~Console()
-{
-}
+    ~QuteConsole();
 
-void Console::appendMessage(QString msg)
-{
-  if (msg.contains("B ") or msg.contains("rtevent", Qt::CaseInsensitive)) {
-    text->setTextColor(QColor("blue"));
-  }
-  if (msg.contains("error", Qt::CaseInsensitive)
-      or msg.contains("overall samples out of range")) {
-    text->setTextColor(QColor("red"));
-  }
-  if (msg.contains("warning", Qt::CaseInsensitive)) {
-    text->setTextColor(QColor("orange"));
-  }
-  text->insertPlainText(msg);
-  text->moveCursor(QTextCursor::End);
-  text->setTextColor(QColor("black"));
-  //text->repaint();
-}
+    virtual void setValue(double value); // Value of button when pressed
+    virtual double getValue(); // This value represents the state of the button
+    virtual QString getWidgetLine();
+    void popUpMenu(QPoint pos);
 
-void Console::clear()
-{
-  text->clear();
-}
+    void appendMessage(QString message);
 
-void DockConsole::closeEvent(QCloseEvent * /*event*/)
-{
-  emit Close(false);
-}
+};
+
+#endif

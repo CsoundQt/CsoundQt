@@ -22,13 +22,13 @@
 // Font point sizes equivalent for html
 // This seems necessary since qt rich text
 // only takes these values for font size
-#define QUTE_XXSMALL 6
-#define QUTE_XSMALL 8
-#define QUTE_SMALL 10
-#define QUTE_MEDIUM 12
-#define QUTE_LARGE 14
-#define QUTE_XLARGE 20
-#define QUTE_XXLARGE 24
+#define QUTE_XXSMALL 8
+#define QUTE_XSMALL 10
+#define QUTE_SMALL 12
+#define QUTE_MEDIUM 16
+#define QUTE_LARGE 20
+#define QUTE_XLARGE 24
+#define QUTE_XXLARGE 28
 
 //number of decimal places shown on the widget
 #define QUTESLIDER_PRECISION 4
@@ -78,16 +78,16 @@ void QuteText::setAlignment(int alignment)
   Qt::Alignment align;
   switch (alignment) {
     case 0:
-      align = Qt::AlignLeft;
+      align = Qt::AlignLeft|Qt::AlignTop;
       break;
     case 1:
-      align = Qt::AlignCenter;
+      align = Qt::AlignHCenter|Qt::AlignTop;
       break;
     case 2:
-      align = Qt::AlignRight;
+      align = Qt::AlignRight|Qt::AlignTop;
       break;
     default:
-      align = Qt::AlignLeft;
+      align = Qt::AlignLeft|Qt::AlignTop;
   }
    ((QLabel *)m_widget)->setAlignment(align);
 }

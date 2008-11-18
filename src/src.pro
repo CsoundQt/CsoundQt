@@ -34,7 +34,8 @@ SOURCES += qutecsound.cpp \
  qutedummy.cpp \
  quteknob.cpp \
  qutecombobox.cpp \
- qutecheckbox.cpp
+ qutecheckbox.cpp \
+ quteconsole.cpp
 HEADERS += qutecsound.h \
  dockhelp.h \
  opentryparser.h \
@@ -55,7 +56,8 @@ HEADERS += qutecsound.h \
  qutedummy.h \
  quteknob.h \
  qutecombobox.h \
- qutecheckbox.h
+ qutecheckbox.h \
+ quteconsole.h
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \

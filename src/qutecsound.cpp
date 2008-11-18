@@ -136,6 +136,7 @@ qutecsound::qutecsound(QString fileName)
     qDebug("Csound already initialized.");
   }
   queueTimer = new QTimer(this);
+  queueTimer->setSingleShot (true);
   connect(queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
 }
 
@@ -153,6 +154,7 @@ void qutecsound::messageCallback_NoThread(CSOUND *csound,
   QString msg;
   msg = msg.vsprintf(fmt, args);
   console->appendMessage(msg);
+  ud->qcs->widgetPanel->appendMessage(msg);
   console->update();
 }
 
@@ -866,6 +868,7 @@ void qutecsound::dispatchQueues()
   //Is used only for threaded operation
   foreach (QString msg, messageQueue) {
     m_console->appendMessage(msg);
+    widgetPanel->appendMessage(msg);
   }
   messageQueue.clear();
   QList<QString> channels = outValueQueue.keys();
@@ -1091,7 +1094,7 @@ void qutecsound::createActions()
   aboutAct = new QAction(tr("&About QuteCsound"), this);
   aboutAct->setStatusTip(tr("Show the application's About box"));
   aboutAct->setIconText("About");
-//   connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
+  connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 
   aboutQtAct = new QAction(tr("About &Qt"), this);
   aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));

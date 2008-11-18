@@ -63,7 +63,12 @@ void QuteKnob::setRange(double min, double max)
 
 void QuteKnob::setValue(double value)
 {
-  m_value = value;
+  if (value > m_max)
+    m_value = m_max;
+  else if (value < m_min)
+    m_value = m_min;
+  else
+    m_value = value;
   int val = (int) (((QDial *)m_widget)->maximum() * (m_value - m_min)/(m_max-m_min));
   ((QDial *)m_widget)->setValue(val);
 }

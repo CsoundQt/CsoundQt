@@ -17,7 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#include "qutebutton.h"
+#include "QuteButton.h"
 
 QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 {
@@ -57,7 +57,7 @@ QString QuteButton::getWidgetLine()
   line += "\"" + ((QPushButton *)m_widget)->text() + "\" ";
   line += "\"" + m_filename + "\" ";
   line += m_eventLine;
-  qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
+  qDebug("QuteButton::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
 
