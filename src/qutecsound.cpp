@@ -164,7 +164,6 @@ void qutecsound::messageCallback_Thread(CSOUND *csound,
                                           va_list args)
 {
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-  DockConsole *console = ud->qcs->m_console;
   QString msg;
   msg = msg.vsprintf(fmt, args);
   csoundLockMutex(ud->qcs->perfMutex);
@@ -468,10 +467,10 @@ void qutecsound::play(bool realtime)
     csoundSetHostData(csound, (void *) ud);
     if(m_options->thread) {
       csoundSetMessageCallback(csound, &qutecsound::messageCallback_Thread);
-	}
-	else {
+    }
+    else {
       csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
-	}
+    }
     qDebug("Command Line:");
     for (int index=0; index< argc; index++) {
       fprintf(stderr, "%s ",argv[index]);
@@ -529,28 +528,12 @@ void qutecsound::play(bool realtime)
       stop();
     }
     free(argv);
-//     int hold;
-//
-//     CsoundPerformanceThread thread(csound.GetCsound());
-//     cout << "Press 1 to play, 2 to pause and 0 to quit\n";
-//     while(1){
-//       cin >> hold;
-//       if(hold==1){
-//         thread.Play();
-//         hold = 0;
-//       }
-//       else if(hold==2){
-//         thread.Pause();
-//         hold=0;
-//
-//       }
-//     }
 #ifdef MACOSX
 // Put menu bar back
     SetMenuBar(menuBarHandle);
 #endif
   }
-  else {
+  else {  // Run in external shell (useAPI == false)
     QString script = generateScript(realtime);
     QFile file(SCRIPT_NAME);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -584,7 +567,7 @@ void qutecsound::stop()
     ud->PERF_STATUS = 0;
   }
   else {
-	return;
+    return;
   }
   if (m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
@@ -766,42 +749,53 @@ void qutecsound::runUtility(QString flags)
 {
   //TODO Run utilities from API using soundRunUtility(CSOUND *, const char *name, int argc, char **argv)
   qDebug("qutecsound::runUtility");
-//   if (m_options->useAPI) {
-// #ifdef MACOSX
-// //Remember menu bar to set it after FLTK grabs it
-//     menuBarHandle = GetMenuBar();
-// #endif
-//     m_console->clear();
-//     CppSound csound;
-//     static char *argv[33];
-//     QStringList indFlags= flags.split(" ",QString::SkipEmptyParts);
-//     int index = 0;
-//     foreach (QString flag, indFlags) {
-//       argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
-//       strcpy(argv[index],flag.toStdString().c_str());
-//       index++;
-//     }
-//     int argc = indFlags.size();
-//
-//     csound.SetMessageCallback(&qutecsound::messageCallback_NoThread);
-//     csound.SetHostData((void *)m_console);
-//     csound.compile(argc, argv);
-//     if (!csound.getIsCompiled()) {
-//       qDebug("Csound compile failed!");
-//       csound.Stop();
-//       csound.cleanup();
-//       return;
-//     }
-//     running = true;
-//     csound.perform();
-//     csound.Stop();
-//     csound.cleanup();
-// #ifdef MACOSX
-// // Put menu bar back
-//     SetMenuBar(menuBarHandle);
-// #endif
-//   }
-//   else {
+  if (m_options->useAPI) {
+#ifdef MACOSX
+//Remember menu bar to set it after FLTK grabs it
+    menuBarHandle = GetMenuBar();
+#endif
+    m_console->clear();
+    static char *argv[33];
+    QString name = "";
+    QStringList indFlags= flags.split(" ",QString::SkipEmptyParts);
+    if (indFlags.size() < 2) {
+      qDebug("qutecsound::runUtility: Error: empty flags");
+      return;
+    }
+    if (indFlags[0] == "-U") {
+      indFlags.removeAt(0);
+      name = indFlags[0];
+      indFlags.removeAt(0);
+    }
+    else {
+      qDebug("qutecsound::runUtility: Error: unexpected flag!");
+      return;
+    }
+    int index = 0;
+    foreach (QString flag, indFlags) {
+      argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
+      strcpy(argv[index],flag.toStdString().c_str());
+      index++;
+      qDebug("%s",flag.toStdString().c_str());
+    }
+    int argc = indFlags.size();
+    CSOUND *csoundU;
+    csoundU=csoundCreate(0);
+    csoundReset(csoundU);
+    csoundSetHostData(csoundU, (void *) ud);
+    csoundPreCompile(csoundU);
+    // Utilities always run in the same thread as QuteCsound
+    csoundSetMessageCallback(csoundU, &qutecsound::messageCallback_NoThread);
+    csoundRunUtility(csoundU, name.toStdString().c_str(), argc, argv);
+    csoundCleanup(csoundU);
+    csoundDestroy(csoundU);
+//     free(argv);
+#ifdef MACOSX
+// Put menu bar back
+    SetMenuBar(menuBarHandle);
+#endif
+  }
+  else {
     QString script;
 #ifdef WIN32
     script = "";
@@ -863,7 +857,7 @@ void qutecsound::runUtility(QString flags)
     options = SCRIPT_NAME;
 #endif
     execute(m_options->terminal, options);
-//   }
+  }
 }
 
 void qutecsound::dispatchQueues()

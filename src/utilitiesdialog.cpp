@@ -32,11 +32,21 @@ UtilitiesDialog::UtilitiesDialog(QWidget *parent, Options *options, ConfigLists 
   qDebug("UtilitiesDialog::UtilitiesDialog");
   helpBrowser->setAcceptRichText(true);
   changeHelp(m_options->csdocdir + "/cvanal.html");
-  
   QStringList searchPaths;
   searchPaths << m_options->csdocdir;
   helpBrowser->setSearchPaths(searchPaths);
   connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTab(int)));
+
+  connect(atsaInputToolButton, SIGNAL(released()), this, SLOT(browseAtsaInput()));
+  connect(atsaOutputToolButton, SIGNAL(released()), this, SLOT(browseAtsaOutput()));
+  connect(pvInputToolButton, SIGNAL(released()), this, SLOT(browsePvInput()));
+  connect(pvOutputToolButton, SIGNAL(released()), this, SLOT(browsePvOutput()));
+  connect(hetInputToolButton, SIGNAL(released()), this, SLOT(browseHetInput()));
+  connect(hetOutputToolButton, SIGNAL(released()), this, SLOT(browseHetOutput()));
+  connect(lpInputToolButton, SIGNAL(released()), this, SLOT(browseLpInput()));
+  connect(lpOutputToolButton, SIGNAL(released()), this, SLOT(browseLpOutput()));
+  connect(cvInputToolButton, SIGNAL(released()), this, SLOT(browseCvInput()));
+  connect(cvOutputToolButton, SIGNAL(released()), this, SLOT(browseCvOutput()));
 }
 
 UtilitiesDialog::~UtilitiesDialog()
@@ -47,25 +57,25 @@ void UtilitiesDialog::runAtsa()
 {
   QString flags = "-U atsa ";
 
-  flags += "-b " + atsaBeginLineEdit->text() + " ";
-  flags += "-e " + atsaEndLineEdit->text() + " ";
-  flags += "-l " + atsaLowestLineEdit->text() + " ";
-  flags += "-H " + atsaHighestLineEdit->text() + " ";
-  flags += "-d " + atsaDeviationLineEdit->text() + " ";
-  flags += "-c " + atsaCycleLineEdit->text() + " ";
-  flags += "-h " + atsaHopSizeLineEdit->text() + " ";
-  flags += "-m " + atsaMagnitudeLineEdit->text() + " ";
-  flags += "-t " + atsaLengthLineEdit->text() + " ";
-  flags += "-s " + atsaMinSegmentLineEdit->text() + " ";
-  flags += "-g " + atsaMinGapLineEdit->text() + " ";
-  flags += "-T " + atsaThresholdLineEdit->text() + " ";
-  flags += "-P " + atsaLastPeakLineEdit->text() + " ";
-  flags += "-S " + atsaSmrLineEdit->text() + " ";
-  flags += "-F " + QString::number(atsaFileTypeComboBox->currentIndex()+1) + " ";
-  flags += "-w " + QString::number(atsaWindowComboBox->currentIndex()) + " ";
+  flags += "-b" + atsaBeginLineEdit->text() + " ";
+  flags += "-e" + atsaEndLineEdit->text() + " ";
+  flags += "-l" + atsaLowestLineEdit->text() + " ";
+  flags += "-H" + atsaHighestLineEdit->text() + " ";
+  flags += "-d" + atsaDeviationLineEdit->text() + " ";
+  flags += "-c" + atsaCycleLineEdit->text() + " ";
+  flags += "-h" + atsaHopSizeLineEdit->text() + " ";
+  flags += "-m" + atsaMagnitudeLineEdit->text() + " ";
+  flags += "-t" + atsaLengthLineEdit->text() + " ";
+  flags += "-s" + atsaMinSegmentLineEdit->text() + " ";
+  flags += "-g" + atsaMinGapLineEdit->text() + " ";
+  flags += "-T" + atsaThresholdLineEdit->text() + " ";
+  flags += "-P" + atsaLastPeakLineEdit->text() + " ";
+  flags += "-S" + atsaSmrLineEdit->text() + " ";
+  flags += "-F" + QString::number(atsaFileTypeComboBox->currentIndex()+1) + " ";
+  flags += "-w" + QString::number(atsaWindowComboBox->currentIndex()) + " ";
 
-  flags += atsaInputLineEdit->text() + " ";
-  flags += atsaOutputLineEdit->text() + " ";
+  flags += "\"" + atsaInputLineEdit->text() + "\" ";
+  flags += "\"" + atsaOutputLineEdit->text() + "\" ";
 
 //   qDebug(flags.toStdString().c_str());
   emit(runUtility(flags));
@@ -97,12 +107,12 @@ void UtilitiesDialog::runPvanal()
 {
   QString flags = "-U pvanal ";
 
-  flags += "-s " + pvSrLineEdit->text() + " ";
-  flags += "-c " + pvChannelLineEdit->text() + " ";
-  flags += "-b " + pvBeginLineEdit->text() + " ";
-  flags += "-d " + pvDurationLineEdit->text() + " ";
-  flags += "-n " + pvFrameLineEdit->text() + " ";
-  flags += "-w " + pvOverlapLineEdit->text() + " ";
+  flags += "-s" + pvSrLineEdit->text() + " ";
+  flags += "-c" + pvChannelLineEdit->text() + " ";
+  flags += "-b" + pvBeginLineEdit->text() + " ";
+  flags += "-d" + pvDurationLineEdit->text() + " ";
+  flags += "-n" + pvFrameLineEdit->text() + " ";
+  flags += "-w" + pvOverlapLineEdit->text() + " ";
 
   switch (pvWindowComboBox->currentIndex()) {
     case 0:
@@ -112,13 +122,13 @@ void UtilitiesDialog::runPvanal()
       break;
     case 2:
       flags += "-K ";
-      flags += "-B " + pvBetaLineEdit->text() ;
+      flags += "-B" + pvBetaLineEdit->text() ;
       break;
     default:
       break;
   }
-  flags += pvInputLineEdit->text() + " ";
-  flags += pvOutputLineEdit->text() + " ";
+  flags += "\"" + pvInputLineEdit->text() + "\" ";
+  flags += "\"" + pvOutputLineEdit->text() + "\" ";
 
 //   qDebug(flags.toStdString().c_str());
   emit(runUtility(flags));
@@ -143,18 +153,18 @@ void UtilitiesDialog::runHetro()
 {
   QString flags = "-U hetro ";
 
-  flags += "-s " + hetSrLineEdit->text() + " ";
-  flags += "-c " + hetChannelLineEdit->text() + " ";
-  flags += "-b " + hetBeginLineEdit->text() + " ";
-  flags += "-d " + hetDurationLineEdit->text() + " ";
-  flags += "-f " + hetStartLineEdit->text() + " ";
-  flags += "-h " + hetPartialsLineEdit->text() + " ";
-  flags += "-M " + hetMaxLineEdit->text() + " ";
-  flags += "-m " + hetMinLineEdit->text() + " ";
-  flags += "-n " + hetBreakpointsLineEdit->text() + " ";
-  flags += "-l " + hetCutoffLineEdit->text() + " ";
-  flags += hetInputLineEdit->text() + " ";
-  flags += hetOutputLineEdit->text() + " ";
+  flags += "-s" + hetSrLineEdit->text() + " ";
+  flags += "-c" + hetChannelLineEdit->text() + " ";
+  flags += "-b" + hetBeginLineEdit->text() + " ";
+  flags += "-d" + hetDurationLineEdit->text() + " ";
+  flags += "-f" + hetStartLineEdit->text() + " ";
+  flags += "-h" + hetPartialsLineEdit->text() + " ";
+  flags += "-M" + hetMaxLineEdit->text() + " ";
+  flags += "-m" + hetMinLineEdit->text() + " ";
+  flags += "-n" + hetBreakpointsLineEdit->text() + " ";
+  flags += "-l" + hetCutoffLineEdit->text() + " ";
+  flags += "\"" + hetInputLineEdit->text() + "\" ";
+  flags += "\"" + hetOutputLineEdit->text() + "\" ";
 
 //   qDebug(flags.toStdString().c_str());
   emit(runUtility(flags));
@@ -180,19 +190,19 @@ void UtilitiesDialog::runLpanal()
 {
   QString flags = "-U lpanal ";
 
-  flags += "-s " + lpSrLineEdit->text() + " ";
-  flags += "-c " + lpChannelLineEdit->text() + " ";
-  flags += "-b " + lpBeginLineEdit->text() + " ";
-  flags += "-d " + lpDurationLineEdit->text() + " ";
-  flags += "-p " + lpPolesLineEdit->text() + " ";
-  flags += "-h " + lpHopSizeLineEdit->text() + " ";
-  flags += "-P " + lpLowestLineEdit->text() + " ";
-  flags += "-Q " + lpMaxLineEdit->text() + " ";
-  flags += "-v " + QString::number(lpVerbosityComboBox->currentIndex()) + " ";
+  flags += "-s" + lpSrLineEdit->text() + " ";
+  flags += "-c" + lpChannelLineEdit->text() + " ";
+  flags += "-b" + lpBeginLineEdit->text() + " ";
+  flags += "-d" + lpDurationLineEdit->text() + " ";
+  flags += "-p" + lpPolesLineEdit->text() + " ";
+  flags += "-h" + lpHopSizeLineEdit->text() + " ";
+  flags += "-P" + lpLowestLineEdit->text() + " ";
+  flags += "-Q" + lpMaxLineEdit->text() + " ";
+  flags += "-v" + QString::number(lpVerbosityComboBox->currentIndex()) + " ";
   if (lpAlternateCheckBox->isChecked())
     flags += "-a ";
-  flags += lpInputLineEdit->text() + " ";
-  flags += lpOutputLineEdit->text() + " ";
+  flags += "\"" + lpInputLineEdit->text() + "\" ";
+  flags += "\"" + lpOutputLineEdit->text() + "\" ";
 
 //   qDebug(flags.toStdString().c_str());
   emit(runUtility(flags));
@@ -216,13 +226,13 @@ void UtilitiesDialog::runCvanal()
 {
   QString flags = "-U cvanal ";
 
-  flags += "-s " + cvSrLineEdit->text() + " ";
-  flags += "-b " + cvBeginLineEdit->text() + " ";
-  flags += "-d " + cvDurationLineEdit->text() + " ";
+  flags += "-s" + cvSrLineEdit->text() + " ";
+  flags += "-b" + cvBeginLineEdit->text() + " ";
+  flags += "-d" + cvDurationLineEdit->text() + " ";
   if (cvChannelLineEdit->text()!= "")
-    flags += "-c " + cvChannelLineEdit->text() + " ";
-  flags += cvInputLineEdit->text() + " ";
-  flags += cvOutputLineEdit->text() + " ";
+    flags += "-c" + cvChannelLineEdit->text() + " ";
+  flags += "\"" + cvInputLineEdit->text() + "\" ";
+  flags += "\"" + cvOutputLineEdit->text() + "\" ";
 
 //   qDebug(flags.toStdString().c_str());
   emit(runUtility(flags));
@@ -241,42 +251,72 @@ void UtilitiesDialog::resetCvanal()
 
 void UtilitiesDialog::browseAtsaInput()
 {
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  if (fileName != "")
+    atsaInputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browseAtsaOutput()
 {
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  if (fileName != "")
+    atsaOutputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browsePvInput()
 {
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  if (fileName != "")
+    pvInputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browsePvOutput()
 {
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  if (fileName != "")
+    pvOutputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browseHetInput()
 {
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  if (fileName != "")
+    hetInputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browseHetOutput()
 {
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  if (fileName != "")
+    hetOutputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browseLpInput()
 {
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  if (fileName != "")
+    lpInputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browseLpOutput()
 {
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  if (fileName != "")
+    lpOutputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browseCvInput()
 {
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  if (fileName != "")
+    cvInputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browseCvOutput()
 {
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  if (fileName != "")
+    cvOutputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browseFile(QString &destination, QString /*extension*/)
