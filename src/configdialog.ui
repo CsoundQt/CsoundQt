@@ -861,6 +861,19 @@
        <string>Save widgets in csd file</string>
       </property>
      </widget>
+     <widget class="QCheckBox" name="showWidgetsOnRunCheckBox" >
+      <property name="geometry" >
+       <rect>
+        <x>10</x>
+        <y>160</y>
+        <width>191</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Show Widgets on Play</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox_8" >
      <property name="geometry" >

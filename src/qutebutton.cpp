@@ -17,7 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#include "QuteButton.h"
+#include "qutebutton.h"
 
 QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 {
@@ -64,6 +64,7 @@ QString QuteButton::getWidgetLine()
 void QuteButton::applyProperties()
 {
   setEventLine(line->text());
+  setValue(valueBox->value());
   setText(text->text());
   setFilename(filenameLineEdit->text());
   setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());

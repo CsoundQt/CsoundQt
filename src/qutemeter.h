@@ -17,75 +17,33 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef QUTEWIDGET_H
-#define QUTEWIDGET_H
+#ifndef QUTEMETER_H
+#define QUTEMETER_H
 
-#include <QtGui>
+#include "qutewidget.h"
 
-class QuteWidget : public QWidget
+class QuteMeter : public QuteWidget
 {
   Q_OBJECT
   public:
-    QuteWidget(QWidget* parent);
+    QuteMeter(QWidget *parent);
 
-    ~QuteWidget();
+    ~QuteMeter();
 
-    const QString name() {return m_name;}
-
-    virtual void setWidgetLine(QString line);
-    void setChannelName(QString name);
-//     virtual void setWidgetGeometry(QRect rect);
-    virtual void setWidgetGeometry(int x, int y, int w, int h);
-    virtual void setRange(int min, int max);
-    virtual void setValue(double value);
-    void setResolution(double resolution);
-    virtual void setChecked(bool checked);
-
-    QString getChannelName();
+    virtual void setValue(double value); // Value of button when pressed
+    virtual double getValue(); // This value represents the state of the button
     virtual QString getWidgetLine();
-    virtual double getValue();
-    virtual void createPropertiesDialog();
-    virtual void applyProperties();
-
-  protected:
-    QSpinBox *xSpinBox;
-    QSpinBox *ySpinBox;
-    QSpinBox *wSpinBox;
-    QSpinBox *hSpinBox;
-    QLineEdit *nameLineEdit;
-    QString m_line;
-    QWidget *m_layoutWidget;
-    QWidget *m_widget;
-    QDialog *dialog;
-    QGridLayout *layout;
-
-    QString m_name;
-    double m_min, m_max;
-    double m_resolution;
-//     double m_min2,m_max2;
-    double m_value, m_value2;
-
-    virtual void contextMenuEvent(QContextMenuEvent *event);
-
-  private:
-    QAction *propertiesAct;
-    QAction *deleteAct;
-
-    QPushButton *applyButton;
-    QPushButton *cancelButton;
-    QPushButton *acceptButton;
-
-  public slots:
+    virtual void setWidgetGeometry(int x,int y,int width,int height);
     void popUpMenu(QPoint pos);
+};
 
-  private slots:
-    void apply();
-    void openProperties();
-    void deleteWidget();
+class MeterWidget : public QWidget
+{
+  Q_OBJECT
+  public:
+    MeterWidget(QWidget *parent) {};
 
-  signals:
-    void widgetChanged();
-    void deleteThisWidget(QuteWidget *thisWidget);
+    ~MeterWidget() {};
 };
 
 #endif

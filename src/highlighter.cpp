@@ -155,6 +155,23 @@ void Highlighter::setFirstRules()
     rule.pattern = QRegExp(pattern);
     rule.format = gstringVarFormat;
     highlightingRules.append(rule);
+
+    QTextCharFormat fsigFormat;
+    fsigFormat.setForeground(QColor(Qt::gray));
+    fsigFormat.setFontWeight(QFont::Bold);
+    pattern = "\\bf[a-zA-Z0-9]*\\b";
+    rule.pattern = QRegExp(pattern);
+    rule.format = fsigFormat;
+    highlightingRules.append(rule);
+
+    QTextCharFormat gfsigFormat;
+    gfsigFormat.setForeground(QColor(Qt::gray));
+    gfsigFormat.setFontItalic(true);
+    gfsigFormat.setFontWeight(QFont::Bold);
+    pattern = "\\bf[a-zA-Z0-9]*\\b";
+    rule.pattern = QRegExp(pattern);
+    rule.format = gfsigFormat;
+    highlightingRules.append(rule);
   }
 
   opcodeFormat.setForeground(QColor("blue"));
@@ -217,8 +234,9 @@ void Highlighter::setLastRules()
   rule.format = quotationFormat;
   highlightingRules.append(rule);
 
-  labelFormat.setForeground(QColor("magenta"));
-  rule.pattern = QRegExp("[^\n]*\\:");
+  labelFormat.setForeground(QColor(205,92,92));
+  labelFormat.setFontWeight(QFont::Bold);
+  rule.pattern = QRegExp("[\\s]*[a-zA-Z0-9]*:[^a-zA-Z0-9]*");
   rule.format = labelFormat;
   highlightingRules.append(rule);
 

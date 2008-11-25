@@ -38,9 +38,9 @@ QuteKnob::~QuteKnob()
 
 double QuteKnob::getValue()
 {
-  QDial *slider = (QDial *)m_widget;
-  double normalized = (double) (slider->value() - slider->minimum())
-        / (double) (slider->maximum() - slider->minimum());
+  QDial *knob = (QDial *)m_widget;
+  double normalized = (double) (knob->value() - knob->minimum())
+        / (double) (knob->maximum() - knob->minimum());
   m_value = m_min + (normalized * (m_max-m_min));
   return m_value;
 }
@@ -50,8 +50,8 @@ void QuteKnob::setRange(double min, double max)
   // TODO when knob is resized, its internal range should be adjusted...
   if (max < min) {
     double temp = max;
-	max = min;
-	min = temp;
+    max = min;
+    min = temp;
   }
   m_min = min;
   m_max = max;
@@ -76,6 +76,14 @@ void QuteKnob::setValue(double value)
 void QuteKnob::setWidgetLine(QString line)
 {
   m_line = line;
+}
+
+void QuteKnob::setWidgetGeometry(int x, int y, int width, int height)
+{
+  QuteWidget::setWidgetGeometry(x,y,width,height);
+  m_widget->move(5,5);
+  m_widget->setFixedSize(width-10, height-10);
+//   m_widget->setGeometry(x+1, y+1, width-2, height-2);
 }
 
 QString QuteKnob::getWidgetLine()

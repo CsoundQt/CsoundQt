@@ -51,6 +51,7 @@ class Options{
     bool enableWidgets;
     bool invalueEnabled;
     bool chngetEnabled;
+    bool showWidgetsOnRun;
 
     bool useAPI;
     bool thread;

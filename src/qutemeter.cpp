@@ -17,31 +17,31 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#include "quteconsole.h"
+#include "qutemeter.h"
 
-QuteConsole::QuteConsole(QWidget *parent) : QuteWidget(parent)
+QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
 {
-  m_widget = new ConsoleWidget(this);
+  m_widget = new MeterWidget(this);
   m_widget->setAutoFillBackground(true);
-  connect(((ConsoleWidget *)m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+  connect(((MeterWidget *)m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 }
 
-QuteConsole::~QuteConsole()
+QuteMeter::~QuteMeter()
 {
 }
 
-void QuteConsole::setValue(double /*value*/)
+void QuteMeter::setValue(double /*value*/)
 {
   // No action
 }
 
-double QuteConsole::getValue()
+double QuteMeter::getValue()
 {
 //This widget has no value
   return 0.0;
 }
 
-QString QuteConsole::getWidgetLine()
+QString QuteMeter::getWidgetLine()
 {
   QString line = "ioListing {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"}";
@@ -49,19 +49,14 @@ QString QuteConsole::getWidgetLine()
   return line;
 }
 
-void QuteConsole::popUpMenu(QPoint pos)
+void QuteMeter::popUpMenu(QPoint pos)
 {
   QuteWidget::popUpMenu(pos);
 }
 
-void QuteConsole::appendMessage(QString message)
-{
-  ((ConsoleWidget *)m_widget)->appendMessage(message);
-}
-
-void QuteConsole::setWidgetGeometry(int x,int y,int width,int height)
+void QuteMeter::setWidgetGeometry(int x,int y,int width,int height)
 {
   QuteWidget::setWidgetGeometry(x,y,width, height);
-  ((ConsoleWidget *)m_widget)->setWidgetGeometry(x,y,width, height);
+//   ((MeterWidget *)m_widget)->setWidgetGeometry(x,y,width, height);
 }
 

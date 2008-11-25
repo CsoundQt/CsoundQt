@@ -56,6 +56,7 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   widgetsCheckBox->setChecked(m_options->enableWidgets);
   invalueCheckBox->setChecked(m_options->invalueEnabled);
   chngetCheckBox->setChecked(m_options->chngetEnabled);
+  showWidgetsOnRunCheckBox->setChecked(m_options->showWidgetsOnRun);
 
   if (m_options->useAPI)
     ApiRadioButton->setChecked(true);
@@ -157,6 +158,7 @@ void ConfigDialog::accept()
   m_options->enableWidgets = widgetsCheckBox->isChecked();
   m_options->invalueEnabled = invalueCheckBox->isChecked();
   m_options->chngetEnabled = chngetCheckBox->isChecked();
+  m_options->showWidgetsOnRun = showWidgetsOnRunCheckBox->isChecked();
 
   m_options->useAPI = ApiRadioButton->isChecked();
   m_options->thread = threadCheckBox->isChecked();

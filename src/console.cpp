@@ -54,3 +54,9 @@ void DockConsole::closeEvent(QCloseEvent * /*event*/)
 {
   emit Close(false);
 }
+
+void ConsoleWidget::setWidgetGeometry(int x,int y,int width,int height)
+{
+//   text->setMinimunSize(width, height);
+  text->setGeometry(QRect(0,0,width, height));
+}

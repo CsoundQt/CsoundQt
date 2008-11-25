@@ -427,6 +427,9 @@ void qutecsound::play(bool realtime)
       getCompanionFileName();
     fileName2 = documentPages[curPage]->companionFile;
   }
+  if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
+    widgetPanel->setVisible(true);
+  }
 
   if (m_options->useAPI) {
 #ifdef MACOSX
@@ -501,8 +504,8 @@ void qutecsound::play(bool realtime)
     unsigned int numWidgets = widgetPanel->widgetCount();
     ud->qcs->channelNames.resize(numWidgets);
     ud->qcs->values.resize(numWidgets);
+    queueTimer->start(QCS_QUEUETIMER_TIME);
     if(m_options->thread) {
-      queueTimer->start(QCS_QUEUETIMER_TIME);
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
       perfThread = new CsoundPerformanceThread(csound);
       perfThread->SetProcessCallback(qutecsound::csThread, (void*)ud);
@@ -583,7 +586,6 @@ void qutecsound::stop()
   else {
 	return;
   }
-  //csoundLockMutex(perfMutex);
   if (m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
   perfThread->Stop();
@@ -593,11 +595,12 @@ void qutecsound::stop()
   csoundJoinThread(ThreadID);
 //   csoundCleanup(csound);
 #endif
-
   }
   playAct->setChecked(false);
   csoundDestroy(csound);
-  //csoundUnlockMutex(perfMutex);
+  if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
+    widgetPanel->setVisible(false);
+  }
 }
 
 void qutecsound::render()
@@ -865,7 +868,7 @@ void qutecsound::runUtility(QString flags)
 
 void qutecsound::dispatchQueues()
 {
-  //Is used only for threaded operation
+//   csoundLockMutex(perfMutex);
   foreach (QString msg, messageQueue) {
     m_console->appendMessage(msg);
     widgetPanel->appendMessage(msg);
@@ -875,6 +878,7 @@ void qutecsound::dispatchQueues()
   foreach (QString channel, channels) {
     widgetPanel->setValue(channel, outValueQueue[channel]);
   }
+//   csoundUnlockMutex(perfMutex);
   processEventQueue(ud);
   if (ud->PERF_STATUS == 1) {
     queueTimer->start(QCS_QUEUETIMER_TIME);
@@ -1316,6 +1320,7 @@ void qutecsound::readSettings()
   m_options->iconText = settings.value("iconText", true).toBool();
   m_options->invalueEnabled = settings.value("invalueEnabled", true).toBool();
   m_options->chngetEnabled = settings.value("chngetEnabled", false).toBool();
+  m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
   lastFile = settings.value("lastfile", "").toString();
   settings.endGroup();
   settings.beginGroup("Run");
@@ -1410,6 +1415,7 @@ void qutecsound::writeSettings()
   settings.setValue("enableWidgets", m_options->enableWidgets);
   settings.setValue("invalueEnabled", m_options->invalueEnabled);
   settings.setValue("chngetEnabled", m_options->chngetEnabled);
+  settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
   settings.setValue("lastfile", documentPages[curPage]->fileName);
   settings.endGroup();
   settings.beginGroup("Run");
@@ -1845,10 +1851,12 @@ void qutecsound::inputValueCallback (CSOUND *csound,
                                      MYFLT *value)
 {
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+  csoundLockMutex(ud->qcs->perfMutex);
   int index = ud->qcs->channelNames.indexOf(QString(channelName));
   if (index>=0)
     *value = (MYFLT) ud->qcs->values[index];
   else {
     *value = 0;
   }
+  csoundUnlockMutex(ud->qcs->perfMutex);
 }

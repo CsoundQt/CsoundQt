@@ -40,7 +40,7 @@ class QuteSlider : public QuteWidget
     virtual void applyProperties();
 
   protected:
-    virtual void setWidgetGeometry(QRect rect);
+//     virtual void setWidgetGeometry(QRect rect);
 
   private:
     QDoubleSpinBox *minSpinBox;

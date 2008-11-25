@@ -73,17 +73,17 @@ void QuteSlider::setValue(double value)
 
 void QuteSlider::setWidgetGeometry(int x, int y, int w, int h)
 {
-  setWidgetGeometry(QRect(x,y,w,h));
+  QuteWidget::setWidgetGeometry(x,y,w,h);
   if (width() > height())
     ((QSlider *)m_widget)->setOrientation(Qt::Horizontal);
   else
     ((QSlider *)m_widget)->setOrientation(Qt::Vertical);
 }
 
-void QuteSlider::setWidgetGeometry(QRect rect)
-{
-  QuteWidget::setWidgetGeometry(rect);
-}
+// void QuteSlider::setWidgetGeometry(QRect rect)
+// {
+//   QuteWidget::setWidgetGeometry(rect);
+// }
 
 void QuteSlider::setWidgetLine(QString line)
 {

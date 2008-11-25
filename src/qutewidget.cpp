@@ -55,16 +55,14 @@ void QuteWidget::setChannelName(QString name)
 
 void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 {
-  setWidgetGeometry(QRect(x,y,w,h));
+  m_widget->setFixedSize(w,h);
+  this->setGeometry(QRect(x,y,w,h));
+  m_widget->setGeometry(QRect(0,0,w,h));
 }
 
-void QuteWidget::setWidgetGeometry(QRect rect)
-{
-  m_widget->setMinimumSize(rect.width(), rect.height());
-  this->setGeometry(rect);
-  QRect wRect(0,0,rect.width(), rect.height() );
-  m_widget->setGeometry(wRect);
-}
+// void QuteWidget::setWidgetGeometry(QRect rect)
+// {
+// }
 
 void QuteWidget::setRange(int /*min*/, int /*max*/)
 {
@@ -187,7 +185,7 @@ void QuteWidget::createPropertiesDialog()
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 3, 0, Qt::AlignLeft|Qt::AlignVCenter);
   nameLineEdit = new QLineEdit(getChannelName(), dialog);
-  layout->addWidget(nameLineEdit, 3, 1, Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(nameLineEdit, 3, 1, Qt::AlignLeft|Qt::AlignVCenter);
   applyButton = new QPushButton(tr("Apply"));
   layout->addWidget(applyButton, 9, 1, Qt::AlignCenter|Qt::AlignVCenter);
   cancelButton = new QPushButton(tr("Cancel"));
@@ -199,8 +197,7 @@ void QuteWidget::createPropertiesDialog()
 void QuteWidget::applyProperties()
 {
   m_name = nameLineEdit->text();
-  QRect rect = QRect(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
-  setWidgetGeometry(rect);
+  setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
   qDebug("QuteWidget::applyProperties() Not fully implemented yet.");
   emit(widgetChanged());
 }

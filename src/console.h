@@ -81,11 +81,14 @@ class ConsoleWidget : public QWidget, public Console
       setWindowTitle("Csound Output Console");
       text = new MyQTextEdit(parent);
       text->setReadOnly(true);
-      text->document()->setDefaultFont(QFont("Courier", 10));
+      text->setFontItalic(false);
+      text->document()->setDefaultFont(QFont("Courier New", 8));
       connect(text, SIGNAL(popUpMenu(QPoint)), this, SLOT(emitPopUpMenu(QPoint)));
     }
 
     ~ConsoleWidget() {;};
+
+    virtual void setWidgetGeometry(int x,int y,int width,int height);
   //protected:
     //virtual void contextMenuEvent(QContextMenuEvent *event)
     //{emit(popUpMenu(event->globalPos()));}

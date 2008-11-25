@@ -34,6 +34,7 @@ class QuteKnob : public QuteWidget
     void setRange(double min, double max);
     void setValue(double value);
     virtual void setWidgetLine(QString line);
+    virtual void setWidgetGeometry(int x, int y, int width, int height);
     QString getWidgetLine();
     virtual void createPropertiesDialog();
     virtual void applyProperties();
