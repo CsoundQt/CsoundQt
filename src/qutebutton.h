@@ -33,8 +33,6 @@ class QuteButton : public QuteWidget
     virtual void setValue(double value); // Value of button when pressed
     virtual double getValue(); // This value represents the state of the button
     virtual QString getWidgetLine();
-    virtual void applyProperties();
-    virtual void createPropertiesDialog();
 //     virtual void setWidgetLine(QString line);
     void setType(QString text);
     void setText(QString text);
@@ -44,6 +42,8 @@ class QuteButton : public QuteWidget
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent* event);
+    virtual void applyProperties();
+    virtual void createPropertiesDialog();
 
   private:
     QString m_eventLine;

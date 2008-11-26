@@ -133,8 +133,16 @@ void QuteWidget::openProperties()
 
 void QuteWidget::deleteWidget()
 {
-qDebug("QuteWidget::deleteWidget()");
+//   qDebug("QuteWidget::deleteWidget()");
   emit(deleteThisWidget(this));
+}
+
+void QuteWidget::valueChanged(int /*value*/)
+{
+  double doubleValue = getValue();
+  QHash<QString, double> channelValue;
+  channelValue.insert(m_name, doubleValue);
+  emit newValue(channelValue);
 }
 
 void QuteWidget::createPropertiesDialog()

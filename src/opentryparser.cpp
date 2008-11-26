@@ -103,7 +103,7 @@ void OpEntryParser::addOpcode(Opcode opcode)
   opcodeList.insert(i, opcode);
 }
 
-QString OpEntryParser::getSyntax(QString opcodeName, bool autoComplete)
+QString OpEntryParser::getSyntax(QString opcodeName)
 {
   int i = 0;
   int size = opcodeList.size();

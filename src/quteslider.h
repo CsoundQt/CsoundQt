@@ -30,17 +30,18 @@ class QuteSlider : public QuteWidget
 
     ~QuteSlider();
 
+    virtual void setWidgetGeometry(int x, int y, int w, int h);
+    virtual void setWidgetLine(QString line);
+    virtual QString getWidgetLine();
+
     double getValue();
     void setRange(double min, double max);
     void setValue(double value);
-    virtual void setWidgetGeometry(int x, int y, int w, int h);
-    virtual void setWidgetLine(QString line);
-    QString getWidgetLine();
-    virtual void createPropertiesDialog();
-    virtual void applyProperties();
 
   protected:
 //     virtual void setWidgetGeometry(QRect rect);
+    virtual void createPropertiesDialog();
+    virtual void applyProperties();
 
   private:
     QDoubleSpinBox *minSpinBox;

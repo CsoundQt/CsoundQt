@@ -102,16 +102,20 @@ qutecsound::qutecsound(QString fileName)
   m_highlighter = new Highlighter();
   configureHighlighter();
 
+  if (!lastFiles.isEmpty()) {
+    foreach (QString lastFile, lastFiles) {
+      if (lastFile!="" and !lastFile.startsWith("untitled")) {
+        loadFile(lastFile);
+      }
+    }
+  }
   if (fileName!="") {
-    loadFile(fileName);
-    if (m_options->autoPlay)
-      play();
+    if (loadFile(fileName)) {
+      if (m_options->autoPlay)
+        play();
+    }
   }
-  else if (lastFile!="" and !lastFile.startsWith("untitled")) {
-    if (!loadFile(lastFile))
-     newFile();
-  }
-  else {
+  if (documentPages.size() == 0) {
     newFile();
   }
 
@@ -145,7 +149,7 @@ qutecsound::~qutecsound()
 }
 
 void qutecsound::messageCallback_NoThread(CSOUND *csound,
-                                          int attr,
+                                          int /*attr*/,
                                           const char *fmt,
                                           va_list args)
 {
@@ -159,7 +163,7 @@ void qutecsound::messageCallback_NoThread(CSOUND *csound,
 }
 
 void qutecsound::messageCallback_Thread(CSOUND *csound,
-                                          int attr,
+                                          int /*attr*/,
                                           const char *fmt,
                                           va_list args)
 {
@@ -232,20 +236,18 @@ void qutecsound::newFile()
 void qutecsound::open()
 {
   QString fileName = "";
-  if (maybeSave()) {
-    fileName = QFileDialog::getOpenFileName(this, tr("Open File"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco)"));
-    for (int i = 0; i < documentPages.size(); i++) {
-      if (fileName == documentPages[i]->fileName) {
-        documentTabs->setCurrentIndex(i);
-        changePage(i);
-        statusBar()->showMessage(tr("File already open"), 10000);
-        return;
-      }
+  fileName = QFileDialog::getOpenFileName(this, tr("Open File"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco)"));
+  for (int i = 0; i < documentPages.size(); i++) {
+    if (fileName == documentPages[i]->fileName) {
+      documentTabs->setCurrentIndex(i);
+      changePage(i);
+      statusBar()->showMessage(tr("File already open"), 10000);
+      return;
     }
-    if (!fileName.isEmpty()) {
-      loadCompanionFile(fileName);
-      loadFile(fileName);
-    }
+  }
+  if (!fileName.isEmpty()) {
+    loadCompanionFile(fileName);
+    loadFile(fileName);
   }
 }
 
@@ -371,8 +373,10 @@ bool qutecsound::closeTab()
       close();
       return false;
     }
-    newFile();
-    curPage = 0;
+    else {
+      newFile();
+      curPage = 0;
+    }
   }
   documentPages.remove(curPage);
   documentTabs->removeTab(curPage);
@@ -459,7 +463,6 @@ void qutecsound::play(bool realtime)
     }
     char **argv;
     argv = (char **) calloc(33, sizeof(char*));
-    MYFLT *pvalue;
     // TODO use: PUBLIC int csoundSetGlobalEnv(const char *name, const char *value);
     int argc = m_options->generateCmdLine(argv, realtime, fileName, fileName2);
     csound=csoundCreate(0);
@@ -591,7 +594,7 @@ void qutecsound::render()
   if (m_options->fileAskFilename) {
     QFileDialog dialog(this,tr("Output Filename"),lastFileDir);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-	dialog.setConfirmOverwrite(false);
+    dialog.setConfirmOverwrite(false);
     QString filter = QString(m_configlists->fileTypeLongNames[m_options->fileFileType] + " Files ("
         + m_configlists->fileTypeExtensions[m_options->fileFileType] + ")");
     dialog.setFilter(filter);
@@ -1315,7 +1318,7 @@ void qutecsound::readSettings()
   m_options->invalueEnabled = settings.value("invalueEnabled", true).toBool();
   m_options->chngetEnabled = settings.value("chngetEnabled", false).toBool();
   m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
-  lastFile = settings.value("lastfile", "").toString();
+  lastFiles = settings.value("lastfiles", "").toStringList();
   settings.endGroup();
   settings.beginGroup("Run");
   m_options->useAPI = settings.value("useAPI", true).toBool();
@@ -1323,7 +1326,7 @@ void qutecsound::readSettings()
   m_options->bufferSize = settings.value("bufferSize", 1024).toInt();
   m_options->bufferSizeActive = settings.value("bufferSizeActive", false).toBool();
   m_options->HwBufferSize = settings.value("HwBufferSize", 1024).toInt();
-  m_options->HwBufferSizeActive = settings.value("HwBufferSizeActive", false).toInt();
+  m_options->HwBufferSizeActive = settings.value("HwBufferSizeActive", false).toBool();
   m_options->dither = settings.value("dither", false).toBool();
   m_options->additionalFlags = settings.value("additionalFlags", "-d").toString();
   // FIXME Suppress displays for Mac by default as it crashes running in a separate thread.
@@ -1332,7 +1335,8 @@ void qutecsound::readSettings()
 #else
   m_options->additionalFlagsActive = settings.value("additionalFlagsActive", false).toBool();
 #endif
-  m_options->fileOverrideOptions = settings.value("fileOverrideOptions", true).toBool();
+  m_options->fileUseOptions = settings.value("fileUseOptions", true).toBool();
+  m_options->fileOverrideOptions = settings.value("fileOverrideOptions", false).toBool();
   m_options->fileAskFilename = settings.value("fileAskFilename", false).toBool();
   m_options->filePlayFinished = settings.value("filePlayFinished", false).toBool();
   m_options->fileFileType = settings.value("fileFileType", 0).toInt();
@@ -1341,7 +1345,8 @@ void qutecsound::readSettings()
   m_options->fileInputFilename = settings.value("fileInputFilename", "").toString();
   m_options->fileOutputFilenameActive = settings.value("fileOutputFilenameActive", false).toBool();
   m_options->fileOutputFilename = settings.value("fileOutputFilename", "").toString();
-  m_options->rtOverrideOptions = settings.value("rtOverrideOptions", true).toBool();
+  m_options->rtUseOptions = settings.value("rtUseOptions", true).toBool();
+  m_options->rtOverrideOptions = settings.value("rtOverrideOptions", false).toBool();
   m_options->enableWidgets = settings.value("enableWidgets", true).toBool();
   m_options->rtAudioModule = settings.value("rtAudioModule", 0).toInt();
   m_options->rtInputDevice = settings.value("rtInputDevice", "adc").toString();
@@ -1410,7 +1415,11 @@ void qutecsound::writeSettings()
   settings.setValue("invalueEnabled", m_options->invalueEnabled);
   settings.setValue("chngetEnabled", m_options->chngetEnabled);
   settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
-  settings.setValue("lastfile", documentPages[curPage]->fileName);
+  QStringList files;
+  for (int i=0; i < documentPages.size(); i++ ) {
+    files.append(documentPages[i]->fileName);
+  }
+  settings.setValue("lastfiles", files);
   settings.endGroup();
   settings.beginGroup("Run");
   settings.setValue("useAPI", m_options->useAPI);
@@ -1422,6 +1431,7 @@ void qutecsound::writeSettings()
   settings.setValue("dither", m_options->dither);
   settings.setValue("additionalFlags", m_options->additionalFlags);
   settings.setValue("additionalFlagsActive", m_options->additionalFlagsActive);
+  settings.setValue("fileUseOptions", m_options->fileUseOptions);
   settings.setValue("fileOverrideOptions", m_options->fileOverrideOptions);
   settings.setValue("fileAskFilename", m_options->fileAskFilename);
   settings.setValue("filePlayFinished", m_options->filePlayFinished);
@@ -1431,6 +1441,7 @@ void qutecsound::writeSettings()
   settings.setValue("fileInputFilename", m_options->fileInputFilename);
   settings.setValue("fileOutputFilenameActive", m_options->fileOutputFilenameActive);
   settings.setValue("fileOutputFilename", m_options->fileOutputFilename);
+  settings.setValue("rtUseOptions", m_options->rtUseOptions);
   settings.setValue("rtOverrideOptions", m_options->rtOverrideOptions);
   settings.setValue("rtAudioModule", m_options->rtAudioModule);
   settings.setValue("rtInputDevice", m_options->rtInputDevice);
@@ -1628,10 +1639,10 @@ bool qutecsound::saveFile(const QString &fileName)
 void qutecsound::setCurrentFile(const QString &fileName)
 {
   QString shownName;
-  if (documentPages[curPage]->fileName.isEmpty())
+  if (fileName.isEmpty())
     shownName = "untitled.csd";
   else
-    shownName = strippedName(documentPages[curPage]->fileName);
+    shownName = strippedName(fileName);
 
   setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("QuteCsound")));
   documentTabs->setTabText(curPage, shownName);

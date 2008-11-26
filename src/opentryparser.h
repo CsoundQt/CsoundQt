@@ -33,7 +33,7 @@ class OpEntryParser
     ~OpEntryParser();
 
     QStringList opcodeNameList();
-    QString getSyntax(QString opcodeName, bool autoComplete = true);
+    QString getSyntax(QString opcodeName);
 
   private:
     QString m_opcodeFile;

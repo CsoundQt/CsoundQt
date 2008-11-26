@@ -21,6 +21,7 @@
 #define QUTEWIDGET_H
 
 #include <QtGui>
+#include <QHash>
 
 class QuteWidget : public QWidget
 {
@@ -33,19 +34,16 @@ class QuteWidget : public QWidget
     const QString name() {return m_name;}
 
     virtual void setWidgetLine(QString line);
-    void setChannelName(QString name);
-//     virtual void setWidgetGeometry(QRect rect);
+    virtual void setChannelName(QString name);
     virtual void setWidgetGeometry(int x, int y, int w, int h);
     virtual void setRange(int min, int max);
     virtual void setValue(double value);
-    void setResolution(double resolution);
+    virtual void setResolution(double resolution);
     virtual void setChecked(bool checked);
 
-    QString getChannelName();
+    virtual QString getChannelName();
     virtual QString getWidgetLine();
     virtual double getValue();
-    virtual void createPropertiesDialog();
-    virtual void applyProperties();
 
   protected:
     QSpinBox *xSpinBox;
@@ -67,6 +65,9 @@ class QuteWidget : public QWidget
 
     virtual void contextMenuEvent(QContextMenuEvent *event);
 
+    virtual void createPropertiesDialog();
+    virtual void applyProperties();
+
   private:
     QAction *propertiesAct;
     QAction *deleteAct;
@@ -78,12 +79,14 @@ class QuteWidget : public QWidget
   public slots:
     void popUpMenu(QPoint pos);
 
-  private slots:
+  protected slots:
     void apply();
     void openProperties();
     void deleteWidget();
+    void valueChanged(int value);
 
   signals:
+    void newValue(QHash<QString,double> channelValue);
     void widgetChanged();
     void deleteThisWidget(QuteWidget *thisWidget);
 };

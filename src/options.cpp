@@ -85,13 +85,17 @@ int Options::generateCmdLine(char **argv,
   int index = 0;
   argv[index] = (char *) calloc(7, sizeof(char));
   strcpy(argv[index++], "csound");
+  //FIXME this memory is not freed!
   argv[index] = (char *) calloc(fileName.size()+1, sizeof(char));
   strcpy(argv[index++],fileName.toStdString().c_str());
   if (fileName2 != "") {
     argv[index] = (char *) calloc(fileName2.size()+1, sizeof(char));
     strcpy(argv[index++],fileName2.toStdString().c_str());
   }
-  QString flags = generateCmdLineFlags(rt);
+  QString flags = "";
+  if ( (rt and rtUseOptions) or (!rt and fileUseOptions) ) {
+    flags = generateCmdLineFlags(rt);
+  }
   QStringList indFlags= flags.split(" ",QString::SkipEmptyParts);
   foreach (QString flag, indFlags) {
     argv[index] = (char *) calloc(flag.size()+1, sizeof(char));

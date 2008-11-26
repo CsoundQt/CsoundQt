@@ -35,6 +35,7 @@ class QuteMeter : public QuteWidget
     virtual QString getWidgetLine();
     virtual void setWidgetGeometry(int x,int y,int width,int height);
     void popUpMenu(QPoint pos);
+
 };
 
 class MeterWidget : public QWidget

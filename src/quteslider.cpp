@@ -28,6 +28,8 @@ QuteSlider::QuteSlider(QWidget *parent) : QuteWidget(parent)
     ((QSlider *)m_widget)->setOrientation(Qt::Horizontal);
   else
     ((QSlider *)m_widget)->setOrientation(Qt::Vertical);
+
+  connect((QSlider *)m_widget, SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
 }
 
 QuteSlider::~QuteSlider()
@@ -48,8 +50,8 @@ void QuteSlider::setRange(double min, double max)
   // TODO when slider is resized, its internal range should be adjusted to accomodate one value per pixel. There are currently 100 values no matter how many pixels...
   if (max < min) {
     double temp = max;
-	max = min;
-	min = temp;
+    max = min;
+    min = temp;
   }
   m_min = min;
   m_max = max;
@@ -96,7 +98,7 @@ QString QuteSlider::getWidgetLine()
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += QString::number(m_min, 'f', 6) + " " + QString::number(m_max, 'f', 6) + " ";
   line += QString::number(m_value, 'f', 6) + " " + m_name;
-  qDebug("QuteSlider::getWidgetLine() %s", line.toStdString().c_str());
+//   qDebug("QuteSlider::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
 
@@ -130,3 +132,4 @@ void QuteSlider::applyProperties()
   setRange(maxSpinBox->value(), minSpinBox->value());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
+

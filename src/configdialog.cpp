@@ -76,6 +76,7 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   AdditionalFlagsCheckBox->setChecked(m_options->additionalFlagsActive);
   AdditionalFlagsLineEdit->setText(m_options->additionalFlags);
   AdditionalFlagsLineEdit->setEnabled(m_options->additionalFlagsActive);
+  FileUseOptionsCheckBox->setChecked(m_options->fileUseOptions);
   FileOverrideCheckBox->setChecked(m_options->fileOverrideOptions);
   AskFilenameCheckBox->setChecked(m_options->fileAskFilename);
   FilePlayFinishedCheckBox->setChecked(m_options->filePlayFinished);
@@ -87,6 +88,7 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   OutputFilenameCheckBox->setChecked(m_options->fileOutputFilenameActive);
   OutputFilenameLineEdit->setText(m_options->fileOutputFilename);
   OutputFilenameLineEdit->setEnabled(m_options->fileOutputFilenameActive);
+  RtUseOptionsCheckBox->setChecked(m_options->rtUseOptions);
   RtOverrideCheckBox->setChecked(m_options->rtOverrideOptions);
   RtModuleComboBox->setCurrentIndex(m_options->rtAudioModule);
   RtInputLineEdit->setText(m_options->rtInputDevice);
@@ -169,6 +171,7 @@ void ConfigDialog::accept()
   m_options->dither = DitherCheckBox->isChecked();
   m_options->additionalFlags = AdditionalFlagsLineEdit->text();
   m_options->additionalFlagsActive = AdditionalFlagsCheckBox->isChecked();
+  m_options->fileUseOptions = FileUseOptionsCheckBox->isChecked();
   m_options->fileOverrideOptions = FileOverrideCheckBox->isChecked();
   m_options->fileAskFilename = AskFilenameCheckBox->isChecked();
   m_options->filePlayFinished = FilePlayFinishedCheckBox->isChecked();
@@ -178,6 +181,7 @@ void ConfigDialog::accept()
   m_options->fileInputFilename = InputFilenameLineEdit->text();
   m_options->fileOutputFilenameActive = OutputFilenameCheckBox->isChecked();
   m_options->fileOutputFilename = OutputFilenameLineEdit->text();
+  m_options->rtUseOptions = RtUseOptionsCheckBox->isChecked();
   m_options->rtOverrideOptions = RtOverrideCheckBox->isChecked();
   m_options->rtAudioModule = RtModuleComboBox->currentIndex();
   m_options->rtInputDevice = RtInputLineEdit->text();

@@ -64,7 +64,7 @@ void DockHelp::loadFile(QString fileName)
 
 }
 
-void DockHelp::closeEvent(QCloseEvent * event)
+void DockHelp::closeEvent(QCloseEvent * /*event*/)
 {
   emit Close(false);
 }

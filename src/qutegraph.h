@@ -17,44 +17,20 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#include "qutecheckbox.h"
+#ifndef QUTEGRAPH_H
+#define QUTEGRAPH_H
 
-QuteCheckBox::QuteCheckBox(QWidget *parent) : QuteWidget(parent)
+#include "qutewidget.h"
+
+class QuteGraph : public QuteWidget
 {
-  m_widget = new QCheckBox(this);
+  Q_OBJECT
+  public:
+    QuteGraph(QWidget *parent);
 
-  connect((QCheckBox *)m_widget, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
-}
+    ~QuteGraph();
 
-QuteCheckBox::~QuteCheckBox()
-{
-}
+    virtual QString getWidgetLine();
+};
 
-void QuteCheckBox::setValue(double value)
-{
-  // value is 1 is checked, 0 if not
-  ((QCheckBox *)m_widget)->setChecked(value == 1);
-}
-
-double QuteCheckBox::getValue()
-{
-  return (((QCheckBox *)m_widget)->isChecked()? 1.0:0.0);
-}
-
-QString QuteCheckBox::getWidgetLine()
-{
-  QString line = "ioCheckbox {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
-  line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-  line += (((QCheckBox *)m_widget)->isChecked()? QString("on "):QString("off "));
-  line += m_name;
-  qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
-  return line;
-}
-
-void QuteCheckBox::stateChanged(int state)
-{
-  if (state == Qt::Unchecked)
-    emit valueChanged(0);
-  else if (state == Qt::Checked)
-    emit valueChanged(1);
-}
+#endif

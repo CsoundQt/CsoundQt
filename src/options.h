@@ -64,6 +64,7 @@ class Options{
     QString additionalFlags;
     bool additionalFlagsActive;
 
+    bool fileUseOptions;
     bool fileOverrideOptions;
     bool fileAskFilename;
     bool filePlayFinished;
@@ -74,6 +75,7 @@ class Options{
     bool fileOutputFilenameActive;
     QString fileOutputFilename;
 
+    bool rtUseOptions;
     bool rtOverrideOptions;
     int rtAudioModule;
     QString rtInputDevice;

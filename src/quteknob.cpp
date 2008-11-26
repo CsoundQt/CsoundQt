@@ -30,6 +30,8 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
   ((QDial *)m_widget)->setMinimum(0);
   ((QDial *)m_widget)->setMaximum(99);
   m_widget->setPalette(QPalette(Qt::gray));
+
+  connect((QDial *)m_widget, SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
 }
 
 QuteKnob::~QuteKnob()

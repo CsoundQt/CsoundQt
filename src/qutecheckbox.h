@@ -35,9 +35,8 @@ class QuteCheckBox : public QuteWidget
     virtual QString getWidgetLine();
     void popUpMenu(QPoint pos);
 
-//   protected:
-//     virtual void contextMenuEvent(QContextMenuEvent* event);
-
+  private slots:
+    void stateChanged(int state);
 
 };
 

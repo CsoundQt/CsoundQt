@@ -62,6 +62,7 @@ class WidgetPanel : public QDockWidget
     QAction *createCheckBoxAct;
     QAction *createMenuAct;
     QAction *createConsoleAct;
+    QAction *createGraphAct;
     QAction *clearAct;
     QAction *propertiesAct;
 
@@ -76,6 +77,7 @@ class WidgetPanel : public QDockWidget
     int createCheckBox(int x, int y, int width, int height, QString widgetLine);
     int createMenu(int x, int y, int width, int height, QString widgetLine);
     int createConsole(int x, int y, int width, int height, QString widgetLine);
+    int createGraph(int x, int y, int width, int height, QString widgetLine);
     int createDummy(int x, int y, int width, int height, QString widgetLine);
 
     void setBackground(bool bg, QColor bgColor);
@@ -83,6 +85,7 @@ class WidgetPanel : public QDockWidget
     virtual void closeEvent(QCloseEvent * event);
 
   public slots:
+    void newValue(QHash<QString, double> channelValue);
     void widgetChanged();
     void deleteWidget(QuteWidget *widget);
     void queueEvent(QString eventLine);
@@ -93,6 +96,7 @@ class WidgetPanel : public QDockWidget
     void createCheckBox();
     void createMenu();
     void createConsole();
+    void createGraph();
     void propertiesDialog();
     void clearWidgets();
     void applyProperties();

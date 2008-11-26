@@ -26,6 +26,7 @@
 #include "qutecheckbox.h"
 #include "qutecombobox.h"
 #include "quteconsole.h"
+#include "qutegraph.h"
 #include "qutedummy.h"
 
 
@@ -51,6 +52,8 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(createCheckBoxAct, SIGNAL(triggered()), this, SLOT(createCheckBox()));
   createConsoleAct = new QAction(tr("Create Console"),this);
   connect(createConsoleAct, SIGNAL(triggered()), this, SLOT(createConsole()));
+  createGraphAct = new QAction(tr("Create Graph"),this);
+  connect(createGraphAct, SIGNAL(triggered()), this, SLOT(createGraph()));
   propertiesAct = new QAction(tr("Properties"),this);
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
   clearAct = new QAction(tr("Clear all widgets"), this);
@@ -161,9 +164,12 @@ int WidgetPanel::newWidget(QString widgetLine)
     else if (parts[0]=="ioMeter") {
       return createDummy(x,y,width, height, widgetLine);
     }
+    else if (parts[0]=="ioGraph") {
+      return createGraph(x,y,width, height, widgetLine);
+    }
     else {
-      //TODO add create Console
       // Unknown widget...
+      qDebug("WidgetPanel::newWidget Warning: unknown widget!");
       return createDummy(x,y,width, height, widgetLine);
     }
   }
@@ -239,12 +245,19 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   menu.addAction(createCheckBoxAct);
   menu.addAction(createMenuAct);
   menu.addAction(createConsoleAct);
+  menu.addAction(createGraphAct);
   menu.addSeparator();
   menu.addAction(clearAct);
   menu.addSeparator();
   menu.addAction(propertiesAct);
   currentPosition = event->pos();
   menu.exec(event->globalPos());
+}
+
+void WidgetPanel::newValue(QHash<QString, double> channelValue)
+{
+//   //qDebug("WidgetPanel::newValue");
+  widgetChanged();
 }
 
 void WidgetPanel::widgetChanged()
@@ -274,6 +287,7 @@ int WidgetPanel::createSlider(int x, int y, int width, int height, QString widge
   }
   connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
   widget->show();
   return 1;
@@ -327,7 +341,7 @@ int WidgetPanel::createLabel(int x, int y, int width, int height, QString widget
 
 int WidgetPanel::createButton(int x, int y, int width, int height, QString widgetLine)
 {
-  qDebug("WidgetPanel::createButton");
+//   qDebug("WidgetPanel::createButton");
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
 //   if (parts.size()<20 or quoteParts.size()>5)
@@ -378,6 +392,7 @@ int WidgetPanel::createKnob(int x, int y, int width, int height, QString widgetL
   }
   connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
   widget->show();
   return 1;
@@ -385,7 +400,7 @@ int WidgetPanel::createKnob(int x, int y, int width, int height, QString widgetL
 
 int WidgetPanel::createCheckBox(int x, int y, int width, int height, QString widgetLine)
 {
-  qDebug("ioCheckBox x=%i y=%i w=%i h=%i", x,y, width, height);
+//   qDebug("ioCheckBox x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QuteCheckBox *widget= new QuteCheckBox(layoutWidget);
   widget->setWidgetLine(widgetLine);
@@ -403,6 +418,7 @@ int WidgetPanel::createCheckBox(int x, int y, int width, int height, QString wid
   }
   connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
   widget->show();
   return 1;
@@ -410,7 +426,7 @@ int WidgetPanel::createCheckBox(int x, int y, int width, int height, QString wid
 
 int WidgetPanel::createMenu(int x, int y, int width, int height, QString widgetLine)
 {
-  qDebug("ioMenu x=%i y=%i w=%i h=%i", x,y, width, height);
+//   qDebug("ioMenu x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
   QuteComboBox *widget= new QuteComboBox(layoutWidget);
@@ -423,6 +439,7 @@ int WidgetPanel::createMenu(int x, int y, int width, int height, QString widgetL
     widget->setChannelName(quoteParts[2].remove(0,1)); //remove initial space from channel name
   connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
   widget->show();
   return 1;
@@ -430,7 +447,7 @@ int WidgetPanel::createMenu(int x, int y, int width, int height, QString widgetL
 
 int WidgetPanel::createConsole(int x, int y, int width, int height, QString widgetLine)
 {
-   qDebug("ioListing x=%i y=%i w=%i h=%i", x,y, width, height);
+//    qDebug("ioListing x=%i y=%i w=%i h=%i", x,y, width, height);
    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
    QuteConsole *widget= new QuteConsole(layoutWidget);
    widget->setWidgetLine(widgetLine);
@@ -441,6 +458,20 @@ int WidgetPanel::createConsole(int x, int y, int width, int height, QString widg
    widget->show();
    consoleWidgets.append(widget);
    return 1;
+}
+
+int WidgetPanel::createGraph(int x, int y, int width, int height, QString widgetLine)
+{
+  qDebug("ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
+  QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  QuteGraph *widget= new QuteGraph(layoutWidget);
+  widget->setWidgetLine(widgetLine);
+  widget->setWidgetGeometry(x,y,width, height);
+  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  widgets.append(widget);
+  widget->show();
+  return 1;
 }
 
 int WidgetPanel::createDummy(int x, int y, int width, int height, QString widgetLine)
@@ -500,6 +531,11 @@ void WidgetPanel::createMenu()
 void WidgetPanel::createConsole()
 {
   createConsole(currentPosition.x(), currentPosition.y() - 20, 200, 400, QString("ioListing {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {200, 400}"));
+}
+
+void WidgetPanel::createGraph()
+{
+  createGraph(currentPosition.x(), currentPosition.y() - 20, 400, 200, QString("ioGraph {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {400, 200}"));
 }
 
 void WidgetPanel::propertiesDialog()

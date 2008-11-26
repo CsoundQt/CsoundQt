@@ -30,18 +30,21 @@ class QuteKnob : public QuteWidget
 
     ~QuteKnob();
 
-    double getValue();
-    void setRange(double min, double max);
-    void setValue(double value);
     virtual void setWidgetLine(QString line);
     virtual void setWidgetGeometry(int x, int y, int width, int height);
-    QString getWidgetLine();
+    virtual QString getWidgetLine();
+    virtual double getValue();
+    virtual void setValue(double value);
+    void setRange(double min, double max);
+
+  protected:
     virtual void createPropertiesDialog();
     virtual void applyProperties();
 
   private:
     QDoubleSpinBox *minSpinBox;
     QDoubleSpinBox *maxSpinBox;
+
 };
 
 #endif

@@ -99,7 +99,10 @@
       </rect>
      </property>
      <property name="title" >
-      <string>File offline</string>
+      <string>File (offline render)</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignLeading</set>
      </property>
      <widget class="QWidget" name="layoutWidget" >
       <property name="geometry" >
@@ -107,7 +110,7 @@
         <x>10</x>
         <y>130</y>
         <width>571</width>
-        <height>65</height>
+        <height>66</height>
        </rect>
       </property>
       <layout class="QGridLayout" >
@@ -147,48 +150,38 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget" >
+     <widget class="QCheckBox" name="FileUseOptionsCheckBox" >
       <property name="geometry" >
        <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>241</width>
-        <height>89</height>
+        <x>11</x>
+        <y>22</y>
+        <width>277</width>
+        <height>25</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" >
-       <item>
-        <widget class="QCheckBox" name="FileOverrideCheckBox" >
-         <property name="text" >
-          <string>Ignore CsOptions</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="AskFilenameCheckBox" >
-         <property name="text" >
-          <string>Ask for filename every time</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="FilePlayFinishedCheckBox" >
-         <property name="enabled" >
-          <bool>false</bool>
-         </property>
-         <property name="text" >
-          <string>Play file when finished</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <property name="text" >
+       <string>Use QuteCsound options</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="FileOverrideCheckBox" >
+      <property name="geometry" >
+       <rect>
+        <x>300</x>
+        <y>22</y>
+        <width>276</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Ignore CsOptions</string>
+      </property>
      </widget>
      <widget class="QWidget" name="layoutWidget" >
       <property name="geometry" >
        <rect>
-        <x>270</x>
-        <y>30</y>
-        <width>271</width>
+        <x>300</x>
+        <y>50</y>
+        <width>281</width>
         <height>64</height>
        </rect>
       </property>
@@ -215,6 +208,35 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="layoutWidget" >
+      <property name="geometry" >
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>251</width>
+        <height>58</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" >
+       <item>
+        <widget class="QCheckBox" name="AskFilenameCheckBox" >
+         <property name="text" >
+          <string>Ask for filename every time</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="FilePlayFinishedCheckBox" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="text" >
+          <string>Play file when finished</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox_2" >
      <property name="geometry" >
@@ -226,12 +248,12 @@
       </rect>
      </property>
      <property name="title" >
-      <string>Realtime</string>
+      <string>Realtime Play</string>
      </property>
      <widget class="QCheckBox" name="RtOverrideCheckBox" >
       <property name="geometry" >
        <rect>
-        <x>10</x>
+        <x>300</x>
         <y>20</y>
         <width>161</width>
         <height>22</height>
@@ -245,16 +267,16 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>80</y>
+        <y>50</y>
         <width>281</width>
-        <height>97</height>
+        <height>137</height>
        </rect>
       </property>
       <layout class="QGridLayout" >
-       <item row="0" column="1" >
+       <item row="1" column="1" >
         <widget class="QLineEdit" name="RtInputLineEdit" />
        </item>
-       <item row="0" column="2" >
+       <item row="1" column="2" >
         <widget class="QToolButton" name="toolButton_7" >
          <property name="enabled" >
           <bool>false</bool>
@@ -264,17 +286,17 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0" >
+       <item row="2" column="0" >
         <widget class="QLabel" name="label_5" >
          <property name="text" >
           <string>output device (-o)</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1" >
+       <item row="2" column="1" >
         <widget class="QLineEdit" name="RtOutputLineEdit" />
        </item>
-       <item row="1" column="2" >
+       <item row="2" column="2" >
         <widget class="QToolButton" name="toolButton_8" >
          <property name="enabled" >
           <bool>false</bool>
@@ -284,22 +306,36 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0" >
+       <item row="3" column="0" >
         <widget class="QLabel" name="label_6" >
          <property name="text" >
           <string>Jack client name</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1" >
+       <item row="3" column="1" >
         <widget class="QLineEdit" name="JackNameLineEdit" />
        </item>
-       <item row="0" column="0" >
+       <item row="1" column="0" >
         <widget class="QLabel" name="label_4" >
          <property name="text" >
           <string>Input device (-i)</string>
          </property>
         </widget>
+       </item>
+       <item row="0" column="0" >
+        <layout class="QHBoxLayout" >
+         <item>
+          <widget class="QLabel" name="label_3" >
+           <property name="text" >
+            <string>RT Audio Module</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QComboBox" name="RtModuleComboBox" />
        </item>
       </layout>
      </widget>
@@ -307,16 +343,16 @@
       <property name="geometry" >
        <rect>
         <x>300</x>
-        <y>80</y>
+        <y>50</y>
         <width>281</width>
-        <height>71</height>
+        <height>102</height>
        </rect>
       </property>
       <layout class="QGridLayout" >
-       <item row="0" column="1" >
+       <item row="1" column="1" >
         <widget class="QLineEdit" name="RtMidiInputLineEdit" />
        </item>
-       <item row="0" column="2" >
+       <item row="1" column="2" >
         <widget class="QToolButton" name="toolButton_11" >
          <property name="enabled" >
           <bool>false</bool>
@@ -326,17 +362,17 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0" >
+       <item row="2" column="0" >
         <widget class="QLabel" name="label_8" >
          <property name="text" >
           <string>output device (-Q)</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1" >
+       <item row="2" column="1" >
         <widget class="QLineEdit" name="RtMidiOutputLineEdit" />
        </item>
-       <item row="1" column="2" >
+       <item row="2" column="2" >
         <widget class="QToolButton" name="toolButton_12" >
          <property name="enabled" >
           <bool>false</bool>
@@ -346,58 +382,41 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0" >
+       <item row="1" column="0" >
         <widget class="QLabel" name="label_12" >
          <property name="text" >
           <string>Input device (-M)</string>
          </property>
         </widget>
        </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="layoutWidget_3" >
-      <property name="geometry" >
-       <rect>
-        <x>300</x>
-        <y>50</y>
-        <width>281</width>
-        <height>30</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" >
-       <item>
-        <widget class="QLabel" name="label_18" >
-         <property name="text" >
-          <string>RT MIDI Module</string>
-         </property>
-        </widget>
+       <item row="0" column="0" >
+        <layout class="QHBoxLayout" >
+         <item>
+          <widget class="QLabel" name="label_18" >
+           <property name="text" >
+            <string>RT MIDI Module</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
-       <item>
+       <item row="0" column="1" >
         <widget class="QComboBox" name="RtMidiModuleComboBox" />
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget" >
+     <widget class="QCheckBox" name="RtUseOptionsCheckBox" >
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>50</y>
-        <width>281</width>
-        <height>30</height>
+        <y>20</y>
+        <width>251</width>
+        <height>22</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" >
-       <item>
-        <widget class="QLabel" name="label_3" >
-         <property name="text" >
-          <string>RT Audio Module</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="RtModuleComboBox" />
-       </item>
-      </layout>
+      <property name="text" >
+       <string>Use QuteCsound options</string>
+      </property>
      </widget>
     </widget>
     <widget class="QLineEdit" name="BufferSizeLineEdit" >
@@ -1429,8 +1448,8 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>407</x>
-     <y>98</y>
+     <x>409</x>
+     <y>86</y>
     </hint>
     <hint type="destinationlabel" >
      <x>569</x>

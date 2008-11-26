@@ -249,7 +249,7 @@ class qutecsound:public QMainWindow
     viewMode m_mode;
     ConfigLists *m_configlists;
     QStringList recentFiles;
-    QString lastFile;
+    QStringList lastFiles;
 
     UtilitiesDialog *utilitiesDialog;
 

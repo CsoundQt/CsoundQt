@@ -32,8 +32,8 @@ class QuteText : public QuteWidget
 
     QString getWidgetLine();
 
-    double getValue();
-    void setValue(double value);
+    virtual double getValue();
+    virtual void setValue(double value);
 
     void setType(QString type);
     void setResolution(double resolution);
@@ -46,6 +46,7 @@ class QuteText : public QuteWidget
     void setBorder(bool border);
     void setText(QString text);
 
+  protected:
     virtual void createPropertiesDialog();
     virtual void applyProperties();
 

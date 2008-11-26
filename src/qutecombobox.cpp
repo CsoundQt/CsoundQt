@@ -23,8 +23,8 @@ QuteComboBox::QuteComboBox(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new MyQComboBox(this);
   connect(((MyQComboBox *)m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
-//   ((QComboBox *)m_widget)->setIcon(icon);
 //   connect((QComboBox *)m_widget, SIGNAL(released()), this, SLOT(buttonReleased()));
+  connect((QCheckBox *)m_widget, SIGNAL(currentIndexChanged(int)), this, SLOT(valueChanged(int)));
 }
 
 QuteComboBox::~QuteComboBox()

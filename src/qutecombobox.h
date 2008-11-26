@@ -32,21 +32,22 @@ class QuteComboBox : public QuteWidget
 
     virtual void setValue(double value); // Current item select index
     virtual double getValue();
-    void setSize(int size);
     virtual QString getWidgetLine();
-    virtual void applyProperties();
-    virtual void createPropertiesDialog();
+    void setSize(int size);
     void setText(QString text);  //Text for this widget is the item list separated by commas
     void popUpMenu(QPoint pos);
     QString itemList();
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent* event);
+    virtual void applyProperties();
+    virtual void createPropertiesDialog();
 
   private:
     int m_size;
     QLineEdit *text;
     QLineEdit *line;
+
 };
 
 class MyQComboBox : public QComboBox
