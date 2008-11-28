@@ -100,7 +100,7 @@ class Options{
     bool opcodexmldirActive;
 
     QString terminal;
-//     QString browser;
+    QString browser;
     QString waveeditor;
     QString waveplayer;
   private:

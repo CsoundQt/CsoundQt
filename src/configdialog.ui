@@ -22,23 +22,14 @@
      <x>0</x>
      <y>550</y>
      <width>621</width>
-     <height>33</height>
+     <height>43</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" >
     <property name="spacing" >
      <number>6</number>
     </property>
-    <property name="leftMargin" >
-     <number>0</number>
-    </property>
-    <property name="topMargin" >
-     <number>0</number>
-    </property>
-    <property name="rightMargin" >
-     <number>0</number>
-    </property>
-    <property name="bottomMargin" >
+    <property name="margin" >
      <number>0</number>
     </property>
     <item>
@@ -46,7 +37,7 @@
       <property name="orientation" >
        <enum>Qt::Horizontal</enum>
       </property>
-      <property name="sizeHint" >
+      <property name="sizeHint" stdset="0" >
        <size>
         <width>131</width>
         <height>31</height>
@@ -526,7 +517,7 @@
        <rect>
         <x>20</x>
         <y>30</y>
-        <width>311</width>
+        <width>391</width>
         <height>99</height>
        </rect>
       </property>
@@ -719,7 +710,7 @@
        <rect>
         <x>20</x>
         <y>30</y>
-        <width>311</width>
+        <width>328</width>
         <height>81</height>
        </rect>
       </property>
@@ -1151,10 +1142,10 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1" >
+       <item row="0" column="2" >
         <widget class="QLineEdit" name="TerminalLineEdit" />
        </item>
-       <item row="0" column="2" >
+       <item row="0" column="3" >
         <widget class="QToolButton" name="terminalToolButton" >
          <property name="text" >
           <string>...</string>
@@ -1171,14 +1162,14 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1" >
+       <item row="1" column="2" >
         <widget class="QLineEdit" name="WaveEditorLineEdit" >
          <property name="enabled" >
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="1" column="2" >
+       <item row="1" column="3" >
         <widget class="QToolButton" name="waveEditorToolButton" >
          <property name="text" >
           <string>...</string>
@@ -1195,15 +1186,39 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1" >
+       <item row="2" column="2" >
         <widget class="QLineEdit" name="WavePlayerLineEdit" >
          <property name="enabled" >
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="2" column="2" >
+       <item row="2" column="3" >
         <widget class="QToolButton" name="wavePlayerToolButton" >
+         <property name="text" >
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2" >
+        <widget class="QLineEdit" name="browserLineEdit" >
+         <property name="enabled" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" >
+        <widget class="QLabel" name="label_20" >
+         <property name="enabled" >
+          <bool>true</bool>
+         </property>
+         <property name="text" >
+          <string>Browser</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3" >
+        <widget class="QToolButton" name="browserToolButton" >
          <property name="text" >
           <string>...</string>
          </property>

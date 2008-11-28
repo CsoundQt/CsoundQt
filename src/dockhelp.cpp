@@ -80,3 +80,13 @@ void DockHelp::showOverview()
   this->setVisible(true);
   this->loadFile(docDir + "/PartOpcodesOverview.html");
 }
+
+void DockHelp::browseBack()
+{
+  text->backward();
+}
+
+void DockHelp::browseForward()
+{
+  text->forward();
+}

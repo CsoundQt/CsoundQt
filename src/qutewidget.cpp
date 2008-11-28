@@ -72,6 +72,12 @@ void QuteWidget::setValue(double /*value*/)
 //   qDebug("QuteWidget::setValue not implemented for widget type (value = %f)", value);
 }
 
+void QuteWidget::setValue2(double /*value*/)
+{
+//FIXME put this back when it's no longer a burden.
+//   qDebug("QuteWidget::setValue not implemented for widget type (value = %f)", value);
+}
+
 void QuteWidget::setResolution(double /*resolution*/)
 {
   qDebug("QuteWidget::setResolution not implemented for widget type");

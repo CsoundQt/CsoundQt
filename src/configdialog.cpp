@@ -119,7 +119,7 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
 //   opcodeXmlDirLineEdit->setEnabled(m_options->opcodexmldirActive);
 
   TerminalLineEdit->setText(m_options->terminal);
-//   BrowserLineEdit->setText(m_options->browser);
+  browserLineEdit->setText(m_options->browser);
   WaveEditorLineEdit->setText(m_options->waveeditor);
   WavePlayerLineEdit->setText(m_options->waveplayer);
 
@@ -133,7 +133,7 @@ ConfigDialog::ConfigDialog(QWidget *parent, Options *options, ConfigLists *m_con
   connect(incdirToolButton, SIGNAL(clicked()), this, SLOT(browseIncdir()));
 //   connect(opcodeXmlDirToolButton, SIGNAL(clicked()), this, SLOT(browseOpcodeXmlDir()));
   connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
-//   connect(browserToolButton, SIGNAL(clicked()), this, SLOT(browseBrowser()));
+  connect(browserToolButton, SIGNAL(clicked()), this, SLOT(browseBrowser()));
   connect(waveEditorToolButton, SIGNAL(clicked()), this, SLOT(browseWaveEditor()));
   connect(wavePlayerToolButton, SIGNAL(clicked()), this, SLOT(browseWavePlayer()));
   connect(this, SIGNAL(changeFont()), parent, SLOT(changeFont()));
@@ -206,7 +206,7 @@ void ConfigDialog::accept()
 //   m_options->opcodexmldir = opcodeXmlDirLineEdit->text();
 
   m_options->terminal = TerminalLineEdit->text();
-//   m_options->browser = BrowserLineEdit->text();
+  m_options->browser = browserLineEdit->text();
   m_options->waveeditor = WaveEditorLineEdit->text();
   m_options->waveplayer = WavePlayerLineEdit->text();
   emit(changeFont());
@@ -273,11 +273,11 @@ void ConfigDialog::browseTerminal()
   TerminalLineEdit->setText(m_options->terminal);
 }
 
-// void ConfigDialog::browseBrowser()
-// {
-//   browseFile(m_options->browser);
-//   BrowserLineEdit->setText(m_options->browser);
-// }
+void ConfigDialog::browseBrowser()
+{
+  browseFile(m_options->browser);
+  browserLineEdit->setText(m_options->browser);
+}
 
 void ConfigDialog::browseWaveEditor()
 {

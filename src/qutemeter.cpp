@@ -172,6 +172,16 @@ void QuteMeter::setValue(double value)
 //   m_value = value;
 }
 
+void QuteMeter::setValue2(double value)
+{
+  if (value < 0.0)
+    value = 0.0;
+  else if (value > 1.0)
+    value = 1.0;
+  ((MeterWidget *)m_widget)->setValue2(value);
+//   m_value = value;
+}
+
 double QuteMeter::getValue()
 {
   return ((MeterWidget *)m_widget)->getValue();
@@ -204,16 +214,6 @@ QString QuteMeter::getChannel2Name()
 void QuteMeter::setChannel2Name(QString name)
 {
   m_name2 = name;
-}
-
-void QuteMeter::setValue2(double value)
-{
-  if (value < 0.0)
-    value = 0.0;
-  else if (value > 1.0)
-    value = 1.0;
-  ((MeterWidget *)m_widget)->setValue2(value);
-//   m_value2 = value;
 }
 
 void QuteMeter::setColor(QColor color)

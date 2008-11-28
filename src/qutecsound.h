@@ -138,12 +138,8 @@ class qutecsound:public QMainWindow
     void openExternalEditor();
     void openExternalPlayer();
     void setHelpEntry();
+    void openExternalBrowser();
     void utilitiesDialogOpen();
-//     void showWidgets();
-//     void comment();
-//     void uncomment();
-//     void indent();
-//     void unindent();
     void about();
     void documentWasModified();
     void syntaxCheck();
@@ -234,6 +230,9 @@ class qutecsound:public QMainWindow
     QAction *showOverviewAct;
     QAction *showConsoleAct;
     QAction *setHelpEntryAct;
+    QAction *browseBackAct;
+    QAction *browseForwardAct;
+	QAction *externalBrowserAct;
     QAction *showUtilitiesAct;
     QAction *showWidgetsAct;
     QAction *commentAct;

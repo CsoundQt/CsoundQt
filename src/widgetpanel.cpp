@@ -96,6 +96,9 @@ void WidgetPanel::setValue(QString channelName, double value)
     if (widgets[i]->getChannelName() == channelName) {
       widgets[i]->setValue(value);
     }
+    if (widgets[i]->getChannel2Name() == channelName) {
+      widgets[i]->setValue2(value);
+    }
   }
 }
 

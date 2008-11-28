@@ -27,7 +27,7 @@ class Console
   public:
     Console();
 
-    ~Console();
+    virtual ~Console();
 
     virtual void appendMessage(QString msg);
     void clear();
@@ -82,7 +82,11 @@ class ConsoleWidget : public QWidget, public Console
       text = new MyQTextEdit(parent);
       text->setReadOnly(true);
       text->setFontItalic(false);
+#ifdef MACOSX
+      text->document()->setDefaultFont(QFont("Courier", 10));
+#else
       text->document()->setDefaultFont(QFont("Courier New", 7));
+#endif
       connect(text, SIGNAL(popUpMenu(QPoint)), this, SLOT(emitPopUpMenu(QPoint)));
     }
 

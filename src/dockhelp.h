@@ -47,6 +47,8 @@ class DockHelp : public QDockWidget
   public slots:
     void showGen();
     void showOverview();
+	void browseBack();
+	void browseForward();
 };
 
 #endif

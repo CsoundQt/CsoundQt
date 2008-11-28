@@ -30,23 +30,23 @@
 #ifdef LINUX
 #define DEFAULT_HTML_DIR "/home/andres/src/manual/html"
 #define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"
-// #define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
+#define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/bin/audacity"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/aplay"
 #endif
 #ifdef MACOSX
 #define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib.framework/Versions/5.1/Resources/Manual"
 #define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app"
-// #define DEFAULT_BROWSER_EXECUTABLE "/Applications/firefox.app"
+#define DEFAULT_BROWSER_EXECUTABLE "/Applications/Firefox.app"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/Applications/Audacity.app"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/Applications/QuickTime Player.app"
 #endif
 #ifdef WIN32
-#define DEFAULT_HTML_DIR "C:/%PROGRAMFILES%/Csound/doc/manual"
+#define DEFAULT_HTML_DIR "C:/Program Files/Csound/doc/manual"
 #define DEFAULT_TERM_EXECUTABLE "cmd.exe"
-// #define DEFAULT_BROWSER_EXECUTABLE ""
-#define DEFAULT_WAVEEDITOR_EXECUTABLE "audacity"
-#define DEFAULT_WAVEPLAYER_EXECUTABLE "wmplayer"
+#define DEFAULT_BROWSER_EXECUTABLE "firefox.exe"
+#define DEFAULT_WAVEEDITOR_EXECUTABLE "audacity.exe"
+#define DEFAULT_WAVEPLAYER_EXECUTABLE "wmplayer.exe"
 #endif
 
 enum viewMode {

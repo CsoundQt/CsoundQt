@@ -579,13 +579,18 @@ void qutecsound::stop()
 #else
   csoundStop(csound);
   csoundJoinThread(ThreadID);
-//   csoundCleanup(csound);
+
+#endif
+  csoundCleanup(csound);
+#ifdef MACOSX
+// Put menu bar back
+    SetMenuBar(menuBarHandle);
 #endif
   }
-  playAct->setChecked(false);
   csoundDestroy(csound);
+  playAct->setChecked(false);
   if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
-    widgetPanel->setVisible(false);
+    //widgetPanel->setVisible(false);
   }
 }
 
@@ -652,31 +657,27 @@ void qutecsound::setHelpEntry()
   }
 }
 
+
+void qutecsound::openExternalBrowser()
+{
+  QTextCursor cursor = textEdit->textCursor();
+  cursor.select(QTextCursor::WordUnderCursor);
+  if (m_options->csdocdir != "") {
+    QString file =  m_options->csdocdir + "/" + cursor.selectedText() + ".html";
+	execute(m_options->browser, file);
+  }
+  else {
+    QMessageBox::critical(this,
+                          tr("Error"),
+                          tr("HTML Documentation directory not set!\n"
+                             "Please go to Edit->Options->Environment and select directory\n"));
+  }
+}
+
 void qutecsound::utilitiesDialogOpen()
 {
   qDebug("qutecsound::utilitiesDialog()");
 }
-
-// void qutecsound::comment()
-// {
-// }
-//
-// void qutecsound::uncomment()
-// {
-// }
-//
-// void qutecsound::indent()
-// {
-// }
-//
-// void qutecsound::unindent()
-// {
-// }
-
-// void qutecsound::showWidgets()
-// {
-//   qDebug("qutecsound::showWidgets()");
-// }
 
 void qutecsound::about()
 {
@@ -729,7 +730,7 @@ void qutecsound::configure()
   dialog->show();
 }
 
-void qutecsound::applySettings(int result)
+void qutecsound::applySettings(int /*result*/)
 {
   m_highlighter->setDocument(textEdit->document());
   m_highlighter->setColorVariables(m_options->colorVariables);
@@ -1024,7 +1025,6 @@ void qutecsound::createActions()
   connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
   connect(helpPanel, SIGNAL(Close(bool)), showHelpAct, SLOT(setChecked(bool)));
 
-
   showGenAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("GEN Routines"), this);
 //   showGenAct->setShortcut(tr("Alt+1"));
   showGenAct->setStatusTip(tr("Show the GEN Routines Manual page"));
@@ -1049,6 +1049,21 @@ void qutecsound::createActions()
   setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
   setHelpEntryAct->setIconText("Manual for opcode");
   connect(setHelpEntryAct, SIGNAL(triggered()), this, SLOT(setHelpEntry()));
+
+  browseBackAct = new QAction(tr("Help Back"), this);
+  browseBackAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
+  browseBackAct->setStatusTip(tr("Go back in help page"));
+  connect(browseBackAct, SIGNAL(triggered()), helpPanel, SLOT(browseBack()));
+  
+  browseForwardAct = new QAction(tr("Help Forward"), this);
+  browseForwardAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
+  browseForwardAct->setStatusTip(tr("Go forward in help page"));
+  connect(browseForwardAct, SIGNAL(triggered()), helpPanel, SLOT(browseForward()));
+
+  externalBrowserAct = new QAction(/*QIcon(":/images/gtk-info.png"), */ tr("Show Opcode Entry in External Browser"), this);
+  externalBrowserAct->setShortcut(tr("Shift+Alt+F1"));
+  externalBrowserAct->setStatusTip(tr("Show Opcode Entry in external browser"));
+  connect(externalBrowserAct, SIGNAL(triggered()), this, SLOT(openExternalBrowser()));
 
   showUtilitiesAct = new QAction(QIcon(":/images/gnome-devel.png"), tr("Utilities"), this);
   showUtilitiesAct->setShortcut(tr("Alt+3"));
@@ -1190,9 +1205,13 @@ void qutecsound::createMenus()
 
   helpMenu = menuBar()->addMenu(tr("Help"));
   helpMenu->addAction(setHelpEntryAct);
+  helpMenu->addAction(externalBrowserAct);
   helpMenu->addSeparator();
   helpMenu->addAction(showOverviewAct);
   helpMenu->addAction(showGenAct);
+  helpMenu->addSeparator();
+  helpMenu->addAction(browseBackAct);
+  helpMenu->addAction(browseForwardAct);
   helpMenu->addSeparator();
   helpMenu->addAction(aboutAct);
   helpMenu->addAction(aboutQtAct);
@@ -1308,7 +1327,7 @@ void qutecsound::readSettings()
   m_options->fontPointSize = settings.value("fontsize", 12).toDouble();
   m_options->consoleFont = settings.value("consolefont", "Courier").toString();
   m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
-  m_options->tabWidth = settings.value("tabWidth", 60).toInt();
+  m_options->tabWidth = settings.value("tabWidth", 40).toInt();
   m_options->colorVariables = settings.value("colorvariables", true).toBool();
   m_options->autoPlay = settings.value("autoplay", false).toBool();
   m_options->saveChanges = settings.value("savechanges", true).toBool();
@@ -1373,7 +1392,7 @@ void qutecsound::readSettings()
   settings.endGroup();
   settings.beginGroup("External");
   m_options->terminal = settings.value("terminal", DEFAULT_TERM_EXECUTABLE).toString();
-//   m_options->browser = settings.value("browser", DEFAULT_BROWSER_EXECUTABLE).toString();
+  m_options->browser = settings.value("browser", DEFAULT_BROWSER_EXECUTABLE).toString();
   m_options->waveeditor = settings.value("waveeditor",
                                          DEFAULT_WAVEEDITOR_EXECUTABLE
                                         ).toString();
@@ -1468,7 +1487,7 @@ void qutecsound::writeSettings()
   settings.endGroup();
   settings.beginGroup("External");
   settings.setValue("terminal", m_options->terminal);
-//   settings.setValue("browser", m_options->browser);
+  settings.setValue("browser", m_options->browser);
   settings.setValue("waveeditor", m_options->waveeditor);
   settings.setValue("waveplayer", m_options->waveplayer);
   settings.endGroup();

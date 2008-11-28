@@ -38,13 +38,13 @@ class QuteMeter : public QuteWidget
     void popUpMenu(QPoint pos);
 
     virtual void setValue(double value);
+    virtual void setValue2(double value);
     virtual double getValue();
     virtual double getValue2();
     virtual QString getChannelName();
     virtual QString getChannel2Name();
 
     void setChannel2Name(QString name);
-    void setValue2(double value);
     void setColor(QColor color);
     void setType(QString type);
     void setPointSize(int size);
