@@ -34,6 +34,7 @@ QuteWidget::QuteWidget(QWidget *parent/*, widgetType type*/):
   deleteAct = new QAction(/*QIcon(":/images/gtk-new.png"),*/ tr("Delete"), this);
   deleteAct->setStatusTip(tr("Delete this widget"));
   connect(deleteAct, SIGNAL(triggered()), this, SLOT(deleteWidget()));
+  m_name2 = "";
 }
 
 
@@ -59,10 +60,6 @@ void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
   this->setGeometry(QRect(x,y,w,h));
   m_widget->setGeometry(QRect(0,0,w,h));
 }
-
-// void QuteWidget::setWidgetGeometry(QRect rect)
-// {
-// }
 
 void QuteWidget::setRange(int /*min*/, int /*max*/)
 {
@@ -90,6 +87,11 @@ QString QuteWidget::getChannelName()
   return m_name;
 }
 
+QString QuteWidget::getChannel2Name()
+{
+  return m_name2;
+}
+
 QString QuteWidget::getWidgetLine()
 {
   return m_line;
@@ -99,6 +101,14 @@ double QuteWidget::getValue()
 {
 #ifdef DEBUG
   qDebug("QuteWidget::getValue not implemented for widget type");
+#endif
+  return 0.0;
+}
+
+double QuteWidget::getValue2()
+{
+#ifdef DEBUG
+  qDebug("QuteWidget::getValue2 not implemented for widget type");
 #endif
   return 0.0;
 }
@@ -114,10 +124,8 @@ void QuteWidget::popUpMenu(QPoint pos)
   menu.addAction(propertiesAct);
   menu.addSeparator();
   menu.addAction(deleteAct);
-//   menu.addAction(copyAct);
-//   menu.addAction(pasteAct);
+
   menu.exec(pos);
-//   qDebug("menu");
 }
 
 void QuteWidget::openProperties()
@@ -152,7 +160,6 @@ void QuteWidget::createPropertiesDialog()
   dialog->setModal(true);
   layout = new QGridLayout(dialog);
   QLabel *label = new QLabel(dialog);
-//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("X =");
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
@@ -161,7 +168,6 @@ void QuteWidget::createPropertiesDialog()
   xSpinBox->setValue(this->x());
   layout->addWidget(xSpinBox, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
-//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Y =");
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 0, 2, Qt::AlignRight|Qt::AlignVCenter);
@@ -170,7 +176,6 @@ void QuteWidget::createPropertiesDialog()
   ySpinBox->setValue(this->y());
   layout->addWidget(ySpinBox, 0, 3, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
-//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Width =");
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
@@ -179,7 +184,6 @@ void QuteWidget::createPropertiesDialog()
   wSpinBox->setValue(this->width());
   layout->addWidget(wSpinBox, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
-//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Height =");
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 1, 2, Qt::AlignRight|Qt::AlignVCenter);
@@ -188,7 +192,6 @@ void QuteWidget::createPropertiesDialog()
   hSpinBox->setValue(this->height());
   layout->addWidget(hSpinBox, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
-//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Channel name =");
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 3, 0, Qt::AlignLeft|Qt::AlignVCenter);

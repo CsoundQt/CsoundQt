@@ -42,8 +42,10 @@ class QuteWidget : public QWidget
     virtual void setChecked(bool checked);
 
     virtual QString getChannelName();
+    virtual QString getChannel2Name();
     virtual QString getWidgetLine();
     virtual double getValue();
+    virtual double getValue2();
 
   protected:
     QSpinBox *xSpinBox;
@@ -57,7 +59,7 @@ class QuteWidget : public QWidget
     QDialog *dialog;
     QGridLayout *layout;
 
-    QString m_name;
+    QString m_name, m_name2;
     double m_min, m_max;
     double m_resolution;
 //     double m_min2,m_max2;

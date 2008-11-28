@@ -25,6 +25,7 @@
 #include "quteknob.h"
 #include "qutecheckbox.h"
 #include "qutecombobox.h"
+#include "qutemeter.h"
 #include "quteconsole.h"
 #include "qutegraph.h"
 #include "qutedummy.h"
@@ -46,10 +47,12 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(createButtonAct, SIGNAL(triggered()), this, SLOT(createButton()));
   createKnobAct = new QAction(tr("Create Knob"),this);
   connect(createKnobAct, SIGNAL(triggered()), this, SLOT(createKnob()));
-  createMenuAct = new QAction(tr("Create Menu"),this);
-  connect(createMenuAct, SIGNAL(triggered()), this, SLOT(createMenu()));
   createCheckBoxAct = new QAction(tr("Create Checkbox"),this);
   connect(createCheckBoxAct, SIGNAL(triggered()), this, SLOT(createCheckBox()));
+  createMenuAct = new QAction(tr("Create Menu"),this);
+  connect(createMenuAct, SIGNAL(triggered()), this, SLOT(createMenu()));
+  createMeterAct = new QAction(tr("Create Controller"),this);
+  connect(createMeterAct, SIGNAL(triggered()), this, SLOT(createMeter()));
   createConsoleAct = new QAction(tr("Create Console"),this);
   connect(createConsoleAct, SIGNAL(triggered()), this, SLOT(createConsole()));
   createGraphAct = new QAction(tr("Create Graph"),this);
@@ -77,11 +80,13 @@ unsigned int WidgetPanel::widgetCount()
 
 void WidgetPanel::getValues(QVector<QString> *channelNames, QVector<double> *values)
 {
-  if (channelNames->size() < widgets.size())
+  if (channelNames->size() < widgets.size()*2)
     return;
   for (int i = 0; i < widgets.size(); i++) {
-    (*channelNames)[i] = widgets[i]->getChannelName();
-    (*values)[i] = widgets[i]->getValue();
+    (*channelNames)[i*2] = widgets[i]->getChannelName();
+    (*values)[i*2] = widgets[i]->getValue();
+    (*channelNames)[i*2 + 1] = widgets[i]->getChannel2Name();
+    (*values)[i*2 + 1] = widgets[i]->getValue2();
   }
 }
 
@@ -162,7 +167,7 @@ int WidgetPanel::newWidget(QString widgetLine)
       return createConsole(x,y,width, height, widgetLine);
     }
     else if (parts[0]=="ioMeter") {
-      return createDummy(x,y,width, height, widgetLine);
+      return createMeter(x,y,width, height, widgetLine);
     }
     else if (parts[0]=="ioGraph") {
       return createGraph(x,y,width, height, widgetLine);
@@ -244,6 +249,7 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   menu.addAction(createKnobAct);
   menu.addAction(createCheckBoxAct);
   menu.addAction(createMenuAct);
+  menu.addAction(createMeterAct);
   menu.addAction(createConsoleAct);
   menu.addAction(createGraphAct);
   menu.addSeparator();
@@ -445,6 +451,43 @@ int WidgetPanel::createMenu(int x, int y, int width, int height, QString widgetL
   return 1;
 }
 
+int WidgetPanel::createMeter(int x, int y, int width, int height, QString widgetLine)
+{
+//   qDebug("ioMenu x=%i y=%i w=%i h=%i", x,y, width, height);
+  QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  QStringList quoteParts = widgetLine.split('"');
+  if (quoteParts.size() < 5) {
+    qDebug("WidgetPanel::createMeter ERROR parsing widget line!");
+    return 0;
+  }
+  QStringList parts2 = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  if (parts2.size() < 5) {
+    qDebug("WidgetPanel::createMeter ERROR parsing widget line!");
+    return 0;
+  }
+  QuteMeter *widget= new QuteMeter(layoutWidget);
+  //TODO is setWidgetLine actually necessary?
+  widget->setWidgetLine(widgetLine);
+  widget->setWidgetGeometry(x,y,width, height);
+  widget->setColor(QColor(parts[5].toDouble()/256.0,
+                       parts[6].toDouble()/256.0,
+                                         parts[7].toDouble()/256.0));
+  widget->setType(parts2[1]); // Important to set type before setting values since values are inverted for crosshair and point
+  widget->setChannelName(quoteParts[1]);
+  widget->setValue(quoteParts[2].toDouble());
+  widget->setChannel2Name(quoteParts[3]);
+  widget->setValue2(parts2[0].toDouble());
+  widget->setPointSize(parts2[2].toInt());
+  widget->setFadeSpeed(parts2[3].toInt());
+  widget->setBehavior(parts2[4]);
+  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
+  widgets.append(widget);
+  widget->show();
+  return 1;
+}
+
 int WidgetPanel::createConsole(int x, int y, int width, int height, QString widgetLine)
 {
 //    qDebug("ioListing x=%i y=%i w=%i h=%i", x,y, width, height);
@@ -499,43 +542,57 @@ void WidgetPanel::setBackground(bool bg, QColor bgColor)
 void WidgetPanel::createSlider()
 {
   createSlider(currentPosition.x(), currentPosition.y() - 20, 20, 100, QString("ioSlider {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(widgets.size())));
+  widgetChanged();
 }
 
 void WidgetPanel::createLabel()
 {
   QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border New Label";
   createLabel(currentPosition.x(), currentPosition.y() - 20, 80, 25, line);
+  widgetChanged();
 }
 
 void WidgetPanel::createButton()
 {
   QString line = "ioButton {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {100, 40} event 1.000000 \"button1\" \"New Button\" \"/\" i1 0 10";
   createButton(currentPosition.x(), currentPosition.y() - 20, 100, 40, line);
+  widgetChanged();
 }
 
 void WidgetPanel::createKnob()
 {
   createKnob(currentPosition.x(), currentPosition.y() - 20, 80, 80, QString("ioKnob {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(widgets.size())));
+  widgetChanged();
 }
 
 void WidgetPanel::createCheckBox()
 {
   createCheckBox(currentPosition.x(), currentPosition.y() - 20, 30, 30, QString("ioCheckbox {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {30, 30} off checkbox" +QString::number(widgets.size())));
+  widgetChanged();
 }
 
 void WidgetPanel::createMenu()
 {
   createMenu(currentPosition.x(), currentPosition.y() - 20, 80, 30, QString("ioMenu {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {80, 30} 1 303 \"item1,item2,item3\" menu" +QString::number(widgets.size())));
+  widgetChanged();
+}
+
+void WidgetPanel::createMeter()
+{
+  createMeter(currentPosition.x(), currentPosition.y() - 20, 30, 80, QString("ioMeter {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {30, 80} {0, 60000, 0} \"vert" + QString::number(widgets.size()) + "\" 0.000000 \"hor" + QString::number(widgets.size()) + "\" 0.000000 fill 1 0 mouse"));
+  widgetChanged();
 }
 
 void WidgetPanel::createConsole()
 {
   createConsole(currentPosition.x(), currentPosition.y() - 20, 200, 400, QString("ioListing {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {200, 400}"));
+  widgetChanged();
 }
 
 void WidgetPanel::createGraph()
 {
   createGraph(currentPosition.x(), currentPosition.y() - 20, 400, 200, QString("ioGraph {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {400, 200}"));
+  widgetChanged();
 }
 
 void WidgetPanel::propertiesDialog()

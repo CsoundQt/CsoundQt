@@ -30,21 +30,91 @@ class QuteMeter : public QuteWidget
 
     ~QuteMeter();
 
-    virtual void setValue(double value); // Value of button when pressed
-    virtual double getValue(); // This value represents the state of the button
     virtual QString getWidgetLine();
+    virtual void createPropertiesDialog();
+    virtual void applyProperties();
     virtual void setWidgetGeometry(int x,int y,int width,int height);
+
     void popUpMenu(QPoint pos);
+
+    virtual void setValue(double value);
+    virtual double getValue();
+    virtual double getValue2();
+    virtual QString getChannelName();
+    virtual QString getChannel2Name();
+
+    void setChannel2Name(QString name);
+    void setValue2(double value);
+    void setColor(QColor color);
+    void setType(QString type);
+    void setPointSize(int size);
+    void setFadeSpeed(int speed);
+    void setBehavior(QString behavior);
+
+  protected:
+    QColor m_color;
+    int m_fadeSpeed;
+    QString m_behavior;
+
+  private:
+    QLineEdit* name2LineEdit;
+    QPushButton*  colorButton;
+    QComboBox* typeComboBox;
+    QSpinBox* pointSizeSpinBox;
+    QSpinBox* fadeSpeedSpinBox;
+    QComboBox* behaviorComboBox;
+
+  private slots:
+    void selectTextColor();
+    void setValuesFromWidget(double value1, double value2);
 
 };
 
-class MeterWidget : public QWidget
+class MeterWidget : public QGraphicsView
 {
   Q_OBJECT
   public:
-    MeterWidget(QWidget *parent) {};
+    MeterWidget(QWidget *parent);
 
-    ~MeterWidget() {};
+    ~MeterWidget();
+
+    void setValue(double value);
+    void setValue2(double value2);
+    void setType(QString type);
+    void setPointSize(int size);
+    void setColor(QColor color);
+    void setWidgetGeometry(int x,int y,int width,int height);
+
+    QColor getColor();
+    QString getType() {return m_type;};
+    int getPointSize() {return m_pointSize;};
+    double getValue();
+    double getValue2();
+
+  protected:
+    virtual void contextMenuEvent(QContextMenuEvent *event)
+    {emit(popUpMenu(event->globalPos()));}
+    virtual void mouseMoveEvent(QMouseEvent* event);
+    virtual void mousePressEvent(QMouseEvent* event);
+    virtual void mouseReleaseEvent(QMouseEvent* event);
+
+  private:
+    double m_value, m_value2;
+    QString m_type;
+    int m_pointSize;
+    bool m_mouseDown;
+
+    QGraphicsScene* m_scene;
+
+//     QGraphicsRectItem* m_background;
+    QGraphicsRectItem* m_block;
+    QGraphicsEllipseItem* m_point;
+    QGraphicsLineItem* m_vline;
+    QGraphicsLineItem* m_hline;
+
+  signals:
+    void popUpMenu(QPoint pos);
+    void newValues(double value1, double value2);
 };
 
 #endif

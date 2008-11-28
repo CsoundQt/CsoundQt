@@ -82,7 +82,7 @@ class ConsoleWidget : public QWidget, public Console
       text = new MyQTextEdit(parent);
       text->setReadOnly(true);
       text->setFontItalic(false);
-      text->document()->setDefaultFont(QFont("Courier New", 8));
+      text->document()->setDefaultFont(QFont("Courier New", 7));
       connect(text, SIGNAL(popUpMenu(QPoint)), this, SLOT(emitPopUpMenu(QPoint)));
     }
 

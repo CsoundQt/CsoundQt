@@ -504,8 +504,8 @@ void qutecsound::play(bool realtime)
     ud->result = result;
     ud->PERF_STATUS=1;
     unsigned int numWidgets = widgetPanel->widgetCount();
-    ud->qcs->channelNames.resize(numWidgets);
-    ud->qcs->values.resize(numWidgets);
+    ud->qcs->channelNames.resize(numWidgets*2);
+    ud->qcs->values.resize(numWidgets*2);
     queueTimer->start(QCS_QUEUETIMER_TIME);
     if(m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
@@ -1516,7 +1516,7 @@ bool qutecsound::maybeSave()
                                      QMessageBox::Cancel | QMessageBox::Escape);
       if (ret == QMessageBox::Yes) {
         save();
-        closeTab();
+//         closeTab();
       }
       else if (ret == QMessageBox::Cancel)
         return false;
@@ -1815,8 +1815,8 @@ uintptr_t qutecsound::csThread(void *data)
   CsoundUserData* udata = (CsoundUserData*)data;
   if(!udata->result) {
     unsigned int numWidgets = udata->qcs->widgetPanel->widgetCount();
-    udata->qcs->channelNames.resize(numWidgets);
-    udata->qcs->values.resize(numWidgets);
+    udata->qcs->channelNames.resize(numWidgets*2);
+    udata->qcs->values.resize(numWidgets*2);
 //     csoundLockMutex(udata->qcs->perfMutex);
     int perform = csoundPerformKsmps(udata->csound);
 //     csoundUnlockMutex(udata->qcs->perfMutex);

@@ -61,6 +61,7 @@ class WidgetPanel : public QDockWidget
     QAction *createKnobAct;
     QAction *createCheckBoxAct;
     QAction *createMenuAct;
+    QAction *createMeterAct;
     QAction *createConsoleAct;
     QAction *createGraphAct;
     QAction *clearAct;
@@ -76,6 +77,7 @@ class WidgetPanel : public QDockWidget
     int createKnob(int x, int y, int width, int height, QString widgetLine);
     int createCheckBox(int x, int y, int width, int height, QString widgetLine);
     int createMenu(int x, int y, int width, int height, QString widgetLine);
+    int createMeter(int x, int y, int width, int height, QString widgetLine);
     int createConsole(int x, int y, int width, int height, QString widgetLine);
     int createGraph(int x, int y, int width, int height, QString widgetLine);
     int createDummy(int x, int y, int width, int height, QString widgetLine);
@@ -95,6 +97,7 @@ class WidgetPanel : public QDockWidget
     void createKnob();
     void createCheckBox();
     void createMenu();
+    void createMeter();
     void createConsole();
     void createGraph();
     void propertiesDialog();
