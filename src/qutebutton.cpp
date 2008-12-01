@@ -22,6 +22,7 @@
 QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new QPushButton(this);
+//   ((QPushButton *)m_widget)->
   m_filename = "/";
   m_type = "event";
 //   ((QPushButton *)m_widget)->setIcon(icon);
@@ -80,12 +81,11 @@ void QuteButton::contextMenuEvent(QContextMenuEvent* event)
 void QuteButton::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
+  dialog->setWindowTitle("Button");
 
   QLabel *label = new QLabel(dialog);
   label->setText("Type");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
-//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   typeComboBox = new QComboBox(dialog);
   typeComboBox->addItem("event");
   typeComboBox->addItem("value");
@@ -97,9 +97,7 @@ void QuteButton::createPropertiesDialog()
 
   label = new QLabel(dialog);
   label->setText("Value");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 4, 2, Qt::AlignRight|Qt::AlignVCenter);
-//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   valueBox = new QDoubleSpinBox(dialog);
   valueBox->setDecimals(6);
   valueBox->setRange(-99999.0, 99999.0);
@@ -107,19 +105,15 @@ void QuteButton::createPropertiesDialog()
   layout->addWidget(valueBox, 4, 3, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Text:");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
   text = new QLineEdit(dialog);
-//   text->setText(((QuteLabel *)m_widget)->toPlainText());
   text->setText(((QPushButton *)m_widget)->text());
   layout->addWidget(text, 5,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
   text->setMinimumWidth(320);
   label = new QLabel(dialog);
   label->setText("Image:");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
   filenameLineEdit = new QLineEdit(dialog);
-//   text->setText(((QuteLabel *)m_widget)->toPlainText());
   filenameLineEdit->setText(m_filename);
   filenameLineEdit->setMinimumWidth(320);
   layout->addWidget(filenameLineEdit, 6,1,1,2, Qt::AlignLeft|Qt::AlignVCenter);
@@ -129,9 +123,7 @@ void QuteButton::createPropertiesDialog()
   connect(browseButton, SIGNAL(released()), this, SLOT(browseFile()));
 
   label = new QLabel(dialog);
-//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Event:");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
   line = new QLineEdit(dialog);
 //   text->setText(((QuteLabel *)m_widget)->toPlainText());
@@ -139,11 +131,6 @@ void QuteButton::createPropertiesDialog()
   layout->addWidget(line, 7,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
   line->setMinimumWidth(320);
 }
-
-// void QuteButton::setWidgetLine(QString line)
-// {
-//   QuteWidget::setWidgetLine(line);
-// }
 
 void QuteButton::setType(QString type)
 {

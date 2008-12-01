@@ -102,10 +102,9 @@ QString QuteKnob::getWidgetLine()
 void QuteKnob::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
+  dialog->setWindowTitle("Knob");
   QLabel *label = new QLabel(dialog);
-//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Min =");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 2, 0, Qt::AlignRight|Qt::AlignVCenter);
   minSpinBox = new QDoubleSpinBox(dialog);
   minSpinBox->setDecimals(6);
@@ -113,9 +112,7 @@ void QuteKnob::createPropertiesDialog()
   minSpinBox->setValue(m_min);
   layout->addWidget(minSpinBox, 2,1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
-//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Max =");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 2, 2, Qt::AlignRight|Qt::AlignVCenter);
   maxSpinBox = new QDoubleSpinBox(dialog);
   maxSpinBox->setDecimals(6);

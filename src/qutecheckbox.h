@@ -35,6 +35,9 @@ class QuteCheckBox : public QuteWidget
     virtual QString getWidgetLine();
     void popUpMenu(QPoint pos);
 
+  protected:
+    virtual void createPropertiesDialog();
+
   private slots:
     void stateChanged(int state);
 

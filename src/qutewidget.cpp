@@ -24,7 +24,7 @@
 QuteWidget::QuteWidget(QWidget *parent/*, widgetType type*/):
     QWidget(parent)/*, m_type(type)*/
 {
-  this->setGeometry(QRect(5, 5, 20, 200));
+//   this->setGeometry(QRect(5, 5, 20, 200));
 
   propertiesAct = new QAction(/*QIcon(":/images/gtk-new.png"),*/ tr("&Properties"), this);
   propertiesAct->setShortcut(tr("Alt+P"));
@@ -51,12 +51,14 @@ void QuteWidget::setChannelName(QString name)
 {
   m_name = name;
   m_widget->setObjectName(name);
+//   m_widget->setToolTip(tr("Channel name:") + name);
 //   qDebug("QuteWidget::setChannelName %s", m_name.toStdString().c_str());
 }
 
 void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 {
-  m_widget->setFixedSize(w,h);
+  qDebug("QuteWidget::setWidgetGeometry %i %i %i %i",x,y,w,h );
+//   m_widget->setFixedSize(w,h);
   this->setGeometry(QRect(x,y,w,h));
   m_widget->setGeometry(QRect(0,0,w,h));
 }
@@ -167,7 +169,6 @@ void QuteWidget::createPropertiesDialog()
   layout = new QGridLayout(dialog);
   QLabel *label = new QLabel(dialog);
   label->setText("X =");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
   xSpinBox = new QSpinBox(dialog);
   xSpinBox->setMaximum(9999);
@@ -175,7 +176,6 @@ void QuteWidget::createPropertiesDialog()
   layout->addWidget(xSpinBox, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Y =");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 0, 2, Qt::AlignRight|Qt::AlignVCenter);
   ySpinBox = new QSpinBox(dialog);
   ySpinBox->setMaximum(9999);
@@ -183,7 +183,6 @@ void QuteWidget::createPropertiesDialog()
   layout->addWidget(ySpinBox, 0, 3, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Width =");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
   wSpinBox = new QSpinBox(dialog);
   wSpinBox->setMaximum(9999);
@@ -191,16 +190,15 @@ void QuteWidget::createPropertiesDialog()
   layout->addWidget(wSpinBox, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Height =");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 1, 2, Qt::AlignRight|Qt::AlignVCenter);
   hSpinBox = new QSpinBox(dialog);
   hSpinBox->setMaximum(9999);
   hSpinBox->setValue(this->height());
   layout->addWidget(hSpinBox, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
-  label = new QLabel(dialog);
-  label->setText("Channel name =");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-  layout->addWidget(label, 3, 0, Qt::AlignLeft|Qt::AlignVCenter);
+  channelLabel = new QLabel(dialog);
+  channelLabel->setText("Channel name =");
+  channelLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(channelLabel, 3, 0, Qt::AlignLeft|Qt::AlignVCenter);
   nameLineEdit = new QLineEdit(getChannelName(), dialog);
   layout->addWidget(nameLineEdit, 3, 1, Qt::AlignLeft|Qt::AlignVCenter);
   applyButton = new QPushButton(tr("Apply"));

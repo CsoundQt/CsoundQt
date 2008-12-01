@@ -58,3 +58,9 @@ void QuteCheckBox::stateChanged(int state)
   else if (state == Qt::Checked)
     emit valueChanged(1);
 }
+
+void QuteCheckBox::createPropertiesDialog()
+{
+  QuteWidget::createPropertiesDialog();
+  dialog->setWindowTitle("Check Box");
+}

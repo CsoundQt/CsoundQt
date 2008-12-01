@@ -401,7 +401,61 @@ void qutecsound::findReplace()
 
 void qutecsound::join()
 {
-  qDebug("join() not implemented");
+  QDialog dialog(this);
+  dialog.resize(700, 350);
+  dialog.setModal(true);
+  QPushButton *okButton = new QPushButton(tr("Ok"));
+  QPushButton *cancelButton = new QPushButton(tr("Cancel"));
+
+  connect(okButton, SIGNAL(released()), &dialog, SLOT(accept()));
+  connect(cancelButton, SIGNAL(released()), &dialog, SLOT(reject()));
+
+  QGridLayout *layout = new QGridLayout(&dialog);
+  QListWidget *list1 = new QListWidget(&dialog);
+  QListWidget *list2 = new QListWidget(&dialog);
+  layout->addWidget(list1, 0, 0);
+  layout->addWidget(list2, 0, 1);
+  layout->addWidget(okButton, 1,0);
+  layout->addWidget(cancelButton, 1,1);
+//   layout->resize(400, 200);
+
+  for (int i = 0; i < documentPages.size(); i++) {
+    QString name = documentPages[i]->fileName;
+    if (documentPages[i]->fileName.endsWith(".orc"))
+      list1->addItem(documentPages[i]->fileName);
+    else if (documentPages[i]->fileName.endsWith(".sco"))
+      list2->addItem(documentPages[i]->fileName);
+  }
+  QList<QListWidgetItem *> itemList = list1->findItems(documentPages[curPage]->fileName,
+      Qt::MatchExactly);
+  if (itemList.size() > 0)
+    list1->setCurrentItem(itemList[0]);
+  QString name = documentPages[curPage]->fileName;
+  itemList = list2->findItems(name.replace(".orc", ".sco"),
+      Qt::MatchExactly);
+  if (itemList.size() > 0)
+    list2->setCurrentItem(itemList[0]);
+  if (dialog.exec() == QDialog::Accepted) {
+    QString orcText = "";
+    QString scoText = "";
+    for (int i = 0; i < documentPages.size(); i++) {
+      QString name = documentPages[i]->fileName;
+      if (name == list1->currentItem()->text())
+        orcText = documentPages[i]->getFullText();
+      else if (name == list2->currentItem()->text())
+        scoText = documentPages[i]->getFullText();
+    }
+    QString text = "<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n<CsInstruments>\n";
+    text += orcText;
+    text += "</CsInstruments>\n<CsScore>\n";
+    text += scoText;
+    text += "</CsScore>\n</CsoundSynthesizer>\n";
+    newFile();
+    documentPages[curPage]->setTextString(text);
+  }
+  else {
+//     qDebug("qutecsound::join() : No Action");
+  }
 }
 
 void qutecsound::play(bool realtime)
@@ -742,6 +796,23 @@ void qutecsound::applySettings(int /*result*/)
   editToolBar->setToolButtonStyle(toolButtonStyle);
   controlToolBar->setToolButtonStyle(toolButtonStyle);
   configureToolBar->setToolButtonStyle(toolButtonStyle);
+  widgetPanel->showTooltips(m_options->showTooltips);
+
+  QString currentOptions = (m_options->useAPI ? tr("API") : tr("Console")) + " ";
+  if (m_options->useAPI) {
+    currentOptions +=  (m_options->thread ? tr("Thread") : tr("NoThread")) + " ";
+  }
+  currentOptions +=  (m_options->saveWidgets ? tr("SaveWidgets") : tr("DontSaveWidgets")) + " ";
+  QString playOptions = " (Audio:" + m_configlists->rtAudioNames[m_options->rtAudioModule] + " ";
+  playOptions += "MIDI:" +  m_configlists->rtMidiNames[m_options->rtMidiModule] + ")";
+  playOptions += " (" + (m_options->rtUseOptions? tr("UseQuteCsoundOptions"): tr("DiscardQuteCsoundOptions"));
+  playOptions += " " + (m_options->rtOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
+  playOptions += currentOptions;
+  QString renderOptions = " (" + (m_options->fileUseOptions? tr("UseQuteCsoundOptions"): tr("DiscardQuteCsoundOptions")) + " ";
+  renderOptions +=  "" + (m_options->fileOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
+  renderOptions += currentOptions;
+  playAct->setStatusTip(tr("Play") + playOptions);
+  renderAct->setStatusTip(tr("Render to file") + renderOptions);
 }
 
 void qutecsound::checkSelection()
@@ -1187,6 +1258,8 @@ void qutecsound::createMenus()
   editMenu->addAction(indentAct);
   editMenu->addAction(unindentAct);
   editMenu->addSeparator();
+  editMenu->addAction(joinAct);
+  editMenu->addSeparator();
   editMenu->addAction(configureAct);
 
   controlMenu = menuBar()->addMenu(tr("Control"));
@@ -1337,6 +1410,7 @@ void qutecsound::readSettings()
   m_options->invalueEnabled = settings.value("invalueEnabled", true).toBool();
   m_options->chngetEnabled = settings.value("chngetEnabled", false).toBool();
   m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
+  m_options->showTooltips = settings.value("showTooltips", true).toBool();
   lastFiles = settings.value("lastfiles", "").toStringList();
   settings.endGroup();
   settings.beginGroup("Run");
@@ -1434,6 +1508,7 @@ void qutecsound::writeSettings()
   settings.setValue("invalueEnabled", m_options->invalueEnabled);
   settings.setValue("chngetEnabled", m_options->chngetEnabled);
   settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
+  settings.setValue("showTooltips", m_options->showWidgetsOnRun);
   QStringList files;
   for (int i=0; i < documentPages.size(); i++ ) {
     files.append(documentPages[i]->fileName);
@@ -1853,6 +1928,7 @@ uintptr_t qutecsound::csThread(void *data)
       }
     }
   }
+//   udata->qcs->stop();
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
 #else
   return 1;

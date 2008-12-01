@@ -57,21 +57,28 @@ void QuteMeter::popUpMenu(QPoint pos)
 void QuteMeter::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
-  QLabel *label = new QLabel(dialog);
-
+  dialog->setWindowTitle("Controller");
+  channelLabel->setText("Vertical Channel name =");
+  channelLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   nameLineEdit->setText(getChannelName());
 
+  QLabel *label = new QLabel(dialog);
   label = new QLabel(dialog);
-  label->setText("Channel 2 name =");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+  label->setText("Horizontal Channel name =");
   layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
   name2LineEdit = new QLineEdit(dialog);
   name2LineEdit->setText(getChannel2Name());
   name2LineEdit->setMinimumWidth(320);
   layout->addWidget(name2LineEdit, 4,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
   if (((MeterWidget *)m_widget)->getType() != "point" and ((MeterWidget *)m_widget)->getType() != "crosshair") {
-    label->setEnabled(false);
-    name2LineEdit->setEnabled(false);
+    if (((MeterWidget *)m_widget)->m_vertical) {
+      label->setEnabled(false);
+      name2LineEdit->setEnabled(false);
+    }
+    else {
+      channelLabel->setEnabled(false);
+      nameLineEdit->setEnabled(false);
+    }
   }
 
   label = new QLabel(dialog);
@@ -194,21 +201,12 @@ double QuteMeter::getValue2()
 
 QString QuteMeter::getChannelName()
 {
-//   if (((MeterWidget *)m_widget)->getType() == "crosshair" or ((MeterWidget *)m_widget)->getType() == "point")
-//     return m_name2;
-//   else
-    return m_name;
+  return m_name;
 }
 
 QString QuteMeter::getChannel2Name()
 {
-//   if (((MeterWidget *)m_widget)->getType() == "crosshair" or ((MeterWidget *)m_widget)->getType() == "point")
-//     return m_name;
-//   else
-  if (((MeterWidget *)m_widget)->getType() == "crosshair" or ((MeterWidget *)m_widget)->getType() == "point")
-    return m_name2;
-  else
-    return QString("");
+  return m_name2;
 }
 
 void QuteMeter::setChannel2Name(QString name)
@@ -275,7 +273,6 @@ MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
   m_scene->setSceneRect(0,0, 20, 20);
   setScene(m_scene);
   m_mouseDown = false;
-//   m_background = m_scene->addRect(0, 0, 0, 0, QPen() , QBrush(Qt::black));
   m_block = m_scene->addRect(0, 0, 0, 0, QPen() , QBrush(Qt::green));
   m_point = m_scene->addEllipse(0, 0, 0, 0, QPen(Qt::green) , QBrush(Qt::green));
   m_vline = m_scene->addLine(0, 0, 0, 0, QPen(Qt::green));
@@ -293,59 +290,45 @@ QColor MeterWidget::getColor()
 
 double MeterWidget::getValue()
 {
-  // For crosshair and point, the first value is x , the second y
-//   if (m_type == "crosshair" or m_type == "point") {
-//     return m_value2;
-//   }
-//   else
-    return m_value;
+  // Vertical value
+  return m_value;
 }
 
 double MeterWidget::getValue2()
 {
-//   if (m_type == "crosshair" or m_type == "point") {
-//     return m_value;
-//   }
-//   else
-    return m_value2;
+  // Horizontal value
+  return m_value2;
 }
 
 void MeterWidget::setValue(double value)
 {
-  /*if (m_type == "crosshair" or m_type == "point") {
-    m_value2 = value;
-    m_hline->setLine(0, (1-m_value2)*height(), width(), (1-m_value2)*height());
-    m_vline->setLine(m_value*width(), 0 ,m_value*width(), height());
-    m_point->setRect(m_value*width()- (m_pointSize/2), (1-m_value2)*height()- (m_pointSize/2), m_pointSize, m_pointSize);
+  m_value = value;
+  if (m_type == "fill" and m_vertical) {
+    m_block->setRect(0, (1-value)*height(), width(), height());
   }
-  else  */{
-    m_value = value;
-    if (m_type == "fill") {
-      m_block->setRect(0, (1-value)*height(), width(), height());
-    }
-    else if (m_type == "llif") {
-      m_block->setRect(0, 0, width(), (1-value)*height());
-    }
-    m_hline->setLine(0, (1-value)*height(), width(), (1-value)*height());
-    m_vline->setLine(m_value2*width(), 0 ,m_value2*width(), height());
-    m_point->setRect(m_value2*width()- (m_pointSize/2), (1-value)*height()- (m_pointSize/2), m_pointSize, m_pointSize);
+  else if (m_type == "llif" and m_vertical) {
+    m_block->setRect(0, 0, width(), (1-value)*height());
   }
+  m_hline->setLine(0, (1-value)*height(), width(), (1-value)*height());
+  m_vline->setLine(m_value2*width(), 0 ,m_value2*width(), height());
+  m_point->setRect(m_value2*width()- (m_pointSize/2.0), (1-value)*height()- (m_pointSize/2.0), m_pointSize, m_pointSize);
 }
 
 void MeterWidget::setValue2(double value)
 {
-  if (m_type == "crosshair" or m_type == "point") {
-    m_value2 = value;
-//     m_hline->setLine(0, (1-m_value2)*height(), width(), (1-m_value2)*height());
-//     m_vline->setLine(m_value*width(), 0 ,m_value*width(), height());
-//     m_point->setRect(m_value*width()- (m_pointSize/2), (1-m_value2)*height()- (m_pointSize/2), m_pointSize, m_pointSize);
-    setValue(m_value);
+  m_value2 = value;
+  if (m_type == "fill" and !m_vertical) {
+    m_block->setRect(0, 0, value*width(), height());
   }
+  else if (m_type == "llif" and !m_vertical) {
+    m_block->setRect(value*width(),0, width(), height());
+  }
+  setValue(m_value);
 }
 
 void MeterWidget::setType(QString type)
 {
-  qDebug("MeterWidget::setType");
+//   qDebug("MeterWidget::setType");
   if (type == "fill") {
     m_type = type;
     m_block->show();
@@ -364,8 +347,14 @@ void MeterWidget::setType(QString type)
     m_type = type;
     m_block->hide();
     m_point->hide();
-    m_vline->hide();
-    m_hline->show();
+    if (m_vertical) {
+      m_vline->hide();
+      m_hline->show();
+    }
+    else {
+      m_vline->show();
+      m_hline->hide();
+    }
   }
   else if (type == "crosshair") {
     m_type = type;
@@ -391,9 +380,9 @@ void MeterWidget::setPointSize(int size)
 
 void MeterWidget::setColor(QColor color)
 {
-  qDebug("MeterWidget::setColor()");
+//   qDebug("MeterWidget::setColor()");
   m_block->setBrush(QBrush(color));
-  m_point->setPen(QPen(color));
+  m_point->setPen(QPen(Qt::NoPen));
   m_point->setBrush(QBrush(color));
   m_vline->setPen(QPen(color));
   m_hline->setPen(QPen(color));
@@ -403,9 +392,13 @@ void MeterWidget::setWidgetGeometry(int x,int y,int width,int height)
 {
   m_scene->setSceneRect(0,0, width, height);
   setSceneRect(0,0, width, height);
-//   m_background->setRect(0,0,width - 5, height - 5 );
   setGeometry(x,y,width, height);
   setMaximumSize(width, height);
+  if (width > height)
+    m_vertical = false;
+  else
+    m_vertical = true;
+  setType(m_type);  // update widgets which depend on verticality
 }
 
 void MeterWidget::mouseMoveEvent(QMouseEvent* event)

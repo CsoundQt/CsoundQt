@@ -22,6 +22,9 @@
 
 #include "qutewidget.h"
 
+// This class is named "meter" internally, following MacCsound's name
+// It is called "Controller" for the user of QuteCsound
+
 class QuteMeter : public QuteWidget
 {
   Q_OBJECT
@@ -90,6 +93,7 @@ class MeterWidget : public QGraphicsView
     int getPointSize() {return m_pointSize;};
     double getValue();
     double getValue2();
+    bool m_vertical;
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent *event)
@@ -99,14 +103,13 @@ class MeterWidget : public QGraphicsView
     virtual void mouseReleaseEvent(QMouseEvent* event);
 
   private:
-    double m_value, m_value2;
+    double m_value, m_value2;  // value1 is vertical, value2 is horizontal
     QString m_type;
     int m_pointSize;
     bool m_mouseDown;
 
     QGraphicsScene* m_scene;
 
-//     QGraphicsRectItem* m_background;
     QGraphicsRectItem* m_block;
     QGraphicsEllipseItem* m_point;
     QGraphicsLineItem* m_vline;

@@ -53,6 +53,7 @@ class QuteWidget : public QWidget
     QSpinBox *ySpinBox;
     QSpinBox *wSpinBox;
     QSpinBox *hSpinBox;
+    QLabel *channelLabel;
     QLineEdit *nameLineEdit;
     QString m_line;
     QWidget *m_layoutWidget;

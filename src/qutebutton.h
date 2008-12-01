@@ -33,7 +33,6 @@ class QuteButton : public QuteWidget
     virtual void setValue(double value); // Value of button when pressed
     virtual double getValue(); // This value represents the state of the button
     virtual QString getWidgetLine();
-//     virtual void setWidgetLine(QString line);
     void setType(QString text);
     void setText(QString text);
     void setFilename(QString filename);

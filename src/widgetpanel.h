@@ -41,7 +41,8 @@ class WidgetPanel : public QDockWidget
     int loadWidgets(QString macWidgets);
     int newWidget(QString widgetLine);
     QString widgetsText();
-	void appendMessage(QString message);
+    void appendMessage(QString message);
+    void showTooltips(bool show);
 
     QVector<QString> eventQueue;
     int eventQueueSize;
@@ -51,7 +52,7 @@ class WidgetPanel : public QDockWidget
 
   private:
     QVector<QuteWidget *> widgets;
-	QVector<QuteConsole *> consoleWidgets;
+    QVector<QuteConsole *> consoleWidgets;
     QWidget *layoutWidget;
 
     QPoint currentPosition;

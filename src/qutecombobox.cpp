@@ -79,24 +79,12 @@ void QuteComboBox::contextMenuEvent(QContextMenuEvent* event)
 void QuteComboBox::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
+  dialog->setWindowTitle("Menu");
   QLabel *label = new QLabel(dialog);
   //TODO add size selection for combo box
-//   label->setText("Size");
-//   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-//   layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
-// //   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-//   typeComboBox = new QComboBox(dialog);
-//   typeComboBox->addItem("event");
-//   typeComboBox->addItem("value");
-//   typeComboBox->addItem("pictevent");
-//   typeComboBox->addItem("pictvalue");
-//   typeComboBox->addItem("pict");
-//   typeComboBox->setCurrentIndex(typeComboBox->findText(m_type));
-//   layout->addWidget(typeComboBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
   label = new QLabel(dialog);
   label->setText("Items (separated by commas):");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
   text = new QLineEdit(dialog);
   text->setText(itemList());

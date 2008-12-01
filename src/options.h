@@ -52,6 +52,7 @@ class Options{
     bool invalueEnabled;
     bool chngetEnabled;
     bool showWidgetsOnRun;
+    bool showTooltips;
 
     bool useAPI;
     bool thread;

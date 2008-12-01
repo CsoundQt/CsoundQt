@@ -29,7 +29,16 @@
     <property name="spacing" >
      <number>6</number>
     </property>
-    <property name="margin" >
+    <property name="leftMargin" >
+     <number>0</number>
+    </property>
+    <property name="topMargin" >
+     <number>0</number>
+    </property>
+    <property name="rightMargin" >
+     <number>0</number>
+    </property>
+    <property name="bottomMargin" >
      <number>0</number>
     </property>
     <item>
@@ -37,7 +46,7 @@
       <property name="orientation" >
        <enum>Qt::Horizontal</enum>
       </property>
-      <property name="sizeHint" stdset="0" >
+      <property name="sizeHint" >
        <size>
         <width>131</width>
         <height>31</height>
@@ -882,6 +891,19 @@
       </property>
       <property name="text" >
        <string>Show Widgets on Play</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="showTooltipsCheckBox" >
+      <property name="geometry" >
+       <rect>
+        <x>10</x>
+        <y>190</y>
+        <width>191</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Show Tooltips for widgets</string>
       </property>
      </widget>
     </widget>

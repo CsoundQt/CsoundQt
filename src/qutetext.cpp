@@ -198,11 +198,10 @@ QString QuteText::getWidgetLine()
 void QuteText::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
+  dialog->setWindowTitle("Text");
   QLabel *label = new QLabel(dialog);
   label->setText("Type");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
-//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   typeComboBox = new QComboBox(dialog);
   typeComboBox->addItem("label");
   typeComboBox->addItem("display");
@@ -211,19 +210,14 @@ void QuteText::createPropertiesDialog()
   typeComboBox->setCurrentIndex(typeComboBox->findText(m_type));
   layout->addWidget(typeComboBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
-//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Text:");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
   text = new QLineEdit(dialog);
-//   text->setText(((QuteLabel *)m_widget)->toPlainText());
   text->setText(m_text);
   layout->addWidget(text, 5,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
   text->setMinimumWidth(320);
   label = new QLabel(dialog);
-//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Text Color");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
   textColor = new QPushButton(dialog);
   QPixmap pixmap(64,64);
@@ -235,9 +229,7 @@ void QuteText::createPropertiesDialog()
   layout->addWidget(textColor, 6,1, Qt::AlignLeft|Qt::AlignVCenter);
   connect(textColor, SIGNAL(released()), this, SLOT(selectTextColor()));
   label = new QLabel(dialog);
-//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Background Color");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
   bgColor = new QPushButton(dialog);
 //   QPixmap pixmap(64,64);
@@ -255,14 +247,12 @@ void QuteText::createPropertiesDialog()
   layout->addWidget(border, 7,2, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Font");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
   font = new QFontComboBox(dialog);
   font->setCurrentFont(QFont(m_font));
   layout->addWidget(font, 7, 1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Font Size");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
   fontSize = new QComboBox(dialog);
   fontSize->addItem("XX-Small", QVariant((int) QUTE_XXSMALL));
@@ -284,7 +274,6 @@ void QuteText::createPropertiesDialog()
   layout->addWidget(fontSize,8, 1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Alignment");
-  label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
   alignment = new QComboBox(dialog);
   alignment->addItem("Left");

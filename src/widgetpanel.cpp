@@ -221,6 +221,23 @@ void WidgetPanel::appendMessage(QString message)
   }
 }
 
+void WidgetPanel::showTooltips(bool show)
+{
+  for (int i=0; i < widgets.size(); i++) {
+    if (show) {
+      if (widgets[i]->getChannel2Name() != "") {
+        widgets[i]->setToolTip(tr("ChannelV:") + widgets[i]->getChannelName()
+            + tr("\nChannelH:")+ widgets[i]->getChannel2Name());
+      }
+      else {
+        widgets[i]->setToolTip(tr("Channel:") + widgets[i]->getChannelName());
+      }
+    }
+    else
+      widgets[i]->setToolTip("");
+  }
+}
+
 void WidgetPanel::deleteWidget(QuteWidget *widget)
 {
   int number = widgets.indexOf(widget);
@@ -272,6 +289,8 @@ void WidgetPanel::newValue(QHash<QString, double> channelValue)
 void WidgetPanel::widgetChanged()
 {
   QString text = widgetsText();
+  if (widgets.size() > 0 and widgets[0]->toolTip() != "")
+    showTooltips(true);
   emit widgetsChanged(text);
 }
 

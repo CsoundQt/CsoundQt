@@ -1,3 +1,251 @@
+2008-11-28 22:25  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r93] src/configdialog.cpp, src/configdialog.h,
+	  src/configdialog.ui, src/console.h, src/dockhelp.cpp,
+	  src/dockhelp.h, src/options.h, src/qutecsound.cpp,
+	  src/qutecsound.h, src/qutemeter.cpp, src/qutemeter.h,
+	  src/qutewidget.cpp, src/qutewidget.h, src/types.h,
+	  src/utilitiesdialog.cpp, src/widgetpanel.cpp: QuteMeter now
+	  receives both values (horizontal and vertical)
+	  Opcode entries can now be viewed in external browser
+	  New back and forward actions for dock help (Alt+left and
+	  Alt+right)
+	  Some cleanup of sources
+
+2008-11-28 22:14  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r92] examples/circle.csd: Added new example showing the new
+	  controller widget
+
+2008-11-28 15:58  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r91] examples/noisered.csd, examples/rms.csd, src/console.h,
+	  src/qutecsound.cpp, src/qutemeter.cpp, src/qutemeter.h,
+	  src/qutewidget.cpp, src/qutewidget.h, src/types.h,
+	  src/widgetpanel.cpp, src/widgetpanel.h: Implemented meter called
+	  "Controller" in QuteCsound, which can send and receive two values
+	  Made widget console font a bit smaller
+	  Added two new examples to the examples folder
+
+2008-11-26 01:55  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r90] src/configdialog.cpp, src/configdialog.ui,
+	  src/dockhelp.cpp, src/opentryparser.cpp, src/opentryparser.h,
+	  src/options.cpp, src/options.h, src/qutebutton.h,
+	  src/qutecheckbox.cpp, src/qutecheckbox.h, src/qutecombobox.cpp,
+	  src/qutecombobox.h, src/qutecsound.cpp, src/qutecsound.h,
+	  src/qutegraph.cpp, src/qutegraph.h, src/quteknob.cpp,
+	  src/quteknob.h, src/qutemeter.h, src/quteslider.cpp,
+	  src/quteslider.h, src/qutetext.h, src/qutewidget.cpp,
+	  src/qutewidget.h, src/src.pro, src/widgetpanel.cpp,
+	  src/widgetpanel.h: Added option to use/disable command line
+	  options from QuteCsound
+	  All open files are remembered, not only the last active ones
+	  When widget values change, document is flagged as modified. This
+	  is also the foundation for automatic widget connection (widgets
+	  with the same channel name modify each other)
+	  No asking "do you want to save" when opening a file.
+	  Hardware buffer active preference is now saved
+	  Cleaned widget classes
+	  Created dummy graph widget
+	  Cleaned most compile warnings
+
+2008-11-25 13:07  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r89] src/qutecsound.cpp, src/utilitiesdialog.cpp,
+	  src/utilitiesdialog.ui: Utilities now run through the API if
+	  useAPI is set in options
+	  Browse buttons now work in utilities dialog
+
+2008-11-25 12:22  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r88] src/configdialog.cpp, src/configdialog.ui, src/console.cpp,
+	  src/console.h, src/highlighter.cpp, src/options.h,
+	  src/qutebutton.cpp, src/quteconsole.cpp, src/quteconsole.h,
+	  src/qutecsound.cpp, src/quteknob.cpp, src/quteknob.h,
+	  src/qutemeter.cpp, src/qutemeter.h, src/quteslider.cpp,
+	  src/quteslider.h, src/qutewidget.cpp, src/qutewidget.h,
+	  src/src.pro: Console widget now resizes properly.
+	  Button now saves its value
+	  Fixed printing of messages and read/write widget values when
+	  running in same thread
+	  f-sigs and labels are now colored in the editor
+	  Made knob (dial) a little smaller than the widget size to imitate
+	  MacCsound
+	  Added option to show/hide widgets on run
+	  Prepared class for meter widget
+
+2008-11-21 13:11  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r87] src/windows-installer-doubles.nsi,
+	  src/windows-installer.nsi: Separated installer maker for floats
+	  and doubles versions for Windows. QuteCsound installs in a
+	  different directory in each case
+
+2008-11-18 17:04  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r86] src/console.cpp, src/console.h, src/documentpage.cpp,
+	  src/qutebutton.cpp, src/quteconsole.cpp, src/quteconsole.h,
+	  src/qutecsound.cpp, src/qutecsound.h, src/quteknob.cpp,
+	  src/quteslider.cpp, src/qutetext.cpp, src/src.pro,
+	  src/widgetpanel.cpp, src/widgetpanel.h: Implemented ioListing
+	  (ConsoleWidget) widget
+	  Fixed separation of MacCsound sections
+	  Made timer single shot
+	  Fixed showing of About QuteCsound
+	  Improved font size compatibility with MacCsound
+
+2008-11-18 00:20  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r85] src/console.cpp, src/console.h, src/qutecsound.cpp,
+	  src/qutecsound.h, src/quteslider.cpp, src/qutetext.cpp,
+	  src/widgetpanel.cpp: Initial work on console (ioListing) widget
+	  Fixed printing csound report when there are compilation errors
+	  and threaded operation is selected
+	  Colors are now shown on buttons for text widget on Mac
+	  Font sizes more closely match MacCsound.
+
+2008-11-17 22:06  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r84] examples/reinit.csd, src/dockhelp.cpp, src/dockhelp.h,
+	  src/documentpage.cpp, src/highlighter.cpp, src/highlighter.h,
+	  src/qutecsound.cpp, src/qutecsound.h: Added actions to show Gen
+	  routines and Opcode overview in Help menu
+	  Improved handling of MacCsound specific sections (needs more
+	  testing)
+	  Labels are now highlighted. Strings within comments appear green
+	  and comments are now in italics
+
+2008-11-17 12:22  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r83] examples, examples/noreinit.csd, examples/reinit.csd,
+	  src/default.csd, src/documentpage.cpp, src/qutecheckbox.cpp,
+	  src/qutecheckbox.h, src/qutecombobox.cpp, src/qutecombobox.h,
+	  src/qutecsound.cpp, src/qutetext.cpp, src/qutetext.h,
+	  src/qutewidget.h, src/src.pro, src/widgetpanel.cpp,
+	  src/widgetpanel.h: Implemented Checkbox and Menu widgets.
+	  Fixed disappearing tabs.
+	  Added examples reinit.csd and noreinit.csd
+	  Reduced verbosity
+
+2008-11-15 21:11  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r82] src/documentpage.cpp, src/documentpage.h,
+	  src/qutebutton.cpp, src/qutecombobox.cpp, src/qutecombobox.h,
+	  src/qutecsound.cpp, src/qutecsound.h, src/src.pro: Added
+	  indent,unindent, comment and uncomment actions.
+	  Initial framework for ioMenu widget
+
+2008-11-11 15:56  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r81] src/default.csd, src/qutecsound.cpp, src/quteknob.cpp,
+	  src/quteknob.h, src/quteslider.cpp, src/quteslider.h,
+	  src/qutetext.cpp, src/qutetext.h, src/widgetpanel.cpp: Put back
+	  latching of play button (fixed on Mac)
+	  Fixed float/int issue with sliders and knobs (the decimal part of
+	  ranges was being discarded)
+	  Implemented value ioText type, which can receive values from
+	  outvalue opcode.
+
+2008-11-08 12:13  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r80] src/qutebutton.cpp, src/qutebutton.h: Added browse button
+	  for filename in button widget.
+	  Button image now updates correctly.
+
+2008-11-08 11:57  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r79] src/qutebutton.cpp, src/qutebutton.h, src/qutetext.cpp,
+	  src/widgetpanel.cpp, src/widgetpanel.h: Implemented setting
+	  pictures for buttons. This completes the implementation of
+	  ioButton from MacCsound.
+	  Buttons can now be deleted.
+	  Background for widget panel can now be set with right click, is
+	  saved and read from the csd.
+
+2008-11-07 12:47  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r78] src/console.cpp, src/documentpage.cpp, src/qutecsound.cpp,
+	  src/qutecsound.h, src/quteslider.cpp, src/quteslider.h,
+	  src/qutewidget.cpp, src/qutewidget.h, src/src.pro, src/types.h,
+	  src/utilitiesdialog.cpp, srcrelease.sh: More work on threading
+	  issues. When threaded, all events and outvalues are queued and
+	  processed by a timer in the main thread. This should make
+	  threaded operation perform even better than non-threaded.
+	  Sliders appear horizontally if width>height (as in MacCsound)
+	  Bumped version to 0.3. 5
+	  Cleaned up some compiler warnings
+	  Fixed srcrelease script
+
+2008-11-04 19:07  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r77] src/console.cpp, src/qutecsound.cpp, src/qutecsound.h,
+	  src/src.pro: Preliminary locks to improve threaded operation
+	  Made play button uncheckable while stability issue is soved on
+	  Mac.
+
+2008-10-31 14:14  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r76] src/configdialog.cpp, src/configdialog.ui,
+	  src/qutebutton.cpp, src/qutecsound.cpp, src/qutetext.cpp: Play
+	  button now latches when pressed.
+	  Line breaks in widgets are now passes properly (Untested om Mac
+	  and Windows)
+
+2008-10-30 00:52  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r75] src/documentpage.cpp, src/documentpage.h,
+	  src/qutecsound.cpp, src/qutedummy.cpp, src/qutedummy.h,
+	  src/quteknob.cpp, src/quteknob.h, src/quteslider.h,
+	  src/qutetext.cpp, src/qutewidget.cpp, src/qutewidget.h,
+	  src/src.pro, src/widgetpanel.cpp, src/widgetpanel.h: Implemented
+	  Knob widget
+	  Added dummy widget which shows as a gray rectangle in the place
+	  of unsupported widgets. No more crashing with MacCsound csds.
+	  If file is already open, go to the tab, instead of opening again
+	  (regression)
+	  MacPresets section in csd is now maintained internally and not
+	  displayed
+
+2008-10-29 20:43  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r74] src/configdialog.cpp, src/configdialog.ui,
+	  src/configlists.cpp, src/highlighter.cpp, src/options.h,
+	  src/qutecsound.cpp, src/qutecsound.h, src/src.pro: Optional
+	  (default) use of CsoundPerFormaceThread class for threaded
+	  operation.
+	  Added option to set tab width and o show text for toolbar icons
+	  (Suggestion from Edward Loveall)
+	  Added jack option for audio output for mac and pulse for linux
+	  Changed some keybindings
+	  On linux, external processes are now independent (qutecsound
+	  doesn't wait for them to stop)
+
+2008-10-28 19:03  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r73] srcrelease.sh: Fixed script for OS X
+
+2008-10-28 19:03  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r72] src/qutecsound.cpp, src/qutewidget.cpp,
+	  src/widgetpanel.cpp: Fixed crashing of unsupported MacCsound
+	  csds.
+	  Small typo (missing namespace) thanks to Felipe Sateler
+
+2008-10-28 16:21  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r71] src/widgetpanel.cpp, src/widgetpanel.h: Added create Button
+	  action to context menu of Widget Panel.
+
+2008-10-28 16:08  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r70] src/qutecsound.cpp, src/qutecsound.h: Bumped version number
+	  to 0.3.3
+
+2008-10-28 11:06  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r69] ChangeLog: Updated changelog
+
 2008-10-28 11:03  Andrés Cabrera <mantaraya36@gmail.com>
 
 	* [r68] src/configdialog.ui, src/default.csd, src/qutecsound.cpp,
