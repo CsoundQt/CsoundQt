@@ -138,6 +138,5 @@ macx {
 
 #QMAKE_CXXFLAGS_DEBUG += -DDEBUG
 
-CONFIG -= stl \
- debug
+CONFIG -= stl
 

@@ -50,8 +50,9 @@ void QuteWidget::setWidgetLine(QString line)
 void QuteWidget::setChannelName(QString name)
 {
   m_name = name;
+  if (m_name.startsWith('$'))
+    m_name.remove(0,1);  // $ symbol is reserved for identifying string channels
   m_widget->setObjectName(name);
-//   m_widget->setToolTip(tr("Channel name:") + name);
 //   qDebug("QuteWidget::setChannelName %s", m_name.toStdString().c_str());
 }
 
@@ -78,6 +79,10 @@ void QuteWidget::setValue2(double /*value*/)
 {
 //FIXME put this back when it's no longer a burden.
 //   qDebug("QuteWidget::setValue not implemented for widget type (value = %f)", value);
+}
+
+void QuteWidget::setValue(QString /*value*/)
+{
 }
 
 void QuteWidget::setResolution(double /*resolution*/)
@@ -211,7 +216,7 @@ void QuteWidget::createPropertiesDialog()
 
 void QuteWidget::applyProperties()
 {
-  m_name = nameLineEdit->text();
+  setChannelName(nameLineEdit->text());
   setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
   qDebug("QuteWidget::applyProperties() Not fully implemented yet.");
   emit(widgetChanged());

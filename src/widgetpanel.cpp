@@ -102,11 +102,32 @@ void WidgetPanel::setValue(QString channelName, double value)
   }
 }
 
+void WidgetPanel::setValue(QString channelName, QString value)
+{
+  for (int i = 0; i < widgets.size(); i++) {
+    if (widgets[i]->getChannelName() == channelName) {
+      widgets[i]->setValue(value);
+    }
+//     if (widgets[i]->getChannel2Name() == channelName) {
+//       widgets[i]->setValue2(value);
+//     }
+  }
+}
+
 void WidgetPanel::setValue(int index, double value)
 {
-  if (index>widgets.size())
+  //index can be greater that widgets.size for value2
+  if (index >= widgets.size() * 2)
     return;
-  widgets[index]->setValue(value);
+  widgets[index/2]->setValue(value);
+}
+
+void WidgetPanel::setValue(int index, QString value)
+{
+  //index can be greater that widgets.size for value2
+  if (index >= widgets.size() * 2)
+    return;
+  widgets[index/2]->setValue(value);
 }
 
 int WidgetPanel::loadWidgets(QString macWidgets)
@@ -377,7 +398,7 @@ int WidgetPanel::createButton(int x, int y, int width, int height, QString widge
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 //   if (lastParts.size() < 9)
 //     return -1;
-  QuteButton *widget= new QuteButton(this);
+  QuteButton *widget= new QuteButton(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->show();
@@ -541,7 +562,7 @@ int WidgetPanel::createGraph(int x, int y, int width, int height, QString widget
 
 int WidgetPanel::createDummy(int x, int y, int width, int height, QString widgetLine)
 {
-  QuteWidget *widget= new QuteDummy(this);
+  QuteWidget *widget= new QuteDummy(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->show();

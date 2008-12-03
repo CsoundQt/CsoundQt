@@ -170,9 +170,9 @@ void qutecsound::messageCallback_Thread(CSOUND *csound,
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
   QString msg;
   msg = msg.vsprintf(fmt, args);
-  csoundLockMutex(ud->qcs->perfMutex);
+//   csoundLockMutex(ud->qcs->perfMutex);
   ud->qcs->queueMessage(msg);
-  csoundUnlockMutex(ud->qcs->perfMutex);
+//   csoundUnlockMutex(ud->qcs->perfMutex);
 }
 
 void qutecsound::changeFont()
@@ -466,6 +466,7 @@ void qutecsound::play(bool realtime)
   }
   widgetPanel->eventQueueSize = 0; //Flush events gathered while idle
   outValueQueue.clear();
+  outStringQueue.clear();
   messageQueue.clear();
   if (documentPages[curPage]->fileName.isEmpty()) {
     if (!saveAs()) {
@@ -942,13 +943,17 @@ void qutecsound::dispatchQueues()
     m_console->appendMessage(msg);
     widgetPanel->appendMessage(msg);
   }
-  messageQueue.clear();
   QList<QString> channels = outValueQueue.keys();
   foreach (QString channel, channels) {
     widgetPanel->setValue(channel, outValueQueue[channel]);
   }
-//   csoundUnlockMutex(perfMutex);
+  channels = outStringQueue.keys();
+  foreach (QString channel, channels) {
+    widgetPanel->setValue(channel, outStringQueue[channel]);
+  }
   processEventQueue(ud);
+//   csoundUnlockMutex(perfMutex);
+  messageQueue.clear();
   if (ud->PERF_STATUS == 1) {
     queueTimer->start(QCS_QUEUETIMER_TIME);
   }
@@ -1853,10 +1858,17 @@ void qutecsound::writeWidgetValues(CsoundUserData *ud)
 {
   MYFLT* pvalue;
   for (int i = 0; i < ud->qcs->channelNames.size(); i++) {
-    if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
-        CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0)
-    {
-      ud->qcs->widgetPanel->setValue(i,*pvalue);
+    if (ud->qcs->channelNames[i] != "") {
+      if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
+          CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0)
+      {
+        ud->qcs->widgetPanel->setValue(i,*pvalue);
+      }
+      if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
+        CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0)
+      {
+        ud->qcs->widgetPanel->setValue(i,QString((char *)pvalue));
+      }
     }
   }
 }
@@ -1895,6 +1907,11 @@ void qutecsound::queueOutValue(QString channelName, double value)
   outValueQueue.insert(channelName, value);
 }
 
+void qutecsound::queueOutString(QString channelName, QString value)
+{
+  outStringQueue.insert(channelName, value);
+}
+
 void qutecsound::queueMessage(QString message)
 {
   messageQueue << message;
@@ -1911,9 +1928,7 @@ uintptr_t qutecsound::csThread(void *data)
     unsigned int numWidgets = udata->qcs->widgetPanel->widgetCount();
     udata->qcs->channelNames.resize(numWidgets*2);
     udata->qcs->values.resize(numWidgets*2);
-//     csoundLockMutex(udata->qcs->perfMutex);
     int perform = csoundPerformKsmps(udata->csound);
-//     csoundUnlockMutex(udata->qcs->perfMutex);
     while((perform == 0) and (udata->PERF_STATUS == 1)) {
       if (udata->qcs->m_options->enableWidgets) {
         udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames, &udata->qcs->values);
@@ -1921,13 +1936,12 @@ uintptr_t qutecsound::csThread(void *data)
           writeWidgetValues(udata);
           readWidgetValues(udata);
         }
-//         csoundLockMutex(udata->qcs->perfMutex);
-        perform = csoundPerformKsmps(udata->csound);
-//         csoundUnlockMutex(udata->qcs->perfMutex);
 //         processEventQueue(udata);
       }
+      perform = csoundPerformKsmps(udata->csound);
     }
   }
+//   udata->qcs->perfThread->Stop();
 //   udata->qcs->stop();
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
 #else
@@ -1940,10 +1954,22 @@ void qutecsound::outputValueCallback (CSOUND *csound,
                                      MYFLT value)
 {
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-  csoundLockMutex(ud->qcs->perfMutex);
-  if (ud->PERF_STATUS == 1)
-    ud->qcs->queueOutValue(QString(channelName), value);
-  csoundUnlockMutex(ud->qcs->perfMutex);
+  if (ud->PERF_STATUS == 1) {
+    QString name = QString(channelName);
+    csoundLockMutex(ud->qcs->perfMutex);
+    if (name.startsWith('$')) {
+      QString channelName = name;
+      channelName.chop(name.size() - (int) value + 1);
+      QString sValue = name;
+      sValue = sValue.right(name.size() - (int) value);
+      channelName.remove(0,1);
+      ud->qcs->queueOutString(channelName, sValue);
+    }
+    else {
+      ud->qcs->queueOutValue(name, value);
+    }
+    csoundUnlockMutex(ud->qcs->perfMutex);
+  }
 }
 
 void qutecsound::inputValueCallback (CSOUND *csound,
@@ -1951,12 +1977,23 @@ void qutecsound::inputValueCallback (CSOUND *csound,
                                      MYFLT *value)
 {
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-  csoundLockMutex(ud->qcs->perfMutex);
-  int index = ud->qcs->channelNames.indexOf(QString(channelName));
-  if (index>=0)
-    *value = (MYFLT) ud->qcs->values[index];
-  else {
-    *value = 0;
+  if (ud->PERF_STATUS == 1) {
+    QString name = QString(channelName);
+    csoundLockMutex(ud->qcs->perfMutex);
+    //TODO input of strings necessary?
+    /*if (name.beginsWith('$')) {
+      int index = ud->qcs->channelNames.indexOf();
+      if (index>=0)
+        *value = (MYFLT *) ;
+    }
+    else */{
+      int index = ud->qcs->channelNames.indexOf(name);
+      if (index>=0)
+        *value = (MYFLT) ud->qcs->values[index];
+      else {
+        *value = 0;
+      }
+    }
+    csoundUnlockMutex(ud->qcs->perfMutex);
   }
-  csoundUnlockMutex(ud->qcs->perfMutex);
 }

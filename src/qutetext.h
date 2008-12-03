@@ -34,6 +34,7 @@ class QuteText : public QuteWidget
 
     virtual double getValue();
     virtual void setValue(double value);
+    virtual void setValue(QString value);
 
     void setType(QString type);
     void setResolution(double resolution);

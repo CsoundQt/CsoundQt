@@ -25,7 +25,6 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 //   ((QPushButton *)m_widget)->
   m_filename = "/";
   m_type = "event";
-//   ((QPushButton *)m_widget)->setIcon(icon);
   connect((QPushButton *)m_widget, SIGNAL(released()), this, SLOT(buttonReleased()));
 }
 

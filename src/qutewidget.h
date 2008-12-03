@@ -39,6 +39,7 @@ class QuteWidget : public QWidget
     virtual void setRange(int min, int max);
     virtual void setValue(double value);
     virtual void setValue2(double value);
+    virtual void setValue(QString value);
     virtual void setResolution(double resolution);
     virtual void setChecked(bool checked);
 

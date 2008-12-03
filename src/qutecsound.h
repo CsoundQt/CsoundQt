@@ -93,7 +93,7 @@ class qutecsound:public QMainWindow
 #else
     static uintptr_t csThread(void *data);
 #endif
-	void *perfMutex;
+    void *perfMutex;
     static void outputValueCallback (CSOUND *csound,
                                     const char *channelName,
                                     MYFLT value);
@@ -104,6 +104,7 @@ class qutecsound:public QMainWindow
     static void writeWidgetValues(CsoundUserData *ud);
     static void processEventQueue(CsoundUserData *ud);
     void queueOutValue(QString channelName, double value);
+    void queueOutString(QString channelName, QString value);
     void queueMessage(QString message);
 
     QVector<QString> channelNames;
@@ -180,6 +181,7 @@ class qutecsound:public QMainWindow
     CsoundUserData* ud;
 
     QHash<QString, double> outValueQueue;
+    QHash<QString, QString> outStringQueue;
     QStringList messageQueue;
     QTimer *queueTimer;
     QTabWidget *documentTabs;
@@ -232,7 +234,7 @@ class qutecsound:public QMainWindow
     QAction *setHelpEntryAct;
     QAction *browseBackAct;
     QAction *browseForwardAct;
-	QAction *externalBrowserAct;
+    QAction *externalBrowserAct;
     QAction *showUtilitiesAct;
     QAction *showWidgetsAct;
     QAction *commentAct;

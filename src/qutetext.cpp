@@ -61,6 +61,11 @@ void QuteText::setValue(double value)
     setText(QString::number(value, 'f', QUTESLIDER_PRECISION));
 }
 
+void QuteText::setValue(QString value)
+{
+  setText(value);
+}
+
 void QuteText::setType(QString type)
 {
 qDebug("QuteText::setType %s", type.toStdString().c_str());
@@ -89,7 +94,7 @@ void QuteText::setAlignment(int alignment)
     default:
       align = Qt::AlignLeft|Qt::AlignTop;
   }
-   ((QLabel *)m_widget)->setAlignment(align);
+   ((QuteLabel *)m_widget)->setAlignment(align);
 }
 
 void QuteText::setFont(QString font)
@@ -163,20 +168,12 @@ QString QuteText::getWidgetLine()
   line += m_type + " ";
   line += QString::number(m_value, 'f', 6) + " 0.00100 \"" + m_name + "\" ";
   QString alignment = "";
-  switch (((QuteLabel *)m_widget)->alignment()) {
-    case Qt::AlignLeft:
-      alignment = "left";
-      break;
-    case Qt::AlignCenter:
+  if (((QuteLabel *)m_widget)->alignment() & Qt::AlignLeft)
+    alignment = "left";
+  else if (((QuteLabel *)m_widget)->alignment() & Qt::AlignCenter)
       alignment = "center";
-      break;
-    case Qt::AlignRight:
-      alignment = "right";
-      break;
-      //Another possibility is Qt::AlignJustify
-    default:
-      alignment = "left";
-  }
+  else if (((QuteLabel *)m_widget)->alignment() & Qt::AlignRight)
+    alignment = "right";
   line += alignment + " ";
   line += "\"" + m_font + "\" " + QString::number(m_fontSize) + " ";
   QColor color = ((QuteLabel *) m_widget)->palette().color(QPalette::WindowText);

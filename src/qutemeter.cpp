@@ -212,6 +212,8 @@ QString QuteMeter::getChannel2Name()
 void QuteMeter::setChannel2Name(QString name)
 {
   m_name2 = name;
+  if (m_name2.startsWith('$'))
+    m_name2.remove(0,1);  // $ symbol is reserved for identifying string channels
 }
 
 void QuteMeter::setColor(QColor color)
@@ -375,7 +377,7 @@ void MeterWidget::setType(QString type)
 void MeterWidget::setPointSize(int size)
 {
   m_pointSize = size;
-  m_point->setRect(m_value2, m_value, size, size);
+  m_point->setRect(m_value2*width()- (m_pointSize/2.0), (1-m_value)*height()- (m_pointSize/2.0), m_pointSize, m_pointSize);
 }
 
 void MeterWidget::setColor(QColor color)
