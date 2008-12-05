@@ -68,7 +68,7 @@ void QuteText::setValue(QString value)
 
 void QuteText::setType(QString type)
 {
-qDebug("QuteText::setType %s", type.toStdString().c_str());
+// qDebug("QuteText::setType %s", type.toStdString().c_str());
   m_type = type;
 }
 
@@ -188,7 +188,7 @@ QString QuteText::getWidgetLine()
   line += ((QuteLabel *)m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
 //   line += ((QuteLabel *)m_widget)->toPlainText();
   line += m_text;
-  qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
+//   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
 

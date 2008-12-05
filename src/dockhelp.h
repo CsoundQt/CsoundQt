@@ -21,6 +21,7 @@
 #define DOCKHELP_H
 
 #include <QDockWidget>
+#include <QUrl>
 #include "types.h"
 
 class QTextBrowser;
@@ -43,12 +44,14 @@ class DockHelp : public QDockWidget
 
   signals:
     void Close(bool visible);
+    void openManualExample(QString fileName);
 
   public slots:
     void showGen();
     void showOverview();
-	void browseBack();
-	void browseForward();
+    void browseBack();
+    void browseForward();
+    void followLink(QUrl url);
 };
 
 #endif

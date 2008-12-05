@@ -47,7 +47,7 @@ QString QuteCheckBox::getWidgetLine()
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += (((QCheckBox *)m_widget)->isChecked()? QString("on "):QString("off "));
   line += m_name;
-  qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
+//   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
 

@@ -69,15 +69,15 @@ qutecsound::qutecsound(QString fileName)
   addDockWidget(Qt::BottomDockWidgetArea, m_console);
   helpPanel = new DockHelp(this);
   helpPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea | Qt::LeftDockWidgetArea);
+  helpPanel->setObjectName("helpPanel");
+  helpPanel->show();
+  connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
   addDockWidget(Qt::RightDockWidgetArea, helpPanel);
 
   widgetPanel = new WidgetPanel(this);
   widgetPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea |Qt::LeftDockWidgetArea);
   widgetPanel->setObjectName("widgetPanel");
   addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
-
-  helpPanel->show();
-  helpPanel->setObjectName("helpPanel");
 
   readSettings();
 
@@ -431,10 +431,15 @@ void qutecsound::join()
   if (itemList.size() > 0)
     list1->setCurrentItem(itemList[0]);
   QString name = documentPages[curPage]->fileName;
-  itemList = list2->findItems(name.replace(".orc", ".sco"),
+  QList<QListWidgetItem *> itemList2 = list2->findItems(name.replace(".orc", ".sco"),
       Qt::MatchExactly);
-  if (itemList.size() > 0)
-    list2->setCurrentItem(itemList[0]);
+  if (itemList2.size() > 0)
+    list2->setCurrentItem(itemList2[0]);
+  if (itemList.size() == 0 or itemList.size() == 0) {
+    QMessageBox::warning(this, tr("Join"),
+                        tr("Please open the orc and sco files in QuteCsound first!"));
+    return;
+  }
   if (dialog.exec() == QDialog::Accepted) {
     QString orcText = "";
     QString scoText = "";
@@ -456,6 +461,11 @@ void qutecsound::join()
   else {
 //     qDebug("qutecsound::join() : No Action");
   }
+}
+
+void qutecsound::edit(bool active)
+{
+  widgetPanel->activateEditMode(active);
 }
 
 void qutecsound::play(bool realtime)
@@ -712,6 +722,10 @@ void qutecsound::setHelpEntry()
   }
 }
 
+void qutecsound::openManualExample(QString fileName)
+{
+  loadFile(fileName);
+}
 
 void qutecsound::openExternalBrowser()
 {
@@ -719,7 +733,7 @@ void qutecsound::openExternalBrowser()
   cursor.select(QTextCursor::WordUnderCursor);
   if (m_options->csdocdir != "") {
     QString file =  m_options->csdocdir + "/" + cursor.selectedText() + ".html";
-	execute(m_options->browser, file);
+    execute(m_options->browser, file);
   }
   else {
     QMessageBox::critical(this,
@@ -1061,6 +1075,13 @@ void qutecsound::createActions()
   configureAct->setIconText("Configure");
   connect(configureAct, SIGNAL(triggered()), this, SLOT(configure()));
 
+  editAct = new QAction(/*QIcon(":/images/gtk-media-play-ltr.png"),*/ tr("Widget Edit Mode"), this);
+  editAct->setShortcut(tr("Ctrl+E"));
+  editAct->setStatusTip(tr("Activate Edit Mode for Widget Panel"));
+//   editAct->setIconText("Play");
+  editAct->setCheckable(true);
+  connect(editAct, SIGNAL(triggered(bool)), this, SLOT(edit(bool)));
+
   playAct = new QAction(QIcon(":/images/gtk-media-play-ltr.png"), tr("Play"), this);
   playAct->setShortcut(tr("Alt+R"));
   playAct->setStatusTip(tr("Play"));
@@ -1264,6 +1285,8 @@ void qutecsound::createMenus()
   editMenu->addAction(unindentAct);
   editMenu->addSeparator();
   editMenu->addAction(joinAct);
+  editMenu->addSeparator();
+  editMenu->addAction(editAct);
   editMenu->addSeparator();
   editMenu->addAction(configureAct);
 

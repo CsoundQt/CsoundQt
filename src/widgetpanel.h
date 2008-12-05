@@ -24,7 +24,7 @@
 
 #define QUTECSOUND_MAX_EVENTS 32
 
-class QuteWidget;
+#include "qutewidget.h"
 class QuteConsole;
 
 class WidgetPanel : public QDockWidget
@@ -55,6 +55,7 @@ class WidgetPanel : public QDockWidget
   private:
     QVector<QuteWidget *> widgets;
     QVector<QuteConsole *> consoleWidgets;
+    QVector<QFrame *> editWidgets;
     QWidget *layoutWidget;
 
     QPoint currentPosition;
@@ -67,6 +68,7 @@ class WidgetPanel : public QDockWidget
     QAction *createMeterAct;
     QAction *createConsoleAct;
     QAction *createGraphAct;
+    QAction *editAct;
     QAction *clearAct;
     QAction *propertiesAct;
 
@@ -107,11 +109,86 @@ class WidgetPanel : public QDockWidget
     void clearWidgets();
     void applyProperties();
     void selectBgColor();
+    void activateEditMode(bool active);
 
   signals:
     void widgetsChanged(QString text);
     void Close(bool visible);
 
 };
+
+class FrameWidget : public QFrame
+{
+  Q_OBJECT
+  public:
+    FrameWidget(QWidget* parent) : QFrame(parent) {
+      m_resizeBox = new QFrame(this);
+      m_resizeBox->setAutoFillBackground(true);
+//       m_resizeBox->move(width()-7, height()-7);
+//       m_resizeBox->resize(7,7);
+      QPalette palette(QColor(Qt::red),QColor(Qt::red));
+      palette.setColor(QPalette::WindowText, QColor(Qt::red));
+      m_resizeBox->setPalette(palette);
+      m_resizeBox->show();
+    }
+    ~FrameWidget() {}
+
+    void setWidget(QuteWidget* widget) {m_widget = widget;}
+
+  protected:
+    virtual void contextMenuEvent(QContextMenuEvent *event)
+    {emit(popUpMenu(event->globalPos()));}
+    virtual void mousePressEvent ( QMouseEvent * event )
+    {
+      QWidget::mousePressEvent(event);
+      startx = event->x();
+      widgetx = x();;
+      starty = event->y();
+      widgety = y();
+      widgetw = width();
+      widgeth = height();
+      if (startx > (width()-7) and starty > (height()-7))
+        m_resize = true;
+      else
+        m_resize = false;
+    }
+    virtual void mouseMoveEvent (QMouseEvent* event)
+    {
+//       qDebug("pos %i, %i", startx - event->x(), starty - event->y());
+      if (m_resize) {
+        int neww = widgetw - startx + event->x();
+        int newh = widgeth - starty + event->y();
+        resize(neww, newh);
+        m_widget->setWidgetGeometry(m_widget->x(), m_widget->y(),neww, newh);
+      }
+      else {
+        int newx = widgetx - startx + event->x();
+        int newy = widgety - starty + event->y();
+        move(newx, newy);
+        m_widget->move(newx, newy);
+      }
+      m_widget->markChanged();
+      widgetx = x();
+      widgety = y();
+//       widgetw = width();
+//       widgeth = height();
+    }
+    virtual void resizeEvent (QResizeEvent* event)
+    {
+      QWidget::resizeEvent(event);
+      m_resizeBox->move(width()-7, height()-7);
+      m_resizeBox->resize(7,7);
+    }
+
+  private:
+    int startx, starty, widgetx, widgety, widgetw, widgeth;
+    QFrame *m_resizeBox;
+    QuteWidget *m_widget;
+    bool m_resize;
+
+  signals:
+    void popUpMenu(QPoint pos);
+};
+
 
 #endif

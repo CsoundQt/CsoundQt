@@ -95,7 +95,7 @@ QString QuteKnob::getWidgetLine()
   line += QString::number(m_min, 'f', 6) + " " + QString::number(m_max, 'f', 6) + " ";
   line += QString::number(m_resolution, 'f', 6) + " ";
   line += QString::number(m_value, 'f', 6) + " " + m_name;
-  qDebug("QuteKnob::getWidgetLine() %s", line.toStdString().c_str());
+//   qDebug("QuteKnob::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
 

@@ -133,12 +133,14 @@ class qutecsound:public QMainWindow
     bool closeTab();
     void findReplace();
     void join();
+    void edit(bool active);
     void play(bool realtime=true);
     void stop();
     void render();
     void openExternalEditor();
     void openExternalPlayer();
     void setHelpEntry();
+    void openManualExample(QString fileName);
     void openExternalBrowser();
     void utilitiesDialogOpen();
     void about();
@@ -222,6 +224,7 @@ class qutecsound:public QMainWindow
     QAction *findAct;
     QAction *autoCompleteAct;
     QAction *configureAct;
+    QAction *editAct;
     QAction *playAct;
     QAction *stopAct;
     QAction *renderAct;

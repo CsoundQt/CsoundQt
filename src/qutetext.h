@@ -78,20 +78,20 @@ class QuteText : public QuteWidget
     void selectBgColor();
 };
 
-class QuteTextEdit : public QTextEdit
-{
-  Q_OBJECT
-  public:
-    QuteTextEdit(QWidget* parent) : QTextEdit(parent) {}
-    ~QuteTextEdit() {}
-
-  protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event)
-    {emit(popUpMenu(event->globalPos()));}
-
-  signals:
-    void popUpMenu(QPoint pos);
-};
+// class QuteTextEdit : public QTextEdit
+// {
+//   Q_OBJECT
+//   public:
+//     QuteTextEdit(QWidget* parent) : QTextEdit(parent) {}
+//     ~QuteTextEdit() {}
+// 
+//   protected:
+//     virtual void contextMenuEvent(QContextMenuEvent *event)
+//     {emit(popUpMenu(event->globalPos()));}
+// 
+//   signals:
+//     void popUpMenu(QPoint pos);
+// };
 
 class QuteLabel : public QLabel
 {

@@ -49,6 +49,8 @@ class QuteWidget : public QWidget
     virtual double getValue();
     virtual double getValue2();
 
+    void markChanged();
+
   protected:
     QSpinBox *xSpinBox;
     QSpinBox *ySpinBox;

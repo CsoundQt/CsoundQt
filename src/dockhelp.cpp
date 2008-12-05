@@ -22,6 +22,7 @@
 #include <QTextBrowser>
 #include <QTextDocument>
 #include <QTextStream>
+#include <QPushButton>
 #include <QFile>
 #include <QMessageBox>
 #include <QDir>
@@ -33,7 +34,17 @@ DockHelp::DockHelp(QWidget *parent)
   setMinimumSize(400,200);
   text = new QTextBrowser(this);
   text->setAcceptRichText(true);
+  text->setOpenLinks(false);
+  connect(text, SIGNAL(anchorClicked(QUrl)), this, SLOT(followLink(QUrl)));
   setWidget (text);
+  QPushButton* backButton = new QPushButton(QIcon(":/images/gtk-media-play-trl.png"), "", this);
+  backButton->move(100, 3);
+  backButton->resize(25, 25);
+  connect(backButton, SIGNAL(released()), this, SLOT(browseBack()));
+  QPushButton* forwardButton = new QPushButton(QIcon(":/images/gtk-media-play-ltr.png"), "", this);
+  forwardButton->move(130, 3);
+  forwardButton->resize(25, 25);
+  connect(forwardButton, SIGNAL(released()), this, SLOT(browseForward()));
 }
 
 DockHelp::~DockHelp()
@@ -89,4 +100,17 @@ void DockHelp::browseBack()
 void DockHelp::browseForward()
 {
   text->forward();
+}
+
+void DockHelp::followLink(QUrl url)
+{
+  if (url.host() == "") {
+    // Will not follow external link, only local links
+    if (url.toString().endsWith(".csd")) {
+      emit openManualExample(url.toLocalFile());
+    }
+    else {
+    text->setSource(url);
+    }
+  }
 }

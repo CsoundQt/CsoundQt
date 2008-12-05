@@ -57,7 +57,7 @@ QString QuteButton::getWidgetLine()
   line += "\"" + ((QPushButton *)m_widget)->text() + "\" ";
   line += "\"" + m_filename + "\" ";
   line += m_eventLine;
-  qDebug("QuteButton::getWidgetLine() %s", line.toStdString().c_str());
+//   qDebug("QuteButton::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
 

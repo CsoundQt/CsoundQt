@@ -35,6 +35,8 @@ QuteWidget::QuteWidget(QWidget *parent/*, widgetType type*/):
   deleteAct->setStatusTip(tr("Delete this widget"));
   connect(deleteAct, SIGNAL(triggered()), this, SLOT(deleteWidget()));
   m_name2 = "";
+
+  this->setMinimumSize(10,10);
 }
 
 
@@ -58,7 +60,7 @@ void QuteWidget::setChannelName(QString name)
 
 void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 {
-  qDebug("QuteWidget::setWidgetGeometry %i %i %i %i",x,y,w,h );
+//   qDebug("QuteWidget::setWidgetGeometry %i %i %i %i",x,y,w,h );
 //   m_widget->setFixedSize(w,h);
   this->setGeometry(QRect(x,y,w,h));
   m_widget->setGeometry(QRect(0,0,w,h));
@@ -124,6 +126,11 @@ double QuteWidget::getValue2()
   qDebug("QuteWidget::getValue2 not implemented for widget type");
 #endif
   return 0.0;
+}
+
+void QuteWidget::markChanged()
+{
+  emit widgetChanged();
 }
 
 void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
@@ -205,6 +212,8 @@ void QuteWidget::createPropertiesDialog()
   channelLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(channelLabel, 3, 0, Qt::AlignLeft|Qt::AlignVCenter);
   nameLineEdit = new QLineEdit(getChannelName(), dialog);
+  nameLineEdit->setFocus(Qt::OtherFocusReason);
+  nameLineEdit->selectAll();
   layout->addWidget(nameLineEdit, 3, 1, Qt::AlignLeft|Qt::AlignVCenter);
   applyButton = new QPushButton(tr("Apply"));
   layout->addWidget(applyButton, 9, 1, Qt::AlignCenter|Qt::AlignVCenter);

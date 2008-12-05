@@ -59,6 +59,9 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(createGraphAct, SIGNAL(triggered()), this, SLOT(createGraph()));
   propertiesAct = new QAction(tr("Properties"),this);
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
+  editAct = new QAction(tr("Edit Mode"), this);
+  editAct->setCheckable(true);
+  connect(editAct, SIGNAL(triggered(bool)), this, SLOT(activateEditMode(bool)));
   clearAct = new QAction(tr("Clear all widgets"), this);
   connect(clearAct, SIGNAL(triggered()), this, SLOT(clearWidgets()));
 
@@ -139,6 +142,9 @@ int WidgetPanel::loadWidgets(QString macWidgets)
     if (line.startsWith("i"))
       newWidget(line);
   }
+  if (editAct->isChecked()) {
+    activateEditMode(true);
+  }
   return 0;
 }
 
@@ -211,6 +217,10 @@ void WidgetPanel::clearWidgets()
   foreach (QuteWidget *widget, widgets) {
     delete widget;
   }
+  for(int i = 0; i< editWidgets.size(); i++){
+    delete(editWidgets[i]);
+  }
+  editWidgets.clear();
   widgets.clear();
   consoleWidgets.clear();
 }
@@ -267,6 +277,8 @@ void WidgetPanel::deleteWidget(QuteWidget *widget)
   qDebug("WidgetPanel::deleteWidget %i", number);
   widget->close();
   widgets.remove(number);
+  delete(editWidgets[number]);
+  editWidgets.remove(number);
   widgetChanged();
 }
 
@@ -294,6 +306,8 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   menu.addAction(createConsoleAct);
   menu.addAction(createGraphAct);
   menu.addSeparator();
+  menu.addAction(editAct);
+  menu.addSeparator();
   menu.addAction(clearAct);
   menu.addSeparator();
   menu.addAction(propertiesAct);
@@ -312,6 +326,10 @@ void WidgetPanel::widgetChanged()
   QString text = widgetsText();
   if (widgets.size() > 0 and widgets[0]->toolTip() != "")
     showTooltips(true);
+  if (editAct->isChecked()) {
+    activateEditMode(false);
+    activateEditMode(true); // recreate widget edit boxes
+  }
   emit widgetsChanged(text);
 }
 
@@ -582,6 +600,31 @@ void WidgetPanel::setBackground(bool bg, QColor bgColor)
   }
 }
 
+void WidgetPanel::activateEditMode(bool active)
+{
+  if (active) {
+    foreach (QuteWidget * widget, widgets) {
+      FrameWidget * frame = new FrameWidget(layoutWidget);
+      QPalette palette(QColor(Qt::red),QColor(Qt::red));
+      palette.setColor(QPalette::WindowText, QColor(Qt::red));
+      frame->setWidget(widget);
+      frame->setPalette(palette);
+      frame->setGeometry(widget->x(), widget->y(), widget->width(), widget->height());
+      frame->setFrameShape(QFrame::Box);
+//       frame->setMouseTracking(false);  //Only track mouse when buttons are pressed
+      frame->show();
+      editWidgets.append(frame);
+      connect(frame, SIGNAL(popUpMenu(QPoint)), widget, SLOT(popUpMenu(QPoint)));
+    }
+  }
+  else {
+    foreach (QFrame* frame, editWidgets) {
+      delete(frame);
+    }
+    editWidgets.clear();
+  }
+}
+
 void WidgetPanel::createSlider()
 {
   createSlider(currentPosition.x(), currentPosition.y() - 20, 20, 100, QString("ioSlider {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(widgets.size())));
@@ -610,7 +653,7 @@ void WidgetPanel::createKnob()
 
 void WidgetPanel::createCheckBox()
 {
-  createCheckBox(currentPosition.x(), currentPosition.y() - 20, 30, 30, QString("ioCheckbox {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {30, 30} off checkbox" +QString::number(widgets.size())));
+  createCheckBox(currentPosition.x(), currentPosition.y() - 20, 20, 20, QString("ioCheckbox {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {20, 20} off checkbox" +QString::number(widgets.size())));
   widgetChanged();
 }
 
@@ -628,7 +671,7 @@ void WidgetPanel::createMeter()
 
 void WidgetPanel::createConsole()
 {
-  createConsole(currentPosition.x(), currentPosition.y() - 20, 200, 400, QString("ioListing {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {200, 400}"));
+  createConsole(currentPosition.x(), currentPosition.y() - 20, 320, 400, QString("ioListing {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {320, 400}"));
   widgetChanged();
 }
 
