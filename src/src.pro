@@ -73,7 +73,8 @@ QT += xml
 
 DISTFILES += default.csd \
  opcodes.xml \
- qutecsound.rc
+ qutecsound.rc \
+ test.csd
 
 FORMS += configdialog.ui \
   utilitiesdialog.ui \

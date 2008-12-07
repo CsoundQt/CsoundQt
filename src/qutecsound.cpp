@@ -175,6 +175,18 @@ void qutecsound::messageCallback_Thread(CSOUND *csound,
 //   csoundUnlockMutex(ud->qcs->perfMutex);
 }
 
+void qutecsound::messageCallback_Devices(CSOUND *csound,
+                                         int /*attr*/,
+                                         const char *fmt,
+                                         va_list args)
+{
+  CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+  QStringList *messages = &ud->qcs->m_deviceMessages;
+  QString msg;
+  msg = msg.vsprintf(fmt, args);
+  messages->append(msg);
+}
+
 void qutecsound::changeFont()
 {
   for (int i = 0; i < documentPages.size(); i++) {
@@ -329,10 +341,19 @@ void qutecsound::openRecent5()
 
 bool qutecsound::save()
 {
-  widgetPanel->widgetChanged();  //To make sure the values of the widgets are stored
   if (documentPages[curPage]->fileName.isEmpty()) {
     return saveAs();
-  } else {
+  }
+  else if (documentPages[curPage]->readOnly){
+    if (saveAs()) {
+      documentPages[curPage]->readOnly = false;
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  else {
     return saveFile(documentPages[curPage]->fileName);
   }
 }
@@ -486,7 +507,10 @@ void qutecsound::play(bool realtime)
   }
   else if (documentPages[curPage]->document()->isModified()) {
     if (m_options->saveChanges)
-      saveFile(documentPages[curPage]->fileName);
+      if (!save()) {
+        playAct->setChecked(false);
+        return;
+      }
   }
   QString fileName, fileName2;
   fileName = documentPages[curPage]->fileName;
@@ -1637,11 +1661,13 @@ bool qutecsound::maybeSave()
                                      QMessageBox::No,
                                      QMessageBox::Cancel | QMessageBox::Escape);
       if (ret == QMessageBox::Yes) {
-        save();
+        if (!save())
+          return false;
 //         closeTab();
       }
-      else if (ret == QMessageBox::Cancel)
+      else if (ret == QMessageBox::Cancel) {
         return false;
+      }
     }
   }
   return true;
@@ -1672,6 +1698,8 @@ bool qutecsound::loadFile(QString fileName)
   textEdit = newPage;
   textEdit->setTabStopWidth(m_options->tabWidth);
   connectActions();
+  if (fileName.startsWith(m_options->csdocdir))
+    documentPages[curPage]->readOnly = true;
   QString text;
   while (!file.atEnd()) {
     QByteArray line = file.readLine();
@@ -1970,6 +1998,41 @@ uintptr_t qutecsound::csThread(void *data)
 #else
   return 1;
 #endif
+}
+
+QStringList qutecsound::runCsound(QStringList flags)
+{
+  static char *argv[33];
+  int index = 0;
+  foreach (QString flag, flags) {
+    argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
+    strcpy(argv[index],flag.toStdString().c_str());
+    index++;
+  }
+  int argc = flags.size();
+#ifdef MACOSX
+//Remember menu bar to set it after FLTK grabs it
+  menuBarHandle = GetMenuBar();
+#endif
+  CSOUND *csoundD;
+  csoundD=csoundCreate(0);
+  csoundReset(csoundD);
+  csoundSetHostData(csoundD, (void *) ud);
+  m_deviceMessages.clear();
+  csoundSetMessageCallback(csoundD, &qutecsound::messageCallback_Devices);
+  int result = csoundCompile(csoundD,argc,argv);
+  if(!result){
+    while(csoundPerformKsmps(csound)==0);
+  }
+
+  csoundCleanup(csoundD);
+  csoundDestroy(csoundD);
+
+#ifdef MACOSX
+// Put menu bar back
+  SetMenuBar(menuBarHandle);
+#endif
+  return m_deviceMessages;
 }
 
 void qutecsound::outputValueCallback (CSOUND *csound,

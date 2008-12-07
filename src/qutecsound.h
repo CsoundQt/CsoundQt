@@ -88,6 +88,10 @@ class qutecsound:public QMainWindow
                                          int attr,
                                          const char *fmt,
                                          va_list args);
+    static void messageCallback_Devices(CSOUND *csound,
+                                       int attr,
+                                       const char *fmt,
+                                       va_list args);
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
     static void  csThread(void *data);
 #else
@@ -106,6 +110,7 @@ class qutecsound:public QMainWindow
     void queueOutValue(QString channelName, double value);
     void queueOutString(QString channelName, QString value);
     void queueMessage(QString message);
+    QStringList runCsound(QStringList flags); //returns csound messages
 
     QVector<QString> channelNames;
     QVector<double> values;
@@ -254,6 +259,7 @@ class qutecsound:public QMainWindow
     ConfigLists *m_configlists;
     QStringList recentFiles;
     QStringList lastFiles;
+    QStringList m_deviceMessages; //stores messages from csound for device discovery
 
     UtilitiesDialog *utilitiesDialog;
 

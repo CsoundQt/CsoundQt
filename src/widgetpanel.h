@@ -154,7 +154,7 @@ class FrameWidget : public QFrame
     }
     virtual void mouseMoveEvent (QMouseEvent* event)
     {
-//       qDebug("pos %i, %i", startx - event->x(), starty - event->y());
+      qDebug("pos %i, %i", startx - event->x(), starty - event->y());
       if (m_resize) {
         int neww = widgetw - startx + event->x();
         int newh = widgeth - starty + event->y();
@@ -167,9 +167,9 @@ class FrameWidget : public QFrame
         move(newx, newy);
         m_widget->move(newx, newy);
       }
-      m_widget->markChanged();
       widgetx = x();
       widgety = y();
+      m_widget->markChanged();
 //       widgetw = width();
 //       widgeth = height();
     }

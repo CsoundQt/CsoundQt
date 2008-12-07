@@ -22,6 +22,7 @@
 
 #include "ui_configdialog.h"
 
+class qutecsound;
 class Options;
 class ConfigLists;
 
@@ -29,13 +30,20 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
 {
   Q_OBJECT
   public:
-    ConfigDialog(QWidget *parent = 0, Options *options = 0, ConfigLists *m_configlist = 0);
+    ConfigDialog(qutecsound *parent = 0, Options *options = 0, ConfigLists *configlists = 0);
 
     ~ConfigDialog();
   private:
+    qutecsound* m_parent;
     Options *m_options;
+    ConfigLists *m_configlists;
     void browseFile(QString &destination);
     void browseDir(QString &destination);
+    QList<QPair<QString, QString> > getMidiInputDevices();
+    QList<QPair<QString, QString> > getMidiOutputDevices();
+    QList<QPair<QString, QString> > getAudioInputDevices();
+    QList<QPair<QString, QString> > getAudioOutputDevices();
+
   private slots:
     virtual void accept();
     void browseInputFilename();
@@ -51,6 +59,10 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
     void browseBrowser();
     void browseWaveEditor();
     void browseWavePlayer();
+    void selectAudioInput();
+    void selectAudioOutput();
+    void selectMidiInput();
+    void selectMidiOutput();
 
   signals:
     void changeFont();

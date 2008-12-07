@@ -28,7 +28,7 @@
     </groups>
     <tree>
       <hidenonprojectfiles>false</hidenonprojectfiles>
-      <hidepatterns>*.o,*.lo,CVS</hidepatterns>
+      <hidepatterns></hidepatterns>
       <showvcsfields>false</showvcsfields>
     </tree>
   </kdevfileview>

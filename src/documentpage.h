@@ -40,6 +40,8 @@ class DocumentPage : public QTextEdit
     QString fileName;
     QString companionFile;
     bool askForFile;
+    bool readOnly; // Used for manual files and internal examples
+
   private:
     QString macOptions;
     QString macPresets;

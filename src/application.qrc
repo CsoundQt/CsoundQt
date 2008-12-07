@@ -25,5 +25,6 @@
       <file>../images/qtcs.png</file>
       <file>opcodes.xml</file>
       <file>default.csd</file>
+      <file>test.csd</file>
 </qresource>
 </RCC>

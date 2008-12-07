@@ -25,6 +25,7 @@ DocumentPage::DocumentPage(QWidget *parent):
   fileName = "";
   companionFile = "";
   askForFile = true;
+  readOnly = false;
 }
 
 
