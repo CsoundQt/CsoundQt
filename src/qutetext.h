@@ -30,7 +30,7 @@ class QuteText : public QuteWidget
 
     ~QuteText();
 
-    QString getWidgetLine();
+    virtual QString getWidgetLine();
 
     virtual double getValue();
     virtual void setValue(double value);
@@ -38,20 +38,19 @@ class QuteText : public QuteWidget
 
     void setType(QString type);
     void setResolution(double resolution);
-    void setAlignment(int alignment);
+    virtual void setAlignment(int alignment);
     void setFont(QString font);
     void setFontSize(int fontSize);
     void setTextColor(QColor textColor);
     void setBgColor(QColor bgColor);
     void setBg(bool bg);
     void setBorder(bool border);
-    void setText(QString text);
+    virtual void setText(QString text);
 
   protected:
     virtual void createPropertiesDialog();
     virtual void applyProperties();
 
-  private:
     double m_resolution;
     QString m_type;
 //     int m_alignment;
@@ -78,27 +77,44 @@ class QuteText : public QuteWidget
     void selectBgColor();
 };
 
-// class QuteTextEdit : public QTextEdit
-// {
-//   Q_OBJECT
-//   public:
-//     QuteTextEdit(QWidget* parent) : QTextEdit(parent) {}
-//     ~QuteTextEdit() {}
-// 
-//   protected:
-//     virtual void contextMenuEvent(QContextMenuEvent *event)
-//     {emit(popUpMenu(event->globalPos()));}
-// 
-//   signals:
-//     void popUpMenu(QPoint pos);
-// };
-
-class QuteLabel : public QLabel
+class QuteLineEdit : public QuteText
 {
   Q_OBJECT
   public:
-    QuteLabel(QWidget* parent) : QLabel(parent) {}
-    ~QuteLabel() {}
+    QuteLineEdit(QWidget* parent);
+    ~QuteLineEdit();
+
+    virtual void setAlignment(int alignment);
+    virtual void setText(QString text);
+    virtual QString getWidgetLine();
+    virtual QString getStringValue();
+
+  protected:
+    virtual void createPropertiesDialog();
+    virtual void applyProperties();
+};
+
+class LabelWidget : public QLabel
+{
+  Q_OBJECT
+  public:
+    LabelWidget(QWidget* parent) : QLabel(parent) {}
+    ~LabelWidget() {}
+
+  protected:
+    virtual void contextMenuEvent(QContextMenuEvent *event)
+    {emit(popUpMenu(event->globalPos()));}
+
+  signals:
+    void popUpMenu(QPoint pos);
+};
+
+class LineEditWidget : public QLineEdit
+{
+  Q_OBJECT
+  public:
+    LineEditWidget(QWidget* parent) : QLineEdit(parent) {}
+    ~LineEditWidget() {}
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent *event)

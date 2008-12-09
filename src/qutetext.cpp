@@ -36,13 +36,13 @@
 QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 {
   m_value = 0.0;
-  m_widget = new QuteLabel(this);
-  ((QuteLabel *)m_widget)->setWordWrap (true);
-  ((QuteLabel *)m_widget)->setMargin (5);
-  ((QuteLabel *)m_widget)->setTextFormat(Qt::RichText);
+  m_widget = new LabelWidget(this);
+  dynamic_cast<LabelWidget*>(m_widget)->setWordWrap (true);
+  dynamic_cast<LabelWidget*>(m_widget)->setMargin (5);
+  dynamic_cast<LabelWidget*>(m_widget)->setTextFormat(Qt::RichText);
 //   ((QuteTextEdit *)m_widget)->setReadOnly(true);
 //   ((QuteTextEdit *)m_widget)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  connect(((QuteLabel *)m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+  connect(dynamic_cast<LabelWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 //   m_alignment = Qt::AlignLeft;
 }
 
@@ -94,7 +94,7 @@ void QuteText::setAlignment(int alignment)
     default:
       align = Qt::AlignLeft|Qt::AlignTop;
   }
-   ((QuteLabel *)m_widget)->setAlignment(align);
+  dynamic_cast<LabelWidget*>(m_widget)->setAlignment(align);
 }
 
 void QuteText::setFont(QString font)
@@ -109,29 +109,29 @@ void QuteText::setFontSize(int fontSize)
 
 void QuteText::setTextColor(QColor textColor)
 {
-  QPalette palette = ((QuteLabel *) m_widget)->palette();
+  QPalette palette = m_widget->palette();
   palette.setColor(QPalette::WindowText, textColor);
-  ((QuteLabel *) m_widget)->setPalette(palette);
+  m_widget->setPalette(palette);
 }
 
 void QuteText::setBgColor(QColor bgColor)
 {
-  QPalette palette = ((QuteLabel *) m_widget)->palette();
+  QPalette palette = m_widget->palette();
   palette.setColor(QPalette::Window, bgColor);
-  ((QuteLabel *) m_widget)->setPalette(palette);
+  m_widget->setPalette(palette);
 }
 
 void QuteText::setBg(bool bg)
 {
-  ((QuteLabel *)m_widget)->setAutoFillBackground(bg);
+  m_widget->setAutoFillBackground(bg);
 }
 
 void QuteText::setBorder(bool border)
 {
   if (border)
-    ((QuteLabel *)m_widget)->setFrameShape(QFrame::Box);
+    dynamic_cast<QFrame*>(m_widget)->setFrameShape(QFrame::Box);
   else
-    ((QuteLabel *)m_widget)->setFrameShape(QFrame::NoFrame);
+    dynamic_cast<QFrame*>(m_widget)->setFrameShape(QFrame::NoFrame);
 //   m_border = border;
 }
 
@@ -157,7 +157,7 @@ void QuteText::setText(QString text)
   text.append("</font>");
   //TODO USE CORRECT CHARACTER for line break
 //   text = text.replace("�", "\n");
-  ((QuteLabel *)m_widget)->setText(text);
+  dynamic_cast<LabelWidget*>(m_widget)->setText(text);
 }
 
 QString QuteText::getWidgetLine()
@@ -168,25 +168,25 @@ QString QuteText::getWidgetLine()
   line += m_type + " ";
   line += QString::number(m_value, 'f', 6) + " 0.00100 \"" + m_name + "\" ";
   QString alignment = "";
-  if (((QuteLabel *)m_widget)->alignment() & Qt::AlignLeft)
+  if (((LabelWidget *)m_widget)->alignment() & Qt::AlignLeft)
     alignment = "left";
-  else if (((QuteLabel *)m_widget)->alignment() & Qt::AlignCenter)
+  else if (((LabelWidget *)m_widget)->alignment() & Qt::AlignCenter)
       alignment = "center";
-  else if (((QuteLabel *)m_widget)->alignment() & Qt::AlignRight)
+  else if (((LabelWidget *)m_widget)->alignment() & Qt::AlignRight)
     alignment = "right";
   line += alignment + " ";
   line += "\"" + m_font + "\" " + QString::number(m_fontSize) + " ";
-  QColor color = ((QuteLabel *) m_widget)->palette().color(QPalette::WindowText);
+  QColor color = m_widget->palette().color(QPalette::WindowText);
   line += "{" + QString::number(color.red() * 256)
       + ", " + QString::number(color.green() * 256)
       + ", " + QString::number(color.blue() * 256) + "} ";
-  color = ((QuteLabel *) m_widget)->palette().color(QPalette::Window);
+  color = m_widget->palette().color(QPalette::Window);
   line += "{" + QString::number(color.red() * 256)
       + ", " + QString::number(color.green() * 256)
       + ", " + QString::number(color.blue() * 256) + "} ";
-  line += ((QuteLabel *)m_widget)->autoFillBackground()? "background ":"nobackground ";
-  line += ((QuteLabel *)m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
-//   line += ((QuteLabel *)m_widget)->toPlainText();
+  line += m_widget->autoFillBackground()? "background ":"nobackground ";
+  line += dynamic_cast<QFrame*>(m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
+//   line += ((LabelWidget *)m_widget)->toPlainText();
   line += m_text;
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
   return line;
@@ -218,9 +218,9 @@ void QuteText::createPropertiesDialog()
   layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
   textColor = new QPushButton(dialog);
   QPixmap pixmap(64,64);
-  pixmap.fill(((QuteLabel *) m_widget)->palette().color(QPalette::WindowText));
+  pixmap.fill(m_widget->palette().color(QPalette::WindowText));
   textColor->setIcon(pixmap);
-  QPalette palette(((QuteLabel *) m_widget)->palette().color(QPalette::WindowText));
+  QPalette palette(m_widget->palette().color(QPalette::WindowText));
   textColor->setPalette(palette);
   palette.color(QPalette::Window);
   layout->addWidget(textColor, 6,1, Qt::AlignLeft|Qt::AlignVCenter);
@@ -230,17 +230,17 @@ void QuteText::createPropertiesDialog()
   layout->addWidget(label, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
   bgColor = new QPushButton(dialog);
 //   QPixmap pixmap(64,64);
-  pixmap.fill(((QuteLabel *) m_widget)->palette().color(QPalette::Window));
+  pixmap.fill(((LabelWidget *) m_widget)->palette().color(QPalette::Window));
   bgColor->setIcon(pixmap);
-  palette = QPalette(((QuteLabel *) m_widget)->palette().color(QPalette::Window));
+  palette = QPalette(((LabelWidget *) m_widget)->palette().color(QPalette::Window));
   bgColor->setPalette(palette);
   palette.color(QPalette::Window);
   layout->addWidget(bgColor, 6,3, Qt::AlignLeft|Qt::AlignVCenter);
   bg = new QCheckBox("Background", dialog);
-  bg->setChecked(((QuteLabel *)m_widget)->autoFillBackground());
+  bg->setChecked(((LabelWidget *)m_widget)->autoFillBackground());
   layout->addWidget(bg, 7,3, Qt::AlignLeft|Qt::AlignVCenter);
   border = new QCheckBox("Border", dialog);
-  border->setChecked(((QuteLabel *)m_widget)->frameShape() != QFrame::NoFrame);
+  border->setChecked(((LabelWidget *)m_widget)->frameShape() != QFrame::NoFrame);
   layout->addWidget(border, 7,2, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Font");
@@ -299,24 +299,24 @@ void QuteText::applyProperties()
 {
   m_font = font->currentFont().family();
   m_fontSize = fontSize->itemData(fontSize->currentIndex()).toInt();
-//   ((QuteLabel *)m_widget)->setText(text->text());
+//   ((LabelWidget *)m_widget)->setText(text->text());
   setType(typeComboBox->currentText());
   setText(text->text());
-  ((QuteLabel *)m_widget)->setAutoFillBackground(bg->isChecked());
-  ((QuteLabel *)m_widget)->setFrameShape(border->isChecked()?  QFrame::Box : QFrame::NoFrame);
+  m_widget->setAutoFillBackground(bg->isChecked());
+  dynamic_cast<QFrame*>(m_widget)->setFrameShape(border->isChecked()?  QFrame::Box : QFrame::NoFrame);
   setAlignment(alignment->currentIndex());
-//   ((QuteLabel *)m_widget)->setPlainText(text->text());
+//   ((LabelWidget *)m_widget)->setPlainText(text->text());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
 
 void QuteText::selectTextColor()
 {
-  QColor color = QColorDialog::getColor(((QuteLabel *) m_widget)->palette().color(QPalette::WindowText), this);
+  QColor color = QColorDialog::getColor(m_widget->palette().color(QPalette::WindowText), this);
   if (color.isValid()) {
     setTextColor(color);
-    textColor->setPalette(QPalette(((QuteLabel *) m_widget)->palette().color(QPalette::WindowText)));
+    textColor->setPalette(QPalette(m_widget->palette().color(QPalette::WindowText)));
     QPixmap pixmap(64,64);
-    pixmap.fill(((QuteLabel *) m_widget)->palette().color(QPalette::WindowText));
+    pixmap.fill(m_widget->palette().color(QPalette::WindowText));
     textColor->setIcon(pixmap);
 //     colorLabel->setAutoFillBackground(true);
   }
@@ -324,14 +324,136 @@ void QuteText::selectTextColor()
 
 void QuteText::selectBgColor()
 {
-  QColor color = QColorDialog::getColor(((QuteLabel *) m_widget)->palette().color(QPalette::Window), this);
+  QColor color = QColorDialog::getColor(m_widget->palette().color(QPalette::Window), this);
   if (color.isValid()) {
     setBgColor(color);
-    bgColor->setPalette(QPalette(((QuteLabel *) m_widget)->palette().color(QPalette::Window)));
+    bgColor->setPalette(QPalette(m_widget->palette().color(QPalette::Window)));
     QPixmap pixmap(64,64);
-    pixmap.fill(((QuteLabel *) m_widget)->palette().color(QPalette::Window));
+    pixmap.fill(m_widget->palette().color(QPalette::Window));
     bgColor->setIcon(pixmap);
 //     colorLabel->setAutoFillBackground(true);
   }
 }
 
+QuteLineEdit::QuteLineEdit(QWidget* parent) : QuteText(parent)
+{
+  delete m_widget; //delete widget created by parent constructor
+  m_widget = new LineEditWidget(this);
+
+//   ((QuteTextEdit *)m_widget)->setReadOnly(true);
+//   ((QuteTextEdit *)m_widget)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  connect(dynamic_cast<LineEditWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+//   m_alignment = Qt::AlignLeft;
+}
+
+QuteLineEdit::~QuteLineEdit()
+{
+}
+
+void QuteLineEdit::setAlignment(int alignment)
+{
+//   qDebug("QuteText::setAlignment %i", alignment);
+  Qt::Alignment align;
+  switch (alignment) {
+    case 0:
+      align = Qt::AlignLeft|Qt::AlignTop;
+      break;
+    case 1:
+      align = Qt::AlignHCenter|Qt::AlignTop;
+      break;
+    case 2:
+      align = Qt::AlignRight|Qt::AlignTop;
+      break;
+    default:
+      align = Qt::AlignLeft|Qt::AlignTop;
+  }
+  dynamic_cast<LineEditWidget*>(m_widget)->setAlignment(align);
+}
+
+void QuteLineEdit::setText(QString text)
+{
+  m_text = text;
+//   int size;
+//   if (m_fontSize >= QUTE_XXLARGE)
+//     size = 7;
+//   else if (m_fontSize >= QUTE_XLARGE)
+//     size = 6;
+//   else if (m_fontSize >= QUTE_LARGE)
+//     size = 5;
+//   else if (m_fontSize >= QUTE_MEDIUM)
+//     size = 4;
+//   else if (m_fontSize >= QUTE_SMALL)
+//     size = 3;
+//   else if (m_fontSize >= QUTE_XSMALL)
+//     size = 2;
+//   else
+//     size = 1;
+//   text.prepend("<font face=\"" + m_font + "\" size=\"" + QString::number(size) + "\">");
+//   text.append("</font>");
+  //TODO USE CORRECT CHARACTER for line break
+//   text = text.replace("�", "\n");
+  dynamic_cast<LineEditWidget*>(m_widget)->setText(text);
+}
+
+QString QuteLineEdit::getWidgetLine()
+{
+  //TODO finish implementing all properties for label
+  QString line = "ioText {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
+  line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
+  line += m_type + " ";
+  line += QString::number(m_value, 'f', 6) + " 0.00100 \"" + m_name + "\" ";
+  QString alignment = "";
+  if (((LabelWidget *)m_widget)->alignment() & Qt::AlignLeft)
+    alignment = "left";
+  else if (((LabelWidget *)m_widget)->alignment() & Qt::AlignCenter)
+    alignment = "center";
+  else if (((LabelWidget *)m_widget)->alignment() & Qt::AlignRight)
+    alignment = "right";
+  line += alignment + " ";
+  line += "\"" + m_font + "\" " + QString::number(m_fontSize) + " ";
+  QColor color = m_widget->palette().color(QPalette::WindowText);
+  line += "{" + QString::number(color.red() * 256)
+      + ", " + QString::number(color.green() * 256)
+      + ", " + QString::number(color.blue() * 256) + "} ";
+  color = m_widget->palette().color(QPalette::Window);
+  line += "{" + QString::number(color.red() * 256)
+      + ", " + QString::number(color.green() * 256)
+      + ", " + QString::number(color.blue() * 256) + "} ";
+  line += m_widget->autoFillBackground()? "background ":"nobackground ";
+  line += "noborder ";
+//   line += ((LabelWidget *)m_widget)->toPlainText();
+  line += m_text;
+//   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
+  return line;
+}
+
+QString QuteLineEdit::getStringValue()
+{
+  return static_cast<LineEditWidget *>(m_widget)->text();
+}
+
+void QuteLineEdit::createPropertiesDialog()
+{
+  QuteText::createPropertiesDialog();
+  typeComboBox->setEnabled(false);
+  fontSize->setEnabled(false);
+  font->setEnabled(false);
+  border->setEnabled(false);
+  bg->setEnabled(false);
+  textColor->setEnabled(false);
+  text->setText(dynamic_cast<LineEditWidget *>(m_widget)->text());
+}
+
+void QuteLineEdit::applyProperties()
+{
+//   m_font = font->currentFont().family();
+//   m_fontSize = fontSize->itemData(fontSize->currentIndex()).toInt();
+//   ((LabelWidget *)m_widget)->setText(text->text());
+//   setType(typeComboBox->currentText());
+  setText(text->text());
+  m_widget->setAutoFillBackground(bg->isChecked());
+//   dynamic_cast<QFrame*>(m_widget)->setFrameShape(border->isChecked()?  QFrame::Box : QFrame::NoFrame);
+  setAlignment(alignment->currentIndex());
+//   ((LabelWidget *)m_widget)->setPlainText(text->text());
+  QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
+}

@@ -30,6 +30,7 @@
 #include "qutegraph.h"
 #include "qutedummy.h"
 
+#include "qutecsound.h"
 
 WidgetPanel::WidgetPanel(QWidget *parent)
   : QDockWidget(parent)
@@ -43,6 +44,8 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createSlider()));
   createLabelAct = new QAction(tr("Create Label"),this);
   connect(createLabelAct, SIGNAL(triggered()), this, SLOT(createLabel()));
+  createLineEditAct = new QAction(tr("Create LineEdit"),this);
+  connect(createLineEditAct, SIGNAL(triggered()), this, SLOT(createLineEdit()));
   createButtonAct = new QAction(tr("Create Button"),this);
   connect(createButtonAct, SIGNAL(triggered()), this, SLOT(createButton()));
   createKnobAct = new QAction(tr("Create Knob"),this);
@@ -59,8 +62,9 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(createGraphAct, SIGNAL(triggered()), this, SLOT(createGraph()));
   propertiesAct = new QAction(tr("Properties"),this);
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
-  editAct = new QAction(tr("Edit Mode"), this);
+  editAct = new QAction(tr("Widget Edit Mode"), static_cast<qutecsound *>(parent));
   editAct->setCheckable(true);
+  editAct->setShortcut(tr("Ctrl+E"));
   connect(editAct, SIGNAL(triggered(bool)), this, SLOT(activateEditMode(bool)));
   clearAct = new QAction(tr("Clear all widgets"), this);
   connect(clearAct, SIGNAL(triggered()), this, SLOT(clearWidgets()));
@@ -81,13 +85,14 @@ unsigned int WidgetPanel::widgetCount()
   return widgets.size();
 }
 
-void WidgetPanel::getValues(QVector<QString> *channelNames, QVector<double> *values)
+void WidgetPanel::getValues(QVector<QString> *channelNames, QVector<double> *values, QVector<QString> *stringValues)
 {
   if (channelNames->size() < widgets.size()*2)
     return;
   for (int i = 0; i < widgets.size(); i++) {
     (*channelNames)[i*2] = widgets[i]->getChannelName();
     (*values)[i*2] = widgets[i]->getValue();
+    (*stringValues)[i*2] = widgets[i]->getStringValue();
     (*channelNames)[i*2 + 1] = widgets[i]->getChannel2Name();
     (*values)[i*2 + 1] = widgets[i]->getValue2();
   }
@@ -177,7 +182,10 @@ int WidgetPanel::newWidget(QString widgetLine)
       if (parts[5]=="label" or parts[5]=="display") {
         return createLabel(x,y,width,height, widgetLine);
       }
-      else if (parts[5]=="edit" or parts[5]=="scrolleditnum") {
+      else if (parts[5]=="edit") {
+        return createLineEdit(x,y,width, height, widgetLine);
+      }
+      else if (parts[5]=="scrolleditnum") {
         return createDummy(x,y,width, height, widgetLine);
       }
     }
@@ -300,6 +308,7 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   QMenu menu;
   menu.addAction(createSliderAct);
   menu.addAction(createLabelAct);
+  menu.addAction(createLineEditAct);
   menu.addAction(createButtonAct);
   menu.addAction(createKnobAct);
   menu.addAction(createCheckBoxAct);
@@ -328,10 +337,10 @@ void WidgetPanel::widgetChanged()
   QString text = widgetsText();
   if (widgets.size() > 0 and widgets[0]->toolTip() != "")
     showTooltips(true);
-  if (editAct->isChecked()) {
-    activateEditMode(false);
-    activateEditMode(true); // recreate widget edit boxes
-  }
+//   if (editAct->isChecked()) {
+//     activateEditMode(false);
+//     activateEditMode(true); // recreate widget edit boxes
+//   }
   emit widgetsChanged(text);
 }
 
@@ -359,6 +368,9 @@ int WidgetPanel::createSlider(int x, int y, int width, int height, QString widge
   connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
   widget->show();
+  if (editAct->isChecked()) {
+    createEditFrame(widget);
+  }
   return 1;
 }
 
@@ -405,6 +417,58 @@ int WidgetPanel::createLabel(int x, int y, int width, int height, QString widget
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   widgets.append(widget);
   widget->show();
+  if (editAct->isChecked()) {
+    createEditFrame(widget);
+  }
+  return 1;
+}
+
+int WidgetPanel::createLineEdit(int x, int y, int width, int height, QString widgetLine)
+{
+  QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  QStringList quoteParts = widgetLine.split('"');
+  if (parts.size()<20 or quoteParts.size()<5)
+    return -1;
+  QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  if (lastParts.size() < 9)
+    return -1;
+  QuteLineEdit *widget= new QuteLineEdit(layoutWidget);
+  widget->setWidgetLine(widgetLine);
+  widget->setWidgetGeometry(x,y,width, height);
+  widget->setType(parts[5]);
+  widget->setResolution(parts[7].toDouble());
+  widget->setChannelName(quoteParts[1]);
+  if (quoteParts[2] == " left ")
+    widget->setAlignment(0);
+  else if (quoteParts[2] == " center ")
+    widget->setAlignment(1);
+  else if (quoteParts[2] == " right ")
+    widget->setAlignment(2);
+  widget->setFont(quoteParts[3]);
+  widget->setFontSize(lastParts[0].toInt());
+  widget->setTextColor(QColor(lastParts[1].toDouble()/256.0,
+                       lastParts[2].toDouble()/256.0,
+                                             lastParts[3].toDouble()/256.0));
+  widget->setBgColor(QColor(lastParts[4].toDouble()/256.0,
+                     lastParts[5].toDouble()/256.0,
+                                           lastParts[6].toDouble()/256.0));
+  widget->setBg(lastParts[7] == "background");
+//   widget->setBorder(lastParts[8] == "border");
+  QString labelText = "";
+  int i = 9;
+  while (lastParts.size() > i) {
+    labelText += lastParts[i] + " ";
+    i++;
+  }
+  labelText.chop(1);
+  widget->setText(labelText);
+  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  widgets.append(widget);
+  widget->show();
+  if (editAct->isChecked()) {
+    createEditFrame(widget);
+  }
   return 1;
 }
 
@@ -436,6 +500,9 @@ int WidgetPanel::createButton(int x, int y, int width, int height, QString widge
   connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
 
+  if (editAct->isChecked()) {
+    createEditFrame(widget);
+  }
   return 1;
 }
 
@@ -464,6 +531,9 @@ int WidgetPanel::createKnob(int x, int y, int width, int height, QString widgetL
   connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
   widget->show();
+  if (editAct->isChecked()) {
+    createEditFrame(widget);
+  }
   return 1;
 }
 
@@ -490,6 +560,9 @@ int WidgetPanel::createCheckBox(int x, int y, int width, int height, QString wid
   connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
   widget->show();
+  if (editAct->isChecked()) {
+    createEditFrame(widget);
+  }
   return 1;
 }
 
@@ -511,6 +584,9 @@ int WidgetPanel::createMenu(int x, int y, int width, int height, QString widgetL
   connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
   widget->show();
+  if (editAct->isChecked()) {
+    createEditFrame(widget);
+  }
   return 1;
 }
 
@@ -548,6 +624,9 @@ int WidgetPanel::createMeter(int x, int y, int width, int height, QString widget
   connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
   widget->show();
+  if (editAct->isChecked()) {
+    createEditFrame(widget);
+  }
   return 1;
 }
 
@@ -577,6 +656,9 @@ int WidgetPanel::createGraph(int x, int y, int width, int height, QString widget
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   widgets.append(widget);
   widget->show();
+  if (editAct->isChecked()) {
+    createEditFrame(widget);
+  }
   return 1;
 }
 
@@ -587,6 +669,9 @@ int WidgetPanel::createDummy(int x, int y, int width, int height, QString widget
   widget->setWidgetGeometry(x,y,width, height);
   widget->show();
   widgets.append(widget);
+  if (editAct->isChecked()) {
+    createEditFrame(widget);
+  }
   return 1;
 }
 
@@ -606,17 +691,7 @@ void WidgetPanel::activateEditMode(bool active)
 {
   if (active) {
     foreach (QuteWidget * widget, widgets) {
-      FrameWidget * frame = new FrameWidget(layoutWidget);
-      QPalette palette(QColor(Qt::red),QColor(Qt::red));
-      palette.setColor(QPalette::WindowText, QColor(Qt::red));
-      frame->setWidget(widget);
-      frame->setPalette(palette);
-      frame->setGeometry(widget->x(), widget->y(), widget->width(), widget->height());
-      frame->setFrameShape(QFrame::Box);
-//       frame->setMouseTracking(false);  //Only track mouse when buttons are pressed
-      frame->show();
-      editWidgets.append(frame);
-      connect(frame, SIGNAL(popUpMenu(QPoint)), widget, SLOT(popUpMenu(QPoint)));
+      createEditFrame(widget);
     }
   }
   else {
@@ -626,7 +701,23 @@ void WidgetPanel::activateEditMode(bool active)
     editWidgets.clear();
   }
 //   this line breaks movement of widgets....
-//   editAct->setChecked(active);
+//   if (editAct->isChecked() != active)
+//     editAct->setChecked(active);
+}
+
+void WidgetPanel::createEditFrame(QuteWidget* widget)
+{
+  FrameWidget * frame = new FrameWidget(layoutWidget);
+  QPalette palette(QColor(Qt::red),QColor(Qt::red));
+  palette.setColor(QPalette::WindowText, QColor(Qt::red));
+  frame->setWidget(widget);
+  frame->setPalette(palette);
+  frame->setGeometry(widget->x(), widget->y(), widget->width(), widget->height());
+  frame->setFrameShape(QFrame::Box);
+//       frame->setMouseTracking(false);  //Only track mouse when buttons are pressed
+  frame->show();
+  editWidgets.append(frame);
+  connect(frame, SIGNAL(popUpMenu(QPoint)), widget, SLOT(popUpMenu(QPoint)));
 }
 
 void WidgetPanel::createSlider()
@@ -642,10 +733,17 @@ void WidgetPanel::createLabel()
   widgetChanged();
 }
 
+void WidgetPanel::createLineEdit()
+{
+  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {100, 25} edit 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
+  createLineEdit(currentPosition.x(), currentPosition.y() - 20, 100, 25, line);
+  widgetChanged();
+}
+
 void WidgetPanel::createButton()
 {
-  QString line = "ioButton {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {100, 40} event 1.000000 \"button1\" \"New Button\" \"/\" i1 0 10";
-  createButton(currentPosition.x(), currentPosition.y() - 20, 100, 40, line);
+  QString line = "ioButton {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {100, 30} event 1.000000 \"button1\" \"New Button\" \"/\" i1 0 10";
+  createButton(currentPosition.x(), currentPosition.y() - 20, 100, 30, line);
   widgetChanged();
 }
 

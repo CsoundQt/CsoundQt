@@ -74,6 +74,7 @@ qutecsound::qutecsound(QString fileName)
   connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
   addDockWidget(Qt::RightDockWidgetArea, helpPanel);
 
+  // WidgetPanel must be created before createAcctions since it contains the editAct action
   widgetPanel = new WidgetPanel(this);
   widgetPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea |Qt::LeftDockWidgetArea);
   widgetPanel->setObjectName("widgetPanel");
@@ -88,6 +89,7 @@ qutecsound::qutecsound(QString fileName)
   createMenus();
   createToolBars();
   createStatusBar();
+
 
   fillFileMenu(); //Must be placed after readSettings to include recent Files
   if (m_options->opcodexmldir == "") {
@@ -484,10 +486,10 @@ void qutecsound::join()
   }
 }
 
-void qutecsound::edit(bool active)
-{
-  widgetPanel->activateEditMode(active);
-}
+// void qutecsound::edit(bool active)
+// {
+//   widgetPanel->activateEditMode(active);
+// }
 
 void qutecsound::play(bool realtime)
 {
@@ -595,6 +597,7 @@ void qutecsound::play(bool realtime)
     unsigned int numWidgets = widgetPanel->widgetCount();
     ud->qcs->channelNames.resize(numWidgets*2);
     ud->qcs->values.resize(numWidgets*2);
+    ud->qcs->stringValues.resize(numWidgets);
     queueTimer->start(QCS_QUEUETIMER_TIME);
     if(m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
@@ -609,7 +612,7 @@ void qutecsound::play(bool realtime)
       while(ud->PERF_STATUS == 1 && csoundPerformKsmps(csound)==0) {
         qApp->processEvents();
         if (ud->qcs->m_options->enableWidgets) {
-          widgetPanel->getValues(&channelNames, &values);
+          widgetPanel->getValues(&channelNames, &values, &stringValues);
           if (ud->qcs->m_options->chngetEnabled) {
             readWidgetValues(ud);
             writeWidgetValues(ud);
@@ -1099,12 +1102,13 @@ void qutecsound::createActions()
   configureAct->setIconText("Configure");
   connect(configureAct, SIGNAL(triggered()), this, SLOT(configure()));
 
-  editAct = new QAction(/*QIcon(":/images/gtk-media-play-ltr.png"),*/ tr("Widget Edit Mode"), this);
-  editAct->setShortcut(tr("Ctrl+E"));
-  editAct->setStatusTip(tr("Activate Edit Mode for Widget Panel"));
-//   editAct->setIconText("Play");
-  editAct->setCheckable(true);
-  connect(editAct, SIGNAL(triggered(bool)), this, SLOT(edit(bool)));
+//   editAct = new QAction(/*QIcon(":/images/gtk-media-play-ltr.png"),*/ tr("Widget Edit Mode"), this);
+//   editAct->setShortcut(tr("Ctrl+E"));
+//   editAct->setStatusTip(tr("Activate Edit Mode for Widget Panel"));
+// //   editAct->setIconText("Play");
+//   editAct->setCheckable(true);
+//   connect(editAct, SIGNAL(triggered(bool)), this, SLOT(edit(bool)));
+  editAct = static_cast<WidgetPanel *>(widgetPanel)->editAct;
 
   playAct = new QAction(QIcon(":/images/gtk-media-play-ltr.png"), tr("Play"), this);
   playAct->setShortcut(tr("Alt+R"));
@@ -1898,9 +1902,13 @@ void qutecsound::readWidgetValues(CsoundUserData *ud)
   MYFLT* pvalue;
   for (int i = 0; i < ud->qcs->channelNames.size(); i++) {
     if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
-        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0)
-    {
+        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
       *pvalue = (MYFLT) ud->qcs->values[i];
+    }
+    if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
+       CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
+      char *string = (char *) pvalue;
+      strcpy(string, ud->qcs->stringValues[i].toStdString().c_str());
     }
   }
 }
@@ -1911,13 +1919,11 @@ void qutecsound::writeWidgetValues(CsoundUserData *ud)
   for (int i = 0; i < ud->qcs->channelNames.size(); i++) {
     if (ud->qcs->channelNames[i] != "") {
       if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
-          CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0)
-      {
+          CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
         ud->qcs->widgetPanel->setValue(i,*pvalue);
       }
-      if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
-        CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0)
-      {
+      else if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
+        CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
         ud->qcs->widgetPanel->setValue(i,QString((char *)pvalue));
       }
     }
@@ -1979,10 +1985,13 @@ uintptr_t qutecsound::csThread(void *data)
     unsigned int numWidgets = udata->qcs->widgetPanel->widgetCount();
     udata->qcs->channelNames.resize(numWidgets*2);
     udata->qcs->values.resize(numWidgets*2);
+    udata->qcs->stringValues.resize(numWidgets*2);
     int perform = csoundPerformKsmps(udata->csound);
     while((perform == 0) and (udata->PERF_STATUS == 1)) {
       if (udata->qcs->m_options->enableWidgets) {
-        udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames, &udata->qcs->values);
+        udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames,
+                                            &udata->qcs->values,
+                                            &udata->qcs->stringValues);
         if (udata->qcs->m_options->chngetEnabled) {
           writeWidgetValues(udata);
           readWidgetValues(udata);
@@ -2062,17 +2071,22 @@ void qutecsound::inputValueCallback (CSOUND *csound,
                                      const char *channelName,
                                      MYFLT *value)
 {
+  // from csound to host
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
   if (ud->PERF_STATUS == 1) {
     QString name = QString(channelName);
     csoundLockMutex(ud->qcs->perfMutex);
-    //TODO input of strings necessary?
-    /*if (name.beginsWith('$')) {
-      int index = ud->qcs->channelNames.indexOf();
-      if (index>=0)
-        *value = (MYFLT *) ;
+    if (name.startsWith('$')) {
+      int index = ud->qcs->channelNames.indexOf(name.mid(1));
+      char *string = (char *) value;
+      if (index>=0) {
+        strcpy(string, ud->qcs->stringValues[index].toStdString().c_str());
+      }
+      else {
+        string[0] = '\0'; //empty c string
+      }
     }
-    else */{
+    else {
       int index = ud->qcs->channelNames.indexOf(name);
       if (index>=0)
         *value = (MYFLT) ud->qcs->values[index];

@@ -30,12 +30,14 @@ class QuteConsole;
 class WidgetPanel : public QDockWidget
 {
   Q_OBJECT
+
+  friend class qutecsound;
   public:
     WidgetPanel(QWidget *parent);
     ~WidgetPanel();
 
     unsigned int widgetCount();
-    void getValues(QVector<QString> *channelNames, QVector<double> *values);
+    void getValues(QVector<QString> *channelNames, QVector<double> *values, QVector<QString> *stringValues);
     void setValue(QString channelName, double value);
     void setValue(QString channelName, QString value);
     void setValue(int index, double value);
@@ -61,6 +63,7 @@ class WidgetPanel : public QDockWidget
     QPoint currentPosition;
     QAction *createSliderAct;
     QAction *createLabelAct;
+    QAction *createLineEditAct;
     QAction *createButtonAct;
     QAction *createKnobAct;
     QAction *createCheckBoxAct;
@@ -78,6 +81,7 @@ class WidgetPanel : public QDockWidget
 
     int createSlider(int x, int y, int width, int height, QString widgetLine);
     int createLabel(int x, int y, int width, int height, QString widgetLine);
+    int createLineEdit(int x, int y, int width, int height, QString widgetLine);
     int createButton(int x, int y, int width, int height, QString widgetLine);
     int createKnob(int x, int y, int width, int height, QString widgetLine);
     int createCheckBox(int x, int y, int width, int height, QString widgetLine);
@@ -97,6 +101,7 @@ class WidgetPanel : public QDockWidget
     void deleteWidget(QuteWidget *widget);
     void queueEvent(QString eventLine);
     void createLabel();
+    void createLineEdit();
     void createSlider();
     void createButton();
     void createKnob();
@@ -110,6 +115,7 @@ class WidgetPanel : public QDockWidget
     void applyProperties();
     void selectBgColor();
     void activateEditMode(bool active);
+    void createEditFrame(QuteWidget* widget);
 
   signals:
     void widgetsChanged(QString text);

@@ -128,6 +128,14 @@ double QuteWidget::getValue2()
   return 0.0;
 }
 
+QString QuteWidget::getStringValue()
+{
+#ifdef DEBUG
+  qDebug("QuteWidget::getValue for QString not implemented for widget type");
+#endif
+  return QString("");
+}
+
 void QuteWidget::markChanged()
 {
   emit widgetChanged();

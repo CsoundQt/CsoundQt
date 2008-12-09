@@ -97,8 +97,8 @@ Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {55769, 65535, 64250}
-ioText {5, 37} {379, 36} label 0.000000 0.00100 "note" left "DejaVu Sans" 16 {0, 0, 0} {65280, 65280, 65280} nobackground border Note On: chan = 0 note# = 0 velocity = 0
-ioText {5, 5} {150, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Note events
+ioText {5, 30} {379, 36} label 0.000000 0.00100 "note" left "DejaVu Sans" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Note On: chan = 0 note# = 0 velocity = 0
+ioText {5, 2} {379, 60} label 0.000000 0.00100 "" left "Courier 10 Pitch" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border Note events:
 ioText {5, 80} {184, 116} label 0.000000 0.00100 "" left "Courier 10 Pitch" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border Control Change:
 ioText {131, 110} {40, 25} display 0.000000 0.00100 "cc" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} background border 0
 ioText {131, 135} {40, 25} display 0.000000 0.00100 "ccvalue" left "DejaVu Sans" 12 {0, 0, 0} {61440, 56320, 58624} background border 0

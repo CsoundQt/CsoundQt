@@ -28,7 +28,6 @@ DocumentPage::DocumentPage(QWidget *parent):
   readOnly = false;
 }
 
-
 DocumentPage::~DocumentPage()
 {
 }

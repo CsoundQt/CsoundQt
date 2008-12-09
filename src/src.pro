@@ -65,7 +65,8 @@ HEADERS += qutecsound.h \
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \
-          qt
+          qt \
+ release
 TARGET = ../bin/qutecsound
 RESOURCES = application.qrc
 
@@ -139,5 +140,6 @@ macx {
 
 #QMAKE_CXXFLAGS_DEBUG += -DDEBUG
 
-CONFIG -= stl
+CONFIG -= stl \
+ debug
 

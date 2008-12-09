@@ -114,6 +114,7 @@ class qutecsound:public QMainWindow
 
     QVector<QString> channelNames;
     QVector<double> values;
+    QVector<QString> stringValues;
 
   public slots:
     void changeFont();
@@ -138,7 +139,7 @@ class qutecsound:public QMainWindow
     bool closeTab();
     void findReplace();
     void join();
-    void edit(bool active);
+//     void edit(bool active);
     void play(bool realtime=true);
     void stop();
     void render();
