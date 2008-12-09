@@ -625,6 +625,8 @@ void WidgetPanel::activateEditMode(bool active)
     }
     editWidgets.clear();
   }
+//   this line breaks movement of widgets....
+//   editAct->setChecked(active);
 }
 
 void WidgetPanel::createSlider()
