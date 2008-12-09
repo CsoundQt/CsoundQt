@@ -277,8 +277,10 @@ void WidgetPanel::deleteWidget(QuteWidget *widget)
   qDebug("WidgetPanel::deleteWidget %i", number);
   widget->close();
   widgets.remove(number);
-  delete(editWidgets[number]);
-  editWidgets.remove(number);
+  if (!editWidgets.isEmpty()) {
+    delete(editWidgets[number]);
+    editWidgets.remove(number);
+  }
   widgetChanged();
 }
 

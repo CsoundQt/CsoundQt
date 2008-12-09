@@ -99,7 +99,7 @@ QString DocumentPage::getMacWidgetsText()
 
 void DocumentPage::setMacWidgetsText(QString text)
 {
-  qDebug("DocumentPage::setMacWidgetsText");
+//   qDebug("DocumentPage::setMacWidgetsText");
   macGUI = text;
   document()->setModified(true);
 }
