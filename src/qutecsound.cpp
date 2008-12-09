@@ -18,8 +18,6 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#include <QtGui>
-
 #include "qutecsound.h"
 #include "console.h"
 #include "dockhelp.h"
@@ -597,7 +595,7 @@ void qutecsound::play(bool realtime)
     unsigned int numWidgets = widgetPanel->widgetCount();
     ud->qcs->channelNames.resize(numWidgets*2);
     ud->qcs->values.resize(numWidgets*2);
-    ud->qcs->stringValues.resize(numWidgets);
+    ud->qcs->stringValues.resize(numWidgets*2);
     queueTimer->start(QCS_QUEUETIMER_TIME);
     if(m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD

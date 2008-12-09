@@ -29,6 +29,7 @@
 #include "quteconsole.h"
 #include "qutegraph.h"
 #include "qutedummy.h"
+#include "framewidget.h"
 
 #include "qutecsound.h"
 
@@ -37,9 +38,11 @@ WidgetPanel::WidgetPanel(QWidget *parent)
 {
   setWindowTitle("Widgets");
   setMinimumSize(200, 140);
-  layoutWidget = new QWidget(this);
+  layoutWidget = new LayoutWidget(this);
   layoutWidget->setGeometry(QRect(0, 0, 800, 600));
   layoutWidget->setAutoFillBackground(true);
+  connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
+
   createSliderAct = new QAction(tr("Create Slider"),this);
   connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createSlider()));
   createLabelAct = new QAction(tr("Create Label"),this);
@@ -143,7 +146,7 @@ int WidgetPanel::loadWidgets(QString macWidgets)
   clearWidgets();
   QStringList widgetLines = macWidgets.split(QRegExp("[\n\r]"), QString::SkipEmptyParts);
   foreach (QString line, widgetLines) {
-    qDebug("WidgetLine: %s", line.toStdString().c_str());
+//     qDebug("WidgetLine: %s", line.toStdString().c_str());
     if (line.startsWith("i"))
       newWidget(line);
   }
@@ -282,7 +285,7 @@ void WidgetPanel::deleteWidget(QuteWidget *widget)
   int number = widgets.indexOf(widget);
   //if (consoleWidgets.contains((QuteConsole *)widget));
   //  consoleWidgets.remove(consoleWidgets.indexOf((QuteConsole *)widget));
-  qDebug("WidgetPanel::deleteWidget %i", number);
+//   qDebug("WidgetPanel::deleteWidget %i", number);
   widget->close();
   widgets.remove(number);
   if (!editWidgets.isEmpty()) {
@@ -294,7 +297,7 @@ void WidgetPanel::deleteWidget(QuteWidget *widget)
 
 void WidgetPanel::queueEvent(QString eventLine)
 {
-  qDebug("WidgetPanel::queueEvent %s", eventLine.toStdString().c_str());
+//   qDebug("WidgetPanel::queueEvent %s", eventLine.toStdString().c_str());
   if (eventQueueSize < QUTECSOUND_MAX_EVENTS) {
     eventQueue[eventQueueSize] = eventLine;
     eventQueueSize++;
@@ -332,15 +335,16 @@ void WidgetPanel::newValue(QHash<QString, double> channelValue)
   widgetChanged();
 }
 
-void WidgetPanel::widgetChanged()
+void WidgetPanel::widgetChanged(QWidget* widget)
 {
   QString text = widgetsText();
   if (widgets.size() > 0 and widgets[0]->toolTip() != "")
     showTooltips(true);
-//   if (editAct->isChecked()) {
-//     activateEditMode(false);
-//     activateEditMode(true); // recreate widget edit boxes
-//   }
+  for (int i = 0; i < editWidgets.size(); i++) {
+    if (editWidgets[i]->getWidget() == widget) {
+      //TODO set edit widget size and pos to widget's
+    }
+  }
   emit widgetsChanged(text);
 }
 
@@ -363,7 +367,7 @@ int WidgetPanel::createSlider(int x, int y, int width, int height, QString widge
     channelName.chop(1);  //remove last space
     widget->setChannelName(channelName);
   }
-  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(widgetChanged(QWidget *)), this, SLOT(widgetChanged(QWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
@@ -718,6 +722,41 @@ void WidgetPanel::createEditFrame(QuteWidget* widget)
   frame->show();
   editWidgets.append(frame);
   connect(frame, SIGNAL(popUpMenu(QPoint)), widget, SLOT(popUpMenu(QPoint)));
+  connect(frame, SIGNAL(deselectAllSignal()), this, SLOT(deselectAll()));
+  connect(frame, SIGNAL(moved( QPair<int, int> )), this, SLOT(widgetMoved( QPair<int, int> )));
+  connect(frame, SIGNAL(resized( QPair<int, int> )), this, SLOT(widgetResized( QPair<int, int> )));
+}
+
+void WidgetPanel::widgetMoved(QPair<int, int> delta)
+{
+  for (int i = 0; i < widgets.size(); i++) {
+    if (editWidgets[i]->isSelected()) {
+      int newx = widgets[i]->x() + delta.first;
+      int newy = widgets[i]->y() + delta.second;
+      widgets[i]->move(newx, newy);
+      editWidgets[i]->move(newx, newy);
+    }
+  }
+}
+
+void WidgetPanel::widgetResized(QPair<int, int> delta)
+{
+//   qDebug("WidgetPanel::widgetResized %i  %i", delta.first, delta.second);
+  for (int i = 0; i< widgets.size(); i++) {
+    if (editWidgets[i]->isSelected()) {
+      int neww = widgets[i]->width() + delta.first;
+      int newh = widgets[i]->height() + delta.second;
+      widgets[i]->setWidgetGeometry(widgets[i]->x(), widgets[i]->y(), neww, newh);
+      editWidgets[i]->resize(neww, newh);
+    }
+  }
+}
+
+void WidgetPanel::deselectAll()
+{
+  for (int i = 0; i< editWidgets.size(); i++) {
+    editWidgets[i]->deselect();
+  }
 }
 
 void WidgetPanel::createSlider()

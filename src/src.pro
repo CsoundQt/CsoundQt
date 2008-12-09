@@ -37,7 +37,8 @@ SOURCES += qutecsound.cpp \
  qutecheckbox.cpp \
  quteconsole.cpp \
  qutemeter.cpp \
- qutegraph.cpp
+ qutegraph.cpp \
+ framewidget.cpp
 HEADERS += qutecsound.h \
  dockhelp.h \
  opentryparser.h \
@@ -61,7 +62,8 @@ HEADERS += qutecsound.h \
  qutecheckbox.h \
  quteconsole.h \
  qutemeter.h \
- qutegraph.h
+ qutegraph.h \
+ framewidget.h
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \

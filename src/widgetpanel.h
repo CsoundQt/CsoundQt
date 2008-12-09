@@ -25,7 +25,10 @@
 #define QUTECSOUND_MAX_EVENTS 32
 
 #include "qutewidget.h"
+
 class QuteConsole;
+class FrameWidget;
+class LayoutWidget;
 
 class WidgetPanel : public QDockWidget
 {
@@ -57,8 +60,8 @@ class WidgetPanel : public QDockWidget
   private:
     QVector<QuteWidget *> widgets;
     QVector<QuteConsole *> consoleWidgets;
-    QVector<QFrame *> editWidgets;
-    QWidget *layoutWidget;
+    QVector<FrameWidget *> editWidgets;
+    LayoutWidget *layoutWidget;
 
     QPoint currentPosition;
     QAction *createSliderAct;
@@ -97,7 +100,7 @@ class WidgetPanel : public QDockWidget
 
   public slots:
     void newValue(QHash<QString, double> channelValue);
-    void widgetChanged();
+    void widgetChanged(QWidget* widget = 0);
     void deleteWidget(QuteWidget *widget);
     void queueEvent(QString eventLine);
     void createLabel();
@@ -116,6 +119,9 @@ class WidgetPanel : public QDockWidget
     void selectBgColor();
     void activateEditMode(bool active);
     void createEditFrame(QuteWidget* widget);
+    void deselectAll();
+    void widgetMoved(QPair<int, int>);
+    void widgetResized(QPair<int, int>);
 
   signals:
     void widgetsChanged(QString text);
@@ -123,78 +129,23 @@ class WidgetPanel : public QDockWidget
 
 };
 
-class FrameWidget : public QFrame
+class LayoutWidget : public QWidget
 {
   Q_OBJECT
   public:
-    FrameWidget(QWidget* parent) : QFrame(parent) {
-      m_resizeBox = new QFrame(this);
-      m_resizeBox->setAutoFillBackground(true);
-//       m_resizeBox->move(width()-7, height()-7);
-//       m_resizeBox->resize(7,7);
-      QPalette palette(QColor(Qt::red),QColor(Qt::red));
-      palette.setColor(QPalette::WindowText, QColor(Qt::red));
-      m_resizeBox->setPalette(palette);
-      m_resizeBox->show();
-    }
-    ~FrameWidget() {}
-
-    void setWidget(QuteWidget* widget) {m_widget = widget;}
+    LayoutWidget(QWidget* parent) : QWidget(parent) {}
+    ~LayoutWidget() {}
 
   protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event)
-    {emit(popUpMenu(event->globalPos()));}
-    virtual void mousePressEvent ( QMouseEvent * event )
+    virtual void mouseReleaseEvent(QMouseEvent *event)
     {
-      QWidget::mousePressEvent(event);
-      startx = event->x();
-      widgetx = x();;
-      starty = event->y();
-      widgety = y();
-      widgetw = width();
-      widgeth = height();
-      if (startx > (width()-7) and starty > (height()-7))
-        m_resize = true;
-      else
-        m_resize = false;
-    }
-    virtual void mouseMoveEvent (QMouseEvent* event)
-    {
-//       qDebug("pos %i, %i", startx - event->x(), starty - event->y());
-      if (m_resize) {
-        int neww = widgetw - startx + event->x();
-        int newh = widgeth - starty + event->y();
-        resize(neww, newh);
-        m_widget->setWidgetGeometry(m_widget->x(), m_widget->y(),neww, newh);
+      if (event->button() & Qt::LeftButton) {
+        emit deselectAll();
       }
-      else {
-        int newx = widgetx - startx + event->x();
-        int newy = widgety - starty + event->y();
-        move(newx, newy);
-        m_widget->move(newx, newy);
-      }
-      widgetx = x();
-      widgety = y();
-      m_widget->markChanged();
-//       widgetw = width();
-//       widgeth = height();
     }
-    virtual void resizeEvent (QResizeEvent* event)
-    {
-      QWidget::resizeEvent(event);
-      m_resizeBox->move(width()-7, height()-7);
-      m_resizeBox->resize(7,7);
-    }
-
-  private:
-    int startx, starty, widgetx, widgety, widgetw, widgeth;
-    QFrame *m_resizeBox;
-    QuteWidget *m_widget;
-    bool m_resize;
 
   signals:
-    void popUpMenu(QPoint pos);
+    void deselectAll();
 };
-
 
 #endif

@@ -138,7 +138,7 @@ QString QuteWidget::getStringValue()
 
 void QuteWidget::markChanged()
 {
-  emit widgetChanged();
+  emit widgetChanged(this);
 }
 
 void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
@@ -149,6 +149,7 @@ void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
 void QuteWidget::popUpMenu(QPoint pos)
 {
   QMenu menu(this);
+//   menu.addSeparator();
   menu.addAction(propertiesAct);
   menu.addSeparator();
   menu.addAction(deleteAct);
@@ -236,7 +237,7 @@ void QuteWidget::applyProperties()
   setChannelName(nameLineEdit->text());
   setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
   qDebug("QuteWidget::applyProperties() Not fully implemented yet.");
-  emit(widgetChanged());
+  emit(widgetChanged(this));
 }
 
 void QuteWidget::apply()
