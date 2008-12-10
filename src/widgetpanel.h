@@ -100,7 +100,7 @@ class WidgetPanel : public QDockWidget
 
   public slots:
     void newValue(QHash<QString, double> channelValue);
-    void widgetChanged(QWidget* widget = 0);
+    void widgetChanged(QuteWidget* widget = 0);
     void deleteWidget(QuteWidget *widget);
     void queueEvent(QString eventLine);
     void createLabel();

@@ -95,7 +95,7 @@ class QuteWidget : public QWidget
 
   signals:
     void newValue(QHash<QString,double> channelValue);
-    void widgetChanged(QWidget* widget);
+    void widgetChanged(QuteWidget* widget);
     void deleteThisWidget(QuteWidget *thisWidget);
 };
 

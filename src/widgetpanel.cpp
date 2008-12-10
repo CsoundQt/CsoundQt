@@ -292,7 +292,7 @@ void WidgetPanel::deleteWidget(QuteWidget *widget)
     delete(editWidgets[number]);
     editWidgets.remove(number);
   }
-  widgetChanged();
+  widgetChanged(widget);
 }
 
 void WidgetPanel::queueEvent(QString eventLine)
@@ -335,7 +335,7 @@ void WidgetPanel::newValue(QHash<QString, double> channelValue)
   widgetChanged();
 }
 
-void WidgetPanel::widgetChanged(QWidget* widget)
+void WidgetPanel::widgetChanged(QuteWidget* widget)
 {
   QString text = widgetsText();
   if (widgets.size() > 0 and widgets[0]->toolTip() != "")
@@ -367,7 +367,7 @@ int WidgetPanel::createSlider(int x, int y, int width, int height, QString widge
     channelName.chop(1);  //remove last space
     widget->setChannelName(channelName);
   }
-  connect(widget, SIGNAL(widgetChanged(QWidget *)), this, SLOT(widgetChanged(QWidget *)));
+  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
@@ -417,7 +417,7 @@ int WidgetPanel::createLabel(int x, int y, int width, int height, QString widget
   }
   labelText.chop(1);
   widget->setText(labelText);
-  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   widgets.append(widget);
   widget->show();
@@ -466,7 +466,7 @@ int WidgetPanel::createLineEdit(int x, int y, int width, int height, QString wid
   }
   labelText.chop(1);
   widget->setText(labelText);
-  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   widgets.append(widget);
   widget->show();
@@ -501,7 +501,7 @@ int WidgetPanel::createButton(int x, int y, int width, int height, QString widge
     widget->setEventLine(quoteParts[6]);
   }
   connect(widget, SIGNAL(queueEvent(QString)), this, SLOT(queueEvent(QString)));
-  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
 
   if (editAct->isChecked()) {
@@ -530,7 +530,7 @@ int WidgetPanel::createKnob(int x, int y, int width, int height, QString widgetL
     channelName.chop(1);  //remove last space
     widget->setChannelName(channelName);
   }
-  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
@@ -559,7 +559,7 @@ int WidgetPanel::createCheckBox(int x, int y, int width, int height, QString wid
     channelName.chop(1);  //remove last space
     widget->setChannelName(channelName);
   }
-  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
@@ -583,7 +583,7 @@ int WidgetPanel::createMenu(int x, int y, int width, int height, QString widgetL
   widget->setValue(parts[5].toDouble()); //setValue must be after setText otherwise ComboBox is empty
   if (quoteParts.size() > 2)
     widget->setChannelName(quoteParts[2].remove(0,1)); //remove initial space from channel name
-  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
@@ -623,7 +623,7 @@ int WidgetPanel::createMeter(int x, int y, int width, int height, QString widget
   widget->setPointSize(parts2[2].toInt());
   widget->setFadeSpeed(parts2[3].toInt());
   widget->setBehavior(parts2[4]);
-  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
@@ -641,7 +641,7 @@ int WidgetPanel::createConsole(int x, int y, int width, int height, QString widg
    QuteConsole *widget= new QuteConsole(layoutWidget);
    widget->setWidgetLine(widgetLine);
    widget->setWidgetGeometry(x,y,width, height);
-   connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
    connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
    widgets.append(widget);
    widget->show();
@@ -656,7 +656,7 @@ int WidgetPanel::createGraph(int x, int y, int width, int height, QString widget
   QuteGraph *widget= new QuteGraph(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
-  connect(widget, SIGNAL(widgetChanged()), this, SLOT(widgetChanged()));
+  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   widgets.append(widget);
   widget->show();
