@@ -37,7 +37,7 @@ class QuteText : public QuteWidget
     virtual void setValue(QString value);
 
     void setType(QString type);
-    void setResolution(double resolution);
+    virtual void setResolution(double resolution);
     virtual void setAlignment(int alignment);
     void setFont(QString font);
     void setFontSize(int fontSize);
@@ -62,7 +62,7 @@ class QuteText : public QuteWidget
 //     bool m_bg;
 //     bool m_border;
 
-    QComboBox * typeComboBox;
+//     QComboBox * typeComboBox;
     QLineEdit *text;
     QPushButton *textColor;
     QPushButton *bgColor;
@@ -107,6 +107,86 @@ class LabelWidget : public QLabel
 
   signals:
     void popUpMenu(QPoint pos);
+};
+
+class QuteScrollNumber : public QuteText
+{
+  Q_OBJECT
+  public:
+    QuteScrollNumber(QWidget* parent);
+    ~QuteScrollNumber();
+
+    virtual void setResolution(double resolution);
+    virtual void setAlignment(int alignment);
+    virtual void setText(QString text);
+    virtual QString getWidgetLine();
+    virtual QString getStringValue();
+    virtual double getValue();
+
+  protected:
+    virtual void createPropertiesDialog();
+    virtual void applyProperties();
+
+    QDoubleSpinBox* resolutionSpinBox;
+    int m_places;
+
+  public slots:
+    void addValue(double delta);
+    void setValue(double value);
+};
+
+class ScrollNumberWidget : public QLabel
+{
+  Q_OBJECT
+  public:
+    ScrollNumberWidget(QWidget* parent) : QLabel(parent) {pressed = false;}
+    ~ScrollNumberWidget() {}
+
+    void setResolution(double resolution)
+    {
+      m_resolution = resolution;
+    }
+    double getResolution()
+    {
+      return m_resolution;
+    }
+
+  protected:
+    virtual void contextMenuEvent(QContextMenuEvent *event)
+    {emit(popUpMenu(event->globalPos()));}
+
+    virtual void mouseMoveEvent(QMouseEvent * event)
+    {
+      if (pressed) {
+        double delta = (oldy - event->y()) * m_resolution;
+        emit addValue(delta);
+        oldy = event->y();
+      }
+    }
+    virtual void mousePressEvent(QMouseEvent * event)
+    {
+      if (event->button() & Qt::LeftButton) {
+        if (event->modifiers() & Qt::ShiftModifier) {
+          emit setValue(0);
+        }
+        oldy = event->y();
+        pressed = true;
+      }
+    }
+    virtual void mouseReleaseEvent (QMouseEvent * event)
+    {
+      pressed = false;
+    }
+
+  private:
+    double m_resolution;
+    int oldy;
+    bool pressed;
+
+  signals:
+    void popUpMenu(QPoint pos);
+    void addValue(double delta);
+    void setValue(double value);
 };
 
 class LineEditWidget : public QLineEdit

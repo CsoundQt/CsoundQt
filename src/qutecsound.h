@@ -22,7 +22,7 @@
 #ifndef QUTECSOUND_H
 #define QUTECSOUND_H
 
-#define QUTECSOUND_VERSION "0.3.6"
+#define QUTECSOUND_VERSION "0.3.9"
 
 #include <QtGui>
 #include <csound.h>
@@ -57,6 +57,7 @@ class Highlighter;
 class ConfigLists;
 class DocumentPage;
 class UtilitiesDialog;
+class Curve;
 
 class qutecsound;
 
@@ -78,7 +79,7 @@ class qutecsound:public QMainWindow
   Q_OBJECT
 
   public:
-    qutecsound(QString fileName);
+    qutecsound(QStringList fileNames);
     ~qutecsound();
     static void messageCallback_NoThread(CSOUND *csound,
                                          int attr,
@@ -92,6 +93,13 @@ class qutecsound:public QMainWindow
                                        int attr,
                                        const char *fmt,
                                        va_list args);
+
+    //callbacks for graph drawing based on J. Ramsdell's flcsound
+    static void makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *name);
+    static void drawGraphCallback(CSOUND *csound, WINDAT *windat);
+    static void killGraphCallback(CSOUND *csound, WINDAT *windat);
+    static int exitGraphCallback(CSOUND *csound);
+
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
     static void  csThread(void *data);
 #else

@@ -45,7 +45,7 @@ QString QuteConsole::getWidgetLine()
 {
   QString line = "ioListing {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"}";
-  qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
+//   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
 

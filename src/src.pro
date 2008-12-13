@@ -40,7 +40,8 @@ SOURCES += qutecsound.cpp \
  quteconsole.cpp \
  qutemeter.cpp \
  qutegraph.cpp \
- framewidget.cpp
+ framewidget.cpp \
+ curve.cpp
 HEADERS += qutecsound.h \
  dockhelp.h \
  opentryparser.h \
@@ -65,12 +66,12 @@ HEADERS += qutecsound.h \
  quteconsole.h \
  qutemeter.h \
  qutegraph.h \
- framewidget.h
+ framewidget.h \
+ curve.h
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \
-          qt \
- release
+          qt
 TARGET = ../bin/qutecsound
 RESOURCES = application.qrc
 
@@ -144,6 +145,5 @@ macx {
 
 #QMAKE_CXXFLAGS_DEBUG += -DDEBUG
 
-CONFIG -= stl \
- debug
+CONFIG -= stl
 

@@ -43,7 +43,7 @@ FrameWidget::~FrameWidget()
 void FrameWidget::select()
 {
   m_selected = true;
-  this->setLineWidth(3);
+  this->setLineWidth(2);
 }
 
 void FrameWidget::deselect()

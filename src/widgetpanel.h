@@ -26,7 +26,9 @@
 
 #include "qutewidget.h"
 
+class Curve;
 class QuteConsole;
+class QuteGraph;
 class FrameWidget;
 class LayoutWidget;
 
@@ -50,6 +52,7 @@ class WidgetPanel : public QDockWidget
     QString widgetsText();
     void appendMessage(QString message);
     void showTooltips(bool show);
+    void newGraph(Curve* curve);
 
     QVector<QString> eventQueue;
     int eventQueueSize;
@@ -60,12 +63,15 @@ class WidgetPanel : public QDockWidget
   private:
     QVector<QuteWidget *> widgets;
     QVector<QuteConsole *> consoleWidgets;
+    QVector<QuteGraph *> graphWidgets;
     QVector<FrameWidget *> editWidgets;
     LayoutWidget *layoutWidget;
 
     QPoint currentPosition;
     QAction *createSliderAct;
     QAction *createLabelAct;
+    QAction *createDisplayAct;
+    QAction *createScrollNumberAct;
     QAction *createLineEditAct;
     QAction *createButtonAct;
     QAction *createKnobAct;
@@ -83,7 +89,8 @@ class WidgetPanel : public QDockWidget
     QPushButton *bgButton;
 
     int createSlider(int x, int y, int width, int height, QString widgetLine);
-    int createLabel(int x, int y, int width, int height, QString widgetLine);
+    int createText(int x, int y, int width, int height, QString widgetLine);
+    int createScrollNumber(int x, int y, int width, int height, QString widgetLine);
     int createLineEdit(int x, int y, int width, int height, QString widgetLine);
     int createButton(int x, int y, int width, int height, QString widgetLine);
     int createKnob(int x, int y, int width, int height, QString widgetLine);
@@ -104,6 +111,8 @@ class WidgetPanel : public QDockWidget
     void deleteWidget(QuteWidget *widget);
     void queueEvent(QString eventLine);
     void createLabel();
+    void createDisplay();
+    void createScrollNumber();
     void createLineEdit();
     void createSlider();
     void createButton();

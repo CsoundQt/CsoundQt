@@ -30,6 +30,7 @@
 #include "qutegraph.h"
 #include "qutedummy.h"
 #include "framewidget.h"
+#include "curve.h"
 
 #include "qutecsound.h"
 
@@ -47,6 +48,10 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createSlider()));
   createLabelAct = new QAction(tr("Create Label"),this);
   connect(createLabelAct, SIGNAL(triggered()), this, SLOT(createLabel()));
+  createDisplayAct = new QAction(tr("Create Display"),this);
+  connect(createDisplayAct, SIGNAL(triggered()), this, SLOT(createDisplay()));
+  createScrollNumberAct = new QAction(tr("Create ScrollNumber"),this);
+  connect(createScrollNumberAct, SIGNAL(triggered()), this, SLOT(createScrollNumber()));
   createLineEditAct = new QAction(tr("Create LineEdit"),this);
   connect(createLineEditAct, SIGNAL(triggered()), this, SLOT(createLineEdit()));
   createButtonAct = new QAction(tr("Create Button"),this);
@@ -183,12 +188,15 @@ int WidgetPanel::newWidget(QString widgetLine)
     }
     else if (parts[0]=="ioText") {
       if (parts[5]=="label" or parts[5]=="display") {
-        return createLabel(x,y,width,height, widgetLine);
+        return createText(x,y,width,height, widgetLine);
       }
       else if (parts[5]=="edit") {
         return createLineEdit(x,y,width, height, widgetLine);
       }
-      else if (parts[5]=="scrolleditnum") {
+      else if (parts[5]=="scroll") {
+        return createScrollNumber(x,y,width, height, widgetLine);
+      }
+      else if (parts[5]=="editnum") {
         return createDummy(x,y,width, height, widgetLine);
       }
     }
@@ -234,6 +242,7 @@ void WidgetPanel::clearWidgets()
   editWidgets.clear();
   widgets.clear();
   consoleWidgets.clear();
+  graphWidgets.clear();
 }
 
 void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
@@ -280,6 +289,10 @@ void WidgetPanel::showTooltips(bool show)
   }
 }
 
+void WidgetPanel::newGraph(Curve* curve)
+{
+}
+
 void WidgetPanel::deleteWidget(QuteWidget *widget)
 {
   int number = widgets.indexOf(widget);
@@ -311,6 +324,8 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   QMenu menu;
   menu.addAction(createSliderAct);
   menu.addAction(createLabelAct);
+  menu.addAction(createDisplayAct);
+  menu.addAction(createScrollNumberAct);
   menu.addAction(createLineEditAct);
   menu.addAction(createButtonAct);
   menu.addAction(createKnobAct);
@@ -378,7 +393,7 @@ int WidgetPanel::createSlider(int x, int y, int width, int height, QString widge
   return 1;
 }
 
-int WidgetPanel::createLabel(int x, int y, int width, int height, QString widgetLine)
+int WidgetPanel::createText(int x, int y, int width, int height, QString widgetLine)
 {
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
@@ -417,6 +432,58 @@ int WidgetPanel::createLabel(int x, int y, int width, int height, QString widget
   }
   labelText.chop(1);
   widget->setText(labelText);
+  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  widgets.append(widget);
+  widget->show();
+  if (editAct->isChecked()) {
+    createEditFrame(widget);
+  }
+  return 1;
+}
+
+int WidgetPanel::createScrollNumber(int x, int y, int width, int height, QString widgetLine)
+{
+  QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  QStringList quoteParts = widgetLine.split('"');
+  if (parts.size()<20 or quoteParts.size()<5)
+    return -1;
+  QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  if (lastParts.size() < 9)
+    return -1;
+  QuteScrollNumber *widget= new QuteScrollNumber(layoutWidget);
+  widget->setWidgetLine(widgetLine);
+  widget->setWidgetGeometry(x,y,width, height);
+  widget->setType(parts[5]);
+  widget->setResolution(parts[7].toDouble());
+  widget->setChannelName(quoteParts[1]);
+  if (quoteParts[2] == " left ")
+    widget->setAlignment(0);
+  else if (quoteParts[2] == " center ")
+    widget->setAlignment(1);
+  else if (quoteParts[2] == " right ")
+    widget->setAlignment(2);
+  widget->setFont(quoteParts[3]);
+  widget->setFontSize(lastParts[0].toInt());
+  widget->setTextColor(QColor(lastParts[1].toDouble()/256.0,
+                       lastParts[2].toDouble()/256.0,
+                                             lastParts[3].toDouble()/256.0));
+  widget->setBgColor(QColor(lastParts[4].toDouble()/256.0,
+                     lastParts[5].toDouble()/256.0,
+                                           lastParts[6].toDouble()/256.0));
+  widget->setBg(lastParts[7] == "background");
+  widget->setBorder(lastParts[8] == "border");
+  QString labelText = "";
+  int i = 9;
+  while (lastParts.size() > i) {
+    labelText += lastParts[i] + " ";
+    i++;
+  }
+  labelText.chop(1);
+  bool ok;
+  widget->setValue(labelText.toDouble(&ok));
+  if (!ok)
+    widget->setText(labelText);
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   widgets.append(widget);
@@ -645,6 +712,9 @@ int WidgetPanel::createConsole(int x, int y, int width, int height, QString widg
    connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
    widgets.append(widget);
    widget->show();
+   if (editAct->isChecked()) {
+     createEditFrame(widget);
+   }
    consoleWidgets.append(widget);
    return 1;
 }
@@ -663,6 +733,7 @@ int WidgetPanel::createGraph(int x, int y, int width, int height, QString widget
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  graphWidgets.append(widget);
   return 1;
 }
 
@@ -768,7 +839,21 @@ void WidgetPanel::createSlider()
 void WidgetPanel::createLabel()
 {
   QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border New Label";
-  createLabel(currentPosition.x(), currentPosition.y() - 20, 80, 25, line);
+  createText(currentPosition.x(), currentPosition.y() - 20, 80, 25, line);
+  widgetChanged();
+}
+
+void WidgetPanel::createDisplay()
+{
+  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 25} display 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border New Label";
+  createText(currentPosition.x(), currentPosition.y() - 20, 80, 25, line);
+  widgetChanged();
+}
+
+void WidgetPanel::createScrollNumber()
+{
+  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 25} scroll 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} background border 0.000000";
+  createScrollNumber(currentPosition.x(), currentPosition.y() - 20, 80, 25, line);
   widgetChanged();
 }
 

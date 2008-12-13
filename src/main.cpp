@@ -20,22 +20,29 @@
 
 
 #include <QApplication>
+#include <QSplashScreen>
 #include "qutecsound.h"
 
 int main(int argc, char *argv[])
 {
-  QString fileName;
+  QStringList fileNames;
 
-  if (argc > 1)
-    fileName = QString(argv[1]);
-#ifdef MACOSX
-  if (fileName.startsWith("-psn_"))
-    fileName = "";
-#endif
-  qDebug("Opening %s", fileName.toStdString().c_str());
+  for (int i = 1; i < argc; i++) {
+    QString arg(argv[i]);
+    if (arg.endsWith(".orc") or arg.endsWith(".sco") or arg.endsWith(".csd")) {
+      fileNames.append(arg);
+    }
+  }
   Q_INIT_RESOURCE(application);
   QApplication app(argc, argv);
-  qutecsound * mw = new qutecsound(fileName);
+
+  QPixmap pixmap(":/qtcs.png");
+  QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
+  splash.show();
+  splash.showMessage("Starting QuteCsound");
+  app.processEvents();
+  qutecsound * mw = new qutecsound(fileNames);
+  splash.finish(mw);
   mw->show();
   return app.exec();
 }

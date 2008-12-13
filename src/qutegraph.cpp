@@ -21,9 +21,9 @@
 
 QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 {
-  m_widget = new QLabel(this);
-  ((QLabel *)m_widget)->setText("Graph not implemented yet.");
-  ((QLabel *)m_widget)->setFrameShape(QFrame::Box);
+  m_widget = new QGraphicsView(this);
+  QGraphicsScene *scene = new QGraphicsScene(m_widget);
+
 }
 
 QuteGraph::~QuteGraph()

@@ -54,7 +54,8 @@ void QuteWidget::setChannelName(QString name)
   m_name = name;
   if (m_name.startsWith('$'))
     m_name.remove(0,1);  // $ symbol is reserved for identifying string channels
-  m_widget->setObjectName(name);
+  if (name != "")
+    m_widget->setObjectName(name);
 //   qDebug("QuteWidget::setChannelName %s", m_name.toStdString().c_str());
 }
 
@@ -236,7 +237,7 @@ void QuteWidget::applyProperties()
 {
   setChannelName(nameLineEdit->text());
   setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
-  qDebug("QuteWidget::applyProperties() Not fully implemented yet.");
+//   qDebug("QuteWidget::applyProperties() Not fully implemented yet.");
   emit(widgetChanged(this));
 }
 

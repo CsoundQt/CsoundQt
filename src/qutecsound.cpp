@@ -31,6 +31,10 @@
 #include "utilitiesdialog.h"
 #include "findreplace.h"
 
+// Structs for csound graphs
+#include <cwindow.h>
+#include "curve.h"
+
 #ifdef WIN32
 static const QString SCRIPT_NAME = "qutecsound_run_script.bat";
 #else
@@ -41,7 +45,7 @@ static const QString SCRIPT_NAME = "./qutecsound_run_script.sh";
 uintptr_t csThread(void *clientData);
 
 //FIXME why does qutecsound not end when it receives a terminate signal?
-qutecsound::qutecsound(QString fileName)
+qutecsound::qutecsound(QStringList fileNames)
 {
   setWindowTitle("QuteCsound[*]");
   resize(660,350);
@@ -109,11 +113,13 @@ qutecsound::qutecsound(QString fileName)
       }
     }
   }
-  if (fileName!="") {
-    if (loadFile(fileName)) {
-      if (m_options->autoPlay)
-        play();
+  foreach (QString fileName, fileNames) {
+    if (fileName!="") {
+      loadFile(fileName);
     }
+  }
+  if (fileNames.size() > 0 and m_options->autoPlay) {
+    play();
   }
   if (documentPages.size() == 0) {
     newFile();
@@ -557,6 +563,8 @@ void qutecsound::play(bool realtime)
     csound=csoundCreate(0);
     csoundReset(csound);
     csoundSetHostData(csound, (void *) ud);
+
+
     if(m_options->thread) {
       csoundSetMessageCallback(csound, &qutecsound::messageCallback_Thread);
     }
@@ -569,6 +577,12 @@ void qutecsound::play(bool realtime)
     }
     fprintf(stderr, "\n");
     int result=csoundCompile(csound,argc,argv);
+
+    csoundSetIsGraphable(csound, true);
+    csoundSetMakeGraphCallback(csound, &qutecsound::makeGraphCallback);
+    csoundSetDrawGraphCallback(csound, &qutecsound::drawGraphCallback);
+    csoundSetKillGraphCallback(csound, &qutecsound::killGraphCallback);
+    csoundSetExitGraphCallback(csound, &qutecsound::exitGraphCallback);
 
     emit(dispatchQueues()); //To dispatch messages produced in compilation.
     if (result!=CSOUND_SUCCESS) {
@@ -2095,3 +2109,54 @@ void qutecsound::inputValueCallback (CSOUND *csound,
     csoundUnlockMutex(ud->qcs->perfMutex);
   }
 }
+
+
+void qutecsound::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *name)
+{
+  qDebug("qutecsound::makeGraph()");
+}
+
+void qutecsound::drawGraphCallback(CSOUND *csound, WINDAT *windat)
+{
+  qDebug("qutecsound::drawGraph()");
+  CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+  windat->caption[CAPSIZE - 1] = 0; // Just in case...
+  Polarity polarity;
+    // translate polarities and hope the definition in Csound doesn't change.
+  switch (windat->polarity) {
+    case NEGPOL:
+      polarity = POLARITY_NEGPOL;
+      break;
+    case POSPOL:
+      polarity = POLARITY_POSPOL;
+      break;
+    case BIPOL:
+      polarity = POLARITY_BIPOL;
+      break;
+    default:
+      polarity = POLARITY_NOPOL;
+  }
+  Curve *curve
+      = new Curve(windat->fdata,
+                  windat->npts,
+                  windat->caption,
+                  polarity,
+                  windat->max,
+                  windat->min,
+                  windat->absmax,
+                  windat->oabsmax,
+                  windat->danflag);
+  ud->qcs->widgetPanel->newGraph(curve);
+}
+
+void qutecsound::killGraphCallback(CSOUND *csound, WINDAT *windat)
+{
+  qDebug("qutecsound::killGraph()");
+}
+
+int qutecsound::exitGraphCallback(CSOUND *csound)
+{
+  qDebug("qutecsound::exitGraph()");
+  return 0;
+}
+

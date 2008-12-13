@@ -1,3 +1,104 @@
+2008-12-10 17:11  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r102] src/qutewidget.h, src/widgetpanel.cpp, src/widgetpanel.h:
+	  Minor fix to correct some connections between widgets
+
+2008-12-09 21:18  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r101] src/framewidget.cpp, src/framewidget.h,
+	  src/qutecsound.cpp, src/qutewidget.cpp, src/qutewidget.h,
+	  src/src.pro, src/widgetpanel.cpp, src/widgetpanel.h: Implemented
+	  multiple selection and simutaneous move and resize of selected
+	  widgets.
+	  Moved FrameWidget class to its own file
+
+2008-12-09 16:39  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r100] examples/lineedit.csd, examples/miditest.csd,
+	  src/documentpage.cpp, src/qutecsound.cpp, src/qutecsound.h,
+	  src/qutetext.cpp, src/qutetext.h, src/qutewidget.cpp,
+	  src/qutewidget.h, src/src.pro, src/widgetpanel.cpp,
+	  src/widgetpanel.h: Added line edit widget
+	  Implementing sending string channels from widgets
+	  Fixed behavior of edit action (now only one action which is
+	  shared)
+
+2008-12-09 01:40  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r99] src/widgetpanel.cpp: Fixed movement of widgets
+
+2008-12-09 01:04  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r98] examples/miditest.csd, src/configdialog.cpp,
+	  src/documentpage.cpp, src/widgetpanel.cpp, src/widgetpanel.h:
+	  Implemented listing of MIDI input and output devices in config
+	  dialog tool buttons.
+
+2008-12-07 14:06  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r97] qutecsound.kdevelop, src/application.qrc,
+	  src/configdialog.cpp, src/configdialog.h, src/configdialog.ui,
+	  src/documentpage.cpp, src/documentpage.h, src/qutecsound.cpp,
+	  src/qutecsound.h, src/src.pro, src/test.csd, src/widgetpanel.h:
+	  Added selection from list of realtime audio devices in
+	  configuration dialog.
+	  When clicking on a csd file from the manual, it is now opened in
+	  qutecsound and marked read only.
+
+2008-12-05 13:26  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r96] images/gtk-media-play-trl.png,
+	  images/gtk-media-play-trl.svg, src/application.qrc,
+	  src/dockhelp.cpp, src/dockhelp.h, src/qutebutton.cpp,
+	  src/qutecheckbox.cpp, src/qutecsound.cpp, src/qutecsound.h,
+	  src/quteknob.cpp, src/qutetext.cpp, src/qutetext.h,
+	  src/qutewidget.cpp, src/qutewidget.h, src/widgetpanel.cpp,
+	  src/widgetpanel.h: Widgets can now be moved and resized using the
+	  Edit mode action
+	  csd files from the manual now open automatically in QuteCsound
+	  Added buttons for back and forward actions to DockHelp panel
+	  The channel name line edit is now selected by default when
+	  opening widget preferences
+	  QuteCsound now warns when there are no open sco or orc files when
+	  joining to csd
+	  Made QuteCsound widgets less verbose
+
+2008-12-03 00:35  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r95] examples/noisered.csd, examples/stringchannels.csd,
+	  src/configdialog.ui, src/qutebutton.cpp, src/qutecsound.cpp,
+	  src/qutecsound.h, src/qutemeter.cpp, src/qutetext.cpp,
+	  src/qutetext.h, src/qutewidget.cpp, src/qutewidget.h,
+	  src/src.pro, src/widgetpanel.cpp, src/widgetpanel.h: Implemented
+	  receiving strings from QuteLabel widgets.
+	  Fixed initial display position for Point Controllers
+	  Fixed positioning of buttons (they appeared higher than they
+	  should)
+	  Text alignment is now saved correctly
+	  Added new string channels example
+
+2008-12-01 16:58  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r94] ChangeLog, src/configdialog.cpp, src/configdialog.ui,
+	  src/documentpage.cpp, src/options.h, src/qutebutton.cpp,
+	  src/qutebutton.h, src/qutecheckbox.cpp, src/qutecheckbox.h,
+	  src/qutecombobox.cpp, src/qutecsound.cpp, src/quteknob.cpp,
+	  src/qutemeter.cpp, src/qutemeter.h, src/quteslider.cpp,
+	  src/qutetext.cpp, src/qutewidget.cpp, src/qutewidget.h,
+	  src/widgetpanel.cpp, src/widgetpanel.h: Meter ("Controller")
+	  widget becomes horizontal if width> height.
+	  Meter widget now sends horizontal/vertical values in the correct
+	  way.
+	  The status bar shows important configuration options when
+	  hovering over play and render toolbar buttons
+	  Added menu action to join orc/sco files into a single csd file
+	  Widget preferences now shows type of widget
+	  Cleaned up unnecessary stuff in widgets
+	  orc and sco files are now preserved correctly (widget section was
+	  being added)
+	  Added option to see channel of widget as tooltip (on by default)
+	  Updated ChangeLog
+
 2008-11-28 22:25  Andrés Cabrera <mantaraya36@gmail.com>
 
 	* [r93] src/configdialog.cpp, src/configdialog.h,
