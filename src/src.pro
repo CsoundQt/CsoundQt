@@ -2,6 +2,8 @@
 #the doubles version, run qmake "CONFIG += build64"
 #CONFIG += build64
 
+win32: QUTECSOUND_CSOUND_PATH = C:\Program Files\Csound
+
 DEFINES += QUTE_USE_CSOUNDPERFORMANCETHREAD
 CONFIG += qute_cpp
 
@@ -10,7 +12,7 @@ build64 {
     DEFINES += USE_DOUBLE
 }
 else {
-    message(Building for float \(32-bit\) csound.)
+    message(Building for float \(32-    bit\) csound.)
     message(For doubles use qmake \"CONFIG += build64\")
 }
 
@@ -85,18 +87,18 @@ FORMS += configdialog.ui \
 
 win32 {
     DEFINES +=WIN32
-    INCLUDEPATH += "C:\Archivos de programa\Csound\include"
-    HEADERS += "C:\Archivos de programa\Csound\include\csound.h"
+    INCLUDEPATH += "$${QUTECSOUND_CSOUND_PATH}\include"
+    HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\csound.h"
     qute_cpp {
-        HEADERS += "C:\Archivos de programa\Csound\include\csound.hpp"
-        HEADERS += "C:\Archivos de programa\Csound\include\csPerfThread.hpp"
-        LIBS += "C:\Archivos de programa\Csound\bin\csnd.dll"
+        HEADERS += "$${QUTECSOUND_CSOUND_PATH}\csound.hpp"
+        HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\csPerfThread.hpp"
+        LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\csnd.dll"
     }
     build64 {
-        LIBS += "C:\Archivos de programa\Csound\bin\Csound64.dll.5.1"
+        LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\libcsound64.a"
     }
     else {
-        LIBS += "C:\Archivos de programa\Csound\bin\Csound32.dll.5.1"
+        LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\libcsound32.a"
     }
     RC_FILE = qutecsound.rc
 }
