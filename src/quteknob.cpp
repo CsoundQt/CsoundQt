@@ -85,7 +85,6 @@ void QuteKnob::setWidgetGeometry(int x, int y, int width, int height)
   QuteWidget::setWidgetGeometry(x,y,width,height);
   m_widget->move(5,5);
   m_widget->setFixedSize(width-10, height-10);
-//   m_widget->setGeometry(x+1, y+1, width-2, height-2);
 }
 
 QString QuteKnob::getWidgetLine()

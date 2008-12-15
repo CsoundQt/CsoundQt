@@ -173,7 +173,7 @@ class ScrollNumberWidget : public QLabel
         pressed = true;
       }
     }
-    virtual void mouseReleaseEvent (QMouseEvent * event)
+    virtual void mouseReleaseEvent (QMouseEvent * /*event*/)
     {
       pressed = false;
     }

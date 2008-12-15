@@ -47,7 +47,7 @@ double QuteSlider::getValue()
 
 void QuteSlider::setRange(double min, double max)
 {
-  // TODO when slider is resized, its internal range should be adjusted to accomodate one value per pixel. There are currently 100 values no matter how many pixels...
+  // FIXME when slider is resized, its internal range should be adjusted to accomodate one value per pixel. There are currently 100 values no matter how many pixels...
   if (max < min) {
     double temp = max;
     max = min;
@@ -81,11 +81,6 @@ void QuteSlider::setWidgetGeometry(int x, int y, int w, int h)
   else
     ((QSlider *)m_widget)->setOrientation(Qt::Vertical);
 }
-
-// void QuteSlider::setWidgetGeometry(QRect rect)
-// {
-//   QuteWidget::setWidgetGeometry(rect);
-// }
 
 void QuteSlider::setWidgetLine(QString line)
 {

@@ -289,8 +289,20 @@ void WidgetPanel::showTooltips(bool show)
   }
 }
 
-void WidgetPanel::newGraph(Curve* curve)
+void WidgetPanel::newCurve(Curve* curve)
 {
+  for (int i = 0; i < graphWidgets.size(); i++) {
+    graphWidgets[i]->addCurve(curve);
+    qApp->processEvents(); //Kludge to allow corret resizing of graph view
+    graphWidgets[i]->changeCurve(-1);
+  }
+}
+
+void WidgetPanel::clearGraphs()
+{
+  for (int i = 0; i < graphWidgets.size(); i++) {
+    graphWidgets[i]->clearCurves();
+  }
 }
 
 void WidgetPanel::deleteWidget(QuteWidget *widget)
@@ -721,7 +733,7 @@ int WidgetPanel::createConsole(int x, int y, int width, int height, QString widg
 
 int WidgetPanel::createGraph(int x, int y, int width, int height, QString widgetLine)
 {
-  qDebug("ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
+//   qDebug("ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QuteGraph *widget= new QuteGraph(layoutWidget);
   widget->setWidgetLine(widgetLine);
@@ -775,9 +787,6 @@ void WidgetPanel::activateEditMode(bool active)
     }
     editWidgets.clear();
   }
-//   this line breaks movement of widgets....
-//   if (editAct->isChecked() != active)
-//     editAct->setChecked(active);
 }
 
 void WidgetPanel::createEditFrame(QuteWidget* widget)

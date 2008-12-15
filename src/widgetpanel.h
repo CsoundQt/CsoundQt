@@ -52,7 +52,8 @@ class WidgetPanel : public QDockWidget
     QString widgetsText();
     void appendMessage(QString message);
     void showTooltips(bool show);
-    void newGraph(Curve* curve);
+    void newCurve(Curve* curve);
+    void clearGraphs();
 
     QVector<QString> eventQueue;
     int eventQueueSize;

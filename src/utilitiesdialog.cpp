@@ -99,8 +99,6 @@ void UtilitiesDialog::resetAtsa()
   atsaSmrLineEdit->setText("0.5");
   atsaFileTypeComboBox->setCurrentIndex(0);
   atsaWindowComboBox->setCurrentIndex(0);
-//   atsaInputLineEdit->setText("input.wav");
-//   atsaOutputLineEdit->setText("output.ats");
 }
 
 void UtilitiesDialog::runPvanal()
@@ -145,8 +143,6 @@ void UtilitiesDialog::resetPvanal()
 
   pvWindowComboBox->setCurrentIndex(0);
   pvBetaLineEdit->setText("6.4");
-//   pvInputLineEdit->setText("input.wav");
-//   pvOutputLineEdit->setText("output.pvx");
 }
 
 void UtilitiesDialog::runHetro()
@@ -182,8 +178,6 @@ void UtilitiesDialog::resetHetro()
   hetMinLineEdit->setText("64");
   hetBreakpointsLineEdit->setText("256");
   hetCutoffLineEdit->setText("0");
-//   hetInputLineEdit->setText("input.wav");
-//   hetOutputLineEdit->setText("output.het");
 }
 
 void UtilitiesDialog::runLpanal()
@@ -218,8 +212,6 @@ void UtilitiesDialog::resetLpanal()
   lpHopSizeLineEdit->setText("200");
   lpVerbosityComboBox->setCurrentIndex(0);
   lpAlternateCheckBox->setChecked(true);
-//   lpInputLineEdit->setText("");
-//   lpOutputLineEdit->setText("");
 }
 
 void UtilitiesDialog::runCvanal()
@@ -244,8 +236,6 @@ void UtilitiesDialog::resetCvanal()
   cvBeginLineEdit->setText("0.0");
   cvDurationLineEdit->setText("0.0");
   cvChannelLineEdit->setText("");
-//   cvInputLineEdit->setText("input.wav");
-//   cvOutputLineEdit->setText("output.cv");
 }
 
 

@@ -22,6 +22,8 @@
 
 #include "qutewidget.h"
 
+class Curve;
+
 class QuteGraph : public QuteWidget
 {
   Q_OBJECT
@@ -31,6 +33,52 @@ class QuteGraph : public QuteWidget
     ~QuteGraph();
 
     virtual QString getWidgetLine();
+    virtual void setWidgetGeometry(int x,int y,int width,int height);
+    virtual void createPropertiesDialog();
+    void clearCurves();
+    void addCurve(Curve *curve);
+
+  protected:
+    QLabel * m_label;
+    QComboBox *m_pageComboBox;
+    QVector<Curve *> curves;
+
+  public slots:
+    void changeCurve(int index);
+};
+
+class StackedLayoutWidget : public QStackedWidget
+{
+  Q_OBJECT
+  public:
+    StackedLayoutWidget(QWidget* parent) : QStackedWidget(parent)
+    {
+      setFrameShape(QFrame::StyledPanel);
+    }
+    ~StackedLayoutWidget() {};
+
+    void setWidgetGeometry(int x,int y,int width,int height)
+    {
+      setGeometry(x,y,width, height);
+      setMaximumSize(width, height);
+    }
+
+    void clearCurves()
+    {
+      QWidget *widget;
+      widget = currentWidget();
+      while (widget != 0) {
+        removeWidget(widget);
+        widget = currentWidget();
+      }
+    }
+
+  protected:
+    virtual void contextMenuEvent(QContextMenuEvent *event)
+    {emit(popUpMenu(event->globalPos()));}
+
+  signals:
+    void popUpMenu(QPoint pos);
 };
 
 #endif

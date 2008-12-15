@@ -31,8 +31,6 @@ class QuteConsole : public QuteWidget
 
     ~QuteConsole();
 
-    virtual void setValue(double value); // Value of button when pressed
-    virtual double getValue(); // This value represents the state of the button
     virtual QString getWidgetLine();
     virtual void setWidgetGeometry(int x,int y,int width,int height);
     void popUpMenu(QPoint pos);

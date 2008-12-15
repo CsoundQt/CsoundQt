@@ -41,10 +41,7 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
   dynamic_cast<LabelWidget*>(m_widget)->setWordWrap (true);
   dynamic_cast<LabelWidget*>(m_widget)->setMargin (5);
   dynamic_cast<LabelWidget*>(m_widget)->setTextFormat(Qt::RichText);
-//   ((QuteTextEdit *)m_widget)->setReadOnly(true);
-//   ((QuteTextEdit *)m_widget)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   connect(dynamic_cast<LabelWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
-//   m_alignment = Qt::AlignLeft;
 }
 
 QuteText::~QuteText()
@@ -132,7 +129,6 @@ void QuteText::setBorder(bool border)
     dynamic_cast<QFrame*>(m_widget)->setFrameShape(QFrame::Box);
   else
     dynamic_cast<QFrame*>(m_widget)->setFrameShape(QFrame::NoFrame);
-//   m_border = border;
 }
 
 void QuteText::setText(QString text)
@@ -162,7 +158,6 @@ void QuteText::setText(QString text)
 
 QString QuteText::getWidgetLine()
 {
-  //TODO finish implementing all properties for label
   QString line = "ioText {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += m_type + " ";
@@ -202,17 +197,6 @@ void QuteText::createPropertiesDialog()
     dialog->setWindowTitle("Display");
   }
   QLabel *label = new QLabel(dialog);
-//   label->setText("Type");
-//   layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
-//   typeComboBox = new QComboBox(dialog);
-//   typeComboBox->addItem("label");
-//   typeComboBox->addItem("display");
-  //typeComboBox->addItem("edit");
-  //typeComboBox->addItem("scroll");
-  //typeComboBox->addItem("editnum");
-//   typeComboBox->setCurrentIndex(typeComboBox->findText(m_type));
-//   layout->addWidget(typeComboBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
-//   label = new QLabel(dialog);
   label->setText("Text:");
   layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
   text = new QLineEdit(dialog);
@@ -304,13 +288,10 @@ void QuteText::applyProperties()
 {
   m_font = font->currentFont().family();
   m_fontSize = fontSize->itemData(fontSize->currentIndex()).toInt();
-//   ((LabelWidget *)m_widget)->setText(text->text());
-//   setType(typeComboBox->currentText());
   setText(text->text());
   m_widget->setAutoFillBackground(bg->isChecked());
   dynamic_cast<QFrame*>(m_widget)->setFrameShape(border->isChecked()?  QFrame::Box : QFrame::NoFrame);
   setAlignment(alignment->currentIndex());
-//   ((LabelWidget *)m_widget)->setPlainText(text->text());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
 
@@ -323,7 +304,6 @@ void QuteText::selectTextColor()
     QPixmap pixmap(64,64);
     pixmap.fill(m_widget->palette().color(QPalette::WindowText));
     textColor->setIcon(pixmap);
-//     colorLabel->setAutoFillBackground(true);
   }
 }
 
@@ -336,7 +316,6 @@ void QuteText::selectBgColor()
     QPixmap pixmap(64,64);
     pixmap.fill(m_widget->palette().color(QPalette::Window));
     bgColor->setIcon(pixmap);
-//     colorLabel->setAutoFillBackground(true);
   }
 }
 
@@ -348,11 +327,8 @@ QuteLineEdit::QuteLineEdit(QWidget* parent) : QuteText(parent)
 {
   delete m_widget; //delete widget created by parent constructor
   m_widget = new LineEditWidget(this);
-
-//   ((QuteTextEdit *)m_widget)->setReadOnly(true);
-//   ((QuteTextEdit *)m_widget)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   connect(dynamic_cast<LineEditWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
-//   m_alignment = Qt::AlignLeft;
+  m_type = "edit";
 }
 
 QuteLineEdit::~QuteLineEdit()
@@ -406,7 +382,6 @@ void QuteLineEdit::setText(QString text)
 
 QString QuteLineEdit::getWidgetLine()
 {
-  //TODO finish implementing all properties for label
   QString line = "ioText {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += m_type + " ";
@@ -431,7 +406,6 @@ QString QuteLineEdit::getWidgetLine()
       + ", " + QString::number(color.blue() * 256) + "} ";
   line += m_widget->autoFillBackground()? "background ":"nobackground ";
   line += "noborder ";
-//   line += ((LabelWidget *)m_widget)->toPlainText();
   line += m_text;
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
   return line;
@@ -446,7 +420,6 @@ void QuteLineEdit::createPropertiesDialog()
 {
   QuteText::createPropertiesDialog();
   dialog->setWindowTitle("Line Edit");
-//   typeComboBox->setEnabled(false);
   fontSize->hide();
   font->hide();
   border->hide();
@@ -458,15 +431,9 @@ void QuteLineEdit::createPropertiesDialog()
 
 void QuteLineEdit::applyProperties()
 {
-//   m_font = font->currentFont().family();
-//   m_fontSize = fontSize->itemData(fontSize->currentIndex()).toInt();
-//   ((LabelWidget *)m_widget)->setText(text->text());
-//   setType(typeComboBox->currentText());
   setText(text->text());
   m_widget->setAutoFillBackground(bg->isChecked());
-//   dynamic_cast<QFrame*>(m_widget)->setFrameShape(border->isChecked()?  QFrame::Box : QFrame::NoFrame);
   setAlignment(alignment->currentIndex());
-//   ((LabelWidget *)m_widget)->setPlainText(text->text());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
 
@@ -479,13 +446,9 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
 {
   delete m_widget; //delete widget created by parent constructor
   m_widget = new ScrollNumberWidget(this);
-
-//   ((QuteTextEdit *)m_widget)->setReadOnly(true);
-//   ((QuteTextEdit *)m_widget)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   connect(dynamic_cast<ScrollNumberWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
   connect(dynamic_cast<ScrollNumberWidget*>(m_widget), SIGNAL(addValue(double)), this, SLOT(addValue(double)));
   connect(dynamic_cast<ScrollNumberWidget*>(m_widget), SIGNAL(setValue(double)), this, SLOT(setValue(double)));
-//   m_alignment = Qt::AlignLeft;
   m_type = "scroll";
 }
 
@@ -553,7 +516,6 @@ void QuteScrollNumber::setText(QString text)
 
 QString QuteScrollNumber::getWidgetLine()
 {
-  //TODO finish implementing all properties for label
   QString line = "ioText {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += m_type + " ";
@@ -580,7 +542,6 @@ QString QuteScrollNumber::getWidgetLine()
       + ", " + QString::number(color.blue() * 256) + "} ";
   line += m_widget->autoFillBackground()? "background ":"nobackground ";
   line += dynamic_cast<QFrame*>(m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
-//   line += ((LabelWidget *)m_widget)->toPlainText();
   line += m_text;
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
   return line;
@@ -608,8 +569,6 @@ void QuteScrollNumber::createPropertiesDialog()
   resolutionSpinBox->setDecimals(6);
   resolutionSpinBox->setValue(dynamic_cast<ScrollNumberWidget*>(m_widget)->getResolution());
   layout->addWidget(resolutionSpinBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
-
-//   text->setEnabled(false);
 }
 
 void QuteScrollNumber::applyProperties()

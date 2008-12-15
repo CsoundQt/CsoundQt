@@ -560,10 +560,10 @@ void qutecsound::play(bool realtime)
     argv = (char **) calloc(33, sizeof(char*));
     // TODO use: PUBLIC int csoundSetGlobalEnv(const char *name, const char *value);
     int argc = m_options->generateCmdLine(argv, realtime, fileName, fileName2);
+    widgetPanel->clearGraphs();
     csound=csoundCreate(0);
     csoundReset(csound);
     csoundSetHostData(csound, (void *) ud);
-
 
     if(m_options->thread) {
       csoundSetMessageCallback(csound, &qutecsound::messageCallback_Thread);
@@ -1007,6 +1007,9 @@ void qutecsound::dispatchQueues()
   processEventQueue(ud);
 //   csoundUnlockMutex(perfMutex);
   messageQueue.clear();
+  while (!curveBuffer.isEmpty()) {
+    widgetPanel->newCurve(curveBuffer.pop());
+  }
   if (ud->PERF_STATUS == 1) {
     queueTimer->start(QCS_QUEUETIMER_TIME);
   }
@@ -2056,6 +2059,11 @@ QStringList qutecsound::runCsound(QStringList flags)
   return m_deviceMessages;
 }
 
+void qutecsound::newCurve(Curve * curve)
+{
+  curveBuffer.append(curve);
+}
+
 void qutecsound::outputValueCallback (CSOUND *csound,
                                      const char *channelName,
                                      MYFLT value)
@@ -2146,7 +2154,7 @@ void qutecsound::drawGraphCallback(CSOUND *csound, WINDAT *windat)
                   windat->absmax,
                   windat->oabsmax,
                   windat->danflag);
-  ud->qcs->widgetPanel->newGraph(curve);
+  ud->qcs->newCurve(curve);
 }
 
 void qutecsound::killGraphCallback(CSOUND *csound, WINDAT *windat)

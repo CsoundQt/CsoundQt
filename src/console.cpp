@@ -42,7 +42,6 @@ void Console::appendMessage(QString msg)
   text->insertPlainText(msg);
   text->moveCursor(QTextCursor::End);
   text->setTextColor(QColor("black"));
-  //text->repaint();
 }
 
 void Console::clear()
@@ -55,8 +54,7 @@ void DockConsole::closeEvent(QCloseEvent * /*event*/)
   emit Close(false);
 }
 
-void ConsoleWidget::setWidgetGeometry(int x,int y,int width,int height)
+void ConsoleWidget::setWidgetGeometry(int /*x*/,int /*y*/,int width,int height)
 {
-//   text->setMinimunSize(width, height);
   text->setGeometry(QRect(0,0,width, height));
 }

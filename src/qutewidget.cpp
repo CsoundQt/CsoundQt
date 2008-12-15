@@ -24,8 +24,6 @@
 QuteWidget::QuteWidget(QWidget *parent/*, widgetType type*/):
     QWidget(parent)/*, m_type(type)*/
 {
-//   this->setGeometry(QRect(5, 5, 20, 200));
-
   propertiesAct = new QAction(/*QIcon(":/images/gtk-new.png"),*/ tr("&Properties"), this);
   propertiesAct->setShortcut(tr("Alt+P"));
   propertiesAct->setStatusTip(tr("Open widget properties"));
@@ -74,14 +72,10 @@ void QuteWidget::setRange(int /*min*/, int /*max*/)
 
 void QuteWidget::setValue(double /*value*/)
 {
-//FIXME put this back when it's no longer a burden.
-//   qDebug("QuteWidget::setValue not implemented for widget type (value = %f)", value);
 }
 
 void QuteWidget::setValue2(double /*value*/)
 {
-//FIXME put this back when it's no longer a burden.
-//   qDebug("QuteWidget::setValue not implemented for widget type (value = %f)", value);
 }
 
 void QuteWidget::setValue(QString /*value*/)
@@ -115,9 +109,6 @@ QString QuteWidget::getWidgetLine()
 
 double QuteWidget::getValue()
 {
-#ifdef DEBUG
-  qDebug("QuteWidget::getValue not implemented for widget type");
-#endif
   return 0.0;
 }
 
@@ -150,7 +141,6 @@ void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
 void QuteWidget::popUpMenu(QPoint pos)
 {
   QMenu menu(this);
-//   menu.addSeparator();
   menu.addAction(propertiesAct);
   menu.addSeparator();
   menu.addAction(deleteAct);

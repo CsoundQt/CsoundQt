@@ -39,7 +39,6 @@ class QuteSlider : public QuteWidget
     void setValue(double value);
 
   protected:
-//     virtual void setWidgetGeometry(QRect rect);
     virtual void createPropertiesDialog();
     virtual void applyProperties();
 

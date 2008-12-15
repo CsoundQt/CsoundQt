@@ -22,7 +22,6 @@
 QuteDummy::QuteDummy(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new QFrame(this);
-//   ((QFrame *)m_widget)->setFrameShape(QFrame::Box);
   m_widget->setAutoFillBackground (true);
   m_widget->setPalette(QPalette(Qt::gray));
 }

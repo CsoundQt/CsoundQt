@@ -119,6 +119,7 @@ class qutecsound:public QMainWindow
     void queueOutString(QString channelName, QString value);
     void queueMessage(QString message);
     QStringList runCsound(QStringList flags); //returns csound messages
+    void newCurve(Curve *curve);  //f-table data
 
     QVector<QString> channelNames;
     QVector<double> values;
@@ -198,6 +199,7 @@ class qutecsound:public QMainWindow
 
     QHash<QString, double> outValueQueue;
     QHash<QString, QString> outStringQueue;
+    QStack<Curve *> curveBuffer;
     QStringList messageQueue;
     QTimer *queueTimer;
     QTabWidget *documentTabs;

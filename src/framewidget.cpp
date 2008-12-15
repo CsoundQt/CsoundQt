@@ -26,8 +26,6 @@ FrameWidget::FrameWidget(QWidget* parent) : QFrame(parent)
 {
   m_resizeBox = new QFrame(this);
   m_resizeBox->setAutoFillBackground(true);
-//       m_resizeBox->move(width()-7, height()-7);
-//       m_resizeBox->resize(7,7);
   QPalette palette(QColor(Qt::red),QColor(Qt::red));
   palette.setColor(QPalette::WindowText, QColor(Qt::red));
   m_resizeBox->setPalette(palette);
@@ -80,7 +78,7 @@ void FrameWidget::mousePressEvent ( QMouseEvent * event )
   this->select();
 }
 
-void FrameWidget::mouseReleaseEvent ( QMouseEvent * event )
+void FrameWidget::mouseReleaseEvent ( QMouseEvent * /*event */)
 {
 }
 

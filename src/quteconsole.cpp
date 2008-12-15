@@ -23,22 +23,11 @@ QuteConsole::QuteConsole(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new ConsoleWidget(this);
   m_widget->setAutoFillBackground(true);
-  connect(((ConsoleWidget *)m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+  connect(static_cast<ConsoleWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 }
 
 QuteConsole::~QuteConsole()
 {
-}
-
-void QuteConsole::setValue(double /*value*/)
-{
-  // No action
-}
-
-double QuteConsole::getValue()
-{
-//This widget has no value
-  return 0.0;
 }
 
 QString QuteConsole::getWidgetLine()
@@ -56,12 +45,12 @@ void QuteConsole::popUpMenu(QPoint pos)
 
 void QuteConsole::appendMessage(QString message)
 {
-  ((ConsoleWidget *)m_widget)->appendMessage(message);
+  static_cast<ConsoleWidget *>(m_widget)->appendMessage(message);
 }
 
 void QuteConsole::setWidgetGeometry(int x,int y,int width,int height)
 {
   QuteWidget::setWidgetGeometry(x,y,width, height);
-  ((ConsoleWidget *)m_widget)->setWidgetGeometry(x,y,width, height);
+  static_cast<ConsoleWidget *>(m_widget)->setWidgetGeometry(x,y,width, height);
 }
 

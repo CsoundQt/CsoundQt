@@ -116,9 +116,6 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options, ConfigLists *co
   IncdirCheckBox->setChecked(m_options->incdirActive);
   IncdirLineEdit->setText(m_options->incdir);
   IncdirLineEdit->setEnabled(m_options->incdirActive);
-//   opcodeXmlDirCheckBox->setChecked(m_options->opcodexmldirActive);
-//   opcodeXmlDirLineEdit->setText(m_options->opcodexmldir);
-//   opcodeXmlDirLineEdit->setEnabled(m_options->opcodexmldirActive);
 
   TerminalLineEdit->setText(m_options->terminal);
   browserLineEdit->setText(m_options->browser);
@@ -133,7 +130,6 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options, ConfigLists *co
   connect(ssdirToolButton, SIGNAL(clicked()), this, SLOT(browseSsdir()));
   connect(sfdirToolButton, SIGNAL(clicked()), this, SLOT(browseSfdir()));
   connect(incdirToolButton, SIGNAL(clicked()), this, SLOT(browseIncdir()));
-//   connect(opcodeXmlDirToolButton, SIGNAL(clicked()), this, SLOT(browseOpcodeXmlDir()));
   connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
   connect(browserToolButton, SIGNAL(clicked()), this, SLOT(browseBrowser()));
   connect(waveEditorToolButton, SIGNAL(clicked()), this, SLOT(browseWaveEditor()));
@@ -268,12 +264,6 @@ void ConfigDialog::browseIncdir()
   browseDir(m_options->incdir);
   IncdirLineEdit->setText(m_options->incdir);
 }
-
-// void ConfigDialog::browseOpcodeXmlDir()
-// {
-//   browseDir(m_options->opcodexmldir);
-//   opcodeXmlDirLineEdit->setText(m_options->opcodexmldir);
-// }
 
 void ConfigDialog::browseTerminal()
 {
@@ -569,8 +559,7 @@ QList<QPair<QString, QString> > ConfigDialog::getMidiOutputDevices()
     tempFile.open();
 
     QStringList flags;
-//     QString rtAudioFlag = "-+rtaudio=" + module;
-    flags << "-+msg_color=false"/* << rtAudioFlag*/ << "-odac"  << "-Q999" << tempFile.fileName();
+    flags << "-+msg_color=false" << "-odac"  << "-Q999" << tempFile.fileName();
     QStringList messages = m_parent->runCsound(flags);
 
     QString startText, endText;
