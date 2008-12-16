@@ -35,6 +35,9 @@ class DocumentPage : public QTextEdit
     int setTextString(QString text);
     QString getFullText();
     QString getMacWidgetsText();
+    QString getMacOptionsText();
+    QString getMacOption(QString option);
+    QRect getWidgetPanelGeometry();
 
 //     QTextDocument *textDocument;
     QString fileName;
@@ -43,13 +46,19 @@ class DocumentPage : public QTextEdit
     bool readOnly; // Used for manual files and internal examples
 
   private:
-    QString macOptions;
+    QStringList macOptions;
     QString macPresets;
     QString macGUI;
     QDomElement widgets;
 
+    bool widgetsDocked;
+
   public slots:
     void setMacWidgetsText(QString text);
+    void setMacOptionsText(QString text);
+    void setMacOption(QString option, QString newValue);
+    void setWidgetPanelPosition(QPoint position);
+    void setWidgetPanelSize(QSize size);
 
     void comment();
     void uncomment();

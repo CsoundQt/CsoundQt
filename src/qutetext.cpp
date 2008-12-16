@@ -69,11 +69,6 @@ void QuteText::setType(QString type)
   m_type = type;
 }
 
-void QuteText::setResolution(double resolution)
-{
-  m_resolution = resolution;
-}
-
 void QuteText::setAlignment(int alignment)
 {
 //   qDebug("QuteText::setAlignment %i", alignment);
@@ -567,7 +562,7 @@ void QuteScrollNumber::createPropertiesDialog()
   layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
   resolutionSpinBox = new QDoubleSpinBox(dialog);
   resolutionSpinBox->setDecimals(6);
-  resolutionSpinBox->setValue(dynamic_cast<ScrollNumberWidget*>(m_widget)->getResolution());
+  resolutionSpinBox->setValue(static_cast<ScrollNumberWidget*>(m_widget)->getResolution());
   layout->addWidget(resolutionSpinBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
 }
 

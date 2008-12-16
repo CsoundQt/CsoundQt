@@ -18,6 +18,7 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 #include "qutewidget.h"
+#include "widgetpanel.h"
 
 #include <QSlider>
 
@@ -82,9 +83,9 @@ void QuteWidget::setValue(QString /*value*/)
 {
 }
 
-void QuteWidget::setResolution(double /*resolution*/)
+void QuteWidget::setResolution(double resolution)
 {
-  qDebug("QuteWidget::setResolution not implemented for widget type");
+  m_resolution = resolution;
 }
 
 void QuteWidget::setChecked(bool /*checked*/)
@@ -142,6 +143,14 @@ void QuteWidget::popUpMenu(QPoint pos)
 {
   QMenu menu(this);
   menu.addAction(propertiesAct);
+  menu.addSeparator();
+
+  QList<QAction *> actionList = getParentActionList();
+
+//   foreach (QAction *action, actionList) {
+//     menu.addAction(action);
+//   }
+
   menu.addSeparator();
   menu.addAction(deleteAct);
 
@@ -229,6 +238,15 @@ void QuteWidget::applyProperties()
   setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
 //   qDebug("QuteWidget::applyProperties() Not fully implemented yet.");
   emit(widgetChanged(this));
+}
+
+QList<QAction *> QuteWidget::getParentActionList()
+{
+  QList<QAction *> actionList;
+  actionList.append(static_cast<WidgetPanel *>(parent())->copyAct);
+  actionList.append(static_cast<WidgetPanel *>(parent())->pasteAct);
+  actionList.append(static_cast<WidgetPanel *>(parent())->cutAct);
+  return actionList;
 }
 
 void QuteWidget::apply()

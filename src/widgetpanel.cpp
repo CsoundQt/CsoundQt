@@ -21,6 +21,7 @@
 #include "qutewidget.h"
 #include "quteslider.h"
 #include "qutetext.h"
+#include "qutespinbox.h"
 #include "qutebutton.h"
 #include "quteknob.h"
 #include "qutecheckbox.h"
@@ -42,7 +43,9 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   layoutWidget = new LayoutWidget(this);
   layoutWidget->setGeometry(QRect(0, 0, 800, 600));
   layoutWidget->setAutoFillBackground(true);
+  layoutWidget->setFocusPolicy(Qt::NoFocus);
   connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
+//   connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));
 
   createSliderAct = new QAction(tr("Create Slider"),this);
   connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createSlider()));
@@ -54,6 +57,8 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(createScrollNumberAct, SIGNAL(triggered()), this, SLOT(createScrollNumber()));
   createLineEditAct = new QAction(tr("Create LineEdit"),this);
   connect(createLineEditAct, SIGNAL(triggered()), this, SLOT(createLineEdit()));
+  createSpinBoxAct = new QAction(tr("Create SpinBox"),this);
+  connect(createSpinBoxAct, SIGNAL(triggered()), this, SLOT(createSpinBox()));
   createButtonAct = new QAction(tr("Create Button"),this);
   connect(createButtonAct, SIGNAL(triggered()), this, SLOT(createButton()));
   createKnobAct = new QAction(tr("Create Knob"),this);
@@ -70,10 +75,22 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(createGraphAct, SIGNAL(triggered()), this, SLOT(createGraph()));
   propertiesAct = new QAction(tr("Properties"),this);
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
-  editAct = new QAction(tr("Widget Edit Mode"), static_cast<qutecsound *>(parent));
+  editAct = new QAction(tr("Widget Edit Mode"), this);
   editAct->setCheckable(true);
   editAct->setShortcut(tr("Ctrl+E"));
   connect(editAct, SIGNAL(triggered(bool)), this, SLOT(activateEditMode(bool)));
+  copyAct = new QAction(tr("Copy Selected"), this);
+  copyAct->setShortcut(tr("Ctrl+C"));
+  connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
+  cutAct = new QAction(tr("Cut Selected"), this);
+  cutAct->setShortcut(tr("Ctrl+X"));
+  connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
+  pasteAct = new QAction(tr("Paste Selected"), this);
+  pasteAct->setShortcut(tr("Ctrl+V"));
+  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
+  duplicateAct = new QAction(tr("Duplicate Selected"), this);
+  duplicateAct->setShortcut(tr("Ctrl+D"));
+  connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
   clearAct = new QAction(tr("Clear all widgets"), this);
   connect(clearAct, SIGNAL(triggered()), this, SLOT(clearWidgets()));
 
@@ -161,7 +178,7 @@ int WidgetPanel::loadWidgets(QString macWidgets)
   return 0;
 }
 
-int WidgetPanel::newWidget(QString widgetLine)
+int WidgetPanel::newWidget(QString widgetLine, bool offset)
 {
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"'); //Remove this line whe not needed
@@ -181,6 +198,10 @@ int WidgetPanel::newWidget(QString widgetLine)
     int x,y,width,height;
     x = parts[1].toInt();
     y = parts[2].toInt();
+    if (offset) {
+      x += 20;
+      y += 20;
+    }
     width = parts[3].toInt();
     height = parts[4].toInt();
     if (parts[0]=="ioSlider") {
@@ -197,7 +218,7 @@ int WidgetPanel::newWidget(QString widgetLine)
         return createScrollNumber(x,y,width, height, widgetLine);
       }
       else if (parts[5]=="editnum") {
-        return createDummy(x,y,width, height, widgetLine);
+        return createSpinBox(x,y,width, height, widgetLine);
       }
     }
     else if (parts[0]=="ioButton") {
@@ -339,6 +360,7 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   menu.addAction(createDisplayAct);
   menu.addAction(createScrollNumberAct);
   menu.addAction(createLineEditAct);
+  menu.addAction(createSpinBoxAct);
   menu.addAction(createButtonAct);
   menu.addAction(createKnobAct);
   menu.addAction(createCheckBoxAct);
@@ -349,11 +371,27 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   menu.addSeparator();
   menu.addAction(editAct);
   menu.addSeparator();
+  menu.addAction(copyAct);
+  menu.addAction(pasteAct);
+  menu.addAction(duplicateAct);
+  menu.addAction(cutAct);
   menu.addAction(clearAct);
   menu.addSeparator();
   menu.addAction(propertiesAct);
   currentPosition = event->pos();
   menu.exec(event->globalPos());
+}
+
+void WidgetPanel::resizeEvent(QResizeEvent * event)
+{
+  oldSize = event->oldSize();
+  qDebug("WidgetPanel::resizeEvent()");
+  emit resized(event->size());
+}
+
+void WidgetPanel::moveEvent(QMoveEvent * event)
+{
+  emit moved(event->pos());
 }
 
 void WidgetPanel::newValue(QHash<QString, double> channelValue)
@@ -516,6 +554,55 @@ int WidgetPanel::createLineEdit(int x, int y, int width, int height, QString wid
   if (lastParts.size() < 9)
     return -1;
   QuteLineEdit *widget= new QuteLineEdit(layoutWidget);
+  widget->setWidgetLine(widgetLine);
+  widget->setWidgetGeometry(x,y,width, height);
+  widget->setType(parts[5]);
+  widget->setResolution(parts[7].toDouble());
+  widget->setChannelName(quoteParts[1]);
+  if (quoteParts[2] == " left ")
+    widget->setAlignment(0);
+  else if (quoteParts[2] == " center ")
+    widget->setAlignment(1);
+  else if (quoteParts[2] == " right ")
+    widget->setAlignment(2);
+  widget->setFont(quoteParts[3]);
+  widget->setFontSize(lastParts[0].toInt());
+  widget->setTextColor(QColor(lastParts[1].toDouble()/256.0,
+                       lastParts[2].toDouble()/256.0,
+                                             lastParts[3].toDouble()/256.0));
+  widget->setBgColor(QColor(lastParts[4].toDouble()/256.0,
+                     lastParts[5].toDouble()/256.0,
+                                           lastParts[6].toDouble()/256.0));
+  widget->setBg(lastParts[7] == "background");
+//   widget->setBorder(lastParts[8] == "border");
+  QString labelText = "";
+  int i = 9;
+  while (lastParts.size() > i) {
+    labelText += lastParts[i] + " ";
+    i++;
+  }
+  labelText.chop(1);
+  widget->setText(labelText);
+  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  widgets.append(widget);
+  widget->show();
+  if (editAct->isChecked()) {
+    createEditFrame(widget);
+  }
+  return 1;
+}
+
+int WidgetPanel::createSpinBox(int x, int y, int width, int height, QString widgetLine)
+{
+  QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  QStringList quoteParts = widgetLine.split('"');
+  if (parts.size()<20 or quoteParts.size()<5)
+    return -1;
+  QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  if (lastParts.size() < 9)
+    return -1;
+  QuteSpinBox *widget= new QuteSpinBox(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setType(parts[5]);
@@ -822,7 +909,7 @@ void WidgetPanel::widgetMoved(QPair<int, int> delta)
 void WidgetPanel::widgetResized(QPair<int, int> delta)
 {
 //   qDebug("WidgetPanel::widgetResized %i  %i", delta.first, delta.second);
-  for (int i = 0; i< widgets.size(); i++) {
+  for (int i = 0; i< editWidgets.size(); i++) {
     if (editWidgets[i]->isSelected()) {
       int neww = widgets[i]->width() + delta.first;
       int newh = widgets[i]->height() + delta.second;
@@ -831,6 +918,72 @@ void WidgetPanel::widgetResized(QPair<int, int> delta)
     }
   }
 }
+
+void WidgetPanel::copy()
+{
+  clipboard.clear();
+  for (int i = 0; i < editWidgets.size(); i++) {
+    if (editWidgets[i]->isSelected()) {
+      clipboard.append(widgets[i]->getWidgetLine());
+//       qDebug("WidgetPanel::copy() %s", clipboard.last().toStdString().c_str());
+    }
+  }
+}
+
+void WidgetPanel::cut()
+{
+  WidgetPanel::copy();
+  for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
+    if (editWidgets[i]->isSelected()) {
+      deleteWidget(widgets[i]);
+    }
+  }
+}
+
+void WidgetPanel::paste()
+{
+  if (editAct->isChecked()) {
+    foreach (QString line, clipboard) {
+      newWidget(line);
+    }
+  }
+}
+
+void WidgetPanel::paste(QPoint pos)
+{
+}
+
+void WidgetPanel::duplicate()
+{
+  qDebug("WidgetPanel::duplicate()");
+  if (editAct->isChecked()) {
+    int size = editWidgets.size();
+    for (int i = 0; i < size ; i++) {
+      if (editWidgets[i]->isSelected()) {
+        editWidgets[i]->deselect();
+        newWidget(widgets[i]->getWidgetLine(), true);
+        editWidgets.last()->select();
+      }
+    }
+  }
+}
+
+void WidgetPanel::undo()
+{
+  qDebug("WidgetPanel::undo() not implemented yet");
+}
+
+void WidgetPanel::redo()
+{
+  qDebug("WidgetPanel::redo() not implemented yet");
+}
+
+// void  WidgetPanel::dockStateChanged(bool topLevel)
+// {
+//   if (!topLevel) {
+//     emit resized(oldSize); //Must send size after widget has docked.
+//   }
+// }
 
 void WidgetPanel::deselectAll()
 {
@@ -870,6 +1023,13 @@ void WidgetPanel::createLineEdit()
 {
   QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {100, 25} edit 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
   createLineEdit(currentPosition.x(), currentPosition.y() - 20, 100, 25, line);
+  widgetChanged();
+}
+
+void WidgetPanel::createSpinBox()
+{
+  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 25} editnum 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
+  createSpinBox(currentPosition.x(), currentPosition.y() - 20, 80, 25, line);
   widgetChanged();
 }
 

@@ -417,7 +417,8 @@ void MeterWidget::mousePressEvent(QMouseEvent* event)
   }
 }
 
-void MeterWidget::mouseReleaseEvent(QMouseEvent* /*event*/)
+void MeterWidget::mouseReleaseEvent(QMouseEvent* event)
 {
+  QGraphicsView::mouseReleaseEvent(event);
   m_mouseDown = false;
 }

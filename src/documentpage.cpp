@@ -35,19 +35,19 @@ DocumentPage::~DocumentPage()
 int DocumentPage::setTextString(QString text)
 {
   if (text.contains("<MacOptions>") and text.contains("</MacOptions>")) {
-    macOptions = text.right(text.size()-text.indexOf("<MacOptions>"));
-    qDebug("<MacOptions> present. \n%s", macOptions.toStdString().c_str());
-    macOptions.resize(macOptions.indexOf("</MacOptions>") + 13);
-    qDebug("<MacOptions> present. \n%s", macOptions.toStdString().c_str());
+    QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
+    options.resize(options.indexOf("</MacOptions>") + 13);
+    setMacOptionsText(options);
+    qDebug("<MacOptions> present. \n%s", options.toStdString().c_str());
     if (text.indexOf("</MacOptions>") + 13 < text.size() and text[text.indexOf("</MacOptions>") + 13] == '\n')
       text.remove(text.indexOf("</MacOptions>") + 13, 1); //remove final line break
     if (text.indexOf("<MacOptions>") > 0 and text[text.indexOf("<MacOptions>") - 1] == '\n')
       text.remove(text.indexOf("<MacOptions>") - 1, 1); //remove initial line break
-    text.remove(text.indexOf("<MacOptions>"), macOptions.size());
-    qDebug("<MacOptions> present.");
+    text.remove(text.indexOf("<MacOptions>"), options.size());
+    qDebug("<MacOptions> present. %s", getMacOption("WindowBounds").toStdString().c_str());
   }
   else {
-    macOptions = "";
+    macOptions.clear();
   }
   if (text.contains("<MacPresets>") and text.contains("</MacPresets>")) {
     macPresets = text.right(text.size()-text.indexOf("<MacPresets>"));
@@ -87,7 +87,7 @@ QString DocumentPage::getFullText()
   if (!fullText.endsWith("\n"))
     fullText += "\n";
   if (fileName.endsWith(".csd"))
-    fullText += macOptions + "\n" + macGUI + "\n" + macPresets + "\n";
+    fullText += getMacOptionsText() + "\n" + macGUI + "\n" + macPresets + "\n";
   return fullText;
 }
 
@@ -96,11 +96,99 @@ QString DocumentPage::getMacWidgetsText()
   return macGUI;
 }
 
+QString DocumentPage::getMacOptionsText()
+{
+  return macOptions.join("\n");
+}
+
+QString DocumentPage::getMacOption(QString option)
+{
+  if (!option.endsWith(":"))
+    option += ":";
+  if (!option.endsWith(" "))
+    option += " ";
+  int index = macOptions.indexOf(QRegExp(option + ".*"));
+  if (index < 0) {
+    qDebug("DocumentPage::getMacOption() Option %s not found!", option.toStdString().c_str());
+    return QString("");
+  }
+  return macOptions[index].mid(option.size());
+}
+
+QRect DocumentPage::getWidgetPanelGeometry()
+{
+  int index = macOptions.indexOf(QRegExp("WindowBounds: .*"));
+  if (index < 0) {
+    qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
+    return QRect();
+  }
+  QString line = macOptions[index];
+  QStringList values = line.split(" ");
+  values.removeFirst();  //remove property name
+  return QRect(values[0].toInt(),
+               values[1].toInt(),
+               values[2].toInt(),
+               values[3].toInt());
+}
+
 void DocumentPage::setMacWidgetsText(QString text)
 {
 //   qDebug("DocumentPage::setMacWidgetsText");
   macGUI = text;
   document()->setModified(true);
+}
+
+void DocumentPage::setMacOptionsText(QString text)
+{
+  macOptions = text.split('\n');
+}
+
+void DocumentPage::setMacOption(QString option, QString newValue)
+{
+  if (!option.endsWith(":"))
+    option += ":";
+  if (!option.endsWith(" "))
+    option += " ";
+  int index = macOptions.indexOf(QRegExp(option + ".*"));
+  if (index < 0) {
+    qDebug("DocumentPage::setMacOption() Option not found!");
+    return;
+  }
+  macOptions[index] = option + newValue;
+  qDebug("DocumentPage::setMacOption() %s", macOptions[index].toStdString().c_str());
+}
+
+void DocumentPage::setWidgetPanelPosition(QPoint position)
+{
+  int index = macOptions.indexOf(QRegExp("WindowBounds: .*"));
+  if (index < 0) {
+    qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
+    return;
+  }
+  QStringList parts = macOptions[index].split(" ");
+  parts.removeFirst();
+  QString newline = "WindowBounds: " + QString::number(position.x()) + " ";
+  newline += QString::number(position.y()) + " ";
+  newline += parts[2] + " " + parts[3];
+  macOptions[index] = newline;
+//   qDebug("DocumentPage::setWidgetPanelPosition() %i %i", position.x(), position.y());
+}
+
+void DocumentPage::setWidgetPanelSize(QSize size)
+{
+  int index = macOptions.indexOf(QRegExp("WindowBounds: .*"));
+  if (index < 0) {
+    qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
+    return;
+  }
+  QStringList parts = macOptions[index].split(" ");
+  parts.removeFirst();
+  QString newline = "WindowBounds: ";
+  newline += parts[0] + " " + parts[1] + " ";
+  newline += QString::number(size.width()) + " ";
+  newline += QString::number(size.height());
+  macOptions[index] = newline;
+//   qDebug("DocumentPage::setWidgetPanelSize() %i %i", size.width(), size.height());
 }
 
 void DocumentPage::comment()

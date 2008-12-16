@@ -36,7 +36,8 @@ class WidgetPanel : public QDockWidget
 {
   Q_OBJECT
 
-  friend class qutecsound;
+  friend class qutecsound;  //necessary?
+  friend class QuteWidget;
   public:
     WidgetPanel(QWidget *parent);
     ~WidgetPanel();
@@ -48,7 +49,7 @@ class WidgetPanel : public QDockWidget
     void setValue(int index, double value);
     void setValue(int index, QString value);
     int loadWidgets(QString macWidgets);
-    int newWidget(QString widgetLine);
+    int newWidget(QString widgetLine, bool offset = false);
     QString widgetsText();
     void appendMessage(QString message);
     void showTooltips(bool show);
@@ -60,6 +61,8 @@ class WidgetPanel : public QDockWidget
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
+    virtual void resizeEvent(QResizeEvent * event);
+    virtual void moveEvent(QMoveEvent * event);
 
   private:
     QVector<QuteWidget *> widgets;
@@ -74,6 +77,7 @@ class WidgetPanel : public QDockWidget
     QAction *createDisplayAct;
     QAction *createScrollNumberAct;
     QAction *createLineEditAct;
+    QAction *createSpinBoxAct;
     QAction *createButtonAct;
     QAction *createKnobAct;
     QAction *createCheckBoxAct;
@@ -83,16 +87,24 @@ class WidgetPanel : public QDockWidget
     QAction *createGraphAct;
     QAction *editAct;
     QAction *clearAct;
+    QAction *copyAct;
+    QAction *cutAct;
+    QAction *pasteAct;
+    QAction *duplicateAct;
     QAction *propertiesAct;
 
     // For the properties dialog
     QCheckBox *bgCheckBox;
     QPushButton *bgButton;
 
+    QStringList clipboard;
+    QSize oldSize;
+
     int createSlider(int x, int y, int width, int height, QString widgetLine);
     int createText(int x, int y, int width, int height, QString widgetLine);
     int createScrollNumber(int x, int y, int width, int height, QString widgetLine);
     int createLineEdit(int x, int y, int width, int height, QString widgetLine);
+    int createSpinBox(int x, int y, int width, int height, QString widgetLine);
     int createButton(int x, int y, int width, int height, QString widgetLine);
     int createKnob(int x, int y, int width, int height, QString widgetLine);
     int createCheckBox(int x, int y, int width, int height, QString widgetLine);
@@ -115,6 +127,7 @@ class WidgetPanel : public QDockWidget
     void createDisplay();
     void createScrollNumber();
     void createLineEdit();
+    void createSpinBox();
     void createSlider();
     void createButton();
     void createKnob();
@@ -133,9 +146,21 @@ class WidgetPanel : public QDockWidget
     void widgetMoved(QPair<int, int>);
     void widgetResized(QPair<int, int>);
 
+  private slots:
+    void copy();
+    void cut();
+    void paste();
+    void paste(QPoint pos);
+    void duplicate();
+    void undo();
+    void redo();
+//     void dockStateChanged(bool topLevel);
+
   signals:
     void widgetsChanged(QString text);
     void Close(bool visible);
+    void moved(QPoint position);
+    void resized(QSize size);
 
 };
 
@@ -143,16 +168,47 @@ class LayoutWidget : public QWidget
 {
   Q_OBJECT
   public:
-    LayoutWidget(QWidget* parent) : QWidget(parent) {}
+    LayoutWidget(QWidget* parent) : QWidget(parent)
+    {
+      selectionFrame = new QRubberBand(QRubberBand::Rectangle, this);
+      selectionFrame->hide();
+    }
     ~LayoutWidget() {}
 
   protected:
+    virtual void mousePressEvent(QMouseEvent *event)
+    {
+      QWidget::mousePressEvent(event);
+//       selectionFrame->show();
+//       startx = event->x();
+//       starty = event->y();
+//       selectionFrame->setGeometry(startx, starty, 0,0);
+    }
+    virtual void mouseMoveEvent(QMouseEvent *event)
+    {
+      QWidget::mouseMoveEvent(event);
+//       int x = startx;
+//       int y = starty;
+//       int height = abs(event->y() - starty);
+//       int width = abs(event->x() - startx);
+//       if (event->x() < startx) {
+//         x = event->x();
+//       }
+//       if (event->y() < starty) {
+//         y = event->y();
+//       }
+//       selectionFrame->setGeometry(x, y, width, height);
+    }
     virtual void mouseReleaseEvent(QMouseEvent *event)
     {
+      QWidget::mouseReleaseEvent(event);
+      selectionFrame->hide();
       if (event->button() & Qt::LeftButton) {
         emit deselectAll();
       }
     }
+    QRubberBand *selectionFrame;
+    int startx, starty;
 
   signals:
     void deselectAll();

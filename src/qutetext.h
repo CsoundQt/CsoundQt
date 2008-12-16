@@ -37,7 +37,6 @@ class QuteText : public QuteWidget
     virtual void setValue(QString value);
 
     void setType(QString type);
-    virtual void setResolution(double resolution);
     virtual void setAlignment(int alignment);
     void setFont(QString font);
     void setFontSize(int fontSize);
@@ -173,8 +172,9 @@ class ScrollNumberWidget : public QLabel
         pressed = true;
       }
     }
-    virtual void mouseReleaseEvent (QMouseEvent * /*event*/)
+    virtual void mouseReleaseEvent (QMouseEvent * event)
     {
+      QLabel::mouseReleaseEvent(event);
       pressed = false;
     }
 

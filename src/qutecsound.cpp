@@ -81,6 +81,7 @@ qutecsound::qutecsound(QStringList fileNames)
   widgetPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea |Qt::LeftDockWidgetArea);
   widgetPanel->setObjectName("widgetPanel");
   addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
+  connect(widgetPanel,SIGNAL(topLevelChanged(bool)), this, SLOT(widgetDockStateChanged(bool)));
 
   readSettings();
 
@@ -212,6 +213,7 @@ void qutecsound::changePage(int index)
   curPage = index;
   setCurrentFile(documentPages[curPage]->fileName);
   connectActions();
+  setWidgetPanelGeometry();
 }
 
 void qutecsound::updateWidgets()
@@ -362,6 +364,60 @@ bool qutecsound::save()
   else {
     return saveFile(documentPages[curPage]->fileName);
   }
+}
+
+void qutecsound::copy()
+{
+  if (documentPages[curPage]->hasFocus()) {
+    documentPages[curPage]->copy();
+  }
+  else
+    widgetPanel->copy();
+}
+
+void qutecsound::cut()
+{
+  if (documentPages[curPage]->hasFocus()) {
+    documentPages[curPage]->cut();
+  }
+  else
+    widgetPanel->cut();
+}
+
+void qutecsound::paste()
+{
+  if (documentPages[curPage]->hasFocus()) {
+    documentPages[curPage]->paste();
+  }
+  else
+    widgetPanel->paste();
+}
+
+void qutecsound::undo()
+{
+  if (documentPages[curPage]->hasFocus()) {
+    documentPages[curPage]->undo();
+  }
+  else
+    widgetPanel->undo();
+}
+
+void qutecsound::redo()
+{
+  if (documentPages[curPage]->hasFocus()) {
+    documentPages[curPage]->redo();
+  }
+  else
+    widgetPanel->redo();
+}
+
+void qutecsound::controlD()
+{
+  if (documentPages[curPage]->hasFocus()) {
+    documentPages[curPage]->comment();
+  }
+  else
+    widgetPanel->duplicate();
 }
 
 bool qutecsound::saveAs()
@@ -1015,6 +1071,21 @@ void qutecsound::dispatchQueues()
   }
 }
 
+void qutecsound::widgetDockStateChanged(bool topLevel)
+{
+  qDebug("qutecsound::widgetDockStateChanged()");
+  qApp->processEvents();
+  if (documentPages.size() < 1)
+    return; //necessary check, since widget panel is created early
+  if (topLevel) {
+//     widgetPanel->setGeometry(documentPages[curPage]->getWidgetPanelGeometry());
+    QRect geometry = documentPages[curPage]->getWidgetPanelGeometry();
+    widgetPanel->move(geometry.x(), geometry.y());
+    widgetPanel->widget()->resize(geometry.width(), geometry.height());
+    qDebug(" %i %i %i %i",geometry.x(), geometry.y(), geometry.width(), geometry.height());
+  }
+}
+
 void qutecsound::createActions()
 {
   // Actions that are not connected here depend on the active document, so they are
@@ -1069,29 +1140,34 @@ void qutecsound::createActions()
   undoAct->setShortcut(tr("Ctrl+Z"));
   undoAct->setStatusTip(tr("Undo last action"));
   exitAct->setIconText("Undo");
+  connect(undoAct, SIGNAL(triggered()), this, SLOT(undo()));
 
   redoAct = new QAction(QIcon(":/images/gtk-redo.png"), tr("Redo"), this);
   redoAct->setShortcut(tr("Shift+Ctrl+Z"));
   redoAct->setStatusTip(tr("Redo last action"));
   redoAct->setIconText("Redo");
+  connect(redoAct, SIGNAL(triggered()), this, SLOT(redo()));
 
   cutAct = new QAction(QIcon(":/images/gtk-cut.png"), tr("Cu&t"), this);
   cutAct->setShortcut(tr("Ctrl+X"));
   cutAct->setStatusTip(tr("Cut the current selection's contents to the "
       "clipboard"));
   cutAct->setIconText("Cut");
+  connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
 
   copyAct = new QAction(QIcon(":/images/gtk-copy.png"), tr("&Copy"), this);
   copyAct->setShortcut(tr("Ctrl+C"));
   copyAct->setStatusTip(tr("Copy the current selection's contents to the "
       "clipboard"));
   copyAct->setIconText("Copy");
+  connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
 
   pasteAct = new QAction(QIcon(":/images/gtk-paste.png"), tr("&Paste"), this);
   pasteAct->setShortcut(tr("Ctrl+V"));
   pasteAct->setStatusTip(tr("Paste the clipboard's contents into the current "
       "selection"));
   pasteAct->setIconText("Paste");
+  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
 
   joinAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("&Join orc/sco"), this);
 //   joinAct->setShortcut(tr("Ctrl+V"));
@@ -1194,7 +1270,7 @@ void qutecsound::createActions()
   browseBackAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
   browseBackAct->setStatusTip(tr("Go back in help page"));
   connect(browseBackAct, SIGNAL(triggered()), helpPanel, SLOT(browseBack()));
-  
+
   browseForwardAct = new QAction(tr("Help Forward"), this);
   browseForwardAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
   browseForwardAct->setStatusTip(tr("Go forward in help page"));
@@ -1227,7 +1303,7 @@ void qutecsound::createActions()
   commentAct->setStatusTip(tr("Comment selection"));
   commentAct->setShortcut(tr("Ctrl+D"));
   commentAct->setIconText("Comment");
-//   connect(commentAct, SIGNAL(triggered()), this, SLOT(comment()));
+  connect(commentAct, SIGNAL(triggered()), this, SLOT(controlD()));
 
   uncommentAct = new QAction(tr("Uncomment"), this);
   uncommentAct->setStatusTip(tr("Uncomment selection"));
@@ -1257,39 +1333,36 @@ void qutecsound::createActions()
   aboutQtAct->setIconText("About Qt");
   connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
-  cutAct->setEnabled(false);
-  copyAct->setEnabled(false);
+  //TODO Put this back when documentpage has focus
+//   cutAct->setEnabled(false);
+//   copyAct->setEnabled(false);
 
 }
 
 void qutecsound::connectActions()
 {
-  disconnect(undoAct, 0, 0, 0);
-  disconnect(redoAct, 0, 0, 0);
-  disconnect(cutAct, 0, 0, 0);
-  disconnect(copyAct, 0, 0, 0);
-  disconnect(pasteAct, 0, 0, 0);
-  connect(undoAct, SIGNAL(triggered()), textEdit, SLOT(undo()));
-  connect(redoAct, SIGNAL(triggered()), textEdit, SLOT(redo()));
-  connect(cutAct, SIGNAL(triggered()), textEdit, SLOT(cut()));
-  connect(copyAct, SIGNAL(triggered()), textEdit, SLOT(copy()));
-  connect(pasteAct, SIGNAL(triggered()), textEdit, SLOT(paste()));
+//   disconnect(undoAct, 0, 0, 0);
+//   disconnect(redoAct, 0, 0, 0);
+//   disconnect(cutAct, 0, 0, 0);
+//   disconnect(copyAct, 0, 0, 0);
+//   disconnect(pasteAct, 0, 0, 0);
 
-  disconnect(commentAct, 0, 0, 0);
+//   disconnect(commentAct, 0, 0, 0);
   disconnect(uncommentAct, 0, 0, 0);
   disconnect(indentAct, 0, 0, 0);
   disconnect(unindentAct, 0, 0, 0);
-  connect(commentAct, SIGNAL(triggered()), textEdit, SLOT(comment()));
+//   connect(commentAct, SIGNAL(triggered()), textEdit, SLOT(comment()));
   connect(uncommentAct, SIGNAL(triggered()), textEdit, SLOT(uncomment()));
   connect(indentAct, SIGNAL(triggered()), textEdit, SLOT(indent()));
   connect(unindentAct, SIGNAL(triggered()), textEdit, SLOT(unindent()));
 
   disconnect(textEdit, SIGNAL(copyAvailable(bool)), 0, 0);
   disconnect(textEdit, SIGNAL(copyAvailable(bool)), 0, 0);
-  connect(textEdit, SIGNAL(copyAvailable(bool)),
-          cutAct, SLOT(setEnabled(bool)));
-  connect(textEdit, SIGNAL(copyAvailable(bool)),
-          copyAct, SLOT(setEnabled(bool)));
+  //TODO put these back but only when document has focus
+//   connect(textEdit, SIGNAL(copyAvailable(bool)),
+//           cutAct, SLOT(setEnabled(bool)));
+//   connect(textEdit, SIGNAL(copyAvailable(bool)),
+//           copyAct, SLOT(setEnabled(bool)));
 
   disconnect(textEdit, SIGNAL(textChanged()), 0, 0);
   disconnect(textEdit, SIGNAL(cursorPositionChanged()), 0, 0);
@@ -1305,6 +1378,12 @@ void qutecsound::connectActions()
   disconnect(widgetPanel, SIGNAL(widgetsChanged(QString)),0,0);
   connect(widgetPanel, SIGNAL(widgetsChanged(QString)),
           textEdit, SLOT(setMacWidgetsText(QString)) );
+  disconnect(widgetPanel, SIGNAL(moved(QPoint)),0,0);
+  connect(widgetPanel, SIGNAL(moved(QPoint)),
+          textEdit, SLOT(setWidgetPanelPosition(QPoint)) );
+  disconnect(widgetPanel, SIGNAL(resized(QSize)),0,0);
+  connect(widgetPanel, SIGNAL(resized(QSize)),
+          textEdit, SLOT(setWidgetPanelSize(QSize)) );
 }
 
 void qutecsound::createMenus()
@@ -1752,6 +1831,7 @@ bool qutecsound::loadFile(QString fileName)
   }
   changeFont();
   statusBar()->showMessage(tr("File loaded"), 2000);
+  setWidgetPanelGeometry();
   return true;
 }
 
@@ -1910,6 +1990,13 @@ void qutecsound::getCompanionFileName()
       break;
     }
   }
+}
+void qutecsound::setWidgetPanelGeometry()
+{
+  QRect geometry = documentPages[curPage]->getWidgetPanelGeometry();
+  if (geometry.width() == 0)
+    return;
+  widgetPanel->setGeometry(geometry);
 }
 
 void qutecsound::readWidgetValues(CsoundUserData *ud)

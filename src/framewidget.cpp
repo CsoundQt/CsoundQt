@@ -62,24 +62,29 @@ void FrameWidget::contextMenuEvent(QContextMenuEvent *event)
 
 void FrameWidget::mousePressEvent ( QMouseEvent * event )
 {
-  QWidget::mousePressEvent(event);
-  startx = event->x();
-  starty = event->y();
-  oldx = event->x();
-  oldy = event->y();
-  if (startx > (width()-7) and starty > (height()-7))
-    m_resize = true;
-  else
-    m_resize = false;
-  if (!(event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier)) ) {
-    if (!this->isSelected())
-      emit deselectAllSignal();
+  QFrame::mousePressEvent(event);
+  if (event->button() & Qt::LeftButton) {
+    startx = event->x();
+    starty = event->y();
+    oldx = event->x();
+    oldy = event->y();
+    if (startx > (width()-7) and starty > (height()-7))
+      m_resize = true;
+    else
+      m_resize = false;
+    if (!(event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier)) ) {
+      if (!this->isSelected())
+        emit deselectAllSignal();
+    }
+    this->select();
   }
-  this->select();
+  event->accept(); //to avoid propagation of the event to parent widgets
 }
 
-void FrameWidget::mouseReleaseEvent ( QMouseEvent * /*event */)
+void FrameWidget::mouseReleaseEvent ( QMouseEvent * event )
 {
+  QFrame::mouseReleaseEvent(event);
+  event->accept(); //to avoid propagation of the event to parent widgets
 }
 
 void FrameWidget::mouseMoveEvent (QMouseEvent* event)

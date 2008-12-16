@@ -145,6 +145,12 @@ class qutecsound:public QMainWindow
     void openRecent5();
     bool save();
     bool saveAs();
+    void copy();
+    void cut();
+    void paste();
+    void undo();
+    void redo();
+    void controlD();
     bool closeTab();
     void findReplace();
     void join();
@@ -167,6 +173,7 @@ class qutecsound:public QMainWindow
     void checkSelection();
     void runUtility(QString flags);
     void dispatchQueues();
+    void widgetDockStateChanged(bool topLevel);
 
   private:
     void createActions();
@@ -188,6 +195,7 @@ class qutecsound:public QMainWindow
     QString strippedName(const QString &fullFileName);
     QString generateScript(bool realtime = true);
     void getCompanionFileName();
+    void setWidgetPanelGeometry();
 
     CSOUND *csound;
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD

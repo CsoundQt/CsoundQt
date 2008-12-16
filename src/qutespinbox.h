@@ -17,88 +17,47 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef QUTEWIDGET_H
-#define QUTEWIDGET_H
+#ifndef QUTESPINBOX_H
+#define QUTESPINBOX_H
 
-#include <QtGui>
-#include <QHash>
+#include "qutetext.h"
 
-class QuteWidget : public QWidget
+class QuteSpinBox : public QuteText
 {
   Q_OBJECT
   public:
-    QuteWidget(QWidget* parent);
+    QuteSpinBox(QWidget* parent);
+    ~QuteSpinBox();
 
-    ~QuteWidget();
-
-    const QString name() {return m_name;}
-
-    virtual void setWidgetLine(QString line);
-    virtual void setChannelName(QString name);
-    virtual void setWidgetGeometry(int x, int y, int w, int h);
-    virtual void setRange(int min, int max);
+    virtual void setAlignment(int alignment);
     virtual void setValue(double value);
-    virtual void setValue2(double value);
-    virtual void setValue(QString value);
+    virtual void setText(QString text);
     virtual void setResolution(double resolution);
-    virtual void setChecked(bool checked);
-
-    virtual QString getChannelName();
-    virtual QString getChannel2Name();
-    virtual QString getWidgetLine();
     virtual double getValue();
-    virtual double getValue2();
+    virtual QString getWidgetLine();
     virtual QString getStringValue();
 
-    void markChanged();
-
   protected:
-    QSpinBox *xSpinBox;
-    QSpinBox *ySpinBox;
-    QSpinBox *wSpinBox;
-    QSpinBox *hSpinBox;
-    QLabel *channelLabel;
-    QLineEdit *nameLineEdit;
-    QString m_line;
-    QWidget *m_layoutWidget;
-    QWidget *m_widget;
-    QDialog *dialog;
-    QGridLayout *layout;
-
-    QString m_name, m_name2;
-    double m_min, m_max;
-    double m_resolution;
-//     double m_min2,m_max2;
-    double m_value, m_value2;
-
-    virtual void contextMenuEvent(QContextMenuEvent *event);
-
     virtual void createPropertiesDialog();
     virtual void applyProperties();
 
-    QList<QAction *> getParentActionList();
+    QDoubleSpinBox* resolutionSpinBox;
+};
 
-  private:
-    QAction *propertiesAct;
-    QAction *deleteAct;
 
-    QPushButton *applyButton;
-    QPushButton *cancelButton;
-    QPushButton *acceptButton;
+class SpinBoxWidget : public QDoubleSpinBox
+{
+  Q_OBJECT
+  public:
+    SpinBoxWidget(QWidget* parent) : QDoubleSpinBox(parent) {}
+    ~SpinBoxWidget() {}
 
-  public slots:
-    void popUpMenu(QPoint pos);
-
-  protected slots:
-    void apply();
-    void openProperties();
-    void deleteWidget();
-    void valueChanged(int value);
+  protected:
+    virtual void contextMenuEvent(QContextMenuEvent *event)
+    {emit(popUpMenu(event->globalPos()));}
 
   signals:
-    void newValue(QHash<QString,double> channelValue);
-    void widgetChanged(QuteWidget* widget);
-    void deleteThisWidget(QuteWidget *thisWidget);
+    void popUpMenu(QPoint pos);
 };
 
 #endif

@@ -2,7 +2,7 @@
 #the doubles version, run qmake "CONFIG += build64"
 #CONFIG += build64
 
-win32: QUTECSOUND_CSOUND_PATH = C:\Program Files\Csound
+win32 : QUTECSOUND_CSOUND_PATH = C:\Program Files\Csound
 
 DEFINES += QUTE_USE_CSOUNDPERFORMANCETHREAD
 CONFIG += qute_cpp
@@ -41,7 +41,8 @@ SOURCES += qutecsound.cpp \
  qutemeter.cpp \
  qutegraph.cpp \
  framewidget.cpp \
- curve.cpp
+ curve.cpp \
+ qutespinbox.cpp
 HEADERS += qutecsound.h \
  dockhelp.h \
  opentryparser.h \
@@ -67,7 +68,8 @@ HEADERS += qutecsound.h \
  qutemeter.h \
  qutegraph.h \
  framewidget.h \
- curve.h
+ curve.h \
+ qutespinbox.h
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \
