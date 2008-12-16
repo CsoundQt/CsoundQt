@@ -48,14 +48,13 @@ f 0 3600
 
 
 
-
 <MacOptions>
 Version: 3
 Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 72 179 850 930
+WindowBounds: 207 334 373 293
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -63,12 +62,13 @@ Options: -b128 -A -s -m167 -R
 <MacGUI>
 ioView background {43690, 43690, 32639}
 ioMenu {25, 30} {120, 30} 1 303 "saw,square,triangle" wave
-ioText {150, 20} {200, 50} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {65280, 65280, 65280} {8192, 8192, 8192} background border Select waveform from this menu
-ioSlider {25, 95} {180, 20} 200.000000 800.000000 721.212121 freq
-ioText {220, 90} {130, 25} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 8 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder Frequency
-ioButton {25, 145} {180, 40} event 1.000000 "button1" "Generate note" "/" i10 0 5
-ioText {210, 120} {150, 50} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder Push this button to generate notes
-ioText {101, 182} {120, 40} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 14 {20992, 28416, 16128} {65280, 65280, 65280} nobackground noborder No Reinit
-ioText {20, 210} {260, 110} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder Values for waveform and frequency are only applied during the init pass so they remain constant for every note. Changes only apply for new notes
+ioText {150, 31} {202, 26} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {65280, 65280, 65280} {8192, 8192, 8192} background noborder Select waveform from this menu
+ioSlider {25, 70} {180, 20} 200.000000 800.000000 703.030303 freq
+ioText {220, 65} {130, 25} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 8 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder Frequency
+ioButton {26, 98} {180, 40} event 1.000000 "button1" "Generate note" "/" i10 0 5
+ioText {208, 100} {130, 36} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder Push this button to generate notes
+ioText {28, 148} {308, 101} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {43264, 48896, 30720} background noborder 
+ioText {42, 180} {277, 66} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder Values for waveform and frequency are only applied during the init pass so they remain constant for every note. Changes only apply for new notes
+ioText {118, 153} {105, 24} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 14 {20992, 28416, 16128} {65280, 65280, 65280} nobackground noborder No Reinit
 </MacGUI>
 

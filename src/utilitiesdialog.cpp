@@ -24,7 +24,7 @@
 #include "options.h"
 #include "types.h"
 
-UtilitiesDialog::UtilitiesDialog(QWidget *parent, Options *options, ConfigLists * /*m_configlist*/)
+UtilitiesDialog::UtilitiesDialog(QWidget *parent, Options *options/*, ConfigLists * m_configlist*/)
   : QDialog(parent), m_options(options)
 {
   setupUi(this);

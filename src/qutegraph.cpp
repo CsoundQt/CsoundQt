@@ -76,12 +76,12 @@ void QuteGraph::changeCurve(int index)
     index = dynamic_cast<StackedLayoutWidget *>(m_widget)->count() - 1;
   dynamic_cast<StackedLayoutWidget *>(m_widget)->setCurrentIndex(index);
   QGraphicsView *view = (QGraphicsView *) dynamic_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
-  double max = curves[index]->get_max();
-  double min = curves[index]->get_min();
+  double max = - curves[index]->get_min();
+  double min = - curves[index]->get_max();
   int size = curves[index]->get_size();
   view->setResizeAnchor(QGraphicsView::NoAnchor);
-  view->setSceneRect (0, min - ((max - min)*0.1), size, (max - min)*1.1);
-  view->fitInView(0, min - ((max - min)*0.1) , size, (max - min)*1.1 );
+  view->setSceneRect (0, min - ((max - min)*0.12), size, (max - min)*1.12);
+  view->fitInView(0, min - ((max - min)*0.12) , size, (max - min)*1.12 );
   QString text = QString::number(size) + " pts Max=";
   text += QString::number(max, 'g', 5) + " Min =" + QString::number(min, 'g', 5);
   m_label->setText(text);
@@ -110,7 +110,7 @@ void QuteGraph::addCurve(Curve * curve)
   scene->addItem(line);
   line->show();
   for (int i = 0; i < size; i++) {
-    line = new QGraphicsLineItem(i, 0, i, curve->get_data()[i]);
+    line = new QGraphicsLineItem(i, 0, i, - curve->get_data()[i]);
     line->setPen(QPen(QColor(30 + 220.0*fabs(curve->get_data()[i])/max,
                  220,
                  255.*fabs(curve->get_data()[i])/max)));

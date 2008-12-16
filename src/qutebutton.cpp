@@ -181,6 +181,30 @@ void QuteButton::buttonReleased()
   // Only produce events for event types
   if (m_type == "event" or m_type == "pictevent")
     emit(queueEvent(m_eventLine));
+  else if (m_type == "value") {
+    if (m_name == "_Play" && m_value == 1)
+      emit play();
+    else if (m_name == "_Play" && m_value == 0)
+      emit stop();
+    else if (m_name == "_Stop")
+      emit stop();
+//     else if (m_name == "_Midiindevices") {
+//       QPoint pos(x(), y());
+//       emit selectMidiInDevices(pos);
+//     }
+//     else if (m_name == "_Midioutdevices") {
+//       QPoint pos(x(), y());
+//       emit selectMidiOutDevices(pos);
+//     }
+//     else if (m_name == "_Audioindevices") {
+//       QPoint pos(x(), y());
+//       emit selectAudioInDevices(pos);
+//     }
+//     else if (m_name == "_Audioindevices") {
+//       QPoint pos(x(), y());
+//       emit selectAudioOutDevices(pos);
+//     }
+  }
 }
 
 void QuteButton::browseFile()

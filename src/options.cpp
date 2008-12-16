@@ -18,7 +18,7 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 #include "options.h"
-#include "configlists.h"
+// #include "configlists.h"
 #include "types.h"
 #include "stdlib.h"
 
@@ -45,15 +45,15 @@ QString Options::generateCmdLineFlags(bool rt)
   if (rt) {
     if (rtOverrideOptions)
       cmdline += " -+ignore_csopts=1";
-    if (m_configlists.rtAudioNames[rtAudioModule] != "none") {
-      cmdline += " -+rtaudio=" + m_configlists.rtAudioNames[rtAudioModule];
+    if (_configlists.rtAudioNames[rtAudioModule] != "none") {
+      cmdline += " -+rtaudio=" + _configlists.rtAudioNames[rtAudioModule];
       cmdline += " -i" + (rtInputDevice == "" ? "adc":rtInputDevice);
       cmdline += " -o" + (rtOutputDevice == "" ? "dac":rtOutputDevice);
       if (rtJackName != "")
         cmdline += " -+jack_client=" + rtJackName;
     }
-    if (m_configlists.rtMidiNames[rtMidiModule] != "none") {
-      cmdline += " -+rtmidi=" + m_configlists.rtMidiNames[rtMidiModule];
+    if (_configlists.rtMidiNames[rtMidiModule] != "none") {
+      cmdline += " -+rtmidi=" + _configlists.rtMidiNames[rtMidiModule];
       if (rtMidiInputDevice != "")
         cmdline += " -M" + rtMidiInputDevice;
       if (rtMidiOutputDevice != "")
@@ -63,8 +63,8 @@ QString Options::generateCmdLineFlags(bool rt)
   else {
     if (fileOverrideOptions)
       cmdline += " -+ignore_csopts=1";
-    cmdline += " --format=" + m_configlists.fileTypeNames[fileFileType];
-    cmdline += ":" + m_configlists.fileFormatFlags[fileSampleFormat];
+    cmdline += " --format=" + _configlists.fileTypeNames[fileFileType];
+    cmdline += ":" + _configlists.fileFormatFlags[fileSampleFormat];
     if (fileInputFilenameActive)
       cmdline += " -i" + fileInputFilename;
     if (fileOutputFilenameActive or fileAskFilename)

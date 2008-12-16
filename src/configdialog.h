@@ -24,19 +24,21 @@
 
 class qutecsound;
 class Options;
-class ConfigLists;
+// class ConfigLists;
 
 class ConfigDialog : public QDialog, private Ui::ConfigDialog
 {
   Q_OBJECT
   public:
-    ConfigDialog(qutecsound *parent = 0, Options *options = 0, ConfigLists *configlists = 0);
+    ConfigDialog(qutecsound *parent = 0, Options *options = 0/*, ConfigLists *configlists = 0*/);
 
     ~ConfigDialog();
+
+
   private:
     qutecsound* m_parent;
     Options *m_options;
-    ConfigLists *m_configlists;
+//     ConfigLists *m_configlists;
     void browseFile(QString &destination);
     void browseDir(QString &destination);
     QList<QPair<QString, QString> > getMidiInputDevices();

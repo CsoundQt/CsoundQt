@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andres Cabrera   *
- *   mantaraya36@gmail.com   *
+ *   Copyright (C) 2008 by Andres Cabrera                                  *
+ *   mantaraya36@gmail.com                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -61,9 +61,19 @@ qutecsound::qutecsound(QStringList fileNames)
   ud->qcs = this;
   perfMutex = csoundCreateMutex(0);
 
+  exampleFiles.append(":/examples/miditest.csd");
+  exampleFiles.append(":/examples/circle.csd");
+  exampleFiles.append(":/examples/lineedit.csd");
+  exampleFiles.append(":/examples/rms.csd");
+  exampleFiles.append(":/examples/reinit.csd");
+  exampleFiles.append(":/examples/noreinit.csd");
+  exampleFiles.append(":/examples/stringchannels.csd");
+  exampleFiles.append(":/examples/reservedchannels.csd");
+  exampleFiles.append(":/examples/noisered.csd");
+
   m_options = new Options();
 
-  m_configlists = new ConfigLists;
+//   _configlists = new ConfigLists;
 
   m_console = new DockConsole(this);
   m_console->setObjectName("m_console");
@@ -82,10 +92,12 @@ qutecsound::qutecsound(QStringList fileNames)
   widgetPanel->setObjectName("widgetPanel");
   addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
   connect(widgetPanel,SIGNAL(topLevelChanged(bool)), this, SLOT(widgetDockStateChanged(bool)));
+  connect(widgetPanel,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
+          this, SLOT(widgetDockLocationChanged(Qt::DockWidgetArea)));
 
   readSettings();
 
-  utilitiesDialog = new UtilitiesDialog(this, m_options, m_configlists);
+  utilitiesDialog = new UtilitiesDialog(this, m_options/*, _configlists*/);
   connect(utilitiesDialog, SIGNAL(runUtility(QString)), this, SLOT(runUtility(QString)));
 
   createActions();
@@ -219,6 +231,16 @@ void qutecsound::changePage(int index)
 void qutecsound::updateWidgets()
 {
   widgetPanel->loadWidgets(textEdit->getMacWidgetsText());
+}
+
+void qutecsound::openExample()
+{
+  QObject *sender = QObject::sender();
+  if (sender == 0)
+    return;
+  QAction *action = dynamic_cast<QAction *>(sender);
+  loadFile(action->data().toString());
+  saveAs();
 }
 
 void qutecsound::closeEvent(QCloseEvent *event)
@@ -371,6 +393,9 @@ void qutecsound::copy()
   if (documentPages[curPage]->hasFocus()) {
     documentPages[curPage]->copy();
   }
+  else if (helpPanel->hasFocus()) {
+    helpPanel->copy();
+  }
   else
     widgetPanel->copy();
 }
@@ -463,9 +488,9 @@ bool qutecsound::closeTab()
   }
   documentPages.remove(curPage);
   documentTabs->removeTab(curPage);
-  if (curPage > 0) {
-    curPage--;
-  }
+//   if (curPage > 0) {
+//     curPage--;
+//   }
   documentTabs->setCurrentIndex(curPage);
   textEdit = documentPages[curPage];
   textEdit->setTabStopWidth(m_options->tabWidth);
@@ -754,17 +779,41 @@ void qutecsound::stop()
   }
 }
 
+// void qutecsound::selectMidiOutDevice(QPoint pos)
+// {
+//   QList<QPair<QString, QString> > devs = ConfigDialog::getMidiInputDevices();
+//   QMenu menu;
+// 
+//   for (int i = 0; i < devs.size(); i++) {
+//     QAction *action = menu.addAction(devs[i].first/*, this, SLOT()*/);
+//     action->setData(devs[i].second);
+//   }
+//   menu.exec();
+// }
+// 
+// void qutecsound::selectMidiInDevice(QPoint pos)
+// {
+// }
+// 
+// void qutecsound::selectAudioOutDevice(QPoint pos)
+// {
+// }
+// 
+// void qutecsound::selectAudioInDevice(QPoint pos)
+// {
+// }
+
 void qutecsound::render()
 {
   if (m_options->fileAskFilename) {
     QFileDialog dialog(this,tr("Output Filename"),lastFileDir);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setConfirmOverwrite(false);
-    QString filter = QString(m_configlists->fileTypeLongNames[m_options->fileFileType] + " Files ("
-        + m_configlists->fileTypeExtensions[m_options->fileFileType] + ")");
+    QString filter = QString(_configlists.fileTypeLongNames[m_options->fileFileType] + " Files ("
+        + _configlists.fileTypeExtensions[m_options->fileFileType] + ")");
     dialog.setFilter(filter);
     if (dialog.exec()) {
-      QString extension = m_configlists->fileTypeExtensions[m_options->fileFileType];
+      QString extension = _configlists.fileTypeExtensions[m_options->fileFileType];
       // Remove the '*' from the extension
       extension.remove(0,1);
       m_options->fileOutputFilename = dialog.selectedFiles()[0];
@@ -889,7 +938,7 @@ void qutecsound::autoComplete()
 
 void qutecsound::configure()
 {
-  ConfigDialog *dialog = new ConfigDialog(this, m_options, m_configlists);
+  ConfigDialog *dialog = new ConfigDialog(this, m_options/*, _configlists*/);
   connect(dialog, SIGNAL(finished(int)), this, SLOT(applySettings(int)));
   dialog->show();
 }
@@ -913,8 +962,8 @@ void qutecsound::applySettings(int /*result*/)
     currentOptions +=  (m_options->thread ? tr("Thread") : tr("NoThread")) + " ";
   }
   currentOptions +=  (m_options->saveWidgets ? tr("SaveWidgets") : tr("DontSaveWidgets")) + " ";
-  QString playOptions = " (Audio:" + m_configlists->rtAudioNames[m_options->rtAudioModule] + " ";
-  playOptions += "MIDI:" +  m_configlists->rtMidiNames[m_options->rtMidiModule] + ")";
+  QString playOptions = " (Audio:" + _configlists.rtAudioNames[m_options->rtAudioModule] + " ";
+  playOptions += "MIDI:" +  _configlists.rtMidiNames[m_options->rtMidiModule] + ")";
   playOptions += " (" + (m_options->rtUseOptions? tr("UseQuteCsoundOptions"): tr("DiscardQuteCsoundOptions"));
   playOptions += " " + (m_options->rtOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
   playOptions += currentOptions;
@@ -1076,7 +1125,7 @@ void qutecsound::widgetDockStateChanged(bool topLevel)
   qDebug("qutecsound::widgetDockStateChanged()");
   qApp->processEvents();
   if (documentPages.size() < 1)
-    return; //necessary check, since widget panel is created early
+    return; //necessary check, since widget panel is created early by consructor
   if (topLevel) {
 //     widgetPanel->setGeometry(documentPages[curPage]->getWidgetPanelGeometry());
     QRect geometry = documentPages[curPage]->getWidgetPanelGeometry();
@@ -1084,6 +1133,11 @@ void qutecsound::widgetDockStateChanged(bool topLevel)
     widgetPanel->widget()->resize(geometry.width(), geometry.height());
     qDebug(" %i %i %i %i",geometry.x(), geometry.y(), geometry.width(), geometry.height());
   }
+}
+
+void qutecsound::widgetDockLocationChanged(Qt::DockWidgetArea area)
+{
+  qDebug("qutecsound::widgetDockLocationChanged() %i", area);
 }
 
 void qutecsound::createActions()
@@ -1232,8 +1286,17 @@ void qutecsound::createActions()
   externalEditorAct->setIconText("Ext. Editor");
   connect(externalEditorAct, SIGNAL(triggered()), this, SLOT(openExternalEditor()));
 
+  showWidgetsAct = new QAction(QIcon(":/images/gnome-mime-application-x-diagram.png"), tr("Widgets"), this);
+  showWidgetsAct->setCheckable(true);
+  showWidgetsAct->setChecked(true);
+  showWidgetsAct->setShortcut(tr("Alt+1"));
+  showWidgetsAct->setStatusTip(tr("Show Realtime Widgets"));
+  showWidgetsAct->setIconText("Widgets");
+  connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
+  connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
+
   showHelpAct = new QAction(QIcon(":/images/gtk-info.png"), tr("Help Panel"), this);
-  showHelpAct->setShortcut(tr("Alt+1"));
+  showHelpAct->setShortcut(tr("Alt+2"));
   showHelpAct->setCheckable(true);
   showHelpAct->setChecked(true);
   showHelpAct->setStatusTip(tr("Show the Csound Manual Panel"));
@@ -1252,7 +1315,7 @@ void qutecsound::createActions()
   connect(showOverviewAct, SIGNAL(triggered()), helpPanel, SLOT(showOverview()));
 
   showConsoleAct = new QAction(QIcon(":/images/gksu-root-terminal.png"), tr("Output Console"), this);
-  showConsoleAct->setShortcut(tr("Alt+2"));
+  showConsoleAct->setShortcut(tr("Alt+3"));
   showConsoleAct->setCheckable(true);
   showConsoleAct->setChecked(true);
   showConsoleAct->setStatusTip(tr("Show Csound's message console"));
@@ -1282,22 +1345,13 @@ void qutecsound::createActions()
   connect(externalBrowserAct, SIGNAL(triggered()), this, SLOT(openExternalBrowser()));
 
   showUtilitiesAct = new QAction(QIcon(":/images/gnome-devel.png"), tr("Utilities"), this);
-  showUtilitiesAct->setShortcut(tr("Alt+3"));
+  showUtilitiesAct->setShortcut(tr("Alt+4"));
   showUtilitiesAct->setCheckable(true);
   showUtilitiesAct->setChecked(false);
   showUtilitiesAct->setStatusTip(tr("Show the Csound Utilities dialog"));
   showUtilitiesAct->setIconText("Utilities");
   connect(showUtilitiesAct, SIGNAL(triggered(bool)), utilitiesDialog, SLOT(setVisible(bool)));
   connect(utilitiesDialog, SIGNAL(Close(bool)), showUtilitiesAct, SLOT(setChecked(bool)));
-
-  showWidgetsAct = new QAction(QIcon(":/images/gnome-mime-application-x-diagram.png"), tr("Widgets"), this);
-  showWidgetsAct->setCheckable(true);
-  showWidgetsAct->setChecked(true);
-  showWidgetsAct->setShortcut(tr("Alt+4"));
-  showWidgetsAct->setStatusTip(tr("Show Realtime Widgets"));
-  showWidgetsAct->setIconText("Widgets");
-  connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
-  connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
 
   commentAct = new QAction(tr("Comment"), this);
   commentAct->setStatusTip(tr("Comment selection"));
@@ -1419,10 +1473,18 @@ void qutecsound::createMenus()
   controlMenu->addAction(externalPlayerAct);
 
   viewMenu = menuBar()->addMenu(tr("View"));
+  viewMenu->addAction(showWidgetsAct);
   viewMenu->addAction(showHelpAct);
   viewMenu->addAction(showConsoleAct);
   viewMenu->addAction(showUtilitiesAct);
-  viewMenu->addAction(showWidgetsAct);
+
+  QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
+  foreach (QString fileName, exampleFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1);
+    QAction *newAction = examplesMenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
 
   menuBar()->addSeparator();
 
@@ -1438,6 +1500,7 @@ void qutecsound::createMenus()
   helpMenu->addSeparator();
   helpMenu->addAction(aboutAct);
   helpMenu->addAction(aboutQtAct);
+
 }
 
 void qutecsound::fillFileMenu()
@@ -1489,9 +1552,9 @@ void qutecsound::createToolBars()
   configureToolBar->setObjectName("configureToolBar");
   configureToolBar->addAction(configureAct);
   configureToolBar->addAction(showWidgetsAct);
-  configureToolBar->addAction(showUtilitiesAct);
-  configureToolBar->addAction(showConsoleAct);
   configureToolBar->addAction(showHelpAct);
+  configureToolBar->addAction(showConsoleAct);
+  configureToolBar->addAction(showUtilitiesAct);
 
   Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
       Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
@@ -1803,7 +1866,8 @@ bool qutecsound::loadFile(QString fileName)
     QByteArray line = file.readLine();
     line.replace("\r\n", "\n");
     line.replace("\r", "\n");  //Change Mac returns to line endings
-    text = text + QString(line);
+    QTextDecoder decoder(QTextCodec::codecForLocale());
+    text = text + decoder.toUnicode(line);
     if (!line.endsWith("\n"))
       text += "\n";
   }
@@ -2111,7 +2175,7 @@ uintptr_t qutecsound::csThread(void *data)
 #endif
 }
 
-QStringList qutecsound::runCsound(QStringList flags)
+QStringList qutecsound::runCsoundInternally(QStringList flags)
 {
   static char *argv[33];
   int index = 0;

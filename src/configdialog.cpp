@@ -21,25 +21,25 @@
 #include <QtGui>
 #include "qutecsound.h"
 #include "configdialog.h"
-#include "configlists.h"
+// #include "configlists.h"
 #include "options.h"
 #include "types.h"
 
-ConfigDialog::ConfigDialog(qutecsound *parent, Options *options, ConfigLists *configlists)
-  : QDialog(parent), m_parent(parent), m_options(options), m_configlists(configlists)
+ConfigDialog::ConfigDialog(qutecsound *parent, Options *options/*, ConfigLists *configlists*/)
+  : QDialog(parent), m_parent(parent), m_options(options)
 {
   setupUi(this);
 
-  foreach (QString item, m_configlists->fileTypeLongNames) {
+  foreach (QString item, _configlists.fileTypeLongNames) {
     FileTypeComboBox->addItem(item);
   }
-  foreach (QString item, m_configlists->fileFormatNames) {
+  foreach (QString item, _configlists.fileFormatNames) {
     FileFormatComboBox->addItem(item);
   }
-  foreach (QString item, m_configlists->rtAudioNames) {
+  foreach (QString item, _configlists.rtAudioNames) {
     RtModuleComboBox->addItem(item);
   }
-  foreach (QString item, m_configlists->rtMidiNames) {
+  foreach (QString item, _configlists.rtMidiNames) {
     RtMidiModuleComboBox->addItem(item);
   }
 
@@ -342,7 +342,7 @@ void ConfigDialog::selectAudioOutput()
 void ConfigDialog::selectMidiInput()
 {
   QList<QPair<QString, QString> > deviceList = getMidiInputDevices();
-  QString module = m_configlists->rtMidiNames[RtMidiModuleComboBox->currentIndex()];
+  QString module = _configlists.rtMidiNames[RtMidiModuleComboBox->currentIndex()];
   QMenu menu(this);
   QVector<QAction*> actions;
 
@@ -376,7 +376,7 @@ void ConfigDialog::selectMidiInput()
 void ConfigDialog::selectMidiOutput()
 {
   QList<QPair<QString, QString> > deviceList = getMidiOutputDevices();
-  QString module = m_configlists->rtMidiNames[RtMidiModuleComboBox->currentIndex()];
+  QString module = _configlists.rtMidiNames[RtMidiModuleComboBox->currentIndex()];
   QMenu menu(this);
   QVector<QAction*> actions;
 
@@ -412,7 +412,7 @@ void ConfigDialog::browseDir(QString &destination)
 QList<QPair<QString, QString> > ConfigDialog::getMidiInputDevices()
 {
   QList<QPair<QString, QString> > deviceList;
-  QString module = m_configlists->rtMidiNames[RtMidiModuleComboBox->currentIndex()];
+  QString module = _configlists.rtMidiNames[RtMidiModuleComboBox->currentIndex()];
   if (module == "none") {
     return deviceList;
   }
@@ -466,7 +466,7 @@ QList<QPair<QString, QString> > ConfigDialog::getMidiInputDevices()
     QStringList flags;
 //     QString rtAudioFlag = "-+rtaudio=" + module;
     flags << "-+msg_color=false"/* << rtAudioFlag*/ << "-odac"  << "-M999" << tempFile.fileName();
-    QStringList messages = m_parent->runCsound(flags);
+    QStringList messages = m_parent->runCsoundInternally(flags);
 
     QString startText, endText;
     if (module == "portmidi") {
@@ -507,7 +507,7 @@ QList<QPair<QString, QString> > ConfigDialog::getMidiInputDevices()
 QList<QPair<QString, QString> > ConfigDialog::getMidiOutputDevices()
 {
   QList<QPair<QString, QString> > deviceList;
-  QString module = m_configlists->rtMidiNames[RtMidiModuleComboBox->currentIndex()];
+  QString module = _configlists.rtMidiNames[RtMidiModuleComboBox->currentIndex()];
   if (module == "none") {
     return deviceList;
   }
@@ -560,7 +560,7 @@ QList<QPair<QString, QString> > ConfigDialog::getMidiOutputDevices()
 
     QStringList flags;
     flags << "-+msg_color=false" << "-odac"  << "-Q999" << tempFile.fileName();
-    QStringList messages = m_parent->runCsound(flags);
+    QStringList messages = m_parent->runCsoundInternally(flags);
 
     QString startText, endText;
     if (module == "portmidi") {
@@ -602,7 +602,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioInputDevices()
 {
   qDebug("qutecsound::getAudioInputDevices()");
   QList<QPair<QString, QString> > deviceList;
-  QString module = m_configlists->rtAudioNames[RtModuleComboBox->currentIndex()];
+  QString module = _configlists.rtAudioNames[RtModuleComboBox->currentIndex()];
   if (module == "none") {
     return deviceList;
   }
@@ -643,7 +643,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioInputDevices()
     QStringList flags;
     // -odac is needed otherwise csound segfaults
     flags << "-+msg_color=false" << "-+rtaudio=jack" << "-iadc:xxx" << "-odac:xxx" << "-B2048" <<  tempFile.fileName();
-    QStringList messages = m_parent->runCsound(flags);
+    QStringList messages = m_parent->runCsoundInternally(flags);
 
     QString sr = "";
     foreach (QString line, messages) {
@@ -661,7 +661,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioInputDevices()
     tempFile.close();
     tempFile.open();
 
-    messages = m_parent->runCsound(flags); // run with same flags as before
+    messages = m_parent->runCsoundInternally(flags); // run with same flags as before
 
     QString previousLine = "";
     foreach (QString line, messages) {
@@ -693,7 +693,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioInputDevices()
     QStringList flags;
     QString rtAudioFlag = "-+rtaudio=" + module;
     flags << "-+msg_color=false" << rtAudioFlag << "-iadc999" << tempFile.fileName();
-    QStringList messages = m_parent->runCsound(flags);
+    QStringList messages = m_parent->runCsoundInternally(flags);
 
     QString startText, endText;
     if (module=="portaudio") {
@@ -750,7 +750,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioOutputDevices()
 {
   qDebug("qutecsound::getAudioOutputDevices()");
   QList<QPair<QString, QString> > deviceList;
-  QString module = m_configlists->rtAudioNames[RtModuleComboBox->currentIndex()];
+  QString module = _configlists.rtAudioNames[RtModuleComboBox->currentIndex()];
   if (module == "none") {
     return deviceList;
   }
@@ -790,7 +790,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioOutputDevices()
 
     QStringList flags;
     flags << "-+msg_color=false" << "-+rtaudio=jack" << "-odac:xxx" << "-B2048" <<  tempFile.fileName();
-    QStringList messages = m_parent->runCsound(flags);
+    QStringList messages = m_parent->runCsoundInternally(flags);
 
     QString sr = "";
     foreach (QString line, messages) {
@@ -808,7 +808,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioOutputDevices()
     tempFile.close();
     tempFile.open();
 
-    messages = m_parent->runCsound(flags); // run with same flags as before
+    messages = m_parent->runCsoundInternally(flags); // run with same flags as before
 
     QString previousLine = "";
     foreach (QString line, messages) {
@@ -839,7 +839,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioOutputDevices()
     QStringList flags;
     QString rtAudioFlag = "-+rtaudio=" + module;
     flags << "-+msg_color=false" << rtAudioFlag << "-odac999" << tempFile.fileName();
-    QStringList messages = m_parent->runCsound(flags);
+    QStringList messages = m_parent->runCsoundInternally(flags);
 
     QString startText, endText;
     if (module=="portaudio") {

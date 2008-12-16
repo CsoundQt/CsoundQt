@@ -118,7 +118,7 @@ class qutecsound:public QMainWindow
     void queueOutValue(QString channelName, double value);
     void queueOutString(QString channelName, QString value);
     void queueMessage(QString message);
-    QStringList runCsound(QStringList flags); //returns csound messages
+    QStringList runCsoundInternally(QStringList flags); //returns csound messages
     void newCurve(Curve *curve);  //f-table data
 
     QVector<QString> channelNames;
@@ -126,9 +126,16 @@ class qutecsound:public QMainWindow
     QVector<QString> stringValues;
 
   public slots:
+    void play(bool realtime=true);
+    void stop();
+//     void selectMidiInDevice(QPoint pos);
+//     void selectMidiOutDevice(QPoint pos);
+//     void selectAudioInDevice(QPoint pos);
+//     void selectAudioOutDevice(QPoint pos);
     void changeFont();
     void changePage(int index);
     void updateWidgets();
+    void openExample();
 
   protected:
     void closeEvent(QCloseEvent *event);
@@ -155,8 +162,6 @@ class qutecsound:public QMainWindow
     void findReplace();
     void join();
 //     void edit(bool active);
-    void play(bool realtime=true);
-    void stop();
     void render();
     void openExternalEditor();
     void openExternalPlayer();
@@ -174,6 +179,7 @@ class qutecsound:public QMainWindow
     void runUtility(QString flags);
     void dispatchQueues();
     void widgetDockStateChanged(bool topLevel);
+    void widgetDockLocationChanged(Qt::DockWidgetArea area);
 
   private:
     void createActions();
@@ -209,6 +215,7 @@ class qutecsound:public QMainWindow
     QHash<QString, QString> outStringQueue;
     QStack<Curve *> curveBuffer;
     QStringList messageQueue;
+    QStringList exampleFiles;
     QTimer *queueTimer;
     QTabWidget *documentTabs;
     QVector<DocumentPage *> documentPages;
@@ -275,7 +282,7 @@ class qutecsound:public QMainWindow
     QString lastUsedDir;
     QString lastFileDir;
     viewMode m_mode;
-    ConfigLists *m_configlists;
+//     ConfigLists *m_configlists;
     QStringList recentFiles;
     QStringList lastFiles;
     QStringList m_deviceMessages; //stores messages from csound for device discovery

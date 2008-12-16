@@ -29,7 +29,7 @@ class UtilitiesDialog : public QDialog, private Ui::UtilitiesDialog
 {
   Q_OBJECT
   public:
-    UtilitiesDialog(QWidget *parent, Options *options, ConfigLists *m_configlist);
+    UtilitiesDialog(QWidget *parent, Options *options/*, ConfigLists *m_configlist*/);
 
     ~UtilitiesDialog();
 

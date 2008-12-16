@@ -52,21 +52,21 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 72 179 850 930
+WindowBounds: 375 245 361 291
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
-
 <MacGUI>
 ioView background {43690, 43690, 32639}
-ioMenu {25, 30} {120, 30} 1 303 "saw,square,triangle" wave
-ioText {150, 20} {200, 50} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {65280, 65280, 65280} {8192, 8192, 8192} background border Select waveform from this menu
-ioSlider {25, 95} {180, 20} 200.000000 800.000000 418.181818 freq
-ioText {220, 90} {130, 25} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 8 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder Frequency
-ioButton {25, 145} {180, 40} event 1.000000 "button1" "Generate note" "/" i10 0 5
-ioText {210, 120} {150, 50} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder Push this button to generate notes
-ioText {101, 182} {120, 40} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 14 {33536, 16640, 12288} {65280, 65280, 65280} nobackground noborder Reinit
-ioText {20, 210} {260, 140} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder Using a reinit pass values for vco2 waveform (which is i-rate) are changed. Values for frequency are no longer used with i() so they change whenever the slider changes
+ioMenu {11, 8} {120, 30} 1 303 "saw,square,triangle" wave
+ioText {137, 8} {205, 26} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {65280, 65280, 65280} {8192, 8192, 8192} background noborder Select waveform from this menu
+ioSlider {11, 44} {180, 20} 200.000000 800.000000 406.060606 freq
+ioText {207, 39} {130, 25} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 8 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder Frequency
+ioButton {11, 71} {180, 40} event 1.000000 "button1" "Generate note" "/" i10 0 5
+ioText {196, 69} {148, 44} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder Push this button to generate notes
+ioText {10, 117} {332, 131} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {39168, 40448, 25600} background noborder 
+ioText {121, 130} {91, 26} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 14 {33536, 16640, 12288} {65280, 65280, 65280} nobackground noborder Reinit
+ioText {18, 160} {313, 73} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder Using a reinit pass values for vco2 waveform (which is i-rate) are changed. Values for frequency are no longer used with i() so they change whenever the slider changes
 </MacGUI>
 

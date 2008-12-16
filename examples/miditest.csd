@@ -90,13 +90,13 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 72 179 850 930
+WindowBounds: 658 191 417 232
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
-ioView background {55769, 65535, 64250}
+ioView background {0, 41891, 41891}
 ioText {5, 30} {379, 36} label 0.000000 0.00100 "note" left "DejaVu Sans" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Note On: chan = 0 note# = 0 velocity = 0
 ioText {5, 2} {379, 60} label 0.000000 0.00100 "" left "Courier 10 Pitch" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border Note events:
 ioText {5, 80} {184, 116} label 0.000000 0.00100 "" left "Courier 10 Pitch" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border Control Change:

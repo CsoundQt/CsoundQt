@@ -264,6 +264,7 @@ void WidgetPanel::clearWidgets()
   widgets.clear();
   consoleWidgets.clear();
   graphWidgets.clear();
+  clipboard.clear();
 }
 
 void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
@@ -385,7 +386,7 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 void WidgetPanel::resizeEvent(QResizeEvent * event)
 {
   oldSize = event->oldSize();
-  qDebug("WidgetPanel::resizeEvent()");
+//   qDebug("WidgetPanel::resizeEvent()");
   emit resized(event->size());
 }
 
@@ -669,6 +670,12 @@ int WidgetPanel::createButton(int x, int y, int width, int height, QString widge
   connect(widget, SIGNAL(queueEvent(QString)), this, SLOT(queueEvent(QString)));
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  connect(widget, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(play()));
+  connect(widget, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
+//   connect(widget, SIGNAL(selectAudioInDevice(QPoint)), static_cast<qutecsound *>(parent()), SLOT(selectAudioInDevice(QPoint)));
+//   connect(widget, SIGNAL(selectAudioOutDevice(QPoint)), static_cast<qutecsound *>(parent()), SLOT(selectAudioOutDevice(QPoint)));
+//   connect(widget, SIGNAL(selectMidiInDevice(QPoint)), static_cast<qutecsound *>(parent()), SLOT(selectMidiInDevice(QPoint)));
+//   connect(widget, SIGNAL(selectMidiOutDevice(QPoint)), static_cast<qutecsound *>(parent()), SLOT(selectMidiOutDevice(QPoint)));
 
   if (editAct->isChecked()) {
     createEditFrame(widget);
@@ -1072,7 +1079,7 @@ void WidgetPanel::createConsole()
 
 void WidgetPanel::createGraph()
 {
-  createGraph(currentPosition.x(), currentPosition.y() - 20, 400, 200, QString("ioGraph {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {400, 200}"));
+  createGraph(currentPosition.x(), currentPosition.y() - 20, 350, 150, QString("ioGraph {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {350, 150}"));
   widgetChanged();
 }
 
@@ -1113,6 +1120,7 @@ void WidgetPanel::propertiesDialog()
 void WidgetPanel::applyProperties()
 {
   setBackground(bgCheckBox->isChecked(), palette().button().color());
+  widgetChanged();
 }
 
 void WidgetPanel::selectBgColor()

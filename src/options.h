@@ -21,7 +21,7 @@
 #define OPTIONS_H
 
 #include <QString>
-#include "configlists.h"
+#include "types.h"
 
 class Options{
   public:
@@ -104,8 +104,8 @@ class Options{
     QString browser;
     QString waveeditor;
     QString waveplayer;
-  private:
-    ConfigLists m_configlists;
+//   private:
+//     ConfigLists m_configlists;
 
 };
 

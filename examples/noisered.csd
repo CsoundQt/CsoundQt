@@ -74,7 +74,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 72 179 850 930
+WindowBounds: 454 181 352 267
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -83,15 +83,15 @@ Options: -b128 -A -s -m167 -R
 ioView background {43690, 43690, 32639}
 ioSlider {5, 5} {20, 200} 0.000000 1.000000 0.000000 ratio
 ioSlider {45, 5} {20, 200} 0.000000 0.100000 0.100000 gain
-ioText {1, 200} {45, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ratio
-ioText {40, 200} {50, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Gain
+ioText {1, 200} {34, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ratio
+ioText {38, 200} {33, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Gain
 ioCheckbox {75, 180} {30, 30} off learn
 ioText {90, 183} {60, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {37632, 13312, 3584} {65280, 65280, 65280} nobackground noborder Learn
-ioButton {75, 180} {100, 25} event 1.000000 "button1" "Clear mask" "/" i2 0 1
+ioButton {75, 158} {100, 25} event 1.000000 "button1" "Clear mask" "/" i2 0 1
 ioCheckbox {75, 130} {30, 30} on 
 ioText {90, 135} {80, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Bypass
 ioText {75, 5} {160, 125} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {32512, 28672, 24064} {49664, 49664, 49664} background border This noise reduction unit can sample a noise print and then remove it through spectral masking. First clear the mask then activate the learn while the noise is playing. Deactivate the learn button and the noise will be removed.
-ioCheckbox {158, 195} {30, 30} off learning
-ioButton {190, 180} {110, 25} event 1.000000 "white" "Mask white noise" "/" i3 0 1
+ioCheckbox {236, 191} {30, 30} off learning
+ioButton {190, 158} {110, 25} event 1.000000 "white" "Mask white noise" "/" i3 0 1
 </MacGUI>
 

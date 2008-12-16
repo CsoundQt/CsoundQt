@@ -147,9 +147,9 @@ void QuteWidget::popUpMenu(QPoint pos)
 
   QList<QAction *> actionList = getParentActionList();
 
-//   foreach (QAction *action, actionList) {
-//     menu.addAction(action);
-//   }
+  foreach (QAction *action, actionList) {
+    menu.addAction(action);
+  }
 
   menu.addSeparator();
   menu.addAction(deleteAct);
@@ -243,9 +243,12 @@ void QuteWidget::applyProperties()
 QList<QAction *> QuteWidget::getParentActionList()
 {
   QList<QAction *> actionList;
-  actionList.append(static_cast<WidgetPanel *>(parent())->copyAct);
-  actionList.append(static_cast<WidgetPanel *>(parent())->pasteAct);
-  actionList.append(static_cast<WidgetPanel *>(parent())->cutAct);
+  // A bit of a kludge... Must get the Widget Panel, which is the parent to the widget which
+  // holds the actual QuteWidgets
+  actionList.append(static_cast<WidgetPanel *>(parent()->parent())->copyAct);
+  actionList.append(static_cast<WidgetPanel *>(parent()->parent())->pasteAct);
+  actionList.append(static_cast<WidgetPanel *>(parent()->parent())->cutAct);
+  actionList.append(static_cast<WidgetPanel *>(parent()->parent())->duplicateAct);
   return actionList;
 }
 

@@ -23,6 +23,7 @@
 
 // #include <QString>
 // #include <QStringList>
+#include "configlists.h"
 
 // Time in milliseconds for widget and console messages updates
 #define QCS_QUEUETIMER_TIME 50
@@ -61,5 +62,7 @@ class Opcode
     QString opcodeName;
     QString inArgs;
 };
+
+static ConfigLists _configlists;
 
 #endif

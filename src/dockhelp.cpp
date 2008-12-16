@@ -51,6 +51,11 @@ DockHelp::~DockHelp()
 {
 }
 
+bool DockHelp::hasFocus()
+{
+  return QDockWidget::hasFocus() || text->hasFocus();
+}
+
 void DockHelp::loadFile(QString fileName)
 {
   QFile file(fileName);
@@ -113,4 +118,9 @@ void DockHelp::followLink(QUrl url)
     text->setSource(url);
     }
   }
+}
+
+void DockHelp::copy()
+{
+  text->copy();
 }

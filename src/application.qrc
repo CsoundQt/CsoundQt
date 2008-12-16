@@ -26,5 +26,15 @@
       <file>opcodes.xml</file>
       <file>default.csd</file>
       <file>test.csd</file>
+
+      <file>../examples/circle.csd</file>
+      <file>../examples/lineedit.csd</file>
+      <file>../examples/miditest.csd</file>
+      <file>../examples/noisered.csd</file>
+      <file>../examples/reservedchannels.csd</file>
+      <file>../examples/stringchannels.csd</file>
+      <file>../examples/rms.csd</file>
+      <file>../examples/reinit.csd</file>
+      <file>../examples/noreinit.csd</file>
 </qresource>
 </RCC>

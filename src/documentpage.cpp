@@ -47,7 +47,8 @@ int DocumentPage::setTextString(QString text)
     qDebug("<MacOptions> present. %s", getMacOption("WindowBounds").toStdString().c_str());
   }
   else {
-    macOptions.clear();
+    QString defaultMacOptions = "<MacOptions>\nVersion: 3\nRender: Real\nAsk: Yes\nFunctions: ioObject\nListing: Window\nWindowBounds: 72 179 400 200\nCurrentView: io\nIOViewEdit: On\nOptions: -b128 -A -s -m167 -R\n</MacOptions>\n";
+    setMacOptionsText(defaultMacOptions);
   }
   if (text.contains("<MacPresets>") and text.contains("</MacPresets>")) {
     macPresets = text.right(text.size()-text.indexOf("<MacPresets>"));

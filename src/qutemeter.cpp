@@ -45,7 +45,7 @@ QString QuteMeter::getWidgetLine()
   line += QString::number(dynamic_cast<MeterWidget *>(m_widget)->getPointSize()) + " ";
   line += QString::number(m_fadeSpeed) + " ";
   line += m_behavior;
-  qDebug("QuteMeter::getWidgetLine() %s", line.toStdString().c_str());
+//   qDebug("QuteMeter::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
 

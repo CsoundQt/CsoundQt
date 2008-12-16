@@ -34,6 +34,8 @@ class DockHelp : public QDockWidget
 
     ~DockHelp();
 
+    bool hasFocus();
+
     void loadFile(QString fileName);
     bool externalBrowser;
     QString docDir;
@@ -52,6 +54,7 @@ class DockHelp : public QDockWidget
     void browseBack();
     void browseForward();
     void followLink(QUrl url);
+    void copy();
 };
 
 #endif

@@ -3,7 +3,7 @@
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
+sr = 48000
 ksmps = 128
 nchnls = 2
 0dbfs = 1
@@ -51,7 +51,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 72 179 850 930
+WindowBounds: 53 584 441 337
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
