@@ -33,7 +33,8 @@ void Console::appendMessage(QString msg)
     text->setTextColor(QColor("blue"));
   }
   if (msg.contains("error", Qt::CaseInsensitive)
-      or msg.contains("overall samples out of range")) {
+      or msg.contains("overall samples out of range")
+      or msg.contains("disabled")) {
     text->setTextColor(QColor("red"));
   }
   if (msg.contains("warning", Qt::CaseInsensitive)) {

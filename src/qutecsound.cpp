@@ -132,7 +132,7 @@ qutecsound::qutecsound(QStringList fileNames)
     }
   }
   if (fileNames.size() > 0 and m_options->autoPlay) {
-    play();
+    runCsound();
   }
   if (documentPages.size() == 0) {
     newFile();
@@ -576,11 +576,18 @@ void qutecsound::join()
 //   widgetPanel->activateEditMode(active);
 // }
 
-void qutecsound::play(bool realtime)
+void qutecsound::runCsound(bool realtime)
 {
   if (ud->PERF_STATUS == 1) {
     stop();
     return;
+  }
+  bool useAPI = false;
+  if (QObject::sender() == playAct) {
+    useAPI = true;
+  }
+  else if (QObject::sender() == renderAct) {
+    useAPI = m_options->useAPI;
   }
   widgetPanel->eventQueueSize = 0; //Flush events gathered while idle
   outValueQueue.clear();
@@ -610,7 +617,7 @@ void qutecsound::play(bool realtime)
     widgetPanel->setVisible(true);
   }
 
-  if (m_options->useAPI) {
+  if (useAPI) {
 #ifdef MACOSX
 //Remember menu bar to set it after FLTK grabs it
     menuBarHandle = GetMenuBar();
@@ -643,10 +650,21 @@ void qutecsound::play(bool realtime)
     int argc = m_options->generateCmdLine(argv, realtime, fileName, fileName2);
     widgetPanel->clearGraphs();
     csound=csoundCreate(0);
+
     csoundReset(csound);
     csoundSetHostData(csound, (void *) ud);
+    csoundPreCompile(csound);
 
-    if(m_options->thread) {
+    int variable = csoundCreateGlobalVariable(csound, "FLTK_Flags", sizeof(int));
+    if (m_options->enableFLTK or !useAPI) {
+      // disable FLTK graphs, but allow FLTK widgets
+      *((int*) csoundQueryGlobalVariable(csound, "FLTK_Flags")) = 4;
+    }
+    else {
+      qDebug("play() FLTK Disabled");
+      *((int*) csoundQueryGlobalVariable(csound, "FLTK_Flags")) = 3;
+    }
+    if (m_options->thread) {
       csoundSetMessageCallback(csound, &qutecsound::messageCallback_Thread);
     }
     else {
@@ -665,13 +683,15 @@ void qutecsound::play(bool realtime)
     csoundSetKillGraphCallback(csound, &qutecsound::killGraphCallback);
     csoundSetExitGraphCallback(csound, &qutecsound::exitGraphCallback);
 
+    ud->PERF_STATUS = 1;
     emit(dispatchQueues()); //To dispatch messages produced in compilation.
-    if (result!=CSOUND_SUCCESS) {
+    if (result!=CSOUND_SUCCESS or variable != CSOUND_SUCCESS) {
       qDebug("Csound compile failed!");
       csoundStop(csound);
       free(argv);
       csoundCleanup(csound);
       csoundDestroy(csound);  //FIXME Had to destroy csound every run otherwise FLTK widgets crash...
+      ud->PERF_STATUS = 0;
       playAct->setChecked(false);
       return;
     }
@@ -686,7 +706,6 @@ void qutecsound::play(bool realtime)
     ud->csound = csound;
 //     ud->realtime = realtime;
     ud->result = result;
-    ud->PERF_STATUS=1;
     unsigned int numWidgets = widgetPanel->widgetCount();
     ud->qcs->channelNames.resize(numWidgets*2);
     ud->qcs->values.resize(numWidgets*2);
@@ -755,6 +774,7 @@ void qutecsound::stop()
     ud->PERF_STATUS = 0;
   }
   else {
+    playAct->setChecked(false);
     return;
   }
   if (m_options->thread) {
@@ -831,7 +851,7 @@ void qutecsound::render()
       lastFileDir = dialog.directory().path();
     }
   }
-  play(false);
+  runCsound(false);
 }
 
 void qutecsound::openExternalEditor()
@@ -1118,6 +1138,8 @@ void qutecsound::dispatchQueues()
   if (ud->PERF_STATUS == 1) {
     queueTimer->start(QCS_QUEUETIMER_TIME);
   }
+  else
+    stop();
 }
 
 void qutecsound::widgetDockStateChanged(bool topLevel)
@@ -1260,7 +1282,13 @@ void qutecsound::createActions()
   playAct->setStatusTip(tr("Play"));
   playAct->setIconText("Play");
   playAct->setCheckable(true);
-  connect(playAct, SIGNAL(triggered()), this, SLOT(play()));
+  connect(playAct, SIGNAL(triggered()), this, SLOT(runCsound()));
+
+  playTermAct = new QAction(QIcon(":/images/gtk-media-play-ltr2.png"), tr("Play in Terminal"), this);
+//   playTermAct->setShortcut(tr("Alt+R"));
+  playTermAct->setStatusTip(tr("Play in external shell"));
+  playTermAct->setIconText("Play in Term");
+  connect(playTermAct, SIGNAL(triggered()), this, SLOT(runCsound()));
 
   stopAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop"), this);
   stopAct->setShortcut(tr("Alt+S"));
@@ -1468,6 +1496,7 @@ void qutecsound::createMenus()
 
   controlMenu = menuBar()->addMenu(tr("Control"));
   controlMenu->addAction(playAct);
+  controlMenu->addAction(playTermAct);
   controlMenu->addAction(renderAct);
   controlMenu->addAction(externalEditorAct);
   controlMenu->addAction(externalPlayerAct);
@@ -1544,6 +1573,7 @@ void qutecsound::createToolBars()
   controlToolBar->setObjectName("controlToolBar");
   controlToolBar->addAction(playAct);
   controlToolBar->addAction(stopAct);
+  controlToolBar->addAction(playTermAct);
   controlToolBar->addAction(renderAct);
   controlToolBar->addAction(externalEditorAct);
   controlToolBar->addAction(externalPlayerAct);
@@ -1572,6 +1602,7 @@ void qutecsound::createStatusBar()
 void qutecsound::readSettings()
 {
   QSettings settings("csound", "qutecsound");
+  int settingsVersion = settings.value("settingsVersion", 0).toInt();
   settings.beginGroup("GUI");
   QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
   QSize size = settings.value("size", QSize(600, 500)).toSize();
@@ -1624,6 +1655,7 @@ void qutecsound::readSettings()
   m_options->chngetEnabled = settings.value("chngetEnabled", false).toBool();
   m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
   m_options->showTooltips = settings.value("showTooltips", true).toBool();
+  m_options->enableFLTK = settings.value("enableFLTK", false).toBool();
   lastFiles = settings.value("lastfiles", "").toStringList();
   settings.endGroup();
   settings.beginGroup("Run");
@@ -1634,13 +1666,10 @@ void qutecsound::readSettings()
   m_options->HwBufferSize = settings.value("HwBufferSize", 1024).toInt();
   m_options->HwBufferSizeActive = settings.value("HwBufferSizeActive", false).toBool();
   m_options->dither = settings.value("dither", false).toBool();
-  m_options->additionalFlags = settings.value("additionalFlags", "-d").toString();
-  // FIXME Suppress displays for Mac by default as it crashes running in a separate thread.
-#ifdef MACOSX
-  m_options->additionalFlagsActive = settings.value("additionalFlagsActive", true).toBool();
-#else
+  m_options->additionalFlags = settings.value("additionalFlags", "").toString();
+  if (settingsVersion < 1)
+    m_options->additionalFlags.remove("-d");  // remove old -d preference, as it is fixed now.
   m_options->additionalFlagsActive = settings.value("additionalFlagsActive", false).toBool();
-#endif
   m_options->fileUseOptions = settings.value("fileUseOptions", true).toBool();
   m_options->fileOverrideOptions = settings.value("fileOverrideOptions", false).toBool();
   m_options->fileAskFilename = settings.value("fileAskFilename", false).toBool();
@@ -1693,6 +1722,7 @@ void qutecsound::readSettings()
 void qutecsound::writeSettings()
 {
   QSettings settings("csound", "qutecsound");
+  settings.setValue("settingsVersion", 1);
   settings.beginGroup("GUI");
   settings.setValue("pos", pos());
   settings.setValue("size", size());
@@ -1722,6 +1752,7 @@ void qutecsound::writeSettings()
   settings.setValue("chngetEnabled", m_options->chngetEnabled);
   settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
   settings.setValue("showTooltips", m_options->showWidgetsOnRun);
+  settings.setValue("enableFLTK", m_options->enableFLTK);
   QStringList files;
   for (int i=0; i < documentPages.size(); i++ ) {
     files.append(documentPages[i]->fileName);
@@ -2167,6 +2198,7 @@ uintptr_t qutecsound::csThread(void *data)
       perform = csoundPerformKsmps(udata->csound);
     }
   }
+  udata->PERF_STATUS = 0;
 //   udata->qcs->perfThread->Stop();
 //   udata->qcs->stop();
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD

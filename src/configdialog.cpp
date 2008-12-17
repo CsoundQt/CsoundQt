@@ -59,6 +59,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options/*, ConfigLists *
   chngetCheckBox->setChecked(m_options->chngetEnabled);
   showWidgetsOnRunCheckBox->setChecked(m_options->showWidgetsOnRun);
   showTooltipsCheckBox->setChecked(m_options->showTooltips);
+  enableFLTKCheckBox->setChecked(m_options->enableFLTK);
 
   if (m_options->useAPI)
     ApiRadioButton->setChecked(true);
@@ -165,6 +166,7 @@ void ConfigDialog::accept()
   m_options->chngetEnabled = chngetCheckBox->isChecked();
   m_options->showWidgetsOnRun = showWidgetsOnRunCheckBox->isChecked();
   m_options->showTooltips = showTooltipsCheckBox->isChecked();
+  m_options->enableFLTK = enableFLTKCheckBox->isChecked();
 
   m_options->useAPI = ApiRadioButton->isChecked();
   m_options->thread = threadCheckBox->isChecked();

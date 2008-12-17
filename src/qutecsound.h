@@ -126,7 +126,7 @@ class qutecsound:public QMainWindow
     QVector<QString> stringValues;
 
   public slots:
-    void play(bool realtime=true);
+    void runCsound(bool realtime=true);
     void stop();
 //     void selectMidiInDevice(QPoint pos);
 //     void selectMidiOutDevice(QPoint pos);
@@ -257,6 +257,7 @@ class qutecsound:public QMainWindow
     QAction *configureAct;
     QAction *editAct;
     QAction *playAct;
+    QAction *playTermAct;
     QAction *stopAct;
     QAction *renderAct;
     QAction *externalEditorAct;

@@ -205,7 +205,7 @@ int WidgetPanel::newWidget(QString widgetLine, bool offset)
     width = parts[3].toInt();
     height = parts[4].toInt();
     if (parts[0]=="ioSlider") {
-	  return createSlider(x,y,width,height, widgetLine);
+        return createSlider(x,y,width,height, widgetLine);
     }
     else if (parts[0]=="ioText") {
       if (parts[5]=="label" or parts[5]=="display") {
@@ -257,14 +257,15 @@ void WidgetPanel::clearWidgets()
   foreach (QuteWidget *widget, widgets) {
     delete widget;
   }
-  for(int i = 0; i< editWidgets.size(); i++){
-    delete(editWidgets[i]);
+  widgets.clear();
+  foreach (FrameWidget *widget, editWidgets) {
+//     qDebug("WidgetPanel::clearWidgets() removed editWidget");
+    delete widget;
   }
   editWidgets.clear();
-  widgets.clear();
   consoleWidgets.clear();
   graphWidgets.clear();
-  clipboard.clear();
+//   clipboard.clear();
 }
 
 void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
@@ -871,6 +872,10 @@ void WidgetPanel::setBackground(bool bg, QColor bgColor)
 void WidgetPanel::activateEditMode(bool active)
 {
   if (active) {
+    foreach (FrameWidget *widget, editWidgets) {
+      delete widget;
+    }
+    editWidgets.clear();
     foreach (QuteWidget * widget, widgets) {
       createEditFrame(widget);
     }
@@ -950,8 +955,10 @@ void WidgetPanel::cut()
 void WidgetPanel::paste()
 {
   if (editAct->isChecked()) {
+    deselectAll();
     foreach (QString line, clipboard) {
       newWidget(line);
+      editWidgets.last()->select();
     }
   }
 }

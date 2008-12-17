@@ -83,7 +83,7 @@
     </rect>
    </property>
    <property name="currentIndex" >
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab_2" >
     <attribute name="title" >
@@ -808,9 +808,9 @@
      <property name="geometry" >
       <rect>
        <x>370</x>
-       <y>260</y>
+       <y>210</y>
        <width>241</width>
-       <height>231</height>
+       <height>281</height>
       </rect>
      </property>
      <property name="title" >
@@ -894,6 +894,22 @@
        <string>Show Tooltips for widgets</string>
       </property>
      </widget>
+     <widget class="QCheckBox" name="enableFLTKCheckBox" >
+      <property name="geometry" >
+       <rect>
+        <x>10</x>
+        <y>240</y>
+        <width>221</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip" >
+       <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
+      </property>
+      <property name="text" >
+       <string>Enable FLTK (dangerous)</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox_8" >
      <property name="geometry" >
@@ -901,7 +917,7 @@
        <x>370</x>
        <y>10</y>
        <width>241</width>
-       <height>241</height>
+       <height>191</height>
       </rect>
      </property>
      <property name="title" >
@@ -911,16 +927,16 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>20</y>
-        <width>123</width>
-        <height>78</height>
+        <y>50</y>
+        <width>221</width>
+        <height>84</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
        <item>
         <widget class="QLabel" name="label_13" >
          <property name="text" >
-          <string>Run using:</string>
+          <string>Run Utilities and Render using:</string>
          </property>
         </widget>
        </item>
@@ -947,7 +963,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>110</y>
+        <y>20</y>
         <width>211</width>
         <height>24</height>
        </rect>
@@ -1250,7 +1266,7 @@
    <hints>
     <hint type="sourcelabel" >
      <x>533</x>
-     <y>552</y>
+     <y>559</y>
     </hint>
     <hint type="destinationlabel" >
      <x>233</x>
@@ -1266,7 +1282,7 @@
    <hints>
     <hint type="sourcelabel" >
      <x>619</x>
-     <y>552</y>
+     <y>559</y>
     </hint>
     <hint type="destinationlabel" >
      <x>219</x>
@@ -1441,12 +1457,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>414</x>
-     <y>340</y>
+     <x>416</x>
+     <y>290</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>431</x>
-     <y>371</y>
+     <x>433</x>
+     <y>321</y>
     </hint>
    </hints>
   </connection>
@@ -1457,28 +1473,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>395</x>
-     <y>340</y>
+     <x>397</x>
+     <y>290</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>442</x>
-     <y>397</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ApiRadioButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>threadCheckBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>409</x>
-     <y>86</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>569</x>
-     <y>162</y>
+     <x>444</x>
+     <y>351</y>
     </hint>
    </hints>
   </connection>

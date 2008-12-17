@@ -53,6 +53,7 @@ class Options{
     bool chngetEnabled;
     bool showWidgetsOnRun;
     bool showTooltips;
+    bool enableFLTK;
 
     bool useAPI;
     bool thread;
