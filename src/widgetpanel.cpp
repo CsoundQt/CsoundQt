@@ -671,7 +671,7 @@ int WidgetPanel::createButton(int x, int y, int width, int height, QString widge
   connect(widget, SIGNAL(queueEvent(QString)), this, SLOT(queueEvent(QString)));
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  connect(widget, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(play()));
+  connect(widget, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(runCsound()));
   connect(widget, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
 //   connect(widget, SIGNAL(selectAudioInDevice(QPoint)), static_cast<qutecsound *>(parent()), SLOT(selectAudioInDevice(QPoint)));
 //   connect(widget, SIGNAL(selectAudioOutDevice(QPoint)), static_cast<qutecsound *>(parent()), SLOT(selectAudioOutDevice(QPoint)));

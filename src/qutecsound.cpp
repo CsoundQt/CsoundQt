@@ -108,11 +108,7 @@ qutecsound::qutecsound(QStringList fileNames)
 
   fillFileMenu(); //Must be placed after readSettings to include recent Files
   if (m_options->opcodexmldir == "") {
-#ifdef MACOSX
     opcodeTree = new OpEntryParser(":/opcodes.xml");
-#else
-    opcodeTree = new OpEntryParser(":/opcodes.xml");
-#endif
   }
   else
     opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + "/opcodes.xml"));
@@ -396,6 +392,9 @@ void qutecsound::copy()
   else if (helpPanel->hasFocus()) {
     helpPanel->copy();
   }
+  else if (m_console->widgetHasFocus()) {
+    m_console->copy();
+  }
   else
     widgetPanel->copy();
 }
@@ -582,12 +581,13 @@ void qutecsound::runCsound(bool realtime)
     stop();
     return;
   }
-  bool useAPI = false;
-  if (QObject::sender() == playAct) {
-    useAPI = true;
-  }
-  else if (QObject::sender() == renderAct) {
+  bool useAPI = true;
+  if (QObject::sender() == renderAct) {
     useAPI = m_options->useAPI;
+  }
+  else 
+  if (QObject::sender() == playTermAct) {
+    useAPI = false;
   }
   widgetPanel->eventQueueSize = 0; //Flush events gathered while idle
   outValueQueue.clear();
@@ -1882,7 +1882,7 @@ bool qutecsound::loadFile(QString fileName)
     return false;
   }
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  DocumentPage *newPage = new DocumentPage(this);
+  DocumentPage *newPage = new DocumentPage(this, opcodeTree);
   documentPages.append(newPage);
   documentTabs->addTab(newPage,"");
   curPage = documentPages.size() - 1;
@@ -2209,6 +2209,7 @@ uintptr_t qutecsound::csThread(void *data)
 
 QStringList qutecsound::runCsoundInternally(QStringList flags)
 {
+qDebug("qutecsound::runCsoundInternally()");
   static char *argv[33];
   int index = 0;
   foreach (QString flag, flags) {
@@ -2227,9 +2228,9 @@ QStringList qutecsound::runCsoundInternally(QStringList flags)
   csoundSetHostData(csoundD, (void *) ud);
   m_deviceMessages.clear();
   csoundSetMessageCallback(csoundD, &qutecsound::messageCallback_Devices);
-  int result = csoundCompile(csoundD,argc,argv);
+  int result = csoundCompile(csoundD,argc,argv);  
   if(!result){
-    while(csoundPerformKsmps(csound)==0);
+    while(csoundPerformKsmps(csoundD)==0);
   }
 
   csoundCleanup(csoundD);

@@ -411,6 +411,12 @@ QString QuteLineEdit::getStringValue()
   return static_cast<LineEditWidget *>(m_widget)->text();
 }
 
+void QuteLineEdit::dropEvent(QDropEvent *event)
+{
+  qDebug("QuteLineEdit::dropEvent");
+  QWidget::dropEvent(event);
+}
+
 void QuteLineEdit::createPropertiesDialog()
 {
   QuteText::createPropertiesDialog();

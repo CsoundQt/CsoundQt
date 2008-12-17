@@ -24,11 +24,13 @@
 #include <QTextEdit>
 #include <QDomElement>
 
+class OpEntryParser;
+
 class DocumentPage : public QTextEdit
 {
   Q_OBJECT
   public:
-    DocumentPage(QWidget *parent);
+    DocumentPage(QWidget *parent, OpEntryParser *opcodeTree);
 
     ~DocumentPage();
 
@@ -45,6 +47,9 @@ class DocumentPage : public QTextEdit
     bool askForFile;
     bool readOnly; // Used for manual files and internal examples
 
+  protected:
+    virtual void contextMenuEvent(QContextMenuEvent *event);
+
   private:
     QStringList macOptions;
     QString macPresets;
@@ -52,6 +57,7 @@ class DocumentPage : public QTextEdit
     QDomElement widgets;
 
     bool widgetsDocked;
+	OpEntryParser *m_opcodeTree;
 
   public slots:
     void setMacWidgetsText(QString text);
@@ -64,6 +70,9 @@ class DocumentPage : public QTextEdit
     void uncomment();
     void indent();
     void unindent();
+	
+	void opcodeFromMenu();
+	
 };
 
 #endif

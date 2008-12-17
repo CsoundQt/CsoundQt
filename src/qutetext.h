@@ -87,6 +87,7 @@ class QuteLineEdit : public QuteText
     virtual void setText(QString text);
     virtual QString getWidgetLine();
     virtual QString getStringValue();
+    virtual void dropEvent(QDropEvent *event);
 
   protected:
     virtual void createPropertiesDialog();

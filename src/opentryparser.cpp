@@ -18,10 +18,10 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 #include "opentryparser.h"
+#include "types.h"
 
 #include <QFile>
 
-#include "types.h"
 
 OpEntryParser::OpEntryParser(QString opcodeFile)
   : m_opcodeFile(opcodeFile)
@@ -35,14 +35,16 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
     return;
   }
   file.close();
-  excludedOpcodes << "|" << "||" << "^" << "+" << "*" << "-" << "/"
-      << "instr" << "endin" << "opcode" << "endop"
-      << "sr" << "kr" << "ksmps" << "nchnls" << "0dbfs";
+  excludedOpcodes << "|" << "||" << "^" << "+" << "*" << "-" << "/";
+//      << "instr" << "endin" << "opcode" << "endop"
+//      << "sr" << "kr" << "ksmps" << "nchnls" << "0dbfs";
   QDomElement docElem = m_doc->documentElement();
+  QList<Opcode> opcodesInCategoryList;
 
   QDomNode n = docElem.firstChild();
   while(!n.isNull()) {
     QString catName;
+	opcodesInCategoryList.clear();
     QDomElement e = n.toElement();
     if(!e.isNull()) {
 //       qDebug() << e.attribute("name", "Miscellaneous");
@@ -68,11 +70,16 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
       }
 //       qDebug() << "out =" << opcode.outArgs << " op=" << opcode.opcodeName << " in=" << opcode.inArgs;
       if (opcode.opcodeName != "" and excludedOpcodes.count(opcode.opcodeName)==0
-          and catName !="Utilities")
+          and catName !="Utilities") {
         addOpcode(opcode);
+		opcodesInCategoryList << opcode;
+		}
       synop = synop.nextSibling();
     }
-    QPair<QString, QList<Opcode> > newCategory(catName, opcodeList);
+    QPair<QString, QList<Opcode> > newCategory(catName, opcodesInCategoryList);
+	opcodeListCategory.append(opcodesInCategoryList);
+	categoryList.append(catName);
+	qDebug() << "Category: " << categoryList.last();
     opcodeCategoryList.append(newCategory);
     n = n.nextSibling();
   }
@@ -117,4 +124,32 @@ QString OpEntryParser::getSyntax(QString opcodeName)
   }
   else
     return QString("");
+}
+
+QList< QPair<QString, QList<Opcode> > > OpEntryParser::getOpcodesByCategory()
+{
+  return opcodeCategoryList;
+}
+
+int OpEntryParser::getCategoryCount()
+{
+qDebug("OpEntryParser::getCategoryCount()");
+  return categoryList.size();
+}
+
+QString OpEntryParser::getCategory(int index)
+{
+  if (index < categoryList.size()) 
+    return categoryList[index];
+  else return QString();
+}
+
+QStringList OpEntryParser::getCategoryList()
+{
+  return QStringList(categoryList);
+}
+
+QList<Opcode> OpEntryParser::getOpcodeList(int index)
+{
+  return opcodeListCategory[index];
 }

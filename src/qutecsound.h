@@ -124,6 +124,7 @@ class qutecsound:public QMainWindow
     QVector<QString> channelNames;
     QVector<double> values;
     QVector<QString> stringValues;
+    OpEntryParser *opcodeTree;
 
   public slots:
     void runCsound(bool realtime=true);
@@ -221,7 +222,6 @@ class qutecsound:public QMainWindow
     QVector<DocumentPage *> documentPages;
     //TODO remove this variable? or make it DocumentPage
     DocumentPage *textEdit;
-    OpEntryParser *opcodeTree;
     Options *m_options;
     DockConsole *m_console;
     Highlighter *m_highlighter;

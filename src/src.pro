@@ -95,6 +95,7 @@ win32 {
     qute_cpp {
         HEADERS += "$${QUTECSOUND_CSOUND_PATH}\csound.hpp"
         HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\csPerfThread.hpp"
+        HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\cwindow.h"
         LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\csnd.dll"
     }
     build64 {
@@ -133,6 +134,7 @@ macx {
     qute_cpp {
         HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.hpp
         HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csPerfThread.hpp
+        HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/cwindow.h
         LIBS += /Library/Frameworks/CsoundLib.framework/Versions/Current/lib_csnd.dylib
     }
     LIBS += -framework QtXml
@@ -147,5 +149,6 @@ macx {
 
 #QMAKE_CXXFLAGS_DEBUG += -DDEBUG
 
-CONFIG -= stl
+CONFIG -= stl \
+  debug
 

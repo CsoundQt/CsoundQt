@@ -34,12 +34,19 @@ class OpEntryParser
 
     QStringList opcodeNameList();
     QString getSyntax(QString opcodeName);
+	QList< QPair<QString, QList<Opcode> > > getOpcodesByCategory();
+	int getCategoryCount();
+	QString getCategory(int index);
+	QStringList getCategoryList();
+	QList<Opcode> getOpcodeList(int index);
 
   private:
     QString m_opcodeFile;
     QDomDocument *m_doc;
     QList<Opcode> opcodeList;
     QList< QPair<QString, QList<Opcode> > > opcodeCategoryList;
+    QVector<QList<Opcode> > opcodeListCategory;
+    QStringList categoryList;
     QStringList excludedOpcodes;
 
     void addOpcode(Opcode opcode);

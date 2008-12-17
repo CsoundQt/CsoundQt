@@ -50,6 +50,16 @@ class DockConsole : public QDockWidget, public Console
     }
 
     ~DockConsole() {;};
+	
+	void copy()
+	{
+	  text->copy();
+	}
+	
+	bool widgetHasFocus()
+	{
+	  return text->hasFocus();
+	}
   private:
     virtual void closeEvent(QCloseEvent * event);
   signals:
