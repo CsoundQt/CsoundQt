@@ -17,63 +17,36 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef QUTEGRAPH_H
-#define QUTEGRAPH_H
+#ifndef QUTESCOPE_H
+#define QUTESCOPE_H
 
 #include "qutewidget.h"
 
-class Curve;
-
-class QuteGraph : public QuteWidget
+class QuteScope : public QuteWidget
 {
   Q_OBJECT
   public:
-    QuteGraph(QWidget *parent);
+    QuteScope(QWidget *parent);
 
-    ~QuteGraph();
+    ~QuteScope();
 
     virtual QString getWidgetLine();
     virtual void setWidgetGeometry(int x,int y,int width,int height);
     virtual void createPropertiesDialog();
-    virtual void setValue(double value);
-//     void setType(QString type);
-    void clearCurves();
-    void addCurve(Curve *curve);
+    void setType(QString type);
 
   protected:
     QLabel * m_label;
-    QComboBox *m_pageComboBox;
-    QVector<Curve *> curves;
+    QString m_type;
 
-  public slots:
-    void changeCurve(int index);
 };
 
-class StackedLayoutWidget : public QStackedWidget
+class ScopeWidget : public QGraphicsView
 {
   Q_OBJECT
   public:
-    StackedLayoutWidget(QWidget* parent) : QStackedWidget(parent)
-    {
-      setFrameShape(QFrame::StyledPanel);
-    }
-    ~StackedLayoutWidget() {};
-
-    void setWidgetGeometry(int x,int y,int width,int height)
-    {
-      setGeometry(x,y,width, height);
-      setMaximumSize(width, height);
-    }
-
-    void clearCurves()
-    {
-      QWidget *widget;
-      widget = currentWidget();
-      while (widget != 0) {
-        removeWidget(widget);
-        widget = currentWidget();
-      }
-    }
+    ScopeWidget(QWidget* parent) : QGraphicsView(parent) {}
+    ~ScopeWidget() {}
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent *event)

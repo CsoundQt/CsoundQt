@@ -72,14 +72,14 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
       if (opcode.opcodeName != "" and excludedOpcodes.count(opcode.opcodeName)==0
           and catName !="Utilities") {
         addOpcode(opcode);
-		opcodesInCategoryList << opcode;
-		}
-      synop = synop.nextSibling();
+        opcodesInCategoryList << opcode;
+          }
+          synop = synop.nextSibling();
     }
     QPair<QString, QList<Opcode> > newCategory(catName, opcodesInCategoryList);
-	opcodeListCategory.append(opcodesInCategoryList);
-	categoryList.append(catName);
-	qDebug() << "Category: " << categoryList.last();
+    opcodeListCategory.append(opcodesInCategoryList);
+    categoryList.append(catName);
+// 	qDebug() << "Category: " << categoryList.last();
     opcodeCategoryList.append(newCategory);
     n = n.nextSibling();
   }
@@ -133,7 +133,7 @@ QList< QPair<QString, QList<Opcode> > > OpEntryParser::getOpcodesByCategory()
 
 int OpEntryParser::getCategoryCount()
 {
-qDebug("OpEntryParser::getCategoryCount()");
+// qDebug("OpEntryParser::getCategoryCount()");
   return categoryList.size();
 }
 

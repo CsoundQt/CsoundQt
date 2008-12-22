@@ -157,6 +157,11 @@ qutecsound::qutecsound(QStringList fileNames)
   queueTimer = new QTimer(this);
   queueTimer->setSingleShot (true);
   connect(queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
+
+#ifndef QUTECSOUND_DESTROY_CSOUND
+  // Create only once
+  csound=csoundCreate(0);
+#endif
 }
 
 qutecsound::~qutecsound()
@@ -649,11 +654,14 @@ void qutecsound::runCsound(bool realtime)
     // TODO use: PUBLIC int csoundSetGlobalEnv(const char *name, const char *value);
     int argc = m_options->generateCmdLine(argv, realtime, fileName, fileName2);
     widgetPanel->clearGraphs();
+#ifdef QUTECSOUND_DESTROY_CSOUND
     csound=csoundCreate(0);
+#endif
 
     csoundReset(csound);
     csoundSetHostData(csound, (void *) ud);
     csoundPreCompile(csound);
+
 
     int variable = csoundCreateGlobalVariable(csound, "FLTK_Flags", sizeof(int));
     if (m_options->enableFLTK or !useAPI) {
@@ -690,7 +698,9 @@ void qutecsound::runCsound(bool realtime)
       csoundStop(csound);
       free(argv);
       csoundCleanup(csound);
+#ifdef QUTECSOUND_DESTROY_CSOUND
       csoundDestroy(csound);  //FIXME Had to destroy csound every run otherwise FLTK widgets crash...
+#endif
       ud->PERF_STATUS = 0;
       playAct->setChecked(false);
       return;
@@ -704,8 +714,13 @@ void qutecsound::runCsound(bool realtime)
       csoundSetOutputValueCallback(csound, NULL);
     }
     ud->csound = csound;
-//     ud->realtime = realtime;
     ud->result = result;
+    ud->zerodBFS = csoundGet0dBFS(csound);
+    ud->outputBufferSize = csoundGetOutputBufferSize(csound);
+    ud->outputBuffer = csoundGetOutputBuffer(csound);
+
+//     PUBLIC int csoundGetSampleFormat(CSOUND *);
+//     PUBLIC int csoundGetSampleSize(CSOUND *);
     unsigned int numWidgets = widgetPanel->widgetCount();
     ud->qcs->channelNames.resize(numWidgets*2);
     ud->qcs->values.resize(numWidgets*2);
@@ -792,7 +807,9 @@ void qutecsound::stop()
     SetMenuBar(menuBarHandle);
 #endif
   }
+#ifdef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(csound);
+#endif
   playAct->setChecked(false);
   if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
     //widgetPanel->setVisible(false);
@@ -1947,6 +1964,29 @@ void qutecsound::loadCompanionFile(const QString &fileName)
 
 bool qutecsound::saveFile(const QString &fileName)
 {
+  qDebug("qutecsound::saveFile");
+  QString text;
+  QApplication::setOverrideCursor(Qt::WaitCursor);
+  if (m_options->saveWidgets)
+    text = documentPages[curPage]->getFullText();
+  else
+    text = documentPages[curPage]->toPlainText();
+  QApplication::restoreOverrideCursor();
+
+  if (fileName != documentPages[curPage]->fileName) {
+    documentPages[curPage]->fileName = fileName;
+    setCurrentFile(fileName);
+  }
+  textEdit->document()->setModified(false);
+  setWindowModified(false);
+  documentTabs->setTabIcon(curPage, QIcon());
+  lastUsedDir = fileName;
+  lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/\\]")));
+  if (recentFiles.count(fileName) == 0) {
+    recentFiles.prepend(fileName);
+    recentFiles.removeLast();
+    fillFileMenu();
+  }
   QFile file(fileName);
   if (!file.open(QFile::WriteOnly | QFile::Text)) {
     QMessageBox::warning(this, tr("Application"),
@@ -1957,25 +1997,7 @@ bool qutecsound::saveFile(const QString &fileName)
   }
 
   QTextStream out(&file);
-  QApplication::setOverrideCursor(Qt::WaitCursor);
-  if (m_options->saveWidgets)
-    out << documentPages[curPage]->getFullText();
-  else
-    out << documentPages[curPage]->toPlainText();
-  QApplication::restoreOverrideCursor();
-
-  textEdit->document()->setModified(false);
-  documentPages[curPage]->fileName = fileName;
-  setCurrentFile(fileName);
-  setWindowModified(false);
-  documentTabs->setTabIcon(curPage, QIcon());
-  lastUsedDir = fileName;
-  lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/\\]")));
-  if (recentFiles.count(fileName) == 0) {
-    recentFiles.prepend(fileName);
-    recentFiles.removeLast();
-    fillFileMenu();
-  }
+  out << text;
   statusBar()->showMessage(tr("File saved"), 2000);
   return true;
 }

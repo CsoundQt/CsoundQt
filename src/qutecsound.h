@@ -44,6 +44,8 @@
 #include <csPerfThread.hpp>
 #endif
 
+// #define QUTECSOUND_DESTROY_CSOUND
+
 class QAction;
 class QMenu;
 class QTextEdit;
@@ -62,15 +64,14 @@ class Curve;
 class qutecsound;
 
 struct CsoundUserData{
-  /*result of csoundCompile()*/
-  int result;
-  /*instance of csound*/
-  CSOUND *csound;
+  int result; //result of csoundCompile()
+  CSOUND *csound; // instance of csound
   /*performance status*/
   bool PERF_STATUS; //0= stopped 1=running
-//   bool realtime;
-  /*pass main application to check widgets*/
-  qutecsound *qcs;
+  qutecsound *qcs; //pass main application to check widgets
+  MYFLT zerodBFS; //0dBFS value
+  long outputBufferSize;
+  MYFLT* outputBuffer;
 };
 
 

@@ -42,7 +42,8 @@ SOURCES += qutecsound.cpp \
  qutegraph.cpp \
  framewidget.cpp \
  curve.cpp \
- qutespinbox.cpp
+ qutespinbox.cpp \
+ qutescope.cpp
 HEADERS += qutecsound.h \
  dockhelp.h \
  opentryparser.h \
@@ -69,7 +70,8 @@ HEADERS += qutecsound.h \
  qutegraph.h \
  framewidget.h \
  curve.h \
- qutespinbox.h
+ qutespinbox.h \
+ qutescope.h
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \

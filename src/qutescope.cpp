@@ -17,70 +17,55 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef QUTEGRAPH_H
-#define QUTEGRAPH_H
+#include "qutescope.h"
+// #include <cmath>
 
-#include "qutewidget.h"
-
-class Curve;
-
-class QuteGraph : public QuteWidget
+QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
 {
-  Q_OBJECT
-  public:
-    QuteGraph(QWidget *parent);
+  m_widget = new ScopeWidget(this);
+  m_widget->show();
+  m_widget->setAutoFillBackground(true);
+  m_label = new QLabel(this);
+  QPalette palette = m_widget->palette();
+  palette.setColor(QPalette::WindowText, Qt::white);
+  m_label->setPalette(palette);
+  m_label->setText("Scope");
+  m_label->move(85, 0);
+  m_label->resize(500, 25);
 
-    ~QuteGraph();
+  connect(dynamic_cast<ScopeWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+}
 
-    virtual QString getWidgetLine();
-    virtual void setWidgetGeometry(int x,int y,int width,int height);
-    virtual void createPropertiesDialog();
-    virtual void setValue(double value);
-//     void setType(QString type);
-    void clearCurves();
-    void addCurve(Curve *curve);
-
-  protected:
-    QLabel * m_label;
-    QComboBox *m_pageComboBox;
-    QVector<Curve *> curves;
-
-  public slots:
-    void changeCurve(int index);
-};
-
-class StackedLayoutWidget : public QStackedWidget
+QuteScope::~QuteScope()
 {
-  Q_OBJECT
-  public:
-    StackedLayoutWidget(QWidget* parent) : QStackedWidget(parent)
-    {
-      setFrameShape(QFrame::StyledPanel);
-    }
-    ~StackedLayoutWidget() {};
+}
 
-    void setWidgetGeometry(int x,int y,int width,int height)
-    {
-      setGeometry(x,y,width, height);
-      setMaximumSize(width, height);
-    }
+QString QuteScope::getWidgetLine()
+{
+  QString line = "ioGraph {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
+  line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
+  line += m_type;
+  return line;
+}
 
-    void clearCurves()
-    {
-      QWidget *widget;
-      widget = currentWidget();
-      while (widget != 0) {
-        removeWidget(widget);
-        widget = currentWidget();
-      }
-    }
+void QuteScope::setType(QString type)
+{
+  m_type = type;
+}
 
-  protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event)
-    {emit(popUpMenu(event->globalPos()));}
+void QuteScope::setWidgetGeometry(int x,int y,int width,int height)
+{
+  QuteWidget::setWidgetGeometry(x,y,width, height);
+//   dynamic_cast<ScopeWidget *>(m_widget)->setWidgetGeometry(0,0,width, height);
+  if (index < 0)
+    return;
+}
 
-  signals:
-    void popUpMenu(QPoint pos);
-};
+void QuteScope::createPropertiesDialog()
+{
+  QuteWidget::createPropertiesDialog();
+  dialog->setWindowTitle("Graph");
+  channelLabel->hide();
+  nameLineEdit->hide();
+}
 
-#endif

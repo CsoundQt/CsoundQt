@@ -29,6 +29,7 @@
 #include "qutemeter.h"
 #include "quteconsole.h"
 #include "qutegraph.h"
+#include "qutescope.h"
 #include "qutedummy.h"
 #include "framewidget.h"
 #include "curve.h"
@@ -43,7 +44,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   layoutWidget = new LayoutWidget(this);
   layoutWidget->setGeometry(QRect(0, 0, 800, 600));
   layoutWidget->setAutoFillBackground(true);
-  layoutWidget->setFocusPolicy(Qt::NoFocus);
+//   layoutWidget->setFocusPolicy(Qt::NoFocus);
   connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
 //   connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));
 
@@ -73,6 +74,8 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(createConsoleAct, SIGNAL(triggered()), this, SLOT(createConsole()));
   createGraphAct = new QAction(tr("Create Graph"),this);
   connect(createGraphAct, SIGNAL(triggered()), this, SLOT(createGraph()));
+  createScopeAct = new QAction(tr("Create Scope"),this);
+  connect(createScopeAct, SIGNAL(triggered()), this, SLOT(createScope()));
   propertiesAct = new QAction(tr("Properties"),this);
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
   editAct = new QAction(tr("Widget Edit Mode"), this);
@@ -165,7 +168,7 @@ void WidgetPanel::setValue(int index, QString value)
 
 int WidgetPanel::loadWidgets(QString macWidgets)
 {
-  clearWidgets();
+  clearWidgetPanel();
   QStringList widgetLines = macWidgets.split(QRegExp("[\n\r]"), QString::SkipEmptyParts);
   foreach (QString line, widgetLines) {
 //     qDebug("WidgetLine: %s", line.toStdString().c_str());
@@ -240,7 +243,10 @@ int WidgetPanel::newWidget(QString widgetLine, bool offset)
       return createMeter(x,y,width, height, widgetLine);
     }
     else if (parts[0]=="ioGraph") {
-      return createGraph(x,y,width, height, widgetLine);
+      if (parts.size() < 6 or parts[5]=="table")
+        return createGraph(x,y,width, height, widgetLine);
+      else if (parts[5]=="fft" or parts[5]=="scope")
+        return createScope(x,y,width, height, widgetLine);
     }
     else {
       // Unknown widget...
@@ -253,19 +259,26 @@ int WidgetPanel::newWidget(QString widgetLine, bool offset)
 
 void WidgetPanel::clearWidgets()
 {
-  qDebug("WidgetPanel::clearWidgets()");
+  clearWidgetPanel();
+  widgetChanged();
+//   clipboard.clear();
+}
+
+void WidgetPanel::clearWidgetPanel()
+{
+  qDebug("WidgetPanel::clearWidgetPanel()");
   foreach (QuteWidget *widget, widgets) {
     delete widget;
   }
   widgets.clear();
   foreach (FrameWidget *widget, editWidgets) {
-//     qDebug("WidgetPanel::clearWidgets() removed editWidget");
+//     qDebug("WidgetPanel::clearWidgetpanel() removed editWidget");
     delete widget;
   }
   editWidgets.clear();
   consoleWidgets.clear();
   graphWidgets.clear();
-//   clipboard.clear();
+  scopeWidgets.clear();
 }
 
 void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
@@ -316,7 +329,7 @@ void WidgetPanel::newCurve(Curve* curve)
 {
   for (int i = 0; i < graphWidgets.size(); i++) {
     graphWidgets[i]->addCurve(curve);
-    qApp->processEvents(); //Kludge to allow corret resizing of graph view
+    qApp->processEvents(); //Kludge to allow correct resizing of graph view
     graphWidgets[i]->changeCurve(-1);
   }
 }
@@ -331,6 +344,7 @@ void WidgetPanel::clearGraphs()
 void WidgetPanel::deleteWidget(QuteWidget *widget)
 {
   int number = widgets.indexOf(widget);
+  //FIXME check whether inlcuded in consoleWidgets, graphWidgets or scopeWidgets;
   //if (consoleWidgets.contains((QuteConsole *)widget));
   //  consoleWidgets.remove(consoleWidgets.indexOf((QuteConsole *)widget));
 //   qDebug("WidgetPanel::deleteWidget %i", number);
@@ -370,6 +384,7 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   menu.addAction(createMeterAct);
   menu.addAction(createConsoleAct);
   menu.addAction(createGraphAct);
+  menu.addAction(createScopeAct);
   menu.addSeparator();
   menu.addAction(editAct);
   menu.addSeparator();
@@ -386,6 +401,7 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 
 void WidgetPanel::resizeEvent(QResizeEvent * event)
 {
+  QDockWidget::resizeEvent(event);
   oldSize = event->oldSize();
 //   qDebug("WidgetPanel::resizeEvent()");
   emit resized(event->size());
@@ -393,6 +409,7 @@ void WidgetPanel::resizeEvent(QResizeEvent * event)
 
 void WidgetPanel::moveEvent(QMoveEvent * event)
 {
+  QDockWidget::moveEvent(event);
   emit moved(event->pos());
 }
 
@@ -833,6 +850,19 @@ int WidgetPanel::createGraph(int x, int y, int width, int height, QString widget
   QuteGraph *widget= new QuteGraph(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
+//   widget->setType(parts[5]);  //Graph widget is always of type "graph"
+  if (parts.size() > 6)
+    widget->setValue(parts[6].toDouble());
+  if (parts.size()>7) {
+    int i=7;
+    QString channelName = "";
+    while (parts.size()>i) {
+      channelName += parts[i] + " ";
+      i++;
+    }
+    channelName.chop(1);  //remove last space
+    widget->setChannelName(channelName);
+  }
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   widgets.append(widget);
@@ -841,6 +871,25 @@ int WidgetPanel::createGraph(int x, int y, int width, int height, QString widget
     createEditFrame(widget);
   }
   graphWidgets.append(widget);
+  return 1;
+}
+
+int WidgetPanel::createScope(int x, int y, int width, int height, QString widgetLine)
+{
+//   qDebug("ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
+  QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  QuteScope *widget= new QuteScope(layoutWidget);
+  widget->setWidgetLine(widgetLine);
+  widget->setWidgetGeometry(x,y,width, height);
+  //TODO set scope type
+  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  widgets.append(widget);
+  widget->show();
+  if (editAct->isChecked()) {
+    createEditFrame(widget);
+  }
+  scopeWidgets.append(widget);
   return 1;
 }
 
@@ -1087,6 +1136,12 @@ void WidgetPanel::createConsole()
 void WidgetPanel::createGraph()
 {
   createGraph(currentPosition.x(), currentPosition.y() - 20, 350, 150, QString("ioGraph {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {350, 150}"));
+  widgetChanged();
+}
+
+void WidgetPanel::createScope()
+{
+  createScope(currentPosition.x(), currentPosition.y() - 20, 350, 150, QString("ioGraph {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {350, 150} scope"));
   widgetChanged();
 }
 

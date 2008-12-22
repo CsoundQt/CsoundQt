@@ -63,6 +63,7 @@ void FrameWidget::contextMenuEvent(QContextMenuEvent *event)
 void FrameWidget::mousePressEvent ( QMouseEvent * event )
 {
   QFrame::mousePressEvent(event);
+  this->setFocus(Qt::MouseFocusReason);
   if (event->button() & Qt::LeftButton) {
     startx = event->x();
     starty = event->y();

@@ -413,6 +413,7 @@ void ConfigDialog::browseDir(QString &destination)
 
 QList<QPair<QString, QString> > ConfigDialog::getMidiInputDevices()
 {
+  // Adapted from blue by Steven Yi
   QList<QPair<QString, QString> > deviceList;
   QString module = _configlists.rtMidiNames[RtMidiModuleComboBox->currentIndex()];
   if (module == "none") {

@@ -37,32 +37,32 @@ DocumentPage::~DocumentPage()
 
 void DocumentPage::contextMenuEvent(QContextMenuEvent *event)
 {
-     QMenu *menu = createStandardContextMenu();
-	 menu->addSeparator();
-	 QMenu *opcodeMenu = menu->addMenu("Opcodes");
-	 QMenu *mainMenu;
-	 QMenu *subMenu;
-	 QString currentMain = "";
-	 for (int i = 0; i < m_opcodeTree->getCategoryCount(); i++) {
-	   QString category = m_opcodeTree->getCategory(i);
-	   QStringList categorySplit = category.split(":");
-	   if (!categorySplit.isEmpty() && categorySplit[0] != currentMain) {
-	     mainMenu = opcodeMenu->addMenu(categorySplit[0]);
-		 currentMain = categorySplit[0];
-	   }
-	   if (categorySplit.size() < 2) {
-	     subMenu = mainMenu;
-	   }
-	   else {
-	     subMenu = mainMenu->addMenu(categorySplit[1]);
-	   }
-	   foreach(Opcode opcode, m_opcodeTree->getOpcodeList(i)) {
-	     QAction *action = subMenu->addAction(opcode.opcodeName, this, SLOT(opcodeFromMenu()));
-		 action->setData(opcode.outArgs + opcode.opcodeName + opcode.inArgs);
-	   }
-	 }
-     menu->exec(event->globalPos());
-     delete menu;
+  QMenu *menu = createStandardContextMenu();
+  menu->addSeparator();
+  QMenu *opcodeMenu = menu->addMenu("Opcodes");
+  QMenu *mainMenu = 0;
+  QMenu *subMenu;
+  QString currentMain = "";
+  for (int i = 0; i < m_opcodeTree->getCategoryCount(); i++) {
+    QString category = m_opcodeTree->getCategory(i);
+    QStringList categorySplit = category.split(":");
+    if (!categorySplit.isEmpty() && categorySplit[0] != currentMain) {
+      mainMenu = opcodeMenu->addMenu(categorySplit[0]);
+      currentMain = categorySplit[0];
+    }
+    if (categorySplit.size() < 2) {
+      subMenu = mainMenu;
+    }
+    else {
+      subMenu = mainMenu->addMenu(categorySplit[1]);
+    }
+    foreach(Opcode opcode, m_opcodeTree->getOpcodeList(i)) {
+      QAction *action = subMenu->addAction(opcode.opcodeName, this, SLOT(opcodeFromMenu()));
+      action->setData(opcode.outArgs + opcode.opcodeName + opcode.inArgs);
+    }
+  }
+  menu->exec(event->globalPos());
+  delete menu;
 }
 
 int DocumentPage::setTextString(QString text)

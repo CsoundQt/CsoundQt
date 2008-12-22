@@ -29,6 +29,7 @@
 class Curve;
 class QuteConsole;
 class QuteGraph;
+class QuteScope;
 class FrameWidget;
 class LayoutWidget;
 
@@ -68,6 +69,7 @@ class WidgetPanel : public QDockWidget
     QVector<QuteWidget *> widgets;
     QVector<QuteConsole *> consoleWidgets;
     QVector<QuteGraph *> graphWidgets;
+    QVector<QuteScope *> scopeWidgets;
     QVector<FrameWidget *> editWidgets;
     LayoutWidget *layoutWidget;
 
@@ -85,6 +87,7 @@ class WidgetPanel : public QDockWidget
     QAction *createMeterAct;
     QAction *createConsoleAct;
     QAction *createGraphAct;
+    QAction *createScopeAct;
     QAction *editAct;
     QAction *clearAct;
     QAction *copyAct;
@@ -112,6 +115,7 @@ class WidgetPanel : public QDockWidget
     int createMeter(int x, int y, int width, int height, QString widgetLine);
     int createConsole(int x, int y, int width, int height, QString widgetLine);
     int createGraph(int x, int y, int width, int height, QString widgetLine);
+    int createScope(int x, int y, int width, int height, QString widgetLine);
     int createDummy(int x, int y, int width, int height, QString widgetLine);
 
     void setBackground(bool bg, QColor bgColor);
@@ -136,8 +140,10 @@ class WidgetPanel : public QDockWidget
     void createMeter();
     void createConsole();
     void createGraph();
+    void createScope();
     void propertiesDialog();
     void clearWidgets();
+    void clearWidgetPanel();
     void applyProperties();
     void selectBgColor();
     void activateEditMode(bool active);
@@ -179,6 +185,7 @@ class LayoutWidget : public QWidget
     virtual void mousePressEvent(QMouseEvent *event)
     {
       QWidget::mousePressEvent(event);
+      this->setFocus(Qt::MouseFocusReason);
 //       selectionFrame->show();
 //       startx = event->x();
 //       starty = event->y();

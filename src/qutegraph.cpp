@@ -47,8 +47,13 @@ QuteGraph::~QuteGraph()
 
 QString QuteGraph::getWidgetLine()
 {
+  // Extension to MacCsound: type of graph (table, ftt, scope), value (which hold the index of the
+  // table displayed or the zoom level) and channel
   QString line = "ioGraph {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
-  line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"}";
+  line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} table ";
+  line += QString::number(m_value, 'f', 6) + " ";
+  line += m_name;
+//   qDebug("QuteGraph::getWidgetLine(): %s", line.toStdString().c_str());
   return line;
 }
 
@@ -66,9 +71,38 @@ void QuteGraph::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
   dialog->setWindowTitle("Graph");
-  channelLabel->hide();
-  nameLineEdit->hide();
+//   channelLabel->hide();
+//   nameLineEdit->hide();
 }
+
+void QuteGraph::setValue(double value)
+{
+  if (m_value == value)
+    return;
+  if (value < 0 ) {
+    for (int i = 0; i < m_pageComboBox->count(); i++) {
+      QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"));
+//       qDebug("QuteGraph::setValue %s", parts[0].toStdString().c_str());
+      if (parts.size() > 1) {
+//         qDebug("QuteGraph::setValue %i", parts[1].toInt());
+        if ((int) value == -parts[1].toInt()) {
+          changeCurve(i);
+          m_value = (int) value;
+        }
+      }
+    }
+  }
+  else if (value < curves.size()) {
+    changeCurve((int) value);
+    m_value = (int) value;
+  }
+  //Dont change value if not valid
+}
+
+// void QuteGraph::setType(QString type)
+// {
+//   m_type = type;
+// }
 
 void QuteGraph::changeCurve(int index)
 {
