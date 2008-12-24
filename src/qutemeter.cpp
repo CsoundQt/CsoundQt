@@ -24,8 +24,9 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
   setGeometry(0,0, parent->width(), parent->height());
   m_widget = new MeterWidget(this);
   m_widget->setAutoFillBackground(true);
-  connect(dynamic_cast<MeterWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
-  connect(dynamic_cast<MeterWidget *>(m_widget), SIGNAL(newValues(double, double)), this, SLOT(setValuesFromWidget(double,double)));
+//   static_cast<MeterWidget *>(m_widget)->setRenderHints(QPainter::Antialiasing);
+  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValues(double, double)), this, SLOT(setValuesFromWidget(double,double)));
 }
 
 QuteMeter::~QuteMeter()
@@ -39,10 +40,10 @@ QString QuteMeter::getWidgetLine()
   line += "{" + QString::number(m_color.red() * 256)
       + ", " + QString::number(m_color.green() * 256)
       + ", " + QString::number(m_color.blue() * 256) + "} ";
-  line += "\"" + m_name + "\" " + QString::number(dynamic_cast<MeterWidget *>(m_widget)->getValue(), 'f', 6) + " ";
-  line += "\"" + m_name2 + "\" " + QString::number(dynamic_cast<MeterWidget *>(m_widget)->getValue2(), 'f', 6) + " ";
-  line += dynamic_cast<MeterWidget *>(m_widget)->getType() + " ";
-  line += QString::number(dynamic_cast<MeterWidget *>(m_widget)->getPointSize()) + " ";
+  line += "\"" + m_name + "\" " + QString::number(static_cast<MeterWidget *>(m_widget)->getValue(), 'f', 6) + " ";
+  line += "\"" + m_name2 + "\" " + QString::number(static_cast<MeterWidget *>(m_widget)->getValue2(), 'f', 6) + " ";
+  line += static_cast<MeterWidget *>(m_widget)->getType() + " ";
+  line += QString::number(static_cast<MeterWidget *>(m_widget)->getPointSize()) + " ";
   line += QString::number(m_fadeSpeed) + " ";
   line += m_behavior;
 //   qDebug("QuteMeter::getWidgetLine() %s", line.toStdString().c_str());
@@ -70,7 +71,7 @@ void QuteMeter::createPropertiesDialog()
   name2LineEdit->setText(getChannel2Name());
   name2LineEdit->setMinimumWidth(320);
   layout->addWidget(name2LineEdit, 4,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
-  if (dynamic_cast<MeterWidget *>(m_widget)->getType() != "point" and ((MeterWidget *)m_widget)->getType() != "crosshair") {
+  if (static_cast<MeterWidget *>(m_widget)->getType() != "point" and ((MeterWidget *)m_widget)->getType() != "crosshair") {
     if (((MeterWidget *)m_widget)->m_vertical) {
       label->setEnabled(false);
       name2LineEdit->setEnabled(false);
@@ -87,9 +88,9 @@ void QuteMeter::createPropertiesDialog()
   layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
   colorButton = new QPushButton(dialog);
   QPixmap pixmap(64,64);
-  pixmap.fill(dynamic_cast<MeterWidget *>(m_widget)->getColor());
+  pixmap.fill(static_cast<MeterWidget *>(m_widget)->getColor());
   colorButton->setIcon(pixmap);
-  QPalette palette(dynamic_cast<MeterWidget *>(m_widget)->getColor());
+  QPalette palette(static_cast<MeterWidget *>(m_widget)->getColor());
   palette.color(QPalette::Window);
   colorButton->setPalette(palette);
   layout->addWidget(colorButton, 5,1, Qt::AlignLeft|Qt::AlignVCenter);
@@ -104,7 +105,7 @@ void QuteMeter::createPropertiesDialog()
   typeComboBox->addItem("line");
   typeComboBox->addItem("crosshair");
   typeComboBox->addItem("point");
-  typeComboBox->setCurrentIndex(typeComboBox->findText(dynamic_cast<MeterWidget *>(m_widget)->getType()));
+  typeComboBox->setCurrentIndex(typeComboBox->findText(static_cast<MeterWidget *>(m_widget)->getType()));
   layout->addWidget(typeComboBox, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
   label = new QLabel(dialog);
@@ -114,7 +115,7 @@ void QuteMeter::createPropertiesDialog()
   pointSizeSpinBox = new QSpinBox(dialog);
   pointSizeSpinBox->setValue(((MeterWidget *)m_widget)->getPointSize());
   layout->addWidget(pointSizeSpinBox, 7,1, Qt::AlignLeft|Qt::AlignVCenter);
-  if (dynamic_cast<MeterWidget *>(m_widget)->getType() != "point") {
+  if (static_cast<MeterWidget *>(m_widget)->getType() != "point") {
     label->setEnabled(false);
     pointSizeSpinBox->setEnabled(false);
   }
@@ -151,8 +152,8 @@ void QuteMeter::applyProperties()
   m_name = nameLineEdit->text();
   m_name2 = name2LineEdit->text();
   setColor(colorButton->palette().color(QPalette::Window));
-  dynamic_cast<MeterWidget *>(m_widget)->setType(typeComboBox->currentText());
-  dynamic_cast<MeterWidget *>(m_widget)->setPointSize(pointSizeSpinBox->value());
+  static_cast<MeterWidget *>(m_widget)->setType(typeComboBox->currentText());
+  static_cast<MeterWidget *>(m_widget)->setPointSize(pointSizeSpinBox->value());
   m_fadeSpeed = fadeSpeedSpinBox->value();
   m_behavior = behaviorComboBox->currentText();
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
@@ -165,7 +166,7 @@ void QuteMeter::setWidgetGeometry(int x,int y,int width,int height)
   QuteWidget::setWidgetGeometry(x,y,width, height);
   /* In MacCsound, meter widgets have an offset of about five pixels in every border
      This has proven problematic in Qt, as the graphicsScene*/
-  dynamic_cast<MeterWidget *>(m_widget)->setWidgetGeometry(0,0,width, height);
+  static_cast<MeterWidget *>(m_widget)->setWidgetGeometry(0,0,width, height);
 }
 
 void QuteMeter::setValue(double value)
@@ -174,7 +175,7 @@ void QuteMeter::setValue(double value)
     value = 0.0;
   else if (value > 1.0)
     value = 1.0;
-  dynamic_cast<MeterWidget *>(m_widget)->setValue(value);
+  static_cast<MeterWidget *>(m_widget)->setValue(value);
 //   m_value = value;
 }
 
@@ -184,17 +185,17 @@ void QuteMeter::setValue2(double value)
     value = 0.0;
   else if (value > 1.0)
     value = 1.0;
-  dynamic_cast<MeterWidget *>(m_widget)->setValue2(value);
+  static_cast<MeterWidget *>(m_widget)->setValue2(value);
 }
 
 double QuteMeter::getValue()
 {
-  return dynamic_cast<MeterWidget *>(m_widget)->getValue();
+  return static_cast<MeterWidget *>(m_widget)->getValue();
 }
 
 double QuteMeter::getValue2()
 {
-  return dynamic_cast<MeterWidget *>(m_widget)->getValue2();
+  return static_cast<MeterWidget *>(m_widget)->getValue2();
 }
 
 QString QuteMeter::getChannelName()
@@ -216,18 +217,18 @@ void QuteMeter::setChannel2Name(QString name)
 
 void QuteMeter::setColor(QColor color)
 {
-  dynamic_cast<MeterWidget *>(m_widget)->setColor(color);
+  static_cast<MeterWidget *>(m_widget)->setColor(color);
   m_color = color;
 }
 
 void QuteMeter::setType(QString type)
 {
-  dynamic_cast<MeterWidget *>(m_widget)->setType(type);
+  static_cast<MeterWidget *>(m_widget)->setType(type);
 }
 
 void QuteMeter::setPointSize(int size)
 {
-  dynamic_cast<MeterWidget *>(m_widget)->setPointSize(size);
+  static_cast<MeterWidget *>(m_widget)->setPointSize(size);
 }
 
 void QuteMeter::setFadeSpeed(int speed)

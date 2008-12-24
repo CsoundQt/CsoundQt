@@ -24,9 +24,10 @@
 QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
 {
   delete m_widget; //delete widget created by parent constructor
-  m_widget = new SpinBoxWidget(this);
-  dynamic_cast<SpinBoxWidget*>(m_widget)->setRange(-99999.999999, 99999.999999);
-  connect(dynamic_cast<SpinBoxWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+  m_widget = new QDoubleSpinBox(this);
+  m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+  static_cast<QDoubleSpinBox*>(m_widget)->setRange(-99999.999999, 99999.999999);
+//   connect(static_cast<QDoubleSpinBox*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
   m_type = "editnum";
 }
 
@@ -51,12 +52,12 @@ void QuteSpinBox::setAlignment(int alignment)
     default:
       align = Qt::AlignLeft|Qt::AlignTop;
   }
-  static_cast<SpinBoxWidget*>(m_widget)->setAlignment(align);
+  static_cast<QDoubleSpinBox*>(m_widget)->setAlignment(align);
 }
 
 void QuteSpinBox::setValue(double value)
 {
-  static_cast<SpinBoxWidget*>(m_widget)->setValue(value);
+  static_cast<QDoubleSpinBox*>(m_widget)->setValue(value);
 }
 
 void QuteSpinBox::setText(QString text)
@@ -84,7 +85,7 @@ void QuteSpinBox::setText(QString text)
   bool ok;
   double value = text.toDouble(&ok);
   if (ok)
-    dynamic_cast<SpinBoxWidget*>(m_widget)->setValue(value);
+    static_cast<QDoubleSpinBox*>(m_widget)->setValue(value);
 }
 
 void QuteSpinBox::setResolution(double resolution)
@@ -96,13 +97,13 @@ void QuteSpinBox::setResolution(double resolution)
     if ((m_resolution * pow(10, i)) == (int) (m_resolution * pow(10,i)) )
       break;
   }
-  dynamic_cast<SpinBoxWidget*>(m_widget)->setDecimals(i);
-  dynamic_cast<SpinBoxWidget*>(m_widget)->setSingleStep(resolution);
+  static_cast<QDoubleSpinBox*>(m_widget)->setDecimals(i);
+  static_cast<QDoubleSpinBox*>(m_widget)->setSingleStep(resolution);
 }
 
 double QuteSpinBox::getValue()
 {
-  return static_cast<SpinBoxWidget*>(m_widget)->value();
+  return static_cast<QDoubleSpinBox*>(m_widget)->value();
 }
 
 QString QuteSpinBox::getWidgetLine()
@@ -110,10 +111,10 @@ QString QuteSpinBox::getWidgetLine()
   QString line = "ioText {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += m_type + " ";
-  line += QString::number(dynamic_cast<SpinBoxWidget*>(m_widget)->value(), 'f', 6) + " ";
+  line += QString::number(static_cast<QDoubleSpinBox*>(m_widget)->value(), 'f', 6) + " ";
   line += QString::number(m_resolution, 'f', 6) + " \"" + m_name + "\" ";
   QString alignment = "";
-  int align = dynamic_cast<SpinBoxWidget *>(m_widget)->alignment();
+  int align = static_cast<QDoubleSpinBox *>(m_widget)->alignment();
   if (align & Qt::AlignLeft)
     alignment = "left";
   else if (align & Qt::AlignCenter)
@@ -132,7 +133,7 @@ QString QuteSpinBox::getWidgetLine()
       + ", " + QString::number(color.blue() * 256) + "} ";
   line += m_widget->autoFillBackground()? "background ":"nobackground ";
   line += "noborder ";
-  line += QString::number(dynamic_cast<SpinBoxWidget*>(m_widget)->value(), 'f', 6);
+  line += QString::number(static_cast<QDoubleSpinBox*>(m_widget)->value(), 'f', 6);
   // For this type of ioText widget, value and text are redundant. QuteCsound reads mthe value coming
   // in the text field, but writes to both.
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
@@ -141,12 +142,12 @@ QString QuteSpinBox::getWidgetLine()
 
 QString QuteSpinBox::getStringValue()
 {
-  return static_cast<SpinBoxWidget *>(m_widget)->text();
+  return static_cast<QDoubleSpinBox *>(m_widget)->text();
 }
 
 void QuteSpinBox::createPropertiesDialog()
 {
-  qDebug("QuteSpinBox::createPropertiesDialog()");
+//   qDebug("QuteSpinBox::createPropertiesDialog()");
   QuteText::createPropertiesDialog();
   dialog->setWindowTitle("SpinBox");
   QLabel *label = new QLabel(dialog);
@@ -163,7 +164,7 @@ void QuteSpinBox::createPropertiesDialog()
   bg->hide();
   textColor->hide();
   bgColor->hide();
-  text->setText(static_cast<SpinBoxWidget *>(m_widget)->text());
+  text->setText(static_cast<QDoubleSpinBox *>(m_widget)->text());
 
 }
 

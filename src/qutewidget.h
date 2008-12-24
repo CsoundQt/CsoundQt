@@ -72,6 +72,7 @@ class QuteWidget : public QWidget
     double m_value, m_value2;
 
     virtual void contextMenuEvent(QContextMenuEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
 
     virtual void createPropertiesDialog();
     virtual void applyProperties();

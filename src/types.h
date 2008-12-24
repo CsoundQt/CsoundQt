@@ -50,6 +50,8 @@
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "wmplayer.exe"
 #endif
 
+#include <csound.h>
+
 enum viewMode {
   VIEW_CSD,
   VIEW_ORC_SCO
@@ -63,6 +65,46 @@ class Opcode
     QString inArgs;
 };
 
+class qutecsound;
+
+struct CsoundUserData{
+  int result; //result of csoundCompile()
+  CSOUND *csound; // instance of csound
+  /*performance status*/
+  bool PERF_STATUS; //0= stopped 1=running
+  qutecsound *qcs; //pass main application to check widgets
+  MYFLT zerodBFS; //0dBFS value
+  long outputBufferSize;
+  MYFLT* outputBuffer;
+  int numChnls;
+};
+
 static ConfigLists _configlists;
+
+class RingBuffer
+{
+  public:
+    RingBuffer() {
+      resize(4096);
+      currentPos = 0;
+    }
+    ~RingBuffer() {}
+    QList<MYFLT> buffer;
+    long currentPos;
+
+    void append(MYFLT value) {
+      buffer[currentPos] = value;
+      currentPos++;
+      if (currentPos >= buffer.size())
+        currentPos = 0;
+    }
+    void resize(int size) {
+      buffer.clear();
+      for (int i = 0; i< size; i++) {
+        buffer.append(0.0);
+      }
+      currentPos = 0;
+    }
+};
 
 #endif

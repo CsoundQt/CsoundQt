@@ -14,7 +14,7 @@
  *                                                                         *
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
+ *   Free Software Foundation, Inc.,                                       *<
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 #ifndef WIDGETPANEL_H
@@ -37,7 +37,7 @@ class WidgetPanel : public QDockWidget
 {
   Q_OBJECT
 
-  friend class qutecsound;  //necessary?
+  friend class qutecsound;
   friend class QuteWidget;
   public:
     WidgetPanel(QWidget *parent);
@@ -55,7 +55,10 @@ class WidgetPanel : public QDockWidget
     void appendMessage(QString message);
     void showTooltips(bool show);
     void newCurve(Curve* curve);
+    int getCurveIndex(Curve *curve);
+    void setCurveData(Curve *curve);
     void clearGraphs();
+    Curve * getCurveById(uintptr_t id);
 
     QVector<QString> eventQueue;
     int eventQueueSize;
@@ -161,6 +164,7 @@ class WidgetPanel : public QDockWidget
     void undo();
     void redo();
 //     void dockStateChanged(bool topLevel);
+    void updateData();
 
   signals:
     void widgetsChanged(QString text);

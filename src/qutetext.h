@@ -94,20 +94,20 @@ class QuteLineEdit : public QuteText
     virtual void applyProperties();
 };
 
-class LabelWidget : public QLabel
-{
-  Q_OBJECT
-  public:
-    LabelWidget(QWidget* parent) : QLabel(parent) {}
-    ~LabelWidget() {}
-
-  protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event)
-    {emit(popUpMenu(event->globalPos()));}
-
-  signals:
-    void popUpMenu(QPoint pos);
-};
+// class QLabel : public QLabel
+// {
+//   Q_OBJECT
+//   public:
+//     QLabel(QWidget* parent) : QLabel(parent) {}
+//     ~QLabel() {}
+// 
+//   protected:
+//     virtual void contextMenuEvent(QContextMenuEvent *event)
+//     {emit(popUpMenu(event->globalPos()));}
+// 
+//   signals:
+//     void popUpMenu(QPoint pos);
+// };
 
 class QuteScrollNumber : public QuteText
 {
@@ -190,19 +190,19 @@ class ScrollNumberWidget : public QLabel
     void setValue(double value);
 };
 
-class LineEditWidget : public QLineEdit
-{
-  Q_OBJECT
-  public:
-    LineEditWidget(QWidget* parent) : QLineEdit(parent) {}
-    ~LineEditWidget() {}
-
-  protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event)
-    {emit(popUpMenu(event->globalPos()));}
-
-  signals:
-    void popUpMenu(QPoint pos);
-};
+// class QLineEdit : public QLineEdit
+// {
+//   Q_OBJECT
+//   public:
+//     QLineEdit(QWidget* parent) : QLineEdit(parent) {}
+//     ~QLineEdit() {}
+// 
+//   protected:
+//     virtual void contextMenuEvent(QContextMenuEvent *event)
+//     {emit(popUpMenu(event->globalPos()));}
+// 
+//   signals:
+//     void popUpMenu(QPoint pos);
+// };
 
 #endif

@@ -22,14 +22,15 @@
 QuteSlider::QuteSlider(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new QSlider(this);
+  m_widget->setContextMenuPolicy(Qt::NoContextMenu);
   m_max = 1.0;
   m_min = 0.0;
   if (width() > height())
-    ((QSlider *)m_widget)->setOrientation(Qt::Horizontal);
+    static_cast<QSlider *>(m_widget)->setOrientation(Qt::Horizontal);
   else
-    ((QSlider *)m_widget)->setOrientation(Qt::Vertical);
+    static_cast<QSlider *>(m_widget)->setOrientation(Qt::Vertical);
 
-  connect((QSlider *)m_widget, SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
+  connect(static_cast<QSlider *>(m_widget), SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
 }
 
 QuteSlider::~QuteSlider()
@@ -38,7 +39,7 @@ QuteSlider::~QuteSlider()
 
 double QuteSlider::getValue()
 {
-  QSlider *slider = (QSlider *)m_widget;
+  QSlider *slider = static_cast<QSlider *>(m_widget);
   double normalized = (double) (slider->value() - slider->minimum())
         / (double) (slider->maximum() - slider->minimum());
   m_value = m_min + (normalized * (m_max-m_min));
@@ -69,17 +70,17 @@ void QuteSlider::setValue(double value)
     m_value = m_min;
   else
     m_value = value;
-  int val = (int) (((QSlider *)m_widget)->maximum() * (m_value - m_min)/(m_max-m_min));
-  ((QSlider *)m_widget)->setValue(val);
+  int val = (int) (static_cast<QSlider *>(m_widget)->maximum() * (m_value - m_min)/(m_max-m_min));
+  static_cast<QSlider *>(m_widget)->setValue(val);
 }
 
 void QuteSlider::setWidgetGeometry(int x, int y, int w, int h)
 {
   QuteWidget::setWidgetGeometry(x,y,w,h);
   if (width() > height())
-    ((QSlider *)m_widget)->setOrientation(Qt::Horizontal);
+    static_cast<QSlider *>(m_widget)->setOrientation(Qt::Horizontal);
   else
-    ((QSlider *)m_widget)->setOrientation(Qt::Vertical);
+    static_cast<QSlider *>(m_widget)->setOrientation(Qt::Vertical);
 }
 
 void QuteSlider::setWidgetLine(QString line)

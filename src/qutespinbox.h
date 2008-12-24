@@ -45,19 +45,19 @@ class QuteSpinBox : public QuteText
 };
 
 
-class SpinBoxWidget : public QDoubleSpinBox
-{
-  Q_OBJECT
-  public:
-    SpinBoxWidget(QWidget* parent) : QDoubleSpinBox(parent) {}
-    ~SpinBoxWidget() {}
-
-  protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event)
-    {emit(popUpMenu(event->globalPos()));}
-
-  signals:
-    void popUpMenu(QPoint pos);
-};
+// class QDoubleSpinBox : public QDoubleSpinBox
+// {
+//   Q_OBJECT
+//   public:
+//     QDoubleSpinBox(QWidget* parent) : QDoubleSpinBox(parent) {}
+//     ~QDoubleSpinBox() {}
+// 
+//   protected:
+//     virtual void contextMenuEvent(QContextMenuEvent *event)
+//     {emit(popUpMenu(event->globalPos()));}
+// 
+//   signals:
+//     void popUpMenu(QPoint pos);
+// };
 
 #endif

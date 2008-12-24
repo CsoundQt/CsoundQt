@@ -37,11 +37,12 @@
 QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 {
   m_value = 0.0;
-  m_widget = new LabelWidget(this);
-  dynamic_cast<LabelWidget*>(m_widget)->setWordWrap (true);
-  dynamic_cast<LabelWidget*>(m_widget)->setMargin (5);
-  dynamic_cast<LabelWidget*>(m_widget)->setTextFormat(Qt::RichText);
-  connect(dynamic_cast<LabelWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+  m_widget = new QLabel(this);
+  static_cast<QLabel*>(m_widget)->setWordWrap (true);
+  static_cast<QLabel*>(m_widget)->setMargin (5);
+  static_cast<QLabel*>(m_widget)->setTextFormat(Qt::RichText);
+  m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+//   connect(static_cast<QLabel*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 }
 
 QuteText::~QuteText()
@@ -86,7 +87,7 @@ void QuteText::setAlignment(int alignment)
     default:
       align = Qt::AlignLeft|Qt::AlignTop;
   }
-  dynamic_cast<LabelWidget*>(m_widget)->setAlignment(align);
+  static_cast<QLabel*>(m_widget)->setAlignment(align);
 }
 
 void QuteText::setFont(QString font)
@@ -121,9 +122,9 @@ void QuteText::setBg(bool bg)
 void QuteText::setBorder(bool border)
 {
   if (border)
-    dynamic_cast<QFrame*>(m_widget)->setFrameShape(QFrame::Box);
+    static_cast<QFrame*>(m_widget)->setFrameShape(QFrame::Box);
   else
-    dynamic_cast<QFrame*>(m_widget)->setFrameShape(QFrame::NoFrame);
+    static_cast<QFrame*>(m_widget)->setFrameShape(QFrame::NoFrame);
 }
 
 void QuteText::setText(QString text)
@@ -148,7 +149,7 @@ void QuteText::setText(QString text)
   text.append("</font>");
   //TODO USE CORRECT CHARACTER for line break
 //   text = text.replace("�", "\n");
-  dynamic_cast<LabelWidget*>(m_widget)->setText(text);
+  static_cast<QLabel*>(m_widget)->setText(text);
 }
 
 QString QuteText::getWidgetLine()
@@ -158,11 +159,11 @@ QString QuteText::getWidgetLine()
   line += m_type + " ";
   line += QString::number(m_value, 'f', 6) + " 0.00100 \"" + m_name + "\" ";
   QString alignment = "";
-  if (((LabelWidget *)m_widget)->alignment() & Qt::AlignLeft)
+  if (((QLabel *)m_widget)->alignment() & Qt::AlignLeft)
     alignment = "left";
-  else if (((LabelWidget *)m_widget)->alignment() & Qt::AlignCenter)
+  else if (((QLabel *)m_widget)->alignment() & Qt::AlignCenter)
       alignment = "center";
-  else if (((LabelWidget *)m_widget)->alignment() & Qt::AlignRight)
+  else if (((QLabel *)m_widget)->alignment() & Qt::AlignRight)
     alignment = "right";
   line += alignment + " ";
   line += "\"" + m_font + "\" " + QString::number(m_fontSize) + " ";
@@ -175,8 +176,8 @@ QString QuteText::getWidgetLine()
       + ", " + QString::number(color.green() * 256)
       + ", " + QString::number(color.blue() * 256) + "} ";
   line += m_widget->autoFillBackground()? "background ":"nobackground ";
-  line += dynamic_cast<QFrame*>(m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
-//   line += ((LabelWidget *)m_widget)->toPlainText();
+  line += static_cast<QFrame*>(m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
+//   line += ((QLabel *)m_widget)->toPlainText();
   line += m_text;
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
   return line;
@@ -215,17 +216,17 @@ void QuteText::createPropertiesDialog()
   layout->addWidget(label, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
   bgColor = new QPushButton(dialog);
 //   QPixmap pixmap(64,64);
-  pixmap.fill(((LabelWidget *) m_widget)->palette().color(QPalette::Window));
+  pixmap.fill(((QLabel *) m_widget)->palette().color(QPalette::Window));
   bgColor->setIcon(pixmap);
-  palette = QPalette(((LabelWidget *) m_widget)->palette().color(QPalette::Window));
+  palette = QPalette(((QLabel *) m_widget)->palette().color(QPalette::Window));
   bgColor->setPalette(palette);
   palette.color(QPalette::Window);
   layout->addWidget(bgColor, 6,3, Qt::AlignLeft|Qt::AlignVCenter);
   bg = new QCheckBox("Background", dialog);
-  bg->setChecked(((LabelWidget *)m_widget)->autoFillBackground());
+  bg->setChecked(((QLabel *)m_widget)->autoFillBackground());
   layout->addWidget(bg, 7,3, Qt::AlignLeft|Qt::AlignVCenter);
   border = new QCheckBox("Border", dialog);
-  border->setChecked(((LabelWidget *)m_widget)->frameShape() != QFrame::NoFrame);
+  border->setChecked(((QLabel *)m_widget)->frameShape() != QFrame::NoFrame);
   layout->addWidget(border, 7,2, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Font");
@@ -285,7 +286,7 @@ void QuteText::applyProperties()
   m_fontSize = fontSize->itemData(fontSize->currentIndex()).toInt();
   setText(text->text());
   m_widget->setAutoFillBackground(bg->isChecked());
-  dynamic_cast<QFrame*>(m_widget)->setFrameShape(border->isChecked()?  QFrame::Box : QFrame::NoFrame);
+  static_cast<QFrame*>(m_widget)->setFrameShape(border->isChecked()?  QFrame::Box : QFrame::NoFrame);
   setAlignment(alignment->currentIndex());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
@@ -321,8 +322,9 @@ void QuteText::selectBgColor()
 QuteLineEdit::QuteLineEdit(QWidget* parent) : QuteText(parent)
 {
   delete m_widget; //delete widget created by parent constructor
-  m_widget = new LineEditWidget(this);
-  connect(dynamic_cast<LineEditWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+  m_widget = new QLineEdit(this);
+  m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+//   connect(static_cast<QLineEdit*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
   m_type = "edit";
 }
 
@@ -347,7 +349,7 @@ void QuteLineEdit::setAlignment(int alignment)
     default:
       align = Qt::AlignLeft|Qt::AlignTop;
   }
-  static_cast<LineEditWidget*>(m_widget)->setAlignment(align);
+  static_cast<QLineEdit*>(m_widget)->setAlignment(align);
 }
 
 void QuteLineEdit::setText(QString text)
@@ -372,7 +374,7 @@ void QuteLineEdit::setText(QString text)
 //   text.append("</font>");
   //TODO USE CORRECT CHARACTER for line break
 //   text = text.replace("�", "\n");
-  dynamic_cast<LineEditWidget*>(m_widget)->setText(text);
+  static_cast<QLineEdit*>(m_widget)->setText(text);
 }
 
 QString QuteLineEdit::getWidgetLine()
@@ -382,7 +384,7 @@ QString QuteLineEdit::getWidgetLine()
   line += m_type + " ";
   line += QString::number(m_value, 'f', 6) + " 0.00100 \"" + m_name + "\" ";
   QString alignment = "";
-  int align = dynamic_cast<LineEditWidget *>(m_widget)->alignment();
+  int align = static_cast<QLineEdit *>(m_widget)->alignment();
   if (align & Qt::AlignLeft)
     alignment = "left";
   else if (align & Qt::AlignCenter)
@@ -408,7 +410,7 @@ QString QuteLineEdit::getWidgetLine()
 
 QString QuteLineEdit::getStringValue()
 {
-  return static_cast<LineEditWidget *>(m_widget)->text();
+  return static_cast<QLineEdit *>(m_widget)->text();
 }
 
 void QuteLineEdit::dropEvent(QDropEvent *event)
@@ -427,7 +429,7 @@ void QuteLineEdit::createPropertiesDialog()
   bg->hide();
   textColor->hide();
   bgColor->hide();
-  text->setText(dynamic_cast<LineEditWidget *>(m_widget)->text());
+  text->setText(static_cast<QLineEdit *>(m_widget)->text());
 }
 
 void QuteLineEdit::applyProperties()
@@ -447,9 +449,9 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
 {
   delete m_widget; //delete widget created by parent constructor
   m_widget = new ScrollNumberWidget(this);
-  connect(dynamic_cast<ScrollNumberWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
-  connect(dynamic_cast<ScrollNumberWidget*>(m_widget), SIGNAL(addValue(double)), this, SLOT(addValue(double)));
-  connect(dynamic_cast<ScrollNumberWidget*>(m_widget), SIGNAL(setValue(double)), this, SLOT(setValue(double)));
+  connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+  connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(addValue(double)), this, SLOT(addValue(double)));
+  connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(setValue(double)), this, SLOT(setValue(double)));
   m_type = "scroll";
 }
 
@@ -512,7 +514,7 @@ void QuteScrollNumber::setText(QString text)
   text.append("</font>");
   //TODO USE CORRECT CHARACTER for line break
 //   text = text.replace("�", "\n");
-  dynamic_cast<ScrollNumberWidget*>(m_widget)->setText(text);
+  static_cast<ScrollNumberWidget*>(m_widget)->setText(text);
 }
 
 QString QuteScrollNumber::getWidgetLine()
@@ -521,10 +523,10 @@ QString QuteScrollNumber::getWidgetLine()
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += m_type + " ";
   line += QString::number(m_value, 'f', 6) + " ";
-  line += QString::number(dynamic_cast<ScrollNumberWidget*>(m_widget)->getResolution(), 'f', 6);
+  line += QString::number(static_cast<ScrollNumberWidget*>(m_widget)->getResolution(), 'f', 6);
   line += + " \"" + m_name + "\" ";
   QString alignment = "";
-  int align = dynamic_cast<ScrollNumberWidget *>(m_widget)->alignment();
+  int align = static_cast<ScrollNumberWidget *>(m_widget)->alignment();
   if (align & Qt::AlignLeft)
     alignment = "left";
   else if (align & Qt::AlignCenter)
@@ -542,7 +544,7 @@ QString QuteScrollNumber::getWidgetLine()
       + ", " + QString::number(color.green() * 256)
       + ", " + QString::number(color.blue() * 256) + "} ";
   line += m_widget->autoFillBackground()? "background ":"nobackground ";
-  line += dynamic_cast<QFrame*>(m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
+  line += static_cast<QFrame*>(m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
   line += m_text;
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
   return line;
@@ -587,7 +589,7 @@ void QuteScrollNumber::applyProperties()
 void QuteScrollNumber::addValue(double delta)
 {
   m_value +=delta;
-  m_resolution = dynamic_cast<ScrollNumberWidget*>(m_widget)->getResolution();
+  m_resolution = static_cast<ScrollNumberWidget*>(m_widget)->getResolution();
 //   qDebug("QuteScrollNumber::addValue places = %i resolution = %f", places, m_resolution);
   setText(QString::number(m_value, 'f', m_places));
   emit widgetChanged(this);

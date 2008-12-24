@@ -139,6 +139,12 @@ void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
   popUpMenu(event->globalPos());
 }
 
+void QuteWidget::mousePressEvent(QMouseEvent *event)
+{
+  qDebug("QuteWidget::mousePressEvent");
+  QWidget::mousePressEvent(event);
+}
+
 void QuteWidget::popUpMenu(QPoint pos)
 {
   QMenu menu(this);

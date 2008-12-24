@@ -26,6 +26,9 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
   m_widget = new StackedLayoutWidget(this);
   m_widget->show();
   m_widget->setAutoFillBackground(true);
+  m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+  m_widget->setFocusPolicy(Qt::NoFocus);
+//   static_cast<StackedLayoutWidget *>(m_widget)->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   m_label = new QLabel(this);
   QPalette palette = m_widget->palette();
   palette.setColor(QPalette::WindowText, Qt::white);
@@ -34,11 +37,12 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
   m_label->move(85, 0);
   m_label->resize(500, 25);
 
+  m_zoom = 1.0;
   m_pageComboBox = new QComboBox(this);
   m_pageComboBox->resize(80, 25);
   connect(m_pageComboBox, SIGNAL(activated(int)),
           this, SLOT(changeCurve(int)));
-  connect(dynamic_cast<StackedLayoutWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+//   connect(static_cast<StackedLayoutWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 }
 
 QuteGraph::~QuteGraph()
@@ -48,20 +52,22 @@ QuteGraph::~QuteGraph()
 QString QuteGraph::getWidgetLine()
 {
   // Extension to MacCsound: type of graph (table, ftt, scope), value (which hold the index of the
-  // table displayed or the zoom level) and channel
+  // table displayed) zoom and channel name
+  // channel number is unused in QuteGraph, but selects channel for scope
   QString line = "ioGraph {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} table ";
   line += QString::number(m_value, 'f', 6) + " ";
+  line += QString::number(m_zoom, 'f', 6) + " ";
   line += m_name;
-//   qDebug("QuteGraph::getWidgetLine(): %s", line.toStdString().c_str());
+  qDebug("QuteGraph::getWidgetLine(): %s", line.toStdString().c_str());
   return line;
 }
 
 void QuteGraph::setWidgetGeometry(int x,int y,int width,int height)
 {
   QuteWidget::setWidgetGeometry(x,y,width, height);
-  dynamic_cast<StackedLayoutWidget *>(m_widget)->setWidgetGeometry(0,0,width, height);
-  int index = dynamic_cast<StackedLayoutWidget *>(m_widget)->currentIndex();
+  static_cast<StackedLayoutWidget *>(m_widget)->setWidgetGeometry(0,0,width, height);
+  int index = static_cast<StackedLayoutWidget *>(m_widget)->currentIndex();
   if (index < 0)
     return;
   changeCurve(index);
@@ -71,8 +77,23 @@ void QuteGraph::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
   dialog->setWindowTitle("Graph");
+  QLabel *label = new QLabel(dialog);
+  label->setText("Zoom");
+  layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
+  zoomBox = new QDoubleSpinBox(dialog);
+  zoomBox->setValue(m_zoom);
+  zoomBox->setRange(0.5, 10.0);
+  zoomBox->setDecimals(1);
+  zoomBox->setSingleStep(0.5);
+  layout->addWidget(zoomBox, 7, 3, Qt::AlignLeft|Qt::AlignVCenter);
 //   channelLabel->hide();
 //   nameLineEdit->hide();
+}
+
+void QuteGraph::applyProperties()
+{
+  QuteWidget::applyProperties();
+  setZoom(zoomBox->value());
 }
 
 void QuteGraph::setValue(double value)
@@ -82,9 +103,7 @@ void QuteGraph::setValue(double value)
   if (value < 0 ) {
     for (int i = 0; i < m_pageComboBox->count(); i++) {
       QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"));
-//       qDebug("QuteGraph::setValue %s", parts[0].toStdString().c_str());
       if (parts.size() > 1) {
-//         qDebug("QuteGraph::setValue %i", parts[1].toInt());
         if ((int) value == -parts[1].toInt()) {
           changeCurve(i);
           m_value = (int) value;
@@ -99,23 +118,41 @@ void QuteGraph::setValue(double value)
   //Dont change value if not valid
 }
 
-// void QuteGraph::setType(QString type)
-// {
-//   m_type = type;
-// }
+void QuteGraph::setZoom(double zoom)
+{
+  if (zoom > 0.5 && zoom < 10.0)
+    m_zoom = zoom;
+  changeCurve(-2);  // Redraw
+}
 
 void QuteGraph::changeCurve(int index)
 {
-  if (index == -1)
-    index = dynamic_cast<StackedLayoutWidget *>(m_widget)->count() - 1;
-  dynamic_cast<StackedLayoutWidget *>(m_widget)->setCurrentIndex(index);
-  QGraphicsView *view = (QGraphicsView *) dynamic_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
+  if (index == -1) // goto last curve
+    index = static_cast<StackedLayoutWidget *>(m_widget)->count() - 1;
+  if (index == -2)  // update curve but don't change which
+    index = static_cast<StackedLayoutWidget *>(m_widget)->currentIndex();
+  if (index < 0)
+    return;
+  static_cast<StackedLayoutWidget *>(m_widget)->setCurrentIndex(index);
+  QGraphicsView *view = (QGraphicsView *) static_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
+//   view->setFocusPolicy(Qt::NoFocus);
   double max = - curves[index]->get_min();
   double min = - curves[index]->get_max();
   int size = curves[index]->get_size();
   view->setResizeAnchor(QGraphicsView::NoAnchor);
-  view->setSceneRect (0, min - ((max - min)*0.12), size, (max - min)*1.12);
-  view->fitInView(0, min - ((max - min)*0.12) , size, (max - min)*1.12 );
+  view->setSceneRect (0, min - ((max - min)*0.17),(double) size/m_zoom, (max - min)*1.17);
+  if (curves[index]->get_caption().contains("ftable")) {
+    view->fitInView(0, min - ((max - min)*0.17) , (double) size/m_zoom, (max - min)*1.17);
+  }
+  else {
+    view->fitInView(0, min - ((max - min)*0.17) , (double) size/m_zoom, (max - min)*1.17);
+//     view->fitInView(0, -1 , (double) size/m_zoom, 2);
+//     view->fitInView(-1, -1 , (double) size/m_zoom, 4);
+//     view->setSceneRect (0, 0, (double) size/m_zoom, 1);
+//     view->fitInView(0, 0, (double) size/m_zoom, 1);
+//     view->fitInView(0, 0 - ((-1.0 - 0.0)*0.17) , (double) size/m_zoom, (-1.0 - 0.0)*1.17);
+//     view->fitInView(0.0, 0.3, size, -1.0);
+  }
   QString text = QString::number(size) + " pts Max=";
   text += QString::number(max, 'g', 5) + " Min =" + QString::number(min, 'g', 5);
   m_label->setText(text);
@@ -124,9 +161,11 @@ void QuteGraph::changeCurve(int index)
 
 void QuteGraph::clearCurves()
 {
-  dynamic_cast<StackedLayoutWidget *>(m_widget)->clearCurves();
+  static_cast<StackedLayoutWidget *>(m_widget)->clearCurves();
   m_pageComboBox->clear();
   curves.clear();
+  lines.clear();
+  polygons.clear();
 }
 
 void QuteGraph::addCurve(Curve * curve)
@@ -134,28 +173,113 @@ void QuteGraph::addCurve(Curve * curve)
   qDebug("QuteGraph::addCurve()");
   QGraphicsView *view = new QGraphicsView(m_widget);
   QGraphicsScene *scene = new QGraphicsScene(view);
+  view->setContextMenuPolicy(Qt::NoContextMenu);
   scene->setBackgroundBrush(QBrush(Qt::black));
-  double max = curve->get_max();
-//   double min = curve->get_min();
-//   double absmax = curve->get_absmax();
   int size = curve->get_size();
   QGraphicsLineItem* line = new QGraphicsLineItem(0, 0, size, 0);
   line->setPen(QPen(QColor(Qt::white)));
   scene->addItem(line);
   line->show();
-  for (int i = 0; i < size; i++) {
-    line = new QGraphicsLineItem(i, 0, i, - curve->get_data()[i]);
-    line->setPen(QPen(QColor(30 + 220.0*fabs(curve->get_data()[i])/max,
-                 220,
-                 255.*fabs(curve->get_data()[i])/max)));
-    scene->addItem(line);
-    line->show();
+  QVector<QGraphicsLineItem *> linesVector;
+  if (curve->get_caption().contains("ftable")) {
+    for (int i = 0; i < size; i++) {
+      line = new QGraphicsLineItem(i, 0, i, - curve->get_data()[i]);
+      line->setPen(QPen(Qt::white));
+//       line->setPen(QPen(QColor(30 + 220.0*fabs(curve->get_data()[i])/max,
+//                   220,
+//                   255.*fabs(curve->get_data()[i])/max)));
+      scene->addItem(line);
+      line->show();
+      linesVector.append(line);
+    }
   }
+  else {
+    QGraphicsPolygonItem * item = new QGraphicsPolygonItem(/*polygon*/);
+    item->setPen(QPen(Qt::green));
+    item->show();
+    polygons.append(item);
+    scene->addItem(item);
+  }
+  lines.append(linesVector);
   view->setScene(scene);
   view->setObjectName(curve->get_caption());
   view->show();
   view->setResizeAnchor (QGraphicsView::NoAnchor);
+  view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  view->setFocusPolicy(Qt::NoFocus);
   m_pageComboBox->addItem(curve->get_caption());
-  dynamic_cast<StackedLayoutWidget *>(m_widget)->addWidget(view);
+  static_cast<StackedLayoutWidget *>(m_widget)->addWidget(view);
   curves.append(curve);
+}
+
+int QuteGraph::getCurveIndex(Curve * curve)
+{
+//   qDebug("QuteGraph::getCurveIndex %i", curves.indexOf(curve));
+  return curves.indexOf(curve);
+}
+
+Curve* QuteGraph::getCurveById(uintptr_t id)
+{
+  Curve *curve = 0;
+  foreach (Curve *thisCurve, curves) {
+    if (thisCurve->get_id() == id)
+      return thisCurve;
+  }
+  return curve;
+}
+
+void QuteGraph::setCurveData(Curve * curve)
+{
+  //TODO is it necessary to free the curves created by Csound? (e.g. FFT from dispfft)
+  int index = getCurveIndex(curve);
+//   qDebug("QuteGraph::setCurveData %i", index);
+  if (index >= curves.size() or index < 0)
+    return;
+  curves[index] = curve;
+  double max = curve->get_max();
+  StackedLayoutWidget *widget_ = static_cast<StackedLayoutWidget *>(m_widget);
+  QGraphicsView *view = static_cast<QGraphicsView *>(widget_->currentWidget());
+  QGraphicsScene *scene = view->scene();
+  // Refitting curves in view resets the scrollbar so we need the previous value
+  int viewPos = view->horizontalScrollBar()->value();
+  if (curve->get_caption().contains("ftable")) {
+    if (lines[index].size() != (int) curve->get_size()) {
+      foreach (QGraphicsLineItem *line, lines[index]) {
+        delete line;
+      }
+      lines[index].clear();
+      for (int i = 0; i < (int) curve->get_size(); i++) {
+        QGraphicsLineItem *line = new QGraphicsLineItem(i, 0, i, - curve->get_data()[i]);
+        line->setPen(QPen(QColor(30 + 220.0*fabs(curve->get_data()[i])/max,
+                     220,
+                     255.*fabs(curve->get_data()[i])/max)));
+        line->show();
+        lines[index].append(line);
+        scene->addItem(line);
+      }
+    }
+    else {
+      for (int i = 1; i < lines[index].size(); i++) { //skip first item, which is base line
+        QGraphicsLineItem *line = static_cast<QGraphicsLineItem *>(lines[index][i]);
+        line->setLine(i - 1, 0, i - 1, - curve->get_data()[i - 1]);
+        line->setPen(QPen(QColor(30 + 220.0*fabs(curve->get_data()[i])/max,
+                    220,
+                    255.*fabs(curve->get_data()[i])/max)));
+        line->show();
+      }
+    }
+  }
+  else {  // in case its not an ftable
+    QPolygonF polygon;
+    polygon.append(QPointF(0,0));
+    for (int i = 0; i < (int) curve->get_size(); i++) { //skip first item, which is base line
+      polygon.append(QPointF(i, - curve->get_data()[i]));
+    }
+    polygon.append(QPointF(curve->get_size(),0));
+    polygons[index]->setPolygon(polygon);
+  }
+  m_pageComboBox->setItemText(index, curve->get_caption());
+  if (index == m_pageComboBox->currentIndex())
+    changeCurve(-2); //update curve
+  view->horizontalScrollBar()->setValue(viewPos);
 }

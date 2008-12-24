@@ -34,16 +34,25 @@ class QuteGraph : public QuteWidget
 
     virtual QString getWidgetLine();
     virtual void setWidgetGeometry(int x,int y,int width,int height);
-    virtual void createPropertiesDialog();
     virtual void setValue(double value);
-//     void setType(QString type);
+    void setZoom(double zoom);
     void clearCurves();
     void addCurve(Curve *curve);
+    int getCurveIndex(Curve * curve);
+    void setCurveData(Curve * curve);
+    Curve* getCurveById(uintptr_t id);
 
   protected:
+    double m_zoom;
     QLabel * m_label;
     QComboBox *m_pageComboBox;
+    QDoubleSpinBox *zoomBox;
     QVector<Curve *> curves;
+    QVector<QVector <QGraphicsLineItem *> > lines;
+    QVector<QGraphicsPolygonItem *> polygons;
+
+    virtual void createPropertiesDialog();
+    virtual void applyProperties();
 
   public slots:
     void changeCurve(int index);
@@ -74,13 +83,13 @@ class StackedLayoutWidget : public QStackedWidget
         widget = currentWidget();
       }
     }
-
+/*
   protected:
     virtual void contextMenuEvent(QContextMenuEvent *event)
     {emit(popUpMenu(event->globalPos()));}
 
   signals:
-    void popUpMenu(QPoint pos);
+    void popUpMenu(QPoint pos);*/
 };
 
 #endif

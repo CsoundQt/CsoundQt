@@ -239,7 +239,7 @@ void qutecsound::openExample()
   QObject *sender = QObject::sender();
   if (sender == 0)
     return;
-  QAction *action = dynamic_cast<QAction *>(sender);
+  QAction *action = static_cast<QAction *>(sender);
   loadFile(action->data().toString());
   saveAs();
 }
@@ -628,6 +628,7 @@ void qutecsound::runCsound(bool realtime)
     menuBarHandle = GetMenuBar();
 #endif
     m_console->clear();
+    widgetPanel->clearGraphs();
     QTemporaryFile csdFile;
     QString tmpFileName = QDir::tempPath();
     if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
@@ -716,8 +717,7 @@ void qutecsound::runCsound(bool realtime)
     ud->csound = csound;
     ud->result = result;
     ud->zerodBFS = csoundGet0dBFS(csound);
-    ud->outputBufferSize = csoundGetOutputBufferSize(csound);
-    ud->outputBuffer = csoundGetOutputBuffer(csound);
+    ud->numChnls = csoundGetNchnls(csound);
 
 //     PUBLIC int csoundGetSampleFormat(CSOUND *);
 //     PUBLIC int csoundGetSampleSize(CSOUND *);
@@ -1149,8 +1149,37 @@ void qutecsound::dispatchQueues()
   processEventQueue(ud);
 //   csoundUnlockMutex(perfMutex);
   messageQueue.clear();
-  while (!curveBuffer.isEmpty()) {
-    widgetPanel->newCurve(curveBuffer.pop());
+  while (!newCurveBuffer.isEmpty()) {
+    Curve * curve = newCurveBuffer.pop();
+//     int index = widgetPanel->getCurveIndex(curve->get_caption());
+// //     qDebug("qutecsound::dispatchQueues() %i-%s", index, curve->get_caption().toStdString().c_str());
+//     if (index == -1) {
+      widgetPanel->newCurve(curve);
+//     }
+//     else {
+//       widgetPanel->setCurveData(index, curve);
+//     }
+  }
+  if (curveBuffer.size() > 32) {
+    qDebug("qutecsound::dispatchQueues() WARNING: curve update buffer too large!");
+    curveBuffer.resize(32);
+  }
+  foreach (WINDAT * windat, curveBuffer){
+    Curve *curve = widgetPanel->getCurveById(windat->windid);
+//     Curve *curve = widgetPanel->getCurveById(windat->windid);
+    if (curve != 0) {
+//       qDebug("qutecsound::dispatchQueues() %s -- %s",windat->caption, curve->get_caption().toStdString().c_str());
+      curve->set_data(windat->fdata);
+      curve->set_size(windat->npts);      // number of points
+      curve->set_caption(QString(windat->caption)); // title of curve
+  //     curve->set_polarity(windat->polarity); // polarity
+      curve->set_max(windat->max);        // curve max
+      curve->set_min(windat->min);        // curve min
+      curve->set_absmax(windat->absmax);     // abs max of above
+  //     curve->set_y_scale(windat->y_scale);    // Y axis scaling factor
+      widgetPanel->setCurveData(curve);
+    }
+    curveBuffer.remove(curveBuffer.indexOf(windat));
   }
   if (ud->PERF_STATUS == 1) {
     queueTimer->start(QCS_QUEUETIMER_TIME);
@@ -2206,7 +2235,13 @@ uintptr_t qutecsound::csThread(void *data)
     udata->qcs->values.resize(numWidgets*2);
     udata->qcs->stringValues.resize(numWidgets*2);
     int perform = csoundPerformKsmps(udata->csound);
+    udata->outputBufferSize = csoundGetKsmps(udata->csound);
+    udata->outputBuffer = csoundGetSpout(udata->csound);
+    int numChnls = csoundGetNchnls(udata->csound);
     while((perform == 0) and (udata->PERF_STATUS == 1)) {
+      for (int i = 0; i < udata->outputBufferSize*numChnls; i++) {
+        udata->qcs->audioOutputBuffer.append(udata->outputBuffer[i]);
+      }
       if (udata->qcs->m_options->enableWidgets) {
         udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames,
                                             &udata->qcs->values,
@@ -2267,7 +2302,18 @@ qDebug("qutecsound::runCsoundInternally()");
 
 void qutecsound::newCurve(Curve * curve)
 {
-  curveBuffer.append(curve);
+  newCurveBuffer.append(curve);
+}
+
+void qutecsound::updateCurve(WINDAT *windat)
+{
+  curveBuffer.append(windat);
+}
+
+int qutecsound::killCurves(CSOUND *csound)
+{
+//   widgetPanel->clearGraphs();
+  return 0;
 }
 
 void qutecsound::outputValueCallback (CSOUND *csound,
@@ -2324,15 +2370,9 @@ void qutecsound::inputValueCallback (CSOUND *csound,
   }
 }
 
-
 void qutecsound::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *name)
 {
-  qDebug("qutecsound::makeGraph()");
-}
-
-void qutecsound::drawGraphCallback(CSOUND *csound, WINDAT *windat)
-{
-  qDebug("qutecsound::drawGraph()");
+//   qDebug("qutecsound::makeGraph()");
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
   windat->caption[CAPSIZE - 1] = 0; // Just in case...
   Polarity polarity;
@@ -2360,17 +2400,29 @@ void qutecsound::drawGraphCallback(CSOUND *csound, WINDAT *windat)
                   windat->absmax,
                   windat->oabsmax,
                   windat->danflag);
+  curve->set_id((uintptr_t) curve);
   ud->qcs->newCurve(curve);
+  windat->windid = (uintptr_t) curve;
+  qDebug("qutecsound::makeGraphCallback %i", windat->windid);
+}
+
+void qutecsound::drawGraphCallback(CSOUND *csound, WINDAT *windat)
+{
+  CsoundUserData *udata = (CsoundUserData *) csoundGetHostData(csound);
+//   qDebug("qutecsound::drawGraph()");
+  udata->qcs->updateCurve(windat);
 }
 
 void qutecsound::killGraphCallback(CSOUND *csound, WINDAT *windat)
 {
+//   udata->qcs->killCurve(windat);
   qDebug("qutecsound::killGraph()");
 }
 
 int qutecsound::exitGraphCallback(CSOUND *csound)
 {
   qDebug("qutecsound::exitGraph()");
-  return 0;
+  CsoundUserData *udata = (CsoundUserData *) csoundGetHostData(csound);
+  return udata->qcs->killCurves(csound);
 }
 

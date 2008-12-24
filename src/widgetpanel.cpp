@@ -102,6 +102,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
 
   eventQueue.resize(QUTECSOUND_MAX_EVENTS);
   eventQueueSize = 0;
+  QTimer::singleShot(30, this, SLOT(updateData()));
 }
 
 WidgetPanel::~WidgetPanel()
@@ -334,6 +335,30 @@ void WidgetPanel::newCurve(Curve* curve)
   }
 }
 
+int WidgetPanel::getCurveIndex(Curve * curve)
+{
+  int index = -1;
+  if (!graphWidgets.isEmpty())
+    index = graphWidgets[0]->getCurveIndex(curve);
+  return index;
+}
+
+void WidgetPanel::setCurveData(Curve *curve)
+{
+//   qDebug("WidgetPanel::setCurveData");
+  for (int i = 0; i < graphWidgets.size(); i++) {
+    graphWidgets[i]->setCurveData(curve);
+  }
+}
+
+Curve * WidgetPanel::getCurveById(uintptr_t id)
+{
+  Curve * curve = 0;;
+  if (!graphWidgets.isEmpty())
+    curve = graphWidgets[0]->getCurveById(id);
+  return curve;
+}
+
 void WidgetPanel::clearGraphs()
 {
   for (int i = 0; i < graphWidgets.size(); i++) {
@@ -343,17 +368,24 @@ void WidgetPanel::clearGraphs()
 
 void WidgetPanel::deleteWidget(QuteWidget *widget)
 {
-  int number = widgets.indexOf(widget);
-  //FIXME check whether inlcuded in consoleWidgets, graphWidgets or scopeWidgets;
-  //if (consoleWidgets.contains((QuteConsole *)widget));
-  //  consoleWidgets.remove(consoleWidgets.indexOf((QuteConsole *)widget));
+  int index = widgets.indexOf(widget);
 //   qDebug("WidgetPanel::deleteWidget %i", number);
   widget->close();
-  widgets.remove(number);
+  widgets.remove(index);
   if (!editWidgets.isEmpty()) {
-    delete(editWidgets[number]);
-    editWidgets.remove(number);
+    delete(editWidgets[index]);
+    editWidgets.remove(index);
   }
+  index = consoleWidgets.indexOf(dynamic_cast<QuteConsole *>(widget));
+  if (index >= 0) {
+    consoleWidgets.remove(index);
+  }
+  index = graphWidgets.indexOf(dynamic_cast<QuteGraph *>(widget));
+  if (index >= 0)
+    graphWidgets.remove(index);
+  index = scopeWidgets.indexOf(dynamic_cast<QuteScope *>(widget));
+  if (index >= 0)
+    scopeWidgets.remove(index);
   widgetChanged(widget);
 }
 
@@ -850,11 +882,13 @@ int WidgetPanel::createGraph(int x, int y, int width, int height, QString widget
   QuteGraph *widget= new QuteGraph(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
-//   widget->setType(parts[5]);  //Graph widget is always of type "graph"
+  //Graph widget is always of type "graph" part 5 is discarded
   if (parts.size() > 6)
     widget->setValue(parts[6].toDouble());
-  if (parts.size()>7) {
-    int i=7;
+  if (parts.size() > 7)
+    widget->setZoom(parts[7].toDouble());
+  if (parts.size()>8) {
+    int i = 8;
     QString channelName = "";
     while (parts.size()>i) {
       channelName += parts[i] + " ";
@@ -876,12 +910,31 @@ int WidgetPanel::createGraph(int x, int y, int width, int height, QString widget
 
 int WidgetPanel::createScope(int x, int y, int width, int height, QString widgetLine)
 {
-//   qDebug("ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
-  QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+  qDebug("WidgetPanel::createScope ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
+  qDebug("%s",widgetLine.toStdString().c_str() );
   QuteScope *widget= new QuteScope(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
-  //TODO set scope type
+  widget->setUd(static_cast<qutecsound *>(parent())->ud);
+  QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
+//   if (parts.size() > 5)
+//     widget->setType(parts[5]);
+  if (parts.size() > 6)
+    widget->setValue(parts[6].toDouble()); //Value here indicates zoom level
+  if (parts.size() > 7) {
+    widget->setChannel((int) parts[7].toDouble()); // Channel number to display
+  }
+  if (parts.size() > 8) {
+    int i=8;
+    QString channelName = "";
+    while (parts.size()>i) {
+      channelName += parts[i] + " ";
+      i++;
+    }
+    channelName.chop(1);  //remove last space
+    widget->setChannelName(channelName);
+  }
+//   connect(static_cast<qutecsound *>(parent()), SIGNAL(updateData()), widget, SLOT(updateData()));
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   widgets.append(widget);
@@ -1048,6 +1101,14 @@ void WidgetPanel::redo()
 //   }
 // }
 
+void WidgetPanel::updateData()
+{
+  foreach (QuteScope *scope, scopeWidgets) {
+    scope->updateData();
+  }
+  QTimer::singleShot(30, this, SLOT(updateData()));
+}
+
 void WidgetPanel::deselectAll()
 {
   for (int i = 0; i< editWidgets.size(); i++) {
@@ -1141,7 +1202,7 @@ void WidgetPanel::createGraph()
 
 void WidgetPanel::createScope()
 {
-  createScope(currentPosition.x(), currentPosition.y() - 20, 350, 150, QString("ioGraph {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {350, 150} scope"));
+  createScope(currentPosition.x(), currentPosition.y() - 20, 350, 150, QString("ioGraph {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {350, 150} scope 2.000000 -1.000000"));
   widgetChanged();
 }
 

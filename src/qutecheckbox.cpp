@@ -22,8 +22,9 @@
 QuteCheckBox::QuteCheckBox(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new QCheckBox(this);
+  m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 
-  connect((QCheckBox *)m_widget, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
+  connect(static_cast<QCheckBox *>(m_widget), SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
 }
 
 QuteCheckBox::~QuteCheckBox()
@@ -33,19 +34,19 @@ QuteCheckBox::~QuteCheckBox()
 void QuteCheckBox::setValue(double value)
 {
   // value is 1 is checked, 0 if not
-  ((QCheckBox *)m_widget)->setChecked(value == 1);
+  static_cast<QCheckBox *>(m_widget)->setChecked(value == 1);
 }
 
 double QuteCheckBox::getValue()
 {
-  return (((QCheckBox *)m_widget)->isChecked()? 1.0:0.0);
+  return (static_cast<QCheckBox *>(m_widget)->isChecked()? 1.0:0.0);
 }
 
 QString QuteCheckBox::getWidgetLine()
 {
   QString line = "ioCheckbox {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-  line += (((QCheckBox *)m_widget)->isChecked()? QString("on "):QString("off "));
+  line += (static_cast<QCheckBox *>(m_widget)->isChecked()? QString("on "):QString("off "));
   line += m_name;
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
   return line;

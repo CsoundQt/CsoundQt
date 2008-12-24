@@ -25,10 +25,10 @@
 #define QUTECSOUND_VERSION "0.3.9"
 
 #include <QtGui>
-#include <csound.h>
 
 #include "types.h"
 
+// #include <csound.h>
 #ifdef MACOSX
 // Needed to be able to grab menus back from FLTK
 #include <Carbon/Carbon.h>
@@ -61,24 +61,11 @@ class DocumentPage;
 class UtilitiesDialog;
 class Curve;
 
-class qutecsound;
-
-struct CsoundUserData{
-  int result; //result of csoundCompile()
-  CSOUND *csound; // instance of csound
-  /*performance status*/
-  bool PERF_STATUS; //0= stopped 1=running
-  qutecsound *qcs; //pass main application to check widgets
-  MYFLT zerodBFS; //0dBFS value
-  long outputBufferSize;
-  MYFLT* outputBuffer;
-};
-
-
 class qutecsound:public QMainWindow
 {
   Q_OBJECT
 
+  friend class WidgetPanel; //to pass ud
   public:
     qutecsound(QStringList fileNames);
     ~qutecsound();
@@ -120,12 +107,15 @@ class qutecsound:public QMainWindow
     void queueOutString(QString channelName, QString value);
     void queueMessage(QString message);
     QStringList runCsoundInternally(QStringList flags); //returns csound messages
-    void newCurve(Curve *curve);  //f-table data
+    void newCurve(Curve *curve);  //New graphs
+    void updateCurve(WINDAT *windat); //graph updates
+    int killCurves(CSOUND *csound);
 
     QVector<QString> channelNames;
     QVector<double> values;
     QVector<QString> stringValues;
     OpEntryParser *opcodeTree;
+    RingBuffer audioOutputBuffer;
 
   public slots:
     void runCsound(bool realtime=true);
@@ -215,7 +205,8 @@ class qutecsound:public QMainWindow
 
     QHash<QString, double> outValueQueue;
     QHash<QString, QString> outStringQueue;
-    QStack<Curve *> curveBuffer;
+    QStack<Curve *> newCurveBuffer;
+    QVector<WINDAT *> curveBuffer;
     QStringList messageQueue;
     QStringList exampleFiles;
     QTimer *queueTimer;

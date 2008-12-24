@@ -114,6 +114,11 @@ size_t Curve::get_size() const
   return m_size;
 }
 
+uintptr_t Curve::get_id() const
+{
+  return m_id;
+}
+
 float *Curve::get_data() const
 {
   return m_data;
@@ -147,6 +152,50 @@ float Curve::get_absmax() const
 float Curve::get_y_scale() const
 {
   return m_y_scale;
+}
+
+void Curve::set_id(uintptr_t id)
+{
+  m_id = id;
+}
+
+void Curve::set_data(float * data)
+{
+  m_data = (float *)data;
+}
+
+void Curve::set_size(size_t size)
+{
+  m_size = size;
+}
+
+void Curve::set_caption(QString caption)
+{
+  m_caption = caption;
+}
+
+void Curve::set_polarity(Polarity polarity)
+{
+  m_polarity = polarity;
+}
+
+void Curve::set_max(float max)
+{
+  m_max = max;
+}
+void Curve::set_min(float min)
+{
+  m_min = min;
+}
+
+void Curve::set_absmax(float absmax)
+{
+  m_absmax = absmax;
+}
+
+void Curve::set_y_scale(float y_scale)
+{
+  m_y_scale = y_scale;
 }
 
 bool Curve::is_divider_dotted() const

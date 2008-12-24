@@ -22,10 +22,10 @@
 QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new QPushButton(this);
-//   ((QPushButton *)m_widget)->
+  m_widget->setContextMenuPolicy(Qt::NoContextMenu);
   m_filename = "/";
   m_type = "event";
-  connect((QPushButton *)m_widget, SIGNAL(released()), this, SLOT(buttonReleased()));
+  connect(static_cast<QPushButton *>(m_widget), SIGNAL(released()), this, SLOT(buttonReleased()));
 }
 
 QuteButton::~QuteButton()
@@ -54,7 +54,7 @@ QString QuteButton::getWidgetLine()
   line += m_type + " ";
   line +=  QString::number(m_value,'f', 6) + " ";
   line += "\"" + m_name + "\" ";
-  line += "\"" + ((QPushButton *)m_widget)->text() + "\" ";
+  line += "\"" + static_cast<QPushButton *>(m_widget)->text() + "\" ";
   line += "\"" + m_filename + "\" ";
   line += m_eventLine;
 //   qDebug("QuteButton::getWidgetLine() %s", line.toStdString().c_str());
@@ -138,12 +138,12 @@ void QuteButton::setType(QString type)
   m_type = type;
   if (m_type == "event" or m_type == "value") {
     icon = QIcon();
-    ((QPushButton *)m_widget)->setIcon(icon);
+    static_cast<QPushButton *>(m_widget)->setIcon(icon);
   }
   else if (m_type == "pictevent" or m_type == "pictvalue" or m_type == "pict") {
     icon = QIcon(QPixmap(m_filename));
-    ((QPushButton *)m_widget)->setIcon(icon);
-    ((QPushButton *)m_widget)->setIconSize(QSize(width(),height()));
+    static_cast<QPushButton *>(m_widget)->setIcon(icon);
+    static_cast<QPushButton *>(m_widget)->setIconSize(QSize(width(),height()));
   }
   else {
     qDebug("Warning! QuteButton::setType() unrecognized type");
@@ -154,7 +154,7 @@ void QuteButton::setText(QString text)
 {
   //TODO use proper character symbol
 //   text = text.replace("Â", "\n");
-  ((QPushButton *)m_widget)->setText(text);
+  static_cast<QPushButton *>(m_widget)->setText(text);
 }
 
 void QuteButton::setFilename(QString filename)

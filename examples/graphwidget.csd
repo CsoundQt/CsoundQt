@@ -64,20 +64,21 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 867 227 397 401
+WindowBounds: 867 203 403 445
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {35466, 38293, 40092}
-ioGraph {8, 131} {377, 198} table 1.000000 graph
+ioGraph {8, 131} {377, 198} table -10.000000 graph
 ioText {116, 6} {160, 34} label 0.000000 0.00100 "" left "DejaVu Sans" 20 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Graph Widget
-ioText {7, 45} {377, 83} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {48896, 52224, 59904} background noborder Graph Widgets display Csound's f-tables. The table shown can be changed with the mouse using the menu on the upper left corner. It can also be changed by sending values on the widget's channel, Positive values change the table by index and negative values change the table by f-table number. Note that tabes are actually in reverse order in the menu.
+ioText {7, 45} {377, 83} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {48896, 52224, 59904} background noborder Graph Widgets display Csound's f-tables. The table shown can be changed with the mouse using the menu on the upper left corner. It can also be changed by sending values on the widget's channel Positive values change the table by index and negative values change the table by f-table number. Note that tabes are actually in reverse order in the menu.
 ioButton {9, 338} {66, 25} event 1.000000 "previous" "Previous" "/" i10 0 1
 ioButton {77, 338} {66, 25} event 1.000000 "next" "Next" "/" i11 0 1
 ioText {275, 339} {45, 25} editnum 10.000000 1.000000 "tabnum" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 10.000000
 ioText {186, 339} {101, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Show f-table
 ioButton {320, 339} {66, 25} event 1.000000 "" "Apply" "/" i12 0 1
+ioText {9, 368} {377, 38} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {48896, 52224, 59904} background noborder Note that the buttons will only only work if Csound is running, as they generate events which are processed by Csound
 </MacGUI>
 

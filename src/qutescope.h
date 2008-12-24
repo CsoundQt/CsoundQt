@@ -21,6 +21,7 @@
 #define QUTESCOPE_H
 
 #include "qutewidget.h"
+#include "types.h"  //necessary for the CsoundUserData struct
 
 class QuteScope : public QuteWidget
 {
@@ -34,26 +35,57 @@ class QuteScope : public QuteWidget
     virtual void setWidgetGeometry(int x,int y,int width,int height);
     virtual void createPropertiesDialog();
     void setType(QString type);
+    void setValue(double value); //Value for this widget indicates zoom level
+    void setChannel(int channel);
+    void setUd(CsoundUserData *ud);
+    void updateLabel();
 
   protected:
     QLabel * m_label;
-    QString m_type;
+//     QString m_type;
+    CsoundUserData *m_ud;
+    int m_channel;
+    int m_zoom;
+    QComboBox *typeComboBox;
+    QComboBox *channelBox;
+    QSpinBox *decimationBox;
+    QPolygonF curveData;
+    QGraphicsPolygonItem *curve;
 
+    virtual void resizeEvent(QResizeEvent * event);
+    virtual void applyProperties();
+
+  public slots:
+    void updateData();
 };
 
 class ScopeWidget : public QGraphicsView
 {
   Q_OBJECT
   public:
-    ScopeWidget(QWidget* parent) : QGraphicsView(parent) {}
+    ScopeWidget(QWidget* parent) : QGraphicsView(parent)
+    {
+      setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+      setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    }
     ~ScopeWidget() {}
 
-  protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event)
-    {emit(popUpMenu(event->globalPos()));}
+    bool freeze;
 
-  signals:
-    void popUpMenu(QPoint pos);
+  protected:
+//     virtual void contextMenuEvent(QContextMenuEvent *event)
+//     {emit(popUpMenu(event->globalPos()));}
+    virtual void mousePressEvent(QMouseEvent())
+    {
+      freeze = true;
+    }
+    virtual void mouseReleaseEvent(QMouseEvent())
+    {
+      freeze = false;
+    }
+
+//   signals:
+//     void popUpMenu(QPoint pos);
 };
 
 #endif

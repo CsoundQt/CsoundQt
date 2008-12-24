@@ -24,12 +24,13 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
   m_widget = new QDial(this);
   m_max = 1.0;
   m_min = 0.0;
-  ((QDial *)m_widget)->setNotchesVisible(true);
+  static_cast<QDial *>(m_widget)->setNotchesVisible(true);
   //TODO add resolution to config dialog and set these values accordingly
   m_resolution = 0.01;
-  ((QDial *)m_widget)->setMinimum(0);
-  ((QDial *)m_widget)->setMaximum(99);
+  static_cast<QDial *>(m_widget)->setMinimum(0);
+  static_cast<QDial *>(m_widget)->setMaximum(99);
   m_widget->setPalette(QPalette(Qt::gray));
+  m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 
   connect((QDial *)m_widget, SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
 }
@@ -40,7 +41,7 @@ QuteKnob::~QuteKnob()
 
 double QuteKnob::getValue()
 {
-  QDial *knob = (QDial *)m_widget;
+  QDial *knob = static_cast<QDial *>(m_widget);
   double normalized = (double) (knob->value() - knob->minimum())
         / (double) (knob->maximum() - knob->minimum());
   m_value = m_min + (normalized * (m_max-m_min));
@@ -71,7 +72,7 @@ void QuteKnob::setValue(double value)
     m_value = m_min;
   else
     m_value = value;
-  int val = (int) (((QDial *)m_widget)->maximum() * (m_value - m_min)/(m_max-m_min));
+  int val = (int) (static_cast<QDial *>(m_widget)->maximum() * (m_value - m_min)/(m_max-m_min));
   ((QDial *)m_widget)->setValue(val);
 }
 
