@@ -717,6 +717,7 @@ void qutecsound::runCsound(bool realtime)
     ud->csound = csound;
     ud->result = result;
     ud->zerodBFS = csoundGet0dBFS(csound);
+    ud->sampleRate = csoundGetSr(csound);
     ud->numChnls = csoundGetNchnls(csound);
 
 //     PUBLIC int csoundGetSampleFormat(CSOUND *);
@@ -736,7 +737,13 @@ void qutecsound::runCsound(bool realtime)
 #endif
     }
     else {
+      int numChnls = csoundGetNchnls(ud->csound);
       while(ud->PERF_STATUS == 1 && csoundPerformKsmps(csound)==0) {
+        ud->outputBufferSize = csoundGetKsmps(ud->csound);
+        ud->outputBuffer = csoundGetSpout(ud->csound);
+        for (int i = 0; i < ud->outputBufferSize*numChnls; i++) {
+          ud->qcs->audioOutputBuffer.put(ud->outputBuffer[i]);
+        }
         qApp->processEvents();
         if (ud->qcs->m_options->enableWidgets) {
           widgetPanel->getValues(&channelNames, &values, &stringValues);
@@ -790,6 +797,7 @@ void qutecsound::stop()
   }
   else {
     playAct->setChecked(false);
+    recAct->setChecked(false);
     return;
   }
   if (m_options->thread) {
@@ -815,6 +823,67 @@ void qutecsound::stop()
     //widgetPanel->setVisible(false);
   }
 }
+
+void qutecsound::record()
+{
+  if (!playAct->isChecked()) {
+    runCsound();
+  }
+  if (recAct->isChecked()) {
+#ifdef USE_LIBSNDFILE
+    const int format=SF_FORMAT_WAV | SF_FORMAT_PCM_16;
+ //  const int format=SF_FORMAT_WAV | SF_FORMAT_FLOAT;
+    const int channels=ud->numChnls;
+    const int sampleRate=ud->sampleRate;
+    int number = 0;
+    QString fileName = documentPages[curPage]->fileName + "-";
+    if (number < 10)
+      fileName += "0";
+    fileName += QString::number(number) + ".wav";
+    while (QFile::exists(fileName)) {
+      number++;
+      fileName = documentPages[curPage]->fileName + "-";
+      if (number < 10)
+        fileName += "0";
+      fileName += QString::number(number) + ".wav";
+    }
+    currentAudioFile = fileName;
+    qDebug("start recording: %s", fileName.toStdString().c_str());
+    outfile = new SndfileHandle(fileName.toStdString().c_str(), SFM_WRITE, format, channels, sampleRate);
+    samplesWritten = 0;
+
+    QTimer::singleShot(20, this, SLOT(recordBuffer()));
+#else
+  QMessageBox::warning(this, tr("QuteCsound"),
+                       tr("This version of QuteCsound has been compiled\nwithout Record support!"),
+                       QMessageBox::Ok);
+#endif
+  }
+}
+
+void qutecsound::recordBuffer()
+{
+  int bufferSize = 4096;
+  float sample[bufferSize];
+#ifdef USE_LIBSNDFILE
+  if (recAct->isChecked()) {
+    if (audioOutputBuffer.copyAvailableBuffer(sample, bufferSize)) {
+      int samps = outfile->write(sample, bufferSize);
+      samplesWritten += samps;
+    }
+    else {
+//       qDebug("qutecsound::recordBuffer() : Empty Buffer!");
+    }
+    QTimer::singleShot(20, this, SLOT(recordBuffer()));
+  }
+  else { //Stop recording
+
+    delete outfile;
+    qDebug("closed file: %s\nWritten %li samples", currentAudioFile.toStdString().c_str(), samplesWritten);
+  }
+#endif
+}
+
 
 // void qutecsound::selectMidiOutDevice(QPoint pos)
 // {
@@ -868,20 +937,21 @@ void qutecsound::render()
       lastFileDir = dialog.directory().path();
     }
   }
+  currentAudioFile = m_options->fileOutputFilename;
   runCsound(false);
 }
 
 void qutecsound::openExternalEditor()
 {
   QString options;
-  options = m_options->fileOutputFilename;
+  options = currentAudioFile;
   execute(m_options->waveeditor, options);
 }
 
 void qutecsound::openExternalPlayer()
 {
   QString options;
-  options = m_options->fileOutputFilename;
+  options = currentAudioFile;
   execute(m_options->waveplayer, options);
 }
 
@@ -1342,6 +1412,13 @@ void qutecsound::createActions()
   stopAct->setIconText("Stop");
   connect(stopAct, SIGNAL(triggered()), this, SLOT(stop()));
 
+  recAct = new QAction(QIcon(":/images/gtk-media-record.png"), tr("Record"), this);
+  recAct->setShortcut(tr("Ctrl+Space"));
+  recAct->setStatusTip(tr("Record"));
+  recAct->setIconText("Record");
+  recAct->setCheckable(true);
+  connect(recAct, SIGNAL(triggered()), this, SLOT(record()));
+
   renderAct = new QAction(QIcon(":/images/render.png"), tr("Render to file"), this);
   renderAct->setShortcut(tr("Alt+F"));
   renderAct->setStatusTip(tr("Render to file"));
@@ -1543,6 +1620,8 @@ void qutecsound::createMenus()
   controlMenu = menuBar()->addMenu(tr("Control"));
   controlMenu->addAction(playAct);
   controlMenu->addAction(playTermAct);
+  controlMenu->addAction(stopAct);
+  controlMenu->addAction(playAct);
   controlMenu->addAction(renderAct);
   controlMenu->addAction(externalEditorAct);
   controlMenu->addAction(externalPlayerAct);
@@ -1620,6 +1699,7 @@ void qutecsound::createToolBars()
   controlToolBar->addAction(playAct);
   controlToolBar->addAction(stopAct);
   controlToolBar->addAction(playTermAct);
+  controlToolBar->addAction(recAct);
   controlToolBar->addAction(renderAct);
   controlToolBar->addAction(externalEditorAct);
   controlToolBar->addAction(externalPlayerAct);
@@ -1706,7 +1786,7 @@ void qutecsound::readSettings()
   settings.endGroup();
   settings.beginGroup("Run");
   m_options->useAPI = settings.value("useAPI", true).toBool();
-  m_options->thread = settings.value("thread", false).toBool();
+  m_options->thread = settings.value("thread", true).toBool();
   m_options->bufferSize = settings.value("bufferSize", 1024).toInt();
   m_options->bufferSizeActive = settings.value("bufferSizeActive", false).toBool();
   m_options->HwBufferSize = settings.value("HwBufferSize", 1024).toInt();
@@ -2240,7 +2320,7 @@ uintptr_t qutecsound::csThread(void *data)
     int numChnls = csoundGetNchnls(udata->csound);
     while((perform == 0) and (udata->PERF_STATUS == 1)) {
       for (int i = 0; i < udata->outputBufferSize*numChnls; i++) {
-        udata->qcs->audioOutputBuffer.append(udata->outputBuffer[i]);
+        udata->qcs->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
       }
       if (udata->qcs->m_options->enableWidgets) {
         udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames,

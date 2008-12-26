@@ -28,6 +28,10 @@
 
 #include "types.h"
 
+#ifdef USE_LIBSNDFILE
+#include    <sndfile.hh>
+#endif
+
 // #include <csound.h>
 #ifdef MACOSX
 // Needed to be able to grab menus back from FLTK
@@ -120,6 +124,8 @@ class qutecsound:public QMainWindow
   public slots:
     void runCsound(bool realtime=true);
     void stop();
+    void record();
+    void recordBuffer();
 //     void selectMidiInDevice(QPoint pos);
 //     void selectMidiOutDevice(QPoint pos);
 //     void selectAudioInDevice(QPoint pos);
@@ -251,6 +257,7 @@ class qutecsound:public QMainWindow
     QAction *playAct;
     QAction *playTermAct;
     QAction *stopAct;
+    QAction *recAct;
     QAction *renderAct;
     QAction *externalEditorAct;
     QAction *externalPlayerAct;
@@ -283,6 +290,12 @@ class qutecsound:public QMainWindow
     UtilitiesDialog *utilitiesDialog;
 
     QIcon modIcon;
+
+#ifdef USE_LIBSNDFILE
+    SndfileHandle *outfile;
+#endif
+    QString currentAudioFile;
+    long samplesWritten;
 
 #ifdef MACOSX
     MenuBarHandle menuBarHandle;

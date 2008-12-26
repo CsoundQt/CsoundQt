@@ -59,7 +59,7 @@ QString QuteGraph::getWidgetLine()
   line += QString::number(m_value, 'f', 6) + " ";
   line += QString::number(m_zoom, 'f', 6) + " ";
   line += m_name;
-  qDebug("QuteGraph::getWidgetLine(): %s", line.toStdString().c_str());
+//   qDebug("QuteGraph::getWidgetLine(): %s", line.toStdString().c_str());
   return line;
 }
 
@@ -226,6 +226,11 @@ Curve* QuteGraph::getCurveById(uintptr_t id)
   return curve;
 }
 
+void QuteGraph::setUd(CsoundUserData *ud)
+{
+  m_ud = ud;
+}
+
 void QuteGraph::setCurveData(Curve * curve)
 {
   //TODO is it necessary to free the curves created by Csound? (e.g. FFT from dispfft)
@@ -272,7 +277,7 @@ void QuteGraph::setCurveData(Curve * curve)
     QPolygonF polygon;
     polygon.append(QPointF(0,0));
     for (int i = 0; i < (int) curve->get_size(); i++) { //skip first item, which is base line
-      polygon.append(QPointF(i, - curve->get_data()[i]));
+      polygon.append(QPointF(i, - curve->get_data()[i] / m_ud->zerodBFS));
     }
     polygon.append(QPointF(curve->get_size(),0));
     polygons[index]->setPolygon(polygon);

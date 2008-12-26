@@ -882,6 +882,7 @@ int WidgetPanel::createGraph(int x, int y, int width, int height, QString widget
   QuteGraph *widget= new QuteGraph(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
+  widget->setUd(static_cast<qutecsound *>(parent())->ud);
   //Graph widget is always of type "graph" part 5 is discarded
   if (parts.size() > 6)
     widget->setValue(parts[6].toDouble());

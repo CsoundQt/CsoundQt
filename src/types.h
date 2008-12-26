@@ -77,6 +77,7 @@ struct CsoundUserData{
   long outputBufferSize;
   MYFLT* outputBuffer;
   int numChnls;
+  int sampleRate;
 };
 
 static ConfigLists _configlists;
@@ -85,19 +86,42 @@ class RingBuffer
 {
   public:
     RingBuffer() {
-      resize(4096);
+      size = 8192*4;
+      resize(size);
       currentPos = 0;
+      currentReadPos = 0;
     }
     ~RingBuffer() {}
     QList<MYFLT> buffer;
     long currentPos;
+    long currentReadPos;
+    int size;
 
-    void append(MYFLT value) {
+    void put(MYFLT value) {
       buffer[currentPos] = value;
       currentPos++;
+      if (currentPos == currentReadPos) {
+//         qDebug("RingBuffer: Buffer overflow!");
+      }
       if (currentPos >= buffer.size())
         currentPos = 0;
     }
+
+    bool copyAvailableBuffer(MYFLT *data, int saveSize) {
+      currentReadPos = currentReadPos%size;
+      int available = (currentReadPos <= currentPos ?
+          currentPos - currentReadPos :  currentPos - currentReadPos + size);
+//       qDebug("RingBuffer: Available: %i", available);
+      if (available <= saveSize) { //not enough data in buffer
+        return false;
+      }
+      for (int i = 0; i < saveSize; i++) {
+        data[i] = buffer[currentReadPos%size];
+        currentReadPos++;
+      }
+      return true;
+    }
+
     void resize(int size) {
       buffer.clear();
       for (int i = 0; i< size; i++) {

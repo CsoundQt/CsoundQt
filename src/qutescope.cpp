@@ -200,7 +200,7 @@ void QuteScope::updateData()
           value = -(double) list[bufferIndex];
       }
     }
-    curveData[i+1] = QPoint(i,value*height()/(2 * m_ud->zerodBFS));
+    curveData[i+1] = QPoint(i,value*height()/(2/* * m_ud->zerodBFS*/));
   }
   static_cast<ScopeWidget *>(m_widget)->setSceneRect(0, -height()/2, width(), height() );
   curveData.last() = QPoint(width()-4, 0);

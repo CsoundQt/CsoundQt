@@ -21,6 +21,7 @@
 #define QUTEGRAPH_H
 
 #include "qutewidget.h"
+#include "types.h"  //necessary for the CsoundUserData struct
 
 class Curve;
 
@@ -41,9 +42,11 @@ class QuteGraph : public QuteWidget
     int getCurveIndex(Curve * curve);
     void setCurveData(Curve * curve);
     Curve* getCurveById(uintptr_t id);
+    void setUd(CsoundUserData *ud);
 
   protected:
     double m_zoom;
+    CsoundUserData *m_ud;
     QLabel * m_label;
     QComboBox *m_pageComboBox;
     QDoubleSpinBox *zoomBox;
