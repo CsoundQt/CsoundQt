@@ -67,6 +67,7 @@ class ScopeWidget : public QGraphicsView
     {
       setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
       setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+      freeze = false;
     }
     ~ScopeWidget() {}
 
@@ -75,11 +76,12 @@ class ScopeWidget : public QGraphicsView
   protected:
 //     virtual void contextMenuEvent(QContextMenuEvent *event)
 //     {emit(popUpMenu(event->globalPos()));}
-    virtual void mousePressEvent(QMouseEvent())
+    virtual void mousePressEvent(QMouseEvent *event)
     {
-      freeze = true;
+      if (event->button() & Qt::LeftButton)
+        freeze = true;
     }
-    virtual void mouseReleaseEvent(QMouseEvent())
+    virtual void mouseReleaseEvent(QMouseEvent *event)
     {
       freeze = false;
     }

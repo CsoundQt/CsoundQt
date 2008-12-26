@@ -50,19 +50,4 @@ class QuteComboBox : public QuteWidget
 
 };
 
-// class MyQComboBox : public QComboBox
-// {
-//   Q_OBJECT
-//   public:
-//     MyQComboBox(QWidget* parent) : QComboBox(parent) {}
-//     ~MyQComboBox() {}
-// 
-//   protected:
-//     virtual void contextMenuEvent(QContextMenuEvent *event)
-//     {emit(popUpMenu(event->globalPos()));}
-// 
-//   signals:
-//     void popUpMenu(QPoint pos);
-// };
-
 #endif

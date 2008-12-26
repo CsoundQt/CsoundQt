@@ -23,7 +23,6 @@ QuteComboBox::QuteComboBox(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new QComboBox(this);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
-//   connect(((MyQComboBox *)m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 //   connect((QComboBox *)m_widget, SIGNAL(released()), this, SLOT(buttonReleased()));
   connect((QCheckBox *)m_widget, SIGNAL(currentIndexChanged(int)), this, SLOT(valueChanged(int)));
 }
@@ -65,7 +64,7 @@ QString QuteComboBox::getWidgetLine()
 void QuteComboBox::applyProperties()
 {
   setText(text->text());
-  //TODO set size for Menu widget
+  //TODO set size for Menu widget according to value in widgetLine?
 //   setSize
   setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last

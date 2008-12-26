@@ -142,6 +142,7 @@ void QuteScope::createPropertiesDialog()
   layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
   decimationBox = new QSpinBox(dialog);
   decimationBox->setValue(m_zoom);
+  decimationBox->setRange(1, 20);
   layout->addWidget(decimationBox, 7, 3, Qt::AlignLeft|Qt::AlignVCenter);
 }
 
@@ -165,10 +166,10 @@ void QuteScope::resizeEvent(QResizeEvent * event)
 void QuteScope::updateData()
 {
 //   qDebug("QuteScope::updateData()");
-  if (m_ud == 0 or m_ud->PERF_STATUS == 0)
+  if (m_ud == 0 or m_ud->PERF_STATUS == 0 )
     return;
-//   if (static_cast<ScopeWidget *>(m_widget)->freeze)
-//     return;
+  if (static_cast<ScopeWidget *>(m_widget)->freeze)
+    return;
   double value;
   RingBuffer *buffer = &m_ud->qcs->audioOutputBuffer;
   QList<MYFLT> list(buffer->buffer);
