@@ -101,6 +101,8 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options/*, ConfigLists *
   RtMidiInputLineEdit->setText(m_options->rtMidiInputDevice);
   RtMidiOutputLineEdit->setText(m_options->rtMidiOutputDevice);
 
+  sampleFormatComboBox->setCurrentIndex(m_options->sampleFormat);
+
   CsdocdirLineEdit->setText(m_options->csdocdir);
   OpcodedirCheckBox->setChecked(m_options->opcodedirActive);
   OpcodedirLineEdit->setText(m_options->opcodedir);
@@ -196,6 +198,8 @@ void ConfigDialog::accept()
   m_options->rtMidiModule = RtMidiModuleComboBox->currentIndex();
   m_options->rtMidiInputDevice = RtMidiInputLineEdit->text();
   m_options->rtMidiOutputDevice = RtMidiOutputLineEdit->text();
+
+  m_options->sampleFormat = sampleFormatComboBox->currentIndex();
 
   m_options->csdocdir = CsdocdirLineEdit->text();
   m_options->opcodedirActive = OpcodedirCheckBox->isChecked();

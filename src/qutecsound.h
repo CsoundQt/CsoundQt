@@ -124,6 +124,7 @@ class qutecsound:public QMainWindow
   public slots:
     void runCsound(bool realtime=true);
     void stop();
+    void stopCsound();
     void record();
     void recordBuffer();
 //     void selectMidiInDevice(QPoint pos);
@@ -215,6 +216,7 @@ class qutecsound:public QMainWindow
     QVector<WINDAT *> curveBuffer;
     QStringList messageQueue;
     QStringList exampleFiles;
+    QStringList widgetFiles;
     QTimer *queueTimer;
     QTabWidget *documentTabs;
     QVector<DocumentPage *> documentPages;
@@ -254,8 +256,8 @@ class qutecsound:public QMainWindow
     QAction *autoCompleteAct;
     QAction *configureAct;
     QAction *editAct;
-    QAction *playAct;
-    QAction *playTermAct;
+    QAction *runAct;
+    QAction *runTermAct;
     QAction *stopAct;
     QAction *recAct;
     QAction *renderAct;

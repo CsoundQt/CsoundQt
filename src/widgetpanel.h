@@ -97,6 +97,7 @@ class WidgetPanel : public QDockWidget
     QAction *cutAct;
     QAction *pasteAct;
     QAction *duplicateAct;
+    QAction *deleteAct;
     QAction *propertiesAct;
 
     // For the properties dialog
@@ -161,6 +162,7 @@ class WidgetPanel : public QDockWidget
     void paste();
     void paste(QPoint pos);
     void duplicate();
+    void deleteSelected();
     void undo();
     void redo();
 //     void dockStateChanged(bool topLevel);

@@ -82,7 +82,7 @@ void QuteGraph::createPropertiesDialog()
   layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
   zoomBox = new QDoubleSpinBox(dialog);
   zoomBox->setValue(m_zoom);
-  zoomBox->setRange(0.5, 10.0);
+  zoomBox->setRange(1, 10.0);
   zoomBox->setDecimals(1);
   zoomBox->setSingleStep(0.5);
   layout->addWidget(zoomBox, 7, 3, Qt::AlignLeft|Qt::AlignVCenter);
@@ -121,7 +121,7 @@ void QuteGraph::setValue(double value)
 void QuteGraph::setZoom(double zoom)
 {
   qDebug("QuteGraph::setZoom %f", zoom);
-  if (zoom > 0.5 && zoom < 10.0)
+  if (zoom >=1.0 && zoom <= 10.0)
     m_zoom = zoom;
   changeCurve(-2);  // Redraw
 }
@@ -146,8 +146,9 @@ void QuteGraph::changeCurve(int index)
     view->fitInView(0, min - ((max - min)*0.17) , (double) size/m_zoom, (max - min)*1.17);
   }
   else {
-    view->setSceneRect (0.01, -0.3, size, 0.31);
-    view->fitInView(0.01, -0.3/m_zoom , (double) size/m_zoom, 0.31/m_zoom);
+    view->setSceneRect (0, 0, size, 90.);
+//     view->fitInView(0, -30./m_zoom , (double) size/m_zoom, 100./m_zoom);
+    view->fitInView(0, -30. , (double) size/m_zoom, 100.);
   }
   QString text = QString::number(size) + " pts Max=";
   text += QString::number(max, 'g', 5) + " Min =" + QString::number(min, 'g', 5);
@@ -275,11 +276,12 @@ void QuteGraph::setCurveData(Curve * curve)
   }
   else {  // in case its not an ftable
     QPolygonF polygon;
-    polygon.append(QPointF(0,0));
+    polygon.append(QPointF(0,110));
     for (int i = 0; i < (int) curve->get_size(); i++) { //skip first item, which is base line
-      polygon.append(QPointF(i, - curve->get_data()[i] / m_ud->zerodBFS));
+      double value =  20*log10(fabs(curve->get_data()[i])/m_ud->zerodBFS);
+      polygon.append(QPointF(i, -value));
     }
-    polygon.append(QPointF(curve->get_size(),0));
+    polygon.append(QPointF(curve->get_size() - 1,110));
     polygons[index]->setPolygon(polygon);
   }
   m_pageComboBox->setItemText(index, curve->get_caption());

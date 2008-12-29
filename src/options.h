@@ -77,6 +77,8 @@ class Options{
     bool fileOutputFilenameActive;
     QString fileOutputFilename;
 
+    int sampleFormat;
+
     bool rtUseOptions;
     bool rtOverrideOptions;
     int rtAudioModule;

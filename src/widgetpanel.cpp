@@ -93,7 +93,10 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
   duplicateAct = new QAction(tr("Duplicate Selected"), this);
   duplicateAct->setShortcut(tr("Ctrl+D"));
-  connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
+  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
+  deleteAct = new QAction(tr("Delete Selected"), this);
+  deleteAct->setShortcut(tr("Del"));
+  connect(deleteAct, SIGNAL(triggered()), this, SLOT(deleteSelected()));
   clearAct = new QAction(tr("Clear all widgets"), this);
   connect(clearAct, SIGNAL(triggered()), this, SLOT(clearWidgets()));
 
@@ -424,6 +427,7 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   menu.addAction(pasteAct);
   menu.addAction(duplicateAct);
   menu.addAction(cutAct);
+  menu.addAction(deleteAct);
   menu.addAction(clearAct);
   menu.addSeparator();
   menu.addAction(propertiesAct);
@@ -1081,6 +1085,15 @@ void WidgetPanel::duplicate()
         newWidget(widgets[i]->getWidgetLine(), true);
         editWidgets.last()->select();
       }
+    }
+  }
+}
+
+void WidgetPanel::deleteSelected()
+{
+  for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
+    if (editWidgets[i]->isSelected()) {
+      deleteWidget(widgets[i]);
     }
   }
 }

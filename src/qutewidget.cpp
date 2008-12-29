@@ -26,7 +26,7 @@ QuteWidget::QuteWidget(QWidget *parent/*, widgetType type*/):
     QWidget(parent)/*, m_type(type)*/
 {
   propertiesAct = new QAction(/*QIcon(":/images/gtk-new.png"),*/ tr("&Properties"), this);
-  propertiesAct->setShortcut(tr("Alt+P"));
+//   propertiesAct->setShortcut(tr("Alt+P"));
   propertiesAct->setStatusTip(tr("Open widget properties"));
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(openProperties()));
 
@@ -51,6 +51,7 @@ void QuteWidget::setWidgetLine(QString line)
 void QuteWidget::setChannelName(QString name)
 {
   m_name = name;
+  m_name.replace("\"", "'"); // Quotes are not allowed
   if (m_name.startsWith('$'))
     m_name.remove(0,1);  // $ symbol is reserved for identifying string channels
   if (name != "")

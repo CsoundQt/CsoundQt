@@ -60,6 +60,7 @@ qutecsound::qutecsound(QStringList fileNames)
   ud->PERF_STATUS = 0;
   ud->qcs = this;
   perfMutex = csoundCreateMutex(0);
+//   perfThread = 0;
 
   exampleFiles.append(":/examples/miditest.csd");
   exampleFiles.append(":/examples/circle.csd");
@@ -70,6 +71,12 @@ qutecsound::qutecsound(QStringList fileNames)
   exampleFiles.append(":/examples/stringchannels.csd");
   exampleFiles.append(":/examples/reservedchannels.csd");
   exampleFiles.append(":/examples/noisered.csd");
+
+  widgetFiles.append(":/examples/widgetpanel.csd");
+  widgetFiles.append(":/examples/checkboxwidget.csd");
+  widgetFiles.append(":/examples/graphwidget.csd");
+  widgetFiles.append(":/examples/labelwidget.csd");
+  widgetFiles.append(":/examples/sliderwidget.csd");
 
   m_options = new Options();
 
@@ -590,8 +597,7 @@ void qutecsound::runCsound(bool realtime)
   if (QObject::sender() == renderAct) {
     useAPI = m_options->useAPI;
   }
-  else 
-  if (QObject::sender() == playTermAct) {
+  else if (QObject::sender() == runTermAct) {
     useAPI = false;
   }
   widgetPanel->eventQueueSize = 0; //Flush events gathered while idle
@@ -600,14 +606,14 @@ void qutecsound::runCsound(bool realtime)
   messageQueue.clear();
   if (documentPages[curPage]->fileName.isEmpty()) {
     if (!saveAs()) {
-      playAct->setChecked(false);
+      runAct->setChecked(false);
       return;
     }
   }
   else if (documentPages[curPage]->document()->isModified()) {
     if (m_options->saveChanges)
       if (!save()) {
-        playAct->setChecked(false);
+        runAct->setChecked(false);
         return;
       }
   }
@@ -629,6 +635,7 @@ void qutecsound::runCsound(bool realtime)
 #endif
     m_console->clear();
     widgetPanel->clearGraphs();
+    audioOutputBuffer.allZero();
     QTemporaryFile csdFile;
     QString tmpFileName = QDir::tempPath();
     if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
@@ -641,7 +648,7 @@ void qutecsound::runCsound(bool realtime)
                             tr("PostQC"),
                             tr("Error creating temporary file."),
                             QMessageBox::Ok);
-      playAct->setChecked(false);
+      runAct->setChecked(false);
       return;
     }
     if (documentPages[curPage]->fileName.endsWith(".csd")) {
@@ -670,7 +677,7 @@ void qutecsound::runCsound(bool realtime)
       *((int*) csoundQueryGlobalVariable(csound, "FLTK_Flags")) = 4;
     }
     else {
-      qDebug("play() FLTK Disabled");
+//       qDebug("play() FLTK Disabled");
       *((int*) csoundQueryGlobalVariable(csound, "FLTK_Flags")) = 3;
     }
     if (m_options->thread) {
@@ -686,24 +693,26 @@ void qutecsound::runCsound(bool realtime)
     fprintf(stderr, "\n");
     int result=csoundCompile(csound,argc,argv);
 
+    qDebug("Csound compiled %i", result);
     csoundSetIsGraphable(csound, true);
     csoundSetMakeGraphCallback(csound, &qutecsound::makeGraphCallback);
     csoundSetDrawGraphCallback(csound, &qutecsound::drawGraphCallback);
     csoundSetKillGraphCallback(csound, &qutecsound::killGraphCallback);
     csoundSetExitGraphCallback(csound, &qutecsound::exitGraphCallback);
 
-    ud->PERF_STATUS = 1;
+    ud->PERF_STATUS = 1; // dispatch queues must be in running state
     emit(dispatchQueues()); //To dispatch messages produced in compilation.
     if (result!=CSOUND_SUCCESS or variable != CSOUND_SUCCESS) {
       qDebug("Csound compile failed!");
-      csoundStop(csound);
+      ud->PERF_STATUS = 0;
       free(argv);
+//       csoundStop(csound);
       csoundCleanup(csound);
 #ifdef QUTECSOUND_DESTROY_CSOUND
       csoundDestroy(csound);  //FIXME Had to destroy csound every run otherwise FLTK widgets crash...
 #endif
-      ud->PERF_STATUS = 0;
-      playAct->setChecked(false);
+//       stopCsound();
+      runAct->setChecked(false);
       return;
     }
     if (m_options->invalueEnabled and m_options->enableWidgets) {
@@ -729,6 +738,7 @@ void qutecsound::runCsound(bool realtime)
     queueTimer->start(QCS_QUEUETIMER_TIME);
     if(m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
+      qDebug("Create CsoundPerformanceThread");
       perfThread = new CsoundPerformanceThread(csound);
       perfThread->SetProcessCallback(qutecsound::csThread, (void*)ud);
       perfThread->Play();
@@ -785,7 +795,7 @@ void qutecsound::runCsound(bool realtime)
     options = SCRIPT_NAME;
 #endif
     execute(m_options->terminal, options);
-    playAct->setChecked(false);
+    runAct->setChecked(false);
   }
 }
 
@@ -796,17 +806,30 @@ void qutecsound::stop()
     ud->PERF_STATUS = 0;
   }
   else {
-    playAct->setChecked(false);
+    runAct->setChecked(false);
     recAct->setChecked(false);
     return;
   }
+  if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
+    //widgetPanel->setVisible(false);
+  }
+}
+
+void qutecsound::stopCsound()
+{
+  qDebug("qutecsound::stopCsound()");
   if (m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
-  perfThread->Stop();
-  perfThread->Join();
+//       perfThread->ScoreEvent(0, 'e', 0, 0);
+      perfThread->Stop();
+      perfThread->Join();
+//       delete perfThread;
+//       perfThread = 0;
+//     }
 #else
-  csoundStop(csound);
-  csoundJoinThread(ThreadID);
+//     csoundScoreEvent(csound,'e' , 0, 0);
+    csoundStop(csound);
+    csoundJoinThread(ThreadID);
 
 #endif
   csoundCleanup(csound);
@@ -815,35 +838,48 @@ void qutecsound::stop()
     SetMenuBar(menuBarHandle);
 #endif
   }
+  else {
+    csoundStop(csound);
+    csoundCleanup(csound);
+  }
 #ifdef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(csound);
 #endif
-  playAct->setChecked(false);
-  if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
-    //widgetPanel->setVisible(false);
-  }
+  runAct->setChecked(false);
+  recAct->setChecked(false);
 }
 
 void qutecsound::record()
 {
-  if (!playAct->isChecked()) {
-    runCsound();
+  if (!runAct->isChecked()) {
+    runAct->setChecked(true);
+    runCsound(true);
   }
   if (recAct->isChecked()) {
 #ifdef USE_LIBSNDFILE
-    const int format=SF_FORMAT_WAV | SF_FORMAT_PCM_16;
+    int format=SF_FORMAT_WAV;
+    switch (m_options->sampleFormat) {
+      case 0:
+        format |= SF_FORMAT_PCM_16;
+        break;
+      case 1:
+        format |= SF_FORMAT_PCM_24;
+        break;
+      case 2:
+        format |= SF_FORMAT_FLOAT;
+        break;
+    }
  //  const int format=SF_FORMAT_WAV | SF_FORMAT_FLOAT;
     const int channels=ud->numChnls;
     const int sampleRate=ud->sampleRate;
     int number = 0;
-    QString fileName = documentPages[curPage]->fileName + "-";
-    if (number < 10)
-      fileName += "0";
-    fileName += QString::number(number) + ".wav";
+    QString fileName = documentPages[curPage]->fileName + "-000.wav";
     while (QFile::exists(fileName)) {
       number++;
       fileName = documentPages[curPage]->fileName + "-";
       if (number < 10)
+        fileName += "0";
+      if (number < 100)
         fileName += "0";
       fileName += QString::number(number) + ".wav";
     }
@@ -1077,7 +1113,7 @@ void qutecsound::applySettings(int /*result*/)
   QString renderOptions = " (" + (m_options->fileUseOptions? tr("UseQuteCsoundOptions"): tr("DiscardQuteCsoundOptions")) + " ";
   renderOptions +=  "" + (m_options->fileOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
   renderOptions += currentOptions;
-  playAct->setStatusTip(tr("Play") + playOptions);
+  runAct->setStatusTip(tr("Play") + playOptions);
   renderAct->setStatusTip(tr("Render to file") + renderOptions);
 }
 
@@ -1203,6 +1239,7 @@ void qutecsound::runUtility(QString flags)
 
 void qutecsound::dispatchQueues()
 {
+//   qDebug("qutecsound::dispatchQueues()");
 //   csoundLockMutex(perfMutex);
   foreach (QString msg, messageQueue) {
     m_console->appendMessage(msg);
@@ -1219,16 +1256,15 @@ void qutecsound::dispatchQueues()
   processEventQueue(ud);
 //   csoundUnlockMutex(perfMutex);
   messageQueue.clear();
+  if (ud->PERF_STATUS == 0) {
+    qDebug("qutecsound::dispatchQueues() stop");
+    stopCsound();
+    return;
+  }
   while (!newCurveBuffer.isEmpty()) {
     Curve * curve = newCurveBuffer.pop();
-//     int index = widgetPanel->getCurveIndex(curve->get_caption());
 // //     qDebug("qutecsound::dispatchQueues() %i-%s", index, curve->get_caption().toStdString().c_str());
-//     if (index == -1) {
       widgetPanel->newCurve(curve);
-//     }
-//     else {
-//       widgetPanel->setCurveData(index, curve);
-//     }
   }
   if (curveBuffer.size() > 32) {
     qDebug("qutecsound::dispatchQueues() WARNING: curve update buffer too large!");
@@ -1236,9 +1272,8 @@ void qutecsound::dispatchQueues()
   }
   foreach (WINDAT * windat, curveBuffer){
     Curve *curve = widgetPanel->getCurveById(windat->windid);
-//     Curve *curve = widgetPanel->getCurveById(windat->windid);
     if (curve != 0) {
-//       qDebug("qutecsound::dispatchQueues() %s -- %s",windat->caption, curve->get_caption().toStdString().c_str());
+      qDebug("qutecsound::dispatchQueues() %s -- %s",windat->caption, curve->get_caption().toStdString().c_str());
       curve->set_data(windat->fdata);
       curve->set_size(windat->npts);      // number of points
       curve->set_caption(QString(windat->caption)); // title of curve
@@ -1251,11 +1286,7 @@ void qutecsound::dispatchQueues()
     }
     curveBuffer.remove(curveBuffer.indexOf(windat));
   }
-  if (ud->PERF_STATUS == 1) {
-    queueTimer->start(QCS_QUEUETIMER_TIME);
-  }
-  else
-    stop();
+  queueTimer->start(QCS_QUEUETIMER_TIME);
 }
 
 void qutecsound::widgetDockStateChanged(bool topLevel)
@@ -1393,18 +1424,18 @@ void qutecsound::createActions()
 //   connect(editAct, SIGNAL(triggered(bool)), this, SLOT(edit(bool)));
   editAct = static_cast<WidgetPanel *>(widgetPanel)->editAct;
 
-  playAct = new QAction(QIcon(":/images/gtk-media-play-ltr.png"), tr("Play"), this);
-  playAct->setShortcut(tr("Alt+R"));
-  playAct->setStatusTip(tr("Play"));
-  playAct->setIconText("Play");
-  playAct->setCheckable(true);
-  connect(playAct, SIGNAL(triggered()), this, SLOT(runCsound()));
+  runAct = new QAction(QIcon(":/images/gtk-media-play-ltr.png"), tr("Run"), this);
+  runAct->setShortcut(tr("CTRL+R"));
+  runAct->setStatusTip(tr("Run"));
+  runAct->setIconText("Run");
+  runAct->setCheckable(true);
+  connect(runAct, SIGNAL(triggered()), this, SLOT(runCsound()));
 
-  playTermAct = new QAction(QIcon(":/images/gtk-media-play-ltr2.png"), tr("Play in Terminal"), this);
-//   playTermAct->setShortcut(tr("Alt+R"));
-  playTermAct->setStatusTip(tr("Play in external shell"));
-  playTermAct->setIconText("Play in Term");
-  connect(playTermAct, SIGNAL(triggered()), this, SLOT(runCsound()));
+  runTermAct = new QAction(QIcon(":/images/gtk-media-play-ltr2.png"), tr("Run in Terminal"), this);
+//   runTermAct->setShortcut(tr("Alt+R"));
+  runTermAct->setStatusTip(tr("Run in external shell"));
+  runTermAct->setIconText("Run in Term");
+  connect(runTermAct, SIGNAL(triggered()), this, SLOT(runCsound()));
 
   stopAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop"), this);
   stopAct->setShortcut(tr("Alt+S"));
@@ -1618,10 +1649,10 @@ void qutecsound::createMenus()
   editMenu->addAction(configureAct);
 
   controlMenu = menuBar()->addMenu(tr("Control"));
-  controlMenu->addAction(playAct);
-  controlMenu->addAction(playTermAct);
+  controlMenu->addAction(runAct);
+  controlMenu->addAction(runTermAct);
   controlMenu->addAction(stopAct);
-  controlMenu->addAction(playAct);
+  controlMenu->addAction(runAct);
   controlMenu->addAction(renderAct);
   controlMenu->addAction(externalEditorAct);
   controlMenu->addAction(externalPlayerAct);
@@ -1633,9 +1664,17 @@ void qutecsound::createMenus()
   viewMenu->addAction(showUtilitiesAct);
 
   QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
+  QMenu *submenu = examplesMenu->addMenu(tr("Widgets"));
+  foreach (QString fileName, widgetFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1);
+    QAction *newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+  submenu = examplesMenu->addMenu(tr("Examples"));
   foreach (QString fileName, exampleFiles) {
     QString name = fileName.mid(fileName.lastIndexOf("/") + 1);
-    QAction *newAction = examplesMenu->addAction(name);
+    QAction *newAction = submenu->addAction(name);
     newAction->setData(fileName);
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
@@ -1696,9 +1735,9 @@ void qutecsound::createToolBars()
 
   controlToolBar = addToolBar(tr("Control"));
   controlToolBar->setObjectName("controlToolBar");
-  controlToolBar->addAction(playAct);
+  controlToolBar->addAction(runAct);
   controlToolBar->addAction(stopAct);
-  controlToolBar->addAction(playTermAct);
+  controlToolBar->addAction(runTermAct);
   controlToolBar->addAction(recAct);
   controlToolBar->addAction(renderAct);
   controlToolBar->addAction(externalEditorAct);
@@ -1816,6 +1855,7 @@ void qutecsound::readSettings()
   m_options->rtMidiModule = settings.value("rtMidiModule", 0).toInt();
   m_options->rtMidiInputDevice = settings.value("rtMidiInputDevice", "0").toString();
   m_options->rtMidiOutputDevice = settings.value("rtMidiOutputDevice", "").toString();
+  m_options->sampleFormat = settings.value("sampleFormat", 0).toInt();
   settings.endGroup();
   settings.beginGroup("Environment");
   m_options->csdocdir = settings.value("csdocdir", DEFAULT_HTML_DIR).toString();
@@ -1914,6 +1954,7 @@ void qutecsound::writeSettings()
   settings.setValue("rtMidiModule", m_options->rtMidiModule);
   settings.setValue("rtMidiInputDevice", m_options->rtMidiInputDevice);
   settings.setValue("rtMidiOutputDevice", m_options->rtMidiOutputDevice);
+  settings.setValue("sampleFormat", m_options->sampleFormat);
   settings.endGroup();
   settings.beginGroup("Environment");
   settings.setValue("csdocdir", m_options->csdocdir);
@@ -2264,8 +2305,9 @@ void qutecsound::processEventQueue(CsoundUserData *ud)
     ud->qcs->widgetPanel->eventQueueSize--;
     ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize];
     char type = ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize][0].unicode();
-    QStringList eventElements = ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts);
-            qDebug("type %c line: %s", type, ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].toStdString().c_str());
+    QStringList eventElements =
+        ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts);
+    qDebug("type %c line: %s", type, ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].toStdString().c_str());
     MYFLT pFields[eventElements.size()];
     for (int j = 0; j < eventElements.size(); j++) {
       pFields[j] = (MYFLT) eventElements[j].toDouble();
@@ -2336,7 +2378,6 @@ uintptr_t qutecsound::csThread(void *data)
     }
   }
   udata->PERF_STATUS = 0;
-//   udata->qcs->perfThread->Stop();
 //   udata->qcs->stop();
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
 #else
@@ -2483,13 +2524,13 @@ void qutecsound::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *n
   curve->set_id((uintptr_t) curve);
   ud->qcs->newCurve(curve);
   windat->windid = (uintptr_t) curve;
-  qDebug("qutecsound::makeGraphCallback %i", windat->windid);
+//   qDebug("qutecsound::makeGraphCallback %i", windat->windid);
 }
 
 void qutecsound::drawGraphCallback(CSOUND *csound, WINDAT *windat)
 {
   CsoundUserData *udata = (CsoundUserData *) csoundGetHostData(csound);
-//   qDebug("qutecsound::drawGraph()");
+  qDebug("qutecsound::drawGraph()");
   udata->qcs->updateCurve(windat);
 }
 

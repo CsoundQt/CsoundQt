@@ -188,10 +188,13 @@ void QuteText::createPropertiesDialog()
   QuteWidget::createPropertiesDialog();
   if (m_type == "label") {
     dialog->setWindowTitle("Label");
+    channelLabel->hide();
+    nameLineEdit->hide();
   }
   else if (m_type == "display") {
     dialog->setWindowTitle("Display");
   }
+
   QLabel *label = new QLabel(dialog);
   label->setText("Text:");
   layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);

@@ -38,5 +38,11 @@
       <file>../examples/rms.csd</file>
       <file>../examples/reinit.csd</file>
       <file>../examples/noreinit.csd</file>
+
+      <file>../examples/widgetpanel.csd</file>
+      <file>../examples/checkboxwidget.csd</file>
+      <file>../examples/graphwidget.csd</file>
+      <file>../examples/labelwidget.csd</file>
+      <file>../examples/sliderwidget.csd</file>
 </qresource>
 </RCC>
