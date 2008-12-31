@@ -24,7 +24,7 @@ QuteComboBox::QuteComboBox(QWidget *parent) : QuteWidget(parent)
   m_widget = new QComboBox(this);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 //   connect((QComboBox *)m_widget, SIGNAL(released()), this, SLOT(buttonReleased()));
-  connect((QCheckBox *)m_widget, SIGNAL(currentIndexChanged(int)), this, SLOT(valueChanged(int)));
+  connect(static_cast<QComboBox *>(m_widget), SIGNAL(currentIndexChanged(int)), this, SLOT(valueChanged(int)));
 }
 
 QuteComboBox::~QuteComboBox()
@@ -33,7 +33,7 @@ QuteComboBox::~QuteComboBox()
 
 void QuteComboBox::setValue(double value)
 {
-  qDebug("QuteComboBox::setValue %i", (int) value);
+//   qDebug("QuteComboBox::setValue %i", (int) value);
   // setValue sets the current index of the ioMenu
   static_cast<QComboBox *>(m_widget)->setCurrentIndex((int) value);
   m_value = static_cast<QComboBox *>(m_widget)->currentIndex();  //This confines the value to valid indices

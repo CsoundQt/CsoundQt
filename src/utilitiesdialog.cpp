@@ -29,7 +29,7 @@ UtilitiesDialog::UtilitiesDialog(QWidget *parent, Options *options/*, ConfigList
 {
   setupUi(this);
 
-  qDebug("UtilitiesDialog::UtilitiesDialog");
+//   qDebug("UtilitiesDialog::UtilitiesDialog");
   helpBrowser->setAcceptRichText(true);
   changeHelp(m_options->csdocdir + "/cvanal.html");
   QStringList searchPaths;

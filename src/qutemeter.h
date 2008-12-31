@@ -118,6 +118,8 @@ class MeterWidget : public QGraphicsView
   signals:
     void popUpMenu(QPoint pos);
     void newValues(double value1, double value2);
+    void valueChanged(double value);
+    void value2Changed(double value);
 };
 
 #endif

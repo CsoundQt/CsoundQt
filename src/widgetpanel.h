@@ -55,7 +55,7 @@ class WidgetPanel : public QDockWidget
     void appendMessage(QString message);
     void showTooltips(bool show);
     void newCurve(Curve* curve);
-    int getCurveIndex(Curve *curve);
+//     int getCurveIndex(Curve *curve);
     void setCurveData(Curve *curve);
     void clearGraphs();
     Curve * getCurveById(uintptr_t id);

@@ -181,7 +181,7 @@ void QuteButton::buttonReleased()
   // Only produce events for event types
   if (m_type == "event" or m_type == "pictevent")
     emit(queueEvent(m_eventLine));
-  else if (m_type == "value") {
+  else if (m_type == "value" or m_type == "pictvalue") {
     if (m_name == "_Play" && m_value == 1)
       emit play();
     else if (m_name == "_Play" && m_value == 0)

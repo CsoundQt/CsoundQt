@@ -623,7 +623,7 @@
        <rect>
         <x>10</x>
         <y>130</y>
-        <width>273</width>
+        <width>294</width>
         <height>151</height>
        </rect>
       </property>
@@ -661,7 +661,7 @@
        <item>
         <widget class="QCheckBox" name="rememberFileCheckBox" >
          <property name="text" >
-          <string>Remember last file opened</string>
+          <string>Remember open files from previous session</string>
          </property>
         </widget>
        </item>
@@ -970,7 +970,7 @@
      <property name="title" >
       <string>Record</string>
      </property>
-     <widget class="QWidget" name="" >
+     <widget class="QWidget" name="layoutWidget" >
       <property name="geometry" >
        <rect>
         <x>10</x>

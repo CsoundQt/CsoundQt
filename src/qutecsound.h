@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andres Cabrera   *
- *   mantaraya36@gmail.com   *
+ *   Copyright (C) 2008 by Andres Cabrera                                  *
+ *   mantaraya36@gmail.com                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -160,7 +160,6 @@ class qutecsound:public QMainWindow
     bool closeTab();
     void findReplace();
     void join();
-//     void edit(bool active);
     void render();
     void openExternalEditor();
     void openExternalPlayer();
@@ -211,6 +210,7 @@ class qutecsound:public QMainWindow
     CsoundUserData* ud;
 
     QHash<QString, double> outValueQueue;
+    QHash<QString, double> inValueQueue;
     QHash<QString, QString> outStringQueue;
     QStack<Curve *> newCurveBuffer;
     QVector<WINDAT *> curveBuffer;

@@ -71,13 +71,13 @@ int DocumentPage::setTextString(QString text)
     QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
     options.resize(options.indexOf("</MacOptions>") + 13);
     setMacOptionsText(options);
-    qDebug("<MacOptions> present. \n%s", options.toStdString().c_str());
+//     qDebug("<MacOptions> present. \n%s", options.toStdString().c_str());
     if (text.indexOf("</MacOptions>") + 13 < text.size() and text[text.indexOf("</MacOptions>") + 13] == '\n')
       text.remove(text.indexOf("</MacOptions>") + 13, 1); //remove final line break
     if (text.indexOf("<MacOptions>") > 0 and text[text.indexOf("<MacOptions>") - 1] == '\n')
       text.remove(text.indexOf("<MacOptions>") - 1, 1); //remove initial line break
     text.remove(text.indexOf("<MacOptions>"), options.size());
-    qDebug("<MacOptions> present. %s", getMacOption("WindowBounds").toStdString().c_str());
+//     qDebug("<MacOptions> present. %s", getMacOption("WindowBounds").toStdString().c_str());
   }
   else {
     QString defaultMacOptions = "<MacOptions>\nVersion: 3\nRender: Real\nAsk: Yes\nFunctions: ioObject\nListing: Window\nWindowBounds: 72 179 400 200\nCurrentView: io\nIOViewEdit: On\nOptions: -b128 -A -s -m167 -R\n</MacOptions>\n";

@@ -270,7 +270,7 @@ void WidgetPanel::clearWidgets()
 
 void WidgetPanel::clearWidgetPanel()
 {
-  qDebug("WidgetPanel::clearWidgetPanel()");
+//   qDebug("WidgetPanel::clearWidgetPanel()");
   foreach (QuteWidget *widget, widgets) {
     delete widget;
   }
@@ -338,13 +338,13 @@ void WidgetPanel::newCurve(Curve* curve)
   }
 }
 
-int WidgetPanel::getCurveIndex(Curve * curve)
-{
-  int index = -1;
-  if (!graphWidgets.isEmpty())
-    index = graphWidgets[0]->getCurveIndex(curve);
-  return index;
-}
+// int WidgetPanel::getCurveIndex(Curve * curve)
+// {
+//   int index = -1;
+//   if (!graphWidgets.isEmpty())
+//     index = graphWidgets[0]->getCurveIndex(curve);
+//   return index;
+// }
 
 void WidgetPanel::setCurveData(Curve *curve)
 {
@@ -591,6 +591,7 @@ int WidgetPanel::createScrollNumber(int x, int y, int width, int height, QString
     widget->setText(labelText);
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
   widget->show();
   if (editAct->isChecked()) {
@@ -689,6 +690,7 @@ int WidgetPanel::createSpinBox(int x, int y, int width, int height, QString widg
   widget->setText(labelText);
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
   widgets.append(widget);
   widget->show();
   if (editAct->isChecked()) {
@@ -915,8 +917,8 @@ int WidgetPanel::createGraph(int x, int y, int width, int height, QString widget
 
 int WidgetPanel::createScope(int x, int y, int width, int height, QString widgetLine)
 {
-  qDebug("WidgetPanel::createScope ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
-  qDebug("%s",widgetLine.toStdString().c_str() );
+//   qDebug("WidgetPanel::createScope ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
+//   qDebug("%s",widgetLine.toStdString().c_str() );
   QuteScope *widget= new QuteScope(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
@@ -1145,7 +1147,7 @@ void WidgetPanel::createLabel()
 
 void WidgetPanel::createDisplay()
 {
-  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 25} display 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border New Label";
+  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 25} display 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border Display";
   createText(currentPosition.x(), currentPosition.y() - 20, 80, 25, line);
   widgetChanged();
 }

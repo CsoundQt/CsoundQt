@@ -83,7 +83,7 @@ void QuteScope::setValue(double value)
 
 void QuteScope::setChannel(int channel)
 {
-  qDebug("QuteScope::setChannel %i", channel);
+//   qDebug("QuteScope::setChannel %i", channel);
   m_channel = channel;
   updateLabel();
 }

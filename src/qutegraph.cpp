@@ -37,7 +37,6 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
   m_label->move(85, 0);
   m_label->resize(500, 25);
 
-//   m_zoom = 1.0;
   m_pageComboBox = new QComboBox(this);
   m_pageComboBox->resize(80, 25);
   connect(m_pageComboBox, SIGNAL(activated(int)),
@@ -100,10 +99,13 @@ void QuteGraph::setValue(double value)
 {
   if (m_value == value)
     return;
+  qDebug("QuteGraph::setValue %i", int(value));
   if (value < 0 ) {
     for (int i = 0; i < m_pageComboBox->count(); i++) {
       QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"));
       if (parts.size() > 1) {
+        if (curves[parts[1].toInt()]->get_caption().isEmpty())
+          return; //don't apply value if curve is currently nameless
         if ((int) value == -parts[1].toInt()) {
           changeCurve(i);
           m_value = (int) value;
@@ -120,7 +122,7 @@ void QuteGraph::setValue(double value)
 
 void QuteGraph::setZoom(double zoom)
 {
-  qDebug("QuteGraph::setZoom %f", zoom);
+//   qDebug("QuteGraph::setZoom %f", zoom);
   if (zoom >=1.0 && zoom <= 10.0)
     m_zoom = zoom;
   changeCurve(-2);  // Redraw
@@ -128,6 +130,7 @@ void QuteGraph::setZoom(double zoom)
 
 void QuteGraph::changeCurve(int index)
 {
+  qDebug("QuteGraph::changeCurve %i", index);
   if (index == -1) // goto last curve
     index = static_cast<StackedLayoutWidget *>(m_widget)->count() - 1;
   if (index == -2)  // update curve but don't change which
@@ -167,7 +170,7 @@ void QuteGraph::clearCurves()
 
 void QuteGraph::addCurve(Curve * curve)
 {
-  qDebug("QuteGraph::addCurve()");
+//   qDebug("QuteGraph::addCurve()");
   QGraphicsView *view = new QGraphicsView(m_widget);
   QGraphicsScene *scene = new QGraphicsScene(view);
   view->setContextMenuPolicy(Qt::NoContextMenu);
@@ -209,18 +212,27 @@ void QuteGraph::addCurve(Curve * curve)
   m_pageComboBox->addItem(curve->get_caption());
   static_cast<StackedLayoutWidget *>(m_widget)->addWidget(view);
   curves.append(curve);
+//   qDebug("QuteGraph::addCurve() %i- %i", curves.size(), curve);
 }
 
 int QuteGraph::getCurveIndex(Curve * curve)
 {
-//   qDebug("QuteGraph::getCurveIndex %i", curves.indexOf(curve));
-  return curves.indexOf(curve);
+  int index = -1;
+  for (int i = 0; i < curves.size(); i++) {
+    if (curves[i] == curve) {
+      index = i;
+      break;
+    }
+  }
+//   qDebug("QuteGraph::getCurveIndex %i - %i", index, curve);
+  return index;
 }
 
 Curve* QuteGraph::getCurveById(uintptr_t id)
 {
   Curve *curve = 0;
   foreach (Curve *thisCurve, curves) {
+//     qDebug("QuteGraph::getCurveById curve %i id %i", thisCurve->get_id(), id);
     if (thisCurve->get_id() == id)
       return thisCurve;
   }

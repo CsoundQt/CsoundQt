@@ -73,10 +73,17 @@ qutecsound::qutecsound(QStringList fileNames)
   exampleFiles.append(":/examples/noisered.csd");
 
   widgetFiles.append(":/examples/widgetpanel.csd");
-  widgetFiles.append(":/examples/checkboxwidget.csd");
-  widgetFiles.append(":/examples/graphwidget.csd");
   widgetFiles.append(":/examples/labelwidget.csd");
+  widgetFiles.append(":/examples/displaywidget.csd");
   widgetFiles.append(":/examples/sliderwidget.csd");
+  widgetFiles.append(":/examples/scrollnumberwidget.csd");
+  widgetFiles.append(":/examples/graphwidget.csd");
+  widgetFiles.append(":/examples/buttonwidget.csd");
+  widgetFiles.append(":/examples/checkboxwidget.csd");
+  widgetFiles.append(":/examples/menuwidget.csd");
+  widgetFiles.append(":/examples/controllerwidget.csd");
+  widgetFiles.append(":/examples/scopewidget.csd");
+  widgetFiles.append(":/examples/graphwidget.csd");
 
   m_options = new Options();
 
@@ -254,6 +261,9 @@ void qutecsound::openExample()
 void qutecsound::closeEvent(QCloseEvent *event)
 {
   stop();
+#ifndef QUTECSOUND_DESTROY_CSOUND
+  csoundDestroy(csound);
+#endif
   if (maybeSave()) {
     writeSettings();
     event->accept();
@@ -582,11 +592,6 @@ void qutecsound::join()
   }
 }
 
-// void qutecsound::edit(bool active)
-// {
-//   widgetPanel->activateEditMode(active);
-// }
-
 void qutecsound::runCsound(bool realtime)
 {
   if (ud->PERF_STATUS == 1) {
@@ -602,6 +607,7 @@ void qutecsound::runCsound(bool realtime)
   }
   widgetPanel->eventQueueSize = 0; //Flush events gathered while idle
   outValueQueue.clear();
+  inValueQueue.clear();
   outStringQueue.clear();
   messageQueue.clear();
   if (documentPages[curPage]->fileName.isEmpty()) {
@@ -666,10 +672,20 @@ void qutecsound::runCsound(bool realtime)
     csound=csoundCreate(0);
 #endif
 
+    if (m_options->thread) {
+      csoundSetMessageCallback(csound, &qutecsound::messageCallback_Thread);
+#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
+      qDebug("Create CsoundPerformanceThread");
+      perfThread = new CsoundPerformanceThread(csound);
+      perfThread->SetProcessCallback(qutecsound::csThread, (void*)ud);
+#endif
+    }
+    else {
+      csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
+    }
     csoundReset(csound);
     csoundSetHostData(csound, (void *) ud);
     csoundPreCompile(csound);
-
 
     int variable = csoundCreateGlobalVariable(csound, "FLTK_Flags", sizeof(int));
     if (m_options->enableFLTK or !useAPI) {
@@ -679,12 +695,6 @@ void qutecsound::runCsound(bool realtime)
     else {
 //       qDebug("play() FLTK Disabled");
       *((int*) csoundQueryGlobalVariable(csound, "FLTK_Flags")) = 3;
-    }
-    if (m_options->thread) {
-      csoundSetMessageCallback(csound, &qutecsound::messageCallback_Thread);
-    }
-    else {
-      csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
     }
     qDebug("Command Line:");
     for (int index=0; index< argc; index++) {
@@ -704,15 +714,8 @@ void qutecsound::runCsound(bool realtime)
     emit(dispatchQueues()); //To dispatch messages produced in compilation.
     if (result!=CSOUND_SUCCESS or variable != CSOUND_SUCCESS) {
       qDebug("Csound compile failed!");
-      ud->PERF_STATUS = 0;
+      ud->PERF_STATUS = 0;  //Csound is stopped and cleaned up by stopCsound() called from dispatchQueues()
       free(argv);
-//       csoundStop(csound);
-      csoundCleanup(csound);
-#ifdef QUTECSOUND_DESTROY_CSOUND
-      csoundDestroy(csound);  //FIXME Had to destroy csound every run otherwise FLTK widgets crash...
-#endif
-//       stopCsound();
-      runAct->setChecked(false);
       return;
     }
     if (m_options->invalueEnabled and m_options->enableWidgets) {
@@ -729,6 +732,7 @@ void qutecsound::runCsound(bool realtime)
     ud->sampleRate = csoundGetSr(csound);
     ud->numChnls = csoundGetNchnls(csound);
 
+    //TODO is something here necessary to wirk with doubles?
 //     PUBLIC int csoundGetSampleFormat(CSOUND *);
 //     PUBLIC int csoundGetSampleSize(CSOUND *);
     unsigned int numWidgets = widgetPanel->widgetCount();
@@ -738,9 +742,6 @@ void qutecsound::runCsound(bool realtime)
     queueTimer->start(QCS_QUEUETIMER_TIME);
     if(m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
-      qDebug("Create CsoundPerformanceThread");
-      perfThread = new CsoundPerformanceThread(csound);
-      perfThread->SetProcessCallback(qutecsound::csThread, (void*)ud);
       perfThread->Play();
 #else
       ThreadID = csoundCreateThread(qutecsound::csThread, (void*)ud);
@@ -765,14 +766,14 @@ void qutecsound::runCsound(bool realtime)
         }
       }
       stop();
-    }
-    free(argv);
 #ifdef MACOSX
 // Put menu bar back
-    SetMenuBar(menuBarHandle);
+      SetMenuBar(menuBarHandle);
 #endif
+    }
+    free(argv);
   }
-  else {  // Run in external shell (useAPI == false)
+  else {  // Run in external shell
     QString script = generateScript(realtime);
     QFile file(SCRIPT_NAME);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -796,6 +797,7 @@ void qutecsound::runCsound(bool realtime)
 #endif
     execute(m_options->terminal, options);
     runAct->setChecked(false);
+    recAct->setChecked(false);
   }
 }
 
@@ -818,12 +820,14 @@ void qutecsound::stop()
 void qutecsound::stopCsound()
 {
   qDebug("qutecsound::stopCsound()");
+  runAct->setChecked(false);
+  recAct->setChecked(false);
   if (m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
 //       perfThread->ScoreEvent(0, 'e', 0, 0);
-      perfThread->Stop();
-      perfThread->Join();
-//       delete perfThread;
+    perfThread->Stop();
+    perfThread->Join();
+    delete perfThread;
 //       perfThread = 0;
 //     }
 #else
@@ -832,21 +836,19 @@ void qutecsound::stopCsound()
     csoundJoinThread(ThreadID);
 
 #endif
-  csoundCleanup(csound);
-#ifdef MACOSX
-// Put menu bar back
-    SetMenuBar(menuBarHandle);
-#endif
+    csoundCleanup(csound);
   }
   else {
     csoundStop(csound);
     csoundCleanup(csound);
   }
+#ifdef MACOSX
+// Put menu bar back
+    SetMenuBar(menuBarHandle);
+#endif
 #ifdef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(csound);
 #endif
-  runAct->setChecked(false);
-  recAct->setChecked(false);
 }
 
 void qutecsound::record()
@@ -1249,10 +1251,12 @@ void qutecsound::dispatchQueues()
   foreach (QString channel, channels) {
     widgetPanel->setValue(channel, outValueQueue[channel]);
   }
+  outValueQueue.clear();
   channels = outStringQueue.keys();
   foreach (QString channel, channels) {
     widgetPanel->setValue(channel, outStringQueue[channel]);
   }
+  outStringQueue.clear();
   processEventQueue(ud);
 //   csoundUnlockMutex(perfMutex);
   messageQueue.clear();
@@ -1273,7 +1277,7 @@ void qutecsound::dispatchQueues()
   foreach (WINDAT * windat, curveBuffer){
     Curve *curve = widgetPanel->getCurveById(windat->windid);
     if (curve != 0) {
-      qDebug("qutecsound::dispatchQueues() %s -- %s",windat->caption, curve->get_caption().toStdString().c_str());
+//       qDebug("qutecsound::dispatchQueues() %s -- %s",windat->caption, curve->get_caption().toStdString().c_str());
       curve->set_data(windat->fdata);
       curve->set_size(windat->npts);      // number of points
       curve->set_caption(QString(windat->caption)); // title of curve
@@ -1917,7 +1921,7 @@ void qutecsound::writeSettings()
   settings.setValue("invalueEnabled", m_options->invalueEnabled);
   settings.setValue("chngetEnabled", m_options->chngetEnabled);
   settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
-  settings.setValue("showTooltips", m_options->showWidgetsOnRun);
+  settings.setValue("showTooltips", m_options->showTooltips);
   settings.setValue("enableFLTK", m_options->enableFLTK);
   QStringList files;
   for (int i=0; i < documentPages.size(); i++ ) {
@@ -2334,6 +2338,11 @@ void qutecsound::queueOutValue(QString channelName, double value)
   outValueQueue.insert(channelName, value);
 }
 
+// void qutecsound::queueInValue(QString channelName, double value)
+// {
+//   inValueQueue.insert(channelName, value);
+// }
+
 void qutecsound::queueOutString(QString channelName, QString value)
 {
   outStringQueue.insert(channelName, value);
@@ -2428,7 +2437,10 @@ void qutecsound::newCurve(Curve * curve)
 
 void qutecsound::updateCurve(WINDAT *windat)
 {
-  curveBuffer.append(windat);
+  //TODO free this
+  WINDAT *windat_ = (WINDAT *) malloc(sizeof(WINDAT));
+  *windat_ = *windat;
+  curveBuffer.append(windat_);
 }
 
 int qutecsound::killCurves(CSOUND *csound)
@@ -2530,7 +2542,7 @@ void qutecsound::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *n
 void qutecsound::drawGraphCallback(CSOUND *csound, WINDAT *windat)
 {
   CsoundUserData *udata = (CsoundUserData *) csoundGetHostData(csound);
-  qDebug("qutecsound::drawGraph()");
+//   qDebug("qutecsound::drawGraph()");
   udata->qcs->updateCurve(windat);
 }
 

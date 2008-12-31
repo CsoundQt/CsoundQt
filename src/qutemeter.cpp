@@ -27,6 +27,8 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
 //   static_cast<MeterWidget *>(m_widget)->setRenderHints(QPainter::Antialiasing);
   connect(static_cast<MeterWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
   connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValues(double, double)), this, SLOT(setValuesFromWidget(double,double)));
+  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(valueChanged(double)), this, SLOT(valueChanged(double)));
+  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(value2Changed(double)), this, SLOT(value2Changed(double)));
 }
 
 QuteMeter::~QuteMeter()
@@ -405,9 +407,13 @@ void MeterWidget::setWidgetGeometry(int x,int y,int width,int height)
 void MeterWidget::mouseMoveEvent(QMouseEvent* event)
 {
   if (m_mouseDown) {
-    if (event->x() > 0 and event->x()< width() and
-        event->y() > 0 and event->y()< height())
-    emit newValues(1 - ((double)event->y()/ height()), (double)event->x()/ width());
+//     if (event->x() > 0 and event->x()< width() and
+//         event->y() > 0 and event->y()< height())
+    double newhor = (double)event->x()/ width();
+    double newvert = 1 - ((double)event->y()/ height());
+    emit newValues(newvert, newhor);
+    emit valueChanged(newvert); //FIXME this values are not constrained between 0 and 1
+    emit value2Changed(newhor);
   }
 }
 

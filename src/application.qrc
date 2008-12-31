@@ -40,9 +40,16 @@
       <file>../examples/noreinit.csd</file>
 
       <file>../examples/widgetpanel.csd</file>
-      <file>../examples/checkboxwidget.csd</file>
-      <file>../examples/graphwidget.csd</file>
       <file>../examples/labelwidget.csd</file>
+      <file>../examples/displaywidget.csd</file>
       <file>../examples/sliderwidget.csd</file>
+      <file>../examples/scrollnumberwidget.csd</file>
+      <file>../examples/graphwidget.csd</file>
+      <file>../examples/buttonwidget.csd</file>
+      <file>../examples/checkboxwidget.csd</file>
+      <file>../examples/menuwidget.csd</file>
+      <file>../examples/controllerwidget.csd</file>
+      <file>../examples/scopewidget.csd</file>
+      <file>../examples/graphwidget.csd</file>
 </qresource>
 </RCC>

@@ -94,7 +94,7 @@ OpEntryParser::~OpEntryParser()
 QStringList OpEntryParser::opcodeNameList()
 {
   QStringList list;
-  qDebug("OpEntryParser::opcodeNameList() opcodeList.size() = %i",opcodeList.size());
+//   qDebug("OpEntryParser::opcodeNameList() opcodeList.size() = %i",opcodeList.size());
   for (int i = 0; i<opcodeList.size();i++)  {
     list.append(opcodeList[i].opcodeName);
   }

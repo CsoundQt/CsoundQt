@@ -27,6 +27,7 @@ QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
   m_widget = new QDoubleSpinBox(this);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
   static_cast<QDoubleSpinBox*>(m_widget)->setRange(-99999.999999, 99999.999999);
+  connect(static_cast<QDoubleSpinBox *>(m_widget), SIGNAL(valueChanged(double)), this, SLOT(valueChanged(double)));
 //   connect(static_cast<QDoubleSpinBox*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
   m_type = "editnum";
 }
