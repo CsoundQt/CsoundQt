@@ -122,9 +122,11 @@ void QuteGraph::setValue(double value)
 
 void QuteGraph::setZoom(double zoom)
 {
-//   qDebug("QuteGraph::setZoom %f", zoom);
+  qDebug("QuteGraph::setZoom %f", zoom);
   if (zoom >=1.0 && zoom <= 10.0)
     m_zoom = zoom;
+  else
+    m_zoom = 1.0;
   changeCurve(-2);  // Redraw
 }
 

@@ -158,7 +158,7 @@ void QuteScope::resizeEvent(QResizeEvent * event)
 {
   QuteWidget::resizeEvent(event);
   curveData.resize(this->width() + 2);
-  QGraphicsScene *m_scene = static_cast<ScopeWidget *>(m_widget)->scene();
+//   QGraphicsScene *m_scene = static_cast<ScopeWidget *>(m_widget)->scene();
 //   m_scene->setSceneRect(-m_ud->zerodBFS, m_ud->zerodBFS, width() - 5, m_ud->zerodBFS *2);
 //   static_cast<ScopeWidget *>(m_widget)->setSceneRect(-m_ud->zerodBFS , m_ud->zerodBFS, width() - 5, m_ud->zerodBFS *2);
 }

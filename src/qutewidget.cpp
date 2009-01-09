@@ -184,23 +184,23 @@ void QuteWidget::deleteWidget()
 void QuteWidget::valueChanged(int /*value*/)
 {
   double doubleValue = getValue(); // int value is not always the real value
-  QHash<QString, double> channelValue;
-  channelValue.insert(m_name, doubleValue);
+  QPair<QString, double> channelValue;
+  channelValue = QPair<QString, double>(m_name, doubleValue);
   emit newValue(channelValue);
 }
 
 void QuteWidget::valueChanged(double value)
 {
 //   double doubleValue = getValue();
-  QHash<QString, double> channelValue;
-  channelValue.insert(m_name, value);
+  QPair<QString, double> channelValue;
+  channelValue = QPair<QString, double>(m_name, value);
   emit newValue(channelValue);
 }
 
 void QuteWidget::value2Changed(double value)
 {
-  QHash<QString, double> channelValue;
-  channelValue.insert(m_name2, value);
+  QPair<QString, double> channelValue;
+  channelValue = QPair<QString, double>(m_name2, value);
   emit newValue(channelValue);
 }
 

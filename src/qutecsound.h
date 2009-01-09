@@ -22,7 +22,7 @@
 #ifndef QUTECSOUND_H
 #define QUTECSOUND_H
 
-#define QUTECSOUND_VERSION "0.3.9"
+#define QUTECSOUND_VERSION "0.4RC2"
 
 #include <QtGui>
 
@@ -168,6 +168,7 @@ class qutecsound:public QMainWindow
     void openExternalBrowser();
     void utilitiesDialogOpen();
     void about();
+    void aboutExamples();
     void documentWasModified();
     void syntaxCheck();
     void autoComplete();
@@ -176,6 +177,7 @@ class qutecsound:public QMainWindow
     void checkSelection();
     void runUtility(QString flags);
     void dispatchQueues();
+    void dispatchOfflineQueues();
     void widgetDockStateChanged(bool topLevel);
     void widgetDockLocationChanged(Qt::DockWidgetArea area);
 
@@ -209,7 +211,7 @@ class qutecsound:public QMainWindow
 #endif
     CsoundUserData* ud;
 
-    QHash<QString, double> outValueQueue;
+//     QHash<QString, double> outValueQueue;
     QHash<QString, double> inValueQueue;
     QHash<QString, QString> outStringQueue;
     QStack<Curve *> newCurveBuffer;
@@ -218,6 +220,7 @@ class qutecsound:public QMainWindow
     QStringList exampleFiles;
     QStringList widgetFiles;
     QTimer *queueTimer;
+    QTimer *offlineTimer;
     QTabWidget *documentTabs;
     QVector<DocumentPage *> documentPages;
     //TODO remove this variable? or make it DocumentPage

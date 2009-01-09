@@ -76,6 +76,7 @@ class Options{
     QString fileInputFilename;
     bool fileOutputFilenameActive;
     QString fileOutputFilename;
+    QString csdPath; //path of active csd needed for setting -o -i paths
 
     int sampleFormat;
 

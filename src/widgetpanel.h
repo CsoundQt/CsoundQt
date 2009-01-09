@@ -59,6 +59,7 @@ class WidgetPanel : public QDockWidget
     void setCurveData(Curve *curve);
     void clearGraphs();
     Curve * getCurveById(uintptr_t id);
+    void flush();
 
     QVector<QString> eventQueue;
     int eventQueueSize;
@@ -74,6 +75,8 @@ class WidgetPanel : public QDockWidget
     QVector<QuteGraph *> graphWidgets;
     QVector<QuteScope *> scopeWidgets;
     QVector<FrameWidget *> editWidgets;
+
+    QHash<QString, double> newValues;
     LayoutWidget *layoutWidget;
 
     QPoint currentPosition;
@@ -96,6 +99,7 @@ class WidgetPanel : public QDockWidget
     QAction *copyAct;
     QAction *cutAct;
     QAction *pasteAct;
+    QAction *selectAllAct;
     QAction *duplicateAct;
     QAction *deleteAct;
     QAction *propertiesAct;
@@ -127,7 +131,9 @@ class WidgetPanel : public QDockWidget
     virtual void closeEvent(QCloseEvent * event);
 
   public slots:
-    void newValue(QHash<QString, double> channelValue);
+    //TODO add newValue slot for strings
+    void newValue(QPair<QString, double> channelValue);
+    void processNewValues();
     void widgetChanged(QuteWidget* widget = 0);
     void deleteWidget(QuteWidget *widget);
     void queueEvent(QString eventLine);
@@ -153,6 +159,8 @@ class WidgetPanel : public QDockWidget
     void activateEditMode(bool active);
     void createEditFrame(QuteWidget* widget);
     void deselectAll();
+    void selectAll();
+    void selectionChanged(QRect selection);
     void widgetMoved(QPair<int, int>);
     void widgetResized(QPair<int, int>);
 
@@ -192,39 +200,46 @@ class LayoutWidget : public QWidget
     {
       QWidget::mousePressEvent(event);
       this->setFocus(Qt::MouseFocusReason);
-//       selectionFrame->show();
-//       startx = event->x();
-//       starty = event->y();
-//       selectionFrame->setGeometry(startx, starty, 0,0);
+      selectionFrame->show();
+      startx = event->x();
+      starty = event->y();
+      selectionFrame->setGeometry(startx, starty, 0,0);
+      if (event->button() & Qt::LeftButton) {
+        emit deselectAll();
+      }
     }
     virtual void mouseMoveEvent(QMouseEvent *event)
     {
       QWidget::mouseMoveEvent(event);
-//       int x = startx;
-//       int y = starty;
-//       int height = abs(event->y() - starty);
-//       int width = abs(event->x() - startx);
-//       if (event->x() < startx) {
-//         x = event->x();
-//       }
-//       if (event->y() < starty) {
-//         y = event->y();
-//       }
-//       selectionFrame->setGeometry(x, y, width, height);
+      int x = startx;
+      int y = starty;
+      int height = abs(event->y() - starty);
+      int width = abs(event->x() - startx);
+      if (event->x() < startx) {
+        x = event->x();
+//         width = event->x() - startx;
+      }
+      if (event->y() < starty) {
+        y = event->y();
+//         height = event->y() - starty;
+      }
+      selectionFrame->setGeometry(x, y, width, height);
+      emit selection(QRect(x,y,width,height));
     }
     virtual void mouseReleaseEvent(QMouseEvent *event)
     {
       QWidget::mouseReleaseEvent(event);
       selectionFrame->hide();
-      if (event->button() & Qt::LeftButton) {
-        emit deselectAll();
-      }
+//       if (event->button() & Qt::LeftButton) {
+//         emit deselectAll();
+//       }
     }
     QRubberBand *selectionFrame;
     int startx, starty;
 
   signals:
     void deselectAll();
+    void selection(QRect area);
 };
 
 #endif

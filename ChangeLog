@@ -1,3 +1,214 @@
+2008-12-31 03:39  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r118] doc/QuteCsound Quick Reference (0.4)-es.odt,
+	  doc/QuteCsound Quick Reference (0.4)-es.pdf, doc/QuteCsound Quick
+	  Reference (0.4).odt, doc/QuteCsound Quick Reference (0.4).pdf:
+	  Added docs in spanish
+	  Updated english docs
+
+2008-12-31 01:45  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r117] examples/buttonwidget.csd, examples/controllerwidget.csd,
+	  examples/displaywidget.csd, examples/graphwidget.csd,
+	  examples/menuwidget.csd, examples/scopewidget.csd,
+	  examples/scrollnumberwidget.csd, examples/sliderwidget.csd,
+	  examples/widgetpanel.csd, src/application.qrc,
+	  src/configdialog.ui, src/documentpage.cpp, src/opentryparser.cpp,
+	  src/qutebutton.cpp, src/qutecombobox.cpp, src/qutecsound.cpp,
+	  src/qutecsound.h, src/qutegraph.cpp, src/qutemeter.cpp,
+	  src/qutemeter.h, src/qutescope.cpp, src/qutespinbox.cpp,
+	  src/qutewidget.cpp, src/qutewidget.h, src/utilitiesdialog.cpp,
+	  src/widgetpanel.cpp, src/widgetpanel.h, srcrelease.sh: Fixed
+	  crashig of csound due to not cleaning up or not destroying when
+	  appropriate
+	  Out values queue is now cleared, so values are sent only once.
+	  Fixed graph display of multiple graphs.
+	  Fixed deletion of perfThread
+	  Added new examples for widgets
+	  Made less verbose
+	  Many small usability fixes
+
+2008-12-30 13:16  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r116] doc, doc/QuteCsound Quick Reference (0.4).odt,
+	  doc/QuteCsound Quick Reference (0.4).pdf: Added Quick reference
+	  documentation
+
+2008-12-29 12:07  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r115] examples/checkboxwidget.csd, examples/labelwidget.csd,
+	  examples/sliderwidget.csd, examples/widgetpanel.csd,
+	  src/application.qrc, src/configdialog.cpp, src/configdialog.ui,
+	  src/options.h, src/qutecsound.cpp, src/qutecsound.h,
+	  src/qutegraph.cpp, src/qutetext.cpp, src/qutewidget.cpp,
+	  src/types.h, src/widgetpanel.cpp, src/widgetpanel.h: Added new
+	  examples for some widgets and reorganized examples menu.
+	  Added option to select record sample format
+	  Changed Play to Run in menus
+	  Fixed Csound not cleaning up after running threaded, which
+	  resulted in a crash the second time Csound ran without e in the
+	  score
+	  Fixed zoom range for graph widget and made FFT scale logarithmic
+	  Quotes are removed from label text since they are not allowed
+	  Added delete action for widget panel
+	  Added simple locking mechanism for ring buffer
+
+2008-12-26 21:30  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r114] images/gtk-media-record.png, images/gtk-media-record.svg,
+	  src/application.qrc, src/qutecsound.cpp, src/qutecsound.h,
+	  src/qutegraph.cpp, src/qutegraph.h, src/qutescope.cpp,
+	  src/src.pro, src/types.h, src/widgetpanel.cpp: Intial
+	  implementation of record button. Works, but saves some extraneous
+	  noise.
+	  Set default Run in separate thread to true, as things appear to
+	  be more stable now.
+	  FFT and scope now depend properly from 0dBFS
+
+2008-12-26 15:36  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r113] src/qutecombobox.cpp, src/qutecombobox.h,
+	  src/qutegraph.cpp, src/qutescope.cpp, src/qutescope.h: Fixed
+	  saving of zoom value for graph widgets
+	  Completed implementation for receiving fft plots from dispfft.
+	  Scope widget can now be "frozen" while pressing the mouse on it.
+
+2008-12-24 15:35  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r112] examples/graphwidget.csd, src/curve.cpp, src/curve.h,
+	  src/qutebutton.cpp, src/qutecheckbox.cpp, src/qutecombobox.cpp,
+	  src/qutecombobox.h, src/qutecsound.cpp, src/qutecsound.h,
+	  src/qutegraph.cpp, src/qutegraph.h, src/quteknob.cpp,
+	  src/qutemeter.cpp, src/qutescope.cpp, src/qutescope.h,
+	  src/quteslider.cpp, src/qutespinbox.cpp, src/qutespinbox.h,
+	  src/qutetext.cpp, src/qutetext.h, src/qutewidget.cpp,
+	  src/qutewidget.h, src/src.pro, src/test.csd, src/types.h,
+	  src/widgetpanel.cpp, src/widgetpanel.h: Impemented scope widget.
+	  Implemented showing fft plots from dispfft opcode in graph widget
+	  Cleaned up unnecessary widget subclasses
+	  Fixed scope widget for multichannel interleaved data.
+	  Implemented selection of channel in scope widget
+	  Implemented zoom in graph widget
+
+2008-12-22 15:45  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r111] examples/graphwidget.csd, src/configdialog.cpp,
+	  src/documentpage.cpp, src/framewidget.cpp, src/opentryparser.cpp,
+	  src/qutecsound.cpp, src/qutecsound.h, src/qutegraph.cpp,
+	  src/qutegraph.h, src/qutescope.cpp, src/qutescope.h, src/src.pro,
+	  src/widgetpanel.cpp, src/widgetpanel.h: Implemented sending vaues
+	  to graph widget to set shown table. Added example to show this.
+	  Fixed nasty bug that crashed csound when saving from widgets
+	  during play, which would save an empty file.
+	  Initial work on Scope widget
+	  Fixed copy and paste for widgets when changing focus to editor
+
+2008-12-17 20:15  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r110] src/configdialog.cpp, src/configdialog.ui, src/console.h,
+	  src/documentpage.cpp, src/documentpage.h, src/opentryparser.cpp,
+	  src/opentryparser.h, src/qutecsound.cpp, src/qutecsound.h,
+	  src/qutetext.cpp, src/qutetext.h, src/src.pro,
+	  src/widgetpanel.cpp: Fixed crashing of device pop up menu in
+	  preference
+	  New menu which includes all opcodes by category when right
+	  clicking on the editor
+	  Copy to clipboard from console panel is now possible
+
+2008-12-17 02:33  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r109] images/gtk-media-play-ltr2.png,
+	  images/gtk-media-play-ltr2.svg, src/application.qrc,
+	  src/configdialog.cpp, src/configdialog.ui, src/console.cpp,
+	  src/options.h, src/qutecsound.cpp, src/qutecsound.h,
+	  src/widgetpanel.cpp: Added new action for Play in terminal
+	  Fixed rashing wigets when cut.
+	  Widget clipboard is now retained through open files, so you can
+	  copy/paste between different files.
+	  Added new option to enable FLTK widgets when running using the
+	  API. FLTK widgets are disabled by default
+	  Play button is now unlatched when csound stops even when threaded
+
+2008-12-16 18:59  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r108] examples/circle.csd, examples/lineedit.csd,
+	  examples/miditest.csd, examples/noisered.csd,
+	  examples/noreinit.csd, examples/reinit.csd,
+	  examples/reservedchannels.csd, examples/rms.csd,
+	  examples/stringchannels.csd, src/application.qrc,
+	  src/configdialog.cpp, src/configdialog.h, src/default.csd,
+	  src/dockhelp.cpp, src/dockhelp.h, src/documentpage.cpp,
+	  src/options.cpp, src/options.h, src/qutebutton.cpp,
+	  src/qutebutton.h, src/qutecsound.cpp, src/qutecsound.h,
+	  src/qutegraph.cpp, src/qutemeter.cpp, src/qutewidget.cpp,
+	  src/types.h, src/utilitiesdialog.cpp, src/utilitiesdialog.h,
+	  src/widgetpanel.cpp: Fixed enconding detection for reading file.
+	  This allows for international characters in csds now.
+	  Added reserved channels for use from buttons
+	  Widget context menu now shows cut/copy/paste/duplicate actions
+	  Fixed going back one extra tab when closing a file
+	  Fixed polarity of Graph widget
+	  Changed some shortcuts for consistency
+	  If MacOptions section does not exist, a defaut one is created.
+	  Fixed copying from the help panel, had broken with the copy/paste
+	  from widget panel
+	  Improved default csd.
+	  Made configlists a static object instead of passing pointers
+	  around
+	  Added new Examples menu which allows direct loading of examples
+	  Fixed widget panel size for existing examples
+	  Added example for reserved channels
+
+2008-12-16 13:28  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r107] src/curve.cpp, src/curve.h: Added missing curve class
+
+2008-12-16 13:27  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r106] src/documentpage.cpp, src/documentpage.h,
+	  src/framewidget.cpp, src/qutecsound.cpp, src/qutecsound.h,
+	  src/qutemeter.cpp, src/qutespinbox.cpp, src/qutespinbox.h,
+	  src/qutetext.cpp, src/qutetext.h, src/qutewidget.cpp,
+	  src/qutewidget.h, src/src.pro, src/widgetpanel.cpp,
+	  src/widgetpanel.h: Implemented SpinBox widget
+	  Widget Panel size is now saved in MacOptions section of csd and
+	  is recalled when changing tabs (Size is not currently kept when
+	  widget is docked or undocked.
+	  Fixed selection behavior for widgets
+	  Implemented copy, paste, cut and duplicate for widgets.
+
+2008-12-15 17:21  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r105] src/configdialog.cpp, src/configdialog.h, src/console.cpp,
+	  src/framewidget.cpp, src/quteconsole.cpp, src/quteconsole.h,
+	  src/qutecsound.cpp, src/qutecsound.h, src/qutedummy.cpp,
+	  src/qutegraph.cpp, src/qutegraph.h, src/quteknob.cpp,
+	  src/qutemeter.cpp, src/quteslider.cpp, src/quteslider.h,
+	  src/qutetext.cpp, src/qutetext.h, src/qutewidget.cpp,
+	  src/utilitiesdialog.cpp, src/widgetpanel.cpp, src/widgetpanel.h:
+	  Completed implementing graph widget to display csound f-tables
+	  Cleaned up warnings and unnecessary comments in sources
+
+2008-12-13 22:55  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r104] ChangeLog, src/framewidget.cpp, src/main.cpp,
+	  src/quteconsole.cpp, src/qutecsound.cpp, src/qutecsound.h,
+	  src/qutegraph.cpp, src/qutetext.cpp, src/qutetext.h,
+	  src/qutewidget.cpp, src/src.pro, src/widgetpanel.cpp,
+	  src/widgetpanel.h: Implemented Scroll Number widget
+	  Separated Label and Display as separate widgets
+	  Command line options are now parsed completely. Hopefully this
+	  will make
+	  Initial work on getting csound graphs to be displayed on Graph
+	  widgets
+	  Attempt to add splash screen, but not working...
+	  Made edit mode borders slightly thinner
+
+2008-12-13 21:05  afillebrown
+
+	* [r103] src, src/src.pro: Added QUTECSOUND_CSOUND_PATH user
+	  variable to src.pro for win32 builds.
+
 2008-12-10 17:11  Andrés Cabrera <mantaraya36@gmail.com>
 
 	* [r102] src/qutewidget.h, src/widgetpanel.cpp, src/widgetpanel.h:

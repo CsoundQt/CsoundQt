@@ -46,6 +46,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   layoutWidget->setAutoFillBackground(true);
 //   layoutWidget->setFocusPolicy(Qt::NoFocus);
   connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
+  connect(layoutWidget, SIGNAL(selection(QRect)), this, SLOT(selectionChanged(QRect)));
 //   connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));
 
   createSliderAct = new QAction(tr("Create Slider"),this);
@@ -99,6 +100,8 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(deleteAct, SIGNAL(triggered()), this, SLOT(deleteSelected()));
   clearAct = new QAction(tr("Clear all widgets"), this);
   connect(clearAct, SIGNAL(triggered()), this, SLOT(clearWidgets()));
+  selectAllAct = new QAction(tr("Select all widgets"), this);
+  connect(selectAllAct, SIGNAL(triggered()), this, SLOT(selectAll()));
 
   setWidget(layoutWidget);
   resize(200, 100);
@@ -362,6 +365,12 @@ Curve * WidgetPanel::getCurveById(uintptr_t id)
   return curve;
 }
 
+void WidgetPanel::flush()
+{
+  newValues.clear();
+  eventQueueSize = 0; //Flush events gathered while idle
+}
+
 void WidgetPanel::clearGraphs()
 {
   for (int i = 0; i < graphWidgets.size(); i++) {
@@ -425,6 +434,7 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   menu.addSeparator();
   menu.addAction(copyAct);
   menu.addAction(pasteAct);
+  menu.addAction(selectAllAct);
   menu.addAction(duplicateAct);
   menu.addAction(cutAct);
   menu.addAction(deleteAct);
@@ -449,10 +459,28 @@ void WidgetPanel::moveEvent(QMoveEvent * event)
   emit moved(event->pos());
 }
 
-void WidgetPanel::newValue(QHash<QString, double> channelValue)
+void WidgetPanel::newValue(QPair<QString, double> channelValue)
 {
 //   //qDebug("WidgetPanel::newValue");
+  if (!channelValue.first.isEmpty())
+    newValues[channelValue.first] = channelValue.second;
   widgetChanged();
+}
+
+void WidgetPanel::processNewValues()
+{
+  QList<QString> channelNames = newValues.keys();
+  foreach(QString name, channelNames) {
+    foreach(QuteWidget *widget, widgets) {
+      if (widget->getChannelName() == name) {
+        widget->setValue(newValues[name]);
+      }
+      if (widget->getChannel2Name() == name) {
+        widget->setValue2(newValues[name]);
+      }
+    }
+  }
+  newValues.clear();
 }
 
 void WidgetPanel::widgetChanged(QuteWidget* widget)
@@ -489,7 +517,7 @@ int WidgetPanel::createSlider(int x, int y, int width, int height, QString widge
   }
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
+  connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widgets.append(widget);
   widget->show();
   if (editAct->isChecked()) {
@@ -591,7 +619,7 @@ int WidgetPanel::createScrollNumber(int x, int y, int width, int height, QString
     widget->setText(labelText);
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
+  connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widgets.append(widget);
   widget->show();
   if (editAct->isChecked()) {
@@ -690,7 +718,7 @@ int WidgetPanel::createSpinBox(int x, int y, int width, int height, QString widg
   widget->setText(labelText);
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
+  connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widgets.append(widget);
   widget->show();
   if (editAct->isChecked()) {
@@ -761,7 +789,7 @@ int WidgetPanel::createKnob(int x, int y, int width, int height, QString widgetL
   }
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
+  connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widgets.append(widget);
   widget->show();
   if (editAct->isChecked()) {
@@ -790,7 +818,7 @@ int WidgetPanel::createCheckBox(int x, int y, int width, int height, QString wid
   }
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
+  connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widgets.append(widget);
   widget->show();
   if (editAct->isChecked()) {
@@ -814,7 +842,7 @@ int WidgetPanel::createMenu(int x, int y, int width, int height, QString widgetL
     widget->setChannelName(quoteParts[2].remove(0,1)); //remove initial space from channel name
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
+  connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widgets.append(widget);
   widget->show();
   if (editAct->isChecked()) {
@@ -854,7 +882,7 @@ int WidgetPanel::createMeter(int x, int y, int width, int height, QString widget
   widget->setBehavior(parts2[4]);
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  connect(widget, SIGNAL(newValue(QHash<QString,double>)), this, SLOT(newValue(QHash<QString,double>)));
+  connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widgets.append(widget);
   widget->show();
   if (editAct->isChecked()) {
@@ -894,6 +922,8 @@ int WidgetPanel::createGraph(int x, int y, int width, int height, QString widget
     widget->setValue(parts[6].toDouble());
   if (parts.size() > 7)
     widget->setZoom(parts[7].toDouble());
+  else
+    widget->setZoom(1.0);
   if (parts.size()>8) {
     int i = 8;
     QString channelName = "";
@@ -1129,6 +1159,31 @@ void WidgetPanel::deselectAll()
 {
   for (int i = 0; i< editWidgets.size(); i++) {
     editWidgets[i]->deselect();
+  }
+}
+
+void WidgetPanel::selectAll()
+{
+  for (int i = 0; i< editWidgets.size(); i++) {
+    editWidgets[i]->select();
+  }
+}
+
+void WidgetPanel::selectionChanged(QRect selection)
+{
+//   qDebug("WidgetPanel::selectionChanged %i %i %i %i", selection.x(), selection.y(), selection.width(), selection.height());
+  if (editWidgets.isEmpty())
+    return; //not in edit mode
+  deselectAll();
+  for (int i = 0; i< widgets.size(); i++) {
+    int x = widgets[i]->x();
+    int y = widgets[i]->y();
+    int w = widgets[i]->width();
+    int h = widgets[i]->height();
+    if (x > selection.x() - w && x < selection.x() + selection.width() &&
+        y > selection.y() - h && y < selection.y() + selection.height() ) {
+      editWidgets[i]->select();
+    }
   }
 }
 

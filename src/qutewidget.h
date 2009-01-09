@@ -99,7 +99,7 @@ class QuteWidget : public QWidget
     void value2Changed(double value);
 
   signals:
-    void newValue(QHash<QString,double> channelValue);
+    void newValue(QPair<QString,double> channelValue);
     void widgetChanged(QuteWidget* widget);
     void deleteThisWidget(QuteWidget *thisWidget);
 };

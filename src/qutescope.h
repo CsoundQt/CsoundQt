@@ -81,7 +81,7 @@ class ScopeWidget : public QGraphicsView
       if (event->button() & Qt::LeftButton)
         freeze = true;
     }
-    virtual void mouseReleaseEvent(QMouseEvent *event)
+    virtual void mouseReleaseEvent(QMouseEvent */*event*/)
     {
       freeze = false;
     }

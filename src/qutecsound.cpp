@@ -129,6 +129,13 @@ qutecsound::qutecsound(QStringList fileNames)
   m_highlighter = new Highlighter();
   configureHighlighter();
 
+  queueTimer = new QTimer(this);
+  queueTimer->setSingleShot(true);
+  connect(queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
+  offlineTimer = new QTimer(this);
+  offlineTimer->setSingleShot(true);
+  connect(offlineTimer, SIGNAL(timeout()), this, SLOT(dispatchOfflineQueues()));
+
   if (!lastFiles.isEmpty()) {
     foreach (QString lastFile, lastFiles) {
       if (lastFile!="" and !lastFile.startsWith("untitled")) {
@@ -168,9 +175,6 @@ qutecsound::qutecsound(QStringList fileNames)
   else if (init>0) {
     qDebug("Csound already initialized.");
   }
-  queueTimer = new QTimer(this);
-  queueTimer->setSingleShot (true);
-  connect(queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
 
 #ifndef QUTECSOUND_DESTROY_CSOUND
   // Create only once
@@ -605,11 +609,6 @@ void qutecsound::runCsound(bool realtime)
   else if (QObject::sender() == runTermAct) {
     useAPI = false;
   }
-  widgetPanel->eventQueueSize = 0; //Flush events gathered while idle
-  outValueQueue.clear();
-  inValueQueue.clear();
-  outStringQueue.clear();
-  messageQueue.clear();
   if (documentPages[curPage]->fileName.isEmpty()) {
     if (!saveAs()) {
       runAct->setChecked(false);
@@ -633,6 +632,13 @@ void qutecsound::runCsound(bool realtime)
   if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
     widgetPanel->setVisible(true);
   }
+
+  widgetPanel->flush();
+  widgetPanel->clearGraphs();
+//   outValueQueue.clear();
+  inValueQueue.clear();
+  outStringQueue.clear();
+  messageQueue.clear();
 
   if (useAPI) {
 #ifdef MACOSX
@@ -665,9 +671,18 @@ void qutecsound::runCsound(bool realtime)
     }
     char **argv;
     argv = (char **) calloc(33, sizeof(char*));
+    if (documentPages[curPage]->fileName.contains('/')) {
+      m_options->csdPath =
+          documentPages[curPage]->fileName.left(documentPages[curPage]->fileName.lastIndexOf('/'));
+      qDebug() << m_options->csdPath;
+      QString command = "cd " + m_options->csdPath;
+      system(command.toStdString().c_str());
+    }
+    else {
+      m_options->csdPath = "";
+    }
     // TODO use: PUBLIC int csoundSetGlobalEnv(const char *name, const char *value);
     int argc = m_options->generateCmdLine(argv, realtime, fileName, fileName2);
-    widgetPanel->clearGraphs();
 #ifdef QUTECSOUND_DESTROY_CSOUND
     csound=csoundCreate(0);
 #endif
@@ -739,6 +754,7 @@ void qutecsound::runCsound(bool realtime)
     ud->qcs->channelNames.resize(numWidgets*2);
     ud->qcs->values.resize(numWidgets*2);
     ud->qcs->stringValues.resize(numWidgets*2);
+    offlineTimer->stop();
     queueTimer->start(QCS_QUEUETIMER_TIME);
     if(m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
@@ -799,11 +815,22 @@ void qutecsound::runCsound(bool realtime)
     runAct->setChecked(false);
     recAct->setChecked(false);
   }
+  if (QObject::sender() == renderAct) {
+    if (QDir::isRelativePath(m_options->fileOutputFilename)) {
+      currentAudioFile = m_options->csdPath + "/" + m_options->fileOutputFilename;
+    }
+    else {
+      currentAudioFile = m_options->fileOutputFilename;
+    }
+  }
 }
 
 void qutecsound::stop()
 {
   qDebug("qutecsound::stop()");
+  if (offlineTimer->isActive())
+    offlineTimer->stop();
+  offlineTimer->start(QCS_QUEUETIMER_TIME);
   if (ud->PERF_STATUS == 1) {
     ud->PERF_STATUS = 0;
   }
@@ -956,7 +983,7 @@ void qutecsound::render()
     QString filter = QString(_configlists.fileTypeLongNames[m_options->fileFileType] + " Files ("
         + _configlists.fileTypeExtensions[m_options->fileFileType] + ")");
     dialog.setFilter(filter);
-    if (dialog.exec()) {
+    if (dialog.exec() == QDialog::Accepted) {
       QString extension = _configlists.fileTypeExtensions[m_options->fileFileType];
       // Remove the '*' from the extension
       extension.remove(0,1);
@@ -973,6 +1000,9 @@ void qutecsound::render()
           return;
       }
       lastFileDir = dialog.directory().path();
+    }
+    else {
+      return;
     }
   }
   currentAudioFile = m_options->fileOutputFilename;
@@ -1042,6 +1072,14 @@ void qutecsound::about()
   QString text = tr("by: Andres Cabrera\nReleased under the GPL V3\nVersion ");
   text += QUTECSOUND_VERSION;
   QMessageBox::about(this, tr("About QuteCsound"), text);
+}
+
+void qutecsound::aboutExamples()
+{
+  QString text = tr("When examples from this menu are opened, a save dialog appears.\n"
+      "It is necessary to save the exaples before usage!");
+  QMessageBox::information(this, tr("About the examples"), text);
+
 }
 
 void qutecsound::documentWasModified()
@@ -1247,22 +1285,24 @@ void qutecsound::dispatchQueues()
     m_console->appendMessage(msg);
     widgetPanel->appendMessage(msg);
   }
-  QList<QString> channels = outValueQueue.keys();
-  foreach (QString channel, channels) {
-    widgetPanel->setValue(channel, outValueQueue[channel]);
-  }
-  outValueQueue.clear();
-  channels = outStringQueue.keys();
+//   QList<QString> channels = outValueQueue.keys();
+//   foreach (QString channel, channels) {
+//     widgetPanel->setValue(channel, outValueQueue[channel]);
+//   }
+//   outValueQueue.clear();
+  QList<QString> channels = outStringQueue.keys();
   foreach (QString channel, channels) {
     widgetPanel->setValue(channel, outStringQueue[channel]);
   }
   outStringQueue.clear();
+  widgetPanel->processNewValues();
   processEventQueue(ud);
 //   csoundUnlockMutex(perfMutex);
   messageQueue.clear();
   if (ud->PERF_STATUS == 0) {
     qDebug("qutecsound::dispatchQueues() stop");
     stopCsound();
+    offlineTimer->start(QCS_QUEUETIMER_TIME);
     return;
   }
   while (!newCurveBuffer.isEmpty()) {
@@ -1291,6 +1331,19 @@ void qutecsound::dispatchQueues()
     curveBuffer.remove(curveBuffer.indexOf(windat));
   }
   queueTimer->start(QCS_QUEUETIMER_TIME);
+}
+
+void qutecsound::dispatchOfflineQueues()
+{
+//   qDebug("qutecsound::dispatchOfflineQueues()");
+//   QList<QString> channels = outStringQueue.keys();
+//   QList<QString> channels = outStringQueue.keys();
+//   foreach (QString channel, channels) {
+//     widgetPanel->setValue(channel, outStringQueue[channel]);
+//   }
+  outStringQueue.clear();
+  widgetPanel->processNewValues();
+  offlineTimer->start(QCS_QUEUETIMER_TIME);
 }
 
 void qutecsound::widgetDockStateChanged(bool topLevel)
@@ -1342,6 +1395,7 @@ void qutecsound::createActions()
   connect(saveAct, SIGNAL(triggered()), this, SLOT(save()));
 
   saveAsAct = new QAction(tr("Save &As..."), this);
+  saveAsAct->setShortcut(tr("Shift+Ctrl+S"));
   saveAsAct->setStatusTip(tr("Save the document under a new name"));
   saveAsAct->setIconText("Save as");
   connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
@@ -1668,10 +1722,12 @@ void qutecsound::createMenus()
   viewMenu->addAction(showUtilitiesAct);
 
   QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
+  QAction *newAction = examplesMenu->addAction("About the examples...");
+  connect(newAction,SIGNAL(triggered()), this, SLOT(aboutExamples()));
   QMenu *submenu = examplesMenu->addMenu(tr("Widgets"));
   foreach (QString fileName, widgetFiles) {
     QString name = fileName.mid(fileName.lastIndexOf("/") + 1);
-    QAction *newAction = submenu->addAction(name);
+    newAction = submenu->addAction(name);
     newAction->setData(fileName);
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
@@ -2335,7 +2391,8 @@ void qutecsound::processEventQueue(CsoundUserData *ud)
 
 void qutecsound::queueOutValue(QString channelName, double value)
 {
-  outValueQueue.insert(channelName, value);
+//   outValueQueue.insert();
+  widgetPanel->newValue(QPair<QString, double>(channelName, value));
 }
 
 // void qutecsound::queueInValue(QString channelName, double value)
@@ -2476,7 +2533,7 @@ void qutecsound::inputValueCallback (CSOUND *csound,
                                      const char *channelName,
                                      MYFLT *value)
 {
-  // from csound to host
+  // from qutecsound to Csound
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
   if (ud->PERF_STATUS == 1) {
     QString name = QString(channelName);
