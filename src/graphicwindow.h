@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andres Cabrera   *
- *   mantaraya36@gmail.com   *
+ *   Copyright (C) 2008 by Andres Cabrera                                  *
+ *   mantaraya36@gmail.com                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,43 +17,57 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef OPENTRYPARSER_H
-#define OPENTRYPARSER_H
+#ifndef GRAPHICWINDOW_H
+#define GRAPHICWINDOW_H
 
-#include <QString>
-#include <QStringList>
-#include <QtXml>
-#include "node.h"
+#include <QtGui>
 
-class Opcode;
-class OpEntryParser
+class GraphicWindow : public QWidget
 {
+  Q_OBJECT
   public:
-    OpEntryParser(QString opcodeFile);
+    GraphicWindow(QWidget *parent);
 
-    ~OpEntryParser();
+    ~GraphicWindow();
 
-    QStringList opcodeNameList();
-    QString getSyntax(QString opcodeName);
-    QList< QPair<QString, QList<Opcode> > > getOpcodesByCategory();
-    int getCategoryCount();
-    QString getCategory(int index);
-    QStringList getCategoryList();
-    QList<Opcode> getOpcodeList(int index);
-    bool isOpcode(QString opcodeName);
-    bool getOpcodeArgNames(Node &node);
+  private slots:
+    void openPng(QString fileName);
+    void zoomIn();
+    void zoomOut();
+    void normalSize();
+    void fitToWindow();
+    void print();
+
+  protected:
+    virtual void closeEvent (QCloseEvent * event);
 
   private:
-    QString m_opcodeFile;
-    QDomDocument *m_doc;
-    QList<Opcode> opcodeList;
-    QList< QPair<QString, QList<Opcode> > > opcodeCategoryList;
-    QVector<QList<Opcode> > opcodeListCategory;
-    QStringList categoryList;
-    QStringList excludedOpcodes;
+//     QGraphicsScene *m_scene;
+    void createActions();
+    void createMenus();
+    void updateActions();
+    void scaleImage(double factor);
+    void adjustScrollBar(QScrollBar *scrollBar, double factor);
 
-    void addOpcode(Opcode opcode);
+    QLabel *imageLabel;
+    QScrollArea *scrollArea;
+    double scaleFactor;
 
+    QPrinter printer;
+
+//     QAction *openAct;
+    QAction *printAct;
+    QAction *exitAct;
+    QAction *zoomInAct;
+    QAction *zoomOutAct;
+    QAction *normalSizeAct;
+    QAction *fitToWindowAct;
+//     QAction *aboutAct;
+//     QAction *aboutQtAct;
+
+    QMenu *fileMenu;
+    QMenu *viewMenu;
+    QMenu *helpMenu;
 };
 
 #endif

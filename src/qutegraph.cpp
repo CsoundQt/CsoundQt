@@ -132,7 +132,7 @@ void QuteGraph::setZoom(double zoom)
 
 void QuteGraph::changeCurve(int index)
 {
-  qDebug("QuteGraph::changeCurve %i", index);
+//   qDebug("QuteGraph::changeCurve %i", index);
   if (index == -1) // goto last curve
     index = static_cast<StackedLayoutWidget *>(m_widget)->count() - 1;
   if (index == -2)  // update curve but don't change which
@@ -151,9 +151,16 @@ void QuteGraph::changeCurve(int index)
     view->fitInView(0, min - ((max - min)*0.17) , (double) size/m_zoom, (max - min)*1.17);
   }
   else {
-    view->setSceneRect (0, 0, size, 90.);
-//     view->fitInView(0, -30./m_zoom , (double) size/m_zoom, 100./m_zoom);
-    view->fitInView(0, -30. , (double) size/m_zoom, 100.);
+    if (curves[index]->get_caption().contains("fft")) {
+      view->setSceneRect (0, 0, size, 90.);
+  //     view->fitInView(0, -30./m_zoom , (double) size/m_zoom, 100./m_zoom);
+      view->fitInView(0, -30. , (double) size/m_zoom, 100.);
+    }
+    else { //from display opcode
+      view->setSceneRect (0, -1, size, 2);
+  //     view->fitInView(0, -30./m_zoom , (double) size/m_zoom, 100./m_zoom);
+      view->fitInView(0, -1 , (double) size/m_zoom, 2);
+    }
   }
   QString text = QString::number(size) + " pts Max=";
   text += QString::number(max, 'g', 5) + " Min =" + QString::number(min, 'g', 5);
@@ -290,12 +297,28 @@ void QuteGraph::setCurveData(Curve * curve)
   }
   else {  // in case its not an ftable
     QPolygonF polygon;
-    polygon.append(QPointF(0,110));
+    if (curve->get_caption().contains("fft")) {
+      polygon.append(QPointF(0,110));
+    }
+    else { //from display opcode
+      polygon.append(QPointF(0,0));
+    }
     for (int i = 0; i < (int) curve->get_size(); i++) { //skip first item, which is base line
-      double value =  20*log10(fabs(curve->get_data()[i])/m_ud->zerodBFS);
+      double value;
+      if (curve->get_caption().contains("fft")) {
+        value =  20*log10(fabs(curve->get_data()[i])/m_ud->zerodBFS);
+      }
+      else {
+        value = curve->get_data()[i]/m_ud->zerodBFS;
+      }
       polygon.append(QPointF(i, -value));
     }
-    polygon.append(QPointF(curve->get_size() - 1,110));
+    if (curve->get_caption().contains("fft")) {
+      polygon.append(QPointF(curve->get_size() - 1,110));
+    }
+    else { //from display opcode
+      polygon.append(QPointF(curve->get_size() - 1,0));
+    }
     polygons[index]->setPolygon(polygon);
   }
   m_pageComboBox->setItemText(index, curve->get_caption());

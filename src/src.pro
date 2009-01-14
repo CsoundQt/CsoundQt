@@ -42,7 +42,9 @@ SOURCES += qutecsound.cpp \
  framewidget.cpp \
  curve.cpp \
  qutespinbox.cpp \
- qutescope.cpp
+ qutescope.cpp \
+ node.cpp \
+ graphicwindow.cpp
 HEADERS += qutecsound.h \
  dockhelp.h \
  opentryparser.h \
@@ -70,7 +72,9 @@ HEADERS += qutecsound.h \
  framewidget.h \
  curve.h \
  qutespinbox.h \
- qutescope.h
+ qutescope.h \
+ node.h \
+ graphicwindow.h
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \
@@ -109,8 +113,22 @@ win32 {
 }
 
 linux-g++ {
-    DEFINES +=LINUX    
+    DEFINES += LINUX
     INCLUDEPATH += /usr/local/include/csound/ /usr/include/csound/
+    qute_cpp {
+        LIBS += -lcsnd
+    }
+    build64 {
+        LIBS += -lcsound64
+    }
+    else {
+        LIBS += -lcsound
+    }
+}
+
+solaris-g++-64 {
+    DEFINES += SOLARIS
+    INCLUDEPATH += /usr/local/include/csound/
     qute_cpp {
         LIBS += -lcsnd
     }

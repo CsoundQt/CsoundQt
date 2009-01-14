@@ -40,6 +40,9 @@ ConfigLists::ConfigLists()
 #ifdef LINUX
   rtAudioNames << "alsa" << "jack" << "portaudio" << "pulse" << "none";
 #endif
+#ifdef SOLARIS
+  rtAudioNames << "portaudio" << "pulse" << "none";
+#endif
 #ifdef MACOSX
   rtAudioNames << "portaudio" << "coreaudio" << "none";
 #endif
@@ -48,6 +51,9 @@ ConfigLists::ConfigLists()
 #endif
 #ifdef LINUX
   rtMidiNames << "none" << "alsa"  << "portmidi"<< "virtual";
+#endif
+#ifdef SOLARIS
+  rtMidiNames << "none" << "portmidi"<< "virtual";
 #endif
 #ifdef MACOSX
   rtMidiNames << "none" << "portmidi" << "virtual";

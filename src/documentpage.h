@@ -36,6 +36,7 @@ class DocumentPage : public QTextEdit
 
     int setTextString(QString text);
     QString getFullText();
+    QString getDotText();
     QString getMacWidgetsText();
     QString getMacOptionsText();
     QString getMacOption(QString option);
@@ -57,7 +58,7 @@ class DocumentPage : public QTextEdit
     QDomElement widgets;
 
     bool widgetsDocked;
-	OpEntryParser *m_opcodeTree;
+    OpEntryParser *m_opcodeTree;
 
   public slots:
     void setMacWidgetsText(QString text);
@@ -70,9 +71,9 @@ class DocumentPage : public QTextEdit
     void uncomment();
     void indent();
     void unindent();
-	
-	void opcodeFromMenu();
-	
+
+    void opcodeFromMenu();
+
 };
 
 #endif

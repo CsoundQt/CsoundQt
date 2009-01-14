@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andres Cabrera   *
- *   mantaraya36@gmail.com   *
+ *   Copyright (C) 2008 by Andres Cabrera                                  *
+ *   mantaraya36@gmail.com                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,43 +17,55 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef OPENTRYPARSER_H
-#define OPENTRYPARSER_H
+#ifndef NODE_H
+#define NODE_H
 
 #include <QString>
-#include <QStringList>
-#include <QtXml>
-#include "node.h"
+#include <QVector>
 
-class Opcode;
-class OpEntryParser
-{
+class Node;
+
+class Port {
   public:
-    OpEntryParser(QString opcodeFile);
+    Port() {};
 
-    ~OpEntryParser();
+    ~Port() {};
+    QString name;
+    QString argName; //parameter name
+//     Node *node;
+    bool optional; //optional parameter
+    bool connected;
+};
 
-    QStringList opcodeNameList();
-    QString getSyntax(QString opcodeName);
-    QList< QPair<QString, QList<Opcode> > > getOpcodesByCategory();
-    int getCategoryCount();
-    QString getCategory(int index);
-    QStringList getCategoryList();
-    QList<Opcode> getOpcodeList(int index);
-    bool isOpcode(QString opcodeName);
-    bool getOpcodeArgNames(Node &node);
+class Node{
+  public:
+    Node();
 
-  private:
-    QString m_opcodeFile;
-    QDomDocument *m_doc;
-    QList<Opcode> opcodeList;
-    QList< QPair<QString, QList<Opcode> > > opcodeCategoryList;
-    QVector<QList<Opcode> > opcodeListCategory;
-    QStringList categoryList;
-    QStringList excludedOpcodes;
+    ~Node();
 
-    void addOpcode(Opcode opcode);
+    void clear();
+    void setName(QString name);
+    QString getName();
+    void setComment(QString comment);
+    QString getComment();
+    void newInput(Port input);
+    void newOutput(Port output);
+    QVector<Port> getInputs();
+    QVector<Port> getOutputs();
+    void setInputs(QVector<Port> inputs);
+    void setOutputs(QVector<Port> outputs);
+    bool inputPortConnected(int portIndex);
+    void setInputPortConnected(bool connected, int portIndex);
+    bool outputPortConnected(int portIndex);
+    void setOutputPortConnected(bool connected, int portIndex);
 
+  protected:
+
+    QString m_name;
+    QString m_comment;
+    QVector<Port> m_inputs;
+    QVector<Port> m_outputs;
+    //TODO in inherited graphics node add shape attribute
 };
 
 #endif

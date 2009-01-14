@@ -29,11 +29,18 @@
 #define QCS_QUEUETIMER_TIME 50
 
 #ifdef LINUX
-#define DEFAULT_HTML_DIR "/home/andres/src/manual/html"
+#define DEFAULT_HTML_DIR "/usr/local/share/doc/csound/html"
 #define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"
 #define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/bin/audacity"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/aplay"
+#endif
+#ifdef SOLARIS
+#define DEFAULT_HTML_DIR "/usr/local/share/doc/csound/html"
+#define DEFAULT_TERM_EXECUTABLE "/usr/openwin/bin/xterm"
+#define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
+#define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/local/bin/audacity"
+#define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/jmplay"
 #endif
 #ifdef MACOSX
 #define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib.framework/Versions/5.1/Resources/Manual"

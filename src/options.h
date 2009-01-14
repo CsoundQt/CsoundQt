@@ -106,6 +106,7 @@ class Options{
 
     QString terminal;
     QString browser;
+    QString dot;
     QString waveeditor;
     QString waveplayer;
 //   private:

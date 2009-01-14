@@ -21,6 +21,7 @@
 #include "qutecsound.h"
 #include "opentryparser.h"
 #include "types.h"
+#include "node.h"
 
 DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
     QTextEdit(parent), m_opcodeTree(opcodeTree)
@@ -123,6 +124,167 @@ QString DocumentPage::getFullText()
   if (fileName.endsWith(".csd"))
     fullText += getMacOptionsText() + "\n" + macGUI + "\n" + macPresets + "\n";
   return fullText;
+}
+
+QString DocumentPage::getDotText()
+{
+  QString dotText = "digraph csd {\n    fontsize=18\n    label=\"" + fileName + "\"\n";
+  if (fileName.endsWith("sco")) {
+    qDebug() << "DocumentPage::getDotText(): No dot for sco files";
+    return QString();
+  }
+  QString orcText = getFullText();
+  if (!fileName.endsWith("orc")) { //asume csd
+    if (orcText.contains("<CsInstruments>") && orcText.contains("</CsInstruments>")) {
+      orcText = orcText.mid(orcText.indexOf("<CsInstruments>") + 15,
+                            orcText.indexOf("</CsInstruments>") - orcText.indexOf("<CsInstruments>") - 15);
+//       qDebug() << orcText;
+    }
+  }
+  QStringList instruments;
+  while (orcText.contains(QRegExp("\\b*instr"))) {
+    int index = orcText.indexOf(QRegExp("\\b*instr"));
+    int end = orcText.indexOf("endin", index) + 6 ;
+    QString instrument = orcText.mid(index, end - index);
+    instruments.append(instrument);
+    orcText.remove(instrument);
+//     qDebug() << index << " " << end << " " << instrument << orcText;
+  }
+  QVector<QVector <Node> > instrumentGraphs;
+  QVector<QString> instrumentNames;
+  foreach (QString instrument, instruments) {
+    QVector <Node> instrumentGraph;
+    QStringList lines = instrument.split("\n", QString::SkipEmptyParts);
+    foreach (QString line, lines) {
+      if (line.contains("instr")) {
+        instrumentNames.append(line.remove("instr").trimmed());
+        //TODO create separate graphs for each instrument. name the graphs
+      }
+      else if (line.contains("endin")) {
+      }
+      else {
+        QStringList parts = line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        qDebug() << line;
+        if (parts.size() > 0) {
+          if (parts[0].startsWith(";")) {
+            //TODO handle comments
+          }
+          else {
+            Node node;
+            for (int i = 0; i < parts.size(); i++){
+              QString inArgs = "";
+              QString opcodeName = "";
+              QString outArgs = "";
+              // determine if part is an opcode
+              if (m_opcodeTree->isOpcode(parts[i])) {
+  //               qDebug() << parts[i] << "isOpcode";
+                opcodeName = parts[i];
+                for (int j = 0; j < i; j++) {
+                  outArgs += parts[j];
+                }
+                for (int j = i + 1; j < parts.size(); j++) {
+                  inArgs += parts[j];
+                }
+  //               qDebug() << inArgs;
+  //               qDebug() << outArgs;
+                node.setName(opcodeName);
+                int commentIndex = inArgs.indexOf(";");
+                if (commentIndex > 0)
+                  inArgs.resize(commentIndex);
+                QStringList args = inArgs.split(QRegExp("[\\s,]+"), QString::SkipEmptyParts);
+                foreach (QString arg, args) {
+                  qDebug() << "inArg:" << arg;
+                  Port port;
+                  // TODO dive into expressions
+                  port.name = arg;
+                  port.connected = false;
+                  node.newInput(port);
+                }
+                args = outArgs.split(QRegExp("[\\s,]+"), QString::SkipEmptyParts);
+                foreach (QString arg, args) {
+                  qDebug() << "outArg:" << arg;
+                  Port port;
+                  // TODO dive into expressions
+                  port.name = arg;
+                  port.connected = false;
+                  node.newOutput(port);
+                }
+                break;
+              }
+            }
+            m_opcodeTree->getOpcodeArgNames(node);
+            instrumentGraph.append(node);
+          }
+        }
+      }
+    }
+    instrumentGraphs.append(instrumentGraph);
+  }
+  for (int i = 0; i < instrumentGraphs.size(); i++) {
+    //TODO add instrument number or name
+    dotText += "subgraph cluster_" + QString::number(i) + " {\n    color=black\n    fontsize=18\n";
+    for (int j = 0; j < instrumentGraphs[i].size(); j++) {
+      QVector<Port> inputs = instrumentGraphs[i][j].getInputs();
+      QVector<Port> outputs = instrumentGraphs[i][j].getOutputs();
+      dotText += "   Node" + QString::number(i) + "_" + QString::number(j) + "[label =\"{";
+      if (inputs.size() > 0) {
+        dotText += "{";
+        for (int x = 0; x < inputs.size(); x++) {
+          QString name = inputs[x].argName;
+          name.replace("\"", "\\\"");
+          dotText += "<i" + QString::number(x) + "> " + name + " |";
+        }
+        dotText.chop(1); // remove last |
+        dotText += "}|";
+      }
+      dotText += instrumentGraphs[i][j].getName();
+      if (outputs.size() > 0) {
+        dotText += "|{";
+        for (int x = 0; x < outputs.size(); x++) {
+          QString name = outputs[x].argName;
+          name.replace("\"", "\\\"");
+          dotText += "<o" + QString::number(x) + "> " + name + "|";
+        }
+        dotText.chop(1); // remove last |
+        dotText += "} ";
+      }
+      dotText += "}\"\n   shape=Mrecord\n    fontsize=10\n]\n  ";
+      //now make connections from outputs
+      // when a non connected argument
+      for (int w = 0; w < outputs.size(); w++) {
+        for (int l = 0; l < instrumentGraphs[i].size(); l++) {
+          QVector<Port> inputs2 = instrumentGraphs[i][l].getInputs();
+          for (int m = 0; m < inputs2.size(); m++) {
+            if (inputs2[m].name == outputs[w].name) {
+              dotText += "   Node" + QString::number(i) + "_" + QString::number(j) + "->";
+              dotText += "Node" + QString::number(i) + "_" + QString::number(l) + ":i" + QString::number(m) ;
+              QString name = inputs2[m].name;
+              name.replace("\"", "\\\"");
+              dotText += " [label=\"" + name + "\" fontsize=8]\n";
+              instrumentGraphs[i][l].setInputPortConnected(true, m);
+              instrumentGraphs[i][j].setOutputPortConnected(true, w);
+            }
+          }
+        }
+      }
+      for (int n = 0; n < inputs.size(); n++) {
+        if (!instrumentGraphs[i][j].inputPortConnected(n)) {
+          dotText += "   ArgNode" + QString::number(i) + "_" + QString::number(j) + "_" + QString::number(n);
+          QString name = inputs[n].name;
+          name.replace("\"", "\\\"");
+          dotText += "[label=\"" + name + "\" shape=none fontsize=8]\n";
+          dotText += "   ArgNode" + QString::number(i) + "_" + QString::number(j) + "_" + QString::number(n) + "->";
+          dotText += "Node" + QString::number(i) + "_" + QString::number(j) + ":i" + QString::number(n) + "\n";
+        }
+      }
+      //TODO check if already connected and don't create coneection above.
+      //TODO do the same for outputs (in case output arg is not connected)
+    }
+    dotText += "fontsize=18\n label = \"instr " + instrumentNames[i] + "\"\n}\n";
+  }
+  dotText += "}\n";
+  qDebug() << dotText;
+  return dotText;
 }
 
 QString DocumentPage::getMacWidgetsText()

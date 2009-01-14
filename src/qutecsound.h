@@ -64,6 +64,7 @@ class ConfigLists;
 class DocumentPage;
 class UtilitiesDialog;
 class Curve;
+class GraphicWindow;
 
 class qutecsound:public QMainWindow
 {
@@ -149,6 +150,8 @@ class qutecsound:public QMainWindow
     void openRecent3();
     void openRecent4();
     void openRecent5();
+    void createGraph();
+    void closeGraph();
     bool save();
     bool saveAs();
     void copy();
@@ -222,6 +225,7 @@ class qutecsound:public QMainWindow
     QTimer *queueTimer;
     QTimer *offlineTimer;
     QTabWidget *documentTabs;
+    GraphicWindow *m_graphic;
     QVector<DocumentPage *> documentPages;
     //TODO remove this variable? or make it DocumentPage
     DocumentPage *textEdit;
@@ -247,6 +251,7 @@ class qutecsound:public QMainWindow
     QAction *saveAct;
     QAction *saveAsAct;
     QAction *closeTabAct;
+    QAction *createGraphAct;
     QAction *exitAct;
     QList<QAction *> openRecentAct;
     QAction *undoAct;

@@ -122,6 +122,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options/*, ConfigLists *
 
   TerminalLineEdit->setText(m_options->terminal);
   browserLineEdit->setText(m_options->browser);
+  dotLineEdit->setText(m_options->dot);
   WaveEditorLineEdit->setText(m_options->waveeditor);
   WavePlayerLineEdit->setText(m_options->waveplayer);
 
@@ -135,6 +136,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options/*, ConfigLists *
   connect(incdirToolButton, SIGNAL(clicked()), this, SLOT(browseIncdir()));
   connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
   connect(browserToolButton, SIGNAL(clicked()), this, SLOT(browseBrowser()));
+  connect(dotToolButton, SIGNAL(clicked()), this, SLOT(browseDot()));
   connect(waveEditorToolButton, SIGNAL(clicked()), this, SLOT(browseWaveEditor()));
   connect(wavePlayerToolButton, SIGNAL(clicked()), this, SLOT(browseWavePlayer()));
   connect(this, SIGNAL(changeFont()), parent, SLOT(changeFont()));
@@ -217,6 +219,7 @@ void ConfigDialog::accept()
 
   m_options->terminal = TerminalLineEdit->text();
   m_options->browser = browserLineEdit->text();
+  m_options->dot = dotLineEdit->text();
   m_options->waveeditor = WaveEditorLineEdit->text();
   m_options->waveplayer = WavePlayerLineEdit->text();
   emit(changeFont());
@@ -281,6 +284,12 @@ void ConfigDialog::browseBrowser()
 {
   browseFile(m_options->browser);
   browserLineEdit->setText(m_options->browser);
+}
+
+void ConfigDialog::browseDot()
+{
+  browseFile(m_options->dot);
+  dotLineEdit->setText(m_options->dot);
 }
 
 void ConfigDialog::browseWaveEditor()

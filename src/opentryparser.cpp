@@ -44,7 +44,7 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
   QDomNode n = docElem.firstChild();
   while(!n.isNull()) {
     QString catName;
-	opcodesInCategoryList.clear();
+    opcodesInCategoryList.clear();
     QDomElement e = n.toElement();
     if(!e.isNull()) {
 //       qDebug() << e.attribute("name", "Miscellaneous");
@@ -73,8 +73,8 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
           and catName !="Utilities") {
         addOpcode(opcode);
         opcodesInCategoryList << opcode;
-          }
-          synop = synop.nextSibling();
+      }
+      synop = synop.nextSibling();
     }
     QPair<QString, QList<Opcode> > newCategory(catName, opcodesInCategoryList);
     opcodeListCategory.append(opcodesInCategoryList);
@@ -152,4 +152,92 @@ QStringList OpEntryParser::getCategoryList()
 QList<Opcode> OpEntryParser::getOpcodeList(int index)
 {
   return opcodeListCategory[index];
+}
+
+bool OpEntryParser::isOpcode(QString opcodeName)
+{
+  bool isOpcode = false;
+  for (int i = 0; i< opcodeList.size();i++)  {
+    if (opcodeName == opcodeList[i].opcodeName) {
+      isOpcode = true;
+      break;
+    }
+  }
+  return isOpcode;
+}
+
+bool OpEntryParser::getOpcodeArgNames(Node &node)
+{
+  bool isOpcode = false;
+  QString opcodeName = node.getName();
+  QVector<Port> inputs = node.getInputs();
+  QVector<Port> outputs = node.getOutputs();
+  for (int i = 0; i< opcodeList.size();i++)  {
+    if (opcodeName == opcodeList[i].opcodeName) {
+      isOpcode = true;
+      QString inArgs = opcodeList[i].inArgs;
+      QString inArgsOpt = "";
+      if (inArgs.contains("["))
+        inArgsOpt = inArgs.mid(inArgs.indexOf("["));
+      inArgs.remove(inArgsOpt);
+      QStringList args = inArgs.split(QRegExp("[,\\s]+"), QString::SkipEmptyParts);
+      QStringList argsOpt = inArgsOpt.split(QRegExp("[,\\s\\[\\]]"), QString::SkipEmptyParts);
+      for (int j = 0; j < inputs.size(); j++) {
+        if (j < args.size()) {
+          inputs[j].argName = args[j];
+          inputs[j].optional = false;
+        }
+        else { //optional parameter
+          int index = j - args.size();
+          if (index < inArgsOpt.size()) {
+            if (index < argsOpt.size()) {
+              // in case the opcode contains an undefined number of optional arguments
+              inputs[j].argName = argsOpt[index];
+            }
+            else {
+              inputs[j].argName = "";
+            }
+            inputs[j].optional = true;
+            qDebug() << "OpEntryParser::getOpcodeArgNames " <<  inputs[j].argName ;
+          }
+          else {
+            qDebug("OpEntryParser::getOpcodeArgNames: Error too many inargs");
+          }
+        }
+      }
+      QString outArgs = opcodeList[i].outArgs;
+      QString outArgsOpt = "";
+      if (outArgs.contains("["))
+        outArgsOpt = outArgs.mid(outArgs.indexOf("["));
+      outArgs.remove(outArgsOpt);
+      args = outArgs.split(QRegExp("[,\\s]+"), QString::SkipEmptyParts);
+      argsOpt = outArgsOpt.split(QRegExp("[,\\s\\[\\]]"), QString::SkipEmptyParts);
+      for (int j = 0; j < outputs.size(); j++) {
+        if (j < args.size()) {
+          outputs[j].argName = args[j];
+          outputs[j].optional = false;
+        }
+        else { //optional parameter
+          int index = j - args.size();
+          if (index < inArgsOpt.size()) {
+            if (index < argsOpt.size()) {
+              // in case the opcode contains an undefined number of optional arguments
+              outputs[j].argName = argsOpt[index];
+            }
+            else {
+              outputs[j].argName = "";
+            }
+            outputs[j].optional = true;
+          }
+          else {
+            qDebug("OpEntryParser::getOpcodeArgNames: Error too many outargs");
+          }
+        }
+      }
+      node.setInputs(inputs);
+      node.setOutputs(outputs);
+      break;
+    }
+  }
+  return isOpcode;
 }

@@ -30,6 +30,7 @@
 #include "documentpage.h"
 #include "utilitiesdialog.h"
 #include "findreplace.h"
+#include "graphicwindow.h"
 
 // Structs for csound graphs
 #include <cwindow.h>
@@ -389,6 +390,44 @@ void qutecsound::openRecent5()
       loadFile(fileName);
     }
   }
+}
+
+void qutecsound::createGraph()
+{
+  QString command = m_options->dot + " -V";
+  int ret = system(command.toStdString().c_str());
+  if (ret != 0) {
+    QMessageBox::warning(this, tr("QuteCsound"),
+                         tr("Dot executable not found.\n"
+                            "Please install graphviz from\n"
+                            "www.graphviz.org"));
+    return;
+  }
+  QString dotText = documentPages[curPage]->getDotText();
+  QTemporaryFile file("QuteCsound-GraphXXXXXX.dot");
+  QTemporaryFile pngFile("QuteCsound-GraphXXXXXX.png");
+  if (!file.open() || !pngFile.open()) {
+    QMessageBox::warning(this, tr("QuteCsound"),
+                         tr("Cannot create temp dot/png file."));
+    return;
+  }
+  QTextStream out(&file);
+  out << dotText;
+  file.close();
+  file.open();
+  command = QString("dot -Tpng -o ") + pngFile.fileName() + " " + file.fileName();
+  qDebug() << command;
+  system(command.toStdString().c_str());
+  m_graphic = new GraphicWindow(this);
+  m_graphic->show();
+  m_graphic->openPng(pngFile.fileName());
+  connect(m_graphic, SIGNAL(destroyed()), this, SLOT(closeGraph()));
+}
+
+void qutecsound::closeGraph()
+{
+  qDebug("qutecsound::closeGraph()");
+  
 }
 
 bool qutecsound::save()
@@ -803,6 +842,9 @@ void qutecsound::runCsound(bool realtime)
 
     QString options;
 #ifdef LINUX
+    options = "-e " + SCRIPT_NAME;
+#endif
+#ifdef SOLARIS
     options = "-e " + SCRIPT_NAME;
 #endif
 #ifdef MACOSX
@@ -1267,6 +1309,9 @@ void qutecsound::runUtility(QString flags)
 #ifdef LINUX
     options = "-e " + SCRIPT_NAME;
 #endif
+#ifdef SOLARIS
+    options = "-e " + SCRIPT_NAME;
+#endif
 #ifdef MACOSX
     options = SCRIPT_NAME;
 #endif
@@ -1411,6 +1456,12 @@ void qutecsound::createActions()
   exitAct->setStatusTip(tr("Exit the application"));
   exitAct->setIconText("Exit");
   connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
+
+  createGraphAct = new QAction(tr("Create &Graph"), this);
+//   createGraphAct->setShortcut(tr("Ctrl+Q"));
+  createGraphAct->setStatusTip(tr("Create Graph"));
+//   createGraphAct->setIconText("Exit");
+  connect(createGraphAct, SIGNAL(triggered()), this, SLOT(createGraph()));
 
 //   for (int i = 0; i < recentFiles.size(); i++) {
 //     openRecentAct[i] = new QAction(tr("Recent 0"), this);
@@ -1720,6 +1771,7 @@ void qutecsound::createMenus()
   viewMenu->addAction(showHelpAct);
   viewMenu->addAction(showConsoleAct);
   viewMenu->addAction(showUtilitiesAct);
+//   viewMenu->addAction(createGraphAct);
 
   QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
   QAction *newAction = examplesMenu->addAction("About the examples...");
@@ -1935,6 +1987,7 @@ void qutecsound::readSettings()
   settings.beginGroup("External");
   m_options->terminal = settings.value("terminal", DEFAULT_TERM_EXECUTABLE).toString();
   m_options->browser = settings.value("browser", DEFAULT_BROWSER_EXECUTABLE).toString();
+  m_options->dot = settings.value("dot", "dot").toString();
   m_options->waveeditor = settings.value("waveeditor",
                                          DEFAULT_WAVEEDITOR_EXECUTABLE
                                         ).toString();
@@ -2034,6 +2087,7 @@ void qutecsound::writeSettings()
   settings.beginGroup("External");
   settings.setValue("terminal", m_options->terminal);
   settings.setValue("browser", m_options->browser);
+  settings.setValue("dot", m_options->dot);
   settings.setValue("waveeditor", m_options->waveeditor);
   settings.setValue("waveplayer", m_options->waveplayer);
   settings.endGroup();
@@ -2050,6 +2104,10 @@ int qutecsound::execute(QString executable, QString options)
   system(commandLine.toStdString().c_str());
 #endif
 #ifdef LINUX
+  QString commandLine = executable + " " + options + "&";
+  system(commandLine.toStdString().c_str());
+#endif
+#ifdef SOLARIS
   QString commandLine = executable + " " + options + "&";
   system(commandLine.toStdString().c_str());
 #endif

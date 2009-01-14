@@ -58,6 +58,7 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
     void browseIncdir();
     void browseTerminal();
     void browseBrowser();
+    void browseDot();
     void browseWaveEditor();
     void browseWavePlayer();
     void selectAudioInput();
