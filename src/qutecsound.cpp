@@ -279,21 +279,16 @@ void qutecsound::closeEvent(QCloseEvent *event)
 
 void qutecsound::newFile()
 {
-#ifdef MACOSX
-  QFile file(":/default.csd");
-#else
-  QFile file(":/default.csd");
-#endif
-  if (!file.open(QFile::ReadOnly | QFile::Text)) {
-    QMessageBox::warning(this, tr("QuteCsound"),
-                          tr("Cannot read default template:\n%1.")
-                              .arg(file.errorString()));
-    return;
+  if (m_options->defaultCsdActive) {
+    loadFile(m_options->defaultCsd);
   }
-  loadFile(":/default.csd");
+  else {
+    loadFile(":/default.csd");
+  }
   documentPages[curPage]->fileName = "";
   setWindowModified(false);
   documentTabs->setTabIcon(curPage, modIcon);
+  documentTabs->setTabText(curPage, "default.csd");
   documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
   connectActions();
 }
@@ -404,6 +399,7 @@ void qutecsound::createGraph()
     return;
   }
   QString dotText = documentPages[curPage]->getDotText();
+  qDebug() << dotText;
   QTemporaryFile file("QuteCsound-GraphXXXXXX.dot");
   QTemporaryFile pngFile("QuteCsound-GraphXXXXXX.png");
   if (!file.open() || !pngFile.open()) {
@@ -415,8 +411,8 @@ void qutecsound::createGraph()
   out << dotText;
   file.close();
   file.open();
-  command = QString("dot -Tpng -o ") + pngFile.fileName() + " " + file.fileName();
-  qDebug() << command;
+  command = "\"" + m_options->dot + "\" -Tpng -o " + pngFile.fileName() + " " + file.fileName();
+//   qDebug() << command;
   system(command.toStdString().c_str());
   m_graphic = new GraphicWindow(this);
   m_graphic->show();
@@ -427,7 +423,6 @@ void qutecsound::createGraph()
 void qutecsound::closeGraph()
 {
   qDebug("qutecsound::closeGraph()");
-  
 }
 
 bool qutecsound::save()
@@ -1457,9 +1452,9 @@ void qutecsound::createActions()
   exitAct->setIconText("Exit");
   connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
-  createGraphAct = new QAction(tr("Create &Graph"), this);
-//   createGraphAct->setShortcut(tr("Ctrl+Q"));
-  createGraphAct->setStatusTip(tr("Create Graph"));
+  createGraphAct = new QAction(tr("View Code &Graph"), this);
+  createGraphAct->setShortcut(tr("Alt+5"));
+  createGraphAct->setStatusTip(tr("View Code Graph"));
 //   createGraphAct->setIconText("Exit");
   connect(createGraphAct, SIGNAL(triggered()), this, SLOT(createGraph()));
 
@@ -1771,7 +1766,7 @@ void qutecsound::createMenus()
   viewMenu->addAction(showHelpAct);
   viewMenu->addAction(showConsoleAct);
   viewMenu->addAction(showUtilitiesAct);
-//   viewMenu->addAction(createGraphAct);
+  viewMenu->addAction(createGraphAct);
 
   QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
   QAction *newAction = examplesMenu->addAction("About the examples...");
@@ -1981,6 +1976,8 @@ void qutecsound::readSettings()
   m_options->sfdirActive = settings.value("sfdirActive","").toBool();
   m_options->incdir = settings.value("incdir","").toString();
   m_options->incdirActive = settings.value("incdirActive","").toBool();
+  m_options->defaultCsd = settings.value("defaultCsd","").toString();
+  m_options->defaultCsdActive = settings.value("defaultCsdActive","").toBool();
   m_options->opcodexmldir = settings.value("opcodexmldir", "").toString();
   m_options->opcodexmldirActive = settings.value("opcodexmldirActive","").toBool();
   settings.endGroup();
@@ -2081,6 +2078,8 @@ void qutecsound::writeSettings()
   settings.setValue("sfdirActive",m_options->sfdirActive);
   settings.setValue("incdir",m_options->incdir);
   settings.setValue("incdirActive",m_options->incdirActive);
+  settings.setValue("defaultCsd",m_options->defaultCsd);
+  settings.setValue("defaultCsdActive",m_options->defaultCsdActive);
   settings.setValue("opcodexmldir", m_options->opcodexmldir);
   settings.setValue("opcodexmldirActive",m_options->opcodexmldirActive);
   settings.endGroup();

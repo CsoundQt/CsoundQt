@@ -101,6 +101,8 @@ class Options{
     bool sfdirActive;
     QString incdir;
     bool incdirActive;
+    QString defaultCsd;
+    bool defaultCsdActive;
     QString opcodexmldir;
     bool opcodexmldirActive;
 

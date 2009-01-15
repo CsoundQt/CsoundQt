@@ -56,6 +56,7 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
     void browseSsdir();
     void browseSfdir();
     void browseIncdir();
+    void browseDefaultCsd();
     void browseTerminal();
     void browseBrowser();
     void browseDot();

@@ -60,6 +60,9 @@ class DocumentPage : public QTextEdit
     bool widgetsDocked;
     OpEntryParser *m_opcodeTree;
 
+//     QString connectedNodeText(QString nodeName, QString label, QString dest);
+//     QString dotTextForExpression(QString expression, QString &outNode);
+
   public slots:
     void setMacWidgetsText(QString text);
     void setMacOptionsText(QString text);

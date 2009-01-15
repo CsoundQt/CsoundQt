@@ -68,7 +68,7 @@
     </rect>
    </property>
    <property name="currentIndex" >
-    <number>2</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab_2" >
     <attribute name="title" >
@@ -623,7 +623,7 @@
        <rect>
         <x>10</x>
         <y>130</y>
-        <width>294</width>
+        <width>311</width>
         <height>151</height>
        </rect>
       </property>
@@ -679,7 +679,7 @@
      <property name="geometry" >
       <rect>
        <x>370</x>
-       <y>280</y>
+       <y>180</y>
        <width>241</width>
        <height>231</height>
       </rect>
@@ -786,7 +786,7 @@
      <property name="geometry" >
       <rect>
        <x>370</x>
-       <y>120</y>
+       <y>20</y>
        <width>241</width>
        <height>151</height>
       </rect>
@@ -847,10 +847,10 @@
     <widget class="QGroupBox" name="groupBox_6" >
      <property name="geometry" >
       <rect>
-       <x>370</x>
-       <y>10</y>
-       <width>241</width>
-       <height>101</height>
+       <x>10</x>
+       <y>310</y>
+       <width>351</width>
+       <height>121</height>
       </rect>
      </property>
      <property name="title" >
@@ -861,7 +861,7 @@
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>220</width>
+        <width>331</width>
         <height>81</height>
        </rect>
       </property>
@@ -962,7 +962,7 @@
      <property name="geometry" >
       <rect>
        <x>10</x>
-       <y>310</y>
+       <y>440</y>
        <width>351</width>
        <height>61</height>
       </rect>
@@ -1032,7 +1032,7 @@
         <x>10</x>
         <y>20</y>
         <width>571</width>
-        <height>240</height>
+        <height>241</height>
        </rect>
       </property>
       <layout class="QGridLayout" >
@@ -1172,6 +1172,30 @@
          </property>
         </widget>
        </item>
+       <item row="6" column="0" >
+        <widget class="QCheckBox" name="defaultCsdCheckBox" >
+         <property name="enabled" >
+          <bool>true</bool>
+         </property>
+         <property name="text" >
+          <string>Default csd</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1" >
+        <widget class="QLineEdit" name="defaultCsdLineEdit" >
+         <property name="enabled" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2" >
+        <widget class="QToolButton" name="defaultCsdToolButton" >
+         <property name="text" >
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -1179,9 +1203,9 @@
      <property name="geometry" >
       <rect>
        <x>10</x>
-       <y>280</y>
+       <y>290</y>
        <width>591</width>
-       <height>221</height>
+       <height>211</height>
       </rect>
      </property>
      <property name="title" >
@@ -1357,12 +1381,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>75</x>
-     <y>76</y>
+     <x>78</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>121</x>
-     <y>76</y>
+     <x>255</x>
+     <y>111</y>
     </hint>
    </hints>
   </connection>
@@ -1373,12 +1397,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>75</x>
-     <y>76</y>
+     <x>78</x>
+     <y>144</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>121</x>
-     <y>76</y>
+     <x>255</x>
+     <y>146</y>
     </hint>
    </hints>
   </connection>
@@ -1389,12 +1413,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>75</x>
-     <y>76</y>
+     <x>78</x>
+     <y>214</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>121</x>
-     <y>76</y>
+     <x>255</x>
+     <y>216</y>
     </hint>
    </hints>
   </connection>
@@ -1405,12 +1429,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>75</x>
-     <y>76</y>
+     <x>78</x>
+     <y>249</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>121</x>
-     <y>76</y>
+     <x>255</x>
+     <y>251</y>
     </hint>
    </hints>
   </connection>
@@ -1421,12 +1445,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>75</x>
-     <y>76</y>
+     <x>78</x>
+     <y>179</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>121</x>
-     <y>76</y>
+     <x>255</x>
+     <y>181</y>
     </hint>
    </hints>
   </connection>
@@ -1517,12 +1541,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>416</x>
-     <y>290</y>
+     <x>418</x>
+     <y>227</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>433</x>
-     <y>321</y>
+     <x>435</x>
+     <y>257</y>
     </hint>
    </hints>
   </connection>
@@ -1533,12 +1557,28 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>397</x>
-     <y>290</y>
+     <x>399</x>
+     <y>227</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>444</x>
-     <y>351</y>
+     <x>446</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>defaultCsdCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>defaultCsdLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>102</x>
+     <y>278</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>177</x>
+     <y>278</y>
     </hint>
    </hints>
   </connection>

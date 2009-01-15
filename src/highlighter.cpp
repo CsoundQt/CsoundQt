@@ -91,7 +91,7 @@ void Highlighter::setFirstRules()
     QTextCharFormat irateFormat;
     irateFormat.setForeground(QColor("darkCyan"));
   //   irateFormat.setFontWeight(QFont::Bold);
-    pattern = "\\bi[a-zA-Z0-9]*\\b";
+    pattern = "\\bi[a-zA-Z0-9_]+\\b";
     rule.pattern = QRegExp(pattern);
     rule.format = irateFormat;
     highlightingRules.append(rule);
@@ -99,7 +99,7 @@ void Highlighter::setFirstRules()
     QTextCharFormat krateFormat;
     krateFormat.setForeground(QColor("darkCyan"));
   //   krateFormat.setFontWeight(QFont::Bold);
-    pattern = "\\bk[a-zA-Z0-9]*\\b";
+    pattern = "\\bk[a-zA-Z0-9_]+\\b";
     rule.pattern = QRegExp(pattern);
     rule.format = krateFormat;
     highlightingRules.append(rule);
@@ -107,7 +107,7 @@ void Highlighter::setFirstRules()
     QTextCharFormat arateFormat;
     arateFormat.setForeground(QColor("darkCyan"));
     arateFormat.setFontWeight(QFont::Bold);
-    pattern = "\\ba[a-zA-Z0-9]*\\b";
+    pattern = "\\ba[a-zA-Z0-9_]+\\b";
     rule.pattern = QRegExp(pattern);
     rule.format = arateFormat;
     highlightingRules.append(rule);
@@ -116,7 +116,7 @@ void Highlighter::setFirstRules()
     girateFormat.setForeground(QColor("darkCyan"));
   //   irateFormat.setFontWeight(QFont::Bold);
     girateFormat.setFontItalic(true);
-    pattern = "\\bgi[a-zA-Z0-9]*\\b";
+    pattern = "\\bgi[a-zA-Z0-9_]+\\b";
     rule.pattern = QRegExp(pattern);
     rule.format = girateFormat;
     highlightingRules.append(rule);
@@ -125,7 +125,7 @@ void Highlighter::setFirstRules()
     gkrateFormat.setForeground(QColor("darkCyan"));
   //   krateFormat.setFontWeight(QFont::Bold);
     gkrateFormat.setFontItalic(true);
-    pattern = "\\bgk[a-zA-Z0-9]*\\b";
+    pattern = "\\bgk[a-zA-Z0-9_]+\\b";
     rule.pattern = QRegExp(pattern);
     rule.format = gkrateFormat;
     highlightingRules.append(rule);
@@ -134,7 +134,7 @@ void Highlighter::setFirstRules()
     garateFormat.setForeground(QColor("darkCyan"));
     garateFormat.setFontWeight(QFont::Bold);
     garateFormat.setFontItalic(true);
-    pattern = "\\bga[a-zA-Z0-9]*\\b";
+    pattern = "\\bga[a-zA-Z0-9_]+\\b";
     rule.pattern = QRegExp(pattern);
     rule.format = garateFormat;
     highlightingRules.append(rule);
@@ -142,7 +142,7 @@ void Highlighter::setFirstRules()
     QTextCharFormat stringVarFormat;
     stringVarFormat.setForeground(QColor(Qt::darkYellow));
     stringVarFormat.setFontWeight(QFont::Bold);
-    pattern = "\\bS[a-zA-Z0-9]*\\b";
+    pattern = "\\bS[a-zA-Z0-9_]+\\b";
     rule.pattern = QRegExp(pattern);
     rule.format = stringVarFormat;
     highlightingRules.append(rule);
@@ -151,7 +151,7 @@ void Highlighter::setFirstRules()
     gstringVarFormat.setForeground(QColor(Qt::darkYellow));
     gstringVarFormat.setFontWeight(QFont::Bold);
     gstringVarFormat.setFontItalic(true);
-    pattern = "\\bgS[a-zA-Z0-9]*\\b";
+    pattern = "\\bgS[a-zA-Z0-9_]+\\b";
     rule.pattern = QRegExp(pattern);
     rule.format = gstringVarFormat;
     highlightingRules.append(rule);
@@ -159,7 +159,7 @@ void Highlighter::setFirstRules()
     QTextCharFormat fsigFormat;
     fsigFormat.setForeground(QColor(Qt::gray));
     fsigFormat.setFontWeight(QFont::Bold);
-    pattern = "\\bf[a-zA-Z0-9]*\\b";
+    pattern = "\\bf[a-zA-Z0-9_]+\\b";
     rule.pattern = QRegExp(pattern);
     rule.format = fsigFormat;
     highlightingRules.append(rule);
@@ -168,7 +168,7 @@ void Highlighter::setFirstRules()
     gfsigFormat.setForeground(QColor(Qt::gray));
     gfsigFormat.setFontItalic(true);
     gfsigFormat.setFontWeight(QFont::Bold);
-    pattern = "\\bf[a-zA-Z0-9]*\\b";
+    pattern = "\\bf[a-zA-Z0-9_]+\\b";
     rule.pattern = QRegExp(pattern);
     rule.format = gfsigFormat;
     highlightingRules.append(rule);

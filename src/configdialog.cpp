@@ -119,6 +119,9 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options/*, ConfigLists *
   IncdirCheckBox->setChecked(m_options->incdirActive);
   IncdirLineEdit->setText(m_options->incdir);
   IncdirLineEdit->setEnabled(m_options->incdirActive);
+  defaultCsdCheckBox->setChecked(m_options->incdirActive);
+  defaultCsdLineEdit->setText(m_options->incdir);
+  defaultCsdLineEdit->setEnabled(m_options->incdirActive);
 
   TerminalLineEdit->setText(m_options->terminal);
   browserLineEdit->setText(m_options->browser);
@@ -134,6 +137,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options/*, ConfigLists *
   connect(ssdirToolButton, SIGNAL(clicked()), this, SLOT(browseSsdir()));
   connect(sfdirToolButton, SIGNAL(clicked()), this, SLOT(browseSfdir()));
   connect(incdirToolButton, SIGNAL(clicked()), this, SLOT(browseIncdir()));
+  connect(defaultCsdToolButton, SIGNAL(clicked()), this, SLOT(browseDefaultCsd()));
   connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
   connect(browserToolButton, SIGNAL(clicked()), this, SLOT(browseBrowser()));
   connect(dotToolButton, SIGNAL(clicked()), this, SLOT(browseDot()));
@@ -214,6 +218,8 @@ void ConfigDialog::accept()
   m_options->sfdir = SfdirLineEdit->text();
   m_options->incdirActive = IncdirCheckBox->isChecked();
   m_options->incdir = IncdirLineEdit->text();
+  m_options->defaultCsdActive = defaultCsdCheckBox->isChecked();
+  m_options->defaultCsd = defaultCsdLineEdit->text();
 //   m_options->opcodexmldirActive = opcodeXmlDirCheckBox->isChecked();
 //   m_options->opcodexmldir = opcodeXmlDirLineEdit->text();
 
@@ -272,6 +278,12 @@ void ConfigDialog::browseIncdir()
 {
   browseDir(m_options->incdir);
   IncdirLineEdit->setText(m_options->incdir);
+}
+
+void ConfigDialog::browseDefaultCsd()
+{
+  browseFile(m_options->defaultCsd);
+  defaultCsdLineEdit->setText(m_options->defaultCsd);
 }
 
 void ConfigDialog::browseTerminal()

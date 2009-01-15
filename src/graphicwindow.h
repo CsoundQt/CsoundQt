@@ -30,21 +30,23 @@ class GraphicWindow : public QWidget
 
     ~GraphicWindow();
 
-  private slots:
     void openPng(QString fileName);
+
+  private slots:
     void zoomIn();
     void zoomOut();
     void normalSize();
     void fitToWindow();
+    void save();
     void print();
 
   protected:
-    virtual void closeEvent (QCloseEvent * event);
+//     virtual void closeEvent (QCloseEvent * event);
 
   private:
 //     QGraphicsScene *m_scene;
     void createActions();
-    void createMenus();
+//     void createMenus();
     void updateActions();
     void scaleImage(double factor);
     void adjustScrollBar(QScrollBar *scrollBar, double factor);
@@ -55,7 +57,9 @@ class GraphicWindow : public QWidget
 
     QPrinter printer;
 
+    QToolBar *m_toolbar;
 //     QAction *openAct;
+    QAction *saveAct;
     QAction *printAct;
     QAction *exitAct;
     QAction *zoomInAct;

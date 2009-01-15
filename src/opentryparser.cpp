@@ -181,7 +181,7 @@ bool OpEntryParser::getOpcodeArgNames(Node &node)
         inArgsOpt = inArgs.mid(inArgs.indexOf("["));
       inArgs.remove(inArgsOpt);
       QStringList args = inArgs.split(QRegExp("[,\\s]+"), QString::SkipEmptyParts);
-      QStringList argsOpt = inArgsOpt.split(QRegExp("[,\\s\\[\\]]"), QString::SkipEmptyParts);
+      QStringList argsOpt = inArgsOpt.split(QRegExp("[,\\\\\\s\\[\\]]+"), QString::SkipEmptyParts);
       for (int j = 0; j < inputs.size(); j++) {
         if (j < args.size()) {
           inputs[j].argName = args[j];
@@ -198,7 +198,7 @@ bool OpEntryParser::getOpcodeArgNames(Node &node)
               inputs[j].argName = "";
             }
             inputs[j].optional = true;
-            qDebug() << "OpEntryParser::getOpcodeArgNames " <<  inputs[j].argName ;
+//             qDebug() << "OpEntryParser::getOpcodeArgNames " <<  inputs[j].argName ;
           }
           else {
             qDebug("OpEntryParser::getOpcodeArgNames: Error too many inargs");
@@ -211,7 +211,7 @@ bool OpEntryParser::getOpcodeArgNames(Node &node)
         outArgsOpt = outArgs.mid(outArgs.indexOf("["));
       outArgs.remove(outArgsOpt);
       args = outArgs.split(QRegExp("[,\\s]+"), QString::SkipEmptyParts);
-      argsOpt = outArgsOpt.split(QRegExp("[,\\s\\[\\]]"), QString::SkipEmptyParts);
+      argsOpt = outArgsOpt.split(QRegExp("[,\\\\\\s\\[\\]]"), QString::SkipEmptyParts);
       for (int j = 0; j < outputs.size(); j++) {
         if (j < args.size()) {
           outputs[j].argName = args[j];
