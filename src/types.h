@@ -21,7 +21,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-// #include <QString>
+#include <QMutex>
 // #include <QStringList>
 #include "configlists.h"
 
@@ -105,10 +105,13 @@ class RingBuffer
     long currentPos;
     long currentReadPos;
     int size;
+	QMutex mutex;
 
     void put(MYFLT value) {
-      while (lock) {}
-      lock = true;
+	  //qDebug() << "RingBuffer::put";
+      while (!mutex.tryLock()) {}
+	  //qDebug() << "RingBuffer::put lock";
+      //lock = true;
       buffer[currentPos] = value;
       currentPos++;
       if (currentPos == currentReadPos) {
@@ -116,18 +119,19 @@ class RingBuffer
       }
       if (currentPos >= buffer.size())
         currentPos = 0;
-      lock = false;
+      mutex.unlock();
     }
 
     bool copyAvailableBuffer(MYFLT *data, int saveSize) {
-      while (lock) {}
-      lock = true;
+	  //qDebug() << "RingBuffer::copyAvailableBuffer";
+      while (!mutex.tryLock()) {}
+	  //qDebug() << "RingBuffer::copyAvailableBuffer lock";
       currentReadPos = currentReadPos%size;
       int available = (currentReadPos <= currentPos ?
           currentPos - currentReadPos :  currentPos - currentReadPos + size);
 //       qDebug("RingBuffer: Available: %i", available);
       if (available <= saveSize) { //not enough data in buffer
-        lock = false;
+	    mutex.unlock();
         return false;
       }
       for (int i = 0; i < saveSize; i++) {
@@ -135,7 +139,7 @@ class RingBuffer
         data[i] = buffer[currentReadPos%size];
         currentReadPos++;
       }
-      lock = false;
+      mutex.unlock();
       return true;
     }
 

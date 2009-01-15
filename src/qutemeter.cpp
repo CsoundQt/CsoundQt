@@ -305,6 +305,8 @@ double MeterWidget::getValue2()
 
 void MeterWidget::setValue(double value)
 {
+  if (isnan(value) != 0)
+	return;
   m_value = value;
   if (m_type == "fill" and m_vertical) {
     m_block->setRect(0, (1-value)*height(), width(), height());

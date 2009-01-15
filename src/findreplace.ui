@@ -5,9 +5,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>401</width>
-    <height>161</height>
+    <width>425</width>
+    <height>169</height>
    </rect>
+  </property>
+  <property name="acceptDrops" >
+   <bool>true</bool>
   </property>
   <property name="windowTitle" >
    <string>Find and Replace</string>
@@ -33,7 +36,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>381</width>
+     <width>401</width>
      <height>71</height>
     </rect>
    </property>
@@ -63,10 +66,10 @@
   <widget class="QWidget" name="layoutWidget" >
    <property name="geometry" >
     <rect>
-     <x>140</x>
+     <x>10</x>
      <y>120</y>
-     <width>254</width>
-     <height>31</height>
+     <width>401</width>
+     <height>41</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" >
@@ -88,6 +91,13 @@
      <widget class="QPushButton" name="replaceAllPushButton" >
       <property name="text" >
        <string>Replace all</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="closePushButton" >
+      <property name="text" >
+       <string>Close</string>
       </property>
      </widget>
     </item>

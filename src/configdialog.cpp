@@ -720,7 +720,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioInputDevices()
 
     QStringList flags;
     QString rtAudioFlag = "-+rtaudio=" + module;
-    flags << "-+msg_color=false" << rtAudioFlag << "-iadc999" << "-odac999"  << tempFile.fileName();
+    flags << "-+msg_color=false" << rtAudioFlag << "-iadc999" << "-odac999" << "-d" << tempFile.fileName();
     QStringList messages = m_parent->runCsoundInternally(flags);
 
     QString startText, endText;

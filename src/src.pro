@@ -4,7 +4,8 @@
 
 win32 : QUTECSOUND_CSOUND_PATH = C:\Program Files\Csound
 
-CONFIG += qute_cpp
+CONFIG += qute_cpp \
+	libsndfile
 
 build64 {
     message(Building for doubles \(64-bit\) csound)
@@ -13,6 +14,14 @@ build64 {
 else {
     message(Building for float \(32-    bit\) csound.)
     message(For doubles use qmake \"CONFIG += build64\")
+}
+
+DEFINES += QUTE_USE_CSOUNDPERFORMANCETHREAD
+
+
+libsndfile {
+	LIBS += -lsndfile
+	DEFINES += USE_LIBSNDFILE
 }
 
 SOURCES += qutecsound.cpp \
@@ -109,6 +118,9 @@ win32 {
     else {
         LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\libcsound32.a"
     }
+	libsndfile {
+        LIBS += -lsndfile
+	}
     RC_FILE = qutecsound.rc
 }
 
@@ -161,7 +173,7 @@ macx {
     LIBS += -framework QtCore
     LIBS += -framework $${MAC_LIB}
     LIBS += -L/Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
-    QMAKE_INFO_PLIST = MyInfo.plist
+	QMAKE_INFO_PLIST = MyInfo.plist
     ICON = ../images/qtcs.icns
 }
 
@@ -170,6 +182,4 @@ macx {
 
 CONFIG -= stl
 
-DEFINES += QUTE_USE_CSOUNDPERFORMANCETHREAD \
-  USE_LIBSNDFILE
 

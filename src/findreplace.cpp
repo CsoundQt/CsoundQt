@@ -27,6 +27,7 @@ FindReplace::FindReplace(QWidget *parent, DocumentPage *document)
   connect(findPushButton, SIGNAL(released()), this, SLOT(find()));
   connect(replacePushButton, SIGNAL(released()), this, SLOT(replace()));
   connect(replaceAllPushButton, SIGNAL(released()), this, SLOT(replaceAll()));
+  connect(closePushButton, SIGNAL(released()), this, SLOT(close()));
 }
 
 FindReplace::~FindReplace()

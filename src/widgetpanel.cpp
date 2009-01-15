@@ -302,6 +302,7 @@ QString WidgetPanel::widgetsText()
   text +=  QString::number((int) (palette().button().color().blueF()*65535.)) +"}\n";
 
   for (int i = 0; i < widgets.size(); i++) {
+  //FIXME os x crash here!
     text += widgets[i]->getWidgetLine() + "\n";
   }
   text += "</MacGUI>";
@@ -462,8 +463,17 @@ void WidgetPanel::moveEvent(QMoveEvent * event)
 void WidgetPanel::newValue(QPair<QString, double> channelValue)
 {
 //   //qDebug("WidgetPanel::newValue");
-  if (!channelValue.first.isEmpty())
-    newValues[channelValue.first] = channelValue.second;
+  if (!channelValue.first.isEmpty()) {
+    if(newValues.contains(channelValue.first)) {
+	//FIXME os x crash here!
+        while (!valueMutex.tryLock()) {};
+		newValues[channelValue.first] = channelValue.second;
+		valueMutex.unlock();
+	}
+	else {
+		newValues.insert(channelValue.first, channelValue.second);
+	}
+  }
   widgetChanged();
 }
 
@@ -473,14 +483,16 @@ void WidgetPanel::processNewValues()
   foreach(QString name, channelNames) {
     foreach(QuteWidget *widget, widgets) {
       if (widget->getChannelName() == name) {
-        widget->setValue(newValues[name]);
+        widget->setValue(newValues.value(name));
       }
       if (widget->getChannel2Name() == name) {
-        widget->setValue2(newValues[name]);
+        widget->setValue2(newValues.value(name));
       }
     }
   }
+  while (!valueMutex.tryLock()) {};
   newValues.clear();
+  valueMutex.unlock();
 }
 
 void WidgetPanel::widgetChanged(QuteWidget* widget)

@@ -78,6 +78,8 @@ class WidgetPanel : public QDockWidget
 
     QHash<QString, double> newValues;
     LayoutWidget *layoutWidget;
+	
+	QMutex valueMutex;
 
     QPoint currentPosition;
     QAction *createSliderAct;
