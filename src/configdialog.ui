@@ -623,7 +623,7 @@
        <rect>
         <x>10</x>
         <y>130</y>
-        <width>311</width>
+        <width>331</width>
         <height>151</height>
        </rect>
       </property>
@@ -713,24 +713,11 @@
        <string>Enable invalue/outvalue</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="chngetCheckBox" >
-      <property name="geometry" >
-       <rect>
-        <x>30</x>
-        <y>80</y>
-        <width>181</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text" >
-       <string>Enable chnget/chnset</string>
-      </property>
-     </widget>
      <widget class="QCheckBox" name="saveWidgetsCheckBox" >
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>110</y>
+        <y>80</y>
         <width>191</width>
         <height>25</height>
        </rect>
@@ -743,7 +730,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>140</y>
+        <y>110</y>
         <width>191</width>
         <height>25</height>
        </rect>
@@ -756,7 +743,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>170</y>
+        <y>140</y>
         <width>191</width>
         <height>25</height>
        </rect>
@@ -769,7 +756,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>200</y>
+        <y>170</y>
         <width>221</width>
         <height>31</height>
        </rect>
@@ -799,7 +786,7 @@
        <rect>
         <x>10</x>
         <y>50</y>
-        <width>191</width>
+        <width>221</width>
         <height>84</height>
        </rect>
       </property>
@@ -1535,38 +1522,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>widgetsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>invalueCheckBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>418</x>
-     <y>227</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>435</x>
-     <y>257</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>widgetsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>chngetCheckBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>399</x>
-     <y>227</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>446</x>
-     <y>287</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>defaultCsdCheckBox</sender>
    <signal>toggled(bool)</signal>
    <receiver>defaultCsdLineEdit</receiver>
@@ -1579,6 +1534,22 @@
     <hint type="destinationlabel" >
      <x>177</x>
      <y>278</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widgetsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>invalueCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>418</x>
+     <y>227</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>435</x>
+     <y>257</y>
     </hint>
    </hints>
   </connection>

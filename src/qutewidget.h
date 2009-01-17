@@ -71,6 +71,8 @@ class QuteWidget : public QWidget
 //     double m_min2,m_max2;
     double m_value, m_value2;
 
+    QMutex mutex;
+
     virtual void contextMenuEvent(QContextMenuEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);
 

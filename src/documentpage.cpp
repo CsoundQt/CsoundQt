@@ -388,6 +388,64 @@ QRect DocumentPage::getWidgetPanelGeometry()
                values[3].toInt());
 }
 
+void DocumentPage::getToIn()
+{
+  setPlainText(changeToInvalue(getFullText()));
+  document()->setModified(true);
+}
+
+void DocumentPage::inToGet()
+{
+  setPlainText(changeToChnget(getFullText()));
+  document()->setModified(true);
+}
+
+QString DocumentPage::changeToChnget(QString text)
+{
+  QStringList lines = text.split("\n");
+  QString newText = "";
+  foreach (QString line, lines) {
+    if (line.contains("invalue")) {
+      line.replace("invalue", "chnget");
+    }
+    else if (line.contains("outvalue")) {
+      line.replace("outvalue", "chnset");
+      int arg1Index = line.indexOf("chnset") + 8;
+      int arg2Index = line.indexOf(",") + 1;
+      int arg2EndIndex = line.indexOf(QRegExp("[\\s]*[;]"), arg2Index);
+      QString arg1 = line.mid(arg1Index, arg2Index-arg1Index - 1);
+      QString arg2 = line.mid(arg2Index, arg2EndIndex-arg2Index);
+      qDebug() << arg1 << arg2 << arg2EndIndex;
+      line = line.mid(0, arg1Index) + arg1 + ", " + arg2;
+      if (arg2EndIndex > 0)
+        line += line.mid(arg2EndIndex);
+    }
+    newText += line + "\n";
+  }
+  return newText;
+}
+
+QString DocumentPage::changeToInvalue(QString text)
+{
+  QStringList lines = text.split("\n");
+  QString newText = "";
+  foreach (QString line, lines) {
+    if (line.contains("chnget")) {
+      line.replace("chnget", "invalue");
+    }
+    else if (line.contains("chnset")) {
+      int arg1Index = line.indexOf("outvalue") + 8;
+      int arg2Index = line.indexOf(",") + 1;
+      int arg2EndIndex = line.indexOf(QRegExp("[\\s]+[;\\n]"), arg2Index);
+      QString arg1 = line.mid(arg1Index, arg2Index-arg1Index);
+      QString arg2 = line.mid(arg2Index, arg2EndIndex-arg2Index);
+      line = line.mid(0, arg1Index) + arg1 + ", " + arg2 + line.mid(arg2EndIndex);
+    }
+    newText += line + "\n";
+  }
+  return newText;
+}
+
 void DocumentPage::setMacWidgetsText(QString text)
 {
 //   qDebug("DocumentPage::setMacWidgetsText");

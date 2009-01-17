@@ -630,6 +630,16 @@ void qutecsound::join()
   }
 }
 
+void qutecsound::getToIn()
+{
+  documentPages[curPage]->getToIn();
+}
+
+void qutecsound::inToGet()
+{
+  documentPages[curPage]->inToGet();
+}
+
 void qutecsound::runCsound(bool realtime)
 {
   if (ud->PERF_STATUS == 1) {
@@ -808,10 +818,10 @@ void qutecsound::runCsound(bool realtime)
         qApp->processEvents();
         if (ud->qcs->m_options->enableWidgets) {
           widgetPanel->getValues(&channelNames, &values, &stringValues);
-          if (ud->qcs->m_options->chngetEnabled) {
-            readWidgetValues(ud);
-            writeWidgetValues(ud);
-          }
+//           if (ud->qcs->m_options->chngetEnabled) {
+//             writeWidgetValues(ud);
+//             readWidgetValues(ud);
+//           }
           processEventQueue(ud);
         }
       }
@@ -1504,6 +1514,16 @@ void qutecsound::createActions()
   joinAct->setIconText("Join");
   connect(joinAct, SIGNAL(triggered()), this, SLOT(join()));
 
+  inToGetAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Invalue->Chnget"), this);
+//   joinAct->setShortcut(tr("Ctrl+V"));
+  inToGetAct->setStatusTip(tr("Convert invalue/outvalue to chnget/chnset"));
+  connect(inToGetAct, SIGNAL(triggered()), this, SLOT(inToGet()));
+
+  getToInAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Chnget->Invalue"), this);
+//   joinAct->setShortcut(tr("Ctrl+V"));
+  getToInAct->setStatusTip(tr("Convert chnget/chnset to invalue/outvalue"));
+  connect(getToInAct, SIGNAL(triggered()), this, SLOT(getToIn()));
+
   findAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("&Find and Replace"), this);
   findAct->setShortcut(tr("Ctrl+F"));
   findAct->setStatusTip(tr("Find and replace strings in file"));
@@ -1749,6 +1769,8 @@ void qutecsound::createMenus()
   editMenu->addAction(unindentAct);
   editMenu->addSeparator();
   editMenu->addAction(joinAct);
+  editMenu->addAction(inToGetAct);
+  editMenu->addAction(getToInAct);
   editMenu->addSeparator();
   editMenu->addAction(editAct);
   editMenu->addSeparator();
@@ -1926,7 +1948,7 @@ void qutecsound::readSettings()
   m_options->saveWidgets = settings.value("savewidgets", true).toBool();
   m_options->iconText = settings.value("iconText", true).toBool();
   m_options->invalueEnabled = settings.value("invalueEnabled", true).toBool();
-  m_options->chngetEnabled = settings.value("chngetEnabled", false).toBool();
+//   m_options->chngetEnabled = settings.value("chngetEnabled", false).toBool();
   m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
   m_options->showTooltips = settings.value("showTooltips", true).toBool();
   m_options->enableFLTK = settings.value("enableFLTK", false).toBool();
@@ -2027,7 +2049,7 @@ void qutecsound::writeSettings()
   settings.setValue("iconText", m_options->iconText);
   settings.setValue("enableWidgets", m_options->enableWidgets);
   settings.setValue("invalueEnabled", m_options->invalueEnabled);
-  settings.setValue("chngetEnabled", m_options->chngetEnabled);
+//   settings.setValue("chngetEnabled", m_options->chngetEnabled);
   settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
   settings.setValue("showTooltips", m_options->showTooltips);
   settings.setValue("enableFLTK", m_options->enableFLTK);
@@ -2403,12 +2425,13 @@ void qutecsound::readWidgetValues(CsoundUserData *ud)
 
 void qutecsound::writeWidgetValues(CsoundUserData *ud)
 {
+//   qDebug("qutecsound::writeWidgetValues");
   MYFLT* pvalue;
   for (int i = 0; i < ud->qcs->channelNames.size(); i++) {
     if (ud->qcs->channelNames[i] != "") {
       if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
-          CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-        ud->qcs->widgetPanel->setValue(i,*pvalue);
+         CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+           ud->qcs->widgetPanel->setValue(i,*pvalue);
       }
       else if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
         CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
@@ -2436,7 +2459,11 @@ void qutecsound::processEventQueue(CsoundUserData *ud)
     if (ud->PERF_STATUS == 1) {
       if (ud->qcs->m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
-        ud->qcs->perfThread->ScoreEvent(0, type, eventElements.size(), pFields);
+        //TODO this is not working!!!
+//         ud->qcs->perfThread->ScoreEvent(0, type, eventElements.size(), pFields);
+        csoundLockMutex(ud->qcs->perfMutex);
+        csoundScoreEvent(ud->csound,type ,pFields, eventElements.size());
+        csoundUnlockMutex(ud->qcs->perfMutex);
 #else
         csoundLockMutex(ud->qcs->perfMutex);
         csoundScoreEvent(ud->csound,type ,pFields, eventElements.size());
@@ -2497,10 +2524,10 @@ uintptr_t qutecsound::csThread(void *data)
         udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames,
                                             &udata->qcs->values,
                                             &udata->qcs->stringValues);
-        if (udata->qcs->m_options->chngetEnabled) {
-          writeWidgetValues(udata);
-          readWidgetValues(udata);
-        }
+//         if (udata->qcs->m_options->chngetEnabled) {
+//           writeWidgetValues(udata);
+//           readWidgetValues(udata);
+//         }
 //         processEventQueue(udata);
       }
       perform = csoundPerformKsmps(udata->csound);
@@ -2597,6 +2624,8 @@ void qutecsound::inputValueCallback (CSOUND *csound,
                                      MYFLT *value)
 {
   // from qutecsound to Csound
+  // This callback is only set when invalueEnabled is true, no need
+  // to check here
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
   if (ud->PERF_STATUS == 1) {
     QString name = QString(channelName);

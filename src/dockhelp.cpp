@@ -64,6 +64,7 @@ void DockHelp::loadFile(QString fileName)
 //                          tr("Cannot read file %1:\n%2.")
 //                              .arg(fileName)
 //                              .arg(file.errorString()));
+    text->setText("Not Found! Make sure the documentation path is set in the Configuration Dialog.");
     return;
   }
   //FIXME: Fix this hack so it works fine in windows as well...

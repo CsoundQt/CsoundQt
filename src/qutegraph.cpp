@@ -99,6 +99,11 @@ void QuteGraph::setValue(double value)
 {
   if (m_value == value)
     return;
+#ifdef  USE_WIDGET_MUTEX
+  while (!mutex.tryLock()) {
+    sleep(1);
+  }
+#endif
   qDebug("QuteGraph::setValue %i", int(value));
   if (value < 0 ) {
     for (int i = 0; i < m_pageComboBox->count(); i++) {
@@ -118,6 +123,9 @@ void QuteGraph::setValue(double value)
     m_value = (int) value;
   }
   //Dont change value if not valid
+#ifdef  USE_WIDGET_MUTEX
+  mutex.unlock();
+#endif
 }
 
 void QuteGraph::setZoom(double zoom)

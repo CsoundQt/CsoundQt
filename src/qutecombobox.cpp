@@ -35,8 +35,16 @@ void QuteComboBox::setValue(double value)
 {
 //   qDebug("QuteComboBox::setValue %i", (int) value);
   // setValue sets the current index of the ioMenu
+#ifdef  USE_WIDGET_MUTEX
+  while (!mutex.tryLock()) {
+    sleep(1);
+  }
+#endif
   static_cast<QComboBox *>(m_widget)->setCurrentIndex((int) value);
   m_value = static_cast<QComboBox *>(m_widget)->currentIndex();  //This confines the value to valid indices
+#ifdef  USE_WIDGET_MUTEX
+  mutex.unlock();
+#endif
 }
 
 double QuteComboBox::getValue()

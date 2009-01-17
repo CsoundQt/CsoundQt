@@ -170,6 +170,11 @@ void QuteScope::updateData()
     return;
   if (static_cast<ScopeWidget *>(m_widget)->freeze)
     return;
+#ifdef  USE_WIDGET_MUTEX
+  while (!mutex.tryLock()) {
+    sleep(1);
+  }
+#endif
   double value;
   RingBuffer *buffer = &m_ud->qcs->audioOutputBuffer;
   QList<MYFLT> list(buffer->buffer);
@@ -206,4 +211,7 @@ void QuteScope::updateData()
   curveData.last() = QPoint(width()-4, 0);
   curveData.first() = QPoint(0, 0);
   curve->setPolygon(curveData);
+#ifdef  USE_WIDGET_MUTEX
+  mutex.unlock();
+#endif
 }

@@ -22,6 +22,8 @@
 
 #include <QSlider>
 
+#define USE_WIDGET_MUTEX
+
 QuteWidget::QuteWidget(QWidget *parent/*, widgetType type*/):
     QWidget(parent)/*, m_type(type)*/
 {
@@ -74,6 +76,10 @@ void QuteWidget::setRange(int /*min*/, int /*max*/)
 
 void QuteWidget::setValue(double /*value*/)
 {
+  while (!mutex.tryLock()) {
+    sleep(1);
+  }
+  mutex.unlock();
 }
 
 void QuteWidget::setValue2(double /*value*/)

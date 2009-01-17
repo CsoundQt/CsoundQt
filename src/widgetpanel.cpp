@@ -159,7 +159,7 @@ void WidgetPanel::setValue(QString channelName, QString value)
 
 void WidgetPanel::setValue(int index, double value)
 {
-  //index can be greater that widgets.size for value2
+  // there are two values for each widget
   if (index >= widgets.size() * 2)
     return;
   widgets[index/2]->setValue(value);
@@ -167,7 +167,7 @@ void WidgetPanel::setValue(int index, double value)
 
 void WidgetPanel::setValue(int index, QString value)
 {
-  //index can be greater that widgets.size for value2
+  // there are two values for each widget
   if (index >= widgets.size() * 2)
     return;
   widgets[index/2]->setValue(value);

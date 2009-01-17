@@ -19,6 +19,8 @@
  ***************************************************************************/
 #include "qutemeter.h"
 
+#include <cmath> //for isnan
+
 QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
 {
   setGeometry(0,0, parent->width(), parent->height());
@@ -177,8 +179,16 @@ void QuteMeter::setValue(double value)
     value = 0.0;
   else if (value > 1.0)
     value = 1.0;
+#ifdef  USE_WIDGET_MUTEX
+  while (!mutex.tryLock()) {
+    sleep(1);
+  }
+#endif
   static_cast<MeterWidget *>(m_widget)->setValue(value);
 //   m_value = value;
+#ifdef  USE_WIDGET_MUTEX
+  mutex.unlock();
+#endif
 }
 
 void QuteMeter::setValue2(double value)
@@ -187,7 +197,15 @@ void QuteMeter::setValue2(double value)
     value = 0.0;
   else if (value > 1.0)
     value = 1.0;
+#ifdef  USE_WIDGET_MUTEX
+  while (!mutex.tryLock()) {
+    sleep(1);
+  }
+#endif
   static_cast<MeterWidget *>(m_widget)->setValue2(value);
+#ifdef  USE_WIDGET_MUTEX
+  mutex.unlock();
+#endif
 }
 
 double QuteMeter::getValue()
@@ -306,7 +324,7 @@ double MeterWidget::getValue2()
 void MeterWidget::setValue(double value)
 {
   if (isnan(value) != 0)
-	return;
+    return;
   m_value = value;
   if (m_type == "fill" and m_vertical) {
     m_block->setRect(0, (1-value)*height(), width(), height());

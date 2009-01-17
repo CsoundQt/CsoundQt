@@ -56,7 +56,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options/*, ConfigLists *
   iconTextCheckBox->setChecked(m_options->iconText);
   widgetsCheckBox->setChecked(m_options->enableWidgets);
   invalueCheckBox->setChecked(m_options->invalueEnabled);
-  chngetCheckBox->setChecked(m_options->chngetEnabled);
+//   chngetCheckBox->setChecked(m_options->chngetEnabled);
   showWidgetsOnRunCheckBox->setChecked(m_options->showWidgetsOnRun);
   showTooltipsCheckBox->setChecked(m_options->showTooltips);
   enableFLTKCheckBox->setChecked(m_options->enableFLTK);
@@ -171,7 +171,7 @@ void ConfigDialog::accept()
   m_options->iconText = iconTextCheckBox->isChecked();
   m_options->enableWidgets = widgetsCheckBox->isChecked();
   m_options->invalueEnabled = invalueCheckBox->isChecked();
-  m_options->chngetEnabled = chngetCheckBox->isChecked();
+//   m_options->chngetEnabled = chngetCheckBox->isChecked();
   m_options->showWidgetsOnRun = showWidgetsOnRunCheckBox->isChecked();
   m_options->showTooltips = showTooltipsCheckBox->isChecked();
   m_options->enableFLTK = enableFLTKCheckBox->isChecked();

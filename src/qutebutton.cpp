@@ -34,8 +34,16 @@ QuteButton::~QuteButton()
 
 void QuteButton::setValue(double value)
 {
+#ifdef  USE_WIDGET_MUTEX
+  while (!mutex.tryLock()) {
+    sleep(1);
+  }
+#endif
   // setValue sets the value the widget outputs while it is pressed
   m_value = value;
+#ifdef  USE_WIDGET_MUTEX
+  mutex.unlock();
+#endif
 }
 
 double QuteButton::getValue()

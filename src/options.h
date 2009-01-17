@@ -50,7 +50,7 @@ class Options{
 
     bool enableWidgets;
     bool invalueEnabled;
-    bool chngetEnabled;
+//     bool chngetEnabled;
     bool showWidgetsOnRun;
     bool showTooltips;
     bool enableFLTK;

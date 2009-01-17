@@ -41,6 +41,10 @@ class DocumentPage : public QTextEdit
     QString getMacOptionsText();
     QString getMacOption(QString option);
     QRect getWidgetPanelGeometry();
+    void getToIn();
+    void inToGet();
+    static QString changeToChnget(QString text);
+    static QString changeToInvalue(QString text);
 
 //     QTextDocument *textDocument;
     QString fileName;

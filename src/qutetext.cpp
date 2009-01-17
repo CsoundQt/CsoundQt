@@ -56,13 +56,25 @@ double QuteText::getValue()
 
 void QuteText::setValue(double value)
 {
+  while (!mutex.tryLock()) {
+    sleep(1);
+  }
   if (m_type == "display")
     setText(QString::number(value, 'f', QUTESLIDER_PRECISION));
+  mutex.unlock();
 }
 
 void QuteText::setValue(QString value)
 {
+#ifdef  USE_WIDGET_MUTEX
+  while (!mutex.tryLock()) {
+    sleep(1);
+  }
+#endif
   setText(value);
+#ifdef  USE_WIDGET_MUTEX
+  mutex.unlock();
+#endif
 }
 
 void QuteText::setType(QString type)
@@ -600,8 +612,16 @@ void QuteScrollNumber::addValue(double delta)
 
 void QuteScrollNumber::setValue(double value)
 {
+#ifdef  USE_WIDGET_MUTEX
+  while (!mutex.tryLock()) {
+    sleep(1);
+  }
+#endif
   m_value = value;
 //   qDebug("QuteScrollNumber::addValue places = %i resolution = %f", places, m_resolution);
   setText(QString::number(m_value, 'f', m_places));
   emit widgetChanged(this);
+#ifdef  USE_WIDGET_MUTEX
+  mutex.unlock();
+#endif
 }

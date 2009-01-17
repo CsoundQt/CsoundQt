@@ -163,6 +163,8 @@ class qutecsound:public QMainWindow
     bool closeTab();
     void findReplace();
     void join();
+    void getToIn();
+    void inToGet();
     void render();
     void openExternalEditor();
     void openExternalPlayer();
@@ -260,6 +262,8 @@ class qutecsound:public QMainWindow
     QAction *copyAct;
     QAction *pasteAct;
     QAction *joinAct;
+    QAction *getToInAct;
+    QAction *inToGetAct;
     QAction *findAct;
     QAction *autoCompleteAct;
     QAction *configureAct;
