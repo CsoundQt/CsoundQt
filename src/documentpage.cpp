@@ -390,13 +390,13 @@ QRect DocumentPage::getWidgetPanelGeometry()
 
 void DocumentPage::getToIn()
 {
-  setPlainText(changeToInvalue(getFullText()));
+  setPlainText(changeToInvalue(document()->toPlainText()));
   document()->setModified(true);
 }
 
 void DocumentPage::inToGet()
 {
-  setPlainText(changeToChnget(getFullText()));
+  setPlainText(changeToChnget(document()->toPlainText()));
   document()->setModified(true);
 }
 
@@ -410,15 +410,16 @@ QString DocumentPage::changeToChnget(QString text)
     }
     else if (line.contains("outvalue")) {
       line.replace("outvalue", "chnset");
-      int arg1Index = line.indexOf("chnset") + 8;
+      int arg1Index = line.indexOf("chnset") + 7;
       int arg2Index = line.indexOf(",") + 1;
       int arg2EndIndex = line.indexOf(QRegExp("[\\s]*[;]"), arg2Index);
-      QString arg1 = line.mid(arg1Index, arg2Index-arg1Index - 1);
-      QString arg2 = line.mid(arg2Index, arg2EndIndex-arg2Index);
+      QString arg1 = line.mid(arg1Index, arg2Index-arg1Index - 1).trimmed();
+      QString arg2 = line.mid(arg2Index, arg2EndIndex-arg2Index).trimmed();
+      QString comment = line.mid(arg2EndIndex);
       qDebug() << arg1 << arg2 << arg2EndIndex;
-      line = line.mid(0, arg1Index) + arg1 + ", " + arg2;
+      line = line.mid(0, arg1Index) + " " +  arg2 + ", " + arg1;
       if (arg2EndIndex > 0)
-        line += line.mid(arg2EndIndex);
+        line += " " + comment;
     }
     newText += line + "\n";
   }
@@ -434,12 +435,17 @@ QString DocumentPage::changeToInvalue(QString text)
       line.replace("chnget", "invalue");
     }
     else if (line.contains("chnset")) {
+      line.replace("chnset", "outvalue");
       int arg1Index = line.indexOf("outvalue") + 8;
       int arg2Index = line.indexOf(",") + 1;
-      int arg2EndIndex = line.indexOf(QRegExp("[\\s]+[;\\n]"), arg2Index);
-      QString arg1 = line.mid(arg1Index, arg2Index-arg1Index);
-      QString arg2 = line.mid(arg2Index, arg2EndIndex-arg2Index);
-      line = line.mid(0, arg1Index) + arg1 + ", " + arg2 + line.mid(arg2EndIndex);
+      int arg2EndIndex = line.indexOf(QRegExp("[\\s]*[;]"), arg2Index);
+      QString arg1 = line.mid(arg1Index, arg2Index-arg1Index - 1).trimmed();
+      QString arg2 = line.mid(arg2Index, arg2EndIndex-arg2Index).trimmed();
+      QString comment = line.mid(arg2EndIndex);
+      qDebug() << arg1 << arg2 << arg2EndIndex;
+      line = line.mid(0, arg1Index) + " " + arg2 + ", " + arg1;
+      if (arg2EndIndex > 0)
+        line += " " + comment;
     }
     newText += line + "\n";
   }
