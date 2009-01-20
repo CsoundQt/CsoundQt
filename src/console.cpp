@@ -29,11 +29,23 @@ Console::~Console()
 
 void Console::appendMessage(QString msg)
 {
+  if (error) {
+    text->setTextColor(QColor("red"));
+    if (msg.contains("line")) {
+      QStringList parts = msg.split("line");
+      int lineNumber = parts.last().remove(":").trimmed().toInt();
+      errorLines.append(lineNumber);
+      error = false;
+    }
+  }
   if (msg.contains("B ") or msg.contains("rtevent", Qt::CaseInsensitive)) {
     text->setTextColor(QColor("blue"));
   }
-  if (msg.contains("error", Qt::CaseInsensitive)
-      or msg.contains("overall samples out of range")
+  if (msg.contains("error:", Qt::CaseInsensitive)) {
+    error = true;
+    text->setTextColor(QColor("red"));
+  }
+  if (msg.contains("overall samples out of range")
       or msg.contains("disabled")) {
     text->setTextColor(QColor("red"));
   }
@@ -48,6 +60,8 @@ void Console::appendMessage(QString msg)
 void Console::clear()
 {
   text->clear();
+  errorLines.clear();
+  error = false;
 }
 
 void DockConsole::closeEvent(QCloseEvent * /*event*/)

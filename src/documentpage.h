@@ -45,6 +45,8 @@ class DocumentPage : public QTextEdit
     void inToGet();
     static QString changeToChnget(QString text);
     static QString changeToInvalue(QString text);
+    void markErrorLines(QList<int> lines);
+    void unmarkErrorLines();
 
 //     QTextDocument *textDocument;
     QString fileName;
@@ -63,6 +65,7 @@ class DocumentPage : public QTextEdit
 
     bool widgetsDocked;
     OpEntryParser *m_opcodeTree;
+    bool errorMarked;
 
 //     QString connectedNodeText(QString nodeName, QString label, QString dest);
 //     QString dotTextForExpression(QString expression, QString &outNode);
@@ -80,6 +83,9 @@ class DocumentPage : public QTextEdit
     void unindent();
 
     void opcodeFromMenu();
+
+  private slots:
+    void changed();
 
 };
 

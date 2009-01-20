@@ -30,6 +30,8 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   companionFile = "";
   askForFile = true;
   readOnly = false;
+  errorMarked = false;
+  connect(document(), SIGNAL(contentsChanged()), this, SLOT(changed()));
 }
 
 DocumentPage::~DocumentPage()
@@ -452,6 +454,44 @@ QString DocumentPage::changeToInvalue(QString text)
   return newText;
 }
 
+void DocumentPage::markErrorLines(QList<int> lines)
+{
+  QTextCharFormat errorFormat;
+  errorFormat.setBackground(QBrush(QColor(255, 182, 193)));
+  QTextCursor cur = textCursor();
+  cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+  int lineCount = 1;
+  foreach(int line, lines) {
+    while (lineCount < line - 1) {
+      lineCount++;
+//       cur.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
+      cur.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
+    }
+    cur.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    cur.mergeCharFormat(errorFormat);
+    setTextCursor(cur);
+    cur.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+  }
+  setTextCursor(cur);
+  errorMarked = true;
+}
+
+void DocumentPage::unmarkErrorLines()
+{
+  if (!errorMarked)
+    return;
+  QTextCursor currentCursor = textCursor();
+  errorMarked = false;
+//   qDebug("DocumentPage::unmarkErrorLines()");
+  selectAll();
+  QTextCursor cur = textCursor();
+  QTextCharFormat format = cur.blockCharFormat();
+  format.clearBackground();
+  cur.setCharFormat(format);
+  setTextCursor(cur);
+  setTextCursor(currentCursor);
+}
+
 void DocumentPage::setMacWidgetsText(QString text)
 {
 //   qDebug("DocumentPage::setMacWidgetsText");
@@ -564,4 +604,9 @@ void DocumentPage::opcodeFromMenu()
   QTextCursor cursor = textCursor();
   QString text = action->data().toString();
   cursor.insertText(text);
+}
+
+void DocumentPage::changed()
+{
+  unmarkErrorLines();
 }

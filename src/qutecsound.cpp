@@ -297,13 +297,12 @@ void qutecsound::open()
 {
   QString fileName = "";
   fileName = QFileDialog::getOpenFileName(this, tr("Open File"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco)"));
-  for (int i = 0; i < documentPages.size(); i++) {
-    if (fileName == documentPages[i]->fileName) {
-      documentTabs->setCurrentIndex(i);
-      changePage(i);
+  int index = isOpen(fileName);
+  if (index != -1) {
+    documentTabs->setCurrentIndex(index);
+    changePage(index);
       statusBar()->showMessage(tr("File already open"), 10000);
-      return;
-    }
+    return;
   }
   if (!fileName.isEmpty()) {
     loadCompanionFile(fileName);
@@ -509,6 +508,12 @@ bool qutecsound::saveAs()
   QString fileName = QFileDialog::getSaveFileName(this, tr("Save File As"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco)"));
   if (fileName.isEmpty())
     return false;
+  if (isOpen(fileName) != -1) {
+    QMessageBox::critical(this, tr("QuteCsound"),
+                tr("The file is already open in another tab.\nFile not saved!"),
+                  QMessageBox::Ok | QMessageBox::Default);
+    return false;
+  }
   if (!fileName.endsWith(".csd") && !fileName.endsWith(".orc") && !fileName.endsWith(".sco"))
     fileName += ".csd";
 
@@ -625,9 +630,9 @@ void qutecsound::join()
     newFile();
     documentPages[curPage]->setTextString(text);
   }
-  else {
+//   else {
 //     qDebug("qutecsound::join() : No Action");
-  }
+//   }
 }
 
 void qutecsound::getToIn()
@@ -672,9 +677,6 @@ void qutecsound::runCsound(bool realtime)
     if (documentPages[curPage]->askForFile)
       getCompanionFileName();
     fileName2 = documentPages[curPage]->companionFile;
-  }
-  if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
-    widgetPanel->setVisible(true);
   }
 
   widgetPanel->flush();
@@ -775,7 +777,11 @@ void qutecsound::runCsound(bool realtime)
       qDebug("Csound compile failed!");
       ud->PERF_STATUS = 0;  //Csound is stopped and cleaned up by stopCsound() called from dispatchQueues()
       free(argv);
+      markErrorLine();
       return;
+    }
+    if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
+      widgetPanel->setVisible(true);
     }
     if (m_options->invalueEnabled and m_options->enableWidgets) {
       csoundSetInputValueCallback(csound, &qutecsound::inputValueCallback);
@@ -2189,6 +2195,13 @@ bool qutecsound::loadFile(QString fileName)
                              .arg(file.errorString()));
     return false;
   }
+  int index = isOpen(fileName);
+  if (index != -1) {
+    documentTabs->setCurrentIndex(index);
+    changePage(index);
+    statusBar()->showMessage(tr("File already open"), 10000);
+    return false;
+  }
   QApplication::setOverrideCursor(Qt::WaitCursor);
   DocumentPage *newPage = new DocumentPage(this, opcodeTree);
   documentPages.append(newPage);
@@ -2405,6 +2418,25 @@ void qutecsound::setWidgetPanelGeometry()
   if (geometry.width() == 0)
     return;
   widgetPanel->setGeometry(geometry);
+}
+
+int qutecsound::isOpen(QString fileName)
+{
+  bool open = false;
+  int i = 0;
+  for (i = 0; i < documentPages.size(); i++) {
+    if (documentPages[i]->fileName == fileName) {
+      open = true;
+      break;
+    }
+  }
+  return (open ? i: -1);
+}
+
+void qutecsound::markErrorLine()
+{
+//   qDebug("qutecsound::markErrorLine()");
+  documentPages[curPage]->markErrorLines(m_console->errorLines);
 }
 
 void qutecsound::readWidgetValues(CsoundUserData *ud)

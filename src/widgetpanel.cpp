@@ -570,12 +570,13 @@ int WidgetPanel::createText(int x, int y, int width, int height, QString widgetL
   widget->setBg(lastParts[7] == "background");
   widget->setBorder(lastParts[8] == "border");
   QString labelText = "";
-  int i = 9;
-  while (lastParts.size() > i) {
-    labelText += lastParts[i] + " ";
-    i++;
-  }
-  labelText.chop(1);
+//   int i = 9;
+//   while (lastParts.size() > i) {
+//     labelText += lastParts[i] + " ";
+//     i++;
+//   }
+//   labelText.chop(1);
+  labelText = widgetLine.mid(widgetLine.indexOf("border") + 7);
   widget->setText(labelText);
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));

@@ -32,8 +32,11 @@ class Console
     virtual void appendMessage(QString msg);
     void clear();
     void setDefaultFont(QFont font) {text->document()->setDefaultFont(font);}
+    QList<int> errorLines;
+
   protected:
     QTextEdit *text;
+    bool error;
 };
 
 class DockConsole : public QDockWidget, public Console
@@ -50,16 +53,16 @@ class DockConsole : public QDockWidget, public Console
     }
 
     ~DockConsole() {;};
-	
-	void copy()
-	{
-	  text->copy();
-	}
-	
-	bool widgetHasFocus()
-	{
-	  return text->hasFocus();
-	}
+
+    void copy()
+    {
+      text->copy();
+    }
+
+    bool widgetHasFocus()
+    {
+      return text->hasFocus();
+    }
   private:
     virtual void closeEvent(QCloseEvent * event);
   signals:

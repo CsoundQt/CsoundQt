@@ -207,6 +207,8 @@ class qutecsound:public QMainWindow
     QString generateScript(bool realtime = true);
     void getCompanionFileName();
     void setWidgetPanelGeometry();
+    int isOpen(QString fileName);
+    void markErrorLine();
 
     CSOUND *csound;
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
