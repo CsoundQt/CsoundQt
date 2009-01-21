@@ -1140,7 +1140,8 @@ void qutecsound::aboutExamples()
 void qutecsound::documentWasModified()
 {
   setWindowModified(textEdit->document()->isModified());
-//   documentTabs->setTabIcon(curPage, QIcon(":/images/modIcon.png"));
+  if (textEdit->document()->isModified())
+    documentTabs->setTabIcon(curPage, modIcon);
 }
 
 void qutecsound::syntaxCheck()
@@ -2270,6 +2271,7 @@ bool qutecsound::saveFile(const QString &fileName)
 {
   qDebug("qutecsound::saveFile");
   QString text;
+  documentTabs->setTabIcon(curPage, QIcon());
   QApplication::setOverrideCursor(Qt::WaitCursor);
   if (m_options->saveWidgets)
     text = documentPages[curPage]->getFullText();
@@ -2283,7 +2285,6 @@ bool qutecsound::saveFile(const QString &fileName)
   }
   textEdit->document()->setModified(false);
   setWindowModified(false);
-  documentTabs->setTabIcon(curPage, QIcon());
   lastUsedDir = fileName;
   lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/\\]")));
   if (recentFiles.count(fileName) == 0) {

@@ -465,12 +465,12 @@ void DocumentPage::markErrorLines(QList<int> lines)
     while (lineCount < line - 1) {
       lineCount++;
 //       cur.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
-      cur.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
+      cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
     }
-    cur.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     cur.mergeCharFormat(errorFormat);
     setTextCursor(cur);
-    cur.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cur.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
   }
   setTextCursor(cur);
   errorMarked = true;
@@ -480,6 +480,7 @@ void DocumentPage::unmarkErrorLines()
 {
   if (!errorMarked)
     return;
+  int position = verticalScrollBar()->value();
   QTextCursor currentCursor = textCursor();
   errorMarked = false;
 //   qDebug("DocumentPage::unmarkErrorLines()");
@@ -488,8 +489,9 @@ void DocumentPage::unmarkErrorLines()
   QTextCharFormat format = cur.blockCharFormat();
   format.clearBackground();
   cur.setCharFormat(format);
-  setTextCursor(cur);
-  setTextCursor(currentCursor);
+  setTextCursor(cur);  //sets format
+  setTextCursor(currentCursor); //returns cursor to initial position
+  verticalScrollBar()->setValue(position); //return document display to initial position
 }
 
 void DocumentPage::setMacWidgetsText(QString text)
