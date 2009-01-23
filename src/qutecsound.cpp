@@ -296,7 +296,12 @@ void qutecsound::newFile()
 void qutecsound::open()
 {
   QString fileName = "";
+  bool widgetsVisible = widgetPanel->isVisible();
+  if (widgetsVisible)
+    widgetPanel->hide(); // Necessary for Mac, as widget Panel covers open dialog
   fileName = QFileDialog::getOpenFileName(this, tr("Open File"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco)"));
+  if (widgetsVisible)
+    widgetPanel->show();
   int index = isOpen(fileName);
   if (index != -1) {
     documentTabs->setCurrentIndex(index);
@@ -505,7 +510,12 @@ void qutecsound::controlD()
 
 bool qutecsound::saveAs()
 {
+  bool widgetsVisible = widgetPanel->isVisible();
+  if (widgetsVisible)
+    widgetPanel->hide(); // Necessary for Mac, as widget Panel covers open dialog
   QString fileName = QFileDialog::getSaveFileName(this, tr("Save File As"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco)"));
+  if (widgetsVisible)
+    widgetPanel->show(); // Necessary for Mac, as widget Panel covers open dialog
   if (fileName.isEmpty())
     return false;
   if (isOpen(fileName) != -1) {
