@@ -33,6 +33,8 @@ class QuteSlider : public QuteWidget
     virtual void setWidgetGeometry(int x, int y, int w, int h);
     virtual void setWidgetLine(QString line);
     virtual QString getWidgetLine();
+    virtual QString getCabbageLine();
+    virtual QString getCsladspaLine();
 
     double getValue();
     void setRange(double min, double max);

@@ -1115,7 +1115,7 @@ void WidgetPanel::paste()
   }
 }
 
-void WidgetPanel::paste(QPoint pos)
+void WidgetPanel::paste(QPoint /*pos*/)
 {
 }
 

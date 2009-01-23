@@ -36,6 +36,8 @@ QuteWidget::QuteWidget(QWidget *parent/*, widgetType type*/):
   deleteAct->setStatusTip(tr("Delete this widget"));
   connect(deleteAct, SIGNAL(triggered()), this, SLOT(deleteWidget()));
   m_name2 = "";
+  m_value = 0.0;
+  m_value2 = 0.0;
 
   this->setMinimumSize(10,10);
 }
@@ -133,6 +135,18 @@ QString QuteWidget::getStringValue()
 #ifdef DEBUG
   qDebug("QuteWidget::getValue for QString not implemented for widget type");
 #endif
+  return QString("");
+}
+
+QString QuteWidget::getCabbageLine()
+{
+  //Widgets return empty strings when not supported
+  return QString("");
+}
+
+QString QuteWidget::getCsladspaLine()
+{
+  //Widgets return empty strings when not supported
   return QString("");
 }
 

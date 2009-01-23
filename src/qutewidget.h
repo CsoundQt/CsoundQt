@@ -49,6 +49,8 @@ class QuteWidget : public QWidget
     virtual double getValue();
     virtual double getValue2();
     virtual QString getStringValue();
+    virtual QString getCabbageLine();
+    virtual QString getCsladspaLine();
 
     void markChanged();
 

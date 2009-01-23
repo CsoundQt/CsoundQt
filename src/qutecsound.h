@@ -165,6 +165,8 @@ class qutecsound:public QMainWindow
     void join();
     void getToIn();
     void inToGet();
+    void putCsladspaText();
+    void exportCabbage();
     void render();
     void openExternalEditor();
     void openExternalPlayer();
@@ -266,6 +268,8 @@ class qutecsound:public QMainWindow
     QAction *joinAct;
     QAction *getToInAct;
     QAction *inToGetAct;
+    QAction *csladspaAct;
+    QAction *cabbageAct;
     QAction *findAct;
     QAction *autoCompleteAct;
     QAction *configureAct;

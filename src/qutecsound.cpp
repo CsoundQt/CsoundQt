@@ -112,6 +112,9 @@ qutecsound::qutecsound(QStringList fileNames)
 
   readSettings();
 
+  bool widgetsVisible = widgetPanel->isVisible();
+  if (widgetsVisible)
+    widgetPanel->hide();
   utilitiesDialog = new UtilitiesDialog(this, m_options/*, _configlists*/);
   connect(utilitiesDialog, SIGNAL(runUtility(QString)), this, SLOT(runUtility(QString)));
 
@@ -149,6 +152,8 @@ qutecsound::qutecsound(QStringList fileNames)
       loadFile(fileName);
     }
   }
+  if (widgetsVisible)
+    widgetPanel->show();
   if (fileNames.size() > 0 and m_options->autoPlay) {
     runCsound();
   }
@@ -653,6 +658,25 @@ void qutecsound::getToIn()
 void qutecsound::inToGet()
 {
   documentPages[curPage]->inToGet();
+}
+
+void qutecsound::putCsladspaText()
+{
+  //TODO finish this
+//   <csLADSPA>
+//       Name=Gain Plugin
+//       Maker=John Doe
+//       UniqueID=1049
+//       Copyright=None
+//       ControlPort=Gain|gain
+//       Range=0|2
+//       </csLADSPA>
+
+}
+
+void qutecsound::exportCabbage()
+{
+  //TODO finish this
 }
 
 void qutecsound::runCsound(bool realtime)
@@ -1541,6 +1565,11 @@ void qutecsound::createActions()
   getToInAct->setStatusTip(tr("Convert chnget/chnset to invalue/outvalue"));
   connect(getToInAct, SIGNAL(triggered()), this, SLOT(getToIn()));
 
+  csladspaAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Insert/Update CsLADSPA text"), this);
+//   joinAct->setShortcut(tr("Ctrl+V"));
+  csladspaAct->setStatusTip(tr("Insert/Update CsLADSPA section to csd file"));
+  connect(csladspaAct, SIGNAL(triggered()), this, SLOT(putCsladspaText()));
+
   findAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("&Find and Replace"), this);
   findAct->setShortcut(tr("Ctrl+F"));
   findAct->setStatusTip(tr("Find and replace strings in file"));
@@ -1788,6 +1817,7 @@ void qutecsound::createMenus()
   editMenu->addAction(joinAct);
   editMenu->addAction(inToGetAct);
   editMenu->addAction(getToInAct);
+//   editMenu->addAction(csladspaAct);
   editMenu->addSeparator();
   editMenu->addAction(editAct);
   editMenu->addSeparator();
@@ -1852,6 +1882,7 @@ void qutecsound::fillFileMenu()
   fileMenu->addAction(saveAct);
   fileMenu->addAction(saveAsAct);
   fileMenu->addAction(reloadAct);
+//   fileMenu->addAction(cabbageAct);
   fileMenu->addAction(closeTabAct);
   fileMenu->addSeparator();
   fileMenu->addAction(exitAct);
