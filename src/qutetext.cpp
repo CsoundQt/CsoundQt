@@ -565,6 +565,19 @@ QString QuteScrollNumber::getWidgetLine()
   return line;
 }
 
+QString QuteScrollNumber::getCsladspaLine()
+{
+  QString line = "ControlPort=" + m_name + "|" + m_name + "\n";
+  line += "Range=9999|9999";
+  return line;
+}
+
+QString QuteScrollNumber::getCabbageLine()
+{
+  QString line = "";
+  return line;
+}
+
 QString QuteScrollNumber::getStringValue()
 {
   return static_cast<ScrollNumberWidget *>(m_widget)->text();

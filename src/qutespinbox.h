@@ -35,6 +35,8 @@ class QuteSpinBox : public QuteText
     virtual void setResolution(double resolution);
     virtual double getValue();
     virtual QString getWidgetLine();
+    virtual QString getCabbageLine();
+    virtual QString getCsladspaLine();
     virtual QString getStringValue();
 
   protected:

@@ -662,16 +662,14 @@ void qutecsound::inToGet()
 
 void qutecsound::putCsladspaText()
 {
-  //TODO finish this
-//   <csLADSPA>
-//       Name=Gain Plugin
-//       Maker=John Doe
-//       UniqueID=1049
-//       Copyright=None
-//       ControlPort=Gain|gain
-//       Range=0|2
-//       </csLADSPA>
-
+  QString text = "<csLADSPA>\nName=";
+  text += documentPages[curPage]->fileName.mid(documentPages[curPage]->fileName.lastIndexOf("/") + 1) + "\n";
+  text += "Maker=QuteCsound\n";
+  text += "UniqueID=69873\n";
+  text += "Copyright=none\n";
+  text += widgetPanel->getCsladspaLines();
+  text += "</csLADSPA>";
+  documentPages[curPage]->updateCsladspaText(text);
 }
 
 void qutecsound::exportCabbage()
@@ -1817,7 +1815,7 @@ void qutecsound::createMenus()
   editMenu->addAction(joinAct);
   editMenu->addAction(inToGetAct);
   editMenu->addAction(getToInAct);
-//   editMenu->addAction(csladspaAct);
+  editMenu->addAction(csladspaAct);
   editMenu->addSeparator();
   editMenu->addAction(editAct);
   editMenu->addSeparator();

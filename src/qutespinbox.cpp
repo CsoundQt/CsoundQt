@@ -149,6 +149,19 @@ QString QuteSpinBox::getWidgetLine()
   return line;
 }
 
+QString QuteSpinBox::getCsladspaLine()
+{
+  QString line = "ControlPort=" + m_name + "|" + m_name + "\n";
+  line += "Range=-9999|9999";
+  return line;
+}
+
+QString QuteSpinBox::getCabbageLine()
+{
+  QString line = "";
+  return line;
+}
+
 QString QuteSpinBox::getStringValue()
 {
   return static_cast<QDoubleSpinBox *>(m_widget)->text();

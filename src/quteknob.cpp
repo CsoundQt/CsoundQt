@@ -107,6 +107,19 @@ QString QuteKnob::getWidgetLine()
   return line;
 }
 
+QString QuteKnob::getCsladspaLine()
+{
+  QString line = "ControlPort=" + m_name + "|" + m_name + "\n";
+  line += "Range=" + QString::number(m_min, 'f', 6) + "|" + QString::number(m_max, 'f', 6);
+  return line;
+}
+
+QString QuteKnob::getCabbageLine()
+{
+  QString line = "";
+  return line;
+}
+
 void QuteKnob::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();

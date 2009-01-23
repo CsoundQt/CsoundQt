@@ -372,6 +372,40 @@ void WidgetPanel::flush()
   eventQueueSize = 0; //Flush events gathered while idle
 }
 
+QString WidgetPanel::getCsladspaLines()
+{
+  QString text = "";
+  int unsupported = 0;
+  foreach(QuteWidget *widget, widgets) {
+    QString line = widget->getCsladspaLine();
+    if (line != "") {
+      text += line + "\n";
+    }
+    else {
+      unsupported++;
+    }
+  }
+  qDebug() << "WidgetPanel:getCsladspaLines() " << unsupported << " Unsupported widgets";
+  return text;
+}
+
+QString WidgetPanel::getCabbageLines()
+{
+  QString text = "";
+  int unsupported = 0;
+  foreach(QuteWidget *widget, widgets) {
+    QString line = widget->getCabbageLine();
+    if (line != "") {
+      text += line;
+    }
+    else {
+      unsupported++;
+    }
+  }
+  qDebug() << "WidgetPanel:getCabbageLines() " << unsupported << " Unsupported widgets";
+  return text;
+}
+
 void WidgetPanel::clearGraphs()
 {
   for (int i = 0; i < graphWidgets.size(); i++) {
@@ -465,14 +499,14 @@ void WidgetPanel::newValue(QPair<QString, double> channelValue)
 //   //qDebug("WidgetPanel::newValue");
   if (!channelValue.first.isEmpty()) {
     if(newValues.contains(channelValue.first)) {
-	//FIXME os x crash here!
-        while (!valueMutex.tryLock()) {};
-		newValues[channelValue.first] = channelValue.second;
-		valueMutex.unlock();
-	}
-	else {
-		newValues.insert(channelValue.first, channelValue.second);
-	}
+      //FIXME os x crash here!
+      while (!valueMutex.tryLock()) {};
+        newValues[channelValue.first] = channelValue.second;
+        valueMutex.unlock();
+      }
+      else {
+        newValues.insert(channelValue.first, channelValue.second);
+      }
   }
   widgetChanged();
 }

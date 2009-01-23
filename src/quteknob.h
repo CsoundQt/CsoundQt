@@ -33,6 +33,8 @@ class QuteKnob : public QuteWidget
     virtual void setWidgetLine(QString line);
     virtual void setWidgetGeometry(int x, int y, int width, int height);
     virtual QString getWidgetLine();
+    virtual QString getCabbageLine();
+    virtual QString getCsladspaLine();
     virtual double getValue();
     virtual void setValue(double value);
     void setRange(double min, double max);

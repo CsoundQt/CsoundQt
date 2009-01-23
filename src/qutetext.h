@@ -94,21 +94,6 @@ class QuteLineEdit : public QuteText
     virtual void applyProperties();
 };
 
-// class QLabel : public QLabel
-// {
-//   Q_OBJECT
-//   public:
-//     QLabel(QWidget* parent) : QLabel(parent) {}
-//     ~QLabel() {}
-// 
-//   protected:
-//     virtual void contextMenuEvent(QContextMenuEvent *event)
-//     {emit(popUpMenu(event->globalPos()));}
-// 
-//   signals:
-//     void popUpMenu(QPoint pos);
-// };
-
 class QuteScrollNumber : public QuteText
 {
   Q_OBJECT
@@ -120,6 +105,8 @@ class QuteScrollNumber : public QuteText
     virtual void setAlignment(int alignment);
     virtual void setText(QString text);
     virtual QString getWidgetLine();
+    virtual QString getCabbageLine();
+    virtual QString getCsladspaLine();
     virtual QString getStringValue();
     virtual double getValue();
 
@@ -189,20 +176,5 @@ class ScrollNumberWidget : public QLabel
     void addValue(double delta);
     void setValue(double value);
 };
-
-// class QLineEdit : public QLineEdit
-// {
-//   Q_OBJECT
-//   public:
-//     QLineEdit(QWidget* parent) : QLineEdit(parent) {}
-//     ~QLineEdit() {}
-// 
-//   protected:
-//     virtual void contextMenuEvent(QContextMenuEvent *event)
-//     {emit(popUpMenu(event->globalPos()));}
-// 
-//   signals:
-//     void popUpMenu(QPoint pos);
-// };
 
 #endif

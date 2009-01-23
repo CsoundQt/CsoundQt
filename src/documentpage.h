@@ -47,6 +47,7 @@ class DocumentPage : public QTextEdit
     static QString changeToInvalue(QString text);
     void markErrorLines(QList<int> lines);
     void unmarkErrorLines();
+    void updateCsladspaText(QString text);
 
 //     QTextDocument *textDocument;
     QString fileName;

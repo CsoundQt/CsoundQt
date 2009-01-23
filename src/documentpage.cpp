@@ -494,6 +494,26 @@ void DocumentPage::unmarkErrorLines()
   verticalScrollBar()->setValue(position); //return document display to initial position
 }
 
+void DocumentPage::updateCsladspaText(QString text)
+{
+  QTextCursor cursor = textCursor();
+  QTextDocument *doc = document();
+  moveCursor(QTextCursor::Start);
+  if (find("<csLADSPA>") and find("</csLADSPA>")) {
+    QString curText = doc->toPlainText();
+    int index = curText.indexOf("<csLADSPA>");
+    curText.remove(index, curText.indexOf("</csLADSPA>") + 11 - index);
+    curText.insert(index, text);
+    doc->setPlainText(curText);
+  }
+  else { //csLADSPA section not present, or incomplete
+    find("<CsoundSynthesizer>"); //cursor moves there
+    moveCursor(QTextCursor::EndOfLine);
+    insertPlainText(QString("\n") + text + QString("\n"));
+  }
+  moveCursor(QTextCursor::Start);
+}
+
 void DocumentPage::setMacWidgetsText(QString text)
 {
 //   qDebug("DocumentPage::setMacWidgetsText");

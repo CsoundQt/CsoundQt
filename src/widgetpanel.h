@@ -60,6 +60,8 @@ class WidgetPanel : public QDockWidget
     void clearGraphs();
     Curve * getCurveById(uintptr_t id);
     void flush();
+    QString getCsladspaLines();
+    QString getCabbageLines();
 
     QVector<QString> eventQueue;
     int eventQueueSize;
@@ -78,8 +80,8 @@ class WidgetPanel : public QDockWidget
 
     QHash<QString, double> newValues;
     LayoutWidget *layoutWidget;
-	
-	QMutex valueMutex;
+
+    QMutex valueMutex;
 
     QPoint currentPosition;
     QAction *createSliderAct;
