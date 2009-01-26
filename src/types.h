@@ -97,10 +97,10 @@ class RingBuffer
       resize(size);
       currentPos = 0;
       currentReadPos = 0;
-      lock = false;
+//       lock = false;
     }
     ~RingBuffer() {}
-    bool lock;
+//     bool lock;
     QList<MYFLT> buffer;
     long currentPos;
     long currentReadPos;

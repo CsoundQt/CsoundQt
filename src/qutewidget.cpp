@@ -22,7 +22,7 @@
 
 #include <QSlider>
 
-#define USE_WIDGET_MUTEX
+// #define USE_WIDGET_MUTEX
 
 QuteWidget::QuteWidget(QWidget *parent/*, widgetType type*/):
     QWidget(parent)/*, m_type(type)*/

@@ -40,8 +40,7 @@ QuteSlider::~QuteSlider()
 double QuteSlider::getValue()
 {
   QSlider *slider = static_cast<QSlider *>(m_widget);
-  double normalized = (double) (slider->value() - slider->minimum())
-        / (double) (slider->maximum() - slider->minimum());
+  double normalized = (double) slider->value() / (double) m_len;
   m_value = m_min + (normalized * (m_max-m_min));
   return m_value;
 }
@@ -70,7 +69,7 @@ void QuteSlider::setValue(double value)
     m_value = m_min;
   else
     m_value = value;
-  int val = (int) (static_cast<QSlider *>(m_widget)->maximum() * (m_value - m_min)/(m_max-m_min));
+  int val = (int) (m_len * (m_value - m_min)/(m_max-m_min));
 #ifdef  USE_WIDGET_MUTEX
   mutex.lock();
 #endif
@@ -83,10 +82,16 @@ void QuteSlider::setValue(double value)
 void QuteSlider::setWidgetGeometry(int x, int y, int w, int h)
 {
   QuteWidget::setWidgetGeometry(x,y,w,h);
-  if (width() > height())
+  if (width() > height()) {
     static_cast<QSlider *>(m_widget)->setOrientation(Qt::Horizontal);
-  else
+    static_cast<QSlider *>(m_widget)->setMaximum(w);
+    m_len = w;
+  }
+  else {
     static_cast<QSlider *>(m_widget)->setOrientation(Qt::Vertical);
+    static_cast<QSlider *>(m_widget)->setMaximum(h);
+    m_len = h;
+  }
 }
 
 void QuteSlider::setWidgetLine(QString line)

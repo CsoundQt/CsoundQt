@@ -537,7 +537,7 @@ bool qutecsound::saveAs()
 
 bool qutecsound::closeTab()
 {
-  qDebug("qutecsound::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
+//   qDebug("qutecsound::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
   if (documentPages[curPage]->document()->isModified()) {
     int ret = QMessageBox::warning(this, tr("QuteCsound"),
                                    tr("File has been modified.\nDo you want to save it?"),
@@ -547,7 +547,7 @@ bool qutecsound::closeTab()
     if (ret == QMessageBox::Cancel)
       return false;
     else if (ret == QMessageBox::Yes) {
-      if (!saveAs())
+      if (!save())
         return false;
     }
   }

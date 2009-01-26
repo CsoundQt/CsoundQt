@@ -47,6 +47,7 @@ class QuteSlider : public QuteWidget
   private:
     QDoubleSpinBox *minSpinBox;
     QDoubleSpinBox *maxSpinBox;
+    int m_len; //length of the slider
 };
 
 #endif

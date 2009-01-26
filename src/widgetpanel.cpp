@@ -496,31 +496,35 @@ void WidgetPanel::moveEvent(QMoveEvent * event)
 
 void WidgetPanel::newValue(QPair<QString, double> channelValue)
 {
-//   //qDebug("WidgetPanel::newValue");
+//   qDebug("WidgetPanel::newValue");
   if (!channelValue.first.isEmpty()) {
     if(newValues.contains(channelValue.first)) {
-      //FIXME os x crash here!
-        valueMutex.lock();
-        newValues[channelValue.first] = channelValue.second;
-        valueMutex.unlock();
-      }
-      else {
-        newValues.insert(channelValue.first, channelValue.second);
-      }
+      valueMutex.lock();
+      newValues[channelValue.first] = channelValue.second;
+      valueMutex.unlock();
+    }
+    else {
+      valueMutex.lock();
+      newValues.insert(channelValue.first, channelValue.second);
+      valueMutex.unlock();
+    }
   }
   widgetChanged();
 }
 
 void WidgetPanel::processNewValues()
 {
+//   qDebug("WidgetPanel::processNewValues");
+  valueMutex.lock();
   QList<QString> channelNames = newValues.keys();
+  valueMutex.unlock();
   foreach(QString name, channelNames) {
-    foreach(QuteWidget *widget, widgets) {
-      if (widget->getChannelName() == name) {
-        widget->setValue(newValues.value(name));
+    for (int i = 0; i < widgets.size(); i++){
+      if (widgets[i]->getChannelName() == name) {
+        widgets[i]->setValue(newValues.value(name));
       }
-      if (widget->getChannel2Name() == name) {
-        widget->setValue2(newValues.value(name));
+      if (widgets[i]->getChannel2Name() == name) {
+        widgets[i]->setValue2(newValues.value(name));
       }
     }
   }
