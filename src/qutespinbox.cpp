@@ -59,9 +59,7 @@ void QuteSpinBox::setAlignment(int alignment)
 void QuteSpinBox::setValue(double value)
 {
 #ifdef  USE_WIDGET_MUTEX
-  while (!mutex.tryLock()) {
-    sleep(1);
-  }
+  mutex.lock();
 #endif
   static_cast<QDoubleSpinBox*>(m_widget)->setValue(value);
 #ifdef  USE_WIDGET_MUTEX

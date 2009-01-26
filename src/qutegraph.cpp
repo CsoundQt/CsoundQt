@@ -100,9 +100,7 @@ void QuteGraph::setValue(double value)
   if (m_value == value)
     return;
 #ifdef  USE_WIDGET_MUTEX
-  while (!mutex.tryLock()) {
-    sleep(1);
-  }
+  mutex.lock();
 #endif
   qDebug("QuteGraph::setValue %i", int(value));
   if (value < 0 ) {

@@ -98,7 +98,7 @@ class qutecsound:public QMainWindow
 #else
     static uintptr_t csThread(void *data);
 #endif
-    void *perfMutex;
+    QMutex perfMutex;
     static void outputValueCallback (CSOUND *csound,
                                     const char *channelName,
                                     MYFLT value);
@@ -175,7 +175,7 @@ class qutecsound:public QMainWindow
     void openExternalBrowser();
     void utilitiesDialogOpen();
     void about();
-    void aboutExamples();
+//     void aboutExamples();
     void documentWasModified();
     void syntaxCheck();
     void autoComplete();

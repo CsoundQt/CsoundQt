@@ -500,7 +500,7 @@ void WidgetPanel::newValue(QPair<QString, double> channelValue)
   if (!channelValue.first.isEmpty()) {
     if(newValues.contains(channelValue.first)) {
       //FIXME os x crash here!
-      while (!valueMutex.tryLock()) {};
+        valueMutex.lock();
         newValues[channelValue.first] = channelValue.second;
         valueMutex.unlock();
       }
@@ -524,7 +524,7 @@ void WidgetPanel::processNewValues()
       }
     }
   }
-  while (!valueMutex.tryLock()) {};
+  valueMutex.lock();
   newValues.clear();
   valueMutex.unlock();
 }

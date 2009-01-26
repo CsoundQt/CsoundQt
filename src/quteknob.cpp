@@ -74,9 +74,7 @@ void QuteKnob::setValue(double value)
     m_value = value;
   int val = (int) (static_cast<QDial *>(m_widget)->maximum() * (m_value - m_min)/(m_max-m_min));
 #ifdef  USE_WIDGET_MUTEX
-  while (!mutex.tryLock()) {
-    sleep(1);
-  }
+  mutex.lock();
 #endif
   ((QDial *)m_widget)->setValue(val);
 #ifdef  USE_WIDGET_MUTEX

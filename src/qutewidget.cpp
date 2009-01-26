@@ -78,10 +78,8 @@ void QuteWidget::setRange(int /*min*/, int /*max*/)
 
 void QuteWidget::setValue(double /*value*/)
 {
-  while (!mutex.tryLock()) {
-    sleep(1);
-  }
-  mutex.unlock();
+//   mutex.lock();
+//   mutex.unlock();
 }
 
 void QuteWidget::setValue2(double /*value*/)

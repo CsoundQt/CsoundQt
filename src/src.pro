@@ -20,8 +20,8 @@ DEFINES += QUTE_USE_CSOUNDPERFORMANCETHREAD
 
 
 libsndfile {
-	LIBS += -lsndfile
-	DEFINES += USE_LIBSNDFILE
+    LIBS += -lsndfile
+    DEFINES += USE_LIBSNDFILE
 }
 
 SOURCES += qutecsound.cpp \
@@ -87,7 +87,8 @@ HEADERS += qutecsound.h \
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \
-          qt
+          qt \
+ debug
 TARGET = ../bin/qutecsound
 RESOURCES = application.qrc
 
@@ -118,9 +119,9 @@ win32 {
     else {
         LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\libcsound32.a"
     }
-	libsndfile {
+    libsndfile {
         LIBS += -lsndfile
-	}
+    }
     RC_FILE = qutecsound.rc
 }
 
@@ -173,13 +174,14 @@ macx {
     LIBS += -framework QtCore
     LIBS += -framework $${MAC_LIB}
     LIBS += -L/Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
-	QMAKE_INFO_PLIST = MyInfo.plist
+    QMAKE_INFO_PLIST = MyInfo.plist
     ICON = ../images/qtcs.icns
 }
 
 
 #QMAKE_CXXFLAGS_DEBUG += -DDEBUG
 
-CONFIG -= stl
+CONFIG -= stl \
+ release
 
 

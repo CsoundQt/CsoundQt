@@ -171,9 +171,7 @@ void QuteScope::updateData()
   if (static_cast<ScopeWidget *>(m_widget)->freeze)
     return;
 #ifdef  USE_WIDGET_MUTEX
-  while (!mutex.tryLock()) {
-    sleep(1);
-  }
+  mutex.lock();
 #endif
   double value;
   RingBuffer *buffer = &m_ud->qcs->audioOutputBuffer;

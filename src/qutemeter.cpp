@@ -180,9 +180,7 @@ void QuteMeter::setValue(double value)
   else if (value > 1.0)
     value = 1.0;
 #ifdef  USE_WIDGET_MUTEX
-  while (!mutex.tryLock()) {
-    sleep(1);
-  }
+  mutex.lock();
 #endif
   static_cast<MeterWidget *>(m_widget)->setValue(value);
 //   m_value = value;
@@ -198,9 +196,7 @@ void QuteMeter::setValue2(double value)
   else if (value > 1.0)
     value = 1.0;
 #ifdef  USE_WIDGET_MUTEX
-  while (!mutex.tryLock()) {
-    sleep(1);
-  }
+  mutex.lock();
 #endif
   static_cast<MeterWidget *>(m_widget)->setValue2(value);
 #ifdef  USE_WIDGET_MUTEX

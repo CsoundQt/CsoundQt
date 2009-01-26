@@ -105,11 +105,11 @@ class RingBuffer
     long currentPos;
     long currentReadPos;
     int size;
-	QMutex mutex;
+    QMutex mutex;
 
     void put(MYFLT value) {
 	  //qDebug() << "RingBuffer::put";
-      while (!mutex.tryLock()) {}
+      mutex.lock();
 	  //qDebug() << "RingBuffer::put lock";
       //lock = true;
       buffer[currentPos] = value;
@@ -124,7 +124,7 @@ class RingBuffer
 
     bool copyAvailableBuffer(MYFLT *data, int saveSize) {
 	  //qDebug() << "RingBuffer::copyAvailableBuffer";
-      while (!mutex.tryLock()) {}
+      mutex.lock();
 	  //qDebug() << "RingBuffer::copyAvailableBuffer lock";
       currentReadPos = currentReadPos%size;
       int available = (currentReadPos <= currentPos ?

@@ -34,9 +34,7 @@ QuteCheckBox::~QuteCheckBox()
 void QuteCheckBox::setValue(double value)
 {
 #ifdef  USE_WIDGET_MUTEX
-  while (!mutex.tryLock()) {
-    sleep(1);
-  }
+  mutex.lock();
 #endif
   // value is 1 is checked, 0 if not
   static_cast<QCheckBox *>(m_widget)->setChecked(value == 1);
