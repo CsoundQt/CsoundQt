@@ -299,6 +299,8 @@ void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 
 QString WidgetPanel::widgetsText()
 {
+  // This function must be used with care as it accesses the widgets, which
+  // may cause crashing since widgets are not reentrant
   QString text = "<MacGUI>\n";
   text += "ioView " + (autoFillBackground()? QString("background "):QString("nobackground "));
   text += "{" + QString::number((int) (palette().button().color().redF()*65535.)) + ", ";
@@ -307,7 +309,6 @@ QString WidgetPanel::widgetsText()
 
   valueMutex.lock();
   for (int i = 0; i < widgets.size(); i++) {
-  //FIXME os x crash here!
     text += widgets[i]->getWidgetLine() + "\n";
   }
   valueMutex.unlock();

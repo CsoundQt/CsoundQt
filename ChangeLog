@@ -1,3 +1,159 @@
+2009-01-27 14:10  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r135] src/qutecsound.cpp, src/widgetpanel.cpp,
+	  src/widgetpanel.h: More work on Mutex locking
+	  Optimized performance by not updating the widget text everytime a
+	  widget changes, but only when the file is saved.
+	  Improved setting tootips for widgets
+
+2009-01-27 02:49  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r134] src/qutecsound.cpp, src/widgetpanel.cpp: Fixed crashing,
+	  but showtooltips is not updated when new widgets are created.
+
+2009-01-27 02:29  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r133] src/qutewidget.cpp, src/qutewidget.h: Moved widget mutex
+	  macro to correct place
+
+2009-01-26 23:06  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r132] src/qutecsound.cpp, src/quteslider.cpp, src/quteslider.h,
+	  src/qutewidget.cpp, src/types.h, src/widgetpanel.cpp: Fixed
+	  confirmation when closing tab
+	  Fixed slider scale, so it follows correctly pixel size. This
+	  fixes changing values when saving.
+	  Disabled building with widget mutex, as it seems to have no
+	  positive effect
+	  Improved usage of mutexes in widget panel
+
+2009-01-26 01:06  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r131] src/qutebutton.cpp, src/qutecheckbox.cpp,
+	  src/qutecombobox.cpp, src/qutecsound.cpp, src/qutecsound.h,
+	  src/qutegraph.cpp, src/quteknob.cpp, src/qutemeter.cpp,
+	  src/qutescope.cpp, src/quteslider.cpp, src/qutespinbox.cpp,
+	  src/qutetext.cpp, src/qutewidget.cpp, src/src.pro, src/types.h,
+	  src/widgetpanel.cpp: Changed csound mutex to QMutex
+	  Moved save untitled warning to correct place
+
+2009-01-23 20:12  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r130] src/highlighter.cpp: Added highlighting to csLADSPA tags
+
+2009-01-23 20:03  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r129] src/documentpage.cpp, src/documentpage.h,
+	  src/qutecsound.cpp, src/quteknob.cpp, src/quteknob.h,
+	  src/qutespinbox.cpp, src/qutespinbox.h, src/qutetext.cpp,
+	  src/qutetext.h, src/widgetpanel.cpp, src/widgetpanel.h: Finished
+	  support for csLADSPA section generation
+
+2009-01-23 15:52  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r128] src/highlighter.cpp, src/qutecsound.cpp, src/qutecsound.h,
+	  src/quteslider.cpp, src/quteslider.h, src/qutewidget.cpp,
+	  src/qutewidget.h, src/widgetpanel.cpp: Initial work for csladspa
+	  and cabbage code generation
+	  Cleaner startup (widget panel is hidden while QuteCsound loads)
+
+2009-01-23 13:04  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r127] src/qutecsound.cpp: Hide widget panel when open or save
+	  as, because it interferes with file selector on OS X
+
+2009-01-21 15:19  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r126] src/documentpage.cpp, src/qutecsound.cpp: Fixed tab icons.
+	  They now reflect whether document has been modified.
+	  Corrected error line highlighting (for lines that wrap) and
+	  textedit now retains position.
+
+2009-01-20 22:20  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r125] src/console.cpp, src/console.h, src/documentpage.cpp,
+	  src/documentpage.h, src/qutecsound.cpp, src/qutecsound.h,
+	  src/widgetpanel.cpp: Csound compilation errors are highlighted in
+	  the csd text
+	  Prevent opening files twice or saving as a file that is already
+	  open
+	  Widgets (when show on run enabled) are ony shown if compilation
+	  is succesful
+	  Labels now retain commas and curly brace characters
+
+2009-01-19 21:56  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r124] src/documentpage.cpp: Finished implementing conversion
+	  between chnget/chnset and invalue/outvaue
+
+2009-01-17 19:45  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r123] src/configdialog.cpp, src/configdialog.ui,
+	  src/dockhelp.cpp, src/documentpage.cpp, src/documentpage.h,
+	  src/options.h, src/qutebutton.cpp, src/qutecheckbox.cpp,
+	  src/qutecombobox.cpp, src/qutecsound.cpp, src/qutecsound.h,
+	  src/qutegraph.cpp, src/quteknob.cpp, src/qutemeter.cpp,
+	  src/qutescope.cpp, src/quteslider.cpp, src/qutespinbox.cpp,
+	  src/qutetext.cpp, src/qutewidget.cpp, src/qutewidget.h,
+	  src/widgetpanel.cpp: Removed option to use chnget/chnset
+	  Initial work on conversion from invalue to chnget and viceversa
+	  Experiments with mutexes to see if it solves OS X issues
+
+2009-01-15 22:45  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r122] src/configdialog.cpp, src/findreplace.cpp,
+	  src/findreplace.ui, src/qutecsound.cpp, src/qutemeter.cpp,
+	  src/src.pro, src/types.h, src/widgetpanel.cpp, src/widgetpanel.h:
+	  Fixed building on OS X (added libsndfile)
+	  Added close button to Find and replace dialog
+	  Added several QMutex mutexes to try to fix OS X problems. Not
+	  working yet....
+
+2009-01-15 16:45  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r121] src/configdialog.cpp, src/configdialog.h,
+	  src/configdialog.ui, src/documentpage.cpp, src/documentpage.h,
+	  src/graphicwindow.cpp, src/graphicwindow.h, src/highlighter.cpp,
+	  src/opentryparser.cpp, src/options.h, src/qutecsound.cpp: Greatly
+	  improved code graph.
+	  Added option to select default csd
+	  Variables with _ are now highlighted properly
+
+2009-01-14 00:28  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r120] src/configdialog.cpp, src/configdialog.h,
+	  src/configdialog.ui, src/configlists.cpp, src/documentpage.cpp,
+	  src/documentpage.h, src/graphicwindow.cpp, src/graphicwindow.h,
+	  src/node.cpp, src/node.h, src/opentryparser.cpp,
+	  src/opentryparser.h, src/options.h, src/qutecsound.cpp,
+	  src/qutecsound.h, src/qutegraph.cpp, src/src.pro, src/types.h:
+	  Fixed GraphWidget for usage with display opcode.
+	  Added initial work for generating code diagrams using dot.
+	  Added proper support for SOLARIS (patch by Sergio)
+
+2009-01-09 22:32  Andrés Cabrera <mantaraya36@gmail.com>
+
+	* [r119] ChangeLog, src/options.h, src/qutecsound.cpp,
+	  src/qutecsound.h, src/qutegraph.cpp, src/qutescope.cpp,
+	  src/qutescope.h, src/qutewidget.cpp, src/qutewidget.h,
+	  src/widgetpanel.cpp, src/widgetpanel.h: Modified internal
+	  handling of values from widgets. Now instead of polling values, a
+	  value queue is filled whenever a widget value changes. Only
+	  implemented for float values not strings.
+	  Connected widgets with the same channel even when Csound is not
+	  running.
+	  When audiofile is rendered, the file can now be opened with
+	  external editor (in previous version, only files created with
+	  record button were opened in external editor and player)
+	  Fixed: csound doesnot run if filename dialog when Render is
+	  cancelled.
+	  Added an "About examples" menu item
+	  Added keyboard shortcut to Save as
+	  Fixed setting the widgetgraphs' zoom when out of bounds (no more
+	  white graphs!)
+	  Selection of widgets with mouse rectangle
+	  Updated ChangeLog
+
 2008-12-31 03:39  Andrés Cabrera <mantaraya36@gmail.com>
 
 	* [r118] doc/QuteCsound Quick Reference (0.4)-es.odt,
