@@ -536,8 +536,6 @@ void WidgetPanel::processNewValues()
 void WidgetPanel::widgetChanged(QuteWidget* widget)
 {
   QString text = widgetsText();
-  if (widgets.size() > 0 and widgets[0]->toolTip() != "")
-    showTooltips(true);
   for (int i = 0; i < editWidgets.size(); i++) {
     if (editWidgets[i]->getWidget() == widget) {
       //TODO set edit widget size and pos to widget's

@@ -256,6 +256,7 @@ void qutecsound::changePage(int index)
 void qutecsound::updateWidgets()
 {
   widgetPanel->loadWidgets(textEdit->getMacWidgetsText());
+  widgetPanel->showTooltips(m_options->showTooltips);
 }
 
 void qutecsound::openExample()
