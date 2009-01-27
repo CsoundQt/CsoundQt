@@ -23,6 +23,8 @@
 #include <QtGui>
 #include <QHash>
 
+#define USE_WIDGET_MUTEX
+
 class QuteWidget : public QWidget
 {
   Q_OBJECT
