@@ -49,11 +49,12 @@ class WidgetPanel : public QDockWidget
     void setValue(QString channelName, QString value);
     void setValue(int index, double value);
     void setValue(int index, QString value);
-    int loadWidgets(QString macWidgets);
+    void loadWidgets(QString macWidgets);
     int newWidget(QString widgetLine, bool offset = false);
     QString widgetsText();
     void appendMessage(QString message);
     void showTooltips(bool show);
+    void setWidgetToolTip(QuteWidget *widget, bool show);
     void newCurve(Curve* curve);
 //     int getCurveIndex(Curve *curve);
     void setCurveData(Curve *curve);
@@ -72,6 +73,9 @@ class WidgetPanel : public QDockWidget
     virtual void moveEvent(QMoveEvent * event);
 
   private:
+    // These vectors must be used with care since they are not reentrant and will
+    // cause problems when accessed simultaneously
+    // TODO check where these are accessed for problems
     QVector<QuteWidget *> widgets;
     QVector<QuteConsole *> consoleWidgets;
     QVector<QuteGraph *> graphWidgets;
@@ -82,6 +86,7 @@ class WidgetPanel : public QDockWidget
     LayoutWidget *layoutWidget;
 
     QMutex valueMutex;
+    QMutex eventMutex;
 
     QPoint currentPosition;
     QAction *createSliderAct;
@@ -114,6 +119,7 @@ class WidgetPanel : public QDockWidget
 
     QStringList clipboard;
     QSize oldSize;
+    bool m_tooltips;
 
     int createSlider(int x, int y, int width, int height, QString widgetLine);
     int createText(int x, int y, int width, int height, QString widgetLine);
@@ -139,6 +145,7 @@ class WidgetPanel : public QDockWidget
     void newValue(QPair<QString, double> channelValue);
     void processNewValues();
     void widgetChanged(QuteWidget* widget = 0);
+//     void updateWidgetText();
     void deleteWidget(QuteWidget *widget);
     void queueEvent(QString eventLine);
     void createLabel();

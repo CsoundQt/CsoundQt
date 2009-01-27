@@ -173,23 +173,28 @@ void WidgetPanel::setValue(int index, QString value)
   widgets[index/2]->setValue(value);
 }
 
-int WidgetPanel::loadWidgets(QString macWidgets)
+void WidgetPanel::loadWidgets(QString macWidgets)
 {
   clearWidgetPanel();
   QStringList widgetLines = macWidgets.split(QRegExp("[\n\r]"), QString::SkipEmptyParts);
   foreach (QString line, widgetLines) {
 //     qDebug("WidgetLine: %s", line.toStdString().c_str());
-    if (line.startsWith("i"))
-      newWidget(line);
+    if (line.startsWith("i")) {
+      if (newWidget(line) < 0)
+        qDebug() << "WidgetPanel::loadWidgets error processing line: " << line;
+    }
+    else {
+      qDebug() << "WidgetPanel::loadWidgets error processing line: " << line;
+    }
   }
   if (editAct->isChecked()) {
     activateEditMode(true);
   }
-  return 0;
 }
 
 int WidgetPanel::newWidget(QString widgetLine, bool offset)
 {
+  // This function returns -1 on error, 0 when no widget was created and 1 if widget was created
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"'); //Remove this line whe not needed
   if (parts.size()<5)
@@ -261,14 +266,13 @@ int WidgetPanel::newWidget(QString widgetLine, bool offset)
       return createDummy(x,y,width, height, widgetLine);
     }
   }
-    return 0;
-  }
+  return -1;
+}
 
 void WidgetPanel::clearWidgets()
 {
   clearWidgetPanel();
   widgetChanged();
-//   clipboard.clear();
 }
 
 void WidgetPanel::clearWidgetPanel()
@@ -301,10 +305,12 @@ QString WidgetPanel::widgetsText()
   text +=  QString::number((int) (palette().button().color().greenF()*65535.)) + ", ";
   text +=  QString::number((int) (palette().button().color().blueF()*65535.)) +"}\n";
 
+  valueMutex.lock();
   for (int i = 0; i < widgets.size(); i++) {
   //FIXME os x crash here!
     text += widgets[i]->getWidgetLine() + "\n";
   }
+  valueMutex.unlock();
   text += "</MacGUI>";
   return text;
 }
@@ -318,19 +324,25 @@ void WidgetPanel::appendMessage(QString message)
 
 void WidgetPanel::showTooltips(bool show)
 {
+  m_tooltips = show;
   for (int i=0; i < widgets.size(); i++) {
-    if (show) {
-      if (widgets[i]->getChannel2Name() != "") {
-        widgets[i]->setToolTip(tr("ChannelV:") + widgets[i]->getChannelName()
-            + tr("\nChannelH:")+ widgets[i]->getChannel2Name());
-      }
-      else {
-        widgets[i]->setToolTip(tr("Channel:") + widgets[i]->getChannelName());
-      }
-    }
-    else
-      widgets[i]->setToolTip("");
+    setWidgetToolTip(widgets[i], show);
   }
+}
+
+void WidgetPanel::setWidgetToolTip(QuteWidget *widget, bool show)
+{
+  if (show) {
+    if (widget->getChannel2Name() != "") {
+      widget->setToolTip(tr("ChannelV:") + widget->getChannelName()
+          + tr("\nChannelH:")+ widget->getChannel2Name());
+    }
+    else {
+      widget->setToolTip(tr("Channel:") + widget->getChannelName());
+    }
+  }
+  else
+    widget->setToolTip("");
 }
 
 void WidgetPanel::newCurve(Curve* curve)
@@ -368,6 +380,7 @@ Curve * WidgetPanel::getCurveById(uintptr_t id)
 
 void WidgetPanel::flush()
 {
+  // Called when running Csound to flush flush queues
   newValues.clear();
   eventQueueSize = 0; //Flush events gathered while idle
 }
@@ -440,8 +453,11 @@ void WidgetPanel::queueEvent(QString eventLine)
 {
 //   qDebug("WidgetPanel::queueEvent %s", eventLine.toStdString().c_str());
   if (eventQueueSize < QUTECSOUND_MAX_EVENTS) {
+    //TODO is this lock necessary?
+//     eventMutex.lock();
     eventQueue[eventQueueSize] = eventLine;
     eventQueueSize++;
+//     eventMutex.unlock();
   }
   else
     qDebug("Warning: event queue full, event not processed");
@@ -509,7 +525,7 @@ void WidgetPanel::newValue(QPair<QString, double> channelValue)
       valueMutex.unlock();
     }
   }
-  widgetChanged();
+//   widgetChanged();
 }
 
 void WidgetPanel::processNewValues()
@@ -535,14 +551,17 @@ void WidgetPanel::processNewValues()
 
 void WidgetPanel::widgetChanged(QuteWidget* widget)
 {
-  QString text = widgetsText();
-  for (int i = 0; i < editWidgets.size(); i++) {
-    if (editWidgets[i]->getWidget() == widget) {
-      //TODO set edit widget size and pos to widget's
-    }
-  }
-  emit widgetsChanged(text);
+//   for (int i = 0; i < editWidgets.size(); i++) {
+//     if (editWidgets[i]->getWidget() == widget) {
+//       //TODO set edit widget size and pos to widget's
+//     }
+//   }
 }
+
+// void WidgetPanel::updateWidgetText()
+// {
+//   emit widgetsChanged(widgetsText());
+// }
 
 int WidgetPanel::createSlider(int x, int y, int width, int height, QString widgetLine)
 {
@@ -563,7 +582,7 @@ int WidgetPanel::createSlider(int x, int y, int width, int height, QString widge
     channelName.chop(1);  //remove last space
     widget->setChannelName(channelName);
   }
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+//   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widgets.append(widget);
@@ -571,6 +590,7 @@ int WidgetPanel::createSlider(int x, int y, int width, int height, QString widge
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
 
@@ -614,13 +634,14 @@ int WidgetPanel::createText(int x, int y, int width, int height, QString widgetL
 //   labelText.chop(1);
   labelText = widgetLine.mid(widgetLine.indexOf("border") + 7);
   widget->setText(labelText);
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+//   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   widgets.append(widget);
   widget->show();
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
 
@@ -666,7 +687,7 @@ int WidgetPanel::createScrollNumber(int x, int y, int width, int height, QString
   widget->setValue(labelText.toDouble(&ok));
   if (!ok)
     widget->setText(labelText);
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+//   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widgets.append(widget);
@@ -674,6 +695,7 @@ int WidgetPanel::createScrollNumber(int x, int y, int width, int height, QString
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
 
@@ -716,13 +738,14 @@ int WidgetPanel::createLineEdit(int x, int y, int width, int height, QString wid
   }
   labelText.chop(1);
   widget->setText(labelText);
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+//   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   widgets.append(widget);
   widget->show();
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
 
@@ -765,7 +788,7 @@ int WidgetPanel::createSpinBox(int x, int y, int width, int height, QString widg
   }
   labelText.chop(1);
   widget->setText(labelText);
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+//   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widgets.append(widget);
@@ -773,6 +796,7 @@ int WidgetPanel::createSpinBox(int x, int y, int width, int height, QString widg
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
 
@@ -801,18 +825,15 @@ int WidgetPanel::createButton(int x, int y, int width, int height, QString widge
     widget->setEventLine(quoteParts[6]);
   }
   connect(widget, SIGNAL(queueEvent(QString)), this, SLOT(queueEvent(QString)));
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+//   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(runCsound()));
   connect(widget, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
-//   connect(widget, SIGNAL(selectAudioInDevice(QPoint)), static_cast<qutecsound *>(parent()), SLOT(selectAudioInDevice(QPoint)));
-//   connect(widget, SIGNAL(selectAudioOutDevice(QPoint)), static_cast<qutecsound *>(parent()), SLOT(selectAudioOutDevice(QPoint)));
-//   connect(widget, SIGNAL(selectMidiInDevice(QPoint)), static_cast<qutecsound *>(parent()), SLOT(selectMidiInDevice(QPoint)));
-//   connect(widget, SIGNAL(selectMidiOutDevice(QPoint)), static_cast<qutecsound *>(parent()), SLOT(selectMidiOutDevice(QPoint)));
 
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
 
@@ -836,7 +857,7 @@ int WidgetPanel::createKnob(int x, int y, int width, int height, QString widgetL
     channelName.chop(1);  //remove last space
     widget->setChannelName(channelName);
   }
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+//   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widgets.append(widget);
@@ -844,6 +865,7 @@ int WidgetPanel::createKnob(int x, int y, int width, int height, QString widgetL
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
 
@@ -865,7 +887,7 @@ int WidgetPanel::createCheckBox(int x, int y, int width, int height, QString wid
     channelName.chop(1);  //remove last space
     widget->setChannelName(channelName);
   }
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+//   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widgets.append(widget);
@@ -873,6 +895,7 @@ int WidgetPanel::createCheckBox(int x, int y, int width, int height, QString wid
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
 
@@ -889,7 +912,7 @@ int WidgetPanel::createMenu(int x, int y, int width, int height, QString widgetL
   widget->setValue(parts[5].toDouble()); //setValue must be after setText otherwise ComboBox is empty
   if (quoteParts.size() > 2)
     widget->setChannelName(quoteParts[2].remove(0,1)); //remove initial space from channel name
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+//   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widgets.append(widget);
@@ -897,6 +920,7 @@ int WidgetPanel::createMenu(int x, int y, int width, int height, QString widgetL
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
 
@@ -929,7 +953,7 @@ int WidgetPanel::createMeter(int x, int y, int width, int height, QString widget
   widget->setPointSize(parts2[2].toInt());
   widget->setFadeSpeed(parts2[3].toInt());
   widget->setBehavior(parts2[4]);
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+//   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widgets.append(widget);
@@ -937,6 +961,7 @@ int WidgetPanel::createMeter(int x, int y, int width, int height, QString widget
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
 
@@ -947,13 +972,14 @@ int WidgetPanel::createConsole(int x, int y, int width, int height, QString widg
    QuteConsole *widget= new QuteConsole(layoutWidget);
    widget->setWidgetLine(widgetLine);
    widget->setWidgetGeometry(x,y,width, height);
-   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+//    connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
    connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
    widgets.append(widget);
    widget->show();
    if (editAct->isChecked()) {
      createEditFrame(widget);
    }
+   setWidgetToolTip(widget, m_tooltips);
    consoleWidgets.append(widget);
    return 1;
 }
@@ -983,13 +1009,14 @@ int WidgetPanel::createGraph(int x, int y, int width, int height, QString widget
     channelName.chop(1);  //remove last space
     widget->setChannelName(channelName);
   }
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+//   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   widgets.append(widget);
   widget->show();
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  setWidgetToolTip(widget, m_tooltips);
   graphWidgets.append(widget);
   return 1;
 }
@@ -1021,13 +1048,14 @@ int WidgetPanel::createScope(int x, int y, int width, int height, QString widget
     widget->setChannelName(channelName);
   }
 //   connect(static_cast<qutecsound *>(parent()), SIGNAL(updateData()), widget, SLOT(updateData()));
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+//   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   widgets.append(widget);
   widget->show();
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  setWidgetToolTip(widget, m_tooltips);
   scopeWidgets.append(widget);
   return 1;
 }
@@ -1042,6 +1070,7 @@ int WidgetPanel::createDummy(int x, int y, int width, int height, QString widget
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
 

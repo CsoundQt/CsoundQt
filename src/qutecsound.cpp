@@ -437,6 +437,10 @@ void qutecsound::closeGraph()
 
 bool qutecsound::save()
 {
+  // Update widget panel text on save.
+  perfMutex.lock();
+  documentPages[curPage]->setMacWidgetsText(widgetPanel->widgetsText());
+  perfMutex.unlock();
   if (documentPages[curPage]->fileName.isEmpty()) {
     return saveAs();
   }
@@ -1424,7 +1428,7 @@ void qutecsound::dispatchQueues()
     }
     curveBuffer.remove(curveBuffer.indexOf(windat));
   }
-  queueTimer->start(QCS_QUEUETIMER_TIME);
+  queueTimer->start(QCS_QUEUETIMER_TIME); //will launch this function again later
 }
 
 void qutecsound::dispatchOfflineQueues()
