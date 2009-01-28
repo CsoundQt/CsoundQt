@@ -1023,7 +1023,7 @@ void qutecsound::record()
 void qutecsound::recordBuffer()
 {
   int bufferSize = 4096;
-  float sample[bufferSize];
+  MYFLT sample[bufferSize];
 #ifdef USE_LIBSNDFILE
   if (recAct->isChecked()) {
     if (audioOutputBuffer.copyAvailableBuffer(sample, bufferSize)) {

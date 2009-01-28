@@ -23,6 +23,7 @@
 #define CURVE_H
 
 #include <QString>
+#include "types.h"
 
 enum Polarity {
   POLARITY_NOPOL,
@@ -52,7 +53,7 @@ class Curve
     float get_y_scale() const;    // Y axis scaling factor
 
     void set_id(uintptr_t id);
-    void set_data(float * data);
+    void set_data(MYFLT * data);
     void set_size(size_t size);      // number of points
     void set_caption(QString caption); // title of curve
     void set_polarity(Polarity polarity); // polarity

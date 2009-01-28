@@ -159,7 +159,7 @@ void Curve::set_id(uintptr_t id)
   m_id = id;
 }
 
-void Curve::set_data(float * data)
+void Curve::set_data(MYFLT * data)
 {
   m_data = (float *)data;
 }
