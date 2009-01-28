@@ -34,6 +34,7 @@
 #define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/bin/audacity"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/aplay"
+#define DEFAULT_DOT_EXECUTABLE "dot"
 #endif
 #ifdef SOLARIS
 #define DEFAULT_HTML_DIR "/usr/local/share/doc/csound/html"
@@ -41,6 +42,7 @@
 #define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/local/bin/audacity"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/jmplay"
+#define DEFAULT_DOT_EXECUTABLE "dot"
 #endif
 #ifdef MACOSX
 #define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib.framework/Versions/5.1/Resources/Manual"
@@ -48,6 +50,7 @@
 #define DEFAULT_BROWSER_EXECUTABLE "/Applications/Firefox.app"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/Applications/Audacity.app"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/Applications/QuickTime Player.app"
+#define DEFAULT_DOT_EXECUTABLE "/Applications/Graphviz.app/Contents/MacOS/dot"
 #endif
 #ifdef WIN32
 #define DEFAULT_HTML_DIR "C:/Program Files/Csound/doc/manual"
@@ -55,6 +58,7 @@
 #define DEFAULT_BROWSER_EXECUTABLE "firefox.exe"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "audacity.exe"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "wmplayer.exe"
+#define DEFAULT_DOT_EXECUTABLE "dot.exe"
 #endif
 
 #include <csound.h>

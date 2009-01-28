@@ -19,7 +19,11 @@
  ***************************************************************************/
 #include "qutemeter.h"
 
+#ifndef MACOSX
 #include <cmath> //for isnan
+#else
+#include <math.h> //for isnan
+#endif
 
 QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
 {

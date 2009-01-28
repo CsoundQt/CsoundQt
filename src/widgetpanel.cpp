@@ -184,6 +184,7 @@ void WidgetPanel::loadWidgets(QString macWidgets)
         qDebug() << "WidgetPanel::loadWidgets error processing line: " << line;
     }
     else {
+      if (!line.contains("<MacGUI>") && !line.contains("</MacGUI>"))
       qDebug() << "WidgetPanel::loadWidgets error processing line: " << line;
     }
   }

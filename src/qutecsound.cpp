@@ -2062,7 +2062,7 @@ void qutecsound::readSettings()
   settings.beginGroup("External");
   m_options->terminal = settings.value("terminal", DEFAULT_TERM_EXECUTABLE).toString();
   m_options->browser = settings.value("browser", DEFAULT_BROWSER_EXECUTABLE).toString();
-  m_options->dot = settings.value("dot", "dot").toString();
+  m_options->dot = settings.value("dot", DEFAULT_DOT_EXECUTABLE).toString();
   m_options->waveeditor = settings.value("waveeditor",
                                          DEFAULT_WAVEEDITOR_EXECUTABLE
                                         ).toString();

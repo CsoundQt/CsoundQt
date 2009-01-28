@@ -47,7 +47,6 @@ double QuteSlider::getValue()
 
 void QuteSlider::setRange(double min, double max)
 {
-  // FIXME when slider is resized, its internal range should be adjusted to accomodate one value per pixel. There are currently 100 values no matter how many pixels...
   if (max < min) {
     double temp = max;
     max = min;
