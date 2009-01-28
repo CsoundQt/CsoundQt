@@ -103,8 +103,8 @@ void QuteScope::setWidgetGeometry(int x,int y,int width,int height)
 {
   QuteWidget::setWidgetGeometry(x,y,width, height);
 //   static_cast<ScopeWidget *>(m_widget)->setWidgetGeometry(0,0,width, height);
-  if (index < 0)
-    return;
+//   if (index < 0)
+//     return;
 }
 
 void QuteScope::createPropertiesDialog()
