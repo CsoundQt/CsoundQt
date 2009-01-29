@@ -2,7 +2,11 @@
 #the doubles version, run qmake "CONFIG += build64"
 #CONFIG += build64
 
-win32 : QUTECSOUND_CSOUND_PATH = C:\Program Files\Csound
+win32 \
+{
+    QUTECSOUND_CSOUND_PATH = C:\Program Files\Csound
+    LIBSNDFILE_PATH        = C:\Development Files\libsndfile-1_0_17
+}
 
 CONFIG += qute_cpp \
 	libsndfile
@@ -20,7 +24,7 @@ DEFINES += QUTE_USE_CSOUNDPERFORMANCETHREAD
 
 
 libsndfile {
-    LIBS += -lsndfile
+    !win32 : LIBS += -lsndfile
     DEFINES += USE_LIBSNDFILE
 }
 
@@ -120,7 +124,8 @@ win32 {
         LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\libcsound32.a"
     }
     libsndfile {
-        LIBS += -lsndfile
+        INCLUDEPATH += "$${LIBSNDFILE_PATH}"
+        LIBS += "$${LIBSNDFILE_PATH}\libsndfile-1.a"
     }
     RC_FILE = qutecsound.rc
 }
