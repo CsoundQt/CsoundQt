@@ -36,6 +36,7 @@ class DocumentPage : public QTextEdit
 
     int setTextString(QString text);
     QString getFullText();
+    QString getOptionsText();
     QString getDotText();
     QString getMacWidgetsText();
     QString getMacOptionsText();

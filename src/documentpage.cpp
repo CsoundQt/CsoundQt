@@ -128,6 +128,17 @@ QString DocumentPage::getFullText()
   return fullText;
 }
 
+QString DocumentPage::getOptionsText()
+{
+  QString text = document()->toPlainText();
+  int index = text.indexOf("<CsOptions>") + 11;
+  int end = text.indexOf("</CsOptions>") - 1 ;
+  if (index < 0 or end < 0)
+    return QString();
+  text = text.mid(index, end-index);
+  return text;
+}
+
 QString DocumentPage::getDotText()
 {
   QString dotText = "digraph csd {\n    fontsize=18\n    label=\"" + fileName + "\"\n";

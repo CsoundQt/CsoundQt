@@ -1,30 +1,12 @@
 #Builds for float version by default. If you want to use
 #the doubles version, run qmake "CONFIG += build64"
-CONFIG += build64
+#CONFIG += build64
 
 win32 \
 {
-    build64 \
-    {
-        include(..\build\qtcreator-win32\doubles\doubles.pri)
-        UI_DIR      = $$join(UI_DIR     ,,,-doubles)
-        OBJECTS_DIR = $$join(OBJECTS_DIR,,,-doubles)
-        MOC_DIR     = $$join(MOC_DIR    ,,,-doubles)
-        RCC_DIR     = $$join(RCC_DIR    ,,,-doubles)
-    }
-    else \
-    {
-        include(..\build\qtcreator-win32\floats\floats.pri)
-        UI_DIR      = $$join(UI_DIR     ,,,-floats)
-        OBJECTS_DIR = $$join(OBJECTS_DIR,,,-floats)
-        MOC_DIR     = $$join(MOC_DIR    ,,,-floats)
-        RCC_DIR     = $$join(RCC_DIR    ,,,-floats)
-    }
+    QUTECSOUND_CSOUND_PATH = C:\Program Files\Csound
+    LIBSNDFILE_PATH        = C:\Development Files\libsndfile-1_0_17
 }
-else \ # !win32...
-{
-
-
 
 CONFIG += qute_cpp \
 	libsndfile
@@ -42,7 +24,7 @@ DEFINES += QUTE_USE_CSOUNDPERFORMANCETHREAD
 
 
 libsndfile {
-    LIBS += -lsndfile
+    !win32 : LIBS += -lsndfile
     DEFINES += USE_LIBSNDFILE
 }
 
@@ -125,20 +107,41 @@ FORMS += configdialog.ui \
   utilitiesdialog.ui \
  findreplace.ui
 
-
+win32 {
+    DEFINES +=WIN32
+    INCLUDEPATH += "$${QUTECSOUND_CSOUND_PATH}\include"
+    HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\csound.h"
+    qute_cpp {
+        HEADERS += "$${QUTECSOUND_CSOUND_PATH}\csound.hpp"
+        HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\csPerfThread.hpp"
+        HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\cwindow.h"
+        LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\csnd.dll"
+}
+    build64 {
+        LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\libcsound64.a"
+}
+    else {
+        LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\libcsound32.a"
+}
+    libsndfile {
+        INCLUDEPATH += "$${LIBSNDFILE_PATH}"
+        LIBS += "$${LIBSNDFILE_PATH}\libsndfile-1.a"
+}
+    RC_FILE = qutecsound.rc
+}
 
 linux-g++ {
     DEFINES += LINUX
     INCLUDEPATH += /usr/local/include/csound/ /usr/include/csound/
     qute_cpp {
         LIBS += -lcsnd
-    }
+}
     build64 {
         LIBS += -lcsound64
-    }
+}
     else {
         LIBS += -lcsound
-    }
+}
 }
 
 solaris-g++-64 {
@@ -146,22 +149,22 @@ solaris-g++-64 {
     INCLUDEPATH += /usr/local/include/csound/
     qute_cpp {
         LIBS += -lcsnd
-    }
+}
     build64 {
         LIBS += -lcsound64
-    }
+}
     else {
         LIBS += -lcsound
-    }
+}
 }
 
 macx {
     build64 {
         MAC_LIB = CsoundLib64
-    }
+}
     else {
         MAC_LIB = CsoundLib
-    }
+}
     message(Building using $${MAC_LIB})
     DEFINES +=MACOSX
     HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.h
@@ -170,7 +173,7 @@ macx {
         HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csPerfThread.hpp
         HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/cwindow.h
         LIBS += /Library/Frameworks/CsoundLib.framework/Versions/Current/lib_csnd.dylib
-    }
+}
     LIBS += -framework QtXml
     LIBS += -framework QtGui
     LIBS += -framework QtCore
@@ -187,5 +190,3 @@ CONFIG -= stl \
  release
 
 
-
-} # ...if !win32

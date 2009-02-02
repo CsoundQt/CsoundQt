@@ -1107,6 +1107,17 @@ void qutecsound::openExternalEditor()
 {
   QString options;
   options = currentAudioFile;
+  QString optionsText = documentPages[curPage]->getOptionsText();
+  if (options == "") {
+    if (!optionsText.contains("-i")) {
+      options = "test.wav";
+    }
+    else {
+      //TODO this is not very robust...
+      optionsText = optionsText.mid(optionsText.indexOf("-i") + 2);
+      optionsText = optionsText.left(optionsText.indexOf(" -"));
+    }
+  }
   execute(m_options->waveeditor, options);
 }
 
@@ -1114,6 +1125,17 @@ void qutecsound::openExternalPlayer()
 {
   QString options;
   options = currentAudioFile;
+  QString optionsText = documentPages[curPage]->getOptionsText();
+  if (options == "") {
+    if (!optionsText.contains("-i")) {
+      options = "test.wav";
+    }
+    else {
+      //TODO this is not very robust...
+      optionsText = optionsText.mid(optionsText.indexOf("-i") + 2);
+      optionsText = optionsText.left(optionsText.indexOf(" -"));
+    }
+  }
   execute(m_options->waveplayer, options);
 }
 
