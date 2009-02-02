@@ -1,15 +1,14 @@
 #Builds for float version by default. If you want to use
-#the doubles version, run qmake "CONFIG += build64"
-#CONFIG += build64
+#the doubles version, run:
+#qmake "CONFIG += build64"
 
-win32 \
-{
+win32 {
     QUTECSOUND_CSOUND_PATH = C:\Program Files\Csound
     LIBSNDFILE_PATH        = C:\Development Files\libsndfile-1_0_17
 }
 
 CONFIG += qute_cpp \
-	libsndfile
+ libsndfile
 
 build64 {
     message(Building for doubles \(64-bit\) csound)
