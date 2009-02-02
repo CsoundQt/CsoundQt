@@ -37,6 +37,7 @@ class QuteKnob : public QuteWidget
     virtual QString getCsladspaLine();
     virtual double getValue();
     virtual void setValue(double value);
+    virtual void setResolution(double resolution);
     void setRange(double min, double max);
 
   protected:
@@ -46,6 +47,7 @@ class QuteKnob : public QuteWidget
   private:
     QDoubleSpinBox *minSpinBox;
     QDoubleSpinBox *maxSpinBox;
+    QDoubleSpinBox *resolutionSpinBox;
 
 };
 

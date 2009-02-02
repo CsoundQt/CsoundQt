@@ -50,6 +50,7 @@ class QuteWidget : public QWidget
     virtual QString getWidgetLine();
     virtual double getValue();
     virtual double getValue2();
+    virtual double getResolution();
     virtual QString getStringValue();
     virtual QString getCabbageLine();
     virtual QString getCsladspaLine();

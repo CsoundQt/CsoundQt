@@ -127,6 +127,11 @@ double QuteWidget::getValue2()
   return 0.0;
 }
 
+double QuteWidget::getResolution()
+{
+  return m_resolution;
+}
+
 QString QuteWidget::getStringValue()
 {
 #ifdef DEBUG
@@ -159,7 +164,7 @@ void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
 
 void QuteWidget::mousePressEvent(QMouseEvent *event)
 {
-  qDebug("QuteWidget::mousePressEvent");
+//   qDebug("QuteWidget::mousePressEvent");
   QWidget::mousePressEvent(event);
 }
 

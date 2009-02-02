@@ -54,7 +54,7 @@ void Console::appendMessage(QString msg)
   }
   text->insertPlainText(msg);
   text->moveCursor(QTextCursor::End);
-  text->setTextColor(QColor("black"));
+  text->setTextColor(m_textColor);
 }
 
 void Console::clear()

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>623</width>
-    <height>585</height>
+    <width>624</width>
+    <height>593</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -31,7 +31,7 @@
       <property name="orientation" >
        <enum>Qt::Horizontal</enum>
       </property>
-      <property name="sizeHint" >
+      <property name="sizeHint" stdset="0" >
        <size>
         <width>131</width>
         <height>31</height>
@@ -499,7 +499,7 @@
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>331</width>
+        <width>339</width>
         <height>99</height>
        </rect>
       </property>
@@ -596,7 +596,7 @@
        <item row="2" column="0" >
         <widget class="QLabel" name="label_19" >
          <property name="text" >
-          <string>Tab Width (px)</string>
+          <string>Tab Width</string>
          </property>
         </widget>
        </item>
@@ -623,7 +623,7 @@
        <rect>
         <x>10</x>
         <y>130</y>
-        <width>331</width>
+        <width>341</width>
         <height>151</height>
        </rect>
       </property>
@@ -679,9 +679,9 @@
      <property name="geometry" >
       <rect>
        <x>370</x>
-       <y>180</y>
+       <y>170</y>
        <width>241</width>
-       <height>231</height>
+       <height>211</height>
       </rect>
      </property>
      <property name="title" >
@@ -773,7 +773,7 @@
      <property name="geometry" >
       <rect>
        <x>370</x>
-       <y>20</y>
+       <y>10</y>
        <width>241</width>
        <height>151</height>
       </rect>
@@ -835,9 +835,9 @@
      <property name="geometry" >
       <rect>
        <x>10</x>
-       <y>310</y>
-       <width>351</width>
-       <height>121</height>
+       <y>390</y>
+       <width>601</width>
+       <height>111</height>
       </rect>
      </property>
      <property name="title" >
@@ -944,14 +944,78 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="layoutWidget" >
+      <property name="geometry" >
+       <rect>
+        <x>358</x>
+        <y>30</y>
+        <width>161</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout" >
+       <item>
+        <widget class="QLabel" name="label_23" >
+         <property name="text" >
+          <string>Font Color</string>
+         </property>
+         <property name="alignment" >
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_24" >
+         <property name="text" >
+          <string>Background Color</string>
+         </property>
+         <property name="alignment" >
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="layoutWidget" >
+      <property name="geometry" >
+       <rect>
+        <x>530</x>
+        <y>30</y>
+        <width>52</width>
+        <height>69</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2" >
+       <item>
+        <widget class="QPushButton" name="consoleFontColorPushButton" >
+         <property name="enabled" >
+          <bool>true</bool>
+         </property>
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="consoleBgColorPushButton" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox_9" >
      <property name="geometry" >
       <rect>
        <x>10</x>
-       <y>440</y>
+       <y>300</y>
        <width>351</width>
-       <height>61</height>
+       <height>81</height>
       </rect>
      </property>
      <property name="title" >
@@ -961,7 +1025,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>20</y>
+        <y>30</y>
         <width>331</width>
         <height>30</height>
        </rect>

@@ -31,12 +31,26 @@ class Console
 
     virtual void appendMessage(QString msg);
     void clear();
-    void setDefaultFont(QFont font) {text->document()->setDefaultFont(font);}
+    virtual void setDefaultFont(QFont font) {text->document()->setDefaultFont(font);}
+    virtual void setColors(QColor textColor, QColor bgColor)
+    {
+      text->setTextColor(textColor);
+      text->setTextBackgroundColor(bgColor);
+      QPalette palette = text->palette();
+      palette.setColor(QPalette::WindowText, textColor);
+      palette.setColor(QPalette::Window, bgColor);
+      text->setPalette(palette);
+      text->setAutoFillBackground(true);
+      m_textColor = textColor;
+      m_bgColor = bgColor;
+    }
     QList<int> errorLines;
 
   protected:
     QTextEdit *text;
     bool error;
+    QColor m_textColor;
+    QColor m_bgColor;
 };
 
 class DockConsole : public QDockWidget, public Console

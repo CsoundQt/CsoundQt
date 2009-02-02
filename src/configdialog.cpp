@@ -47,6 +47,17 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options/*, ConfigLists *
   fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));
   consoleFontComboBox->setCurrentIndex(consoleFontComboBox->findText(m_options->consoleFont) );
   consoleFontSizeComboBox->setCurrentIndex(consoleFontSizeComboBox->findText(QString::number((int) m_options->consoleFontPointSize)));
+  QPixmap pixmap(64,64);
+  pixmap.fill(m_options->consoleFontColor);
+  consoleFontColorPushButton->setIcon(pixmap);
+  QPalette palette(m_options->consoleFontColor);
+  consoleFontColorPushButton->setPalette(palette);
+
+  pixmap.fill(m_options->consoleBgColor);
+  consoleBgColorPushButton->setIcon(pixmap);
+  palette = QPalette(m_options->consoleBgColor);
+  consoleBgColorPushButton->setPalette(palette);
+
   tabWidthSpinBox->setValue(m_options->tabWidth);
   colorVariablesCheckBox->setChecked(m_options->colorVariables);
   autoplayCheckBox->setChecked(m_options->autoPlay);
@@ -148,6 +159,8 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options/*, ConfigLists *
   connect(audioOutputToolButton, SIGNAL(released()), this, SLOT(selectAudioOutput()));
   connect(midiInputToolButton, SIGNAL(released()), this, SLOT(selectMidiInput()));
   connect(midiOutputToolButton, SIGNAL(released()), this, SLOT(selectMidiOutput()));
+  connect(consoleFontColorPushButton, SIGNAL(released()), this, SLOT(selectTextColor()));
+  connect(consoleBgColorPushButton, SIGNAL(released()), this, SLOT(selectBgColor()));
 
 }
 
@@ -918,4 +931,30 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioOutputDevices()
     }
   }
   return deviceList;
+}
+
+void ConfigDialog::selectTextColor()
+{
+  QColor color = QColorDialog::getColor(m_options->consoleFontColor, this);
+  if (color.isValid()) {
+    m_options->consoleFontColor = color;
+    QPixmap pixmap (64,64);
+    pixmap.fill(m_options->consoleFontColor);
+    consoleFontColorPushButton->setIcon(pixmap);
+    QPalette palette(m_options->consoleFontColor);
+    consoleFontColorPushButton->setPalette(palette);
+  }
+}
+
+void ConfigDialog::selectBgColor()
+{
+  QColor color = QColorDialog::getColor(m_options->consoleBgColor, this);
+  if (color.isValid()) {
+    m_options->consoleBgColor = color;
+    QPixmap pixmap (64,64);
+    pixmap.fill(m_options->consoleBgColor);
+    consoleBgColorPushButton->setIcon(pixmap);
+    QPalette palette(m_options->consoleBgColor);
+    consoleBgColorPushButton->setPalette(palette);
+  }
 }

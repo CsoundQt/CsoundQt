@@ -66,6 +66,8 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
     void selectAudioOutput();
     void selectMidiInput();
     void selectMidiOutput();
+    void selectTextColor();
+    void selectBgColor();
 
   signals:
     void changeFont();

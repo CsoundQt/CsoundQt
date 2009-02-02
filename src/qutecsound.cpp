@@ -56,7 +56,6 @@ qutecsound::qutecsound(QStringList fileNames)
   curPage = -1;
   setCentralWidget(documentTabs);
 
-  //TODO: free ud if switched to non threaded use
   ud = (CsoundUserData *)malloc(sizeof(CsoundUserData));
   ud->PERF_STATUS = 0;
   ud->qcs = this;
@@ -190,6 +189,7 @@ qutecsound::qutecsound(QStringList fileNames)
 
 qutecsound::~qutecsound()
 {
+  free(ud);
 }
 
 void qutecsound::messageCallback_NoThread(CSOUND *csound,
@@ -237,7 +237,9 @@ void qutecsound::changeFont()
     documentPages[i]->document()->setDefaultFont(QFont(m_options->font, (int) m_options->fontPointSize));
   }
   m_console->setDefaultFont(QFont(m_options->consoleFont,
-                                      (int) m_options->consoleFontPointSize));
+                            (int) m_options->consoleFontPointSize));
+  m_console->setColors(m_options->consoleFontColor, m_options->consoleBgColor);
+//   widgetPanel->setConsoleFont()
 }
 
 void qutecsound::changePage(int index)
@@ -2016,6 +2018,9 @@ void qutecsound::readSettings()
   m_options->fontPointSize = settings.value("fontsize", 12).toDouble();
   m_options->consoleFont = settings.value("consolefont", "Courier").toString();
   m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
+
+  m_options->consoleFontColor = settings.value("consoleFontColor", QVariant(QColor(Qt::black))).value<QColor>();
+  m_options->consoleBgColor = settings.value("consoleBgColor", QVariant(QColor(Qt::white))).value<QColor>();
   m_options->tabWidth = settings.value("tabWidth", 40).toInt();
   m_options->colorVariables = settings.value("colorvariables", true).toBool();
   m_options->autoPlay = settings.value("autoplay", false).toBool();
@@ -2116,6 +2121,8 @@ void qutecsound::writeSettings()
   settings.setValue("fontsize", m_options->fontPointSize);
   settings.setValue("consolefont", m_options->consoleFont );
   settings.setValue("consolefontsize", m_options->consoleFontPointSize);
+  settings.setValue("consoleFontColor", QVariant(m_options->consoleFontColor));
+  settings.setValue("consoleBgColor", QVariant(m_options->consoleBgColor));
   settings.setValue("tabWidth", m_options->tabWidth );
   settings.setValue("colorvariables", m_options->colorVariables);
   settings.setValue("autoplay", m_options->autoPlay);
@@ -2686,7 +2693,6 @@ void qutecsound::newCurve(Curve * curve)
 
 void qutecsound::updateCurve(WINDAT *windat)
 {
-  //TODO free this
   WINDAT *windat_ = (WINDAT *) malloc(sizeof(WINDAT));
   *windat_ = *windat;
   curveBuffer.append(windat_);
@@ -2694,6 +2700,11 @@ void qutecsound::updateCurve(WINDAT *windat)
 
 int qutecsound::killCurves(CSOUND *csound)
 {
+  //FIXME: This is not safe, but the memory must be cleared...
+//   for (int i = 0; i < curveBuffer.size(); i++) {
+//     free(curveBuffer[i]);
+//   }
+  curveBuffer.clear();
 //   widgetPanel->clearGraphs();
   return 0;
 }

@@ -107,7 +107,7 @@ int DocumentPage::setTextString(QString text)
     if (text.indexOf("<MacGUI>") > 0 and text[text.indexOf("<MacGUI>") - 1] == '\n')
       text.remove(text.indexOf("<MacGUI>") - 1, 1); //remove initial line break
     text.remove(text.indexOf("<MacGUI>"), macGUI.size());
-    qDebug("<MacGUI> present.");
+//     qDebug("<MacGUI> present.");
   }
   else {
     macGUI = "\n<MacGUI>\nioView nobackground {59352, 11885, 65535}\nioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1\nioSlider {45, 5} {20, 100} 0.000000 1.000000 0.000000 slider2\nioSlider {85, 5} {20, 100} 0.000000 1.000000 0.000000 slider3\nioSlider {125, 5} {20, 100} 0.000000 1.000000 0.000000 slider4\nioSlider {165, 5} {20, 100} 0.000000 1.000000 0.000000 slider5\n</MacGUI>\n";

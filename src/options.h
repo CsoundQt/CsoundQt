@@ -21,6 +21,7 @@
 #define OPTIONS_H
 
 #include <QString>
+#include <QColor>
 #include "types.h"
 
 class Options{
@@ -40,6 +41,8 @@ class Options{
     float fontPointSize;
     QString consoleFont;
     float consoleFontPointSize;
+    QColor consoleFontColor;
+    QColor consoleBgColor;
     int tabWidth;
     bool colorVariables;
     bool autoPlay;

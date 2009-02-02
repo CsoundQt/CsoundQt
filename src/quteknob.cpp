@@ -82,6 +82,11 @@ void QuteKnob::setValue(double value)
 #endif
 }
 
+void QuteKnob::setResolution(double resolution)
+{
+  m_resolution = resolution;
+}
+
 void QuteKnob::setWidgetLine(QString line)
 {
   m_line = line;
@@ -138,11 +143,18 @@ void QuteKnob::createPropertiesDialog()
   maxSpinBox->setRange(-99999.0, 99999.0);
   maxSpinBox->setValue(m_max);
   layout->addWidget(maxSpinBox, 2,3, Qt::AlignLeft|Qt::AlignVCenter);
+  label->setText("Resolution");
+  layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
+//   resolutionSpinBox = new QDoubleSpinBox(dialog);
+//   resolutionSpinBox->setDecimals(6);
+//   resolutionSpinBox->setValue(getResolution());
+//   layout->addWidget(resolutionSpinBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
 }
 
 void QuteKnob::applyProperties()
 {
   m_max = maxSpinBox->value();
   m_min = minSpinBox->value();
+//   m_resolution = resolutionSpinBox->value();
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
