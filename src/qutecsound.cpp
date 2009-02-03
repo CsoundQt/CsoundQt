@@ -102,6 +102,7 @@ qutecsound::qutecsound(QStringList fileNames)
 
   // WidgetPanel must be created before createAcctions since it contains the editAct action
   widgetPanel = new WidgetPanel(this);
+  widgetPanel->hide();
   widgetPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea |Qt::LeftDockWidgetArea);
   widgetPanel->setObjectName("widgetPanel");
   addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
@@ -122,6 +123,9 @@ qutecsound::qutecsound(QStringList fileNames)
   createToolBars();
   createStatusBar();
 
+  closeTabButton = new QToolButton(documentTabs);
+  closeTabButton->setDefaultAction(closeTabAct);
+  documentTabs->setCornerWidget(closeTabButton);
 
   fillFileMenu(); //Must be placed after readSettings to include recent Files
   if (m_options->opcodexmldir == "") {
@@ -190,6 +194,7 @@ qutecsound::qutecsound(QStringList fileNames)
 qutecsound::~qutecsound()
 {
   free(ud);
+  delete closeTabButton;
 }
 
 void qutecsound::messageCallback_NoThread(CSOUND *csound,
@@ -650,7 +655,7 @@ void qutecsound::join()
     text += scoText;
     text += "</CsScore>\n</CsoundSynthesizer>\n";
     newFile();
-    documentPages[curPage]->setTextString(text);
+    documentPages[curPage]->setTextString(text, m_options->showWidgetsOnRun);
   }
 //   else {
 //     qDebug("qutecsound::join() : No Action");
@@ -822,6 +827,7 @@ void qutecsound::runCsound(bool realtime)
       return;
     }
     if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
+      showWidgetsAct->setChecked(true);
       widgetPanel->setVisible(true);
     }
     if (m_options->invalueEnabled and m_options->enableWidgets) {
@@ -1111,13 +1117,15 @@ void qutecsound::openExternalEditor()
   options = currentAudioFile;
   QString optionsText = documentPages[curPage]->getOptionsText();
   if (options == "") {
-    if (!optionsText.contains("-i")) {
+    if (!optionsText.contains("-o")) {
       options = "test.wav";
     }
     else {
       //TODO this is not very robust...
-      optionsText = optionsText.mid(optionsText.indexOf("-i") + 2);
-      optionsText = optionsText.left(optionsText.indexOf(" -"));
+      optionsText = optionsText.mid(optionsText.indexOf("-o") + 2);
+      optionsText = optionsText.left(optionsText.indexOf(" -")).trimmed();
+      if (!optionsText.startsWith("dac"))
+        options = optionsText;
     }
   }
   execute(m_options->waveeditor, options);
@@ -1129,13 +1137,15 @@ void qutecsound::openExternalPlayer()
   options = currentAudioFile;
   QString optionsText = documentPages[curPage]->getOptionsText();
   if (options == "") {
-    if (!optionsText.contains("-i")) {
+    if (!optionsText.contains("-o")) {
       options = "test.wav";
     }
     else {
       //TODO this is not very robust...
-      optionsText = optionsText.mid(optionsText.indexOf("-i") + 2);
-      optionsText = optionsText.left(optionsText.indexOf(" -"));
+      optionsText = optionsText.mid(optionsText.indexOf("-o") + 2);
+      optionsText = optionsText.left(optionsText.indexOf(" -")).trimmed();
+      if (!optionsText.startsWith("dac"))
+        options = optionsText;
     }
   }
   execute(m_options->waveplayer, options);
@@ -1526,6 +1536,7 @@ void qutecsound::createActions()
   closeTabAct->setShortcut(tr("Ctrl+W"));
   closeTabAct->setStatusTip(tr("Close current tab"));
   closeTabAct->setIconText("Close");
+  closeTabAct->setIcon(QIcon(":/images/cross.png"));
   connect(closeTabAct, SIGNAL(triggered()), this, SLOT(closeTab()));
 
   exitAct = new QAction(tr("E&xit"), this);
@@ -2205,6 +2216,10 @@ int qutecsound::execute(QString executable, QString options)
   QStringList optionlist;
   optionlist = options.split(QRegExp("\\s+"));
 
+  // cd to current directory on all platforms
+  QString cdLine = "cd " + documentPages[curPage]->getFilePath();
+  system(cdLine.toStdString().c_str());
+
 #ifdef MACOSX
   QString commandLine = "open -a '" + executable + "' '" + options + "'";
   system(commandLine.toStdString().c_str());
@@ -2302,7 +2317,7 @@ bool qutecsound::loadFile(QString fileName)
   }
   //textEdit->setPlainText(fixLineEndings(in.readAll()));
 //   textEdit->setPlainText(text);
-  textEdit->setTextString(text);
+  textEdit->setTextString(text, m_options->showWidgetsOnRun);
   textEdit->setTabStopWidth(m_options->tabWidth);
   m_highlighter->setColorVariables(m_options->colorVariables);
   m_highlighter->setDocument(textEdit->document());

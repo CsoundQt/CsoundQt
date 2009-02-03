@@ -240,6 +240,7 @@ class qutecsound:public QMainWindow
     Highlighter *m_highlighter;
     DockHelp *helpPanel;
     WidgetPanel *widgetPanel;
+    QToolButton *closeTabButton;
 
     QMenu *fileMenu;
     QMenu *recentMenu;

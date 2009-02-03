@@ -68,7 +68,7 @@ void DocumentPage::contextMenuEvent(QContextMenuEvent *event)
   delete menu;
 }
 
-int DocumentPage::setTextString(QString text)
+int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 {
   if (text.contains("<MacOptions>") and text.contains("</MacOptions>")) {
     QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
@@ -83,8 +83,12 @@ int DocumentPage::setTextString(QString text)
 //     qDebug("<MacOptions> present. %s", getMacOption("WindowBounds").toStdString().c_str());
   }
   else {
-    QString defaultMacOptions = "<MacOptions>\nVersion: 3\nRender: Real\nAsk: Yes\nFunctions: ioObject\nListing: Window\nWindowBounds: 72 179 400 200\nCurrentView: io\nIOViewEdit: On\nOptions: -b128 -A -s -m167 -R\n</MacOptions>\n";
-    setMacOptionsText(defaultMacOptions);
+    if (autoCreateMacCsoundSections) {
+      QString defaultMacOptions = "<MacOptions>\nVersion: 3\nRender: Real\nAsk: Yes\nFunctions: ioObject\nListing: Window\nWindowBounds: 72 179 400 200\nCurrentView: io\nIOViewEdit: On\nOptions: -b128 -A -s -m167 -R\n</MacOptions>\n";
+      setMacOptionsText(defaultMacOptions);
+    }
+    else
+      setMacOptionsText("");
   }
   if (text.contains("<MacPresets>") and text.contains("</MacPresets>")) {
     macPresets = text.right(text.size()-text.indexOf("<MacPresets>"));
@@ -110,7 +114,12 @@ int DocumentPage::setTextString(QString text)
 //     qDebug("<MacGUI> present.");
   }
   else {
-    macGUI = "\n<MacGUI>\nioView nobackground {59352, 11885, 65535}\nioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1\nioSlider {45, 5} {20, 100} 0.000000 1.000000 0.000000 slider2\nioSlider {85, 5} {20, 100} 0.000000 1.000000 0.000000 slider3\nioSlider {125, 5} {20, 100} 0.000000 1.000000 0.000000 slider4\nioSlider {165, 5} {20, 100} 0.000000 1.000000 0.000000 slider5\n</MacGUI>\n";
+    if (autoCreateMacCsoundSections) {
+      macGUI = "\n<MacGUI>\nioView nobackground {59352, 11885, 65535}\nioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1\nioSlider {45, 5} {20, 100} 0.000000 1.000000 0.000000 slider2\nioSlider {85, 5} {20, 100} 0.000000 1.000000 0.000000 slider3\nioSlider {125, 5} {20, 100} 0.000000 1.000000 0.000000 slider4\nioSlider {165, 5} {20, 100} 0.000000 1.000000 0.000000 slider5\n</MacGUI>\n";
+    }
+    else {
+      macGUI = "";
+    }
   }
   setPlainText(text);
   document()->setModified(true);
@@ -523,6 +532,11 @@ void DocumentPage::updateCsladspaText(QString text)
     insertPlainText(QString("\n") + text + QString("\n"));
   }
   moveCursor(QTextCursor::Start);
+}
+
+QString DocumentPage::getFilePath()
+{
+  return fileName.left(fileName.lastIndexOf("/"));
 }
 
 void DocumentPage::setMacWidgetsText(QString text)

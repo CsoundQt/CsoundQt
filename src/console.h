@@ -35,7 +35,7 @@ class Console
     virtual void setColors(QColor textColor, QColor bgColor)
     {
       text->setTextColor(textColor);
-      text->setTextBackgroundColor(bgColor);
+//       text->setTextBackgroundColor(bgColor);
       QPalette palette = text->palette();
       palette.setColor(QPalette::WindowText, textColor);
       palette.setColor(QPalette::Window, bgColor);

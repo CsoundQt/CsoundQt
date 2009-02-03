@@ -34,7 +34,7 @@ class DocumentPage : public QTextEdit
 
     ~DocumentPage();
 
-    int setTextString(QString text);
+    int setTextString(QString text, bool autoCreateMacCsoundSections = true);
     QString getFullText();
     QString getOptionsText();
     QString getDotText();
@@ -49,6 +49,7 @@ class DocumentPage : public QTextEdit
     void markErrorLines(QList<int> lines);
     void unmarkErrorLines();
     void updateCsladspaText(QString text);
+    QString getFilePath();
 
 //     QTextDocument *textDocument;
     QString fileName;
