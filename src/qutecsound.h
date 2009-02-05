@@ -32,7 +32,6 @@
 #include    <sndfile.hh>
 #endif
 
-// #include <csound.h>
 #ifdef MACOSX
 // Needed to be able to grab menus back from FLTK
 #include <Carbon/Carbon.h>
@@ -175,7 +174,6 @@ class qutecsound:public QMainWindow
     void openExternalBrowser();
     void utilitiesDialogOpen();
     void about();
-//     void aboutExamples();
     void documentWasModified();
     void syntaxCheck();
     void autoComplete();
@@ -303,7 +301,6 @@ class qutecsound:public QMainWindow
     QString lastUsedDir;
     QString lastFileDir;
     viewMode m_mode;
-//     ConfigLists *m_configlists;
     QStringList recentFiles;
     QStringList lastFiles;
     QStringList m_deviceMessages; //stores messages from csound for device discovery

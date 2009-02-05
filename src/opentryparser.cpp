@@ -180,7 +180,13 @@ bool OpEntryParser::getOpcodeArgNames(Node &node)
       if (inArgs.contains("["))
         inArgsOpt = inArgs.mid(inArgs.indexOf("["));
       inArgs.remove(inArgsOpt);
-      QStringList args = inArgs.split(QRegExp("[,\\s]+"), QString::SkipEmptyParts);
+      QStringList args = inArgs.split(QRegExp("[,\\\"]+"), QString::SkipEmptyParts);
+      for (int count = 0; count < args.size(); count ++) {
+        args[count] = args[count].trimmed();
+        qDebug() << args[count];
+        if (args[count] == "")
+          args.removeAt(count);
+      }
       QStringList argsOpt = inArgsOpt.split(QRegExp("[,\\\\\\s\\[\\]]+"), QString::SkipEmptyParts);
       for (int j = 0; j < inputs.size(); j++) {
         if (j < args.size()) {

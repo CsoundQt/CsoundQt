@@ -516,18 +516,30 @@ void WidgetPanel::newValue(QPair<QString, double> channelValue)
 {
 //   qDebug("WidgetPanel::newValue");
   if (!channelValue.first.isEmpty()) {
+    valueMutex.lock();
     if(newValues.contains(channelValue.first)) {
-      valueMutex.lock();
       newValues[channelValue.first] = channelValue.second;
-      valueMutex.unlock();
     }
     else {
-      valueMutex.lock();
       newValues.insert(channelValue.first, channelValue.second);
-      valueMutex.unlock();
     }
+    valueMutex.unlock();
   }
 //   widgetChanged();
+}
+
+void WidgetPanel::newValue(QPair<QString, QString> channelValue)
+{
+  if (!channelValue.first.isEmpty()) {
+    stringValueMutex.lock();
+    if(newStringValues.contains(channelValue.first)) {
+      newStringValues[channelValue.first] = channelValue.second;
+    }
+    else {
+      newStringValues.insert(channelValue.first, channelValue.second);
+    }
+    stringValueMutex.unlock();
+  }
 }
 
 void WidgetPanel::processNewValues()
@@ -549,6 +561,19 @@ void WidgetPanel::processNewValues()
   valueMutex.lock();
   newValues.clear();
   valueMutex.unlock();
+  stringValueMutex.lock();
+  channelNames = newStringValues.keys();
+  stringValueMutex.unlock();
+  foreach(QString name, channelNames) {
+    for (int i = 0; i < widgets.size(); i++){
+      if (widgets[i]->getChannelName() == name) {
+        widgets[i]->setValue(newStringValues.value(name));
+      }
+    }
+  }
+  stringValueMutex.lock();
+  newStringValues.clear();
+  stringValueMutex.unlock();
 }
 
 void WidgetPanel::widgetChanged(QuteWidget* widget)
@@ -831,6 +856,7 @@ int WidgetPanel::createButton(int x, int y, int width, int height, QString widge
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(runCsound()));
   connect(widget, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
+  connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));
 
   if (editAct->isChecked()) {
     createEditFrame(widget);

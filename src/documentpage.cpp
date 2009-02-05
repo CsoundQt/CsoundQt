@@ -204,9 +204,12 @@ QString DocumentPage::getDotText()
                 }
                 node.setName(opcodeName);
                 int commentIndex = inArgs.indexOf(";");
-                if (commentIndex > 0)
-                  inArgs.resize(commentIndex);
-                QStringList args = inArgs.split(QRegExp("[\\s,]+"), QString::SkipEmptyParts);
+                QString comment = "";
+                if (commentIndex > 0) {
+                  comment = inArgs.mid(commentIndex);
+                }
+                inArgs.remove(comment);
+                QStringList args = inArgs.split(QRegExp("[,\\s]+"), QString::SkipEmptyParts);
                 bool string = false;
                 QString stringArg = "";
                 foreach (QString arg, args) {

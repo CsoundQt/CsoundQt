@@ -51,16 +51,10 @@ qutecsound::qutecsound(QStringList fileNames)
   setWindowTitle("QuteCsound[*]");
   resize(660,350);
   setWindowIcon(QIcon(":/images/qtcs.png"));
-  documentTabs = new QTabWidget (this);
-  connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
-  curPage = -1;
-  setCentralWidget(documentTabs);
 
   ud = (CsoundUserData *)malloc(sizeof(CsoundUserData));
   ud->PERF_STATUS = 0;
   ud->qcs = this;
-//   perfMutex = csoundCreateMutex(0);
-//   perfThread = 0;
 
   exampleFiles.append(":/examples/miditest.csd");
   exampleFiles.append(":/examples/circle.csd");
@@ -86,8 +80,6 @@ qutecsound::qutecsound(QStringList fileNames)
   widgetFiles.append(":/examples/graphwidget.csd");
 
   m_options = new Options();
-
-//   _configlists = new ConfigLists;
 
   m_console = new DockConsole(this);
   m_console->setObjectName("m_console");
@@ -123,6 +115,10 @@ qutecsound::qutecsound(QStringList fileNames)
   createToolBars();
   createStatusBar();
 
+  documentTabs = new QTabWidget (this);
+  connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
+  curPage = -1;
+  setCentralWidget(documentTabs);
   closeTabButton = new QToolButton(documentTabs);
   closeTabButton->setDefaultAction(closeTabAct);
   documentTabs->setCornerWidget(closeTabButton);
@@ -189,6 +185,7 @@ qutecsound::qutecsound(QStringList fileNames)
   // Create only once
   csound=csoundCreate(0);
 #endif
+  dispatchOfflineQueues(); //start offline queue dispatcher counter
 }
 
 qutecsound::~qutecsound()
@@ -250,6 +247,7 @@ void qutecsound::changeFont()
 void qutecsound::changePage(int index)
 {
   stop();
+  textEdit->setMacWidgetsText(widgetPanel->widgetsText());
   textEdit = documentPages[index];
   textEdit->setTabStopWidth(m_options->tabWidth);
   m_highlighter->setColorVariables(m_options->colorVariables);
@@ -416,7 +414,7 @@ void qutecsound::createGraph()
     return;
   }
   QString dotText = documentPages[curPage]->getDotText();
-  qDebug() << dotText;
+//   qDebug() << dotText;
   QTemporaryFile file("QuteCsound-GraphXXXXXX.dot");
   QTemporaryFile pngFile("QuteCsound-GraphXXXXXX.png");
   if (!file.open() || !pngFile.open()) {
@@ -722,7 +720,13 @@ void qutecsound::runCsound(bool realtime)
   if (!fileName.endsWith(".csd")) {
     if (documentPages[curPage]->askForFile)
       getCompanionFileName();
-    fileName2 = documentPages[curPage]->companionFile;
+    if (fileName.endsWith(".sco")) {
+      //Must switch filename order when open file is a sco file
+      fileName2 = fileName;
+      fileName = documentPages[curPage]->companionFile;
+    }
+    else
+      fileName2 = documentPages[curPage]->companionFile;
   }
 
   widgetPanel->flush();
@@ -1202,14 +1206,6 @@ void qutecsound::about()
   QMessageBox::about(this, tr("About QuteCsound"), text);
 }
 
-// void qutecsound::aboutExamples()
-// {
-//   QString text = tr("When examples from this menu are opened, a save dialog appears.\n"
-//       "It is necessary to save the exaples before usage!");
-//   QMessageBox::information(this, tr("About the examples"), text);
-//
-// }
-
 void qutecsound::documentWasModified()
 {
   setWindowModified(textEdit->document()->isModified());
@@ -1303,7 +1299,10 @@ void qutecsound::runUtility(QString flags)
     m_console->clear();
     static char *argv[33];
     QString name = "";
+    QString fileFlags = flags.mid(flags.indexOf("\""));
+    flags.remove(fileFlags);
     QStringList indFlags= flags.split(" ",QString::SkipEmptyParts);
+    QStringList files = fileFlags.split("\"", QString::SkipEmptyParts);
     if (indFlags.size() < 2) {
       qDebug("qutecsound::runUtility: Error: empty flags");
       return;
@@ -1322,16 +1321,20 @@ void qutecsound::runUtility(QString flags)
       argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
       strcpy(argv[index],flag.toStdString().c_str());
       index++;
-      qDebug("%s",flag.toStdString().c_str());
+//       qDebug("%s",flag.toStdString().c_str());
     }
-    int argc = indFlags.size();
+    argv[index] = (char *) calloc(files[0].size()+1, sizeof(char));
+    strcpy(argv[index++],files[0].toStdString().c_str());
+    argv[index] = (char *) calloc(files[2].size()+1, sizeof(char));
+    strcpy(argv[index++],files[2].toStdString().c_str());
+    int argc = index;
     CSOUND *csoundU;
     csoundU=csoundCreate(0);
     csoundReset(csoundU);
     csoundSetHostData(csoundU, (void *) ud);
+    csoundSetMessageCallback(csoundU, &qutecsound::messageCallback_NoThread);
     csoundPreCompile(csoundU);
     // Utilities always run in the same thread as QuteCsound
-    csoundSetMessageCallback(csoundU, &qutecsound::messageCallback_NoThread);
     csoundRunUtility(csoundU, name.toStdString().c_str(), argc, argv);
     csoundCleanup(csoundU);
     csoundDestroy(csoundU);
@@ -2217,7 +2220,7 @@ int qutecsound::execute(QString executable, QString options)
   optionlist = options.split(QRegExp("\\s+"));
 
   // cd to current directory on all platforms
-  QString cdLine = "cd " + documentPages[curPage]->getFilePath();
+  QString cdLine = "cd \"" + documentPages[curPage]->getFilePath() + "\"";
   system(cdLine.toStdString().c_str());
 
 #ifdef MACOSX
@@ -2573,7 +2576,7 @@ void qutecsound::processEventQueue(CsoundUserData *ud)
     char type = ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize][0].unicode();
     QStringList eventElements =
         ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts);
-    qDebug("type %c line: %s", type, ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].toStdString().c_str());
+//     qDebug("type %c line: %s", type, ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].toStdString().c_str());
 	//FIXME this is not freed!
     MYFLT *pFields;
 	pFields = (MYFLT *) calloc(eventElements.size(), sizeof(MYFLT));

@@ -418,8 +418,8 @@ QString QuteLineEdit::getWidgetLine()
       + ", " + QString::number(color.blue() * 256) + "} ";
   line += m_widget->autoFillBackground()? "background ":"nobackground ";
   line += "noborder ";
-  line += m_text;
-//   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
+  line += static_cast<QLineEdit*>(m_widget)->text();
+//   qDebug("QuteLineEdit::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
 

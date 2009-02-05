@@ -194,6 +194,12 @@ void QuteButton::buttonReleased()
       emit stop();
     else if (m_name == "_Stop")
       emit stop();
+    else if (m_name.startsWith("_Browse")) {
+      QString fileName = QFileDialog::getOpenFileName(this, tr("Select File"));
+      if (fileName != "") {
+        emit newValue(QPair<QString, QString>(m_name, fileName));
+      }
+    }
 //     else if (m_name == "_Midiindevices") {
 //       QPoint pos(x(), y());
 //       emit selectMidiInDevices(pos);

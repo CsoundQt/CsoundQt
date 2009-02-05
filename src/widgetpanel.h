@@ -83,9 +83,11 @@ class WidgetPanel : public QDockWidget
     QVector<FrameWidget *> editWidgets;
 
     QHash<QString, double> newValues;
+    QHash<QString, QString> newStringValues;
     LayoutWidget *layoutWidget;
 
     QMutex valueMutex;
+    QMutex stringValueMutex;
     QMutex eventMutex;
 
     QPoint currentPosition;
@@ -143,6 +145,7 @@ class WidgetPanel : public QDockWidget
   public slots:
     //TODO add newValue slot for strings
     void newValue(QPair<QString, double> channelValue);
+    void newValue(QPair<QString, QString> channelValue);
     void processNewValues();
     void widgetChanged(QuteWidget* widget = 0);
 //     void updateWidgetText();
