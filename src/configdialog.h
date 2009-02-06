@@ -40,6 +40,7 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
     Options *m_options;
 //     ConfigLists *m_configlists;
     void browseFile(QString &destination);
+    void browseSaveFile(QString &destination);
     void browseDir(QString &destination);
     QList<QPair<QString, QString> > getMidiInputDevices();
     QList<QPair<QString, QString> > getMidiOutputDevices();

@@ -247,13 +247,13 @@ void ConfigDialog::accept()
 
 void ConfigDialog::browseInputFilename()
 {
-  browseFile(m_options->fileInputFilename);
+  browseSaveFile(m_options->fileInputFilename);
   InputFilenameLineEdit->setText(m_options->fileInputFilename);
 }
 
 void ConfigDialog::browseOutputFilename()
 {
-  browseFile(m_options->fileOutputFilename);
+  browseSaveFile(m_options->fileOutputFilename);
   OutputFilenameLineEdit->setText(m_options->fileOutputFilename);
 }
 
@@ -438,6 +438,13 @@ void ConfigDialog::selectMidiOutput()
 void ConfigDialog::browseFile(QString &destination)
 {
   QString file =  QFileDialog::QFileDialog::getOpenFileName(this,tr("Select File"),destination);
+  if (file!="")
+    destination = file;
+}
+
+void ConfigDialog::browseSaveFile(QString &destination)
+{
+  QString file =  QFileDialog::QFileDialog::getSaveFileName(this,tr("Select File"),destination);
   if (file!="")
     destination = file;
 }

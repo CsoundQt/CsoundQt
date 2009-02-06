@@ -66,9 +66,9 @@ QString Options::generateCmdLineFlags(bool rt)
     cmdline += " --format=" + _configlists.fileTypeNames[fileFileType];
     cmdline += ":" + _configlists.fileFormatFlags[fileSampleFormat];
     if (fileInputFilenameActive)
-      cmdline += " -i" + fileInputFilename;
+      cmdline += " -i" + fileInputFilename + "";
     if (fileOutputFilenameActive or fileAskFilename)
-      cmdline += " -o" + fileOutputFilename;
+      cmdline += " -o" + fileOutputFilename + "";
 
   }
   cmdline += " --env:CSNOSTOP=yes";
@@ -96,8 +96,10 @@ int Options::generateCmdLine(char **argv,
   if ( (rt and rtUseOptions) or (!rt and fileUseOptions) ) {
     flags = generateCmdLineFlags(rt);
   }
-  QStringList indFlags= flags.split(" ",QString::SkipEmptyParts);
+  QStringList indFlags= flags.split(" -",QString::SkipEmptyParts);
   foreach (QString flag, indFlags) {
+    flag = "-" + flag;
+    printf("%s", flag.toStdString().c_str()) ;
     argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
     strcpy(argv[index],flag.toStdString().c_str());
     index++;

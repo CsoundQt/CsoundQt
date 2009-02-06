@@ -1118,7 +1118,7 @@ void qutecsound::render()
 void qutecsound::openExternalEditor()
 {
   QString options;
-  options = currentAudioFile;
+  options = "\"" + currentAudioFile + "\"";
   QString optionsText = documentPages[curPage]->getOptionsText();
   if (options == "") {
     if (!optionsText.contains("-o")) {
@@ -1138,7 +1138,7 @@ void qutecsound::openExternalEditor()
 void qutecsound::openExternalPlayer()
 {
   QString options;
-  options = currentAudioFile;
+  options = "\"" + currentAudioFile + "\"";
   QString optionsText = documentPages[curPage]->getOptionsText();
   if (options == "") {
     if (!optionsText.contains("-o")) {
