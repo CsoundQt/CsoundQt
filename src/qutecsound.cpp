@@ -2237,7 +2237,25 @@ int qutecsound::execute(QString executable, QString options)
 #endif
 #ifdef WIN32
   QString commandLine = executable + (executable.startsWith("cmd")? " /k ": " ") + options;
-  system(commandLine.toStdString().c_str());
+//   system(commandLine.toStdString().c_str());
+
+  STARTUPINFO si;
+  PROCESS_INFORMATION pi;
+  STARTUPINFO sj;
+  PROCESS_INFORMATION pj;
+
+  ZeroMemory( &si, sizeof(si) );
+  si.cb = sizeof(si);
+  ZeroMemory( &pi, sizeof(pi) );
+
+  ZeroMemory( &sj, sizeof(sj) );
+  sj.cb = sizeof(sj);
+  ZeroMemory( &pj, sizeof(pj) );
+
+  if(!CreateProcess(NULL, commandLine.toStdString().c_str() , NULL, NULL, FALSE, 0, NULL, NULL, &sj, &pj))
+  {
+    qDebug() << "qutecsound::execute Error executing!"
+  }
 #endif
   return 1;
 }
