@@ -62,6 +62,7 @@ class DockConsole : public QDockWidget, public Console
       setWindowTitle("Csound Output Console");
       text = new QTextEdit(parent);
       text->setReadOnly(true);
+      text->setContextMenuPolicy(Qt::NoContextMenu);
       text->document()->setDefaultFont(QFont("Courier", 10));
       setWidget(text);
     }
@@ -77,7 +78,22 @@ class DockConsole : public QDockWidget, public Console
     {
       return text->hasFocus();
     }
-  private:
+
+  public slots:
+    void clear()
+    {
+      text->clear();
+    }
+
+  protected:
+    virtual void contextMenuEvent(QContextMenuEvent *event)
+    {
+      QMenu *menu = text->createStandardContextMenu();
+      menu->addAction("Clear", this, SLOT(clear()));
+      menu->exec(event->globalPos());
+      delete menu;
+    }
+
     virtual void closeEvent(QCloseEvent * event);
   signals:
     void Close(bool visible);
@@ -93,10 +109,17 @@ class MyQTextEdit : public QTextEdit
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent *event)
-    {emit(popUpMenu(event->globalPos()));}
-
-  signals:
-    void popUpMenu(QPoint pos);
+    {
+      QMenu *menu = createStandardContextMenu();
+      menu->addAction("Clear", this, SLOT(clear()));
+      menu->exec(event->globalPos());
+      delete menu;
+    }
+//     virtual void contextMenuEvent(QContextMenuEvent *event)
+//     {emit(popUpMenu(event->globalPos()));}
+// 
+//   signals:
+//     void popUpMenu(QPoint pos);
 };
 
 class ConsoleWidget : public QWidget, public Console
@@ -114,19 +137,19 @@ class ConsoleWidget : public QWidget, public Console
 #else
       text->document()->setDefaultFont(QFont("Courier New", 7));
 #endif
-      connect(text, SIGNAL(popUpMenu(QPoint)), this, SLOT(emitPopUpMenu(QPoint)));
+//       connect(text, SIGNAL(popUpMenu(QPoint)), this, SLOT(emitPopUpMenu(QPoint)));
     }
 
     ~ConsoleWidget() {;};
 
     virtual void setWidgetGeometry(int x,int y,int width,int height);
-  //protected:
-    //virtual void contextMenuEvent(QContextMenuEvent *event)
-    //{emit(popUpMenu(event->globalPos()));}
-  private slots:
-    void emitPopUpMenu(QPoint point) {emit(popUpMenu(point));}
+
+  protected:
+//   private slots:
+//     void emitPopUpMenu(QPoint point) {emit(popUpMenu(point));}
   signals:
-    void popUpMenu(QPoint pos);
+//     void popUpMenu(QPoint pos);
+
 };
 
 #endif

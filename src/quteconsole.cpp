@@ -23,7 +23,7 @@ QuteConsole::QuteConsole(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new ConsoleWidget(this);
   m_widget->setAutoFillBackground(true);
-  connect(static_cast<ConsoleWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+//   connect(static_cast<ConsoleWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 }
 
 QuteConsole::~QuteConsole()
@@ -38,10 +38,10 @@ QString QuteConsole::getWidgetLine()
   return line;
 }
 
-void QuteConsole::popUpMenu(QPoint pos)
-{
-  QuteWidget::popUpMenu(pos);
-}
+// void QuteConsole::popUpMenu(QPoint pos)
+// {
+//   QuteWidget::popUpMenu(pos);
+// }
 
 void QuteConsole::appendMessage(QString message)
 {

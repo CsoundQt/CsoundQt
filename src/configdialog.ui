@@ -31,7 +31,7 @@
       <property name="orientation" >
        <enum>Qt::Horizontal</enum>
       </property>
-      <property name="sizeHint" stdset="0" >
+      <property name="sizeHint" >
        <size>
         <width>131</width>
         <height>31</height>
@@ -488,7 +488,7 @@
        <x>10</x>
        <y>10</y>
        <width>351</width>
-       <height>291</height>
+       <height>311</height>
       </rect>
      </property>
      <property name="title" >
@@ -500,7 +500,7 @@
         <x>10</x>
         <y>20</y>
         <width>339</width>
-        <height>99</height>
+        <height>97</height>
        </rect>
       </property>
       <layout class="QGridLayout" >
@@ -622,9 +622,9 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>130</y>
+        <y>120</y>
         <width>341</width>
-        <height>151</height>
+        <height>182</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
@@ -672,6 +672,13 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="wrapLinesCheckBox" >
+         <property name="text" >
+          <string>Wrap Lines</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -681,7 +688,7 @@
        <x>370</x>
        <y>170</y>
        <width>241</width>
-       <height>211</height>
+       <height>221</height>
       </rect>
      </property>
      <property name="title" >
@@ -835,9 +842,9 @@
      <property name="geometry" >
       <rect>
        <x>10</x>
-       <y>390</y>
+       <y>400</y>
        <width>601</width>
-       <height>111</height>
+       <height>101</height>
       </rect>
      </property>
      <property name="title" >
@@ -849,7 +856,7 @@
         <x>10</x>
         <y>20</y>
         <width>331</width>
-        <height>81</height>
+        <height>71</height>
        </rect>
       </property>
       <layout class="QGridLayout" >
@@ -948,12 +955,12 @@
       <property name="geometry" >
        <rect>
         <x>358</x>
-        <y>30</y>
+        <y>20</y>
         <width>161</width>
         <height>61</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout" >
+      <layout class="QVBoxLayout" >
        <item>
         <widget class="QLabel" name="label_23" >
          <property name="text" >
@@ -980,12 +987,12 @@
       <property name="geometry" >
        <rect>
         <x>530</x>
-        <y>30</y>
+        <y>20</y>
         <width>52</width>
         <height>69</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2" >
+      <layout class="QVBoxLayout" >
        <item>
         <widget class="QPushButton" name="consoleFontColorPushButton" >
          <property name="enabled" >
@@ -1013,9 +1020,9 @@
      <property name="geometry" >
       <rect>
        <x>10</x>
-       <y>300</y>
+       <y>330</y>
        <width>351</width>
-       <height>81</height>
+       <height>61</height>
       </rect>
      </property>
      <property name="title" >
@@ -1025,7 +1032,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>30</y>
+        <y>20</y>
         <width>331</width>
         <height>30</height>
        </rect>

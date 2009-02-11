@@ -250,6 +250,7 @@ void qutecsound::changePage(int index)
   textEdit->setMacWidgetsText(widgetPanel->widgetsText());
   textEdit = documentPages[index];
   textEdit->setTabStopWidth(m_options->tabWidth);
+  textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
   m_highlighter->setColorVariables(m_options->colorVariables);
   m_highlighter->setDocument(textEdit->document());
   curPage = index;
@@ -300,7 +301,7 @@ void qutecsound::newFile()
   setWindowModified(false);
   documentTabs->setTabIcon(curPage, modIcon);
   documentTabs->setTabText(curPage, "default.csd");
-  documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
+//   documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
   connectActions();
 }
 
@@ -582,7 +583,8 @@ bool qutecsound::closeTab()
 //   }
   documentTabs->setCurrentIndex(curPage);
   textEdit = documentPages[curPage];
-  textEdit->setTabStopWidth(m_options->tabWidth);
+//   textEdit->setTabStopWidth(m_options->tabWidth);
+//   textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
   setCurrentFile(documentPages[curPage]->fileName);
   m_highlighter->setColorVariables(m_options->colorVariables);
   m_highlighter->setDocument(documentPages[curPage]->document());
@@ -1256,6 +1258,7 @@ void qutecsound::applySettings(int /*result*/)
   m_highlighter->setDocument(textEdit->document());
   m_highlighter->setColorVariables(m_options->colorVariables);
   documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
+  documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
   widgetPanel->setEnabled(m_options->enableWidgets);
   Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
       Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
@@ -2042,6 +2045,7 @@ void qutecsound::readSettings()
   m_options->rememberFile = settings.value("rememberfile", true).toBool();
   m_options->saveWidgets = settings.value("savewidgets", true).toBool();
   m_options->iconText = settings.value("iconText", true).toBool();
+  m_options->wrapLines = settings.value("wrapLines", true).toBool();
   m_options->invalueEnabled = settings.value("invalueEnabled", true).toBool();
 //   m_options->chngetEnabled = settings.value("chngetEnabled", false).toBool();
   m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
@@ -2144,6 +2148,7 @@ void qutecsound::writeSettings()
   settings.setValue("rememberfile", m_options->rememberFile);
   settings.setValue("savewidgets", m_options->saveWidgets);
   settings.setValue("iconText", m_options->iconText);
+  settings.setValue("wrapLines", m_options->wrapLines);
   settings.setValue("enableWidgets", m_options->enableWidgets);
   settings.setValue("invalueEnabled", m_options->invalueEnabled);
 //   settings.setValue("chngetEnabled", m_options->chngetEnabled);
@@ -2323,6 +2328,7 @@ bool qutecsound::loadFile(QString fileName)
   documentTabs->setCurrentIndex(curPage);
   textEdit = newPage;
   textEdit->setTabStopWidth(m_options->tabWidth);
+  textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
   connectActions();
   if (fileName.startsWith(m_options->csdocdir))
     documentPages[curPage]->readOnly = true;
@@ -2339,7 +2345,7 @@ bool qutecsound::loadFile(QString fileName)
   //textEdit->setPlainText(fixLineEndings(in.readAll()));
 //   textEdit->setPlainText(text);
   textEdit->setTextString(text, m_options->showWidgetsOnRun);
-  textEdit->setTabStopWidth(m_options->tabWidth);
+//   textEdit->setTabStopWidth(m_options->tabWidth);
   m_highlighter->setColorVariables(m_options->colorVariables);
   m_highlighter->setDocument(textEdit->document());
   QApplication::restoreOverrideCursor();

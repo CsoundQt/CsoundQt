@@ -33,7 +33,7 @@ class QuteConsole : public QuteWidget
 
     virtual QString getWidgetLine();
     virtual void setWidgetGeometry(int x,int y,int width,int height);
-    void popUpMenu(QPoint pos);
+//     void popUpMenu(QPoint pos);
 
     void appendMessage(QString message);
 

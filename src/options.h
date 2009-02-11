@@ -50,6 +50,7 @@ class Options{
     bool rememberFile;
     bool saveWidgets;
     bool iconText;
+    bool wrapLines;
 
     bool enableWidgets;
     bool invalueEnabled;
