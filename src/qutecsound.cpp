@@ -311,7 +311,7 @@ void qutecsound::open()
   bool widgetsVisible = widgetPanel->isVisible();
   if (widgetsVisible)
     widgetPanel->hide(); // Necessary for Mac, as widget Panel covers open dialog
-  fileName = QFileDialog::getOpenFileName(this, tr("Open File"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco)"));
+  fileName = QFileDialog::getOpenFileName(this, tr("Open File"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco);;All Files (*)"));
   if (widgetsVisible)
     widgetPanel->show();
   int index = isOpen(fileName);
