@@ -37,7 +37,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 557 173 281 537
+WindowBounds: 624 262 256 214
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -45,11 +45,10 @@ Options: -b128 -A -s -m167 -R
 <MacGUI>
 ioView background {50115, 50886, 51143}
 ioText {100, 5} {140, 100} label 0.000000 0.00100 "chann" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Rms values for the complete signal and for two separate parts of the spectrum. Use the knob to select crossover frequency
-ioListing {5, 190} {250, 300}
-ioMeter {5, 5} {30, 150} {59904, 18176, 32768} "rms" 0.297227 "" 0.000000 fill 1 0 mouse
+ioMeter {5, 5} {30, 150} {59904, 18176, 32768} "rms" 0.000032 "" 0.000000 fill 1 0 mouse
 ioText {5, 155} {40, 20} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Rms
-ioMeter {45, 5} {15, 150} {43520, 21760, 65280} "low" 0.297276 "" 0.000000 fill 1 0 mouse
-ioMeter {75, 5} {15, 150} {59904, 58624, 16128} "hi" 0.001007 "" 0.000000 fill 1 0 mouse
+ioMeter {45, 5} {15, 150} {43520, 21760, 65280} "low" 0.000019 "" 0.000000 fill 1 0 mouse
+ioMeter {75, 5} {15, 150} {59904, 58624, 16128} "hi" 0.000026 "" 0.000000 fill 1 0 mouse
 ioText {45, 155} {25, 20} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Lo
 ioText {75, 155} {25, 20} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Hi
 ioKnob {100, 110} {50, 50} 100.000000 1000.000000 0.010000 600.000000 freq

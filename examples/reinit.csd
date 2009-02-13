@@ -34,7 +34,7 @@ instr 10
 newwaveform:
 	prints "instr 1-init"
 	imode tab_i i(gkwave), giwavemodes ;This line is only run every init pass
-	aout  vco2  0.3, gkfreq, imode ;This line must be within the reinit section
+	aout  vco2  0.2, gkfreq, imode ;This line must be within the reinit section
 	rireturn ;End of reinit section
 
 	outs aout*kenv, aout*kenv
@@ -61,7 +61,7 @@ Options: -b128 -A -s -m167 -R
 ioView background {43690, 43690, 32639}
 ioMenu {11, 8} {120, 30} 1 303 "saw,square,triangle" wave
 ioText {137, 8} {205, 26} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {65280, 65280, 65280} {8192, 8192, 8192} background noborder Select waveform from this menu
-ioSlider {11, 44} {180, 20} 200.000000 800.000000 406.060606 freq
+ioSlider {11, 44} {180, 20} 200.000000 800.000000 520.000000 freq
 ioText {207, 39} {130, 25} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 8 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder Frequency
 ioButton {11, 71} {180, 40} event 1.000000 "button1" "Generate note" "/" i10 0 5
 ioText {196, 69} {148, 44} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder Push this button to generate notes

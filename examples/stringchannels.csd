@@ -3,7 +3,7 @@
 </CsOptions>
 <CsInstruments>
 
-sr = 48000
+sr = 44100
 ksmps = 128
 nchnls = 2
 0dbfs = 1
@@ -41,7 +41,7 @@ endin
 </CsInstruments>
 <CsScore>
 f 0 3600
-i 1 1 1
+i 1 0 1
 
 </CsScore>
 </CsoundSynthesizer>
@@ -51,18 +51,14 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 53 584 441 337
+WindowBounds: 501 374 202 199
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {43690, 43690, 32639}
-ioText {20, 20} {120, 60} label 0.000000 0.00100 "text" left "DejaVu Sans" 24 {0, 0, 0} {56576, 55808, 47360} background border 
-ioText {300, 20} {120, 60} label 0.000000 0.00100 "textset" left "DejaVu Sans" 24 {0, 0, 0} {65280, 52480, 43264} background border 
-ioText {20, 90} {190, 50} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border The label above will change if invalue/outvalue are enabled
-ioText {230, 90} {190, 50} label 0.000000 0.00100 "" right "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border The label above will change if chnget/chnset are enabled
-ioButton {20, 150} {100, 40} event 0.000000 "button1" "Do it again!" "/" i1 0 1
-ioText {20, 200} {400, 90} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border To enable chnget/chnset or invalue/outvalue go to Configuration->General->Widgets. It is not recommended to use both simultaneously as it will degrade performance.
+ioText {38, 24} {120, 60} label 0.000000 0.00100 "text" left "DejaVu Sans" 24 {0, 0, 0} {56576, 55808, 47360} background border 
+ioButton {45, 94} {100, 40} event 0.000000 "button1" "Do it again!" "/" i1 0 1
 </MacGUI>
 

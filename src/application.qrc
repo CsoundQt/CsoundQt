@@ -32,7 +32,6 @@
 
       <file>../examples/circle.csd</file>
       <file>../examples/lineedit.csd</file>
-      <file>../examples/miditest.csd</file>
       <file>../examples/noisered.csd</file>
       <file>../examples/reservedchannels.csd</file>
       <file>../examples/stringchannels.csd</file>
@@ -52,5 +51,19 @@
       <file>../examples/controllerwidget.csd</file>
       <file>../examples/scopewidget.csd</file>
       <file>../examples/graphwidget.csd</file>
+
+      <file>../examples/toot1.csd</file>
+      <file>../examples/toot2.csd</file>
+      <file>../examples/toot3.csd</file>
+      <file>../examples/toot4.csd</file>
+      <file>../examples/toot5.csd</file>
+      <file>../examples/widgets1.csd</file>
+      <file>../examples/widgets2.csd</file>
+
+      <file>../examples/Audio_Input_Test.csd</file>
+      <file>../examples/Audio_Output_Test.csd</file>
+      <file>../examples/Audio_Thru_Test.csd</file>
+      <file>../examples/IO_Test.csd</file>
+      <file>../examples/miditest.csd</file>
 </qresource>
 </RCC>

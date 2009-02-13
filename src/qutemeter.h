@@ -44,7 +44,7 @@ class QuteMeter : public QuteWidget
     virtual void setValue2(double value);
     virtual double getValue();
     virtual double getValue2();
-    virtual QString getChannelName();
+//     virtual QString getChannelName();
     virtual QString getChannel2Name();
 
     void setChannel2Name(QString name);

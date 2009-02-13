@@ -214,10 +214,10 @@ double QuteMeter::getValue2()
   return static_cast<MeterWidget *>(m_widget)->getValue2();
 }
 
-QString QuteMeter::getChannelName()
-{
-  return m_name;
-}
+// QString QuteMeter::getChannelName()
+// {
+//   return m_name;
+// }
 
 QString QuteMeter::getChannel2Name()
 {

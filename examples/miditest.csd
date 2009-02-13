@@ -1,6 +1,5 @@
 <CsoundSynthesizer>
 <CsOptions>
--+rtmidi=pmall -Ma
 </CsOptions>
 <CsInstruments>
 
@@ -13,13 +12,17 @@ nchnls = 2
 massign         0, 0  ; disable triggering of notes
 pgmassign       0, 0
 
-instr 1  ;Generate MIDI notes
-	xtratim 1
+instr 1  ;Generate MIDI note
+	ktime timeinsts
 	noteon 1, 60, 100
-	kflag release
-	if (kflag == 1) then
-		noteoff 1, 60, 100
+	if (ktime > p3/2) then
+		reinit endnote
+		turnoff
 	endif
+	goto end
+endnote:
+	noteoff 1, 60, 100
+end:
 endin
 
 instr   130
@@ -90,24 +93,24 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 658 191 417 232
+WindowBounds: 329 376 403 252
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
-ioView background {0, 41891, 41891}
-ioText {5, 30} {379, 36} label 0.000000 0.00100 "note" left "DejaVu Sans" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Note On: chan = 0 note# = 0 velocity = 0
-ioText {5, 2} {379, 60} label 0.000000 0.00100 "" left "Courier 10 Pitch" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border Note events:
-ioText {5, 80} {184, 116} label 0.000000 0.00100 "" left "Courier 10 Pitch" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border Control Change:
-ioText {131, 110} {40, 25} display 0.000000 0.00100 "cc" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} background border 0
-ioText {131, 135} {40, 25} display 0.000000 0.00100 "ccvalue" left "DejaVu Sans" 12 {0, 0, 0} {61440, 56320, 58624} background border 0
-ioText {131, 160} {40, 25} display 0.000000 0.00100 "channel" left "DejaVu Sans" 12 {0, 0, 0} {56320, 55552, 65280} background border 0
-ioButton {202, 84} {179, 26} event 1.000000 "button1" "Generate note" "/" i1 0 0.5
-ioCheckbox {206, 122} {20, 20} off continuous
-ioText {224, 117} {164, 29} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Generate continuously
-ioText {5, 113} {125, 24} label 0.000000 0.00100 "" right "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Controller number CC#
-ioText {20, 138} {110, 25} label 0.000000 0.00100 "" right "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Value
-ioText {34, 162} {96, 25} label 0.000000 0.00100 "" right "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Channel
+ioView background {0, 41634, 53199}
+ioText {5, 3} {382, 82} label 0.000000 0.00100 "" left "Courier 10 Pitch" 10 {0, 0, 0} {65280, 65280, 65280} nobackground border Note events:
+ioText {5, 88} {184, 116} label 0.000000 0.00100 "" left "Courier 10 Pitch" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border Control Change:
+ioText {131, 118} {40, 25} display 0.000000 0.00100 "cc" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} background border 0
+ioText {131, 143} {40, 25} display 0.000000 0.00100 "ccvalue" left "DejaVu Sans" 12 {0, 0, 0} {61440, 56320, 58624} background border 0
+ioText {131, 168} {40, 25} display 0.000000 0.00100 "channel" left "DejaVu Sans" 12 {0, 0, 0} {56320, 55552, 65280} background border 0
+ioButton {202, 92} {179, 26} event 1.000000 "button1" "Generate note" "/" i1 0 1
+ioCheckbox {206, 130} {20, 20} off continuous
+ioText {224, 125} {164, 29} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Generate continuously
+ioText {5, 121} {125, 24} label 0.000000 0.00100 "" right "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Controller number CC#
+ioText {20, 146} {110, 25} label 0.000000 0.00100 "" right "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Value
+ioText {34, 170} {96, 25} label 0.000000 0.00100 "" right "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Channel
+ioText {5, 26} {381, 53} label 0.000000 0.00100 "note" left "DejaVu Sans" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Note On: chan = 0 note#  = 0 velocity = 0
 </MacGUI>
 

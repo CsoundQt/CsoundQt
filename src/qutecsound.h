@@ -224,8 +224,6 @@ class qutecsound:public QMainWindow
     QStack<Curve *> newCurveBuffer;
     QVector<WINDAT *> curveBuffer;
     QStringList messageQueue;
-    QStringList exampleFiles;
-    QStringList widgetFiles;
     QTimer *queueTimer;
     QTimer *offlineTimer;
     QTabWidget *documentTabs;

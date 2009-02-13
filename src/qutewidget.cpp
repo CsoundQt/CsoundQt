@@ -57,8 +57,10 @@ void QuteWidget::setChannelName(QString name)
   m_name.replace("\"", "'"); // Quotes are not allowed
   if (m_name.startsWith('$'))
     m_name.remove(0,1);  // $ symbol is reserved for identifying string channels
+  mutex.lock();
   if (name != "")
     m_widget->setObjectName(name);
+  mutex.unlock();
 //   qDebug("QuteWidget::setChannelName %s", m_name.toStdString().c_str());
 }
 

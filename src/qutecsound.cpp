@@ -56,29 +56,6 @@ qutecsound::qutecsound(QStringList fileNames)
   ud->PERF_STATUS = 0;
   ud->qcs = this;
 
-  exampleFiles.append(":/examples/miditest.csd");
-  exampleFiles.append(":/examples/circle.csd");
-  exampleFiles.append(":/examples/lineedit.csd");
-  exampleFiles.append(":/examples/rms.csd");
-  exampleFiles.append(":/examples/reinit.csd");
-  exampleFiles.append(":/examples/noreinit.csd");
-  exampleFiles.append(":/examples/stringchannels.csd");
-  exampleFiles.append(":/examples/reservedchannels.csd");
-  exampleFiles.append(":/examples/noisered.csd");
-
-  widgetFiles.append(":/examples/widgetpanel.csd");
-  widgetFiles.append(":/examples/labelwidget.csd");
-  widgetFiles.append(":/examples/displaywidget.csd");
-  widgetFiles.append(":/examples/sliderwidget.csd");
-  widgetFiles.append(":/examples/scrollnumberwidget.csd");
-  widgetFiles.append(":/examples/graphwidget.csd");
-  widgetFiles.append(":/examples/buttonwidget.csd");
-  widgetFiles.append(":/examples/checkboxwidget.csd");
-  widgetFiles.append(":/examples/menuwidget.csd");
-  widgetFiles.append(":/examples/controllerwidget.csd");
-  widgetFiles.append(":/examples/scopewidget.csd");
-  widgetFiles.append(":/examples/graphwidget.csd");
-
   m_options = new Options();
 
   m_console = new DockConsole(this);
@@ -272,7 +249,7 @@ void qutecsound::openExample()
     return;
   QAction *action = static_cast<QAction *>(sender);
   loadFile(action->data().toString());
-  saveAs();
+//   saveAs();
 }
 
 void qutecsound::closeEvent(QCloseEvent *event)
@@ -443,11 +420,7 @@ void qutecsound::closeGraph()
 
 bool qutecsound::save()
 {
-  // Update widget panel text on save.
-  perfMutex.lock();
-  documentPages[curPage]->setMacWidgetsText(widgetPanel->widgetsText());
-  perfMutex.unlock();
-  if (documentPages[curPage]->fileName.isEmpty()) {
+  if (documentPages[curPage]->fileName.isEmpty() or documentPages[curPage]->fileName.startsWith(":/examples/")) {
     return saveAs();
   }
   else if (documentPages[curPage]->readOnly){
@@ -717,6 +690,17 @@ void qutecsound::runCsound(bool realtime)
         return;
       }
   }
+  //Go to directory of current file
+  if (documentPages[curPage]->fileName.contains('/')) {
+    m_options->csdPath =
+        documentPages[curPage]->fileName.left(documentPages[curPage]->fileName.lastIndexOf('/'));
+    qDebug() << m_options->csdPath;
+    QString command = "cd \"" + m_options->csdPath +"\"";
+    system(command.toStdString().c_str());
+  }
+  else {
+    m_options->csdPath = "";
+  }
   QString fileName, fileName2;
   fileName = documentPages[curPage]->fileName;
   if (!fileName.endsWith(".csd")) {
@@ -729,6 +713,27 @@ void qutecsound::runCsound(bool realtime)
     }
     else
       fileName2 = documentPages[curPage]->companionFile;
+  }
+  QTemporaryFile tempFile;
+  if (fileName.startsWith(":/examples/")) {
+    QString tmpFileName = QDir::tempPath();
+    if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
+      tmpFileName += QDir::separator();
+    }
+    tmpFileName += QString("QuteCsoundExampleXXXXXXXX.csd");
+    tempFile.setFileTemplate(tmpFileName);
+    if (!tempFile.open()) {
+      QMessageBox::critical(this,
+                            tr("PostQC"),
+                               tr("Error creating temporary file."),
+                                  QMessageBox::Ok);
+      runAct->setChecked(false);
+      return;
+    }
+    QString csdText = textEdit->document()->toPlainText();
+    fileName = tempFile.fileName();
+    tempFile.write(csdText.toAscii());
+    tempFile.flush();
   }
 
   widgetPanel->flush();
@@ -769,16 +774,6 @@ void qutecsound::runCsound(bool realtime)
     }
     char **argv;
     argv = (char **) calloc(33, sizeof(char*));
-    if (documentPages[curPage]->fileName.contains('/')) {
-      m_options->csdPath =
-          documentPages[curPage]->fileName.left(documentPages[curPage]->fileName.lastIndexOf('/'));
-      qDebug() << m_options->csdPath;
-      QString command = "cd " + m_options->csdPath;
-      system(command.toStdString().c_str());
-    }
-    else {
-      m_options->csdPath = "";
-    }
     // TODO use: PUBLIC int csoundSetGlobalEnv(const char *name, const char *value);
     int argc = m_options->generateCmdLine(argv, realtime, fileName, fileName2);
 #ifdef QUTECSOUND_DESTROY_CSOUND
@@ -1830,8 +1825,8 @@ void qutecsound::connectActions()
           this, SLOT(checkSelection()));
 
   disconnect(widgetPanel, SIGNAL(widgetsChanged(QString)),0,0);
-  connect(widgetPanel, SIGNAL(widgetsChanged(QString)),
-          textEdit, SLOT(setMacWidgetsText(QString)) );
+//   connect(widgetPanel, SIGNAL(widgetsChanged(QString)),
+//           textEdit, SLOT(setMacWidgetsText(QString)) );
   disconnect(widgetPanel, SIGNAL(moved(QPoint)),0,0);
   connect(widgetPanel, SIGNAL(moved(QPoint)),
           textEdit, SLOT(setWidgetPanelPosition(QPoint)) );
@@ -1885,11 +1880,59 @@ void qutecsound::createMenus()
   viewMenu->addAction(showUtilitiesAct);
   viewMenu->addAction(createGraphAct);
 
+  QStringList exampleFiles;
+  QStringList widgetFiles;
+  QStringList tutFiles;
+  QStringList utilitiesFiles;
+
+  exampleFiles.append(":/examples/circle.csd");
+  exampleFiles.append(":/examples/lineedit.csd");
+  exampleFiles.append(":/examples/rms.csd");
+  exampleFiles.append(":/examples/reinit.csd");
+  exampleFiles.append(":/examples/noreinit.csd");
+  exampleFiles.append(":/examples/stringchannels.csd");
+  exampleFiles.append(":/examples/reservedchannels.csd");
+  exampleFiles.append(":/examples/noisered.csd");
+
+  widgetFiles.append(":/examples/widgetpanel.csd");
+  widgetFiles.append(":/examples/labelwidget.csd");
+  widgetFiles.append(":/examples/displaywidget.csd");
+  widgetFiles.append(":/examples/sliderwidget.csd");
+  widgetFiles.append(":/examples/scrollnumberwidget.csd");
+  widgetFiles.append(":/examples/graphwidget.csd");
+  widgetFiles.append(":/examples/buttonwidget.csd");
+  widgetFiles.append(":/examples/checkboxwidget.csd");
+  widgetFiles.append(":/examples/menuwidget.csd");
+  widgetFiles.append(":/examples/controllerwidget.csd");
+  widgetFiles.append(":/examples/scopewidget.csd");
+  widgetFiles.append(":/examples/graphwidget.csd");
+
+  tutFiles.append(":/examples/toot1.csd");
+  tutFiles.append(":/examples/toot2.csd");
+  tutFiles.append(":/examples/toot3.csd");
+  tutFiles.append(":/examples/toot4.csd");
+  tutFiles.append(":/examples/toot5.csd");
+  tutFiles.append(":/examples/widgets1.csd");
+  tutFiles.append(":/examples/widgets2.csd");
+
+  utilitiesFiles.append(":/examples/IO_Test.csd");
+  utilitiesFiles.append(":/examples/Audio_Input_Test.csd");
+  utilitiesFiles.append(":/examples/Audio_Output_Test.csd");
+  utilitiesFiles.append(":/examples/Audio_Thru_Test.csd");
+  utilitiesFiles.append(":/examples/miditest.csd");
+
   QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
 //   QAction *newAction = examplesMenu->addAction("About the examples...");
 //   connect(newAction,SIGNAL(triggered()), this, SLOT(aboutExamples()));
   QAction *newAction;
-  QMenu *submenu = examplesMenu->addMenu(tr("Widgets"));
+  QMenu *submenu = examplesMenu->addMenu(tr("Tutorials"));
+  foreach (QString fileName, tutFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1);
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+  submenu = examplesMenu->addMenu(tr("Widgets"));
   foreach (QString fileName, widgetFiles) {
     QString name = fileName.mid(fileName.lastIndexOf("/") + 1);
     newAction = submenu->addAction(name);
@@ -1898,6 +1941,13 @@ void qutecsound::createMenus()
   }
   submenu = examplesMenu->addMenu(tr("Examples"));
   foreach (QString fileName, exampleFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1);
+    QAction *newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+  submenu = examplesMenu->addMenu(tr("Utilities"));
+  foreach (QString fileName, utilitiesFiles) {
     QString name = fileName.mid(fileName.lastIndexOf("/") + 1);
     QAction *newAction = submenu->addAction(name);
     newAction->setData(fileName);
@@ -2344,7 +2394,7 @@ bool qutecsound::loadFile(QString fileName)
   }
   //textEdit->setPlainText(fixLineEndings(in.readAll()));
 //   textEdit->setPlainText(text);
-  textEdit->setTextString(text, m_options->showWidgetsOnRun);
+  textEdit->setTextString(text, m_options->saveWidgets);
 //   textEdit->setTabStopWidth(m_options->tabWidth);
   m_highlighter->setColorVariables(m_options->colorVariables);
   m_highlighter->setDocument(textEdit->document());
@@ -2389,6 +2439,10 @@ bool qutecsound::saveFile(const QString &fileName)
 {
   qDebug("qutecsound::saveFile");
   QString text;
+  // Update widget panel text on save.
+  perfMutex.lock();
+  documentPages[curPage]->setMacWidgetsText(widgetPanel->widgetsText());
+  perfMutex.unlock();
   documentTabs->setTabIcon(curPage, QIcon());
   QApplication::setOverrideCursor(Qt::WaitCursor);
   if (m_options->saveWidgets)

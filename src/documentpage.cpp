@@ -132,8 +132,9 @@ QString DocumentPage::getFullText()
   fullText = document()->toPlainText();
   if (!fullText.endsWith("\n"))
     fullText += "\n";
-  if (fileName.endsWith(".csd"))
+  if (fileName.endsWith(".csd") or fileName == "")
     fullText += getMacOptionsText() + "\n" + macGUI + "\n" + macPresets + "\n";
+
   return fullText;
 }
 
@@ -546,7 +547,7 @@ void DocumentPage::setMacWidgetsText(QString text)
 {
 //   qDebug("DocumentPage::setMacWidgetsText");
   macGUI = text;
-  document()->setModified(true);
+//   document()->setModified(true);
 }
 
 void DocumentPage::setMacOptionsText(QString text)

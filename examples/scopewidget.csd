@@ -9,7 +9,7 @@ nchnls = 2
 0dbfs = 1
 
 instr 1
-	asig oscils 0.5, 440, 0
+	asig oscils 0.2, 440, 0
 	kpan oscil 1, 1, 1
 	outs asig*kpan, asig*(1-kpan)
 endin
@@ -28,7 +28,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 579 227 489 590
+WindowBounds: 666 275 489 590
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R

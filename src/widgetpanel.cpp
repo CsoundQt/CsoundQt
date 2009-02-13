@@ -545,8 +545,9 @@ void WidgetPanel::newValue(QPair<QString, QString> channelValue)
 void WidgetPanel::processNewValues()
 {
 //   qDebug("WidgetPanel::processNewValues");
+  QList<QString> channelNames;
   valueMutex.lock();
-  QList<QString> channelNames = newValues.keys();
+  channelNames = newValues.keys();
   valueMutex.unlock();
   foreach(QString name, channelNames) {
     for (int i = 0; i < widgets.size(); i++){
@@ -1214,7 +1215,7 @@ void WidgetPanel::paste(QPoint /*pos*/)
 
 void WidgetPanel::duplicate()
 {
-  qDebug("WidgetPanel::duplicate()");
+//   qDebug("WidgetPanel::duplicate()");
   if (editAct->isChecked()) {
     int size = editWidgets.size();
     for (int i = 0; i < size ; i++) {
@@ -1301,7 +1302,7 @@ void WidgetPanel::createSlider()
 
 void WidgetPanel::createLabel()
 {
-  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border New Label";
+  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder New Label";
   createText(currentPosition.x(), currentPosition.y() - 20, 80, 25, line);
   widgetChanged();
 }

@@ -36,10 +36,10 @@ Options: -b128 -A -s -m167 -R
 ioView background {35466, 38293, 40092}
 ioText {116, 4} {160, 34} label 0.000000 0.00100 "" left "DejaVu Sans" 20 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Slider Widget
 ioText {7, 45} {377, 56} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {48896, 52224, 59904} background noborder Sliders are used to send and receive data from the running Csound using channels. If a slider's width is greater than its height it becomes a horizontal slider. You can set a slider's range in it's properties.
-ioSlider {41, 109} {20, 100} 0.000000 1.000000 0.717172 amp
-ioSlider {67, 109} {313, 23} 100.000000 1000.000000 436.363636 freq
-ioText {140, 125} {163, 43} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frequency (from 100 to 1000 transmitting on channel
-ioText {10, 214} {85, 84} label 0.000000 0.00100 "" center "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amplitude (transmitting from 0 to 1 on channel
+ioSlider {41, 109} {20, 100} 0.000000 1.000000 0.220000 amp
+ioSlider {67, 109} {313, 23} 100.000000 1000.000000 459.424920 freq
+ioText {140, 125} {163, 43} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frequency (from 100 to 1000 transmitting on channel 'freq'
+ioText {10, 214} {86, 84} label 0.000000 0.00100 "" center "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amplitude (transmitting from 0 to 1 on channel 'amp'
 ioGraph {139, 171} {241, 110} scope 2.000000 -1.000000 
 </MacGUI>
 

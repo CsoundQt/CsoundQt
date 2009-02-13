@@ -21,7 +21,7 @@ instr 1
 	elseif (ktype == 2) then
 		asig shaker 0.5, 880*ktfactor, 64*ktfactor, 0.7, 3, 0
 	endif
-	outs asig, asig
+	outs asig*0.3, asig*0.3
 endin
 
 instr 2  ;randomize
@@ -47,7 +47,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 762 238 396 217
+WindowBounds: 654 270 396 217
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
