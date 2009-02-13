@@ -30,40 +30,41 @@
       <file>default.csd</file>
       <file>test.csd</file>
 
-      <file>../examples/circle.csd</file>
-      <file>../examples/lineedit.csd</file>
-      <file>../examples/noisered.csd</file>
-      <file>../examples/reservedchannels.csd</file>
-      <file>../examples/stringchannels.csd</file>
-      <file>../examples/rms.csd</file>
-      <file>../examples/reinit.csd</file>
-      <file>../examples/noreinit.csd</file>
+      <file>../examples/Circle.csd</file>
+      <file>../examples/Noise_Reduction.csd</file>
+      <file>../examples/Reserved_Channels.csd</file>
+      <file>../examples/String_Channels.csd</file>
+      <file>../examples/Rms.csd</file>
+      <file>../examples/Reinit_Example.csd</file>
+      <file>../examples/No_Reinit.csd</file>
 
-      <file>../examples/widgetpanel.csd</file>
-      <file>../examples/labelwidget.csd</file>
-      <file>../examples/displaywidget.csd</file>
-      <file>../examples/sliderwidget.csd</file>
-      <file>../examples/scrollnumberwidget.csd</file>
-      <file>../examples/graphwidget.csd</file>
-      <file>../examples/buttonwidget.csd</file>
-      <file>../examples/checkboxwidget.csd</file>
-      <file>../examples/menuwidget.csd</file>
-      <file>../examples/controllerwidget.csd</file>
-      <file>../examples/scopewidget.csd</file>
-      <file>../examples/graphwidget.csd</file>
+      <file>../examples/Widget_Panel.csd</file>
+      <file>../examples/Label_Widget.csd</file>
+      <file>../examples/Display_Widget.csd</file>
+      <file>../examples/Slider_Widget.csd</file>
+      <file>../examples/Lineedit_Widget.csd</file>
+      <file>../examples/Scrollnumber_Widget.csd</file>
+      <file>../examples/Graph_Widget.csd</file>
+      <file>../examples/Button_Widget.csd</file>
+      <file>../examples/Checkbox_Widget.csd</file>
+      <file>../examples/Menu_Widget.csd</file>
+      <file>../examples/Controller_Widget.csd</file>
+      <file>../examples/Scope_Widget.csd</file>
 
-      <file>../examples/toot1.csd</file>
-      <file>../examples/toot2.csd</file>
-      <file>../examples/toot3.csd</file>
-      <file>../examples/toot4.csd</file>
-      <file>../examples/toot5.csd</file>
-      <file>../examples/widgets1.csd</file>
-      <file>../examples/widgets2.csd</file>
+      <file>../examples/Toot1.csd</file>
+      <file>../examples/Toot2.csd</file>
+      <file>../examples/Toot3.csd</file>
+      <file>../examples/Toot4.csd</file>
+      <file>../examples/Toot5.csd</file>
+      <file>../examples/Widgets_1.csd</file>
+      <file>../examples/Widgets_2.csd</file>
+
+      <file>../examples/Simple_Subtractive.csd</file>
 
       <file>../examples/Audio_Input_Test.csd</file>
       <file>../examples/Audio_Output_Test.csd</file>
       <file>../examples/Audio_Thru_Test.csd</file>
       <file>../examples/IO_Test.csd</file>
-      <file>../examples/miditest.csd</file>
+      <file>../examples/MIDI_IO_Test.csd</file>
 </qresource>
 </RCC>

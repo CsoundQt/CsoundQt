@@ -1883,75 +1883,76 @@ void qutecsound::createMenus()
   QStringList exampleFiles;
   QStringList widgetFiles;
   QStringList tutFiles;
+  QStringList synthFiles;
   QStringList utilitiesFiles;
+  QList<QStringList> subMenus;
+  QStringList subMenuNames;
 
-  exampleFiles.append(":/examples/circle.csd");
-  exampleFiles.append(":/examples/lineedit.csd");
-  exampleFiles.append(":/examples/rms.csd");
-  exampleFiles.append(":/examples/reinit.csd");
-  exampleFiles.append(":/examples/noreinit.csd");
-  exampleFiles.append(":/examples/stringchannels.csd");
-  exampleFiles.append(":/examples/reservedchannels.csd");
-  exampleFiles.append(":/examples/noisered.csd");
+  tutFiles.append(":/examples/Toot1.csd");
+  tutFiles.append(":/examples/Toot2.csd");
+  tutFiles.append(":/examples/Toot3.csd");
+  tutFiles.append(":/examples/Toot4.csd");
+  tutFiles.append(":/examples/Toot5.csd");
+  tutFiles.append(":/examples/Widgets_1.csd");
+  tutFiles.append(":/examples/Widgets_2.csd");
 
-  widgetFiles.append(":/examples/widgetpanel.csd");
-  widgetFiles.append(":/examples/labelwidget.csd");
-  widgetFiles.append(":/examples/displaywidget.csd");
-  widgetFiles.append(":/examples/sliderwidget.csd");
-  widgetFiles.append(":/examples/scrollnumberwidget.csd");
-  widgetFiles.append(":/examples/graphwidget.csd");
-  widgetFiles.append(":/examples/buttonwidget.csd");
-  widgetFiles.append(":/examples/checkboxwidget.csd");
-  widgetFiles.append(":/examples/menuwidget.csd");
-  widgetFiles.append(":/examples/controllerwidget.csd");
-  widgetFiles.append(":/examples/scopewidget.csd");
-  widgetFiles.append(":/examples/graphwidget.csd");
+  subMenus << tutFiles;
+  subMenuNames << "Tutorials";
 
-  tutFiles.append(":/examples/toot1.csd");
-  tutFiles.append(":/examples/toot2.csd");
-  tutFiles.append(":/examples/toot3.csd");
-  tutFiles.append(":/examples/toot4.csd");
-  tutFiles.append(":/examples/toot5.csd");
-  tutFiles.append(":/examples/widgets1.csd");
-  tutFiles.append(":/examples/widgets2.csd");
+  widgetFiles.append(":/examples/Widget_Panel.csd");
+  widgetFiles.append(":/examples/Label_Widget.csd");
+  widgetFiles.append(":/examples/Display_Widget.csd");
+  widgetFiles.append(":/examples/Slider_Widget.csd");
+  widgetFiles.append(":/examples/Scrollnumber_Widget.csd");
+  widgetFiles.append(":/examples/Graph_Widget.csd");
+  widgetFiles.append(":/examples/Button_Widget.csd");
+  widgetFiles.append(":/examples/Checkbox_Widget.csd");
+  widgetFiles.append(":/examples/Menu_Widget.csd");
+  widgetFiles.append(":/examples/Controller_Widget.csd");
+  widgetFiles.append(":/examples/Scope_Widget.csd");
+
+  subMenus << widgetFiles;
+  subMenuNames << "Widgets";
+
+  synthFiles.append(":/examples/Simple_Subtractive.csd");
+
+  subMenus << synthFiles;
+  subMenuNames << tr("Synths");
+
+  exampleFiles.append(":/examples/Circle.csd");
+  exampleFiles.append(":/examples/Lineedit_Widget.csd");
+  exampleFiles.append(":/examples/Rms.csd");
+  exampleFiles.append(":/examples/Reinit_Example.csd");
+  exampleFiles.append(":/examples/No_Reinit.csd");
+  exampleFiles.append(":/examples/String_Channels.csd");
+  exampleFiles.append(":/examples/Reserved_Channels.csd");
+  exampleFiles.append(":/examples/Noise_Reduction.csd");
+
+  subMenus << exampleFiles;
+  subMenuNames << "Examples";
 
   utilitiesFiles.append(":/examples/IO_Test.csd");
   utilitiesFiles.append(":/examples/Audio_Input_Test.csd");
   utilitiesFiles.append(":/examples/Audio_Output_Test.csd");
   utilitiesFiles.append(":/examples/Audio_Thru_Test.csd");
-  utilitiesFiles.append(":/examples/miditest.csd");
+  utilitiesFiles.append(":/examples/MIDI_IO_Test.csd");
+
+  subMenus << utilitiesFiles;
+  subMenuNames << tr("Utilities");
 
   QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
 //   QAction *newAction = examplesMenu->addAction("About the examples...");
 //   connect(newAction,SIGNAL(triggered()), this, SLOT(aboutExamples()));
   QAction *newAction;
-  QMenu *submenu = examplesMenu->addMenu(tr("Tutorials"));
-  foreach (QString fileName, tutFiles) {
-    QString name = fileName.mid(fileName.lastIndexOf("/") + 1);
-    newAction = submenu->addAction(name);
-    newAction->setData(fileName);
-    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-  }
-  submenu = examplesMenu->addMenu(tr("Widgets"));
-  foreach (QString fileName, widgetFiles) {
-    QString name = fileName.mid(fileName.lastIndexOf("/") + 1);
-    newAction = submenu->addAction(name);
-    newAction->setData(fileName);
-    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-  }
-  submenu = examplesMenu->addMenu(tr("Examples"));
-  foreach (QString fileName, exampleFiles) {
-    QString name = fileName.mid(fileName.lastIndexOf("/") + 1);
-    QAction *newAction = submenu->addAction(name);
-    newAction->setData(fileName);
-    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-  }
-  submenu = examplesMenu->addMenu(tr("Utilities"));
-  foreach (QString fileName, utilitiesFiles) {
-    QString name = fileName.mid(fileName.lastIndexOf("/") + 1);
-    QAction *newAction = submenu->addAction(name);
-    newAction->setData(fileName);
-    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  QMenu *submenu;
+  for (int i = 0; i < subMenus.size(); i++) {
+    submenu = examplesMenu->addMenu(subMenuNames[i]);
+    foreach (QString fileName, subMenus[i]) {
+      QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+      newAction = submenu->addAction(name);
+      newAction->setData(fileName);
+      connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+    }
   }
 
   menuBar()->addSeparator();
