@@ -224,7 +224,8 @@ void qutecsound::changeFont()
 void qutecsound::changePage(int index)
 {
   stop();
-  textEdit->setMacWidgetsText(widgetPanel->widgetsText());
+  //FIXME check if textEdit exists otherwise this crashes!
+//   textEdit->setMacWidgetsText(widgetPanel->widgetsText());
   textEdit = documentPages[index];
   textEdit->setTabStopWidth(m_options->tabWidth);
   textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);

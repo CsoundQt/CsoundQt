@@ -74,7 +74,7 @@ class DocumentPage : public QTextEdit
 //     QString dotTextForExpression(QString expression, QString &outNode);
 
   public slots:
-    void setMacWidgetsText(QString text);
+    void setMacWidgetsText(QString widgetText);
     void setMacOptionsText(QString text);
     void setMacOption(QString option, QString newValue);
     void setWidgetPanelPosition(QPoint position);

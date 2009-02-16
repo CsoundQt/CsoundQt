@@ -229,7 +229,6 @@ class qutecsound:public QMainWindow
     QTabWidget *documentTabs;
     GraphicWindow *m_graphic;
     QVector<DocumentPage *> documentPages;
-    //TODO remove this variable? or make it DocumentPage
     DocumentPage *textEdit;
     Options *m_options;
     DockConsole *m_console;

@@ -28,6 +28,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 {
   fileName = "";
   companionFile = "";
+  macGUI = "";
   askForFile = true;
   readOnly = false;
   errorMarked = false;
@@ -543,10 +544,10 @@ QString DocumentPage::getFilePath()
   return fileName.left(fileName.lastIndexOf("/"));
 }
 
-void DocumentPage::setMacWidgetsText(QString text)
+void DocumentPage::setMacWidgetsText(QString widgetText)
 {
-//   qDebug("DocumentPage::setMacWidgetsText");
-  macGUI = text;
+//   qDebug() << "DocumentPage::setMacWidgetsText: ";
+  macGUI = widgetText;
 //   document()->setModified(true);
 }
 
