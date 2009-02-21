@@ -1424,11 +1424,15 @@ void qutecsound::dispatchQueues()
 //     widgetPanel->setValue(channel, outValueQueue[channel]);
 //   }
 //   outValueQueue.clear();
+
+  stringValueMutex.lock();
   QList<QString> channels = outStringQueue.keys();
   foreach (QString channel, channels) {
     widgetPanel->setValue(channel, outStringQueue[channel]);
   }
   outStringQueue.clear();
+  stringValueMutex.unlock();
+
   widgetPanel->processNewValues();
   processEventQueue(ud);
 //   csoundUnlockMutex(perfMutex);
@@ -2699,7 +2703,14 @@ void qutecsound::queueOutValue(QString channelName, double value)
 
 void qutecsound::queueOutString(QString channelName, QString value)
 {
-  outStringQueue.insert(channelName, value);
+  stringValueMutex.lock();
+  if (outStringQueue.contains(channelName)) {
+    outStringQueue[channelName] = value;
+  }
+  else {
+    outStringQueue.insert(channelName, value);
+  }
+  stringValueMutex.unlock();
 }
 
 void qutecsound::queueMessage(QString message)

@@ -236,6 +236,7 @@ class qutecsound:public QMainWindow
     DockHelp *helpPanel;
     WidgetPanel *widgetPanel;
     QToolButton *closeTabButton;
+    QMutex stringValueMutex;
 
     QMenu *fileMenu;
     QMenu *recentMenu;
