@@ -158,7 +158,8 @@ class RingBuffer
       for (int i = 0; i< buffer.size(); i++) {
         buffer[i] = 0;
       }
-      currentPos = 0;
+      currentReadPos = 0;
+      currentPos = 1;
     }
 };
 

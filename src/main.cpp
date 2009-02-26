@@ -40,8 +40,11 @@ int main(int argc, char *argv[])
   QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
   splash.show();
   splash.showMessage("Starting QuteCsound");
-  app.processEvents();
   qutecsound * mw = new qutecsound(fileNames);
+  FileOpenEater *filterObj=new FileOpenEater();
+  filterObj->mainWindow=mw;
+  app.installEventFilter(filterObj);
+  app.processEvents();
   splash.finish(mw);
   mw->show();
   return app.exec();

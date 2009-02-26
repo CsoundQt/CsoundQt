@@ -170,20 +170,20 @@ void QuteScope::updateData()
     return;
   if (static_cast<ScopeWidget *>(m_widget)->freeze)
     return;
+  double value;
+  int numChnls = m_ud->numChnls;
+  int channel = m_channel;
+  MYFLT newValue;
+  if (channel == 0 or channel >= numChnls )
+    return;
+  channel = (channel != -1 ? channel - 1 : -1);
 #ifdef  USE_WIDGET_MUTEX
   mutex.lock();
 #endif
-  double value;
   RingBuffer *buffer = &m_ud->qcs->audioOutputBuffer;
   QList<MYFLT> list(buffer->buffer);
   long listSize = list.size();
   long offset = buffer->currentPos;
-  int numChnls = m_ud->numChnls;
-  int channel = m_channel;
-  MYFLT newValue;
-  if (channel == 0 or channel > numChnls )
-    return;
-  channel = (channel != -1 ? channel - 1 : -1);
   for (int i = 0; i < this->width(); i++) {
     value = 0;
     for (int j = 0; j < (int) m_zoom; j++) {

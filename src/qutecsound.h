@@ -122,6 +122,7 @@ class qutecsound:public QMainWindow
     RingBuffer audioOutputBuffer;
 
   public slots:
+    bool loadFile(QString fileName);
     void runCsound(bool realtime=true);
     void stop();
     void stopCsound();
@@ -199,7 +200,6 @@ class qutecsound:public QMainWindow
     void configureHighlighter();
     bool maybeSave();
     QString fixLineEndings(const QString &text);
-    bool loadFile(QString fileName);
     void loadCompanionFile(const QString &fileName);
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
@@ -316,6 +316,30 @@ class qutecsound:public QMainWindow
 #ifdef MACOSX
     MenuBarHandle menuBarHandle;
 #endif
+};
+
+/* This class is taken from MeshLab, originally licensed GPL v2 or later. */
+class FileOpenEater : public QObject
+{
+  Q_OBJECT
+  public:
+    FileOpenEater() {noEvent=true;}
+    qutecsound *mainWindow;
+    bool noEvent;
+  protected:
+    bool eventFilter(QObject *obj, QEvent *event)
+    {
+      if (event->type() == QEvent::FileOpen) {
+        noEvent=false;
+        QFileOpenEvent *fileEvent = static_cast<QFileOpenEvent*>(event);
+        mainWindow->loadFile(fileEvent->file());
+// QMessageBox::information(0,"Meshlab",fileEvent->file());
+        return true;
+      } else {
+// standard event processing
+        return QObject::eventFilter(obj, event);
+      }
+    }
 };
 
 #endif

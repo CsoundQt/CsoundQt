@@ -99,7 +99,7 @@ int Options::generateCmdLine(char **argv,
   QStringList indFlags= flags.split(" -",QString::SkipEmptyParts);
   foreach (QString flag, indFlags) {
     flag = "-" + flag;
-    printf("%s", flag.toStdString().c_str()) ;
+//     printf("%s", flag.toStdString().c_str()) ;
     argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
     strcpy(argv[index],flag.toStdString().c_str());
     index++;

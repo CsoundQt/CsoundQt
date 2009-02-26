@@ -167,6 +167,7 @@ qutecsound::qutecsound(QStringList fileNames)
 
 qutecsound::~qutecsound()
 {
+  qDebug() << "qutecsound::~qutecsound()";
   free(ud);
   delete closeTabButton;
 }
@@ -695,7 +696,7 @@ void qutecsound::runCsound(bool realtime)
   if (documentPages[curPage]->fileName.contains('/')) {
     m_options->csdPath =
         documentPages[curPage]->fileName.left(documentPages[curPage]->fileName.lastIndexOf('/'));
-    qDebug() << m_options->csdPath;
+//     qDebug() << m_options->csdPath;
     QString command = "cd \"" + m_options->csdPath +"\"";
     system(command.toStdString().c_str());
   }
@@ -781,10 +782,11 @@ void qutecsound::runCsound(bool realtime)
     csound=csoundCreate(0);
 #endif
 
+    // Callbacks must be set before compile, otherwise some information is missed
     if (m_options->thread) {
       csoundSetMessageCallback(csound, &qutecsound::messageCallback_Thread);
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
-      qDebug("Create CsoundPerformanceThread");
+//       qDebug("Create CsoundPerformanceThread");
       perfThread = new CsoundPerformanceThread(csound);
       perfThread->SetProcessCallback(qutecsound::csThread, (void*)ud);
 #endif
@@ -792,9 +794,13 @@ void qutecsound::runCsound(bool realtime)
     else {
       csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
     }
+
+
+
     csoundReset(csound);
     csoundSetHostData(csound, (void *) ud);
-    csoundPreCompile(csound);
+    csoundPreCompile(csound);  //Need to run PreCompile to create the FLTK_Flags global variable
+
 
     int variable = csoundCreateGlobalVariable(csound, "FLTK_Flags", sizeof(int));
     if (m_options->enableFLTK or !useAPI) {
@@ -805,23 +811,28 @@ void qutecsound::runCsound(bool realtime)
 //       qDebug("play() FLTK Disabled");
       *((int*) csoundQueryGlobalVariable(csound, "FLTK_Flags")) = 3;
     }
-    qDebug("Command Line:");
+    qDebug("Command Line args:");
     for (int index=0; index< argc; index++) {
-      fprintf(stderr, "%s ",argv[index]);
+      qDebug() << argv[index];
     }
-    fprintf(stderr, "\n");
-    int result=csoundCompile(csound,argc,argv);
 
-    qDebug("Csound compiled %i", result);
     csoundSetIsGraphable(csound, true);
     csoundSetMakeGraphCallback(csound, &qutecsound::makeGraphCallback);
     csoundSetDrawGraphCallback(csound, &qutecsound::drawGraphCallback);
     csoundSetKillGraphCallback(csound, &qutecsound::killGraphCallback);
     csoundSetExitGraphCallback(csound, &qutecsound::exitGraphCallback);
 
+    ud->result=csoundCompile(csound,argc,argv);
+    ud->csound = csound;
+    ud->zerodBFS = csoundGet0dBFS(csound);
+    ud->sampleRate = csoundGetSr(csound);
+    ud->numChnls = csoundGetNchnls(csound);
+
+    qDebug("Csound compiled %i", ud->result);
+
     ud->PERF_STATUS = 1; // dispatch queues must be in running state
-    emit(dispatchQueues()); //To dispatch messages produced in compilation.
-    if (result!=CSOUND_SUCCESS or variable != CSOUND_SUCCESS) {
+    dispatchQueues(); //To dispatch messages produced in compilation.
+    if (ud->result!=CSOUND_SUCCESS or variable != CSOUND_SUCCESS) {
       qDebug("Csound compile failed!");
       ud->PERF_STATUS = 0;  //Csound is stopped and cleaned up by stopCsound() called from dispatchQueues()
       free(argv);
@@ -840,11 +851,6 @@ void qutecsound::runCsound(bool realtime)
       csoundSetInputValueCallback(csound, NULL);
       csoundSetOutputValueCallback(csound, NULL);
     }
-    ud->csound = csound;
-    ud->result = result;
-    ud->zerodBFS = csoundGet0dBFS(csound);
-    ud->sampleRate = csoundGetSr(csound);
-    ud->numChnls = csoundGetNchnls(csound);
 
     //TODO is something here necessary to wirk with doubles?
 //     PUBLIC int csoundGetSampleFormat(CSOUND *);
@@ -929,7 +935,7 @@ void qutecsound::runCsound(bool realtime)
 
 void qutecsound::stop()
 {
-  qDebug("qutecsound::stop()");
+//   qDebug("qutecsound::stop()");
   if (offlineTimer->isActive())
     offlineTimer->stop();
   offlineTimer->start(QCS_QUEUETIMER_TIME);
@@ -948,7 +954,7 @@ void qutecsound::stop()
 
 void qutecsound::stopCsound()
 {
-  qDebug("qutecsound::stopCsound()");
+//   qDebug("qutecsound::stopCsound()");
   runAct->setChecked(false);
   recAct->setChecked(false);
   if (m_options->thread) {
@@ -1438,8 +1444,12 @@ void qutecsound::dispatchQueues()
 //   csoundUnlockMutex(perfMutex);
   messageQueue.clear();
   if (ud->PERF_STATUS == 0) {
-    qDebug("qutecsound::dispatchQueues() stop");
+//     qDebug("qutecsound::dispatchQueues() stop");
     stopCsound();
+    foreach (QString msg, messageQueue) {
+      m_console->appendMessage(msg);
+      widgetPanel->appendMessage(msg);
+    }
     offlineTimer->start(QCS_QUEUETIMER_TIME);
     return;
   }
@@ -1486,7 +1496,7 @@ void qutecsound::dispatchOfflineQueues()
 
 void qutecsound::widgetDockStateChanged(bool topLevel)
 {
-  qDebug("qutecsound::widgetDockStateChanged()");
+//   qDebug("qutecsound::widgetDockStateChanged()");
   qApp->processEvents();
   if (documentPages.size() < 1)
     return; //necessary check, since widget panel is created early by consructor
@@ -2730,6 +2740,11 @@ uintptr_t qutecsound::csThread(void *data)
     udata->qcs->channelNames.resize(numWidgets*2);
     udata->qcs->values.resize(numWidgets*2);
     udata->qcs->stringValues.resize(numWidgets*2);
+    if (udata->qcs->m_options->enableWidgets) {
+      udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames,
+                                          &udata->qcs->values,
+                                          &udata->qcs->stringValues);
+    }
     int perform = csoundPerformKsmps(udata->csound);
     udata->outputBufferSize = csoundGetKsmps(udata->csound);
     udata->outputBuffer = csoundGetSpout(udata->csound);
@@ -2742,16 +2757,16 @@ uintptr_t qutecsound::csThread(void *data)
         udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames,
                                             &udata->qcs->values,
                                             &udata->qcs->stringValues);
+      }
 //         if (udata->qcs->m_options->chngetEnabled) {
 //           writeWidgetValues(udata);
 //           readWidgetValues(udata);
 //         }
 //         processEventQueue(udata);
-      }
       perform = csoundPerformKsmps(udata->csound);
     }
+    udata->PERF_STATUS = 0;
   }
-  udata->PERF_STATUS = 0;
 //   udata->qcs->stop();
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
 #else

@@ -79,6 +79,25 @@ void Highlighter::highlightBlock(const QString &text)
     startIndex = text.indexOf(commentStartExpression,
                               startIndex + commentLength);
   }
+//   setCurrentBlockState(0);
+//   startIndex = 0;
+//   if (previousBlockState() != 3)
+//     startIndex = text.indexOf("<CsOptions>");
+// 
+//   while (startIndex >= 0) {
+//     int endIndex = text.indexOf("</CsOptions>", startIndex);
+//     int optionsLength;
+//     if (endIndex == -1) {
+//       setCurrentBlockState(3);
+//       optionsLength = text.length() - startIndex;
+//     } else {
+//       optionsLength = endIndex - startIndex
+//           + QRegExp("</CsOptions>").matchedLength();
+//     }
+//     setFormat(startIndex, optionsLength, csdtagFormat);
+//     startIndex = text.indexOf("<CsOptions>",
+//                               startIndex + optionsLength);
+//   }
 }
 
 void Highlighter::setFirstRules()
@@ -190,22 +209,6 @@ void Highlighter::setLastRules()
 {
   HighlightingRule rule;
 
-  csdtagFormat.setForeground(QColor("brown"));
-//      csdtagFormat.setFontWeight(QFont::Bold);
-  QStringList keywordPatterns;
-  keywordPatterns << "<CsoundSynthesizer>" << "</CsoundSynthesizer>"
-      << "<CsOptions>" << "</CsOptions>"
-      << "<CsInstruments>" << "</CsInstruments>"
-      << "<CsScore>" << "</CsScore>"
-      << "<CsVersion>" << "</CsVersion>"
-      << "<MacOptions>" << "</MacOptions>"
-      << "<MacGUI>" << "</MacGUI>"
-      << "<csLADSPA>" << "</csLADSPA>";
-  foreach (QString pattern, keywordPatterns) {
-    rule.pattern = QRegExp(pattern);
-    rule.format = csdtagFormat;
-    highlightingRules.append(rule);
-  }
 
   QStringList instPatterns;
   instPatterns << "\\binstr\\b" << "\\bendin\\b" << "\\bopcode\\b" << "\\bendop\\b";
@@ -249,6 +252,22 @@ void Highlighter::setLastRules()
 
   multiLineCommentFormat.setForeground(QColor("green"));
 
+  csdtagFormat.setForeground(QColor("brown"));
+//      csdtagFormat.setFontWeight(QFont::Bold);
+  QStringList keywordPatterns;
+  keywordPatterns << "<CsoundSynthesizer>" << "</CsoundSynthesizer>"
+      << "<CsInstruments>" << "</CsInstruments>"
+      << "<CsOptions>" << "</CsOptions>"
+      << "<CsScore>" << "</CsScore>"
+      << "<CsVersion>" << "</CsVersion>"
+      << "<MacOptions>" << "</MacOptions>"
+      << "<MacGUI>" << "</MacGUI>"
+      << "<csLADSPA>" << "</csLADSPA>";
+  foreach (QString pattern, keywordPatterns) {
+    rule.pattern = QRegExp(pattern);
+    rule.format = csdtagFormat;
+    highlightingRules.append(rule);
+  }
 //      classFormat.setFontWeight(QFont::Bold);
 //      classFormat.setForeground(Qt::darkMagenta);
 //      rule.pattern = QRegExp("\\bQ[A-Za-z]+\\b");

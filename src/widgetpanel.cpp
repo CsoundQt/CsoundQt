@@ -1362,7 +1362,7 @@ void WidgetPanel::createCheckBox()
 
 void WidgetPanel::createMenu()
 {
-  createMenu(currentPosition.x(), currentPosition.y() - 20, 80, 30, QString("ioMenu {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {80, 30} 1 303 \"item1,item2,item3\" menu" +QString::number(widgets.size())));
+  createMenu(currentPosition.x(), currentPosition.y() - 20, 80, 30, QString("ioMenu {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {80, 25} 1 303 \"item1,item2,item3\" menu" +QString::number(widgets.size())));
   widgetChanged();
 }
 

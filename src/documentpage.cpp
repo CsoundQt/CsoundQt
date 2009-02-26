@@ -85,7 +85,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   }
   else {
     if (autoCreateMacCsoundSections) {
-      QString defaultMacOptions = "<MacOptions>\nVersion: 3\nRender: Real\nAsk: Yes\nFunctions: ioObject\nListing: Window\nWindowBounds: 72 179 400 200\nCurrentView: io\nIOViewEdit: On\nOptions: -b128 -A -s -m167 -R\n</MacOptions>\n";
+      QString defaultMacOptions = "<MacOptions>\nVersion: 3\nRender: Real\nAsk: Yes\nFunctions: ioObject\nListing: Window\nWindowBounds: 72 179 400 200\nCurrentView: io\nIOViewEdit: On\nOptions:\n</MacOptions>\n";
       setMacOptionsText(defaultMacOptions);
     }
     else
@@ -120,6 +120,27 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     }
     else {
       macGUI = "";
+    }
+  }
+  // This here is for compatibility with MacCsound
+  QString optionsText = getMacOption("Options:");
+  if (optionsText.contains(" -o")) {
+    QString outFile = optionsText.mid(optionsText.indexOf(" -o") + 1);
+    int index = outFile.indexOf(" -");
+    if (index > 0) {
+      outFile = outFile.left(index);
+    }
+    optionsText.remove(outFile);
+    setMacOption("Options:", optionsText);
+    index = text.indexOf("<CsOptions>");
+    int endindex = text.indexOf("</CsOptions>");
+    if (index >= 0 and endindex > index) {
+      text.remove(index, endindex - index);
+      text.insert(index, "<CsOptions>\n" + outFile);
+    }
+    else {
+      index = text.indexOf("<CsInstruments>");
+      text.insert(index, "<CsOptions>\n" + outFile + "\n</CsOptions>\n");
     }
   }
   setPlainText(text);
@@ -403,7 +424,7 @@ QRect DocumentPage::getWidgetPanelGeometry()
 {
   int index = macOptions.indexOf(QRegExp("WindowBounds: .*"));
   if (index < 0) {
-    qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
+//     qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
     return QRect();
   }
   QString line = macOptions[index];
