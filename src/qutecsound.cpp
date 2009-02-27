@@ -698,7 +698,8 @@ void qutecsound::runCsound(bool realtime)
         documentPages[curPage]->fileName.left(documentPages[curPage]->fileName.lastIndexOf('/'));
 //     qDebug() << m_options->csdPath;
     QString command = "cd \"" + m_options->csdPath +"\"";
-    system(command.toStdString().c_str());
+    //system(command.toStdString().c_str());
+	QProcess::execute(command);
   }
   else {
     m_options->csdPath = "";
@@ -852,7 +853,7 @@ void qutecsound::runCsound(bool realtime)
       csoundSetOutputValueCallback(csound, NULL);
     }
 
-    //TODO is something here necessary to wirk with doubles?
+    //TODO is something here necessary to work with doubles?
 //     PUBLIC int csoundGetSampleFormat(CSOUND *);
 //     PUBLIC int csoundGetSampleSize(CSOUND *);
     unsigned int numWidgets = widgetPanel->widgetCount();
@@ -918,6 +919,7 @@ void qutecsound::runCsound(bool realtime)
 #endif
 #ifdef WIN32
     options = SCRIPT_NAME;
+	qDebug() << "m_options->terminal == " << m_options->terminal;
 #endif
     execute(m_options->terminal, options);
     runAct->setChecked(false);
@@ -2292,7 +2294,8 @@ int qutecsound::execute(QString executable, QString options)
 
   // cd to current directory on all platforms
   QString cdLine = "cd \"" + documentPages[curPage]->getFilePath() + "\"";
-  system(cdLine.toStdString().c_str());
+  //system(cdLine.toStdString().c_str());
+  QProcess::execute(cdLine);
 
 #ifdef MACOSX
   QString commandLine = "open -a '" + executable + "' '" + options + "'";
@@ -2308,25 +2311,27 @@ int qutecsound::execute(QString executable, QString options)
 #endif
 #ifdef WIN32
   QString commandLine = executable + (executable.startsWith("cmd")? " /k ": " ") + options;
-//   system(commandLine.toStdString().c_str());
+  //system(commandLine.toStdString().c_str());
 
-  STARTUPINFO si;
-  PROCESS_INFORMATION pi;
-  STARTUPINFO sj;
-  PROCESS_INFORMATION pj;
-
-  ZeroMemory( &si, sizeof(si) );
-  si.cb = sizeof(si);
-  ZeroMemory( &pi, sizeof(pi) );
-
-  ZeroMemory( &sj, sizeof(sj) );
-  sj.cb = sizeof(sj);
-  ZeroMemory( &pj, sizeof(pj) );
-
-  if(!CreateProcess(NULL, commandLine.toStdString().c_str() , NULL, NULL, FALSE, 0, NULL, NULL, &sj, &pj))
-  {
-    qDebug() << "qutecsound::execute Error executing!"
-  }
+//  STARTUPINFO si;
+//  PROCESS_INFORMATION pi;
+//  STARTUPINFO sj;
+//  PROCESS_INFORMATION pj;
+//
+//  ZeroMemory( &si, sizeof(si) );
+//  si.cb = sizeof(si);
+//  ZeroMemory( &pi, sizeof(pi) );
+//
+//  ZeroMemory( &sj, sizeof(sj) );
+//  sj.cb = sizeof(sj);
+//  ZeroMemory( &pj, sizeof(pj) );
+//
+//  if(!CreateProcess(NULL, commandLine.toStdString().c_str() , NULL, NULL, FALSE, 0, NULL, NULL, &sj, &pj))
+//  {
+//    qDebug() << "qutecsound::execute Error executing!";
+//  }
+  QProcess::startDetached(commandLine);
+  
 #endif
   return 1;
 }
@@ -2515,7 +2520,12 @@ QString qutecsound::strippedName(const QString &fullFileName)
 
 QString qutecsound::generateScript(bool realtime)
 {
+#ifndef WIN32
   QString script = "#!/bin/sh\n";
+#else
+  QString script = "";
+#endif
+  
   QString cmdLine = "";
   if (m_options->opcodedirActive)
     script += "export OPCODEDIR=" + m_options->opcodedir + "\n";
@@ -2528,12 +2538,22 @@ QString qutecsound::generateScript(bool realtime)
   if (m_options->ssdirActive)
     script += "export INCDIR=" + m_options->incdir + "\n";
 
+#ifndef WIN32
   script += "cd " + QFileInfo(documentPages[curPage]->fileName).absoluteFilePath() + "\n";
+#else // WIN32 defined.
+	// AF: Instead of using "cd" to change directories, use "pushd" so we can
+	//	"popd" back to the original directory later and delete the batch file.
+  QString script_cd = "@pushd " + QFileInfo(documentPages[curPage]->fileName).absolutePath() + "\n";
+  script_cd.replace("/", "\\");
+  script += script_cd;
+#endif
+  
 #ifdef MACOSX
   cmdLine = "/usr/local/bin/csound ";
 #else
   cmdLine = "csound ";
 #endif
+  
   if (documentPages[curPage]->companionFile != "") {
     if (documentPages[curPage]->fileName.endsWith(".orc"))
       cmdLine += "\""  + documentPages[curPage]->fileName
@@ -2545,12 +2565,21 @@ QString qutecsound::generateScript(bool realtime)
   else if (documentPages[curPage]->fileName.endsWith(".csd"))
     cmdLine += "\""  + documentPages[curPage]->fileName + "\"";
   cmdLine += m_options->generateCmdLineFlags(realtime);
-  script += "echo \"" + cmdLine + "\"\n";
+  script += "@echo \"" + cmdLine + "\"\n";
   script += cmdLine + "\n";
+  
+#ifndef WIN32
   script += "echo \"\nPress return to continue\"\n";
   script += "dummy_var=\"\"\n";
   script += "read dummy_var\n";
   script += "rm $0\n";
+#else // WIN32 defined.
+  script += "@echo.\n";
+  script += "@pause\n";
+  script += "@popd\n";
+  // AF: TODO: Figure out how to delete batch file without throwing an error.
+  script += "@exit\n";
+#endif
   return script;
 }
 
