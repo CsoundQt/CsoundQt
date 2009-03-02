@@ -225,8 +225,9 @@ void qutecsound::changeFont()
 void qutecsound::changePage(int index)
 {
   stop();
-  //FIXME check if textEdit exists otherwise this crashes!
-//   textEdit->setMacWidgetsText(widgetPanel->widgetsText());
+  if (textEdit != NULL) {
+    textEdit->setMacWidgetsText(widgetPanel->widgetsText()); //Updated changes to widgets in file
+  }
   textEdit = documentPages[index];
   textEdit->setTabStopWidth(m_options->tabWidth);
   textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
@@ -2331,7 +2332,7 @@ int qutecsound::execute(QString executable, QString options)
 //    qDebug() << "qutecsound::execute Error executing!";
 //  }
   QProcess::startDetached(commandLine);
-  
+
 #endif
   return 1;
 }
@@ -2525,7 +2526,7 @@ QString qutecsound::generateScript(bool realtime)
 #else
   QString script = "";
 #endif
-  
+
   QString cmdLine = "";
   if (m_options->opcodedirActive)
     script += "export OPCODEDIR=" + m_options->opcodedir + "\n";
@@ -2547,13 +2548,13 @@ QString qutecsound::generateScript(bool realtime)
   script_cd.replace("/", "\\");
   script += script_cd;
 #endif
-  
+
 #ifdef MACOSX
   cmdLine = "/usr/local/bin/csound ";
 #else
   cmdLine = "csound ";
 #endif
-  
+
   if (documentPages[curPage]->companionFile != "") {
     if (documentPages[curPage]->fileName.endsWith(".orc"))
       cmdLine += "\""  + documentPages[curPage]->fileName
@@ -2567,7 +2568,7 @@ QString qutecsound::generateScript(bool realtime)
   cmdLine += m_options->generateCmdLineFlags(realtime);
   script += "@echo \"" + cmdLine + "\"\n";
   script += cmdLine + "\n";
-  
+
 #ifndef WIN32
   script += "echo \"\nPress return to continue\"\n";
   script += "dummy_var=\"\"\n";
