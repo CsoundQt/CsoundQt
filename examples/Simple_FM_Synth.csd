@@ -30,7 +30,7 @@ kmod1factor invalue "mod1factor"
 kmod2factor invalue "mod2factor"
 ; Modulator 1
 ; modamp = modenv * modindex * carrierfreq
-amod1 oscil3 amod1env*kmod1index*ifreq*kmod2factor, kmod1factor*ifreq, 1
+amod1 poscil amod1env*kmod1index*ifreq*kmod2factor, kmod1factor*ifreq, 1
 
 ; Mod 2 envelope
 kmod2att invalue "mod2att"
@@ -41,7 +41,7 @@ amod2env madsr i(kmod2att), i(kmod2dec), i(kmod2sus), i(kmod2rel)
 
 ; Modulator 2
 kmod2index invalue "mod2index"
-amod2 oscil3 amod2env*kmod2index*ifreq, (kmod2factor*ifreq)+amod1, 1
+amod2 poscil amod2env*kmod2index*ifreq, (kmod2factor*ifreq)+amod1, 1
 
 ;Carrier amp envelope
 kaatt invalue "aatt"
@@ -51,7 +51,7 @@ karel invalue "arel"
 aenv madsr i(kaatt), i(kadec), i(kasus), i(karel)
 
 ; Carrier
-aout oscil3 aenv, ifreq+amod2, 1
+aout poscil aenv, ifreq+amod2, 1
 
 ; Output
 klevel invalue "level"
@@ -60,7 +60,7 @@ endin
 
 instr 98 ; Trigger instrument from button
 kfreq invalue "freq"
-event "i", 1, 0, 5, kfreq
+event "i", 1, 0, p3, kfreq
 turnoff
 endin
 
@@ -79,7 +79,6 @@ endin
 </CsInstruments>
 <CsScore>
 f 1 0 4096 10 1
-i 1 0 5 440
 i 99 0 3600
 e
 </CsScore>
@@ -90,7 +89,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 929 95 436 606
+WindowBounds: 470 219 436 606
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -100,46 +99,46 @@ ioView background {38550, 41634, 35209}
 ioText {303, 57} {124, 189} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border Carrier Amp Env
 ioSlider {317, 78} {20, 100} 0.000001 1.000000 0.200001 aatt
 ioSlider {344, 78} {20, 100} 0.000001 1.000000 0.230001 adec
-ioSlider {369, 78} {20, 100} 0.000000 1.000000 0.730000 asus
+ioSlider {369, 78} {20, 100} 0.000000 1.000000 0.700000 asus
 ioSlider {396, 78} {20, 100} 0.000001 1.000000 0.460001 arel
 ioText {319, 177} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder A
 ioText {347, 177} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder D
 ioText {372, 177} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder S
 ioText {397, 176} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder R
-ioKnob {367, 196} {56, 50} 0.000000 1.000000 0.010000 0.606061 level
+ioKnob {367, 196} {56, 50} 0.000000 1.000000 0.010000 0.323232 level
 ioText {323, 211} {45, 26} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Level
 ioButton {316, 254} {93, 28} event 1.000000 "" "Note" "/" i98 0 3
-ioKnob {322, 293} {83, 50} 110.000000 880.000000 0.010000 327.777778 freq
+ioKnob {322, 293} {83, 50} 110.000000 880.000000 0.010000 180.000000 freq
 ioText {372, 342} {35, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Hz
-ioText {322, 348} {49, 23} scroll 397.800000 0.100000 "oscfreq" right "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 397.8
+ioText {322, 348} {49, 23} scroll 180.000000 0.100000 "freq" right "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 180.0
 ioText {2, 4} {365, 44} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 20 {65280, 65280, 65280} {21760, 21760, 0} background noborder Simple FM Synth
 ioText {4, 57} {291, 154} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border Modulator 1
-ioSlider {18, 78} {20, 100} 0.000001 1.000000 0.110001 mod1att
-ioSlider {45, 78} {20, 100} 0.000001 1.000000 0.220001 mod1dec
-ioSlider {70, 78} {20, 100} 0.000000 1.000000 0.640000 mod1sus
-ioSlider {97, 78} {20, 100} 0.000001 1.000000 0.380001 mod1rel
+ioSlider {18, 78} {20, 100} 0.000001 1.000000 0.760000 mod1att
+ioSlider {45, 78} {20, 100} 0.000001 1.000000 0.780000 mod1dec
+ioSlider {70, 78} {20, 100} 0.000000 1.000000 0.400000 mod1sus
+ioSlider {97, 78} {20, 100} 0.000001 1.000000 0.140001 mod1rel
 ioText {20, 178} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder A
 ioText {48, 178} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder D
 ioText {73, 178} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder S
 ioText {98, 177} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder R
-ioText {206, 77} {78, 25} editnum 1.000000 0.010000 "mod1factor" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
+ioText {206, 77} {78, 25} editnum 0.250000 0.010000 "mod1factor" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.250000
 ioText {124, 78} {82, 24} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Freq factor
 ioText {124, 107} {80, 25} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frequency
-ioText {204, 107} {81, 26} display 0.000000 0.00100 "mod1freq" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 327.7778
+ioText {204, 107} {81, 26} display 0.000000 0.00100 "mod1freq" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 45.0000
 ioText {4, 222} {291, 155} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border Modulator 2
-ioSlider {18, 243} {20, 100} 0.000001 1.000000 0.220001 mod2att
-ioSlider {45, 243} {20, 100} 0.000001 1.000000 0.380001 mod2dec
-ioSlider {70, 243} {20, 100} 0.000000 1.000000 0.780000 mod2sus
-ioSlider {97, 243} {20, 100} 0.000001 1.000000 0.140001 mod2rel
+ioSlider {18, 243} {20, 100} 0.000001 1.000000 0.510000 mod2att
+ioSlider {45, 243} {20, 100} 0.000001 1.000000 0.770000 mod2dec
+ioSlider {70, 243} {20, 100} 0.000000 1.000000 0.640000 mod2sus
+ioSlider {97, 243} {20, 100} 0.000001 1.000000 0.810000 mod2rel
 ioText {20, 343} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder A
 ioText {48, 343} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder D
 ioText {73, 343} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder S
 ioText {98, 342} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder R
-ioText {206, 242} {78, 25} editnum 3.000000 0.010000 "mod2factor" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3.000000
+ioText {206, 242} {78, 25} editnum 2.000000 0.010000 "mod2factor" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.000000
 ioText {124, 243} {82, 24} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Freq factor
 ioText {124, 272} {80, 25} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frequency
-ioText {204, 272} {81, 26} display 0.000000 0.00100 "mod2freq" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 983.3333
-ioKnob {134, 136} {52, 51} 0.000000 1.000000 0.010000 0.030303 mod2index
+ioText {204, 272} {81, 26} display 0.000000 0.00100 "mod2freq" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 360.0000
+ioKnob {134, 136} {52, 51} 0.000000 1.000000 0.010000 0.939394 mod2index
 ioText {122, 185} {80, 25} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Mod index
 ioKnob {134, 298} {52, 51} 0.000000 1.000000 0.010000 0.898990 mod1index
 ioText {122, 347} {80, 25} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Mod index

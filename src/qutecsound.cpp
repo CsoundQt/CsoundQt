@@ -39,7 +39,7 @@
 #ifdef WIN32
 static const QString SCRIPT_NAME = "qutecsound_run_script.bat";
 #else
-static const QString SCRIPT_NAME = "./qutecsound_run_script.sh";
+static const QString SCRIPT_NAME = "qutecsound_run_script.sh";
 #endif
 
 //csound performance thread function prototype
@@ -168,9 +168,10 @@ qutecsound::qutecsound(QStringList fileNames)
 qutecsound::~qutecsound()
 {
   qDebug() << "qutecsound::~qutecsound()";
-  free(ud);
-  delete closeTabButton;
+  // This function is not called... see closeEvent()
 }
+
+void closeEvent();
 
 void qutecsound::messageCallback_NoThread(CSOUND *csound,
                                           int /*attr*/,
@@ -263,6 +264,12 @@ void qutecsound::closeEvent(QCloseEvent *event)
 #endif
   if (maybeSave()) {
     writeSettings();
+    foreach (QString tempFile, tempScriptFiles) {
+      QDir().remove(tempFile);
+    }
+    free(ud);
+    delete closeTabButton;
+    close();
     event->accept();
   } else {
     event->ignore();
@@ -718,27 +725,6 @@ void qutecsound::runCsound(bool realtime)
     else
       fileName2 = documentPages[curPage]->companionFile;
   }
-  QTemporaryFile tempFile;
-  if (fileName.startsWith(":/examples/")) {
-    QString tmpFileName = QDir::tempPath();
-    if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
-      tmpFileName += QDir::separator();
-    }
-    tmpFileName += QString("QuteCsoundExampleXXXXXXXX.csd");
-    tempFile.setFileTemplate(tmpFileName);
-    if (!tempFile.open()) {
-      QMessageBox::critical(this,
-                            tr("PostQC"),
-                               tr("Error creating temporary file."),
-                                  QMessageBox::Ok);
-      runAct->setChecked(false);
-      return;
-    }
-    QString csdText = textEdit->document()->toPlainText();
-    fileName = tempFile.fileName();
-    tempFile.write(csdText.toAscii());
-    tempFile.flush();
-  }
 
   widgetPanel->flush();
   widgetPanel->clearGraphs();
@@ -755,6 +741,27 @@ void qutecsound::runCsound(bool realtime)
     m_console->clear();
     widgetPanel->clearGraphs();
     audioOutputBuffer.allZero();
+    QTemporaryFile tempFile;
+    if (fileName.startsWith(":/examples/")) {
+      QString tmpFileName = QDir::tempPath();
+      if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
+        tmpFileName += QDir::separator();
+      }
+      tmpFileName += QString("QuteCsoundExample-XXXXXXXX.csd");
+      tempFile.setFileTemplate(tmpFileName);
+      if (!tempFile.open()) {
+        QMessageBox::critical(this,
+                              tr("PostQC"),
+                                tr("Error creating temporary file."),
+                                    QMessageBox::Ok);
+        runAct->setChecked(false);
+        return;
+      }
+      QString csdText = textEdit->document()->toPlainText();
+      fileName = tempFile.fileName();
+      tempFile.write(csdText.toAscii());
+      tempFile.flush();
+    }
     QTemporaryFile csdFile;
     QString tmpFileName = QDir::tempPath();
     if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
@@ -797,12 +804,9 @@ void qutecsound::runCsound(bool realtime)
       csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
     }
 
-
-
     csoundReset(csound);
     csoundSetHostData(csound, (void *) ud);
     csoundPreCompile(csound);  //Need to run PreCompile to create the FLTK_Flags global variable
-
 
     int variable = csoundCreateGlobalVariable(csound, "FLTK_Flags", sizeof(int));
     if (m_options->enableFLTK or !useAPI) {
@@ -897,34 +901,61 @@ void qutecsound::runCsound(bool realtime)
     free(argv);
   }
   else {  // Run in external shell
-    QString script = generateScript(realtime);
-    QFile file(SCRIPT_NAME);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    QFile tempFile("QuteCsoundExample.csd");
+    if (fileName.startsWith(":/examples/")) {
+      QString tmpFileName = QDir::tempPath();
+      if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
+        tmpFileName += QDir::separator();
+      }
+//       tmpFileName += QString("QuteCsoundExample.csd");
+//       tempFile.setFileTemplate(tmpFileName);
+      if (!tempFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
+        QMessageBox::critical(this,
+                              tr("PostQC"),
+                                 tr("Error creating temporary file."),
+                                    QMessageBox::Ok);
+        runAct->setChecked(false);
+        return;
+      }
+      QString csdText = textEdit->document()->toPlainText();
+      fileName = tempFile.fileName();
+      tempFile.write(csdText.toAscii());
+      tempFile.flush();
+      if (!tempScriptFiles.contains(fileName))
+        tempScriptFiles << fileName;
+    }
+    QString script = generateScript(realtime, fileName);
+    QString scriptFileName = QDir::tempPath() + SCRIPT_NAME;
+    QFile file(scriptFileName);
+    if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+      qDebug() << "qutecsound::runCsound() : Error creating temp file";
       return;
-
+    }
     QTextStream out(&file);
     out << script;
-    file.flush();
+//     file.flush();
     file.close();
     file.setPermissions (QFile::ExeOwner| QFile::WriteOwner| QFile::ReadOwner);
 
     QString options;
 #ifdef LINUX
-    options = "-e " + SCRIPT_NAME;
+    options = "-e " + scriptFileName;
 #endif
 #ifdef SOLARIS
-    options = "-e " + SCRIPT_NAME;
+    options = "-e " + scriptFileName;
 #endif
 #ifdef MACOSX
-    options = SCRIPT_NAME;
+    options = fileName;
 #endif
 #ifdef WIN32
-    options = SCRIPT_NAME;
-	qDebug() << "m_options->terminal == " << m_options->terminal;
+    options = fileName;
+    qDebug() << "m_options->terminal == " << m_options->terminal;
 #endif
     execute(m_options->terminal, options);
     runAct->setChecked(false);
     recAct->setChecked(false);
+    if (!tempScriptFiles.contains(scriptFileName))
+      tempScriptFiles << scriptFileName;
   }
   if (QObject::sender() == renderAct) {
     if (QDir::isRelativePath(m_options->fileOutputFilename)) {
@@ -1932,7 +1963,9 @@ void qutecsound::createMenus()
   subMenus << widgetFiles;
   subMenuNames << "Widgets";
 
+  synthFiles.append(":/examples/Additive_Synth.csd");
   synthFiles.append(":/examples/Simple_Subtractive.csd");
+  synthFiles.append(":/examples/Simple_FM_Synth.csd");
 
   subMenus << synthFiles;
   subMenuNames << tr("Synths");
@@ -2292,6 +2325,7 @@ int qutecsound::execute(QString executable, QString options)
 {
   QStringList optionlist;
   optionlist = options.split(QRegExp("\\s+"));
+//   qDebug() << "qutecsound::execute";
 
   // cd to current directory on all platforms
   QString cdLine = "cd \"" + documentPages[curPage]->getFilePath() + "\"";
@@ -2300,15 +2334,18 @@ int qutecsound::execute(QString executable, QString options)
 
 #ifdef MACOSX
   QString commandLine = "open -a '" + executable + "' '" + options + "'";
-  system(commandLine.toStdString().c_str());
+//   QProcess::execute(commandLine);
+//   system(commandLine.toStdString().c_str());
 #endif
 #ifdef LINUX
-  QString commandLine = executable + " " + options + "&";
-  system(commandLine.toStdString().c_str());
+  QString commandLine = executable + " " + options;
+//   QProcess::execute(commandLine);
+//   system(commandLine.toStdString().c_str());
 #endif
 #ifdef SOLARIS
-  QString commandLine = executable + " " + options + "&";
-  system(commandLine.toStdString().c_str());
+  QString commandLine = executable + " " + options;
+//   QProcess::execute(commandLine);
+//   system(commandLine.toStdString().c_str());
 #endif
 #ifdef WIN32
   QString commandLine = executable + (executable.startsWith("cmd")? " /k ": " ") + options;
@@ -2331,9 +2368,9 @@ int qutecsound::execute(QString executable, QString options)
 //  {
 //    qDebug() << "qutecsound::execute Error executing!";
 //  }
-  QProcess::startDetached(commandLine);
 
 #endif
+  QProcess::startDetached(commandLine);
   return 1;
 }
 
@@ -2519,7 +2556,7 @@ QString qutecsound::strippedName(const QString &fullFileName)
   return QFileInfo(fullFileName).fileName();
 }
 
-QString qutecsound::generateScript(bool realtime)
+QString qutecsound::generateScript(bool realtime, QString tempFileName)
 {
 #ifndef WIN32
   QString script = "#!/bin/sh\n";
@@ -2541,9 +2578,7 @@ QString qutecsound::generateScript(bool realtime)
 
 #ifndef WIN32
   script += "cd " + QFileInfo(documentPages[curPage]->fileName).absoluteFilePath() + "\n";
-#else // WIN32 defined.
-	// AF: Instead of using "cd" to change directories, use "pushd" so we can
-	//	"popd" back to the original directory later and delete the batch file.
+#else // WIN32 defined
   QString script_cd = "@pushd " + QFileInfo(documentPages[curPage]->fileName).absolutePath() + "\n";
   script_cd.replace("/", "\\");
   script += script_cd;
@@ -2555,18 +2590,25 @@ QString qutecsound::generateScript(bool realtime)
   cmdLine = "csound ";
 #endif
 
-  if (documentPages[curPage]->companionFile != "") {
-    if (documentPages[curPage]->fileName.endsWith(".orc"))
-      cmdLine += "\""  + documentPages[curPage]->fileName
-          + "\" \""+ documentPages[curPage]->companionFile + "\"";
-    else
-      cmdLine += "\""  + documentPages[curPage]->companionFile
-          + "\" \""+ documentPages[curPage]->fileName + "\"";
+  if (tempFileName == ""){
+    if (documentPages[curPage]->companionFile != "") {
+      if (documentPages[curPage]->fileName.endsWith(".orc"))
+        cmdLine += "\""  + documentPages[curPage]->fileName
+            + "\" \""+ documentPages[curPage]->companionFile + "\" ";
+      else
+        cmdLine += "\""  + documentPages[curPage]->companionFile
+            + "\" \""+ documentPages[curPage]->fileName + "\" ";
+    }
+    else if (documentPages[curPage]->fileName.endsWith(".csd")) {
+      cmdLine += "\""  + documentPages[curPage]->fileName + "\" ";
+    }
   }
-  else if (documentPages[curPage]->fileName.endsWith(".csd"))
-    cmdLine += "\""  + documentPages[curPage]->fileName + "\"";
+  else {
+    cmdLine += "\""  + tempFileName + "\" ";
+  }
+
   cmdLine += m_options->generateCmdLineFlags(realtime);
-  script += "@echo \"" + cmdLine + "\"\n";
+  script += "echo \"" + cmdLine + "\"\n";
   script += cmdLine + "\n";
 
 #ifndef WIN32
@@ -2577,8 +2619,6 @@ QString qutecsound::generateScript(bool realtime)
 #else // WIN32 defined.
   script += "@echo.\n";
   script += "@pause\n";
-  script += "@popd\n";
-  // AF: TODO: Figure out how to delete batch file without throwing an error.
   script += "@exit\n";
 #endif
   return script;

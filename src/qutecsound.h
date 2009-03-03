@@ -138,7 +138,7 @@ class qutecsound:public QMainWindow
     void openExample();
 
   protected:
-    void closeEvent(QCloseEvent *event);
+    virtual void closeEvent(QCloseEvent *event);
 
   private slots:
     void newFile();
@@ -204,7 +204,7 @@ class qutecsound:public QMainWindow
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
-    QString generateScript(bool realtime = true);
+    QString generateScript(bool realtime = true, QString tempFileName = "");
     void getCompanionFileName();
     void setWidgetPanelGeometry();
     int isOpen(QString fileName);
@@ -237,6 +237,7 @@ class qutecsound:public QMainWindow
     WidgetPanel *widgetPanel;
     QToolButton *closeTabButton;
     QMutex stringValueMutex;
+    QStringList tempScriptFiles; //Remember temp files to delete them later
 
     QMenu *fileMenu;
     QMenu *recentMenu;

@@ -49,7 +49,7 @@
 #define DEFAULT_BROWSER_EXECUTABLE "/Applications/Firefox.app"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/Applications/Audacity.app"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/Applications/QuickTime Player.app"
-#define DEFAULT_DOT_EXECUTABLE "/Applications/Graphviz.app/Contents/MacOS/dot"
+#define DEFAULT_DOT_EXECUTABLE "/usr/local/bin/dot"
 #endif
 #ifdef WIN32
 #define DEFAULT_HTML_DIR "C:/Program Files/Csound/doc/manual"
