@@ -44,7 +44,7 @@
 #define DEFAULT_DOT_EXECUTABLE "dot"
 #endif
 #ifdef MACOSX
-#define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Manual"
+#define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib.framework/Resources/Manual"
 #define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app"
 #define DEFAULT_BROWSER_EXECUTABLE "/Applications/Firefox.app"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/Applications/Audacity.app"

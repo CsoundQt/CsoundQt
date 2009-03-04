@@ -237,6 +237,7 @@ class qutecsound:public QMainWindow
     WidgetPanel *widgetPanel;
     QToolButton *closeTabButton;
     QMutex stringValueMutex;
+    QMutex messageMutex;
     QStringList tempScriptFiles; //Remember temp files to delete them later
 
     QMenu *fileMenu;

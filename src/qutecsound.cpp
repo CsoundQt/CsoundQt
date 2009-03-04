@@ -1455,7 +1455,14 @@ void qutecsound::dispatchQueues()
 {
 //   qDebug("qutecsound::dispatchQueues()");
 //   csoundLockMutex(perfMutex);
-  foreach (QString msg, messageQueue) {
+  while (true) {
+    messageMutex.lock();
+    if (messageQueue.isEmpty()) {
+      messageMutex.unlock();
+      break;
+    }
+    QString msg = messageQueue.takeFirst();
+    messageMutex.unlock();
     m_console->appendMessage(msg);
     widgetPanel->appendMessage(msg);
   }
@@ -1476,7 +1483,6 @@ void qutecsound::dispatchQueues()
   widgetPanel->processNewValues();
   processEventQueue(ud);
 //   csoundUnlockMutex(perfMutex);
-  messageQueue.clear();
   if (ud->PERF_STATUS == 0) {
 //     qDebug("qutecsound::dispatchQueues() stop");
     stopCsound();
@@ -2795,7 +2801,9 @@ void qutecsound::queueOutString(QString channelName, QString value)
 
 void qutecsound::queueMessage(QString message)
 {
+  messageMutex.lock();
   messageQueue << message;
+  messageMutex.unlock();
 }
 
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
