@@ -51,6 +51,7 @@ qutecsound::qutecsound(QStringList fileNames)
   setWindowTitle("QuteCsound[*]");
   resize(660,350);
   setWindowIcon(QIcon(":/images/qtcs.png"));
+  textEdit = NULL;
 
   ud = (CsoundUserData *)malloc(sizeof(CsoundUserData));
   ud->PERF_STATUS = 0;
@@ -704,7 +705,7 @@ void qutecsound::runCsound(bool realtime)
   if (documentPages[curPage]->fileName.contains('/')) {
     m_options->csdPath =
         documentPages[curPage]->fileName.left(documentPages[curPage]->fileName.lastIndexOf('/'));
-//     qDebug() << m_options->csdPath;
+    /// qDebug() << m_options->csdPath;
     QString command = "cd \"" + m_options->csdPath +"\"";
     //system(command.toStdString().c_str());
 	QProcess::execute(command);
@@ -925,7 +926,10 @@ void qutecsound::runCsound(bool realtime)
         tempScriptFiles << fileName;
     }
     QString script = generateScript(realtime, fileName);
-    QString scriptFileName = QDir::tempPath() + SCRIPT_NAME;
+    QString scriptFileName = QDir::tempPath();
+	if (!scriptFileName.endsWith("/"))
+	  scriptFileName += "/";
+	scriptFileName += SCRIPT_NAME;
     QFile file(scriptFileName);
     if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
       qDebug() << "qutecsound::runCsound() : Error creating temp file";
@@ -945,10 +949,10 @@ void qutecsound::runCsound(bool realtime)
     options = "-e " + scriptFileName;
 #endif
 #ifdef MACOSX
-    options = fileName;
+    options = scriptFileName;
 #endif
 #ifdef WIN32
-    options = fileName;
+    options = scriptFileName;
     qDebug() << "m_options->terminal == " << m_options->terminal;
 #endif
     execute(m_options->terminal, options);
@@ -1155,8 +1159,7 @@ void qutecsound::render()
 
 void qutecsound::openExternalEditor()
 {
-  QString options;
-  options = "\"" + currentAudioFile + "\"";
+  QString options = currentAudioFile;
   QString optionsText = documentPages[curPage]->getOptionsText();
   if (options == "") {
     if (!optionsText.contains("-o")) {
@@ -1170,13 +1173,13 @@ void qutecsound::openExternalEditor()
         options = optionsText;
     }
   }
+  options = "\"" + options + "\"";
   execute(m_options->waveeditor, options);
 }
 
 void qutecsound::openExternalPlayer()
 {
-  QString options;
-  options = "\"" + currentAudioFile + "\"";
+  QString options = currentAudioFile;
   QString optionsText = documentPages[curPage]->getOptionsText();
   if (options == "") {
     if (!optionsText.contains("-o")) {
@@ -1190,6 +1193,7 @@ void qutecsound::openExternalPlayer()
         options = optionsText;
     }
   }
+  options = "\"" + currentAudioFile + "\"";
   execute(m_options->waveplayer, options);
 }
 
@@ -2339,7 +2343,8 @@ int qutecsound::execute(QString executable, QString options)
   QProcess::execute(cdLine);
 
 #ifdef MACOSX
-  QString commandLine = "open -a '" + executable + "' '" + options + "'";
+  QString commandLine = "open -a \"" + executable + "\" " + options;
+  qDebug() << commandLine;
 //   QProcess::execute(commandLine);
 //   system(commandLine.toStdString().c_str());
 #endif

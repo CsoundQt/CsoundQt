@@ -67,12 +67,14 @@ QString Options::generateCmdLineFlags(bool rt)
     cmdline += ":" + _configlists.fileFormatFlags[fileSampleFormat];
     if (fileInputFilenameActive)
       cmdline += " -i" + fileInputFilename + "";
-    if (fileOutputFilenameActive or fileAskFilename)
-      cmdline += " -o" + fileOutputFilename + "";
-
+    if (fileOutputFilenameActive or fileAskFilename) {
+	  if (fileOutputFilename.startsWith("/"))
+		cmdline += " -o" + fileOutputFilename + "";
+	  else
+		cmdline += " -o" + csdPath + fileOutputFilename + "";
+	}
   }
   cmdline += " --env:CSNOSTOP=yes";
-
   return cmdline;
 }
 
