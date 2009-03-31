@@ -160,6 +160,7 @@ class qutecsound:public QMainWindow
     void undo();
     void redo();
     void controlD();
+    void del();
     bool closeTab();
     void findReplace();
     void join();

@@ -51,7 +51,7 @@ class QuteButton : public QuteWidget
 
     QComboBox *typeComboBox;
     QDoubleSpinBox *valueBox;
-    QLineEdit *text;
+    QTextEdit *text;
     QLineEdit *filenameLineEdit;
     QLineEdit *line;
 

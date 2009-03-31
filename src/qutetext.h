@@ -62,7 +62,7 @@ class QuteText : public QuteWidget
 //     bool m_border;
 
 //     QComboBox * typeComboBox;
-    QLineEdit *text;
+    QTextEdit *text;
     QPushButton *textColor;
     QPushButton *bgColor;
     QCheckBox *bg;

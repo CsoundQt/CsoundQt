@@ -60,7 +60,7 @@ QString QuteButton::getWidgetLine()
   line += m_type + " ";
   line +=  QString::number(m_value,'f', 6) + " ";
   line += "\"" + m_name + "\" ";
-  line += "\"" + static_cast<QPushButton *>(m_widget)->text() + "\" ";
+  line += "\"" + static_cast<QPushButton *>(m_widget)->text().replace("\n", "\u00AC") + "\" ";
   line += "\"" + m_filename + "\" ";
   line += m_eventLine;
 //   qDebug("QuteButton::getWidgetLine() %s", line.toStdString().c_str());
@@ -71,7 +71,7 @@ void QuteButton::applyProperties()
 {
   setEventLine(line->text());
   setValue(valueBox->value());
-  setText(text->text());
+  setText(text->toPlainText());
   setFilename(filenameLineEdit->text());
   setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
   setType(typeComboBox->currentText());
@@ -111,7 +111,7 @@ void QuteButton::createPropertiesDialog()
   label = new QLabel(dialog);
   label->setText("Text:");
   layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
-  text = new QLineEdit(dialog);
+  text = new QTextEdit(dialog);
   text->setText(((QPushButton *)m_widget)->text());
   layout->addWidget(text, 5,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
   text->setMinimumWidth(320);
@@ -158,8 +158,7 @@ void QuteButton::setType(QString type)
 
 void QuteButton::setText(QString text)
 {
-  //TODO use proper character symbol
-//   text = text.replace("Â", "\n");
+  text.replace("\u00AC", "\n");
   static_cast<QPushButton *>(m_widget)->setText(text);
 }
 

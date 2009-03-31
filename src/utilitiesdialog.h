@@ -33,71 +33,6 @@ class UtilitiesDialog : public QDialog, private Ui::UtilitiesDialog
 
     ~UtilitiesDialog();
 
-//     QString cvInput;
-//     QString cvOutput;
-//     QString cvSr;
-//     QString cvBegin;
-//     QString cvDuration;
-//     QString cvChannel;
-//
-//     QString hetInput;
-//     QString hetOutput;
-//     QString hetSr;
-//     QString hetChannel;
-//     QString hetBegin;
-//     QString hetDuration;
-//     QString hetStart;
-//     QString hetPartials;
-//     QString hetMax;
-//     QString hetMin;
-//     QString hetBreakpoints;
-//     QString hetCutoff;
-//
-//     QString lpInput;
-//     QString lpOutput;
-//     QString lpSr;
-//     QString lpChannel;
-//     QString lpBegin;
-//     QString lpDuration;
-//     QString lpPoles;
-//     QString lpHopSize;
-//     QString lpLowest;
-//     QString lpMax;
-//     int lpVerbosity;
-//     bool lpAlternate;
-//
-//     QString pvInput;
-//     QString pvOutput;
-//     QString pvSr;
-//     QString pvChannel;
-//     QString pvBegin;
-//     QString pvDuration;
-//     QString pvFrame;
-//     QString pvOverlap;
-//     QString pvLowest;
-//     QString pvMax;
-//     int pvWindow;
-//     QString pvBeta;
-//
-//     QString atsaInput;
-//     QString atsaOutput;
-//     QString atsaSr;
-//     QString atsaBegin;
-//     QString atsaEnd;
-//     QString atsaLowest;
-//     QString atsaHighest;
-//     QString atsaDeviation;
-//     QString atsaCycle;
-//     QString atsaHopSize;
-//     QString atsaMagnitude;
-//     QString atsalength;
-//     QString atsaMinSegment;
-//     QString atsaMinGap;
-//     QString atsaThreshold;
-//     QString atsaSmr;
-//     int atsaFileType;
-//     int atsaWindow;
-
   private:
     Options *m_options;
     QString m_helpDir; // Html help directory
@@ -111,14 +46,19 @@ class UtilitiesDialog : public QDialog, private Ui::UtilitiesDialog
     void changeTab(int tab);
     void runAtsa();
     void resetAtsa();
+    void setAtsaOutput(QString name);
     void runPvanal();
     void resetPvanal();
+    void setPvanalOutput(QString name);
     void runHetro();
     void resetHetro();
+    void setHetroOutput(QString name);
     void runLpanal();
     void resetLpanal();
+    void setLpanalOutput(QString name);
     void runCvanal();
     void resetCvanal();
+    void setCvanalOutput(QString name);
     void browseAtsaInput();
     void browseAtsaOutput();
     void browsePvInput();

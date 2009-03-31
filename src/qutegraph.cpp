@@ -274,20 +274,28 @@ void QuteGraph::setCurveData(Curve * curve)
   // Refitting curves in view resets the scrollbar so we need the previous value
   int viewPosx = view->horizontalScrollBar()->value();
   int viewPosy = view->verticalScrollBar()->value();
+  int decimate = (int) curve->get_size() / 1024;
   if (curve->get_caption().contains("ftable")) {
     if (lines[index].size() != (int) curve->get_size()) {
       foreach (QGraphicsLineItem *line, lines[index]) {
         delete line;
       }
       lines[index].clear();
+      MYFLT decValue = 0;
       for (int i = 0; i < (int) curve->get_size(); i++) {
-        QGraphicsLineItem *line = new QGraphicsLineItem(i, 0, i, - curve->get_data()[i]);
-        line->setPen(QPen(QColor(30 + 220.0*fabs(curve->get_data()[i])/max,
-                     220,
-                     255.*fabs(curve->get_data()[i])/max)));
-        line->show();
-        lines[index].append(line);
-        scene->addItem(line);
+        decValue = (decValue < fabs(curve->get_data()[i]) ? curve->get_data()[i] : decValue);
+        if (decimate == 0 or i%decimate == 0) {
+          QGraphicsLineItem *line = new QGraphicsLineItem(i, 0, i, - decValue);
+          int colorValue = (int) (220.0*fabs(decValue)/max);
+          colorValue = colorValue > 220 ? 220 : colorValue;
+          line->setPen(QPen(QColor(30 + colorValue,
+                      220,
+                      colorValue )));
+          line->show();
+          lines[index].append(line);
+          scene->addItem(line);
+          decValue = 0;
+        }
       }
     }
     else {

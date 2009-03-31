@@ -96,7 +96,10 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   duplicateAct->setShortcut(tr("Ctrl+D"));
   connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
   deleteAct = new QAction(tr("Delete Selected"), this);
-  deleteAct->setShortcut(tr("Del"));
+  deleteAct->setShortcut(tr("Ctrl+M"));
+//   QList<QKeySequence> deleteShortcuts;
+//   deleteShortcuts << QKeySequence::Delete << Qt::Key_Backspace << Qt::Key_Delete;
+//   deleteAct->setShortcuts(deleteShortcuts);
   connect(deleteAct, SIGNAL(triggered()), this, SLOT(deleteSelected()));
   clearAct = new QAction(tr("Clear all widgets"), this);
   connect(clearAct, SIGNAL(triggered()), this, SLOT(clearWidgets()));
@@ -1236,6 +1239,7 @@ void WidgetPanel::duplicate()
 
 void WidgetPanel::deleteSelected()
 {
+//   qDebug("WidgetPanel::deleteSelected()");
   for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
     if (editWidgets[i]->isSelected()) {
       deleteWidget(widgets[i]);

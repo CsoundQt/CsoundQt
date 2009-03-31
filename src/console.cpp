@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andres Cabrera   *
- *   mantaraya36@gmail.com   *
+ *   Copyright (C) 2008 by Andres Cabrera                                  *
+ *   mantaraya36@gmail.com                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 #include "console.h"
 
@@ -31,8 +31,8 @@ void Console::appendMessage(QString msg)
 {
   if (error) {
     text->setTextColor(QColor("red"));
-    if (msg.contains("line")) {
-      QStringList parts = msg.split("line");
+    if (msg.contains("line ")) {
+      QStringList parts = msg.split("line ");
       int lineNumber = parts.last().remove(":").trimmed().toInt();
       errorLines.append(lineNumber);
       error = false;

@@ -191,7 +191,7 @@ void QuteSpinBox::createPropertiesDialog()
 void QuteSpinBox::applyProperties()
 {
   setResolution(resolutionSpinBox->value());
-  setText(text->text());
+  setText(text->toPlainText());
 //   m_widget->setAutoFillBackground(bg->isChecked());
   setAlignment(alignment->currentIndex());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last

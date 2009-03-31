@@ -47,6 +47,12 @@ UtilitiesDialog::UtilitiesDialog(QWidget *parent, Options *options/*, ConfigList
   connect(lpOutputToolButton, SIGNAL(released()), this, SLOT(browseLpOutput()));
   connect(cvInputToolButton, SIGNAL(released()), this, SLOT(browseCvInput()));
   connect(cvOutputToolButton, SIGNAL(released()), this, SLOT(browseCvOutput()));
+
+  connect(atsaInputLineEdit, SIGNAL(textChanged(QString)), this, SLOT(setAtsaOutput(QString)));
+  connect(pvInputLineEdit, SIGNAL(textChanged(QString)), this, SLOT(setPvanalOutput(QString)));
+  connect(hetInputLineEdit, SIGNAL(textChanged(QString)), this, SLOT(setHetroOutput(QString)));
+  connect(lpInputLineEdit, SIGNAL(textChanged(QString)), this, SLOT(setLpanalOutput(QString)));
+  connect(cvInputLineEdit, SIGNAL(textChanged(QString)), this, SLOT(setCvanalOutput(QString)));
 }
 
 UtilitiesDialog::~UtilitiesDialog()
@@ -101,6 +107,16 @@ void UtilitiesDialog::resetAtsa()
   atsaWindowComboBox->setCurrentIndex(0);
 }
 
+void UtilitiesDialog::setAtsaOutput(QString name)
+{
+  QString out = "";
+  if (name.contains("."))
+    out = name.left(name.lastIndexOf(".")) + ".ats";
+  else
+    out = name + ".ats";
+  atsaOutputLineEdit->setText(out);
+}
+
 void UtilitiesDialog::runPvanal()
 {
   QString flags = "-U pvanal ";
@@ -134,15 +150,25 @@ void UtilitiesDialog::runPvanal()
 
 void UtilitiesDialog::resetPvanal()
 {
-  pvSrLineEdit->setText("44100");
+  pvSrLineEdit->setText("");
   pvChannelLineEdit->setText("1");
   pvBeginLineEdit->setText("0.0");
   pvDurationLineEdit->setText("0.0");
-  pvFrameLineEdit->setText("256");
+  pvFrameLineEdit->setText("1024");
   pvOverlapLineEdit->setText("4");
 
   pvWindowComboBox->setCurrentIndex(0);
   pvBetaLineEdit->setText("6.4");
+}
+
+void UtilitiesDialog::setPvanalOutput(QString name)
+{
+  QString out = "";
+  if (name.contains("."))
+    out = name.left(name.lastIndexOf(".")) + ".pvx";
+  else
+    out = name + ".pvx";
+  pvOutputLineEdit->setText(out);
 }
 
 void UtilitiesDialog::runHetro()
@@ -180,6 +206,16 @@ void UtilitiesDialog::resetHetro()
   hetCutoffLineEdit->setText("0");
 }
 
+void UtilitiesDialog::setHetroOutput(QString name)
+{
+  QString out = "";
+  if (name.contains("."))
+    out = name.left(name.lastIndexOf(".")) + ".het";
+  else
+    out = name + ".het";
+  hetOutputLineEdit->setText(out);
+}
+
 void UtilitiesDialog::runLpanal()
 {
   QString flags = "-U lpanal ";
@@ -214,6 +250,16 @@ void UtilitiesDialog::resetLpanal()
   lpAlternateCheckBox->setChecked(true);
 }
 
+void UtilitiesDialog::setLpanalOutput(QString name)
+{
+  QString out = "";
+  if (name.contains("."))
+    out = name.left(name.lastIndexOf(".")) + ".lp";
+  else
+    out = name + ".lp";
+  lpOutputLineEdit->setText(out);
+}
+
 void UtilitiesDialog::runCvanal()
 {
   QString flags = "-U cvanal ";
@@ -238,6 +284,15 @@ void UtilitiesDialog::resetCvanal()
   cvChannelLineEdit->setText("");
 }
 
+void UtilitiesDialog::setCvanalOutput(QString name)
+{
+  QString out = "";
+  if (name.contains("."))
+    out = name.left(name.lastIndexOf(".")) + ".cv";
+  else
+    out = name + ".cv";
+  cvOutputLineEdit->setText(out);
+}
 
 void UtilitiesDialog::browseAtsaInput()
 {

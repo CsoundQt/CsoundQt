@@ -40,6 +40,7 @@
 
   protected:
     void highlightBlock(const QString &text);
+    int findOpcode(QString opcodeName, int start, int end);
 
   private:
     struct HighlightingRule
@@ -48,17 +49,22 @@
       QTextCharFormat format;
     };
     QVector<HighlightingRule> highlightingRules;
+    QVector<HighlightingRule> lastHighlightingRules;
 
     QRegExp commentStartExpression;
     QRegExp commentEndExpression;
 
-    QTextCharFormat csdtagFormat;
-    QTextCharFormat opcodeFormat;
+    QTextCharFormat /*csdBlockFormat,*/ csdtagFormat, instFormat;
+    QTextCharFormat irateFormat, krateFormat, arateFormat, girateFormat, gkrateFormat, garateFormat;
+    QTextCharFormat stringVarFormat, gstringVarFormat, fsigFormat, gfsigFormat;
+    QTextCharFormat opcodeFormat, macroDefineFormat, pfieldFormat;
     QTextCharFormat singleLineCommentFormat;
     QTextCharFormat multiLineCommentFormat;
     QTextCharFormat quotationFormat;
     QTextCharFormat functionFormat;
     QTextCharFormat labelFormat;
+
+    QStringList tagPatterns, headerPatterns, instPatterns;
 
     void setFirstRules();
     void setLastRules();

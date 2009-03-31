@@ -31,9 +31,9 @@ QuteWidget::QuteWidget(QWidget *parent/*, widgetType type*/):
   propertiesAct->setStatusTip(tr("Open widget properties"));
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(openProperties()));
 
-  deleteAct = new QAction(/*QIcon(":/images/gtk-new.png"),*/ tr("Delete"), this);
-  deleteAct->setStatusTip(tr("Delete this widget"));
-  connect(deleteAct, SIGNAL(triggered()), this, SLOT(deleteWidget()));
+//   deleteAct = new QAction(/*QIcon(":/images/gtk-new.png"),*/ tr("Delete"), this);
+//   deleteAct->setStatusTip(tr("Delete this widget"));
+//   connect(deleteAct, SIGNAL(triggered()), this, SLOT(deleteWidget()));
   m_name2 = "";
   m_value = 0.0;
   m_value2 = 0.0;
@@ -182,8 +182,8 @@ void QuteWidget::popUpMenu(QPoint pos)
     menu.addAction(action);
   }
 
-  menu.addSeparator();
-  menu.addAction(deleteAct);
+//   menu.addSeparator();
+//   menu.addAction(deleteAct);
 
   menu.exec(pos);
 }
@@ -295,6 +295,7 @@ QList<QAction *> QuteWidget::getParentActionList()
   actionList.append(static_cast<WidgetPanel *>(parent()->parent())->pasteAct);
   actionList.append(static_cast<WidgetPanel *>(parent()->parent())->cutAct);
   actionList.append(static_cast<WidgetPanel *>(parent()->parent())->duplicateAct);
+  actionList.append(static_cast<WidgetPanel *>(parent()->parent())->deleteAct);
   return actionList;
 }
 

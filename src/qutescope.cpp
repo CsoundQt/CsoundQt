@@ -174,14 +174,18 @@ void QuteScope::updateData()
   int numChnls = m_ud->numChnls;
   int channel = m_channel;
   MYFLT newValue;
-  if (channel == 0 or channel >= numChnls )
+  if (channel == 0 or channel > numChnls ) {
+//     qDebug() << "QuteScope::updateData() Channel out of range " << channel;
     return;
+  }
   channel = (channel != -1 ? channel - 1 : -1);
 #ifdef  USE_WIDGET_MUTEX
   mutex.lock();
 #endif
   RingBuffer *buffer = &m_ud->qcs->audioOutputBuffer;
-  QList<MYFLT> list(buffer->buffer);
+  buffer->lock();
+  QList<MYFLT> list = buffer->buffer;
+  buffer->unlock();
   long listSize = list.size();
   long offset = buffer->currentPos;
   for (int i = 0; i < this->width(); i++) {
@@ -200,7 +204,7 @@ void QuteScope::updateData()
       else {
         int bufferIndex = (int)((((i* m_zoom)+ j)*numChnls) + offset + channel) % listSize;
         if (fabs(list[bufferIndex]) > fabs(value))
-          value = -(double) list[bufferIndex];
+          value = (double) -list[bufferIndex];
       }
     }
     curveData[i+1] = QPoint(i,value*height()/(2/* * m_ud->zerodBFS*/));

@@ -141,8 +141,8 @@ void QuteText::setBorder(bool border)
 
 void QuteText::setText(QString text)
 {
-  m_text = text;
   int size;
+  m_text = text.replace("\u00AC", "\n");
   if (m_fontSize >= QUTE_XXLARGE)
     size = 7;
   else if (m_fontSize >= QUTE_XLARGE)
@@ -159,9 +159,9 @@ void QuteText::setText(QString text)
     size = 1;
   text.prepend("<font face=\"" + m_font + "\" size=\"" + QString::number(size) + "\">");
   text.append("</font>");
-  //TODO USE CORRECT CHARACTER for line break
-//   text = text.replace("�", "\n");
-  static_cast<QLabel*>(m_widget)->setText(text);
+  QString displayText = text;
+  displayText.replace("\n", "<br />");
+  static_cast<QLabel*>(m_widget)->setText(displayText);
 }
 
 QString QuteText::getWidgetLine()
@@ -190,7 +190,9 @@ QString QuteText::getWidgetLine()
   line += m_widget->autoFillBackground()? "background ":"nobackground ";
   line += static_cast<QFrame*>(m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
 //   line += ((QLabel *)m_widget)->toPlainText();
-  line += m_text;
+  QString outText = m_text;
+  outText.replace("\n", "\u00AC");
+  line += outText;
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
@@ -210,7 +212,8 @@ void QuteText::createPropertiesDialog()
   QLabel *label = new QLabel(dialog);
   label->setText("Text:");
   layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
-  text = new QLineEdit(dialog);
+  text = new QTextEdit(dialog);
+  text->setAcceptRichText(false);
   text->setText(m_text);
   layout->addWidget(text, 5,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
   text->setMinimumWidth(320);
@@ -299,7 +302,7 @@ void QuteText::applyProperties()
 {
   m_font = font->currentFont().family();
   m_fontSize = fontSize->itemData(fontSize->currentIndex()).toInt();
-  setText(text->text());
+  setText(text->toPlainText().replace("\n", "\u00AC"));
   m_widget->setAutoFillBackground(bg->isChecked());
   static_cast<QFrame*>(m_widget)->setFrameShape(border->isChecked()?  QFrame::Box : QFrame::NoFrame);
   setAlignment(alignment->currentIndex());
@@ -449,7 +452,7 @@ void QuteLineEdit::createPropertiesDialog()
 
 void QuteLineEdit::applyProperties()
 {
-  setText(text->text());
+  setText(text->toPlainText());
   m_widget->setAutoFillBackground(bg->isChecked());
   setAlignment(alignment->currentIndex());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
@@ -606,7 +609,7 @@ void QuteScrollNumber::applyProperties()
 {
   setResolution(resolutionSpinBox->value());
   bool ok;
-  double value = text->text().toDouble(&ok);
+  double value = text->toPlainText().toDouble(&ok);
   if (ok) {
     m_value = value;
     addValue(0);

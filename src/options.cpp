@@ -38,7 +38,7 @@ QString Options::generateCmdLineFlags(bool rt)
     cmdline += " -b" + QString::number(bufferSize);
   if (HwBufferSizeActive)
     cmdline += " -B" + QString::number(HwBufferSize);
-  if (additionalFlagsActive)
+  if (additionalFlagsActive && !additionalFlags.isEmpty())
     cmdline += " " + additionalFlags;
   if (dither)
     cmdline += " -Z";
@@ -68,11 +68,11 @@ QString Options::generateCmdLineFlags(bool rt)
     if (fileInputFilenameActive)
       cmdline += " -i" + fileInputFilename + "";
     if (fileOutputFilenameActive or fileAskFilename) {
-	  if (fileOutputFilename.startsWith("/"))
-		cmdline += " -o" + fileOutputFilename + "";
-	  else
-		cmdline += " -o" + csdPath + fileOutputFilename + "";
-	}
+      if (fileOutputFilename.startsWith("/"))
+        cmdline += " -o" + fileOutputFilename + "";
+      else
+        cmdline += " -o" + csdPath + fileOutputFilename + "";
+    }
   }
   cmdline += " --env:CSNOSTOP=yes";
   return cmdline;

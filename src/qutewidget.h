@@ -88,7 +88,7 @@ class QuteWidget : public QWidget
 
   private:
     QAction *propertiesAct;
-    QAction *deleteAct;
+//     QAction *deleteAct;
 
     QPushButton *applyButton;
     QPushButton *cancelButton;

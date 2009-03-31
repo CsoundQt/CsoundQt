@@ -110,25 +110,40 @@ class RingBuffer
     int size;
     QMutex mutex;
 
-    void put(MYFLT value) {
-	  //qDebug() << "RingBuffer::put";
+    void lock() {
       mutex.lock();
-	  //qDebug() << "RingBuffer::put lock";
+    }
+
+    void unlock() {
+      mutex.unlock();
+    }
+
+    void put(MYFLT value) {
+      //qDebug() << "RingBuffer::put";
+      mutex.lock();
+      //qDebug() << "RingBuffer::put lock";
       //lock = true;
       buffer[currentPos] = value;
       currentPos++;
       if (currentPos == currentReadPos) {
-//         qDebug("RingBuffer: Buffer overflow!");
+        qDebug("RingBuffer: Buffer overflow!");
       }
-      if (currentPos >= buffer.size())
+      if (currentPos >= size)
         currentPos = 0;
       mutex.unlock();
     }
 
+//     // Doesn't check bounds
+//     MYFLT get(int index) {
+//       mutex.lock();
+//       return buffer[index]
+//       mutex.unlock();
+//     }
+
     bool copyAvailableBuffer(MYFLT *data, int saveSize) {
-	  //qDebug() << "RingBuffer::copyAvailableBuffer";
+      //qDebug() << "RingBuffer::copyAvailableBuffer";
       mutex.lock();
-	  //qDebug() << "RingBuffer::copyAvailableBuffer lock";
+      //qDebug() << "RingBuffer::copyAvailableBuffer lock";
       currentReadPos = currentReadPos%size;
       int available = (currentReadPos <= currentPos ?
           currentPos - currentReadPos :  currentPos - currentReadPos + size);
@@ -147,19 +162,23 @@ class RingBuffer
     }
 
     void resize(int size) {
+      mutex.lock();
       buffer.clear();
       for (int i = 0; i< size; i++) {
         buffer.append(0.0);
       }
       currentPos = 0;
+      mutex.unlock();
     }
 
     void  allZero() {
+      mutex.lock();
       for (int i = 0; i< buffer.size(); i++) {
         buffer[i] = 0;
       }
       currentReadPos = 0;
       currentPos = 1;
+      mutex.unlock();
     }
 };
 

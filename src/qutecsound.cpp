@@ -404,8 +404,8 @@ void qutecsound::createGraph()
   }
   QString dotText = documentPages[curPage]->getDotText();
 //   qDebug() << dotText;
-  QTemporaryFile file("QuteCsound-GraphXXXXXX.dot");
-  QTemporaryFile pngFile("QuteCsound-GraphXXXXXX.png");
+  QTemporaryFile file(QDir::tempPath() + "/" + "QuteCsound-GraphXXXXXX.dot");
+  QTemporaryFile pngFile(QDir::tempPath() + "/" + "QuteCsound-GraphXXXXXX.png");
   if (!file.open() || !pngFile.open()) {
     QMessageBox::warning(this, tr("QuteCsound"),
                          tr("Cannot create temp dot/png file."));
@@ -506,6 +506,16 @@ void qutecsound::controlD()
   }
   else
     widgetPanel->duplicate();
+}
+
+void qutecsound::del()
+{
+  //FIXME finish this...
+  if (documentPages[curPage]->hasFocus()) {
+//     documentPages[curPage]->comment();
+  }
+  else
+    widgetPanel->deleteSelected();
 }
 
 bool qutecsound::saveAs()
@@ -705,7 +715,7 @@ void qutecsound::runCsound(bool realtime)
   if (documentPages[curPage]->fileName.contains('/')) {
     m_options->csdPath =
         documentPages[curPage]->fileName.left(documentPages[curPage]->fileName.lastIndexOf('/'));
-    /// qDebug() << m_options->csdPath;
+    // qDebug() << m_options->csdPath;
     QString command = "cd \"" + m_options->csdPath +"\"";
     //system(command.toStdString().c_str());
 	QProcess::execute(command);
@@ -876,11 +886,11 @@ void qutecsound::runCsound(bool realtime)
 #endif
     }
     else {
-      int numChnls = csoundGetNchnls(ud->csound);
+//       int numChnls = csoundGetNchnls(ud->csound);
       while(ud->PERF_STATUS == 1 && csoundPerformKsmps(csound)==0) {
         ud->outputBufferSize = csoundGetKsmps(ud->csound);
         ud->outputBuffer = csoundGetSpout(ud->csound);
-        for (int i = 0; i < ud->outputBufferSize*numChnls; i++) {
+        for (int i = 0; i < ud->outputBufferSize*ud->numChnls; i++) {
           ud->qcs->audioOutputBuffer.put(ud->outputBuffer[i]);
         }
         qApp->processEvents();
@@ -1028,6 +1038,14 @@ void qutecsound::stopCsound()
 
 void qutecsound::record()
 {
+  if (documentPages[curPage]->fileName.startsWith(":/")) {
+    QMessageBox::critical(this,
+                          tr("PostQC"),
+                             tr("You must save the examples to use Record."),
+                                QMessageBox::Ok);
+    recAct->setChecked(false);
+    return;
+  }
   if (!runAct->isChecked()) {
     runAct->setChecked(true);
     runCsound(true);
@@ -1469,6 +1487,7 @@ void qutecsound::dispatchQueues()
     messageMutex.unlock();
     m_console->appendMessage(msg);
     widgetPanel->appendMessage(msg);
+//     qApp->processEvents();
   }
 //   QList<QString> channels = outValueQueue.keys();
 //   foreach (QString channel, channels) {
@@ -2831,9 +2850,9 @@ uintptr_t qutecsound::csThread(void *data)
     int perform = csoundPerformKsmps(udata->csound);
     udata->outputBufferSize = csoundGetKsmps(udata->csound);
     udata->outputBuffer = csoundGetSpout(udata->csound);
-    int numChnls = csoundGetNchnls(udata->csound);
+//     int numChnls = csoundGetNchnls(udata->csound);
     while((perform == 0) and (udata->PERF_STATUS == 1)) {
-      for (int i = 0; i < udata->outputBufferSize*numChnls; i++) {
+      for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
         udata->qcs->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
       }
       if (udata->qcs->m_options->enableWidgets) {
