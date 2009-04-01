@@ -393,6 +393,14 @@ void WidgetPanel::flush()
   eventQueueSize = 0; //Flush events gathered while idle
 }
 
+void WidgetPanel::refresh()
+{
+  // Necessary 
+  for (int i=0; i < consoleWidgets.size(); i++) {
+    consoleWidgets[i]->refresh();
+  }
+}
+
 QString WidgetPanel::getCsladspaLines()
 {
   QString text = "";

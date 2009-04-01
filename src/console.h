@@ -34,6 +34,7 @@ class Console
 
     virtual void appendMessage(QString msg);
     void clear();
+	void refresh();
     virtual void setDefaultFont(QFont font) {text->document()->setDefaultFont(font);}
     virtual void setColors(QColor textColor, QColor bgColor)
     {

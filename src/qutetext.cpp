@@ -376,25 +376,6 @@ void QuteLineEdit::setAlignment(int alignment)
 void QuteLineEdit::setText(QString text)
 {
   m_text = text;
-//   int size;
-//   if (m_fontSize >= QUTE_XXLARGE)
-//     size = 7;
-//   else if (m_fontSize >= QUTE_XLARGE)
-//     size = 6;
-//   else if (m_fontSize >= QUTE_LARGE)
-//     size = 5;
-//   else if (m_fontSize >= QUTE_MEDIUM)
-//     size = 4;
-//   else if (m_fontSize >= QUTE_SMALL)
-//     size = 3;
-//   else if (m_fontSize >= QUTE_XSMALL)
-//     size = 2;
-//   else
-//     size = 1;
-//   text.prepend("<font face=\"" + m_font + "\" size=\"" + QString::number(size) + "\">");
-//   text.append("</font>");
-  //TODO USE CORRECT CHARACTER for line break
-//   text = text.replace("�", "\n");
   static_cast<QLineEdit*>(m_widget)->setText(text);
 }
 
@@ -533,8 +514,6 @@ void QuteScrollNumber::setText(QString text)
     size = 1;
   text.prepend("<font face=\"" + m_font + "\" size=\"" + QString::number(size) + "\">");
   text.append("</font>");
-  //TODO USE CORRECT CHARACTER for line break
-//   text = text.replace("�", "\n");
   static_cast<ScrollNumberWidget*>(m_widget)->setText(text);
 }
 
@@ -566,7 +545,9 @@ QString QuteScrollNumber::getWidgetLine()
       + ", " + QString::number(color.blue() * 256) + "} ";
   line += m_widget->autoFillBackground()? "background ":"nobackground ";
   line += static_cast<QFrame*>(m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
-  line += m_text;
+  QString outText = m_text;
+  outText.replace("\n", "\u00AC");
+  line += outText;
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }

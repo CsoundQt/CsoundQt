@@ -84,9 +84,9 @@ qutecsound::qutecsound(QStringList fileNames)
 
   readSettings();
 
-  bool widgetsVisible = widgetPanel->isVisible();
+  bool widgetsVisible = !widgetPanel->isHidden();
   if (widgetsVisible)
-    widgetPanel->hide();
+    widgetPanel->hide();  // Hide until QuteCsound has finished loading
   utilitiesDialog = new UtilitiesDialog(this, m_options/*, _configlists*/);
   connect(utilitiesDialog, SIGNAL(runUtility(QString)), this, SLOT(runUtility(QString)));
 
@@ -131,8 +131,13 @@ qutecsound::qutecsound(QStringList fileNames)
       loadFile(fileName);
     }
   }
-  if (widgetsVisible)
+  if (widgetsVisible) {
     widgetPanel->show();
+  }
+  showWidgetsAct->setChecked(widgetsVisible);  // Button will initialize to current state of panel
+  showConsoleAct->setChecked(!m_console->isHidden());  // Button will initialize to current state of panel
+  showHelpAct->setChecked(!helpPanel->isHidden());  // Button will initialize to current state of panel
+
   if (fileNames.size() > 0 and m_options->autoPlay) {
     runCsound();
   }
@@ -1503,6 +1508,8 @@ void qutecsound::dispatchQueues()
     widgetPanel->appendMessage(msg);
 //     qApp->processEvents();
   }
+  m_console->refresh();
+//  widgetPanel->refresh(); // Doesn't work... ??
 //   QList<QString> channels = outValueQueue.keys();
 //   foreach (QString channel, channels) {
 //     widgetPanel->setValue(channel, outValueQueue[channel]);
@@ -1782,7 +1789,7 @@ void qutecsound::createActions()
 
   showWidgetsAct = new QAction(QIcon(":/images/gnome-mime-application-x-diagram.png"), tr("Widgets"), this);
   showWidgetsAct->setCheckable(true);
-  showWidgetsAct->setChecked(true);
+  //showWidgetsAct->setChecked(true);
   showWidgetsAct->setShortcut(tr("Alt+1"));
   showWidgetsAct->setStatusTip(tr("Show Realtime Widgets"));
   showWidgetsAct->setIconText("Widgets");
@@ -2732,6 +2739,14 @@ void qutecsound::setWidgetPanelGeometry()
   QRect geometry = documentPages[curPage]->getWidgetPanelGeometry();
   if (geometry.width() == 0)
     return;
+  if (geometry.x() < 0) {
+    geometry.setX(10);
+	qDebug() << "qutecsound::setWidgetPanelGeometry() Warining: X is negative.";
+  }
+  if (geometry.y() < 0) {
+    geometry.setY(10);
+	qDebug() << "qutecsound::setWidgetPanelGeometry() Warining: Y is negative.";
+  }
   widgetPanel->setGeometry(geometry);
 }
 

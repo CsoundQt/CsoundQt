@@ -24,6 +24,7 @@
 
 Console::Console()
 {
+  error = false;
 }
 
 Console::~Console()
@@ -58,6 +59,8 @@ void Console::appendMessage(QString msg)
   text->insertPlainText(msg);
   text->moveCursor(QTextCursor::End);
   text->setTextColor(m_textColor);
+  // Necessary hack to make sure Console show text properly. It's not working...
+  //text->repaint(QRect(0,0, text->width(), text->height()));
 }
 
 void Console::clear()
@@ -65,6 +68,13 @@ void Console::clear()
   text->clear();
   errorLines.clear();
   error = false;
+}
+
+void Console::refresh()
+{
+  // This is a necessary hack since QTextEdit appears to not refresh correctly
+  // Not working...
+  //text->repaint(QRect(0,0, text->width(), text->height()));
 }
 
 void DockConsole::closeEvent(QCloseEvent * /*event*/)
