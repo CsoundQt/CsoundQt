@@ -1,22 +1,24 @@
-/***************************************************************************
- *   Copyright (C) 2008 by Andres Cabrera                                  *
- *   mantaraya36@gmail.com                                                 *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 3 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
- ***************************************************************************/
+/*
+    Copyright (C) 2008, 2009 Andres Cabrera
+    mantaraya36@gmail.com
+
+    This file is part of QuteCsound.
+
+    QuteCsound is free software; you can redistribute it
+    and/or modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    QuteCsound is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with Csound; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+    02111-1307 USA
+*/
 
 #include "qutecsound.h"
 #include "console.h"
@@ -584,6 +586,18 @@ bool qutecsound::closeTab()
   m_highlighter->setDocument(documentPages[curPage]->document());
   connectActions();
   return true;
+}
+
+void qutecsound::print()
+{
+  QPrinter printer;
+  QPrintDialog *dialog = new QPrintDialog(&printer, this);
+  dialog->setWindowTitle(tr("Print Document"));
+//   if (editor->textCursor().hasSelection())
+//     dialog->addEnabledOption(QAbstractPrintDialog::PrintSelection);
+  if (dialog->exec() != QDialog::Accepted)
+    return;
+  documentPages[curPage]->print(&printer);
 }
 
 void qutecsound::findReplace()
@@ -1618,6 +1632,13 @@ void qutecsound::createActions()
   closeTabAct->setIcon(QIcon(":/images/cross.png"));
   connect(closeTabAct, SIGNAL(triggered()), this, SLOT(closeTab()));
 
+  printAct = new QAction(tr("Print"), this);
+  printAct->setShortcut(tr("Ctrl+P"));
+  printAct->setStatusTip(tr("Print current document"));
+  printAct->setIconText("Print");
+//   closeTabAct->setIcon(QIcon(":/images/cross.png"));
+  connect(printAct, SIGNAL(triggered()), this, SLOT(print()));
+
   exitAct = new QAction(tr("E&xit"), this);
   exitAct->setShortcut(tr("Ctrl+Q"));
   exitAct->setStatusTip(tr("Exit the application"));
@@ -2066,6 +2087,7 @@ void qutecsound::fillFileMenu()
   fileMenu->addAction(reloadAct);
 //   fileMenu->addAction(cabbageAct);
   fileMenu->addAction(closeTabAct);
+  fileMenu->addAction(printAct);
   fileMenu->addSeparator();
   fileMenu->addAction(exitAct);
   fileMenu->addSeparator();
