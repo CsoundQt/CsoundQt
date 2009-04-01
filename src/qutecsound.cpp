@@ -1999,6 +1999,10 @@ void qutecsound::createMenus()
   subMenus << synthFiles;
   subMenuNames << tr("Synths");
 
+  exampleFiles.append(":/examples/SF_Play_from_buffer.csd");
+  exampleFiles.append(":/examples/SF_Play_from_buffer_2.csd");
+  exampleFiles.append(":/examples/SF_Play_from_HD.csd");
+  exampleFiles.append(":/examples/SF_Play_from_HD_2.csd");
   exampleFiles.append(":/examples/Circle.csd");
   exampleFiles.append(":/examples/Lineedit_Widget.csd");
   exampleFiles.append(":/examples/Rms.csd");

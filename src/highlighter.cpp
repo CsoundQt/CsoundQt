@@ -136,7 +136,7 @@ void Highlighter::highlightBlock(const QString &text)
       setFormat(wordStart, wordEnd - wordStart, instFormat);
     }
     else if (tagPatterns.contains("<" + word + ">") && wordStart > 0) {
-      setFormat(wordStart - (text[wordStart - 1] == '/' ?  2 : 1), wordEnd - wordStart + 2, csdtagFormat);
+      setFormat(wordStart - (text[wordStart - 1] == '/' ?  2 : 1), wordEnd - wordStart + (text[wordStart - 1] == '/' ?  3 : 2), csdtagFormat);
     }
     else if (headerPatterns.contains(word)) {
       setFormat(wordStart, wordEnd - wordStart, csdtagFormat);

@@ -30,6 +30,10 @@
       <file>default.csd</file>
       <file>test.csd</file>
 
+      <file>../examples/SF_Play_from_buffer.csd</file>
+      <file>../examples/SF_Play_from_buffer_2.csd</file>
+      <file>../examples/SF_Play_from_HD.csd</file>
+      <file>../examples/SF_Play_from_HD_2.csd</file>
       <file>../examples/Circle.csd</file>
       <file>../examples/Noise_Reduction.csd</file>
       <file>../examples/Reserved_Channels.csd</file>

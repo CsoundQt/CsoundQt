@@ -85,14 +85,20 @@ klevel invalue "level"
 outs asig*kon*klevel, asig*kon*klevel
 endin
 
-instr 99
+instr 98
+turnoff2 1, 0, 0
+event "i", 1, 0, 3600
+turnoff
+endin
 
+instr 99
 krel invalue "rel"
 ktrig changed krel
-ktrig init 0
 
-if ktrig == 1 goto nochange
-if krel == 0 then
+if ktrig == 0 then
+	kgoto nochange
+endif
+if (krel == 0) then
 	outvalue "fac1", 1
 	outvalue "fac2", 2
 	outvalue "fac3", 3
@@ -105,7 +111,7 @@ if krel == 0 then
 	outvalue "fac10", 10
 	outvalue "fac11", 11
 	outvalue "fac12", 12
-elseif krel == 1 then
+elseif (krel == 1) then
 	outvalue "fac1", 1
 	outvalue "fac2", 3
 	outvalue "fac3", 5
@@ -118,7 +124,7 @@ elseif krel == 1 then
 	outvalue "fac10", 19
 	outvalue "fac11", 21
 	outvalue "fac12", 23
-elseif krel == 2 then
+elseif (krel == 2) then
 	outvalue "fac1", 1
 	outvalue "fac2", 1.22
 	outvalue "fac3", 1.3
@@ -131,7 +137,7 @@ elseif krel == 2 then
 	outvalue "fac10", 1.81
 	outvalue "fac11", 1.91
 	outvalue "fac12", 1.98
-elseif krel == 3 then
+elseif (krel == 3) then
 	outvalue "fac1", 1
 	outvalue "fac2", 2.22
 	outvalue "fac3", 3.3
@@ -144,7 +150,7 @@ elseif krel == 3 then
 	outvalue "fac10", 10.81
 	outvalue "fac11", 11.91
 	outvalue "fac12", 12.98
-elseif krel == 4 then
+elseif (krel == 4) then
 	outvalue "fac1", 1.02
 	outvalue "fac2", 1.05
 	outvalue "fac3", 1.12
@@ -175,7 +181,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 530 179 709 547
+WindowBounds: 469 263 704 551
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -186,14 +192,14 @@ ioSlider {26, 55} {243, 22} 0.000000 1.000000 1.000000 amp1
 ioSlider {26, 80} {243, 22} 0.000000 1.000000 0.580247 amp2
 ioSlider {26, 105} {243, 22} 0.000000 1.000000 0.325103 amp3
 ioSlider {26, 130} {243, 22} 0.000000 1.000000 0.251029 amp4
-ioSlider {27, 155} {243, 22} 0.000000 1.000000 0.168724 amp5
-ioSlider {27, 180} {243, 22} 0.000000 1.000000 0.115226 amp6
+ioSlider {27, 155} {243, 22} 0.000000 1.000000 0.160494 amp5
+ioSlider {27, 180} {243, 22} 0.000000 1.000000 0.106996 amp6
 ioSlider {27, 205} {243, 22} 0.000000 1.000000 0.069959 amp7
-ioSlider {27, 230} {243, 22} 0.000000 1.000000 0.057613 amp8
+ioSlider {27, 230} {243, 22} 0.000000 1.000000 0.053498 amp8
 ioSlider {27, 254} {243, 22} 0.000000 1.000000 0.032922 amp9
-ioSlider {27, 279} {243, 22} 0.000000 1.000000 0.020576 amp10
-ioSlider {27, 304} {243, 22} 0.000000 1.000000 0.008230 amp11
-ioSlider {27, 329} {243, 22} 0.000000 1.000000 0.004115 amp12
+ioSlider {27, 279} {243, 22} 0.000000 1.000000 0.016461 amp10
+ioSlider {27, 304} {243, 22} 0.000000 1.000000 0.000000 amp11
+ioSlider {27, 329} {243, 22} 0.000000 1.000000 0.000000 amp12
 ioText {8, 54} {17, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1
 ioText {8, 78} {17, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2
 ioText {8, 103} {17, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3
@@ -218,28 +224,28 @@ ioText {270, 252} {50, 25} display 0.000000 0.00100 "amp9" left "DejaVu Sans" 8 
 ioText {270, 278} {50, 25} display 0.000000 0.00100 "amp10" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0206
 ioText {270, 303} {50, 25} display 0.000000 0.00100 "amp11" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0082
 ioText {270, 329} {50, 25} display 0.000000 0.00100 "amp12" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0041
-ioKnob {548, 70} {80, 80} 100.000000 1500.000000 0.010000 269.696970 freq
-ioText {548, 149} {80, 25} display 0.000000 0.00100 "freq" center "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 269.6970
-ioText {547, 52} {80, 25} label 0.000000 0.00100 "" center "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Base Freq
+ioKnob {516, 70} {80, 80} 100.000000 1500.000000 0.010000 255.555556 freq
+ioText {516, 149} {80, 25} display 0.000000 0.00100 "freq" center "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 255.5556
+ioText {515, 52} {80, 25} label 0.000000 0.00100 "" center "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Base Freq
 ioCheckbox {511, 244} {20, 20} on on
 ioText {530, 242} {93, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder On
 ioGraph {4, 358} {692, 157} scope 2.000000 -1.000000 
 ioMenu {515, 203} {161, 30} 0 303 "all harmonics,even harmonics,inharmonic1,inharmonic2,inharmonic3" rel
 ioText {417, 38} {80, 316} label 0.000000 0.00100 "" center "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border Freq. (Hz)
-ioText {423, 55} {80, 25} display 0.000000 0.00100 "freq1" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 269.6971
-ioText {422, 78} {80, 25} display 0.000000 0.00100 "freq2" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 539.3942
-ioText {422, 104} {80, 25} display 0.000000 0.00100 "freq3" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 809.0913
-ioText {424, 131} {80, 25} display 0.000000 0.00100 "freq4" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1078.7885
-ioText {424, 156} {80, 25} display 0.000000 0.00100 "freq5" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1348.4856
-ioText {424, 180} {80, 25} display 0.000000 0.00100 "freq6" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1618.1826
-ioText {422, 205} {80, 25} display 0.000000 0.00100 "freq7" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1887.8798
-ioText {423, 230} {80, 25} display 0.000000 0.00100 "freq8" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2157.5769
-ioText {422, 255} {80, 25} display 0.000000 0.00100 "freq9" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2427.2739
-ioText {423, 279} {80, 25} display 0.000000 0.00100 "freq10" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2696.9712
-ioText {422, 305} {80, 25} display 0.000000 0.00100 "freq11" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2966.6682
-ioText {420, 329} {80, 25} display 0.000000 0.00100 "freq12" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3236.3652
-ioKnob {544, 274} {78, 60} 0.000000 0.500000 0.010000 0.141414 level
-ioText {545, 331} {80, 25} label 0.000000 0.00100 "" center "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Level
+ioText {423, 55} {80, 25} display 0.000000 0.00100 "freq1" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 255.5555
+ioText {422, 78} {80, 25} display 0.000000 0.00100 "freq2" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 511.1110
+ioText {422, 104} {80, 25} display 0.000000 0.00100 "freq3" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 766.6664
+ioText {424, 131} {80, 25} display 0.000000 0.00100 "freq4" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1022.2219
+ioText {424, 156} {80, 25} display 0.000000 0.00100 "freq5" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1277.7773
+ioText {424, 180} {80, 25} display 0.000000 0.00100 "freq6" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1533.3329
+ioText {422, 205} {80, 25} display 0.000000 0.00100 "freq7" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1788.8884
+ioText {423, 230} {80, 25} display 0.000000 0.00100 "freq8" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2044.4438
+ioText {422, 255} {80, 25} display 0.000000 0.00100 "freq9" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2299.9993
+ioText {423, 279} {80, 25} display 0.000000 0.00100 "freq10" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2555.5547
+ioText {422, 305} {80, 25} display 0.000000 0.00100 "freq11" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2811.1104
+ioText {420, 329} {80, 25} display 0.000000 0.00100 "freq12" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3066.6658
+ioKnob {602, 92} {66, 60} 0.000000 0.500000 0.010000 0.166667 level
+ioText {603, 149} {64, 25} label 0.000000 0.00100 "" center "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Level
 ioText {7, 5} {277, 43} label 0.000000 0.00100 "" left "DejaVu Sans" 20 {65280, 65280, 65280} {8448, 8704, 9216} background noborder Additive syntheziser
 ioText {515, 180} {140, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Partial relationship:
 ioText {317, 38} {96, 316} label 0.000000 0.00100 "" center "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border Freq. Factor
@@ -255,5 +261,6 @@ ioText {324, 255} {80, 25} editnum 9.000000 0.001000 "fac9" left "Lucida Grande"
 ioText {324, 279} {80, 25} editnum 10.000000 0.001000 "fac10" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 10.000000
 ioText {324, 302} {80, 25} editnum 11.000000 0.001000 "fac11" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 11.000000
 ioText {324, 328} {80, 25} editnum 12.000000 0.001000 "fac12" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 12.000000
+ioButton {538, 272} {99, 83} event 1.000000 "reset" "Reset Phase" "/" i98 0 10
 </MacGUI>
 
