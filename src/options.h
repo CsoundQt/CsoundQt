@@ -118,6 +118,7 @@ class Options{
     QString dot;
     QString waveeditor;
     QString waveplayer;
+    int language;
 //   private:
 //     ConfigLists m_configlists;
 

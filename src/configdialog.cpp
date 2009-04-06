@@ -44,6 +44,9 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options/*, ConfigLists *
   foreach (QString item, _configlists.rtMidiNames) {
     RtMidiModuleComboBox->addItem(item);
   }
+  for (int i = 0; i < _configlists.languages.size(); i++) {
+    languageComboBox->addItem(_configlists.languages[i], QVariant(_configlists.languageCodes[i]));
+  }
 
   fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
   fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));
@@ -142,6 +145,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options/*, ConfigLists *
   dotLineEdit->setText(m_options->dot);
   WaveEditorLineEdit->setText(m_options->waveeditor);
   WavePlayerLineEdit->setText(m_options->waveplayer);
+  languageComboBox->setCurrentIndex(m_options->language);
 
   connect(inputFilenameToolButton, SIGNAL(clicked()), this, SLOT(browseInputFilename()));
   connect(outputFilenameToolButton, SIGNAL(clicked()), this, SLOT(browseOutputFilename()));
@@ -245,6 +249,8 @@ void ConfigDialog::accept()
   m_options->dot = dotLineEdit->text();
   m_options->waveeditor = WaveEditorLineEdit->text();
   m_options->waveplayer = WavePlayerLineEdit->text();
+  m_options->language = languageComboBox->currentIndex();
+
   emit(changeFont());
   QDialog::accept();
 }

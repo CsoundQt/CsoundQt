@@ -1,5 +1,5 @@
 
-The C++ sources for QuteCsound are licenced under the GPLv3 licence. See the file gpl-3.0.txt for more details, or visit http://gplv3.fsf.org/.
+The C++ sources for QuteCsound are licenced under the LGPLv2.1 licence. See the file lgpl-2.1.txt for more details, or visit http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 
 The opcodes.xml file comes from the Canonical Csound Reference Manual, which is hosted at sourceforge (http://sourceforge.net/projects/csound). It is licenced under the GFDL (GNU Free Documentation Licence http://www.gnu.org/copyleft/fdl.html).
 

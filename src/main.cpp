@@ -41,6 +41,17 @@ int main(int argc, char *argv[])
   QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
   splash.show();
   splash.showMessage("Starting QuteCsound");
+
+  QSettings settings("csound", "qutecsound");
+  settings.beginGroup("GUI");
+  QString language = settings.value("language", QLocale::system().name()).toString();
+  settings.endGroup();
+
+  QTranslator translator;
+  translator.load(QString(":/qutecsound_") + language);
+//   translator.load(":/qutecsound_es");
+  app.installTranslator(&translator);
+
   qutecsound * mw = new qutecsound(fileNames);
   FileOpenEater *filterObj=new FileOpenEater();
   filterObj->mainWindow=mw;

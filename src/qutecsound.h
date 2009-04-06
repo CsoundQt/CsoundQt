@@ -324,7 +324,6 @@ class qutecsound:public QMainWindow
 #endif
 };
 
-/* This class is taken from MeshLab, originally licensed GPL v2 or later. */
 class FileOpenEater : public QObject
 {
   Q_OBJECT

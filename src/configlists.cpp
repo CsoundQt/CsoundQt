@@ -64,6 +64,8 @@ ConfigLists::ConfigLists()
 #ifdef WIN32
   rtMidiNames << "none" << "winmm" << "portmidi" << "virtual";
 #endif
+  languages << "English" << QString("Español");
+  languageCodes << "en" << "es";
 }
 
 

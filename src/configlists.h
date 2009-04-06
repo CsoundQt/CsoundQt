@@ -38,6 +38,8 @@ class ConfigLists{
     QStringList fileFormatNames;
     QStringList rtAudioNames;
     QStringList rtMidiNames;
+    QStringList languages;
+    QStringList languageCodes;
 
 };
 
