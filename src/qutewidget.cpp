@@ -273,12 +273,12 @@ void QuteWidget::createPropertiesDialog()
   nameLineEdit->setFocus(Qt::OtherFocusReason);
   nameLineEdit->selectAll();
   layout->addWidget(nameLineEdit, 3, 1, Qt::AlignLeft|Qt::AlignVCenter);
+  acceptButton = new QPushButton(tr("Ok"));
+  layout->addWidget(acceptButton, 9, 3, Qt::AlignCenter|Qt::AlignVCenter);
   applyButton = new QPushButton(tr("Apply"));
   layout->addWidget(applyButton, 9, 1, Qt::AlignCenter|Qt::AlignVCenter);
   cancelButton = new QPushButton(tr("Cancel"));
   layout->addWidget(cancelButton, 9, 2, Qt::AlignCenter|Qt::AlignVCenter);
-  acceptButton = new QPushButton(tr("Ok"));
-  layout->addWidget(acceptButton, 9, 3, Qt::AlignCenter|Qt::AlignVCenter);
 }
 
 void QuteWidget::applyProperties()

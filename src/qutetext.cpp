@@ -607,6 +607,7 @@ void QuteScrollNumber::addValue(double delta)
   m_resolution = static_cast<ScrollNumberWidget*>(m_widget)->getResolution();
 //   qDebug("QuteScrollNumber::addValue places = %i resolution = %f", places, m_resolution);
   setText(QString::number(m_value, 'f', m_places));
+  valueChanged(m_value);
   emit widgetChanged(this);
 }
 

@@ -47,6 +47,9 @@ class QuteSlider : public QuteWidget
     virtual void createPropertiesDialog();
     virtual void applyProperties();
 
+  protected slots:
+    void valueChanged(int value);
+
   private:
     QDoubleSpinBox *minSpinBox;
     QDoubleSpinBox *maxSpinBox;

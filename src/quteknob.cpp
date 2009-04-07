@@ -35,7 +35,7 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
   m_widget->setPalette(QPalette(Qt::gray));
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 
-  connect((QDial *)m_widget, SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
+  connect(static_cast<QDial *>(m_widget), SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
 }
 
 QuteKnob::~QuteKnob()
@@ -44,11 +44,16 @@ QuteKnob::~QuteKnob()
 
 double QuteKnob::getValue()
 {
+  return m_value;
+}
+
+void QuteKnob::valueChanged(int value)
+{
   QDial *knob = static_cast<QDial *>(m_widget);
-  double normalized = (double) (knob->value() - knob->minimum())
+  double normalized = (double) (value - knob->minimum())
         / (double) (knob->maximum() - knob->minimum());
   m_value = m_min + (normalized * (m_max-m_min));
-  return m_value;
+  QuteWidget::valueChanged(m_value);
 }
 
 void QuteKnob::setRange(double min, double max)

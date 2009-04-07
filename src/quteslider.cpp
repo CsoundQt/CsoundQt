@@ -42,10 +42,17 @@ QuteSlider::~QuteSlider()
 
 double QuteSlider::getValue()
 {
-  QSlider *slider = static_cast<QSlider *>(m_widget);
-  double normalized = (double) slider->value() / (double) m_len;
-  m_value = m_min + (normalized * (m_max-m_min));
+//   QSlider *slider = static_cast<QSlider *>(m_widget);
+//   double normalized = (double) slider->value() / (double) m_len;
+//   m_value = m_min + (normalized * (m_max-m_min));
   return m_value;
+}
+
+void QuteSlider::valueChanged(int value)
+{
+  double normalized = (double) value / (double) m_len;
+  m_value = m_min + (normalized * (m_max-m_min));
+  QuteWidget::valueChanged(m_value);
 }
 
 void QuteSlider::setRange(double min, double max)
