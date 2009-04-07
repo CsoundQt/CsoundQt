@@ -8,7 +8,8 @@ CONFIG += qute_cpp \
 DEFINES += QUTE_USE_CSOUNDPERFORMANCETHREAD
 
 TRANSLATIONS = qutecsound_es.ts \
-               qutecsound_en.ts
+               qutecsound_en.ts \
+ qutecsound_de.ts
 
 
 win32 {

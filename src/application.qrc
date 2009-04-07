@@ -75,5 +75,6 @@
 
       <file>qutecsound_en.qm</file>
       <file>qutecsound_es.qm</file>
+      <file>qutecsound_de.qm</file>
 </qresource>
 </RCC>

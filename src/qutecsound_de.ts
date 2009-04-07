@@ -1507,6 +1507,11 @@ Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="qutecsound.cpp" line="1359"/>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="qutecsound.cpp" line="1361"/>
         <source>Play</source>
         <translation type="unfinished"></translation>
@@ -1532,6 +1537,11 @@ Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="qutecsound.cpp" line="1608"/>
+        <source>New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="qutecsound.cpp" line="1611"/>
         <source>&amp;Open...</source>
         <translation type="unfinished"></translation>
@@ -1544,6 +1554,11 @@ Version </source>
     <message>
         <location filename="qutecsound.cpp" line="1613"/>
         <source>Open an existing file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qutecsound.cpp" line="1614"/>
+        <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1572,6 +1587,11 @@ Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="qutecsound.cpp" line="1626"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="qutecsound.cpp" line="1629"/>
         <source>Save &amp;As...</source>
         <translation type="unfinished"></translation>
@@ -1584,6 +1604,11 @@ Version </source>
     <message>
         <location filename="qutecsound.cpp" line="1631"/>
         <source>Save the document under a new name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qutecsound.cpp" line="1632"/>
+        <source>Save as</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1687,6 +1712,11 @@ Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="qutecsound.cpp" line="1682"/>
+        <source>Cut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="qutecsound.cpp" line="1685"/>
         <source>&amp;Copy</source>
         <translation type="unfinished"></translation>
@@ -1702,6 +1732,11 @@ Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="qutecsound.cpp" line="1689"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="qutecsound.cpp" line="1692"/>
         <source>&amp;Paste</source>
         <translation type="unfinished"></translation>
@@ -1714,6 +1749,11 @@ Version </source>
     <message>
         <location filename="qutecsound.cpp" line="1695"/>
         <source>Paste the clipboard&apos;s contents into the current selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qutecsound.cpp" line="1696"/>
+        <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1797,6 +1837,11 @@ Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="qutecsound.cpp" line="2136"/>
+        <source>Configure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="qutecsound.cpp" line="1749"/>
         <source>Run</source>
         <translation type="unfinished"></translation>
@@ -1814,6 +1859,11 @@ Version </source>
     <message>
         <location filename="qutecsound.cpp" line="1755"/>
         <source>Run in external shell</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qutecsound.cpp" line="1756"/>
+        <source>Run in Term</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1842,6 +1892,11 @@ Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="qutecsound.cpp" line="1775"/>
+        <source>Render</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="qutecsound.cpp" line="1778"/>
         <source>Play Audiofile</source>
         <translation type="unfinished"></translation>
@@ -1852,6 +1907,11 @@ Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="qutecsound.cpp" line="1781"/>
+        <source>Ext. Player</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="qutecsound.cpp" line="1784"/>
         <source>Edit Audiofile</source>
         <translation type="unfinished"></translation>
@@ -1859,6 +1919,11 @@ Version </source>
     <message>
         <location filename="qutecsound.cpp" line="1786"/>
         <source>Edit rendered audiofile in External Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qutecsound.cpp" line="1787"/>
+        <source>Ext. Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1889,6 +1954,11 @@ Version </source>
     <message>
         <location filename="qutecsound.cpp" line="1803"/>
         <source>Show the Csound Manual Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qutecsound.cpp" line="1804"/>
+        <source>Manual</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1939,6 +2009,11 @@ Version </source>
     <message>
         <location filename="qutecsound.cpp" line="1829"/>
         <source>Show Opcode Entry in help panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qutecsound.cpp" line="1830"/>
+        <source>Manual for opcode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2112,11 +2187,6 @@ Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qutecsound.cpp" line="2136"/>
-        <source>Configure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="qutecsound.cpp" line="2154"/>
         <source>Ready</source>
         <translation type="unfinished"></translation>
@@ -2168,71 +2238,6 @@ Do you want to save the changes before closing?</source>
     <message>
         <location filename="qutecsound.cpp" line="2704"/>
         <source>Do not ask again</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qutecsound.cpp" line="1608"/>
-        <source>New</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qutecsound.cpp" line="1614"/>
-        <source>Open</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qutecsound.cpp" line="1626"/>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qutecsound.cpp" line="1632"/>
-        <source>Save as</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qutecsound.cpp" line="1682"/>
-        <source>Cut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qutecsound.cpp" line="1689"/>
-        <source>Copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qutecsound.cpp" line="1696"/>
-        <source>Paste</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qutecsound.cpp" line="1756"/>
-        <source>Run in Term</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qutecsound.cpp" line="1775"/>
-        <source>Render</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qutecsound.cpp" line="1781"/>
-        <source>Ext. Player</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qutecsound.cpp" line="1787"/>
-        <source>Ext. Editor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qutecsound.cpp" line="1804"/>
-        <source>Manual</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qutecsound.cpp" line="1830"/>
-        <source>Manual for opcode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
