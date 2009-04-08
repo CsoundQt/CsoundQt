@@ -644,17 +644,17 @@ Would you like to start from the top?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qutewidget.cpp" line="276"/>
+        <location filename="qutewidget.cpp" line="278"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qutewidget.cpp" line="278"/>
+        <location filename="qutewidget.cpp" line="280"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qutewidget.cpp" line="280"/>
+        <location filename="qutewidget.cpp" line="276"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1504,11 +1504,6 @@ Version </source>
     <message>
         <location filename="qutecsound.cpp" line="1359"/>
         <source>OverrideCsOptions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qutecsound.cpp" line="1359"/>
-        <source></source>
         <translation type="unfinished"></translation>
     </message>
     <message>
