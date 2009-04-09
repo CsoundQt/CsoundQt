@@ -2235,5 +2235,10 @@ Do you want to save the changes before closing?</source>
         <source>Do not ask again</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="qutecsound.cpp" line="1359"/>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

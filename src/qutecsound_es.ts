@@ -2251,10 +2251,5 @@ Desea salvar los cambios antes de cerrar?</translation>
         <source>Manual for opcode</source>
         <translation>Manual para opcode</translation>
     </message>
-    <message>
-        <location filename="qutecsound.cpp" line="1359"/>
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 </TS>

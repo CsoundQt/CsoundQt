@@ -54,7 +54,7 @@ qutecsound::qutecsound(QStringList fileNames)
   resize(660,350);
   setWindowIcon(QIcon(":/images/qtcs.png"));
   textEdit = NULL;
-
+  QLocale::setDefault(QLocale::system());  //Does this take care of the decimal separator for different locales?
   ud = (CsoundUserData *)malloc(sizeof(CsoundUserData));
   ud->PERF_STATUS = 0;
   ud->qcs = this;
@@ -1280,8 +1280,10 @@ void qutecsound::utilitiesDialogOpen()
 
 void qutecsound::about()
 {
-  QString text = tr("by: Andres Cabrera\nReleased under the LGPLv2 or GPLv3\nVersion ");
-  text += QUTECSOUND_VERSION;
+  QString text = tr("by: Andres Cabrera\nReleased under the LGPLv2 or GPLv3\nVersion %1").arg(QUTECSOUND_VERSION);
+  text += tr("French translation:\nFrançois Pinot\n");
+  text += tr("German translation:\nJoachim Heintz\n");
+  text += QString("qutecsound.sourceforge.net");
   QMessageBox::about(this, tr("About QuteCsound"), text);
 }
 
