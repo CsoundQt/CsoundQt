@@ -66,6 +66,7 @@
       <file>../examples/Additive_Synth.csd</file>
       <file>../examples/Simple_Subtractive.csd</file>
       <file>../examples/Simple_FM_Synth.csd</file>
+      <file>../examples/Phase_Mod_Synth.csd</file>
 
       <file>../examples/Audio_Input_Test.csd</file>
       <file>../examples/Audio_Output_Test.csd</file>

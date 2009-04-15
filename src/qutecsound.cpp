@@ -128,7 +128,7 @@ qutecsound::qutecsound(QStringList fileNames)
   }
   foreach (QString fileName, fileNames) {
     if (fileName!="") {
-      loadFile(fileName);
+      loadFile(fileName, true);
     }
   }
   if (widgetsVisible) {
@@ -138,9 +138,6 @@ qutecsound::qutecsound(QStringList fileNames)
   showConsoleAct->setChecked(!m_console->isHidden());  // Button will initialize to current state of panel
   showHelpAct->setChecked(!helpPanel->isHidden());  // Button will initialize to current state of panel
 
-  if (fileNames.size() > 0 and m_options->autoPlay) {
-    runCsound();
-  }
   if (documentPages.size() == 0) {
     newFile();
   }
@@ -318,7 +315,7 @@ void qutecsound::open()
   }
   if (!fileName.isEmpty()) {
     loadCompanionFile(fileName);
-    loadFile(fileName);
+    loadFile(fileName, true);
   }
 }
 
@@ -1280,7 +1277,7 @@ void qutecsound::utilitiesDialogOpen()
 
 void qutecsound::about()
 {
-  QString text = tr("by: Andres Cabrera\nReleased under the LGPLv2 or GPLv3\nVersion %1").arg(QUTECSOUND_VERSION);
+  QString text = tr("by: Andres Cabrera\nReleased under the LGPLv2 or GPLv3\nVersion %1\n").arg(QUTECSOUND_VERSION);
   text += tr("French translation:\nFrançois Pinot\n");
   text += tr("German translation:\nJoachim Heintz\n");
   text += QString("qutecsound.sourceforge.net");
@@ -2025,6 +2022,7 @@ void qutecsound::createMenus()
   synthFiles.append(":/examples/Additive_Synth.csd");
   synthFiles.append(":/examples/Simple_Subtractive.csd");
   synthFiles.append(":/examples/Simple_FM_Synth.csd");
+  synthFiles.append(":/examples/Phase_Mod_Synth.csd");
 
   subMenus << synthFiles;
   subMenuNames << tr("Synths");
@@ -2169,6 +2167,8 @@ void qutecsound::readSettings()
   lastUsedDir = settings.value("lastuseddir", "").toString();
   lastFileDir = settings.value("lastfiledir", "").toString();
   m_options->language = _configlists.languageCodes.indexOf(settings.value("language", QLocale::system().name()).toString());
+  if (m_options->language < 0)
+    m_options->language = 0;
   recentFiles.clear();
   QAction *newAct;
   recentFiles.append(settings.value("recentFiles0", "").toString());
@@ -2324,8 +2324,10 @@ void qutecsound::writeSettings()
   settings.setValue("showTooltips", m_options->showTooltips);
   settings.setValue("enableFLTK", m_options->enableFLTK);
   QStringList files;
-  for (int i=0; i < documentPages.size(); i++ ) {
-    files.append(documentPages[i]->fileName);
+  if (m_options->rememberFile) {
+    for (int i = 0; i < documentPages.size(); i++ ) {
+          files.append(documentPages[i]->fileName);
+    }
   }
   settings.setValue("lastfiles", files);
   settings.endGroup();
@@ -2389,53 +2391,25 @@ void qutecsound::writeSettings()
 
 int qutecsound::execute(QString executable, QString options)
 {
+//   qDebug() << "qutecsound::execute";
   QStringList optionlist;
   optionlist = options.split(QRegExp("\\s+"));
-//   qDebug() << "qutecsound::execute";
 
   // cd to current directory on all platforms
   QString cdLine = "cd \"" + documentPages[curPage]->getFilePath() + "\"";
-  //system(cdLine.toStdString().c_str());
   QProcess::execute(cdLine);
 
 #ifdef MACOSX
   QString commandLine = "open -a \"" + executable + "\" " + options;
-  qDebug() << commandLine;
-//   QProcess::execute(commandLine);
-//   system(commandLine.toStdString().c_str());
 #endif
 #ifdef LINUX
   QString commandLine = executable + " " + options;
-//   QProcess::execute(commandLine);
-//   system(commandLine.toStdString().c_str());
 #endif
 #ifdef SOLARIS
   QString commandLine = executable + " " + options;
-//   QProcess::execute(commandLine);
-//   system(commandLine.toStdString().c_str());
 #endif
 #ifdef WIN32
   QString commandLine = executable + (executable.startsWith("cmd")? " /k ": " ") + options;
-  //system(commandLine.toStdString().c_str());
-
-//  STARTUPINFO si;
-//  PROCESS_INFORMATION pi;
-//  STARTUPINFO sj;
-//  PROCESS_INFORMATION pj;
-//
-//  ZeroMemory( &si, sizeof(si) );
-//  si.cb = sizeof(si);
-//  ZeroMemory( &pi, sizeof(pi) );
-//
-//  ZeroMemory( &sj, sizeof(sj) );
-//  sj.cb = sizeof(sj);
-//  ZeroMemory( &pj, sizeof(pj) );
-//
-//  if(!CreateProcess(NULL, commandLine.toStdString().c_str() , NULL, NULL, FALSE, 0, NULL, NULL, &sj, &pj))
-//  {
-//    qDebug() << "qutecsound::execute Error executing!";
-//  }
-
 #endif
   QProcess::startDetached(commandLine);
   return 1;
@@ -2479,7 +2453,7 @@ QString qutecsound::fixLineEndings(const QString &text)
   return text;
 }
 
-bool qutecsound::loadFile(QString fileName)
+bool qutecsound::loadFile(QString fileName, bool runNow)
 {
   QFile file(fileName);
   if (!file.open(QFile::ReadOnly | QFile::Text)) {
@@ -2543,6 +2517,9 @@ bool qutecsound::loadFile(QString fileName)
   changeFont();
   statusBar()->showMessage(tr("File loaded"), 2000);
   setWidgetPanelGeometry();
+  if (runNow && m_options->autoPlay) {
+    runCsound();
+  }
   return true;
 }
 

@@ -23,7 +23,7 @@
 #ifndef QUTECSOUND_H
 #define QUTECSOUND_H
 
-#define QUTECSOUND_VERSION "0.4"
+#define QUTECSOUND_VERSION "0.4.1"
 
 #include <QtGui>
 
@@ -123,7 +123,7 @@ class qutecsound:public QMainWindow
     RingBuffer audioOutputBuffer;
 
   public slots:
-    bool loadFile(QString fileName);
+    bool loadFile(QString fileName, bool runNow = false);
     void runCsound(bool realtime=true);
     void stop();
     void stopCsound();
@@ -337,7 +337,7 @@ class FileOpenEater : public QObject
       if (event->type() == QEvent::FileOpen) {
         noEvent=false;
         QFileOpenEvent *fileEvent = static_cast<QFileOpenEvent*>(event);
-        mainWindow->loadFile(fileEvent->file());
+        mainWindow->loadFile(fileEvent->file(), true);
 // QMessageBox::information(0,"Meshlab",fileEvent->file());
         return true;
       } else {

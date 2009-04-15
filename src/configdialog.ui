@@ -68,7 +68,7 @@
     </rect>
    </property>
    <property name="currentIndex" >
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab_2" >
     <attribute name="title" >
@@ -80,7 +80,7 @@
        <x>10</x>
        <y>100</y>
        <width>601</width>
-       <height>201</height>
+       <height>211</height>
       </rect>
      </property>
      <property name="title" >
@@ -93,7 +93,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>130</y>
+        <y>138</y>
         <width>581</width>
         <height>66</height>
        </rect>
@@ -139,7 +139,7 @@
       <property name="geometry" >
        <rect>
         <x>11</x>
-        <y>22</y>
+        <y>30</y>
         <width>277</width>
         <height>25</height>
        </rect>
@@ -152,7 +152,7 @@
       <property name="geometry" >
        <rect>
         <x>300</x>
-        <y>22</y>
+        <y>30</y>
         <width>276</width>
         <height>25</height>
        </rect>
@@ -165,7 +165,7 @@
       <property name="geometry" >
        <rect>
         <x>300</x>
-        <y>50</y>
+        <y>58</y>
         <width>291</width>
         <height>64</height>
        </rect>
@@ -197,7 +197,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>50</y>
+        <y>58</y>
         <width>281</width>
         <height>58</height>
        </rect>
@@ -222,6 +222,11 @@
        </item>
       </layout>
      </widget>
+     <zorder>FileUseOptionsCheckBox</zorder>
+     <zorder>FileOverrideCheckBox</zorder>
+     <zorder>layoutWidget</zorder>
+     <zorder>layoutWidget</zorder>
+     <zorder>layoutWidget</zorder>
     </widget>
     <widget class="QGroupBox" name="groupBox_2" >
      <property name="geometry" >
@@ -229,7 +234,7 @@
        <x>10</x>
        <y>310</y>
        <width>601</width>
-       <height>191</height>
+       <height>201</height>
       </rect>
      </property>
      <property name="title" >
@@ -239,7 +244,7 @@
       <property name="geometry" >
        <rect>
         <x>300</x>
-        <y>20</y>
+        <y>30</y>
         <width>161</width>
         <height>22</height>
        </rect>
@@ -252,9 +257,9 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>50</y>
+        <y>60</y>
         <width>281</width>
-        <height>137</height>
+        <height>101</height>
        </rect>
       </property>
       <layout class="QGridLayout" >
@@ -285,16 +290,6 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0" >
-        <widget class="QLabel" name="label_6" >
-         <property name="text" >
-          <string>Jack client name</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1" >
-        <widget class="QLineEdit" name="JackNameLineEdit" />
-       </item>
        <item row="1" column="0" >
         <widget class="QLabel" name="label_4" >
          <property name="text" >
@@ -322,7 +317,7 @@
       <property name="geometry" >
        <rect>
         <x>300</x>
-        <y>50</y>
+        <y>60</y>
         <width>291</width>
         <height>102</height>
        </rect>
@@ -382,7 +377,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>20</y>
+        <y>30</y>
         <width>251</width>
         <height>22</height>
        </rect>
@@ -390,6 +385,28 @@
       <property name="text" >
        <string>Use QuteCsound options</string>
       </property>
+     </widget>
+     <widget class="QWidget" name="layoutWidget" >
+      <property name="geometry" >
+       <rect>
+        <x>10</x>
+        <y>170</y>
+        <width>411</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3" >
+       <item>
+        <widget class="QLabel" name="label_6" >
+         <property name="text" >
+          <string>Jack client name</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="JackNameLineEdit" />
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QCheckBox" name="DitherCheckBox" >
@@ -405,13 +422,13 @@
       <string>Dither</string>
      </property>
     </widget>
-    <widget class="QWidget" name="" >
+    <widget class="QWidget" name="layoutWidget" >
      <property name="geometry" >
       <rect>
        <x>10</x>
        <y>70</y>
        <width>591</width>
-       <height>25</height>
+       <height>29</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2" >
@@ -431,13 +448,13 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="" >
+    <widget class="QWidget" name="layoutWidget" >
      <property name="geometry" >
       <rect>
-       <x>11</x>
-       <y>11</y>
+       <x>10</x>
+       <y>10</y>
        <width>311</width>
-       <height>54</height>
+       <height>61</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout" >
@@ -485,7 +502,7 @@
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>339</width>
+        <width>331</width>
         <height>97</height>
        </rect>
       </property>
@@ -630,7 +647,7 @@
           <bool>true</bool>
          </property>
          <property name="text" >
-          <string>Autoplay when launched from file</string>
+          <string>Autoplay files when opened</string>
          </property>
         </widget>
        </item>
@@ -684,7 +701,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>20</y>
+        <y>30</y>
         <width>231</width>
         <height>24</height>
        </rect>
@@ -697,7 +714,7 @@
       <property name="geometry" >
        <rect>
         <x>30</x>
-        <y>50</y>
+        <y>60</y>
         <width>211</width>
         <height>25</height>
        </rect>
@@ -710,7 +727,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>80</y>
+        <y>90</y>
         <width>231</width>
         <height>25</height>
        </rect>
@@ -723,7 +740,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>110</y>
+        <y>120</y>
         <width>231</width>
         <height>25</height>
        </rect>
@@ -736,7 +753,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>140</y>
+        <y>150</y>
         <width>231</width>
         <height>25</height>
        </rect>
@@ -749,7 +766,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>170</y>
+        <y>180</y>
         <width>231</width>
         <height>31</height>
        </rect>
@@ -780,7 +797,7 @@
         <x>10</x>
         <y>50</y>
         <width>221</width>
-        <height>101</height>
+        <height>91</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
@@ -843,7 +860,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>20</y>
+        <y>30</y>
         <width>331</width>
         <height>71</height>
        </rect>
@@ -943,8 +960,8 @@
      <widget class="QWidget" name="layoutWidget" >
       <property name="geometry" >
        <rect>
-        <x>358</x>
-        <y>20</y>
+        <x>350</x>
+        <y>30</y>
         <width>161</width>
         <height>61</height>
        </rect>
@@ -975,9 +992,9 @@
      <widget class="QWidget" name="layoutWidget" >
       <property name="geometry" >
        <rect>
-        <x>530</x>
-        <y>20</y>
-        <width>62</width>
+        <x>520</x>
+        <y>30</y>
+        <width>74</width>
         <height>69</height>
        </rect>
       </property>
@@ -1021,7 +1038,7 @@
       <property name="geometry" >
        <rect>
         <x>10</x>
-        <y>20</y>
+        <y>30</y>
         <width>331</width>
         <height>30</height>
        </rect>
@@ -1067,7 +1084,7 @@
        <x>10</x>
        <y>0</y>
        <width>591</width>
-       <height>251</height>
+       <height>261</height>
       </rect>
      </property>
      <property name="title" >
@@ -1078,8 +1095,8 @@
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>581</width>
-        <height>221</height>
+        <width>571</width>
+        <height>233</height>
        </rect>
       </property>
       <layout class="QGridLayout" >
@@ -1252,7 +1269,7 @@
        <x>10</x>
        <y>260</y>
        <width>591</width>
-       <height>181</height>
+       <height>191</height>
       </rect>
      </property>
      <property name="title" >
@@ -1263,8 +1280,8 @@
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>581</width>
-        <height>156</height>
+        <width>571</width>
+        <height>162</height>
        </rect>
       </property>
       <layout class="QGridLayout" >
