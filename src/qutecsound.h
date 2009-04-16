@@ -38,11 +38,6 @@
 #include <Carbon/Carbon.h>
 #endif
 
-#ifdef WIN32
-// Needed for the CreateProcess function in execute()
-#include <windows.h>
-#endif
-
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
 #include <csound.hpp>
 #include <csPerfThread.hpp>

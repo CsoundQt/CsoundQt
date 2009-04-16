@@ -1187,6 +1187,9 @@ void qutecsound::render()
       return;
     }
   }
+#ifdef Q_OS_WIN32
+  m_options->fileOutputFilename.replace('\\', '/');
+#endif
   currentAudioFile = m_options->fileOutputFilename;
   runCsound(false);
 }
@@ -1208,6 +1211,7 @@ void qutecsound::openExternalEditor()
     }
   }
   options = "\"" + options + "\"";
+  QString waveeditor = "\"" + m_options->waveeditor + "\"";
   execute(m_options->waveeditor, options);
 }
 
@@ -1228,7 +1232,8 @@ void qutecsound::openExternalPlayer()
     }
   }
   options = "\"" + currentAudioFile + "\"";
-  execute(m_options->waveplayer, options);
+  QString waveplayer = "\"" + m_options->waveplayer + "\"";
+  execute(waveplayer, options);
 }
 
 void qutecsound::setHelpEntry()

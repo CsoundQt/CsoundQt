@@ -71,7 +71,8 @@ QString Options::generateCmdLineFlags(bool rt)
     if (fileInputFilenameActive)
       cmdline += " -i" + fileInputFilename + "";
     if (fileOutputFilenameActive or fileAskFilename) {
-      if (fileOutputFilename.startsWith("/"))
+      //if (fileOutputFilename.startsWith("/"))
+      if (fileOutputFilename.contains('/'))
         cmdline += " -o" + fileOutputFilename + "";
       else
         cmdline += " -o" + csdPath + fileOutputFilename + "";
