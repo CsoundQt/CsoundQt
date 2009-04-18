@@ -68,7 +68,7 @@
     </rect>
    </property>
    <property name="currentIndex" >
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab_2" >
     <attribute name="title" >
@@ -392,7 +392,7 @@
         <x>10</x>
         <y>170</y>
         <width>411</width>
-        <height>24</height>
+        <height>25</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3" >
@@ -647,7 +647,7 @@
           <bool>true</bool>
          </property>
          <property name="text" >
-          <string>Autoplay files when opened</string>
+          <string>Autoplay files when launched from file</string>
          </property>
         </widget>
        </item>

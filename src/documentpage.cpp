@@ -36,6 +36,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   readOnly = false;
   errorMarked = false;
   connect(document(), SIGNAL(contentsChanged()), this, SLOT(changed()));
+//   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(moved()));
 }
 
 DocumentPage::~DocumentPage()
@@ -569,6 +570,17 @@ QString DocumentPage::getFilePath()
   return fileName.left(fileName.lastIndexOf("/"));
 }
 
+int DocumentPage::currentLine()
+{
+  QTextCursor cursor = textCursor();
+//   cursor.clearSelection();
+//   cursor.setPosition(0,QTextCursor::KeepAnchor);
+//   QString section = cursor.selectedText();
+//   qDebug() << section;
+//   return section.count('\n');
+  return cursor.blockNumber() + 1;
+}
+
 void DocumentPage::setMacWidgetsText(QString widgetText)
 {
 //   qDebug() << "DocumentPage::setMacWidgetsText: ";
@@ -687,3 +699,9 @@ void DocumentPage::changed()
 {
   unmarkErrorLines();
 }
+
+// void DocumentPage::moved()
+// {
+//   qDebug() << "DocumentPage::moved()" << currentLine();
+//   emit(currentLineChanged(currentLine()));
+// }

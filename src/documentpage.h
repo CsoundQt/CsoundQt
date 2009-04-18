@@ -53,6 +53,7 @@ class DocumentPage : public QTextEdit
     void unmarkErrorLines();
     void updateCsladspaText(QString text);
     QString getFilePath();
+    int currentLine();
 
 //     QTextDocument *textDocument;
     QString fileName;
@@ -92,6 +93,10 @@ class DocumentPage : public QTextEdit
 
   private slots:
     void changed();
+//     void moved();
+
+  signals:
+    void currentLineChanged(int);
 
 };
 

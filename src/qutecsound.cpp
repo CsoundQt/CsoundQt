@@ -59,6 +59,9 @@ qutecsound::qutecsound(QStringList fileNames)
   ud->PERF_STATUS = 0;
   ud->qcs = this;
 
+  lineNumberLabel = new QLabel("Line 1");
+  statusBar()->addPermanentWidget(lineNumberLabel);
+
   m_options = new Options();
 
   m_console = new DockConsole(this);
@@ -1301,6 +1304,7 @@ void qutecsound::syntaxCheck()
   QTextCursor cursor = textEdit->textCursor();
   cursor.select(QTextCursor::LineUnderCursor);
   QStringList words = cursor.selectedText().split(QRegExp("\\b"));
+  showLineNumber(textEdit->currentLine());
   foreach( QString word, words) {
        // We need to remove all not possibly opcode
     word.remove(QRegExp("[^\\d\\w]"));
@@ -1600,6 +1604,11 @@ void qutecsound::widgetDockStateChanged(bool topLevel)
 void qutecsound::widgetDockLocationChanged(Qt::DockWidgetArea area)
 {
   qDebug("qutecsound::widgetDockLocationChanged() %i", area);
+}
+
+void qutecsound::showLineNumber(int lineNumber)
+{
+  lineNumberLabel->setText(tr("Line %1").arg(lineNumber));
 }
 
 void qutecsound::createActions()
@@ -1943,6 +1952,8 @@ void qutecsound::connectActions()
   disconnect(widgetPanel, SIGNAL(resized(QSize)),0,0);
   connect(widgetPanel, SIGNAL(resized(QSize)),
           textEdit, SLOT(setWidgetPanelSize(QSize)) );
+  disconnect(textEdit, SIGNAL(currentLineChanged(int)), 0, 0);
+  connect(textEdit, SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
 }
 
 void qutecsound::createMenus()

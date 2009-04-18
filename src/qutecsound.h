@@ -184,6 +184,7 @@ class qutecsound:public QMainWindow
     void dispatchOfflineQueues();
     void widgetDockStateChanged(bool topLevel);
     void widgetDockLocationChanged(Qt::DockWidgetArea area);
+    void showLineNumber(int lineNumber);
 
   private:
     void createActions();
@@ -307,6 +308,7 @@ class qutecsound:public QMainWindow
     UtilitiesDialog *utilitiesDialog;
 
     QIcon modIcon;
+    QLabel *lineNumberLabel;
 
 #ifdef USE_LIBSNDFILE
     SndfileHandle *outfile;
