@@ -2047,6 +2047,8 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/SF_Play_from_buffer_2.csd");
   exampleFiles.append(":/examples/SF_Play_from_HD.csd");
   exampleFiles.append(":/examples/SF_Play_from_HD_2.csd");
+  exampleFiles.append(":/examples/8_Chn_Player.csd");
+  exampleFiles.append(":/examples/Simple_Convolution.csd");
   exampleFiles.append(":/examples/Circle.csd");
   exampleFiles.append(":/examples/Lineedit_Widget.csd");
   exampleFiles.append(":/examples/Rms.csd");
