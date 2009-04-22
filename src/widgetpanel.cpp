@@ -1280,6 +1280,7 @@ void WidgetPanel::updateData()
   foreach (QuteScope *scope, scopeWidgets) {
     scope->updateData();
   }
+    //FIXME this is crashing on exit with Scope widget(without major consequence...)
   QTimer::singleShot(30, this, SLOT(updateData()));
 }
 

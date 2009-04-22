@@ -58,10 +58,10 @@ qutecsound::qutecsound(QStringList fileNames)
   ud = (CsoundUserData *)malloc(sizeof(CsoundUserData));
   ud->PERF_STATUS = 0;
   ud->qcs = this;
-
   lineNumberLabel = new QLabel("Line 1");
   statusBar()->addPermanentWidget(lineNumberLabel);
 
+  curPage = -1;
   m_options = new Options();
 
   m_console = new DockConsole(this);
@@ -86,7 +86,7 @@ qutecsound::qutecsound(QStringList fileNames)
           this, SLOT(widgetDockLocationChanged(Qt::DockWidgetArea)));
 
   readSettings();
-
+  
   bool widgetsVisible = !widgetPanel->isHidden();
   if (widgetsVisible)
     widgetPanel->hide();  // Hide until QuteCsound has finished loading
@@ -100,7 +100,6 @@ qutecsound::qutecsound(QStringList fileNames)
 
   documentTabs = new QTabWidget (this);
   connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
-  curPage = -1;
   setCentralWidget(documentTabs);
   closeTabButton = new QToolButton(documentTabs);
   closeTabButton->setDefaultAction(closeTabAct);
@@ -1589,9 +1588,9 @@ void qutecsound::dispatchOfflineQueues()
 void qutecsound::widgetDockStateChanged(bool topLevel)
 {
 //   qDebug("qutecsound::widgetDockStateChanged()");
-  qApp->processEvents();
   if (documentPages.size() < 1)
     return; //necessary check, since widget panel is created early by consructor
+  qApp->processEvents();
   if (topLevel) {
 //     widgetPanel->setGeometry(documentPages[curPage]->getWidgetPanelGeometry());
     QRect geometry = documentPages[curPage]->getWidgetPanelGeometry();
@@ -1991,6 +1990,7 @@ void qutecsound::createMenus()
   controlMenu->addAction(stopAct);
   controlMenu->addAction(runAct);
   controlMenu->addAction(renderAct);
+  controlMenu->addAction(recAct);
   controlMenu->addAction(externalEditorAct);
   controlMenu->addAction(externalPlayerAct);
 
@@ -2048,6 +2048,7 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/SF_Play_from_HD.csd");
   exampleFiles.append(":/examples/SF_Play_from_HD_2.csd");
   exampleFiles.append(":/examples/8_Chn_Player.csd");
+  exampleFiles.append(":/examples/SF_Record.csd");
   exampleFiles.append(":/examples/Simple_Convolution.csd");
   exampleFiles.append(":/examples/Circle.csd");
   exampleFiles.append(":/examples/Lineedit_Widget.csd");
@@ -2536,6 +2537,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   statusBar()->showMessage(tr("File loaded"), 2000);
   setWidgetPanelGeometry();
   if (runNow && m_options->autoPlay) {
+    runAct->setChecked(true);
     runCsound();
   }
   return true;
@@ -2753,10 +2755,12 @@ int qutecsound::isOpen(QString fileName)
 {
   bool open = false;
   int i = 0;
-  for (i = 0; i < documentPages.size(); i++) {
-    if (documentPages[i]->fileName == fileName) {
-      open = true;
-      break;
+  if (curPage != -1) { // Is this a necessary check? 
+    for (i = 0; i < documentPages.size(); i++) {
+      if (documentPages[i]->fileName == fileName) {
+        open = true;
+        break;
+      }
     }
   }
   return (open ? i: -1);

@@ -325,18 +325,18 @@ class FileOpenEater : public QObject
 {
   Q_OBJECT
   public:
-    FileOpenEater() {noEvent=true;}
+    FileOpenEater() {noEvent=true; mainWindow = NULL;}
     qutecsound *mainWindow;
     bool noEvent;
   protected:
     bool eventFilter(QObject *obj, QEvent *event)
     {
       if (event->type() == QEvent::FileOpen) {
-        noEvent=false;
-        QFileOpenEvent *fileEvent = static_cast<QFileOpenEvent*>(event);
-        mainWindow->loadFile(fileEvent->file(), true);
-// QMessageBox::information(0,"Meshlab",fileEvent->file());
-        return true;
+          noEvent=false;
+          QFileOpenEvent *fileEvent = static_cast<QFileOpenEvent*>(event);
+          mainWindow->loadFile(fileEvent->file(), true);
+          qDebug() << "FileOpenEater::eventFilter " << fileEvent->file();
+          return true;
       } else {
 // standard event processing
         return QObject::eventFilter(obj, event);

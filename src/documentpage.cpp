@@ -512,8 +512,8 @@ void DocumentPage::markErrorLines(QList<int> lines)
   cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
   int lineCount = 1;
   foreach(int line, lines) {
-    // Csound reports the line numbers incorrectly...
-    while (lineCount < line - 1 ) {
+    // Csound reports the line numbers incorrectly... but only on my machine apparently...
+    while (lineCount < line) {
       lineCount++;
 //       cur.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
       cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
