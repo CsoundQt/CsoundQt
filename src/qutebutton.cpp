@@ -63,7 +63,7 @@ QString QuteButton::getWidgetLine()
   line += m_type + " ";
   line +=  QString::number(m_value,'f', 6) + " ";
   line += "\"" + m_name + "\" ";
-  line += "\"" + static_cast<QPushButton *>(m_widget)->text().replace("\n", "\u00AC") + "\" ";
+  line += "\"" + static_cast<QPushButton *>(m_widget)->text().replace(QRegExp("[\n\r]"), "\u00AC") + "\" ";
   line += "\"" + m_filename + "\" ";
   line += m_eventLine;
 //   qDebug("QuteButton::getWidgetLine() %s", line.toStdString().c_str());

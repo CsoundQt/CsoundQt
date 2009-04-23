@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
   
   FileOpenEater *filterObj=new FileOpenEater();
   app.installEventFilter(filterObj);
-  app.processEvents();
+  //app.processEvents();
 //  QPixmap pixmap(":/qtcs.png");
 //  QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
 //  splash.show();
@@ -56,9 +56,9 @@ int main(int argc, char *argv[])
   app.installTranslator(&translator);
 
   qutecsound * mw = new qutecsound(fileNames);
-  filterObj->mainWindow=mw;
 //  splash.finish(mw);
   mw->show();
+  filterObj->setMainWindow(mw);
   return app.exec();
 }
 

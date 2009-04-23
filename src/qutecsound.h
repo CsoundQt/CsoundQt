@@ -65,7 +65,8 @@ class qutecsound:public QMainWindow
 {
   Q_OBJECT
 
-  friend class WidgetPanel; //to pass ud
+    friend class WidgetPanel; //to pass ud
+    friend class FileOpenEater; //to pass curPage
   public:
     qutecsound(QStringList fileNames);
     ~qutecsound();
@@ -325,16 +326,23 @@ class FileOpenEater : public QObject
 {
   Q_OBJECT
   public:
-    FileOpenEater() {noEvent=true; mainWindow = NULL;}
-    qutecsound *mainWindow;
+    FileOpenEater() {noEvent=true; mwSet = false;}
+    void setMainWindow(qutecsound *mainWindow) {m_mw = mainWindow; mwSet = true;}
+
     bool noEvent;
+    QList<QFileOpenEvent> eventQueue;
   protected:
     bool eventFilter(QObject *obj, QEvent *event)
     {
       if (event->type() == QEvent::FileOpen) {
           noEvent=false;
           QFileOpenEvent *fileEvent = static_cast<QFileOpenEvent*>(event);
-          mainWindow->loadFile(fileEvent->file(), true);
+          if (mwSet == false || m_mw->curPage == -1) {
+              eventQueue << *fileEvent;
+          }
+          else {
+              m_mw->loadFile(fileEvent->file(), true);
+          }
           qDebug() << "FileOpenEater::eventFilter " << fileEvent->file();
           return true;
       } else {
@@ -342,6 +350,9 @@ class FileOpenEater : public QObject
         return QObject::eventFilter(obj, event);
       }
     }
+
+    qutecsound *m_mw;
+    bool mwSet;
 };
 
 #endif

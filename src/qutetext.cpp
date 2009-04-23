@@ -194,9 +194,8 @@ QString QuteText::getWidgetLine()
   line += static_cast<QFrame*>(m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
 //   line += ((QLabel *)m_widget)->toPlainText();
   QString outText = m_text;
-  outText.replace("\n", "\u00AC");
+  outText.replace(QRegExp("[\n\r]"), "\u00AC");
   line += outText;
-//   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
 
@@ -305,7 +304,7 @@ void QuteText::applyProperties()
 {
   m_font = font->currentFont().family();
   m_fontSize = fontSize->itemData(fontSize->currentIndex()).toInt();
-  setText(text->toPlainText().replace("\n", "\u00AC"));
+  setText(text->toPlainText().replace(QRegExp("[\n\r]"), "\u00AC"));
   m_widget->setAutoFillBackground(bg->isChecked());
   static_cast<QFrame*>(m_widget)->setFrameShape(border->isChecked()?  QFrame::Box : QFrame::NoFrame);
   setAlignment(alignment->currentIndex());
@@ -546,7 +545,7 @@ QString QuteScrollNumber::getWidgetLine()
   line += m_widget->autoFillBackground()? "background ":"nobackground ";
   line += static_cast<QFrame*>(m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
   QString outText = m_text;
-  outText.replace("\n", "\u00AC");
+  outText.replace(QRegExp("[\n\r]"), "\u00AC");
   line += outText;
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
   return line;

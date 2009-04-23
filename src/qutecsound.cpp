@@ -2755,13 +2755,11 @@ int qutecsound::isOpen(QString fileName)
 {
   bool open = false;
   int i = 0;
-  if (curPage != -1) { // Is this a necessary check? 
-    for (i = 0; i < documentPages.size(); i++) {
+  for (i = 0; i < documentPages.size(); i++) {
       if (documentPages[i]->fileName == fileName) {
         open = true;
         break;
       }
-    }
   }
   return (open ? i: -1);
 }
