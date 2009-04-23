@@ -25,7 +25,8 @@
 
 #include <QStringList>
 
-class ConfigLists{
+class ConfigLists
+{
   public:
     ConfigLists();
 
@@ -40,7 +41,6 @@ class ConfigLists{
     QStringList rtMidiNames;
     QStringList languages;
     QStringList languageCodes;
-
 };
 
 #endif

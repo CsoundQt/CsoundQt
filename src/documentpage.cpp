@@ -644,6 +644,14 @@ void DocumentPage::setWidgetPanelSize(QSize size)
 void DocumentPage::comment()
 {
   QTextCursor cursor = textCursor();
+  if (cursor.position() > cursor.anchor()) {
+    int temp = cursor.anchor();
+    cursor.setPosition(cursor.position());
+    cursor.setPosition(temp, QTextCursor::KeepAnchor);
+  }
+  if (!cursor.atBlockStart()) {
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+  }
   QString text = cursor.selectedText();
   text.prepend(";");
   text.replace(QChar(QChar::ParagraphSeparator), QString("\n;"));
@@ -654,7 +662,16 @@ void DocumentPage::comment()
 void DocumentPage::uncomment()
 {
   QTextCursor cursor = textCursor();
+  if (cursor.position() > cursor.anchor()) {
+    int temp = cursor.anchor();
+    cursor.setPosition(cursor.position());
+    cursor.setPosition(temp, QTextCursor::KeepAnchor);
+  }
   QString text = cursor.selectedText();
+  if (!cursor.atBlockStart() && !text.startsWith(";")) {
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+    text = cursor.selectedText();
+  }
   if (text.startsWith(";"))
     text.remove(0,1);
   text.replace(QChar(QChar::ParagraphSeparator), QString("\n"));
@@ -667,6 +684,14 @@ void DocumentPage::indent()
 {
   qDebug("DocumentPage::indent");
   QTextCursor cursor = textCursor();
+  if (cursor.position() > cursor.anchor()) {
+    int temp = cursor.anchor();
+    cursor.setPosition(cursor.position());
+    cursor.setPosition(temp, QTextCursor::KeepAnchor);
+  }
+  if (!cursor.atBlockStart()) {
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+  }
   QString text = cursor.selectedText();
 //   if (text[0] == '\n')
   text.prepend("\t"); //TODO check if previous character is \n
@@ -678,6 +703,14 @@ void DocumentPage::indent()
 void DocumentPage::unindent()
 {
   QTextCursor cursor = textCursor();
+  if (cursor.position() > cursor.anchor()) {
+    int temp = cursor.anchor();
+    cursor.setPosition(cursor.position());
+    cursor.setPosition(temp, QTextCursor::KeepAnchor);
+  }
+  if (!cursor.atBlockStart()) {
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+  }
   QString text = cursor.selectedText();
   if (text.startsWith("\t"))
     text.remove(0,1);
