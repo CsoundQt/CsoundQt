@@ -682,7 +682,7 @@ void DocumentPage::uncomment()
 
 void DocumentPage::indent()
 {
-  qDebug("DocumentPage::indent");
+//   qDebug("DocumentPage::indent");
   QTextCursor cursor = textCursor();
   if (cursor.position() > cursor.anchor()) {
     int temp = cursor.anchor();

@@ -1287,6 +1287,7 @@ void qutecsound::about()
   QString text = tr("by: Andres Cabrera\nReleased under the LGPLv2 or GPLv3\nVersion %1\n").arg(QUTECSOUND_VERSION);
   text += tr("French translation:\nFrançois Pinot\n");
   text += tr("German translation:\nJoachim Heintz\n");
+  text += tr("Portuguese translation:\nVictor Lazzarini\n");
   text += QString("qutecsound.sourceforge.net");
   QMessageBox::about(this, tr("About QuteCsound"), text);
 }
