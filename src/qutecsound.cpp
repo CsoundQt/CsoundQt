@@ -285,7 +285,7 @@ void qutecsound::closeEvent(QCloseEvent *event)
 
 void qutecsound::newFile()
 {
-  if (m_options->defaultCsdActive && !m_options->defaultCsd.isEmpty()) {
+  if (m_options->defaultCsdActive && m_options->defaultCsd.endsWith(".csd")) {
     loadFile(m_options->defaultCsd);
   }
   else {
