@@ -306,6 +306,11 @@ void ConfigDialog::browseIncdir()
 void ConfigDialog::browseDefaultCsd()
 {
   browseFile(m_options->defaultCsd);
+  if (!m_options->defaultCsd.endsWith(".csd")) {
+    QMessageBox::warning(this, tr("QuteCsound"),
+                         tr("Only files with extension .csd are accepted"));
+    return;
+  }
   defaultCsdLineEdit->setText(m_options->defaultCsd);
 }
 
