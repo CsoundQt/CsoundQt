@@ -28,6 +28,8 @@
 
 // Time in milliseconds for widget and console messages updates
 #define QCS_QUEUETIMER_TIME 50
+// Maximum pfields QuteCsound can accept for realtime score events
+#define EVENTS_MAX_PFIELDS 256
 
 #ifdef LINUX
 #define DEFAULT_HTML_DIR "/usr/local/share/doc/csound/html"
@@ -83,7 +85,7 @@ struct CsoundUserData{
   int result; //result of csoundCompile()
   CSOUND *csound; // instance of csound
   /*performance status*/
-  bool PERF_STATUS; //0= stopped 1=running
+  int PERF_STATUS; //0= stopped 1=running -1=stopping
   qutecsound *qcs; //pass main application to check widgets
   MYFLT zerodBFS; //0dBFS value
   long outputBufferSize;
@@ -127,9 +129,9 @@ class RingBuffer
       //lock = true;
       buffer[currentPos] = value;
       currentPos++;
-      if (currentPos == currentReadPos) {
-        qDebug("RingBuffer: Buffer overflow!");
-      }
+//       if (currentPos == currentReadPos) {
+//         qDebug("RingBuffer: Buffer overflow!");
+//       }
       if (currentPos >= size)
         currentPos = 0;
       mutex.unlock();

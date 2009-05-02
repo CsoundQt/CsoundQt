@@ -156,6 +156,7 @@ void WidgetPanel::setValue(QString channelName, QString value)
   for (int i = 0; i < widgets.size(); i++) {
     if (widgets[i]->getChannelName() == channelName) {
       widgets[i]->setValue(value);
+//       qDebug() << "WidgetPanel::setValue " << value;
     }
 //     if (widgets[i]->getChannel2Name() == channelName) {
 //       widgets[i]->setValue2(value);
@@ -558,6 +559,7 @@ void WidgetPanel::newValue(QPair<QString, QString> channelValue)
 
 void WidgetPanel::processNewValues()
 {
+  // Apply values received
 //   qDebug("WidgetPanel::processNewValues");
   QList<QString> channelNames;
   valueMutex.lock();

@@ -55,15 +55,18 @@ qutecsound::qutecsound(QStringList fileNames)
   setWindowIcon(QIcon(":/images/qtcs.png"));
   textEdit = NULL;
   QLocale::setDefault(QLocale::system());  //Does this take care of the decimal separator for different locales?
+  // Initialize user data pointer passed to Csound
   ud = (CsoundUserData *)malloc(sizeof(CsoundUserData));
   ud->PERF_STATUS = 0;
   ud->qcs = this;
-  lineNumberLabel = new QLabel("Line 1");
-  statusBar()->addPermanentWidget(lineNumberLabel);
+  pFields = (MYFLT *) calloc(EVENTS_MAX_PFIELDS, sizeof(MYFLT)); // Maximum number of p-fields for events
 
   curPage = -1;
   m_options = new Options();
 
+  // Create GUI panels
+  lineNumberLabel = new QLabel("Line 1"); // Line number display
+  statusBar()->addPermanentWidget(lineNumberLabel); // This must be done before a file is loaded
   m_console = new DockConsole(this);
   m_console->setObjectName("m_console");
 //   m_console->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -86,8 +89,8 @@ qutecsound::qutecsound(QStringList fileNames)
           this, SLOT(widgetDockLocationChanged(Qt::DockWidgetArea)));
 
   readSettings();
-  
-  bool widgetsVisible = !widgetPanel->isHidden();
+
+  bool widgetsVisible = !widgetPanel->isHidden(); // Must be after readSettings() to save last state
   if (widgetsVisible)
     widgetPanel->hide();  // Hide until QuteCsound has finished loading
   utilitiesDialog = new UtilitiesDialog(this, m_options/*, _configlists*/);
@@ -104,6 +107,8 @@ qutecsound::qutecsound(QStringList fileNames)
   closeTabButton = new QToolButton(documentTabs);
   closeTabButton->setDefaultAction(closeTabAct);
   documentTabs->setCornerWidget(closeTabButton);
+  modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
+  modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
 
   fillFileMenu(); //Must be placed after readSettings to include recent Files
   if (m_options->opcodexmldir == "") {
@@ -114,13 +119,7 @@ qutecsound::qutecsound(QStringList fileNames)
   m_highlighter = new Highlighter();
   configureHighlighter();
 
-  queueTimer = new QTimer(this);
-  queueTimer->setSingleShot(true);
-  connect(queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
-  offlineTimer = new QTimer(this);
-  offlineTimer->setSingleShot(true);
-  connect(offlineTimer, SIGNAL(timeout()), this, SLOT(dispatchOfflineQueues()));
-
+  // Open files saved from last session
   if (!lastFiles.isEmpty()) {
     foreach (QString lastFile, lastFiles) {
       if (lastFile!="" and !lastFile.startsWith("untitled")) {
@@ -128,29 +127,29 @@ qutecsound::qutecsound(QStringList fileNames)
       }
     }
   }
+  // Open files passed in the command line. Only valid for non OS X platforms
   foreach (QString fileName, fileNames) {
     if (fileName!="") {
       loadFile(fileName, true);
     }
   }
-  if (widgetsVisible) {
+  if (widgetsVisible) { // Reshow widget panel if necessary
     widgetPanel->show();
   }
   showWidgetsAct->setChecked(widgetsVisible);  // Button will initialize to current state of panel
   showConsoleAct->setChecked(!m_console->isHidden());  // Button will initialize to current state of panel
   showHelpAct->setChecked(!helpPanel->isHidden());  // Button will initialize to current state of panel
 
-  if (documentPages.size() == 0) {
+  if (documentPages.size() == 0) { // No files yet open. Open default
     newFile();
   }
 
   changeFont();
-  modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
-  modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
 
   helpPanel->docDir = m_options->csdocdir;
   QString index = m_options->csdocdir + QString("/index.html");
   helpPanel->loadFile(index);
+
 
   applySettings();
 
@@ -169,7 +168,11 @@ qutecsound::qutecsound(QStringList fileNames)
   // Create only once
   csound=csoundCreate(0);
 #endif
-  dispatchOfflineQueues(); //start offline queue dispatcher counter
+
+  queueTimer = new QTimer(this);
+  queueTimer->setSingleShot(true);
+  connect(queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
+  dispatchQueues(); //start queue dispatcher
 }
 
 qutecsound::~qutecsound()
@@ -177,8 +180,6 @@ qutecsound::~qutecsound()
   qDebug() << "qutecsound::~qutecsound()";
   // This function is not called... see closeEvent()
 }
-
-void closeEvent();
 
 void qutecsound::messageCallback_NoThread(CSOUND *csound,
                                           int /*attr*/,
@@ -277,6 +278,7 @@ void qutecsound::closeEvent(QCloseEvent *event)
     free(ud);
     delete closeTabButton;
     close();
+    free(pFields);
     event->accept();
   } else {
     event->ignore();
@@ -703,7 +705,10 @@ void qutecsound::exportCabbage()
 
 void qutecsound::runCsound(bool realtime)
 {
-  if (ud->PERF_STATUS == 1) {
+  if (ud->PERF_STATUS == -1) { //Currently stopping, do nothing
+    return;
+  }
+  else if (ud->PERF_STATUS == 1) { //If running, stop
     stop();
     return;
   }
@@ -733,10 +738,8 @@ void qutecsound::runCsound(bool realtime)
   if (documentPages[curPage]->fileName.contains('/')) {
     m_options->csdPath =
         documentPages[curPage]->fileName.left(documentPages[curPage]->fileName.lastIndexOf('/'));
-    // qDebug() << m_options->csdPath;
     QString command = "cd \"" + m_options->csdPath +"\"";
-    //system(command.toStdString().c_str());
-	QProcess::execute(command);
+    QProcess::execute(command);
   }
   else {
     m_options->csdPath = "";
@@ -865,11 +868,9 @@ void qutecsound::runCsound(bool realtime)
 
     qDebug("Csound compiled %i", ud->result);
 
-    ud->PERF_STATUS = 1; // dispatch queues must be in running state
-    dispatchQueues(); //To dispatch messages produced in compilation.
     if (ud->result!=CSOUND_SUCCESS or variable != CSOUND_SUCCESS) {
       qDebug("Csound compile failed!");
-      ud->PERF_STATUS = 0;  //Csound is stopped and cleaned up by stopCsound() called from dispatchQueues()
+      stop();
       free(argv);
       markErrorLine();
       return;
@@ -878,6 +879,7 @@ void qutecsound::runCsound(bool realtime)
       showWidgetsAct->setChecked(true);
       widgetPanel->setVisible(true);
     }
+    ud->PERF_STATUS = 1;
     if (m_options->invalueEnabled and m_options->enableWidgets) {
       csoundSetInputValueCallback(csound, &qutecsound::inputValueCallback);
       csoundSetOutputValueCallback(csound, &qutecsound::outputValueCallback);
@@ -894,8 +896,6 @@ void qutecsound::runCsound(bool realtime)
     ud->qcs->channelNames.resize(numWidgets*2);
     ud->qcs->values.resize(numWidgets*2);
     ud->qcs->stringValues.resize(numWidgets*2);
-    offlineTimer->stop();
-    queueTimer->start(QCS_QUEUETIMER_TIME);
     if(m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
       perfThread->Play();
@@ -921,7 +921,8 @@ void qutecsound::runCsound(bool realtime)
           processEventQueue(ud);
         }
       }
-      stop();
+      ud->PERF_STATUS = 0; // Confirm that Csound has stopped
+      stop();  // To flush pending queues
 #ifdef MACOSX
 // Put menu bar back
       SetMenuBar(menuBarHandle);
@@ -1001,18 +1002,23 @@ void qutecsound::runCsound(bool realtime)
 
 void qutecsound::stop()
 {
-//   qDebug("qutecsound::stop()");
-  if (offlineTimer->isActive())
-    offlineTimer->stop();
-  offlineTimer->start(QCS_QUEUETIMER_TIME);
+  // Must guarantee that csound has stopped when it returns
+  qDebug("qutecsound::stop()");
   if (ud->PERF_STATUS == 1) {
-    ud->PERF_STATUS = 0;
+    stopCsound();
   }
-  else {
-    runAct->setChecked(false);
-    recAct->setChecked(false);
-    return;
+  foreach (QString msg, messageQueue) { //Flush pending messages
+    m_console->appendMessage(msg);
+    widgetPanel->appendMessage(msg);
   }
+  if (!m_options->thread) {
+    while (ud->PERF_STATUS == -1) {
+      ;
+      //TODO: wait here?
+    }
+  }
+  runAct->setChecked(false);
+  recAct->setChecked(false);
   if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
     //widgetPanel->setVisible(false);
   }
@@ -1020,9 +1026,8 @@ void qutecsound::stop()
 
 void qutecsound::stopCsound()
 {
-//   qDebug("qutecsound::stopCsound()");
-  runAct->setChecked(false);
-  recAct->setChecked(false);
+  qDebug("qutecsound::stopCsound()");
+  ud->PERF_STATUS = -1;
   if (m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
 //       perfThread->ScoreEvent(0, 'e', 0, 0);
@@ -1040,14 +1045,16 @@ void qutecsound::stopCsound()
 
 #endif
     csoundCleanup(csound);
+    ud->PERF_STATUS = 0;
   }
   else {
     csoundStop(csound);
     csoundCleanup(csound);
+    ud->PERF_STATUS = 0;
   }
 #ifdef MACOSX
 // Put menu bar back
-    SetMenuBar(menuBarHandle);
+  SetMenuBar(menuBarHandle);
 #endif
 #ifdef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(csound);
@@ -1503,87 +1510,64 @@ void qutecsound::runUtility(QString flags)
 void qutecsound::dispatchQueues()
 {
 //   qDebug("qutecsound::dispatchQueues()");
-//   csoundLockMutex(perfMutex);
-  while (true) {
-    messageMutex.lock();
-    if (messageQueue.isEmpty()) {
-      messageMutex.unlock();
-      break;
-    }
-    QString msg = messageQueue.takeFirst();
-    messageMutex.unlock();
-    m_console->appendMessage(msg);
-    widgetPanel->appendMessage(msg);
-//     qApp->processEvents();
-  }
-  m_console->refresh();
-//  widgetPanel->refresh(); // Doesn't work... ??
-//   QList<QString> channels = outValueQueue.keys();
-//   foreach (QString channel, channels) {
-//     widgetPanel->setValue(channel, outValueQueue[channel]);
-//   }
-//   outValueQueue.clear();
-
-  stringValueMutex.lock();
-  QList<QString> channels = outStringQueue.keys();
-  foreach (QString channel, channels) {
-    widgetPanel->setValue(channel, outStringQueue[channel]);
-  }
-  outStringQueue.clear();
-  stringValueMutex.unlock();
-
   widgetPanel->processNewValues();
-  processEventQueue(ud);
-//   csoundUnlockMutex(perfMutex);
-  if (ud->PERF_STATUS == 0) {
-//     qDebug("qutecsound::dispatchQueues() stop");
-    stopCsound();
-    foreach (QString msg, messageQueue) {
+  if (ud->PERF_STATUS == 1) {
+    while (true) {
+      messageMutex.lock();
+      if (messageQueue.isEmpty()) {
+        messageMutex.unlock();
+        break;
+      }
+      QString msg = messageQueue.takeFirst();
+      messageMutex.unlock();
       m_console->appendMessage(msg);
       widgetPanel->appendMessage(msg);
+  //     qApp->processEvents();
     }
-    offlineTimer->start(QCS_QUEUETIMER_TIME);
-    return;
-  }
-  while (!newCurveBuffer.isEmpty()) {
-    Curve * curve = newCurveBuffer.pop();
-// //     qDebug("qutecsound::dispatchQueues() %i-%s", index, curve->get_caption().toStdString().c_str());
-      widgetPanel->newCurve(curve);
-  }
-  if (curveBuffer.size() > 32) {
-    qDebug("qutecsound::dispatchQueues() WARNING: curve update buffer too large!");
-    curveBuffer.resize(32);
-  }
-  foreach (WINDAT * windat, curveBuffer){
-    Curve *curve = widgetPanel->getCurveById(windat->windid);
-    if (curve != 0) {
-//       qDebug("qutecsound::dispatchQueues() %s -- %s",windat->caption, curve->get_caption().toStdString().c_str());
-      curve->set_data(windat->fdata);
-      curve->set_size(windat->npts);      // number of points
-      curve->set_caption(QString(windat->caption)); // title of curve
-  //     curve->set_polarity(windat->polarity); // polarity
-      curve->set_max(windat->max);        // curve max
-      curve->set_min(windat->min);        // curve min
-      curve->set_absmax(windat->absmax);     // abs max of above
-  //     curve->set_y_scale(windat->y_scale);    // Y axis scaling factor
-      widgetPanel->setCurveData(curve);
+    m_console->refresh();
+  //  widgetPanel->refresh(); // Doesn't work... ??
+  //   QList<QString> channels = outValueQueue.keys();
+  //   foreach (QString channel, channels) {
+  //     widgetPanel->setValue(channel, outValueQueue[channel]);
+  //   }
+  //   outValueQueue.clear();
+
+    stringValueMutex.lock();
+    QStringList channels = outStringQueue.keys();
+    for  (int i = 0; i < channels.size(); i++) { //TODO is there an iterator in Qt which can do this better?
+      widgetPanel->setValue(channels[i], outStringQueue[channels[i]]);
     }
-    curveBuffer.remove(curveBuffer.indexOf(windat));
+    outStringQueue.clear();
+    stringValueMutex.unlock();
+    processEventQueue(ud);
+  //   csoundUnlockMutex(perfMutex);
+    while (!newCurveBuffer.isEmpty()) {
+      Curve * curve = newCurveBuffer.pop();
+  // //     qDebug("qutecsound::dispatchQueues() %i-%s", index, curve->get_caption().toStdString().c_str());
+        widgetPanel->newCurve(curve);
+    }
+    if (curveBuffer.size() > 32) {
+      qDebug("qutecsound::dispatchQueues() WARNING: curve update buffer too large!");
+      curveBuffer.resize(32);
+    }
+    foreach (WINDAT * windat, curveBuffer){
+      Curve *curve = widgetPanel->getCurveById(windat->windid);
+      if (curve != 0) {
+  //       qDebug("qutecsound::dispatchQueues() %s -- %s",windat->caption, curve->get_caption().toStdString().c_str());
+        curve->set_data(windat->fdata);
+        curve->set_size(windat->npts);      // number of points
+        curve->set_caption(QString(windat->caption)); // title of curve
+    //     curve->set_polarity(windat->polarity); // polarity
+        curve->set_max(windat->max);        // curve max
+        curve->set_min(windat->min);        // curve min
+        curve->set_absmax(windat->absmax);     // abs max of above
+    //     curve->set_y_scale(windat->y_scale);    // Y axis scaling factor
+        widgetPanel->setCurveData(curve);
+      }
+      curveBuffer.remove(curveBuffer.indexOf(windat));
+    }
   }
   queueTimer->start(QCS_QUEUETIMER_TIME); //will launch this function again later
-}
-
-void qutecsound::dispatchOfflineQueues()
-{
-//   qDebug("qutecsound::dispatchOfflineQueues()");
-//   QList<QString> channels = outStringQueue.keys();
-//   QList<QString> channels = outStringQueue.keys();
-//   foreach (QString channel, channels) {
-//     widgetPanel->setValue(channel, outStringQueue[channel]);
-//   }
-  outStringQueue.clear();
-  widgetPanel->processNewValues();
-  offlineTimer->start(QCS_QUEUETIMER_TIME);
 }
 
 void qutecsound::widgetDockStateChanged(bool topLevel)
@@ -2807,6 +2791,7 @@ void qutecsound::writeWidgetValues(CsoundUserData *ud)
 
 void qutecsound::processEventQueue(CsoundUserData *ud)
 {
+  // This function should only be called when Csound is running
   while (ud->qcs->widgetPanel->eventQueueSize > 0) {
     ud->qcs->widgetPanel->eventQueueSize--;
     ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize];
@@ -2814,29 +2799,25 @@ void qutecsound::processEventQueue(CsoundUserData *ud)
     QStringList eventElements =
         ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts);
 //     qDebug("type %c line: %s", type, ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].toStdString().c_str());
-	//FIXME this is not freed!
-    MYFLT *pFields;
-	pFields = (MYFLT *) calloc(eventElements.size(), sizeof(MYFLT));
+    // eventElements.size() should never be larger than EVENTS_MAX_PFIELDS
     for (int j = 0; j < eventElements.size(); j++) {
-      pFields[j] = (MYFLT) eventElements[j].toDouble();
+      ud->qcs->pFields[j] = (MYFLT) eventElements[j].toDouble();
     }
-    if (ud->PERF_STATUS == 1) {
-      if (ud->qcs->m_options->thread) {
+    if (ud->qcs->m_options->thread) {
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
         //TODO this is not working!!!
 //         ud->qcs->perfThread->ScoreEvent(0, type, eventElements.size(), pFields);
-        ud->qcs->perfMutex.lock();
-        csoundScoreEvent(ud->csound,type ,pFields, eventElements.size());
-        ud->qcs->perfMutex.unlock();
+      ud->qcs->perfMutex.lock();
+      csoundScoreEvent(ud->csound,type, ud->qcs->pFields, eventElements.size());
+      ud->qcs->perfMutex.unlock();
 #else
-        csoundLockMutex(ud->qcs->perfMutex);
-        csoundScoreEvent(ud->csound,type ,pFields, eventElements.size());
-        csoundUnlockMutex(ud->qcs->perfMutex);
+      csoundLockMutex(ud->qcs->perfMutex);
+      csoundScoreEvent(ud->csound,type, ud->qcs->pFields, eventElements.size());
+      csoundUnlockMutex(ud->qcs->perfMutex);
 #endif
-      }
-      else {
-        csoundScoreEvent(ud->csound,type ,pFields, eventElements.size());
-      }
+    }
+    else {
+      csoundScoreEvent(ud->csound,type ,ud->qcs->pFields, eventElements.size());
     }
   }
 }
@@ -2856,6 +2837,7 @@ void qutecsound::queueOutValue(QString channelName, double value)
 
 void qutecsound::queueOutString(QString channelName, QString value)
 {
+//   qDebug() << "qutecsound::queueOutString";
   stringValueMutex.lock();
   if (outStringQueue.contains(channelName)) {
     outStringQueue[channelName] = value;
@@ -2910,9 +2892,9 @@ uintptr_t qutecsound::csThread(void *data)
 //         processEventQueue(udata);
       perform = csoundPerformKsmps(udata->csound);
     }
-    udata->PERF_STATUS = 0;
   }
 //   udata->qcs->stop();
+  udata->PERF_STATUS = 0;
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
 #else
   return 1;

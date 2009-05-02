@@ -169,7 +169,7 @@ void QuteScope::resizeEvent(QResizeEvent * event)
 void QuteScope::updateData()
 {
 //   qDebug("QuteScope::updateData()");
-  if (m_ud == 0 or m_ud->PERF_STATUS == 0 )
+  if (m_ud == 0 or m_ud->PERF_STATUS != 1 )
     return;
   if (static_cast<ScopeWidget *>(m_widget)->freeze)
     return;

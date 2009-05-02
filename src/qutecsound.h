@@ -182,7 +182,6 @@ class qutecsound:public QMainWindow
     void checkSelection();
     void runUtility(QString flags);
     void dispatchQueues();
-    void dispatchOfflineQueues();
     void widgetDockStateChanged(bool topLevel);
     void widgetDockLocationChanged(Qt::DockWidgetArea area);
     void showLineNumber(int lineNumber);
@@ -217,6 +216,7 @@ class qutecsound:public QMainWindow
     void* ThreadID;
 #endif
     CsoundUserData* ud;
+    MYFLT *pFields; // array of pfields for score and rt events
 
 //     QHash<QString, double> outValueQueue;
     QHash<QString, double> inValueQueue;
@@ -225,7 +225,6 @@ class qutecsound:public QMainWindow
     QVector<WINDAT *> curveBuffer;
     QStringList messageQueue;
     QTimer *queueTimer;
-    QTimer *offlineTimer;
     QTabWidget *documentTabs;
     GraphicWindow *m_graphic;
     QVector<DocumentPage *> documentPages;
