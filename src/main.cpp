@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
   }
   Q_INIT_RESOURCE(application);
   QApplication app(argc, argv);
-  
+
   FileOpenEater *filterObj=new FileOpenEater();
   app.installEventFilter(filterObj);
   //app.processEvents();

@@ -38,6 +38,14 @@
 #include <Carbon/Carbon.h>
 #endif
 
+// Use copy paste implemented within QuteCsound
+// to avoid problems
+// #ifdef WIN32
+// #define QUTECSOUND_COPYPASTE
+// #endif
+
+#define QUTECSOUND_COPYPASTE
+
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
 #include <csound.hpp>
 #include <csPerfThread.hpp>
@@ -318,6 +326,9 @@ class qutecsound:public QMainWindow
 
 #ifdef MACOSX
     MenuBarHandle menuBarHandle;
+#endif
+#ifdef QUTECSOUND_COPYPASTE
+    QTextCursor m_clipboard;
 #endif
 };
 

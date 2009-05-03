@@ -458,8 +458,14 @@ bool qutecsound::save()
 
 void qutecsound::copy()
 {
+  qDebug() << "aweasf";
   if (documentPages[curPage]->hasFocus()) {
+#ifdef QUTECSOUND_COPYPASTE
+    m_clipboard = documentPages[curPage]->textCursor();
+#else
+    qDebug() << "awdasdasdaseasf";
     documentPages[curPage]->copy();
+#endif
   }
   else if (helpPanel->hasFocus()) {
     helpPanel->copy();
@@ -474,7 +480,13 @@ void qutecsound::copy()
 void qutecsound::cut()
 {
   if (documentPages[curPage]->hasFocus()) {
+#ifdef QUTECSOUND_COPYPASTE
+    qDebug() << "aweasf";
+    m_clipboard = documentPages[curPage]->textCursor();
+    documentPages[curPage]->insertPlainText("");
+#else
     documentPages[curPage]->cut();
+#endif
   }
   else
     widgetPanel->cut();
@@ -483,7 +495,11 @@ void qutecsound::cut()
 void qutecsound::paste()
 {
   if (documentPages[curPage]->hasFocus()) {
+#ifdef QUTECSOUND_COPYPASTE
+    documentPages[curPage]->insertPlainText(m_clipboard.selectedText());
+#else
     documentPages[curPage]->paste();
+#endif
   }
   else
     widgetPanel->paste();
@@ -1893,11 +1909,16 @@ void qutecsound::createActions()
 
 void qutecsound::connectActions()
 {
-//   disconnect(undoAct, 0, 0, 0);
-//   disconnect(redoAct, 0, 0, 0);
-//   disconnect(cutAct, 0, 0, 0);
-//   disconnect(copyAct, 0, 0, 0);
-//   disconnect(pasteAct, 0, 0, 0);
+  disconnect(undoAct, 0, 0, 0);
+  connect(undoAct, SIGNAL(triggered()), textEdit, SLOT(undo()));
+  disconnect(redoAct, 0, 0, 0);
+  connect(redoAct, SIGNAL(triggered()), textEdit, SLOT(redo()));
+  disconnect(cutAct, 0, 0, 0);
+  connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
+  disconnect(copyAct, 0, 0, 0);
+  connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
+  disconnect(pasteAct, 0, 0, 0);
+  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
 
 //   disconnect(commentAct, 0, 0, 0);
   disconnect(uncommentAct, 0, 0, 0);
