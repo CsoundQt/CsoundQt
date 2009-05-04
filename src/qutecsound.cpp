@@ -458,12 +458,10 @@ bool qutecsound::save()
 
 void qutecsound::copy()
 {
-  qDebug() << "aweasf";
   if (documentPages[curPage]->hasFocus()) {
 #ifdef QUTECSOUND_COPYPASTE
     m_clipboard = documentPages[curPage]->textCursor();
 #else
-    qDebug() << "awdasdasdaseasf";
     documentPages[curPage]->copy();
 #endif
   }

@@ -100,7 +100,7 @@ void Highlighter::setColorVariables(bool color)
     gfsigFormat.setFontItalic(true);
     gfsigFormat.setFontWeight(QFont::Bold);
   }
-  setFirstRules();
+  highlightingRules.clear();
   setLastRules();
 }
 
@@ -108,7 +108,6 @@ void Highlighter::highlightBlock(const QString &text)
 {
   // text is processed one line at a time
 //   qDebug("Text---------------------: %s", text.toStdString().c_str());
-
 
   int commentIndex = text.indexOf(';');
   if (commentIndex >= 0) {
@@ -206,156 +205,16 @@ void Highlighter::highlightBlock(const QString &text)
     startIndex = text.indexOf(commentStartExpression,
                               startIndex + commentLength);
   }
-//   setCurrentBlockState(0);
-//   startIndex = 0;
-//   if (previousBlockState() != 3)
-//     startIndex = text.indexOf("<CsOptions>");
-// 
-//   while (startIndex >= 0) {
-//     int endIndex = text.indexOf("</CsOptions>", startIndex);
-//     int optionsLength;
-//     if (endIndex == -1) {
-//       setCurrentBlockState(3);
-//       optionsLength = text.length() - startIndex;
-//     } else {
-//       optionsLength = endIndex - startIndex
-//           + QRegExp("</CsOptions>").matchedLength();
-//     }
-//     setFormat(startIndex, optionsLength, csdtagFormat);
-//     startIndex = text.indexOf("<CsOptions>",
-//                               startIndex + optionsLength);
-//   }
 }
 
-void Highlighter::setFirstRules()
-{
-  highlightingRules.clear();
-//   HighlightingRule rule;
-//   QString pattern;
-
-//   if (colorVariables) {
-//     QTextCharFormat irateFormat;
-//     irateFormat.setForeground(QColor("darkCyan"));
-//   //   irateFormat.setFontWeight(QFont::Bold);
-//     pattern = "\\bi[a-zA-Z0-9_]+\\b";
-//     rule.pattern = QRegExp(pattern);
-//     rule.format = irateFormat;
-//     highlightingRules.append(rule);
-
-//     QTextCharFormat krateFormat;
-//     krateFormat.setForeground(QColor("darkCyan"));
-//   //   krateFormat.setFontWeight(QFont::Bold);
-//     pattern = "\\bk[a-zA-Z0-9_]+\\b";
-//     rule.pattern = QRegExp(pattern);
-//     rule.format = krateFormat;
-//     highlightingRules.append(rule);
-// 
-//     QTextCharFormat arateFormat;
-//     arateFormat.setForeground(QColor("darkCyan"));
-//     arateFormat.setFontWeight(QFont::Bold);
-//     pattern = "\\ba[a-zA-Z0-9_]+\\b";
-//     rule.pattern = QRegExp(pattern);
-//     rule.format = arateFormat;
-//     highlightingRules.append(rule);
-// 
-//     QTextCharFormat girateFormat;
-//     girateFormat.setForeground(QColor("darkCyan"));
-//   //   irateFormat.setFontWeight(QFont::Bold);
-//     girateFormat.setFontItalic(true);
-//     pattern = "\\bgi[a-zA-Z0-9_]+\\b";
-//     rule.pattern = QRegExp(pattern);
-//     rule.format = girateFormat;
-//     highlightingRules.append(rule);
-// 
-//     QTextCharFormat gkrateFormat;
-//     gkrateFormat.setForeground(QColor("darkCyan"));
-//   //   krateFormat.setFontWeight(QFont::Bold);
-//     gkrateFormat.setFontItalic(true);
-//     pattern = "\\bgk[a-zA-Z0-9_]+\\b";
-//     rule.pattern = QRegExp(pattern);
-//     rule.format = gkrateFormat;
-//     highlightingRules.append(rule);
-// 
-//     QTextCharFormat garateFormat;
-//     garateFormat.setForeground(QColor("darkCyan"));
-//     garateFormat.setFontWeight(QFont::Bold);
-//     garateFormat.setFontItalic(true);
-//     pattern = "\\bga[a-zA-Z0-9_]+\\b";
-//     rule.pattern = QRegExp(pattern);
-//     rule.format = garateFormat;
-//     highlightingRules.append(rule);
-// 
-//     QTextCharFormat stringVarFormat;
-//     stringVarFormat.setForeground(QColor(Qt::darkYellow));
-//     stringVarFormat.setFontWeight(QFont::Bold);
-//     pattern = "\\bS[a-zA-Z0-9_]+\\b";
-//     rule.pattern = QRegExp(pattern);
-//     rule.format = stringVarFormat;
-//     highlightingRules.append(rule);
-// 
-//     QTextCharFormat gstringVarFormat;
-//     gstringVarFormat.setForeground(QColor(Qt::darkYellow));
-//     gstringVarFormat.setFontWeight(QFont::Bold);
-//     gstringVarFormat.setFontItalic(true);
-//     pattern = "\\bgS[a-zA-Z0-9_]+\\b";
-//     rule.pattern = QRegExp(pattern);
-//     rule.format = gstringVarFormat;
-//     highlightingRules.append(rule);
-// 
-//     QTextCharFormat fsigFormat;
-//     fsigFormat.setForeground(QColor(Qt::gray));
-//     fsigFormat.setFontWeight(QFont::Bold);
-//     pattern = "\\bf[a-zA-Z0-9_]+\\b";
-//     rule.pattern = QRegExp(pattern);
-//     rule.format = fsigFormat;
-//     highlightingRules.append(rule);
-// 
-//     QTextCharFormat gfsigFormat;
-//     gfsigFormat.setForeground(QColor(Qt::gray));
-//     gfsigFormat.setFontItalic(true);
-//     gfsigFormat.setFontWeight(QFont::Bold);
-//     pattern = "\\bf[a-zA-Z0-9_]+\\b";
-//     rule.pattern = QRegExp(pattern);
-//     rule.format = gfsigFormat;
-//     highlightingRules.append(rule);
-//   }
-
-//   opcodeFormat.setForeground(QColor("blue"));
-//   opcodeFormat.setFontWeight(QFont::Bold);
-//   foreach (QString opPattern, m_list) {
-// //     pattern = "[ \\t\\r\\n]" + pattern + "[ \\t\\r\\n]";
-//     opPattern = "\\b" + opPattern + "\\b";
-// //     qDebug("%s",pattern.toStdString().c_str());
-//     rule.pattern = QRegExp(opPattern);
-//     rule.format = opcodeFormat;
-//     highlightingRules.append(rule);
-//   }
-}
+// void Highlighter::setFirstRules()
+// {
+//   highlightingRules.clear();
+// }
 
 void Highlighter::setLastRules()
 {
   HighlightingRule rule;
-
-
-//   QStringList instPatterns;
-//   instPatterns << "\\binstr\\b" << "\\bendin\\b" << "\\bopcode\\b" << "\\bendop\\b";
-//   csdtagFormat.setForeground(QColor("purple"));
-//   csdtagFormat.setFontWeight(QFont::Bold);
-//   foreach (QString pattern, instPatterns) {
-//     rule.pattern = QRegExp(pattern);
-//     rule.format = csdtagFormat;
-//     lastHighlightingRules.append(rule);
-//   }
-
-//   QStringList headerPatterns;
-//   headerPatterns << "\\bsr\\b" << "\\bkr\\b" << "\\bksmps\\b" << "\\bnchnls\\b" << "\\b0dbfs\\b";
-//   csdtagFormat.setForeground(QColor("brown"));
-//   csdtagFormat.setFontWeight(QFont::Bold);
-//   foreach (QString pattern, headerPatterns) {
-//     rule.pattern = QRegExp(pattern);
-//     rule.format = csdtagFormat;
-//     lastHighlightingRules.append(rule);
-//   }
 
   quotationFormat.setForeground(Qt::red);
   rule.pattern = QRegExp("\".*\"");
@@ -371,40 +230,7 @@ void Highlighter::setLastRules()
   rule.format = labelFormat;
   lastHighlightingRules.append(rule);
 
-//   rule.pattern = QRegExp(";[^\n]*");
-//   rule.format = singleLineCommentFormat;
-//   lastHighlightingRules.append(rule);
-
   multiLineCommentFormat.setForeground(QColor("green"));
-
-//   csdtagFormat.setForeground(QColor("brown"));
-// //      csdtagFormat.setFontWeight(QFont::Bold);
-//   QStringList keywordPatterns;
-//   keywordPatterns << "<CsoundSynthesizer>" << "</CsoundSynthesizer>"
-//       << "<CsInstruments>" << "</CsInstruments>"
-//       << "<CsOptions>" << "</CsOptions>"
-//       << "<CsScore>" << "</CsScore>"
-//       << "<CsVersion>" << "</CsVersion>"
-//       << "<MacOptions>" << "</MacOptions>"
-//       << "<MacGUI>" << "</MacGUI>"
-//       << "<csLADSPA>" << "</csLADSPA>";
-//   foreach (QString pattern, tagPatterns) {
-//     rule.pattern = QRegExp(pattern);
-//     rule.format = csdtagFormat;
-//     lastHighlightingRules.append(rule);
-//   }
-//      classFormat.setFontWeight(QFont::Bold);
-//      classFormat.setForeground(Qt::darkMagenta);
-//      rule.pattern = QRegExp("\\bQ[A-Za-z]+\\b");
-//      rule.format = classFormat;
-//      lastHighlightingRules.append(rule);
-
-
-//      functionFormat.setFontItalic(true);
-//      functionFormat.setForeground(Qt::blue);
-//      rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
-//      rule.format = functionFormat;
-//      lastHighlightingRules.append(rule);
 }
 
 int Highlighter::findOpcode(QString opcodeName, int start, int end)

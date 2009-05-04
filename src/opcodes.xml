@@ -89,7 +89,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 </category>
 <category name="Signal Generators:Granular Synthesis">
 <synopsis>asig <opcodename>diskgrain</opcodename> Sfname, kamp, kfreq, kpitch, kgrsize, kprate, \
-      ifun, iolaps[, ioffset, imaxgrsize]</synopsis>
+      ifun, iolaps [,imaxgrsize , ioffset]</synopsis>
 <synopsis>ares <opcodename>fof</opcodename> xamp, xfund, xform, koct, kband, kris, kdur, kdec, iolaps, \
       ifna, ifnb, itotdur [, iphs] [, ifmode] [, iskip]</synopsis>
 <synopsis>ares <opcodename>fof2</opcodename> xamp, xfund, xform, koct, kband, kris, kdur, kdec, iolaps, \
@@ -355,7 +355,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis>ar1, ar2, ar3, ar4, ar5, ar6, ar7, ar8, ar9, ar10, ar11, ar12, ar13, ar14, \
       ar15, ar16, ar17, ar18, ar19, ar20, ar21, ar22, ar23, ar24, ar25, ar26, \
       ar27, ar28, ar29, ar30, ar31, ar32 <opcodename>in32</opcodename></synopsis>
-<synopsis>ar1 <opcodename>inch</opcodename> ksig1</synopsis>
+<synopsis>ain <opcodename>inch</opcodename> kchan</synopsis>
 <synopsis>ar1, ar2, ar3, ar4, ar5, ar6 <opcodename>inh</opcodename></synopsis>
 <synopsis>ar1, ar2, ar3, ar4, ar5, ar6, ar7, ar8 <opcodename>ino</opcodename></synopsis>
 <synopsis>ar1, ar2,  ar3, a4 <opcodename>inq</opcodename></synopsis>
@@ -365,6 +365,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis>ar1, ar2, ar3, ar4, ar5, ar6, ar7, ar8, ar9, ar10, ar11, ar12, \
       ar13, ar14, ar15, ar16 <opcodename>inx</opcodename></synopsis>
 <synopsis><opcodename>inz</opcodename> ksig1</synopsis>
+<synopsis>ar1, ar2 <opcodename>mp3in</opcodename> ifilcod, iskptim, iformat, iskipinit, ibufsize</synopsis>
 <synopsis>ar1[, ar2[, ar3[, ... a24]]] <opcodename>soundin</opcodename> ifilcod [, iskptim] [, iformat] \
       [, iskipinit] [, ibufsize]</synopsis>
 </category>
@@ -377,7 +378,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
       asig19, asig20, asig21, asig22, asig23, asig24, asig25, asig26, \
       asig27, asig28, asig29, asig30, asig31, asig32</synopsis>
 <synopsis><opcodename>outc</opcodename> asig1 [, asig2] [...]</synopsis>
-<synopsis><opcodename>outch</opcodename> ksig1, asig1 [, ksig2] [, asig2] [...]</synopsis>
+<synopsis><opcodename>outch</opcodename> kchan1, asig1 [, kchan2] [, asig2] [...]</synopsis>
 <synopsis><opcodename>outh</opcodename> asig1, asig2, asig3, asig4, asig5, asig6</synopsis>
 <synopsis><opcodename>outo</opcodename> asig1, asig2, asig3, asig4, asig5, asig6, asig7, asig8</synopsis>
 <synopsis><opcodename>outq</opcodename> asig1, asig2, asig3, asig4</synopsis>
@@ -668,7 +669,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 </category>
 <category name="Instrument Control:Invocation">
 <synopsis><opcodename>event</opcodename> &quot;scorechar&quot;, kinsnum, kdelay, kdur, [, kp4] [, kp5] [, ...]</synopsis><synopsis><opcodename>event</opcodename> &quot;scorechar&quot;, &quot;insname&quot;, kdelay, kdur, [, kp4] [, kp5] [, ...]</synopsis>
-<synopsis><opcodename>event_i</opcodename> &quot;scorechar&quot;, iinsnum, idelay, idur, [, ip4] [, ip5] [, ...]</synopsis><synopsis><opcodename>event</opcodename> &quot;scorechar&quot;, &quot;insname&quot;, idelay, idur, [, ip4] [, ip5] [, ...]</synopsis>
+<synopsis><opcodename>event_i</opcodename> &quot;scorechar&quot;, iinsnum, idelay, idur, [, ip4] [, ip5] [, ...]</synopsis><synopsis><opcodename>event_i</opcodename> &quot;scorechar&quot;, &quot;insname&quot;, idelay, idur, [, ip4] [, ip5] [, ...]</synopsis>
 <synopsis><opcodename>mute</opcodename> insnum [, iswitch]</synopsis><synopsis><opcodename>mute</opcodename> &quot;insname&quot; [, iswitch]</synopsis>
 <synopsis><opcodename>remove</opcodename> insnum</synopsis>
 <synopsis><opcodename>schedkwhen</opcodename> ktrigger, kmintim, kmaxnum, kinsnum, kwhen, kdur \
@@ -678,7 +679,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
       [, ip4] [, ip5] [...]</synopsis>
 <synopsis><opcodename>schedule</opcodename> insnum, iwhen, idur [, ip4] [, ip5] [...]</synopsis><synopsis><opcodename>schedule</opcodename> &quot;insname&quot;, iwhen, idur [, ip4] [, ip5] [...]</synopsis>
 <synopsis><opcodename>schedwhen</opcodename> ktrigger, kinsnum, kwhen, kdur [, ip4] [, ip5] [...]</synopsis><synopsis><opcodename>schedwhen</opcodename> ktrigger, &quot;insname&quot;, kwhen, kdur [, ip4] [, ip5] [...]</synopsis>
-<synopsis><opcodename>scoreline</opcodename> Sin, ktring</synopsis>
+<synopsis><opcodename>scoreline</opcodename> Sin, ktrig</synopsis>
 <synopsis><opcodename>scoreline_i</opcodename> Sin</synopsis>
 </category>
 <category name="Instrument Control:Program Flow Control">
@@ -690,20 +691,20 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis><opcodename>elseif</opcodename> xa R xb <opcodename>then</opcodename></synopsis>
 <synopsis><opcodename>endif</opcodename></synopsis>
 <synopsis><opcodename>goto</opcodename> label</synopsis>
-<synopsis><opcodename>if</opcodename> ia R ib <opcodename>igoto</opcodename> label</synopsis><synopsis><opcodename>if</opcodename> ka R kb <opcodename>kgoto</opcodename> label</synopsis><synopsis><opcodename>if</opcodename> ia R ib <opcodename>goto</opcodename> label</synopsis><synopsis><opcodename>if</opcodename> xa R xb <opcodename>then</opcodename></synopsis>
+<synopsis><opcodename>if</opcodename> ia R ib <opcodename>igoto</opcodename> label</synopsis><synopsis><opcodename>if</opcodename> ka R kb <opcodename>kgoto</opcodename> label</synopsis><synopsis><opcodename>if</opcodename> xa R xb <opcodename>goto</opcodename> label</synopsis><synopsis><opcodename>if</opcodename> xa R xb <opcodename>then</opcodename></synopsis>
 <synopsis><opcodename>igoto</opcodename> label</synopsis>
 <synopsis><opcodename>kgoto</opcodename> label</synopsis>
-<synopsis><opcodename>loop_ge </opcodename>  indx, idecr, imin, label</synopsis><synopsis><opcodename>loop_ge </opcodename>  kndx, kdecr, kmin, label</synopsis>
-<synopsis><opcodename>loop_gt </opcodename>  indx, idecr, imin, label</synopsis><synopsis><opcodename>loop_gt </opcodename>  kndx, kdecr, kmin, label</synopsis>
-<synopsis><opcodename>loop_le </opcodename>  indx, incr, imax, label</synopsis><synopsis><opcodename>loop_le </opcodename>  kndx, kncr, kmax, label</synopsis>
-<synopsis><opcodename>loop_lt </opcodename>  indx, incr, imax, label</synopsis><synopsis><opcodename>loop_lt </opcodename>  kndx, kncr, kmax, label</synopsis>
+<synopsis><opcodename>loop_ge</opcodename>  indx, idecr, imin, label</synopsis><synopsis><opcodename>loop_ge</opcodename>  kndx, kdecr, kmin, label</synopsis>
+<synopsis><opcodename>loop_gt</opcodename>  indx, idecr, imin, label</synopsis><synopsis><opcodename>loop_gt</opcodename>  kndx, kdecr, kmin, label</synopsis>
+<synopsis><opcodename>loop_le</opcodename>  indx, incr, imax, label</synopsis><synopsis><opcodename>loop_le</opcodename>  kndx, kncr, kmax, label</synopsis>
+<synopsis><opcodename>loop_lt</opcodename>  indx, incr, imax, label</synopsis><synopsis><opcodename>loop_lt</opcodename>  kndx, kncr, kmax, label</synopsis>
 <synopsis><opcodename>tigoto</opcodename> label</synopsis>
 <synopsis><opcodename>timout</opcodename> istrt, idur, label</synopsis>
 </category>
 <category name="Instrument Control:Realtime Performance Control">
 <synopsis>ir <opcodename>active</opcodename> insnum</synopsis><synopsis>kres <opcodename>active</opcodename> kinsnum</synopsis>
 <synopsis><opcodename>cpuprc</opcodename> insnum, ipercent</synopsis>
-<synopsis>      <opcodename>exitnow</opcodename></synopsis>
+<synopsis><opcodename>exitnow</opcodename></synopsis>
 <synopsis><opcodename>jacktransport</opcodename> icommand [, ilocation]</synopsis>
 <synopsis><opcodename>maxalloc</opcodename> insnum, icount</synopsis>
 <synopsis><opcodename>prealloc</opcodename> insnum, icount</synopsis><synopsis><opcodename>prealloc</opcodename> &quot;insname&quot;, icount</synopsis>
@@ -752,6 +753,10 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis>ktrig  <opcodename>timedseq</opcodename>  ktimpnt, ifn, kp1 [,kp2, kp3, ...,kpN]</synopsis>
 <synopsis>kout <opcodename>trigger</opcodename> ksig, kthreshold, kmode</synopsis>
 <synopsis><opcodename>trigseq</opcodename> ktrig_in, kstart, kloop, kinitndx, kfn_values, kout1 [, kout2] [...]</synopsis>
+<synopsis>kres <opcodename>wiiconnect</opcodename> [itimeout, imaxnum]</synopsis>
+<synopsis>kres <opcodename>wiidata</opcodename> kcontrol[, knum]</synopsis>
+<synopsis> <opcodename>wiirange</opcodename> icontrol, iminimum, imaximum[, inum]</synopsis>
+<synopsis>kres <opcodename>wiisend</opcodename> kcontrol, kvalue[, knum]</synopsis>
 <synopsis>kx, ky <opcodename>xyin</opcodename> iprd, ixmin, ixmax, iymin, iymax [, ixinit] [, iyinit]</synopsis>
 </category>
 <category name="Instrument Control:Stacks">
@@ -770,7 +775,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis>Sir <opcodename>dates</opcodename> [ itime]</synopsis>
 <synopsis>ir <opcodename>readclock</opcodename> inum</synopsis>
 <synopsis>ires <opcodename>rtclock</opcodename></synopsis><synopsis>kres <opcodename>rtclock</opcodename></synopsis>
-<synopsis>kres <opcodename>timeinstk</opcodename></synopsis><synopsis>kres <opcodename>timeinsts</opcodename></synopsis>
+<synopsis>kres <opcodename>timeinstk</opcodename></synopsis>
 <synopsis>kres <opcodename>timeinsts</opcodename></synopsis>
 <synopsis>ires <opcodename>timek</opcodename></synopsis><synopsis>kres <opcodename>timek</opcodename></synopsis>
 <synopsis>ires <opcodename>times</opcodename></synopsis><synopsis>kres <opcodename>times</opcodename></synopsis>
@@ -1510,6 +1515,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 
 
 
+
 <synopsis>ires <opcodename>system_i</opcodename> itrig, Scmd, [inowait]</synopsis><synopsis>kres <opcodename>system</opcodename> ktrig, Scmd, [knowait]</synopsis>
 
 
@@ -1549,7 +1555,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis><opcodename>csound -U pvanal</opcodename> [flags] infilename outfilename</synopsis><synopsis><opcodename>pvanal</opcodename> [flags] infilename outfilename</synopsis>
 <synopsis><opcodename>csound</opcodename> -U <opcodename>pvlook</opcodename> [flags] infilename</synopsis><synopsis><opcodename>pvlook</opcodename> [flags] infilename</synopsis>
 <synopsis><opcodename>scale</opcodename> [OPTIONS ... ] infile</synopsis>
-<synopsis><opcodename>csound -U sdif2ad</opcodename> [flags] infilename outfilename</synopsis>
+<synopsis><opcodename>sdif2ad</opcodename> [flags] infilename outfilename</synopsis>
 <synopsis><opcodename>csound -U sndinfo</opcodename> [options] soundfilenames ...</synopsis><synopsis><opcodename>sndinfo</opcodename> [options] soundfilenames ...</synopsis>
 <synopsis><opcodename>srconv</opcodename> [flags] infile</synopsis>
 </category>

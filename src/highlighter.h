@@ -69,7 +69,7 @@
 
     QStringList tagPatterns, headerPatterns, instPatterns;
 
-    void setFirstRules();
+//     void setFirstRules();
     void setLastRules();
 
     QStringList m_list;
