@@ -34,9 +34,8 @@ class DocumentPage : public QTextEdit
   Q_OBJECT
   public:
     DocumentPage(QWidget *parent, OpEntryParser *opcodeTree);
-
     ~DocumentPage();
-
+    
     int setTextString(QString text, bool autoCreateMacCsoundSections = true);
     QString getFullText();
     QString getOptionsText();
@@ -62,6 +61,7 @@ class DocumentPage : public QTextEdit
     bool readOnly; // Used for manual files and internal examples
 
   protected:
+    virtual void keyPressEvent(QKeyEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);
 
   private:
@@ -76,7 +76,7 @@ class DocumentPage : public QTextEdit
 
 //     QString connectedNodeText(QString nodeName, QString label, QString dest);
 //     QString dotTextForExpression(QString expression, QString &outNode);
-
+    
   public slots:
     void setMacWidgetsText(QString widgetText);
     void setMacOptionsText(QString text);
@@ -97,7 +97,9 @@ class DocumentPage : public QTextEdit
 
   signals:
     void currentLineChanged(int);
-
+    void doCopy();
+    void doCut();
+    void doPaste();
 };
 
 #endif

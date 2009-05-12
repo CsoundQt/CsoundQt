@@ -461,6 +461,8 @@ void qutecsound::copy()
   if (documentPages[curPage]->hasFocus()) {
 #ifdef QUTECSOUND_COPYPASTE
     m_clipboard = documentPages[curPage]->textCursor();
+    m_clipboardText = m_clipboard.selectedText();
+    QApplication::clipboard()->setText(m_clipboardText);
 #else
     documentPages[curPage]->copy();
 #endif
@@ -481,6 +483,8 @@ void qutecsound::cut()
 #ifdef QUTECSOUND_COPYPASTE
     qDebug() << "aweasf";
     m_clipboard = documentPages[curPage]->textCursor();
+    m_clipboardText = m_clipboard.selectedText();
+    QApplication::clipboard()->setText(m_clipboardText);
     documentPages[curPage]->insertPlainText("");
 #else
     documentPages[curPage]->cut();
@@ -494,7 +498,7 @@ void qutecsound::paste()
 {
   if (documentPages[curPage]->hasFocus()) {
 #ifdef QUTECSOUND_COPYPASTE
-    documentPages[curPage]->insertPlainText(m_clipboard.selectedText());
+    documentPages[curPage]->insertPlainText(m_clipboardText);
 #else
     documentPages[curPage]->paste();
 #endif
@@ -1917,7 +1921,7 @@ void qutecsound::connectActions()
   connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
   disconnect(pasteAct, 0, 0, 0);
   connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
-
+  
 //   disconnect(commentAct, 0, 0, 0);
   disconnect(uncommentAct, 0, 0, 0);
   disconnect(indentAct, 0, 0, 0);
@@ -2503,6 +2507,10 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   textEdit->setTabStopWidth(m_options->tabWidth);
   textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
   connectActions();
+  connect(textEdit, SIGNAL(doCut()), this, SLOT(cut()));
+  connect(textEdit, SIGNAL(doCopy()), this, SLOT(copy()));
+  connect(textEdit, SIGNAL(doPaste()), this, SLOT(paste()));
+
   if (fileName.startsWith(m_options->csdocdir))
     documentPages[curPage]->readOnly = true;
   QString text;

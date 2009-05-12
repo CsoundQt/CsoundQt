@@ -329,6 +329,7 @@ class qutecsound:public QMainWindow
 #endif
 #ifdef QUTECSOUND_COPYPASTE
     QTextCursor m_clipboard;
+    QString m_clipboardText;
 #endif
 };
 

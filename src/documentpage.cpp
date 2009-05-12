@@ -43,6 +43,26 @@ DocumentPage::~DocumentPage()
 {
 }
 
+void DocumentPage::keyPressEvent(QKeyEvent *event)
+{
+    if (event == QKeySequence::Cut)
+    {
+        emit doCut();
+        return;
+    }
+    if (event == QKeySequence::Copy)
+    {
+        emit doCopy();
+        return;
+    }
+    if (event == QKeySequence::Paste)
+    {
+        emit doPaste();
+        return;
+    }
+    return QTextEdit::keyPressEvent(event);
+}
+
 void DocumentPage::contextMenuEvent(QContextMenuEvent *event)
 {
   QMenu *menu = createStandardContextMenu();
