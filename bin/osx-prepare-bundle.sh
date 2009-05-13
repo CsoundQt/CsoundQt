@@ -5,7 +5,7 @@
 #cp ../src/opcodes.xml QuteCsound.app/Contents/MacOS
 
 mv qutecsound.app QuteCsound.app
-zip -r QuteCsound-noQt QuteCsound.app
+tar -czvf QuteCsound-noQt.tar.gz QuteCsound.app
 mkdir QuteCsound.app/Contents/Frameworks
 
 cp -R /Library/Frameworks/QtCore.framework QuteCsound.app/Contents/Frameworks/
@@ -27,4 +27,4 @@ rm QuteCsound.app/Contents/Info.plist
 cp ../src/MyInfo.plist QuteCsound.app/Contents/Info.plist
 
 otool -L QuteCsound.app/Contents/MacOS/qutecsound
-zip -r QuteCsound-incQt QuteCsound.app
+tar -czvf QuteCsound-incQt.tar.gz QuteCsound.app
