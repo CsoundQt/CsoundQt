@@ -28,6 +28,7 @@
 #define QUTECSOUND_MAX_EVENTS 32
 
 #include "qutewidget.h"
+#include "curve.h"
 
 class Curve;
 class QuteConsole;

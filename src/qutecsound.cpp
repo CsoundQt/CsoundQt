@@ -854,7 +854,7 @@ void qutecsound::runCsound(bool realtime)
       csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
     }
 
-    csoundReset(csound);
+    csoundReset(csound); // This is what causes the clipboard problems in Windows... why????
     csoundSetHostData(csound, (void *) ud);
     csoundPreCompile(csound);  //Need to run PreCompile to create the FLTK_Flags global variable
 
@@ -2047,6 +2047,7 @@ void qutecsound::createMenus()
   synthFiles.append(":/examples/Simple_Subtractive.csd");
   synthFiles.append(":/examples/Simple_FM_Synth.csd");
   synthFiles.append(":/examples/Phase_Mod_Synth.csd");
+  synthFiles.append(":/examples/Formant_Synth.csd");
 
   subMenus << synthFiles;
   subMenuNames << tr("Synths");
@@ -2059,6 +2060,7 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/SF_Record.csd");
   exampleFiles.append(":/examples/Simple_Convolution.csd");
   exampleFiles.append(":/examples/Circle.csd");
+  exampleFiles.append(":/examples/Pvstencil.csd");
   exampleFiles.append(":/examples/Lineedit_Widget.csd");
   exampleFiles.append(":/examples/Rms.csd");
   exampleFiles.append(":/examples/Reinit_Example.csd");
@@ -2507,9 +2509,11 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   textEdit->setTabStopWidth(m_options->tabWidth);
   textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
   connectActions();
+// #ifdef QUTECSOUND_COPYPASTE
   connect(textEdit, SIGNAL(doCut()), this, SLOT(cut()));
   connect(textEdit, SIGNAL(doCopy()), this, SLOT(copy()));
   connect(textEdit, SIGNAL(doPaste()), this, SLOT(paste()));
+// #endif
 
   if (fileName.startsWith(m_options->csdocdir))
     documentPages[curPage]->readOnly = true;

@@ -35,7 +35,7 @@
 #include "qutescope.h"
 #include "qutedummy.h"
 #include "framewidget.h"
-#include "curve.h"
+// #include "curve.h"
 
 #include "qutecsound.h"
 

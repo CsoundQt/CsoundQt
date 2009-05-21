@@ -38,6 +38,7 @@
       <file>../examples/SF_Record.csd</file>
       <file>../examples/Simple_Convolution.csd</file>
       <file>../examples/Circle.csd</file>
+      <file>../examples/Pvstencil.csd</file>
       <file>../examples/Noise_Reduction.csd</file>
       <file>../examples/Reserved_Channels.csd</file>
       <file>../examples/String_Channels.csd</file>
@@ -70,6 +71,7 @@
       <file>../examples/Simple_Subtractive.csd</file>
       <file>../examples/Simple_FM_Synth.csd</file>
       <file>../examples/Phase_Mod_Synth.csd</file>
+      <file>../examples/Formant_Synth.csd</file>
 
       <file>../examples/Audio_Input_Test.csd</file>
       <file>../examples/Audio_Output_Test.csd</file>

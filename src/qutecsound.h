@@ -39,19 +39,19 @@
 #endif
 
 // Use copy paste implemented within QuteCsound
-// to avoid problems
-// #ifdef WIN32
-// #define QUTECSOUND_COPYPASTE
-// #endif
-
+// to avoid clipboard problems in windows
+#ifdef WIN32
 #define QUTECSOUND_COPYPASTE
+#endif
 
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
 #include <csound.hpp>
 #include <csPerfThread.hpp>
 #endif
 
-// #define QUTECSOUND_DESTROY_CSOUND
+// Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
+
+#define QUTECSOUND_DESTROY_CSOUND
 
 class QAction;
 class QMenu;
