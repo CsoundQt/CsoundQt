@@ -37,6 +37,7 @@
       <file>../examples/8_Chn_Player.csd</file>
       <file>../examples/SF_Record.csd</file>
       <file>../examples/Simple_Convolution.csd</file>
+      <file>../examples/Oscillator_Aliasing.csd</file>
       <file>../examples/Circle.csd</file>
       <file>../examples/Pvstencil.csd</file>
       <file>../examples/Noise_Reduction.csd</file>

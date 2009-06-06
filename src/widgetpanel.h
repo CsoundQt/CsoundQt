@@ -182,6 +182,7 @@ class WidgetPanel : public QDockWidget
     void selectionChanged(QRect selection);
     void widgetMoved(QPair<int, int>);
     void widgetResized(QPair<int, int>);
+    void adjustLayoutSize();
 
   private slots:
     void copy();
@@ -209,10 +210,12 @@ class LayoutWidget : public QWidget
   public:
     LayoutWidget(QWidget* parent) : QWidget(parent)
     {
+      m_panel = (WidgetPanel *) parent;  // parent changes by itself???
       selectionFrame = new QRubberBand(QRubberBand::Rectangle, this);
       selectionFrame->hide();
     }
     ~LayoutWidget() {}
+    WidgetPanel * panel() {return m_panel;}  // hack because parent for this widget seems to change when scroll area is aplied
 
   protected:
     virtual void mousePressEvent(QMouseEvent *event)
@@ -255,6 +258,7 @@ class LayoutWidget : public QWidget
     }
     QRubberBand *selectionFrame;
     int startx, starty;
+    WidgetPanel *m_panel;
 
   signals:
     void deselectAll();

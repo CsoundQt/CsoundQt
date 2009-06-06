@@ -47,7 +47,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   layoutWidget = new LayoutWidget(this);
   layoutWidget->setGeometry(QRect(0, 0, 800, 600));
   layoutWidget->setAutoFillBackground(true);
-//   layoutWidget->setFocusPolicy(Qt::NoFocus);
+  layoutWidget->setFocusPolicy(Qt::NoFocus);
   connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
   connect(layoutWidget, SIGNAL(selection(QRect)), this, SLOT(selectionChanged(QRect)));
 //   connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));
@@ -109,8 +109,11 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   selectAllAct = new QAction(tr("Select all widgets"), this);
   connect(selectAllAct, SIGNAL(triggered()), this, SLOT(selectAll()));
 
-  setWidget(layoutWidget);
-  resize(200, 100);
+  QScrollArea *scrollArea = new QScrollArea(this);
+//   scrollArea->setBackgroundRole(QPalette::Dark);
+  scrollArea->setWidget(layoutWidget);
+  setWidget(scrollArea);
+//   resize(200, 100);
 
   eventQueue.resize(QUTECSOUND_MAX_EVENTS);
   eventQueueSize = 0;
@@ -606,6 +609,7 @@ void WidgetPanel::widgetChanged(QuteWidget* widget)
       editWidgets[index]->resize(neww, newh);
     }
   }
+  adjustLayoutSize();
 }
 
 // void WidgetPanel::updateWidgetText()
@@ -1184,6 +1188,7 @@ void WidgetPanel::widgetMoved(QPair<int, int> delta)
       editWidgets[i]->move(newx, newy);
     }
   }
+  adjustLayoutSize();
 }
 
 void WidgetPanel::widgetResized(QPair<int, int> delta)
@@ -1197,6 +1202,21 @@ void WidgetPanel::widgetResized(QPair<int, int> delta)
       editWidgets[i]->resize(neww, newh);
     }
   }
+  adjustLayoutSize();
+}
+
+void WidgetPanel::adjustLayoutSize()
+{
+  int width = 30, height = 30;
+  for (int i = 0; i< widgets.size(); i++) {
+    if (widgets[i]->x() + widgets[i]->width() > width) {
+      width = widgets[i]->x() + widgets[i]->width();
+    }
+    if (widgets[i]->y() + widgets[i]->height() > height) {
+      height = widgets[i]->y() + widgets[i]->height();
+    }
+  }
+  layoutWidget->resize(width+5, height+5);
 }
 
 void WidgetPanel::copy()
