@@ -73,6 +73,7 @@ void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 //   m_widget->setFixedSize(w,h);
   this->setGeometry(QRect(x,y,w,h));
   m_widget->setGeometry(QRect(0,0,w,h));
+  this->markChanged();
 }
 
 void QuteWidget::setRange(int /*min*/, int /*max*/)

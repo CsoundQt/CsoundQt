@@ -90,6 +90,7 @@ class WidgetPanel : public QDockWidget
     QHash<QString, double> newValues;
     QHash<QString, QString> newStringValues;
     LayoutWidget *layoutWidget;
+    QScrollArea *scrollArea;
 
     QMutex valueMutex;
     QMutex stringValueMutex;

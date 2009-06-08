@@ -109,7 +109,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   selectAllAct = new QAction(tr("Select all widgets"), this);
   connect(selectAllAct, SIGNAL(triggered()), this, SLOT(selectAll()));
 
-  QScrollArea *scrollArea = new QScrollArea(this);
+  scrollArea = new QScrollArea(this);
 //   scrollArea->setBackgroundRole(QPalette::Dark);
   scrollArea->setWidget(layoutWidget);
   setWidget(scrollArea);
@@ -644,6 +644,7 @@ int WidgetPanel::createSlider(int x, int y, int width, int height, QString widge
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  adjustLayoutSize();
   setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
@@ -695,6 +696,7 @@ int WidgetPanel::createText(int x, int y, int width, int height, QString widgetL
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  adjustLayoutSize();
   setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
@@ -749,6 +751,7 @@ int WidgetPanel::createScrollNumber(int x, int y, int width, int height, QString
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  adjustLayoutSize();
   setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
@@ -799,6 +802,7 @@ int WidgetPanel::createLineEdit(int x, int y, int width, int height, QString wid
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  adjustLayoutSize();
   setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
@@ -850,6 +854,7 @@ int WidgetPanel::createSpinBox(int x, int y, int width, int height, QString widg
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  adjustLayoutSize();
   setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
@@ -888,6 +893,7 @@ int WidgetPanel::createButton(int x, int y, int width, int height, QString widge
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  adjustLayoutSize();
   setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
@@ -920,6 +926,7 @@ int WidgetPanel::createKnob(int x, int y, int width, int height, QString widgetL
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  adjustLayoutSize();
   setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
@@ -950,6 +957,7 @@ int WidgetPanel::createCheckBox(int x, int y, int width, int height, QString wid
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  adjustLayoutSize();
   setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
@@ -975,6 +983,7 @@ int WidgetPanel::createMenu(int x, int y, int width, int height, QString widgetL
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  adjustLayoutSize();
   setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
@@ -1016,6 +1025,7 @@ int WidgetPanel::createMeter(int x, int y, int width, int height, QString widget
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  adjustLayoutSize();
   setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
@@ -1034,6 +1044,7 @@ int WidgetPanel::createConsole(int x, int y, int width, int height, QString widg
    if (editAct->isChecked()) {
      createEditFrame(widget);
    }
+   adjustLayoutSize();
    setWidgetToolTip(widget, m_tooltips);
    consoleWidgets.append(widget);
    return 1;
@@ -1071,6 +1082,7 @@ int WidgetPanel::createGraph(int x, int y, int width, int height, QString widget
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  adjustLayoutSize();
   setWidgetToolTip(widget, m_tooltips);
   graphWidgets.append(widget);
   return 1;
@@ -1110,6 +1122,7 @@ int WidgetPanel::createScope(int x, int y, int width, int height, QString widget
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  adjustLayoutSize();
   setWidgetToolTip(widget, m_tooltips);
   scopeWidgets.append(widget);
   return 1;
@@ -1125,6 +1138,7 @@ int WidgetPanel::createDummy(int x, int y, int width, int height, QString widget
   if (editAct->isChecked()) {
     createEditFrame(widget);
   }
+  adjustLayoutSize();
   setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
@@ -1340,91 +1354,119 @@ void WidgetPanel::selectionChanged(QRect selection)
 
 void WidgetPanel::createSlider()
 {
-  createSlider(currentPosition.x(), currentPosition.y() - 20, 20, 100, QString("ioSlider {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(widgets.size())));
+  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
+  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  createSlider(posx, posy, 20, 100, QString("ioSlider {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(widgets.size())));
   widgetChanged();
 }
 
 void WidgetPanel::createLabel()
 {
-  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder New Label";
-  createText(currentPosition.x(), currentPosition.y() - 20, 80, 25, line);
+  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
+  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder New Label";
+  createText(posx, posy, 80, 25, line);
   widgetChanged();
 }
 
 void WidgetPanel::createDisplay()
 {
-  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 25} display 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border Display";
-  createText(currentPosition.x(), currentPosition.y() - 20, 80, 25, line);
+  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
+  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} display 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border Display";
+  createText(posx, posy, 80, 25, line);
   widgetChanged();
 }
 
 void WidgetPanel::createScrollNumber()
 {
-  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 25} scroll 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} background border 0.000000";
-  createScrollNumber(currentPosition.x(), currentPosition.y() - 20, 80, 25, line);
+  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
+  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} scroll 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} background border 0.000000";
+  createScrollNumber(posx, posy, 80, 25, line);
   widgetChanged();
 }
 
 void WidgetPanel::createLineEdit()
 {
-  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {100, 25} edit 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
-  createLineEdit(currentPosition.x(), currentPosition.y() - 20, 100, 25, line);
+  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
+  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 25} edit 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
+  createLineEdit(posx, posy, 100, 25, line);
   widgetChanged();
 }
 
 void WidgetPanel::createSpinBox()
 {
-  QString line = "ioText {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {80, 25} editnum 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
-  createSpinBox(currentPosition.x(), currentPosition.y() - 20, 80, 25, line);
+  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
+  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} editnum 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
+  createSpinBox(posx, posy, 80, 25, line);
   widgetChanged();
 }
 
 void WidgetPanel::createButton()
 {
-  QString line = "ioButton {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) +"} {100, 30} event 1.000000 \"button1\" \"New Button\" \"/\" i1 0 10";
-  createButton(currentPosition.x(), currentPosition.y() - 20, 100, 30, line);
+  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
+  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  QString line = "ioButton {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 30} event 1.000000 \"button1\" \"New Button\" \"/\" i1 0 10";
+  createButton(posx, posy, 100, 30, line);
   widgetChanged();
 }
 
 void WidgetPanel::createKnob()
 {
-  createKnob(currentPosition.x(), currentPosition.y() - 20, 80, 80, QString("ioKnob {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(widgets.size())));
+  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
+  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  createKnob(posx, posy, 80, 80, QString("ioKnob {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(widgets.size())));
   widgetChanged();
 }
 
 void WidgetPanel::createCheckBox()
 {
-  createCheckBox(currentPosition.x(), currentPosition.y() - 20, 20, 20, QString("ioCheckbox {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {20, 20} off checkbox" +QString::number(widgets.size())));
+  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
+  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  createCheckBox(posx, posy, 20, 20, QString("ioCheckbox {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 20} off checkbox" +QString::number(widgets.size())));
   widgetChanged();
 }
 
 void WidgetPanel::createMenu()
 {
-  createMenu(currentPosition.x(), currentPosition.y() - 20, 80, 30, QString("ioMenu {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {80, 25} 1 303 \"item1,item2,item3\" menu" +QString::number(widgets.size())));
+  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
+  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  createMenu(posx, posy, 80, 30, QString("ioMenu {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 25} 1 303 \"item1,item2,item3\" menu" +QString::number(widgets.size())));
   widgetChanged();
 }
 
 void WidgetPanel::createMeter()
 {
-  createMeter(currentPosition.x(), currentPosition.y() - 20, 30, 80, QString("ioMeter {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {30, 80} {0, 60000, 0} \"vert" + QString::number(widgets.size()) + "\" 0.000000 \"hor" + QString::number(widgets.size()) + "\" 0.000000 fill 1 0 mouse"));
+  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
+  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  createMeter(posx, posy, 30, 80, QString("ioMeter {"+ QString::number(posx) +", "+ QString::number(posy) + "} {30, 80} {0, 60000, 0} \"vert" + QString::number(widgets.size()) + "\" 0.000000 \"hor" + QString::number(widgets.size()) + "\" 0.000000 fill 1 0 mouse"));
   widgetChanged();
 }
 
 void WidgetPanel::createConsole()
 {
-  createConsole(currentPosition.x(), currentPosition.y() - 20, 320, 400, QString("ioListing {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {320, 400}"));
+  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
+  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  createConsole(posx, posy, 320, 400, QString("ioListing {"+ QString::number(posx) +", "+ QString::number(posy) + "} {320, 400}"));
   widgetChanged();
 }
 
 void WidgetPanel::createGraph()
 {
-  createGraph(currentPosition.x(), currentPosition.y() - 20, 350, 150, QString("ioGraph {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {350, 150}"));
+  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
+  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  createGraph(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150}"));
   widgetChanged();
 }
 
 void WidgetPanel::createScope()
 {
-  createScope(currentPosition.x(), currentPosition.y() - 20, 350, 150, QString("ioGraph {"+ QString::number(currentPosition.x()) +", "+ QString::number(currentPosition.y() - 20) + "} {350, 150} scope 2.000000 -1.000000"));
+  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
+  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  createScope(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150} scope 2.000000 -1.000000"));
   widgetChanged();
 }
 
