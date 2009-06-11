@@ -128,6 +128,8 @@ class WidgetPanel : public QDockWidget
     QStringList clipboard;
     QSize oldSize;
     bool m_tooltips;
+    int m_width;
+    int m_height;
 
     int createSlider(int x, int y, int width, int height, QString widgetLine);
     int createText(int x, int y, int width, int height, QString widgetLine);
@@ -194,8 +196,8 @@ class WidgetPanel : public QDockWidget
     void deleteSelected();
     void undo();
     void redo();
-//     void dockStateChanged(bool topLevel);
     void updateData();
+    void dockStateChanged(bool);
 
   signals:
     void widgetsChanged(QString text);

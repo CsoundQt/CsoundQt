@@ -62,7 +62,8 @@ SOURCES += qutecsound.cpp \
  qutespinbox.cpp \
  qutescope.cpp \
  node.cpp \
- graphicwindow.cpp
+ graphicwindow.cpp \
+ keyboardshortcuts.cpp
 HEADERS += qutecsound.h \
  dockhelp.h \
  opentryparser.h \
@@ -92,7 +93,8 @@ HEADERS += qutecsound.h \
  qutespinbox.h \
  qutescope.h \
  node.h \
- graphicwindow.h
+ graphicwindow.h \
+ keyboardshortcuts.h
 TEMPLATE = app
 CONFIG += warn_on \
 	  thread \
@@ -110,7 +112,9 @@ DISTFILES += default.csd \
 
 FORMS += configdialog.ui \
   utilitiesdialog.ui \
- findreplace.ui
+ findreplace.ui \
+ keyboardshortcuts.ui \
+ keyselector.ui
 
 win32 {
     DEFINES +=WIN32

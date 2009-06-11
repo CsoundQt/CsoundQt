@@ -50,7 +50,8 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   layoutWidget->setFocusPolicy(Qt::NoFocus);
   connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
   connect(layoutWidget, SIGNAL(selection(QRect)), this, SLOT(selectionChanged(QRect)));
-//   connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));
+//   connect(this,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(dockLocationChanged(Qt::DockWidgetArea)));
+  connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));
 
   createSliderAct = new QAction(tr("Create Slider"),this);
   connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createSlider()));
@@ -1304,13 +1305,6 @@ void WidgetPanel::redo()
   qDebug("WidgetPanel::redo() not implemented yet");
 }
 
-// void  WidgetPanel::dockStateChanged(bool topLevel)
-// {
-//   if (!topLevel) {
-//     emit resized(oldSize); //Must send size after widget has docked.
-//   }
-// }
-
 void WidgetPanel::updateData()
 {
   foreach (QuteScope *scope, scopeWidgets) {
@@ -1318,6 +1312,11 @@ void WidgetPanel::updateData()
   }
     //FIXME this is crashing on exit with Scope widget(without major consequence...)
   QTimer::singleShot(30, this, SLOT(updateData()));
+}
+
+void WidgetPanel::dockStateChanged(bool undocked)
+{
+  qDebug() << "WidgetPanel::dockStateChanged" << undocked;
 }
 
 void WidgetPanel::deselectAll()

@@ -68,6 +68,7 @@ class DocumentPage;
 class UtilitiesDialog;
 class Curve;
 class GraphicWindow;
+class KeyboardShortcuts;
 
 class qutecsound:public QMainWindow
 {
@@ -180,6 +181,7 @@ class qutecsound:public QMainWindow
     void setHelpEntry();
     void openManualExample(QString fileName);
     void openExternalBrowser();
+    void openShortcutDialog();
     void utilitiesDialogOpen();
     void about();
     void documentWasModified();
@@ -190,12 +192,14 @@ class qutecsound:public QMainWindow
     void checkSelection();
     void runUtility(QString flags);
     void dispatchQueues();
-    void widgetDockStateChanged(bool topLevel);
-    void widgetDockLocationChanged(Qt::DockWidgetArea area);
+//     void widgetDockStateChanged(bool topLevel);
+//     void widgetDockLocationChanged(Qt::DockWidgetArea area);
     void showLineNumber(int lineNumber);
+    void setDefaultKeyboardShortcuts();
 
   private:
     void createActions();
+    void setKeyboardShortcuts();
     void connectActions();
     void createMenus();
     void fillFileMenu();
@@ -246,6 +250,7 @@ class qutecsound:public QMainWindow
     QMutex stringValueMutex;
     QMutex messageMutex;
     QStringList tempScriptFiles; //Remember temp files to delete them later
+    QVector<QAction *> m_keyActions; //Actions which have keyboard shortcuts
 
     QMenu *fileMenu;
     QMenu *recentMenu;
@@ -280,6 +285,7 @@ class qutecsound:public QMainWindow
     QAction *findAct;
     QAction *autoCompleteAct;
     QAction *configureAct;
+    QAction *setShortcutsAct;
     QAction *editAct;
     QAction *runAct;
     QAction *runTermAct;
