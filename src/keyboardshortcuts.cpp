@@ -76,7 +76,7 @@ bool KeyboardShortcuts::shortcutTaken(QString shortcut)
 void KeyboardShortcuts::restoreDefaults()
 {
   emit restoreDefaultShortcuts();
-  QDialog::reject();
+  refreshTable();
 }
 
 void KeyboardShortcuts::assignShortcut(int row, int /*column*/)

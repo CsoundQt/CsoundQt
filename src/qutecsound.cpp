@@ -1975,9 +1975,6 @@ void qutecsound::setKeyboardShortcuts()
   m_keyActions.append(showOverviewAct);
   m_keyActions.append(showConsoleAct);
   m_keyActions.append(setHelpEntryAct);
-  m_keyActions.append(setHelpEntryAct);
-  m_keyActions.append(browseBackAct);
-  m_keyActions.append(setHelpEntryAct);
   m_keyActions.append(browseBackAct);
   m_keyActions.append(browseForwardAct);
   m_keyActions.append(externalBrowserAct);
