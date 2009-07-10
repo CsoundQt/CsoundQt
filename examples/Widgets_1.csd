@@ -22,7 +22,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 144 230 393 417
+WindowBounds: 144 230 409 431
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R

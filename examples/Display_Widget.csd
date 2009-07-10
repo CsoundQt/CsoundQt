@@ -44,7 +44,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 735 284 393 300
+WindowBounds: 515 238 406 313
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -55,7 +55,7 @@ ioText {116, 6} {199, 34} label 0.000000 0.00100 "" left "DejaVu Sans" 20 {0, 0,
 ioText {6, 45} {363, 48} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {48896, 52224, 59904} background noborder Display widgets are labels whose value can be set from Csound through channels. The Display Widget can display both numbers and text.
 ioText {204, 102} {166, 35} display 0.000000 0.00100 "time" center "Courier New" 20 {0, 0, 0} {56064, 65280, 56576} background noborder 44.7913
 ioText {88, 108} {116, 29} label 0.000000 0.00100 "" right "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Time elapsed:
-ioSlider {12, 155} {249, 26} 30.000000 180.000000 52.727273 tempo
+ioSlider {12, 155} {249, 26} 30.000000 180.000000 52.289157 tempo
 ioText {117, 178} {80, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Tempo
 ioText {259, 153} {68, 26} display 0.000000 0.00100 "tempodisp" right "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 52.7273
 ioText {326, 153} {49, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder bpm

@@ -57,6 +57,7 @@ void Console::appendMessage(QString msg)
     text->setTextColor(QColor("orange"));
   }
   text->insertPlainText(msg);
+//   text->moveCursor(QTextCursor::Start);
   text->moveCursor(QTextCursor::End);
   text->setTextColor(m_textColor);
   // Necessary hack to make sure Console show text properly. It's not working...

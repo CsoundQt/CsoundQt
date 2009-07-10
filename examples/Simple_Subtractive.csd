@@ -102,7 +102,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 554 474 604 424
+WindowBounds: 502 235 613 433
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -112,7 +112,7 @@ ioView background {32125, 41634, 41120}
 ioText {216, 38} {243, 189} label 0.000000 0.00100 "" center "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border Filter
 ioKnob {228, 46} {56, 49} 100.000000 5000.000000 0.010000 495.959596 ffreq
 ioText {232, 89} {58, 26} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Cut Freq
-ioKnob {230, 111} {55, 48} 0.000000 1.000000 0.010000 0.434343 fres
+ioKnob {230, 111} {55, 48} 0.000000 1.000000 0.010000 0.424242 fres
 ioText {220, 154} {77, 24} label 0.000000 0.00100 "" center "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Resonance
 ioMenu {339, 61} {110, 25} 1 303 "moogladder, moogvcf2, rezzy, lowresx" ftype
 ioText {292, 63} {53, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Opcode 

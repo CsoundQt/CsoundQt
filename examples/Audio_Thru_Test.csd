@@ -133,7 +133,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 654 220 566 649
+WindowBounds: 344 245 582 651
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -174,7 +174,7 @@ ioMeter {237, 495} {250, 19} {0, 59904, 0} "out2_post" 0.000000 "out2_post" 0.00
 ioMeter {486, 495} {21, 21} {50176, 3584, 3072} "out2over_post" 0.000000 "DelayMute" 0.000000 fill 1 0 mouse
 ioText {22, 504} {49, 30} display 0.000000 0.00100 "gain_out1_disp" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border -21.4
 ioText {72, 503} {50, 30} display 0.000000 0.00100 "gain_out2_disp" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border -21.4
-ioSlider {47, 380} {24, 122} -48.000000 12.000000 -21.442623 gain_out1
-ioSlider {81, 380} {24, 122} -48.000000 12.000000 -21.442623 gain_out2
+ioSlider {47, 380} {24, 122} -48.000000 12.000000 -21.934426 gain_out1
+ioSlider {81, 380} {24, 122} -48.000000 12.000000 -21.934426 gain_out2
 </MacGUI>
 

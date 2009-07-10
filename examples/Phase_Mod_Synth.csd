@@ -337,7 +337,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 274 127 689 623
+WindowBounds: 274 127 716 665
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -348,15 +348,15 @@ ioText {22, 5} {653, 64} label 0.000000 0.00100 "" center "Lucida Grande" 20 {0,
 ioText {118, 229} {20, 36} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} background noborder 
 ioText {342, 228} {20, 36} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} background noborder 
 ioText {23, 77} {207, 157} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} background border OP3
-ioSlider {35, 102} {20, 100} 0.000000 1.000000 0.600000 op3amp
+ioSlider {35, 102} {20, 100} 0.000000 1.000000 0.590000 op3amp
 ioSlider {130, 100} {20, 100} 0.000001 3.000000 0.870001 op3att
-ioSlider {154, 99} {20, 100} 0.000001 2.000000 0.685323 op3dec
-ioSlider {177, 100} {20, 100} 0.000000 1.000000 0.870000 op3sus
+ioSlider {154, 99} {20, 100} 0.000001 2.000000 0.680001 op3dec
+ioSlider {177, 100} {20, 100} 0.000000 1.000000 0.860000 op3sus
 ioSlider {201, 100} {20, 100} 0.000001 4.000000 0.240001 op3rel
 ioText {57, 134} {67, 25} editnum 3.000000 0.001000 "op3ratio" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3.000000
 ioText {251, 78} {205, 154} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} background border OP5
-ioSlider {265, 102} {20, 100} 0.000000 1.000000 0.710000 op5amp
-ioSlider {357, 100} {20, 100} 0.000001 3.000000 1.500000 op5att
+ioSlider {265, 102} {20, 100} 0.000000 1.000000 0.700000 op5amp
+ioSlider {357, 100} {20, 100} 0.000001 3.000000 1.470001 op5att
 ioSlider {380, 100} {20, 100} 0.000001 2.000000 0.760001 op5dec
 ioSlider {403, 100} {20, 100} 0.000000 1.000000 0.270000 op5sus
 ioSlider {428, 100} {20, 100} 0.000001 4.000000 0.600001 op5rel
@@ -378,14 +378,14 @@ ioText {346, 414} {20, 36} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 
 ioText {227, 441} {20, 36} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} background noborder 
 ioText {105, 434} {262, 16} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} background noborder 
 ioText {23, 262} {204, 157} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} background border OP2
-ioSlider {35, 285} {20, 100} 0.000000 1.000000 0.820000 op2amp
+ioSlider {35, 285} {20, 100} 0.000000 1.000000 0.810000 op2amp
 ioText {56, 316} {67, 26} editnum 1.000000 0.001000 "op2ratio" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
-ioSlider {127, 284} {20, 100} 0.000001 3.000000 1.920000 op2att
+ioSlider {127, 284} {20, 100} 0.000001 3.000000 1.890000 op2att
 ioSlider {150, 284} {20, 100} 0.000001 2.000000 0.200001 op2dec
 ioSlider {174, 284} {20, 100} 0.000000 1.000000 0.910000 op2sus
 ioSlider {197, 284} {20, 100} 0.000001 4.000000 1.440001 op2rel
 ioText {130, 471} {207, 148} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} background border OP1
-ioSlider {145, 490} {20, 100} 0.000000 1.000000 0.410000 op1amp
+ioSlider {145, 490} {20, 100} 0.000000 1.000000 0.400000 op1amp
 ioText {167, 523} {67, 25} editnum 2.000000 0.001000 "op1ratio" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.000000
 ioSlider {237, 487} {20, 100} 0.000001 3.000000 0.240001 op1att
 ioSlider {260, 487} {20, 100} 0.000001 2.000000 0.320001 op1dec
@@ -394,8 +394,8 @@ ioSlider {308, 487} {20, 100} 0.000001 4.000000 1.760001 op1rel
 ioText {252, 263} {206, 155} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} background border OP4
 ioSlider {265, 286} {20, 100} 0.000000 1.000000 0.020000 op4amp
 ioText {289, 320} {66, 25} editnum 1.000000 0.001000 "op4ratio" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
-ioSlider {359, 285} {20, 100} 0.000001 3.000000 1.830000 op4att
-ioSlider {382, 285} {20, 100} 0.000001 2.000000 1.840000 op4dec
+ioSlider {359, 285} {20, 100} 0.000001 3.000000 1.800000 op4att
+ioSlider {382, 285} {20, 100} 0.000001 2.000000 1.820000 op4dec
 ioSlider {405, 285} {20, 100} 0.000000 1.000000 1.000000 op4sus
 ioSlider {429, 285} {20, 100} 0.000001 4.000000 0.800001 op4rel
 ioText {126, 385} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder A
@@ -419,7 +419,7 @@ ioText {166, 546} {69, 24} display 0.000000 0.00100 "" left "Lucida Grande" 8 {0
 ioText {560, 391} {19, 76} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} background noborder 
 ioText {470, 264} {205, 154} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} background border OP7
 ioSlider {484, 288} {20, 100} 0.000000 1.000000 0.880000 op7amp
-ioSlider {576, 286} {20, 100} 0.000001 3.000000 1.830000 op7att
+ioSlider {576, 286} {20, 100} 0.000001 3.000000 1.800000 op7att
 ioSlider {599, 286} {20, 100} 0.000001 2.000000 0.120001 op7dec
 ioSlider {622, 286} {20, 100} 0.000000 1.000000 0.010000 op7sus
 ioSlider {647, 286} {20, 100} 0.000001 4.000000 1.000001 op7rel
@@ -431,11 +431,11 @@ ioText {648, 387} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 
 ioText {477, 387} {41, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amp
 ioText {506, 341} {69, 24} display 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Ratio
 ioText {464, 458} {206, 155} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} background border OP6
-ioSlider {477, 481} {20, 100} 0.000000 1.000000 0.610000 op6amp
+ioSlider {477, 481} {20, 100} 0.000000 1.000000 0.600000 op6amp
 ioText {501, 515} {66, 25} editnum 4.000000 0.001000 "op6ratio" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4.000000
-ioSlider {571, 480} {20, 100} 0.000001 3.000000 1.770000 op6att
+ioSlider {571, 480} {20, 100} 0.000001 3.000000 1.740000 op6att
 ioSlider {594, 480} {20, 100} 0.000001 2.000000 0.560001 op6dec
-ioSlider {617, 480} {20, 100} 0.000000 1.000000 0.700000 op6sus
+ioSlider {617, 480} {20, 100} 0.000000 1.000000 0.690000 op6sus
 ioSlider {641, 480} {20, 100} 0.000001 4.000000 0.880001 op6rel
 ioText {571, 582} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder A
 ioText {595, 582} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder D

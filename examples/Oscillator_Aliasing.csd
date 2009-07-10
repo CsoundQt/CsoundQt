@@ -61,14 +61,14 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 525 192 648 709
+WindowBounds: 525 192 653 715
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {32125, 41634, 41120}
-ioKnob {23, 17} {77, 64} 40.000000 6000.000000 0.010000 401.212121 freq
+ioKnob {23, 17} {77, 64} 40.000000 6000.000000 0.010000 341.010101 freq
 ioText {22, 79} {80, 25} display 0.000000 0.00100 "freq" center "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 401.2121
 ioGraph {10, 124} {614, 392} table 0.000000 1.000000 
 ioMenu {225, 44} {124, 24} 0 303 "oscil,vco2" family

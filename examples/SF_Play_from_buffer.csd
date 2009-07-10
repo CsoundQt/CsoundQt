@@ -66,7 +66,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 512 231 462 631
+WindowBounds: 512 231 466 637
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R

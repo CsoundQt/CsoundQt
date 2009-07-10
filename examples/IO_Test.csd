@@ -60,7 +60,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 523 282 262 294
+WindowBounds: 523 282 270 305
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -76,8 +76,8 @@ ioMeter {68, 65} {17, 132} {39168, 47104, 59904} "in2" 0.953873 "hor2" 0.000000 
 ioMeter {20, 65} {17, 132} {39168, 47104, 59904} "in1" 0.953873 "hor2" 0.000000 fill 1 0 mouse
 ioText {18, 195} {23, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1
 ioText {69, 195} {23, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2
-ioText {8, 221} {41, 25} scroll -2.214111 0.100000 "indb1" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} background border -2.2
-ioText {59, 221} {41, 25} scroll -2.214111 0.100000 "indb2" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} background border -2.2
+ioText {8, 221} {41, 25} scroll -2.200000 0.100000 "indb1" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} background border -2.2
+ioText {59, 221} {41, 25} scroll -2.200000 0.100000 "indb2" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} background border -2.2
 ioText {137, 168} {23, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1
 ioText {188, 168} {23, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2
 ioCheckbox {138, 146} {20, 20} off on1
