@@ -308,8 +308,13 @@ void qutecsound::open()
   bool widgetsVisible = widgetPanel->isVisible();
   if (widgetsVisible)
     widgetPanel->hide(); // Necessary for Mac, as widget Panel covers open dialog
+  bool helpVisible = helpPanel->isVisible();
+  if (helpVisible)
+    helpPanel->hide(); // Necessary for Mac, as widget Panel covers open dialog
   fileName = QFileDialog::getOpenFileName(this, tr("Open File"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco);;All Files (*)"));
   if (widgetsVisible)
+    helpPanel->show();
+  if (helpVisible)
     widgetPanel->show();
   int index = isOpen(fileName);
   if (index != -1) {
@@ -1648,7 +1653,7 @@ void qutecsound::setDefaultKeyboardShortcuts()
   findAct->setShortcut(tr("Ctrl+F"));
   autoCompleteAct->setShortcut(tr("Alt+C"));
   configureAct->setShortcut(tr(""));
-  editAct->setShortcut(tr(""));
+  editAct->setShortcut(tr("CTRL+E"));
   runAct->setShortcut(tr("CTRL+R"));
   runTermAct->setShortcut(tr(""));
   stopAct->setShortcut(tr("Alt+S"));

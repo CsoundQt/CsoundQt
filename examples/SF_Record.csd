@@ -179,14 +179,14 @@ ain8post	=		ain8pre * ampdbfs(kgain)
 		ShowLED_a	"in6_post", ain6post, kTrigDisp, kampdisp, kdbrange
 		ShowLED_a	"in7_post", ain7post, kTrigDisp, kampdisp, kdbrange
 		ShowLED_a	"in8_post", ain8post, kTrigDisp, kampdisp, kdbrange
-		ShowOver_a	"in1over_post", ain1pre, kTrigDisp, kpeakhold
-		ShowOver_a	"in2over_post", ain2pre, kTrigDisp, kpeakhold
-		ShowOver_a	"in3over_post", ain3pre, kTrigDisp, kpeakhold
-		ShowOver_a	"in4over_post", ain4pre, kTrigDisp, kpeakhold
-		ShowOver_a	"in5over_post", ain5pre, kTrigDisp, kpeakhold
-		ShowOver_a	"in6over_post", ain6pre, kTrigDisp, kpeakhold
-		ShowOver_a	"in7over_post", ain7pre, kTrigDisp, kpeakhold
-		ShowOver_a	"in8over_post", ain8pre, kTrigDisp, kpeakhold
+		ShowOver_a	"in1over_post", ain1post, kTrigDisp, kpeakhold
+		ShowOver_a	"in2over_post", ain2post, kTrigDisp, kpeakhold
+		ShowOver_a	"in3over_post", ain3post, kTrigDisp, kpeakhold
+		ShowOver_a	"in4over_post", ain4post, kTrigDisp, kpeakhold
+		ShowOver_a	"in5over_post", ain5post, kTrigDisp, kpeakhold
+		ShowOver_a	"in6over_post", ain6post, kTrigDisp, kpeakhold
+		ShowOver_a	"in7over_post", ain7post, kTrigDisp, kpeakhold
+		ShowOver_a	"in8over_post", ain8post, kTrigDisp, kpeakhold
 endin
 
 
@@ -574,7 +574,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 305 102 787 696
+WindowBounds: 418 100 787 696
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -583,8 +583,8 @@ Options: -b128 -A -s -m167 -R
 ioView background {43690, 43690, 32639}
 ioText {27, 131} {324, 24} edit 0.000000 0.00100 "_Browse1" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioButton {141, 89} {100, 30} value 1.000000 "_Browse1" "Output File" "/" 
-ioSlider {128, 465} {136, 31} -18.000000 18.000000 0.264706 gain
-ioText {269, 465} {98, 31} display 0.000000 0.00100 "gain_disp" right "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder +0.26 dB
+ioSlider {128, 465} {136, 31} -18.000000 18.000000 0.000000 gain
+ioText {269, 465} {98, 31} display 0.000000 0.00100 "gain_disp" right "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder +0.00 dB
 ioButton {99, 174} {78, 26} value 1.000000 "record" "Record" "/" 
 ioButton {189, 174} {80, 25} value 1.000000 "stop" "Stop" "/" 
 ioText {614, 259} {37, 30} display 0.000000 0.00100 "min" right "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
@@ -623,21 +623,21 @@ ioText {342, 297} {46, 24} editnum 7.000000 1.000000 "chn7" right "Lucida Grande
 ioCheckbox {353, 271} {20, 20} off chn7onoff
 ioText {396, 298} {46, 24} editnum 8.000000 1.000000 "chn8" right "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 8.000000
 ioCheckbox {407, 272} {20, 20} off chn8onoff
-ioMeter {20, 348} {27, 94} {0, 59904, 0} "in1_pre" 0.192927 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {20, 348} {27, 94} {0, 59904, 0} "in1_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {20, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in1over_pre" 0.000000 fill 1 0 mouse
-ioMeter {74, 348} {27, 94} {0, 59904, 0} "in2_pre" 0.191341 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {74, 348} {27, 94} {0, 59904, 0} "in2_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {74, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in2over_pre" 0.000000 fill 1 0 mouse
-ioMeter {128, 348} {27, 94} {0, 59904, 0} "in3_pre" 0.000000 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {128, 348} {27, 94} {0, 59904, 0} "in3_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {128, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in3over_pre" 0.000000 fill 1 0 mouse
-ioMeter {181, 348} {27, 94} {0, 59904, 0} "in4_pre" 0.000000 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {181, 348} {27, 94} {0, 59904, 0} "in4_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {181, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in4over_pre" 0.000000 fill 1 0 mouse
-ioMeter {237, 348} {27, 94} {0, 59904, 0} "in5_pre" 0.000000 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {237, 348} {27, 94} {0, 59904, 0} "in5_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {237, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in5over_pre" 0.000000 fill 1 0 mouse
-ioMeter {291, 348} {27, 94} {0, 59904, 0} "in6_pre" 0.000000 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {291, 348} {27, 94} {0, 59904, 0} "in6_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {291, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in6over_pre" 0.000000 fill 1 0 mouse
-ioMeter {343, 348} {27, 94} {0, 59904, 0} "in7_pre" 0.000000 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {343, 348} {27, 94} {0, 59904, 0} "in7_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {343, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in7over_pre" 0.000000 fill 1 0 mouse
-ioMeter {397, 348} {27, 94} {0, 59904, 0} "in8_pre" 0.000000 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {397, 348} {27, 94} {0, 59904, 0} "in8_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {397, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in8over_pre" 0.000000 fill 1 0 mouse
 ioText {371, 90} {116, 32} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File Format
 ioMenu {389, 127} {83, 25} 0 303 "WAV,AIFF" fileformat
@@ -648,23 +648,25 @@ ioText {442, 504} {94, 25} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 
 ioMenu {537, 502} {61, 26} 1 303 "dB,raw" ampdisp
 ioText {457, 299} {129, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select Input Channels
 ioText {435, 412} {167, 130} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border LED Display Properties
-ioMeter {21, 536} {27, 94} {0, 59904, 0} "in1_post" 0.198442 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {21, 536} {27, 94} {0, 59904, 0} "in1_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {21, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in1over_post" 0.000000 fill 1 0 mouse
-ioMeter {75, 536} {27, 94} {0, 59904, 0} "in2_post" 0.196856 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {75, 536} {27, 94} {0, 59904, 0} "in2_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {75, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in2over_post" 0.000000 fill 1 0 mouse
-ioMeter {129, 536} {27, 94} {0, 59904, 0} "in3_post" 0.000000 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {129, 536} {27, 94} {0, 59904, 0} "in3_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {129, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in3over_post" 0.000000 fill 1 0 mouse
-ioMeter {182, 536} {27, 94} {0, 59904, 0} "in4_post" 0.000000 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {182, 536} {27, 94} {0, 59904, 0} "in4_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {182, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in4over_post" 0.000000 fill 1 0 mouse
-ioMeter {238, 536} {27, 94} {0, 59904, 0} "in5_post" 0.000000 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {238, 536} {27, 94} {0, 59904, 0} "in5_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {238, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in5over_post" 0.000000 fill 1 0 mouse
-ioMeter {292, 536} {27, 94} {0, 59904, 0} "in6_post" 0.000000 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {292, 536} {27, 94} {0, 59904, 0} "in6_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {292, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in6over_post" 0.000000 fill 1 0 mouse
-ioMeter {344, 536} {27, 94} {0, 59904, 0} "in7_post" 0.000000 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {344, 536} {27, 94} {0, 59904, 0} "in7_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {344, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in7over_post" 0.000000 fill 1 0 mouse
-ioMeter {398, 536} {27, 94} {0, 59904, 0} "in8_post" 0.000000 "hor8" 0.370370 fill 1 0 mouse
+ioMeter {398, 536} {27, 94} {0, 59904, 0} "in8_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
 ioMeter {398, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in8over_post" 0.000000 fill 1 0 mouse
 ioText {606, 296} {166, 327} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Records a soundfile (1-8 channels) with arbitrary input routing. The file will have as many channels as you select to record with the checkboxes. E.g. if you check channels 2, 3, 5 and 8 for recording, a sound file with 4 channels will be written. Set the nchnls in the orchestra header and select your audio device in the CsOptions or in the Configure dialog.
-ioText {435, 553} {166, 71} label 0.000000 0.00100 "" left "Lucida Grande" 8 {21504, 28672, 21248} {65280, 65280, 65280} nobackground noborder Note: You can also us the Record Button in the QuteCsound interface for quick simple recording on any csd.
+ioText {434, 609} {166, 71} label 0.000000 0.00100 "" left "Lucida Grande" 8 {21504, 28672, 21248} {65280, 65280, 65280} nobackground noborder Note: You can also us the Record Button in the QuteCsound interface for quick simple recording on any csd.
+ioText {443, 362} {129, 33} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Pre Fader
+ioText {440, 558} {129, 33} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Post Fader
 </MacGUI>
 

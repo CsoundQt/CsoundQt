@@ -35,23 +35,24 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 324 204 289 431
+WindowBounds: 324 204 572 424
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {32125, 41634, 41120}
-ioSlider {8, 7} {20, 98} 0.000000 1.000000 0.397959 amp
-ioSlider {34, 6} {239, 22} 100.000000 1000.000000 100.000000 freq
+ioSlider {266, 7} {20, 98} 0.000000 1.000000 0.367347 amp
+ioSlider {10, 29} {239, 22} 100.000000 1000.000000 261.924686 freq
 ioGraph {8, 112} {265, 116} table 0.000000 1.000000 
-ioListing {8, 234} {266, 158}
-ioText {34, 37} {41, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder Amp:
-ioText {74, 37} {70, 24} display 0.000000 0.00100 "amp" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder 0.4184
-ioText {35, 67} {41, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder Freq:
-ioText {75, 67} {69, 24} display 0.000000 0.00100 "freq" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder 427.6151
-ioText {152, 34} {119, 69} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 
-ioText {169, 72} {78, 24} display 0.000000 0.00100 "freqsweep" center "DejaVu Sans" 8 {0, 0, 0} {14080, 31232, 29696} background border 999.6769
-ioButton {160, 37} {100, 30} event 1.000000 "Button 1" "Sweep" "/" i1 0 10
+ioListing {279, 112} {266, 266}
+ioText {293, 44} {41, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder Amp:
+ioText {333, 44} {70, 24} display 0.000000 0.00100 "amp" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder 0.3673
+ioText {66, 57} {41, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder Freq:
+ioText {106, 57} {69, 24} display 0.000000 0.00100 "freq" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder 261.9247
+ioText {425, 6} {120, 100} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 
+ioText {449, 68} {78, 24} display 0.000000 0.00100 "freqsweep" center "DejaVu Sans" 8 {0, 0, 0} {14080, 31232, 29696} background border 999.6769
+ioButton {435, 24} {100, 30} event 1.000000 "Button 1" "Sweep" "/" i1 0 10
+ioGraph {8, 233} {266, 147} scope 2.000000 -1.000000 
 </MacGUI>
 
