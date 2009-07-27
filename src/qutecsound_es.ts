@@ -509,6 +509,24 @@
     </message>
 </context>
 <context>
+    <name>DockHelp</name>
+    <message>
+        <location filename="dockhelp.cpp" line="70"/>
+        <source>Not Found! Make sure the documentation path is set in the Configuration Dialog.</source>
+        <translation>¡No encontrado! Asegúrese que la ruta a la documentación esté correcta en la ventana de configuración.</translation>
+    </message>
+    <message>
+        <location filename="dockhelp.cpp" line="126"/>
+        <source>QuteCsound</source>
+        <translation>QuteCsound</translation>
+    </message>
+    <message>
+        <location filename="dockhelp.cpp" line="127"/>
+        <source>External links can&apos;t be followed in help browser.</source>
+        <translation>Los enlaces externos no se pueden mostrar en el panel de ayuda.</translation>
+    </message>
+</context>
+<context>
     <name>FindReplace</name>
     <message>
         <location filename="findreplace.cpp" line="50"/>

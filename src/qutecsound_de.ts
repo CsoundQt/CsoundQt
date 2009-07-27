@@ -6,12 +6,12 @@
     <message>
         <location filename="configdialog.cpp" line="310"/>
         <source>QuteCsound</source>
-        <translation type="unfinished">QuteCsound</translation>
+        <translation>QuteCsound</translation>
     </message>
     <message>
         <location filename="configdialog.cpp" line="311"/>
         <source>Only files with extension .csd are accepted</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur Dateien mit der Endung .csd sind möglich</translation>
     </message>
     <message>
         <location filename="configdialog.cpp" line="455"/>
@@ -505,6 +505,24 @@
     <message>
         <location filename="configdialog.ui" line="650"/>
         <source>Autoplay files when launched from file</source>
+        <translation>Selbststart wenn aus Datei geladen</translation>
+    </message>
+</context>
+<context>
+    <name>DockHelp</name>
+    <message>
+        <location filename="dockhelp.cpp" line="70"/>
+        <source>Not Found! Make sure the documentation path is set in the Configuration Dialog.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dockhelp.cpp" line="126"/>
+        <source>QuteCsound</source>
+        <translation type="unfinished">QuteCsound</translation>
+    </message>
+    <message>
+        <location filename="dockhelp.cpp" line="127"/>
+        <source>External links can&apos;t be followed in help browser.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -662,12 +680,12 @@ Von Anfang beginnen?</translation>
     <message>
         <location filename="keyboardshortcuts.cpp" line="107"/>
         <source>Press Key Combination</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenkombination drücken</translation>
     </message>
     <message>
         <location filename="keyboardshortcuts.cpp" line="109"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine</translation>
     </message>
 </context>
 <context>
@@ -675,47 +693,47 @@ Von Anfang beginnen?</translation>
     <message>
         <location filename="keyselector.ui" line="13"/>
         <source>Select shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenkombination auswählen</translation>
     </message>
     <message>
         <location filename="keyselector.ui" line="47"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="keyselector.ui" line="54"/>
         <source>Cancel</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="keyselector.ui" line="73"/>
         <source>Current Shortcut:    </source>
-        <translation type="unfinished"></translation>
+        <translation>Gegenwärtige Kombination:</translation>
     </message>
     <message>
         <location filename="keyselector.ui" line="80"/>
         <source>current</source>
-        <translation type="unfinished"></translation>
+        <translation>laufend</translation>
     </message>
     <message>
         <location filename="keyselector.ui" line="87"/>
         <source>Command</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommando</translation>
     </message>
     <message>
         <location filename="keyselector.ui" line="94"/>
         <source>Action:   </source>
-        <translation type="unfinished"></translation>
+        <translation>Aktion:</translation>
     </message>
     <message>
         <location filename="keyselector.ui" line="101"/>
         <source>new</source>
-        <translation type="unfinished"></translation>
+        <translation>neu</translation>
     </message>
     <message>
         <location filename="keyselector.ui" line="108"/>
         <source>New shortcut:</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Kürzel:</translation>
     </message>
 </context>
 <context>
@@ -724,28 +742,29 @@ Von Anfang beginnen?</translation>
         <location filename="keyboardshortcuts.cpp" line="30"/>
         <location filename="keyboardshortcuts.ui" line="22"/>
         <source>Keyboard Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenkombination</translation>
     </message>
     <message>
         <location filename="keyboardshortcuts.cpp" line="90"/>
         <source>Invalid shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Tastenkombination</translation>
     </message>
     <message>
         <location filename="keyboardshortcuts.cpp" line="91"/>
         <source>Shortcut cannot be assigned.
 It is already used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenkombination kann nicht zugewiesen werden.
+Ist schon in Gebrauch.</translation>
     </message>
     <message>
         <location filename="keyboardshortcuts.ui" line="43"/>
         <source>Restore Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Voreinstellungen wiederherstellen</translation>
     </message>
     <message>
         <location filename="keyboardshortcuts.ui" line="63"/>
         <source>Close</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation>Schließen</translation>
     </message>
 </context>
 <context>
@@ -805,17 +824,17 @@ It is already used.</source>
     <message>
         <location filename="qutewidget.cpp" line="256"/>
         <source>Width =</source>
-        <translation type="unfinished"></translation>
+        <translation>Breite</translation>
     </message>
     <message>
         <location filename="qutewidget.cpp" line="263"/>
         <source>Height =</source>
-        <translation type="unfinished"></translation>
+        <translation>Höhe</translation>
     </message>
     <message>
         <location filename="qutewidget.cpp" line="270"/>
         <source>Channel name =</source>
-        <translation type="unfinished"></translation>
+        <translation>Kanalname</translation>
     </message>
 </context>
 <context>
@@ -2406,23 +2425,24 @@ Version </translation>
         <source>French translation:
 Francois Pinot
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Französische Übersetzung:
+Francois Pinot</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1656"/>
         <source>CTRL+E</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+E</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1898"/>
         <location filename="qutecsound.cpp" line="1899"/>
         <source>Set Keyboard Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenkürzel setzen</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1900"/>
         <source>Set Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenkürzel setzen</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1923"/>
@@ -2551,26 +2571,33 @@ wurde verändert.
 Released under the LGPLv2 or GPLv3
 Version %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>von Andres Cabrera
+Veröffentlicht unter LGPLv2 oder GPLv3
+Version %1
+</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1329"/>
         <source>German translation:
 Joachim Heintz
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Deutsche Übersetzung:
+Joachim Heintz
+</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1628"/>
         <source>Line %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile %1</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1330"/>
         <source>Portuguese translation:
 Victor Lazzarini
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Portugiesische Übersetzung:
+Victor Lazzarini
+</translation>
     </message>
 </context>
 </TS>

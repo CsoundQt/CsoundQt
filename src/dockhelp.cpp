@@ -67,7 +67,7 @@ void DockHelp::loadFile(QString fileName)
 //                          tr("Cannot read file %1:\n%2.")
 //                              .arg(fileName)
 //                              .arg(file.errorString()));
-    text->setText("Not Found! Make sure the documentation path is set in the Configuration Dialog.");
+    text->setText(tr("Not Found! Make sure the documentation path is set in the Configuration Dialog."));
     return;
   }
   //FIXME: Fix this hack so it works fine in windows as well...
@@ -114,13 +114,17 @@ void DockHelp::browseForward()
 void DockHelp::followLink(QUrl url)
 {
   if (url.host() == "") {
-    // Will not follow external link, only local links
+    // Will not follow external links for safety, only local files
     if (url.toString().endsWith(".csd")) {
       emit openManualExample(url.toLocalFile());
     }
     else {
     text->setSource(url);
     }
+  }
+  else {
+    QMessageBox::warning(this, tr("QuteCsound"),
+                    tr("External links can't be followed in help browser."));
   }
 }
 
