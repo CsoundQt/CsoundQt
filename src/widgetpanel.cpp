@@ -519,10 +519,11 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 
 void WidgetPanel::resizeEvent(QResizeEvent * event)
 {
+//   qDebug("WidgetPanel::resizeEvent()");
   QDockWidget::resizeEvent(event);
   oldSize = event->oldSize();
-//   qDebug("WidgetPanel::resizeEvent()");
   emit resized(event->size());
+  adjustLayoutSize();
 }
 
 void WidgetPanel::moveEvent(QMoveEvent * event)
@@ -1223,6 +1224,7 @@ void WidgetPanel::widgetResized(QPair<int, int> delta)
 void WidgetPanel::adjustLayoutSize()
 {
   int width = 30, height = 30;
+  int woff = 20, hoff = 45; // hack to avoid scrollbars...
   for (int i = 0; i< widgets.size(); i++) {
     if (widgets[i]->x() + widgets[i]->width() > width) {
       width = widgets[i]->x() + widgets[i]->width();
@@ -1230,6 +1232,12 @@ void WidgetPanel::adjustLayoutSize()
     if (widgets[i]->y() + widgets[i]->height() > height) {
       height = widgets[i]->y() + widgets[i]->height();
     }
+  }
+  if (this->width() - woff > width) {
+    width = this->width() - woff;
+  }
+  if  (this->height() - hoff > height) {
+    height = this->height() - hoff;
   }
   layoutWidget->resize(width+5, height+5);
 }

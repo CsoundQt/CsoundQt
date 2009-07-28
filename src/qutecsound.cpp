@@ -1130,6 +1130,8 @@ void qutecsound::record()
     currentAudioFile = fileName;
     qDebug("start recording: %s", fileName.toStdString().c_str());
     outfile = new SndfileHandle(fileName.toStdString().c_str(), SFM_WRITE, format, channels, sampleRate);
+    // clip instead of wrap when converting floats to ints
+    outfile->command(SFC_SET_CLIPPING, NULL, SF_TRUE);
     samplesWritten = 0;
 
     QTimer::singleShot(20, this, SLOT(recordBuffer()));
@@ -1157,7 +1159,6 @@ void qutecsound::recordBuffer()
     QTimer::singleShot(20, this, SLOT(recordBuffer()));
   }
   else { //Stop recording
-
     delete outfile;
     qDebug("closed file: %s\nWritten %li samples", currentAudioFile.toStdString().c_str(), samplesWritten);
   }
@@ -1630,6 +1631,7 @@ void qutecsound::showLineNumber(int lineNumber)
 
 void qutecsound::setDefaultKeyboardShortcuts()
 {
+//   m_keyActions.append(createGraphAct);
   newAct->setShortcut(tr("Ctrl+N"));
   openAct->setShortcut(tr("Ctrl+O"));
   reloadAct->setShortcut(tr(""));
@@ -1801,8 +1803,8 @@ void qutecsound::createActions()
 //   connect(editAct, SIGNAL(triggered(bool)), this, SLOT(edit(bool)));
   editAct = static_cast<WidgetPanel *>(widgetPanel)->editAct;
 
-  runAct = new QAction(QIcon(":/images/gtk-media-play-ltr.png"), tr("Run"), this);
-  runAct->setStatusTip(tr("Run"));
+  runAct = new QAction(QIcon(":/images/gtk-media-play-ltr.png"), tr("Run Csound"), this);
+  runAct->setStatusTip(tr("Run current file"));
   runAct->setIconText(tr("Run"));
   runAct->setCheckable(true);
   connect(runAct, SIGNAL(triggered()), this, SLOT(runCsound()));

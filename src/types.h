@@ -153,7 +153,7 @@ class RingBuffer
           currentPos - currentReadPos :  currentPos - currentReadPos + size);
 //       qDebug("RingBuffer: Available: %i", available);
       if (available <= saveSize) { //not enough data in buffer
-	    mutex.unlock();
+        mutex.unlock();
         return false;
       }
       for (int i = 0; i < saveSize; i++) {
