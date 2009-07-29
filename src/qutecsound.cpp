@@ -550,7 +550,7 @@ void qutecsound::del()
     widgetPanel->deleteSelected();
 }
 
-bool qutecsound::saveAs()
+QString qutecsound::getSaveFileName()
 {
   bool widgetsVisible = widgetPanel->isVisible();
   if (widgetsVisible)
@@ -562,14 +562,31 @@ bool qutecsound::saveAs()
     return false;
   if (isOpen(fileName) != -1) {
     QMessageBox::critical(this, tr("QuteCsound"),
-                tr("The file is already open in another tab.\nFile not saved!"),
-                  QMessageBox::Ok | QMessageBox::Default);
+                          tr("The file is already open in another tab.\nFile not saved!"),
+                             QMessageBox::Ok | QMessageBox::Default);
     return false;
   }
   if (!fileName.endsWith(".csd") && !fileName.endsWith(".orc") && !fileName.endsWith(".sco"))
     fileName += ".csd";
+  return fileName;
+}
 
-  return saveFile(fileName);
+bool qutecsound::saveAs()
+{
+  QString fileName = getSaveFileName();
+  if (fileName != "")
+    return saveFile(fileName);
+  else
+    return false;
+}
+
+bool qutecsound::saveNoWidgets()
+{
+  QString fileName = getSaveFileName();
+  if (fileName != "")
+    return saveFile(fileName, false);
+  else
+    return false;
 }
 
 bool qutecsound::closeTab()
@@ -1709,6 +1726,11 @@ void qutecsound::createActions()
   saveAsAct->setIconText(tr("Save as"));
   connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
 
+  saveNoWidgetsAct = new QAction(tr("Export without widgets"), this);
+  saveNoWidgetsAct->setStatusTip(tr("Save to new file without including widget sections"));
+//   saveNoWidgetsAct->setIconText(tr("Save as"));
+  connect(saveNoWidgetsAct, SIGNAL(triggered()), this, SLOT(saveNoWidgets()));
+
   closeTabAct = new QAction(tr("Close current tab"), this);
   closeTabAct->setStatusTip(tr("Close current tab"));
 //   closeTabAct->setIconText(tr("Close"));
@@ -2200,6 +2222,7 @@ void qutecsound::fillFileMenu()
   fileMenu->addAction(openAct);
   fileMenu->addAction(saveAct);
   fileMenu->addAction(saveAsAct);
+  fileMenu->addAction(saveNoWidgetsAct);
   fileMenu->addAction(reloadAct);
 //   fileMenu->addAction(cabbageAct);
   fileMenu->addAction(closeTabAct);
@@ -2668,7 +2691,7 @@ void qutecsound::loadCompanionFile(const QString &fileName)
     loadFile(companionFileName);
 }
 
-bool qutecsound::saveFile(const QString &fileName)
+bool qutecsound::saveFile(const QString &fileName, bool saveWidgets)
 {
   qDebug("qutecsound::saveFile");
   QString text;
@@ -2678,13 +2701,13 @@ bool qutecsound::saveFile(const QString &fileName)
   perfMutex.unlock();
   documentTabs->setTabIcon(curPage, QIcon());
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  if (m_options->saveWidgets)
+  if (m_options->saveWidgets && saveWidgets)
     text = documentPages[curPage]->getFullText();
   else
     text = documentPages[curPage]->toPlainText();
   QApplication::restoreOverrideCursor();
 
-  if (fileName != documentPages[curPage]->fileName) {
+  if (fileName != documentPages[curPage]->fileName && saveWidgets) {
     documentPages[curPage]->fileName = fileName;
     setCurrentFile(fileName);
   }

@@ -160,6 +160,7 @@ class qutecsound:public QMainWindow
     void closeGraph();
     bool save();
     bool saveAs();
+    bool saveNoWidgets();
     void copy();
     void cut();
     void paste();
@@ -212,7 +213,7 @@ class qutecsound:public QMainWindow
     bool maybeSave();
     QString fixLineEndings(const QString &text);
     void loadCompanionFile(const QString &fileName);
-    bool saveFile(const QString &fileName);
+    bool saveFile(const QString &fileName, bool saveWidgets = true);
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
     QString generateScript(bool realtime = true, QString tempFileName = "");
@@ -220,6 +221,7 @@ class qutecsound:public QMainWindow
     void setWidgetPanelGeometry();
     int isOpen(QString fileName);
     void markErrorLine();
+    QString getSaveFileName();
 
     CSOUND *csound;
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
@@ -267,6 +269,7 @@ class qutecsound:public QMainWindow
     QAction *reloadAct;
     QAction *saveAct;
     QAction *saveAsAct;
+    QAction *saveNoWidgetsAct;
     QAction *closeTabAct;
     QAction *printAct;
     QAction *createGraphAct;

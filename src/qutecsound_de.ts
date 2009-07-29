@@ -513,17 +513,17 @@
     <message>
         <location filename="dockhelp.cpp" line="70"/>
         <source>Not Found! Make sure the documentation path is set in the Configuration Dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht gefunden! Bitte versichern ob der Pfad für die Dokumentation im Konfigurationsdialog richtig gesetzt wurde.</translation>
     </message>
     <message>
         <location filename="dockhelp.cpp" line="126"/>
         <source>QuteCsound</source>
-        <translation type="unfinished">QuteCsound</translation>
+        <translation>QuteCsound</translation>
     </message>
     <message>
         <location filename="dockhelp.cpp" line="127"/>
         <source>External links can&apos;t be followed in help browser.</source>
-        <translation type="unfinished"></translation>
+        <translation>Externen Links kann im Hilfe-Browser nicht gefolgt werden.</translation>
     </message>
 </context>
 <context>
@@ -2434,12 +2434,12 @@ Francois Pinot</translation>
     <message>
         <location filename="qutecsound.cpp" line="1806"/>
         <source>Run Csound</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound ausführen</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1807"/>
         <source>Run current file</source>
-        <translation type="unfinished"></translation>
+        <translation>Gegenwärtige Datei ausführen</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1900"/>
