@@ -921,7 +921,7 @@ void qutecsound::runCsound(bool realtime)
       widgetPanel->setVisible(true);
     }
     ud->PERF_STATUS = 1;
-    if (m_options->invalueEnabled and m_options->enableWidgets) {
+    if (m_options->useInvalue and m_options->enableWidgets) {
       csoundSetInputValueCallback(csound, &qutecsound::inputValueCallback);
       csoundSetOutputValueCallback(csound, &qutecsound::outputValueCallback);
     }
@@ -955,10 +955,10 @@ void qutecsound::runCsound(bool realtime)
         qApp->processEvents();
         if (ud->qcs->m_options->enableWidgets) {
           widgetPanel->getValues(&channelNames, &values, &stringValues);
-//           if (ud->qcs->m_options->chngetEnabled) {
-//             writeWidgetValues(ud);
-//             readWidgetValues(ud);
-//           }
+          if (!ud->qcs->m_options->useInvalue) {
+            writeWidgetValues(ud);
+            readWidgetValues(ud);
+          }
           processEventQueue(ud);
         }
       }
@@ -1055,7 +1055,7 @@ void qutecsound::stop()
   if (!m_options->thread) {
     while (ud->PERF_STATUS == -1) {
       ;
-      //TODO: wait here?
+      // Wait until performance has stopped
     }
   }
   runAct->setChecked(false);
@@ -1391,12 +1391,15 @@ void qutecsound::autoComplete()
 
 void qutecsound::configure()
 {
-  ConfigDialog *dialog = new ConfigDialog(this, m_options/*, _configlists*/);
-  connect(dialog, SIGNAL(finished(int)), this, SLOT(applySettings(int)));
-  dialog->show();
+  ConfigDialog dialog(this, m_options);
+  dialog.setCurrentTab(configureTab);
+  if (dialog.exec() == QDialog::Accepted) {
+    applySettings();
+    configureTab = dialog.currentTab();
+  }
 }
 
-void qutecsound::applySettings(int /*result*/)
+void qutecsound::applySettings()
 {
   m_highlighter->setDocument(textEdit->document());
   m_highlighter->setColorVariables(m_options->colorVariables);
@@ -1426,6 +1429,7 @@ void qutecsound::applySettings(int /*result*/)
   renderOptions += currentOptions;
   runAct->setStatusTip(tr("Play") + playOptions);
   renderAct->setStatusTip(tr("Render to file") + renderOptions);
+
 }
 
 void qutecsound::checkSelection()
@@ -1585,7 +1589,7 @@ void qutecsound::dispatchQueues()
 
     stringValueMutex.lock();
     QStringList channels = outStringQueue.keys();
-    for  (int i = 0; i < channels.size(); i++) { //TODO is there an iterator in Qt which can do this better?
+    for  (int i = 0; i < channels.size(); i++) {
       widgetPanel->setValue(channels[i], outStringQueue[channels[i]]);
     }
     outStringQueue.clear();
@@ -2160,6 +2164,7 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/8_Chn_Player.csd");
   exampleFiles.append(":/examples/SF_Record.csd");
   exampleFiles.append(":/examples/Simple_Convolution.csd");
+  exampleFiles.append(":/examples/Universal_Convolution.csd");
   exampleFiles.append(":/examples/Oscillator_Aliasing.csd");
   exampleFiles.append(":/examples/Circle.csd");
   exampleFiles.append(":/examples/Pvstencil.csd");
@@ -2352,8 +2357,7 @@ void qutecsound::readSettings()
   m_options->saveWidgets = settings.value("savewidgets", true).toBool();
   m_options->iconText = settings.value("iconText", true).toBool();
   m_options->wrapLines = settings.value("wrapLines", true).toBool();
-  m_options->invalueEnabled = settings.value("invalueEnabled", true).toBool();
-//   m_options->chngetEnabled = settings.value("chngetEnabled", false).toBool();
+  m_options->useInvalue = settings.value("useInvalue", true).toBool();
   m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
   m_options->showTooltips = settings.value("showTooltips", true).toBool();
   m_options->enableFLTK = settings.value("enableFLTK", false).toBool();
@@ -2464,8 +2468,7 @@ void qutecsound::writeSettings()
   settings.setValue("iconText", m_options->iconText);
   settings.setValue("wrapLines", m_options->wrapLines);
   settings.setValue("enableWidgets", m_options->enableWidgets);
-  settings.setValue("invalueEnabled", m_options->invalueEnabled);
-//   settings.setValue("chngetEnabled", m_options->chngetEnabled);
+  settings.setValue("useInvalue", m_options->useInvalue);
   settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
   settings.setValue("showTooltips", m_options->showTooltips);
   settings.setValue("enableFLTK", m_options->enableFLTK);
@@ -2593,12 +2596,6 @@ bool qutecsound::maybeSave()
   return true;
 }
 
-QString qutecsound::fixLineEndings(const QString &text)
-{
-  qDebug("n = %i  r = %i", text.count("\n"), text.count("\r"));
-  return text;
-}
-
 bool qutecsound::loadFile(QString fileName, bool runNow)
 {
   QFile file(fileName);
@@ -2644,7 +2641,6 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
     if (!line.endsWith("\n"))
       text += "\n";
   }
-  //textEdit->setPlainText(fixLineEndings(in.readAll()));
 //   textEdit->setPlainText(text);
   textEdit->setTextString(text, m_options->saveWidgets);
 //   textEdit->setTabStopWidth(m_options->tabWidth);
@@ -2875,11 +2871,11 @@ void qutecsound::setWidgetPanelGeometry()
     return;
   if (geometry.x() < 0) {
     geometry.setX(10);
-	qDebug() << "qutecsound::setWidgetPanelGeometry() Warining: X is negative.";
+    qDebug() << "qutecsound::setWidgetPanelGeometry() Warining: X is negative.";
   }
   if (geometry.y() < 0) {
     geometry.setY(10);
-	qDebug() << "qutecsound::setWidgetPanelGeometry() Warining: Y is negative.";
+    qDebug() << "qutecsound::setWidgetPanelGeometry() Warining: Y is negative.";
   }
   widgetPanel->setGeometry(geometry);
 }
@@ -2922,19 +2918,19 @@ void qutecsound::readWidgetValues(CsoundUserData *ud)
 void qutecsound::writeWidgetValues(CsoundUserData *ud)
 {
 //   qDebug("qutecsound::writeWidgetValues");
-  MYFLT* pvalue;
-  for (int i = 0; i < ud->qcs->channelNames.size(); i++) {
-    if (ud->qcs->channelNames[i] != "") {
-      if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
-         CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-           ud->qcs->widgetPanel->setValue(i,*pvalue);
-      }
-      else if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
-        CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
-        ud->qcs->widgetPanel->setValue(i,QString((char *)pvalue));
-      }
-    }
-  }
+//   MYFLT* pvalue;
+//   for (int i = 0; i < ud->qcs->channelNames.size(); i++) {
+//     if (ud->qcs->channelNames[i] != "") {
+//       if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
+//          CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+//            ud->qcs->widgetPanel->setValue(i,*pvalue);
+//       }
+//       else if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
+//         CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
+//         ud->qcs->widgetPanel->setValue(i,QString((char *)pvalue));
+//       }
+//     }
+//   }
 }
 
 void qutecsound::processEventQueue(CsoundUserData *ud)
@@ -3032,11 +3028,11 @@ uintptr_t qutecsound::csThread(void *data)
         udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames,
                                             &udata->qcs->values,
                                             &udata->qcs->stringValues);
+        if (!udata->qcs->m_options->useInvalue) {
+          writeWidgetValues(udata);
+          readWidgetValues(udata);
+        }
       }
-//         if (udata->qcs->m_options->chngetEnabled) {
-//           writeWidgetValues(udata);
-//           readWidgetValues(udata);
-//         }
 //         processEventQueue(udata);
       perform = csoundPerformKsmps(udata->csound);
     }
@@ -3051,7 +3047,7 @@ uintptr_t qutecsound::csThread(void *data)
 
 QStringList qutecsound::runCsoundInternally(QStringList flags)
 {
-qDebug("qutecsound::runCsoundInternally()");
+  qDebug("qutecsound::runCsoundInternally()");
   static char *argv[33];
   int index = 0;
   foreach (QString flag, flags) {

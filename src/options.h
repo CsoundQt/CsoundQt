@@ -56,8 +56,7 @@ class Options{
     bool wrapLines;
 
     bool enableWidgets;
-    bool invalueEnabled;
-//     bool chngetEnabled;
+    bool useInvalue; // If false use chnget
     bool showWidgetsOnRun;
     bool showTooltips;
     bool enableFLTK;

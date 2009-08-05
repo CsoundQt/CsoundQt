@@ -120,6 +120,11 @@ QString QuteWidget::getWidgetLine()
   return m_line;
 }
 
+QString QuteWidget::getWidgetXmlText()
+{
+  return QString();
+}
+
 double QuteWidget::getValue()
 {
   return 0.0;

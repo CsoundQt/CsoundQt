@@ -27,21 +27,21 @@
 
 class qutecsound;
 class Options;
-// class ConfigLists;
 
 class ConfigDialog : public QDialog, private Ui::ConfigDialog
 {
   Q_OBJECT
   public:
-    ConfigDialog(qutecsound *parent = 0, Options *options = 0/*, ConfigLists *configlists = 0*/);
+    ConfigDialog(qutecsound *parent = 0, Options *options = 0);
 
     ~ConfigDialog();
+    int currentTab();
+    void setCurrentTab(int index);
 
 
   private:
     qutecsound* m_parent;
     Options *m_options;
-//     ConfigLists *m_configlists;
     void browseFile(QString &destination);
     void browseSaveFile(QString &destination);
     void browseDir(QString &destination);

@@ -130,7 +130,9 @@ unsigned int WidgetPanel::widgetCount()
   return widgets.size();
 }
 
-void WidgetPanel::getValues(QVector<QString> *channelNames, QVector<double> *values, QVector<QString> *stringValues)
+void WidgetPanel::getValues(QVector<QString> *channelNames,
+                            QVector<double> *values, 
+                            QVector<QString> *stringValues)
 {
   if (channelNames->size() < widgets.size()*2)
     return;
@@ -474,7 +476,6 @@ void WidgetPanel::queueEvent(QString eventLine)
 {
 //   qDebug("WidgetPanel::queueEvent %s", eventLine.toStdString().c_str());
   if (eventQueueSize < QUTECSOUND_MAX_EVENTS) {
-    //TODO is this lock necessary?
 //     eventMutex.lock();
     eventQueue[eventQueueSize] = eventLine;
     eventQueueSize++;

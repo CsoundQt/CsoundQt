@@ -189,7 +189,7 @@ class qutecsound:public QMainWindow
     void syntaxCheck();
     void autoComplete();
     void configure();
-    void applySettings(int result = 0);
+    void applySettings();
     void checkSelection();
     void runUtility(QString flags);
     void dispatchQueues();
@@ -211,7 +211,6 @@ class qutecsound:public QMainWindow
     int execute(QString executable, QString options);
     void configureHighlighter();
     bool maybeSave();
-    QString fixLineEndings(const QString &text);
     void loadCompanionFile(const QString &fileName);
     bool saveFile(const QString &fileName, bool saveWidgets = true);
     void setCurrentFile(const QString &fileName);
@@ -315,6 +314,7 @@ class qutecsound:public QMainWindow
     QAction *aboutQtAct;
 
     int curPage;
+    int configureTab; // Tab in last configure dialog
     QString lastUsedDir;
     QString lastFileDir;
     viewMode m_mode;

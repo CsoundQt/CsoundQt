@@ -62,8 +62,10 @@ void QuteText::setValue(double value)
 #ifdef  USE_WIDGET_MUTEX
   mutex.lock();
 #endif
-  if (m_type == "display")
+  if (m_type == "display") {
     setText(QString::number(value, 'f', QUTESLIDER_PRECISION));
+    m_value = value;
+  }
 #ifdef  USE_WIDGET_MUTEX
   mutex.unlock();
 #endif
@@ -75,6 +77,7 @@ void QuteText::setValue(QString value)
   mutex.lock();
 #endif
   setText(value);
+  m_value = value.toDouble();
 #ifdef  USE_WIDGET_MUTEX
   mutex.unlock();
 #endif

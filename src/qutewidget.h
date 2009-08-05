@@ -51,6 +51,7 @@ class QuteWidget : public QWidget
     virtual QString getChannelName();
     virtual QString getChannel2Name();
     virtual QString getWidgetLine();
+    virtual QString getWidgetXmlText();
     virtual double getValue();
     virtual double getValue2();
     virtual double getResolution();

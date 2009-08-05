@@ -23,11 +23,10 @@
 #include <QtGui>
 #include "qutecsound.h"
 #include "configdialog.h"
-// #include "configlists.h"
 #include "options.h"
 #include "types.h"
 
-ConfigDialog::ConfigDialog(qutecsound *parent, Options *options/*, ConfigLists *configlists*/)
+ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   : QDialog(parent), m_parent(parent), m_options(options)
 {
   setupUi(this);
@@ -72,8 +71,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options/*, ConfigLists *
   iconTextCheckBox->setChecked(m_options->iconText);
   wrapLinesCheckBox->setChecked(m_options->wrapLines);
   widgetsCheckBox->setChecked(m_options->enableWidgets);
-  invalueCheckBox->setChecked(m_options->invalueEnabled);
-//   chngetCheckBox->setChecked(m_options->chngetEnabled);
+  channelComboBox->setCurrentIndex(m_options->useInvalue ? 0: 1);
   showWidgetsOnRunCheckBox->setChecked(m_options->showWidgetsOnRun);
   showTooltipsCheckBox->setChecked(m_options->showTooltips);
   enableFLTKCheckBox->setChecked(m_options->enableFLTK);
@@ -171,9 +169,20 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options/*, ConfigLists *
 
 }
 
-
 ConfigDialog::~ConfigDialog()
 {
+}
+
+int ConfigDialog::currentTab()
+{
+  return editorTabWidget->currentIndex();
+}
+
+void ConfigDialog::setCurrentTab(int index)
+{
+  if (index >= 0 && index < 4) {
+    editorTabWidget->setCurrentIndex(index);
+  }
 }
 
 void ConfigDialog::accept()
@@ -191,8 +200,7 @@ void ConfigDialog::accept()
   m_options->iconText = iconTextCheckBox->isChecked();
   m_options->wrapLines = wrapLinesCheckBox->isChecked();
   m_options->enableWidgets = widgetsCheckBox->isChecked();
-  m_options->invalueEnabled = invalueCheckBox->isChecked();
-//   m_options->chngetEnabled = chngetCheckBox->isChecked();
+  m_options->useInvalue = channelComboBox->currentIndex() == 0;
   m_options->showWidgetsOnRun = showWidgetsOnRunCheckBox->isChecked();
   m_options->showTooltips = showTooltipsCheckBox->isChecked();
   m_options->enableFLTK = enableFLTKCheckBox->isChecked();
@@ -241,8 +249,6 @@ void ConfigDialog::accept()
   m_options->incdir = IncdirLineEdit->text();
   m_options->defaultCsdActive = defaultCsdCheckBox->isChecked();
   m_options->defaultCsd = defaultCsdLineEdit->text();
-//   m_options->opcodexmldirActive = opcodeXmlDirCheckBox->isChecked();
-//   m_options->opcodexmldir = opcodeXmlDirLineEdit->text();
 
   m_options->terminal = TerminalLineEdit->text();
   m_options->browser = browserLineEdit->text();
