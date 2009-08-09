@@ -47,40 +47,41 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   layoutWidget = new LayoutWidget(this);
   layoutWidget->setGeometry(QRect(0, 0, 800, 600));
   layoutWidget->setAutoFillBackground(true);
-  layoutWidget->setFocusPolicy(Qt::NoFocus);
+//   layoutWidget->setFocusPolicy(Qt::NoFocus);
   connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
   connect(layoutWidget, SIGNAL(selection(QRect)), this, SLOT(selectionChanged(QRect)));
 //   connect(this,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(dockLocationChanged(Qt::DockWidgetArea)));
   connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));
 
   createSliderAct = new QAction(tr("Create Slider"),this);
-  connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createSlider()));
+  connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createNewSlider()));
   createLabelAct = new QAction(tr("Create Label"),this);
-  connect(createLabelAct, SIGNAL(triggered()), this, SLOT(createLabel()));
+  connect(createLabelAct, SIGNAL(triggered()), this, SLOT(createNewLabel()));
   createDisplayAct = new QAction(tr("Create Display"),this);
-  connect(createDisplayAct, SIGNAL(triggered()), this, SLOT(createDisplay()));
+  connect(createDisplayAct, SIGNAL(triggered()), this, SLOT(createNewDisplay()));
   createScrollNumberAct = new QAction(tr("Create ScrollNumber"),this);
-  connect(createScrollNumberAct, SIGNAL(triggered()), this, SLOT(createScrollNumber()));
+  connect(createScrollNumberAct, SIGNAL(triggered()),
+          this, SLOT(createNewScrollNumber()));
   createLineEditAct = new QAction(tr("Create LineEdit"),this);
-  connect(createLineEditAct, SIGNAL(triggered()), this, SLOT(createLineEdit()));
+  connect(createLineEditAct, SIGNAL(triggered()), this, SLOT(createNewLineEdit()));
   createSpinBoxAct = new QAction(tr("Create SpinBox"),this);
-  connect(createSpinBoxAct, SIGNAL(triggered()), this, SLOT(createSpinBox()));
+  connect(createSpinBoxAct, SIGNAL(triggered()), this, SLOT(createNewSpinBox()));
   createButtonAct = new QAction(tr("Create Button"),this);
-  connect(createButtonAct, SIGNAL(triggered()), this, SLOT(createButton()));
+  connect(createButtonAct, SIGNAL(triggered()), this, SLOT(createNewButton()));
   createKnobAct = new QAction(tr("Create Knob"),this);
-  connect(createKnobAct, SIGNAL(triggered()), this, SLOT(createKnob()));
+  connect(createKnobAct, SIGNAL(triggered()), this, SLOT(createNewKnob()));
   createCheckBoxAct = new QAction(tr("Create Checkbox"),this);
-  connect(createCheckBoxAct, SIGNAL(triggered()), this, SLOT(createCheckBox()));
+  connect(createCheckBoxAct, SIGNAL(triggered()), this, SLOT(createNewCheckBox()));
   createMenuAct = new QAction(tr("Create Menu"),this);
-  connect(createMenuAct, SIGNAL(triggered()), this, SLOT(createMenu()));
+  connect(createMenuAct, SIGNAL(triggered()), this, SLOT(createNewMenu()));
   createMeterAct = new QAction(tr("Create Controller"),this);
-  connect(createMeterAct, SIGNAL(triggered()), this, SLOT(createMeter()));
+  connect(createMeterAct, SIGNAL(triggered()), this, SLOT(createNewMeter()));
   createConsoleAct = new QAction(tr("Create Console"),this);
-  connect(createConsoleAct, SIGNAL(triggered()), this, SLOT(createConsole()));
+  connect(createConsoleAct, SIGNAL(triggered()), this, SLOT(createNewConsole()));
   createGraphAct = new QAction(tr("Create Graph"),this);
-  connect(createGraphAct, SIGNAL(triggered()), this, SLOT(createGraph()));
+  connect(createGraphAct, SIGNAL(triggered()), this, SLOT(createNewGraph()));
   createScopeAct = new QAction(tr("Create Scope"),this);
-  connect(createScopeAct, SIGNAL(triggered()), this, SLOT(createScope()));
+  connect(createScopeAct, SIGNAL(triggered()), this, SLOT(createNewScope()));
   propertiesAct = new QAction(tr("Properties"),this);
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
   editAct = new QAction(tr("Widget Edit Mode"), this);
@@ -110,11 +111,13 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   selectAllAct = new QAction(tr("Select all widgets"), this);
   connect(selectAllAct, SIGNAL(triggered()), this, SLOT(selectAll()));
 
-  scrollArea = new QScrollArea(this);
-//   scrollArea->setBackgroundRole(QPalette::Dark);
-  scrollArea->setWidget(layoutWidget);
-  setWidget(scrollArea);
-//   resize(200, 100);
+//   this is causing trouble, left out for now
+//   scrollArea = new QScrollArea(this);
+//   scrollArea->setWidget(layoutWidget);
+//   setWidget(scrollArea);
+
+// //   if scrollArea is giving trouble comment lines above and use the one below
+  setWidget(layoutWidget);
 
   eventQueue.resize(QUTECSOUND_MAX_EVENTS);
   eventQueueSize = 0;
@@ -1360,7 +1363,7 @@ void WidgetPanel::selectionChanged(QRect selection)
   }
 }
 
-void WidgetPanel::createSlider()
+void WidgetPanel::createNewSlider()
 {
   int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
   int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
@@ -1368,7 +1371,7 @@ void WidgetPanel::createSlider()
   widgetChanged();
 }
 
-void WidgetPanel::createLabel()
+void WidgetPanel::createNewLabel()
 {
   int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
   int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
@@ -1377,7 +1380,7 @@ void WidgetPanel::createLabel()
   widgetChanged();
 }
 
-void WidgetPanel::createDisplay()
+void WidgetPanel::createNewDisplay()
 {
   int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
   int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
@@ -1386,7 +1389,7 @@ void WidgetPanel::createDisplay()
   widgetChanged();
 }
 
-void WidgetPanel::createScrollNumber()
+void WidgetPanel::createNewScrollNumber()
 {
   int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
   int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
@@ -1395,7 +1398,7 @@ void WidgetPanel::createScrollNumber()
   widgetChanged();
 }
 
-void WidgetPanel::createLineEdit()
+void WidgetPanel::createNewLineEdit()
 {
   int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
   int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
@@ -1404,7 +1407,7 @@ void WidgetPanel::createLineEdit()
   widgetChanged();
 }
 
-void WidgetPanel::createSpinBox()
+void WidgetPanel::createNewSpinBox()
 {
   int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
   int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
@@ -1413,7 +1416,7 @@ void WidgetPanel::createSpinBox()
   widgetChanged();
 }
 
-void WidgetPanel::createButton()
+void WidgetPanel::createNewButton()
 {
   int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
   int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
@@ -1422,7 +1425,7 @@ void WidgetPanel::createButton()
   widgetChanged();
 }
 
-void WidgetPanel::createKnob()
+void WidgetPanel::createNewKnob()
 {
   int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
   int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
@@ -1430,7 +1433,7 @@ void WidgetPanel::createKnob()
   widgetChanged();
 }
 
-void WidgetPanel::createCheckBox()
+void WidgetPanel::createNewCheckBox()
 {
   int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
   int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
@@ -1438,7 +1441,7 @@ void WidgetPanel::createCheckBox()
   widgetChanged();
 }
 
-void WidgetPanel::createMenu()
+void WidgetPanel::createNewMenu()
 {
   int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
   int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
@@ -1446,7 +1449,7 @@ void WidgetPanel::createMenu()
   widgetChanged();
 }
 
-void WidgetPanel::createMeter()
+void WidgetPanel::createNewMeter()
 {
   int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
   int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
@@ -1454,7 +1457,7 @@ void WidgetPanel::createMeter()
   widgetChanged();
 }
 
-void WidgetPanel::createConsole()
+void WidgetPanel::createNewConsole()
 {
   int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
   int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
@@ -1462,7 +1465,7 @@ void WidgetPanel::createConsole()
   widgetChanged();
 }
 
-void WidgetPanel::createGraph()
+void WidgetPanel::createNewGraph()
 {
   int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
   int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
@@ -1470,7 +1473,7 @@ void WidgetPanel::createGraph()
   widgetChanged();
 }
 
-void WidgetPanel::createScope()
+void WidgetPanel::createNewScope()
 {
   int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
   int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
