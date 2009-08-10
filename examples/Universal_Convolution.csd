@@ -16,7 +16,6 @@ ksmps = 128
 nchnls = 2
 0dbfs = 1
 
-#define LOG2 #0,301029996#
 
  opcode nextpowof2, i, i
 ilen    xin ;given length as input
