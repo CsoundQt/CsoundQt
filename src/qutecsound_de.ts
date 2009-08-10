@@ -349,12 +349,12 @@
     <message>
         <location filename="configdialog.ui" line="783"/>
         <source>Use invalue/outvalue</source>
-        <translation type="unfinished"></translation>
+        <translation>invalue/outvalue benutzen</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="788"/>
         <source>Use chnget/chnset</source>
-        <translation type="unfinished"></translation>
+        <translation>chnget/chnset benutzen</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="803"/>
@@ -2282,7 +2282,7 @@ Version </translation>
     <message>
         <location filename="qutecsound.cpp" line="1893"/>
         <source>Output Console</source>
-        <translation>Output-Konsole</translation>
+        <translation>Konsole</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1691"/>
@@ -2433,7 +2433,8 @@ Version </translation>
 Francois Pinot
 </source>
         <translation>Französische Übersetzung:
-Francois Pinot</translation>
+Francois Pinot
+</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1679"/>
@@ -2443,12 +2444,12 @@ Francois Pinot</translation>
     <message>
         <location filename="qutecsound.cpp" line="1733"/>
         <source>Export without widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportieren ohne Widgets</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1734"/>
         <source>Save to new file without including widget sections</source>
-        <translation type="unfinished"></translation>
+        <translation>In neuer Datei ohne Angaben über die Widgets sichern</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1832"/>
