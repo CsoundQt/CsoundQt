@@ -18,11 +18,14 @@ nchnls = 2
 
 #define LOG2 #0,301029996#
 
-  opcode nextpowof2, i, i
-ilen	xin; given length as input
-iout = 2^(ceil(log(ilen)/$LOG2))
-	xout iout
-  endop
+ opcode nextpowof2, i, i
+ilen    xin ;given length as input
+iout = 1
+loop:
+iout = iout * 2
+if iout < ilen igoto loop
+xout iout
+ endop
 
   opcode TakeAll2, aa, Skii
 Sfil, kspeed, iskip, iloop	xin
@@ -163,7 +166,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 539 25 534 741
+WindowBounds: 637 25 534 741
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
