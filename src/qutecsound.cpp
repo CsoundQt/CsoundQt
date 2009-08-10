@@ -1882,6 +1882,10 @@ void qutecsound::createActions()
   connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
   connect(helpPanel, SIGNAL(Close(bool)), showHelpAct, SLOT(setChecked(bool)));
 
+  showManualAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("Csound Manual"), this);
+  showManualAct->setStatusTip(tr("Show the Csound manual in the help panel"));
+  connect(showManualAct, SIGNAL(triggered()), helpPanel, SLOT(showManual()));
+
   showGenAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("GEN Routines"), this);
   showGenAct->setStatusTip(tr("Show the GEN Routines Manual page"));
   connect(showGenAct, SIGNAL(triggered()), helpPanel, SLOT(showGen()));
@@ -2209,6 +2213,7 @@ void qutecsound::createMenus()
   helpMenu->addAction(setHelpEntryAct);
   helpMenu->addAction(externalBrowserAct);
   helpMenu->addSeparator();
+  helpMenu->addAction(showManualAct);
   helpMenu->addAction(showOverviewAct);
   helpMenu->addAction(showGenAct);
   helpMenu->addSeparator();

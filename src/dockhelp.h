@@ -52,6 +52,7 @@ class DockHelp : public QDockWidget
     void openManualExample(QString fileName);
 
   public slots:
+    void showManual();
     void showGen();
     void showOverview();
     void browseBack();

@@ -88,6 +88,11 @@ void DockHelp::closeEvent(QCloseEvent * /*event*/)
 {
   emit Close(false);
 }
+void DockHelp::showManual()
+{
+  this->setVisible(true);
+  this->loadFile(docDir + "/index.html");
+}
 
 void DockHelp::showGen()
 {
