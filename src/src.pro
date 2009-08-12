@@ -170,19 +170,26 @@ solaris-g++-64 {
 macx {
     build64 {
         MAC_LIB = CsoundLib64
+        HEADERS += /Library/Frameworks/CsoundLib64.framework/Versions/Current/Headers/csound.h
+        qute_cpp {
+            HEADERS += /Library/Frameworks/CsoundLib64.framework/Versions/Current/Headers/csound.hpp
+            HEADERS += /Library/Frameworks/CsoundLib64.framework/Versions/Current/Headers/csPerfThread.hpp
+            HEADERS += /Library/Frameworks/CsoundLib64.framework/Versions/Current/Headers/cwindow.h
+            LIBS += /Library/Frameworks/CsoundLib64.framework/Versions/Current/lib_csnd.dylib
+        }
     }
     else {
         MAC_LIB = CsoundLib
+        HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.h
+        qute_cpp {
+            HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.hpp
+            HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csPerfThread.hpp
+            HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/cwindow.h
+            LIBS += /Library/Frameworks/CsoundLib.framework/Versions/Current/lib_csnd.dylib
+        }
     }
     message(Building using $${MAC_LIB})
     DEFINES +=MACOSX
-    HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.h
-    qute_cpp {
-        HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.hpp
-        HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csPerfThread.hpp
-        HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/cwindow.h
-        LIBS += /Library/Frameworks/CsoundLib.framework/Versions/Current/lib_csnd.dylib
-    }
     LIBS += -framework QtXml
     LIBS += -framework QtGui
     LIBS += -framework QtCore
