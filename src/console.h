@@ -34,7 +34,7 @@ class Console
 
     virtual void appendMessage(QString msg);
     void clear();
-	void refresh();
+    void refresh();
     virtual void setDefaultFont(QFont font) {text->document()->setDefaultFont(font);}
     virtual void setColors(QColor textColor, QColor bgColor)
     {
@@ -55,6 +55,7 @@ class Console
     bool error;
     QColor m_textColor;
     QColor m_bgColor;
+    QMutex lock;
 };
 
 class DockConsole : public QDockWidget, public Console
@@ -63,7 +64,7 @@ class DockConsole : public QDockWidget, public Console
   public:
     DockConsole(QWidget * parent): QDockWidget(parent)
     {
-      setWindowTitle("Csound Output Console");
+      setWindowTitle(tr("Csound Output Console"));
       text = new QTextEdit(parent);
       text->setReadOnly(true);
       text->setContextMenuPolicy(Qt::NoContextMenu);
@@ -97,10 +98,32 @@ class DockConsole : public QDockWidget, public Console
       menu->exec(event->globalPos());
       delete menu;
     }
+    virtual void keyPressEvent(QKeyEvent *event)
+    {
+      if (!event->isAutoRepeat()) {
+        QString key = event->text();
+        if (key != "") {
+          appendMessage(key);
+          emit keyPressed(key);
+        }
+      }
+    }
+    virtual void keyReleaseEvent(QKeyEvent *event)
+    {
+      if (!event->isAutoRepeat()) {
+        QString key = event->text();
+        if (key != "") {
+//           appendMessage("rel:" + key);
+          emit keyReleased(key);
+        }
+      }
+    }
 
     virtual void closeEvent(QCloseEvent * event);
   signals:
     void Close(bool visible);
+    void keyPressed(QString key);
+    void keyReleased(QString key);
 };
 
 
@@ -132,7 +155,7 @@ class ConsoleWidget : public QWidget, public Console
   public:
     ConsoleWidget(QWidget * parent): QWidget(parent)
     {
-      setWindowTitle("Csound Output Console");
+      setWindowTitle(tr("Csound Output Console"));
       text = new MyQTextEdit(parent);
       text->setReadOnly(true);
       text->setFontItalic(false);

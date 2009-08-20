@@ -97,6 +97,19 @@ class qutecsound:public QMainWindow
     static void drawGraphCallback(CSOUND *csound, WINDAT *windat);
     static void killGraphCallback(CSOUND *csound, WINDAT *windat);
     static int exitGraphCallback(CSOUND *csound);
+    static void outputValueCallback (CSOUND *csound,
+                                    const char *channelName,
+                                    MYFLT value);
+    static void inputValueCallback (CSOUND *csound,
+                                   const char *channelName,
+                                   MYFLT *value);
+//     static void ioCallback (CSOUND *csound,
+//                             const char *channelName,
+//                             MYFLT *value,
+//                             int channelType);
+    static int keyEventCallback(void *userData,
+                                void *p,
+                                unsigned int type);
 
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
     static void  csThread(void *data);
@@ -104,12 +117,6 @@ class qutecsound:public QMainWindow
     static uintptr_t csThread(void *data);
 #endif
     QMutex perfMutex;
-    static void outputValueCallback (CSOUND *csound,
-                                    const char *channelName,
-                                    MYFLT value);
-    static void inputValueCallback (CSOUND *csound,
-                                   const char *channelName,
-                                   MYFLT *value);
     static void readWidgetValues(CsoundUserData *ud);
     static void writeWidgetValues(CsoundUserData *ud);
     static void processEventQueue(CsoundUserData *ud);
@@ -120,6 +127,8 @@ class qutecsound:public QMainWindow
     void newCurve(Curve *curve);  //New graphs
     void updateCurve(WINDAT *windat); //graph updates
     int killCurves(CSOUND *csound);
+    int popKeyPressEvent(); // return ASCII code of key press event for Csound or -1 if no event
+    int popKeyReleaseEvent(); // return ASCII code of key release event for Csound -1 if no event
 
     QVector<QString> channelNames;
     QVector<double> values;
@@ -197,6 +206,8 @@ class qutecsound:public QMainWindow
 //     void widgetDockLocationChanged(Qt::DockWidgetArea area);
     void showLineNumber(int lineNumber);
     void setDefaultKeyboardShortcuts();
+    void keyPressForCsound(QString key);
+    void keyReleaseForCsound(QString key);
 
   private:
     void createActions();
@@ -237,7 +248,10 @@ class qutecsound:public QMainWindow
     QStack<Curve *> newCurveBuffer;
     QVector<WINDAT *> curveBuffer;
     QStringList messageQueue;
+    QStringList keyPressBuffer; // protected by keyMutex
+    QStringList keyReleaseBuffer; // protected by keyMutex
     QTimer *queueTimer;
+
     QTabWidget *documentTabs;
     GraphicWindow *m_graphic;
     QVector<DocumentPage *> documentPages;
@@ -248,8 +262,10 @@ class qutecsound:public QMainWindow
     DockHelp *helpPanel;
     WidgetPanel *widgetPanel;
     QToolButton *closeTabButton;
+
     QMutex stringValueMutex;
     QMutex messageMutex;
+    QMutex keyMutex; // For keys pressed in the console to pass to Csound
     QStringList tempScriptFiles; //Remember temp files to delete them later
     QVector<QAction *> m_keyActions; //Actions which have keyboard shortcuts
 

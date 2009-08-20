@@ -111,13 +111,12 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   selectAllAct = new QAction(tr("Select all widgets"), this);
   connect(selectAllAct, SIGNAL(triggered()), this, SLOT(selectAll()));
 
-//   this is causing trouble, left out for now
-//   scrollArea = new QScrollArea(this);
-//   scrollArea->setWidget(layoutWidget);
-//   setWidget(scrollArea);
+  scrollArea = new QScrollArea(this);
+  scrollArea->setWidget(layoutWidget);
+  setWidget(scrollArea);
 
 // //   if scrollArea is giving trouble comment lines above and use the one below
-  setWidget(layoutWidget);
+//   setWidget(layoutWidget);
 
   eventQueue.resize(QUTECSOUND_MAX_EVENTS);
   eventQueueSize = 0;
@@ -1319,8 +1318,8 @@ void WidgetPanel::redo()
 
 void WidgetPanel::updateData()
 {
-  foreach (QuteScope *scope, scopeWidgets) {
-    scope->updateData();
+  for (int i = 0; i < scopeWidgets.size(); i++) {
+    scopeWidgets[i]->updateData();
   }
     //FIXME this is crashing on exit with Scope widget(without major consequence...)
   QTimer::singleShot(30, this, SLOT(updateData()));

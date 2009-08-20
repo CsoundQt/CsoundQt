@@ -71,6 +71,10 @@ qutecsound::qutecsound(QStringList fileNames)
   m_console = new DockConsole(this);
   m_console->setObjectName("m_console");
 //   m_console->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+  connect(m_console, SIGNAL(keyPressed(QString)),
+          this, SLOT(keyPressForCsound(QString)));
+  connect(m_console, SIGNAL(keyReleased(QString)),
+          this, SLOT(keyReleaseForCsound(QString)));
   addDockWidget(Qt::BottomDockWidgetArea, m_console);
   helpPanel = new DockHelp(this);
   helpPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea | Qt::LeftDockWidgetArea);
@@ -313,9 +317,9 @@ void qutecsound::open()
     helpPanel->hide(); // Necessary for Mac, as widget Panel covers open dialog
   fileName = QFileDialog::getOpenFileName(this, tr("Open File"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco);;All Files (*)"));
   if (widgetsVisible)
-    helpPanel->show();
-  if (helpVisible)
     widgetPanel->show();
+  if (helpVisible)
+    helpPanel->show();
   int index = isOpen(fileName);
   if (index != -1) {
     documentTabs->setCurrentIndex(index);
@@ -560,7 +564,7 @@ QString qutecsound::getSaveFileName()
     widgetPanel->show(); // Necessary for Mac, as widget Panel covers open dialog
   if (fileName.isEmpty())
     return false;
-  if (isOpen(fileName) != -1) {
+  if (isOpen(fileName) != -1 && isOpen(fileName) != curPage) {
     QMessageBox::critical(this, tr("QuteCsound"),
                           tr("The file is already open in another tab.\nFile not saved!"),
                              QMessageBox::Ok | QMessageBox::Default);
@@ -901,6 +905,26 @@ void qutecsound::runCsound(bool realtime)
     csoundSetKillGraphCallback(csound, &qutecsound::killGraphCallback);
     csoundSetExitGraphCallback(csound, &qutecsound::exitGraphCallback);
 
+    if (m_options->enableWidgets) {
+      if (m_options->useInvalue) {
+        csoundSetInputValueCallback(csound, &qutecsound::inputValueCallback);
+        csoundSetOutputValueCallback(csound, &qutecsound::outputValueCallback);
+      }
+      else {
+        // Not really sure that this is worth the trouble, as it
+        // is used only with chnsend and chnrecv which are deprecated
+//         qDebug() << "csoundSetChannelIOCallback";
+//         csoundSetChannelIOCallback(csound, &qutecsound::ioCallback);
+      }
+    }
+    else {
+      csoundSetInputValueCallback(csound, NULL);
+      csoundSetOutputValueCallback(csound, NULL);
+    }
+    csoundSetCallback(csound,
+                      &keyEventCallback,
+                      (void *) ud, CSOUND_CALLBACK_KBD_EVENT);
+
     ud->result=csoundCompile(csound,argc,argv);
     ud->csound = csound;
     ud->zerodBFS = csoundGet0dBFS(csound);
@@ -921,14 +945,6 @@ void qutecsound::runCsound(bool realtime)
       widgetPanel->setVisible(true);
     }
     ud->PERF_STATUS = 1;
-    if (m_options->useInvalue and m_options->enableWidgets) {
-      csoundSetInputValueCallback(csound, &qutecsound::inputValueCallback);
-      csoundSetOutputValueCallback(csound, &qutecsound::outputValueCallback);
-    }
-    else {
-      csoundSetInputValueCallback(csound, NULL);
-      csoundSetOutputValueCallback(csound, NULL);
-    }
 
     //TODO is something here necessary to work with doubles?
 //     PUBLIC int csoundGetSampleFormat(CSOUND *);
@@ -1701,6 +1717,22 @@ void qutecsound::setDefaultKeyboardShortcuts()
   unindentAct->setShortcut(tr("Shift+Ctrl+I"));
 }
 
+void qutecsound::keyPressForCsound(QString key)
+{
+//   qDebug() << "keyPressForCsound " << key;
+  keyMutex.lock(); // Is this lock necessary?
+  keyPressBuffer << key;
+  keyMutex.unlock();
+}
+
+void qutecsound::keyReleaseForCsound(QString key)
+{
+//   qDebug() << "keyReleaseForCsound " << key;
+  keyMutex.lock(); // Is this lock necessary?
+  keyReleaseBuffer << key;
+  keyMutex.unlock();
+}
+
 void qutecsound::createActions()
 {
   // Actions that are not connected here depend on the active document, so they are
@@ -2165,6 +2197,7 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/SF_Play_from_buffer_2.csd");
   exampleFiles.append(":/examples/SF_Play_from_HD.csd");
   exampleFiles.append(":/examples/SF_Play_from_HD_2.csd");
+  exampleFiles.append(":/examples/Keyboard_Control.csd");
   exampleFiles.append(":/examples/8_Chn_Player.csd");
   exampleFiles.append(":/examples/SF_Record.csd");
   exampleFiles.append(":/examples/Simple_Convolution.csd");
@@ -2887,15 +2920,15 @@ void qutecsound::setWidgetPanelGeometry()
 
 int qutecsound::isOpen(QString fileName)
 {
-  bool open = false;
+  int open = -1;
   int i = 0;
   for (i = 0; i < documentPages.size(); i++) {
       if (documentPages[i]->fileName == fileName) {
-        open = true;
+        open = i;
         break;
       }
   }
-  return (open ? i: -1);
+  return open;
 }
 
 void qutecsound::markErrorLine()
@@ -2907,6 +2940,27 @@ void qutecsound::markErrorLine()
 void qutecsound::readWidgetValues(CsoundUserData *ud)
 {
   MYFLT* pvalue;
+//   CsoundChannelListEntry **lst;
+//   CsoundChannelListEntry *chan;
+//   int num = csoundListChannels(ud->csound, lst);
+//   for (int i = 0; i < num; i++) {
+//     chan = lst[i];
+//     if (chan) {  //Not sure why this check is needed here....
+//       if (chan->type & (CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL)) {
+//         if(csoundGetChannelPtr(ud->csound, &pvalue, chan->name, 0) == 0) {
+//           *pvalue = (MYFLT) ud->qcs->values[i];
+//         }
+//       }
+//       else if (chan->type & (CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL)) {
+//         if(csoundGetChannelPtr(ud->csound, &pvalue, chan->name, 0) == 0) {
+//           char *string = (char *) pvalue;
+//           strcpy(string, ud->qcs->stringValues[i].toStdString().c_str());
+//         }
+//       }
+//     }
+//   }
+//   csoundDeleteChannelList(ud->csound, *lst);
+
   for (int i = 0; i < ud->qcs->channelNames.size(); i++) {
     if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
         CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
@@ -3109,6 +3163,28 @@ int qutecsound::killCurves(CSOUND *csound)
   return 0;
 }
 
+int qutecsound::popKeyPressEvent()
+{
+  keyMutex.lock();
+  int value = -1;
+  if (!keyPressBuffer.isEmpty()) {
+    value = (int) keyPressBuffer.takeFirst()[0].toAscii();
+  }
+  keyMutex.unlock();
+  return value;
+}
+
+int qutecsound::popKeyReleaseEvent()
+{
+  keyMutex.lock();
+  int value = -1;
+  if (!keyReleaseBuffer.isEmpty()) {
+    value = (int) keyReleaseBuffer.takeFirst()[0].toAscii() + 0x10000;
+  }
+  keyMutex.unlock();
+  return value;
+}
+
 void qutecsound::outputValueCallback (CSOUND *csound,
                                      const char *channelName,
                                      MYFLT value)
@@ -3162,6 +3238,57 @@ void qutecsound::inputValueCallback (CSOUND *csound,
     ud->qcs->perfMutex.unlock();
   }
 }
+
+int qutecsound::keyEventCallback(void *userData,
+                                 void *p,
+                                 unsigned int type)
+{
+  if (type != CSOUND_CALLBACK_KBD_EVENT)
+    return 1;
+  CsoundUserData *ud = (CsoundUserData *) userData;
+  qutecsound *qcs = (qutecsound *) ud->qcs;
+  int *value = (int *) p;
+  int key = qcs->popKeyPressEvent();
+  if (key >= 0) {
+    *value = key;
+//     qDebug() << "Pressed: " << key;
+  }
+  else {
+    key = qcs->popKeyReleaseEvent();
+    if (key >= 0) {
+      *value = key;
+//       qDebug() << "Released: " << key;
+    }
+  }
+  return 0;
+}
+
+// void qutecsound::ioCallback (CSOUND *csound,
+//                              const char *channelName,
+//                              MYFLT *value,
+//                              int channelType
+//                             )
+// {
+//   qDebug() << "qutecsound::ioCallback";
+//   if (channelType & CSOUND_INPUT_CHANNEL) { // is Input Channel
+//     if (channelType & CSOUND_CONTROL_CHANNEL) {
+//       inputValueCallback(csound, channelName, value);
+//     }
+//     else if (channelType & CSOUND_AUDIO_CHANNEL) {
+//     }
+//     else if (channelType & CSOUND_STRING_CHANNEL) {
+//     }
+//   }
+//   else if (channelType & CSOUND_OUTPUT_CHANNEL) { // Is output channel
+//     if (channelType & CSOUND_CONTROL_CHANNEL) {
+//       outputValueCallback(csound, channelName, *value);
+//     }
+//     else if (channelType & CSOUND_AUDIO_CHANNEL) {
+//     }
+//     else if (channelType & CSOUND_STRING_CHANNEL) {
+//     }
+//   }
+// }
 
 void qutecsound::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *name)
 {

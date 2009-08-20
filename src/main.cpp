@@ -39,11 +39,12 @@ int main(int argc, char *argv[])
 
   FileOpenEater *filterObj=new FileOpenEater();
   app.installEventFilter(filterObj);
-  //app.processEvents();
-//  QPixmap pixmap(":/qtcs.png");
-//  QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
-//  splash.show();
-//  splash.showMessage("Starting QuteCsound");
+  QPixmap pixmap(":/images/splashscreen.png");
+  QSplashScreen *splash = new QSplashScreen(pixmap, Qt::WindowStaysOnTopHint);
+  splash->show();
+  splash->raise();
+  splash->showMessage("Starting QuteCsound");
+  app.processEvents();
 
   QSettings settings("csound", "qutecsound");
   settings.beginGroup("GUI");
@@ -56,7 +57,7 @@ int main(int argc, char *argv[])
   app.installTranslator(&translator);
 
   qutecsound * mw = new qutecsound(fileNames);
-//  splash.finish(mw);
+  splash->finish(mw);
   mw->show();
   filterObj->setMainWindow(mw);
   return app.exec();

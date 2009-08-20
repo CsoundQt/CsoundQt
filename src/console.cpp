@@ -33,6 +33,7 @@ Console::~Console()
 
 void Console::appendMessage(QString msg)
 {
+  lock.lock();
   if (error) {
     text->setTextColor(QColor("red"));
     if (msg.contains("line ")) {
@@ -62,6 +63,7 @@ void Console::appendMessage(QString msg)
   text->setTextColor(m_textColor);
   // Necessary hack to make sure Console show text properly. It's not working...
   //text->repaint(QRect(0,0, text->width(), text->height()));
+  lock.unlock();
 }
 
 void Console::clear()

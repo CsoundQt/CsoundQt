@@ -86,7 +86,7 @@ struct CsoundUserData{
   CSOUND *csound; // instance of csound
   /*performance status*/
   int PERF_STATUS; //0= stopped 1=running -1=stopping
-  qutecsound *qcs; //pass main application to check widgets
+  qutecsound *qcs; //pass main application to check widgets and key events
   MYFLT zerodBFS; //0dBFS value
   long outputBufferSize;
   MYFLT* outputBuffer;
