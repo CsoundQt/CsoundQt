@@ -51,10 +51,10 @@ void QuteConsole::appendMessage(QString message)
   static_cast<ConsoleWidget *>(m_widget)->appendMessage(message);
 }
 
-void QuteConsole::refresh()
+void QuteConsole::scrollToEnd()
 {
 //qDebug() << "QuteConsole::refresh()";
-  static_cast<ConsoleWidget *>(m_widget)->refresh();
+  static_cast<ConsoleWidget *>(m_widget)->scrollToEnd();
 }
 
 void QuteConsole::setWidgetGeometry(int x,int y,int width,int height)

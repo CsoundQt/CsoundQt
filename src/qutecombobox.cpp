@@ -70,6 +70,17 @@ QString QuteComboBox::getWidgetLine()
   return line;
 }
 
+QString QuteComboBox::getCabbageLine()
+{
+//   combobox channel("chanName"),  pos(Top, Left), size(Width, Height), value(val), items("item1", "item2", ...)
+  QString line = "combobox channel(\"" + m_name + "\"),  ";
+  line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
+  line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
+  line += "value(" + QString::number(((QComboBox *)m_widget)->currentIndex()) + "), ";
+  line += "items(\"" + itemList() + "\")";
+  return line;
+}
+
 void QuteComboBox::applyProperties()
 {
   setText(text->text());

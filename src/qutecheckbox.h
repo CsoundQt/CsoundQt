@@ -36,6 +36,7 @@ class QuteCheckBox : public QuteWidget
     virtual void setValue(double value); // Value of button when pressed
     virtual double getValue(); // This value represents the state of the button
     virtual QString getWidgetLine();
+    virtual QString getCabbageLine();
     void popUpMenu(QPoint pos);
 
   protected:

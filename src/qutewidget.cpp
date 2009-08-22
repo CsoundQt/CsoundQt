@@ -120,6 +120,12 @@ QString QuteWidget::getWidgetLine()
   return m_line;
 }
 
+QString QuteWidget::getCabbageLine()
+{
+  //Widgets return empty strings when not supported
+  return QString("");
+}
+
 QString QuteWidget::getWidgetXmlText()
 {
   return QString();
@@ -148,12 +154,6 @@ QString QuteWidget::getStringValue()
 #ifdef DEBUG
   qDebug("QuteWidget::getValue for QString not implemented for widget type");
 #endif
-  return QString("");
-}
-
-QString QuteWidget::getCabbageLine()
-{
-  //Widgets return empty strings when not supported
   return QString("");
 }
 

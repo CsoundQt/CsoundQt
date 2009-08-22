@@ -61,6 +61,16 @@ QString QuteCheckBox::getWidgetLine()
   return line;
 }
 
+QString QuteCheckBox::getCabbageLine()
+{
+  QString line = "checkbox channel(\"" + m_name + "\"),  ";
+  line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
+  line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
+  line += "value(" + (static_cast<QCheckBox *>(m_widget)->isChecked()? QString("1"):QString("0")) + "), ";
+  line += "caption(\"\")"; // Caption is not supported in QuteCsound
+  return line;
+}
+
 void QuteCheckBox::stateChanged(int state)
 {
   if (state == Qt::Unchecked)

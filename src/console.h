@@ -33,21 +33,11 @@ class Console
     virtual ~Console();
 
     virtual void appendMessage(QString msg);
+    virtual void setDefaultFont(QFont font);
+    virtual void setColors(QColor textColor, QColor bgColor);
     void clear();
-    void refresh();
-    virtual void setDefaultFont(QFont font) {text->document()->setDefaultFont(font);}
-    virtual void setColors(QColor textColor, QColor bgColor)
-    {
-      text->setTextColor(textColor);
-//       text->setTextBackgroundColor(bgColor);
-      QPalette palette = text->palette();
-      palette.setColor(QPalette::WindowText, textColor);
-      palette.setColor(QPalette::Window, bgColor);
-      text->setPalette(palette);
-      text->setAutoFillBackground(true);
-      m_textColor = textColor;
-      m_bgColor = bgColor;
-    }
+    void scrollToEnd();
+//     void refresh();
     QList<int> errorLines;
 
   protected:

@@ -36,6 +36,7 @@ class QuteComboBox : public QuteWidget
     virtual void setValue(double value); // Current item select index
     virtual double getValue();
     virtual QString getWidgetLine();
+    virtual QString getCabbageLine();
     void setSize(int size);
     void setText(QString text);  //Text for this widget is the item list separated by commas
     void popUpMenu(QPoint pos);

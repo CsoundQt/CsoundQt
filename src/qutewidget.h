@@ -51,12 +51,12 @@ class QuteWidget : public QWidget
     virtual QString getChannelName();
     virtual QString getChannel2Name();
     virtual QString getWidgetLine();
+    virtual QString getCabbageLine();
     virtual QString getWidgetXmlText();
     virtual double getValue();
     virtual double getValue2();
     virtual double getResolution();
     virtual QString getStringValue();
-    virtual QString getCabbageLine();
     virtual QString getCsladspaLine();
 
     void markChanged();

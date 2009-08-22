@@ -127,7 +127,13 @@ QString QuteSlider::getCsladspaLine()
 
 QString QuteSlider::getCabbageLine()
 {
-  QString line = "";
+  QString line = "scrollbar chan(\"" + m_name + "\"),  ";
+  line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
+  line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
+  line += "min("+ QString::number(m_min, 'f', 6) +"), ";
+  line += "max("+ QString::number(m_max, 'f', 6) +"), ";
+  line += "value(" + QString::number(m_value, 'f', 6) + "), ";
+  line += "kind(\"" + (width() > height()? QString("horizontal"):QString("vertical")) +"\")";
   return line;
 }
 

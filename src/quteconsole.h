@@ -39,8 +39,7 @@ class QuteConsole : public QuteWidget
 //     void popUpMenu(QPoint pos);
 
     void appendMessage(QString message);
-	void refresh();
-
+    void scrollToEnd();
 };
 
 #endif

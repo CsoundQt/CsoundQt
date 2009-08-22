@@ -33,7 +33,7 @@ Console::~Console()
 
 void Console::appendMessage(QString msg)
 {
-  lock.lock();
+//   lock.lock(); // This operation is already locked in qutecsound class
   if (error) {
     text->setTextColor(QColor("red"));
     if (msg.contains("line ")) {
@@ -59,11 +59,29 @@ void Console::appendMessage(QString msg)
   }
   text->insertPlainText(msg);
 //   text->moveCursor(QTextCursor::Start);
-  text->moveCursor(QTextCursor::End);
+//   text->moveCursor(QTextCursor::End);
   text->setTextColor(m_textColor);
   // Necessary hack to make sure Console show text properly. It's not working...
   //text->repaint(QRect(0,0, text->width(), text->height()));
-  lock.unlock();
+//   lock.unlock();
+}
+
+void Console::setDefaultFont(QFont font) 
+{
+  text->document()->setDefaultFont(font);
+}
+
+void Console::setColors(QColor textColor, QColor bgColor)
+{
+  text->setTextColor(textColor);
+//       text->setTextBackgroundColor(bgColor);
+  QPalette palette = text->palette();
+  palette.setColor(QPalette::WindowText, textColor);
+  palette.setColor(QPalette::Window, bgColor);
+  text->setPalette(palette);
+  text->setAutoFillBackground(true);
+  m_textColor = textColor;
+  m_bgColor = bgColor;
 }
 
 void Console::clear()
@@ -73,12 +91,17 @@ void Console::clear()
   error = false;
 }
 
-void Console::refresh()
+void Console::scrollToEnd()
 {
-  // This is a necessary hack since QTextEdit appears to not refresh correctly
-  // Not working...
-  //text->repaint(QRect(0,0, text->width(), text->height()));
+  text->moveCursor(QTextCursor::End);
 }
+
+// void Console::refresh()
+// {
+//   // This is a necessary hack since QTextEdit appears to not refresh correctly
+//   // Not working...
+//   //text->repaint(QRect(0,0, text->width(), text->height()));
+// }
 
 void DockConsole::closeEvent(QCloseEvent * /*event*/)
 {

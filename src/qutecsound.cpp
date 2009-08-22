@@ -1593,10 +1593,7 @@ void qutecsound::dispatchQueues()
       messageMutex.unlock();
       m_console->appendMessage(msg);
       widgetPanel->appendMessage(msg);
-  //     qApp->processEvents();
     }
-    m_console->refresh();
-  //  widgetPanel->refresh(); // Doesn't work... ??
   //   QList<QString> channels = outValueQueue.keys();
   //   foreach (QString channel, channels) {
   //     widgetPanel->setValue(channel, outValueQueue[channel]);
@@ -1638,6 +1635,9 @@ void qutecsound::dispatchQueues()
       curveBuffer.remove(curveBuffer.indexOf(windat));
     }
   }
+  qApp->processEvents(); //FIXME Is this useful here to avoid display problems in the console?
+  m_console->scrollToEnd();
+  widgetPanel->refreshConsole(); // Doesn't work... ??
   queueTimer->start(QCS_QUEUETIMER_TIME); //will launch this function again later
 }
 

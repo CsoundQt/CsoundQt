@@ -70,6 +70,16 @@ QString QuteButton::getWidgetLine()
   return line;
 }
 
+QString QuteButton::getCabbageLine()
+{
+  QString line = "button channel(\"" + m_name + "\"),  ";
+  line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
+  line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
+  line += "OnOffCaption(\"" + m_name + "\")"; // OffCaption is not supported in QuteCsound
+  qDebug() << "Warning: Cabbage does not support button values different than 1, images or event buttons";
+  return line;
+}
+
 void QuteButton::applyProperties()
 {
   setEventLine(line->text());
