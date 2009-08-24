@@ -85,7 +85,6 @@ qutecsound::qutecsound(QStringList fileNames)
 
   // WidgetPanel must be created before createAcctions since it contains the editAct action
   widgetPanel = new WidgetPanel(this);
-  widgetPanel->hide();
   widgetPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea |Qt::LeftDockWidgetArea);
   widgetPanel->setObjectName("widgetPanel");
   addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
@@ -409,7 +408,7 @@ void qutecsound::openRecent5()
   }
 }
 
-void qutecsound::createGraph()
+void qutecsound::createCodeGraph()
 {
   QString command = m_options->dot + " -V";
   int ret = system(command.toStdString().c_str());
@@ -421,7 +420,11 @@ void qutecsound::createGraph()
     return;
   }
   QString dotText = documentPages[curPage]->getDotText();
-//   qDebug() << dotText;
+  if (dotText.isEmpty()) {
+    qDebug() << "Empty dot text.";
+    return;
+  }
+  qDebug() << dotText;
   QTemporaryFile file(QDir::tempPath() + "/" + "QuteCsound-GraphXXXXXX.dot");
   QTemporaryFile pngFile(QDir::tempPath() + "/" + "QuteCsound-GraphXXXXXX.png");
   if (!file.open() || !pngFile.open()) {
@@ -433,7 +436,7 @@ void qutecsound::createGraph()
   out << dotText;
   file.close();
   file.open();
-  command = "\"" + m_options->dot + "\" -Tpng -o " + pngFile.fileName() + " " + file.fileName();
+  command = "\"" + m_options->dot + "\" -Tpng -o \"" + pngFile.fileName() + "\" \"" + file.fileName() + "\"";
 //   qDebug() << command;
   system(command.toStdString().c_str());
   m_graphic = new GraphicWindow(this);
@@ -1342,6 +1345,30 @@ void qutecsound::openExternalBrowser()
   }
 }
 
+void qutecsound::openQuickRef()
+{
+  if (!QFile::exists(m_options->pdfviewer)) {
+    QMessageBox::critical(this,
+                          tr("Error"),
+                          tr("PDF viewer not found!\n"
+                             "Please go to Edit->Options->Environment and select directory\n"));
+  }
+  QString quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
+  quickRefFileName += _configlists.languageCodes[m_options->language];
+  quickRefFileName += ".pdf";
+  qDebug() << " Opening " << quickRefFileName;
+  if (!QFile::exists(quickRefFileName))
+    quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
+  QTemporaryFile *file = QTemporaryFile::createLocalFile (quickRefFileName);
+  if (file == 0) {
+    qDebug() << "Error creating local pdf file";
+    return;
+  }
+  QString commandLine = "\"" + m_options->pdfviewer + "\"";
+  commandLine += " \"" + file->fileName() + "\"";
+  QProcess::startDetached(commandLine);
+}
+
 void qutecsound::openShortcutDialog()
 {
   KeyboardShortcuts dialog(this, m_keyActions);
@@ -1668,7 +1695,7 @@ void qutecsound::showLineNumber(int lineNumber)
 
 void qutecsound::setDefaultKeyboardShortcuts()
 {
-//   m_keyActions.append(createGraphAct);
+//   m_keyActions.append(createCodeGraphAct);
   newAct->setShortcut(tr("Ctrl+N"));
   openAct->setShortcut(tr("Ctrl+O"));
   reloadAct->setShortcut(tr(""));
@@ -1706,11 +1733,12 @@ void qutecsound::setDefaultKeyboardShortcuts()
   showOverviewAct->setShortcut(tr(""));
   showConsoleAct->setShortcut(tr("Alt+3"));
   showUtilitiesAct->setShortcut(tr("Alt+4"));
-  createGraphAct->setShortcut(tr("Alt+5"));
+  createCodeGraphAct->setShortcut(tr("Alt+5"));
   setHelpEntryAct->setShortcut(tr("Shift+F1"));
   browseBackAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
   browseForwardAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
   externalBrowserAct->setShortcut(tr("Shift+Alt+F1"));
+  openQuickRefAct->setShortcut(tr(""));
   commentAct->setShortcut(tr("Ctrl+D"));
   uncommentAct->setShortcut(tr("Shift+Ctrl+D"));
   indentAct->setShortcut(tr("Ctrl+I"));
@@ -1784,10 +1812,10 @@ void qutecsound::createActions()
 //   exitAct->setIconText(tr("Exit"));
   connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
-  createGraphAct = new QAction(tr("View Code &Graph"), this);
-  createGraphAct->setStatusTip(tr("View Code Graph"));
-//   createGraphAct->setIconText("Exit");
-  connect(createGraphAct, SIGNAL(triggered()), this, SLOT(createGraph()));
+  createCodeGraphAct = new QAction(tr("View Code &Graph"), this);
+  createCodeGraphAct->setStatusTip(tr("View Code Graph"));
+//   createCodeGraphAct->setIconText("Exit");
+  connect(createCodeGraphAct, SIGNAL(triggered()), this, SLOT(createCodeGraph()));
 
 //   for (int i = 0; i < recentFiles.size(); i++) {
 //     openRecentAct[i] = new QAction(tr("Recent 0"), this);
@@ -1951,6 +1979,10 @@ void qutecsound::createActions()
   externalBrowserAct->setStatusTip(tr("Show Opcode Entry in external browser"));
   connect(externalBrowserAct, SIGNAL(triggered()), this, SLOT(openExternalBrowser()));
 
+  openQuickRefAct = new QAction(/*QIcon(":/images/gtk-info.png"), */ tr("Open Quick Reference Guide"), this);
+  openQuickRefAct->setStatusTip(tr("Open Quick Reference Guide in PDF viewer"));
+  connect(openQuickRefAct, SIGNAL(triggered()), this, SLOT(openQuickRef()));
+
   showUtilitiesAct = new QAction(QIcon(":/images/gnome-devel.png"), tr("Utilities"), this);
   showUtilitiesAct->setCheckable(true);
   showUtilitiesAct->setChecked(false);
@@ -2013,7 +2045,7 @@ void qutecsound::setKeyboardShortcuts()
   m_keyActions.append(closeTabAct);
   m_keyActions.append(printAct);
   m_keyActions.append(exitAct);
-  m_keyActions.append(createGraphAct);
+  m_keyActions.append(createCodeGraphAct);
   m_keyActions.append(undoAct);
   m_keyActions.append(redoAct);
   m_keyActions.append(cutAct);
@@ -2047,6 +2079,7 @@ void qutecsound::setKeyboardShortcuts()
   m_keyActions.append(browseBackAct);
   m_keyActions.append(browseForwardAct);
   m_keyActions.append(externalBrowserAct);
+  m_keyActions.append(openQuickRefAct);
 }
 
 void qutecsound::connectActions()
@@ -2148,7 +2181,7 @@ void qutecsound::createMenus()
   viewMenu->addAction(showHelpAct);
   viewMenu->addAction(showConsoleAct);
   viewMenu->addAction(showUtilitiesAct);
-  viewMenu->addAction(createGraphAct);
+  viewMenu->addAction(createCodeGraphAct);
 
   QStringList exampleFiles;
   QStringList widgetFiles;
@@ -2246,12 +2279,13 @@ void qutecsound::createMenus()
   helpMenu->addAction(setHelpEntryAct);
   helpMenu->addAction(externalBrowserAct);
   helpMenu->addSeparator();
+  helpMenu->addAction(browseBackAct);
+  helpMenu->addAction(browseForwardAct);
+  helpMenu->addSeparator();
   helpMenu->addAction(showManualAct);
   helpMenu->addAction(showOverviewAct);
   helpMenu->addAction(showGenAct);
-  helpMenu->addSeparator();
-  helpMenu->addAction(browseBackAct);
-  helpMenu->addAction(browseForwardAct);
+  helpMenu->addAction(openQuickRefAct);
   helpMenu->addSeparator();
   helpMenu->addAction(aboutAct);
   helpMenu->addAction(aboutQtAct);
@@ -2462,6 +2496,9 @@ void qutecsound::readSettings()
   m_options->waveplayer = settings.value("waveplayer",
                                          DEFAULT_WAVEPLAYER_EXECUTABLE
                                         ).toString();
+  m_options->pdfviewer = settings.value("pdfviewer",
+                                         DEFAULT_PDFVIEWER_EXECUTABLE
+                                        ).toString();
   settings.endGroup();
   settings.endGroup();
 }
@@ -2572,6 +2609,7 @@ void qutecsound::writeSettings()
   settings.setValue("dot", m_options->dot);
   settings.setValue("waveeditor", m_options->waveeditor);
   settings.setValue("waveplayer", m_options->waveplayer);
+  settings.setValue("pdfviewer", m_options->pdfviewer);
   settings.endGroup();
   settings.endGroup();
 }

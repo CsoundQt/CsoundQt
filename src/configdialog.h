@@ -66,6 +66,7 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
     void browseDot();
     void browseWaveEditor();
     void browseWavePlayer();
+    void browsePdfViewer();
     void selectAudioInput();
     void selectAudioOutput();
     void selectMidiInput();

@@ -88,5 +88,10 @@
       <file>qutecsound_de.qm</file>
       <file>qutecsound_fr.qm</file>
       <file>qutecsound_pt.qm</file>
+
+      <file>../doc/QuteCsound Quick Reference (0.4).pdf</file>
+      <file>../doc/QuteCsound Quick Reference (0.4)-es.pdf</file>
+      <file>../doc/QuteCsound Quick Reference (0.4)-fr.pdf</file>
+      <file>../doc/QuteCsound Quick Reference (0.4)-de.pdf</file>
 </qresource>
 </RCC>

@@ -165,7 +165,7 @@ class qutecsound:public QMainWindow
     void openRecent3();
     void openRecent4();
     void openRecent5();
-    void createGraph();
+    void createCodeGraph();
     void closeGraph();
     bool save();
     bool saveAs();
@@ -191,6 +191,7 @@ class qutecsound:public QMainWindow
     void setHelpEntry();
     void openManualExample(QString fileName);
     void openExternalBrowser();
+    void openQuickRef();
     void openShortcutDialog();
     void utilitiesDialogOpen();
     void about();
@@ -287,7 +288,7 @@ class qutecsound:public QMainWindow
     QAction *saveNoWidgetsAct;
     QAction *closeTabAct;
     QAction *printAct;
-    QAction *createGraphAct;
+    QAction *createCodeGraphAct;
     QAction *exitAct;
     QList<QAction *> openRecentAct;
     QAction *undoAct;
@@ -321,6 +322,7 @@ class qutecsound:public QMainWindow
     QAction *browseBackAct;
     QAction *browseForwardAct;
     QAction *externalBrowserAct;
+    QAction *openQuickRefAct;
     QAction *showUtilitiesAct;
     QAction *showWidgetsAct;
     QAction *commentAct;

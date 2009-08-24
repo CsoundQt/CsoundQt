@@ -37,6 +37,7 @@
 #define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/bin/audacity"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/aplay"
+#define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
 #define DEFAULT_DOT_EXECUTABLE "dot"
 #endif
 #ifdef SOLARIS
@@ -45,6 +46,7 @@
 #define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/local/bin/audacity"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/jmplay"
+#define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
 #define DEFAULT_DOT_EXECUTABLE "dot"
 #endif
 #ifdef MACOSX
@@ -53,6 +55,7 @@
 #define DEFAULT_BROWSER_EXECUTABLE "/Applications/Firefox.app"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/Applications/Audacity.app"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/Applications/QuickTime Player.app"
+#define DEFAULT_PDFVIEWER_EXECUTABLE "/Applications/Preview.app"
 #define DEFAULT_DOT_EXECUTABLE "/usr/local/bin/dot"
 #endif
 #ifdef WIN32
@@ -61,6 +64,7 @@
 #define DEFAULT_BROWSER_EXECUTABLE "firefox.exe"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "audacity.exe"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "wmplayer.exe"
+#define DEFAULT_PDFVIEWER_EXECUTABLE "C:/Program Files/"
 #define DEFAULT_DOT_EXECUTABLE "dot.exe"
 #endif
 

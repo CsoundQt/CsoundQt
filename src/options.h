@@ -117,6 +117,7 @@ class Options{
     QString dot;
     QString waveeditor;
     QString waveplayer;
+    QString pdfviewer;
     int language;
 //   private:
 //     ConfigLists m_configlists;

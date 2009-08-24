@@ -143,6 +143,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   dotLineEdit->setText(m_options->dot);
   WaveEditorLineEdit->setText(m_options->waveeditor);
   WavePlayerLineEdit->setText(m_options->waveplayer);
+  pdfViewerLineEdit->setText(m_options->pdfviewer);
   languageComboBox->setCurrentIndex(m_options->language);
 
   connect(inputFilenameToolButton, SIGNAL(clicked()), this, SLOT(browseInputFilename()));
@@ -159,6 +160,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   connect(dotToolButton, SIGNAL(clicked()), this, SLOT(browseDot()));
   connect(waveEditorToolButton, SIGNAL(clicked()), this, SLOT(browseWaveEditor()));
   connect(wavePlayerToolButton, SIGNAL(clicked()), this, SLOT(browseWavePlayer()));
+  connect(pdfViewerToolButton, SIGNAL(clicked()), this, SLOT(browsePdfViewer()));
   connect(this, SIGNAL(changeFont()), parent, SLOT(changeFont()));
   connect(audioInputToolButton, SIGNAL(released()), this, SLOT(selectAudioInput()));
   connect(audioOutputToolButton, SIGNAL(released()), this, SLOT(selectAudioOutput()));
@@ -255,6 +257,7 @@ void ConfigDialog::accept()
   m_options->dot = dotLineEdit->text();
   m_options->waveeditor = WaveEditorLineEdit->text();
   m_options->waveplayer = WavePlayerLineEdit->text();
+  m_options->pdfviewer = pdfViewerLineEdit->text();
   m_options->language = languageComboBox->currentIndex();
 
   emit(changeFont());
@@ -348,6 +351,12 @@ void ConfigDialog::browseWavePlayer()
 {
   browseFile(m_options->waveplayer);
   WavePlayerLineEdit->setText(m_options->waveplayer);
+}
+
+void ConfigDialog::browsePdfViewer()
+{
+  browseFile(m_options->pdfviewer);
+  pdfViewerLineEdit->setText(m_options->pdfviewer);
 }
 
 void ConfigDialog::selectAudioInput()

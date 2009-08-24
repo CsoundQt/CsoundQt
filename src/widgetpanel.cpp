@@ -44,6 +44,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
 {
   setWindowTitle("Widgets");
   setMinimumSize(200, 140);
+  this->hide();
   layoutWidget = new LayoutWidget(this);
   layoutWidget->setGeometry(QRect(0, 0, 800, 600));
   layoutWidget->setAutoFillBackground(true);

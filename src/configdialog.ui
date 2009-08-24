@@ -1107,14 +1107,14 @@
         <x>10</x>
         <y>20</y>
         <width>641</width>
-        <height>233</height>
+        <height>221</height>
        </rect>
       </property>
       <layout class="QGridLayout">
-       <item row="0" column="1">
+       <item row="0" column="2">
         <widget class="QLineEdit" name="CsdocdirLineEdit"/>
        </item>
-       <item row="0" column="2">
+       <item row="0" column="3">
         <widget class="QToolButton" name="csdocdirToolButton">
          <property name="text">
           <string>...</string>
@@ -1131,10 +1131,10 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="1" column="2">
         <widget class="QLineEdit" name="OpcodedirLineEdit"/>
        </item>
-       <item row="1" column="2">
+       <item row="1" column="3">
         <widget class="QToolButton" name="opcodedirToolButton">
          <property name="text">
           <string>...</string>
@@ -1151,14 +1151,14 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="2" column="2">
         <widget class="QLineEdit" name="SadirLineEdit">
          <property name="enabled">
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
+       <item row="2" column="3">
         <widget class="QToolButton" name="sadirToolButton">
          <property name="text">
           <string>...</string>
@@ -1175,14 +1175,14 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="3" column="2">
         <widget class="QLineEdit" name="SsdirLineEdit">
          <property name="enabled">
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
+       <item row="3" column="3">
         <widget class="QToolButton" name="ssdirToolButton">
          <property name="text">
           <string>...</string>
@@ -1199,14 +1199,14 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="4" column="2">
         <widget class="QLineEdit" name="SfdirLineEdit">
          <property name="enabled">
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
+       <item row="4" column="3">
         <widget class="QToolButton" name="sfdirToolButton">
          <property name="text">
           <string>...</string>
@@ -1223,14 +1223,14 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item row="5" column="2">
         <widget class="QLineEdit" name="IncdirLineEdit">
          <property name="enabled">
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="5" column="2">
+       <item row="5" column="3">
         <widget class="QToolButton" name="incdirToolButton">
          <property name="text">
           <string>...</string>
@@ -1257,17 +1257,17 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
-        <widget class="QLineEdit" name="defaultCsdLineEdit">
-         <property name="enabled">
-          <bool>true</bool>
+       <item row="6" column="3">
+        <widget class="QToolButton" name="defaultCsdToolButton">
+         <property name="text">
+          <string>...</string>
          </property>
         </widget>
        </item>
        <item row="6" column="2">
-        <widget class="QToolButton" name="defaultCsdToolButton">
-         <property name="text">
-          <string>...</string>
+        <widget class="QLineEdit" name="defaultCsdLineEdit">
+         <property name="enabled">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -1278,9 +1278,9 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>260</y>
+       <y>250</y>
        <width>661</width>
-       <height>191</height>
+       <height>211</height>
       </rect>
      </property>
      <property name="title">
@@ -1292,7 +1292,7 @@
         <x>10</x>
         <y>20</y>
         <width>641</width>
-        <height>162</height>
+        <height>188</height>
        </rect>
       </property>
       <layout class="QGridLayout">
@@ -1409,6 +1409,27 @@
          </property>
         </widget>
        </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_26">
+         <property name="text">
+          <string>PDF viewer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QLineEdit" name="pdfViewerLineEdit">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="3">
+        <widget class="QToolButton" name="pdfViewerToolButton">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -1416,7 +1437,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>460</y>
+       <y>470</y>
        <width>581</width>
        <height>29</height>
       </rect>
@@ -1478,12 +1499,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>80</y>
+     <x>83</x>
+     <y>107</y>
     </hint>
     <hint type="destinationlabel">
-     <x>121</x>
-     <y>80</y>
+     <x>255</x>
+     <y>109</y>
     </hint>
    </hints>
   </connection>
@@ -1494,12 +1515,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>80</y>
+     <x>83</x>
+     <y>139</y>
     </hint>
     <hint type="destinationlabel">
-     <x>121</x>
-     <y>80</y>
+     <x>255</x>
+     <y>141</y>
     </hint>
    </hints>
   </connection>
@@ -1510,12 +1531,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>80</y>
+     <x>83</x>
+     <y>203</y>
     </hint>
     <hint type="destinationlabel">
-     <x>121</x>
-     <y>80</y>
+     <x>255</x>
+     <y>205</y>
     </hint>
    </hints>
   </connection>
@@ -1526,12 +1547,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>80</y>
+     <x>83</x>
+     <y>235</y>
     </hint>
     <hint type="destinationlabel">
-     <x>121</x>
-     <y>80</y>
+     <x>255</x>
+     <y>237</y>
     </hint>
    </hints>
   </connection>
@@ -1542,12 +1563,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>80</y>
+     <x>83</x>
+     <y>171</y>
     </hint>
     <hint type="destinationlabel">
-     <x>121</x>
-     <y>80</y>
+     <x>255</x>
+     <y>173</y>
     </hint>
    </hints>
   </connection>
@@ -1638,12 +1659,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>104</x>
-     <y>80</y>
+     <x>107</x>
+     <y>267</y>
     </hint>
     <hint type="destinationlabel">
-     <x>121</x>
-     <y>80</y>
+     <x>255</x>
+     <y>269</y>
     </hint>
    </hints>
   </connection>
