@@ -77,7 +77,7 @@ void Console::setColors(QColor textColor, QColor bgColor)
 //       text->setTextBackgroundColor(bgColor);
   QPalette palette = text->palette();
   palette.setColor(QPalette::WindowText, textColor);
-  palette.setColor(QPalette::Window, bgColor);
+  palette.setColor(QPalette::Active, static_cast<QPalette::ColorRole>(9), bgColor);
   text->setPalette(palette);
   text->setAutoFillBackground(true);
   m_textColor = textColor;

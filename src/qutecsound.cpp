@@ -1364,9 +1364,8 @@ void qutecsound::openQuickRef()
     qDebug() << "Error creating local pdf file";
     return;
   }
-  QString commandLine = "\"" + m_options->pdfviewer + "\"";
-  commandLine += " \"" + file->fileName() + "\"";
-  QProcess::startDetached(commandLine);
+  QString arg = " \"" + file->fileName() + "\"";
+  execute(m_options->pdfviewer, arg);
 }
 
 void qutecsound::openShortcutDialog()

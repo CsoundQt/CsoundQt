@@ -110,17 +110,17 @@ ioText {319, 177} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0,
 ioText {347, 177} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder D
 ioText {372, 177} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder S
 ioText {397, 176} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder R
-ioKnob {367, 196} {56, 50} 0.000000 1.000000 0.010000 0.252525 level
+ioKnob {367, 196} {56, 50} 0.000000 1.000000 0.010000 0.242424 level
 ioText {323, 211} {45, 26} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Level
 ioButton {326, 255} {93, 28} event 1.000000 "" "Note" "/" i98 0 3
 ioKnob {326, 288} {48, 49} 110.000000 880.000000 0.010000 358.888889 freq
 ioText {360, 336} {35, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Hz
-ioText {310, 341} {49, 23} scroll 358.888889 0.100000 "freq" right "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 358.9
+ioText {310, 341} {49, 23} scroll 358.900000 0.100000 "freq" right "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 358.9
 ioText {2, 4} {365, 44} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 20 {65280, 65280, 65280} {21760, 21760, 0} background noborder Simple FM Synth
 ioText {7, 57} {291, 189} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border Modulator
-ioSlider {18, 91} {20, 100} 0.000001 1.000000 0.910000 modatt
+ioSlider {18, 91} {20, 100} 0.000001 1.000000 0.900000 modatt
 ioSlider {45, 91} {20, 100} 0.000001 1.000000 1.000000 moddec
-ioSlider {70, 91} {20, 100} 0.000000 1.000000 0.410000 modsus
+ioSlider {70, 91} {20, 100} 0.000000 1.000000 1.000000 modsus
 ioSlider {97, 91} {20, 100} 0.000001 1.000000 0.000001 modrel
 ioText {20, 191} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder A
 ioText {48, 191} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder D
@@ -128,13 +128,13 @@ ioText {73, 191} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 
 ioText {98, 190} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder R
 ioText {209, 71} {78, 25} editnum 0.500000 0.010000 "modfactor" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.500000
 ioText {127, 72} {82, 24} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Freq factor
-ioText {127, 101} {82, 25} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder FrequencyÂ¬Â¬hfghdÂ¬Â¬dhfghd
-ioText {207, 101} {81, 26} display 179.444443 0.00100 "mod1freq" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 179.4444
+ioText {127, 101} {82, 25} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frequency
+ioText {207, 101} {81, 26} display 0.000000 0.00100 "mod1freq" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 179.4444
 ioKnob {136, 151} {52, 51} 0.000000 5.000000 0.010000 2.929293 modindex
 ioText {124, 201} {80, 25} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Index
 ioGraph {6, 256} {312, 107} scope 4.000000 1.000000 
 ioGraph {7, 367} {411, 122} table 0.000000 5.000000 
-ioText {187, 162} {80, 25} display 2.929293 0.00100 "index" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.9293
+ioText {187, 162} {80, 25} display 0.000000 0.00100 "index" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.9293
 ioCheckbox {378, 292} {20, 20} off on
 ioText {394, 291} {28, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder On
 </MacGUI>

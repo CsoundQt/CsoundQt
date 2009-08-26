@@ -1023,7 +1023,7 @@
        <item>
         <widget class="QPushButton" name="consoleBgColorPushButton">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string/>
