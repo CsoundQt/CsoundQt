@@ -1364,7 +1364,8 @@ void qutecsound::openQuickRef()
     qDebug() << "Error creating local pdf file";
     return;
   }
-  QString arg = " \"" + file->fileName() + "\"";
+  QString arg = "\"" + file->fileName() + "\"";
+  qDebug() << arg;
   execute(m_options->pdfviewer, arg);
 }
 
@@ -2615,7 +2616,7 @@ void qutecsound::writeSettings()
 
 int qutecsound::execute(QString executable, QString options)
 {
-//   qDebug() << "qutecsound::execute";
+  qDebug() << "qutecsound::execute";
   QStringList optionlist;
   optionlist = options.split(QRegExp("\\s+"));
 
@@ -2627,14 +2628,15 @@ int qutecsound::execute(QString executable, QString options)
   QString commandLine = "open -a \"" + executable + "\" " + options;
 #endif
 #ifdef LINUX
-  QString commandLine = executable + " " + options;
+  QString commandLine = "\"" + executable + "\" " + options;
 #endif
 #ifdef SOLARIS
-  QString commandLine = executable + " " + options;
+  QString commandLine = "\"" + executable + "\" " + options;
 #endif
 #ifdef WIN32
-  QString commandLine = executable + (executable.startsWith("cmd")? " /k ": " ") + options;
+  QString commandLine = "\"" + executable + "\" " + (executable.startsWith("cmd")? " /k ": " ") + options;
 #endif
+  qDebug() << "qutecsound::execute   " << commandLine;
   QProcess::startDetached(commandLine);
   return 1;
 }
