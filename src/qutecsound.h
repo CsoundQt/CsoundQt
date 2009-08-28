@@ -233,6 +233,7 @@ class qutecsound:public QMainWindow
     int isOpen(QString fileName);
     void markErrorLine();
     QString getSaveFileName();
+    void createQuickRefPdf();
 
     CSOUND *csound;
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
@@ -342,6 +343,7 @@ class qutecsound:public QMainWindow
     QStringList m_deviceMessages; //stores messages from csound for device discovery
 
     UtilitiesDialog *utilitiesDialog;
+    QTemporaryFile *quickRefFile;
 
     QIcon modIcon;
     QLabel *lineNumberLabel;

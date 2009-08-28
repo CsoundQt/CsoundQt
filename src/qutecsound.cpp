@@ -167,7 +167,7 @@ qutecsound::qutecsound(QStringList fileNames)
   else if (init>0) {
     qDebug("Csound already initialized.");
   }
-
+  createQuickRefPdf();
 #ifndef QUTECSOUND_DESTROY_CSOUND
   // Create only once
   csound=csoundCreate(0);
@@ -578,6 +578,22 @@ QString qutecsound::getSaveFileName()
   return fileName;
 }
 
+void qutecsound::createQuickRefPdf()
+{
+  QString quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
+  quickRefFileName += _configlists.languageCodes[m_options->language];
+  quickRefFileName += ".pdf";
+  qDebug() << " Opening " << quickRefFileName;
+  if (!QFile::exists(quickRefFileName))
+    quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
+  quickRefFile = QTemporaryFile::createLocalFile(quickRefFileName);
+  if (quickRefFile == 0) {
+    qDebug() << "Error creating local pdf file";
+    return;
+  }
+  if (!quickRefFile->rename(quickRefFileName))
+    qDebug() << "Error renaming temporary QuickRef file";
+}
 bool qutecsound::saveAs()
 {
   QString fileName = getSaveFileName();
@@ -1347,26 +1363,21 @@ void qutecsound::openExternalBrowser()
 
 void qutecsound::openQuickRef()
 {
+#ifndef MACOSX
   if (!QFile::exists(m_options->pdfviewer)) {
     QMessageBox::critical(this,
                           tr("Error"),
                           tr("PDF viewer not found!\n"
                              "Please go to Edit->Options->Environment and select directory\n"));
   }
-  QString quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
-  quickRefFileName += _configlists.languageCodes[m_options->language];
-  quickRefFileName += ".pdf";
-  qDebug() << " Opening " << quickRefFileName;
-  if (!QFile::exists(quickRefFileName))
-    quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
-  QTemporaryFile *file = QTemporaryFile::createLocalFile (quickRefFileName);
-  if (file == 0) {
-    qDebug() << "Error creating local pdf file";
-    return;
-  }
-  QString arg = "\"" + file->fileName() + "\"";
+#endif
+  QString arg = "\"" + quickRefFile->fileName() + "\"";
   qDebug() << arg;
+#ifndef MACOSX
   execute(m_options->pdfviewer, arg);
+#else
+  execute(QString(), arg);
+#endif
 }
 
 void qutecsound::openShortcutDialog()
@@ -2625,7 +2636,10 @@ int qutecsound::execute(QString executable, QString options)
   QProcess::execute(cdLine);
 
 #ifdef MACOSX
-  QString commandLine = "open -a \"" + executable + "\" " + options;
+  if (executable != QString())
+    QString commandLine = "open -a \"" + executable + "\" " + options;
+  else
+    QString commandLine = "open " + options;
 #endif
 #ifdef LINUX
   QString commandLine = "\"" + executable + "\" " + options;
