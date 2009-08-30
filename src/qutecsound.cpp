@@ -2636,10 +2636,11 @@ int qutecsound::execute(QString executable, QString options)
   QProcess::execute(cdLine);
 
 #ifdef MACOSX
+  QString commandLine;
   if (executable != QString())
-    QString commandLine = "open -a \"" + executable + "\" " + options;
+    commandLine = "open -a \"" + executable + "\" " + options;
   else
-    QString commandLine = "open " + options;
+    commandLine = "open " + options;
 #endif
 #ifdef LINUX
   QString commandLine = "\"" + executable + "\" " + options;
