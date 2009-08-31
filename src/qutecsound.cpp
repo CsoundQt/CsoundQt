@@ -1373,11 +1373,7 @@ void qutecsound::openQuickRef()
 #endif
   QString arg = "\"" + quickRefFile->fileName() + "\"";
   qDebug() << arg;
-#ifndef MACOSX
   execute(m_options->pdfviewer, arg);
-#else
-  execute(QString(), arg);
-#endif
 }
 
 void qutecsound::openShortcutDialog()
@@ -2636,11 +2632,7 @@ int qutecsound::execute(QString executable, QString options)
   QProcess::execute(cdLine);
 
 #ifdef MACOSX
-  QString commandLine;
-  if (executable != QString())
-    commandLine = "open -a \"" + executable + "\" " + options;
-  else
-    commandLine = "open " + options;
+  QString commandLine = "open -a \"" + executable + "\" " + options;
 #endif
 #ifdef LINUX
   QString commandLine = "\"" + executable + "\" " + options;
