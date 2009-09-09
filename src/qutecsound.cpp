@@ -87,6 +87,10 @@ qutecsound::qutecsound(QStringList fileNames)
   widgetPanel = new WidgetPanel(this);
   widgetPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea |Qt::LeftDockWidgetArea);
   widgetPanel->setObjectName("widgetPanel");
+  connect(widgetPanel, SIGNAL(keyPressed(QString)),
+          this, SLOT(keyPressForCsound(QString)));
+  connect(widgetPanel, SIGNAL(keyReleased(QString)),
+          this, SLOT(keyReleaseForCsound(QString)));
   addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
   utilitiesDialog = new UtilitiesDialog(this, m_options/*, _configlists*/);
   connect(utilitiesDialog, SIGNAL(runUtility(QString)), this, SLOT(runUtility(QString)));

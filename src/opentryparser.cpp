@@ -60,7 +60,7 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
       QDomNode node = op.firstChild();
       QDomElement elem = node.toElement();
       if (elem.tagName()=="opcodename") {
-        opcode.opcodeName = elem.text();
+        opcode.opcodeName = elem.text().trimmed();
         opcode.inArgs = node.nextSibling().toText().data();
       }
       else {

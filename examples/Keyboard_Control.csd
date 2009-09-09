@@ -74,15 +74,15 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 638 369 313 250
+WindowBounds: 638 369 322 293
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {21845, 43690, 32639}
-ioText {5, 52} {287, 80} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground border The sensekey opcode can be used to receive keyboard action. It is VERY  IMPORTANT to click on the Dock Console to give it focus, otherwise key events will NOT be passed to Csound.
+ioText {5, 52} {289, 104} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground border The sensekey opcode can be used to receive keyboard action. It is VERY  IMPORTANT to click on the Dock Console or the Widget Panel to give it focus, otherwise key events will NOT be passed to Csound.
 ioText {6, 11} {287, 37} label 0.000000 0.00100 "" center "DejaVu Sans" 20 {0, 0, 0} {24832, 49664, 36864} background noborder Keyboard control
-ioText {7, 150} {288, 27} display 0.000000 0.00100 "data" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} background border Key released. Code = 113
+ioText {46, 163} {198, 26} display 0.000000 0.00100 "data" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} background border Key released. Code = 113
 </MacGUI>
 

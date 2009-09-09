@@ -76,6 +76,27 @@ class WidgetPanel : public QDockWidget
     virtual void contextMenuEvent(QContextMenuEvent *event);
     virtual void resizeEvent(QResizeEvent * event);
     virtual void moveEvent(QMoveEvent * event);
+    virtual void keyPressEvent(QKeyEvent *event)
+    {
+      if (!event->isAutoRepeat()) {
+        QString key = event->text();
+        qDebug() << key ;
+        if (key != "") {
+//           appendMessage(key);
+          emit keyPressed(key);
+        }
+      }
+    }
+    virtual void keyReleaseEvent(QKeyEvent *event)
+    {
+      if (!event->isAutoRepeat()) {
+        QString key = event->text();
+        if (key != "") {
+//           appendMessage("rel:" + key);
+          emit keyReleased(key);
+        }
+      }
+    }
 
   private:
     // These vectors must be used with care since they are not reentrant and will
@@ -204,6 +225,8 @@ class WidgetPanel : public QDockWidget
     void Close(bool visible);
     void moved(QPoint position);
     void resized(QSize size);
+    void keyPressed(QString key);
+    void keyReleased(QString key);
 
 };
 
