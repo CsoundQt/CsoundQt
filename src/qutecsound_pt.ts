@@ -383,6 +383,24 @@
         <source>Use chnget/chnset</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>PDF viewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ConsoleWidget</name>
+    <message>
+        <source>Csound Output Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DockConsole</name>
+    <message>
+        <source>Csound Output Console</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DockHelp</name>
@@ -1987,6 +2005,28 @@ Victor Lazzarini
     </message>
     <message>
         <source>Save to new file without including widget sections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PDF viewer not found!
+Please go to Edit-&gt;Options-&gt;Environment and select directory
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Csound Manual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show the Csound manual in the help panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Quick Reference Guide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Quick Reference Guide in PDF viewer</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
