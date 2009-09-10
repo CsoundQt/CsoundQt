@@ -337,6 +337,7 @@ class qutecsound:public QMainWindow
     int configureTab; // Tab in last configure dialog
     QString lastUsedDir;
     QString lastFileDir;
+    QString quickRefFileName;
     viewMode m_mode;
     QStringList recentFiles;
     QStringList lastFiles;

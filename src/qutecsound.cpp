@@ -584,7 +584,7 @@ QString qutecsound::getSaveFileName()
 
 void qutecsound::createQuickRefPdf()
 {
-  QString quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
+  quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
   quickRefFileName += _configlists.languageCodes[m_options->language];
   quickRefFileName += ".pdf";
   qDebug() << " Opening " << quickRefFileName;
@@ -595,8 +595,12 @@ void qutecsound::createQuickRefPdf()
     qDebug() << "Error creating local pdf file";
     return;
   }
-  if (!quickRefFile->rename(quickRefFileName))
-    qDebug() << "Error renaming temporary QuickRef file";
+  quickRefFileName = QDir::tempPath() + quickRefFileName.mid(quickRefFileName.lastIndexOf("/"));
+  qDebug() << quickRefFileName; 
+  if (!quickRefFile->rename(quickRefFileName)) {
+    qDebug() << "Error renaming temporary QuickRef file- removing temp file";
+    delete quickRefFile;
+  }
 }
 bool qutecsound::saveAs()
 {
@@ -1036,9 +1040,9 @@ void qutecsound::runCsound(bool realtime)
     }
     QString script = generateScript(realtime, fileName);
     QString scriptFileName = QDir::tempPath();
-	if (!scriptFileName.endsWith("/"))
-	  scriptFileName += "/";
-	scriptFileName += SCRIPT_NAME;
+    if (!scriptFileName.endsWith("/"))
+      scriptFileName += "/";
+    scriptFileName += SCRIPT_NAME;
     QFile file(scriptFileName);
     if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
       qDebug() << "qutecsound::runCsound() : Error creating temp file";
@@ -1375,7 +1379,7 @@ void qutecsound::openQuickRef()
                              "Please go to Edit->Options->Environment and select directory\n"));
   }
 #endif
-  QString arg = "\"" + quickRefFile->fileName() + "\"";
+  QString arg = "\"" + quickRefFileName + "\"";
   qDebug() << arg;
   execute(m_options->pdfviewer, arg);
 }
