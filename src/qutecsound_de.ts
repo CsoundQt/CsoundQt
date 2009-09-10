@@ -510,7 +510,7 @@
     <message>
         <location filename="configdialog.ui" line="1415"/>
         <source>PDF viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF-Anzeiger</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="1449"/>
@@ -528,7 +528,7 @@
     <message>
         <location filename="console.h" line="148"/>
         <source>Csound Output Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound Konsole</translation>
     </message>
 </context>
 <context>
@@ -536,7 +536,7 @@
     <message>
         <location filename="console.h" line="57"/>
         <source>Csound Output Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound Konsole</translation>
     </message>
 </context>
 <context>
@@ -2455,7 +2455,8 @@ Version </translation>
         <source>PDF viewer not found!
 Please go to Edit-&gt;Options-&gt;Environment and select directory
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Programm zur PDF-Ansicht nicht gefunden!
+Bitte bei Konfiguration-&gt;Umgebung-&gt;PDF-Ansicht auswählen</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1398"/>
@@ -2494,22 +2495,22 @@ Francois Pinot
     <message>
         <location filename="qutecsound.cpp" line="1956"/>
         <source>Csound Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound Manual</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1957"/>
         <source>Show the Csound manual in the help panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound Manual im Hilfefenster zeigen</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1993"/>
         <source>Open Quick Reference Guide</source>
-        <translation type="unfinished"></translation>
+        <translation>QuteCsound Erläuterungen (Quick Reference)</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1994"/>
         <source>Open Quick Reference Guide in PDF viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>QuteCsound Kurzeinführung im PDF-Anzeiger öffnen</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2005"/>
