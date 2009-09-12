@@ -791,6 +791,10 @@ void qutecsound::runCsound(bool realtime)
   else if (QObject::sender() == runTermAct) {
     useAPI = false;
   }
+  if (m_options->terminalFLTK) { // if "FLpanel" is found in csd run from terminal
+    if (textEdit->document()->toPlainText().contains("FLpanel"))
+      useAPI = false;
+  }
   if (documentPages[curPage]->fileName.isEmpty()) {
     QMessageBox::warning(this, tr("QuteCsound"),
                          tr("This file has not been been saved\nPlease select name and location."));
@@ -2447,7 +2451,8 @@ void qutecsound::readSettings()
   m_options->useInvalue = settings.value("useInvalue", true).toBool();
   m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
   m_options->showTooltips = settings.value("showTooltips", true).toBool();
-  m_options->enableFLTK = settings.value("enableFLTK", false).toBool();
+  m_options->enableFLTK = settings.value("enableFLTK", true).toBool();
+  m_options->terminalFLTK = settings.value("terminalFLTK", true).toBool();
   lastFiles = settings.value("lastfiles", "").toStringList();
   settings.endGroup();
   settings.beginGroup("Run");
@@ -2562,6 +2567,7 @@ void qutecsound::writeSettings()
   settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
   settings.setValue("showTooltips", m_options->showTooltips);
   settings.setValue("enableFLTK", m_options->enableFLTK);
+  settings.setValue("terminalFLTK", m_options->terminalFLTK);
   QStringList files;
   if (m_options->rememberFile) {
     for (int i = 0; i < documentPages.size(); i++ ) {

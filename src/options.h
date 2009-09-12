@@ -60,6 +60,7 @@ class Options{
     bool showWidgetsOnRun;
     bool showTooltips;
     bool enableFLTK;
+    bool terminalFLTK;
 
     bool useAPI;
     bool thread;

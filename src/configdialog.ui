@@ -692,7 +692,7 @@
        <x>390</x>
        <y>170</y>
        <width>281</width>
-       <height>221</height>
+       <height>241</height>
       </rect>
      </property>
      <property name="title">
@@ -788,6 +788,22 @@
         <string>Use chnget/chnset</string>
        </property>
       </item>
+     </widget>
+     <widget class="QCheckBox" name="terminalFLTKCheckBox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>210</y>
+        <width>251</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
+      </property>
+      <property name="text">
+       <string>Run FLTK csds in Terminal</string>
+      </property>
      </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox_8">
@@ -1499,12 +1515,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>107</y>
+     <x>85</x>
+     <y>80</y>
     </hint>
     <hint type="destinationlabel">
-     <x>255</x>
-     <y>109</y>
+     <x>121</x>
+     <y>80</y>
     </hint>
    </hints>
   </connection>
@@ -1515,12 +1531,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>139</y>
+     <x>85</x>
+     <y>80</y>
     </hint>
     <hint type="destinationlabel">
-     <x>255</x>
-     <y>141</y>
+     <x>121</x>
+     <y>80</y>
     </hint>
    </hints>
   </connection>
@@ -1531,12 +1547,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>203</y>
+     <x>85</x>
+     <y>80</y>
     </hint>
     <hint type="destinationlabel">
-     <x>255</x>
-     <y>205</y>
+     <x>121</x>
+     <y>80</y>
     </hint>
    </hints>
   </connection>
@@ -1547,12 +1563,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>235</y>
+     <x>85</x>
+     <y>80</y>
     </hint>
     <hint type="destinationlabel">
-     <x>255</x>
-     <y>237</y>
+     <x>121</x>
+     <y>80</y>
     </hint>
    </hints>
   </connection>
@@ -1563,12 +1579,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>171</y>
+     <x>85</x>
+     <y>80</y>
     </hint>
     <hint type="destinationlabel">
-     <x>255</x>
-     <y>173</y>
+     <x>121</x>
+     <y>80</y>
     </hint>
    </hints>
   </connection>
@@ -1659,12 +1675,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>107</x>
-     <y>267</y>
+     <x>109</x>
+     <y>80</y>
     </hint>
     <hint type="destinationlabel">
-     <x>255</x>
-     <y>269</y>
+     <x>121</x>
+     <y>80</y>
     </hint>
    </hints>
   </connection>
@@ -1681,6 +1697,22 @@
     <hint type="destinationlabel">
      <x>526</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>enableFLTKCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>terminalFLTKCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>550</x>
+     <y>395</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>555</x>
+     <y>423</y>
     </hint>
    </hints>
   </connection>
