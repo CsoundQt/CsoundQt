@@ -38,6 +38,8 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
     int currentTab();
     void setCurrentTab(int index);
 
+  public slots:
+    void warnOpcodeDir(bool on);
 
   private:
     qutecsound* m_parent;

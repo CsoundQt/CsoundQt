@@ -41,7 +41,7 @@ QString Options::generateCmdLineFlags(bool rt)
     cmdline += " -b" + QString::number(bufferSize);
   if (HwBufferSizeActive)
     cmdline += " -B" + QString::number(HwBufferSize);
-  if (additionalFlagsActive && !additionalFlags.isEmpty())
+  if (additionalFlagsActive && !additionalFlags.trimmed().isEmpty())
     cmdline += " " + additionalFlags;
   if (dither)
     cmdline += " -Z";
@@ -74,10 +74,24 @@ QString Options::generateCmdLineFlags(bool rt)
       //if (fileOutputFilename.startsWith("/"))
       if (fileOutputFilename.contains('/'))
         cmdline += " -o" + fileOutputFilename + "";
-      else
-        cmdline += " -o" + csdPath + fileOutputFilename + "";
+      else {
+        if (sfdirActive) {
+          cmdline += " -o" + fileOutputFilename + "";
+        }
+        else {
+          cmdline += " -o" + csdPath + fileOutputFilename + "";
+        }
+      }
     }
   }
+  if (sadirActive)
+    cmdline += " --env:SADIR=" + sadir;
+  if (ssdirActive)
+    cmdline += " --env:SSDIR=" + ssdir;
+  if (sfdirActive)
+    cmdline += " --env:SFDIR=" + sfdir;
+  if (ssdirActive)
+    cmdline += " --env:INCDIR=" + incdir;
   cmdline += " --env:CSNOSTOP=yes";
   return cmdline;
 }

@@ -1257,6 +1257,13 @@ void qutecsound::recordBuffer()
 void qutecsound::render()
 {
   if (m_options->fileAskFilename) {
+    QString defaultFile;
+    if (m_options->fileOutputFilenameActive) {
+      defaultFile = m_options->fileOutputFilename;
+    }
+    else {
+      defaultFile = lastFileDir;
+    }
     QFileDialog dialog(this,tr("Output Filename"),lastFileDir);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setConfirmOverwrite(false);
@@ -1264,12 +1271,12 @@ void qutecsound::render()
         + _configlists.fileTypeExtensions[m_options->fileFileType] + ")");
     dialog.setFilter(filter);
     if (dialog.exec() == QDialog::Accepted) {
-      QString extension = _configlists.fileTypeExtensions[m_options->fileFileType];
-      // Remove the '*' from the extension
-      extension.remove(0,1);
+//       QString extension = _configlists.fileTypeExtensions[m_options->fileFileType].left(_configlists.fileTypeExtensions[m_options->fileFileType].indexOf(";"));
+//       // Remove the '*' from the extension
+//       extension.remove(0,1);
       m_options->fileOutputFilename = dialog.selectedFiles()[0];
-      if (!m_options->fileOutputFilename.endsWith(extension))
-        m_options->fileOutputFilename += extension;
+//       if (!m_options->fileOutputFilename.endsWith(extension))
+//         m_options->fileOutputFilename += extension;
       if (QFile::exists(m_options->fileOutputFilename)) {
         int ret = QMessageBox::warning(this, tr("QuteCsound"),
                 tr("The file %1 \nalready exists.\n"
@@ -1562,31 +1569,35 @@ void qutecsound::runUtility(QString flags)
     script = "";
     if (m_options->opcodedirActive)
       script += "set OPCODEDIR=" + m_options->opcodedir + "\n";
-    if (m_options->sadirActive)
-      script += "set SADIR=" + m_options->sadir + "\n";
-    if (m_options->ssdirActive)
-      script += "set SSDIR=" + m_options->ssdir + "\n";
-    if (m_options->sfdirActive)
-      script += "set SFDIR=" + m_options->sfdir + "\n";
-    if (m_options->ssdirActive)
-      script += "set INCDIR=" + m_options->incdir + "\n";
+    // Only OPCODEDIR left here as it must be present before csound initializes
+    // The problem is that it won't be passed when using the API...
+//     if (m_options->sadirActive)
+//       script += "set SADIR=" + m_options->sadir + "\n";
+//     if (m_options->ssdirActive)
+//       script += "set SSDIR=" + m_options->ssdir + "\n";
+//     if (m_options->sfdirActive)
+//       script += "set SFDIR=" + m_options->sfdir + "\n";
+//     if (m_options->ssdirActive)
+//       script += "set INCDIR=" + m_options->incdir + "\n";
 
-    script += "cd " + QFileInfo(documentPages[curPage]->fileName).absoluteFilePath() + "\n";
+    script += "cd " + QFileInfo(documentPages[curPage]->fileName).absolutePath() + "\n";
     script += "csound " + flags + "\n";
 #else
     script = "#!/bin/sh\n";
     if (m_options->opcodedirActive)
       script += "export OPCODEDIR=" + m_options->opcodedir + "\n";
-    if (m_options->sadirActive)
-      script += "export SADIR=" + m_options->sadir + "\n";
-    if (m_options->ssdirActive)
-      script += "export SSDIR=" + m_options->ssdir + "\n";
-    if (m_options->sfdirActive)
-      script += "export SFDIR=" + m_options->sfdir + "\n";
-    if (m_options->ssdirActive)
-      script += "export INCDIR=" + m_options->incdir + "\n";
+    // Only OPCODEDIR left here as it must be present before csound initializes
+    // The problem is that it won't be passed when using the API...
+//     if (m_options->sadirActive)
+//       script += "export SADIR=" + m_options->sadir + "\n";
+//     if (m_options->ssdirActive)
+//       script += "export SSDIR=" + m_options->ssdir + "\n";
+//     if (m_options->sfdirActive)
+//       script += "export SFDIR=" + m_options->sfdir + "\n";
+//     if (m_options->ssdirActive)
+//       script += "export INCDIR=" + m_options->incdir + "\n";
 
-    script += "cd " + QFileInfo(documentPages[curPage]->fileName).absoluteFilePath() + "\n";
+    script += "cd " + QFileInfo(documentPages[curPage]->fileName).absolutePath() + "\n";
 #ifdef MACOSX
     script += "/usr/local/bin/csound " + flags + "\n";
 #else
@@ -2858,17 +2869,19 @@ QString qutecsound::generateScript(bool realtime, QString tempFileName)
   QString cmdLine = "";
   if (m_options->opcodedirActive)
     script += "export OPCODEDIR=" + m_options->opcodedir + "\n";
-  if (m_options->sadirActive)
-    script += "export SADIR=" + m_options->sadir + "\n";
-  if (m_options->ssdirActive)
-    script += "export SSDIR=" + m_options->ssdir + "\n";
-  if (m_options->sfdirActive)
-    script += "export SFDIR=" + m_options->sfdir + "\n";
-  if (m_options->ssdirActive)
-    script += "export INCDIR=" + m_options->incdir + "\n";
+    // Only OPCODEDIR left here as it must be present before csound initializes
+    // The problem is that it can't be passed when using the API...
+//   if (m_options->sadirActive)
+//     script += "export SADIR=" + m_options->sadir + "\n";
+//   if (m_options->ssdirActive)
+//     script += "export SSDIR=" + m_options->ssdir + "\n";
+//   if (m_options->sfdirActive)
+//     script += "export SFDIR=" + m_options->sfdir + "\n";
+//   if (m_options->ssdirActive)
+//     script += "export INCDIR=" + m_options->incdir + "\n";
 
 #ifndef WIN32
-  script += "cd " + QFileInfo(documentPages[curPage]->fileName).absoluteFilePath() + "\n";
+  script += "cd " + QFileInfo(documentPages[curPage]->fileName).absolutePath() + "\n";
 #else // WIN32 defined
   QString script_cd = "@pushd " + QFileInfo(documentPages[curPage]->fileName).absolutePath() + "\n";
   script_cd.replace("/", "\\");

@@ -30,7 +30,7 @@ ConfigLists::ConfigLists()
   fileTypeExtensions << "*.wav" << "*.aif;*.aiff" << "*.au" << "*.avr" << "*.caf"
       << "*.flac" << "*.htk;*.*" << "*.ircam;*.*" << "*.mat4;*.*" << "*.mat5;*.*"
       << "*.nis;*.*" << "*.paf;*.*" << "*.pvf" << "*.raw;*.*" << "*.sd2;*.*" << "*.sds;*.*"
-      << "*.svx;*.*" << "*.voc;*.*" << "*.w64;*.wav" << "*.wav;*.wavex";
+      << "*.svx;*.*" << "*.voc;*.*" << "*.w64;*.wav" << "*.wavex;*.wav";
   fileTypeLongNames << "WAVE" << "AIFF" << "au" << "avr" << "CAF" << "FLAC"
       << "htk" << "ircam" << "mat4" << "mat5" << "nis" << "paf" << "pvf"
       << "Raw (Headerless)" << "Sound Designer II" << "sds" << "svx" << "voc"

@@ -381,14 +381,22 @@
     </message>
     <message>
         <source>Use invalue/outvalue</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser invalue/outvalue</translation>
     </message>
     <message>
         <source>Use chnget/chnset</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser chnget/chnset</translation>
     </message>
     <message>
         <source>PDF viewer</source>
+        <translation>Visualiseur PDF</translation>
+    </message>
+    <message>
+        <source>Please note that OPCODEDIR will only be set when running in an external shell. It won&apos;t be set when using Run or Render.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Run FLTK csds in Terminal</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -396,14 +404,14 @@
     <name>ConsoleWidget</name>
     <message>
         <source>Csound Output Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Console de Sortie de Csound</translation>
     </message>
 </context>
 <context>
     <name>DockConsole</name>
     <message>
         <source>Csound Output Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Console de Sortie de Csound</translation>
     </message>
 </context>
 <context>
@@ -2020,33 +2028,35 @@ Victor Lazzarini
     </message>
     <message>
         <source>Export without widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter sans les widgets</translation>
     </message>
     <message>
         <source>Save to new file without including widget sections</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauver dans un nouveau fichier sans inclure les sections de widget</translation>
     </message>
     <message>
         <source>PDF viewer not found!
 Please go to Edit-&gt;Options-&gt;Environment and select directory
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Visualiseur PDF introuvable !
+Aller à Edition-&gt;Configuration-&gt;Environnement et choisir le répertoire
+</translation>
     </message>
     <message>
         <source>Csound Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuel de Csound</translation>
     </message>
     <message>
         <source>Show the Csound manual in the help panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer le manuel de Csound dans le panneau d&apos;aide</translation>
     </message>
     <message>
         <source>Open Quick Reference Guide</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir le Guide de Référence Rapide</translation>
     </message>
     <message>
         <source>Open Quick Reference Guide in PDF viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir le Guide de Référence Rapide dans le visualiseur PDF</translation>
     </message>
 </context>
 </TS>

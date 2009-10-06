@@ -136,9 +136,9 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   IncdirCheckBox->setChecked(m_options->incdirActive);
   IncdirLineEdit->setText(m_options->incdir);
   IncdirLineEdit->setEnabled(m_options->incdirActive);
-  defaultCsdCheckBox->setChecked(m_options->incdirActive);
-  defaultCsdLineEdit->setText(m_options->incdir);
-  defaultCsdLineEdit->setEnabled(m_options->incdirActive);
+  defaultCsdCheckBox->setChecked(m_options->defaultCsdActive);
+  defaultCsdLineEdit->setText(m_options->defaultCsd);
+  defaultCsdLineEdit->setEnabled(m_options->defaultCsdActive);
 
   TerminalLineEdit->setText(m_options->terminal);
   browserLineEdit->setText(m_options->browser);
@@ -171,6 +171,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   connect(consoleFontColorPushButton, SIGNAL(released()), this, SLOT(selectTextColor()));
   connect(consoleBgColorPushButton, SIGNAL(released()), this, SLOT(selectBgColor()));
 
+  connect(OpcodedirCheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
 }
 
 ConfigDialog::~ConfigDialog()
@@ -180,6 +181,15 @@ ConfigDialog::~ConfigDialog()
 int ConfigDialog::currentTab()
 {
   return editorTabWidget->currentIndex();
+}
+
+void ConfigDialog::warnOpcodeDir(bool on)
+{
+  if (on) {
+    QMessageBox::warning(this, "QuteCsound",
+                         tr("Please note that OPCODEDIR will only be set when running in an external shell. It won't be set when using Run or Render.")
+                        );
+  }
 }
 
 void ConfigDialog::setCurrentTab(int index)

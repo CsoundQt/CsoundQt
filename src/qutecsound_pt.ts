@@ -387,6 +387,14 @@
         <source>PDF viewer</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Please note that OPCODEDIR will only be set when running in an external shell. It won&apos;t be set when using Run or Render.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Run FLTK csds in Terminal</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConsoleWidget</name>
