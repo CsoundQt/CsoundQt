@@ -124,7 +124,9 @@ void DockHelp::followLink(QUrl url)
       emit openManualExample(url.toLocalFile());
     }
     else {
-    text->setSource(url);
+      if (!url.toString().endsWith("indexframes.html") ) { // Don't do anything with frames version...
+        text->setSource(url);
+      }
     }
   }
   else {

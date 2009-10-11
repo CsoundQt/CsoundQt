@@ -178,7 +178,7 @@ QString DocumentPage::getFullText()
   fullText = document()->toPlainText();
   if (!fullText.endsWith("\n"))
     fullText += "\n";
-  if (fileName.endsWith(".csd") or fileName == "")
+  if (fileName.endsWith(".csd",Qt::CaseInsensitive) or fileName == "")
     fullText += getMacOptionsText() + "\n" + macGUI + "\n" + macPresets + "\n";
 
   return fullText;

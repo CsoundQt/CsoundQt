@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 
   for (int i = 1; i < argc; i++) {
     QString arg(argv[i]);
-    if (arg.endsWith(".orc") or arg.endsWith(".sco") or arg.endsWith(".csd")) {
+    if (arg.endsWith(".orc",Qt::CaseInsensitive) or arg.endsWith(".sco",Qt::CaseInsensitive) or arg.endsWith(".csd",Qt::CaseInsensitive)) {
       fileNames.append(arg);
     }
   }

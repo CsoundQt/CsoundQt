@@ -295,7 +295,7 @@ void qutecsound::closeEvent(QCloseEvent *event)
 
 void qutecsound::newFile()
 {
-  if (m_options->defaultCsdActive && m_options->defaultCsd.endsWith(".csd")) {
+  if (m_options->defaultCsdActive && m_options->defaultCsd.endsWith(".csd",Qt::CaseInsensitive)) {
     loadFile(m_options->defaultCsd);
   }
   else {
@@ -566,7 +566,7 @@ QString qutecsound::getSaveFileName()
   bool widgetsVisible = widgetPanel->isVisible();
   if (widgetsVisible)
     widgetPanel->hide(); // Necessary for Mac, as widget Panel covers open dialog
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Save File As"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco)"));
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Save File As"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)"));
   if (widgetsVisible)
     widgetPanel->show(); // Necessary for Mac, as widget Panel covers open dialog
   if (fileName.isEmpty())
@@ -577,7 +577,7 @@ QString qutecsound::getSaveFileName()
                              QMessageBox::Ok | QMessageBox::Default);
     return false;
   }
-  if (!fileName.endsWith(".csd") && !fileName.endsWith(".orc") && !fileName.endsWith(".sco"))
+  if (!fileName.endsWith(".csd",Qt::CaseInsensitive) && !fileName.endsWith(".orc",Qt::CaseInsensitive) && !fileName.endsWith(".sco",Qt::CaseInsensitive))
     fileName += ".csd";
   return fileName;
 }
@@ -822,10 +822,10 @@ void qutecsound::runCsound(bool realtime)
   }
   QString fileName, fileName2;
   fileName = documentPages[curPage]->fileName;
-  if (!fileName.endsWith(".csd")) {
+  if (!fileName.endsWith(".csd",Qt::CaseInsensitive)) {
     if (documentPages[curPage]->askForFile)
       getCompanionFileName();
-    if (fileName.endsWith(".sco")) {
+    if (fileName.endsWith(".sco",Qt::CaseInsensitive)) {
       //Must switch filename order when open file is a sco file
       fileName2 = fileName;
       fileName = documentPages[curPage]->companionFile;
@@ -885,7 +885,7 @@ void qutecsound::runCsound(bool realtime)
       runAct->setChecked(false);
       return;
     }
-    if (documentPages[curPage]->fileName.endsWith(".csd")) {
+    if (documentPages[curPage]->fileName.endsWith(".csd",Qt::CaseInsensitive)) {
       QString csdText = textEdit->document()->toPlainText();
       QString fileName = csdFile.fileName();
       csdFile.write(csdText.toAscii());
@@ -2903,7 +2903,7 @@ QString qutecsound::generateScript(bool realtime, QString tempFileName)
         cmdLine += "\""  + documentPages[curPage]->companionFile
             + "\" \""+ documentPages[curPage]->fileName + "\" ";
     }
-    else if (documentPages[curPage]->fileName.endsWith(".csd")) {
+    else if (documentPages[curPage]->fileName.endsWith(".csd",Qt::CaseInsensitive)) {
       cmdLine += "\""  + documentPages[curPage]->fileName + "\" ";
     }
   }
