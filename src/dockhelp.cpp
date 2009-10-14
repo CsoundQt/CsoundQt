@@ -124,8 +124,13 @@ void DockHelp::followLink(QUrl url)
       emit openManualExample(url.toLocalFile());
     }
     else {
-      if (!url.toString().endsWith("indexframes.html") ) { // Don't do anything with frames version...
+      if (!url.toString().endsWith("indexframes.html") ) {
         text->setSource(url);
+      }
+      else { // Don't do anything with frames version...
+         // This could be fixed using the WebKit rendering engine
+        QMessageBox::warning(this, tr("QuteCsound"),
+                             tr("Frames version only available in external browser."));
       }
     }
   }

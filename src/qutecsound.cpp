@@ -134,6 +134,9 @@ qutecsound::qutecsound(QStringList fileNames)
         loadFile(lastFile);
       }
     }
+    if (lastTabIndex < documentPages.size()) {
+      documentTabs->setCurrentIndex(lastTabIndex);
+    }
   }
   // Open files passed in the command line. Only valid for non OS X platforms
   foreach (QString fileName, fileNames) {
@@ -1134,11 +1137,13 @@ void qutecsound::stopCsound()
 #endif
     csoundCleanup(csound);
     ud->PERF_STATUS = 0;
+    m_console->scrollToEnd();
   }
   else {
     csoundStop(csound);
     csoundCleanup(csound);
     ud->PERF_STATUS = 0;
+    m_console->scrollToEnd();
   }
 #ifdef MACOSX
 // Put menu bar back
@@ -2465,6 +2470,7 @@ void qutecsound::readSettings()
   m_options->enableFLTK = settings.value("enableFLTK", true).toBool();
   m_options->terminalFLTK = settings.value("terminalFLTK", true).toBool();
   lastFiles = settings.value("lastfiles", "").toStringList();
+  lastTabIndex = settings.value("lasttabindex", "").toInt();
   settings.endGroup();
   settings.beginGroup("Run");
   m_options->useAPI = settings.value("useAPI", true).toBool();
@@ -2586,6 +2592,7 @@ void qutecsound::writeSettings()
     }
   }
   settings.setValue("lastfiles", files);
+  settings.setValue("lasttabindex", documentTabs->currentIndex());
   settings.endGroup();
   settings.beginGroup("Run");
   settings.setValue("useAPI", m_options->useAPI);

@@ -28,9 +28,8 @@
 
 QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
 {
-  m_ud = 0;
   m_zoom = 2;
-//   m_type = "scope";
+  m_type = "scope";
   m_channel = -1;
   QGraphicsScene *m_scene = new QGraphicsScene(this);
   m_scene->setBackgroundBrush(QBrush(Qt::black));
@@ -48,35 +47,50 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
   m_label->setText("Scope");
   m_label->move(85, 0);
   m_label->resize(500, 25);
-  curveData.resize(this->width());
-  curve = new QGraphicsPolygonItem(/*&curveData*/);
-  curve->setPen(QPen(Qt::green));
-  curve->show();
-  m_scene->addItem(curve);
-
+  m_params = new ScopeParams(0, m_scene, static_cast<ScopeWidget *>(m_widget), &mutex, this->width(), this->height());
+  m_scopeData = new ScopeData(m_params);
+  m_lissajouData = new LissajouData(m_params);
+  m_poincareData = new PoincareData(m_params);
+  m_dataDisplay = (DataDisplay *)m_scopeData;
+  m_dataDisplay->show();
 //   connect(static_cast<ScopeWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 }
 
 QuteScope::~QuteScope()
 {
+  delete m_poincareData;
+  delete m_lissajouData;
+  delete m_scopeData;
+  delete m_params;
 }
 
 QString QuteScope::getWidgetLine()
 {
   QString line = "ioGraph {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-  line += "scope " + QString::number(m_zoom, 'f', 6) + " ";
+  line += m_type + " " + QString::number(m_zoom, 'f', 6) + " ";
   line += QString::number(m_channel, 'f', 6) + " ";
   line += m_name;
 //   qDebug("QuteScope::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
 
-// void QuteScope::setType(QString type)
-// {
-//   m_type = type;
-//   updateLabel();
-// }
+void QuteScope::setType(QString type)
+{
+  m_type = type;
+  updateLabel();
+  m_dataDisplay->hide();
+  if (m_type == "scope") {
+    m_dataDisplay = (DataDisplay *)m_scopeData;
+  }
+  else if (m_type == "lissajou") {
+    m_dataDisplay = (DataDisplay *)m_lissajouData;
+  }
+  else if (m_type == "poincare") {
+    m_dataDisplay = (DataDisplay *)m_poincareData;
+  }
+  m_dataDisplay->show();
+}
 
 void QuteScope::setValue(double value)
 {
@@ -93,7 +107,7 @@ void QuteScope::setChannel(int channel)
 
 void QuteScope::setUd(CsoundUserData *ud)
 {
-  m_ud = ud;
+  m_params->ud = ud;
 }
 
 void QuteScope::updateLabel()
@@ -104,7 +118,7 @@ void QuteScope::updateLabel()
 
 void QuteScope::setWidgetGeometry(int x,int y,int width,int height)
 {
-  QuteWidget::setWidgetGeometry(x,y,width, height);
+  QuteWidget::setWidgetGeometry(x, y, width, height);
 //   static_cast<ScopeWidget *>(m_widget)->setWidgetGeometry(0,0,width, height);
 //   if (index < 0)
 //     return;
@@ -117,14 +131,16 @@ void QuteScope::createPropertiesDialog()
 //   channelLabel->hide();
 //   nameLineEdit->hide();
   QLabel *label = new QLabel(dialog);
-//   label->setText("Type");
-//   layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
-//   typeComboBox = new QComboBox(dialog);
-//   typeComboBox->addItem("Osciloscope", QVariant(QString("scope")));
+  label->setText("Type");
+  layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
+  typeComboBox = new QComboBox(dialog);
+  typeComboBox->addItem("Oscilloscope", QVariant(QString("scope")));
+  typeComboBox->addItem("Lissajou curve", QVariant(QString("lissajou")));
+  typeComboBox->addItem("Poincare map", QVariant(QString("poincare")));
 //   typeComboBox->addItem("Spectrogram", QVariant(QString("fft")));
-//   typeComboBox->setCurrentIndex(typeComboBox->findData(QVariant(m_type)));
-//   layout->addWidget(typeComboBox, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
-//   label = new QLabel(dialog);
+  typeComboBox->setCurrentIndex(typeComboBox->findData(QVariant(m_type)));
+  layout->addWidget(typeComboBox, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
   label->setText("Channel");
   layout->addWidget(label, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
   channelBox = new QComboBox(dialog);
@@ -151,7 +167,7 @@ void QuteScope::createPropertiesDialog()
 
 void QuteScope::applyProperties()
 {
-//   setType(typeComboBox->itemData(typeComboBox->currentIndex()).toString());
+  setType(typeComboBox->itemData(typeComboBox->currentIndex()).toString());
   setChannel(channelBox->itemData(channelBox->currentIndex()).toInt());
   setValue(decimationBox->value());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
@@ -160,7 +176,11 @@ void QuteScope::applyProperties()
 void QuteScope::resizeEvent(QResizeEvent * event)
 {
   QuteWidget::resizeEvent(event);
-  curveData.resize(this->width() + 2);
+  m_params->setWidth(this->width());
+  m_params->setHeight(this->height());
+  m_scopeData->resize();
+  m_lissajouData->resize();
+  m_poincareData->resize();
 //   QGraphicsScene *m_scene = static_cast<ScopeWidget *>(m_widget)->scene();
 //   m_scene->setSceneRect(-m_ud->zerodBFS, m_ud->zerodBFS, width() - 5, m_ud->zerodBFS *2);
 //   static_cast<ScopeWidget *>(m_widget)->setSceneRect(-m_ud->zerodBFS , m_ud->zerodBFS, width() - 5, m_ud->zerodBFS *2);
@@ -169,13 +189,65 @@ void QuteScope::resizeEvent(QResizeEvent * event)
 void QuteScope::updateData()
 {
 //   qDebug("QuteScope::updateData()");
-  if (m_ud == 0 or m_ud->PERF_STATUS != 1 )
+  m_dataDisplay->updateData(m_channel, m_zoom, static_cast<ScopeWidget *>(m_widget)->freeze);
+}
+
+ScopeItem::ScopeItem(int width, int height)
+{
+  m_width = width;
+  m_height = height;
+}
+
+void ScopeItem::paint(QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+  p->setPen(m_pen);
+  p->drawPoints(m_polygon);
+}
+
+void ScopeItem::setPen(const QPen & pen)
+{
+  m_pen = pen;
+}
+
+void ScopeItem::setPolygon(const QPolygonF & polygon)
+{
+  m_polygon = polygon;
+  update(boundingRect());
+}
+
+void ScopeItem::setSize(int width, int height)
+{
+  m_width = width;
+  m_height = height;
+  prepareGeometryChange();
+}
+
+ScopeData::ScopeData(ScopeParams *params) : DataDisplay(params)
+{
+  curveData.resize(m_params->width + 2);
+  curve = new QGraphicsPolygonItem(/*&curveData*/);
+  curve->setPen(QPen(Qt::green));
+  curve->hide();
+  m_params->scene->addItem(curve);
+}
+
+void ScopeData::resize()
+{
+  curveData.resize(m_params->width + 2);
+}
+
+void ScopeData::updateData(int channel, int zoom, bool freeze)
+{
+  CsoundUserData *ud = m_params->ud;
+  QMutex *mutex = m_params->mutex;
+  int width = m_params->width;
+  int height = m_params->height;
+  if (ud == 0 or ud->PERF_STATUS != 1 )
     return;
-  if (static_cast<ScopeWidget *>(m_widget)->freeze)
+  if (freeze)
     return;
   double value;
-  int numChnls = m_ud->numChnls;
-  int channel = m_channel;
+  int numChnls = ud->numChnls;
   MYFLT newValue;
   if (channel == 0 or channel > numChnls ) {
 //     qDebug() << "QuteScope::updateData() Channel out of range " << channel;
@@ -183,21 +255,21 @@ void QuteScope::updateData()
   }
   channel = (channel != -1 ? channel - 1 : -1);
 #ifdef  USE_WIDGET_MUTEX
-  mutex.lock();
+  mutex->lock();
 #endif
-  RingBuffer *buffer = &m_ud->qcs->audioOutputBuffer;
+  RingBuffer *buffer = &ud->qcs->audioOutputBuffer;
   buffer->lock();
   QList<MYFLT> list = buffer->buffer;
   buffer->unlock();
   long listSize = list.size();
   long offset = buffer->currentPos;
-  for (int i = 0; i < this->width(); i++) {
+  for (int i = 0; i < width; i++) {
     value = 0;
-    for (int j = 0; j < (int) m_zoom; j++) {
+    for (int j = 0; j < (int) zoom; j++) {
       if (channel == -1) {
         newValue = 0;
         for (int k = 0; k < numChnls; k++) {
-          int bufferIndex = (int)((((i* m_zoom)+ j)*numChnls) + offset + k) % listSize;
+          int bufferIndex = (int)((((i* zoom)+ j)*numChnls) + offset + k) % listSize;
           newValue += list[bufferIndex];
         }
         newValue /= numChnls;
@@ -205,18 +277,166 @@ void QuteScope::updateData()
           value = -(double) newValue;
       }
       else {
-        int bufferIndex = (int)((((i* m_zoom)+ j)*numChnls) + offset + channel) % listSize;
+        int bufferIndex = (int)((((i* zoom)+ j)*numChnls) + offset + channel) % listSize;
         if (fabs(list[bufferIndex]) > fabs(value))
           value = (double) -list[bufferIndex];
       }
     }
-    curveData[i+1] = QPoint(i,value*height()/(2/* * m_ud->zerodBFS*/));
+    curveData[i+1] = QPoint(i, value*height/(2/* * m_ud->zerodBFS*/));
   }
-  static_cast<ScopeWidget *>(m_widget)->setSceneRect(0, -height()/2, width(), height() );
-  curveData.last() = QPoint(width()-4, 0);
+  m_params->widget->setSceneRect(0, -height/2, width, height );
+  curveData.last() = QPoint(width-4, 0);
   curveData.first() = QPoint(0, 0);
   curve->setPolygon(curveData);
 #ifdef  USE_WIDGET_MUTEX
-  mutex.unlock();
+  mutex->unlock();
 #endif
 }
+
+void ScopeData::show()
+{
+  curve->show();
+}
+
+void ScopeData::hide()
+{
+  curve->hide();
+}
+
+LissajouData::LissajouData(ScopeParams *params) : DataDisplay(params)
+{
+  curveData.resize(m_params->width);
+  curve = new ScopeItem(m_params->width, m_params->height);
+  curve->setPen(QPen(Qt::green));
+  curve->hide();
+  m_params->scene->addItem(curve);
+}
+
+void LissajouData::resize()
+{
+  // We take 8 times the display width points for each pass
+  // to have a smooth animation
+  curveData.resize(m_params->width * 8);
+  curve->setSize(m_params->width, m_params->height);
+}
+
+void LissajouData::updateData(int channel, int zoom, bool freeze)
+{
+  // The decimation factor (zoom) is not used here
+  CsoundUserData *ud = m_params->ud;
+  QMutex *mutex = m_params->mutex;
+  int width = m_params->width;
+  int height = m_params->height;
+  if (ud == 0 or ud->PERF_STATUS != 1 )
+    return;
+  if (freeze)
+    return;
+  double x, y;
+  int numChnls = ud->numChnls;
+  // We take two consecutives channels, the first one for abscissas and
+  // the second one for ordinates
+  if (channel == 0 or channel >= numChnls or numChnls < 2) {
+//     qDebug() << "QuteScope::updateData() Channel out of range " << channel;
+    return;
+  }
+  channel = (channel != -1 ? channel - 1 : 0);
+#ifdef  USE_WIDGET_MUTEX
+  mutex->lock();
+#endif
+  RingBuffer *buffer = &ud->qcs->audioOutputBuffer;
+  buffer->lock();
+  QList<MYFLT> list = buffer->buffer;
+  buffer->unlock();
+  long listSize = list.size();
+  long offset = buffer->currentPos;
+  for (int i = 0; i < curveData.size(); i++) {
+    int bufferIndex = (int)((i*numChnls) + offset + channel) % listSize;
+    x = (double)list[bufferIndex];
+    bufferIndex = (bufferIndex + 1) % listSize;
+    y = (double) -list[bufferIndex];
+    curveData[i] = QPoint(x*width/2, y*height/2);
+  }
+  m_params->widget->setSceneRect(-width/2, -height/2, width, height );
+  curve->setPolygon(curveData);
+#ifdef  USE_WIDGET_MUTEX
+  mutex->unlock();
+#endif
+}
+
+void LissajouData::show()
+{
+  curve->show();
+}
+
+void LissajouData::hide()
+{
+  curve->hide();
+}
+
+PoincareData::PoincareData(ScopeParams *params) : DataDisplay(params)
+{
+  curveData.resize(m_params->width);
+  curve = new ScopeItem(m_params->width, m_params->height);
+  curve->setPen(QPen(Qt::green));
+  curve->hide();
+  lastValue = 0.0;
+  m_params->scene->addItem(curve);
+}
+
+void PoincareData::resize()
+{
+  // We take 8 times the display width points for each pass
+  // to have a smooth animation
+  curveData.resize(m_params->width * 8);
+  curve->setSize(m_params->width, m_params->height);
+}
+
+void PoincareData::updateData(int channel, int zoom, bool freeze)
+{
+  CsoundUserData *ud = m_params->ud;
+  QMutex *mutex = m_params->mutex;
+  int width = m_params->width;
+  int height = m_params->height;
+  if (ud == 0 or ud->PERF_STATUS != 1 )
+    return;
+  if (freeze)
+    return;
+  double value;
+  int numChnls = ud->numChnls;
+  if (channel == 0 or channel > numChnls) {
+//     qDebug() << "QuteScope::updateData() Channel out of range " << channel;
+    return;
+  }
+  channel = (channel != -1 ? channel - 1 : 0);
+#ifdef  USE_WIDGET_MUTEX
+  mutex->lock();
+#endif
+  RingBuffer *buffer = &ud->qcs->audioOutputBuffer;
+  buffer->lock();
+  QList<MYFLT> list = buffer->buffer;
+  buffer->unlock();
+  long listSize = list.size();
+  long offset = buffer->currentPos;
+  for (int i = 0; i < curveData.size(); i++) {
+    int bufferIndex = (int)((i*zoom*numChnls) + offset + channel) % listSize;
+    value = (double)list[bufferIndex];
+    curveData[i] = QPoint(lastValue*width/2, -value*height/2);
+    lastValue = value;
+  }
+  m_params->widget->setSceneRect(-width/2, -height/2, width, height );
+  curve->setPolygon(curveData);
+#ifdef  USE_WIDGET_MUTEX
+  mutex->unlock();
+#endif
+}
+
+void PoincareData::show()
+{
+  curve->show();
+}
+
+void PoincareData::hide()
+{
+  curve->hide();
+}
+

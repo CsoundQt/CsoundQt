@@ -51,7 +51,7 @@
 
 // Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
 
-#define QUTECSOUND_DESTROY_CSOUND
+// #define QUTECSOUND_DESTROY_CSOUND
 
 class QAction;
 class QMenu;
@@ -341,6 +341,7 @@ class qutecsound:public QMainWindow
     viewMode m_mode;
     QStringList recentFiles;
     QStringList lastFiles;
+    int lastTabIndex;
     QStringList m_deviceMessages; //stores messages from csound for device discovery
 
     UtilitiesDialog *utilitiesDialog;

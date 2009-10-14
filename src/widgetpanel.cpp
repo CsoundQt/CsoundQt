@@ -274,7 +274,7 @@ int WidgetPanel::newWidget(QString widgetLine, bool offset)
     else if (parts[0]=="ioGraph") {
       if (parts.size() < 6 or parts[5]=="table")
         return createGraph(x,y,width, height, widgetLine);
-      else if (parts[5]=="fft" or parts[5]=="scope")
+      else if (parts[5]=="fft" or parts[5]=="scope" or parts[5]=="lissajou" or parts[5]=="poincare")
         return createScope(x,y,width, height, widgetLine);
     }
     else {
@@ -1103,8 +1103,8 @@ int WidgetPanel::createScope(int x, int y, int width, int height, QString widget
   widget->setWidgetGeometry(x,y,width, height);
   widget->setUd(static_cast<qutecsound *>(parent())->ud);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-//   if (parts.size() > 5)
-//     widget->setType(parts[5]);
+  if (parts.size() > 5)
+    widget->setType(parts[5]);
   if (parts.size() > 6)
     widget->setValue(parts[6].toDouble()); //Value here indicates zoom level
   if (parts.size() > 7) {

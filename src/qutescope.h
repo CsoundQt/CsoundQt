@@ -26,6 +26,21 @@
 #include "qutewidget.h"
 #include "types.h"  //necessary for the CsoundUserData struct
 
+class ScopeParams;
+class DataDisplay;
+class ScopeData;
+class LissajouData;
+class PoincareData;
+
+//
+// To add a new kind of display you have to derive a class from the abstract
+// class DataDisplay. This new class will be created in the constructor of
+// the QuteScope class and referenced through a pointer, member of the
+// later class. 
+// You have then to modify the QuteScope destructor and setType member
+// accordingly.
+// Finally the new type has to appear in the createPropertiesDialog method
+//
 class QuteScope : public QuteWidget
 {
   Q_OBJECT
@@ -45,15 +60,17 @@ class QuteScope : public QuteWidget
 
   protected:
     QLabel * m_label;
-//     QString m_type;
-    CsoundUserData *m_ud;
+    QString m_type;
     int m_channel;
     int m_zoom;
     QComboBox *typeComboBox;
     QComboBox *channelBox;
     QSpinBox *decimationBox;
-    QPolygonF curveData;
-    QGraphicsPolygonItem *curve;
+    ScopeParams *m_params;
+    DataDisplay *m_dataDisplay;
+    ScopeData *m_scopeData;
+    LissajouData *m_lissajouData;
+    PoincareData *m_poincareData;
 
     virtual void resizeEvent(QResizeEvent * event);
     virtual void applyProperties();
@@ -93,4 +110,140 @@ class ScopeWidget : public QGraphicsView
 //     void popUpMenu(QPoint pos);
 };
 
+
+//
+// This class encapsulates data common to all types of displays
+// ie ud (user data), scene, widget, mutex, width and height
+//
+class ScopeParams
+{
+  public:
+    ScopeParams(CsoundUserData *ud, QGraphicsScene *scene, ScopeWidget *widget,
+                QMutex *mutex, int width, int height)
+    {
+      this->ud = ud;
+      this->scene = scene;
+      this->widget = widget;
+      this->mutex = mutex;
+      this->width = width;
+      this->height = height;
+    }
+    void setWidth(int width)
+    {
+      this->width = width;
+    }
+    void setHeight(int height)
+    {
+      this->height = height;
+    }
+    
+    CsoundUserData *ud;
+    QGraphicsScene *scene;
+    ScopeWidget *widget;
+    QMutex *mutex;
+    int width;
+    int height;
+};
+
+
+//
+// A custom QGraphicsItem to display sets of points
+//
+class ScopeItem : public QGraphicsItem
+{
+  public:
+    ScopeItem(int width, int height);
+    QRectF boundingRect() const
+    {
+      return QRectF(-m_width/2, -m_height/2, m_width, m_height);
+    }
+    void paint(QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void setPen(const QPen & pen);
+    void setPolygon(const QPolygonF & polygon);
+    void setSize(int width, int height);
+    
+  protected:
+    int m_width;
+    int m_height;
+    QPen m_pen;
+    QPolygonF m_polygon;
+};
+
+
+//
+// Abstract base class for displays. The inherited classes will differ
+// mainly through the updateData method
+//
+class DataDisplay
+{
+  public:
+    DataDisplay(ScopeParams *params)
+    {
+      m_params = params;
+    }
+    virtual void resize() = 0;
+    virtual void updateData(int channel, int zoom, bool freeze) = 0;
+    virtual void show() = 0;
+    virtual void hide() = 0;
+  
+  protected:
+    ScopeParams *m_params;
+};
+
+
+//
+// Display class for oscilloscope view
+//
+class ScopeData : public DataDisplay
+{
+  public:
+    ScopeData(ScopeParams *params);
+    virtual void resize();
+    virtual void updateData(int channel, int zoom, bool freeze);
+    virtual void show();
+    virtual void hide();
+  
+  protected:
+    QPolygonF curveData;
+    QGraphicsPolygonItem *curve;
+};
+
+
+//
+// Display class for Lissajou curves or two dimensional map
+//
+class LissajouData : public DataDisplay
+{
+  public:
+    LissajouData(ScopeParams *params);
+    virtual void resize();
+    virtual void updateData(int channel, int zoom, bool freeze);
+    virtual void show();
+    virtual void hide();
+  
+  protected:
+    QPolygonF curveData;
+    ScopeItem *curve;
+};
+
+
+//
+// Display class for Poincare map
+//
+class PoincareData : public DataDisplay
+{
+  public:
+    PoincareData(ScopeParams *params);
+    virtual void resize();
+    virtual void updateData(int channel, int zoom, bool freeze);
+    virtual void show();
+    virtual void hide();
+  
+  protected:
+    QPolygonF curveData;
+    ScopeItem *curve;
+    double lastValue;  // holds the last ordinate value to become abcsissa value of the next pass
+};
+
 #endif
+
