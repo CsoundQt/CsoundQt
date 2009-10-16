@@ -51,7 +51,7 @@
 
 // Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
 
-// #define QUTECSOUND_DESTROY_CSOUND
+#define QUTECSOUND_DESTROY_CSOUND
 
 class QAction;
 class QMenu;

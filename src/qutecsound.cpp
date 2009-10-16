@@ -203,7 +203,7 @@ void qutecsound::messageCallback_NoThread(CSOUND *csound,
   msg = msg.vsprintf(fmt, args);
   console->appendMessage(msg);
   ud->qcs->widgetPanel->appendMessage(msg);
-  console->update();
+  console->scrollToEnd();
 }
 
 void qutecsound::messageCallback_Thread(CSOUND *csound,
@@ -994,7 +994,7 @@ void qutecsound::runCsound(bool realtime)
       ThreadID = csoundCreateThread(qutecsound::csThread, (void*)ud);
 #endif
     }
-    else {
+    else { // Run in the same thread
 //       int numChnls = csoundGetNchnls(ud->csound);
       while(ud->PERF_STATUS == 1 && csoundPerformKsmps(csound)==0) {
         ud->outputBufferSize = csoundGetKsmps(ud->csound);
@@ -1133,6 +1133,7 @@ void qutecsound::stopCsound()
 //     csoundScoreEvent(csound,'e' , 0, 0);
     csoundStop(csound);
     csoundJoinThread(ThreadID);
+    qDebug() << "qutecsound::stopCsound() Thread Joined";
 
 #endif
     csoundCleanup(csound);
@@ -3145,6 +3146,7 @@ uintptr_t qutecsound::csThread(void *data)
 #endif
 {
   CsoundUserData* udata = (CsoundUserData*)data;
+  printf("csThread-Thread start\n");
   if(!udata->result) {
     unsigned int numWidgets = udata->qcs->widgetPanel->widgetCount();
     udata->qcs->channelNames.resize(numWidgets*2);
@@ -3159,6 +3161,7 @@ uintptr_t qutecsound::csThread(void *data)
     udata->outputBufferSize = csoundGetKsmps(udata->csound);
     udata->outputBuffer = csoundGetSpout(udata->csound);
 //     int numChnls = csoundGetNchnls(udata->csound);
+    printf("csThread-Begin loop\n");
     while((perform == 0) and (udata->PERF_STATUS == 1)) {
       for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
         udata->qcs->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
@@ -3176,11 +3179,12 @@ uintptr_t qutecsound::csThread(void *data)
       perform = csoundPerformKsmps(udata->csound);
     }
   }
+  printf("csThread-Exit loop\n");
 //   udata->qcs->stop();
   udata->PERF_STATUS = 0;
 #ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
 #else
-  return 1;
+  return 0;
 #endif
 }
 
