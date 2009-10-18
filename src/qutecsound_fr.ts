@@ -428,6 +428,10 @@
         <source>External links can&apos;t be followed in help browser.</source>
         <translation>Le navigateur de l&apos;aide ne peut pas suivre des liens externes.</translation>
     </message>
+    <message>
+        <source>Frames version only available in external browser.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FindReplace</name>
@@ -1247,7 +1251,7 @@ www.graphviz.org</translation>
     </message>
     <message>
         <source>Csound Files (*.csd *.orc *.sco)</source>
-        <translation>Fichiers Csound (*.csd *.orc *.sco)</translation>
+        <translation type="obsolete">Fichiers Csound (*.csd *.orc *.sco)</translation>
     </message>
     <message>
         <source>The file is already open in another tab.
@@ -2057,6 +2061,10 @@ Aller à Edition-&gt;Configuration-&gt;Environnement et choisir le répertoire
     <message>
         <source>Open Quick Reference Guide in PDF viewer</source>
         <translation>Ouvrir le Guide de Référence Rapide dans le visualiseur PDF</translation>
+    </message>
+    <message>
+        <source>Csound Files (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

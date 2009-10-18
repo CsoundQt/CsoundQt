@@ -424,6 +424,10 @@
         <source>External links can&apos;t be followed in help browser.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Frames version only available in external browser.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FindReplace</name>
@@ -1239,7 +1243,7 @@ Instale graphviz de www.graphviz.org</translation>
     </message>
     <message>
         <source>Csound Files (*.csd *.orc *.sco)</source>
-        <translation>Arquivos Csound (*.csd *.orc *.sco)</translation>
+        <translation type="obsolete">Arquivos Csound (*.csd *.orc *.sco)</translation>
     </message>
     <message>
         <source>The file is already open in another tab.
@@ -2035,6 +2039,10 @@ Please go to Edit-&gt;Options-&gt;Environment and select directory
     </message>
     <message>
         <source>Open Quick Reference Guide in PDF viewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Csound Files (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

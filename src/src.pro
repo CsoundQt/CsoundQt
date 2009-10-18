@@ -11,7 +11,8 @@ TRANSLATIONS = qutecsound_es.ts \
                qutecsound_en.ts \
  qutecsound_de.ts \
  qutecsound_fr.ts \
- qutecsound_pt.ts
+ qutecsound_pt.ts \
+ qutecsound_it.ts
 
 
 win32 {
