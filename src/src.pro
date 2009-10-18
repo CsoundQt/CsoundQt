@@ -5,7 +5,7 @@
 CONFIG += qute_cpp \
  libsndfile
 
-DEFINES += QUTE_USE_CSOUNDPERFORMANCETHREAD
+#DEFINES += QUTE_USE_CSOUNDPERFORMANCETHREAD
 
 TRANSLATIONS = qutecsound_es.ts \
                qutecsound_en.ts \

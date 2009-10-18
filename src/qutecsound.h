@@ -44,10 +44,8 @@
 #define QUTECSOUND_COPYPASTE
 #endif
 
-#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
 #include <csound.hpp>
 #include <csPerfThread.hpp>
-#endif
 
 // Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
 
@@ -111,11 +109,7 @@ class qutecsound:public QMainWindow
                                 void *p,
                                 unsigned int type);
 
-#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
-    static void  csThread(void *data);
-#else
-    static uintptr_t csThread(void *data);
-#endif
+    static void  csThread(void *data);  //Thread function
     QMutex perfMutex;
     static void readWidgetValues(CsoundUserData *ud);
     static void writeWidgetValues(CsoundUserData *ud);
@@ -236,11 +230,7 @@ class qutecsound:public QMainWindow
     void createQuickRefPdf();
 
     CSOUND *csound;
-#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
     CsoundPerformanceThread *perfThread;
-#else
-    void* ThreadID;
-#endif
     CsoundUserData* ud;
     MYFLT *pFields; // array of pfields for score and rt events
 

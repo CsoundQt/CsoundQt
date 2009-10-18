@@ -403,7 +403,7 @@ void WidgetPanel::flush()
   eventQueueSize = 0; //Flush events gathered while idle
 }
 
-void WidgetPanel::refreshConsole()
+void WidgetPanel::refreshConsoles()
 {
   // Necessary 
   for (int i=0; i < consoleWidgets.size(); i++) {

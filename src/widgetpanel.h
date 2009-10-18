@@ -65,7 +65,7 @@ class WidgetPanel : public QDockWidget
     void clearGraphs();
     Curve * getCurveById(uintptr_t id);
     void flush();
-    void refreshConsole();
+    void refreshConsoles();
     QString getCsladspaLines();
     QString getCabbageLines();
 

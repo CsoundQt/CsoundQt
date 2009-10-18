@@ -214,9 +214,7 @@ void qutecsound::messageCallback_Thread(CSOUND *csound,
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
   QString msg;
   msg = msg.vsprintf(fmt, args);
-//   csoundLockMutex(ud->qcs->perfMutex);
   ud->qcs->queueMessage(msg);
-//   csoundUnlockMutex(ud->qcs->perfMutex);
 }
 
 void qutecsound::messageCallback_Devices(CSOUND *csound,
@@ -590,20 +588,27 @@ void qutecsound::createQuickRefPdf()
   quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
   quickRefFileName += _configlists.languageCodes[m_options->language];
   quickRefFileName += ".pdf";
-  qDebug() << " Opening " << quickRefFileName;
+//   qDebug() << " Opening " << quickRefFileName;
   if (!QFile::exists(quickRefFileName))
     quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
-  quickRefFile = QTemporaryFile::createLocalFile(quickRefFileName);
+  QFile file(":/doc/QuteCsound Quick Reference (0.4).pdf");
+  file.open(QIODevice::ReadOnly);
+  quickRefFile = new QTemporaryFile(QDir::tempPath() + "/QuteCsound Quick Reference-XXXXXX.pdf");
   if (quickRefFile == 0) {
     qDebug() << "Error creating local pdf file";
     return;
   }
-  quickRefFileName = QDir::tempPath() + quickRefFileName.mid(quickRefFileName.lastIndexOf("/"));
-  qDebug() << quickRefFileName; 
-  if (!quickRefFile->rename(quickRefFileName)) {
-    qDebug() << "Error renaming temporary QuickRef file- removing temp file";
-    delete quickRefFile;
-  }
+  quickRefFile->open();
+  QDataStream quickRefIn(quickRefFile);
+  quickRefIn << file.readAll();
+  quickRefFile->close();
+  quickRefFile->open();
+  quickRefFileName = quickRefFile->fileName();
+//   qDebug() << quickRefFileName; 
+//   if (!quickRefFile->rename(quickRefFileName)) {
+//     qDebug() << "Error renaming temporary QuickRef file- removing temp file";
+//     delete quickRefFile;
+//   }
 }
 bool qutecsound::saveAs()
 {
@@ -905,11 +910,9 @@ void qutecsound::runCsound(bool realtime)
     // Callbacks must be set before compile, otherwise some information is missed
     if (m_options->thread) {
       csoundSetMessageCallback(csound, &qutecsound::messageCallback_Thread);
-#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
 //       qDebug("Create CsoundPerformanceThread");
       perfThread = new CsoundPerformanceThread(csound);
       perfThread->SetProcessCallback(qutecsound::csThread, (void*)ud);
-#endif
     }
     else {
       csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
@@ -988,11 +991,12 @@ void qutecsound::runCsound(bool realtime)
     ud->qcs->values.resize(numWidgets*2);
     ud->qcs->stringValues.resize(numWidgets*2);
     if(m_options->thread) {
-#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
       perfThread->Play();
-#else
-      ThreadID = csoundCreateThread(qutecsound::csThread, (void*)ud);
-#endif
+      while(perfThread->GetStatus() == 0) {
+        qApp->processEvents();
+      }
+      qDebug() << "Score finished";
+      stop();
     }
     else { // Run in the same thread
 //       int numChnls = csoundGetNchnls(ud->csound);
@@ -1098,16 +1102,17 @@ void qutecsound::stop()
   if (ud->PERF_STATUS == 1) {
     stopCsound();
   }
-  foreach (QString msg, messageQueue) { //Flush pending messages
-    m_console->appendMessage(msg);
-    widgetPanel->appendMessage(msg);
-  }
   if (!m_options->thread) {
     while (ud->PERF_STATUS == -1) {
       ;
       // Wait until performance has stopped
     }
   }
+  foreach (QString msg, messageQueue) { //Flush pending messages
+    m_console->appendMessage(msg);
+    widgetPanel->appendMessage(msg);
+  }
+  m_console->scrollToEnd();
   runAct->setChecked(false);
   recAct->setChecked(false);
   if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
@@ -1118,32 +1123,20 @@ void qutecsound::stop()
 void qutecsound::stopCsound()
 {
   qDebug("qutecsound::stopCsound()");
-  ud->PERF_STATUS = -1;
   if (m_options->thread) {
-#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
 //       perfThread->ScoreEvent(0, 'e', 0, 0);
-    //csoundLockMutex(perfMutex);
-    perfThread->Stop();
-    //csoundUnlockMutex(perfMutex);
-    perfThread->Join();
-    delete perfThread;
-//       perfThread = 0;
-//     }
-#else
-//     csoundScoreEvent(csound,'e' , 0, 0);
-    csoundStop(csound);
-    csoundJoinThread(ThreadID);
-    qDebug() << "qutecsound::stopCsound() Thread Joined";
-
-#endif
-    csoundCleanup(csound);
-    ud->PERF_STATUS = 0;
-    m_console->scrollToEnd();
+    if (ud->PERF_STATUS == 1) {
+      ud->PERF_STATUS = -1;
+      perfThread->Stop();
+      int s = perfThread->Join();
+      delete perfThread;
+      ud->PERF_STATUS = 0;
+    }
   }
   else {
     csoundStop(csound);
-    csoundCleanup(csound);
     ud->PERF_STATUS = 0;
+    csoundCleanup(csound);
     m_console->scrollToEnd();
   }
 #ifdef MACOSX
@@ -1646,19 +1639,20 @@ void qutecsound::dispatchQueues()
 //   qDebug("qutecsound::dispatchQueues()");
   widgetPanel->processNewValues();
   if (ud->PERF_STATUS == 1) {
-    while (true) {
-      messageMutex.lock();
-      if (messageQueue.isEmpty()) {
-        messageMutex.unlock();
-        break;
-      }
-      QString msg = messageQueue.takeFirst();
+  while (true) { // Flush message queue necessary here in case Csound has stopped but messages are pending
+    messageMutex.lock();
+    if (messageQueue.isEmpty()) {
       messageMutex.unlock();
-      m_console->appendMessage(msg);
-      widgetPanel->appendMessage(msg);
-      qApp->processEvents(); //FIXME Is this useful here to avoid display problems in the console?
-      m_console->scrollToEnd();
+      break;
     }
+    QString msg = messageQueue.takeFirst();
+    messageMutex.unlock();
+    m_console->appendMessage(msg);
+    widgetPanel->appendMessage(msg);
+    qApp->processEvents(); //FIXME Is this needed here to avoid display problems in the console?
+    m_console->scrollToEnd();
+    widgetPanel->refreshConsoles();  // Scroll to end of text all console widgets
+  }
   //   QList<QString> channels = outValueQueue.keys();
   //   foreach (QString channel, channels) {
   //     widgetPanel->setValue(channel, outValueQueue[channel]);
@@ -1673,7 +1667,6 @@ void qutecsound::dispatchQueues()
     outStringQueue.clear();
     stringValueMutex.unlock();
     processEventQueue(ud);
-  //   csoundUnlockMutex(perfMutex);
     while (!newCurveBuffer.isEmpty()) {
       Curve * curve = newCurveBuffer.pop();
   // //     qDebug("qutecsound::dispatchQueues() %i-%s", index, curve->get_caption().toStdString().c_str());
@@ -1700,7 +1693,6 @@ void qutecsound::dispatchQueues()
       curveBuffer.remove(curveBuffer.indexOf(windat));
     }
   }
-  widgetPanel->refreshConsole(); // Doesn't work... ??
   queueTimer->start(QCS_QUEUETIMER_TIME); //will launch this function again later
 }
 
@@ -3088,17 +3080,7 @@ void qutecsound::processEventQueue(CsoundUserData *ud)
       ud->qcs->pFields[j] = (MYFLT) eventElements[j].toDouble();
     }
     if (ud->qcs->m_options->thread) {
-#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
-        //TODO this is not working!!!
-//         ud->qcs->perfThread->ScoreEvent(0, type, eventElements.size(), pFields);
-      ud->qcs->perfMutex.lock();
-      csoundScoreEvent(ud->csound,type, ud->qcs->pFields, eventElements.size());
-      ud->qcs->perfMutex.unlock();
-#else
-      csoundLockMutex(ud->qcs->perfMutex);
-      csoundScoreEvent(ud->csound,type, ud->qcs->pFields, eventElements.size());
-      csoundUnlockMutex(ud->qcs->perfMutex);
-#endif
+      ud->qcs->perfThread->ScoreEvent(0, type, eventElements.size(), ud->qcs->pFields);
     }
     else {
       csoundScoreEvent(ud->csound,type ,ud->qcs->pFields, eventElements.size());
@@ -3108,10 +3090,7 @@ void qutecsound::processEventQueue(CsoundUserData *ud)
 
 void qutecsound::queueOutValue(QString channelName, double value)
 {
-//   outValueQueue.insert();
- // csoundLockMutex(ud->qcs->perfMutex);
   widgetPanel->newValue(QPair<QString, double>(channelName, value));
-//  csoundUnlockMutex(ud->qcs->perfMutex);
 }
 
 // void qutecsound::queueInValue(QString channelName, double value)
@@ -3139,14 +3118,9 @@ void qutecsound::queueMessage(QString message)
   messageMutex.unlock();
 }
 
-#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
 void qutecsound::csThread(void *data)
-#else
-uintptr_t qutecsound::csThread(void *data)
-#endif
 {
   CsoundUserData* udata = (CsoundUserData*)data;
-  printf("csThread-Thread start\n");
   if(!udata->result) {
     unsigned int numWidgets = udata->qcs->widgetPanel->widgetCount();
     udata->qcs->channelNames.resize(numWidgets*2);
@@ -3161,7 +3135,6 @@ uintptr_t qutecsound::csThread(void *data)
     udata->outputBufferSize = csoundGetKsmps(udata->csound);
     udata->outputBuffer = csoundGetSpout(udata->csound);
 //     int numChnls = csoundGetNchnls(udata->csound);
-    printf("csThread-Begin loop\n");
     while((perform == 0) and (udata->PERF_STATUS == 1)) {
       for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
         udata->qcs->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
@@ -3179,13 +3152,6 @@ uintptr_t qutecsound::csThread(void *data)
       perform = csoundPerformKsmps(udata->csound);
     }
   }
-  printf("csThread-Exit loop\n");
-//   udata->qcs->stop();
-  udata->PERF_STATUS = 0;
-#ifdef QUTE_USE_CSOUNDPERFORMANCETHREAD
-#else
-  return 0;
-#endif
 }
 
 QStringList qutecsound::runCsoundInternally(QStringList flags)
