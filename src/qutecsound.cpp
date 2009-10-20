@@ -288,6 +288,7 @@ void qutecsound::closeEvent(QCloseEvent *event)
     delete closeTabButton;
     close();
     free(pFields);
+    delete quickRefFile;
     event->accept();
   } else {
     event->ignore();
@@ -588,10 +589,11 @@ void qutecsound::createQuickRefPdf()
   quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
   quickRefFileName += _configlists.languageCodes[m_options->language];
   quickRefFileName += ".pdf";
-//   qDebug() << " Opening " << quickRefFileName;
-  if (!QFile::exists(quickRefFileName))
+  if (!QFile::exists(quickRefFileName)) {
     quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
-  QFile file(":/doc/QuteCsound Quick Reference (0.4).pdf");
+  }
+  qDebug() << " Opening " << quickRefFileName;
+  QFile file(quickRefFileName);
   file.open(QIODevice::ReadOnly);
   quickRefFile = new QTemporaryFile(QDir::tempPath() + "/QuteCsound Quick Reference-XXXXXX.pdf");
   if (quickRefFile == 0) {
@@ -604,12 +606,8 @@ void qutecsound::createQuickRefPdf()
   quickRefFile->close();
   quickRefFile->open();
   quickRefFileName = quickRefFile->fileName();
-//   qDebug() << quickRefFileName; 
-//   if (!quickRefFile->rename(quickRefFileName)) {
-//     qDebug() << "Error renaming temporary QuickRef file- removing temp file";
-//     delete quickRefFile;
-//   }
 }
+
 bool qutecsound::saveAs()
 {
   QString fileName = getSaveFileName();
@@ -1028,7 +1026,7 @@ void qutecsound::runCsound(bool realtime)
           processEventQueue(ud);
         }
       }
-      ud->PERF_STATUS = 0; // Confirm that Csound has stopped
+//       ud->PERF_STATUS = 0; // Confirm that Csound has stopped
       stop();  // To flush pending queues
 #ifdef MACOSX
 // Put menu bar back
@@ -3139,27 +3137,20 @@ void qutecsound::csThread(void *data)
 {
   CsoundUserData* udata = (CsoundUserData*)data;
   if(!udata->result) {
-//     int perform = csoundPerformKsmps(udata->csound);
     udata->outputBufferSize = csoundGetKsmps(udata->csound);
     udata->outputBuffer = csoundGetSpout(udata->csound);
-//     int numChnls = csoundGetNchnls(udata->csound);
-//     qDebug() << "qutecsound::csThread start loop";
-//     while((perform == 0) and (udata->PERF_STATUS == 1)) {
-      for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
-        udata->qcs->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
+    for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
+      udata->qcs->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
+    }
+    if (udata->qcs->m_options->enableWidgets) {
+      udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames,
+                                          &udata->qcs->values,
+                                          &udata->qcs->stringValues);
+      if (!udata->qcs->m_options->useInvalue) {
+        writeWidgetValues(udata);
+        readWidgetValues(udata);
       }
-      if (udata->qcs->m_options->enableWidgets) {
-        udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames,
-                                            &udata->qcs->values,
-                                            &udata->qcs->stringValues);
-        if (!udata->qcs->m_options->useInvalue) {
-          writeWidgetValues(udata);
-          readWidgetValues(udata);
-        }
-      }
-//         processEventQueue(udata);
-//       perform = csoundPerformKsmps(udata->csound);
-//     }
+    }
   }
 }
 

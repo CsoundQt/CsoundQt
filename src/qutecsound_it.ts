@@ -37,7 +37,7 @@
     </message>
     <message>
         <source>Run</source>
-        <translation>Avvia</translation>
+        <translation>Avvio</translation>
     </message>
     <message>
         <source>File (offline render)</source>
@@ -510,7 +510,7 @@ Volete partire dall&apos;inizio?</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation>Esci &amp;x</translation>
+        <translation>&amp;Esci</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
@@ -1551,7 +1551,7 @@ Victor Lazzarini
     </message>
     <message>
         <source>&amp;Open...</source>
-        <translation>Apri... &amp;O</translation>
+        <translation>Apr&amp;i...</translation>
     </message>
     <message>
         <source>Open an existing file</source>
@@ -1615,7 +1615,7 @@ Victor Lazzarini
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation>Esci &amp;x</translation>
+        <translation>&amp;Esci</translation>
     </message>
     <message>
         <source>Exit the application</source>
@@ -1647,7 +1647,7 @@ Victor Lazzarini
     </message>
     <message>
         <source>Cu&amp;t</source>
-        <translation>&amp;taglia</translation>
+        <translation>&amp;Taglia</translation>
     </message>
     <message>
         <source>Cut the current selection&apos;s contents to the clipboard</source>
@@ -1671,7 +1671,7 @@ Victor Lazzarini
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation>Incolla &amp;P</translation>
+        <translation>&amp;Incolla</translation>
     </message>
     <message>
         <source>Paste the clipboard&apos;s contents into the current selection</source>
@@ -1683,7 +1683,7 @@ Victor Lazzarini
     </message>
     <message>
         <source>&amp;Join orc/sco</source>
-        <translation>Unisci orc/sco &amp;J</translation>
+        <translation>&amp;Unisci orc/sco</translation>
     </message>
     <message>
         <source>Join orc/sco files in a single csd file</source>
@@ -1971,7 +1971,7 @@ Victor Lazzarini
     </message>
     <message>
         <source>Control</source>
-        <translation>Control</translation>
+        <translation>Controllo</translation>
     </message>
     <message>
         <source>View</source>
