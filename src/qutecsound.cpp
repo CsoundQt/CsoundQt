@@ -907,12 +907,9 @@ void qutecsound::runCsound(bool realtime)
     csound=csoundCreate(0);
 #endif
 
-    // Callbacks must be set before compile, otherwise some information is missed
+    // Message Callbacks must be set before compile, otherwise some information is missed
     if (m_options->thread) {
       csoundSetMessageCallback(csound, &qutecsound::messageCallback_Thread);
-//       qDebug("Create CsoundPerformanceThread");
-      perfThread = new CsoundPerformanceThread(csound);
-      perfThread->SetProcessCallback(qutecsound::csThread, (void*)ud);
     }
     else {
       csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
@@ -991,6 +988,21 @@ void qutecsound::runCsound(bool realtime)
     ud->qcs->values.resize(numWidgets*2);
     ud->qcs->stringValues.resize(numWidgets*2);
     if(m_options->thread) {
+      // First update values from widgets
+      // TODO: When this is working, simplify pointers
+      unsigned int numWidgets = ud->qcs->widgetPanel->widgetCount();
+      ud->qcs->channelNames.resize(numWidgets*2);
+      ud->qcs->values.resize(numWidgets*2);
+      ud->qcs->stringValues.resize(numWidgets*2);
+      if (ud->qcs->m_options->enableWidgets) {
+        ud->qcs->widgetPanel->getValues(&ud->qcs->channelNames,
+                                        &ud->qcs->values,
+                                        &ud->qcs->stringValues);
+      }
+//       qDebug("Create CsoundPerformanceThread");
+      perfThread = new CsoundPerformanceThread(csound);
+      perfThread->SetProcessCallback(qutecsound::csThread, (void*)ud);
+      qDebug() << "Play";
       perfThread->Play();
       while(perfThread->GetStatus() == 0) {
         qApp->processEvents();
@@ -1128,7 +1140,7 @@ void qutecsound::stopCsound()
     if (ud->PERF_STATUS == 1) {
       ud->PERF_STATUS = -1;
       perfThread->Stop();
-      int s = perfThread->Join();
+//       int s = perfThread->Join();
       delete perfThread;
       ud->PERF_STATUS = 0;
     }
@@ -3072,15 +3084,20 @@ void qutecsound::processEventQueue(CsoundUserData *ud)
     ud->qcs->widgetPanel->eventQueueSize--;
     ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize];
     char type = ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize][0].unicode();
-    QStringList eventElements =
-        ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts);
-//     qDebug("type %c line: %s", type, ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].toStdString().c_str());
+    QStringList eventElements/* =
+        ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts)*/;
+    qDebug("type %c line: %s", type, ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].toStdString().c_str());
     // eventElements.size() should never be larger than EVENTS_MAX_PFIELDS
     for (int j = 0; j < eventElements.size(); j++) {
       ud->qcs->pFields[j] = (MYFLT) eventElements[j].toDouble();
     }
     if (ud->qcs->m_options->thread) {
+      //ScoreEvent is not working
       ud->qcs->perfThread->ScoreEvent(0, type, eventElements.size(), ud->qcs->pFields);
+//       ud->qcs->perfThread->InputMessage(ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).data());
+//       perfThread->lock();
+//       csoundScoreEvent(ud->csound,type ,ud->qcs->pFields, eventElements.size());
+//       perfThread->unlock();
     }
     else {
       csoundScoreEvent(ud->csound,type ,ud->qcs->pFields, eventElements.size());
@@ -3122,20 +3139,12 @@ void qutecsound::csThread(void *data)
 {
   CsoundUserData* udata = (CsoundUserData*)data;
   if(!udata->result) {
-    unsigned int numWidgets = udata->qcs->widgetPanel->widgetCount();
-    udata->qcs->channelNames.resize(numWidgets*2);
-    udata->qcs->values.resize(numWidgets*2);
-    udata->qcs->stringValues.resize(numWidgets*2);
-    if (udata->qcs->m_options->enableWidgets) {
-      udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames,
-                                          &udata->qcs->values,
-                                          &udata->qcs->stringValues);
-    }
-    int perform = csoundPerformKsmps(udata->csound);
+//     int perform = csoundPerformKsmps(udata->csound);
     udata->outputBufferSize = csoundGetKsmps(udata->csound);
     udata->outputBuffer = csoundGetSpout(udata->csound);
 //     int numChnls = csoundGetNchnls(udata->csound);
-    while((perform == 0) and (udata->PERF_STATUS == 1)) {
+//     qDebug() << "qutecsound::csThread start loop";
+//     while((perform == 0) and (udata->PERF_STATUS == 1)) {
       for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
         udata->qcs->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
       }
@@ -3149,8 +3158,8 @@ void qutecsound::csThread(void *data)
         }
       }
 //         processEventQueue(udata);
-      perform = csoundPerformKsmps(udata->csound);
-    }
+//       perform = csoundPerformKsmps(udata->csound);
+//     }
   }
 }
 
