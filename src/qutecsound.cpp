@@ -273,6 +273,33 @@ void qutecsound::openExample()
 //   saveAs();
 }
 
+void qutecsound::findString(QString query)
+{
+  qDebug() << "qutecsound::findString " << query;
+  if (query == "") {
+    query = lastSearch;
+  }
+  bool found = false;
+  if (lastCaseSensitive) {
+    found = documentPages[curPage]->find(query,
+                             QTextDocument::FindCaseSensitively);
+  }
+  else
+    found = documentPages[curPage]->find(query);
+  if (!found) {
+    int ret = QMessageBox::question(this, tr("Find and replace"),
+                                    tr("The string was not found.\n"
+                                        "Would you like to start from the top?"),
+                                        QMessageBox::Yes | QMessageBox::No,
+                                        QMessageBox::No
+                                   );
+    if (ret == QMessageBox::Yes) {
+      documentPages[curPage]->moveCursor(QTextCursor::Start);
+      findString();
+    }
+  }
+}
+
 void qutecsound::closeEvent(QCloseEvent *event)
 {
   stop();
@@ -686,7 +713,14 @@ void qutecsound::print()
 
 void qutecsound::findReplace()
 {
-  FindReplace *dialog = new FindReplace(this, documentPages[curPage]);
+  FindReplace *dialog = new FindReplace(this, 
+                                        documentPages[curPage],
+                                        &lastSearch,
+                                        &lastReplace,
+                                        &lastCaseSensitive);
+  // lastSearch and lastReplace are passed by reference so they are
+  // updated by FindReplace dialog
+  connect(dialog, SIGNAL(findString(QString)), this, SLOT(findString(QString)));
   dialog->show();
 }
 
@@ -1755,6 +1789,7 @@ void qutecsound::setDefaultKeyboardShortcuts()
   getToInAct->setShortcut(tr(""));
   csladspaAct->setShortcut(tr(""));
   findAct->setShortcut(tr("Ctrl+F"));
+  findAgainAct->setShortcut(tr("Ctrl+G"));
   autoCompleteAct->setShortcut(tr("Alt+C"));
   configureAct->setShortcut(tr(""));
   editAct->setShortcut(tr("CTRL+E"));
@@ -1909,6 +1944,11 @@ void qutecsound::createActions()
   findAct->setStatusTip(tr("Find and replace strings in file"));
 //   findAct->setIconText(tr("Find"));
   connect(findAct, SIGNAL(triggered()), this, SLOT(findReplace()));
+
+  findAgainAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Find a&gain"), this);
+  findAgainAct->setStatusTip(tr("Find next appearance of string"));
+//   findAct->setIconText(tr("Find"));
+  connect(findAgainAct, SIGNAL(triggered()), this, SLOT(findString()));
 
   autoCompleteAct = new QAction(tr("AutoComplete"), this);
   autoCompleteAct->setStatusTip(tr("Autocomplete according to Status bar display"));
@@ -2187,6 +2227,7 @@ void qutecsound::createMenus()
   editMenu->addAction(pasteAct);
   editMenu->addSeparator();
   editMenu->addAction(findAct);
+  editMenu->addAction(findAgainAct);
   editMenu->addAction(autoCompleteAct);
   editMenu->addSeparator();
   editMenu->addAction(commentAct);

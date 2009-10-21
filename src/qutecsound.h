@@ -145,6 +145,7 @@ class qutecsound:public QMainWindow
     void changePage(int index);
     void updateWidgets();
     void openExample();
+    void findString(QString query = QString());
 
   protected:
     virtual void closeEvent(QCloseEvent *event);
@@ -293,6 +294,7 @@ class qutecsound:public QMainWindow
     QAction *csladspaAct;
     QAction *cabbageAct;
     QAction *findAct;
+    QAction *findAgainAct;
     QAction *autoCompleteAct;
     QAction *configureAct;
     QAction *setShortcutsAct;
@@ -327,12 +329,15 @@ class qutecsound:public QMainWindow
     int configureTab; // Tab in last configure dialog
     QString lastUsedDir;
     QString lastFileDir;
+    bool lastCaseSensitive; // These last three are for search and replace
     QString quickRefFileName;
     viewMode m_mode;
     QStringList recentFiles;
     QStringList lastFiles;
     int lastTabIndex;
     QStringList m_deviceMessages; //stores messages from csound for device discovery
+    QString lastSearch;
+    QString lastReplace;
 
     UtilitiesDialog *utilitiesDialog;
     QTemporaryFile *quickRefFile;

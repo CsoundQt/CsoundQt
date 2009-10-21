@@ -23,14 +23,26 @@
 #include "findreplace.h"
 #include "documentpage.h"
 
-FindReplace::FindReplace(QWidget *parent, DocumentPage *document)
-  : QDialog(parent), m_document(document)
+FindReplace::FindReplace(QWidget *parent,
+                         DocumentPage *document,
+                         QString *lastSearch,
+                         QString *lastReplace,
+                         bool *lastCaseSensitive)
+  : QDialog(parent), m_document(document), m_lastSearch(lastSearch),
+            m_lastReplace(lastReplace),
+            m_lastCaseSensitive(lastCaseSensitive)
 {
   setupUi(this);
+  this->setModal(false);
   connect(findPushButton, SIGNAL(released()), this, SLOT(find()));
   connect(replacePushButton, SIGNAL(released()), this, SLOT(replace()));
   connect(replaceAllPushButton, SIGNAL(released()), this, SLOT(replaceAll()));
   connect(closePushButton, SIGNAL(released()), this, SLOT(close()));
+
+  findLineEdit->setText(*m_lastSearch);
+  findLineEdit->setFocus(Qt::PopupFocusReason);
+  replaceLineEdit->setText(*m_lastReplace);
+  caseCheckBox->setChecked(*m_lastCaseSensitive);
 }
 
 FindReplace::~FindReplace()
@@ -39,25 +51,10 @@ FindReplace::~FindReplace()
 
 void FindReplace::find()
 {
-  bool found = false;
-  if (caseCheckBox->isChecked()) {
-    found = m_document->find(findLineEdit->text(),
-                     QTextDocument::FindCaseSensitively);
-  }
-  else
-    found = m_document->find(findLineEdit->text());
-  if (!found) {
-    int ret = QMessageBox::question(this, tr("Find and replace"),
-                                   tr("The string was not found.\n"
-                                      "Would you like to start from the top?"),
-                                      QMessageBox::Yes | QMessageBox::No,
-                                      QMessageBox::No
-                                   );
-    if (ret == QMessageBox::Yes) {
-      m_document->moveCursor(QTextCursor::Start);
-      find();
-    }
-  }
+  *m_lastCaseSensitive = caseCheckBox->isChecked();
+  *m_lastSearch = findLineEdit->text();
+  *m_lastReplace = replaceLineEdit->text();
+  emit(findString(*m_lastSearch));
 }
 
 void FindReplace::replace()
