@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
   FileOpenEater *filterObj=new FileOpenEater();
   app.installEventFilter(filterObj);
   QPixmap pixmap(":/images/splashscreen.png");
-  QSplashScreen *splash = new QSplashScreen(pixmap, Qt::WindowStaysOnTopHint);
+  QSplashScreen *splash = new QSplashScreen(pixmap);
   splash->show();
   splash->raise();
   splash->showMessage("Starting QuteCsound");

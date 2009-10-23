@@ -837,7 +837,7 @@ void qutecsound::runCsound(bool realtime)
   }
   if (documentPages[curPage]->fileName.isEmpty()) {
     QMessageBox::warning(this, tr("QuteCsound"),
-                         tr("This file has not been been saved\nPlease select name and location."));
+                         tr("This file has not been saved\nPlease select name and location."));
     if (!saveAs()) {
       runAct->setChecked(false);
       return;
@@ -1379,7 +1379,7 @@ void qutecsound::openExternalPlayer()
         options = optionsText;
     }
   }
-  options = "\"" + currentAudioFile + "\"";
+  options = "\"" + options + "\"";
   QString waveplayer = "\"" + m_options->waveplayer + "\"";
   execute(waveplayer, options);
 }
@@ -1458,6 +1458,7 @@ void qutecsound::about()
 //   text += tr("French translation:\nFrançois Pinot\n");
   text += tr("German translation:\nJoachim Heintz\n");
   text += tr("Portuguese translation:\nVictor Lazzarini\n");
+  text += tr("Italian translation:\nFrancesco\n");
   text += QString("qutecsound.sourceforge.net");
   QMessageBox::about(this, tr("About QuteCsound"), text);
 }
@@ -2277,6 +2278,7 @@ void qutecsound::createMenus()
   tutFiles.append(":/examples/Toot5.csd");
   tutFiles.append(":/examples/Widgets_1.csd");
   tutFiles.append(":/examples/Widgets_2.csd");
+  tutFiles.append(":/examples/Score_Tricks.csd");
 
   subMenus << tutFiles;
   subMenuNames << "Tutorials";

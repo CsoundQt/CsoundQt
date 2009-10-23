@@ -536,6 +536,29 @@ void WidgetPanel::moveEvent(QMoveEvent * event)
   emit moved(event->pos());
 }
 
+void WidgetPanel::keyPressEvent(QKeyEvent *event)
+{
+  if (!event->isAutoRepeat()) {
+    QString key = event->text();
+    qDebug() << key ;
+    if (key != "") {
+//           appendMessage(key);
+      emit keyPressed(key);
+    }
+  }
+}
+
+void WidgetPanel::keyReleaseEvent(QKeyEvent *event)
+{
+  if (!event->isAutoRepeat()) {
+    QString key = event->text();
+    if (key != "") {
+//           appendMessage("rel:" + key);
+      emit keyReleased(key);
+    }
+  }
+}
+
 void WidgetPanel::newValue(QPair<QString, double> channelValue)
 {
 //   qDebug("WidgetPanel::newValue");
