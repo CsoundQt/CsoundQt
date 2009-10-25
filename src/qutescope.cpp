@@ -64,6 +64,11 @@ QuteScope::~QuteScope()
   delete m_params;
 }
 
+void QuteScope::loadFromXml(QString xmlText)
+{
+  qDebug() << "loadFromXml not implemented for this widget yet";
+}
+
 QString QuteScope::getWidgetLine()
 {
   QString line = "ioGraph {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
@@ -73,6 +78,16 @@ QString QuteScope::getWidgetLine()
   line += m_name;
 //   qDebug("QuteScope::getWidgetLine() %s", line.toStdString().c_str());
   return line;
+}
+
+QString QuteScope::getWidgetXmlText()
+{
+  return QString();
+}
+
+QString QuteScope::getWidgetType()
+{
+  return QString("scope");
 }
 
 void QuteScope::setType(QString type)

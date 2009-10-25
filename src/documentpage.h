@@ -35,9 +35,10 @@ class DocumentPage : public QTextEdit
   public:
     DocumentPage(QWidget *parent, OpEntryParser *opcodeTree);
     ~DocumentPage();
-    
+
     int setTextString(QString text, bool autoCreateMacCsoundSections = true);
     QString getFullText();
+//     QString getXmlWidgetsText();
     QString getOptionsText();
     QString getDotText();
     QString getMacWidgetsText();

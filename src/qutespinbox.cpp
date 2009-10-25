@@ -39,6 +39,11 @@ QuteSpinBox::~QuteSpinBox()
 {
 }
 
+void QuteSpinBox::loadFromXml(QString xmlText)
+{
+  qDebug() << "loadFromXml not implemented for this widget yet";
+}
+
 void QuteSpinBox::setAlignment(int alignment)
 {
 //   qDebug("QuteText::setAlignment %i", alignment);
@@ -155,6 +160,16 @@ QString QuteSpinBox::getCsladspaLine()
   QString line = "ControlPort=" + m_name + "|" + m_name + "\n";
   line += "Range=-9999|9999";
   return line;
+}
+
+QString QuteSpinBox::getWidgetXmlText()
+{
+  return QString();
+}
+
+QString QuteSpinBox::getWidgetType()
+{
+  return QString("spinbox");
 }
 
 QString QuteSpinBox::getCabbageLine()

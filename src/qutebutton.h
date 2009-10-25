@@ -33,10 +33,13 @@ class QuteButton : public QuteWidget
 
     ~QuteButton();
 
+    virtual void loadFromXml(QString xmlText);
     virtual void setValue(double value); // Value of button when pressed
     virtual double getValue(); // This value represents the state of the button
     virtual QString getWidgetLine();
     virtual QString getCabbageLine();
+    virtual QString getWidgetXmlText();
+    virtual QString getWidgetType();
     void setType(QString text);
     void setText(QString text);
     void setFilename(QString filename);
@@ -69,6 +72,7 @@ class QuteButton : public QuteWidget
     void queueEvent(QString eventLine);
     void play();
     void stop();
+    void render();
 //     void selectMidiInDevices(QPoint pos);
 //     void selectMidiOutDevices(QPoint pos);
 //     void selectAudioInDevices(QPoint pos);

@@ -34,6 +34,11 @@ QuteComboBox::~QuteComboBox()
 {
 }
 
+void QuteComboBox::loadFromXml(QString xmlText)
+{
+  qDebug() << "loadFromXml not implemented for this widget yet";
+}
+
 void QuteComboBox::setValue(double value)
 {
 //   qDebug("QuteComboBox::setValue %i", (int) value);
@@ -79,6 +84,34 @@ QString QuteComboBox::getCabbageLine()
   line += "value(" + QString::number(((QComboBox *)m_widget)->currentIndex()) + "), ";
   line += "items(\"" + itemList() + "\")";
   return line;
+}
+
+QString QuteComboBox::getWidgetXmlText()
+{
+  QXmlStreamWriter s(&xmlText);
+  createXmlWriter(s);
+
+  s.writeStartElement("bsbDropdownItemList");
+  for (int i = 0; i < static_cast<QComboBox *>(m_widget)->count(); i++) {
+    s.writeStartElement("bsbDropdownItem");
+    s.writeTextElement("name", static_cast<QComboBox *>(m_widget)->itemText(i));
+    s.writeTextElement("value", QString::number(i) );  //From blue. Only partly supported. Blue supports strings here
+    s.writeEndElement();
+  }
+  s.writeEndElement();
+  s.writeTextElement("selectedIndex", QString::number(((QComboBox *)m_widget)->currentIndex()));
+  // These three come from blue, but they are not implemented here
+  s.writeTextElement("randomizable", "");
+   //These are not implemented in blue
+   //TODO: add index offset
+//    s.writeTextElement("indexoffset", "");
+  s.writeEndElement();
+  return xmlText;
+}
+
+QString QuteComboBox::getWidgetType()
+{
+  return QString("BSBDropdown");
 }
 
 void QuteComboBox::applyProperties()

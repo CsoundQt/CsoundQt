@@ -33,11 +33,14 @@ class QuteSlider : public QuteWidget
 
     ~QuteSlider();
 
+    virtual void loadFromXml(QString xmlText);
     virtual void setWidgetGeometry(int x, int y, int w, int h);
     virtual void setWidgetLine(QString line);
     virtual QString getWidgetLine();
     virtual QString getCabbageLine();
     virtual QString getCsladspaLine();
+    virtual QString getWidgetXmlText();
+    virtual QString getWidgetType();
 
     double getValue();
     void setRange(double min, double max);

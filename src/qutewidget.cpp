@@ -42,11 +42,31 @@ QuteWidget::QuteWidget(QWidget *parent/*, widgetType type*/):
   m_value2 = 0.0;
 
   this->setMinimumSize(10,10);
+
+  m_uuid = QUuid::createUuid().toString();
 }
 
 
 QuteWidget::~QuteWidget()
 {
+}
+
+void QuteWidget::initFromXml(QString xmlText)
+{
+  QDomDocument doc;
+  QDomElement n = doc.createElement(xmlText);
+  qDebug() << n.text();
+//   s.writeStartElement("bsbObject");
+//   s.writeAttribute("type", getWidgetType());
+//   if (getWidgetType() == "BSBKnob" or getWidgetType() == "BSBXYController")
+//     s.writeAttribute("version", "2");  // Only for compatibility with blue (absolute values)
+// 
+//   s.writeTextElement("objectName", m_name);
+//   s.writeTextElement("x", QString::number(x()));
+//   s.writeTextElement("y", QString::number(y()));
+//   s.writeTextElement("width", QString::number(width()));
+//   s.writeTextElement("height", QString::number(height()));
+//   s.writeTextElement("uuid", m_uuid);
 }
 
 void QuteWidget::setWidgetLine(QString line)
@@ -126,10 +146,26 @@ QString QuteWidget::getCabbageLine()
   return QString("");
 }
 
-QString QuteWidget::getWidgetXmlText()
+void QuteWidget::createXmlWriter(QXmlStreamWriter &s)
 {
-  return QString();
+  s.writeStartElement("bsbObject");
+  s.writeAttribute("type", getWidgetType());
+  if (getWidgetType() == "BSBKnob" or getWidgetType() == "BSBXYController")
+    s.writeAttribute("version", "2");  // Only for compatibility with blue (absolute values)
+
+  s.writeTextElement("objectName", m_name);
+  s.writeTextElement("x", QString::number(x()));
+  s.writeTextElement("y", QString::number(y()));
+  s.writeTextElement("width", QString::number(width()));
+  s.writeTextElement("height", QString::number(height()));
+  s.writeTextElement("uuid", m_uuid);
 }
+
+// QString QuteWidget::getWidgetXmlText()
+// {
+//   createXmlWriter();
+//   return xmlText;
+// }
 
 double QuteWidget::getValue()
 {

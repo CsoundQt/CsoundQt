@@ -36,7 +36,10 @@ class QuteGraph : public QuteWidget
 
     ~QuteGraph();
 
+    virtual void loadFromXml(QString xmlText);
     virtual QString getWidgetLine();
+    virtual QString getWidgetXmlText();
+    virtual QString getWidgetType();
     virtual void setWidgetGeometry(int x,int y,int width,int height);
     virtual void setValue(double value);
     void setZoom(double zoom);

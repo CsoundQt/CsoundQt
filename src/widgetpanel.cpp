@@ -327,6 +327,7 @@ QString WidgetPanel::widgetsText()
   valueMutex.lock();
   for (int i = 0; i < widgets.size(); i++) {
     text += widgets[i]->getWidgetLine() + "\n";
+    qDebug() << widgets[i]->getWidgetXmlText();
   }
   valueMutex.unlock();
   text += "</MacGUI>";
@@ -917,6 +918,7 @@ int WidgetPanel::createButton(int x, int y, int width, int height, QString widge
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(runCsound()));
   connect(widget, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
+  connect(widget, SIGNAL(render()), static_cast<qutecsound *>(parent()), SLOT(render()));
   connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));
 
   if (editAct->isChecked()) {

@@ -42,6 +42,11 @@ QuteKnob::~QuteKnob()
 {
 }
 
+void QuteKnob::loadFromXml(QString xmlText)
+{
+  qDebug() << "loadFromXml not implemented for this widget yet";
+}
+
 double QuteKnob::getValue()
 {
   return m_value;
@@ -118,6 +123,12 @@ QString QuteKnob::getWidgetLine()
   return line;
 }
 
+QString QuteKnob::getCabbageLine()
+{
+  QString line = "";
+  return line;
+}
+
 QString QuteKnob::getCsladspaLine()
 {
   QString line = "ControlPort=" + m_name + "|" + m_name + "\n";
@@ -125,10 +136,28 @@ QString QuteKnob::getCsladspaLine()
   return line;
 }
 
-QString QuteKnob::getCabbageLine()
+QString QuteKnob::getWidgetXmlText()
 {
-  QString line = "";
-  return line;
+  QXmlStreamWriter s(&xmlText);
+  createXmlWriter(s);
+
+  s.writeTextElement("minimum", QString::number(m_min, 'f', 8));
+  s.writeTextElement("maximum", QString::number(m_max, 'f', 8));
+  s.writeTextElement("value", QString::number(m_value, 'f', 8));
+
+  // These three come from blue, but they are not implemented here
+  s.writeTextElement("knobWidth", "");
+  s.writeTextElement("randomizable", "");
+   //These are not implemented in blue
+  s.writeTextElement("resolution", QString::number(m_resolution, 'f', 6));
+  s.writeEndElement();
+  initFromXml(xmlText);
+  return xmlText;
+}
+
+QString QuteKnob::getWidgetType()
+{
+  return QString("BSBKnob");
 }
 
 void QuteKnob::createPropertiesDialog()

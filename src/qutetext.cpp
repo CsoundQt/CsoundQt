@@ -45,11 +45,17 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
   static_cast<QLabel*>(m_widget)->setMargin (5);
   static_cast<QLabel*>(m_widget)->setTextFormat(Qt::RichText);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+
 //   connect(static_cast<QLabel*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 }
 
 QuteText::~QuteText()
 {
+}
+
+void QuteText::loadFromXml(QString xmlText)
+{
+  qDebug() << "loadFromXml not implemented for this widget yet";
 }
 
 double QuteText::getValue()
@@ -200,6 +206,53 @@ QString QuteText::getWidgetLine()
   outText.replace(QRegExp("[\n\r]"), "\u00AC");
   line += outText;
   return line;
+}
+
+QString QuteText::getWidgetType()
+{
+  return QString("BSBLabel");
+}
+
+QString QuteText::getWidgetXmlText()
+{
+  QXmlStreamWriter s(&xmlText);
+  createXmlWriter(s);
+
+  QString outText = m_text;
+  outText.replace(QRegExp("[\n\r]"), "\u00AC");
+  s.writeTextElement("label", outText);
+
+   //These are not implemented in blue
+  QString alignment;
+  if (((QLabel *)m_widget)->alignment() & Qt::AlignLeft)
+    alignment = "left";
+  else if (((QLabel *)m_widget)->alignment() & Qt::AlignCenter)
+    alignment = "center";
+  else if (((QLabel *)m_widget)->alignment() & Qt::AlignRight)
+    alignment = "right";
+  s.writeTextElement("alignment", alignment);
+  //TODO: what about type?
+
+  s.writeTextElement("font", m_font);
+  s.writeTextElement("fontsize", QString::number(m_fontSize));
+
+  QColor color = m_widget->palette().color(QPalette::WindowText);
+  s.writeStartElement("color");
+  s.writeTextElement("r", QString::number(color.red()));
+  s.writeTextElement("g", QString::number(color.green()));
+  s.writeTextElement("b", QString::number(color.blue()));
+  s.writeEndElement();
+  color = m_widget->palette().color(QPalette::Window);
+  s.writeStartElement("bgcolor");
+  s.writeAttribute("mode", m_widget->autoFillBackground()? "background":"nobackground");
+  s.writeTextElement("r", QString::number(color.red()));
+  s.writeTextElement("g", QString::number(color.green()));
+  s.writeTextElement("b", QString::number(color.blue()));
+  s.writeEndElement();
+  
+  s.writeTextElement("bordermode", static_cast<QFrame*>(m_widget)->frameShape()==QFrame::NoFrame ? "noborder": "border");
+  s.writeEndElement();
+  return xmlText;
 }
 
 void QuteText::createPropertiesDialog()
@@ -355,6 +408,11 @@ QuteLineEdit::~QuteLineEdit()
 {
 }
 
+void QuteLineEdit::loadFromXml(QString xmlText)
+{
+  qDebug() << "loadFromXml not implemented for this widget yet";
+}
+
 void QuteLineEdit::setAlignment(int alignment)
 {
 //   qDebug("QuteText::setAlignment %i", alignment);
@@ -412,6 +470,16 @@ QString QuteLineEdit::getWidgetLine()
   return line;
 }
 
+QString QuteLineEdit::getWidgetXmlText()
+{
+  return QString();
+}
+
+QString QuteLineEdit::getWidgetType()
+{
+  return QString("lineedit");
+}
+
 QString QuteLineEdit::getStringValue()
 {
   return static_cast<QLineEdit *>(m_widget)->text();
@@ -461,6 +529,11 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
 
 QuteScrollNumber::~QuteScrollNumber()
 {
+}
+
+void QuteScrollNumber::loadFromXml(QString xmlText)
+{
+  qDebug() << "loadFromXml not implemented for this widget yet";
 }
 
 void QuteScrollNumber::setResolution(double resolution)
@@ -554,6 +627,12 @@ QString QuteScrollNumber::getWidgetLine()
   return line;
 }
 
+QString QuteScrollNumber::getCabbageLine()
+{
+  QString line = "";
+  return line;
+}
+
 QString QuteScrollNumber::getCsladspaLine()
 {
   QString line = "ControlPort=" + m_name + "|" + m_name + "\n";
@@ -561,10 +640,14 @@ QString QuteScrollNumber::getCsladspaLine()
   return line;
 }
 
-QString QuteScrollNumber::getCabbageLine()
+QString QuteScrollNumber::getWidgetXmlText()
 {
-  QString line = "";
-  return line;
+  return QString();
+}
+
+QString QuteScrollNumber::getWidgetType()
+{
+  return QString("scrollnumber");
 }
 
 QString QuteScrollNumber::getStringValue()

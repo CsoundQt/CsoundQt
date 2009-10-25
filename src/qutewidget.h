@@ -24,7 +24,8 @@
 #define QUTEWIDGET_H
 
 #include <QtGui>
-#include <QHash>
+#include <QtXml>
+// #include <QHash>
 
 #define USE_WIDGET_MUTEX
 
@@ -38,6 +39,8 @@ class QuteWidget : public QWidget
 
     const QString name() {return m_name;}
 
+    void initFromXml(QString xmlText);
+    virtual void loadFromXml(QString xmlText) = 0;
     virtual void setWidgetLine(QString line);
     virtual void setChannelName(QString name);
     virtual void setWidgetGeometry(int x, int y, int w, int h);
@@ -52,12 +55,14 @@ class QuteWidget : public QWidget
     virtual QString getChannel2Name();
     virtual QString getWidgetLine();
     virtual QString getCabbageLine();
-    virtual QString getWidgetXmlText();
+    void createXmlWriter(QXmlStreamWriter &s);
+    virtual QString getWidgetXmlText() = 0;
     virtual double getValue();
     virtual double getValue2();
     virtual double getResolution();
     virtual QString getStringValue();
     virtual QString getCsladspaLine();
+    virtual QString getWidgetType() = 0;
 
     void markChanged();
 
@@ -79,8 +84,11 @@ class QuteWidget : public QWidget
     double m_resolution;
 //     double m_min2,m_max2;
     double m_value, m_value2;
+    QString m_uuid;
+    bool m_randomizable;
 
     QMutex mutex;
+    QString xmlText;
 
     virtual void contextMenuEvent(QContextMenuEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);

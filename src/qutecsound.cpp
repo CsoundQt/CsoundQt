@@ -3171,8 +3171,14 @@ void qutecsound::queueOutString(QString channelName, QString value)
 
 void qutecsound::queueMessage(QString message)
 {
+  int messBufSize = 256;
   messageMutex.lock();
-  messageQueue << message;
+  if (messageQueue.size() < messBufSize) {
+    messageQueue << message;
+  }
+  else if (messageQueue.size() < messBufSize + 1 && !messageQueue.last().startsWith("QUTECSOUND")) {
+    messageQueue << "QUTECSOUND: Message buffer overload. Messages discarded!\n";
+  }
   messageMutex.unlock();
 }
 

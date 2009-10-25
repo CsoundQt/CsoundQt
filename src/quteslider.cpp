@@ -40,6 +40,11 @@ QuteSlider::~QuteSlider()
 {
 }
 
+void QuteSlider::loadFromXml(QString xmlText)
+{
+  qDebug() << "loadFromXml not implemented for this widget yet";
+}
+
 double QuteSlider::getValue()
 {
 //   QSlider *slider = static_cast<QSlider *>(m_widget);
@@ -118,13 +123,6 @@ QString QuteSlider::getWidgetLine()
   return line;
 }
 
-QString QuteSlider::getCsladspaLine()
-{
-  QString line = "ControlPort=" + m_name + "|" + m_name + "\n";
-  line += "Range=" + QString::number(m_min, 'f', 6) + "|" + QString::number(m_max, 'f', 6);
-  return line;
-}
-
 QString QuteSlider::getCabbageLine()
 {
   QString line = "scrollbar chan(\"" + m_name + "\"),  ";
@@ -135,6 +133,35 @@ QString QuteSlider::getCabbageLine()
   line += "value(" + QString::number(m_value, 'f', 6) + "), ";
   line += "kind(\"" + (width() > height()? QString("horizontal"):QString("vertical")) +"\")";
   return line;
+}
+
+QString QuteSlider::getCsladspaLine()
+{
+  QString line = "ControlPort=" + m_name + "|" + m_name + "\n";
+  line += "Range=" + QString::number(m_min, 'f', 6) + "|" + QString::number(m_max, 'f', 6);
+  return line;
+}
+
+QString QuteSlider::getWidgetXmlText()
+{
+  QXmlStreamWriter s(&xmlText);
+  createXmlWriter(s);
+
+  s.writeTextElement("minimum", QString::number(m_min, 'f', 8));
+  s.writeTextElement("maximum", QString::number(m_max, 'f', 8));
+  s.writeTextElement("value", QString::number(m_value, 'f', 8));
+
+  // These come from blue, but they are not implemented here
+  s.writeTextElement("resolution", "");
+  s.writeTextElement("sliderWidth", "");
+  s.writeTextElement("randomizable", "");
+  s.writeEndElement();
+  return xmlText;
+}
+
+QString QuteSlider::getWidgetType()
+{
+  return (width() > height()? QString("BSBHSlider"):QString("BSBVSlider"));
 }
 
 void QuteSlider::createPropertiesDialog()

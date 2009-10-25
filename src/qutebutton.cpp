@@ -35,6 +35,11 @@ QuteButton::~QuteButton()
 {
 }
 
+void QuteButton::loadFromXml(QString xmlText)
+{
+  qDebug() << "loadFromXml not implemented for this widget yet";
+}
+
 void QuteButton::setValue(double value)
 {
 #ifdef  USE_WIDGET_MUTEX
@@ -78,6 +83,16 @@ QString QuteButton::getCabbageLine()
   line += "OnOffCaption(\"" + m_name + "\")"; // OffCaption is not supported in QuteCsound
   qDebug() << "Warning: Cabbage does not support button values different than 1, images or event buttons";
   return line;
+}
+
+QString QuteButton::getWidgetXmlText()
+{
+  return QString();
+}
+
+QString QuteButton::getWidgetType()
+{
+  return QString("button");
 }
 
 void QuteButton::applyProperties()
@@ -206,6 +221,8 @@ void QuteButton::buttonReleased()
       emit stop();
     else if (m_name == "_Stop")
       emit stop();
+    else if (m_name == "_Render")
+      emit render();
     else if (m_name.startsWith("_Browse")) {
       QString fileName = QFileDialog::getOpenFileName(this, tr("Select File"));
       if (fileName != "") {

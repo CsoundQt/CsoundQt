@@ -32,6 +32,7 @@ class QuteSpinBox : public QuteText
     QuteSpinBox(QWidget* parent);
     ~QuteSpinBox();
 
+    virtual void loadFromXml(QString xmlText);
     virtual void setAlignment(int alignment);
     virtual void setValue(double value);
     virtual void setText(QString text);
@@ -40,6 +41,8 @@ class QuteSpinBox : public QuteText
     virtual QString getWidgetLine();
     virtual QString getCabbageLine();
     virtual QString getCsladspaLine();
+    virtual QString getWidgetXmlText();
+    virtual QString getWidgetType();
     virtual QString getStringValue();
 
   protected:

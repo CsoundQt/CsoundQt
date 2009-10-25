@@ -135,6 +135,7 @@ class qutecsound:public QMainWindow
     void runCsound(bool realtime=true);
     void stop();
     void stopCsound();
+    void render();
     void record();
     void recordBuffer();
 //     void selectMidiInDevice(QPoint pos);
@@ -180,7 +181,6 @@ class qutecsound:public QMainWindow
     void inToGet();
     void putCsladspaText();
     void exportCabbage();
-    void render();
     void openExternalEditor();
     void openExternalPlayer();
     void setHelpEntry();

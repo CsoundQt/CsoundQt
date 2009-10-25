@@ -34,6 +34,11 @@ QuteCheckBox::~QuteCheckBox()
 {
 }
 
+void QuteCheckBox::loadFromXml(QString xmlText)
+{
+  qDebug() << "loadFromXml not implemented for this widget yet";
+}
+
 void QuteCheckBox::setValue(double value)
 {
 #ifdef  USE_WIDGET_MUTEX
@@ -69,6 +74,25 @@ QString QuteCheckBox::getCabbageLine()
   line += "value(" + (static_cast<QCheckBox *>(m_widget)->isChecked()? QString("1"):QString("0")) + "), ";
   line += "caption(\"\")"; // Caption is not supported in QuteCsound
   return line;
+}
+
+QString QuteCheckBox::getWidgetType()
+{
+  return QString("BSBCheckBox");
+}
+
+QString QuteCheckBox::getWidgetXmlText()
+{
+  QXmlStreamWriter s(&xmlText);
+  createXmlWriter(s);
+
+  s.writeTextElement("selected",
+                     static_cast<QCheckBox *>(m_widget)->isChecked()? QString("true"):QString("false"));
+  // These three come from blue, but they are not implemented here
+  s.writeTextElement("label", "");
+  s.writeTextElement("randomizable", "");
+  s.writeEndElement();
+  return xmlText;
 }
 
 void QuteCheckBox::stateChanged(int state)

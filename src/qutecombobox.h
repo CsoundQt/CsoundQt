@@ -33,10 +33,13 @@ class QuteComboBox : public QuteWidget
 
     ~QuteComboBox();
 
+    virtual void loadFromXml(QString xmlText);
     virtual void setValue(double value); // Current item select index
     virtual double getValue();
     virtual QString getWidgetLine();
     virtual QString getCabbageLine();
+    virtual QString getWidgetXmlText();
+    virtual QString getWidgetType();
     void setSize(int size);
     void setText(QString text);  //Text for this widget is the item list separated by commas
     void popUpMenu(QPoint pos);

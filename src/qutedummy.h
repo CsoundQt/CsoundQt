@@ -30,8 +30,11 @@ class QuteDummy : public QuteWidget
   Q_OBJECT
   public:
     QuteDummy(QWidget *parent);
-
     ~QuteDummy();
+
+    virtual void loadFromXml(QString xmlText);
+    virtual QString getWidgetXmlText();
+    virtual QString getWidgetType();
 
 };
 

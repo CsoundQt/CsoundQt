@@ -33,12 +33,27 @@ QuteConsole::~QuteConsole()
 {
 }
 
+void QuteConsole::loadFromXml(QString xmlText)
+{
+  qDebug() << "loadFromXml not implemented for this widget yet";
+}
+
 QString QuteConsole::getWidgetLine()
 {
   QString line = "ioListing {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"}";
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
   return line;
+}
+
+QString QuteConsole::getWidgetXmlText()
+{
+  return QString();
+}
+
+QString QuteConsole::getWidgetType()
+{
+  return QString("console");
 }
 
 // void QuteConsole::popUpMenu(QPoint pos)

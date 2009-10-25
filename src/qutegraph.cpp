@@ -51,6 +51,11 @@ QuteGraph::~QuteGraph()
 {
 }
 
+void QuteGraph::loadFromXml(QString xmlText)
+{
+  qDebug() << "loadFromXml not implemented for this widget yet";
+}
+
 QString QuteGraph::getWidgetLine()
 {
   // Extension to MacCsound: type of graph (table, ftt, scope), value (which hold the index of the
@@ -63,6 +68,16 @@ QString QuteGraph::getWidgetLine()
   line += m_name;
 //   qDebug("QuteGraph::getWidgetLine(): %s", line.toStdString().c_str());
   return line;
+}
+
+QString QuteGraph::getWidgetXmlText()
+{
+  return QString();
+}
+
+QString QuteGraph::getWidgetType()
+{
+  return QString("graph");
 }
 
 void QuteGraph::setWidgetGeometry(int x,int y,int width,int height)

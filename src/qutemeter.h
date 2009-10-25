@@ -36,7 +36,10 @@ class QuteMeter : public QuteWidget
 
     ~QuteMeter();
 
+    virtual void loadFromXml(QString xmlText);
     virtual QString getWidgetLine();
+    virtual QString getWidgetXmlText();
+    virtual QString getWidgetType();
     virtual void createPropertiesDialog();
     virtual void applyProperties();
     virtual void setWidgetGeometry(int x,int y,int width,int height);

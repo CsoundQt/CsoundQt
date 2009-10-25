@@ -49,7 +49,10 @@ class QuteScope : public QuteWidget
 
     ~QuteScope();
 
+    virtual void loadFromXml(QString xmlText);
     virtual QString getWidgetLine();
+    virtual QString getWidgetXmlText();
+    virtual QString getWidgetType();
     virtual void setWidgetGeometry(int x,int y,int width,int height);
     virtual void createPropertiesDialog();
     void setType(QString type);

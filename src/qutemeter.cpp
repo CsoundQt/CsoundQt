@@ -40,6 +40,11 @@ QuteMeter::~QuteMeter()
 {
 }
 
+void QuteMeter::loadFromXml(QString xmlText)
+{
+  qDebug() << "loadFromXml not implemented for this widget yet";
+}
+
 QString QuteMeter::getWidgetLine()
 {
   QString line = "ioMeter {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
@@ -55,6 +60,42 @@ QString QuteMeter::getWidgetLine()
   line += m_behavior;
 //   qDebug("QuteMeter::getWidgetLine() %s", line.toStdString().c_str());
   return line;
+}
+
+QString QuteMeter::getWidgetXmlText()
+{
+  QXmlStreamWriter s(&xmlText);
+  createXmlWriter(s);
+
+  //TODO implement any range for controller
+  s.writeTextElement("xMin", QString::number(0.0, 'f', 8));
+  s.writeTextElement("xMax", QString::number(1.0, 'f', 8));
+  s.writeTextElement("yMin", QString::number(0.0, 'f', 8));
+  s.writeTextElement("yMax", QString::number(1.0, 'f', 8));
+  s.writeTextElement("xValue", QString::number(static_cast<MeterWidget *>(m_widget)->getValue(), 'f', 6));
+  s.writeTextElement("yValue", QString::number(static_cast<MeterWidget *>(m_widget)->getValue2(), 'f', 6));
+
+  // These three come from blue, but they are not implemented here
+  s.writeTextElement("randomizable", "");
+   //These are not implemented in blue
+  s.writeTextElement("type", static_cast<MeterWidget *>(m_widget)->getType());
+  s.writeTextElement("pointsize", QString::number(static_cast<MeterWidget *>(m_widget)->getPointSize()));
+  s.writeTextElement("fadeSpeed", QString::number(m_fadeSpeed));
+  s.writeTextElement("behavior", m_behavior);
+
+  s.writeStartElement("color");
+  s.writeTextElement("r", QString::number(m_color.red()));
+  s.writeTextElement("g", QString::number(m_color.green()));
+  s.writeTextElement("b", QString::number(m_color.blue()));
+  s.writeEndElement();
+
+  s.writeEndElement();
+  return xmlText;
+}
+
+QString QuteMeter::getWidgetType()
+{
+  return QString("BSBXYController");
 }
 
 void QuteMeter::popUpMenu(QPoint pos)
