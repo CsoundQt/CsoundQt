@@ -31,6 +31,8 @@ QuteWidget::QuteWidget(QWidget *parent/*, widgetType type*/):
 {
   propertiesAct = new QAction(/*QIcon(":/images/gtk-new.png"),*/ tr("&Properties"), this);
 //   propertiesAct->setShortcut(tr("Alt+P"));
+  this->setWindowFlags(Qt::WindowStaysOnTopHint);
+  this->setFocusPolicy(Qt::NoFocus);
   propertiesAct->setStatusTip(tr("Open widget properties"));
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(openProperties()));
 
@@ -53,6 +55,7 @@ QuteWidget::~QuteWidget()
 
 void QuteWidget::initFromXml(QString xmlText)
 {
+  qDebug() << "---" << xmlText;
   QDomDocument doc;
   QDomElement n = doc.createElement(xmlText);
   qDebug() << n.text();
@@ -337,7 +340,7 @@ QList<QAction *> QuteWidget::getParentActionList()
   // A bit of a kludge... Must get the Widget Panel, which is the parent to the widget which
   // holds the actual QuteWidgets
 //   qDebug() << parent() << parent()->parent();
-  WidgetPanel *panel = dynamic_cast<WidgetPanel *>(dynamic_cast<LayoutWidget *>(parent())->panel());
+  WidgetPanel *panel = static_cast<LayoutWidget *>(parent())->panel();
   actionList.append(panel->copyAct);
   actionList.append(panel->pasteAct);
   actionList.append(panel->cutAct);

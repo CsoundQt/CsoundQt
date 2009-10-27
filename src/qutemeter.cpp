@@ -24,11 +24,16 @@
 
 #include <math.h> //for isnan
 
+// This class is called meter for historical reasons (MacCsound's widget was called meter)
+// But it is a meter and a controller widget
+
 QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
 {
   setGeometry(0,0, parent->width(), parent->height());
   m_widget = new MeterWidget(this);
   m_widget->setAutoFillBackground(true);
+  m_widget->setWindowFlags(Qt::WindowStaysOnTopHint);
+  m_widget->setFocusPolicy(Qt::NoFocus);
 //   static_cast<MeterWidget *>(m_widget)->setRenderHints(QPainter::Antialiasing);
   connect(static_cast<MeterWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
   connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValues(double, double)), this, SLOT(setValuesFromWidget(double,double)));

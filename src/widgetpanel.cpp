@@ -44,11 +44,12 @@ WidgetPanel::WidgetPanel(QWidget *parent)
 {
   setWindowTitle("Widgets");
   setMinimumSize(200, 140);
-  this->hide();
+//   this->hide();
   layoutWidget = new LayoutWidget(this);
   layoutWidget->setGeometry(QRect(0, 0, 800, 600));
-  layoutWidget->setAutoFillBackground(true);
-//   layoutWidget->setFocusPolicy(Qt::NoFocus);
+  layoutWidget->setPanel(this);
+//   layoutWidget->setAutoFillBackground(true);
+  layoutWidget->setFocusPolicy(Qt::NoFocus);
   connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
   connect(layoutWidget, SIGNAL(selection(QRect)), this, SLOT(selectionChanged(QRect)));
 //   connect(this,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(dockLocationChanged(Qt::DockWidgetArea)));
@@ -112,12 +113,16 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   selectAllAct = new QAction(tr("Select all widgets"), this);
   connect(selectAllAct, SIGNAL(triggered()), this, SLOT(selectAll()));
 
-  scrollArea = new QScrollArea(this);
-  scrollArea->setWidget(layoutWidget);
-  setWidget(scrollArea);
-
-// //   if scrollArea is giving trouble comment lines above and use the one below
-//   setWidget(layoutWidget);
+//   scrollArea = new QScrollArea(this);
+//   scrollArea->setWidget(layoutWidget);
+//   scrollArea->setFocusPolicy(Qt::NoFocus);
+//   scrollArea->setWidgetResizable (true);
+//   setWidget(scrollArea);
+  
+  setWidget(layoutWidget);
+  m_sbActive = false;
+  setScrollBarsActive(true);
+  setScrollBarsActive(false);
 
   eventQueue.resize(QUTECSOUND_MAX_EVENTS);
   eventQueueSize = 0;
@@ -187,6 +192,23 @@ void WidgetPanel::setValue(int index, QString value)
   if (index >= widgets.size() * 2)
     return;
   widgets[index/2]->setValue(value);
+}
+
+void WidgetPanel::setScrollBarsActive(bool active)
+{
+  qDebug() << "WidgetPanel::setScrollBarsActive" << active;
+  if (active && !m_sbActive) {
+    scrollArea = new QScrollArea(this);
+    scrollArea->setWidget(layoutWidget);
+    scrollArea->setFocusPolicy(Qt::NoFocus);
+    setWidget(scrollArea);
+    scrollArea->show();
+  }
+  else {
+    setWidget(scrollArea->takeWidget());
+    delete scrollArea;
+  }
+  m_sbActive = active;
 }
 
 void WidgetPanel::loadWidgets(QString macWidgets)
@@ -519,6 +541,10 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   menu.addSeparator();
   menu.addAction(propertiesAct);
   currentPosition = event->pos();
+  if (m_sbActive) {
+    currentPosition.setX(currentPosition.x() + scrollArea->horizontalScrollBar()->value());
+    currentPosition.setX(currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20);
+  }
   menu.exec(event->globalPos());
 }
 
@@ -916,7 +942,7 @@ int WidgetPanel::createButton(int x, int y, int width, int height, QString widge
   connect(widget, SIGNAL(queueEvent(QString)), this, SLOT(queueEvent(QString)));
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  connect(widget, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(runCsound()));
+  connect(widget, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(play()));
   connect(widget, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
   connect(widget, SIGNAL(render()), static_cast<qutecsound *>(parent()), SLOT(render()));
   connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));
@@ -1390,16 +1416,16 @@ void WidgetPanel::selectionChanged(QRect selection)
 
 void WidgetPanel::createNewSlider()
 {
-  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
-  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  int posx = currentPosition.x();
+  int posy = currentPosition.y();
   createSlider(posx, posy, 20, 100, QString("ioSlider {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(widgets.size())));
   widgetChanged();
 }
 
 void WidgetPanel::createNewLabel()
 {
-  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
-  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  int posx = currentPosition.x();
+  int posy = currentPosition.y();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder New Label";
   createText(posx, posy, 80, 25, line);
   widgetChanged();
@@ -1407,8 +1433,8 @@ void WidgetPanel::createNewLabel()
 
 void WidgetPanel::createNewDisplay()
 {
-  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
-  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  int posx = currentPosition.x();
+  int posy = currentPosition.y();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} display 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border Display";
   createText(posx, posy, 80, 25, line);
   widgetChanged();
@@ -1416,8 +1442,8 @@ void WidgetPanel::createNewDisplay()
 
 void WidgetPanel::createNewScrollNumber()
 {
-  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
-  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  int posx = currentPosition.x();
+  int posy = currentPosition.y();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} scroll 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} background border 0.000000";
   createScrollNumber(posx, posy, 80, 25, line);
   widgetChanged();
@@ -1425,8 +1451,8 @@ void WidgetPanel::createNewScrollNumber()
 
 void WidgetPanel::createNewLineEdit()
 {
-  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
-  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  int posx = currentPosition.x();
+  int posy = currentPosition.y();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 25} edit 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
   createLineEdit(posx, posy, 100, 25, line);
   widgetChanged();
@@ -1434,8 +1460,8 @@ void WidgetPanel::createNewLineEdit()
 
 void WidgetPanel::createNewSpinBox()
 {
-  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
-  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  int posx = currentPosition.x();
+  int posy = currentPosition.y();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} editnum 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
   createSpinBox(posx, posy, 80, 25, line);
   widgetChanged();
@@ -1443,8 +1469,8 @@ void WidgetPanel::createNewSpinBox()
 
 void WidgetPanel::createNewButton()
 {
-  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
-  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  int posx = currentPosition.x();
+  int posy = currentPosition.y();
   QString line = "ioButton {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 30} event 1.000000 \"button1\" \"New Button\" \"/\" i1 0 10";
   createButton(posx, posy, 100, 30, line);
   widgetChanged();
@@ -1452,56 +1478,56 @@ void WidgetPanel::createNewButton()
 
 void WidgetPanel::createNewKnob()
 {
-  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
-  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  int posx = currentPosition.x();
+  int posy = currentPosition.y();
   createKnob(posx, posy, 80, 80, QString("ioKnob {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(widgets.size())));
   widgetChanged();
 }
 
 void WidgetPanel::createNewCheckBox()
 {
-  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
-  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  int posx = currentPosition.x();
+  int posy = currentPosition.y();
   createCheckBox(posx, posy, 20, 20, QString("ioCheckbox {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 20} off checkbox" +QString::number(widgets.size())));
   widgetChanged();
 }
 
 void WidgetPanel::createNewMenu()
 {
-  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
-  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  int posx = currentPosition.x();
+  int posy = currentPosition.y();
   createMenu(posx, posy, 80, 30, QString("ioMenu {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 25} 1 303 \"item1,item2,item3\" menu" +QString::number(widgets.size())));
   widgetChanged();
 }
 
 void WidgetPanel::createNewMeter()
 {
-  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
-  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  int posx = currentPosition.x();
+  int posy = currentPosition.y();
   createMeter(posx, posy, 30, 80, QString("ioMeter {"+ QString::number(posx) +", "+ QString::number(posy) + "} {30, 80} {0, 60000, 0} \"vert" + QString::number(widgets.size()) + "\" 0.000000 \"hor" + QString::number(widgets.size()) + "\" 0.000000 fill 1 0 mouse"));
   widgetChanged();
 }
 
 void WidgetPanel::createNewConsole()
 {
-  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
-  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  int posx = currentPosition.x();
+  int posy = currentPosition.y();
   createConsole(posx, posy, 320, 400, QString("ioListing {"+ QString::number(posx) +", "+ QString::number(posy) + "} {320, 400}"));
   widgetChanged();
 }
 
 void WidgetPanel::createNewGraph()
 {
-  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
-  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  int posx = currentPosition.x();
+  int posy = currentPosition.y();
   createGraph(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150}"));
   widgetChanged();
 }
 
 void WidgetPanel::createNewScope()
 {
-  int posx = currentPosition.x() + scrollArea->horizontalScrollBar()->value();
-  int posy = currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20;
+  int posx = currentPosition.x();
+  int posy = currentPosition.y();
   createScope(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150} scope 2.000000 -1.000000"));
   widgetChanged();
 }

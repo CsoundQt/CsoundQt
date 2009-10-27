@@ -26,6 +26,7 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new QPushButton(this);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+  m_widget->setFocusPolicy(Qt::NoFocus);
   m_filename = "/";
   m_type = "event";
   connect(static_cast<QPushButton *>(m_widget), SIGNAL(released()), this, SLOT(buttonReleased()));

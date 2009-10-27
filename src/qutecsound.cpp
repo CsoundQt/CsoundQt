@@ -1139,6 +1139,12 @@ void qutecsound::runCsound(bool realtime)
   }
 }
 
+void qutecsound::play()
+{
+  runAct->setChecked(true);
+  runCsound(true);
+}
+
 void qutecsound::stop()
 {
   // Must guarantee that csound has stopped when it returns
@@ -3125,8 +3131,8 @@ void qutecsound::processEventQueue(CsoundUserData *ud)
     ud->qcs->widgetPanel->eventQueueSize--;
     ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize];
     char type = ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize][0].unicode();
-    QStringList eventElements/* =
-        ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts)*/;
+    QStringList eventElements =
+        ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts);
     qDebug("type %c line: %s", type, ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].toStdString().c_str());
     // eventElements.size() should never be larger than EVENTS_MAX_PFIELDS
     for (int j = 0; j < eventElements.size(); j++) {

@@ -53,6 +53,7 @@ class WidgetPanel : public QDockWidget
     void setValue(QString channelName, QString value);
     void setValue(int index, double value);
     void setValue(int index, QString value);
+    void setScrollBarsActive(bool active);
     void loadWidgets(QString macWidgets);
     int newWidget(QString widgetLine, bool offset = false);
     QString widgetsText();
@@ -132,6 +133,7 @@ class WidgetPanel : public QDockWidget
     bool m_tooltips;
     int m_width;
     int m_height;
+    bool m_sbActive; // Scroll bars active
 
     int createSlider(int x, int y, int width, int height, QString widgetLine);
     int createText(int x, int y, int width, int height, QString widgetLine);
@@ -217,12 +219,13 @@ class LayoutWidget : public QWidget
   public:
     LayoutWidget(QWidget* parent) : QWidget(parent)
     {
-      m_panel = (WidgetPanel *) parent;  // parent changes by itself???
+//       m_panel = (WidgetPanel *) parent;
       selectionFrame = new QRubberBand(QRubberBand::Rectangle, this);
       selectionFrame->hide();
     }
     ~LayoutWidget() {}
-    WidgetPanel * panel() {return m_panel;}  // hack because parent for this widget seems to change when scroll area is aplied
+    void setPanel(WidgetPanel* panel) {m_panel = panel;}
+    WidgetPanel * panel() {return m_panel;}
 
   protected:
     virtual void mousePressEvent(QMouseEvent *event)

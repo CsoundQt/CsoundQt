@@ -26,6 +26,7 @@ QuteConsole::QuteConsole(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new ConsoleWidget(this);
   m_widget->setAutoFillBackground(true);
+  m_widget->setFocusPolicy(Qt::NoFocus);
 //   connect(static_cast<ConsoleWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 }
 

@@ -39,9 +39,11 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
   m_label->setText("");
   m_label->move(85, 0);
   m_label->resize(500, 25);
+  m_label->setFocusPolicy(Qt::NoFocus);
 
   m_pageComboBox = new QComboBox(this);
   m_pageComboBox->resize(80, 25);
+  m_pageComboBox->setFocusPolicy(Qt::NoFocus);
   connect(m_pageComboBox, SIGNAL(activated(int)),
           this, SLOT(changeCurve(int)));
 //   connect(static_cast<StackedLayoutWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
