@@ -183,6 +183,7 @@ qutecsound::qutecsound(QStringList fileNames)
   queueTimer = new QTimer(this);
   queueTimer->setSingleShot(true);
   connect(queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
+  refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;
   dispatchQueues(); //start queue dispatcher
 }
 
@@ -1036,11 +1037,6 @@ void qutecsound::runCsound(bool realtime)
       perfThread->SetProcessCallback(qutecsound::csThread, (void*)ud);
       qDebug() << "Play";
       perfThread->Play();
-      while(perfThread->GetStatus() == 0) {
-        qApp->processEvents();
-      }
-      qDebug() << "Score finished";
-      stop();
     }
     else { // Run in the same thread
 //       int numChnls = csoundGetNchnls(ud->csound);
@@ -1178,7 +1174,7 @@ void qutecsound::stopCsound()
     if (ud->PERF_STATUS == 1) {
       ud->PERF_STATUS = -1;
       perfThread->Stop();
-//       int s = perfThread->Join();
+      perfThread->Join();
       delete perfThread;
       ud->PERF_STATUS = 0;
     }
@@ -1690,25 +1686,25 @@ void qutecsound::dispatchQueues()
 //   qDebug("qutecsound::dispatchQueues()");
   widgetPanel->processNewValues();
   if (ud->PERF_STATUS == 1) {
-  while (true) { // Flush message queue necessary here in case Csound has stopped but messages are pending
-    messageMutex.lock();
-    if (messageQueue.isEmpty()) {
+    while (true) { // Flush message queue necessary here in case Csound has stopped but messages are pending
+      messageMutex.lock();
+      if (messageQueue.isEmpty()) {
+        messageMutex.unlock();
+        break;
+      }
+      QString msg = messageQueue.takeFirst();
       messageMutex.unlock();
-      break;
+      m_console->appendMessage(msg);
+      widgetPanel->appendMessage(msg);
+      qApp->processEvents(); //FIXME Is this needed here to avoid display problems in the console?
+      m_console->scrollToEnd();
+      widgetPanel->refreshConsoles();  // Scroll to end of text all console widgets
     }
-    QString msg = messageQueue.takeFirst();
-    messageMutex.unlock();
-    m_console->appendMessage(msg);
-    widgetPanel->appendMessage(msg);
-    qApp->processEvents(); //FIXME Is this needed here to avoid display problems in the console?
-    m_console->scrollToEnd();
-    widgetPanel->refreshConsoles();  // Scroll to end of text all console widgets
-  }
-  //   QList<QString> channels = outValueQueue.keys();
-  //   foreach (QString channel, channels) {
-  //     widgetPanel->setValue(channel, outValueQueue[channel]);
-  //   }
-  //   outValueQueue.clear();
+    //   QList<QString> channels = outValueQueue.keys();
+    //   foreach (QString channel, channels) {
+    //     widgetPanel->setValue(channel, outValueQueue[channel]);
+    //   }
+    //   outValueQueue.clear();
 
     stringValueMutex.lock();
     QStringList channels = outStringQueue.keys();
@@ -1743,8 +1739,14 @@ void qutecsound::dispatchQueues()
       }
       curveBuffer.remove(curveBuffer.indexOf(windat));
     }
+    qApp->processEvents();
+    if (m_options->thread) {
+      if (perfThread->GetStatus() != 0) {
+        stop();
+      }
+    }
   }
-  queueTimer->start(QCS_QUEUETIMER_TIME); //will launch this function again later
+  queueTimer->start(refreshTime); //will launch this function again later
 }
 
 // void qutecsound::widgetDockStateChanged(bool topLevel)

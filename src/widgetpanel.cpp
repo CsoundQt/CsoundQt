@@ -122,7 +122,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   setWidget(layoutWidget);
   m_sbActive = false;
   setScrollBarsActive(true);
-  setScrollBarsActive(false);
+  setScrollBarsActive(false); //TODO temporary for testing
 
   eventQueue.resize(QUTECSOUND_MAX_EVENTS);
   eventQueueSize = 0;

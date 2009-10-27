@@ -245,6 +245,7 @@ class qutecsound:public QMainWindow
     QStringList keyPressBuffer; // protected by keyMutex
     QStringList keyReleaseBuffer; // protected by keyMutex
     QTimer *queueTimer;
+    int refreshTime;
 
     QTabWidget *documentTabs;
     GraphicWindow *m_graphic;

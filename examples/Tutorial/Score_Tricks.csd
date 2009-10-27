@@ -14,6 +14,13 @@ aout oscil 0.2, kfreq, 1
 outs aout, aout
 endin
 
+instr 2 ; Same as above but with envelope
+kfreq line 300, abs(p3), 1000
+kenv linenr 0.2, 1, 1, 0.01
+aout oscil kenv, kfreq, 1
+outs aout, aout
+endin
+
 </CsInstruments>
 <CsScore>
 f 1 0 1024 10 1
@@ -27,6 +34,9 @@ i 1.2 ^+2 -20  ;Turn on note 1.2
 
 i -1.2 ^+0.5 1  ;Turn off 1.2
 i -1.1 ^+1 1  ;Turn off 1.1
+
+i 2 ^+1 -20  ;Turn on instr 2
+i -2 ^+3 1  ;Turn off instr 2
 
 ; For information on Score processing (e.g the ^character
 ; stand on the i character and press Shift+F1

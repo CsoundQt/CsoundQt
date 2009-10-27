@@ -27,7 +27,7 @@
 #include "configlists.h"
 
 // Time in milliseconds for widget and console messages updates
-#define QCS_QUEUETIMER_TIME 50
+#define QCS_QUEUETIMER_DEFAULT_TIME 50
 // Maximum pfields QuteCsound can accept for realtime score events
 #define EVENTS_MAX_PFIELDS 256
 
