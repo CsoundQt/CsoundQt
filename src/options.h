@@ -61,9 +61,11 @@ class Options{
     bool showTooltips;
     bool enableFLTK;
     bool terminalFLTK;
+    bool scrollbars;
 
     bool useAPI;
     bool thread;
+    bool keyRepeat;
 
     int bufferSize;
     bool bufferSizeActive;

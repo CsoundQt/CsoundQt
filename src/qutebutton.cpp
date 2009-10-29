@@ -27,7 +27,7 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
   m_widget = new QPushButton(this);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
   m_widget->setFocusPolicy(Qt::NoFocus);
-  m_filename = "/";
+  m_imageFilename = "/";
   m_type = "event";
   connect(static_cast<QPushButton *>(m_widget), SIGNAL(released()), this, SLOT(buttonReleased()));
 }
@@ -62,6 +62,16 @@ double QuteButton::getValue()
     return 0.0;
 }
 
+QString QuteButton::getStringValue()
+{
+  if (m_name.startsWith("_Browse")) {
+    return m_filename;
+  }
+  else {
+    return QString::number(m_value);
+  }
+}
+
 QString QuteButton::getWidgetLine()
 {
   QString line = "ioButton {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
@@ -70,7 +80,7 @@ QString QuteButton::getWidgetLine()
   line +=  QString::number(m_value,'f', 6) + " ";
   line += "\"" + m_name + "\" ";
   line += "\"" + static_cast<QPushButton *>(m_widget)->text().replace(QRegExp("[\n\r]"), "\u00AC") + "\" ";
-  line += "\"" + m_filename + "\" ";
+  line += "\"" + m_imageFilename + "\" ";
   line += m_eventLine;
 //   qDebug("QuteButton::getWidgetLine() %s", line.toStdString().c_str());
   return line;
@@ -148,7 +158,7 @@ void QuteButton::createPropertiesDialog()
   label->setText("Image:");
   layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
   filenameLineEdit = new QLineEdit(dialog);
-  filenameLineEdit->setText(m_filename);
+  filenameLineEdit->setText(m_imageFilename);
   filenameLineEdit->setMinimumWidth(320);
   layout->addWidget(filenameLineEdit, 6,1,1,2, Qt::AlignLeft|Qt::AlignVCenter);
   QPushButton *browseButton = new QPushButton(dialog);
@@ -176,7 +186,7 @@ void QuteButton::setType(QString type)
     static_cast<QPushButton *>(m_widget)->setIcon(icon);
   }
   else if (m_type == "pictevent" or m_type == "pictvalue" or m_type == "pict") {
-    icon = QIcon(QPixmap(m_filename));
+    icon = QIcon(QPixmap(m_imageFilename));
     static_cast<QPushButton *>(m_widget)->setIcon(icon);
     static_cast<QPushButton *>(m_widget)->setIconSize(QSize(width(),height()));
   }
@@ -193,7 +203,7 @@ void QuteButton::setText(QString text)
 
 void QuteButton::setFilename(QString filename)
 {
-  m_filename = filename;
+  m_imageFilename = filename;
 }
 
 void QuteButton::setEventLine(QString eventLine)
@@ -227,6 +237,7 @@ void QuteButton::buttonReleased()
     else if (m_name.startsWith("_Browse")) {
       QString fileName = QFileDialog::getOpenFileName(this, tr("Select File"));
       if (fileName != "") {
+        m_filename = fileName;
         emit newValue(QPair<QString, QString>(m_name, fileName));
       }
     }
@@ -255,5 +266,6 @@ void QuteButton::browseFile()
   QString file =  QFileDialog::getOpenFileName(this,tr("Select File"));
   if (file!="") {
     filenameLineEdit->setText(file);
+    m_imageFilename = file;
   }
 }

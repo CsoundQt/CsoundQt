@@ -54,6 +54,7 @@ class WidgetPanel : public QDockWidget
     void setValue(int index, double value);
     void setValue(int index, QString value);
     void setScrollBarsActive(bool active);
+    void setKeyRepeatMode(bool repeat);
     void loadWidgets(QString macWidgets);
     int newWidget(QString widgetLine, bool offset = false);
     QString widgetsText();
@@ -134,6 +135,7 @@ class WidgetPanel : public QDockWidget
     int m_width;
     int m_height;
     bool m_sbActive; // Scroll bars active
+    bool m_repeatKeys;
 
     int createSlider(int x, int y, int width, int height, QString widgetLine);
     int createText(int x, int y, int width, int height, QString widgetLine);

@@ -37,6 +37,7 @@ class Console
     virtual void setColors(QColor textColor, QColor bgColor);
     void clear();
     void scrollToEnd();
+    void setKeyRepeatMode(bool repeat);
 //     void refresh();
     QList<int> errorLines;
 
@@ -45,6 +46,7 @@ class Console
     bool error;
     QColor m_textColor;
     QColor m_bgColor;
+    bool m_repeatKeys;
     QMutex lock;
 };
 
@@ -90,7 +92,7 @@ class DockConsole : public QDockWidget, public Console
     }
     virtual void keyPressEvent(QKeyEvent *event)
     {
-      if (!event->isAutoRepeat()) {
+      if (!event->isAutoRepeat() or m_repeatKeys) {
         QString key = event->text();
         if (key != "") {
           appendMessage(key);
@@ -100,7 +102,7 @@ class DockConsole : public QDockWidget, public Console
     }
     virtual void keyReleaseEvent(QKeyEvent *event)
     {
-      if (!event->isAutoRepeat()) {
+      if (!event->isAutoRepeat() or m_repeatKeys) {
         QString key = event->text();
         if (key != "") {
 //           appendMessage("rel:" + key);

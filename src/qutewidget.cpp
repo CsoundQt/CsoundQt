@@ -278,7 +278,11 @@ void QuteWidget::value2Changed(double value)
 
 void QuteWidget::createPropertiesDialog()
 {
+#ifdef MACOSX
+  dialog = new QDialog(this, Qt::WindowStaysOnTopHint);  // On OS X the widget panel may com in front of properties
+#else
   dialog = new QDialog(this);
+#endif
   dialog->resize(300, 300);
   dialog->setModal(true);
   layout = new QGridLayout(dialog);

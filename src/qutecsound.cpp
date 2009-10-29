@@ -161,7 +161,6 @@ qutecsound::qutecsound(QStringList fileNames)
   QString index = m_options->csdocdir + QString("/index.html");
   helpPanel->loadFile(index);
 
-
   applySettings();
 
   csound = NULL;
@@ -1144,7 +1143,7 @@ void qutecsound::play()
 void qutecsound::stop()
 {
   // Must guarantee that csound has stopped when it returns
-  qDebug("qutecsound::stop()");
+//   qDebug("qutecsound::stop()");
   if (ud->PERF_STATUS == 1) {
     stopCsound();
   }
@@ -1528,6 +1527,9 @@ void qutecsound::applySettings()
   controlToolBar->setToolButtonStyle(toolButtonStyle);
   configureToolBar->setToolButtonStyle(toolButtonStyle);
   widgetPanel->showTooltips(m_options->showTooltips);
+  widgetPanel->setKeyRepeatMode(m_options->keyRepeat);
+  widgetPanel->setScrollBarsActive(m_options->scrollbars);
+  m_console->setKeyRepeatMode(m_options->keyRepeat);
 
   QString currentOptions = (m_options->useAPI ? tr("API") : tr("Console")) + " ";
   if (m_options->useAPI) {
@@ -2522,13 +2524,15 @@ void qutecsound::readSettings()
   m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
   m_options->showTooltips = settings.value("showTooltips", true).toBool();
   m_options->enableFLTK = settings.value("enableFLTK", true).toBool();
-  m_options->terminalFLTK = settings.value("terminalFLTK", true).toBool();
+  m_options->terminalFLTK = settings.value("terminalFLTK", false).toBool();
+  m_options->scrollbars = settings.value("scrollbars", true).toBool();
   lastFiles = settings.value("lastfiles", "").toStringList();
   lastTabIndex = settings.value("lasttabindex", "").toInt();
   settings.endGroup();
   settings.beginGroup("Run");
   m_options->useAPI = settings.value("useAPI", true).toBool();
   m_options->thread = settings.value("thread", true).toBool();
+  m_options->keyRepeat = settings.value("keyRepeat", false).toBool();
   m_options->bufferSize = settings.value("bufferSize", 1024).toInt();
   m_options->bufferSizeActive = settings.value("bufferSizeActive", false).toBool();
   m_options->HwBufferSize = settings.value("HwBufferSize", 1024).toInt();
@@ -2639,6 +2643,7 @@ void qutecsound::writeSettings()
   settings.setValue("showTooltips", m_options->showTooltips);
   settings.setValue("enableFLTK", m_options->enableFLTK);
   settings.setValue("terminalFLTK", m_options->terminalFLTK);
+  settings.setValue("scrollbars", m_options->scrollbars);
   QStringList files;
   if (m_options->rememberFile) {
     for (int i = 0; i < documentPages.size(); i++ ) {
@@ -2651,6 +2656,7 @@ void qutecsound::writeSettings()
   settings.beginGroup("Run");
   settings.setValue("useAPI", m_options->useAPI);
   settings.setValue("thread", m_options->thread);
+  settings.setValue("keyRepeat", m_options->keyRepeat);
   settings.setValue("bufferSize", m_options->bufferSize);
   settings.setValue("bufferSizeActive", m_options->bufferSizeActive);
   settings.setValue("HwBufferSize",m_options->HwBufferSize);

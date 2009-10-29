@@ -105,7 +105,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     if (text.indexOf("<MacOptions>") > 0 and text[text.indexOf("<MacOptions>") - 1] == '\n')
       text.remove(text.indexOf("<MacOptions>") - 1, 1); //remove initial line break
     text.remove(text.indexOf("<MacOptions>"), options.size());
-//     qDebug("<MacOptions> present. %s", getMacOption("WindowBounds").toStdString().c_str());
+//     qDebug("<MacOptions> present. %s", getMacOptions("WindowBounds").toStdString().c_str());
   }
   else {
     if (autoCreateMacCsoundSections) {
@@ -147,7 +147,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     }
   }
   // This here is for compatibility with MacCsound
-  QString optionsText = getMacOption("Options:");
+  QString optionsText = getMacOptions("Options:");
   if (optionsText.contains(" -o")) {
     QString outFile = optionsText.mid(optionsText.indexOf(" -o") + 1);
     int index = outFile.indexOf(" -");
@@ -257,7 +257,7 @@ QString DocumentPage::getMacOptionsText()
   return macOptions.join("\n");
 }
 
-QString DocumentPage::getMacOption(QString option)
+QString DocumentPage::getMacOptions(QString option)
 {
   if (!option.endsWith(":"))
     option += ":";
@@ -265,7 +265,7 @@ QString DocumentPage::getMacOption(QString option)
     option += " ";
   int index = macOptions.indexOf(QRegExp(option + ".*"));
   if (index < 0) {
-    qDebug("DocumentPage::getMacOption() Option %s not found!", option.toStdString().c_str());
+    qDebug("DocumentPage::getMacOptions() Option %s not found!", option.toStdString().c_str());
     return QString("");
   }
   return macOptions[index].mid(option.size());

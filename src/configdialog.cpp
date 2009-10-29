@@ -77,6 +77,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   enableFLTKCheckBox->setChecked(m_options->enableFLTK);
   terminalFLTKCheckBox->setChecked(m_options->terminalFLTK);
   terminalFLTKCheckBox->setEnabled(m_options->enableFLTK);
+  scrollbarsCheckBox->setChecked(m_options->scrollbars);
 
   if (m_options->useAPI)
     ApiRadioButton->setChecked(true);
@@ -85,6 +86,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
 
   threadCheckBox->setChecked(m_options->thread);
   threadCheckBox->setEnabled(ApiRadioButton->isChecked());
+  keyRepeatCheckBox->setChecked(m_options->keyRepeat);
 
   BufferSizeLineEdit->setText(QString::number(m_options->bufferSize));
   BufferSizeCheckBox->setChecked(m_options->bufferSizeActive);
@@ -219,9 +221,11 @@ void ConfigDialog::accept()
   m_options->showTooltips = showTooltipsCheckBox->isChecked();
   m_options->enableFLTK = enableFLTKCheckBox->isChecked();
   m_options->terminalFLTK = terminalFLTKCheckBox->isChecked();
+  m_options->scrollbars = scrollbarsCheckBox->isChecked();
 
   m_options->useAPI = ApiRadioButton->isChecked();
   m_options->thread = threadCheckBox->isChecked();
+  m_options->keyRepeat = keyRepeatCheckBox->isChecked();
   m_options->bufferSize = BufferSizeLineEdit->text().toInt();
   m_options->bufferSizeActive = BufferSizeCheckBox->isChecked();
   m_options->HwBufferSize = HwBufferSizeLineEdit->text().toInt();

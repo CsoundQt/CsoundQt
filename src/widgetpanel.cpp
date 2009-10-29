@@ -118,11 +118,11 @@ WidgetPanel::WidgetPanel(QWidget *parent)
 //   scrollArea->setFocusPolicy(Qt::NoFocus);
 //   scrollArea->setWidgetResizable (true);
 //   setWidget(scrollArea);
-  
+
   setWidget(layoutWidget);
   m_sbActive = false;
   setScrollBarsActive(true);
-  setScrollBarsActive(false); //TODO temporary for testing
+//   setScrollBarsActive(false); //TODO temporary for testing
 
   eventQueue.resize(QUTECSOUND_MAX_EVENTS);
   eventQueueSize = 0;
@@ -196,7 +196,7 @@ void WidgetPanel::setValue(int index, QString value)
 
 void WidgetPanel::setScrollBarsActive(bool active)
 {
-  qDebug() << "WidgetPanel::setScrollBarsActive" << active;
+//   qDebug() << "WidgetPanel::setScrollBarsActive" << active;
   if (active && !m_sbActive) {
     scrollArea = new QScrollArea(this);
     scrollArea->setWidget(layoutWidget);
@@ -204,11 +204,16 @@ void WidgetPanel::setScrollBarsActive(bool active)
     setWidget(scrollArea);
     scrollArea->show();
   }
-  else {
+  else if (!active) {
     setWidget(scrollArea->takeWidget());
     delete scrollArea;
   }
   m_sbActive = active;
+}
+
+void WidgetPanel::setKeyRepeatMode(bool repeat)
+{
+  m_repeatKeys = repeat;
 }
 
 void WidgetPanel::loadWidgets(QString macWidgets)
@@ -349,7 +354,7 @@ QString WidgetPanel::widgetsText()
   valueMutex.lock();
   for (int i = 0; i < widgets.size(); i++) {
     text += widgets[i]->getWidgetLine() + "\n";
-    qDebug() << widgets[i]->getWidgetXmlText();
+//     qDebug() << widgets[i]->getWidgetXmlText();
   }
   valueMutex.unlock();
   text += "</MacGUI>";
@@ -565,9 +570,9 @@ void WidgetPanel::moveEvent(QMoveEvent * event)
 
 void WidgetPanel::keyPressEvent(QKeyEvent *event)
 {
-  if (!event->isAutoRepeat()) {
+  if (!event->isAutoRepeat() or m_repeatKeys) {
     QString key = event->text();
-    qDebug() << key ;
+//     qDebug() << key ;
     if (key != "") {
 //           appendMessage(key);
       emit keyPressed(key);
@@ -577,7 +582,7 @@ void WidgetPanel::keyPressEvent(QKeyEvent *event)
 
 void WidgetPanel::keyReleaseEvent(QKeyEvent *event)
 {
-  if (!event->isAutoRepeat()) {
+  if (!event->isAutoRepeat() or m_repeatKeys) {
     QString key = event->text();
     if (key != "") {
 //           appendMessage("rel:" + key);

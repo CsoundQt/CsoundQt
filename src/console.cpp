@@ -96,6 +96,11 @@ void Console::scrollToEnd()
   text->moveCursor(QTextCursor::End);
 }
 
+void Console::setKeyRepeatMode(bool repeat)
+{
+  m_repeatKeys = repeat;
+}
+
 // void Console::refresh()
 // {
 //   // This is a necessary hack since QTextEdit appears to not refresh correctly

@@ -43,7 +43,7 @@ class DocumentPage : public QTextEdit
     QString getDotText();
     QString getMacWidgetsText();
     QString getMacOptionsText();
-    QString getMacOption(QString option);
+    QString getMacOptions(QString option);
     QRect getWidgetPanelGeometry();
     void getToIn();
     void inToGet();
