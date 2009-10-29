@@ -2276,7 +2276,7 @@ void qutecsound::createMenus()
   QStringList exampleFiles;
   QStringList widgetFiles;
   QStringList tutFiles;
-  QStringList synthFiles;
+  QStringList classicalFiles;
   QStringList utilitiesFiles;
   QList<QStringList> subMenus;
   QStringList subMenuNames;
@@ -2304,18 +2304,25 @@ void qutecsound::createMenus()
   widgetFiles.append(":/examples/Menu_Widget.csd");
   widgetFiles.append(":/examples/Controller_Widget.csd");
   widgetFiles.append(":/examples/Scope_Widget.csd");
+  widgetFiles.append(":/examples/String_Channels.csd");
+  widgetFiles.append(":/examples/Reserved_Channels.csd");
 
   subMenus << widgetFiles;
   subMenuNames << "Widgets";
 
-  synthFiles.append(":/examples/Additive_Synth.csd");
-  synthFiles.append(":/examples/Simple_Subtractive.csd");
-  synthFiles.append(":/examples/Simple_FM_Synth.csd");
-  synthFiles.append(":/examples/Phase_Mod_Synth.csd");
-  synthFiles.append(":/examples/Formant_Synth.csd");
+  utilitiesFiles.append(":/examples/IO_Test.csd");
+  utilitiesFiles.append(":/examples/Audio_Input_Test.csd");
+  utilitiesFiles.append(":/examples/Audio_Output_Test.csd");
+  utilitiesFiles.append(":/examples/Audio_Thru_Test.csd");
+  utilitiesFiles.append(":/examples/MIDI_IO_Test.csd");
 
-  subMenus << synthFiles;
-  subMenuNames << tr("Synths");
+  subMenus << utilitiesFiles;
+  subMenuNames << tr("Tests");
+
+  classicalFiles.append(":/examples/Chowning_Stria.csd");
+
+  subMenus << classicalFiles;
+  subMenuNames << tr("Classical");
 
   exampleFiles.append(":/examples/SF_Play_from_buffer.csd");
   exampleFiles.append(":/examples/SF_Play_from_buffer_2.csd");
@@ -2333,21 +2340,16 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/Rms.csd");
   exampleFiles.append(":/examples/Reinit_Example.csd");
   exampleFiles.append(":/examples/No_Reinit.csd");
-  exampleFiles.append(":/examples/String_Channels.csd");
-  exampleFiles.append(":/examples/Reserved_Channels.csd");
   exampleFiles.append(":/examples/Noise_Reduction.csd");
+  exampleFiles.append(":/examples/Additive_Synth.csd");
+  exampleFiles.append(":/examples/Simple_Subtractive.csd");
+  exampleFiles.append(":/examples/Simple_FM_Synth.csd");
+  exampleFiles.append(":/examples/Phase_Mod_Synth.csd");
+  exampleFiles.append(":/examples/Formant_Synth.csd");
+
 
   subMenus << exampleFiles;
   subMenuNames << "Examples";
-
-  utilitiesFiles.append(":/examples/IO_Test.csd");
-  utilitiesFiles.append(":/examples/Audio_Input_Test.csd");
-  utilitiesFiles.append(":/examples/Audio_Output_Test.csd");
-  utilitiesFiles.append(":/examples/Audio_Thru_Test.csd");
-  utilitiesFiles.append(":/examples/MIDI_IO_Test.csd");
-
-  subMenus << utilitiesFiles;
-  subMenuNames << tr("Utilities");
 
   QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
 //   QAction *newAction = examplesMenu->addAction("About the examples...");

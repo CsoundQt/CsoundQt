@@ -82,7 +82,8 @@
       <file>../examples/Audio_Output_Test.csd</file>
       <file>../examples/Audio_Thru_Test.csd</file>
       <file>../examples/IO_Test.csd</file>
-      <file>../examples/MIDI_IO_Test.csd</file>
+
+      <file>../examples/Chowning_Stria.csd</file>
 
       <file>qutecsound_en.qm</file>
       <file>qutecsound_es.qm</file>
