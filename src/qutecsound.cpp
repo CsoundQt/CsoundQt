@@ -2273,83 +2273,87 @@ void qutecsound::createMenus()
   viewMenu->addAction(showUtilitiesAct);
   viewMenu->addAction(createCodeGraphAct);
 
-  QStringList exampleFiles;
-  QStringList widgetFiles;
   QStringList tutFiles;
-  QStringList classicalFiles;
-  QStringList utilitiesFiles;
+  QStringList widgetFiles;
+  QStringList synthFiles;
+  QStringList musicFiles;
+  QStringList usefulFiles;
+  QStringList exampleFiles;
   QList<QStringList> subMenus;
   QStringList subMenuNames;
 
-  tutFiles.append(":/examples/Toot1.csd");
-  tutFiles.append(":/examples/Toot2.csd");
-  tutFiles.append(":/examples/Toot3.csd");
-  tutFiles.append(":/examples/Toot4.csd");
-  tutFiles.append(":/examples/Toot5.csd");
-  tutFiles.append(":/examples/Widgets_1.csd");
-  tutFiles.append(":/examples/Widgets_2.csd");
-  tutFiles.append(":/examples/Score_Tricks.csd");
+  tutFiles.append(":/examples/Tutorial/Toot1.csd");
+  tutFiles.append(":/examples/Tutorial/Toot2.csd");
+  tutFiles.append(":/examples/Tutorial/Toot3.csd");
+  tutFiles.append(":/examples/Tutorial/Toot4.csd");
+  tutFiles.append(":/examples/Tutorial/Toot5.csd");
+  tutFiles.append(":/examples/Tutorial/Widgets_1.csd");
+  tutFiles.append(":/examples/Tutorial/Widgets_2.csd");
+  tutFiles.append(":/examples/Tutorial/Score_Tricks.csd");
 
   subMenus << tutFiles;
   subMenuNames << "Tutorials";
 
-  widgetFiles.append(":/examples/Widget_Panel.csd");
-  widgetFiles.append(":/examples/Label_Widget.csd");
-  widgetFiles.append(":/examples/Display_Widget.csd");
-  widgetFiles.append(":/examples/Slider_Widget.csd");
-  widgetFiles.append(":/examples/Scrollnumber_Widget.csd");
-  widgetFiles.append(":/examples/Graph_Widget.csd");
-  widgetFiles.append(":/examples/Button_Widget.csd");
-  widgetFiles.append(":/examples/Checkbox_Widget.csd");
-  widgetFiles.append(":/examples/Menu_Widget.csd");
-  widgetFiles.append(":/examples/Controller_Widget.csd");
-  widgetFiles.append(":/examples/Scope_Widget.csd");
-  widgetFiles.append(":/examples/String_Channels.csd");
-  widgetFiles.append(":/examples/Reserved_Channels.csd");
+  widgetFiles.append(":/examples/Widgets/Widget_Panel.csd");
+  widgetFiles.append(":/examples/Widgets/Label_Widget.csd");
+  widgetFiles.append(":/examples/Widgets/Display_Widget.csd");
+  widgetFiles.append(":/examples/Widgets/Slider_Widget.csd");
+  widgetFiles.append(":/examples/Widgets/Scrollnumber_Widget.csd");
+  widgetFiles.append(":/examples/Widgets/Graph_Widget.csd");
+  widgetFiles.append(":/examples/Widgets/Button_Widget.csd");
+  widgetFiles.append(":/examples/Widgets/Checkbox_Widget.csd");
+  widgetFiles.append(":/examples/Widgets/Menu_Widget.csd");
+  widgetFiles.append(":/examples/Widgets/Controller_Widget.csd");
+  widgetFiles.append(":/examples/Widgets/Scope_Widget.csd");
+  widgetFiles.append(":/examples/Widgets/String_Channels.csd");
+  widgetFiles.append(":/examples/Widgets/Reserved_Channels.csd");
 
   subMenus << widgetFiles;
   subMenuNames << "Widgets";
 
-  utilitiesFiles.append(":/examples/IO_Test.csd");
-  utilitiesFiles.append(":/examples/Audio_Input_Test.csd");
-  utilitiesFiles.append(":/examples/Audio_Output_Test.csd");
-  utilitiesFiles.append(":/examples/Audio_Thru_Test.csd");
-  utilitiesFiles.append(":/examples/MIDI_IO_Test.csd");
+  synthFiles.append(":/examples/Synths/Additive_Synth.csd");
+  synthFiles.append(":/examples/Synths/Simple_Subtractive.csd");
+  synthFiles.append(":/examples/Synths/Simple_FM_Synth.csd");
+  synthFiles.append(":/examples/Synths/Phase_Mod_Synth.csd");
+  synthFiles.append(":/examples/Synths/Formant_Synth.csd");
+  subMenus << synthFiles;
+  subMenuNames << "Synths";
 
-  subMenus << utilitiesFiles;
-  subMenuNames << tr("Tests");
+  musicFiles.append(":/examples/Music/Chowning_Stria.csd");
 
-  classicalFiles.append(":/examples/Chowning_Stria.csd");
+  subMenus << musicFiles;
+  subMenuNames << tr("Music");
 
-  subMenus << classicalFiles;
-  subMenuNames << tr("Classical");
+  usefulFiles.append(":/examples/Useful/IO_Test.csd");
+  usefulFiles.append(":/examples/Useful/Audio_Input_Test.csd");
+  usefulFiles.append(":/examples/Useful/Audio_Output_Test.csd");
+  usefulFiles.append(":/examples/Useful/Audio_Thru_Test.csd");
+  usefulFiles.append(":/examples/Useful/MIDI_IO_Test.csd");
 
-  exampleFiles.append(":/examples/SF_Play_from_buffer.csd");
-  exampleFiles.append(":/examples/SF_Play_from_buffer_2.csd");
-  exampleFiles.append(":/examples/SF_Play_from_HD.csd");
-  exampleFiles.append(":/examples/SF_Play_from_HD_2.csd");
-  exampleFiles.append(":/examples/Keyboard_Control.csd");
-  exampleFiles.append(":/examples/8_Chn_Player.csd");
-  exampleFiles.append(":/examples/SF_Record.csd");
-  exampleFiles.append(":/examples/Simple_Convolution.csd");
-  exampleFiles.append(":/examples/Universal_Convolution.csd");
-  exampleFiles.append(":/examples/Oscillator_Aliasing.csd");
-  exampleFiles.append(":/examples/Circle.csd");
-  exampleFiles.append(":/examples/Pvstencil.csd");
-  exampleFiles.append(":/examples/Lineedit_Widget.csd");
-  exampleFiles.append(":/examples/Rms.csd");
-  exampleFiles.append(":/examples/Reinit_Example.csd");
-  exampleFiles.append(":/examples/No_Reinit.csd");
-  exampleFiles.append(":/examples/Noise_Reduction.csd");
-  exampleFiles.append(":/examples/Additive_Synth.csd");
-  exampleFiles.append(":/examples/Simple_Subtractive.csd");
-  exampleFiles.append(":/examples/Simple_FM_Synth.csd");
-  exampleFiles.append(":/examples/Phase_Mod_Synth.csd");
-  exampleFiles.append(":/examples/Formant_Synth.csd");
+  exampleFiles.append(":/examples/Useful/SF_Play_from_buffer.csd");
+  exampleFiles.append(":/examples/Useful/SF_Play_from_buffer_2.csd");
+  exampleFiles.append(":/examples/Useful/SF_Play_from_HD.csd");
+  exampleFiles.append(":/examples/Useful/SF_Play_from_HD_2.csd");
+  exampleFiles.append(":/examples/Useful/8_Chn_Player.csd");
+  exampleFiles.append(":/examples/Useful/SF_Record.csd");
 
+  subMenus << usefulFiles;
+  subMenuNames << tr("Useful");
+
+  exampleFiles.append(":/examples/Examples/Keyboard_Control.csd");
+  exampleFiles.append(":/examples/Examples/Simple_Convolution.csd");
+  exampleFiles.append(":/examples/Examples/Universal_Convolution.csd");
+  exampleFiles.append(":/examples/Examples/Oscillator_Aliasing.csd");
+  exampleFiles.append(":/examples/Examples/Circle.csd");
+  exampleFiles.append(":/examples/Examples/Pvstencil.csd");
+  exampleFiles.append(":/examples/Examples/Lineedit_Widget.csd");
+  exampleFiles.append(":/examples/Examples/Rms.csd");
+  exampleFiles.append(":/examples/Examples/Reinit_Example.csd");
+  exampleFiles.append(":/examples/Examples/No_Reinit.csd");
+  exampleFiles.append(":/examples/Examples/Noise_Reduction.csd");
 
   subMenus << exampleFiles;
-  subMenuNames << "Examples";
+  subMenuNames << tr("Examples");
 
   QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
 //   QAction *newAction = examplesMenu->addAction("About the examples...");
@@ -2833,8 +2837,10 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   setCurrentFile(fileName);
   setWindowModified(false);
   documentTabs->setTabIcon(curPage, modIcon);
-  lastUsedDir = fileName;
-  lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/]")));
+  if (!lastUsedDir.contains(":/")) {  // Don't store internal examples directory as last used dir
+    lastUsedDir = fileName;
+    lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/]")));
+  }
   if (recentFiles.count(fileName) == 0 and fileName!="") {
     recentFiles.prepend(fileName);
     recentFiles.removeLast();
@@ -2887,7 +2893,8 @@ bool qutecsound::saveFile(const QString &fileName, bool saveWidgets)
   }
   textEdit->document()->setModified(false);
   setWindowModified(false);
-  lastUsedDir = fileName;
+  if (!lastUsedDir.contains(":/"))  // Don't store internal examples directory as last used dir
+    lastUsedDir = fileName;
   lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/\\]")));
   if (recentFiles.count(fileName) == 0) {
     recentFiles.prepend(fileName);

@@ -41,7 +41,13 @@ void QuteDummy::loadFromXml(QString xmlText)
 
 QString QuteDummy::getWidgetXmlText()
 {
-  return QString();
+  // Just an empty place holder
+  QXmlStreamWriter s(&xmlText);
+  createXmlWriter(s);
+
+//   s.writeTextElement("randomizable", "");
+  s.writeEndElement();
+  return xmlText;
 }
 
 QString QuteDummy::getWidgetType()

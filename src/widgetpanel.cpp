@@ -669,6 +669,7 @@ void WidgetPanel::widgetChanged(QuteWidget* widget)
       editWidgets[index]->move(newx, newy);
       editWidgets[index]->resize(neww, newh);
     }
+    setWidgetToolTip(widget, m_tooltips);
   }
   adjustLayoutSize();
 }

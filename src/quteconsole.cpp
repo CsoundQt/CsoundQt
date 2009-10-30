@@ -49,7 +49,12 @@ QString QuteConsole::getWidgetLine()
 
 QString QuteConsole::getWidgetXmlText()
 {
-  return QString();
+  // Consoles are not implemented in blue
+  QXmlStreamWriter s(&xmlText);
+  createXmlWriter(s);
+
+  s.writeEndElement();
+  return xmlText;
 }
 
 QString QuteConsole::getWidgetType()

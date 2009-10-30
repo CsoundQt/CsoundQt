@@ -31,59 +31,59 @@
       <file>default.csd</file>
       <file>test.csd</file>
 
-      <file>../examples/SF_Play_from_buffer.csd</file>
-      <file>../examples/SF_Play_from_buffer_2.csd</file>
-      <file>../examples/SF_Play_from_HD.csd</file>
-      <file>../examples/SF_Play_from_HD_2.csd</file>
-      <file>../examples/Keyboard_Control.csd</file>
-      <file>../examples/8_Chn_Player.csd</file>
-      <file>../examples/SF_Record.csd</file>
-      <file>../examples/Simple_Convolution.csd</file>
-      <file>../examples/Universal_Convolution.csd</file>
-      <file>../examples/Oscillator_Aliasing.csd</file>
-      <file>../examples/Circle.csd</file>
-      <file>../examples/Pvstencil.csd</file>
-      <file>../examples/Noise_Reduction.csd</file>
-      <file>../examples/Reserved_Channels.csd</file>
-      <file>../examples/String_Channels.csd</file>
-      <file>../examples/Rms.csd</file>
-      <file>../examples/Reinit_Example.csd</file>
-      <file>../examples/No_Reinit.csd</file>
+      <file>../examples/Examples/Keyboard_Control.csd</file>
+      <file>../examples/Examples/Simple_Convolution.csd</file>
+      <file>../examples/Examples/Universal_Convolution.csd</file>
+      <file>../examples/Examples/Oscillator_Aliasing.csd</file>
+      <file>../examples/Examples/Circle.csd</file>
+      <file>../examples/Examples/Pvstencil.csd</file>
+      <file>../examples/Examples/Noise_Reduction.csd</file>
+      <file>../examples/Examples/Reserved_Channels.csd</file>
+      <file>../examples/Examples/String_Channels.csd</file>
+      <file>../examples/Examples/Rms.csd</file>
+      <file>../examples/Examples/Reinit_Example.csd</file>
+      <file>../examples/Examples/No_Reinit.csd</file>
 
-      <file>../examples/Widget_Panel.csd</file>
-      <file>../examples/Label_Widget.csd</file>
-      <file>../examples/Display_Widget.csd</file>
-      <file>../examples/Slider_Widget.csd</file>
-      <file>../examples/Lineedit_Widget.csd</file>
-      <file>../examples/Scrollnumber_Widget.csd</file>
-      <file>../examples/Graph_Widget.csd</file>
-      <file>../examples/Button_Widget.csd</file>
-      <file>../examples/Checkbox_Widget.csd</file>
-      <file>../examples/Menu_Widget.csd</file>
-      <file>../examples/Controller_Widget.csd</file>
-      <file>../examples/Scope_Widget.csd</file>
+      <file>../examples/Widgets/Widget_Panel.csd</file>
+      <file>../examples/Widgets/Label_Widget.csd</file>
+      <file>../examples/Widgets/Display_Widget.csd</file>
+      <file>../examples/Widgets/Slider_Widget.csd</file>
+      <file>../examples/Widgets/Lineedit_Widget.csd</file>
+      <file>../examples/Widgets/Scrollnumber_Widget.csd</file>
+      <file>../examples/Widgets/Graph_Widget.csd</file>
+      <file>../examples/Widgets/Button_Widget.csd</file>
+      <file>../examples/Widgets/Checkbox_Widget.csd</file>
+      <file>../examples/Widgets/Menu_Widget.csd</file>
+      <file>../examples/Widgets/Controller_Widget.csd</file>
+      <file>../examples/Widgets/Scope_Widget.csd</file>
 
-      <file>../examples/Toot1.csd</file>
-      <file>../examples/Toot2.csd</file>
-      <file>../examples/Toot3.csd</file>
-      <file>../examples/Toot4.csd</file>
-      <file>../examples/Toot5.csd</file>
-      <file>../examples/Widgets_1.csd</file>
-      <file>../examples/Widgets_2.csd</file>
+      <file>../examples/Tutorial/Toot1.csd</file>
+      <file>../examples/Tutorial/Toot2.csd</file>
+      <file>../examples/Tutorial/Toot3.csd</file>
+      <file>../examples/Tutorial/Toot4.csd</file>
+      <file>../examples/Tutorial/Toot5.csd</file>
+      <file>../examples/Tutorial/Widgets_1.csd</file>
+      <file>../examples/Tutorial/Widgets_2.csd</file>
       <file>../examples/Tutorial/Score_Tricks.csd</file>
 
-      <file>../examples/Additive_Synth.csd</file>
-      <file>../examples/Simple_Subtractive.csd</file>
-      <file>../examples/Simple_FM_Synth.csd</file>
-      <file>../examples/Phase_Mod_Synth.csd</file>
-      <file>../examples/Formant_Synth.csd</file>
+      <file>../examples/Synths/Additive_Synth.csd</file>
+      <file>../examples/Synths/Simple_Subtractive.csd</file>
+      <file>../examples/Synths/Simple_FM_Synth.csd</file>
+      <file>../examples/Synths/Phase_Mod_Synth.csd</file>
+      <file>../examples/Synths/Formant_Synth.csd</file>
 
-      <file>../examples/Audio_Input_Test.csd</file>
-      <file>../examples/Audio_Output_Test.csd</file>
-      <file>../examples/Audio_Thru_Test.csd</file>
-      <file>../examples/IO_Test.csd</file>
+      <file>../examples/Useful/SF_Play_from_buffer.csd</file>
+      <file>../examples/Useful/SF_Play_from_buffer_2.csd</file>
+      <file>../examples/Useful/SF_Play_from_HD.csd</file>
+      <file>../examples/Useful/SF_Play_from_HD_2.csd</file>
+      <file>../examples/Useful/8_Chn_Player.csd</file>
+      <file>../examples/Useful/SF_Record.csd</file>
+      <file>../examples/Useful/Audio_Input_Test.csd</file>
+      <file>../examples/Useful/Audio_Output_Test.csd</file>
+      <file>../examples/Useful/Audio_Thru_Test.csd</file>
+      <file>../examples/Useful/IO_Test.csd</file>
 
-      <file>../examples/Chowning_Stria.csd</file>
+      <file>../examples/Music/Chowning_Stria.csd</file>
 
       <file>qutecsound_en.qm</file>
       <file>qutecsound_es.qm</file>

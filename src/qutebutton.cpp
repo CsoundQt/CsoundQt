@@ -98,7 +98,20 @@ QString QuteButton::getCabbageLine()
 
 QString QuteButton::getWidgetXmlText()
 {
-  return QString();
+// Buttons are not implemented in blue
+  QXmlStreamWriter s(&xmlText);
+  createXmlWriter(s);
+
+  s.writeTextElement("type", m_type); // TODO add latch button and button bank
+  s.writeTextElement("value", QString::number(m_value,'f', 6));
+  s.writeTextElement("stringvalue", m_filename);
+  s.writeTextElement("text", static_cast<QPushButton *>(m_widget)->text());
+  s.writeTextElement("image", m_imageFilename);
+  s.writeTextElement("eventLine", m_imageFilename);
+
+//   s.writeTextElement("randomizable", "");
+  s.writeEndElement();
+  return xmlText;
 }
 
 QString QuteButton::getWidgetType()
