@@ -204,7 +204,7 @@ void WidgetPanel::setScrollBarsActive(bool active)
     setWidget(scrollArea);
     scrollArea->show();
   }
-  else if (!active) {
+  else if (!active && m_sbActive) {
     setWidget(scrollArea->takeWidget());
     delete scrollArea;
   }

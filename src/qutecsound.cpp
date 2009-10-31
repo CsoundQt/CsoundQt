@@ -1686,9 +1686,11 @@ void qutecsound::runUtility(QString flags)
 void qutecsound::dispatchQueues()
 {
 //   qDebug("qutecsound::dispatchQueues()");
+  int messBufSize = 512;
+  int counter = 0;
   widgetPanel->processNewValues();
   if (ud->PERF_STATUS == 1) {
-    while (true) { // Flush message queue necessary here in case Csound has stopped but messages are pending
+    while (counter++ < messBufSize) {
       messageMutex.lock();
       if (messageQueue.isEmpty()) {
         messageMutex.unlock();
@@ -1702,6 +1704,12 @@ void qutecsound::dispatchQueues()
       m_console->scrollToEnd();
       widgetPanel->refreshConsoles();  // Scroll to end of text all console widgets
     }
+    messageMutex.lock();
+    if (!messageQueue.isEmpty() and counter >= messBufSize) {
+      messageQueue.clear();
+      messageQueue << "\nQUTECSOUND: Message buffer overflow. Messages discarded!\n";
+    }
+    messageMutex.unlock();
     //   QList<QString> channels = outValueQueue.keys();
     //   foreach (QString channel, channels) {
     //     widgetPanel->setValue(channel, outValueQueue[channel]);
@@ -2319,7 +2327,8 @@ void qutecsound::createMenus()
   subMenus << synthFiles;
   subMenuNames << "Synths";
 
-  musicFiles.append(":/examples/Music/Chowning_Stria.csd");
+  musicFiles.append(":/examples/Music/Chowning-Stria.csd");
+  musicFiles.append(":/examples/Music/Riley-In_C.csd");
 
   subMenus << musicFiles;
   subMenuNames << tr("Music");
@@ -2329,13 +2338,13 @@ void qutecsound::createMenus()
   usefulFiles.append(":/examples/Useful/Audio_Output_Test.csd");
   usefulFiles.append(":/examples/Useful/Audio_Thru_Test.csd");
   usefulFiles.append(":/examples/Useful/MIDI_IO_Test.csd");
-
-  exampleFiles.append(":/examples/Useful/SF_Play_from_buffer.csd");
-  exampleFiles.append(":/examples/Useful/SF_Play_from_buffer_2.csd");
-  exampleFiles.append(":/examples/Useful/SF_Play_from_HD.csd");
-  exampleFiles.append(":/examples/Useful/SF_Play_from_HD_2.csd");
-  exampleFiles.append(":/examples/Useful/8_Chn_Player.csd");
-  exampleFiles.append(":/examples/Useful/SF_Record.csd");
+  usefulFiles.append(":/examples/Useful/SF_Play_from_buffer.csd");
+  usefulFiles.append(":/examples/Useful/SF_Play_from_buffer_2.csd");
+  usefulFiles.append(":/examples/Useful/SF_Play_from_HD.csd");
+  usefulFiles.append(":/examples/Useful/SF_Play_from_HD_2.csd");
+  usefulFiles.append(":/examples/Useful/8_Chn_Player.csd");
+  usefulFiles.append(":/examples/Useful/SF_Record.csd");
+  usefulFiles.append(":/examples/Useful/File_to_Text.csd");
 
   subMenus << usefulFiles;
   subMenuNames << tr("Useful");
@@ -3194,14 +3203,8 @@ void qutecsound::queueOutString(QString channelName, QString value)
 
 void qutecsound::queueMessage(QString message)
 {
-  int messBufSize = 256;
   messageMutex.lock();
-  if (messageQueue.size() < messBufSize) {
-    messageQueue << message;
-  }
-  else if (messageQueue.size() < messBufSize + 1 && !messageQueue.last().startsWith("QUTECSOUND")) {
-    messageQueue << "QUTECSOUND: Message buffer overload. Messages discarded!\n";
-  }
+  messageQueue << message;
   messageMutex.unlock();
 }
 

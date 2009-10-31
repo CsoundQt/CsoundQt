@@ -279,9 +279,9 @@ void QuteWidget::value2Changed(double value)
 void QuteWidget::createPropertiesDialog()
 {
 #ifdef MACOSX
-  dialog = new QDialog(this, Qt::WindowStaysOnTopHint);  // On OS X the widget panel may com in front of properties
+  dialog = new QDialog(static_cast<QWidget *>(this->parent()), Qt::WindowStaysOnTopHint);  // On OS X the widget panel may com in front of properties
 #else
-  dialog = new QDialog(this);
+  dialog = new QDialog(static_cast<QWidget *>(this->parent()));
 #endif
   dialog->resize(300, 300);
   dialog->setModal(true);
@@ -334,7 +334,6 @@ void QuteWidget::applyProperties()
 {
   setChannelName(nameLineEdit->text());
   setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
-//   qDebug("QuteWidget::applyProperties() Not fully implemented yet.");
   emit(widgetChanged(this));
 }
 

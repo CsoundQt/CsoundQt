@@ -82,8 +82,10 @@
       <file>../examples/Useful/Audio_Output_Test.csd</file>
       <file>../examples/Useful/Audio_Thru_Test.csd</file>
       <file>../examples/Useful/IO_Test.csd</file>
+      <file>../examples/Useful/File_to_Text.csd</file>
 
-      <file>../examples/Music/Chowning_Stria.csd</file>
+      <file>../examples/Music/Chowning-Stria.csd</file>
+      <file>../examples/Music/Riley-In_C.csd</file>
 
       <file>qutecsound_en.qm</file>
       <file>qutecsound_es.qm</file>

@@ -8,6 +8,8 @@ ksmps = 128
 nchnls = 2
 0dbfs = 1
 
+massign 0, 2
+
 instr 1
 ; Signal generator
 ksignal invalue "signal"
@@ -46,6 +48,16 @@ endif
 
 endin
 
+instr 2  ; midi note input
+xtratim 0.1
+kflag release
+outvalue "notein", (kflag * -1)+ 1
+endin
+
+instr 3
+noteondur 1, 60, 100, p3
+endin
+
 
 </CsInstruments>
 <CsScore>
@@ -60,29 +72,33 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 523 282 270 305
+WindowBounds: 623 286 401 294
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
-ioView background {41634, 40092, 28270}
-ioText {91, 6} {87, 32} label 0.000000 0.00100 "" left "DejaVu Sans" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder I/O Test
-ioText {115, 40} {134, 216} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border Output
-ioMenu {122, 107} {106, 28} 1 303 "none,sine,noise" signal
-ioText {122, 79} {122, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Signal generator
-ioText {1, 40} {107, 216} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border Input
-ioMeter {68, 65} {17, 132} {39168, 47104, 59904} "in2" 0.953873 "hor2" 0.000000 fill 1 0 mouse
-ioMeter {20, 65} {17, 132} {39168, 47104, 59904} "in1" 0.953873 "hor2" 0.000000 fill 1 0 mouse
+ioView background {33924, 32639, 22873}
+ioText {2, 4} {386, 32} label 0.000000 0.00100 "" center "DejaVu Sans" 16 {0, 0, 0} {65280, 65280, 65280} background border I/O Test
+ioText {115, 40} {134, 216} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {43520, 43520, 32512} background border Audio Output
+ioText {122, 82} {120, 165} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border Signal generator
+ioText {1, 40} {107, 216} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {43520, 43520, 32512} background border Audio Input
+ioMeter {68, 65} {17, 132} {39168, 47104, 59904} "in2" 0.000000 "hor2" 0.235294 fill 1 0 mouse
+ioMeter {20, 65} {17, 132} {39168, 47104, 59904} "in1" 0.000000 "hor2" 0.235294 fill 1 0 mouse
 ioText {18, 195} {23, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1
 ioText {69, 195} {23, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2
-ioText {8, 221} {41, 25} scroll -2.200000 0.100000 "indb1" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} background border -2.2
-ioText {59, 221} {41, 25} scroll -2.200000 0.100000 "indb2" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} background border -2.2
-ioText {137, 168} {23, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1
-ioText {188, 168} {23, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2
-ioCheckbox {138, 146} {20, 20} off on1
-ioCheckbox {188, 147} {20, 20} off on2
-ioText {183, 206} {39, 25} scroll -20.000000 0.100000 "level" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} background border -20.0
-ioText {122, 206} {61, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Level
+ioText {8, 221} {41, 25} scroll -52.578922 0.100000 "indb1" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} background border -52.6
+ioText {59, 221} {41, 25} scroll -52.578922 0.100000 "indb2" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} background border -52.6
+ioText {253, 39} {134, 216} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {43520, 43520, 32512} background border MIDI note IO
+ioText {290, 63} {80, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Note in
+ioButton {260, 98} {120, 30} event 1.000000 "button1" "Generate note" "/" i3 0 0.5
+ioMeter {269, 65} {19, 19} {0, 59904, 0} "notein" 0.000000 "hor21" 0.000000 fill 1 0 mouse
+ioMenu {131, 106} {106, 28} 2 303 "none,sine,noise" signal
+ioText {140, 167} {23, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1
+ioText {191, 167} {23, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2
+ioCheckbox {141, 145} {20, 20} off on1
+ioCheckbox {191, 146} {20, 20} off on2
+ioText {193, 204} {39, 25} scroll -20.000000 0.100000 "level" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} background border -20.0
+ioText {133, 204} {61, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Level
 </MacGUI>
 
