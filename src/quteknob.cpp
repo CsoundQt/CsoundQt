@@ -151,7 +151,6 @@ QString QuteKnob::getWidgetXmlText()
    //These are not implemented in blue
   s.writeTextElement("resolution", QString::number(m_resolution, 'f', 6));
   s.writeEndElement();
-  initFromXml(xmlText);
   return xmlText;
 }
 

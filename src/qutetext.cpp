@@ -472,12 +472,42 @@ QString QuteLineEdit::getWidgetLine()
 
 QString QuteLineEdit::getWidgetXmlText()
 {
-  return QString();
+  QXmlStreamWriter s(&xmlText);
+  createXmlWriter(s);
+  // Not implemented in blue
+
+  s.writeTextElement("type", m_type);
+  s.writeTextElement("value", QString::number(static_cast<QDoubleSpinBox*>(m_widget)->value()));
+  s.writeTextElement("resolution", QString::number(m_resolution, 'f', 6));
+
+  s.writeTextElement("font", m_font);
+  s.writeTextElement("fontsize", QString::number(m_fontSize));
+
+  QColor color = m_widget->palette().color(QPalette::WindowText);
+  s.writeStartElement("color");
+  s.writeTextElement("r", QString::number(color.red()));
+  s.writeTextElement("g", QString::number(color.green()));
+  s.writeTextElement("b", QString::number(color.blue()));
+  s.writeEndElement();
+  color = m_widget->palette().color(QPalette::Window);
+  s.writeStartElement("bgcolor");
+  s.writeAttribute("mode", m_widget->autoFillBackground()? "background":"nobackground");
+  s.writeTextElement("r", QString::number(color.red()));
+  s.writeTextElement("g", QString::number(color.green()));
+  s.writeTextElement("b", QString::number(color.blue()));
+  s.writeEndElement();
+
+  s.writeTextElement("background", m_widget->autoFillBackground()? "background":"nobackground");
+  s.writeTextElement("border", "border");  //Not used yet. Should it be removed?
+
+  s.writeTextElement("randomizable", "");
+
+  return xmlText;
 }
 
 QString QuteLineEdit::getWidgetType()
 {
-  return QString("lineedit");
+  return QString("BSBLineEdit");
 }
 
 QString QuteLineEdit::getStringValue()
@@ -647,7 +677,7 @@ QString QuteScrollNumber::getWidgetXmlText()
 
 QString QuteScrollNumber::getWidgetType()
 {
-  return QString("scrollnumber");
+  return QString("BSBScrollNumber");
 }
 
 QString QuteScrollNumber::getStringValue()

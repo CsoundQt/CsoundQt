@@ -100,6 +100,12 @@ QString QuteMeter::getWidgetXmlText()
 
 QString QuteMeter::getWidgetType()
 {
+  QString type = static_cast<MeterWidget *>(m_widget)->getType();
+  if (type == "fill" or type == "line" or type == "llif") {
+    return QString("BSBController");
+  }
+//  else if (type == "crosshair" or type == "point") {
+//  }
   return QString("BSBXYController");
 }
 

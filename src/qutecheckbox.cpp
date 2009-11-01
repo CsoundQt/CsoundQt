@@ -37,7 +37,36 @@ QuteCheckBox::~QuteCheckBox()
 
 void QuteCheckBox::loadFromXml(QString xmlText)
 {
-  qDebug() << "loadFromXml not implemented for this widget yet";
+  initFromXml(xmlText);
+  QDomDocument doc;
+  if (!doc.setContent(xmlText)) {
+    qDebug() << "QuteCheckBox::loadFromXml: Error parsing xml";
+    return;
+  }
+  QDomElement e = doc.firstChildElement("selected");
+  if (e.isNull()) {
+    qDebug() << "QuteCheckBox::loadFromXml: Expecting selected element";
+    return;
+  }
+  else {
+    static_cast<QCheckBox *>(m_widget)->setChecked(e.nodeValue() == "true");
+  }
+  e = doc.firstChildElement("label");
+  if (e.isNull()) {
+    qDebug() << "QuteCheckBox::loadFromXml: Expecting label element";
+    return;
+  }
+  else {
+    setLabel(e.nodeValue());
+  }
+  e = doc.firstChildElement("randomizable");
+  if (e.isNull()) {
+    qDebug() << "QuteCheckBox::loadFromXml: Expecting randomizable element";
+    return;
+  }
+  else {
+    qDebug() << "QuteCheckBox::loadFromXml: randomizable not implemented";
+  }
 }
 
 void QuteCheckBox::setValue(double value)
@@ -52,9 +81,19 @@ void QuteCheckBox::setValue(double value)
 #endif
 }
 
+void QuteCheckBox::setLabel(QString label)
+{
+  static_cast<QCheckBox *>(m_widget)->setText(label);
+}
+
 double QuteCheckBox::getValue()
 {
   return (static_cast<QCheckBox *>(m_widget)->isChecked()? 1.0:0.0);
+}
+
+QString QuteCheckBox::getLabel()
+{
+  return static_cast<QCheckBox *>(m_widget)->text();
 }
 
 QString QuteCheckBox::getWidgetLine()
@@ -73,7 +112,7 @@ QString QuteCheckBox::getCabbageLine()
   line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
   line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
   line += "value(" + (static_cast<QCheckBox *>(m_widget)->isChecked()? QString("1"):QString("0")) + "), ";
-  line += "caption(\"\")"; // Caption is not supported in QuteCsound
+  line += "caption(\"" + getLabel() + "\")";
   return line;
 }
 
@@ -89,8 +128,8 @@ QString QuteCheckBox::getWidgetXmlText()
 
   s.writeTextElement("selected",
                      static_cast<QCheckBox *>(m_widget)->isChecked()? QString("true"):QString("false"));
-  // These three come from blue, but they are not implemented here
-  s.writeTextElement("label", "");
+  s.writeTextElement("label", getLabel());
+  // These come from blue, but they are not implemented here
   s.writeTextElement("randomizable", "");
   s.writeEndElement();
   return xmlText;

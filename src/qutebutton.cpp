@@ -38,7 +38,60 @@ QuteButton::~QuteButton()
 
 void QuteButton::loadFromXml(QString xmlText)
 {
-  qDebug() << "loadFromXml not implemented for this widget yet";
+  initFromXml(xmlText);
+  QDomDocument doc;
+  if (!doc.setContent(xmlText)) {
+    qDebug() << "QuteButton::loadFromXml: Error parsing xml";
+    return;
+  }
+  QDomElement e = doc.firstChildElement("type"); // TODO add latch button and button bank
+  if (e.isNull()) {
+    qDebug() << "QuteButton::loadFromXml: Expecting type element";
+    return;
+  }
+  else {
+    m_type = e.nodeValue();
+  }
+  e = doc.firstChildElement("value");
+  if (e.isNull()) {
+    qDebug() << "QuteButton::loadFromXml: Expecting value element";
+    return;
+  }
+  else {
+    m_value = e.nodeValue().toDouble();
+  }
+  e = doc.firstChildElement("stringvalue");
+  if (e.isNull()) {
+    qDebug() << "QuteButton::loadFromXml: Expecting stringvalue element";
+    return;
+  }
+  else {
+    m_filename = e.nodeValue();
+  }
+  e = doc.firstChildElement("text");
+  if (e.isNull()) {
+    qDebug() << "QuteButton::loadFromXml: Expecting text element";
+    return;
+  }
+  else {
+    static_cast<QPushButton *>(m_widget)->setText(e.nodeValue());
+  }
+  e = doc.firstChildElement("image");
+  if (e.isNull()) {
+    qDebug() << "QuteButton::loadFromXml: Expecting image element";
+    return;
+  }
+  else {
+    m_imageFilename = e.nodeValue();
+  }
+  e = doc.firstChildElement("eventLine");
+  if (e.isNull()) {
+    qDebug() << "QuteButton::loadFromXml: Expecting eventLine element";
+    return;
+  }
+  else {
+    m_eventLine = e.nodeValue();
+  }
 }
 
 void QuteButton::setValue(double value)
@@ -107,7 +160,7 @@ QString QuteButton::getWidgetXmlText()
   s.writeTextElement("stringvalue", m_filename);
   s.writeTextElement("text", static_cast<QPushButton *>(m_widget)->text());
   s.writeTextElement("image", m_imageFilename);
-  s.writeTextElement("eventLine", m_imageFilename);
+  s.writeTextElement("eventLine", m_eventLine);
 
 //   s.writeTextElement("randomizable", "");
   s.writeEndElement();
@@ -116,7 +169,7 @@ QString QuteButton::getWidgetXmlText()
 
 QString QuteButton::getWidgetType()
 {
-  return QString("button");
+  return QString("BSBButton");
 }
 
 void QuteButton::applyProperties()

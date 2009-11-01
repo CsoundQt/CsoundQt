@@ -52,6 +52,7 @@ QString QuteConsole::getWidgetXmlText()
   // Consoles are not implemented in blue
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
+  // Nothing else needed here
 
   s.writeEndElement();
   return xmlText;
@@ -59,7 +60,7 @@ QString QuteConsole::getWidgetXmlText()
 
 QString QuteConsole::getWidgetType()
 {
-  return QString("console");
+  return QString("BSBConsole");
 }
 
 // void QuteConsole::popUpMenu(QPoint pos)

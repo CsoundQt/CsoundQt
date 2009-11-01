@@ -37,7 +37,43 @@ QuteComboBox::~QuteComboBox()
 
 void QuteComboBox::loadFromXml(QString xmlText)
 {
-  qDebug() << "loadFromXml not implemented for this widget yet";
+  initFromXml(xmlText);
+  QDomDocument doc;
+  if (!doc.setContent(xmlText)) {
+    qDebug() << "QuteComboBox::loadFromXml: Error parsing xml";
+    return;
+  }
+  QDomElement e = doc.firstChildElement("bsbDropdownItemList");
+  if (e.isNull()) {
+    qDebug() << "QuteComboBox::loadFromXml: Expecting bsbDropdownItemList element";
+    return;
+  }
+  else {
+    QDomElement e2 = doc.firstChildElement("bsbDropdownItem");
+    while (!e2.isNull()) {
+      QDomElement e3 = doc.firstChildElement("name");
+      QDomElement e4 = doc.firstChildElement("value");
+      static_cast<QComboBox *>(m_widget)->addItem(e3.nodeValue(), QVariant(e4.nodeValue().toInt()));
+      // TODO: string values for item not implemented
+      e2 = e2.nextSiblingElement("bsbDropdownItem");
+    }
+  }
+  e = doc.firstChildElement("selectedIndex");
+  if (e.isNull()) {
+    qDebug() << "QuteComboBox::loadFromXml: Expecting selectedIndex element";
+    return;
+  }
+  else {
+    static_cast<QComboBox *>(m_widget)->setCurrentIndex(e.nodeValue().toInt());
+  }
+  e = doc.firstChildElement("randomizable");
+  if (e.isNull()) {
+    qDebug() << "QuteComboBox::loadFromXml: Expecting randomizable element";
+    return;
+  }
+  else {
+    qDebug() << "QuteComboBox::loadFromXml: randomizable not implemented";
+  }
 }
 
 void QuteComboBox::setValue(double value)

@@ -79,7 +79,7 @@ QString QuteGraph::getWidgetXmlText()
 
 QString QuteGraph::getWidgetType()
 {
-  return QString("graph");
+  return QString("BSBGraph");
 }
 
 void QuteGraph::setWidgetGeometry(int x,int y,int width,int height)

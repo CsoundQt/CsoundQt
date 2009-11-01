@@ -35,7 +35,9 @@ class QuteCheckBox : public QuteWidget
 
     virtual void loadFromXml(QString xmlText);
     virtual void setValue(double value); // Value of button when pressed
+    void setLabel(QString label);
     virtual double getValue(); // This value represents the state of the button
+    QString getLabel();
     virtual QString getWidgetLine();
     virtual QString getCabbageLine();
     virtual QString getWidgetType();

@@ -84,12 +84,20 @@ QString QuteScope::getWidgetLine()
 
 QString QuteScope::getWidgetXmlText()
 {
-  return QString();
+  QXmlStreamWriter s(&xmlText);
+  createXmlWriter(s);
+   // Not implemented in blue
+
+  s.writeTextElement("type", m_type);
+  s.writeTextElement("zoom", QString::number(m_zoom, 'f', 6));
+
+  s.writeEndElement();
+  return xmlText;
 }
 
 QString QuteScope::getWidgetType()
 {
-  return QString("scope");
+  return QString("BSBScope");
 }
 
 void QuteScope::setType(QString type)

@@ -52,5 +52,5 @@ QString QuteDummy::getWidgetXmlText()
 
 QString QuteDummy::getWidgetType()
 {
-  return QString("dummy");
+  return QString("BSBDummy");
 }

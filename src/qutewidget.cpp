@@ -55,21 +55,69 @@ QuteWidget::~QuteWidget()
 
 void QuteWidget::initFromXml(QString xmlText)
 {
-  qDebug() << "---" << xmlText;
+  qDebug() << "QuteWidget::initFromXml" << xmlText;
+
   QDomDocument doc;
-  QDomElement n = doc.createElement(xmlText);
-  qDebug() << n.text();
+  if (!doc.setContent(xmlText)) {
+    qDebug() << "QuteWidget::initFromXml: Error parsing xml";
+    return;
+  }
+  QDomElement e = doc.firstChildElement("objectName");
+  if (e.isNull()) {
+    qDebug() << "QuteWidget::initFromXml: Expecting objectName element";
+    return;
+  }
+  else {
+    m_name = e.nodeValue();
+  }
+  int posx, posy, w, h;
+  e = doc.firstChildElement("x");
+  if (e.isNull()) {
+    qDebug() << "QuteWidget::initFromXml: Expecting x element";
+    return;
+  }
+  else {
+    posx = e.nodeValue().toInt();
+  }
+  e = doc.firstChildElement("y");
+  if (e.isNull()) {
+    qDebug() << "QuteWidget::initFromXml: Expecting y element";
+    return;
+  }
+  else {
+    posy = e.nodeValue().toInt();
+  }
+  e = doc.firstChildElement("width");
+  if (e.isNull()) {
+    qDebug() << "QuteWidget::initFromXml: Expecting width element";
+    return;
+  }
+  else {
+    w = e.nodeValue().toInt();
+  }
+  e = doc.firstChildElement("height");
+  if (e.isNull()) {
+    qDebug() << "QuteWidget::initFromXml: Expecting height element";
+    return;
+  }
+  else {
+    h = e.nodeValue().toInt();
+  }
+  setWidgetGeometry(posx, posy, w, h);
+  e = doc.firstChildElement("uuid");
+  if (e.isNull()) {
+    qDebug() << "QuteWidget::initFromXml: Expecting eventLine element";
+    return;
+  }
+  else {
+    m_uuid = e.nodeValue();
+  }
+
 //   s.writeStartElement("bsbObject");
 //   s.writeAttribute("type", getWidgetType());
 //   if (getWidgetType() == "BSBKnob" or getWidgetType() == "BSBXYController")
 //     s.writeAttribute("version", "2");  // Only for compatibility with blue (absolute values)
-// 
-//   s.writeTextElement("objectName", m_name);
-//   s.writeTextElement("x", QString::number(x()));
-//   s.writeTextElement("y", QString::number(y()));
-//   s.writeTextElement("width", QString::number(width()));
-//   s.writeTextElement("height", QString::number(height()));
-//   s.writeTextElement("uuid", m_uuid);
+//
 }
 
 void QuteWidget::setWidgetLine(QString line)
