@@ -51,6 +51,7 @@ Curve::Curve(float *data, size_t size, const QString& caption,
              float y_scale, bool dotted_divider)
   : m_caption(caption)
 {
+  mutex.lock();
   m_data = copy(size, data);
   m_size = size;
   m_polarity = polarity;
@@ -59,6 +60,7 @@ Curve::Curve(float *data, size_t size, const QString& caption,
   m_absmax = absmax;
   m_y_scale = y_scale;
   m_dotted_divider = dotted_divider;
+  mutex.unlock();
 }
 
 Curve::Curve(double *data, size_t size, const QString& caption,
@@ -66,6 +68,7 @@ Curve::Curve(double *data, size_t size, const QString& caption,
              double y_scale, bool dotted_divider)
   : m_caption(caption)
 {
+  mutex.lock();
   m_data = copy(size, data);
   m_size = size;
   m_polarity = polarity;
@@ -74,11 +77,13 @@ Curve::Curve(double *data, size_t size, const QString& caption,
   m_absmax = absmax;
   m_y_scale = y_scale;
   m_dotted_divider = dotted_divider;
+  mutex.unlock();
 }
 
 Curve::Curve(const Curve& curve)
   : m_caption(curve.m_caption)
 {
+  mutex.lock();
   m_data = copy(curve.m_size, curve.m_data);
   m_size = curve.m_size;
   m_polarity = curve.m_polarity;
@@ -87,10 +92,12 @@ Curve::Curve(const Curve& curve)
   m_absmax = curve.m_absmax;
   m_y_scale = curve.m_y_scale;
   m_dotted_divider = curve.m_dotted_divider;
+  mutex.unlock();
 }
 
 Curve& Curve::operator=(const Curve& curve)
 {
+  mutex.lock();
   if (this != &curve) {
     destroy();
     m_data = copy(curve.m_size, curve.m_data);
@@ -103,12 +110,15 @@ Curve& Curve::operator=(const Curve& curve)
     m_y_scale = curve.m_y_scale;
     m_dotted_divider = curve.m_dotted_divider;
   }
+  mutex.unlock();
   return *this;
 }
 
 Curve::~Curve()
 {
+  mutex.lock();
   destroy();
+  mutex.unlock();
 }
 
 size_t Curve::get_size() const
@@ -121,9 +131,17 @@ uintptr_t Curve::get_id() const
   return m_id;
 }
 
-float *Curve::get_data() const
+// float *Curve::get_data() const
+// {
+//   return m_data;
+// }
+
+float Curve::get_data(int index)
 {
-  return m_data;
+//   mutex.lock();
+  float out = m_data[index];
+//   mutex.unlock();
+  return out;
 }
 
 QString Curve::get_caption() const

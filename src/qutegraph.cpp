@@ -46,6 +46,7 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
   m_pageComboBox->setFocusPolicy(Qt::NoFocus);
   connect(m_pageComboBox, SIGNAL(activated(int)),
           this, SLOT(changeCurve(int)));
+  polygons.clear();
 //   connect(static_cast<StackedLayoutWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 }
 
@@ -303,7 +304,7 @@ void QuteGraph::setCurveData(Curve * curve)
       lines[index].clear();
       MYFLT decValue = 0;
       for (int i = 0; i < (int) curve->get_size(); i++) {
-        decValue = (decValue < fabs(curve->get_data()[i]) ? curve->get_data()[i] : decValue);
+        decValue = (decValue < fabs(curve->get_data(i)) ? curve->get_data(i) : decValue);
         if (decimate == 0 or i%decimate == 0) {
           QGraphicsLineItem *line = new QGraphicsLineItem(i, 0, i, - decValue);
           int colorValue = (int) (220.0*fabs(decValue)/max);
@@ -321,10 +322,10 @@ void QuteGraph::setCurveData(Curve * curve)
     else {
       for (int i = 1; i < lines[index].size(); i++) { //skip first item, which is base line
         QGraphicsLineItem *line = static_cast<QGraphicsLineItem *>(lines[index][i]);
-        line->setLine(i - 1, 0, i - 1, - curve->get_data()[i - 1]);
-        line->setPen(QPen(QColor(30 + 220.0*fabs(curve->get_data()[i])/max,
+        line->setLine(i - 1, 0, i - 1, - curve->get_data(i - 1));
+        line->setPen(QPen(QColor(30 + 220.0*fabs(curve->get_data(i))/max,
                     220,
-                    255.*fabs(curve->get_data()[i])/max)));
+                    255.*fabs(curve->get_data(i))/max)));
         line->show();
       }
     }
@@ -340,10 +341,10 @@ void QuteGraph::setCurveData(Curve * curve)
     for (int i = 0; i < (int) curve->get_size(); i++) { //skip first item, which is base line
       double value;
       if (curve->get_caption().contains("fft")) {
-        value =  20*log10(fabs(curve->get_data()[i])/m_ud->zerodBFS);
+        value =  20*log10(fabs(curve->get_data(i))/m_ud->zerodBFS);
       }
       else {
-        value = curve->get_data()[i]/m_ud->zerodBFS;
+        value = curve->get_data(i)/m_ud->zerodBFS;
       }
       polygon.append(QPointF(i, -value));
     }

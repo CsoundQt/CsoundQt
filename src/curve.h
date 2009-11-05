@@ -25,6 +25,7 @@
 #define CURVE_H
 
 #include <QString>
+#include <QMutex>
 #include "types.h"
 
 enum Polarity {
@@ -45,7 +46,8 @@ class Curve
     Curve &operator=(const Curve&);
     ~Curve();
     uintptr_t get_id() const;
-    float *get_data() const;
+//     float *get_data() const;
+    float get_data(int index);
     size_t get_size() const;      // number of points
     QString get_caption() const; // title of curve
     Polarity get_polarity() const; // polarity
@@ -77,6 +79,8 @@ class Curve
     static float *copy(size_t, float *);
     static float *copy(size_t, double *);
     void destroy();
+
+    QMutex mutex;
 };
 
 #endif

@@ -105,7 +105,6 @@ int Options::generateCmdLine(char **argv,
   int index = 0;
   argv[index] = (char *) calloc(7, sizeof(char));
   strcpy(argv[index++], "csound");
-  //FIXME this memory is not freed!
   argv[index] = (char *) calloc(fileName.size()+1, sizeof(char));
   strcpy(argv[index++],fileName.toStdString().c_str());
   if (fileName2 != "") {

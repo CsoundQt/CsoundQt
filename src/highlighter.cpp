@@ -216,18 +216,18 @@ void Highlighter::setLastRules()
 {
   HighlightingRule rule;
 
+  labelFormat.setForeground(QColor(205,92,92));
+  labelFormat.setFontWeight(QFont::Bold);
+  rule.pattern = QRegExp("\\b[a-zA-Z0-9]*:[^a-zA-Z0-9]*");
+  rule.format = labelFormat;
+  lastHighlightingRules.append(rule);
+
   quotationFormat.setForeground(Qt::red);
   rule.pattern = QRegExp("\".*\"");
   rule.format = quotationFormat;
   lastHighlightingRules.append(rule);
   rule.pattern = QRegExp("\\{\\{.*\\}\\}");
   rule.format = quotationFormat;
-  lastHighlightingRules.append(rule);
-
-  labelFormat.setForeground(QColor(205,92,92));
-  labelFormat.setFontWeight(QFont::Bold);
-  rule.pattern = QRegExp("\\b[a-zA-Z0-9]*:[^a-zA-Z0-9]*");
-  rule.format = labelFormat;
   lastHighlightingRules.append(rule);
 
   multiLineCommentFormat.setForeground(QColor("green"));

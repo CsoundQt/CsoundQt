@@ -824,6 +824,7 @@ void qutecsound::runCsound(bool realtime)
     stop();
     return;
   }
+  // Determine if API should be used
   bool useAPI = true;
   if (QObject::sender() == renderAct) {
     useAPI = m_options->useAPI;
@@ -850,15 +851,12 @@ void qutecsound::runCsound(bool realtime)
         return;
       }
   }
-  //Go to directory of current file
+  //Set directory of current file
+  m_options->csdPath = "";
   if (documentPages[curPage]->fileName.contains('/')) {
     m_options->csdPath =
         documentPages[curPage]->fileName.left(documentPages[curPage]->fileName.lastIndexOf('/'));
-    QString command = "cd \"" + m_options->csdPath +"\"";
-    QProcess::execute(command);
-  }
-  else {
-    m_options->csdPath = "";
+    QDir::setCurrent(m_options->csdPath);
   }
   QString fileName, fileName2;
   fileName = documentPages[curPage]->fileName;
@@ -1061,6 +1059,10 @@ void qutecsound::runCsound(bool realtime)
 // Put menu bar back
       SetMenuBar(menuBarHandle);
 #endif
+    }
+    for (int i = 0; i < 33; i++) {
+      if (argv[i] != 0)
+        free(argv[i]);
     }
     free(argv);
   }
@@ -2734,9 +2736,9 @@ int qutecsound::execute(QString executable, QString options)
   QStringList optionlist;
   optionlist = options.split(QRegExp("\\s+"));
 
-  // cd to current directory on all platforms
-  QString cdLine = "cd \"" + documentPages[curPage]->getFilePath() + "\"";
-  QProcess::execute(cdLine);
+//  // cd to current directory on all platforms
+//  QString cdLine = "cd \"" + documentPages[curPage]->getFilePath() + "\"";
+//  QProcess::execute(cdLine);
 
 #ifdef MACOSX
   QString commandLine = "open -a \"" + executable + "\" " + options;
@@ -2750,9 +2752,16 @@ int qutecsound::execute(QString executable, QString options)
 #ifdef WIN32
   QString commandLine = "\"" + executable + "\" " + (executable.startsWith("cmd")? " /k ": " ") + options;
 #endif
-  qDebug() << "qutecsound::execute   " << commandLine;
-  QProcess::startDetached(commandLine);
-  return 1;
+  qDebug() << "qutecsound::execute   " << commandLine << documentPages[curPage]->getFilePath();
+  QProcess *p = new QProcess(this);
+  p->setWorkingDirectory(documentPages[curPage]->getFilePath());
+  p->start(commandLine);
+  Q_PID id = p->pid();
+  qDebug() << "Launched external program with id:" << id;
+  if (!p->waitForStarted())
+    return 1;
+//  QProcess::startDetached(commandLine, QStringList(), );
+  return 0;
 }
 
 void qutecsound::configureHighlighter()
