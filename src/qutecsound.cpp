@@ -2352,6 +2352,7 @@ void qutecsound::createMenus()
   subMenuNames << tr("Useful");
 
   exampleFiles.append(":/examples/Examples/Keyboard_Control.csd");
+  exampleFiles.append(":/examples/Examples/Just_Intonation.csd");
   exampleFiles.append(":/examples/Examples/Simple_Convolution.csd");
   exampleFiles.append(":/examples/Examples/Universal_Convolution.csd");
   exampleFiles.append(":/examples/Examples/Oscillator_Aliasing.csd");
