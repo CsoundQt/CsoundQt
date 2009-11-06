@@ -84,6 +84,7 @@ class DocumentPage : public QTextEdit
     void setMacOption(QString option, QString newValue);
     void setWidgetPanelPosition(QPoint position);
     void setWidgetPanelSize(QSize size);
+    void jumpToLine(int line);
 
     void comment();
     void uncomment();

@@ -488,6 +488,20 @@ void DocumentPage::setWidgetPanelSize(QSize size)
 //   qDebug("DocumentPage::setWidgetPanelSize() %i %i", size.width(), size.height());
 }
 
+void DocumentPage::jumpToLine(int line)
+{
+  int lineCount = 1;
+  QTextCursor cur = textCursor();
+  cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+  while (lineCount < line) {
+    lineCount++;
+    //       cur.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
+    cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+  }
+  moveCursor(QTextCursor::End); // go to end to make sure line is put at the top of text
+  setTextCursor(cur);
+}
+
 void DocumentPage::comment()
 {
   QTextCursor cursor = textCursor();

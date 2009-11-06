@@ -24,6 +24,7 @@
 #include "console.h"
 #include "dockhelp.h"
 #include "widgetpanel.h"
+#include "inspector.h"
 #include "opentryparser.h"
 #include "options.h"
 #include "highlighter.h"
@@ -98,6 +99,11 @@ qutecsound::qutecsound(QStringList fileNames)
 //   connect(widgetPanel,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
 //           this, SLOT(widgetDockLocationChanged(Qt::DockWidgetArea)));
 
+  m_inspector = new Inspector(this);
+  m_inspector->parseText(QString());
+  widgetPanel->setObjectName("Inspector");
+  addDockWidget(Qt::LeftDockWidgetArea, m_inspector);
+
   createActions(); // Must be before readSettings as this sets the default shortcuts
   readSettings();
 
@@ -150,6 +156,7 @@ qutecsound::qutecsound(QStringList fileNames)
   showWidgetsAct->setChecked(widgetsVisible);  // Button will initialize to current state of panel
   showConsoleAct->setChecked(!m_console->isHidden());  // Button will initialize to current state of panel
   showHelpAct->setChecked(!helpPanel->isHidden());  // Button will initialize to current state of panel
+  showInspectorAct->setChecked(!m_inspector->isHidden());  // Button will initialize to current state of panel
 
   if (documentPages.size() == 0) { // No files yet open. Open default
     newFile();
@@ -255,6 +262,10 @@ void qutecsound::changePage(int index)
   setCurrentFile(documentPages[curPage]->fileName);
   connectActions();
   setWidgetPanelGeometry();
+  disconnect(m_inspector, 0, 0, 0);
+  connect(m_inspector, SIGNAL(jumpToLine(int)),
+          textEdit, SLOT(jumpToLine(int)));
+  m_inspector->parseText(documentPages[curPage]->toPlainText());
 }
 
 void qutecsound::updateWidgets()
@@ -1828,6 +1839,7 @@ void qutecsound::setDefaultKeyboardShortcuts()
   showConsoleAct->setShortcut(tr("Alt+3"));
   showUtilitiesAct->setShortcut(tr("Alt+4"));
   createCodeGraphAct->setShortcut(tr("Alt+5"));
+  showInspectorAct->setShortcut(tr("Alt+6"));
   setHelpEntryAct->setShortcut(tr("Shift+F1"));
   browseBackAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
   browseForwardAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
@@ -2033,6 +2045,13 @@ void qutecsound::createActions()
   connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
   connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
 
+  showInspectorAct = new QAction(tr("Inspector"), this);
+  showInspectorAct->setCheckable(true);
+  showInspectorAct->setStatusTip(tr("Show Inspector"));
+  showInspectorAct->setIconText(tr("Inspector"));
+  connect(showInspectorAct, SIGNAL(triggered(bool)), m_inspector, SLOT(setVisible(bool)));
+  connect(m_inspector, SIGNAL(Close(bool)), showInspectorAct, SLOT(setChecked(bool)));
+
   showHelpAct = new QAction(QIcon(":/images/gtk-info.png"), tr("Help Panel"), this);
   showHelpAct->setCheckable(true);
   showHelpAct->setChecked(true);
@@ -2179,6 +2198,7 @@ void qutecsound::setKeyboardShortcuts()
   m_keyActions.append(browseForwardAct);
   m_keyActions.append(externalBrowserAct);
   m_keyActions.append(openQuickRefAct);
+  m_keyActions.append(showInspectorAct);
 }
 
 void qutecsound::connectActions()
@@ -2282,6 +2302,7 @@ void qutecsound::createMenus()
   viewMenu->addAction(showConsoleAct);
   viewMenu->addAction(showUtilitiesAct);
   viewMenu->addAction(createCodeGraphAct);
+  viewMenu->addAction(showInspectorAct);
 
   QStringList tutFiles;
   QStringList widgetFiles;
@@ -2458,6 +2479,7 @@ void qutecsound::createToolBars()
   configureToolBar->addAction(showHelpAct);
   configureToolBar->addAction(showConsoleAct);
   configureToolBar->addAction(showUtilitiesAct);
+  configureToolBar->addAction(showInspectorAct);
 
   Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
       Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
@@ -2868,6 +2890,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   changeFont();
   statusBar()->showMessage(tr("File loaded"), 2000);
   setWidgetPanelGeometry();
+  m_inspector->parseText(documentPages[curPage]->toPlainText());
   if (runNow && m_options->autoPlay) {
     runAct->setChecked(true);
     runCsound();

@@ -66,7 +66,7 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
       else {
         opcode.outArgs = node.toText().data();
         node = node.nextSibling();
-        opcode.opcodeName = node.toElement().text();
+        opcode.opcodeName = node.toElement().text().trimmed();
         node = node.nextSibling();
         if (!node.isNull())
           opcode.inArgs = node.toText().data();
@@ -121,8 +121,10 @@ QString OpEntryParser::getSyntax(QString opcodeName)
     i++;
   }
   if (i < size) {
-    QString syntax = opcodeList[i].outArgs + " " + opcodeList[i].opcodeName
-        + " " + opcodeList[i].inArgs;
+    QString syntax = opcodeList[i].outArgs;
+    if (!opcodeList[i].outArgs.isEmpty())
+      syntax += " ";
+    syntax += opcodeList[i].opcodeName + " " + opcodeList[i].inArgs;
     return syntax;
   }
   else

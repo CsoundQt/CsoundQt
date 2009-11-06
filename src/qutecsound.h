@@ -57,6 +57,7 @@ class QTextEdit;
 
 class DockHelp;
 class WidgetPanel;
+class Inspector;
 class DockConsole;
 class OpEntryParser;
 class Options;
@@ -256,6 +257,7 @@ class qutecsound:public QMainWindow
     Highlighter *m_highlighter;
     DockHelp *helpPanel;
     WidgetPanel *widgetPanel;
+    Inspector *m_inspector;
     QToolButton *closeTabButton;
 
     QMutex stringValueMutex;
@@ -320,6 +322,7 @@ class qutecsound:public QMainWindow
     QAction *openQuickRefAct;
     QAction *showUtilitiesAct;
     QAction *showWidgetsAct;
+    QAction *showInspectorAct;
     QAction *commentAct;
     QAction *uncommentAct;
     QAction *indentAct;
