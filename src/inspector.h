@@ -47,6 +47,9 @@ class Inspector : public QDockWidget
     ~Inspector();
     void parseText(const QString &text);
 
+  protected:
+    virtual void focusInEvent (QFocusEvent * event);
+
   private:
     QTreeWidget *m_treeWidget;
 

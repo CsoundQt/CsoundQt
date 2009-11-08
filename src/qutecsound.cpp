@@ -101,7 +101,7 @@ qutecsound::qutecsound(QStringList fileNames)
 
   m_inspector = new Inspector(this);
   m_inspector->parseText(QString());
-  widgetPanel->setObjectName("Inspector");
+  m_inspector->setObjectName("Inspector");
   addDockWidget(Qt::LeftDockWidgetArea, m_inspector);
 
   createActions(); // Must be before readSettings as this sets the default shortcuts
@@ -883,20 +883,18 @@ void qutecsound::runCsound(bool realtime)
       fileName2 = documentPages[curPage]->companionFile;
   }
 
-  widgetPanel->flush();
-  widgetPanel->clearGraphs();
-//   outValueQueue.clear();
-  inValueQueue.clear();
-  outStringQueue.clear();
-  messageQueue.clear();
-
   if (useAPI) {
 #ifdef MACOSX
 //Remember menu bar to set it after FLTK grabs it
     menuBarHandle = GetMenuBar();
 #endif
     m_console->clear();
+    widgetPanel->flush();
     widgetPanel->clearGraphs();
+    //   outValueQueue.clear();
+    inValueQueue.clear();
+    outStringQueue.clear();
+    messageQueue.clear();
     audioOutputBuffer.allZero();
     QTemporaryFile tempFile;
     if (fileName.startsWith(":/examples/")) {
@@ -969,10 +967,10 @@ void qutecsound::runCsound(bool realtime)
 //       qDebug("play() FLTK Disabled");
       *((int*) csoundQueryGlobalVariable(csound, "FLTK_Flags")) = 3;
     }
-    qDebug("Command Line args:");
-    for (int index=0; index< argc; index++) {
-      qDebug() << argv[index];
-    }
+//    qDebug("Command Line args:");
+//    for (int index=0; index< argc; index++) {
+//      qDebug() << argv[index];
+//    }
 
     csoundSetIsGraphable(csound, true);
     csoundSetMakeGraphCallback(csound, &qutecsound::makeGraphCallback);
@@ -1017,7 +1015,8 @@ void qutecsound::runCsound(bool realtime)
     }
     if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
       showWidgetsAct->setChecked(true);
-      widgetPanel->setVisible(true);
+      if (!textEdit->document()->toPlainText().contains("FLpanel")) // Don't bring up widget panel if there's an FLTK panel
+        widgetPanel->setVisible(true);
     }
     ud->PERF_STATUS = 1;
 
@@ -1797,6 +1796,14 @@ void qutecsound::showLineNumber(int lineNumber)
   lineNumberLabel->setText(tr("Line %1").arg(lineNumber));
 }
 
+void qutecsound::updateGUI()
+{
+  // This slot is triggered when a tab is closed, so you need to check
+  // if curPage is valid.
+  if (curPage < documentPages.size())
+    m_inspector->parseText(documentPages[curPage]->toPlainText());
+}
+
 void qutecsound::setDefaultKeyboardShortcuts()
 {
 //   m_keyActions.append(createCodeGraphAct);
@@ -2253,6 +2260,7 @@ void qutecsound::connectActions()
           textEdit, SLOT(setWidgetPanelSize(QSize)) );
   disconnect(textEdit, SIGNAL(currentLineChanged(int)), 0, 0);
   connect(textEdit, SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
+  connect(textEdit, SIGNAL(currentTextUpdated()), this, SLOT(updateGUI()));
 }
 
 void qutecsound::createMenus()
@@ -2890,7 +2898,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   changeFont();
   statusBar()->showMessage(tr("File loaded"), 2000);
   setWidgetPanelGeometry();
-  m_inspector->parseText(documentPages[curPage]->toPlainText());
+  updateGUI();
   if (runNow && m_options->autoPlay) {
     runAct->setChecked(true);
     runCsound();

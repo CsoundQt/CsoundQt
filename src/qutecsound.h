@@ -203,6 +203,7 @@ class qutecsound:public QMainWindow
 //     void widgetDockStateChanged(bool topLevel);
 //     void widgetDockLocationChanged(Qt::DockWidgetArea area);
     void showLineNumber(int lineNumber);
+    void updateGUI();
     void setDefaultKeyboardShortcuts();
     void keyPressForCsound(QString key);
     void keyReleaseForCsound(QString key);

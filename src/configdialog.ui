@@ -69,7 +69,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -566,7 +566,7 @@
        <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
       </property>
       <property name="text">
-       <string>Enable FLTK (unsafe)</string>
+       <string>Enable FLTK</string>
       </property>
      </widget>
      <widget class="QComboBox" name="channelComboBox">

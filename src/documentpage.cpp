@@ -592,6 +592,7 @@ void DocumentPage::opcodeFromMenu()
 void DocumentPage::changed()
 {
   unmarkErrorLines();
+  emit currentTextUpdated();
 }
 
 // void DocumentPage::moved()

@@ -99,6 +99,7 @@ class DocumentPage : public QTextEdit
 
   signals:
     void currentLineChanged(int);
+    void currentTextUpdated();
     void doCopy();
     void doCut();
     void doPaste();
