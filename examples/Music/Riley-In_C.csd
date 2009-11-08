@@ -1,47 +1,35 @@
-This file is released with CC-by-sa license. http://creativecommons.org
-www.triceratupuz.altervista.org
+;This file is released with CC-by-sa license. http://creativecommons.org
+;www.triceratupuz.altervista.org
 
-For Csound 5.00 and above
+;For Csound 5.00 and above
 
 <CsoundSynthesizer>
 <CsOptions>
+--nodisplays
 ;linux
 ;-o dac:system:playback_ -+rtaudio=jack -+rtmidi=null --nodisplays -b 1024 -B 4096
 ;-odac
 ;--format=wav
 </CsOptions>
 <CsInstruments>
-sr	= 44100
-kr	= 4410
-nchnls	= 2
-zakinit 20, 1
-;-------------------------MACROS--------------------------
-;macro TABREADER
-;find duration of patterns stored into tables
-;read the table pattern length to find the value of the loop
-;lenght of Patterns are analized then stored into a ftable 1
-;Do not use values of -1 in the external file unless used for repeat section
-#define TABREADER(NUM) 
-#kipattdur init 0
-kpointpattern init 0
-back:
-kipattdur table kpointpattern, 1$NUM
-if (kipattdur == -1) kgoto calcul
-kpointpattern = kpointpattern+1
-kgoto back
-calcul:
-	kipattdur table kpointpattern+1, 1$NUM
-	tablew kipattdur, $NUM, 100
-	printks "Pattern $NUM : %f \n", 1, kipattdur
-	turnoff#
 
+;Adapted for QuteCsound by Andres Cabrera 2009
+
+sr	= 44100
+kr = 441
+nchnls	= 2
+
+zakinit 20, 1
+
+;-------------------------MACROS--------------------------
 ;Interface column
 #define PLAYINT(NUM)
-#ix$NUM init 10 + ($NUM - 1) *50
+#
+ix$NUM init 10 + ($NUM - 1) *50
 ihandle FLbox "Player $NUM", 8, 1, 12, 50, 23, ix$NUM, 1
 gkpatt_index$NUM, giflbuttbank$NUM FLbutBank 12, 1, 53, 50, 672, ix$NUM, 49, -1
-gkOnOff$NUM, gihOnOff$NUM FLbutton	"@|>",	1, 0, 2, 50, 30, ix$NUM, 19, 0, 1, 0, -1#
-
+gkOnOff$NUM, gihOnOff$NUM FLbutton	"@|>",	1, 0, 2, 50, 30, ix$NUM, 19, -1
+#
 
 ;---------------------INITIALIZATION-----------------
 gisin ftgen 1, 0, 16384, 10, 1; sine wave
@@ -179,7 +167,7 @@ itab19 ftgen 119, 0, 64, -2, 0, 0, 1.50, 0, 8.04, 0, \
 0, 3, 1.50, 0, 8.04, 0, \
 -1, 3, -1, -1, -1, -1, \
 -1, -1, -1, -1, -1, -1
-itab20 ftgen 120, 0, 64, -2, 0, 0, 0.25, 30000, 8.04, 0, \
+itab20 ftgen 120, 0, 128, -2, 0, 0, 0.25, 30000, 8.04, 0, \
 0, 0.25, 0.25, 30000, 8.06, 0, \
 0, 0.5, 0.25, 30000, 8.04, 0, \
 0, 0.75, 0.25, 30000, 8.06, 0, \
@@ -244,7 +232,7 @@ itab25 ftgen 125, 0, 64, -2, 0, 0, 0.50, 30000, 8.04, 0, \
 0, 10.5, 0.50, 30000, 8.04, 0, \
 -1, 10.5, -1, -1, -1, -1, \
 -1, -1, -1, -1, -1, -1
-itab26 ftgen 126, 0, 64, -2, 0, 0, 0.50, 30000, 8.04, 0, \
+itab26 ftgen 126, 0, 128, -2, 0, 0, 0.50, 30000, 8.04, 0, \
 0, 0.5, 0.50, 30000, 8.06, 0, \
 0, 1, 0.50, 30000, 8.07, 0, \
 0, 1.5, 0.50, 30000, 8.09, 0, \
@@ -256,7 +244,7 @@ itab26 ftgen 126, 0, 64, -2, 0, 0, 0.50, 30000, 8.04, 0, \
 0, 9.5, 0.50, 30000, 8.04, 0, \
 -1, 9.5, -1, -1, -1, -1, \
 -1, -1, -1, -1, -1, -1
-itab27 ftgen 127, 0, 64, -2, 0, 0, 0.25, 30000, 8.04, 0, \
+itab27 ftgen 127, 0, 128, -2, 0, 0, 0.25, 30000, 8.04, 0, \
 0, 0.25, 0.25, 30000, 8.06, 0, \
 0, 0.5, 0.25, 30000, 8.04, 0, \
 0, 0.75, 0.25, 30000, 8.06, 0, \
@@ -471,9 +459,6 @@ itab53 ftgen 153, 0, 64, -2, 0, 0, 0.25, 30000, 8.10, 0, \
 -1, 0.5, -1, -1, -1, -1, \
 -1, -1, -1, -1, -1, -1
 
-
-
-
 ;------------------------INTERFACE-----------------------
 FLpanel "In C Player", 1010, 723, 1, 1, 1, 1, 0
 ;Metronome
@@ -600,166 +585,29 @@ ihandle FLbox "Recording", 8, 1, 12, 100, 25, 850, 550
 gkRecPerfo, giRecPerfo FLbutton	"Rec\ndon't\nswitch\nOff",	1, 0, 2, 100, 75, 850, 575, 0, 402, 0, -1
 FLpanelEnd
 FLrun
+
 ;Tab readers ---------------------------------------------------
 instr 1
-$TABREADER(01)
+;find duration of patterns stored into tables
+;read the table pattern length to find the value of the loop
+;lenght of Patterns are analized then stored into a ftable 1
+;Do not use values of -1 in the external file unless used for repeat section
+inum = p4
+if inum == 0 goto calcul ; Just in case...
+iipattdur init 0
+ipointpattern init 0
+back:
+	iipattdur table ipointpattern, 100 + inum
+	if (iipattdur == -1) igoto calcul
+	ipointpattern = ipointpattern+1
+	igoto back
+calcul:
+	iipattdur table ipointpattern+1, 100 + inum
+	tableiw iipattdur, inum, 100
+	prints "Pattern %i : %f \n", inum, iipattdur
+	turnoff
 endin
-instr 2
-$TABREADER(02)
-endin
-instr 3
-$TABREADER(03)
-endin
-instr 4
-$TABREADER(04)
-endin
-instr 5
-$TABREADER(05)
-endin
-instr 6
-$TABREADER(06)
-endin
-instr 7
-$TABREADER(07)
-endin
-instr 8
-$TABREADER(08)
-endin
-instr 9
-$TABREADER(09)
-endin
-instr 10
-$TABREADER(10)
-endin
-instr 11
-$TABREADER(11)
-endin
-instr 12
-$TABREADER(12)
-endin
-instr 13
-$TABREADER(13)
-endin
-instr 14
-$TABREADER(14)
-endin
-instr 15
-$TABREADER(15)
-endin
-instr 16
-$TABREADER(16)
-endin
-instr 17
-$TABREADER(17)
-endin
-instr 18
-$TABREADER(18)
-endin
-instr 19
-$TABREADER(19)
-endin
-instr 20
-$TABREADER(20)
-endin
-instr 21
-$TABREADER(21)
-endin
-instr 22
-$TABREADER(22)
-endin
-instr 23
-$TABREADER(23)
-endin
-instr 24
-$TABREADER(24)
-endin
-instr 25
-$TABREADER(25)
-endin
-instr 26
-$TABREADER(26)
-endin
-instr 27
-$TABREADER(27)
-endin
-instr 28
-$TABREADER(28)
-endin
-instr 29
-$TABREADER(29)
-endin
-instr 30
-$TABREADER(30)
-endin
-instr 31
-$TABREADER(31)
-endin
-instr 32
-$TABREADER(32)
-endin
-instr 33
-$TABREADER(33)
-endin
-instr 34
-$TABREADER(34)
-endin
-instr 35
-$TABREADER(35)
-endin
-instr 36
-$TABREADER(36)
-endin
-instr 37
-$TABREADER(37)
-endin
-instr 38
-$TABREADER(38)
-endin
-instr 39
-$TABREADER(39)
-endin
-instr 40
-$TABREADER(40)
-endin
-instr 41
-$TABREADER(41)
-endin
-instr 42
-$TABREADER(42)
-endin
-instr 43
-$TABREADER(43)
-endin
-instr 44
-$TABREADER(44)
-endin
-instr 45
-$TABREADER(45)
-endin
-instr 46
-$TABREADER(46)
-endin
-instr 47
-$TABREADER(47)
-endin
-instr 48
-$TABREADER(48)
-endin
-instr 49
-$TABREADER(49)
-endin
-instr 50
-$TABREADER(50)
-endin
-instr 51
-$TABREADER(51)
-endin
-instr 52
-$TABREADER(52)
-endin
-instr 53
-$TABREADER(53)
-endin
+
 ;Control-----------------------------------------------------------
 instr 98; initialize some variables
 gkpatt_index1 init 0
@@ -797,10 +645,12 @@ gkpatt_duration_new08 = gkpatt_duration08
 gkpatt_index9 init 0
 gkpatt_duration09 table gkpatt_index9+1, gipattdur
 gkpatt_duration_new09 = gkpatt_duration09
+
+turnoff
 endin
 
 
-instr 99
+instr 99 ;Metronome and key sensing
 gkc1 init 0
 gkc2 init 0
 gkc3 init 0
@@ -836,108 +686,63 @@ endif
 if (gkc8 == 1) then
 	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 12.00, .5
 endif
-;COmputer Keyboard Control
+;Computer Keyboard Control
 gkkeypressed FLkeyIn
 keyactivation changed gkkeypressed
 ;Start stop keys
-;q key
 kbuttonq init 0
+;q key
 if (gkkeypressed == 113 && keyactivation == 1) then
-	if (kbuttonq == 0) then
-		kbuttonq = 1
-		FLsetVal 1, kbuttonq, gihOnOff1
-	else
-		kbuttonq = 0
-		FLsetVal 1, kbuttonq, gihOnOff1
-	endif
+	kbuttonq = (kbuttonq == 0 ? 1 : 0)
+	FLsetVal 1, kbuttonq, gihOnOff1
 endif
 ;w key
 kbuttonw init 0
 if (gkkeypressed == 119 && keyactivation == 1) then
-	if (kbuttonw == 0) then
-		kbuttonw = 1
-		FLsetVal 1, kbuttonw, gihOnOff2
-	else
-		kbuttonw = 0
-		FLsetVal 1, kbuttonw, gihOnOff2
-	endif
+	kbuttonw = (kbuttonw == 0 ? 1 : 0)
+	FLsetVal 1, kbuttonw, gihOnOff2
 endif
 ;e key
 kbuttone init 0
 if (gkkeypressed == 101 && keyactivation == 1) then
-	if (kbuttone == 0) then
-		kbuttone = 1
-		FLsetVal 1, kbuttone, gihOnOff3
-	else
-		kbuttone = 0
-		FLsetVal 1, kbuttone, gihOnOff3
-	endif
+	kbuttone = (kbuttone == 0 ? 1 : 0)
+	FLsetVal 1, kbuttone, gihOnOff3
 endif
 ;r key
 kbuttonr init 0
 if (gkkeypressed == 114 && keyactivation == 1) then
-	if (kbuttonr == 0) then
-		kbuttonr = 1
-		FLsetVal 1, kbuttonr, gihOnOff4
-	else
-		kbuttonr = 0
-		FLsetVal 1, kbuttonr, gihOnOff4
-	endif
+	kbuttonr = (kbuttonr == 0 ? 1 : 0)
+	FLsetVal 1, kbuttonr, gihOnOff4
 endif
 ;t key
 kbuttont init 0
 if (gkkeypressed == 116 && keyactivation == 1) then
-	if (kbuttont == 0) then
-		kbuttont = 1
-		FLsetVal 1, kbuttont, gihOnOff5
-	else
-		kbuttont = 0
-		FLsetVal 1, kbuttont, gihOnOff5
-	endif
+	kbuttont = (kbuttont == 0 ? 1 : 0)
+	FLsetVal 1, kbuttont, gihOnOff5
 endif
 ;y key
 kbuttony init 0
 if (gkkeypressed == 121 && keyactivation == 1) then
-	if (kbuttony == 0) then
-		kbuttony = 1
-		FLsetVal 1, kbuttony, gihOnOff6
-	else
-		kbuttony = 0
-		FLsetVal 1, kbuttony, gihOnOff6
-	endif
+	kbuttony = (kbuttony == 0 ? 1 : 0)
+	FLsetVal 1, kbuttony, gihOnOff6
 endif
 ;u key
 kbuttonu init 0
 if (gkkeypressed == 117 && keyactivation == 1) then
-	if (kbuttonu == 0) then
-		kbuttonu = 1
-		FLsetVal 1, kbuttonu, gihOnOff7
-	else
-		kbuttonu = 0
-		FLsetVal 1, kbuttonu, gihOnOff7
-	endif
+	kbuttonu = (kbuttonu == 0 ? 1 : 0)
+	FLsetVal 1, kbuttonu, gihOnOff7
 endif
 ;i key
 kbuttoni init 0
 if (gkkeypressed == 105 && keyactivation == 1) then
-	if (kbuttoni == 0) then
-		kbuttoni = 1
-		FLsetVal 1, kbuttoni, gihOnOff8
-	else
-		kbuttoni = 0
-		FLsetVal 1, kbuttoni, gihOnOff8
-	endif
+	kbuttoni = (kbuttoni == 0 ? 1 : 0)
+	FLsetVal 1, kbuttoni, gihOnOff8
 endif
 ;o key
 kbuttono init 0
 if (gkkeypressed == 111 && keyactivation == 1) then
-	if (kbuttono == 0) then
-		kbuttono = 1
-		FLsetVal 1, kbuttono, gihOnOff9
-	else
-		kbuttono = 0
-		FLsetVal 1, kbuttono, gihOnOff9
-	endif
+	kbuttono = (kbuttono == 0 ? 1 : 0)
+	FLsetVal 1, kbuttono, gihOnOff9
 endif
 
 ;activate all the players together!
@@ -1027,9 +832,6 @@ if (gkkeypressed == 108 && keyactivation == 1) then
 		FLsetVal 1, kbuttonl, giflbuttbank9
 	endif
 endif
-
-
-
 
 ;---------------------------------------------------------------
 ;Player 1
@@ -1728,10 +1530,9 @@ endin
 
 </CsInstruments>
 <CsScore>
-#define TR(INSNUM) #i$INSNUM	0 1#
-#define OPEN #7200#
-f	0	$OPEN
-;inst	sta	dur	note	veloc
+#define TR(INSNUM) #i1 0 1 $INSNUM#
+#define DUR #7200#
+
 $TR(1)
 $TR(2)
 $TR(3)
@@ -1786,10 +1587,10 @@ $TR(51)
 $TR(52)
 $TR(53)
 
-i 98 1 1
-i 99 1 $OPEN
-i 400 1 $OPEN
-i 401 1 $OPEN
+i 98 0 1
+i 99 0 $DUR
+i 400 0 $DUR
+i 401 0 $DUR
 e
 </CsScore>
 </CsoundSynthesizer>
@@ -1799,7 +1600,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: -898 -643 398 143
+WindowBounds: 818 161 406 148
 CurrentView: io
 IOViewEdit: On
 Options:
