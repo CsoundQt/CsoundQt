@@ -4,7 +4,7 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 256
 nchnls = 2
 0dbfs = 1
 
@@ -55,15 +55,15 @@ i . ^ . [3/2] 1
 i . + . [1/1] 0
 i . ^ . [5/4] 1
 i . + . [1/1] 0
-i . ^ . [16/9] 1
+i . ^ . [7/4] 1
 i . + . [1/1] 0
 i . ^ . [5/4] 1
 i . ^ . [3/2] 0
-i . ^ . [15/8] 1
+i . ^ . [7/4] 1
 i . + . [1/1] 1
 i . ^ . [5/4] 1
 i . ^ . [3/2] 0
-i . ^ . [15/8] 0
+i . ^ . [7/4] 0
 e
 </CsScore>
 </CsoundSynthesizer>
@@ -73,7 +73,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 479 322 608 353
+WindowBounds: 518 254 606 347
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
