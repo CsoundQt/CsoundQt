@@ -62,6 +62,7 @@ class QuteMeter : public QuteWidget
 
   protected:
     QColor m_color;
+    double m_xMin, m_xMax, m_yMin, m_yMax;
     int m_fadeSpeed;
     QString m_behavior;
 
@@ -95,8 +96,8 @@ class MeterWidget : public QGraphicsView
     void setWidgetGeometry(int x,int y,int width,int height);
 
     QColor getColor();
-    QString getType() {return m_type;};
-    int getPointSize() {return m_pointSize;};
+    QString getType() {return m_type;}
+    int getPointSize() {return m_pointSize;}
     double getValue();
     double getValue2();
     bool m_vertical;

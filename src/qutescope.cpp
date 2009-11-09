@@ -68,7 +68,28 @@ QuteScope::~QuteScope()
 
 void QuteScope::loadFromXml(QString xmlText)
 {
-  qDebug() << "loadFromXml not implemented for this widget yet";
+  initFromXml(xmlText);
+  QDomDocument doc;
+  if (!doc.setContent(xmlText)) {
+    qDebug() << "QuteCheckBox::loadFromXml: Error parsing xml";
+    return;
+  }
+  QDomElement e = doc.firstChildElement("type");
+  if (e.isNull()) {
+    qDebug() << "QuteScope::loadFromXml: Expecting type element";
+    return;
+  }
+  else {
+    m_type = e.nodeValue();
+  }
+  e = doc.firstChildElement("zoom");
+  if (e.isNull()) {
+    qDebug() << "QuteScope::loadFromXml: Expecting zoom element";
+    return;
+  }
+  else {
+    m_zoom = e.nodeValue().toInt();
+  }
 }
 
 QString QuteScope::getWidgetLine()
@@ -379,7 +400,7 @@ void LissajouData::updateData(int channel, int zoom, bool freeze)
     x = (double)list[bufferIndex];
     bufferIndex = (bufferIndex + 1) % listSize;
     y = (double) -list[bufferIndex];
-    curveData[i] = QPoint(x*width/2, y*height/2);
+    curveData[i] = QPoint(x*width*zoom/4, y*height*zoom/4);
   }
   m_params->widget->setSceneRect(-width/2, -height/2, width, height );
   curve->setPolygon(curveData);

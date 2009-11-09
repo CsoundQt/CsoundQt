@@ -47,7 +47,121 @@ QuteMeter::~QuteMeter()
 
 void QuteMeter::loadFromXml(QString xmlText)
 {
-  qDebug() << "loadFromXml not implemented for this widget yet";
+  initFromXml(xmlText);
+  QDomDocument doc;
+  if (!doc.setContent(xmlText)) {
+    qDebug() << "QuteMeter::loadFromXml: Error parsing xml";
+    return;
+  }
+  QDomElement e = doc.firstChildElement("xMin");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting xMin element";
+    return;
+  }
+  else {
+    m_xMin = e.nodeValue().toDouble();
+  }
+  e = doc.firstChildElement("xMin");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting xMin element";
+    return;
+  }
+  else {
+    m_xMin = e.nodeValue().toDouble();
+  }
+  e = doc.firstChildElement("xMax");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting xMax element";
+    return;
+  }
+  else {
+    m_xMax = e.nodeValue().toDouble();
+  }
+  e = doc.firstChildElement("yMin");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting yMin element";
+    return;
+  }
+  else {
+    m_yMin = e.nodeValue().toDouble();
+  }
+  e = doc.firstChildElement("yMax");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting yMax element";
+    return;
+  }
+  else {
+    m_yMax = e.nodeValue().toDouble();
+  }
+  e = doc.firstChildElement("xValue");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting xValue element";
+    return;
+  }
+  else {
+    static_cast<MeterWidget *>(m_widget)->setValue(e.nodeValue().toDouble());
+  }
+  e = doc.firstChildElement("yValue");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting yValue element";
+    return;
+  }
+  else {
+    static_cast<MeterWidget *>(m_widget)->setValue2(e.nodeValue().toDouble());
+  }
+  e = doc.firstChildElement("type");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting type element";
+    return;
+  }
+  else {
+    static_cast<MeterWidget *>(m_widget)->setType(e.nodeValue());
+  }
+  e = doc.firstChildElement("pointsize");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting pointsize element";
+    return;
+  }
+  else {
+    static_cast<MeterWidget *>(m_widget)->setPointSize(e.nodeValue().toInt());
+  }
+  e = doc.firstChildElement("fadeSpeed");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting fadeSpeed element";
+    return;
+  }
+  else {
+    m_fadeSpeed = e.nodeValue().toInt();
+  }
+  e = doc.firstChildElement("behavior");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting behavior element";
+    return;
+  }
+  else {
+    m_behavior = e.nodeValue();
+  }
+  e = doc.firstChildElement("color");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting color element";
+    return;
+  }
+  else {
+    QDomElement e2 = e.firstChildElement("r");
+    m_color.setRed(e.nodeValue().toInt());
+    e.firstChildElement("g");
+    m_color.setGreen(e.nodeValue().toInt());
+    e.firstChildElement("b");
+    m_color.setBlue(e.nodeValue().toInt());
+  }
+  e = doc.firstChildElement("randomizable");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting randomizable element";
+    return;
+  }
+  else {
+    qDebug() << "QuteMeter::loadFromXml: randomizable not implemented";
+  }
 }
 
 QString QuteMeter::getWidgetLine()
@@ -77,8 +191,8 @@ QString QuteMeter::getWidgetXmlText()
   s.writeTextElement("xMax", QString::number(1.0, 'f', 8));
   s.writeTextElement("yMin", QString::number(0.0, 'f', 8));
   s.writeTextElement("yMax", QString::number(1.0, 'f', 8));
-  s.writeTextElement("xValue", QString::number(static_cast<MeterWidget *>(m_widget)->getValue(), 'f', 6));
-  s.writeTextElement("yValue", QString::number(static_cast<MeterWidget *>(m_widget)->getValue2(), 'f', 6));
+  s.writeTextElement("xValue", QString::number(static_cast<MeterWidget *>(m_widget)->getValue(), 'f', 8));
+  s.writeTextElement("yValue", QString::number(static_cast<MeterWidget *>(m_widget)->getValue2(), 'f', 8));
 
   // These three come from blue, but they are not implemented here
   s.writeTextElement("randomizable", "");

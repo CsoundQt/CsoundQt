@@ -56,7 +56,28 @@ QuteGraph::~QuteGraph()
 
 void QuteGraph::loadFromXml(QString xmlText)
 {
-  qDebug() << "loadFromXml not implemented for this widget yet";
+  initFromXml(xmlText);
+  QDomDocument doc;
+  if (!doc.setContent(xmlText)) {
+    qDebug() << "QuteGraph::loadFromXml: Error parsing xml";
+    return;
+  }
+  QDomElement e = doc.firstChildElement("value");
+  if (e.isNull()) {
+    qDebug() << "QuteGraph::loadFromXml: Expecting value element";
+    return;
+  }
+  else {
+    m_value = e.nodeValue().toDouble();
+  }
+  e = doc.firstChildElement("zoom");
+  if (e.isNull()) {
+    qDebug() << "QuteGraph::loadFromXml: Expecting zoom element";
+    return;
+  }
+  else {
+    m_zoom = e.nodeValue().toDouble();
+  }
 }
 
 QString QuteGraph::getWidgetLine()
@@ -75,7 +96,14 @@ QString QuteGraph::getWidgetLine()
 
 QString QuteGraph::getWidgetXmlText()
 {
-  return QString();
+  // Consoles are not implemented in blue
+  QXmlStreamWriter s(&xmlText);
+  createXmlWriter(s);
+
+  s.writeTextElement("value", QString::number(m_value, 'f', 8));
+  s.writeTextElement("zoom", QString::number(m_zoom, 'f', 8));
+  s.writeEndElement();
+  return xmlText;
 }
 
 QString QuteGraph::getWidgetType()

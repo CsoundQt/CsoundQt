@@ -25,8 +25,8 @@
 QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new QDial(this);
-  m_max = 1.0;
   m_min = 0.0;
+  m_max = 99.0;
   static_cast<QDial *>(m_widget)->setNotchesVisible(true);
   //TODO add resolution to config dialog and set these values accordingly
   m_resolution = 0.01;
@@ -44,7 +44,52 @@ QuteKnob::~QuteKnob()
 
 void QuteKnob::loadFromXml(QString xmlText)
 {
-  qDebug() << "loadFromXml not implemented for this widget yet";
+  initFromXml(xmlText);
+  QDomDocument doc;
+  if (!doc.setContent(xmlText)) {
+    qDebug() << "QuteButton::loadFromXml: Error parsing xml";
+    return;
+  }
+  QDomElement e = doc.firstChildElement("minimum"); // TODO add latch button and button bank
+  if (e.isNull()) {
+    qDebug() << "QuteKnob::loadFromXml: Expecting minimum element";
+    return;
+  }
+  else {
+    m_min = e.nodeValue().toDouble();
+  }
+  e = doc.firstChildElement("maximum");
+  if (e.isNull()) {
+    qDebug() << "QuteKnob::loadFromXml: Expecting maximum element";
+    return;
+  }
+  else {
+    m_max = e.nodeValue().toDouble();
+  }
+  e = doc.firstChildElement("value");
+  if (e.isNull()) {
+    qDebug() << "QuteKnob::loadFromXml: Expecting value element";
+    return;
+  }
+  else {
+    m_value = e.nodeValue().toDouble();
+  }
+  e = doc.firstChildElement("resolution");
+  if (e.isNull()) {
+    qDebug() << "QuteKnob::loadFromXml: Expecting resolution element";
+    return;
+  }
+  else {
+    m_resolution = e.nodeValue().toDouble();
+  }
+  e = doc.firstChildElement("randomizable");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting randomizable element";
+    return;
+  }
+  else {
+    qDebug() << "QuteMeter::loadFromXml: randomizable not implemented";
+  }
 }
 
 double QuteKnob::getValue()

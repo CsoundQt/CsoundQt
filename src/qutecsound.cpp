@@ -2885,7 +2885,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   documentPages[curPage]->fileName = fileName;
   setCurrentFile(fileName);
   setWindowModified(false);
-  documentTabs->setTabIcon(curPage, modIcon);
+  documentTabs->setTabIcon(curPage, QIcon());
   if (!lastUsedDir.contains(":/")) {  // Don't store internal examples directory as last used dir
     lastUsedDir = fileName;
     lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/]")));

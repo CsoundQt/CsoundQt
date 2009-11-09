@@ -36,7 +36,20 @@ QuteConsole::~QuteConsole()
 
 void QuteConsole::loadFromXml(QString xmlText)
 {
-  qDebug() << "loadFromXml not implemented for this widget yet";
+  initFromXml(xmlText);
+//  QDomDocument doc;
+//  if (!doc.setContent(xmlText)) {
+//    qDebug() << "QuteButton::loadFromXml: Error parsing xml";
+//    return;
+//  }
+//  QDomElement e = doc.firstChildElement("type"); // TODO add latch button and button bank
+//  if (e.isNull()) {
+//    qDebug() << "QuteButton::loadFromXml: Expecting type element";
+//    return;
+//  }
+//  else {
+//    m_type = e.nodeValue();
+//  }
 }
 
 QString QuteConsole::getWidgetLine()

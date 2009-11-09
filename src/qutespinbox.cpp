@@ -41,7 +41,110 @@ QuteSpinBox::~QuteSpinBox()
 
 void QuteSpinBox::loadFromXml(QString xmlText)
 {
-  qDebug() << "loadFromXml not implemented for this widget yet";
+  initFromXml(xmlText);
+  QDomDocument doc;
+  if (!doc.setContent(xmlText)) {
+    qDebug() << "QuteSpinBox::loadFromXml: Error parsing xml";
+    return;
+  }
+  QDomElement e = doc.firstChildElement("type");
+  if (e.isNull()) {
+    qDebug() << "QuteSpinBox::loadFromXml: Expecting minimum element";
+    return;
+  }
+  else {
+    m_type = e.nodeValue();
+  }
+  e = doc.firstChildElement("value");
+  if (e.isNull()) {
+    qDebug() << "QuteSpinBox::loadFromXml: Expecting value element";
+    return;
+  }
+  else {
+    static_cast<QDoubleSpinBox*>(m_widget)->setValue(e.nodeValue().toDouble());
+  }
+  e = doc.firstChildElement("resolution");
+  if (e.isNull()) {
+    qDebug() << "QuteSpinBox::loadFromXml: Expecting resolution element";
+    return;
+  }
+  else {
+    m_resolution = e.nodeValue().toDouble();
+  }
+  e = doc.firstChildElement("alignment");
+  if (e.isNull()) {
+    qDebug() << "QuteSpinBox::loadFromXml: Expecting alignment element";
+    return;
+  }
+  else {
+    QString alignment = e.nodeValue();
+    Qt::AlignmentFlag align = Qt::AlignCenter;
+    if (alignment == "left") {
+      align = Qt::AlignLeft;
+    }
+    else if (alignment == "center") {
+      align = Qt::AlignCenter;
+    }
+    else if (alignment == "right") {
+      align = Qt::AlignRight;
+    }
+    static_cast<QDoubleSpinBox *>(m_widget)->setAlignment(align);
+  }
+  e = doc.firstChildElement("font");
+  if (e.isNull()) {
+    qDebug() << "QuteSpinBox::loadFromXml: Expecting font element";
+    return;
+  }
+  else {
+    m_font = e.nodeValue();
+  }
+  e = doc.firstChildElement("fontsize");
+  if (e.isNull()) {
+    qDebug() << "QuteSpinBox::loadFromXml: Expecting fontsize element";
+    return;
+  }
+  else {
+    m_fontSize = e.nodeValue().toInt();
+  }
+  e = doc.firstChildElement("color");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting color element";
+    return;
+  }
+  else {
+    QDomElement e2 = e.firstChildElement("r");
+//    m_color.setRed(e.nodeValue().toInt());
+//    e.firstChildElement("g");
+//    m_color.setGreen(e.nodeValue().toInt());
+//    e.firstChildElement("b");
+//    m_color.setBlue(e.nodeValue().toInt());
+  }
+  //FIXME implement!!!
+//  QColor color = m_widget->palette().color(QPalette::WindowText);
+  e = doc.firstChildElement("bgcolor");
+  if (e.isNull()) {
+    qDebug() << "QuteMeter::loadFromXml: Expecting color element";
+    return;
+  }
+  else {
+    m_widget->setAutoFillBackground(e.attribute("mode", "nobackground") == "background");
+    QDomElement e2 = e.firstChildElement("r");
+//    m_color.setRed(e.nodeValue().toInt());
+//    e.firstChildElement("g");
+//    m_color.setGreen(e.nodeValue().toInt());
+//    e.firstChildElement("b");
+//    m_color.setBlue(e.nodeValue().toInt());
+  }
+  //FIXME implement!!!
+//  color = m_widget->palette().color(QPalette::Window);
+  e = doc.firstChildElement("randomizable");
+  if (e.isNull()) {
+    qDebug() << "QuteSpinBox::loadFromXml: Expecting randomizable element";
+    return;
+  }
+  else {
+    qDebug() << "QuteSpinBox::loadFromXml: randomizable element not implemented";
+  }
 }
 
 void QuteSpinBox::setAlignment(int alignment)
@@ -198,9 +301,6 @@ QString QuteSpinBox::getWidgetXmlText()
   s.writeTextElement("g", QString::number(color.green()));
   s.writeTextElement("b", QString::number(color.blue()));
   s.writeEndElement();
-
-  s.writeTextElement("background", m_widget->autoFillBackground()? "background":"nobackground");
-  s.writeTextElement("border", "border");  //Not used yet. Should it be removed?
 
   s.writeTextElement("randomizable", "");
 

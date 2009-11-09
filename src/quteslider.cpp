@@ -43,7 +43,60 @@ QuteSlider::~QuteSlider()
 
 void QuteSlider::loadFromXml(QString xmlText)
 {
-  qDebug() << "loadFromXml not implemented for this widget yet";
+  initFromXml(xmlText);
+  QDomDocument doc;
+  if (!doc.setContent(xmlText)) {
+    qDebug() << "QuteSlider::loadFromXml: Error parsing xml";
+    return;
+  }
+  QDomElement e = doc.firstChildElement("minimum");
+  if (e.isNull()) {
+    qDebug() << "QuteSlider::loadFromXml: Expecting minimum element";
+    return;
+  }
+  else {
+    m_min = e.nodeValue().toDouble();
+  }
+  e = doc.firstChildElement("maximum");
+  if (e.isNull()) {
+    qDebug() << "QuteSlider::loadFromXml: Expecting maximum element";
+    return;
+  }
+  else {
+    m_max = e.nodeValue().toDouble();
+  }
+  e = doc.firstChildElement("value");
+  if (e.isNull()) {
+    qDebug() << "QuteSlider::loadFromXml: Expecting value element";
+    return;
+  }
+  else {
+    m_value = e.nodeValue().toDouble();
+  }
+  e = doc.firstChildElement("resolution");
+  if (e.isNull()) {
+    qDebug() << "QuteSlider::loadFromXml: Expecting resolution element";
+    return;
+  }
+  else {
+    qDebug() << "QuteSlider::loadFromXml: resolution element not implemented";
+  }
+  e = doc.firstChildElement("sliderWidth");
+  if (e.isNull()) {
+    qDebug() << "QuteSlider::loadFromXml: Expecting sliderWidth element";
+    return;
+  }
+  else {
+    qDebug() << "QuteSlider::loadFromXml: sliderWidth element not implemented";
+  }
+  e = doc.firstChildElement("randomizable");
+  if (e.isNull()) {
+    qDebug() << "QuteSlider::loadFromXml: Expecting randomizable element";
+    return;
+  }
+  else {
+    qDebug() << "QuteSlider::loadFromXml: randomizable element not implemented";
+  }
 }
 
 double QuteSlider::getValue()
