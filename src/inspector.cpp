@@ -69,6 +69,11 @@ void Inspector::focusInEvent (QFocusEvent * event)
 //  parseText();
 }
 
+void Inspector::closeEvent(QCloseEvent * /*event*/)
+{
+  emit Close(false);
+}
+
 void Inspector::itemActivated(QTreeWidgetItem * item, int column)
 {
   int line = static_cast<TreeItem *>(item)->getLine();

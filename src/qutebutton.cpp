@@ -296,6 +296,8 @@ void QuteButton::buttonReleased()
       emit play();
     else if (m_name == "_Play" && m_value == 0)
       emit stop();
+    else if (m_name == "_Pause")
+      emit pause();
     else if (m_name == "_Stop")
       emit stop();
     else if (m_name == "_Render")

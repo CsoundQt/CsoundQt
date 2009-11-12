@@ -135,6 +135,7 @@ class qutecsound:public QMainWindow
     bool loadFile(QString fileName, bool runNow = false);
     void runCsound(bool realtime=true);
     void play();
+    void pause();
     void stop();
     void stopCsound();
     void render();

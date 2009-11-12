@@ -73,6 +73,7 @@ class QuteButton : public QuteWidget
   signals:
     void queueEvent(QString eventLine);
     void play();
+    void pause();
     void stop();
     void render();
 //     void selectMidiInDevices(QPoint pos);

@@ -39,8 +39,6 @@
       <file>../examples/Examples/Circle.csd</file>
       <file>../examples/Examples/Pvstencil.csd</file>
       <file>../examples/Examples/Noise_Reduction.csd</file>
-      <file>../examples/Examples/Reserved_Channels.csd</file>
-      <file>../examples/Examples/String_Channels.csd</file>
       <file>../examples/Examples/Rms.csd</file>
       <file>../examples/Examples/Reinit_Example.csd</file>
       <file>../examples/Examples/No_Reinit.csd</file>
@@ -57,6 +55,8 @@
       <file>../examples/Widgets/Menu_Widget.csd</file>
       <file>../examples/Widgets/Controller_Widget.csd</file>
       <file>../examples/Widgets/Scope_Widget.csd</file>
+      <file>../examples/Widgets/String_Channels.csd</file>
+      <file>../examples/Widgets/Reserved_Channels.csd</file>
 
       <file>../examples/Tutorial/Toot1.csd</file>
       <file>../examples/Tutorial/Toot2.csd</file>

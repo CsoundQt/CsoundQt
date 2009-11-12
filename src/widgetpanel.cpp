@@ -548,7 +548,7 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   currentPosition = event->pos();
   if (m_sbActive) {
     currentPosition.setX(currentPosition.x() + scrollArea->horizontalScrollBar()->value());
-    currentPosition.setX(currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20);
+    currentPosition.setY(currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20);
   }
   menu.exec(event->globalPos());
 }
@@ -949,6 +949,7 @@ int WidgetPanel::createButton(int x, int y, int width, int height, QString widge
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(play()));
+  connect(widget, SIGNAL(pause()), static_cast<qutecsound *>(parent()), SLOT(pause()));
   connect(widget, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
   connect(widget, SIGNAL(render()), static_cast<qutecsound *>(parent()), SLOT(render()));
   connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));

@@ -49,6 +49,7 @@ class Inspector : public QDockWidget
 
   protected:
     virtual void focusInEvent (QFocusEvent * event);
+    virtual void closeEvent(QCloseEvent * event);
 
   private:
     QTreeWidget *m_treeWidget;
@@ -57,6 +58,7 @@ class Inspector : public QDockWidget
     void itemActivated(QTreeWidgetItem * item, int column);
 
   signals:
+    void Close(bool visible);
     void jumpToLine(int line);
 };
 

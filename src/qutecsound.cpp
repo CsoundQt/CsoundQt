@@ -1152,6 +1152,13 @@ void qutecsound::play()
   runCsound(true);
 }
 
+void qutecsound::pause()
+{
+  if (ud->PERF_STATUS == 1) {
+    perfThread->TogglePause();
+  }
+}
+
 void qutecsound::stop()
 {
   // Must guarantee that csound has stopped when it returns
@@ -2545,8 +2552,7 @@ void qutecsound::readSettings()
   settings.beginGroup("Shortcuts");
   for (int i = 0; i < m_keyActions.size();i++) {
     QString shortcut = settings.value(QString::number(i), "").toString();
-    if (shortcut != "")
-      m_keyActions[i]->setShortcut(shortcut);
+    m_keyActions[i]->setShortcut(shortcut);
   }
   settings.endGroup();
   settings.endGroup();
