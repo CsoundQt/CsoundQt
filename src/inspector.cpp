@@ -54,6 +54,12 @@ void Inspector::parseText(const QString &text)
       TreeItem *newItem = new TreeItem(m_treeWidget, columnslist);
       newItem->setLine(i + 1);
     }
+    if (lines[i].trimmed().contains(QRegExp("^[\\s]*opcode"))) {
+      QString text = lines[i].mid(lines[i].indexOf("opcode") + 6);
+      QStringList columnslist(QString("opcode %1").arg(text).simplified());
+      TreeItem *newItem = new TreeItem(m_treeWidget, columnslist);
+      newItem->setLine(i + 1);
+    }
   }
 }
 
