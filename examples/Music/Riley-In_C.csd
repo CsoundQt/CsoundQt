@@ -4,38 +4,30 @@
 ;vallste at libero.it
 ;www.triceratupuz.altervista.org
 
-;For Csound 5.00 and above
 ;Ftables inclusion and testing by: Joachim Heintz - www.joachimheintz.de - 
 ;email: jh at joachimheintz.de
+
+;Table reading optimization to 1 instrument by Andres Cabrera
 
 ;If you have problems to play this file in QuteCsound,
 ;go to the Configurations dialog and choose "Run FLTK in Terminal"
 
 <CsoundSynthesizer>
 <CsOptions>
---nodisplays
-;linux
-;-o dac:system:playback_ -+rtaudio=jack -+rtmidi=null --nodisplays -b 1024 -B 4096
-;-odac
-;--format=wav
+-nm0  ;No output messages
 </CsOptions>
 <CsInstruments>
-
-sr = 44100
-kr = 441
-nchnls = 2
-
+sr	= 44100
+kr	= 4410
+nchnls	= 2
 zakinit 20, 1
-
 ;-------------------------MACROS--------------------------
 ;Interface column
 #define PLAYINT(NUM)
-#
-ix$NUM init 10 + ($NUM - 1) *50
+#ix$NUM init 10 + ($NUM - 1) *50
 ihandle FLbox "Player $NUM", 8, 1, 12, 50, 23, ix$NUM, 1
 gkpatt_index$NUM, giflbuttbank$NUM FLbutBank 12, 1, 53, 50, 672, ix$NUM, 49, -1
-gkOnOff$NUM, gihOnOff$NUM FLbutton	"@|>",	1, 0, 2, 50, 30, ix$NUM, 19, -1
-#
+gkOnOff$NUM, gihOnOff$NUM FLbutton	"@|>",	1, 0, 2, 50, 30, ix$NUM, 19, 0, 1, 0, -1#
 
 ;---------------------INITIALIZATION-----------------
 gisin ftgen 1, 0, 16384, 10, 1; sine wave
@@ -569,6 +561,11 @@ itab53 ftgen 153, 0, -30, -2, \
 	-1,	0.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
+
+
+
+
+
 ;------------------------INTERFACE-----------------------
 FLpanel "In C Player", 1010, 723, 1, 1, 1, 1, 0
 ;Metronome
@@ -683,7 +680,8 @@ gkinte9, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 950, 500, 20
 ihandle FLbox "Global", 8, 1, 12, 50, 100, 500, 550
 ihandle FLbox "Volume", 8, 1, 12, 60, 25, 550, 550
 gkpppfff, ipppfff FLknob "ppp - fff", 0.01, 2, 0, 1, -1, 60, 550, 575, 20 
-ihandle FLbox "Alt Key\nActivate\nall the\nPlayers\ntogether", 8, 1, 12, 60, 100, 610, 550
+ihandle FLbox "Alt Key\nAll the\nPlayers\ntogether\nOnOff", 8, 1, 12, 60, 75, 610, 550
+gkOnOffAll, gihOnOffAll FLbutton	"@|>",	1, 0, 2, 60, 25, 610, 625, 0, 1, 0, -1
 FLsetVal_i 1, ipppfff
 ihandle FLbox "Reverb", 8, 1, 12, 180, 25, 670, 550
 gkwet, iwet FLknob "dry-wet", 0, 1, 0, 1, -1, 60, 670, 575, 20 
@@ -698,23 +696,23 @@ FLrun
 
 ;Tab readers ---------------------------------------------------
 instr 1
+;TABREADER
 ;find duration of patterns stored into tables
 ;read the table pattern length to find the value of the loop
 ;lenght of Patterns are analized then stored into a ftable 1
 ;Do not use values of -1 in the external file unless used for repeat section
-inum = p4
-if inum == 0 goto calcul ; Just in case...
+if p4 == 0 goto calcul ; Just in case...
 iipattdur init 0
 ipointpattern init 0
 back:
-	iipattdur table ipointpattern, 100 + inum
+	iipattdur table ipointpattern, 100 + p4
 	if (iipattdur == -1) igoto calcul
 	ipointpattern = ipointpattern+1
 	igoto back
 calcul:
-	iipattdur table ipointpattern+1, 100 + inum
-	tableiw iipattdur, inum, 100
-	prints "Pattern %i : %f \n", inum, iipattdur
+	iipattdur table ipointpattern+1, 100 + p4
+	tableiw iipattdur, p4, 100
+	prints "Pattern %i : %i \n", p4, iipattdur
 	turnoff
 endin
 
@@ -755,12 +753,11 @@ gkpatt_duration_new08 = gkpatt_duration08
 gkpatt_index9 init 0
 gkpatt_duration09 table gkpatt_index9+1, gipattdur
 gkpatt_duration_new09 = gkpatt_duration09
-
 turnoff
 endin
 
 
-instr 99 ;Metronome and key sensing
+instr 99
 gkc1 init 0
 gkc2 init 0
 gkc3 init 0
@@ -773,100 +770,166 @@ kPulse metro (2*gkBPM/60)
 kpulse_quantize metro (2*gkBPM/60)
 ;Audio Metronome
 if (gkc1 == 1) then
-	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 5.00, .5
+	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 5.00
 endif
 if (gkc2 == 1) then
-	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 6.00, .5
+	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 6.00
 endif
 if (gkc3 == 1) then
-	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 7.00, .5
+	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 7.00
 endif
 if (gkc4 == 1) then
-	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 8.00, .5
+	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 8.00
 endif
 if (gkc5 == 1) then
-	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 9.00, .5
+	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 9.00
 endif
 if (gkc6 == 1) then
-	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 10.00, .5
+	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 10.00
 endif
 if (gkc7 == 1) then
-	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 11.00, .5
+	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 11.00
 endif
 if (gkc8 == 1) then
-	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 12.00, .5
+	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 12.00
 endif
-;Computer Keyboard Control
+;COmputer Keyboard Control
 gkkeypressed FLkeyIn
 keyactivation changed gkkeypressed
 ;Start stop keys
-kbuttonq init 0
 ;q key
+kbuttonq init 0
 if (gkkeypressed == 113 && keyactivation == 1) then
-	kbuttonq = (kbuttonq == 0 ? 1 : 0)
-	FLsetVal 1, kbuttonq, gihOnOff1
+	if (kbuttonq == 0) then
+		kbuttonq = 1
+		FLsetVal 1, kbuttonq, gihOnOff1
+	else
+		kbuttonq = 0
+		FLsetVal 1, kbuttonq, gihOnOff1
+	endif
 endif
 ;w key
 kbuttonw init 0
 if (gkkeypressed == 119 && keyactivation == 1) then
-	kbuttonw = (kbuttonw == 0 ? 1 : 0)
-	FLsetVal 1, kbuttonw, gihOnOff2
+	if (kbuttonw == 0) then
+		kbuttonw = 1
+		FLsetVal 1, kbuttonw, gihOnOff2
+	else
+		kbuttonw = 0
+		FLsetVal 1, kbuttonw, gihOnOff2
+	endif
 endif
 ;e key
 kbuttone init 0
 if (gkkeypressed == 101 && keyactivation == 1) then
-	kbuttone = (kbuttone == 0 ? 1 : 0)
-	FLsetVal 1, kbuttone, gihOnOff3
+	if (kbuttone == 0) then
+		kbuttone = 1
+		FLsetVal 1, kbuttone, gihOnOff3
+	else
+		kbuttone = 0
+		FLsetVal 1, kbuttone, gihOnOff3
+	endif
 endif
 ;r key
 kbuttonr init 0
 if (gkkeypressed == 114 && keyactivation == 1) then
-	kbuttonr = (kbuttonr == 0 ? 1 : 0)
-	FLsetVal 1, kbuttonr, gihOnOff4
+	if (kbuttonr == 0) then
+		kbuttonr = 1
+		FLsetVal 1, kbuttonr, gihOnOff4
+	else
+		kbuttonr = 0
+		FLsetVal 1, kbuttonr, gihOnOff4
+	endif
 endif
 ;t key
 kbuttont init 0
 if (gkkeypressed == 116 && keyactivation == 1) then
-	kbuttont = (kbuttont == 0 ? 1 : 0)
-	FLsetVal 1, kbuttont, gihOnOff5
+	if (kbuttont == 0) then
+		kbuttont = 1
+		FLsetVal 1, kbuttont, gihOnOff5
+	else
+		kbuttont = 0
+		FLsetVal 1, kbuttont, gihOnOff5
+	endif
 endif
 ;y key
 kbuttony init 0
 if (gkkeypressed == 121 && keyactivation == 1) then
-	kbuttony = (kbuttony == 0 ? 1 : 0)
-	FLsetVal 1, kbuttony, gihOnOff6
+	if (kbuttony == 0) then
+		kbuttony = 1
+		FLsetVal 1, kbuttony, gihOnOff6
+	else
+		kbuttony = 0
+		FLsetVal 1, kbuttony, gihOnOff6
+	endif
 endif
 ;u key
 kbuttonu init 0
 if (gkkeypressed == 117 && keyactivation == 1) then
-	kbuttonu = (kbuttonu == 0 ? 1 : 0)
-	FLsetVal 1, kbuttonu, gihOnOff7
+	if (kbuttonu == 0) then
+		kbuttonu = 1
+		FLsetVal 1, kbuttonu, gihOnOff7
+	else
+		kbuttonu = 0
+		FLsetVal 1, kbuttonu, gihOnOff7
+	endif
 endif
 ;i key
 kbuttoni init 0
 if (gkkeypressed == 105 && keyactivation == 1) then
-	kbuttoni = (kbuttoni == 0 ? 1 : 0)
-	FLsetVal 1, kbuttoni, gihOnOff8
+	if (kbuttoni == 0) then
+		kbuttoni = 1
+		FLsetVal 1, kbuttoni, gihOnOff8
+	else
+		kbuttoni = 0
+		FLsetVal 1, kbuttoni, gihOnOff8
+	endif
 endif
 ;o key
 kbuttono init 0
 if (gkkeypressed == 111 && keyactivation == 1) then
-	kbuttono = (kbuttono == 0 ? 1 : 0)
-	FLsetVal 1, kbuttono, gihOnOff9
+	if (kbuttono == 0) then
+		kbuttono = 1
+		FLsetVal 1, kbuttono, gihOnOff9
+	else
+		kbuttono = 0
+		FLsetVal 1, kbuttono, gihOnOff9
+	endif
 endif
 
 ;activate all the players together!
 kbuttonAlt init 0
 if (gkkeypressed == 489 && keyactivation == 1) then
-	FLsetVal 1, 1, gihOnOff1
-	FLsetVal 1, 1, gihOnOff2
-	FLsetVal 1, 1, gihOnOff3
-	FLsetVal 1, 1, gihOnOff4
-	FLsetVal 1, 1, gihOnOff5
-	FLsetVal 1, 1, gihOnOff6
-	FLsetVal 1, 1, gihOnOff7
-	FLsetVal 1, 1, gihOnOff8
-	FLsetVal 1, 1, gihOnOff9
+	if (gkOnOffAll == 0) then
+		FLsetVal 1, 1, gihOnOffAll
+	elseif (gkOnOffAll == 1) then
+		FLsetVal 1, 0, gihOnOffAll
+	endif
+endif
+
+ktriggAll changed gkOnOffAll
+if (ktriggAll == 1) then
+	if (gkOnOffAll == 1) then
+		FLsetVal 1, 1, gihOnOff1
+		FLsetVal 1, 1, gihOnOff2
+		FLsetVal 1, 1, gihOnOff3
+		FLsetVal 1, 1, gihOnOff4
+		FLsetVal 1, 1, gihOnOff5
+		FLsetVal 1, 1, gihOnOff6
+		FLsetVal 1, 1, gihOnOff7
+		FLsetVal 1, 1, gihOnOff8
+		FLsetVal 1, 1, gihOnOff9
+	elseif (gkOnOffAll == 0) then
+		FLsetVal 1, 0, gihOnOff1
+		FLsetVal 1, 0, gihOnOff2
+		FLsetVal 1, 0, gihOnOff3
+		FLsetVal 1, 0, gihOnOff4
+		FLsetVal 1, 0, gihOnOff5
+		FLsetVal 1, 0, gihOnOff6
+		FLsetVal 1, 0, gihOnOff7
+		FLsetVal 1, 0, gihOnOff8
+		FLsetVal 1, 0, gihOnOff9
+	endif
 endif
 
 ;Next pattern keys
@@ -943,12 +1006,15 @@ if (gkkeypressed == 108 && keyactivation == 1) then
 	endif
 endif
 
+
+
+
 ;---------------------------------------------------------------
 ;Player 1
 ;Sync Sequencer-On with metro pulse signal
 if (kpulse_quantize = 1) then
 	ktrigOn1 trigger gkOnOff1, 0.5, 0
-		schedkwhen ktrigOn1, 0, 0, 101, 0, -1, 1;, gkpatt_key, gkpatt_found, gkpatt_duration
+		schedkwhen ktrigOn1, 0, 0, 101, 0, -1
 endif
 ;Turn Off the trigger instrument and the pattern reader whenever needed 
 ;without syncro to metronome signal 
@@ -960,7 +1026,7 @@ ktrigOff1 trigger gkOnOff1, 0.5, 1
 ;Sync Sequencer-On with metro pulse signal
 if (kpulse_quantize = 1) then
 	ktrigOn2 trigger gkOnOff2, 0.5, 0
-		schedkwhen ktrigOn2, 0, 0, 102, 0, -1, 1;, gkpatt_key, gkpatt_found, gkpatt_duration
+		schedkwhen ktrigOn2, 0, 0, 102, 0, -1
 endif
 ;Turn Off the trigger instrument and the pattern reader whenever needed 
 ;without syncro to metronome signal 
@@ -972,7 +1038,7 @@ ktrigOff2 trigger gkOnOff2, 0.5, 1
 ;Sync Sequencer-On with metro pulse signal
 if (kpulse_quantize = 1) then
 	ktrigOn3 trigger gkOnOff3, 0.5, 0
-		schedkwhen ktrigOn3, 0, 0, 103, 0, -1, 1;, gkpatt_key, gkpatt_found, gkpatt_duration
+		schedkwhen ktrigOn3, 0, 0, 103, 0, -1
 endif
 ;Turn Off the trigger instrument and the pattern reader whenever needed 
 ;without syncro to metronome signal 
@@ -984,7 +1050,7 @@ ktrigOff3 trigger gkOnOff3, 0.5, 1
 ;Sync Sequencer-On with metro pulse signal
 if (kpulse_quantize = 1) then
 	ktrigOn4 trigger gkOnOff4, 0.5, 0
-		schedkwhen ktrigOn4, 0, 0, 104, 0, -1, 1;, gkpatt_key, gkpatt_found, gkpatt_duration
+		schedkwhen ktrigOn4, 0, 0, 104, 0, -1
 endif
 ;Turn Off the trigger instrument and the pattern reader whenever needed 
 ;without syncro to metronome signal 
@@ -996,7 +1062,7 @@ ktrigOff4 trigger gkOnOff4, 0.5, 1
 ;Sync Sequencer-On with metro pulse signal
 if (kpulse_quantize = 1) then
 	ktrigOn5 trigger gkOnOff5, 0.5, 0
-		schedkwhen ktrigOn5, 0, 0, 105, 0, -1, 1;, gkpatt_key, gkpatt_found, gkpatt_duration
+		schedkwhen ktrigOn5, 0, 0, 105, 0, -1
 endif
 ;Turn Off the trigger instrument and the pattern reader whenever needed 
 ;without syncro to metronome signal 
@@ -1008,7 +1074,7 @@ ktrigOff5 trigger gkOnOff5, 0.5, 1
 ;Sync Sequencer-On with metro pulse signal
 if (kpulse_quantize = 1) then
 	ktrigOn6 trigger gkOnOff6, 0.5, 0
-		schedkwhen ktrigOn6, 0, 0, 106, 0, -1, 1;, gkpatt_key, gkpatt_found, gkpatt_duration
+		schedkwhen ktrigOn6, 0, 0, 106, 0, -1
 endif
 ;Turn Off the trigger instrument and the pattern reader whenever needed 
 ;without syncro to metronome signal 
@@ -1020,7 +1086,7 @@ ktrigOff6 trigger gkOnOff6, 0.5, 1
 ;Sync Sequencer-On with metro pulse signal
 if (kpulse_quantize = 1) then
 	ktrigOn7 trigger gkOnOff7, 0.5, 0
-		schedkwhen ktrigOn7, 0, 0, 107, 0, -1, 1;, gkpatt_key, gkpatt_found, gkpatt_duration
+		schedkwhen ktrigOn7, 0, 0, 107, 0, -1
 endif
 ;Turn Off the trigger instrument and the pattern reader whenever needed 
 ;without syncro to metronome signal 
@@ -1032,7 +1098,7 @@ ktrigOff7 trigger gkOnOff7, 0.5, 1
 ;Sync Sequencer-On with metro pulse signal
 if (kpulse_quantize = 1) then
 	ktrigOn8 trigger gkOnOff8, 0.5, 0
-		schedkwhen ktrigOn8, 0, 0, 108, 0, -1, 1;, gkpatt_key, gkpatt_found, gkpatt_duration
+		schedkwhen ktrigOn8, 0, 0, 108, 0, -1
 endif
 ;Turn Off the trigger instrument and the pattern reader whenever needed 
 ;without syncro to metronome signal 
@@ -1044,7 +1110,7 @@ ktrigOff8 trigger gkOnOff8, 0.5, 1
 ;Sync Sequencer-On with metro pulse signal
 if (kpulse_quantize = 1) then
 	ktrigOn9 trigger gkOnOff9, 0.5, 0
-		schedkwhen ktrigOn9, 0, 0, 109, 0, -1, 1;, gkpatt_key, gkpatt_found, gkpatt_duration
+		schedkwhen ktrigOn9, 0, 0, 109, 0, -1
 endif
 ;Turn Off the trigger instrument and the pattern reader whenever needed 
 ;without syncro to metronome signal 
@@ -1640,9 +1706,10 @@ endin
 
 </CsInstruments>
 <CsScore>
-#define TR(INSNUM) #i1 0 1 $INSNUM#
-#define DUR #7200#
-
+#define TR(INSNUM) #i 1	0 1 $INSNUM#
+#define OPEN #7200#
+f	0	$OPEN
+;inst	sta	dur	note	veloc
 $TR(1)
 $TR(2)
 $TR(3)
@@ -1698,9 +1765,9 @@ $TR(52)
 $TR(53)
 
 i 98 0 1
-i 99 0 $DUR
-i 400 0 $DUR
-i 401 0 $DUR
+i 99 0 $OPEN
+i 400 0 $OPEN
+i 401 0 $OPEN
 e
 </CsScore>
 </CsoundSynthesizer>
@@ -1710,13 +1777,17 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 819 364 406 148
+WindowBounds: 746 479 400 200
 CurrentView: io
 IOViewEdit: On
 Options:
 </MacOptions>
 <MacGUI>
 ioView nobackground {59110, 56797, 54741}
-ioText {6, 6} {373, 94} label 0.000000 0.00100 "" left "DejaVu Sans" 20 {0, 0, 0} {65280, 65280, 65280} nobackground border This is csd uses an interface built with FLTK. No QuteCsound widgets here...
+ioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1
+ioSlider {45, 5} {20, 100} 0.000000 1.000000 0.000000 slider2
+ioSlider {85, 5} {20, 100} 0.000000 1.000000 0.000000 slider3
+ioSlider {125, 5} {20, 100} 0.000000 1.000000 0.000000 slider4
+ioSlider {165, 5} {20, 100} 0.000000 1.000000 0.000000 slider5
 </MacGUI>
 
