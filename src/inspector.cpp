@@ -48,7 +48,7 @@ void Inspector::parseText(const QString &text)
   QStringList lines = text.split(QRegExp("[\n\r]"));
   QList<QTreeWidgetItem *> items;
   for (int i = 0; i< lines.size(); i++) {
-    if (lines[i].trimmed().contains(QRegExp("^[\s]*instr"))) {
+    if (lines[i].trimmed().contains(QRegExp("^[\\s]*instr"))) {
       QString text = lines[i].mid(lines[i].indexOf("instr") + 6);
       QStringList columnslist(QString("instr %1").arg(text).simplified());
       TreeItem *newItem = new TreeItem(m_treeWidget, columnslist);
