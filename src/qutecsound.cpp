@@ -1698,11 +1698,10 @@ void qutecsound::runUtility(QString flags)
 void qutecsound::dispatchQueues()
 {
 //   qDebug("qutecsound::dispatchQueues()");
-  int messBufSize = 512;
   int counter = 0;
   widgetPanel->processNewValues();
   if (ud->PERF_STATUS == 1) {
-    while (counter++ < messBufSize) {
+    while ((m_options->consoleBufferSize <= 0 || counter++ < m_options->consoleBufferSize) && ud->PERF_STATUS == 1) {
       messageMutex.lock();
       if (messageQueue.isEmpty()) {
         messageMutex.unlock();
@@ -1717,7 +1716,7 @@ void qutecsound::dispatchQueues()
       widgetPanel->refreshConsoles();  // Scroll to end of text all console widgets
     }
     messageMutex.lock();
-    if (!messageQueue.isEmpty() and counter >= messBufSize) {
+    if (!messageQueue.isEmpty() && m_options->consoleBufferSize > 0 && counter >= m_options->consoleBufferSize) {
       messageQueue.clear();
       messageQueue << "\nQUTECSOUND: Message buffer overflow. Messages discarded!\n";
     }
@@ -2581,6 +2580,7 @@ void qutecsound::readSettings()
   m_options->useAPI = settings.value("useAPI", true).toBool();
   m_options->thread = settings.value("thread", true).toBool();
   m_options->keyRepeat = settings.value("keyRepeat", false).toBool();
+  m_options->consoleBufferSize = settings.value("consoleBufferSize", 1024).toInt();
   m_options->bufferSize = settings.value("bufferSize", 1024).toInt();
   m_options->bufferSizeActive = settings.value("bufferSizeActive", false).toBool();
   m_options->HwBufferSize = settings.value("HwBufferSize", 1024).toInt();
@@ -2705,6 +2705,7 @@ void qutecsound::writeSettings()
   settings.setValue("useAPI", m_options->useAPI);
   settings.setValue("thread", m_options->thread);
   settings.setValue("keyRepeat", m_options->keyRepeat);
+  settings.setValue("consoleBufferSize", m_options->consoleBufferSize);
   settings.setValue("bufferSize", m_options->bufferSize);
   settings.setValue("bufferSizeActive", m_options->bufferSizeActive);
   settings.setValue("HwBufferSize",m_options->HwBufferSize);

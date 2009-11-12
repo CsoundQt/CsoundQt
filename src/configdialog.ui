@@ -628,7 +628,7 @@
        <x>10</x>
        <y>10</y>
        <width>321</width>
-       <height>191</height>
+       <height>241</height>
       </rect>
      </property>
      <property name="title">
@@ -698,6 +698,44 @@
       <property name="text">
        <string>Allow key repeats for sensekey</string>
       </property>
+     </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>180</y>
+        <width>301</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QLabel" name="label_27">
+         <property name="text">
+          <string>Console Message buffer size</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="consoleBufferComboBox">
+         <item>
+          <property name="text">
+           <string>256</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1024</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>No limit</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox_6">

@@ -66,6 +66,7 @@ class Options{
     bool useAPI;
     bool thread;
     bool keyRepeat;
+    int consoleBufferSize;
 
     int bufferSize;
     bool bufferSizeActive;
