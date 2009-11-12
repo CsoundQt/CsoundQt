@@ -14,8 +14,9 @@ gihandle init 0
 ; By Andres Cabrera 2009
 
 instr 1
-; Receive the name from the text box
+; Receive the name from the text boxes
 Sfilename invalue "_Browse1"
+Sfilename2 invalue "_Browse2"
 ; Check duration and sample rate
 ilen filelen Sfilename
 
@@ -31,8 +32,8 @@ kdec invalue "decimation"
 event_i "i", 97, 0, 1
 ; Turn on processing instrument for approprate time
 event_i "i", 98, 5, ilen / i(kdec)
-Soutline strcat Sfilename, ".txt"
-gihandle fiopen Soutline, 0 ; open text file for writing
+prints Sfilename2
+gihandle fiopen Sfilename2, 0 ; open text file for writing
 ; When finished, quit
 event_i "i", 100, (ilen/ i(kdec)) + 6, 1
 endin
@@ -106,25 +107,28 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 401 221 580 400
+WindowBounds: 629 86 585 492
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {35466, 40349, 41634}
-ioText {95, 258} {80, 25} editnum 1000.000000 1.000000 "decimation" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1000.000000
+ioText {95, 316} {80, 25} editnum 1000.000000 1.000000 "decimation" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1000.000000
 ioText {11, 227} {445, 26} edit 0.000000 0.00100 "_Browse1" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder /home/andres/Documentos/04 Javeriana/01 Compresores/test-signal-static.wav
 ioButton {458, 225} {100, 30} value 1.000000 "_Browse1" "Browse" "/" 
-ioButton {188, 296} {375, 61} value 1.000000 "_Render" "Render" "/" 
+ioButton {188, 354} {375, 61} value 1.000000 "_Play" "Run" "/" 
 ioText {10, 198} {80, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File to load
-ioText {12, 258} {80, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Decimation
-ioText {95, 292} {80, 25} editnum 0.000000 1.000000 "start" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.000000
-ioText {12, 292} {86, 27} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Start time (ms)
-ioText {95, 329} {80, 25} editnum 1000.000000 1.000000 "end" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1000.000000
-ioText {12, 329} {86, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder End time (ms)
-ioMenu {186, 260} {122, 30} 1 303 "peak,average" type
-ioMeter {316, 265} {245, 22} {0, 59904, 0} "vert12" 0.000000 "fb" 0.997732 fill 1 0 mouse
+ioText {12, 316} {80, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Decimation
+ioText {95, 350} {80, 25} editnum 0.000000 1.000000 "start" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.000000
+ioText {12, 350} {86, 27} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Start time (ms)
+ioText {95, 387} {80, 25} editnum 1000.000000 1.000000 "end" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1000.000000
+ioText {12, 387} {86, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder End time (ms)
+ioMenu {186, 318} {122, 30} 1 303 "peak,average" type
+ioMeter {316, 323} {245, 22} {0, 59904, 0} "vert12" 0.681818 "fb" 0.991837 fill 1 0 mouse
 ioText {10, 0} {554, 192} display 0.000000 0.00100 "" center "DejaVu Sans" 12 {65280, 43520, 0} {4352, 4096, 3840} background border Â¬This csd file writes the values from an audio file to a text file, from the selected starting time to the selected end time, in blocks of size determined by the decimation value. If decimation is 100, this means that 100 audio samples will write a single value to the text file.Â¬You can select peak to store the sample with greatest absolute value or average to store the average of the set.Â¬To use, select file to process using the Browse button, then press the render button and wait for the progress bar to go completely green.
+ioButton {460, 283} {100, 30} value 1.000000 "_Browse2" "Browse" "/" 
+ioText {12, 256} {80, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Destination file
+ioText {13, 285} {445, 26} edit 0.000000 0.00100 "_Browse1" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder /home/andres/Documentos/04 Javeriana/01 Compresores/test-signal-static.txt
 </MacGUI>
 
