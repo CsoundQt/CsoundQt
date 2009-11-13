@@ -48,6 +48,12 @@ void Inspector::parseText(const QString &text)
   QStringList lines = text.split(QRegExp("[\n\r]"));
   QList<QTreeWidgetItem *> items;
   for (int i = 0; i< lines.size(); i++) {
+    if (lines[i].trimmed().contains(QRegExp("^[\\s\\w]*ftgen"))) {
+      QString text = lines[i].trimmed().simplified();
+      QStringList columnslist(text);
+      TreeItem *newItem = new TreeItem(m_treeWidget, columnslist);
+      newItem->setLine(i + 1);
+    }
     if (lines[i].trimmed().contains(QRegExp("^[\\s]*instr"))) {
       QString text = lines[i].mid(lines[i].indexOf("instr") + 6);
       QStringList columnslist(QString("instr %1").arg(text).simplified());
@@ -57,6 +63,12 @@ void Inspector::parseText(const QString &text)
     if (lines[i].trimmed().contains(QRegExp("^[\\s]*opcode"))) {
       QString text = lines[i].mid(lines[i].indexOf("opcode") + 6);
       QStringList columnslist(QString("opcode %1").arg(text).simplified());
+      TreeItem *newItem = new TreeItem(m_treeWidget, columnslist);
+      newItem->setLine(i + 1);
+    }
+    if (lines[i].trimmed().contains(QRegExp("^[\\s]*f[\\s\\d]"))) {
+      QString text = lines[i].mid(lines[i].indexOf("f") + 2);
+      QStringList columnslist(QString("f %1").arg(text).simplified());
       TreeItem *newItem = new TreeItem(m_treeWidget, columnslist);
       newItem->setLine(i + 1);
     }

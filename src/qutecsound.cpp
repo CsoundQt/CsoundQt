@@ -2058,7 +2058,7 @@ void qutecsound::createActions()
   connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
   connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
 
-  showInspectorAct = new QAction(tr("Inspector"), this);
+  showInspectorAct = new QAction(QIcon(":/images/edit-find.png"), tr("Inspector"), this);
   showInspectorAct->setCheckable(true);
   showInspectorAct->setStatusTip(tr("Show Inspector"));
   showInspectorAct->setIconText(tr("Inspector"));
