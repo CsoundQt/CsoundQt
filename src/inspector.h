@@ -30,6 +30,7 @@ class TreeItem : public QTreeWidgetItem
 {
   public:
     TreeItem(QTreeWidget *parent, QStringList columnslist) : QTreeWidgetItem(parent, columnslist) {;}
+    TreeItem(QTreeWidgetItem *parent, QStringList columnslist) : QTreeWidgetItem(parent, columnslist) {;}
     ~TreeItem() {;}
 
     int getLine() {return m_line;}

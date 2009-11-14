@@ -2364,7 +2364,9 @@ void qutecsound::createMenus()
   subMenus << synthFiles;
   subMenuNames << "Synths";
 
+  musicFiles.append(":/examples/Music/Boulanger-Trapped_in_Convert.csd");
   musicFiles.append(":/examples/Music/Chowning-Stria.csd");
+  musicFiles.append(":/examples/Music/Kung-Xanadu.csd");
   musicFiles.append(":/examples/Music/Riley-In_C.csd");
 
   subMenus << musicFiles;

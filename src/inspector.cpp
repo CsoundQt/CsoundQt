@@ -29,7 +29,7 @@ Inspector::Inspector(QWidget *parent)
 {
   setWindowTitle("Inspector");
   m_treeWidget = new QTreeWidget(this);
-  m_treeWidget->setHeaderLabel("Instruments");
+  m_treeWidget->setHeaderLabel("Inspector");
   m_treeWidget->show();
   setWidget(m_treeWidget);
   connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
@@ -45,34 +45,39 @@ void Inspector::parseText(const QString &text)
 {
 //  qDebug() << "Inspector:parseText";
   m_treeWidget->clear();
+  TreeItem *opcodeItem = new TreeItem(m_treeWidget, QStringList("Opcodes"));
+  TreeItem *instrItem = new TreeItem(m_treeWidget, QStringList("Instruments"));
+  TreeItem *ftableItem = new TreeItem(m_treeWidget, QStringList("F-tables"));
   QStringList lines = text.split(QRegExp("[\n\r]"));
-  QList<QTreeWidgetItem *> items;
   for (int i = 0; i< lines.size(); i++) {
     if (lines[i].trimmed().contains(QRegExp("^[\\s\\w]*ftgen"))) {
       QString text = lines[i].trimmed().simplified();
       QStringList columnslist(text);
-      TreeItem *newItem = new TreeItem(m_treeWidget, columnslist);
+      TreeItem *newItem = new TreeItem(ftableItem, columnslist);
       newItem->setLine(i + 1);
     }
     if (lines[i].trimmed().contains(QRegExp("^[\\s]*instr"))) {
-      QString text = lines[i].mid(lines[i].indexOf("instr") + 6);
-      QStringList columnslist(QString("instr %1").arg(text).simplified());
-      TreeItem *newItem = new TreeItem(m_treeWidget, columnslist);
+      QString text = lines[i].mid(lines[i].indexOf("instr"));
+      QStringList columnslist(text.simplified());
+      TreeItem *newItem = new TreeItem(instrItem, columnslist);
       newItem->setLine(i + 1);
     }
     if (lines[i].trimmed().contains(QRegExp("^[\\s]*opcode"))) {
-      QString text = lines[i].mid(lines[i].indexOf("opcode") + 6);
-      QStringList columnslist(QString("opcode %1").arg(text).simplified());
-      TreeItem *newItem = new TreeItem(m_treeWidget, columnslist);
+      QString text = lines[i].mid(lines[i].indexOf("opcode"));
+      QStringList columnslist(text.simplified());
+      TreeItem *newItem = new TreeItem(opcodeItem, columnslist);
       newItem->setLine(i + 1);
     }
     if (lines[i].trimmed().contains(QRegExp("^[\\s]*f[\\s\\d]"))) {
-      QString text = lines[i].mid(lines[i].indexOf("f") + 2);
-      QStringList columnslist(QString("f %1").arg(text).simplified());
-      TreeItem *newItem = new TreeItem(m_treeWidget, columnslist);
+      QString text = lines[i].mid(lines[i].indexOf("f") );
+      QStringList columnslist(text.simplified());
+      TreeItem *newItem = new TreeItem(ftableItem, columnslist);
       newItem->setLine(i + 1);
     }
   }
+  m_treeWidget->expandItem(opcodeItem);
+  m_treeWidget->expandItem(instrItem);
+  m_treeWidget->expandItem(ftableItem);
 }
 
 void Inspector::focusInEvent (QFocusEvent * event)

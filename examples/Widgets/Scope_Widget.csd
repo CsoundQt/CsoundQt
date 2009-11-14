@@ -28,7 +28,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 666 275 498 594
+WindowBounds: 624 25 496 703
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -43,5 +43,8 @@ ioGraph {9, 304} {466, 97} scope 2.000000 -1.000000
 ioGraph {10, 457} {231, 92} scope 8.000000 -1.000000 
 ioText {10, 406} {463, 46} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {48896, 52224, 59904} background noborder The decimation property averages sample, allowing a larger time frame to be displayed. The default without decimation is one audio sample per screen pixel.
 ioGraph {247, 457} {226, 91} scope 1.000000 -1.000000 
+ioGraph {12, 553} {84, 84} lissajou 2.000000 -1.000000 
+ioGraph {101, 553} {84, 84} poincare 2.000000 -1.000000 
+ioText {192, 555} {281, 82} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {48896, 52224, 59904} background noborder The Scope widget can also show Lissajou and Poincare graphs. The decimation parameter in these cases determines the "zoom".
 </MacGUI>
 
