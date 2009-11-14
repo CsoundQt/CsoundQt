@@ -249,7 +249,7 @@
     </message>
     <message>
         <source>Enable FLTK (unsafe)</source>
-        <translation>Permita FLTK (perigoso)</translation>
+        <translation type="obsolete">Permita FLTK (perigoso)</translation>
     </message>
     <message>
         <source>Csound execution</source>
@@ -395,6 +395,34 @@
         <source>Run FLTK csds in Terminal</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Enable FLTK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scrollbars on widget panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow key repeats for sensekey</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Console Message buffer size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>256</source>
+        <translation type="unfinished">256</translation>
+    </message>
+    <message>
+        <source>1024</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No limit</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConsoleWidget</name>
@@ -433,12 +461,7 @@
     <name>FindReplace</name>
     <message>
         <source>Find and replace</source>
-        <translation>Achar e substituir</translation>
-    </message>
-    <message>
-        <source>The string was not found.
-Would you like to start from the top?</source>
-        <translation></translation>
+        <translation type="obsolete">Achar e substituir</translation>
     </message>
     <message>
         <source>Find and Replace</source>
@@ -546,6 +569,25 @@ Would you like to start from the top?</source>
     <message>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
+    </message>
+</context>
+<context>
+    <name>Inspector</name>
+    <message>
+        <source>Inspector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opcodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F-tables</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1284,7 +1326,7 @@ Você quer salvar?</translation>
     <message>
         <source>This file has not been been saved
 Please select name and location.</source>
-        <translation>Arquivo não foi salvo
+        <translation type="obsolete">Arquivo não foi salvo
 Por favo, selecione nome e local</translation>
     </message>
     <message>
@@ -1943,7 +1985,7 @@ Francois Pinot
     </message>
     <message>
         <source>Synths</source>
-        <translation>Sintetizadores</translation>
+        <translation type="obsolete">Sintetizadores</translation>
     </message>
     <message>
         <source>Examples</source>
@@ -2043,6 +2085,58 @@ Please go to Edit-&gt;Options-&gt;Environment and select directory
     </message>
     <message>
         <source>Csound Files (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Find and replace</source>
+        <translation type="unfinished">Achar e substituir</translation>
+    </message>
+    <message>
+        <source>The string was not found.
+Would you like to start from the top?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This file has not been saved
+Please select name and location.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Italian translation:
+Francesco
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+G</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Find a&amp;gain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Find next appearance of string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inspector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Inspector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Useful</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -249,7 +249,7 @@
     </message>
     <message>
         <source>Enable FLTK (unsafe)</source>
-        <translation>Abilitare FLTK (non è sicuro)</translation>
+        <translation type="obsolete">Abilitare FLTK (non è sicuro)</translation>
     </message>
     <message>
         <source>Use invalue/outvalue</source>
@@ -391,6 +391,34 @@
         <source>Interface Language (requires restart)</source>
         <translation>Lingua dell&apos;interfaccia (richiede il riavvio)</translation>
     </message>
+    <message>
+        <source>Enable FLTK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scrollbars on widget panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow key repeats for sensekey</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Console Message buffer size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>256</source>
+        <translation type="unfinished">256</translation>
+    </message>
+    <message>
+        <source>1024</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No limit</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConsoleWidget</name>
@@ -429,12 +457,12 @@
     <name>FindReplace</name>
     <message>
         <source>Find and replace</source>
-        <translation>Trova e sostituisci</translation>
+        <translation type="obsolete">Trova e sostituisci</translation>
     </message>
     <message>
         <source>The string was not found.
 Would you like to start from the top?</source>
-        <translation>La stringa non è stata trovata.
+        <translation type="obsolete">La stringa non è stata trovata.
 Volete partire dall&apos;inizio?</translation>
     </message>
     <message>
@@ -543,6 +571,25 @@ Volete partire dall&apos;inizio?</translation>
     <message>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
+    </message>
+</context>
+<context>
+    <name>Inspector</name>
+    <message>
+        <source>Inspector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opcodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F-tables</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1284,7 +1331,7 @@ Volete salvarlo?</translation>
     <message>
         <source>This file has not been been saved
 Please select name and location.</source>
-        <translation>Questo file non è stato salvato
+        <translation type="obsolete">Questo file non è stato salvato
 Selezionare nome e locazione.</translation>
     </message>
     <message>
@@ -1979,7 +2026,7 @@ Victor Lazzarini
     </message>
     <message>
         <source>Synths</source>
-        <translation>Synths</translation>
+        <translation type="obsolete">Synths</translation>
     </message>
     <message>
         <source>Examples</source>
@@ -2040,6 +2087,59 @@ Volete salvare i cambiamenti prima di chiudere?</translation>
     <message>
         <source>Do not ask again</source>
         <translation>Non chiedere di nuovo</translation>
+    </message>
+    <message>
+        <source>Find and replace</source>
+        <translation type="unfinished">Trova e sostituisci</translation>
+    </message>
+    <message>
+        <source>The string was not found.
+Would you like to start from the top?</source>
+        <translation type="unfinished">La stringa non è stata trovata.
+Volete partire dall&apos;inizio?</translation>
+    </message>
+    <message>
+        <source>This file has not been saved
+Please select name and location.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Italian translation:
+Francesco
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+G</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Find a&amp;gain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Find next appearance of string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inspector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Inspector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Useful</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

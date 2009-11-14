@@ -358,11 +358,16 @@ void qutecsound::open()
   bool helpVisible = helpPanel->isVisible();
   if (helpVisible)
     helpPanel->hide(); // Necessary for Mac, as widget Panel covers open dialog
+  bool inspectorVisible = m_inspector->isVisible();
+  if (inspectorVisible)
+    m_inspector->hide(); // Necessary for Mac, as widget Panel covers open dialog
   fileName = QFileDialog::getOpenFileName(this, tr("Open File"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco);;All Files (*)"));
   if (widgetsVisible)
     widgetPanel->show();
   if (helpVisible)
     helpPanel->show();
+  if (inspectorVisible)
+    m_inspector->show();
   int index = isOpen(fileName);
   if (index != -1) {
     documentTabs->setCurrentIndex(index);
@@ -606,9 +611,19 @@ QString qutecsound::getSaveFileName()
   bool widgetsVisible = widgetPanel->isVisible();
   if (widgetsVisible)
     widgetPanel->hide(); // Necessary for Mac, as widget Panel covers open dialog
+  bool helpVisible = helpPanel->isVisible();
+  if (helpVisible)
+    helpPanel->hide(); // Necessary for Mac, as widget Panel covers open dialog
+  bool inspectorVisible = m_inspector->isVisible();
+  if (inspectorVisible)
+    m_inspector->hide(); // Necessary for Mac, as widget Panel covers open dialog
   QString fileName = QFileDialog::getSaveFileName(this, tr("Save File As"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)"));
   if (widgetsVisible)
     widgetPanel->show(); // Necessary for Mac, as widget Panel covers open dialog
+  if (helpVisible)
+    helpPanel->show(); // Necessary for Mac, as widget Panel covers open dialog
+  if (inspectorVisible)
+    m_inspector->show(); // Necessary for Mac, as widget Panel covers open dialog
   if (fileName.isEmpty())
     return false;
   if (isOpen(fileName) != -1 && isOpen(fileName) != curPage) {
@@ -2349,6 +2364,7 @@ void qutecsound::createMenus()
   widgetFiles.append(":/examples/Widgets/Checkbox_Widget.csd");
   widgetFiles.append(":/examples/Widgets/Menu_Widget.csd");
   widgetFiles.append(":/examples/Widgets/Controller_Widget.csd");
+  widgetFiles.append(":/examples/Widgets/Lineedit_Widget.csd");
   widgetFiles.append(":/examples/Widgets/Scope_Widget.csd");
   widgetFiles.append(":/examples/Widgets/String_Channels.csd");
   widgetFiles.append(":/examples/Widgets/Reserved_Channels.csd");
@@ -2395,7 +2411,6 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/Examples/Oscillator_Aliasing.csd");
   exampleFiles.append(":/examples/Examples/Circle.csd");
   exampleFiles.append(":/examples/Examples/Pvstencil.csd");
-  exampleFiles.append(":/examples/Examples/Lineedit_Widget.csd");
   exampleFiles.append(":/examples/Examples/Rms.csd");
   exampleFiles.append(":/examples/Examples/Reinit_Example.csd");
   exampleFiles.append(":/examples/Examples/No_Reinit.csd");

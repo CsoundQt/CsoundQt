@@ -27,13 +27,15 @@
 Inspector::Inspector(QWidget *parent)
   : QDockWidget(parent)
 {
-  setWindowTitle("Inspector");
+  setWindowTitle(tr("Inspector"));
   m_treeWidget = new QTreeWidget(this);
-  m_treeWidget->setHeaderLabel("Inspector");
+  m_treeWidget->setHeaderLabel(tr("Inspector"));
   m_treeWidget->show();
   setWidget(m_treeWidget);
-  connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
+  connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
           this, SLOT(itemActivated(QTreeWidgetItem*,int)));
+//  connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
+//          this, SLOT(itemActivated(QTreeWidgetItem*,int)));
 }
 
 Inspector::~Inspector()
@@ -45,31 +47,31 @@ void Inspector::parseText(const QString &text)
 {
 //  qDebug() << "Inspector:parseText";
   m_treeWidget->clear();
-  TreeItem *opcodeItem = new TreeItem(m_treeWidget, QStringList("Opcodes"));
-  TreeItem *instrItem = new TreeItem(m_treeWidget, QStringList("Instruments"));
-  TreeItem *ftableItem = new TreeItem(m_treeWidget, QStringList("F-tables"));
+  TreeItem *opcodeItem = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
+  TreeItem *instrItem = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
+  TreeItem *ftableItem = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
   QStringList lines = text.split(QRegExp("[\n\r]"));
   for (int i = 0; i< lines.size(); i++) {
     if (lines[i].trimmed().contains(QRegExp("^[\\s\\w]*ftgen"))) {
-      QString text = lines[i].trimmed().simplified();
-      QStringList columnslist(text);
+      QString text = lines[i].trimmed();
+      QStringList columnslist(text.simplified());
       TreeItem *newItem = new TreeItem(ftableItem, columnslist);
       newItem->setLine(i + 1);
     }
     if (lines[i].trimmed().contains(QRegExp("^[\\s]*instr"))) {
-      QString text = lines[i].mid(lines[i].indexOf("instr"));
+      QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
       TreeItem *newItem = new TreeItem(instrItem, columnslist);
       newItem->setLine(i + 1);
     }
     if (lines[i].trimmed().contains(QRegExp("^[\\s]*opcode"))) {
-      QString text = lines[i].mid(lines[i].indexOf("opcode"));
+      QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
       TreeItem *newItem = new TreeItem(opcodeItem, columnslist);
       newItem->setLine(i + 1);
     }
     if (lines[i].trimmed().contains(QRegExp("^[\\s]*f[\\s\\d]"))) {
-      QString text = lines[i].mid(lines[i].indexOf("f") );
+      QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
       TreeItem *newItem = new TreeItem(ftableItem, columnslist);
       newItem->setLine(i + 1);
