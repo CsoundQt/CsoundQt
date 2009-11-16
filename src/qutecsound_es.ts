@@ -6,7 +6,7 @@
     <message>
         <location filename="configdialog.cpp" line="197"/>
         <source>Please note that OPCODEDIR will only be set when running in an external shell. It won&apos;t be set when using Run or Render.</source>
-        <translation type="unfinished"></translation>
+        <translation>OPCODEDIR solo se define si se está corriendo en terminal externa. No se define cuando se usa Correr o Render.</translation>
     </message>
     <message>
         <location filename="configdialog.cpp" line="344"/>
@@ -199,7 +199,7 @@
     <message>
         <location filename="configdialog.ui" line="569"/>
         <source>Enable FLTK</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar FLTK</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="776"/>
@@ -372,12 +372,12 @@
     <message>
         <location filename="configdialog.ui" line="605"/>
         <source>Run FLTK csds in Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Correr FLTK en terminal</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="621"/>
         <source>Scrollbars on widget panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Barras de arrastre en panel de widgets</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="635"/>
@@ -407,27 +407,27 @@
     <message>
         <location filename="configdialog.ui" line="699"/>
         <source>Allow key repeats for sensekey</source>
-        <translation type="unfinished"></translation>
+        <translation>Permitir repetición para sensekey</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="715"/>
         <source>Console Message buffer size</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamaño del buffer de la consola</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="723"/>
         <source>256</source>
-        <translation type="unfinished">256</translation>
+        <translation>256</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="728"/>
         <source>1024</source>
-        <translation type="unfinished"></translation>
+        <translation>1024</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="733"/>
         <source>No limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Sin límite</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="751"/>
@@ -602,7 +602,7 @@
     <message>
         <location filename="dockhelp.cpp" line="133"/>
         <source>Frames version only available in external browser.</source>
-        <translation type="unfinished"></translation>
+        <translation>Versión con marcos solo disponible en el navegador externo.</translation>
     </message>
     <message>
         <location filename="dockhelp.cpp" line="139"/>
@@ -763,22 +763,22 @@ Desea iniciar desde el principio?</translation>
         <location filename="inspector.cpp" line="30"/>
         <location filename="inspector.cpp" line="32"/>
         <source>Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Inspector</translation>
     </message>
     <message>
         <location filename="inspector.cpp" line="50"/>
         <source>Opcodes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="inspector.cpp" line="51"/>
-        <source>Instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>Opcodes</translation>
     </message>
     <message>
         <location filename="inspector.cpp" line="52"/>
+        <source>Instruments</source>
+        <translation>Instrumentos</translation>
+    </message>
+    <message>
+        <location filename="inspector.cpp" line="54"/>
         <source>F-tables</source>
-        <translation type="unfinished"></translation>
+        <translation>Tablas-F (f-tables)</translation>
     </message>
 </context>
 <context>
@@ -2453,25 +2453,26 @@ Versión</translation>
     <message>
         <location filename="qutecsound.cpp" line="301"/>
         <source>Find and replace</source>
-        <translation type="unfinished">Buscar y reemplazar</translation>
+        <translation>Buscar y reemplazar</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="302"/>
         <source>The string was not found.
 Would you like to start from the top?</source>
-        <translation type="unfinished">No se encontró la búsqueda.
+        <translation>No se encontró la búsqueda.
 Desea iniciar desde el principio?</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="620"/>
         <source>Csound Files (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivos de Csound (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="867"/>
         <source>This file has not been saved
 Please select name and location.</source>
-        <translation type="unfinished"></translation>
+        <translation>Este archivo no ha sido salvado
+Por favor elija un nombre y ubicación.</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1467"/>
@@ -2495,12 +2496,12 @@ Francois Pinot</translation>
         <source>Italian translation:
 Francesco
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Traducción al italiano: Francesco</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1852"/>
         <source>Ctrl+G</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1855"/>
@@ -2510,7 +2511,7 @@ Francesco
     <message>
         <location filename="qutecsound.cpp" line="1870"/>
         <source>Alt+6</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1927"/>
@@ -2525,12 +2526,12 @@ Francesco
     <message>
         <location filename="qutecsound.cpp" line="2009"/>
         <source>Find a&amp;gain</source>
-        <translation type="unfinished"></translation>
+        <translation>Encontrar de nuevo</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2010"/>
         <source>Find next appearance of string</source>
-        <translation type="unfinished"></translation>
+        <translation>Encontrar siguiente ocurrencia</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2031"/>
@@ -2546,12 +2547,12 @@ Francesco
         <location filename="qutecsound.cpp" line="2076"/>
         <location filename="qutecsound.cpp" line="2079"/>
         <source>Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Inspector</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2078"/>
         <source>Show Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar Inspector</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2091"/>
@@ -2656,12 +2657,12 @@ Francesco
     <message>
         <location filename="qutecsound.cpp" line="2389"/>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation>Música</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2405"/>
         <source>Useful</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiles</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2525"/>

@@ -194,12 +194,12 @@
     <message>
         <location filename="configdialog.ui" line="569"/>
         <source>Enable FLTK</source>
-        <translation type="unfinished"></translation>
+        <translation>Autoriser FLTK</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="621"/>
         <source>Scrollbars on widget panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Ascenseurs dans le panneau des widgets</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="776"/>
@@ -387,27 +387,27 @@
     <message>
         <location filename="configdialog.ui" line="699"/>
         <source>Allow key repeats for sensekey</source>
-        <translation type="unfinished"></translation>
+        <translation>Autoriser la répétition de touche pour sensekey</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="715"/>
         <source>Console Message buffer size</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille du tampon de message de la console</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="723"/>
         <source>256</source>
-        <translation type="unfinished">256</translation>
+        <translation>256</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="728"/>
         <source>1024</source>
-        <translation type="unfinished"></translation>
+        <translation>1024</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="733"/>
         <source>No limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de limite</translation>
     </message>
     <message>
         <location filename="configdialog.ui" line="751"/>
@@ -763,22 +763,22 @@ Voulez-vous chercher depuis le début ?</translation>
         <location filename="inspector.cpp" line="30"/>
         <location filename="inspector.cpp" line="32"/>
         <source>Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Inspecteur</translation>
     </message>
     <message>
         <location filename="inspector.cpp" line="50"/>
         <source>Opcodes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="inspector.cpp" line="51"/>
-        <source>Instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>Opcodes</translation>
     </message>
     <message>
         <location filename="inspector.cpp" line="52"/>
+        <source>Instruments</source>
+        <translation>Instruments</translation>
+    </message>
+    <message>
+        <location filename="inspector.cpp" line="54"/>
         <source>F-tables</source>
-        <translation type="unfinished"></translation>
+        <translation>F-tables</translation>
     </message>
 </context>
 <context>
@@ -1778,9 +1778,11 @@ Voulez-vous le sauvegarder ?</translation>
         <translation>Ouvrir d&apos;abord les fichiers orc et sco dans QuteCsound !</translation>
     </message>
     <message>
-        <source>This file has not been been saved
-Please select name and location.</source>
-        <translation type="obsolete">Ce fichier n&apos;est pas sauvegardé
+        <location filename="qutecsound.cpp" line="791"/>
+        <source>Please open the orc and sco files in QuteCsound first!</source>
+        <oldsource>This file has not been been saved
+Please select name and location.</oldsource>
+        <translation type="unfinished">Ce fichier n&apos;est pas sauvegardé
 Choisir un nom et une destination.</translation>
     </message>
     <message>
@@ -2187,7 +2189,7 @@ Délivré sous licence LGPLv2 ou GPLv3</translation>
     <message>
         <location filename="qutecsound.cpp" line="2004"/>
         <source>&amp;Find and Replace</source>
-        <translation>&amp;Trouver et remplacer</translation>
+        <translation>&amp;Rechercher et remplacer</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1851"/>
@@ -2525,20 +2527,21 @@ Délivré sous licence LGPLv2 ou GPLv3</translation>
     <message>
         <location filename="qutecsound.cpp" line="301"/>
         <source>Find and replace</source>
-        <translation type="unfinished">Chercher et remplacer</translation>
+        <translation>Chercher et remplacer</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="302"/>
         <source>The string was not found.
 Would you like to start from the top?</source>
-        <translation type="unfinished">La chaîne n&apos;a pas été trouvée.
+        <translation>La chaîne n&apos;a pas été trouvée.
 Voulez-vous chercher depuis le début ?</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="867"/>
         <source>This file has not been saved
 Please select name and location.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce fichier n&apos;a pas été enregistré
+Choisir un nom et une destination.</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1491"/>
@@ -2554,12 +2557,14 @@ François Pinot
         <source>Italian translation:
 Francesco
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Traduction italienne :
+Francesco
+</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1852"/>
         <source>Ctrl+G</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+G</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="1855"/>
@@ -2569,17 +2574,17 @@ Francesco
     <message>
         <location filename="qutecsound.cpp" line="1870"/>
         <source>Alt+6</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+6</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2009"/>
         <source>Find a&amp;gain</source>
-        <translation type="unfinished"></translation>
+        <translation>Rec&amp;hercher à nouveau</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2010"/>
         <source>Find next appearance of string</source>
-        <translation type="unfinished"></translation>
+        <translation>Chercher l&apos;occurence suivante de la chaîne</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2031"/>
@@ -2595,12 +2600,12 @@ Francesco
         <location filename="qutecsound.cpp" line="2076"/>
         <location filename="qutecsound.cpp" line="2079"/>
         <source>Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Inspecteur</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2078"/>
         <source>Show Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer l&apos;inspecteur</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2140"/>
@@ -2659,12 +2664,12 @@ Francesco
     <message>
         <location filename="qutecsound.cpp" line="2389"/>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation>Musique</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2405"/>
         <source>Useful</source>
-        <translation type="unfinished"></translation>
+        <translation>Utile</translation>
     </message>
     <message>
         <source>Synths</source>
@@ -2779,6 +2784,7 @@ Victor Lazzarini
 </translation>
     </message>
     <message>
+        <location filename="qutecsound.cpp" line="1495"/>
         <source></source>
         <translation></translation>
     </message>
