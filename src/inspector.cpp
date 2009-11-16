@@ -48,8 +48,11 @@ void Inspector::parseText(const QString &text)
 //  qDebug() << "Inspector:parseText";
   m_treeWidget->clear();
   TreeItem *opcodeItem = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
+  opcodeItem->setLine(-1);
   TreeItem *instrItem = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
+  instrItem->setLine(-1);
   TreeItem *ftableItem = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
+  ftableItem->setLine(-1);
   QStringList lines = text.split(QRegExp("[\n\r]"));
   for (int i = 0; i< lines.size(); i++) {
     if (lines[i].trimmed().contains(QRegExp("^[\\s\\w]*ftgen"))) {
@@ -96,5 +99,7 @@ void Inspector::closeEvent(QCloseEvent * /*event*/)
 void Inspector::itemActivated(QTreeWidgetItem * item, int column)
 {
   int line = static_cast<TreeItem *>(item)->getLine();
-  emit jumpToLine(line);
+  if (line >= 0) {
+    emit jumpToLine(line);
+  }
 }

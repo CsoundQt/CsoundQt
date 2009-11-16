@@ -46,11 +46,15 @@ QString DotGenerator::getDotText()
     m_orcText.remove(instrument);
   }
   QVector<QVector <Node> > instrumentGraphs;
+  QVector<QVector <QPair <QString, int> > > allInstrumentLabels;
   QVector<QString> instrumentNames;
-  foreach (QString instrument, instruments) {
+  for (int i = 0; i < instruments.size(); i++) {
+    QString instrument = instruments[i];
     QVector <Node> instrumentGraph;
-    QStringList lines = instrument.split("\n", QString::SkipEmptyParts);
-    foreach (QString line, lines) {
+    QVector <QPair <QString, int> > instrumentLabels;
+    QStringList lines = instrument.split(QRegExp("\n"), QString::SkipEmptyParts);
+    for (int j = 0; j < lines.size(); j++) {
+      QString line = lines[j];
       if (line.contains("instr")) {
         instrumentNames.append(line.remove("instr").trimmed());
       }
@@ -63,6 +67,25 @@ QString DotGenerator::getDotText()
           if (parts[0].startsWith(";")) {
             //TODO handle comments
           } //TODO handle if, gotos and labels
+          else if (parts[0] == "if") {
+
+          }
+          else if (parts[0] == "else") {
+
+          }
+          else if (parts[0] == "elseif") {
+
+          }
+          else if (parts[0] == "endif") {
+
+          }
+          else if (line.trimmed().contains(QRegExp("^[\\w]+:"))) {  // a label
+            QPair<QString, int> l;
+            l.first = parts[0].trimmed();
+            l.second = instrumentGraph.size();
+            instrumentLabels.append(l);
+            qDebug() << l;
+          }
           else {
             instrumentGraph.append(createNode(parts));
           }
@@ -70,12 +93,23 @@ QString DotGenerator::getDotText()
       }
     }
     instrumentGraphs.append(instrumentGraph);
+    allInstrumentLabels.append(instrumentLabels);
   }
   QHash<QString, QString> tokenSource;
   for (int i = 0; i < instrumentGraphs.size(); i++) {
     dotText += "subgraph cluster_" + QString::number(i) + " {\n    color=black\n fontsize=18\n";
     dotText += "label=\"instr " + instrumentNames[i]  + "\"\n";
+    int labelCounter = 0;
     for (int j = 0; j < instrumentGraphs[i].size(); j++) {
+      if (allInstrumentLabels[i].size() > 0 && allInstrumentLabels[i][labelCounter].second == j) {
+//        qDebug() << "allInstrument " << allInstrumentLabels[i].size() << " " << allInstrumentLabels[i][labelCounter].second;
+        if (labelCounter > 0) { // Close previous label
+          dotText += "} /* closes cluster_l" + QString::number(labelCounter - 1) +" */\n";
+        }
+        dotText +="subgraph cluster_l" + QString::number(labelCounter) + " {\n style=filled;\ncolor=lightgrey\n fontsize=18\n";
+        dotText += "label=\"" + allInstrumentLabels[i][labelCounter].first  + "\"\n";
+        labelCounter++;
+      }
       QVector<Port> inputs = instrumentGraphs[i][j].getInputs();
       QVector<Port> outputs = instrumentGraphs[i][j].getOutputs();
       dotText += makeNodeText(i,j,instrumentGraphs[i][j].getName(),inputs ,outputs);
@@ -92,15 +126,19 @@ QString DotGenerator::getDotText()
             }
       }
     }
-    dotText += "}\n"; //close subgraph
+    if (allInstrumentLabels[i].size() > 0) {
+      dotText += "} /*close last label in instrument */\n"; //close last label subgraph
+    }
+    dotText += "} /* close instrument subgraph */\n"; //close subgraph
   }
-  dotText += "}\n"; //close main graph
+  dotText += "} /* close main graph */\n"; //close main graph
   return dotText;
 }
 
 
 Node DotGenerator::createNode(QStringList parts)
 {
+  qDebug() << "DotGenerator::createNode " << parts;
   Node node;
   QVector <Node> instrumentGraph;
   for (int i = 0; i < parts.size(); i++){
@@ -114,10 +152,14 @@ Node DotGenerator::createNode(QStringList parts)
         outArgs += parts[j];
       }
       for (int j = i + 1; j < parts.size(); j++) {
+        if (parts[j] == ";") { // TODO: get rid of slash asterisk comments too
+          break;
+        }
         inArgs += parts[j];
       }
       node.setName(opcodeName);
       int commentIndex = inArgs.indexOf(";");
+      // TODO when comment is removed above, no need for these lines
       QString comment = "";
       if (commentIndex > 0) {
         comment = inArgs.mid(commentIndex);
@@ -209,18 +251,23 @@ QString DotGenerator::makeinputConnection(int i, int j, int n, Port input, QHash
 //           qDebug() << tokenSource.keys();
     QString name = input.name;
     QString label = input.name;
-    label.replace("\"", "\\\"");
+    if (label == "\\") { // Ignore line continuation character
+      return QString();
+    }
+    label.replace("\"", "\\\""); // Escape quotes
     QString nodeName = "ArgNode" + QString::number(i) + "_" + QString::number(j) + "_" + QString::number(n);
-    text += "    " + nodeName + " [label =\"" + label + "\" shape=box fontname=\"Arial\"  fontsize=10]\n";
+    text += "    " + nodeName + " [label=\"" + label + "\" shape=box fontname=\"Arial\"  fontsize=10]\n";
     QList<QString> keys = tokenSource.keys();
-//           qDebug() << keys;
+
+    qDebug() << keys;
+    bool connected = false;
     QStringList expTokens = label.split(QRegExp("[\\+\\-\\*\\/\\^\\)\\(\\%\\!]+"), QString::SkipEmptyParts);
     if (expTokens.size() > 1 && !label.contains("\"")) { //means it is an expression
       text += "    " + nodeName + "->";
-      text += "   Node" + QString::number(i) + "_" + QString::number(j);
+      text += "   Node" + QString::number(i) + "_" + QString::number(j) + ":i" + QString::number(n);
       text += " [fontsize=10]\n";
+      connected = true;
     }
-    bool connected = false;
     foreach (QString key, keys) {
       foreach (QString token, expTokens) {
         token.remove(QRegExp("\\s+"));
