@@ -749,12 +749,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="inspector.cpp" line="51"/>
+        <location filename="inspector.cpp" line="52"/>
         <source>Instruments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="inspector.cpp" line="52"/>
+        <location filename="inspector.cpp" line="54"/>
         <source>F-tables</source>
         <translation type="unfinished"></translation>
     </message>

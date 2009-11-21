@@ -253,6 +253,10 @@ void qutecsound::changePage(int index)
   if (textEdit != NULL) {
     textEdit->setMacWidgetsText(widgetPanel->widgetsText()); //Updated changes to widgets in file
   }
+  if (index < 0) {
+    qDebug() << "qutecsound::changePage index < 0";
+    return;
+  }
   textEdit = documentPages[index];
   textEdit->setTabStopWidth(m_options->tabWidth);
   textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
@@ -393,68 +397,52 @@ void qutecsound::reload()
 
 void qutecsound::openRecent0()
 {
-  if (maybeSave()) {
-    QString fileName = recentFiles[0];
-    if (!fileName.isEmpty()) {
-      loadCompanionFile(fileName);
-      loadFile(fileName);
-    }
-  }
+//  if (maybeSave()) {
+    openRecent(recentFiles[0]);
+//  }
 }
 
 void qutecsound::openRecent1()
 {
-  if (maybeSave()) {
-    QString fileName = recentFiles[1];
-    if (!fileName.isEmpty()) {
-      loadCompanionFile(fileName);
-      loadFile(fileName);
-    }
-  }
+//  if (maybeSave()) {
+    openRecent(recentFiles[1]);
+//  }
 }
 
 void qutecsound::openRecent2()
 {
-  if (maybeSave()) {
-    QString fileName = recentFiles[2];
-    if (!fileName.isEmpty()) {
-      loadCompanionFile(fileName);
-      loadFile(fileName);
-    }
-  }
+//  if (maybeSave()) {
+    openRecent(recentFiles[2]);
+//  }
 }
 
 void qutecsound::openRecent3()
 {
-  if (maybeSave()) {
-    QString fileName = recentFiles[3];
-    if (!fileName.isEmpty()) {
-      loadCompanionFile(fileName);
-      loadFile(fileName);
-    }
-  }
+//  if (maybeSave()) {
+    openRecent(recentFiles[3]);
+//  }
 }
 
 void qutecsound::openRecent4()
 {
-  if (maybeSave()) {
-    QString fileName = recentFiles[4];
-    if (!fileName.isEmpty()) {
-      loadCompanionFile(fileName);
-      loadFile(fileName);
-    }
-  }
+//  if (maybeSave()) {
+    openRecent(recentFiles[4]);
+//  }
 }
 
 void qutecsound::openRecent5()
 {
-  if (maybeSave()) {
-    QString fileName = recentFiles[5];
+//  if (maybeSave()) {
+    openRecent(recentFiles[5]);
+//  }
+}
+
+void qutecsound::openRecent(QString fileName)
+{
     if (!fileName.isEmpty()) {
       loadCompanionFile(fileName);
       loadFile(fileName);
     }
-  }
 }
 
 void qutecsound::createCodeGraph()
@@ -932,26 +920,28 @@ void qutecsound::runCsound(bool realtime)
       tempFile.write(csdText.toAscii());
       tempFile.flush();
     }
-    QTemporaryFile csdFile;
-    QString tmpFileName = QDir::tempPath();
-    if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
-      tmpFileName += QDir::separator();
-    }
-    tmpFileName += QString("csound-tmpXXXXXXXX.csd");
-    csdFile.setFileTemplate(tmpFileName);
-    if (!csdFile.open()) {
-      QMessageBox::critical(this,
-                            tr("QuteCsound"),
-                            tr("Error creating temporary file."),
-                            QMessageBox::Ok);
-      runAct->setChecked(false);
-      return;
-    }
-    if (documentPages[curPage]->fileName.endsWith(".csd",Qt::CaseInsensitive)) {
-      QString csdText = textEdit->document()->toPlainText();
-      QString fileName = csdFile.fileName();
-      csdFile.write(csdText.toAscii());
-      csdFile.flush();
+    QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
+    if (!m_options->saveChanges) {
+      QString tmpFileName = QDir::tempPath();
+      if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
+        tmpFileName += QDir::separator();
+      }
+      if (documentPages[curPage]->fileName.endsWith(".csd",Qt::CaseInsensitive)) {
+        tmpFileName += QString("csound-tmpXXXXXXXX.csd");
+        csdFile.setFileTemplate(tmpFileName);
+        if (!csdFile.open()) {
+          QMessageBox::critical(this,
+                                tr("QuteCsound"),
+                                tr("Error creating temporary file."),
+                                QMessageBox::Ok);
+          runAct->setChecked(false);
+          return;
+        }
+        QString csdText = textEdit->document()->toPlainText();
+        fileName = csdFile.fileName();
+        csdFile.write(csdText.toAscii());
+        csdFile.flush();
+      }
     }
     char **argv;
     argv = (char **) calloc(33, sizeof(char*));
@@ -2585,7 +2575,7 @@ void qutecsound::readSettings()
   m_options->tabWidth = settings.value("tabWidth", 40).toInt();
   m_options->colorVariables = settings.value("colorvariables", true).toBool();
   m_options->autoPlay = settings.value("autoplay", false).toBool();
-  m_options->saveChanges = settings.value("savechanges", true).toBool();
+  m_options->saveChanges = settings.value("savechanges", false).toBool();
   m_options->rememberFile = settings.value("rememberfile", true).toBool();
   m_options->saveWidgets = settings.value("savewidgets", true).toBool();
   m_options->iconText = settings.value("iconText", true).toBool();
@@ -2914,7 +2904,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
     lastUsedDir = fileName;
     lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/]")));
   }
-  if (recentFiles.count(fileName) == 0 and fileName!="") {
+  if (recentFiles.count(fileName) == 0 && fileName!="" && !fileName.startsWith(":/")) {
     recentFiles.prepend(fileName);
     recentFiles.removeLast();
     fillFileMenu();

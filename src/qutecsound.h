@@ -164,6 +164,7 @@ class qutecsound:public QMainWindow
     void openRecent3();
     void openRecent4();
     void openRecent5();
+    void openRecent(QString fileName);
     void createCodeGraph();
     void closeGraph();
     bool save();
@@ -348,6 +349,7 @@ class qutecsound:public QMainWindow
 
     UtilitiesDialog *utilitiesDialog;
     QTemporaryFile *quickRefFile;
+    QTemporaryFile *executionFile;
 
     QIcon modIcon;
     QLabel *lineNumberLabel;

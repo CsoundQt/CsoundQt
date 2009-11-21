@@ -393,31 +393,31 @@
     </message>
     <message>
         <source>Enable FLTK</source>
-        <translation type="unfinished"></translation>
+        <translation>Abilita FLYK</translation>
     </message>
     <message>
         <source>Scrollbars on widget panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Barre di scorrimento nel pannello widget</translation>
     </message>
     <message>
         <source>Allow key repeats for sensekey</source>
-        <translation type="unfinished"></translation>
+        <translation>Permetti la ripetizione tasti per sensekey</translation>
     </message>
     <message>
         <source>Console Message buffer size</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensione buffer Console Message</translation>
     </message>
     <message>
         <source>256</source>
-        <translation type="unfinished">256</translation>
+        <translation>256</translation>
     </message>
     <message>
         <source>1024</source>
-        <translation type="unfinished"></translation>
+        <translation>1024</translation>
     </message>
     <message>
         <source>No limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun limite</translation>
     </message>
 </context>
 <context>
@@ -577,19 +577,19 @@ Volete partire dall&apos;inizio?</translation>
     <name>Inspector</name>
     <message>
         <source>Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Inspector</translation>
     </message>
     <message>
         <source>Opcodes</source>
-        <translation type="unfinished"></translation>
+        <translation>Opcodes</translation>
     </message>
     <message>
         <source>Instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>Strumenti</translation>
     </message>
     <message>
         <source>F-tables</source>
-        <translation type="unfinished"></translation>
+        <translation>F-tables</translation>
     </message>
 </context>
 <context>
@@ -2090,56 +2090,57 @@ Volete salvare i cambiamenti prima di chiudere?</translation>
     </message>
     <message>
         <source>Find and replace</source>
-        <translation type="unfinished">Trova e sostituisci</translation>
+        <translation>Trova e sostituisci</translation>
     </message>
     <message>
         <source>The string was not found.
 Would you like to start from the top?</source>
-        <translation type="unfinished">La stringa non è stata trovata.
+        <translation>La stringa non è stata trovata.
 Volete partire dall&apos;inizio?</translation>
     </message>
     <message>
         <source>This file has not been saved
 Please select name and location.</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo file non è stato salvato
+Selezionare nome e locazione.</translation>
     </message>
     <message>
         <source>Italian translation:
 Francesco
 </source>
-        <translation type="unfinished"></translation>
+        <translation>traduzione italiana: Francesco</translation>
     </message>
     <message>
         <source>Ctrl+G</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+G</translation>
     </message>
     <message>
         <source>Alt+6</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+6</translation>
     </message>
     <message>
         <source>Find a&amp;gain</source>
-        <translation type="unfinished"></translation>
+        <translation>Trova a&amp;ncora</translation>
     </message>
     <message>
         <source>Find next appearance of string</source>
-        <translation type="unfinished"></translation>
+        <translation>Trova la prossima comparsa di stringa</translation>
     </message>
     <message>
         <source>Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Inspector</translation>
     </message>
     <message>
         <source>Show Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra Inspector</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation>Musica</translation>
     </message>
     <message>
         <source>Useful</source>
-        <translation type="unfinished"></translation>
+        <translation>Utile</translation>
     </message>
 </context>
 </TS>
