@@ -154,11 +154,13 @@ void QuteGraph::setValue(double value)
   qDebug("QuteGraph::setValue %i", int(value));
   if (value < 0 ) {
     for (int i = 0; i < m_pageComboBox->count(); i++) {
-      QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"));
+      QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"), QString::SkipEmptyParts);
+      qDebug() << "QuteGraph::setValue " << parts;
       if (parts.size() > 1) {
-        if (curves[parts[1].toInt()]->get_caption().isEmpty())
+        int num = parts.last().toInt();
+        if (curves.size() > num && curves[num]->get_caption().isEmpty())
           return; //don't apply value if curve is currently nameless
-        if ((int) value == -parts[1].toInt()) {
+        if ((int) value == -num) {
           changeCurve(i);
           m_value = (int) value;
         }

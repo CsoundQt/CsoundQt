@@ -1414,9 +1414,13 @@ void qutecsound::setHelpEntry()
   QTextCursor cursor = textEdit->textCursor();
   cursor.select(QTextCursor::WordUnderCursor);
   if (m_options->csdocdir != "") {
-    QString file =  m_options->csdocdir + "/" + cursor.selectedText() + ".html";
+    QString text = cursor.selectedText();
+    if (text == "0dbfs")
+      text = "Zerodbfs";
+    else if (text.contains("CsOptions"))
+      text = "CommandUnifile";
     helpPanel->docDir = m_options->csdocdir;
-    helpPanel->loadFile(file);
+    helpPanel->loadFile(m_options->csdocdir + "/" + text + ".html");
     helpPanel->show();
   }
   else {
