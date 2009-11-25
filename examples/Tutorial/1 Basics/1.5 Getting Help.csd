@@ -2,11 +2,11 @@
 
 General information about QuteCsound's buttons and windows, can be found in the 'Open Quick Reference Guide' located in the Help Menu.
 
-Help for most of the used Csound vocabulary is available, by marking the words and selecting: 
-Menu: Help - Show Opcode Entry (or with shortcut: Shift+F1)
+Help for most of the used Csound vocabulary is available, by marking the words with the cursor and selecting
+Show Opcode Entry from the Help Menu (or with shortcut: Shift+F1)
 
-A short definition about opcodes in- and outputs, can be found on the QuteCsound bottomline. 
-As an example, mark the opcode 'line' and you see:
+A short definition about opcodes' inputs and outputs, can be found on the QuteCsound status bar at the bottom when the cursor is over an opcode. 
+As an example, click on the opcode 'line' below:
 
 kres line ia, idur, ib 
 
@@ -15,6 +15,11 @@ kres line ia, idur, ib
 3. "ia" sets the initial value, the line starts with
 4. "idur" sets the duration value
 5. "ib" sets the destination value
+
+Notice that line must use i-type variables (so you can't change its behavior inside a note!)
+
+Direct links to Manual chapters can be provided in the comments. For example, click on the word below and press Shift+F1:
+CommandUnifile
 
 Further Reading:
 In the help menu is a direkt link to the Csound Manual and also to it's second chapter 'Opcodes Overview'.
@@ -54,7 +59,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 427 199 285 422
+WindowBounds: 860 199 285 208
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R

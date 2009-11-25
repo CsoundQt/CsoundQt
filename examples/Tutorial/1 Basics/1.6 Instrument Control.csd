@@ -1,13 +1,15 @@
-/*Getting started.. 1.6 Instrument Control
+/*Getting started.. 1.6 Instrument Control from the Score
 
-This first instrument provides two control possibilities to a sine oscillator. 
-Pitch and Volume can be modulated from the score. Therefore a fourth and fifth p-argument (p4, p5) are used in the instrument definition.
+This first instrument provides two control possibilities for a sine oscillator. 
+Pitch and Volume can be determined from the score. The different values for a score instruction are called p-fields. For example the score below uses 5 p-fields:
+i1 	0 	2 	0.8 	440
 
-p1, p2 & p3 are automatically generated arguments for each instrument, so we don't create them manually.
+When used inside an instrument, the values from the score are referenced using a 'p' and the number of the p-field.
+p1, p2 & p3 are required arguments for each instrument, and they have fixed meaning. All values after that can be freely assigned.
 
 p1 - instrument number
-p2 - start trigger
-p3 - stop trigger
+p2 - start time
+p3 - duration
 ---
 p4 - amplitude (0-1)
 p5 - frequency (Hz)
@@ -45,7 +47,7 @@ i1 	10 	3	0.1	659.255
 i1 	10.2 	2.5	0.15	783.991
 i1 	10.8 	2	0.3	932.328
 e
-; Keep in mind, that in "realtime mode", the number of layers is limited by your machines CPU power.
+; Keep in mind, that in "realtime mode", the number of layers is limited by your machine's CPU power.
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Nov. 2009) - Incontri HMT-Hannover
@@ -55,7 +57,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 552 190 307 465
+WindowBounds: 792 229 326 481
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -65,18 +67,15 @@ ioView background {41120, 40606, 41634}
 ioGraph {30, 281} {255, 150} scope 2.000000 -1.000000 
 ioText {30, 229} {254, 53} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The scope shows the current output-waveform.
 ioGraph {29, 81} {251, 109} table 0.000000 1.000000 
-ioText {29, 21} {251, 61} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The pure waveform used by the oscillator is visable in the Graph display.
 ioGraph {30, 281} {255, 150} scope 2.000000 -1.000000 
 ioText {30, 229} {254, 53} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The scope shows the current output-waveform.
 ioGraph {29, 81} {251, 109} table 0.000000 1.000000 
-ioText {29, 21} {251, 61} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The pure waveform used by the oscillator is visable in the Graph display.
 ioGraph {30, 281} {255, 150} scope 2.000000 -1.000000 
 ioText {30, 229} {254, 53} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The scope shows the current output-waveform.
 ioGraph {29, 81} {251, 109} table 0.000000 1.000000 
-ioText {29, 21} {251, 61} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The pure waveform used by the oscillator is visable in the Graph display.
 ioGraph {30, 281} {255, 150} scope 2.000000 -1.000000 
 ioText {30, 229} {254, 53} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The scope shows the current output-waveform.
 ioGraph {29, 81} {251, 109} table 0.000000 1.000000 
-ioText {29, 21} {251, 61} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The pure waveform used by the oscillator is visable in the Graph display.
+ioText {29, 21} {251, 61} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The pure waveform used by the oscillator is displayed in this Graph widget.
 </MacGUI>
 

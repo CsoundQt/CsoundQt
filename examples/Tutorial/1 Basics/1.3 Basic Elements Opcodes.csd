@@ -1,14 +1,19 @@
 /* Getting started.. 1.3 Basic Elements: Opcodes
 
 The fundamental building block of a Csound instrument is the opcode. 
-Each opcode can be seen as little program itself, that does a specific task. Opcodes get a blue highlightning in the QuteCsound editor. In this example 'line', 'expon', 'oscil', 'outvalue' and 'outs', are the used opcodes.
+Each opcode can be seen as little program itself, that does a specific task. Opcodes get a bold-blue highlightning in the QuteCsound editor. In this example 'line', 'expon', 'oscil', 'outvalue' and 'outs', are the opcodes used.
 
-The names are mostly a short form of their functionality.
-'line' -  generates a line between specified points
+The names of opcodes are usually a short form of their functionality.
+'line' -  generates a linear changing value between specified points
 'expon' - generates a exponential curve between two points
-'oscil' - is a tone generator (oscillator)
+'oscil' - is a tone generator (an oscillator)
 'outvalue' - sends a value to a user defined channel, in this case to the widget display
 'outs' - writes stereo audio data to an external audio device
+
+It is important to remember that opcodes receive their input arguments on the right and output their results on the left, like this:
+
+output Opcode input1, input2
+
 */
 
 <CsoundSynthesizer>
@@ -22,10 +27,10 @@ nchnls = 2
 0dbfs = 1
 
 instr 1
-kFreq line 100, 5, 1000 		; 'line' generates a linear ramp, from 100-1000 Hz
-aOut  oscili 0.2, kFreq, 1
-	outvalue "freqsweep", kFreq
-      outs aOut, aOut
+kFreq line 100, 5, 1000 		; 'line' generates a linear ramp, from 100-1000 Hz, taking 5 seconds
+aOut  oscili 0.2, kFreq, 1	; an oscillator whose frequency is taken from the value produced by 'line'
+	outvalue "freqsweep", kFreq   ; show the value from 'line' in a widget
+     outs aOut, aOut		; send the oscillator's audio to the audio ouput
 endin
 
 
@@ -38,9 +43,9 @@ endin
 
 </CsInstruments>
 <CsScore>
-f 1 0 1024 10 1 				; the basic sine waveform is generated here 
+f 1 0 1024 10 1 				; the basic sine waveform for the oscillator is generated here 
 i 1 0 5
-i 2 5 5
+i 2 5 5			;The second instrument will spend more time on lower frequencies because the values move exponentially
 e
 </CsScore>
 </CsoundSynthesizer>
@@ -51,14 +56,14 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 431 140 302 543
+WindowBounds: 895 125 316 571
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {41120, 40606, 41634}
-ioText {108, 37} {144, 29} display 997.766968 0.00100 "freqsweep" center "Helvetica" 16 {0, 0, 0} {46592, 27904, 0} background border 997.7670
+ioText {108, 37} {144, 29} display 0.000000 0.00100 "freqsweep" center "Helvetica" 16 {0, 0, 0} {46592, 27904, 0} background border 997.7670
 ioGraph {22, 365} {255, 150} scope 2.000000 -1.000000 
 ioText {21, 7} {248, 71} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder This label displays the current frequency:
 ioText {22, 313} {254, 53} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The scope shows the current output-waveform.

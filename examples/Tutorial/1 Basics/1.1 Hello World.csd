@@ -1,11 +1,11 @@
 /* Getting started.. 1.1 Hello World
 
-The 'Basics Chapter' of 'Getting started', will explain the root functionality of QuteCsound.
-You find the descriptions as comments directly in the code. 
+The 'Basics Chapter' of the Tutorials, will explain the root functionality of QuteCsound.
+You will find the descriptions as comments directly in the code. 
 
-This first example is focused on the different comment-types and shows a simple program, which outputs the "Hello World" string to the console and a "Hello World - 440Hz beep" to the computers audio output.
+This first example is focused on the different comment-types and shows a simple program, which outputs a "Hello World - 440Hz beep" to the computer's audio output and the "Hello World" string to the console.
 
-To start it, press the RUN Button in the QuteCsound-toolbar, or choose "Control->RunCsound" from the menu. 
+To start it, press the RUN Button in the QuteCsound-toolbar, or choose "Control->Run Csound" from the menu. 
 */
 
 <CsoundSynthesizer>
@@ -15,6 +15,8 @@ To start it, press the RUN Button in the QuteCsound-toolbar, or choose "Control-
 
 ; This is a comment!
 ; Comments describe how things are done, and help to explain the code.
+; They are shown in green in QuteCsound.
+; Anything after a semicolon will be ignored by Csound, so you can use it for human readable information.
 
 /*
 If you need more space than one line,
@@ -23,18 +25,16 @@ no
 problem, with those comment signs used here.
 */
 
-instr 123 						; instr starts an instrument block and refers it to a number. In this case, it is 123.
+instr 123 					; instr starts an instrument block and refers it to a number. In this case, it is 123.
 							; You can put comments everywhere, they will not become compiled.
-	
-	      prints "Hello World!%n" 	; The 'prints', will print the following string to the Csound console.
-	aSin	oscils 0dbfs/5, 440, 0 	; the opcode 'oscils' generates a 440 Hz sinetone
-	      out aSin				; here the signal is assigned to the computer audio output
+	prints "Hello World!%n" 	     ; 'prints' will print a string to the Csound console.
+	aSin	oscils 0dbfs/5, 440, 0 	; the opcode 'oscils' here generates a 440 Hz sinetone signal at -6dB FS
+	out aSin				     ; here the signal is assigned to the computer audio output
 endin
 
 </CsInstruments>
-
 <CsScore>
-i 123 0 1 						; the instrument is called by its number(123) to be evaluated
+i 123 0 1 					; the instrument is called by its number (123) to be played
 e 							; e - ends the score
 </CsScore>
 </CsoundSynthesizer>
@@ -45,7 +45,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 573 94 306 359
+WindowBounds: 911 307 308 378
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R

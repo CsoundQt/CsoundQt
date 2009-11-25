@@ -1,8 +1,9 @@
 /*Getting started.. Basic Elements: Constants and Variables
 
-Variables are named cells which contain numbers. They are available continuously and may be updated at one of the available update rates: i, k and a.
-To specify the type of variable you want, you put the label-string (i,k,a) first and then give it a name. The names are easier to read, if you start new words with big letters.
+Variables are named 'cells' or 'slots' which contain data. They may be updated at one of the available update rates: i, k and a, which stand for initialization, control and audio.
+The type of variable is determined by the first letter of its name (i,k,a). The names can be easier to read, if you start new words with big letters.
 
+For example:
 aMyAudioVariable
 kMyControlVariable
 iThisIsTheInitVariable
@@ -54,13 +55,13 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 461 160 306 529
+WindowBounds: 832 162 310 570
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
-ioView background {41120, 40606, 41634}
+ioView background {41634, 36751, 38807}
 ioText {108, 37} {144, 29} display 0.000000 0.00100 "freqsweep" center "Helvetica" 16 {0, 0, 0} {46592, 27904, 0} background border 999.1507
 ioGraph {22, 365} {255, 150} scope 2.000000 -1.000000 
 ioText {21, 7} {248, 71} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder This label displays the current frequency:

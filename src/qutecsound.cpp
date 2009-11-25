@@ -2406,7 +2406,6 @@ void qutecsound::createMenus()
   QAction *newAction;
   QMenu *submenu;
 
-  submenu = examplesMenu->addMenu("Tutorials");
   basicsFiles.append(":/examples/Tutorial/1 Basics/1.1 Hello World.csd");
   basicsFiles.append(":/examples/Tutorial/1 Basics/1.2 Document Structure.csd");
   basicsFiles.append(":/examples/Tutorial/1 Basics/1.3 Basic Elements Opcodes.csd");
@@ -2417,7 +2416,7 @@ void qutecsound::createMenus()
   basicsFiles.append(":/examples/Tutorial/1 Basics/1.8 Routing.csd");
 
   QMenu *tutorialMenu = examplesMenu->addMenu("Tutorials");
-  submenu = tutorialMenu->addMenu("Basics");
+  submenu = tutorialMenu->addMenu("1. Basics");
   foreach (QString fileName, basicsFiles) {
     QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
     newAction = submenu->addAction(name);
