@@ -1167,7 +1167,7 @@ void qutecsound::pause()
 void qutecsound::stop()
 {
   // Must guarantee that csound has stopped when it returns
-//   qDebug("qutecsound::stop()");
+   qDebug("qutecsound::stop()");
   if (ud->PERF_STATUS == 1) {
     stopCsound();
   }
@@ -1193,7 +1193,7 @@ void qutecsound::stopCsound()
 {
   qDebug("qutecsound::stopCsound()");
   if (m_options->thread) {
-//       perfThread->ScoreEvent(0, 'e', 0, 0);
+//    perfThread->ScoreEvent(0, 'e', 0, 0);
     if (ud->PERF_STATUS == 1) {
       ud->PERF_STATUS = -1;
       perfThread->Stop();
@@ -2328,6 +2328,7 @@ void qutecsound::createMenus()
   viewMenu->addAction(showInspectorAct);
 
   QStringList tutFiles;
+  QStringList basicsFiles;
   QStringList widgetFiles;
   QStringList synthFiles;
   QStringList musicFiles;
@@ -2335,18 +2336,6 @@ void qutecsound::createMenus()
   QStringList exampleFiles;
   QList<QStringList> subMenus;
   QStringList subMenuNames;
-
-  tutFiles.append(":/examples/Tutorial/Toot1.csd");
-  tutFiles.append(":/examples/Tutorial/Toot2.csd");
-  tutFiles.append(":/examples/Tutorial/Toot3.csd");
-  tutFiles.append(":/examples/Tutorial/Toot4.csd");
-  tutFiles.append(":/examples/Tutorial/Toot5.csd");
-  tutFiles.append(":/examples/Tutorial/Widgets_1.csd");
-  tutFiles.append(":/examples/Tutorial/Widgets_2.csd");
-  tutFiles.append(":/examples/Tutorial/Score_Tricks.csd");
-
-  subMenus << tutFiles;
-  subMenuNames << "Tutorials";
 
   widgetFiles.append(":/examples/Widgets/Widget_Panel.csd");
   widgetFiles.append(":/examples/Widgets/Label_Widget.csd");
@@ -2414,10 +2403,53 @@ void qutecsound::createMenus()
   subMenuNames << tr("Examples");
 
   QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
-//   QAction *newAction = examplesMenu->addAction("About the examples...");
-//   connect(newAction,SIGNAL(triggered()), this, SLOT(aboutExamples()));
   QAction *newAction;
   QMenu *submenu;
+
+  submenu = examplesMenu->addMenu("Tutorials");
+  basicsFiles.append(":/examples/Tutorial/1 Basics/1.1 Hello World.csd");
+  basicsFiles.append(":/examples/Tutorial/1 Basics/1.2 Document Structure.csd");
+  basicsFiles.append(":/examples/Tutorial/1 Basics/1.3 Basic Elements Opcodes.csd");
+  basicsFiles.append(":/examples/Tutorial/1 Basics/1.4 Basic Elements Variables.csd");
+  basicsFiles.append(":/examples/Tutorial/1 Basics/1.5 Getting Help.csd");
+  basicsFiles.append(":/examples/Tutorial/1 Basics/1.6 Instrument Control.csd");
+  basicsFiles.append(":/examples/Tutorial/1 Basics/1.7 Realtime Instrument Control.csd");
+  basicsFiles.append(":/examples/Tutorial/1 Basics/1.8 Routing.csd");
+
+  QMenu *tutorialMenu = examplesMenu->addMenu("Tutorials");
+  submenu = tutorialMenu->addMenu("Basics");
+  foreach (QString fileName, basicsFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+  tutFiles.append(":/examples/Tutorial/Toots/Toot1.csd");
+  tutFiles.append(":/examples/Tutorial/Toots/Toot2.csd");
+  tutFiles.append(":/examples/Tutorial/Toots/Toot3.csd");
+  tutFiles.append(":/examples/Tutorial/Toots/Toot4.csd");
+  tutFiles.append(":/examples/Tutorial/Toots/Toot5.csd");
+
+  submenu = tutorialMenu->addMenu("Toots");
+  foreach (QString fileName, tutFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
+  tutFiles.clear();
+  tutFiles.append(":/examples/Tutorial/Widgets_1.csd");
+  tutFiles.append(":/examples/Tutorial/Widgets_2.csd");
+  tutFiles.append(":/examples/Tutorial/Score_Tricks.csd");
+  submenu = tutorialMenu->addMenu("Other");
+  foreach (QString fileName, tutFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
   for (int i = 0; i < subMenus.size(); i++) {
     submenu = examplesMenu->addMenu(subMenuNames[i]);
     foreach (QString fileName, subMenus[i]) {
@@ -3344,6 +3376,7 @@ int qutecsound::killCurves(CSOUND *csound)
 //   }
   curveBuffer.clear();
 //   widgetPanel->clearGraphs();
+  qDebug() << "qutecsound::killCurves";
   return 0;
 }
 

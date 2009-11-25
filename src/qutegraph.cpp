@@ -160,8 +160,8 @@ void QuteGraph::setValue(double value)
         int num = parts.last().toInt();
         if (curves.size() > num && curves[num]->get_caption().isEmpty())
           return; //don't apply value if curve is currently nameless
-        if ((int) value == -num) {
           changeCurve(i);
+          if ((int) value == -num) {
           m_value = (int) value;
         }
       }
