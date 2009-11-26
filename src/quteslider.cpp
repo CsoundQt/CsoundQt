@@ -26,7 +26,7 @@ QuteSlider::QuteSlider(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new QSlider(this);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
-  m_widget->setFocusPolicy(Qt::NoFocus);
+  canFocus(false);
   m_max = 1.0;
   m_min = 0.0;
   if (width() > height())

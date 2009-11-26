@@ -30,7 +30,6 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
   m_widget->show();
   m_widget->setAutoFillBackground(true);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
-  m_widget->setFocusPolicy(Qt::NoFocus);
 //   static_cast<StackedLayoutWidget *>(m_widget)->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   m_label = new QLabel(this);
   QPalette palette = m_widget->palette();
@@ -39,11 +38,13 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
   m_label->setText("");
   m_label->move(85, 0);
   m_label->resize(500, 25);
-  m_label->setFocusPolicy(Qt::NoFocus);
 
   m_pageComboBox = new QComboBox(this);
   m_pageComboBox->resize(80, 25);
+
   m_pageComboBox->setFocusPolicy(Qt::NoFocus);
+  m_label->setFocusPolicy(Qt::NoFocus);
+  canFocus(true);
   connect(m_pageComboBox, SIGNAL(activated(int)),
           this, SLOT(changeCurve(int)));
   polygons.clear();

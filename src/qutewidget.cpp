@@ -32,7 +32,7 @@ QuteWidget::QuteWidget(QWidget *parent/*, widgetType type*/):
   propertiesAct = new QAction(/*QIcon(":/images/gtk-new.png"),*/ tr("&Properties"), this);
 //   propertiesAct->setShortcut(tr("Alt+P"));
   this->setWindowFlags(Qt::WindowStaysOnTopHint);
-  this->setFocusPolicy(Qt::NoFocus);
+//  canFocus(false);
   propertiesAct->setStatusTip(tr("Open widget properties"));
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(openProperties()));
 
@@ -142,7 +142,8 @@ void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 {
 //   qDebug("QuteWidget::setWidgetGeometry %i %i %i %i",x,y,w,h );
 //   m_widget->setFixedSize(w,h);
-  this->setGeometry(QRect(x,y,w,h));
+  int yoff = 20;
+  this->setGeometry(QRect(x,y+yoff,w,h));
   m_widget->setGeometry(QRect(0,0,w,h));
   this->markChanged();
 }
@@ -253,6 +254,18 @@ QString QuteWidget::getCsladspaLine()
 void QuteWidget::markChanged()
 {
   emit widgetChanged(this);
+}
+
+void QuteWidget::canFocus(bool can)
+{
+  if (can) {
+    this->setFocusPolicy(Qt::StrongFocus);
+    m_widget->setFocusPolicy(Qt::StrongFocus);
+  }
+  else {
+    this->setFocusPolicy(Qt::NoFocus);
+    m_widget->setFocusPolicy(Qt::NoFocus);
+  }
 }
 
 void QuteWidget::contextMenuEvent(QContextMenuEvent *event)

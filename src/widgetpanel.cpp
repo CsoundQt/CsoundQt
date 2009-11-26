@@ -50,6 +50,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   layoutWidget->setPanel(this);
 //   layoutWidget->setAutoFillBackground(true);
   layoutWidget->setFocusPolicy(Qt::NoFocus);
+  this->setFocusPolicy(Qt::NoFocus);
   connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
   connect(layoutWidget, SIGNAL(selection(QRect)), this, SLOT(selectionChanged(QRect)));
 //   connect(this,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(dockLocationChanged(Qt::DockWidgetArea)));
@@ -346,10 +347,10 @@ QString WidgetPanel::widgetsText()
   // This function must be used with care as it accesses the widgets, which
   // may cause crashing since widgets are not reentrant
   QString text = "<MacGUI>\n";
-  text += "ioView " + (autoFillBackground()? QString("background "):QString("nobackground "));
-  text += "{" + QString::number((int) (palette().button().color().redF()*65535.)) + ", ";
-  text +=  QString::number((int) (palette().button().color().greenF()*65535.)) + ", ";
-  text +=  QString::number((int) (palette().button().color().blueF()*65535.)) +"}\n";
+  text += "ioView " + (layoutWidget->autoFillBackground()? QString("background "):QString("nobackground "));
+  text += "{" + QString::number((int) (layoutWidget->palette().button().color().redF()*65535.)) + ", ";
+  text +=  QString::number((int) (layoutWidget->palette().button().color().greenF()*65535.)) + ", ";
+  text +=  QString::number((int) (layoutWidget->palette().button().color().blueF()*65535.)) +"}\n";
 
   valueMutex.lock();
   for (int i = 0; i < widgets.size(); i++) {
@@ -683,7 +684,7 @@ int WidgetPanel::createSlider(int x, int y, int width, int height, QString widge
 {
 //   qDebug("ioSlider x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-  QuteSlider *widget= new QuteSlider(layoutWidget);
+  QuteSlider *widget= new QuteSlider(this);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setRange(parts[5].toDouble(), parts[6].toDouble());
@@ -720,7 +721,7 @@ int WidgetPanel::createText(int x, int y, int width, int height, QString widgetL
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   if (lastParts.size() < 9)
     return -1;
-  QuteText *widget= new QuteText(layoutWidget);
+  QuteText *widget= new QuteText(this);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setType(parts[5]);
@@ -772,7 +773,7 @@ int WidgetPanel::createScrollNumber(int x, int y, int width, int height, QString
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   if (lastParts.size() < 9)
     return -1;
-  QuteScrollNumber *widget= new QuteScrollNumber(layoutWidget);
+  QuteScrollNumber *widget= new QuteScrollNumber(this);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setType(parts[5]);
@@ -827,7 +828,7 @@ int WidgetPanel::createLineEdit(int x, int y, int width, int height, QString wid
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   if (lastParts.size() < 9)
     return -1;
-  QuteLineEdit *widget= new QuteLineEdit(layoutWidget);
+  QuteLineEdit *widget= new QuteLineEdit(this);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setType(parts[5]);
@@ -878,7 +879,7 @@ int WidgetPanel::createSpinBox(int x, int y, int width, int height, QString widg
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   if (lastParts.size() < 9)
     return -1;
-  QuteSpinBox *widget= new QuteSpinBox(layoutWidget);
+  QuteSpinBox *widget= new QuteSpinBox(this);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setType(parts[5]);
@@ -931,7 +932,7 @@ int WidgetPanel::createButton(int x, int y, int width, int height, QString widge
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 //   if (lastParts.size() < 9)
 //     return -1;
-  QuteButton *widget= new QuteButton(layoutWidget);
+  QuteButton *widget= new QuteButton(this);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->show();
@@ -966,7 +967,7 @@ int WidgetPanel::createKnob(int x, int y, int width, int height, QString widgetL
 {
 //   qDebug("ioKnob x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-  QuteKnob *widget= new QuteKnob(layoutWidget);
+  QuteKnob *widget= new QuteKnob(this);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setRange(parts[5].toDouble(), parts[6].toDouble());
@@ -999,7 +1000,7 @@ int WidgetPanel::createCheckBox(int x, int y, int width, int height, QString wid
 {
 //   qDebug("ioCheckBox x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-  QuteCheckBox *widget= new QuteCheckBox(layoutWidget);
+  QuteCheckBox *widget= new QuteCheckBox(this);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setValue(parts[5]=="on");
@@ -1031,7 +1032,7 @@ int WidgetPanel::createMenu(int x, int y, int width, int height, QString widgetL
 //   qDebug("ioMenu x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
-  QuteComboBox *widget= new QuteComboBox(layoutWidget);
+  QuteComboBox *widget= new QuteComboBox(this);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setSize(parts[6].toInt());
@@ -1066,7 +1067,7 @@ int WidgetPanel::createMeter(int x, int y, int width, int height, QString widget
     qDebug("WidgetPanel::createMeter ERROR parsing widget line!");
     return 0;
   }
-  QuteMeter *widget= new QuteMeter(layoutWidget);
+  QuteMeter *widget= new QuteMeter(this);
   //TODO is setWidgetLine actually necessary?
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
@@ -1098,7 +1099,7 @@ int WidgetPanel::createConsole(int x, int y, int width, int height, QString widg
 {
 //    qDebug("ioListing x=%i y=%i w=%i h=%i", x,y, width, height);
    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-   QuteConsole *widget= new QuteConsole(layoutWidget);
+   QuteConsole *widget= new QuteConsole(this);
    widget->setWidgetLine(widgetLine);
    widget->setWidgetGeometry(x,y,width, height);
    connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
@@ -1118,7 +1119,7 @@ int WidgetPanel::createGraph(int x, int y, int width, int height, QString widget
 {
 //   qDebug("ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-  QuteGraph *widget= new QuteGraph(layoutWidget);
+  QuteGraph *widget= new QuteGraph(this);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setUd(static_cast<qutecsound *>(parent())->ud);
@@ -1156,7 +1157,7 @@ int WidgetPanel::createScope(int x, int y, int width, int height, QString widget
 {
 //   qDebug("WidgetPanel::createScope ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
 //   qDebug("%s",widgetLine.toStdString().c_str() );
-  QuteScope *widget= new QuteScope(layoutWidget);
+  QuteScope *widget= new QuteScope(this);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setUd(static_cast<qutecsound *>(parent())->ud);
@@ -1194,7 +1195,7 @@ int WidgetPanel::createScope(int x, int y, int width, int height, QString widget
 
 int WidgetPanel::createDummy(int x, int y, int width, int height, QString widgetLine)
 {
-  QuteWidget *widget= new QuteDummy(layoutWidget);
+  QuteWidget *widget= new QuteDummy(this);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->show();
@@ -1210,12 +1211,12 @@ int WidgetPanel::createDummy(int x, int y, int width, int height, QString widget
 void WidgetPanel::setBackground(bool bg, QColor bgColor)
 {
   if (bg) {
-    setPalette(QPalette(bgColor));
-    setAutoFillBackground(true);
+    layoutWidget->setPalette(QPalette(bgColor));
+    layoutWidget->setAutoFillBackground(true);
   }
   else { // =="nobackground"
-    setPalette(QPalette());
-    setAutoFillBackground(false);
+    layoutWidget->setPalette(QPalette());
+    layoutWidget->setAutoFillBackground(false);
   }
 }
 
@@ -1301,7 +1302,7 @@ void WidgetPanel::adjustLayoutSize()
   if  (this->height() - hoff > height) {
     height = this->height() - hoff;
   }
-  layoutWidget->resize(width+5, height+5);
+  layoutWidget->resize(width+10, height+10);
 }
 
 void WidgetPanel::copy()
@@ -1548,7 +1549,7 @@ void WidgetPanel::propertiesDialog()
   QGridLayout *layout = new QGridLayout(dialog);
   bgCheckBox = new QCheckBox(dialog);
   bgCheckBox->setText("Enable Background");
-  bgCheckBox->setChecked(autoFillBackground());
+  bgCheckBox->setChecked(layoutWidget->autoFillBackground());
   layout->addWidget(bgCheckBox, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
   QLabel *label = new QLabel(dialog);
 //   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
@@ -1557,7 +1558,7 @@ void WidgetPanel::propertiesDialog()
   layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
   bgButton = new QPushButton(dialog);
   QPixmap pixmap = QPixmap(64,64);
-  pixmap.fill(palette().button().color());
+  pixmap.fill(layoutWidget->palette().button().color());
   bgButton->setIcon(pixmap);
   layout->addWidget(bgButton, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);
   QPushButton *applyButton = new QPushButton(tr("Apply"));
@@ -1576,17 +1577,17 @@ void WidgetPanel::propertiesDialog()
 
 void WidgetPanel::applyProperties()
 {
-  setBackground(bgCheckBox->isChecked(), palette().button().color());
+  setBackground(bgCheckBox->isChecked(), layoutWidget->palette().button().color());
   widgetChanged();
 }
 
 void WidgetPanel::selectBgColor()
 {
-  QColor color = QColorDialog::getColor(palette().button().color(), this);
+  QColor color = QColorDialog::getColor(layoutWidget->palette().button().color(), this);
   if (color.isValid()) {
-    setPalette(QPalette(color));
+    layoutWidget->setPalette(QPalette(color));
     QPixmap pixmap(64,64);
-    pixmap.fill(palette().button().color());
+    pixmap.fill(layoutWidget->palette().button().color());
     bgButton->setIcon(pixmap);
   }
 }

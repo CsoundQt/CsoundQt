@@ -26,7 +26,7 @@ QuteComboBox::QuteComboBox(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new QComboBox(this);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
-//   m_widget->setFocusPolicy(Qt::NoFocus);
+//  canFocus(false);
 //   connect((QComboBox *)m_widget, SIGNAL(released()), this, SLOT(buttonReleased()));
   connect(static_cast<QComboBox *>(m_widget), SIGNAL(currentIndexChanged(int)), this, SLOT(valueChanged(int)));
 }

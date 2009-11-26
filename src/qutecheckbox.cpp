@@ -26,7 +26,7 @@ QuteCheckBox::QuteCheckBox(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new QCheckBox(this);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
-  m_widget->setFocusPolicy(Qt::NoFocus);
+  canFocus(false);
 
   connect(static_cast<QCheckBox *>(m_widget), SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
 }

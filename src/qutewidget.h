@@ -65,6 +65,7 @@ class QuteWidget : public QWidget
     virtual QString getWidgetType() = 0;
 
     void markChanged();
+    void canFocus(bool can);
 
   protected:
     QSpinBox *xSpinBox;

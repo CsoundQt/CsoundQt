@@ -43,7 +43,7 @@ endin
 
 instr 2
 aSaw oscili 0.2, $SAWFREQ, 1
-aFiltered lowpass2 aSaw, 200, 5 	;butlp
+aFiltered lowpass2 aSaw, 200, 5
 outs aFiltered, aFiltered
 endin
 

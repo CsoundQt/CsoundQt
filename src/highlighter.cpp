@@ -226,7 +226,10 @@ void Highlighter::setLastRules()
   rule.pattern = QRegExp("\".*\"");
   rule.format = quotationFormat;
   lastHighlightingRules.append(rule);
-  rule.pattern = QRegExp("\\{\\{.*\\}\\}");
+  rule.pattern = QRegExp("\\{\\{.*");
+  rule.format = quotationFormat;
+  lastHighlightingRules.append(rule);
+  rule.pattern = QRegExp(".*\\}\\}");
   rule.format = quotationFormat;
   lastHighlightingRules.append(rule);
 
