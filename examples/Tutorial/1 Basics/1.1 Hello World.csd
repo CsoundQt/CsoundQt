@@ -28,7 +28,7 @@ problem, with those comment signs used here.
 instr 123 					; instr starts an instrument block and refers it to a number. In this case, it is 123.
 							; You can put comments everywhere, they will not become compiled.
 	prints "Hello World!%n" 	     ; 'prints' will print a string to the Csound console.
-	aSin	oscils 0dbfs/5, 440, 0 	; the opcode 'oscils' here generates a 440 Hz sinetone signal at -6dB FS
+	aSin	oscils 0dbfs/4, 440, 0 	; the opcode 'oscils' here generates a 440 Hz sinetone signal at -12dB FS
 	out aSin				     ; here the signal is assigned to the computer audio output
 endin
 

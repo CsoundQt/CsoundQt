@@ -2367,6 +2367,7 @@ void qutecsound::createMenus()
   musicFiles.append(":/examples/Music/Chowning-Stria.csd");
   musicFiles.append(":/examples/Music/Kung-Xanadu.csd");
   musicFiles.append(":/examples/Music/Riley-In_C.csd");
+  musicFiles.append(":/examples/Music/Stockhausen-Studie_II.csd");
 
   subMenus << musicFiles;
   subMenuNames << tr("Music");
