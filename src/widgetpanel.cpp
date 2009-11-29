@@ -50,6 +50,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   layoutWidget->setPanel(this);
 //   layoutWidget->setAutoFillBackground(true);
   layoutWidget->setFocusPolicy(Qt::NoFocus);
+  layoutWidget->setWindowFlags(Qt::WindowStaysOnTopHint);
   this->setFocusPolicy(Qt::NoFocus);
   connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
   connect(layoutWidget, SIGNAL(selection(QRect)), this, SLOT(selectionChanged(QRect)));
@@ -114,16 +115,14 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   selectAllAct = new QAction(tr("Select all widgets"), this);
   connect(selectAllAct, SIGNAL(triggered()), this, SLOT(selectAll()));
 
-//   scrollArea = new QScrollArea(this);
-//   scrollArea->setWidget(layoutWidget);
-//   scrollArea->setFocusPolicy(Qt::NoFocus);
-//   scrollArea->setWidgetResizable (true);
-//   setWidget(scrollArea);
+  alignLeftAct = new QAction(tr("Align Left"), this);
+  connect(alignLeftAct, SIGNAL(triggered()), this, SLOT(alignLeft()));
+  alignTopAct = new QAction(tr("Align Top"), this);
+  connect(alignTopAct, SIGNAL(triggered()), this, SLOT(alignTop()));
 
   setWidget(layoutWidget);
   m_sbActive = false;
   setScrollBarsActive(true);
-//   setScrollBarsActive(false); //TODO temporary for testing
 
   eventQueue.resize(QUTECSOUND_MAX_EVENTS);
   eventQueueSize = 0;
@@ -202,7 +201,9 @@ void WidgetPanel::setScrollBarsActive(bool active)
     scrollArea = new QScrollArea(this);
     scrollArea->setWidget(layoutWidget);
     scrollArea->setFocusPolicy(Qt::NoFocus);
+    scrollArea->setFocusPolicy(Qt::NoFocus);
     setWidget(scrollArea);
+    scrollArea->setAutoFillBackground(false);
     scrollArea->show();
   }
   else if (!active && m_sbActive) {
@@ -684,7 +685,7 @@ int WidgetPanel::createSlider(int x, int y, int width, int height, QString widge
 {
 //   qDebug("ioSlider x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-  QuteSlider *widget= new QuteSlider(this);
+  QuteSlider *widget= new QuteSlider(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setRange(parts[5].toDouble(), parts[6].toDouble());
@@ -721,7 +722,7 @@ int WidgetPanel::createText(int x, int y, int width, int height, QString widgetL
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   if (lastParts.size() < 9)
     return -1;
-  QuteText *widget= new QuteText(this);
+  QuteText *widget= new QuteText(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setType(parts[5]);
@@ -773,7 +774,7 @@ int WidgetPanel::createScrollNumber(int x, int y, int width, int height, QString
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   if (lastParts.size() < 9)
     return -1;
-  QuteScrollNumber *widget= new QuteScrollNumber(this);
+  QuteScrollNumber *widget= new QuteScrollNumber(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setType(parts[5]);
@@ -828,7 +829,7 @@ int WidgetPanel::createLineEdit(int x, int y, int width, int height, QString wid
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   if (lastParts.size() < 9)
     return -1;
-  QuteLineEdit *widget= new QuteLineEdit(this);
+  QuteLineEdit *widget= new QuteLineEdit(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setType(parts[5]);
@@ -879,7 +880,7 @@ int WidgetPanel::createSpinBox(int x, int y, int width, int height, QString widg
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   if (lastParts.size() < 9)
     return -1;
-  QuteSpinBox *widget= new QuteSpinBox(this);
+  QuteSpinBox *widget= new QuteSpinBox(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setType(parts[5]);
@@ -932,7 +933,7 @@ int WidgetPanel::createButton(int x, int y, int width, int height, QString widge
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 //   if (lastParts.size() < 9)
 //     return -1;
-  QuteButton *widget= new QuteButton(this);
+  QuteButton *widget= new QuteButton(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->show();
@@ -967,7 +968,7 @@ int WidgetPanel::createKnob(int x, int y, int width, int height, QString widgetL
 {
 //   qDebug("ioKnob x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-  QuteKnob *widget= new QuteKnob(this);
+  QuteKnob *widget= new QuteKnob(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setRange(parts[5].toDouble(), parts[6].toDouble());
@@ -1000,7 +1001,7 @@ int WidgetPanel::createCheckBox(int x, int y, int width, int height, QString wid
 {
 //   qDebug("ioCheckBox x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-  QuteCheckBox *widget= new QuteCheckBox(this);
+  QuteCheckBox *widget= new QuteCheckBox(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setValue(parts[5]=="on");
@@ -1032,7 +1033,7 @@ int WidgetPanel::createMenu(int x, int y, int width, int height, QString widgetL
 //   qDebug("ioMenu x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
-  QuteComboBox *widget= new QuteComboBox(this);
+  QuteComboBox *widget= new QuteComboBox(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setSize(parts[6].toInt());
@@ -1067,7 +1068,7 @@ int WidgetPanel::createMeter(int x, int y, int width, int height, QString widget
     qDebug("WidgetPanel::createMeter ERROR parsing widget line!");
     return 0;
   }
-  QuteMeter *widget= new QuteMeter(this);
+  QuteMeter *widget= new QuteMeter(layoutWidget);
   //TODO is setWidgetLine actually necessary?
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
@@ -1099,7 +1100,7 @@ int WidgetPanel::createConsole(int x, int y, int width, int height, QString widg
 {
 //    qDebug("ioListing x=%i y=%i w=%i h=%i", x,y, width, height);
    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-   QuteConsole *widget= new QuteConsole(this);
+   QuteConsole *widget= new QuteConsole(layoutWidget);
    widget->setWidgetLine(widgetLine);
    widget->setWidgetGeometry(x,y,width, height);
    connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
@@ -1119,7 +1120,7 @@ int WidgetPanel::createGraph(int x, int y, int width, int height, QString widget
 {
 //   qDebug("ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-  QuteGraph *widget= new QuteGraph(this);
+  QuteGraph *widget= new QuteGraph(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setUd(static_cast<qutecsound *>(parent())->ud);
@@ -1157,7 +1158,7 @@ int WidgetPanel::createScope(int x, int y, int width, int height, QString widget
 {
 //   qDebug("WidgetPanel::createScope ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
 //   qDebug("%s",widgetLine.toStdString().c_str() );
-  QuteScope *widget= new QuteScope(this);
+  QuteScope *widget= new QuteScope(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->setUd(static_cast<qutecsound *>(parent())->ud);
@@ -1195,7 +1196,7 @@ int WidgetPanel::createScope(int x, int y, int width, int height, QString widget
 
 int WidgetPanel::createDummy(int x, int y, int width, int height, QString widgetLine)
 {
-  QuteWidget *widget= new QuteDummy(this);
+  QuteWidget *widget= new QuteDummy(layoutWidget);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->show();
@@ -1255,6 +1256,7 @@ void WidgetPanel::createEditFrame(QuteWidget* widget)
   connect(frame, SIGNAL(deselectAllSignal()), this, SLOT(deselectAll()));
   connect(frame, SIGNAL(moved( QPair<int, int> )), this, SLOT(widgetMoved( QPair<int, int> )));
   connect(frame, SIGNAL(resized( QPair<int, int> )), this, SLOT(widgetResized( QPair<int, int> )));
+  connect(frame, SIGNAL(editWidget()), widget, SLOT(openProperties()));
 }
 
 void WidgetPanel::widgetMoved(QPair<int, int> delta)
@@ -1401,6 +1403,44 @@ void WidgetPanel::selectAll()
 {
   for (int i = 0; i< editWidgets.size(); i++) {
     editWidgets[i]->select();
+  }
+}
+
+void WidgetPanel::alignLeft()
+{
+  int newx = 99999;
+  if (editAct->isChecked()) {
+    int size = editWidgets.size();
+    for (int i = 0; i < size ; i++) { // First find leftmost
+      if (editWidgets[i]->isSelected()) {
+        newx =  editWidgets[i]->x() < newx ? editWidgets[i]->x(): newx;
+      }
+    }
+    for (int i = 0; i < size ; i++) { // Then put all x values to that
+      if (editWidgets[i]->isSelected()) {
+        editWidgets[i]->move(newx, editWidgets[i]->y());
+        widgets[i]->move(newx, editWidgets[i]->y());
+      }
+    }
+  }
+}
+
+void WidgetPanel::alignTop()
+{
+  int newy = 99999;
+  if (editAct->isChecked()) {
+    int size = editWidgets.size();
+    for (int i = 0; i < size ; i++) { // First find uppermost
+      if (editWidgets[i]->isSelected()) {
+        newy =  editWidgets[i]->y() < newy ? editWidgets[i]->y(): newy;
+      }
+    }
+    for (int i = 0; i < size ; i++) { // Then put all y values to that
+      if (editWidgets[i]->isSelected()) {
+        editWidgets[i]->move(editWidgets[i]->x(), newy);
+        widgets[i]->move(editWidgets[i]->x(), newy);
+      }
+    }
   }
 }
 

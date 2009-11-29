@@ -107,6 +107,11 @@ void FrameWidget::mouseMoveEvent (QMouseEvent* event)
   m_changed = true;
 }
 
+void FrameWidget::mouseDoubleClickEvent (QMouseEvent * event)
+{
+  emit editWidget();
+}
+
 void FrameWidget::resizeEvent (QResizeEvent* event)
 {
   QWidget::resizeEvent(event);

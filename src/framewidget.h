@@ -47,6 +47,7 @@ class FrameWidget : public QFrame
     virtual void mousePressEvent ( QMouseEvent * event );
     virtual void mouseReleaseEvent ( QMouseEvent * event );
     virtual void mouseMoveEvent (QMouseEvent* event);
+    virtual void mouseDoubleClickEvent (QMouseEvent * event);
     virtual void resizeEvent (QResizeEvent* event);
 
   private:
@@ -62,6 +63,7 @@ class FrameWidget : public QFrame
     void deselectAllSignal();
     void moved(QPair<int, int>);
     void resized(QPair<int, int>);
+    void editWidget();
 };
 
 #endif

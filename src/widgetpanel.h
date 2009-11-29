@@ -41,8 +41,8 @@ class WidgetPanel : public QDockWidget
 {
   Q_OBJECT
 
-  friend class qutecsound;
-  friend class QuteWidget;
+  friend class qutecsound;  // To allow edit actions- TODO- can this be done all here?
+  friend class QuteWidget;  // To allow edit actions
   public:
     WidgetPanel(QWidget *parent);
     ~WidgetPanel();
@@ -101,6 +101,7 @@ class WidgetPanel : public QDockWidget
     QMutex eventMutex;
 
     QPoint currentPosition;
+    // Create new widget Actions
     QAction *createSliderAct;
     QAction *createLabelAct;
     QAction *createDisplayAct;
@@ -115,6 +116,7 @@ class WidgetPanel : public QDockWidget
     QAction *createConsoleAct;
     QAction *createGraphAct;
     QAction *createScopeAct;
+    // Edition Actions
     QAction *editAct;
     QAction *clearAct;
     QAction *copyAct;
@@ -124,8 +126,11 @@ class WidgetPanel : public QDockWidget
     QAction *duplicateAct;
     QAction *deleteAct;
     QAction *propertiesAct;
+    // Alignment Actions
+    QAction *alignLeftAct;
+    QAction *alignTopAct;
 
-    // For the properties dialog
+    // For the properties dialog - they store the configuration data for the widget panel
     QCheckBox *bgCheckBox;
     QPushButton *bgButton;
 
@@ -188,6 +193,8 @@ class WidgetPanel : public QDockWidget
     void createEditFrame(QuteWidget* widget);
     void deselectAll();
     void selectAll();
+    void alignLeft();
+    void alignTop();
     void selectionChanged(QRect selection);
     void widgetMoved(QPair<int, int>);
     void widgetResized(QPair<int, int>);

@@ -142,8 +142,8 @@ void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 {
 //   qDebug("QuteWidget::setWidgetGeometry %i %i %i %i",x,y,w,h );
 //   m_widget->setFixedSize(w,h);
-  int yoff = 20;
-  this->setGeometry(QRect(x,y+yoff,w,h));
+//  int yoff = 20;
+  this->setGeometry(QRect(x,y/*+yoff*/,w,h));
   m_widget->setGeometry(QRect(0,0,w,h));
   this->markChanged();
 }
@@ -410,6 +410,8 @@ QList<QAction *> QuteWidget::getParentActionList()
   actionList.append(panel->cutAct);
   actionList.append(panel->duplicateAct);
   actionList.append(panel->deleteAct);
+  actionList.append(panel->alignLeftAct);
+  actionList.append(panel->alignTopAct);
   return actionList;
 }
 
