@@ -61,7 +61,8 @@ SOURCES += qutecsound.cpp \
     graphicwindow.cpp \
     keyboardshortcuts.cpp \
     dotgenerator.cpp \
-    inspector.cpp
+    inspector.cpp \
+    widgetpreset.cpp
 HEADERS += qutecsound.h \
     dockhelp.h \
     opentryparser.h \
@@ -94,7 +95,8 @@ HEADERS += qutecsound.h \
     graphicwindow.h \
     keyboardshortcuts.h \
     dotgenerator.h \
-    inspector.h
+    inspector.h \
+    widgetpreset.h
 TEMPLATE = app
 CONFIG += warn_on \
     thread \

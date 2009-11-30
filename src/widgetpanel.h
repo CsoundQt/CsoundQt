@@ -29,6 +29,7 @@
 
 #include "qutewidget.h"
 #include "curve.h"
+#include "widgetpreset.h"
 
 class Curve;
 class QuteConsole;
@@ -128,11 +129,15 @@ class WidgetPanel : public QDockWidget
     QAction *propertiesAct;
     // Alignment Actions
     QAction *alignLeftAct;
+    QAction *alignRightAct;
     QAction *alignTopAct;
+    QAction *alignBottomAct;
 
     // For the properties dialog - they store the configuration data for the widget panel
     QCheckBox *bgCheckBox;
     QPushButton *bgButton;
+
+    QVector<WidgetPreset> presets;
 
     QStringList clipboard;
     QSize oldSize;
@@ -158,6 +163,12 @@ class WidgetPanel : public QDockWidget
     int createDummy(int x, int y, int width, int height, QString widgetLine);
 
     void setBackground(bool bg, QColor bgColor);
+
+    // Preset methods
+    void loadPreset(int num);
+    void savePreset(int num, QString name);
+    void setPresetName(int num, QString name);
+    QString getPresetsXmlText();
 
     virtual void closeEvent(QCloseEvent * event);
 
@@ -194,7 +205,9 @@ class WidgetPanel : public QDockWidget
     void deselectAll();
     void selectAll();
     void alignLeft();
+    void alignRight();
     void alignTop();
+    void alignBottom();
     void selectionChanged(QRect selection);
     void widgetMoved(QPair<int, int>);
     void widgetResized(QPair<int, int>);

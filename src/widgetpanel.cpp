@@ -117,8 +117,12 @@ WidgetPanel::WidgetPanel(QWidget *parent)
 
   alignLeftAct = new QAction(tr("Align Left"), this);
   connect(alignLeftAct, SIGNAL(triggered()), this, SLOT(alignLeft()));
+  alignRightAct = new QAction(tr("Align Right"), this);
+  connect(alignRightAct, SIGNAL(triggered()), this, SLOT(alignRight()));
   alignTopAct = new QAction(tr("Align Top"), this);
   connect(alignTopAct, SIGNAL(triggered()), this, SLOT(alignTop()));
+  alignBottomAct = new QAction(tr("Align Bottom"), this);
+  connect(alignBottomAct, SIGNAL(triggered()), this, SLOT(alignBottom()));
 
   setWidget(layoutWidget);
   m_sbActive = false;
@@ -1221,6 +1225,62 @@ void WidgetPanel::setBackground(bool bg, QColor bgColor)
   }
 }
 
+void WidgetPanel::loadPreset(int num)
+{
+  WidgetPreset p = presets[num];
+  if (num >= 0 && num < presets.size()) {
+    for (int i = 0; i < widgets.size(); i++) {
+      QString id = widgets[i]->getUuid();
+      if (p.idIndex(id) > -1) {
+        widgets[i]->setValue(p.getValue(id));
+        widgets[i]->setValue2(p.getValue2(id));
+        widgets[i]->setValue(p.getStringValue(id));
+      }
+    }
+  }
+  else {
+    qDebug() << "WidgetPanel::loadPreset invalid preset number";
+  }
+}
+
+void WidgetPanel::savePreset(int num, QString name)
+{
+  if (num >= 0 && num < presets.size()) {
+    presets[num].clear();
+  }
+  else if (num < 0) {
+    WidgetPreset p;
+    presets.append(p);
+    num = presets.size() - 1;
+  }
+  else {
+    qDebug() << "WidgetPanel::savePreset invalid preset number";
+    return;
+  }
+  for (int i = 0; i < widgets.size(); i++) {
+    QString id = widgets[i]->getUuid();
+    WidgetPreset p;
+    p.setName(name);
+    p.setValue(id, widgets[i]->getValue());
+    p.setValue2(id, widgets[i]->getValue2());
+    p.setStringValue(id, widgets[i]->getStringValue());
+    presets.append(p);
+  }
+}
+
+void WidgetPanel::setPresetName(int num, QString name)
+{
+  if (num >= 0 && num < presets.size()) {
+    presets[num].setName(name);
+  }
+}
+
+QString WidgetPanel::getPresetsXmlText()
+{
+  qDebug() << "WidgetPanel::getPresetsXmlText() not implemented yet";
+  return QString();
+}
+
 void WidgetPanel::activateEditMode(bool active)
 {
   if (active) {
@@ -1425,6 +1485,25 @@ void WidgetPanel::alignLeft()
   }
 }
 
+void WidgetPanel::alignRight()
+{
+  int newx = -99999;
+  if (editAct->isChecked()) {
+    int size = editWidgets.size();
+    for (int i = 0; i < size ; i++) { // First find leftmost
+      if (editWidgets[i]->isSelected()) {
+        newx =  editWidgets[i]->x() > newx ? editWidgets[i]->x(): newx;
+      }
+    }
+    for (int i = 0; i < size ; i++) { // Then put all x values to that
+      if (editWidgets[i]->isSelected()) {
+        editWidgets[i]->move(newx, editWidgets[i]->y());
+        widgets[i]->move(newx, editWidgets[i]->y());
+      }
+    }
+  }
+}
+
 void WidgetPanel::alignTop()
 {
   int newy = 99999;
@@ -1433,6 +1512,25 @@ void WidgetPanel::alignTop()
     for (int i = 0; i < size ; i++) { // First find uppermost
       if (editWidgets[i]->isSelected()) {
         newy =  editWidgets[i]->y() < newy ? editWidgets[i]->y(): newy;
+      }
+    }
+    for (int i = 0; i < size ; i++) { // Then put all y values to that
+      if (editWidgets[i]->isSelected()) {
+        editWidgets[i]->move(editWidgets[i]->x(), newy);
+        widgets[i]->move(editWidgets[i]->x(), newy);
+      }
+    }
+  }
+}
+
+void WidgetPanel::alignBottom()
+{
+  int newy = -99999;
+  if (editAct->isChecked()) {
+    int size = editWidgets.size();
+    for (int i = 0; i < size ; i++) { // First find uppermost
+      if (editWidgets[i]->isSelected()) {
+        newy =  editWidgets[i]->y() > newy ? editWidgets[i]->y(): newy;
       }
     }
     for (int i = 0; i < size ; i++) { // Then put all y values to that

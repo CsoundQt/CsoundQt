@@ -30,9 +30,7 @@ int main(int argc, char *argv[])
 
   for (int i = 1; i < argc; i++) {
     QString arg(argv[i]);
-    if (arg.endsWith(".orc",Qt::CaseInsensitive) or arg.endsWith(".sco",Qt::CaseInsensitive) or arg.endsWith(".csd",Qt::CaseInsensitive)) {
-      fileNames.append(arg);
-    }
+    fileNames.append(arg);
   }
   Q_INIT_RESOURCE(application);
   QApplication app(argc, argv);
@@ -53,7 +51,6 @@ int main(int argc, char *argv[])
 
   QTranslator translator;
   translator.load(QString(":/qutecsound_") + language);
-//   translator.load(":/qutecsound_es");
   app.installTranslator(&translator);
 
   qutecsound * mw = new qutecsound(fileNames);

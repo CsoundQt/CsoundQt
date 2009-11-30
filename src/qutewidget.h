@@ -64,6 +64,8 @@ class QuteWidget : public QWidget
     virtual QString getCsladspaLine();
     virtual QString getWidgetType() = 0;
 
+    QString getUuid();
+
     void markChanged();
     void canFocus(bool can);
 

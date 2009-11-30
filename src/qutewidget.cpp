@@ -251,6 +251,11 @@ QString QuteWidget::getCsladspaLine()
   return QString("");
 }
 
+QString QuteWidget::getUuid()
+{
+  return m_uuid;
+}
+
 void QuteWidget::markChanged()
 {
   emit widgetChanged(this);
@@ -411,7 +416,9 @@ QList<QAction *> QuteWidget::getParentActionList()
   actionList.append(panel->duplicateAct);
   actionList.append(panel->deleteAct);
   actionList.append(panel->alignLeftAct);
+  actionList.append(panel->alignRightAct);
   actionList.append(panel->alignTopAct);
+  actionList.append(panel->alignBottomAct);
   return actionList;
 }
 
