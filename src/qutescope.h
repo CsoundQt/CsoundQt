@@ -36,7 +36,7 @@ class PoincareData;
 // To add a new kind of display you have to derive a class from the abstract
 // class DataDisplay. This new class will be created in the constructor of
 // the QuteScope class and referenced through a pointer, member of the
-// later class. 
+// later class.
 // You have then to modify the QuteScope destructor and setType member
 // accordingly.
 // Finally the new type has to appear in the createPropertiesDialog method
@@ -139,7 +139,7 @@ class ScopeParams
     {
       this->height = height;
     }
-    
+
     CsoundUserData *ud;
     QGraphicsScene *scene;
     ScopeWidget *widget;
@@ -164,7 +164,7 @@ class ScopeItem : public QGraphicsItem
     void setPen(const QPen & pen);
     void setPolygon(const QPolygonF & polygon);
     void setSize(int width, int height);
-    
+
   protected:
     int m_width;
     int m_height;
@@ -188,7 +188,7 @@ class DataDisplay
     virtual void updateData(int channel, int zoom, bool freeze) = 0;
     virtual void show() = 0;
     virtual void hide() = 0;
-  
+
   protected:
     ScopeParams *m_params;
 };
@@ -201,11 +201,12 @@ class ScopeData : public DataDisplay
 {
   public:
     ScopeData(ScopeParams *params);
+    virtual ~ScopeData() {}
     virtual void resize();
     virtual void updateData(int channel, int zoom, bool freeze);
     virtual void show();
     virtual void hide();
-  
+
   protected:
     QPolygonF curveData;
     QGraphicsPolygonItem *curve;
@@ -219,11 +220,12 @@ class LissajouData : public DataDisplay
 {
   public:
     LissajouData(ScopeParams *params);
+    virtual ~LissajouData() {}
     virtual void resize();
     virtual void updateData(int channel, int zoom, bool freeze);
     virtual void show();
     virtual void hide();
-  
+
   protected:
     QPolygonF curveData;
     ScopeItem *curve;
@@ -237,11 +239,12 @@ class PoincareData : public DataDisplay
 {
   public:
     PoincareData(ScopeParams *params);
+    virtual ~PoincareData() {}
     virtual void resize();
     virtual void updateData(int channel, int zoom, bool freeze);
     virtual void show();
     virtual void hide();
-  
+
   protected:
     QPolygonF curveData;
     ScopeItem *curve;
