@@ -128,7 +128,7 @@ win32 {
     else:LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\libcsound32.a"
     libsndfile {
         INCLUDEPATH += "$${LIBSNDFILE_PATH}"
-        LIBS += "$${LIBSNDFILE_PATH}\libsndfile-1.a"
+        LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\libsndfile-1.dll"
     }
     RC_FILE = qutecsound.rc
 }
