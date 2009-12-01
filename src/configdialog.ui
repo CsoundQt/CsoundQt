@@ -17,7 +17,7 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget" name="layoutWidget1">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -90,7 +90,7 @@
      <property name="alignment">
       <set>Qt::AlignLeading</set>
      </property>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="layoutWidget2">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -162,7 +162,7 @@
        <string>Ignore CsOptions</string>
       </property>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="layoutWidget3">
       <property name="geometry">
        <rect>
         <x>340</x>
@@ -194,7 +194,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="layoutWidget4">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -223,11 +223,11 @@
        </item>
       </layout>
      </widget>
+     <zorder>layoutWidget2</zorder>
+     <zorder>layoutWidget3</zorder>
+     <zorder>layoutWidget4</zorder>
      <zorder>FileUseOptionsCheckBox</zorder>
      <zorder>FileOverrideCheckBox</zorder>
-     <zorder>layoutWidget</zorder>
-     <zorder>layoutWidget</zorder>
-     <zorder>layoutWidget</zorder>
     </widget>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="geometry">
@@ -254,7 +254,7 @@
        <string>Ignore CsOptions</string>
       </property>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="layoutWidget5">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -387,7 +387,7 @@
        <string>Use QuteCsound options</string>
       </property>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="layoutWidget6">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -423,7 +423,7 @@
       <string>Dither</string>
      </property>
     </widget>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="layoutWidget7">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -449,7 +449,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="layoutWidget8">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -458,7 +458,7 @@
        <height>61</height>
       </rect>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
+     <layout class="QGridLayout" name="gridLayout10">
       <item row="0" column="0">
        <widget class="QCheckBox" name="BufferSizeCheckBox">
         <property name="text">
@@ -643,7 +643,7 @@
         <height>91</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout">
+      <layout class="QVBoxLayout" name="layout14">
        <item>
         <widget class="QLabel" name="label_13">
          <property name="text">
@@ -699,7 +699,7 @@
        <string>Allow key repeats for sensekey</string>
       </property>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -851,7 +851,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="layoutWidget9">
       <property name="geometry">
        <rect>
         <x>350</x>
@@ -883,7 +883,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="layoutWidget10">
       <property name="geometry">
        <rect>
         <x>520</x>
@@ -928,7 +928,7 @@
      <property name="title">
       <string>Record</string>
      </property>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="layoutWidget11">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1189,7 +1189,7 @@
      <property name="title">
       <string>Directories</string>
      </property>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="layoutWidget12">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1521,7 +1521,7 @@
       </layout>
      </widget>
     </widget>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="layoutWidget13">
      <property name="geometry">
       <rect>
        <x>20</x>
