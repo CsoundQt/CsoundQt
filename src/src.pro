@@ -124,8 +124,8 @@ win32 {
         HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\cwindow.h"
         LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\csnd.dll"
     }
-    build64:LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\libcsound64.a"
-    else:LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\libcsound32.a"
+    build64:LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\csound64.dll.5.2"
+    else:LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\csound32.dll.5.2"
     libsndfile {
         INCLUDEPATH += "$${LIBSNDFILE_PATH}"
         LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\libsndfile-1.dll"
