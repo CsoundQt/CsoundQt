@@ -326,11 +326,11 @@ void qutecsound::closeEvent(QCloseEvent *event)
     foreach (QString tempFile, tempScriptFiles) {
       QDir().remove(tempFile);
     }
-    free(ud);
-    delete closeTabButton;
+    free(ud);ud = 0;
+    delete closeTabButton;closeTabButton = 0;
     close();
-    free(pFields);
-    delete quickRefFile;
+    free(pFields);pFields = 0;
+    delete quickRefFile;quickRefFile = 0;
     event->accept();
   } else {
     event->ignore();
@@ -727,7 +727,7 @@ void qutecsound::print()
 
 void qutecsound::findReplace()
 {
-  FindReplace *dialog = new FindReplace(this, 
+  FindReplace *dialog = new FindReplace(this,
                                         documentPages[curPage],
                                         &lastSearch,
                                         &lastReplace,
@@ -1716,7 +1716,7 @@ void qutecsound::dispatchQueues()
 //   qDebug("qutecsound::dispatchQueues()");
   int counter = 0;
   widgetPanel->processNewValues();
-  if (ud->PERF_STATUS == 1) {
+  if (ud && ud->PERF_STATUS == 1) {
     while ((m_options->consoleBufferSize <= 0 || counter++ < m_options->consoleBufferSize) && ud->PERF_STATUS == 1) {
       messageMutex.lock();
       if (messageQueue.isEmpty()) {
@@ -1800,7 +1800,7 @@ void qutecsound::dispatchQueues()
 //     qDebug(" %i %i %i %i",geometry.x(), geometry.y(), geometry.width(), geometry.height());
 //   }
 // }
-// 
+//
 // void qutecsound::widgetDockLocationChanged(Qt::DockWidgetArea area)
 // {
 //   qDebug("qutecsound::widgetDockLocationChanged() %i", area);
@@ -2235,7 +2235,7 @@ void qutecsound::connectActions()
   connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
   disconnect(pasteAct, 0, 0, 0);
   connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
-  
+
 //   disconnect(commentAct, 0, 0, 0);
   disconnect(uncommentAct, 0, 0, 0);
   disconnect(indentAct, 0, 0, 0);
