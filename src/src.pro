@@ -184,5 +184,5 @@ macx {
 }
 
 # QMAKE_CXXFLAGS_DEBUG += -DDEBUG
-CONFIG -= stl \
-    release
+CONFIG -= stl
+!win32:CONFIG -= release
