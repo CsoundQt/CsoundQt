@@ -100,8 +100,8 @@ HEADERS += qutecsound.h \
 TEMPLATE = app
 CONFIG += warn_on \
     thread \
-    qt \
-    debug
+    qt
+!win32: CONFIG += debug
 TARGET = ../bin/qutecsound
 RESOURCES = application.qrc
 QT += xml
