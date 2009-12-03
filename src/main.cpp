@@ -30,7 +30,8 @@ int main(int argc, char *argv[])
 
   for (int i = 1; i < argc; i++) {
     QString arg(argv[i]);
-    fileNames.append(arg);
+    if (!fileNames.startsWith("-p")) // avoid OS X arguments
+      fileNames.append(arg);
   }
   Q_INIT_RESOURCE(application);
   QApplication app(argc, argv);
