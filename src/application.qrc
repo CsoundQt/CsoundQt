@@ -43,6 +43,7 @@
       <file>../examples/Examples/Rms.csd</file>
       <file>../examples/Examples/Reinit_Example.csd</file>
       <file>../examples/Examples/No_Reinit.csd</file>
+      <file>../examples/Examples/Binaural_Panning.csd</file>
 
       <file>../examples/Widgets/Widget_Panel.csd</file>
       <file>../examples/Widgets/Label_Widget.csd</file>
@@ -93,6 +94,7 @@
       <file>../examples/Useful/Audio_Thru_Test.csd</file>
       <file>../examples/Useful/IO_Test.csd</file>
       <file>../examples/Useful/File_to_Text.csd</file>
+      <file>../examples/Useful/Pitch_Tracker.csd</file>
 
       <file>../examples/Music/Chowning-Stria.csd</file>
       <file>../examples/Music/Riley-In_C.csd</file>

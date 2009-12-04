@@ -475,7 +475,10 @@ void qutecsound::createCodeGraph()
   file.open();
   command = "\"" + m_options->dot + "\" -Tpng -o \"" + pngFile.fileName() + "\" \"" + file.fileName() + "\"";
 //   qDebug() << command;
-  system(command.toStdString().c_str());
+  ret = system(command.toStdString().c_str());
+  if (ret != 0) {
+    qDebug() << "qutecsound::createCodeGraph() Error running dot";
+  }
   m_graphic = new GraphicWindow(this);
   m_graphic->show();
   m_graphic->openPng(pngFile.fileName());
@@ -2384,6 +2387,7 @@ void qutecsound::createMenus()
   usefulFiles.append(":/examples/Useful/8_Chn_Player.csd");
   usefulFiles.append(":/examples/Useful/SF_Record.csd");
   usefulFiles.append(":/examples/Useful/File_to_Text.csd");
+  usefulFiles.append(":/examples/Useful/Pitch_Tracker.csd");
 
   subMenus << usefulFiles;
   subMenuNames << tr("Useful");
@@ -2398,6 +2402,7 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/Examples/Rms.csd");
   exampleFiles.append(":/examples/Examples/Reinit_Example.csd");
   exampleFiles.append(":/examples/Examples/No_Reinit.csd");
+  exampleFiles.append(":/examples/Examples/Binaural_Panning.csd");
   exampleFiles.append(":/examples/Examples/Noise_Reduction.csd");
 
   subMenus << exampleFiles;

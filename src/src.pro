@@ -100,8 +100,8 @@ HEADERS += qutecsound.h \
 TEMPLATE = app
 CONFIG += warn_on \
     thread \
-    qt
-!win32: CONFIG += debug
+    qt \
+    release
 TARGET = ../bin/qutecsound
 RESOURCES = application.qrc
 QT += xml
@@ -185,4 +185,3 @@ macx {
 
 # QMAKE_CXXFLAGS_DEBUG += -DDEBUG
 CONFIG -= stl
-!win32:CONFIG -= release
