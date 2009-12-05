@@ -1,9 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
+-odac -m0
 </CsOptions>
 <CsInstruments>
-
-sr = 44100
 ksmps = 16
 nchnls = 2
 0dbfs = 1
@@ -836,12 +835,8 @@ iftmxgrpdrs	TabMkTbFrmGrpMx_i iftdurs, iftcount; table with the maximal duration
 indxseq	=		0
 indxtonabs	=		0
 indxenv	=		0; read index in iftenvtyp2 (has as many positions as there are typ2-sequenzes)
-inum = abs(ftlen(iftstarts5a))
-icount init 0
 seq:
 icount		tab_i		indxseq, iftcount
-prints "icount %i---", icount
-if icount < 1 goto end
 indxton	=		0
 ityp		tab_i		indxseq, ifttyps
 istartseq	=		istartabs; absolute starting time for this sequence
@@ -869,11 +864,9 @@ else; typ=3: isolated events, or last note from a typ=1 sequence
 		tabw_i		istartabs, indxtonabs+1, iftout
 endif
 indxtonabs	=		indxtonabs + 1
-
 		loop_lt	indxton, 1, icount, ton
 indxenv	=		(ityp == 2 ? indxenv+1 : indxenv); indxenv up if value was used
-		loop_lt indxseq, 1, ftlen(iftcount), seq
-end:
+		loop_lt	indxseq, 1, ftlen(iftcount), seq
 		xout		iftout
   endop
 
@@ -1720,44 +1713,44 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 849 26 412 730
+WindowBounds: 457 22 434 733
 CurrentView: io
 IOViewEdit: On
 Options:
 </MacOptions>
 <MacGUI>
-ioView nobackground {59110, 56797, 54741}
-ioText {17, 94} {365, 249} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground border Reverb (freeverb)
-ioText {17, 357} {365, 180} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground border Panning and Volume
-ioSlider {24, 500} {250, 29} 0.000000 0.500000 0.200000 vol
-ioText {148, 468} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Volume
-ioMeter {21, 551} {336, 22} {0, 59904, 0} "out1_post" 0.363636 "outL" 0.000000 fill 1 0 mouse
-ioMeter {355, 551} {27, 22} {50176, 3584, 3072} "outLover" 0.000000 "outLover" 0.000000 fill 1 0 mouse
-ioMeter {21, 578} {336, 22} {0, 59904, 0} "out2_post" 0.526316 "outR" 0.000000 fill 1 0 mouse
-ioMeter {355, 578} {27, 22} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
-ioSlider {119, 153} {160, 31} 0.000000 1.000000 0.437500 wdmix
-ioText {21, 152} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Dry
-ioText {281, 153} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Wet
-ioText {141, 124} {110, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Mix
-ioSlider {121, 219} {160, 31} 0.000000 1.000000 0.525000 roomsize
-ioText {23, 218} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Small
-ioText {283, 219} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Large
-ioText {139, 185} {110, 30} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Room Size
-ioSlider {121, 287} {160, 31} 0.000000 1.000000 0.450000 hfdamp
-ioText {23, 286} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder No
-ioText {283, 287} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Yes
-ioText {24, 253} {352, 31} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder High Frequency Attenuation
-ioSlider {143, 421} {132, 32} 0.000000 1.000000 1.000000 panwidth
-ioText {20, 422} {122, 32} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Narrow (Mono)
-ioText {277, 422} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Broad
-ioText {21, 389} {352, 31} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Stereo Panning
-ioText {274, 499} {98, 31} display 0.000000 0.00100 "vol" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.2000
-ioText {17, 6} {366, 78} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder KARLHEINZ STOCKHAUSEN: STUDIE IIÂ¬generated in Csound by Joachim HeintzÂ¬Version 1, November 2009
-ioCheckbox {23, 652} {20, 20} on printlines
-ioText {47, 648} {302, 30} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Print all Events in Output Console
-ioText {302, 608} {80, 25} editnum 40.000000 0.100000 "dbrange" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 40.000000
-ioText {223, 607} {80, 26} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder dB-Range
-ioText {20, 609} {91, 25} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Show as
-ioMenu {110, 608} {109, 26} 1 303 "Amplitudes,dB" showdb
+ioView nobackground {59624, 59624, 59624}
+ioText {34, 102} {365, 249} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground border Reverb (freeverb)
+ioText {34, 380} {365, 180} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground border Panning and Volume
+ioSlider {41, 523} {250, 29} 0.000000 0.500000 0.200000 vol
+ioText {165, 491} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Volume
+ioMeter {38, 574} {336, 22} {0, 59904, 0} "out1_post" 0.363636 "outL" 0.000000 fill 1 0 mouse
+ioMeter {372, 574} {27, 22} {50176, 3584, 3072} "outLover" 0.000000 "outLover" 0.000000 fill 1 0 mouse
+ioMeter {38, 601} {336, 22} {0, 59904, 0} "out2_post" 0.526316 "outR" 0.000000 fill 1 0 mouse
+ioMeter {372, 601} {27, 22} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
+ioSlider {136, 161} {160, 31} 0.000000 1.000000 0.443750 wdmix
+ioText {38, 160} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Dry
+ioText {298, 161} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Wet
+ioText {158, 132} {110, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Mix
+ioSlider {138, 227} {160, 31} 0.000000 1.000000 0.525000 roomsize
+ioText {40, 226} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Small
+ioText {300, 227} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Large
+ioText {156, 193} {110, 30} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Room Size
+ioSlider {138, 295} {160, 31} 0.000000 1.000000 0.456250 hfdamp
+ioText {40, 294} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder No
+ioText {300, 295} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Yes
+ioText {41, 261} {352, 31} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder High Frequency Attenuation
+ioSlider {160, 444} {132, 32} 0.000000 1.000000 1.000000 panwidth
+ioText {37, 445} {122, 32} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Narrow (Mono)
+ioText {294, 445} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Broad
+ioText {38, 412} {352, 31} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Stereo Panning
+ioText {291, 522} {98, 31} display 0.000000 0.00100 "vol" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.2000
+ioText {34, 14} {366, 78} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder KARLHEINZ STOCKHAUSEN: STUDIE IIÂ¬generated in Csound by Joachim HeintzÂ¬Version 1, November 2009
+ioCheckbox {40, 675} {20, 20} on printlines
+ioText {64, 671} {352, 31} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Print all Events in Output Console
+ioText {319, 631} {80, 25} editnum 40.000000 0.100000 "dbrange" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 40.000000
+ioText {240, 630} {80, 26} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder dB-Range
+ioText {37, 632} {91, 25} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Show as
+ioMenu {127, 631} {109, 26} 1 303 "Amplitudes,dB" showdb
 </MacGUI>
 
