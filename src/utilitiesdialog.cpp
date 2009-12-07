@@ -390,7 +390,6 @@ void UtilitiesDialog::changeHelp(QString filename)
 //                              .arg(file.errorString()));
     return;
   }
-//FIXME: Fix this hack so it works fine in windows as well...  
 #ifdef WIN32
   QTextStream in(&file);
   in.setAutoDetectUnicode(true);

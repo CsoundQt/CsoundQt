@@ -119,7 +119,7 @@ void QuteSpinBox::loadFromXml(QString xmlText)
 //    e.firstChildElement("b");
 //    m_color.setBlue(e.nodeValue().toInt());
   }
-  //FIXME implement!!!
+  //TODO implement!!!
 //  QColor color = m_widget->palette().color(QPalette::WindowText);
   e = doc.firstChildElement("bgcolor");
   if (e.isNull()) {
@@ -135,7 +135,7 @@ void QuteSpinBox::loadFromXml(QString xmlText)
 //    e.firstChildElement("b");
 //    m_color.setBlue(e.nodeValue().toInt());
   }
-  //FIXME implement!!!
+  //TODO implement!!!
 //  color = m_widget->palette().color(QPalette::Window);
   e = doc.firstChildElement("randomizable");
   if (e.isNull()) {

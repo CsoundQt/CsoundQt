@@ -194,7 +194,7 @@ void ConfigDialog::warnOpcodeDir(bool on)
 {
   if (on) {
     QMessageBox::warning(this, "QuteCsound",
-                         tr("Please note that OPCODEDIR will only be set when running in an external shell. It won't be set when using Run or Render.")
+                         tr("Please note that OPCODEDIR will overwrite current settings so you will need to restart QuteCsound to return to default.")
                         );
   }
 }

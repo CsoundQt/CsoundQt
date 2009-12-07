@@ -1443,7 +1443,6 @@ void WidgetPanel::updateData()
   for (int i = 0; i < scopeWidgets.size(); i++) {
     scopeWidgets[i]->updateData();
   }
-    //FIXME this is crashing on exit with Scope widget(without major consequence...)
   QTimer::singleShot(30, this, SLOT(updateData()));
 }
 

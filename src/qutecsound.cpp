@@ -589,7 +589,7 @@ void qutecsound::controlD()
 
 void qutecsound::del()
 {
-  //FIXME finish this...
+  //TODO finish this...
   if (documentPages[curPage]->hasFocus()) {
 //     documentPages[curPage]->comment();
   }
@@ -961,8 +961,17 @@ void qutecsound::runCsound(bool realtime)
     else {
       csoundSetMessageCallback(csound, &qutecsound::messageCallback_NoThread);
     }
-
-    csoundReset(csound); // This is what causes the clipboard problems in Windows... why????
+//    QString oldOpcodeDir = "";
+    if (m_options->opcodedirActive) {
+      // csoundGetEnv must be called after Compile or Precompile,
+      // But I need to set OPCODEDIR before compile....
+//      char *name = 0;
+//      csoundGetEnv(csound,name);
+//      oldOpcodeDir = QString(name);
+//      qDebug() << oldOpcodeDir;
+      csoundSetGlobalEnv("OPCODEDIR", m_options->opcodedir.toLocal8Bit());
+    }
+    csoundReset(csound);
     csoundSetHostData(csound, (void *) ud);
     csoundPreCompile(csound);  //Need to run PreCompile to create the FLTK_Flags global variable
 
@@ -1083,6 +1092,9 @@ void qutecsound::runCsound(bool realtime)
         free(argv[i]);
     }
     free(argv);
+//    if (oldOpcodeDir != "") {
+//      csoundSetGlobalEnv("OPCODEDIR", oldOpcodeDir.toLocal8Bit());
+//    }
   }
   else {  // Run in external shell
     QFile tempFile("QuteCsoundExample.csd");

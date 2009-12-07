@@ -70,11 +70,10 @@ void DockHelp::loadFile(QString fileName)
     text->setText(tr("Not Found! Make sure the documentation path is set in the Configuration Dialog."));
     return;
   }
-  //FIXME: Fix this hack so it works fine in windows as well...
+#ifdef WIN32
   QStringList searchPaths;
   searchPaths << docDir;
   text->setSearchPaths(searchPaths);
-#ifdef WIN32
   QTextStream in(&file);
   in.setAutoDetectUnicode(true);
   text->setHtml(in.readAll());

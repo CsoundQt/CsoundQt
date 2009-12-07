@@ -173,7 +173,6 @@ class WidgetPanel : public QDockWidget
     virtual void closeEvent(QCloseEvent * event);
 
   public slots:
-    //TODO add newValue slot for strings
     void newValue(QPair<QString, double> channelValue);
     void newValue(QPair<QString, QString> channelValue);
     void processNewValues();
