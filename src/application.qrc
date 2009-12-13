@@ -92,7 +92,7 @@
       <file>../examples/Useful/Audio_Input_Test.csd</file>
       <file>../examples/Useful/Audio_Output_Test.csd</file>
       <file>../examples/Useful/Audio_Thru_Test.csd</file>
-      <file>../examples/Useful MIDI_IO_Test.csd</file>
+      <file>../examples/Useful/MIDI_IO_Test.csd</file>
       <file>../examples/Useful/IO_Test.csd</file>
       <file>../examples/Useful/File_to_Text.csd</file>
       <file>../examples/Useful/Pitch_Tracker.csd</file>
