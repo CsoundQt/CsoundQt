@@ -2847,9 +2847,11 @@ int qutecsound::execute(QString executable, QString options)
 #ifdef SOLARIS
   QString commandLine = "\"" + executable + "\" " + options;
 #endif
-#ifdef WIN32
+#ifdef Q_OS_WIN
   QString commandLine = "\"" + executable + "\" " + (executable.startsWith("cmd")? " /k ": " ") + options;
-#endif
+  if (!QProcess::startDetached(commandLine))
+      return 1;
+#else
   qDebug() << "qutecsound::execute   " << commandLine << documentPages[curPage]->getFilePath();
   QProcess *p = new QProcess(this);
   p->setWorkingDirectory(documentPages[curPage]->getFilePath());
@@ -2858,7 +2860,7 @@ int qutecsound::execute(QString executable, QString options)
   qDebug() << "Launched external program with id:" << id;
   if (!p->waitForStarted())
     return 1;
-//  QProcess::startDetached(commandLine, QStringList(), );
+#endif
   return 0;
 }
 
