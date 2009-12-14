@@ -512,13 +512,7 @@ bool qutecsound::save()
 void qutecsound::copy()
 {
   if (documentPages[curPage]->hasFocus()) {
-#ifdef QUTECSOUND_COPYPASTE
-    m_clipboard = documentPages[curPage]->textCursor();
-    m_clipboardText = m_clipboard.selectedText();
-    QApplication::clipboard()->setText(m_clipboardText);
-#else
     documentPages[curPage]->copy();
-#endif
   }
   else if (helpPanel->hasFocus()) {
     helpPanel->copy();
@@ -533,15 +527,7 @@ void qutecsound::copy()
 void qutecsound::cut()
 {
   if (documentPages[curPage]->hasFocus()) {
-#ifdef QUTECSOUND_COPYPASTE
-    qDebug() << "aweasf";
-    m_clipboard = documentPages[curPage]->textCursor();
-    m_clipboardText = m_clipboard.selectedText();
-    QApplication::clipboard()->setText(m_clipboardText);
-    documentPages[curPage]->insertPlainText("");
-#else
     documentPages[curPage]->cut();
-#endif
   }
   else
     widgetPanel->cut();
@@ -550,11 +536,7 @@ void qutecsound::cut()
 void qutecsound::paste()
 {
   if (documentPages[curPage]->hasFocus()) {
-#ifdef QUTECSOUND_COPYPASTE
-    documentPages[curPage]->insertPlainText(m_clipboardText);
-#else
     documentPages[curPage]->paste();
-#endif
   }
   else
     widgetPanel->paste();

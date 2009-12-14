@@ -38,12 +38,6 @@
 #include <Carbon/Carbon.h>
 #endif
 
-// Use copy paste implemented within QuteCsound
-// to avoid clipboard problems in windows
-#ifdef WIN32
-#define QUTECSOUND_COPYPASTE
-#endif
-
 #include <csound.hpp>
 #include <csPerfThread.hpp>
 
