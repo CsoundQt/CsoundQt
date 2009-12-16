@@ -448,6 +448,14 @@ void qutecsound::openRecent(QString fileName)
 void qutecsound::createCodeGraph()
 {
   QString command = m_options->dot + " -V";
+#ifdef Q_OS_WIN
+    // add quotes surrounding dot command if it has spaces in it
+  if (m_options->dot.contains(" "))
+      command.replace(m_options->dot, "\"" + m_options->dot + "\"");
+    // replace linux/mac style directory separators with windows style separators
+  command.replace("/", "\\");
+#endif
+
   int ret = system(command.toAscii());
   if (ret != 0) {
     QMessageBox::warning(this, tr("QuteCsound"),
@@ -481,9 +489,10 @@ void qutecsound::createCodeGraph()
     // remove quotes surrounding dot command if it doesn't have spaces in it
   if (!m_options->dot.contains(" "))
       command.replace("\"" + m_options->dot + "\"", m_options->dot);
-
     // replace linux/mac style directory separators with windows style separators
   command.replace("/", "\\");
+  command.prepend("\"");
+  command.append("\"");
 #endif
 
 //   qDebug() << command;
