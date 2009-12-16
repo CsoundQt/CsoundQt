@@ -448,7 +448,7 @@ void qutecsound::openRecent(QString fileName)
 void qutecsound::createCodeGraph()
 {
   QString command = m_options->dot + " -V";
-  int ret = system(command.toStdString().c_str());
+  int ret = system(command.toAscii());
   if (ret != 0) {
     QMessageBox::warning(this, tr("QuteCsound"),
                          tr("Dot executable not found.\n"
@@ -469,13 +469,25 @@ void qutecsound::createCodeGraph()
                          tr("Cannot create temp dot/png file."));
     return;
   }
+
   QTextStream out(&file);
   out << dotText;
   file.close();
   file.open();
-  command = "\"" + m_options->dot + "\" -Tpng -o \"" + pngFile.fileName() + "\" \"" + file.fileName() + "\"";
+
+  command = "\"" + m_options->dot + "\"" + " -Tpng -o \"" + pngFile.fileName() + "\" \"" + file.fileName() + "\"";
+
+#ifdef Q_OS_WIN
+    // remove quotes surrounding dot command if it doesn't have spaces in it
+  if (!m_options->dot.contains(" "))
+      command.replace("\"" + m_options->dot + "\"", m_options->dot);
+
+    // replace linux/mac style directory separators with windows style separators
+  command.replace("/", "\\");
+#endif
+
 //   qDebug() << command;
-  ret = system(command.toStdString().c_str());
+  ret = system(command.toAscii());
   if (ret != 0) {
     qDebug() << "qutecsound::createCodeGraph() Error running dot";
   }
@@ -1357,7 +1369,7 @@ void qutecsound::render()
       return;
     }
   }
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
   m_options->fileOutputFilename.replace('\\', '/');
 #endif
   currentAudioFile = m_options->fileOutputFilename;
