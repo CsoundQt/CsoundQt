@@ -28,6 +28,7 @@
 #include <QDomElement>
 
 class OpEntryParser;
+class Highlighter;
 
 class DocumentPage : public QTextEdit
 {
@@ -37,6 +38,8 @@ class DocumentPage : public QTextEdit
     ~DocumentPage();
 
     int setTextString(QString text, bool autoCreateMacCsoundSections = true);
+    void setColorVariables(bool color);
+    void setOpcodeNameList(QStringList list);
     QString getFullText();
 //     QString getXmlWidgetsText();
     QString getOptionsText();
@@ -72,6 +75,7 @@ class DocumentPage : public QTextEdit
     QDomElement widgets;
 
     bool widgetsDocked;
+    Highlighter *m_highlighter;
     OpEntryParser *m_opcodeTree;
     bool errorMarked;
 

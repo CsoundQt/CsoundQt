@@ -130,8 +130,6 @@ qutecsound::qutecsound(QStringList fileNames)
   }
   else
     opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + "/opcodes.xml"));
-  m_highlighter = new Highlighter();
-  configureHighlighter();
 
   // Open files saved from last session
   if (!lastFiles.isEmpty()) {
@@ -260,8 +258,6 @@ void qutecsound::changePage(int index)
   textEdit = documentPages[index];
   textEdit->setTabStopWidth(m_options->tabWidth);
   textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
-  m_highlighter->setColorVariables(m_options->colorVariables);
-  m_highlighter->setDocument(textEdit->document());
   curPage = index;
   setCurrentFile(documentPages[curPage]->fileName);
   connectActions();
@@ -713,8 +709,6 @@ bool qutecsound::closeTab()
 //   textEdit->setTabStopWidth(m_options->tabWidth);
 //   textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
   setCurrentFile(documentPages[curPage]->fileName);
-  m_highlighter->setColorVariables(m_options->colorVariables);
-  m_highlighter->setDocument(documentPages[curPage]->document());
   connectActions();
   return true;
 }
@@ -1561,10 +1555,11 @@ void qutecsound::configure()
 
 void qutecsound::applySettings()
 {
-  m_highlighter->setDocument(textEdit->document());
-  m_highlighter->setColorVariables(m_options->colorVariables);
-  documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
-  documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
+  for (int i = 0; i < documentPages.size(); i++) {
+    documentPages[i]->setColorVariables(m_options->colorVariables);
+    documentPages[i]->setTabStopWidth(m_options->tabWidth);
+    documentPages[i]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
+  }
   widgetPanel->setEnabled(m_options->enableWidgets);
   Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
       Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
@@ -2867,11 +2862,6 @@ int qutecsound::execute(QString executable, QString options)
   return 0;
 }
 
-void qutecsound::configureHighlighter()
-{
-  m_highlighter->setOpcodeNameList(opcodeTree->opcodeNameList());
-}
-
 bool qutecsound::maybeSave()
 {
   for (int i = 0; i< documentPages.size(); i++) {
@@ -2921,10 +2911,12 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   documentPages.append(newPage);
   documentTabs->addTab(newPage,"");
   curPage = documentPages.size() - 1;
+  documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
+  documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
+  documentPages[curPage]->setColorVariables(m_options->colorVariables);
+  documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
   documentTabs->setCurrentIndex(curPage);
   textEdit = newPage;
-  textEdit->setTabStopWidth(m_options->tabWidth);
-  textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
   connectActions();
 // #ifdef QUTECSOUND_COPYPASTE
   connect(textEdit, SIGNAL(doCut()), this, SLOT(cut()));
@@ -2944,11 +2936,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
     if (!line.endsWith("\n"))
       text += "\n";
   }
-//   textEdit->setPlainText(text);
   textEdit->setTextString(text, m_options->saveWidgets);
-//   textEdit->setTabStopWidth(m_options->tabWidth);
-  m_highlighter->setColorVariables(m_options->colorVariables);
-  m_highlighter->setDocument(textEdit->document());
   QApplication::restoreOverrideCursor();
 
   textEdit->document()->setModified(false);

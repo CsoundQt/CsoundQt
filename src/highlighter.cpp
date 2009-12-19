@@ -130,7 +130,7 @@ void Highlighter::highlightBlock(const QString &text)
     int wordEnd = text.indexOf(endExpression, wordStart);
     wordEnd = (wordEnd > 0 ? wordEnd : text.size());
     QString word = text.mid(wordStart, wordEnd - wordStart);
-//     fprintf(stderr, "word: %s\n",word.toStdString().c_str());
+//    qDebug() << "word: " << word;
     if (word.indexOf(QRegExp("p[\\d]+\\b")) != -1) {
       setFormat(wordStart, wordEnd - wordStart, pfieldFormat);
     }

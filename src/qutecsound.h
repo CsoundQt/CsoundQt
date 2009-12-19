@@ -55,7 +55,6 @@ class Inspector;
 class DockConsole;
 class OpEntryParser;
 class Options;
-class Highlighter;
 class ConfigLists;
 class DocumentPage;
 class UtilitiesDialog;
@@ -215,7 +214,6 @@ class qutecsound:public QMainWindow
     void readSettings();
     void writeSettings();
     int execute(QString executable, QString options);
-    void configureHighlighter();
     bool maybeSave();
     void loadCompanionFile(const QString &fileName);
     bool saveFile(const QString &fileName, bool saveWidgets = true);
@@ -251,7 +249,6 @@ class qutecsound:public QMainWindow
     DocumentPage *textEdit;
     Options *m_options;
     DockConsole *m_console;
-    Highlighter *m_highlighter;
     DockHelp *helpPanel;
     WidgetPanel *widgetPanel;
     Inspector *m_inspector;

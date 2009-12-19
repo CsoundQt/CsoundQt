@@ -25,6 +25,7 @@
 #include "opentryparser.h"
 #include "types.h"
 #include "dotgenerator.h"
+#include "highlighter.h"
 
 DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
     QTextEdit(parent), m_opcodeTree(opcodeTree)
@@ -35,12 +36,14 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   askForFile = true;
   readOnly = false;
   errorMarked = false;
+  m_highlighter = new Highlighter();
   connect(document(), SIGNAL(contentsChanged()), this, SLOT(changed()));
 //   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(moved()));
 }
 
 DocumentPage::~DocumentPage()
 {
+  delete m_highlighter;
 }
 
 void DocumentPage::keyPressEvent(QKeyEvent *event)
@@ -169,7 +172,17 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   }
   setPlainText(text);
   document()->setModified(true);
+  m_highlighter->setDocument(document());
   return 0;
+}
+void DocumentPage::setColorVariables(bool color)
+{
+  m_highlighter->setColorVariables(color);
+}
+
+void DocumentPage::setOpcodeNameList(QStringList list)
+{
+  m_highlighter->setOpcodeNameList(list);
 }
 
 QString DocumentPage::getFullText()
