@@ -638,7 +638,7 @@ void qutecsound::createQuickRefPdf()
   qDebug() << " Opening " << quickRefFileName;
   QFile file(quickRefFileName);
   file.open(QIODevice::ReadOnly);
-  quickRefFile = new QTemporaryFile(QDir::tempPath() + "/QuteCsound Quick Reference-XXXXXX.pdf");
+  quickRefFile = new QTemporaryFile(QDir::tempPath() + "/QuteCsound Quick Reference-XXXXXX.pdf", this);
   if (quickRefFile == 0) {
     qDebug() << "Error creating local pdf file";
     return;
