@@ -339,7 +339,7 @@ class qutecsound:public QMainWindow
     QString lastReplace;
 
     UtilitiesDialog *utilitiesDialog;
-    QTemporaryFile *quickRefFile;
+    //QTemporaryFile *quickRefFile;
     QTemporaryFile *executionFile;
 
     QIcon modIcon;

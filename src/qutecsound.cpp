@@ -326,7 +326,7 @@ void qutecsound::closeEvent(QCloseEvent *event)
     delete closeTabButton;closeTabButton = 0;
     close();
     free(pFields);pFields = 0;
-    delete quickRefFile;quickRefFile = 0;
+    //delete quickRefFile;quickRefFile = 0;
     event->accept();
   } else {
     event->ignore();
@@ -629,26 +629,24 @@ QString qutecsound::getSaveFileName()
 
 void qutecsound::createQuickRefPdf()
 {
-  quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
-  quickRefFileName += _configlists.languageCodes[m_options->language];
-  quickRefFileName += ".pdf";
-  if (!QFile::exists(quickRefFileName)) {
-    quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
+  QString tempFileName(QDir::tempPath() + "/QuteCsound Quick Reference.pdf");
+  if (!QFile::exists(tempFileName))
+  {
+      quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
+      quickRefFileName += _configlists.languageCodes[m_options->language];
+      quickRefFileName += ".pdf";
+      if (!QFile::exists(quickRefFileName)) {
+        quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
+      }
+      qDebug() << " Opening " << quickRefFileName;
+      QFile file(quickRefFileName);
+      file.open(QIODevice::ReadOnly);
+      QFile quickRefFile(tempFileName);
+      quickRefFile.open(QFile::WriteOnly);
+      QDataStream quickRefIn(&quickRefFile);
+      quickRefIn << file.readAll();
   }
-  qDebug() << " Opening " << quickRefFileName;
-  QFile file(quickRefFileName);
-  file.open(QIODevice::ReadOnly);
-  quickRefFile = new QTemporaryFile(QDir::tempPath() + "/QuteCsound Quick Reference-XXXXXX.pdf", this);
-  if (quickRefFile == 0) {
-    qDebug() << "Error creating local pdf file";
-    return;
-  }
-  quickRefFile->open();
-  QDataStream quickRefIn(quickRefFile);
-  quickRefIn << file.readAll();
-  quickRefFile->close();
-  quickRefFile->open();
-  quickRefFileName = quickRefFile->fileName();
+  quickRefFileName = tempFileName;
 }
 
 bool qutecsound::saveAs()
