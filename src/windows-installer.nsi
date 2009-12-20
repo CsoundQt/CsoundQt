@@ -92,6 +92,7 @@ Section "Qt Libraries" SEC02
 SectionEnd
 
 Section "Mingw Runtime" SEC03
+  File "bin\libgcc_s_dw2-1.dll"
   File "bin\mingwm10.dll"
 
 ; Shortcuts
@@ -138,6 +139,7 @@ FunctionEnd
 Section Uninstall
   !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
   Delete "$INSTDIR\uninst.exe"
+  Delete "$INSTDIR\libgcc_s_dw2-1.dll"
   Delete "$INSTDIR\mingwm10.dll"
   Delete "$INSTDIR\QtCore4.dll"
   Delete "$INSTDIR\QtGui4.dll"
