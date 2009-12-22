@@ -106,8 +106,8 @@ class MeterWidget : public QGraphicsView
     virtual void contextMenuEvent(QContextMenuEvent *event)
     {emit(popUpMenu(event->globalPos()));}
     virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
+//    virtual void mousePressEvent(QMouseEvent* event);
+//    virtual void mouseReleaseEvent(QMouseEvent* event);
 
   private:
     double m_value, m_value2;  // value1 is vertical, value2 is horizontal

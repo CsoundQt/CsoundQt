@@ -26,6 +26,7 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new QPushButton(this);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+  m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   canFocus(false);
   m_imageFilename = "/";
   m_type = "event";
@@ -156,7 +157,7 @@ QString QuteButton::getWidgetXmlText()
   createXmlWriter(s);
 
   s.writeTextElement("type", m_type); // TODO add latch button and button bank
-  s.writeTextElement("value", QString::number(m_value,'f', 6));
+  s.writeTextElement("value", QString::number(m_value,'f', 8));
   s.writeTextElement("stringvalue", m_filename);
   s.writeTextElement("text", static_cast<QPushButton *>(m_widget)->text());
   s.writeTextElement("image", m_imageFilename);

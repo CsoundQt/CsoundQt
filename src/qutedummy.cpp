@@ -27,6 +27,7 @@ QuteDummy::QuteDummy(QWidget *parent) : QuteWidget(parent)
   m_widget = new QFrame(this);
   m_widget->setAutoFillBackground (true);
   m_widget->setPalette(QPalette(Qt::gray));
+  m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 }
 
 QuteDummy::~QuteDummy()

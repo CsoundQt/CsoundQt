@@ -131,6 +131,11 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   eventQueue.resize(QUTECSOUND_MAX_EVENTS);
   eventQueueSize = 0;
   QTimer::singleShot(30, this, SLOT(updateData()));
+  layoutWidget->setMouseTracking(true);  // Must allow this for layoutWidget to propagate tracking events
+  this->setMouseTracking(true);
+  trackMouse = true;
+  mouseBut1 = 0;
+  mouseBut2 = 0;
 }
 
 WidgetPanel::~WidgetPanel()
@@ -147,7 +152,7 @@ void WidgetPanel::getValues(QVector<QString> *channelNames,
                             QVector<QString> *stringValues)
 {
   if (channelNames->size() < widgets.size()*2)
-    return;
+    return;  // Is this check necessary?
   for (int i = 0; i < widgets.size(); i++) {
     (*channelNames)[i*2] = widgets[i]->getChannelName();
     (*values)[i*2] = widgets[i]->getValue();
@@ -155,6 +160,52 @@ void WidgetPanel::getValues(QVector<QString> *channelNames,
     (*channelNames)[i*2 + 1] = widgets[i]->getChannel2Name();
     (*values)[i*2 + 1] = widgets[i]->getValue2();
   }
+}
+
+void WidgetPanel::getMouseValues(QVector<double> *values)
+{
+  // values must have size of 4 for _MouseX _MouseY _MouseRelX and _MouseRelY
+  (*values)[0] = getMouseX();
+  (*values)[1] = getMouseY();
+  (*values)[2] = getMouseRelX();
+  (*values)[3] = getMouseRelY();
+}
+
+int WidgetPanel::getMouseX()
+{
+  if (mouseX > 0 and mouseX < 4096)
+    return mouseX;
+  else return 0;
+}
+
+int WidgetPanel::getMouseY()
+{
+  if (mouseY > 0 and mouseY < 4096)
+    return mouseY;
+  else return 0;
+}
+int WidgetPanel::getMouseRelX()
+{
+  if (mouseRelX > 0 and mouseRelX < 4096)
+    return mouseRelX;
+  else return 0;
+}
+
+int WidgetPanel::getMouseRelY()
+{
+  if (mouseRelY > 0 and mouseRelY < 4096)
+    return mouseRelY;
+  else return 0;
+}
+
+int WidgetPanel::getMouseBut1()
+{
+  return mouseBut1;
+}
+
+int WidgetPanel::getMouseBut2()
+{
+  return mouseBut2;
 }
 
 void WidgetPanel::setValue(QString channelName, double value)
@@ -205,14 +256,16 @@ void WidgetPanel::setScrollBarsActive(bool active)
     scrollArea = new QScrollArea(this);
     scrollArea->setWidget(layoutWidget);
     scrollArea->setFocusPolicy(Qt::NoFocus);
-    scrollArea->setFocusPolicy(Qt::NoFocus);
     setWidget(scrollArea);
     scrollArea->setAutoFillBackground(false);
     scrollArea->show();
+    scrollArea->setMouseTracking(true);
+//    layoutWidget->setMouseTracking(false);
   }
   else if (!active && m_sbActive) {
     setWidget(scrollArea->takeWidget());
     delete scrollArea;
+    layoutWidget->setMouseTracking(true);
   }
   m_sbActive = active;
 }
@@ -574,6 +627,36 @@ void WidgetPanel::moveEvent(QMoveEvent * event)
   emit moved(event->pos());
 }
 
+void WidgetPanel::mouseMoveEvent(QMouseEvent * event)
+{
+  QWidget::mouseMoveEvent(event);
+//  qDebug() << "WidgetPanel::mouseMoveEvent " << event->x();
+  mouseX = event->globalX();
+  mouseY = event->globalY();
+  mouseRelX = event->x();
+  mouseRelY = event->y();
+}
+
+void WidgetPanel::mousePressEvent(QMouseEvent * event)
+{
+  QWidget::mousePressEvent(event);
+//  qDebug() << "WidgetPanel::mouseMoveEvent " << event->x();
+  if (event->button() == Qt::LeftButton)
+    mouseBut1 = 1;
+  else if (event->button() == Qt::RightButton)
+    mouseBut2 = 1;
+}
+
+void WidgetPanel::mouseReleaseEvent(QMouseEvent * event)
+{
+  QWidget::mousePressEvent(event);
+//  qDebug() << "WidgetPanel::mouseMoveEvent " << event->x();
+  if (event->button() == Qt::LeftButton)
+    mouseBut1 = 0;
+  else if (event->button() == Qt::RightButton)
+    mouseBut2 = 0;
+}
+
 void WidgetPanel::keyPressEvent(QKeyEvent *event)
 {
   if (!event->isAutoRepeat() or m_repeatKeys) {
@@ -643,6 +726,46 @@ void WidgetPanel::processNewValues()
       if (widgets[i]->getChannel2Name() == name) {
         widgets[i]->setValue2(newValues.value(name));
       }
+      if (trackMouse) {
+        QString ch1name = widgets[i]->getChannelName();
+        if (ch1name == "_MouseX") {
+          widgets[i]->setValue(getMouseX());
+        }
+        else if (ch1name == "_MouseY") {
+          widgets[i]->setValue(getMouseY());
+        }
+        else if (ch1name == "_MouseRelX") {
+          widgets[i]->setValue(getMouseRelX());
+        }
+        else if (ch1name == "_MouseRelY") {
+          widgets[i]->setValue(getMouseRelY());
+        }
+        else if (ch1name == "_MouseBut1") {
+          widgets[i]->setValue(getMouseBut1());
+        }
+        else if (ch1name == "_MouseBut2") {
+          widgets[i]->setValue(getMouseBut2());
+        }
+        QString ch2name = widgets[i]->getChannel2Name();
+        if (ch2name == "_MouseX") {
+          widgets[i]->setValue2(getMouseX());
+        }
+        else if (ch2name == "_MouseY") {
+          widgets[i]->setValue2(getMouseY());
+        }
+        else if (ch2name == "_MouseRelX") {
+          widgets[i]->setValue2(getMouseRelX());
+        }
+        else if (ch2name == "_MouseRelY") {
+          widgets[i]->setValue2(getMouseRelY());
+        }
+        else if (ch2name == "_MouseBut1") {
+          widgets[i]->setValue2(getMouseBut1());
+        }
+        else if (ch2name == "_MouseBut2") {
+          widgets[i]->setValue2(getMouseBut2());
+        }
+      }
     }
   }
   valueMutex.lock();
@@ -650,6 +773,7 @@ void WidgetPanel::processNewValues()
   valueMutex.unlock();
   stringValueMutex.lock();
   channelNames = newStringValues.keys();
+  // Now set string values
   stringValueMutex.unlock();
   foreach(QString name, channelNames) {
     for (int i = 0; i < widgets.size(); i++){

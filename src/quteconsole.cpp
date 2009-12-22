@@ -26,6 +26,7 @@ QuteConsole::QuteConsole(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new ConsoleWidget(this);
   m_widget->setAutoFillBackground(true);
+  m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   canFocus(false);
 //   connect(static_cast<ConsoleWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 }

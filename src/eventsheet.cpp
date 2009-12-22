@@ -34,7 +34,10 @@ EventSheet::EventSheet()
   this->setColumnCount(6);
   columnNames << tr("Event") << "p1 (instr)" << "p2 (start)" << "p3 (dur)" << "p4" << "p5";
   this->setHorizontalHeaderLabels(columnNames);
-  connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(reverse()));
+  this->setColumnWidth(0, 45);
+  this->setColumnWidth(1, 55);
+  this->setColumnWidth(2, 55);
+  this->setColumnWidth(3, 55);
 
   createActions();
 }

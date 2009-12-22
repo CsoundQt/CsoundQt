@@ -43,7 +43,8 @@ QuteWidget::QuteWidget(QWidget *parent/*, widgetType type*/):
   m_value = 0.0;
   m_value2 = 0.0;
 
-  this->setMinimumSize(10,10);
+  this->setMinimumSize(1,1);
+  this->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 
   m_uuid = QUuid::createUuid().toString();
 }
@@ -278,11 +279,11 @@ void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
   popUpMenu(event->globalPos());
 }
 
-void QuteWidget::mousePressEvent(QMouseEvent *event)
-{
-//   qDebug("QuteWidget::mousePressEvent");
-  QWidget::mousePressEvent(event);
-}
+//void QuteWidget::mousePressEvent(QMouseEvent *event)
+//{
+////   qDebug("QuteWidget::mousePressEvent");
+//  QWidget::mousePressEvent(event);
+//}
 
 void QuteWidget::popUpMenu(QPoint pos)
 {
@@ -400,6 +401,9 @@ void QuteWidget::applyProperties()
 {
   setChannelName(nameLineEdit->text());
   setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
+  delete dialog;
+
+//  this->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   emit(widgetChanged(this));
 }
 

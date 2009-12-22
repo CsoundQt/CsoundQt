@@ -25,6 +25,7 @@
 QuteCheckBox::QuteCheckBox(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new QCheckBox(this);
+  m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
   canFocus(false);
 

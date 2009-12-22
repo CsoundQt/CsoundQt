@@ -50,6 +50,14 @@ class WidgetPanel : public QDockWidget
 
     unsigned int widgetCount();
     void getValues(QVector<QString> *channelNames, QVector<double> *values, QVector<QString> *stringValues);
+    void getMouseValues(QVector<double> *values);
+    int getMouseX();
+    int getMouseY();
+    int getMouseRelX();
+    int getMouseRelY();
+    int getMouseBut1();
+    int getMouseBut2();
+
     void setValue(QString channelName, double value);
     void setValue(QString channelName, QString value);
     void setValue(int index, double value);
@@ -79,8 +87,12 @@ class WidgetPanel : public QDockWidget
     virtual void contextMenuEvent(QContextMenuEvent *event);
     virtual void resizeEvent(QResizeEvent * event);
     virtual void moveEvent(QMoveEvent * event);
+    virtual void mouseMoveEvent (QMouseEvent * event);
+    virtual void mousePressEvent(QMouseEvent * event);
+    virtual void mouseReleaseEvent(QMouseEvent * event);
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
+    virtual void closeEvent(QCloseEvent * event);
 
   private:
     // These vectors must be used with care since they are not reentrant and will
@@ -100,6 +112,7 @@ class WidgetPanel : public QDockWidget
     QMutex valueMutex;
     QMutex stringValueMutex;
     QMutex eventMutex;
+    int mouseX, mouseY, mouseRelX, mouseRelY, mouseBut1, mouseBut2;
 
     QPoint currentPosition;
     // Create new widget Actions
@@ -140,6 +153,7 @@ class WidgetPanel : public QDockWidget
     QVector<WidgetPreset> presets;
 
     QStringList clipboard;
+    bool trackMouse;
     QSize oldSize;
     bool m_tooltips;
     int m_width;
@@ -170,7 +184,6 @@ class WidgetPanel : public QDockWidget
     void setPresetName(int num, QString name);
     QString getPresetsXmlText();
 
-    virtual void closeEvent(QCloseEvent * event);
 
   public slots:
     void newValue(QPair<QString, double> channelValue);
@@ -252,13 +265,15 @@ class LayoutWidget : public QWidget
     virtual void mousePressEvent(QMouseEvent *event)
     {
       QWidget::mousePressEvent(event);
-      this->setFocus(Qt::MouseFocusReason);
-      selectionFrame->show();
-      startx = event->x();
-      starty = event->y();
-      selectionFrame->setGeometry(startx, starty, 0,0);
       if (event->button() & Qt::LeftButton) {
-        emit deselectAll();
+        this->setFocus(Qt::MouseFocusReason);
+        selectionFrame->show();
+        startx = event->x();
+        starty = event->y();
+        selectionFrame->setGeometry(startx, starty, 0,0);
+        if (event->button() & Qt::LeftButton) {
+          emit deselectAll();
+        }
       }
     }
     virtual void mouseMoveEvent(QMouseEvent *event)
@@ -268,21 +283,25 @@ class LayoutWidget : public QWidget
       int y = starty;
       int height = abs(event->y() - starty);
       int width = abs(event->x() - startx);
-      if (event->x() < startx) {
-        x = event->x();
-//         width = event->x() - startx;
+      if (event->buttons() & Qt::LeftButton) {  // Currently dragging selection
+        if (event->x() < startx) {
+          x = event->x();
+          //         width = event->x() - startx;
+        }
+        if (event->y() < starty) {
+          y = event->y();
+          //         height = event->y() - starty;
+        }
+        selectionFrame->setGeometry(x, y, width, height);
+        emit selection(QRect(x,y,width,height));
       }
-      if (event->y() < starty) {
-        y = event->y();
-//         height = event->y() - starty;
-      }
-      selectionFrame->setGeometry(x, y, width, height);
-      emit selection(QRect(x,y,width,height));
     }
     virtual void mouseReleaseEvent(QMouseEvent *event)
     {
       QWidget::mouseReleaseEvent(event);
-      selectionFrame->hide();
+      if (event->button() & Qt::LeftButton) {
+        selectionFrame->hide();
+      }
 //       if (event->button() & Qt::LeftButton) {
 //         emit deselectAll();
 //       }

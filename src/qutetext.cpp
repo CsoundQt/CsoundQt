@@ -45,6 +45,7 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
   static_cast<QLabel*>(m_widget)->setMargin (5);
   static_cast<QLabel*>(m_widget)->setTextFormat(Qt::RichText);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+  m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   canFocus(true);
 
 //   connect(static_cast<QLabel*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));

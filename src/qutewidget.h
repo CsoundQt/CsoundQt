@@ -77,10 +77,10 @@ class QuteWidget : public QWidget
     QLabel *channelLabel;
     QLineEdit *nameLineEdit;
     QString m_line;
-    QWidget *m_layoutWidget;
+//    QWidget *m_layoutWidget;
     QWidget *m_widget;
     QDialog *dialog;
-    QGridLayout *layout;
+    QGridLayout *layout;  // For preference dialog
 
     QString m_name, m_name2;
     double m_min, m_max;
@@ -94,7 +94,7 @@ class QuteWidget : public QWidget
     QString xmlText;
 
     virtual void contextMenuEvent(QContextMenuEvent *event);
-    virtual void mousePressEvent(QMouseEvent *event);
+//    virtual void mousePressEvent(QMouseEvent *event);
 
     virtual void createPropertiesDialog();
     virtual void applyProperties();

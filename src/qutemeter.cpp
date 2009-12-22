@@ -32,6 +32,7 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
   setGeometry(0,0, parent->width(), parent->height());
   m_widget = new MeterWidget(this);
   m_widget->setAutoFillBackground(true);
+  m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 //  m_widget->setWindowFlags(Qt::WindowStaysOnTopHint);
   canFocus(false);
 //   static_cast<MeterWidget *>(m_widget)->setRenderHints(QPainter::Antialiasing);
@@ -591,7 +592,7 @@ void MeterWidget::setWidgetGeometry(int x,int y,int width,int height)
 
 void MeterWidget::mouseMoveEvent(QMouseEvent* event)
 {
-  if (m_mouseDown) {
+  if (event->buttons() & Qt::LeftButton) {
 //     if (event->x() > 0 and event->x()< width() and
 //         event->y() > 0 and event->y()< height())
     double newhor = (double)event->x()/ width();
@@ -602,15 +603,15 @@ void MeterWidget::mouseMoveEvent(QMouseEvent* event)
   }
 }
 
-void MeterWidget::mousePressEvent(QMouseEvent* event)
-{
-  if (event->buttons() & Qt::LeftButton) {
-    m_mouseDown = true;
-  }
-}
+//void MeterWidget::mousePressEvent(QMouseEvent* event)
+//{
+//  if (event->buttons() & Qt::LeftButton) {
+//    m_mouseDown = true;
+//  }
+//}
 
-void MeterWidget::mouseReleaseEvent(QMouseEvent* event)
-{
-  QGraphicsView::mouseReleaseEvent(event);
-  m_mouseDown = false;
-}
+//void MeterWidget::mouseReleaseEvent(QMouseEvent* event)
+//{
+//  QGraphicsView::mouseReleaseEvent(event);
+//  m_mouseDown = false;
+//}

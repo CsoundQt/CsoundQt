@@ -121,6 +121,7 @@ class qutecsound:public QMainWindow
     QVector<QString> channelNames;
     QVector<double> values;
     QVector<QString> stringValues;
+    QVector<double> mouseValues;
     OpEntryParser *opcodeTree;
     RingBuffer audioOutputBuffer;
 

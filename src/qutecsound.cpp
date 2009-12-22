@@ -185,6 +185,7 @@ qutecsound::qutecsound(QStringList fileNames)
   csound=csoundCreate(0);
 #endif
 
+  mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2channels
   queueTimer = new QTimer(this);
   queueTimer->setSingleShot(true);
   connect(queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
@@ -889,7 +890,7 @@ void qutecsound::runCsound(bool realtime)
   }
 
   if (useAPI) {
-#ifdef MACOSX
+#ifdef MACOSX_PRE_SNOW
 //Remember menu bar to set it after FLTK grabs it
     menuBarHandle = GetMenuBar();
 #endif
@@ -1072,6 +1073,7 @@ void qutecsound::runCsound(bool realtime)
         qApp->processEvents();
         if (ud->qcs->m_options->enableWidgets) {
           widgetPanel->getValues(&channelNames, &values, &stringValues);
+          ud->qcs->widgetPanel->getMouseValues(&mouseValues);
           if (!ud->qcs->m_options->useInvalue) {
             writeWidgetValues(ud);
             readWidgetValues(ud);
@@ -1081,7 +1083,7 @@ void qutecsound::runCsound(bool realtime)
       }
 //       ud->PERF_STATUS = 0; // Confirm that Csound has stopped
       stop();  // To flush pending queues
-#ifdef MACOSX
+#ifdef MACOSX_PRE_SNOW
 // Put menu bar back
       SetMenuBar(menuBarHandle);
 #endif
@@ -1222,7 +1224,7 @@ void qutecsound::stopCsound()
     csoundCleanup(csound);
     m_console->scrollToEnd();
   }
-#ifdef MACOSX
+#ifdef MACOSX_PRE_SNOW
 // Put menu bar back
   SetMenuBar(menuBarHandle);
 #endif
@@ -1434,7 +1436,13 @@ void qutecsound::setHelpEntry()
     else if (text.contains("CsOptions"))
       text = "CommandUnifile";
     helpPanel->docDir = m_options->csdocdir;
-    helpPanel->loadFile(m_options->csdocdir + "/" + text + ".html");
+    QString fileName = m_options->csdocdir + "/" + text + ".html";
+    if (QFile::exists(fileName)) {
+        helpPanel->loadFile(fileName);
+    }
+    else {
+        helpPanel->loadFile(m_options->csdocdir + "/index.html");
+    }
     helpPanel->show();
   }
   else {
@@ -1602,7 +1610,7 @@ void qutecsound::runUtility(QString flags)
   //TODO Run utilities from API using soundRunUtility(CSOUND *, const char *name, int argc, char **argv)
   qDebug("qutecsound::runUtility");
   if (m_options->useAPI) {
-#ifdef MACOSX
+#ifdef MACOSX_PRE_SNOW
 //Remember menu bar to set it after FLTK grabs it
     menuBarHandle = GetMenuBar();
 #endif
@@ -1649,7 +1657,7 @@ void qutecsound::runUtility(QString flags)
     csoundCleanup(csoundU);
     csoundDestroy(csoundU);
 //     free(argv);
-#ifdef MACOSX
+#ifdef MACOSX_PRE_SNOW
 // Put menu bar back
     SetMenuBar(menuBarHandle);
 #endif
@@ -2406,6 +2414,7 @@ void qutecsound::createMenus()
 
   exampleFiles.append(":/examples/Examples/Keyboard_Control.csd");
   exampleFiles.append(":/examples/Examples/Just_Intonation.csd");
+  exampleFiles.append(":/examples/Examples/Mouse_Control.csd");
   exampleFiles.append(":/examples/Examples/Simple_Convolution.csd");
   exampleFiles.append(":/examples/Examples/Universal_Convolution.csd");
   exampleFiles.append(":/examples/Examples/Oscillator_Aliasing.csd");
@@ -3233,6 +3242,31 @@ void qutecsound::readWidgetValues(CsoundUserData *ud)
       strcpy(string, ud->qcs->stringValues[i].toStdString().c_str());
     }
   }
+  //FIXME check if mouse tracking is active
+  if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseX",
+        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+      *pvalue = (MYFLT) ud->qcs->mouseValues[0];
+  }
+  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseY",
+        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+      *pvalue = (MYFLT) ud->qcs->mouseValues[1];
+  }
+  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseRelX",
+        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+      *pvalue = (MYFLT) ud->qcs->mouseValues[2];
+  }
+  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseRelY",
+        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+      *pvalue = (MYFLT) ud->qcs->mouseValues[3];
+  }
+  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseBut1",
+        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+      *pvalue = (MYFLT) ud->qcs->mouseValues[4];
+  }
+  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseBut2",
+        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+      *pvalue = (MYFLT) ud->qcs->mouseValues[5];
+  }
 }
 
 void qutecsound::writeWidgetValues(CsoundUserData *ud)
@@ -3324,6 +3358,7 @@ void qutecsound::csThread(void *data)
       udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames,
                                           &udata->qcs->values,
                                           &udata->qcs->stringValues);
+      udata->qcs->widgetPanel->getMouseValues(&udata->qcs->mouseValues);
       if (!udata->qcs->m_options->useInvalue) {
         writeWidgetValues(udata);
         readWidgetValues(udata);
@@ -3343,7 +3378,7 @@ QStringList qutecsound::runCsoundInternally(QStringList flags)
     index++;
   }
   int argc = flags.size();
-#ifdef MACOSX
+#ifdef MACOSX_PRE_SNOW
 //Remember menu bar to set it after FLTK grabs it
   menuBarHandle = GetMenuBar();
 #endif
@@ -3361,7 +3396,7 @@ QStringList qutecsound::runCsoundInternally(QStringList flags)
   csoundCleanup(csoundD);
   csoundDestroy(csoundD);
 
-#ifdef MACOSX
+#ifdef MACOSX_PRE_SNOW
 // Put menu bar back
   SetMenuBar(menuBarHandle);
 #endif
@@ -3446,7 +3481,7 @@ void qutecsound::inputValueCallback (CSOUND *csound,
   if (ud->PERF_STATUS == 1) {
     QString name = QString(channelName);
     ud->qcs->perfMutex.lock();
-    if (name.startsWith('$')) {
+    if (name.startsWith('$')) { // channel is a string channel
       int index = ud->qcs->channelNames.indexOf(name.mid(1));
       char *string = (char *) value;
       if (index>=0) {
@@ -3456,12 +3491,31 @@ void qutecsound::inputValueCallback (CSOUND *csound,
         string[0] = '\0'; //empty c string
       }
     }
-    else {
+    else {  // Not a string channel
       int index = ud->qcs->channelNames.indexOf(name);
       if (index>=0)
         *value = (MYFLT) ud->qcs->values[index];
       else {
         *value = 0;
+      }
+      //FIXME check if mouse tracking is active
+      if (name == "_MouseX") {
+        *value = (MYFLT) ud->qcs->mouseValues[0];
+      }
+      else if (name == "_MouseY") {
+        *value = (MYFLT) ud->qcs->mouseValues[1];
+      }
+      else if(name == "_MouseRelX") {
+        *value = (MYFLT) ud->qcs->mouseValues[2];
+      }
+      else if(name == "_MouseRelY") {
+        *value = (MYFLT) ud->qcs->mouseValues[3];
+      }
+      else if(name == "_MouseBut1") {
+        *value = (MYFLT) ud->qcs->mouseValues[4];
+      }
+      else if(name == "_MouseBut2") {
+        *value = (MYFLT) ud->qcs->mouseValues[5];
       }
     }
     ud->qcs->perfMutex.unlock();

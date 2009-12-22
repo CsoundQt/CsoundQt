@@ -11,12 +11,7 @@ TRANSLATIONS = qutecsound_es.ts \
     qutecsound_fr.ts \
     qutecsound_pt.ts \
     qutecsound_it.ts
-win32 { 
-    QUTECSOUND_CSOUND_PATH = C:\Program \
-        Files\Csound
-    LIBSNDFILE_PATH = C:\Development \
-        Files\libsndfile-1_0_17
-}
+
 build64 { 
     message(Building for doubles \(64-bit\) csound)
     DEFINES += USE_DOUBLE
@@ -123,6 +118,10 @@ FORMS += configdialog.ui \
     keyselector.ui \
     onevaluedialog.ui
 win32 { 
+    QUTECSOUND_CSOUND_PATH = C:\Program \
+        Files\Csound
+    LIBSNDFILE_PATH = C:\Development \
+        Files\libsndfile-1_0_17
     DEFINES += WIN32
     INCLUDEPATH += "$${QUTECSOUND_CSOUND_PATH}\include"
     HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\csound.h"
@@ -158,6 +157,7 @@ solaris-g++-64 {
 macx { 
     build64 { 
         MAC_LIB = CsoundLib64
+        INCLUDEPATH += /Library/Frameworks/CsoundLib64.framework/Versions/Current/Headers/
         HEADERS += /Library/Frameworks/CsoundLib64.framework/Versions/Current/Headers/csound.h
         qute_cpp { 
             HEADERS += /Library/Frameworks/CsoundLib64.framework/Versions/Current/Headers/csound.hpp
@@ -168,6 +168,7 @@ macx {
     }
     else { 
         MAC_LIB = CsoundLib
+        INCLUDEPATH += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/
         HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.h
         qute_cpp { 
             HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.hpp
@@ -178,6 +179,9 @@ macx {
     }
     message(Building using $${MAC_LIB})
     DEFINES += MACOSX
+    #QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.5
+    #QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk
+    DEFINES += MACOSX_PRE_SNOW # Use this if you are building for OS X < 10.6
     LIBS += -framework \
         QtXml
     LIBS += -framework \

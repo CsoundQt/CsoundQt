@@ -55,25 +55,26 @@ void Inspector::parseText(const QString &text)
   ftableItem->setLine(-1);
   QStringList lines = text.split(QRegExp("[\n\r]"));
   for (int i = 0; i< lines.size(); i++) {
-    if (lines[i].trimmed().contains(QRegExp("^[\\s\\w]*ftgen"))) {
-      QString text = lines[i].trimmed();
-      QStringList columnslist(text.simplified());
-      TreeItem *newItem = new TreeItem(ftableItem, columnslist);
-      newItem->setLine(i + 1);
-    }
-    if (lines[i].trimmed().contains(QRegExp("^[\\s]*instr"))) {
-      QString text = lines[i].trimmed();
-      QStringList columnslist(text.simplified());
+    if (lines[i].trimmed().startsWith("instr")) {
+      QString text = lines[i].mid(lines[i].indexOf("instr") + 6);
+      QStringList columnslist(QString("instr %1").arg(text).simplified());
       TreeItem *newItem = new TreeItem(instrItem, columnslist);
       newItem->setLine(i + 1);
     }
-    if (lines[i].trimmed().contains(QRegExp("^[\\s]*opcode"))) {
+//    if (lines[i].trimmed().contains(QRegExp("^[\\s]*instr"))) {
+//      QString text = lines[i].trimmed();
+//      QStringList columnslist(text.simplified());
+//      TreeItem *newItem = new TreeItem(instrItem, columnslist);
+//      newItem->setLine(i + 1);
+//    }
+    if (lines[i].trimmed().startsWith("opcode")) {
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
       TreeItem *newItem = new TreeItem(opcodeItem, columnslist);
       newItem->setLine(i + 1);
     }
-    if (lines[i].trimmed().contains(QRegExp("^[\\s]*f[\\s\\d]"))) {
+    if (lines[i].trimmed().contains(QRegExp("^f\\s*\\d")) ||
+        lines[i].trimmed().contains(QRegExp("^[\\w]*[\\s]*ftgen"))) {
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
       TreeItem *newItem = new TreeItem(ftableItem, columnslist);

@@ -37,6 +37,7 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
   m_widget->show();
   m_widget->setAutoFillBackground(true);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+  m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 //  m_widget->setWindowFlags(Qt::WindowStaysOnTopHint);
   canFocus(false);
   static_cast<ScopeWidget *>(m_widget)->setScene(m_scene);
@@ -110,7 +111,7 @@ QString QuteScope::getWidgetXmlText()
    // Not implemented in blue
 
   s.writeTextElement("type", m_type);
-  s.writeTextElement("zoom", QString::number(m_zoom, 'f', 6));
+  s.writeTextElement("zoom", QString::number(m_zoom, 'f', 8));
 
   s.writeEndElement();
   return xmlText;

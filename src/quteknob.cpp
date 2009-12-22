@@ -24,16 +24,17 @@
 
 QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
 {
-  m_widget = new QDial(this);
   m_min = 0.0;
   m_max = 99.0;
-  static_cast<QDial *>(m_widget)->setNotchesVisible(true);
   //TODO add resolution to config dialog and set these values accordingly
   m_resolution = 0.01;
+  m_widget = new QDial(this);
   static_cast<QDial *>(m_widget)->setMinimum(0);
   static_cast<QDial *>(m_widget)->setMaximum(99);
+  static_cast<QDial *>(m_widget)->setNotchesVisible(true);
   m_widget->setPalette(QPalette(Qt::gray));
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+  m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 
   connect(static_cast<QDial *>(m_widget), SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
 }
@@ -152,7 +153,7 @@ void QuteKnob::setWidgetLine(QString line)
 
 void QuteKnob::setWidgetGeometry(int x, int y, int width, int height)
 {
-  qDebug() << "QuteKnob::setWidgetGeometry " << width << "," << height;
+//  qDebug() << "QuteKnob::setWidgetGeometry " << width << "," << height;
   QuteWidget::setWidgetGeometry(x,y,width,height);
   m_widget->move(5,5);
   m_widget->setFixedSize(width-10, height-10);
@@ -192,7 +193,7 @@ QString QuteKnob::getWidgetXmlText()
   s.writeTextElement("value", QString::number(m_value, 'f', 8));
 
   // These three come from blue, but they are not implemented here
-  s.writeTextElement("knobWidth", "");
+  //s.writeTextElement("knobWidth", "");
   s.writeTextElement("randomizable", "");
    //These are not implemented in blue
   s.writeTextElement("resolution", QString::number(m_resolution, 'f', 6));

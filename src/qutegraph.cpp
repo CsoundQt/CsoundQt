@@ -29,6 +29,7 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
   m_widget = new StackedLayoutWidget(this);
   m_widget->show();
   m_widget->setAutoFillBackground(true);
+  m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 //   static_cast<StackedLayoutWidget *>(m_widget)->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   m_label = new QLabel(this);
@@ -44,7 +45,7 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 
   m_pageComboBox->setFocusPolicy(Qt::NoFocus);
   m_label->setFocusPolicy(Qt::NoFocus);
-  canFocus(true);
+  canFocus(false);
   connect(m_pageComboBox, SIGNAL(activated(int)),
           this, SLOT(changeCurve(int)));
   polygons.clear();
