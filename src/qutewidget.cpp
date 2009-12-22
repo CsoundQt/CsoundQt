@@ -31,7 +31,7 @@ QuteWidget::QuteWidget(QWidget *parent/*, widgetType type*/):
 {
   propertiesAct = new QAction(/*QIcon(":/images/gtk-new.png"),*/ tr("&Properties"), this);
 //   propertiesAct->setShortcut(tr("Alt+P"));
-  this->setWindowFlags(Qt::WindowStaysOnTopHint);
+//  this->setWindowFlags(Qt::WindowStaysOnTopHint);
 //  canFocus(false);
   propertiesAct->setStatusTip(tr("Open widget properties"));
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(openProperties()));
@@ -226,9 +226,9 @@ double QuteWidget::getValue()
 
 double QuteWidget::getValue2()
 {
-#ifdef DEBUG
-  qDebug("QuteWidget::getValue2 not implemented for widget type");
-#endif
+//#ifdef DEBUG
+//  qDebug("QuteWidget::getValue2 not implemented for widget type");
+//#endif
   return 0.0;
 }
 
@@ -239,9 +239,9 @@ double QuteWidget::getResolution()
 
 QString QuteWidget::getStringValue()
 {
-#ifdef DEBUG
-  qDebug("QuteWidget::getValue for QString not implemented for widget type");
-#endif
+//#ifdef DEBUG
+//  qDebug("QuteWidget::getValue for QString not implemented for widget type");
+//#endif
   return QString("");
 }
 

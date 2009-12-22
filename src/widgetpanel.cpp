@@ -50,8 +50,8 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   layoutWidget->setPanel(this);
 //   layoutWidget->setAutoFillBackground(true);
   layoutWidget->setFocusPolicy(Qt::NoFocus);
-  layoutWidget->setWindowFlags(Qt::WindowStaysOnTopHint);
-  this->setFocusPolicy(Qt::NoFocus);
+//  layoutWidget->setWindowFlags(Qt::WindowStaysOnTopHint);
+//  this->setFocusPolicy(Qt::NoFocus);
   connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
   connect(layoutWidget, SIGNAL(selection(QRect)), this, SLOT(selectionChanged(QRect)));
 //   connect(this,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(dockLocationChanged(Qt::DockWidgetArea)));

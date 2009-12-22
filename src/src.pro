@@ -11,21 +11,21 @@ TRANSLATIONS = qutecsound_es.ts \
     qutecsound_fr.ts \
     qutecsound_pt.ts \
     qutecsound_it.ts
-win32 {
+win32 { 
     QUTECSOUND_CSOUND_PATH = C:\Program \
         Files\Csound
     LIBSNDFILE_PATH = C:\Development \
         Files\libsndfile-1_0_17
 }
-build64 {
+build64 { 
     message(Building for doubles \(64-bit\) csound)
     DEFINES += USE_DOUBLE
 }
-else {
+else { 
     message(Building for float \(32- bit\) csound.)
     message(For doubles use qmake \"CONFIG += build64\")
 }
-libsndfile {
+libsndfile { 
     !win32:LIBS += -lsndfile
     DEFINES += USE_LIBSNDFILE
 }
@@ -62,7 +62,9 @@ SOURCES += qutecsound.cpp \
     keyboardshortcuts.cpp \
     dotgenerator.cpp \
     inspector.cpp \
-    widgetpreset.cpp
+    widgetpreset.cpp \
+    eventsheet.cpp \
+    onevaluedialog.cpp
 HEADERS += qutecsound.h \
     dockhelp.h \
     opentryparser.h \
@@ -96,12 +98,17 @@ HEADERS += qutecsound.h \
     keyboardshortcuts.h \
     dotgenerator.h \
     inspector.h \
-    widgetpreset.h
+    widgetpreset.h \
+    eventsheet.h \
+    onevaluedialog.h
 TEMPLATE = app
 CONFIG += warn_on \
     thread \
-    qt \
-    release
+    qt
+
+# \
+# release
+QMAKE_CXXFLAGS_DEBUG += -DDEBUG
 TARGET = ../bin/qutecsound
 RESOURCES = application.qrc
 QT += xml
@@ -113,12 +120,13 @@ FORMS += configdialog.ui \
     utilitiesdialog.ui \
     findreplace.ui \
     keyboardshortcuts.ui \
-    keyselector.ui
-win32 {
+    keyselector.ui \
+    onevaluedialog.ui
+win32 { 
     DEFINES += WIN32
     INCLUDEPATH += "$${QUTECSOUND_CSOUND_PATH}\include"
     HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\csound.h"
-    qute_cpp {
+    qute_cpp { 
         HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\csound.hpp"
         HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\csPerfThread.hpp"
         HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\cwindow.h"
@@ -126,13 +134,13 @@ win32 {
     }
     build64:LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\csound64.dll.5.2"
     else:LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\csound32.dll.5.2"
-    libsndfile {
+    libsndfile { 
         INCLUDEPATH += "$${LIBSNDFILE_PATH}"
         LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\libsndfile-1.dll"
     }
     RC_FILE = qutecsound.rc
 }
-linux-g++ {
+linux-g++ { 
     DEFINES += LINUX
     INCLUDEPATH += /usr/local/include/csound/ \
         /usr/include/csound/
@@ -140,28 +148,28 @@ linux-g++ {
     build64:LIBS += -lcsound64
     else:LIBS += -lcsound
 }
-solaris-g++-64 {
+solaris-g++-64 { 
     DEFINES += SOLARIS
     INCLUDEPATH += /usr/local/include/csound/
     qute_cpp:LIBS += -lcsnd
     build64:LIBS += -lcsound64
     else:LIBS += -lcsound
 }
-macx {
-    build64 {
+macx { 
+    build64 { 
         MAC_LIB = CsoundLib64
         HEADERS += /Library/Frameworks/CsoundLib64.framework/Versions/Current/Headers/csound.h
-        qute_cpp {
+        qute_cpp { 
             HEADERS += /Library/Frameworks/CsoundLib64.framework/Versions/Current/Headers/csound.hpp
             HEADERS += /Library/Frameworks/CsoundLib64.framework/Versions/Current/Headers/csPerfThread.hpp
             HEADERS += /Library/Frameworks/CsoundLib64.framework/Versions/Current/Headers/cwindow.h
             LIBS += /Library/Frameworks/CsoundLib64.framework/Versions/Current/lib_csnd.dylib
         }
     }
-    else {
+    else { 
         MAC_LIB = CsoundLib
         HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.h
-        qute_cpp {
+        qute_cpp { 
             HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csound.hpp
             HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/csPerfThread.hpp
             HEADERS += /Library/Frameworks/CsoundLib.framework/Versions/Current/Headers/cwindow.h
@@ -182,6 +190,4 @@ macx {
     QMAKE_INFO_PLIST = MyInfo.plist
     ICON = ../images/qtcs.icns
 }
-
-# QMAKE_CXXFLAGS_DEBUG += -DDEBUG
 CONFIG -= stl

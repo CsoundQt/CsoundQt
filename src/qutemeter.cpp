@@ -32,7 +32,7 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
   setGeometry(0,0, parent->width(), parent->height());
   m_widget = new MeterWidget(this);
   m_widget->setAutoFillBackground(true);
-  m_widget->setWindowFlags(Qt::WindowStaysOnTopHint);
+//  m_widget->setWindowFlags(Qt::WindowStaysOnTopHint);
   canFocus(false);
 //   static_cast<MeterWidget *>(m_widget)->setRenderHints(QPainter::Antialiasing);
   connect(static_cast<MeterWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));

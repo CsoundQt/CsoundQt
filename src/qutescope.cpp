@@ -37,7 +37,7 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
   m_widget->show();
   m_widget->setAutoFillBackground(true);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
-  m_widget->setWindowFlags(Qt::WindowStaysOnTopHint);
+//  m_widget->setWindowFlags(Qt::WindowStaysOnTopHint);
   canFocus(false);
   static_cast<ScopeWidget *>(m_widget)->setScene(m_scene);
   static_cast<ScopeWidget *>(m_widget)->setResizeAnchor(QGraphicsView::AnchorViewCenter);

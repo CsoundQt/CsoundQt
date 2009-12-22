@@ -35,6 +35,7 @@
 #include "findreplace.h"
 #include "graphicwindow.h"
 #include "keyboardshortcuts.h"
+#include "eventsheet.h"
 
 // Structs for csound graphs
 #include <cwindow.h>
@@ -189,6 +190,9 @@ qutecsound::qutecsound(QStringList fileNames)
   connect(queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
   refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;
   dispatchQueues(); //start queue dispatcher
+  EventSheet *e = new EventSheet();
+  connect(e, SIGNAL(sendEvent(QString)), widgetPanel, SLOT(queueEvent(QString)));
+  e->show();
 }
 
 qutecsound::~qutecsound()
