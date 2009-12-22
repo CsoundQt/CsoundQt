@@ -85,7 +85,6 @@ void EventSheet::sendEvents()
       selectedRows.append(list[i].row());
     }
   }
-  QString events;
   for (int i = 0; i < selectedRows.size(); i++) {
     emit sendEvent(getLine(selectedRows[i]));
   }
@@ -131,14 +130,51 @@ void EventSheet::divide()
   }
 }
 
-void EventSheet::randomize(double min, double max, int dist)
+void EventSheet::randomize()
 {
 
 }
 
 void EventSheet::reverse()
 {
-  qDebug() << getLine(currentRow());
+  QModelIndexList list = this->selectedIndexes();
+  if (list.size() < 2)
+    return;
+  QList<int> selectedColumns;
+  for (int i = 0; i < list.size(); i++) {
+    if (!selectedColumns.contains(list[i].column()) ) {
+      selectedColumns.append(list[i].column());
+    }
+  }
+  int numRows = list.size() / selectedColumns.size();
+  if (numRows < 2)
+    return;
+
+  QVector<QVariant> elements;
+  elements.resize(numRows);
+  for (int i = 0; i < selectedColumns.size(); i++) {
+    for (int j = 0; j < numRows; j++) {
+      QTableWidgetItem * item = this->item(list[(i*numRows) + j].row(), list[(i*numRows) + j].column());
+      if (item != 0) {
+        elements[numRows - j - 1] = item->data(Qt::DisplayRole);
+      }
+      else {
+        elements[numRows - j - 1] = QVariant();
+      }
+    }
+    for (int j = 0; j < numRows; j++) {
+      QTableWidgetItem * item = this->item(list[(i*numRows) + j].row(), list[(i*numRows) + j].column());
+      if (item != 0) {
+        item->setData(Qt::DisplayRole, elements[j] );
+      }
+      else {
+        QTableWidgetItem *item = new QTableWidgetItem();
+        item->setData(Qt::DisplayRole, elements[j] );
+        this->setItem(list[(i*numRows) + j].row(), list[(i*numRows) + j].column(), item );
+      }
+
+    }
+  }
 }
 
 void EventSheet::shuffle(int iterations)
@@ -275,6 +311,11 @@ void EventSheet::divide(double value)
   }
 }
 
+void EventSheet::randomize(double min, double max, int dist)
+{
+
+}
+
 void EventSheet::createActions()
 {
   sendEventsAct = new QAction(/*QIcon(":/a.png"),*/ tr("&SendEvents"), this);
@@ -320,7 +361,7 @@ void EventSheet::createActions()
   connect(randomizeAct, SIGNAL(triggered()), this, SLOT(randomize()));
 
   reverseAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Reverse"), this);
-  reverseAct->setStatusTip(tr("Reverse the selected cells"));
+  reverseAct->setStatusTip(tr("Reverse the selected cells by column"));
   reverseAct->setIconText(tr("Reverse"));
   connect(reverseAct, SIGNAL(triggered()), this, SLOT(reverse()));
 

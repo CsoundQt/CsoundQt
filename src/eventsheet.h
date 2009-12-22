@@ -47,8 +47,8 @@ class EventSheet : public QTableWidget
     void multiply();
     void divide();
 
-    void randomize(double min, double max, int dist);
-    void reverse();
+    void randomize();
+    void reverse();  // Reverse columns
     void shuffle(int iterations);
     void mirror();
     void rotate(int amount);
@@ -70,6 +70,7 @@ class EventSheet : public QTableWidget
     void add(double value);
     void multiply(double value);
     void divide(double value);
+    void randomize(double min, double max, int dist);
 
     QAction *sendEventsAct;
     QAction *loopEventsAct;
