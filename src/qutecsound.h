@@ -61,6 +61,7 @@ class UtilitiesDialog;
 class Curve;
 class GraphicWindow;
 class KeyboardShortcuts;
+class EventDispatcher;
 
 class qutecsound:public QMainWindow
 {
@@ -144,6 +145,7 @@ class qutecsound:public QMainWindow
     void updateWidgets();
     void openExample();
     void findString(QString query = QString());
+    void registerLiveEvent(QWidget *e);
 
   protected:
     virtual void closeEvent(QCloseEvent *event);

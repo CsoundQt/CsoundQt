@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2008, 2009 Andres Cabrera
+    Copyright (C) 2009 Andres Cabrera
     mantaraya36@gmail.com
 
     This file is part of QuteCsound.
@@ -28,16 +28,16 @@
 // Only for debug
 #include <QtCore>
 
-EventSheet::EventSheet()
+EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
 {
   this->setRowCount(10);
   this->setColumnCount(6);
   columnNames << tr("Event") << "p1 (instr)" << "p2 (start)" << "p3 (dur)" << "p4" << "p5";
   this->setHorizontalHeaderLabels(columnNames);
-  this->setColumnWidth(0, 45);
-  this->setColumnWidth(1, 55);
-  this->setColumnWidth(2, 55);
-  this->setColumnWidth(3, 55);
+  this->setColumnWidth(0, 50);
+  this->setColumnWidth(1, 65);
+  this->setColumnWidth(2, 65);
+  this->setColumnWidth(3, 65);
 
   createActions();
 }
@@ -46,19 +46,36 @@ EventSheet::~EventSheet()
 {
 }
 
-QString EventSheet::getPlainText()
+QString EventSheet::getPlainText(bool scaleTempo)
 {
-  QString t;
+  QString t = "";
+  for (int i = 0; i < this->rowCount(); i++) {
+    t += getLine(0, scaleTempo) + "\n";  // Don't scale by default
+  }
   return t;
 }
 
-QString EventSheet::getLine(int number)
+QString EventSheet::getLine(int number, bool scaleTempo)
 {
   QString line = "";
   for (int i = 0; i < this->columnCount(); i++) {
     QTableWidgetItem * item = this->item(number, i);
     if (item != 0) {
-      line += item->data(Qt::DisplayRole).toString();
+      if (scaleTempo && (i == 2 || i == 3) ) { // Scale tempo only for pfields p2 and p3
+        bool ok = false;
+        double value = item->data(Qt::DisplayRole).toDouble(&ok);
+        if (ok) {
+          value = value * (60.0/tempo);
+          line += QString::number(value, 'f', 8);;
+        }
+        else {
+          line += item->data(Qt::DisplayRole).toString();
+        }
+      }
+      else {
+        line += item->data(Qt::DisplayRole).toString();
+      }
+      // Then add white space separation
       QString space = item->data(Qt::UserRole).toString();
       if (!space.isEmpty()) { // Separataion is stored in UserRole of items
         line += space;
@@ -71,9 +88,15 @@ QString EventSheet::getLine(int number)
   return line;
 }
 
+double EventSheet::getTempo()
+{
+  return tempo;
+}
+
 void EventSheet::setFromText(QString text)
 {
  // Separataion is stored in UserRole of items
+  // remember to treat comments and formulas properly
 }
 
 void EventSheet::sendEvents()
@@ -86,8 +109,14 @@ void EventSheet::sendEvents()
     }
   }
   for (int i = 0; i < selectedRows.size(); i++) {
-    emit sendEvent(getLine(selectedRows[i]));
+    emit sendEvent(getLine(selectedRows[i], true));  // With tempo scaling
   }
+}
+
+void EventSheet::setTempo(double value)
+{
+  qDebug() << "EventSheet::setTempo " << value;
+  tempo = value;
 }
 
 void EventSheet::loopEvents() {

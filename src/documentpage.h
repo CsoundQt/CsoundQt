@@ -29,6 +29,7 @@
 
 class OpEntryParser;
 class Highlighter;
+class LiveEventFrame;
 
 class DocumentPage : public QTextEdit
 {
@@ -57,6 +58,8 @@ class DocumentPage : public QTextEdit
     void updateCsladspaText(QString text);
     QString getFilePath();
     int currentLine();
+    void showLiveEvents();
+    void hideLiveEvents();
 
 //     QTextDocument *textDocument;
     QString fileName;
@@ -74,10 +77,13 @@ class DocumentPage : public QTextEdit
     QString macGUI;
     QDomElement widgets;
 
+    QVector<LiveEventFrame *> liveEvents;
+
     bool widgetsDocked;
     Highlighter *m_highlighter;
     OpEntryParser *m_opcodeTree;
     bool errorMarked;
+    bool saveLiveEvents;
 
 //     QString connectedNodeText(QString nodeName, QString label, QString dest);
 //     QString dotTextForExpression(QString expression, QString &outNode);
@@ -96,6 +102,7 @@ class DocumentPage : public QTextEdit
     void unindent();
 
     void opcodeFromMenu();
+    void newLiveEventFrame();
 
   private slots:
     void changed();
@@ -107,6 +114,7 @@ class DocumentPage : public QTextEdit
     void doCopy();
     void doCut();
     void doPaste();
+    void registerLiveEvent(QWidget *e);
 };
 
 #endif

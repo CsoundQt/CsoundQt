@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2008, 2009 Andres Cabrera
+    Copyright (C) 2009 Andres Cabrera
     mantaraya36@gmail.com
 
     This file is part of QuteCsound.
@@ -31,14 +31,16 @@ class EventSheet : public QTableWidget
 {
   Q_OBJECT
   public:
-    EventSheet();
+    EventSheet(QWidget *parent);
     ~EventSheet();
 
-    QString getPlainText();
-    QString getLine(int number);
+    QString getPlainText(bool scaleTempo = false);
+    QString getLine(int number, bool scaleTempo = false);
+    double getTempo();
     void setFromText(QString text);
 
   public slots:
+    void setTempo(double value);
     void sendEvents();
     void loopEvents();
 
@@ -71,6 +73,8 @@ class EventSheet : public QTableWidget
     void multiply(double value);
     void divide(double value);
     void randomize(double min, double max, int dist);
+
+    double tempo;
 
     QAction *sendEventsAct;
     QAction *loopEventsAct;

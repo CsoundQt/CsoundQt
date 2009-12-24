@@ -35,6 +35,7 @@
 #include "findreplace.h"
 #include "graphicwindow.h"
 #include "keyboardshortcuts.h"
+#include "liveeventframe.h"
 #include "eventsheet.h"
 
 // Structs for csound graphs
@@ -191,9 +192,6 @@ qutecsound::qutecsound(QStringList fileNames)
   connect(queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
   refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;
   dispatchQueues(); //start queue dispatcher
-  EventSheet *e = new EventSheet();
-  connect(e, SIGNAL(sendEvent(QString)), widgetPanel, SLOT(queueEvent(QString)));
-  e->show();
 }
 
 qutecsound::~qutecsound()
@@ -255,6 +253,7 @@ void qutecsound::changePage(int index)
   stop();
   if (textEdit != NULL) {
     textEdit->setMacWidgetsText(widgetPanel->widgetsText()); //Updated changes to widgets in file
+    textEdit->hideLiveEvents();
   }
   if (index < 0) {
     qDebug() << "qutecsound::changePage index < 0";
@@ -263,6 +262,7 @@ void qutecsound::changePage(int index)
   textEdit = documentPages[index];
   textEdit->setTabStopWidth(m_options->tabWidth);
   textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
+  textEdit->showLiveEvents();
   curPage = index;
   setCurrentFile(documentPages[curPage]->fileName);
   connectActions();
@@ -314,6 +314,14 @@ void qutecsound::findString(QString query)
       findString();
     }
   }
+}
+
+void qutecsound::registerLiveEvent(QWidget *_e)
+{
+  qDebug() << "qutecsound::registerLiveEvent";
+  EventSheet *e = static_cast<LiveEventFrame *>(_e)->getSheet();
+
+  connect(e,SIGNAL(sendEvent(QString)),widgetPanel,SLOT(queueEvent(QString)));
 }
 
 void qutecsound::closeEvent(QCloseEvent *event)
@@ -2920,12 +2928,14 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   QApplication::setOverrideCursor(Qt::WaitCursor);
   DocumentPage *newPage = new DocumentPage(this, opcodeTree);
   documentPages.append(newPage);
+  connect(newPage, SIGNAL(registerLiveEvent(QWidget*)), this, SLOT(registerLiveEvent(QWidget*)));
   documentTabs->addTab(newPage,"");
   curPage = documentPages.size() - 1;
   documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
   documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
   documentPages[curPage]->setColorVariables(m_options->colorVariables);
   documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
+  documentPages[curPage]->newLiveEventFrame(); //FIXME This should only be here for testing
   documentTabs->setCurrentIndex(curPage);
   textEdit = newPage;
   connectActions();

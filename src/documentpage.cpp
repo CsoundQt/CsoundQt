@@ -26,6 +26,8 @@
 #include "types.h"
 #include "dotgenerator.h"
 #include "highlighter.h"
+#include "liveeventframe.h"
+#include "eventsheet.h"
 
 DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
     QTextEdit(parent), m_opcodeTree(opcodeTree)
@@ -36,6 +38,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   askForFile = true;
   readOnly = false;
   errorMarked = false;
+  saveLiveEvents = true;
   m_highlighter = new Highlighter();
   connect(document(), SIGNAL(contentsChanged()), this, SLOT(changed()));
 //   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(moved()));
@@ -43,6 +46,9 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 
 DocumentPage::~DocumentPage()
 {
+  for (int i = 0; i < liveEvents.size(); i++) {
+    delete liveEvents[i];  // These widgets have the order not to delete on close
+  }
   delete m_highlighter;
 }
 
@@ -193,8 +199,17 @@ QString DocumentPage::getFullText()
     fullText += "\n";
   if (fileName.endsWith(".csd",Qt::CaseInsensitive) or fileName == "")
     fullText += getMacOptionsText() + "\n" + macGUI + "\n" + macPresets + "\n";
-
-  return fullText;
+  QString panelText = "";
+  if (saveLiveEvents) {
+    for (int i = 0; i < liveEvents.size(); i++) {
+      QString panel = "\n<EventPanel tempo=\"";
+      panel += QString::number(liveEvents[i]->getSheet()->getTempo(), 'f', 8) + "\">";
+      panel += liveEvents[i]->getSheet()->getPlainText();
+      panel += "</EventPanel>\n";
+      qDebug() << "DocumentPage::getFullText()" << panel;
+    }
+  }
+  return fullText /*+ panelText*/;
 }
 
 // QString DocumentPage::getXmlWidgetsText()
@@ -441,6 +456,20 @@ int DocumentPage::currentLine()
   return cursor.blockNumber() + 1;
 }
 
+void DocumentPage::showLiveEvents()
+{
+  for (int i = 0; i < liveEvents.size(); i++) {
+    liveEvents[i]->show();
+  }
+}
+
+void DocumentPage::hideLiveEvents()
+{
+  for (int i = 0; i < liveEvents.size(); i++) {
+    liveEvents[i]->hide();
+  }
+}
+
 void DocumentPage::setMacWidgetsText(QString widgetText)
 {
 //   qDebug() << "DocumentPage::setMacWidgetsText: ";
@@ -600,6 +629,18 @@ void DocumentPage::opcodeFromMenu()
   QTextCursor cursor = textCursor();
   QString text = action->data().toString();
   cursor.insertText(text);
+}
+
+void DocumentPage::newLiveEventFrame()
+{
+  qDebug() << "DocumentPage::newLiveEventFrame()";
+  // TODO delete these!!!
+  // TODO remove from QVector when they are closed
+  LiveEventFrame *e = new LiveEventFrame("Live Event");
+  e->show();
+  setAttribute (Qt::WA_DeleteOnClose, false);
+  liveEvents.append(e);
+  emit registerLiveEvent(dynamic_cast<QWidget *>(e));
 }
 
 void DocumentPage::changed()

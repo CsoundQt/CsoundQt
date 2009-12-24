@@ -11,7 +11,6 @@ TRANSLATIONS = qutecsound_es.ts \
     qutecsound_fr.ts \
     qutecsound_pt.ts \
     qutecsound_it.ts
-
 build64 { 
     message(Building for doubles \(64-bit\) csound)
     DEFINES += USE_DOUBLE
@@ -59,7 +58,8 @@ SOURCES += qutecsound.cpp \
     inspector.cpp \
     widgetpreset.cpp \
     eventsheet.cpp \
-    onevaluedialog.cpp
+    onevaluedialog.cpp \
+    liveeventframe.cpp
 HEADERS += qutecsound.h \
     dockhelp.h \
     opentryparser.h \
@@ -95,7 +95,8 @@ HEADERS += qutecsound.h \
     inspector.h \
     widgetpreset.h \
     eventsheet.h \
-    onevaluedialog.h
+    onevaluedialog.h \
+    liveeventframe.h
 TEMPLATE = app
 CONFIG += warn_on \
     thread \
@@ -116,7 +117,8 @@ FORMS += configdialog.ui \
     findreplace.ui \
     keyboardshortcuts.ui \
     keyselector.ui \
-    onevaluedialog.ui
+    onevaluedialog.ui \
+    liveeventframe.ui
 win32 { 
     QUTECSOUND_CSOUND_PATH = C:\Program \
         Files\Csound
@@ -179,8 +181,9 @@ macx {
     }
     message(Building using $${MAC_LIB})
     DEFINES += MACOSX
-    #QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.5
-    #QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk
+    
+    # QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.5
+    # QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk
     DEFINES += MACOSX_PRE_SNOW # Use this if you are building for OS X < 10.6
     LIBS += -framework \
         QtXml
