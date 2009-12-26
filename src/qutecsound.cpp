@@ -253,7 +253,8 @@ void qutecsound::changePage(int index)
   stop();
   if (textEdit != NULL) {
     textEdit->setMacWidgetsText(widgetPanel->widgetsText()); //Updated changes to widgets in file
-    textEdit->hideLiveEvents();
+    textEdit->showLiveEvents(false);
+    disconnect(showLiveEventsAct, SIGNAL(toggled(bool)), textEdit, SLOT(showLiveEvents(bool)));
   }
   if (index < 0) {
     qDebug() << "qutecsound::changePage index < 0";
@@ -262,7 +263,7 @@ void qutecsound::changePage(int index)
   textEdit = documentPages[index];
   textEdit->setTabStopWidth(m_options->tabWidth);
   textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
-  textEdit->showLiveEvents();
+  textEdit->showLiveEvents(showLiveEventsAct->isChecked());
   curPage = index;
   setCurrentFile(documentPages[curPage]->fileName);
   connectActions();
@@ -270,6 +271,7 @@ void qutecsound::changePage(int index)
   disconnect(m_inspector, 0, 0, 0);
   connect(m_inspector, SIGNAL(jumpToLine(int)),
           textEdit, SLOT(jumpToLine(int)));
+  connect(showLiveEventsAct, SIGNAL(toggled(bool)), documentPages[curPage], SLOT(showLiveEvents(bool)));
   m_inspector->parseText(documentPages[curPage]->toPlainText());
 }
 
@@ -2113,6 +2115,12 @@ void qutecsound::createActions()
   connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
   connect(helpPanel, SIGNAL(Close(bool)), showHelpAct, SLOT(setChecked(bool)));
 
+  showLiveEventsAct = new QAction(/*QIcon(":/images/gtk-info.png"),*/ tr("Live Events"), this);
+  showLiveEventsAct->setCheckable(true);
+  showLiveEventsAct->setChecked(true);
+  showLiveEventsAct->setStatusTip(tr("Show Live Events Panels"));
+  showLiveEventsAct->setIconText(tr("Live Events"));
+
   showManualAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("Csound Manual"), this);
   showManualAct->setStatusTip(tr("Show the Csound manual in the help panel"));
   connect(showManualAct, SIGNAL(triggered()), helpPanel, SLOT(showManual()));
@@ -2252,6 +2260,7 @@ void qutecsound::setKeyboardShortcuts()
   m_keyActions.append(externalBrowserAct);
   m_keyActions.append(openQuickRefAct);
   m_keyActions.append(showInspectorAct);
+  m_keyActions.append(showLiveEventsAct);
 }
 
 void qutecsound::connectActions()
@@ -2357,6 +2366,7 @@ void qutecsound::createMenus()
   viewMenu->addAction(showUtilitiesAct);
   viewMenu->addAction(createCodeGraphAct);
   viewMenu->addAction(showInspectorAct);
+  viewMenu->addAction(showLiveEventsAct);
 
   QStringList tutFiles;
   QStringList basicsFiles;
@@ -2571,6 +2581,7 @@ void qutecsound::createToolBars()
   configureToolBar->addAction(showConsoleAct);
   configureToolBar->addAction(showUtilitiesAct);
   configureToolBar->addAction(showInspectorAct);
+  configureToolBar->addAction(showLiveEventsAct);
 
   Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
       Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);

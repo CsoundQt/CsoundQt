@@ -25,6 +25,9 @@
 
 #include <QMenu>
 #include <QContextMenuEvent>
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QLineEdit>
 // Only for debug
 #include <QtCore>
 
@@ -39,6 +42,7 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
   this->setColumnWidth(2, 65);
   this->setColumnWidth(3, 65);
 
+  m_name = "Events";
   createActions();
 }
 
@@ -50,8 +54,9 @@ QString EventSheet::getPlainText(bool scaleTempo)
 {
   QString t = "";
   for (int i = 0; i < this->rowCount(); i++) {
-    t += getLine(0, scaleTempo) + "\n";  // Don't scale by default
+    t += getLine(i, scaleTempo) + "\n";  // Don't scale by default
   }
+//  qDebug() << " EventSheet::getPlainText   " << t;
   return t;
 }
 
@@ -59,9 +64,12 @@ QString EventSheet::getLine(int number, bool scaleTempo)
 {
   QString line = "";
   for (int i = 0; i < this->columnCount(); i++) {
+    bool instrEvent = false;
     QTableWidgetItem * item = this->item(number, i);
-    if (item != 0) {
-      if (scaleTempo && (i == 2 || i == 3) ) { // Scale tempo only for pfields p2 and p3
+    if (item != 0) { // Item is not empty
+      if (i == 0 && (item->data(Qt::DisplayRole).toString() == "i") )
+        instrEvent = true;  // Check if event is intrument note to allow scale by tempo
+      if (scaleTempo && instrEvent && (i == 2 || i == 3) ) { // Scale tempo only for pfields p2 and p3
         bool ok = false;
         double value = item->data(Qt::DisplayRole).toDouble(&ok);
         if (ok) {
@@ -93,10 +101,103 @@ double EventSheet::getTempo()
   return tempo;
 }
 
+QString EventSheet::getName()
+{
+  return m_name;
+}
+
 void EventSheet::setFromText(QString text)
 {
  // Separataion is stored in UserRole of items
   // remember to treat comments and formulas properly
+  QStringList lines = text.split("\n");
+  this->setRowCount(0);
+  this->setColumnCount(6);
+  for (int i = 0; i < lines.size(); i++) {
+    QString line = lines[i].trimmed(); //Remove whitespace from start and end
+    int count = 0;
+    int pcount = 0;
+    bool isp = true; // Assume starting on a pfield, not white space
+    QString pvalue = "";
+    QString spacing = "";
+    while (count < lines[i].size()) {
+      if (isp == true) { // Processing p-field
+        if (line[count] == '[') { //Start of formula
+          //TODO finish parsing score formulas
+        }
+        else if (line[count] == ';') { // comment
+          // First add current pfield
+          if (this->columnCount() <= pcount)
+            appendColumn();
+          QTableWidgetItem * item = this->item(i, pcount);
+          if (item == 0) {
+            item = new QTableWidgetItem();
+            this->setItem(i, pcount, item);
+          }
+          item->setData(Qt::DisplayRole, pvalue); // TODO are double values treated correctly
+          pcount++;
+          // Now add comment
+          QString comment = line.mid(count);
+          if (this->columnCount() <= pcount)
+            appendColumn();
+          item = this->item(i, pcount);
+          if (item == 0) {
+            item = new QTableWidgetItem();
+            this->setItem(i, pcount, item);
+          }
+          item->setData(Qt::DisplayRole, comment);
+          break; // Nothing more todo for this line
+        }
+        else if (line[count].isSpace()) { // White space so p-field has finished
+          if (this->columnCount() <= pcount)
+            appendColumn();
+          QTableWidgetItem * item = this->item(i, pcount);
+          if (item == 0) {
+            item = new QTableWidgetItem();
+            this->setItem(i, pcount, item);
+          }
+          item->setData(Qt::DisplayRole, pvalue); // TODO are double values treated correctly
+          isp = false;
+        }
+        else { // Continue p-field processing
+          pvalue.append(line[count]);
+        }
+      }
+      else { // Processing white space
+        if (line[count] == '[') { //Start of formula
+          //TODO finish parsing score formulas
+        }
+        else if (line[count] == ';') { // comment
+          QString comment = line.mid(count);
+          if (this->columnCount() <= pcount)
+            appendColumn();
+          QTableWidgetItem * item = this->item(i, pcount);
+          if (item == 0) {
+            item = new QTableWidgetItem();
+            this->setItem(i, pcount, item);
+          }
+          item->setData(Qt::DisplayRole, comment);
+          break; // Nothing more todo on this line
+        }
+        else if (!line[count].isSpace()) { // Not White space so new p-field has started
+          QTableWidgetItem * item = this->item(i, pcount);
+          if (item == 0) {
+            item = new QTableWidgetItem();
+            this->setItem(i, pcount, item);
+          }
+          item->setData(Qt::UserRole, spacing); // TODO are double values treated correctly
+          isp = false;
+          pcount++;
+        }
+        else { // Continue p-field processing
+          spacing.append(line[count]);
+        }
+      }
+      count++;
+    }
+  }
+  if (this->rowCount() == 0)
+    this->setRowCount(1);
 }
 
 void EventSheet::sendEvents()
@@ -193,15 +294,11 @@ void EventSheet::reverse()
     }
     for (int j = 0; j < numRows; j++) {
       QTableWidgetItem * item = this->item(list[(i*numRows) + j].row(), list[(i*numRows) + j].column());
-      if (item != 0) {
-        item->setData(Qt::DisplayRole, elements[j] );
-      }
-      else {
-        QTableWidgetItem *item = new QTableWidgetItem();
-        item->setData(Qt::DisplayRole, elements[j] );
+      if (item == 0) {
+        item = new QTableWidgetItem();
         this->setItem(list[(i*numRows) + j].row(), list[(i*numRows) + j].column(), item );
       }
-
+      item->setData(Qt::DisplayRole, elements[j] );
     }
   }
 }
@@ -211,10 +308,10 @@ void EventSheet::shuffle(int iterations)
 
 }
 
-void EventSheet::mirror()
-{
-
-}
+//void EventSheet::mirror()
+//{
+//
+//}
 
 void EventSheet::rotate(int amount)
 {
@@ -263,6 +360,24 @@ void EventSheet::deleteRow()
 
 }
 
+void EventSheet::rename()
+{
+  QDialog d;
+  QVBoxLayout l(&d);
+  QLabel label("Enter new name");
+  QLineEdit line;
+//  d.resize(300, d.height());
+//  line.resize(300, line.height());
+  line.setText(m_name);
+  l.addWidget(&label);
+  l.addWidget(&line);
+  connect(&line, SIGNAL(editingFinished()), &d, SLOT(accept ()) );
+  int ret = d.exec();
+  if (ret == QDialog::Accepted) {
+    m_name = line.text();
+  }
+}
+
 void EventSheet::contextMenuEvent (QContextMenuEvent * event)
 {
 //  qDebug() << "EventSheet::contextMenuEvent";
@@ -279,10 +394,11 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
   menu.addAction(randomizeAct);
   menu.addAction(reverseAct);
   menu.addAction(shuffleAct);
-  menu.addAction(mirrorAct);
+//  menu.addAction(mirrorAct);
   menu.addAction(rotateAct);
   menu.addAction(fillAct);
   menu.addSeparator();
+  menu.addAction(renameAct);
   menu.addAction(insertColumnHereAct);
   menu.addAction(insertRowHereAct);
   menu.addAction(appendColumnAct);
@@ -399,10 +515,10 @@ void EventSheet::createActions()
   shuffleAct->setIconText(tr("Shuffle"));
   connect(shuffleAct, SIGNAL(triggered()), this, SLOT(shuffle()));
 
-  mirrorAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Mirror"), this);
-  mirrorAct->setStatusTip(tr("Mirror the selected cells"));
-  mirrorAct->setIconText(tr("Mirror"));
-  connect(mirrorAct, SIGNAL(triggered()), this, SLOT(mirror()));
+//  mirrorAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Mirror"), this);
+//  mirrorAct->setStatusTip(tr("Mirror the selected cells"));
+//  mirrorAct->setIconText(tr("Mirror"));
+//  connect(mirrorAct, SIGNAL(triggered()), this, SLOT(mirror()));
 
   rotateAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Rotate"), this);
   rotateAct->setStatusTip(tr("Rotate the selected cells"));
@@ -413,6 +529,11 @@ void EventSheet::createActions()
   fillAct->setStatusTip(tr("Fill selected cells"));
   fillAct->setIconText(tr("Fill"));
   connect(fillAct, SIGNAL(triggered()), this, SLOT(fill()));
+
+  renameAct = new QAction(/*QIcon(":/a.png"),*/ tr("Rename sheet"), this);
+  renameAct->setStatusTip(tr("Rename sheet"));
+  renameAct->setIconText(tr("This"));
+  connect(renameAct, SIGNAL(triggered()), this, SLOT(rename()));
 
 
   insertColumnHereAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Insert Column"), this);

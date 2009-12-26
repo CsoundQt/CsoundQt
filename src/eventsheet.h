@@ -37,6 +37,7 @@ class EventSheet : public QTableWidget
     QString getPlainText(bool scaleTempo = false);
     QString getLine(int number, bool scaleTempo = false);
     double getTempo();
+    QString getName();
     void setFromText(QString text);
 
   public slots:
@@ -52,7 +53,7 @@ class EventSheet : public QTableWidget
     void randomize();
     void reverse();  // Reverse columns
     void shuffle(int iterations);
-    void mirror();
+//    void mirror();
     void rotate(int amount);
     void fill(double start, double end, double slope);
 
@@ -63,19 +64,28 @@ class EventSheet : public QTableWidget
     void deleteColumn();
     void deleteRow();
 
+    void rename();
+
   protected:
     void contextMenuEvent (QContextMenuEvent * event);
 
   private:
     void createActions();
 
+    // Operations
     void add(double value);
     void multiply(double value);
     void divide(double value);
     void randomize(double min, double max, int dist);
 
-    double tempo;
 
+    void rename(QString name);
+
+    // Attributes to be saved
+    double tempo;
+    QString m_name;
+
+    // Actions
     QAction *sendEventsAct;
     QAction *loopEventsAct;
     QAction *stopAllEventsAct;
@@ -86,9 +96,10 @@ class EventSheet : public QTableWidget
     QAction *randomizeAct;
     QAction *reverseAct;
     QAction *shuffleAct;
-    QAction *mirrorAct;
+//    QAction *mirrorAct;
     QAction *rotateAct;
     QAction *fillAct;
+    QAction *renameAct;
 
     QAction *insertColumnHereAct;
     QAction *insertRowHereAct;

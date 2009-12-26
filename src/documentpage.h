@@ -58,8 +58,6 @@ class DocumentPage : public QTextEdit
     void updateCsladspaText(QString text);
     QString getFilePath();
     int currentLine();
-    void showLiveEvents();
-    void hideLiveEvents();
 
 //     QTextDocument *textDocument;
     QString fileName;
@@ -103,6 +101,7 @@ class DocumentPage : public QTextEdit
 
     void opcodeFromMenu();
     void newLiveEventFrame();
+    void showLiveEvents(bool visible);
 
   private slots:
     void changed();

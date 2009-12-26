@@ -176,6 +176,13 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
       text.insert(index, "<CsOptions>\n" + outFile + "\n</CsOptions>\n");
     }
   }
+  while (text.contains("<EventPanel") and text.contains("</EventPanel>")) {
+    QString liveEventsText = text.mid(text.indexOf("<EventPanel "),
+                                      text.indexOf("</EventPanel>") - text.indexOf("<EventPanel ") + 13);
+    qDebug() << "DocumentPage::setTextString   " << liveEventsText;
+    // TODO load live events panels
+    text.remove(liveEventsText);
+  }
   setPlainText(text);
   document()->setModified(true);
   m_highlighter->setDocument(document());
@@ -199,17 +206,22 @@ QString DocumentPage::getFullText()
     fullText += "\n";
   if (fileName.endsWith(".csd",Qt::CaseInsensitive) or fileName == "")
     fullText += getMacOptionsText() + "\n" + macGUI + "\n" + macPresets + "\n";
-  QString panelText = "";
+  QString liveEventsText = "";
   if (saveLiveEvents) {
     for (int i = 0; i < liveEvents.size(); i++) {
       QString panel = "\n<EventPanel tempo=\"";
-      panel += QString::number(liveEvents[i]->getSheet()->getTempo(), 'f', 8) + "\">";
+      panel += QString::number(liveEvents[i]->getSheet()->getTempo(), 'f', 8) + "\" name=\"";
+      panel += liveEvents[i]->getSheet()->getName() + "\" x=\"";
+      panel += QString::number(liveEvents[i]->x()) + "\" y=\"";
+      panel += QString::number(liveEvents[i]->y()) + "\" width=\"";
+      panel += QString::number(liveEvents[i]->width()) + "\" height=\"";
+      panel += QString::number(liveEvents[i]->height()) + "\">";
       panel += liveEvents[i]->getSheet()->getPlainText();
       panel += "</EventPanel>\n";
-      qDebug() << "DocumentPage::getFullText()" << panel;
+      liveEventsText += panel;
     }
   }
-  return fullText /*+ panelText*/;
+  return fullText + liveEventsText;
 }
 
 // QString DocumentPage::getXmlWidgetsText()
@@ -456,17 +468,13 @@ int DocumentPage::currentLine()
   return cursor.blockNumber() + 1;
 }
 
-void DocumentPage::showLiveEvents()
+void DocumentPage::showLiveEvents(bool visible)
 {
   for (int i = 0; i < liveEvents.size(); i++) {
-    liveEvents[i]->show();
-  }
-}
-
-void DocumentPage::hideLiveEvents()
-{
-  for (int i = 0; i < liveEvents.size(); i++) {
-    liveEvents[i]->hide();
+    if (visible)
+      liveEvents[i]->show();
+    else
+      liveEvents[i]->hide();
   }
 }
 
