@@ -23,16 +23,23 @@
 #include "liveeventframe.h"
 #include "eventsheet.h"
 
+#include <QTextEdit>
+#include <QResizeEvent>
+
 LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent) :
     QFrame(parent), m_csdName(csdName)
 {
   setupUi(this);
 
   setWindowTitle(m_csdName);
-  m_sheet = new EventSheet(scrollArea);
+  m_sheet = new EventSheet(this);
   m_sheet->show();
   m_sheet->setTempo(60.0);
   scrollArea->setWidget(m_sheet);
+
+  m_editor = new QTextEdit(this);
+  m_editor->hide();
+
   connect(tempoSpinBox,SIGNAL(valueChanged(double)), m_sheet,SLOT(setTempo(double)));
 }
 
@@ -51,4 +58,11 @@ void LiveEventFrame::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void LiveEventFrame::resizeEvent (QResizeEvent * event)
+{
+  QSize s = event->size();
+  s.setHeight(s.height() - 30);
+  scrollArea->resize(s);
 }

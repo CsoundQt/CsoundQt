@@ -76,7 +76,7 @@ class EventSheet : public QTableWidget
     void add(double value);
     void multiply(double value);
     void divide(double value);
-    void randomize(double min, double max, int dist);
+    void randomize(double min, double max, int mode);
 
 
     void rename(QString name);

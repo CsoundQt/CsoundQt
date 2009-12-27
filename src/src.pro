@@ -58,7 +58,6 @@ SOURCES += qutecsound.cpp \
     inspector.cpp \
     widgetpreset.cpp \
     eventsheet.cpp \
-    onevaluedialog.cpp \
     liveeventframe.cpp
 HEADERS += qutecsound.h \
     dockhelp.h \
@@ -95,7 +94,6 @@ HEADERS += qutecsound.h \
     inspector.h \
     widgetpreset.h \
     eventsheet.h \
-    onevaluedialog.h \
     liveeventframe.h
 TEMPLATE = app
 CONFIG += warn_on \
@@ -117,7 +115,6 @@ FORMS += configdialog.ui \
     findreplace.ui \
     keyboardshortcuts.ui \
     keyselector.ui \
-    onevaluedialog.ui \
     liveeventframe.ui
 win32 { 
     QUTECSOUND_CSOUND_PATH = C:\Program \

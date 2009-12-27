@@ -46,14 +46,16 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 
 DocumentPage::~DocumentPage()
 {
-  for (int i = 0; i < liveEvents.size(); i++) {
-    delete liveEvents[i];  // These widgets have the order not to delete on close
+  qDebug() << "DocumentPage::~DocumentPage()";
+  for (int i = 0; i < liveEventFrames.size(); i++) {
+    delete liveEventFrames[i];  // These widgets have the order not to delete on close
   }
   delete m_highlighter;
 }
 
 void DocumentPage::keyPressEvent(QKeyEvent *event)
 {
+  // TODO is this function necessary any more?
     if (event == QKeySequence::Cut)
     {
         emit doCut();
@@ -176,6 +178,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
       text.insert(index, "<CsOptions>\n" + outFile + "\n</CsOptions>\n");
     }
   }
+  // Load Live Event Panels
   while (text.contains("<EventPanel") and text.contains("</EventPanel>")) {
     QString liveEventsText = text.mid(text.indexOf("<EventPanel "),
                                       text.indexOf("</EventPanel>") - text.indexOf("<EventPanel ") + 13);
@@ -184,7 +187,14 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     QString scoText = liveEventsText.mid(liveEventsText.indexOf(">") + 1,
                                          liveEventsText.indexOf("</EventPanel>") - liveEventsText.indexOf(">") - 1 );
     frame->getSheet()->setFromText(scoText);
+    if (liveEventsText.contains("tempo=\"")) {
+//      QString tempostr = liveEventsText.mid(liveEventsText.indexOf("tempo=\"") + 7,
+//                                            );
+    }
     text.remove(liveEventsText);
+  }
+  if (liveEventFrames.size() == 0) {
+    newLiveEventFrame();
   }
   setPlainText(text);
   document()->setModified(true);
@@ -211,15 +221,15 @@ QString DocumentPage::getFullText()
     fullText += getMacOptionsText() + "\n" + macGUI + "\n" + macPresets + "\n";
   QString liveEventsText = "";
   if (saveLiveEvents) {
-    for (int i = 0; i < liveEvents.size(); i++) {
+    for (int i = 0; i < liveEventFrames.size(); i++) {
       QString panel = "\n<EventPanel tempo=\"";
-      panel += QString::number(liveEvents[i]->getSheet()->getTempo(), 'f', 8) + "\" name=\"";
-      panel += liveEvents[i]->getSheet()->getName() + "\" x=\"";
-      panel += QString::number(liveEvents[i]->x()) + "\" y=\"";
-      panel += QString::number(liveEvents[i]->y()) + "\" width=\"";
-      panel += QString::number(liveEvents[i]->width()) + "\" height=\"";
-      panel += QString::number(liveEvents[i]->height()) + "\">";
-      panel += liveEvents[i]->getSheet()->getPlainText();
+      panel += QString::number(liveEventFrames[i]->getSheet()->getTempo(), 'f', 8) + "\" name=\"";
+      panel += liveEventFrames[i]->getSheet()->getName() + "\" x=\"";
+      panel += QString::number(liveEventFrames[i]->x()) + "\" y=\"";
+      panel += QString::number(liveEventFrames[i]->y()) + "\" width=\"";
+      panel += QString::number(liveEventFrames[i]->width()) + "\" height=\"";
+      panel += QString::number(liveEventFrames[i]->height()) + "\">";
+      panel += liveEventFrames[i]->getSheet()->getPlainText();
       panel += "</EventPanel>\n";
       liveEventsText += panel;
     }
@@ -471,13 +481,13 @@ int DocumentPage::currentLine()
   return cursor.blockNumber() + 1;
 }
 
-void DocumentPage::showLiveEvents(bool visible)
+void DocumentPage::showLiveEventFrames(bool visible)
 {
-  for (int i = 0; i < liveEvents.size(); i++) {
+  for (int i = 0; i < liveEventFrames.size(); i++) {
     if (visible)
-      liveEvents[i]->show();
+      liveEventFrames[i]->show();
     else
-      liveEvents[i]->hide();
+      liveEventFrames[i]->hide();
   }
 }
 
@@ -645,12 +655,12 @@ void DocumentPage::opcodeFromMenu()
 LiveEventFrame * DocumentPage::newLiveEventFrame()
 {
   qDebug() << "DocumentPage::newLiveEventFrame()";
-  // TODO delete these!!!
-  // TODO remove from QVector when they are closed
+  // TODO delete these frames!!!
+  // TODO remove from QVector when they are deleted
   LiveEventFrame *e = new LiveEventFrame("Live Event");
   e->show();
   e->setAttribute(Qt::WA_DeleteOnClose, false);
-  liveEvents.append(e);
+  liveEventFrames.append(e);
   emit registerLiveEvent(dynamic_cast<QWidget *>(e));
   return e;
 }

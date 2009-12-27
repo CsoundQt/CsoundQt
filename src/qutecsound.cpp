@@ -253,7 +253,7 @@ void qutecsound::changePage(int index)
   stop();
   if (textEdit != NULL) {
     textEdit->setMacWidgetsText(widgetPanel->widgetsText()); //Updated changes to widgets in file
-    textEdit->showLiveEvents(false);
+    textEdit->showLiveEventFrames(false);
     disconnect(showLiveEventsAct, SIGNAL(toggled(bool)), textEdit, SLOT(showLiveEvents(bool)));
   }
   if (index < 0) {
@@ -263,7 +263,7 @@ void qutecsound::changePage(int index)
   textEdit = documentPages[index];
   textEdit->setTabStopWidth(m_options->tabWidth);
   textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
-  textEdit->showLiveEvents(showLiveEventsAct->isChecked());
+  textEdit->showLiveEventFrames(showLiveEventsAct->isChecked());
   curPage = index;
   setCurrentFile(documentPages[curPage]->fileName);
   connectActions();

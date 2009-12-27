@@ -26,6 +26,7 @@
 #include "ui_liveeventframe.h"
 
 class EventSheet;
+class QTextEdit;
 
 class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
 {
@@ -36,11 +37,13 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
 
   protected:
     void changeEvent(QEvent *e);
+    virtual void resizeEvent (QResizeEvent * event);
 
   private:
-    QWidget *m_editor; //TODO add text editor
+    int mode; // 0 = sheet 1 = text  2 = piano roll?
+    QTextEdit *m_editor; //TODO add text editor
+    EventSheet *m_sheet;
     QString m_csdName;
-    EventSheet *m_sheet;  // Can this be made private some way?
 };
 
 #endif // LIVEEVENTFRAME_H

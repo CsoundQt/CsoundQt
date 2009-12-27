@@ -21,15 +21,93 @@
 */
 
 #include "eventsheet.h"
-#include "onevaluedialog.h"
 
 #include <QMenu>
 #include <QContextMenuEvent>
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QLineEdit>
+#include <QDialog>
+#include <QDoubleSpinBox>
+
+// For rand() function
+#include <cstdlib>
 // Only for debug
 #include <QtCore>
+
+class OneValueDialog: public QDialog
+{
+  public:
+  OneValueDialog(QWidget *parent, QString label, double defaultValue = 0.0):
+      QDialog(parent)
+  {
+    l = new QVBoxLayout(this);
+    lab= new QLabel(label, this);
+    box = new QDoubleSpinBox(this);
+    box->setRange(-999999, 999999);
+    box->setDecimals(8);
+    box->setValue(defaultValue);
+    box->selectAll();
+    l->addWidget(lab);
+    l->addWidget(box);
+    connect(box, SIGNAL(editingFinished()), this, SLOT(accept ()) );
+  }
+
+  double value() { return box->value();}
+
+  QVBoxLayout *l;
+  QLabel *lab;
+  QDoubleSpinBox *box;
+};
+
+class ThreeValueDialog: public QDialog
+{
+  public:
+  ThreeValueDialog(QWidget *parent, QStringList labels, QVector<double> defaultValues):
+      QDialog(parent)
+  {
+    l = new QVBoxLayout(this);
+    lab1= new QLabel(labels[0], this);
+    box1 = new QDoubleSpinBox(this);
+    box1->setRange(-999999, 999999);
+    box1->setDecimals(8);
+    box1->setValue(defaultValues[0]);
+    box1->selectAll();
+    lab2= new QLabel(labels[1], this);
+    box2 = new QDoubleSpinBox(this);
+    box2->setRange(-999999, 999999);
+    box2->setDecimals(8);
+    box2->setValue(defaultValues[1]);
+    l->addWidget(lab1);
+    l->addWidget(box1);
+    l->addWidget(lab2);
+    l->addWidget(box2);
+    if (labels[2] != "") {
+      lab3= new QLabel(labels[2], this);
+      box3 = new QDoubleSpinBox(this);
+      box3->setRange(-999999, 999999);
+      box3->setDecimals(8);
+      box3->setValue(defaultValues[2]);
+      l->addWidget(lab3);
+      l->addWidget(box3);
+    }
+//    connect(box1, SIGNAL(editingFinished()), this, SLOT(accept ()) );
+//    connect(box2, SIGNAL(editingFinished()), this, SLOT(accept ()) );
+    connect(box3, SIGNAL(editingFinished()), this, SLOT(accept ()) );
+  }
+
+  double value1() { return box1->value();}
+  double value2() { return box2->value();}
+  double value3() { return box3->value();} // Be careful, this is not checked!
+
+  QVBoxLayout *l;
+  QLabel *lab1;
+  QDoubleSpinBox *box1;
+  QLabel *lab2;
+  QDoubleSpinBox *box2;
+  QLabel *lab3;
+  QDoubleSpinBox *box3;
+};
 
 EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
 {
@@ -121,13 +199,31 @@ void EventSheet::setFromText(QString text)
     QString line = lines[i].trimmed(); //Remove whitespace from start and end
     int count = 0;
     int pcount = 0;
+    bool formula = false;
+    bool string = false;
     bool isp = true; // Assume starting on a pfield, not white space
     QString pvalue = "";
     QString spacing = "";
+    if (!line.isEmpty() && (line[0] == 'i' || line[0] == 'f') ) {
+      QTableWidgetItem * item = this->item(i, pcount);
+      if (item == 0) {
+        item = new QTableWidgetItem();
+        this->setItem(i, pcount, item);
+      }
+      item->setData(Qt::DisplayRole, QString(line[0]));
+      count++;
+      isp = false; // consider p-field done with first character.
+    }
     while (count < line.size()) {
-      if (isp == true) { // Processing p-field
-        if (line[count] == '[') { //Start of formula
-          //TODO finish parsing score formulas
+      if (isp == true || formula || string) { // Processing p-field
+        if (line[count] == '"') { // string takes precedence over formulas and comments
+          string = !string;
+        }
+        else if (line[count] == '[') { //Start of formula
+          formula = true;  // This should never happen as this character should always be after whitespace....
+        }
+        else if (line[count] == ']') { //End of formula
+          formula = false;
         }
         else if (line[count] == ';') { // comment
           // First add current pfield, in case there is no spacing
@@ -138,11 +234,11 @@ void EventSheet::setFromText(QString text)
             item = new QTableWidgetItem();
             this->setItem(i, pcount, item);
           }
-          if (pvalue == "") { // Only add it if it is not empty, e.g. the comment is the first item
+          if (pvalue != "") { // Only add it if it is not empty, e.g. the comment is the first item
             item->setData(Qt::DisplayRole, pvalue);
-            pcount++;
           }
           // Now add comment
+          pcount++;
           QString comment = line.mid(count);
           qDebug() << "EventSheet::setFromText: " << i << "---" << pcount << " - - " << comment;
           if (this->columnCount() <= pcount) {
@@ -154,9 +250,11 @@ void EventSheet::setFromText(QString text)
             this->setItem(i, pcount, item);
           }
           item->setData(Qt::DisplayRole, comment);
+          isp = false;  // last p-field has been processed here
           break; // Nothing more todo for this line
-        }
-        else if (line[count].isSpace()) { // White space so p-field has finished
+        }  // End of comment processing
+        // ----
+        if (line[count].isSpace() && !formula && !string) { // White space so p-field has finished
           if (this->columnCount() <= pcount) {
             appendColumn();
           }
@@ -170,15 +268,27 @@ void EventSheet::setFromText(QString text)
           spacing.append(line[count]);
           isp = false;
         }
-        else { // Continue p-field processing
+        else { // A character or formula so continue p-field processing
           pvalue.append(line[count]);
         }
       }
       else { // Processing white space
-        if (line[count] == '[') { //Start of formula
-          //TODO finish parsing score formulas
+        if (line[count] == '"') { // string
+          string = !string;
+        }
+        else if (line[count] == '[') { //Start of formula
+          formula = true;
         }
         else if (line[count] == ';') { // comment
+          if (spacing != "") { // Process spacing if any
+            QTableWidgetItem * item = this->item(i, pcount);
+            if (item == 0) {
+              item = new QTableWidgetItem();
+              this->setItem(i, pcount, item);
+            }
+            item->setData(Qt::UserRole, spacing);
+          }
+          pcount++;
           QString comment = line.mid(count);
           if (this->columnCount() <= pcount) {
             appendColumn();
@@ -191,7 +301,8 @@ void EventSheet::setFromText(QString text)
           item->setData(Qt::DisplayRole, comment);
           break; // Nothing more todo on this line
         }
-        else if (!line[count].isSpace()) { // Not White space so new p-field has started
+        // ---
+        if (!line[count].isSpace()) { // Not White space so new p-field has started
           QTableWidgetItem * item = this->item(i, pcount);
           if (item == 0) {
             item = new QTableWidgetItem();
@@ -211,12 +322,15 @@ void EventSheet::setFromText(QString text)
     }
     // Process final p-field
     if (isp == true) {
+      if (this->columnCount() <= pcount) {
+        appendColumn();
+      }
       QTableWidgetItem * item = this->item(i, pcount);
       if (item == 0) {
         item = new QTableWidgetItem();
         this->setItem(i, pcount, item);
       }
-      item->setData(Qt::DisplayRole, pvalue); // TODO are double values treated correctly?
+      item->setData(Qt::DisplayRole, pvalue);
     }
     else {
       QTableWidgetItem * item = this->item(i, pcount);
@@ -224,7 +338,7 @@ void EventSheet::setFromText(QString text)
         item = new QTableWidgetItem();
         this->setItem(i, pcount, item);
       }
-      item->setData(Qt::UserRole, spacing); // TODO are double values treated correctly?
+      item->setData(Qt::UserRole, spacing);
     }
   }
   if (this->rowCount() == 0)
@@ -257,7 +371,7 @@ void EventSheet::loopEvents() {
 
 void EventSheet::subtract()
 {
-  OneValueDialog d(this);
+  OneValueDialog d(this, tr("Subtract"));
   d.exec();
   if (d.result() == QDialog::Accepted) {
     this->add(- d.value());
@@ -266,7 +380,7 @@ void EventSheet::subtract()
 
 void EventSheet::add()
 {
-  OneValueDialog d(this);
+  OneValueDialog d(this, tr("Add"));
   d.exec();
   if (d.result() == QDialog::Accepted) {
     this->add(d.value());
@@ -275,7 +389,7 @@ void EventSheet::add()
 
 void EventSheet::multiply()
 {
-  OneValueDialog d(this);
+  OneValueDialog d(this, tr("Multiply by"));
   d.exec();
   if (d.result() == QDialog::Accepted) {
     this->multiply(d.value());
@@ -284,7 +398,7 @@ void EventSheet::multiply()
 
 void EventSheet::divide()
 {
-  OneValueDialog d(this);
+  OneValueDialog d(this, tr("Divide by"));
   d.exec();
   if (d.result() == QDialog::Accepted) {
     this->divide(d.value());
@@ -293,7 +407,15 @@ void EventSheet::divide()
 
 void EventSheet::randomize()
 {
-
+  QStringList labels;
+  labels << tr("Minimum") << tr("Maximum") << tr("Mode: 0=decimals 1=Integers only");
+  QVector<double> defaultValues;
+  defaultValues << 0.0 << 1.0 << 0.0;
+  ThreeValueDialog d(this, labels, defaultValues);
+  d.exec();
+  if (d.result() == QDialog::Accepted) {
+    this->randomize(d.value1(), d.value2(), d.value3());
+  }
 }
 
 void EventSheet::reverse()
@@ -488,9 +610,29 @@ void EventSheet::divide(double value)
   }
 }
 
-void EventSheet::randomize(double min, double max, int dist)
+void EventSheet::randomize(double min, double max, int mode)
 {
-
+  // Mode 0 =
+  // Mode 1 = integers only
+  QModelIndexList list = this->selectedIndexes();
+  QTime midnight(0, 0, 0);
+  qsrand(midnight.secsTo(QTime::currentTime()));
+  for (int i = 0; i < list.size(); i++) {
+    QTableWidgetItem * item = this->item(list[i].row(), list[i].column());
+    if (item == 0) {
+      item = new QTableWidgetItem();
+      this->setItem(list[i].row(), list[i].column(), item);
+    }
+    double value = 0.0;
+    if (mode == 0) {
+      value = min + ((double) qrand() / (double) RAND_MAX) * (max - min);
+    }
+    else /*if (mode == 1)*/ {  // Integers only
+      value = min + (qrand() % (int) (max-min));
+    }
+    item->setData(Qt::DisplayRole,
+                  QVariant(value));
+  }
 }
 
 void EventSheet::createActions()

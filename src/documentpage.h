@@ -75,7 +75,7 @@ class DocumentPage : public QTextEdit
     QString macGUI;
     QDomElement widgets;
 
-    QVector<LiveEventFrame *> liveEvents;
+    QVector<LiveEventFrame *> liveEventFrames;
 
     bool widgetsDocked;
     Highlighter *m_highlighter;
@@ -101,7 +101,7 @@ class DocumentPage : public QTextEdit
 
     void opcodeFromMenu();
     LiveEventFrame * newLiveEventFrame();
-    void showLiveEvents(bool visible);
+    void showLiveEventFrames(bool visible);
 
   private slots:
     void changed();
