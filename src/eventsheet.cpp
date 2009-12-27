@@ -33,14 +33,15 @@
 
 EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
 {
+  qDebug() << "EventSheet::EventSheet";
   this->setRowCount(10);
   this->setColumnCount(6);
   columnNames << tr("Event") << "p1 (instr)" << "p2 (start)" << "p3 (dur)" << "p4" << "p5";
   this->setHorizontalHeaderLabels(columnNames);
   this->setColumnWidth(0, 50);
-  this->setColumnWidth(1, 65);
-  this->setColumnWidth(2, 65);
-  this->setColumnWidth(3, 65);
+  this->setColumnWidth(1, 70);
+  this->setColumnWidth(2, 70);
+  this->setColumnWidth(3, 70);
 
   m_name = "Events";
   createActions();
@@ -114,19 +115,22 @@ void EventSheet::setFromText(QString text)
   this->setRowCount(0);
   this->setColumnCount(6);
   for (int i = 0; i < lines.size(); i++) {
+    if (this->rowCount() <= i) {
+      appendRow();
+    }
     QString line = lines[i].trimmed(); //Remove whitespace from start and end
     int count = 0;
     int pcount = 0;
     bool isp = true; // Assume starting on a pfield, not white space
     QString pvalue = "";
     QString spacing = "";
-    while (count < lines[i].size()) {
+    while (count < line.size()) {
       if (isp == true) { // Processing p-field
         if (line[count] == '[') { //Start of formula
           //TODO finish parsing score formulas
         }
         else if (line[count] == ';') { // comment
-          // First add current pfield
+          // First add current pfield, in case there is no spacing
           if (this->columnCount() <= pcount)
             appendColumn();
           QTableWidgetItem * item = this->item(i, pcount);
@@ -134,12 +138,16 @@ void EventSheet::setFromText(QString text)
             item = new QTableWidgetItem();
             this->setItem(i, pcount, item);
           }
-          item->setData(Qt::DisplayRole, pvalue); // TODO are double values treated correctly
-          pcount++;
+          if (pvalue == "") { // Only add it if it is not empty, e.g. the comment is the first item
+            item->setData(Qt::DisplayRole, pvalue);
+            pcount++;
+          }
           // Now add comment
           QString comment = line.mid(count);
-          if (this->columnCount() <= pcount)
+          qDebug() << "EventSheet::setFromText: " << i << "---" << pcount << " - - " << comment;
+          if (this->columnCount() <= pcount) {
             appendColumn();
+          }
           item = this->item(i, pcount);
           if (item == 0) {
             item = new QTableWidgetItem();
@@ -149,14 +157,17 @@ void EventSheet::setFromText(QString text)
           break; // Nothing more todo for this line
         }
         else if (line[count].isSpace()) { // White space so p-field has finished
-          if (this->columnCount() <= pcount)
+          if (this->columnCount() <= pcount) {
             appendColumn();
+          }
           QTableWidgetItem * item = this->item(i, pcount);
           if (item == 0) {
             item = new QTableWidgetItem();
             this->setItem(i, pcount, item);
           }
           item->setData(Qt::DisplayRole, pvalue); // TODO are double values treated correctly
+          spacing = "";
+          spacing.append(line[count]);
           isp = false;
         }
         else { // Continue p-field processing
@@ -169,8 +180,9 @@ void EventSheet::setFromText(QString text)
         }
         else if (line[count] == ';') { // comment
           QString comment = line.mid(count);
-          if (this->columnCount() <= pcount)
+          if (this->columnCount() <= pcount) {
             appendColumn();
+          }
           QTableWidgetItem * item = this->item(i, pcount);
           if (item == 0) {
             item = new QTableWidgetItem();
@@ -185,8 +197,10 @@ void EventSheet::setFromText(QString text)
             item = new QTableWidgetItem();
             this->setItem(i, pcount, item);
           }
-          item->setData(Qt::UserRole, spacing); // TODO are double values treated correctly
-          isp = false;
+          item->setData(Qt::UserRole, spacing); // TODO are double values treated correctly?
+          isp = true;
+          pvalue = "";
+          pvalue.append(line[count]);
           pcount++;
         }
         else { // Continue p-field processing
@@ -194,6 +208,23 @@ void EventSheet::setFromText(QString text)
         }
       }
       count++;
+    }
+    // Process final p-field
+    if (isp == true) {
+      QTableWidgetItem * item = this->item(i, pcount);
+      if (item == 0) {
+        item = new QTableWidgetItem();
+        this->setItem(i, pcount, item);
+      }
+      item->setData(Qt::DisplayRole, pvalue); // TODO are double values treated correctly?
+    }
+    else {
+      QTableWidgetItem * item = this->item(i, pcount);
+      if (item == 0) {
+        item = new QTableWidgetItem();
+        this->setItem(i, pcount, item);
+      }
+      item->setData(Qt::UserRole, spacing); // TODO are double values treated correctly?
     }
   }
   if (this->rowCount() == 0)
@@ -342,6 +373,7 @@ void EventSheet::appendColumn()
 
 void EventSheet::appendRow()
 {
+  qDebug() << "EventSheet::appendRow()";
   this->insertRow(this->rowCount());
 
 }

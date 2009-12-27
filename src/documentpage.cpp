@@ -180,7 +180,10 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     QString liveEventsText = text.mid(text.indexOf("<EventPanel "),
                                       text.indexOf("</EventPanel>") - text.indexOf("<EventPanel ") + 13);
     qDebug() << "DocumentPage::setTextString   " << liveEventsText;
-    // TODO load live events panels
+    LiveEventFrame *frame = newLiveEventFrame();
+    QString scoText = liveEventsText.mid(liveEventsText.indexOf(">") + 1,
+                                         liveEventsText.indexOf("</EventPanel>") - liveEventsText.indexOf(">") - 1 );
+    frame->getSheet()->setFromText(scoText);
     text.remove(liveEventsText);
   }
   setPlainText(text);
@@ -639,16 +642,17 @@ void DocumentPage::opcodeFromMenu()
   cursor.insertText(text);
 }
 
-void DocumentPage::newLiveEventFrame()
+LiveEventFrame * DocumentPage::newLiveEventFrame()
 {
   qDebug() << "DocumentPage::newLiveEventFrame()";
   // TODO delete these!!!
   // TODO remove from QVector when they are closed
   LiveEventFrame *e = new LiveEventFrame("Live Event");
   e->show();
-  setAttribute (Qt::WA_DeleteOnClose, false);
+  e->setAttribute(Qt::WA_DeleteOnClose, false);
   liveEvents.append(e);
   emit registerLiveEvent(dynamic_cast<QWidget *>(e));
+  return e;
 }
 
 void DocumentPage::changed()

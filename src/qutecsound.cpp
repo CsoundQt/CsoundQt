@@ -2946,7 +2946,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
   documentPages[curPage]->setColorVariables(m_options->colorVariables);
   documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
-  documentPages[curPage]->newLiveEventFrame(); //FIXME This should only be here for testing
+//  documentPages[curPage]->newLiveEventFrame(); //FIXME This should only be here for testing
   documentTabs->setCurrentIndex(curPage);
   textEdit = newPage;
   connectActions();

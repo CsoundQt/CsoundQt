@@ -100,7 +100,7 @@ class DocumentPage : public QTextEdit
     void unindent();
 
     void opcodeFromMenu();
-    void newLiveEventFrame();
+    LiveEventFrame * newLiveEventFrame();
     void showLiveEvents(bool visible);
 
   private slots:
