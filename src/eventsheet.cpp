@@ -37,7 +37,7 @@
 
 class OneValueDialog: public QDialog
 {
-  public:
+public:
   OneValueDialog(QWidget *parent, QString label, double defaultValue = 0.0):
       QDialog(parent)
   {
@@ -62,7 +62,7 @@ class OneValueDialog: public QDialog
 
 class ThreeValueDialog: public QDialog
 {
-  public:
+public:
   ThreeValueDialog(QWidget *parent, QStringList labels, QVector<double> defaultValues):
       QDialog(parent)
   {
@@ -99,7 +99,6 @@ class ThreeValueDialog: public QDialog
   double value1() { return box1->value();}
   double value2() { return box2->value();}
   double value3() { return box3->value();} // Be careful, this is not checked!
-
   QVBoxLayout *l;
   QLabel *lab1;
   QDoubleSpinBox *box1;
@@ -107,6 +106,22 @@ class ThreeValueDialog: public QDialog
   QDoubleSpinBox *box2;
   QLabel *lab3;
   QDoubleSpinBox *box3;
+
+protected:
+  virtual void keyPressEvent (QKeyEvent * event) {
+    if (event->key() == Qt::Key_Escape) {
+      this->reject();
+    }
+    if (event->key() == Qt::Key_Return) {
+      if (box1->hasFocus())
+        box2->setFocus(Qt::TabFocusReason);
+      else if (box2->hasFocus())
+        box3->setFocus(Qt::TabFocusReason);
+    }
+    else {
+      QDialog::keyPressEvent(event);  // Otherwise propagate event
+    }
+  }
 };
 
 EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
@@ -142,12 +157,13 @@ QString EventSheet::getPlainText(bool scaleTempo)
 QString EventSheet::getLine(int number, bool scaleTempo)
 {
   QString line = "";
+  bool instrEvent = false;
   for (int i = 0; i < this->columnCount(); i++) {
-    bool instrEvent = false;
     QTableWidgetItem * item = this->item(number, i);
     if (item != 0) { // Item is not empty
-      if (i == 0 && (item->data(Qt::DisplayRole).toString() == "i") )
+      if (i == 0 && (item->data(Qt::DisplayRole).toString() == "i") ) {
         instrEvent = true;  // Check if event is intrument note to allow scale by tempo
+      }
       if (scaleTempo && instrEvent && (i == 2 || i == 3) ) { // Scale tempo only for pfields p2 and p3
         bool ok = false;
         double value = item->data(Qt::DisplayRole).toDouble(&ok);
@@ -471,9 +487,19 @@ void EventSheet::rotate(int amount)
 
 }
 
-void EventSheet::fill(double start, double end, double slope)
+void EventSheet::fill()
 {
-
+  QStringList labels;
+  labels << tr("From") << tr("To") << tr("Slope (1=Linear)");
+  QVector<double> defaultValues;
+  defaultValues << 1.0 << 5.0 << 1.0;
+  ThreeValueDialog d(this, labels, defaultValues);
+  connect(d.box1, SIGNAL(valueChanged (double)),
+          d.box2, SLOT(setValue(double)));
+  d.exec();
+  if (d.result() == QDialog::Accepted) {
+    this->fill(d.value1(), d.value2(), d.value3());
+  }
 }
 
 void EventSheet::insertColumnHere()
@@ -562,6 +588,14 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
   menu.exec(event->globalPos());
 }
 
+void EventSheet::keyPressEvent (QKeyEvent * event) {
+//  if (event->key() == Qt::Key_Escape) {
+//    this->reject();
+//  }
+  qDebug() << "EventSheet::keyPressEvent  " << event->key();
+  QTableWidget::keyPressEvent(event);  // Propagate event
+}
+
 void EventSheet::add(double value)
 {
   QModelIndexList list = this->selectedIndexes();
@@ -632,6 +666,23 @@ void EventSheet::randomize(double min, double max, int mode)
     }
     item->setData(Qt::DisplayRole,
                   QVariant(value));
+  }
+}
+
+void EventSheet::fill(double start, double end, double slope)
+{
+  QModelIndexList list = this->selectedIndexes();
+  double inc = (end - start) / (list.size() - 1.0);
+  double value = start;
+  for (int i = 0; i < list.size(); i++) {
+    QTableWidgetItem * item = this->item(list[i].row(), list[i].column());
+    if (item == 0) {
+      item = new QTableWidgetItem();
+      this->setItem(list[i].row(), list[i].column(), item);
+    }
+    item->setData(Qt::DisplayRole,
+                  QVariant(value));
+    value += inc;
   }
 }
 

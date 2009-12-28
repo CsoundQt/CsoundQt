@@ -55,7 +55,7 @@ class EventSheet : public QTableWidget
     void shuffle(int iterations);
 //    void mirror();
     void rotate(int amount);
-    void fill(double start, double end, double slope);
+    void fill();
 
     void insertColumnHere();
     void insertRowHere();
@@ -67,7 +67,8 @@ class EventSheet : public QTableWidget
     void rename();
 
   protected:
-    void contextMenuEvent (QContextMenuEvent * event);
+    void contextMenuEvent(QContextMenuEvent * event);
+    virtual void keyPressEvent(QKeyEvent * event);
 
   private:
     void createActions();
@@ -77,6 +78,7 @@ class EventSheet : public QTableWidget
     void multiply(double value);
     void divide(double value);
     void randomize(double min, double max, int mode);
+    void fill(double start, double end, double slope);
 
 
     void rename(QString name);
