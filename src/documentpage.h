@@ -105,6 +105,7 @@ class DocumentPage : public QTextEdit
 
   private slots:
     void changed();
+    void liveEventFrameClosed();
 //     void moved();
 
   signals:
@@ -114,6 +115,7 @@ class DocumentPage : public QTextEdit
     void doCut();
     void doPaste();
     void registerLiveEvent(QWidget *e);
+    void liveEventsVisible(bool);  // To change the action in the main window
 };
 
 #endif

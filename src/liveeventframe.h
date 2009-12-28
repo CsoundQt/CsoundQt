@@ -34,16 +34,21 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
   public:
     LiveEventFrame(QString csdName, QWidget *parent = 0);
     EventSheet * getSheet();
+    void setTempo(double tempo);
 
   protected:
     void changeEvent(QEvent *e);
     virtual void resizeEvent (QResizeEvent * event);
+    virtual void closeEvent (QCloseEvent * event);
 
   private:
     int mode; // 0 = sheet 1 = text  2 = piano roll?
     QTextEdit *m_editor; //TODO add text editor
     EventSheet *m_sheet;
     QString m_csdName;
+
+  signals:
+    void closed();  // To inform DocumentPage that live event panel has been closed
 };
 
 #endif // LIVEEVENTFRAME_H

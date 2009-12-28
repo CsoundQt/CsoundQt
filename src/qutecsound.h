@@ -307,7 +307,6 @@ class qutecsound:public QMainWindow
     QAction *renderAct;
     QAction *externalEditorAct;
     QAction *externalPlayerAct;
-    QAction *showLiveEventsAct;
     QAction *showHelpAct;
     QAction *showManualAct;
     QAction *showGenAct;
@@ -321,6 +320,7 @@ class qutecsound:public QMainWindow
     QAction *showUtilitiesAct;
     QAction *showWidgetsAct;
     QAction *showInspectorAct;
+    QAction *showLiveEventsAct;
     QAction *commentAct;
     QAction *uncommentAct;
     QAction *indentAct;

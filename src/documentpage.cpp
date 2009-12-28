@@ -188,9 +188,53 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
                                          liveEventsText.indexOf("</EventPanel>") - liveEventsText.indexOf(">") - 1 );
     frame->getSheet()->setFromText(scoText);
     if (liveEventsText.contains("tempo=\"")) {
-//      QString tempostr = liveEventsText.mid(liveEventsText.indexOf("tempo=\"") + 7,
-//                                            );
+      int index = liveEventsText.indexOf("tempo=\"") + 7;
+      QString tempostr = liveEventsText.mid(index,
+                                            liveEventsText.indexOf("\"", index) - index );
+      bool ok = false;
+      double tempo = tempostr.toDouble(&ok);
+      if (ok)
+        frame->setTempo(tempo);
     }
+    int posx, posy, width, height;
+    if (liveEventsText.contains("x=\"")) {
+      int index = liveEventsText.indexOf("x=\"") + 3;
+      QString xstr = liveEventsText.mid(index,
+                                        liveEventsText.indexOf("\"", index) - index );
+      bool ok = false;
+      posx = xstr.toInt(&ok);
+      if (!ok)
+        posx = frame->x();
+    }
+    if (liveEventsText.contains("y=\"")) {
+      int index = liveEventsText.indexOf("y=\"") + 3;
+      QString ystr = liveEventsText.mid(index,
+                                        liveEventsText.indexOf("\"", index) - index );
+      bool ok = false;
+      posy = ystr.toInt(&ok);
+      if (!ok)
+        posy = frame->y();
+    }
+    if (liveEventsText.contains("width=\"")) {
+      int index = liveEventsText.indexOf("width=\"") + 7;
+      QString wstr = liveEventsText.mid(index,
+                                        liveEventsText.indexOf("\"", index) - index );
+      bool ok = false;
+      width = wstr.toInt(&ok);
+      if (!ok)
+        width = frame->width();
+    }
+    if (liveEventsText.contains("height=\"")) {
+      int index = liveEventsText.indexOf("height=\"") + 8;
+      QString hstr = liveEventsText.mid(index,
+                                        liveEventsText.indexOf("\"", index) - index );
+      bool ok = false;
+      height = hstr.toInt(&ok);
+      if (!ok)
+        height = frame->height();
+    }
+    frame->move(posx, posy);
+    frame->resize(width, height);
     text.remove(liveEventsText);
   }
   if (liveEventFrames.size() == 0) {
@@ -201,6 +245,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   m_highlighter->setDocument(document());
   return 0;
 }
+
 void DocumentPage::setColorVariables(bool color)
 {
   m_highlighter->setColorVariables(color);
@@ -483,6 +528,7 @@ int DocumentPage::currentLine()
 
 void DocumentPage::showLiveEventFrames(bool visible)
 {
+  qDebug() << "DocumentPage::showLiveEventFrames  " << visible;
   for (int i = 0; i < liveEventFrames.size(); i++) {
     if (visible)
       liveEventFrames[i]->show();
@@ -658,9 +704,10 @@ LiveEventFrame * DocumentPage::newLiveEventFrame()
   // TODO delete these frames!!!
   // TODO remove from QVector when they are deleted
   LiveEventFrame *e = new LiveEventFrame("Live Event");
-  e->show();
+//  e->show();
   e->setAttribute(Qt::WA_DeleteOnClose, false);
   liveEventFrames.append(e);
+  connect(e, SIGNAL(closed()), this, SLOT(liveEventFrameClosed()));
   emit registerLiveEvent(dynamic_cast<QWidget *>(e));
   return e;
 }
@@ -669,6 +716,19 @@ void DocumentPage::changed()
 {
   unmarkErrorLines();
   emit currentTextUpdated();
+}
+
+void DocumentPage::liveEventFrameClosed()
+{
+//  LiveEventFrame *e = dynamic_cast<LiveEventFrame *>(QObject::sender());
+//  if (e != 0) { // This shouldn't really be necessary but just in case
+  bool shown = false;
+  for (int i = 0; i < liveEventFrames.size(); i++) {
+    if (liveEventFrames[i]->isVisible())
+      shown = true;
+  }
+  emit liveEventsVisible(shown);
+//  }
 }
 
 // void DocumentPage::moved()

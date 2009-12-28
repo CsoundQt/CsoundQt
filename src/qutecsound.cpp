@@ -254,7 +254,7 @@ void qutecsound::changePage(int index)
   if (textEdit != NULL) {
     textEdit->setMacWidgetsText(widgetPanel->widgetsText()); //Updated changes to widgets in file
     textEdit->showLiveEventFrames(false);
-    disconnect(showLiveEventsAct, SIGNAL(toggled(bool)), textEdit, SLOT(showLiveEvents(bool)));
+    disconnect(showLiveEventsAct, SIGNAL(toggled(bool)), textEdit, SLOT(showLiveEventFrames(bool)));
   }
   if (index < 0) {
     qDebug() << "qutecsound::changePage index < 0";
@@ -271,7 +271,8 @@ void qutecsound::changePage(int index)
   disconnect(m_inspector, 0, 0, 0);
   connect(m_inspector, SIGNAL(jumpToLine(int)),
           textEdit, SLOT(jumpToLine(int)));
-  connect(showLiveEventsAct, SIGNAL(toggled(bool)), documentPages[curPage], SLOT(showLiveEvents(bool)));
+  connect(showLiveEventsAct, SIGNAL(toggled(bool)), documentPages[curPage], SLOT(showLiveEventFrames(bool)));
+  connect(textEdit, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
   m_inspector->parseText(documentPages[curPage]->toPlainText());
 }
 
@@ -2115,9 +2116,9 @@ void qutecsound::createActions()
   connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
   connect(helpPanel, SIGNAL(Close(bool)), showHelpAct, SLOT(setChecked(bool)));
 
-  showLiveEventsAct = new QAction(/*QIcon(":/images/gtk-info.png"),*/ tr("Live Events"), this);
+  showLiveEventsAct = new QAction(QIcon(":/images/note.png"), tr("Live Events"), this);
   showLiveEventsAct->setCheckable(true);
-  showLiveEventsAct->setChecked(true);
+//  showLiveEventsAct->setChecked(true);  // Unnecessary because it is set by options
   showLiveEventsAct->setStatusTip(tr("Show Live Events Panels"));
   showLiveEventsAct->setIconText(tr("Live Events"));
 
@@ -2608,6 +2609,7 @@ void qutecsound::readSettings()
   restoreState(settings.value("dockstate").toByteArray());
   lastUsedDir = settings.value("lastuseddir", "").toString();
   lastFileDir = settings.value("lastfiledir", "").toString();
+  showLiveEventsAct->setChecked(settings.value("liveEventsActive", true).toBool());
   m_options->language = _configlists.languageCodes.indexOf(settings.value("language", QLocale::system().name()).toString());
   if (m_options->language < 0)
     m_options->language = 0;
@@ -2751,6 +2753,7 @@ void qutecsound::writeSettings()
   settings.setValue("lastuseddir", lastUsedDir);
   settings.setValue("lastfiledir", lastFileDir);
   settings.setValue("language", _configlists.languageCodes[m_options->language]);
+  settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
   for (int i = 0; i < recentFiles.size();i++) {
     QString key = "recentFiles" + QString::number(i);
     settings.setValue(key, recentFiles[i]);
@@ -2989,6 +2992,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   }
   changeFont();
   statusBar()->showMessage(tr("File loaded"), 2000);
+  textEdit->showLiveEventFrames(showLiveEventsAct->isChecked());
   setWidgetPanelGeometry();
   updateGUI();
   if (runNow && m_options->autoPlay) {

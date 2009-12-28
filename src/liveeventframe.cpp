@@ -48,6 +48,11 @@ EventSheet * LiveEventFrame::getSheet()
   return m_sheet;
 }
 
+void LiveEventFrame::setTempo(double tempo)
+{
+  tempoSpinBox->setValue(tempo);
+}
+
 void LiveEventFrame::changeEvent(QEvent *e)
 {
     QFrame::changeEvent(e);
@@ -65,4 +70,9 @@ void LiveEventFrame::resizeEvent (QResizeEvent * event)
   QSize s = event->size();
   s.setHeight(s.height() - 30);
   scrollArea->resize(s);
+}
+
+void LiveEventFrame::closeEvent (QCloseEvent * event)
+{
+  emit closed();
 }
