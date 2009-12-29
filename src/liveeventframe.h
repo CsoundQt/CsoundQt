@@ -32,7 +32,7 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
 {
     Q_OBJECT
   public:
-    LiveEventFrame(QString csdName, QWidget *parent = 0);
+    LiveEventFrame(QString csdName, QWidget *parent = 0, Qt::WindowFlags f = 0 );
     EventSheet * getSheet();
     void setTempo(double tempo);
 

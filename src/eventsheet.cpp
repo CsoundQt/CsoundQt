@@ -29,6 +29,8 @@
 #include <QLineEdit>
 #include <QDialog>
 #include <QDoubleSpinBox>
+#include <QApplication>
+#include <QClipboard>
 
 // For rand() function
 #include <cstdlib>
@@ -138,6 +140,7 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
 
   m_name = "Events";
   createActions();
+  connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
 }
 
 EventSheet::~EventSheet()
@@ -154,7 +157,7 @@ QString EventSheet::getPlainText(bool scaleTempo)
   return t;
 }
 
-QString EventSheet::getLine(int number, bool scaleTempo)
+QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber)
 {
   QString line = "";
   bool instrEvent = false;
@@ -163,6 +166,12 @@ QString EventSheet::getLine(int number, bool scaleTempo)
     if (item != 0) { // Item is not empty
       if (i == 0 && (item->data(Qt::DisplayRole).toString() == "i") ) {
         instrEvent = true;  // Check if event is intrument note to allow scale by tempo
+      }
+      if (instrEvent && i == 1 && storeNumber) { // append current instrument number to active note list
+        bool ok = false;
+        double instrNum = item->data(Qt::DisplayRole).toDouble(&ok);
+        if (ok && !activeInstruments.contains(instrNum))
+          activeInstruments.append(instrNum);
       }
       if (scaleTempo && instrEvent && (i == 2 || i == 3) ) { // Scale tempo only for pfields p2 and p3
         bool ok = false;
@@ -361,6 +370,12 @@ void EventSheet::setFromText(QString text)
     this->setRowCount(1);
 }
 
+void EventSheet::setTempo(double value)
+{
+  qDebug() << "EventSheet::setTempo " << value;
+  tempo = value;
+}
+
 void EventSheet::sendEvents()
 {
   QModelIndexList list = this->selectedIndexes();
@@ -371,18 +386,79 @@ void EventSheet::sendEvents()
     }
   }
   for (int i = 0; i < selectedRows.size(); i++) {
-    emit sendEvent(getLine(selectedRows[i], true));  // With tempo scaling
+    double number = 0.0;
+    emit sendEvent(getLine(selectedRows[i], true, true));  // With tempo scaling
   }
-}
-
-void EventSheet::setTempo(double value)
-{
-  qDebug() << "EventSheet::setTempo " << value;
-  tempo = value;
 }
 
 void EventSheet::loopEvents() {
 
+}
+
+void EventSheet::stopAllEvents()
+{
+  // TODO is it necessary to protect this data from threaded access?
+  while (!activeInstruments.isEmpty()) {
+    QString event = "i -";
+    event += QString::number(activeInstruments.takeFirst(), 'f', 10);
+    event += " 0 1";
+    emit sendEvent(event);
+  }
+}
+
+void EventSheet::del()
+{
+  QModelIndexList list = this->selectedIndexes();
+  for (int i = 0; i < list.size(); i++) {
+    QTableWidgetItem * item = this->item(list[i].row(), list[i].column());
+    if (item != 0) { // Item is not empty
+      delete item;
+    }
+  }
+}
+
+void EventSheet::cut()
+{
+  copy(true);
+}
+
+void EventSheet::copy(bool cut)
+{
+  QModelIndexList list = this->selectedIndexes();
+  QList<int> selectedRows;
+  QList<int> selectedColumns;
+  for (int i = 0; i < list.size(); i++) { // Get list of selected rows
+    if (!selectedRows.contains(list[i].row()) ) {
+      selectedRows.append(list[i].row());
+    }
+    if (!selectedColumns.contains(list[i].column()) ) {
+      selectedColumns.append(list[i].column());
+    }
+  }
+  QString text = "";
+  for (int i = 0; i < selectedRows.size(); i++) {
+    QString line = "";
+    for (int j = 0; j < selectedColumns.size(); j++) {
+      QTableWidgetItem * item = this->item(selectedRows[i], selectedColumns[j]);
+      if (item != 0) { // Item is not empty
+        line += item->data(Qt::DisplayRole).toString();
+        QString space = item->data(Qt::UserRole).toString();
+        if (!space.isEmpty())
+          line += space;
+        else
+          line += " ";
+        if (cut)
+          delete item;
+      }
+    }
+    text += line + "\n";
+  }
+  qApp->clipboard()->setText(text);
+}
+
+void EventSheet::paste()
+{
+  qDebug() << "text = " << qApp->clipboard()->text();
 }
 
 void EventSheet::subtract()
@@ -428,6 +504,7 @@ void EventSheet::randomize()
   QVector<double> defaultValues;
   defaultValues << 0.0 << 1.0 << 0.0;
   ThreeValueDialog d(this, labels, defaultValues);
+  d.box3->setDecimals(0);
   d.exec();
   if (d.result() == QDialog::Accepted) {
     this->randomize(d.value1(), d.value2(), d.value3());
@@ -472,9 +549,16 @@ void EventSheet::reverse()
   }
 }
 
-void EventSheet::shuffle(int iterations)
+void EventSheet::shuffle()
 {
-
+  OneValueDialog d(this, tr("Iterations"));
+  d.box->setValue(10.0);
+  d.box->setDecimals(0);
+  d.box->selectAll();
+  d.exec();
+  if (d.result() == QDialog::Accepted) {
+    this->shuffle(d.value());
+  }
 }
 
 //void EventSheet::mirror()
@@ -482,9 +566,15 @@ void EventSheet::shuffle(int iterations)
 //
 //}
 
-void EventSheet::rotate(int amount)
+void EventSheet::rotate()
 {
-
+  OneValueDialog d(this, tr("Rotate by"));
+  d.box->setValue(1.0);
+  d.box->setDecimals(0);
+  d.exec();
+  if (d.result() == QDialog::Accepted) {
+    this->rotate(d.value());
+  }
 }
 
 void EventSheet::fill()
@@ -589,11 +679,22 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
 }
 
 void EventSheet::keyPressEvent (QKeyEvent * event) {
-//  if (event->key() == Qt::Key_Escape) {
-//    this->reject();
-//  }
-  qDebug() << "EventSheet::keyPressEvent  " << event->key();
-  QTableWidget::keyPressEvent(event);  // Propagate event
+  if (event->matches(QKeySequence::Delete)) {
+    this->del();
+  }
+  else if (event->matches(QKeySequence::Cut)) {
+    this->cut();
+  }
+  else if (event->matches(QKeySequence::Copy)) {
+    this->copy();
+  }
+  else if (event->matches(QKeySequence::Paste)) {
+    this->paste();
+  }
+  else {
+    qDebug() << "EventSheet::keyPressEvent  " << event->key();
+    QTableWidget::keyPressEvent(event);  // Propagate event
+  }
 }
 
 void EventSheet::add(double value)
@@ -662,10 +763,64 @@ void EventSheet::randomize(double min, double max, int mode)
       value = min + ((double) qrand() / (double) RAND_MAX) * (max - min);
     }
     else /*if (mode == 1)*/ {  // Integers only
-      value = min + (qrand() % (int) (max-min));
+      value = min + (qrand() % (int) (max - min + 1)); // Include max value as a possibility
     }
     item->setData(Qt::DisplayRole,
                   QVariant(value));
+  }
+}
+
+void EventSheet::shuffle(int iterations)
+{
+  QTime midnight(0, 0, 0);
+  qsrand(midnight.secsTo(QTime::currentTime()));
+  QModelIndexList list = this->selectedIndexes();
+  for (int i = 0; i < iterations; i++) { // First traverse to copy values
+    int num1 = qrand() % list.size();
+    QTableWidgetItem * item1 = this->item(list[num1].row(), list[num1].column());
+    int num2 = qrand() % list.size();
+    while (num2 == num1) {
+      num2 = qrand() % list.size();
+    }
+    QTableWidgetItem * item2 = this->item(list[num2].row(), list[num2].column());
+    QVariant value1 = QVariant();
+    if (item1 != 0) {
+      value1 = item1->data(Qt::DisplayRole);
+    }
+    else {
+      item1 = new QTableWidgetItem();
+      this->setItem(list[i].row(), list[i].column(), item1);
+    }
+    if (item2 == 0) {
+      item2 = new QTableWidgetItem();
+      this->setItem(list[i].row(), list[i].column(), item2);
+    }
+    item1->setData(Qt::DisplayRole,item2->data(Qt::DisplayRole));
+    item2->setData(Qt::DisplayRole,value1);
+  }
+}
+
+void EventSheet::rotate(int amount)
+{
+  QModelIndexList list = this->selectedIndexes();
+  QList<QVariant> oldValues;
+  for (int i = 0; i < list.size(); i++) { // First traverse to copy values
+    QTableWidgetItem * item = this->item(list[i].row(), list[i].column());
+    if (item != 0) {
+      oldValues.append(item->data(Qt::DisplayRole));
+    }
+    else {
+      oldValues.append(QVariant());
+    }
+  }
+  for (int i = 0; i < list.size(); i++) { // Then put in rotated values
+    QTableWidgetItem * item = this->item(list[i].row(), list[i].column());
+    if (item == 0) {
+      item = new QTableWidgetItem();
+      this->setItem(list[i].row(), list[i].column(), item);
+    }
+    int index = (i - amount + list.size())%list.size();
+    item->setData(Qt::DisplayRole,oldValues[index]);
   }
 }
 
@@ -791,4 +946,15 @@ void EventSheet::createActions()
   deleteRowAct->setStatusTip(tr("Delete Row"));
   deleteRowAct->setIconText(tr("Delete Row"));
   connect(deleteRowAct, SIGNAL(triggered()), this, SLOT(deleteRow()));
+}
+
+void EventSheet::selectionChanged()
+{
+  QModelIndexList list = this->selectedIndexes();
+  if (list.size() > 1) {
+    this->setDragDropMode(QAbstractItemView::DragDrop); // Allow dragging items
+  }
+  else {
+    this->setDragDropMode(QAbstractItemView::NoDragDrop); // Allow extending selection
+  }
 }

@@ -105,7 +105,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   duplicateAct->setShortcut(tr("Ctrl+D"));
   connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
   deleteAct = new QAction(tr("Delete Selected"), this);
-  deleteAct->setShortcut(tr("Ctrl+M"));
+//  deleteAct->setShortcut(tr("Ctrl+M"));
 //   QList<QKeySequence> deleteShortcuts;
 //   deleteShortcuts << QKeySequence::Delete << Qt::Key_Backspace << Qt::Key_Delete;
 //   deleteAct->setShortcuts(deleteShortcuts);
@@ -660,6 +660,9 @@ void WidgetPanel::mouseReleaseEvent(QMouseEvent * event)
 void WidgetPanel::keyPressEvent(QKeyEvent *event)
 {
   if (!event->isAutoRepeat() or m_repeatKeys) {
+    if (event->matches(QKeySequence::Delete)) {
+      this->deleteSelected();
+    }
     QString key = event->text();
 //     qDebug() << key ;
     if (key != "") {

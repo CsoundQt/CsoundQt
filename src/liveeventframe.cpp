@@ -26,8 +26,8 @@
 #include <QTextEdit>
 #include <QResizeEvent>
 
-LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent) :
-    QFrame(parent), m_csdName(csdName)
+LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags f) :
+    QFrame(parent, f), m_csdName(csdName)
 {
   setupUi(this);
 

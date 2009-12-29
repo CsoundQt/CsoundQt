@@ -703,7 +703,7 @@ LiveEventFrame * DocumentPage::newLiveEventFrame()
   qDebug() << "DocumentPage::newLiveEventFrame()";
   // TODO delete these frames!!!
   // TODO remove from QVector when they are deleted
-  LiveEventFrame *e = new LiveEventFrame("Live Event");
+  LiveEventFrame *e = new LiveEventFrame("Live Event", this, Qt::Window);
 //  e->show();
   e->setAttribute(Qt::WA_DeleteOnClose, false);
   liveEventFrames.append(e);
