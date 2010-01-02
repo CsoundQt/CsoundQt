@@ -186,6 +186,8 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     LiveEventFrame *frame = newLiveEventFrame();
     QString scoText = liveEventsText.mid(liveEventsText.indexOf(">") + 1,
                                          liveEventsText.indexOf("</EventPanel>") - liveEventsText.indexOf(">") - 1 );
+    frame->getSheet()->setRowCount(0);
+    frame->getSheet()->setColumnCount(6);
     frame->getSheet()->setFromText(scoText);
     if (liveEventsText.contains("tempo=\"")) {
       int index = liveEventsText.indexOf("tempo=\"") + 7;
@@ -528,12 +530,14 @@ int DocumentPage::currentLine()
 
 void DocumentPage::showLiveEventFrames(bool visible)
 {
-  qDebug() << "DocumentPage::showLiveEventFrames  " << visible;
+  qDebug() << "DocumentPage::showLiveEventFrames  " << visible << (int) this;
   for (int i = 0; i < liveEventFrames.size(); i++) {
-    if (visible)
+    if (visible) {
       liveEventFrames[i]->show();
-    else
+    }
+    else {
       liveEventFrames[i]->hide();
+    }
   }
 }
 
@@ -702,10 +706,11 @@ LiveEventFrame * DocumentPage::newLiveEventFrame()
 {
   qDebug() << "DocumentPage::newLiveEventFrame()";
   // TODO delete these frames!!!
-  // TODO remove from QVector when they are deleted
+  // TODO remove from QVector when they are deleted individually
   LiveEventFrame *e = new LiveEventFrame("Live Event", this, Qt::Window);
-//  e->show();
+//  e->hide();
   e->setAttribute(Qt::WA_DeleteOnClose, false);
+
   liveEventFrames.append(e);
   connect(e, SIGNAL(closed()), this, SLOT(liveEventFrameClosed()));
   emit registerLiveEvent(dynamic_cast<QWidget *>(e));
@@ -720,6 +725,7 @@ void DocumentPage::changed()
 
 void DocumentPage::liveEventFrameClosed()
 {
+  qDebug() << "DocumentPage::liveEventFrameClosed()";
 //  LiveEventFrame *e = dynamic_cast<LiveEventFrame *>(QObject::sender());
 //  if (e != 0) { // This shouldn't really be necessary but just in case
   bool shown = false;

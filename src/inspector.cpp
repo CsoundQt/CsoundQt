@@ -53,6 +53,8 @@ void Inspector::parseText(const QString &text)
   instrItem->setLine(-1);
   TreeItem *ftableItem = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
   ftableItem->setLine(-1);
+  TreeItem *scoreItem = new TreeItem(m_treeWidget, QStringList(tr("Score")));
+  scoreItem->setLine(-1);
   QStringList lines = text.split(QRegExp("[\n\r]"));
   for (int i = 0; i< lines.size(); i++) {
     if (lines[i].trimmed().startsWith("instr")) {
@@ -61,29 +63,31 @@ void Inspector::parseText(const QString &text)
       TreeItem *newItem = new TreeItem(instrItem, columnslist);
       newItem->setLine(i + 1);
     }
-//    if (lines[i].trimmed().contains(QRegExp("^[\\s]*instr"))) {
-//      QString text = lines[i].trimmed();
-//      QStringList columnslist(text.simplified());
-//      TreeItem *newItem = new TreeItem(instrItem, columnslist);
-//      newItem->setLine(i + 1);
-//    }
-    if (lines[i].trimmed().startsWith("opcode")) {
+    else if (lines[i].trimmed().startsWith("opcode")) {
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
       TreeItem *newItem = new TreeItem(opcodeItem, columnslist);
       newItem->setLine(i + 1);
     }
-    if (lines[i].trimmed().contains(QRegExp("^f\\s*\\d")) ||
+    else if (lines[i].trimmed().contains(QRegExp("^f\\s*\\d")) ||
         lines[i].trimmed().contains(QRegExp("^[\\w]*[\\s]*ftgen"))) {
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
       TreeItem *newItem = new TreeItem(ftableItem, columnslist);
       newItem->setLine(i + 1);
     }
+    else if (lines[i].trimmed().contains(QRegExp("^s\\s*\\b")) ||
+        lines[i].trimmed().contains(QRegExp("^m\\s*\\b"))) {
+      QString text = lines[i].trimmed();
+      QStringList columnslist(text.simplified());
+      TreeItem *newItem = new TreeItem(scoreItem, columnslist);
+      newItem->setLine(i + 1);
+    }
   }
   m_treeWidget->expandItem(opcodeItem);
   m_treeWidget->expandItem(instrItem);
   m_treeWidget->expandItem(ftableItem);
+  m_treeWidget->expandItem(scoreItem);
 }
 
 void Inspector::focusInEvent (QFocusEvent * event)

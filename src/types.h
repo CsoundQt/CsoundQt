@@ -30,6 +30,8 @@
 #define QCS_QUEUETIMER_DEFAULT_TIME 50
 // Maximum pfields QuteCsound can accept for realtime score events
 #define EVENTS_MAX_PFIELDS 256
+// Maximum number of files in recent files menu
+#define QUTE_MAX_RECENT_FILES 20
 
 #ifdef LINUX
 #define DEFAULT_HTML_DIR "/usr/local/share/doc/csound/html"

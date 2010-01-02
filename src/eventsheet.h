@@ -38,7 +38,7 @@ class EventSheet : public QTableWidget
     QString getLine(int number, bool scaleTempo = false, bool storeNumber = false);
     double getTempo();
     QString getName();
-    void setFromText(QString text);
+    void setFromText(QString text, int rowOffset = 0, int columnOffset = 0, int numRows = 0, int numColumns = 0);
 
   public slots:
     void setTempo(double value);
@@ -77,6 +77,7 @@ class EventSheet : public QTableWidget
 
   private:
     void createActions();
+    QList<QPair<QString, QString> > parseLine(QString line);
 
     // Operations
     void add(double value);

@@ -218,7 +218,7 @@ void Highlighter::setLastRules()
 
   labelFormat.setForeground(QColor(205,92,92));
   labelFormat.setFontWeight(QFont::Bold);
-  rule.pattern = QRegExp("\\b[a-zA-Z0-9]*:[^a-zA-Z0-9]*");
+  rule.pattern = QRegExp("\\b[\\w]*:[^\\w;]*");
   rule.format = labelFormat;
   lastHighlightingRules.append(rule);
 

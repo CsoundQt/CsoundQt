@@ -141,7 +141,10 @@ qutecsound::qutecsound(QStringList fileNames)
       }
     }
     if (lastTabIndex < documentPages.size()) {
-      documentTabs->setCurrentIndex(lastTabIndex);
+      if (documentTabs->currentIndex() != lastTabIndex)
+        documentTabs->setCurrentIndex(lastTabIndex);
+      else
+        this->changePage(lastTabIndex); // To make sure actions like show live score are executed
     }
   }
   // Open files passed in the command line. Only valid for non OS X platforms
@@ -251,34 +254,30 @@ void qutecsound::changeFont()
 void qutecsound::changePage(int index)
 {
   stop();
-  if (textEdit != NULL) {
-    textEdit->setMacWidgetsText(widgetPanel->widgetsText()); //Updated changes to widgets in file
-    textEdit->showLiveEventFrames(false);
-    disconnect(showLiveEventsAct, SIGNAL(toggled(bool)), textEdit, SLOT(showLiveEventFrames(bool)));
+  qDebug() << "qutecsound::changePage " << index;
+  if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
+    documentPages[curPage]->showLiveEventFrames(false);
+    documentPages[curPage]->setMacWidgetsText(widgetPanel->widgetsText()); //Updated changes to widgets in file
+    disconnect(showLiveEventsAct, SIGNAL(toggled(bool)), documentPages[curPage], SLOT(showLiveEventFrames(bool)));
   }
   if (index < 0) {
     qDebug() << "qutecsound::changePage index < 0";
     return;
   }
-  textEdit = documentPages[index];
-  textEdit->setTabStopWidth(m_options->tabWidth);
-  textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
-  textEdit->showLiveEventFrames(showLiveEventsAct->isChecked());
   curPage = index;
   setCurrentFile(documentPages[curPage]->fileName);
   connectActions();
+  documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
+  documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
+  documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
   setWidgetPanelGeometry();
-  disconnect(m_inspector, 0, 0, 0);
-  connect(m_inspector, SIGNAL(jumpToLine(int)),
-          textEdit, SLOT(jumpToLine(int)));
-  connect(showLiveEventsAct, SIGNAL(toggled(bool)), documentPages[curPage], SLOT(showLiveEventFrames(bool)));
-  connect(textEdit, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
   m_inspector->parseText(documentPages[curPage]->toPlainText());
+  textEdit = documentPages[curPage];
 }
 
 void qutecsound::updateWidgets()
 {
-  widgetPanel->loadWidgets(textEdit->getMacWidgetsText());
+  widgetPanel->loadWidgets(documentPages[curPage]->getMacWidgetsText());
   widgetPanel->showTooltips(m_options->showTooltips);
 }
 
@@ -407,46 +406,10 @@ void qutecsound::reload()
   }
 }
 
-void qutecsound::openRecent0()
+void qutecsound::openRecent()
 {
-//  if (maybeSave()) {
-    openRecent(recentFiles[0]);
-//  }
-}
-
-void qutecsound::openRecent1()
-{
-//  if (maybeSave()) {
-    openRecent(recentFiles[1]);
-//  }
-}
-
-void qutecsound::openRecent2()
-{
-//  if (maybeSave()) {
-    openRecent(recentFiles[2]);
-//  }
-}
-
-void qutecsound::openRecent3()
-{
-//  if (maybeSave()) {
-    openRecent(recentFiles[3]);
-//  }
-}
-
-void qutecsound::openRecent4()
-{
-//  if (maybeSave()) {
-    openRecent(recentFiles[4]);
-//  }
-}
-
-void qutecsound::openRecent5()
-{
-//  if (maybeSave()) {
-    openRecent(recentFiles[5]);
-//  }
+  QString fileName = static_cast<QAction *>(sender())->text();
+  openRecent(fileName);
 }
 
 void qutecsound::openRecent(QString fileName)
@@ -809,7 +772,7 @@ void qutecsound::join()
     text += scoText;
     text += "</CsScore>\n</CsoundSynthesizer>\n";
     newFile();
-    documentPages[curPage]->setTextString(text, m_options->showWidgetsOnRun);
+    documentPages[curPage]->setTextString(text, m_options->saveWidgets);
   }
 //   else {
 //     qDebug("qutecsound::join() : No Action");
@@ -861,7 +824,7 @@ void qutecsound::runCsound(bool realtime)
     useAPI = false;
   }
   if (m_options->terminalFLTK) { // if "FLpanel" is found in csd run from terminal
-    if (textEdit->document()->toPlainText().contains("FLpanel"))
+    if (documentPages[curPage]->document()->toPlainText().contains("FLpanel"))
       useAPI = false;
   }
   if (documentPages[curPage]->fileName.isEmpty()) {
@@ -1969,6 +1932,12 @@ void qutecsound::createActions()
 //   closeTabAct->setIcon(QIcon(":/images/cross.png"));
   connect(printAct, SIGNAL(triggered()), this, SLOT(print()));
 
+  for (int i = 0; i < QUTE_MAX_RECENT_FILES; i++) {
+    QAction *newAction = new QAction(this);
+    openRecentAct.append(newAction);
+    connect(newAction, SIGNAL(triggered()), this, SLOT(openRecent()));
+  }
+
   exitAct = new QAction(tr("E&xit"), this);
   exitAct->setStatusTip(tr("Exit the application"));
 //   exitAct->setIconText(tr("Exit"));
@@ -1978,11 +1947,6 @@ void qutecsound::createActions()
   createCodeGraphAct->setStatusTip(tr("View Code Graph"));
 //   createCodeGraphAct->setIconText("Exit");
   connect(createCodeGraphAct, SIGNAL(triggered()), this, SLOT(createCodeGraph()));
-
-//   for (int i = 0; i < recentFiles.size(); i++) {
-//     openRecentAct[i] = new QAction(tr("Recent 0"), this);
-//     connect(openRecentAct[i], SIGNAL(triggered()), this, SLOT(openRecent()));
-//   }
 
   undoAct = new QAction(QIcon(":/images/gtk-undo.png"), tr("Undo"), this);
   undoAct->setStatusTip(tr("Undo last action"));
@@ -2266,10 +2230,11 @@ void qutecsound::setKeyboardShortcuts()
 
 void qutecsound::connectActions()
 {
+  DocumentPage * doc = documentPages[curPage];
   disconnect(undoAct, 0, 0, 0);
-  connect(undoAct, SIGNAL(triggered()), textEdit, SLOT(undo()));
+  connect(undoAct, SIGNAL(triggered()), doc, SLOT(undo()));
   disconnect(redoAct, 0, 0, 0);
-  connect(redoAct, SIGNAL(triggered()), textEdit, SLOT(redo()));
+  connect(redoAct, SIGNAL(triggered()), doc, SLOT(redo()));
   disconnect(cutAct, 0, 0, 0);
   connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
   disconnect(copyAct, 0, 0, 0);
@@ -2281,47 +2246,68 @@ void qutecsound::connectActions()
   disconnect(uncommentAct, 0, 0, 0);
   disconnect(indentAct, 0, 0, 0);
   disconnect(unindentAct, 0, 0, 0);
-//   connect(commentAct, SIGNAL(triggered()), textEdit, SLOT(comment()));
-  connect(uncommentAct, SIGNAL(triggered()), textEdit, SLOT(uncomment()));
-  connect(indentAct, SIGNAL(triggered()), textEdit, SLOT(indent()));
-  connect(unindentAct, SIGNAL(triggered()), textEdit, SLOT(unindent()));
+//   connect(commentAct, SIGNAL(triggered()), doc, SLOT(comment()));
+  connect(uncommentAct, SIGNAL(triggered()), doc, SLOT(uncomment()));
+  connect(indentAct, SIGNAL(triggered()), doc, SLOT(indent()));
+  connect(unindentAct, SIGNAL(triggered()), doc, SLOT(unindent()));
 
-  disconnect(textEdit, SIGNAL(copyAvailable(bool)), 0, 0);
-  disconnect(textEdit, SIGNAL(copyAvailable(bool)), 0, 0);
+  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
+  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
   //TODO put these back but only when document has focus
-//   connect(textEdit, SIGNAL(copyAvailable(bool)),
+//   connect(doc, SIGNAL(copyAvailable(bool)),
 //           cutAct, SLOT(setEnabled(bool)));
-//   connect(textEdit, SIGNAL(copyAvailable(bool)),
+//   connect(doc, SIGNAL(copyAvailable(bool)),
 //           copyAct, SLOT(setEnabled(bool)));
 
-  disconnect(textEdit, SIGNAL(textChanged()), 0, 0);
-  disconnect(textEdit, SIGNAL(cursorPositionChanged()), 0, 0);
-  connect(textEdit, SIGNAL(textChanged()),
+  disconnect(doc, SIGNAL(textChanged()), 0, 0);
+  disconnect(doc, SIGNAL(cursorPositionChanged()), 0, 0);
+  connect(doc, SIGNAL(textChanged()),
           this, SLOT(documentWasModified()));
-  connect(textEdit, SIGNAL(textChanged()),
+  connect(doc, SIGNAL(textChanged()),
           this, SLOT(syntaxCheck()));
-  connect(textEdit, SIGNAL(cursorPositionChanged()),
+  connect(doc, SIGNAL(cursorPositionChanged()),
           this, SLOT(syntaxCheck()));
-  connect(textEdit, SIGNAL(selectionChanged()),
+  connect(doc, SIGNAL(selectionChanged()),
           this, SLOT(checkSelection()));
 
   disconnect(widgetPanel, SIGNAL(widgetsChanged(QString)),0,0);
 //   connect(widgetPanel, SIGNAL(widgetsChanged(QString)),
-//           textEdit, SLOT(setMacWidgetsText(QString)) );
+//           doc, SLOT(setMacWidgetsText(QString)) );
   disconnect(widgetPanel, SIGNAL(moved(QPoint)),0,0);
   connect(widgetPanel, SIGNAL(moved(QPoint)),
-          textEdit, SLOT(setWidgetPanelPosition(QPoint)) );
+          doc, SLOT(setWidgetPanelPosition(QPoint)) );
   disconnect(widgetPanel, SIGNAL(resized(QSize)),0,0);
   connect(widgetPanel, SIGNAL(resized(QSize)),
-          textEdit, SLOT(setWidgetPanelSize(QSize)) );
-  disconnect(textEdit, SIGNAL(currentLineChanged(int)), 0, 0);
-  connect(textEdit, SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
-  connect(textEdit, SIGNAL(currentTextUpdated()), this, SLOT(updateGUI()));
+          doc, SLOT(setWidgetPanelSize(QSize)) );
+  disconnect(doc, SIGNAL(currentLineChanged(int)), 0, 0);
+  connect(doc, SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
+  connect(doc, SIGNAL(currentTextUpdated()), this, SLOT(updateGUI()));
+
+  disconnect(m_inspector, 0, 0, 0);
+  connect(m_inspector, SIGNAL(jumpToLine(int)),
+          doc, SLOT(jumpToLine(int)));
+  connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventFrames(bool)));
+  connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
+
 }
 
 void qutecsound::createMenus()
 {
   fileMenu = menuBar()->addMenu(tr("File"));
+  fileMenu->addAction(newAct);
+  fileMenu->addAction(openAct);
+  fileMenu->addAction(saveAct);
+  fileMenu->addAction(saveAsAct);
+  fileMenu->addAction(saveNoWidgetsAct);
+  fileMenu->addAction(reloadAct);
+//   fileMenu->addAction(cabbageAct);
+  fileMenu->addAction(closeTabAct);
+  fileMenu->addAction(printAct);
+  fileMenu->addSeparator();
+  fileMenu->addAction(exitAct);
+  fileMenu->addSeparator();
+
+  recentMenu = fileMenu->addMenu(tr("Recent files"));
 
   editMenu = menuBar()->addMenu(tr("Edit"));
   editMenu->addAction(undoAct);
@@ -2526,22 +2512,9 @@ void qutecsound::createMenus()
 
 void qutecsound::fillFileMenu()
 {
-  fileMenu->clear();
-  fileMenu->addAction(newAct);
-  fileMenu->addAction(openAct);
-  fileMenu->addAction(saveAct);
-  fileMenu->addAction(saveAsAct);
-  fileMenu->addAction(saveNoWidgetsAct);
-  fileMenu->addAction(reloadAct);
-//   fileMenu->addAction(cabbageAct);
-  fileMenu->addAction(closeTabAct);
-  fileMenu->addAction(printAct);
-  fileMenu->addSeparator();
-  fileMenu->addAction(exitAct);
-  fileMenu->addSeparator();
-  recentMenu = fileMenu->addMenu(tr("Recent files"));
+  recentMenu->clear();
   for (int i = 0; i< recentFiles.size(); i++) {
-    if (recentFiles[i] != "") {
+    if (i < recentFiles.size() && recentFiles[i] != "") {
       openRecentAct[i]->setText(recentFiles[i]);
       recentMenu->addAction(openRecentAct[i]);
     }
@@ -2614,35 +2587,16 @@ void qutecsound::readSettings()
   if (m_options->language < 0)
     m_options->language = 0;
   recentFiles.clear();
-  QAction *newAct;
-  recentFiles.append(settings.value("recentFiles0", "").toString());
-  newAct = new QAction(this);
-  openRecentAct.append(newAct);
-  connect(newAct, SIGNAL(triggered()), this, SLOT(openRecent0()));
-  recentFiles.append(settings.value("recentFiles1", "").toString());
-  newAct = new QAction(this);
-  openRecentAct.append(newAct);
-  connect(newAct, SIGNAL(triggered()), this, SLOT(openRecent1()));
-  recentFiles.append(settings.value("recentFiles2", "").toString());
-  newAct = new QAction(this);
-  openRecentAct.append(newAct);
-  connect(newAct, SIGNAL(triggered()), this, SLOT(openRecent2()));
-  recentFiles.append(settings.value("recentFiles3", "").toString());
-  newAct = new QAction(this);
-  openRecentAct.append(newAct);
-  connect(newAct, SIGNAL(triggered()), this, SLOT(openRecent3()));
-  recentFiles.append(settings.value("recentFiles4", "").toString());
-  newAct = new QAction(this);
-  openRecentAct.append(newAct);
-  connect(newAct, SIGNAL(triggered()), this, SLOT(openRecent4()));
-  recentFiles.append(settings.value("recentFiles5", "").toString());
-  newAct = new QAction(this);
-  openRecentAct.append(newAct);
-  connect(newAct, SIGNAL(triggered()), this, SLOT(openRecent5()));
+  recentFiles = settings.value("recentFiles").toStringList();
   settings.beginGroup("Shortcuts");
-  for (int i = 0; i < m_keyActions.size();i++) {
-    QString shortcut = settings.value(QString::number(i), "").toString();
-    m_keyActions[i]->setShortcut(shortcut);
+  if (settings.contains("0")) {
+    for (int i = 0; i < m_keyActions.size();i++) {
+      QString shortcut = settings.value(QString::number(i), "").toString();
+      m_keyActions[i]->setShortcut(shortcut);
+    }
+  }
+  else { // No shortcuts are saved, so it is a new installation.
+    setDefaultKeyboardShortcuts();
   }
   settings.endGroup();
   settings.endGroup();
@@ -2754,10 +2708,7 @@ void qutecsound::writeSettings()
   settings.setValue("lastfiledir", lastFileDir);
   settings.setValue("language", _configlists.languageCodes[m_options->language]);
   settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
-  for (int i = 0; i < recentFiles.size();i++) {
-    QString key = "recentFiles" + QString::number(i);
-    settings.setValue(key, recentFiles[i]);
-  }
+  settings.setValue("recentFiles", recentFiles);
   settings.beginGroup("Shortcuts");
   for (int i = 0; i < m_keyActions.size();i++) {
 //     QString key = m_keyActions[i]->text();
@@ -2939,6 +2890,11 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
     statusBar()->showMessage(tr("File already open"), 10000);
     return false;
   }
+  if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
+    documentPages[curPage]->showLiveEventFrames(false);
+    documentPages[curPage]->setMacWidgetsText(widgetPanel->widgetsText()); //Updated changes to widgets in file
+    disconnect(showLiveEventsAct, SIGNAL(toggled(bool)), documentPages[curPage], SLOT(showLiveEventFrames(bool)));
+  }
   QApplication::setOverrideCursor(Qt::WaitCursor);
   DocumentPage *newPage = new DocumentPage(this, opcodeTree);
   documentPages.append(newPage);
@@ -2949,14 +2905,12 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
   documentPages[curPage]->setColorVariables(m_options->colorVariables);
   documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
-//  documentPages[curPage]->newLiveEventFrame(); //FIXME This should only be here for testing
   documentTabs->setCurrentIndex(curPage);
-  textEdit = newPage;
   connectActions();
 // #ifdef QUTECSOUND_COPYPASTE
-  connect(textEdit, SIGNAL(doCut()), this, SLOT(cut()));
-  connect(textEdit, SIGNAL(doCopy()), this, SLOT(copy()));
-  connect(textEdit, SIGNAL(doPaste()), this, SLOT(paste()));
+  connect(documentPages[curPage], SIGNAL(doCut()), this, SLOT(cut()));
+  connect(documentPages[curPage], SIGNAL(doCopy()), this, SLOT(copy()));
+  connect(documentPages[curPage], SIGNAL(doPaste()), this, SLOT(paste()));
 // #endif
 
   if (fileName.startsWith(m_options->csdocdir))
@@ -2971,10 +2925,11 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
     if (!line.endsWith("\n"))
       text += "\n";
   }
-  textEdit->setTextString(text, m_options->saveWidgets);
+  documentPages[curPage]->setTextString(text, m_options->saveWidgets);
   QApplication::restoreOverrideCursor();
 
-  textEdit->document()->setModified(false);
+//  documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
+  documentPages[curPage]->document()->setModified(false);
   if (fileName == ":/default.csd")
     fileName = QString("");
   documentPages[curPage]->fileName = fileName;
@@ -2987,12 +2942,13 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   }
   if (recentFiles.count(fileName) == 0 && fileName!="" && !fileName.startsWith(":/")) {
     recentFiles.prepend(fileName);
-    recentFiles.removeLast();
+    if (recentFiles.size() > QUTE_MAX_RECENT_FILES)
+      recentFiles.removeLast();
     fillFileMenu();
   }
   changeFont();
   statusBar()->showMessage(tr("File loaded"), 2000);
-  textEdit->showLiveEventFrames(showLiveEventsAct->isChecked());
+  textEdit = documentPages[curPage];
   setWidgetPanelGeometry();
   updateGUI();
   if (runNow && m_options->autoPlay) {

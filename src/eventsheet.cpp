@@ -210,162 +210,181 @@ QString EventSheet::getName()
   return m_name;
 }
 
-void EventSheet::setFromText(QString text)
+void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int numRows, int numColumns)
 {
  // Separataion is stored in UserRole of items
   // remember to treat comments and formulas properly
   QStringList lines = text.split("\n");
-  this->setRowCount(0);
-  this->setColumnCount(6);
   for (int i = 0; i < lines.size(); i++) {
-    if (this->rowCount() <= i) {
+    if (numRows != 0 && i >= numRows) {  // Only paste up to a certain number of rows if not 0
+      break;
+    }
+    while (this->rowCount() <= i + rowOffset) {
       appendRow();
     }
     QString line = lines[i].trimmed(); //Remove whitespace from start and end
-    int count = 0;
-    int pcount = 0;
-    bool formula = false;
-    bool string = false;
-    bool isp = true; // Assume starting on a pfield, not white space
-    QString pvalue = "";
-    QString spacing = "";
-    if (!line.isEmpty() && (line[0] == 'i' || line[0] == 'f') ) {
-      QTableWidgetItem * item = this->item(i, pcount);
-      if (item == 0) {
-        item = new QTableWidgetItem();
-        this->setItem(i, pcount, item);
+    QList<QPair<QString, QString> > fields = parseLine(line);
+    for (int j = 0; j < fields.size(); j++) {
+      if (numColumns != 0 && j >= numColumns) {  // Only paste up to a certain number of columns if not 0
+        break;
       }
-      item->setData(Qt::DisplayRole, QString(line[0]));
-      count++;
-      isp = false; // consider p-field done with first character.
-    }
-    while (count < line.size()) {
-      if (isp == true || formula || string) { // Processing p-field
-        if (line[count] == '"') { // string takes precedence over formulas and comments
-          string = !string;
-        }
-        else if (line[count] == '[') { //Start of formula
-          formula = true;  // This should never happen as this character should always be after whitespace....
-        }
-        else if (line[count] == ']') { //End of formula
-          formula = false;
-        }
-        else if (line[count] == ';') { // comment
-          // First add current pfield, in case there is no spacing
-          if (this->columnCount() <= pcount)
-            appendColumn();
-          QTableWidgetItem * item = this->item(i, pcount);
-          if (item == 0) {
-            item = new QTableWidgetItem();
-            this->setItem(i, pcount, item);
-          }
-          if (pvalue != "") { // Only add it if it is not empty, e.g. the comment is the first item
-            item->setData(Qt::DisplayRole, pvalue);
-          }
-          // Now add comment
-          pcount++;
-          QString comment = line.mid(count);
-          qDebug() << "EventSheet::setFromText: " << i << "---" << pcount << " - - " << comment;
-          if (this->columnCount() <= pcount) {
-            appendColumn();
-          }
-          item = this->item(i, pcount);
-          if (item == 0) {
-            item = new QTableWidgetItem();
-            this->setItem(i, pcount, item);
-          }
-          item->setData(Qt::DisplayRole, comment);
-          isp = false;  // last p-field has been processed here
-          break; // Nothing more todo for this line
-        }  // End of comment processing
-        // ----
-        if (line[count].isSpace() && !formula && !string) { // White space so p-field has finished
-          if (this->columnCount() <= pcount) {
-            appendColumn();
-          }
-          QTableWidgetItem * item = this->item(i, pcount);
-          if (item == 0) {
-            item = new QTableWidgetItem();
-            this->setItem(i, pcount, item);
-          }
-          item->setData(Qt::DisplayRole, pvalue); // TODO are double values treated correctly
-          spacing = "";
-          spacing.append(line[count]);
-          isp = false;
-        }
-        else { // A character or formula so continue p-field processing
-          pvalue.append(line[count]);
-        }
-      }
-      else { // Processing white space
-        if (line[count] == '"') { // string
-          string = !string;
-        }
-        else if (line[count] == '[') { //Start of formula
-          formula = true;
-        }
-        else if (line[count] == ';') { // comment
-          if (spacing != "") { // Process spacing if any
-            QTableWidgetItem * item = this->item(i, pcount);
-            if (item == 0) {
-              item = new QTableWidgetItem();
-              this->setItem(i, pcount, item);
-            }
-            item->setData(Qt::UserRole, spacing);
-          }
-          pcount++;
-          QString comment = line.mid(count);
-          if (this->columnCount() <= pcount) {
-            appendColumn();
-          }
-          QTableWidgetItem * item = this->item(i, pcount);
-          if (item == 0) {
-            item = new QTableWidgetItem();
-            this->setItem(i, pcount, item);
-          }
-          item->setData(Qt::DisplayRole, comment);
-          break; // Nothing more todo on this line
-        }
-        // ---
-        if (!line[count].isSpace()) { // Not White space so new p-field has started
-          QTableWidgetItem * item = this->item(i, pcount);
-          if (item == 0) {
-            item = new QTableWidgetItem();
-            this->setItem(i, pcount, item);
-          }
-          item->setData(Qt::UserRole, spacing); // TODO are double values treated correctly?
-          isp = true;
-          pvalue = "";
-          pvalue.append(line[count]);
-          pcount++;
-        }
-        else { // Continue p-field processing
-          spacing.append(line[count]);
-        }
-      }
-      count++;
-    }
-    // Process final p-field
-    if (isp == true) {
-      if (this->columnCount() <= pcount) {
+      while (this->columnCount() <= j + columnOffset) {
         appendColumn();
       }
-      QTableWidgetItem * item = this->item(i, pcount);
+      QTableWidgetItem * item = this->item(i + rowOffset, j + columnOffset);
       if (item == 0) {
         item = new QTableWidgetItem();
-        this->setItem(i, pcount, item);
+        this->setItem(i + rowOffset, j + columnOffset, item);
       }
-      item->setData(Qt::DisplayRole, pvalue);
-    }
-    else {
-      QTableWidgetItem * item = this->item(i, pcount);
-      if (item == 0) {
-        item = new QTableWidgetItem();
-        this->setItem(i, pcount, item);
-      }
-      item->setData(Qt::UserRole, spacing);
+      item->setData(Qt::DisplayRole, fields[j].first);
+      item->setData(Qt::UserRole, fields[j].second);
     }
   }
+//    int count = 0;
+//    int pcount = 0;
+//    bool formula = false;
+//    bool string = false;
+//    bool isp = true; // Assume starting on a pfield, not white space
+//    QString pvalue = "";
+//    QString spacing = "";
+//    if (!line.isEmpty() && (line[0] == 'i' || line[0] == 'f') ) {
+//      QTableWidgetItem * item = this->item(i, pcount);
+//      if (item == 0) {
+//        item = new QTableWidgetItem();
+//        this->setItem(i, pcount, item);
+//      }
+//      item->setData(Qt::DisplayRole, QString(line[0]));
+//      count++;
+//      isp = false; // consider p-field done with first character.
+//    }
+//    while (count < line.size()) {
+//      if (isp == true || formula || string) { // Processing p-field
+//        if (line[count] == '"') { // string takes precedence over formulas and comments
+//          string = !string;
+//        }
+//        else if (line[count] == '[') { //Start of formula
+//          formula = true;  // This should never happen as this character should always be after whitespace....
+//        }
+//        else if (line[count] == ']') { //End of formula
+//          formula = false;
+//        }
+//        else if (line[count] == ';') { // comment
+//          // First add current pfield, in case there is no spacing
+//          if (this->columnCount() <= pcount)
+//            appendColumn();
+//          QTableWidgetItem * item = this->item(i, pcount);
+//          if (item == 0) {
+//            item = new QTableWidgetItem();
+//            this->setItem(i, pcount, item);
+//          }
+//          if (pvalue != "") { // Only add it if it is not empty, e.g. the comment is the first item
+//            item->setData(Qt::DisplayRole, pvalue);
+//          }
+//          // Now add comment
+//          pcount++;
+//          QString comment = line.mid(count);
+//          qDebug() << "EventSheet::setFromText: " << i << "---" << pcount << " - - " << comment;
+//          if (this->columnCount() <= pcount) {
+//            appendColumn();
+//          }
+//          item = this->item(i, pcount);
+//          if (item == 0) {
+//            item = new QTableWidgetItem();
+//            this->setItem(i, pcount, item);
+//          }
+//          item->setData(Qt::DisplayRole, comment);
+//          isp = false;  // last p-field has been processed here
+//          break; // Nothing more todo for this line
+//        }  // End of comment processing
+//        // ----
+//        if (line[count].isSpace() && !formula && !string) { // White space so p-field has finished
+//          if (this->columnCount() <= pcount) {
+//            appendColumn();
+//          }
+//          QTableWidgetItem * item = this->item(i, pcount);
+//          if (item == 0) {
+//            item = new QTableWidgetItem();
+//            this->setItem(i, pcount, item);
+//          }
+//          item->setData(Qt::DisplayRole, pvalue); // TODO are double values treated correctly
+//          spacing = "";
+//          spacing.append(line[count]);
+//          isp = false;
+//        }
+//        else { // A character or formula so continue p-field processing
+//          pvalue.append(line[count]);
+//        }
+//      }
+//      else { // Processing white space
+//        if (line[count] == '"') { // string
+//          string = !string;
+//        }
+//        else if (line[count] == '[') { //Start of formula
+//          formula = true;
+//        }
+//        else if (line[count] == ';') { // comment
+//          if (spacing != "") { // Process spacing if any
+//            QTableWidgetItem * item = this->item(i, pcount);
+//            if (item == 0) {
+//              item = new QTableWidgetItem();
+//              this->setItem(i, pcount, item);
+//            }
+//            item->setData(Qt::UserRole, spacing);
+//          }
+//          pcount++;
+//          QString comment = line.mid(count);
+//          if (this->columnCount() <= pcount) {
+//            appendColumn();
+//          }
+//          QTableWidgetItem * item = this->item(i, pcount);
+//          if (item == 0) {
+//            item = new QTableWidgetItem();
+//            this->setItem(i, pcount, item);
+//          }
+//          item->setData(Qt::DisplayRole, comment);
+//          break; // Nothing more todo on this line
+//        }
+//        // ---
+//        if (!line[count].isSpace()) { // Not White space so new p-field has started
+//          QTableWidgetItem * item = this->item(i, pcount);
+//          if (item == 0) {
+//            item = new QTableWidgetItem();
+//            this->setItem(i, pcount, item);
+//          }
+//          item->setData(Qt::UserRole, spacing); // TODO are double values treated correctly?
+//          isp = true;
+//          pvalue = "";
+//          pvalue.append(line[count]);
+//          pcount++;
+//        }
+//        else { // Continue p-field processing
+//          spacing.append(line[count]);
+//        }
+//      }
+//      count++;
+//    }
+//    // Process final p-field
+//    if (isp == true) {
+//      if (this->columnCount() <= pcount) {
+//        appendColumn();
+//      }
+//      QTableWidgetItem * item = this->item(i, pcount);
+//      if (item == 0) {
+//        item = new QTableWidgetItem();
+//        this->setItem(i, pcount, item);
+//      }
+//      item->setData(Qt::DisplayRole, pvalue);
+//    }
+//    else {
+//      QTableWidgetItem * item = this->item(i, pcount);
+//      if (item == 0) {
+//        item = new QTableWidgetItem();
+//        this->setItem(i, pcount, item);
+//      }
+//      item->setData(Qt::UserRole, spacing);
+//    }
+//    qDebug() << parseLine(line);
+//  }
   if (this->rowCount() == 0)
     this->setRowCount(1);
 }
@@ -458,7 +477,32 @@ void EventSheet::copy(bool cut)
 
 void EventSheet::paste()
 {
-  qDebug() << "text = " << qApp->clipboard()->text();
+  qDebug() << "EventSheet::paste() text = " << qApp->clipboard()->text();
+  QModelIndexList list = this->selectedIndexes();
+  QList<int> selectedRows;
+  QList<int> selectedColumns;
+  int rowCount, columnCount;
+  int lowestRow = 99999, lowestColumn = 99999;
+  for (int i = 0; i < list.size(); i++) { // Get list of selected rows
+    if (!selectedRows.contains(list[i].row()) ) {
+      selectedRows.append(list[i].row());
+      if (list[i].row() < lowestRow) {
+        lowestRow = list[i].row();
+      }
+    }
+    if (!selectedColumns.contains(list[i].column()) ) {
+      selectedColumns.append(list[i].column());
+      if (list[i].column() < lowestColumn) {
+        lowestColumn = list[i].column();
+      }
+    }
+  }
+  rowCount = selectedRows.size();
+  columnCount = selectedColumns.size();
+  if (rowCount <= 1 && columnCount <= 1) {
+    rowCount = columnCount = 0;
+  }
+  setFromText(qApp->clipboard()->text(), lowestRow, lowestColumn, rowCount, columnCount);
 }
 
 void EventSheet::subtract()
@@ -946,6 +990,101 @@ void EventSheet::createActions()
   deleteRowAct->setStatusTip(tr("Delete Row"));
   deleteRowAct->setIconText(tr("Delete Row"));
   connect(deleteRowAct, SIGNAL(triggered()), this, SLOT(deleteRow()));
+}
+
+QList<QPair<QString, QString> > EventSheet::parseLine(QString line)
+{
+  QList<QPair<QString, QString> > list;
+  QPair<QString, QString> field;
+
+  int count = 0;
+  int pcount = 0;
+  bool formula = false;
+  bool string = false;
+  bool isp = true; // Assume starting on a pfield, not white space
+  QString pvalue = "";
+  QString spacing = "";
+  if (!line.isEmpty() && (line[0] == 'i' || line[0] == 'f') ) { // A space is not necessary between these and the first p-field
+    field.first = QString(line[0]);
+    field.second = QString();
+    count++;
+    isp = false; // consider p-field done with first character.
+  }
+  while (count < line.size()) {  // More characters left
+    if (isp == true || formula || string) { // Processing p-field
+      if (line[count] == '"') { // string takes precedence over formulas and comments
+        string = !string;
+      }
+      else if (line[count] == '[') { //Start of formula
+        formula = true;  // This should never happen as this character should always be after whitespace....
+      }
+      else if (line[count] == ']') { //End of formula
+        formula = false;
+      }
+      else if (line[count] == ';') { // comment
+        // First add current pfield, in case there is no spacing
+        field.first = pvalue;
+        field.second = spacing;
+        list.append(field);
+        pcount++;
+        // Now add comment
+        QString comment = line.mid(count);
+        field.first = comment;
+        field.second = "";
+        isp = false;  // last p-field has been processed here
+        break; // Nothing more todo for this line
+      }  // End of comment processing
+      // ----
+      if (line[count].isSpace() && !formula && !string) { // White space so p-field has finished
+        spacing = line[count];
+        isp = false;
+      }
+      else { // A character or formula so continue p-field processing
+        pvalue.append(line[count]);
+        field.first = pvalue;
+      }
+    }
+    else { // Processing white space
+      if (line[count] == '"') { // string
+        string = !string;
+      }
+      else if (line[count] == '[') { //Start of formula
+        formula = true;
+      }
+      else if (line[count] == ';') { // comment
+        field.first = pvalue;
+        field.second = spacing;
+        list.append(field);  //Should only append when pcount is incremented
+        pcount++;
+        QString comment = line.mid(count);
+        field.first = comment;
+        field.second = "";
+        break; // Nothing more todo on this line
+      }
+      // ---
+      if (!line[count].isSpace()) { // Not White space so new p-field has started
+        field.second = spacing;
+        list.append(field);  //Should only append when pcount is incremented
+        pcount++;
+        isp = true;
+        pvalue = line[count];
+        field.first = pvalue;
+        spacing = "";
+      }
+      else { // Continue p-field processing
+        spacing.append(line[count]);
+      }
+    }
+    count++;
+  }
+  // Process final p-field
+  if (isp == true) {
+    field.first = pvalue;
+    field.second = "";
+  }
+  list.append(field);
+
+  return list;
 }
 
 void EventSheet::selectionChanged()

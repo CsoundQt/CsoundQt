@@ -154,12 +154,7 @@ class qutecsound:public QMainWindow
     void newFile();
     void open();
     void reload();
-    void openRecent0();
-    void openRecent1();
-    void openRecent2();
-    void openRecent3();
-    void openRecent4();
-    void openRecent5();
+    void openRecent();
     void openRecent(QString fileName);
     void createCodeGraph();
     void closeGraph();
