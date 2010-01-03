@@ -282,7 +282,15 @@ void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
 //void QuteWidget::mousePressEvent(QMouseEvent *event)
 //{
 ////   qDebug("QuteWidget::mousePressEvent");
-//  QWidget::mousePressEvent(event);
+//  emit mouseReleased();
+//  QWidget::mouseReleaseEvent(event);
+//}
+
+//void QuteWidget::mouseReleaseEvent(QMouseEvent *event)
+//{
+////   qDebug("QuteWidget::mousePressEvent");
+//  emit mouseReleased();
+//  QWidget::mouseReleaseEvent(event);
 //}
 
 void QuteWidget::popUpMenu(QPoint pos)
@@ -405,6 +413,7 @@ void QuteWidget::applyProperties()
 
 //  this->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   emit(widgetChanged(this));
+  emit propertiesAccepted();
 }
 
 QList<QAction *> QuteWidget::getParentActionList()

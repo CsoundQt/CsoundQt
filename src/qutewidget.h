@@ -95,6 +95,7 @@ class QuteWidget : public QWidget
 
     virtual void contextMenuEvent(QContextMenuEvent *event);
 //    virtual void mousePressEvent(QMouseEvent *event);
+//    virtual void mouseReleaseEvent(QMouseEvent *event);
 
     virtual void createPropertiesDialog();
     virtual void applyProperties();
@@ -125,6 +126,8 @@ class QuteWidget : public QWidget
     void newValue(QPair<QString,QString> channelValue);
     void widgetChanged(QuteWidget* widget);
     void deleteThisWidget(QuteWidget *thisWidget);
+    void propertiesAccepted();
+//    void mouseReleased(); // used to set undo history
 };
 
 #endif

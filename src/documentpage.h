@@ -65,6 +65,9 @@ class DocumentPage : public QTextEdit
     bool askForFile;
     bool readOnly; // Used for manual files and internal examples
 
+    QVector<QString> widgetHistory;  // Undo/ Redo history
+    int widgetHistoryIndex; // Current point in history
+
   protected:
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);

@@ -265,6 +265,10 @@ void qutecsound::changePage(int index)
     return;
   }
   curPage = index;
+  //FIXME hack while widgetpanel is moved to belong to document
+  widgetPanel->setUndoHistory(&documentPages[curPage]->widgetHistory,
+                              &documentPages[curPage]->widgetHistoryIndex);
+
   setCurrentFile(documentPages[curPage]->fileName);
   connectActions();
   documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
@@ -278,6 +282,7 @@ void qutecsound::changePage(int index)
 void qutecsound::updateWidgets()
 {
   widgetPanel->loadWidgets(documentPages[curPage]->getMacWidgetsText());
+  widgetPanel->markHistory();
   widgetPanel->showTooltips(m_options->showTooltips);
 }
 
@@ -540,6 +545,7 @@ void qutecsound::paste()
 
 void qutecsound::undo()
 {
+  qDebug() << "qutecsound::undo()";
   if (documentPages[curPage]->hasFocus()) {
     documentPages[curPage]->undo();
   }
@@ -2232,9 +2238,9 @@ void qutecsound::connectActions()
 {
   DocumentPage * doc = documentPages[curPage];
   disconnect(undoAct, 0, 0, 0);
-  connect(undoAct, SIGNAL(triggered()), doc, SLOT(undo()));
+  connect(undoAct, SIGNAL(triggered()), this, SLOT(undo()));
   disconnect(redoAct, 0, 0, 0);
-  connect(redoAct, SIGNAL(triggered()), doc, SLOT(redo()));
+  connect(redoAct, SIGNAL(triggered()), this, SLOT(redo()));
   disconnect(cutAct, 0, 0, 0);
   connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
   disconnect(copyAct, 0, 0, 0);
@@ -2951,6 +2957,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   textEdit = documentPages[curPage];
   setWidgetPanelGeometry();
   updateGUI();
+  widgetPanel->clearHistory();
   if (runNow && m_options->autoPlay) {
     runAct->setChecked(true);
     runCsound();

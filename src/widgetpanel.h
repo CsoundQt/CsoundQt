@@ -66,7 +66,7 @@ class WidgetPanel : public QDockWidget
     void setKeyRepeatMode(bool repeat);
     void loadWidgets(QString macWidgets);
     int newWidget(QString widgetLine, bool offset = false);
-    QString widgetsText();
+    QString widgetsText(bool tags = true);
     void appendMessage(QString message);
     void showTooltips(bool show);
     void setWidgetToolTip(QuteWidget *widget, bool show);
@@ -79,6 +79,8 @@ class WidgetPanel : public QDockWidget
     void refreshConsoles();
     QString getCsladspaLines();
     QString getCabbageLines();
+
+    void setUndoHistory(QVector<QString> *history, int *index);
 
     QVector<QString> eventQueue;
     int eventQueueSize;
@@ -153,6 +155,8 @@ class WidgetPanel : public QDockWidget
     QVector<WidgetPreset> presets;
 
     QStringList clipboard;
+    QVector<QString> *m_history;  // Undo/ Redo history
+    int *m_historyIndex; // Current point in history
     bool trackMouse;
     QSize oldSize;
     bool m_tooltips;
@@ -177,6 +181,8 @@ class WidgetPanel : public QDockWidget
     int createDummy(int x, int y, int width, int height, QString widgetLine);
 
     void setBackground(bool bg, QColor bgColor);
+
+    void clearHistory();
 
     // Preset methods
     void loadPreset(int num);
@@ -224,6 +230,7 @@ class WidgetPanel : public QDockWidget
     void widgetMoved(QPair<int, int>);
     void widgetResized(QPair<int, int>);
     void adjustLayoutSize();
+    void markHistory();
 
   private slots:
     void copy();

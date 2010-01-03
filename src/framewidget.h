@@ -64,6 +64,7 @@ class FrameWidget : public QFrame
     void moved(QPair<int, int>);
     void resized(QPair<int, int>);
     void editWidget();
-};
+    void mouseReleased();  // When mouse released, send to set undo history
+ };
 
 #endif

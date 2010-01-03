@@ -32,6 +32,8 @@
 #define EVENTS_MAX_PFIELDS 256
 // Maximum number of files in recent files menu
 #define QUTE_MAX_RECENT_FILES 20
+// Maximum undo history depth for widget panel and event sheet
+#define QUTE_MAX_UNDO 256
 
 #ifdef LINUX
 #define DEFAULT_HTML_DIR "/usr/local/share/doc/csound/html"

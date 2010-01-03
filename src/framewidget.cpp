@@ -89,6 +89,7 @@ void FrameWidget::mousePressEvent ( QMouseEvent * event )
 void FrameWidget::mouseReleaseEvent ( QMouseEvent * event )
 {
   QFrame::mouseReleaseEvent(event);
+  emit mouseReleased();
   event->accept(); //to avoid propagation of the event to parent widgets
 }
 
