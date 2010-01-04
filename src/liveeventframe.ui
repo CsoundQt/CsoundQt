@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>513</width>
+    <width>596</width>
     <height>322</height>
    </rect>
   </property>
@@ -24,13 +24,16 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>511</width>
+     <width>591</width>
      <height>31</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QComboBox" name="comboBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <item>
        <property name="text">
         <string>New...</string>
@@ -70,6 +73,9 @@
     </item>
     <item>
      <widget class="QComboBox" name="comboBox_2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <item>
        <property name="text">
         <string>Sheet</string>
@@ -112,6 +118,39 @@
       </property>
      </widget>
     </item>
+    <item>
+     <spacer name="horizontalSpacer_3">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Loop Length</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QDoubleSpinBox" name="loopLengthSpinBox">
+      <property name="decimals">
+       <number>3</number>
+      </property>
+      <property name="minimum">
+       <double>1.000000000000000</double>
+      </property>
+      <property name="value">
+       <double>8.000000000000000</double>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QScrollArea" name="scrollArea">
@@ -119,8 +158,8 @@
     <rect>
      <x>0</x>
      <y>30</y>
-     <width>511</width>
-     <height>291</height>
+     <width>591</width>
+     <height>321</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -131,8 +170,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>509</width>
-      <height>289</height>
+      <width>589</width>
+      <height>319</height>
      </rect>
     </property>
    </widget>

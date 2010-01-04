@@ -21,6 +21,7 @@
 */
 
 #include "eventsheet.h"
+#include "liveeventframe.h"
 
 #include <QMenu>
 #include <QContextMenuEvent>
@@ -141,6 +142,9 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
   m_name = "Events";
   createActions();
   connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
+
+  loopTimer.setSingleShot(true);
+  connect(&loopTimer, SIGNAL(timeout()), this, SLOT(sendEvents()));
 }
 
 EventSheet::~EventSheet()
@@ -177,7 +181,7 @@ QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber)
         bool ok = false;
         double value = item->data(Qt::DisplayRole).toDouble(&ok);
         if (ok) {
-          value = value * (60.0/tempo);
+          value = value * (60.0/m_tempo);
           line += QString::number(value, 'f', 8);;
         }
         else {
@@ -198,16 +202,6 @@ QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber)
     }
   }
   return line;
-}
-
-double EventSheet::getTempo()
-{
-  return tempo;
-}
-
-QString EventSheet::getName()
-{
-  return m_name;
 }
 
 void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int numRows, int numColumns)
@@ -392,13 +386,28 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
 void EventSheet::setTempo(double value)
 {
   qDebug() << "EventSheet::setTempo " << value;
-  tempo = value;
+  m_tempo = value;
+}
+
+void EventSheet::setLoopLength(double value)
+{
+  qDebug() << "EventSheet::setLoopLength " << value;
+  m_loopLength = value;
 }
 
 void EventSheet::sendEvents()
 {
-  QModelIndexList list = this->selectedIndexes();
+  QModelIndexList list;
   QList<int> selectedRows;
+  if (m_looping && sender() != sendEventsAct) {
+    double time = 1000.0 * m_loopLength * 60.0 /m_tempo;
+    qDebug() << " EventSheet::sendEvents() " << time;
+    loopTimer.start(time);
+    list = loopList;
+  }
+  else {
+    list = this->selectedIndexes();
+  }
   for (int i = 0; i < list.size(); i++) {
     if (!selectedRows.contains(list[i].row()) ) {
       selectedRows.append(list[i].row());
@@ -410,12 +419,42 @@ void EventSheet::sendEvents()
   }
 }
 
-void EventSheet::loopEvents() {
-
+void EventSheet::loopEvents()
+{
+  for (int i = 0; i < loopList.size(); i++) {
+    QTableWidgetItem * item = this->item(loopList[i].row(), loopList[i].column());
+    if (item == 0) {
+        item = new QTableWidgetItem();
+        this->setItem(loopList[i].row(), loopList[i].column(), item );
+      }
+    item->setBackground(QBrush());
+  }
+  m_looping = true;
+  loopList = this->selectedIndexes();
+  for (int i = 0; i < loopList.size(); i++) {
+    QTableWidgetItem * item = this->item(loopList[i].row(), loopList[i].column());
+    if (item == 0) {
+        item = new QTableWidgetItem();
+        this->setItem(loopList[i].row(), loopList[i].column(), item );
+      }
+    item->setBackground(QBrush(Qt::green));
+  }
+  sendEvents();
 }
 
 void EventSheet::stopAllEvents()
 {
+  m_looping = false;
+
+  for (int i = 0; i < loopList.size(); i++) {
+    QTableWidgetItem * item = this->item(loopList[i].row(), loopList[i].column());
+    if (item == 0) {
+        item = new QTableWidgetItem();
+        this->setItem(loopList[i].row(), loopList[i].column(), item );
+      }
+    item->setBackground(QBrush());
+  }
+  loopTimer.stop();
   // TODO is it necessary to protect this data from threaded access?
   while (!activeInstruments.isEmpty()) {
     QString event = "i -";
@@ -672,24 +711,6 @@ void EventSheet::deleteRow()
   // TODO: remove multiple rows
   this->removeRow(this->currentRow());
 
-}
-
-void EventSheet::rename()
-{
-  QDialog d;
-  QVBoxLayout l(&d);
-  QLabel label("Enter new name");
-  QLineEdit line;
-//  d.resize(300, d.height());
-//  line.resize(300, line.height());
-  line.setText(m_name);
-  l.addWidget(&label);
-  l.addWidget(&line);
-  connect(&line, SIGNAL(editingFinished()), &d, SLOT(accept ()) );
-  int ret = d.exec();
-  if (ret == QDialog::Accepted) {
-    m_name = line.text();
-  }
 }
 
 void EventSheet::contextMenuEvent (QContextMenuEvent * event)
@@ -957,7 +978,7 @@ void EventSheet::createActions()
   renameAct = new QAction(/*QIcon(":/a.png"),*/ tr("Rename sheet"), this);
   renameAct->setStatusTip(tr("Rename sheet"));
   renameAct->setIconText(tr("This"));
-  connect(renameAct, SIGNAL(triggered()), this, SLOT(rename()));
+  connect(renameAct, SIGNAL(triggered()), static_cast<LiveEventFrame *>(parent()), SLOT(rename()));
 
 
   insertColumnHereAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Insert Column"), this);

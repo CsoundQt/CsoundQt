@@ -188,7 +188,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
                                          liveEventsText.indexOf("</EventPanel>") - liveEventsText.indexOf(">") - 1 );
     frame->getSheet()->setRowCount(0);
     frame->getSheet()->setColumnCount(6);
-    frame->getSheet()->setFromText(scoText);
+    frame->setFromText(scoText);
     if (liveEventsText.contains("tempo=\"")) {
       int index = liveEventsText.indexOf("tempo=\"") + 7;
       QString tempostr = liveEventsText.mid(index,
@@ -197,6 +197,15 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
       double tempo = tempostr.toDouble(&ok);
       if (ok)
         frame->setTempo(tempo);
+    }
+    if (liveEventsText.contains("loop=\"")) {
+      int index = liveEventsText.indexOf("loop=\"") + 6;
+      QString loopstr = liveEventsText.mid(index,
+                                           liveEventsText.indexOf("\"", index) - index );
+      bool ok = false;
+      double loop = loopstr.toDouble(&ok);
+      if (ok)
+        frame->setLoopLength(loop);
     }
     int posx, posy, width, height;
     if (liveEventsText.contains("x=\"")) {
@@ -270,13 +279,14 @@ QString DocumentPage::getFullText()
   if (saveLiveEvents) {
     for (int i = 0; i < liveEventFrames.size(); i++) {
       QString panel = "\n<EventPanel tempo=\"";
-      panel += QString::number(liveEventFrames[i]->getSheet()->getTempo(), 'f', 8) + "\" name=\"";
-      panel += liveEventFrames[i]->getSheet()->getName() + "\" x=\"";
+      panel += QString::number(liveEventFrames[i]->getTempo(), 'f', 8) + "\" loop=\"";
+      panel += QString::number(liveEventFrames[i]->getLoopLength(), 'f', 8) + "\" name=\"";
+      panel += liveEventFrames[i]->getName() + "\" x=\"";
       panel += QString::number(liveEventFrames[i]->x()) + "\" y=\"";
       panel += QString::number(liveEventFrames[i]->y()) + "\" width=\"";
       panel += QString::number(liveEventFrames[i]->width()) + "\" height=\"";
       panel += QString::number(liveEventFrames[i]->height()) + "\">";
-      panel += liveEventFrames[i]->getSheet()->getPlainText();
+      panel += liveEventFrames[i]->getPlainText();
       panel += "</EventPanel>\n";
       liveEventsText += panel;
     }

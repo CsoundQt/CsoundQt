@@ -34,7 +34,18 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
   public:
     LiveEventFrame(QString csdName, QWidget *parent = 0, Qt::WindowFlags f = 0 );
     EventSheet * getSheet();
+    void setName(QString name);
+    void setFromText(QString text);
+
+    double getTempo();
+    QString getName();
+    double getLoopLength();
+    QString getPlainText();
+
+  public slots:
     void setTempo(double tempo);
+    void setLoopLength(double length);
+    void rename();
 
   protected:
     void changeEvent(QEvent *e);
@@ -42,7 +53,8 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     virtual void closeEvent (QCloseEvent * event);
 
   private:
-    int mode; // 0 = sheet 1 = text  2 = piano roll?
+    int m_mode; // 0 = sheet 1 = text  2 = piano roll?
+    QString m_name;
     QTextEdit *m_editor; //TODO add text editor
     EventSheet *m_sheet;
     QString m_csdName;

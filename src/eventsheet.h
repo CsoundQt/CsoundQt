@@ -26,6 +26,7 @@
 #include <QTableWidget>
 #include <QStandardItemModel>
 #include <QAction>
+#include <QTimer>
 
 class EventSheet : public QTableWidget
 {
@@ -36,12 +37,13 @@ class EventSheet : public QTableWidget
 
     QString getPlainText(bool scaleTempo = false);
     QString getLine(int number, bool scaleTempo = false, bool storeNumber = false);
-    double getTempo();
-    QString getName();
+//    double getTempo();
+//    QString getName();
     void setFromText(QString text, int rowOffset = 0, int columnOffset = 0, int numRows = 0, int numColumns = 0);
 
   public slots:
     void setTempo(double value);
+    void setLoopLength(double value);
     void sendEvents();
     void loopEvents();
     void stopAllEvents();
@@ -69,8 +71,6 @@ class EventSheet : public QTableWidget
     void deleteColumn();
     void deleteRow();
 
-    void rename();
-
   protected:
     void contextMenuEvent(QContextMenuEvent * event);
     virtual void keyPressEvent(QKeyEvent * event);
@@ -88,10 +88,10 @@ class EventSheet : public QTableWidget
     void rotate(int amount);
     void fill(double start, double end, double slope);
 
-    void rename(QString name);
+//    void rename(QString name);
 
     // Attributes to be saved
-    double tempo;
+    double m_tempo;
     QString m_name;
 
     // Actions
@@ -120,6 +120,11 @@ class EventSheet : public QTableWidget
     QStringList columnNames;
 
     QList<double> activeInstruments;
+    bool m_looping; // Whether currently looping
+    double m_loopLength;
+
+    QTimer loopTimer;
+    QModelIndexList  loopList;
 
   private slots:
     void selectionChanged();
