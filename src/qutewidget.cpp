@@ -432,6 +432,7 @@ QList<QAction *> QuteWidget::getParentActionList()
   actionList.append(panel->alignRightAct);
   actionList.append(panel->alignTopAct);
   actionList.append(panel->alignBottomAct);
+  actionList.append(panel->sendToBackAct);
   return actionList;
 }
 

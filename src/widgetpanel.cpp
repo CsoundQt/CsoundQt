@@ -123,6 +123,8 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(alignTopAct, SIGNAL(triggered()), this, SLOT(alignTop()));
   alignBottomAct = new QAction(tr("Align Bottom"), this);
   connect(alignBottomAct, SIGNAL(triggered()), this, SLOT(alignBottom()));
+  sendToBackAct = new QAction(tr("Send to back"), this);
+  connect(sendToBackAct, SIGNAL(triggered()), this, SLOT(sendToBack()));
 
   setWidget(layoutWidget);
   m_sbActive = false;
@@ -1742,6 +1744,31 @@ void WidgetPanel::alignBottom()
       if (editWidgets[i]->isSelected()) {
         editWidgets[i]->move(editWidgets[i]->x(), newy);
         widgets[i]->move(editWidgets[i]->x(), newy);
+      }
+    }
+  }
+}
+
+void WidgetPanel::sendToBack()
+{
+  if (editAct->isChecked()) {
+    int size = editWidgets.size();
+    for (int i = 0; i < size ; i++) { // First invert selection
+      if (editWidgets[i]->isSelected()) {
+        editWidgets[i]->deselect();
+      }
+      else {
+        editWidgets[i]->select();
+      }
+    }
+    cut();
+    paste();
+    for (int i = 0; i < size ; i++) { // Now invert selection again
+      if (editWidgets[i]->isSelected()) {
+        editWidgets[i]->deselect();
+      }
+      else {
+        editWidgets[i]->select();
       }
     }
   }

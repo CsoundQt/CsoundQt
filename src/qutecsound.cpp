@@ -607,7 +607,11 @@ QString qutecsound::getSaveFileName()
                              QMessageBox::Ok | QMessageBox::Default);
     return false;
   }
-  if (!fileName.endsWith(".csd",Qt::CaseInsensitive) && !fileName.endsWith(".orc",Qt::CaseInsensitive) && !fileName.endsWith(".sco",Qt::CaseInsensitive))
+//  if (!fileName.endsWith(".csd",Qt::CaseInsensitive) && !fileName.endsWith(".orc",Qt::CaseInsensitive)
+//    && !fileName.endsWith(".sco",Qt::CaseInsensitive) && !fileName.endsWith(".txt",Qt::CaseInsensitive)
+//    && !fileName.endsWith(".udo",Qt::CaseInsensitive))
+//    fileName += ".csd";
+  if (!fileName.contains("."))
     fileName += ".csd";
   return fileName;
 }
