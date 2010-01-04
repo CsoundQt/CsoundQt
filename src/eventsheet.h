@@ -51,6 +51,10 @@ class EventSheet : public QTableWidget
     void cut();
     void copy(bool cut = false);
     void paste();
+    void undo();
+    void redo();
+    void markHistory(QTableWidgetItem *item = 0);
+    void clearHistory();
 
     void subtract();
     void add();
@@ -123,14 +127,21 @@ class EventSheet : public QTableWidget
     bool m_looping; // Whether currently looping
     double m_loopLength;
 
+    //Undo / Redo
+    int historyIndex;
+    QVector<QString> history;
+
+    // Looping
     QTimer loopTimer;
     QModelIndexList  loopList;
 
   private slots:
     void selectionChanged();
+    void cellDoubleClickedSlot(int row, int column);
 
   signals:
     void sendEvent(QString event);
+    void cellDoubleClicked();
 };
 
 #endif // EVENTSHEET_H

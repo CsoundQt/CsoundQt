@@ -85,6 +85,8 @@ void LiveEventFrame::setFromText(QString text)
 {
   if (m_mode == 0) { // Sheet mode
     m_sheet->setFromText(text);
+    m_sheet->clearHistory();
+    m_sheet->markHistory();
   }
   else if (m_mode == 1) { // text mode
 

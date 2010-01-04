@@ -115,7 +115,7 @@ protected:
     if (event->key() == Qt::Key_Escape) {
       this->reject();
     }
-    if (event->key() == Qt::Key_Return) {
+    else if (event->key() == Qt::Key_Return) {
       if (box1->hasFocus())
         box2->setFocus(Qt::TabFocusReason);
       else if (box2->hasFocus())
@@ -142,6 +142,8 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
   m_name = "Events";
   createActions();
   connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
+  connect(this, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(cellDoubleClickedSlot(int, int)));
+  connect(this, SIGNAL(cellDoubleClicked()), this, SLOT(markHistory()));
 
   loopTimer.setSingleShot(true);
   connect(&loopTimer, SIGNAL(timeout()), this, SLOT(sendEvents()));
@@ -473,11 +475,13 @@ void EventSheet::del()
       delete item;
     }
   }
+  markHistory();
 }
 
 void EventSheet::cut()
 {
   copy(true);
+  markHistory();
 }
 
 void EventSheet::copy(bool cut)
@@ -542,6 +546,53 @@ void EventSheet::paste()
     rowCount = columnCount = 0;
   }
   setFromText(qApp->clipboard()->text(), lowestRow, lowestColumn, rowCount, columnCount);
+  markHistory();
+}
+
+void EventSheet::undo()
+{
+  qDebug() << "EventSheet::undo() " << historyIndex;
+  if (historyIndex > 0) {
+    historyIndex--;
+    setFromText(history[historyIndex]);
+  }
+}
+
+void EventSheet::redo()
+{
+  qDebug() << "EventSheet::redo() " << historyIndex << history.size();
+  if (historyIndex < history.size() - 1) {
+    historyIndex++;
+    setFromText(history[historyIndex]);
+  }
+}
+
+void EventSheet::markHistory()
+{
+  QString text = getPlainText();
+  if (history.isEmpty()) {
+    history << "";
+    historyIndex = 0;
+  }
+  if (history[historyIndex] != text) {
+    if (! history[historyIndex].isEmpty())
+      historyIndex++;
+//    if (historyIndex >= QUTE_MAX_UNDO) {
+//      history.pop_front();
+//      historyIndex--;
+//    }
+    if (history.size() != historyIndex + 1)
+      history.resize(historyIndex + 1);
+    history[historyIndex] = text;
+    qDebug() << "EventSheet::markHistory "<< historyIndex << " ....."  << text;
+  }
+}
+
+void EventSheet::clearHistory()
+{
+  qDebug() << "EventSheet::clearHistory()";
+  history.clear();
+  historyIndex = 0;
 }
 
 void EventSheet::subtract()
@@ -756,6 +807,12 @@ void EventSheet::keyPressEvent (QKeyEvent * event) {
   else if (event->matches(QKeySequence::Paste)) {
     this->paste();
   }
+  else if (event->matches(QKeySequence::Undo)) {
+    this->undo();
+  }
+  else if (event->matches(QKeySequence::Redo)) {
+    this->redo();
+  }
   else {
     qDebug() << "EventSheet::keyPressEvent  " << event->key();
     QTableWidget::keyPressEvent(event);  // Propagate event
@@ -776,6 +833,7 @@ void EventSheet::add(double value)
       }
     }
   }
+  markHistory();
 }
 
 void EventSheet::multiply(double value)
@@ -792,6 +850,7 @@ void EventSheet::multiply(double value)
       }
     }
   }
+  markHistory();
 }
 
 void EventSheet::divide(double value)
@@ -808,6 +867,7 @@ void EventSheet::divide(double value)
       }
     }
   }
+  markHistory();
 }
 
 void EventSheet::randomize(double min, double max, int mode)
@@ -833,6 +893,7 @@ void EventSheet::randomize(double min, double max, int mode)
     item->setData(Qt::DisplayRole,
                   QVariant(value));
   }
+  markHistory();
 }
 
 void EventSheet::shuffle(int iterations)
@@ -863,6 +924,7 @@ void EventSheet::shuffle(int iterations)
     item1->setData(Qt::DisplayRole,item2->data(Qt::DisplayRole));
     item2->setData(Qt::DisplayRole,value1);
   }
+  markHistory();
 }
 
 void EventSheet::rotate(int amount)
@@ -887,6 +949,7 @@ void EventSheet::rotate(int amount)
     int index = (i - amount + list.size())%list.size();
     item->setData(Qt::DisplayRole,oldValues[index]);
   }
+  markHistory();
 }
 
 void EventSheet::fill(double start, double end, double slope)
@@ -904,6 +967,7 @@ void EventSheet::fill(double start, double end, double slope)
                   QVariant(value));
     value += inc;
   }
+  markHistory();
 }
 
 void EventSheet::createActions()
@@ -1117,4 +1181,9 @@ void EventSheet::selectionChanged()
   else {
     this->setDragDropMode(QAbstractItemView::NoDragDrop); // Allow extending selection
   }
+}
+
+void EventSheet::cellDoubleClickedSlot(int row, int column)
+{
+  emit cellDoubleClicked();
 }
