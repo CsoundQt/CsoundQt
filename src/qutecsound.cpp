@@ -2448,28 +2448,28 @@ void qutecsound::createMenus()
   QAction *newAction;
   QMenu *submenu;
 
-  basicsFiles.append(":/examples/Tutorial/1 Basics/1.1 Hello World.csd");
-  basicsFiles.append(":/examples/Tutorial/1 Basics/1.2 Document Structure.csd");
-  basicsFiles.append(":/examples/Tutorial/1 Basics/1.3 Basic Elements Opcodes.csd");
-  basicsFiles.append(":/examples/Tutorial/1 Basics/1.4 Basic Elements Variables.csd");
-  basicsFiles.append(":/examples/Tutorial/1 Basics/1.5 Getting Help.csd");
-  basicsFiles.append(":/examples/Tutorial/1 Basics/1.6 Instrument Control.csd");
-  basicsFiles.append(":/examples/Tutorial/1 Basics/1.7 Realtime Instrument Control.csd");
-  basicsFiles.append(":/examples/Tutorial/1 Basics/1.8 Routing.csd");
+  basicsFiles.append(":/examples/Getting Started/Basics/Hello World.csd");
+  basicsFiles.append(":/examples/Getting Started/Basics/Document Structure.csd");
+  basicsFiles.append(":/examples/Getting Started/Basics/Basic Elements Opcodes.csd");
+  basicsFiles.append(":/examples/Getting Started/Basics/Basic Elements Variables.csd");
+  basicsFiles.append(":/examples/Getting Started/Basics/Getting Help.csd");
+  basicsFiles.append(":/examples/Getting Started/Basics/Instrument Control.csd");
+  basicsFiles.append(":/examples/Getting Started/Basics/Realtime Instrument Control.csd");
+  basicsFiles.append(":/examples/Getting Started/Basics/Routing.csd");
 
-  QMenu *tutorialMenu = examplesMenu->addMenu("Tutorials");
-  submenu = tutorialMenu->addMenu("1. Basics");
+  QMenu *tutorialMenu = examplesMenu->addMenu(tr("Tutorials"));
+  submenu = tutorialMenu->addMenu(tr("Basics"));
   foreach (QString fileName, basicsFiles) {
     QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
     newAction = submenu->addAction(name);
     newAction->setData(fileName);
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
-  tutFiles.append(":/examples/Tutorial/Toots/Toot1.csd");
-  tutFiles.append(":/examples/Tutorial/Toots/Toot2.csd");
-  tutFiles.append(":/examples/Tutorial/Toots/Toot3.csd");
-  tutFiles.append(":/examples/Tutorial/Toots/Toot4.csd");
-  tutFiles.append(":/examples/Tutorial/Toots/Toot5.csd");
+  tutFiles.append(":/examples/Getting Started/Toots/Toot1.csd");
+  tutFiles.append(":/examples/Getting Started/Toots/Toot2.csd");
+  tutFiles.append(":/examples/Getting Started/Toots/Toot3.csd");
+  tutFiles.append(":/examples/Getting Started/Toots/Toot4.csd");
+  tutFiles.append(":/examples/Getting Started/Toots/Toot5.csd");
 
   submenu = tutorialMenu->addMenu("Toots");
   foreach (QString fileName, tutFiles) {
@@ -2480,9 +2480,9 @@ void qutecsound::createMenus()
   }
 
   tutFiles.clear();
-  tutFiles.append(":/examples/Tutorial/Widgets_1.csd");
-  tutFiles.append(":/examples/Tutorial/Widgets_2.csd");
-  tutFiles.append(":/examples/Tutorial/Score_Tricks.csd");
+  tutFiles.append(":/examples/Getting Started/Widgets_1.csd");
+  tutFiles.append(":/examples/Getting Started/Widgets_2.csd");
+  tutFiles.append(":/examples/Getting Started/Score_Tricks.csd");
   submenu = tutorialMenu->addMenu("Other");
   foreach (QString fileName, tutFiles) {
     QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");

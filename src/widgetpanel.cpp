@@ -1558,7 +1558,7 @@ void WidgetPanel::markHistory()
     if ((*m_history).size() != *m_historyIndex + 1)
       (*m_history).resize(*m_historyIndex + 1);
     (*m_history)[*m_historyIndex] = text;
-    qDebug() << "WidgetPanel::markHistory "<< *m_historyIndex << " ....."  << text;
+//    qDebug() << "WidgetPanel::markHistory "<< *m_historyIndex << " ....."  << text;
   }
 }
 

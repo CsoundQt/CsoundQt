@@ -159,6 +159,7 @@ QString EventSheet::getPlainText(bool scaleTempo)
   for (int i = 0; i < this->rowCount(); i++) {
     t += getLine(i, scaleTempo) + "\n";  // Don't scale by default
   }
+  t.chop(1);
 //  qDebug() << " EventSheet::getPlainText   " << t;
   return t;
 }
@@ -728,12 +729,12 @@ void EventSheet::fill()
 
 void EventSheet::insertColumnHere()
 {
-
+  // TODO implement
 }
 
 void EventSheet::insertRowHere()
 {
-
+  // TODO implement
 }
 
 void EventSheet::appendColumn()
@@ -745,7 +746,7 @@ void EventSheet::appendColumn()
 
 void EventSheet::appendRow()
 {
-  qDebug() << "EventSheet::appendRow()";
+//  qDebug() << "EventSheet::appendRow()";
   this->insertRow(this->rowCount());
 
 }
@@ -785,8 +786,8 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
   menu.addAction(fillAct);
   menu.addSeparator();
   menu.addAction(renameAct);
-  menu.addAction(insertColumnHereAct);
-  menu.addAction(insertRowHereAct);
+//  menu.addAction(insertColumnHereAct);
+//  menu.addAction(insertRowHereAct);
   menu.addAction(appendColumnAct);
   menu.addAction(appendRowAct);
   menu.addAction(deleteColumnAct);
@@ -1048,12 +1049,12 @@ void EventSheet::createActions()
   insertColumnHereAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Insert Column"), this);
   insertColumnHereAct->setStatusTip(tr("Insert a column at the current position"));
   insertColumnHereAct->setIconText(tr("Insert Column"));
-  connect(insertColumnHereAct, SIGNAL(triggered()), this, SLOT(insertColumn()));
+  connect(insertColumnHereAct, SIGNAL(triggered()), this, SLOT(insertColumnHere()));
 
   insertRowHereAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Insert Row"), this);
   insertRowHereAct->setStatusTip(tr("Insert a row at the current position"));
   insertRowHereAct->setIconText(tr("Insert Row"));
-  connect(insertRowHereAct, SIGNAL(triggered()), this, SLOT(insertRow()));
+  connect(insertRowHereAct, SIGNAL(triggered()), this, SLOT(insertRowHere()));
 
 
   appendColumnAct = new QAction(/*QIcon(":/a.png"),*/ tr("Append Column"), this);
