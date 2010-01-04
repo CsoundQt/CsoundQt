@@ -59,13 +59,13 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 860 199 285 208
+WindowBounds: 860 199 290 222
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {41120, 40606, 41634}
-ioText {20, 30} {241, 137} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder This is a widget window. More information about widgets can be found in the menu: Examples-> Widgets
+ioText {21, 17} {241, 137} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder This is a widget window. More information about widgets can be found in the menu: Examples-> Widgets
 </MacGUI>
 
