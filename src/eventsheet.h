@@ -53,7 +53,7 @@ class EventSheet : public QTableWidget
     void paste();
     void undo();
     void redo();
-    void markHistory(QTableWidgetItem *item = 0);
+    void markHistory();
     void clearHistory();
 
     void subtract();
