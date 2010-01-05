@@ -371,7 +371,7 @@ void qutecsound::newFile()
 
 void qutecsound::open()
 {
-  QString fileName = "";
+  QStringList fileNames;
   bool widgetsVisible = widgetPanel->isVisible();
   if (widgetsVisible)
     widgetPanel->hide(); // Necessary for Mac, as widget Panel covers open dialog
@@ -381,23 +381,25 @@ void qutecsound::open()
   bool inspectorVisible = m_inspector->isVisible();
   if (inspectorVisible)
     m_inspector->hide(); // Necessary for Mac, as widget Panel covers open dialog
-  fileName = QFileDialog::getOpenFileName(this, tr("Open File"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco);;All Files (*)"));
+  fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"), lastUsedDir ,
+                                            tr("Csound Files (*.csd *.orc *.sco);;All Files (*)"));
   if (widgetsVisible)
     widgetPanel->show();
   if (helpVisible)
     helpPanel->show();
   if (inspectorVisible)
     m_inspector->show();
-  int index = isOpen(fileName);
-  if (index != -1) {
-    documentTabs->setCurrentIndex(index);
-    changePage(index);
+  foreach (QString fileName, fileNames) {
+    int index = isOpen(fileName);
+    if (index != -1) {
+      documentTabs->setCurrentIndex(index);
+      changePage(index);
       statusBar()->showMessage(tr("File already open"), 10000);
-    return;
-  }
-  if (!fileName.isEmpty()) {
-    loadCompanionFile(fileName);
-    loadFile(fileName, true);
+    }
+    else if (!fileName.isEmpty()) {
+      loadCompanionFile(fileName);
+      loadFile(fileName, true);
+    }
   }
 }
 
@@ -592,7 +594,11 @@ QString qutecsound::getSaveFileName()
   bool inspectorVisible = m_inspector->isVisible();
   if (inspectorVisible)
     m_inspector->hide(); // Necessary for Mac, as widget Panel covers open dialog
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Save File As"), lastUsedDir , tr("Csound Files (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)"));
+  QString dir = lastUsedDir;
+  dir += documentPages[curPage]->fileName.mid(documentPages[curPage]->fileName.lastIndexOf("/") + 1);
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Save File As"),
+                                                  dir,
+                                                  tr("Csound Files (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)"));
   if (widgetsVisible)
     widgetPanel->show(); // Necessary for Mac, as widget Panel covers open dialog
   if (helpVisible)
@@ -2457,7 +2463,7 @@ void qutecsound::createMenus()
   basicsFiles.append(":/examples/Getting Started/Basics/Realtime Instrument Control.csd");
   basicsFiles.append(":/examples/Getting Started/Basics/Routing.csd");
 
-  QMenu *tutorialMenu = examplesMenu->addMenu(tr("Tutorials"));
+  QMenu *tutorialMenu = examplesMenu->addMenu(tr("Getting Started"));
   submenu = tutorialMenu->addMenu(tr("Basics"));
   foreach (QString fileName, basicsFiles) {
     QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
@@ -2946,9 +2952,9 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   setCurrentFile(fileName);
   setWindowModified(false);
   documentTabs->setTabIcon(curPage, QIcon());
-  if (!lastUsedDir.contains(":/")) {  // Don't store internal examples directory as last used dir
+  if (!fileName.startsWith(":/")) {  // Don't store internal examples directory as last used dir
     lastUsedDir = fileName;
-    lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/]")));
+    lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/]")) + 1);
   }
   if (recentFiles.count(fileName) == 0 && fileName!="" && !fileName.startsWith(":/")) {
     recentFiles.prepend(fileName);
@@ -3006,9 +3012,8 @@ bool qutecsound::saveFile(const QString &fileName, bool saveWidgets)
   }
   textEdit->document()->setModified(false);
   setWindowModified(false);
-  if (!lastUsedDir.contains(":/"))  // Don't store internal examples directory as last used dir
-    lastUsedDir = fileName;
-  lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/\\]")));
+  lastUsedDir = fileName;
+  lastUsedDir.resize(fileName.lastIndexOf("/") + 1);
   if (recentFiles.count(fileName) == 0) {
     recentFiles.prepend(fileName);
     recentFiles.removeLast();

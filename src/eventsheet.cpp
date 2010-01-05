@@ -142,6 +142,10 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
   m_name = "Events";
   createActions();
   connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
+  // a bit of a hack to ensure that manual changes to the sheet are stored in the
+  // undo history. This seems better than calling markHistory() when a cell
+  // changes because large operations like add or subractract will produce
+  // many steps in the history
   connect(this, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(cellDoubleClickedSlot(int, int)));
   connect(this, SIGNAL(cellDoubleClicked()), this, SLOT(markHistory()));
 
