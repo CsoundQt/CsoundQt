@@ -1007,9 +1007,6 @@ void qutecsound::runCsound(bool realtime)
 
     ud->result=csoundCompile(csound,argc,argv);
     ud->csound = csound;
-    ud->zerodBFS = csoundGet0dBFS(csound);
-    ud->sampleRate = csoundGetSr(csound);
-    ud->numChnls = csoundGetNchnls(csound);
 
     qDebug("Csound compiled %i", ud->result);
 
@@ -1026,6 +1023,11 @@ void qutecsound::runCsound(bool realtime)
         widgetPanel->setVisible(true);
     }
     ud->PERF_STATUS = 1;
+    ud->zerodBFS = csoundGet0dBFS(csound);
+    ud->sampleRate = csoundGetSr(csound);
+    ud->numChnls = csoundGetNchnls(csound);
+    ud->outputBufferSize = csoundGetKsmps(ud->csound);
+    ud->ksmpscount = 0;
 
     //TODO is something here necessary to work with doubles?
 //     PUBLIC int csoundGetSampleFormat(CSOUND *);
@@ -1055,21 +1057,9 @@ void qutecsound::runCsound(bool realtime)
     else { // Run in the same thread
 //       int numChnls = csoundGetNchnls(ud->csound);
       while(ud->PERF_STATUS == 1 && csoundPerformKsmps(csound)==0) {
-        ud->outputBufferSize = csoundGetKsmps(ud->csound);
-        ud->outputBuffer = csoundGetSpout(ud->csound);
-        for (int i = 0; i < ud->outputBufferSize*ud->numChnls; i++) {
-          ud->qcs->audioOutputBuffer.put(ud->outputBuffer[i]);
-        }
-        qApp->processEvents();
-        if (ud->qcs->m_options->enableWidgets) {
-          widgetPanel->getValues(&channelNames, &values, &stringValues);
-          ud->qcs->widgetPanel->getMouseValues(&mouseValues);
-          if (!ud->qcs->m_options->useInvalue) {
-            writeWidgetValues(ud);
-            readWidgetValues(ud);
-          }
-          processEventQueue(ud);
-        }
+        processEventQueue(ud);
+        qutecsound::csThread(ud);
+        qApp->processEvents(); // Must process events last to avoid stopping and calling csThread invalidly
       }
 //       ud->PERF_STATUS = 0; // Confirm that Csound has stopped
       stop();  // To flush pending queues
@@ -2631,7 +2621,7 @@ void qutecsound::readSettings()
   m_options->tabWidth = settings.value("tabWidth", 40).toInt();
   m_options->colorVariables = settings.value("colorvariables", true).toBool();
   m_options->autoPlay = settings.value("autoplay", false).toBool();
-  m_options->saveChanges = settings.value("savechanges", false).toBool();
+  m_options->saveChanges = settings.value("savechanges", true).toBool();
   m_options->rememberFile = settings.value("rememberfile", true).toBool();
   m_options->saveWidgets = settings.value("savewidgets", true).toBool();
   m_options->iconText = settings.value("iconText", true).toBool();
@@ -3348,23 +3338,41 @@ void qutecsound::queueMessage(QString message)
 void qutecsound::csThread(void *data)
 {
   CsoundUserData* udata = (CsoundUserData*)data;
-  if(!udata->result) {
-    udata->outputBufferSize = csoundGetKsmps(udata->csound);
-    udata->outputBuffer = csoundGetSpout(udata->csound);
-    for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
-      udata->qcs->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
-    }
-    if (udata->qcs->m_options->enableWidgets) {
-      udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames,
-                                          &udata->qcs->values,
-                                          &udata->qcs->stringValues);
-      udata->qcs->widgetPanel->getMouseValues(&udata->qcs->mouseValues);
-      if (!udata->qcs->m_options->useInvalue) {
-        writeWidgetValues(udata);
-        readWidgetValues(udata);
-      }
+  udata->outputBuffer = csoundGetSpout(udata->csound);
+  for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
+    udata->qcs->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
+  }
+  if (udata->qcs->m_options->enableWidgets) {
+    udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames,
+                                       &udata->qcs->values,
+                                       &udata->qcs->stringValues);
+    udata->qcs->widgetPanel->getMouseValues(&udata->qcs->mouseValues);
+    if (!udata->qcs->m_options->useInvalue) {
+      writeWidgetValues(udata);
+      readWidgetValues(udata);
     }
   }
+  QStringList events = udata->qcs->widgetPanel->getScheduledEvents(udata->ksmpscount);
+  for (int i = 0; i < events.size(); i++) {
+    char type = udata->qcs->widgetPanel->eventQueue[udata->qcs->widgetPanel->eventQueueSize][0].unicode();
+    QStringList eventElements = events[i].remove(0,1).split(QRegExp("\\s"),QString::SkipEmptyParts);
+    // eventElements.size() should never be larger than EVENTS_MAX_PFIELDS
+    for (int j = 0; j < eventElements.size(); j++) {
+      udata->qcs->pFields[j] = (MYFLT) eventElements[j].toDouble();
+    }
+    if (udata->qcs->m_options->thread) {
+      //ScoreEvent is not working
+      udata->qcs->perfThread->ScoreEvent(0, type, eventElements.size(), udata->qcs->pFields);
+      //       ud->qcs->perfThread->InputMessage(ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).data());
+      //       perfThread->lock();
+      //       csoundScoreEvent(ud->csound,type ,ud->qcs->pFields, eventElements.size());
+      //       perfThread->unlock();
+    }
+    else {
+      csoundScoreEvent(udata->csound,type ,udata->qcs->pFields, eventElements.size());
+    }
+  }
+  (udata->ksmpscount)++;
 }
 
 QStringList qutecsound::runCsoundInternally(QStringList flags)

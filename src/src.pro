@@ -10,7 +10,9 @@ TRANSLATIONS = qutecsound_es.ts \
     qutecsound_de.ts \
     qutecsound_fr.ts \
     qutecsound_pt.ts \
-    qutecsound_it.ts
+    qutecsound_it.ts \
+    qutecsound_tr.ts \
+    qutecsound_el.ts
 build64 { 
     message(Building for doubles \(64-bit\) csound)
     DEFINES += USE_DOUBLE

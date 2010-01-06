@@ -57,6 +57,7 @@ class WidgetPanel : public QDockWidget
     int getMouseRelY();
     int getMouseBut1();
     int getMouseBut2();
+    unsigned long getKsmpsCount();
 
     void setValue(QString channelName, double value);
     void setValue(QString channelName, QString value);
@@ -79,6 +80,8 @@ class WidgetPanel : public QDockWidget
     void refreshConsoles();
     QString getCsladspaLines();
     QString getCabbageLines();
+
+    QStringList getScheduledEvents(unsigned long ksmpscount);
 
     void setUndoHistory(QVector<QString> *history, int *index);
 
@@ -165,6 +168,7 @@ class WidgetPanel : public QDockWidget
     int m_height;
     bool m_sbActive; // Scroll bars active
     bool m_repeatKeys;
+    unsigned long m_ksmpscount;
 
     int createSlider(int x, int y, int width, int height, QString widgetLine);
     int createText(int x, int y, int width, int height, QString widgetLine);

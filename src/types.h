@@ -100,6 +100,7 @@ struct CsoundUserData{
   MYFLT* outputBuffer;
   int numChnls;
   int sampleRate;
+  unsigned long ksmpscount;
 };
 
 static ConfigLists _configlists;

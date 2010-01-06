@@ -5,7 +5,7 @@
     <name>ConfigDialog</name>
     <message>
         <source>Please note that OPCODEDIR will only be set when running in an external shell. It won&apos;t be set when using Run or Render.</source>
-        <translation>Notate che la OPCODEDIR può essere impostata solo girando in shell esterna. Non verrà impostata usando Avvia o Render.</translation>
+        <translation type="obsolete">Notate che la OPCODEDIR può essere impostata solo girando in shell esterna. Non verrà impostata usando Avvia o Render.</translation>
     </message>
     <message>
         <source>QuteCsound</source>
@@ -419,6 +419,10 @@
         <source>No limit</source>
         <translation>Nessun limite</translation>
     </message>
+    <message>
+        <source>Please note that OPCODEDIR will overwrite current settings so you will need to restart QuteCsound to return to default.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConsoleWidget</name>
@@ -451,6 +455,269 @@
     <message>
         <source>External links can&apos;t be followed in help browser.</source>
         <translation>I link esterni non possono essere seguiti nell&apos; help browser.</translation>
+    </message>
+</context>
+<context>
+    <name>EventSheet</name>
+    <message>
+        <source>Event</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtract</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiply by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Divide by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minimum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mode: 0=decimals 1=Integers only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Iterations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotate by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>From</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slope (1=Linear)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;SendEvents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send Events to Csound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send Events</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+C</source>
+        <translation type="unfinished">Alt+C</translation>
+    </message>
+    <message>
+        <source>&amp;Loop Events</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loop Events to Csound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loop Events</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Stop Events</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop all running and pending events</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop Events</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+Q</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Subtract</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtract a value from the selected cells</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add a value to the selected cells</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Multiply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiply the selected cells by a value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Divide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Divide the selected cells by a value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Divide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Randomize</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize the selected cells</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Reverse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reverse the selected cells by column</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reverse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Shuffle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shuffle the selected cells</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shuffle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Rotate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotate the selected cells</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Fill Cells</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fill selected cells</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rename sheet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Insert Column</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert a column at the current position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert Column</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Insert Row</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert a row at the current position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert Row</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Append Column</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Append a column to the sheet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Append Row</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Append a row to the sheet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Append Row</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete Last Column</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete Current Row</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete Row</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -591,6 +858,10 @@ Volete partire dall&apos;inizio?</translation>
         <source>F-tables</source>
         <translation>F-tables</translation>
     </message>
+    <message>
+        <source>Score</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>KeySelector</name>
@@ -665,6 +936,45 @@ E&apos; già usata.</translation>
     <message>
         <source>Close</source>
         <translation>Chiudi</translation>
+    </message>
+</context>
+<context>
+    <name>LiveEventFrame</name>
+    <message>
+        <source>Frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Separate Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished">Vedi</translation>
+    </message>
+    <message>
+        <source>Sheet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tempo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loop Length</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1211,7 +1521,7 @@ E&apos; già usata.</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation>Ctrl+M</translation>
+        <translation type="obsolete">Ctrl+M</translation>
     </message>
     <message>
         <source>Clear all widgets</source>
@@ -1246,6 +1556,26 @@ CanaleH:</translation>
     <message>
         <source>Ok</source>
         <translation>Ok</translation>
+    </message>
+    <message>
+        <source>Align Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Align Right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Align Top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Align Bottom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send to back</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2141,6 +2471,22 @@ Francesco
     <message>
         <source>Useful</source>
         <translation>Utile</translation>
+    </message>
+    <message>
+        <source>Live Events</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Live Events Panels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Getting Started</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Basics</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
