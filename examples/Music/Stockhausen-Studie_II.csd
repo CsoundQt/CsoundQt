@@ -290,49 +290,50 @@ Sdump		=		""
 		puts		Sdump, 1
   endop
 
-  opcode	ShowLED_a, 0, Sakkk
-;zeigt ein audiosignal in einem outvalue-kanal, in dB oder reinen amplituden
-;Soutchan: string als name des outvalue-kanals
-;asig: audio signal das angezeigt werden soll
-;kdispfreq: erneuerungsfrequenz der anzeige (Hz)
-;idb: 1 = in dB anzeigen, 0 = in reinen amplitudes anzei (beides im bereich 0-1)
-;idbrange: wenn idb=1: wie viele dB-schritte werden angezeigt (zb wenn idbrange=36 sieht man nichts von einem signal unterhalb von -36 dB)
-Soutchan, asig, ktrig, kdb, kdbrange	xin
-kdispval	max_k	asig, ktrig, 1
+  opcode ShowLED_a, 0, Sakkk
+;Shows an audio signal in an outvalue channel. You can choose to show the value in dB or in raw amplitudes.
+;;Input:
+;Soutchan: string with the name of the outvalue channel
+;asig: audio signal which is to displayed
+;kdispfreq: refresh frequency (Hz)
+;kdb: 1 = show in dB, 0 = show in raw amplitudes (both in the range 0-1)
+;kdbrange: if idb=1: how many db-steps are shown (e.g. if 36 you will not see anything from a signal below -36 dB)
+Soutchan, asig, kdispfreq, kdb, kdbrange	xin
+kdispval	max_k	asig, kdispfreq, 1
 	if kdb != 0 then
 kdb 		= 		dbfsamp(kdispval)
 kval 		= 		(kdbrange + kdb) / kdbrange
 	else
 kval		=		kdispval
 	endif
-	if ktrig == 1 then
-		outvalue	Soutchan, kval
-	endif
+			outvalue	Soutchan, kval
   endop
 
   opcode ShowOver_a, 0, Sakk
-;zeigt wenn asig größer als 1 war und bleibt khold sekunden auf dieser anzeige
-;Soutchan: string als name des outvalue-kanals
-;kdispfreq: erneuerungsfrequenz der anzeige (Hz)
-Soutchan, asig, ktrig, khold	xin
+;Shows if the incoming audio signal was more than 1 and stays there for some time
+;;Input:
+;Soutchan: string with the name of the outvalue channel
+;asig: audio signal which is to displayed
+;kdispfreq: refresh frequency (Hz)
+;khold: time in seconds to "hold the red light"
+Soutchan, asig, kdispfreq, khold	xin
 kon		init		0
 ktim		times
 kstart		init		0
 kend		init		0
 khold		=		(khold < .01 ? .01 : khold); avoiding too short hold times
-kmax		max_k		asig, ktrig, 1
-	if kon == 0 && kmax > 1 && ktrig == 1 then
+kmax		max_k		asig, kdispfreq, 1
+	if kon == 0 && kmax > 1 then
 kstart		=		ktim
 kend		=		kstart + khold
 		outvalue	Soutchan, kmax
 kon		=		1
 	endif
-	if kon == 1 && ktim > kend && ktrig == 1 then
+	if kon == 1 && ktim > kend then
 		outvalue	Soutchan, 0
 kon		=		0
 	endif
   endop
-
 
 
 

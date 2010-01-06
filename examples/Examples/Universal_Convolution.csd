@@ -16,16 +16,6 @@ ksmps = 128
 nchnls = 2
 0dbfs = 1
 
-
- opcode nextpowof2, i, i
-ilen    xin ;given length as input
-iout = 1
-loop:
-iout = iout * 2
-if iout < ilen igoto loop
-xout iout
- endop
-
   opcode TakeAll2, aa, Skii
 Sfil, kspeed, iskip, iloop	xin
 ichn		filenchnls	Sfil
@@ -94,11 +84,11 @@ kirlensmps	=		(kirlen == 0? (iconvlen - kselstart) * iconvsr : kirlen * iconvsr)
 ;;creating two ftables (left and right channel) for ftconv
 ichnlsfil2	filenchnls	Sfile2
 if ichnlsfil2 == 2 then
-iftlen		nextpowof2	iconvlensmps / 2
+iftlen		=		2 ^ ceil(log(iconvlensmps / 2) / log(2))
 giftL		ftgen		0, 0, iftlen, 1, Sfile2, 0, 0, 1
 giftR		ftgen		0, 0, iftlen, 1, Sfile2, 0, 0, 2
 else; if mono impulse response, create two identical tables
-iftlen		nextpowof2	iconvlensmps
+iftlen		=		2 ^ ceil(log(iconvlensmps) / log(2))
 giftL		ftgen		0, 0, iftlen, 1, Sfile2, 0, 0, 1
 giftR		ftgen		0, 0, iftlen, 1, Sfile2, 0, 0, 1
 endif
@@ -165,7 +155,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 637 25 534 741
+WindowBounds: 637 22 534 741
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -193,10 +183,10 @@ ioText {78, 372} {63, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0
 ioText {250, 370} {63, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder length
 ioText {344, 333} {105, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Partitionsize
 ioMenu {357, 370} {84, 24} 2 303 "256,512,1024,2048,4096" partsiz
-ioSlider {34, 397} {156, 29} 0.000000 1.000000 0.500000 startabs
-ioSlider {204, 396} {156, 29} 0.000000 1.000000 0.147436 irlen
-ioText {84, 430} {62, 34} display 0.000000 0.00100 "start" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.2507
-ioText {229, 429} {55, 28} display 0.000000 0.00100 "irlen" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.1474
+ioSlider {34, 397} {156, 29} 0.000000 1.000000 0.205128 startabs
+ioSlider {204, 396} {156, 29} 0.000000 1.000000 0.083333 irlen
+ioText {84, 430} {62, 34} display 1.162663 0.00100 "start" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.1627
+ioText {229, 429} {55, 28} display 0.083333 0.00100 "irlen" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0833
 ioText {284, 429} {212, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0 = take the whole file length
 ioSlider {113, 521} {282, 29} 0.000000 1.000000 0.748227 wdmix
 ioText {191, 483} {130, 30} label 0.000000 0.00100 "" center "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Wet-Dry Mix
@@ -206,9 +196,9 @@ ioText {308, 570} {130, 28} label 0.000000 0.00100 "" center "Lucida Grande" 12 
 ioSlider {102, 566} {201, 34} 0.100000 2.000000 0.544279 gain
 ioText {36, 566} {62, 34} display 0.000000 0.00100 "gain" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.5537
 ioText {325, 481} {62, 34} display 0.000000 0.00100 "wdmix" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.7553
-ioMeter {124, 614} {250, 19} {0, 59904, 0} "out1_post" 0.578947 "outL" 0.658561 fill 1 0 mouse
+ioMeter {124, 614} {250, 19} {0, 59904, 0} "out1_post" 0.578947 "outL" 0.109080 fill 1 0 mouse
 ioMeter {371, 614} {21, 19} {50176, 3584, 3072} "outLover" 0.000000 "outLover" 0.000000 fill 1 0 mouse
-ioMeter {124, 641} {250, 19} {0, 59904, 0} "out2_post" 1.000000 "outR" 0.336022 fill 1 0 mouse
+ioMeter {124, 641} {250, 19} {0, 59904, 0} "out2_post" 1.000000 "outR" 0.109080 fill 1 0 mouse
 ioMeter {371, 641} {21, 19} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
 ioText {23, 49} {472, 47} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder You can convolve here any file with any other (or usually a selection of it). 
 </MacGUI>

@@ -2438,6 +2438,9 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/Examples/Mouse_Control.csd");
   exampleFiles.append(":/examples/Examples/Simple_Convolution.csd");
   exampleFiles.append(":/examples/Examples/Universal_Convolution.csd");
+  exampleFiles.append(":/examples/Examples/Cross_Synthesis.csd");
+  exampleFiles.append(":/examples/Examples/Live_Granular.csd");
+  exampleFiles.append(":/examples/Examples/SF_Granular.csd");
   exampleFiles.append(":/examples/Examples/Oscillator_Aliasing.csd");
   exampleFiles.append(":/examples/Examples/Circle.csd");
   exampleFiles.append(":/examples/Examples/Pvstencil.csd");

@@ -38,6 +38,9 @@
       <file>../examples/Examples/Mouse_Control.csd</file>
       <file>../examples/Examples/Simple_Convolution.csd</file>
       <file>../examples/Examples/Universal_Convolution.csd</file>
+      <file>../examples/Examples/Cross_Synthesis.csd</file>
+      <file>../examples/Examples/Live_Granular.csd</file>
+      <file>../examples/Examples/SF_Granular.csd</file>
       <file>../examples/Examples/Oscillator_Aliasing.csd</file>
       <file>../examples/Examples/Circle.csd</file>
       <file>../examples/Examples/Pvstencil.csd</file>
