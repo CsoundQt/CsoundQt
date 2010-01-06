@@ -40,6 +40,7 @@ LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags
   setupUi(this);
 
   setWindowTitle(m_csdName);
+  setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
   m_sheet = new EventSheet(this);
   m_sheet->show();
   m_sheet->setTempo(60.0);
