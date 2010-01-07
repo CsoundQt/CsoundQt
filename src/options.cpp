@@ -105,12 +105,6 @@ int Options::generateCmdLine(char **argv,
   int index = 0;
   argv[index] = (char *) calloc(7, sizeof(char));
   strcpy(argv[index++], "csound");
-  argv[index] = (char *) calloc(fileName.size()+1, sizeof(char));
-  strcpy(argv[index++],fileName.toStdString().c_str());
-  if (fileName2 != "") {
-    argv[index] = (char *) calloc(fileName2.size()+1, sizeof(char));
-    strcpy(argv[index++],fileName2.toStdString().c_str());
-  }
   QString flags = "";
   if ( (rt and rtUseOptions) or (!rt and fileUseOptions) ) {
     flags = generateCmdLineFlags(rt);
@@ -122,6 +116,12 @@ int Options::generateCmdLine(char **argv,
     argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
     strcpy(argv[index],flag.toStdString().c_str());
     index++;
+  }
+  argv[index] = (char *) calloc(fileName.size()+1, sizeof(char));
+  strcpy(argv[index++],fileName.toStdString().c_str());
+  if (fileName2 != "") {
+    argv[index] = (char *) calloc(fileName2.size()+1, sizeof(char));
+    strcpy(argv[index++],fileName2.toStdString().c_str());
   }
   return index;
 }

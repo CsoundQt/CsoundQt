@@ -38,10 +38,8 @@ enum Polarity {
 class Curve
 {
   public:
-    Curve(float *, size_t, const QString&, Polarity,
+    Curve(MYFLT *, size_t, const QString&, Polarity,
           float, float, float, float, bool);
-    Curve(double *, size_t, const QString&, Polarity,
-          double, double, double, double, bool);
     Curve(const Curve&);
     Curve &operator=(const Curve&);
     ~Curve();
@@ -70,14 +68,13 @@ class Curve
     bool has_same_caption(Curve *) const;
   private:
     uintptr_t m_id;
-    float *m_data;
+    MYFLT *m_data;
     size_t m_size;
     QString m_caption;
     Polarity m_polarity;
     float m_max, m_min, m_absmax, m_y_scale;
     bool m_dotted_divider;
-    static float *copy(size_t, float *);
-    static float *copy(size_t, double *);
+    void copy(size_t, MYFLT *);
     void destroy();
 
     QMutex mutex;

@@ -334,7 +334,7 @@ void QuteGraph::setCurveData(Curve * curve)
         delete line;
       }
       lines[index].clear();
-      MYFLT decValue = 0;
+      MYFLT decValue = 0.0;
       for (int i = 0; i < (int) curve->get_size(); i++) {
         decValue = (decValue < fabs(curve->get_data(i)) ? curve->get_data(i) : decValue);
         if (decimate == 0 or i%decimate == 0) {

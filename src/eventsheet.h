@@ -36,10 +36,12 @@ class EventSheet : public QTableWidget
     ~EventSheet();
 
     QString getPlainText(bool scaleTempo = false);
-    QString getLine(int number, bool scaleTempo = false, bool storeNumber = false);
+    QString getLine(int number, bool scaleTempo = false,
+                    bool storeNumber = false, bool preprocess = false);
 //    double getTempo();
 //    QString getName();
-    void setFromText(QString text, int rowOffset = 0, int columnOffset = 0, int numRows = 0, int numColumns = 0);
+    void setFromText(QString text, int rowOffset = 0, int columnOffset = 0,
+                     int numRows = 0, int numColumns = 0);
 
   public slots:
     void setTempo(double value);

@@ -966,7 +966,7 @@ void qutecsound::runCsound(bool realtime)
     csoundPreCompile(csound);  //Need to run PreCompile to create the FLTK_Flags global variable
 
     int variable = csoundCreateGlobalVariable(csound, "FLTK_Flags", sizeof(int));
-    if (m_options->enableFLTK or !useAPI) {
+    if (m_options->enableFLTK) {
       // disable FLTK graphs, but allow FLTK widgets
       *((int*) csoundQueryGlobalVariable(csound, "FLTK_Flags")) = 4;
     }
@@ -1033,16 +1033,12 @@ void qutecsound::runCsound(bool realtime)
 //     PUBLIC int csoundGetSampleFormat(CSOUND *);
 //     PUBLIC int csoundGetSampleSize(CSOUND *);
     unsigned int numWidgets = widgetPanel->widgetCount();
+      // TODO: When this is working, simplify pointers
     ud->qcs->channelNames.resize(numWidgets*2);
     ud->qcs->values.resize(numWidgets*2);
     ud->qcs->stringValues.resize(numWidgets*2);
     if(m_options->thread) {
       // First update values from widgets
-      // TODO: When this is working, simplify pointers
-      unsigned int numWidgets = ud->qcs->widgetPanel->widgetCount();
-      ud->qcs->channelNames.resize(numWidgets*2);
-      ud->qcs->values.resize(numWidgets*2);
-      ud->qcs->stringValues.resize(numWidgets*2);
       if (ud->qcs->m_options->enableWidgets) {
         ud->qcs->widgetPanel->getValues(&ud->qcs->channelNames,
                                         &ud->qcs->values,
@@ -1328,7 +1324,7 @@ void qutecsound::render()
     else {
       defaultFile = lastFileDir;
     }
-    QFileDialog dialog(this,tr("Output Filename"),lastFileDir);
+    QFileDialog dialog(this,tr("Output Filename"),defaultFile);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setConfirmOverwrite(false);
     QString filter = QString(_configlists.fileTypeLongNames[m_options->fileFileType] + " Files ("
@@ -1767,8 +1763,8 @@ void qutecsound::dispatchQueues()
       Curve *curve = widgetPanel->getCurveById(windat->windid);
       if (curve != 0) {
   //       qDebug("qutecsound::dispatchQueues() %s -- %s",windat->caption, curve->get_caption().toStdString().c_str());
-        curve->set_data(windat->fdata);
         curve->set_size(windat->npts);      // number of points
+        curve->set_data(windat->fdata);
         curve->set_caption(QString(windat->caption)); // title of curve
     //     curve->set_polarity(windat->polarity); // polarity
         curve->set_max(windat->max);        // curve max

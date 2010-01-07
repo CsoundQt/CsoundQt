@@ -168,7 +168,7 @@ QString EventSheet::getPlainText(bool scaleTempo)
   return t;
 }
 
-QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber)
+QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber, bool preprocess)
 {
   QString line = "";
   bool instrEvent = false;
@@ -184,10 +184,24 @@ QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber)
         if (ok && !activeInstruments.contains(instrNum))
           activeInstruments.append(instrNum);
       }
+      if (preprocess && item->data(Qt::DisplayRole).toString() == ".") { // Carry value from above
+        QString cellText = ".";
+        int row = number;
+        while (row >= 0 && cellText == "." && cellText != "") {
+          item = this->item(row, i);
+          if (item != 0 ) {
+            cellText = item->data(Qt::DisplayRole).toString();
+          }
+          else {
+            cellText = "";
+          }
+          row--;
+        }
+      }
       if (scaleTempo && instrEvent && (i == 2 || i == 3) ) { // Scale tempo only for pfields p2 and p3
         bool ok = false;
-        double value = item->data(Qt::DisplayRole).toDouble(&ok);
         if (ok) {
+          double value = item->data(Qt::DisplayRole).toDouble(&ok);
           value = value * (60.0/m_tempo);
           line += QString::number(value, 'f', 8);;
         }
@@ -422,7 +436,7 @@ void EventSheet::sendEvents()
   }
   for (int i = 0; i < selectedRows.size(); i++) {
     double number = 0.0;
-    emit sendEvent(getLine(selectedRows[i], true, true));  // With tempo scaling
+    emit sendEvent(getLine(selectedRows[i], true, true, true));  // With tempo scaling
   }
 }
 
