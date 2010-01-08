@@ -27,6 +27,7 @@
 
 void Curve::copy(size_t size, MYFLT *data)
 {
+  // set_size must be called prior to this, as bounds are not checked.
   for (size_t i = 0; i < size; i++)
     m_data[i] = data[i];
 }

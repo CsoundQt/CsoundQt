@@ -30,6 +30,7 @@
 #include <QDialog>
 #include <QDoubleSpinBox>
 #include <QResizeEvent>
+#include <QMessageBox>
 
 //Only for debug
 #include <QtCore>
@@ -40,7 +41,7 @@ LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags
   setupUi(this);
 
   setWindowTitle(m_csdName);
-  setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+//  setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
   m_sheet = new EventSheet(this);
   m_sheet->show();
   m_sheet->setTempo(60.0);
@@ -52,6 +53,7 @@ LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags
 
   m_mode = 0; // Sheet mode by default
 
+  connect(actionComboBox,SIGNAL(activated(int)), this, SLOT(doAction(int)));
   connect(tempoSpinBox,SIGNAL(valueChanged(double)), this, SLOT(setTempo(double)));
   connect(loopLengthSpinBox,SIGNAL(valueChanged(double)), this, SLOT(setLoopLength(double)));
 }
@@ -72,6 +74,7 @@ void LiveEventFrame::setTempo(double tempo)
 void LiveEventFrame::setName(QString name)
 {
   m_name = name;
+  setWindowTitle(m_csdName + " -- " + m_name);
 }
 
 void LiveEventFrame::setLoopLength(double length)
@@ -80,6 +83,42 @@ void LiveEventFrame::setLoopLength(double length)
   loopLengthSpinBox->setValue(length);
   m_sheet->setLoopLength(length);
   //TODO add sending length to other modes here too
+}
+
+void LiveEventFrame::doAction(int action)
+{
+  // TODO This really should be done with QActions
+  if (action == 1) {
+    newFrame();
+  }
+  else if (action == 2) {
+    cloneFrame();
+  }
+  else if (action == 3) {
+    deleteFrame();
+  }
+  actionComboBox->setCurrentIndex(0);
+}
+
+void LiveEventFrame::newFrame()
+{
+  emit(newFrameSignal(QString()));
+}
+
+void LiveEventFrame::cloneFrame()
+{
+  emit(newFrameSignal(getPlainText()));
+}
+
+void LiveEventFrame::deleteFrame()
+{
+  int ret = QMessageBox::question(this,
+                                  tr("Delete Frame"),
+                                  tr("Are you sure you want to delete this frame?"),
+                                  QMessageBox::Ok | QMessageBox::Cancel,
+                                  QMessageBox::Cancel);
+  if (ret == QMessageBox::Ok)
+    emit(deleteFrameSignal(this));
 }
 
 void LiveEventFrame::setFromText(QString text)
@@ -120,6 +159,11 @@ QString LiveEventFrame::getPlainText()
   return QString();
 }
 
+void LiveEventFrame::forceDestroy()
+{
+  this->destroy();
+}
+
 void LiveEventFrame::rename()
 {
   QDialog d;
@@ -134,7 +178,7 @@ void LiveEventFrame::rename()
   connect(&line, SIGNAL(editingFinished()), &d, SLOT(accept ()) );
   int ret = d.exec();
   if (ret == QDialog::Accepted) {
-    m_name = line.text();
+    setName(line.text());
   }
 }
 

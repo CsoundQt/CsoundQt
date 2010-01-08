@@ -42,9 +42,15 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     double getLoopLength();
     QString getPlainText();
 
+    void forceDestroy();
+
   public slots:
     void setTempo(double tempo);
     void setLoopLength(double length);
+    void doAction(int action);
+    void newFrame();
+    void cloneFrame();
+    void deleteFrame();
     void rename();
 
   protected:
@@ -60,6 +66,8 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     QString m_csdName;
 
   signals:
+    void newFrameSignal(QString text);
+    void deleteFrameSignal(LiveEventFrame *frame);
     void closed();  // To inform DocumentPage that live event panel has been closed
 };
 

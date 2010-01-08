@@ -1007,9 +1007,7 @@ void qutecsound::runCsound(bool realtime)
 
     ud->result=csoundCompile(csound,argc,argv);
     ud->csound = csound;
-
-    qDebug("Csound compiled %i", ud->result);
-
+//    qDebug("Csound compiled %i", ud->result);
     if (ud->result!=CSOUND_SUCCESS or variable != CSOUND_SUCCESS) {
       qDebug("Csound compile failed!");
       stop();
@@ -1044,20 +1042,17 @@ void qutecsound::runCsound(bool realtime)
                                         &ud->qcs->values,
                                         &ud->qcs->stringValues);
       }
-//       qDebug("Create CsoundPerformanceThread");
       perfThread = new CsoundPerformanceThread(csound);
       perfThread->SetProcessCallback(qutecsound::csThread, (void*)ud);
-      qDebug() << "Play";
+//      qDebug() << "qutecsound::runCsound perfThread->Play";
       perfThread->Play();
     }
     else { // Run in the same thread
-//       int numChnls = csoundGetNchnls(ud->csound);
       while(ud->PERF_STATUS == 1 && csoundPerformKsmps(csound)==0) {
         processEventQueue(ud);
         qutecsound::csThread(ud);
         qApp->processEvents(); // Must process events last to avoid stopping and calling csThread invalidly
       }
-//       ud->PERF_STATUS = 0; // Confirm that Csound has stopped
       stop();  // To flush pending queues
 #ifdef MACOSX_PRE_SNOW
 // Put menu bar back
@@ -3421,13 +3416,9 @@ void qutecsound::updateCurve(WINDAT *windat)
 
 int qutecsound::killCurves(CSOUND *csound)
 {
-  //FIXME: This is not safe, but the memory must be cleared...
-//   for (int i = 0; i < curveBuffer.size(); i++) {
-//     free(curveBuffer[i]);
-//   }
   curveBuffer.clear();
 //   widgetPanel->clearGraphs();
-  qDebug() << "qutecsound::killCurves";
+//  qDebug() << "qutecsound::killCurves";
   return 0;
 }
 
@@ -3628,7 +3619,7 @@ void qutecsound::killGraphCallback(CSOUND *csound, WINDAT *windat)
 
 int qutecsound::exitGraphCallback(CSOUND *csound)
 {
-  qDebug("qutecsound::exitGraph()");
+//  qDebug("qutecsound::exitGraphCallback()");
   CsoundUserData *udata = (CsoundUserData *) csoundGetHostData(csound);
   return udata->qcs->killCurves(csound);
 }

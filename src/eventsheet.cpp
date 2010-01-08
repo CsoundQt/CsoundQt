@@ -832,8 +832,11 @@ void EventSheet::keyPressEvent (QKeyEvent * event) {
   else if (event->matches(QKeySequence::Redo)) {
     this->redo();
   }
+  else if (event->matches(QKeySequence::InsertLineSeparator)) {
+    this->sendEvents();
+  }
   else {
-    qDebug() << "EventSheet::keyPressEvent  " << event->key();
+//    qDebug() << "EventSheet::keyPressEvent  " << event->key();
     QTableWidget::keyPressEvent(event);  // Propagate event
   }
 }
@@ -994,7 +997,7 @@ void EventSheet::createActions()
   sendEventsAct = new QAction(/*QIcon(":/a.png"),*/ tr("&SendEvents"), this);
   sendEventsAct->setStatusTip(tr("Send Events to Csound"));
   sendEventsAct->setIconText(tr("Send Events"));
-  sendEventsAct->setShortcut(QKeySequence(tr("Alt+C")));
+  sendEventsAct->setShortcut(QKeySequence(QKeySequence::InsertLineSeparator));
   connect(sendEventsAct, SIGNAL(triggered()), this, SLOT(sendEvents()));
 
   loopEventsAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Loop Events"), this);
@@ -1005,7 +1008,6 @@ void EventSheet::createActions()
   stopAllEventsAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Stop Events"), this);
   stopAllEventsAct->setStatusTip(tr("Stop all running and pending events"));
   stopAllEventsAct->setIconText(tr("Stop Events"));
-  sendEventsAct->setShortcut(QKeySequence(tr("Alt+Q")));
   connect(stopAllEventsAct, SIGNAL(triggered()), this, SLOT(stopAllEvents()));
 
   subtractAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Subtract"), this);

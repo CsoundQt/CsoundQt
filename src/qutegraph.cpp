@@ -316,7 +316,7 @@ void QuteGraph::setCurveData(Curve * curve)
 {
   //TODO is it necessary to free the curves created by Csound? (e.g. FFT from dispfft)
   int index = getCurveIndex(curve);
-  qDebug("QuteGraph::setCurveData %i", index);
+//  qDebug("QuteGraph::setCurveData %i", index);
   if (index >= curves.size() or index < 0)
     return;
   curves[index] = curve;

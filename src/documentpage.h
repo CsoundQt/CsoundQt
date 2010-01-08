@@ -103,7 +103,8 @@ class DocumentPage : public QTextEdit
     void unindent();
 
     void opcodeFromMenu();
-    LiveEventFrame * newLiveEventFrame();
+    LiveEventFrame * newLiveEventFrame(QString text = QString());
+    void deleteLiveEventFrame(LiveEventFrame *frame);
     void showLiveEventFrames(bool visible);
 
   private slots:

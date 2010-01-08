@@ -30,23 +30,25 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QComboBox" name="comboBox">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
+     <widget class="QComboBox" name="actionComboBox">
       <item>
        <property name="text">
-        <string>New...</string>
+        <string>Menu</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Separate Panel</string>
+        <string>New Frame</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Duplicate</string>
+        <string>Clone Frame</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Delete Frame</string>
        </property>
       </item>
      </widget>

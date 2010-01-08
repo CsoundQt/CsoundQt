@@ -186,9 +186,15 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     LiveEventFrame *frame = newLiveEventFrame();
     QString scoText = liveEventsText.mid(liveEventsText.indexOf(">") + 1,
                                          liveEventsText.indexOf("</EventPanel>") - liveEventsText.indexOf(">") - 1 );
-    frame->getSheet()->setRowCount(0);
+    frame->getSheet()->setRowCount(1);
     frame->getSheet()->setColumnCount(6);
     frame->setFromText(scoText);
+    if (liveEventsText.contains("name=\"")) {
+      int index = liveEventsText.indexOf("name=\"") + 6;
+      QString name = liveEventsText.mid(index,
+                                        liveEventsText.indexOf("\"", index) - index );
+      frame->setName(name);
+    }
     if (liveEventsText.contains("tempo=\"")) {
       int index = liveEventsText.indexOf("tempo=\"") + 7;
       QString tempostr = liveEventsText.mid(index,
@@ -273,25 +279,28 @@ QString DocumentPage::getFullText()
   fullText = document()->toPlainText();
   if (!fullText.endsWith("\n"))
     fullText += "\n";
-  if (fileName.endsWith(".csd",Qt::CaseInsensitive) or fileName == "")
+  if (fileName.endsWith(".csd",Qt::CaseInsensitive) or fileName == "") {
     fullText += getMacOptionsText() + "\n" + macGUI + "\n" + macPresets + "\n";
-  QString liveEventsText = "";
-  if (saveLiveEvents) {
-    for (int i = 0; i < liveEventFrames.size(); i++) {
-      QString panel = "\n<EventPanel tempo=\"";
-      panel += QString::number(liveEventFrames[i]->getTempo(), 'f', 8) + "\" loop=\"";
-      panel += QString::number(liveEventFrames[i]->getLoopLength(), 'f', 8) + "\" name=\"";
-      panel += liveEventFrames[i]->getName() + "\" x=\"";
-      panel += QString::number(liveEventFrames[i]->x()) + "\" y=\"";
-      panel += QString::number(liveEventFrames[i]->y()) + "\" width=\"";
-      panel += QString::number(liveEventFrames[i]->width()) + "\" height=\"";
-      panel += QString::number(liveEventFrames[i]->height()) + "\">";
-      panel += liveEventFrames[i]->getPlainText();
-      panel += "</EventPanel>\n";
-      liveEventsText += panel;
+    QString liveEventsText = "";
+    if (saveLiveEvents) { // Only add live events sections if file is a csd file
+      for (int i = 0; i < liveEventFrames.size(); i++) {
+        QString panel = "\n<EventPanel name=\"";
+        panel += liveEventFrames[i]->getName() + "\" tempo=\"";
+        panel += QString::number(liveEventFrames[i]->getTempo(), 'f', 8) + "\" loop=\"";
+        panel += QString::number(liveEventFrames[i]->getLoopLength(), 'f', 8) + "\" name=\"";
+        panel += liveEventFrames[i]->getName() + "\" x=\"";
+        panel += QString::number(liveEventFrames[i]->x()) + "\" y=\"";
+        panel += QString::number(liveEventFrames[i]->y()) + "\" width=\"";
+        panel += QString::number(liveEventFrames[i]->width()) + "\" height=\"";
+        panel += QString::number(liveEventFrames[i]->height()) + "\">";
+        panel += liveEventFrames[i]->getPlainText();
+        panel += "</EventPanel>\n";
+        liveEventsText += panel;
+      }
+      fullText += liveEventsText;
     }
   }
-  return fullText + liveEventsText;
+  return fullText;
 }
 
 // QString DocumentPage::getXmlWidgetsText()
@@ -712,19 +721,39 @@ void DocumentPage::opcodeFromMenu()
   cursor.insertText(text);
 }
 
-LiveEventFrame * DocumentPage::newLiveEventFrame()
+LiveEventFrame * DocumentPage::newLiveEventFrame(QString text)
 {
   qDebug() << "DocumentPage::newLiveEventFrame()";
-  // TODO delete these frames!!!
+  // TODO delete these frames, for proper cleanup
   // TODO remove from QVector when they are deleted individually
   LiveEventFrame *e = new LiveEventFrame("Live Event", this, Qt::Window);
-//  e->hide();
   e->setAttribute(Qt::WA_DeleteOnClose, false);
+  e->show();
 
+  if (!text.isEmpty()) {
+    e->setFromText(text);
+  }
   liveEventFrames.append(e);
   connect(e, SIGNAL(closed()), this, SLOT(liveEventFrameClosed()));
+  connect(e, SIGNAL(newFrameSignal(QString)), this, SLOT(newLiveEventFrame(QString)));
+  connect(e, SIGNAL(deleteFrameSignal(LiveEventFrame *)), this, SLOT(deleteLiveEventFrame(LiveEventFrame *)));
   emit registerLiveEvent(dynamic_cast<QWidget *>(e));
   return e;
+}
+
+void DocumentPage::deleteLiveEventFrame(LiveEventFrame *frame)
+{
+  qDebug() << "deleteLiveEventFrame(LiveEventFrame *frame)";
+  qApp->processEvents();
+  int index = liveEventFrames.indexOf(frame);
+  if (index >= 0) {
+    frame->forceDestroy();
+    liveEventFrames.remove(index);
+  }
+  else {
+    qDebug() << "DocumentPage::deleteLiveEventFrame frame not found";
+  }
+  qDebug() << "deleteLiveEventFrame(LiveEventFrame *frame) out";
 }
 
 void DocumentPage::changed()
