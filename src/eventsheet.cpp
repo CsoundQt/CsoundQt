@@ -836,7 +836,8 @@ void EventSheet::keyPressEvent (QKeyEvent * event) {
     this->sendEvents();
   }
   else {
-//    qDebug() << "EventSheet::keyPressEvent  " << event->key();
+    qDebug() << "EventSheet::keyPressEvent  " << event->key();
+    event->ignore();
     QTableWidget::keyPressEvent(event);  // Propagate event
   }
 }
@@ -979,6 +980,7 @@ void EventSheet::fill(double start, double end, double slope)
   QModelIndexList list = this->selectedIndexes();
   double inc = (end - start) / (list.size() - 1.0);
   double value = start;
+  double listSize = (double) list.size();
   for (int i = 0; i < list.size(); i++) {
     QTableWidgetItem * item = this->item(list[i].row(), list[i].column());
     if (item == 0) {
@@ -987,13 +989,41 @@ void EventSheet::fill(double start, double end, double slope)
     }
     item->setData(Qt::DisplayRole,
                   QVariant(value));
-    value += inc;
+    if (slope == 1.0) {
+      value += inc;
+    }
+    else if (slope < 1.0 && slope >= 0.0) {
+      value = start;
+      value += (end-start) * (exp(((i + 1.0) / (list.size() - 1.0)) * log(slope))-1.0) / (slope-1.0);
+    }
+    else if (slope > 1.0) {
+      double sl = 1.0/slope;
+      value = start;
+      value += (end-start) * (exp(((i + 1.0) / (list.size() - 1.0)) * log(slope))-1.0) / (slope-1.0);
+    }
   }
   markHistory();
 }
 
 void EventSheet::createActions()
 {
+  // For some reason, the shortcuts set here have no effect and need to be
+  // decoded in keyPressEvent... (at least for linux)
+  cutAct = new QAction(/*QIcon(":/a.png"),*/ tr("Cut"), this);
+//  loopEventsAct->setIconText(tr("Loop Events"));
+  cutAct->setShortcut(QKeySequence(QKeySequence::Cut));
+  connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
+
+  copyAct = new QAction(/*QIcon(":/a.png"),*/ tr("Copy"), this);
+//  loopEventsAct->setIconText(tr("Loop Events"));
+  copyAct->setShortcut(QKeySequence(QKeySequence::Copy));
+  connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
+
+  pasteAct = new QAction(/*QIcon(":/a.png"),*/ tr("Paste"), this);
+//  loopEventsAct->setIconText(tr("Loop Events"));
+  pasteAct->setShortcut(QKeySequence(QKeySequence::Paste));
+  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
+
   sendEventsAct = new QAction(/*QIcon(":/a.png"),*/ tr("&SendEvents"), this);
   sendEventsAct->setStatusTip(tr("Send Events to Csound"));
   sendEventsAct->setIconText(tr("Send Events"));

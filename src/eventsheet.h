@@ -101,6 +101,9 @@ class EventSheet : public QTableWidget
     QString m_name;
 
     // Actions
+    QAction *copyAct;
+    QAction *pasteAct;
+    QAction *cutAct;
     QAction *sendEventsAct;
     QAction *loopEventsAct;
     QAction *stopAllEventsAct;
