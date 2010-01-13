@@ -1093,8 +1093,7 @@ void EventSheet::createActions()
   renameAct = new QAction(/*QIcon(":/a.png"),*/ tr("Rename sheet"), this);
   renameAct->setStatusTip(tr("Rename sheet"));
   renameAct->setIconText(tr("This"));
-  connect(renameAct, SIGNAL(triggered()), static_cast<LiveEventFrame *>(parent()), SLOT(rename()));
-
+  connect(renameAct, SIGNAL(triggered()), static_cast<QDockWidget *>(parent()), SLOT(rename()));
 
   insertColumnHereAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Insert Column"), this);
   insertColumnHereAct->setStatusTip(tr("Insert a column at the current position"));
@@ -1105,7 +1104,6 @@ void EventSheet::createActions()
   insertRowHereAct->setStatusTip(tr("Insert a row at the current position"));
   insertRowHereAct->setIconText(tr("Insert Row"));
   connect(insertRowHereAct, SIGNAL(triggered()), this, SLOT(insertRowHere()));
-
 
   appendColumnAct = new QAction(/*QIcon(":/a.png"),*/ tr("Append Column"), this);
   appendColumnAct->setStatusTip(tr("Append a column to the sheet"));

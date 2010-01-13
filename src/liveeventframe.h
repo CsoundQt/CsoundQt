@@ -23,12 +23,13 @@
 #ifndef LIVEEVENTFRAME_H
 #define LIVEEVENTFRAME_H
 
-#include "ui_liveeventframe.h"
+#include <QDockWidget>
 
 class EventSheet;
 class QTextEdit;
+//class LiveEventWidget;  // Defined below
 
-class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
+class LiveEventFrame :  public QDockWidget
 {
     Q_OBJECT
   public:
@@ -54,7 +55,7 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     void rename();
 
   protected:
-    void changeEvent(QEvent *e);
+//    void changeEvent(QEvent *e);
     virtual void resizeEvent (QResizeEvent * event);
     virtual void closeEvent (QCloseEvent * event);
 
@@ -63,6 +64,7 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     QString m_name;
     QTextEdit *m_editor; //TODO add text editor
     EventSheet *m_sheet;
+    LiveEventW *m_frame;
     QString m_csdName;
 
   signals:
