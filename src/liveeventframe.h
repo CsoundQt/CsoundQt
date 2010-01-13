@@ -64,7 +64,7 @@ class LiveEventFrame :  public QDockWidget
     QString m_name;
     QTextEdit *m_editor; //TODO add text editor
     EventSheet *m_sheet;
-    LiveEventW *m_frame;
+    LiveEventWidget *m_frame;
     QString m_csdName;
 
   signals:
