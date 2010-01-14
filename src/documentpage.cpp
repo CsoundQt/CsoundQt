@@ -178,7 +178,12 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
       text.insert(index, "<CsOptions>\n" + outFile + "\n</CsOptions>\n");
     }
   }
-  // Load Live Event Panels
+  setPlainText(text);
+  document()->setModified(true);
+  m_highlighter->setDocument(document());
+  if (!text.contains("<CsoundSynthesizer>")) //TODO this check is very flaky....
+    return 0;  // Don't add live event panel if not a csd file.
+  // Load Live Event Panels ------------------------
   while (text.contains("<EventPanel") and text.contains("</EventPanel>")) {
     QString liveEventsText = text.mid(text.indexOf("<EventPanel "),
                                       text.indexOf("</EventPanel>") - text.indexOf("<EventPanel ") + 13);
@@ -189,6 +194,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     frame->getSheet()->setRowCount(1);
     frame->getSheet()->setColumnCount(6);
     frame->setFromText(scoText);
+    frame->show();
     if (liveEventsText.contains("name=\"")) {
       int index = liveEventsText.indexOf("name=\"") + 6;
       QString name = liveEventsText.mid(index,
@@ -255,11 +261,10 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     text.remove(liveEventsText);
   }
   if (liveEventFrames.size() == 0) {
-    newLiveEventFrame();
+    LiveEventFrame *e = newLiveEventFrame();
+    e->setFromText(QString()); // Must set blank for undo history point
+    e->show();
   }
-  setPlainText(text);
-  document()->setModified(true);
-  m_highlighter->setDocument(document());
   return 0;
 }
 
@@ -728,7 +733,7 @@ LiveEventFrame * DocumentPage::newLiveEventFrame(QString text)
   // TODO remove from QVector when they are deleted individually
   LiveEventFrame *e = new LiveEventFrame("Live Event", this, Qt::Window);
   e->setAttribute(Qt::WA_DeleteOnClose, false);
-  e->show();
+//  e->show();
 
   if (!text.isEmpty()) {
     e->setFromText(text);
