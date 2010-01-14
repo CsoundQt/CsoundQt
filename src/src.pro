@@ -60,8 +60,7 @@ SOURCES += qutecsound.cpp \
     inspector.cpp \
     widgetpreset.cpp \
     eventsheet.cpp \
-    liveeventframe.cpp \
-    liveeventwidget.cpp
+    liveeventframe.cpp
 HEADERS += qutecsound.h \
     dockhelp.h \
     opentryparser.h \
@@ -97,8 +96,7 @@ HEADERS += qutecsound.h \
     inspector.h \
     widgetpreset.h \
     eventsheet.h \
-    liveeventframe.h \
-    liveeventwidget.h
+    liveeventframe.h
 TEMPLATE = app
 CONFIG += warn_on \
     thread \
@@ -119,7 +117,7 @@ FORMS += configdialog.ui \
     findreplace.ui \
     keyboardshortcuts.ui \
     keyselector.ui \
-    liveeventwidget.ui
+    liveeventframe.ui
 win32 { 
     QUTECSOUND_CSOUND_PATH = C:\Program \
         Files\Csound
