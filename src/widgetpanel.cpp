@@ -125,6 +125,10 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(alignBottomAct, SIGNAL(triggered()), this, SLOT(alignBottom()));
   sendToBackAct = new QAction(tr("Send to back"), this);
   connect(sendToBackAct, SIGNAL(triggered()), this, SLOT(sendToBack()));
+  distributeHorizontalAct = new QAction(tr("Distribute Horizontally"), this);
+  connect(distributeHorizontalAct, SIGNAL(triggered()), this, SLOT(distributeHorizontal()));
+  distributeVerticalAct = new QAction(tr("Distribute Vertically"), this);
+  connect(distributeVerticalAct, SIGNAL(triggered()), this, SLOT(distributeVertical()));
 
   setWidget(layoutWidget);
   m_sbActive = false;
@@ -1777,6 +1781,100 @@ void WidgetPanel::sendToBack()
       else {
         editWidgets[i]->select();
       }
+    }
+  }
+}
+
+void WidgetPanel::distributeHorizontal()
+{
+  if (editAct->isChecked()) {
+    int size = editWidgets.size();
+    int spacing, emptySpace, max = -9999, min = 9999, widgetWidth = 0;
+    QVector<int> order;
+    for (int i = 0; i < size ; i++) { // First check free space
+      if (editWidgets[i]->isSelected()) {
+        widgetWidth += editWidgets[i]->width();
+        if (min > editWidgets[i]->x()) { // Left most widget
+          min = editWidgets[i]->x();
+          if (!order.contains(i))
+            order.prepend(i);
+        }
+        if (max < editWidgets[i]->x() + editWidgets[i]->width()) { // Right most widget
+          max = editWidgets[i]->x() + editWidgets[i]->width();
+          if (!order.contains(i))
+            order.append(i);
+        }
+        if (!order.contains(i)) {
+          int j = 0;
+          while (j < order.size()) {
+            if (editWidgets[order[j]]->x() > editWidgets[i]->x()) {
+              break;
+            }
+            j++;
+          }
+          order.insert(j++, i);
+        }
+      }
+    }
+    if (order.size() < 3)
+      return;  // do nothing for less than three selected
+    emptySpace = max - min - widgetWidth;
+    qDebug() << "WidgetPanel::distributeHorizontal " << emptySpace <<  "---" << order;
+    int accum = min;
+    for (int i = 1; i < order.size() - 1 ; i++) { // Don't touch first and last
+      spacing = emptySpace / (size - i);
+      emptySpace -= spacing;
+      accum += spacing + editWidgets[order[i-1]]->width();
+      qDebug() << "WidgetPanel::distributeHorizontal --" << i;
+      editWidgets[order[i]]->move(accum, editWidgets[order[i]]->y());
+      widgets[order[i]]->move(accum, editWidgets[order[i]]->y());
+    }
+  }
+}
+
+void WidgetPanel::distributeVertical()
+{
+  if (editAct->isChecked()) {
+    int size = editWidgets.size();
+    int spacing, emptySpace, max = -9999, min = 9999, widgetHeight = 0;
+    QVector<int> order;
+    for (int i = 0; i < size ; i++) { // First check free space
+      if (editWidgets[i]->isSelected()) {
+        widgetHeight += editWidgets[i]->height();
+        if (min > editWidgets[i]->y()) { // Bottom widget
+          min = editWidgets[i]->y();
+          if (!order.contains(i))
+            order.prepend(i);
+        }
+        if (max < editWidgets[i]->y() + editWidgets[i]->height()) { // Topmost widget
+          max = editWidgets[i]->y() + editWidgets[i]->height();
+          if (!order.contains(i))
+            order.append(i);
+        }
+        if (!order.contains(i)) {
+          int j = 0;
+          while (j < order.size()) {
+            if (editWidgets[order[j]]->y() > editWidgets[i]->y()) {
+              break;
+            }
+            j++;
+          }
+          order.insert(j++, i);
+        }
+      }
+    }
+    if (order.size() < 3)
+      return;  // do nothing for less than three selected
+    emptySpace = max - min - widgetHeight;
+    qDebug() << "WidgetPanel::distributeHorizontal " << emptySpace <<  "---" << order;
+    int accum = min;
+    for (int i = 1; i < order.size() - 1 ; i++) { // Don't touch first and last
+      spacing = emptySpace / (size - i);
+      emptySpace -= spacing;
+      accum += spacing + editWidgets[order[i-1]]->height();
+      qDebug() << "WidgetPanel::distributeHorizontal --" << i;
+      editWidgets[order[i]]->move(editWidgets[order[i]]->x(), accum);
+      widgets[order[i]]->move(editWidgets[order[i]]->x(), accum);
     }
   }
 }

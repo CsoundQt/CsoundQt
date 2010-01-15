@@ -516,10 +516,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Alt+C</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&amp;Loop Events</source>
         <translation type="unfinished"></translation>
     </message>
@@ -541,10 +537,6 @@
     </message>
     <message>
         <source>Stop Events</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Alt+Q</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -652,10 +644,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&amp;Insert Column</source>
         <translation type="unfinished"></translation>
     </message>
@@ -709,6 +697,18 @@
     </message>
     <message>
         <source>Delete Row</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -926,18 +926,6 @@ It is already used.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>New...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Separate Panel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Duplicate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
@@ -955,6 +943,26 @@ It is already used.</source>
     </message>
     <message>
         <source>Loop Length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete Frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete this frame?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clone Frame</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1551,6 +1559,14 @@ ChannelH:</source>
     </message>
     <message>
         <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Distribute Horizontally</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Distribute Vertically</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

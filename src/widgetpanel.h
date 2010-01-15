@@ -151,6 +151,8 @@ class WidgetPanel : public QDockWidget
     QAction *alignTopAct;
     QAction *alignBottomAct;
     QAction *sendToBackAct;
+    QAction *distributeHorizontalAct;
+    QAction *distributeVerticalAct;
 
     // For the properties dialog - they store the configuration data for the widget panel
     QCheckBox *bgCheckBox;
@@ -232,6 +234,8 @@ class WidgetPanel : public QDockWidget
     void alignTop();
     void alignBottom();
     void sendToBack();
+    void distributeHorizontal();
+    void distributeVertical();
     void selectionChanged(QRect selection);
     void widgetMoved(QPair<int, int>);
     void widgetResized(QPair<int, int>);
