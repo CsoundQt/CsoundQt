@@ -37,7 +37,7 @@ void Curve::destroy()
   free(m_data);
 }
 
-Curve::Curve(float *data, size_t size, const QString& caption,
+Curve::Curve(MYFLT *data, size_t size, const QString& caption,
              Polarity polarity, float max, float min, float absmax,
              float y_scale, bool dotted_divider)
   : m_caption(caption)

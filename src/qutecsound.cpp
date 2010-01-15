@@ -692,6 +692,7 @@ bool qutecsound::closeTab()
       curPage = 0;
     }
   }
+  documentPages[curPage]->close();
   documentPages.remove(curPage);
   documentTabs->removeTab(curPage);
 //   if (curPage > 0) {
@@ -2417,6 +2418,7 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/Examples/Keyboard_Control.csd");
   exampleFiles.append(":/examples/Examples/Just_Intonation.csd");
   exampleFiles.append(":/examples/Examples/Mouse_Control.csd");
+  exampleFiles.append(":/examples/Examples/Event_Panel.csd");
   exampleFiles.append(":/examples/Examples/Simple_Convolution.csd");
   exampleFiles.append(":/examples/Examples/Universal_Convolution.csd");
   exampleFiles.append(":/examples/Examples/Cross_Synthesis.csd");
@@ -2926,6 +2928,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
       text += "\n";
   }
   documentPages[curPage]->setTextString(text, m_options->saveWidgets);
+  documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
   QApplication::restoreOverrideCursor();
 
 //  documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());

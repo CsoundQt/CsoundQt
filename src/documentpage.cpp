@@ -47,10 +47,6 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 DocumentPage::~DocumentPage()
 {
   qDebug() << "DocumentPage::~DocumentPage()";
-  for (int i = 0; i < liveEventFrames.size(); i++) {
-    delete liveEventFrames[i];  // These widgets have the order not to delete on close
-  }
-  delete m_highlighter;
 }
 
 void DocumentPage::keyPressEvent(QKeyEvent *event)
@@ -102,6 +98,17 @@ void DocumentPage::contextMenuEvent(QContextMenuEvent *event)
   }
   menu->exec(event->globalPos());
   delete menu;
+}
+
+void DocumentPage::closeEvent(QCloseEvent *event)
+{
+  qDebug() << "DocumentPage::closeEvent";
+  for (int i = 0; i < liveEventFrames.size(); i++) {
+    delete liveEventFrames[i];  // These widgets have the order not to delete on close
+    liveEventFrames.remove(i);
+  }
+  delete m_highlighter;
+  QTextEdit::closeEvent(event);
 }
 
 int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
@@ -178,11 +185,12 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
       text.insert(index, "<CsOptions>\n" + outFile + "\n</CsOptions>\n");
     }
   }
-  setPlainText(text);
-  document()->setModified(true);
   m_highlighter->setDocument(document());
-  if (!text.contains("<CsoundSynthesizer>")) //TODO this check is very flaky....
+  if (!text.contains("<CsoundSynthesizer>")) {//TODO this check is very flaky....
+    setPlainText(text);
+    document()->setModified(true);
     return 0;  // Don't add live event panel if not a csd file.
+  }
   // Load Live Event Panels ------------------------
   while (text.contains("<EventPanel") and text.contains("</EventPanel>")) {
     QString liveEventsText = text.mid(text.indexOf("<EventPanel "),
@@ -194,7 +202,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     frame->getSheet()->setRowCount(1);
     frame->getSheet()->setColumnCount(6);
     frame->setFromText(scoText);
-    frame->show();
+//    frame->show();
     if (liveEventsText.contains("name=\"")) {
       int index = liveEventsText.indexOf("name=\"") + 6;
       QString name = liveEventsText.mid(index,
@@ -263,8 +271,10 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   if (liveEventFrames.size() == 0) {
     LiveEventFrame *e = newLiveEventFrame();
     e->setFromText(QString()); // Must set blank for undo history point
-    e->show();
+//    e->show();
   }
+  setPlainText(text);
+  document()->setModified(true);
   return 0;
 }
 

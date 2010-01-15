@@ -36,6 +36,7 @@
       <file>../examples/Examples/Keyboard_Control.csd</file>
       <file>../examples/Examples/Just_Intonation.csd</file>
       <file>../examples/Examples/Mouse_Control.csd</file>
+      <file>../examples/Examples/Event_Panel.csd</file>
       <file>../examples/Examples/Simple_Convolution.csd</file>
       <file>../examples/Examples/Universal_Convolution.csd</file>
       <file>../examples/Examples/Cross_Synthesis.csd</file>

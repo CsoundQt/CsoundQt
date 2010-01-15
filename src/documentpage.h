@@ -71,6 +71,7 @@ class DocumentPage : public QTextEdit
   protected:
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);
+    virtual void closeEvent(QCloseEvent *event);
 
   private:
     QStringList macOptions;
