@@ -5,14 +5,14 @@ CONFIG += qute_cpp \
     libsndfile
 
 # DEFINES += QUTE_USE_CSOUNDPERFORMANCETHREAD
-TRANSLATIONS = qutecsound_es.ts \
-    qutecsound_en.ts \
-    qutecsound_de.ts \
-    qutecsound_fr.ts \
-    qutecsound_pt.ts \
-    qutecsound_it.ts \
-    qutecsound_tr.ts \
-    qutecsound_el.ts
+TRANSLATIONS = translations/qutecsound_es.ts \
+    translations/qutecsound_en.ts \
+    translations/qutecsound_de.ts \
+    translations/qutecsound_fr.ts \
+    translations/qutecsound_pt.ts \
+    translations/qutecsound_it.ts \
+    translations/qutecsound_tr.ts \
+    translations/qutecsound_el.ts
 build64 { 
     message(Building for doubles \(64-bit\) csound)
     DEFINES += USE_DOUBLE

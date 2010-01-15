@@ -108,14 +108,14 @@
       <file>../examples/Music/Kung-Xanadu.csd</file>
       <file>../examples/Music/Stockhausen-Studie_II.csd</file>
 
-      <file>qutecsound_en.qm</file>
-      <file>qutecsound_es.qm</file>
-      <file>qutecsound_de.qm</file>
-      <file>qutecsound_fr.qm</file>
-      <file>qutecsound_pt.qm</file>
-      <file>qutecsound_it.qm</file>
-      <file>qutecsound_tr.qm</file>
-      <file>qutecsound_el.qm</file>
+      <file>translations/qutecsound_en.qm</file>
+      <file>translations/qutecsound_es.qm</file>
+      <file>translations/qutecsound_de.qm</file>
+      <file>translations/qutecsound_fr.qm</file>
+      <file>translations/qutecsound_pt.qm</file>
+      <file>translations/qutecsound_it.qm</file>
+      <file>translations/qutecsound_tr.qm</file>
+      <file>translations/qutecsound_el.qm</file>
 
       <file>../doc/QuteCsound Quick Reference (0.4).pdf</file>
       <file>../doc/QuteCsound Quick Reference (0.4)-es.pdf</file>
