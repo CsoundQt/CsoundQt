@@ -58,6 +58,16 @@ Options: -b128 -A -s -m167 -R
 <MacGUI>
 ioView background {0, 0, 0}
 ioButton {8, 306} {249, 66} value 1.000000 "_Play" "Play" "/" 
-ioText {8, 12} {249, 290} label 0.000000 0.00100 "" center "DejaVu Sans" 12 {0, 65280, 0} {65280, 65280, 65280} nobackground border You can turn off an instrument with a negative number in an i statement in the score. Note that this will only turn off held notes. To create a held use a negative number in the duration. Notice that you'll have to use abs() to get the line opcode to work.Â¬To an instrument, turning off a note from the score is equivalent to a noteoff event so all "r" opcodes like linenr will start the release phase when the note is turned off.
+ioText {8, 12} {249, 290} label 0.000000 0.00100 "" center "DejaVu Sans" 12 {0, 65280, 0} {65280, 65280, 65280} nobackground border You can turn off an instrument with a negative number in an i statement in the score.Â¬To create a held use a negative number in the duration. Notice that you'll have to use abs() to get the line opcode to work.Â¬To an instrument, turning off a note from the score is equivalent to a noteoff event so all "r" opcodes like linenr will start the release phase when the note is turned off.
 </MacGUI>
 
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" name="" x="0" y="0" width="596" height="322"> 
+
+
+
+
+
+
+
+
+</EventPanel>
