@@ -373,13 +373,13 @@ void qutecsound::open()
 {
   QStringList fileNames;
   bool widgetsVisible = widgetPanel->isVisible();
-  if (widgetsVisible)
+  if (widgetsVisible && widgetPanel->isFloating())
     widgetPanel->hide(); // Necessary for Mac, as widget Panel covers open dialog
   bool helpVisible = helpPanel->isVisible();
-  if (helpVisible)
+  if (helpVisible && helpPanel->isFloating())
     helpPanel->hide(); // Necessary for Mac, as widget Panel covers open dialog
   bool inspectorVisible = m_inspector->isVisible();
-  if (inspectorVisible)
+  if (inspectorVisible && m_inspector->isFloating())
     m_inspector->hide(); // Necessary for Mac, as widget Panel covers open dialog
   fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"), lastUsedDir ,
                                             tr("Csound Files (*.csd *.orc *.sco);;All Files (*)"));
@@ -586,13 +586,13 @@ void qutecsound::del()
 QString qutecsound::getSaveFileName()
 {
   bool widgetsVisible = widgetPanel->isVisible();
-  if (widgetsVisible)
+  if (widgetsVisible && widgetPanel->isFloating())
     widgetPanel->hide(); // Necessary for Mac, as widget Panel covers open dialog
   bool helpVisible = helpPanel->isVisible();
-  if (helpVisible)
+  if (helpVisible && helpPanel->isFloating())
     helpPanel->hide(); // Necessary for Mac, as widget Panel covers open dialog
   bool inspectorVisible = m_inspector->isVisible();
-  if (inspectorVisible)
+  if (inspectorVisible && m_inspector->isFloating())
     m_inspector->hide(); // Necessary for Mac, as widget Panel covers open dialog
   QString dir = lastUsedDir;
   dir += documentPages[curPage]->fileName.mid(documentPages[curPage]->fileName.lastIndexOf("/") + 1);

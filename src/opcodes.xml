@@ -70,6 +70,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis>ifn <opcodename>vco2init</opcodename> iwave [, ibasfn] [, ipmul] [, iminsiz] [, imaxsiz] [, isrcft]</synopsis>
 </category>
 <category name="Signal Generators:FM Synthesis">
+<synopsis>a1, a2 <opcodename>crossfm</opcodename> xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [, iphs1] [, iphs2]</synopsis><synopsis>a1, a2 <opcodename>crossfmi</opcodename> xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [, iphs1] [, iphs2]</synopsis><synopsis>a1, a2 <opcodename>crosspm</opcodename> xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [, iphs1] [, iphs2]</synopsis><synopsis>a1, a2 <opcodename>crosspmi</opcodename> xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [, iphs1] [, iphs2]</synopsis><synopsis>a1, a2 <opcodename>crossfmpm</opcodename> xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [, iphs1] [, iphs2]</synopsis><synopsis>a1, a2 <opcodename>crossfmpmi</opcodename> xfrq1, xfrq2, xndx1, xndx2, kcps, ifn1, ifn2 [, iphs1] [, iphs2]</synopsis>
 <synopsis>ares <opcodename>fmb3</opcodename> kamp, kfreq, kc1, kc2, kvdepth, kvrate, ifn1, ifn2, ifn3, \
       ifn4, ivfn</synopsis>
 <synopsis>ares <opcodename>fmbell</opcodename> kamp, kfreq, kc1, kc2, kvdepth, kvrate, ifn1, ifn2, ifn3, \
@@ -146,6 +147,10 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
       [, ktime2] [, kvalue2] [...]</synopsis>
 <synopsis>ksig <opcodename>loopsegp</opcodename>  kphase, kvalue0, kdur0, kvalue1 \
       [, kdur1, ... , kdurN-1, kvalueN]</synopsis>
+<synopsis>ksig <opcodename>looptseg</opcodename> kfreq, ktrig, ktime0, kvalue0, ktype, [, ktime1] [,ktype1] [, kvalue1] \
+      [, ktime2] [,ktype2] [, kvalue2] [...]</synopsis>
+<synopsis>ksig <opcodename>loopxseg</opcodename> kfreq, ktrig, ktime0, kvalue0 [, ktime1] [, kvalue1] \
+      [, ktime2] [, kvalue2] [...]</synopsis>
 <synopsis>ksig <opcodename>lpshold</opcodename> kfreq, ktrig, ktime0, kvalue0  [, ktime1] [, kvalue1] \
       [, ktime2] [, kvalue2] [...]</synopsis>
 <synopsis>ksig <opcodename>lpsholdp</opcodename>  kphase, ktrig, ktime0, kvalue0  [, ktime1] [, kvalue1] \
@@ -153,6 +158,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis>ares <opcodename>rspline</opcodename> xrangeMin, xrangeMax, kcpsMin, kcpsMax</synopsis><synopsis>kres <opcodename>rspline</opcodename> krangeMin, krangeMax, kcpsMin, kcpsMax</synopsis>
 <synopsis>kscl <opcodename>scale</opcodename> kinput, kmax, kmin</synopsis>
 <synopsis>ares <opcodename>transeg</opcodename> ia, idur, itype, ib [, idur2] [, itype] [, ic] ...</synopsis><synopsis>kres <opcodename>transeg</opcodename> ia, idur, itype, ib [, idur2] [, itype] [, ic] ...</synopsis>
+<synopsis>ares <opcodename>transegr</opcodename> ia, idur, itype, ib [, idur2] [, itype] [, ic] ...</synopsis><synopsis>kres <opcodename>transegr</opcodename> ia, idur, itype, ib [, idur2] [, itype] [, ic] ...</synopsis>
 </category>
 <category name="Signal Generators:Envelope Generators">
 <synopsis>ares <opcodename>adsr</opcodename> iatt, idec, islev, irel [, idel]</synopsis><synopsis>kres <opcodename>adsr</opcodename> iatt, idec, islev, irel [, idel]</synopsis>
@@ -406,6 +412,8 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis>ival <opcodename>chnget</opcodename> Sname</synopsis><synopsis>kval <opcodename>chnget</opcodename> Sname</synopsis><synopsis>aval <opcodename>chnget</opcodename> Sname</synopsis><synopsis>Sval <opcodename>chnget</opcodename> Sname</synopsis>
 <synopsis><opcodename>chnmix</opcodename> aval, Sname</synopsis>
 <synopsis>itype, imode, ictltype, idflt, imin, imax <opcodename>chnparams</opcodename></synopsis>
+<synopsis>ival <opcodename>chnrecv</opcodename> Sname</synopsis><synopsis>kval <opcodename>chnrecv</opcodename> Sname</synopsis><synopsis>aval <opcodename>chnrecv</opcodename> Sname</synopsis><synopsis>Sval <opcodename>chnrecv</opcodename> Sname</synopsis>
+<synopsis><opcodename>chnsend</opcodename> ival, Sname</synopsis><synopsis><opcodename>chnsend</opcodename> kval, Sname</synopsis><synopsis><opcodename>chnsend</opcodename> aval, Sname</synopsis><synopsis><opcodename>chnsend</opcodename> Sval, Sname</synopsis>
 <synopsis><opcodename>chnset</opcodename> ival, Sname</synopsis><synopsis><opcodename>chnset</opcodename> kval, Sname</synopsis><synopsis><opcodename>chnset</opcodename> aval, Sname</synopsis><synopsis><opcodename>chnset</opcodename> Sval, Sname</synopsis>
 <synopsis><opcodename>setksmps</opcodename> iksmps</synopsis>
 <synopsis>xinarg1 [, xinarg2] ... [xinargN] <opcodename>xin</opcodename></synopsis>
@@ -423,6 +431,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis><opcodename>prints</opcodename> &quot;string&quot; [, kval1] [, kval2] [...]</synopsis>
 </category>
 <category name="Signal I/O:Soundfile Queries">
+<synopsis>ir <opcodename>filebit</opcodename> ifilcod [, iallowraw]</synopsis>
 <synopsis>ir <opcodename>filelen</opcodename> ifilcod, [iallowraw]</synopsis>
 <synopsis>ir <opcodename>filenchnls</opcodename> ifilcod [, iallowraw]</synopsis>
 <synopsis>ir <opcodename>filepeak</opcodename> ifilcod [, ichnl]</synopsis>
@@ -456,7 +465,9 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis>ares <opcodename>deltapn</opcodename> xnumsamps</synopsis>
 <synopsis>aout <opcodename>deltapx</opcodename> adel, iwsize</synopsis>
 <synopsis><opcodename>deltapxw</opcodename> ain, adel, iwsize</synopsis>
+<synopsis>outarg1, outarg2 <opcodename>newopcodename</opcodename> inarg1, inarg2</synopsis>
 <synopsis>ares <opcodename>multitap</opcodename> asig [, itime1] [, igain1] [, itime2] [, igain2] [...]</synopsis>
+<synopsis>outarg1, outarg2 <opcodename>newopcodename</opcodename> inarg1, inarg2</synopsis>
 <synopsis>ares <opcodename>vdelay</opcodename> asig, adel, imaxdel [, iskip]</synopsis>
 <synopsis>ares <opcodename>vdelay3</opcodename> asig, adel, imaxdel [, iskip]</synopsis>
 <synopsis>aout <opcodename>vdelayx</opcodename> ain, adl, imd, iws [, ist]</synopsis>
@@ -576,6 +587,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis>ares <opcodename>butterhp</opcodename> asig, kfreq [, iskip]</synopsis>
 <synopsis>ares <opcodename>butterlp</opcodename> asig, kfreq [, iskip]</synopsis>
 <synopsis>ares <opcodename>clfilt</opcodename> asig, kfreq, itype, inpol [, ikind] [, ipbr] [, isba] [, iskip]</synopsis>
+<synopsis>ashifted <opcodename>doppler</opcodename> asource, ksourceposition, kmicposition [, isoundspeed, ifiltercutoff]</synopsis>
 <synopsis>aout <opcodename>mode</opcodename> ain, kfreq, kQ [, iskip]</synopsis>
 <synopsis>ares <opcodename>tone</opcodename> asig, khp [, iskip]</synopsis>
 <synopsis>ares <opcodename>tonex</opcodename>  asig, khp [, inumlayer] [, iskip]</synopsis>
@@ -714,6 +726,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis>ares <opcodename>init</opcodename> iarg</synopsis><synopsis>ires <opcodename>init</opcodename> iarg</synopsis><synopsis>kres <opcodename>init</opcodename> iarg</synopsis>
 <synopsis>insno <opcodename>nstrnum</opcodename> &quot;name&quot;</synopsis>
 <synopsis><opcodename>p</opcodename>(x) </synopsis>
+<synopsis> ivar1, ... <opcodename>passign</opcodename> [istart]</synopsis>
 <synopsis><opcodename>pset</opcodename> icon1 [, icon2] [...]</synopsis>
 <synopsis><opcodename>reinit</opcodename> label</synopsis>
 <synopsis><opcodename>rigoto</opcodename> label</synopsis>
@@ -730,6 +743,8 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis>Svalue <opcodename>getcfg</opcodename> iopt</synopsis>
 <synopsis>ktrig  <opcodename>metro</opcodename>  kfreq [, initphase]</synopsis>
 <synopsis>ksig  <opcodename>miditempo</opcodename></synopsis>
+<synopsis><opcodename>p5gconnect</opcodename></synopsis>
+<synopsis>kres <opcodename>p5gdata</opcodename> kcontrol</synopsis>
 <synopsis>icount <opcodename>pcount</opcodename></synopsis>
 <synopsis>kres <opcodename>peak</opcodename> asig</synopsis><synopsis>kres <opcodename>peak</opcodename> ksig</synopsis>
 <synopsis>ivalue <opcodename>pindex</opcodename> ipfieldIndex</synopsis>
@@ -794,6 +809,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis><opcodename>ftsr</opcodename>(x) (init-rate args only)</synopsis>
 <synopsis><opcodename>nsamp</opcodename>(x) (init-rate args only)</synopsis>
 <synopsis>ires <opcodename>tableng</opcodename> ifn</synopsis><synopsis>kres <opcodename>tableng</opcodename> kfn</synopsis>
+<synopsis>kr <opcodename>tabsum</opcodename> ifn[[, kmin] [, kmax]]</synopsis>
 <synopsis><opcodename>tb0_init</opcodename> ifn</synopsis><synopsis><opcodename>tb1_init</opcodename> ifn</synopsis><synopsis><opcodename>tb2_init</opcodename> ifn</synopsis><synopsis><opcodename>tb3_init</opcodename> ifn</synopsis><synopsis><opcodename>tb4_init</opcodename> ifn</synopsis><synopsis><opcodename>tb5_init</opcodename> ifn</synopsis><synopsis><opcodename>tb6_init</opcodename> ifn</synopsis><synopsis><opcodename>tb7_init</opcodename> ifn</synopsis><synopsis><opcodename>tb8_init</opcodename> ifn</synopsis><synopsis><opcodename>tb9_init</opcodename> ifn</synopsis><synopsis><opcodename>tb10_init</opcodename> ifn</synopsis><synopsis><opcodename>tb11_init</opcodename> ifn</synopsis><synopsis><opcodename>tb12_init</opcodename> ifn</synopsis><synopsis><opcodename>tb13_init</opcodename> ifn</synopsis><synopsis><opcodename>tb14_init</opcodename> ifn</synopsis><synopsis><opcodename>tb15_init</opcodename> ifn</synopsis><synopsis>iout = <opcodename>tb0</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb0</opcodename>(kIndex)</synopsis><synopsis>iout = <opcodename>tb1</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb1</opcodename>(kIndex)</synopsis><synopsis>iout = <opcodename>tb2</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb2</opcodename>(kIndex)</synopsis><synopsis>iout = <opcodename>tb3</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb3</opcodename>(kIndex)</synopsis><synopsis>iout = <opcodename>tb4</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb4</opcodename>(kIndex)</synopsis><synopsis>iout = <opcodename>tb5</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb5</opcodename>(kIndex)</synopsis><synopsis>iout = <opcodename>tb6</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb6</opcodename>(kIndex)</synopsis><synopsis>iout = <opcodename>tb7</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb7</opcodename>(kIndex)</synopsis><synopsis>iout = <opcodename>tb8</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb8</opcodename>(kIndex)</synopsis><synopsis>iout = <opcodename>tb9</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb9</opcodename>(kIndex)</synopsis><synopsis>iout = <opcodename>tb10</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb10</opcodename>(kIndex)</synopsis><synopsis>iout = <opcodename>tb11</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb11</opcodename>(kIndex)</synopsis><synopsis>iout = <opcodename>tb12</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb12</opcodename>(kIndex)</synopsis><synopsis>iout = <opcodename>tb13</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb13</opcodename>(kIndex)</synopsis><synopsis>iout = <opcodename>tb14</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb14</opcodename>(kIndex)</synopsis><synopsis>iout = <opcodename>tb15</opcodename>(iIndex)</synopsis><synopsis>kout = <opcodename>tb15</opcodename>(kIndex)</synopsis>
 </category>
 <category name="Table Control:Dynamic Selection">
@@ -867,7 +883,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis><opcodename>FLhvsBox</opcodename> kx, ky, ihandle</synopsis>
 <synopsis>kascii <opcodename>FLkeyIn</opcodename> [ifn]</synopsis>
 <synopsis><opcodename>FLloadsnap</opcodename> &quot;filename&quot; [, igroup]</synopsis>
-<synopsis>kx, ky, kb1, kb2, kb3 <opcodename>FLmouse</opcodename> [, imode]</synopsis>
+<synopsis>kx, ky, kb1, kb2, kb3 <opcodename>FLmouse</opcodename> [imode]</synopsis>
 <synopsis><opcodename>FLprintk</opcodename> itime, kval, idisp</synopsis>
 <synopsis><opcodename>FLprintk2</opcodename> kval, idisp</synopsis>
 <synopsis><opcodename>FLrun</opcodename></synopsis>
@@ -1133,6 +1149,16 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
       init1, ifn1, icutoff1, .... , ictlnum8, imin8, imax8, init8, ifn8, icutoff8</synopsis>
 <synopsis>k1, k2, ...., k16 <opcodename>sliderKawai</opcodename> imin1, imax1, init1, ifn1, \
       imin2, imax2, init2, ifn2, ..., imin16, imax16, init16, ifn16</synopsis>
+</category>
+<category name="Signal Flow Graph">
+<synopsis><opcodename>alwayson </opcodename>Tinstrument [p4, ..., pn]</synopsis>
+<synopsis><opcodename>connect </opcodename>Tsource1, Soutlet1, Tsink1, Sinlet1</synopsis>
+<synopsis>asignal <opcodename>inleta </opcodename>Sname</synopsis>
+<synopsis>fsignal <opcodename>inletf </opcodename>Sname</synopsis>
+<synopsis>ksignal <opcodename>inletk </opcodename>Sname</synopsis>
+<synopsis><opcodename>outleta </opcodename>Sname, asignal</synopsis>
+<synopsis><opcodename>outletf </opcodename>Sname, fsignal</synopsis>
+<synopsis><opcodename>outletk </opcodename>Sname, ksignal</synopsis>
 </category>
 <category name="Spectral Processing:STFT">
 <synopsis><opcodename>ktableseg</opcodename> ifn1, idur1, ifn2 [, idur2] [, ifn3] [...]</synopsis>
@@ -1405,6 +1431,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <synopsis>asignal <opcodename>MixerReceive</opcodename> ibuss, ichannel</synopsis>
 <synopsis><opcodename>MixerSend</opcodename> asignal, isend, ibuss, ichannel</synopsis>
 <synopsis><opcodename>MixerSetLevel</opcodename> isend, ibuss, kgain</synopsis>
+<synopsis><opcodename>MixerSetLevel_i</opcodename> isend, ibuss, igain</synopsis>
 </category>
 <category name="Python Opcodes">
 <synopsis><opcodename>pyassign</opcodename> &quot;variable&quot;, kvalue</synopsis><synopsis><opcodename>pyassigni</opcodename> &quot;variable&quot;, ivalue</synopsis><synopsis><opcodename>pylassign</opcodename> &quot;variable&quot;, kvalue</synopsis><synopsis><opcodename>pylassigni</opcodename> &quot;variable&quot;, ivalue</synopsis><synopsis><opcodename>pyassignt</opcodename> ktrigger, &quot;variable&quot;, kvalue</synopsis><synopsis><opcodename>pylassignt</opcodename> ktrigger, &quot;variable&quot;, kvalue</synopsis>
@@ -1512,6 +1539,8 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 
 
 
+<synopsis><opcodename>modmatrix</opcodename> iresfn, isrcmodfn, isrcparmfn, imodscale, inum_mod, \\
+inum_parm, kupdate</synopsis>
 
 
 

@@ -292,14 +292,14 @@ QString DocumentPage::getFullText()
 {
   QString fullText;
   fullText = document()->toPlainText();
-  if (!fullText.endsWith("\n"))
-    fullText += "\n";
+//  if (!fullText.endsWith("\n"))
+//    fullText += "\n";
   if (fileName.endsWith(".csd",Qt::CaseInsensitive) or fileName == "") {
     fullText += getMacOptionsText() + "\n" + macGUI + "\n" + macPresets + "\n";
     QString liveEventsText = "";
     if (saveLiveEvents) { // Only add live events sections if file is a csd file
       for (int i = 0; i < liveEventFrames.size(); i++) {
-        QString panel = "\n<EventPanel name=\"";
+        QString panel = "<EventPanel name=\"";
         panel += liveEventFrames[i]->getName() + "\" tempo=\"";
         panel += QString::number(liveEventFrames[i]->getTempo(), 'f', 8) + "\" loop=\"";
         panel += QString::number(liveEventFrames[i]->getLoopLength(), 'f', 8) + "\" name=\"";
@@ -309,7 +309,7 @@ QString DocumentPage::getFullText()
         panel += QString::number(liveEventFrames[i]->width()) + "\" height=\"";
         panel += QString::number(liveEventFrames[i]->height()) + "\">";
         panel += liveEventFrames[i]->getPlainText();
-        panel += "</EventPanel>\n";
+        panel += "</EventPanel>";
         liveEventsText += panel;
       }
       fullText += liveEventsText;
