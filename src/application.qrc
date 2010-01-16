@@ -37,6 +37,8 @@
       <file>../examples/Examples/Just_Intonation.csd</file>
       <file>../examples/Examples/Mouse_Control.csd</file>
       <file>../examples/Examples/Event_Panel.csd</file>
+      <file>../examples/Examples/Score_Tricks.csd</file>
+
       <file>../examples/Examples/Simple_Convolution.csd</file>
       <file>../examples/Examples/Universal_Convolution.csd</file>
       <file>../examples/Examples/Cross_Synthesis.csd</file>
@@ -81,7 +83,6 @@
       <file>../examples/Getting Started/Toots/Toot5.csd</file>
       <file>../examples/Getting Started/Widgets_1.csd</file>
       <file>../examples/Getting Started/Widgets_2.csd</file>
-      <file>../examples/Getting Started/Score_Tricks.csd</file>
 
       <file>../examples/Synths/Additive_Synth.csd</file>
       <file>../examples/Synths/Simple_Subtractive.csd</file>

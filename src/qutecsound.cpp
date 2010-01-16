@@ -2419,6 +2419,7 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/Examples/Just_Intonation.csd");
   exampleFiles.append(":/examples/Examples/Mouse_Control.csd");
   exampleFiles.append(":/examples/Examples/Event_Panel.csd");
+  exampleFiles.append(":/examples/Exaples/Score_Tricks.csd");
   exampleFiles.append(":/examples/Examples/Simple_Convolution.csd");
   exampleFiles.append(":/examples/Examples/Universal_Convolution.csd");
   exampleFiles.append(":/examples/Examples/Cross_Synthesis.csd");
@@ -2474,7 +2475,6 @@ void qutecsound::createMenus()
   tutFiles.clear();
   tutFiles.append(":/examples/Getting Started/Widgets_1.csd");
   tutFiles.append(":/examples/Getting Started/Widgets_2.csd");
-  tutFiles.append(":/examples/Getting Started/Score_Tricks.csd");
   submenu = tutorialMenu->addMenu("Other");
   foreach (QString fileName, tutFiles) {
     QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
