@@ -81,8 +81,6 @@ class WidgetPanel : public QDockWidget
     QString getCsladspaLines();
     QString getCabbageLines();
 
-    QStringList getScheduledEvents(unsigned long ksmpscount);
-
     void setUndoHistory(QVector<QString> *history, int *index);
 
     QVector<QString> eventQueue;

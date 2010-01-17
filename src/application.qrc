@@ -76,6 +76,19 @@
       <file>../examples/Getting Started/Basics/Instrument Control.csd</file>
       <file>../examples/Getting Started/Basics/Realtime Instrument Control.csd</file>
       <file>../examples/Getting Started/Basics/Routing.csd</file>
+
+     <file>../examples/Getting Started/Realtime_Interaction/Creating_Widgets.csd</file>
+     <file>../examples/Getting Started/Realtime_Interaction/Widgets_Invalue.csd</file>
+     <file>../examples/Getting Started/Realtime_Interaction/Widgets_Outvalue.csd</file>
+     <file>../examples/Getting Started/Realtime_Interaction/Widgets_Buttontypes.csd</file>
+     <file>../examples/Getting Started/Realtime_Interaction/Widgets_Checkbox.csd</file>
+     <file>../examples/Getting Started/Realtime_Interaction/Live_Audio_Input.csd</file>
+     <file>../examples/Getting Started/Realtime_Interaction/MIDI_Receiving_Notes.csd</file>
+     <file>../examples/Getting Started/Realtime_Interaction/MIDI_Synth.csd</file>
+     <file>../examples/Getting Started/Realtime_Interaction/MIDI_Control_Data.csd</file>
+     <file>../examples/Getting Started/Realtime_Interaction/MIDI_Assign_Controllers.csd</file>
+     <file>../examples/Getting Started/Realtime_Interaction/OpenSoundControl.csd</file>
+
       <file>../examples/Getting Started/Toots/Toot1.csd</file>
       <file>../examples/Getting Started/Toots/Toot2.csd</file>
       <file>../examples/Getting Started/Toots/Toot3.csd</file>

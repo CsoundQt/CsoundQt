@@ -52,22 +52,22 @@ DocumentPage::~DocumentPage()
 void DocumentPage::keyPressEvent(QKeyEvent *event)
 {
   // TODO is this function necessary any more?
-    if (event == QKeySequence::Cut)
-    {
-        emit doCut();
-        return;
+  if (event == QKeySequence::Cut)
+  {
+    emit doCut();
+    return;
+  }
+  if (event == QKeySequence::Copy)
+  {
+    emit doCopy();
+    return;
+  }
+  if (event == QKeySequence::Paste)
+  {
+    emit doPaste();
+    return;
     }
-    if (event == QKeySequence::Copy)
-    {
-        emit doCopy();
-        return;
-    }
-    if (event == QKeySequence::Paste)
-    {
-        emit doPaste();
-        return;
-    }
-    return QTextEdit::keyPressEvent(event);
+  return QTextEdit::keyPressEvent(event);
 }
 
 void DocumentPage::contextMenuEvent(QContextMenuEvent *event)
@@ -202,7 +202,6 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     frame->getSheet()->setRowCount(1);
     frame->getSheet()->setColumnCount(6);
     frame->setFromText(scoText);
-//    frame->show();
     if (liveEventsText.contains("name=\"")) {
       int index = liveEventsText.indexOf("name=\"") + 6;
       QString name = liveEventsText.mid(index,
@@ -271,7 +270,6 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   if (liveEventFrames.size() == 0) {
     LiveEventFrame *e = newLiveEventFrame();
     e->setFromText(QString()); // Must set blank for undo history point
-//    e->show();
   }
   setPlainText(text);
   document()->setModified(true);
@@ -318,11 +316,6 @@ QString DocumentPage::getFullText()
   return fullText;
 }
 
-// QString DocumentPage::getXmlWidgetsText()
-// {
-//   
-// }
-
 QString DocumentPage::getOptionsText()
 {
   QString text = document()->toPlainText();
@@ -350,36 +343,6 @@ QString DocumentPage::getDotText()
   DotGenerator dot(fileName, orcText, m_opcodeTree);
   return dot.getDotText();
 }
-
-// QString DocumentPage::connectedNodeText(QString nodeName, QString label, QString dest)
-// {
-//   QString nodeText = "    " + nodeName;
-//   nodeText += "[label=\"" + label + "\" shape=none fontsize=8 splines=polyline]\n";
-//   nodeText += "    "+ nodeName + "->" + dest + "[splines=polyline]\n";
-//   return nodeText;
-// }
-
-// QString DocumentPage::dotTextForExpression(QString expression, QString &outNode)
-// {
-//   QString text = "";
-// //   QString outNode = "";
-//   QString node1 = "";
-//   QString node2 = "";
-//   while (expression.contains("(")) {
-//     int parenIndex = expression.lastIndexOf("(");
-//     int parenCloseIndex = expression.indexOf(")");
-//     QString innerExpression = expression.mid(parenIndex,parenCloseIndex - parenIndex + 1 );
-//     qDebug() << "Inner expression:" <<  innerExpression;
-//     text += dotTextForExpression(innerExpression, outNode);
-//     dotTextForExpression(QString expression, QString &outNode);
-//   }
-//   while (expression.contains(QRegExp("[\\*\\/\\+\\-]+"))) {
-//   }
-//   text = "  ExNd_" + expression + "_" + outNode + " [label = " + expression + "]\n";
-//   text = "  ExNd_" + expression + "_" + outNode + " -> " outNode + "\n";
-//   outNode = "ExNd_" + expression + "_" + outNode;
-//   return text;
-// }
 
 QString DocumentPage::getMacWidgetsText()
 {
@@ -562,9 +525,20 @@ int DocumentPage::currentLine()
   return cursor.blockNumber() + 1;
 }
 
+QStringList DocumentPage::getScheduledEvents(unsigned long ksmps)
+{
+  QStringList events;
+  // Called once after every Csound control pass
+  for (int i = 0; i < liveEventFrames.size(); i++) {
+    liveEventFrames[i]->getEvents(ksmps, &events);
+  }
+//  m_ksmpscount = ksmpscount;
+  return events;
+}
+
 void DocumentPage::showLiveEventFrames(bool visible)
 {
-  qDebug() << "DocumentPage::showLiveEventFrames  " << visible << (int) this;
+//  qDebug() << "DocumentPage::showLiveEventFrames  " << visible << (int) this;
   for (int i = 0; i < liveEventFrames.size(); i++) {
     if (visible) {
       liveEventFrames[i]->show();
@@ -736,6 +710,12 @@ void DocumentPage::opcodeFromMenu()
   cursor.insertText(text);
 }
 
+void DocumentPage::newLiveEventFrameSlot(QString text)
+{
+  LiveEventFrame *e = newLiveEventFrame(text);
+  e->show();  //Assume that since slot was called ust be visible
+}
+
 LiveEventFrame * DocumentPage::newLiveEventFrame(QString text)
 {
   qDebug() << "DocumentPage::newLiveEventFrame()";
@@ -750,7 +730,7 @@ LiveEventFrame * DocumentPage::newLiveEventFrame(QString text)
   }
   liveEventFrames.append(e);
   connect(e, SIGNAL(closed()), this, SLOT(liveEventFrameClosed()));
-  connect(e, SIGNAL(newFrameSignal(QString)), this, SLOT(newLiveEventFrame(QString)));
+  connect(e, SIGNAL(newFrameSignal(QString)), this, SLOT(newLiveEventFrameSlot(QString)));
   connect(e, SIGNAL(deleteFrameSignal(LiveEventFrame *)), this, SLOT(deleteLiveEventFrame(LiveEventFrame *)));
   emit registerLiveEvent(dynamic_cast<QWidget *>(e));
   return e;
@@ -768,7 +748,6 @@ void DocumentPage::deleteLiveEventFrame(LiveEventFrame *frame)
   else {
     qDebug() << "DocumentPage::deleteLiveEventFrame frame not found";
   }
-  qDebug() << "deleteLiveEventFrame(LiveEventFrame *frame) out";
 }
 
 void DocumentPage::changed()
@@ -779,20 +758,15 @@ void DocumentPage::changed()
 
 void DocumentPage::liveEventFrameClosed()
 {
-  qDebug() << "DocumentPage::liveEventFrameClosed()";
-//  LiveEventFrame *e = dynamic_cast<LiveEventFrame *>(QObject::sender());
+//  qDebug() << "DocumentPage::liveEventFrameClosed()";
+  LiveEventFrame *e = dynamic_cast<LiveEventFrame *>(QObject::sender());
 //  if (e != 0) { // This shouldn't really be necessary but just in case
   bool shown = false;
   for (int i = 0; i < liveEventFrames.size(); i++) {
-    if (liveEventFrames[i]->isVisible())
+    if (liveEventFrames[i]->isVisible()
+      && liveEventFrames[i] != e)  // frame that called has not been called yet
       shown = true;
   }
   emit liveEventsVisible(shown);
 //  }
 }
-
-// void DocumentPage::moved()
-// {
-//   qDebug() << "DocumentPage::moved()" << currentLine();
-//   emit(currentLineChanged(currentLine()));
-// }

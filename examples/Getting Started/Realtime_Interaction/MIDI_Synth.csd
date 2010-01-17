@@ -71,19 +71,6 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
-
-
-
-
-
-
-
-
-
-
-
-
-
 <MacOptions>
 Version: 3
 Render: Real
@@ -96,13 +83,13 @@ IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
-ioView background {46811, 28108, 0}
+ioView background {46774, 28013, 0}
 ioSlider {22, 458} {311, 38} 0.000000 1.000000 0.189711 d_w_reverb
 ioText {22, 421} {131, 35} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Reverb Mix
 ioSlider {22, 277} {311, 38} 0.000000 1.000000 0.070740 d_w_delay
 ioText {22, 240} {131, 35} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Delay Mix
 ioSlider {244, 147} {20, 100} 0.050000 1.000000 0.268500 time_delay
-ioSlider {313, 148} {20, 100} 0.050000 1.000000 0.534500 feedb_delay
+ioSlider {313, 148} {20, 100} 0.050000 1.000000 0.525000 feedb_delay
 ioText {235, 121} {45, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Time
 ioText {294, 121} {57, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Feedback
 ioText {22, 116} {184, 35} label 0.000000 0.00100 "" left "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground border DELAY SECTION
@@ -115,11 +102,10 @@ ioText {223, 250} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 
 ioText {300, 251} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0-100 %
 ioText {19, 44} {273, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Filterfrequency Control for Instr 1
 ioText {19, 9} {184, 35} label 0.000000 0.00100 "" left "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground border SYNTH SECTION
-ioSlider {18, 68} {311, 38} 10.000000 5000.000000 1983.536977 filter_freq
+ioSlider {18, 68} {311, 38} 10.000000 5000.000000 1967.491961 filter_freq
 </MacGUI>
 
-
-<EventPanel tempo="60.00000000" name="Events" x="60" y="304" width="513" height="322"> 
+<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" name="Events" x="60" y="304" width="513" height="322"> 
  
  
  
@@ -139,4 +125,4 @@ ioSlider {18, 68} {311, 38} 10.000000 5000.000000 1983.536977 filter_freq
  
  
  
-</EventPanel>
+ </EventPanel>

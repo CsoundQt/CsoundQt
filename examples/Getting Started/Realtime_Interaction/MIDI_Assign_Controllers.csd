@@ -92,12 +92,6 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Joachim Heintz & Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
-
-
-
-
-
-
 <MacOptions>
 Version: 3
 Render: Real
@@ -110,12 +104,12 @@ IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
-ioView background {46811, 28108, 0}
+ioView background {46774, 28013, 0}
 ioSlider {22, 555} {311, 38} 0.000000 1.000000 0.000000 d_w_reverb
 ioText {22, 518} {131, 35} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Reverb Mix
 ioSlider {22, 374} {311, 38} 0.000000 1.000000 0.000000 d_w_delay
 ioText {22, 337} {131, 35} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Delay Mix
-ioSlider {244, 244} {20, 100} 0.050000 1.000000 0.603543 time_delay
+ioSlider {244, 244} {20, 100} 0.050000 1.000000 0.601000 time_delay
 ioSlider {313, 245} {20, 100} 0.050000 1.000000 0.050000 feedb_delay
 ioText {235, 218} {45, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Time
 ioText {294, 218} {57, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Feedback
@@ -129,7 +123,7 @@ ioText {223, 347} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 
 ioText {300, 348} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0-100 %
 ioText {19, 141} {273, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder LP-Filter Cutoff-frequency
 ioText {20, 107} {184, 35} label 0.000000 0.00100 "" left "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground border SYNTH SECTION
-ioSlider {18, 165} {311, 38} 10.000000 5000.000000 1463.779541 filter_freq
+ioSlider {18, 165} {311, 38} 10.000000 5000.000000 1454.051447 filter_freq
 ioText {382, 107} {319, 64} label 0.000000 0.00100 "" center "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground border CONTROLLER NUMBERS FOR THE DIFFERENT SLIDERS
 ioText {513, 178} {54, 27} editnum 1.000000 1.000000 "ctrl#filt_freq" right "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
 ioText {333, 169} {169, 35} label 0.000000 0.00100 "" center "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ---------->
@@ -147,8 +141,7 @@ ioText {511, 76} {54, 27} editnum 1.000000 1.000000 "#midichn_slider" right "Luc
 ioText {4, 70} {335, 23} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder (or you must change the massign statement in the orc header)
 </MacGUI>
 
-
-<EventPanel tempo="60.00000000" name="Events" x="410" y="239" width="513" height="322"> 
+<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" name="Events" x="410" y="239" width="513" height="322"> 
  
  
  
@@ -166,4 +159,4 @@ ioText {4, 70} {335, 23} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0
  
  
  
-</EventPanel>
+ </EventPanel>

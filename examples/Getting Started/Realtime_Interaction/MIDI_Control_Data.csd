@@ -7,8 +7,8 @@ aSrc oscili 0.8, kMidiCC, 1	; now CC 01 controlls the frequency of this oscillat
 ..
 The disadvantage of that method is, that you have no communication with the Widget-GUI.
 
-In the example below, a sperate instrument (100) is built to receive the MIDI CC 01 (Modulation) constantly and send it's values to the userchannel "filter_freq". 
-In Instrument 101 the data from this userchannel is read-out and mapped to the filters frequency input. 
+In the example below, a separate instrument (instr 100) is built to receive the MIDI CC 01 (Modulation) constantly and send its values on channel "filter_freq". 
+In Instrument 101 the data from this channel is read and mapped to the filters frequency input. 
 
 By sending MIDI-Data on Ch.1 / CC01 (with your keyboards modualtion wheel, or any other MIDI faderbox) you see the Widget-fader moving and can hear the filter adjustments in realtime, when playing a note. Adjusting the fader with the mouse is also still possible.
 */
@@ -83,17 +83,6 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
-
-
-
-
-
-
-
-
-
-
-
 <MacOptions>
 Version: 3
 Render: Real
@@ -106,12 +95,12 @@ IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
-ioView background {46811, 28108, 0}
+ioView background {46774, 28013, 0}
 ioSlider {22, 458} {311, 38} 0.000000 1.000000 0.244373 d_w_reverb
 ioText {22, 421} {131, 35} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Reverb Mix
 ioSlider {22, 277} {311, 38} 0.000000 1.000000 0.257235 d_w_delay
 ioText {22, 240} {131, 35} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Delay Mix
-ioSlider {244, 147} {20, 100} 0.050000 1.000000 0.420500 time_delay
+ioSlider {244, 147} {20, 100} 0.050000 1.000000 0.401500 time_delay
 ioSlider {313, 148} {20, 100} 0.050000 1.000000 0.316000 feedb_delay
 ioText {235, 121} {45, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Time
 ioText {294, 121} {57, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Feedback
@@ -125,11 +114,10 @@ ioText {223, 250} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 
 ioText {300, 251} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0-100 %
 ioText {19, 44} {273, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Filterfrequency Control with CC 01 (Modulation)
 ioText {20, 10} {184, 35} label 0.000000 0.00100 "" left "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground border SYNTH SECTION
-ioSlider {18, 68} {311, 38} 10.000000 5000.000000 2320.482315 filter_freq
+ioSlider {18, 68} {311, 38} 10.000000 5000.000000 2288.392283 filter_freq
 </MacGUI>
 
-
-<EventPanel tempo="60.00000000" name="Events" x="383" y="237" width="513" height="322"> 
+<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" name="Events" x="383" y="237" width="513" height="322"> 
  
  
  
@@ -147,4 +135,4 @@ ioSlider {18, 68} {311, 38} 10.000000 5000.000000 2320.482315 filter_freq
  
  
  
-</EventPanel>
+ </EventPanel>

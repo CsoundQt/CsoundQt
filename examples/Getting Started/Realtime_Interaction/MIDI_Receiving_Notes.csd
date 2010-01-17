@@ -27,19 +27,6 @@ e 3600
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann & Joachim Heintz (Dec. 2009) - Incontri HMT-Hannover 
-
-
-
-
-
-
-
-
-
-
-
-
-
 <MacOptions>
 Version: 3
 Render: Real
@@ -55,7 +42,6 @@ Options: -b128 -A -s -m167 -R
 ioView background {1799, 24415, 41634}
 ioText {25, 24} {137, 53} label 0.000000 0.00100 "" left "Lucida Grande" 16 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder ..nothing here!
 </MacGUI>
-
 
 <EventPanel name="Events" tempo="60.00000000" loop="8.00000000" name="Events" x="60" y="304" width="513" height="322"> 
  

@@ -1,13 +1,13 @@
 /*Getting started.. Realtime Interaction: Open Sound Control
 
-Open Sound Control (OSC) is a network protocol format for musical control data communication. A few of it's advantages compared to MIDI are, that it's more accurat, quicker and much more flexible. With OSC you can easily send messages to other software like Max/Msp, Chuck or SuperCollider.
+Open Sound Control (OSC) is a network protocol format for musical control data communication. A few of its advantages compared to MIDI are, that it's more accurate, quicker and much more flexible. With OSC you can easily send messages to other software like Max/Msp, Chuck or SuperCollider.
 
-In this example, two instruments are build, which show OSC usage with Qutecsound. 
+In this example, two instruments are built, which show OSC usage with Qutecsound. 
 
 Instrument 1000 will send OSC messages to an IP-adress. You can generate values on two different channels, on the yellow side of the Widget-Panel.
 Instrument 1001 will receive the OSC data from an this IP-adress. When Csound is running, you can see the reactions on the blue side of the Widget-Panel.
 
-Marcos are used, to define the send and receive ports, so you can change them at the top of the example-file.
+Macros are used, to define the send and receive ports, so you can change them at the top of the example-file.
 
 1. open the widget panel
 2. press run, to start csound and its OSC responders
@@ -57,11 +57,6 @@ e 3600
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
-
-
-
-
-
 <MacOptions>
 Version: 3
 Render: Real
@@ -96,7 +91,6 @@ ioText {86, 270} {151, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 
 ioText {407, 288} {151, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Channel "rcvSlider"
 ioText {409, 136} {151, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Channel "rcvNumber"
 </MacGUI>
-
 
 <EventPanel name="Events" tempo="60.00000000" loop="8.00000000" name="Events" x="320" y="218" width="513" height="322"> 
  

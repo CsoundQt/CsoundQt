@@ -42,7 +42,6 @@ class DocumentPage : public QTextEdit
     void setColorVariables(bool color);
     void setOpcodeNameList(QStringList list);
     QString getFullText();
-//     QString getXmlWidgetsText();
     QString getOptionsText();
     QString getDotText();
     QString getMacWidgetsText();
@@ -58,8 +57,8 @@ class DocumentPage : public QTextEdit
     void updateCsladspaText(QString text);
     QString getFilePath();
     int currentLine();
+    QStringList getScheduledEvents(unsigned long ksmpscount);
 
-//     QTextDocument *textDocument;
     QString fileName;
     QString companionFile;
     bool askForFile;
@@ -81,14 +80,10 @@ class DocumentPage : public QTextEdit
 
     QVector<LiveEventFrame *> liveEventFrames;
 
-    bool widgetsDocked;
     Highlighter *m_highlighter;
     OpEntryParser *m_opcodeTree;
     bool errorMarked;
     bool saveLiveEvents;
-
-//     QString connectedNodeText(QString nodeName, QString label, QString dest);
-//     QString dotTextForExpression(QString expression, QString &outNode);
     
   public slots:
     void setMacWidgetsText(QString widgetText);
@@ -104,6 +99,7 @@ class DocumentPage : public QTextEdit
     void unindent();
 
     void opcodeFromMenu();
+    void newLiveEventFrameSlot(QString text = QString());
     LiveEventFrame * newLiveEventFrame(QString text = QString());
     void deleteLiveEventFrame(LiveEventFrame *frame);
     void showLiveEventFrames(bool visible);

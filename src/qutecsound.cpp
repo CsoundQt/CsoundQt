@@ -2465,7 +2465,7 @@ void qutecsound::createMenus()
   realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Outvalue.csd");
   realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Buttontypes.csd");
   realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Checkbox.csd");
-  realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Live_Audio_Input.csd");
+  realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Live_Audio_Input.csd");
   realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Receiving_Notes.csd");
   realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Synth.csd");
   realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Control_Data.csd");
@@ -3367,7 +3367,9 @@ void qutecsound::csThread(void *data)
       readWidgetValues(udata);
     }
   }
-  QStringList events = udata->qcs->widgetPanel->getScheduledEvents(udata->ksmpscount);
+//  QStringList events = udata->qcs->widgetPanel->getScheduledEvents(udata->ksmpscount);
+  QStringList events = udata->qcs->documentPages[udata->qcs->curPage]
+      ->getScheduledEvents(udata->ksmpscount * udata->outputBufferSize);
   for (int i = 0; i < events.size(); i++) {
     char type = udata->qcs->widgetPanel->eventQueue[udata->qcs->widgetPanel->eventQueueSize][0].unicode();
     QStringList eventElements = events[i].remove(0,1).split(QRegExp("\\s"),QString::SkipEmptyParts);

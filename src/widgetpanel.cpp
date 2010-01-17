@@ -545,13 +545,6 @@ QString WidgetPanel::getCabbageLines()
   return text;
 }
 
-QStringList WidgetPanel::getScheduledEvents(unsigned long ksmpscount)
-{
-  QStringList events;
-  m_ksmpscount = ksmpscount;
-  return events;
-}
-
 void WidgetPanel::setUndoHistory(QVector<QString> *history, int *index)
 {
   m_history = history;

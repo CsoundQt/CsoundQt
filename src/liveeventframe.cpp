@@ -159,6 +159,11 @@ QString LiveEventFrame::getPlainText()
   return QString();
 }
 
+void LiveEventFrame::getEvents(unsigned long ksmps, QStringList *eventText)
+{
+  // TODO: implement
+}
+
 void LiveEventFrame::forceDestroy()
 {
   this->destroy();

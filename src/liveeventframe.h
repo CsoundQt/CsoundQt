@@ -42,6 +42,7 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     double getLoopLength();
     QString getPlainText();
 
+    void getEvents(unsigned long ksmps, QStringList *eventText);
     void forceDestroy();
 
   public slots:
