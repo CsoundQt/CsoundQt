@@ -2355,6 +2355,7 @@ void qutecsound::createMenus()
 
   QStringList tutFiles;
   QStringList basicsFiles;
+  QStringList realtimeInteractionFiles;
   QStringList widgetFiles;
   QStringList synthFiles;
   QStringList musicFiles;
@@ -2453,6 +2454,26 @@ void qutecsound::createMenus()
   QMenu *tutorialMenu = examplesMenu->addMenu(tr("Getting Started"));
   submenu = tutorialMenu->addMenu(tr("Basics"));
   foreach (QString fileName, basicsFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
+  realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Creating_Widgets.csd");
+  realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Invalue.csd");
+  realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Outvalue.csd");
+  realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Buttontypes.csd");
+  realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Checkbox.csd");
+  realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Live_Audio_Input.csd");
+  realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Receiving_Notes.csd");
+  realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Synth.csd");
+  realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Control_Data.csd");
+  realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Assign_Controllers.csd");
+  realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/OpenSoundControl.csd");
+
+   submenu = tutorialMenu->addMenu(tr("Realtime Interaction"));
+  foreach (QString fileName, realtimeInteractionFiles) {
     QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
     newAction = submenu->addAction(name);
     newAction->setData(fileName);
