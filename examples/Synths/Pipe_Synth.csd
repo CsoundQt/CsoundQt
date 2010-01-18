@@ -12,7 +12,7 @@ ksmps	= 256
 nchnls	= 2
 
 maxalloc	1, 10	;maximum polyphony
-prealloc	1, 8 ;preallocate voices
+;prealloc	1, 9 ;preallocate voices
 gaIn_Reverb	init	0
 
 ; all midi channels to instrument 1
@@ -159,10 +159,10 @@ aout_SD		deltap3	 kdly_DT
 
 ;Send the signal aout_SD to Saturation (Allpass is bypassed) if iPower_AP = 0.
 
-if kPower_AP > 0.5	goto	Allpasstune
+if kPower_AP > 0.5	kgoto	Allpasstune
 
 aout_AP	= aout_SD
-		goto Saturation
+		kgoto Saturation
 Allpasstune:
 ;************************************************************************************ALLPASS TUNE
 ;Output idly_APTune (to ALLPASS)
@@ -685,15 +685,23 @@ f 2 0 128 -25 0 8.17579892 128 13289.7503	;Table  exp2= 440 * pow(2; (indx-69)/1
 f 3 0 512 10 1							;sinus for poscil
 
 i 99 0 3600
+
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
+
+
+
 <MacOptions>
 Version: 3
 Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 103 52 974 798
+WindowBounds: 540 144 974 798
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -701,229 +709,242 @@ Options: -b128 -A -s -m167 -R
 <MacGUI>
 ioView background {32125, 41634, 41120}
 ioText {3, 0} {952, 30} label 0.000000 0.00100 "" center "DejaVu Sans" 20 {0, 0, 0} {45056, 44544, 32512} background noborder SYNTH PIPE
-ioText {137, 440} {658, 218} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border REVERB
-ioText {5, 32} {302, 203} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border AIR ENVELOPPE
-ioSlider {23, 79} {19, 99} -20.000000 100.000000 20.000000 kC1
+ioText {133, 441} {658, 218} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border REVERB
+ioText {5, 32} {297, 196} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border AIR ENVELOPPE
+ioSlider {23, 79} {19, 99} -20.000000 100.000000 7.878788 kC1
 ioText {21, 182} {30, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Att
-ioText {13, 204} {51, 23} display 0.000000 0.00100 "kC1" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 25.0000
+ioText {15, 199} {51, 23} display 0.000000 0.00100 "kC1" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 7.8788
 ioText {24, 54} {26, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 01
-ioSlider {68, 79} {19, 99} -20.000000 100.000000 18.787879 kC2
+ioSlider {68, 79} {19, 99} -20.000000 100.000000 7.878788 kC2
 ioText {66, 182} {30, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Dec
-ioText {58, 204} {51, 23} display 0.000000 0.00100 "kC2" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 20.0000
+ioText {60, 199} {51, 23} display 0.000000 0.00100 "kC2" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 9.0909
 ioText {69, 55} {26, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 02
-ioSlider {114, 79} {19, 99} 0.000000 1.000000 0.898990 kC3
+ioSlider {114, 79} {19, 99} 0.000000 1.000000 0.838384 kC3
 ioText {112, 182} {30, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Sus
-ioText {104, 204} {51, 23} display 0.000000 0.00100 "kC3" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.9000
+ioText {106, 199} {51, 23} display 0.000000 0.00100 "kC3" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.8384
 ioText {115, 55} {26, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 03
-ioSlider {159, 79} {19, 99} -20.000000 100.000000 47.878788 kC4
+ioSlider {159, 79} {19, 99} -20.000000 100.000000 -16.363636 kC4
 ioText {157, 182} {30, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Rel
-ioText {149, 204} {51, 23} display 0.000000 0.00100 "kC4" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 49.0909
+ioText {151, 199} {51, 23} display 0.000000 0.00100 "kC4" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -16.3636
 ioText {160, 55} {26, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 04
-ioSlider {207, 78} {19, 99} 0.000000 1.000000 0.202020 kC5
+ioSlider {207, 78} {19, 99} 0.000000 1.000000 0.767677 kC5
 ioText {205, 181} {30, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Vel
-ioText {197, 204} {51, 23} display 0.000000 0.00100 "kC5" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.3300
+ioText {199, 199} {51, 23} display 0.000000 0.00100 "kC5" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.7677
 ioText {208, 54} {26, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 05
-ioSlider {254, 78} {19, 99} -1.000000 0.000000 -0.626263 kC6
+ioSlider {254, 78} {19, 99} -1.000000 0.000000 -0.949495 kC6
 ioText {252, 181} {30, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Scal
-ioText {244, 203} {51, 23} display 0.000000 0.00100 "kC6" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border -0.5000
+ioText {246, 199} {51, 23} display 0.000000 0.00100 "kC6" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -0.8788
 ioText {255, 54} {26, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 06
-ioSlider {158, 497} {20, 100} 0.000000 240.000000 16.800000 kC38
-ioText {156, 600} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Time
-ioText {148, 622} {52, 24} display 0.000000 0.00100 "kC38" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 16.8000
-ioText {159, 473} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 38
-ioSlider {211, 497} {20, 100} -1.000000 1.000000 0.380000 kC39
-ioText {209, 600} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder L/R
-ioText {201, 622} {52, 24} display 0.000000 0.00100 "kC39" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.3800
-ioText {212, 473} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 39
-ioSlider {264, 497} {20, 100} 0.000000 60.000000 30.000000 kC40
-ioText {262, 600} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Size
-ioText {254, 622} {52, 24} display 0.000000 0.00100 "kC40" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 30.0000
-ioText {265, 473} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 40
-ioSlider {317, 497} {20, 100} 0.000000 120.000000 60.000000 kC41
-ioText {315, 600} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder RT
-ioText {307, 622} {52, 24} display 0.000000 0.00100 "kC41" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 60.0000
-ioText {318, 473} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 41
-ioSlider {370, 497} {20, 100} 24.000000 144.000000 144.000000 kC42
-ioText {368, 600} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder LP
-ioText {360, 622} {52, 24} display 0.000000 0.00100 "kC42" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 144.0000
-ioText {371, 473} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 42
-ioSlider {423, 496} {20, 100} 0.000000 30.000000 1.500000 kC43
-ioText {421, 599} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder LD
-ioText {413, 621} {52, 24} display 0.000000 0.00100 "kC43" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 1.5000
-ioText {424, 472} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 43
-ioSlider {476, 496} {20, 100} 0.000000 30.000000 1.500000 kC44
-ioText {474, 599} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder HD
-ioText {466, 621} {52, 24} display 0.000000 0.00100 "kC44" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 1.5000
-ioText {477, 472} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 44
-ioSlider {529, 496} {20, 100} 0.000000 2.000000 0.400000 kC45
-ioText {527, 599} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Freq
-ioText {519, 621} {52, 24} display 0.000000 0.00100 "kC45" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.4000
-ioText {530, 472} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 45
-ioSlider {582, 496} {20, 100} 0.000000 2.000000 0.280000 kC46
-ioText {580, 599} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Spin
-ioText {572, 621} {52, 24} display 0.000000 0.00100 "kC46" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.3000
-ioText {583, 472} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 46
-ioSlider {635, 496} {20, 100} 0.000000 2.000000 0.200000 kC47
-ioText {633, 599} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Dizzy
-ioText {625, 621} {52, 24} display 0.000000 0.00100 "kC47" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.2000
-ioText {636, 472} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 47
-ioSlider {688, 496} {20, 100} 0.000000 1.000000 0.750000 kC48
-ioText {686, 599} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Pos
-ioText {678, 621} {52, 24} display 0.000000 0.00100 "kC48" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.7500
-ioText {689, 472} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 48
-ioSlider {741, 496} {20, 100} 0.000000 1.000000 0.080000 kC49
-ioText {739, 599} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Mix
-ioText {731, 621} {52, 24} display 0.000000 0.00100 "kC49" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.0800
-ioText {742, 472} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 49
-ioText {310, 31} {315, 204} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border AIR GENERATOR
-ioSlider {325, 77} {20, 100} 0.000000 1.000000 0.500000 kC7
-ioText {323, 180} {36, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Noise
-ioText {315, 202} {52, 24} display 0.000000 0.00100 "kC7" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.5000
-ioText {326, 52} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 07
-ioSlider {379, 77} {20, 100} 0.000000 120.000000 97.200000 kC8
-ioText {377, 180} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Cut
-ioText {369, 202} {52, 24} display 0.000000 0.00100 "kC8" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 98.0000
-ioText {380, 53} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 08
-ioSlider {432, 77} {20, 100} 0.000000 1.000000 0.000000 kC9
-ioText {430, 180} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Res
-ioText {422, 202} {52, 24} display 0.000000 0.00100 "kC9" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.0000
-ioText {433, 53} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 09
-ioSlider {485, 77} {20, 100} 0.000000 2.000000 0.660000 kC10
-ioText {483, 180} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder KTr
-ioText {475, 202} {52, 24} display 0.000000 0.00100 "kC10" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.6600
-ioText {486, 53} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 10
-ioSlider {538, 76} {20, 100} 0.000000 1.000000 0.330000 kC11
-ioText {536, 179} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder VTr
-ioText {528, 202} {52, 24} display 0.000000 0.00100 "kC11" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.3300
-ioText {539, 52} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 11
-ioText {571, 93} {46, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 12: 1P
-ioCheckbox {584, 123} {20, 20} on kC12
-ioText {633, 239} {322, 198} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border FILTER
-ioSlider {646, 286} {20, 100} 0.000000 120.000000 12.000000 kC32
-ioText {643, 389} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder HP0
-ioText {635, 411} {52, 24} display 0.000000 0.00100 "kC32" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 12.0000
-ioText {646, 261} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 32
-ioSlider {699, 286} {20, 100} 0.000000 120.000000 60.000000 kC33
-ioText {697, 389} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder HP1
-ioText {689, 411} {52, 24} display 0.000000 0.00100 "kC33" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 60.0000
-ioText {700, 262} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 33
-ioSlider {753, 286} {20, 100} 0.000000 2.000000 1.000000 kC34
-ioText {750, 389} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder KTrH
-ioText {742, 411} {52, 24} display 0.000000 0.00100 "kC34" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 1.0000
-ioText {753, 262} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 34
-ioSlider {805, 286} {20, 100} 0.000000 120.000000 60.000000 kC35
-ioText {803, 389} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder LP0
-ioText {795, 411} {52, 24} display 0.000000 0.00100 "kC35" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 60.0000
-ioText {806, 262} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 35
-ioSlider {858, 285} {20, 100} 0.000000 120.000000 96.000000 kC36
-ioText {856, 388} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder LP1
-ioText {848, 411} {52, 24} display 0.000000 0.00100 "kC36" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 96.0000
-ioText {859, 261} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 36
-ioSlider {911, 286} {20, 100} 0.000000 2.000000 0.780000 kC37
-ioText {909, 389} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder KTrL
-ioText {901, 411} {52, 24} display 0.000000 0.00100 "kC37" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.7800
-ioText {912, 262} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 37
-ioText {628, 31} {107, 204} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border PIPE
-ioSlider {646, 78} {20, 100} 0.000000 1.000000 0.350000 kC13
-ioText {642, 181} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder MW
-ioText {634, 204} {52, 24} display 0.000000 0.00100 "kC13" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.3622
-ioText {645, 54} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 13
-ioText {679, 96} {46, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 14: Pol
-ioCheckbox {692, 124} {20, 20} on kC14
-ioText {738, 31} {217, 203} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border DELAY TUNE
-ioSlider {747, 77} {20, 100} -60.000000 60.000000 12.000000 kC15
-ioText {746, 180} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Tune
-ioText {738, 202} {52, 24} display 0.000000 0.00100 "kC15" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 14.0000
-ioText {747, 52} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 15
-ioSlider {803, 78} {20, 100} -1.000000 1.000000 -0.060000 kC16
-ioText {800, 180} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Fine
-ioText {792, 202} {52, 24} display 0.000000 0.00100 "kC16" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border -0.0600
-ioText {803, 53} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 16
-ioSlider {855, 77} {20, 100} -5.000000 0.000000 -1.400000 kC17
-ioText {853, 180} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Srec
-ioText {845, 202} {52, 24} display 0.000000 0.00100 "kC17" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border -1.3000
-ioText {856, 53} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 17
-ioSlider {908, 77} {20, 100} -2.000000 2.000000 -1.640000 kC18
-ioText {906, 180} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder MW
-ioText {898, 202} {52, 24} display 0.000000 0.00100 "kC18" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border -1.6000
-ioText {909, 53} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 18
-ioText {6, 239} {160, 199} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border FEEDBACK
-ioSlider {15, 285} {20, 100} -90.000000 30.000000 -87.600000 kC19
-ioText {13, 388} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder RT
-ioText {5, 410} {52, 24} display 0.000000 0.00100 "kC19" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border -86.4000
-ioText {16, 260} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 19
-ioSlider {69, 285} {20, 100} 0.000000 2.000000 1.000000 kC20
-ioText {67, 388} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder KTr
-ioText {59, 410} {52, 24} display 0.000000 0.00100 "kC20" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 1.0000
-ioText {70, 261} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 20
-ioSlider {122, 285} {20, 100} 0.000000 120.000000 110.400000 kC21
-ioText {120, 388} {38, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Damp
-ioText {112, 410} {52, 24} display 0.000000 0.00100 "kC21" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 110.4000
-ioText {122, 261} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 21
-ioText {179, 238} {213, 199} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border ALLPASS TUNE
-ioSlider {188, 282} {20, 100} -60.000000 60.000000 -40.800000 kC22
-ioText {187, 385} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Tune
-ioText {179, 407} {52, 24} display 0.000000 0.00100 "kC22" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border -40.8000
-ioText {190, 257} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 22
-ioSlider {243, 282} {20, 100} -1.000000 1.000000 0.000000 kC23
-ioText {241, 385} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Fine
-ioText {233, 407} {52, 24} display 0.000000 0.00100 "kC23" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.0000
-ioText {244, 258} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 23
-ioSlider {296, 282} {20, 100} -5.000000 0.000000 0.000000 kC24
-ioText {294, 385} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Srec
-ioText {286, 407} {52, 24} display 0.000000 0.00100 "kC24" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.0000
-ioText {297, 258} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 24
-ioSlider {348, 282} {20, 100} -2.000000 2.000000 0.000000 kC25
-ioText {346, 385} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder MW
-ioText {338, 407} {52, 24} display 0.000000 0.00100 "kC25" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.0000
-ioText {349, 258} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 25
-ioText {406, 237} {86, 201} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border DELAY + ALLPASS
-ioSlider {417, 282} {20, 100} -1.000000 1.000000 0.000000 kC26
-ioText {415, 385} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Diff
-ioText {407, 408} {52, 24} display 0.000000 0.00100 "kC26" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.0000
-ioText {418, 257} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 26
-ioText {441, 312} {46, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 27: On
-ioCheckbox {452, 332} {20, 20} on kC27
-ioText {508, 238} {110, 198} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border PUSH PULL
-ioSlider {519, 283} {20, 100} -1.000000 1.000000 0.460000 kC28
-ioText {517, 386} {39, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Offset
-ioText {509, 408} {52, 24} display 0.000000 0.00100 "kC28" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.4800
-ioText {520, 258} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 28
-ioSlider {573, 283} {20, 100} 0.000000 2.000000 1.560000 kC29
-ioText {571, 386} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Push
-ioText {563, 408} {52, 24} display 0.000000 0.00100 "kC29" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 1.5600
-ioText {574, 259} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 29
+ioSlider {154, 498} {20, 100} 0.000000 240.000000 9.600000 kC38
+ioText {152, 601} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Time
+ioText {144, 623} {52, 24} display 0.000000 0.00100 "kC38" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 9.6000
+ioText {155, 474} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 38
+ioSlider {207, 498} {20, 100} -1.000000 1.000000 0.380000 kC39
+ioText {205, 601} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder L/R
+ioText {197, 623} {52, 24} display 0.000000 0.00100 "kC39" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.3800
+ioText {208, 474} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 39
+ioSlider {260, 498} {20, 100} 0.000000 60.000000 30.000000 kC40
+ioText {258, 601} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Size
+ioText {250, 623} {52, 24} display 0.000000 0.00100 "kC40" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 30.0000
+ioText {261, 474} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 40
+ioSlider {313, 498} {20, 100} 0.000000 120.000000 60.000000 kC41
+ioText {311, 601} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder RT
+ioText {303, 623} {52, 24} display 0.000000 0.00100 "kC41" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 60.0000
+ioText {314, 474} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 41
+ioSlider {366, 498} {20, 100} 24.000000 144.000000 144.000000 kC42
+ioText {364, 601} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder LP
+ioText {357, 623} {52, 24} display 0.000000 0.00100 "kC42" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 144.0000
+ioText {367, 474} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 42
+ioSlider {419, 497} {20, 100} 0.000000 30.000000 1.500000 kC43
+ioText {417, 600} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder LD
+ioText {410, 623} {52, 24} display 0.000000 0.00100 "kC43" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 1.5000
+ioText {420, 473} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 43
+ioSlider {472, 497} {20, 100} 0.000000 30.000000 1.500000 kC44
+ioText {470, 600} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder HD
+ioText {463, 623} {52, 24} display 0.000000 0.00100 "kC44" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 1.5000
+ioText {473, 473} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 44
+ioSlider {525, 497} {20, 100} 0.000000 2.000000 0.400000 kC45
+ioText {523, 600} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Freq
+ioText {516, 623} {52, 24} display 0.000000 0.00100 "kC45" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.4000
+ioText {526, 473} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 45
+ioSlider {578, 497} {20, 100} 0.000000 2.000000 0.280000 kC46
+ioText {576, 600} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Spin
+ioText {568, 623} {52, 24} display 0.000000 0.00100 "kC46" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.3000
+ioText {579, 473} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 46
+ioSlider {631, 497} {20, 100} 0.000000 2.000000 0.200000 kC47
+ioText {629, 600} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Dizzy
+ioText {621, 623} {52, 24} display 0.000000 0.00100 "kC47" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.2000
+ioText {632, 473} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 47
+ioSlider {684, 497} {20, 100} 0.000000 1.000000 0.750000 kC48
+ioText {682, 600} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Pos
+ioText {674, 623} {52, 24} display 0.000000 0.00100 "kC48" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.7500
+ioText {685, 473} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 48
+ioSlider {737, 497} {20, 100} 0.000000 1.000000 0.200000 kC49
+ioText {735, 600} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Mix
+ioText {727, 623} {52, 24} display 0.000000 0.00100 "kC49" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.2000
+ioText {738, 473} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 49
+ioText {305, 31} {315, 197} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border AIR GENERATOR
+ioSlider {320, 77} {20, 100} 0.000000 1.000000 0.670000 kC7
+ioText {318, 180} {36, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Noise
+ioText {310, 198} {52, 24} display 0.000000 0.00100 "kC7" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.6700
+ioText {321, 52} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 07
+ioSlider {374, 77} {20, 100} 0.000000 120.000000 43.200000 kC8
+ioText {372, 180} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Cut
+ioText {364, 198} {52, 24} display 0.000000 0.00100 "kC8" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 43.2000
+ioText {375, 53} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 08
+ioSlider {427, 77} {20, 100} 0.000000 1.000000 0.600000 kC9
+ioText {425, 180} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Res
+ioText {417, 198} {52, 24} display 0.000000 0.00100 "kC9" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.6000
+ioText {428, 53} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 09
+ioSlider {480, 77} {20, 100} 0.000000 2.000000 0.520000 kC10
+ioText {478, 180} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder KTr
+ioText {470, 198} {52, 24} display 0.000000 0.00100 "kC10" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.5200
+ioText {481, 53} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 10
+ioSlider {533, 76} {20, 100} 0.000000 1.000000 0.230000 kC11
+ioText {531, 179} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder VTr
+ioText {523, 198} {52, 24} display 0.000000 0.00100 "kC11" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.2300
+ioText {534, 52} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 11
+ioText {566, 93} {46, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 12: 1P
+ioCheckbox {579, 123} {20, 20} on kC12
+ioText {627, 234} {322, 198} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border FILTER
+ioSlider {640, 281} {20, 100} 0.000000 120.000000 2.400000 kC32
+ioText {637, 384} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder HP0
+ioText {629, 406} {52, 24} display 0.000000 0.00100 "kC32" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.4000
+ioText {640, 256} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 32
+ioSlider {693, 281} {20, 100} 0.000000 120.000000 0.000000 kC33
+ioText {691, 384} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder HP1
+ioText {683, 406} {52, 24} display 0.000000 0.00100 "kC33" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0000
+ioText {694, 257} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 33
+ioSlider {747, 281} {20, 100} 0.000000 2.000000 0.020000 kC34
+ioText {744, 384} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder KTrH
+ioText {736, 406} {52, 24} display 0.000000 0.00100 "kC34" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0200
+ioText {747, 257} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 34
+ioSlider {799, 281} {20, 100} 0.000000 120.000000 120.000000 kC35
+ioText {797, 384} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder LP0
+ioText {789, 406} {52, 24} display 0.000000 0.00100 "kC35" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 120.0000
+ioText {800, 257} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 35
+ioSlider {852, 280} {20, 100} 0.000000 120.000000 120.000000 kC36
+ioText {850, 383} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder LP1
+ioText {842, 406} {52, 24} display 0.000000 0.00100 "kC36" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 120.0000
+ioText {853, 256} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 36
+ioSlider {905, 281} {20, 100} 0.000000 2.000000 1.840000 kC37
+ioText {903, 384} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder KTrL
+ioText {895, 406} {52, 24} display 0.000000 0.00100 "kC37" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.8400
+ioText {906, 257} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 37
+ioText {624, 31} {103, 197} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border PIPE
+ioSlider {642, 78} {20, 100} 0.000000 1.000000 0.090000 kC13
+ioText {638, 181} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder MW
+ioText {630, 199} {52, 24} display 0.000000 0.00100 "kC13" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0900
+ioText {641, 54} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 13
+ioText {670, 96} {46, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 14: Pol
+ioCheckbox {683, 124} {20, 20} on kC14
+ioText {732, 30} {219, 197} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border DELAY TUNE
+ioSlider {741, 76} {20, 100} -60.000000 60.000000 0.000000 kC15
+ioText {740, 179} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Tune
+ioText {734, 196} {52, 24} display 0.000000 0.00100 "kC15" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0000
+ioText {741, 51} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 15
+ioSlider {797, 77} {20, 100} -1.000000 1.000000 0.020000 kC16
+ioText {794, 179} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Fine
+ioText {788, 196} {52, 24} display 0.000000 0.00100 "kC16" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0200
+ioText {797, 52} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 16
+ioSlider {849, 76} {20, 100} -5.000000 0.000000 -1.400000 kC17
+ioText {847, 179} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Srec
+ioText {841, 196} {52, 24} display 0.000000 0.00100 "kC17" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -1.3000
+ioText {850, 52} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 17
+ioSlider {902, 76} {20, 100} -2.000000 2.000000 -1.640000 kC18
+ioText {900, 179} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder MW
+ioText {894, 196} {52, 24} display 0.000000 0.00100 "kC18" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -1.6000
+ioText {903, 52} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 18
+ioText {5, 234} {160, 199} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border FEEDBACK
+ioSlider {14, 280} {20, 100} -90.000000 30.000000 -18.000000 kC19
+ioText {12, 383} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder RT
+ioText {4, 405} {52, 24} display 0.000000 0.00100 "kC19" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -18.0000
+ioText {15, 255} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 19
+ioSlider {68, 280} {20, 100} 0.000000 2.000000 0.480000 kC20
+ioText {66, 383} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder KTr
+ioText {58, 405} {52, 24} display 0.000000 0.00100 "kC20" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.4800
+ioText {69, 256} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 20
+ioSlider {121, 280} {20, 100} 0.000000 120.000000 12.000000 kC21
+ioText {119, 383} {38, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Damp
+ioText {111, 405} {52, 24} display 0.000000 0.00100 "kC21" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 12.0000
+ioText {121, 256} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 21
+ioText {172, 234} {213, 199} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border ALLPASS TUNE
+ioSlider {181, 278} {20, 100} -60.000000 60.000000 0.000000 kC22
+ioText {180, 381} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Tune
+ioText {175, 403} {52, 24} display 0.000000 0.00100 "kC22" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0000
+ioText {183, 253} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 22
+ioSlider {236, 278} {20, 100} -1.000000 1.000000 0.000000 kC23
+ioText {234, 381} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Fine
+ioText {229, 403} {52, 24} display 0.000000 0.00100 "kC23" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0000
+ioText {237, 254} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 23
+ioSlider {289, 278} {20, 100} -5.000000 0.000000 0.000000 kC24
+ioText {287, 381} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Srec
+ioText {282, 403} {52, 24} display 0.000000 0.00100 "kC24" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0000
+ioText {290, 254} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 24
+ioSlider {341, 278} {20, 100} -2.000000 2.000000 0.000000 kC25
+ioText {339, 381} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder MW
+ioText {334, 403} {52, 24} display 0.000000 0.00100 "kC25" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0000
+ioText {342, 254} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 25
+ioText {393, 234} {108, 199} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border DELAY + ALLPASS
+ioSlider {461, 281} {20, 100} -1.000000 1.000000 0.000000 kC26
+ioText {459, 384} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Diff
+ioText {451, 407} {52, 24} display 0.000000 0.00100 "kC26" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0000
+ioText {461, 259} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 26
+ioText {401, 385} {46, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 27: On
+ioCheckbox {412, 406} {20, 20} off kC27
+ioText {510, 235} {110, 198} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border PUSH PULL
+ioSlider {523, 281} {20, 100} -1.000000 1.000000 -0.720000 kC28
+ioText {521, 384} {39, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Offset
+ioText {513, 406} {52, 24} display 0.000000 0.00100 "kC28" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -0.7200
+ioText {524, 256} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 28
+ioSlider {577, 281} {20, 100} 0.000000 2.000000 1.400000 kC29
+ioText {575, 384} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Push
+ioText {567, 406} {52, 24} display 0.000000 0.00100 "kC29" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.4000
+ioText {578, 257} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 29
 ioText {7, 441} {117, 216} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border SATURATION
-ioSlider {18, 487} {20, 100} 0.000000 1.000000 0.330000 kC30
+ioSlider {18, 487} {20, 100} 0.000000 1.000000 0.270000 kC30
 ioText {16, 590} {39, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder S / H
-ioText {8, 612} {52, 24} display 0.000000 0.00100 "kC30" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.3300
+ioText {8, 612} {52, 24} display 0.000000 0.00100 "kC30" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.2700
 ioText {19, 462} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 30
-ioSlider {72, 487} {20, 100} 0.000000 1.000000 0.450000 kC31
+ioSlider {72, 487} {20, 100} 0.000000 1.000000 0.280000 kC31
 ioText {70, 590} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Sym
-ioText {62, 612} {48, 24} display 0.000000 0.00100 "kC31" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.4500
+ioText {62, 612} {48, 24} display 0.000000 0.00100 "kC31" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.2800
 ioText {73, 463} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 31
-ioText {806, 441} {149, 216} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border MAIN
-ioKnob {815, 489} {80, 80} 0.000000 5.000000 0.010000 0.959596 kC50
-ioText {812, 575} {88, 27} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 50 : Volume
-ioText {826, 606} {57, 27} display 0.000000 0.00100 "kC50" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border 1.0000
-ioGraph {3, 660} {283, 120} scope 2.000000 1.000000 
-ioMeter {906, 447} {14, 178} {0, 59904, 0} "vu_Left" 0.000000 "hor210" 0.214286 fill 1 0 mouse
-ioMeter {923, 447} {14, 178} {0, 59904, 0} "vu_Right" 0.000000 "hor210" 0.214286 fill 1 0 mouse
-ioText {905, 624} {17, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder L
-ioText {921, 624} {17, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder R
-ioGraph {291, 661} {257, 120} scope 2.000000 2.000000 
-ioMeter {856, 446} {18, 19} {6144, 59392, 0} "tempo" 1.000000 "hor220" 0.333333 fill 1 0 mouse
-ioListing {551, 661} {405, 119}
+ioText {800, 441} {149, 216} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border MAIN
+ioKnob {809, 489} {80, 80} 0.000000 5.000000 0.010000 0.505051 kC50
+ioText {806, 575} {88, 27} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 50 : Volume
+ioText {820, 606} {57, 27} display 0.505051 0.00100 "kC50" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.5051
+ioGraph {5, 663} {283, 120} scope 2.000000 1.000000 
+ioMeter {900, 447} {14, 178} {0, 59904, 0} "vu_Left" 0.170424 "hor210" 0.214286 fill 1 0 mouse
+ioMeter {917, 447} {14, 178} {0, 59904, 0} "vu_Right" 0.172204 "hor210" 0.214286 fill 1 0 mouse
+ioText {899, 624} {17, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder L
+ioText {915, 624} {17, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder R
+ioGraph {293, 664} {257, 120} scope 2.000000 2.000000 
+ioMeter {850, 446} {18, 19} {6144, 59392, 0} "tempo" 1.000000 "hor220" 0.333333 fill 1 0 mouse
+ioListing {553, 664} {399, 120}
 </MacGUI>
 
-
-<EventPanel name="" tempo="60.00000000" loop="9.00000000" name="" x="900" y="451" width="683" height="426">
-i 1 0 3 60 
-
-
-
-
-
-
-
-</EventPanel>
+<EventPanel name="" tempo="130.00000000" loop="8.00000000" name="" x="1047" y="62" width="602" height="886">i 1 0 0.1 56 
+i 1 0.5 0.1 69 
+i 1 1 0.1 60 
+i 1 1.5 0.1 59 
+i 1 2 0.1 79 
+i 1 3.5 0.1 79 
+i 1 4 0.1 80 
+i 1 4.5 0.1 79 
+i 1 5 0.1 80 
+i 1 3.5 0.1 96 
+i 1 4 0.1 89 
+i 1 3.5 0.1 97 
+i 1 4 0.1 60 
+i 1 5 0.1 73 
+i 1 5.5 0.1 66 
+i 1 6 0.1 61 
+i 1 6.5 0.1 81 
+i 1 0 0.1 79 
+i 1 0.5 0.1 80 
+i 1 1 0.1 79 
+i 1 1.5 0.1 80 
+i 1 1 0.1 92 
+i 1 1.5 0.1 85 
+93 </EventPanel>
