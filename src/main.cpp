@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
   settings.endGroup();
 
   QTranslator translator;
-  translator.load(QString(":/qutecsound_") + language);
+  translator.load(QString(":/translations/qutecsound_") + language);
   app.installTranslator(&translator);
 
   qutecsound * mw = new qutecsound(fileNames);
