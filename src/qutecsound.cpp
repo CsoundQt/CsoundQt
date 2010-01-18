@@ -2416,27 +2416,27 @@ void qutecsound::createMenus()
   subMenus << usefulFiles;
   subMenuNames << tr("Useful");
 
-  exampleFiles.append(":/examples/Examples/Keyboard_Control.csd");
-  exampleFiles.append(":/examples/Examples/Just_Intonation.csd");
-  exampleFiles.append(":/examples/Examples/Mouse_Control.csd");
-  exampleFiles.append(":/examples/Examples/Event_Panel.csd");
-  exampleFiles.append(":/examples/Exaples/Score_Tricks.csd");
-  exampleFiles.append(":/examples/Examples/Simple_Convolution.csd");
-  exampleFiles.append(":/examples/Examples/Universal_Convolution.csd");
-  exampleFiles.append(":/examples/Examples/Cross_Synthesis.csd");
-  exampleFiles.append(":/examples/Examples/Live_Granular.csd");
-  exampleFiles.append(":/examples/Examples/SF_Granular.csd");
-  exampleFiles.append(":/examples/Examples/Oscillator_Aliasing.csd");
-  exampleFiles.append(":/examples/Examples/Circle.csd");
-  exampleFiles.append(":/examples/Examples/Pvstencil.csd");
-  exampleFiles.append(":/examples/Examples/Rms.csd");
-  exampleFiles.append(":/examples/Examples/Reinit_Example.csd");
-  exampleFiles.append(":/examples/Examples/No_Reinit.csd");
-  exampleFiles.append(":/examples/Examples/Binaural_Panning.csd");
-  exampleFiles.append(":/examples/Examples/Noise_Reduction.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Keyboard_Control.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Just_Intonation.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Mouse_Control.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Event_Panel.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Score_Tricks.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Simple_Convolution.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Universal_Convolution.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Cross_Synthesis.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Live_Granular.csd");
+  exampleFiles.append(":/examples/Miscellaneous/SF_Granular.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Oscillator_Aliasing.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Circle.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Pvstencil.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Rms.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Reinit_Example.csd");
+  exampleFiles.append(":/examples/Miscellaneous/No_Reinit.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Binaural_Panning.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Noise_Reduction.csd");
 
   subMenus << exampleFiles;
-  subMenuNames << tr("Examples");
+  subMenuNames << tr("Miscellaneous");
 
   QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
   QAction *newAction;

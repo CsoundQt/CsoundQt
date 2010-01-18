@@ -33,25 +33,25 @@
       <file>default.csd</file>
       <file>test.csd</file>
 
-      <file>../examples/Examples/Keyboard_Control.csd</file>
-      <file>../examples/Examples/Just_Intonation.csd</file>
-      <file>../examples/Examples/Mouse_Control.csd</file>
-      <file>../examples/Examples/Event_Panel.csd</file>
-      <file>../examples/Examples/Score_Tricks.csd</file>
+      <file>../examples/Miscellaneous/Keyboard_Control.csd</file>
+      <file>../examples/Miscellaneous/Just_Intonation.csd</file>
+      <file>../examples/Miscellaneous/Mouse_Control.csd</file>
+      <file>../examples/Miscellaneous/Event_Panel.csd</file>
+      <file>../examples/Miscellaneous/Score_Tricks.csd</file>
 
-      <file>../examples/Examples/Simple_Convolution.csd</file>
-      <file>../examples/Examples/Universal_Convolution.csd</file>
-      <file>../examples/Examples/Cross_Synthesis.csd</file>
-      <file>../examples/Examples/Live_Granular.csd</file>
-      <file>../examples/Examples/SF_Granular.csd</file>
-      <file>../examples/Examples/Oscillator_Aliasing.csd</file>
-      <file>../examples/Examples/Circle.csd</file>
-      <file>../examples/Examples/Pvstencil.csd</file>
-      <file>../examples/Examples/Noise_Reduction.csd</file>
-      <file>../examples/Examples/Rms.csd</file>
-      <file>../examples/Examples/Reinit_Example.csd</file>
-      <file>../examples/Examples/No_Reinit.csd</file>
-      <file>../examples/Examples/Binaural_Panning.csd</file>
+      <file>../examples/Miscellaneous/Simple_Convolution.csd</file>
+      <file>../examples/Miscellaneous/Universal_Convolution.csd</file>
+      <file>../examples/Miscellaneous/Cross_Synthesis.csd</file>
+      <file>../examples/Miscellaneous/Live_Granular.csd</file>
+      <file>../examples/Miscellaneous/SF_Granular.csd</file>
+      <file>../examples/Miscellaneous/Oscillator_Aliasing.csd</file>
+      <file>../examples/Miscellaneous/Circle.csd</file>
+      <file>../examples/Miscellaneous/Pvstencil.csd</file>
+      <file>../examples/Miscellaneous/Noise_Reduction.csd</file>
+      <file>../examples/Miscellaneous/Rms.csd</file>
+      <file>../examples/Miscellaneous/Reinit_Example.csd</file>
+      <file>../examples/Miscellaneous/No_Reinit.csd</file>
+      <file>../examples/Miscellaneous/Binaural_Panning.csd</file>
 
       <file>../examples/Widgets/Widget_Panel.csd</file>
       <file>../examples/Widgets/Label_Widget.csd</file>
