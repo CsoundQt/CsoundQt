@@ -3153,12 +3153,12 @@ Francesco</translation>
     <message>
         <location filename="qutecsound.cpp" line="2398"/>
         <source>Music</source>
-        <translation>Musik</translation>
+        <translation>Music</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2415"/>
         <source>Useful</source>
-        <translation>Nützlich</translation>
+        <translation>Useful</translation>
     </message>
     <message>
         <source>Synths</source>
@@ -3183,12 +3183,12 @@ Francesco</translation>
     <message>
         <location filename="qutecsound.cpp" line="2450"/>
         <source>Getting Started</source>
-        <translation>Los gehts</translation>
+        <translation>Getting Started</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2451"/>
         <source>Basics</source>
-        <translation>Grundlagen</translation>
+        <translation>Basics</translation>
     </message>
     <message>
         <location filename="qutecsound.cpp" line="2570"/>
