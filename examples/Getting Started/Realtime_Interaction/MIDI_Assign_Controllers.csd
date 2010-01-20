@@ -1,6 +1,6 @@
 /*Getting started.. Realtime Interaction: MIDI Assign Controllers
 
-In the example below, instrument 100 (which is "always on") receives the MIDI control data and sends it as global k-variables (gk...). You can choose the MIDI channel number and the controller numbers via the spinboxes in the widget panel. You can even change these numbers during the performance. As they are i-values, the opcodes reinit and rireturn are used to put the changes into force (for another examples, see Examples->Reinit_Example).
+In the example below, instrument 100 (which is "always on") receives the MIDI control data and sends it as global k-variables (gk...). You can choose the MIDI channel number and the controller numbers via the spinboxes in the widget panel. You can even change these numbers during the performance. As they are i-values, the opcodes 'reinit' and 'rireturn' are used to put the changes into force (for another examples, see Examples->Reinit_Example).
 
 In comparison to the example before, the sliders are not 'invalue'-ed to the instruments, so the only way to control the synth is via MIDI-CC's. The GUI is just for displaying, so 'outvalue' is used to send the CC-values to the Widget GUI. 
 
@@ -92,6 +92,7 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Joachim Heintz & Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
+
 <MacOptions>
 Version: 3
 Render: Real

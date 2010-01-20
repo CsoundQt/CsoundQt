@@ -1,4 +1,4 @@
-/* Getting Started .. Realtime Interaction: Widgets
+/* Getting Started .. Realtime Interaction: Widgets-Checkbox
 
 Open the Widgets-Panel. 
 

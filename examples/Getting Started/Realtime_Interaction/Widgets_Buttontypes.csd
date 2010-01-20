@@ -1,9 +1,9 @@
-/* Getting Started .. Realtime Interaction: Widgets
+/* Getting Started .. Realtime Interaction: Widgets-Buttontypes
 
-This example concentrates on different button-types. 
+This example concentrates on the different button-types. 
 
-Buttons send momentary values (0 or 1) to a channel. There are some reserved Channel names in QuteCsound, which enable to control QuteCsound from the Widgets Panel. In this example we use Channel "_Play", to run Csound. The button has to be in "value" mode! 
-Read more about reserved channel in: (Examples-> Widgets->Reserved Channels)
+Buttons send momentary values (0 or 1) to a channel. There are some reserved Channel names in QuteCsound, which enable to control functionality of QuteCsound from the Widgets Panel. In this example we use Channel "_Play", to run Csound. Therefor button has to be in "value" mode! 
+Read more about reserved channels in: (Examples-> Widgets->Reserved Channels)
 
 The "Move Fader!" button is in "event" mode, so it sends a "scoreline-event", when pressed.
 
@@ -39,6 +39,7 @@ e 3600
 
 
 
+
 <MacOptions>
 Version: 3
 Render: Real
@@ -64,7 +65,6 @@ ioButton {33, 410} {100, 30} value 1.000000 "_Stop" "Stop Csound" "/" i1 0 10
 ioText {144, 409} {182, 31} display 0.000000 0.00100 "" left "Lucida Grande" 12 {65280, 65280, 65280} {65280, 65280, 65280} nobackground border Reserved Channel: _Stop
 ioText {135, 117} {203, 117} label 0.000000 0.00100 "" left "Lucida Grande" 12 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder _Play is a reserved channel to control QuteCsound functionality. (Run Csound) The button has to be in value mode, to send this message. 
 </MacGUI>
-
 
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" name="" x="261" y="207" width="513" height="322"> 
  

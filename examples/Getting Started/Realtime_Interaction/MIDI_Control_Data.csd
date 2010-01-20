@@ -5,12 +5,12 @@ The quickest way to control instruments with MIDI control-data (Modulation, Afte
 kMidiCC ctrl7 1, 1, 10, 5000   	; read 7-bit MIDI CC data from Ch.1, CC 01, and map to a range between 10-5000 
 aSrc oscili 0.8, kMidiCC, 1	; now CC 01 controlls the frequency of this oscillator
 ..
-The disadvantage of that method is, that you have no communication with the Widget-GUI.
+The disadvantage of that method would be, that you have no communication with the Widget-GUI.
 
 In the example below, a separate instrument (instr 100) is built to receive the MIDI CC 01 (Modulation) constantly and send its values on channel "filter_freq". 
 In Instrument 101 the data from this channel is read and mapped to the filters frequency input. 
 
-By sending MIDI-Data on Ch.1 / CC01 (with your keyboards modualtion wheel, or any other MIDI faderbox) you see the Widget-fader moving and can hear the filter adjustments in realtime, when playing a note. Adjusting the fader with the mouse is also still possible.
+By sending MIDI-Control-Data 01 on Channel 1 (CC 01 - with your keyboards modualtion wheel, or any other MIDI faderbox) you see the Widget-fader moving and can hear the filter adjustments in realtime, when playing a note. Adjusting the fader with the mouse is also still possible.
 */
 
 <CsoundSynthesizer>
@@ -83,6 +83,7 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
+
 <MacOptions>
 Version: 3
 Render: Real

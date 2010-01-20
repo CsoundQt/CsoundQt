@@ -23,7 +23,8 @@ endin
 e
 </CsScore>
 </CsoundSynthesizer>
-; written by Andres Cabreras 
+; written by Andres Cabrera
+
 
 
 
@@ -45,7 +46,6 @@ ioText {14, 45} {373, 66} label 0.000000 0.00100 "" left "Helvetica" 16 {61696, 
 ioText {11, 322} {392, 84} label 0.000000 0.00100 "" left "Helvetica" 16 {61696, 61696, 61696} {65280, 65280, 65280} nobackground border You can delete widgets by right-clicking the Widgets and selecting delete. Using this menu or the keyboard commands, you can also copy, paste, cut and duplicate widgets.
 ioText {14, 234} {371, 62} label 0.000000 0.00100 "" left "Helvetica" 16 {61696, 61696, 61696} {65280, 65280, 65280} nobackground border You can move and resize widgets by entering the EDIT MODE, pressing Ctrl+E or Command+E on OS X.
 </MacGUI>
-
 
 <EventPanel name="Events" tempo="60.00000000" loop="8.00000000" name="Events" x="320" y="218" width="513" height="322"> 
  

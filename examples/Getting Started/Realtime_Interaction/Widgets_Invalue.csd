@@ -26,7 +26,8 @@ i 1 0 300 			; Play for 300 seconds
 e
 </CsScore>
 </CsoundSynthesizer>
-; written by Andres Cabreras
+; written by Andres Cabrera
+
 
 
 
@@ -51,7 +52,6 @@ ioText {12, 184} {368, 101} label 0.000000 0.00100 "" left "Helvetica" 16 {61696
 ioSlider {13, 160} {366, 21} 300.000000 1000.000000 300.000000 slider
 ioText {12, 409} {372, 51} label 0.000000 0.00100 "" left "Helvetica" 16 {61696, 61696, 61696} {65280, 65280, 65280} nobackground border You can change a slider's range in its properties dialog, if you want a broader or smaller range.
 </MacGUI>
-
 
 <EventPanel name="Events" tempo="60.00000000" loop="8.00000000" name="Events" x="320" y="218" width="513" height="322"> 
  

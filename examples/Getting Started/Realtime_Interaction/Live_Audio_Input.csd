@@ -4,8 +4,9 @@ Two very common live-electronic uscases are modifying an incoming signal in real
 To avoid acoustic feedbacks, this example, does not output the input-signal!
 
 Here, the input's frequency and amplitude are analysed in realtime and displayed on the Widget-Panel. 
-A second instrument can be started, which uses these information to control an oscillator.
-
+The second instrument can be started, which uses these information to control an oscillator.
+(If this is using to much CPU power and does crackle, increase the buffersize in the Preferences Menu(->Run->Buffer Size). 
+A good startingpoint is 1024.)
 */
 
 <CsoundSynthesizer>
@@ -36,7 +37,7 @@ kFeedback=0.6						; feedback-amount for the delay
 aDelay delayr 1						
 aWet	deltapi 0.2
 	delayw aSrc+(aWet*kFeedback)
-aOut = aSrc+(aWet*0.3)					; mixing the Oscillator with the Delay
+aOut = aSrc+(aWet*0.3)					; mixing the oscillator with the delay
 out aOut
 endin
 
@@ -48,6 +49,7 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
+
 
 
 
@@ -73,7 +75,6 @@ ioText {23, 162} {151, 31} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0,
 ioText {23, 7} {151, 31} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Instrument 1
 ioText {21, 196} {156, 61} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder This button plays a synth for 20 seconds, which gets the frequency, form the input-analysis.
 </MacGUI>
-
 
 <EventPanel name="Events" tempo="60.00000000" loop="8.00000000" name="Events" x="320" y="218" width="513" height="322"> 
  

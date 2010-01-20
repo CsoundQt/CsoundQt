@@ -1,7 +1,8 @@
 /*Getting started.. Realtime Interaction: MIDI Notes / MIDI Synth
 
+Generating the frequency for one voice, has to become computed individually for each midi note. So a new instance of instr 1 is started for every key pressed on the keyboard.  
 
-Instruments 101 (Feedback Delay) and 102 (Reverb) are global effects, which are not necessary to compute for each individual voice independently. So started once from the score, one instance of each runs constantly whether a note is played or not. The Widget Panel, gives access to some of their parameters. You can add more..
+Instruments 101 (Feedback Delay) and 102 (Reverb) are global effects, which are not necessary to compute for each individual voice independently. So started once from the score, one instance each runs constantly whether a note is played or not. The Widget Panel, gives access to some of their parameters. You can add more..
 */
 
 <CsoundSynthesizer>
@@ -71,6 +72,7 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
+
 <MacOptions>
 Version: 3
 Render: Real
@@ -102,7 +104,7 @@ ioText {223, 250} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 
 ioText {300, 251} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0-100 %
 ioText {19, 44} {273, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Filterfrequency Control for Instr 1
 ioText {19, 9} {184, 35} label 0.000000 0.00100 "" left "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground border SYNTH SECTION
-ioSlider {18, 68} {311, 38} 10.000000 5000.000000 1967.491961 filter_freq
+ioSlider {18, 68} {311, 38} 10.000000 5000.000000 1935.401929 filter_freq
 </MacGUI>
 
 <EventPanel name="Events" tempo="60.00000000" loop="8.00000000" name="Events" x="60" y="304" width="513" height="322"> 
