@@ -33,7 +33,7 @@
 #include    <sndfile.hh>
 #endif
 
-#ifdef MACOSX
+#ifdef MACOSX_PRE_SNOW
 // Needed to be able to grab menus back from FLTK
 #include <Carbon/Carbon.h>
 #endif
@@ -350,7 +350,7 @@ class qutecsound:public QMainWindow
     QString currentAudioFile;
     long samplesWritten;
 
-#ifdef MACOSX
+#ifdef MACOSX_PRE_SNOW
     MenuBarHandle menuBarHandle;
 #endif
 #ifdef QUTECSOUND_COPYPASTE
