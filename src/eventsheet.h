@@ -117,7 +117,6 @@ class EventSheet : public QTableWidget
 //    QAction *mirrorAct;
     QAction *rotateAct;
     QAction *fillAct;
-    QAction *renameAct;
 
     QAction *insertColumnHereAct;
     QAction *insertRowHereAct;

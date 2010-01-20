@@ -51,6 +51,11 @@
         <string>Delete Frame</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>Rename</string>
+       </property>
+      </item>
      </widget>
     </item>
     <item>

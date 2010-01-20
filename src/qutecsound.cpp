@@ -1891,11 +1891,13 @@ void qutecsound::createActions()
   newAct = new QAction(QIcon(":/images/gtk-new.png"), tr("&New"), this);
   newAct->setStatusTip(tr("Create a new file"));
   newAct->setIconText(tr("New"));
+  newAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));
 
   openAct = new QAction(QIcon(":/images/gnome-folder.png"), tr("&Open..."), this);
   openAct->setStatusTip(tr("Open an existing file"));
   openAct->setIconText(tr("Open"));
+  openAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
   reloadAct = new QAction(QIcon(":/images/gtk-reload.png"), tr("Reload"), this);
@@ -1906,11 +1908,13 @@ void qutecsound::createActions()
   saveAct = new QAction(QIcon(":/images/gnome-dev-floppy.png"), tr("&Save"), this);
   saveAct->setStatusTip(tr("Save the document to disk"));
   saveAct->setIconText(tr("Save"));
+  saveAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(saveAct, SIGNAL(triggered()), this, SLOT(save()));
 
   saveAsAct = new QAction(tr("Save &As..."), this);
   saveAsAct->setStatusTip(tr("Save the document under a new name"));
   saveAsAct->setIconText(tr("Save as"));
+  saveAsAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
 
   saveNoWidgetsAct = new QAction(tr("Export without widgets"), this);
@@ -1922,6 +1926,7 @@ void qutecsound::createActions()
   closeTabAct->setStatusTip(tr("Close current tab"));
 //   closeTabAct->setIconText(tr("Close"));
   closeTabAct->setIcon(QIcon(":/images/cross.png"));
+  closeTabAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(closeTabAct, SIGNAL(triggered()), this, SLOT(closeTab()));
 
   printAct = new QAction(tr("Print"), this);
@@ -2022,6 +2027,7 @@ void qutecsound::createActions()
   runAct->setStatusTip(tr("Run current file"));
   runAct->setIconText(tr("Run"));
   runAct->setCheckable(true);
+  runAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(runAct, SIGNAL(triggered()), this, SLOT(runCsound()));
 
   runTermAct = new QAction(QIcon(":/images/gtk-media-play-ltr2.png"), tr("Run in Terminal"), this);
@@ -2032,12 +2038,14 @@ void qutecsound::createActions()
   stopAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop"), this);
   stopAct->setStatusTip(tr("Stop"));
   stopAct->setIconText(tr("Stop"));
+  stopAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(stopAct, SIGNAL(triggered()), this, SLOT(stop()));
 
   recAct = new QAction(QIcon(":/images/gtk-media-record.png"), tr("Record"), this);
   recAct->setStatusTip(tr("Record"));
   recAct->setIconText(tr("Record"));
   recAct->setCheckable(true);
+  recAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(recAct, SIGNAL(triggered()), this, SLOT(record()));
 
   renderAct = new QAction(QIcon(":/images/render.png"), tr("Render to file"), this);
@@ -2060,6 +2068,7 @@ void qutecsound::createActions()
   //showWidgetsAct->setChecked(true);
   showWidgetsAct->setStatusTip(tr("Show Realtime Widgets"));
   showWidgetsAct->setIconText(tr("Widgets"));
+  showWidgetsAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
   connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
 
@@ -2067,6 +2076,7 @@ void qutecsound::createActions()
   showInspectorAct->setCheckable(true);
   showInspectorAct->setStatusTip(tr("Show Inspector"));
   showInspectorAct->setIconText(tr("Inspector"));
+  showInspectorAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(showInspectorAct, SIGNAL(triggered(bool)), m_inspector, SLOT(setVisible(bool)));
   connect(m_inspector, SIGNAL(Close(bool)), showInspectorAct, SLOT(setChecked(bool)));
 
@@ -2081,11 +2091,13 @@ void qutecsound::createActions()
   showLiveEventsAct = new QAction(QIcon(":/images/note.png"), tr("Live Events"), this);
   showLiveEventsAct->setCheckable(true);
 //  showLiveEventsAct->setChecked(true);  // Unnecessary because it is set by options
+  showLiveEventsAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   showLiveEventsAct->setStatusTip(tr("Show Live Events Panels"));
   showLiveEventsAct->setIconText(tr("Live Events"));
 
   showManualAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("Csound Manual"), this);
   showManualAct->setStatusTip(tr("Show the Csound manual in the help panel"));
+  showManualAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(showManualAct, SIGNAL(triggered()), helpPanel, SLOT(showManual()));
 
   showGenAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("GEN Routines"), this);

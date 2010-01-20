@@ -803,7 +803,6 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
   menu.addAction(rotateAct);
   menu.addAction(fillAct);
   menu.addSeparator();
-  menu.addAction(renameAct);
 //  menu.addAction(insertColumnHereAct);
 //  menu.addAction(insertRowHereAct);
   menu.addAction(appendColumnAct);
@@ -838,7 +837,7 @@ void EventSheet::keyPressEvent (QKeyEvent * event) {
   else {
     qDebug() << "EventSheet::keyPressEvent  " << event->key();
     event->ignore();
-    QTableWidget::keyPressEvent(event);  // Propagate event
+    QTableWidget::keyPressEvent(event);  // FIXME This is not  propagating to documentpage grandparent. Propagate event
   }
 }
 
@@ -1089,11 +1088,6 @@ void EventSheet::createActions()
   fillAct->setStatusTip(tr("Fill selected cells"));
   fillAct->setIconText(tr("Fill"));
   connect(fillAct, SIGNAL(triggered()), this, SLOT(fill()));
-
-  renameAct = new QAction(/*QIcon(":/a.png"),*/ tr("Rename sheet"), this);
-  renameAct->setStatusTip(tr("Rename sheet"));
-//  renameAct->setIconText(tr("This"));
-  connect(renameAct, SIGNAL(triggered()), static_cast<LiveEventFrame *>(parent()), SLOT(rename()));
 
   insertColumnHereAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Insert Column"), this);
   insertColumnHereAct->setStatusTip(tr("Insert a column at the current position"));

@@ -65,7 +65,7 @@ EventSheet * LiveEventFrame::getSheet()
 
 void LiveEventFrame::setTempo(double tempo)
 {
-  qDebug() << "LiveEventFrame::setTempo";
+//  qDebug() << "LiveEventFrame::setTempo";
   tempoSpinBox->setValue(tempo);
   m_sheet->setTempo(tempo);
   //TODO add sending tempo to other modes here too
@@ -79,7 +79,7 @@ void LiveEventFrame::setName(QString name)
 
 void LiveEventFrame::setLoopLength(double length)
 {
-  qDebug() << "LiveEventFrame::setLoopLength";
+//  qDebug() << "LiveEventFrame::setLoopLength";
   loopLengthSpinBox->setValue(length);
   m_sheet->setLoopLength(length);
   //TODO add sending length to other modes here too
@@ -96,6 +96,9 @@ void LiveEventFrame::doAction(int action)
   }
   else if (action == 3) {
     deleteFrame();
+  }
+  else if (action == 4) {
+    rename();
   }
   actionComboBox->setCurrentIndex(0);
 }

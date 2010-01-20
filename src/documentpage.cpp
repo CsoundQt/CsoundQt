@@ -51,6 +51,7 @@ DocumentPage::~DocumentPage()
 
 void DocumentPage::keyPressEvent(QKeyEvent *event)
 {
+  qDebug() << "DocumentPage::keyPressEvent " << event->key();
   // TODO is this function necessary any more?
   if (event == QKeySequence::Cut)
   {
@@ -66,7 +67,7 @@ void DocumentPage::keyPressEvent(QKeyEvent *event)
   {
     emit doPaste();
     return;
-    }
+  }
   return QTextEdit::keyPressEvent(event);
 }
 
@@ -195,7 +196,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   while (text.contains("<EventPanel") and text.contains("</EventPanel>")) {
     QString liveEventsText = text.mid(text.indexOf("<EventPanel "),
                                       text.indexOf("</EventPanel>") - text.indexOf("<EventPanel ") + 13);
-    qDebug() << "DocumentPage::setTextString   " << liveEventsText;
+//    qDebug() << "DocumentPage::setTextString   " << liveEventsText;
     LiveEventFrame *frame = newLiveEventFrame();
     QString scoText = liveEventsText.mid(liveEventsText.indexOf(">") + 1,
                                          liveEventsText.indexOf("</EventPanel>") - liveEventsText.indexOf(">") - 1 );
