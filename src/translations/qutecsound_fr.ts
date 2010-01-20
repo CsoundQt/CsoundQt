@@ -620,13 +620,13 @@
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="619"/>
-        <location filename="../eventsheet.cpp" line="1045"/>
+        <location filename="../eventsheet.cpp" line="1044"/>
         <source>Subtract</source>
         <translation>Soustraire</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="628"/>
-        <location filename="../eventsheet.cpp" line="1050"/>
+        <location filename="../eventsheet.cpp" line="1049"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
@@ -681,32 +681,32 @@
         <translation>Pente (1=Linéaire)</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1012"/>
+        <location filename="../eventsheet.cpp" line="1011"/>
         <source>Cut</source>
         <translation>Couper</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1017"/>
+        <location filename="../eventsheet.cpp" line="1016"/>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1022"/>
+        <location filename="../eventsheet.cpp" line="1021"/>
         <source>Paste</source>
         <translation>Coller</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1027"/>
+        <location filename="../eventsheet.cpp" line="1026"/>
         <source>&amp;SendEvents</source>
         <translation>&amp;Poster les Evènements</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1028"/>
+        <location filename="../eventsheet.cpp" line="1027"/>
         <source>Send Events to Csound</source>
         <translation>Poster les évènements à Csound</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1029"/>
+        <location filename="../eventsheet.cpp" line="1028"/>
         <source>Send Events</source>
         <translation>Poster les évènements</translation>
     </message>
@@ -715,237 +715,235 @@
         <translation type="obsolete">Alt+C</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1033"/>
+        <location filename="../eventsheet.cpp" line="1032"/>
         <source>&amp;Loop Events</source>
         <translation>&amp;Boucler les Evènements</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1034"/>
+        <location filename="../eventsheet.cpp" line="1033"/>
         <source>Loop Events to Csound</source>
         <translation>Boucler les évènements vers Csound</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1035"/>
+        <location filename="../eventsheet.cpp" line="1034"/>
         <source>Loop Events</source>
         <translation>Boucler les évènements</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1038"/>
+        <location filename="../eventsheet.cpp" line="1037"/>
         <source>&amp;Stop Events</source>
         <translation>&amp;Stopper les Evènements</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1039"/>
+        <location filename="../eventsheet.cpp" line="1038"/>
         <source>Stop all running and pending events</source>
         <translation>Stopper tous les évènements exécutés ou en attente</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1040"/>
+        <location filename="../eventsheet.cpp" line="1039"/>
         <source>Stop Events</source>
         <translation>Stopper les évènements</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1043"/>
+        <location filename="../eventsheet.cpp" line="1042"/>
         <source>&amp;Subtract</source>
         <translation>&amp;Soustraire</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1044"/>
+        <location filename="../eventsheet.cpp" line="1043"/>
         <source>Subtract a value from the selected cells</source>
         <translation>Soustraire une valeur des cellules sélectionnées</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1048"/>
+        <location filename="../eventsheet.cpp" line="1047"/>
         <source>&amp;Add</source>
         <translation>&amp;Ajouter</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1049"/>
+        <location filename="../eventsheet.cpp" line="1048"/>
         <source>Add a value to the selected cells</source>
         <translation>Ajouter une valeur aux cellules sélectionnées</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1053"/>
+        <location filename="../eventsheet.cpp" line="1052"/>
         <source>&amp;Multiply</source>
         <translation>&amp;Multiplier</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1054"/>
+        <location filename="../eventsheet.cpp" line="1053"/>
         <source>Multiply the selected cells by a value</source>
         <translation>Multiplier les cellules sélectionnées par une valeur</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1055"/>
+        <location filename="../eventsheet.cpp" line="1054"/>
         <source>Multiply</source>
         <translation>Multiplier</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1058"/>
+        <location filename="../eventsheet.cpp" line="1057"/>
         <source>&amp;Divide</source>
         <translation>&amp;Diviser</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1059"/>
+        <location filename="../eventsheet.cpp" line="1058"/>
         <source>Divide the selected cells by a value</source>
         <translation>Diviser les cellules sélectionnées par une valeur</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1060"/>
+        <location filename="../eventsheet.cpp" line="1059"/>
         <source>Divide</source>
         <translation>Diviser</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1063"/>
+        <location filename="../eventsheet.cpp" line="1062"/>
         <source>&amp;Randomize</source>
         <translation>&amp;Valeur Aléatoire</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1064"/>
+        <location filename="../eventsheet.cpp" line="1063"/>
         <source>Randomize the selected cells</source>
         <translation>Valeur aléatoire dans les cellules sélectionnées</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1065"/>
+        <location filename="../eventsheet.cpp" line="1064"/>
         <source>Randomize</source>
         <translation>Valeur aléatoire</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1068"/>
+        <location filename="../eventsheet.cpp" line="1067"/>
         <source>&amp;Reverse</source>
         <translation>&amp;Inverser</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1069"/>
+        <location filename="../eventsheet.cpp" line="1068"/>
         <source>Reverse the selected cells by column</source>
         <translation>Inverser les cellules sélectionnées par colonne</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1070"/>
+        <location filename="../eventsheet.cpp" line="1069"/>
         <source>Reverse</source>
         <translation>Inverser</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1073"/>
+        <location filename="../eventsheet.cpp" line="1072"/>
         <source>&amp;Shuffle</source>
         <translation>&amp;Mélanger</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1074"/>
+        <location filename="../eventsheet.cpp" line="1073"/>
         <source>Shuffle the selected cells</source>
         <translation>Mélanger les cellules sélectionnées</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1075"/>
+        <location filename="../eventsheet.cpp" line="1074"/>
         <source>Shuffle</source>
         <translation>Mélanger</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1083"/>
+        <location filename="../eventsheet.cpp" line="1082"/>
         <source>&amp;Rotate</source>
         <translation>&amp;Permuter</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1084"/>
+        <location filename="../eventsheet.cpp" line="1083"/>
         <source>Rotate the selected cells</source>
         <translation>Permuter les cellules sélectionnées</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1085"/>
+        <location filename="../eventsheet.cpp" line="1084"/>
         <source>Rotate</source>
         <translation>Permuter</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1088"/>
+        <location filename="../eventsheet.cpp" line="1087"/>
         <source>&amp;Fill Cells</source>
         <translation>&amp;Remplir les cellules</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1089"/>
+        <location filename="../eventsheet.cpp" line="1088"/>
         <source>Fill selected cells</source>
         <translation>Remplir les cellules sélectionnées</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1090"/>
+        <location filename="../eventsheet.cpp" line="1089"/>
         <source>Fill</source>
         <translation>Remplir</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1093"/>
-        <location filename="../eventsheet.cpp" line="1094"/>
         <source>Rename sheet</source>
-        <translation>Renommer la feuille</translation>
+        <translation type="obsolete">Renommer la feuille</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1098"/>
+        <location filename="../eventsheet.cpp" line="1092"/>
         <source>&amp;Insert Column</source>
         <translation>&amp;Insérer une Colonne</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1099"/>
+        <location filename="../eventsheet.cpp" line="1093"/>
         <source>Insert a column at the current position</source>
         <translation>Insérer une colonne à la position courante</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1100"/>
+        <location filename="../eventsheet.cpp" line="1094"/>
         <source>Insert Column</source>
         <translation>Insérer une colonne</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1103"/>
+        <location filename="../eventsheet.cpp" line="1097"/>
         <source>&amp;Insert Row</source>
         <translation>&amp;Insérer une ligne</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1104"/>
+        <location filename="../eventsheet.cpp" line="1098"/>
         <source>Insert a row at the current position</source>
         <translation>Insérer une ligne à la position courante</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1105"/>
+        <location filename="../eventsheet.cpp" line="1099"/>
         <source>Insert Row</source>
         <translation>Insérer une ligne</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1109"/>
-        <location filename="../eventsheet.cpp" line="1111"/>
+        <location filename="../eventsheet.cpp" line="1103"/>
+        <location filename="../eventsheet.cpp" line="1105"/>
         <source>Append Column</source>
         <translation>Ajouter une colonne</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1110"/>
+        <location filename="../eventsheet.cpp" line="1104"/>
         <source>Append a column to the sheet</source>
         <translation>Ajouter une colonne à la fin de la feuille</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1114"/>
+        <location filename="../eventsheet.cpp" line="1108"/>
         <source>&amp;Append Row</source>
         <translation>&amp;Ajouter une ligne</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1115"/>
+        <location filename="../eventsheet.cpp" line="1109"/>
         <source>Append a row to the sheet</source>
         <translation>Ajouter une ligne à la feuille</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1116"/>
+        <location filename="../eventsheet.cpp" line="1110"/>
         <source>Append Row</source>
         <translation>Ajouter une ligne</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1119"/>
-        <location filename="../eventsheet.cpp" line="1120"/>
-        <location filename="../eventsheet.cpp" line="1121"/>
+        <location filename="../eventsheet.cpp" line="1113"/>
+        <location filename="../eventsheet.cpp" line="1114"/>
+        <location filename="../eventsheet.cpp" line="1115"/>
         <source>Delete Last Column</source>
         <translation>Effacer la Dernière Colonne</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1124"/>
+        <location filename="../eventsheet.cpp" line="1118"/>
         <source>Delete Current Row</source>
         <translation>Effacer la Dernière Ligne</translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1125"/>
-        <location filename="../eventsheet.cpp" line="1126"/>
+        <location filename="../eventsheet.cpp" line="1119"/>
+        <location filename="../eventsheet.cpp" line="1120"/>
         <source>Delete Row</source>
         <translation>Effacer la Ligne</translation>
     </message>
@@ -1241,38 +1239,43 @@ Il est déjà utilisé.</translation>
         <translation>Cloner le Cadre</translation>
     </message>
     <message>
-        <location filename="../liveeventframe.ui" line="72"/>
+        <location filename="../liveeventframe.ui" line="56"/>
+        <source>Rename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../liveeventframe.ui" line="77"/>
         <source>View</source>
         <translation>Vue</translation>
     </message>
     <message>
-        <location filename="../liveeventframe.ui" line="83"/>
+        <location filename="../liveeventframe.ui" line="88"/>
         <source>Sheet</source>
         <translation>Feuille</translation>
     </message>
     <message>
-        <location filename="../liveeventframe.ui" line="88"/>
+        <location filename="../liveeventframe.ui" line="93"/>
         <source>Text</source>
         <translation>Texte</translation>
     </message>
     <message>
-        <location filename="../liveeventframe.ui" line="109"/>
+        <location filename="../liveeventframe.ui" line="114"/>
         <source>Tempo</source>
         <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../liveeventframe.ui" line="139"/>
+        <location filename="../liveeventframe.ui" line="144"/>
         <source>Loop Length</source>
         <translation>Longueur de Boucle</translation>
     </message>
     <message>
-        <location filename="../liveeventframe.cpp" line="116"/>
+        <location filename="../liveeventframe.cpp" line="119"/>
         <location filename="../liveeventframe.ui" line="51"/>
         <source>Delete Frame</source>
         <translation>Effacer le Cadre</translation>
     </message>
     <message>
-        <location filename="../liveeventframe.cpp" line="117"/>
+        <location filename="../liveeventframe.cpp" line="120"/>
         <source>Are you sure you want to delete this frame?</source>
         <translation>Etes-vous sûr de vouloir effacer ce cadre ?</translation>
     </message>
@@ -2118,9 +2121,9 @@ CanalH:</translation>
         <location filename="../qutecsound.cpp" line="1212"/>
         <location filename="../qutecsound.cpp" line="1259"/>
         <location filename="../qutecsound.cpp" line="1337"/>
-        <location filename="../qutecsound.cpp" line="2860"/>
-        <location filename="../qutecsound.cpp" line="2882"/>
-        <location filename="../qutecsound.cpp" line="3032"/>
+        <location filename="../qutecsound.cpp" line="2881"/>
+        <location filename="../qutecsound.cpp" line="2903"/>
+        <location filename="../qutecsound.cpp" line="3053"/>
         <source>QuteCsound</source>
         <translation>QuteCSound</translation>
     </message>
@@ -2143,7 +2146,7 @@ Qutecsound risque de planter si vous essayez de lancer Csound.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="397"/>
-        <location filename="../qutecsound.cpp" line="2892"/>
+        <location filename="../qutecsound.cpp" line="2913"/>
         <source>File already open</source>
         <translation>Fichier déjà ouvert</translation>
     </message>
@@ -2196,7 +2199,7 @@ Voulez-vous le sauvegarder ?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="740"/>
-        <location filename="../qutecsound.cpp" line="3118"/>
+        <location filename="../qutecsound.cpp" line="3139"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -2658,7 +2661,7 @@ Délivré sous licence LGPLv2 ou GPLv3</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2011"/>
-        <location filename="../qutecsound.cpp" line="2552"/>
+        <location filename="../qutecsound.cpp" line="2573"/>
         <source>Configure</source>
         <translation>Configurer</translation>
     </message>
@@ -3081,19 +3084,19 @@ Francesco
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2294"/>
-        <location filename="../qutecsound.cpp" line="2528"/>
+        <location filename="../qutecsound.cpp" line="2549"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2310"/>
-        <location filename="../qutecsound.cpp" line="2534"/>
+        <location filename="../qutecsound.cpp" line="2555"/>
         <source>Edit</source>
         <translation>Edition</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2337"/>
-        <location filename="../qutecsound.cpp" line="2542"/>
+        <location filename="../qutecsound.cpp" line="2563"/>
         <source>Control</source>
         <translation>Contrôle</translation>
     </message>
@@ -3103,12 +3106,12 @@ Francesco
         <translation>Vue</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2399"/>
+        <location filename="../qutecsound.cpp" line="2400"/>
         <source>Music</source>
         <translation>Musique</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2416"/>
+        <location filename="../qutecsound.cpp" line="2417"/>
         <source>Useful</source>
         <translation>Utile</translation>
     </message>
@@ -3117,13 +3120,12 @@ Francesco
         <translation type="obsolete">Synths</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2438"/>
-        <location filename="../qutecsound.cpp" line="2440"/>
+        <location filename="../qutecsound.cpp" line="2441"/>
         <source>Examples</source>
         <translation>Exemples</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2498"/>
+        <location filename="../qutecsound.cpp" line="2519"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
@@ -3133,27 +3135,37 @@ Francesco
         <translation>Fichiers récents</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2453"/>
+        <location filename="../qutecsound.cpp" line="2439"/>
+        <source>Miscellaneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2454"/>
         <source>Getting Started</source>
         <translation>Démarrage</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2454"/>
+        <location filename="../qutecsound.cpp" line="2455"/>
         <source>Basics</source>
         <translation>Fondamentaux</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2572"/>
+        <location filename="../qutecsound.cpp" line="2475"/>
+        <source>Realtime Interaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2593"/>
         <source>Ready</source>
         <translation>Prêt</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2857"/>
+        <location filename="../qutecsound.cpp" line="2878"/>
         <source>The document </source>
         <translation>Le document </translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2859"/>
+        <location filename="../qutecsound.cpp" line="2880"/>
         <source>
 has been modified.
 Do you want to save the changes before closing?</source>
@@ -3162,41 +3174,41 @@ a été modifié.
 Voulez-vous sauvegarder les changements avant de le fermer ?</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2883"/>
+        <location filename="../qutecsound.cpp" line="2904"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation>Impossible de lire le fichier %1 :
 %2.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2953"/>
+        <location filename="../qutecsound.cpp" line="2974"/>
         <source>File loaded</source>
         <translation>Fichier chargé</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3011"/>
+        <location filename="../qutecsound.cpp" line="3032"/>
         <source>Application</source>
         <translation>Application</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3012"/>
+        <location filename="../qutecsound.cpp" line="3033"/>
         <source>Cannot write file %1:
 %2.</source>
         <translation>Impossible d&apos;écrire le fichier %1:
 %2.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3020"/>
+        <location filename="../qutecsound.cpp" line="3041"/>
         <source>File saved</source>
         <translation>Fichier sauvegardé</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3032"/>
+        <location filename="../qutecsound.cpp" line="3053"/>
         <source>%1[*] - %2</source>
         <translation>%1[*] - %2</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3124"/>
+        <location filename="../qutecsound.cpp" line="3145"/>
         <source>Do not ask again</source>
         <translation>Ne pas redemander</translation>
     </message>

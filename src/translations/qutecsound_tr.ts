@@ -640,10 +640,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Rename sheet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&amp;Insert Column</source>
         <translation type="unfinished"></translation>
     </message>
@@ -963,6 +959,10 @@ It is already used.</source>
     </message>
     <message>
         <source>Clone Frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2443,6 +2443,14 @@ Do you want to save the changes before closing?</source>
     </message>
     <message>
         <source>Do not ask again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Realtime Interaction</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

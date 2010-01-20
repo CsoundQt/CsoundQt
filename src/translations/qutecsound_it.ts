@@ -421,7 +421,7 @@
     </message>
     <message>
         <source>Please note that OPCODEDIR will overwrite current settings so you will need to restart QuteCsound to return to default.</source>
-        <translation type="unfinished"></translation>
+        <translation>Notate che OPCODEDIR sovrascriverà le impostazioni attuali perciò dovrete far ripartire QuteCsound per ritornare al default.</translation>
     </message>
 </context>
 <context>
@@ -461,67 +461,67 @@
     <name>EventSheet</name>
     <message>
         <source>Event</source>
-        <translation type="unfinished"></translation>
+        <translation>evento</translation>
     </message>
     <message>
         <source>Subtract</source>
-        <translation type="unfinished"></translation>
+        <translation>Sottrazione</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Addizione</translation>
     </message>
     <message>
         <source>Multiply by</source>
-        <translation type="unfinished"></translation>
+        <translation>Moltiplicazione per</translation>
     </message>
     <message>
         <source>Divide by</source>
-        <translation type="unfinished"></translation>
+        <translation>Divisione per</translation>
     </message>
     <message>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimo</translation>
     </message>
     <message>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Massimo</translation>
     </message>
     <message>
         <source>Mode: 0=decimals 1=Integers only</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo: 0=decimali 1=solo interi</translation>
     </message>
     <message>
         <source>Iterations</source>
-        <translation type="unfinished"></translation>
+        <translation>Iterazioni</translation>
     </message>
     <message>
         <source>Rotate by</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruota di</translation>
     </message>
     <message>
         <source>From</source>
-        <translation type="unfinished"></translation>
+        <translation>Da</translation>
     </message>
     <message>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation>A</translation>
     </message>
     <message>
         <source>Slope (1=Linear)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pendenza (1=lineare)</translation>
     </message>
     <message>
         <source>&amp;SendEvents</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;InviaEventi</translation>
     </message>
     <message>
         <source>Send Events to Csound</source>
-        <translation type="unfinished"></translation>
+        <translation>Invia eventi a Csound</translation>
     </message>
     <message>
         <source>Send Events</source>
-        <translation type="unfinished"></translation>
+        <translation>Invia Eventi</translation>
     </message>
     <message>
         <source>Alt+C</source>
@@ -529,199 +529,199 @@
     </message>
     <message>
         <source>&amp;Loop Events</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Loop Eventi</translation>
     </message>
     <message>
         <source>Loop Events to Csound</source>
-        <translation type="unfinished"></translation>
+        <translation>Loop Eventi a Csound</translation>
     </message>
     <message>
         <source>Loop Events</source>
-        <translation type="unfinished"></translation>
+        <translation>Loop Eventi</translation>
     </message>
     <message>
         <source>&amp;Stop Events</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ferma Eventi</translation>
     </message>
     <message>
         <source>Stop all running and pending events</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferma tutti gli eventi in funzione e in attesa</translation>
     </message>
     <message>
         <source>Stop Events</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferma eventi</translation>
     </message>
     <message>
         <source>&amp;Subtract</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sottrai</translation>
     </message>
     <message>
         <source>Subtract a value from the selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>Sottrai un valore dalle celle selezionate</translation>
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Addiziona</translation>
     </message>
     <message>
         <source>Add a value to the selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>Addiziona un valore alle celle selezionate</translation>
     </message>
     <message>
         <source>&amp;Multiply</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Moltiplica</translation>
     </message>
     <message>
         <source>Multiply the selected cells by a value</source>
-        <translation type="unfinished"></translation>
+        <translation>Moltiplica le celle selezionate per un valore</translation>
     </message>
     <message>
         <source>Multiply</source>
-        <translation type="unfinished"></translation>
+        <translation>Moltiplica</translation>
     </message>
     <message>
         <source>&amp;Divide</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Dividi</translation>
     </message>
     <message>
         <source>Divide the selected cells by a value</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividi le celle selezionate per un valore</translation>
     </message>
     <message>
         <source>Divide</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividi</translation>
     </message>
     <message>
         <source>&amp;Randomize</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Randomizza</translation>
     </message>
     <message>
         <source>Randomize the selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>Randomizza le celle selezionate</translation>
     </message>
     <message>
         <source>Randomize</source>
-        <translation type="unfinished"></translation>
+        <translation>Randomizza</translation>
     </message>
     <message>
         <source>&amp;Reverse</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Inverti</translation>
     </message>
     <message>
         <source>Reverse the selected cells by column</source>
-        <translation type="unfinished"></translation>
+        <translation>Inverti le celle selezionate per colonna</translation>
     </message>
     <message>
         <source>Reverse</source>
-        <translation type="unfinished"></translation>
+        <translation>Inverti</translation>
     </message>
     <message>
         <source>&amp;Shuffle</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mischia</translation>
     </message>
     <message>
         <source>Shuffle the selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>Mischia le celle selezionate</translation>
     </message>
     <message>
         <source>Shuffle</source>
-        <translation type="unfinished"></translation>
+        <translation>Mischia</translation>
     </message>
     <message>
         <source>&amp;Rotate</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ruota</translation>
     </message>
     <message>
         <source>Rotate the selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruota le celle selezionate</translation>
     </message>
     <message>
         <source>Rotate</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruota</translation>
     </message>
     <message>
         <source>&amp;Fill Cells</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Riempi celle</translation>
     </message>
     <message>
         <source>Fill selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>Riempi le celle selezionate</translation>
     </message>
     <message>
         <source>Fill</source>
-        <translation type="unfinished"></translation>
+        <translation>Riempi</translation>
     </message>
     <message>
         <source>Rename sheet</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Rinomina foglio</translation>
     </message>
     <message>
         <source>&amp;Insert Column</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Inserisci colonna</translation>
     </message>
     <message>
         <source>Insert a column at the current position</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci una colonna alla posizione attuale</translation>
     </message>
     <message>
         <source>Insert Column</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci colonna</translation>
     </message>
     <message>
         <source>&amp;Insert Row</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Inserisci Riga</translation>
     </message>
     <message>
         <source>Insert a row at the current position</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci una riga alla posizione attuale</translation>
     </message>
     <message>
         <source>Insert Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci riga</translation>
     </message>
     <message>
         <source>Append Column</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi Colonna</translation>
     </message>
     <message>
         <source>Append a column to the sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi una colonna al foglio</translation>
     </message>
     <message>
         <source>&amp;Append Row</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Aggiungi riga</translation>
     </message>
     <message>
         <source>Append a row to the sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi una riga al foglio</translation>
     </message>
     <message>
         <source>Append Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi riga</translation>
     </message>
     <message>
         <source>Delete Last Column</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella l&apos;ultima colonna</translation>
     </message>
     <message>
         <source>Delete Current Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella la riga attuale</translation>
     </message>
     <message>
         <source>Delete Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella riga</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation type="unfinished">Taglia</translation>
+        <translation>Taglia</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Copia</translation>
+        <translation>Copia</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation type="unfinished">Incolla</translation>
+        <translation>Incolla</translation>
     </message>
 </context>
 <context>
@@ -864,7 +864,7 @@ Volete partire dall&apos;inizio?</translation>
     </message>
     <message>
         <source>Score</source>
-        <translation type="unfinished"></translation>
+        <translation>Score</translation>
     </message>
 </context>
 <context>
@@ -946,46 +946,50 @@ E&apos; già usata.</translation>
     <name>LiveEventFrame</name>
     <message>
         <source>Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Frame</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished">Vedi</translation>
+        <translation>Vedi</translation>
     </message>
     <message>
         <source>Sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Foglio</translation>
     </message>
     <message>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Testo</translation>
     </message>
     <message>
         <source>Tempo</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>Loop Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Lunghezza loop</translation>
     </message>
     <message>
         <source>Delete Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella frame</translation>
     </message>
     <message>
         <source>Are you sure you want to delete this frame?</source>
-        <translation type="unfinished"></translation>
+        <translation>Siete sicuri di voler cancellare questo frame?</translation>
     </message>
     <message>
         <source>Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Menu</translation>
     </message>
     <message>
         <source>New Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuovo frame</translation>
     </message>
     <message>
         <source>Clone Frame</source>
+        <translation>Clona frame</translation>
+    </message>
+    <message>
+        <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1571,31 +1575,31 @@ CanaleH:</translation>
     </message>
     <message>
         <source>Align Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Allinea a sinistra</translation>
     </message>
     <message>
         <source>Align Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Allinea a destra</translation>
     </message>
     <message>
         <source>Align Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Allinea sopra</translation>
     </message>
     <message>
         <source>Align Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Allinea sotto</translation>
     </message>
     <message>
         <source>Send to back</source>
-        <translation type="unfinished"></translation>
+        <translation>Manda dietro</translation>
     </message>
     <message>
         <source>Distribute Horizontally</source>
-        <translation type="unfinished"></translation>
+        <translation>Distribuisci orizzontalmente</translation>
     </message>
     <message>
         <source>Distribute Vertically</source>
-        <translation type="unfinished"></translation>
+        <translation>Distribuisci verticalmente</translation>
     </message>
 </context>
 <context>
@@ -2494,18 +2498,26 @@ Francesco
     </message>
     <message>
         <source>Live Events</source>
-        <translation type="unfinished"></translation>
+        <translation>Evento live</translation>
     </message>
     <message>
         <source>Show Live Events Panels</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra i pannelli degli eventi live</translation>
     </message>
     <message>
         <source>Getting Started</source>
-        <translation type="unfinished"></translation>
+        <translation>Getting Started</translation>
     </message>
     <message>
         <source>Basics</source>
+        <translation>Fondamentali</translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Realtime Interaction</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
