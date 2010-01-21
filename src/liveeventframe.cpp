@@ -55,12 +55,35 @@ LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags
 
   connect(actionComboBox,SIGNAL(activated(int)), this, SLOT(doAction(int)));
   connect(tempoSpinBox,SIGNAL(valueChanged(double)), this, SLOT(setTempo(double)));
+  connect(modeComboBox,SIGNAL(activated(int)), this, SLOT(setMode(int)));
   connect(loopLengthSpinBox,SIGNAL(valueChanged(double)), this, SLOT(setLoopLength(double)));
 }
 
 EventSheet * LiveEventFrame::getSheet()
 {
   return m_sheet;
+}
+
+void LiveEventFrame::setMode(int mode)
+{
+  if (m_mode == mode)
+    return;
+  if (mode == 0) {
+    m_editor->hide();
+    m_editor = static_cast<QTextEdit *>(scrollArea->takeWidget());
+    m_sheet->setFromText(m_editor->toPlainText());
+    scrollArea->setWidget(m_sheet);
+    m_sheet->show();
+  }
+  else if (mode == 1) {
+    m_sheet->stopAllEvents();
+    m_sheet->hide();
+    m_sheet = static_cast<EventSheet *>(scrollArea->takeWidget());
+    m_editor->setText(m_sheet->getPlainText());
+    scrollArea->setWidget(m_editor);
+    m_editor->show();
+  }
+  m_mode = mode;
 }
 
 void LiveEventFrame::setTempo(double tempo)

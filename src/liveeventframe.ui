@@ -24,7 +24,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>591</width>
+     <width>882</width>
      <height>31</height>
     </rect>
    </property>
@@ -79,10 +79,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QComboBox" name="comboBox_2">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
+     <widget class="QComboBox" name="modeComboBox">
       <item>
        <property name="text">
         <string>Sheet</string>

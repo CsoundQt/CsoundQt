@@ -603,7 +603,7 @@ void EventSheet::markHistory()
     if (history.size() != historyIndex + 1)
       history.resize(historyIndex + 1);
     history[historyIndex] = text;
-    qDebug() << "EventSheet::markHistory "<< historyIndex << " ....."  << text;
+//    qDebug() << "EventSheet::markHistory "<< historyIndex << " ....."  << text;
   }
 }
 

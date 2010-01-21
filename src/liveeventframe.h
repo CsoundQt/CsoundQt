@@ -46,6 +46,7 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     void forceDestroy();
 
   public slots:
+    void setMode(int mode);
     void setTempo(double tempo);
     void setLoopLength(double length);
     void doAction(int action);

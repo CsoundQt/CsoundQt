@@ -32,6 +32,7 @@ class EventSheet : public QTableWidget
 {
   Q_OBJECT
   public:
+
     EventSheet(QWidget *parent);
     ~EventSheet();
 
