@@ -231,7 +231,7 @@ ioText {9, 351} {702, 343} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0,
 ioText {529, 164} {95, 27} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Output Gain
 ioSlider {625, 165} {205, 24} 0.000000 5.000000 1.000000 gain
 ioText {831, 165} {61, 27} display 0.000000 0.00100 "gain" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.0000
-ioText {26, 391} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Grains per k-period
+ioText {26, 391} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Grains per Second
 ioText {25, 478} {147, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Transposition (Cent)
 ioSlider {19, 502} {154, 25} -1200.000000 1200.000000 0.000000 transp
 ioText {53, 526} {81, 26} display 0.000000 0.00100 "transp" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0000
@@ -241,7 +241,7 @@ ioText {53, 609} {81, 26} display 0.000000 0.00100 "grainsize" right "Lucida Gra
 ioSlider {21, 418} {152, 25} 1.000000 200.000000 92.644737 grainrate
 ioText {53, 440} {81, 26} display 0.000000 0.00100 "grainrate" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 92.6447
 ioText {244, 389} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Distribution
-ioSlider {239, 415} {152, 25} 0.000000 1.000000 0.467105 dist
+ioSlider {239, 415} {152, 25} 0.000000 1.000000 0.460526 dist
 ioText {224, 476} {191, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Position Randomness (ms)
 ioSlider {240, 501} {152, 25} 0.000000 100.000000 0.000000 posrand
 ioText {274, 523} {81, 26} display 0.000000 0.00100 "posrand" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0000
@@ -259,3 +259,13 @@ ioText {483, 466} {168, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 
 ioText {469, 416} {185, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select window function ...
 </MacGUI>
 
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" name="" x="360" y="248" width="596" height="322"> 
+
+
+
+
+
+
+
+
+</EventPanel>

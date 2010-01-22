@@ -86,16 +86,18 @@ kwinshape	invalue	"winshape"; 0=Hamming, 1=von Hann, 2=Bartlett, 3=Triangle, 4=B
 		outvalue	"ftab", 12-(kwinshape); graph widget shows selected window shape
 
 ;;triggers i 10 at the beginning and whenever the grain envelope has changed
+gksamplepos	init		0; position of the pointer through the sample
 kchanged	changed	kwinshape; sends 1 if the windowshape has changed
  if kchanged == 1 then
 		event		"i", -10, 0, -1; turn off previous instance of i10
-		event		"i", 10, 0, -1, kwinshape+1; turn on new instance
+		event		"i", 10, 0, -1, kwinshape+1, gksamplepos; turn on new instance
  endif
 endin
 
 instr 10; performs granular synthesis
 ;;used parameters for the partikkel opcode
 iwin		=		p4; shape of the grain window 
+igksamplepos	=		p5; pointer position at the beginning
 ifiltab	=		giFile; buffer to read
 kspeed		invalue	"speed"; speed of reading the buffer (1=normal)
 kspeed0	invalue	"speed0"; set playback speed to 0
@@ -154,13 +156,14 @@ kwavfreq	= 		iorig * cent(kcent + kcentrand)
 ichannelmasks = 		giPan; ftable for panning
 
 ;;time pointer
-afilposphas		phasor kspeed / ifildur; in general
+afilposphas		phasor kspeed / ifildur, igksamplepos; in general
 ;generate random deviation of the time pointer
 kposrandsec		= kposrand / 1000	; ms -> sec
 kposrand		= kposrandsec / ifildur	; phase values (0-1)
 arndpos		linrand	 kposrand	; random offset in phase values
 ;add random deviation to the time pointer
 asamplepos		= afilposphas + arndpos; resulting phase values (0-1)
+gksamplepos		downsamp	asamplepos; export pointer position 
 
 agrL, agrR	partikkel kgrainrate, kdist, giDisttab, async, kenv2amt, ienv2tab, \
 		ienv_attack, ienv_decay, ksustain_amount, ka_d_ratio, kgrainsize, kamp, igainmasks, \
@@ -202,7 +205,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 66 38 906 818
+WindowBounds: 356 92 906 818
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -214,7 +217,7 @@ ioText {9, 58} {872, 66} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0
 ioText {9, 130} {483, 72} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground border  INPUT
 ioSlider {185, 186} {173, 0} 0.000000 1.000000 0.000000 slider7
 ioText {499, 131} {383, 119} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground border  OUTPUT
-ioMeter {511, 197} {335, 18} {0, 59904, 0} "out2_post" 0.000000 "outL" 0.401013 fill 1 0 mouse
+ioMeter {511, 197} {335, 18} {0, 59904, 0} "out2_post" 0.000000 "outL" 0.371216 fill 1 0 mouse
 ioMeter {844, 197} {26, 18} {50176, 3584, 3072} "outRover" 0.000000 "outLover" 0.000000 fill 1 0 mouse
 ioText {374, 210} {79, 27} editnum 50.000000 0.100000 "dbrange" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 50.000000
 ioText {295, 209} {79, 28} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder dB-Range
@@ -223,17 +226,17 @@ ioMenu {171, 208} {108, 28} 1 303 "Amplitudes,dB" showdb
 ioGraph {9, 254} {432, 82} scope 2.000000 1.000000 
 ioText {10, 352} {873, 399} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground border GRANULAR
 ioText {510, 164} {95, 27} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Output Gain
-ioSlider {606, 165} {205, 24} 0.000000 5.000000 0.829268 gain
-ioText {812, 164} {61, 27} display 0.829268 0.00100 "gain" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.8293
-ioText {47, 389} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Grains per k-period
+ioSlider {606, 165} {205, 24} 0.000000 5.000000 0.780488 gain
+ioText {812, 164} {61, 27} display 0.000000 0.00100 "gain" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.8293
+ioText {47, 389} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Grains per Second
 ioText {279, 555} {235, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Transposition (Cent)
 ioSlider {269, 579} {242, 25} -1200.000000 1200.000000 0.000000 transp
 ioText {307, 603} {169, 26} display 0.000000 0.00100 "transp" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0000
 ioText {66, 558} {101, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Grainsize (ms)
-ioSlider {41, 580} {152, 25} 1.000000 100.000000 31.611842 grainsize
-ioText {73, 603} {81, 26} display 31.611842 0.00100 "grainsize" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 31.6118
-ioSlider {42, 416} {152, 25} 1.000000 200.000000 52.059211 grainrate
-ioText {74, 438} {81, 26} display 52.059211 0.00100 "grainrate" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 52.0592
+ioSlider {41, 580} {152, 25} 1.000000 100.000000 30.309211 grainsize
+ioText {73, 603} {81, 26} display 0.000000 0.00100 "grainsize" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 31.6118
+ioSlider {42, 416} {152, 25} 1.000000 200.000000 67.769737 grainrate
+ioText {74, 438} {81, 26} display 67.769737 0.00100 "grainrate" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 67.7697
 ioText {45, 472} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Distribution
 ioSlider {40, 498} {152, 25} 0.000000 1.000000 1.000000 dist
 ioText {264, 475} {258, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Position Randomness (ms)
@@ -249,21 +252,31 @@ ioMenu {664, 417} {144, 24} 0 303 "Hamming,von Hann,Triangle,Blackman,Blackman-H
 ioGraph {607, 470} {264, 176} table 12.000000 1.000000 ftab
 ioText {648, 442} {168, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ... and see its shape
 ioText {634, 392} {185, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select window function ...
-ioText {24, 162} {351, 23} edit 0.000000 0.00100 "_Browse1" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder /Joachim/Materialien/SamplesKlangbearbeitung/SpracheStereo.aiff
+ioText {24, 162} {351, 23} edit 0.000000 0.00100 "_Browse1" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioButton {383, 160} {100, 30} value 1.000000 "_Browse1" "Open File" "/" 
 ioGraph {452, 254} {431, 82} scope 2.000000 2.000000 
-ioMeter {511, 222} {335, 18} {0, 59904, 0} "out2_post" 0.000000 "outR" 0.362367 fill 1 0 mouse
+ioMeter {511, 222} {335, 18} {0, 59904, 0} "out2_post" 0.000000 "outR" 0.412916 fill 1 0 mouse
 ioMeter {844, 222} {26, 18} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
 ioText {51, 637} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Panning
 ioSlider {46, 663} {152, 25} 0.000000 1.000000 0.506579 pan
 ioText {27, 683} {71, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder narrow
 ioText {149, 683} {71, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder wide
 ioText {334, 386} {119, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Playback Speed
-ioSlider {269, 415} {245, 28} -2.000000 2.000000 0.938776 speed
-ioText {303, 439} {172, 29} display 0.938776 0.00100 "speed" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.9388
+ioSlider {269, 415} {245, 28} -2.000000 2.000000 1.020408 speed
+ioText {303, 439} {172, 29} display 1.020408 0.00100 "speed" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.0204
 ioCheckbox {268, 388} {20, 20} off speed0
 ioCheckbox {496, 388} {20, 20} off speed1
 ioText {288, 386} {20, 25} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0
 ioText {475, 386} {20, 25} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1
 </MacGUI>
 
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" name="" x="360" y="248" width="596" height="322"> 
+
+
+
+
+
+
+
+
+</EventPanel>
