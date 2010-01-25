@@ -1481,7 +1481,7 @@ void qutecsound::utilitiesDialogOpen()
 void qutecsound::about()
 {
   QString text = tr("by: Andres Cabrera\nReleased under the LGPLv2 or GPLv3\nVersion %1\n").arg(QUTECSOUND_VERSION);
-  text += tr("French translation:\nFrancois Pinot\n");
+  text += "\n" + tr("French translation:\nFrancois Pinot\n");
   //Why is the ç character not displayed correctly...?
 //   text += tr("French translation:\nFrançois Pinot\n");
   text += tr("German translation:\nJoachim Heintz\n");
