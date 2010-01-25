@@ -5,11 +5,11 @@
     <name>ConfigDialog</name>
     <message>
         <source>QuteCsound</source>
-        <translation type="unfinished">QuteCsound</translation>
+        <translation>QuteCsound</translation>
     </message>
     <message>
         <source>Only files with extension .csd are accepted</source>
-        <translation type="unfinished"></translation>
+        <translation>Apenas arquivos com extensão csd são aceitos</translation>
     </message>
     <message>
         <source>Select File</source>
@@ -377,151 +377,151 @@
     </message>
     <message>
         <source>Use invalue/outvalue</source>
-        <translation type="unfinished"></translation>
+        <translation>Use invalue/outvalue</translation>
     </message>
     <message>
         <source>Use chnget/chnset</source>
-        <translation type="unfinished"></translation>
+        <translation>Use chnget/chnset</translation>
     </message>
     <message>
         <source>PDF viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizador de arquivos PDF</translation>
     </message>
     <message>
         <source>Run FLTK csds in Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Rodar csds com FLTK no Terminal</translation>
     </message>
     <message>
         <source>Enable FLTK</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar FLTK</translation>
     </message>
     <message>
         <source>Scrollbars on widget panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Barras de navegacão no painel de widgets</translation>
     </message>
     <message>
         <source>Allow key repeats for sensekey</source>
-        <translation type="unfinished"></translation>
+        <translation>Permitir repetição de teclas para sensekey</translation>
     </message>
     <message>
         <source>Console Message buffer size</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamanho do buffer para mensages de console</translation>
     </message>
     <message>
         <source>256</source>
-        <translation type="unfinished">256</translation>
+        <translation>256</translation>
     </message>
     <message>
         <source>1024</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>No limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Ilimitado</translation>
     </message>
     <message>
         <source>Please note that OPCODEDIR will overwrite current settings so you will need to restart QuteCsound to return to default.</source>
-        <translation type="unfinished"></translation>
+        <translation>Note que OPCODEDIR sobrescreverá a configuração atual, por isso voce precisará fechar e abrir de novo QuteCsound para voltar aos defaults</translation>
     </message>
 </context>
 <context>
     <name>ConsoleWidget</name>
     <message>
         <source>Csound Output Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Console de Mensagens de Csound</translation>
     </message>
 </context>
 <context>
     <name>DockConsole</name>
     <message>
         <source>Csound Output Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Console de Mensagens de Csound</translation>
     </message>
 </context>
 <context>
     <name>DockHelp</name>
     <message>
         <source>Not Found! Make sure the documentation path is set in the Configuration Dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Não encontrado! Defina a localização dos manuais na janela de configuração</translation>
     </message>
     <message>
         <source>QuteCsound</source>
-        <translation type="unfinished">QuteCsound</translation>
+        <translation>QuteCsound</translation>
     </message>
     <message>
         <source>External links can&apos;t be followed in help browser.</source>
-        <translation type="unfinished"></translation>
+        <translation>Links externos não podem ser seguidos no browser de ajuda</translation>
     </message>
     <message>
         <source>Frames version only available in external browser.</source>
-        <translation type="unfinished"></translation>
+        <translation>Versão em frames apenas disponível em browser externo</translation>
     </message>
 </context>
 <context>
     <name>EventSheet</name>
     <message>
         <source>Event</source>
-        <translation type="unfinished"></translation>
+        <translation>Evento</translation>
     </message>
     <message>
         <source>Subtract</source>
-        <translation type="unfinished"></translation>
+        <translation>Subtrair</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Somar</translation>
     </message>
     <message>
         <source>Multiply by</source>
-        <translation type="unfinished"></translation>
+        <translation>Multiplicar por</translation>
     </message>
     <message>
         <source>Divide by</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividir por</translation>
     </message>
     <message>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>Mínimo</translation>
     </message>
     <message>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>Máximo</translation>
     </message>
     <message>
         <source>Mode: 0=decimals 1=Integers only</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo: 0=decimais 1=somente números inteiros</translation>
     </message>
     <message>
         <source>Iterations</source>
-        <translation type="unfinished"></translation>
+        <translation>Repetições</translation>
     </message>
     <message>
         <source>Rotate by</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotar por</translation>
     </message>
     <message>
         <source>From</source>
-        <translation type="unfinished"></translation>
+        <translation>De</translation>
     </message>
     <message>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation>Para</translation>
     </message>
     <message>
         <source>Slope (1=Linear)</source>
-        <translation type="unfinished"></translation>
+        <translation>Curva (1=Linear)</translation>
     </message>
     <message>
         <source>&amp;SendEvents</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar eventos</translation>
     </message>
     <message>
         <source>Send Events to Csound</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar eventos para Csound</translation>
     </message>
     <message>
         <source>Send Events</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar eventos</translation>
     </message>
     <message>
         <source>Alt+C</source>
@@ -529,195 +529,195 @@
     </message>
     <message>
         <source>&amp;Loop Events</source>
-        <translation type="unfinished"></translation>
+        <translation>Colocar eventos em Loop</translation>
     </message>
     <message>
         <source>Loop Events to Csound</source>
-        <translation type="unfinished"></translation>
+        <translation>Colocar eventos em Loop para Csound</translation>
     </message>
     <message>
         <source>Loop Events</source>
-        <translation type="unfinished"></translation>
+        <translation>Colocar eventos em Loop</translation>
     </message>
     <message>
         <source>&amp;Stop Events</source>
-        <translation type="unfinished"></translation>
+        <translation>Para eventos</translation>
     </message>
     <message>
         <source>Stop all running and pending events</source>
-        <translation type="unfinished"></translation>
+        <translation>Parar todos os eventos</translation>
     </message>
     <message>
         <source>Stop Events</source>
-        <translation type="unfinished"></translation>
+        <translation>Parar eventos</translation>
     </message>
     <message>
         <source>&amp;Subtract</source>
-        <translation type="unfinished"></translation>
+        <translation>Subtrair</translation>
     </message>
     <message>
         <source>Subtract a value from the selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>Subtrair um valor de células selecionadas</translation>
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar</translation>
     </message>
     <message>
         <source>Add a value to the selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar valor às células selecionadas</translation>
     </message>
     <message>
         <source>&amp;Multiply</source>
-        <translation type="unfinished"></translation>
+        <translation>Multiplicar</translation>
     </message>
     <message>
         <source>Multiply the selected cells by a value</source>
-        <translation type="unfinished"></translation>
+        <translation>Multiplicar as células selecionadas por um valor</translation>
     </message>
     <message>
         <source>Multiply</source>
-        <translation type="unfinished"></translation>
+        <translation>Multiplicar</translation>
     </message>
     <message>
         <source>&amp;Divide</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividir</translation>
     </message>
     <message>
         <source>Divide the selected cells by a value</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividir as células selecionadas por um valor</translation>
     </message>
     <message>
         <source>Divide</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividir</translation>
     </message>
     <message>
         <source>&amp;Randomize</source>
-        <translation type="unfinished"></translation>
+        <translation>Aleatorizar</translation>
     </message>
     <message>
         <source>Randomize the selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>Aleatorizar as células selecionadas</translation>
     </message>
     <message>
         <source>Randomize</source>
-        <translation type="unfinished"></translation>
+        <translation>Aleatorizar</translation>
     </message>
     <message>
         <source>&amp;Reverse</source>
-        <translation type="unfinished"></translation>
+        <translation>Reverter</translation>
     </message>
     <message>
         <source>Reverse the selected cells by column</source>
-        <translation type="unfinished"></translation>
+        <translation>Reverter as células selecionadas</translation>
     </message>
     <message>
         <source>Reverse</source>
-        <translation type="unfinished"></translation>
+        <translation>Reverter</translation>
     </message>
     <message>
         <source>&amp;Shuffle</source>
-        <translation type="unfinished"></translation>
+        <translation>Embaralhar</translation>
     </message>
     <message>
         <source>Shuffle the selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>Embaralhar as células selecionadas</translation>
     </message>
     <message>
         <source>Shuffle</source>
-        <translation type="unfinished"></translation>
+        <translation>Embaralhar</translation>
     </message>
     <message>
         <source>&amp;Rotate</source>
-        <translation type="unfinished"></translation>
+        <translation>Rodar</translation>
     </message>
     <message>
         <source>Rotate the selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>Rodar  as células selecionadas</translation>
     </message>
     <message>
         <source>Rotate</source>
-        <translation type="unfinished"></translation>
+        <translation>Rodar</translation>
     </message>
     <message>
         <source>&amp;Fill Cells</source>
-        <translation type="unfinished"></translation>
+        <translation>Preencher células </translation>
     </message>
     <message>
         <source>Fill selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>Preencher as células selecionadas</translation>
     </message>
     <message>
         <source>Fill</source>
-        <translation type="unfinished"></translation>
+        <translation>Preencher</translation>
     </message>
     <message>
         <source>&amp;Insert Column</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserir coluna</translation>
     </message>
     <message>
         <source>Insert a column at the current position</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserir uma coluna na posição corrente</translation>
     </message>
     <message>
         <source>Insert Column</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserir coluna</translation>
     </message>
     <message>
         <source>&amp;Insert Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserir linha</translation>
     </message>
     <message>
         <source>Insert a row at the current position</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserir uma linha na posição corrente</translation>
     </message>
     <message>
         <source>Insert Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserir linha</translation>
     </message>
     <message>
         <source>Append Column</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar coluna</translation>
     </message>
     <message>
         <source>Append a column to the sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar coluna à tabela</translation>
     </message>
     <message>
         <source>&amp;Append Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar linha</translation>
     </message>
     <message>
         <source>Append a row to the sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar linha à tabela</translation>
     </message>
     <message>
         <source>Append Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar linha</translation>
     </message>
     <message>
         <source>Delete Last Column</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar última coluna</translation>
     </message>
     <message>
         <source>Delete Current Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar linha corrente</translation>
     </message>
     <message>
         <source>Delete Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar linha</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation type="unfinished">Cortar</translation>
+        <translation>Cortar</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Copiar</translation>
+        <translation>Copiar</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation type="unfinished">Colar</translation>
+        <translation>Colar</translation>
     </message>
 </context>
 <context>
@@ -838,148 +838,148 @@
     <name>Inspector</name>
     <message>
         <source>Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Inspetor</translation>
     </message>
     <message>
         <source>Opcodes</source>
-        <translation type="unfinished"></translation>
+        <translation>Opcodes</translation>
     </message>
     <message>
         <source>Instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>Instrumentos</translation>
     </message>
     <message>
         <source>F-tables</source>
-        <translation type="unfinished"></translation>
+        <translation>Tabelas</translation>
     </message>
     <message>
         <source>Score</source>
-        <translation type="unfinished"></translation>
+        <translation>Score</translation>
     </message>
 </context>
 <context>
     <name>KeySelector</name>
     <message>
         <source>Press Key Combination</source>
-        <translation type="unfinished"></translation>
+        <translation>Digite a combinação de teclas</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum</translation>
     </message>
 </context>
 <context>
     <name>KeySelectorDialog</name>
     <message>
         <source>Select shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecionar atalho</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <source>Current Shortcut:    </source>
-        <translation type="unfinished"></translation>
+        <translation>Atalho corrente:</translation>
     </message>
     <message>
         <source>current</source>
-        <translation type="unfinished"></translation>
+        <translation>corrente</translation>
     </message>
     <message>
         <source>Command</source>
-        <translation type="unfinished"></translation>
+        <translation>Comando</translation>
     </message>
     <message>
         <source>Action:   </source>
-        <translation type="unfinished"></translation>
+        <translation>Ação</translation>
     </message>
     <message>
         <source>new</source>
-        <translation type="unfinished"></translation>
+        <translation>Novo</translation>
     </message>
     <message>
         <source>New shortcut:</source>
-        <translation type="unfinished"></translation>
+        <translation>Novo atalho:</translation>
     </message>
 </context>
 <context>
     <name>KeyboardShortcuts</name>
     <message>
         <source>Keyboard Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Atalhos de teclado</translation>
     </message>
     <message>
         <source>Invalid shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Atalho inválido</translation>
     </message>
     <message>
         <source>Shortcut cannot be assigned.
 It is already used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Atalho não pode ser feito, já é usado.</translation>
     </message>
     <message>
         <source>Restore Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar defaults</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>Fechar</translation>
     </message>
 </context>
 <context>
     <name>LiveEventFrame</name>
     <message>
         <source>Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Moldura</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished">Visual</translation>
+        <translation>Visual</translation>
     </message>
     <message>
         <source>Sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Tabela</translation>
     </message>
     <message>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto</translation>
     </message>
     <message>
         <source>Tempo</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>Loop Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamanho do Loop</translation>
     </message>
     <message>
         <source>Delete Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar moldura</translation>
     </message>
     <message>
         <source>Are you sure you want to delete this frame?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voçê tem certeza que quer apagar esta moldura?</translation>
     </message>
     <message>
         <source>Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Menu</translation>
     </message>
     <message>
         <source>New Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Nova moldura</translation>
     </message>
     <message>
         <source>Clone Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Clonar moldura</translation>
     </message>
     <message>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>Renomear</translation>
     </message>
 </context>
 <context>
@@ -1564,31 +1564,31 @@ CanallH:</translation>
     </message>
     <message>
         <source>Align Left</source>
-        <translation type="unfinished"></translation>
+        <translation>alinhar à esquerda</translation>
     </message>
     <message>
         <source>Align Right</source>
-        <translation type="unfinished"></translation>
+        <translation>alinhar à direita</translation>
     </message>
     <message>
         <source>Align Top</source>
-        <translation type="unfinished"></translation>
+        <translation>alinhar ao topo</translation>
     </message>
     <message>
         <source>Align Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>alinhar abaixo</translation>
     </message>
     <message>
         <source>Send to back</source>
-        <translation type="unfinished"></translation>
+        <translation>Mandar para o fundo</translation>
     </message>
     <message>
         <source>Distribute Horizontally</source>
-        <translation type="unfinished"></translation>
+        <translation>Distribuir horizontalmente</translation>
     </message>
     <message>
         <source>Distribute Vertically</source>
-        <translation type="unfinished"></translation>
+        <translation>Distribuir verticalmente</translation>
     </message>
 </context>
 <context>
@@ -2275,27 +2275,27 @@ Joachim Heintz
         <source>French translation:
 Francois Pinot
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Tradução francesa: Francois Pinot</translation>
     </message>
     <message>
         <source>CTRL+E</source>
-        <translation type="unfinished"></translation>
+        <translation>CTRL+E</translation>
     </message>
     <message>
         <source>Run Csound</source>
-        <translation type="unfinished"></translation>
+        <translation>Rodar Csound</translation>
     </message>
     <message>
         <source>Run current file</source>
-        <translation type="unfinished"></translation>
+        <translation>Rodar arquivo corrente</translation>
     </message>
     <message>
         <source>Set Keyboard Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurar atalhos de teclado</translation>
     </message>
     <message>
         <source>Set Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurar atalhos</translation>
     </message>
     <message>
         <source>&amp;About QuteCsound</source>
@@ -2397,117 +2397,117 @@ Você quer salvar antes de fechar?</translation>
         <source>Portuguese translation:
 Victor Lazzarini
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Tradução portuguesa: Victor Lazzarini</translation>
     </message>
     <message>
         <source>Export without widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar sem widgets</translation>
     </message>
     <message>
         <source>Save to new file without including widget sections</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar em arquivo novo sem incluir widgets</translation>
     </message>
     <message>
         <source>PDF viewer not found!
 Please go to Edit-&gt;Options-&gt;Environment and select directory
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Leitor de PDF não encontrado! Vá a Editar-&gt;Opções-&gt;Ambiente e selecione diretório</translation>
     </message>
     <message>
         <source>Csound Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Manual de Csound</translation>
     </message>
     <message>
         <source>Show the Csound manual in the help panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar o manual de Csound no painel de ajuda</translation>
     </message>
     <message>
         <source>Open Quick Reference Guide</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir Guia de Referência Rápida</translation>
     </message>
     <message>
         <source>Open Quick Reference Guide in PDF viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir Guia de Referência Rápida no leitor de PDF</translation>
     </message>
     <message>
         <source>Csound Files (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos de Csound (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)</translation>
     </message>
     <message>
         <source>Find and replace</source>
-        <translation type="unfinished">Achar e substituir</translation>
+        <translation>Achar e substituir</translation>
     </message>
     <message>
         <source>The string was not found.
 Would you like to start from the top?</source>
-        <translation type="unfinished"></translation>
+        <translation>O texto não foi encontrado. Começar do topo?</translation>
     </message>
     <message>
         <source>This file has not been saved
 Please select name and location.</source>
-        <translation type="unfinished"></translation>
+        <translation>O arquivo não foi salvo. Selecione nome e local</translation>
     </message>
     <message>
         <source>Italian translation:
 Francesco
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Tradução italiana: Francesco</translation>
     </message>
     <message>
         <source>Ctrl+G</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+G</translation>
     </message>
     <message>
         <source>Alt+6</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+6</translation>
     </message>
     <message>
         <source>Find a&amp;gain</source>
-        <translation type="unfinished"></translation>
+        <translation>Achar de novo</translation>
     </message>
     <message>
         <source>Find next appearance of string</source>
-        <translation type="unfinished"></translation>
+        <translation>Achar a nova aparição do texto</translation>
     </message>
     <message>
         <source>Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Inspetor</translation>
     </message>
     <message>
         <source>Show Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar inspetor</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation>Música</translation>
     </message>
     <message>
         <source>Useful</source>
-        <translation type="unfinished"></translation>
+        <translation>ÚTIL</translation>
     </message>
     <message>
         <source>Live Events</source>
-        <translation type="unfinished"></translation>
+        <translation>Eventos ao vivo</translation>
     </message>
     <message>
         <source>Show Live Events Panels</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar paineis de eventos ao vivo</translation>
     </message>
     <message>
         <source>Getting Started</source>
-        <translation type="unfinished"></translation>
+        <translation>Começando</translation>
     </message>
     <message>
         <source>Basics</source>
-        <translation type="unfinished"></translation>
+        <translation>Elementos Bá sicos</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Miscelâneos</translation>
     </message>
     <message>
         <source>Realtime Interaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Interação em tempo real</translation>
     </message>
 </context>
 </TS>
