@@ -694,11 +694,16 @@ bool qutecsound::closeTab()
   }
   documentPages[curPage]->close();
   documentPages.remove(curPage);
+  int newIndex = curPage;
+  if (newIndex >= documentPages.size())
+    newIndex = documentPages.size() - 1;
+  widgetPanel->loadWidgets(documentPages[newIndex]->getMacWidgetsText());
   documentTabs->removeTab(curPage);
 //   if (curPage > 0) {
 //     curPage--;
 //   }
   documentTabs->setCurrentIndex(curPage);
+  setCurrentFile(documentPages[curPage]->fileName);
   textEdit = documentPages[curPage];
 //   textEdit->setTabStopWidth(m_options->tabWidth);
 //   textEdit->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
