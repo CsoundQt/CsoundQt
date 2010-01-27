@@ -2870,7 +2870,10 @@ int qutecsound::execute(QString executable, QString options)
   QString commandLine = "\"" + executable + "\" " + options;
 #endif
 #ifdef Q_OS_WIN
-  QString commandLine = "\"" + executable + "\" " + (executable.startsWith("cmd")? " /k ": " ") + options;
+  QString commandLine = executable;
+  if (!commandLine.startsWith("\""))
+      commandLine = "\"" + commandLine + "\"";
+  commandLine = commandLine + " " + (executable.startsWith("cmd")? " /k ": " ") + options;
   if (!QProcess::startDetached(commandLine))
       return 1;
 #else
