@@ -23,7 +23,7 @@
 #ifndef QUTECSOUND_H
 #define QUTECSOUND_H
 
-#define QUTECSOUND_VERSION "0.4.6"
+#define QUTECSOUND_VERSION "0.4.5.2"
 
 #include <QtGui>
 
@@ -38,12 +38,6 @@
 #include <Carbon/Carbon.h>
 #endif
 
-#include <csound.hpp>
-#include <csPerfThread.hpp>
-
-// Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
-
-#define QUTECSOUND_DESTROY_CSOUND
 
 class QAction;
 class QMenu;
@@ -72,70 +66,33 @@ class qutecsound:public QMainWindow
   public:
     qutecsound(QStringList fileNames);
     ~qutecsound();
-    static void messageCallback_NoThread(CSOUND *csound,
-                                         int attr,
-                                         const char *fmt,
-                                         va_list args);
-    static void messageCallback_Thread(CSOUND *csound,
-                                         int attr,
-                                         const char *fmt,
-                                         va_list args);
-    static void messageCallback_Devices(CSOUND *csound,
+    static void devicesMessageCallback(CSOUND *csound,
                                        int attr,
                                        const char *fmt,
                                        va_list args);
+    static void utilitiesMessageCallback(CSOUND *csound,
+                                         int /*attr*/,
+                                         const char *fmt,
+                                         va_list args);
 
-    //callbacks for graph drawing based on J. Ramsdell's flcsound
-    static void makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *name);
-    static void drawGraphCallback(CSOUND *csound, WINDAT *windat);
-    static void killGraphCallback(CSOUND *csound, WINDAT *windat);
-    static int exitGraphCallback(CSOUND *csound);
-    static void outputValueCallback (CSOUND *csound,
-                                    const char *channelName,
-                                    MYFLT value);
-    static void inputValueCallback (CSOUND *csound,
-                                   const char *channelName,
-                                   MYFLT *value);
-//     static void ioCallback (CSOUND *csound,
-//                             const char *channelName,
-//                             MYFLT *value,
-//                             int channelType);
-    static int keyEventCallback(void *userData,
-                                void *p,
-                                unsigned int type);
-
-    static void  csThread(void *data);  //Thread function
-    QMutex perfMutex;
-    static void readWidgetValues(CsoundUserData *ud);
-    static void writeWidgetValues(CsoundUserData *ud);
-    static void processEventQueue(CsoundUserData *ud);
-    void queueOutValue(QString channelName, double value);
-    void queueOutString(QString channelName, QString value);
-    void queueMessage(QString message);
     QStringList runCsoundInternally(QStringList flags); //returns csound messages
-    void newCurve(Curve *curve);  //New graphs
-    void updateCurve(WINDAT *windat); //graph updates
-    int killCurves(CSOUND *csound);
-    int popKeyPressEvent(); // return ASCII code of key press event for Csound or -1 if no event
-    int popKeyReleaseEvent(); // return ASCII code of key release event for Csound -1 if no event
+//    void newCurve(Curve *curve);  //New graphs
+//    void updateCurve(WINDAT *windat); //graph updates
+//    int killCurves(CSOUND *csound);
+//    int popKeyPressEvent(); // return ASCII code of key press event for Csound or -1 if no event
+//    int popKeyReleaseEvent(); // return ASCII code of key release event for Csound -1 if no event
 
-    QVector<QString> channelNames;
-    QVector<double> values;
-    QVector<QString> stringValues;
-    QVector<double> mouseValues;
     OpEntryParser *opcodeTree;
-    RingBuffer audioOutputBuffer;
 
   public slots:
     bool loadFile(QString fileName, bool runNow = false);
-    void runCsound(bool realtime=true);
+//    void runCsound(bool realtime=true);
     void play();
     void pause();
     void stop();
-    void stopCsound();
+//    void stopCsound();
     void render();
     void record();
-    void recordBuffer();
 //     void selectMidiInDevice(QPoint pos);
 //     void selectMidiOutDevice(QPoint pos);
 //     void selectAudioInDevice(QPoint pos);
@@ -190,16 +147,12 @@ class qutecsound:public QMainWindow
     void autoComplete();
     void configure();
     void applySettings();
-    void checkSelection();
     void runUtility(QString flags);
-    void dispatchQueues();
 //     void widgetDockStateChanged(bool topLevel);
 //     void widgetDockLocationChanged(Qt::DockWidgetArea area);
     void showLineNumber(int lineNumber);
-    void updateGUI();
+    void updateInspector();
     void setDefaultKeyboardShortcuts();
-    void keyPressForCsound(QString key);
-    void keyReleaseForCsound(QString key);
 
   private:
     void createActions();
@@ -220,42 +173,26 @@ class qutecsound:public QMainWindow
     QString generateScript(bool realtime = true, QString tempFileName = "");
     void getCompanionFileName();
     void setWidgetPanelGeometry();
-    int isOpen(QString fileName);
-    void markErrorLine();
+    int isOpen(QString fileName);  // Returns index of document if open -1 if not open
+//    void markErrorLine();
     QString getSaveFileName();
     void createQuickRefPdf();
 
-    CSOUND *csound;
-    CsoundPerformanceThread *perfThread;
-    CsoundUserData* ud;
-    MYFLT *pFields; // array of pfields for score and rt events
-
 //     QHash<QString, double> outValueQueue;
-    QHash<QString, double> inValueQueue;
-    QHash<QString, QString> outStringQueue;
-    QStack<Curve *> newCurveBuffer;
-    QVector<WINDAT *> curveBuffer;
-    QStringList messageQueue;
-    QStringList keyPressBuffer; // protected by keyMutex
-    QStringList keyReleaseBuffer; // protected by keyMutex
-    QTimer *queueTimer;
-    int refreshTime;
+//    QHash<QString, double> inValueQueue;
+//    QHash<QString, QString> outStringQueue;
 
     QTabWidget *documentTabs;
-    GraphicWindow *m_graphic;
+    GraphicWindow *m_graphic;  // To display the code graph images
     QVector<DocumentPage *> documentPages;
-    DocumentPage *textEdit;
+    DocumentPage *textEdit;  // TODO get rid of this, or use it consistently
     Options *m_options;
     DockConsole *m_console;
     DockHelp *helpPanel;
-    WidgetPanel *widgetPanel;
+    WidgetPanel *widgetPanel;  // Dock widget, for containing the widget layout
     Inspector *m_inspector;
     QToolButton *closeTabButton;
 
-    QMutex stringValueMutex;
-    QMutex messageMutex;
-    QMutex keyMutex; // For keys pressed in the console to pass to Csound
-    QStringList tempScriptFiles; //Remember temp files to delete them later
     QVector<QAction *> m_keyActions; //Actions which have keyboard shortcuts
 
     QMenu *fileMenu;
@@ -323,23 +260,17 @@ class qutecsound:public QMainWindow
     QAction *aboutAct;
     QAction *aboutQtAct;
 
-    int curPage;
-    int configureTab; // Tab in last configure dialog
+    int curPage;  // TODO use this or textEdit but not both!
+    int configureTab; // Tab in last configure dialog accepted
     QString lastUsedDir;
     QString lastFileDir;
-    bool lastCaseSensitive; // These last three are for search and replace
     QString quickRefFileName;
-    viewMode m_mode;
     QStringList recentFiles;
     QStringList lastFiles;
     int lastTabIndex;
     QStringList m_deviceMessages; //stores messages from csound for device discovery
-    QString lastSearch;
-    QString lastReplace;
 
     UtilitiesDialog *utilitiesDialog;
-    //QTemporaryFile *quickRefFile;
-    QTemporaryFile *executionFile;
 
     QIcon modIcon;
     QLabel *lineNumberLabel;

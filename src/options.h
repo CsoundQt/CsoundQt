@@ -25,20 +25,14 @@
 
 #include <QString>
 #include <QColor>
-#include "types.h"
+//#include "types.h"
+#include "csoundoptions.h"
 
-class Options{
+class Options: public CsoundOptions{
   public:
     Options();
 
     ~Options();
-
-    QString generateCmdLineFlags(bool rt = false);
-    int generateCmdLine(char **argv,
-                        bool rt,
-                        QString fileName,
-                        QString fileName2);
-
 
     QString font;
     float fontPointSize;
@@ -55,77 +49,33 @@ class Options{
     bool iconText;
     bool wrapLines;
 
-    bool enableWidgets;
-    bool useInvalue; // If false use chnget
     bool showWidgetsOnRun;
     bool showTooltips;
-    bool enableFLTK;
     bool terminalFLTK;
     bool scrollbars;
 
     bool useAPI;
+    bool enableWidgets;
+    bool useInvalue; // If false use chnget
     bool thread;
     bool keyRepeat;
     int consoleBufferSize;
 
-    int bufferSize;
-    bool bufferSizeActive;
-    int HwBufferSize;
-    bool HwBufferSizeActive;
-    bool dither;
-    QString additionalFlags;
-    bool additionalFlagsActive;
-
-    bool fileUseOptions;
-    bool fileOverrideOptions;
-    bool fileAskFilename;
-    bool filePlayFinished;
-    int fileFileType;
-    int fileSampleFormat;
-    bool fileInputFilenameActive;
-    QString fileInputFilename;
-    bool fileOutputFilenameActive;
-    QString fileOutputFilename;
     QString csdPath; //path of active csd needed for setting -o -i paths
 
-    int sampleFormat;
-
-    bool rtUseOptions;
-    bool rtOverrideOptions;
-    int rtAudioModule;
-    QString rtInputDevice;
-    QString rtOutputDevice;
-    QString rtJackName;
-    int rtMidiModule;
-    QString rtMidiInputDevice;
-    QString rtMidiOutputDevice;
-
-    QString csdocdir;
-    QString opcodedir;
-    bool opcodedirActive;
-    QString sadir;
-    bool sadirActive;
-    QString ssdir;
-    bool ssdirActive;
-    QString sfdir;
-    bool sfdirActive;
-    QString incdir;
-    bool incdirActive;
     QString defaultCsd;
     bool defaultCsdActive;
     QString opcodexmldir;
     bool opcodexmldirActive;
 
+    // External applications
     QString terminal;
     QString browser;
     QString dot;
     QString waveeditor;
     QString waveplayer;
     QString pdfviewer;
-    int language;
-//   private:
-//     ConfigLists m_configlists;
-
+    int language;  // Interface language
 };
 
 #endif

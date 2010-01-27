@@ -33,7 +33,7 @@ class FindReplace : public QDialog, private Ui::FindReplace
   Q_OBJECT
   public:
     FindReplace(QWidget *parent,
-                DocumentPage *document,
+                QTextEdit *document,
                 QString *lastSearch,
                 QString *lastReplace,
                 bool *lastCaseSensitive);
@@ -41,7 +41,7 @@ class FindReplace : public QDialog, private Ui::FindReplace
     ~FindReplace();
 
   private:
-    DocumentPage *m_document;
+    QTextEdit *m_document;
     QString *m_lastSearch, *m_lastReplace;
     bool *m_lastCaseSensitive;
 

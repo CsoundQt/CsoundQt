@@ -24,7 +24,7 @@
 #include "documentpage.h"
 
 FindReplace::FindReplace(QWidget *parent,
-                         DocumentPage *document,
+                         QTextEdit *document,
                          QString *lastSearch,
                          QString *lastReplace,
                          bool *lastCaseSensitive)

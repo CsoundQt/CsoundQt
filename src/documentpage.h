@@ -26,12 +26,22 @@
 #include <QWidget>
 #include <QTextEdit>
 #include <QDomElement>
+#include <QStack>
+
+#include "types.h"
 
 class OpEntryParser;
 class Highlighter;
+class DocumentView;
+class WidgetLayout;
 class LiveEventFrame;
+class CsoundEngine;
 
-class DocumentPage : public QTextEdit
+class Curve;
+
+//FIXME when refactoring is done, organize the methods in the correct order
+
+class DocumentPage : public QObject
 {
   Q_OBJECT
   public:
@@ -39,25 +49,33 @@ class DocumentPage : public QTextEdit
     ~DocumentPage();
 
     int setTextString(QString text, bool autoCreateMacCsoundSections = true);
-    void setColorVariables(bool color);
-    void setOpcodeNameList(QStringList list);
     QString getFullText();
+    QString getBasicText();
     QString getOptionsText();
     QString getDotText();
     QString getMacWidgetsText();
+    QString getMacPresetsText();
     QString getMacOptionsText();
     QString getMacOptions(QString option);
     QRect getWidgetPanelGeometry();
     void getToIn();
     void inToGet();
-    static QString changeToChnget(QString text);
-    static QString changeToInvalue(QString text);
     void markErrorLines(QList<int> lines);
     void unmarkErrorLines();
     void updateCsladspaText(QString text);
     QString getFilePath();
     int currentLine();
     QStringList getScheduledEvents(unsigned long ksmpscount);
+    void setModified(bool mod);
+    bool isModified();
+
+    void copy();  // This actions are passed here for distribution
+    void cut();  // Can it be done better?
+    void paste();
+    void undo();
+    void redo();
+
+    DocumentView * view();
 
     QString fileName;
     QString companionFile;
@@ -67,6 +85,32 @@ class DocumentPage : public QTextEdit
     QVector<QString> widgetHistory;  // Undo/ Redo history
     int widgetHistoryIndex; // Current point in history
 
+    QAction *runAct;
+
+  public slots:
+    void play();
+    void pause();
+    void stop();
+    void render();
+    void record();
+    void recordBuffer();
+
+    void keyPressForCsound(QString key);
+    void keyReleaseForCsound(QString key);
+
+    void setMacWidgetsText(QString widgetText);
+    void setMacOptionsText(QString text);
+    void setMacOption(QString option, QString newValue);
+    void setWidgetPanelPosition(QPoint position);
+    void setWidgetPanelSize(QSize size);
+    void jumpToLine(int line);
+
+    void opcodeFromMenu();
+    void newLiveEventFrame(QString text = QString());
+    LiveEventFrame * createLiveEventFrame(QString text = QString());
+    void deleteLiveEventFrame(LiveEventFrame *frame);
+    void showLiveEventFrames(bool visible);
+
   protected:
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);
@@ -75,38 +119,41 @@ class DocumentPage : public QTextEdit
   private:
     QStringList macOptions;
     QString macPresets;
-    QString macGUI;
-    QDomElement widgets;
+//    QString macGUI;
+    QDomElement widgetsXml;
+    int refreshTime; // time in milliseconds for widget value updates (both directions)
+    QTimer *queueTimer;
 
-    QVector<LiveEventFrame *> liveEventFrames;
+    WidgetLayout * m_widgetLayout;
+    DocumentView *m_view;
+    CsoundEngine *m_csEngine;
+    QVector<LiveEventFrame *> m_liveFrames;
+
 
     Highlighter *m_highlighter;
     OpEntryParser *m_opcodeTree;
     bool errorMarked;
     bool saveLiveEvents;
+    int bufferSize; // size of teh record buffer
+    MYFLT *recBuffer; // for temporary copy of Csound output buffer when recording to file
     
-  public slots:
-    void setMacWidgetsText(QString widgetText);
-    void setMacOptionsText(QString text);
-    void setMacOption(QString option, QString newValue);
-    void setWidgetPanelPosition(QPoint position);
-    void setWidgetPanelSize(QSize size);
-    void jumpToLine(int line);
+    QMutex stringValueMutex;
 
-    void comment();
-    void uncomment();
-    void indent();
-    void unindent();
+    QStack<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
+    QVector<WINDAT *> curveBuffer;  // TODO Should these be moved to the widget layout class?
 
-    void opcodeFromMenu();
-    void newLiveEventFrameSlot(QString text = QString());
-    LiveEventFrame * newLiveEventFrame(QString text = QString());
-    void deleteLiveEventFrame(LiveEventFrame *frame);
-    void showLiveEventFrames(bool visible);
+    QMutex messageMutex;
+    QStringList messageQueue;  // Messages from Csound execution
+    QMutex keyMutex; // For keys pressed to pass to Csound from console and widget panel
+    QStringList keyPressBuffer; // protected by keyMutex
+    QStringList keyReleaseBuffer; // protected by keyMutex
 
   private slots:
     void changed();
     void liveEventFrameClosed();
+    void dispatchQueues();
+    void queueMessage(QString message);
+    void clearMessageQueue();
 //     void moved();
 
   signals:

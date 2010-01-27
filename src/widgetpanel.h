@@ -25,23 +25,17 @@
 
 #include <QtGui>
 
-#define QUTECSOUND_MAX_EVENTS 32
+#include "qutewidget.h"//FIXME this shoudl be removed from here
+#include "curve.h"  //FIXME this shoudl be removed from here
+//#include "widgetpreset.h"
 
-#include "qutewidget.h"
-#include "curve.h"
-#include "widgetpreset.h"
-
-class Curve;
-class QuteConsole;
-class QuteGraph;
-class QuteScope;
-class FrameWidget;
-class LayoutWidget;
+class WidgetLayout;
 
 class WidgetPanel : public QDockWidget
 {
   Q_OBJECT
 
+  // FIXME are these friendings still needed???
   friend class qutecsound;  // To allow edit actions- TODO- can this be done all here?
   friend class QuteWidget;  // To allow edit actions
   public:
@@ -49,6 +43,8 @@ class WidgetPanel : public QDockWidget
     ~WidgetPanel();
 
     unsigned int widgetCount();
+    void setWidgetLayout(WidgetLayout *layoutWidget);
+    WidgetLayout * popWidgetLayout();
     void getValues(QVector<QString> *channelNames, QVector<double> *values, QVector<QString> *stringValues);
     void getMouseValues(QVector<double> *values);
     int getMouseX();
@@ -57,15 +53,16 @@ class WidgetPanel : public QDockWidget
     int getMouseRelY();
     int getMouseBut1();
     int getMouseBut2();
-    unsigned long getKsmpsCount();
+//    unsigned long getKsmpsCount();
 
     void setValue(QString channelName, double value);
     void setValue(QString channelName, QString value);
     void setValue(int index, double value);
     void setValue(int index, QString value);
+
     void setScrollBarsActive(bool active);
     void setKeyRepeatMode(bool repeat);
-    void loadWidgets(QString macWidgets);
+//    void loadWidgets(QString macWidgets);
     int newWidget(QString widgetLine, bool offset = false);
     QString widgetsText(bool tags = true);
     void appendMessage(QString message);
@@ -79,15 +76,13 @@ class WidgetPanel : public QDockWidget
     void flush();
     void refreshConsoles();
     QString getCsladspaLines();
-    QString getCabbageLines();
-
-    void setUndoHistory(QVector<QString> *history, int *index);
-
-    QVector<QString> eventQueue;
-    int eventQueueSize;
+//    QString getCabbageLines();
+    void newValue(QPair<QString, double> channelValue);
+    void newValue(QPair<QString, QString> channelValue);
+    void processNewValues();
 
   protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event);
+//    virtual void contextMenuEvent(QContextMenuEvent *event);
     virtual void resizeEvent(QResizeEvent * event);
     virtual void moveEvent(QMoveEvent * event);
     virtual void mouseMoveEvent (QMouseEvent * event);
@@ -98,158 +93,37 @@ class WidgetPanel : public QDockWidget
     virtual void closeEvent(QCloseEvent * event);
 
   private:
-    // These vectors must be used with care since they are not reentrant and will
-    // cause problems when accessed simultaneously
-    // TODO check where these are accessed for problems
-    QVector<QuteWidget *> widgets;
-    QVector<QuteConsole *> consoleWidgets;
-    QVector<QuteGraph *> graphWidgets;
-    QVector<QuteScope *> scopeWidgets;
-    QVector<FrameWidget *> editWidgets;
 
-    QHash<QString, double> newValues;
-    QHash<QString, QString> newStringValues;
-    LayoutWidget *layoutWidget;
+    QAction *editAct;
+    WidgetLayout *layoutWidget;   // Always owned by documentpage,, is this needed here?
     QScrollArea *scrollArea;
 
-    QMutex valueMutex;
-    QMutex stringValueMutex;
-    QMutex eventMutex;
-    int mouseX, mouseY, mouseRelX, mouseRelY, mouseBut1, mouseBut2;
-
-    QPoint currentPosition;
-    // Create new widget Actions
-    QAction *createSliderAct;
-    QAction *createLabelAct;
-    QAction *createDisplayAct;
-    QAction *createScrollNumberAct;
-    QAction *createLineEditAct;
-    QAction *createSpinBoxAct;
-    QAction *createButtonAct;
-    QAction *createKnobAct;
-    QAction *createCheckBoxAct;
-    QAction *createMenuAct;
-    QAction *createMeterAct;
-    QAction *createConsoleAct;
-    QAction *createGraphAct;
-    QAction *createScopeAct;
-    // Edition Actions
-    QAction *editAct;
-    QAction *clearAct;
-    QAction *copyAct;
-    QAction *cutAct;
-    QAction *pasteAct;
-    QAction *selectAllAct;
-    QAction *duplicateAct;
-    QAction *deleteAct;
-    QAction *propertiesAct;
-    // Alignment Actions
-    QAction *alignLeftAct;
-    QAction *alignRightAct;
-    QAction *alignTopAct;
-    QAction *alignBottomAct;
-    QAction *sendToBackAct;
-    QAction *distributeHorizontalAct;
-    QAction *distributeVerticalAct;
-
-    // For the properties dialog - they store the configuration data for the widget panel
-    QCheckBox *bgCheckBox;
-    QPushButton *bgButton;
-
-    QVector<WidgetPreset> presets;
-
     QStringList clipboard;
-    QVector<QString> *m_history;  // Undo/ Redo history
-    int *m_historyIndex; // Current point in history
-    bool trackMouse;
     QSize oldSize;
-    bool m_tooltips;
+//    bool m_tooltips;
     int m_width;
     int m_height;
     bool m_sbActive; // Scroll bars active
-    bool m_repeatKeys;
-    unsigned long m_ksmpscount;
-
-    int createSlider(int x, int y, int width, int height, QString widgetLine);
-    int createText(int x, int y, int width, int height, QString widgetLine);
-    int createScrollNumber(int x, int y, int width, int height, QString widgetLine);
-    int createLineEdit(int x, int y, int width, int height, QString widgetLine);
-    int createSpinBox(int x, int y, int width, int height, QString widgetLine);
-    int createButton(int x, int y, int width, int height, QString widgetLine);
-    int createKnob(int x, int y, int width, int height, QString widgetLine);
-    int createCheckBox(int x, int y, int width, int height, QString widgetLine);
-    int createMenu(int x, int y, int width, int height, QString widgetLine);
-    int createMeter(int x, int y, int width, int height, QString widgetLine);
-    int createConsole(int x, int y, int width, int height, QString widgetLine);
-    int createGraph(int x, int y, int width, int height, QString widgetLine);
-    int createScope(int x, int y, int width, int height, QString widgetLine);
-    int createDummy(int x, int y, int width, int height, QString widgetLine);
-
-    void setBackground(bool bg, QColor bgColor);
-
-    void clearHistory();
-
-    // Preset methods
-    void loadPreset(int num);
-    void savePreset(int num, QString name);
-    void setPresetName(int num, QString name);
-    QString getPresetsXmlText();
-
 
   public slots:
-    void newValue(QPair<QString, double> channelValue);
-    void newValue(QPair<QString, QString> channelValue);
-    void processNewValues();
-    void widgetChanged(QuteWidget* widget = 0);
+//    void newValue(QPair<QString, double> channelValue);
+//    void newValue(QPair<QString, QString> channelValue);
+//    void processNewValues();
+//    void widgetChanged(QuteWidget* widget = 0);
 //     void updateWidgetText();
-    void deleteWidget(QuteWidget *widget);
-    void queueEvent(QString eventLine);
-    void createNewLabel();
-    void createNewDisplay();
-    void createNewScrollNumber();
-    void createNewLineEdit();
-    void createNewSpinBox();
-    void createNewSlider();
-    void createNewButton();
-    void createNewKnob();
-    void createNewCheckBox();
-    void createNewMenu();
-    void createNewMeter();
-    void createNewConsole();
-    void createNewGraph();
-    void createNewScope();
-    void propertiesDialog();
-    void clearWidgets();
-    void clearWidgetPanel();
-    void applyProperties();
-    void selectBgColor();
-    void activateEditMode(bool active);
-    void createEditFrame(QuteWidget* widget);
-    void deselectAll();
-    void selectAll();
-    void alignLeft();
-    void alignRight();
-    void alignTop();
-    void alignBottom();
-    void sendToBack();
-    void distributeHorizontal();
-    void distributeVertical();
-    void selectionChanged(QRect selection);
+//    void deleteWidget(QuteWidget *widget);
+//    void queueEvent(QString eventLine);
+
+//    void selectionChanged(QRect selection);
     void widgetMoved(QPair<int, int>);
     void widgetResized(QPair<int, int>);
     void adjustLayoutSize();
-    void markHistory();
 
   private slots:
     void copy();
     void cut();
     void paste();
-    void paste(QPoint pos);
-    void duplicate();
-    void deleteSelected();
-    void undo();
-    void redo();
-    void updateData();
+//    void paste(QPoint pos);
     void dockStateChanged(bool);
 
   signals:
@@ -257,77 +131,6 @@ class WidgetPanel : public QDockWidget
     void Close(bool visible);
     void moved(QPoint position);
     void resized(QSize size);
-    void keyPressed(QString key);
-    void keyReleased(QString key);
-
-};
-
-class LayoutWidget : public QWidget
-{
-  Q_OBJECT
-  public:
-    LayoutWidget(QWidget* parent) : QWidget(parent)
-    {
-//       m_panel = (WidgetPanel *) parent;
-      selectionFrame = new QRubberBand(QRubberBand::Rectangle, this);
-      selectionFrame->hide();
-    }
-    ~LayoutWidget() {}
-    void setPanel(WidgetPanel* panel) {m_panel = panel;}
-    WidgetPanel * panel() {return m_panel;}
-
-  protected:
-    virtual void mousePressEvent(QMouseEvent *event)
-    {
-      QWidget::mousePressEvent(event);
-      if (event->button() & Qt::LeftButton) {
-        this->setFocus(Qt::MouseFocusReason);
-        selectionFrame->show();
-        startx = event->x();
-        starty = event->y();
-        selectionFrame->setGeometry(startx, starty, 0,0);
-        if (event->button() & Qt::LeftButton) {
-          emit deselectAll();
-        }
-      }
-    }
-    virtual void mouseMoveEvent(QMouseEvent *event)
-    {
-      QWidget::mouseMoveEvent(event);
-      int x = startx;
-      int y = starty;
-      int height = abs(event->y() - starty);
-      int width = abs(event->x() - startx);
-      if (event->buttons() & Qt::LeftButton) {  // Currently dragging selection
-        if (event->x() < startx) {
-          x = event->x();
-          //         width = event->x() - startx;
-        }
-        if (event->y() < starty) {
-          y = event->y();
-          //         height = event->y() - starty;
-        }
-        selectionFrame->setGeometry(x, y, width, height);
-        emit selection(QRect(x,y,width,height));
-      }
-    }
-    virtual void mouseReleaseEvent(QMouseEvent *event)
-    {
-      QWidget::mouseReleaseEvent(event);
-      if (event->button() & Qt::LeftButton) {
-        selectionFrame->hide();
-      }
-//       if (event->button() & Qt::LeftButton) {
-//         emit deselectAll();
-//       }
-    }
-    QRubberBand *selectionFrame;
-    int startx, starty;
-    WidgetPanel *m_panel;
-
-  signals:
-    void deselectAll();
-    void selection(QRect area);
 };
 
 #endif

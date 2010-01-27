@@ -60,7 +60,11 @@ SOURCES += qutecsound.cpp \
     inspector.cpp \
     widgetpreset.cpp \
     eventsheet.cpp \
-    liveeventframe.cpp
+    liveeventframe.cpp \
+    widgetlayout.cpp \
+    csoundengine.cpp \
+    csoundoptions.cpp \
+    documentview.cpp
 HEADERS += qutecsound.h \
     dockhelp.h \
     opentryparser.h \
@@ -96,7 +100,11 @@ HEADERS += qutecsound.h \
     inspector.h \
     widgetpreset.h \
     eventsheet.h \
-    liveeventframe.h
+    liveeventframe.h \
+    widgetlayout.h \
+    csoundengine.h \
+    csoundoptions.h \
+    documentview.h
 TEMPLATE = app
 CONFIG += warn_on \
     thread \
@@ -183,7 +191,7 @@ macx {
     
     # QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.5
     # QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk
-    #DEFINES += MACOSX_PRE_SNOW # Use this if you are building for OS X < 10.6
+    # DEFINES += MACOSX_PRE_SNOW # Use this if you are building for OS X < 10.6
     LIBS += -framework \
         QtXml
     LIBS += -framework \

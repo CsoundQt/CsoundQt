@@ -21,7 +21,7 @@
 */
 
 #include "qutewidget.h"
-#include "widgetpanel.h"
+#include "widgetlayout.h"
 
 #include <QSlider>
 
@@ -422,19 +422,32 @@ QList<QAction *> QuteWidget::getParentActionList()
   // A bit of a kludge... Must get the Widget Panel, which is the parent to the widget which
   // holds the actual QuteWidgets
 //   qDebug() << parent() << parent()->parent();
-  WidgetPanel *panel = static_cast<LayoutWidget *>(parent())->panel();
-  actionList.append(panel->copyAct);
-  actionList.append(panel->pasteAct);
-  actionList.append(panel->cutAct);
-  actionList.append(panel->duplicateAct);
-  actionList.append(panel->deleteAct);
-  actionList.append(panel->alignLeftAct);
-  actionList.append(panel->alignRightAct);
-  actionList.append(panel->alignTopAct);
-  actionList.append(panel->alignBottomAct);
-  actionList.append(panel->sendToBackAct);
-  actionList.append(panel->distributeHorizontalAct);
-  actionList.append(panel->distributeVerticalAct);
+//  WidgetPanel *panel = static_cast<LayoutWidget *>(parent())->panel();
+//  actionList.append(panel->copyAct);
+//  actionList.append(panel->pasteAct);
+//  actionList.append(panel->cutAct);
+//  actionList.append(panel->duplicateAct);
+//  actionList.append(panel->deleteAct);
+//  actionList.append(panel->alignLeftAct);
+//  actionList.append(panel->alignRightAct);
+//  actionList.append(panel->alignTopAct);
+//  actionList.append(panel->alignBottomAct);
+//  actionList.append(panel->sendToBackAct);
+//  actionList.append(panel->distributeHorizontalAct);
+//  actionList.append(panel->distributeVerticalAct);
+  WidgetLayout *layout = static_cast<WidgetLayout *>(this->parentWidget());
+  actionList.append(layout->copyAct);
+  actionList.append(layout->pasteAct);
+  actionList.append(layout->cutAct);
+  actionList.append(layout->duplicateAct);
+  actionList.append(layout->deleteAct);
+  actionList.append(layout->alignLeftAct);
+  actionList.append(layout->alignRightAct);
+  actionList.append(layout->alignTopAct);
+  actionList.append(layout->alignBottomAct);
+  actionList.append(layout->sendToBackAct);
+  actionList.append(layout->distributeHorizontalAct);
+  actionList.append(layout->distributeVerticalAct);
   return actionList;
 }
 

@@ -21,32 +21,59 @@
 */
 
 #include "documentpage.h"
-#include "qutecsound.h"
+#include "documentview.h"
+#include "csoundengine.h"
+#include "liveeventframe.h"
+#include "eventsheet.h"
+//#include "qutecsound.h"
 #include "opentryparser.h"
 #include "types.h"
 #include "dotgenerator.h"
 #include "highlighter.h"
-#include "liveeventframe.h"
-#include "eventsheet.h"
 
 DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
-    QTextEdit(parent), m_opcodeTree(opcodeTree)
+    QObject(parent), m_opcodeTree(opcodeTree)
 {
   fileName = "";
   companionFile = "";
-  macGUI = "";
+//  macGUI = "";
   askForFile = true;
   readOnly = false;
   errorMarked = false;
   saveLiveEvents = true;
-  m_highlighter = new Highlighter();
+
+  bufferSize = 4096;
+  recBuffer = (MYFLT *) calloc(bufferSize, sizeof(MYFLT));
+
+  m_view = new DocumentView();
+  m_csEngine = new CsoundEngine();
+
   connect(document(), SIGNAL(contentsChanged()), this, SLOT(changed()));
 //   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(moved()));
+
+  queueTimer = new QTimer(this);
+  queueTimer->setSingleShot(true);
+  connect(queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
+  refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;  // Eventually allow this to be changed
+  dispatchQueues(); //start queue dispatcher
+
+  connect(m_console, SIGNAL(keyPressed(QString)),
+          this, SLOT(keyPressForCsound(QString)));
+  connect(m_console, SIGNAL(keyReleased(QString)),
+          this, SLOT(keyReleaseForCsound(QString)));
+
+  // FIXME connect(csEngine, SIGNAL(clearMessageQueue()), this, SLOT(clearMessageQueue()));
+  // FIXME connect(layout, SIGNAL(changed()), this, SLOT(changed()));
+
 }
 
 DocumentPage::~DocumentPage()
 {
   qDebug() << "DocumentPage::~DocumentPage()";
+  //TODO is this being deleted?
+  delete recBuffer;
+  delete m_view;
+  delete m_csEngine;
 }
 
 void DocumentPage::keyPressEvent(QKeyEvent *event)
@@ -104,11 +131,10 @@ void DocumentPage::contextMenuEvent(QContextMenuEvent *event)
 void DocumentPage::closeEvent(QCloseEvent *event)
 {
   qDebug() << "DocumentPage::closeEvent";
-  for (int i = 0; i < liveEventFrames.size(); i++) {
-    delete liveEventFrames[i];  // These widgets have the order not to delete on close
-    liveEventFrames.remove(i);
+  for (int i = 0; i < m_liveFrames.size(); i++) {
+    delete m_liveFrames[i];  // These widgets have the order not to delete on close
+    m_liveFrames.remove(i);
   }
-  delete m_highlighter;
   QTextEdit::closeEvent(event);
 }
 
@@ -148,22 +174,24 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     macPresets = "";
   }
   if (text.contains("<MacGUI>") and text.contains("</MacGUI>")) {
-    macGUI = text.right(text.size()-text.indexOf("<MacGUI>"));
-    macGUI.resize(macGUI.indexOf("</MacGUI>") + 9);
-    if (text.indexOf("</MacGUI>") + 9 < text.size() and text[text.indexOf("</MacGUI>") + 9] == '\n')
-      text.remove(text.indexOf("</MacGUI>") + 9, 1); //remove final line break
-    if (text.indexOf("<MacGUI>") > 0 and text[text.indexOf("<MacGUI>") - 1] == '\n')
-      text.remove(text.indexOf("<MacGUI>") - 1, 1); //remove initial line break
-    text.remove(text.indexOf("<MacGUI>"), macGUI.size());
+  // FIXME put back {
+//    macGUI = text.right(text.size()-text.indexOf("<MacGUI>"));
+//    macGUI.resize(macGUI.indexOf("</MacGUI>") + 9);
+//    if (text.indexOf("</MacGUI>") + 9 < text.size() and text[text.indexOf("</MacGUI>") + 9] == '\n')
+//      text.remove(text.indexOf("</MacGUI>") + 9, 1); //remove final line break
+//    if (text.indexOf("<MacGUI>") > 0 and text[text.indexOf("<MacGUI>") - 1] == '\n')
+//      text.remove(text.indexOf("<MacGUI>") - 1, 1); //remove initial line break
+//    text.remove(text.indexOf("<MacGUI>"), macGUI.size());
 //     qDebug("<MacGUI> present.");
   }
   else {
-    if (autoCreateMacCsoundSections) {
-      macGUI = "\n<MacGUI>\nioView nobackground {59352, 11885, 65535}\nioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1\n</MacGUI>\n";
-    }
-    else {
-      macGUI = "";
-    }
+  // FIXME put back
+//    if (autoCreateMacCsoundSections) {
+//      macGUI = "\n<MacGUI>\nioView nobackground {59352, 11885, 65535}\nioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1\n</MacGUI>\n";
+//    }
+//    else {
+//      macGUI = "";
+//    }
   }
   // This here is for compatibility with MacCsound
   QString optionsText = getMacOptions("Options:");
@@ -186,7 +214,6 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
       text.insert(index, "<CsOptions>\n" + outFile + "\n</CsOptions>\n");
     }
   }
-  m_highlighter->setDocument(document());
   if (!text.contains("<CsoundSynthesizer>")) {//TODO this check is very flaky....
     setPlainText(text);
     document()->setModified(true);
@@ -197,7 +224,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     QString liveEventsText = text.mid(text.indexOf("<EventPanel "),
                                       text.indexOf("</EventPanel>") - text.indexOf("<EventPanel ") + 13);
 //    qDebug() << "DocumentPage::setTextString   " << liveEventsText;
-    LiveEventFrame *frame = newLiveEventFrame();
+    LiveEventFrame *frame = createLiveEventFrame();
     QString scoText = liveEventsText.mid(liveEventsText.indexOf(">") + 1,
                                          liveEventsText.indexOf("</EventPanel>") - liveEventsText.indexOf(">") - 1 );
     frame->getSheet()->setRowCount(1);
@@ -268,23 +295,13 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     frame->resize(width, height);
     text.remove(liveEventsText);
   }
-  if (liveEventFrames.size() == 0) {
-    LiveEventFrame *e = newLiveEventFrame();
+  if (m_liveFrames.size() == 0) {
+    LiveEventFrame *e = createLiveEventFrame();
     e->setFromText(QString()); // Must set blank for undo history point
   }
   setPlainText(text);
   document()->setModified(true);
   return 0;
-}
-
-void DocumentPage::setColorVariables(bool color)
-{
-  m_highlighter->setColorVariables(color);
-}
-
-void DocumentPage::setOpcodeNameList(QStringList list)
-{
-  m_highlighter->setOpcodeNameList(list);
 }
 
 QString DocumentPage::getFullText()
@@ -294,20 +311,21 @@ QString DocumentPage::getFullText()
 //  if (!fullText.endsWith("\n"))
 //    fullText += "\n";
   if (fileName.endsWith(".csd",Qt::CaseInsensitive) or fileName == "") {
-    fullText += getMacOptionsText() + "\n" + macGUI + "\n" + macPresets + "\n";
+    fullText += getMacOptionsText() + "\n" + getMacWidgetsText() + "\n";
+    fullText += getMacPresetsText() + "\n";
     QString liveEventsText = "";
     if (saveLiveEvents) { // Only add live events sections if file is a csd file
-      for (int i = 0; i < liveEventFrames.size(); i++) {
+      for (int i = 0; i < m_liveFrames.size(); i++) {
         QString panel = "<EventPanel name=\"";
-        panel += liveEventFrames[i]->getName() + "\" tempo=\"";
-        panel += QString::number(liveEventFrames[i]->getTempo(), 'f', 8) + "\" loop=\"";
-        panel += QString::number(liveEventFrames[i]->getLoopLength(), 'f', 8) + "\" name=\"";
-        panel += liveEventFrames[i]->getName() + "\" x=\"";
-        panel += QString::number(liveEventFrames[i]->x()) + "\" y=\"";
-        panel += QString::number(liveEventFrames[i]->y()) + "\" width=\"";
-        panel += QString::number(liveEventFrames[i]->width()) + "\" height=\"";
-        panel += QString::number(liveEventFrames[i]->height()) + "\">";
-        panel += liveEventFrames[i]->getPlainText();
+        panel += m_liveFrames[i]->getName() + "\" tempo=\"";
+        panel += QString::number(m_liveFrames[i]->getTempo(), 'f', 8) + "\" loop=\"";
+        panel += QString::number(m_liveFrames[i]->getLoopLength(), 'f', 8) + "\" name=\"";
+        panel += m_liveFrames[i]->getName() + "\" x=\"";
+        panel += QString::number(m_liveFrames[i]->x()) + "\" y=\"";
+        panel += QString::number(m_liveFrames[i]->y()) + "\" width=\"";
+        panel += QString::number(m_liveFrames[i]->width()) + "\" height=\"";
+        panel += QString::number(m_liveFrames[i]->height()) + "\">";
+        panel += m_liveFrames[i]->getPlainText();
         panel += "</EventPanel>";
         liveEventsText += panel;
       }
@@ -315,6 +333,13 @@ QString DocumentPage::getFullText()
     }
   }
   return fullText;
+}
+
+QString DocumentPage::getBasicText()
+{
+  qDebug() << "DocumentPage::getBasicText() will crash to avoid data loss!"
+
+//  return QString();
 }
 
 QString DocumentPage::getOptionsText()
@@ -347,7 +372,14 @@ QString DocumentPage::getDotText()
 
 QString DocumentPage::getMacWidgetsText()
 {
-  return macGUI;
+  //FIXME put back
+//  return macGUI;
+  return layoutWidget->getMacWidgetsText();
+}
+
+QString DocumentPage::getMacPresetsText()
+{
+  return macPresets;
 }
 
 QString DocumentPage::getMacOptionsText()
@@ -383,70 +415,6 @@ QRect DocumentPage::getWidgetPanelGeometry()
                values[1].toInt(),
                values[2].toInt(),
                values[3].toInt());
-}
-
-void DocumentPage::getToIn()
-{
-  setPlainText(changeToInvalue(document()->toPlainText()));
-  document()->setModified(true);
-}
-
-void DocumentPage::inToGet()
-{
-  setPlainText(changeToChnget(document()->toPlainText()));
-  document()->setModified(true);
-}
-
-QString DocumentPage::changeToChnget(QString text)
-{
-  QStringList lines = text.split("\n");
-  QString newText = "";
-  foreach (QString line, lines) {
-    if (line.contains("invalue")) {
-      line.replace("invalue", "chnget");
-    }
-    else if (line.contains("outvalue")) {
-      line.replace("outvalue", "chnset");
-      int arg1Index = line.indexOf("chnset") + 7;
-      int arg2Index = line.indexOf(",") + 1;
-      int arg2EndIndex = line.indexOf(QRegExp("[\\s]*[;]"), arg2Index);
-      QString arg1 = line.mid(arg1Index, arg2Index-arg1Index - 1).trimmed();
-      QString arg2 = line.mid(arg2Index, arg2EndIndex-arg2Index).trimmed();
-      QString comment = line.mid(arg2EndIndex);
-      qDebug() << arg1 << arg2 << arg2EndIndex;
-      line = line.mid(0, arg1Index) + " " +  arg2 + ", " + arg1;
-      if (arg2EndIndex > 0)
-        line += " " + comment;
-    }
-    newText += line + "\n";
-  }
-  return newText;
-}
-
-QString DocumentPage::changeToInvalue(QString text)
-{
-  QStringList lines = text.split("\n");
-  QString newText = "";
-  foreach (QString line, lines) {
-    if (line.contains("chnget")) {
-      line.replace("chnget", "invalue");
-    }
-    else if (line.contains("chnset")) {
-      line.replace("chnset", "outvalue");
-      int arg1Index = line.indexOf("outvalue") + 8;
-      int arg2Index = line.indexOf(",") + 1;
-      int arg2EndIndex = line.indexOf(QRegExp("[\\s]*[;]"), arg2Index);
-      QString arg1 = line.mid(arg1Index, arg2Index-arg1Index - 1).trimmed();
-      QString arg2 = line.mid(arg2Index, arg2EndIndex-arg2Index).trimmed();
-      QString comment = line.mid(arg2EndIndex);
-      qDebug() << arg1 << arg2 << arg2EndIndex;
-      line = line.mid(0, arg1Index) + " " + arg2 + ", " + arg1;
-      if (arg2EndIndex > 0)
-        line += " " + comment;
-    }
-    newText += line + "\n";
-  }
-  return newText;
 }
 
 void DocumentPage::markErrorLines(QList<int> lines)
@@ -530,30 +498,194 @@ QStringList DocumentPage::getScheduledEvents(unsigned long ksmps)
 {
   QStringList events;
   // Called once after every Csound control pass
-  for (int i = 0; i < liveEventFrames.size(); i++) {
-    liveEventFrames[i]->getEvents(ksmps, &events);
+  for (int i = 0; i < m_liveFrames.size(); i++) {
+    m_liveFrames[i]->getEvents(ksmps, &events);
   }
 //  m_ksmpscount = ksmpscount;
   return events;
 }
 
+void DocumentPage::setModified(bool mod)
+{
+  // FIXME live frame modification should also affect here
+  m_view->setModified(mod);
+  m_widgetLayout->setModified(mod);
+}
+
+bool DocumentPage::isModified()
+{
+  if (m_view->isModified())
+    return true;
+  if (m_widgetLayout->isModified())
+    return true;
+  return false;
+}
+
+void DocumentPage::copy()
+{
+  qDebug() << "DocumentPage::copy() not implemented!";
+}
+
+void DocumentPage::cut()
+{
+  qDebug() << "DocumentPage::cut() not implemented!";
+}
+
+void DocumentPage::paste()
+{
+  qDebug() << "DocumentPage::paste() not implemented!";
+}
+
+void DocumentPage::undo()
+{
+  qDebug() << "DocumentPage::undo() not implemented!";
+}
+
+void DocumentPage::redo()
+{
+  qDebug() << "DocumentPage::redo() not implemented!";
+}
+
+DocumentView * DocumentPage::view()
+{
+  return m_view;
+}
+
+void DocumentPage::keyPressForCsound(QString key)
+{
+//   qDebug() << "keyPressForCsound " << key;
+  keyMutex.lock(); // Is this lock necessary?
+  keyPressBuffer << key;
+  keyMutex.unlock();
+}
+
+void DocumentPage::keyReleaseForCsound(QString key)
+{
+//   qDebug() << "keyReleaseForCsound " << key;
+  keyMutex.lock(); // Is this lock necessary?
+  keyReleaseBuffer << key;
+  keyMutex.unlock();
+}
+
 void DocumentPage::showLiveEventFrames(bool visible)
 {
 //  qDebug() << "DocumentPage::showLiveEventFrames  " << visible << (int) this;
-  for (int i = 0; i < liveEventFrames.size(); i++) {
+  for (int i = 0; i < m_liveFrames.size(); i++) {
     if (visible) {
-      liveEventFrames[i]->show();
+      m_liveFrames[i]->show();
     }
     else {
-      liveEventFrames[i]->hide();
+      m_liveFrames[i]->hide();
     }
   }
+}
+
+void DocumentPage::play()
+{
+  qDebug() << "DocumentPage::play() not implemented!";
+  unmarkErrorLines();  // Clear error lines when running
+}
+
+void DocumentPage::pause()
+{
+    qDebug() << "DocumentPage::pause() not implemented!";
+}
+
+void DocumentPage::stop()
+{
+    qDebug() << "DocumentPage::stop() not implemented!";
+}
+
+void DocumentPage::render()
+{
+    qDebug() << "DocumentPage::render() not implemented!";
+}
+
+void DocumentPage::record()
+{
+  if (fileName.startsWith(":/")) {
+    QMessageBox::critical(this,
+                          tr("QuteCsound"),
+                          tr("You must save the examples to use Record."),
+                          QMessageBox::Ok);
+    //FIXME connect rec act
+//    recAct->setChecked(false);
+    return;
+  }
+  if (!runAct->isChecked()) {
+    //FIXME run act must be checked according to the status of the current document when it changes
+//    runAct->setChecked(true);
+    play();
+  }
+  if (recAct->isChecked()) {
+#ifdef USE_LIBSNDFILE
+    int format=SF_FORMAT_WAV;
+    switch (m_options->sampleFormat) {
+      case 0:
+        format |= SF_FORMAT_PCM_16;
+        break;
+      case 1:
+        format |= SF_FORMAT_PCM_24;
+        break;
+      case 2:
+        format |= SF_FORMAT_FLOAT;
+        break;
+    }
+ //  const int format=SF_FORMAT_WAV | SF_FORMAT_FLOAT;
+    const int channels=ud->numChnls;
+    const int sampleRate=ud->sampleRate;
+    int number = 0;
+    QString fileName = documentPages[curPage]->fileName + "-000.wav";
+    while (QFile::exists(fileName)) {
+      number++;
+      fileName = documentPages[curPage]->fileName + "-";
+      if (number < 10)
+        fileName += "0";
+      if (number < 100)
+        fileName += "0";
+      fileName += QString::number(number) + ".wav";
+    }
+    currentAudioFile = fileName;
+    qDebug("start recording: %s", fileName.toStdString().c_str());
+    outfile = new SndfileHandle(fileName.toStdString().c_str(), SFM_WRITE, format, channels, sampleRate);
+    // clip instead of wrap when converting floats to ints
+    outfile->command(SFC_SET_CLIPPING, NULL, SF_TRUE);
+    samplesWritten = 0;
+
+    QTimer::singleShot(20, this, SLOT(recordBuffer()));
+#else
+  QMessageBox::warning(this, tr("QuteCsound"),
+                       tr("This version of QuteCsound has been compiled\nwithout Record support!"),
+                       QMessageBox::Ok);
+#endif
+  }
+}
+
+void DocumentPage::recordBuffer()
+{
+#ifdef USE_LIBSNDFILE
+  if (recAct->isChecked()) {
+    if (audioOutputBuffer.copyAvailableBuffer(recBuffer, bufferSize)) {
+      int samps = outfile->write(recBuffer, bufferSize);
+      samplesWritten += samps;
+    }
+    else {
+//       qDebug("qutecsound::recordBuffer() : Empty Buffer!");
+    }
+    QTimer::singleShot(20, this, SLOT(recordBuffer()));
+  }
+  else { //Stop recording
+    delete outfile;
+    qDebug("closed file: %s\nWritten %li samples", currentAudioFile.toStdString().c_str(), samplesWritten);
+  }
+#endif
 }
 
 void DocumentPage::setMacWidgetsText(QString widgetText)
 {
 //   qDebug() << "DocumentPage::setMacWidgetsText: ";
-  macGUI = widgetText;
+  //FIXME put back
+//  macGUI = widgetText;
 //   document()->setModified(true);
 }
 
@@ -624,85 +756,6 @@ void DocumentPage::jumpToLine(int line)
   setTextCursor(cur);
 }
 
-void DocumentPage::comment()
-{
-  QTextCursor cursor = textCursor();
-  if (cursor.position() > cursor.anchor()) {
-    int temp = cursor.anchor();
-    cursor.setPosition(cursor.position());
-    cursor.setPosition(temp, QTextCursor::KeepAnchor);
-  }
-  if (!cursor.atBlockStart()) {
-    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-  }
-  QString text = cursor.selectedText();
-  text.prepend(";");
-  text.replace(QChar(QChar::ParagraphSeparator), QString("\n;"));
-  cursor.insertText(text);
-  setTextCursor(cursor);
-}
-
-void DocumentPage::uncomment()
-{
-  QTextCursor cursor = textCursor();
-  if (cursor.position() > cursor.anchor()) {
-    int temp = cursor.anchor();
-    cursor.setPosition(cursor.position());
-    cursor.setPosition(temp, QTextCursor::KeepAnchor);
-  }
-  QString text = cursor.selectedText();
-  if (!cursor.atBlockStart() && !text.startsWith(";")) {
-    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-    text = cursor.selectedText();
-  }
-  if (text.startsWith(";"))
-    text.remove(0,1);
-  text.replace(QChar(QChar::ParagraphSeparator), QString("\n"));
-  text.replace(QString("\n;"), QString("\n")); //TODO make more robust
-  cursor.insertText(text);
-  setTextCursor(cursor);
-}
-
-void DocumentPage::indent()
-{
-//   qDebug("DocumentPage::indent");
-  QTextCursor cursor = textCursor();
-  if (cursor.position() > cursor.anchor()) {
-    int temp = cursor.anchor();
-    cursor.setPosition(cursor.position());
-    cursor.setPosition(temp, QTextCursor::KeepAnchor);
-  }
-  if (!cursor.atBlockStart()) {
-    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-  }
-  QString text = cursor.selectedText();
-//   if (text[0] == '\n')
-  text.prepend("\t"); //TODO check if previous character is \n
-  text.replace(QChar(QChar::ParagraphSeparator), QString("\n\t"));
-  cursor.insertText(text);
-  setTextCursor(cursor);
-}
-
-void DocumentPage::unindent()
-{
-  QTextCursor cursor = textCursor();
-  if (cursor.position() > cursor.anchor()) {
-    int temp = cursor.anchor();
-    cursor.setPosition(cursor.position());
-    cursor.setPosition(temp, QTextCursor::KeepAnchor);
-  }
-  if (!cursor.atBlockStart()) {
-    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-  }
-  QString text = cursor.selectedText();
-  if (text.startsWith("\t"))
-    text.remove(0,1);
-  text.replace(QChar(QChar::ParagraphSeparator), QString("\n"));
-  text.replace(QString("\n\t"), QString("\n")); //TODO make more robust
-  cursor.insertText(text);
-  setTextCursor(cursor);
-}
-
 void DocumentPage::opcodeFromMenu()
 {
   QAction *action = (QAction *) QObject::sender();
@@ -711,13 +764,13 @@ void DocumentPage::opcodeFromMenu()
   cursor.insertText(text);
 }
 
-void DocumentPage::newLiveEventFrameSlot(QString text)
+void DocumentPage::newLiveEventFrame(QString text)
 {
-  LiveEventFrame *e = newLiveEventFrame(text);
+  LiveEventFrame *e = createLiveEventFrame(text);
   e->show();  //Assume that since slot was called ust be visible
 }
 
-LiveEventFrame * DocumentPage::newLiveEventFrame(QString text)
+LiveEventFrame * DocumentPage::createLiveEventFrame(QString text)
 {
   qDebug() << "DocumentPage::newLiveEventFrame()";
   // TODO delete these frames, for proper cleanup
@@ -729,9 +782,9 @@ LiveEventFrame * DocumentPage::newLiveEventFrame(QString text)
   if (!text.isEmpty()) {
     e->setFromText(text);
   }
-  liveEventFrames.append(e);
+  m_liveFrames.append(e);
   connect(e, SIGNAL(closed()), this, SLOT(liveEventFrameClosed()));
-  connect(e, SIGNAL(newFrameSignal(QString)), this, SLOT(newLiveEventFrameSlot(QString)));
+  connect(e, SIGNAL(newFrameSignal(QString)), this, SLOT(newLiveEventFrame(QString)));
   connect(e, SIGNAL(deleteFrameSignal(LiveEventFrame *)), this, SLOT(deleteLiveEventFrame(LiveEventFrame *)));
   emit registerLiveEvent(dynamic_cast<QWidget *>(e));
   return e;
@@ -741,10 +794,10 @@ void DocumentPage::deleteLiveEventFrame(LiveEventFrame *frame)
 {
   qDebug() << "deleteLiveEventFrame(LiveEventFrame *frame)";
   qApp->processEvents();
-  int index = liveEventFrames.indexOf(frame);
+  int index = m_liveFrames.indexOf(frame);
   if (index >= 0) {
     frame->forceDestroy();
-    liveEventFrames.remove(index);
+    m_liveFrames.remove(index);
   }
   else {
     qDebug() << "DocumentPage::deleteLiveEventFrame frame not found";
@@ -763,11 +816,100 @@ void DocumentPage::liveEventFrameClosed()
   LiveEventFrame *e = dynamic_cast<LiveEventFrame *>(QObject::sender());
 //  if (e != 0) { // This shouldn't really be necessary but just in case
   bool shown = false;
-  for (int i = 0; i < liveEventFrames.size(); i++) {
-    if (liveEventFrames[i]->isVisible()
-      && liveEventFrames[i] != e)  // frame that called has not been called yet
+  for (int i = 0; i < m_liveFrames.size(); i++) {
+    if (m_liveFrames[i]->isVisible()
+      && m_liveFrames[i] != e)  // frame that called has not been called yet
       shown = true;
   }
   emit liveEventsVisible(shown);
 //  }
+}
+
+void DocumentPage::dispatchQueues()
+{
+//   qDebug("qutecsound::dispatchQueues()");
+  int counter = 0;
+  widgetPanel->processNewValues();
+  if (ud && ud->PERF_STATUS == 1) {
+    while ((m_options->consoleBufferSize <= 0 || counter++ < m_options->consoleBufferSize) && ud->PERF_STATUS == 1) {
+      messageMutex.lock();
+      if (messageQueue.isEmpty()) {
+        messageMutex.unlock();
+        break;
+      }
+      QString msg = messageQueue.takeFirst();
+      messageMutex.unlock();
+      m_console->appendMessage(msg);
+      widgetPanel->appendMessage(msg);
+      qApp->processEvents(); //FIXME Is this needed here to avoid display problems in the console?
+      m_console->scrollToEnd();
+      widgetPanel->refreshConsoles();  // Scroll to end of text all console widgets
+    }
+    messageMutex.lock();
+    if (!messageQueue.isEmpty() && m_options->consoleBufferSize > 0 && counter >= m_options->consoleBufferSize) {
+      messageQueue.clear();
+      messageQueue << "\nQUTECSOUND: Message buffer overflow. Messages discarded!\n";
+    }
+    messageMutex.unlock();
+    //   QList<QString> channels = outValueQueue.keys();
+    //   foreach (QString channel, channels) {
+    //     widgetPanel->setValue(channel, outValueQueue[channel]);
+    //   }
+    //   outValueQueue.clear();
+
+    stringValueMutex.lock();
+    QStringList channels = outStringQueue.keys();
+    for  (int i = 0; i < channels.size(); i++) {
+      widgetPanel->setValue(channels[i], outStringQueue[channels[i]]);
+    }
+    outStringQueue.clear();
+    stringValueMutex.unlock();
+    processEventQueue(ud);
+    while (!newCurveBuffer.isEmpty()) {
+      Curve * curve = newCurveBuffer.pop();
+  // //     qDebug("qutecsound::dispatchQueues() %i-%s", index, curve->get_caption().toStdString().c_str());
+        widgetPanel->newCurve(curve);
+    }
+    if (curveBuffer.size() > 32) {
+      qDebug("qutecsound::dispatchQueues() WARNING: curve update buffer too large!");
+      curveBuffer.resize(32);
+    }
+    foreach (WINDAT * windat, curveBuffer){
+      Curve *curve = widgetPanel->getCurveById(windat->windid);
+      if (curve != 0) {
+  //       qDebug("qutecsound::dispatchQueues() %s -- %s",windat->caption, curve->get_caption().toStdString().c_str());
+        curve->set_size(windat->npts);      // number of points
+        curve->set_data(windat->fdata);
+        curve->set_caption(QString(windat->caption)); // title of curve
+    //     curve->set_polarity(windat->polarity); // polarity
+        curve->set_max(windat->max);        // curve max
+        curve->set_min(windat->min);        // curve min
+        curve->set_absmax(windat->absmax);     // abs max of above
+    //     curve->set_y_scale(windat->y_scale);    // Y axis scaling factor
+        widgetPanel->setCurveData(curve);
+      }
+      curveBuffer.remove(curveBuffer.indexOf(windat));
+    }
+    qApp->processEvents();
+    if (m_options->thread) {
+      if (perfThread->GetStatus() != 0) {
+        stop();
+      }
+    }
+  }
+  queueTimer->start(refreshTime); //will launch this function again later
+}
+
+void DocumentPage::queueMessage(QString message)
+{
+  messageMutex.lock();
+  messageQueue << message;
+  messageMutex.unlock();
+}
+
+void DocumentPage::clearMessageQueue()
+{
+  messageMutex.lock();
+  messageQueue.clear();
+  messageMutex.unlock();
 }
