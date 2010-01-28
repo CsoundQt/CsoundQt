@@ -304,7 +304,7 @@ void ScopeData::updateData(int channel, int zoom, bool freeze)
 #ifdef  USE_WIDGET_MUTEX
   mutex->lock();
 #endif
-  RingBuffer *buffer = &ud->qcs->audioOutputBuffer;
+  RingBuffer *buffer = &ud->audioOutputBuffer;
   buffer->lock();
   QList<MYFLT> list = buffer->buffer;
   buffer->unlock();
@@ -390,7 +390,7 @@ void LissajouData::updateData(int channel, int zoom, bool freeze)
 #ifdef  USE_WIDGET_MUTEX
   mutex->lock();
 #endif
-  RingBuffer *buffer = &ud->qcs->audioOutputBuffer;
+  RingBuffer *buffer = &ud->audioOutputBuffer;
   buffer->lock();
   QList<MYFLT> list = buffer->buffer;
   buffer->unlock();
@@ -458,7 +458,7 @@ void PoincareData::updateData(int channel, int zoom, bool freeze)
 #ifdef  USE_WIDGET_MUTEX
   mutex->lock();
 #endif
-  RingBuffer *buffer = &ud->qcs->audioOutputBuffer;
+  RingBuffer *buffer = &ud->audioOutputBuffer;
   buffer->lock();
   QList<MYFLT> list = buffer->buffer;
   buffer->unlock();

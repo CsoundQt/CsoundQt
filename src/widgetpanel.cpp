@@ -85,55 +85,55 @@ WidgetLayout * WidgetPanel::popWidgetLayout()
   return w;
 }
 
-void WidgetPanel::getValues(QVector<QString> *channelNames,
-                            QVector<double> *values, 
-                            QVector<QString> *stringValues)
-{
-  //FIXME remove this intermediate function.
-  layoutWidget->getValues(channelNames, values, stringValues);
-}
+//void WidgetPanel::getValues(QVector<QString> *channelNames,
+//                            QVector<double> *values,
+//                            QVector<QString> *stringValues)
+//{
+//  //FIXME remove this intermediate function.
+//  layoutWidget->getValues(channelNames, values, stringValues);
+//}
 
-void WidgetPanel::getMouseValues(QVector<double> *values)
-{
-  //FIXME remove this intermediate function.
-  layoutWidget->getMouseValues(values);
-}
-
-int WidgetPanel::getMouseX()
-{
-  //FIXME remove this intermediate function.
-  return layoutWidget->getMouseX();
-}
-
-int WidgetPanel::getMouseY()
-{
-  //FIXME remove this intermediate function.
-  return layoutWidget->getMouseY();
-}
-
-int WidgetPanel::getMouseRelX()
-{
-  //FIXME remove this intermediate function.
-  return layoutWidget->getMouseRelX();
-}
-
-int WidgetPanel::getMouseRelY()
-{
-  //FIXME remove this intermediate function.
-  return layoutWidget->getMouseRelY();
-}
-
-int WidgetPanel::getMouseBut1()
-{
-  //FIXME remove this intermediate function.
-  return layoutWidget->getMouseBut1();
-}
-
-int WidgetPanel::getMouseBut2()
-{
-  //FIXME remove this intermediate function.
-  return layoutWidget->getMouseBut2();
-}
+//void WidgetPanel::getMouseValues(QVector<double> *values)
+//{
+//  //FIXME remove this intermediate function.
+//  layoutWidget->getMouseValues(values);
+//}
+//
+//int WidgetPanel::getMouseX()
+//{
+//  //FIXME remove this intermediate function.
+//  return layoutWidget->getMouseX();
+//}
+//
+//int WidgetPanel::getMouseY()
+//{
+//  //FIXME remove this intermediate function.
+//  return layoutWidget->getMouseY();
+//}
+//
+//int WidgetPanel::getMouseRelX()
+//{
+//  //FIXME remove this intermediate function.
+//  return layoutWidget->getMouseRelX();
+//}
+//
+//int WidgetPanel::getMouseRelY()
+//{
+//  //FIXME remove this intermediate function.
+//  return layoutWidget->getMouseRelY();
+//}
+//
+//int WidgetPanel::getMouseBut1()
+//{
+//  //FIXME remove this intermediate function.
+//  return layoutWidget->getMouseBut1();
+//}
+//
+//int WidgetPanel::getMouseBut2()
+//{
+//  //FIXME remove this intermediate function.
+//  return layoutWidget->getMouseBut2();
+//}
 
 
 void WidgetPanel::setValue(QString channelName, double value)
@@ -199,11 +199,11 @@ void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
   emit Close(false);
 }
 
-QString WidgetPanel::widgetsText(bool tags)
-{
-  //FIXME remove this function
-  return layoutWidget->widgetsText(tags);
-}
+//QString WidgetPanel::widgetsText(bool tags)
+//{
+//  //FIXME remove this function
+//  return layoutWidget->widgetsText(tags);
+//}
 
 void WidgetPanel::appendMessage(QString message)
 {
@@ -223,17 +223,17 @@ void WidgetPanel::setWidgetToolTip(QuteWidget *widget, bool show)
   layoutWidget->setWidgetToolTip(widget, show);
 }
 
-void WidgetPanel::newCurve(Curve* curve)
-{
-  //FIXME remove this function
-  layoutWidget->newCurve(curve);
-}
+//void WidgetPanel::newCurve(Curve* curve)
+//{
+//  //FIXME remove this function
+//  layoutWidget->newCurve(curve);
+//}
 
-void WidgetPanel::setCurveData(Curve *curve)
-{
-  //FIXME remove this function
-  layoutWidget->setCurveData(curve);
-}
+//void WidgetPanel::setCurveData(Curve *curve)
+//{
+//  //FIXME remove this function
+//  layoutWidget->setCurveData(curve);
+//}
 
 void WidgetPanel::clearGraphs()
 {
@@ -241,11 +241,11 @@ void WidgetPanel::clearGraphs()
   layoutWidget->clearGraphs();
 }
 
-Curve * WidgetPanel::getCurveById(uintptr_t id)
-{
-  //FIXME remove this function
-  return layoutWidget->getCurveById(id);
-}
+//Curve * WidgetPanel::getCurveById(uintptr_t id)
+//{
+//  //FIXME remove this function
+//  return layoutWidget->getCurveById(id);
+//}
 
 void WidgetPanel::flush()
 {
@@ -259,12 +259,6 @@ void WidgetPanel::refreshConsoles()
   layoutWidget->refreshConsoles();
 }
 
-QString WidgetPanel::getCsladspaLines()
-{
-  // FIXME remove this function
-  return layoutWidget->getCsladspaLines();
-}
-
 void WidgetPanel::newValue(QPair<QString, double> channelValue)
 {
   // FIXME remove this function
@@ -275,12 +269,6 @@ void WidgetPanel::newValue(QPair<QString, QString> channelValue)
 {
   // FIXME remove this function
   layoutWidget->newValue(channelValue);
-}
-
-void WidgetPanel::processNewValues()
-{
-  // FIXME remove this function
-  layoutWidget->processNewValues();
 }
 
 

@@ -29,10 +29,6 @@
 
 #include "types.h"
 
-#ifdef USE_LIBSNDFILE
-#include    <sndfile.hh>
-#endif
-
 #ifdef MACOSX_PRE_SNOW
 // Needed to be able to grab menus back from FLTK
 #include <Carbon/Carbon.h>
@@ -275,11 +271,7 @@ class qutecsound:public QMainWindow
     QIcon modIcon;
     QLabel *lineNumberLabel;
 
-#ifdef USE_LIBSNDFILE
-    SndfileHandle *outfile;
-#endif
     QString currentAudioFile;
-    long samplesWritten;
 
 #ifdef MACOSX_PRE_SNOW
     MenuBarHandle menuBarHandle;

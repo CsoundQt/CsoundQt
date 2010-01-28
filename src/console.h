@@ -141,25 +141,23 @@ class MyQTextEdit : public QTextEdit
 //     void popUpMenu(QPoint pos);
 };
 
-class ConsoleWidget : public QWidget, public Console
+class ConsoleWidget : public QTextEdit, public Console
 {
   Q_OBJECT
   public:
-    ConsoleWidget(QWidget * parent): QWidget(parent)
+    ConsoleWidget(QWidget * parent = 0): QTextEdit(parent)
     {
-      setWindowTitle(tr("Csound Output Console"));
-      text = new MyQTextEdit(parent);
-      text->setReadOnly(true);
-      text->setFontItalic(false);
+      setReadOnly(true);
+      setFontItalic(false);
 #ifdef MACOSX
-      text->document()->setDefaultFont(QFont("Courier", 10));
+      document()->setDefaultFont(QFont("Courier", 10));
 #else
-      text->document()->setDefaultFont(QFont("Courier New", 7));
+      document()->setDefaultFont(QFont("Courier New", 7));
 #endif
 //       connect(text, SIGNAL(popUpMenu(QPoint)), this, SLOT(emitPopUpMenu(QPoint)));
     }
 
-    ~ConsoleWidget() {;};
+    ~ConsoleWidget() {;}
 
     virtual void setWidgetGeometry(int x,int y,int width,int height);
 

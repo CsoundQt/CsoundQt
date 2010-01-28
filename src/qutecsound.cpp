@@ -195,27 +195,6 @@ void qutecsound::utilitiesMessageCallback(CSOUND *csound,
   console->scrollToEnd();
 }
 
-//int qutecsound::popKeyPressEvent()
-//{
-//  keyMutex.lock();
-//  int value = -1;
-//  if (!keyPressBuffer.isEmpty()) {
-//    value = (int) keyPressBuffer.takeFirst()[0].toAscii();
-//  }
-//  keyMutex.unlock();
-//  return value;
-//}
-//
-//int qutecsound::popKeyReleaseEvent()
-//{
-//  keyMutex.lock();
-//  int value = -1;
-//  if (!keyReleaseBuffer.isEmpty()) {
-//    value = (int) keyReleaseBuffer.takeFirst()[0].toAscii() + 0x10000;
-//  }
-//  keyMutex.unlock();
-//  return value;
-//}
 
 void qutecsound::changeFont()
 {
@@ -236,8 +215,8 @@ void qutecsound::changePage(int index)
   qDebug() << "qutecsound::changePage " << curPage << "--" << index << "-" << documentPages.size();
   if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
     documentPages[curPage]->showLiveEventFrames(false);
-    documentPages[curPage]->setMacWidgetsText
-        (widgetPanel->widgetsText()); //Updated changes to widgets in file
+//    documentPages[curPage]->setMacWidgetsText
+//        (widgetPanel->widgetsText()); //Updated changes to widgets in file
     disconnect(showLiveEventsAct, SIGNAL(toggled(bool)),
                documentPages[curPage], SLOT(showLiveEventFrames(bool)));
   }
@@ -723,14 +702,8 @@ void qutecsound::join()
 
 void qutecsound::putCsladspaText()
 {
-  QString text = "<csLADSPA>\nName=";
-  text += documentPages[curPage]->fileName.mid(documentPages[curPage]->fileName.lastIndexOf("/") + 1) + "\n";
-  text += "Maker=QuteCsound\n";
-  text += "UniqueID=69873\n";
-  text += "Copyright=none\n";
-  text += widgetPanel->getCsladspaLines();
-  text += "</csLADSPA>";
-  documentPages[curPage]->updateCsladspaText(text);
+
+  documentPages[curPage]->updateCsLadspaText();
 }
 
 void qutecsound::exportCabbage()
@@ -786,10 +759,8 @@ void qutecsound::stop()
 
 void qutecsound::record()
 {
-  documentPages[curPage]->record();
+  documentPages[curPage]->record(m_options->sampleFormat);
 }
-
-
 
 // void qutecsound::selectMidiOutDevice(QPoint pos)
 // {
@@ -1671,7 +1642,7 @@ void qutecsound::connectActions()
 
   disconnect(m_inspector, 0, 0, 0);
   connect(m_inspector, SIGNAL(jumpToLine(int)),
-          doc, SLOT(jumpToLine(int)));
+          doc->view(), SLOT(jumpToLine(int)));
   connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventFrames(bool)));
   connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
 
@@ -2304,7 +2275,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   }
   if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
     documentPages[curPage]->showLiveEventFrames(false);
-    documentPages[curPage]->setMacWidgetsText(widgetPanel->widgetsText()); //Updated changes to widgets in file
+//    documentPages[curPage]->setMacWidgetsText(widgetPanel->widgetsText()); //Updated changes to widgets in file
     disconnect(showLiveEventsAct, SIGNAL(toggled(bool)), documentPages[curPage], SLOT(showLiveEventFrames(bool)));
   }
   QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -2648,11 +2619,5 @@ QStringList qutecsound::runCsoundInternally(QStringList flags)
 //  curveBuffer.append(windat_);
 //}
 //
-//int qutecsound::killCurves(CSOUND *csound)
-//{
-//  curveBuffer.clear();
-////   widgetPanel->clearGraphs();
-////  qDebug() << "qutecsound::killCurves";
-//  return 0;
-//}
+
 

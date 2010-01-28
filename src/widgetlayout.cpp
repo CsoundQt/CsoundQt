@@ -50,9 +50,6 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   selectionFrame = new QRubberBand(QRubberBand::Rectangle, this);
   selectionFrame->hide();
 
-  eventQueue.resize(QUTECSOUND_MAX_EVENTS);
-  eventQueueSize = 0;
-
   m_trackMouse = true;
 
   createSliderAct = new QAction(tr("Create Slider"),this);
@@ -173,14 +170,12 @@ void WidgetLayout::loadWidgets(QString macWidgets)
   }
 }
 
-QString WidgetLayout::widgetsText(bool tags)
+QString WidgetLayout::getMacWidgetsText()
 {
   // This function must be used with care as it accesses the widgets, which
   // may cause crashing since widgets are not reentrant
   QString text = "";
-  if (tags) {
-    text = "<MacGUI>\n";
-  }
+  text = "<MacGUI>\n";
   text += "ioView " + (this->autoFillBackground()? QString("background "):QString("nobackground "));
   text += "{" + QString::number((int) (this->palette().button().color().redF()*65535.)) + ", ";
   text +=  QString::number((int) (this->palette().button().color().greenF()*65535.)) + ", ";
@@ -192,13 +187,11 @@ QString WidgetLayout::widgetsText(bool tags)
 //     qDebug() << widgets[i]->getWidgetXmlText();
   }
   valueMutex.unlock();
-  if (tags) {
-    text += "</MacGUI>";
-  }
+  text += "</MacGUI>";
   return text;
 }
 
-QStringList WidgetLayout::getSelectedWidgetsText(bool xml)
+QStringList WidgetLayout::getSelectedMacWidgetsText()
 {
   QStringList l;
   for (int i = 0; i < editWidgets.size(); i++) {
@@ -207,6 +200,16 @@ QStringList WidgetLayout::getSelectedWidgetsText(bool xml)
     }
   }
   return l;
+}
+
+QString WidgetLayout::getWidgetsText()
+{
+  qDebug() << "WidgetLayout::getWidgetsText not implemented and will crash!";
+}
+
+QStringList WidgetLayout::getSelectedWidgetsText()
+{
+  qDebug() << "WidgetLayout::getSelectedWidgetsText not implemented and will crash!";
 }
 
 void WidgetLayout::setValue(QString channelName, double value)
@@ -259,8 +262,9 @@ void WidgetLayout::getValues(QVector<QString> *channelNames,
                             QVector<double> *values,
                             QVector<QString> *stringValues)
 {
-  if (channelNames->size() < widgets.size()*2)
-    return;  // Is this check necessary?
+  if (!this->isEnabled()) {
+    return;
+  }
   for (int i = 0; i < widgets.size(); i++) {
     (*channelNames)[i*2] = widgets[i]->getChannelName();
     (*values)[i*2] = widgets[i]->getValue();
@@ -273,10 +277,14 @@ void WidgetLayout::getValues(QVector<QString> *channelNames,
 void WidgetLayout::getMouseValues(QVector<double> *values)
 {
   // values must have size of 4 for _MouseX _MouseY _MouseRelX and _MouseRelY
-  (*values)[0] = getMouseX();
-  (*values)[1] = getMouseY();
-  (*values)[2] = getMouseRelX();
-  (*values)[3] = getMouseRelY();
+  if (this->isEnabled()) {
+    (*values)[0] = getMouseX();
+    (*values)[1] = getMouseY();
+    (*values)[2] = getMouseRelX();
+    (*values)[3] = getMouseRelY();
+    (*values)[4] = getMouseBut1();
+    (*values)[5] = getMouseBut2();
+  }
 }
 
 int WidgetLayout::getMouseX()
@@ -405,7 +413,6 @@ void WidgetLayout::flush()
 {
   // Called when running Csound to flush queues
   newValues.clear();
-  eventQueueSize = 0; //Flush events gathered while idle
 }
 
 void WidgetLayout::showTooltips(bool show)
@@ -456,6 +463,14 @@ Curve * WidgetLayout::getCurveById(uintptr_t id)
   return curve;
 }
 
+int WidgetLayout::killCurves(CSOUND *csound)
+{
+  // FIXME free memory from curves
+//   widgetPanel->clearGraphs();
+  qDebug() << "qutecsound::killCurves. Implement!";
+  return 0;
+}
+
 void WidgetLayout::clearGraphs()
 {
   for (int i = 0; i < graphWidgets.size(); i++) {
@@ -486,6 +501,11 @@ QString WidgetLayout::getCsladspaLines()
   }
   qDebug() << "WidgetPanel:getCsladspaLines() " << unsupported << " Unsupported widgets";
   return text;
+}
+
+bool WidgetLayout::isModified()
+{
+  return m_modified;
 }
 
 void WidgetLayout::deselectAll()
@@ -1699,6 +1719,11 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
   }
 }
 
+void WidgetLayout::setModified(bool mod)
+{
+  m_modified = mod;
+}
+
 void WidgetLayout::clearHistory()
 {
   m_history->clear();
@@ -1830,7 +1855,7 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
 
 void WidgetLayout::markHistory()
 {
-  QString text = widgetsText(false);
+  QString text = getMacWidgetsText();
   if (m_history->isEmpty()) {
     *m_history << "";
     *m_historyIndex = 0;
@@ -1981,15 +2006,8 @@ void WidgetLayout::processNewValues()
 
 void WidgetLayout::queueEvent(QString eventLine)
 {
-//   qDebug("WidgetPanel::queueEvent %s", eventLine.toStdString().c_str());
-  if (eventQueueSize < QUTECSOUND_MAX_EVENTS) {
-//     eventMutex.lock();
-    eventQueue[eventQueueSize] = eventLine;
-    eventQueueSize++;
-//     eventMutex.unlock();
-  }
-  else
-    qDebug("Warning: event queue full, event not processed");
+  // FIXME connect this!!
+  emit queueEvent(eventLine);
 }
 
 void WidgetLayout::paste(QPoint /*pos*/)

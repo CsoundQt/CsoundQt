@@ -38,6 +38,24 @@ class DocumentView : public QWidget
     void setColorVariables(bool color);
     void setOpcodeNameList(QStringList list);
     void setOpcodeTree(OpEntryParser *opcodeTree);
+
+    void setFullText(QString text);
+    void setLadspaText(QString text);
+    // TODO add all text inputs here as below
+
+    QString getFullText();
+    QString getBasicText();  // Everything except widget and preset sections
+    QString getOrcText();  // Without tags
+    QString getScoText();  // Without tags
+    QString getOptionsText();  // Without tags
+    QString getMiscText();  // All other tags like version and licence with tags
+    QString getExtraText(); // Text outside any known tags
+    // These two should be used with care as they are only here in case
+    // Widgets are being edited in text format. In most cases, you want to
+    // get the widgets Text from the widget layout object
+    QString getMacWidgetsText(); // With tags including presets
+    QString getWidgetsText(); // With tags including presets, in new xml format
+
     QString wordUnderCursor();
     bool isModified();
     void print(QPrinter *printer);
@@ -55,6 +73,16 @@ class DocumentView : public QWidget
     void uncomment();
     void indent();
     void unindent();
+
+    // FIXME connect these to the engine (or where appropriate)
+    void markErrorLines(QList<int> lines);
+    void unmarkErrorLines();
+    void jumpToLine(int line);
+    void opcodeFromMenu();
+    void updateCsladspaText(QString text);
+
+  protected:
+    virtual void contextMenuEvent(QContextMenuEvent *event);
 
 //    void setModified(bool mod = true);
 
@@ -74,6 +102,7 @@ class DocumentView : public QWidget
                     // 64 = show <CsLicence>/<CsLicense> Section(s)
                     //128 = show Text outside any tag
                     //256 = show Widget, Preset and Extra Options sections
+                    //512 = show <CsLadspa> text with tags
     QSplitter *splitter;
     QTextEdit *mainEditor;
     QTextEdit *scoreEditor;
@@ -83,6 +112,7 @@ class DocumentView : public QWidget
     QTextEdit *licenceEditor;
     QTextEdit *otherEditor;
     QTextEdit *widgetEditor;
+    QTextEdit *ladspaEditor;
     QVector<QTextEdit *> editors; // A vector to hold pointers for the above for easy processing
 
     OpEntryParser *m_opcodeTree;
@@ -91,7 +121,6 @@ class DocumentView : public QWidget
     bool lastCaseSensitive; // These last three are for search and replace
     QString lastSearch;
     QString lastReplace;
-
 
   private slots:
 

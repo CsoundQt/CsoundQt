@@ -25,7 +25,7 @@
 
 #include <QtGui>
 
-#define QUTECSOUND_MAX_EVENTS 64
+#define QUTECSOUND_MAX_EVENTS 4096
 
 #include "qutewidget.h"
 #include "curve.h"
@@ -48,13 +48,17 @@ class WidgetLayout : public QWidget
     void setUndoHistory(QVector<QString> *history, int *index);
     unsigned int widgetCount();
     void loadWidgets(QString macWidgets);
-    QString widgetsText(bool tags);
-    QStringList getSelectedWidgetsText(bool xml = false);
+    QString getMacWidgetsText(); // With full tags
+    QStringList getSelectedMacWidgetsText();
+    QString getWidgetsText(); // With full tags
+    QStringList getSelectedWidgetsText();
+
     void setValue(QString channelName, double value);
     void setValue(QString channelName, QString value);
     void setValue(int index, double value);
     void setValue(int index, QString value);
     void setKeyRepeatMode(bool repeat);
+
     void getValues(QVector<QString> *channelNames,
                    QVector<double> *values,
                    QVector<QString> *stringValues);
@@ -65,6 +69,7 @@ class WidgetLayout : public QWidget
     int getMouseRelY();
     int getMouseBut1();
     int getMouseBut2();
+
     int newWidget(QString widgetLine, bool offset = false);
     void appendMessage(QString message);
     void flush();
@@ -73,12 +78,14 @@ class WidgetLayout : public QWidget
     void newCurve(Curve* curve);
     void setCurveData(Curve *curve);
     Curve * getCurveById(uintptr_t id);
+//    void updateCurve(WINDAT *windat); //graph updates. useful, necessary?
+    int killCurves(CSOUND *csound);
     void clearGraphs();
     void refreshConsoles();
     QString getCsladspaLines();
-
-    QVector<QString> eventQueue;
-    int eventQueueSize;
+    bool isModified();
+    int popKeyPressEvent();
+    int popKeyReleaseEvent();
 
     // Edition Actions
     QAction *clearAct;
@@ -162,7 +169,6 @@ class WidgetLayout : public QWidget
     QHash<QString, QString> newStringValues;
     QMutex valueMutex;
     QMutex stringValueMutex;
-    QMutex eventMutex;
 
     bool m_repeatKeys;
     bool m_trackMouse;
@@ -191,6 +197,7 @@ class WidgetLayout : public QWidget
 
     QVector<QString> *m_history;  // Undo/ Redo history
     int *m_historyIndex; // Current point in history
+    bool m_modified;
 
     // Contained Widgets
     QVector<QuteWidget *> widgets;
@@ -219,6 +226,7 @@ class WidgetLayout : public QWidget
     int createDummy(int x, int y, int width, int height, QString widgetLine);
 
     void setBackground(bool bg, QColor bgColor);
+    void setModified(bool mod = true);
 
     bool m_tooltips;
     QVector<WidgetPreset> presets;

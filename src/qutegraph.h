@@ -24,7 +24,7 @@
 #define QUTEGRAPH_H
 
 #include "qutewidget.h"
-#include "types.h"  //necessary for the CsoundUserData struct
+#include "csoundengine.h"  //necessary for the CsoundUserData struct
 
 class Curve;
 
@@ -47,7 +47,7 @@ class QuteGraph : public QuteWidget
     void addCurve(Curve *curve);
     int getCurveIndex(Curve * curve);
     void setCurveData(Curve * curve);
-    Curve* getCurveById(uintptr_t id);
+    Curve* getCurveById(uintptr_t id);  // FIXME this should be moved from here, as curves are bieng copied as many times as there are graphs!
     void setUd(CsoundUserData *ud);
 
   protected:

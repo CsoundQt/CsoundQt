@@ -36,6 +36,8 @@ class DocumentView;
 class WidgetLayout;
 class LiveEventFrame;
 class CsoundEngine;
+class ConsoleWidget;
+class SndfileHandle;
 
 class Curve;
 
@@ -58,16 +60,15 @@ class DocumentPage : public QObject
     QString getMacOptionsText();
     QString getMacOptions(QString option);
     QRect getWidgetPanelGeometry();
-    void getToIn();
-    void inToGet();
-    void markErrorLines(QList<int> lines);
-    void unmarkErrorLines();
-    void updateCsladspaText(QString text);
+//    void getToIn();
+//    void inToGet();
+//    void updateCsladspaText(QString text);
     QString getFilePath();
     int currentLine();
     QStringList getScheduledEvents(unsigned long ksmpscount);
     void setModified(bool mod);
     bool isModified();
+    void updateCsLadspaText();
 
     void copy();  // This actions are passed here for distribution
     void cut();  // Can it be done better?
@@ -75,8 +76,13 @@ class DocumentPage : public QObject
     void undo();
     void redo();
 
-    DocumentView * view();
+    DocumentView *view();
 
+    // Options setters
+    void setConsoleBufferSize(int size);
+    void setWidgetEnabled(bool enabled);
+
+    // Member public variables
     QString fileName;
     QString companionFile;
     bool askForFile;
@@ -92,11 +98,8 @@ class DocumentPage : public QObject
     void pause();
     void stop();
     void render();
-    void record();
-    void recordBuffer();
-
-    void keyPressForCsound(QString key);
-    void keyReleaseForCsound(QString key);
+    void runInTerm();
+    void record(int mode); // 0=16 bit int  1=32 bit int  2=float
 
     void setMacWidgetsText(QString widgetText);
     void setMacOptionsText(QString text);
@@ -113,8 +116,8 @@ class DocumentPage : public QObject
 
   protected:
     virtual void keyPressEvent(QKeyEvent *event);
-    virtual void contextMenuEvent(QContextMenuEvent *event);
-    virtual void closeEvent(QCloseEvent *event);
+//    virtual void contextMenuEvent(QContextMenuEvent *event);
+//    virtual void closeEvent(QCloseEvent *event);
 
   private:
     QStringList macOptions;
@@ -127,32 +130,32 @@ class DocumentPage : public QObject
     WidgetLayout * m_widgetLayout;
     DocumentView *m_view;
     CsoundEngine *m_csEngine;
+    ConsoleWidget *m_console;  // FIXME have a single console widget which is duplicated across all places! Is it possible? due to parenting issues
     QVector<LiveEventFrame *> m_liveFrames;
-
 
     Highlighter *m_highlighter;
     OpEntryParser *m_opcodeTree;
     bool errorMarked;
-    bool saveLiveEvents;
-    int bufferSize; // size of teh record buffer
     MYFLT *recBuffer; // for temporary copy of Csound output buffer when recording to file
-    
-    QMutex stringValueMutex;
+
+    QMutex stringValueMutex;  // FIXME this mutex is in two places so it does nothing... Explore Qt's shared data classes
 
     QStack<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
     QVector<WINDAT *> curveBuffer;  // TODO Should these be moved to the widget layout class?
 
     QMutex messageMutex;
     QStringList messageQueue;  // Messages from Csound execution
-    QMutex keyMutex; // For keys pressed to pass to Csound from console and widget panel
-    QStringList keyPressBuffer; // protected by keyMutex
-    QStringList keyReleaseBuffer; // protected by keyMutex
+
+    // Options
+    bool saveLiveEvents;
+    int bufferSize; // size of the record buffer
 
   private slots:
     void changed();
     void liveEventFrameClosed();
     void dispatchQueues();
     void queueMessage(QString message);
+    void queueEvent(QString line, int delay = 0);
     void clearMessageQueue();
 //     void moved();
 
@@ -162,7 +165,8 @@ class DocumentPage : public QObject
     void doCopy();
     void doCut();
     void doPaste();
-    void registerLiveEvent(QWidget *e);
+    void registerLiveEvent(QWidget *e);   // FIXME is this still needed?
+    void setCurrentAudioFile(QString name);
     void liveEventsVisible(bool);  // To change the action in the main window
 };
 

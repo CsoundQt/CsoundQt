@@ -33,8 +33,10 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   licenceEditor = new QTextEdit(this);
   otherEditor = new QTextEdit(this);
   widgetEditor = new QTextEdit(this);
+  ladspaEditor = new QTextEdit(this);
   editors << mainEditor << scoreEditor << optionsEditor << filebEditor
-      << versionEditor << licenceEditor << otherEditor << widgetEditor;
+      << versionEditor << licenceEditor << otherEditor << widgetEditor
+      << ladspaEditor;
   splitter = new QSplitter(this);
   splitter->setOrientation(Qt::Vertical);
   for (int i = 0; editors.size(); i++) {
@@ -158,6 +160,79 @@ void DocumentView::setOpcodeTree(OpEntryParser *opcodeTree)
   m_opcodeTree = opcodeTree;
 }
 
+void DocumentView::setFullText(QString text)
+{
+  editors[0]->setText(text);
+}
+
+void setLadspaText(QString text)
+{
+  ladspaEditor->setText(text);
+}
+
+QString DocumentView::getFullText()
+{
+  return editors[0]->toPlainText();
+}
+
+QString DocumentView::getBasicText()
+{// Everything except widget and preset sections
+  qDebug() << "DocumentView::getBasicText() not implemented and will crash!";
+}
+
+QString DocumentView::getOrcText()
+{// Without tags
+  qDebug() << "DocumentView::getOrcText() not implemented and will crash!";
+}
+
+QString DocumentView::getScoText()
+{
+  // Without tags
+  qDebug() << "DocumentView::getScoText() not implemented and will crash!";
+}
+
+QString DocumentView::getOptionsText()
+{
+  // Without tags
+  qDebug() << "DocumentView::getOptionsText() not implemented and will crash!";
+}
+
+QString DocumentView::getMiscText()
+{
+  // All other tags like version and licence with tags
+  qDebug() << "DocumentView::getMiscText() not implemented and will crash!";
+}
+
+QString DocumentView::getExtraText()
+{// Text outside any known tags
+  qDebug() << "DocumentView::getFullOptionsText() not implemented and will crash!";
+}
+
+QString DocumentView::getMacWidgetsText()
+{
+  // With tags including presets
+  qDebug() << "DocumentView::getFullOptionsText() not implemented and will crash!";
+}
+
+QString DocumentView::getWidgetsText()
+{
+  // With tags including presets, in new xml format
+  qDebug() << "DocumentView::getFullOptionsText() not implemented and will crash!";
+}
+
+
+int DocumentView::currentLine()
+{
+  // FIXME check properly for line number also from other editors
+  QTextCursor cursor = editors[0]->textCursor();
+//   cursor.clearSelection();
+//   cursor.setPosition(0,QTextCursor::KeepAnchor);
+//   QString section = cursor.selectedText();
+//   qDebug() << section;
+//   return section.count('\n');
+  return cursor.blockNumber() + 1;
+}
+
 QString DocumentView::wordUnderCursor()
 {
   QTextCursor cursor = editors[0]->textCursor();
@@ -180,8 +255,8 @@ void DocumentView::updateFromDocumentModel()
 
 void DocumentView::syntaxCheck()
 {
-  // FIXME check properly for line number also from second editor
-  emit lineNumberSignal(mainEditor->currentLine());
+  // FIXME implment for multiple views
+  emit lineNumberSignal(currentLine());
   //FIXME connect this signal to main class showLineNumber
   QTextCursor cursor = mainEditor->textCursor();
   cursor.select(QTextCursor::LineUnderCursor);
@@ -201,6 +276,7 @@ void DocumentView::syntaxCheck()
 
 void DocumentView::findReplace()
 {
+  // FIXME implment for multiple views
   FindReplace *dialog = new FindReplace(this,
                                         editors[0],
                                         &lastSearch,
@@ -214,18 +290,21 @@ void DocumentView::findReplace()
 
 void DocumentView::getToIn()
 {
+  // FIXME implment for multiple views
   editors[0]->setPlainText(changeToInvalue(editors[0]->toPlainText()));
   editors[0]->document()->setModified(true);  // Necessary, or is setting it locally enough?
 }
 
 void DocumentView::inToGet()
 {
+  // FIXME implment for multiple views
   editors[0]->setPlainText(changeToChnget(editors[0]->toPlainText()));
   editors[0]->document()->setModified(true);
 }
 
 void DocumentView::comment()
 {
+  // FIXME implment for multiple views
   QTextCursor cursor = editors[0]->textCursor();
   if (cursor.position() > cursor.anchor()) {
     int temp = cursor.anchor();
@@ -244,6 +323,7 @@ void DocumentView::comment()
 
 void DocumentView::uncomment()
 {
+  // FIXME implment for multiple views
   QTextCursor cursor = editors[0]->textCursor();
   if (cursor.position() > cursor.anchor()) {
     int temp = cursor.anchor();
@@ -265,6 +345,7 @@ void DocumentView::uncomment()
 
 void DocumentView::indent()
 {
+  // FIXME implment for multiple views
 //   qDebug("DocumentPage::indent");
   QTextCursor cursor = editors[0]->textCursor();
   if (cursor.position() > cursor.anchor()) {
@@ -285,6 +366,7 @@ void DocumentView::indent()
 
 void DocumentView::unindent()
 {
+  // FIXME implment for multiple views
   QTextCursor cursor = editors[0]->textCursor();
   if (cursor.position() > cursor.anchor()) {
     int temp = cursor.anchor();
@@ -301,6 +383,123 @@ void DocumentView::unindent()
   text.replace(QString("\n\t"), QString("\n")); //TODO make more robust
   cursor.insertText(text);
   editors[0]->setTextCursor(cursor);
+}
+
+void DocumentView::markErrorLines(QList<int> lines)
+{
+  // FIXME implment for multiple views
+  QTextCharFormat errorFormat;
+  errorFormat.setBackground(QBrush(QColor(255, 182, 193)));
+  QTextCursor cur = editors[0]->textCursor();
+  cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+  int lineCount = 1;
+  foreach(int line, lines) {
+    // Csound reports the line numbers incorrectly... but only on my machine apparently...
+    while (lineCount < line) {
+      lineCount++;
+//       cur.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
+      cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+    }
+    cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    cur.mergeCharFormat(errorFormat);
+    setTextCursor(cur);
+    cur.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+  }
+  editors[0]->setTextCursor(cur);
+  errorMarked = true;
+}
+
+void DocumentView::unmarkErrorLines()
+{
+  // FIXME implment for multiple views
+  if (!errorMarked)
+    return;
+  int position = verticalScrollBar()->value();
+  QTextCursor currentCursor = editors[0]->textCursor();
+  errorMarked = false;
+//   qDebug("DocumentPage::unmarkErrorLines()");
+  selectAll();
+  QTextCursor cur = editors[0]->textCursor();
+  QTextCharFormat format = cur.blockCharFormat();
+  format.clearBackground();
+  cur.setCharFormat(format);
+  editors[0]->setTextCursor(cur);  //sets format
+  editors[0]->setTextCursor(currentCursor); //returns cursor to initial position
+  editors[0]->verticalScrollBar()->setValue(position); //return document display to initial position
+}
+
+void DocumentView::jumpToLine(int line)
+{
+  // FIXME implment for multiple views
+  int lineCount = 1;
+  QTextCursor cur = editors[0]->textCursor();
+  cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+  while (lineCount < line) {
+    lineCount++;
+    //       cur.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
+    cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+  }
+  editors[0]->moveCursor(QTextCursor::End); // go to end to make sure line is put at the top of text
+  editors[0]->setTextCursor(cur);
+}
+
+void DocumentView::opcodeFromMenu()
+{
+  QAction *action = (QAction *) QObject::sender();
+  QTextCursor cursor = textCursor();
+  QString text = action->data().toString();
+  cursor.insertText(text);
+}
+
+void DocumentView::updateCsladspaText(QString text)
+{
+  ladspaEditor->setText(text);
+//  QTextCursor cursor = textCursor();
+//  QTextDocument *doc = editordocument();
+//  moveCursor(QTextCursor::Start);
+//  if (find("<csLADSPA>") and find("</csLADSPA>")) {
+//    QString curText = doc->toPlainText();
+//    int index = curText.indexOf("<csLADSPA>");
+//    curText.remove(index, curText.indexOf("</csLADSPA>") + 11 - index);
+//    curText.insert(index, text);
+//    doc->setPlainText(curText);
+//  }
+//  else { //csLADSPA section not present, or incomplete
+//    find("<CsoundSynthesizer>"); //cursor moves there
+//    moveCursor(QTextCursor::EndOfLine);
+//    insertPlainText(QString("\n") + text + QString("\n"));
+//  }
+//  moveCursor(QTextCursor::Start);
+}
+
+void DocumentView::contextMenuEvent(QContextMenuEvent *event)
+{
+  QMenu *menu = createStandardContextMenu();
+  menu->addSeparator();
+  QMenu *opcodeMenu = menu->addMenu("Opcodes");
+  QMenu *mainMenu = 0;
+  QMenu *subMenu;
+  QString currentMain = "";
+  for (int i = 0; i < m_opcodeTree->getCategoryCount(); i++) {
+    QString category = m_opcodeTree->getCategory(i);
+    QStringList categorySplit = category.split(":");
+    if (!categorySplit.isEmpty() && categorySplit[0] != currentMain) {
+      mainMenu = opcodeMenu->addMenu(categorySplit[0]);
+      currentMain = categorySplit[0];
+    }
+    if (categorySplit.size() < 2) {
+      subMenu = mainMenu;
+    }
+    else {
+      subMenu = mainMenu->addMenu(categorySplit[1]);
+    }
+    foreach(Opcode opcode, m_opcodeTree->getOpcodeList(i)) {
+      QAction *action = subMenu->addAction(opcode.opcodeName, this, SLOT(opcodeFromMenu()));
+      action->setData(opcode.outArgs + opcode.opcodeName + opcode.inArgs);
+    }
+  }
+  menu->exec(event->globalPos());
+  delete menu;
 }
 
 QString DocumentView::changeToChnget(QString text)

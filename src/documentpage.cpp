@@ -30,6 +30,12 @@
 #include "types.h"
 #include "dotgenerator.h"
 #include "highlighter.h"
+#include "widgetlayout.h"
+#include "console.h"
+#include "curve.h"
+
+#include "cwindow.h"
+#include <csound.hpp>  // TODO These two are necessary for the WINDAT struct. Can they be moved?
 
 DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
     QObject(parent), m_opcodeTree(opcodeTree)
@@ -45,10 +51,17 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   bufferSize = 4096;
   recBuffer = (MYFLT *) calloc(bufferSize, sizeof(MYFLT));
 
-  m_view = new DocumentView();
+  m_view = new DocumentView(parent);
   m_csEngine = new CsoundEngine();
+  m_console = new ConsoleWidget(parent);
+  //FIXME show console
+  m_console->hide();
+  m_widgetLayout = new WidgetLayout(parent);
+  //FIXME show widgets
+  m_widgetLayout->hide();
 
-  connect(document(), SIGNAL(contentsChanged()), this, SLOT(changed()));
+  //FIXME this is possibly not connected, but is it still necessary?
+  connect(m_view, SIGNAL(contentsChanged()), this, SLOT(changed()));
 //   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(moved()));
 
   queueTimer = new QTimer(this);
@@ -57,10 +70,6 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;  // Eventually allow this to be changed
   dispatchQueues(); //start queue dispatcher
 
-  connect(m_console, SIGNAL(keyPressed(QString)),
-          this, SLOT(keyPressForCsound(QString)));
-  connect(m_console, SIGNAL(keyReleased(QString)),
-          this, SLOT(keyReleaseForCsound(QString)));
 
   // FIXME connect(csEngine, SIGNAL(clearMessageQueue()), this, SLOT(clearMessageQueue()));
   // FIXME connect(layout, SIGNAL(changed()), this, SLOT(changed()));
@@ -70,7 +79,11 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 DocumentPage::~DocumentPage()
 {
   qDebug() << "DocumentPage::~DocumentPage()";
-  //TODO is this being deleted?
+  //TODO is all this being deleted?
+  for (int i = 0; i < m_liveFrames.size(); i++) {
+    delete m_liveFrames[i];  // These widgets have the order not to delete on close
+    m_liveFrames.remove(i);
+  }
   delete recBuffer;
   delete m_view;
   delete m_csEngine;
@@ -95,48 +108,15 @@ void DocumentPage::keyPressEvent(QKeyEvent *event)
     emit doPaste();
     return;
   }
-  return QTextEdit::keyPressEvent(event);
+  //FIXME is it necessary to propagate events further? Possibly
+//  QTextEdit::keyPressEvent(event);
 }
 
-void DocumentPage::contextMenuEvent(QContextMenuEvent *event)
-{
-  QMenu *menu = createStandardContextMenu();
-  menu->addSeparator();
-  QMenu *opcodeMenu = menu->addMenu("Opcodes");
-  QMenu *mainMenu = 0;
-  QMenu *subMenu;
-  QString currentMain = "";
-  for (int i = 0; i < m_opcodeTree->getCategoryCount(); i++) {
-    QString category = m_opcodeTree->getCategory(i);
-    QStringList categorySplit = category.split(":");
-    if (!categorySplit.isEmpty() && categorySplit[0] != currentMain) {
-      mainMenu = opcodeMenu->addMenu(categorySplit[0]);
-      currentMain = categorySplit[0];
-    }
-    if (categorySplit.size() < 2) {
-      subMenu = mainMenu;
-    }
-    else {
-      subMenu = mainMenu->addMenu(categorySplit[1]);
-    }
-    foreach(Opcode opcode, m_opcodeTree->getOpcodeList(i)) {
-      QAction *action = subMenu->addAction(opcode.opcodeName, this, SLOT(opcodeFromMenu()));
-      action->setData(opcode.outArgs + opcode.opcodeName + opcode.inArgs);
-    }
-  }
-  menu->exec(event->globalPos());
-  delete menu;
-}
-
-void DocumentPage::closeEvent(QCloseEvent *event)
-{
-  qDebug() << "DocumentPage::closeEvent";
-  for (int i = 0; i < m_liveFrames.size(); i++) {
-    delete m_liveFrames[i];  // These widgets have the order not to delete on close
-    m_liveFrames.remove(i);
-  }
-  QTextEdit::closeEvent(event);
-}
+//void DocumentPage::closeEvent(QCloseEvent *event)
+//{
+//  qDebug() << "DocumentPage::closeEvent";
+//  QTextEdit::closeEvent(event);
+//}
 
 int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 {
@@ -214,9 +194,11 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
       text.insert(index, "<CsOptions>\n" + outFile + "\n</CsOptions>\n");
     }
   }
-  if (!text.contains("<CsoundSynthesizer>")) {//TODO this check is very flaky....
-    setPlainText(text);
-    document()->setModified(true);
+  if (!text.contains("<CsoundSynthesizer>") &&
+      !text.contains("</CsoundSynthesizer>") ) {//TODO this check is very flaky....
+    view()->setFullText(text);
+    //FIXME is it necessary to set modified here?
+//    view()->document()->setModified(true);
     return 0;  // Don't add live event panel if not a csd file.
   }
   // Load Live Event Panels ------------------------
@@ -299,15 +281,17 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     LiveEventFrame *e = createLiveEventFrame();
     e->setFromText(QString()); // Must set blank for undo history point
   }
-  setPlainText(text);
-  document()->setModified(true);
+
+  view()->setFullText(text);  //FIXME is this necessary as it is above, or remove from above?
+  // FIXME is it necessary to set modified here?
+//  document()->setModified(true);
   return 0;
 }
 
 QString DocumentPage::getFullText()
 {
   QString fullText;
-  fullText = document()->toPlainText();
+  fullText = view()->getFullText();
 //  if (!fullText.endsWith("\n"))
 //    fullText += "\n";
   if (fileName.endsWith(".csd",Qt::CaseInsensitive) or fileName == "") {
@@ -337,20 +321,14 @@ QString DocumentPage::getFullText()
 
 QString DocumentPage::getBasicText()
 {
-  qDebug() << "DocumentPage::getBasicText() will crash to avoid data loss!"
+  qDebug() << "DocumentPage::getBasicText() will crash to avoid data loss!";
 
 //  return QString();
 }
 
 QString DocumentPage::getOptionsText()
 {
-  QString text = document()->toPlainText();
-  int index = text.indexOf("<CsOptions>") + 11;
-  int end = text.indexOf("</CsOptions>") - 1 ;
-  if (index < 0 or end < 0)
-    return QString();
-  text = text.mid(index, end-index);
-  return text;
+  return view()->getOptionsText();
 }
 
 QString DocumentPage::getDotText()
@@ -374,7 +352,7 @@ QString DocumentPage::getMacWidgetsText()
 {
   //FIXME put back
 //  return macGUI;
-  return layoutWidget->getMacWidgetsText();
+  return m_widgetLayout->getMacWidgetsText();
 }
 
 QString DocumentPage::getMacPresetsText()
@@ -417,81 +395,9 @@ QRect DocumentPage::getWidgetPanelGeometry()
                values[3].toInt());
 }
 
-void DocumentPage::markErrorLines(QList<int> lines)
-{
-  QTextCharFormat errorFormat;
-  errorFormat.setBackground(QBrush(QColor(255, 182, 193)));
-  QTextCursor cur = textCursor();
-  cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-  int lineCount = 1;
-  foreach(int line, lines) {
-    // Csound reports the line numbers incorrectly... but only on my machine apparently...
-    while (lineCount < line) {
-      lineCount++;
-//       cur.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
-      cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
-    }
-    cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    cur.mergeCharFormat(errorFormat);
-    setTextCursor(cur);
-    cur.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-  }
-  setTextCursor(cur);
-  errorMarked = true;
-}
-
-void DocumentPage::unmarkErrorLines()
-{
-  if (!errorMarked)
-    return;
-  int position = verticalScrollBar()->value();
-  QTextCursor currentCursor = textCursor();
-  errorMarked = false;
-//   qDebug("DocumentPage::unmarkErrorLines()");
-  selectAll();
-  QTextCursor cur = textCursor();
-  QTextCharFormat format = cur.blockCharFormat();
-  format.clearBackground();
-  cur.setCharFormat(format);
-  setTextCursor(cur);  //sets format
-  setTextCursor(currentCursor); //returns cursor to initial position
-  verticalScrollBar()->setValue(position); //return document display to initial position
-}
-
-void DocumentPage::updateCsladspaText(QString text)
-{
-  QTextCursor cursor = textCursor();
-  QTextDocument *doc = document();
-  moveCursor(QTextCursor::Start);
-  if (find("<csLADSPA>") and find("</csLADSPA>")) {
-    QString curText = doc->toPlainText();
-    int index = curText.indexOf("<csLADSPA>");
-    curText.remove(index, curText.indexOf("</csLADSPA>") + 11 - index);
-    curText.insert(index, text);
-    doc->setPlainText(curText);
-  }
-  else { //csLADSPA section not present, or incomplete
-    find("<CsoundSynthesizer>"); //cursor moves there
-    moveCursor(QTextCursor::EndOfLine);
-    insertPlainText(QString("\n") + text + QString("\n"));
-  }
-  moveCursor(QTextCursor::Start);
-}
-
 QString DocumentPage::getFilePath()
 {
   return fileName.left(fileName.lastIndexOf("/"));
-}
-
-int DocumentPage::currentLine()
-{
-  QTextCursor cursor = textCursor();
-//   cursor.clearSelection();
-//   cursor.setPosition(0,QTextCursor::KeepAnchor);
-//   QString section = cursor.selectedText();
-//   qDebug() << section;
-//   return section.count('\n');
-  return cursor.blockNumber() + 1;
 }
 
 QStringList DocumentPage::getScheduledEvents(unsigned long ksmps)
@@ -508,8 +414,8 @@ QStringList DocumentPage::getScheduledEvents(unsigned long ksmps)
 void DocumentPage::setModified(bool mod)
 {
   // FIXME live frame modification should also affect here
-  m_view->setModified(mod);
-  m_widgetLayout->setModified(mod);
+  //FIXME is this needed? m_view->setModified(mod);
+  //FIXME is this needed? m_widgetLayout->setModified(mod);
 }
 
 bool DocumentPage::isModified()
@@ -519,6 +425,18 @@ bool DocumentPage::isModified()
   if (m_widgetLayout->isModified())
     return true;
   return false;
+}
+
+void DocumentPage::updateCsLadspaText()
+{
+  QString text = "<csLADSPA>\nName=";
+  text += fileName.mid(fileName.lastIndexOf("/") + 1) + "\n";
+  text += "Maker=QuteCsound\n";
+  text += "UniqueID=69873\n";  // FIXME generate a proper id
+  text += "Copyright=none\n";
+  text += m_widgetLayout->getCsladspaLines();
+  text += "</csLADSPA>";
+  view()->setLadspaText(text);
 }
 
 void DocumentPage::copy()
@@ -551,20 +469,14 @@ DocumentView * DocumentPage::view()
   return m_view;
 }
 
-void DocumentPage::keyPressForCsound(QString key)
+void DocumentPage::setConsoleBufferSize(int size)
 {
-//   qDebug() << "keyPressForCsound " << key;
-  keyMutex.lock(); // Is this lock necessary?
-  keyPressBuffer << key;
-  keyMutex.unlock();
+  m_csEngine->setConsoleBufferSize(size);
 }
 
-void DocumentPage::keyReleaseForCsound(QString key)
+void DocumentPage::setWidgetEnabled(bool enabled)
 {
-//   qDebug() << "keyReleaseForCsound " << key;
-  keyMutex.lock(); // Is this lock necessary?
-  keyReleaseBuffer << key;
-  keyMutex.unlock();
+  m_widgetLayout->setEnabled(enabled);
 }
 
 void DocumentPage::showLiveEventFrames(bool visible)
@@ -583,28 +495,44 @@ void DocumentPage::showLiveEventFrames(bool visible)
 void DocumentPage::play()
 {
   qDebug() << "DocumentPage::play() not implemented!";
-  unmarkErrorLines();  // Clear error lines when running
+  view()->unmarkErrorLines();  // Clear error lines when running
+  // Determine if API should be used
+  bool useAPI = true;
+  // FIXME put back this check for FLTK
+//  if (m_options->terminalFLTK) { // if "FLpanel" is found in csd run from terminal
+//    if (view()->getBasicText().contains("FLpanel"))
+//      useAPI = false;
+//  }
+  m_csEngine->play();
 }
 
 void DocumentPage::pause()
 {
-    qDebug() << "DocumentPage::pause() not implemented!";
+  qDebug() << "DocumentPage::pause() not implemented!";
+  m_csEngine->pause();
 }
 
 void DocumentPage::stop()
 {
-    qDebug() << "DocumentPage::stop() not implemented!";
+  qDebug() << "DocumentPage::stop() not implemented!";
+  m_csEngine->stop();
 }
 
 void DocumentPage::render()
 {
-    qDebug() << "DocumentPage::render() not implemented!";
+  qDebug() << "DocumentPage::render() not implemented!";
+  //  m_csEngine->runCsound(m_options->useAPI);  // render use of API depends on this preference
 }
 
-void DocumentPage::record()
+void DocumentPage::runInTerm()
+{
+  m_csEngine->runInTerm();
+}
+
+void DocumentPage::record(int format)
 {
   if (fileName.startsWith(":/")) {
-    QMessageBox::critical(this,
+    QMessageBox::critical(static_cast<QWidget *>(parent()),
                           tr("QuteCsound"),
                           tr("You must save the examples to use Record."),
                           QMessageBox::Ok);
@@ -612,73 +540,22 @@ void DocumentPage::record()
 //    recAct->setChecked(false);
     return;
   }
-  if (!runAct->isChecked()) {
-    //FIXME run act must be checked according to the status of the current document when it changes
-//    runAct->setChecked(true);
-    play();
+  int number = 0;
+  QString recName = fileName + "-000.wav";
+  while (QFile::exists(recName)) {
+    number++;
+    recName = fileName + "-";
+    if (number < 10)
+      recName += "0";
+    if (number < 100)
+      recName += "0";
+    recName += QString::number(number) + ".wav";
   }
-  if (recAct->isChecked()) {
-#ifdef USE_LIBSNDFILE
-    int format=SF_FORMAT_WAV;
-    switch (m_options->sampleFormat) {
-      case 0:
-        format |= SF_FORMAT_PCM_16;
-        break;
-      case 1:
-        format |= SF_FORMAT_PCM_24;
-        break;
-      case 2:
-        format |= SF_FORMAT_FLOAT;
-        break;
-    }
- //  const int format=SF_FORMAT_WAV | SF_FORMAT_FLOAT;
-    const int channels=ud->numChnls;
-    const int sampleRate=ud->sampleRate;
-    int number = 0;
-    QString fileName = documentPages[curPage]->fileName + "-000.wav";
-    while (QFile::exists(fileName)) {
-      number++;
-      fileName = documentPages[curPage]->fileName + "-";
-      if (number < 10)
-        fileName += "0";
-      if (number < 100)
-        fileName += "0";
-      fileName += QString::number(number) + ".wav";
-    }
-    currentAudioFile = fileName;
-    qDebug("start recording: %s", fileName.toStdString().c_str());
-    outfile = new SndfileHandle(fileName.toStdString().c_str(), SFM_WRITE, format, channels, sampleRate);
-    // clip instead of wrap when converting floats to ints
-    outfile->command(SFC_SET_CLIPPING, NULL, SF_TRUE);
-    samplesWritten = 0;
+  m_csEngine->startRecording(format, recName);
 
-    QTimer::singleShot(20, this, SLOT(recordBuffer()));
-#else
-  QMessageBox::warning(this, tr("QuteCsound"),
-                       tr("This version of QuteCsound has been compiled\nwithout Record support!"),
-                       QMessageBox::Ok);
-#endif
-  }
-}
-
-void DocumentPage::recordBuffer()
-{
-#ifdef USE_LIBSNDFILE
-  if (recAct->isChecked()) {
-    if (audioOutputBuffer.copyAvailableBuffer(recBuffer, bufferSize)) {
-      int samps = outfile->write(recBuffer, bufferSize);
-      samplesWritten += samps;
-    }
-    else {
-//       qDebug("qutecsound::recordBuffer() : Empty Buffer!");
-    }
-    QTimer::singleShot(20, this, SLOT(recordBuffer()));
-  }
-  else { //Stop recording
-    delete outfile;
-    qDebug("closed file: %s\nWritten %li samples", currentAudioFile.toStdString().c_str(), samplesWritten);
-  }
-#endif
+  // FIXME setup stopping of recording!
+  // FIXME connect this so that the current audio file for external editor, etc is set
+  emit setCurrentAudioFile(recName);
 }
 
 void DocumentPage::setMacWidgetsText(QString widgetText)
@@ -742,28 +619,6 @@ void DocumentPage::setWidgetPanelSize(QSize size)
 //   qDebug("DocumentPage::setWidgetPanelSize() %i %i", size.width(), size.height());
 }
 
-void DocumentPage::jumpToLine(int line)
-{
-  int lineCount = 1;
-  QTextCursor cur = textCursor();
-  cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-  while (lineCount < line) {
-    lineCount++;
-    //       cur.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
-    cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
-  }
-  moveCursor(QTextCursor::End); // go to end to make sure line is put at the top of text
-  setTextCursor(cur);
-}
-
-void DocumentPage::opcodeFromMenu()
-{
-  QAction *action = (QAction *) QObject::sender();
-  QTextCursor cursor = textCursor();
-  QString text = action->data().toString();
-  cursor.insertText(text);
-}
-
 void DocumentPage::newLiveEventFrame(QString text)
 {
   LiveEventFrame *e = createLiveEventFrame(text);
@@ -775,7 +630,7 @@ LiveEventFrame * DocumentPage::createLiveEventFrame(QString text)
   qDebug() << "DocumentPage::newLiveEventFrame()";
   // TODO delete these frames, for proper cleanup
   // TODO remove from QVector when they are deleted individually
-  LiveEventFrame *e = new LiveEventFrame("Live Event", this, Qt::Window);
+  LiveEventFrame *e = new LiveEventFrame("Live Event", 0, Qt::Window);  //FIXME is it OK to have no parent?
   e->setAttribute(Qt::WA_DeleteOnClose, false);
 //  e->show();
 
@@ -806,7 +661,7 @@ void DocumentPage::deleteLiveEventFrame(LiveEventFrame *frame)
 
 void DocumentPage::changed()
 {
-  unmarkErrorLines();
+  view()->unmarkErrorLines();
   emit currentTextUpdated();
 }
 
@@ -825,91 +680,8 @@ void DocumentPage::liveEventFrameClosed()
 //  }
 }
 
-void DocumentPage::dispatchQueues()
+void DocumentPage::queueEvent(QString eventLine, int delay)
 {
-//   qDebug("qutecsound::dispatchQueues()");
-  int counter = 0;
-  widgetPanel->processNewValues();
-  if (ud && ud->PERF_STATUS == 1) {
-    while ((m_options->consoleBufferSize <= 0 || counter++ < m_options->consoleBufferSize) && ud->PERF_STATUS == 1) {
-      messageMutex.lock();
-      if (messageQueue.isEmpty()) {
-        messageMutex.unlock();
-        break;
-      }
-      QString msg = messageQueue.takeFirst();
-      messageMutex.unlock();
-      m_console->appendMessage(msg);
-      widgetPanel->appendMessage(msg);
-      qApp->processEvents(); //FIXME Is this needed here to avoid display problems in the console?
-      m_console->scrollToEnd();
-      widgetPanel->refreshConsoles();  // Scroll to end of text all console widgets
-    }
-    messageMutex.lock();
-    if (!messageQueue.isEmpty() && m_options->consoleBufferSize > 0 && counter >= m_options->consoleBufferSize) {
-      messageQueue.clear();
-      messageQueue << "\nQUTECSOUND: Message buffer overflow. Messages discarded!\n";
-    }
-    messageMutex.unlock();
-    //   QList<QString> channels = outValueQueue.keys();
-    //   foreach (QString channel, channels) {
-    //     widgetPanel->setValue(channel, outValueQueue[channel]);
-    //   }
-    //   outValueQueue.clear();
-
-    stringValueMutex.lock();
-    QStringList channels = outStringQueue.keys();
-    for  (int i = 0; i < channels.size(); i++) {
-      widgetPanel->setValue(channels[i], outStringQueue[channels[i]]);
-    }
-    outStringQueue.clear();
-    stringValueMutex.unlock();
-    processEventQueue(ud);
-    while (!newCurveBuffer.isEmpty()) {
-      Curve * curve = newCurveBuffer.pop();
-  // //     qDebug("qutecsound::dispatchQueues() %i-%s", index, curve->get_caption().toStdString().c_str());
-        widgetPanel->newCurve(curve);
-    }
-    if (curveBuffer.size() > 32) {
-      qDebug("qutecsound::dispatchQueues() WARNING: curve update buffer too large!");
-      curveBuffer.resize(32);
-    }
-    foreach (WINDAT * windat, curveBuffer){
-      Curve *curve = widgetPanel->getCurveById(windat->windid);
-      if (curve != 0) {
-  //       qDebug("qutecsound::dispatchQueues() %s -- %s",windat->caption, curve->get_caption().toStdString().c_str());
-        curve->set_size(windat->npts);      // number of points
-        curve->set_data(windat->fdata);
-        curve->set_caption(QString(windat->caption)); // title of curve
-    //     curve->set_polarity(windat->polarity); // polarity
-        curve->set_max(windat->max);        // curve max
-        curve->set_min(windat->min);        // curve min
-        curve->set_absmax(windat->absmax);     // abs max of above
-    //     curve->set_y_scale(windat->y_scale);    // Y axis scaling factor
-        widgetPanel->setCurveData(curve);
-      }
-      curveBuffer.remove(curveBuffer.indexOf(windat));
-    }
-    qApp->processEvents();
-    if (m_options->thread) {
-      if (perfThread->GetStatus() != 0) {
-        stop();
-      }
-    }
-  }
-  queueTimer->start(refreshTime); //will launch this function again later
-}
-
-void DocumentPage::queueMessage(QString message)
-{
-  messageMutex.lock();
-  messageQueue << message;
-  messageMutex.unlock();
-}
-
-void DocumentPage::clearMessageQueue()
-{
-  messageMutex.lock();
-  messageQueue.clear();
-  messageMutex.unlock();
+//   qDebug("WidgetPanel::queueEvent %s", eventLine.toStdString().c_str());
+  m_csEngine->queueEvent(eventLine, delay);  //TODO  implement passing of timestamp
 }

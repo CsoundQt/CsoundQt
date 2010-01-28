@@ -23,7 +23,6 @@ else {
 }
 libsndfile { 
     !win32:LIBS += -lsndfile
-    DEFINES += USE_LIBSNDFILE
 }
 SOURCES += qutecsound.cpp \
     main.cpp \

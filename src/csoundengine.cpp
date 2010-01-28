@@ -21,6 +21,8 @@
 */
 
 #include "csoundengine.h"
+#include "widgetlayout.h"
+#include "console.h"
 
 CsoundEngine::CsoundEngine()
 {
@@ -30,19 +32,25 @@ CsoundEngine::CsoundEngine()
   ud->cs = this;
   pFields = (MYFLT *) calloc(EVENTS_MAX_PFIELDS, sizeof(MYFLT)); // Maximum number of p-fields for events
 
+  //FIXME set widget layout ud->wl =
+  m_recording = false;
   ud->csound = NULL;
   int init = csoundInitialize(0,0,0);
-  if (init<0) {
-    qDebug("Error initializing Csound!");
-    QMessageBox::warning(this, tr("QuteCsound"),
-                         tr("Error initializing Csound!\nQutecsound will probably crash if you try to run Csound."));
+  if (init < 0) {
+    qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nQutecsound will probably crash if you try to run Csound.");
   }
 #ifndef QUTECSOUND_DESTROY_CSOUND
   // Create only once
   csound=csoundCreate(0);
 #endif
 
-  mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2channels
+  ud->perfThread = 0;
+
+  eventQueue.resize(QUTECSOUND_MAX_EVENTS);
+  eventTimeStamps.resize(QUTECSOUND_MAX_EVENTS);
+  eventQueueSize = 0;
+
+  ud->mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2 channels
 }
 
 CsoundEngine::~CsoundEngine()
@@ -59,21 +67,21 @@ CsoundEngine::~CsoundEngine()
   free(pFields);
 }
 
-void CsoundEngine::messageCallback_NoThread(CSOUND *csound,
+void CsoundEngine::messageCallbackNoThread(CSOUND *csound,
                                           int /*attr*/,
                                           const char *fmt,
                                           va_list args)
 {
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-  DockConsole *console = ud->cs->m_console;
   QString msg;
   msg = msg.vsprintf(fmt, args);
-  console->appendMessage(msg);
-  ud->cs->widgetPanel->appendMessage(msg);
-  console->scrollToEnd();
+  for (int i = 0; i < ud->cs->consoles.size(); i++) {
+    ud->cs->consoles[i]->appendMessage(msg);
+    ud->cs->consoles[i]->scrollToEnd();
+  }
 }
 
-void CsoundEngine::messageCallback_Thread(CSOUND *csound,
+void CsoundEngine::messageCallbackThread(CSOUND *csound,
                                           int /*attr*/,
                                           const char *fmt,
                                           va_list args)
@@ -82,6 +90,79 @@ void CsoundEngine::messageCallback_Thread(CSOUND *csound,
   QString msg;
   msg = msg.vsprintf(fmt, args);
   ud->cs->queueMessage(msg);
+}
+
+void CsoundEngine::outputValueCallbackThread (CSOUND *csound,
+                                     const char *channelName,
+                                     MYFLT value)
+{
+  CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+  if (ud->perfThread->isRunning()) {
+    QString name = QString(channelName);
+    ud->cs->perfMutex.lock();
+    if (name.startsWith('$')) {
+      QString channelName = name;
+      channelName.chop(name.size() - (int) value + 1);
+      QString sValue = name;
+      sValue = sValue.right(name.size() - (int) value);
+      channelName.remove(0,1);
+      ud->cs->queueOutString(channelName, sValue);
+    }
+    else {
+      ud->cs->queueOutValue(name, value);
+    }
+    ud->cs->perfMutex.unlock();
+  }
+}
+
+void CsoundEngine::inputValueCallbackThread (CSOUND *csound,
+                                     const char *channelName,
+                                     MYFLT *value)
+{
+  // from qutecsound to Csound
+  CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+  if (ud->perfThread->isRunning()) {
+    QString name = QString(channelName);
+    ud->cs->perfMutex.lock();
+    if (name.startsWith('$')) { // channel is a string channel
+      int index = ud->channelNames.indexOf(name.mid(1));
+      char *string = (char *) value;
+      if (index>=0) {
+        strcpy(string, ud->stringValues[index].toStdString().c_str());
+      }
+      else {
+        string[0] = '\0'; //empty c string
+      }
+    }
+    else {  // Not a string channel
+      int index = ud->channelNames.indexOf(name);
+      if (index>=0)
+        *value = (MYFLT) ud->values[index];
+      else {
+        *value = 0;
+      }
+      //FIXME check if mouse tracking is active
+      if (name == "_MouseX") {
+        *value = (MYFLT) ud->mouseValues[0];
+      }
+      else if (name == "_MouseY") {
+        *value = (MYFLT) ud->mouseValues[1];
+      }
+      else if(name == "_MouseRelX") {
+        *value = (MYFLT) ud->mouseValues[2];
+      }
+      else if(name == "_MouseRelY") {
+        *value = (MYFLT) ud->mouseValues[3];
+      }
+      else if(name == "_MouseBut1") {
+        *value = (MYFLT) ud->mouseValues[4];
+      }
+      else if(name == "_MouseBut2") {
+        *value = (MYFLT) ud->mouseValues[5];
+      }
+    }
+    ud->cs->perfMutex.unlock();
+  }
 }
 
 void CsoundEngine::outputValueCallback (CSOUND *csound,
@@ -117,44 +198,101 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
     QString name = QString(channelName);
     ud->cs->perfMutex.lock();
     if (name.startsWith('$')) { // channel is a string channel
-      int index = ud->qcs->channelNames.indexOf(name.mid(1));
+      int index = ud->channelNames.indexOf(name.mid(1));
       char *string = (char *) value;
       if (index>=0) {
-        strcpy(string, ud->cs->stringValues[index].toStdString().c_str());
+        strcpy(string, ud->stringValues[index].toStdString().c_str());
       }
       else {
         string[0] = '\0'; //empty c string
       }
     }
     else {  // Not a string channel
-      int index = ud->qcs->channelNames.indexOf(name);
+      int index = ud->channelNames.indexOf(name);
       if (index>=0)
-        *value = (MYFLT) ud->qcs->values[index];
+        *value = (MYFLT) ud->values[index];
       else {
         *value = 0;
       }
       //FIXME check if mouse tracking is active
       if (name == "_MouseX") {
-        *value = (MYFLT) ud->qcs->mouseValues[0];
+        *value = (MYFLT) ud->mouseValues[0];
       }
       else if (name == "_MouseY") {
-        *value = (MYFLT) ud->qcs->mouseValues[1];
+        *value = (MYFLT) ud->mouseValues[1];
       }
       else if(name == "_MouseRelX") {
-        *value = (MYFLT) ud->qcs->mouseValues[2];
+        *value = (MYFLT) ud->mouseValues[2];
       }
       else if(name == "_MouseRelY") {
-        *value = (MYFLT) ud->qcs->mouseValues[3];
+        *value = (MYFLT) ud->mouseValues[3];
       }
       else if(name == "_MouseBut1") {
-        *value = (MYFLT) ud->qcs->mouseValues[4];
+        *value = (MYFLT) ud->mouseValues[4];
       }
       else if(name == "_MouseBut2") {
-        *value = (MYFLT) ud->qcs->mouseValues[5];
+        *value = (MYFLT) ud->mouseValues[5];
       }
     }
-    ud->qcs->perfMutex.unlock();
+    ud->cs->perfMutex.unlock();
   }
+}
+
+void CsoundEngine::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *name)
+{
+//   qDebug("qutecsound::makeGraph()");
+  CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+  windat->caption[CAPSIZE - 1] = 0; // Just in case...
+  Polarity polarity;
+    // translate polarities and hope the definition in Csound doesn't change.
+  switch (windat->polarity) {
+    case NEGPOL:
+      polarity = POLARITY_NEGPOL;
+      break;
+    case POSPOL:
+      polarity = POLARITY_POSPOL;
+      break;
+    case BIPOL:
+      polarity = POLARITY_BIPOL;
+      break;
+    default:
+      polarity = POLARITY_NOPOL;
+  }
+  Curve *curve
+      = new Curve(windat->fdata,
+                  windat->npts,
+                  windat->caption,
+                  polarity,
+                  windat->max,
+                  windat->min,
+                  windat->absmax,
+                  windat->oabsmax,
+                  windat->danflag);
+  curve->set_id((uintptr_t) curve);
+  ud->wl->newCurve(curve);
+  windat->windid = (uintptr_t) curve;
+//   qDebug("qutecsound::makeGraphCallback %i", windat->windid);
+}
+
+void CsoundEngine::drawGraphCallback(CSOUND *csound, WINDAT *windat)
+{
+  CsoundUserData *udata = (CsoundUserData *) csoundGetHostData(csound);
+  // FIXME what is this callback for????
+//   qDebug("qutecsound::drawGraph()");
+//  udata->qcs->updateCurve(windat);
+}
+
+void CsoundEngine::killGraphCallback(CSOUND *csound, WINDAT *windat)
+{
+//   udata->qcs->killCurve(windat);
+  qDebug("qutecsound::killGraph()");
+}
+
+int CsoundEngine::exitGraphCallback(CSOUND *csound)
+{
+//  qDebug("qutecsound::exitGraphCallback()");
+  CsoundUserData *udata = (CsoundUserData *) csoundGetHostData(csound);
+  return udata->wl->killCurves(csound);
 }
 
 int CsoundEngine::keyEventCallback(void *userData,
@@ -164,15 +302,15 @@ int CsoundEngine::keyEventCallback(void *userData,
   if (type != CSOUND_CALLBACK_KBD_EVENT)
     return 1;
   CsoundUserData *ud = (CsoundUserData *) userData;
-  qutecsound *qcs = (qutecsound *) ud->qcs;
+  WidgetLayout *wl = (WidgetLayout *) ud->wl;
   int *value = (int *) p;
-  int key = qcs->popKeyPressEvent();
+  int key = wl->popKeyPressEvent();
   if (key >= 0) {
     *value = key;
 //     qDebug() << "Pressed: " << key;
   }
   else {
-    key = qcs->popKeyReleaseEvent();
+    key = ud->cs->popKeyReleaseEvent();
     if (key >= 0) {
       *value = key;
 //       qDebug() << "Released: " << key;
@@ -208,82 +346,295 @@ int CsoundEngine::keyEventCallback(void *userData,
 //   }
 // }
 
-void CsoundEngine::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *name)
+void CsoundEngine::csThread(void *data)
 {
-//   qDebug("qutecsound::makeGraph()");
-  CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-  windat->caption[CAPSIZE - 1] = 0; // Just in case...
-  Polarity polarity;
-    // translate polarities and hope the definition in Csound doesn't change.
-  switch (windat->polarity) {
-    case NEGPOL:
-      polarity = POLARITY_NEGPOL;
-      break;
-    case POSPOL:
-      polarity = POLARITY_POSPOL;
-      break;
-    case BIPOL:
-      polarity = POLARITY_BIPOL;
-      break;
-    default:
-      polarity = POLARITY_NOPOL;
+  CsoundUserData* udata = (CsoundUserData*)data;
+  udata->outputBuffer = csoundGetSpout(udata->csound);
+  for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
+    udata->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
   }
-  Curve *curve
-      = new Curve(windat->fdata,
-                  windat->npts,
-                  windat->caption,
-                  polarity,
-                  windat->max,
-                  windat->min,
-                  windat->absmax,
-                  windat->oabsmax,
-                  windat->danflag);
-  curve->set_id((uintptr_t) curve);
-  ud->qcs->newCurve(curve);
-  windat->windid = (uintptr_t) curve;
-//   qDebug("qutecsound::makeGraphCallback %i", windat->windid);
+  udata->wl->getValues(&udata->channelNames,
+                       &udata->values,
+                       &udata->stringValues);
+  udata->wl->getMouseValues(&udata->mouseValues);
+  //FIXME put back usage of invalue/outvalue
+//  if (!udata->qcs->m_options->useInvalue) {
+//    writeWidgetValues(udata);
+//    readWidgetValues(udata);
+//  }
+  (udata->ksmpscount)++;
 }
 
-void CsoundEngine::drawGraphCallback(CSOUND *csound, WINDAT *windat)
+void CsoundEngine::readWidgetValues(CsoundUserData *ud)
 {
-  CsoundUserData *udata = (CsoundUserData *) csoundGetHostData(csound);
-//   qDebug("qutecsound::drawGraph()");
-  udata->qcs->updateCurve(windat);
-}
+  MYFLT* pvalue;
+//   CsoundChannelListEntry **lst;
+//   CsoundChannelListEntry *chan;
+//   int num = csoundListChannels(ud->csound, lst);
+//   for (int i = 0; i < num; i++) {
+//     chan = lst[i];
+//     if (chan) {  //Not sure why this check is needed here....
+//       if (chan->type & (CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL)) {
+//         if(csoundGetChannelPtr(ud->csound, &pvalue, chan->name, 0) == 0) {
+//           *pvalue = (MYFLT) ud->qcs->values[i];
+//         }
+//       }
+//       else if (chan->type & (CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL)) {
+//         if(csoundGetChannelPtr(ud->csound, &pvalue, chan->name, 0) == 0) {
+//           char *string = (char *) pvalue;
+//           strcpy(string, ud->qcs->stringValues[i].toStdString().c_str());
+//         }
+//       }
+//     }
+//   }
+//   csoundDeleteChannelList(ud->csound, *lst);
 
-void CsoundEngine::killGraphCallback(CSOUND *csound, WINDAT *windat)
-{
-//   udata->qcs->killCurve(windat);
-  qDebug("qutecsound::killGraph()");
-}
-
-int CsoundEngine::exitGraphCallback(CSOUND *csound)
-{
-//  qDebug("qutecsound::exitGraphCallback()");
-  CsoundUserData *udata = (CsoundUserData *) csoundGetHostData(csound);
-  return udata->qcs->killCurves(csound);
-}
-
-void CsoundEngine::runCsound(bool realtime)
-{
-  if (ud->PERF_STATUS == -1) { //Currently stopping, do nothing
-    return;
+  for (int i = 0; i < ud->channelNames.size(); i++) {
+    if(csoundGetChannelPtr(ud->csound, &pvalue, ud->channelNames[i].toStdString().c_str(),
+        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+      *pvalue = (MYFLT) ud->values[i];
+    }
+    if(csoundGetChannelPtr(ud->csound, &pvalue, ud->channelNames[i].toStdString().c_str(),
+       CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
+      char *string = (char *) pvalue;
+      strcpy(string, ud->stringValues[i].toStdString().c_str());
+    }
   }
-  else if (ud->PERF_STATUS == 1) { //If running, stop
+  //FIXME check if mouse tracking is active
+  if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseX",
+        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+      *pvalue = (MYFLT) ud->mouseValues[0];
+  }
+  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseY",
+        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+      *pvalue = (MYFLT) ud->mouseValues[1];
+  }
+  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseRelX",
+        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+      *pvalue = (MYFLT) ud->mouseValues[2];
+  }
+  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseRelY",
+        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+      *pvalue = (MYFLT) ud->mouseValues[3];
+  }
+  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseBut1",
+        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+      *pvalue = (MYFLT) ud->mouseValues[4];
+  }
+  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseBut2",
+        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+      *pvalue = (MYFLT) ud->mouseValues[5];
+  }
+}
+
+void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
+{
+//   qDebug("qutecsound::writeWidgetValues");
+   MYFLT* pvalue;
+   for (int i = 0; i < ud->channelNames.size(); i++) {
+     if (ud->channelNames[i] != "") {
+       if(csoundGetChannelPtr(ud->csound, &pvalue, ud->channelNames[i].toStdString().c_str(),
+          CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+            ud->wl->setValue(i,*pvalue);
+       }
+       else if(csoundGetChannelPtr(ud->csound, &pvalue, ud->channelNames[i].toStdString().c_str(),
+         CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
+         ud->wl->setValue(i,QString((char *)pvalue));
+       }
+     }
+   }
+}
+
+
+
+void CsoundEngine::registerConsole(ConsoleWidget *c)
+{
+  //FIXME register consoles as they are created
+  consoles.append(c);
+
+  connect(c, SIGNAL(keyPressed(QString)),
+          this, SLOT(keyPressForCsound(QString)));
+  connect(c, SIGNAL(keyReleased(QString)),
+          this, SLOT(keyReleaseForCsound(QString)));
+}
+
+void CsoundEngine::unregisterConsole(ConsoleWidget *c)
+{
+  //FIXME unregister consoles as they are destroyed
+  int index = consoles.indexOf(c);
+  if (index >= 0 )
+    consoles.remove(index);
+}
+
+void CsoundEngine::setConsoleBufferSize(int size)
+{
+  m_consoleBufferSize = size;
+}
+
+void CsoundEngine::keyPressForCsound(QString key)
+{
+//   qDebug() << "keyPressForCsound " << key;
+  keyMutex.lock(); // Is this lock necessary?
+  keyPressBuffer << key;
+  keyMutex.unlock();
+}
+
+void CsoundEngine::keyReleaseForCsound(QString key)
+{
+//   qDebug() << "keyReleaseForCsound " << key;
+  keyMutex.lock(); // Is this lock necessary?
+  keyReleaseBuffer << key;
+  keyMutex.unlock();
+}
+
+int CsoundEngine::popKeyPressEvent()
+{
+  keyMutex.lock();
+  int value = -1;
+  if (!keyPressBuffer.isEmpty()) {
+    value = (int) keyPressBuffer.takeFirst()[0].toAscii();
+  }
+  keyMutex.unlock();
+  return value;
+}
+
+int CsoundEngine::popKeyReleaseEvent()
+{
+  keyMutex.lock();
+  int value = -1;
+  if (!keyReleaseBuffer.isEmpty()) {
+    value = (int) keyReleaseBuffer.takeFirst()[0].toAscii() + 0x10000;
+  }
+  keyMutex.unlock();
+  return value;
+}
+
+void CsoundEngine::processEventQueue()
+{
+  // This function should only be called when Csound is running
+  while (eventQueueSize > 0) {
+    eventQueueSize--;
+    eventQueue[eventQueueSize];
+    char type = eventQueue[eventQueueSize][0].unicode();
+    // FIXME this should process both events from the widget panel and the live event panels!
+    QStringList eventElements = eventQueue[eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts);
+    qDebug("type %c line: %s", type, eventQueue[eventQueueSize].toStdString().c_str());
+    // eventElements.size() should never be larger than EVENTS_MAX_PFIELDS
+    for (int j = 0; j < eventElements.size(); j++) {
+      pFields[j] = (MYFLT) eventElements[j].toDouble();
+    }
+    if (ud->perfThread != 0) {
+      //ScoreEvent is not working
+      ud->perfThread->ScoreEvent(0, type, eventElements.size(), pFields);
+//       ud->qcs->perfThread->InputMessage(ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).data());
+//       perfThread->lock();
+//       csoundScoreEvent(ud->csound,type ,ud->qcs->pFields, eventElements.size());
+//       perfThread->unlock();
+    }
+    else {
+      csoundScoreEvent(ud->csound, type, pFields, eventElements.size());
+    }
+  }
+}
+
+void CsoundEngine::queueOutValue(QString channelName, double value)
+{
+  ud->wl->newValue(QPair<QString, double>(channelName, value));
+}
+
+// void qutecsound::queueInValue(QString channelName, double value)
+// {
+//   inValueQueue.insert(channelName, value);
+// }
+
+void CsoundEngine::queueOutString(QString channelName, QString value)
+{
+//   qDebug() << "qutecsound::queueOutString";
+  ud->wl->newValue(QPair<QString, QString>(channelName, value));
+}
+
+
+void CsoundEngine::play()
+{
+  if (!ud->perfThread->isRunning()) {
+    runCsound(true);
+  }
+  else {
+    ud->perfThread->Play();
+  }
+}
+
+void CsoundEngine::stop()
+{
+  stopCsound();
+}
+
+void CsoundEngine::pause()
+{
+  if (ud->perfThread->isRunning())
+   ud->perfThread->Pause();
+}
+
+void CsoundEngine::runInTerm()
+{
+  runCsound(false);
+}
+
+void CsoundEngine::startRecording(int sampleformat, QString fileName)
+{
+  if (isRunning()) {
+    //FIXME run act must be checked according to the status of the current document when it changes
+//    runAct->setChecked(true);
+    play();
+  }
+  const int channels=ud->numChnls;
+  const int sampleRate=ud->sampleRate;
+  int format = SF_FORMAT_WAV;
+  switch (sampleformat) {
+      case 0:
+    format |= SF_FORMAT_PCM_16;
+    break;
+      case 1:
+    format |= SF_FORMAT_PCM_24;
+    break;
+      case 2:
+    format |= SF_FORMAT_FLOAT;
+    break;
+  }
+  qDebug("start recording: %s", fileName.toStdString().c_str());
+  outfile = new SndfileHandle(fileName.toStdString().c_str(), SFM_WRITE, format, channels, sampleRate);
+  // clip instead of wrap when converting floats to ints
+  outfile->command(SFC_SET_CLIPPING, NULL, SF_TRUE);
+  samplesWritten = 0;
+  m_recording = true;
+
+  QTimer::singleShot(20, this, SLOT(recordBuffer()));
+}
+
+void CsoundEngine::stopRecording()
+{
+  m_recording = false;  // Will be processed on next record buffer
+}
+
+void CsoundEngine::queueEvent(QString eventLine, int delay)
+{
+//   qDebug("CsoundEngine::queueEvent %s", eventLine.toStdString().c_str());
+  if (eventQueueSize < QUTECSOUND_MAX_EVENTS) {
+    eventMutex.lock();
+    eventQueue[eventQueueSize] = eventLine;
+    eventQueueSize++;
+    eventMutex.unlock();
+  }
+  else
+    qDebug("Warning: event queue full, event not processed");
+}
+
+void CsoundEngine::runCsound(bool useAPI)
+{
+  if ((m_options->thread && ud->perfThread->isRunning() ) ||
+           (!m_options->thread && ud->PERF_STATUS == 1)) { //If running, stop
     stop();
     return;
-  }
-  // Determine if API should be used
-  bool useAPI = true;
-  if (QObject::sender() == renderAct) {
-    useAPI = m_options->useAPI;
-  }
-  else if (QObject::sender() == runTermAct) {
-    useAPI = false;
-  }
-  if (m_options->terminalFLTK) { // if "FLpanel" is found in csd run from terminal
-    if (documentPages[curPage]->document()->toPlainText().contains("FLpanel"))
-      useAPI = false;
   }
   if (documentPages[curPage]->fileName.isEmpty()) {
     QMessageBox::warning(this, tr("QuteCsound"),
@@ -329,9 +680,10 @@ void CsoundEngine::runCsound(bool realtime)
     m_console->clear();
     widgetPanel->flush();
     widgetPanel->clearGraphs();
+    eventQueueSize = 0; //Flush events gathered while idle
     //   outValueQueue.clear();
-    inValueQueue.clear();
-    outStringQueue.clear();
+//    inValueQueue.clear();
+//    outStringQueue.clear();
     emit clearMessageQueueSignal();
     audioOutputBuffer.allZero();
     QTemporaryFile tempFile;
@@ -580,17 +932,17 @@ void CsoundEngine::runCsound(bool realtime)
   }
 }
 
-void qutecsound::stopCsound()
+
+void CsoundEngine::stopCsound()
 {
   qDebug("qutecsound::stopCsound()");
   if (m_options->thread) {
 //    perfThread->ScoreEvent(0, 'e', 0, 0);
-    if (ud->PERF_STATUS == 1) {
-      ud->PERF_STATUS = -1;
+    if (perfThread->isRunning()) {
       perfThread->Stop();
       perfThread->Join();
       delete perfThread;
-      ud->PERF_STATUS = 0;
+      perfThread = 0;
     }
   }
   else {
@@ -608,170 +960,121 @@ void qutecsound::stopCsound()
 #endif
 }
 
-void qutecsound::readWidgetValues(CsoundUserData *ud)
+void DocumentPage::dispatchQueues()
 {
-  MYFLT* pvalue;
-//   CsoundChannelListEntry **lst;
-//   CsoundChannelListEntry *chan;
-//   int num = csoundListChannels(ud->csound, lst);
-//   for (int i = 0; i < num; i++) {
-//     chan = lst[i];
-//     if (chan) {  //Not sure why this check is needed here....
-//       if (chan->type & (CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL)) {
-//         if(csoundGetChannelPtr(ud->csound, &pvalue, chan->name, 0) == 0) {
-//           *pvalue = (MYFLT) ud->qcs->values[i];
-//         }
-//       }
-//       else if (chan->type & (CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL)) {
-//         if(csoundGetChannelPtr(ud->csound, &pvalue, chan->name, 0) == 0) {
-//           char *string = (char *) pvalue;
-//           strcpy(string, ud->qcs->stringValues[i].toStdString().c_str());
-//         }
-//       }
-//     }
-//   }
-//   csoundDeleteChannelList(ud->csound, *lst);
+//   qDebug("qutecsound::dispatchQueues()");
+  int counter = 0;
+  ud->wl->processNewValues();
+  if (isRunning()) {
+    while ((m_consoleBufferSize <= 0 || counter++ < m_consoleBufferSize) && m_csEngine->isRunning()) {
+      messageMutex.lock();
+      if (messageQueue.isEmpty()) {
+        messageMutex.unlock();
+        break;
+      }
+      QString msg = messageQueue.takeFirst();
+      messageMutex.unlock();
+      m_console->appendMessage(msg);
+      m_widgetLayout->appendMessage(msg);
+      qApp->processEvents(); //FIXME Is this needed here to avoid display problems in the console?
+      m_console->scrollToEnd();
+      m_widgetLayout->refreshConsoles();  // Scroll to end of text all console widgets
+    }
+    messageMutex.lock();
+    if (!messageQueue.isEmpty() && m_consoleBufferSize > 0 && counter >= m_consoleBufferSize) {
+      messageQueue.clear();
+      messageQueue << "\nQUTECSOUND: Message buffer overflow. Messages discarded!\n";
+    }
+    messageMutex.unlock();
+    //   QList<QString> channels = outValueQueue.keys();
+    //   foreach (QString channel, channels) {
+    //     widgetPanel->setValue(channel, outValueQueue[channel]);
+    //   }
+    //   outValueQueue.clear();
 
-  for (int i = 0; i < ud->qcs->channelNames.size(); i++) {
-    if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
-        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-      *pvalue = (MYFLT) ud->qcs->values[i];
+//    stringValueMutex.lock();
+//    QStringList channels = outStringQueue.keys();
+//    for  (int i = 0; i < channels.size(); i++) {
+//      m_widgetLayout->setValue(channels[i], outStringQueue[channels[i]]);
+//    }
+//    outStringQueue.clear();
+//    stringValueMutex.unlock();
+    m_csEngine->processEventQueue();
+    while (!newCurveBuffer.isEmpty()) {
+      Curve * curve = newCurveBuffer.pop();
+  // //     qDebug("qutecsound::dispatchQueues() %i-%s", index, curve->get_caption().toStdString().c_str());
+        m_widgetLayout->newCurve(curve);
     }
-    if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
-       CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
-      char *string = (char *) pvalue;
-      strcpy(string, ud->qcs->stringValues[i].toStdString().c_str());
+    if (curveBuffer.size() > 32) {
+      qDebug("qutecsound::dispatchQueues() WARNING: curve update buffer too large!");
+      curveBuffer.resize(32);
     }
+    foreach (WINDAT * windat, curveBuffer){
+      Curve *curve = m_widgetLayout->getCurveById(windat->windid);
+      if (curve != 0) {
+  //       qDebug("qutecsound::dispatchQueues() %s -- %s",windat->caption, curve->get_caption().toStdString().c_str());
+        curve->set_size(windat->npts);      // number of points
+        curve->set_data(windat->fdata);
+        curve->set_caption(QString(windat->caption)); // title of curve
+    //     curve->set_polarity(windat->polarity); // polarity
+        curve->set_max(windat->max);        // curve max
+        curve->set_min(windat->min);        // curve min
+        curve->set_absmax(windat->absmax);     // abs max of above
+    //     curve->set_y_scale(windat->y_scale);    // Y axis scaling factor
+        m_widgetLayout->setCurveData(curve);
+      }
+      curveBuffer.remove(curveBuffer.indexOf(windat));
+    }
+    qApp->processEvents();
+//    if (m_options->thread) {
+      // FIXME it's necessary to check this, otherwise even though performance has ended, no one will find out
+//      if (m_csEngine->GetStatus() != 0) {
+//        stop();
+//      }
+//    }
   }
-  //FIXME check if mouse tracking is active
-  if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseX",
-        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-      *pvalue = (MYFLT) ud->qcs->mouseValues[0];
-  }
-  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseY",
-        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-      *pvalue = (MYFLT) ud->qcs->mouseValues[1];
-  }
-  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseRelX",
-        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-      *pvalue = (MYFLT) ud->qcs->mouseValues[2];
-  }
-  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseRelY",
-        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-      *pvalue = (MYFLT) ud->qcs->mouseValues[3];
-  }
-  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseBut1",
-        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-      *pvalue = (MYFLT) ud->qcs->mouseValues[4];
-  }
-  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseBut2",
-        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-      *pvalue = (MYFLT) ud->qcs->mouseValues[5];
-  }
+  queueTimer->start(refreshTime); //will launch this function again later
 }
 
-void qutecsound::writeWidgetValues(CsoundUserData *ud)
+void DocumentPage::queueMessage(QString message)
 {
-//   qDebug("qutecsound::writeWidgetValues");
-//   MYFLT* pvalue;
-//   for (int i = 0; i < ud->qcs->channelNames.size(); i++) {
-//     if (ud->qcs->channelNames[i] != "") {
-//       if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
-//          CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-//            ud->qcs->widgetPanel->setValue(i,*pvalue);
-//       }
-//       else if(csoundGetChannelPtr(ud->csound, &pvalue, ud->qcs->channelNames[i].toStdString().c_str(),
-//         CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
-//         ud->qcs->widgetPanel->setValue(i,QString((char *)pvalue));
-//       }
-//     }
-//   }
+  messageMutex.lock();
+  messageQueue << message;
+  messageMutex.unlock();
 }
 
-void qutecsound::processEventQueue(CsoundUserData *ud)
+void DocumentPage::clearMessageQueue()
 {
-  // This function should only be called when Csound is running
-  while (ud->qcs->widgetPanel->layoutWidget->eventQueueSize > 0) {
-    ud->qcs->widgetPanel->layoutWidget->eventQueueSize--;
-    ud->qcs->widgetPanel->layoutWidget->eventQueue[ud->qcs->widgetPanel->layoutWidget->eventQueueSize];
-    char type = ud->qcs->widgetPanel->layoutWidget->eventQueue[ud->qcs->widgetPanel->layoutWidget->eventQueueSize][0].unicode();
-    QStringList eventElements =
-        ud->qcs->widgetPanel->layoutWidget->eventQueue[ud->qcs->widgetPanel->layoutWidget->eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts);
-    qDebug("type %c line: %s", type, ud->qcs->widgetPanel->layoutWidget->eventQueue[ud->qcs->widgetPanel->layoutWidget->eventQueueSize].toStdString().c_str());
-    // eventElements.size() should never be larger than EVENTS_MAX_PFIELDS
-    for (int j = 0; j < eventElements.size(); j++) {
-      ud->qcs->pFields[j] = (MYFLT) eventElements[j].toDouble();
-    }
-    if (ud->qcs->m_options->thread) {
-      //ScoreEvent is not working
-      ud->qcs->perfThread->ScoreEvent(0, type, eventElements.size(), ud->qcs->pFields);
-//       ud->qcs->perfThread->InputMessage(ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).data());
-//       perfThread->lock();
-//       csoundScoreEvent(ud->csound,type ,ud->qcs->pFields, eventElements.size());
-//       perfThread->unlock();
+  messageMutex.lock();
+  messageQueue.clear();
+  messageMutex.unlock();
+}
+
+void CsoundEngine::recordBuffer()
+{
+  if (m_recording == 1) {
+    if (audioOutputBuffer.copyAvailableBuffer(recBuffer, bufferSize)) {
+      int samps = outfile->write(recBuffer, bufferSize);
+      samplesWritten += samps;
     }
     else {
-      csoundScoreEvent(ud->csound,type ,ud->qcs->pFields, eventElements.size());
+//       qDebug("qutecsound::recordBuffer() : Empty Buffer!");
     }
+    QTimer::singleShot(20, this, SLOT(recordBuffer()));
+  }
+  else { //Stop recording
+    delete outfile;
+    qDebug("closed file: %s\nWritten %li samples", currentAudioFile.toStdString().c_str(), samplesWritten);
   }
 }
 
-void qutecsound::queueOutValue(QString channelName, double value)
+bool CsoundEngine::isRunning()
 {
-  widgetPanel->newValue(QPair<QString, double>(channelName, value));
-}
-
-// void qutecsound::queueInValue(QString channelName, double value)
-// {
-//   inValueQueue.insert(channelName, value);
-// }
-
-void qutecsound::queueOutString(QString channelName, QString value)
-{
-//   qDebug() << "qutecsound::queueOutString";
-  widgetPanel->newValue(QPair<QString, QString>(channelName, value));
-}
-
-void qutecsound::csThread(void *data)
-{
-  CsoundUserData* udata = (CsoundUserData*)data;
-  udata->outputBuffer = csoundGetSpout(udata->csound);
-  for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
-    udata->qcs->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
+  if (m_options->thread) {
+    return perfThread->isRunning();
   }
-  if (udata->qcs->m_options->enableWidgets) {
-    udata->qcs->widgetPanel->getValues(&udata->qcs->channelNames,
-                                       &udata->qcs->values,
-                                       &udata->qcs->stringValues);
-    udata->qcs->widgetPanel->getMouseValues(&udata->qcs->mouseValues);
-    if (!udata->qcs->m_options->useInvalue) {
-      writeWidgetValues(udata);
-      readWidgetValues(udata);
-    }
+  else {
+    return ud->PERF_STATUS;
   }
-//  QStringList events = udata->qcs->widgetPanel->getScheduledEvents(udata->ksmpscount);
-  QStringList events = udata->qcs->documentPages[udata->qcs->curPage]
-      ->getScheduledEvents(udata->ksmpscount * udata->outputBufferSize);
-  for (int i = 0; i < events.size(); i++) {
-    char type = udata->qcs->widgetPanel->layoutWidget->eventQueue[udata->qcs->widgetPanel->layoutWidget->eventQueueSize][0].unicode();
-    QStringList eventElements = events[i].remove(0,1).split(QRegExp("\\s"),QString::SkipEmptyParts);
-    // eventElements.size() should never be larger than EVENTS_MAX_PFIELDS
-    for (int j = 0; j < eventElements.size(); j++) {
-      udata->qcs->pFields[j] = (MYFLT) eventElements[j].toDouble();
-    }
-    if (udata->qcs->m_options->thread) {
-      //ScoreEvent is not working
-      udata->qcs->perfThread->ScoreEvent(0, type, eventElements.size(), udata->qcs->pFields);
-      //       ud->qcs->perfThread->InputMessage(ud->qcs->widgetPanel->eventQueue[ud->qcs->widgetPanel->eventQueueSize].remove(0,1).data());
-      //       perfThread->lock();
-      //       csoundScoreEvent(ud->csound,type ,ud->qcs->pFields, eventElements.size());
-      //       perfThread->unlock();
-    }
-    else {
-      csoundScoreEvent(udata->csound,type ,udata->qcs->pFields, eventElements.size());
-    }
-  }
-  (udata->ksmpscount)++;
 }
-
 

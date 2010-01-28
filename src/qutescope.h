@@ -24,7 +24,7 @@
 #define QUTESCOPE_H
 
 #include "qutewidget.h"
-#include "types.h"  //necessary for the CsoundUserData struct
+#include "csoundengine.h"  //necessary for the CsoundUserData struct
 
 class ScopeParams;
 class DataDisplay;

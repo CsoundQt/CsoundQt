@@ -45,14 +45,14 @@ class WidgetPanel : public QDockWidget
     unsigned int widgetCount();
     void setWidgetLayout(WidgetLayout *layoutWidget);
     WidgetLayout * popWidgetLayout();
-    void getValues(QVector<QString> *channelNames, QVector<double> *values, QVector<QString> *stringValues);
-    void getMouseValues(QVector<double> *values);
-    int getMouseX();
-    int getMouseY();
-    int getMouseRelX();
-    int getMouseRelY();
-    int getMouseBut1();
-    int getMouseBut2();
+//    void getValues(QVector<QString> *channelNames, QVector<double> *values, QVector<QString> *stringValues);
+//    void getMouseValues(QVector<double> *values);
+//    int getMouseX();
+//    int getMouseY();
+//    int getMouseRelX();
+//    int getMouseRelY();
+//    int getMouseBut1();
+//    int getMouseBut2();
 //    unsigned long getKsmpsCount();
 
     void setValue(QString channelName, double value);
@@ -64,22 +64,20 @@ class WidgetPanel : public QDockWidget
     void setKeyRepeatMode(bool repeat);
 //    void loadWidgets(QString macWidgets);
     int newWidget(QString widgetLine, bool offset = false);
-    QString widgetsText(bool tags = true);
+//    QString widgetsText(bool tags = true);
     void appendMessage(QString message);
     void showTooltips(bool show);
     void setWidgetToolTip(QuteWidget *widget, bool show);
-    void newCurve(Curve* curve);
+//    void newCurve(Curve* curve);
 //     int getCurveIndex(Curve *curve);
-    void setCurveData(Curve *curve);
+//    void setCurveData(Curve *curve);
     void clearGraphs();
-    Curve * getCurveById(uintptr_t id);
+//    Curve * getCurveById(uintptr_t id);
     void flush();
     void refreshConsoles();
-    QString getCsladspaLines();
 //    QString getCabbageLines();
     void newValue(QPair<QString, double> channelValue);
     void newValue(QPair<QString, QString> channelValue);
-    void processNewValues();
 
   protected:
 //    virtual void contextMenuEvent(QContextMenuEvent *event);
