@@ -96,6 +96,7 @@ class qutecsound:public QMainWindow
 //     void selectAudioOutDevice(QPoint pos);
     void changeFont();
     void changePage(int index);
+    void setWidgetTooltipsVisible(bool visible);
     void updateWidgets();
     void openExample();
     void registerLiveEvent(QWidget *e);

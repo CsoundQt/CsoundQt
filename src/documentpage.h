@@ -40,7 +40,7 @@ class SndfileHandle;
 
 class Curve;
 
-//FIXME when refactoring is done, organize the methods in the correct order
+//TODO when refactoring is done, organize the methods in the correct order
 
 class DocumentPage : public QObject
 {
@@ -75,10 +75,14 @@ class DocumentPage : public QObject
     void redo();
 
     DocumentView *view();
+    CsoundEngine *engine();
+    WidgetLayout *widgetLayout(); // Get rid of these some day...
 
     // Options setters
     void setConsoleBufferSize(int size);
     void setWidgetEnabled(bool enabled);
+    void setRunThreaded(bool thread);
+    void useInvalue(bool use);
 
     // Member public variables
     QString fileName;
@@ -126,12 +130,11 @@ class DocumentPage : public QObject
     WidgetLayout * m_widgetLayout;
     DocumentView *m_view;
     CsoundEngine *m_csEngine;
-    ConsoleWidget *m_console;  // FIXME have a single console widget which is duplicated across all places! Is it possible? due to parenting issues
+    ConsoleWidget *m_console;  // TODO have a single console widget which is duplicated across all places! Is it possible? due to parenting issues
     QVector<LiveEventFrame *> m_liveFrames;
 
     OpEntryParser *m_opcodeTree;
 
-    QMutex stringValueMutex;  // FIXME this mutex is in two places so it does nothing... Explore Qt's shared data classes
 
     // Options
     bool saveLiveEvents;

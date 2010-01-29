@@ -37,7 +37,7 @@ class ConsoleWidget;
 class Curve;
 
 // Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
-// FIXME is this still necessary?
+// TODO is this still necessary?
 #define QUTECSOUND_DESTROY_CSOUND
 
 class CsoundEngine;
@@ -59,7 +59,6 @@ struct CsoundUserData {
   int PERF_STATUS; //0=stopped 1=running
   MYFLT* outputBuffer;
 
-  // FIXME these preferences needs to be set!
   bool enableWidgets; // Whether widget values are processed in the callback
   bool threaded; // Whether running in a separate thread or not
   bool useInvalue; // To select between invalue/outvalue and chnget/chnset
@@ -114,10 +113,13 @@ class CsoundEngine : public QObject
     static void readWidgetValues(CsoundUserData *ud);
     static void writeWidgetValues(CsoundUserData *ud);
 
-    //FIXME set threaded and filenames prior to running
-//    void setThreaded(bool threaded);
-//    void setFiles(QString fileName1, QString fileName2 = 0);
-    void setOptions(const CsoundOptions &options);
+    void setCsoundOptions(const CsoundOptions &options);
+    // Options unsafe to change while running
+    void setThreaded(bool threaded);
+    // Options safe to change while running
+    void useInvalue(bool use);
+    void enableWidgets(bool enable);
+
     void registerConsole(ConsoleWidget *c);
     void unregisterConsole(ConsoleWidget *c);
     void setConsoleBufferSize(int size);
@@ -160,6 +162,11 @@ class CsoundEngine : public QObject
     int bufferSize; // size of the record buffer
 
     CsoundOptions m_options; // FIXME how to fill these?
+    // Options which are not safe to pass while running are stored in these
+    // variables to pass on next run.
+    bool m_threaded;
+
+
     MYFLT *pFields; // array of pfields for score and rt events
 
     QVector<ConsoleWidget *> consoles;

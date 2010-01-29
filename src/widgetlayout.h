@@ -73,7 +73,7 @@ class WidgetLayout : public QWidget
     int newWidget(QString widgetLine, bool offset = false);
     void appendMessage(QString message);
     void flush();
-    void showTooltips(bool show);
+    void showWidgetTooltips(bool show);
     void setWidgetToolTip(QuteWidget *widget, bool show);
     void newCurve(Curve* curve);
     void setCurveData(Curve *curve);

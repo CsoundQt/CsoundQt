@@ -416,7 +416,7 @@ void WidgetLayout::flush()
   newValues.clear();
 }
 
-void WidgetLayout::showTooltips(bool show)
+void WidgetLayout::showWidgetTooltips(bool show)
 {
   m_tooltips = show;
   for (int i=0; i < m_widgets.size(); i++) {
@@ -1806,13 +1806,13 @@ void WidgetLayout::cut()
 
 void WidgetLayout::paste()
 {
-//  if (m_editMode) {
-//    deselectAll();
+  if (m_editMode) {
+    deselectAll();
 //    foreach (QString line, clipboard) {
 //      newWidget(line);
 //      editWidgets.last()->select();
 //    }
-//  }
+  }
 //  markHistory();
 }
 

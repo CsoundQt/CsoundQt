@@ -47,15 +47,15 @@ WidgetPanel::~WidgetPanel()
 {
 }
 
-unsigned int WidgetPanel::widgetCount()
-{//FIXME get rid of ths function (as intermediary)
-  return layoutWidget->widgetCount();
-}
+//unsigned int WidgetPanel::widgetCount()
+//{//FIXME get rid of ths function (as intermediary)
+//  return layoutWidget->widgetCount();
+//}
 
 void WidgetPanel::setWidgetLayout(WidgetLayout *w)
 {
-  layoutWidget = w;
-  setScrollBarsActive(true);
+//  layoutWidget = w;
+  setWidgetScrollBarsActive(true);
   if (m_sbActive) {
     scrollArea->setWidget(w);
   }
@@ -68,8 +68,6 @@ void WidgetPanel::setWidgetLayout(WidgetLayout *w)
 
 WidgetLayout * WidgetPanel::popWidgetLayout()
 {
-//  disconnect(layoutWidget, SIGNAL(deselectAll()));
-  disconnect(layoutWidget, SIGNAL(selection(QRect)));
   disconnect(this,SIGNAL(topLevelChanged(bool)));
   WidgetLayout * w;
   if (m_sbActive) {
@@ -78,6 +76,8 @@ WidgetLayout * WidgetPanel::popWidgetLayout()
   else {
     w = static_cast<WidgetLayout *>(widget());
   }
+//  disconnect(layoutWidget, SIGNAL(deselectAll()));
+  disconnect(w, SIGNAL(selection(QRect)));
   return w;
 }
 
@@ -85,83 +85,71 @@ WidgetLayout * WidgetPanel::popWidgetLayout()
 //                            QVector<double> *values,
 //                            QVector<QString> *stringValues)
 //{
-//  //FIXME remove this intermediate function.
 //  layoutWidget->getValues(channelNames, values, stringValues);
 //}
 
 //void WidgetPanel::getMouseValues(QVector<double> *values)
 //{
-//  //FIXME remove this intermediate function.
 //  layoutWidget->getMouseValues(values);
 //}
 //
 //int WidgetPanel::getMouseX()
 //{
-//  //FIXME remove this intermediate function.
 //  return layoutWidget->getMouseX();
 //}
 //
 //int WidgetPanel::getMouseY()
 //{
-//  //FIXME remove this intermediate function.
 //  return layoutWidget->getMouseY();
 //}
 //
 //int WidgetPanel::getMouseRelX()
 //{
-//  //FIXME remove this intermediate function.
 //  return layoutWidget->getMouseRelX();
 //}
 //
 //int WidgetPanel::getMouseRelY()
 //{
-//  //FIXME remove this intermediate function.
 //  return layoutWidget->getMouseRelY();
 //}
 //
 //int WidgetPanel::getMouseBut1()
 //{
-//  //FIXME remove this intermediate function.
 //  return layoutWidget->getMouseBut1();
 //}
 //
 //int WidgetPanel::getMouseBut2()
 //{
-//  //FIXME remove this intermediate function.
 //  return layoutWidget->getMouseBut2();
 //}
 
 
-void WidgetPanel::setValue(QString channelName, double value)
-{
-  //FIXME remove this intermediate function
-  layoutWidget->setValue(channelName, value);
-}
+//void WidgetPanel::setValue(QString channelName, double value)
+//{
+//  layoutWidget->setValue(channelName, value);
+//}
+//
+//void WidgetPanel::setValue(QString channelName, QString value)
+//{
+//  layoutWidget->setValue(channelName, value);
+//}
+//
+//void WidgetPanel::setValue(int index, double value)
+//{
+//  layoutWidget->setValue(index, value);
+//}
+//
+//void WidgetPanel::setValue(int index, QString value)
+//{
+//  layoutWidget->setValue(index, value);
+//}
 
-void WidgetPanel::setValue(QString channelName, QString value)
-{
-  //FIXME remove this intermediate function
-  layoutWidget->setValue(channelName, value);
-}
-
-void WidgetPanel::setValue(int index, double value)
-{
-  //FIXME remove this intermediate function
-  layoutWidget->setValue(index, value);
-}
-
-void WidgetPanel::setValue(int index, QString value)
-{
-  //FIXME remove this intermediate function
-  layoutWidget->setValue(index, value);
-}
-
-void WidgetPanel::setScrollBarsActive(bool active)
+void WidgetPanel::setWidgetScrollBarsActive(bool active)
 {
 //   qDebug() << "WidgetPanel::setScrollBarsActive" << active;
   if (active && !m_sbActive) {
     scrollArea = new QScrollArea(this);
-    scrollArea->setWidget(layoutWidget);
+    scrollArea->setWidget(widget());
     scrollArea->setFocusPolicy(Qt::NoFocus);
     setWidget(scrollArea);
     scrollArea->setAutoFillBackground(false);
@@ -172,26 +160,30 @@ void WidgetPanel::setScrollBarsActive(bool active)
   else if (!active && m_sbActive) {
     setWidget(scrollArea->takeWidget());
     delete scrollArea;
-    layoutWidget->setMouseTracking(true);
+    widget()->setMouseTracking(true);
   }
   m_sbActive = active;
 }
 
-void WidgetPanel::setKeyRepeatMode(bool repeat)
-{
-  layoutWidget->setKeyRepeatMode(repeat);
-}
+//void WidgetPanel::setKeyRepeatMode(bool repeat)
+//{
+//  layoutWidget->setKeyRepeatMode(repeat);
+//}
 
 void WidgetPanel::focusWidgets()
 {
-  layoutWidget->setFocus();
+  if (m_sbActive) {
+    scrollArea->widget()->setFocus();
+  }
+  else  {
+    widget()->setFocus();
+  }
 }
 
-int WidgetPanel::newWidget(QString widgetLine, bool offset)
-{
-  //FIXME remove this function
-  return layoutWidget->newWidget(widgetLine, offset);
-}
+//int WidgetPanel::newWidget(QString widgetLine, bool offset)
+//{
+//  return layoutWidget->newWidget(widgetLine, offset);
+//}
 
 void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 {
@@ -200,75 +192,58 @@ void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 
 //QString WidgetPanel::widgetsText(bool tags)
 //{
-//  //FIXME remove this function
 //  return layoutWidget->widgetsText(tags);
 //}
 
 //void WidgetPanel::appendMessage(QString message)
 //{
-//  //FIXME remove this function
 //  layoutWidget->appendMessage(message);
 //}
 
-void WidgetPanel::showTooltips(bool show)
-{
-  //FIXME remove this function
-  layoutWidget->showTooltips(show);
-}
-
-void WidgetPanel::setWidgetToolTip(QuteWidget *widget, bool show)
-{
-  //FIXME remove this function
-  layoutWidget->setWidgetToolTip(widget, show);
-}
+//void WidgetPanel::setWidgetToolTip(QuteWidget *widget, bool show)
+//{
+//  layoutWidget->setWidgetToolTip(widget, show);
+//}
 
 //void WidgetPanel::newCurve(Curve* curve)
 //{
-//  //FIXME remove this function
 //  layoutWidget->newCurve(curve);
 //}
 
 //void WidgetPanel::setCurveData(Curve *curve)
 //{
-//  //FIXME remove this function
 //  layoutWidget->setCurveData(curve);
 //}
 
 //void WidgetPanel::clearGraphs()
 //{
-//  //FIXME remove this function
 //  layoutWidget->clearGraphs();
 //}
 
 //Curve * WidgetPanel::getCurveById(uintptr_t id)
 //{
-//  //FIXME remove this function
 //  return layoutWidget->getCurveById(id);
 //}
 
-void WidgetPanel::flush()
-{
-  //FIXME remove this function
-  return layoutWidget->flush();
-}
+//void WidgetPanel::flush()
+//{
+//  return layoutWidget->flush();
+//}
 
-void WidgetPanel::refreshConsoles()
-{
-  // FIXME remove this function
-  layoutWidget->refreshConsoles();
-}
+//void WidgetPanel::refreshConsoles()
+//{
+//  layoutWidget->refreshConsoles();
+//}
 
-void WidgetPanel::newValue(QPair<QString, double> channelValue)
-{
-  // FIXME remove this function
-  layoutWidget->newValue(channelValue);
-}
-
-void WidgetPanel::newValue(QPair<QString, QString> channelValue)
-{
-  // FIXME remove this function
-  layoutWidget->newValue(channelValue);
-}
+//void WidgetPanel::newValue(QPair<QString, double> channelValue)
+//{
+//  layoutWidget->newValue(channelValue);
+//}
+//
+//void WidgetPanel::newValue(QPair<QString, QString> channelValue)
+//{
+//  layoutWidget->newValue(channelValue);
+//}
 
 
 //QString WidgetPanel::getCabbageLines()
@@ -377,35 +352,30 @@ void WidgetPanel::moveEvent(QMoveEvent * event)
   emit moved(event->pos());
 }
 
-void WidgetPanel::mouseMoveEvent(QMouseEvent * event)
-{
-  // FIXME remove this function
-  QWidget::mouseMoveEvent(event);
-}
-
-void WidgetPanel::mousePressEvent(QMouseEvent * event)
-{
-  // FIXME remove this function
-  QWidget::mousePressEvent(event);
-}
-
-void WidgetPanel::mouseReleaseEvent(QMouseEvent * event)
-{
-  // FIXME remove this function
-  QWidget::mousePressEvent(event);
-}
-
-void WidgetPanel::keyPressEvent(QKeyEvent *event)
-{
-  // FIXME remove this function
-  QDockWidget::keyPressEvent(event); // Propagate event if not used
-}
-
-void WidgetPanel::keyReleaseEvent(QKeyEvent *event)
-{
-  // FIXME remove this function
-  QDockWidget::keyReleaseEvent(event); // Propagate event if not used
-}
+//void WidgetPanel::mouseMoveEvent(QMouseEvent * event)
+//{
+//  QWidget::mouseMoveEvent(event);
+//}
+//
+//void WidgetPanel::mousePressEvent(QMouseEvent * event)
+//{
+//  QWidget::mousePressEvent(event);
+//}
+//
+//void WidgetPanel::mouseReleaseEvent(QMouseEvent * event)
+//{
+//  QWidget::mousePressEvent(event);
+//}
+//
+//void WidgetPanel::keyPressEvent(QKeyEvent *event)
+//{
+//  QDockWidget::keyPressEvent(event); // Propagate event if not used
+//}
+//
+//void WidgetPanel::keyReleaseEvent(QKeyEvent *event)
+//{
+//  QDockWidget::keyReleaseEvent(event); // Propagate event if not used
+//}
 
 //void WidgetPanel::widgetChanged(QuteWidget* widget)
 //{
@@ -430,58 +400,60 @@ void WidgetPanel::keyReleaseEvent(QKeyEvent *event)
 // }
 
 
-void WidgetPanel::widgetMoved(QPair<int, int> delta)
-{
-  // FIXME remove this function
-  layoutWidget->widgetMoved(delta);
-}
-
-void WidgetPanel::widgetResized(QPair<int, int> delta)
-{
-  // FIXME remove this function
-  layoutWidget->widgetResized(delta);
-}
-
+//void WidgetPanel::widgetMoved(QPair<int, int> delta)
+//{
+//  layoutWidget->widgetMoved(delta);
+//}
+//
+//void WidgetPanel::widgetResized(QPair<int, int> delta)
+//{
+//  layoutWidget->widgetResized(delta);
+//}
+//
 void WidgetPanel::adjustLayoutSize()
 {
-  // FIXME remove this function
-  layoutWidget->adjustLayoutSize();
-}
-
-void WidgetPanel::copy()
-{
-  clipboard.clear();
-  // FIXME fix undo!
-  QStringList l = layoutWidget->getSelectedWidgetsText();
-  for (int i = 0; i < l.size(); i++) {
-    clipboard.append(l[i]);
-//       qDebug("WidgetPanel::copy() %s", clipboard.last().toStdString().c_str());
+  if (m_sbActive) {
+    static_cast<WidgetLayout *>(scrollArea->widget())->adjustLayoutSize();
+  }
+  else  {
+    static_cast<WidgetLayout *>(widget())->adjustLayoutSize();
   }
 }
 
-void WidgetPanel::cut()
-{
-  WidgetPanel::copy();
-  // FIXME fix undo!
-//  for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
-//    if (editWidgets[i]->isSelected()) {
-//      deleteWidget(widgets[i]);
+//void WidgetPanel::copy()
+//{
+//  clipboard.clear();
+//  // FIXME fix undo!
+//  QStringList l = layoutWidget->getSelectedWidgetsText();
+//  for (int i = 0; i < l.size(); i++) {
+//    clipboard.append(l[i]);
+////       qDebug("WidgetPanel::copy() %s", clipboard.last().toStdString().c_str());
+//  }
+//}
+//
+//void WidgetPanel::cut()
+//{
+//  WidgetPanel::copy();
+//  // FIXME fix undo!
+////  for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
+////    if (editWidgets[i]->isSelected()) {
+////      deleteWidget(widgets[i]);
+////    }
+////  }
+////  markHistory();
+//}
+//
+//void WidgetPanel::paste()
+//{
+//  if (editAct->isChecked()) {
+//    layoutWidget->deselectAll();
+//    foreach (QString line, clipboard) {
+//      layoutWidget->newWidget(line);
 //    }
 //  }
-//  markHistory();
-}
-
-void WidgetPanel::paste()
-{
-  if (editAct->isChecked()) {
-    layoutWidget->deselectAll();
-    foreach (QString line, clipboard) {
-      layoutWidget->newWidget(line);
-    }
-  }
-  //FIXME check if undo is working properly here
-//  markHistory();
-}
+//  //FIXME check if undo is working properly here
+////  markHistory();
+//}
 
 void WidgetPanel::dockStateChanged(bool undocked)
 {

@@ -454,11 +454,6 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
      }
    }
 }
-
-//void CsoundEngine::setThreaded(bool threaded)
-//{
-//  ud->m_threaded = threaded;
-//}
 //
 //void CsoundEngine::setFiles(QString fileName1, QString fileName2)
 //{
@@ -466,9 +461,24 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
 //  m_fileName2 = fileName2;
 //}
 
-void CsoundEngine::setOptions(const CsoundOptions &options)
+void CsoundEngine::setCsoundOptions(const CsoundOptions &options)
 {
   m_options = options;
+}
+
+void CsoundEngine::setThreaded(bool threaded)
+{
+  m_threaded = threaded;
+}
+
+void CsoundEngine::useInvalue(bool use)
+{
+  ud->useInvalue = use;
+}
+
+void CsoundEngine::enableWidgets(bool enable)
+{
+  ud->enableWidgets = enable;
 }
 
 void CsoundEngine::registerConsole(ConsoleWidget *c)
@@ -675,6 +685,7 @@ int CsoundEngine::runCsound(bool useAPI)
     argv = (char **) calloc(33, sizeof(char*));
     // TODO use: PUBLIC int csoundSetGlobalEnv(const char *name, const char *value);
 
+    ud->threaded = m_threaded;
     // FIXME set realtime and filenames in options before calling this!
     int argc = m_options.generateCmdLine(argv);
 #ifdef QUTECSOUND_DESTROY_CSOUND

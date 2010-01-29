@@ -41,7 +41,7 @@ class WidgetPanel : public QDockWidget
     WidgetPanel(QWidget *parent);
     ~WidgetPanel();
 
-    unsigned int widgetCount();
+//    unsigned int widgetCount();
     void setWidgetLayout(WidgetLayout *layoutWidget);
     WidgetLayout * popWidgetLayout();
 //    void getValues(QVector<QString> *channelNames, QVector<double> *values, QVector<QString> *stringValues);
@@ -54,46 +54,46 @@ class WidgetPanel : public QDockWidget
 //    int getMouseBut2();
 //    unsigned long getKsmpsCount();
 
-    void setValue(QString channelName, double value);
-    void setValue(QString channelName, QString value);
-    void setValue(int index, double value);
-    void setValue(int index, QString value);
+//    void setValue(QString channelName, double value);
+//    void setValue(QString channelName, QString value);
+//    void setValue(int index, double value);
+//    void setValue(int index, QString value);
 
-    void setScrollBarsActive(bool active);
-    void setKeyRepeatMode(bool repeat);
+    void setWidgetScrollBarsActive(bool active);
+//    void setKeyRepeatMode(bool repeat);
     void focusWidgets();
 //    void loadWidgets(QString macWidgets);
-    int newWidget(QString widgetLine, bool offset = false);
+//    int newWidget(QString widgetLine, bool offset = false);
 //    QString widgetsText(bool tags = true);
 //    void appendMessage(QString message);
-    void showTooltips(bool show);
-    void setWidgetToolTip(QuteWidget *widget, bool show);
+//    void showTooltips(bool show);
+//    void setWidgetToolTip(QuteWidget *widget, bool show);
 //    void newCurve(Curve* curve);
 //     int getCurveIndex(Curve *curve);
 //    void setCurveData(Curve *curve);
 //    void clearGraphs();
 //    Curve * getCurveById(uintptr_t id);
-    void flush();
-    void refreshConsoles();
+//    void flush();
+//    void refreshConsoles();
 //    QString getCabbageLines();
-    void newValue(QPair<QString, double> channelValue);
-    void newValue(QPair<QString, QString> channelValue);
+//    void newValue(QPair<QString, double> channelValue);
+//    void newValue(QPair<QString, QString> channelValue);
 
   protected:
 //    virtual void contextMenuEvent(QContextMenuEvent *event);
     virtual void resizeEvent(QResizeEvent * event);
     virtual void moveEvent(QMoveEvent * event);
-    virtual void mouseMoveEvent (QMouseEvent * event);
-    virtual void mousePressEvent(QMouseEvent * event);
-    virtual void mouseReleaseEvent(QMouseEvent * event);
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent *event);
+//    virtual void mouseMoveEvent (QMouseEvent * event);
+//    virtual void mousePressEvent(QMouseEvent * event);
+//    virtual void mouseReleaseEvent(QMouseEvent * event);
+//    virtual void keyPressEvent(QKeyEvent *event);
+//    virtual void keyReleaseEvent(QKeyEvent *event);
     virtual void closeEvent(QCloseEvent * event);
 
   private:
 
-    QAction *editAct;
-    WidgetLayout *layoutWidget;   // Always owned by documentpage,, is this needed here?
+    QAction *editAct;  // TODO this edit action should be moved somewhere better
+//    WidgetLayout *layoutWidget;   // Always owned by documentpage is this needed here?
     QScrollArea *scrollArea;
 
     QStringList clipboard;
@@ -113,14 +113,14 @@ class WidgetPanel : public QDockWidget
 //    void queueEvent(QString eventLine);
 
 //    void selectionChanged(QRect selection);
-    void widgetMoved(QPair<int, int>);
-    void widgetResized(QPair<int, int>);
+//    void widgetMoved(QPair<int, int>);
+//    void widgetResized(QPair<int, int>);
     void adjustLayoutSize();
 
   private slots:
-    void copy();
-    void cut();
-    void paste();
+//    void copy();
+//    void cut();
+//    void paste();
 //    void paste(QPoint pos);
     void dockStateChanged(bool);
 

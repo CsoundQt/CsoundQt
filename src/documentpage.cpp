@@ -51,13 +51,15 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   saveChanges = true;
 
   m_view = new DocumentView(parent);
-  m_csEngine = new CsoundEngine();
   m_console = new ConsoleWidget(parent);
   //FIXME show console
   m_console->hide();
   m_widgetLayout = new WidgetLayout(parent);
   //FIXME show widgets
   m_widgetLayout->hide();
+
+  m_csEngine = new CsoundEngine();
+  m_csEngine->wl = m_widgetLayout;  // Pass widget layout to engine
 
   //FIXME this is possibly not connected, but is it still necessary?
   connect(m_view, SIGNAL(contentsChanged()), this, SLOT(changed()));
@@ -460,6 +462,16 @@ DocumentView * DocumentPage::view()
   return m_view;
 }
 
+CsoundEngine *DocumentPage::engine()
+{
+  return m_csEngine;
+}
+
+WidgetLayout * DocumentPage::widgetLayout()
+{
+  return m_widgetLayout;
+}
+
 void DocumentPage::setConsoleBufferSize(int size)
 {
   m_csEngine->setConsoleBufferSize(size);
@@ -468,6 +480,17 @@ void DocumentPage::setConsoleBufferSize(int size)
 void DocumentPage::setWidgetEnabled(bool enabled)
 {
   m_widgetLayout->setEnabled(enabled);
+  m_csEngine->enableWidgets(enabled);
+}
+
+void DocumentPage::setRunThreaded(bool threaded)
+{
+  m_csEngine->setThreaded(threaded);  // This will take effect on next run of the engine
+}
+
+void DocumentPage::useInvalue(bool use)
+{
+  m_csEngine->useInvalue(use);  // This will take effect on next run of the engine
 }
 
 void DocumentPage::showLiveEventFrames(bool visible)

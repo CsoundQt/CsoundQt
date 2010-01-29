@@ -24,7 +24,6 @@
 #include "console.h"
 #include "dockhelp.h"
 #include "widgetpanel.h"
-#include "widgetlayout.h"
 #include "inspector.h"
 #include "opentryparser.h"
 #include "options.h"
@@ -32,12 +31,18 @@
 #include "configdialog.h"
 #include "configlists.h"
 #include "documentpage.h"
-#include "documentview.h"
 #include "utilitiesdialog.h"
 #include "graphicwindow.h"
 #include "keyboardshortcuts.h"
 #include "liveeventframe.h"
 #include "eventsheet.h"
+
+
+// One day remove these from here for nicer abstraction....
+#include "csoundengine.h"
+#include "documentview.h"
+#include "widgetlayout.h"
+
 
 // Structs for csound graphs
 #include <cwindow.h>
@@ -52,7 +57,7 @@ static const QString SCRIPT_NAME = "qutecsound_run_script-XXXXXX.sh";
 //csound performance thread function prototype
 uintptr_t csThread(void *clientData);
 
-//FIXME why does qutecsound not end when it receives a terminate signal?
+//TODO why does qutecsound not end when it receives a terminate signal?
 qutecsound::qutecsound(QStringList fileNames)
 {
   setWindowTitle("QuteCsound[*]");
@@ -239,11 +244,16 @@ void qutecsound::changePage(int index)
   textEdit = documentPages[curPage];
 }
 
+void qutecsound::setWidgetTooltipsVisible(bool visible)
+{
+  documentPages[curPage]->widgetLayout()->showWidgetTooltips(visible);
+}
+
 void qutecsound::updateWidgets()
 {
-  widgetPanel->layoutWidget->loadWidgets(documentPages[curPage]->getMacWidgetsText());
-  widgetPanel->layoutWidget->markHistory();
-  widgetPanel->showTooltips(m_options->showTooltips);
+  documentPages[curPage]->widgetLayout()->loadWidgets(documentPages[curPage]->getMacWidgetsText());
+  documentPages[curPage]->widgetLayout()->markHistory();
+  setWidgetTooltipsVisible(m_options->showTooltips);
 }
 
 void qutecsound::openExample()
@@ -728,6 +738,7 @@ void qutecsound::exportCabbage()
 void qutecsound::play()
 {
   runAct->setChecked(true);
+  documentPages[curPage]->engine()->setCsoundOptions(static_cast<CsoundOptions>(*m_options));
   if (documentPages[curPage]->fileName.isEmpty()) {
     QMessageBox::warning(this, tr("QuteCsound"),
                          tr("This file has not been saved\nPlease select name and location."));
@@ -1107,23 +1118,27 @@ void qutecsound::applySettings()
     documentPages[i]->view()->setColorVariables(m_options->colorVariables);
     documentPages[i]->view()->setTabStopWidth(m_options->tabWidth);
     documentPages[i]->view()->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
+    documentPages[i]->setRunThreaded(m_options->thread);
+    documentPages[i]->useInvalue(m_options->useInvalue);
+    documentPages[i]->setWidgetEnabled(m_options->enableWidgets);
+    documentPages[i]->widgetLayout()->showWidgetTooltips(m_options->showTooltips);
+    documentPages[i]->widgetLayout()->setKeyRepeatMode(m_options->keyRepeat);
   }
-  widgetPanel->setEnabled(m_options->enableWidgets);
+  widgetPanel->setWidgetScrollBarsActive(m_options->scrollbars);
   Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
       Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
   fileToolBar->setToolButtonStyle(toolButtonStyle);
   editToolBar->setToolButtonStyle(toolButtonStyle);
   controlToolBar->setToolButtonStyle(toolButtonStyle);
   configureToolBar->setToolButtonStyle(toolButtonStyle);
-  widgetPanel->showTooltips(m_options->showTooltips);
-  widgetPanel->setKeyRepeatMode(m_options->keyRepeat);
-  widgetPanel->setScrollBarsActive(m_options->scrollbars);
   m_console->text->setKeyRepeatMode(m_options->keyRepeat);
 
   QString currentOptions = (m_options->useAPI ? tr("API") : tr("Console")) + " ";
   if (m_options->useAPI) {
     currentOptions +=  (m_options->thread ? tr("Thread") : tr("NoThread")) + " ";
   }
+
+  // Display a summary of options on the status bar
   currentOptions +=  (m_options->saveWidgets ? tr("SaveWidgets") : tr("DontSaveWidgets")) + " ";
   QString playOptions = " (Audio:" + _configlists.rtAudioNames[m_options->rtAudioModule] + " ";
   playOptions += "MIDI:" +  _configlists.rtMidiNames[m_options->rtMidiModule] + ")";
@@ -1135,7 +1150,6 @@ void qutecsound::applySettings()
   renderOptions += currentOptions;
   runAct->setStatusTip(tr("Play") + playOptions);
   renderAct->setStatusTip(tr("Render to file") + renderOptions);
-
 }
 
 void qutecsound::runUtility(QString flags)
