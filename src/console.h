@@ -27,6 +27,7 @@
 
 class Console : public QTextEdit
 {
+  Q_OBJECT
   public:
     Console(QWidget *parent = 0);
 
@@ -131,7 +132,7 @@ class ConsoleWidget : public Console
     {
       setReadOnly(true);
       setFontItalic(false);
-#ifdef MACOSX
+#ifdef Q_WS_MAC
       document()->setDefaultFont(QFont("Courier", 10));
 #else
       document()->setDefaultFont(QFont("Courier New", 7));

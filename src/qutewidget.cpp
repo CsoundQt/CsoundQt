@@ -353,7 +353,7 @@ void QuteWidget::value2Changed(double value)
 
 void QuteWidget::createPropertiesDialog()
 {
-#ifdef MACOSX
+#ifdef Q_WS_MAC
   dialog = new QDialog(static_cast<QWidget *>(this->parent()), Qt::WindowStaysOnTopHint);  // On OS X the widget panel may com in front of properties
 #else
   dialog = new QDialog(static_cast<QWidget *>(this->parent()));

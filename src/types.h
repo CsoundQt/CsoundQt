@@ -35,7 +35,7 @@
 // Maximum undo history depth for widget panel and event sheet
 #define QUTE_MAX_UNDO 256
 
-#ifdef LINUX
+#ifdef Q_OS_LINUX
 #define DEFAULT_HTML_DIR "/usr/local/share/doc/csound/html"
 #define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"
 #define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
@@ -44,7 +44,7 @@
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
 #define DEFAULT_DOT_EXECUTABLE "dot"
 #endif
-#ifdef SOLARIS
+#ifdef Q_OS_SOLARIS
 #define DEFAULT_HTML_DIR "/usr/local/share/doc/csound/html"
 #define DEFAULT_TERM_EXECUTABLE "/usr/openwin/bin/xterm"
 #define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
@@ -53,7 +53,7 @@
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
 #define DEFAULT_DOT_EXECUTABLE "dot"
 #endif
-#ifdef MACOSX
+#ifdef Q_WS_MAC
 #define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib.framework/Resources/Manual"
 #define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app"
 #define DEFAULT_BROWSER_EXECUTABLE "/Applications/Firefox.app"
@@ -62,7 +62,7 @@
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/Applications/Preview.app"
 #define DEFAULT_DOT_EXECUTABLE "/usr/local/bin/dot"
 #endif
-#ifdef WIN32
+#ifdef Q_OS_WIN32
 #define DEFAULT_HTML_DIR "C:/Program Files/Csound/doc/manual"
 #define DEFAULT_TERM_EXECUTABLE "cmd.exe"
 #define DEFAULT_BROWSER_EXECUTABLE "firefox.exe"

@@ -21,6 +21,11 @@
 */
 
 #include "documentview.h"
+#include "highlighter.h"
+#include "findreplace.h"
+#include "opentryparser.h"
+#include "node.h"
+#include "types.h"
 
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
     QWidget(parent),  m_opcodeTree(opcodeTree)
@@ -58,7 +63,9 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 //          this, SLOT(syntaxCheck()));
 
   setViewMode(0);
-  m_highlighter->setDocument(editor[0]);
+
+  errorMarked = false;
+  m_highlighter->setDocument(mainEditor->document());
 }
 
 DocumentView::~DocumentView()
@@ -94,7 +101,7 @@ void DocumentView::setViewMode(int mode)
   }
 }
 
-void DocumentView::setFont(QString font)
+void DocumentView::setFont(QFont font)
 {
   for (int i = 0; i < editors.size(); i++) {
     editors[i]->setFont(font);
@@ -111,7 +118,7 @@ void DocumentView::setFontPointSize(float size)
 void DocumentView::setTabWidth(int width)
 {
   for (int i = 0; i < editors.size(); i++) {
-    editors[i]->setTabWidth(width);
+    editors[i]->setTabStopWidth(width);
   }
 }
 
@@ -122,7 +129,7 @@ void DocumentView::setTabStopWidth(int width)
   }
 }
 
-void DocumentView::setLineWrapMode(int mode)
+void DocumentView::setLineWrapMode(QTextEdit::LineWrapMode mode)
 {
   for (int i = 0; i < editors.size(); i++) {
     editors[i]->setLineWrapMode(mode);
@@ -165,7 +172,7 @@ void DocumentView::setFullText(QString text)
   editors[0]->setText(text);
 }
 
-void setLadspaText(QString text)
+void DocumentView::setLadspaText(QString text)
 {
   ladspaEditor->setText(text);
 }
@@ -237,7 +244,7 @@ QString DocumentView::wordUnderCursor()
 {
   QTextCursor cursor = editors[0]->textCursor();
   cursor.select(QTextCursor::WordUnderCursor);
-  return cursor->selectedText();
+  return cursor.selectedText();
 }
 
 void DocumentView::updateDocumentModel()
@@ -256,7 +263,9 @@ void DocumentView::updateFromDocumentModel()
 void DocumentView::syntaxCheck()
 {
   // FIXME implment for multiple views
-  emit lineNumberSignal(currentLine());
+
+  //FIXME this is not building... why???
+//  emit lineNumberSignal(currentLine());
   //FIXME connect this signal to main class showLineNumber
   QTextCursor cursor = mainEditor->textCursor();
   cursor.select(QTextCursor::LineUnderCursor);
@@ -265,9 +274,10 @@ void DocumentView::syntaxCheck()
     // We need to remove all not possibly opcode
     word.remove(QRegExp("[^\\d\\w]"));
     if (!word.isEmpty()) {
-      QString syntax = opcodeTree->getSyntax(word);
+      QString syntax = m_opcodeTree->getSyntax(word);
       if(!syntax.isEmpty()) {
-        emit opcodeSyntaxSignal(syntax);
+        // FIXME this is not building... why?
+//        emit(opcodeSyntaxSignal(syntax));
         return;
       }
     }
@@ -300,6 +310,47 @@ void DocumentView::inToGet()
   // FIXME implment for multiple views
   editors[0]->setPlainText(changeToChnget(editors[0]->toPlainText()));
   editors[0]->document()->setModified(true);
+}
+
+void DocumentView::autoComplete()
+{
+  QTextCursor cursor = mainEditor->textCursor();
+  cursor.select(QTextCursor::WordUnderCursor);
+  QString opcodeName = cursor.selectedText();
+  if (opcodeName=="")
+    return;
+  mainEditor->setTextCursor(cursor);
+  mainEditor->cut();
+  QString syntax = m_opcodeTree->getSyntax(opcodeName);
+  mainEditor->insertPlainText (syntax);
+}
+
+void DocumentView::findString(QString query)
+{
+  //FIXME search across all editors
+  qDebug() << "qutecsound::findString " << query;
+  if (query == "") {
+    query = lastSearch;
+  }
+  bool found = false;
+  if (lastCaseSensitive) {
+    found = editors[0]->find(query,
+                             QTextDocument::FindCaseSensitively);
+  }
+  else
+    found = editors[0]->find(query);
+  if (!found) {
+    int ret = QMessageBox::question(this, tr("Find and replace"),
+                                    tr("The string was not found.\n"
+                                        "Would you like to start from the top?"),
+                                        QMessageBox::Yes | QMessageBox::No,
+                                        QMessageBox::No
+                                   );
+    if (ret == QMessageBox::Yes) {
+      editors[0]->moveCursor(QTextCursor::Start);
+      findString();
+    }
+  }
 }
 
 void DocumentView::comment()
@@ -402,7 +453,7 @@ void DocumentView::markErrorLines(QList<int> lines)
     }
     cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     cur.mergeCharFormat(errorFormat);
-    setTextCursor(cur);
+    editors[0]->setTextCursor(cur);
     cur.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
   }
   editors[0]->setTextCursor(cur);
@@ -414,11 +465,11 @@ void DocumentView::unmarkErrorLines()
   // FIXME implment for multiple views
   if (!errorMarked)
     return;
-  int position = verticalScrollBar()->value();
+  int position = editors[0]->verticalScrollBar()->value();
   QTextCursor currentCursor = editors[0]->textCursor();
   errorMarked = false;
 //   qDebug("DocumentPage::unmarkErrorLines()");
-  selectAll();
+  editors[0]->selectAll();
   QTextCursor cur = editors[0]->textCursor();
   QTextCharFormat format = cur.blockCharFormat();
   format.clearBackground();
@@ -446,7 +497,7 @@ void DocumentView::jumpToLine(int line)
 void DocumentView::opcodeFromMenu()
 {
   QAction *action = (QAction *) QObject::sender();
-  QTextCursor cursor = textCursor();
+  QTextCursor cursor = editors[0]->textCursor();
   QString text = action->data().toString();
   cursor.insertText(text);
 }
@@ -474,7 +525,7 @@ void DocumentView::updateCsladspaText(QString text)
 
 void DocumentView::contextMenuEvent(QContextMenuEvent *event)
 {
-  QMenu *menu = createStandardContextMenu();
+  QMenu *menu = editors[0]->createStandardContextMenu();
   menu->addSeparator();
   QMenu *opcodeMenu = menu->addMenu("Opcodes");
   QMenu *mainMenu = 0;
@@ -554,51 +605,10 @@ QString DocumentView::changeToInvalue(QString text)
   return newText;
 }
 
-void DocumentView::autoComplete()
-{
-  QTextCursor cursor = mainEditor->textCursor();
-  cursor.select(QTextCursor::WordUnderCursor);
-  QString opcodeName = cursor.selectedText();
-  if (opcodeName=="")
-    return;
-  mainEditor->setTextCursor(cursor);
-  mainEditor->cut();
-  QString syntax = opcodeTree->getSyntax(opcodeName);
-  mainEditor->insertPlainText (syntax);
-}
-
 void DocumentView::hideAllEditors()
 {
   for (int i = 0; i < editors.size(); i++) {
     editors[i]->hide();
-  }
-}
-
-void DocumentView::findString(QString query)
-{
-  //FIXME search across all editors
-  qDebug() << "qutecsound::findString " << query;
-  if (query == "") {
-    query = lastSearch;
-  }
-  bool found = false;
-  if (lastCaseSensitive) {
-    found = editors[0]->find(query,
-                             QTextDocument::FindCaseSensitively);
-  }
-  else
-    found = editors[0]->find(query);
-  if (!found) {
-    int ret = QMessageBox::question(this, tr("Find and replace"),
-                                    tr("The string was not found.\n"
-                                        "Would you like to start from the top?"),
-                                        QMessageBox::Yes | QMessageBox::No,
-                                        QMessageBox::No
-                                   );
-    if (ret == QMessageBox::Yes) {
-      editors[0]->moveCursor(QTextCursor::Start);
-      findString();
-    }
   }
 }
 

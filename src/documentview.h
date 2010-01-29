@@ -25,16 +25,20 @@
 
 #include <QtGui>
 
+class OpEntryParser;
+class Highlighter;
+
 class DocumentView : public QWidget
 {
   public:
     DocumentView(QWidget * parent, OpEntryParser *opcodeTree = 0);
+    ~DocumentView();
     void setViewMode(int mode);
     void setFont(QFont font);
     void setFontPointSize(float size);
     void setTabWidth(int width);
     void setTabStopWidth(int width);
-    void setLineWrapMode(bool mode);
+    void setLineWrapMode(QTextEdit::LineWrapMode mode);
     void setColorVariables(bool color);
     void setOpcodeNameList(QStringList list);
     void setOpcodeTree(OpEntryParser *opcodeTree);
@@ -57,17 +61,20 @@ class DocumentView : public QWidget
     QString getWidgetsText(); // With tags including presets, in new xml format
 
     QString wordUnderCursor();
+    int currentLine();
     bool isModified();
     void print(QPrinter *printer);
 
-
   public slots:
+    void setModified(bool mod);
     void updateDocumentModel();
     void updateFromDocumentModel();
     void syntaxCheck();
     void findReplace();
     void getToIn(); // chnget/chnset to invalue/outvalue
     void inToGet(); // invalue/outvalue to chnget/chnset
+    void autoComplete();
+    void findString(QString query = QString());
 
     void comment();
     void uncomment();
@@ -116,16 +123,17 @@ class DocumentView : public QWidget
     QVector<QTextEdit *> editors; // A vector to hold pointers for the above for easy processing
 
     OpEntryParser *m_opcodeTree;
+    Highlighter *m_highlighter;
     bool m_isModified;
+    bool errorMarked;
 
     bool lastCaseSensitive; // These last three are for search and replace
     QString lastSearch;
     QString lastReplace;
 
-  private slots:
-
   signals:
-    void opcodeSyntaxSignal(QString);  // Report an opcode syntax under cursor
+    void opcodeSyntaxSignal(QString syntax);  // Report an opcode syntax under cursor
+    void lineNumberSignal(int number); // Sends current line number when cursor is moved
 };
 
 #endif // DOCUMENTVIEW_H

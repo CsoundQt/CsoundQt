@@ -51,6 +51,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   selectionFrame->hide();
 
   m_trackMouse = true;
+  m_editMode = false;
 
   createSliderAct = new QAction(tr("Create Slider"),this);
   connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createNewSlider()));
@@ -84,7 +85,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   propertiesAct = new QAction(tr("Properties"),this);
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
 
-  //FIXME implement edit act
+  //FIXME bring edit act from parent
 //  connect(editAct, SIGNAL(triggered(bool)), this, SLOT(activateEditMode(bool)));
   copyAct = new QAction(tr("Copy Selected"), this);
   copyAct->setShortcut(tr("Ctrl+C"));
@@ -147,7 +148,7 @@ void WidgetLayout::setUndoHistory(QVector<QString> *history, int *index)
 
 unsigned int WidgetLayout::widgetCount()
 {
-  return widgets.size();
+  return m_widgets.size();
 }
 
 void WidgetLayout::loadWidgets(QString macWidgets)
@@ -165,8 +166,8 @@ void WidgetLayout::loadWidgets(QString macWidgets)
       qDebug() << "WidgetPanel::loadWidgets error processing line: " << line;
     }
   }
-  if (editAct->isChecked()) {
-    activateEditMode(true);
+  if (m_editMode) {
+    setEditMode(true);
   }
 }
 
@@ -182,9 +183,9 @@ QString WidgetLayout::getMacWidgetsText()
   text +=  QString::number((int) (this->palette().button().color().blueF()*65535.)) +"}\n";
 
   valueMutex.lock();
-  for (int i = 0; i < widgets.size(); i++) {
-    text += widgets[i]->getWidgetLine() + "\n";
-//     qDebug() << widgets[i]->getWidgetXmlText();
+  for (int i = 0; i < m_widgets.size(); i++) {
+    text += m_widgets[i]->getWidgetLine() + "\n";
+//     qDebug() << m_widgets[i]->getWidgetXmlText();
   }
   valueMutex.unlock();
   text += "</MacGUI>";
@@ -196,7 +197,7 @@ QStringList WidgetLayout::getSelectedMacWidgetsText()
   QStringList l;
   for (int i = 0; i < editWidgets.size(); i++) {
     if (editWidgets[i]->isSelected()) {
-      l << widgets[i]->getWidgetLine();
+      l << m_widgets[i]->getWidgetLine();
     }
   }
   return l;
@@ -214,12 +215,12 @@ QStringList WidgetLayout::getSelectedWidgetsText()
 
 void WidgetLayout::setValue(QString channelName, double value)
 {
-  for (int i = 0; i < widgets.size(); i++) {
-    if (widgets[i]->getChannelName() == channelName) {
-      widgets[i]->setValue(value);
+  for (int i = 0; i < m_widgets.size(); i++) {
+    if (m_widgets[i]->getChannelName() == channelName) {
+      m_widgets[i]->setValue(value);
     }
-    if (widgets[i]->getChannel2Name() == channelName) {
-      widgets[i]->setValue2(value);
+    if (m_widgets[i]->getChannel2Name() == channelName) {
+      m_widgets[i]->setValue2(value);
     }
   }
 }
@@ -231,13 +232,13 @@ void WidgetLayout::setKeyRepeatMode(bool repeat)
 
 void WidgetLayout::setValue(QString channelName, QString value)
 {
-  for (int i = 0; i < widgets.size(); i++) {
-    if (widgets[i]->getChannelName() == channelName) {
-      widgets[i]->setValue(value);
+  for (int i = 0; i < m_widgets.size(); i++) {
+    if (m_widgets[i]->getChannelName() == channelName) {
+      m_widgets[i]->setValue(value);
 //       qDebug() << "WidgetPanel::setValue " << value;
     }
-//     if (widgets[i]->getChannel2Name() == channelName) {
-//       widgets[i]->setValue2(value);
+//     if (m_widgets[i]->getChannel2Name() == channelName) {
+//       m_widgets[i]->setValue2(value);
 //     }
   }
 }
@@ -245,17 +246,17 @@ void WidgetLayout::setValue(QString channelName, QString value)
 void WidgetLayout::setValue(int index, double value)
 {
   // there are two values for each widget
-  if (index >= widgets.size() * 2)
+  if (index >= m_widgets.size() * 2)
     return;
-  widgets[index/2]->setValue(value);
+  m_widgets[index/2]->setValue(value);
 }
 
 void WidgetLayout::setValue(int index, QString value)
 {
   // there are two values for each widget
-  if (index >= widgets.size() * 2)
+  if (index >= m_widgets.size() * 2)
     return;
-  widgets[index/2]->setValue(value);
+  m_widgets[index/2]->setValue(value);
 }
 
 void WidgetLayout::getValues(QVector<QString> *channelNames,
@@ -265,12 +266,12 @@ void WidgetLayout::getValues(QVector<QString> *channelNames,
   if (!this->isEnabled()) {
     return;
   }
-  for (int i = 0; i < widgets.size(); i++) {
-    (*channelNames)[i*2] = widgets[i]->getChannelName();
-    (*values)[i*2] = widgets[i]->getValue();
-    (*stringValues)[i*2] = widgets[i]->getStringValue();
-    (*channelNames)[i*2 + 1] = widgets[i]->getChannel2Name();
-    (*values)[i*2 + 1] = widgets[i]->getValue2();
+  for (int i = 0; i < m_widgets.size(); i++) {
+    (*channelNames)[i*2] = m_widgets[i]->getChannelName();
+    (*values)[i*2] = m_widgets[i]->getValue();
+    (*stringValues)[i*2] = m_widgets[i]->getStringValue();
+    (*channelNames)[i*2 + 1] = m_widgets[i]->getChannel2Name();
+    (*values)[i*2 + 1] = m_widgets[i]->getValue2();
   }
 }
 
@@ -418,8 +419,8 @@ void WidgetLayout::flush()
 void WidgetLayout::showTooltips(bool show)
 {
   m_tooltips = show;
-  for (int i=0; i < widgets.size(); i++) {
-    setWidgetToolTip(widgets[i], show);
+  for (int i=0; i < m_widgets.size(); i++) {
+    setWidgetToolTip(m_widgets[i], show);
   }
 }
 
@@ -490,7 +491,7 @@ QString WidgetLayout::getCsladspaLines()
 {
   QString text = "";
   int unsupported = 0;
-  foreach(QuteWidget *widget, widgets) {
+  foreach(QuteWidget *widget, m_widgets) {
     QString line = widget->getCsladspaLine();
     if (line != "") {
       text += line + "\n";
@@ -524,11 +525,11 @@ void WidgetLayout::selectAll()
 
 void WidgetLayout::widgetMoved(QPair<int, int> delta)
 {
-  for (int i = 0; i < widgets.size(); i++) {
+  for (int i = 0; i < m_widgets.size(); i++) {
     if (editWidgets[i]->isSelected()) {
-      int newx = widgets[i]->x() + delta.first;
-      int newy = widgets[i]->y() + delta.second;
-      widgets[i]->move(newx, newy);
+      int newx = m_widgets[i]->x() + delta.first;
+      int newy = m_widgets[i]->y() + delta.second;
+      m_widgets[i]->move(newx, newy);
       editWidgets[i]->move(newx, newy);
     }
   }
@@ -540,9 +541,9 @@ void WidgetLayout::widgetResized(QPair<int, int> delta)
 //   qDebug("WidgetPanel::widgetResized %i  %i", delta.first, delta.second);
   for (int i = 0; i< editWidgets.size(); i++) {
     if (editWidgets[i]->isSelected()) {
-      int neww = widgets[i]->width() + delta.first;
-      int newh = widgets[i]->height() + delta.second;
-      widgets[i]->setWidgetGeometry(widgets[i]->x(), widgets[i]->y(), neww, newh);
+      int neww = m_widgets[i]->width() + delta.first;
+      int newh = m_widgets[i]->height() + delta.second;
+      m_widgets[i]->setWidgetGeometry(m_widgets[i]->x(), m_widgets[i]->y(), neww, newh);
       editWidgets[i]->resize(neww, newh);
     }
   }
@@ -553,12 +554,12 @@ void WidgetLayout::adjustLayoutSize()
 {
   int width = 30, height = 30;
   int woff = 20, hoff = 45; // hack to avoid scrollbars...
-  for (int i = 0; i< widgets.size(); i++) {
-    if (widgets[i]->x() + widgets[i]->width() > width) {
-      width = widgets[i]->x() + widgets[i]->width();
+  for (int i = 0; i< m_widgets.size(); i++) {
+    if (m_widgets[i]->x() + m_widgets[i]->width() > width) {
+      width = m_widgets[i]->x() + m_widgets[i]->width();
     }
-    if (widgets[i]->y() + widgets[i]->height() > height) {
-      height = widgets[i]->y() + widgets[i]->height();
+    if (m_widgets[i]->y() + m_widgets[i]->height() > height) {
+      height = m_widgets[i]->y() + m_widgets[i]->height();
     }
   }
   if (this->width() - woff > width) {
@@ -576,11 +577,11 @@ void WidgetLayout::selectionChanged(QRect selection)
   if (editWidgets.isEmpty())
     return; //not in edit mode
   deselectAll();
-  for (int i = 0; i< widgets.size(); i++) {
-    int x = widgets[i]->x();
-    int y = widgets[i]->y();
-    int w = widgets[i]->width();
-    int h = widgets[i]->height();
+  for (int i = 0; i< m_widgets.size(); i++) {
+    int x = m_widgets[i]->x();
+    int y = m_widgets[i]->y();
+    int w = m_widgets[i]->width();
+    int h = m_widgets[i]->height();
     if (x > selection.x() - w && x < selection.x() + selection.width() &&
         y > selection.y() - h && y < selection.y() + selection.height() ) {
       editWidgets[i]->select();
@@ -592,7 +593,7 @@ void WidgetLayout::createNewSlider()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
-  createSlider(posx, posy, 20, 100, QString("ioSlider {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(widgets.size())));
+  createSlider(posx, posy, 20, 100, QString("ioSlider {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(m_widgets.size())));
   widgetChanged();
   markHistory();
 }
@@ -661,7 +662,7 @@ void WidgetLayout::createNewKnob()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
-  createKnob(posx, posy, 80, 80, QString("ioKnob {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(widgets.size())));
+  createKnob(posx, posy, 80, 80, QString("ioKnob {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(m_widgets.size())));
   widgetChanged();
   markHistory();
 }
@@ -670,7 +671,7 @@ void WidgetLayout::createNewCheckBox()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
-  createCheckBox(posx, posy, 20, 20, QString("ioCheckbox {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 20} off checkbox" +QString::number(widgets.size())));
+  createCheckBox(posx, posy, 20, 20, QString("ioCheckbox {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 20} off checkbox" +QString::number(m_widgets.size())));
   widgetChanged();
   markHistory();
 }
@@ -679,7 +680,7 @@ void WidgetLayout::createNewMenu()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
-  createMenu(posx, posy, 80, 30, QString("ioMenu {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 25} 1 303 \"item1,item2,item3\" menu" +QString::number(widgets.size())));
+  createMenu(posx, posy, 80, 30, QString("ioMenu {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 25} 1 303 \"item1,item2,item3\" menu" +QString::number(m_widgets.size())));
   widgetChanged();
   markHistory();
 }
@@ -688,7 +689,7 @@ void WidgetLayout::createNewMeter()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
-  createMeter(posx, posy, 30, 80, QString("ioMeter {"+ QString::number(posx) +", "+ QString::number(posy) + "} {30, 80} {0, 60000, 0} \"vert" + QString::number(widgets.size()) + "\" 0.000000 \"hor" + QString::number(widgets.size()) + "\" 0.000000 fill 1 0 mouse"));
+  createMeter(posx, posy, 30, 80, QString("ioMeter {"+ QString::number(posx) +", "+ QString::number(posy) + "} {30, 80} {0, 60000, 0} \"vert" + QString::number(m_widgets.size()) + "\" 0.000000 \"hor" + QString::number(m_widgets.size()) + "\" 0.000000 fill 1 0 mouse"));
   widgetChanged();
   markHistory();
 }
@@ -729,10 +730,10 @@ void WidgetLayout::clearWidgets()
 void WidgetLayout::clearWidgetLayout()
 {
 //   qDebug("WidgetLayout::clearWidgetLayout()");
-  foreach (QuteWidget *widget, widgets) {
+  foreach (QuteWidget *widget, m_widgets) {
     delete widget;
   }
-  widgets.clear();
+  m_widgets.clear();
   foreach (FrameWidget *widget, editWidgets) {
 //     qDebug("WidgetLayout::clearWidgetLayout() removed editWidget");
     delete widget;
@@ -798,7 +799,7 @@ void WidgetLayout::selectBgColor()
 void WidgetLayout::alignLeft()
 {
   int newx = 99999;
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     int size = editWidgets.size();
     for (int i = 0; i < size ; i++) { // First find leftmost
       if (editWidgets[i]->isSelected()) {
@@ -808,7 +809,7 @@ void WidgetLayout::alignLeft()
     for (int i = 0; i < size ; i++) { // Then put all x values to that
       if (editWidgets[i]->isSelected()) {
         editWidgets[i]->move(newx, editWidgets[i]->y());
-        widgets[i]->move(newx, editWidgets[i]->y());
+        m_widgets[i]->move(newx, editWidgets[i]->y());
       }
     }
   }
@@ -817,7 +818,7 @@ void WidgetLayout::alignLeft()
 void WidgetLayout::alignRight()
 {
   int newx = -99999;
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     int size = editWidgets.size();
     for (int i = 0; i < size ; i++) { // First find leftmost
       if (editWidgets[i]->isSelected()) {
@@ -827,7 +828,7 @@ void WidgetLayout::alignRight()
     for (int i = 0; i < size ; i++) { // Then put all x values to that
       if (editWidgets[i]->isSelected()) {
         editWidgets[i]->move(newx, editWidgets[i]->y());
-        widgets[i]->move(newx, editWidgets[i]->y());
+        m_widgets[i]->move(newx, editWidgets[i]->y());
       }
     }
   }
@@ -836,7 +837,7 @@ void WidgetLayout::alignRight()
 void WidgetLayout::alignTop()
 {
   int newy = 99999;
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     int size = editWidgets.size();
     for (int i = 0; i < size ; i++) { // First find uppermost
       if (editWidgets[i]->isSelected()) {
@@ -846,7 +847,7 @@ void WidgetLayout::alignTop()
     for (int i = 0; i < size ; i++) { // Then put all y values to that
       if (editWidgets[i]->isSelected()) {
         editWidgets[i]->move(editWidgets[i]->x(), newy);
-        widgets[i]->move(editWidgets[i]->x(), newy);
+        m_widgets[i]->move(editWidgets[i]->x(), newy);
       }
     }
   }
@@ -855,7 +856,7 @@ void WidgetLayout::alignTop()
 void WidgetLayout::alignBottom()
 {
   int newy = -99999;
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     int size = editWidgets.size();
     for (int i = 0; i < size ; i++) { // First find uppermost
       if (editWidgets[i]->isSelected()) {
@@ -865,7 +866,7 @@ void WidgetLayout::alignBottom()
     for (int i = 0; i < size ; i++) { // Then put all y values to that
       if (editWidgets[i]->isSelected()) {
         editWidgets[i]->move(editWidgets[i]->x(), newy);
-        widgets[i]->move(editWidgets[i]->x(), newy);
+        m_widgets[i]->move(editWidgets[i]->x(), newy);
       }
     }
   }
@@ -873,7 +874,7 @@ void WidgetLayout::alignBottom()
 
 void WidgetLayout::sendToBack()
 {
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     int size = editWidgets.size();
     for (int i = 0; i < size ; i++) { // First invert selection
       if (editWidgets[i]->isSelected()) {
@@ -898,7 +899,7 @@ void WidgetLayout::sendToBack()
 
 void WidgetLayout::distributeHorizontal()
 {
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     int size = editWidgets.size();
     int spacing, emptySpace, max = -9999, min = 9999, widgetWidth = 0;
     QVector<int> order;
@@ -938,14 +939,14 @@ void WidgetLayout::distributeHorizontal()
       accum += spacing + editWidgets[order[i-1]]->width();
 //      qDebug() << "WidgetLayout::distributeHorizontal --" << i;
       editWidgets[order[i]]->move(accum, editWidgets[order[i]]->y());
-      widgets[order[i]]->move(accum, editWidgets[order[i]]->y());
+      m_widgets[order[i]]->move(accum, editWidgets[order[i]]->y());
     }
   }
 }
 
 void WidgetLayout::distributeVertical()
 {
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     int size = editWidgets.size();
     int spacing, emptySpace, max = -9999, min = 9999, widgetHeight = 0;
     QVector<int> order;
@@ -985,7 +986,7 @@ void WidgetLayout::distributeVertical()
       accum += spacing + editWidgets[order[i-1]]->height();
 //      qDebug() << "WidgetLayout::distributeHorizontal --" << i;
       editWidgets[order[i]]->move(editWidgets[order[i]]->x(), accum);
-      widgets[order[i]]->move(editWidgets[order[i]]->x(), accum);
+      m_widgets[order[i]]->move(editWidgets[order[i]]->x(), accum);
     }
   }
 }
@@ -1028,7 +1029,7 @@ void WidgetLayout::keyReleaseEvent(QKeyEvent *event)
 void WidgetLayout::widgetChanged(QuteWidget* widget)
 {
   if (widget != 0) {
-    int index = widgets.indexOf(widget);
+    int index = m_widgets.indexOf(widget);
     if (index >= 0 and editWidgets.size() > index) {
       int newx = widget->x();
       int newy = widget->y();
@@ -1129,8 +1130,9 @@ void WidgetLayout::contextMenuEvent(QContextMenuEvent *event)
   menu.addAction(createGraphAct);
   menu.addAction(createScopeAct);
   menu.addSeparator();
-  menu.addAction(editAct);
-  menu.addSeparator();
+  // FIXME bring editAct from parent!
+//  menu.addAction(editAct);
+//  menu.addSeparator();
   menu.addAction(copyAct);
   menu.addAction(pasteAct);
   menu.addAction(selectAllAct);
@@ -1171,9 +1173,9 @@ int WidgetLayout::createSlider(int x, int y, int width, int height, QString widg
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  widgets.append(widget);
+  m_widgets.append(widget);
   widget->show();
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -1225,9 +1227,9 @@ int WidgetLayout::createText(int x, int y, int width, int height, QString widget
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  widgets.append(widget);
+  m_widgets.append(widget);
   widget->show();
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -1282,9 +1284,9 @@ int WidgetLayout::createScrollNumber(int x, int y, int width, int height, QStrin
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  widgets.append(widget);
+  m_widgets.append(widget);
   widget->show();
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -1335,9 +1337,9 @@ int WidgetLayout::createLineEdit(int x, int y, int width, int height, QString wi
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  widgets.append(widget);
+  m_widgets.append(widget);
   widget->show();
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -1389,9 +1391,9 @@ int WidgetLayout::createSpinBox(int x, int y, int width, int height, QString wid
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  widgets.append(widget);
+  m_widgets.append(widget);
   widget->show();
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -1414,7 +1416,7 @@ int WidgetLayout::createButton(int x, int y, int width, int height, QString widg
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   widget->show();
-  widgets.append(widget);
+  m_widgets.append(widget);
   widget->setValue(parts[6].toDouble());  //value produced by button
   widget->setChannelName(quoteParts[1]);
   widget->setText(quoteParts[3]);
@@ -1435,7 +1437,7 @@ int WidgetLayout::createButton(int x, int y, int width, int height, QString widg
   connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
 
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -1468,9 +1470,9 @@ int WidgetLayout::createKnob(int x, int y, int width, int height, QString widget
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  widgets.append(widget);
+  m_widgets.append(widget);
   widget->show();
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -1501,9 +1503,9 @@ int WidgetLayout::createCheckBox(int x, int y, int width, int height, QString wi
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  widgets.append(widget);
+  m_widgets.append(widget);
   widget->show();
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -1529,9 +1531,9 @@ int WidgetLayout::createMenu(int x, int y, int width, int height, QString widget
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  widgets.append(widget);
+  m_widgets.append(widget);
   widget->show();
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -1573,9 +1575,9 @@ int WidgetLayout::createMeter(int x, int y, int width, int height, QString widge
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  widgets.append(widget);
+  m_widgets.append(widget);
   widget->show();
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -1594,9 +1596,9 @@ int WidgetLayout::createConsole(int x, int y, int width, int height, QString wid
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  widgets.append(widget);
+  m_widgets.append(widget);
   widget->show();
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -1635,9 +1637,9 @@ int WidgetLayout::createGraph(int x, int y, int width, int height, QString widge
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  widgets.append(widget);
+  m_widgets.append(widget);
   widget->show();
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -1678,9 +1680,9 @@ int WidgetLayout::createScope(int x, int y, int width, int height, QString widge
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  widgets.append(widget);
+  m_widgets.append(widget);
   widget->show();
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -1697,8 +1699,8 @@ int WidgetLayout::createDummy(int x, int y, int width, int height, QString widge
   widget->setWidgetGeometry(x,y,width, height);
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
   widget->show();
-  widgets.append(widget);
-  if (editAct->isChecked()) {
+  m_widgets.append(widget);
+  if (m_editMode) {
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -1735,12 +1737,12 @@ void WidgetLayout::loadPreset(int num)
 {
   WidgetPreset p = presets[num];
   if (num >= 0 && num < presets.size()) {
-    for (int i = 0; i < widgets.size(); i++) {
-      QString id = widgets[i]->getUuid();
+    for (int i = 0; i < m_widgets.size(); i++) {
+      QString id = m_widgets[i]->getUuid();
       if (p.idIndex(id) > -1) {
-        widgets[i]->setValue(p.getValue(id));
-        widgets[i]->setValue2(p.getValue2(id));
-        widgets[i]->setValue(p.getStringValue(id));
+        m_widgets[i]->setValue(p.getValue(id));
+        m_widgets[i]->setValue2(p.getValue2(id));
+        m_widgets[i]->setValue(p.getStringValue(id));
       }
     }
   }
@@ -1763,13 +1765,13 @@ void WidgetLayout::savePreset(int num, QString name)
     qDebug() << "WidgetPanel::savePreset invalid preset number";
     return;
   }
-  for (int i = 0; i < widgets.size(); i++) {
-    QString id = widgets[i]->getUuid();
+  for (int i = 0; i < m_widgets.size(); i++) {
+    QString id = m_widgets[i]->getUuid();
     WidgetPreset p;
     p.setName(name);
-    p.setValue(id, widgets[i]->getValue());
-    p.setValue2(id, widgets[i]->getValue2());
-    p.setStringValue(id, widgets[i]->getStringValue());
+    p.setValue(id, m_widgets[i]->getValue());
+    p.setValue2(id, m_widgets[i]->getValue2());
+    p.setStringValue(id, m_widgets[i]->getStringValue());
     presets.append(p);
   }
 }
@@ -1796,7 +1798,7 @@ void WidgetLayout::cut()
   WidgetLayout::copy();
   for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
     if (editWidgets[i]->isSelected()) {
-      deleteWidget(widgets[i]);
+      deleteWidget(m_widgets[i]);
     }
   }
   markHistory();
@@ -1804,7 +1806,7 @@ void WidgetLayout::cut()
 
 void WidgetLayout::paste()
 {
-//  if (editAct->isChecked()) {
+//  if (m_editMode) {
 //    deselectAll();
 //    foreach (QString line, clipboard) {
 //      newWidget(line);
@@ -1814,14 +1816,14 @@ void WidgetLayout::paste()
 //  markHistory();
 }
 
-void WidgetLayout::activateEditMode(bool active)
+void WidgetLayout::setEditMode(bool active)
 {
   if (active) {
     foreach (FrameWidget *widget, editWidgets) {
       delete widget;
     }
     editWidgets.clear();
-    foreach (QuteWidget * widget, widgets) {
+    foreach (QuteWidget * widget, m_widgets) {
       createEditFrame(widget);
     }
   }
@@ -1831,6 +1833,7 @@ void WidgetLayout::activateEditMode(bool active)
     }
     editWidgets.clear();
   }
+  m_editMode = active;
 }
 
 void WidgetLayout::createEditFrame(QuteWidget* widget)
@@ -1876,10 +1879,10 @@ void WidgetLayout::markHistory()
 
 void WidgetLayout::deleteWidget(QuteWidget *widget)
 {
-  int index = widgets.indexOf(widget);
+  int index = m_widgets.indexOf(widget);
 //   qDebug("WidgetPanel::deleteWidget %i", number);
   widget->close();
-  widgets.remove(index);
+  m_widgets.remove(index);
   if (!editWidgets.isEmpty()) {
     delete(editWidgets[index]);
     editWidgets.remove(index);
@@ -1936,51 +1939,51 @@ void WidgetLayout::processNewValues()
   channelNames = newValues.keys();
   valueMutex.unlock();
   foreach(QString name, channelNames) {
-    for (int i = 0; i < widgets.size(); i++){
-      if (widgets[i]->getChannelName() == name) {
-        widgets[i]->setValue(newValues.value(name));
+    for (int i = 0; i < m_widgets.size(); i++){
+      if (m_widgets[i]->getChannelName() == name) {
+        m_widgets[i]->setValue(newValues.value(name));
       }
-      if (widgets[i]->getChannel2Name() == name) {
-        widgets[i]->setValue2(newValues.value(name));
+      if (m_widgets[i]->getChannel2Name() == name) {
+        m_widgets[i]->setValue2(newValues.value(name));
       }
       if (m_trackMouse) {
-        QString ch1name = widgets[i]->getChannelName();
+        QString ch1name = m_widgets[i]->getChannelName();
         if (ch1name == "_MouseX") {
-          widgets[i]->setValue(getMouseX());
+          m_widgets[i]->setValue(getMouseX());
         }
         else if (ch1name == "_MouseY") {
-          widgets[i]->setValue(getMouseY());
+          m_widgets[i]->setValue(getMouseY());
         }
         else if (ch1name == "_MouseRelX") {
-          widgets[i]->setValue(getMouseRelX());
+          m_widgets[i]->setValue(getMouseRelX());
         }
         else if (ch1name == "_MouseRelY") {
-          widgets[i]->setValue(getMouseRelY());
+          m_widgets[i]->setValue(getMouseRelY());
         }
         else if (ch1name == "_MouseBut1") {
-          widgets[i]->setValue(getMouseBut1());
+          m_widgets[i]->setValue(getMouseBut1());
         }
         else if (ch1name == "_MouseBut2") {
-          widgets[i]->setValue(getMouseBut2());
+          m_widgets[i]->setValue(getMouseBut2());
         }
-        QString ch2name = widgets[i]->getChannel2Name();
+        QString ch2name = m_widgets[i]->getChannel2Name();
         if (ch2name == "_MouseX") {
-          widgets[i]->setValue2(getMouseX());
+          m_widgets[i]->setValue2(getMouseX());
         }
         else if (ch2name == "_MouseY") {
-          widgets[i]->setValue2(getMouseY());
+          m_widgets[i]->setValue2(getMouseY());
         }
         else if (ch2name == "_MouseRelX") {
-          widgets[i]->setValue2(getMouseRelX());
+          m_widgets[i]->setValue2(getMouseRelX());
         }
         else if (ch2name == "_MouseRelY") {
-          widgets[i]->setValue2(getMouseRelY());
+          m_widgets[i]->setValue2(getMouseRelY());
         }
         else if (ch2name == "_MouseBut1") {
-          widgets[i]->setValue2(getMouseBut1());
+          m_widgets[i]->setValue2(getMouseBut1());
         }
         else if (ch2name == "_MouseBut2") {
-          widgets[i]->setValue2(getMouseBut2());
+          m_widgets[i]->setValue2(getMouseBut2());
         }
       }
     }
@@ -1993,9 +1996,9 @@ void WidgetLayout::processNewValues()
   // Now set string values
   stringValueMutex.unlock();
   foreach(QString name, channelNames) {
-    for (int i = 0; i < widgets.size(); i++){
-      if (widgets[i]->getChannelName() == name) {
-        widgets[i]->setValue(newStringValues.value(name));
+    for (int i = 0; i < m_widgets.size(); i++){
+      if (m_widgets[i]->getChannelName() == name) {
+        m_widgets[i]->setValue(newStringValues.value(name));
       }
     }
   }
@@ -2017,12 +2020,12 @@ void WidgetLayout::paste(QPoint /*pos*/)
 void WidgetLayout::duplicate()
 {
 //   qDebug("WidgetLayout::duplicate()");
-  if (editAct->isChecked()) {
+  if (m_editMode) {
     int size = editWidgets.size();
     for (int i = 0; i < size ; i++) {
       if (editWidgets[i]->isSelected()) {
         editWidgets[i]->deselect();
-        newWidget(widgets[i]->getWidgetLine(), true);
+        newWidget(m_widgets[i]->getWidgetLine(), true);
         editWidgets.last()->select();
       }
     }
@@ -2035,7 +2038,7 @@ void WidgetLayout::deleteSelected()
 //   qDebug("WidgetLayout::deleteSelected()");
   for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
     if (editWidgets[i]->isSelected()) {
-      deleteWidget(widgets[i]);
+      deleteWidget(m_widgets[i]);
     }
   }
   markHistory();

@@ -45,14 +45,10 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 //  macGUI = "";
   askForFile = true;
   readOnly = false;
-  errorMarked = false;
 
   //FIXME this options must be set from QuteCsound configuratio!
   saveLiveEvents = true;
   saveChanges = true;
-
-  bufferSize = 4096;
-  recBuffer = (MYFLT *) calloc(bufferSize, sizeof(MYFLT));
 
   m_view = new DocumentView(parent);
   m_csEngine = new CsoundEngine();
@@ -67,14 +63,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   connect(m_view, SIGNAL(contentsChanged()), this, SLOT(changed()));
 //   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(moved()));
 
-  queueTimer = new QTimer(this);
-  queueTimer->setSingleShot(true);
-  connect(queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
-  refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;  // Eventually allow this to be changed
-  dispatchQueues(); //start queue dispatcher
 
-
-  // FIXME connect(csEngine, SIGNAL(clearMessageQueue()), this, SLOT(clearMessageQueue()));
   // FIXME connect(layout, SIGNAL(changed()), this, SLOT(changed()));
 
 }
@@ -87,7 +76,6 @@ DocumentPage::~DocumentPage()
     delete m_liveFrames[i];  // These widgets have the order not to delete on close
     m_liveFrames.remove(i);
   }
-  delete recBuffer;
   delete m_view;
   delete m_csEngine;
 }
@@ -548,7 +536,8 @@ int DocumentPage::play()
   m_console->reset();
   m_widgetLayout->flush();
   m_widgetLayout->clearGraphs();
-  m_csEngine->setFiles(runFileName1, runFileName2);
+  //FIXME set options before running (including realtime and filenames)
+//  m_csEngine->setFiles(runFileName1, runFileName2);
 
   return m_csEngine->play();
 }
@@ -569,11 +558,16 @@ void DocumentPage::render()
 {
   qDebug() << "DocumentPage::render() not implemented!";
   //  m_csEngine->runCsound(m_options->useAPI);  // render use of API depends on this preference
-}
-
-void DocumentPage::runInTerm()
-{
-  m_csEngine->runInTerm();
+  if (m_csEngine->play() == 0) {
+    // FIXME set current audio file from rendered file
+//    if (QDir::isRelativePath(m_options.fileOutputFilename)) {
+//      emit setCurrentAudioFile(m_csEngine->m_options.csdPath + "/"
+//                               + m_csEngine->m_options.fileOutputFilename);
+//    }
+//    else {
+//      emit setCurrentAudioFile(m_csEngine->m_options.fileOutputFilename);
+//    }
+  }
 }
 
 void DocumentPage::record(int format)
@@ -664,6 +658,12 @@ void DocumentPage::setWidgetPanelSize(QSize size)
   newline += QString::number(size.height());
   macOptions[index] = newline;
 //   qDebug("DocumentPage::setWidgetPanelSize() %i %i", size.width(), size.height());
+}
+
+
+void DocumentPage::setWidgetEditMode(bool active)
+{
+  m_widgetLayout->setEditMode(active);
 }
 
 void DocumentPage::newLiveEventFrame(QString text)

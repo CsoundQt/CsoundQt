@@ -34,12 +34,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
 //   connect(this,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(dockLocationChanged(Qt::DockWidgetArea)));
   connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));
 
-  editAct = new QAction(tr("Widget Edit Mode"), this);
-  editAct->setCheckable(true);
-  editAct->setShortcut(tr("Ctrl+E"));
-
   m_sbActive = false;
-  setScrollBarsActive(true);
   QTimer::singleShot(30, this, SLOT(updateData()));
   this->setMouseTracking(true);
 //  mouseBut1 = 0;
@@ -60,6 +55,7 @@ unsigned int WidgetPanel::widgetCount()
 void WidgetPanel::setWidgetLayout(WidgetLayout *w)
 {
   layoutWidget = w;
+  setScrollBarsActive(true);
   if (m_sbActive) {
     scrollArea->setWidget(w);
   }
@@ -186,7 +182,10 @@ void WidgetPanel::setKeyRepeatMode(bool repeat)
   layoutWidget->setKeyRepeatMode(repeat);
 }
 
-
+void WidgetPanel::focusWidgets()
+{
+  layoutWidget->setFocus();
+}
 
 int WidgetPanel::newWidget(QString widgetLine, bool offset)
 {
@@ -205,11 +204,11 @@ void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 //  return layoutWidget->widgetsText(tags);
 //}
 
-void WidgetPanel::appendMessage(QString message)
-{
-  //FIXME remove this function
-  layoutWidget->appendMessage(message);
-}
+//void WidgetPanel::appendMessage(QString message)
+//{
+//  //FIXME remove this function
+//  layoutWidget->appendMessage(message);
+//}
 
 void WidgetPanel::showTooltips(bool show)
 {

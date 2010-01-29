@@ -31,23 +31,22 @@
 
 #include    <sndfile.hh>
 #include "types.h"
+#include "csoundoptions.h"
 
 class ConsoleWidget;
+class Curve;
 
 // Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
 // FIXME is this still necessary?
 #define QUTECSOUND_DESTROY_CSOUND
 
 class CsoundEngine;
-class CsoundOptions;
 class WidgetLayout;
 
 struct CsoundUserData {
   int result; //result of csoundCompile()
   CSOUND *csound; // instance of csound
   CsoundPerformanceThread *perfThread;
-  // FIXME threaded needs to be set!
-  bool m_threaded; // Whether running in a separate thread or not
   CsoundEngine *cs; // Pass engine
   WidgetLayout *wl; // Pass widgets
   /* current configuration */
@@ -59,6 +58,11 @@ struct CsoundUserData {
   // PERF_STATUS stores performance state when run in the same thread. Should not be used when threaded.
   int PERF_STATUS; //0=stopped 1=running
   MYFLT* outputBuffer;
+
+  // FIXME these preferences needs to be set!
+  bool enableWidgets; // Whether widget values are processed in the callback
+  bool threaded; // Whether running in a separate thread or not
+  bool useInvalue; // To select between invalue/outvalue and chnget/chnset
 
   QVector<QString> channelNames;
   QVector<double> values;
@@ -110,8 +114,10 @@ class CsoundEngine : public QObject
     static void readWidgetValues(CsoundUserData *ud);
     static void writeWidgetValues(CsoundUserData *ud);
 
-    void setThreaded(bool threaded);
-    void setFiles(QString fileName1, QString fileName2 = 0);
+    //FIXME set threaded and filenames prior to running
+//    void setThreaded(bool threaded);
+//    void setFiles(QString fileName1, QString fileName2 = 0);
+    void setOptions(const CsoundOptions &options);
     void registerConsole(ConsoleWidget *c);
     void unregisterConsole(ConsoleWidget *c);
     void setConsoleBufferSize(int size);
@@ -124,6 +130,7 @@ class CsoundEngine : public QObject
     void queueOutValue(QString channelName, double value);
     void queueOutString(QString channelName, QString value);
     void queueMessage(QString message);
+    void clearMessageQueue();
 
     bool isRunning();
 
@@ -133,7 +140,6 @@ class CsoundEngine : public QObject
     int play();
     void stop();
     void pause();
-    void runInTerm();
     void startRecording(int format, QString filename);
     void stopRecording();
     void queueEvent(QString eventLine, int delay);
@@ -141,28 +147,35 @@ class CsoundEngine : public QObject
   private:
     int runCsound(bool useAPI);
     void stopCsound();
+    void dispatchQueues();
+    QStack<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
+    QVector<WINDAT *> curveBuffer;
 
     CsoundUserData *ud;
 
     SndfileHandle *outfile;
     long samplesWritten;
     bool m_recording;
+    MYFLT *recBuffer; // for temporary copy of Csound output buffer when recording to file
+    int bufferSize; // size of the record buffer
 
-    CsoundOptions *m_options; // FIXME how to fill these?
+    CsoundOptions m_options; // FIXME how to fill these?
     MYFLT *pFields; // array of pfields for score and rt events
 
     QVector<ConsoleWidget *> consoles;
     int m_consoleBufferSize;
+    QMutex messageMutex; // Protection for message queue
+    QStringList messageQueue;  // Messages from Csound execution
     QMutex keyMutex; // For keys pressed to pass to Csound from console and widget panel
     QStringList keyPressBuffer; // protected by keyMutex
     QStringList keyReleaseBuffer; // protected by keyMutex
 
     QMutex eventMutex;
     QVector<QString> eventQueue;
+    QTimer queueTimer;
+    int refreshTime; // time in milliseconds for widget value updates (both input and output)
     QVector<unsigned long> eventTimeStamps;
     int eventQueueSize;
-
-    QStringList tempScriptFiles; //Remember temp files to delete them later
 
   private slots:
     void recordBuffer();

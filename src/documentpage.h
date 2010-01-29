@@ -31,7 +31,6 @@
 #include "types.h"
 
 class OpEntryParser;
-class Highlighter;
 class DocumentView;
 class WidgetLayout;
 class LiveEventFrame;
@@ -64,7 +63,6 @@ class DocumentPage : public QObject
 //    void inToGet();
 //    void updateCsladspaText(QString text);
     QString getFilePath();
-    int currentLine();
     QStringList getScheduledEvents(unsigned long ksmpscount);
     void setModified(bool mod);
     bool isModified();
@@ -98,7 +96,6 @@ class DocumentPage : public QObject
     void pause();
     void stop();
     void render();
-    void runInTerm();
     void record(int mode); // 0=16 bit int  1=32 bit int  2=float
 
     void setMacWidgetsText(QString widgetText);
@@ -106,9 +103,10 @@ class DocumentPage : public QObject
     void setMacOption(QString option, QString newValue);
     void setWidgetPanelPosition(QPoint position);
     void setWidgetPanelSize(QSize size);
-    void jumpToLine(int line);
+    void setWidgetEditMode(bool active);
+//    void jumpToLine(int line);
 
-    void opcodeFromMenu();
+//    void opcodeFromMenu();
     void newLiveEventFrame(QString text = QString());
     LiveEventFrame * createLiveEventFrame(QString text = QString());
     void deleteLiveEventFrame(LiveEventFrame *frame);
@@ -124,8 +122,6 @@ class DocumentPage : public QObject
     QString macPresets;
 //    QString macGUI;
     QDomElement widgetsXml;
-    int refreshTime; // time in milliseconds for widget value updates (both directions)
-    QTimer *queueTimer;
 
     WidgetLayout * m_widgetLayout;
     DocumentView *m_view;
@@ -133,31 +129,21 @@ class DocumentPage : public QObject
     ConsoleWidget *m_console;  // FIXME have a single console widget which is duplicated across all places! Is it possible? due to parenting issues
     QVector<LiveEventFrame *> m_liveFrames;
 
-    Highlighter *m_highlighter;
     OpEntryParser *m_opcodeTree;
-    bool errorMarked;
-    MYFLT *recBuffer; // for temporary copy of Csound output buffer when recording to file
 
     QMutex stringValueMutex;  // FIXME this mutex is in two places so it does nothing... Explore Qt's shared data classes
-
-    QStack<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
-    QVector<WINDAT *> curveBuffer;  // TODO Should these be moved to the widget layout class?
-
-    QMutex messageMutex;
-    QStringList messageQueue;  // Messages from Csound execution
 
     // Options
     bool saveLiveEvents;
     bool saveChanges;
-    int bufferSize; // size of the record buffer
 
   private slots:
     void changed();
     void liveEventFrameClosed();
-    void dispatchQueues();
-    void queueMessage(QString message);
+//    void dispatchQueues();
+//    void queueMessage(QString message);
     void queueEvent(QString line, int delay = 0);
-    void clearMessageQueue();
+//    void clearMessageQueue();
 //     void moved();
 
   signals:

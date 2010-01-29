@@ -84,6 +84,7 @@ class qutecsound:public QMainWindow
     bool loadFile(QString fileName, bool runNow = false);
 //    void runCsound(bool realtime=true);
     void play();
+    void runInTerm();
     void pause();
     void stop();
 //    void stopCsound();
@@ -97,7 +98,6 @@ class qutecsound:public QMainWindow
     void changePage(int index);
     void updateWidgets();
     void openExample();
-    void findString(QString query = QString());
     void registerLiveEvent(QWidget *e);
 
   protected:
@@ -119,14 +119,15 @@ class qutecsound:public QMainWindow
     void paste();
     void undo();
     void redo();
+    void setWidgetEditMode(bool);
     void controlD();
     void del();
     bool closeTab();
     void print();
-    void findReplace();
+//    void findReplace();
     void join();
-    void getToIn();
-    void inToGet();
+//    void getToIn();
+//    void inToGet();
     void putCsladspaText();
     void exportCabbage();
     void openExternalEditor();
@@ -139,8 +140,7 @@ class qutecsound:public QMainWindow
     void utilitiesDialogOpen();
     void about();
     void documentWasModified();
-    void syntaxCheck();
-    void autoComplete();
+//    void syntaxCheck();
     void configure();
     void applySettings();
     void runUtility(QString flags);
@@ -263,6 +263,8 @@ class qutecsound:public QMainWindow
     QString quickRefFileName;
     QStringList recentFiles;
     QStringList lastFiles;
+
+    QStringList tempScriptFiles; //Remember temp files to delete them later
     int lastTabIndex;
     QStringList m_deviceMessages; //stores messages from csound for device discovery
 

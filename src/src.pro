@@ -130,7 +130,6 @@ win32 {
         Files\Csound
     LIBSNDFILE_PATH = C:\Development \
         Files\libsndfile-1_0_17
-    DEFINES += WIN32
     INCLUDEPATH += "$${QUTECSOUND_CSOUND_PATH}\include"
     HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\csound.h"
     qute_cpp { 
@@ -147,16 +146,14 @@ win32 {
     }
     RC_FILE = qutecsound.rc
 }
-linux-g++ { 
-    DEFINES += LINUX
+linux-g++ {
     INCLUDEPATH += /usr/local/include/csound/ \
         /usr/include/csound/
     qute_cpp:LIBS += -lcsnd
     build64:LIBS += -lcsound64
     else:LIBS += -lcsound
 }
-solaris-g++-64 { 
-    DEFINES += SOLARIS
+solaris-g++-64 {
     INCLUDEPATH += /usr/local/include/csound/
     qute_cpp:LIBS += -lcsnd
     build64:LIBS += -lcsound64
@@ -186,7 +183,6 @@ macx {
         }
     }
     message(Building using $${MAC_LIB})
-    DEFINES += MACOSX
     
     # QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.5
     # QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk

@@ -84,8 +84,6 @@ class WidgetLayout : public QWidget
     void refreshConsoles();
     QString getCsladspaLines();
     bool isModified();
-    int popKeyPressEvent();
-    int popKeyReleaseEvent();
 
     // Edition Actions
     QAction *clearAct;
@@ -95,7 +93,6 @@ class WidgetLayout : public QWidget
     QAction *selectAllAct;
     QAction *duplicateAct;
     QAction *deleteAct;
-    QAction *editAct; // This action is not created here, but brought from parent
     QAction *propertiesAct;
     // Alignment Actions
     QAction *alignLeftAct;
@@ -126,7 +123,7 @@ class WidgetLayout : public QWidget
     void propertiesDialog();
     void applyProperties();
     void selectBgColor();
-    void activateEditMode(bool active);
+    void setEditMode(bool active);
     void deselectAll();
     void selectAll();
     void widgetMoved(QPair<int, int>);
@@ -198,9 +195,10 @@ class WidgetLayout : public QWidget
     QVector<QString> *m_history;  // Undo/ Redo history
     int *m_historyIndex; // Current point in history
     bool m_modified;
+    bool m_editMode;
 
     // Contained Widgets
-    QVector<QuteWidget *> widgets;
+    QVector<QuteWidget *> m_widgets;
     QVector<FrameWidget *> editWidgets;
     // These vectors must be used with care since they are not reentrant and will
     // cause problems when accessed simultaneously

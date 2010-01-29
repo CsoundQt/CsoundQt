@@ -390,7 +390,7 @@ void UtilitiesDialog::changeHelp(QString filename)
 //                              .arg(file.errorString()));
     return;
   }
-#ifdef WIN32
+#ifdef Q_OS_WIN32
   QTextStream in(&file);
   in.setAutoDetectUnicode(true);
   helpBrowser->setHtml(in.readAll());

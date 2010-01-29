@@ -40,28 +40,28 @@ ConfigLists::ConfigLists()
       << "schar"<< "float"<< "long";
   fileFormatNames << "24 Bit" << "16 Bit (short)" << "unsigned 8-bit"
       << "signed 8-bit" << "32 bit float"<< "long (32-bit)";
-#ifdef LINUX
+#ifdef Q_OS_LINUX
   rtAudioNames << "alsa" << "jack" << "portaudio" << "pulse" << "none";
 #endif
-#ifdef SOLARIS
+#ifdef Q_OS_SOLARIS
   rtAudioNames << "portaudio" << "pulse" << "none";
 #endif
-#ifdef MACOSX
+#ifdef Q_WS_MAC
   rtAudioNames << "portaudio" << "coreaudio" << "none";
 #endif
-#ifdef WIN32
+#ifdef Q_OS_WIN32
   rtAudioNames << "portaudio" << "winmm" << "jack" <<  "none";
 #endif
-#ifdef LINUX
+#ifdef Q_OS_LINUX
   rtMidiNames << "none" << "alsa"  << "portmidi"<< "virtual";
 #endif
-#ifdef SOLARIS
+#ifdef Q_OS_SOLARIS
   rtMidiNames << "none" << "portmidi"<< "virtual";
 #endif
-#ifdef MACOSX
+#ifdef Q_WS_MAC
   rtMidiNames << "none" << "portmidi" << "virtual";
 #endif
-#ifdef WIN32
+#ifdef Q_OS_WIN32
   rtMidiNames << "none" << "winmm" << "portmidi" << "virtual";
 #endif
   languages << "English" << "Spanish" << "German" << "French" << "Portuguese" << "Italian" /* << "Turkish"*/;

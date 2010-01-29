@@ -70,7 +70,7 @@ void DockHelp::loadFile(QString fileName)
     text->setText(tr("Not Found! Make sure the documentation path is set in the Configuration Dialog."));
     return;
   }
-#ifdef WIN32
+#ifdef Q_OS_WIN32
   QStringList searchPaths;
   searchPaths << docDir;
   text->setSearchPaths(searchPaths);

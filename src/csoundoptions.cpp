@@ -21,12 +21,13 @@
 */
 
 #include "csoundoptions.h"
+#include "types.h" // for _configlists
 
 CsoundOptions::CsoundOptions()
 {
 }
 
-QString Options::generateCmdLineFlags(bool rt)
+QString CsoundOptions::generateCmdLineFlags()
 {
   QString cmdline = "";
   if (bufferSizeActive)
@@ -71,7 +72,9 @@ QString Options::generateCmdLineFlags(bool rt)
           cmdline += " -o" + fileOutputFilename + "";
         }
         else {
-          cmdline += " -o" + csdPath + fileOutputFilename + "";
+          // FIXME is csdPath needed here for the output to be in the correct place?
+//          cmdline += " -o" + csdPath + fileOutputFilename + "";
+          cmdline += " -o" + fileOutputFilename + "";
         }
       }
     }
@@ -88,29 +91,85 @@ QString Options::generateCmdLineFlags(bool rt)
   return cmdline;
 }
 
-int Options::generateCmdLine(char **argv,
-                             bool rt,
-                             QString fileName,
-                             QString fileName2)
+QStringList CsoundOptions::generateCmdLineFlagsList()
 {
+  QStringList list;
+  if (bufferSizeActive)
+    list << " -b" + QString::number(bufferSize);
+  if (HwBufferSizeActive)
+    list << " -B" + QString::number(HwBufferSize);
+  if (additionalFlagsActive && !additionalFlags.trimmed().isEmpty())
+    list << " " + additionalFlags;
+  if (dither)
+    list << " -Z";
+  if (rt) {
+    if (rtOverrideOptions)
+      list << " -+ignore_csopts=1";
+    if (_configlists.rtAudioNames[rtAudioModule] != "none") {
+      list << " -+rtaudio=" + _configlists.rtAudioNames[rtAudioModule];
+      list << " -i" + (rtInputDevice == "" ? "adc":rtInputDevice);
+      list << " -o" + (rtOutputDevice == "" ? "dac":rtOutputDevice);
+      if (rtJackName != "")
+        list << " -+jack_client=" + rtJackName;
+    }
+    if (_configlists.rtMidiNames[rtMidiModule] != "none") {
+      list << " -+rtmidi=" + _configlists.rtMidiNames[rtMidiModule];
+      if (rtMidiInputDevice != "")
+        list << " -M" + rtMidiInputDevice;
+      if (rtMidiOutputDevice != "")
+        list << " -Q" + rtMidiOutputDevice;
+    }
+  }
+  else {
+    if (fileOverrideOptions)
+      list << " -+ignore_csopts=1";
+    list << " --format=" + _configlists.fileTypeNames[fileFileType];
+    list << ":" + _configlists.fileFormatFlags[fileSampleFormat];
+    if (fileInputFilenameActive)
+      list << " -i" + fileInputFilename + "";
+    if (fileOutputFilenameActive or fileAskFilename) {
+      //if (fileOutputFilename.startsWith("/"))
+      if (fileOutputFilename.contains('/'))
+        list << " -o" + fileOutputFilename + "";
+      else {
+        if (sfdirActive) {
+          list << " -o" + fileOutputFilename + "";
+        }
+        else {
+          // FIXME is csdPath needed here for the output to be in the correct place?
+//          cmdline += " -o" + csdPath + fileOutputFilename + "";
+          list << " -o" + fileOutputFilename + "";
+        }
+      }
+    }
+  }
+  if (sadirActive)
+    list << " --env:SADIR=" + sadir;
+  if (ssdirActive)
+    list << " --env:SSDIR=" + ssdir;
+  if (sfdirActive)
+    list << " --env:SFDIR=" + sfdir;
+  if (ssdirActive)
+    list << " --env:INCDIR=" + incdir;
+  list << " --env:CSNOSTOP=yes";
+  return list;
+}
 
+int CsoundOptions::generateCmdLine(char **argv)
+{
   int index = 0;
   argv[index] = (char *) calloc(7, sizeof(char));
   strcpy(argv[index++], "csound");
-  QString flags = "";
-  if ( (rt and rtUseOptions) or (!rt and fileUseOptions) ) {
-    flags = generateCmdLineFlags(rt);
-  }
-  QStringList indFlags= flags.split(" -",QString::SkipEmptyParts);
+  QStringList indFlags = generateCmdLineFlagsList();
   foreach (QString flag, indFlags) {
-    flag = "-" + flag;
-//     printf("%s", flag.toStdString().c_str()) ;
+//    flag = "-" + flag;
+     printf("%s", flag.toStdString().c_str()) ;
     argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
     strcpy(argv[index],flag.toStdString().c_str());
     index++;
   }
-  argv[index] = (char *) calloc(fileName.size()+1, sizeof(char));
-  strcpy(argv[index++],fileName.toStdString().c_str());
+  argv[index] = (char *) calloc(fileName1.size()+1, sizeof(char));
+  strcpy(argv[index++],fileName1.toStdString().c_str());
   if (fileName2 != "") {
     argv[index] = (char *) calloc(fileName2.size()+1, sizeof(char));
     strcpy(argv[index++],fileName2.toStdString().c_str());

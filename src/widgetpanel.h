@@ -26,7 +26,6 @@
 #include <QtGui>
 
 #include "qutewidget.h"//FIXME this shoudl be removed from here
-#include "curve.h"  //FIXME this shoudl be removed from here
 //#include "widgetpreset.h"
 
 class WidgetLayout;
@@ -62,10 +61,11 @@ class WidgetPanel : public QDockWidget
 
     void setScrollBarsActive(bool active);
     void setKeyRepeatMode(bool repeat);
+    void focusWidgets();
 //    void loadWidgets(QString macWidgets);
     int newWidget(QString widgetLine, bool offset = false);
 //    QString widgetsText(bool tags = true);
-    void appendMessage(QString message);
+//    void appendMessage(QString message);
     void showTooltips(bool show);
     void setWidgetToolTip(QuteWidget *widget, bool show);
 //    void newCurve(Curve* curve);
