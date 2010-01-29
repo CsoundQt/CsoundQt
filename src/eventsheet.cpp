@@ -200,8 +200,8 @@ QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber, bool 
       }
       if (scaleTempo && instrEvent && (i == 2 || i == 3) ) { // Scale tempo only for pfields p2 and p3
         bool ok = false;
+        double value = item->data(Qt::DisplayRole).toDouble(&ok);
         if (ok) {
-          double value = item->data(Qt::DisplayRole).toDouble(&ok);
           value = value * (60.0/m_tempo);
           line += QString::number(value, 'f', 8);;
         }
@@ -923,6 +923,8 @@ void EventSheet::shuffle(int iterations)
   QTime midnight(0, 0, 0);
   qsrand(midnight.secsTo(QTime::currentTime()));
   QModelIndexList list = this->selectedIndexes();
+  if (list.size() < 3)
+    return;
   for (int i = 0; i < iterations; i++) { // First traverse to copy values
     int num1 = qrand() % list.size();
     QTableWidgetItem * item1 = this->item(list[num1].row(), list[num1].column());

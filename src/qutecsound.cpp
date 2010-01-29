@@ -191,8 +191,8 @@ void qutecsound::utilitiesMessageCallback(CSOUND *csound,
 {
   DockConsole *console = (DockConsole *) csoundGetHostData(csound);
   QString msg = msg.vsprintf(fmt, args);
-  console->appendMessage(msg);
-  console->scrollToEnd();
+  console->text->appendMessage(msg);
+  console->text->scrollToEnd();
 }
 
 
@@ -202,10 +202,10 @@ void qutecsound::changeFont()
     documentPages[i]->view()->setFont(QFont(m_options->font,
                                     (int) m_options->fontPointSize));
   }
-  m_console->setDefaultFont(QFont(m_options->consoleFont,
-                            (int) m_options->consoleFontPointSize));
-  m_console->setColors(m_options->consoleFontColor,
-                       m_options->consoleBgColor);
+  m_console->text->setDefaultFont(QFont(m_options->consoleFont,
+                                        (int) m_options->consoleFontPointSize));
+  m_console->text->setColors(m_options->consoleFontColor,
+                             m_options->consoleBgColor);
 //   widgetPanel->setConsoleFont()
 }
 
@@ -719,7 +719,56 @@ void qutecsound::exportCabbage()
 void qutecsound::play()
 {
   runAct->setChecked(true);
-  documentPages[curPage]->play();
+  if (documentPages[curPage]->fileName.isEmpty()) {
+    QMessageBox::warning(this, tr("QuteCsound"),
+                         tr("This file has not been saved\nPlease select name and location."));
+    if (!saveAs()) {
+      runAct->setChecked(false);
+      return;
+    }
+  }
+  else if (documentPages[curPage]->isModified()) {
+    if (m_options->saveChanges)
+      if (!save()) {
+        runAct->setChecked(false);
+        return;
+      }
+  }
+  m_options->csdPath = "";
+  if (documentPages[curPage]->fileName.contains('/')) {
+    m_options->csdPath =
+        documentPages[curPage]->fileName.left(documentPages[curPage]->fileName.lastIndexOf('/'));
+    QDir::setCurrent(m_options->csdPath);
+  }
+  QString fileName, fileName2;
+  fileName = documentPages[curPage]->fileName;
+  if (!fileName.endsWith(".csd",Qt::CaseInsensitive)) {
+    if (documentPages[curPage]->askForFile)
+      getCompanionFileName();
+    // FIXME run orc file when sco companion is currently active
+//    if (fileName.endsWith(".sco",Qt::CaseInsensitive)) {
+//      //Must switch filename order when open file is a sco file
+//      fileName2 = fileName;
+//      fileName = documentPages[curPage]->companionFile;
+//    }
+//    else
+//      fileName2 = documentPages[curPage]->companionFile;
+  }
+  int ret = documentPages[curPage]->play();
+  if (ret == -1) {
+    runAct->setChecked(false);
+    QMessageBox::critical(this,
+                          tr("QuteCsound"),
+                          tr("Internal error running Csound."),
+                          QMessageBox::Ok);
+  }
+  else if (ret == -2) {
+    runAct->setChecked(false);
+    QMessageBox::critical(this,
+                          tr("QuteCsound"),
+                          tr("Error creating temporary file."),
+                          QMessageBox::Ok);
+  }
 }
 
 void qutecsound::pause()
@@ -994,7 +1043,7 @@ void qutecsound::applySettings()
   widgetPanel->showTooltips(m_options->showTooltips);
   widgetPanel->setKeyRepeatMode(m_options->keyRepeat);
   widgetPanel->setScrollBarsActive(m_options->scrollbars);
-  m_console->setKeyRepeatMode(m_options->keyRepeat);
+  m_console->text->setKeyRepeatMode(m_options->keyRepeat);
 
   QString currentOptions = (m_options->useAPI ? tr("API") : tr("Console")) + " ";
   if (m_options->useAPI) {
@@ -1023,7 +1072,7 @@ void qutecsound::runUtility(QString flags)
 //Remember menu bar to set it after FLTK grabs it
     menuBarHandle = GetMenuBar();
 #endif
-    m_console->clear();
+    m_console->reset();
     static char *argv[33];
     QString name = "";
     QString fileFlags = flags.mid(flags.indexOf("\""));

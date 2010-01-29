@@ -46,6 +46,8 @@ struct CsoundUserData {
   int result; //result of csoundCompile()
   CSOUND *csound; // instance of csound
   CsoundPerformanceThread *perfThread;
+  // FIXME threaded needs to be set!
+  bool m_threaded; // Whether running in a separate thread or not
   CsoundEngine *cs; // Pass engine
   WidgetLayout *wl; // Pass widgets
   /* current configuration */
@@ -108,6 +110,8 @@ class CsoundEngine : public QObject
     static void readWidgetValues(CsoundUserData *ud);
     static void writeWidgetValues(CsoundUserData *ud);
 
+    void setThreaded(bool threaded);
+    void setFiles(QString fileName1, QString fileName2 = 0);
     void registerConsole(ConsoleWidget *c);
     void unregisterConsole(ConsoleWidget *c);
     void setConsoleBufferSize(int size);
@@ -126,7 +130,7 @@ class CsoundEngine : public QObject
     QMutex perfMutex;  // TODO is this still needed?
 
   public slots:
-    void play();
+    int play();
     void stop();
     void pause();
     void runInTerm();
@@ -135,7 +139,7 @@ class CsoundEngine : public QObject
     void queueEvent(QString eventLine, int delay);
 
   private:
-    void runCsound(bool useAPI);
+    int runCsound(bool useAPI);
     void stopCsound();
 
     CsoundUserData *ud;
@@ -146,6 +150,8 @@ class CsoundEngine : public QObject
 
     CsoundOptions *m_options; // FIXME how to fill these?
     MYFLT *pFields; // array of pfields for score and rt events
+    QString m_fileName1;
+    QString m_fileName2;
 
     QVector<ConsoleWidget *> consoles;
     int m_consoleBufferSize;
@@ -163,8 +169,7 @@ class CsoundEngine : public QObject
   private slots:
     void recordBuffer();
 
-  signals:
-    void clearMessageQueueSignal();
+//  signals:
 };
 
 #endif // CSOUNDENGINE_H

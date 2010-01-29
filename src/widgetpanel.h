@@ -71,7 +71,7 @@ class WidgetPanel : public QDockWidget
 //    void newCurve(Curve* curve);
 //     int getCurveIndex(Curve *curve);
 //    void setCurveData(Curve *curve);
-    void clearGraphs();
+//    void clearGraphs();
 //    Curve * getCurveById(uintptr_t id);
     void flush();
     void refreshConsoles();

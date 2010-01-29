@@ -46,7 +46,10 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   askForFile = true;
   readOnly = false;
   errorMarked = false;
+
+  //FIXME this options must be set from QuteCsound configuratio!
   saveLiveEvents = true;
+  saveChanges = true;
 
   bufferSize = 4096;
   recBuffer = (MYFLT *) calloc(bufferSize, sizeof(MYFLT));
@@ -492,7 +495,7 @@ void DocumentPage::showLiveEventFrames(bool visible)
   }
 }
 
-void DocumentPage::play()
+int DocumentPage::play()
 {
   qDebug() << "DocumentPage::play() not implemented!";
   view()->unmarkErrorLines();  // Clear error lines when running
@@ -503,7 +506,51 @@ void DocumentPage::play()
 //    if (view()->getBasicText().contains("FLpanel"))
 //      useAPI = false;
 //  }
-  m_csEngine->play();
+  //Set directory of current file
+  QString runFileName1, runFileName2;
+  QTemporaryFile tempFile, csdFile, csdFile2; // TODO add support for orc/sco pairs
+  if (fileName.startsWith(":/examples/")) { // TODO is there a proper check to see if example was modified?
+    QString tmpFileName = QDir::tempPath();
+    if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
+      tmpFileName += QDir::separator();
+    }
+    tmpFileName += QString("QuteCsoundExample-XXXXXXXX.csd");
+    tempFile.setFileTemplate(tmpFileName);
+    if (!tempFile.open()) {
+      qDebug() << "Error creating temporary file " << tmpFileName;
+      return -2;
+    }
+    QString csdText = m_view->getBasicText();
+    runFileName1 = tempFile.fileName();
+    tempFile.write(csdText.toAscii());
+    tempFile.flush();
+  } /*if (fileName.startsWith(":/examples/"))*/
+  else if (!saveChanges) {
+    QString tmpFileName = QDir::tempPath();
+    if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
+      tmpFileName += QDir::separator();
+    }
+    if (fileName.endsWith(".csd",Qt::CaseInsensitive)) {
+      tmpFileName += QString("csound-tmpXXXXXXXX.csd");
+      csdFile.setFileTemplate(tmpFileName);
+      if (!csdFile.open()) {
+        qDebug() << "Error creating temporary file " << tmpFileName;
+        return -2;
+      }
+      QString csdText = m_view->getBasicText();
+      runFileName1 = csdFile.fileName();
+      csdFile.write(csdText.toAscii());
+      csdFile.flush();
+    }
+  }
+
+  runFileName2 = companionFile;
+  m_console->reset();
+  m_widgetLayout->flush();
+  m_widgetLayout->clearGraphs();
+  m_csEngine->setFiles(runFileName1, runFileName2);
+
+  return m_csEngine->play();
 }
 
 void DocumentPage::pause()

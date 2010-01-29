@@ -102,6 +102,7 @@
       <file>../examples/Synths/Simple_FM_Synth.csd</file>
       <file>../examples/Synths/Phase_Mod_Synth.csd</file>
       <file>../examples/Synths/Formant_Synth.csd</file>
+      <file>../examples/Synths/Pipe_Synth.csd</file>
 
       <file>../examples/Useful/SF_Play_from_buffer.csd</file>
       <file>../examples/Useful/SF_Play_from_buffer_2.csd</file>

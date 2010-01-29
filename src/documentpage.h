@@ -94,7 +94,7 @@ class DocumentPage : public QObject
     QAction *runAct;
 
   public slots:
-    void play();
+    int play();
     void pause();
     void stop();
     void render();
@@ -148,6 +148,7 @@ class DocumentPage : public QObject
 
     // Options
     bool saveLiveEvents;
+    bool saveChanges;
     int bufferSize; // size of the record buffer
 
   private slots:

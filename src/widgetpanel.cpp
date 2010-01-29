@@ -235,11 +235,11 @@ void WidgetPanel::setWidgetToolTip(QuteWidget *widget, bool show)
 //  layoutWidget->setCurveData(curve);
 //}
 
-void WidgetPanel::clearGraphs()
-{
-  //FIXME remove this function
-  layoutWidget->clearGraphs();
-}
+//void WidgetPanel::clearGraphs()
+//{
+//  //FIXME remove this function
+//  layoutWidget->clearGraphs();
+//}
 
 //Curve * WidgetPanel::getCurveById(uintptr_t id)
 //{

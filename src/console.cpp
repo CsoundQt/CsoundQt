@@ -22,7 +22,7 @@
 
 #include "console.h"
 
-Console::Console()
+Console::Console(QWidget *parent) : QTextEdit(parent)
 {
   error = false;
 }
@@ -35,7 +35,7 @@ void Console::appendMessage(QString msg)
 {
 //   lock.lock(); // This operation is already locked in qutecsound class
   if (error) {
-    text->setTextColor(QColor("red"));
+    setTextColor(QColor("red"));
     if (msg.contains("line ")) {
       QStringList parts = msg.split("line ");
       int lineNumber = parts.last().remove(":").trimmed().toInt();
@@ -44,23 +44,23 @@ void Console::appendMessage(QString msg)
     }
   }
   if (msg.contains("B ") or msg.contains("rtevent", Qt::CaseInsensitive)) {
-    text->setTextColor(QColor("blue"));
+    setTextColor(QColor("blue"));
   }
   if (msg.contains("error:", Qt::CaseInsensitive)) {
     error = true;
-    text->setTextColor(QColor("red"));
+    setTextColor(QColor("red"));
   }
   if (msg.contains("overall samples out of range")
       or msg.contains("disabled")) {
-    text->setTextColor(QColor("red"));
+    setTextColor(QColor("red"));
   }
   if (msg.contains("warning", Qt::CaseInsensitive)) {
-    text->setTextColor(QColor("orange"));
+    setTextColor(QColor("orange"));
   }
-  text->insertPlainText(msg);
+  insertPlainText(msg);
 //   text->moveCursor(QTextCursor::Start);
 //   text->moveCursor(QTextCursor::End);
-  text->setTextColor(m_textColor);
+  setTextColor(m_textColor);
   // Necessary hack to make sure Console show text properly. It's not working...
   //text->repaint(QRect(0,0, text->width(), text->height()));
 //   lock.unlock();
@@ -68,32 +68,32 @@ void Console::appendMessage(QString msg)
 
 void Console::setDefaultFont(QFont font) 
 {
-  text->document()->setDefaultFont(font);
+  document()->setDefaultFont(font);
 }
 
 void Console::setColors(QColor textColor, QColor bgColor)
 {
-  text->setTextColor(textColor);
+  setTextColor(textColor);
 //       text->setTextBackgroundColor(bgColor);
-  QPalette palette = text->palette();
-  palette.setColor(QPalette::WindowText, textColor);
-  palette.setColor(QPalette::Active, static_cast<QPalette::ColorRole>(9), bgColor);
-  text->setPalette(palette);
-  text->setAutoFillBackground(true);
+  QPalette p = palette();
+  p.setColor(QPalette::WindowText, textColor);
+  p.setColor(QPalette::Active, static_cast<QPalette::ColorRole>(9), bgColor);
+  setPalette(p);
+  setAutoFillBackground(true);
   m_textColor = textColor;
   m_bgColor = bgColor;
 }
 
-void Console::clear()
+void Console::reset()
 {
-  text->clear();
+  clear();
   errorLines.clear();
   error = false;
 }
 
 void Console::scrollToEnd()
 {
-  text->moveCursor(QTextCursor::End);
+  moveCursor(QTextCursor::End);
 }
 
 void Console::setKeyRepeatMode(bool repeat)
@@ -108,6 +108,38 @@ void Console::setKeyRepeatMode(bool repeat)
 //   //text->repaint(QRect(0,0, text->width(), text->height()));
 // }
 
+void Console::contextMenuEvent(QContextMenuEvent *event)
+{
+  QMenu *menu = createStandardContextMenu();
+  menu->addAction("Clear", this, SLOT(reset()));
+  menu->exec(event->globalPos());
+  delete menu;
+}
+
+void Console::keyPressEvent(QKeyEvent *event)
+{
+  if (!event->isAutoRepeat() or m_repeatKeys) {
+    QString key = event->text();
+    if (key != "") {
+      appendMessage(key);
+      emit keyPressed(key);
+    }
+  }
+  // FIXME propagate keys to parent for keyboard shortcut actions from console
+}
+
+void Console::keyReleaseEvent(QKeyEvent *event)
+{
+  if (!event->isAutoRepeat() or m_repeatKeys) {
+    QString key = event->text();
+    if (key != "") {
+      //           appendMessage("rel:" + key);
+      emit keyReleased(key);
+    }
+  }
+  // FIXME propagate keys to parent for keyboard shortcut actions from console
+}
+
 void DockConsole::closeEvent(QCloseEvent * /*event*/)
 {
   emit Close(false);
@@ -115,5 +147,5 @@ void DockConsole::closeEvent(QCloseEvent * /*event*/)
 
 void ConsoleWidget::setWidgetGeometry(int /*x*/,int /*y*/,int width,int height)
 {
-  text->setGeometry(QRect(0,0,width, height));
+  setGeometry(QRect(0,0,width, height));
 }

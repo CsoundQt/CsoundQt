@@ -21,6 +21,7 @@
 */
 
 #include "csoundengine.h"
+#include "csoundoptions.h"
 #include "widgetlayout.h"
 #include "console.h"
 
@@ -30,11 +31,12 @@ CsoundEngine::CsoundEngine()
   ud = (CsoundUserData *)malloc(sizeof(CsoundUserData));
   ud->PERF_STATUS = 0;
   ud->cs = this;
+  ud->m_threaded = true;
+  ud->csound = NULL;
+  //FIXME set widget layout ud->wl =
   pFields = (MYFLT *) calloc(EVENTS_MAX_PFIELDS, sizeof(MYFLT)); // Maximum number of p-fields for events
 
-  //FIXME set widget layout ud->wl =
   m_recording = false;
-  ud->csound = NULL;
   int init = csoundInitialize(0,0,0);
   if (init < 0) {
     qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nQutecsound will probably crash if you try to run Csound.");
@@ -445,7 +447,16 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
    }
 }
 
+void CsoundEngine::setThreaded(bool threaded)
+{
+  ud->m_threaded = threaded;
+}
 
+void CsoundEngine::setFiles(QString fileName1, QString fileName2)
+{
+  m_fileName1 = fileName1;
+  m_fileName2 = fileName2;
+}
 
 void CsoundEngine::registerConsole(ConsoleWidget *c)
 {
@@ -554,13 +565,14 @@ void CsoundEngine::queueOutString(QString channelName, QString value)
 }
 
 
-void CsoundEngine::play()
+int CsoundEngine::play()
 {
   if (!ud->perfThread->isRunning()) {
-    runCsound(true);
+    return runCsound(true);
   }
   else {
     ud->perfThread->Play();
+    return 0;
   }
 }
 
@@ -629,107 +641,26 @@ void CsoundEngine::queueEvent(QString eventLine, int delay)
     qDebug("Warning: event queue full, event not processed");
 }
 
-void CsoundEngine::runCsound(bool useAPI)
+int CsoundEngine::runCsound(bool useAPI)
 {
-  if ((m_options->thread && ud->perfThread->isRunning() ) ||
-           (!m_options->thread && ud->PERF_STATUS == 1)) { //If running, stop
-    stop();
-    return;
-  }
-  if (documentPages[curPage]->fileName.isEmpty()) {
-    QMessageBox::warning(this, tr("QuteCsound"),
-                         tr("This file has not been saved\nPlease select name and location."));
-    if (!saveAs()) {
-      runAct->setChecked(false);
-      return;
-    }
-  }
-  else if (documentPages[curPage]->document()->isModified()) {
-    if (m_options->saveChanges)
-      if (!save()) {
-        runAct->setChecked(false);
-        return;
-      }
-  }
-  //Set directory of current file
-  m_options->csdPath = "";
-  if (documentPages[curPage]->fileName.contains('/')) {
-    m_options->csdPath =
-        documentPages[curPage]->fileName.left(documentPages[curPage]->fileName.lastIndexOf('/'));
-    QDir::setCurrent(m_options->csdPath);
-  }
-  QString fileName, fileName2;
-  fileName = documentPages[curPage]->fileName;
-  if (!fileName.endsWith(".csd",Qt::CaseInsensitive)) {
-    if (documentPages[curPage]->askForFile)
-      getCompanionFileName();
-    if (fileName.endsWith(".sco",Qt::CaseInsensitive)) {
-      //Must switch filename order when open file is a sco file
-      fileName2 = fileName;
-      fileName = documentPages[curPage]->companionFile;
-    }
-    else
-      fileName2 = documentPages[curPage]->companionFile;
-  }
+  // FIXME change behavior. When play is pressed do pause, not stop
+//  if ((ud->m_threaded && ud->perfThread->isRunning() ) ||
+//           (!ud->m_threaded && ud->PERF_STATUS == 1)) { //If running, stop
+//    stop();
+//    return 0;
+//  }
 
   if (useAPI) {
 #ifdef MACOSX_PRE_SNOW
 //Remember menu bar to set it after FLTK grabs it
     menuBarHandle = GetMenuBar();
 #endif
-    m_console->clear();
-    widgetPanel->flush();
-    widgetPanel->clearGraphs();
     eventQueueSize = 0; //Flush events gathered while idle
     //   outValueQueue.clear();
 //    inValueQueue.clear();
 //    outStringQueue.clear();
-    emit clearMessageQueueSignal();
-    audioOutputBuffer.allZero();
-    QTemporaryFile tempFile;
-    if (fileName.startsWith(":/examples/")) {
-      QString tmpFileName = QDir::tempPath();
-      if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
-        tmpFileName += QDir::separator();
-      }
-      tmpFileName += QString("QuteCsoundExample-XXXXXXXX.csd");
-      tempFile.setFileTemplate(tmpFileName);
-      if (!tempFile.open()) {
-        QMessageBox::critical(this,
-                              tr("QuteCsound"),
-                                tr("Error creating temporary file."),
-                                    QMessageBox::Ok);
-        runAct->setChecked(false);
-        return;
-      }
-      QString csdText = textEdit->document()->toPlainText();
-      fileName = tempFile.fileName();
-      tempFile.write(csdText.toAscii());
-      tempFile.flush();
-    }
-    QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
-    if (!m_options->saveChanges) {
-      QString tmpFileName = QDir::tempPath();
-      if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
-        tmpFileName += QDir::separator();
-      }
-      if (documentPages[curPage]->fileName.endsWith(".csd",Qt::CaseInsensitive)) {
-        tmpFileName += QString("csound-tmpXXXXXXXX.csd");
-        csdFile.setFileTemplate(tmpFileName);
-        if (!csdFile.open()) {
-          QMessageBox::critical(this,
-                                tr("QuteCsound"),
-                                tr("Error creating temporary file."),
-                                QMessageBox::Ok);
-          runAct->setChecked(false);
-          return;
-        }
-        QString csdText = textEdit->document()->toPlainText();
-        fileName = csdFile.fileName();
-        csdFile.write(csdText.toAscii());
-        csdFile.flush();
-      }
-    }
+    ud->audioOutputBuffer.allZero();
+
     char **argv;
     argv = (char **) calloc(33, sizeof(char*));
     // TODO use: PUBLIC int csoundSetGlobalEnv(const char *name, const char *value);

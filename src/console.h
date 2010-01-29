@@ -25,46 +25,54 @@
 
 #include <QtGui>
 
-class Console
+class Console : public QTextEdit
 {
   public:
-    Console();
+    Console(QWidget *parent = 0);
 
     virtual ~Console();
 
     virtual void appendMessage(QString msg);
     virtual void setDefaultFont(QFont font);
     virtual void setColors(QColor textColor, QColor bgColor);
-    void clear();
+    void reset();
     void scrollToEnd();
     void setKeyRepeatMode(bool repeat);
 //     void refresh();
+
     QList<int> errorLines;
 
   protected:
-    QTextEdit *text;
+    virtual void contextMenuEvent(QContextMenuEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void keyReleaseEvent(QKeyEvent *event);
+
     bool error;
     QColor m_textColor;
     QColor m_bgColor;
     bool m_repeatKeys;
     QMutex lock;
+
+  signals:
+    void keyPressed(QString key);
+    void keyReleased(QString key);
 };
 
-class DockConsole : public QDockWidget, public Console
+class DockConsole : public QDockWidget
 {
   Q_OBJECT
   public:
     DockConsole(QWidget * parent): QDockWidget(parent)
     {
       setWindowTitle(tr("Csound Output Console"));
-      text = new QTextEdit(parent);
+      text = new Console(parent);
       text->setReadOnly(true);
       text->setContextMenuPolicy(Qt::NoContextMenu);
       text->document()->setDefaultFont(QFont("Courier", 10));
       setWidget(text);
     }
 
-    ~DockConsole() {;};
+    ~DockConsole() {;}
 
     void copy()
     {
@@ -76,76 +84,50 @@ class DockConsole : public QDockWidget, public Console
       return text->hasFocus();
     }
 
+    Console *text; // Made public for access from main application for utilities
+
   public slots:
-    void clear()
+    void reset()
     {
       text->clear();
     }
 
   protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event)
-    {
-      QMenu *menu = text->createStandardContextMenu();
-      menu->addAction("Clear", this, SLOT(clear()));
-      menu->exec(event->globalPos());
-      delete menu;
-    }
-    virtual void keyPressEvent(QKeyEvent *event)
-    {
-      if (!event->isAutoRepeat() or m_repeatKeys) {
-        QString key = event->text();
-        if (key != "") {
-          appendMessage(key);
-          emit keyPressed(key);
-        }
-      }
-    }
-    virtual void keyReleaseEvent(QKeyEvent *event)
-    {
-      if (!event->isAutoRepeat() or m_repeatKeys) {
-        QString key = event->text();
-        if (key != "") {
-//           appendMessage("rel:" + key);
-          emit keyReleased(key);
-        }
-      }
-    }
 
     virtual void closeEvent(QCloseEvent * event);
+
   signals:
     void Close(bool visible);
-    void keyPressed(QString key);
-    void keyReleased(QString key);
 };
 
 
-class MyQTextEdit : public QTextEdit
-{
-  Q_OBJECT
-  public:
-    MyQTextEdit(QWidget* parent) : QTextEdit(parent) {}
-    ~MyQTextEdit() {}
-
-  protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event)
-    {
-      QMenu *menu = createStandardContextMenu();
-      menu->addAction("Clear", this, SLOT(clear()));
-      menu->exec(event->globalPos());
-      delete menu;
-    }
+//class MyQTextEdit : public QTextEdit
+//{
+//  Q_OBJECT
+//  public:
+//    MyQTextEdit(QWidget* parent) : QTextEdit(parent) {}
+//    ~MyQTextEdit() {}
+//
+//  protected:
+//    virtual void contextMenuEvent(QContextMenuEvent *event)
+//    {
+//      QMenu *menu = createStandardContextMenu();
+//      menu->addAction("Clear", this, SLOT(clear()));
+//      menu->exec(event->globalPos());
+//      delete menu;
+//    }
 //     virtual void contextMenuEvent(QContextMenuEvent *event)
 //     {emit(popUpMenu(event->globalPos()));}
 // 
 //   signals:
 //     void popUpMenu(QPoint pos);
-};
+//};
 
-class ConsoleWidget : public QTextEdit, public Console
+class ConsoleWidget : public Console
 {
   Q_OBJECT
   public:
-    ConsoleWidget(QWidget * parent = 0): QTextEdit(parent)
+    ConsoleWidget(QWidget * parent = 0): Console(parent)
     {
       setReadOnly(true);
       setFontItalic(false);
