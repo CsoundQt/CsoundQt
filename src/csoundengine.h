@@ -150,8 +150,6 @@ class CsoundEngine : public QObject
 
     CsoundOptions *m_options; // FIXME how to fill these?
     MYFLT *pFields; // array of pfields for score and rt events
-    QString m_fileName1;
-    QString m_fileName2;
 
     QVector<ConsoleWidget *> consoles;
     int m_consoleBufferSize;

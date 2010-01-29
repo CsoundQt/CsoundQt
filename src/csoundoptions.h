@@ -30,11 +30,12 @@ class CsoundOptions
   public:
     CsoundOptions();
 
-    QString generateCmdLineFlags(bool rt = false);
-    int generateCmdLine(char **argv,
-                        bool rt,
-                        QString fileName,
-                        QString fileName2);
+    QString generateCmdLineFlags();
+    int generateCmdLine(char **argv);
+
+    QString fileName1;
+    QString fileName2;
+    bool rt; //FIXME make sure this is set!
 
     bool enableFLTK;
     int bufferSize;

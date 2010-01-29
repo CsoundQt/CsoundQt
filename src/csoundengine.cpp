@@ -664,7 +664,9 @@ int CsoundEngine::runCsound(bool useAPI)
     char **argv;
     argv = (char **) calloc(33, sizeof(char*));
     // TODO use: PUBLIC int csoundSetGlobalEnv(const char *name, const char *value);
-    int argc = m_options->generateCmdLine(argv, realtime, fileName, fileName2);
+
+    // FIXME set realtime and filenames in options before calling this!
+    int argc = m_options->generateCmdLine(argv);
 #ifdef QUTECSOUND_DESTROY_CSOUND
     csound=csoundCreate(0);
 #endif
