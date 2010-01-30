@@ -28,8 +28,9 @@
 class OpEntryParser;
 class Highlighter;
 
-class DocumentView : public QWidget
+class DocumentView : public QScrollArea
 {
+  Q_OBJECT
   public:
     DocumentView(QWidget * parent, OpEntryParser *opcodeTree = 0);
     ~DocumentView();

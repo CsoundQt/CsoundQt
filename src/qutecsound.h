@@ -97,9 +97,9 @@ class qutecsound:public QMainWindow
     void changeFont();
     void changePage(int index);
     void setWidgetTooltipsVisible(bool visible);
-    void updateWidgets();
+//    void updateWidgets();
     void openExample();
-    void registerLiveEvent(QWidget *e);
+//    void registerLiveEvent(QWidget *e);
 
   protected:
     virtual void closeEvent(QCloseEvent *event);
@@ -278,10 +278,6 @@ class qutecsound:public QMainWindow
 
 #ifdef MACOSX_PRE_SNOW
     MenuBarHandle menuBarHandle;
-#endif
-#ifdef QUTECSOUND_COPYPASTE
-    QTextCursor m_clipboard;
-    QString m_clipboardText;
 #endif
 };
 

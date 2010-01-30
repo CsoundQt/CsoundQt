@@ -124,6 +124,8 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   connect(distributeHorizontalAct, SIGNAL(triggered()), this, SLOT(distributeHorizontal()));
   distributeVerticalAct = new QAction(tr("Distribute Vertically"), this);
   connect(distributeVerticalAct, SIGNAL(triggered()), this, SLOT(distributeVertical()));
+
+  setFocusPolicy(Qt::NoFocus);
 }
 
 WidgetLayout::~WidgetLayout()
@@ -139,12 +141,12 @@ WidgetLayout::~WidgetLayout()
 //{
 //  return m_panel;
 //}
-
-void WidgetLayout::setUndoHistory(QVector<QString> *history, int *index)
-{
-  m_history = history;
-  m_historyIndex = index;
-}
+//
+//void WidgetLayout::setUndoHistory(QVector<QString> *history, int *index)
+//{
+//  m_history = history;
+//  m_historyIndex = index;
+//}
 
 unsigned int WidgetLayout::widgetCount()
 {
@@ -1676,7 +1678,8 @@ int WidgetLayout::createScope(int x, int y, int width, int height, QString widge
     channelName.chop(1);  //remove last space
     widget->setChannelName(channelName);
   }
-//   connect(static_cast<qutecsound *>(parent()), SIGNAL(updateData()), widget, SLOT(updateData()));
+
+  updateData(); // Starts updataData timer
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
@@ -1728,9 +1731,9 @@ void WidgetLayout::setModified(bool mod)
 
 void WidgetLayout::clearHistory()
 {
-  m_history->clear();
-  (*m_history) << "";
-  *m_historyIndex = 0;
+  m_history.clear();
+  m_history << "";
+  m_historyIndex = 0;
 }
 
 void WidgetLayout::loadPreset(int num)
@@ -1859,20 +1862,20 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
 void WidgetLayout::markHistory()
 {
   QString text = getMacWidgetsText();
-  if (m_history->isEmpty()) {
-    *m_history << "";
-    *m_historyIndex = 0;
+  if (m_history.isEmpty()) {
+    m_history << "";
+    m_historyIndex = 0;
   }
-  if ((*m_history)[*m_historyIndex] != text) {
-    if (! (*m_history)[*m_historyIndex].isEmpty())
-      (*m_historyIndex)++;
-    if (*m_historyIndex >= QUTE_MAX_UNDO) {
-      m_history->pop_front();
-      (*m_historyIndex)--;
+  if (m_history[m_historyIndex] != text) {
+    if (! m_history[m_historyIndex].isEmpty())
+      m_historyIndex++;
+    if (m_historyIndex >= QUTE_MAX_UNDO) {
+      m_history.pop_front();
+      (m_historyIndex)--;
     }
-    if ((*m_history).size() != *m_historyIndex + 1)
-      (*m_history).resize(*m_historyIndex + 1);
-    (*m_history)[*m_historyIndex] = text;
+    if (m_history.size() != m_historyIndex + 1)
+      m_history.resize(m_historyIndex + 1);
+    m_history[m_historyIndex] = text;
 //    qDebug() << "WidgetLayout::markHistory "<< *m_historyIndex << " ....."  << text;
   }
 }
@@ -2047,19 +2050,19 @@ void WidgetLayout::deleteSelected()
 void WidgetLayout::undo()
 {
   qDebug("WidgetLayout::undo()");
-  if (*m_historyIndex > 0) {
-    (*m_historyIndex)--;
-    qDebug() << "WidgetLayout::undo() " << *m_historyIndex << "...." << (*m_history)[*m_historyIndex];
-    loadWidgets((*m_history)[*m_historyIndex]);
+  if (m_historyIndex > 0) {
+    (m_historyIndex)--;
+    qDebug() << "WidgetLayout::undo() " << m_historyIndex << "...." << m_history[m_historyIndex];
+    loadWidgets(m_history[m_historyIndex]);
   }
 }
 
 void WidgetLayout::redo()
 {
   qDebug("WidgetLayout::redo()");
-  if (*m_historyIndex < (*m_history).size() - 1) {
-    (*m_historyIndex)++;
-    loadWidgets((*m_history)[*m_historyIndex]);
+  if (m_historyIndex < m_history.size() - 1) {
+    m_historyIndex++;
+    loadWidgets(m_history[m_historyIndex]);
   }
 }
 

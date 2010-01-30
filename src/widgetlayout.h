@@ -45,7 +45,7 @@ class WidgetLayout : public QWidget
     ~WidgetLayout();
 //    void setPanel(WidgetPanel* panel);
 //    WidgetPanel * panel();
-    void setUndoHistory(QVector<QString> *history, int *index);
+//    void setUndoHistory(QVector<QString> *history, int *index);
     unsigned int widgetCount();
     void loadWidgets(QString macWidgets);
     QString getMacWidgetsText(); // With full tags
@@ -192,8 +192,8 @@ class WidgetLayout : public QWidget
     QCheckBox *bgCheckBox;
     QPushButton *bgButton;
 
-    QVector<QString> *m_history;  // Undo/ Redo history
-    int *m_historyIndex; // Current point in history
+    QVector<QString> m_history;  // Undo/ Redo history
+    int m_historyIndex; // Current point in history
     bool m_modified;
     bool m_editMode;
 

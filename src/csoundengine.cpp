@@ -28,12 +28,15 @@
 CsoundEngine::CsoundEngine()
 {
   // Initialize user data pointer passed to Csound
-  ud = (CsoundUserData *)malloc(sizeof(CsoundUserData));
+//  ud = (CsoundUserData *)malloc(sizeof(CsoundUserData));
+  ud = new CsoundUserData();
   ud->PERF_STATUS = 0;
   ud->cs = this;
   ud->threaded = true;
   ud->csound = NULL;
-  //FIXME set widget layout ud->wl =
+  ud->perfThread = 0;
+  ud->mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2 channels
+
   pFields = (MYFLT *) calloc(EVENTS_MAX_PFIELDS, sizeof(MYFLT)); // Maximum number of p-fields for events
 
   m_recording = false;
@@ -49,8 +52,6 @@ CsoundEngine::CsoundEngine()
   csound=csoundCreate(0);
 #endif
 
-  ud->perfThread = 0;
-
   eventQueue.resize(QUTECSOUND_MAX_EVENTS);
   eventTimeStamps.resize(QUTECSOUND_MAX_EVENTS);
   eventQueueSize = 0;
@@ -58,11 +59,7 @@ CsoundEngine::CsoundEngine()
   queueTimer.setSingleShot(true);
   connect(&queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
   refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;  // Eventually allow this to be changed
-  dispatchQueues(); // starts queue dispatcher timer
 
-  ud->mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2 channels
-
-  // FIXME connect(csEngine, SIGNAL(clearMessageQueue()), this, SLOT(clearMessageQueue()));
 }
 
 CsoundEngine::~CsoundEngine()
@@ -72,8 +69,9 @@ CsoundEngine::~CsoundEngine()
 #ifndef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(csound);
 #endif
-  free(ud);
+//  free(ud);
   free(pFields);
+  delete ud;
   delete recBuffer;
 }
 
@@ -461,9 +459,15 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
 //  m_fileName2 = fileName2;
 //}
 
-void CsoundEngine::setCsoundOptions(const CsoundOptions &options)
+//void CsoundEngine::setCsoundOptions(const CsoundOptions &options)
+//{
+//  m_options = options;
+//}
+
+void CsoundEngine::setWidgetLayout(WidgetLayout *wl)
 {
-  m_options = options;
+  ud->wl = wl;
+  dispatchQueues(); // starts queue dispatcher timer
 }
 
 void CsoundEngine::setThreaded(bool threaded)
@@ -483,18 +487,11 @@ void CsoundEngine::enableWidgets(bool enable)
 
 void CsoundEngine::registerConsole(ConsoleWidget *c)
 {
-  //FIXME register consoles as they are created
   consoles.append(c);
-
-  connect(c, SIGNAL(keyPressed(QString)),
-          this, SLOT(keyPressForCsound(QString)));
-  connect(c, SIGNAL(keyReleased(QString)),
-          this, SLOT(keyReleaseForCsound(QString)));
 }
 
 void CsoundEngine::unregisterConsole(ConsoleWidget *c)
 {
-  //FIXME unregister consoles as they are destroyed
   int index = consoles.indexOf(c);
   if (index >= 0 )
     consoles.remove(index);
@@ -588,13 +585,16 @@ void CsoundEngine::queueOutString(QString channelName, QString value)
 }
 
 
-int CsoundEngine::play()
+int CsoundEngine::play(CsoundOptions *options)
 {
-  if (!ud->perfThread->isRunning()) {
+  if ((ud->threaded && ud->perfThread && ud->perfThread->isRunning())
+    || (!ud->threaded && ud->PERF_STATUS != 1) ) {
+    m_options = *options;
     return runCsound(true);
   }
   else {
-    ud->perfThread->Play();
+    if (ud->threaded)
+      ud->perfThread->Play();
     return 0;
   }
 }
@@ -610,14 +610,12 @@ void CsoundEngine::pause()
    ud->perfThread->Pause();
 }
 
-
-
 void CsoundEngine::startRecording(int sampleformat, QString fileName)
 {
   if (isRunning()) {
     //FIXME run act must be checked according to the status of the current document when it changes
 //    runAct->setChecked(true);
-    play();
+    play(&m_options);
   }
   const int channels=ud->numChnls;
   const int sampleRate=ud->sampleRate;
@@ -757,7 +755,6 @@ int CsoundEngine::runCsound(bool useAPI)
 //    qDebug("Csound compiled %i", ud->result);
     if (ud->result!=CSOUND_SUCCESS or variable != CSOUND_SUCCESS) {
       qDebug("Csound compile failed!");
-      stop();  // FIXME necessary here any longer?
       free(argv);
       // FIXME mark error lines: documentPages[curPage]->markErrorLines(m_console->errorLines);
       return -3;
@@ -819,7 +816,7 @@ void CsoundEngine::stopCsound()
   qDebug("qutecsound::stopCsound()");
   if (ud->threaded) {
 //    perfThread->ScoreEvent(0, 'e', 0, 0);
-    if (ud->perfThread->isRunning()) {
+    if (ud->perfThread != 0 && ud->perfThread->isRunning()) {
       ud->perfThread->Stop();
       ud->perfThread->Join();
       delete ud->perfThread;
@@ -827,11 +824,13 @@ void CsoundEngine::stopCsound()
     }
   } /*if (m_options.threaded)*/
   else {
-    csoundStop(ud->csound);
-    ud->PERF_STATUS = 0;
-    csoundCleanup(ud->csound);
-    for (int i = 0; i < ud->cs->consoles.size(); i++) {
-      ud->cs->consoles[i]->scrollToEnd();
+    if (ud->PERF_STATUS == 1) {
+      ud->PERF_STATUS = 0;
+      csoundStop(ud->csound);
+      csoundCleanup(ud->csound);
+      for (int i = 0; i < ud->cs->consoles.size(); i++) {
+        ud->cs->consoles[i]->scrollToEnd();
+      }
     }
   }
 #ifdef MACOSX_PRE_SNOW
@@ -962,7 +961,10 @@ void CsoundEngine::recordBuffer()
 bool CsoundEngine::isRunning()
 {
   if (ud->threaded) {
-    return ud->perfThread->isRunning();
+    if (ud->perfThread != 0 && ud->perfThread->isRunning())
+      return true;
+    else
+      return false;
   }
   else {
     return ud->PERF_STATUS;

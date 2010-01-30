@@ -25,7 +25,7 @@
 
 #include <QtGui>
 
-#include "qutewidget.h"//FIXME this shoudl be removed from here
+//#include "qutewidget.h"
 //#include "widgetpreset.h"
 
 class WidgetLayout;
@@ -34,7 +34,6 @@ class WidgetPanel : public QDockWidget
 {
   Q_OBJECT
 
-  // FIXME are these friendings still needed???
   friend class qutecsound;  // To allow edit actions- TODO- can this be done all here?
   friend class QuteWidget;  // To allow edit actions
   public:
@@ -43,7 +42,7 @@ class WidgetPanel : public QDockWidget
 
 //    unsigned int widgetCount();
     void setWidgetLayout(WidgetLayout *layoutWidget);
-    WidgetLayout * popWidgetLayout();
+//    WidgetLayout * popWidgetLayout();
 //    void getValues(QVector<QString> *channelNames, QVector<double> *values, QVector<QString> *stringValues);
 //    void getMouseValues(QVector<double> *values);
 //    int getMouseX();
@@ -61,7 +60,6 @@ class WidgetPanel : public QDockWidget
 
     void setWidgetScrollBarsActive(bool active);
 //    void setKeyRepeatMode(bool repeat);
-    void focusWidgets();
 //    void loadWidgets(QString macWidgets);
 //    int newWidget(QString widgetLine, bool offset = false);
 //    QString widgetsText(bool tags = true);
@@ -95,6 +93,7 @@ class WidgetPanel : public QDockWidget
     QAction *editAct;  // TODO this edit action should be moved somewhere better
 //    WidgetLayout *layoutWidget;   // Always owned by documentpage is this needed here?
     QScrollArea *scrollArea;
+//    QStackedLayout *l;
 
     QStringList clipboard;
     QSize oldSize;
@@ -115,7 +114,7 @@ class WidgetPanel : public QDockWidget
 //    void selectionChanged(QRect selection);
 //    void widgetMoved(QPair<int, int>);
 //    void widgetResized(QPair<int, int>);
-    void adjustLayoutSize();
+//    void adjustLayoutSize();
 
   private slots:
 //    void copy();

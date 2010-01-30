@@ -35,12 +35,11 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));
 
   m_sbActive = false;
-  QTimer::singleShot(30, this, SLOT(updateData()));
   this->setMouseTracking(true);
-//  mouseBut1 = 0;
-//  mouseBut2 = 0;
 
-//  clearHistory();
+  setFocusPolicy(Qt::NoFocus);
+//  l = new QStackedLayout(this);
+//  setLayout(l);
 }
 
 WidgetPanel::~WidgetPanel()
@@ -48,38 +47,41 @@ WidgetPanel::~WidgetPanel()
 }
 
 //unsigned int WidgetPanel::widgetCount()
-//{//FIXME get rid of ths function (as intermediary)
+//{
 //  return layoutWidget->widgetCount();
 //}
 
 void WidgetPanel::setWidgetLayout(WidgetLayout *w)
 {
 //  layoutWidget = w;
-  setWidgetScrollBarsActive(true);
-  if (m_sbActive) {
-    scrollArea->setWidget(w);
+  if (widget() != 0) {
+//    widget()->hide();
+//    l->removeWidget(widget());
+    disconnect(widget(), SIGNAL(selection(QRect)));
   }
-  else {
-    setWidget(w);
-  }
+//  setWidgetScrollBarsActive(true);
 //  connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
   connect(w, SIGNAL(selection(QRect)), this, SLOT(selectionChanged(QRect)));
+
+//  l->addWidget(w);
+  setWidget(w);
 }
 
-WidgetLayout * WidgetPanel::popWidgetLayout()
-{
-  disconnect(this,SIGNAL(topLevelChanged(bool)));
-  WidgetLayout * w;
-  if (m_sbActive) {
-    w = static_cast<WidgetLayout *>(scrollArea->takeWidget());
-  }
-  else {
-    w = static_cast<WidgetLayout *>(widget());
-  }
-//  disconnect(layoutWidget, SIGNAL(deselectAll()));
-  disconnect(w, SIGNAL(selection(QRect)));
-  return w;
-}
+//WidgetLayout * WidgetPanel::popWidgetLayout()
+//{
+//  disconnect(this,SIGNAL(topLevelChanged(bool)));
+//  WidgetLayout * w;
+//  l->removeWidget(widget());
+//  if (m_sbActive) {
+//    w = static_cast<WidgetLayout *>(scrollArea->takeWidget());
+//  }
+//  else {
+//    w = static_cast<WidgetLayout *>(widget());
+//  }
+////  disconnect(layoutWidget, SIGNAL(deselectAll()));
+//  disconnect(w, SIGNAL(selection(QRect)));
+//  return w;
+//}
 
 //void WidgetPanel::getValues(QVector<QString> *channelNames,
 //                            QVector<double> *values,
@@ -169,16 +171,6 @@ void WidgetPanel::setWidgetScrollBarsActive(bool active)
 //{
 //  layoutWidget->setKeyRepeatMode(repeat);
 //}
-
-void WidgetPanel::focusWidgets()
-{
-  if (m_sbActive) {
-    scrollArea->widget()->setFocus();
-  }
-  else  {
-    widget()->setFocus();
-  }
-}
 
 //int WidgetPanel::newWidget(QString widgetLine, bool offset)
 //{
@@ -343,7 +335,7 @@ void WidgetPanel::resizeEvent(QResizeEvent * event)
   QDockWidget::resizeEvent(event);
   oldSize = event->oldSize();
   emit resized(event->size());
-  adjustLayoutSize();
+//  adjustLayoutSize();
 }
 
 void WidgetPanel::moveEvent(QMoveEvent * event)
@@ -410,15 +402,17 @@ void WidgetPanel::moveEvent(QMoveEvent * event)
 //  layoutWidget->widgetResized(delta);
 //}
 //
-void WidgetPanel::adjustLayoutSize()
-{
-  if (m_sbActive) {
-    static_cast<WidgetLayout *>(scrollArea->widget())->adjustLayoutSize();
-  }
-  else  {
-    static_cast<WidgetLayout *>(widget())->adjustLayoutSize();
-  }
-}
+//void WidgetPanel::adjustLayoutSize()
+//{
+//  if (m_sbActive) {
+//    if (scrollArea->widget() != 0)
+//      static_cast<WidgetLayout *>(scrollArea->widget())->adjustLayoutSize();
+//  }
+//  else  {
+//    if (widget() != 0)
+//      static_cast<WidgetLayout *>(widget())->adjustLayoutSize();
+//  }
+//}
 
 //void WidgetPanel::copy()
 //{

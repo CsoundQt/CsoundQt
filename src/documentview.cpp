@@ -28,7 +28,7 @@
 #include "types.h"
 
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
-    QWidget(parent),  m_opcodeTree(opcodeTree)
+    QScrollArea(parent),  m_opcodeTree(opcodeTree)
 {
   mainEditor = new QTextEdit(this);
   scoreEditor = new QTextEdit(this);
@@ -44,10 +44,15 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
       << ladspaEditor;
   splitter = new QSplitter(this);
   splitter->setOrientation(Qt::Vertical);
-  for (int i = 0; editors.size(); i++) {
+  splitter->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+  for (int i = 0; i < editors.size(); i++) {
     connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
     splitter->addWidget(editors[i]);
   }
+
+  QStackedLayout *l = new QStackedLayout(this);
+  l->addWidget(splitter);
+  setLayout(l);
 
   m_highlighter = new Highlighter();
 
@@ -76,8 +81,8 @@ DocumentView::~DocumentView()
 
 void DocumentView::setViewMode(int mode)
 {
-  if (m_viewMode == mode)
-    return;
+//  if (m_viewMode == mode)
+//    return;
   m_viewMode = mode;
   hideAllEditors();
 
@@ -265,7 +270,10 @@ void DocumentView::syntaxCheck()
   // FIXME implment for multiple views
 
   //FIXME this is not building... why???
-//  emit lineNumberSignal(currentLine());
+  int line = currentLine();
+  emit(lineNumberSignal(line));
+
+  unmarkErrorLines();
   //FIXME connect this signal to main class showLineNumber
   QTextCursor cursor = mainEditor->textCursor();
   cursor.select(QTextCursor::LineUnderCursor);
@@ -609,6 +617,7 @@ void DocumentView::hideAllEditors()
 {
   for (int i = 0; i < editors.size(); i++) {
     editors[i]->hide();
+    splitter->handle(i)->hide();
   }
 }
 

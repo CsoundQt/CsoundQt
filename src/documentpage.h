@@ -29,6 +29,7 @@
 #include <QStack>
 
 #include "types.h"
+#include "csoundoptions.h"
 
 class OpEntryParser;
 class DocumentView;
@@ -58,6 +59,7 @@ class DocumentPage : public QObject
     QString getMacPresetsText();
     QString getMacOptionsText();
     QString getMacOptions(QString option);
+    QString wordUnderCursor();
     QRect getWidgetPanelGeometry();
 //    void getToIn();
 //    void inToGet();
@@ -66,7 +68,9 @@ class DocumentPage : public QObject
     QStringList getScheduledEvents(unsigned long ksmpscount);
     void setModified(bool mod);
     bool isModified();
+    bool usesFltk();
     void updateCsLadspaText();
+    void focusWidgets();
 
     void copy();  // This actions are passed here for distribution
     void cut();  // Can it be done better?
@@ -74,11 +78,25 @@ class DocumentPage : public QObject
     void undo();
     void redo();
 
-    DocumentView *view();
-    CsoundEngine *engine();
-    WidgetLayout *widgetLayout(); // Get rid of these some day...
+    DocumentView *getView();  // Needed to pass view for placing it as tab widget in main application
+    WidgetLayout *getWidgetLayout();  // Needed to pass for placing in widget dock panel
 
-    // Options setters
+    // Document view properties
+    void setTextFont(QFont font);
+    void setTabStopWidth(int tabWidth);
+    void setLineWrapMode(QTextEdit::LineWrapMode wrapLines);
+    void setColorVariables(bool colorVariables);
+    void setOpcodeNameList(QStringList opcodeNameList);
+    void print(QPrinter *printer);
+
+    // Widget Layout properties
+    void showWidgetTooltips(bool visible);
+    void setKeyRepeatMode(bool keyRepeat);  // Also for console widget
+
+    //Engine Properties
+//    void setCsoundOptions(CsoundOptions &options);
+
+    // Internal Options setters
     void setConsoleBufferSize(int size);
     void setWidgetEnabled(bool enabled);
     void setRunThreaded(bool thread);
@@ -96,10 +114,10 @@ class DocumentPage : public QObject
     QAction *runAct;
 
   public slots:
-    int play();
+    int play(CsoundOptions *options);
     void pause();
     void stop();
-    void render();
+    void render(CsoundOptions *options);
     void record(int mode); // 0=16 bit int  1=32 bit int  2=float
 
     void setMacWidgetsText(QString widgetText);
@@ -138,10 +156,10 @@ class DocumentPage : public QObject
 
     // Options
     bool saveLiveEvents;
-    bool saveChanges;
+//    bool saveChanges;
 
   private slots:
-    void changed();
+    void textChanged();
     void liveEventFrameClosed();
 //    void dispatchQueues();
 //    void queueMessage(QString message);
@@ -155,7 +173,7 @@ class DocumentPage : public QObject
     void doCopy();
     void doCut();
     void doPaste();
-    void registerLiveEvent(QWidget *e);   // FIXME is this still needed?
+//    void registerLiveEvent(QWidget *e);
     void setCurrentAudioFile(QString name);
     void liveEventsVisible(bool);  // To change the action in the main window
 };
