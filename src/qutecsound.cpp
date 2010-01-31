@@ -1943,6 +1943,7 @@ void qutecsound::createMenus()
   usefulFiles.append(":/examples/Useful/Audio_Output_Test.csd");
   usefulFiles.append(":/examples/Useful/Audio_Thru_Test.csd");
   usefulFiles.append(":/examples/Useful/MIDI_IO_Test.csd");
+  usefulFiles.append(":/examples/Useful/MIDI_Tunings.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_buffer.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_buffer_2.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_HD.csd");
