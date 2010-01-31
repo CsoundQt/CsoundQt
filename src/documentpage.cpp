@@ -53,9 +53,11 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 
   m_view = new DocumentView(parent);
   m_view->setOpcodeTree(m_opcodeTree);
+
   m_console = new ConsoleWidget(parent);
   //FIXME show console
   m_console->hide();
+
   m_widgetLayout = new WidgetLayout(parent);
   m_widgetLayout->show();
 
@@ -66,21 +68,23 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   connect(m_view, SIGNAL(contentsChanged()), this, SLOT(textChanged()));
 //   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(moved()));
 
-  // Key presses on widget layout and console are passed to the engine
-  connect(m_widgetLayout, SIGNAL(keyPressed(QString)),
-          m_csEngine, SLOT(keyPressForCsound(QString)));
-  connect(m_widgetLayout, SIGNAL(keyReleased(QString)),
-          m_csEngine, SLOT(keyReleaseForCsound(QString)));
-
   connect(m_console, SIGNAL(keyPressed(QString)),
           m_csEngine, SLOT(keyPressForCsound(QString)));
   connect(m_console, SIGNAL(keyReleased(QString)),
           m_csEngine, SLOT(keyReleaseForCsound(QString)));
 
+  // Key presses on widget layout and console are passed to the engine
+  connect(m_widgetLayout, SIGNAL(keyPressed(QString)),
+          m_csEngine, SLOT(keyPressForCsound(QString)));
+  connect(m_widgetLayout, SIGNAL(keyReleased(QString)),
+          m_csEngine, SLOT(keyReleaseForCsound(QString)));
+  connect(m_widgetLayout, SIGNAL(changed()), this, SLOT(setModified()));
+
+  connect(m_csEngine, SIGNAL(errorLines(QList<int>)),
+          m_view, SLOT(markErrorLines(QList<int>)));
+
   // Register the console with the engine for message printing
   m_csEngine->registerConsole(m_console);
-
-  connect(m_widgetLayout, SIGNAL(changed()), this, SLOT(setModified()));
 
 }
 
@@ -523,6 +527,11 @@ void DocumentPage::print(QPrinter *printer)
   m_view->print(printer);
 }
 
+//void DocumentPage::setEditAct(QAction *editAct)
+//{
+//  m_widgetLayout->setEditAct(editAct);
+//}
+
 //void DocumentPage::setCsoundOptions(CsoundOptions &options)
 //{
 //  m_csEngine->setCsoundOptions(options);
@@ -720,10 +729,19 @@ void DocumentPage::setWidgetPanelSize(QSize size)
 //   qDebug("DocumentPage::setWidgetPanelSize() %i %i", size.width(), size.height());
 }
 
-
 void DocumentPage::setWidgetEditMode(bool active)
 {
   m_widgetLayout->setEditMode(active);
+}
+
+void DocumentPage::duplicateWidgets()
+{
+  m_widgetLayout->duplicate();
+}
+
+void DocumentPage::jumpToLine(int line)
+{
+  m_view->jumpToLine(line);
 }
 
 void DocumentPage::newLiveEventFrame(QString text)

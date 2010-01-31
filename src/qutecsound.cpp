@@ -64,8 +64,8 @@ qutecsound::qutecsound(QStringList fileNames)
   textEdit = NULL;
   QLocale::setDefault(QLocale::system());  //Does this take care of the decimal separator for different locales?
   curPage = -1;
-  m_options = new Options();
 
+  m_options = new Options();
   // Create GUI panels
   lineNumberLabel = new QLabel("Line 1"); // Line number display
   statusBar()->addPermanentWidget(lineNumberLabel); // This must be done before a file is loaded
@@ -80,7 +80,6 @@ qutecsound::qutecsound(QStringList fileNames)
   connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
   addDockWidget(Qt::RightDockWidgetArea, helpPanel);
 
-  // WidgetPanel must be created before createAcctions since it contains the editAct action
   widgetPanel = new WidgetPanel(this);
   widgetPanel->setFocusPolicy(Qt::NoFocus);
   widgetPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea |Qt::LeftDockWidgetArea);
@@ -97,7 +96,7 @@ qutecsound::qutecsound(QStringList fileNames)
   m_inspector->setObjectName("Inspector");
   addDockWidget(Qt::LeftDockWidgetArea, m_inspector);
 
-  createActions(); // Must be before readSettings as this sets the default shortcuts
+  createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
   readSettings();
 
   bool widgetsVisible = !widgetPanel->isHidden(); // Must be after readSettings() to save last state
@@ -226,11 +225,11 @@ void qutecsound::changePage(int index)
   // FIXME connect showLineNumber(int lineNumber) from current document view
   setCurrentFile(documentPages[curPage]->fileName);
   connectActions();
-  widgetPanel->setWidgetLayout(documentPages[curPage]->getWidgetLayout());
   documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
   documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
   documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
   setWidgetPanelGeometry();
+  widgetPanel->setWidgetLayout(documentPages[curPage]->getWidgetLayout());
   textEdit = documentPages[curPage];
 }
 
@@ -476,9 +475,9 @@ void qutecsound::redo()
   documentPages[curPage]->redo();
 }
 
-void qutecsound::setWidgetEditMode(bool)
+void qutecsound::setWidgetEditMode(bool active)
 {
-
+  documentPages[curPage]->setWidgetEditMode(active);
 }
 
 void qutecsound::controlD()
@@ -1708,11 +1707,10 @@ void qutecsound::createActions()
   //TODO Put this back when documentpage has focus
 //   cutAct->setEnabled(false);
 //   copyAct->setEnabled(false);
-  setKeyboardShortcuts();
-  setDefaultKeyboardShortcuts();
+  setKeyboardShortcutsList();
 }
 
-void qutecsound::setKeyboardShortcuts()
+void qutecsound::setKeyboardShortcutsList()
 {
   // Do not change the order of these actions because the settings
   // read shortcuts for a number. Only add at the end.
@@ -1765,21 +1763,20 @@ void qutecsound::setKeyboardShortcuts()
 
 void qutecsound::connectActions()
 {
-  //TODO instead of connecting and disconnecting, would it be better to change between already existing actions created from each separate object?
   DocumentPage * doc = documentPages[curPage];
-  disconnect(undoAct, 0, 0, 0);
-  connect(undoAct, SIGNAL(triggered()), this, SLOT(undo()));
-  disconnect(redoAct, 0, 0, 0);
-  connect(redoAct, SIGNAL(triggered()), this, SLOT(redo()));
-  disconnect(cutAct, 0, 0, 0);
-  connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
-  disconnect(copyAct, 0, 0, 0);
-  connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
-  disconnect(pasteAct, 0, 0, 0);
-  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
+//  disconnect(undoAct, 0, 0, 0);
+//  connect(undoAct, SIGNAL(triggered()), this, SLOT(undo()));
+//  disconnect(redoAct, 0, 0, 0);
+//  connect(redoAct, SIGNAL(triggered()), this, SLOT(redo()));
+//  disconnect(cutAct, 0, 0, 0);
+//  connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
+//  disconnect(copyAct, 0, 0, 0);
+//  connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
+//  disconnect(pasteAct, 0, 0, 0);
+//  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
 
-  disconnect(findAct, 0, 0, 0);
-  connect(findAct, SIGNAL(triggered()), this, SLOT(findReplace()));
+//  disconnect(findAct, 0, 0, 0);
+//  connect(findAct, SIGNAL(triggered()), this, SLOT(findReplace()));
 
 //   disconnect(commentAct, 0, 0, 0);
   disconnect(uncommentAct, 0, 0, 0);
@@ -1819,9 +1816,9 @@ void qutecsound::connectActions()
   connect(doc, SIGNAL(currentTextUpdated()), this, SLOT(updateInspector()));
 
   // Connect inspector actions to document
-//  disconnect(m_inspector, 0, 0, 0);
-//  connect(m_inspector, SIGNAL(jumpToLine(int)),
-//          doc->view(), SLOT(jumpToLine(int)));
+  disconnect(m_inspector, 0, 0, 0);
+  connect(m_inspector, SIGNAL(jumpToLine(int)),
+          doc, SLOT(jumpToLine(int)));
   connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventFrames(bool)));
   connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
 
@@ -2467,6 +2464,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
   documentPages[curPage]->setColorVariables(m_options->colorVariables);
   documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
+//  documentPages[curPage]->setEditAct(editAct);
   documentTabs->setCurrentIndex(curPage);
   connectActions();
   connect(documentPages[curPage], SIGNAL(doCut()), this, SLOT(cut()));

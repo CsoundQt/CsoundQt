@@ -90,7 +90,7 @@ class WidgetPanel : public QDockWidget
 
   private:
 
-    QAction *editAct;  // TODO this edit action should be moved somewhere better
+//    QAction *editAct;
 //    WidgetLayout *layoutWidget;   // Always owned by documentpage is this needed here?
     QScrollArea *scrollArea;
 //    QStackedLayout *l;

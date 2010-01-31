@@ -497,6 +497,15 @@ void CsoundEngine::unregisterConsole(ConsoleWidget *c)
     consoles.remove(index);
 }
 
+QList<int> CsoundEngine::getErrorLines()
+{
+  QList<int> list;
+  if (consoles.size() > 0) {
+    list = consoles[0]->errorLines;
+  }
+  return list;
+}
+
 void CsoundEngine::setConsoleBufferSize(int size)
 {
   m_consoleBufferSize = size;
@@ -756,7 +765,7 @@ int CsoundEngine::runCsound(bool useAPI)
     if (ud->result!=CSOUND_SUCCESS or variable != CSOUND_SUCCESS) {
       qDebug("Csound compile failed!");
       free(argv);
-      // FIXME mark error lines: documentPages[curPage]->markErrorLines(m_console->errorLines);
+      emit (errorLines(getErrorLines()));
       return -3;
     }
     ud->zerodBFS = csoundGet0dBFS(ud->csound);

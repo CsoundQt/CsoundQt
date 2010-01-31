@@ -85,15 +85,16 @@ class WidgetLayout : public QWidget
     QString getCsladspaLines();
     bool isModified();
 
+    // Indispensable functions. Must be set before using this object
+//    void setEditAct(QAction *editAct);
+
     // Edition Actions
     QAction *clearAct;
-    QAction *copyAct;
-    QAction *cutAct;
-    QAction *pasteAct;
     QAction *selectAllAct;
     QAction *duplicateAct;
     QAction *deleteAct;
     QAction *propertiesAct;
+//    QAction *editAct;  // This is set from the parent
     // Alignment Actions
     QAction *alignLeftAct;
     QAction *alignRightAct;
@@ -131,6 +132,14 @@ class WidgetLayout : public QWidget
     void selectionChanged(QRect selection);
     void adjustLayoutSize();
 
+    void copy();
+    void cut();
+    void paste();
+    void paste(QPoint pos);
+    void duplicate();
+    void deleteSelected();
+    void undo();
+    void redo();
     void alignLeft();
     void alignRight();
     void alignTop();
@@ -240,14 +249,6 @@ class WidgetLayout : public QWidget
     QString getPresetsXmlText();
 
   private slots:
-    void copy();
-    void cut();
-    void paste();
-    void paste(QPoint pos);
-    void duplicate();
-    void deleteSelected();
-    void undo();
-    void redo();
     void updateData();
 
   signals:

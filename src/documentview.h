@@ -82,9 +82,9 @@ class DocumentView : public QScrollArea
     void indent();
     void unindent();
 
-    // FIXME connect these to the engine (or where appropriate)
     void markErrorLines(QList<int> lines);
     void unmarkErrorLines();
+    // FIXME connect these to the engine (or where appropriate)
     void jumpToLine(int line);
     void opcodeFromMenu();
     void updateCsladspaText(QString text);

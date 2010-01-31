@@ -81,13 +81,14 @@ class DocumentPage : public QObject
     DocumentView *getView();  // Needed to pass view for placing it as tab widget in main application
     WidgetLayout *getWidgetLayout();  // Needed to pass for placing in widget dock panel
 
-    // Document view properties
+    // Document view properties and actions
     void setTextFont(QFont font);
     void setTabStopWidth(int tabWidth);
     void setLineWrapMode(QTextEdit::LineWrapMode wrapLines);
     void setColorVariables(bool colorVariables);
     void setOpcodeNameList(QStringList opcodeNameList);
     void print(QPrinter *printer);
+//    void setEditAct(QAction *editAct);
 
     // Widget Layout properties
     void showWidgetTooltips(bool visible);
@@ -111,7 +112,13 @@ class DocumentPage : public QObject
     QVector<QString> widgetHistory;  // Undo/ Redo history
     int widgetHistoryIndex; // Current point in history
 
-    QAction *runAct;
+    // Actions from parent for passing to children
+//    QAction *runAct;
+//    QAction *copyAct;
+//    QAction *cutAct;
+//    QAction *pasteAct;
+    // Actions from widget layout
+//    QAction *editAct;
 
   public slots:
     int play(CsoundOptions *options);
@@ -125,8 +132,13 @@ class DocumentPage : public QObject
     void setMacOption(QString option, QString newValue);
     void setWidgetPanelPosition(QPoint position);
     void setWidgetPanelSize(QSize size);
+
+    //Passed directly to widget layout
     void setWidgetEditMode(bool active);
-//    void jumpToLine(int line);
+    void duplicateWidgets();
+
+    // Passed directly to document view
+    void jumpToLine(int line);
 
 //    void opcodeFromMenu();
     void newLiveEventFrame(QString text = QString());

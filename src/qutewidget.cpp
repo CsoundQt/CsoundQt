@@ -436,11 +436,12 @@ QList<QAction *> QuteWidget::getParentActionList()
 //  actionList.append(panel->distributeHorizontalAct);
 //  actionList.append(panel->distributeVerticalAct);
   WidgetLayout *layout = static_cast<WidgetLayout *>(this->parentWidget());
-  actionList.append(layout->copyAct);
-  actionList.append(layout->pasteAct);
-  actionList.append(layout->cutAct);
-  actionList.append(layout->duplicateAct);
+  // FIXME put cut/copy/paste actions in menu
+//  actionList.append(layout->copyAct);
+//  actionList.append(layout->pasteAct);
+//  actionList.append(layout->cutAct);
   actionList.append(layout->deleteAct);
+  actionList.append(layout->duplicateAct);
   actionList.append(layout->alignLeftAct);
   actionList.append(layout->alignRightAct);
   actionList.append(layout->alignTopAct);
@@ -448,6 +449,8 @@ QList<QAction *> QuteWidget::getParentActionList()
   actionList.append(layout->sendToBackAct);
   actionList.append(layout->distributeHorizontalAct);
   actionList.append(layout->distributeVerticalAct);
+  // FIXME put edit action in menu
+//  actionList.append(layout->editAct);
   return actionList;
 }
 

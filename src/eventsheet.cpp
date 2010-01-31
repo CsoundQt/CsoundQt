@@ -1010,20 +1010,20 @@ void EventSheet::createActions()
 {
   // For some reason, the shortcuts set here have no effect and need to be
   // decoded in keyPressEvent... (at least for linux)
-  cutAct = new QAction(/*QIcon(":/a.png"),*/ tr("Cut"), this);
-//  loopEventsAct->setIconText(tr("Loop Events"));
-  cutAct->setShortcut(QKeySequence(QKeySequence::Cut));
-  connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
-
-  copyAct = new QAction(/*QIcon(":/a.png"),*/ tr("Copy"), this);
-//  loopEventsAct->setIconText(tr("Loop Events"));
-  copyAct->setShortcut(QKeySequence(QKeySequence::Copy));
-  connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
-
-  pasteAct = new QAction(/*QIcon(":/a.png"),*/ tr("Paste"), this);
-//  loopEventsAct->setIconText(tr("Loop Events"));
-  pasteAct->setShortcut(QKeySequence(QKeySequence::Paste));
-  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
+//  cutAct = new QAction(/*QIcon(":/a.png"),*/ tr("Cut"), this);
+////  loopEventsAct->setIconText(tr("Loop Events"));
+//  cutAct->setShortcut(QKeySequence(QKeySequence::Cut));
+//  connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
+//
+//  copyAct = new QAction(/*QIcon(":/a.png"),*/ tr("Copy"), this);
+////  loopEventsAct->setIconText(tr("Loop Events"));
+//  copyAct->setShortcut(QKeySequence(QKeySequence::Copy));
+//  connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
+//
+//  pasteAct = new QAction(/*QIcon(":/a.png"),*/ tr("Paste"), this);
+////  loopEventsAct->setIconText(tr("Loop Events"));
+//  pasteAct->setShortcut(QKeySequence(QKeySequence::Paste));
+//  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
 
   sendEventsAct = new QAction(/*QIcon(":/a.png"),*/ tr("&SendEvents"), this);
   sendEventsAct->setStatusTip(tr("Send Events to Csound"));

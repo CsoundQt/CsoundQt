@@ -51,7 +51,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   selectionFrame->hide();
 
   m_trackMouse = true;
-  m_editMode = false;
+//  m_editMode = false;
 
   createSliderAct = new QAction(tr("Create Slider"),this);
   connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createNewSlider()));
@@ -85,20 +85,9 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   propertiesAct = new QAction(tr("Properties"),this);
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
 
-  //FIXME bring edit act from parent
-//  connect(editAct, SIGNAL(triggered(bool)), this, SLOT(activateEditMode(bool)));
-  copyAct = new QAction(tr("Copy Selected"), this);
-  copyAct->setShortcut(tr("Ctrl+C"));
-  connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
-  cutAct = new QAction(tr("Cut Selected"), this);
-  cutAct->setShortcut(tr("Ctrl+X"));
-  connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
-  pasteAct = new QAction(tr("Paste Selected"), this);
-  pasteAct->setShortcut(tr("Ctrl+V"));
-  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
   duplicateAct = new QAction(tr("Duplicate Selected"), this);
   duplicateAct->setShortcut(tr("Ctrl+D"));
-  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
+  // FIXME connect duplicate act?
   deleteAct = new QAction(tr("Delete Selected"), this);
 //  deleteAct->setShortcut(tr("Ctrl+M"));
 //   QList<QKeySequence> deleteShortcuts;
@@ -125,7 +114,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   distributeVerticalAct = new QAction(tr("Distribute Vertically"), this);
   connect(distributeVerticalAct, SIGNAL(triggered()), this, SLOT(distributeVertical()));
 
-  setFocusPolicy(Qt::NoFocus);
+//  setFocusPolicy(Qt::NoFocus);
 }
 
 WidgetLayout::~WidgetLayout()
@@ -510,6 +499,12 @@ bool WidgetLayout::isModified()
 {
   return m_modified;
 }
+
+//void WidgetLayout::setEditAct(QAction *_editAct)
+//{
+//  editAct = _editAct;
+//  connect(editAct, SIGNAL(triggered(bool)), this, SLOT(setEditMode(bool)));
+//}
 
 void WidgetLayout::deselectAll()
 {
@@ -1132,14 +1127,14 @@ void WidgetLayout::contextMenuEvent(QContextMenuEvent *event)
   menu.addAction(createGraphAct);
   menu.addAction(createScopeAct);
   menu.addSeparator();
-  // FIXME bring editAct from parent!
+  // FIXME put actions back in menu
 //  menu.addAction(editAct);
 //  menu.addSeparator();
-  menu.addAction(copyAct);
-  menu.addAction(pasteAct);
+//  menu.addAction(cutAct);
+//  menu.addAction(copyAct);
+//  menu.addAction(pasteAct);
   menu.addAction(selectAllAct);
   menu.addAction(duplicateAct);
-  menu.addAction(cutAct);
   menu.addAction(deleteAct);
   menu.addAction(clearAct);
   menu.addSeparator();

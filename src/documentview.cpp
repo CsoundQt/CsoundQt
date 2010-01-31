@@ -269,7 +269,6 @@ void DocumentView::syntaxCheck()
 {
   // FIXME implment for multiple views
 
-  //FIXME this is not building... why???
   int line = currentLine();
   emit(lineNumberSignal(line));
 
@@ -473,10 +472,10 @@ void DocumentView::unmarkErrorLines()
   // FIXME implment for multiple views
   if (!errorMarked)
     return;
+//   qDebug("DocumentPage::unmarkErrorLines()");
   int position = editors[0]->verticalScrollBar()->value();
   QTextCursor currentCursor = editors[0]->textCursor();
   errorMarked = false;
-//   qDebug("DocumentPage::unmarkErrorLines()");
   editors[0]->selectAll();
   QTextCursor cur = editors[0]->textCursor();
   QTextCharFormat format = cur.blockCharFormat();

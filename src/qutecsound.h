@@ -120,7 +120,7 @@ class qutecsound:public QMainWindow
     void paste();
     void undo();
     void redo();
-    void setWidgetEditMode(bool);
+    void setWidgetEditMode(bool);  // This is not necessary as the action is passed and connected in the widget layout
     void controlD();
     void del();
     bool closeTab();
@@ -153,7 +153,7 @@ class qutecsound:public QMainWindow
 
   private:
     void createActions();
-    void setKeyboardShortcuts();
+    void setKeyboardShortcutsList();
     void connectActions();
     void createMenus();
     void fillFileMenu();
@@ -285,19 +285,17 @@ class FileOpenEater : public QObject
 {
   Q_OBJECT
   public:
-    FileOpenEater() {noEvent=true; mwSet = false;}
-    void setMainWindow(qutecsound *mainWindow) {m_mw = mainWindow; mwSet = true;}
+    FileOpenEater() {m_mw = 0;}
+    void setMainWindow(qutecsound *mainWindow) {m_mw = mainWindow;}
 
-    bool noEvent;
     QList<QFileOpenEvent> eventQueue;
   protected:
     bool eventFilter(QObject *obj, QEvent *event)
     {
       if (event->type() == QEvent::FileOpen) {
-          noEvent=false;
           QFileOpenEvent *fileEvent = static_cast<QFileOpenEvent*>(event);
-          if (mwSet == false || m_mw->curPage == -1) {
-              eventQueue << *fileEvent;
+          if (m_mw == 0) {
+              eventQueue << *fileEvent;  // FIXME this queue is not being processed
           }
           else {
               m_mw->loadFile(fileEvent->file(), true);
@@ -305,13 +303,12 @@ class FileOpenEater : public QObject
           qDebug() << "FileOpenEater::eventFilter " << fileEvent->file();
           return true;
       } else {
-// standard event processing
+        // standard event processing
         return QObject::eventFilter(obj, event);
       }
     }
 
     qutecsound *m_mw;
-    bool mwSet;
 };
 
 #endif
