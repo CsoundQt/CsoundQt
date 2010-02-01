@@ -189,6 +189,7 @@ QString DocumentView::getFullText()
 
 QString DocumentView::getBasicText()
 {// Everything except widget and preset sections
+
   qDebug() << "DocumentView::getBasicText() not implemented and will crash!";
 }
 

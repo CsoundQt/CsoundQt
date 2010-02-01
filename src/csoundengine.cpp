@@ -292,6 +292,7 @@ void CsoundEngine::drawGraphCallback(CSOUND *csound, WINDAT *windat)
 
 void CsoundEngine::killGraphCallback(CSOUND *csound, WINDAT *windat)
 {
+  // FIXME free memory for this graph
 //   udata->qcs->killCurve(windat);
   qDebug("qutecsound::killGraph()");
 }
@@ -310,7 +311,7 @@ int CsoundEngine::keyEventCallback(void *userData,
   if (type != CSOUND_CALLBACK_KBD_EVENT)
     return 1;
   CsoundUserData *ud = (CsoundUserData *) userData;
-  WidgetLayout *wl = (WidgetLayout *) ud->wl;
+//  WidgetLayout *wl = (WidgetLayout *) ud->wl;
   int *value = (int *) p;
   int key = ud->cs->popKeyPressEvent();
   if (key >= 0) {
@@ -365,11 +366,10 @@ void CsoundEngine::csThread(void *data)
                        &udata->values,
                        &udata->stringValues);
   udata->wl->getMouseValues(&udata->mouseValues);
-  //FIXME put back usage of invalue/outvalue
-//  if (!udata->qcs->m_options.useInvalue) {
-//    writeWidgetValues(udata);
-//    readWidgetValues(udata);
-//  }
+  if (!udata->useInvalue) {
+    writeWidgetValues(udata);
+    readWidgetValues(udata);
+  }
   (udata->ksmpscount)++;
 }
 
@@ -599,7 +599,7 @@ int CsoundEngine::play(CsoundOptions *options)
   if ((ud->threaded && ud->perfThread && ud->perfThread->isRunning())
     || (!ud->threaded && ud->PERF_STATUS != 1) ) {
     m_options = *options;
-    return runCsound(true);
+    return runCsound();
   }
   else {
     if (ud->threaded)
@@ -668,156 +668,146 @@ void CsoundEngine::queueEvent(QString eventLine, int delay)
     qDebug("Warning: event queue full, event not processed");
 }
 
-int CsoundEngine::runCsound(bool useAPI)
+int CsoundEngine::runCsound()
 {
-  // FIXME change behavior. When play is pressed do pause, not stop
-//  if ((ud->m_threaded && ud->perfThread->isRunning() ) ||
-//           (!ud->m_threaded && ud->PERF_STATUS == 1)) { //If running, stop
-//    stop();
-//    return 0;
-//  }
-
-  if (useAPI) {
 #ifdef MACOSX_PRE_SNOW
-//Remember menu bar to set it after FLTK grabs it
-    menuBarHandle = GetMenuBar();
+  //Remember menu bar to set it after FLTK grabs it
+  menuBarHandle = GetMenuBar();
 #endif
-    eventQueueSize = 0; //Flush events gathered while idle
-    //   outValueQueue.clear();
-//    inValueQueue.clear();
-//    outStringQueue.clear();
-    ud->audioOutputBuffer.allZero();
+  eventQueueSize = 0; //Flush events gathered while idle
+  //   outValueQueue.clear();
+  //    inValueQueue.clear();
+  //    outStringQueue.clear();
+  ud->audioOutputBuffer.allZero();
 
-    char **argv;
-    argv = (char **) calloc(33, sizeof(char*));
-    // TODO use: PUBLIC int csoundSetGlobalEnv(const char *name, const char *value);
+  char **argv;
+  argv = (char **) calloc(33, sizeof(char*));
+  // TODO use: PUBLIC int csoundSetGlobalEnv(const char *name, const char *value);
 
-    ud->threaded = m_threaded;
-    // FIXME set realtime and filenames in options before calling this!
-    int argc = m_options.generateCmdLine(argv);
+  ud->threaded = m_threaded;
+  // FIXME set realtime before calling this!
+  int argc = m_options.generateCmdLine(argv);
 #ifdef QUTECSOUND_DESTROY_CSOUND
-    ud->csound=csoundCreate(0);
+  ud->csound=csoundCreate(0);
 #endif
 
-    // Message Callbacks must be set before compile, otherwise some information is missed
-    if (ud->threaded) {
-      csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackThread);
+  // Message Callbacks must be set before compile, otherwise some information is missed
+  if (ud->threaded) {
+    csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackThread);
+  }
+  else {
+    csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackNoThread);
+  }
+  //    QString oldOpcodeDir = "";
+  if (m_options.opcodedirActive) {
+    // csoundGetEnv must be called after Compile or Precompile,
+    // But I need to set OPCODEDIR before compile....
+    //      char *name = 0;
+    //      csoundGetEnv(csound,name);
+    //      oldOpcodeDir = QString(name);
+    //      qDebug() << oldOpcodeDir;
+    csoundSetGlobalEnv("OPCODEDIR", m_options.opcodedir.toLocal8Bit());
+  }
+  csoundReset(ud->csound);
+  csoundSetHostData(ud->csound, (void *) ud);
+  csoundPreCompile(ud->csound);  //Need to run PreCompile to create the FLTK_Flags global variable
+
+  int variable = csoundCreateGlobalVariable(ud->csound, "FLTK_Flags", sizeof(int));
+  if (m_options.enableFLTK) {
+    // disable FLTK graphs, but allow FLTK widgets
+    *((int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags")) = 4;
+  }
+  else {
+    //       qDebug("play() FLTK Disabled");
+    *((int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags")) = 3;
+  }
+  //    qDebug("Command Line args:");
+  //    for (int index=0; index< argc; index++) {
+  //      qDebug() << argv[index];
+  //    }
+
+  csoundSetIsGraphable(ud->csound, true);
+  csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
+  csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
+  csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
+  csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
+
+  if (ud->enableWidgets) {
+    if (ud->useInvalue) {
+      csoundSetInputValueCallback(ud->csound, &CsoundEngine::inputValueCallback);
+      csoundSetOutputValueCallback(ud->csound, &CsoundEngine::outputValueCallback);
     }
     else {
-      csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackNoThread);
+      // Not really sure that this is worth the trouble, as it
+      // is used only with chnsend and chnrecv which are deprecated
+      //         qDebug() << "csoundSetChannelIOCallback";
+      //         csoundSetChannelIOCallback(csound, &qutecsound::ioCallback);
     }
-//    QString oldOpcodeDir = "";
-    if (m_options.opcodedirActive) {
-      // csoundGetEnv must be called after Compile or Precompile,
-      // But I need to set OPCODEDIR before compile....
-//      char *name = 0;
-//      csoundGetEnv(csound,name);
-//      oldOpcodeDir = QString(name);
-//      qDebug() << oldOpcodeDir;
-      csoundSetGlobalEnv("OPCODEDIR", m_options.opcodedir.toLocal8Bit());
-    }
-    csoundReset(ud->csound);
-    csoundSetHostData(ud->csound, (void *) ud);
-    csoundPreCompile(ud->csound);  //Need to run PreCompile to create the FLTK_Flags global variable
+  }
+  else {
+    csoundSetInputValueCallback(ud->csound, NULL);
+    csoundSetOutputValueCallback(ud->csound, NULL);
+  }
+  csoundSetCallback(ud->csound,
+                    &CsoundEngine::keyEventCallback,
+                    (void *) ud, CSOUND_CALLBACK_KBD_EVENT);
 
-    int variable = csoundCreateGlobalVariable(ud->csound, "FLTK_Flags", sizeof(int));
-    if (m_options.enableFLTK) {
-      // disable FLTK graphs, but allow FLTK widgets
-      *((int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags")) = 4;
-    }
-    else {
-//       qDebug("play() FLTK Disabled");
-      *((int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags")) = 3;
-    }
-//    qDebug("Command Line args:");
-//    for (int index=0; index< argc; index++) {
-//      qDebug() << argv[index];
-//    }
-
-    csoundSetIsGraphable(ud->csound, true);
-    csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
-    csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
-    csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
-    csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
-
-    if (ud->enableWidgets) {
-      if (ud->useInvalue) {
-        csoundSetInputValueCallback(ud->csound, &CsoundEngine::inputValueCallback);
-        csoundSetOutputValueCallback(ud->csound, &CsoundEngine::outputValueCallback);
-      }
-      else {
-        // Not really sure that this is worth the trouble, as it
-        // is used only with chnsend and chnrecv which are deprecated
-//         qDebug() << "csoundSetChannelIOCallback";
-//         csoundSetChannelIOCallback(csound, &qutecsound::ioCallback);
-      }
-    }
-    else {
-      csoundSetInputValueCallback(ud->csound, NULL);
-      csoundSetOutputValueCallback(ud->csound, NULL);
-    }
-    csoundSetCallback(ud->csound,
-                      &CsoundEngine::keyEventCallback,
-                      (void *) ud, CSOUND_CALLBACK_KBD_EVENT);
-
-    ud->result=csoundCompile(ud->csound,argc,argv);
-//    qDebug("Csound compiled %i", ud->result);
-    if (ud->result!=CSOUND_SUCCESS or variable != CSOUND_SUCCESS) {
-      qDebug("Csound compile failed!");
-      free(argv);
-      emit (errorLines(getErrorLines()));
-      return -3;
-    }
-    ud->zerodBFS = csoundGet0dBFS(ud->csound);
-    ud->sampleRate = csoundGetSr(ud->csound);
-    ud->numChnls = csoundGetNchnls(ud->csound);
-    ud->outputBufferSize = csoundGetKsmps(ud->csound);
-    ud->ksmpscount = 0;
-
-    //TODO is something here necessary to work with doubles?
-//     PUBLIC int csoundGetSampleFormat(CSOUND *);
-//     PUBLIC int csoundGetSampleSize(CSOUND *);
-    unsigned int numWidgets = ud->wl->widgetCount();
-    ud->channelNames.resize(numWidgets*2);
-    ud->values.resize(numWidgets*2);
-    ud->stringValues.resize(numWidgets*2);
-    if (ud->threaded) {  // Run threaded
-      // First update values from widgets
-      if (ud->enableWidgets) {
-        ud->wl->getValues(&ud->channelNames,
-                          &ud->values,
-                          &ud->stringValues);
-      }
-      ud->perfThread = new CsoundPerformanceThread(ud->csound);
-      ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
-//      qDebug() << "qutecsound::runCsound perfThread->Play";
-      ud->perfThread->Play();
-    } /*if (ud->thread)*/
-    else { // Run in the same thread
-      ud->PERF_STATUS = 1;
-      while(ud->PERF_STATUS == 1 && csoundPerformKsmps(ud->csound)==0) {
-        processEventQueue();
-        CsoundEngine::csThread(ud);
-        qApp->processEvents(); // Must process events last to avoid stopping and calling csThread invalidly
-      }
-      stop();  // To flush pending queues
-#ifdef MACOSX_PRE_SNOW
-// Put menu bar back
-      SetMenuBar(menuBarHandle);
-#endif
-    }
-    for (int i = 0; i < 33; i++) {
-      if (argv[i] != 0)
-        free(argv[i]);
-    }
+  ud->result=csoundCompile(ud->csound,argc,argv);
+  //    qDebug("Csound compiled %i", ud->result);
+  if (ud->result!=CSOUND_SUCCESS or variable != CSOUND_SUCCESS) {
+    qDebug("Csound compile failed!");
     free(argv);
-//    if (oldOpcodeDir != "") {
-//      csoundSetGlobalEnv("OPCODEDIR", oldOpcodeDir.toLocal8Bit());
-//    }
+    emit (errorLines(getErrorLines()));
+    return -3;
   }
-  else {  // Run in external shell
+  ud->zerodBFS = csoundGet0dBFS(ud->csound);
+  ud->sampleRate = csoundGetSr(ud->csound);
+  ud->numChnls = csoundGetNchnls(ud->csound);
+  ud->outputBufferSize = csoundGetKsmps(ud->csound);
+  ud->ksmpscount = 0;
 
+  //TODO is something here necessary to work with doubles?
+  //     PUBLIC int csoundGetSampleFormat(CSOUND *);
+  //     PUBLIC int csoundGetSampleSize(CSOUND *);
+  unsigned int numWidgets = ud->wl->widgetCount();
+  ud->channelNames.resize(numWidgets*2);
+  ud->values.resize(numWidgets*2);
+  ud->stringValues.resize(numWidgets*2);
+  if (ud->threaded) {  // Run threaded
+    // First update values from widgets
+    if (ud->enableWidgets) {
+      ud->wl->getValues(&ud->channelNames,
+                        &ud->values,
+                        &ud->stringValues);
+    }
+    ud->perfThread = new CsoundPerformanceThread(ud->csound);
+    ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
+    //      qDebug() << "qutecsound::runCsound perfThread->Play";
+    ud->perfThread->Play();
+  } /*if (ud->thread)*/
+  else { // Run in the same thread
+    ud->PERF_STATUS = 1;
+    while(ud->PERF_STATUS == 1 && csoundPerformKsmps(ud->csound)==0) {
+      processEventQueue();
+      CsoundEngine::csThread(ud);
+      qApp->processEvents(); // Must process events last to avoid stopping and calling csThread invalidly
+    }
+    flushMessageQueue();  // To flush pending queues
+#ifdef MACOSX_PRE_SNOW
+    // Put menu bar back
+    SetMenuBar(menuBarHandle);
+#endif
   }
+  for (int i = 0; i < 33; i++) {
+    if (argv[i] != 0)
+      free(argv[i]);
+  }
+  free(argv);
+  //    if (oldOpcodeDir != "") {
+  //      csoundSetGlobalEnv("OPCODEDIR", oldOpcodeDir.toLocal8Bit());
+  //    }
+
+  return 0;
 }
 
 void CsoundEngine::stopCsound()
@@ -837,21 +827,13 @@ void CsoundEngine::stopCsound()
       ud->PERF_STATUS = 0;
       csoundStop(ud->csound);
       csoundCleanup(ud->csound);
-      for (int i = 0; i < ud->cs->consoles.size(); i++) {
-        ud->cs->consoles[i]->scrollToEnd();
-      }
     }
   }
+flushMessageQueue();
 #ifdef MACOSX_PRE_SNOW
 // Put menu bar back
   SetMenuBar(menuBarHandle);
 #endif
-  foreach (QString msg, messageQueue) { //Flush pending messages
-    for (int i = 0; i < ud->cs->consoles.size(); i++) {
-      ud->cs->consoles[i]->appendMessage(msg);
-    }
-    ud->wl->appendMessage(msg);
-  }
 #ifdef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(ud->csound);
 #endif
@@ -925,12 +907,12 @@ void CsoundEngine::dispatchQueues()
       curveBuffer.remove(curveBuffer.indexOf(windat));
     }
     qApp->processEvents();
-//    if (m_options.thread) {
-      // FIXME it's necessary to check this, otherwise even though performance has ended, no one will find out
-//      if (m_csEngine->GetStatus() != 0) {
+    if (ud->threaded) {
+      // FIXME, how to check the score is finished?
+//      if (ud->perfThread->isRunning()) {
 //        stop();
 //      }
-//    }
+    }
   }
   queueTimer.start(refreshTime); //will launch this function again later
 }
@@ -947,6 +929,19 @@ void CsoundEngine::clearMessageQueue()
   messageMutex.lock();
   messageQueue.clear();
   messageMutex.unlock();
+}
+
+void CsoundEngine::flushMessageQueue()
+{
+  foreach (QString msg, messageQueue) { //Flush pending messages
+    for (int i = 0; i < ud->cs->consoles.size(); i++) {
+      ud->cs->consoles[i]->appendMessage(msg);
+    }
+    ud->wl->appendMessage(msg);
+  }
+  for (int i = 0; i < ud->cs->consoles.size(); i++) {
+    ud->cs->consoles[i]->scrollToEnd();
+  }
 }
 
 void CsoundEngine::recordBuffer()

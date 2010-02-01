@@ -455,6 +455,15 @@ Curve * WidgetLayout::getCurveById(uintptr_t id)
   return curve;
 }
 
+void WidgetLayout::updateCurve(WINDAT *windat)
+{
+  qDebug() << "updateCurve(WINDAT *windat)";
+//  WINDAT *windat_ = (WINDAT *) malloc(sizeof(WINDAT));
+//  *windat_ = *windat;
+//  curveBuffer.append(windat_);
+}
+
+
 int WidgetLayout::killCurves(CSOUND *csound)
 {
   // FIXME free memory from curves

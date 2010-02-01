@@ -42,15 +42,7 @@ class WidgetPanel : public QDockWidget
 
 //    unsigned int widgetCount();
     void setWidgetLayout(WidgetLayout *layoutWidget);
-//    WidgetLayout * popWidgetLayout();
-//    void getValues(QVector<QString> *channelNames, QVector<double> *values, QVector<QString> *stringValues);
-//    void getMouseValues(QVector<double> *values);
-//    int getMouseX();
-//    int getMouseY();
-//    int getMouseRelX();
-//    int getMouseRelY();
-//    int getMouseBut1();
-//    int getMouseBut2();
+    WidgetLayout * takeWidgetLayout();
 //    unsigned long getKsmpsCount();
 
 //    void setValue(QString channelName, double value);
@@ -79,7 +71,7 @@ class WidgetPanel : public QDockWidget
 
   protected:
 //    virtual void contextMenuEvent(QContextMenuEvent *event);
-    virtual void resizeEvent(QResizeEvent * event);
+//    virtual void resizeEvent(QResizeEvent * event);
     virtual void moveEvent(QMoveEvent * event);
 //    virtual void mouseMoveEvent (QMouseEvent * event);
 //    virtual void mousePressEvent(QMouseEvent * event);
@@ -127,7 +119,7 @@ class WidgetPanel : public QDockWidget
     void widgetsChanged(QString text);
     void Close(bool visible);
     void moved(QPoint position);
-    void resized(QSize size);
+//    void resized(QSize size);
 };
 
 #endif

@@ -136,6 +136,7 @@ class CsoundEngine : public QObject
     void queueOutString(QString channelName, QString value);
     void queueMessage(QString message);
     void clearMessageQueue();
+    void flushMessageQueue();
 
     bool isRunning();
 
@@ -150,7 +151,7 @@ class CsoundEngine : public QObject
     void queueEvent(QString eventLine, int delay);
 
   private:
-    int runCsound(bool useAPI);
+    int runCsound();
     void stopCsound();
     void dispatchQueues();
     QStack<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets

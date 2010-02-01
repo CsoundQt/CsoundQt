@@ -435,7 +435,7 @@ void EventSheet::sendEvents()
     }
   }
   for (int i = 0; i < selectedRows.size(); i++) {
-    double number = 0.0;
+//    double number = 0.0;
     emit sendEvent(getLine(selectedRows[i], true, true, true));  // With tempo scaling
   }
 }
@@ -981,7 +981,7 @@ void EventSheet::fill(double start, double end, double slope)
   QModelIndexList list = this->selectedIndexes();
   double inc = (end - start) / (list.size() - 1.0);
   double value = start;
-  double listSize = (double) list.size();
+//  double listSize = (double) list.size();
   for (int i = 0; i < list.size(); i++) {
     QTableWidgetItem * item = this->item(list[i].row(), list[i].column());
     if (item == 0) {

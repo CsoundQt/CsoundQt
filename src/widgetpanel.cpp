@@ -35,9 +35,10 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));
 
   m_sbActive = false;
-  this->setMouseTracking(true);
+//  setWidgetScrollBarsActive(false);
+  setMouseTracking(true);
 
-  setFocusPolicy(Qt::NoFocus);
+//  setFocusPolicy(Qt::NoFocus);
 //  l = new QStackedLayout(this);
 //  setLayout(l);
 }
@@ -53,103 +54,47 @@ WidgetPanel::~WidgetPanel()
 
 void WidgetPanel::setWidgetLayout(WidgetLayout *w)
 {
-//  layoutWidget = w;
-  if (widget() != 0) {
-//    widget()->hide();
-//    l->removeWidget(widget());
-    disconnect(widget(), SIGNAL(selection(QRect)));
+  // When this function is called, there must be no widget layout set, as this
+  // function will delete the set widget.
+  if (m_sbActive) {
+//    scrollArea->setWidgetResizable(true);
+    connect(w, SIGNAL(selection(QRect)), this, SLOT(selectionChanged(QRect)));
+    scrollArea->setWidget(w);
+    scrollArea->show();
   }
-//  setWidgetScrollBarsActive(true);
+  else {
+    if (widget() != 0) {
+      disconnect(widget(), SIGNAL(selection(QRect)));
+    }
+    connect(w, SIGNAL(selection(QRect)), this, SLOT(selectionChanged(QRect)));
+    setWidget(w);
+  }
 //  connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
-  connect(w, SIGNAL(selection(QRect)), this, SLOT(selectionChanged(QRect)));
-
-//  l->addWidget(w);
-  setWidget(w);
 }
 
-//WidgetLayout * WidgetPanel::popWidgetLayout()
-//{
-//  disconnect(this,SIGNAL(topLevelChanged(bool)));
-//  WidgetLayout * w;
+WidgetLayout * WidgetPanel::takeWidgetLayout()
+{
+  disconnect(this,SIGNAL(topLevelChanged(bool)));
+  WidgetLayout * w;
 //  l->removeWidget(widget());
-//  if (m_sbActive) {
-//    w = static_cast<WidgetLayout *>(scrollArea->takeWidget());
-//  }
-//  else {
-//    w = static_cast<WidgetLayout *>(widget());
-//  }
-////  disconnect(layoutWidget, SIGNAL(deselectAll()));
-//  disconnect(w, SIGNAL(selection(QRect)));
-//  return w;
-//}
-
-//void WidgetPanel::getValues(QVector<QString> *channelNames,
-//                            QVector<double> *values,
-//                            QVector<QString> *stringValues)
-//{
-//  layoutWidget->getValues(channelNames, values, stringValues);
-//}
-
-//void WidgetPanel::getMouseValues(QVector<double> *values)
-//{
-//  layoutWidget->getMouseValues(values);
-//}
-//
-//int WidgetPanel::getMouseX()
-//{
-//  return layoutWidget->getMouseX();
-//}
-//
-//int WidgetPanel::getMouseY()
-//{
-//  return layoutWidget->getMouseY();
-//}
-//
-//int WidgetPanel::getMouseRelX()
-//{
-//  return layoutWidget->getMouseRelX();
-//}
-//
-//int WidgetPanel::getMouseRelY()
-//{
-//  return layoutWidget->getMouseRelY();
-//}
-//
-//int WidgetPanel::getMouseBut1()
-//{
-//  return layoutWidget->getMouseBut1();
-//}
-//
-//int WidgetPanel::getMouseBut2()
-//{
-//  return layoutWidget->getMouseBut2();
-//}
+  if (m_sbActive) {
+    w = static_cast<WidgetLayout *>(scrollArea->takeWidget());
+    disconnect(scrollArea->widget(), SIGNAL(selection(QRect)));
+    w->setParent(0);
+  }
+  else {
+    w = static_cast<WidgetLayout *>(widget());
+  }
+//  disconnect(layoutWidget, SIGNAL(deselectAll()));
+  disconnect(w, SIGNAL(selection(QRect)));
+  return w;
+}
 
 
-//void WidgetPanel::setValue(QString channelName, double value)
-//{
-//  layoutWidget->setValue(channelName, value);
-//}
-//
-//void WidgetPanel::setValue(QString channelName, QString value)
-//{
-//  layoutWidget->setValue(channelName, value);
-//}
-//
-//void WidgetPanel::setValue(int index, double value)
-//{
-//  layoutWidget->setValue(index, value);
-//}
-//
-//void WidgetPanel::setValue(int index, QString value)
-//{
-//  layoutWidget->setValue(index, value);
-//}
-
-void WidgetPanel::setWidgetScrollBarsActive(bool active)
+void WidgetPanel::setWidgetScrollBarsActive(bool act)
 {
 //   qDebug() << "WidgetPanel::setScrollBarsActive" << active;
-  if (active && !m_sbActive) {
+  if (act && !m_sbActive) {
     scrollArea = new QScrollArea(this);
     scrollArea->setWidget(widget());
     scrollArea->setFocusPolicy(Qt::NoFocus);
@@ -159,12 +104,12 @@ void WidgetPanel::setWidgetScrollBarsActive(bool active)
     scrollArea->setMouseTracking(true);
 //    layoutWidget->setMouseTracking(false);
   }
-  else if (!active && m_sbActive) {
+  else if (!act && m_sbActive) {
     setWidget(scrollArea->takeWidget());
     delete scrollArea;
     widget()->setMouseTracking(true);
   }
-  m_sbActive = active;
+  m_sbActive = act;
 }
 
 //void WidgetPanel::setKeyRepeatMode(bool repeat)
@@ -187,55 +132,6 @@ void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 //  return layoutWidget->widgetsText(tags);
 //}
 
-//void WidgetPanel::appendMessage(QString message)
-//{
-//  layoutWidget->appendMessage(message);
-//}
-
-//void WidgetPanel::setWidgetToolTip(QuteWidget *widget, bool show)
-//{
-//  layoutWidget->setWidgetToolTip(widget, show);
-//}
-
-//void WidgetPanel::newCurve(Curve* curve)
-//{
-//  layoutWidget->newCurve(curve);
-//}
-
-//void WidgetPanel::setCurveData(Curve *curve)
-//{
-//  layoutWidget->setCurveData(curve);
-//}
-
-//void WidgetPanel::clearGraphs()
-//{
-//  layoutWidget->clearGraphs();
-//}
-
-//Curve * WidgetPanel::getCurveById(uintptr_t id)
-//{
-//  return layoutWidget->getCurveById(id);
-//}
-
-//void WidgetPanel::flush()
-//{
-//  return layoutWidget->flush();
-//}
-
-//void WidgetPanel::refreshConsoles()
-//{
-//  layoutWidget->refreshConsoles();
-//}
-
-//void WidgetPanel::newValue(QPair<QString, double> channelValue)
-//{
-//  layoutWidget->newValue(channelValue);
-//}
-//
-//void WidgetPanel::newValue(QPair<QString, QString> channelValue)
-//{
-//  layoutWidget->newValue(channelValue);
-//}
 
 
 //QString WidgetPanel::getCabbageLines()
@@ -329,14 +225,14 @@ void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 //  menu.exec(event->globalPos());
 //}
 
-void WidgetPanel::resizeEvent(QResizeEvent * event)
-{
-//   qDebug("WidgetPanel::resizeEvent()");
-  QDockWidget::resizeEvent(event);
-  oldSize = event->oldSize();
-  emit resized(event->size());
-//  adjustLayoutSize();
-}
+//void WidgetPanel::resizeEvent(QResizeEvent * event)
+//{
+////   qDebug("WidgetPanel::resizeEvent()");
+//  QDockWidget::resizeEvent(event);
+//  oldSize = event->oldSize();
+//  emit resized(event->size());
+////  adjustLayoutSize();
+//}
 
 void WidgetPanel::moveEvent(QMoveEvent * event)
 {

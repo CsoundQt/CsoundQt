@@ -180,7 +180,7 @@ QString LiveEventFrame::getPlainText()
     return m_sheet->getPlainText();
   }
   else if (m_mode == 1) { // text mode
-    return "";  //FIXME implement
+    return "";  //TODO implement text mode
   }
   return QString();
 }

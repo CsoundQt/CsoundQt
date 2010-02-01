@@ -82,12 +82,10 @@ class qutecsound:public QMainWindow
 
   public slots:
     bool loadFile(QString fileName, bool runNow = false);
-//    void runCsound(bool realtime=true);
     void play();
     void runInTerm();
     void pause();
     void stop();
-//    void stopCsound();
     void render();
     void record();
 //     void selectMidiInDevice(QPoint pos);

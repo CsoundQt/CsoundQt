@@ -216,6 +216,9 @@ void qutecsound::changePage(int index)
     disconnect(showLiveEventsAct, SIGNAL(toggled(bool)),
                documentPages[curPage], SLOT(showLiveEventFrames(bool)));
   }
+  if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL && index != curPage) {
+    documentPages[curPage]->setWidgetLayout(widgetPanel->takeWidgetLayout());  // widget is destroyed by widget panel if it is still there when setting a new one, so we need to take it
+  }
   if (index < 0) {
     qDebug() << "qutecsound::changePage index < 0";
     return;
@@ -718,13 +721,9 @@ void qutecsound::exportCabbage()
   //TODO finish this
 }
 
-//void qutecsound::runCsound(bool realtime)
-//{
-//  documentPages[curPage]->run(realtime);
-//}
-
 void qutecsound::play()
 {
+  // TODO make csound pause if it is already running
   runAct->setChecked(true);
   if (documentPages[curPage]->fileName.isEmpty()) {
     QMessageBox::warning(this, tr("QuteCsound"),
@@ -842,7 +841,6 @@ void qutecsound::play()
     //FIXME show error line numbers
   }
 }
-
 
 void qutecsound::runInTerm()
 {
@@ -1808,9 +1806,9 @@ void qutecsound::connectActions()
   disconnect(widgetPanel, SIGNAL(moved(QPoint)),0,0);
   connect(widgetPanel, SIGNAL(moved(QPoint)),
           doc, SLOT(setWidgetPanelPosition(QPoint)) );
-  disconnect(widgetPanel, SIGNAL(resized(QSize)),0,0);
-  connect(widgetPanel, SIGNAL(resized(QSize)),
-          doc, SLOT(setWidgetPanelSize(QSize)) );
+//  disconnect(widgetPanel, SIGNAL(resized(QSize)),0,0);
+//  connect(widgetPanel, SIGNAL(resized(QSize)),
+//          doc, SLOT(setWidgetPanelSize(QSize)) );
   disconnect(doc, SIGNAL(currentLineChanged(int)), 0, 0);
   connect(doc, SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
   connect(doc, SIGNAL(currentTextUpdated()), this, SLOT(updateInspector()));
@@ -2458,7 +2456,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   DocumentPage *newPage = new DocumentPage(this, opcodeTree);
   documentPages.append(newPage);
   documentTabs->addTab(newPage->getView(),"");
-  widgetPanel->setWidgetLayout(newPage->getWidgetLayout());
+//  widgetPanel->setWidgetLayout(newPage->getWidgetLayout());
   curPage = documentPages.size() - 1;
   documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
   documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
@@ -2788,12 +2786,3 @@ QStringList qutecsound::runCsoundInternally(QStringList flags)
 //  newCurveBuffer.append(curve);
 //}
 //
-//void qutecsound::updateCurve(WINDAT *windat)
-//{
-//  WINDAT *windat_ = (WINDAT *) malloc(sizeof(WINDAT));
-//  *windat_ = *windat;
-//  curveBuffer.append(windat_);
-//}
-//
-
-

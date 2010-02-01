@@ -112,6 +112,7 @@ void FrameWidget::mouseMoveEvent (QMouseEvent* event)
 
 void FrameWidget::mouseDoubleClickEvent (QMouseEvent * event)
 {
+  event->accept();
   emit editWidget();
 }
 

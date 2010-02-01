@@ -71,14 +71,14 @@ class WidgetLayout : public QWidget
     int getMouseBut2();
 
     int newWidget(QString widgetLine, bool offset = false);
-    void appendMessage(QString message);
+    void appendMessage(QString message);  // TODO is this still necessary if all consoles are shared?
     void flush();
     void showWidgetTooltips(bool show);
     void setWidgetToolTip(QuteWidget *widget, bool show);
     void newCurve(Curve* curve);
     void setCurveData(Curve *curve);
     Curve * getCurveById(uintptr_t id);
-//    void updateCurve(WINDAT *windat); //graph updates. useful, necessary?
+    void updateCurve(WINDAT *windat);
     int killCurves(CSOUND *csound);
     void clearGraphs();
     void refreshConsoles();

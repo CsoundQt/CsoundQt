@@ -49,7 +49,6 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 
   //FIXME this options must be set from QuteCsound configuration!
   saveLiveEvents = true;
-//  saveChanges = true;
 
   m_view = new DocumentView(parent);
   m_view->setOpcodeTree(m_opcodeTree);
@@ -386,6 +385,15 @@ QString DocumentPage::getMacOptions(QString option)
   return macOptions[index].mid(option.size());
 }
 
+QString DocumentPage::getLiveEventsText()
+{
+  QString text;
+  for (int i = 0; i < m_liveFrames.size(); i++) {
+    text += m_liveFrames[i]->getPlainText();
+  }
+  return text;
+}
+
 QString DocumentPage::wordUnderCursor()
 {
   return m_view->wordUnderCursor();
@@ -492,6 +500,16 @@ DocumentView *DocumentPage::getView()
   return m_view;
 }
 
+void DocumentPage::setWidgetLayout(WidgetLayout *w)
+{
+  if (w != 0) {
+    m_widgetLayout = w;
+  }
+  else {
+    qDebug() << "DocumentPage::setWidgetLayout()  NULL widget.";
+  }
+}
+
 WidgetLayout *DocumentPage::getWidgetLayout()
 {
   return m_widgetLayout;
@@ -570,7 +588,8 @@ void DocumentPage::setConsoleBufferSize(int size)
 
 void DocumentPage::setWidgetEnabled(bool enabled)
 {
-  m_widgetLayout->setEnabled(enabled);
+  // TODO disable widgetLayout if its not being used?
+//  m_widgetLayout->setEnabled(enabled);
   m_csEngine->enableWidgets(enabled);
 }
 
