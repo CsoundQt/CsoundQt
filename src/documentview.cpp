@@ -54,7 +54,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   l->addWidget(splitter);
   setLayout(l);
 
-  m_highlighter = new Highlighter();
+//  m_highlighter = new Highlighter();
 
   connect(mainEditor, SIGNAL(textChanged()),
           this, SLOT(syntaxCheck()));
@@ -70,13 +70,12 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   setViewMode(0);
 
   errorMarked = false;
-  m_highlighter->setDocument(mainEditor->document());
+  m_highlighter.setDocument(mainEditor->document());
 }
 
 DocumentView::~DocumentView()
 {
-  // FIXME check if this is being called
-  delete m_highlighter;
+//  delete m_highlighter;
 }
 
 void DocumentView::setViewMode(int mode)
@@ -143,13 +142,13 @@ void DocumentView::setLineWrapMode(QTextEdit::LineWrapMode mode)
 
 void DocumentView::setColorVariables(bool color)
 {
-  m_highlighter->setColorVariables(color);
+  m_highlighter.setColorVariables(color);
 }
 
 void DocumentView::setOpcodeNameList(QStringList list)
 {
   // FIXME highlighter should be moved to main application class and this should only be done once!
-  m_highlighter->setOpcodeNameList(list);
+  m_highlighter.setOpcodeNameList(list);
 }
 
 bool DocumentView::isModified()
@@ -184,13 +183,18 @@ void DocumentView::setLadspaText(QString text)
 
 QString DocumentView::getFullText()
 {
-  return editors[0]->toPlainText();
+  QString text;
+  text += mainEditor->toPlainText();
+  return text;
 }
 
 QString DocumentView::getBasicText()
-{// Everything except widget and preset sections
-
-  qDebug() << "DocumentView::getBasicText() not implemented and will crash!";
+{
+//   What Csound needs (no widgets, misc text, etc.)
+  qDebug() << "DocumentView::getBasicText()";
+  QString text;
+  text += mainEditor->toPlainText();
+  return text;
 }
 
 QString DocumentView::getOrcText()

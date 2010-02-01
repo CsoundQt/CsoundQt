@@ -82,6 +82,7 @@ class DocumentPage : public QObject
     DocumentView *getView();  // Needed to pass view for placing it as tab widget in main application
     void setWidgetLayout(WidgetLayout *w);  // In case the widget needs to be reparented (e.g. when putting it in a dock widget)
     WidgetLayout *getWidgetLayout();  // Needed to pass for placing in widget dock panel
+    ConsoleWidget *getConsole();  // Needed to pass for placing in console dock panel
 
     // Document view properties and actions
     void setTextFont(QFont font);

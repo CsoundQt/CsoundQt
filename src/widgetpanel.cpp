@@ -57,18 +57,17 @@ void WidgetPanel::setWidgetLayout(WidgetLayout *w)
   // When this function is called, there must be no widget layout set, as this
   // function will delete the set widget.
   if (m_sbActive) {
-//    scrollArea->setWidgetResizable(true);
-    connect(w, SIGNAL(selection(QRect)), this, SLOT(selectionChanged(QRect)));
     scrollArea->setWidget(w);
+    this->setAutoFillBackground(true);
+    this->setPalette(w->palette());
+    w->setAutoFillBackground(false);
     scrollArea->show();
   }
   else {
-    if (widget() != 0) {
-      disconnect(widget(), SIGNAL(selection(QRect)));
-    }
-    connect(w, SIGNAL(selection(QRect)), this, SLOT(selectionChanged(QRect)));
     setWidget(w);
   }
+  connect(w, SIGNAL(resized()), this, SLOT(widgetChanged()));
+  widgetChanged();
 //  connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
 }
 
@@ -79,7 +78,6 @@ WidgetLayout * WidgetPanel::takeWidgetLayout()
 //  l->removeWidget(widget());
   if (m_sbActive) {
     w = static_cast<WidgetLayout *>(scrollArea->takeWidget());
-    disconnect(scrollArea->widget(), SIGNAL(selection(QRect)));
     w->setParent(0);
   }
   else {
@@ -87,6 +85,7 @@ WidgetLayout * WidgetPanel::takeWidgetLayout()
   }
 //  disconnect(layoutWidget, SIGNAL(deselectAll()));
   disconnect(w, SIGNAL(selection(QRect)));
+  disconnect(w, SIGNAL(resized(QRect)));
   return w;
 }
 
@@ -111,6 +110,21 @@ void WidgetPanel::setWidgetScrollBarsActive(bool act)
   }
   m_sbActive = act;
 }
+
+void WidgetPanel::widgetChanged()
+{
+  QWidget *w;
+  if (m_sbActive) {
+    w = scrollArea->widget();
+  }
+  else {
+    w = widget();
+  }
+  this->setAutoFillBackground(true);
+  this->setPalette(w->palette());
+  w->setAutoFillBackground(false);
+}
+
 
 //void WidgetPanel::setKeyRepeatMode(bool repeat)
 //{
@@ -188,42 +202,15 @@ void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 //    qDebug("Warning: event queue full, event not processed");
 //}
 
-//void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
-//{
-//  QMenu menu;
-//  menu.addAction(createSliderAct);
-//  menu.addAction(createLabelAct);
-//  menu.addAction(createDisplayAct);
-//  menu.addAction(createScrollNumberAct);
-//  menu.addAction(createLineEditAct);
-//  menu.addAction(createSpinBoxAct);
-//  menu.addAction(createButtonAct);
-//  menu.addAction(createKnobAct);
-//  menu.addAction(createCheckBoxAct);
-//  menu.addAction(createMenuAct);
-//  menu.addAction(createMeterAct);
-//  menu.addAction(createConsoleAct);
-//  menu.addAction(createGraphAct);
-//  menu.addAction(createScopeAct);
-//  menu.addSeparator();
-//  menu.addAction(editAct);
-//  menu.addSeparator();
-//  menu.addAction(copyAct);
-//  menu.addAction(pasteAct);
-//  menu.addAction(selectAllAct);
-//  menu.addAction(duplicateAct);
-//  menu.addAction(cutAct);
-//  menu.addAction(deleteAct);
-//  menu.addAction(clearAct);
-//  menu.addSeparator();
-//  menu.addAction(propertiesAct);
-//  currentPosition = event->pos();
-//  if (m_sbActive) {
-//    currentPosition.setX(currentPosition.x() + scrollArea->horizontalScrollBar()->value());
-//    currentPosition.setY(currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20);
-//  }
-//  menu.exec(event->globalPos());
-//}
+void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
+{
+  if (m_sbActive) {
+    static_cast<WidgetLayout *>(scrollArea->widget())->createContextMenu(event);
+  }
+  else {
+    static_cast<WidgetLayout *>(widget())->createContextMenu(event);
+  }
+}
 
 //void WidgetPanel::resizeEvent(QResizeEvent * event)
 //{

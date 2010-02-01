@@ -596,14 +596,15 @@ void CsoundEngine::queueOutString(QString channelName, QString value)
 
 int CsoundEngine::play(CsoundOptions *options)
 {
-  if ((ud->threaded && ud->perfThread && ud->perfThread->isRunning())
+  if ((ud->threaded && !ud->perfThread)
     || (!ud->threaded && ud->PERF_STATUS != 1) ) {
     m_options = *options;
     return runCsound();
   }
   else {
-    if (ud->threaded)
+    if (ud->threaded) { // TODO is this action correct?
       ud->perfThread->Play();
+    }
     return 0;
   }
 }
@@ -755,7 +756,8 @@ int CsoundEngine::runCsound()
   ud->result=csoundCompile(ud->csound,argc,argv);
   //    qDebug("Csound compiled %i", ud->result);
   if (ud->result!=CSOUND_SUCCESS or variable != CSOUND_SUCCESS) {
-    qDebug("Csound compile failed!");
+    qDebug() << "Csound compile failed!";
+    flushMessageQueue();
     free(argv);
     emit (errorLines(getErrorLines()));
     return -3;

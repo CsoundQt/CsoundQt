@@ -69,8 +69,22 @@ class WidgetPanel : public QDockWidget
 //    void newValue(QPair<QString, double> channelValue);
 //    void newValue(QPair<QString, QString> channelValue);
 
+  public slots:
+//    void newValue(QPair<QString, double> channelValue);
+//    void newValue(QPair<QString, QString> channelValue);
+//    void processNewValues();
+//    void widgetChanged(QuteWidget* widget = 0);
+//     void updateWidgetText();
+//    void deleteWidget(QuteWidget *widget);
+//    void queueEvent(QString eventLine);
+
+//    void selectionChanged(QRect selection);
+//    void widgetMoved(QPair<int, int>);
+    void widgetChanged();
+//    void adjustLayoutSize();
+
   protected:
-//    virtual void contextMenuEvent(QContextMenuEvent *event);
+    virtual void contextMenuEvent(QContextMenuEvent *event);
 //    virtual void resizeEvent(QResizeEvent * event);
     virtual void moveEvent(QMoveEvent * event);
 //    virtual void mouseMoveEvent (QMouseEvent * event);
@@ -93,20 +107,6 @@ class WidgetPanel : public QDockWidget
     int m_width;
     int m_height;
     bool m_sbActive; // Scroll bars active
-
-  public slots:
-//    void newValue(QPair<QString, double> channelValue);
-//    void newValue(QPair<QString, QString> channelValue);
-//    void processNewValues();
-//    void widgetChanged(QuteWidget* widget = 0);
-//     void updateWidgetText();
-//    void deleteWidget(QuteWidget *widget);
-//    void queueEvent(QString eventLine);
-
-//    void selectionChanged(QRect selection);
-//    void widgetMoved(QPair<int, int>);
-//    void widgetResized(QPair<int, int>);
-//    void adjustLayoutSize();
 
   private slots:
 //    void copy();

@@ -218,6 +218,8 @@ void qutecsound::changePage(int index)
   }
   if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL && index != curPage) {
     documentPages[curPage]->setWidgetLayout(widgetPanel->takeWidgetLayout());  // widget is destroyed by widget panel if it is still there when setting a new one, so we need to take it
+//    QWidget *w = m_console->widget();
+//    w->setParent(0);
   }
   if (index < 0) {
     qDebug() << "qutecsound::changePage index < 0";
@@ -233,6 +235,7 @@ void qutecsound::changePage(int index)
   documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
   setWidgetPanelGeometry();
   widgetPanel->setWidgetLayout(documentPages[curPage]->getWidgetLayout());
+  m_console->setWidget(documentPages[curPage]->getConsole());
   textEdit = documentPages[curPage];
 }
 
@@ -268,20 +271,24 @@ void qutecsound::openExample()
 
 void qutecsound::closeEvent(QCloseEvent *event)
 {
-  //FIXME need to destroy all document pages here!
   if (maybeSave()) {
     writeSettings();
     delete closeTabButton;
     closeTabButton = 0;
-    close();
+    disconnect(documentTabs, SIGNAL(currentChanged(int))); // To avoid triggering changePage when destroying the tabs
+    while (!documentPages.isEmpty()) {
+      delete documentPages.last();  // TODO do these have to be pointers now?
+      documentPages.pop_back();
+    }
     //delete quickRefFile;quickRefFile = 0;
+    // Delete all temporary files.
+    foreach (QString tempFile, tempScriptFiles) {
+      QDir().remove(tempFile);
+    }
     event->accept();
+    close();
   } else {
     event->ignore();
-  }
-  // Delete all temporary files.
-  foreach (QString tempFile, tempScriptFiles) {
-    QDir().remove(tempFile);
   }
 }
 
@@ -724,7 +731,7 @@ void qutecsound::exportCabbage()
 void qutecsound::play()
 {
   // TODO make csound pause if it is already running
-  runAct->setChecked(true);
+//  runAct->setChecked(true);
   if (documentPages[curPage]->fileName.isEmpty()) {
     QMessageBox::warning(this, tr("QuteCsound"),
                          tr("This file has not been saved\nPlease select name and location."));
@@ -1549,13 +1556,13 @@ void qutecsound::createActions()
   runAct->setIconText(tr("Run"));
   runAct->setCheckable(true);
   runAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
-  connect(runAct, SIGNAL(triggered()), this, SLOT(runInTerm()));
+  connect(runAct, SIGNAL(triggered()), this, SLOT(play()));
 
   runTermAct = new QAction(QIcon(":/images/gtk-media-play-ltr2.png"), tr("Run in Terminal"), this);
   runTermAct->setStatusTip(tr("Run in external shell"));
   runTermAct->setIconText(tr("Run in Term"));
   //FIXME does it really run in term now?
-  connect(runTermAct, SIGNAL(triggered()), this, SLOT(play()));
+  connect(runTermAct, SIGNAL(triggered()), this, SLOT(runInTerm()));
 
   stopAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop"), this);
   stopAct->setStatusTip(tr("Stop"));

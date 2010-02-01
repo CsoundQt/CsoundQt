@@ -44,6 +44,8 @@
 //  layoutWidget->setMouseTracking(true);  // Must allow this for layoutWidget to propagate tracking events
 ////  layoutWidget->setFocusPolicy(Qt::NoFocus);
 
+// FIXME how to pass right clicks from widget layout to this class when clicked outside of this widget?
+
 WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 {
 //       m_panel = (WidgetPanel *) parent;
@@ -160,6 +162,7 @@ void WidgetLayout::loadWidgets(QString macWidgets)
   if (m_editMode) {
     setEditMode(true);
   }
+  adjustLayoutSize();
 }
 
 QString WidgetLayout::getMacWidgetsText()
@@ -515,6 +518,44 @@ bool WidgetLayout::isModified()
 //  connect(editAct, SIGNAL(triggered(bool)), this, SLOT(setEditMode(bool)));
 //}
 
+void WidgetLayout::createContextMenu(QContextMenuEvent *event)
+{
+  QMenu menu;
+  menu.addAction(createSliderAct);
+  menu.addAction(createLabelAct);
+  menu.addAction(createDisplayAct);
+  menu.addAction(createScrollNumberAct);
+  menu.addAction(createLineEditAct);
+  menu.addAction(createSpinBoxAct);
+  menu.addAction(createButtonAct);
+  menu.addAction(createKnobAct);
+  menu.addAction(createCheckBoxAct);
+  menu.addAction(createMenuAct);
+  menu.addAction(createMeterAct);
+  menu.addAction(createConsoleAct);
+  menu.addAction(createGraphAct);
+  menu.addAction(createScopeAct);
+  menu.addSeparator();
+  // FIXME put actions back in menu
+//  menu.addAction(editAct);
+//  menu.addSeparator();
+//  menu.addAction(cutAct);
+//  menu.addAction(copyAct);
+//  menu.addAction(pasteAct);
+  menu.addAction(selectAllAct);
+  menu.addAction(duplicateAct);
+  menu.addAction(deleteAct);
+  menu.addAction(clearAct);
+  menu.addSeparator();
+  menu.addAction(propertiesAct);
+  currentPosition = event->pos();
+//  if (m_sbActive) {
+//    currentPosition.setX(currentPosition.x() + scrollArea->horizontalScrollBar()->value());
+//    currentPosition.setY(currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20);
+//  }
+  menu.exec(event->globalPos());
+}
+
 void WidgetLayout::deselectAll()
 {
   for (int i = 0; i< editWidgets.size(); i++) {
@@ -559,7 +600,7 @@ void WidgetLayout::widgetResized(QPair<int, int> delta)
 void WidgetLayout::adjustLayoutSize()
 {
   int width = 30, height = 30;
-  int woff = 20, hoff = 45; // hack to avoid scrollbars...
+//  int woff = 20, hoff = 45; // hack to avoid scrollbars...
   for (int i = 0; i< m_widgets.size(); i++) {
     if (m_widgets[i]->x() + m_widgets[i]->width() > width) {
       width = m_widgets[i]->x() + m_widgets[i]->width();
@@ -568,13 +609,14 @@ void WidgetLayout::adjustLayoutSize()
       height = m_widgets[i]->y() + m_widgets[i]->height();
     }
   }
-  if (this->width() - woff > width) {
-    width = this->width() - woff;
-  }
-  if  (this->height() - hoff > height) {
-    height = this->height() - hoff;
-  }
-  this->resize(width+10, height+10);
+//  if (this->width() - woff > width) {
+//    width = this->width() - woff;
+//  }
+//  if  (this->height() - hoff > height) {
+//    height = this->height() - hoff;
+//  }
+  this->resize(width, height);
+  emit resized();
 }
 
 void WidgetLayout::selectionChanged(QRect selection)
@@ -1091,7 +1133,7 @@ void WidgetLayout::mouseMoveEvent(QMouseEvent *event)
       //         height = event->y() - starty;
     }
     selectionFrame->setGeometry(x, y, width, height);
-    emit selection(QRect(x,y,width,height));
+    selectionChanged(QRect(x,y,width,height));
   }
 //  qDebug() << "WidgetPanel::mouseMoveEvent " << event->x();
   //FIXME these are duplicated now!
@@ -1120,40 +1162,8 @@ void WidgetLayout::mouseReleaseEvent(QMouseEvent *event)
 
 void WidgetLayout::contextMenuEvent(QContextMenuEvent *event)
 {
-  QMenu menu;
-  menu.addAction(createSliderAct);
-  menu.addAction(createLabelAct);
-  menu.addAction(createDisplayAct);
-  menu.addAction(createScrollNumberAct);
-  menu.addAction(createLineEditAct);
-  menu.addAction(createSpinBoxAct);
-  menu.addAction(createButtonAct);
-  menu.addAction(createKnobAct);
-  menu.addAction(createCheckBoxAct);
-  menu.addAction(createMenuAct);
-  menu.addAction(createMeterAct);
-  menu.addAction(createConsoleAct);
-  menu.addAction(createGraphAct);
-  menu.addAction(createScopeAct);
-  menu.addSeparator();
-  // FIXME put actions back in menu
-//  menu.addAction(editAct);
-//  menu.addSeparator();
-//  menu.addAction(cutAct);
-//  menu.addAction(copyAct);
-//  menu.addAction(pasteAct);
-  menu.addAction(selectAllAct);
-  menu.addAction(duplicateAct);
-  menu.addAction(deleteAct);
-  menu.addAction(clearAct);
-  menu.addSeparator();
-  menu.addAction(propertiesAct);
-  currentPosition = event->pos();
-//  if (m_sbActive) {
-//    currentPosition.setX(currentPosition.x() + scrollArea->horizontalScrollBar()->value());
-//    currentPosition.setY(currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20);
-//  }
-  menu.exec(event->globalPos());
+  createContextMenu(event);
+  event->accept();
 }
 
 int WidgetLayout::createSlider(int x, int y, int width, int height, QString widgetLine)

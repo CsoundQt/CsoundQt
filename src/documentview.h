@@ -24,9 +24,9 @@
 #define DOCUMENTVIEW_H
 
 #include <QtGui>
+#include "highlighter.h"
 
 class OpEntryParser;
-class Highlighter;
 
 class DocumentView : public QScrollArea
 {
@@ -49,7 +49,7 @@ class DocumentView : public QScrollArea
     // TODO add all text inputs here as below
 
     QString getFullText();
-    QString getBasicText();  // Everything except widget and preset sections
+    QString getBasicText();  // What Csound needs (no widgets, misc text, etc.)
     QString getOrcText();  // Without tags
     QString getScoText();  // Without tags
     QString getOptionsText();  // Without tags
@@ -124,7 +124,7 @@ class DocumentView : public QScrollArea
     QVector<QTextEdit *> editors; // A vector to hold pointers for the above for easy processing
 
     OpEntryParser *m_opcodeTree;
-    Highlighter *m_highlighter;
+    Highlighter m_highlighter;
     bool m_isModified;
     bool errorMarked;
 

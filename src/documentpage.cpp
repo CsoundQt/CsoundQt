@@ -96,8 +96,8 @@ DocumentPage::~DocumentPage()
     delete m_liveFrames[i];  // These widgets have the order not to delete on close
     m_liveFrames.remove(i);
   }
-  delete m_view;
   delete m_csEngine;
+//  delete m_view;   // TODO why is this crashing?
 }
 
 void DocumentPage::keyPressEvent(QKeyEvent *event)
@@ -515,6 +515,11 @@ WidgetLayout *DocumentPage::getWidgetLayout()
   return m_widgetLayout;
 }
 
+ConsoleWidget *DocumentPage::getConsole()
+{
+  return m_console;
+}
+
 void DocumentPage::setTextFont(QFont font)
 {
   m_view->setFont(font);
@@ -618,13 +623,9 @@ void DocumentPage::showLiveEventFrames(bool visible)
 
 int DocumentPage::play(CsoundOptions *options)
 {
-  qDebug() << "DocumentPage::play() not implemented!";
   m_view->unmarkErrorLines();  // Clear error lines when running
-  // Determine if API should be used
-  bool useAPI = true;
-
-  m_console->reset();
-  m_widgetLayout->flush();
+  m_console->reset(); // Clear consoles
+  m_widgetLayout->flush();   // Flush accumulated values
   m_widgetLayout->clearGraphs();
   return m_csEngine->play(options);
 }

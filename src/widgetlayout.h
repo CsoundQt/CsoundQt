@@ -85,6 +85,8 @@ class WidgetLayout : public QWidget
     QString getCsladspaLines();
     bool isModified();
 
+    void createContextMenu(QContextMenuEvent *event);  // When done outside container widget
+
     // Indispensable functions. Must be set before using this object
 //    void setEditAct(QAction *editAct);
 
@@ -256,6 +258,7 @@ class WidgetLayout : public QWidget
     void selection(QRect area);
     void keyPressed(QString key);
     void keyReleased(QString key);
+    void resized(); // To let widget panel know widget layout has changed size
 };
 
 #endif // WIDGETLAYOUT_H
