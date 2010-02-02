@@ -53,7 +53,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   selectionFrame->hide();
 
   m_trackMouse = true;
-//  m_editMode = false;
+  m_editMode = false;
 
   createSliderAct = new QAction(tr("Create Slider"),this);
   connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createNewSlider()));
@@ -171,11 +171,12 @@ QString WidgetLayout::getMacWidgetsText()
   // may cause crashing since widgets are not reentrant
   QString text = "";
   text = "<MacGUI>\n";
-  text += "ioView " + (this->autoFillBackground()? QString("background "):QString("nobackground "));
-  text += "{" + QString::number((int) (this->palette().button().color().redF()*65535.)) + ", ";
-  text +=  QString::number((int) (this->palette().button().color().greenF()*65535.)) + ", ";
-  text +=  QString::number((int) (this->palette().button().color().blueF()*65535.)) +"}\n";
+  text += "ioView " + (this->parentWidget()->autoFillBackground()? QString("background "):QString("nobackground "));
+  text += "{" + QString::number((int) (this->parentWidget()->palette().button().color().redF()*65535.)) + ", ";
+  text +=  QString::number((int) (this->parentWidget()->palette().button().color().greenF()*65535.)) + ", ";
+  text +=  QString::number((int) (this->parentWidget()->palette().button().color().blueF()*65535.)) +"}\n";
 
+  //FIXME is it really necessary to lock this here?
   valueMutex.lock();
   for (int i = 0; i < m_widgets.size(); i++) {
     text += m_widgets[i]->getWidgetLine() + "\n";
@@ -595,6 +596,21 @@ void WidgetLayout::widgetResized(QPair<int, int> delta)
     }
   }
   adjustLayoutSize();
+}
+
+void WidgetLayout::mousePressEventParent(QMouseEvent *event)
+{
+  WidgetLayout::mousePressEvent(event);
+}
+
+void WidgetLayout::mouseReleaseEventParent(QMouseEvent *event)
+{
+  WidgetLayout::mouseReleaseEvent(event);
+}
+
+void WidgetLayout::mouseMoveEventParent(QMouseEvent *event)
+{
+  WidgetLayout::mouseMoveEvent(event);
 }
 
 void WidgetLayout::adjustLayoutSize()
@@ -1875,6 +1891,7 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
 
 void WidgetLayout::markHistory()
 {
+  // FIXME implement undo
   QString text = getMacWidgetsText();
   if (m_history.isEmpty()) {
     m_history << "";

@@ -126,8 +126,6 @@ class CsoundEngine : public QObject
     void unregisterConsole(ConsoleWidget *c);
     QList<int> getErrorLines();
     void setConsoleBufferSize(int size);
-    void keyPressForCsound(QString key);  // For key press events from consoles and widget panel
-    void keyReleaseForCsound(QString key);
     int popKeyPressEvent();
     int popKeyReleaseEvent();
 
@@ -148,12 +146,13 @@ class CsoundEngine : public QObject
     void pause();
     void startRecording(int format, QString filename);
     void stopRecording();
-    void queueEvent(QString eventLine, int delay);
+    void queueEvent(QString eventLine, int delay = 0);
+    void keyPressForCsound(QString key);  // For key press events from consoles and widget panel
+    void keyReleaseForCsound(QString key);
 
   private:
     int runCsound();
     void stopCsound();
-    void dispatchQueues();
     QStack<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
     QVector<WINDAT *> curveBuffer;
 
@@ -183,13 +182,14 @@ class CsoundEngine : public QObject
 
     QMutex eventMutex;
     QVector<QString> eventQueue;
-    QTimer queueTimer;
+    QTimer *queueTimer;
     int refreshTime; // time in milliseconds for widget value updates (both input and output)
     QVector<unsigned long> eventTimeStamps;
     int eventQueueSize;
 
   private slots:
     void recordBuffer();
+    void dispatchQueues();
 
   signals:
     void errorLines(QList<int>);

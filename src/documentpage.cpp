@@ -85,6 +85,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   // Register the console with the engine for message printing
   m_csEngine->registerConsole(m_console);
 
+  useXml = false; // use Mac widgets
 }
 
 DocumentPage::~DocumentPage()
@@ -97,31 +98,30 @@ DocumentPage::~DocumentPage()
     m_liveFrames.remove(i);
   }
   delete m_csEngine;
-//  delete m_view;   // TODO why is this crashing?
+//  m_view->deleteLater();   // TODO why is this crashing?
 }
 
-void DocumentPage::keyPressEvent(QKeyEvent *event)
-{
-  qDebug() << "DocumentPage::keyPressEvent " << event->key();
-  // TODO is this function necessary any more?
-  if (event == QKeySequence::Cut)
-  {
-    emit doCut();
-    return;
-  }
-  if (event == QKeySequence::Copy)
-  {
-    emit doCopy();
-    return;
-  }
-  if (event == QKeySequence::Paste)
-  {
-    emit doPaste();
-    return;
-  }
-  //FIXME is it necessary to propagate events further? Possibly
-//  QTextEdit::keyPressEvent(event);
-}
+//void DocumentPage::keyPressEvent(QKeyEvent *event)
+//{
+//  qDebug() << "DocumentPage::keyPressEvent " << event->key();
+//  // TODO is this function necessary any more?
+//  if (event == QKeySequence::Cut)
+//  {
+//    emit doCut();
+//    return;
+//  }
+//  if (event == QKeySequence::Copy)
+//  {
+//    emit doCopy();
+//    return;
+//  }
+//  if (event == QKeySequence::Paste)
+//  {
+//    emit doPaste();
+//    return;
+//  }
+////  QTextEdit::keyPressEvent(event);
+//}
 
 //void DocumentPage::closeEvent(QCloseEvent *event)
 //{
@@ -173,7 +173,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     if (text.indexOf("<MacGUI>") > 0 and text[text.indexOf("<MacGUI>") - 1] == '\n')
       text.remove(text.indexOf("<MacGUI>") - 1, 1); //remove initial line break
     text.remove(macGUI);
-     qDebug("<MacGUI> loaded.");
+    qDebug("<MacGUI> loaded.");
   }
   else {
     if (autoCreateMacCsoundSections) {
@@ -303,8 +303,13 @@ QString DocumentPage::getFullText()
 //  if (!fullText.endsWith("\n"))
 //    fullText += "\n";
   if (fileName.endsWith(".csd",Qt::CaseInsensitive) or fileName == "") {
-    fullText += getMacOptionsText() + "\n" + getMacWidgetsText() + "\n";
-    fullText += getMacPresetsText() + "\n";
+    if (useXml) {
+      // TODO implement xml widgets
+    }
+    else {
+      fullText += getMacOptionsText() + "\n" + getMacWidgetsText() + "\n";
+      fullText += getMacPresetsText() + "\n";
+    }
     QString liveEventsText = "";
     if (saveLiveEvents) { // Only add live events sections if file is a csd file
       for (int i = 0; i < m_liveFrames.size(); i++) {
@@ -356,8 +361,6 @@ QString DocumentPage::getDotText()
 
 QString DocumentPage::getMacWidgetsText()
 {
-  //FIXME put back
-//  return macGUI;
   return m_widgetLayout->getMacWidgetsText();
 }
 
@@ -447,6 +450,11 @@ bool DocumentPage::isModified()
   return false;
 }
 
+bool DocumentPage::isRunning()
+{
+  // TODO what to do with pause?
+  return m_csEngine->isRunning();
+}
 
 bool DocumentPage::usesFltk()
 {
@@ -500,15 +508,15 @@ DocumentView *DocumentPage::getView()
   return m_view;
 }
 
-void DocumentPage::setWidgetLayout(WidgetLayout *w)
-{
-  if (w != 0) {
-    m_widgetLayout = w;
-  }
-  else {
-    qDebug() << "DocumentPage::setWidgetLayout()  NULL widget.";
-  }
-}
+//void DocumentPage::setWidgetLayout(WidgetLayout *w)
+//{
+//  if (w != 0) {
+//    m_widgetLayout = w;
+//  }
+//  else {
+//    qDebug() << "DocumentPage::setWidgetLayout()  NULL widget.";
+//  }
+//}
 
 WidgetLayout *DocumentPage::getWidgetLayout()
 {
@@ -632,13 +640,11 @@ int DocumentPage::play(CsoundOptions *options)
 
 void DocumentPage::pause()
 {
-  qDebug() << "DocumentPage::pause() not implemented!";
   m_csEngine->pause();
 }
 
 void DocumentPage::stop()
 {
-  qDebug() << "DocumentPage::stop() not implemented!";
   m_csEngine->stop();
 }
 
@@ -761,6 +767,7 @@ void DocumentPage::duplicateWidgets()
 
 void DocumentPage::jumpToLine(int line)
 {
+//  qDebug() << "DocumentPage::jumpToLine " << line;
   m_view->jumpToLine(line);
 }
 
@@ -786,7 +793,7 @@ LiveEventFrame * DocumentPage::createLiveEventFrame(QString text)
   connect(e, SIGNAL(closed()), this, SLOT(liveEventFrameClosed()));
   connect(e, SIGNAL(newFrameSignal(QString)), this, SLOT(newLiveEventFrame(QString)));
   connect(e, SIGNAL(deleteFrameSignal(LiveEventFrame *)), this, SLOT(deleteLiveEventFrame(LiveEventFrame *)));
-  connect(e,SIGNAL(sendEvent(QString)),this,SLOT(queueEvent(QString)));
+  connect(e->getSheet(), SIGNAL(sendEvent(QString)),this,SLOT(queueEvent(QString)));
   return e;
 }
 

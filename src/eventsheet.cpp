@@ -998,7 +998,6 @@ void EventSheet::fill(double start, double end, double slope)
       value += (end-start) * (exp(((i + 1.0) / (list.size() - 1.0)) * log(slope))-1.0) / (slope-1.0);
     }
     else if (slope > 1.0) {
-      double sl = 1.0/slope;
       value = start;
       value += (end-start) * (exp(((i + 1.0) / (list.size() - 1.0)) * log(slope))-1.0) / (slope-1.0);
     }

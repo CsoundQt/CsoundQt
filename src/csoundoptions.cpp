@@ -98,8 +98,12 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
     list << " -b" + QString::number(bufferSize);
   if (HwBufferSizeActive)
     list << " -B" + QString::number(HwBufferSize);
-  if (additionalFlagsActive && !additionalFlags.trimmed().isEmpty())
-    list << " " + additionalFlags;
+  if (additionalFlagsActive && !additionalFlags.trimmed().isEmpty()) {
+    QStringList addFlags = additionalFlags.split(QRegExp("[\\s]"),QString::SkipEmptyParts);
+    foreach (QString f, addFlags) {
+      list << f;
+    }
+  }
   if (dither)
     list << " -Z";
   if (rt) {
@@ -163,16 +167,20 @@ int CsoundOptions::generateCmdLine(char **argv)
   QStringList indFlags = generateCmdLineFlagsList();
   foreach (QString flag, indFlags) {
 //    flag = "-" + flag;
-     printf("%s", flag.toStdString().c_str()) ;
+    flag = flag.simplified();
     argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
     strcpy(argv[index],flag.toStdString().c_str());
     index++;
+    fprintf(stdout, "%i - %s.....", index, flag.toStdString().c_str()) ;
   }
   argv[index] = (char *) calloc(fileName1.size()+1, sizeof(char));
   strcpy(argv[index++],fileName1.toStdString().c_str());
+  fprintf(stdout, "%i - %s.....", index, fileName1.toStdString().c_str()) ;
   if (fileName2 != "") {
     argv[index] = (char *) calloc(fileName2.size()+1, sizeof(char));
     strcpy(argv[index++],fileName2.toStdString().c_str());
+    fprintf(stdout, "%i - %s.....", index, fileName2.toStdString().c_str()) ;
   }
+  fprintf(stdout, "\nCsoundOptions::generateCmdLine  index %i\n", index);
   return index;
 }

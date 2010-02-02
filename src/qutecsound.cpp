@@ -61,7 +61,7 @@ qutecsound::qutecsound(QStringList fileNames)
   setWindowTitle("QuteCsound[*]");
   resize(660,350);
   setWindowIcon(QIcon(":/images/qtcs.png"));
-  textEdit = NULL;
+
   QLocale::setDefault(QLocale::system());  //Does this take care of the decimal separator for different locales?
   curPage = -1;
 
@@ -177,7 +177,8 @@ void qutecsound::devicesMessageCallback(CSOUND *csound,
                                          va_list args)
 {
   QStringList *messages = (QStringList *) csoundGetHostData(csound);
-  QString msg = msg.vsprintf(fmt, args);
+  QString msg;
+  msg = msg.vsprintf(fmt, args);
   messages->append(msg);
 }
 
@@ -187,7 +188,8 @@ void qutecsound::utilitiesMessageCallback(CSOUND *csound,
                                           va_list args)
 {
   DockConsole *console = (DockConsole *) csoundGetHostData(csound);
-  QString msg = msg.vsprintf(fmt, args);
+  QString msg;
+  msg = msg.vsprintf(fmt, args);
   console->text->appendMessage(msg);
   console->text->scrollToEnd();
 }
@@ -209,34 +211,38 @@ void qutecsound::changeFont()
 void qutecsound::changePage(int index)
 {
   qDebug() << "qutecsound::changePage " << curPage << "--" << index << "-" << documentPages.size();
+  curPage = index;
   if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
+    QWidget *w = widgetPanel->takeWidgetLayout();
+    if (w != 0)
+      w->setParent(0);
     documentPages[curPage]->showLiveEventFrames(false);
 //    documentPages[curPage]->setMacWidgetsText
 //        (widgetPanel->widgetsText()); //Updated changes to widgets in file
     disconnect(showLiveEventsAct, SIGNAL(toggled(bool)),
                documentPages[curPage], SLOT(showLiveEventFrames(bool)));
+    setCurrentFile(documentPages[curPage]->fileName);
+    connectActions();
+    documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
+    documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
+    documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
+    setWidgetPanelGeometry();
+    widgetPanel->setWidgetLayout(documentPages[curPage]->getWidgetLayout());
+    m_console->setWidget(documentPages[curPage]->getConsole());
+    updateInspector();
+    runAct->setChecked(documentPages[curPage]->isRunning());
+
+  // FIXME connect showLineNumber(int lineNumber) from current document view
   }
-  if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL && index != curPage) {
-    documentPages[curPage]->setWidgetLayout(widgetPanel->takeWidgetLayout());  // widget is destroyed by widget panel if it is still there when setting a new one, so we need to take it
-//    QWidget *w = m_console->widget();
+//  if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL && index != curPage) {
+//    documentPages[curPage]->setWidgetLayout(widgetPanel->takeWidgetLayout());  // widget is destroyed by widget panel if it is still there when setting a new one, so we need to take it
+    //    QWidget *w = m_console->widget();
 //    w->setParent(0);
-  }
+//  }
   if (index < 0) {
     qDebug() << "qutecsound::changePage index < 0";
     return;
   }
-  curPage = index;
-
-  // FIXME connect showLineNumber(int lineNumber) from current document view
-  setCurrentFile(documentPages[curPage]->fileName);
-  connectActions();
-  documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
-  documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
-  documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
-  setWidgetPanelGeometry();
-  widgetPanel->setWidgetLayout(documentPages[curPage]->getWidgetLayout());
-  m_console->setWidget(documentPages[curPage]->getConsole());
-  textEdit = documentPages[curPage];
 }
 
 void qutecsound::setWidgetTooltipsVisible(bool visible)
@@ -276,10 +282,11 @@ void qutecsound::closeEvent(QCloseEvent *event)
     delete closeTabButton;
     closeTabButton = 0;
     disconnect(documentTabs, SIGNAL(currentChanged(int))); // To avoid triggering changePage when destroying the tabs
-    while (!documentPages.isEmpty()) {
-      delete documentPages.last();  // TODO do these have to be pointers now?
-      documentPages.pop_back();
-    }
+//    while (!documentPages.isEmpty()) {
+//      DocumentPage *d = documentPages.last();
+//      documentPages.pop_back();
+//      delete d;  // TODO do these have to be pointers now?
+//    }
     //delete quickRefFile;quickRefFile = 0;
     // Delete all temporary files.
     foreach (QString tempFile, tempScriptFiles) {
@@ -769,36 +776,10 @@ void qutecsound::play()
 //    else
 //      fileName2 = documentPages[curPage]->companionFile;
   }
-  // FIXME put back this check for FLTK
-//  if (m_options->terminalFLTK) { // if "FLpanel" is found in csd run from terminal
-//    if (view()->getBasicText().contains("FLpanel"))
-//      useAPI = false;
-//  }
-  //Set directory of current file
+  // FIXME Set directory of current file
   QString runFileName1, runFileName2;
-  QTemporaryFile tempFile, csdFile, csdFile2; // TODO add support for orc/sco pairs
-  if (fileName.startsWith(":/examples/")) { // TODO is there a proper check to see if example was modified?
-    QString tmpFileName = QDir::tempPath();
-    if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
-      tmpFileName += QDir::separator();
-    }
-    tmpFileName += QString("QuteCsoundExample-XXXXXXXX.csd");
-    tempFile.setFileTemplate(tmpFileName);
-    if (!tempFile.open()) {
-      qDebug() << "Error creating temporary file " << tmpFileName;
-      runAct->setChecked(false);
-      QMessageBox::critical(this,
-                            tr("QuteCsound"),
-                            tr("Error creating temporary file."),
-                            QMessageBox::Ok);
-      return;
-    }
-    QString csdText = documentPages[curPage]->getBasicText();
-    runFileName1 = tempFile.fileName();
-    tempFile.write(csdText.toAscii());
-    tempFile.flush();
-  } /*if (fileName.startsWith(":/examples/"))*/
-  else if (!m_options->saveChanges) {
+  QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
+  if (fileName.startsWith(":/examples/") || !m_options->saveChanges) {
     QString tmpFileName = QDir::tempPath();
     if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
       tmpFileName += QDir::separator();
@@ -820,6 +801,9 @@ void qutecsound::play()
       csdFile.flush();
     }
   }
+  else {
+    runFileName1 = fileName;
+  }
   runFileName2 = documentPages[curPage]->companionFile;
   m_options->fileName1 = runFileName1;
   m_options->fileName2 = runFileName2;
@@ -832,7 +816,6 @@ void qutecsound::play()
     }
 
   }
-//  documentPages[curPage]->setCsoundOptions(*m_options);
   int ret = documentPages[curPage]->play(m_options);
   if (ret == -1) {
     runAct->setChecked(false);
@@ -906,7 +889,7 @@ void qutecsound::runInTerm()
 void qutecsound::pause()
 {
   documentPages[curPage]->pause();
-//  if (ud->PERF_STATUS == 1) {
+//  if (ud->isRunning()) {
 //    perfThread->TogglePause();
 //  }
 }
@@ -917,18 +900,11 @@ void qutecsound::stop()
    qDebug("qutecsound::stop()");
    // FIXME when to stop one document, when to stop all
   documentPages[curPage]->stop();
-//  if (ud->PERF_STATUS == 1) {
+  runAct->setChecked(false);
+//  if (ud->isRunning()) {
 //    stopCsound();
 //  }
-//  if (!m_options->thread) {
-//    while (ud->PERF_STATUS == -1) {
-//      ;
-//      // Wait until performance has stopped
-//    }
-//  }
 //  m_console->scrollToEnd();
-//  runAct->setChecked(false);
-//  recAct->setChecked(false);
 //  if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
 //    //widgetPanel->setVisible(false);
 //  }
@@ -1357,7 +1333,7 @@ void qutecsound::updateInspector()
   // This slot is triggered when a tab is closed, so you need to check
   // if curPage is valid.
 //  if (curPage < documentPages.size())
-//    m_inspector->parseText(documentPages[curPage]->toPlainText());
+    m_inspector->parseText(documentPages[curPage]->getBasicText());
 }
 
 void qutecsound::setDefaultKeyboardShortcuts()
@@ -1555,7 +1531,7 @@ void qutecsound::createActions()
   runAct->setStatusTip(tr("Run current file"));
   runAct->setIconText(tr("Run"));
   runAct->setCheckable(true);
-  runAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
+  runAct->setShortcutContext (Qt::ApplicationShortcut); // FIXME Needed because some key events are not propagation properly
   connect(runAct, SIGNAL(triggered()), this, SLOT(play()));
 
   runTermAct = new QAction(QIcon(":/images/gtk-media-play-ltr2.png"), tr("Run in Terminal"), this);
@@ -1567,14 +1543,14 @@ void qutecsound::createActions()
   stopAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop"), this);
   stopAct->setStatusTip(tr("Stop"));
   stopAct->setIconText(tr("Stop"));
-  stopAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
+  stopAct->setShortcutContext (Qt::ApplicationShortcut); // FIXME Needed because some key events are not propagation properly
   connect(stopAct, SIGNAL(triggered()), this, SLOT(stop()));
 
   recAct = new QAction(QIcon(":/images/gtk-media-record.png"), tr("Record"), this);
   recAct->setStatusTip(tr("Record"));
   recAct->setIconText(tr("Record"));
   recAct->setCheckable(true);
-  recAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
+  recAct->setShortcutContext (Qt::ApplicationShortcut); // FIXME Needed because some key events are not propagation properly
   connect(recAct, SIGNAL(triggered()), this, SLOT(record()));
 
   renderAct = new QAction(QIcon(":/images/render.png"), tr("Render to file"), this);
@@ -1792,6 +1768,7 @@ void qutecsound::connectActions()
   connect(indentAct, SIGNAL(triggered()), doc, SLOT(indent()));
   connect(unindentAct, SIGNAL(triggered()), doc, SLOT(unindent()));
 
+  // FIXME this disconnections from doc are not disconnecting from previous doc!
   disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
   disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
   //TODO put these back but only when document has focus
@@ -1806,6 +1783,8 @@ void qutecsound::connectActions()
 //          this, SLOT(documentWasModified()));
   connect(doc, SIGNAL(selectionChanged()),
           this, SLOT(checkSelection()));
+  disconnect(doc, SIGNAL(currentLineChanged(int)), 0, 0);
+  connect(doc, SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
 
   disconnect(widgetPanel, SIGNAL(widgetsChanged(QString)),0,0);
 //   connect(widgetPanel, SIGNAL(widgetsChanged(QString)),
@@ -1813,17 +1792,18 @@ void qutecsound::connectActions()
   disconnect(widgetPanel, SIGNAL(moved(QPoint)),0,0);
   connect(widgetPanel, SIGNAL(moved(QPoint)),
           doc, SLOT(setWidgetPanelPosition(QPoint)) );
-//  disconnect(widgetPanel, SIGNAL(resized(QSize)),0,0);
-//  connect(widgetPanel, SIGNAL(resized(QSize)),
-//          doc, SLOT(setWidgetPanelSize(QSize)) );
-  disconnect(doc, SIGNAL(currentLineChanged(int)), 0, 0);
-  connect(doc, SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
-  connect(doc, SIGNAL(currentTextUpdated()), this, SLOT(updateInspector()));
+  disconnect(widgetPanel, SIGNAL(resized(QSize)),0,0);
+  connect(widgetPanel, SIGNAL(resized(QSize)),
+          doc, SLOT(setWidgetPanelSize(QSize)) );
 
   // Connect inspector actions to document
   disconnect(m_inspector, 0, 0, 0);
   connect(m_inspector, SIGNAL(jumpToLine(int)),
           doc, SLOT(jumpToLine(int)));
+  disconnect(m_inspector, 0, 0, 0);
+  connect(m_inspector, SIGNAL(jumpToLine(int)),
+          doc, SLOT(jumpToLine(int)));
+
   connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventFrames(bool)));
   connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
 
@@ -2461,20 +2441,21 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   }
   QApplication::setOverrideCursor(Qt::WaitCursor);
   DocumentPage *newPage = new DocumentPage(this, opcodeTree);
-  documentPages.append(newPage);
-  documentTabs->addTab(newPage->getView(),"");
+  documentPages.insert(curPage + 1, newPage);
 //  widgetPanel->setWidgetLayout(newPage->getWidgetLayout());
-  curPage = documentPages.size() - 1;
+  curPage += 1;
   documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
   documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
   documentPages[curPage]->setColorVariables(m_options->colorVariables);
   documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
+
 //  documentPages[curPage]->setEditAct(editAct);
   documentTabs->setCurrentIndex(curPage);
   connectActions();
-  connect(documentPages[curPage], SIGNAL(doCut()), this, SLOT(cut()));
-  connect(documentPages[curPage], SIGNAL(doCopy()), this, SLOT(copy()));
-  connect(documentPages[curPage], SIGNAL(doPaste()), this, SLOT(paste()));
+//  connect(documentPages[curPage], SIGNAL(doCut()), this, SLOT(cut()));
+//  connect(documentPages[curPage], SIGNAL(doCopy()), this, SLOT(copy()));
+//  connect(documentPages[curPage], SIGNAL(doPaste()), this, SLOT(paste()));
+  connect(documentPages[curPage], SIGNAL(currentTextUpdated()), this, SLOT(updateInspector()));
 
   if (fileName.startsWith(m_options->csdocdir))
     documentPages[curPage]->readOnly = true;
@@ -2490,6 +2471,8 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   }
   documentPages[curPage]->setTextString(text, m_options->saveWidgets);
   documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
+  documentTabs->insertTab(curPage, documentPages[curPage]->getView(),"");
+  documentTabs->setCurrentIndex(curPage);
   QApplication::restoreOverrideCursor();
 
 //  documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
@@ -2512,11 +2495,9 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   }
   changeFont();
   statusBar()->showMessage(tr("File loaded"), 2000);
-  textEdit = documentPages[curPage];
   setWidgetPanelGeometry();
 
-  //FIXME m_inspector->parseText(documentPages[curPage]->toPlainText()); //necessary?
-  updateInspector();
+//  updateInspector();
   // FIXME put back
 //  widgetPanel->clearHistory();
   if (runNow && m_options->autoPlay) {
@@ -2556,7 +2537,7 @@ bool qutecsound::saveFile(const QString &fileName, bool saveWidgets)
     documentPages[curPage]->fileName = fileName;
     setCurrentFile(fileName);
   }
-  textEdit->setModified(false);
+  documentPages[curPage]->setModified(false);
   setWindowModified(false);
   lastUsedDir = fileName;
   lastUsedDir.resize(fileName.lastIndexOf("/") + 1);

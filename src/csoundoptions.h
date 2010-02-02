@@ -30,7 +30,7 @@ class CsoundOptions
   public:
     CsoundOptions();
 
-    QString generateCmdLineFlags();  // Still necessary?
+    QString generateCmdLineFlags();
     QStringList generateCmdLineFlagsList();
     int generateCmdLine(char **argv);
 

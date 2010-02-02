@@ -180,7 +180,6 @@ class qutecsound:public QMainWindow
     QTabWidget *documentTabs;
     GraphicWindow *m_graphic;  // To display the code graph images
     QVector<DocumentPage *> documentPages;
-    DocumentPage *textEdit;  // TODO get rid of this, or use it consistently
     Options *m_options;
     DockConsole *m_console;
     DockHelp *helpPanel;
@@ -286,14 +285,14 @@ class FileOpenEater : public QObject
     FileOpenEater() {m_mw = 0;}
     void setMainWindow(qutecsound *mainWindow) {m_mw = mainWindow;}
 
-    QList<QFileOpenEvent> eventQueue;
+    QList<QFileOpenEvent> fileEventQueue;
   protected:
     bool eventFilter(QObject *obj, QEvent *event)
     {
       if (event->type() == QEvent::FileOpen) {
           QFileOpenEvent *fileEvent = static_cast<QFileOpenEvent*>(event);
           if (m_mw == 0) {
-              eventQueue << *fileEvent;  // FIXME this queue is not being processed
+              fileEventQueue << *fileEvent;  // FIXME this queue is not being processed
           }
           else {
               m_mw->loadFile(fileEvent->file(), true);

@@ -140,10 +140,44 @@ void Console::keyReleaseEvent(QKeyEvent *event)
   // FIXME propagate keys to parent for keyboard shortcut actions from console
 }
 
+// ---------------------------------------------------------------
+
+DockConsole::DockConsole(QWidget * parent): QDockWidget(parent)
+{
+  setWindowTitle(tr("Csound Output Console"));
+  text = new Console(parent);
+  text->setReadOnly(true);
+  text->setContextMenuPolicy(Qt::NoContextMenu);
+  text->document()->setDefaultFont(QFont("Courier", 10));
+  setWidget(text);
+  //      QStackedLayout *l = new QStackedLayout(this);
+  //      l->addWidget(text);
+  //      setLayout(l);
+}
+
+DockConsole::~DockConsole()
+{;}
+
+void DockConsole::copy()
+{
+  text->copy();
+}
+
+bool DockConsole::widgetHasFocus()
+{
+  return text->hasFocus();
+}
+void DockConsole::reset()
+{
+  text->clear();
+}
+
 void DockConsole::closeEvent(QCloseEvent * /*event*/)
 {
   emit Close(false);
 }
+
+// ---------------------------------------------------------------
 
 void ConsoleWidget::setWidgetGeometry(int /*x*/,int /*y*/,int width,int height)
 {

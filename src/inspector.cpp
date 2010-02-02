@@ -46,8 +46,6 @@ Inspector::~Inspector()
 
 void Inspector::parseText(const QString &text)
 {
-// FIXME: Inspector must now pass the m_treeWidget to the documentview for it to update it
-  // alternatively, create a way to parse it here...
 //  qDebug() << "Inspector:parseText";
   m_treeWidget->clear();
   TreeItem *opcodeItem = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));

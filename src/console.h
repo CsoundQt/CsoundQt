@@ -63,38 +63,17 @@ class DockConsole : public QDockWidget
 {
   Q_OBJECT
   public:
-    DockConsole(QWidget * parent): QDockWidget(parent)
-    {
-      setWindowTitle(tr("Csound Output Console"));
-      text = new Console(parent);
-      text->setReadOnly(true);
-      text->setContextMenuPolicy(Qt::NoContextMenu);
-      text->document()->setDefaultFont(QFont("Courier", 10));
-      setWidget(text);
-    }
-
-    ~DockConsole() {;}
-
-    void copy()
-    {
-      text->copy();
-    }
-
-    bool widgetHasFocus()
-    {
-      return text->hasFocus();
-    }
+    DockConsole(QWidget * parent);
+    ~DockConsole();
+    void copy();
+    bool widgetHasFocus();
 
     Console *text; // Made public for access from main application for utilities
 
   public slots:
-    void reset()
-    {
-      text->clear();
-    }
+    void reset();
 
   protected:
-
     virtual void closeEvent(QCloseEvent * event);
 
   signals:

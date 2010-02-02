@@ -289,7 +289,7 @@ void ScopeData::updateData(int channel, int zoom, bool freeze)
   QMutex *mutex = m_params->mutex;
   int width = m_params->width;
   int height = m_params->height;
-  if (ud == 0 or ud->PERF_STATUS != 1 )
+  if (ud == 0 or !ud->cs->isRunning() )
     return;
   if (freeze)
     return;
@@ -374,7 +374,7 @@ void LissajouData::updateData(int channel, int zoom, bool freeze)
   QMutex *mutex = m_params->mutex;
   int width = m_params->width;
   int height = m_params->height;
-  if (ud == 0 or ud->PERF_STATUS != 1 )
+  if (ud == 0 or !ud->cs->isRunning() )
     return;
   if (freeze)
     return;
@@ -444,7 +444,7 @@ void PoincareData::updateData(int channel, int zoom, bool freeze)
   QMutex *mutex = m_params->mutex;
   int width = m_params->width;
   int height = m_params->height;
-  if (ud == 0 or ud->PERF_STATUS != 1 )
+  if (ud == 0 or !ud->cs->isRunning() )
     return;
   if (freeze)
     return;

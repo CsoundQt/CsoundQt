@@ -67,7 +67,7 @@ class DocumentView : public QScrollArea
     void print(QPrinter *printer);
 
   public slots:
-    void setModified(bool mod);
+    void setModified(bool mod = true);
     void updateDocumentModel();
     void updateFromDocumentModel();
     void syntaxCheck();
@@ -84,8 +84,8 @@ class DocumentView : public QScrollArea
 
     void markErrorLines(QList<int> lines);
     void unmarkErrorLines();
-    // FIXME connect these to the engine (or where appropriate)
     void jumpToLine(int line);
+    // FIXME connect these to the engine (or where appropriate)
     void opcodeFromMenu();
     void updateCsladspaText(QString text);
 
@@ -135,6 +135,7 @@ class DocumentView : public QScrollArea
   signals:
     void opcodeSyntaxSignal(QString syntax);  // Report an opcode syntax under cursor
     void lineNumberSignal(int number); // Sends current line number when cursor is moved
+    void contentsChanged();
 };
 
 #endif // DOCUMENTVIEW_H

@@ -61,10 +61,12 @@ void WidgetPanel::setWidgetLayout(WidgetLayout *w)
     this->setAutoFillBackground(true);
     this->setPalette(w->palette());
     w->setAutoFillBackground(false);
+    w->show();
     scrollArea->show();
   }
   else {
     setWidget(w);
+    w->show();
   }
   connect(w, SIGNAL(resized()), this, SLOT(widgetChanged()));
   widgetChanged();
@@ -212,14 +214,14 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
   }
 }
 
-//void WidgetPanel::resizeEvent(QResizeEvent * event)
-//{
-////   qDebug("WidgetPanel::resizeEvent()");
-//  QDockWidget::resizeEvent(event);
-//  oldSize = event->oldSize();
-//  emit resized(event->size());
-////  adjustLayoutSize();
-//}
+void WidgetPanel::resizeEvent(QResizeEvent * event)
+{
+//   qDebug("WidgetPanel::resizeEvent()");
+  QDockWidget::resizeEvent(event);
+  oldSize = event->oldSize();
+  emit resized(event->size());
+//  adjustLayoutSize();
+}
 
 void WidgetPanel::moveEvent(QMoveEvent * event)
 {
@@ -232,15 +234,37 @@ void WidgetPanel::moveEvent(QMoveEvent * event)
 //  QWidget::mouseMoveEvent(event);
 //}
 //
-//void WidgetPanel::mousePressEvent(QMouseEvent * event)
-//{
-//  QWidget::mousePressEvent(event);
-//}
-//
-//void WidgetPanel::mouseReleaseEvent(QMouseEvent * event)
-//{
-//  QWidget::mousePressEvent(event);
-//}
+void WidgetPanel::mousePressEvent(QMouseEvent * event)
+{
+  if (m_sbActive) {
+    static_cast<WidgetLayout *>(scrollArea->widget())->mousePressEventParent(event);
+  }
+  else {
+    static_cast<WidgetLayout *>(widget())->mousePressEventParent(event);
+  }
+}
+
+void WidgetPanel::mouseReleaseEvent(QMouseEvent * event)
+{
+  if (m_sbActive) {
+    static_cast<WidgetLayout *>(scrollArea->widget())->mousePressEventParent(event);
+  }
+  else {
+    static_cast<WidgetLayout *>(widget())->mousePressEventParent(event);
+  }
+}
+
+void WidgetPanel::mouseMoveEvent(QMouseEvent * event)
+{
+  if (m_sbActive) {
+    static_cast<WidgetLayout *>(scrollArea->widget())->mouseMoveEventParent(event);
+  }
+  else {
+    static_cast<WidgetLayout *>(widget())->mouseMoveEventParent(event);
+  }
+  qApp->processEvents();
+}
+
 //
 //void WidgetPanel::keyPressEvent(QKeyEvent *event)
 //{

@@ -131,6 +131,9 @@ class WidgetLayout : public QWidget
     void selectAll();
     void widgetMoved(QPair<int, int>);
     void widgetResized(QPair<int, int>);
+    void mousePressEventParent(QMouseEvent *event); // To receive events from ancestors when outside the widget area
+    void mouseReleaseEventParent(QMouseEvent *event);
+    void mouseMoveEventParent(QMouseEvent *event);
     void selectionChanged(QRect selection);
     void adjustLayoutSize();
 

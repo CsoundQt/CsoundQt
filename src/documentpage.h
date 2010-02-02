@@ -69,6 +69,7 @@ class DocumentPage : public QObject
     QStringList getScheduledEvents(unsigned long ksmpscount);
     void setModified(bool mod);
     bool isModified();
+    bool isRunning();
     bool usesFltk();
     void updateCsLadspaText();
     void focusWidgets();
@@ -80,7 +81,7 @@ class DocumentPage : public QObject
     void redo();
 
     DocumentView *getView();  // Needed to pass view for placing it as tab widget in main application
-    void setWidgetLayout(WidgetLayout *w);  // In case the widget needs to be reparented (e.g. when putting it in a dock widget)
+//    void setWidgetLayout(WidgetLayout *w);  // In case the widget needs to be reparented (e.g. when putting it in a dock widget)
     WidgetLayout *getWidgetLayout();  // Needed to pass for placing in widget dock panel
     ConsoleWidget *getConsole();  // Needed to pass for placing in console dock panel
 
@@ -150,7 +151,7 @@ class DocumentPage : public QObject
     void showLiveEventFrames(bool visible);
 
   protected:
-    virtual void keyPressEvent(QKeyEvent *event);
+//    virtual void keyPressEvent(QKeyEvent *event);
 //    virtual void contextMenuEvent(QContextMenuEvent *event);
 //    virtual void closeEvent(QCloseEvent *event);
 
@@ -159,6 +160,7 @@ class DocumentPage : public QObject
     QString macPresets;
 //    QString macGUI;
     QDomElement widgetsXml;
+    bool useXml;
 
     WidgetLayout * m_widgetLayout;
     DocumentView *m_view;
@@ -185,9 +187,9 @@ class DocumentPage : public QObject
   signals:
     void currentLineChanged(int);
     void currentTextUpdated();
-    void doCopy();
-    void doCut();
-    void doPaste();
+//    void doCopy();
+//    void doCut();
+//    void doPaste();
 //    void registerLiveEvent(QWidget *e);
     void setCurrentAudioFile(QString name);
     void liveEventsVisible(bool);  // To change the action in the main window
