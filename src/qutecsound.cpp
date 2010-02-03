@@ -210,9 +210,9 @@ void qutecsound::changeFont()
 
 void qutecsound::changePage(int index)
 {
+  // Previous page has already been destroyed here. Remember this is called when opening, closing or switching tabs
   qDebug() << "qutecsound::changePage " << curPage << "--" << index << "-" << documentPages.size();
-  if (documentPages[curPage]) { // If page has not been destroyed
-    documentPages[curPage]->showLiveEventFrames(false);
+  if (documentPages.size() > curPage && documentPages[curPage]) {
     disconnect(showLiveEventsAct, SIGNAL(toggled(bool)), documentPages[curPage], SLOT(showLiveEventFrames(bool)));
   }
   curPage = index;
@@ -629,6 +629,7 @@ bool qutecsound::closeTab()
       curPage = 0;
     }
   }
+  documentPages[curPage]->showLiveEventFrames(false);
   documentPages[curPage]->deleteLater();
   documentPages.remove(curPage);
   documentTabs->removeTab(curPage);
@@ -1513,7 +1514,6 @@ void qutecsound::createActions()
   findAgainAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Find a&gain"), this);
   findAgainAct->setStatusTip(tr("Find next appearance of string"));
 //   findAct->setIconText(tr("Find"));
-  connect(findAgainAct, SIGNAL(triggered()), this, SLOT(findString()));
 
   autoCompleteAct = new QAction(tr("AutoComplete"), this);
   autoCompleteAct->setStatusTip(tr("Autocomplete according to Status bar display"));
@@ -1760,17 +1760,19 @@ void qutecsound::connectActions()
 //  disconnect(pasteAct, 0, 0, 0);
 //  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
 
-//  disconnect(findAct, 0, 0, 0);
-//  connect(findAct, SIGNAL(triggered()), this, SLOT(findReplace()));
 
 //   disconnect(commentAct, 0, 0, 0);
   disconnect(uncommentAct, 0, 0, 0);
   disconnect(indentAct, 0, 0, 0);
   disconnect(unindentAct, 0, 0, 0);
+  disconnect(findAct, 0, 0, 0);
+  disconnect(findAgainAct, 0, 0, 0);
   connect(commentAct, SIGNAL(triggered()), doc, SLOT(comment()));
   connect(uncommentAct, SIGNAL(triggered()), doc, SLOT(uncomment()));
   connect(indentAct, SIGNAL(triggered()), doc, SLOT(indent()));
   connect(unindentAct, SIGNAL(triggered()), doc, SLOT(unindent()));
+  connect(findAct, SIGNAL(triggered()), doc, SLOT(findReplace()));
+  connect(findAgainAct, SIGNAL(triggered()), doc, SLOT(findString()));
 
 //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
 //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
@@ -2447,8 +2449,8 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
 //  connect(documentPages[curPage], SIGNAL(doCopy()), this, SLOT(copy()));
 //  connect(documentPages[curPage], SIGNAL(doPaste()), this, SLOT(paste()));
   connect(documentPages[curPage], SIGNAL(currentTextUpdated()), this, SLOT(updateInspector()));
-  connect(documentPages[curPage], SIGNAL(textChanged()), this, SLOT(documentWasModified()));
-  connect(documentPages[curPage], SIGNAL(selectionChanged()), this, SLOT(checkSelection()));
+  connect(documentPages[curPage], SIGNAL(modified()), this, SLOT(documentWasModified()));
+//  connect(documentPages[curPage], SIGNAL(selectionChanged()), this, SLOT(checkSelection()));
   connect(documentPages[curPage], SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
 
   if (fileName.startsWith(m_options->csdocdir))

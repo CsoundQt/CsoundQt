@@ -136,6 +136,7 @@ class WidgetLayout : public QWidget
     void mouseMoveEventParent(QMouseEvent *event);
     void selectionChanged(QRect selection);
     void adjustLayoutSize();
+    void setModified(bool mod = true);
 
     void copy();
     void cut();
@@ -238,7 +239,6 @@ class WidgetLayout : public QWidget
     int createDummy(int x, int y, int width, int height, QString widgetLine);
 
     void setBackground(bool bg, QColor bgColor);
-    void setModified(bool mod = true);
 
     bool m_tooltips;
     QVector<WidgetPreset> presets;
@@ -262,6 +262,7 @@ class WidgetLayout : public QWidget
     void keyPressed(QString key);
     void keyReleased(QString key);
     void resized(); // To let widget panel know widget layout has changed size
+    void changed(); // Should be triggered whenever widgets change, to let main document know
 };
 
 #endif // WIDGETLAYOUT_H

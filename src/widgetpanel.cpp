@@ -58,15 +58,19 @@ void WidgetPanel::setWidgetLayout(WidgetLayout *w)
   // function will delete the set widget.
   if (m_sbActive) {
     scrollArea->setWidget(w);
-    this->setAutoFillBackground(true);
-    this->setBackgroundRole(QPalette::Window);
-    this->setPalette(w->palette());
+    scrollArea->setAutoFillBackground(w->autoFillBackground());
+    scrollArea->setBackgroundRole(QPalette::Window);
+    scrollArea->setPalette(w->palette());
     w->setAutoFillBackground(false);
     w->show();
     scrollArea->show();
   }
   else {
     setWidget(w);
+    this->setAutoFillBackground(w->autoFillBackground());
+    this->setBackgroundRole(QPalette::Window);
+    this->setPalette(w->palette());
+    w->setAutoFillBackground(false);
     w->show();
   }
   connect(w, SIGNAL(resized()), this, SLOT(widgetChanged()));

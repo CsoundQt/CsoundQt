@@ -43,12 +43,14 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     QString getPlainText();
 
     void getEvents(unsigned long ksmps, QStringList *eventText);
+    bool isModified();
     void forceDestroy();
 
   public slots:
     void setMode(int mode);
     void setTempo(double tempo);
     void setLoopLength(double length);
+    void setModified(bool mod = true);
     void doAction(int action);
     void newFrame();
     void cloneFrame();
@@ -66,6 +68,7 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     QTextEdit *m_editor; //TODO add text editor
     EventSheet *m_sheet;
     QString m_csdName;
+    bool m_modified;
 
   signals:
     void newFrameSignal(QString text);

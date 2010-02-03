@@ -67,7 +67,6 @@ class DocumentPage : public QObject
 //    void updateCsladspaText(QString text);
     QString getFilePath();
     QStringList getScheduledEvents(unsigned long ksmpscount);
-    void setModified(bool mod);
     bool isModified();
     bool isRunning();
     bool usesFltk();
@@ -139,6 +138,7 @@ class DocumentPage : public QObject
     void setMacOption(QString option, QString newValue);
     void setWidgetPanelPosition(QPoint position);
     void setWidgetPanelSize(QSize size);
+    void setModified(bool mod = true);
 
     //Passed directly to widget layout
     void setWidgetEditMode(bool active);
@@ -193,13 +193,14 @@ class DocumentPage : public QObject
 
   signals:
     void currentLineChanged(int);
-    void currentTextUpdated();
+    void currentTextUpdated();  // To let inspector know it must update
 //    void doCopy();
 //    void doCut();
 //    void doPaste();
 //    void registerLiveEvent(QWidget *e);
     void setCurrentAudioFile(QString name);
     void liveEventsVisible(bool);  // To change the action in the main window
+    void modified();  // Triggered whenever the children change
 };
 
 #endif

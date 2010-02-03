@@ -92,7 +92,7 @@ DocumentPage::~DocumentPage()
   qDebug() << "DocumentPage::~DocumentPage()";
   m_csEngine->stop();
   for (int i = 0; i < m_liveFrames.size(); i++) {
-    m_liveFrames[i]->deleteFrame();  // These widgets have the order not to delete on close
+    delete m_liveFrames[i];  // These widgets have the order not to delete on close
     m_liveFrames.remove(i);
   }
   delete m_csEngine;
@@ -201,11 +201,12 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     }
   }
   if (!text.contains("<CsoundSynthesizer>") &&
-      !text.contains("</CsoundSynthesizer>") ) {//TODO this check is very flaky....
-    m_view->setFullText(text);
-    //FIXME is it necessary to set modified here?
-//    view()->document()->setModified(true);
+      !text.contains("</CsoundSynthesizer>") ) { // When not a csd file
+    m_view->setFullText(text);  // TODO do something different if not a csd file?
     return 0;  // Don't add live event panel if not a csd file.
+  }
+  else { // When a csd file
+    m_view->setFullText(text);
   }
   // Load Live Event Panels ------------------------
   while (text.contains("<EventPanel") and text.contains("</EventPanel>")) {
@@ -288,9 +289,6 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     e->setFromText(QString()); // Must set blank for undo history point
   }
 
-  m_view->setFullText(text);  //FIXME is this necessary as it is above, or remove from above?
-  // FIXME is it necessary to set modified here?
-//  document()->setModified(true);
   return 0;
 }
 
@@ -434,9 +432,19 @@ QStringList DocumentPage::getScheduledEvents(unsigned long ksmps)
 
 void DocumentPage::setModified(bool mod)
 {
+  // This slot is triggered by the document children whenever they are modified
+  // It is also called from the main application when the file is saved to set as unmodified.
   // FIXME live frame modification should also affect here
-  //FIXME is this needed? m_view->setModified(mod);
-  //FIXME is this needed? m_widgetLayout->setModified(mod);
+  if (mod == true) {
+    emit modified();
+  }
+  else {
+    m_view->setModified(false);
+    m_widgetLayout->setModified(false);
+    for (int i = 0; i < m_liveFrames.size(); i++) {
+      m_liveFrames[i]->setModified(false);
+    }
+  }
 }
 
 bool DocumentPage::isModified()
@@ -445,6 +453,10 @@ bool DocumentPage::isModified()
     return true;
   if (m_widgetLayout->isModified())
     return true;
+  for (int i = 0; i < m_liveFrames.size(); i++) {
+    if (m_liveFrames[i]->isModified())
+      return true;
+  }
   return false;
 }
 

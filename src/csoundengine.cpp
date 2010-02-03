@@ -74,8 +74,8 @@ CsoundEngine::~CsoundEngine()
   delete ud;
   delete recBuffer;
   qApp->processEvents();
-  queueTimer->stop();   // This crashes... so is the timer being deleted?
-  queueTimer->deleteLater();
+//  queueTimer->stop();   // This crashes... so is the timer being deleted?
+//  queueTimer->deleteLater();
 }
 
 void CsoundEngine::messageCallbackNoThread(CSOUND *csound,

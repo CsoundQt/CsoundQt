@@ -46,11 +46,13 @@ LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags
   m_sheet->show();
   m_sheet->setTempo(60.0);
   m_sheet->setLoopLength(8.0);
+  connect(m_sheet,SIGNAL(modified()), this, SLOT(setModified()));
   scrollArea->setWidget(m_sheet);
 
   m_editor = new QTextEdit(this);
   m_editor->hide();
 
+  m_modified = false;
   m_mode = 0; // Sheet mode by default
 
   connect(actionComboBox,SIGNAL(activated(int)), this, SLOT(doAction(int)));
@@ -108,6 +110,11 @@ void LiveEventFrame::setLoopLength(double length)
   //TODO add sending length to other modes here too
 }
 
+void LiveEventFrame::setModified(bool mod)
+{
+  m_modified = mod;
+}
+
 void LiveEventFrame::doAction(int action)
 {
   // TODO This really should be done with QActions
@@ -153,9 +160,11 @@ void LiveEventFrame::setFromText(QString text)
     m_sheet->setFromText(text);
     m_sheet->clearHistory();
     m_sheet->markHistory();
+    m_modified = false;
   }
   else if (m_mode == 1) { // text mode
 
+    m_modified = false;
   }
 }
 
@@ -188,6 +197,11 @@ QString LiveEventFrame::getPlainText()
 void LiveEventFrame::getEvents(unsigned long ksmps, QStringList *eventText)
 {
   // TODO: implement
+}
+
+bool LiveEventFrame::isModified()
+{
+  return m_modified;
 }
 
 void LiveEventFrame::forceDestroy()

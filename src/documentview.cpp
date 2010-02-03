@@ -70,6 +70,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   setViewMode(0);
 
   errorMarked = false;
+  m_isModified = false;
   m_highlighter.setDocument(mainEditor->document());
 }
 
@@ -174,6 +175,7 @@ void DocumentView::setOpcodeTree(OpEntryParser *opcodeTree)
 void DocumentView::setFullText(QString text)
 {
   editors[0]->setText(text);
+  setModified(false);
 }
 
 void DocumentView::setLadspaText(QString text)

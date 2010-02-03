@@ -55,6 +55,8 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   m_trackMouse = true;
   m_editMode = false;
 
+  m_modified = false;
+
   createSliderAct = new QAction(tr("Create Slider"),this);
   connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createNewSlider()));
   createLabelAct = new QAction(tr("Create Label"),this);
@@ -817,7 +819,7 @@ void WidgetLayout::propertiesDialog()
   QGridLayout *layout = new QGridLayout(dialog);
   bgCheckBox = new QCheckBox(dialog);
   bgCheckBox->setText("Enable Background");
-  bgCheckBox->setChecked(this->autoFillBackground());
+  bgCheckBox->setChecked(parentWidget()->autoFillBackground());
   layout->addWidget(bgCheckBox, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
   QLabel *label = new QLabel(dialog);
 //   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
@@ -1758,6 +1760,7 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
 void WidgetLayout::setModified(bool mod)
 {
   m_modified = mod;
+  emit changed();
 }
 
 void WidgetLayout::clearHistory()

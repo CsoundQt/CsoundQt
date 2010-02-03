@@ -147,7 +147,7 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
   // changes because large operations like add or subractract will produce
   // many steps in the history
   connect(this, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(cellDoubleClickedSlot(int, int)));
-  connect(this, SIGNAL(cellDoubleClicked()), this, SLOT(markHistory()));
+  connect(this, SIGNAL(cellChanged (int, int)), this, SLOT(cellChangedSlot(int, int)));
 
   loopTimer.setSingleShot(true);
   connect(&loopTimer, SIGNAL(timeout()), this, SLOT(sendEvents()));
@@ -1230,5 +1230,10 @@ void EventSheet::selectionChanged()
 
 void EventSheet::cellDoubleClickedSlot(int row, int column)
 {
-  emit cellDoubleClicked();
+  markHistory();
+}
+
+void EventSheet::cellChangedSlot(int row, int column)
+{
+  emit modified();
 }

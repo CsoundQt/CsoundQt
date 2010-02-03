@@ -274,21 +274,21 @@ aout_FeedBack	= (aout_FBack + aout_PPull) * kPolarity
 endop
 
 
-opcode	REVERB, aa, aiiiiiiiiiiik
+opcode	REVERB, aa, akkkkkkkkkkkk
 
 aIn_Reverb,\	;audio input
 \
-iTime_Rev,\	;knob Time
-iLR_Rev,\		;knob L/R
-iSize_Rev,\	;knob Size
-iRT_Rev,\		;knob RT
-iLP_Rev,\		;knob LP
-iLD_Rev,\		;knob LD
-iHD_Rev,\		;knob HD
-iFrq_Rev,\	;knob Frq,	LFO sinus frequency
-iSpin_Rev,\	;knob Spin,	LFO sinus amplitude
-iDizzy_Rev,\	;knob Dizzy,	Slow Random amplitude
-iPos_Rev,\	;knob Pos	0 à 1
+kTime_Rev,\	;knob Time
+kLR_Rev,\		;knob L/R
+kSize_Rev,\	;knob Size
+kRT_Rev,\		;knob RT
+kLP_Rev,\		;knob LP
+kLD_Rev,\		;knob LD
+kHD_Rev,\		;knob HD
+kFrq_Rev,\	;knob Frq,	LFO sinus frequency
+kSpin_Rev,\	;knob Spin,	LFO sinus amplitude
+kDizzy_Rev,\	;knob Dizzy,	Slow Random amplitude
+kPos_Rev,\	;knob Pos	0 à 1
 kMix_Rev\		;knob Mix	0 à 1
 		xin
 
@@ -306,11 +306,11 @@ aoutR_Feed	init	0
 ainL_dry	= aIn_Reverb
 ainR_dry	= aIn_Reverb
 
-idelL		=		iTime_Rev * (1 + iLR_Rev)
-idelR		=		iTime_Rev * (1 - iLR_Rev)
+kdelL		=		kTime_Rev * (1 + kLR_Rev)
+kdelR		=		kTime_Rev * (1 - kLR_Rev)
 
-aoutL_Del		vdelay	ainL_dry, idelL, 500
-aoutR_Del		vdelay	ainR_dry, idelR, 500
+aoutL_Del		vdelay	ainL_dry, kdelL, 500
+aoutR_Del		vdelay	ainR_dry, kdelR, 500
 
 ;*************************************************************************************DEL SECTION END
 
@@ -324,78 +324,78 @@ aoutR_Del		vdelay	ainR_dry, idelR, 500
 ;Outputs ainL_EDiff and ainR_EDiff (to LOPASS)
 
 ;Diffusion with variable Delay ;ktime mini=2/sr
-iDffs		=		0.5 + (iSize_Rev * 0.0041666666)
+kDffs		=		0.5 + (kSize_Rev * 0.0041666666)
 
-itime_1L_ED	table	iSize_Rev + 4, 1	;exp table; in seconds
-itime_2L_ED	table	iSize_Rev + 8, 1	;exp table; in seconds
-itime_3L_ED	table	iSize_Rev + 12, 1	;exp table; in seconds
+ktime_1L_ED	table	kSize_Rev + 4, 1	;exp table; in seconds
+ktime_2L_ED	table	kSize_Rev + 8, 1	;exp table; in seconds
+ktime_3L_ED	table	kSize_Rev + 12, 1	;exp table; in seconds
 
-itime_1R_ED	table	iSize_Rev + 6, 1	;exp table; in seconds
-itime_2R_ED	table	iSize_Rev + 10, 1	;exp table; in seconds
-itime_3R_ED	table	iSize_Rev + 14, 1	;exp table; in seconds
+ktime_1R_ED	table	kSize_Rev + 6, 1	;exp table; in seconds
+ktime_2R_ED	table	kSize_Rev + 10, 1	;exp table; in seconds
+ktime_3R_ED	table	kSize_Rev + 14, 1	;exp table; in seconds
 
 ;Diffuser delay 1L
 adel1L_ED		init		0
 amaxtime1L_ED	delayr	0.2							; set maximum delay 200 ms
-aEDiff_1L		=		adel1L_ED + iDffs * aoutL_Del		; FEED FORWARD
-adel1L_ED		deltap	itime_1L_ED					; DELAY
-			delayw	aoutL_Del - iDffs * aEDiff_1L		; FEEDBACK
+aEDiff_1L		=		adel1L_ED + kDffs * aoutL_Del		; FEED FORWARD
+adel1L_ED		deltap	ktime_1L_ED					; DELAY
+			delayw	aoutL_Del - kDffs * aEDiff_1L		; FEEDBACK
 ;Diffuser delay 2L
 adel2L_ED		init	0
 amaxtime2L_ED	delayr	0.2							; set maximum delay 200 ms
-aEDiff_2L		=		adel2L_ED + iDffs * aEDiff_1L		; FEED FORWARD
-adel2L_ED		deltap	itime_2L_ED					; DELAY
-			delayw	aEDiff_1L - iDffs * aEDiff_2L		; FEEDBACK
+aEDiff_2L		=		adel2L_ED + kDffs * aEDiff_1L		; FEED FORWARD
+adel2L_ED		deltap	ktime_2L_ED					; DELAY
+			delayw	aEDiff_1L - kDffs * aEDiff_2L		; FEEDBACK
 ;Diffuser delay 3L
 adel3L_ED		init	0
 amaxtime3L_ED	delayr	0.2							; set maximum delay 200 ms
-ainL_EDiff	=		adel3L_ED + iDffs * aEDiff_2L		; FEED FORWARD
-adel3L_ED		deltap	itime_3L_ED					; DELAY
-			delayw	aEDiff_2L - iDffs * ainL_EDiff	; FEEDBACK
+ainL_EDiff	=		adel3L_ED + kDffs * aEDiff_2L		; FEED FORWARD
+adel3L_ED		deltap	ktime_3L_ED					; DELAY
+			delayw	aEDiff_2L - kDffs * ainL_EDiff	; FEEDBACK
 
 ;Diffuser delay 1R
 adel1R_ED		init	0
 amaxtime1R_ED	delayr	0.2							; set maximum delay 200 ms
-aEDiff_1R		=		adel1R_ED + iDffs * aoutR_Del		; FEED FORWARD
-adel1R_ED		deltap	itime_1R_ED					; DELAY
-			delayw	aoutR_Del - iDffs * aEDiff_1R		; FEEDBACK
+aEDiff_1R		=		adel1R_ED + kDffs * aoutR_Del		; FEED FORWARD
+adel1R_ED		deltap	ktime_1R_ED					; DELAY
+			delayw	aoutR_Del - kDffs * aEDiff_1R		; FEEDBACK
 ;Diffuser delay 2R
 adel2R_ED		init	0
 amaxtime2R_ED	delayr	0.2							; set maximum delay 200 ms
-aEDiff_2R		=		adel2R_ED + iDffs * aEDiff_1R		; FEED FORWARD
-adel2R_ED		deltap	itime_2R_ED					; DELAY
-			delayw	aEDiff_1R - iDffs * aEDiff_2R		; FEEDBACK
+aEDiff_2R		=		adel2R_ED + kDffs * aEDiff_1R		; FEED FORWARD
+adel2R_ED		deltap	ktime_2R_ED					; DELAY
+			delayw	aEDiff_1R - kDffs * aEDiff_2R		; FEEDBACK
 ;Diffuser delay 3R
 adel3R_ED		init	0
 amaxtime3R_ED	delayr	0.2							; set maximum delay 200 ms
-ainR_EDiff	=		adel3R_ED + iDffs * aEDiff_2R		; FEED FORWARD
-adel3R_ED		deltap	itime_3R_ED					; DELAY
-			delayw	aEDiff_2R - iDffs * ainR_EDiff	; FEEDBACK
+ainR_EDiff	=		adel3R_ED + kDffs * aEDiff_2R		; FEED FORWARD
+adel3R_ED		deltap	ktime_3R_ED					; DELAY
+			delayw	aEDiff_2R - kDffs * ainR_EDiff	; FEEDBACK
 
 ;*****************************************************************************************LOPASS
 ;Inputs ainL_EDiff and ainR_EDiff (from EARLY DIFF)
 ;Outputs aoutL_LP and aoutR_LP  (to DAMP L, POWER FADE L, DAMP R, POWER FADE R)
 
-ifreq_LP		table	iLP_Rev, 2			;exp2 table; Pitch to freq convertion in hertz
+kfreq_LP		table	kLP_Rev, 2			;exp2 table; Pitch to freq convertion in hertz
 
-aoutL_LP		tone		ainL_EDiff, ifreq_LP
-aoutR_LP		tone		ainR_EDiff, ifreq_LP
+aoutL_LP		tone		ainL_EDiff, kfreq_LP
+aoutR_LP		tone		ainR_EDiff, kfreq_LP
 
 ;**************************************************************************************DAMP L et R
 ;Inputs aoutL_LP (from LOPASS) and aoutR_Feed (from DIFF R)
 ;Inputs aoutR_LP (from LOPASS) and aoutL_Feed (from DIFF L)
 ;Outputs aoutL_Damp (to DIFF L) and aoutR_Damp (to DIFF R)
 
-ivH			= ampdb (-iHD_Rev)
-ivL			= ampdb (-iLD_Rev)
+kvH			= ampdb (-kHD_Rev)
+kvL			= ampdb (-kLD_Rev)
 
 ainL_Damp		=		aoutL_LP + aoutR_Feed
-aH			pareq	ainL_Damp, 2093, ivH, 0.707 , 2	;L Damp HiShelfEQ
-aoutL_Damp	pareq	aH, 262, ivL, 0.707 , 1			;L Damp LoShelfEQ
+aH			pareq	ainL_Damp, 2093, kvH, 0.707 , 2	;L Damp HiShelfEQ
+aoutL_Damp	pareq	aH, 262, kvL, 0.707 , 1			;L Damp LoShelfEQ
 
 ainR_Damp		=		aoutR_LP + aoutL_Feed
-aH			pareq	ainR_Damp, 2093, ivH, 0.707 , 2	;R Damp HiShelfEQ
-aoutR_Damp	pareq	aH, 262, ivL, 0.707 , 1			;R Damp LoShelfEQ
+aH			pareq	ainR_Damp, 2093, kvH, 0.707 , 2	;R Damp HiShelfEQ
+aoutR_Damp	pareq	aH, 262, kvL, 0.707 , 1			;R Damp LoShelfEQ
 
 ;***************************************************************************************16 PHASE
 ;Outputs kphase1,kphase2,kphase3,kphase4 (to DIFF L)
@@ -403,30 +403,30 @@ aoutR_Damp	pareq	aH, 262, ivL, 0.707 , 1			;R Damp LoShelfEQ
 
 ;LFO +Slow Random gen N1
 iseed1		=		0
-krand1		randh	iDizzy_Rev, 400, iseed1
-krand1		tonek	krand1, iFrq_Rev * 0.7
-klfo1		poscil	iSpin_Rev, iFrq_Rev, 3, 0.9375	;phase=1-1/16
+krand1		randh	kDizzy_Rev, 400, iseed1
+krand1		tonek	krand1, kFrq_Rev * 0.7
+klfo1		poscil	kSpin_Rev, kFrq_Rev, 3, 0.9375	;phase=1-1/16
 kphase1		=		klfo1 * 0.001 + krand1 * 0.004
 kphase5		=		- kphase1
 ;LFO +Slow Random gen N2
 iseed2		=		0.2
-krand2		randh	iDizzy_Rev, 400, iseed2
-krand2		tonek	krand2, iFrq_Rev * 0.7
-klfo2		poscil	iSpin_Rev, iFrq_Rev, 3, 0.875		;phase=1-2/16
+krand2		randh	kDizzy_Rev, 400, iseed2
+krand2		tonek	krand2, kFrq_Rev * 0.7
+klfo2		poscil	kSpin_Rev, kFrq_Rev, 3, 0.875		;phase=1-2/16
 kphase2		=		klfo2 * 0.001 + krand2 * 0.004
 kphase6		=		- kphase2
 ;LFO +Slow Random gen N3
 iseed3		=		0.4
-krand3		randh	iDizzy_Rev, 400, iseed3
-krand3		tonek	krand3, iFrq_Rev * 0.7
-klfo3		poscil	iSpin_Rev, iFrq_Rev, 3, 0.8125	;phase=1-3/16
+krand3		randh	kDizzy_Rev, 400, iseed3
+krand3		tonek	krand3, kFrq_Rev * 0.7
+klfo3		poscil	kSpin_Rev, kFrq_Rev, 3, 0.8125	;phase=1-3/16
 kphase3		=		klfo3 * 0.001 + krand3 * 0.004
 kphase7		=		- kphase3
 ;LFO +Slow Random gen N4
 iseed4		=		0.6
-krand4		randh	iDizzy_Rev, 400, iseed4
-krand4		tonek	krand4, iFrq_Rev * 0.7
-klfo4		poscil	iSpin_Rev, iFrq_Rev, 3, 0.75		;phase=1-4/16
+krand4		randh	kDizzy_Rev, 400, iseed4
+krand4		tonek	krand4, kFrq_Rev * 0.7
+klfo4		poscil	kSpin_Rev, kFrq_Rev, 3, 0.75		;phase=1-4/16
 kphase4		=		klfo4 * 0.001 + krand4 * 0.004
 kphase8		=		- kphase4
 
@@ -437,15 +437,15 @@ kphase8		=		- kphase4
 ;Diffusion with variable Delay ;ktime mini=2/sr
 ;iDffs same value as in EARLY DIFF
 
-itime_1L_Diff	table	iSize_Rev + 31, 1	;exp table; in seconds
-itime_2L_Diff	table	iSize_Rev + 35, 1	;exp table; in seconds
-itime_3L_Diff	table	iSize_Rev + 39, 1	;exp table; in seconds
-itime_4L_Diff	table	iSize_Rev + 46, 1	;exp table; in seconds
+ktime_1L_Diff	table	kSize_Rev + 31, 1	;exp table; in seconds
+ktime_2L_Diff	table	kSize_Rev + 35, 1	;exp table; in seconds
+ktime_3L_Diff	table	kSize_Rev + 39, 1	;exp table; in seconds
+ktime_4L_Diff	table	kSize_Rev + 46, 1	;exp table; in seconds
 
-ktime_1L_Diff	=		itime_1L_Diff + kphase1
-ktime_2L_Diff	=		itime_2L_Diff + kphase2
-ktime_3L_Diff	=		itime_3L_Diff + kphase3
-ktime_4L_DiffRT	=	itime_4L_Diff + kphase4
+ktime_1L_Diff	=		ktime_1L_Diff + kphase1
+ktime_2L_Diff	=		ktime_2L_Diff + kphase2
+ktime_3L_Diff	=		ktime_3L_Diff + kphase3
+ktime_4L_DiffRT	=	ktime_4L_Diff + kphase4
 
 ktime_1L_Diff	portk	ktime_1L_Diff, 0.1
 ktime_2L_Diff	portk	ktime_2L_Diff, 0.1
@@ -455,31 +455,31 @@ ktime_4L_Diff	portk	ktime_4L_DiffRT, 0.1
 ;Diffuser delay 1L
 adel1L_Diff	init	0
 amaxtime1L_Diff	delayr	1.0					; set maximum delay 1000 ms
-aDiff_1L		=	adel1L_Diff + iDffs * aoutL_Damp	; FEED FORWARD
+aDiff_1L		=	adel1L_Diff + kDffs * aoutL_Damp	; FEED FORWARD
 adel1L_Diff	deltap3	ktime_1L_Diff				; DELAY
-			delayw	aoutL_Damp - iDffs * aDiff_1L	; FEEDBACK
+			delayw	aoutL_Damp - kDffs * aDiff_1L	; FEEDBACK
 
 ;Diffuser delay 2L
 adel2L_Diff	init	0
 amaxtime2L_Diff	delayr	1.0					; set maximum delay 1000 ms
-aDiff_2L		=	adel2L_Diff + iDffs * aDiff_1L	; FEED FORWARD
+aDiff_2L		=	adel2L_Diff + kDffs * aDiff_1L	; FEED FORWARD
 adel2L_Diff	deltap3	ktime_2L_Diff				; DELAY
-			delayw	aDiff_1L - iDffs * aDiff_2L	; FEEDBACK
+			delayw	aDiff_1L - kDffs * aDiff_2L	; FEEDBACK
 
 ;Diffuser delay 3L
 adel3L_Diff	init	0
 amaxtime3L_Diff	delayr	1.0					; set maximum delay 1000 ms
-aoutL_Diff	=	adel3L_Diff + iDffs * aDiff_2L	; FEED FORWARD
+aoutL_Diff	=	adel3L_Diff + kDffs * aDiff_2L	; FEED FORWARD
 adel3L_Diff	deltap3	ktime_3L_Diff				; DELAY
-			delayw	aDiff_2L - iDffs * aoutL_Diff	; FEEDBACK
+			delayw	aDiff_2L - kDffs * aoutL_Diff	; FEEDBACK
 
 ;Single delay 4L
 aoutL_SD		vdelay	aoutL_Diff, a (ktime_4L_Diff), 1500
 
-iFeed1		table	iRT_Rev, 1				;exp table
-iFeed2		=	-1.115 / iFeed1
+kFeed1		table	kRT_Rev, 1				;exp table
+kFeed2		=	-1.115 / kFeed1
 
-aoutL_Feed	= aoutL_SD * ampdb ( ktime_4L_DiffRT * iFeed2)
+aoutL_Feed	= aoutL_SD * ampdb ( ktime_4L_DiffRT * kFeed2)
 
 ;******************************************************************************************DIFF R
 ;Input aoutR_Damp (from DAMP R)
@@ -488,15 +488,15 @@ aoutL_Feed	= aoutL_SD * ampdb ( ktime_4L_DiffRT * iFeed2)
 ;Diffusion with variable Delay ;ktime mini=2/sr
 ;iDffs same value as in EARLY DIFF
 
-itime_1R_Diff	table	iSize_Rev + 31, 1	;exp table; in seconds
-itime_2R_Diff	table	iSize_Rev + 35, 1	;exp table; in seconds
-itime_3R_Diff	table	iSize_Rev + 39, 1	;exp table; in seconds
-itime_4R_Diff	table	iSize_Rev + 46, 1	;exp table; in seconds
+ktime_1R_Diff	table	kSize_Rev + 31, 1	;exp table; in seconds
+ktime_2R_Diff	table	kSize_Rev + 35, 1	;exp table; in seconds
+ktime_3R_Diff	table	kSize_Rev + 39, 1	;exp table; in seconds
+ktime_4R_Diff	table	kSize_Rev + 46, 1	;exp table; in seconds
 
-ktime_1R_Diff	= itime_1R_Diff + kphase5
-ktime_2R_Diff	= itime_2R_Diff + kphase6
-ktime_3R_Diff	= itime_3R_Diff + kphase7
-ktime_4R_DiffRT	= itime_4R_Diff + kphase8
+ktime_1R_Diff	= ktime_1R_Diff + kphase5
+ktime_2R_Diff	= ktime_2R_Diff + kphase6
+ktime_3R_Diff	= ktime_3R_Diff + kphase7
+ktime_4R_DiffRT	= ktime_4R_Diff + kphase8
 
 ktime_1R_Diff	portk	ktime_1R_Diff, 0.1
 ktime_2R_Diff	portk	ktime_2R_Diff, 0.1
@@ -506,40 +506,40 @@ ktime_4R_Diff	portk	ktime_4R_DiffRT, 0.1
 ;Diffuser delay 1R
 adel1R_Diff	init	0
 amaxtime1R_Diff	delayr	1.0					; set maximum delay 1000 ms
-aDiff_1R		=	adel1R_Diff + iDffs * aoutR_Damp	; FEED FORWARD
+aDiff_1R		=	adel1R_Diff + kDffs * aoutR_Damp	; FEED FORWARD
 adel1R_Diff	deltap3	ktime_1R_Diff				; DELAY
-			delayw	aoutR_Damp - iDffs * aDiff_1R	; FEEDBACK
+			delayw	aoutR_Damp - kDffs * aDiff_1R	; FEEDBACK
 
 ;Diffuser delay 2R
 adel2R_Diff	init	0
 amaxtime2R_Diff	delayr	1.0					; set maximum delay 1000 ms
-aDiff_2R		=	adel2R_Diff + iDffs * aDiff_1R	; FEED FORWARD
+aDiff_2R		=	adel2R_Diff + kDffs * aDiff_1R	; FEED FORWARD
 adel2R_Diff	deltap3	ktime_2R_Diff				; DELAY
-			delayw	aDiff_1R - iDffs * aDiff_2R	; FEEDBACK
+			delayw	aDiff_1R - kDffs * aDiff_2R	; FEEDBACK
 
 ;Diffuser delay 3R
 adel3R_Diff	init	0
 amaxtime3R_Diff	delayr	1.0					; set maximum delay 1000 ms
-aoutR_Diff	=	adel3R_Diff + iDffs * aDiff_2R	; FEED FORWARD
+aoutR_Diff	=	adel3R_Diff + kDffs * aDiff_2R	; FEED FORWARD
 adel3R_Diff	deltap3	ktime_3R_Diff				; DELAY
-			delayw	aDiff_2R - iDffs * aoutR_Diff	; FEEDBACK
+			delayw	aDiff_2R - kDffs * aoutR_Diff	; FEEDBACK
 
 ;Single delay 4R
 aoutR_SD		vdelay	aoutR_Diff, a (ktime_4R_Diff), 1500
 
 ;iFeed2 same as in DIFF L
-aoutR_Feed	= aoutR_SD * ampdb ( ktime_4R_DiffRT * iFeed2)
+aoutR_Feed	= aoutR_SD * ampdb ( ktime_4R_DiffRT * kFeed2)
 
 ;*******************************************************************************POWER FADE L and R
 ;Inputs aoutL_LP (from LOPASS) and aoutL_Diff (from DIFF L)
 ;Inputs aoutR_LP (from LOPASS) and aoutR_Diff (from DIFF R)
 ;Outputs ainL_wet and ainR_wet (to OUT)
 
-isqrtPos_Rev0	= sqrt (1 - iPos_Rev)
-isqrtPos_Rev1	= sqrt (iPos_Rev)
+ksqrtPos_Rev0	= sqrt (1 - kPos_Rev)
+ksqrtPos_Rev1	= sqrt (kPos_Rev)
 
-ainL_wet		= isqrtPos_Rev0 * aoutL_LP + isqrtPos_Rev1 * aoutL_Diff
-ainR_wet		= isqrtPos_Rev0 * aoutR_LP + isqrtPos_Rev1 * aoutR_Diff
+ainL_wet		= ksqrtPos_Rev0 * aoutL_LP + ksqrtPos_Rev1 * aoutL_Diff
+ainR_wet		= ksqrtPos_Rev0 * aoutR_LP + ksqrtPos_Rev1 * aoutR_Diff
 
 ;*******************************************************************************DIFFUSION SECTION END
 
@@ -701,7 +701,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 540 144 974 798
+WindowBounds: 562 206 974 798
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -718,26 +718,26 @@ ioText {24, 54} {26, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0
 ioSlider {68, 79} {19, 99} -20.000000 100.000000 7.878788 kC2
 ioText {66, 182} {30, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Dec
 ioText {60, 199} {51, 23} display 0.000000 0.00100 "kC2" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 9.0909
-ioText {69, 55} {26, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 02
+ioText {69, 54} {26, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 02
 ioSlider {114, 79} {19, 99} 0.000000 1.000000 0.838384 kC3
 ioText {112, 182} {30, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Sus
 ioText {106, 199} {51, 23} display 0.000000 0.00100 "kC3" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.8384
-ioText {115, 55} {26, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 03
+ioText {115, 54} {26, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 03
 ioSlider {159, 79} {19, 99} -20.000000 100.000000 -16.363636 kC4
 ioText {157, 182} {30, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Rel
 ioText {151, 199} {51, 23} display 0.000000 0.00100 "kC4" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -16.3636
-ioText {160, 55} {26, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 04
-ioSlider {207, 78} {19, 99} 0.000000 1.000000 0.767677 kC5
+ioText {160, 54} {26, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 04
+ioSlider {207, 79} {19, 99} 0.000000 1.000000 0.767677 kC5
 ioText {205, 181} {30, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Vel
 ioText {199, 199} {51, 23} display 0.000000 0.00100 "kC5" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.7677
 ioText {208, 54} {26, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 05
-ioSlider {254, 78} {19, 99} -1.000000 0.000000 -0.949495 kC6
+ioSlider {253, 79} {19, 99} -1.000000 0.000000 -0.989899 kC6
 ioText {252, 181} {30, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Scal
 ioText {246, 199} {51, 23} display 0.000000 0.00100 "kC6" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -0.8788
 ioText {255, 54} {26, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 06
-ioSlider {154, 498} {20, 100} 0.000000 240.000000 9.600000 kC38
+ioSlider {154, 498} {20, 100} 0.000000 240.000000 240.000000 kC38
 ioText {152, 601} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Time
-ioText {144, 623} {52, 24} display 0.000000 0.00100 "kC38" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 9.6000
+ioText {144, 623} {52, 24} display 0.000000 0.00100 "kC38" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 240.0000
 ioText {155, 474} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 38
 ioSlider {207, 498} {20, 100} -1.000000 1.000000 0.380000 kC39
 ioText {205, 601} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder L/R
@@ -913,38 +913,40 @@ ioText {73, 463} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 
 ioText {800, 441} {149, 216} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border MAIN
 ioKnob {809, 489} {80, 80} 0.000000 5.000000 0.010000 0.505051 kC50
 ioText {806, 575} {88, 27} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 50 : Volume
-ioText {820, 606} {57, 27} display 0.505051 0.00100 "kC50" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.5051
+ioText {820, 606} {57, 27} display 0.000000 0.00100 "kC50" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.5051
 ioGraph {5, 663} {283, 120} scope 2.000000 1.000000 
-ioMeter {900, 447} {14, 178} {0, 59904, 0} "vu_Left" 0.170424 "hor210" 0.214286 fill 1 0 mouse
-ioMeter {917, 447} {14, 178} {0, 59904, 0} "vu_Right" 0.172204 "hor210" 0.214286 fill 1 0 mouse
+ioMeter {900, 447} {14, 178} {0, 59904, 0} "vu_Left" 0.364269 "hor210" 0.428571 fill 1 0 mouse
+ioMeter {917, 447} {14, 178} {0, 59904, 0} "vu_Right" 0.372979 "hor210" 0.428571 fill 1 0 mouse
 ioText {899, 624} {17, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder L
 ioText {915, 624} {17, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder R
 ioGraph {293, 664} {257, 120} scope 2.000000 2.000000 
-ioMeter {850, 446} {18, 19} {6144, 59392, 0} "tempo" 1.000000 "hor220" 0.333333 fill 1 0 mouse
+ioMeter {850, 446} {18, 19} {6144, 59392, 0} "tempo" 1.000000 "hor220" 0.277778 fill 1 0 mouse
 ioListing {553, 664} {399, 120}
 </MacGUI>
 
-<EventPanel name="" tempo="130.00000000" loop="8.00000000" name="" x="1047" y="62" width="602" height="886">i 1 0 0.1 56 
-i 1 0.5 0.1 69 
-i 1 1 0.1 60 
-i 1 1.5 0.1 59 
-i 1 2 0.1 79 
-i 1 3.5 0.1 79 
-i 1 4 0.1 80 
-i 1 4.5 0.1 79 
-i 1 5 0.1 80 
-i 1 3.5 0.1 96 
-i 1 4 0.1 89 
-i 1 3.5 0.1 97 
-i 1 4 0.1 60 
-i 1 5 0.1 73 
-i 1 5.5 0.1 66 
-i 1 6 0.1 61 
-i 1 6.5 0.1 81 
-i 1 0 0.1 79 
-i 1 0.5 0.1 80 
-i 1 1 0.1 79 
-i 1 1.5 0.1 80 
-i 1 1 0.1 92 
-i 1 1.5 0.1 85 
-93 </EventPanel>
+<EventPanel name="New" tempo="100.00000000" loop="8.00000000" name="New" x="958" y="122" width="582" height="801">i 1 0 0.4 64 
+i 1 0.5 0.4 68 
+i 1 1 0.4 71 
+i 1 1.5 0.4 69 
+i 1 2 0.4 60 
+i 1 2.5 0.4 61 
+i 1 3 0.4 61 
+i 1 3.5 0.4 68 
+i 1 4 0.4 61 
+i 1 4.5 0.4 67 
+i 1 5 0.4 68 
+i 1 5.5 0.1 97 
+i 1 6 0.1 60 
+i 1 6.5 0.1 73 
+i 1 7 0.1 66 
+i 1 7.5 0.1 61 
+
+
+
+
+
+
+
+
+ 
+ </EventPanel>

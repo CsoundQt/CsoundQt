@@ -143,10 +143,12 @@ class EventSheet : public QTableWidget
   private slots:
     void selectionChanged();
     void cellDoubleClickedSlot(int row, int column);
+    void cellChangedSlot(int row, int column);
 
   signals:
     void sendEvent(QString event);
-    void cellDoubleClicked();
+//    void cellDoubleClicked();
+    void modified();
 };
 
 #endif // EVENTSHEET_H
