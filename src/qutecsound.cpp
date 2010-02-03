@@ -211,16 +211,17 @@ void qutecsound::changeFont()
 void qutecsound::changePage(int index)
 {
   qDebug() << "qutecsound::changePage " << curPage << "--" << index << "-" << documentPages.size();
+  if (documentPages[curPage]) { // If page has not been destroyed
+    documentPages[curPage]->showLiveEventFrames(false);
+    disconnect(showLiveEventsAct, SIGNAL(toggled(bool)), documentPages[curPage], SLOT(showLiveEventFrames(bool)));
+  }
   curPage = index;
   if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
     QWidget *w = widgetPanel->takeWidgetLayout();
-    if (w != 0)
+    if (w != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
       w->setParent(0);
-    documentPages[curPage]->showLiveEventFrames(false);
+    }
 //    documentPages[curPage]->setMacWidgetsText
-//        (widgetPanel->widgetsText()); //Updated changes to widgets in file
-    disconnect(showLiveEventsAct, SIGNAL(toggled(bool)),
-               documentPages[curPage], SLOT(showLiveEventFrames(bool)));
     setCurrentFile(documentPages[curPage]->fileName);
     connectActions();
     documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
@@ -812,6 +813,7 @@ void qutecsound::play()
     showWidgetsAct->setChecked(true);
     if (!documentPages[curPage]->usesFltk()) { // Don't bring up widget panel if there's an FLTK panel
       widgetPanel->setVisible(true);
+      documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
       documentPages[curPage]->focusWidgets();
     }
 
@@ -2433,11 +2435,6 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
     changePage(index);
     statusBar()->showMessage(tr("File already open"), 10000);
     return false;
-  }
-  if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
-    documentPages[curPage]->showLiveEventFrames(false);
-//    documentPages[curPage]->setMacWidgetsText(widgetPanel->widgetsText()); //Updated changes to widgets in file
-    disconnect(showLiveEventsAct, SIGNAL(toggled(bool)), documentPages[curPage], SLOT(showLiveEventFrames(bool)));
   }
   QApplication::setOverrideCursor(Qt::WaitCursor);
   DocumentPage *newPage = new DocumentPage(this, opcodeTree);

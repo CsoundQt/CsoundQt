@@ -1746,6 +1746,7 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
 {
   if (bg) {
     this->setPalette(QPalette(bgColor));
+    this->setBackgroundRole(QPalette::Window);
     this->setAutoFillBackground(true);
   }
   else { // =="nobackground"

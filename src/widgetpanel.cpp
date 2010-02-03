@@ -59,6 +59,7 @@ void WidgetPanel::setWidgetLayout(WidgetLayout *w)
   if (m_sbActive) {
     scrollArea->setWidget(w);
     this->setAutoFillBackground(true);
+    this->setBackgroundRole(QPalette::Window);
     this->setPalette(w->palette());
     w->setAutoFillBackground(false);
     w->show();
@@ -100,7 +101,8 @@ void WidgetPanel::setWidgetScrollBarsActive(bool act)
     scrollArea->setWidget(widget());
     scrollArea->setFocusPolicy(Qt::NoFocus);
     setWidget(scrollArea);
-    scrollArea->setAutoFillBackground(false);
+    scrollArea->setAutoFillBackground(true);
+    scrollArea->setBackgroundRole(QPalette::Window);
     scrollArea->show();
     scrollArea->setMouseTracking(true);
 //    layoutWidget->setMouseTracking(false);
@@ -123,6 +125,7 @@ void WidgetPanel::widgetChanged()
     w = widget();
   }
   this->setAutoFillBackground(true);
+  this->setBackgroundRole(QPalette::Window);
   this->setPalette(w->palette());
   w->setAutoFillBackground(false);
 }

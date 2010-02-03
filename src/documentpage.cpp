@@ -47,14 +47,14 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   askForFile = true;
   readOnly = false;
 
-  //FIXME this options must be set from QuteCsound configuration!
+  //FIXME these options must be set from QuteCsound configuration!
   saveLiveEvents = true;
 
   m_view = new DocumentView(parent);
   m_view->setOpcodeTree(m_opcodeTree);
 
   m_console = new ConsoleWidget(parent);
-  //FIXME show console
+  m_console->setReadOnly(true);
   m_console->hide();
 
   m_widgetLayout = new WidgetLayout(parent);
@@ -92,9 +92,8 @@ DocumentPage::~DocumentPage()
 {
   qDebug() << "DocumentPage::~DocumentPage()";
   m_csEngine->stop();
-  //TODO is all this being deleted?
   for (int i = 0; i < m_liveFrames.size(); i++) {
-    delete m_liveFrames[i];  // These widgets have the order not to delete on close
+    m_liveFrames[i]->deleteFrame();  // These widgets have the order not to delete on close
     m_liveFrames.remove(i);
   }
   delete m_csEngine;
@@ -621,6 +620,7 @@ void DocumentPage::showLiveEventFrames(bool visible)
 //  qDebug() << "DocumentPage::showLiveEventFrames  " << visible << (int) this;
   for (int i = 0; i < m_liveFrames.size(); i++) {
     if (visible) {
+      m_liveFrames[i]->hide();
       m_liveFrames[i]->show();
     }
     else {
@@ -770,6 +770,27 @@ void DocumentPage::jumpToLine(int line)
 //  qDebug() << "DocumentPage::jumpToLine " << line;
   m_view->jumpToLine(line);
 }
+
+void DocumentPage::comment()
+{
+  m_view->comment();
+}
+
+void DocumentPage::uncomment()
+{
+  m_view->uncomment();
+}
+
+void DocumentPage::indent()
+{
+  m_view->indent();
+}
+
+void DocumentPage::unindent()
+{
+  m_view->unindent();
+}
+
 
 void DocumentPage::newLiveEventFrame(QString text)
 {

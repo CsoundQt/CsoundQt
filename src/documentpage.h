@@ -143,6 +143,10 @@ class DocumentPage : public QObject
 
     // Passed directly to document view
     void jumpToLine(int line);
+    void comment();
+    void uncomment();
+    void indent();
+    void unindent();
 
 //    void opcodeFromMenu();
     void newLiveEventFrame(QString text = QString());

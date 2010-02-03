@@ -837,7 +837,7 @@ void EventSheet::keyPressEvent (QKeyEvent * event) {
   else {
     qDebug() << "EventSheet::keyPressEvent  " << event->key();
     event->ignore();
-    QTableWidget::keyPressEvent(event);  // FIXME This is not  propagating to documentpage grandparent. Propagate event
+    QTableWidget::keyPressEvent(event);  // Propagate any other events
   }
 }
 
