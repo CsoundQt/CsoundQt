@@ -47,7 +47,7 @@ ConfigLists::ConfigLists()
   rtAudioNames << "portaudio" << "pulse" << "none";
 #endif
 #ifdef Q_WS_MAC
-  rtAudioNames << "portaudio" << "coreaudio" << "none";
+  rtAudioNames << "portaudio" << "coreaudio" << "jack" << "none";
 #endif
 #ifdef Q_OS_WIN32
   rtAudioNames << "portaudio" << "winmm" << "jack" <<  "none";
