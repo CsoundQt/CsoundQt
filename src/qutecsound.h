@@ -123,10 +123,10 @@ class qutecsound:public QMainWindow
     void del();
     bool closeTab();
     void print();
-//    void findReplace();
+    void findReplace();
     void join();
-//    void getToIn();
-//    void inToGet();
+    void getToIn();
+    void inToGet();
     void putCsladspaText();
     void exportCabbage();
     void openExternalEditor();

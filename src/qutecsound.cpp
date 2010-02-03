@@ -647,19 +647,11 @@ void qutecsound::print()
     return;
   documentPages[curPage]->print(&printer);
 }
-//
-//void qutecsound::findReplace()
-//{
-//  FindReplace *dialog = new FindReplace(this,
-//                                        documentPages[curPage],
-//                                        &lastSearch,
-//                                        &lastReplace,
-//                                        &lastCaseSensitive);
-//  // lastSearch and lastReplace are passed by reference so they are
-//  // updated by FindReplace dialog
-//  connect(dialog, SIGNAL(findString(QString)), this, SLOT(findString(QString)));
-//  dialog->show();
-//}
+
+void qutecsound::findReplace()
+{
+  documentPages[curPage]->findReplace();
+}
 
 void qutecsound::join()
 {
@@ -723,6 +715,16 @@ void qutecsound::join()
 //   else {
 //     qDebug("qutecsound::join() : No Action");
 //   }
+}
+
+void qutecsound::inToGet()
+{
+  documentPages[curPage]->inToGet();
+}
+
+void qutecsound::getToIn()
+{
+  documentPages[curPage]->getToIn();
 }
 
 void qutecsound::putCsladspaText()
@@ -1765,28 +1767,21 @@ void qutecsound::connectActions()
   disconnect(uncommentAct, 0, 0, 0);
   disconnect(indentAct, 0, 0, 0);
   disconnect(unindentAct, 0, 0, 0);
-//   connect(commentAct, SIGNAL(triggered()), doc, SLOT(comment()));
+  connect(commentAct, SIGNAL(triggered()), doc, SLOT(comment()));
   connect(uncommentAct, SIGNAL(triggered()), doc, SLOT(uncomment()));
   connect(indentAct, SIGNAL(triggered()), doc, SLOT(indent()));
   connect(unindentAct, SIGNAL(triggered()), doc, SLOT(unindent()));
 
-  // FIXME this disconnections from doc are not disconnecting from previous doc!
-  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
-  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
-  //TODO put these back but only when document has focus
+//  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
+//  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
+  //TODO put these back
 //   connect(doc, SIGNAL(copyAvailable(bool)),
 //           cutAct, SLOT(setEnabled(bool)));
 //   connect(doc, SIGNAL(copyAvailable(bool)),
 //           copyAct, SLOT(setEnabled(bool)));
 
 //  disconnect(doc, SIGNAL(textChanged()), 0, 0);
-  disconnect(doc, SIGNAL(cursorPositionChanged()), 0, 0);
-//  connect(doc, SIGNAL(textChanged()),
-//          this, SLOT(documentWasModified()));
-  connect(doc, SIGNAL(selectionChanged()),
-          this, SLOT(checkSelection()));
-  disconnect(doc, SIGNAL(currentLineChanged(int)), 0, 0);
-  connect(doc, SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
+//  disconnect(doc, SIGNAL(cursorPositionChanged()), 0, 0);
 
   disconnect(widgetPanel, SIGNAL(widgetsChanged(QString)),0,0);
 //   connect(widgetPanel, SIGNAL(widgetsChanged(QString)),
@@ -2446,13 +2441,15 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   documentPages[curPage]->setColorVariables(m_options->colorVariables);
   documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
 
-//  documentPages[curPage]->setEditAct(editAct);
   documentTabs->setCurrentIndex(curPage);
   connectActions();
 //  connect(documentPages[curPage], SIGNAL(doCut()), this, SLOT(cut()));
 //  connect(documentPages[curPage], SIGNAL(doCopy()), this, SLOT(copy()));
 //  connect(documentPages[curPage], SIGNAL(doPaste()), this, SLOT(paste()));
   connect(documentPages[curPage], SIGNAL(currentTextUpdated()), this, SLOT(updateInspector()));
+  connect(documentPages[curPage], SIGNAL(textChanged()), this, SLOT(documentWasModified()));
+  connect(documentPages[curPage], SIGNAL(selectionChanged()), this, SLOT(checkSelection()));
+  connect(documentPages[curPage], SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
 
   if (fileName.startsWith(m_options->csdocdir))
     documentPages[curPage]->readOnly = true;

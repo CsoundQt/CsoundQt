@@ -556,6 +556,22 @@ void DocumentPage::print(QPrinter *printer)
   m_view->print(printer);
 }
 
+void DocumentPage::findReplace()
+{
+  m_view->findReplace();
+}
+
+void DocumentPage::getToIn()
+{
+  m_view->getToIn();
+}
+
+void DocumentPage::inToGet()
+{
+  m_view->inToGet();
+}
+
+
 //void DocumentPage::setEditAct(QAction *editAct)
 //{
 //  m_widgetLayout->setEditAct(editAct);
@@ -761,7 +777,9 @@ void DocumentPage::setWidgetEditMode(bool active)
 
 void DocumentPage::duplicateWidgets()
 {
-  m_widgetLayout->duplicate();
+  if (m_widgetLayout->hasFocus()) {
+    m_widgetLayout->duplicate();
+  }
 }
 
 void DocumentPage::jumpToLine(int line)
@@ -772,7 +790,9 @@ void DocumentPage::jumpToLine(int line)
 
 void DocumentPage::comment()
 {
-  m_view->comment();
+  if (m_view->hasFocus()) {   // Keyboard shortcut clashes with duplicate, so check for focus
+    m_view->comment();
+  }
 }
 
 void DocumentPage::uncomment()

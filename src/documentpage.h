@@ -92,6 +92,9 @@ class DocumentPage : public QObject
     void setColorVariables(bool colorVariables);
     void setOpcodeNameList(QStringList opcodeNameList);
     void print(QPrinter *printer);
+    void findReplace();
+    void getToIn();
+    void inToGet();
 //    void setEditAct(QAction *editAct);
 
     // Widget Layout properties

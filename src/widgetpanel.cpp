@@ -88,7 +88,6 @@ WidgetLayout * WidgetPanel::takeWidgetLayout()
   }
 //  disconnect(layoutWidget, SIGNAL(deselectAll()));
   disconnect(w, SIGNAL(selection(QRect)));
-  disconnect(w, SIGNAL(resized(QRect)));
   return w;
 }
 
