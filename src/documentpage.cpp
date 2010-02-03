@@ -55,7 +55,6 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 
   m_console = new ConsoleWidget(parent);
   m_console->setReadOnly(true);
-  m_console->hide();
 
   m_widgetLayout = new WidgetLayout(parent);
   m_widgetLayout->show();
