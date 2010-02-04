@@ -83,7 +83,7 @@ class qutecsound:public QMainWindow
   public slots:
     bool loadFile(QString fileName, bool runNow = false);
     void play();
-    void runInTerm();
+    void runInTerm(bool realtime = true);
     void pause();
     void stop();
     void render();
@@ -142,6 +142,7 @@ class qutecsound:public QMainWindow
 //    void syntaxCheck();
     void configure();
     void applySettings();
+    void setCurrentOptionsForPage(DocumentPage *p);
     void runUtility(QString flags);
 //     void widgetDockStateChanged(bool topLevel);
 //     void widgetDockLocationChanged(Qt::DockWidgetArea area);

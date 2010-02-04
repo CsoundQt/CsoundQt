@@ -472,6 +472,12 @@ bool DocumentPage::isRunning()
   return m_csEngine->isRunning();
 }
 
+bool DocumentPage::isRecording()
+{
+  // TODO what to do with pause?
+  return m_csEngine->isRecording();
+}
+
 bool DocumentPage::usesFltk()
 {
   return m_view->getBasicText().contains("FLpanel");
@@ -684,21 +690,23 @@ void DocumentPage::stop()
   m_csEngine->stop();
 }
 
-void DocumentPage::render(CsoundOptions *options)
-{
-  qDebug() << "DocumentPage::render() not implemented!";
-  //  m_csEngine->runCsound(m_options->useAPI);  // render use of API depends on this preference
-  if (m_csEngine->play(options) == 0) {
-    // FIXME set current audio file from rendered file
-//    if (QDir::isRelativePath(m_options.fileOutputFilename)) {
-//      emit setCurrentAudioFile(m_csEngine->m_options.csdPath + "/"
-//                               + m_csEngine->m_options.fileOutputFilename);
-//    }
-//    else {
-//      emit setCurrentAudioFile(m_csEngine->m_options.fileOutputFilename);
-//    }
-  }
-}
+//void DocumentPage::render(CsoundOptions *options)
+//{
+//  qDebug() << "DocumentPage::render() not implemented!";
+//  //  m_csEngine->runCsound(m_options->useAPI);  // render use of API depends on this preference
+//  CsoundOptions renderOptions = *options;
+//  renderOptions.rt = false;
+//  if (m_csEngine->play(&renderOptions) == 0) {
+//    // FIXME set current audio file from rendered file
+////    if (QDir::isRelativePath(m_options.fileOutputFilename)) {
+////      emit setCurrentAudioFile(m_csEngine->m_options.csdPath + "/"
+////                               + m_csEngine->m_options.fileOutputFilename);
+////    }
+////    else {
+////      emit setCurrentAudioFile(m_csEngine->m_options.fileOutputFilename);
+////    }
+//  }
+//}
 
 void DocumentPage::record(int format)
 {
@@ -727,6 +735,11 @@ void DocumentPage::record(int format)
   // FIXME setup stopping of recording!
   // FIXME connect this so that the current audio file for external editor, etc is set
   emit setCurrentAudioFile(recName);
+}
+
+void DocumentPage::stopRecording()
+{
+  m_csEngine->stopRecording();
 }
 
 void DocumentPage::setMacWidgetsText(QString widgetText)

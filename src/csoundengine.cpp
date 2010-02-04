@@ -71,6 +71,7 @@ CsoundEngine::~CsoundEngine()
 #ifndef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(csound);
 #endif
+  stop();
 //  free(ud);
   free(pFields);
   delete ud;
@@ -630,6 +631,7 @@ int CsoundEngine::play(CsoundOptions *options)
 
 void CsoundEngine::stop()
 {
+  stopRecording();
   stopCsound();
 }
 
@@ -667,7 +669,7 @@ void CsoundEngine::startRecording(int sampleformat, QString fileName)
   samplesWritten = 0;
   m_recording = true;
 
-  QTimer::singleShot(20, this, SLOT(recordBuffer()));
+  recordTimer.singleShot(20, this, SLOT(recordBuffer()));
 }
 
 void CsoundEngine::stopRecording()
@@ -929,12 +931,12 @@ void CsoundEngine::dispatchQueues()
       curveBuffer.remove(curveBuffer.indexOf(windat));
     }
   }
-  qApp->processEvents();
   if (ud->threaded && ud->perfThread) {
     if (ud->perfThread->GetStatus() > 0) {
       stop();
     }
   }
+//  qApp->processEvents();
 }
 
 void CsoundEngine::queueMessage(QString message)
@@ -967,7 +969,7 @@ void CsoundEngine::flushMessageQueue()
 
 void CsoundEngine::recordBuffer()
 {
-  if (m_recording == 1) {
+  if (m_recording) {
     if (ud->audioOutputBuffer.copyAvailableBuffer(recBuffer, bufferSize)) {
       int samps = outfile->write(recBuffer, bufferSize);
       samplesWritten += samps;
@@ -994,5 +996,10 @@ bool CsoundEngine::isRunning()
   else {
     return (ud->PERF_STATUS == 1);
   }
+}
+
+bool CsoundEngine::isRecording()
+{
+  return m_recording;
 }
 

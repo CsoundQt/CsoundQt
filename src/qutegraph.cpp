@@ -238,12 +238,13 @@ void QuteGraph::clearCurves()
 
 void QuteGraph::addCurve(Curve * curve)
 {
-//   qDebug("QuteGraph::addCurve()");
+  qDebug("QuteGraph::addCurve()");
   QGraphicsView *view = new QGraphicsView(m_widget);
   QGraphicsScene *scene = new QGraphicsScene(view);
   view->setContextMenuPolicy(Qt::NoContextMenu);
   scene->setBackgroundBrush(QBrush(Qt::black));
   int size = curve->get_size();
+  qDebug("QuteGraph::addCurve2()");
   QGraphicsLineItem* line = new QGraphicsLineItem(0, 0, size, 0);
   line->setPen(QPen(QColor(Qt::white)));
   line->show();

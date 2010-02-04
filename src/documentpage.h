@@ -69,6 +69,7 @@ class DocumentPage : public QObject
     QStringList getScheduledEvents(unsigned long ksmpscount);
     bool isModified();
     bool isRunning();
+    bool isRecording();
     bool usesFltk();
     void updateCsLadspaText();
     void focusWidgets();
@@ -130,8 +131,9 @@ class DocumentPage : public QObject
     int play(CsoundOptions *options);
     void pause();
     void stop();
-    void render(CsoundOptions *options);
+//    void render(CsoundOptions *options);
     void record(int mode); // 0=16 bit int  1=32 bit int  2=float
+    void stopRecording();
 
     void setMacWidgetsText(QString widgetText);
     void setMacOptionsText(QString text);

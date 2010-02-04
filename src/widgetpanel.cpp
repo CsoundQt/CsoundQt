@@ -85,7 +85,8 @@ WidgetLayout * WidgetPanel::takeWidgetLayout()
 //  l->removeWidget(widget());
   if (m_sbActive) {
     w = static_cast<WidgetLayout *>(scrollArea->takeWidget());
-    w->setParent(0);
+    if (w != 0)
+      w->setParent(0);
   }
   else {
     w = static_cast<WidgetLayout *>(widget());

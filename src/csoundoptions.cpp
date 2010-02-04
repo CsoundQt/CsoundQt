@@ -140,8 +140,8 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
   else {
     if (fileOverrideOptions)
       list << " -+ignore_csopts=1";
-    list << " --format=" + _configlists.fileTypeNames[fileFileType];
-    list << ":" + _configlists.fileFormatFlags[fileSampleFormat];
+    list << " --format=" + _configlists.fileTypeNames[fileFileType]
+        + ":" + _configlists.fileFormatFlags[fileSampleFormat];
     if (fileInputFilenameActive)
       list << " -i" + fileInputFilename + "";
     if (fileOutputFilenameActive or fileAskFilename) {

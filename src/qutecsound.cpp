@@ -222,7 +222,7 @@ void qutecsound::changePage(int index)
   if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
     QWidget *w = widgetPanel->takeWidgetLayout();
     if (w != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
-      w->setParent(0);
+      w->setParent(0); //FIXME this is crashing ocasionally at startup
     }
 //    documentPages[curPage]->setMacWidgetsText
     setCurrentFile(documentPages[curPage]->fileName);
@@ -235,6 +235,7 @@ void qutecsound::changePage(int index)
     m_console->setWidget(documentPages[curPage]->getConsole());
     updateInspector();
     runAct->setChecked(documentPages[curPage]->isRunning());
+    recAct->setChecked(documentPages[curPage]->isRecording());
 
   // FIXME connect showLineNumber(int lineNumber) from current document view
   }
@@ -829,6 +830,7 @@ void qutecsound::play()
   runFileName2 = documentPages[curPage]->companionFile;
   m_options->fileName1 = runFileName1;
   m_options->fileName2 = runFileName2;
+  m_options->rt = true;
 
   if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
     showWidgetsAct->setChecked(true);
@@ -855,7 +857,7 @@ void qutecsound::play()
   }
 }
 
-void qutecsound::runInTerm()
+void qutecsound::runInTerm(bool realtime)
 {
   QString fileName = documentPages[curPage]->fileName;
   QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "QuteCsoundExample-XXXXXX.csd");
@@ -873,9 +875,8 @@ void qutecsound::runInTerm()
     if (!tempScriptFiles.contains(fileName))
       tempScriptFiles << fileName;
   }
-  // FIXME implement usage of realtime / non - realtime here...
 //  QString script = generateScript(m_options->realtime, fileName);
-  QString script = generateScript(true, fileName);
+  QString script = generateScript(realtime, fileName);
   QTemporaryFile scriptFile(QDir::tempPath() + QDir::separator() + SCRIPT_NAME);
   scriptFile.setAutoRemove(false);
   if (!scriptFile.open()) {
@@ -935,7 +936,12 @@ void qutecsound::stop()
 
 void qutecsound::record()
 {
-  documentPages[curPage]->record(m_options->sampleFormat);
+  if (!recAct->isChecked()) {
+    documentPages[curPage]->record(m_options->sampleFormat);
+  }
+  else {
+    documentPages[curPage]->stopRecording();
+  }
 }
 
 // void qutecsound::selectMidiOutDevice(QPoint pos)
@@ -1004,9 +1010,10 @@ void qutecsound::render()
   m_options->fileOutputFilename.replace('\\', '/');
 #endif
   currentAudioFile = m_options->fileOutputFilename;
+  m_options->rt = false;
   m_options->fileName1 = m_options->fileOutputFilename;
   m_options->fileName2 = "";
-  documentPages[curPage]->render(m_options);
+  documentPages[curPage]->play(m_options);
 }
 
 void qutecsound::openExternalEditor()
@@ -1158,14 +1165,7 @@ void qutecsound::configure()
 void qutecsound::applySettings()
 {
   for (int i = 0; i < documentPages.size(); i++) {
-    documentPages[i]->setColorVariables(m_options->colorVariables);
-    documentPages[i]->setTabStopWidth(m_options->tabWidth);
-    documentPages[i]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
-    documentPages[i]->setRunThreaded(m_options->thread);
-    documentPages[i]->useInvalue(m_options->useInvalue);
-    documentPages[i]->setWidgetEnabled(m_options->enableWidgets);
-    documentPages[i]->showWidgetTooltips(m_options->showTooltips);
-    documentPages[i]->setKeyRepeatMode(m_options->keyRepeat);
+    setCurrentOptionsForPage(documentPages[i]);
   }
   widgetPanel->setWidgetScrollBarsActive(m_options->scrollbars);
   Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
@@ -1193,6 +1193,18 @@ void qutecsound::applySettings()
   renderOptions += currentOptions;
   runAct->setStatusTip(tr("Play") + playOptions);
   renderAct->setStatusTip(tr("Render to file") + renderOptions);
+}
+
+void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
+{
+  p->setColorVariables(m_options->colorVariables);
+  p->setTabStopWidth(m_options->tabWidth);
+  p->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
+  p->setRunThreaded(m_options->thread);
+  p->useInvalue(m_options->useInvalue);
+  p->setWidgetEnabled(m_options->enableWidgets);
+  p->showWidgetTooltips(m_options->showTooltips);
+  p->setKeyRepeatMode(m_options->keyRepeat);
 }
 
 void qutecsound::runUtility(QString flags)
@@ -2378,7 +2390,7 @@ void qutecsound::writeSettings()
 int qutecsound::execute(QString executable, QString options)
 {
   qDebug() << "qutecsound::execute";
-  QStringList optionlist;
+//  QStringList optionlist;
 
 //  // cd to current directory on all platforms
 //  QString cdLine = "cd \"" + documentPages[curPage]->getFilePath() + "\"";
@@ -2454,9 +2466,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   documentPages.insert(curPage + 1, newPage);
 //  widgetPanel->setWidgetLayout(newPage->getWidgetLayout());
   curPage += 1;
-  documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
-  documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
-  documentPages[curPage]->setColorVariables(m_options->colorVariables);
+  setCurrentOptionsForPage(documentPages[curPage]);
   documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
 
   connectActions();

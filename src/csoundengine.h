@@ -139,6 +139,7 @@ class CsoundEngine : public QObject
     void flushMessageQueue();
 
     bool isRunning();
+    bool isRecording();
 
     QMutex perfMutex;  // TODO is this still needed?
 
@@ -169,6 +170,7 @@ class CsoundEngine : public QObject
     bool m_recording;
     MYFLT *recBuffer; // for temporary copy of Csound output buffer when recording to file
     int bufferSize; // size of the record buffer
+    QTimer recordTimer;
 
     CsoundOptions m_options;
     // Options which are not safe to pass while running are stored in these
