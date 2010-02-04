@@ -243,6 +243,11 @@ void WidgetPanel::moveEvent(QMoveEvent * event)
 //
 void WidgetPanel::mousePressEvent(QMouseEvent * event)
 {
+//  QMouseEvent e(QEvent::MouseButtonPress,
+//                QPoint(event->x(), event->y()),
+//                event->button(),
+//                event->buttons(),
+//                Qt::NoModifier );
   if (m_sbActive) {
     static_cast<WidgetLayout *>(scrollArea->widget())->mousePressEventParent(event);
   }
@@ -264,12 +269,18 @@ void WidgetPanel::mouseReleaseEvent(QMouseEvent * event)
 void WidgetPanel::mouseMoveEvent(QMouseEvent * event)
 {
   if (m_sbActive) {
-    static_cast<WidgetLayout *>(scrollArea->widget())->mouseMoveEventParent(event);
+    WidgetLayout *w  = static_cast<WidgetLayout *>(scrollArea->widget());
+    if (w != 0) {
+      w->mouseMoveEventParent(event);
+    }
   }
   else {
-    static_cast<WidgetLayout *>(widget())->mouseMoveEventParent(event);
+    WidgetLayout *w  = static_cast<WidgetLayout *>(scrollArea->widget());
+    if (w != 0) {
+      w->mouseMoveEventParent(event);
+    }
   }
-  qApp->processEvents();
+//  qApp->processEvents();
 }
 
 //

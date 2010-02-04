@@ -730,7 +730,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioInputDevices()
       }
     }
   }
-  else if (module=="jack") {
+  else if (module == "jack") {
     QFile file(":/test.csd");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
       return deviceList;
@@ -745,15 +745,24 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioInputDevices()
     tempFile.open();
 
     QStringList flags;
+    QString previousLine = "";
     // -odac is needed otherwise csound segfaults
     flags << "-+msg_color=false" << "-+rtaudio=jack" << "-iadc:xxx" << "-odac:xxx" << "-B2048" <<  tempFile.fileName();
     QStringList messages = m_parent->runCsoundInternally(flags);
 
     QString sr = "";
-    foreach (QString line, messages) {
+    foreach (QString line, messages) { // Need to run again if sample rate does not match...
       if (line.indexOf("does not match JACK sample rate") >= 0) {
         sr = line.mid(line.lastIndexOf(" ") + 1);
       }
+      if (line.endsWith("channel)\n") || line.endsWith("channels)\n")) {
+        QStringList parts = previousLine.split("\"");
+        QPair<QString, QString> device;
+        device.first = parts[1];
+        device.second = "adc:" + parts[1];
+        deviceList.append(device);
+      }
+      previousLine = line;
     }
     if (sr == "") {
       return deviceList;
@@ -767,9 +776,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioInputDevices()
 
     messages = m_parent->runCsoundInternally(flags); // run with same flags as before
 
-    QString previousLine = "";
     foreach (QString line, messages) {
-      qDebug("jack %s----",line.toStdString().c_str());
       if (line.endsWith("channel)\n") || line.endsWith("channels)\n")) {
         QStringList parts = previousLine.split("\"");
         QPair<QString, QString> device;
@@ -893,6 +900,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioOutputDevices()
     tempFile.open();
 
     QStringList flags;
+    QString previousLine = "";
     flags << "-+msg_color=false" << "-+rtaudio=jack" << "-odac:xxx" << "-B2048" <<  tempFile.fileName();
     QStringList messages = m_parent->runCsoundInternally(flags);
 
@@ -901,6 +909,14 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioOutputDevices()
       if (line.indexOf("does not match JACK sample rate") >= 0) {
         sr = line.mid(line.lastIndexOf(" ") + 1);
       }
+      if (line.endsWith("channel)\n") || line.endsWith("channels)\n")) {
+        QStringList parts = previousLine.split("\"");
+        QPair<QString, QString> device;
+        device.first = parts[1];
+        device.second = "dac:" + parts[1];
+        deviceList.append(device);
+      }
+      previousLine = line;
     }
     if (sr == "") {
       return deviceList;
@@ -914,7 +930,6 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioOutputDevices()
 
     messages = m_parent->runCsoundInternally(flags); // run with same flags as before
 
-    QString previousLine = "";
     foreach (QString line, messages) {
       if (line.endsWith("channel)\n") || line.endsWith("channels)\n")) {
         QStringList parts = previousLine.split("\"");

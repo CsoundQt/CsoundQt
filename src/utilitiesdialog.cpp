@@ -33,7 +33,6 @@ UtilitiesDialog::UtilitiesDialog(QWidget *parent, Options *options/*, ConfigList
 
 //   qDebug("UtilitiesDialog::UtilitiesDialog");
   helpBrowser->setAcceptRichText(true);
-  changeHelp(m_options->csdocdir + "/cvanal.html");
   QStringList searchPaths;
   searchPaths << m_options->csdocdir;
   helpBrowser->setSearchPaths(searchPaths);
@@ -55,6 +54,7 @@ UtilitiesDialog::UtilitiesDialog(QWidget *parent, Options *options/*, ConfigList
   connect(hetInputLineEdit, SIGNAL(textChanged(QString)), this, SLOT(setHetroOutput(QString)));
   connect(lpInputLineEdit, SIGNAL(textChanged(QString)), this, SLOT(setLpanalOutput(QString)));
   connect(cvInputLineEdit, SIGNAL(textChanged(QString)), this, SLOT(setCvanalOutput(QString)));
+  changeHelp(m_options->csdocdir + "/cvanal.html");
 }
 
 UtilitiesDialog::~UtilitiesDialog()

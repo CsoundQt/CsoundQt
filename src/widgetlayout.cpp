@@ -36,15 +36,22 @@
 #include "qutedummy.h"
 #include "framewidget.h"
 
-
-//FIXME put this somewhere!!!
-//  layoutWidget = new WidgetLayout(this);
-//  layoutWidget->setGeometry(QRect(0, 0, 800, 600));
-//  layoutWidget->setPanel(this);
-//  layoutWidget->setMouseTracking(true);  // Must allow this for layoutWidget to propagate tracking events
-////  layoutWidget->setFocusPolicy(Qt::NoFocus);
-
-// FIXME how to pass right clicks from widget layout to this class when clicked outside of this widget?
+#ifdef Q_OS_LINUX
+#define LAYOUT_X_OFFSET 5
+#define LAYOUT_Y_OFFSET 30
+#endif
+#ifdef Q_OS_SOLARIS
+#define LAYOUT_X_OFFSET 0
+#define LAYOUT_Y_OFFSET 25
+#endif
+#ifdef Q_OS_MAC
+#define LAYOUT_X_OFFSET 0
+#define LAYOUT_Y_OFFSET 25
+#endif
+#ifdef Q_OS_WIN32
+#define LAYOUT_X_OFFSET 0
+#define LAYOUT_Y_OFFSET 25
+#endif
 
 WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 {
@@ -1116,11 +1123,11 @@ void WidgetLayout::widgetChanged(QuteWidget* widget)
 
 void WidgetLayout::mousePressEvent(QMouseEvent *event)
 {
-  if (event->button() & Qt::LeftButton) {
+  if (m_editMode && (event->button() & Qt::LeftButton)) {
     this->setFocus(Qt::MouseFocusReason);
     selectionFrame->show();
-    startx = event->x();
-    starty = event->y();
+    startx = event->x() - LAYOUT_X_OFFSET;
+    starty = event->y() - LAYOUT_Y_OFFSET;
     selectionFrame->setGeometry(startx, starty, 0,0);
     if (event->button() & Qt::LeftButton) {
       deselectAll();
@@ -1139,8 +1146,8 @@ void WidgetLayout::mouseMoveEvent(QMouseEvent *event)
   QWidget::mouseMoveEvent(event);
   int x = startx;
   int y = starty;
-  int height = abs(event->y() - starty);
-  int width = abs(event->x() - startx);
+  int width = abs(event->x() - startx - LAYOUT_X_OFFSET);
+  int height = abs(event->y() - starty - LAYOUT_Y_OFFSET);
   if (event->buttons() & Qt::LeftButton) {  // Currently dragging selection
     if (event->x() < startx) {
       x = event->x();

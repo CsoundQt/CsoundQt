@@ -69,7 +69,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -392,7 +392,7 @@
        <rect>
         <x>10</x>
         <y>170</y>
-        <width>411</width>
+        <width>641</width>
         <height>28</height>
        </rect>
       </property>
@@ -400,7 +400,7 @@
        <item>
         <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>Jack client name</string>
+          <string>Jack client name (use * for current filename)</string>
          </property>
         </widget>
        </item>

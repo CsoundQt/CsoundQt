@@ -539,7 +539,7 @@ void EventSheet::copy(bool cut)
 
 void EventSheet::paste()
 {
-  qDebug() << "EventSheet::paste() text = " << qApp->clipboard()->text();
+//  qDebug() << "EventSheet::paste() text = " << qApp->clipboard()->text();
   QModelIndexList list = this->selectedIndexes();
   QList<int> selectedRows;
   QList<int> selectedColumns;
@@ -835,7 +835,7 @@ void EventSheet::keyPressEvent (QKeyEvent * event) {
     this->sendEvents();
   }
   else {
-    qDebug() << "EventSheet::keyPressEvent  " << event->key();
+//    qDebug() << "EventSheet::keyPressEvent  " << event->key();
     event->ignore();
     QTableWidget::keyPressEvent(event);  // Propagate any other events
   }

@@ -77,7 +77,6 @@ qutecsound::qutecsound(QStringList fileNames)
   helpPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea | Qt::LeftDockWidgetArea);
   helpPanel->setObjectName("helpPanel");
   helpPanel->show();
-  connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
   addDockWidget(Qt::RightDockWidgetArea, helpPanel);
 
   widgetPanel = new WidgetPanel(this);
@@ -86,7 +85,6 @@ qutecsound::qutecsound(QStringList fileNames)
   widgetPanel->setObjectName("widgetPanel");
   addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
   utilitiesDialog = new UtilitiesDialog(this, m_options/*, _configlists*/);
-  connect(utilitiesDialog, SIGNAL(runUtility(QString)), this, SLOT(runUtility(QString)));
 //   connect(widgetPanel,SIGNAL(topLevelChanged(bool)), this, SLOT(widgetDockStateChanged(bool)));
 //   connect(widgetPanel,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
 //           this, SLOT(widgetDockLocationChanged(Qt::DockWidgetArea)));
@@ -96,6 +94,8 @@ qutecsound::qutecsound(QStringList fileNames)
   m_inspector->setObjectName("Inspector");
   addDockWidget(Qt::LeftDockWidgetArea, m_inspector);
 
+  connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
+  connect(utilitiesDialog, SIGNAL(runUtility(QString)), this, SLOT(runUtility(QString)));
   createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
   readSettings();
 
@@ -138,9 +138,10 @@ qutecsound::qutecsound(QStringList fileNames)
   // Open files passed in the command line. Only valid for non OS X platforms
   foreach (QString fileName, fileNames) {
     if (fileName!="") {
-      loadFile(fileName, true);
+      loadFile(fileName, true); // FIXME Something here seems to be causing spurious crashes
     }
   }
+  qDebug() << "qutecsound::qutecsound()";
   if (widgetsVisible) { // Reshow widget panel if necessary
     widgetPanel->show();
   }
