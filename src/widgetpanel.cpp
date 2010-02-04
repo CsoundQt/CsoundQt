@@ -91,7 +91,8 @@ WidgetLayout * WidgetPanel::takeWidgetLayout()
     w = static_cast<WidgetLayout *>(widget());
   }
 //  disconnect(layoutWidget, SIGNAL(deselectAll()));
-  disconnect(w, SIGNAL(selection(QRect)));
+  if (w != 0)
+    disconnect(w, SIGNAL(selection(QRect)));
   return w;
 }
 

@@ -23,12 +23,14 @@
 #include "csoundengine.h"
 #include "widgetlayout.h"
 #include "curve.h"
+
 #include "console.h"
+#include "qutescope.h"  // Needed for passing the ud to the scope for display data
+#include "qutegraph.h"  // Needed for passing the ud to the graph for display data
 
 CsoundEngine::CsoundEngine()
 {
   // Initialize user data pointer passed to Csound
-//  ud = (CsoundUserData *)malloc(sizeof(CsoundUserData));
   ud = new CsoundUserData();
   ud->PERF_STATUS = 0;
   ud->cs = this;
@@ -73,7 +75,7 @@ CsoundEngine::~CsoundEngine()
   free(pFields);
   delete ud;
   delete recBuffer;
-  qApp->processEvents();
+//  qApp->processEvents();
 //  queueTimer->stop();   // This crashes... so is the timer being deleted?
 //  queueTimer->deleteLater();
 }
@@ -529,6 +531,22 @@ void CsoundEngine::keyReleaseForCsound(QString key)
   keyReleaseBuffer << key;
   keyMutex.unlock();
 }
+
+void CsoundEngine::registerScope(QuteScope *scope)
+{
+  scope->setUd(ud);
+}
+
+void CsoundEngine::registerGraph(QuteGraph *graph)
+{
+  graph->setUd(ud);
+}
+
+//void CsoundEngine::unregisterScope(QuteScope *scope)
+//{
+//  // TODO is it necessary to unregiter scopes?
+//  qDebug() << "CsoundEngine::unregisterScope not implemented";
+//}
 
 int CsoundEngine::popKeyPressEvent()
 {

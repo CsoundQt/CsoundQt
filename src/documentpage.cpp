@@ -80,6 +80,11 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 
   connect(m_csEngine, SIGNAL(errorLines(QList<int>)),
           m_view, SLOT(markErrorLines(QList<int>)));
+  // Register scopes and graphs to pass them the engine'es user data
+  connect(m_widgetLayout, SIGNAL(registerScope(QuteScope*)),
+          m_csEngine,SLOT(registerScope(QuteScope*)));
+  connect(m_widgetLayout, SIGNAL(registerGraph(QuteGraph*)),
+          m_csEngine,SLOT(registerGraph(QuteGraph*)));
 
   // Register the console with the engine for message printing
   m_csEngine->registerConsole(m_console);
@@ -89,14 +94,18 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 
 DocumentPage::~DocumentPage()
 {
-  qDebug() << "DocumentPage::~DocumentPage()";
+//  qDebug() << "DocumentPage::~DocumentPage()";
+  disconnect(m_console, 0,0,0);
+  disconnect(m_view, 0,0,0);
+  disconnect(m_csEngine, 0,0,0);
+  disconnect(m_widgetLayout, 0,0,0);
+  delete m_view;   // Must be destroyed before the widgetLayout
+  delete m_widgetLayout;
   m_csEngine->stop();
-  for (int i = 0; i < m_liveFrames.size(); i++) {
-    delete m_liveFrames[i];  // These widgets have the order not to delete on close
-    m_liveFrames.remove(i);
-  }
   delete m_csEngine;
-//  m_view->deleteLater();   // TODO why is this crashing?
+  for (int i = 0; i < m_liveFrames.size(); i++) {
+    deleteLiveEventFrame(m_liveFrames[i]);
+  }
 }
 
 //void DocumentPage::keyPressEvent(QKeyEvent *event)
@@ -205,9 +214,6 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     m_view->setFullText(text);  // TODO do something different if not a csd file?
     return 0;  // Don't add live event panel if not a csd file.
   }
-  else { // When a csd file
-    m_view->setFullText(text);
-  }
   // Load Live Event Panels ------------------------
   while (text.contains("<EventPanel") and text.contains("</EventPanel>")) {
     QString liveEventsText = text.mid(text.indexOf("<EventPanel "),
@@ -288,7 +294,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     LiveEventFrame *e = createLiveEventFrame();
     e->setFromText(QString()); // Must set blank for undo history point
   }
-
+  m_view->setFullText(text);  // This must be here as some of the text has been removed along the way
   return 0;
 }
 
@@ -644,11 +650,14 @@ void DocumentPage::useInvalue(bool use)
 
 void DocumentPage::showLiveEventFrames(bool visible)
 {
-//  qDebug() << "DocumentPage::showLiveEventFrames  " << visible << (int) this;
   for (int i = 0; i < m_liveFrames.size(); i++) {
     if (visible) {
-      m_liveFrames[i]->hide();
-      m_liveFrames[i]->show();
+      //  qDebug() << "DocumentPage::showLiveEventFrames  " << visible << (int) this;
+      if (m_liveFrames[i]->isVisible())
+        m_liveFrames[i]->raise();
+      else
+        m_liveFrames[i]->show();
+        m_liveFrames[i]->raise();
     }
     else {
       m_liveFrames[i]->hide();
@@ -832,11 +841,9 @@ void DocumentPage::newLiveEventFrame(QString text)
 LiveEventFrame * DocumentPage::createLiveEventFrame(QString text)
 {
   qDebug() << "DocumentPage::newLiveEventFrame()";
-  // TODO delete these frames, for proper cleanup
-  // TODO remove from QVector when they are deleted individually
   LiveEventFrame *e = new LiveEventFrame("Live Event", 0, Qt::Window);  //FIXME is it OK to have no parent?
-  e->setAttribute(Qt::WA_DeleteOnClose, false);
-//  e->show();
+//  e->setAttribute(Qt::WA_DeleteOnClose, false);
+  e->hide();
 
   if (!text.isEmpty()) {
     e->setFromText(text);
@@ -851,12 +858,13 @@ LiveEventFrame * DocumentPage::createLiveEventFrame(QString text)
 
 void DocumentPage::deleteLiveEventFrame(LiveEventFrame *frame)
 {
-  qDebug() << "deleteLiveEventFrame(LiveEventFrame *frame)";
-  qApp->processEvents();
+//  qDebug() << "deleteLiveEventFrame(LiveEventFrame *frame)";
   int index = m_liveFrames.indexOf(frame);
   if (index >= 0) {
-    frame->forceDestroy();
+    disconnect(frame, 0,0,0);
+    disconnect(frame->getSheet(), 0,0,0);
     m_liveFrames.remove(index);
+    frame->deleteLater();
   }
   else {
     qDebug() << "DocumentPage::deleteLiveEventFrame frame not found";

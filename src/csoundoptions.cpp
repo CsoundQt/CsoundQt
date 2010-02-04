@@ -22,6 +22,7 @@
 
 #include "csoundoptions.h"
 #include "types.h" // for _configlists
+#include <QDir> // for static QDir::separator()
 
 CsoundOptions::CsoundOptions()
 {
@@ -45,8 +46,14 @@ QString CsoundOptions::generateCmdLineFlags()
       cmdline += " -+rtaudio=" + _configlists.rtAudioNames[rtAudioModule];
       cmdline += " -i" + (rtInputDevice == "" ? "adc":rtInputDevice);
       cmdline += " -o" + (rtOutputDevice == "" ? "dac":rtOutputDevice);
-      if (rtJackName != "")
-        cmdline += " -+jack_client=" + rtJackName;
+      if (rtJackName != "") {
+        QString jackName = rtJackName;
+        if (jackName.contains("*")) {
+          jackName.replace("*",fileName1.mid(fileName1.lastIndexOf(QDir::separator()) + 1));
+          jackName.replace(" ","_");
+        }
+        cmdline += " -+jack_client=" + jackName;
+      }
     }
     if (_configlists.rtMidiNames[rtMidiModule] != "none") {
       cmdline += " -+rtmidi=" + _configlists.rtMidiNames[rtMidiModule];
@@ -113,8 +120,14 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
       list << " -+rtaudio=" + _configlists.rtAudioNames[rtAudioModule];
       list << " -i" + (rtInputDevice == "" ? "adc":rtInputDevice);
       list << " -o" + (rtOutputDevice == "" ? "dac":rtOutputDevice);
-      if (rtJackName != "")
-        list << " -+jack_client=" + rtJackName;
+      if (rtJackName != "") {
+        QString jackName = rtJackName;
+        if (jackName.contains("*")) {
+          jackName.replace("*",fileName1.mid(fileName1.lastIndexOf(QDir::separator()) + 1));
+          jackName.replace(" ","_");
+        }
+        list << " -+jack_client=" + jackName;
+      }
     }
     if (_configlists.rtMidiNames[rtMidiModule] != "none") {
       list << " -+rtmidi=" + _configlists.rtMidiNames[rtMidiModule];
@@ -179,7 +192,7 @@ int CsoundOptions::generateCmdLine(char **argv)
   if (fileName2 != "") {
     argv[index] = (char *) calloc(fileName2.size()+1, sizeof(char));
     strcpy(argv[index++],fileName2.toStdString().c_str());
-    fprintf(stdout, "%i - %s.....", index, fileName2.toStdString().c_str()) ;
+//    fprintf(stdout, "%i - %s.....", index, fileName2.toStdString().c_str()) ;
   }
   fprintf(stdout, "\nCsoundOptions::generateCmdLine  index %i\n", index);
   return index;

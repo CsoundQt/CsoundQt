@@ -263,6 +263,8 @@ class WidgetLayout : public QWidget
     void keyReleased(QString key);
     void resized(); // To let widget panel know widget layout has changed size
     void changed(); // Should be triggered whenever widgets change, to let main document know
+    void registerScope(QuteScope *scope);
+    void registerGraph(QuteGraph *graph);
 };
 
 #endif // WIDGETLAYOUT_H

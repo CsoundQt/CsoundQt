@@ -33,6 +33,7 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     Q_OBJECT
   public:
     LiveEventFrame(QString csdName, QWidget *parent = 0, Qt::WindowFlags f = 0 );
+    ~LiveEventFrame();
     EventSheet * getSheet();
     void setName(QString name);
     void setFromText(QString text);
@@ -44,7 +45,7 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
 
     void getEvents(unsigned long ksmps, QStringList *eventText);
     bool isModified();
-    void forceDestroy();
+//    void forceDestroy();
 
   public slots:
     void setMode(int mode);

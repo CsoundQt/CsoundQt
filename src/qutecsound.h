@@ -121,7 +121,7 @@ class qutecsound:public QMainWindow
     void setWidgetEditMode(bool);  // This is not necessary as the action is passed and connected in the widget layout
     void controlD();
     void del();
-    bool closeTab();
+    bool closeTab(bool askCloseApp = false);
     void print();
     void findReplace();
     void join();
@@ -160,7 +160,7 @@ class qutecsound:public QMainWindow
     void readSettings();
     void writeSettings();
     int execute(QString executable, QString options);
-    bool maybeSave();
+    bool saveCurrent();
     void loadCompanionFile(const QString &fileName);
     bool saveFile(const QString &fileName, bool saveWidgets = true);
     void setCurrentFile(const QString &fileName);

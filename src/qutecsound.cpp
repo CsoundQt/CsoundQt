@@ -133,8 +133,6 @@ qutecsound::qutecsound(QStringList fileNames)
     if (lastTabIndex < documentPages.size()) {
       if (documentTabs->currentIndex() != lastTabIndex)
         documentTabs->setCurrentIndex(lastTabIndex);
-      else
-        this->changePage(lastTabIndex); // To make sure actions like show live score are executed
     }
   }
   // Open files passed in the command line. Only valid for non OS X platforms
@@ -212,8 +210,12 @@ void qutecsound::changePage(int index)
 {
   // Previous page has already been destroyed here. Remember this is called when opening, closing or switching tabs
   qDebug() << "qutecsound::changePage " << curPage << "--" << index << "-" << documentPages.size();
-  if (documentPages.size() > curPage && documentPages[curPage]) {
-    disconnect(showLiveEventsAct, SIGNAL(toggled(bool)), documentPages[curPage], SLOT(showLiveEventFrames(bool)));
+  if (documentPages.size() > curPage && documentPages.size() > 0 && documentPages[curPage]) {
+    disconnect(showLiveEventsAct, 0,0,0);
+    documentPages[curPage]->showLiveEventFrames(false);
+  }
+  if (index < 0) { // No tabs left
+    return;
   }
   curPage = index;
   if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
@@ -278,26 +280,34 @@ void qutecsound::openExample()
 
 void qutecsound::closeEvent(QCloseEvent *event)
 {
-  if (maybeSave()) {
-    writeSettings();
-    delete closeTabButton;
-    closeTabButton = 0;
-    disconnect(documentTabs, SIGNAL(currentChanged(int))); // To avoid triggering changePage when destroying the tabs
-//    while (!documentPages.isEmpty()) {
-//      DocumentPage *d = documentPages.last();
-//      documentPages.pop_back();
-//      delete d;  // TODO do these have to be pointers now?
-//    }
-    //delete quickRefFile;quickRefFile = 0;
-    // Delete all temporary files.
-    foreach (QString tempFile, tempScriptFiles) {
-      QDir().remove(tempFile);
+  writeSettings();
+//  disconnect(documentTabs, 0,0,0)); // To avoid triggering changePage when destroying the tabs
+  while (!documentPages.isEmpty()) {
+    if (!saveCurrent()) {
+      event->ignore();
+      return; // Action canceled
     }
-    event->accept();
-    close();
-  } else {
-    event->ignore();
+    if (!closeTab(true)) { // Don't ask for closing app
+      event->ignore();
+      return;
+    }
   }
+  //delete quickRefFile;quickRefFile = 0;
+  // Delete all temporary files.
+  foreach (QString tempFile, tempScriptFiles) {
+    QDir().remove(tempFile);
+  }
+  delete m_options;
+  delete m_console;
+  delete helpPanel;
+  delete widgetPanel;
+  delete utilitiesDialog;
+  delete m_inspector;
+  delete closeTabButton;
+  delete opcodeTree;
+  delete documentTabs;
+  event->accept();
+  close();
 }
 
 void qutecsound::newFile()
@@ -599,7 +609,7 @@ bool qutecsound::saveNoWidgets()
     return false;
 }
 
-bool qutecsound::closeTab()
+bool qutecsound::closeTab(bool askCloseApp)
 {
 //   qDebug("qutecsound::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
   if (documentPages[curPage]->isModified()) {
@@ -615,25 +625,32 @@ bool qutecsound::closeTab()
         return false;
     }
   }
-  if (documentPages.size() <= 1) {
-    if (QMessageBox::warning(this, tr("QuteCsound"),
-        tr("Do you want to exit QuteCsound?"),
-           QMessageBox::Yes | QMessageBox::Default,
-           QMessageBox::No) == QMessageBox::Yes)
-    {
-      close();
-      return false;
-    }
-    else {
-      newFile();
-      curPage = 0;
+  if (!askCloseApp) {
+    if (documentPages.size() <= 1) {
+      if (QMessageBox::warning(this, tr("QuteCsound"),
+                               tr("Do you want to exit QuteCsound?"),
+                               QMessageBox::Yes | QMessageBox::Default,
+                               QMessageBox::No) == QMessageBox::Yes)
+      {
+        close();
+        return false;
+      }
+      else {
+        newFile();
+        curPage = 0;
+      }
     }
   }
+
+  disconnect(showLiveEventsAct, 0,0,0);
   documentPages[curPage]->showLiveEventFrames(false);
-  documentPages[curPage]->deleteLater();
-  documentPages.remove(curPage);
+  DocumentPage *d = documentPages[curPage];
+  documentPages.remove(curPage); // Must remove from the vector first
+  delete d;  // TODO do these have to be pointers now?
+  if (curPage < 0)
+    curPage = 0; // deleting the document page decreases curPage, so must check
   documentTabs->removeTab(curPage);
-  changePage(curPage);
+//  changePage(curPage);
   return true;
 }
 
@@ -1803,9 +1820,9 @@ void qutecsound::connectActions()
   connect(m_inspector, SIGNAL(jumpToLine(int)),
           doc, SLOT(jumpToLine(int)));
 
+  disconnect(showLiveEventsAct, 0,0,0);
   connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventFrames(bool)));
   connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
-
 }
 
 void qutecsound::createMenus()
@@ -2126,7 +2143,7 @@ void qutecsound::readSettings()
   restoreState(settings.value("dockstate").toByteArray());
   lastUsedDir = settings.value("lastuseddir", "").toString();
   lastFileDir = settings.value("lastfiledir", "").toString();
-  showLiveEventsAct->setChecked(settings.value("liveEventsActive", true).toBool());
+//  showLiveEventsAct->setChecked(settings.value("liveEventsActive", true).toBool());
   m_options->language = _configlists.languageCodes.indexOf(settings.value("language", QLocale::system().name()).toString());
   if (m_options->language < 0)
     m_options->language = 0;
@@ -2201,6 +2218,9 @@ void qutecsound::readSettings()
   m_options->rtInputDevice = settings.value("rtInputDevice", "adc").toString();
   m_options->rtOutputDevice = settings.value("rtOutputDevice", "dac").toString();
   m_options->rtJackName = settings.value("rtJackName", "").toString();
+  if (settingsVersion < 2) {
+    m_options->rtJackName.append("*");
+  }
   m_options->rtMidiModule = settings.value("rtMidiModule", 0).toInt();
   m_options->rtMidiInputDevice = settings.value("rtMidiInputDevice", "0").toString();
   m_options->rtMidiOutputDevice = settings.value("rtMidiOutputDevice", "").toString();
@@ -2243,7 +2263,7 @@ void qutecsound::readSettings()
 void qutecsound::writeSettings()
 {
   QSettings settings("csound", "qutecsound");
-  settings.setValue("settingsVersion", 1);
+  settings.setValue("settingsVersion", 2); // Version 1 when clearing additional flags, version 2 when setting jack client to *
   settings.beginGroup("GUI");
   settings.setValue("pos", pos());
   settings.setValue("size", size());
@@ -2251,7 +2271,7 @@ void qutecsound::writeSettings()
   settings.setValue("lastuseddir", lastUsedDir);
   settings.setValue("lastfiledir", lastFileDir);
   settings.setValue("language", _configlists.languageCodes[m_options->language]);
-  settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
+//  settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
   settings.setValue("recentFiles", recentFiles);
   settings.beginGroup("Shortcuts");
   for (int i = 0; i < m_keyActions.size();i++) {
@@ -2389,31 +2409,26 @@ int qutecsound::execute(QString executable, QString options)
   return 0;
 }
 
-bool qutecsound::maybeSave()
+bool qutecsound::saveCurrent()
 {
-  for (int i = 0; i< documentPages.size(); i++) {
-    if (documentPages[i]->isModified()) {
-      documentTabs->setCurrentIndex(i);
-      changePage(i);
-      QString message = tr("The document ")
-          + (documentPages[i]->fileName != "" ? documentPages[i]->fileName: "untitled.csd")
-          + tr("\nhas been modified.\nDo you want to save the changes before closing?");
-      int ret = QMessageBox::warning(this, tr("QuteCsound"),
-                                     message,
-                                     QMessageBox::Yes | QMessageBox::Default,
-                                     QMessageBox::No,
-                                     QMessageBox::Cancel | QMessageBox::Escape);
-      if (ret == QMessageBox::Yes) {
-        if (!save())
-          return false;
-//         closeTab();
-      }
-      else if (ret == QMessageBox::Cancel) {
+  if (documentPages[curPage]->isModified()) {
+    QString message = tr("The document ")
+                      + (documentPages[curPage]->fileName != "" ? documentPages[curPage]->fileName: "untitled.csd")
+                      + tr("\nhas been modified.\nDo you want to save the changes before closing?");
+    int ret = QMessageBox::warning(this, tr("QuteCsound"),
+                                   message,
+                                   QMessageBox::Yes | QMessageBox::Default,
+                                   QMessageBox::No,
+                                   QMessageBox::Cancel | QMessageBox::Escape);
+    if (ret == QMessageBox::Yes) {
+      if (!save())
         return false;
-      }
+    }
+    else if (ret == QMessageBox::Cancel) {
+      return false;
     }
   }
-  return true;
+  return true; // If file saved correctly or not save is chosen. False if unable to save or cancelled
 }
 
 bool qutecsound::loadFile(QString fileName, bool runNow)
@@ -2443,7 +2458,6 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   documentPages[curPage]->setColorVariables(m_options->colorVariables);
   documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
 
-  documentTabs->setCurrentIndex(curPage);
   connectActions();
 //  connect(documentPages[curPage], SIGNAL(doCut()), this, SLOT(cut()));
 //  connect(documentPages[curPage], SIGNAL(doCopy()), this, SLOT(copy()));
@@ -2466,7 +2480,6 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
       text += "\n";
   }
   documentPages[curPage]->setTextString(text, m_options->saveWidgets);
-  documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
   documentTabs->insertTab(curPage, documentPages[curPage]->getView(),"");
   documentTabs->setCurrentIndex(curPage);
   QApplication::restoreOverrideCursor();
@@ -2499,6 +2512,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   if (runNow && m_options->autoPlay) {
     play();
   }
+  qApp->processEvents();
   return true;
 }
 

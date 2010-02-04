@@ -1649,7 +1649,7 @@ int WidgetLayout::createGraph(int x, int y, int width, int height, QString widge
   QuteGraph *widget= new QuteGraph(this);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
-  //FIXME put this back
+  emit registerGraph(widget);
 //  widget->setUd(static_cast<qutecsound *>(parent())->ud);
   //Graph widget is always of type "graph" part 5 is discarded
   if (parts.size() > 6)
@@ -1690,8 +1690,7 @@ int WidgetLayout::createScope(int x, int y, int width, int height, QString widge
   QuteScope *widget= new QuteScope(this);
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
-  //FIXME put this back!
-//  widget->setUd(static_cast<DocumentPage *>(parent())->ud);
+  emit registerScope(widget);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   if (parts.size() > 5)
     widget->setType(parts[5]);

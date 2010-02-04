@@ -304,6 +304,7 @@ void ScopeData::updateData(int channel, int zoom, bool freeze)
 #ifdef  USE_WIDGET_MUTEX
   mutex->lock();
 #endif
+  // FIXME how to make sure the buffer is read before it is flushed when recorded? Have another buffer?
   RingBuffer *buffer = &ud->audioOutputBuffer;
   buffer->lock();
   QList<MYFLT> list = buffer->buffer;

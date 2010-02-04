@@ -129,7 +129,7 @@ protected:
 
 EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
 {
-  qDebug() << "EventSheet::EventSheet";
+//  qDebug() << "EventSheet::EventSheet";
   this->setRowCount(10);
   this->setColumnCount(6);
   columnNames << tr("Event") << "p1 (instr)" << "p2 (start)" << "p3 (dur)" << "p4" << "p5";
@@ -406,13 +406,13 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
 
 void EventSheet::setTempo(double value)
 {
-  qDebug() << "EventSheet::setTempo " << value;
+//  qDebug() << "EventSheet::setTempo " << value;
   m_tempo = value;
 }
 
 void EventSheet::setLoopLength(double value)
 {
-  qDebug() << "EventSheet::setLoopLength " << value;
+//  qDebug() << "EventSheet::setLoopLength " << value;
   m_loopLength = value;
 }
 

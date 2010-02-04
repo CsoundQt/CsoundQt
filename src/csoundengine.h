@@ -34,6 +34,8 @@
 #include "csoundoptions.h"
 
 class ConsoleWidget;
+class QuteScope;
+class QuteGraph;
 class Curve;
 
 // Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
@@ -149,6 +151,10 @@ class CsoundEngine : public QObject
     void queueEvent(QString eventLine, int delay = 0);
     void keyPressForCsound(QString key);  // For key press events from consoles and widget panel
     void keyReleaseForCsound(QString key);
+
+    void registerScope(QuteScope *scope);
+//    void unregisterScope(QuteScope *scope);
+    void registerGraph(QuteGraph *scope);
 
   private:
     int runCsound();

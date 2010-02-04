@@ -61,6 +61,18 @@ LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags
   connect(loopLengthSpinBox,SIGNAL(valueChanged(double)), this, SLOT(setLoopLength(double)));
 }
 
+LiveEventFrame::~LiveEventFrame()
+{
+  qDebug() << "LiveEventFrame::~LiveEventFrame()";
+  disconnect(actionComboBox, 0,0,0);
+  disconnect(tempoSpinBox, 0,0,0);
+  disconnect(modeComboBox, 0,0,0);
+  disconnect(loopLengthSpinBox, 0,0,0);
+  disconnect(m_sheet, 0,0,0);
+  delete m_sheet;
+  delete m_editor;
+}
+
 EventSheet * LiveEventFrame::getSheet()
 {
   return m_sheet;
@@ -126,6 +138,7 @@ void LiveEventFrame::doAction(int action)
   }
   else if (action == 3) {
     deleteFrame();
+    return;
   }
   else if (action == 4) {
     rename();
@@ -204,10 +217,10 @@ bool LiveEventFrame::isModified()
   return m_modified;
 }
 
-void LiveEventFrame::forceDestroy()
-{
-  this->destroy();
-}
+//void LiveEventFrame::forceDestroy()
+//{
+//  this->destroy();
+//}
 
 void LiveEventFrame::rename()
 {
@@ -229,14 +242,14 @@ void LiveEventFrame::rename()
 
 void LiveEventFrame::changeEvent(QEvent *e)
 {
-    QFrame::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        retranslateUi(this);
-        break;
-    default:
-        break;
-    }
+  QFrame::changeEvent(e);
+  switch (e->type()) {
+  case QEvent::LanguageChange:
+    retranslateUi(this);
+    break;
+  default:
+    break;
+  }
 }
 
 void LiveEventFrame::resizeEvent (QResizeEvent * event)
