@@ -56,6 +56,7 @@ void Inspector::parseText(const QString &text)
   ftableItem->setLine(-1);
   TreeItem *scoreItem = new TreeItem(m_treeWidget, QStringList(tr("Score")));
   scoreItem->setLine(-1);
+  TreeItem *currentInstrumment = 0;
   QStringList lines = text.split(QRegExp("[\n\r]"));
   for (int i = 0; i< lines.size(); i++) {
     if (lines[i].trimmed().startsWith("instr")) {
@@ -83,6 +84,14 @@ void Inspector::parseText(const QString &text)
       QStringList columnslist(text.simplified());
       TreeItem *newItem = new TreeItem(scoreItem, columnslist);
       newItem->setLine(i + 1);
+    }
+    else if (lines[i].trimmed().contains(QRegExp("\\w+\\:"))) {
+      QString text = lines[i].trimmed();
+      QStringList columnslist(text.simplified());
+      if (currentInstrumment != 0) {
+        TreeItem *newItem = new TreeItem(currentInstrumment, columnslist);
+        newItem->setLine(i + 1);
+      }
     }
   }
   m_treeWidget->expandItem(opcodeItem);

@@ -285,10 +285,10 @@ void qutecsound::closeEvent(QCloseEvent *event)
   writeSettings();
 //  disconnect(documentTabs, 0,0,0)); // To avoid triggering changePage when destroying the tabs
   while (!documentPages.isEmpty()) {
-    if (!saveCurrent()) {
-      event->ignore();
-      return; // Action canceled
-    }
+//    if (!saveCurrent()) {
+//      event->ignore();
+//      return; // Action canceled
+//    }
     if (!closeTab(true)) { // Don't ask for closing app
       event->ignore();
       return;
@@ -615,11 +615,14 @@ bool qutecsound::closeTab(bool askCloseApp)
 {
 //   qDebug("qutecsound::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
   if (documentPages[curPage]->isModified()) {
+    QString message = tr("The document ")
+                      + (documentPages[curPage]->fileName != "" ? documentPages[curPage]->fileName: "untitled.csd")
+                      + tr("\nhas been modified.\nDo you want to save the changes before closing?");
     int ret = QMessageBox::warning(this, tr("QuteCsound"),
-                                   tr("File has been modified.\nDo you want to save it?"),
-                                      QMessageBox::Yes | QMessageBox::Default,
-                                      QMessageBox::No,
-                                      QMessageBox::Cancel);
+                                   message,
+                                   QMessageBox::Yes | QMessageBox::Default,
+                                   QMessageBox::No,
+                                   QMessageBox::Cancel | QMessageBox::Escape);
     if (ret == QMessageBox::Cancel)
       return false;
     else if (ret == QMessageBox::Yes) {
@@ -2422,27 +2425,27 @@ int qutecsound::execute(QString executable, QString options)
   return 0;
 }
 
-bool qutecsound::saveCurrent()
-{
-  if (documentPages[curPage]->isModified()) {
-    QString message = tr("The document ")
-                      + (documentPages[curPage]->fileName != "" ? documentPages[curPage]->fileName: "untitled.csd")
-                      + tr("\nhas been modified.\nDo you want to save the changes before closing?");
-    int ret = QMessageBox::warning(this, tr("QuteCsound"),
-                                   message,
-                                   QMessageBox::Yes | QMessageBox::Default,
-                                   QMessageBox::No,
-                                   QMessageBox::Cancel | QMessageBox::Escape);
-    if (ret == QMessageBox::Yes) {
-      if (!save())
-        return false;
-    }
-    else if (ret == QMessageBox::Cancel) {
-      return false;
-    }
-  }
-  return true; // If file saved correctly or not save is chosen. False if unable to save or cancelled
-}
+//bool qutecsound::saveCurrent()
+//{
+//  if (documentPages[curPage]->isModified()) {
+//    QString message = tr("The document ")
+//                      + (documentPages[curPage]->fileName != "" ? documentPages[curPage]->fileName: "untitled.csd")
+//                      + tr("\nhas been modified.\nDo you want to save the changes before closing?");
+//    int ret = QMessageBox::warning(this, tr("QuteCsound"),
+//                                   message,
+//                                   QMessageBox::Yes | QMessageBox::Default,
+//                                   QMessageBox::No,
+//                                   QMessageBox::Cancel | QMessageBox::Escape);
+//    if (ret == QMessageBox::Yes) {
+//      if (!save())
+//        return false;
+//    }
+//    else if (ret == QMessageBox::Cancel) {
+//      return false;
+//    }
+//  }
+//  return true; // If file saved correctly or not save is chosen. False if unable to save or cancelled
+//}
 
 bool qutecsound::loadFile(QString fileName, bool runNow)
 {
