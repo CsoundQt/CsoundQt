@@ -39,9 +39,9 @@ QString CsoundOptions::generateCmdLineFlags()
     cmdline += " " + additionalFlags;
   if (dither)
     cmdline += " -Z";
+  if (rtOverrideOptions)
+    cmdline += " -+ignore_csopts=1";
   if (rt) {
-    if (rtOverrideOptions)
-      cmdline += " -+ignore_csopts=1";
     if (_configlists.rtAudioNames[rtAudioModule] != "none") {
       cmdline += " -+rtaudio=" + _configlists.rtAudioNames[rtAudioModule];
       cmdline += " -i" + (rtInputDevice == "" ? "adc":rtInputDevice);
@@ -64,8 +64,6 @@ QString CsoundOptions::generateCmdLineFlags()
     }
   }
   else {
-    if (fileOverrideOptions)
-      cmdline += " -+ignore_csopts=1";
     cmdline += " --format=" + _configlists.fileTypeNames[fileFileType];
     cmdline += ":" + _configlists.fileFormatFlags[fileSampleFormat];
     if (fileInputFilenameActive)
@@ -113,9 +111,9 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
   }
   if (dither)
     list << " -Z";
+  if (rtOverrideOptions)
+    list << " -+ignore_csopts=1";
   if (rt) {
-    if (rtOverrideOptions)
-      list << " -+ignore_csopts=1";
     if (_configlists.rtAudioNames[rtAudioModule] != "none") {
       list << " -+rtaudio=" + _configlists.rtAudioNames[rtAudioModule];
       list << " -i" + (rtInputDevice == "" ? "adc":rtInputDevice);
@@ -138,8 +136,6 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
     }
   }
   else {
-    if (fileOverrideOptions)
-      list << " -+ignore_csopts=1";
     list << " --format=" + _configlists.fileTypeNames[fileFileType]
         + ":" + _configlists.fileFormatFlags[fileSampleFormat];
     if (fileInputFilenameActive)
@@ -184,7 +180,7 @@ int CsoundOptions::generateCmdLine(char **argv)
     argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
     strcpy(argv[index],flag.toStdString().c_str());
     index++;
-    fprintf(stdout, "%i - %s.....", index, flag.toStdString().c_str()) ;
+//    fprintf(stdout, "%i - %s.....", index, flag.toStdString().c_str()) ;
   }
   argv[index] = (char *) calloc(fileName1.size()+1, sizeof(char));
   strcpy(argv[index++],fileName1.toStdString().c_str());
@@ -194,6 +190,6 @@ int CsoundOptions::generateCmdLine(char **argv)
     strcpy(argv[index++],fileName2.toStdString().c_str());
 //    fprintf(stdout, "%i - %s.....", index, fileName2.toStdString().c_str()) ;
   }
-  fprintf(stdout, "\nCsoundOptions::generateCmdLine  index %i\n", index);
+//  fprintf(stdout, "\nCsoundOptions::generateCmdLine  index %i\n", index);
   return index;
 }

@@ -116,7 +116,8 @@ qutecsound::qutecsound(QStringList fileNames)
   modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
   modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
 
-  fillFileMenu(); //Must be placed after readSettings to include recent Files
+  fillFileMenu(); // Must be placed after readSettings to include recent Files
+  fillFavoriteMenu(); // Must be placed after readSettings to know directory
   if (m_options->opcodexmldir == "") {
     opcodeTree = new OpEntryParser(":/opcodes.xml");
   }
@@ -153,8 +154,6 @@ qutecsound::qutecsound(QStringList fileNames)
   if (documentPages.size() == 0) { // No files yet open. Open default
     newFile();
   }
-
-  changeFont();
 
   helpPanel->docDir = m_options->csdocdir;
   QString index = m_options->csdocdir + QString("/index.html");
@@ -193,26 +192,14 @@ void qutecsound::utilitiesMessageCallback(CSOUND *csound,
   console->text->scrollToEnd();
 }
 
-
-void qutecsound::changeFont()
-{
-  for (int i = 0; i < documentPages.size(); i++) {
-    documentPages[i]->setTextFont(QFont(m_options->font,
-                                    (int) m_options->fontPointSize));
-  }
-  m_console->text->setDefaultFont(QFont(m_options->consoleFont,
-                                        (int) m_options->consoleFontPointSize));
-  m_console->text->setColors(m_options->consoleFontColor,
-                             m_options->consoleBgColor);
-//   widgetPanel->setConsoleFont()
-}
-
 void qutecsound::changePage(int index)
 {
-  // Previous page has already been destroyed here. Remember this is called when opening, closing or switching tabs
-  qDebug() << "qutecsound::changePage " << curPage << "--" << index << "-" << documentPages.size();
+  // Previous page has already been destroyed here (if closed)
+  // Remember this is called when opening, closing or switching tabs (including loading)
+//  qDebug() << "qutecsound::changePage " << curPage << "--" << index << "-" << documentPages.size();
   if (documentPages.size() > curPage && documentPages.size() > 0 && documentPages[curPage]) {
     disconnect(showLiveEventsAct, 0,0,0);
+    disconnect(documentPages[curPage], SIGNAL(stopSignal()),0,0);
     documentPages[curPage]->showLiveEventFrames(false);
   }
   if (index < 0) { // No tabs left
@@ -230,6 +217,7 @@ void qutecsound::changePage(int index)
     documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
     documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
     documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
+    documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
     setWidgetPanelGeometry();
     widgetPanel->setWidgetLayout(documentPages[curPage]->getWidgetLayout());
     m_console->setWidget(documentPages[curPage]->getConsole());
@@ -312,6 +300,11 @@ void qutecsound::closeEvent(QCloseEvent *event)
   close();
 }
 
+void qutecsound::keyPressEvent(QKeyEvent *event)
+{
+  qDebug() << "qutecsound::keyPressEvent " << event->key();
+}
+
 void qutecsound::newFile()
 {
   if (m_options->defaultCsdActive && m_options->defaultCsd.endsWith(".csd",Qt::CaseInsensitive)) {
@@ -372,13 +365,13 @@ void qutecsound::reload()
   }
 }
 
-void qutecsound::openRecent()
+void qutecsound::openFromAction()
 {
-  QString fileName = static_cast<QAction *>(sender())->text();
-  openRecent(fileName);
+  QString fileName = static_cast<QAction *>(sender())->data().toString();
+  openFromAction(fileName);
 }
 
-void qutecsound::openRecent(QString fileName)
+void qutecsound::openFromAction(QString fileName)
 {
     if (!fileName.isEmpty()) {
       loadCompanionFile(fileName);
@@ -507,18 +500,20 @@ void qutecsound::redo()
 
 void qutecsound::setWidgetEditMode(bool active)
 {
-  documentPages[curPage]->setWidgetEditMode(active);
+  for (int i = 0; i < documentPages.size(); i++) {
+    documentPages[i]->setWidgetEditMode(active);
+  }
 }
 
-void qutecsound::controlD()
+void qutecsound::setWidgetClipboard(QString text)
 {
-  qDebug() << "qutecsound::controlD() not implemented";
-  // FIXME put back
-//  if (documentPages[curPage]->hasFocus()) {
-//    documentPages[curPage]->comment();
-//  }
-//  else
-//    widgetPanel->duplicate();
+  m_widgetClipboard = text;
+}
+
+void qutecsound::duplicate()
+{
+  qDebug() << "qutecsound::duplicate()";
+  documentPages[curPage]->duplicateWidgets();
 }
 
 void qutecsound::del()
@@ -676,6 +671,16 @@ void qutecsound::findReplace()
   documentPages[curPage]->findReplace();
 }
 
+void qutecsound::findString()
+{
+  documentPages[curPage]->findString();
+}
+
+void qutecsound::autoComplete()
+{
+  documentPages[curPage]->autoComplete();
+}
+
 void qutecsound::join()
 {
   QDialog dialog(this);
@@ -761,10 +766,10 @@ void qutecsound::exportCabbage()
   //TODO finish this
 }
 
-void qutecsound::play()
+void qutecsound::play(bool realtime)
 {
   // TODO make csound pause if it is already running
-//  runAct->setChecked(true);
+  runAct->setChecked(true);  // In case the call comes from a button
   if (documentPages[curPage]->fileName.isEmpty()) {
     QMessageBox::warning(this, tr("QuteCsound"),
                          tr("This file has not been saved\nPlease select name and location."));
@@ -833,7 +838,7 @@ void qutecsound::play()
   runFileName2 = documentPages[curPage]->companionFile;
   m_options->fileName1 = runFileName1;
   m_options->fileName2 = runFileName2;
-  m_options->rt = true;
+  m_options->rt = realtime;
 
   if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
     showWidgetsAct->setChecked(true);
@@ -925,7 +930,6 @@ void qutecsound::stop()
 {
   // Must guarantee that csound has stopped when it returns
    qDebug("qutecsound::stop()");
-   // FIXME when to stop one document, when to stop all
   documentPages[curPage]->stop();
   runAct->setChecked(false);
 //  if (ud->isRunning()) {
@@ -937,9 +941,25 @@ void qutecsound::stop()
 //  }
 }
 
+void qutecsound::stopAll()
+{
+  for (int i = 0; i < documentPages.size(); i++) {
+    documentPages[i]->stop();
+  }
+  runAct->setChecked(false);
+}
+
+void qutecsound::perfEnded()
+{
+  runAct->setChecked(false);
+}
+
 void qutecsound::record()
 {
-  if (!recAct->isChecked()) {
+  if (!documentPages[curPage]->isRunning()) {
+    play();
+  }
+  if (recAct->isChecked()) {
     documentPages[curPage]->record(m_options->sampleFormat);
   }
   else {
@@ -1013,10 +1033,7 @@ void qutecsound::render()
   m_options->fileOutputFilename.replace('\\', '/');
 #endif
   currentAudioFile = m_options->fileOutputFilename;
-  m_options->rt = false;
-  m_options->fileName1 = m_options->fileOutputFilename;
-  m_options->fileName2 = "";
-  documentPages[curPage]->play(m_options);
+  play(false);
 }
 
 void qutecsound::openExternalEditor()
@@ -1129,9 +1146,14 @@ void qutecsound::openShortcutDialog()
   dialog.exec();
 }
 
-void qutecsound::utilitiesDialogOpen()
+//void qutecsound::utilitiesDialogOpen()
+//{
+//  qDebug("qutecsound::utilitiesDialog()");
+//}
+
+void qutecsound::statusBarMessage(QString message)
 {
-  qDebug("qutecsound::utilitiesDialog()");
+  statusBar()->showMessage(message);
 }
 
 void qutecsound::about()
@@ -1177,7 +1199,6 @@ void qutecsound::applySettings()
   editToolBar->setToolButtonStyle(toolButtonStyle);
   controlToolBar->setToolButtonStyle(toolButtonStyle);
   configureToolBar->setToolButtonStyle(toolButtonStyle);
-  m_console->text->setKeyRepeatMode(m_options->keyRepeat);
 
   QString currentOptions = (m_options->useAPI ? tr("API") : tr("Console")) + " ";
   if (m_options->useAPI) {
@@ -1196,6 +1217,7 @@ void qutecsound::applySettings()
   renderOptions += currentOptions;
   runAct->setStatusTip(tr("Play") + playOptions);
   renderAct->setStatusTip(tr("Render to file") + renderOptions);
+  fillFavoriteMenu();
 }
 
 void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
@@ -1208,6 +1230,12 @@ void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
   p->setWidgetEnabled(m_options->enableWidgets);
   p->showWidgetTooltips(m_options->showTooltips);
   p->setKeyRepeatMode(m_options->keyRepeat);
+  p->setTextFont(QFont(m_options->font,
+                       (int) m_options->fontPointSize));
+  p->setConsoleFont(QFont(m_options->consoleFont,
+                          (int) m_options->consoleFontPointSize));
+  p->setConsoleColors(m_options->consoleFontColor,
+                      m_options->consoleBgColor);
 }
 
 void qutecsound::runUtility(QString flags)
@@ -1405,6 +1433,7 @@ void qutecsound::setDefaultKeyboardShortcuts()
   runAct->setShortcut(tr("CTRL+R"));
   runTermAct->setShortcut(tr(""));
   stopAct->setShortcut(tr("Alt+S"));
+  stopAllAct->setShortcut(tr("Ctrl+."));
   recAct->setShortcut(tr("Ctrl+Space"));
   renderAct->setShortcut(tr("Alt+F"));
   externalPlayerAct->setShortcut(tr(""));
@@ -1422,8 +1451,8 @@ void qutecsound::setDefaultKeyboardShortcuts()
   browseForwardAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
   externalBrowserAct->setShortcut(tr("Shift+Alt+F1"));
   openQuickRefAct->setShortcut(tr(""));
-  commentAct->setShortcut(tr("Ctrl+D"));
-  uncommentAct->setShortcut(tr("Shift+Ctrl+D"));
+  commentAct->setShortcut(tr("Ctrl+/"));
+  uncommentAct->setShortcut(tr("Shift+Ctrl+/"));
   indentAct->setShortcut(tr("Ctrl+I"));
   unindentAct->setShortcut(tr("Shift+Ctrl+I"));
 }
@@ -1435,13 +1464,11 @@ void qutecsound::createActions()
   newAct = new QAction(QIcon(":/images/gtk-new.png"), tr("&New"), this);
   newAct->setStatusTip(tr("Create a new file"));
   newAct->setIconText(tr("New"));
-  newAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));
 
   openAct = new QAction(QIcon(":/images/gnome-folder.png"), tr("&Open..."), this);
   openAct->setStatusTip(tr("Open an existing file"));
   openAct->setIconText(tr("Open"));
-  openAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
   reloadAct = new QAction(QIcon(":/images/gtk-reload.png"), tr("Reload"), this);
@@ -1452,13 +1479,11 @@ void qutecsound::createActions()
   saveAct = new QAction(QIcon(":/images/gnome-dev-floppy.png"), tr("&Save"), this);
   saveAct->setStatusTip(tr("Save the document to disk"));
   saveAct->setIconText(tr("Save"));
-  saveAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(saveAct, SIGNAL(triggered()), this, SLOT(save()));
 
   saveAsAct = new QAction(tr("Save &As..."), this);
   saveAsAct->setStatusTip(tr("Save the document under a new name"));
   saveAsAct->setIconText(tr("Save as"));
-  saveAsAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
 
   saveNoWidgetsAct = new QAction(tr("Export without widgets"), this);
@@ -1470,7 +1495,6 @@ void qutecsound::createActions()
   closeTabAct->setStatusTip(tr("Close current tab"));
 //   closeTabAct->setIconText(tr("Close"));
   closeTabAct->setIcon(QIcon(":/images/cross.png"));
-  closeTabAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(closeTabAct, SIGNAL(triggered()), this, SLOT(closeTab()));
 
   printAct = new QAction(tr("Print"), this);
@@ -1479,11 +1503,11 @@ void qutecsound::createActions()
 //   closeTabAct->setIcon(QIcon(":/images/cross.png"));
   connect(printAct, SIGNAL(triggered()), this, SLOT(print()));
 
-  for (int i = 0; i < QUTE_MAX_RECENT_FILES; i++) {
-    QAction *newAction = new QAction(this);
-    openRecentAct.append(newAction);
-    connect(newAction, SIGNAL(triggered()), this, SLOT(openRecent()));
-  }
+//  for (int i = 0; i < QUTE_MAX_RECENT_FILES; i++) {
+//    QAction *newAction = new QAction(this);
+//    openRecentAct.append(newAction);
+//    connect(newAction, SIGNAL(triggered()), this, SLOT(openFromAction()));
+//  }
 
   exitAct = new QAction(tr("E&xit"), this);
   exitAct->setStatusTip(tr("Exit the application"));
@@ -1543,10 +1567,12 @@ void qutecsound::createActions()
   findAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("&Find and Replace"), this);
   findAct->setStatusTip(tr("Find and replace strings in file"));
 //   findAct->setIconText(tr("Find"));
+  connect(findAct, SIGNAL(triggered()), this, SLOT(findReplace()));
 
   findAgainAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Find a&gain"), this);
   findAgainAct->setStatusTip(tr("Find next appearance of string"));
 //   findAct->setIconText(tr("Find"));
+  connect(findAgainAct, SIGNAL(triggered()), this, SLOT(findString()));
 
   autoCompleteAct = new QAction(tr("AutoComplete"), this);
   autoCompleteAct->setStatusTip(tr("Autocomplete according to Status bar display"));
@@ -1568,26 +1594,27 @@ void qutecsound::createActions()
   runAct->setStatusTip(tr("Run current file"));
   runAct->setIconText(tr("Run"));
   runAct->setCheckable(true);
-  runAct->setShortcutContext (Qt::ApplicationShortcut); // FIXME Needed because some key events are not propagation properly
   connect(runAct, SIGNAL(triggered()), this, SLOT(play()));
 
   runTermAct = new QAction(QIcon(":/images/gtk-media-play-ltr2.png"), tr("Run in Terminal"), this);
   runTermAct->setStatusTip(tr("Run in external shell"));
   runTermAct->setIconText(tr("Run in Term"));
-  //FIXME does it really run in term now?
   connect(runTermAct, SIGNAL(triggered()), this, SLOT(runInTerm()));
 
   stopAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop"), this);
   stopAct->setStatusTip(tr("Stop"));
   stopAct->setIconText(tr("Stop"));
-  stopAct->setShortcutContext (Qt::ApplicationShortcut); // FIXME Needed because some key events are not propagation properly
   connect(stopAct, SIGNAL(triggered()), this, SLOT(stop()));
+
+  stopAllAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop All"), this);
+  stopAct->setStatusTip(tr("Stop all running documents"));
+  stopAct->setIconText(tr("Stop All"));
+  connect(stopAllAct, SIGNAL(triggered()), this, SLOT(stopAll()));
 
   recAct = new QAction(QIcon(":/images/gtk-media-record.png"), tr("Record"), this);
   recAct->setStatusTip(tr("Record"));
   recAct->setIconText(tr("Record"));
   recAct->setCheckable(true);
-  recAct->setShortcutContext (Qt::ApplicationShortcut); // FIXME Needed because some key events are not propagation properly
   connect(recAct, SIGNAL(triggered()), this, SLOT(record()));
 
   renderAct = new QAction(QIcon(":/images/render.png"), tr("Render to file"), this);
@@ -1610,7 +1637,6 @@ void qutecsound::createActions()
   //showWidgetsAct->setChecked(true);
   showWidgetsAct->setStatusTip(tr("Show Realtime Widgets"));
   showWidgetsAct->setIconText(tr("Widgets"));
-  showWidgetsAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
   connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
 
@@ -1618,7 +1644,6 @@ void qutecsound::createActions()
   showInspectorAct->setCheckable(true);
   showInspectorAct->setStatusTip(tr("Show Inspector"));
   showInspectorAct->setIconText(tr("Inspector"));
-  showInspectorAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(showInspectorAct, SIGNAL(triggered(bool)), m_inspector, SLOT(setVisible(bool)));
   connect(m_inspector, SIGNAL(Close(bool)), showInspectorAct, SLOT(setChecked(bool)));
 
@@ -1633,13 +1658,11 @@ void qutecsound::createActions()
   showLiveEventsAct = new QAction(QIcon(":/images/note.png"), tr("Live Events"), this);
   showLiveEventsAct->setCheckable(true);
 //  showLiveEventsAct->setChecked(true);  // Unnecessary because it is set by options
-  showLiveEventsAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   showLiveEventsAct->setStatusTip(tr("Show Live Events Panels"));
   showLiveEventsAct->setIconText(tr("Live Events"));
 
   showManualAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("Csound Manual"), this);
   showManualAct->setStatusTip(tr("Show the Csound manual in the help panel"));
-  showManualAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(showManualAct, SIGNAL(triggered()), helpPanel, SLOT(showManual()));
 
   showGenAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("GEN Routines"), this);
@@ -1694,8 +1717,8 @@ void qutecsound::createActions()
 
   commentAct = new QAction(tr("Comment"), this);
   commentAct->setStatusTip(tr("Comment selection"));
-  commentAct->setIconText(tr("Comment"));
-  connect(commentAct, SIGNAL(triggered()), this, SLOT(controlD()));
+//  commentAct->setIconText(tr("Comment"));
+//  connect(commentAct, SIGNAL(triggered()), this, SLOT(controlD()));
 
   uncommentAct = new QAction(tr("Uncomment"), this);
   uncommentAct->setStatusTip(tr("Uncomment selection"));
@@ -1722,9 +1745,10 @@ void qutecsound::createActions()
 //   aboutQtAct->setIconText(tr("About Qt"));
   connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
-  //TODO Put this back when documentpage has focus
-//   cutAct->setEnabled(false);
-//   copyAct->setEnabled(false);
+  duplicateAct = new QAction(this);
+  duplicateAct->setShortcut(tr("Ctrl+D"));
+  connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
+
   setKeyboardShortcutsList();
 }
 
@@ -1757,6 +1781,7 @@ void qutecsound::setKeyboardShortcutsList()
   m_keyActions.append(runAct);
   m_keyActions.append(runTermAct);
   m_keyActions.append(stopAct);
+  m_keyActions.append(stopAllAct);
   m_keyActions.append(recAct);
   m_keyActions.append(renderAct);
   m_keyActions.append(commentAct);
@@ -1794,7 +1819,7 @@ void qutecsound::connectActions()
 //  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
 
 
-//   disconnect(commentAct, 0, 0, 0);
+  disconnect(commentAct, 0, 0, 0);
   disconnect(uncommentAct, 0, 0, 0);
   disconnect(indentAct, 0, 0, 0);
   disconnect(unindentAct, 0, 0, 0);
@@ -1804,8 +1829,6 @@ void qutecsound::connectActions()
   connect(uncommentAct, SIGNAL(triggered()), doc, SLOT(uncomment()));
   connect(indentAct, SIGNAL(triggered()), doc, SLOT(indent()));
   connect(unindentAct, SIGNAL(triggered()), doc, SLOT(unindent()));
-  connect(findAct, SIGNAL(triggered()), doc, SLOT(findReplace()));
-  connect(findAgainAct, SIGNAL(triggered()), doc, SLOT(findString()));
 
 //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
 //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
@@ -1839,6 +1862,8 @@ void qutecsound::connectActions()
   disconnect(showLiveEventsAct, 0,0,0);
   connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventFrames(bool)));
   connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
+  connect(doc, SIGNAL(stopSignal()), this, SLOT(stop()));
+  connect(doc, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(statusBarMessage(QString)));
 }
 
 void qutecsound::createMenus()
@@ -1889,10 +1914,10 @@ void qutecsound::createMenus()
   controlMenu = menuBar()->addMenu(tr("Control"));
   controlMenu->addAction(runAct);
   controlMenu->addAction(runTermAct);
-  controlMenu->addAction(stopAct);
-  controlMenu->addAction(runAct);
   controlMenu->addAction(renderAct);
   controlMenu->addAction(recAct);
+  controlMenu->addAction(stopAct);
+  controlMenu->addAction(stopAllAct);
   controlMenu->addAction(externalEditorAct);
   controlMenu->addAction(externalPlayerAct);
 
@@ -2068,6 +2093,8 @@ void qutecsound::createMenus()
     }
   }
 
+  favoriteMenu = examplesMenu->addMenu(tr("Favorites"));
+
   menuBar()->addSeparator();
 
   helpMenu = menuBar()->addMenu(tr("Help"));
@@ -2090,11 +2117,27 @@ void qutecsound::createMenus()
 void qutecsound::fillFileMenu()
 {
   recentMenu->clear();
-  for (int i = 0; i< recentFiles.size(); i++) {
+  for (int i = 0; i < recentFiles.size(); i++) {
     if (i < recentFiles.size() && recentFiles[i] != "") {
-      openRecentAct[i]->setText(recentFiles[i]);
-      recentMenu->addAction(openRecentAct[i]);
+      QAction *a = recentMenu->addAction(recentFiles[i], this, SLOT(openFromAction()));
+      a->setData(recentFiles[i]);
     }
+  }
+}
+
+void qutecsound::fillFavoriteMenu()
+{
+  favoriteMenu->clear();
+  QDir dir(m_options->favoriteDir);
+  QStringList filters;
+  filters << "*.csd" << "*.orc" << "*.sco" << "*.udo";
+  dir.setNameFilters(filters);
+  QStringList files = dir.entryList(QDir::Files,QDir::Name);
+
+  for (int i = 0; i < files.size(); i++) {
+    QAction *newAction = favoriteMenu->addAction(files[i],
+                                                 this, SLOT(openFromAction()));
+    newAction->setData(dir.absoluteFilePath(files[i]));
   }
 }
 
@@ -2174,6 +2217,9 @@ void qutecsound::readSettings()
   }
   else { // No shortcuts are saved, so it is a new installation.
     setDefaultKeyboardShortcuts();
+  }
+  if (settingsVersion < 2) {
+    setDefaultKeyboardShortcuts();  // Changes in structure, so reset shortcuts
   }
   settings.endGroup();
   settings.endGroup();
@@ -2256,6 +2302,7 @@ void qutecsound::readSettings()
   m_options->incdirActive = settings.value("incdirActive","").toBool();
   m_options->defaultCsd = settings.value("defaultCsd","").toString();
   m_options->defaultCsdActive = settings.value("defaultCsdActive","").toBool();
+  m_options->favoriteDir = settings.value("favoriteDir","").toString();
   m_options->opcodexmldir = settings.value("opcodexmldir", "").toString();
   m_options->opcodexmldirActive = settings.value("opcodexmldirActive","").toBool();
   settings.endGroup();
@@ -2376,6 +2423,7 @@ void qutecsound::writeSettings()
   settings.setValue("incdirActive",m_options->incdirActive);
   settings.setValue("defaultCsd",m_options->defaultCsd);
   settings.setValue("defaultCsdActive",m_options->defaultCsdActive);
+  settings.setValue("favoriteDir",m_options->favoriteDir);
   settings.setValue("opcodexmldir", m_options->opcodexmldir);
   settings.setValue("opcodexmldirActive",m_options->opcodexmldirActive);
   settings.endGroup();
@@ -2480,6 +2528,12 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   connect(documentPages[curPage], SIGNAL(modified()), this, SLOT(documentWasModified()));
 //  connect(documentPages[curPage], SIGNAL(selectionChanged()), this, SLOT(checkSelection()));
   connect(documentPages[curPage], SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
+  connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
+          this, SLOT(setWidgetClipboard(QString)));
+  connect(documentPages[curPage]->getView(), SIGNAL(lineNumberSignal(int)),
+          this, SLOT(showLineNumber(int)));
+
+
 
   if (fileName.startsWith(m_options->csdocdir))
     documentPages[curPage]->readOnly = true;
@@ -2516,7 +2570,6 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
       recentFiles.removeLast();
     fillFileMenu();
   }
-  changeFont();
   statusBar()->showMessage(tr("File loaded"), 2000);
   setWidgetPanelGeometry();
 

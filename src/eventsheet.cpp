@@ -534,6 +534,7 @@ void EventSheet::copy(bool cut)
     }
     text += line + "\n";
   }
+  text.chop(1); // remove last line break
   qApp->clipboard()->setText(text);
 }
 

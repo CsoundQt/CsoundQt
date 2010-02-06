@@ -35,7 +35,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
   connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));
 
   m_sbActive = false;
-//  setWidgetScrollBarsActive(false);
+  setWidgetScrollBarsActive(true);
   setMouseTracking(true);
 
 //  setFocusPolicy(Qt::NoFocus);
@@ -119,6 +119,19 @@ void WidgetPanel::setWidgetScrollBarsActive(bool act)
   }
   m_sbActive = act;
 }
+
+//void WidgetPanel::duplicate()
+//{
+//  qDebug() << "WidgetPanel::duplicate()";
+//  QWidget *w;
+//  if (m_sbActive) {
+//    w = scrollArea->widget();
+//  }
+//  else {
+//    w = widget();
+//  }
+//  static_cast<WidgetLayout *>(w)->duplicate();
+//}
 
 void WidgetPanel::widgetChanged()
 {
@@ -260,10 +273,10 @@ void WidgetPanel::mousePressEvent(QMouseEvent * event)
 void WidgetPanel::mouseReleaseEvent(QMouseEvent * event)
 {
   if (m_sbActive) {
-    static_cast<WidgetLayout *>(scrollArea->widget())->mousePressEventParent(event);
+    static_cast<WidgetLayout *>(scrollArea->widget())->mouseReleaseEventParent(event);
   }
   else {
-    static_cast<WidgetLayout *>(widget())->mousePressEventParent(event);
+    static_cast<WidgetLayout *>(widget())->mouseReleaseEventParent(event);
   }
 }
 

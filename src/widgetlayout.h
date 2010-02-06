@@ -57,7 +57,9 @@ class WidgetLayout : public QWidget
     void setValue(QString channelName, QString value);
     void setValue(int index, double value);
     void setValue(int index, QString value);
+
     void setKeyRepeatMode(bool repeat);
+//    void setDuplicateShortcut(QKeySequence shortcut);
 
     void getValues(QVector<QString> *channelNames,
                    QVector<double> *values,
@@ -75,15 +77,19 @@ class WidgetLayout : public QWidget
     void flush();
     void showWidgetTooltips(bool show);
     void setWidgetToolTip(QuteWidget *widget, bool show);
+
+    void appendCurve(Curve * curve);
     void newCurve(Curve* curve);
     void setCurveData(Curve *curve);
     Curve * getCurveById(uintptr_t id);
     void updateCurve(WINDAT *windat);
     int killCurves(CSOUND *csound);
     void clearGraphs();
+
     void refreshConsoles();
     QString getCsladspaLines();
     bool isModified();
+    void passWidgetClipboard(QString text);
 
     void createContextMenu(QContextMenuEvent *event);  // When done outside container widget
 
@@ -127,6 +133,7 @@ class WidgetLayout : public QWidget
     void applyProperties();
     void selectBgColor();
     void setEditMode(bool active);
+//    void toggleEditMode();
     void deselectAll();
     void selectAll();
     void widgetMoved(QPair<int, int>);
@@ -181,6 +188,8 @@ class WidgetLayout : public QWidget
     QHash<QString, QString> newStringValues;
     QMutex valueMutex;
     QMutex stringValueMutex;
+    QStack<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
+    QVector<WINDAT *> curveBuffer;
 
     bool m_repeatKeys;
     bool m_trackMouse;
@@ -211,6 +220,8 @@ class WidgetLayout : public QWidget
     int m_historyIndex; // Current point in history
     bool m_modified;
     bool m_editMode;
+    QString m_clipboard;
+//    QKeySequence m_duplicateShortcut;
 
     // Contained Widgets
     QVector<QuteWidget *> m_widgets;
@@ -265,6 +276,8 @@ class WidgetLayout : public QWidget
     void changed(); // Should be triggered whenever widgets change, to let main document know
     void registerScope(QuteScope *scope);
     void registerGraph(QuteGraph *graph);
+    void queueEventSignal(QString eventLine);
+    void setWidgetClipboardSignal(QString text);  // To propagate clipboard for sharing between pages
 };
 
 #endif // WIDGETLAYOUT_H

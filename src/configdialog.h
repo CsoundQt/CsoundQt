@@ -63,6 +63,7 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
     void browseSfdir();
     void browseIncdir();
     void browseDefaultCsd();
+    void browseFavorite();
     void browseTerminal();
     void browseBrowser();
     void browseDot();
@@ -77,7 +78,7 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
     void selectBgColor();
 
   signals:
-    void changeFont();
+//    void changeFont();
 
 };
 

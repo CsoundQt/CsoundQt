@@ -69,7 +69,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -920,7 +920,7 @@
      <property name="geometry">
       <rect>
        <x>360</x>
-       <y>310</y>
+       <y>280</y>
        <width>301</width>
        <height>71</height>
       </rect>
@@ -966,6 +966,28 @@
        </item>
       </layout>
      </widget>
+    </widget>
+    <widget class="QWidget" name="layoutWidget13">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>370</y>
+       <width>641</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_25">
+        <property name="text">
+         <string>Interface Language (requires restart)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="languageComboBox"/>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_4">
@@ -1183,7 +1205,7 @@
        <x>10</x>
        <y>0</y>
        <width>661</width>
-       <height>261</height>
+       <height>291</height>
       </rect>
      </property>
      <property name="title">
@@ -1195,7 +1217,7 @@
         <x>10</x>
         <y>20</y>
         <width>641</width>
-        <height>221</height>
+        <height>252</height>
        </rect>
       </property>
       <layout class="QGridLayout">
@@ -1335,16 +1357,6 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
-        <widget class="QCheckBox" name="defaultCsdCheckBox">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="text">
-          <string>Default csd</string>
-         </property>
-        </widget>
-       </item>
        <item row="6" column="3">
         <widget class="QToolButton" name="defaultCsdToolButton">
          <property name="text">
@@ -1359,6 +1371,37 @@
          </property>
         </widget>
        </item>
+       <item row="6" column="0">
+        <widget class="QCheckBox" name="defaultCsdCheckBox">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Default csd</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="QLineEdit" name="favoriteLineEdit">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="3">
+        <widget class="QToolButton" name="favoriteToolButton">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_28">
+         <property name="text">
+          <string>Favorite dir</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -1366,7 +1409,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>250</y>
+       <y>290</y>
        <width>661</width>
        <height>211</height>
       </rect>
@@ -1521,28 +1564,6 @@
       </layout>
      </widget>
     </widget>
-    <widget class="QWidget" name="layoutWidget13">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>470</y>
-       <width>581</width>
-       <height>29</height>
-      </rect>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="label_25">
-        <property name="text">
-         <string>Interface Language (requires restart)</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="languageComboBox"/>
-      </item>
-     </layout>
-    </widget>
    </widget>
   </widget>
  </widget>
@@ -1587,12 +1608,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>85</x>
-     <y>80</y>
+     <x>88</x>
+     <y>107</y>
     </hint>
     <hint type="destinationlabel">
-     <x>121</x>
-     <y>80</y>
+     <x>255</x>
+     <y>109</y>
     </hint>
    </hints>
   </connection>
@@ -1603,12 +1624,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>85</x>
-     <y>80</y>
+     <x>88</x>
+     <y>139</y>
     </hint>
     <hint type="destinationlabel">
-     <x>121</x>
-     <y>80</y>
+     <x>255</x>
+     <y>141</y>
     </hint>
    </hints>
   </connection>
@@ -1619,12 +1640,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>85</x>
-     <y>80</y>
+     <x>88</x>
+     <y>203</y>
     </hint>
     <hint type="destinationlabel">
-     <x>121</x>
-     <y>80</y>
+     <x>255</x>
+     <y>205</y>
     </hint>
    </hints>
   </connection>
@@ -1635,12 +1656,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>85</x>
-     <y>80</y>
+     <x>88</x>
+     <y>235</y>
     </hint>
     <hint type="destinationlabel">
-     <x>121</x>
-     <y>80</y>
+     <x>255</x>
+     <y>237</y>
     </hint>
    </hints>
   </connection>
@@ -1651,12 +1672,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>85</x>
-     <y>80</y>
+     <x>88</x>
+     <y>171</y>
     </hint>
     <hint type="destinationlabel">
-     <x>121</x>
-     <y>80</y>
+     <x>255</x>
+     <y>173</y>
     </hint>
    </hints>
   </connection>
@@ -1747,12 +1768,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>109</x>
-     <y>80</y>
+     <x>112</x>
+     <y>267</y>
     </hint>
     <hint type="destinationlabel">
-     <x>121</x>
-     <y>80</y>
+     <x>255</x>
+     <y>269</y>
     </hint>
    </hints>
   </connection>
@@ -1763,12 +1784,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>511</x>
-     <y>244</y>
+     <x>513</x>
+     <y>94</y>
     </hint>
     <hint type="destinationlabel">
-     <x>526</x>
-     <y>274</y>
+     <x>528</x>
+     <y>127</y>
     </hint>
    </hints>
   </connection>
@@ -1779,12 +1800,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>550</x>
-     <y>395</y>
+     <x>552</x>
+     <y>241</y>
     </hint>
     <hint type="destinationlabel">
-     <x>555</x>
-     <y>423</y>
+     <x>557</x>
+     <y>271</y>
     </hint>
    </hints>
   </connection>

@@ -63,7 +63,7 @@ LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags
 
 LiveEventFrame::~LiveEventFrame()
 {
-  qDebug() << "LiveEventFrame::~LiveEventFrame()";
+//  qDebug() << "LiveEventFrame::~LiveEventFrame()";
   disconnect(actionComboBox, 0,0,0);
   disconnect(tempoSpinBox, 0,0,0);
   disconnect(modeComboBox, 0,0,0);

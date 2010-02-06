@@ -67,6 +67,7 @@ class Options: public CsoundOptions{
     bool defaultCsdActive;
     QString opcodexmldir;
     bool opcodexmldirActive;
+    QString favoriteDir;
 
     // External applications
     QString terminal;

@@ -82,17 +82,18 @@ class qutecsound:public QMainWindow
 
   public slots:
     bool loadFile(QString fileName, bool runNow = false);
-    void play();
+    void play(bool realtime = true);
     void runInTerm(bool realtime = true);
     void pause();
     void stop();
+    void stopAll();
+    void perfEnded();
     void render();
     void record();
 //     void selectMidiInDevice(QPoint pos);
 //     void selectMidiOutDevice(QPoint pos);
 //     void selectAudioInDevice(QPoint pos);
 //     void selectAudioOutDevice(QPoint pos);
-    void changeFont();
     void changePage(int index);
     void setWidgetTooltipsVisible(bool visible);
 //    void updateWidgets();
@@ -101,13 +102,14 @@ class qutecsound:public QMainWindow
 
   protected:
     virtual void closeEvent(QCloseEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event);
 
   private slots:
     void newFile();
     void open();
     void reload();
-    void openRecent();
-    void openRecent(QString fileName);
+    void openFromAction();
+    void openFromAction(QString fileName);
     void createCodeGraph();
     void closeGraph();
     bool save();
@@ -119,11 +121,14 @@ class qutecsound:public QMainWindow
     void undo();
     void redo();
     void setWidgetEditMode(bool);  // This is not necessary as the action is passed and connected in the widget layout
-    void controlD();
+    void setWidgetClipboard(QString text);
+    void duplicate();
     void del();
     bool closeTab(bool askCloseApp = false);
     void print();
-    void findReplace();
+    void findReplace();  // Direct to current Page
+    void findString();  // Direct to current Page
+    void autoComplete();  // Direct to current Page
     void join();
     void getToIn();
     void inToGet();
@@ -136,7 +141,8 @@ class qutecsound:public QMainWindow
     void openExternalBrowser();
     void openQuickRef();
     void openShortcutDialog();
-    void utilitiesDialogOpen();
+//    void utilitiesDialogOpen();
+    void statusBarMessage(QString message);
     void about();
     void documentWasModified();
 //    void syntaxCheck();
@@ -156,6 +162,7 @@ class qutecsound:public QMainWindow
     void connectActions();
     void createMenus();
     void fillFileMenu();
+    void fillFavoriteMenu();
     void createToolBars();
     void createStatusBar();
     void readSettings();
@@ -185,6 +192,7 @@ class qutecsound:public QMainWindow
     DockConsole *m_console;
     DockHelp *helpPanel;
     WidgetPanel *widgetPanel;  // Dock widget, for containing the widget layout
+    QString m_widgetClipboard;
     Inspector *m_inspector;
     QToolButton *closeTabButton;
 
@@ -196,6 +204,7 @@ class qutecsound:public QMainWindow
     QMenu *controlMenu;
     QMenu *viewMenu;
     QMenu *helpMenu;
+    QMenu *favoriteMenu;
     QToolBar *fileToolBar;
     QToolBar *editToolBar;
     QToolBar *controlToolBar;
@@ -216,6 +225,7 @@ class qutecsound:public QMainWindow
     QAction *cutAct;
     QAction *copyAct;
     QAction *pasteAct;
+    QAction *duplicateAct;
     QAction *joinAct;
     QAction *getToInAct;
     QAction *inToGetAct;
@@ -230,6 +240,7 @@ class qutecsound:public QMainWindow
     QAction *runAct;
     QAction *runTermAct;
     QAction *stopAct;
+    QAction *stopAllAct;
     QAction *recAct;
     QAction *renderAct;
     QAction *externalEditorAct;

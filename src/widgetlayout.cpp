@@ -36,6 +36,8 @@
 #include "qutedummy.h"
 #include "framewidget.h"
 
+#include "qutecsound.h" // For passing the actions from button reserved channels
+
 #ifdef Q_OS_LINUX
 #define LAYOUT_X_OFFSET 5
 #define LAYOUT_Y_OFFSET 30
@@ -97,8 +99,10 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
 
   duplicateAct = new QAction(tr("Duplicate Selected"), this);
-  duplicateAct->setShortcut(tr("Ctrl+D"));
-  // FIXME connect duplicate act?
+//  duplicateAct->setShortcut(tr("Ctrl+D"));
+//  duplicateAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
+  connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
+//  m_duplicateShortcut = QKeySequence("Ctrl+D");
   deleteAct = new QAction(tr("Delete Selected"), this);
 //  deleteAct->setShortcut(tr("Ctrl+M"));
 //   QList<QKeySequence> deleteShortcuts;
@@ -126,6 +130,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   connect(distributeVerticalAct, SIGNAL(triggered()), this, SLOT(distributeVertical()));
 
 //  setFocusPolicy(Qt::NoFocus);
+  updateData(); // Starts updataData timer
 }
 
 WidgetLayout::~WidgetLayout()
@@ -233,6 +238,11 @@ void WidgetLayout::setKeyRepeatMode(bool repeat)
 {
   m_repeatKeys = repeat;
 }
+
+//void WidgetLayout::setDuplicateShortcut(QKeySequence shortcut)
+//{
+//  m_duplicateShortcut = shortcut;
+//}
 
 void WidgetLayout::setValue(QString channelName, QString value)
 {
@@ -447,7 +457,7 @@ void WidgetLayout::newCurve(Curve* curve)
 {
   for (int i = 0; i < graphWidgets.size(); i++) {
     graphWidgets[i]->addCurve(curve);
-    qApp->processEvents(); //Kludge to allow correct resizing of graph view
+    qApp->processEvents(); // Kludge to allow correct resizing of graph view
     graphWidgets[i]->changeCurve(-1);
   }
 }
@@ -458,6 +468,11 @@ void WidgetLayout::setCurveData(Curve *curve)
   for (int i = 0; i < graphWidgets.size(); i++) {
     graphWidgets[i]->setCurveData(curve);
   }
+}
+
+void WidgetLayout::passWidgetClipboard(QString text)
+{
+  m_clipboard = text;
 }
 
 Curve * WidgetLayout::getCurveById(uintptr_t id)
@@ -471,16 +486,16 @@ Curve * WidgetLayout::getCurveById(uintptr_t id)
 void WidgetLayout::updateCurve(WINDAT *windat)
 {
   qDebug() << "updateCurve(WINDAT *windat)";
-//  WINDAT *windat_ = (WINDAT *) malloc(sizeof(WINDAT));
-//  *windat_ = *windat;
-//  curveBuffer.append(windat_);
+  WINDAT *windat_ = (WINDAT *) malloc(sizeof(WINDAT));
+  *windat_ = *windat;
+  curveBuffer.append(windat_);
 }
 
 
 int WidgetLayout::killCurves(CSOUND *csound)
 {
   // FIXME free memory from curves
-//   widgetPanel->clearGraphs();
+  clearGraphs();
   qDebug() << "qutecsound::killCurves. Implement!";
   return 0;
 }
@@ -948,8 +963,7 @@ void WidgetLayout::alignBottom()
 void WidgetLayout::sendToBack()
 {
   if (m_editMode) {
-    int size = editWidgets.size();
-    for (int i = 0; i < size ; i++) { // First invert selection
+    for (int i = 0; i < editWidgets.size() ; i++) { // First invert selection
       if (editWidgets[i]->isSelected()) {
         editWidgets[i]->deselect();
       }
@@ -959,7 +973,7 @@ void WidgetLayout::sendToBack()
     }
     cut();
     paste();
-    for (int i = 0; i < size ; i++) { // Now invert selection again
+    for (int i = 0; i < editWidgets.size() ; i++) { // Now invert selection again
       if (editWidgets[i]->isSelected()) {
         editWidgets[i]->deselect();
       }
@@ -974,15 +988,18 @@ void WidgetLayout::distributeHorizontal()
 {
   if (m_editMode) {
     int size = editWidgets.size();
+    if (size < 3)
+      return;  // do nothing for less than three selected
     int spacing, emptySpace, max = -9999, min = 9999, widgetWidth = 0;
+    int num = 0;
     QVector<int> order;
     for (int i = 0; i < size ; i++) { // First check free space
       if (editWidgets[i]->isSelected()) {
         widgetWidth += editWidgets[i]->width();
+        num++;
         if (min > editWidgets[i]->x()) { // Left most widget
           min = editWidgets[i]->x();
-          if (!order.contains(i))
-            order.prepend(i);
+          order.prepend(i);
         }
         if (max < editWidgets[i]->x() + editWidgets[i]->width()) { // Right most widget
           max = editWidgets[i]->x() + editWidgets[i]->width();
@@ -1001,13 +1018,11 @@ void WidgetLayout::distributeHorizontal()
         }
       }
     }
-    if (order.size() < 3)
-      return;  // do nothing for less than three selected
     emptySpace = max - min - widgetWidth;
 //    qDebug() << "WidgetLayout::distributeHorizontal " << emptySpace <<  "---" << order;
     int accum = min;
     for (int i = 1; i < order.size() - 1 ; i++) { // Don't touch first and last
-      spacing = emptySpace / (size - i);
+      spacing = emptySpace / (num- i);
       emptySpace -= spacing;
       accum += spacing + editWidgets[order[i-1]]->width();
 //      qDebug() << "WidgetLayout::distributeHorizontal --" << i;
@@ -1021,15 +1036,18 @@ void WidgetLayout::distributeVertical()
 {
   if (m_editMode) {
     int size = editWidgets.size();
+    if (size < 3)
+      return;  // do nothing for less than three selected
     int spacing, emptySpace, max = -9999, min = 9999, widgetHeight = 0;
+    int num = 0;
     QVector<int> order;
     for (int i = 0; i < size ; i++) { // First check free space
       if (editWidgets[i]->isSelected()) {
+        num++;
         widgetHeight += editWidgets[i]->height();
         if (min > editWidgets[i]->y()) { // Bottom widget
           min = editWidgets[i]->y();
-          if (!order.contains(i))
-            order.prepend(i);
+          order.prepend(i);
         }
         if (max < editWidgets[i]->y() + editWidgets[i]->height()) { // Topmost widget
           max = editWidgets[i]->y() + editWidgets[i]->height();
@@ -1048,13 +1066,11 @@ void WidgetLayout::distributeVertical()
         }
       }
     }
-    if (order.size() < 3)
-      return;  // do nothing for less than three selected
     emptySpace = max - min - widgetHeight;
 //    qDebug() << "WidgetLayout::distributeHorizontal " << emptySpace <<  "---" << order;
     int accum = min;
     for (int i = 1; i < order.size() - 1 ; i++) { // Don't touch first and last
-      spacing = emptySpace / (size - i);
+      spacing = emptySpace / (num - i);
       emptySpace -= spacing;
       accum += spacing + editWidgets[order[i-1]]->height();
 //      qDebug() << "WidgetLayout::distributeHorizontal --" << i;
@@ -1066,10 +1082,31 @@ void WidgetLayout::distributeVertical()
 
 void WidgetLayout::keyPressEvent(QKeyEvent *event)
 {
-  if (!event->isAutoRepeat() or m_repeatKeys) {
+  qDebug() << "WidgetLayout::keyPressEvent --- " << event->key();
+//  if (!event->isAutoRepeat() or m_repeatKeys) {
     QString key = event->text();
-    qDebug() << "WidgetPanel::keyPressEvent  " << event->key();
-    if (event->matches(QKeySequence::Delete)) {
+    if (event->key() == Qt::Key_D && (event->modifiers() & Qt::ControlModifier )) {
+      this->duplicate();
+      event->accept();
+      return;
+    }
+    // Why are these not working here?????
+    if (event->key() == Qt::Key_X && (event->modifiers() & Qt::ControlModifier )) {
+      this->cut();
+      event->accept();
+      return;
+    }
+    else if (event->key() == Qt::Key_C && (event->modifiers() & Qt::ControlModifier )) {
+      this->copy();
+      event->accept();
+      return;
+    }
+    else if (event->key() == Qt::Key_V && (event->modifiers() & Qt::ControlModifier )) {
+      this->paste();
+      event->accept();
+      return;
+    }
+    else if (event->matches(QKeySequence::Delete)) {
       this->deleteSelected();
     }
     else if (event->matches(QKeySequence::Undo)) {
@@ -1078,13 +1115,12 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
     else if (event->matches(QKeySequence::Redo)) {
       this->redo();
     }
-//     qDebug() << key ;
     else if (key != "") {
 //           appendMessage(key);
       emit keyPressed(key);
       QWidget::keyPressEvent(event); // Propagate event if not used
     }
-  }
+//  }
 }
 
 void WidgetLayout::keyReleaseEvent(QKeyEvent *event)
@@ -1470,11 +1506,12 @@ int WidgetLayout::createButton(int x, int y, int width, int height, QString widg
   connect(widget, SIGNAL(queueEvent(QString)), this, SLOT(queueEvent(QString)));
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  // FIXME implement these actions in document page
-//  connect(widget, SIGNAL(play()), static_cast<DocumentPage *>(parentWidget()), SLOT(play()));
-//  connect(widget, SIGNAL(pause()), static_cast<DocumentPage *>(parentWidget()), SLOT(pause()));
-//  connect(widget, SIGNAL(stop()), static_cast<DocumentPage *>(parentWidget()), SLOT(stop()));
-//  connect(widget, SIGNAL(render()), static_cast<DocumentPage *>(parentWidget()), SLOT(render()));
+
+  // Play and render require the options from the main application, so must call play from it
+  connect(widget, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(play()));
+  connect(widget, SIGNAL(render()), static_cast<qutecsound *>(parent()), SLOT(render()));
+  connect(widget, SIGNAL(pause()), static_cast<qutecsound *>(parent()), SLOT(pause()));
+  connect(widget, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
   connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
 
@@ -1657,7 +1694,6 @@ int WidgetLayout::createGraph(int x, int y, int width, int height, QString widge
   widget->setWidgetLine(widgetLine);
   widget->setWidgetGeometry(x,y,width, height);
   emit registerGraph(widget);
-//  widget->setUd(static_cast<qutecsound *>(parent())->ud);
   //Graph widget is always of type "graph" part 5 is discarded
   if (parts.size() > 6)
     widget->setValue(parts[6].toDouble());
@@ -1717,7 +1753,6 @@ int WidgetLayout::createScope(int x, int y, int width, int height, QString widge
     widget->setChannelName(channelName);
   }
 
-  updateData(); // Starts updataData timer
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
@@ -1765,6 +1800,7 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
 
 void WidgetLayout::setModified(bool mod)
 {
+  qDebug() << "WidgetLayout::setModified";
   m_modified = mod;
   emit changed();
 }
@@ -1834,29 +1870,45 @@ QString WidgetLayout::getPresetsXmlText()
 
 void WidgetLayout::copy()
 {
+  qDebug() << "WidgetLayout::copy()";
+  QString text;
+  if (m_editMode) {
+    for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
+      if (editWidgets[i]->isSelected()) {
+        text += m_widgets[i]->getWidgetLine() + "\n";
+      }
+    }
+    m_clipboard = text;
+    emit setWidgetClipboardSignal(m_clipboard);
+  }
 }
 
 void WidgetLayout::cut()
 {
-  WidgetLayout::copy();
-  for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
-    if (editWidgets[i]->isSelected()) {
-      deleteWidget(m_widgets[i]);
+  qDebug() << "WidgetLayout::cut()";
+  if (m_editMode) {
+    WidgetLayout::copy();
+    for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
+      if (editWidgets[i]->isSelected()) {
+        deleteWidget(m_widgets[i]);
+      }
     }
+    markHistory();
   }
-  markHistory();
 }
 
 void WidgetLayout::paste()
 {
+  qDebug() << "WidgetLayout::paste()";
   if (m_editMode) {
     deselectAll();
-//    foreach (QString line, clipboard) {
-//      newWidget(line);
-//      editWidgets.last()->select();
-//    }
+    QStringList lines = m_clipboard.split("\n");
+    foreach (QString line, lines) {
+      newWidget(line);
+      editWidgets.last()->select();
+    }
   }
-//  markHistory();
+  markHistory();
 }
 
 void WidgetLayout::setEditMode(bool active)
@@ -1878,6 +1930,26 @@ void WidgetLayout::setEditMode(bool active)
   }
   m_editMode = active;
 }
+
+//void WidgetLayout::toggleEditMode()
+//{
+//  m_editMode = !m_editMode;
+//  if (m_editMode) {
+//    foreach (FrameWidget *widget, editWidgets) {
+//      delete widget;
+//    }
+//    editWidgets.clear();
+//    foreach (QuteWidget * widget, m_widgets) {
+//      createEditFrame(widget);
+//    }
+//  }
+//  else {
+//    foreach (QFrame* frame, editWidgets) {
+//      delete(frame);
+//    }
+//    editWidgets.clear();
+//  }
+//}
 
 void WidgetLayout::createEditFrame(QuteWidget* widget)
 {
@@ -2054,7 +2126,7 @@ void WidgetLayout::processNewValues()
 void WidgetLayout::queueEvent(QString eventLine)
 {
   // FIXME connect this!!
-  emit queueEvent(eventLine);
+  emit queueEventSignal(eventLine);
 }
 
 void WidgetLayout::paste(QPoint /*pos*/)
@@ -2063,7 +2135,7 @@ void WidgetLayout::paste(QPoint /*pos*/)
 
 void WidgetLayout::duplicate()
 {
-//   qDebug("WidgetLayout::duplicate()");
+   qDebug("WidgetLayout::duplicate()");
   if (m_editMode) {
     int size = editWidgets.size();
     for (int i = 0; i < size ; i++) {
@@ -2107,8 +2179,39 @@ void WidgetLayout::redo()
   }
 }
 
+void WidgetLayout::appendCurve(Curve * curve)
+{
+  qDebug() << "WidgetLayout::appendCurve " << curve;
+  newCurveBuffer.append(curve);
+}
+
 void WidgetLayout::updateData()
 {
+  while (!newCurveBuffer.isEmpty()) {
+    Curve * curve = newCurveBuffer.pop();
+    qDebug("qutecsound::updateData() curve %s", curve->get_caption().unicode());
+    newCurve(curve);
+  }
+  if (curveBuffer.size() > 32) {
+    qDebug("qutecsound::dispatchQueues() WARNING: curve update buffer too large!");
+    curveBuffer.resize(32);
+  }
+  foreach (WINDAT * windat, curveBuffer){
+    Curve *curve = getCurveById(windat->windid);
+    if (curve != 0) {
+      //       qDebug("qutecsound::dispatchQueues() %s -- %s",windat->caption, curve->get_caption().toStdString().c_str());
+      curve->set_size(windat->npts);      // number of points
+      curve->set_data(windat->fdata);
+      curve->set_caption(QString(windat->caption)); // title of curve
+      //     curve->set_polarity(windat->polarity); // polarity
+      curve->set_max(windat->max);        // curve max
+      curve->set_min(windat->min);        // curve min
+      curve->set_absmax(windat->absmax);     // abs max of above
+      //     curve->set_y_scale(windat->y_scale);    // Y axis scaling factor
+      setCurveData(curve);
+    }
+    curveBuffer.remove(curveBuffer.indexOf(windat));
+  }
   for (int i = 0; i < scopeWidgets.size(); i++) {
     scopeWidgets[i]->updateData();
   }

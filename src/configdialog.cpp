@@ -146,6 +146,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   defaultCsdCheckBox->setChecked(m_options->defaultCsdActive);
   defaultCsdLineEdit->setText(m_options->defaultCsd);
   defaultCsdLineEdit->setEnabled(m_options->defaultCsdActive);
+  favoriteLineEdit->setText(m_options->favoriteDir);
 
   TerminalLineEdit->setText(m_options->terminal);
   browserLineEdit->setText(m_options->browser);
@@ -164,13 +165,14 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   connect(sfdirToolButton, SIGNAL(clicked()), this, SLOT(browseSfdir()));
   connect(incdirToolButton, SIGNAL(clicked()), this, SLOT(browseIncdir()));
   connect(defaultCsdToolButton, SIGNAL(clicked()), this, SLOT(browseDefaultCsd()));
+  connect(favoriteToolButton, SIGNAL(clicked()), this, SLOT(browseFavorite()));
   connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
   connect(browserToolButton, SIGNAL(clicked()), this, SLOT(browseBrowser()));
   connect(dotToolButton, SIGNAL(clicked()), this, SLOT(browseDot()));
   connect(waveEditorToolButton, SIGNAL(clicked()), this, SLOT(browseWaveEditor()));
   connect(wavePlayerToolButton, SIGNAL(clicked()), this, SLOT(browseWavePlayer()));
   connect(pdfViewerToolButton, SIGNAL(clicked()), this, SLOT(browsePdfViewer()));
-  connect(this, SIGNAL(changeFont()), parent, SLOT(changeFont()));
+//  connect(this, SIGNAL(changeFont()), parent, SLOT(changeFont()));
   connect(audioInputToolButton, SIGNAL(released()), this, SLOT(selectAudioInput()));
   connect(audioOutputToolButton, SIGNAL(released()), this, SLOT(selectAudioOutput()));
   connect(midiInputToolButton, SIGNAL(released()), this, SLOT(selectMidiInput()));
@@ -276,6 +278,7 @@ void ConfigDialog::accept()
   m_options->incdir = IncdirLineEdit->text();
   m_options->defaultCsdActive = defaultCsdCheckBox->isChecked();
   m_options->defaultCsd = defaultCsdLineEdit->text();
+  m_options->favoriteDir = favoriteLineEdit->text();
 
   m_options->terminal = TerminalLineEdit->text();
   m_options->browser = browserLineEdit->text();
@@ -285,7 +288,7 @@ void ConfigDialog::accept()
   m_options->pdfviewer = pdfViewerLineEdit->text();
   m_options->language = languageComboBox->currentIndex();
 
-  emit(changeFont());
+//  emit(changeFont());
   QDialog::accept();
 }
 
@@ -346,6 +349,12 @@ void ConfigDialog::browseDefaultCsd()
     return;
   }
   defaultCsdLineEdit->setText(m_options->defaultCsd);
+}
+
+void ConfigDialog::browseFavorite()
+{
+  browseDir(m_options->favoriteDir);
+  favoriteLineEdit->setText(m_options->favoriteDir);
 }
 
 void ConfigDialog::browseTerminal()

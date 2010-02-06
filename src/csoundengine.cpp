@@ -51,8 +51,15 @@ CsoundEngine::CsoundEngine()
   }
 #ifndef QUTECSOUND_DESTROY_CSOUND
   // Create only once
-  csound=csoundCreate(0);
+  ud->csound=csoundCreate(0);
 #endif
+
+//  csoundPreCompile(ud->csound);  // Precompile once, to preload dynamic libs (making first run faster)
+//  csoundCleanup(ud->csound);
+//
+//#ifndef QUTECSOUND_DESTROY_CSOUND
+//  csoundDestroy(ud->csound);
+//#endif
 
   eventQueue.resize(QUTECSOUND_MAX_EVENTS);
   eventTimeStamps.resize(QUTECSOUND_MAX_EVENTS);
@@ -281,9 +288,9 @@ void CsoundEngine::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char 
                   windat->min,
                   windat->absmax,
                   windat->oabsmax,
-                  windat->danflag);
+                  windat->danflag);  //FIXME delete these, but where?
   curve->set_id((uintptr_t) curve);
-  ud->wl->newCurve(curve);
+  ud->wl->appendCurve(curve);
   windat->windid = (uintptr_t) curve;
 //   qDebug("qutecsound::makeGraphCallback %i", windat->windid);
 }
@@ -633,6 +640,7 @@ void CsoundEngine::stop()
 {
   stopRecording();
   stopCsound();
+  emit stopSignal();
 }
 
 void CsoundEngine::pause()
@@ -643,11 +651,6 @@ void CsoundEngine::pause()
 
 void CsoundEngine::startRecording(int sampleformat, QString fileName)
 {
-  if (!isRunning()) {
-    // FIXME runAct in main application should be checked when running from here
-//    runAct->setChecked(true);
-    play(&m_options);
-  }
   const int channels=ud->numChnls;
   const int sampleRate=ud->sampleRate;
   int format = SF_FORMAT_WAV;
@@ -705,7 +708,6 @@ int CsoundEngine::runCsound()
   // TODO use: PUBLIC int csoundSetGlobalEnv(const char *name, const char *value);
 
   ud->threaded = m_threaded;
-  // FIXME set realtime before calling this!
 #ifdef QUTECSOUND_DESTROY_CSOUND
   ud->csound=csoundCreate(0);
 #endif
@@ -835,7 +837,7 @@ int CsoundEngine::runCsound()
 
 void CsoundEngine::stopCsound()
 {
-  qDebug("CsoundEngine::stopCsound()");
+//  qDebug("CsoundEngine::stopCsound()");
   if (ud->threaded) {
 //    perfThread->ScoreEvent(0, 'e', 0, 0);
     if (ud->perfThread != 0) {
@@ -905,34 +907,10 @@ void CsoundEngine::dispatchQueues()
 //    }
 //    outStringQueue.clear();
 //    stringValueMutex.unlock();
-    while (!newCurveBuffer.isEmpty()) {
-      Curve * curve = newCurveBuffer.pop();
-  // //     qDebug("qutecsound::dispatchQueues() %i-%s", index, curve->get_caption().toStdString().c_str());
-        ud->wl->newCurve(curve);
-    }
-    if (curveBuffer.size() > 32) {
-      qDebug("qutecsound::dispatchQueues() WARNING: curve update buffer too large!");
-      curveBuffer.resize(32);
-    }
-    foreach (WINDAT * windat, curveBuffer){
-      Curve *curve = ud->wl->getCurveById(windat->windid);
-      if (curve != 0) {
-  //       qDebug("qutecsound::dispatchQueues() %s -- %s",windat->caption, curve->get_caption().toStdString().c_str());
-        curve->set_size(windat->npts);      // number of points
-        curve->set_data(windat->fdata);
-        curve->set_caption(QString(windat->caption)); // title of curve
-    //     curve->set_polarity(windat->polarity); // polarity
-        curve->set_max(windat->max);        // curve max
-        curve->set_min(windat->min);        // curve min
-        curve->set_absmax(windat->absmax);     // abs max of above
-    //     curve->set_y_scale(windat->y_scale);    // Y axis scaling factor
-        ud->wl->setCurveData(curve);
-      }
-      curveBuffer.remove(curveBuffer.indexOf(windat));
-    }
   }
   if (ud->threaded && ud->perfThread) {
     if (ud->perfThread->GetStatus() > 0) {
+//      qDebug() << "CsoundEngine::dispatchQueues() perf finished";
       stop();
     }
   }
@@ -977,7 +955,7 @@ void CsoundEngine::recordBuffer()
     else {
 //       qDebug("qutecsound::recordBuffer() : Empty Buffer!");
     }
-    QTimer::singleShot(20, this, SLOT(recordBuffer()));
+    recordTimer.singleShot(20, this, SLOT(recordBuffer()));
   }
   else { //Stop recording
     delete outfile;

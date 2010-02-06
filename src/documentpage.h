@@ -41,7 +41,7 @@ class SndfileHandle;
 
 class Curve;
 
-//TODO when refactoring is done, organize the methods in the correct order
+//TODO when refactoring is done, organize the methods in the nice order
 
 class DocumentPage : public QObject
 {
@@ -93,6 +93,7 @@ class DocumentPage : public QObject
     void setOpcodeNameList(QStringList opcodeNameList);
     void print(QPrinter *printer);
     void findReplace();
+    void findString();  // For find again
     void getToIn();
     void inToGet();
 //    void setEditAct(QAction *editAct);
@@ -100,6 +101,11 @@ class DocumentPage : public QObject
     // Widget Layout properties
     void showWidgetTooltips(bool visible);
     void setKeyRepeatMode(bool keyRepeat);  // Also for console widget
+    void passWidgetClipboard(QString text);
+
+    // Console properties
+    void setConsoleFont(QFont font);
+    void setConsoleColors(QColor fontColor, QColor bgColor);
 
     //Engine Properties
 //    void setCsoundOptions(CsoundOptions &options);
@@ -131,9 +137,12 @@ class DocumentPage : public QObject
     int play(CsoundOptions *options);
     void pause();
     void stop();
-//    void render(CsoundOptions *options);
+    void perfEnded();
     void record(int mode); // 0=16 bit int  1=32 bit int  2=float
     void stopRecording();
+    // Triggered from button, ask parent for options
+    void playParent();
+    void renderParent();
 
     void setMacWidgetsText(QString widgetText);
     void setMacOptionsText(QString text);
@@ -144,6 +153,7 @@ class DocumentPage : public QObject
 
     //Passed directly to widget layout
     void setWidgetEditMode(bool active);
+//    void toggleWidgetEditMode();
     void duplicateWidgets();
 
     // Passed directly to document view
@@ -152,6 +162,7 @@ class DocumentPage : public QObject
     void uncomment();
     void indent();
     void unindent();
+    void autoComplete();
 
 //    void opcodeFromMenu();
     void newLiveEventFrame(QString text = QString());
@@ -165,6 +176,8 @@ class DocumentPage : public QObject
 //    virtual void closeEvent(QCloseEvent *event);
 
   private:
+    CsoundOptions getParentOptions();
+
     QStringList macOptions;
     QString macPresets;
 //    QString macGUI;
@@ -187,6 +200,8 @@ class DocumentPage : public QObject
   private slots:
     void textChanged();
     void liveEventFrameClosed();
+    void opcodeSyntax(QString message);
+    void setWidgetClipboard(QString text);
 //    void dispatchQueues();
 //    void queueMessage(QString message);
     void queueEvent(QString line, int delay = 0);
@@ -203,6 +218,9 @@ class DocumentPage : public QObject
     void setCurrentAudioFile(QString name);
     void liveEventsVisible(bool);  // To change the action in the main window
     void modified();  // Triggered whenever the children change
+    void stopSignal(); // Propagated from engine
+    void opcodeSyntaxSignal(QString message); // Propagated from view
+    void setWidgetClipboardSignal(QString text);
 };
 
 #endif

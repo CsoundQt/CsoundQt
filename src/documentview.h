@@ -46,6 +46,7 @@ class DocumentView : public QScrollArea
 
     void setFullText(QString text);
     void setLadspaText(QString text);
+
     // TODO add all text inputs here as below
 
     QString getFullText();
@@ -68,8 +69,8 @@ class DocumentView : public QScrollArea
 
   public slots:
     void setModified(bool mod = true);
-    void updateDocumentModel();
-    void updateFromDocumentModel();
+//    void updateDocumentModel();
+//    void updateFromDocumentModel();
     void syntaxCheck();
     void findReplace();
     void getToIn(); // chnget/chnset to invalue/outvalue

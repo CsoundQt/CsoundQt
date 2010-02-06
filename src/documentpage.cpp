@@ -25,7 +25,7 @@
 #include "csoundengine.h"
 #include "liveeventframe.h"
 #include "eventsheet.h"
-//#include "qutecsound.h"
+#include "qutecsound.h" // For playParent and renderParent functions (called from button reserved channels)
 #include "opentryparser.h"
 #include "types.h"
 #include "dotgenerator.h"
@@ -64,6 +64,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 
   // Connect for clearing marked lines and letting inspector know text has changed
   connect(m_view, SIGNAL(contentsChanged()), this, SLOT(textChanged()));
+  connect(m_view, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(opcodeSyntax(QString)));
 //   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(moved()));
 
   connect(m_console, SIGNAL(keyPressed(QString)),
@@ -77,10 +78,16 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   connect(m_widgetLayout, SIGNAL(keyReleased(QString)),
           m_csEngine, SLOT(keyReleaseForCsound(QString)));
   connect(m_widgetLayout, SIGNAL(changed()), this, SLOT(setModified()));
+  connect(m_widgetLayout, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
+  connect(m_widgetLayout, SIGNAL(setWidgetClipboardSignal(QString)),
+          this, SLOT(setWidgetClipboard(QString)));
 
   connect(m_csEngine, SIGNAL(errorLines(QList<int>)),
           m_view, SLOT(markErrorLines(QList<int>)));
-  // Register scopes and graphs to pass them the engine'es user data
+  connect(m_csEngine, SIGNAL(stopSignal()),
+          this, SLOT(perfEnded()));
+
+  // Register scopes and graphs to pass them the engine's user data
   connect(m_widgetLayout, SIGNAL(registerScope(QuteScope*)),
           m_csEngine,SLOT(registerScope(QuteScope*)));
   connect(m_widgetLayout, SIGNAL(registerGraph(QuteGraph*)),
@@ -502,27 +509,29 @@ void DocumentPage::focusWidgets()
 
 void DocumentPage::copy()
 {
-  qDebug() << "DocumentPage::copy() not implemented!";
+  // For some strange reason, the shortcuts are not being intercepted by the widget layout directly...
+  // so they are going through here.
+  m_widgetLayout->copy();
 }
 
 void DocumentPage::cut()
 {
-  qDebug() << "DocumentPage::cut() not implemented!";
+  m_widgetLayout->cut();
 }
 
 void DocumentPage::paste()
 {
-  qDebug() << "DocumentPage::paste() not implemented!";
+  m_widgetLayout->paste();
 }
 
 void DocumentPage::undo()
 {
-  qDebug() << "DocumentPage::undo() not implemented!";
+  m_widgetLayout->undo();
 }
 
 void DocumentPage::redo()
 {
-  qDebug() << "DocumentPage::redo() not implemented!";
+  m_widgetLayout->redo();
 }
 
 DocumentView *DocumentPage::getView()
@@ -585,6 +594,11 @@ void DocumentPage::findReplace()
   m_view->findReplace();
 }
 
+void DocumentPage::findString()
+{
+  m_view->findString();
+}
+
 void DocumentPage::getToIn()
 {
   m_view->getToIn();
@@ -615,6 +629,21 @@ void DocumentPage::setKeyRepeatMode(bool keyRepeat)
 {
   m_widgetLayout->setKeyRepeatMode(keyRepeat);
   m_console->setKeyRepeatMode(keyRepeat);
+}
+
+void DocumentPage::passWidgetClipboard(QString text)
+{
+  m_widgetLayout->passWidgetClipboard(text);
+}
+
+void DocumentPage::setConsoleFont(QFont font)
+{
+  m_console->setDefaultFont(font);
+}
+
+void DocumentPage::setConsoleColors(QColor fontColor, QColor bgColor)
+{
+  m_console->setColors(fontColor, bgColor);
 }
 
 //DocumentView * DocumentPage::view()
@@ -673,10 +702,12 @@ void DocumentPage::showLiveEventFrames(bool visible)
 
 int DocumentPage::play(CsoundOptions *options)
 {
-  m_view->unmarkErrorLines();  // Clear error lines when running
-  m_console->reset(); // Clear consoles
-  m_widgetLayout->flush();   // Flush accumulated values
-  m_widgetLayout->clearGraphs();
+  if (!m_csEngine->isRunning()) {
+    m_view->unmarkErrorLines();  // Clear error lines when running
+    m_console->reset(); // Clear consoles
+    m_widgetLayout->flush();   // Flush accumulated values
+    m_widgetLayout->clearGraphs();
+  }
   return m_csEngine->play(options);
 }
 
@@ -687,26 +718,14 @@ void DocumentPage::pause()
 
 void DocumentPage::stop()
 {
-  m_csEngine->stop();
+  if (m_csEngine->isRunning())
+    m_csEngine->stop();
 }
 
-//void DocumentPage::render(CsoundOptions *options)
-//{
-//  qDebug() << "DocumentPage::render() not implemented!";
-//  //  m_csEngine->runCsound(m_options->useAPI);  // render use of API depends on this preference
-//  CsoundOptions renderOptions = *options;
-//  renderOptions.rt = false;
-//  if (m_csEngine->play(&renderOptions) == 0) {
-//    // FIXME set current audio file from rendered file
-////    if (QDir::isRelativePath(m_options.fileOutputFilename)) {
-////      emit setCurrentAudioFile(m_csEngine->m_options.csdPath + "/"
-////                               + m_csEngine->m_options.fileOutputFilename);
-////    }
-////    else {
-////      emit setCurrentAudioFile(m_csEngine->m_options.fileOutputFilename);
-////    }
-//  }
-//}
+void DocumentPage::perfEnded()
+{
+  emit stopSignal();
+}
 
 void DocumentPage::record(int format)
 {
@@ -740,6 +759,16 @@ void DocumentPage::record(int format)
 void DocumentPage::stopRecording()
 {
   m_csEngine->stopRecording();
+}
+
+void DocumentPage::playParent()
+{
+  static_cast<qutecsound *>(parent())->play();
+}
+
+void DocumentPage::renderParent()
+{
+  static_cast<qutecsound *>(parent())->render();
 }
 
 void DocumentPage::setMacWidgetsText(QString widgetText)
@@ -806,8 +835,15 @@ void DocumentPage::setWidgetPanelSize(QSize size)
 
 void DocumentPage::setWidgetEditMode(bool active)
 {
+//  qDebug() << "DocumentPage::setWidgetEditMode";
   m_widgetLayout->setEditMode(active);
 }
+
+//void DocumentPage::toggleWidgetEditMode()
+//{
+//  qDebug() << "DocumentPage::toggleWidgetEditMode";
+//  m_widgetLayout->toggleEditMode();
+//}
 
 void DocumentPage::duplicateWidgets()
 {
@@ -824,6 +860,7 @@ void DocumentPage::jumpToLine(int line)
 
 void DocumentPage::comment()
 {
+  qDebug() << "DocumentPage::comment()";
   if (m_view->hasFocus()) {   // Keyboard shortcut clashes with duplicate, so check for focus
     m_view->comment();
   }
@@ -844,6 +881,10 @@ void DocumentPage::unindent()
   m_view->unindent();
 }
 
+void DocumentPage::autoComplete()
+{
+  m_view->autoComplete();
+}
 
 void DocumentPage::newLiveEventFrame(QString text)
 {
@@ -853,7 +894,7 @@ void DocumentPage::newLiveEventFrame(QString text)
 
 LiveEventFrame * DocumentPage::createLiveEventFrame(QString text)
 {
-  qDebug() << "DocumentPage::newLiveEventFrame()";
+//  qDebug() << "DocumentPage::newLiveEventFrame()";
   LiveEventFrame *e = new LiveEventFrame("Live Event", 0, Qt::Window);  //FIXME is it OK to have no parent?
 //  e->setAttribute(Qt::WA_DeleteOnClose, false);
   e->hide();
@@ -886,6 +927,7 @@ void DocumentPage::deleteLiveEventFrame(LiveEventFrame *frame)
 
 void DocumentPage::textChanged()
 {
+//  qDebug() << "DocumentPage::textChanged()";
   emit currentTextUpdated();
 }
 
@@ -902,6 +944,16 @@ void DocumentPage::liveEventFrameClosed()
   }
   emit liveEventsVisible(shown);
 //  }
+}
+
+void DocumentPage::opcodeSyntax(QString message)
+{
+  emit opcodeSyntaxSignal(message);
+}
+
+void DocumentPage::setWidgetClipboard(QString message)
+{
+  emit setWidgetClipboardSignal(message);
 }
 
 void DocumentPage::queueEvent(QString eventLine, int delay)

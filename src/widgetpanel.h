@@ -80,6 +80,7 @@ class WidgetPanel : public QDockWidget
 
 //    void selectionChanged(QRect selection);
 //    void widgetMoved(QPair<int, int>);
+//    void duplicate();
     void widgetChanged();
 //    void adjustLayoutSize();
 

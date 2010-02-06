@@ -160,8 +160,6 @@ class CsoundEngine : public QObject
   private:
     int runCsound();
     void stopCsound();
-    QStack<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
-    QVector<WINDAT *> curveBuffer;
 
     CsoundUserData *ud;
 
@@ -176,7 +174,6 @@ class CsoundEngine : public QObject
     // Options which are not safe to pass while running are stored in these
     // variables to pass on next run.
     bool m_threaded;
-
 
     MYFLT *pFields; // array of pfields for score and rt events
 
@@ -201,6 +198,7 @@ class CsoundEngine : public QObject
 
   signals:
     void errorLines(QList<int>);
+    void stopSignal(); // Sent when performance has stopped internally to inform others.playFromParent()
 };
 
 #endif // CSOUNDENGINE_H
