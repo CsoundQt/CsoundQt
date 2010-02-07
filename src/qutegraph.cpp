@@ -238,13 +238,13 @@ void QuteGraph::clearCurves()
 
 void QuteGraph::addCurve(Curve * curve)
 {
-  qDebug("QuteGraph::addCurve()");
+//  qDebug("QuteGraph::addCurve()");
   QGraphicsView *view = new QGraphicsView(m_widget);
   QGraphicsScene *scene = new QGraphicsScene(view);
   view->setContextMenuPolicy(Qt::NoContextMenu);
   scene->setBackgroundBrush(QBrush(Qt::black));
   int size = curve->get_size();
-  qDebug("QuteGraph::addCurve2()");
+//  qDebug("QuteGraph::addCurve2()");
   QGraphicsLineItem* line = new QGraphicsLineItem(0, 0, size, 0);
   line->setPen(QPen(QColor(Qt::white)));
   line->show();
@@ -297,16 +297,9 @@ int QuteGraph::getCurveIndex(Curve * curve)
   return index;
 }
 
-Curve* QuteGraph::getCurveById(uintptr_t id)
-{
-  Curve *curve = 0;
-  foreach (Curve *thisCurve, curves) {
-//     qDebug("QuteGraph::getCurveById curve %i id %i", thisCurve->get_id(), id);
-    if (thisCurve->get_id() == id)
-      return thisCurve;
-  }
-  return curve;
-}
+//Curve* QuteGraph::getCurveById(uintptr_t id)
+//{
+//}
 
 void QuteGraph::setUd(CsoundUserData *ud)
 {

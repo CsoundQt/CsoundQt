@@ -78,7 +78,8 @@ class WidgetLayout : public QWidget
     void showWidgetTooltips(bool show);
     void setWidgetToolTip(QuteWidget *widget, bool show);
 
-    void appendCurve(Curve * curve);
+    void appendCurve(WINDAT *windat);
+    void killCurve(WINDAT *windat);
     void newCurve(Curve* curve);
     void setCurveData(Curve *curve);
     Curve * getCurveById(uintptr_t id);
@@ -190,6 +191,7 @@ class WidgetLayout : public QWidget
     QMutex stringValueMutex;
     QStack<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
     QVector<WINDAT *> curveBuffer;
+    QVector<Curve *> curves;
 
     bool m_repeatKeys;
     bool m_trackMouse;

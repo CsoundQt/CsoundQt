@@ -453,11 +453,46 @@ void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
     widget->setToolTip("");
 }
 
+void WidgetLayout::appendCurve(WINDAT *windat)
+{
+//  qDebug() << "WidgetLayout::appendCurve " << curve;
+  windat->caption[CAPSIZE - 1] = 0; // Just in case...
+  Polarity polarity;
+    // translate polarities and hope the definition in Csound doesn't change.
+  switch (windat->polarity) {
+    case NEGPOL:
+      polarity = POLARITY_NEGPOL;
+      break;
+    case POSPOL:
+      polarity = POLARITY_POSPOL;
+      break;
+    case BIPOL:
+      polarity = POLARITY_BIPOL;
+      break;
+    default:
+      polarity = POLARITY_NOPOL;
+  }
+  Curve *curve
+      = new Curve(windat->fdata,
+                  windat->npts,
+                  windat->caption,
+                  polarity,
+                  windat->max,
+                  windat->min,
+                  windat->absmax,
+                  windat->oabsmax,
+                  windat->danflag);  //FIXME delete these, but where?
+  windat->windid = (uintptr_t) curve;
+  curve->set_id((uintptr_t) curve);
+  newCurveBuffer.append(curve);
+}
+
 void WidgetLayout::newCurve(Curve* curve)
 {
   for (int i = 0; i < graphWidgets.size(); i++) {
     graphWidgets[i]->addCurve(curve);
-    qApp->processEvents(); // Kludge to allow correct resizing of graph view
+    curves.append(curve);
+    qApp->processEvents(); // FIXME Kludge to allow correct resizing of graph view
     graphWidgets[i]->changeCurve(-1);
   }
 }
@@ -477,15 +512,18 @@ void WidgetLayout::passWidgetClipboard(QString text)
 
 Curve * WidgetLayout::getCurveById(uintptr_t id)
 {
-  Curve * curve = 0;;
-  if (!graphWidgets.isEmpty())
-    curve = graphWidgets[0]->getCurveById(id);
-  return curve;
+  foreach (Curve *thisCurve, curves) {
+//     qDebug() << "WidgetLayout::getCurveById " << thisCurve->get_id() << " id " << id;
+    if (thisCurve->get_id() == id)
+      return thisCurve;
+  }
+  return 0;
 }
 
 void WidgetLayout::updateCurve(WINDAT *windat)
 {
-  qDebug() << "updateCurve(WINDAT *windat)";
+//  qDebug() << "WidgetLayout::updateCurve(WINDAT *windat) ";
+  // FIXME dont allocate new memory
   WINDAT *windat_ = (WINDAT *) malloc(sizeof(WINDAT));
   *windat_ = *windat;
   curveBuffer.append(windat_);
@@ -495,7 +533,7 @@ void WidgetLayout::updateCurve(WINDAT *windat)
 int WidgetLayout::killCurves(CSOUND *csound)
 {
   // FIXME free memory from curves
-  clearGraphs();
+//  clearGraphs();
   qDebug() << "qutecsound::killCurves. Implement!";
   return 0;
 }
@@ -505,6 +543,10 @@ void WidgetLayout::clearGraphs()
   for (int i = 0; i < graphWidgets.size(); i++) {
     graphWidgets[i]->clearCurves();
   }
+  curves.clear();
+  curveBuffer.clear();
+  newCurveBuffer.clear();
+
 }
 
 void WidgetLayout::refreshConsoles()
@@ -2179,17 +2221,18 @@ void WidgetLayout::redo()
   }
 }
 
-void WidgetLayout::appendCurve(Curve * curve)
+void WidgetLayout::killCurve(WINDAT *windat)
 {
-  qDebug() << "WidgetLayout::appendCurve " << curve;
-  newCurveBuffer.append(curve);
+  qDebug() << "WidgetLayout::killCurve()";
+  Curve *curve = getCurveById(windat->windid);
+  // FIXME free memory for this graph
 }
 
 void WidgetLayout::updateData()
 {
   while (!newCurveBuffer.isEmpty()) {
     Curve * curve = newCurveBuffer.pop();
-    qDebug("qutecsound::updateData() curve %s", curve->get_caption().unicode());
+//    qDebug() << "WidgetLayout::updateData() curve " << curve->get_caption();
     newCurve(curve);
   }
   if (curveBuffer.size() > 32) {
@@ -2197,9 +2240,9 @@ void WidgetLayout::updateData()
     curveBuffer.resize(32);
   }
   foreach (WINDAT * windat, curveBuffer){
-    Curve *curve = getCurveById(windat->windid);
+    Curve *curve = getCurveById((uintptr_t) windat->windid);
     if (curve != 0) {
-      //       qDebug("qutecsound::dispatchQueues() %s -- %s",windat->caption, curve->get_caption().toStdString().c_str());
+//      qDebug() << "qutecsound::updateData() " <<windat->caption << "-" <<  curve->get_caption();
       curve->set_size(windat->npts);      // number of points
       curve->set_data(windat->fdata);
       curve->set_caption(QString(windat->caption)); // title of curve

@@ -22,7 +22,7 @@
 
 #include "csoundengine.h"
 #include "widgetlayout.h"
-#include "curve.h"
+//#include "curve.h"
 
 #include "console.h"
 #include "qutescope.h"  // Needed for passing the ud to the scope for display data
@@ -263,51 +263,23 @@ void CsoundEngine::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char 
 {
 //   qDebug("qutecsound::makeGraph()");
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-  windat->caption[CAPSIZE - 1] = 0; // Just in case...
-  Polarity polarity;
-    // translate polarities and hope the definition in Csound doesn't change.
-  switch (windat->polarity) {
-    case NEGPOL:
-      polarity = POLARITY_NEGPOL;
-      break;
-    case POSPOL:
-      polarity = POLARITY_POSPOL;
-      break;
-    case BIPOL:
-      polarity = POLARITY_BIPOL;
-      break;
-    default:
-      polarity = POLARITY_NOPOL;
-  }
-  Curve *curve
-      = new Curve(windat->fdata,
-                  windat->npts,
-                  windat->caption,
-                  polarity,
-                  windat->max,
-                  windat->min,
-                  windat->absmax,
-                  windat->oabsmax,
-                  windat->danflag);  //FIXME delete these, but where?
-  curve->set_id((uintptr_t) curve);
-  ud->wl->appendCurve(curve);
-  windat->windid = (uintptr_t) curve;
+  ud->wl->appendCurve(windat);
+//  windat->windid = (uintptr_t) curve;
 //   qDebug("qutecsound::makeGraphCallback %i", windat->windid);
 }
 
 void CsoundEngine::drawGraphCallback(CSOUND *csound, WINDAT *windat)
 {
   CsoundUserData *udata = (CsoundUserData *) csoundGetHostData(csound);
-  // FIXME what is this callback for????
+  // This callback paints data on curves
 //   qDebug("qutecsound::drawGraph()");
-//  udata->qcs->updateCurve(windat);
+  udata->wl->updateCurve(windat);
 }
 
 void CsoundEngine::killGraphCallback(CSOUND *csound, WINDAT *windat)
 {
-  // FIXME free memory for this graph
-//   udata->qcs->killCurve(windat);
-  qDebug("qutecsound::killGraph()");
+  CsoundUserData *udata = (CsoundUserData *) csoundGetHostData(csound);
+   udata->wl->killCurve(windat);
 }
 
 int CsoundEngine::exitGraphCallback(CSOUND *csound)
