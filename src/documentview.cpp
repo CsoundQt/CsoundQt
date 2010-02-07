@@ -192,10 +192,16 @@ QString DocumentView::getFullText()
 
 QString DocumentView::getBasicText()
 {
-//   What Csound needs (no widgets, misc text, etc.)
-  qDebug() << "DocumentView::getBasicText()";
+  // TODO implement modes
   QString text;
-  text += mainEditor->toPlainText();
+  switch (m_viewMode) {
+    case 0: // csd without extra sections
+      text = mainEditor->toPlainText();
+    case 1:
+      break;
+    default:
+      break;
+    }
   return text;
 }
 
