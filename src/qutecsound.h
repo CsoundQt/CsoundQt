@@ -163,6 +163,7 @@ class qutecsound:public QMainWindow
     void createMenus();
     void fillFileMenu();
     void fillFavoriteMenu();
+    void fillFavoriteSubMenu(QDir dir, QMenu *m, int depth);
     void createToolBars();
     void createStatusBar();
     void readSettings();

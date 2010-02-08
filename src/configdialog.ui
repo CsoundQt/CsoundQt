@@ -1205,7 +1205,7 @@
        <x>10</x>
        <y>0</y>
        <width>661</width>
-       <height>291</height>
+       <height>301</height>
       </rect>
      </property>
      <property name="title">
@@ -1217,7 +1217,7 @@
         <x>10</x>
         <y>20</y>
         <width>641</width>
-        <height>252</height>
+        <height>271</height>
        </rect>
       </property>
       <layout class="QGridLayout">
@@ -1402,6 +1402,27 @@
          </property>
         </widget>
        </item>
+       <item row="8" column="3">
+        <widget class="QToolButton" name="pythonDirToolButton">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_29">
+         <property name="text">
+          <string>Python Script Dir </string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="QLineEdit" name="pythonDirLineEdit">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -1409,7 +1430,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>290</y>
+       <y>300</y>
        <width>661</width>
        <height>211</height>
       </rect>
@@ -1423,7 +1444,7 @@
         <x>10</x>
         <y>20</y>
         <width>641</width>
-        <height>188</height>
+        <height>181</height>
        </rect>
       </property>
       <layout class="QGridLayout">
@@ -1547,17 +1568,17 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="2">
-        <widget class="QLineEdit" name="pdfViewerLineEdit">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
        <item row="5" column="3">
         <widget class="QToolButton" name="pdfViewerToolButton">
          <property name="text">
           <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QLineEdit" name="pdfViewerLineEdit">
+         <property name="enabled">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

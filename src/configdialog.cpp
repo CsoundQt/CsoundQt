@@ -147,6 +147,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   defaultCsdLineEdit->setText(m_options->defaultCsd);
   defaultCsdLineEdit->setEnabled(m_options->defaultCsdActive);
   favoriteLineEdit->setText(m_options->favoriteDir);
+  pythonDirLineEdit->setText(m_options->pythonDir);
 
   TerminalLineEdit->setText(m_options->terminal);
   browserLineEdit->setText(m_options->browser);
@@ -172,6 +173,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   connect(waveEditorToolButton, SIGNAL(clicked()), this, SLOT(browseWaveEditor()));
   connect(wavePlayerToolButton, SIGNAL(clicked()), this, SLOT(browseWavePlayer()));
   connect(pdfViewerToolButton, SIGNAL(clicked()), this, SLOT(browsePdfViewer()));
+  connect(pythonDirToolButton, SIGNAL(clicked()), this, SLOT(browsePythonDir()));
 //  connect(this, SIGNAL(changeFont()), parent, SLOT(changeFont()));
   connect(audioInputToolButton, SIGNAL(released()), this, SLOT(selectAudioInput()));
   connect(audioOutputToolButton, SIGNAL(released()), this, SLOT(selectAudioOutput()));
@@ -279,6 +281,7 @@ void ConfigDialog::accept()
   m_options->defaultCsdActive = defaultCsdCheckBox->isChecked();
   m_options->defaultCsd = defaultCsdLineEdit->text();
   m_options->favoriteDir = favoriteLineEdit->text();
+  m_options->pythonDir = pythonDirLineEdit->text();
 
   m_options->terminal = TerminalLineEdit->text();
   m_options->browser = browserLineEdit->text();
@@ -391,6 +394,12 @@ void ConfigDialog::browsePdfViewer()
 {
   browseFile(m_options->pdfviewer);
   pdfViewerLineEdit->setText(m_options->pdfviewer);
+}
+
+void ConfigDialog::browsePythonDir()
+{
+  browseDir(m_options->pythonDir);
+  pythonDirLineEdit->setText(m_options->pythonDir);
 }
 
 void ConfigDialog::selectAudioInput()

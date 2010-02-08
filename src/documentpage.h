@@ -110,6 +110,9 @@ class DocumentPage : public QObject
     //Engine Properties
 //    void setCsoundOptions(CsoundOptions &options);
 
+    // Event Sheet Properties
+    void setScriptDirectory(QString dir);
+
     // Internal Options setters
     void setConsoleBufferSize(int size);
     void setWidgetEnabled(bool enabled);

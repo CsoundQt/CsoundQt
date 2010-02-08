@@ -24,6 +24,7 @@
 #include "liveeventframe.h"
 
 #include <QMenu>
+#include <QDir>
 #include <QContextMenuEvent>
 #include <QLabel>
 #include <QVBoxLayout>
@@ -32,6 +33,9 @@
 #include <QDoubleSpinBox>
 #include <QApplication>
 #include <QClipboard>
+
+#include <QFile>
+#include <QMessageBox>
 
 // For rand() function
 #include <cstdlib>
@@ -54,6 +58,7 @@ public:
     l->addWidget(lab);
     l->addWidget(box);
     connect(box, SIGNAL(editingFinished()), this, SLOT(accept ()) );
+
   }
 
   double value() { return box->value();}
@@ -138,6 +143,8 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
   this->setColumnWidth(1, 70);
   this->setColumnWidth(2, 70);
   this->setColumnWidth(3, 70);
+  this->setColumnWidth(4, 50);
+  this->setColumnWidth(5, 50);
 
   m_name = "Events";
   createActions();
@@ -151,6 +158,8 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
 
   loopTimer.setSingleShot(true);
   connect(&loopTimer, SIGNAL(timeout()), this, SLOT(sendEvents()));
+
+  builtinScripts << ":/python/sort_by_start.py";
 }
 
 EventSheet::~EventSheet()
@@ -615,6 +624,13 @@ void EventSheet::clearHistory()
   historyIndex = 0;
 }
 
+void EventSheet::setScriptDirectory(QString dir)
+{
+  scriptDir = dir;
+  if (!scriptDir.endsWith("/"))
+    scriptDir += "/";
+}
+
 void EventSheet::subtract()
 {
   OneValueDialog d(this, tr("Subtract"));
@@ -746,6 +762,177 @@ void EventSheet::fill()
   }
 }
 
+void EventSheet::runScript()
+{
+  runScript(static_cast<QAction *>(sender())->data().toString());
+}
+
+QString EventSheet::generateDataText()
+{
+  QModelIndexList list = this->selectedIndexes();
+  int minRow = 999999, minCol = 999999, maxRow = -1, maxCol = -1;
+  for (int i = 0; i < list.size(); i++) { // First traverse to find size
+    if (list[i].row() > maxRow) {
+      maxRow = list[i].row();
+    }
+    if (list[i].row() < minRow) {
+      minRow = list[i].row();
+    }
+    if (list[i].column() > maxCol) {
+      maxCol = list[i].column();
+    }
+    if (list[i].column() < minCol) {
+      minCol = list[i].column();
+    }
+  }
+  QString data = "[ ";
+  for (int i = minRow; i <= maxRow; i++) {
+    data += "( ";
+    for (int j = minCol; j <= maxCol; j++) {
+      QTableWidgetItem * item = this->item(i, j);
+      if ( item == 0) {
+        data += "''";
+      }
+      else {
+        bool ok;
+        item->data(Qt::DisplayRole).toString().toDouble(&ok);
+        if (ok) {
+          data += item->data(Qt::DisplayRole).toString();
+        }
+        else {
+          data += "'" + item->data(Qt::DisplayRole).toString() + "'";
+        }
+      }
+      data += ", ";
+    }
+    data.chop(2);
+    data += " ),\n";
+  }
+  data.chop(2);
+  data += " ]";
+
+  QString data_all = "[ ";
+  for (int i = 0; i < this->rowCount(); i++) {
+    data_all += "( ";
+    for (int j = 0; j < this->columnCount() ; j++) {
+      QTableWidgetItem * item = this->item(i, j);
+      if ( item == 0) {
+        data_all += "''";
+      }
+      else {
+        bool ok;
+        item->data(Qt::DisplayRole).toString().toDouble(&ok);
+//        qDebug() << item->data(Qt::DisplayRole).typeName() << item;
+        if (ok) {
+          data_all += item->data(Qt::DisplayRole).toString();
+        }
+        else {
+          data_all += "'" + item->data(Qt::DisplayRole).toString() + "'";
+        }
+      }
+      data_all += ", ";
+    }
+    data_all.chop(2);
+    data_all += " ),\n";
+  }
+  data_all.chop(2);
+  data_all += " ]";
+
+  QString text;
+  text += "row = " + QString::number(minRow) + "\n";
+  text += "col = " + QString::number(minCol) + "\n";
+  text += "num_rows = " + QString::number(maxRow - minRow + 1) + "\n";
+  text += "num_cols = " + QString::number(maxCol - minCol + 1) + "\n";
+  text += "total_rows = " + QString::number(this->rowCount()) + "\n";
+  text += "total_cols = " + QString::number(this->columnCount ()) + "\n";
+
+  text += "data = " + data + "\n";
+  text += "data_all = " + data_all + "\n";
+  return text;
+}
+
+void EventSheet::runScript(QString name)
+{
+//  qDebug() << "EventSheet::runScript " << name;
+
+  QString outFileName = "qutesheet_out_data.txt";
+  QDir oldDir = QDir::current();
+  QDir tempDir(QDir::tempPath());
+  QString subDir = "QCS-" + QString::number(qrand());
+  while (!tempDir.mkdir(subDir))
+    subDir = "QCS-" + QString(qrand());
+  tempDir.cd(subDir);
+  QDir::setCurrent(tempDir.absolutePath());
+  QFile module(tempDir.absolutePath() + QDir::separator() + "qutesheet.py");
+  module.open(QFile::WriteOnly | QIODevice::Text);
+  QFile file(":/python/qutesheet.py");
+  file.open(QIODevice::ReadOnly);
+  QTextStream moduleStream(&module);
+  moduleStream << file.readAll();
+  file.close();
+  module.close();
+  qDebug() << module.fileName();
+
+  QFile script(tempDir.absolutePath() + QDir::separator() + name.mid(name.lastIndexOf("/") + 1));
+  script.open(QFile::WriteOnly | QIODevice::Text);
+  QFile file2(name);
+  file2.open(QIODevice::ReadOnly);
+  QTextStream scriptStream(&script);
+  scriptStream << file2.readAll();
+  file2.close();
+  script.close();
+
+  QFile dataFile(tempDir.absolutePath() + QDir::separator() + "qutesheet_data.py");
+  dataFile.open(QFile::WriteOnly | QIODevice::Text);
+  QTextStream dataStream(&dataFile);
+  dataStream << generateDataText();
+  dataFile.close();
+
+  QFile outFile(tempDir.absolutePath() + QDir::separator() + outFileName);
+
+  QProcess p;
+  p.start("python " + name.mid(name.lastIndexOf("/") + 1));
+
+  if (!p.waitForFinished (30000)) {
+    qDebug() << "EventSheet::runScript Script took too long!! Current max is 30 secs.";
+  }
+  QByteArray stdout = p.readAllStandardOutput();
+  QByteArray stderr = p.readAllStandardError();
+  qDebug() << "---------------\n" << stderr;
+  QDir::setCurrent(oldDir.absolutePath());
+  if (p.exitCode() != 0) {
+    QMessageBox::critical(this, name.mid(name.lastIndexOf("/") + 1) ,
+                         QString(stderr),
+                         QMessageBox::Ok);
+  }
+  else {
+    qDebug() << stdout;
+//    QMessageBox::information(this, name.mid(name.lastIndexOf("/") + 1) ,
+//                         QString(stdout),
+//                         QMessageBox::Ok);
+    outFile.open(QIODevice::ReadWrite);
+    QString text = outFile.readAll();
+    QStringList lines = text.split("\n");
+    if (lines.size() > 0 && lines[0].startsWith("__@ ")) {
+      QStringList position = lines[0].split(" ");
+      position.pop_front();
+      lines.pop_front();
+      QString pasteText = lines.join("\n");
+      pasteText.chop(1);
+      setFromText(pasteText, position[0].toInt(), position[1].toInt(),
+                  position[2].toInt(), position[3].toInt());
+    }
+    else {
+      qDebug() << "EventSheet::runScript invalid out file format";
+    }
+  }
+  module.remove();
+  script.remove();
+  dataFile.remove();
+  outFile.remove();
+  tempDir.rmpath(tempDir.absolutePath());
+}
+
 void EventSheet::insertColumnHere()
 {
   // TODO implement
@@ -761,6 +948,7 @@ void EventSheet::appendColumn()
   this->insertColumn(this->columnCount());
   columnNames << QString("p%1").arg(this->columnCount() - 1);
   this->setHorizontalHeaderLabels(columnNames);
+  this->setColumnWidth(this->columnCount() - 1, 50);
 }
 
 void EventSheet::appendRow()
@@ -803,6 +991,23 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
 //  menu.addAction(mirrorAct);
   menu.addAction(rotateAct);
   menu.addAction(fillAct);
+  menu.addSeparator();
+  QMenu *scriptMenu = menu.addMenu(tr("Python Scripts"));
+  for (int i = 0; i < builtinScripts.size(); i++) {
+    QAction *a = scriptMenu->addAction(builtinScripts[i].mid(9),
+                                       this, SLOT(runScript() ));
+    a->setData(builtinScripts[i]);
+  }
+  scriptMenu->addSeparator();
+  QDir dir(scriptDir);
+  QStringList filters;
+  filters << "*.py";
+  dir.setNameFilters(filters);
+  QStringList scripts = dir.entryList(QDir::Files,QDir::Name);
+  for (int i = 0; i < scripts.size(); i++) {
+    QAction *a = scriptMenu->addAction(scripts[i], this, SLOT(runScript() ));
+    a->setData(scriptDir + scripts[i]);
+  }
   menu.addSeparator();
 //  menu.addAction(insertColumnHereAct);
 //  menu.addAction(insertRowHereAct);

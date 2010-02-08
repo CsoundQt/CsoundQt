@@ -58,6 +58,7 @@ class EventSheet : public QTableWidget
     void redo();
     void markHistory();
     void clearHistory();
+    void setScriptDirectory(QString dir);
 
     void subtract();
     void add();
@@ -95,6 +96,8 @@ class EventSheet : public QTableWidget
     void rotate(int amount);
     void fill(double start, double end, double slope);
 
+    void runScript(QString script);
+    QString generateDataText();
 //    void rename(QString name);
 
     // Attributes to be saved
@@ -140,10 +143,16 @@ class EventSheet : public QTableWidget
     QTimer loopTimer;
     QModelIndexList  loopList;
 
+    // Python scripts
+    QString scriptDir;
+    QStringList builtinScripts;
+
   private slots:
     void selectionChanged();
     void cellDoubleClickedSlot(int row, int column);
     void cellChangedSlot(int row, int column);
+
+    void runScript();
 
   signals:
     void sendEvent(QString event);

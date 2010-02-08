@@ -338,6 +338,9 @@ QString DocumentPage::getFullText()
       fullText += liveEventsText;
     }
   }
+  else { // Not a csd file
+
+  }
   return fullText;
 }
 
@@ -660,6 +663,13 @@ void DocumentPage::setConsoleColors(QColor fontColor, QColor bgColor)
 //{
 //  return m_widgetLayout;
 //}
+
+void DocumentPage::setScriptDirectory(QString dir)
+{
+  for (int i = 0; i < m_liveFrames.size(); i++) {
+    m_liveFrames[i]->getSheet()->setScriptDirectory(dir);
+  }
+}
 
 void DocumentPage::setConsoleBufferSize(int size)
 {

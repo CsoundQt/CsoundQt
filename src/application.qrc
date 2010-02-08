@@ -134,6 +134,9 @@
       <file>translations/qutecsound_tr.qm</file>
       <file>translations/qutecsound_el.qm</file>
 
+      <file>python/qutesheet.py</file>
+      <file>python/sort_by_start.py</file>
+
       <file>../doc/QuteCsound Quick Reference (0.4).pdf</file>
       <file>../doc/QuteCsound Quick Reference (0.4)-es.pdf</file>
       <file>../doc/QuteCsound Quick Reference (0.4)-fr.pdf</file>

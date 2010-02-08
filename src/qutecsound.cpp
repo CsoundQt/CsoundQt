@@ -1236,6 +1236,7 @@ void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
                           (int) m_options->consoleFontPointSize));
   p->setConsoleColors(m_options->consoleFontColor,
                       m_options->consoleBgColor);
+  p->setScriptDirectory(m_options->pythonDir);
 }
 
 void qutecsound::runUtility(QString flags)
@@ -2130,13 +2131,33 @@ void qutecsound::fillFavoriteMenu()
   favoriteMenu->clear();
   QDir dir(m_options->favoriteDir);
   QStringList filters;
+  fillFavoriteSubMenu(dir.absolutePath(), favoriteMenu, 0);
+}
+
+void qutecsound::fillFavoriteSubMenu(QDir dir, QMenu *m, int depth)
+{
+  QStringList filters;
   filters << "*.csd" << "*.orc" << "*.sco" << "*.udo";
   dir.setNameFilters(filters);
   QStringList files = dir.entryList(QDir::Files,QDir::Name);
-
-  for (int i = 0; i < files.size(); i++) {
-    QAction *newAction = favoriteMenu->addAction(files[i],
-                                                 this, SLOT(openFromAction()));
+  QStringList dirs = dir.entryList(QDir::AllDirs,QDir::Name);
+  if (depth > 3)
+    return;
+  for (int i = 0; i < dirs.size() && i < 64; i++) {
+    QDir newDir(dir.absolutePath() + "/" + dirs[i]);
+    newDir.setNameFilters(filters);
+    QStringList newFiles = dir.entryList(QDir::Files,QDir::Name);
+    QStringList newDirs = dir.entryList(QDir::AllDirs,QDir::Name);
+    if (newFiles.size() > 0 ||  newDirs.size() > 0) {
+      if (dirs[i] != "." && dirs[i] != "..") {
+        QMenu *menu = m->addMenu(dirs[i]);
+        fillFavoriteSubMenu(newDir.absolutePath(), menu, depth + 1);
+      }
+    }
+  }
+  for (int i = 0; i < files.size() &&  i < 64; i++) {
+    QAction *newAction = m->addAction(files[i],
+                                      this, SLOT(openFromAction()));
     newAction->setData(dir.absoluteFilePath(files[i]));
   }
 }
@@ -2303,6 +2324,7 @@ void qutecsound::readSettings()
   m_options->defaultCsd = settings.value("defaultCsd","").toString();
   m_options->defaultCsdActive = settings.value("defaultCsdActive","").toBool();
   m_options->favoriteDir = settings.value("favoriteDir","").toString();
+  m_options->pythonDir = settings.value("pythonDir","").toString();
   m_options->opcodexmldir = settings.value("opcodexmldir", "").toString();
   m_options->opcodexmldirActive = settings.value("opcodexmldirActive","").toBool();
   settings.endGroup();
@@ -2424,6 +2446,7 @@ void qutecsound::writeSettings()
   settings.setValue("defaultCsd",m_options->defaultCsd);
   settings.setValue("defaultCsdActive",m_options->defaultCsdActive);
   settings.setValue("favoriteDir",m_options->favoriteDir);
+  settings.setValue("pythonDir",m_options->pythonDir);
   settings.setValue("opcodexmldir", m_options->opcodexmldir);
   settings.setValue("opcodexmldirActive",m_options->opcodexmldirActive);
   settings.endGroup();
@@ -2519,6 +2542,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   curPage += 1;
   setCurrentOptionsForPage(documentPages[curPage]);
   documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
+  setCurrentOptionsForPage(documentPages[curPage]);
 
   connectActions();
 //  connect(documentPages[curPage], SIGNAL(doCut()), this, SLOT(cut()));

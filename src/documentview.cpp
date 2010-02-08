@@ -265,18 +265,18 @@ QString DocumentView::wordUnderCursor()
   return cursor.selectedText();
 }
 
-void DocumentView::updateDocumentModel()
-{
-  // FIXME this should update the document model when needed
-  // e.g. on run or save or when widgets or presets have been modified in text format
-  // maybe the document model pointer should be passed and processed here.
-}
+//void DocumentView::updateDocumentModel()
+//{
+//  // FIXME this should update the document model when needed
+//  // e.g. on run or save or when widgets or presets have been modified in text format
+//  // maybe the document model pointer should be passed and processed here.
+//}
 
-void DocumentView::updateFromDocumentModel()
-{
-  // FIXME this should update from the document model when needed
-  // e.g. on loading, widget changes from widget layout
-}
+//void DocumentView::updateFromDocumentModel()
+//{
+//  // FIXME this should update from the document model when needed
+//  // e.g. on loading, widget changes from widget layout
+//}
 
 void DocumentView::syntaxCheck()
 {
