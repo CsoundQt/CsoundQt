@@ -896,17 +896,17 @@ void EventSheet::runScript(QString name)
   if (!p.waitForFinished (30000)) {
     qDebug() << "EventSheet::runScript Script took too long!! Current max is 30 secs.";
   }
-  QByteArray stdout = p.readAllStandardOutput();
-  QByteArray stderr = p.readAllStandardError();
-  qDebug() << "---------------\n" << stderr;
+  QByteArray sout = p.readAllStandardOutput();
+  QByteArray serr = p.readAllStandardError();
+  qDebug() << "---------------\n" << serr;
   QDir::setCurrent(oldDir.absolutePath());
   if (p.exitCode() != 0) {
     QMessageBox::critical(this, name.mid(name.lastIndexOf("/") + 1) ,
-                         QString(stderr),
+                         QString(serr),
                          QMessageBox::Ok);
   }
   else {
-    qDebug() << stdout;
+    qDebug() << sout;
 //    QMessageBox::information(this, name.mid(name.lastIndexOf("/") + 1) ,
 //                         QString(stdout),
 //                         QMessageBox::Ok);
