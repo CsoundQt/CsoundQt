@@ -98,6 +98,7 @@ class EventSheet : public QTableWidget
 
     void runScript(QString script);
     QString generateDataText();
+    void addDirectoryToMenu(QMenu *m, QString dir, int depth = 0);
 //    void rename(QString name);
 
     // Attributes to be saved

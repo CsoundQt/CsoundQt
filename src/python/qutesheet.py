@@ -12,9 +12,8 @@ _out_filename = "qutesheet_out_data.txt"
 
 def _get_cells_by_row(rows):
     cells = []
-    for row in rows:
-        for cell in row:
-            cells.append(cell)
+    for c in rows:
+        cells.append(c)
     return cells
 
 def _transpose(mtx):
@@ -66,7 +65,21 @@ def set_cols(new_data, new_first_row = -1, new_first_col = -1, new_num_rows = -1
     set_rows(_transpose(new_data), new_first_row, new_first_col, new_num_rows, new_num_cols)
 
 def set_cells_by_row(new_data, new_first_row = -1, new_first_col = -1, new_num_rows = -1, new_num_cols = -1):
-    print "Warning! set_cells_by_row() not implemented yet!"
+    global first_row, first_col, num_rows, num_cols
+    if new_first_row == -1:
+        new_first_row = first_row
+    if new_first_col == -1:
+        new_first_col = first_col
+    if new_num_rows == -1:
+        new_num_rows = num_rows
+    if new_num_cols == -1:
+        new_num_cols = num_cols
+    out_data = []
+    for i in range(new_num_rows):
+        out_data.append([])
+        for j in range(new_num_cols):
+            out_data[i].append(new_data.pop(0))
+    set_rows(out_data, new_first_row, new_first_col, new_num_rows, new_num_cols)
 
 def set_cells_by_col(new_data, new_first_row = -1, new_first_col = -1, new_num_rows = -1, new_num_cols = -1):
     print "Warning! set_cells_by_col() not implemented yet!"
@@ -106,10 +119,10 @@ cols = _transpose(rows);
 cols = _transpose(_all_cols(_transpose(qutesheet_data.data_all), first_col, num_cols))
 cols_all = _transpose(rows_all);
 
-cells_by_row = _get_cells_by_row(rows)
+cells_by_row = _get_cells_by_row(rows_selection)
 cells_by_row_all = _get_cells_by_row(rows_all)
-cells_by_col = _get_cells_by_row(_transpose(rows))
-cells_by_col_all = _get_cells_by_row(_transpose(rows_all))
+cells_by_col = _get_cells_by_row(cols_selection)
+cells_by_col_all = _get_cells_by_row(cols_all)
 
 #set_out_filename(qutesheet_data.out_filename)
 

@@ -5,7 +5,6 @@ import qutesheet
 rows = qutesheet.rows
 new_data = []
 
-print rows
 for r in rows:
     if len(r) < 3:
         new_data.append(r)
@@ -17,6 +16,5 @@ for r in rows:
             count += 1
         new_data.insert(count, r)
 
-print new_data
 # set output
 qutesheet.set_rows(new_data, -1, 0, -1, qutesheet.total_cols)

@@ -999,15 +999,7 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
     a->setData(builtinScripts[i]);
   }
   scriptMenu->addSeparator();
-  QDir dir(scriptDir);
-  QStringList filters;
-  filters << "*.py";
-  dir.setNameFilters(filters);
-  QStringList scripts = dir.entryList(QDir::Files,QDir::Name);
-  for (int i = 0; i < scripts.size(); i++) {
-    QAction *a = scriptMenu->addAction(scripts[i], this, SLOT(runScript() ));
-    a->setData(scriptDir + scripts[i]);
-  }
+  addDirectoryToMenu(scriptMenu, scriptDir);
   menu.addSeparator();
 //  menu.addAction(insertColumnHereAct);
 //  menu.addAction(insertRowHereAct);
@@ -1016,6 +1008,31 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
   menu.addAction(deleteColumnAct);
   menu.addAction(deleteRowAct);
   menu.exec(event->globalPos());
+}
+
+void EventSheet::addDirectoryToMenu(QMenu *m, QString dir, int depth)
+{
+  if (depth > 4)
+    return;
+  QDir d(dir);
+  QStringList filters;
+  filters << "*.py";
+  d.setNameFilters(filters);
+  QStringList scripts = d.entryList(QDir::Files,QDir::Name);
+  QStringList directories = d.entryList(QDir::AllDirs,QDir::Name);
+  if (scripts.size() > 0 || directories.size() > 2) {
+    QMenu *newMenu = m;
+    if (dir != scriptDir)
+      newMenu = m->addMenu(dir.mid(dir.lastIndexOf("/")+ 1));
+    for (int i = 0; i < directories.size(); i++) {
+      if (directories[i] != "." && directories[i] != "..")
+        addDirectoryToMenu(newMenu, dir + directories[i], depth++);
+    }
+    for (int i = 0; i < scripts.size(); i++) {
+       QAction *a = newMenu->addAction(scripts[i], this, SLOT(runScript() ));
+       a->setData(dir + scripts[i]);
+    }
+  }
 }
 
 void EventSheet::keyPressEvent (QKeyEvent * event) {
