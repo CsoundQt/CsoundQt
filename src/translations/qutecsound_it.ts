@@ -109,7 +109,7 @@
     </message>
     <message>
         <source>Jack client name</source>
-        <translation>nome cliente Jack</translation>
+        <translation type="obsolete">nome cliente Jack</translation>
     </message>
     <message>
         <source>Dither</source>
@@ -423,12 +423,24 @@
         <source>Please note that OPCODEDIR will overwrite current settings so you will need to restart QuteCsound to return to default.</source>
         <translation>Notate che OPCODEDIR sovrascriverà le impostazioni attuali perciò dovrete far ripartire QuteCsound per ritornare al default.</translation>
     </message>
+    <message>
+        <source>Jack client name (use * for current filename)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Favorite dir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Python Script Dir </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConsoleWidget</name>
     <message>
         <source>Csound Output Console</source>
-        <translation>Console dell&apos;output di Csound</translation>
+        <translation type="obsolete">Console dell&apos;output di Csound</translation>
     </message>
 </context>
 <context>
@@ -455,6 +467,30 @@
     <message>
         <source>External links can&apos;t be followed in help browser.</source>
         <translation>I link esterni non possono essere seguiti nell&apos; help browser.</translation>
+    </message>
+</context>
+<context>
+    <name>DocumentPage</name>
+    <message>
+        <source>QuteCsound</source>
+        <translation type="unfinished">QuteCsound</translation>
+    </message>
+    <message>
+        <source>You must save the examples to use Record.</source>
+        <translation type="unfinished">Dovete salvare l&apos;esempio per potere registrare.</translation>
+    </message>
+</context>
+<context>
+    <name>DocumentView</name>
+    <message>
+        <source>Find and replace</source>
+        <translation type="unfinished">Trova e sostituisci</translation>
+    </message>
+    <message>
+        <source>The string was not found.
+Would you like to start from the top?</source>
+        <translation type="unfinished">La stringa non è stata trovata.
+Volete partire dall&apos;inizio?</translation>
     </message>
 </context>
 <context>
@@ -713,15 +749,19 @@
     </message>
     <message>
         <source>Cut</source>
-        <translation>Taglia</translation>
+        <translation type="obsolete">Taglia</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>Copia</translation>
+        <translation type="obsolete">Copia</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation>Incolla</translation>
+        <translation type="obsolete">Incolla</translation>
+    </message>
+    <message>
+        <source>Python Scripts</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1430,110 +1470,243 @@ E&apos; già usata.</translation>
     </message>
 </context>
 <context>
-    <name>WidgetPanel</name>
+    <name>WidgetLayout</name>
     <message>
         <source>Create Slider</source>
-        <translation>Crea Slider</translation>
+        <translation type="unfinished">Crea Slider</translation>
     </message>
     <message>
         <source>Create Label</source>
-        <translation>Crea Etichetta (Label)</translation>
+        <translation type="unfinished">Crea Etichetta (Label)</translation>
     </message>
     <message>
         <source>Create Display</source>
-        <translation>Crea Display</translation>
+        <translation type="unfinished">Crea Display</translation>
     </message>
     <message>
         <source>Create ScrollNumber</source>
-        <translation>Crea ScrollNumber</translation>
+        <translation type="unfinished">Crea ScrollNumber</translation>
     </message>
     <message>
         <source>Create LineEdit</source>
-        <translation>Crea LineEdit</translation>
+        <translation type="unfinished">Crea LineEdit</translation>
     </message>
     <message>
         <source>Create SpinBox</source>
-        <translation>Crea SpinBox</translation>
+        <translation type="unfinished">Crea SpinBox</translation>
     </message>
     <message>
         <source>Create Button</source>
-        <translation>Crea Button</translation>
+        <translation type="unfinished">Crea Button</translation>
     </message>
     <message>
         <source>Create Knob</source>
-        <translation>Crea Manopola (Knob)</translation>
+        <translation type="unfinished">Crea Manopola (Knob)</translation>
     </message>
     <message>
         <source>Create Checkbox</source>
-        <translation>Crea Checkbox</translation>
+        <translation type="unfinished">Crea Checkbox</translation>
     </message>
     <message>
         <source>Create Menu</source>
-        <translation>Crea Menu</translation>
+        <translation type="unfinished">Crea Menu</translation>
     </message>
     <message>
         <source>Create Controller</source>
-        <translation>Crea Controller</translation>
+        <translation type="unfinished">Crea Controller</translation>
     </message>
     <message>
         <source>Create Console</source>
-        <translation>Crea Console</translation>
+        <translation type="unfinished">Crea Console</translation>
     </message>
     <message>
         <source>Create Graph</source>
-        <translation>Crea Graph</translation>
+        <translation type="unfinished">Crea Graph</translation>
     </message>
     <message>
         <source>Create Scope</source>
-        <translation>Crea Scope</translation>
+        <translation type="unfinished">Crea Scope</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Proprietà</translation>
-    </message>
-    <message>
-        <source>Widget Edit Mode</source>
-        <translation>Modo Edit del Widget</translation>
-    </message>
-    <message>
-        <source>Ctrl+E</source>
-        <translation>Ctrl+E</translation>
-    </message>
-    <message>
-        <source>Copy Selected</source>
-        <translation>Copia il selezionato</translation>
-    </message>
-    <message>
-        <source>Ctrl+C</source>
-        <translation>Ctrl+C</translation>
-    </message>
-    <message>
-        <source>Cut Selected</source>
-        <translation>Taglia il selezionato</translation>
-    </message>
-    <message>
-        <source>Ctrl+X</source>
-        <translation>Ctrl+X</translation>
-    </message>
-    <message>
-        <source>Paste Selected</source>
-        <translation>Incolla il selezionato</translation>
-    </message>
-    <message>
-        <source>Ctrl+V</source>
-        <translation>Ctrl+V</translation>
+        <translation type="unfinished">Proprietà</translation>
     </message>
     <message>
         <source>Duplicate Selected</source>
-        <translation>Duplica il selezionato</translation>
-    </message>
-    <message>
-        <source>Ctrl+D</source>
-        <translation>Ctrl+D</translation>
+        <translation type="unfinished">Duplica il selezionato</translation>
     </message>
     <message>
         <source>Delete Selected</source>
-        <translation>Cancellare il selezionato</translation>
+        <translation type="unfinished">Cancellare il selezionato</translation>
+    </message>
+    <message>
+        <source>Clear all widgets</source>
+        <translation type="unfinished">Cancella tutti i widget</translation>
+    </message>
+    <message>
+        <source>Select all widgets</source>
+        <translation type="unfinished">Seleziona tutti i widget</translation>
+    </message>
+    <message>
+        <source>Align Left</source>
+        <translation type="unfinished">Allinea a sinistra</translation>
+    </message>
+    <message>
+        <source>Align Right</source>
+        <translation type="unfinished">Allinea a destra</translation>
+    </message>
+    <message>
+        <source>Align Top</source>
+        <translation type="unfinished">Allinea sopra</translation>
+    </message>
+    <message>
+        <source>Align Bottom</source>
+        <translation type="unfinished">Allinea sotto</translation>
+    </message>
+    <message>
+        <source>Send to back</source>
+        <translation type="unfinished">Manda dietro</translation>
+    </message>
+    <message>
+        <source>Distribute Horizontally</source>
+        <translation type="unfinished">Distribuisci orizzontalmente</translation>
+    </message>
+    <message>
+        <source>Distribute Vertically</source>
+        <translation type="unfinished">Distribuisci verticalmente</translation>
+    </message>
+    <message>
+        <source>ChannelV:</source>
+        <translation type="unfinished">CanaleV:</translation>
+    </message>
+    <message>
+        <source>
+ChannelH:</source>
+        <translation type="unfinished">
+CanaleH:</translation>
+    </message>
+    <message>
+        <source>Channel:</source>
+        <translation type="unfinished">Canale:</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation type="unfinished">Applica</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished">Ok</translation>
+    </message>
+</context>
+<context>
+    <name>WidgetPanel</name>
+    <message>
+        <source>Create Slider</source>
+        <translation type="obsolete">Crea Slider</translation>
+    </message>
+    <message>
+        <source>Create Label</source>
+        <translation type="obsolete">Crea Etichetta (Label)</translation>
+    </message>
+    <message>
+        <source>Create Display</source>
+        <translation type="obsolete">Crea Display</translation>
+    </message>
+    <message>
+        <source>Create ScrollNumber</source>
+        <translation type="obsolete">Crea ScrollNumber</translation>
+    </message>
+    <message>
+        <source>Create LineEdit</source>
+        <translation type="obsolete">Crea LineEdit</translation>
+    </message>
+    <message>
+        <source>Create SpinBox</source>
+        <translation type="obsolete">Crea SpinBox</translation>
+    </message>
+    <message>
+        <source>Create Button</source>
+        <translation type="obsolete">Crea Button</translation>
+    </message>
+    <message>
+        <source>Create Knob</source>
+        <translation type="obsolete">Crea Manopola (Knob)</translation>
+    </message>
+    <message>
+        <source>Create Checkbox</source>
+        <translation type="obsolete">Crea Checkbox</translation>
+    </message>
+    <message>
+        <source>Create Menu</source>
+        <translation type="obsolete">Crea Menu</translation>
+    </message>
+    <message>
+        <source>Create Controller</source>
+        <translation type="obsolete">Crea Controller</translation>
+    </message>
+    <message>
+        <source>Create Console</source>
+        <translation type="obsolete">Crea Console</translation>
+    </message>
+    <message>
+        <source>Create Graph</source>
+        <translation type="obsolete">Crea Graph</translation>
+    </message>
+    <message>
+        <source>Create Scope</source>
+        <translation type="obsolete">Crea Scope</translation>
+    </message>
+    <message>
+        <source>Properties</source>
+        <translation type="obsolete">Proprietà</translation>
+    </message>
+    <message>
+        <source>Widget Edit Mode</source>
+        <translation type="obsolete">Modo Edit del Widget</translation>
+    </message>
+    <message>
+        <source>Ctrl+E</source>
+        <translation type="obsolete">Ctrl+E</translation>
+    </message>
+    <message>
+        <source>Copy Selected</source>
+        <translation type="obsolete">Copia il selezionato</translation>
+    </message>
+    <message>
+        <source>Ctrl+C</source>
+        <translation type="obsolete">Ctrl+C</translation>
+    </message>
+    <message>
+        <source>Cut Selected</source>
+        <translation type="obsolete">Taglia il selezionato</translation>
+    </message>
+    <message>
+        <source>Ctrl+X</source>
+        <translation type="obsolete">Ctrl+X</translation>
+    </message>
+    <message>
+        <source>Paste Selected</source>
+        <translation type="obsolete">Incolla il selezionato</translation>
+    </message>
+    <message>
+        <source>Ctrl+V</source>
+        <translation type="obsolete">Ctrl+V</translation>
+    </message>
+    <message>
+        <source>Duplicate Selected</source>
+        <translation type="obsolete">Duplica il selezionato</translation>
+    </message>
+    <message>
+        <source>Ctrl+D</source>
+        <translation type="obsolete">Ctrl+D</translation>
+    </message>
+    <message>
+        <source>Delete Selected</source>
+        <translation type="obsolete">Cancellare il selezionato</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
@@ -1541,65 +1714,65 @@ E&apos; già usata.</translation>
     </message>
     <message>
         <source>Clear all widgets</source>
-        <translation>Cancella tutti i widget</translation>
+        <translation type="obsolete">Cancella tutti i widget</translation>
     </message>
     <message>
         <source>Select all widgets</source>
-        <translation>Seleziona tutti i widget</translation>
+        <translation type="obsolete">Seleziona tutti i widget</translation>
     </message>
     <message>
         <source>ChannelV:</source>
-        <translation>CanaleV:</translation>
+        <translation type="obsolete">CanaleV:</translation>
     </message>
     <message>
         <source>
 ChannelH:</source>
-        <translation>
+        <translation type="obsolete">
 CanaleH:</translation>
     </message>
     <message>
         <source>Channel:</source>
-        <translation>Canale:</translation>
+        <translation type="obsolete">Canale:</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation>Applica</translation>
+        <translation type="obsolete">Applica</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancella</translation>
+        <translation type="obsolete">Cancella</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation>Ok</translation>
+        <translation type="obsolete">Ok</translation>
     </message>
     <message>
         <source>Align Left</source>
-        <translation>Allinea a sinistra</translation>
+        <translation type="obsolete">Allinea a sinistra</translation>
     </message>
     <message>
         <source>Align Right</source>
-        <translation>Allinea a destra</translation>
+        <translation type="obsolete">Allinea a destra</translation>
     </message>
     <message>
         <source>Align Top</source>
-        <translation>Allinea sopra</translation>
+        <translation type="obsolete">Allinea sopra</translation>
     </message>
     <message>
         <source>Align Bottom</source>
-        <translation>Allinea sotto</translation>
+        <translation type="obsolete">Allinea sotto</translation>
     </message>
     <message>
         <source>Send to back</source>
-        <translation>Manda dietro</translation>
+        <translation type="obsolete">Manda dietro</translation>
     </message>
     <message>
         <source>Distribute Horizontally</source>
-        <translation>Distribuisci orizzontalmente</translation>
+        <translation type="obsolete">Distribuisci orizzontalmente</translation>
     </message>
     <message>
         <source>Distribute Vertically</source>
-        <translation>Distribuisci verticalmente</translation>
+        <translation type="obsolete">Distribuisci verticalmente</translation>
     </message>
 </context>
 <context>
@@ -1611,7 +1784,7 @@ CanaleH:</translation>
     <message>
         <source>Error initializing Csound!
 Qutecsound will probably crash if you try to run Csound.</source>
-        <translation>Errore inizializzazione di Csound!
+        <translation type="obsolete">Errore inizializzazione di Csound!
 QuteCsound probabilmente andrà in crash se provate ad avviare Csound.</translation>
     </message>
     <message>
@@ -1655,7 +1828,7 @@ Il file non è stato salvato!</translation>
     <message>
         <source>File has been modified.
 Do you want to save it?</source>
-        <translation>Il file è stato modificato.
+        <translation type="obsolete">Il file è stato modificato.
 Volete salvarlo?</translation>
     </message>
     <message>
@@ -1694,12 +1867,12 @@ Selezionare nome e locazione.</translation>
     </message>
     <message>
         <source>You must save the examples to use Record.</source>
-        <translation>Dovete salvare l&apos;esempio per potere registrare.</translation>
+        <translation type="obsolete">Dovete salvare l&apos;esempio per potere registrare.</translation>
     </message>
     <message>
         <source>This version of QuteCsound has been compiled
 without Record support!</source>
-        <translation>Quetsa versione di QuteCsound è stata compilata
+        <translation type="obsolete">Quetsa versione di QuteCsound è stata compilata
 senza il supporto della registrazione (Record)!</translation>
     </message>
     <message>
@@ -1928,7 +2101,7 @@ Victor Lazzarini
     </message>
     <message>
         <source>Shift+Ctrl+D</source>
-        <translation>Shift+Ctrl+D</translation>
+        <translation type="obsolete">Shift+Ctrl+D</translation>
     </message>
     <message>
         <source>Ctrl+I</source>
@@ -2444,12 +2617,12 @@ Volete salvare i cambiamenti prima di chiudere?</translation>
     </message>
     <message>
         <source>Find and replace</source>
-        <translation>Trova e sostituisci</translation>
+        <translation type="obsolete">Trova e sostituisci</translation>
     </message>
     <message>
         <source>The string was not found.
 Would you like to start from the top?</source>
-        <translation>La stringa non è stata trovata.
+        <translation type="obsolete">La stringa non è stata trovata.
 Volete partire dall&apos;inizio?</translation>
     </message>
     <message>
@@ -2518,6 +2691,42 @@ Francesco
     </message>
     <message>
         <source>Realtime Interaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal error running Csound.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Ctrl+/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Widget Edit Mode</source>
+        <translation type="unfinished">Modo Edit del Widget</translation>
+    </message>
+    <message>
+        <source>Activate Edit Mode for Widget Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop all running documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Favorites</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
