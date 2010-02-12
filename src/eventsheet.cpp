@@ -1058,8 +1058,8 @@ void EventSheet::keyPressEvent (QKeyEvent * event) {
     this->sendEvents();
   }
   else {
-//    qDebug() << "EventSheet::keyPressEvent  " << event->key();
-    event->ignore();
+    qDebug() << "EventSheet::keyPressEvent  " << event->key();
+//    event->ignore();
     QTableWidget::keyPressEvent(event);  // Propagate any other events
   }
 }

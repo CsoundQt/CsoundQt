@@ -181,6 +181,7 @@ class qutecsound:public QMainWindow
 //    void markErrorLine();
     QString getSaveFileName();
     void createQuickRefPdf();
+    bool deleteCurrentTab();
 
 //     QHash<QString, double> outValueQueue;
 //    QHash<QString, double> inValueQueue;

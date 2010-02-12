@@ -110,9 +110,7 @@ DocumentPage::~DocumentPage()
   delete m_widgetLayout;
   m_csEngine->stop();
   delete m_csEngine;
-  for (int i = 0; i < m_liveFrames.size(); i++) {
-    deleteLiveEventFrame(m_liveFrames[i]);
-  }
+//  deleteAllLiveEvents();
 }
 
 //void DocumentPage::keyPressEvent(QKeyEvent *event)
@@ -145,6 +143,7 @@ DocumentPage::~DocumentPage()
 
 int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 {
+  deleteAllLiveEvents();
   if (text.contains("<MacOptions>") and text.contains("</MacOptions>")) {
     QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
     options.resize(options.indexOf("</MacOptions>") + 13);
@@ -612,7 +611,6 @@ void DocumentPage::inToGet()
   m_view->inToGet();
 }
 
-
 //void DocumentPage::setEditAct(QAction *editAct)
 //{
 //  m_widgetLayout->setEditAct(editAct);
@@ -707,6 +705,13 @@ void DocumentPage::showLiveEventFrames(bool visible)
     else {
       m_liveFrames[i]->hide();
     }
+  }
+}
+
+void DocumentPage::deleteAllLiveEvents()
+{
+  for (int i = 0; i < m_liveFrames.size(); i++) {
+    deleteLiveEventFrame(m_liveFrames[i]);
   }
 }
 
@@ -905,7 +910,7 @@ void DocumentPage::newLiveEventFrame(QString text)
 LiveEventFrame * DocumentPage::createLiveEventFrame(QString text)
 {
 //  qDebug() << "DocumentPage::newLiveEventFrame()";
-  LiveEventFrame *e = new LiveEventFrame("Live Event", 0, Qt::Window);  //FIXME is it OK to have no parent?
+  LiveEventFrame *e = new LiveEventFrame("Live Event", m_view, Qt::Window);  //FIXME is it OK to have no parent?
 //  e->setAttribute(Qt::WA_DeleteOnClose, false);
   e->hide();
 
@@ -924,11 +929,13 @@ void DocumentPage::deleteLiveEventFrame(LiveEventFrame *frame)
 {
 //  qDebug() << "deleteLiveEventFrame(LiveEventFrame *frame)";
   int index = m_liveFrames.indexOf(frame);
-  if (index >= 0) {
-    disconnect(frame, 0,0,0);
-    disconnect(frame->getSheet(), 0,0,0);
-    m_liveFrames.remove(index);
-    frame->deleteLater();
+  if (index >= 0) {  // Frames should already have been deleted by parent document view widget
+    if (frame != 0) {
+      disconnect(frame, 0,0,0);
+      disconnect(frame->getSheet(), 0,0,0);
+      m_liveFrames.remove(index);
+      frame->close();
+    }
   }
   else {
     qDebug() << "DocumentPage::deleteLiveEventFrame frame not found";

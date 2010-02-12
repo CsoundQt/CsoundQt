@@ -359,8 +359,7 @@ void qutecsound::reload()
 {
   if (documentPages[curPage]->isModified()) {
     QString fileName = documentPages[curPage]->fileName;
-    documentPages.remove(curPage);
-    documentTabs->removeTab(curPage);
+    deleteCurrentTab();
     loadFile(fileName);
   }
 }
@@ -588,6 +587,19 @@ void qutecsound::createQuickRefPdf()
   quickRefFileName = tempFileName;
 }
 
+bool qutecsound::deleteCurrentTab()
+{
+  qDebug() << "qutecsound::deleteCurrentTab()";
+  disconnect(showLiveEventsAct, 0,0,0);
+  documentPages[curPage]->showLiveEventFrames(false);
+  DocumentPage *d = documentPages[curPage];
+  documentPages.remove(curPage); // Must remove from the vector first
+  delete d;  // TODO do these have to be pointers now?
+  if (curPage < 0)
+    curPage = 0; // deleting the document page decreases curPage, so must check
+//  documentTabs->removeTab(curPage);  // Tab is already removed when destroying the content
+}
+
 bool qutecsound::saveAs()
 {
   QString fileName = getSaveFileName();
@@ -608,7 +620,7 @@ bool qutecsound::saveNoWidgets()
 
 bool qutecsound::closeTab(bool askCloseApp)
 {
-//   qDebug("qutecsound::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
+   qDebug("qutecsound::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
   if (documentPages[curPage]->isModified()) {
     QString message = tr("The document ")
                       + (documentPages[curPage]->fileName != "" ? documentPages[curPage]->fileName: "untitled.csd")
@@ -641,16 +653,7 @@ bool qutecsound::closeTab(bool askCloseApp)
       }
     }
   }
-
-  disconnect(showLiveEventsAct, 0,0,0);
-  documentPages[curPage]->showLiveEventFrames(false);
-  DocumentPage *d = documentPages[curPage];
-  documentPages.remove(curPage); // Must remove from the vector first
-  delete d;  // TODO do these have to be pointers now?
-  if (curPage < 0)
-    curPage = 0; // deleting the document page decreases curPage, so must check
-  documentTabs->removeTab(curPage);
-//  changePage(curPage);
+  deleteCurrentTab();
   return true;
 }
 
@@ -844,6 +847,7 @@ void qutecsound::play(bool realtime)
     showWidgetsAct->setChecked(true);
     if (!documentPages[curPage]->usesFltk()) { // Don't bring up widget panel if there's an FLTK panel
       widgetPanel->setVisible(true);
+      widgetPanel->setFocus(Qt::OtherFocusReason);
       documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
       documentPages[curPage]->focusWidgets();
     }
@@ -2137,7 +2141,7 @@ void qutecsound::fillFavoriteMenu()
 void qutecsound::fillFavoriteSubMenu(QDir dir, QMenu *m, int depth)
 {
   QStringList filters;
-  filters << "*.csd" << "*.orc" << "*.sco" << "*.udo";
+  filters << "*.csd" << "*.orc" << "*.sco" << "*.udo" << "*.inc" << "*.py";
   dir.setNameFilters(filters);
   QStringList files = dir.entryList(QDir::Files,QDir::Name);
   QStringList dirs = dir.entryList(QDir::AllDirs,QDir::Name);
@@ -2593,6 +2597,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
     if (recentFiles.size() > QUTE_MAX_RECENT_FILES)
       recentFiles.removeLast();
     fillFileMenu();
+    fillFavoriteMenu();
   }
   statusBar()->showMessage(tr("File loaded"), 2000);
   setWidgetPanelGeometry();

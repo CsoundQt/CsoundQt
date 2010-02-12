@@ -137,7 +137,7 @@ void LiveEventFrame::doAction(int action)
     cloneFrame();
   }
   else if (action == 3) {
-    deleteFrame();
+    deleteFrame(true);
     return;
   }
   else if (action == 4) {
@@ -156,14 +156,17 @@ void LiveEventFrame::cloneFrame()
   emit(newFrameSignal(getPlainText()));
 }
 
-void LiveEventFrame::deleteFrame()
+void LiveEventFrame::deleteFrame(bool ask)
 {
-  int ret = QMessageBox::question(this,
-                                  tr("Delete Frame"),
-                                  tr("Are you sure you want to delete this frame?"),
-                                  QMessageBox::Ok | QMessageBox::Cancel,
-                                  QMessageBox::Cancel);
-  if (ret == QMessageBox::Ok)
+  int ret;
+  if (ask) {
+    ret = QMessageBox::question(this,
+                                    tr("Delete Frame"),
+                                    tr("Are you sure you want to delete this frame?"),
+                                    QMessageBox::Ok | QMessageBox::Cancel,
+                                    QMessageBox::Cancel);
+  }
+  if (ret == QMessageBox::Ok || !ask)
     emit(deleteFrameSignal(this));
 }
 

@@ -144,7 +144,7 @@ void CsoundEngine::inputValueCallbackThread (CSOUND *csound,
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
   if (ud->perfThread->GetStatus() == 0) {
     QString name = QString(channelName);
-    ud->cs->perfMutex.lock();
+//    ud->cs->perfMutex.lock();
     if (name.startsWith('$')) { // channel is a string channel
       int index = ud->channelNames.indexOf(name.mid(1));
       char *string = (char *) value;
@@ -182,7 +182,7 @@ void CsoundEngine::inputValueCallbackThread (CSOUND *csound,
         *value = (MYFLT) ud->mouseValues[5];
       }
     }
-    ud->cs->perfMutex.unlock();
+//    ud->cs->perfMutex.unlock();
   }
 }
 
@@ -350,7 +350,6 @@ void CsoundEngine::csThread(void *data)
   udata->wl->getValues(&udata->channelNames,
                        &udata->values,
                        &udata->stringValues);
-  udata->wl->getMouseValues(&udata->mouseValues);
   if (!udata->useInvalue) {
     writeWidgetValues(udata);
     readWidgetValues(udata);
@@ -842,6 +841,7 @@ void CsoundEngine::dispatchQueues()
 {
 //   qDebug("qutecsound::dispatchQueues()");
   int counter = 0;
+  ud->wl->getMouseValues(&ud->mouseValues);
   if (isRunning()) {
     ud->wl->processNewValues();
     while ((m_consoleBufferSize <= 0 || counter++ < m_consoleBufferSize)) {

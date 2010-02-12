@@ -55,7 +55,7 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     void doAction(int action);
     void newFrame();
     void cloneFrame();
-    void deleteFrame();
+    void deleteFrame(bool ask = false);
     void rename();
 
   protected:

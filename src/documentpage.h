@@ -180,6 +180,7 @@ class DocumentPage : public QObject
 
   private:
     CsoundOptions getParentOptions();
+    void deleteAllLiveEvents();
 
     QStringList macOptions;
     QString macPresets;
