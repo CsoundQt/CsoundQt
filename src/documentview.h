@@ -28,6 +28,20 @@
 
 class OpEntryParser;
 
+#include <QKeyEvent> // For syntax menu class
+
+class MySyntaxMenu: public QMenu
+{
+  Q_OBJECT
+  public:
+    MySyntaxMenu(QWidget * parent);
+    ~MySyntaxMenu();
+  protected:
+    virtual void keyPressEvent(QKeyEvent * event);
+  signals:
+    void keyPressed(QString text);
+};
+
 class DocumentView : public QScrollArea
 {
   Q_OBJECT
@@ -72,10 +86,12 @@ class DocumentView : public QScrollArea
 //    void updateDocumentModel();
 //    void updateFromDocumentModel();
     void syntaxCheck();
+    void textChanged();
     void findReplace();
     void getToIn(); // chnget/chnset to invalue/outvalue
     void inToGet(); // invalue/outvalue to chnget/chnset
     void autoComplete();
+    void insertTextFromAction();
     void findString(QString query = QString());
 
     void comment();
@@ -125,6 +141,7 @@ class DocumentView : public QScrollArea
     QVector<QTextEdit *> editors; // A vector to hold pointers for the above for easy processing
 
     OpEntryParser *m_opcodeTree;
+    MySyntaxMenu *syntaxMenu;
     Highlighter m_highlighter;
     bool m_isModified;
     bool errorMarked;

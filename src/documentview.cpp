@@ -57,7 +57,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 //  m_highlighter = new Highlighter();
 
   connect(mainEditor, SIGNAL(textChanged()),
-          this, SLOT(syntaxCheck()));
+          this, SLOT(textChanged()));
   connect(mainEditor, SIGNAL(cursorPositionChanged()),
           this, SLOT(syntaxCheck()));
 
@@ -72,6 +72,16 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   errorMarked = false;
   m_isModified = false;
   m_highlighter.setDocument(mainEditor->document());
+
+  syntaxMenu = new MySyntaxMenu(mainEditor);
+//  syntaxMenu->setFocusPolicy(Qt::NoFocus);
+  syntaxMenu->setAutoFillBackground(true);
+  QPalette p =syntaxMenu-> palette();
+  p.setColor(QPalette::WindowText, Qt::blue);
+  p.setColor(QPalette::Active, static_cast<QPalette::ColorRole>(9), Qt::yellow);
+  syntaxMenu->setPalette(p);
+  connect(syntaxMenu,SIGNAL(keyPressed(QString)),
+          mainEditor, SLOT(insertPlainText(QString)));
 }
 
 DocumentView::~DocumentView()
@@ -285,8 +295,6 @@ void DocumentView::syntaxCheck()
   int line = currentLine();
   emit(lineNumberSignal(line));
 
-  unmarkErrorLines();
-  //FIXME connect this signal to main class showLineNumber
   QTextCursor cursor = mainEditor->textCursor();
   cursor.select(QTextCursor::LineUnderCursor);
   QStringList words = cursor.selectedText().split(QRegExp("\\b"));
@@ -296,12 +304,57 @@ void DocumentView::syntaxCheck()
     if (!word.isEmpty()) {
       QString syntax = m_opcodeTree->getSyntax(word);
       if(!syntax.isEmpty()) {
-        // FIXME this is not building... why?
-//        emit(opcodeSyntaxSignal(syntax));
+        emit(opcodeSyntaxSignal(syntax));
         return;
       }
     }
   }
+}
+
+void DocumentView::textChanged()
+{
+  unmarkErrorLines();
+  QTextCursor cursor = mainEditor->textCursor();
+  cursor.select(QTextCursor::WordUnderCursor);
+  QString word = cursor.selectedText();
+    // We need to remove all not possibly opcode
+//    word.remove(QRegExp("[^\\d\\w]"));
+  if (word.size() > 2) {
+    QVector<Opcode> syntax = m_opcodeTree->getPossibleSyntax(word);
+    if (syntax.size() > 0) {
+      syntaxMenu->clear();
+      for(int i = 0; i < syntax.size(); i++) {
+        QString text = syntax[i].opcodeName;
+        if (syntax[i].outArgs.simplified().startsWith("a")) {
+          text += " (audio-rate)";
+        }
+        else if (syntax[i].outArgs.simplified().startsWith("k")) {
+          text += " (control-rate)";
+        }
+        else if (syntax[i].outArgs.simplified().startsWith("x")) {
+          text += " (multi-rate)";
+        }
+        else if (syntax[i].outArgs.simplified().startsWith("S")) {
+          text += " (string output)";
+        }
+        else if (syntax[i].outArgs.simplified().startsWith("f")) {
+          text += " (pvs)";
+        }
+        QAction *a = syntaxMenu->addAction(text,
+                                           this, SLOT(insertTextFromAction()));
+        a->setData(m_opcodeTree->getSyntax(syntax[i].opcodeName));
+      }
+      QRect r =  mainEditor->cursorRect();
+      QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+      QPoint globalPoint =  mainEditor->mapToGlobal(p);
+      syntaxMenu->setWindowModality(Qt::NonModal);
+      syntaxMenu->popup (globalPoint);
+      //    syntaxMenu->move(QPoint(r.x() + r.width(), r.y() + r.height()));
+      //    syntaxMenu->show();
+      mainEditor->setFocus(Qt::OtherFocusReason);
+    }
+  }
+  syntaxCheck();
 }
 
 void DocumentView::findReplace()
@@ -342,7 +395,17 @@ void DocumentView::autoComplete()
   mainEditor->setTextCursor(cursor);
   mainEditor->cut();
   QString syntax = m_opcodeTree->getSyntax(opcodeName);
-  mainEditor->insertPlainText (syntax);
+  mainEditor->insertPlainText(syntax);
+}
+
+void DocumentView::insertTextFromAction()
+{
+  QTextCursor cursor = editors[0]->textCursor();
+  cursor.select(QTextCursor::WordUnderCursor);
+  cursor.insertText("");
+  editors[0]->setTextCursor(cursor);
+  QAction *action = static_cast<QAction *>(QObject::sender());
+  editors[0]->insertPlainText(action->data().toString());
 }
 
 void DocumentView::findString(QString query)
@@ -633,3 +696,28 @@ void DocumentView::hideAllEditors()
   }
 }
 
+MySyntaxMenu::MySyntaxMenu(QWidget * parent) :
+    QMenu(parent)
+{
+
+}
+
+MySyntaxMenu::~MySyntaxMenu()
+{
+
+}
+
+void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
+{
+  if (event->key() == Qt::Key_Escape) {
+    this->hide();
+  }
+  else if (event->key() != Qt::Key_Up && event->key() != Qt::Key_Down
+           && event->key() != Qt::Key_Return) {
+    this->hide();
+    if (event->key() != Qt::Key_Backspace) {
+      emit keyPressed(event->text());
+    }
+  }
+  QMenu::keyPressEvent(event);
+}

@@ -27,8 +27,8 @@
 #include <QStringList>
 #include <QtXml>
 #include "node.h"
+#include "types.h" // For Opcode class
 
-class Opcode;
 class OpEntryParser
 {
   public:
@@ -38,6 +38,7 @@ class OpEntryParser
 
     QStringList opcodeNameList();
     QString getSyntax(QString opcodeName);
+    QVector<Opcode> getPossibleSyntax(QString word);
     QList< QPair<QString, QList<Opcode> > > getOpcodesByCategory();
     int getCategoryCount();
     QString getCategory(int index);

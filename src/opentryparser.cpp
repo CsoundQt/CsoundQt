@@ -60,16 +60,16 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
       QDomNode node = op.firstChild();
       QDomElement elem = node.toElement();
       if (elem.tagName()=="opcodename") {
-        opcode.opcodeName = elem.text().trimmed();
+        opcode.opcodeName = elem.text().simplified();
         opcode.inArgs = node.nextSibling().toText().data();
       }
       else {
-        opcode.outArgs = node.toText().data();
+        opcode.outArgs = node.toText().data().simplified();
         node = node.nextSibling();
-        opcode.opcodeName = node.toElement().text().trimmed();
+        opcode.opcodeName = node.toElement().text().simplified();
         node = node.nextSibling();
         if (!node.isNull())
-          opcode.inArgs = node.toText().data();
+          opcode.inArgs = node.toText().data().simplified();
       }
 //       qDebug() << "out =" << opcode.outArgs << " op=" << opcode.opcodeName << " in=" << opcode.inArgs;
       if (opcode.opcodeName != "" and excludedOpcodes.count(opcode.opcodeName)==0
@@ -129,6 +129,17 @@ QString OpEntryParser::getSyntax(QString opcodeName)
   }
   else
     return QString("");
+}
+
+QVector<Opcode> OpEntryParser::getPossibleSyntax(QString word)
+{
+  QVector<Opcode> out;
+  for (int i = 0; i < opcodeList.size(); i++) {
+    if (opcodeList[i].opcodeName.startsWith(word)) {
+       out << opcodeList[i];
+    }
+  }
+  return out;
 }
 
 QList< QPair<QString, QList<Opcode> > > OpEntryParser::getOpcodesByCategory()
