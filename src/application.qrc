@@ -136,6 +136,9 @@
 
       <file>python/qutesheet.py</file>
       <file>python/sort_by_start.py</file>
+      <file>python/cps2mid.py</file>
+      <file>python/mid2cps.py</file>
+      <file>python/test/tk_test.py</file>
 
       <file>../doc/QuteCsound Quick Reference (0.4).pdf</file>
       <file>../doc/QuteCsound Quick Reference (0.4)-es.pdf</file>

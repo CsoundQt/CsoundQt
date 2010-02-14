@@ -115,13 +115,13 @@ rows_selection = qutesheet_data.data
 rows = _all_cols(qutesheet_data.data_all, first_row, num_rows)
 rows_all =  qutesheet_data.data_all
 
-cols = _transpose(rows);
+#cols_selection = _transpose(qutesheet_data.data);
 cols = _transpose(_all_cols(_transpose(qutesheet_data.data_all), first_col, num_cols))
 cols_all = _transpose(rows_all);
 
 cells_by_row = _get_cells_by_row(rows_selection)
 cells_by_row_all = _get_cells_by_row(rows_all)
-cells_by_col = _get_cells_by_row(cols_selection)
+#cells_by_col = _get_cells_by_row(cols_selection)
 cells_by_col_all = _get_cells_by_row(cols_all)
 
 #set_out_filename(qutesheet_data.out_filename)

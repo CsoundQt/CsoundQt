@@ -159,7 +159,7 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
   loopTimer.setSingleShot(true);
   connect(&loopTimer, SIGNAL(timeout()), this, SLOT(sendEvents()));
 
-  builtinScripts << ":/python/sort_by_start.py";
+  builtinScripts << ":/python/sort_by_start.py" << ":/python/cps2mid.py" << ":/python/mid2cps.py";
 }
 
 EventSheet::~EventSheet()
@@ -993,6 +993,9 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
   menu.addAction(fillAct);
   menu.addSeparator();
   QMenu *scriptMenu = menu.addMenu(tr("Python Scripts"));
+  QMenu *testMenu = scriptMenu->addMenu(tr("Tests"));
+  testMenu->addAction("tk_test.py",
+                      this, SLOT(runScript() ))->setData(":/python/test/tk_test.py");
   for (int i = 0; i < builtinScripts.size(); i++) {
     QAction *a = scriptMenu->addAction(builtinScripts[i].mid(9),
                                        this, SLOT(runScript() ));

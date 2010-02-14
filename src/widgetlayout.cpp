@@ -280,7 +280,7 @@ void WidgetLayout::getValues(QVector<QString> *channelNames,
   if (!this->isEnabled()) {
     return;
   }
-  for (int i = 0; i < m_widgets.size(); i++) {
+  for (int i = 0; i < m_widgets.size(); i++) {  // FIXME this crashes if a new widget is created while running because vector size has not changed
     (*channelNames)[i*2] = m_widgets[i]->getChannelName();
     (*values)[i*2] = m_widgets[i]->getValue();
     (*stringValues)[i*2] = m_widgets[i]->getStringValue();

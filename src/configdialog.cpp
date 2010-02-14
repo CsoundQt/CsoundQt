@@ -538,38 +538,25 @@ QList<QPair<QString, QString> > ConfigDialog::getMidiInputDevices()
     return deviceList;
   }
   if (module == "alsa") {
-    // This commented section uses the wrong file to query devices. maybe this used to work? 
-//     QFile f("/proc/asound/seq/clients");
-//     f.open(QIODevice::ReadOnly | QIODevice::Text);
-//     QString values = QString(f.readAll());
-//     QStringList st = values.split("\n");
-//     QString line;
-//     for (int i = 0; i < st.size(); i++){
-//       line = st[i].trimmed();
-//       if (line.startsWith("Client") && line.indexOf(":") >= 0) {
-//         QString clientNum = QString::number(line.mid(6,line.indexOf(":") - 6).trimmed().toInt());
-//         while (i < st.size() - 2) {
-//           i++;
-// 
-//           QString tempLine = st[i].trimmed();
-//           if (tempLine.startsWith("Port")) {
-//             QString capabilities = tempLine.mid(tempLine.lastIndexOf("("));
-//             if (capabilities.indexOf("R") >= 0) {
-//               QStringList portParts = tempLine.split("\"");
-//               int portNum = tempLine.mid(6, tempLine.indexOf(":") - 6).trimmed().toInt();
-//               QPair<QString, QString> device;
-//               device.first = portParts[1];
-//               device.second = "hw:" + clientNum + "," + QString::number(portNum);
-//               deviceList.append(device);
-//             }
-//           }
-//           else if (tempLine.startsWith("Client")) {
-//             i--;
-//             break;
-//           }
-//         }
-//       }
-//     }
+    QProcess amidi;
+    amidi.start("amidi", QStringList() << "-l");
+    if (!amidi.waitForFinished())
+      return deviceList;
+
+    QByteArray result = amidi.readAllStandardOutput();
+    QString values = QString(result);
+    QStringList st = values.split("\n");
+    st.takeFirst(); // Remove first column lines
+    for (int i = 0; i < st.size(); i++){
+      QStringList parts = st[i].split(" ", QString::SkipEmptyParts);
+      if (parts.size() > 0 && parts[0].contains("I")) {
+        QPair<QString, QString> device;
+        device.second = parts[1]; // Devce name
+        parts.takeFirst(); // Remove IO flags
+        device.first = parts.join(" ") ; // Full name with description
+        deviceList.append(device);
+      }
+    }
   }
   else { // if not alsa (i.e. winmm or portmidi)
     QFile file(":/test.csd");
@@ -634,35 +621,23 @@ QList<QPair<QString, QString> > ConfigDialog::getMidiOutputDevices()
     return deviceList;
   }
   if (module == "alsa") {
-    QFile f("/proc/asound/seq/clients");
-    f.open(QIODevice::ReadOnly | QIODevice::Text);
-    QString values = QString(f.readAll());
-    QStringList st = values.split("\n");
-    QString line;
-    for (int i = 0; i < st.size(); i++){
-      line = st[i].trimmed();
-      if (line.startsWith("Client") && line.indexOf(":") >= 0) {
-        QString clientNum = QString::number(line.mid(6,line.indexOf(":") - 6).trimmed().toInt());
-        while (i < st.size() - 2) {
-          i++;
+    QProcess amidi;
+    amidi.start("amidi", QStringList() << "-l");
+    if (!amidi.waitForFinished())
+      return deviceList;
 
-          QString tempLine = st[i].trimmed();
-          if (tempLine.startsWith("Port")) {
-            QString capabilities = tempLine.mid(tempLine.lastIndexOf("("));
-            if (capabilities.indexOf("W") >= 0) {
-              QStringList portParts = tempLine.split("\"");
-              int portNum = tempLine.mid(6, tempLine.indexOf(":") - 6).trimmed().toInt();
-              QPair<QString, QString> device;
-              device.first = portParts[1];
-              device.second = "hw:" + clientNum + "," + QString::number(portNum);
-              deviceList.append(device);
-            }
-          }
-          else if (tempLine.startsWith("Client")) {
-            i--;
-            break;
-          }
-        }
+    QByteArray result = amidi.readAllStandardOutput();
+    QString values = QString(result);
+    QStringList st = values.split("\n");
+    st.takeFirst(); // Remove first column lines
+    for (int i = 0; i < st.size(); i++){
+      QStringList parts = st[i].split(" ", QString::SkipEmptyParts);
+      if (parts.size() > 0 && parts[0].contains("O")) {
+        QPair<QString, QString> device;
+        device.second = parts[1]; // Devce name
+        parts.takeFirst(); // Remove IO flags
+        device.first = parts.join(" ") ; // Full name with description
+        deviceList.append(device);
       }
     }
   }

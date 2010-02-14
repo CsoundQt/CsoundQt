@@ -587,7 +587,7 @@ void qutecsound::createQuickRefPdf()
   quickRefFileName = tempFileName;
 }
 
-bool qutecsound::deleteCurrentTab()
+void qutecsound::deleteCurrentTab()
 {
   qDebug() << "qutecsound::deleteCurrentTab()";
   disconnect(showLiveEventsAct, 0,0,0);
@@ -842,18 +842,8 @@ void qutecsound::play(bool realtime)
   m_options->fileName1 = runFileName1;
   m_options->fileName2 = runFileName2;
   m_options->rt = realtime;
-
-  if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
-    showWidgetsAct->setChecked(true);
-    if (!documentPages[curPage]->usesFltk()) { // Don't bring up widget panel if there's an FLTK panel
-      widgetPanel->setVisible(true);
-      widgetPanel->setFocus(Qt::OtherFocusReason);
-      documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
-      documentPages[curPage]->focusWidgets();
-    }
-
-  }
   int ret = documentPages[curPage]->play(m_options);
+
   if (ret == -1) {
     runAct->setChecked(false);
     QMessageBox::critical(this,
@@ -866,6 +856,17 @@ void qutecsound::play(bool realtime)
   else if (ret == -3) { // Csound compilation failed
     runAct->setChecked(false);
     //FIXME show error line numbers
+  }
+  else if (ret == 0) { // No problem
+    if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
+      showWidgetsAct->setChecked(true);
+      if (!documentPages[curPage]->usesFltk()) { // Don't bring up widget panel if there's an FLTK panel
+        widgetPanel->setVisible(true);
+        widgetPanel->setFocus(Qt::OtherFocusReason);
+        documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
+        documentPages[curPage]->focusWidgets();
+      }
+    }
   }
 }
 
@@ -2837,7 +2838,6 @@ int qutecsound::isOpen(QString fileName)
 ////   qDebug("qutecsound::markErrorLine()");
 //  documentPages[curPage]->markErrorLines(m_console->errorLines);
 //}
-
 
 QStringList qutecsound::runCsoundInternally(QStringList flags)
 {

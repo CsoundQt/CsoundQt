@@ -53,6 +53,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   QStackedLayout *l = new QStackedLayout(this);
   l->addWidget(splitter);
   setLayout(l);
+  setFocusProxy(mainEditor);  // for comment action from main application
 
 //  m_highlighter = new Highlighter();
 
@@ -174,6 +175,8 @@ void DocumentView::print(QPrinter *printer)
 
 void DocumentView::setModified(bool mod)
 {
+//  qDebug() << "DocumentView::setModified";
+  emit contentsChanged();
   m_isModified = mod;
 }
 
@@ -202,6 +205,7 @@ QString DocumentView::getFullText()
 
 QString DocumentView::getBasicText()
 {
+//   What Csound needs (no widgets, misc text, etc.)
   // TODO implement modes
   QString text;
   switch (m_viewMode) {
@@ -246,7 +250,7 @@ QString DocumentView::getExtraText()
 QString DocumentView::getMacWidgetsText()
 {
   // With tags including presets
-  qDebug() << "DocumentView::getFullOptionsText() not implemented and will crash!";
+  qDebug() << "DocumentView::getMacWidgetsText() not implemented and will crash!";
 }
 
 QString DocumentView::getWidgetsText()
@@ -277,20 +281,20 @@ QString DocumentView::wordUnderCursor()
 
 //void DocumentView::updateDocumentModel()
 //{
-//  // FIXME this should update the document model when needed
+//  // this should update the document model when needed
 //  // e.g. on run or save or when widgets or presets have been modified in text format
 //  // maybe the document model pointer should be passed and processed here.
 //}
-
+//
 //void DocumentView::updateFromDocumentModel()
 //{
-//  // FIXME this should update from the document model when needed
+//  // this should update from the document model when needed
 //  // e.g. on loading, widget changes from widget layout
 //}
 
 void DocumentView::syntaxCheck()
 {
-  // FIXME implment for multiple views
+  // TODO implment for multiple views
 
   int line = currentLine();
   emit(lineNumberSignal(line));
@@ -410,7 +414,7 @@ void DocumentView::insertTextFromAction()
 
 void DocumentView::findString(QString query)
 {
-  //FIXME search across all editors
+  // TODO search across all editors
   qDebug() << "qutecsound::findString " << query;
   if (query == "") {
     query = lastSearch;

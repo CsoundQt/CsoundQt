@@ -181,7 +181,7 @@ class qutecsound:public QMainWindow
 //    void markErrorLine();
     QString getSaveFileName();
     void createQuickRefPdf();
-    bool deleteCurrentTab();
+    void deleteCurrentTab();
 
 //     QHash<QString, double> outValueQueue;
 //    QHash<QString, double> inValueQueue;
@@ -297,16 +297,21 @@ class FileOpenEater : public QObject
   Q_OBJECT
   public:
     FileOpenEater() {m_mw = 0;}
-    void setMainWindow(qutecsound *mainWindow) {m_mw = mainWindow;}
-
-    QList<QFileOpenEvent> fileEventQueue;
+    void setMainWindow(qutecsound *mainWindow) {
+      m_mw = mainWindow;
+      while (!fileEventQueue.isEmpty()) {
+        QString fileName = fileEventQueue.takeFirst();
+        m_mw->loadFile(fileName, true);
+      }
+    }
+    QStringList fileEventQueue;
   protected:
     bool eventFilter(QObject *obj, QEvent *event)
     {
       if (event->type() == QEvent::FileOpen) {
           QFileOpenEvent *fileEvent = static_cast<QFileOpenEvent*>(event);
           if (m_mw == 0) {
-              fileEventQueue << *fileEvent;  // FIXME this queue is not being processed
+              fileEventQueue << fileEvent->file();
           }
           else {
               m_mw->loadFile(fileEvent->file(), true);

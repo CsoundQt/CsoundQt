@@ -842,8 +842,8 @@ void CsoundEngine::dispatchQueues()
 //   qDebug("qutecsound::dispatchQueues()");
   int counter = 0;
   ud->wl->getMouseValues(&ud->mouseValues);
+  ud->wl->processNewValues();  // Process values from widgets even if not running
   if (isRunning()) {
-    ud->wl->processNewValues();
     while ((m_consoleBufferSize <= 0 || counter++ < m_consoleBufferSize)) {
       messageMutex.lock();
       if (messageQueue.isEmpty()) {
