@@ -55,6 +55,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   setLayout(l);
   setFocusProxy(mainEditor);  // for comment action from main application
 
+  m_mode = 0;
+
 //  m_highlighter = new Highlighter();
 
   connect(mainEditor, SIGNAL(textChanged()),
@@ -115,6 +117,12 @@ void DocumentView::setViewMode(int mode)
       otherEditor->setVisible(m_viewMode & 128);
       widgetEditor->setVisible(m_viewMode & 256);
   }
+}
+
+void DocumentView::setFileType(int mode)
+{
+  m_highlighter.setMode(mode);
+  m_mode = mode;
 }
 
 void DocumentView::setFont(QFont font)
@@ -443,6 +451,14 @@ void DocumentView::findString(QString query)
 void DocumentView::comment()
 {
   // FIXME implment for multiple views
+//  qDebug() << "DocumentView::comment()";
+  QString commentChar = "";
+  if (m_mode == 0) {
+    commentChar = ";";
+  }
+  else if (m_mode == 1) { // Python Mode
+    commentChar = "#";
+  }
   QTextCursor cursor = editors[0]->textCursor();
   if (cursor.position() > cursor.anchor()) {
     int temp = cursor.anchor();
@@ -453,8 +469,8 @@ void DocumentView::comment()
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
   }
   QString text = cursor.selectedText();
-  text.prepend(";");
-  text.replace(QChar(QChar::ParagraphSeparator), QString("\n;"));
+  text.prepend(commentChar);
+  text.replace(QChar(QChar::ParagraphSeparator), QString("\n" + commentChar));
   cursor.insertText(text);
   editors[0]->setTextCursor(cursor);
 }
@@ -462,6 +478,13 @@ void DocumentView::comment()
 void DocumentView::uncomment()
 {
   // FIXME implment for multiple views
+  QString commentChar = "";
+  if (m_mode == 0) {
+    commentChar = ";";
+  }
+  else if (m_mode == 1) { // Python Mode
+    commentChar = "#";
+  }
   QTextCursor cursor = editors[0]->textCursor();
   if (cursor.position() > cursor.anchor()) {
     int temp = cursor.anchor();
@@ -469,14 +492,14 @@ void DocumentView::uncomment()
     cursor.setPosition(temp, QTextCursor::KeepAnchor);
   }
   QString text = cursor.selectedText();
-  if (!cursor.atBlockStart() && !text.startsWith(";")) {
+  if (!cursor.atBlockStart() && !text.startsWith(commentChar)) {
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
     text = cursor.selectedText();
   }
-  if (text.startsWith(";"))
+  if (text.startsWith(commentChar))
     text.remove(0,1);
   text.replace(QChar(QChar::ParagraphSeparator), QString("\n"));
-  text.replace(QString("\n;"), QString("\n")); //TODO make more robust
+  text.replace(QString("\n" + commentChar), QString("\n")); //TODO make more robust
   cursor.insertText(text);
   editors[0]->setTextCursor(cursor);
 }
@@ -485,6 +508,13 @@ void DocumentView::indent()
 {
   // FIXME implment for multiple views
 //   qDebug("DocumentPage::indent");
+  QString indentChar = "";
+  if (m_mode == 0) {
+    indentChar = "\t";
+  }
+  else if (m_mode == 1) { // Python Mode
+    indentChar = "    ";
+  }
   QTextCursor cursor = editors[0]->textCursor();
   if (cursor.position() > cursor.anchor()) {
     int temp = cursor.anchor();
@@ -495,9 +525,9 @@ void DocumentView::indent()
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
   }
   QString text = cursor.selectedText();
-//   if (text[0] == '\n')
-  text.prepend("\t"); //TODO check if previous character is \n
-  text.replace(QChar(QChar::ParagraphSeparator), QString("\n\t"));
+  text.prepend(indentChar);
+  text.replace(QChar(QChar::ParagraphSeparator), "\n" + indentChar);
+  text.replace(QChar(QChar::ParagraphSeparator), "\n" + indentChar);
   cursor.insertText(text);
   editors[0]->setTextCursor(cursor);
 }
@@ -505,6 +535,13 @@ void DocumentView::indent()
 void DocumentView::unindent()
 {
   // FIXME implment for multiple views
+  QString indentChar = "";
+  if (m_mode == 0) {
+    indentChar = "\t";
+  }
+  else if (m_mode == 1) { // Python Mode
+    indentChar = "    ";
+  }
   QTextCursor cursor = editors[0]->textCursor();
   if (cursor.position() > cursor.anchor()) {
     int temp = cursor.anchor();
@@ -515,10 +552,10 @@ void DocumentView::unindent()
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
   }
   QString text = cursor.selectedText();
-  if (text.startsWith("\t"))
-    text.remove(0,1);
+  if (text.startsWith(indentChar))
+    text.remove(indentChar);
   text.replace(QChar(QChar::ParagraphSeparator), QString("\n"));
-  text.replace(QString("\n\t"), QString("\n")); //TODO make more robust
+  text.replace("\n" + indentChar, QString("\n")); //TODO make more robust
   cursor.insertText(text);
   editors[0]->setTextCursor(cursor);
 }

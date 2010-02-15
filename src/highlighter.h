@@ -40,9 +40,13 @@
     ~Highlighter();
     void setOpcodeNameList(QStringList list);
     void setColorVariables(bool color);
+    void setMode(int mode);
 
   protected:
     void highlightBlock(const QString &text);
+    void highlightCsoundBlock(const QString &text);
+    void highlightPythonBlock(const QString &text);
+    void highlightXmlBlock(const QString &text);
     int findOpcode(QString opcodeName, int start, int end);
 
   private:
@@ -67,13 +71,17 @@
     QTextCharFormat functionFormat;
     QTextCharFormat labelFormat;
 
-    QStringList tagPatterns, headerPatterns, instPatterns;
+    QStringList tagPatterns, headerPatterns, instPatterns; //Csound
+
+    QStringList keywords;  //Python
+    QTextCharFormat keywordFormat;
 
 //     void setFirstRules();
     void setLastRules();
 
     QStringList m_list;
     bool colorVariables;
+    int m_mode;  // 0 = Csound generic mode, 1 = Python Mode, 2 = XML mode
 };
 
 #endif

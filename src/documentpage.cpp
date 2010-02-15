@@ -509,6 +509,29 @@ void DocumentPage::focusWidgets()
   m_widgetLayout->setFocus();
 }
 
+QString DocumentPage::getFileName()
+{
+  return fileName;
+}
+
+QString DocumentPage::getCompanionFileName()
+{
+  return companionFile;
+}
+
+void DocumentPage::setFileName(QString name)
+{
+  fileName = name;
+  if (name.endsWith(".py")) {
+    m_view->setFileType(1);
+  }
+}
+
+void DocumentPage::setCompanionFileName(QString name)
+{
+  companionFile = name;
+}
+
 void DocumentPage::copy()
 {
   // For some strange reason, the shortcuts are not being intercepted by the widget layout directly...
@@ -717,6 +740,10 @@ void DocumentPage::deleteAllLiveEvents()
 
 int DocumentPage::play(CsoundOptions *options)
 {
+  if (fileName.endsWith(".py")) {
+    m_console->reset(); // Clear consoles
+    return runPython();
+  }
   if (!m_csEngine->isRunning()) {
     m_view->unmarkErrorLines();  // Clear error lines when running
     m_console->reset(); // Clear consoles
@@ -784,6 +811,23 @@ void DocumentPage::playParent()
 void DocumentPage::renderParent()
 {
   static_cast<qutecsound *>(parent())->render();
+}
+
+int DocumentPage::runPython()
+{
+  QProcess p;
+  QDir::setCurrent(fileName.mid(fileName.lastIndexOf("/") + 1));
+  p.start("python \"" + fileName + "\"");
+
+  if (!p.waitForFinished (30000)) {
+    qDebug() << "DocumentPage::runPython() Script took too long!! Current max is 30 secs.";
+  }
+  QByteArray sout = p.readAllStandardOutput();
+  QByteArray serr = p.readAllStandardError();
+  m_console->appendMessage(sout);
+  m_console->appendMessage(serr);
+  emit stopSignal();
+  return p.exitCode();
 }
 
 void DocumentPage::setMacWidgetsText(QString widgetText)
@@ -876,9 +920,7 @@ void DocumentPage::jumpToLine(int line)
 void DocumentPage::comment()
 {
   qDebug() << "DocumentPage::comment()";
-  if (m_view->hasFocus()) {   // Keyboard shortcut clashes with duplicate, so check for focus
-    m_view->comment();
-  }
+  m_view->comment();
 }
 
 void DocumentPage::uncomment()

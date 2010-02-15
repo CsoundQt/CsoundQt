@@ -75,10 +75,12 @@ CsoundEngine::CsoundEngine()
 CsoundEngine::~CsoundEngine()
 {
 //  qDebug() << "CsoundEngine::~CsoundEngine() ";
+  stop();
 #ifndef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(csound);
 #endif
-  stop();
+  //FIXME sometimes messages slip past destruction of this object...
+//  flushMessageQueue();
 //  free(ud);
   free(pFields);
   delete ud;
@@ -676,8 +678,7 @@ int CsoundEngine::runCsound()
   //    outStringQueue.clear();
   ud->audioOutputBuffer.allZero();
 
-  // TODO use: PUBLIC int csoundSetGlobalEnv(const char *name, const char *value);
-
+  QDir::setCurrent(m_options.fileName1);
   ud->threaded = m_threaded;
 #ifdef QUTECSOUND_DESTROY_CSOUND
   ud->csound=csoundCreate(0);
@@ -788,7 +789,11 @@ int CsoundEngine::runCsound()
     }
     ud->PERF_STATUS = 0;
     csoundStop(ud->csound);
+    csoundSetMessageCallback(ud->csound, 0); // Does this fix the messages that appear when closing QCS?
     csoundCleanup(ud->csound);
+#ifdef QUTECSOUND_DESTROY_CSOUND
+  csoundDestroy(ud->csound);
+#endif
     flushMessageQueue();  // To flush pending queues
 #ifdef MACOSX_PRE_SNOW
     // Put menu bar back
@@ -813,9 +818,14 @@ void CsoundEngine::stopCsound()
 //    perfThread->ScoreEvent(0, 'e', 0, 0);
     if (ud->perfThread != 0) {
       ud->perfThread->Stop();
+      qDebug() << "CsoundEngine::stopCsound() stopped";
       ud->perfThread->Join();
+      qDebug() << "CsoundEngine::stopCsound() joined";
       delete ud->perfThread;
       ud->perfThread = 0;
+#ifdef QUTECSOUND_DESTROY_CSOUND
+  csoundDestroy(ud->csound);
+#endif
       flushMessageQueue();
     }
   } /*if (m_options.threaded)*/

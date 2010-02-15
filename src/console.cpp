@@ -144,7 +144,7 @@ void Console::keyReleaseEvent(QKeyEvent *event)
 
 DockConsole::DockConsole(QWidget * parent): QDockWidget(parent)
 {
-  setWindowTitle(tr("Csound Output Console"));
+  setWindowTitle(tr("Output Console"));
   text = new Console(parent);
   text->setReadOnly(true);
   text->setContextMenuPolicy(Qt::NoContextMenu);

@@ -1029,11 +1029,11 @@ void EventSheet::addDirectoryToMenu(QMenu *m, QString dir, int depth)
       newMenu = m->addMenu(dir.mid(dir.lastIndexOf("/")+ 1));
     for (int i = 0; i < directories.size(); i++) {
       if (directories[i] != "." && directories[i] != "..")
-        addDirectoryToMenu(newMenu, dir + directories[i], depth++);
+        addDirectoryToMenu(newMenu, dir + "/" + directories[i], depth++);
     }
     for (int i = 0; i < scripts.size(); i++) {
        QAction *a = newMenu->addAction(scripts[i], this, SLOT(runScript() ));
-       a->setData(dir + scripts[i]);
+       a->setData(dir + "/" + scripts[i]);
     }
   }
 }

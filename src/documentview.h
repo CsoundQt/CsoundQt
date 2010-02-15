@@ -49,6 +49,7 @@ class DocumentView : public QScrollArea
     DocumentView(QWidget * parent, OpEntryParser *opcodeTree = 0);
     ~DocumentView();
     void setViewMode(int mode);
+    void setFileType(int mode); // For higlighting mode
     void setFont(QFont font);
     void setFontPointSize(float size);
     void setTabWidth(int width);
@@ -145,6 +146,8 @@ class DocumentView : public QScrollArea
     Highlighter m_highlighter;
     bool m_isModified;
     bool errorMarked;
+    //TODO this variable is duplicated in various places. Unify?
+    int m_mode; //type of file 0= csound 1=python 2=xml
 
     bool lastCaseSensitive; // These last three are for search and replace
     QString lastSearch;

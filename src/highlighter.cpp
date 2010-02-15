@@ -29,7 +29,9 @@ Highlighter::Highlighter(QTextDocument *parent)
   commentStartExpression = QRegExp("/\\*");
   commentEndExpression = QRegExp("\\*/");
   colorVariables = true;
+  m_mode = 0; // default to Csound mode
 
+  // For Csound
   csdtagFormat.setForeground(QColor("brown"));
   csdtagFormat.setFontWeight(QFont::Bold);
   tagPatterns << "<CsoundSynthesizer>" << "</CsoundSynthesizer>"
@@ -48,6 +50,18 @@ Highlighter::Highlighter(QTextDocument *parent)
   csdtagFormat.setFontWeight(QFont::Bold);
   opcodeFormat.setForeground(QColor("blue"));
   opcodeFormat.setFontWeight(QFont::Bold);
+
+  // For Python
+  keywords << "and" << "or" << "not" << "is";
+  keywords << "global" << "with" << "from" << "import" << "as";
+  keywords << "if" << "else" << "elif";
+  keywords << "print" << "class" << "del" << "exec";
+  keywords << "for" << "in" << "while" << "continue" << "pass" << "break";
+  keywords << "def" << "return" << "lambda";
+  keywords << "yield" << "assert" << "try" << "except" << "finally" << "raise";
+
+  keywordFormat.setForeground(QColor("blue"));
+  keywordFormat.setFontWeight(QFont::Bold);
 
   singleLineCommentFormat.setForeground(QColor("green"));
   singleLineCommentFormat.setFontItalic(true);
@@ -68,6 +82,11 @@ void Highlighter::setOpcodeNameList(QStringList list)
   m_list = list;
 //   setFirstRules();
   setLastRules();
+}
+
+void Highlighter::setMode(int mode)
+{
+  m_mode = mode;
 }
 
 void Highlighter::setColorVariables(bool color)
@@ -105,6 +124,21 @@ void Highlighter::setColorVariables(bool color)
 }
 
 void Highlighter::highlightBlock(const QString &text)
+{
+  switch (m_mode) {
+    case 0:  // Csound mode
+      highlightCsoundBlock(text);
+      break;
+    case 1:  // Python mode
+      highlightPythonBlock(text);
+      break;
+    case 2:  // Xml mode
+      highlightXmlBlock(text);
+      break;
+    }
+}
+
+void Highlighter::highlightCsoundBlock(const QString &text)
 {
   // text is processed one line at a time
 //   qDebug("Text---------------------: %s", text.toStdString().c_str());
@@ -206,6 +240,34 @@ void Highlighter::highlightBlock(const QString &text)
                               startIndex + commentLength);
   }
 }
+
+
+void Highlighter::highlightPythonBlock(const QString &text)
+{
+  QRegExp expression("\\b+\\w\\b+");
+  int index = text.indexOf(expression, 0);
+  for (int i = 0; i < keywords.size(); i++) {
+    QRegExp expression("\\b+" + keywords[i] + "\\b+");
+    int index = text.indexOf(expression);
+    while (index >= 0) {
+      int length = expression.matchedLength();
+      setFormat(index, length, keywordFormat);
+      index = text.indexOf(expression, index + length);
+    }
+  }
+  QRegExp expComment("#.*");
+  index = text.indexOf(expComment);
+  while (index >= 0) {
+    int length = expComment.matchedLength();
+    setFormat(index, length, singleLineCommentFormat);
+    index = text.indexOf(expComment, index + length);
+  }
+}
+
+void Highlighter::highlightXmlBlock(const QString &text)
+{
+}
+
 
 // void Highlighter::setFirstRules()
 // {

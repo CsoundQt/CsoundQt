@@ -73,6 +73,10 @@ class DocumentPage : public QObject
     bool usesFltk();
     void updateCsLadspaText();
     void focusWidgets();
+    QString getFileName();
+    QString getCompanionFileName();
+    void setFileName(QString name);
+    void setCompanionFileName(QString name);
 
     void copy();  // This actions are passed here for distribution
     void cut();  // Can it be done better?
@@ -120,8 +124,6 @@ class DocumentPage : public QObject
     void useInvalue(bool use);
 
     // Member public variables
-    QString fileName;
-    QString companionFile;
     bool askForFile;
     bool readOnly; // Used for manual files and internal examples
 
@@ -146,6 +148,7 @@ class DocumentPage : public QObject
     // Triggered from button, ask parent for options
     void playParent();
     void renderParent();
+    int runPython();  // Called when file is a python file
 
     void setMacWidgetsText(QString widgetText);
     void setMacOptionsText(QString text);
@@ -191,11 +194,13 @@ class DocumentPage : public QObject
     WidgetLayout * m_widgetLayout;
     DocumentView *m_view;
     CsoundEngine *m_csEngine;
-    ConsoleWidget *m_console;  // TODO have a single console widget which is duplicated across all places! Is it possible? due to parenting issues
+    ConsoleWidget *m_console;
     QVector<LiveEventFrame *> m_liveFrames;
 
     OpEntryParser *m_opcodeTree;
 
+    QString fileName;
+    QString companionFile;
 
     // Options
     bool saveLiveEvents;
@@ -222,7 +227,7 @@ class DocumentPage : public QObject
     void setCurrentAudioFile(QString name);
     void liveEventsVisible(bool);  // To change the action in the main window
     void modified();  // Triggered whenever the children change
-    void stopSignal(); // Propagated from engine
+    void stopSignal(); // To tell main application that running has stopped
     void opcodeSyntaxSignal(QString message); // Propagated from view
     void setWidgetClipboardSignal(QString text);
 };
