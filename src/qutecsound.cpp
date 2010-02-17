@@ -589,7 +589,7 @@ void qutecsound::createQuickRefPdf()
 
 void qutecsound::deleteCurrentTab()
 {
-  qDebug() << "qutecsound::deleteCurrentTab()";
+//  qDebug() << "qutecsound::deleteCurrentTab()";
   disconnect(showLiveEventsAct, 0,0,0);
   documentPages[curPage]->showLiveEventFrames(false);
   DocumentPage *d = documentPages[curPage];
@@ -620,7 +620,7 @@ bool qutecsound::saveNoWidgets()
 
 bool qutecsound::closeTab(bool askCloseApp)
 {
-   qDebug("qutecsound::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
+//   qDebug("qutecsound::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
   if (documentPages[curPage]->isModified()) {
     QString message = tr("The document ")
                       + (documentPages[curPage]->fileName != "" ? documentPages[curPage]->fileName: "untitled.csd")
@@ -1829,8 +1829,8 @@ void qutecsound::connectActions()
   disconnect(uncommentAct, 0, 0, 0);
   disconnect(indentAct, 0, 0, 0);
   disconnect(unindentAct, 0, 0, 0);
-  disconnect(findAct, 0, 0, 0);
-  disconnect(findAgainAct, 0, 0, 0);
+//  disconnect(findAct, 0, 0, 0);
+//  disconnect(findAgainAct, 0, 0, 0);
   connect(commentAct, SIGNAL(triggered()), doc, SLOT(comment()));
   connect(uncommentAct, SIGNAL(triggered()), doc, SLOT(uncomment()));
   connect(indentAct, SIGNAL(triggered()), doc, SLOT(indent()));

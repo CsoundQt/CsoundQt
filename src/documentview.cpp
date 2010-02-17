@@ -45,11 +45,12 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   splitter = new QSplitter(this);
   splitter->setOrientation(Qt::Vertical);
   splitter->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+  splitter->setContextMenuPolicy (Qt::NoContextMenu);
   for (int i = 0; i < editors.size(); i++) {
     connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
     splitter->addWidget(editors[i]);
+    editors[0]->setContextMenuPolicy (Qt::NoContextMenu);
   }
-
   QStackedLayout *l = new QStackedLayout(this);
   l->addWidget(splitter);
   setLayout(l);
@@ -372,6 +373,13 @@ void DocumentView::textChanged()
 void DocumentView::findReplace()
 {
   // FIXME implment for multiple views
+  QTextCursor cursor = mainEditor->textCursor();
+  QString word = cursor.selectedText();
+  cursor.select(QTextCursor::WordUnderCursor);
+  QString word2 = cursor.selectedText();
+  if (word == word2 && word!= "") {
+    lastSearch = word;
+  }
   FindReplace *dialog = new FindReplace(this,
                                         editors[0],
                                         &lastSearch,
@@ -649,6 +657,7 @@ void DocumentView::updateCsladspaText(QString text)
 
 void DocumentView::contextMenuEvent(QContextMenuEvent *event)
 {
+  qDebug() << "DocumentView::contextMenuEvent";
   QMenu *menu = editors[0]->createStandardContextMenu();
   menu->addSeparator();
   QMenu *opcodeMenu = menu->addMenu("Opcodes");

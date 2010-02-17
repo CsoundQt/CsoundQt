@@ -557,6 +557,10 @@ QList<QPair<QString, QString> > ConfigDialog::getMidiInputDevices()
         deviceList.append(device);
       }
     }
+    QPair<QString, QString> device;
+    device.first = "All available devices "; // Full name with description
+    device.second = "a"; // Devce name
+    deviceList.append(device);
   }
   else { // if not alsa (i.e. winmm or portmidi)
     QFile file(":/test.csd");
