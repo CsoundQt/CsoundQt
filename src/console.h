@@ -36,12 +36,14 @@ class Console : public QTextEdit
     virtual void appendMessage(QString msg);
     virtual void setDefaultFont(QFont font);
     virtual void setColors(QColor textColor, QColor bgColor);
-    void reset();
     void scrollToEnd();
     void setKeyRepeatMode(bool repeat);
 //     void refresh();
 
     QList<int> errorLines;
+
+  public slots:
+    void reset();
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
@@ -57,6 +59,7 @@ class Console : public QTextEdit
   signals:
     void keyPressed(QString key);
     void keyReleased(QString key);
+    void logMessage(QString msg);
 };
 
 class DockConsole : public QDockWidget
@@ -122,7 +125,6 @@ class ConsoleWidget : public Console
     ~ConsoleWidget() {;}
 
     virtual void setWidgetGeometry(int x,int y,int width,int height);
-
   protected:
 //   private slots:
 //     void emitPopUpMenu(QPoint point) {emit(popUpMenu(point));}

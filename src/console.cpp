@@ -29,6 +29,7 @@ Console::Console(QWidget *parent) : QTextEdit(parent)
 
 Console::~Console()
 {
+  disconnect(this, 0,0,0);
 }
 
 void Console::appendMessage(QString msg)
@@ -61,9 +62,8 @@ void Console::appendMessage(QString msg)
 //   text->moveCursor(QTextCursor::Start);
 //   text->moveCursor(QTextCursor::End);
   setTextColor(m_textColor);
-  // Necessary hack to make sure Console show text properly. It's not working...
-  //text->repaint(QRect(0,0, text->width(), text->height()));
 //   lock.unlock();
+  logMessage(msg);
 }
 
 void Console::setDefaultFont(QFont font) 

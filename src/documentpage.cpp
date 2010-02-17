@@ -25,7 +25,7 @@
 #include "csoundengine.h"
 #include "liveeventframe.h"
 #include "eventsheet.h"
-#include "qutecsound.h" // For playParent and renderParent functions (called from button reserved channels)
+#include "qutecsound.h" // For playParent and renderParent functions (called from button reserved channels) and for connecting from console to log file
 #include "opentryparser.h"
 #include "types.h"
 #include "dotgenerator.h"
@@ -71,6 +71,8 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
           m_csEngine, SLOT(keyPressForCsound(QString)));
   connect(m_console, SIGNAL(keyReleased(QString)),
           m_csEngine, SLOT(keyReleaseForCsound(QString)));
+  connect(m_console, SIGNAL(logMessage(QString)),
+          static_cast<qutecsound *>(parent), SLOT(logMessage(QString)));
 
   // Key presses on widget layout and console are passed to the engine
   connect(m_widgetLayout, SIGNAL(keyPressed(QString)),
@@ -102,6 +104,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 DocumentPage::~DocumentPage()
 {
 //  qDebug() << "DocumentPage::~DocumentPage()";
+//  m_csEngine->qTimer.stop();
   disconnect(m_console, 0,0,0);
   disconnect(m_view, 0,0,0);
   disconnect(m_csEngine, 0,0,0);
@@ -262,7 +265,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
                                         liveEventsText.indexOf("\"", index) - index );
       bool ok = false;
       posx = xstr.toInt(&ok);
-      if (!ok)
+      if (!ok || posx < 5)
         posx = frame->x();
     }
     if (liveEventsText.contains("y=\"")) {
@@ -271,7 +274,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
                                         liveEventsText.indexOf("\"", index) - index );
       bool ok = false;
       posy = ystr.toInt(&ok);
-      if (!ok)
+      if (!ok || posy < 5)
         posy = frame->y();
     }
     if (liveEventsText.contains("width=\"")) {
@@ -324,8 +327,7 @@ QString DocumentPage::getFullText()
         QString panel = "<EventPanel name=\"";
         panel += m_liveFrames[i]->getName() + "\" tempo=\"";
         panel += QString::number(m_liveFrames[i]->getTempo(), 'f', 8) + "\" loop=\"";
-        panel += QString::number(m_liveFrames[i]->getLoopLength(), 'f', 8) + "\" name=\"";
-        panel += m_liveFrames[i]->getName() + "\" x=\"";
+        panel += QString::number(m_liveFrames[i]->getLoopLength(), 'f', 8) + "\" x=\"";
         panel += QString::number(m_liveFrames[i]->x()) + "\" y=\"";
         panel += QString::number(m_liveFrames[i]->y()) + "\" width=\"";
         panel += QString::number(m_liveFrames[i]->width()) + "\" height=\"";
@@ -819,8 +821,13 @@ int DocumentPage::runPython()
   QDir::setCurrent(fileName.mid(fileName.lastIndexOf("/") + 1));
   p.start("python \"" + fileName + "\"");
 
-  if (!p.waitForFinished (30000)) {
-    qDebug() << "DocumentPage::runPython() Script took too long!! Current max is 30 secs.";
+  while (!p.waitForFinished (1000)) {
+    // TODO make stop button stop python too
+    QByteArray sout = p.readAllStandardOutput();
+    QByteArray serr = p.readAllStandardError();
+    m_console->appendMessage(sout);
+    m_console->appendMessage(serr);
+    qApp->processEvents();
   }
   QByteArray sout = p.readAllStandardOutput();
   QByteArray serr = p.readAllStandardError();

@@ -7,7 +7,6 @@
 sr = 44100
 ksmps = 128
 nchnls = 2
-0dbfs = 1
 
 instr 1
 

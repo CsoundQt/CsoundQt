@@ -130,11 +130,18 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   connect(distributeVerticalAct, SIGNAL(triggered()), this, SLOT(distributeVertical()));
 
 //  setFocusPolicy(Qt::NoFocus);
+  closing = 0;
   updateData(); // Starts updataData timer
 }
 
 WidgetLayout::~WidgetLayout()
 {
+  disconnect(this, 0,0,0);
+  closing = 1;
+  while (closing == 1) {
+    qApp->processEvents();
+    usleep(10000);
+  }
 }
 
 //void WidgetLayout::setPanel(WidgetPanel* panel)
@@ -2230,6 +2237,10 @@ void WidgetLayout::killCurve(WINDAT *windat)
 
 void WidgetLayout::updateData()
 {
+  if (closing == 1) {
+    closing = 0;
+    return;
+  }
   while (!newCurveBuffer.isEmpty()) {
     Curve * curve = newCurveBuffer.pop();
 //    qDebug() << "WidgetLayout::updateData() curve " << curve->get_caption();

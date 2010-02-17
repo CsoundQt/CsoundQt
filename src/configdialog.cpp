@@ -148,6 +148,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   defaultCsdLineEdit->setEnabled(m_options->defaultCsdActive);
   favoriteLineEdit->setText(m_options->favoriteDir);
   pythonDirLineEdit->setText(m_options->pythonDir);
+  logFileLineEdit->setText(m_options->logFile);
 
   TerminalLineEdit->setText(m_options->terminal);
   browserLineEdit->setText(m_options->browser);
@@ -174,6 +175,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   connect(wavePlayerToolButton, SIGNAL(clicked()), this, SLOT(browseWavePlayer()));
   connect(pdfViewerToolButton, SIGNAL(clicked()), this, SLOT(browsePdfViewer()));
   connect(pythonDirToolButton, SIGNAL(clicked()), this, SLOT(browsePythonDir()));
+  connect(logFileToolButton, SIGNAL(clicked()), this, SLOT(browseLogFile()));
 //  connect(this, SIGNAL(changeFont()), parent, SLOT(changeFont()));
   connect(audioInputToolButton, SIGNAL(released()), this, SLOT(selectAudioInput()));
   connect(audioOutputToolButton, SIGNAL(released()), this, SLOT(selectAudioOutput()));
@@ -282,6 +284,7 @@ void ConfigDialog::accept()
   m_options->defaultCsd = defaultCsdLineEdit->text();
   m_options->favoriteDir = favoriteLineEdit->text();
   m_options->pythonDir = pythonDirLineEdit->text();
+  m_options->logFile = logFileLineEdit->text();
 
   m_options->terminal = TerminalLineEdit->text();
   m_options->browser = browserLineEdit->text();
@@ -402,6 +405,12 @@ void ConfigDialog::browsePythonDir()
   pythonDirLineEdit->setText(m_options->pythonDir);
 }
 
+void ConfigDialog::browseLogFile()
+{
+  browseSaveFile(m_options->logFile);
+  logFileLineEdit->setText(m_options->logFile);
+}
+
 void ConfigDialog::selectAudioInput()
 {
   QList<QPair<QString, QString> > deviceList = getAudioInputDevices();
@@ -460,19 +469,13 @@ void ConfigDialog::selectMidiInput()
   QVector<QAction*> actions;
 
   QPair<QString, QString> device;
-  device.first = "none";
+  device.first = "Disabled";
   device.second = "";
   deviceList.prepend(device);
 
   if (module == "portmidi") {
     device.first = "all";
     device.second = "a";
-    deviceList.prepend(device);
-  }
-
-  if (module == "virtual") {
-    device.first = "enabled";
-    device.second = "0";
     deviceList.prepend(device);
   }
 
@@ -562,13 +565,19 @@ QList<QPair<QString, QString> > ConfigDialog::getMidiInputDevices()
     device.second = "a"; // Devce name
     deviceList.append(device);
   }
+  else if (module == "virtual") {
+    QPair<QString, QString> device;
+    device.first = tr("Enabled", "Virtual MIDI keyboard Enabled");
+    device.second = "0";
+    deviceList.append(device);
+  }
   else { // if not alsa (i.e. winmm or portmidi)
     QFile file(":/test.csd");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
       return deviceList;
     QString jackCSD = QString(file.readAll());
     QString tempText = jackCSD;
-    tempText.replace("$SR", "1000");
+    tempText.replace("$SR", "441000");
     QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdQuteCsoundXXXXXX.csd");
     tempFile.open();
     QTextStream out(&tempFile);
@@ -578,7 +587,7 @@ QList<QPair<QString, QString> > ConfigDialog::getMidiInputDevices()
 
     QStringList flags;
 //     QString rtAudioFlag = "-+rtaudio=" + module;
-    flags << "-+msg_color=false"/* << rtAudioFlag*/ << "-odac"  << "-M999" << tempFile.fileName();
+    flags << "-+msg_color=false"/* << rtAudioFlag*/ << "-otest"  << "-n"  << "-M999" << tempFile.fileName();
     QStringList messages = m_parent->runCsoundInternally(flags);
 
     QString startText, endText;
@@ -645,13 +654,16 @@ QList<QPair<QString, QString> > ConfigDialog::getMidiOutputDevices()
       }
     }
   }
+  else if (module == "virtual") {
+    // do nothing
+  }
   else { // if not alsa (i.e. winmm or portmidi)
     QFile file(":/test.csd");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
       return deviceList;
     QString jackCSD = QString(file.readAll());
     QString tempText = jackCSD;
-    tempText.replace("$SR", "1000");
+    tempText.replace("$SR", "441000");
     QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdQuteCsoundXXXXXX.csd");
     tempFile.open();
     QTextStream out(&tempFile);
@@ -660,7 +672,7 @@ QList<QPair<QString, QString> > ConfigDialog::getMidiOutputDevices()
     tempFile.open();
 
     QStringList flags;
-    flags << "-+msg_color=false" << "-odac"  << "-Q999" << tempFile.fileName();
+    flags << "-+msg_color=false" << "-otest"  << "-n"   << "-Q999" << tempFile.fileName();
     QStringList messages = m_parent->runCsoundInternally(flags);
 
     QString startText, endText;

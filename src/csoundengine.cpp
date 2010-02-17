@@ -65,29 +65,40 @@ CsoundEngine::CsoundEngine()
   eventTimeStamps.resize(QUTECSOUND_MAX_EVENTS);
   eventQueueSize = 0;
 
-  QTimer *queueTimer = new QTimer(this);
-  queueTimer->setSingleShot(false);
-  connect(queueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
-  refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;  // Eventually allow this to be changed
-  queueTimer->start(refreshTime);
+//  qTimer = new QTimer(this);
+  closing = 0;
+//  qTimer.setSingleShot(true);
+//
+//  connect(&qTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
+//  refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;  // Eventually allow this to be changed
+//  qTimer.start(refreshTime);
 }
 
 CsoundEngine::~CsoundEngine()
 {
 //  qDebug() << "CsoundEngine::~CsoundEngine() ";
+  closing = 1;
   stop();
+  disconnect(this, 0,0,0);
+//  disconnect(&qTimer, 0,0,0);
+//  qTimer.stop();
+//  while (qTimer.isActive()) {
+////    qTimer.deleteLater();
+//    usleep(1000); // This actually depends on QCS_QUEUETIMER_DEFAULT_TIME
+//    qApp->processEvents();
+//  }
 #ifndef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(csound);
 #endif
   //FIXME sometimes messages slip past destruction of this object...
 //  flushMessageQueue();
 //  free(ud);
+//  consoles.clear();
+//  for (int i = 0; i < consoles.size(); i++) {
+//  }
   free(pFields);
   delete ud;
   delete recBuffer;
-//  qApp->processEvents();
-//  queueTimer->stop();   // This crashes... so is the timer being deleted?
-//  queueTimer->deleteLater();
 }
 
 void CsoundEngine::messageCallbackNoThread(CSOUND *csound,
@@ -749,6 +760,7 @@ int CsoundEngine::runCsound()
     qDebug() << "Csound compile failed! "  << ud->result;
     flushMessageQueue();
     for (int i = 0; i < argc; i++) {
+      qDebug() << argv[i];
       free(argv[i]);
     }
     free(argv);
@@ -850,6 +862,10 @@ void CsoundEngine::stopCsound()
 void CsoundEngine::dispatchQueues()
 {
 //   qDebug("qutecsound::dispatchQueues()");
+  if (closing == 1) {
+    closing = 0;
+    return;
+  }
   int counter = 0;
   ud->wl->getMouseValues(&ud->mouseValues);
   ud->wl->processNewValues();  // Process values from widgets even if not running
@@ -896,7 +912,8 @@ void CsoundEngine::dispatchQueues()
       stop();
     }
   }
-//  qApp->processEvents();
+  //  qApp->processEvents();
+  QTimer::singleShot(refreshTime, this, SLOT(dispatchQueues()));
 }
 
 void CsoundEngine::queueMessage(QString message)

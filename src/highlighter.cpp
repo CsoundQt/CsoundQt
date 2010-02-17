@@ -59,6 +59,7 @@ Highlighter::Highlighter(QTextDocument *parent)
   keywords << "for" << "in" << "while" << "continue" << "pass" << "break";
   keywords << "def" << "return" << "lambda";
   keywords << "yield" << "assert" << "try" << "except" << "finally" << "raise";
+  keywords << "True" << "False" << "None";
 
   keywordFormat.setForeground(QColor("blue"));
   keywordFormat.setFontWeight(QFont::Bold);
@@ -254,6 +255,14 @@ void Highlighter::highlightPythonBlock(const QString &text)
       setFormat(index, length, keywordFormat);
       index = text.indexOf(expression, index + length);
     }
+  }
+  QRegExp strings( QRegExp("[\"'].*[\"']"));
+  //     QString temp = rule.pattern.pattern();
+  index = text.indexOf(strings);
+  while (index >= 0) {
+    int length = strings.matchedLength();
+    setFormat(index, length, quotationFormat);
+    index = text.indexOf(strings, index + length);
   }
   QRegExp expComment("#.*");
   index = text.indexOf(expComment);

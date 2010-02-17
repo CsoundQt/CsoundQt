@@ -98,6 +98,7 @@ class qutecsound:public QMainWindow
     void setWidgetTooltipsVisible(bool visible);
 //    void updateWidgets();
     void openExample();
+    void logMessage(QString msg);
 //    void registerLiveEvent(QWidget *e);
 
   protected:
@@ -182,6 +183,7 @@ class qutecsound:public QMainWindow
     QString getSaveFileName();
     void createQuickRefPdf();
     void deleteCurrentTab();
+    void openLogFile();
 
 //     QHash<QString, double> outValueQueue;
 //    QHash<QString, double> inValueQueue;
@@ -197,6 +199,7 @@ class qutecsound:public QMainWindow
     QString m_widgetClipboard;
     Inspector *m_inspector;
     QToolButton *closeTabButton;
+    QFile logFile;
 
     QVector<QAction *> m_keyActions; //Actions which have keyboard shortcuts
 

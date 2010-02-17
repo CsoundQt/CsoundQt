@@ -101,6 +101,31 @@ void Inspector::parseText(const QString &text)
   m_treeWidget->expandItem(scoreItem);
 }
 
+void Inspector::parsePythonText(const QString &text)
+{
+//  qDebug() << "Inspector:parseText";
+  m_treeWidget->clear();
+  TreeItem *importItem = new TreeItem(m_treeWidget, QStringList(tr("Imports")));
+  importItem->setLine(-1);
+  TreeItem *functionItem = new TreeItem(m_treeWidget, QStringList(tr("Functions")));
+  functionItem->setLine(-1);
+  QStringList lines = text.split(QRegExp("[\n\r]"));
+  for (int i = 0; i< lines.size(); i++) {
+    if (lines[i].trimmed().contains("import")) {
+      QStringList columnslist(lines[i].simplified());
+      TreeItem *newItem = new TreeItem(importItem, columnslist);
+      newItem->setLine(i + 1);
+    }
+    else if (lines[i].trimmed().startsWith("def ")) {
+      QStringList columnslist(lines[i].simplified());
+      TreeItem *newItem = new TreeItem(functionItem, columnslist);
+      newItem->setLine(i + 1);
+    }
+  }
+  m_treeWidget->expandItem(importItem);
+  m_treeWidget->expandItem(functionItem);
+}
+
 void Inspector::focusInEvent (QFocusEvent * event)
 {
   QWidget::focusInEvent(event);

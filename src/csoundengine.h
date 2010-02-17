@@ -142,6 +142,7 @@ class CsoundEngine : public QObject
     bool isRecording();
 
     QMutex perfMutex;  // TODO is this still needed?
+//    QTimer qTimer;  // This 4timer is started and stopped from the document page
 
   public slots:
     int play(CsoundOptions *options);
@@ -187,10 +188,11 @@ class CsoundEngine : public QObject
 
     QMutex eventMutex;
     QVector<QString> eventQueue;
-    QTimer *queueTimer;
     int refreshTime; // time in milliseconds for widget value updates (both input and output)
     QVector<unsigned long> eventTimeStamps;
     int eventQueueSize;
+
+    int closing; // to notify timer this class is being destroyed
 
   private slots:
     void recordBuffer();

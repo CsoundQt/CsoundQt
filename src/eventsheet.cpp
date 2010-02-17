@@ -239,21 +239,19 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
  // Separataion is stored in UserRole of items
   // remember to treat comments and formulas properly
   QStringList lines = text.split("\n");
+  this->setRowCount(lines.size() + rowOffset + 1);
   for (int i = 0; i < lines.size(); i++) {
     if (numRows != 0 && i >= numRows) {  // Only paste up to a certain number of rows if not 0
       break;
     }
-    while (this->rowCount() <= i + rowOffset) {
-      appendRow();
-    }
     QString line = lines[i].trimmed(); //Remove whitespace from start and end
     QList<QPair<QString, QString> > fields = parseLine(line);
+    if (this->columnCount() < fields.size() + columnOffset + 1) {
+      this->setColumnCount(fields.size() + columnOffset + 1);
+    }
     for (int j = 0; j < fields.size(); j++) {
       if (numColumns != 0 && j >= numColumns) {  // Only paste up to a certain number of columns if not 0
         break;
-      }
-      while (this->columnCount() <= j + columnOffset) {
-        appendColumn();
       }
       QTableWidgetItem * item = this->item(i + rowOffset, j + columnOffset);
       if (item == 0) {

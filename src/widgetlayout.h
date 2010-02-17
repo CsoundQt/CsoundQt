@@ -217,6 +217,7 @@ class WidgetLayout : public QWidget
     QPoint currentPosition;
     QCheckBox *bgCheckBox;
     QPushButton *bgButton;
+    int closing; // to control timer when destroying this object
 
     QVector<QString> m_history;  // Undo/ Redo history
     int m_historyIndex; // Current point in history

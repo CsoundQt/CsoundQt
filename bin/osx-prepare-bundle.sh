@@ -28,3 +28,18 @@ cp ../src/MyInfo.plist QuteCsound.app/Contents/Info.plist
 
 otool -L QuteCsound.app/Contents/MacOS/qutecsound
 tar -czvf QuteCsound-incQt.tar.gz QuteCsound.app
+
+# make Standalone application
+cp -R /Library/Frameworks/CsoundLib.framework QuteCsound.app/Contents/Frameworks/
+cp -R /usr/local/lib/libsndfile.1.dylib QuteCsound.app/Contents/libsndfile.dylib
+
+install_name_tool -id @executable_path/../Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
+install_name_tool -change /Library/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib @executable_path/../Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib QuteCsound.app/Contents/MacOS/qutecsound
+install_name_tool -change  /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib QuteCsound.app/Contents/MacOS/qutecsound
+install_name_tool -change /Library/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib @executable_path/../Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib QuteCsound.app/Contents/MacOS/qutecsound
+install_name_tool -change /Library/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib @executable_path/../Frameworks/CsoundLib.framework/Versions/Current/CsoundLib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
+
+install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
+install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
+
+tar -czvf QuteCsound-full.tar.gz QuteCsound.app

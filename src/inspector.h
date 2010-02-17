@@ -47,6 +47,7 @@ class Inspector : public QDockWidget
     Inspector(QWidget *parent);
     ~Inspector();
     void parseText(const QString &text);
+    void parsePythonText(const QString &text);
 
   protected:
     virtual void focusInEvent (QFocusEvent * event);

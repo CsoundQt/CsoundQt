@@ -65,6 +65,7 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
     void browseDefaultCsd();
     void browseFavorite();
     void browsePythonDir();
+    void browseLogFile();
     void browseTerminal();
     void browseBrowser();
     void browseDot();
