@@ -1406,14 +1406,25 @@ QList<QPair<QString, QString> > EventSheet::parseLine(QString line)
         formula = true;
       }
       else if (line[count] == ';') { // comment
-        field.first = pvalue;
-        field.second = spacing;
-        list.append(field);  //Should only append when pcount is incremented
-        pcount++;
+//        field.first = pvalue;
+//        field.second = spacing;
+//        list.append(field);  //Should only append when pcount is incremented
+//        pcount++;
+        count++;
         QString comment = line.mid(count);
-        field.first = comment;
-        field.second = "";
-        break; // Nothing more todo on this line
+        QStringList parts = comment.split(";");
+        for (int i = 0; i < parts.size(); i++) {
+          if (i==0) {  // Only put the ; character visible on the first column
+            field.first = ";" + parts[i];
+          }
+          else {
+            field.first = parts[i];
+          }
+          field.second = ";";
+          list.append(field);
+          pcount++;
+        }
+        return list; // Nothing more todo on this line
       }
       // ---
       if (!line[count].isSpace()) { // Not White space so new p-field has started
