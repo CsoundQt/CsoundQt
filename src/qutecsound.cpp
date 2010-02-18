@@ -161,6 +161,8 @@ qutecsound::qutecsound(QStringList fileNames)
 
   applySettings();
   createQuickRefPdf();
+
+  openLogFile();
 }
 
 qutecsound::~qutecsound()
@@ -177,6 +179,7 @@ void qutecsound::devicesMessageCallback(CSOUND *csound,
   QStringList *messages = (QStringList *) csoundGetHostData(csound);
   QString msg;
   msg = msg.vsprintf(fmt, args);
+  qDebug() << msg;
   messages->append(msg);
 }
 
@@ -212,7 +215,7 @@ void qutecsound::changePage(int index)
       w->setParent(0); //FIXME this is crashing ocasionally at startup
     }
 //    documentPages[curPage]->setMacWidgetsText
-    setCurrentFile(documentPages[curPage]->fileName);
+    setCurrentFile(documentPages[curPage]->getFileName());
     connectActions();
     documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
     documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
@@ -260,6 +263,13 @@ void qutecsound::openExample()
 //   saveAs();
 }
 
+void qutecsound::logMessage(QString msg)
+{
+  if (logFile.isOpen()) {
+    logFile.write(msg.toAscii());
+  }
+}
+
 //void qutecsound::registerLiveEvent(QWidget *_e)
 //{
 //  qDebug() << "qutecsound::registerLiveEvent";
@@ -287,6 +297,9 @@ void qutecsound::closeEvent(QCloseEvent *event)
   foreach (QString tempFile, tempScriptFiles) {
     QDir().remove(tempFile);
   }
+  if (logFile.isOpen()) {
+    logFile.close();
+  }
   delete m_options;
   delete m_console;
   delete helpPanel;
@@ -313,7 +326,7 @@ void qutecsound::newFile()
   else {
     loadFile(":/default.csd");
   }
-  documentPages[curPage]->fileName = "";
+  documentPages[curPage]->setFileName("");
   setWindowModified(false);
   documentTabs->setTabIcon(curPage, modIcon);
   documentTabs->setTabText(curPage, "default.csd");
@@ -334,7 +347,7 @@ void qutecsound::open()
   if (inspectorVisible && m_inspector->isFloating())
     m_inspector->hide(); // Necessary for Mac, as widget Panel covers open dialog
   fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"), lastUsedDir ,
-                                            tr("Csound Files (*.csd *.orc *.sco);;All Files (*)"));
+                                            tr("Csound Files (*.csd *.orc *.sco);;Python Files (*.py);;All Files (*)"));
   if (widgetsVisible)
     widgetPanel->show();
   if (helpVisible)
@@ -358,7 +371,7 @@ void qutecsound::open()
 void qutecsound::reload()
 {
   if (documentPages[curPage]->isModified()) {
-    QString fileName = documentPages[curPage]->fileName;
+    QString fileName = documentPages[curPage]->getFileName();
     deleteCurrentTab();
     loadFile(fileName);
   }
@@ -446,7 +459,8 @@ void qutecsound::closeGraph()
 
 bool qutecsound::save()
 {
-  if (documentPages[curPage]->fileName.isEmpty() or documentPages[curPage]->fileName.startsWith(":/examples/")) {
+  QString fileName = documentPages[curPage]->getFileName();
+  if (fileName.isEmpty() or fileName.startsWith(":/examples/")) {
     return saveAs();
   }
   else if (documentPages[curPage]->readOnly){
@@ -459,7 +473,7 @@ bool qutecsound::save()
     }
   }
   else {
-    return saveFile(documentPages[curPage]->fileName);
+    return saveFile(fileName);
   }
 }
 
@@ -538,7 +552,8 @@ QString qutecsound::getSaveFileName()
   if (inspectorVisible && m_inspector->isFloating())
     m_inspector->hide(); // Necessary for Mac, as widget Panel covers open dialog
   QString dir = lastUsedDir;
-  dir += documentPages[curPage]->fileName.mid(documentPages[curPage]->fileName.lastIndexOf("/") + 1);
+  QString name = documentPages[curPage]->getFileName();
+  dir += name.mid(name.lastIndexOf("/") + 1);
   QString fileName = QFileDialog::getSaveFileName(this, tr("Save File As"),
                                                   dir,
                                                   tr("Csound Files (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)"));
@@ -560,6 +575,8 @@ QString qutecsound::getSaveFileName()
 //    && !fileName.endsWith(".sco",Qt::CaseInsensitive) && !fileName.endsWith(".txt",Qt::CaseInsensitive)
 //    && !fileName.endsWith(".udo",Qt::CaseInsensitive))
 //    fileName += ".csd";
+  if (fileName.isEmpty())
+    fileName = name;
   if (!fileName.contains("."))
     fileName += ".csd";
   return fileName;
@@ -589,7 +606,7 @@ void qutecsound::createQuickRefPdf()
 
 void qutecsound::deleteCurrentTab()
 {
-//  qDebug() << "qutecsound::deleteCurrentTab()";
+  qDebug() << "qutecsound::deleteCurrentTab()";
   disconnect(showLiveEventsAct, 0,0,0);
   documentPages[curPage]->showLiveEventFrames(false);
   DocumentPage *d = documentPages[curPage];
@@ -598,6 +615,26 @@ void qutecsound::deleteCurrentTab()
   if (curPage < 0)
     curPage = 0; // deleting the document page decreases curPage, so must check
 //  documentTabs->removeTab(curPage);  // Tab is already removed when destroying the content
+}
+
+void qutecsound::openLogFile()
+{
+  if (logFile.isOpen()) {
+    logFile.close();
+  }
+  logFile.setFileName(m_options->logFile);
+  if (m_options->logFile.isEmpty())
+    return;
+  if (logFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
+    logFile.readAll();
+    QString text = "--**-- QuteCsound Logging Started: "
+                   + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss")
+                   + "\n";
+    logFile.write(text.toAscii());
+  }
+  else {
+    qDebug() << "qutecsound::openLogFile() Error. Could not open log file! NO logging.";
+  }
 }
 
 bool qutecsound::saveAs()
@@ -620,10 +657,11 @@ bool qutecsound::saveNoWidgets()
 
 bool qutecsound::closeTab(bool askCloseApp)
 {
-//   qDebug("qutecsound::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
+   qDebug("qutecsound::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
   if (documentPages[curPage]->isModified()) {
     QString message = tr("The document ")
-                      + (documentPages[curPage]->fileName != "" ? documentPages[curPage]->fileName: "untitled.csd")
+                      + (documentPages[curPage]->getFileName() != ""
+                         ? documentPages[curPage]->getFileName(): "untitled.csd")
                       + tr("\nhas been modified.\nDo you want to save the changes before closing?");
     int ret = QMessageBox::warning(this, tr("QuteCsound"),
                                    message,
@@ -705,17 +743,16 @@ void qutecsound::join()
 //   layout->resize(400, 200);
 
   for (int i = 0; i < documentPages.size(); i++) {
-    QString name = documentPages[i]->fileName;
-    if (documentPages[i]->fileName.endsWith(".orc"))
-      list1->addItem(documentPages[i]->fileName);
-    else if (documentPages[i]->fileName.endsWith(".sco"))
-      list2->addItem(documentPages[i]->fileName);
+    QString name = documentPages[i]->getFileName();
+    if (name.endsWith(".orc"))
+      list1->addItem(name);
+    else if (name.endsWith(".sco"))
+      list2->addItem(name);
   }
-  QList<QListWidgetItem *> itemList = list1->findItems(documentPages[curPage]->fileName,
-      Qt::MatchExactly);
+  QString name = documentPages[curPage]->getFileName();
+  QList<QListWidgetItem *> itemList = list1->findItems(name, Qt::MatchExactly);
   if (itemList.size() > 0)
     list1->setCurrentItem(itemList[0]);
-  QString name = documentPages[curPage]->fileName;
   QList<QListWidgetItem *> itemList2 = list2->findItems(name.replace(".orc", ".sco"),
       Qt::MatchExactly);
   if (itemList2.size() > 0)
@@ -729,7 +766,7 @@ void qutecsound::join()
     QString orcText = "";
     QString scoText = "";
     for (int i = 0; i < documentPages.size(); i++) {
-      QString name = documentPages[i]->fileName;
+      QString name = documentPages[i]->getFileName();
       if (name == list1->currentItem()->text())
         orcText = documentPages[i]->getFullText();
       else if (name == list2->currentItem()->text())
@@ -773,7 +810,7 @@ void qutecsound::play(bool realtime)
 {
   // TODO make csound pause if it is already running
   runAct->setChecked(true);  // In case the call comes from a button
-  if (documentPages[curPage]->fileName.isEmpty()) {
+  if (documentPages[curPage]->getFileName().isEmpty()) {
     QMessageBox::warning(this, tr("QuteCsound"),
                          tr("This file has not been saved\nPlease select name and location."));
     if (!saveAs()) {
@@ -789,16 +826,15 @@ void qutecsound::play(bool realtime)
       }
   }
   m_options->csdPath = "";
-  if (documentPages[curPage]->fileName.contains('/')) {
+  QString fileName, fileName2;
+  fileName = documentPages[curPage]->getFileName();
+  if (fileName.contains('/')) {
     //FIXME is it necessary to set the csdPath here?
 //    m_options->csdPath =
 //        documentPages[curPage]->fileName.left(documentPages[curPage]->fileName.lastIndexOf('/'));
-    QDir::setCurrent(documentPages[curPage]
-                     ->fileName.left(documentPages[curPage]->fileName.lastIndexOf('/')));
+    QDir::setCurrent(fileName.left(fileName.lastIndexOf('/')));
   }
-  QString fileName, fileName2;
-  fileName = documentPages[curPage]->fileName;
-  if (!fileName.endsWith(".csd",Qt::CaseInsensitive)) {
+  if (!fileName.endsWith(".csd",Qt::CaseInsensitive) && !fileName.endsWith(".py",Qt::CaseInsensitive))  {
     if (documentPages[curPage]->askForFile)
       getCompanionFileName();
     // FIXME run orc file when sco companion is currently active
@@ -838,12 +874,17 @@ void qutecsound::play(bool realtime)
   else {
     runFileName1 = fileName;
   }
-  runFileName2 = documentPages[curPage]->companionFile;
+  runFileName2 = documentPages[curPage]->getCompanionFileName();
   m_options->fileName1 = runFileName1;
   m_options->fileName2 = runFileName2;
   m_options->rt = realtime;
-  int ret = documentPages[curPage]->play(m_options);
 
+  if (_configlists.rtAudioNames[m_options->rtAudioModule] == "alsa"
+      or _configlists.rtAudioNames[m_options->rtAudioModule] == "coreaudio") {
+    stopAll();
+    runAct->setChecked(true);  // mark it correctly again after stopping...
+  }
+  int ret = documentPages[curPage]->play(m_options);
   if (ret == -1) {
     runAct->setChecked(false);
     QMessageBox::critical(this,
@@ -872,7 +913,7 @@ void qutecsound::play(bool realtime)
 
 void qutecsound::runInTerm(bool realtime)
 {
-  QString fileName = documentPages[curPage]->fileName;
+  QString fileName = documentPages[curPage]->getFileName();
   QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "QuteCsoundExample-XXXXXX.csd");
   tempFile.setAutoRemove(false);
   if (fileName.startsWith(":/examples/")) {
@@ -1223,6 +1264,9 @@ void qutecsound::applySettings()
   runAct->setStatusTip(tr("Play") + playOptions);
   renderAct->setStatusTip(tr("Render to file") + renderOptions);
   fillFavoriteMenu();
+  if (m_options->logFile != logFile.fileName()) {
+    openLogFile();
+  }
 }
 
 void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
@@ -1336,7 +1380,7 @@ void qutecsound::runUtility(QString flags)
 //     if (m_options->ssdirActive)
 //       script += "export INCDIR=" + m_options->incdir + "\n";
 
-    script += "cd " + QFileInfo(documentPages[curPage]->fileName).absolutePath() + "\n";
+    script += "cd " + QFileInfo(documentPages[curPage]->getFileName()).absolutePath() + "\n";
 #ifdef Q_WS_MAC
     script += "/usr/local/bin/csound " + flags + "\n";
 #else
@@ -1405,7 +1449,12 @@ void qutecsound::updateInspector()
   // This slot is triggered when a tab is closed, so you need to check
   // if curPage is valid.
 //  if (curPage < documentPages.size())
+  if (!documentPages[curPage]->getFileName().endsWith("py")) {
     m_inspector->parseText(documentPages[curPage]->getBasicText());
+  }
+  else {
+    m_inspector->parsePythonText(documentPages[curPage]->getBasicText());
+  }
 }
 
 void qutecsound::setDefaultKeyboardShortcuts()
@@ -1613,8 +1662,8 @@ void qutecsound::createActions()
   connect(stopAct, SIGNAL(triggered()), this, SLOT(stop()));
 
   stopAllAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop All"), this);
-  stopAct->setStatusTip(tr("Stop all running documents"));
-  stopAct->setIconText(tr("Stop All"));
+  stopAllAct->setStatusTip(tr("Stop all running documents"));
+  stopAllAct->setIconText(tr("Stop All"));
   connect(stopAllAct, SIGNAL(triggered()), this, SLOT(stopAll()));
 
   recAct = new QAction(QIcon(":/images/gtk-media-record.png"), tr("Record"), this);
@@ -2307,7 +2356,8 @@ void qutecsound::readSettings()
   m_options->rtOutputDevice = settings.value("rtOutputDevice", "dac").toString();
   m_options->rtJackName = settings.value("rtJackName", "").toString();
   if (settingsVersion < 2) {
-    m_options->rtJackName.append("*");
+    if (!m_options->rtJackName.endsWith("*"))
+      m_options->rtJackName.append("*");
   }
   m_options->rtMidiModule = settings.value("rtMidiModule", 0).toInt();
   m_options->rtMidiInputDevice = settings.value("rtMidiInputDevice", "0").toString();
@@ -2330,6 +2380,7 @@ void qutecsound::readSettings()
   m_options->defaultCsdActive = settings.value("defaultCsdActive","").toBool();
   m_options->favoriteDir = settings.value("favoriteDir","").toString();
   m_options->pythonDir = settings.value("pythonDir","").toString();
+  m_options->logFile = settings.value("logFile",DEFAULT_LOG_FILE).toString();
   m_options->opcodexmldir = settings.value("opcodexmldir", "").toString();
   m_options->opcodexmldirActive = settings.value("opcodexmldirActive","").toBool();
   settings.endGroup();
@@ -2397,7 +2448,7 @@ void qutecsound::writeSettings()
   QStringList files;
   if (m_options->rememberFile) {
     for (int i = 0; i < documentPages.size(); i++ ) {
-          files.append(documentPages[i]->fileName);
+      files.append(documentPages[i]->getFileName());
     }
   }
   settings.setValue("lastfiles", files);
@@ -2452,6 +2503,7 @@ void qutecsound::writeSettings()
   settings.setValue("defaultCsdActive",m_options->defaultCsdActive);
   settings.setValue("favoriteDir",m_options->favoriteDir);
   settings.setValue("pythonDir",m_options->pythonDir);
+  settings.setValue("logFile",m_options->logFile);
   settings.setValue("opcodexmldir", m_options->opcodexmldir);
   settings.setValue("opcodexmldirActive",m_options->opcodexmldirActive);
   settings.endGroup();
@@ -2562,8 +2614,6 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   connect(documentPages[curPage]->getView(), SIGNAL(lineNumberSignal(int)),
           this, SLOT(showLineNumber(int)));
 
-
-
   if (fileName.startsWith(m_options->csdocdir))
     documentPages[curPage]->readOnly = true;
   QString text;
@@ -2576,6 +2626,9 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
     if (!line.endsWith("\n"))
       text += "\n";
   }
+  if (fileName == ":/default.csd")
+    fileName = QString("");
+  documentPages[curPage]->setFileName(fileName);  // Must set before sending text to set highlighting mode
   documentPages[curPage]->setTextString(text, m_options->saveWidgets);
   documentTabs->insertTab(curPage, documentPages[curPage]->getView(),"");
   documentTabs->setCurrentIndex(curPage);
@@ -2583,9 +2636,6 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
 
 //  documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
   documentPages[curPage]->setModified(false);
-  if (fileName == ":/default.csd")
-    fileName = QString("");
-  documentPages[curPage]->fileName = fileName;
   setCurrentFile(fileName);
   setWindowModified(false);
   documentTabs->setTabIcon(curPage, QIcon());
@@ -2640,8 +2690,8 @@ bool qutecsound::saveFile(const QString &fileName, bool saveWidgets)
     text = documentPages[curPage]->getBasicText();
   QApplication::restoreOverrideCursor();
 
-  if (fileName != documentPages[curPage]->fileName && saveWidgets) {
-    documentPages[curPage]->fileName = fileName;
+  if (fileName != documentPages[curPage]->getFileName() && saveWidgets) {
+    documentPages[curPage]->setFileName(fileName);
     setCurrentFile(fileName);
   }
   documentPages[curPage]->setModified(false);
@@ -2709,7 +2759,7 @@ QString qutecsound::generateScript(bool realtime, QString tempFileName)
 //     script += "export INCDIR=" + m_options->incdir + "\n";
 
 #ifndef Q_OS_WIN32
-  script += "cd " + QFileInfo(documentPages[curPage]->fileName).absolutePath() + "\n";
+  script += "cd " + QFileInfo(documentPages[curPage]->getFileName()).absolutePath() + "\n";
 #else
   QString script_cd = "@pushd " + QFileInfo(documentPages[curPage]->fileName).absolutePath() + "\n";
   script_cd.replace("/", "\\");
@@ -2723,16 +2773,18 @@ QString qutecsound::generateScript(bool realtime, QString tempFileName)
 #endif
 
   if (tempFileName == ""){
-    if (documentPages[curPage]->companionFile != "") {
-      if (documentPages[curPage]->fileName.endsWith(".orc"))
-        cmdLine += "\""  + documentPages[curPage]->fileName
-            + "\" \""+ documentPages[curPage]->companionFile + "\" ";
+    QString fileName = documentPages[curPage]->getFileName();
+    if (documentPages[curPage]->getCompanionFileName() != "") {
+      QString companionFile = documentPages[curPage]->getCompanionFileName();
+      if (fileName.endsWith(".orc"))
+        cmdLine += "\""  + fileName
+            + "\" \""+ companionFile + "\" ";
       else
-        cmdLine += "\""  + documentPages[curPage]->companionFile
-            + "\" \""+ documentPages[curPage]->fileName + "\" ";
+        cmdLine += "\""  + companionFile
+            + "\" \""+ fileName + "\" ";
     }
-    else if (documentPages[curPage]->fileName.endsWith(".csd",Qt::CaseInsensitive)) {
-      cmdLine += "\""  + documentPages[curPage]->fileName + "\" ";
+    else if (fileName.endsWith(".csd",Qt::CaseInsensitive)) {
+      cmdLine += "\""  + fileName + "\" ";
     }
   }
   else {
@@ -2776,17 +2828,22 @@ void qutecsound::getCompanionFileName()
   splitter->resize(400, 200);
   splitter->setOrientation(Qt::Vertical);
   QString extensionComplement = "";
-  if (documentPages[curPage]->fileName.endsWith(".orc"))
+  if (documentPages[curPage]->getFileName().endsWith(".orc"))
     extensionComplement = ".sco";
-  else if (documentPages[curPage]->fileName.endsWith(".sco"))
+  else if (documentPages[curPage]->getFileName().endsWith(".sco"))
     extensionComplement = ".orc";
+  else if (documentPages[curPage]->getFileName().endsWith(".udo"))
+    extensionComplement = ".csd";
+  else if (documentPages[curPage]->getFileName().endsWith(".inc"))
+    extensionComplement = ".csd";
 
   for (int i = 0; i < documentPages.size(); i++) {
-    QString name = documentPages[i]->fileName;
-    if (documentPages[i]->fileName.endsWith(extensionComplement))
-      list->addItem(documentPages[i]->fileName);
+    QString name = documentPages[i]->getFileName();
+    if (name.endsWith(extensionComplement))
+      list->addItem(name);
   }
-  QList<QListWidgetItem *> itemList = list->findItems(documentPages[curPage]->companionFile,
+  QList<QListWidgetItem *> itemList = list->findItems(
+      documentPages[curPage]->getCompanionFileName(),
       Qt::MatchExactly);
   if (itemList.size() > 0)
     list->setCurrentItem(itemList[0]);
@@ -2795,10 +2852,11 @@ void qutecsound::getCompanionFileName()
   QString itemText = item->text();
   if (checkbox->isChecked())
     documentPages[curPage]->askForFile = false;
-  documentPages[curPage]->companionFile = itemText;
+  documentPages[curPage]->setCompanionFileName(itemText);
   for (int i = 0; i < documentPages.size(); i++) {
-    if (documentPages[i]->fileName == documentPages[curPage]->companionFile) {
-      documentPages[i]->companionFile = documentPages[curPage]->fileName;
+    if (documentPages[i]->getFileName() == documentPages[curPage]->getCompanionFileName()
+      && !documentPages[i]->getFileName().endsWith(".csd")) {
+      documentPages[i]->setCompanionFileName(documentPages[curPage]->getFileName());
       documentPages[i]->askForFile = documentPages[curPage]->askForFile;
       break;
     }
@@ -2825,7 +2883,7 @@ int qutecsound::isOpen(QString fileName)
   int open = -1;
   int i = 0;
   for (i = 0; i < documentPages.size(); i++) {
-      if (documentPages[i]->fileName == fileName) {
+      if (documentPages[i]->getFileName() == fileName) {
         open = i;
         break;
       }
@@ -2841,7 +2899,7 @@ int qutecsound::isOpen(QString fileName)
 
 QStringList qutecsound::runCsoundInternally(QStringList flags)
 {
-  qDebug("qutecsound::runCsoundInternally()");
+  qDebug() << "qutecsound::runCsoundInternally() " << flags.join(" ");
   static char *argv[33];
   int index = 0;
   foreach (QString flag, flags) {
@@ -2858,20 +2916,23 @@ QStringList qutecsound::runCsoundInternally(QStringList flags)
   CSOUND *csoundD;
   csoundD=csoundCreate(0);
   csoundReset(csoundD);
-  csoundSetHostData(csoundD, (void *) &m_deviceMessages);
+  csoundSetHostData(csoundD, (void *) &m_deviceMessages);  // To pass message variable data
   csoundSetMessageCallback(csoundD, &qutecsound::devicesMessageCallback);
   int result = csoundCompile(csoundD,argc,argv);
-  if(!result){
-    while(csoundPerformKsmps(csoundD)==0) {};
+  if(!result) {
+    while(csoundPerformKsmps(csoundD) == 0){}
+    csoundCleanup(csoundD);
   }
-
-  csoundCleanup(csoundD);
+//  csoundSetMessageCallback(csoundD, 0);
+//  csoundCleanup(csoundD);
+  csoundReset(csoundD);
   csoundDestroy(csoundD);
 
 #ifdef MACOSX_PRE_SNOW
 // Put menu bar back
   SetMenuBar(menuBarHandle);
 #endif
+  qDebug() << "qutecsound::runCsoundInternally done";
   return m_deviceMessages;
 }
 
