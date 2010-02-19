@@ -8,6 +8,7 @@ mv qutecsound.app QuteCsound.app
 tar -czvf QuteCsound-noQt.tar.gz QuteCsound.app
 mkdir QuteCsound.app/Contents/Frameworks
 
+# make version including Qt
 cp -R /Library/Frameworks/QtCore.framework QuteCsound.app/Contents/Frameworks/
 cp -R /Library/Frameworks/QtGui.framework QuteCsound.app/Contents/Frameworks/
 cp -R /Library/Frameworks/QtXml.framework QuteCsound.app/Contents/Frameworks/
@@ -52,6 +53,7 @@ install_name_tool -change /Library/Frameworks/CsoundLib.framework/Versions/5.2/C
 install_name_tool -id @executable_path/../libsndfile.dylib QuteCsound.app/Contents/libsndfile.dylib
 install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
 install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
+install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib QuteCsound.app/Contents/MacOS/qutecsound
 
 install_name_tool -id @executable_path/../libportaudio.dylib QuteCsound.app/Contents/libportaudio.dylib
 install_name_tool -change /usr/local/lib/libportaudio.2.dylib @executable_path/../libportaudio.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
@@ -66,8 +68,8 @@ install_name_tool -change /usr/local/lib/libmpadec.dylib @executable_path/../lib
 install_name_tool -change /usr/local/lib/libmpadec.2.dylib @executable_path/../libmpadec.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
 
 install_name_tool -id @executable_path/../liblo.dylib QuteCsound.app/Contents/liblo.dylib
-install_name_tool -change /usr/local/lib/liblo.0.6.0.dylib @executable_path/../liblo.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
-install_name_tool -change /usr/local/lib/liblo.0.6.0.dylib @executable_path/../liblo.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
+install_name_tool -change /usr/local/lib/liblo.0.dylib @executable_path/../liblo.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
+install_name_tool -change /usr/local/lib/liblo.0.dylib @executable_path/../liblo.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
 
 install_name_tool -id @executable_path/../libfltk.dylib QuteCsound.app/Contents/libfltk.dylib
 install_name_tool -change /usr/local/lib/libfltk.1.1.dylib @executable_path/../libfltk.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib

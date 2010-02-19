@@ -94,6 +94,7 @@ class DocumentView : public QScrollArea
     void autoComplete();
     void insertTextFromAction();
     void findString(QString query = QString());
+    void createContextMenu(QPoint pos);
 
     void comment();
     void uncomment();

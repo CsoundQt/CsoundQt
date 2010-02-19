@@ -49,7 +49,9 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   for (int i = 0; i < editors.size(); i++) {
     connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
     splitter->addWidget(editors[i]);
-    editors[0]->setContextMenuPolicy (Qt::NoContextMenu);
+    editors[i]->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(editors[i], SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(createContextMenu(QPoint)));
   }
   QStackedLayout *l = new QStackedLayout(this);
   l->addWidget(splitter);
@@ -461,6 +463,36 @@ void DocumentView::findString(QString query)
   }
 }
 
+void DocumentView::createContextMenu(QPoint pos)
+{
+  QMenu *menu = editors[0]->createStandardContextMenu();
+  menu->addSeparator();
+  QMenu *opcodeMenu = menu->addMenu("Opcodes");
+  QMenu *mainMenu = 0;
+  QMenu *subMenu;
+  QString currentMain = "";
+  for (int i = 0; i < m_opcodeTree->getCategoryCount(); i++) {
+    QString category = m_opcodeTree->getCategory(i);
+    QStringList categorySplit = category.split(":");
+    if (!categorySplit.isEmpty() && categorySplit[0] != currentMain) {
+      mainMenu = opcodeMenu->addMenu(categorySplit[0]);
+      currentMain = categorySplit[0];
+    }
+    if (categorySplit.size() < 2) {
+      subMenu = mainMenu;
+    }
+    else {
+      subMenu = mainMenu->addMenu(categorySplit[1]);
+    }
+    foreach(Opcode opcode, m_opcodeTree->getOpcodeList(i)) {
+      QAction *action = subMenu->addAction(opcode.opcodeName, this, SLOT(opcodeFromMenu()));
+      action->setData(opcode.outArgs + opcode.opcodeName + opcode.inArgs);
+    }
+  }
+  menu->exec(editors[0]->mapToGlobal(pos));
+  delete menu;
+}
+
 void DocumentView::comment()
 {
   // FIXME implment for multiple views
@@ -663,32 +695,7 @@ void DocumentView::updateCsladspaText(QString text)
 void DocumentView::contextMenuEvent(QContextMenuEvent *event)
 {
   qDebug() << "DocumentView::contextMenuEvent";
-  QMenu *menu = editors[0]->createStandardContextMenu();
-  menu->addSeparator();
-  QMenu *opcodeMenu = menu->addMenu("Opcodes");
-  QMenu *mainMenu = 0;
-  QMenu *subMenu;
-  QString currentMain = "";
-  for (int i = 0; i < m_opcodeTree->getCategoryCount(); i++) {
-    QString category = m_opcodeTree->getCategory(i);
-    QStringList categorySplit = category.split(":");
-    if (!categorySplit.isEmpty() && categorySplit[0] != currentMain) {
-      mainMenu = opcodeMenu->addMenu(categorySplit[0]);
-      currentMain = categorySplit[0];
-    }
-    if (categorySplit.size() < 2) {
-      subMenu = mainMenu;
-    }
-    else {
-      subMenu = mainMenu->addMenu(categorySplit[1]);
-    }
-    foreach(Opcode opcode, m_opcodeTree->getOpcodeList(i)) {
-      QAction *action = subMenu->addAction(opcode.opcodeName, this, SLOT(opcodeFromMenu()));
-      action->setData(opcode.outArgs + opcode.opcodeName + opcode.inArgs);
-    }
-  }
-  menu->exec(event->globalPos());
-  delete menu;
+  createContextMenu(event->globalPos());
 }
 
 QString DocumentView::changeToChnget(QString text)
