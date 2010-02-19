@@ -58,8 +58,9 @@ uintptr_t csThread(void *clientData);
 //TODO why does qutecsound not end when it receives a terminate signal?
 qutecsound::qutecsound(QStringList fileNames)
 {
+  initialDir = QDir::current().path();
   setWindowTitle("QuteCsound[*]");
-  resize(660,350);
+  resize(780,550);
   setWindowIcon(QIcon(":/images/qtcs.png"));
 
   QLocale::setDefault(QLocale::system());  //Does this take care of the decimal separator for different locales?
@@ -179,7 +180,7 @@ void qutecsound::devicesMessageCallback(CSOUND *csound,
   QStringList *messages = (QStringList *) csoundGetHostData(csound);
   QString msg;
   msg = msg.vsprintf(fmt, args);
-  qDebug() << msg;
+//  qDebug() << msg;
   messages->append(msg);
 }
 
@@ -223,6 +224,12 @@ void qutecsound::changePage(int index)
     documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
     setWidgetPanelGeometry();
     widgetPanel->setWidgetLayout(documentPages[curPage]->getWidgetLayout());
+    if (documentPages[curPage]->getFileName().endsWith(".py")) {
+      widgetPanel->hide();
+    }
+    else {
+      widgetPanel->setVisible(showWidgetsAct->isChecked());
+    }
     m_console->setWidget(documentPages[curPage]->getConsole());
     updateInspector();
     runAct->setChecked(documentPages[curPage]->isRunning());
@@ -880,7 +887,8 @@ void qutecsound::play(bool realtime)
   m_options->rt = realtime;
 
   if (_configlists.rtAudioNames[m_options->rtAudioModule] == "alsa"
-      or _configlists.rtAudioNames[m_options->rtAudioModule] == "coreaudio") {
+      or _configlists.rtAudioNames[m_options->rtAudioModule] == "coreaudio"
+      or _configlists.rtAudioNames[m_options->rtAudioModule] == "portaudio") {
     stopAll();
     runAct->setChecked(true);  // mark it correctly again after stopping...
   }
@@ -975,8 +983,9 @@ void qutecsound::pause()
 void qutecsound::stop()
 {
   // Must guarantee that csound has stopped when it returns
-   qDebug("qutecsound::stop()");
-  documentPages[curPage]->stop();
+  qDebug("qutecsound::stop()");
+  if (documentPages[curPage]->isRunning())
+    documentPages[curPage]->stop();
   runAct->setChecked(false);
 //  if (ud->isRunning()) {
 //    stopCsound();
@@ -2599,6 +2608,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   curPage += 1;
   setCurrentOptionsForPage(documentPages[curPage]);
   documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
+  documentPages[curPage]->setInitialDir(initialDir);
   setCurrentOptionsForPage(documentPages[curPage]);
 
   connectActions();
@@ -2920,12 +2930,11 @@ QStringList qutecsound::runCsoundInternally(QStringList flags)
   csoundSetMessageCallback(csoundD, &qutecsound::devicesMessageCallback);
   int result = csoundCompile(csoundD,argc,argv);
   if(!result) {
-    while(csoundPerformKsmps(csoundD) == 0){}
-    csoundCleanup(csoundD);
+    csoundPerform(csoundD);
   }
 //  csoundSetMessageCallback(csoundD, 0);
 //  csoundCleanup(csoundD);
-  csoundReset(csoundD);
+//  csoundReset(csoundD);
   csoundDestroy(csoundD);
 
 #ifdef MACOSX_PRE_SNOW

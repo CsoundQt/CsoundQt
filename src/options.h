@@ -79,6 +79,7 @@ class Options: public CsoundOptions{
     QString waveplayer;
     QString pdfviewer;
     int language;  // Interface language
+    
 };
 
 #endif

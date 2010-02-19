@@ -113,6 +113,7 @@ class DocumentPage : public QObject
 
     //Engine Properties
 //    void setCsoundOptions(CsoundOptions &options);
+    void setInitialDir(QString initialDir);
 
     // Event Sheet Properties
     void setScriptDirectory(QString dir);

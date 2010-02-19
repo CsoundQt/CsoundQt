@@ -201,13 +201,7 @@ double LiveEventFrame::getLoopLength()
 
 QString LiveEventFrame::getPlainText()
 {
-  if (m_mode == 0) { // Sheet mode
-    return m_sheet->getPlainText();
-  }
-  else if (m_mode == 1) { // text mode
-    return "";  //TODO implement text mode
-  }
-  return QString();
+  return m_sheet->getPlainText();
 }
 
 void LiveEventFrame::getEvents(unsigned long ksmps, QStringList *eventText)

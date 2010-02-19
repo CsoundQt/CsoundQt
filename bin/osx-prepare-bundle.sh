@@ -31,7 +31,16 @@ tar -czvf QuteCsound-incQt.tar.gz QuteCsound.app
 
 # make Standalone application
 cp -R /Library/Frameworks/CsoundLib.framework QuteCsound.app/Contents/Frameworks/
-cp -R /usr/local/lib/libsndfile.1.dylib QuteCsound.app/Contents/libsndfile.dylib
+cp /usr/local/lib/libsndfile.1.dylib QuteCsound.app/Contents/libsndfile.dylib
+cp /usr/local/lib/libportaudio.2.0.0.dylib QuteCsound.app/Contents/libportaudio.dylib
+cp /usr/local/lib/libportmidi.dylib QuteCsound.app/Contents/libportmidi.dylib
+cp /usr/local/lib/libmpadec.dylib QuteCsound.app/Contents/libmpadec.dylib
+cp /usr/local/lib/liblo.0.6.0.dylib QuteCsound.app/Contents/liblo.dylib
+cp /usr/local/lib/libfltk.1.1.dylib QuteCsound.app/Contents/libfltk.dylib
+cp /usr/local/lib/libfltk_images.1.1.dylib QuteCsound.app/Contents/libfltk_images.dylib
+cp /usr/local/lib/libfluidsynth.1.dylib QuteCsound.app/Contents/libfluidsynth.dylib
+cp /usr/local/lib/libpng12.0.dylib QuteCsound.app/Contents/libpng12.dylib
+cp /usr/local/lib/libpng12.0.dylib QuteCsound.app/Contents/libpng12.dylib
 
 install_name_tool -id @executable_path/../Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
 install_name_tool -change /Library/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib @executable_path/../Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib QuteCsound.app/Contents/MacOS/qutecsound
@@ -39,7 +48,44 @@ install_name_tool -change  /usr/local/lib/libsndfile.1.dylib @executable_path/..
 install_name_tool -change /Library/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib @executable_path/../Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib QuteCsound.app/Contents/MacOS/qutecsound
 install_name_tool -change /Library/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib @executable_path/../Frameworks/CsoundLib.framework/Versions/Current/CsoundLib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
 
+
+install_name_tool -id @executable_path/../libsndfile.dylib QuteCsound.app/Contents/libsndfile.dylib
 install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
 install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
+
+install_name_tool -id @executable_path/../libportaudio.dylib QuteCsound.app/Contents/libportaudio.dylib
+install_name_tool -change /usr/local/lib/libportaudio.2.dylib @executable_path/../libportaudio.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
+install_name_tool -change /usr/local/lib/libportaudio.2.dylib @executable_path/../libportaudio.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
+
+install_name_tool -id @executable_path/../libportmidi.dylib QuteCsound.app/Contents/libportmidi.dylib
+install_name_tool -change /usr/local/lib/libportmidi.dylib @executable_path/../libportmidi.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
+install_name_tool -change /usr/local/lib/libportmidi.dylib @executable_path/../libportmidi.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
+
+install_name_tool -id @executable_path/../libmpadec.dylib QuteCsound.app/Contents/libmpadec.dylib
+install_name_tool -change /usr/local/lib/libmpadec.dylib @executable_path/../libmpadec.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
+install_name_tool -change /usr/local/lib/libmpadec.2.dylib @executable_path/../libmpadec.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
+
+install_name_tool -id @executable_path/../liblo.dylib QuteCsound.app/Contents/liblo.dylib
+install_name_tool -change /usr/local/lib/liblo.0.6.0.dylib @executable_path/../liblo.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
+install_name_tool -change /usr/local/lib/liblo.0.6.0.dylib @executable_path/../liblo.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
+
+install_name_tool -id @executable_path/../libfltk.dylib QuteCsound.app/Contents/libfltk.dylib
+install_name_tool -change /usr/local/lib/libfltk.1.1.dylib @executable_path/../libfltk.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
+install_name_tool -change /usr/local/lib/libfltk.1.1.dylib @executable_path/../libfltk.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
+
+install_name_tool -id @executable_path/../libfltk_images.dylib QuteCsound.app/Contents/libfltk_images.dylib
+install_name_tool -change /usr/local/lib/libfltk_images.1.1.dylib @executable_path/../libfltk_images.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
+install_name_tool -change /usr/local/lib/libfltk_images.1.1.dylib @executable_path/../libfltk_images.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
+install_name_tool -change /usr/local/lib/libfltk.1.1.dylib @executable_path/../libfltk.dylib QuteCsound.app/Contents/libfltk_images.dylib
+
+install_name_tool -id @executable_path/../libpng12.dylib QuteCsound.app/Contents/libpng12.dylib
+install_name_tool -change /usr/local/lib/libpng12.0.dylib @executable_path/../libpng12.dylib QuteCsound.app/Contents/libfltk_images.dylib
+
+
+install_name_tool -id @executable_path/../libfluidsynth.dylib QuteCsound.app/Contents/libfluidsynth.dylib
+install_name_tool -change /usr/local/lib/libfluidsynth.1.dylib @executable_path/../libfluidsynth.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
+install_name_tool -change /usr/local/lib/libfluidsynth.1.dylib @executable_path/../libfluidsynth.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
+
+# TODO include dot and Jack installers in an optional directory.
 
 tar -czvf QuteCsound-full.tar.gz QuteCsound.app

@@ -289,6 +289,7 @@ class qutecsound:public QMainWindow
     QLabel *lineNumberLabel;
 
     QString currentAudioFile;
+    QString initialDir;
 
 #ifdef MACOSX_PRE_SNOW
     MenuBarHandle menuBarHandle;

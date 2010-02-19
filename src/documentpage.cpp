@@ -110,9 +110,9 @@ DocumentPage::~DocumentPage()
   disconnect(m_csEngine, 0,0,0);
   disconnect(m_widgetLayout, 0,0,0);
   delete m_view;   // Must be destroyed before the widgetLayout
-  delete m_widgetLayout;
   m_csEngine->stop();
-  delete m_csEngine;
+  delete m_csEngine;  // Must be destroyed before widgetLayout
+  delete m_widgetLayout;
 //  deleteAllLiveEvents();
 }
 
@@ -670,6 +670,11 @@ void DocumentPage::setConsoleFont(QFont font)
 void DocumentPage::setConsoleColors(QColor fontColor, QColor bgColor)
 {
   m_console->setColors(fontColor, bgColor);
+}
+
+void DocumentPage::setInitialDir(QString initialDir)
+{
+  m_csEngine->setInitialDir(initialDir);
 }
 
 //DocumentView * DocumentPage::view()

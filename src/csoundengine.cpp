@@ -70,8 +70,7 @@ CsoundEngine::CsoundEngine()
 //  qTimer.setSingleShot(true);
 //
 //  connect(&qTimer, SIGNAL(timeout()), this, SLOT(dispatchQueues()));
-//  refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;  // Eventually allow this to be changed
-//  qTimer.start(refreshTime);
+  refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;  // Eventually allow this to be changed
 }
 
 CsoundEngine::~CsoundEngine()
@@ -80,13 +79,10 @@ CsoundEngine::~CsoundEngine()
   closing = 1;
   stop();
   disconnect(this, 0,0,0);
-//  disconnect(&qTimer, 0,0,0);
-//  qTimer.stop();
-//  while (qTimer.isActive()) {
-////    qTimer.deleteLater();
-//    usleep(1000); // This actually depends on QCS_QUEUETIMER_DEFAULT_TIME
-//    qApp->processEvents();
-//  }
+  while (closing == 1) {
+    qApp->processEvents();
+    usleep(20000);
+  }
 #ifndef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(csound);
 #endif
@@ -483,6 +479,11 @@ void CsoundEngine::enableWidgets(bool enable)
   ud->enableWidgets = enable;
 }
 
+void CsoundEngine::setInitialDir(QString initialDir)
+{
+  m_initialDir = initialDir;
+}
+
 void CsoundEngine::registerConsole(ConsoleWidget *c)
 {
   consoles.append(c);
@@ -712,6 +713,19 @@ int CsoundEngine::runCsound()
     //      qDebug() << oldOpcodeDir;
     csoundSetGlobalEnv("OPCODEDIR", m_options.opcodedir.toLocal8Bit());
   }
+#ifdef Q_OS_MAC
+  else {
+#ifdef USE_DOUBLES
+    QString stdopcode = m_initialDir + "/QuteCsound.app/QuteCsound.app/Contents/Frameworks/CsoundLib64.framework/Resources/Opcodes/libstdopcod.dylib";
+#else
+    QString stdopcode = m_initialDir + "/QuteCsound.app/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Resources/Opcodes/libstdopcod.dylib";
+#endif
+    // TODO is this check robust enough? what if the standard library is not used? is it likely it is not?
+    if (QFile::exists(stdopcode)) {
+      csoundSetGlobalEnv("OPCODEDIR", stdopcode.toLocal8Bit());
+    }
+  }
+#endif
   csoundReset(ud->csound);
   csoundSetHostData(ud->csound, (void *) ud);
   csoundPreCompile(ud->csound);  //Need to run PreCompile to create the FLTK_Flags global variable
@@ -835,13 +849,9 @@ void CsoundEngine::stopCsound()
       qDebug() << "CsoundEngine::stopCsound() joined";
       delete ud->perfThread;
       ud->perfThread = 0;
-#ifdef QUTECSOUND_DESTROY_CSOUND
-  csoundDestroy(ud->csound);
-#endif
-      flushMessageQueue();
     }
-  } /*if (m_options.threaded)*/
-  else {
+  } /*if (ud->threaded)*/
+  else {  // in same thread
     if (ud->PERF_STATUS == 1) {
       ud->PERF_STATUS = -1;
       while (ud->PERF_STATUS == -1) { // Wait until performance has stopped
@@ -857,6 +867,7 @@ void CsoundEngine::stopCsound()
 #ifdef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(ud->csound);
 #endif
+  flushMessageQueue();
 }
 
 void CsoundEngine::dispatchQueues()
@@ -912,7 +923,6 @@ void CsoundEngine::dispatchQueues()
       stop();
     }
   }
-  //  qApp->processEvents();
   QTimer::singleShot(refreshTime, this, SLOT(dispatchQueues()));
 }
 

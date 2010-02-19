@@ -288,7 +288,7 @@ void WidgetLayout::getValues(QVector<QString> *channelNames,
     return;
   }
   for (int i = 0; i < m_widgets.size(); i++) {  // FIXME this crashes if a new widget is created while running because vector size has not changed
-    (*channelNames)[i*2] = m_widgets[i]->getChannelName();
+    (*channelNames)[i*2] = m_widgets[i]->getChannelName();  // FIXME this also crashes when closing qute while a tab is playing
     (*values)[i*2] = m_widgets[i]->getValue();
     (*stringValues)[i*2] = m_widgets[i]->getStringValue();
     (*channelNames)[i*2 + 1] = m_widgets[i]->getChannel2Name();
@@ -2241,16 +2241,17 @@ void WidgetLayout::updateData()
     closing = 0;
     return;
   }
-  while (!newCurveBuffer.isEmpty()) {
+  while (!newCurveBuffer.isEmpty() && curveBuffer.size() < 32) {
     Curve * curve = newCurveBuffer.pop();
 //    qDebug() << "WidgetLayout::updateData() curve " << curve->get_caption();
     newCurve(curve);
   }
-  if (curveBuffer.size() > 32) {
-    qDebug("qutecsound::dispatchQueues() WARNING: curve update buffer too large!");
-    curveBuffer.resize(32);
-  }
-  foreach (WINDAT * windat, curveBuffer){
+//  if (curveBuffer.size() > 32) {
+//    qDebug("qutecsound::dispatchQueues() WARNING: curve update buffer too large!");
+//    curveBuffer.resize(32);
+//  }
+  for (int i = 0; i < curveBuffer.size(); i++) {
+    WINDAT * windat = curveBuffer[i];
     Curve *curve = getCurveById((uintptr_t) windat->windid);
     if (curve != 0) {
 //      qDebug() << "qutecsound::updateData() " <<windat->caption << "-" <<  curve->get_caption();
