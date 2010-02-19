@@ -112,10 +112,9 @@ CONFIG += warn_on \
 # \
 # release
 QMAKE_CXXFLAGS_DEBUG += -DDEBUG
-OBJECTS_DIR = build/
-MOC_DIR = build/
-RCC_DIR = build/
-#UI_DIR = build/ui/
+OBJECTS_DIR = build
+MOC_DIR = build
+RCC_DIR = build
 TARGET = ../bin/qutecsound
 RESOURCES = application.qrc
 QT += xml
