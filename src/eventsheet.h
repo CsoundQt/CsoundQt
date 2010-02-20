@@ -147,6 +147,8 @@ class EventSheet : public QTableWidget
     // Python scripts
     QString scriptDir;
     QStringList builtinScripts;
+    QStringList converterScripts;
+    QStringList testScripts;
 
   private slots:
     void selectionChanged();
