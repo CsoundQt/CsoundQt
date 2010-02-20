@@ -144,7 +144,7 @@ class DocumentPage : public QObject
     void pause();
     void stop();
     void perfEnded();
-    void record(int mode); // 0=16 bit int  1=32 bit int  2=float
+    int record(int mode); // 0=16 bit int  1=32 bit int  2=float
     void stopRecording();
     // Triggered from button, ask parent for options
     void playParent();

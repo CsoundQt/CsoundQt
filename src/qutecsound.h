@@ -124,7 +124,6 @@ class qutecsound:public QMainWindow
     void setWidgetEditMode(bool);  // This is not necessary as the action is passed and connected in the widget layout
     void setWidgetClipboard(QString text);
     void duplicate();
-    void del();
     bool closeTab(bool askCloseApp = false);
     void print();
     void findReplace();  // Direct to current Page
@@ -135,6 +134,7 @@ class qutecsound:public QMainWindow
     void inToGet();
     void putCsladspaText();
     void exportCabbage();
+    void setCurrentAudioFile(const QString fileName);
     void openExternalEditor();
     void openExternalPlayer();
     void setHelpEntry();

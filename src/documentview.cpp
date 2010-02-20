@@ -59,6 +59,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   setFocusProxy(mainEditor);  // for comment action from main application
 
   m_mode = 0;
+  internalChange = false;
 
 //  m_highlighter = new Highlighter();
 
@@ -67,7 +68,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   connect(mainEditor, SIGNAL(cursorPositionChanged()),
           this, SLOT(syntaxCheck()));
 
-  //FIXME put this for line reporting for score editor
+  //TODO put this for line reporting for score editor
 //  connect(scoreEditor, SIGNAL(textChanged()),
 //          this, SLOT(syntaxCheck()));
 //  connect(scoreEditor, SIGNAL(cursorPositionChanged()),
@@ -103,7 +104,7 @@ void DocumentView::setViewMode(int mode)
   m_viewMode = mode;
   hideAllEditors();
 
-  // FIXME implement modes properly
+  // TODO implement modes properly
   switch (m_viewMode) {
     case 0: // csd without extra sections
       mainEditor->show();
@@ -171,7 +172,6 @@ void DocumentView::setColorVariables(bool color)
 
 void DocumentView::setOpcodeNameList(QStringList list)
 {
-  // FIXME highlighter should be moved to main application class and this should only be done once!
   m_highlighter.setOpcodeNameList(list);
 }
 
@@ -205,7 +205,34 @@ void DocumentView::setFullText(QString text)
 
 void DocumentView::setLadspaText(QString text)
 {
-  ladspaEditor->setText(text);
+  QTextCursor cursor;
+  QTextDocument *doc;
+  QTextEdit *edit;
+  if (m_mode == 0 || m_mode == 1) {
+    cursor = editors[0]->textCursor();
+    doc = editors[0]->document();
+    edit = editors[0];
+    editors[0]->moveCursor(QTextCursor::Start);
+  }
+  else {
+    cursor = ladspaEditor->textCursor();
+    doc = ladspaEditor->document();
+    edit = ladspaEditor;
+    ladspaEditor->moveCursor(QTextCursor::Start);
+  }
+  if (edit->find("<csLADSPA>") and edit->find("</csLADSPA>")) {
+    QString curText = doc->toPlainText();
+    int index = curText.indexOf("<csLADSPA>");
+    curText.remove(index, curText.indexOf("</csLADSPA>") + 11 - index);
+    curText.insert(index, text);
+    doc->setPlainText(curText);
+  }
+  else { //csLADSPA section not present, or incomplete
+    edit->find("<CsoundSynthesizer>"); //cursor moves there
+    edit->moveCursor(QTextCursor::EndOfLine);
+    edit->insertPlainText(QString("\n") + text + QString("\n"));
+  }
+  edit->moveCursor(QTextCursor::Start);
 }
 
 QString DocumentView::getFullText()
@@ -274,7 +301,7 @@ QString DocumentView::getWidgetsText()
 
 int DocumentView::currentLine()
 {
-  // FIXME check properly for line number also from other editors
+  // TODO check properly for line number also from other editors
   QTextCursor cursor = editors[0]->textCursor();
 //   cursor.clearSelection();
 //   cursor.setPosition(0,QTextCursor::KeepAnchor);
@@ -329,6 +356,10 @@ void DocumentView::syntaxCheck()
 
 void DocumentView::textChanged()
 {
+  if (internalChange) {
+    internalChange = false;
+    return;
+  }
   unmarkErrorLines();
   if (m_mode == 0) {  // CSD mode
     QTextCursor cursor = mainEditor->textCursor();
@@ -379,7 +410,8 @@ void DocumentView::textChanged()
 
 void DocumentView::findReplace()
 {
-  // FIXME implment for multiple views
+  // TODO implment for multiple views
+  internalChange = true;
   QTextCursor cursor = mainEditor->textCursor();
   QString word = cursor.selectedText();
   cursor.select(QTextCursor::WordUnderCursor);
@@ -400,20 +432,23 @@ void DocumentView::findReplace()
 
 void DocumentView::getToIn()
 {
-  // FIXME implment for multiple views
+  // TODO implment for multiple views
+  internalChange = true;
   editors[0]->setPlainText(changeToInvalue(editors[0]->toPlainText()));
   editors[0]->document()->setModified(true);  // Necessary, or is setting it locally enough?
 }
 
 void DocumentView::inToGet()
 {
-  // FIXME implment for multiple views
+  // TODO implment for multiple views
+  internalChange = true;
   editors[0]->setPlainText(changeToChnget(editors[0]->toPlainText()));
   editors[0]->document()->setModified(true);
 }
 
 void DocumentView::autoComplete()
 {
+  internalChange = true;
   QTextCursor cursor = mainEditor->textCursor();
   cursor.select(QTextCursor::WordUnderCursor);
   QString opcodeName = cursor.selectedText();
@@ -427,6 +462,7 @@ void DocumentView::autoComplete()
 
 void DocumentView::insertTextFromAction()
 {
+  internalChange = true;
   QTextCursor cursor = editors[0]->textCursor();
   cursor.select(QTextCursor::WordUnderCursor);
   cursor.insertText("");
@@ -495,8 +531,9 @@ void DocumentView::createContextMenu(QPoint pos)
 
 void DocumentView::comment()
 {
-  // FIXME implment for multiple views
+  // TODO implment for multiple views
 //  qDebug() << "DocumentView::comment()";
+  internalChange = true;
   QString commentChar = "";
   if (m_mode == 0) {
     commentChar = ";";
@@ -522,7 +559,8 @@ void DocumentView::comment()
 
 void DocumentView::uncomment()
 {
-  // FIXME implment for multiple views
+  // TODO implment for multiple views
+  internalChange = true;
   QString commentChar = "";
   if (m_mode == 0) {
     commentChar = ";";
@@ -551,8 +589,9 @@ void DocumentView::uncomment()
 
 void DocumentView::indent()
 {
-  // FIXME implment for multiple views
+  // TODO implment for multiple views
 //   qDebug("DocumentPage::indent");
+  internalChange = true;
   QString indentChar = "";
   if (m_mode == 0) {
     indentChar = "\t";
@@ -579,7 +618,8 @@ void DocumentView::indent()
 
 void DocumentView::unindent()
 {
-  // FIXME implment for multiple views
+  // TODO implment for multiple views
+  internalChange = true;
   QString indentChar = "";
   if (m_mode == 0) {
     indentChar = "\t";
@@ -607,7 +647,8 @@ void DocumentView::unindent()
 
 void DocumentView::markErrorLines(QList<int> lines)
 {
-  // FIXME implment for multiple views
+  // TODO implment for multiple views
+  internalChange = true;
   QTextCharFormat errorFormat;
   errorFormat.setBackground(QBrush(QColor(255, 182, 193)));
   QTextCursor cur = editors[0]->textCursor();
@@ -631,7 +672,7 @@ void DocumentView::markErrorLines(QList<int> lines)
 
 void DocumentView::unmarkErrorLines()
 {
-  // FIXME implment for multiple views
+  // TODO implment for multiple views
   if (!errorMarked)
     return;
 //   qDebug("DocumentPage::unmarkErrorLines()");
@@ -639,18 +680,21 @@ void DocumentView::unmarkErrorLines()
   QTextCursor currentCursor = editors[0]->textCursor();
   errorMarked = false;
   editors[0]->selectAll();
+  internalChange = true;
   QTextCursor cur = editors[0]->textCursor();
   QTextCharFormat format = cur.blockCharFormat();
   format.clearBackground();
   cur.setCharFormat(format);
+  internalChange = true;
   editors[0]->setTextCursor(cur);  //sets format
+  internalChange = true;
   editors[0]->setTextCursor(currentCursor); //returns cursor to initial position
   editors[0]->verticalScrollBar()->setValue(position); //return document display to initial position
 }
 
 void DocumentView::jumpToLine(int line)
 {
-  // FIXME implment for multiple views
+  // TODO implment for multiple views
   int lineCount = 1;
   QTextCursor cur = editors[0]->textCursor();
   cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
@@ -669,27 +713,6 @@ void DocumentView::opcodeFromMenu()
   QTextCursor cursor = editors[0]->textCursor();
   QString text = action->data().toString();
   cursor.insertText(text);
-}
-
-void DocumentView::updateCsladspaText(QString text)
-{
-  ladspaEditor->setText(text);
-//  QTextCursor cursor = textCursor();
-//  QTextDocument *doc = editordocument();
-//  moveCursor(QTextCursor::Start);
-//  if (find("<csLADSPA>") and find("</csLADSPA>")) {
-//    QString curText = doc->toPlainText();
-//    int index = curText.indexOf("<csLADSPA>");
-//    curText.remove(index, curText.indexOf("</csLADSPA>") + 11 - index);
-//    curText.insert(index, text);
-//    doc->setPlainText(curText);
-//  }
-//  else { //csLADSPA section not present, or incomplete
-//    find("<CsoundSynthesizer>"); //cursor moves there
-//    moveCursor(QTextCursor::EndOfLine);
-//    insertPlainText(QString("\n") + text + QString("\n"));
-//  }
-//  moveCursor(QTextCursor::Start);
 }
 
 void DocumentView::contextMenuEvent(QContextMenuEvent *event)

@@ -181,6 +181,7 @@ QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber, bool 
 {
   QString line = "";
   bool instrEvent = false;
+  bool comment = false;
   for (int i = 0; i < this->columnCount(); i++) {
     QTableWidgetItem * item = this->item(number, i);
     if (item != 0) { // Item is not empty
@@ -218,8 +219,18 @@ QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber, bool 
           line += item->data(Qt::DisplayRole).toString();
         }
       }
-      else {
-        line += item->data(Qt::DisplayRole).toString();
+      else {  // All other p-fields that don require tempo scaling
+        QString cellText = item->data(Qt::DisplayRole).toString();
+        if (comment) {
+          line += ";" + cellText;
+        }
+        else if (cellText.startsWith(';')) {
+          comment = true; // is a comment from now on
+          line += cellText;
+        }
+        else {
+          line += cellText;
+        }
       }
       // Then add white space separation
       QString space = item->data(Qt::UserRole).toString();
@@ -229,6 +240,9 @@ QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber, bool 
       else {
         line += " ";
       }
+    }
+    else if (comment) { // empty cell part of a comment
+      // Do nothing
     }
   }
   return line;
@@ -1376,15 +1390,28 @@ QList<QPair<QString, QString> > EventSheet::parseLine(QString line)
         formula = false;
       }
       else if (line[count] == ';') { // comment
-        // First add current pfield, in case there is no spacing
-        field.first = pvalue;
-        field.second = spacing;
-        list.append(field);
-        pcount++;
+        if (count > 0) {
+        // First add current pfield, in case there is previous data
+          field.first = pvalue;
+          field.second = spacing;
+          list.append(field);
+          pcount++;
+        }
         // Now add comment
+        count++;
         QString comment = line.mid(count);
-        field.first = comment;
-        field.second = "";
+        QStringList parts = comment.split(";");
+        for (int i = 0; i < parts.size(); i++) {
+          if (i==0) {  // Only put the ; character visible on the first column
+            field.first = ";" + parts[i];
+          }
+          else {
+            field.first = parts[i];
+          }
+          field.second = "";
+          list.append(field);
+          pcount++;
+        }
         isp = false;  // last p-field has been processed here
         break; // Nothing more todo for this line
       }  // End of comment processing
@@ -1420,11 +1447,12 @@ QList<QPair<QString, QString> > EventSheet::parseLine(QString line)
           else {
             field.first = parts[i];
           }
-          field.second = ";";
+          field.second = "";
           list.append(field);
           pcount++;
         }
-        return list; // Nothing more todo on this line
+        isp = false;  // last p-field has been processed here
+        break; // Nothing more todo for this line
       }
       // ---
       if (!line[count].isSpace()) { // Not White space so new p-field has started
@@ -1446,9 +1474,8 @@ QList<QPair<QString, QString> > EventSheet::parseLine(QString line)
   if (isp == true) {
     field.first = pvalue;
     field.second = "";
+    list.append(field);
   }
-  list.append(field);
-
   return list;
 }
 

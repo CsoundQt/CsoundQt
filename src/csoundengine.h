@@ -149,7 +149,7 @@ class CsoundEngine : public QObject
     int play(CsoundOptions *options);
     void stop();
     void pause();
-    void startRecording(int format, QString filename);
+    int startRecording(int format, QString filename);
     void stopRecording();
     void queueEvent(QString eventLine, int delay = 0);
     void keyPressForCsound(QString key);  // For key press events from consoles and widget panel

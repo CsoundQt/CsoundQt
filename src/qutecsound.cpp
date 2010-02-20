@@ -235,7 +235,6 @@ void qutecsound::changePage(int index)
     runAct->setChecked(documentPages[curPage]->isRunning());
     recAct->setChecked(documentPages[curPage]->isRecording());
 
-  // FIXME connect showLineNumber(int lineNumber) from current document view
   }
 //  if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL && index != curPage) {
 //    documentPages[curPage]->setWidgetLayout(widgetPanel->takeWidgetLayout());  // widget is destroyed by widget panel if it is still there when setting a new one, so we need to take it
@@ -289,6 +288,8 @@ void qutecsound::closeEvent(QCloseEvent *event)
 {
   writeSettings();
 //  disconnect(documentTabs, 0,0,0)); // To avoid triggering changePage when destroying the tabs
+  showWidgetsAct->setChecked(false);
+  showLiveEventsAct->setChecked(false); // These two give faster shutdown times as the panels don't have to be called up as the tabs close
   while (!documentPages.isEmpty()) {
 //    if (!saveCurrent()) {
 //      event->ignore();
@@ -536,17 +537,6 @@ void qutecsound::duplicate()
   documentPages[curPage]->duplicateWidgets();
 }
 
-void qutecsound::del()
-{
-  //TODO finish this...
-//   FIXME put back, or can this be done directly in the widget layout class when it has focus?
-//  if (documentPages[curPage]->hasFocus()) {
-//     documentPages[curPage]->comment();
-//  }
-//  else
-//    widgetPanel->deleteSelected();
-}
-
 QString qutecsound::getSaveFileName()
 {
   bool widgetsVisible = widgetPanel->isVisible();
@@ -613,8 +603,9 @@ void qutecsound::createQuickRefPdf()
 
 void qutecsound::deleteCurrentTab()
 {
-  qDebug() << "qutecsound::deleteCurrentTab()";
+//  qDebug() << "qutecsound::deleteCurrentTab()";
   disconnect(showLiveEventsAct, 0,0,0);
+  documentPages[curPage]->stop();
   documentPages[curPage]->showLiveEventFrames(false);
   DocumentPage *d = documentPages[curPage];
   documentPages.remove(curPage); // Must remove from the vector first
@@ -664,7 +655,7 @@ bool qutecsound::saveNoWidgets()
 
 bool qutecsound::closeTab(bool askCloseApp)
 {
-   qDebug("qutecsound::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
+//   qDebug("qutecsound::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
   if (documentPages[curPage]->isModified()) {
     QString message = tr("The document ")
                       + (documentPages[curPage]->getFileName() != ""
@@ -804,13 +795,17 @@ void qutecsound::getToIn()
 
 void qutecsound::putCsladspaText()
 {
-
   documentPages[curPage]->updateCsLadspaText();
 }
 
 void qutecsound::exportCabbage()
 {
   //TODO finish this
+}
+
+void qutecsound::setCurrentAudioFile(const QString fileName)
+{
+  currentAudioFile = fileName;
 }
 
 void qutecsound::play(bool realtime)
@@ -853,7 +848,6 @@ void qutecsound::play(bool realtime)
 //    else
 //      fileName2 = documentPages[curPage]->companionFile;
   }
-  // FIXME Set directory of current file
   QString runFileName1, runFileName2;
   QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
   if (fileName.startsWith(":/examples/") || !m_options->saveChanges) {
@@ -904,7 +898,6 @@ void qutecsound::play(bool realtime)
   }
   else if (ret == -3) { // Csound compilation failed
     runAct->setChecked(false);
-    //FIXME show error line numbers
   }
   else if (ret == 0) { // No problem
     if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
@@ -1013,9 +1006,16 @@ void qutecsound::record()
 {
   if (!documentPages[curPage]->isRunning()) {
     play();
+    if (!documentPages[curPage]->isRunning()) {
+      recAct->setChecked(false);
+      return;
+    }
   }
   if (recAct->isChecked()) {
-    documentPages[curPage]->record(m_options->sampleFormat);
+    int ret = documentPages[curPage]->record(m_options->sampleFormat);
+    if (ret != 0) {
+      recAct->setChecked(false);
+    }
   }
   else {
     documentPages[curPage]->stopRecording();
@@ -1087,7 +1087,7 @@ void qutecsound::render()
 #ifdef Q_OS_WIN32
   m_options->fileOutputFilename.replace('\\', '/');
 #endif
-  currentAudioFile = m_options->fileOutputFilename;
+  setCurrentAudioFile(m_options->fileOutputFilename);
   play(false);
 }
 
@@ -1341,13 +1341,12 @@ void qutecsound::runUtility(QString flags)
     CSOUND *csoundU;
     csoundU=csoundCreate(0);
     csoundReset(csoundU);
-    //FIXME is the userdata needed here? uncomment if needed, think not
-//    csoundSetHostData(csoundU, (void *) ud);
+    csoundSetHostData(csoundU, (void *) m_console);
     csoundSetMessageCallback(csoundU, &qutecsound::utilitiesMessageCallback);
     csoundPreCompile(csoundU);
     // Utilities always run in the same thread as QuteCsound
     csoundRunUtility(csoundU, name.toStdString().c_str(), argc, argv);
-    csoundCleanup(csoundU);
+//    csoundCleanup(csoundU);
     csoundDestroy(csoundU);
 //     free(argv);
 #ifdef MACOSX_PRE_SNOW
@@ -1449,7 +1448,6 @@ void qutecsound::runUtility(QString flags)
 
 void qutecsound::showLineNumber(int lineNumber)
 {
-  // FIXME connect this from current document view
   lineNumberLabel->setText(tr("Line %1").arg(lineNumber));
 }
 
@@ -2621,6 +2619,8 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   connect(documentPages[curPage], SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
   connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
           this, SLOT(setWidgetClipboard(QString)));
+  connect(documentPages[curPage], SIGNAL(setCurrentAudioFile(QString)),
+          this, SLOT(setCurrentAudioFile(QString)));
   connect(documentPages[curPage]->getView(), SIGNAL(lineNumberSignal(int)),
           this, SLOT(showLineNumber(int)));
 

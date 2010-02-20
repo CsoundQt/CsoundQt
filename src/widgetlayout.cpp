@@ -197,7 +197,6 @@ QString WidgetLayout::getMacWidgetsText()
   text +=  QString::number((int) (this->parentWidget()->palette().button().color().greenF()*65535.)) + ", ";
   text +=  QString::number((int) (this->parentWidget()->palette().button().color().blueF()*65535.)) +"}\n";
 
-  //FIXME is it really necessary to lock this here?
   valueMutex.lock();
   for (int i = 0; i < m_widgets.size(); i++) {
     text += m_widgets[i]->getWidgetLine() + "\n";
@@ -284,11 +283,17 @@ void WidgetLayout::getValues(QVector<QString> *channelNames,
                             QVector<double> *values,
                             QVector<QString> *stringValues)
 {
+  // This function is called from the Csound thread function, so it must not contain realtime compatible functions
   if (!this->isEnabled()) {
     return;
   }
-  for (int i = 0; i < m_widgets.size(); i++) {  // FIXME this crashes if a new widget is created while running because vector size has not changed
-    (*channelNames)[i*2] = m_widgets[i]->getChannelName();  // FIXME this also crashes when closing qute while a tab is playing
+  if (m_widgets.size() > (channelNames->size()/2) ) { // This allocation is not realtime, but the user can expect dropouts when creating widgets while running
+    channelNames->resize(m_widgets.size() *2);
+    values->resize(m_widgets.size() *2);
+    stringValues->resize(m_widgets.size() *2);
+  }
+  for (int i = 0; i < channelNames->size()/2 ; i++) {
+    (*channelNames)[i*2] = m_widgets[i]->getChannelName();
     (*values)[i*2] = m_widgets[i]->getValue();
     (*stringValues)[i*2] = m_widgets[i]->getStringValue();
     (*channelNames)[i*2 + 1] = m_widgets[i]->getChannel2Name();
@@ -2022,7 +2027,6 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
 
 void WidgetLayout::markHistory()
 {
-  // FIXME implement undo
   QString text = getMacWidgetsText();
   if (m_history.isEmpty()) {
     m_history << "";

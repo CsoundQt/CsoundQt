@@ -25,6 +25,7 @@
 Console::Console(QWidget *parent) : QTextEdit(parent)
 {
   error = false;
+  setReadOnly(true);
 }
 
 Console::~Console()
@@ -35,6 +36,7 @@ Console::~Console()
 void Console::appendMessage(QString msg)
 {
 //   lock.lock(); // This operation is already locked in qutecsound class
+  setTextColor(m_textColor);
   if (error) {
     setTextColor(QColor("red"));
     if (msg.contains("line ")) {
@@ -125,7 +127,6 @@ void Console::keyPressEvent(QKeyEvent *event)
       emit keyPressed(key);
     }
   }
-  // FIXME propagate keys to parent for keyboard shortcut actions from console
 }
 
 void Console::keyReleaseEvent(QKeyEvent *event)
@@ -137,7 +138,6 @@ void Console::keyReleaseEvent(QKeyEvent *event)
       emit keyReleased(key);
     }
   }
-  // FIXME propagate keys to parent for keyboard shortcut actions from console
 }
 
 // ---------------------------------------------------------------

@@ -47,7 +47,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   askForFile = true;
   readOnly = false;
 
-  //FIXME these options must be set from QuteCsound configuration!
+  //TODO this should be set from QuteCsound configuration
   saveLiveEvents = true;
 
   m_view = new DocumentView(parent);
@@ -499,7 +499,8 @@ void DocumentPage::updateCsLadspaText()
   QString text = "<csLADSPA>\nName=";
   text += fileName.mid(fileName.lastIndexOf("/") + 1) + "\n";
   text += "Maker=QuteCsound\n";
-  text += "UniqueID=69873\n";  // FIXME generate a proper id
+  QString id = QString::number(qrand());
+  text += "UniqueID=" + id + "\n";
   text += "Copyright=none\n";
   text += m_widgetLayout->getCsladspaLines();
   text += "</csLADSPA>";
@@ -776,16 +777,14 @@ void DocumentPage::perfEnded()
   emit stopSignal();
 }
 
-void DocumentPage::record(int format)
+int DocumentPage::record(int format)
 {
   if (fileName.startsWith(":/")) {
     QMessageBox::critical(static_cast<QWidget *>(parent()),
                           tr("QuteCsound"),
                           tr("You must save the examples to use Record."),
                           QMessageBox::Ok);
-    //FIXME connect rec act
-//    recAct->setChecked(false);
-    return;
+    return -1;
   }
   int number = 0;
   QString recName = fileName + "-000.wav";
@@ -798,11 +797,8 @@ void DocumentPage::record(int format)
       recName += "0";
     recName += QString::number(number) + ".wav";
   }
-  m_csEngine->startRecording(format, recName);
-
-  // FIXME setup stopping of recording!
-  // FIXME connect this so that the current audio file for external editor, etc is set
   emit setCurrentAudioFile(recName);
+  return m_csEngine->startRecording(format, recName);
 }
 
 void DocumentPage::stopRecording()
@@ -845,7 +841,6 @@ int DocumentPage::runPython()
 void DocumentPage::setMacWidgetsText(QString widgetText)
 {
 //   qDebug() << "DocumentPage::setMacWidgetsText: ";
-  //FIXME put back
 //  macGUI = widgetText;
 //   document()->setModified(true);
 }
@@ -888,7 +883,7 @@ void DocumentPage::setWidgetPanelPosition(QPoint position)
 
 void DocumentPage::setWidgetPanelSize(QSize size)
 {
-  // FIXME move this so that only updated when needed (e.g. full text read)
+  // TODO move this so that only updated when needed (e.g. full text read)
   int index = macOptions.indexOf(QRegExp("WindowBounds: .*"));
   if (index < 0) {
     qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");

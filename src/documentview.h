@@ -104,9 +104,7 @@ class DocumentView : public QScrollArea
     void markErrorLines(QList<int> lines);
     void unmarkErrorLines();
     void jumpToLine(int line);
-    // FIXME connect these to the engine (or where appropriate)
     void opcodeFromMenu();
-    void updateCsladspaText(QString text);
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
@@ -147,6 +145,7 @@ class DocumentView : public QScrollArea
     Highlighter m_highlighter;
     bool m_isModified;
     bool errorMarked;
+    bool internalChange;  // to let popoup opcode completion know if text change was internal
     //TODO this variable is duplicated in various places. Unify?
     int m_mode; //type of file 0= csound 1=python 2=xml
 

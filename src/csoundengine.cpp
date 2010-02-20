@@ -86,7 +86,6 @@ CsoundEngine::~CsoundEngine()
 #ifndef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(csound);
 #endif
-  //FIXME sometimes messages slip past destruction of this object...
 //  flushMessageQueue();
 //  free(ud);
 //  consoles.clear();
@@ -634,7 +633,7 @@ void CsoundEngine::pause()
    ud->perfThread->Pause();
 }
 
-void CsoundEngine::startRecording(int sampleformat, QString fileName)
+int CsoundEngine::startRecording(int sampleformat, QString fileName)
 {
   const int channels=ud->numChnls;
   const int sampleRate=ud->sampleRate;
@@ -658,6 +657,7 @@ void CsoundEngine::startRecording(int sampleformat, QString fileName)
   m_recording = true;
 
   recordTimer.singleShot(20, this, SLOT(recordBuffer()));
+  return 0;
 }
 
 void CsoundEngine::stopRecording()
@@ -794,7 +794,7 @@ int CsoundEngine::runCsound()
   //TODO is something here necessary to work with doubles?
   //     PUBLIC int csoundGetSampleFormat(CSOUND *);
   //     PUBLIC int csoundGetSampleSize(CSOUND *);
-  unsigned int numWidgets = ud->wl->widgetCount();
+  unsigned int numWidgets = ud->wl->widgetCount();  // FIXME still needed here?
   ud->channelNames.resize(numWidgets*2);
   ud->values.resize(numWidgets*2);
   ud->stringValues.resize(numWidgets*2);
@@ -820,9 +820,10 @@ int CsoundEngine::runCsound()
     ud->PERF_STATUS = 0;
     csoundStop(ud->csound);
     csoundSetMessageCallback(ud->csound, 0); // Does this fix the messages that appear when closing QCS?
-    csoundCleanup(ud->csound);
 #ifdef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(ud->csound);
+#else
+    csoundCleanup(ud->csound);
 #endif
     flushMessageQueue();  // To flush pending queues
 #ifdef MACOSX_PRE_SNOW
@@ -898,7 +899,7 @@ void CsoundEngine::dispatchQueues()
         ud->cs->consoles[i]->scrollToEnd();
       }
       ud->wl->appendMessage(msg);
-//      qApp->processEvents(); //FIXME Is this needed here to avoid display problems in the console?
+//      qApp->processEvents(); //TODO Is this needed here to avoid display problems in the console?
       ud->wl->refreshConsoles();  // Scroll to end of text all console widgets
     }
     messageMutex.lock();
