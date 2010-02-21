@@ -180,6 +180,7 @@ class WidgetLayout : public QWidget
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);
+//    virtual void resizeEvent(QResizeEvent * event);
     QRubberBand *selectionFrame;
     int startx, starty;
 //    WidgetPanel *m_panel;

@@ -151,7 +151,6 @@ class qutecsound:public QMainWindow
     void applySettings();
     void setCurrentOptionsForPage(DocumentPage *p);
     void runUtility(QString flags);
-//     void widgetDockStateChanged(bool topLevel);
 //     void widgetDockLocationChanged(Qt::DockWidgetArea area);
     void showLineNumber(int lineNumber);
     void updateInspector();

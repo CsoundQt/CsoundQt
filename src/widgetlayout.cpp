@@ -1189,6 +1189,11 @@ void WidgetLayout::keyReleaseEvent(QKeyEvent *event)
   QWidget::keyReleaseEvent(event); // Propagate event
 }
 
+//void WidgetLayout::resizeEvent(QResizeEvent * event)
+//{
+//  qDebug() << "WidgetLayout::resizeEvent " << event->size() << event->oldSize();
+//}
+
 void WidgetLayout::widgetChanged(QuteWidget* widget)
 {
   if (widget != 0) {

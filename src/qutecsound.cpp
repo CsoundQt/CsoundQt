@@ -86,9 +86,7 @@ qutecsound::qutecsound(QStringList fileNames)
   widgetPanel->setObjectName("widgetPanel");
   addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
   utilitiesDialog = new UtilitiesDialog(this, m_options/*, _configlists*/);
-//   connect(widgetPanel,SIGNAL(topLevelChanged(bool)), this, SLOT(widgetDockStateChanged(bool)));
-//   connect(widgetPanel,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
-//           this, SLOT(widgetDockLocationChanged(Qt::DockWidgetArea)));
+//  connect(widgetPanel,SIGNAL(topLevelChanged(bool)), this, SLOT(widgetDockStateChanged(bool)));
 
   m_inspector = new Inspector(this);
   m_inspector->parseText(QString());
@@ -1228,8 +1226,9 @@ void qutecsound::documentWasModified()
 {
   // FIXME this should be called every time the current document is modified
 //  setWindowModified(documentPages[curPage]->isModified());
-  if (documentPages[curPage]->isModified())
-    documentTabs->setTabIcon(curPage, modIcon);
+  qDebug() << "qutecsound::documentWasModified()";
+//  if (documentPages[curPage]->isModified())
+  documentTabs->setTabIcon(curPage, modIcon);
 }
 
 void qutecsound::configure()
@@ -1426,20 +1425,22 @@ void qutecsound::runUtility(QString flags)
   }
 }
 
-// void qutecsound::widgetDockStateChanged(bool topLevel)
-// {
-// //   qDebug("qutecsound::widgetDockStateChanged()");
-//   if (documentPages.size() < 1)
-//     return; //necessary check, since widget panel is created early by consructor
-//   qApp->processEvents();
-//   if (topLevel) {
-// //     widgetPanel->setGeometry(documentPages[curPage]->getWidgetPanelGeometry());
-//     QRect geometry = documentPages[curPage]->getWidgetPanelGeometry();
-//     widgetPanel->move(geometry.x(), geometry.y());
-//     widgetPanel->widget()->resize(geometry.width(), geometry.height());
-//     qDebug(" %i %i %i %i",geometry.x(), geometry.y(), geometry.width(), geometry.height());
-//   }
-// }
+//void qutecsound::widgetDockStateChanged(bool topLevel)
+//{
+//  //   qDebug("qutecsound::widgetDockStateChanged()");
+//  if (documentPages.size() < 1)
+//    return; //necessary check, since widget panel is created early by consructor
+//  //   qApp->processEvents();
+//  if (topLevel) {
+//    //     widgetPanel->setGeometry(documentPages[curPage]->getWidgetPanelGeometry());
+//    QRect geometry = documentPages[curPage]->getWidgetPanelGeometry();
+//    widgetPanel->move(geometry.x(), geometry.y());
+//    widgetPanel->widget()->resize(geometry.width(), geometry.height());
+//    qDebug(" %i %i %i %i",geometry.x(), geometry.y(), geometry.width(), geometry.height());
+//  }
+//}
+
+
 //
 // void qutecsound::widgetDockLocationChanged(Qt::DockWidgetArea area)
 // {

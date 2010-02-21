@@ -237,7 +237,7 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 
 void WidgetPanel::resizeEvent(QResizeEvent * event)
 {
-//   qDebug("WidgetPanel::resizeEvent()");
+//   qDebug( ) << "WidgetPanel::resizeEvent() " << event->oldSize() << event->size() ;
   QDockWidget::resizeEvent(event);
   oldSize = event->oldSize();
   emit resized(event->size());
