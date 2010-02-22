@@ -38,7 +38,8 @@ class EventSheet : public QTableWidget
 
     QString getPlainText(bool scaleTempo = false);
     QString getLine(int number, bool scaleTempo = false,
-                    bool storeNumber = false, bool preprocess = false);
+                    bool storeNumber = false, bool preprocess = false,
+                    double startOffset = 0.0);
 //    double getTempo();
 //    QString getName();
     void setFromText(QString text, int rowOffset = 0, int columnOffset = 0,
@@ -48,6 +49,7 @@ class EventSheet : public QTableWidget
     void setTempo(double value);
     void setLoopLength(double value);
     void sendEvents();
+    void sendEventsOffset();
     void loopEvents();
     void stopAllEvents();
     void del();
@@ -77,7 +79,7 @@ class EventSheet : public QTableWidget
     void appendColumn();
     void appendRow();
     void deleteColumn();
-    void deleteRow();
+    void deleteRows();
 
   protected:
     void contextMenuEvent(QContextMenuEvent * event);
@@ -110,6 +112,7 @@ class EventSheet : public QTableWidget
 //    QAction *pasteAct;
 //    QAction *cutAct;
     QAction *sendEventsAct;
+    QAction *sendEventsOffsetAct;
     QAction *loopEventsAct;
     QAction *stopAllEventsAct;
     QAction *subtractAct;

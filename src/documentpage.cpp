@@ -227,7 +227,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   while (text.contains("<EventPanel") and text.contains("</EventPanel>")) {
     QString liveEventsText = text.mid(text.indexOf("<EventPanel "),
                                       text.indexOf("</EventPanel>") - text.indexOf("<EventPanel ") + 13);
-//    qDebug() << "DocumentPage::setTextString   " << liveEventsText;
+    qDebug() << "DocumentPage::setTextString   " << liveEventsText;
     LiveEventFrame *frame = createLiveEventFrame();
     QString scoText = liveEventsText.mid(liveEventsText.indexOf(">") + 1,
                                          liveEventsText.indexOf("</EventPanel>") - liveEventsText.indexOf(">") - 1 );
@@ -335,6 +335,7 @@ QString DocumentPage::getFullText()
         panel += m_liveFrames[i]->getPlainText();
         panel += "</EventPanel>";
         liveEventsText += panel;
+        qDebug() << "DocumentPage::getFullText() " <<panel;
       }
       fullText += liveEventsText;
     }
@@ -537,29 +538,65 @@ void DocumentPage::setCompanionFileName(QString name)
 
 void DocumentPage::copy()
 {
-  // For some strange reason, the shortcuts are not being intercepted by the widget layout directly...
-  // so they are going through here.
-  m_widgetLayout->copy();
+  // For some reason the shortcut takes this route on OS X but the direct route through keyEvent on each on Linux
+  if (m_widgetLayout->hasFocus())
+    m_widgetLayout->copy();
+  else {
+    for (int i = 0; i < m_liveFrames.size(); i++) {
+      if (m_liveFrames[i]->getSheet()->hasFocus())
+        m_liveFrames[i]->getSheet()->copy();
+    }
+  }
 }
 
 void DocumentPage::cut()
 {
-  m_widgetLayout->cut();
+  if (m_widgetLayout->hasFocus())
+    m_widgetLayout->cut();
+  else {
+    for (int i = 0; i < m_liveFrames.size(); i++) {
+      if (m_liveFrames[i]->getSheet()->hasFocus())
+        m_liveFrames[i]->getSheet()->cut();
+    }
+  }
 }
 
 void DocumentPage::paste()
 {
-  m_widgetLayout->paste();
+    if (m_widgetLayout->hasFocus())
+      m_widgetLayout->paste();
+  else {
+    for (int i = 0; i < m_liveFrames.size(); i++) {
+      if (m_liveFrames[i]->getSheet()->hasFocus())
+        m_liveFrames[i]->getSheet()->paste();
+    }
+  }
 }
 
 void DocumentPage::undo()
 {
-  m_widgetLayout->undo();
+  // For some reason the shortcut takes this route on OS X but the direct route through keyEvent on each on Linux
+  if (m_widgetLayout->hasFocus())
+    m_widgetLayout->undo();
+  else {
+    for (int i = 0; i < m_liveFrames.size(); i++) {
+      if (m_liveFrames[i]->getSheet()->hasFocus())
+        m_liveFrames[i]->getSheet()->undo();
+    }
+  }
 }
 
 void DocumentPage::redo()
 {
-  m_widgetLayout->redo();
+  // For some reason the shortcut takes this route on OS X but the direct route through keyEvent on each on Linux
+  if (m_widgetLayout->hasFocus())
+    m_widgetLayout->redo();
+  else {
+    for (int i = 0; i < m_liveFrames.size(); i++) {
+      if (m_liveFrames[i]->getSheet()->hasFocus())
+        m_liveFrames[i]->getSheet()->redo();
+    }
+  }
 }
 
 DocumentView *DocumentPage::getView()

@@ -173,7 +173,7 @@ void LiveEventFrame::deleteFrame(bool ask)
 void LiveEventFrame::setFromText(QString text)
 {
   if (m_mode == 0) { // Sheet mode
-    m_sheet->setFromText(text);
+    m_sheet->setFromText(text,0,0,0,0,true);
     m_sheet->clearHistory();
     m_sheet->markHistory();
     m_modified = false;

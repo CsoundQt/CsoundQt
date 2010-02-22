@@ -1584,7 +1584,7 @@ void qutecsound::createActions()
 
   undoAct = new QAction(QIcon(":/images/gtk-undo.png"), tr("Undo"), this);
   undoAct->setStatusTip(tr("Undo last action"));
-  exitAct->setIconText(tr("Undo"));
+  undoAct->setIconText(tr("Undo"));
   connect(undoAct, SIGNAL(triggered()), this, SLOT(undo()));
 
   redoAct = new QAction(QIcon(":/images/gtk-redo.png"), tr("Redo"), this);
@@ -2282,7 +2282,9 @@ void qutecsound::readSettings()
   QSize size = settings.value("size", QSize(600, 500)).toSize();
   resize(size);
   move(pos);
-  restoreState(settings.value("dockstate").toByteArray());
+  if (settings.contains("dockstate")) {
+    restoreState(settings.value("dockstate").toByteArray());
+  }
   lastUsedDir = settings.value("lastuseddir", "").toString();
   lastFileDir = settings.value("lastfiledir", "").toString();
 //  showLiveEventsAct->setChecked(settings.value("liveEventsActive", true).toBool());

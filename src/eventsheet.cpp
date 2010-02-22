@@ -181,7 +181,7 @@ QString EventSheet::getPlainText(bool scaleTempo)
   return t;
 }
 
-QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber, bool preprocess)
+QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber, bool preprocess, double startOffset)
 {
   QString line = "";
   bool instrEvent = false;
@@ -216,6 +216,9 @@ QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber, bool 
         bool ok = false;
         double value = item->data(Qt::DisplayRole).toDouble(&ok);
         if (ok) {
+          if (i == 2) { // Add start offset to p2 before scaling
+            value += startOffset;
+          }
           value = value * (60.0/m_tempo);
           line += QString::number(value, 'f', 8);;
         }
@@ -267,22 +270,21 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
     }
     QString line = "";
     if (i < lines.size()) {
-        line = lines[i].trimmed(); //Remove whitespace from start and end
+      line = lines[i].trimmed(); //Remove whitespace from start and end
     }
     QList<QPair<QString, QString> > fields = parseLine(line);
+    numColumns = numColumns == 0 ? fields.size() : numColumns;
+    if (this->columnCount() < numColumns + columnOffset) {
+      this->setColumnCount(numColumns + columnOffset);
+    }
     for (int j = 0; j < numColumns; j++) {
-      if (j == 0) { // do this only once
-        numColumns = numColumns == 0 ? fields.size() : numColumns;
-        if (this->columnCount() < numColumns + columnOffset) {
-          this->setColumnCount(numColumns + columnOffset);
-        }
-      }
       if (numColumns != 0 && j >= numColumns) {  // Only paste up to a certain number of columns if not 0
         break;
       }
       QTableWidgetItem * item = this->item(i + rowOffset, j + columnOffset);
       if (item == 0) {
         item = new QTableWidgetItem();
+        noHistoryChange = (noHistoryMark ? 1: 0);
         this->setItem(i + rowOffset, j + columnOffset, item);
       }
       if (j < fields.size()) {
@@ -336,6 +338,37 @@ void EventSheet::sendEvents()
   for (int i = 0; i < selectedRows.size(); i++) {
 //    double number = 0.0;
     emit sendEvent(getLine(selectedRows[i], true, true, true));  // With tempo scaling
+  }
+}
+
+void EventSheet::sendEventsOffset()
+{
+  QModelIndexList list;
+  QList<int> selectedRows;
+  list = this->selectedIndexes();
+  for (int i = 0; i < list.size(); i++) {
+    if (!selectedRows.contains(list[i].row()) ) {
+      selectedRows.append(list[i].row());
+    }
+  }
+  double minTime = 999999999999999.0;
+  bool hasMin = false;
+  for (int i = 0; i < selectedRows.size(); i++) {
+    QTableWidgetItem * item = this->item(selectedRows[i], 2);
+    if (item != 0 && item->data(Qt::DisplayRole).canConvert(QVariant::Double)) {
+      bool ok = false;
+      double n = item->data(Qt::DisplayRole).toDouble(&ok);
+      if (ok && n < minTime) {
+        minTime = n;
+        hasMin = true;
+      }
+    }
+  }
+  if (!hasMin)
+    minTime = 0.0;
+  for (int i = 0; i < selectedRows.size(); i++) {
+//    double number = 0.0;
+    emit sendEvent(getLine(selectedRows[i], true, true, true, -minTime));  // With tempo scaling
   }
 }
 
@@ -509,7 +542,8 @@ void EventSheet::markHistory()
 
 void EventSheet::clearHistory()
 {
-  qDebug() << "EventSheet::clearHistory()";
+  QString text = getPlainText();
+  qDebug() << "EventSheet::clearHistory() " << text;
   history.clear();
   historyIndex = 0;
 }
@@ -856,11 +890,20 @@ void EventSheet::deleteColumn()
   columnNames.takeLast();
 }
 
-void EventSheet::deleteRow()
+void EventSheet::deleteRows()
 {
   // TODO: remove multiple rows
-  this->removeRow(this->currentRow());
-
+  QModelIndexList list = this->selectedIndexes();
+  QList<int> selectedRows;
+  for (int i = 0; i < list.size(); i++) {
+    if (!selectedRows.contains(list[i].row()) ) {
+      selectedRows.append(list[i].row());
+    }
+  }
+  qSort(selectedRows);
+  for (int i = selectedRows.size() - 1; i >=0; i--) {
+    this->removeRow(selectedRows[i]);
+  }
 }
 
 void EventSheet::contextMenuEvent (QContextMenuEvent * event)
@@ -869,6 +912,7 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
 
   QMenu menu;
   menu.addAction(sendEventsAct);
+  menu.addAction(sendEventsOffsetAct);
   menu.addAction(loopEventsAct);
   menu.addAction(stopAllEventsAct);
   menu.addSeparator();
@@ -951,10 +995,13 @@ void EventSheet::keyPressEvent (QKeyEvent * event) {
   else if (event->matches(QKeySequence::Paste)) {
     this->paste();
   }
-  else if (event->matches(QKeySequence::Undo)) {
+  else if (event->matches(QKeySequence::Undo)
+    || (event->key() == Qt::Key_Z && event->modifiers() == Qt::ControlModifier) ){
     this->undo();
   }
-  else if (event->matches(QKeySequence::Redo)) {
+  else if (event->matches(QKeySequence::Redo)
+    || (event->key() == Qt::Key_Z
+        && event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) ) {
     this->redo();
   }
   else if (event->matches(QKeySequence::InsertLineSeparator)) {
@@ -1150,11 +1197,16 @@ void EventSheet::createActions()
 //  pasteAct->setShortcut(QKeySequence(QKeySequence::Paste));
 //  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
 
-  sendEventsAct = new QAction(/*QIcon(":/a.png"),*/ tr("&SendEvents"), this);
+  sendEventsAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Send Events"), this);
   sendEventsAct->setStatusTip(tr("Send Events to Csound"));
   sendEventsAct->setIconText(tr("Send Events"));
   sendEventsAct->setShortcut(QKeySequence(QKeySequence::InsertLineSeparator));
   connect(sendEventsAct, SIGNAL(triggered()), this, SLOT(sendEvents()));
+
+  sendEventsOffsetAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Send Events without offset"), this);
+  sendEventsOffsetAct->setStatusTip(tr("Send Events to Csound without offset"));
+  sendEventsOffsetAct->setIconText(tr("Send Events no offset"));
+  connect(sendEventsOffsetAct, SIGNAL(triggered()), this, SLOT(sendEventsOffset()));
 
   loopEventsAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Loop Events"), this);
   loopEventsAct->setStatusTip(tr("Loop Events to Csound"));
@@ -1242,10 +1294,10 @@ void EventSheet::createActions()
   deleteColumnAct->setIconText(tr("Delete Last Column"));
   connect(deleteColumnAct, SIGNAL(triggered()), this, SLOT(deleteColumn()));
 
-  deleteRowAct = new QAction(/*QIcon(":/a.png"),*/ tr("Delete Current Row"), this);
-  deleteRowAct->setStatusTip(tr("Delete Row"));
-  deleteRowAct->setIconText(tr("Delete Row"));
-  connect(deleteRowAct, SIGNAL(triggered()), this, SLOT(deleteRow()));
+  deleteRowAct = new QAction(/*QIcon(":/a.png"),*/ tr("Delete Selected Rows"), this);
+  deleteRowAct->setStatusTip(tr("Delete Rows"));
+  deleteRowAct->setIconText(tr("Delete Rows"));
+  connect(deleteRowAct, SIGNAL(triggered()), this, SLOT(deleteRows()));
 }
 
 QList<QPair<QString, QString> > EventSheet::parseLine(QString line)
@@ -1385,6 +1437,19 @@ void EventSheet::cellDoubleClickedSlot(int row, int column)
 
 void EventSheet::cellChangedSlot(int row, int column)
 {
+  if (this->item(row, column) != 0 and this->item(row, column)->data(Qt::DisplayRole).toString() != 0) {
+    while (column > 0) {
+      column--;
+      QTableWidgetItem * item = this->item(row, column);
+      qDebug() << "EventSheet::cellChangedSlot " << column;
+      if (item == 0 or item->data(Qt::DisplayRole).toString() == "") {
+        this->setItem(row, column, this->takeItem(row, column + 1));
+      }
+      else {
+        break;
+      }
+    }
+  }
   if (noHistoryChange == 0) {
     markHistory();
   }
