@@ -41,14 +41,16 @@ if kSound == 1 then
 	; Sound Point
 	kpoint_x invalue "point_x"
 	kpoint_y invalue "point_y"
-	aOut oscili kpoint_y, kpoint_x*1000, 1
+	apoint_x interp  kpoint_x			; casts both k-signals ...
+	apoint_y interp  kpoint_y			; ... to audiorate
+	aOut oscili apoint_y, apoint_x*1000, 1
 	out aOut
 endif
 
 if kDance == 1 then
 	; Dance Point
-	knew_x unirand 1
-	knew_y unirand 1
+	knew_x randomh 0, 1, 15
+	knew_y randomh 0, 1, 15
 	outvalue "point_x", knew_x
 	outvalue "point_y", knew_y
 endif
@@ -83,7 +85,7 @@ Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {33924, 41634, 2056}
-ioMeter {36, 168} {318, 253} {0, 59904, 0} "point_x" 0.865439 "point_y" 0.409289 point 7 0 mouse
+ioMeter {36, 168} {318, 253} {0, 59904, 0} "point_x" 0.810277 "point_y" 0.100629 point 7 0 mouse
 ioText {37, 2} {134, 30} label 0.000000 0.00100 "" left "DejaVu Sans" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1. Run Csound
 ioText {37, 93} {135, 73} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Read out the point position and print it to the console.
 ioText {367, 93} {120, 70} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Send random position data to the point.
