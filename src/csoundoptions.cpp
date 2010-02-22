@@ -118,7 +118,7 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
       list << " -+rtaudio=" + _configlists.rtAudioNames[rtAudioModule];
       list << " -i" + (rtInputDevice == "" ? "adc":rtInputDevice);
       list << " -o" + (rtOutputDevice == "" ? "dac":rtOutputDevice);
-      if (rtJackName != "") {
+      if (rtJackName != "" && _configlists.rtAudioNames[rtAudioModule] == "jack") {
         QString jackName = rtJackName;
         if (jackName.contains("*")) {
           jackName.replace("*",fileName1.mid(fileName1.lastIndexOf(QDir::separator()) + 1));

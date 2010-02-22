@@ -898,7 +898,7 @@ void qutecsound::play(bool realtime)
     runAct->setChecked(false);
   }
   else if (ret == 0) { // No problem
-    if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
+    if (m_options->enableWidgets and m_options->showWidgetsOnRun && !runFileName1.endsWith(".py")) {
       showWidgetsAct->setChecked(true);
       if (!documentPages[curPage]->usesFltk()) { // Don't bring up widget panel if there's an FLTK panel
         widgetPanel->setVisible(true);

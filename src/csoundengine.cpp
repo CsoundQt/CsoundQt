@@ -84,7 +84,7 @@ CsoundEngine::~CsoundEngine()
     usleep(20000);
   }
 #ifndef QUTECSOUND_DESTROY_CSOUND
-  csoundDestroy(csound);
+  csoundDestroy(ud->csound);
 #endif
 //  flushMessageQueue();
 //  free(ud);
