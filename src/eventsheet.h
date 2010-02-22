@@ -42,7 +42,7 @@ class EventSheet : public QTableWidget
 //    double getTempo();
 //    QString getName();
     void setFromText(QString text, int rowOffset = 0, int columnOffset = 0,
-                     int numRows = 0, int numColumns = 0);
+                     int numRows = 0, int numColumns = 0, bool noHistoryMark = false);
 
   public slots:
     void setTempo(double value);
@@ -135,6 +135,7 @@ class EventSheet : public QTableWidget
     QList<double> activeInstruments;
     bool m_looping; // Whether currently looping
     double m_loopLength;
+    int noHistoryChange; // Last change in cells was made by undo
 
     //Undo / Redo
     int historyIndex;

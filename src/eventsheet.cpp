@@ -162,6 +162,8 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
   builtinScripts << ":/python/sort_by_start.py";
   converterScripts << ":/python/cps2mid.py" << ":/python/mid2cps.py" << ":/python/cps2pch.py" << ":/python/pch2cps.py";
   testScripts <<  ":/python/test/python_test.py" << ":/python/test/tk_test.py";
+
+  noHistoryChange = 0;
 }
 
 EventSheet::~EventSheet()
@@ -250,22 +252,31 @@ QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber, bool 
   return line;
 }
 
-void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int numRows, int numColumns)
+void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int numRows, int numColumns, bool noHistoryMark)
 {
  // Separataion is stored in UserRole of items
   // remember to treat comments and formulas properly
   QStringList lines = text.split("\n");
-  this->setRowCount(lines.size() + rowOffset + 1);
-  for (int i = 0; i < lines.size(); i++) {
+  numRows = numRows == 0 ? lines.size() : numRows;
+  if (this->rowCount() <numRows + rowOffset) {
+    this->setRowCount(numRows + rowOffset);
+  }
+  for (int i = 0; i < numRows; i++) {
     if (numRows != 0 && i >= numRows) {  // Only paste up to a certain number of rows if not 0
       break;
     }
-    QString line = lines[i].trimmed(); //Remove whitespace from start and end
-    QList<QPair<QString, QString> > fields = parseLine(line);
-    if (this->columnCount() < fields.size() + columnOffset + 1) {
-      this->setColumnCount(fields.size() + columnOffset + 1);
+    QString line = "";
+    if (i < lines.size()) {
+        line = lines[i].trimmed(); //Remove whitespace from start and end
     }
-    for (int j = 0; j < fields.size(); j++) {
+    QList<QPair<QString, QString> > fields = parseLine(line);
+    for (int j = 0; j < numColumns; j++) {
+      if (j == 0) { // do this only once
+        numColumns = numColumns == 0 ? fields.size() : numColumns;
+        if (this->columnCount() < numColumns + columnOffset) {
+          this->setColumnCount(numColumns + columnOffset);
+        }
+      }
       if (numColumns != 0 && j >= numColumns) {  // Only paste up to a certain number of columns if not 0
         break;
       }
@@ -274,155 +285,20 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
         item = new QTableWidgetItem();
         this->setItem(i + rowOffset, j + columnOffset, item);
       }
-      item->setData(Qt::DisplayRole, fields[j].first);
-      item->setData(Qt::UserRole, fields[j].second);
+      if (j < fields.size()) {
+        noHistoryChange = (noHistoryMark ? 1: 0);
+        item->setData(Qt::DisplayRole, fields[j].first);
+        noHistoryChange = (noHistoryMark ? 1: 0);
+        item->setData(Qt::UserRole, fields[j].second);
+      }
+      else {
+        noHistoryChange = (noHistoryMark ? 1: 0);
+        item->setData(Qt::DisplayRole, "");
+        noHistoryChange = (noHistoryMark ? 1: 0);
+        item->setData(Qt::UserRole, "");
+      }
     }
   }
-//    int count = 0;
-//    int pcount = 0;
-//    bool formula = false;
-//    bool string = false;
-//    bool isp = true; // Assume starting on a pfield, not white space
-//    QString pvalue = "";
-//    QString spacing = "";
-//    if (!line.isEmpty() && (line[0] == 'i' || line[0] == 'f') ) {
-//      QTableWidgetItem * item = this->item(i, pcount);
-//      if (item == 0) {
-//        item = new QTableWidgetItem();
-//        this->setItem(i, pcount, item);
-//      }
-//      item->setData(Qt::DisplayRole, QString(line[0]));
-//      count++;
-//      isp = false; // consider p-field done with first character.
-//    }
-//    while (count < line.size()) {
-//      if (isp == true || formula || string) { // Processing p-field
-//        if (line[count] == '"') { // string takes precedence over formulas and comments
-//          string = !string;
-//        }
-//        else if (line[count] == '[') { //Start of formula
-//          formula = true;  // This should never happen as this character should always be after whitespace....
-//        }
-//        else if (line[count] == ']') { //End of formula
-//          formula = false;
-//        }
-//        else if (line[count] == ';') { // comment
-//          // First add current pfield, in case there is no spacing
-//          if (this->columnCount() <= pcount)
-//            appendColumn();
-//          QTableWidgetItem * item = this->item(i, pcount);
-//          if (item == 0) {
-//            item = new QTableWidgetItem();
-//            this->setItem(i, pcount, item);
-//          }
-//          if (pvalue != "") { // Only add it if it is not empty, e.g. the comment is the first item
-//            item->setData(Qt::DisplayRole, pvalue);
-//          }
-//          // Now add comment
-//          pcount++;
-//          QString comment = line.mid(count);
-//          qDebug() << "EventSheet::setFromText: " << i << "---" << pcount << " - - " << comment;
-//          if (this->columnCount() <= pcount) {
-//            appendColumn();
-//          }
-//          item = this->item(i, pcount);
-//          if (item == 0) {
-//            item = new QTableWidgetItem();
-//            this->setItem(i, pcount, item);
-//          }
-//          item->setData(Qt::DisplayRole, comment);
-//          isp = false;  // last p-field has been processed here
-//          break; // Nothing more todo for this line
-//        }  // End of comment processing
-//        // ----
-//        if (line[count].isSpace() && !formula && !string) { // White space so p-field has finished
-//          if (this->columnCount() <= pcount) {
-//            appendColumn();
-//          }
-//          QTableWidgetItem * item = this->item(i, pcount);
-//          if (item == 0) {
-//            item = new QTableWidgetItem();
-//            this->setItem(i, pcount, item);
-//          }
-//          item->setData(Qt::DisplayRole, pvalue); // TODO are double values treated correctly
-//          spacing = "";
-//          spacing.append(line[count]);
-//          isp = false;
-//        }
-//        else { // A character or formula so continue p-field processing
-//          pvalue.append(line[count]);
-//        }
-//      }
-//      else { // Processing white space
-//        if (line[count] == '"') { // string
-//          string = !string;
-//        }
-//        else if (line[count] == '[') { //Start of formula
-//          formula = true;
-//        }
-//        else if (line[count] == ';') { // comment
-//          if (spacing != "") { // Process spacing if any
-//            QTableWidgetItem * item = this->item(i, pcount);
-//            if (item == 0) {
-//              item = new QTableWidgetItem();
-//              this->setItem(i, pcount, item);
-//            }
-//            item->setData(Qt::UserRole, spacing);
-//          }
-//          pcount++;
-//          QString comment = line.mid(count);
-//          if (this->columnCount() <= pcount) {
-//            appendColumn();
-//          }
-//          QTableWidgetItem * item = this->item(i, pcount);
-//          if (item == 0) {
-//            item = new QTableWidgetItem();
-//            this->setItem(i, pcount, item);
-//          }
-//          item->setData(Qt::DisplayRole, comment);
-//          break; // Nothing more todo on this line
-//        }
-//        // ---
-//        if (!line[count].isSpace()) { // Not White space so new p-field has started
-//          QTableWidgetItem * item = this->item(i, pcount);
-//          if (item == 0) {
-//            item = new QTableWidgetItem();
-//            this->setItem(i, pcount, item);
-//          }
-//          item->setData(Qt::UserRole, spacing); // TODO are double values treated correctly?
-//          isp = true;
-//          pvalue = "";
-//          pvalue.append(line[count]);
-//          pcount++;
-//        }
-//        else { // Continue p-field processing
-//          spacing.append(line[count]);
-//        }
-//      }
-//      count++;
-//    }
-//    // Process final p-field
-//    if (isp == true) {
-//      if (this->columnCount() <= pcount) {
-//        appendColumn();
-//      }
-//      QTableWidgetItem * item = this->item(i, pcount);
-//      if (item == 0) {
-//        item = new QTableWidgetItem();
-//        this->setItem(i, pcount, item);
-//      }
-//      item->setData(Qt::DisplayRole, pvalue);
-//    }
-//    else {
-//      QTableWidgetItem * item = this->item(i, pcount);
-//      if (item == 0) {
-//        item = new QTableWidgetItem();
-//        this->setItem(i, pcount, item);
-//      }
-//      item->setData(Qt::UserRole, spacing);
-//    }
-//    qDebug() << parseLine(line);
-//  }
   if (this->rowCount() == 0)
     this->setRowCount(1);
 }
@@ -563,7 +439,7 @@ void EventSheet::copy(bool cut)
 
 void EventSheet::paste()
 {
-//  qDebug() << "EventSheet::paste() text = " << qApp->clipboard()->text();
+  qDebug() << "EventSheet::paste() text = " << qApp->clipboard()->text();
   QModelIndexList list = this->selectedIndexes();
   QList<int> selectedRows;
   QList<int> selectedColumns;
@@ -588,7 +464,7 @@ void EventSheet::paste()
   if (rowCount <= 1 && columnCount <= 1) {
     rowCount = columnCount = 0;
   }
-  setFromText(qApp->clipboard()->text(), lowestRow, lowestColumn, rowCount, columnCount);
+  setFromText(qApp->clipboard()->text(), lowestRow, lowestColumn, rowCount, columnCount, true);
   markHistory();
 }
 
@@ -597,7 +473,7 @@ void EventSheet::undo()
   qDebug() << "EventSheet::undo() " << historyIndex;
   if (historyIndex > 0) {
     historyIndex--;
-    setFromText(history[historyIndex]);
+    setFromText(history[historyIndex], 0,0,rowCount(),columnCount(),true);
   }
 }
 
@@ -606,7 +482,7 @@ void EventSheet::redo()
   qDebug() << "EventSheet::redo() " << historyIndex << history.size();
   if (historyIndex < history.size() - 1) {
     historyIndex++;
-    setFromText(history[historyIndex]);
+    setFromText(history[historyIndex], 0,0,rowCount(),columnCount(),true);
   }
 }
 
@@ -627,7 +503,7 @@ void EventSheet::markHistory()
     if (history.size() != historyIndex + 1)
       history.resize(historyIndex + 1);
     history[historyIndex] = text;
-//    qDebug() << "EventSheet::markHistory "<< historyIndex << " ....."  << text;
+    qDebug() << "EventSheet::markHistory "<< historyIndex << " ....."  << text;
   }
 }
 
@@ -934,7 +810,8 @@ void EventSheet::runScript(QString name)
       QString pasteText = lines.join("\n");
       pasteText.chop(1);
       setFromText(pasteText, position[0].toInt(), position[1].toInt(),
-                  position[2].toInt(), position[3].toInt());
+                  position[2].toInt(), position[3].toInt(), true);
+      markHistory();
     }
     else {
       qDebug() << "EventSheet::runScript invalid out file format";
@@ -1508,5 +1385,11 @@ void EventSheet::cellDoubleClickedSlot(int row, int column)
 
 void EventSheet::cellChangedSlot(int row, int column)
 {
+  if (noHistoryChange == 0) {
+    markHistory();
+  }
+  else {
+    noHistoryChange = 0;
+  }
   emit modified();
 }
