@@ -39,7 +39,7 @@ class QuteGraph;
 class Curve;
 
 // Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
-// TODO is this still necessary?
+// This still necessary for 5.12
 #define QUTECSOUND_DESTROY_CSOUND
 
 class CsoundEngine;

@@ -1138,7 +1138,7 @@ void WidgetLayout::distributeVertical()
 
 void WidgetLayout::keyPressEvent(QKeyEvent *event)
 {
-  qDebug() << "WidgetLayout::keyPressEvent --- " << event->key();
+//  qDebug() << "WidgetLayout::keyPressEvent --- " << event->key();
 //  if (!event->isAutoRepeat() or m_repeatKeys) {
     QString key = event->text();
     if (event->key() == Qt::Key_D && (event->modifiers() & Qt::ControlModifier )) {
@@ -1858,7 +1858,6 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
     this->setAutoFillBackground(false);
   }
 }
-
 void WidgetLayout::setModified(bool mod)
 {
   qDebug() << "WidgetLayout::setModified";

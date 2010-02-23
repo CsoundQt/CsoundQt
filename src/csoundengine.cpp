@@ -716,10 +716,10 @@ int CsoundEngine::runCsound()
 #ifdef Q_OS_MAC
   else {
 #ifdef USE_DOUBLES
-    QString opcodedir = m_initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib64.framework/Resources/Opcodes";
+    QString opcodedir = m_initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib64.framework/Versions/5.2/Resources/Opcodes";
     QString stdopcode = opcodedir + "/libstdopcod.dylib";
 #else
-    QString opcodedir = m_initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Resources/Opcodes";
+    QString opcodedir = m_initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Resources/Resources/Opcodes";
     QString stdopcode = opcodedir + "/libstdopcod.dylib";
     qDebug() << opcodedir;
     qDebug() << stdopcode;

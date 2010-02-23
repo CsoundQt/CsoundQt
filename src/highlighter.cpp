@@ -71,6 +71,31 @@ Highlighter::Highlighter(QTextDocument *parent)
   macroDefineFormat.setFontWeight(QFont::Bold);
 
   pfieldFormat.setFontWeight(QFont::Bold);
+
+  irateFormat.setForeground(QColor("darkCyan"));
+  krateFormat.setForeground(QColor("darkCyan"));
+  arateFormat.setForeground(QColor("darkCyan"));
+  arateFormat.setFontWeight(QFont::Bold);
+
+  girateFormat.setForeground(QColor("darkCyan"));
+  girateFormat.setFontItalic(true);
+  gkrateFormat.setForeground(QColor("darkCyan"));
+  gkrateFormat.setFontItalic(true);
+  garateFormat.setForeground(QColor("darkCyan"));
+  garateFormat.setFontWeight(QFont::Bold);
+  garateFormat.setFontItalic(true);
+
+  stringVarFormat.setForeground(QColor(Qt::darkYellow));
+  stringVarFormat.setFontWeight(QFont::Bold);
+  gstringVarFormat.setForeground(QColor(Qt::darkYellow));
+  gstringVarFormat.setFontWeight(QFont::Bold);
+  gstringVarFormat.setFontItalic(true);
+
+  fsigFormat.setForeground(QColor(Qt::gray));
+  fsigFormat.setFontWeight(QFont::Bold);
+  gfsigFormat.setForeground(QColor(Qt::gray));
+  gfsigFormat.setFontItalic(true);
+  gfsigFormat.setFontWeight(QFont::Bold);
 }
 
 
@@ -94,32 +119,6 @@ void Highlighter::setColorVariables(bool color)
 {
   colorVariables = color;
 
-  if (colorVariables) {
-    irateFormat.setForeground(QColor("darkCyan"));
-    krateFormat.setForeground(QColor("darkCyan"));
-    arateFormat.setForeground(QColor("darkCyan"));
-    arateFormat.setFontWeight(QFont::Bold);
-
-    girateFormat.setForeground(QColor("darkCyan"));
-    girateFormat.setFontItalic(true);
-    gkrateFormat.setForeground(QColor("darkCyan"));
-    gkrateFormat.setFontItalic(true);
-    garateFormat.setForeground(QColor("darkCyan"));
-    garateFormat.setFontWeight(QFont::Bold);
-    garateFormat.setFontItalic(true);
-
-    stringVarFormat.setForeground(QColor(Qt::darkYellow));
-    stringVarFormat.setFontWeight(QFont::Bold);
-    gstringVarFormat.setForeground(QColor(Qt::darkYellow));
-    gstringVarFormat.setFontWeight(QFont::Bold);
-    gstringVarFormat.setFontItalic(true);
-
-    fsigFormat.setForeground(QColor(Qt::gray));
-    fsigFormat.setFontWeight(QFont::Bold);
-    gfsigFormat.setForeground(QColor(Qt::gray));
-    gfsigFormat.setFontItalic(true);
-    gfsigFormat.setFontWeight(QFont::Bold);
-  }
   highlightingRules.clear();
   setLastRules();
 }
@@ -181,28 +180,28 @@ void Highlighter::highlightCsoundBlock(const QString &text)
     else if (findOpcode(word, 0, m_list.size() - 1) >= 0) {
       setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
     }
-    else if (word.startsWith('a')) {
+    else if (word.startsWith('a') && colorVariables) {
       setFormat(wordStart, wordEnd - wordStart, arateFormat);
     }
-    else if (word.startsWith('k') || word.startsWith('i')) {
+    else if ((word.startsWith('k') || word.startsWith('i')) && colorVariables) {
       setFormat(wordStart, wordEnd - wordStart, krateFormat);
     }
-    else if (word.startsWith("ga")) {
+    else if (word.startsWith("ga")  && colorVariables) {
       setFormat(wordStart, wordEnd - wordStart, garateFormat);
     }
-    else if (word.startsWith("gk") || word.startsWith("gi")) {
+    else if ((word.startsWith("gk") || word.startsWith("gi")) && colorVariables) {
       setFormat(wordStart, wordEnd - wordStart, gkrateFormat);
     }
-    else if (word.startsWith("S")) {
+    else if (word.startsWith("S")  && colorVariables) {
       setFormat(wordStart, wordEnd - wordStart, stringVarFormat);
     }
-    else if (word.startsWith("gS")) {
+    else if (word.startsWith("gS")  && colorVariables) {
       setFormat(wordStart, wordEnd - wordStart, gstringVarFormat);
     }
-    else if (word.startsWith("f")) {
+    else if (word.startsWith("f") && colorVariables) {
       setFormat(wordStart, wordEnd - wordStart, fsigFormat);
     }
-    else if (word.startsWith("gf")) {
+    else if (word.startsWith("gf") && colorVariables) {
       setFormat(wordStart, wordEnd - wordStart, gfsigFormat);
     }
     index = text.indexOf(expression, wordEnd);

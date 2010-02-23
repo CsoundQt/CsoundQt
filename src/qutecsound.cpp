@@ -321,7 +321,7 @@ void qutecsound::closeEvent(QCloseEvent *event)
 
 void qutecsound::keyPressEvent(QKeyEvent *event)
 {
-  qDebug() << "qutecsound::keyPressEvent " << event->key();
+//  qDebug() << "qutecsound::keyPressEvent " << event->key();
 }
 
 void qutecsound::newFile()
@@ -1140,7 +1140,19 @@ void qutecsound::setHelpEntry()
     else if (text.contains("CsOptions"))
       text = "CommandUnifile";
     helpPanel->docDir = m_options->csdocdir;
+#ifdef Q_OS_MAC
     QString fileName = m_options->csdocdir + "/" + text + ".html";
+#ifdef USE_DOUBLES
+    QString defHelpdir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib64.framework/Versions/5.2/Resources/Manual";
+#else
+    QString defHelpdir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Resources/Manual";
+#endif
+    if (m_options->csdocdir == "") {
+      fileName = defHelpDir + "/" + text + ".html";
+    }
+#else
+    QString fileName = m_options->csdocdir + "/" + text + ".html";
+#endif
     if (QFile::exists(fileName)) {
         helpPanel->loadFile(fileName);
     }
@@ -2695,7 +2707,6 @@ bool qutecsound::saveFile(const QString &fileName, bool saveWidgets)
 {
   qDebug("qutecsound::saveFile");
   QString text;
-  documentTabs->setTabIcon(curPage, QIcon());
   QApplication::setOverrideCursor(Qt::WaitCursor);
   if (m_options->saveWidgets && saveWidgets)
     text = documentPages[curPage]->getFullText();
@@ -2707,8 +2718,6 @@ bool qutecsound::saveFile(const QString &fileName, bool saveWidgets)
     documentPages[curPage]->setFileName(fileName);
     setCurrentFile(fileName);
   }
-  documentPages[curPage]->setModified(false);
-  setWindowModified(false);
   lastUsedDir = fileName;
   lastUsedDir.resize(fileName.lastIndexOf("/") + 1);
   if (recentFiles.count(fileName) == 0) {
@@ -2727,6 +2736,9 @@ bool qutecsound::saveFile(const QString &fileName, bool saveWidgets)
 
   QTextStream out(&file);
   out << text;
+  documentPages[curPage]->setModified(false);
+  setWindowModified(false);
+  documentTabs->setTabIcon(curPage, QIcon());
   statusBar()->showMessage(tr("File saved"), 2000);
   return true;
 }

@@ -457,6 +457,7 @@ void DocumentView::autoComplete()
   mainEditor->setTextCursor(cursor);
   mainEditor->cut();
   QString syntax = m_opcodeTree->getSyntax(opcodeName);
+  internalChange = true;
   mainEditor->insertPlainText(syntax);
 }
 
@@ -468,6 +469,7 @@ void DocumentView::insertTextFromAction()
   cursor.insertText("");
   editors[0]->setTextCursor(cursor);
   QAction *action = static_cast<QAction *>(QObject::sender());
+  internalChange = true;
   editors[0]->insertPlainText(action->data().toString());
 }
 

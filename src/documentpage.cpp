@@ -335,7 +335,7 @@ QString DocumentPage::getFullText()
         panel += m_liveFrames[i]->getPlainText();
         panel += "</EventPanel>";
         liveEventsText += panel;
-        qDebug() << "DocumentPage::getFullText() " <<panel;
+//        qDebug() << "DocumentPage::getFullText() " <<panel;
       }
       fullText += liveEventsText;
     }
