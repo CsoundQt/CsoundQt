@@ -145,6 +145,7 @@ class WidgetLayout : public QWidget
     void selectionChanged(QRect selection);
     void adjustLayoutSize();
     void setModified(bool mod = true);
+    void setMouseOffset(int x, int y);
 
     void copy();
     void cut();
@@ -197,6 +198,7 @@ class WidgetLayout : public QWidget
     bool m_repeatKeys;
     bool m_trackMouse;
     int mouseX, mouseY, mouseRelX, mouseRelY, mouseBut1, mouseBut2;
+    int xOffset, yOffset;
 
     // Create new widget Actions
     QAction *createSliderAct;

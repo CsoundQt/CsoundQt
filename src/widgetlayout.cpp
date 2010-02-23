@@ -48,7 +48,7 @@
 #endif
 #ifdef Q_OS_MAC
 #define LAYOUT_X_OFFSET 0
-#define LAYOUT_Y_OFFSET 25
+#define LAYOUT_Y_OFFSET 0
 #endif
 #ifdef Q_OS_WIN32
 #define LAYOUT_X_OFFSET 0
@@ -131,6 +131,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 
 //  setFocusPolicy(Qt::NoFocus);
   closing = 0;
+  xOffset = yOffset = 0;
   updateData(); // Starts updataData timer
 }
 
@@ -633,6 +634,7 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
 //    currentPosition.setY(currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20);
 //  }
   menu.exec(event->globalPos());
+//  menu.exec(event->pos());
 }
 
 void WidgetLayout::deselectAll()
@@ -1221,8 +1223,8 @@ void WidgetLayout::mousePressEvent(QMouseEvent *event)
   if (m_editMode && (event->button() & Qt::LeftButton)) {
     this->setFocus(Qt::MouseFocusReason);
     selectionFrame->show();
-    startx = event->x() - LAYOUT_X_OFFSET;
-    starty = event->y() - LAYOUT_Y_OFFSET;
+    startx = event->x() - LAYOUT_X_OFFSET + xOffset;
+    starty = event->y() - LAYOUT_Y_OFFSET + yOffset;
     selectionFrame->setGeometry(startx, starty, 0,0);
     if (event->button() & Qt::LeftButton) {
       deselectAll();
@@ -1241,15 +1243,15 @@ void WidgetLayout::mouseMoveEvent(QMouseEvent *event)
   QWidget::mouseMoveEvent(event);
   int x = startx;
   int y = starty;
-  int width = abs(event->x() - startx - LAYOUT_X_OFFSET);
-  int height = abs(event->y() - starty - LAYOUT_Y_OFFSET);
+  int width = abs(event->x() - startx - LAYOUT_X_OFFSET + xOffset);
+  int height = abs(event->y() - starty - LAYOUT_Y_OFFSET + yOffset);
   if (event->buttons() & Qt::LeftButton) {  // Currently dragging selection
     if (event->x() < startx) {
-      x = event->x();
+      x = event->x() + xOffset;
       //         width = event->x() - startx;
     }
     if (event->y() < starty) {
-      y = event->y();
+      y = event->y() + yOffset;
       //         height = event->y() - starty;
     }
     selectionFrame->setGeometry(x, y, width, height);
@@ -1259,8 +1261,8 @@ void WidgetLayout::mouseMoveEvent(QMouseEvent *event)
   //FIXME these are duplicated now!
   mouseX = event->globalX();
   mouseY = event->globalY();
-  mouseRelX = event->x();
-  mouseRelY = event->y();
+  mouseRelX = event->x() + xOffset;
+  mouseRelY = event->y() + xOffset;
 }
 
 void WidgetLayout::mouseReleaseEvent(QMouseEvent *event)
@@ -1862,6 +1864,12 @@ void WidgetLayout::setModified(bool mod)
   qDebug() << "WidgetLayout::setModified";
   m_modified = mod;
   emit changed();
+}
+
+void WidgetLayout::setMouseOffset(int x, int y)
+{
+  xOffset = x;
+  yOffset = y;
 }
 
 void WidgetLayout::clearHistory()

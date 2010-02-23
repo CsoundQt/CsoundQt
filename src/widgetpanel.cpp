@@ -110,12 +110,17 @@ void WidgetPanel::setWidgetScrollBarsActive(bool act)
     scrollArea->setBackgroundRole(QPalette::Window);
     scrollArea->show();
     scrollArea->setMouseTracking(true);
+    connect(scrollArea->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+            this, SLOT(scrollBarMoved(int)) );
+    connect(scrollArea->verticalScrollBar(), SIGNAL(valueChanged(int)),
+            this, SLOT(scrollBarMoved(int)) );
 //    layoutWidget->setMouseTracking(false);
   }
   else if (!act && m_sbActive) {
     setWidget(scrollArea->takeWidget());
     delete scrollArea;
     widget()->setMouseTracking(true);
+    static_cast<WidgetLayout *>(widget())->setMouseOffset(0,0);
   }
   m_sbActive = act;
 }
@@ -300,4 +305,13 @@ void WidgetPanel::mouseMoveEvent(QMouseEvent * event)
 void WidgetPanel::dockStateChanged(bool undocked)
 {
   qDebug() << "WidgetPanel::dockStateChanged" << undocked;
+}
+
+void WidgetPanel::scrollBarMoved(int value)
+{
+  if (m_sbActive) {
+    int v = scrollArea->verticalScrollBar()->value();
+    int h = scrollArea->horizontalScrollBar()->value();
+    static_cast<WidgetLayout *>(scrollArea->widget())->setMouseOffset(h, v);
+  }
 }

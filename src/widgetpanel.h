@@ -115,6 +115,7 @@ class WidgetPanel : public QDockWidget
 //    void paste();
 //    void paste(QPoint pos);
     void dockStateChanged(bool);
+    void scrollBarMoved(int);
 
   signals:
     void widgetsChanged(QString text);
