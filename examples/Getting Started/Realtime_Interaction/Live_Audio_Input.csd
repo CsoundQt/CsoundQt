@@ -5,8 +5,11 @@ To avoid acoustic feedbacks, this example, does not output the input-signal!
 
 Here, the input's frequency and amplitude are analysed in realtime and displayed on the Widget-Panel. 
 The second instrument can be started, which uses these information to control an oscillator.
+
 (If this is using to much CPU power and does crackle, increase the buffersize in the Preferences Menu(->Run->Buffer Size). 
-A good startingpoint is 1024.)
+A good startingpoint is  Buffersize (-b)=128; HW Buffersize(-B)=512.)
+
+More information concerning realtime-audio can be found in the Csound-Manual: Using Csound-> Optimizing Audio I/O Latency
 */
 
 <CsoundSynthesizer>
@@ -15,7 +18,7 @@ A good startingpoint is 1024.)
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps =  32
 nchnls = 1
 0dbfs = 1
 
