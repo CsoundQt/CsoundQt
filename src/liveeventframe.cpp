@@ -85,7 +85,7 @@ void LiveEventFrame::setMode(int mode)
   if (mode == 0) {
     m_editor->hide();
     m_editor = static_cast<QTextEdit *>(scrollArea->takeWidget());
-    m_sheet->setFromText(m_editor->toPlainText());
+    m_sheet->setFromText(m_editor->toPlainText(), 0,0, -1, -1);
     scrollArea->setWidget(m_sheet);
     m_sheet->show();
   }

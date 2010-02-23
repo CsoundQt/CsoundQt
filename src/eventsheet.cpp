@@ -226,10 +226,19 @@ QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber, bool 
           line += item->data(Qt::DisplayRole).toString();
         }
       }
-      else {  // All other p-fields that don require tempo scaling
+      else {  // All other p-fields that don't require tempo scaling
         QString cellText = item->data(Qt::DisplayRole).toString();
         if (comment) {
-          line += ";" + cellText;
+          bool dataRemaining = false;  // Check if remaining cells have data
+          for (int j = i + 1; j < this->columnCount(); j++) {
+            QTableWidgetItem * checkItem = this->item(number, j);
+            if (checkItem != 0 && checkItem->data(Qt::DisplayRole).toString() != "") {
+              dataRemaining = true;
+              break;
+            }
+          }
+          if (dataRemaining || cellText != "")
+            line += ";" + cellText;
         }
         else if (cellText.startsWith(';')) {
           comment = true; // is a comment from now on
@@ -257,15 +266,16 @@ QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber, bool 
 
 void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int numRows, int numColumns, bool noHistoryMark)
 {
- // Separataion is stored in UserRole of items
+  // Separataion is stored in UserRole of items
   // remember to treat comments and formulas properly
   QStringList lines = text.split("\n");
-  numRows = numRows == 0 ? lines.size() : numRows;
-  if (this->rowCount() <numRows + rowOffset) {
-    this->setRowCount(numRows + rowOffset);
+  int nRows = numRows == 0 ? lines.size() : numRows;  // 0 pastes only available data
+  nRows = (numRows == -1  && nRows <  this->rowCount()) ?  this->rowCount() : nRows; //-1 pastes all of numColumns even if not in data
+  if (this->rowCount() <nRows + rowOffset) {
+    this->setRowCount(nRows + rowOffset);
   }
-  for (int i = 0; i < numRows; i++) {
-    if (numRows != 0 && i >= numRows) {  // Only paste up to a certain number of rows if not 0
+  for (int i = 0; i < nRows; i++) {
+    if (nRows != 0 && i >= nRows) {  // Only paste up to a certain number of rows if not 0
       break;
     }
     QString line = "";
@@ -273,12 +283,13 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
       line = lines[i].trimmed(); //Remove whitespace from start and end
     }
     QList<QPair<QString, QString> > fields = parseLine(line);
-    numColumns = numColumns == 0 ? fields.size() : numColumns;
-    if (this->columnCount() < numColumns + columnOffset) {
-      this->setColumnCount(numColumns + columnOffset);
+    int nColumns = numColumns == 0 ? fields.size() : numColumns;
+    nColumns = (numColumns == -1 && nColumns <  this->columnCount()) ?  this->columnCount() : nColumns;
+    if (this->columnCount() < nColumns + columnOffset) {
+      this->setColumnCount(nColumns + columnOffset);
     }
-    for (int j = 0; j < numColumns; j++) {
-      if (numColumns != 0 && j >= numColumns) {  // Only paste up to a certain number of columns if not 0
+    for (int j = 0; j < nColumns; j++) {
+      if (nColumns != 0 && j >= nColumns) {  // Only paste up to a certain number of columns if not 0
         break;
       }
       QTableWidgetItem * item = this->item(i + rowOffset, j + columnOffset);
