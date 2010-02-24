@@ -453,6 +453,7 @@ void DocumentPage::setModified(bool mod)
   // This slot is triggered by the document children whenever they are modified
   // It is also called from the main application when the file is saved to set as unmodified.
   // FIXME live frame modification should also affect here
+  qDebug() << "DocumentPage::setModified(bool mod) "<< mod;
   if (mod == true) {
     emit modified();
   }
@@ -1008,6 +1009,7 @@ LiveEventFrame * DocumentPage::createLiveEventFrame(QString text)
   connect(e, SIGNAL(newFrameSignal(QString)), this, SLOT(newLiveEventFrame(QString)));
   connect(e, SIGNAL(deleteFrameSignal(LiveEventFrame *)), this, SLOT(deleteLiveEventFrame(LiveEventFrame *)));
   connect(e->getSheet(), SIGNAL(sendEvent(QString)),this,SLOT(queueEvent(QString)));
+  connect(e->getSheet(), SIGNAL(modified()),this,SLOT(setModified()));
   return e;
 }
 
@@ -1031,6 +1033,7 @@ void DocumentPage::deleteLiveEventFrame(LiveEventFrame *frame)
 void DocumentPage::textChanged()
 {
 //  qDebug() << "DocumentPage::textChanged()";
+  setModified(true);
   emit currentTextUpdated();
 }
 

@@ -1236,10 +1236,8 @@ void qutecsound::about()
 
 void qutecsound::documentWasModified()
 {
-  // FIXME this should be called every time the current document is modified
-//  setWindowModified(documentPages[curPage]->isModified());
+  setWindowModified(true);
   qDebug() << "qutecsound::documentWasModified()";
-//  if (documentPages[curPage]->isModified())
   documentTabs->setTabIcon(curPage, modIcon);
 }
 

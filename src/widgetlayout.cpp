@@ -1207,6 +1207,7 @@ void WidgetLayout::widgetChanged(QuteWidget* widget)
       int newh = widget->height();
       editWidgets[index]->move(newx, newy);
       editWidgets[index]->resize(neww, newh);
+      emit changed();
     }
     setWidgetToolTip(widget, m_tooltips);
   }
