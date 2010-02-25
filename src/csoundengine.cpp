@@ -81,7 +81,7 @@ CsoundEngine::~CsoundEngine()
   disconnect(this, 0,0,0);
   while (closing == 1) {
     qApp->processEvents();
-    usleep(20000);
+    usleep(10000);
   }
 #ifndef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(ud->csound);
@@ -933,9 +933,11 @@ void CsoundEngine::dispatchQueues()
 
 void CsoundEngine::queueMessage(QString message)
 {
-  messageMutex.lock();
-  messageQueue << message;
-  messageMutex.unlock();
+  if (closing != 1) {
+    messageMutex.lock();
+    messageQueue << message;
+    messageMutex.unlock();
+  }
 }
 
 void CsoundEngine::clearMessageQueue()

@@ -547,14 +547,14 @@ void EventSheet::markHistory()
     if (history.size() != historyIndex + 1)
       history.resize(historyIndex + 1);
     history[historyIndex] = text;
-    qDebug() << "EventSheet::markHistory "<< historyIndex << " ....."  << text;
+//    qDebug() << "EventSheet::markHistory "<< historyIndex << " ....."  << text;
   }
 }
 
 void EventSheet::clearHistory()
 {
   QString text = getPlainText();
-  qDebug() << "EventSheet::clearHistory() " << text;
+//  qDebug() << "EventSheet::clearHistory() " << text;
   history.clear();
   historyIndex = 0;
 }
@@ -1452,7 +1452,7 @@ void EventSheet::cellChangedSlot(int row, int column)
     while (column > 0) {
       column--;
       QTableWidgetItem * item = this->item(row, column);
-      qDebug() << "EventSheet::cellChangedSlot " << column;
+//      qDebug() << "EventSheet::cellChangedSlot " << column;
       if (item == 0 or item->data(Qt::DisplayRole).toString() == "") {
         this->setItem(row, column, this->takeItem(row, column + 1));
       }

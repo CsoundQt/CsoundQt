@@ -58,6 +58,7 @@ uintptr_t csThread(void *clientData);
 //TODO why does qutecsound not end when it receives a terminate signal?
 qutecsound::qutecsound(QStringList fileNames)
 {
+  qDebug() << "QuteCsound using Csound Version: " << csoundGetVersion();
   initialDir = QDir::current().path();
   setWindowTitle("QuteCsound[*]");
   resize(780,550);
@@ -310,11 +311,11 @@ void qutecsound::closeEvent(QCloseEvent *event)
   delete m_console;
   delete helpPanel;
   delete widgetPanel;
-  delete utilitiesDialog;
   delete m_inspector;
   delete closeTabButton;
   delete opcodeTree;
-  delete documentTabs;
+//  delete documentTabs;  // This is crashing occasionally... why?
+//  delete utilitiesDialog;  // This is crashing occasionally... why?
   event->accept();
   close();
 }
@@ -1142,13 +1143,14 @@ void qutecsound::setHelpEntry()
     helpPanel->docDir = m_options->csdocdir;
 #ifdef Q_OS_MAC
     QString fileName = m_options->csdocdir + "/" + text + ".html";
+    QString defHelpdir;
 #ifdef USE_DOUBLES
-    QString defHelpdir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib64.framework/Versions/5.2/Resources/Manual";
+    defHelpdir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib64.framework/Versions/5.2/Resources/Manual";
 #else
-    QString defHelpdir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Resources/Manual";
+    defHelpdir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Resources/Manual";
 #endif
     if (m_options->csdocdir == "") {
-      fileName = defHelpDir + "/" + text + ".html";
+      fileName = defHelpdir + "/" + text + ".html";
     }
 #else
     QString fileName = m_options->csdocdir + "/" + text + ".html";
@@ -1237,7 +1239,7 @@ void qutecsound::about()
 void qutecsound::documentWasModified()
 {
   setWindowModified(true);
-  qDebug() << "qutecsound::documentWasModified()";
+//  qDebug() << "qutecsound::documentWasModified()";
   documentTabs->setTabIcon(curPage, modIcon);
 }
 

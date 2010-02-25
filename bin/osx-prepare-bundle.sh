@@ -4,8 +4,35 @@
 #cp ../src/default.csd QuteCsound.app/Contents/MacOS
 #cp ../src/opcodes.xml QuteCsound.app/Contents/MacOS
 
+#-n don't compress
+#-v version number
+
+nflag=0
+vflag=
+while getopts 'nv:' OPTION
+do
+case $OPTION in
+n)	nflag=1
+;;
+v)	vflag=1
+bval="$OPTARG"
+;;
+?)	printf "Usage: %s: [-n] [-n version] args\n" $(basename $0) >&2
+exit 2
+;;
+esac
+done
+shift $(($OPTIND - 1))
+
+
+
 mv qutecsound.app QuteCsound.app
+
+if [ "$nflag" -ne 1 ]
+        then
 tar -czvf QuteCsound-noQt.tar.gz QuteCsound.app
+fi
+
 mkdir QuteCsound.app/Contents/Frameworks
 
 # make version including Qt
@@ -28,7 +55,12 @@ rm QuteCsound.app/Contents/Info.plist
 cp ../src/MyInfo.plist QuteCsound.app/Contents/Info.plist
 
 otool -L QuteCsound.app/Contents/MacOS/qutecsound
+
+if [ "$nflag"  -ne 1 ]
+        then
 tar -czvf QuteCsound-incQt.tar.gz QuteCsound.app
+fi
+
 
 # make Standalone application
 cp -R /Library/Frameworks/CsoundLib.framework QuteCsound.app/Contents/Frameworks/
@@ -79,10 +111,9 @@ install_name_tool -id @executable_path/../libfltk_images.dylib QuteCsound.app/Co
 install_name_tool -change /usr/local/lib/libfltk_images.1.1.dylib @executable_path/../libfltk_images.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
 install_name_tool -change /usr/local/lib/libfltk_images.1.1.dylib @executable_path/../libfltk_images.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
 install_name_tool -change /usr/local/lib/libfltk.1.1.dylib @executable_path/../libfltk.dylib QuteCsound.app/Contents/libfltk_images.dylib
-
-install_name_tool -id @executable_path/../libpng12.dylib QuteCsound.app/Contents/libpng12.dylib
 install_name_tool -change /usr/local/lib/libpng12.0.dylib @executable_path/../libpng12.dylib QuteCsound.app/Contents/libfltk_images.dylib
 
+install_name_tool -id @executable_path/../libpng12.dylib QuteCsound.app/Contents/libpng12.dylib
 
 install_name_tool -id @executable_path/../libfluidsynth.dylib QuteCsound.app/Contents/libfluidsynth.dylib
 install_name_tool -change /usr/local/lib/libfluidsynth.1.dylib @executable_path/../libfluidsynth.dylib QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
@@ -90,4 +121,19 @@ install_name_tool -change /usr/local/lib/libfluidsynth.1.dylib @executable_path/
 
 # TODO include dot and Jack installers in an optional directory.
 
+otool -L QuteCsound.app/Contents/MacOS/qutecsound
+otool -L QuteCsound.app/Contents/libsndfile.dylib
+otool -L QuteCsound.app/Contents/libportaudio.dylib
+otool -L QuteCsound.app/Contents/libportmidi.dylib
+otool -L QuteCsound.app/Contents/libmpadec.dylib
+otool -L QuteCsound.app/Contents/liblo.dylib
+otool -L QuteCsound.app/Contents/libpng12.dylib
+otool -L QuteCsound.app/Contents/libfltk_images.dylib
+otool -L QuteCsound.app/Contents/libfluidsynth.dylib
+
+if [ "$nflag" -ne 1 ]
+        then
 tar -czvf QuteCsound-full.tar.gz QuteCsound.app
+fi
+
+

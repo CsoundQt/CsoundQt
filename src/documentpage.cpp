@@ -227,7 +227,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   while (text.contains("<EventPanel") and text.contains("</EventPanel>")) {
     QString liveEventsText = text.mid(text.indexOf("<EventPanel "),
                                       text.indexOf("</EventPanel>") - text.indexOf("<EventPanel ") + 13);
-    qDebug() << "DocumentPage::setTextString   " << liveEventsText;
+//    qDebug() << "DocumentPage::setTextString   " << liveEventsText;
     LiveEventFrame *frame = createLiveEventFrame();
     QString scoText = liveEventsText.mid(liveEventsText.indexOf(">") + 1,
                                          liveEventsText.indexOf("</EventPanel>") - liveEventsText.indexOf(">") - 1 );
@@ -453,7 +453,7 @@ void DocumentPage::setModified(bool mod)
   // This slot is triggered by the document children whenever they are modified
   // It is also called from the main application when the file is saved to set as unmodified.
   // FIXME live frame modification should also affect here
-  qDebug() << "DocumentPage::setModified(bool mod) "<< mod;
+//  qDebug() << "DocumentPage::setModified(bool mod) "<< mod;
   if (mod == true) {
     emit modified();
   }
