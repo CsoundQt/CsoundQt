@@ -290,50 +290,49 @@ Sdump		=		""
 		puts		Sdump, 1
   endop
 
-  opcode ShowLED_a, 0, Sakkk
-;Shows an audio signal in an outvalue channel. You can choose to show the value in dB or in raw amplitudes.
-;;Input:
-;Soutchan: string with the name of the outvalue channel
-;asig: audio signal which is to displayed
-;kdispfreq: refresh frequency (Hz)
-;kdb: 1 = show in dB, 0 = show in raw amplitudes (both in the range 0-1)
-;kdbrange: if idb=1: how many db-steps are shown (e.g. if 36 you will not see anything from a signal below -36 dB)
-Soutchan, asig, kdispfreq, kdb, kdbrange	xin
-kdispval	max_k	asig, kdispfreq, 1
+  opcode	ShowLED_a, 0, Sakkk
+;zeigt ein audiosignal in einem outvalue-kanal, in dB oder reinen amplituden
+;Soutchan: string als name des outvalue-kanals
+;asig: audio signal das angezeigt werden soll
+;kdispfreq: erneuerungsfrequenz der anzeige (Hz)
+;idb: 1 = in dB anzeigen, 0 = in reinen amplitudes anzei (beides im bereich 0-1)
+;idbrange: wenn idb=1: wie viele dB-schritte werden angezeigt (zb wenn idbrange=36 sieht man nichts von einem signal unterhalb von -36 dB)
+Soutchan, asig, ktrig, kdb, kdbrange	xin
+kdispval	max_k	asig, ktrig, 1
 	if kdb != 0 then
 kdb 		= 		dbfsamp(kdispval)
 kval 		= 		(kdbrange + kdb) / kdbrange
 	else
 kval		=		kdispval
 	endif
-			outvalue	Soutchan, kval
+	if ktrig == 1 then
+		outvalue	Soutchan, kval
+	endif
   endop
 
   opcode ShowOver_a, 0, Sakk
-;Shows if the incoming audio signal was more than 1 and stays there for some time
-;;Input:
-;Soutchan: string with the name of the outvalue channel
-;asig: audio signal which is to displayed
-;kdispfreq: refresh frequency (Hz)
-;khold: time in seconds to "hold the red light"
-Soutchan, asig, kdispfreq, khold	xin
+;zeigt wenn asig größer als 1 war und bleibt khold sekunden auf dieser anzeige
+;Soutchan: string als name des outvalue-kanals
+;kdispfreq: erneuerungsfrequenz der anzeige (Hz)
+Soutchan, asig, ktrig, khold	xin
 kon		init		0
 ktim		times
 kstart		init		0
 kend		init		0
 khold		=		(khold < .01 ? .01 : khold); avoiding too short hold times
-kmax		max_k		asig, kdispfreq, 1
-	if kon == 0 && kmax > 1 then
+kmax		max_k		asig, ktrig, 1
+	if kon == 0 && kmax > 1 && ktrig == 1 then
 kstart		=		ktim
 kend		=		kstart + khold
 		outvalue	Soutchan, kmax
 kon		=		1
 	endif
-	if kon == 1 && ktim > kend then
+	if kon == 1 && ktim > kend && ktrig == 1 then
 		outvalue	Soutchan, 0
 kon		=		0
 	endif
   endop
+
 
 
 
@@ -420,18 +419,18 @@ iabst		=		(iabst < 0 ? iabst + 5 : iabst)
 ifn, ifnabst, istartval xin
 ilen		=		ftlen(ifn)
 iftres		ftgen		0, 0, -ilen, -2, 0
-		tabw_i		istartval, 0, iftres
+		tabw_i		istartval, 0, iftres; istartval is the first result
 indx		=		0
-ival		=		istartval
-indxifn	TabValIn	ival, ifn
+ival		=		istartval; begin with istartval
+indxifn	TabValIn	ival, ifn; look where it is in ifn
 loop:
-iabst		tab_i		indx, ifnabst
-indxnext	=		indxifn + iabst
-indxnext	=		(indxnext >= ilen ? indxnext % ilen : indxnext)
-ival		tab_i		indxnext, ifn
-		tabw_i		ival, indx+1, iftres
-indxifn	=		indxnext
-		loop_lt	indx, 1, ilen, loop
+iabst		tab_i		indx, ifnabst; take the first distance
+indxnext	=		indxifn + iabst; the index where the next value is: in general ...
+indxnext	=		(indxnext >= ilen ? indxnext % ilen : indxnext);...and really
+ival		tab_i		indxnext, ifn; get this value
+		tabw_i		ival, indx+1, iftres; write it to iftres
+indxifn	=		indxnext; go on starting at the point where you are
+		loop_lt	indx, 1, ilen-1, loop; repeat 4 times
 		xout		iftres
   endop
 
@@ -843,7 +842,6 @@ ityp		tab_i		indxseq, ifttyps
 istartseq	=		istartabs; absolute starting time for this sequence
 idurshift	=		0
 imaxdur	tab_i		indxseq, iftmxgrpdrs
-ienv		tab_i		indxenv, iftenvtyp2
 ton:
 istartdiff3	tab_i		indxtonabs, iftstarts5a
 istartabs	=		istartabs + istartdiff3; starting time if all is direct from iftstarts5a (typ=3)
@@ -853,6 +851,7 @@ idurshift	=		idurshift + idur1
 istart1	=		istartseq + idurshift
 		tabw_i		istart1, indxtonabs+1, iftout; value for the next note after the duration of this note
 elseif ityp == 2 then; typ2: chords
+ienv		tab_i		indxenv, iftenvtyp2; get its envelope
  if (ienv == 1 || ienv == 2 || ienv == 5) && (indxton < icount-1) then; for common starts
 istart2	=		istartseq
  else; else starting point as difference to the maximum duration of the sequence
@@ -886,13 +885,18 @@ indxenv	=		(ityp == 2 ? indxenv+1 : indxenv); indxenv up if value was used
 ;c) otherwise the end value of the diminuendi is the starting value of the next note
 iftdb, iftenv, indxnotabs, indxnote, icount xin
 idb		tab_i		indxnotabs, iftdb
-idbnext	tab_i		indxnotabs+1, iftdb
 ienv		tab_i		indxnotabs, iftenv
+if indxnote != icount-1 then; calculate idbnext and ienvnext if it's relevant
+idbnext	tab_i		indxnotabs+1, iftdb
 ienvnext	tab_i		indxnotabs+1, iftenv
+else				; otherwise take dummy values
+idbnext	=		0
+ienvnext	=		1
+endif
 if ienv == 1 then; execute crescendo isolated (starting from -40 db)
 idb1		=		-40
 idb2		=		idb
-elseif ienvnext == 1 || indxnote == icount-1 || idbnext > idb then; execute dim isolated (falling to -40 db)
+elseif indxnote == icount-1 || ienvnext == 1 || idbnext > idb then; execute dim isolated (falling to -40 db)
 idb1		=		idb
 idb2		=		-40
 else ;if dim is followed by dim and not the last note: dim to starting value of next dim
@@ -1003,16 +1007,12 @@ indxtonabs	=		indxtonabs + 1
 ;corrects the values in iftdbs_5a as assigned by iftkorr
 iftdbs_5a, iftkorr xin
 iftout		TabMkCp_i	iftdbs_5a
-indx		=		0
 indxkorr	=		0
 loop:
 iwhich		tab_i		indxkorr, iftkorr
-if iwhich == indx then
 ikorrval	tab_i		indxkorr+1, iftkorr
-		tabw_i		ikorrval, indx, iftout
-indxkorr	=		indxkorr + 2
-endif
-		loop_lt	indx, 1, ftlen(iftdbs_5a), loop
+		tabw_i		ikorrval, iwhich, iftout
+		loop_lt	indxkorr, 2, ftlen(iftkorr), loop
 		xout		iftout
   endop
 
@@ -1061,7 +1061,6 @@ icrescalign	=		0; to see if a cresc of type1 does not start with the final value
 icount		tab_i		indxseq, iftcount
 imaxdur	tab_i		indxseq, iftmxgrpdrs
 ityp		tab_i		indxseq, ifttyp
-ienv2		tab_i		indxenv2, iftenv2
 note:
 idb		tab_i		indxnotabs, iftdb
 idur		tab_i		indxnotabs, iftdur
@@ -1073,6 +1072,7 @@ idb2		=		-40
 		tabw_i		idb2, (indxnotabs * 2) + 1, iftout
 
 elseif ityp == 2 then; CHORDS
+ienv2		tab_i		indxenv2, iftenv2; get envelope type
  if ienv2 == 2 || ienv2 == 6 then; simple cresc for the duration of the tone
 idb1		=		-40
 idb2		=		idb
@@ -1097,8 +1097,6 @@ idb1		=		(idb1 <= -35 ? -40 : idb1); set to real miminum if necessary
 
 elseif ityp == 1 then; LINKED NOTES
 ienv1		tab_i		indxenv1, iftenv1
-idbnext	tab_i		indxnotabs + 1, iftdb; next db-value from the table
-ienvnext	tab_i		indxenv1 + 1, iftenv1; next value for envelope (cresc or dim)
  if ienv1 == 1 then; crescendo 
   if icrescalign == 0 then; if not linked to preceding note
 idb1		=		-40; execute isolated (starting from -40 db)
@@ -1110,6 +1108,13 @@ idb2		=		idb
 icrescalign	=		0; delete information on linkage
   endif
  elseif ienv1 == 2 then; diminuendo
+  if (indxnot != icount - 1) then; get next db and next env if not last note of a sequence
+idbnext	tab_i		indxnotabs + 1, iftdb; next db-value from the table
+ienvnext	tab_i		indxenv1 + 1, iftenv1; next value for envelope (cresc or dim)
+  else				;otherwise assign dummy value
+idbnext	=		0
+ienvnext	=		2
+  endif
   if (indxnot == icount - 1) || (ienvnext == 2 && idbnext > idb) || (ienvnext == 1 && idbnext < idb) || (ienvnext == 1 && idb < -21) then; if (1) last note of a sequence, or (2) following dim and db-value thereof greater than this db-value, or (3) following cresc and db-value thereof smaller than this db-value, or (4) following cresc and current db-value is -22 or smaller: dim until -40 db
 idb1		=		idb
 idb2		=		-40
