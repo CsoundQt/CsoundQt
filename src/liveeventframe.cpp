@@ -249,6 +249,13 @@ void LiveEventFrame::changeEvent(QEvent *e)
   }
 }
 
+//void LiveEventFrame::moveEvent (QResizeEvent * event)
+//{
+//  QSize s = event->size();
+//  s.setHeight(s.height() - 30);
+//  scrollArea->resize(s);
+//}
+
 void LiveEventFrame::resizeEvent (QResizeEvent * event)
 {
   QSize s = event->size();

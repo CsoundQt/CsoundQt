@@ -112,7 +112,8 @@ DocumentPage::~DocumentPage()
   delete m_view;   // Must be destroyed before the widgetLayout
   m_csEngine->stop();
   delete m_csEngine;  // Must be destroyed before widgetLayout
-//  delete m_widgetLayout;  //FIXME This is occasionally crashing.... but must be deleted
+  m_widgetLayout->setParent(0);  //To make sure the widget panel from the main application doesn't attempt to delete it as its child
+  delete m_widgetLayout;  //FIXME This is occasionally crashing.... but must be deleted
 //  deleteAllLiveEvents();
 }
 
@@ -315,7 +316,8 @@ QString DocumentPage::getFullText()
 //    fullText += "\n";
   if (fileName.endsWith(".csd",Qt::CaseInsensitive) or fileName == "") {
     if (useXml) {
-      // TODO implement xml widgets
+      fullText += getWidgetsText() + "\n" ;
+      fullText += getPresetsText() + "\n";
     }
     else {
       fullText += getMacOptionsText() + "\n" + getMacWidgetsText() + "\n";
@@ -373,8 +375,48 @@ QString DocumentPage::getDotText()
   return dot.getDotText();
 }
 
+QString DocumentPage::getWidgetsText()
+{
+  QString text = m_widgetLayout->getWidgetsText();
+  QDomDocument d;
+  d.setContent(text);
+  QDomElement n = d.firstChildElement("bsbPanel");
+  if (!n.isNull()) {
+    QDomElement node;
+    node.setTagName("objectName");
+    node.setNodeValue(fileName);
+    d.appendChild(node);
+    node.setTagName("x");
+    node.setNodeValue(QString::number(m_x));
+    d.appendChild(node);
+    node.setTagName("y");
+    node.setNodeValue(QString::number(m_y));
+    d.appendChild(node);
+    node.setTagName("width");
+    node.setNodeValue(QString::number(m_width));
+    d.appendChild(node);
+    node.setTagName("height");
+    node.setNodeValue(QString::number(m_height));
+    d.appendChild(node);
+    node.setTagName("visible");
+    node.setNodeValue("true");
+    d.appendChild(node);
+    //TODO add uuid for widget layout
+//    newtext = "<uuid>" "</uuid>";
+//    node.setContent(newtext);
+//    d.appendChild(node);
+  }
+  return d.toString();
+}
+
+QString DocumentPage::getPresetsText()
+{
+  return m_widgetLayout->getPresetsText();
+}
+
 QString DocumentPage::getMacWidgetsText()
 {
+//  qDebug() <<m_widgetLayout->getWidgetsText() ;
   return m_widgetLayout->getMacWidgetsText();
 }
 
@@ -916,6 +958,9 @@ void DocumentPage::setWidgetPanelPosition(QPoint position)
   newline += QString::number(position.y()) + " ";
   newline += parts[2] + " " + parts[3];
   macOptions[index] = newline;
+
+  m_x = position.x();
+  m_y = position.y();
 //   qDebug("DocumentPage::setWidgetPanelPosition() %i %i", position.x(), position.y());
 }
 
@@ -934,6 +979,9 @@ void DocumentPage::setWidgetPanelSize(QSize size)
   newline += QString::number(size.width()) + " ";
   newline += QString::number(size.height());
   macOptions[index] = newline;
+
+  m_width = size.width();
+  m_height = size.height();
 //   qDebug("DocumentPage::setWidgetPanelSize() %i %i", size.width(), size.height());
 }
 

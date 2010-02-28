@@ -31,6 +31,15 @@ QString WidgetPreset::getName()
   return m_name;
 }
 
+QStringList WidgetPreset::getWidgetIds()
+{
+  QStringList list;
+  for (int i = 0; i < m_data.size(); i++) {
+    list << m_data[i].id;
+  }
+  return list;
+}
+
 double WidgetPreset::getValue(QString id)
 {
   int index = idIndex(id);

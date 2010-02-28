@@ -18,7 +18,7 @@ instr 20
 	outs asig*0.1,asig*0.1
 	if (kspectrum == 1) then
 		dispfft asig, 0.2, 1024 ;calculate spectrum
-		ktab = 5 ;set to show graph index 6
+		ktab = -5 ;set to show graph index 6
 	endif
 	outvalue "graph", -ktab ;show appropriate graph
 endin
@@ -41,7 +41,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 482 198 404 588
+WindowBounds: 438 129 404 597
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -56,8 +56,8 @@ ioText {8, 479} {101, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0,
 ioText {7, 508} {377, 38} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {48896, 52224, 59904} background noborder Note that the buttons will only only work if Csound is running as they generate events which are processed by Csound
 ioCheckbox {161, 483} {20, 20} on spectrum
 ioText {179, 480} {111, 27} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Show spectrum
-ioGraph {8, 147} {373, 142} table 1.000000 1.000000 graph_direct
-ioText {150, 295} {80, 25} editnum -1.000000 1.000000 "graph_direct" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -1.000000
+ioGraph {8, 147} {373, 142} table 0.000000 1.000000 graph_direct
+ioText {150, 295} {80, 25} editnum 0.000000 1.000000 "graph_direct" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.000000
 </MacGUI>
 
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="0" y="0" width="596" height="322"> 

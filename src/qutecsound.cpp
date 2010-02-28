@@ -609,6 +609,9 @@ void qutecsound::deleteCurrentTab()
   DocumentPage *d = documentPages[curPage];
   documentPages.remove(curPage); // Must remove from the vector first
   delete d;  // TODO do these have to be pointers now?
+  if (curPage >= documentPages.size()) {
+    curPage = documentPages.size() - 1;
+  }
   if (curPage < 0)
     curPage = 0; // deleting the document page decreases curPage, so must check
 //  documentTabs->removeTab(curPage);  // Tab is already removed when destroying the content
@@ -655,7 +658,7 @@ bool qutecsound::saveNoWidgets()
 bool qutecsound::closeTab(bool askCloseApp)
 {
 //   qDebug("qutecsound::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
-  if (documentPages[curPage]->isModified()) {
+  if (documentPages.size() > 0 && documentPages[curPage]->isModified()) {
     QString message = tr("The document ")
                       + (documentPages[curPage]->getFileName() != ""
                          ? documentPages[curPage]->getFileName(): "untitled.csd")
@@ -882,7 +885,7 @@ void qutecsound::play(bool realtime)
   if (_configlists.rtAudioNames[m_options->rtAudioModule] == "alsa"
       or _configlists.rtAudioNames[m_options->rtAudioModule] == "coreaudio"
       or _configlists.rtAudioNames[m_options->rtAudioModule] == "portaudio"
-      or _configlists.rtAudioNames[m_options->rtAudioModule] == "portmidi") {
+      or _configlists.rtMidiNames[m_options->rtMidiModule] == "portmidi") {
     stopAll();
     runAct->setChecked(true);  // mark it correctly again after stopping...
   }

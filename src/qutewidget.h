@@ -25,7 +25,6 @@
 
 #include <QtGui>
 #include <QtXml>
-// #include <QHash>
 
 //#define USE_WIDGET_MUTEX
 

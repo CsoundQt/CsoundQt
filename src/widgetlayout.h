@@ -48,10 +48,11 @@ class WidgetLayout : public QWidget
 //    void setUndoHistory(QVector<QString> *history, int *index);
     unsigned int widgetCount();
     void loadWidgets(QString macWidgets);
-    QString getMacWidgetsText(); // With full tags
-    QStringList getSelectedMacWidgetsText();
     QString getWidgetsText(); // With full tags
     QStringList getSelectedWidgetsText();
+    QString getPresetsText(); // With full tags
+    QString getMacWidgetsText(); // With full tags
+    QStringList getSelectedMacWidgetsText();
 
     void setValue(QString channelName, double value);
     void setValue(QString channelName, QString value);

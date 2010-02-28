@@ -187,6 +187,57 @@ void WidgetLayout::loadWidgets(QString macWidgets)
   adjustLayoutSize();
 }
 
+QString WidgetLayout::getWidgetsText()
+{
+  // This function must be used with care as it accesses the widgets, which
+  // may cause crashing since widgets are not reentrant
+  QString text = "";
+  QString name = "QuteCsound"; // FIXME add setting of panel name
+  text = "<bsbPanel>\n";
+  text += "<bgcolor mode=\""
+          + (this->parentWidget()->autoFillBackground()? QString("background"):QString("nobackground")) + "\">\n";
+  text +=  "<r>"
+          + QString::number((int) (this->parentWidget()->palette().button().color().redF()*256.)) + "</r>\n";
+  text +=  "<g>"
+          + QString::number((int) (this->parentWidget()->palette().button().color().greenF()*256.)) + "</g>\n";
+  text +=  "<b>"
+          + QString::number((int) (this->parentWidget()->palette().button().color().blueF()*256.)) + "</b>\n";
+  text += "</bgcolor>\n";
+
+  valueMutex.lock();
+  for (int i = 0; i < m_widgets.size(); i++) {
+    text += m_widgets[i]->getWidgetXmlText() + "\n";
+  }
+  valueMutex.unlock();
+  text += "</bsbPanel>";
+  return text;
+}
+
+QStringList WidgetLayout::getSelectedWidgetsText()
+{
+  qDebug() << "WidgetLayout::getSelectedWidgetsText not implemented and will crash!";
+}
+
+QString WidgetLayout::getPresetsText()
+{
+  QString text = "<bsbPresets>\n";
+  for (int i = 0; i < presets.size(); i++) {
+    text += "<bsbPreset name=\"" + presets[i].getName() + "\" type=\"user\">\n";
+    QStringList widgets = presets[i].getWidgetIds();
+    for (int j = 0; j < widgets.size(); j++) {
+      text += "<widget uuid=\"" + widgets[j] + "\">";
+      text += "<v1>" + QString::number(presets[i].getValue(widgets[j]), 'f', 10) + "<v1>";
+      text += "<v2>" + QString::number(presets[i].getValue2(widgets[j]), 'f', 10) + "<v2>";
+      text += "<s>" + presets[i].getStringValue(widgets[j]) + "<s>";
+      text += "</widget>\n";
+    }
+    text += "</bsbPreset>";
+  }
+
+  text += "</bsbPresets>\n";
+  return text;
+}
+
 QString WidgetLayout::getMacWidgetsText()
 {
   // This function must be used with care as it accesses the widgets, which
@@ -217,16 +268,6 @@ QStringList WidgetLayout::getSelectedMacWidgetsText()
     }
   }
   return l;
-}
-
-QString WidgetLayout::getWidgetsText()
-{
-  qDebug() << "WidgetLayout::getWidgetsText not implemented and will crash!";
-}
-
-QStringList WidgetLayout::getSelectedWidgetsText()
-{
-  qDebug() << "WidgetLayout::getSelectedWidgetsText not implemented and will crash!";
 }
 
 void WidgetLayout::setValue(QString channelName, double value)
@@ -293,7 +334,7 @@ void WidgetLayout::getValues(QVector<QString> *channelNames,
     values->resize(m_widgets.size() *2);
     stringValues->resize(m_widgets.size() *2);
   }
-  for (int i = 0; i < channelNames->size()/2 ; i++) {
+  for (int i = 0; i < m_widgets.size() ; i++) {
     (*channelNames)[i*2] = m_widgets[i]->getChannelName();
     (*values)[i*2] = m_widgets[i]->getValue();
     (*stringValues)[i*2] = m_widgets[i]->getStringValue();

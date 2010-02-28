@@ -55,6 +55,8 @@ class DocumentPage : public QObject
     QString getBasicText();
     QString getOptionsText();
     QString getDotText();
+    QString getWidgetsText();
+    QString getPresetsText();
     QString getMacWidgetsText();
     QString getMacPresetsText();
     QString getMacOptionsText();
@@ -193,6 +195,7 @@ class DocumentPage : public QObject
     bool useXml;
 
     WidgetLayout * m_widgetLayout;
+    int m_x,m_y,m_width, m_height;  // Position of the widget panel
     DocumentView *m_view;
     CsoundEngine *m_csEngine;
     ConsoleWidget *m_console;

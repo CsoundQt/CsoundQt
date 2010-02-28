@@ -184,7 +184,7 @@ int CsoundOptions::generateCmdLine(char **argv)
   }
   argv[index] = (char *) calloc(fileName1.size()+1, sizeof(char));
   strcpy(argv[index++],fileName1.toStdString().c_str());
-  fprintf(stdout, "%i - %s.....", index, fileName1.toStdString().c_str()) ;
+//  fprintf(stdout, "%i - %s.....", index, fileName1.toStdString().c_str()) ;
   if (fileName2 != "") {
     argv[index] = (char *) calloc(fileName2.size()+1, sizeof(char));
     strcpy(argv[index++],fileName2.toStdString().c_str());

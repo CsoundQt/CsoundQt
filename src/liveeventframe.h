@@ -60,6 +60,7 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
 
   protected:
     void changeEvent(QEvent *e);
+//    virtual void moveEvent (QMoveEvent * event);
     virtual void resizeEvent (QResizeEvent * event);
     virtual void closeEvent (QCloseEvent * event);
 

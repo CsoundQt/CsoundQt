@@ -40,6 +40,7 @@ class WidgetPreset
     WidgetPreset();
 
     QString getName();
+    QStringList getWidgetIds();
     double getValue(QString id);
     double getValue2(QString id);
     QString getStringValue(QString id);
