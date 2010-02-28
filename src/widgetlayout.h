@@ -191,7 +191,7 @@ class WidgetLayout : public QWidget
     QHash<QString, QString> newStringValues;
     QMutex valueMutex;
     QMutex stringValueMutex;
-    QStack<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
+    QList<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
     QVector<WINDAT *> curveBuffer;
     QVector<Curve *> curves;
 

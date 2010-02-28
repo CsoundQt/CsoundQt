@@ -497,7 +497,7 @@ void WidgetLayout::appendCurve(WINDAT *windat)
                   windat->danflag);  //FIXME delete these, but where?
   windat->windid = (uintptr_t) curve;
   curve->set_id((uintptr_t) curve);
-  newCurveBuffer.append(curve);
+  newCurveBuffer.prepend(curve);
 }
 
 void WidgetLayout::newCurve(Curve* curve)
@@ -2084,7 +2084,6 @@ void WidgetLayout::deleteWidget(QuteWidget *widget)
 
 void WidgetLayout::newValue(QPair<QString, double> channelValue)
 {
-//   qDebug("WidgetPanel::newValue");
   if (!channelValue.first.isEmpty()) {
     valueMutex.lock();
     if(newValues.contains(channelValue.first)) {
@@ -2092,6 +2091,7 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
     }
     else {
       newValues.insert(channelValue.first, channelValue.second);
+//      qDebug() << "WidgetLayout::newValue " << channelValue.first << " " << channelValue.second;
     }
     valueMutex.unlock();
   }
@@ -2259,7 +2259,7 @@ void WidgetLayout::updateData()
     return;
   }
   while (!newCurveBuffer.isEmpty() && curveBuffer.size() < 32) {
-    Curve * curve = newCurveBuffer.pop();
+    Curve * curve = newCurveBuffer.takeLast();
 //    qDebug() << "WidgetLayout::updateData() curve " << curve->get_caption();
     newCurve(curve);
   }

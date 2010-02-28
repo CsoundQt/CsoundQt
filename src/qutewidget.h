@@ -27,7 +27,7 @@
 #include <QtXml>
 // #include <QHash>
 
-#define USE_WIDGET_MUTEX
+//#define USE_WIDGET_MUTEX
 
 class QuteWidget : public QWidget
 {

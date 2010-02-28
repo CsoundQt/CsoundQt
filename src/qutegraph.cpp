@@ -153,18 +153,17 @@ void QuteGraph::setValue(double value)
 #ifdef  USE_WIDGET_MUTEX
   mutex.lock();
 #endif
-  qDebug("QuteGraph::setValue %i", int(value));
   if (value < 0 ) {
     for (int i = 0; i < m_pageComboBox->count(); i++) {
       QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"), QString::SkipEmptyParts);
-      qDebug() << "QuteGraph::setValue " << parts;
+//      qDebug() << "QuteGraph::setValue " << parts;
       if (parts.size() > 1) {
         int num = parts.last().toInt();
         if (curves.size() > num && curves[num]->get_caption().isEmpty())
-          return; //don't apply value if curve is currently nameless
+          return;
+        if (int(value) == -num) {
+          m_value = - (int) value;
           changeCurve(i);
-          if ((int) value == -num) {
-          m_value = (int) value;
         }
       }
     }

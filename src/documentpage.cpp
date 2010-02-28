@@ -112,7 +112,7 @@ DocumentPage::~DocumentPage()
   delete m_view;   // Must be destroyed before the widgetLayout
   m_csEngine->stop();
   delete m_csEngine;  // Must be destroyed before widgetLayout
-  delete m_widgetLayout;
+//  delete m_widgetLayout;  //FIXME This is occasionally crashing.... but must be deleted
 //  deleteAllLiveEvents();
 }
 

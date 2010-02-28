@@ -87,12 +87,12 @@ class CsoundEngine : public QObject
                                          int attr,
                                          const char *fmt,
                                          va_list args);
-    static void outputValueCallbackThread (CSOUND *csound,
-                                    const char *channelName,
-                                    MYFLT value);
-    static void inputValueCallbackThread (CSOUND *csound,
-                                   const char *channelName,
-                                   MYFLT *value);
+//    static void outputValueCallbackThread (CSOUND *csound,
+//                                    const char *channelName,
+//                                    MYFLT value);
+//    static void inputValueCallbackThread (CSOUND *csound,
+//                                   const char *channelName,
+//                                   MYFLT *value);
     static void outputValueCallback (CSOUND *csound,
                                     const char *channelName,
                                     MYFLT value);

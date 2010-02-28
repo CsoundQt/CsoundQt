@@ -121,78 +121,78 @@ void CsoundEngine::messageCallbackThread(CSOUND *csound,
   ud->cs->queueMessage(msg);
 }
 
-void CsoundEngine::outputValueCallbackThread (CSOUND *csound,
-                                     const char *channelName,
-                                     MYFLT value)
-{
-  CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-  if (ud->perfThread->GetStatus() == 0) {
-    QString name = QString(channelName);
-    ud->cs->perfMutex.lock();
-    if (name.startsWith('$')) {
-      QString channelName = name;
-      channelName.chop(name.size() - (int) value + 1);
-      QString sValue = name;
-      sValue = sValue.right(name.size() - (int) value);
-      channelName.remove(0,1);
-      ud->cs->queueOutString(channelName, sValue);
-    }
-    else {
-      ud->cs->queueOutValue(name, value);
-    }
-    ud->cs->perfMutex.unlock();
-  }
-}
-
-void CsoundEngine::inputValueCallbackThread (CSOUND *csound,
-                                     const char *channelName,
-                                     MYFLT *value)
-{
-  // from qutecsound to Csound
-  CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-  if (ud->perfThread->GetStatus() == 0) {
-    QString name = QString(channelName);
+//void CsoundEngine::outputValueCallbackThread (CSOUND *csound,
+//                                     const char *channelName,
+//                                     MYFLT value)
+//{
+//  CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+//  if (ud->perfThread->GetStatus() == 0) {
+//    QString name = QString(channelName);
 //    ud->cs->perfMutex.lock();
-    if (name.startsWith('$')) { // channel is a string channel
-      int index = ud->channelNames.indexOf(name.mid(1));
-      char *string = (char *) value;
-      if (index>=0) {
-        strcpy(string, ud->stringValues[index].toStdString().c_str());
-      }
-      else {
-        string[0] = '\0'; //empty c string
-      }
-    }
-    else {  // Not a string channel
-      int index = ud->channelNames.indexOf(name);
-      if (index>=0)
-        *value = (MYFLT) ud->values[index];
-      else {
-        *value = 0;
-      }
-      //FIXME check if mouse tracking is active
-      if (name == "_MouseX") {
-        *value = (MYFLT) ud->mouseValues[0];
-      }
-      else if (name == "_MouseY") {
-        *value = (MYFLT) ud->mouseValues[1];
-      }
-      else if(name == "_MouseRelX") {
-        *value = (MYFLT) ud->mouseValues[2];
-      }
-      else if(name == "_MouseRelY") {
-        *value = (MYFLT) ud->mouseValues[3];
-      }
-      else if(name == "_MouseBut1") {
-        *value = (MYFLT) ud->mouseValues[4];
-      }
-      else if(name == "_MouseBut2") {
-        *value = (MYFLT) ud->mouseValues[5];
-      }
-    }
+//    if (name.startsWith('$')) {
+//      QString channelName = name;
+//      channelName.chop(name.size() - (int) value + 1);
+//      QString sValue = name;
+//      sValue = sValue.right(name.size() - (int) value);
+//      channelName.remove(0,1);
+//      ud->cs->queueOutString(channelName, sValue);
+//    }
+//    else {
+//      ud->cs->queueOutValue(name, value);
+//    }
 //    ud->cs->perfMutex.unlock();
-  }
-}
+//  }
+//}
+//
+//void CsoundEngine::inputValueCallbackThread (CSOUND *csound,
+//                                     const char *channelName,
+//                                     MYFLT *value)
+//{
+//  // from qutecsound to Csound
+//  CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+//  if (ud->perfThread->GetStatus() == 0) {
+//    QString name = QString(channelName);
+////    ud->cs->perfMutex.lock();
+//    if (name.startsWith('$')) { // channel is a string channel
+//      int index = ud->channelNames.indexOf(name.mid(1));
+//      char *string = (char *) value;
+//      if (index>=0) {
+//        strcpy(string, ud->stringValues[index].toStdString().c_str());
+//      }
+//      else {
+//        string[0] = '\0'; //empty c string
+//      }
+//    }
+//    else {  // Not a string channel
+//      int index = ud->channelNames.indexOf(name);
+//      if (index>=0)
+//        *value = (MYFLT) ud->values[index];
+//      else {
+//        *value = 0;
+//      }
+//      //FIXME check if mouse tracking is active
+//      if (name == "_MouseX") {
+//        *value = (MYFLT) ud->mouseValues[0];
+//      }
+//      else if (name == "_MouseY") {
+//        *value = (MYFLT) ud->mouseValues[1];
+//      }
+//      else if(name == "_MouseRelX") {
+//        *value = (MYFLT) ud->mouseValues[2];
+//      }
+//      else if(name == "_MouseRelY") {
+//        *value = (MYFLT) ud->mouseValues[3];
+//      }
+//      else if(name == "_MouseBut1") {
+//        *value = (MYFLT) ud->mouseValues[4];
+//      }
+//      else if(name == "_MouseBut2") {
+//        *value = (MYFLT) ud->mouseValues[5];
+//      }
+//    }
+////    ud->cs->perfMutex.unlock();
+//  }
+//}
 
 void CsoundEngine::outputValueCallback (CSOUND *csound,
                                      const char *channelName,

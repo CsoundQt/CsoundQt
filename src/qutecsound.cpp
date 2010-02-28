@@ -881,7 +881,8 @@ void qutecsound::play(bool realtime)
 
   if (_configlists.rtAudioNames[m_options->rtAudioModule] == "alsa"
       or _configlists.rtAudioNames[m_options->rtAudioModule] == "coreaudio"
-      or _configlists.rtAudioNames[m_options->rtAudioModule] == "portaudio") {
+      or _configlists.rtAudioNames[m_options->rtAudioModule] == "portaudio"
+      or _configlists.rtAudioNames[m_options->rtAudioModule] == "portmidi") {
     stopAll();
     runAct->setChecked(true);  // mark it correctly again after stopping...
   }
