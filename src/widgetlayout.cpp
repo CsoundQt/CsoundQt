@@ -213,11 +213,6 @@ QString WidgetLayout::getWidgetsText()
   return text;
 }
 
-QStringList WidgetLayout::getSelectedWidgetsText()
-{
-  qDebug() << "WidgetLayout::getSelectedWidgetsText not implemented and will crash!";
-}
-
 QString WidgetLayout::getPresetsText()
 {
   QString text = "<bsbPresets>\n";
@@ -236,6 +231,11 @@ QString WidgetLayout::getPresetsText()
 
   text += "</bsbPresets>\n";
   return text;
+}
+
+QStringList WidgetLayout::getSelectedWidgetsText()
+{
+  qDebug() << "WidgetLayout::getSelectedWidgetsText not implemented and will crash!";
 }
 
 QString WidgetLayout::getMacWidgetsText()
@@ -1938,6 +1938,12 @@ void WidgetLayout::loadPreset(int num)
   }
 }
 
+void WidgetLayout::newPreset(QString name)
+{
+  presets.resize(presets.size() + 1);
+  savePreset(presets.size() - 1, name);
+}
+
 void WidgetLayout::savePreset(int num, QString name)
 {
   if (num >= 0 && num < presets.size()) {
@@ -1968,12 +1974,6 @@ void WidgetLayout::setPresetName(int num, QString name)
   if (num >= 0 && num < presets.size()) {
     presets[num].setName(name);
   }
-}
-
-QString WidgetLayout::getPresetsXmlText()
-{
-  qDebug() << "WidgetPanel::getPresetsXmlText() not implemented yet";
-  return QString();
 }
 
 void WidgetLayout::copy()

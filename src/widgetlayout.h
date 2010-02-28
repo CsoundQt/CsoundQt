@@ -49,8 +49,8 @@ class WidgetLayout : public QWidget
     unsigned int widgetCount();
     void loadWidgets(QString macWidgets);
     QString getWidgetsText(); // With full tags
+    QString getPresetsText();
     QStringList getSelectedWidgetsText();
-    QString getPresetsText(); // With full tags
     QString getMacWidgetsText(); // With full tags
     QStringList getSelectedMacWidgetsText();
 
@@ -267,9 +267,9 @@ class WidgetLayout : public QWidget
 
     // Preset methods
     void loadPreset(int num);
+    void newPreset(QString name);
     void savePreset(int num, QString name);
     void setPresetName(int num, QString name);
-    QString getPresetsXmlText();
 
   private slots:
     void updateData();
