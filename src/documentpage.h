@@ -125,6 +125,7 @@ class DocumentPage : public QObject
     void setWidgetEnabled(bool enabled);
     void setRunThreaded(bool thread);
     void useInvalue(bool use);
+    void useXmlFormat(bool use);
 
     // Member public variables
     bool askForFile;

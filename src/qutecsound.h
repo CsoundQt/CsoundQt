@@ -103,7 +103,7 @@ class qutecsound:public QMainWindow
 
   protected:
     virtual void closeEvent(QCloseEvent *event);
-    virtual void keyPressEvent(QKeyEvent *event);
+//    virtual void keyPressEvent(QKeyEvent *event);
 
   private slots:
     void newFile();

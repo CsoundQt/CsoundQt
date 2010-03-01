@@ -53,6 +53,7 @@ class Options: public CsoundOptions{
     bool showTooltips;
     bool terminalFLTK;
     bool scrollbars;
+    bool newformat;  // Use XML widget format
 
     bool useAPI;
     bool enableWidgets;

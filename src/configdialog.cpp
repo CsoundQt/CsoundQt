@@ -78,6 +78,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   terminalFLTKCheckBox->setChecked(m_options->terminalFLTK);
   terminalFLTKCheckBox->setEnabled(m_options->enableFLTK);
   scrollbarsCheckBox->setChecked(m_options->scrollbars);
+  newFormatCheckBox->setChecked(m_options->newformat);
 
   if (m_options->useAPI)
     ApiRadioButton->setChecked(true);
@@ -233,6 +234,7 @@ void ConfigDialog::accept()
   m_options->enableFLTK = enableFLTKCheckBox->isChecked();
   m_options->terminalFLTK = terminalFLTKCheckBox->isChecked();
   m_options->scrollbars = scrollbarsCheckBox->isChecked();
+  m_options->newformat = newFormatCheckBox->isChecked();
 
   m_options->useAPI = ApiRadioButton->isChecked();
   m_options->thread = threadCheckBox->isChecked();

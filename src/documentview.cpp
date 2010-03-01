@@ -271,31 +271,33 @@ QString DocumentView::getScoText()
 
 QString DocumentView::getOptionsText()
 {
-  // Without tags
+  // Without tags. For text that is being edited in the text editor
   qDebug() << "DocumentView::getOptionsText() not implemented and will crash!";
 }
 
 QString DocumentView::getMiscText()
 {
-  // All other tags like version and licence with tags
+  // All other tags like version and licence with tags. For text that is being edited in the text editor
   qDebug() << "DocumentView::getMiscText() not implemented and will crash!";
 }
 
 QString DocumentView::getExtraText()
-{// Text outside any known tags
+{// Text outside any known tags. For text that is being edited in the text editor
   qDebug() << "DocumentView::getFullOptionsText() not implemented and will crash!";
 }
 
 QString DocumentView::getMacWidgetsText()
 {
-  // With tags including presets
+  // With tags including presets. For text that is being edited in the text editor
+  // Includes presets text
   qDebug() << "DocumentView::getMacWidgetsText() not implemented and will crash!";
 }
 
 QString DocumentView::getWidgetsText()
 {
-  // With tags including presets, in new xml format
-  qDebug() << "DocumentView::getFullOptionsText() not implemented and will crash!";
+  // With tags including presets, in new xml format. For text that is being edited in the text editor
+  // Includes presets text
+  qDebug() << "DocumentView::getWidgetsText() not implemented and will crash!";
 }
 
 

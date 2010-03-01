@@ -286,7 +286,6 @@ void ScopeData::resize()
 void ScopeData::updateData(int channel, int zoom, bool freeze)
 {
   CsoundUserData *ud = m_params->ud;
-  QMutex *mutex = m_params->mutex;
   int width = m_params->width;
   int height = m_params->height;
   if (ud == 0 or !ud->cs->isRunning() )
@@ -302,6 +301,7 @@ void ScopeData::updateData(int channel, int zoom, bool freeze)
   }
   channel = (channel != -1 ? channel - 1 : -1);
 #ifdef  USE_WIDGET_MUTEX
+  QMutex *mutex = m_params->mutex;
   mutex->lock();
 #endif
   // FIXME how to make sure the buffer is read before it is flushed when recorded? Have another buffer?
@@ -372,7 +372,6 @@ void LissajouData::updateData(int channel, int zoom, bool freeze)
 {
   // The decimation factor (zoom) is not used here
   CsoundUserData *ud = m_params->ud;
-  QMutex *mutex = m_params->mutex;
   int width = m_params->width;
   int height = m_params->height;
   if (ud == 0 or !ud->cs->isRunning() )
@@ -389,6 +388,7 @@ void LissajouData::updateData(int channel, int zoom, bool freeze)
   }
   channel = (channel != -1 ? channel - 1 : 0);
 #ifdef  USE_WIDGET_MUTEX
+  QMutex *mutex = m_params->mutex;
   mutex->lock();
 #endif
   RingBuffer *buffer = &ud->audioOutputBuffer;
@@ -442,7 +442,6 @@ void PoincareData::resize()
 void PoincareData::updateData(int channel, int zoom, bool freeze)
 {
   CsoundUserData *ud = m_params->ud;
-  QMutex *mutex = m_params->mutex;
   int width = m_params->width;
   int height = m_params->height;
   if (ud == 0 or !ud->cs->isRunning() )
@@ -457,6 +456,7 @@ void PoincareData::updateData(int channel, int zoom, bool freeze)
   }
   channel = (channel != -1 ? channel - 1 : 0);
 #ifdef  USE_WIDGET_MUTEX
+  QMutex *mutex = m_params->mutex;
   mutex->lock();
 #endif
   RingBuffer *buffer = &ud->audioOutputBuffer;

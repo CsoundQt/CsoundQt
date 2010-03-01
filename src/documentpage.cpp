@@ -98,7 +98,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   // Register the console with the engine for message printing
   m_csEngine->registerConsole(m_console);
 
-  useXml = false; // use Mac widgets
+  useXml = false; // use Mac widgets by default
 }
 
 DocumentPage::~DocumentPage()
@@ -148,75 +148,109 @@ DocumentPage::~DocumentPage()
 int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 {
   deleteAllLiveEvents();
+  bool xmlFormatFound = false;
+  while (text.contains("<bsbPanel>") and text.contains("</bsbPanel>")) {
+    QString panel = text.right(text.size()-text.indexOf("<bsbPanel>"));
+    panel.resize(panel.indexOf("</bsbPanel>") + 11);
+    if (text.indexOf("</bsbPanel>") + 11 < text.size() and text[text.indexOf("</bsbPanel>") + 13] == '\n')
+      text.remove(text.indexOf("</bsbPanel>") + 13, 1); //remove final line break
+    if (text.indexOf("<bsbPanel>") > 0 and text[text.indexOf("<bsbPanel>") - 1] == '\n')
+      text.remove(text.indexOf("<bsbPanel>") - 1, 1); //remove initial line break
+    text.remove(text.indexOf("<bsbPanel>"), panel.size());
+    xmlFormatFound = true;
+    // TODO enable creation of several panels
+    // FIMXE here the options for the bsbPanel should be read and parsed.
+  }
   if (text.contains("<MacOptions>") and text.contains("</MacOptions>")) {
-    QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
-    options.resize(options.indexOf("</MacOptions>") + 13);
-    setMacOptionsText(options);
-//     qDebug("<MacOptions> present. \n%s", options.toStdString().c_str());
-    if (text.indexOf("</MacOptions>") + 13 < text.size() and text[text.indexOf("</MacOptions>") + 13] == '\n')
-      text.remove(text.indexOf("</MacOptions>") + 13, 1); //remove final line break
-    if (text.indexOf("<MacOptions>") > 0 and text[text.indexOf("<MacOptions>") - 1] == '\n')
-      text.remove(text.indexOf("<MacOptions>") - 1, 1); //remove initial line break
-    text.remove(text.indexOf("<MacOptions>"), options.size());
-//     qDebug("<MacOptions> present. %s", getMacOptions("WindowBounds").toStdString().c_str());
+    if (!xmlFormatFound) {
+      QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
+      options.resize(options.indexOf("</MacOptions>") + 13);
+      setMacOptionsText(options);
+      //     qDebug("<MacOptions> present. \n%s", options.toStdString().c_str());
+      if (text.indexOf("</MacOptions>") + 13 < text.size() and text[text.indexOf("</MacOptions>") + 13] == '\n')
+        text.remove(text.indexOf("</MacOptions>") + 13, 1); //remove final line break
+      if (text.indexOf("<MacOptions>") > 0 and text[text.indexOf("<MacOptions>") - 1] == '\n')
+        text.remove(text.indexOf("<MacOptions>") - 1, 1); //remove initial line break
+      text.remove(text.indexOf("<MacOptions>"), options.size());
+      //     qDebug("<MacOptions> present. %s", getMacOptions("WindowBounds").toStdString().c_str());
+    }
+    else {
+      qDebug() << "NOTE: New XML format present, ignoring exisiting old format options.";
+    }
   }
   else {
-    if (autoCreateMacCsoundSections) {
+    if (autoCreateMacCsoundSections && !xmlFormatFound) {
       QString defaultMacOptions = "<MacOptions>\nVersion: 3\nRender: Real\nAsk: Yes\nFunctions: ioObject\nListing: Window\nWindowBounds: 72 179 400 200\nCurrentView: io\nIOViewEdit: On\nOptions:\n</MacOptions>\n";
       setMacOptionsText(defaultMacOptions);
     }
-    else
+    else {
       setMacOptionsText("");
+    }
   }
   if (text.contains("<MacPresets>") and text.contains("</MacPresets>")) {
-    macPresets = text.right(text.size()-text.indexOf("<MacPresets>"));
-    macPresets.resize(macPresets.indexOf("</MacPresets>") + 12);
-    if (text.indexOf("</MacPresets>") + 12 < text.size() and text[text.indexOf("</MacPresets>") + 12] == '\n')
-      text.remove(text.indexOf("</MacPresets>") + 12, 1); //remove final line break
-    if (text.indexOf("<MacPresets>") > 0 and text[text.indexOf("<MacPresets>") - 1] == '\n')
-      text.remove(text.indexOf("<MacPresets>") - 1, 1); //remove initial line break
-    text.remove(text.indexOf("<MacPresets>"), macPresets.size());
-    qDebug("<MacPresets> present.");
+    if (!xmlFormatFound) {
+      macPresets = text.right(text.size()-text.indexOf("<MacPresets>"));
+      macPresets.resize(macPresets.indexOf("</MacPresets>") + 12);
+      if (text.indexOf("</MacPresets>") + 12 < text.size() and text[text.indexOf("</MacPresets>") + 12] == '\n')
+        text.remove(text.indexOf("</MacPresets>") + 12, 1); //remove final line break
+      if (text.indexOf("<MacPresets>") > 0 and text[text.indexOf("<MacPresets>") - 1] == '\n')
+        text.remove(text.indexOf("<MacPresets>") - 1, 1); //remove initial line break
+      text.remove(text.indexOf("<MacPresets>"), macPresets.size());
+      qDebug("<MacPresets> present.");
+    }
+    else {
+      qDebug() << "NOTE: New XML format present, ignoring exisiting old format presets.";
+    }
   }
   else {
     macPresets = "";
   }
   if (text.contains("<MacGUI>") and text.contains("</MacGUI>")) {
-    QString macGUI = text.right(text.size()-text.indexOf("<MacGUI>"));
-    macGUI.resize(macGUI.indexOf("</MacGUI>") + 9);
-    m_widgetLayout->loadWidgets(macGUI);
-    if (text.indexOf("</MacGUI>") + 9 < text.size() and text[text.indexOf("</MacGUI>") + 9] == '\n')
-      text.remove(text.indexOf("</MacGUI>") + 9, 1); //remove final line break
-    if (text.indexOf("<MacGUI>") > 0 and text[text.indexOf("<MacGUI>") - 1] == '\n')
-      text.remove(text.indexOf("<MacGUI>") - 1, 1); //remove initial line break
-    text.remove(macGUI);
-    qDebug("<MacGUI> loaded.");
+    if (!xmlFormatFound) {
+      QString macGUI = text.right(text.size()-text.indexOf("<MacGUI>"));
+      macGUI.resize(macGUI.indexOf("</MacGUI>") + 9);
+      m_widgetLayout->loadWidgets(macGUI);
+      if (text.indexOf("</MacGUI>") + 9 < text.size() and text[text.indexOf("</MacGUI>") + 9] == '\n')
+        text.remove(text.indexOf("</MacGUI>") + 9, 1); //remove final line break
+      if (text.indexOf("<MacGUI>") > 0 and text[text.indexOf("<MacGUI>") - 1] == '\n')
+        text.remove(text.indexOf("<MacGUI>") - 1, 1); //remove initial line break
+      text.remove(macGUI);
+      qDebug("<MacGUI> loaded.");
+    }
+    else {
+      qDebug() << "NOTE: New XML format present, ignoring exisiting old format widgets.";
+    }
   }
   else {
-    if (autoCreateMacCsoundSections) {
+    if (autoCreateMacCsoundSections && !xmlFormatFound) {
       QString macGUI = "<MacGUI>\nioView nobackground {59352, 11885, 65535}\nioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1\n</MacGUI>";
       m_widgetLayout->loadWidgets(macGUI);
     }
+//    else {
+//      macGUI = "";
+//    }
   }
+  if (!xmlFormatFound) {  // Use the old options only if the new ones are not present
   // This here is for compatibility with MacCsound
-  QString optionsText = getMacOptions("Options:");
-  if (optionsText.contains(" -o")) {
-    QString outFile = optionsText.mid(optionsText.indexOf(" -o") + 1);
-    int index = outFile.indexOf(" -");
-    if (index > 0) {
-      outFile = outFile.left(index);
-    }
-    optionsText.remove(outFile);
-    setMacOption("Options:", optionsText);
-    index = text.indexOf("<CsOptions>");
-    int endindex = text.indexOf("</CsOptions>");
-    if (index >= 0 and endindex > index) {
-      text.remove(index, endindex - index);
-      text.insert(index, "<CsOptions>\n" + outFile);
-    }
-    else {
-      index = text.indexOf("<CsInstruments>");
-      text.insert(index, "<CsOptions>\n" + outFile + "\n</CsOptions>\n");
+    QString optionsText = getMacOptions("Options:");
+    if (optionsText.contains(" -o")) {
+      QString outFile = optionsText.mid(optionsText.indexOf(" -o") + 1);
+      int index = outFile.indexOf(" -");
+      if (index > 0) {
+        outFile = outFile.left(index);
+      }
+      optionsText.remove(outFile);
+      setMacOption("Options:", optionsText);
+      index = text.indexOf("<CsOptions>");
+      int endindex = text.indexOf("</CsOptions>");
+      if (index >= 0 and endindex > index) {
+        text.remove(index, endindex - index);
+        text.insert(index, "<CsOptions>\n" + outFile);
+      }
+      else {
+        index = text.indexOf("<CsInstruments>");
+        text.insert(index, "<CsOptions>\n" + outFile + "\n</CsOptions>\n");
+      }
     }
   }
   if (!text.contains("<CsoundSynthesizer>") &&
@@ -318,6 +352,8 @@ QString DocumentPage::getFullText()
     if (useXml) {
       fullText += getWidgetsText() + "\n" ;
       fullText += getPresetsText() + "\n";
+      fullText += getMacOptionsText() + "\n" + getMacWidgetsText() + "\n";
+      fullText += getMacPresetsText() + "\n";  // Put old format anyway for backward compatibility, at least for some time...
     }
     else {
       fullText += getMacOptionsText() + "\n" + getMacWidgetsText() + "\n";
@@ -382,30 +418,32 @@ QString DocumentPage::getWidgetsText()
   d.setContent(text);
   QDomElement n = d.firstChildElement("bsbPanel");
   if (!n.isNull()) {
-    QDomElement node;
-    node.setTagName("objectName");
+    qDebug() << "DocumentPage::getWidgetsText() bsbPanel found ";
+    QDomElement node = d.createElement("objectName");
     node.setNodeValue(fileName);
-    d.appendChild(node);
-    node.setTagName("x");
-    node.setNodeValue(QString::number(m_x));
-    d.appendChild(node);
-    node.setTagName("y");
-    node.setNodeValue(QString::number(m_y));
-    d.appendChild(node);
-    node.setTagName("width");
-    node.setNodeValue(QString::number(m_width));
-    d.appendChild(node);
-    node.setTagName("height");
-    node.setNodeValue(QString::number(m_height));
-    d.appendChild(node);
-    node.setTagName("visible");
-    node.setNodeValue("true");
-    d.appendChild(node);
+    n.appendChild(node);
+    QDomElement nodex = d.createElement("x");
+    nodex.appendChild(d.createTextNode(QString::number(m_x)));
+    n.appendChild(nodex);
+    QDomElement nodey = d.createElement("y");
+    nodey.appendChild(d.createTextNode(QString::number(m_y)));
+    n.appendChild(nodey);
+    QDomElement nodew = d.createElement("width");
+    nodew.appendChild(d.createTextNode(QString::number(m_width)));
+    n.appendChild(nodew);
+    QDomElement nodeh = d.createElement("height");
+    nodeh.appendChild(d.createTextNode(QString::number(m_height)));
+    n.appendChild(nodeh);
+    QDomElement nodev = d.createElement("visible");
+    nodev.appendChild(d.createTextNode("true"));
+    n.appendChild(nodev);
     //TODO add uuid for widget layout
 //    newtext = "<uuid>" "</uuid>";
 //    node.setContent(newtext);
 //    d.appendChild(node);
   }
+//  qDebug() << n.toText().nodeValue();
+  qDebug() << d.toString();
   return d.toString();
 }
 
@@ -416,7 +454,7 @@ QString DocumentPage::getPresetsText()
 
 QString DocumentPage::getMacWidgetsText()
 {
-//  qDebug() <<m_widgetLayout->getWidgetsText() ;
+  QString t = getWidgetsText();  // TODO only for testing. remove later
   return m_widgetLayout->getMacWidgetsText();
 }
 
@@ -800,6 +838,12 @@ void DocumentPage::setRunThreaded(bool threaded)
 void DocumentPage::useInvalue(bool use)
 {
   m_csEngine->useInvalue(use);  // This will take effect on next run of the engine
+}
+
+void DocumentPage::useXmlFormat(bool use)
+{
+  qDebug() << "DocumentPage::useXmlFormat " << use;
+  useXml = use;
 }
 
 void DocumentPage::showLiveEventFrames(bool visible)

@@ -320,10 +320,10 @@ void qutecsound::closeEvent(QCloseEvent *event)
   close();
 }
 
-void qutecsound::keyPressEvent(QKeyEvent *event)
-{
-//  qDebug() << "qutecsound::keyPressEvent " << event->key();
-}
+//void qutecsound::keyPressEvent(QKeyEvent *event)
+//{
+////  qDebug() << "qutecsound::keyPressEvent " << event->key();
+//}
 
 void qutecsound::newFile()
 {
@@ -1310,6 +1310,7 @@ void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
   p->setConsoleColors(m_options->consoleFontColor,
                       m_options->consoleBgColor);
   p->setScriptDirectory(m_options->pythonDir);
+  p->useXmlFormat(m_options->newformat);
 }
 
 void qutecsound::runUtility(QString flags)
@@ -2347,6 +2348,7 @@ void qutecsound::readSettings()
   m_options->enableFLTK = settings.value("enableFLTK", true).toBool();
   m_options->terminalFLTK = settings.value("terminalFLTK", false).toBool();
   m_options->scrollbars = settings.value("scrollbars", true).toBool();
+  m_options->newformat = settings.value("newformat", false).toBool();  //TODO when format is stabilized, use by default
   lastFiles = settings.value("lastfiles", "").toStringList();
   lastTabIndex = settings.value("lasttabindex", "").toInt();
   settings.endGroup();
@@ -2471,6 +2473,7 @@ void qutecsound::writeSettings()
   settings.setValue("enableFLTK", m_options->enableFLTK);
   settings.setValue("terminalFLTK", m_options->terminalFLTK);
   settings.setValue("scrollbars", m_options->scrollbars);
+  settings.setValue("newformat", m_options->newformat);
   QStringList files;
   if (m_options->rememberFile) {
     for (int i = 0; i < documentPages.size(); i++ ) {
