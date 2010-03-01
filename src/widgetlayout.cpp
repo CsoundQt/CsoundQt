@@ -509,10 +509,16 @@ void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
 
 void WidgetLayout::appendCurve(WINDAT *windat)
 {
-//  qDebug() << "WidgetLayout::appendCurve " << curve;
+  // Called from the Csound callback, creates a curve and queues it for processing
+  // Csound itself deletes the WINDAT structures, that's why we retain a copy of the data for when Csound stops
+  // It would be nice if Csound used a single windat for every f-table, but it reuses them...
+//  for (int i = 0; i < curves.size(); i++) {  // Check if windat is already handled by one of the existing curves
+//    if (windat == curves[i]->getOriginal()) {
+//      return;
+//    }
+//  }
   windat->caption[CAPSIZE - 1] = 0; // Just in case...
   Polarity polarity;
-    // translate polarities and hope the definition in Csound doesn't change.
   switch (windat->polarity) {
     case NEGPOL:
       polarity = POLARITY_NEGPOL;
@@ -535,10 +541,11 @@ void WidgetLayout::appendCurve(WINDAT *windat)
                   windat->min,
                   windat->absmax,
                   windat->oabsmax,
-                  windat->danflag);  //FIXME delete these, but where?
+                  windat->danflag,
+                  windat);  //FIXME delete these when starting a new run
   windat->windid = (uintptr_t) curve;
-  curve->set_id((uintptr_t) curve);
-  newCurveBuffer.prepend(curve);
+  newCurveBuffer.append(curve);
+  qDebug() << "WidgetLayout::appendCurve " << curve << "__--__" << windat;
 }
 
 void WidgetLayout::newCurve(Curve* curve)
@@ -546,7 +553,7 @@ void WidgetLayout::newCurve(Curve* curve)
   for (int i = 0; i < graphWidgets.size(); i++) {
     graphWidgets[i]->addCurve(curve);
     curves.append(curve);
-    qApp->processEvents(); // FIXME Kludge to allow correct resizing of graph view
+//    qApp->processEvents(); // FIXME Kludge to allow correct resizing of graph view
     graphWidgets[i]->changeCurve(-1);
   }
 }
@@ -564,31 +571,45 @@ void WidgetLayout::passWidgetClipboard(QString text)
   m_clipboard = text;
 }
 
-Curve * WidgetLayout::getCurveById(uintptr_t id)
+uintptr_t WidgetLayout::getCurveById(uintptr_t id)
 {
+  qDebug() << "WidgetLayout::getCurveById ";
   foreach (Curve *thisCurve, curves) {
-//     qDebug() << "WidgetLayout::getCurveById " << thisCurve->get_id() << " id " << id;
-    if (thisCurve->get_id() == id)
-      return thisCurve;
+    qDebug() << "WidgetLayout::getCurveById " << (uintptr_t) thisCurve << " id " << id;
+    if ((uintptr_t) thisCurve == id)
+      return (uintptr_t) thisCurve;
   }
   return 0;
 }
 
 void WidgetLayout::updateCurve(WINDAT *windat)
 {
-//  qDebug() << "WidgetLayout::updateCurve(WINDAT *windat) ";
+  qDebug() << "WidgetLayout::updateCurve(WINDAT *windat) ";
   // FIXME dont allocate new memory
   WINDAT *windat_ = (WINDAT *) malloc(sizeof(WINDAT));
   *windat_ = *windat;
-  curveBuffer.append(windat_);
+  curveUpdateBuffer.append(windat_);
 }
 
 
 int WidgetLayout::killCurves(CSOUND *csound)
 {
   // FIXME free memory from curves
-//  clearGraphs();
-  qDebug() << "qutecsound::killCurves. Implement!";
+  qDebug() << "qutecsound::killCurves";
+  for (int i = 0; i < curves.size(); i++) {
+    WINDAT * windat = curves[i]->getOriginal();
+    if (windat->npts > 0 && windat->windid == (uintptr_t)curves[i]) { // Check for sanity of pointer
+      curves[i]->set_size(windat->npts);      // number of points
+      curves[i]->set_data(windat->fdata);
+      curves[i]->set_caption(QString(windat->caption)); // title of curve
+      //    curves[i]->set_polarity(windat->polarity); // polarity
+      curves[i]->set_max(windat->max);        // curve max
+      curves[i]->set_min(windat->min);        // curve min
+      curves[i]->set_absmax(windat->absmax);     // abs max of above
+      //    curves[i]->set_y_scale(windat->y_scale);    // Y axis scaling factor
+      curves[i]->setOriginal(0);
+    }
+  }
   return 0;
 }
 
@@ -598,9 +619,8 @@ void WidgetLayout::clearGraphs()
     graphWidgets[i]->clearCurves();
   }
   curves.clear();
-  curveBuffer.clear();
+  curveUpdateBuffer.clear();
   newCurveBuffer.clear();
-
 }
 
 void WidgetLayout::refreshConsoles()
@@ -2289,8 +2309,8 @@ void WidgetLayout::redo()
 void WidgetLayout::killCurve(WINDAT *windat)
 {
   qDebug() << "WidgetLayout::killCurve()";
-  Curve *curve = getCurveById(windat->windid);
-  // FIXME free memory for this graph
+  Curve *curve = (Curve *) getCurveById(windat->windid);
+  curve->setOriginal(0);
 }
 
 void WidgetLayout::updateData()
@@ -2299,32 +2319,36 @@ void WidgetLayout::updateData()
     closing = 0;
     return;
   }
-  while (!newCurveBuffer.isEmpty() && curveBuffer.size() < 32) {
-    Curve * curve = newCurveBuffer.takeLast();
-//    qDebug() << "WidgetLayout::updateData() curve " << curve->get_caption();
-    newCurve(curve);
+  while (!newCurveBuffer.isEmpty()) {
+    Curve * curve = newCurveBuffer.takeFirst();
+    newCurve(curve); // Register new curve
+    qDebug() << "WidgetLayout::updateData() new curve " << curve;
   }
-//  if (curveBuffer.size() > 32) {
-//    qDebug("qutecsound::dispatchQueues() WARNING: curve update buffer too large!");
-//    curveBuffer.resize(32);
-//  }
-  for (int i = 0; i < curveBuffer.size(); i++) {
-    WINDAT * windat = curveBuffer[i];
-    Curve *curve = getCurveById((uintptr_t) windat->windid);
-    if (curve != 0) {
-//      qDebug() << "qutecsound::updateData() " <<windat->caption << "-" <<  curve->get_caption();
+  // Check for graph updates after creating new curves
+  for (int i = 0; i < curveUpdateBuffer.size(); i++) {
+    Curve *curve = (Curve *) getCurveById(curveUpdateBuffer[i]->windid);
+    qDebug() << "WidgetLayout::updateData() " << i << " of " << curveUpdateBuffer.size() <<  " ---" << curveUpdateBuffer[i] << "  " << curve;
+    if (curve == 0) {
+      break;
+    }
+    WINDAT * windat = curve->getOriginal();
+    windat = curveUpdateBuffer[i];
+    if (windat != 0) {
+      qDebug() << "WidgetLayout::updateData() " << windat->caption << "-" <<  curve->get_caption();
       curve->set_size(windat->npts);      // number of points
       curve->set_data(windat->fdata);
       curve->set_caption(QString(windat->caption)); // title of curve
-      //     curve->set_polarity(windat->polarity); // polarity
+      //      curve->set_polarity(windat->polarity); // polarity
       curve->set_max(windat->max);        // curve max
       curve->set_min(windat->min);        // curve min
       curve->set_absmax(windat->absmax);     // abs max of above
-      //     curve->set_y_scale(windat->y_scale);    // Y axis scaling factor
+      //      curve->set_y_scale(windat->y_scale);    // Y axis scaling factor
       setCurveData(curve);
+      curveUpdateBuffer.remove(i);
+      i--;
     }
-    curveBuffer.remove(curveBuffer.indexOf(windat));
   }
+//  curveBuffer.clear();
   for (int i = 0; i < scopeWidgets.size(); i++) {
     scopeWidgets[i]->updateData();
   }

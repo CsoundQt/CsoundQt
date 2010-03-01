@@ -39,11 +39,11 @@ class Curve
 {
   public:
     Curve(MYFLT *, size_t, const QString&, Polarity,
-          float, float, float, float, bool);
+          float, float, float, float, bool, WINDAT *original);
     Curve(const Curve&);
     Curve &operator=(const Curve&);
     ~Curve();
-    uintptr_t get_id() const;
+//    uintptr_t get_id() const;
 //     float *get_data() const;
     float get_data(int index);
     size_t get_size() const;      // number of points
@@ -53,8 +53,9 @@ class Curve
     float get_min() const;        // curve min
     float get_absmax() const;     // abs max of above
     float get_y_scale() const;    // Y axis scaling factor
+    WINDAT * getOriginal();
 
-    void set_id(uintptr_t id);
+//    void set_id(uintptr_t id);
     void set_data(MYFLT * data);
     void set_size(size_t size);      // number of points
     void set_caption(QString caption); // title of curve
@@ -63,12 +64,14 @@ class Curve
     void set_min(float min);        // curve min
     void set_absmax(float absmax);     // abs max of above
     void set_y_scale(float y_scale);    // Y axis scaling factor
+    void setOriginal(WINDAT *windat);
 
     bool is_divider_dotted() const; // Add dotted divider when true
     bool has_same_caption(Curve *) const;
   private:
-    uintptr_t m_id;
+//    uintptr_t m_id;
     MYFLT *m_data;
+    WINDAT *m_original;
     size_t m_size;
     QString m_caption;
     Polarity m_polarity;

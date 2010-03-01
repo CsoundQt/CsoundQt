@@ -24,6 +24,7 @@
 #define TYPES_H
 
 #include <QMutex>
+#include <QtGlobal>
 #include "configlists.h"
 
 // Time in milliseconds for widget and console messages updates

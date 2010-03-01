@@ -39,7 +39,7 @@ void Curve::destroy()
 
 Curve::Curve(MYFLT *data, size_t size, const QString& caption,
              Polarity polarity, float max, float min, float absmax,
-             float y_scale, bool dotted_divider)
+             float y_scale, bool dotted_divider, WINDAT *original)
   : m_caption(caption)
 {
   m_size = 0;
@@ -52,6 +52,7 @@ Curve::Curve(MYFLT *data, size_t size, const QString& caption,
   m_absmax = absmax;
   m_y_scale = y_scale;
   m_dotted_divider = dotted_divider;
+  m_original = original;
   mutex.unlock();
 }
 
@@ -101,10 +102,10 @@ size_t Curve::get_size() const
   return m_size;
 }
 
-uintptr_t Curve::get_id() const
-{
-  return m_id;
-}
+//uintptr_t Curve::get_id() const
+//{
+//  return m_id;
+//}
 
 // float *Curve::get_data() const
 // {
@@ -149,10 +150,15 @@ float Curve::get_y_scale() const
   return m_y_scale;
 }
 
-void Curve::set_id(uintptr_t id)
+WINDAT * Curve::getOriginal()
 {
-  m_id = id;
+  return m_original;
 }
+
+//void Curve::set_id(uintptr_t id)
+//{
+//  m_id = id;
+//}
 
 void Curve::set_data(MYFLT * data)
 {
@@ -197,6 +203,11 @@ void Curve::set_absmax(float absmax)
 void Curve::set_y_scale(float y_scale)
 {
   m_y_scale = y_scale;
+}
+
+void Curve::setOriginal(WINDAT *windat)
+{
+  m_original = windat;
 }
 
 bool Curve::is_divider_dotted() const

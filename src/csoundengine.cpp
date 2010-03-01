@@ -269,30 +269,33 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
 
 void CsoundEngine::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *name)
 {
-//   qDebug("qutecsound::makeGraph()");
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+  // Csound reuses windat, so it is not guaranteed to be unique
+  qDebug() << "CsoundEngine::makeGraph() " << windat << "  " << name;
   ud->wl->appendCurve(windat);
 //  windat->windid = (uintptr_t) curve;
-//   qDebug("qutecsound::makeGraphCallback %i", windat->windid);
+//   qDebug("CsoundEngine::makeGraphCallback %i", windat->windid);
 }
 
 void CsoundEngine::drawGraphCallback(CSOUND *csound, WINDAT *windat)
 {
   CsoundUserData *udata = (CsoundUserData *) csoundGetHostData(csound);
   // This callback paints data on curves
-//   qDebug("qutecsound::drawGraph()");
+  qDebug("CsoundEngine::drawGraph()");
   udata->wl->updateCurve(windat);
 }
 
 void CsoundEngine::killGraphCallback(CSOUND *csound, WINDAT *windat)
 {
+  // When is this callback called??
+  qDebug() << "CsoundEngine::killGraphCallback";
   CsoundUserData *udata = (CsoundUserData *) csoundGetHostData(csound);
-   udata->wl->killCurve(windat);
+  udata->wl->killCurve(windat);
 }
 
 int CsoundEngine::exitGraphCallback(CSOUND *csound)
 {
-//  qDebug("qutecsound::exitGraphCallback()");
+//  qDebug("CsoundEngine::exitGraphCallback()");
   CsoundUserData *udata = (CsoundUserData *) csoundGetHostData(csound);
   return udata->wl->killCurves(csound);
 }
@@ -716,10 +719,10 @@ int CsoundEngine::runCsound()
 #ifdef Q_OS_MAC
   else {
 #ifdef USE_DOUBLES
-    QString opcodedir = m_initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib64.framework/Versions/5.2/Resources/Opcodes";
+    QString opcodedir = m_initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib64.framework/Resources/Opcodes";
     QString stdopcode = opcodedir + "/libstdopcod.dylib";
 #else
-    QString opcodedir = m_initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Resources/Resources/Opcodes";
+    QString opcodedir = m_initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Resources/Opcodes";
     QString stdopcode = opcodedir + "/libstdopcod.dylib";
     qDebug() << opcodedir;
     qDebug() << stdopcode;

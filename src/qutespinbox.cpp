@@ -304,6 +304,7 @@ QString QuteSpinBox::getWidgetXmlText()
   s.writeEndElement();
 
   s.writeTextElement("randomizable", "");
+  s.writeEndElement();
 
   return xmlText;
 }

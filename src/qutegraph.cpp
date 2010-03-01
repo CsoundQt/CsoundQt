@@ -37,11 +37,11 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
   palette.setColor(QPalette::WindowText, Qt::white);
   m_label->setPalette(palette);
   m_label->setText("");
-  m_label->move(85, 0);
+  m_label->move(105, 0);
   m_label->resize(500, 25);
 
   m_pageComboBox = new QComboBox(this);
-  m_pageComboBox->resize(80, 25);
+  m_pageComboBox->resize(100, 25);
 
   m_pageComboBox->setFocusPolicy(Qt::NoFocus);
   m_label->setFocusPolicy(Qt::NoFocus);
@@ -162,7 +162,6 @@ void QuteGraph::setValue(double value)
         if (curves.size() > num && curves[num]->get_caption().isEmpty())
           return;
         if (int(value) == -num) {
-          m_value = - (int) value;
           changeCurve(i);
         }
       }
@@ -170,7 +169,6 @@ void QuteGraph::setValue(double value)
   }
   else if (value < curves.size()) {
     changeCurve((int) value);
-    m_value = (int) value;
   }
   //Dont change value if not valid
 #ifdef  USE_WIDGET_MUTEX
@@ -198,7 +196,9 @@ void QuteGraph::changeCurve(int index)
   if (index < 0 or curves[index]->get_caption().isEmpty())
     return;
   static_cast<StackedLayoutWidget *>(m_widget)->setCurrentIndex(index);
+  drawCurve(curves[index], index);
   QGraphicsView *view = (QGraphicsView *) static_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
+
 //   view->setFocusPolicy(Qt::NoFocus);
   double max = - curves[index]->get_min();
   double min = - curves[index]->get_max();
@@ -224,6 +224,7 @@ void QuteGraph::changeCurve(int index)
   text += QString::number(max, 'g', 5) + " Min =" + QString::number(min, 'g', 5);
   m_label->setText(text);
   m_pageComboBox->setCurrentIndex(index);
+  m_value = (int) index;
 }
 
 void QuteGraph::clearCurves()
@@ -300,60 +301,20 @@ int QuteGraph::getCurveIndex(Curve * curve)
 //{
 //}
 
-void QuteGraph::setUd(CsoundUserData *ud)
-{
-  m_ud = ud;
-}
-
 void QuteGraph::setCurveData(Curve * curve)
 {
-  //TODO is it necessary to free the curves created by Csound? (e.g. FFT from dispfft)
   int index = getCurveIndex(curve);
 //  qDebug("QuteGraph::setCurveData %i", index);
   if (index >= curves.size() or index < 0)
     return;
   curves[index] = curve;
-  double max = curve->get_max();
   StackedLayoutWidget *widget_ = static_cast<StackedLayoutWidget *>(m_widget);
   QGraphicsView *view = static_cast<QGraphicsView *>(widget_->widget(index));
-  QGraphicsScene *scene = view->scene();
   // Refitting curves in view resets the scrollbar so we need the previous value
   int viewPosx = view->horizontalScrollBar()->value();
   int viewPosy = view->verticalScrollBar()->value();
-  int decimate = (int) curve->get_size() / 1024;
   if (curve->get_caption().contains("ftable")) {
-    if (lines[index].size() != (int) curve->get_size()) {
-      foreach (QGraphicsLineItem *line, lines[index]) {
-        delete line;
-      }
-      lines[index].clear();
-      MYFLT decValue = 0.0;
-      for (int i = 0; i < (int) curve->get_size(); i++) {
-        decValue = (decValue < fabs(curve->get_data(i)) ? curve->get_data(i) : decValue);
-        if (decimate == 0 or i%decimate == 0) {
-          QGraphicsLineItem *line = new QGraphicsLineItem(i, 0, i, - decValue);
-          int colorValue = (int) (220.0*fabs(decValue)/max);
-          colorValue = colorValue > 220 ? 220 : colorValue;
-          line->setPen(QPen(QColor(30 + colorValue,
-                      220,
-                      colorValue )));
-          line->show();
-          lines[index].append(line);
-          scene->addItem(line);
-          decValue = 0;
-        }
-      }
-    }
-    else {
-      for (int i = 1; i < lines[index].size(); i++) { //skip first item, which is base line
-        QGraphicsLineItem *line = static_cast<QGraphicsLineItem *>(lines[index][i]);
-        line->setLine(i - 1, 0, i - 1, - curve->get_data(i - 1));
-        line->setPen(QPen(QColor(30 + 220.0*fabs(curve->get_data(i))/max,
-                    220,
-                    255.*fabs(curve->get_data(i))/max)));
-        line->show();
-      }
-    }
+    drawCurve(curve, index);
   }
   else {  // in case its not an ftable
     QPolygonF polygon;
@@ -386,4 +347,57 @@ void QuteGraph::setCurveData(Curve * curve)
     changeCurve(-2); //update curve
   view->horizontalScrollBar()->setValue(viewPosx);
   view->verticalScrollBar()->setValue(viewPosy);
+}
+
+void QuteGraph::setUd(CsoundUserData *ud)
+{
+  m_ud = ud;
+}
+
+void QuteGraph::drawCurve(Curve * curve, int index)
+{
+//  qDebug() << "QuteGraph::drawCurve";
+//  qDebug() << "QuteGraph::drawCurve min=" << curve->getOriginal();
+  bool live = curve->getOriginal() != 0;
+  live = false; // TODO will Csound ever allow polling the ftables from the graphs?
+  QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
+  double max = live ? curve->getOriginal()->max :curve->get_max();
+  int size = live ? curve->getOriginal()->npts:(int) curve->get_size();
+  int decimate = (int) size /1024;
+  if (lines[index].size() != size) {
+    foreach (QGraphicsLineItem *line, lines[index]) {
+      delete line;
+    }
+    lines[index].clear();
+    MYFLT decValue = 0.0;
+    for (int i = 0; i < (int) curve->get_size(); i++) {
+      float value = live ? (curve->getOriginal()->windid != 0 ? (float) curve->getOriginal()->fdata[i]: curve->get_data(i))
+                    : curve->get_data(i);
+      decValue = (fabs(decValue) < fabs(value) ? value : decValue);
+      if (decimate == 0 or i%decimate == 0) {
+        QGraphicsLineItem *line = new QGraphicsLineItem(i, 0, i, - decValue);
+        int colorValue = (int) (220.0*fabs(decValue)/max);
+        colorValue = colorValue > 220 ? 220 : colorValue;
+        line->setPen(QPen(QColor(30 + colorValue,
+                                 220,
+                                 colorValue )));
+        line->show();
+        lines[index].append(line);
+        scene->addItem(line);
+        decValue = 0;
+      }
+    }
+  }
+  else {
+    for (int i = 1; i < lines[index].size(); i++) { //skip first item, which is base line
+      QGraphicsLineItem *line = static_cast<QGraphicsLineItem *>(lines[index][i]);
+      float prevvalue = live ? (float) curve->getOriginal()->fdata[i - 1] : curve->get_data(i - 1);
+      float value = live ? (float) curve->getOriginal()->fdata[i] : curve->get_data(i);
+      line->setLine(i - 1, 0, i - 1, - prevvalue);
+      line->setPen(QPen(QColor(30 + 220.0*fabs(value)/max,
+                               220,
+                               255.*fabs(value)/max)));
+      line->show();
+    }
+  }
 }

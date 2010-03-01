@@ -503,6 +503,7 @@ QString QuteLineEdit::getWidgetXmlText()
   s.writeTextElement("border", "border");  //Not used yet. Should it be removed?
 
   s.writeTextElement("randomizable", "");
+  s.writeEndElement();
 
   return xmlText;
 }

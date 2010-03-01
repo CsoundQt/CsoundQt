@@ -83,7 +83,7 @@ class WidgetLayout : public QWidget
     void killCurve(WINDAT *windat);
     void newCurve(Curve* curve);
     void setCurveData(Curve *curve);
-    Curve * getCurveById(uintptr_t id);
+    uintptr_t getCurveById(uintptr_t id);
     void updateCurve(WINDAT *windat);
     int killCurves(CSOUND *csound);
     void clearGraphs();
@@ -193,7 +193,7 @@ class WidgetLayout : public QWidget
     QMutex valueMutex;
     QMutex stringValueMutex;
     QList<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
-    QVector<WINDAT *> curveBuffer;
+    QVector<WINDAT *> curveUpdateBuffer;
     QVector<Curve *> curves;
 
     bool m_repeatKeys;

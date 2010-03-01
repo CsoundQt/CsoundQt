@@ -367,7 +367,7 @@ void DocumentView::textChanged()
     QTextCursor cursor = mainEditor->textCursor();
     cursor.select(QTextCursor::WordUnderCursor);
     QString word = cursor.selectedText();
-    if (word.size() > 2) {
+    if (word.size() > 2 && !word.startsWith("\"")) {
       QVector<Opcode> syntax = m_opcodeTree->getPossibleSyntax(word);
       if (syntax.size() > 0) {
         syntaxMenu->clear();

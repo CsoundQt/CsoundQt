@@ -65,6 +65,9 @@ class QuteGraph : public QuteWidget
 
   public slots:
     void changeCurve(int index);
+
+  private:
+    void drawCurve(Curve * curve, int index);
 };
 
 class StackedLayoutWidget : public QStackedWidget
