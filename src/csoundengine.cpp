@@ -45,10 +45,6 @@ CsoundEngine::CsoundEngine()
   bufferSize = 4096;
   recBuffer = (MYFLT *) calloc(bufferSize, sizeof(MYFLT));
 
-  int init = csoundInitialize(0,0,0);
-  if (init < 0) {
-    qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nQutecsound will probably crash if you try to run Csound.");
-  }
 #ifndef QUTECSOUND_DESTROY_CSOUND
   // Create only once
   ud->csound=csoundCreate(0);

@@ -50,6 +50,8 @@ void Inspector::parseText(const QString &text)
   m_treeWidget->clear();
   TreeItem *opcodeItem = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
   opcodeItem->setLine(-1);
+  TreeItem *macroItem = new TreeItem(m_treeWidget, QStringList(tr("Macros")));
+  macroItem->setLine(-1);
   TreeItem *instrItem = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
   instrItem->setLine(-1);
   TreeItem *ftableItem = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
@@ -70,6 +72,12 @@ void Inspector::parseText(const QString &text)
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
       TreeItem *newItem = new TreeItem(opcodeItem, columnslist);
+      newItem->setLine(i + 1);
+    }
+    else if (lines[i].trimmed().startsWith("#define") or lines[i].trimmed().startsWith("# define")) {
+      QString text = lines[i].trimmed();
+      QStringList columnslist(text.simplified());
+      TreeItem *newItem = new TreeItem(macroItem, columnslist);
       newItem->setLine(i + 1);
     }
     else if (lines[i].trimmed().contains(QRegExp("^f\\s*\\d")) ||
@@ -96,6 +104,7 @@ void Inspector::parseText(const QString &text)
     }
   }
   m_treeWidget->expandItem(opcodeItem);
+  m_treeWidget->expandItem(macroItem);
   m_treeWidget->expandItem(instrItem);
   m_treeWidget->expandItem(ftableItem);
   m_treeWidget->expandItem(scoreItem);

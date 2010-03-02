@@ -163,6 +163,11 @@ qutecsound::qutecsound(QStringList fileNames)
   createQuickRefPdf();
 
   openLogFile();
+
+  int init = csoundInitialize(0,0,0);
+  if (init < 0) {
+    qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nQutecsound will probably crash if you try to run Csound.");
+  }
 }
 
 qutecsound::~qutecsound()
@@ -2058,11 +2063,12 @@ void qutecsound::createMenus()
   subMenuNames << tr("Music");
 
   usefulFiles.append(":/examples/Useful/IO_Test.csd");
+  usefulFiles.append(":/examples/Useful/MIDI_IO_Test.csd");
   usefulFiles.append(":/examples/Useful/Audio_Input_Test.csd");
   usefulFiles.append(":/examples/Useful/Audio_Output_Test.csd");
   usefulFiles.append(":/examples/Useful/Audio_Thru_Test.csd");
-  usefulFiles.append(":/examples/Useful/MIDI_IO_Test.csd");
   usefulFiles.append(":/examples/Useful/MIDI_Tunings.csd");
+  usefulFiles.append(":/examples/Useful/MIDI_Recorder.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_buffer.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_buffer_2.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_HD.csd");
@@ -2543,6 +2549,32 @@ void qutecsound::writeSettings()
   settings.setValue("waveeditor", m_options->waveeditor);
   settings.setValue("waveplayer", m_options->waveplayer);
   settings.setValue("pdfviewer", m_options->pdfviewer);
+  settings.endGroup();
+  settings.endGroup();
+}
+
+void qutecsound::clearSettings()
+{
+  QSettings settings("csound", "qutecsound");
+  settings.remove("");
+  settings.beginGroup("GUI");
+  settings.beginGroup("Shortcuts");
+  settings.remove("");
+  settings.endGroup();
+  settings.endGroup();
+  settings.beginGroup("Options");
+  settings.remove("");
+  settings.beginGroup("Editor");
+  settings.remove("");
+  settings.endGroup();
+  settings.beginGroup("Run");
+  settings.remove("");
+  settings.endGroup();
+  settings.beginGroup("Environment");
+  settings.remove("");
+  settings.endGroup();
+  settings.beginGroup("External");
+  settings.remove("");
   settings.endGroup();
   settings.endGroup();
 }

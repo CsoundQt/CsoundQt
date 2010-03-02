@@ -76,6 +76,7 @@ class WidgetLayout : public QWidget
     int newWidget(QString widgetLine, bool offset = false);
     void appendMessage(QString message);  // TODO is this still necessary if all consoles are shared?
     void flush();
+    void engineStopped(); // To let the widgets know engine has stopped (to free unused curve buffers)
     void showWidgetTooltips(bool show);
     void setWidgetToolTip(QuteWidget *widget, bool show);
 

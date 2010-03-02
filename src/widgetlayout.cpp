@@ -484,6 +484,11 @@ void WidgetLayout::flush()
   newValues.clear();
 }
 
+void WidgetLayout::engineStopped()
+{
+  curveUpdateBuffer.clear();
+}
+
 void WidgetLayout::showWidgetTooltips(bool show)
 {
   m_tooltips = show;
@@ -596,20 +601,21 @@ int WidgetLayout::killCurves(CSOUND *csound)
 {
   // FIXME free memory from curves
   qDebug() << "qutecsound::killCurves";
-  for (int i = 0; i < curves.size(); i++) {
-    WINDAT * windat = curves[i]->getOriginal();
-    if (windat->npts > 0 && windat->windid == (uintptr_t)curves[i]) { // Check for sanity of pointer
-      curves[i]->set_size(windat->npts);      // number of points
-      curves[i]->set_data(windat->fdata);
-      curves[i]->set_caption(QString(windat->caption)); // title of curve
-      //    curves[i]->set_polarity(windat->polarity); // polarity
-      curves[i]->set_max(windat->max);        // curve max
-      curves[i]->set_min(windat->min);        // curve min
-      curves[i]->set_absmax(windat->absmax);     // abs max of above
-      //    curves[i]->set_y_scale(windat->y_scale);    // Y axis scaling factor
-      curves[i]->setOriginal(0);
-    }
-  }
+  // FIXME this is a great idea, to copy data from the tables at the end of run, but the API is not working as expected
+//  for (int i = 0; i < curves.size(); i++) {
+//    WINDAT * windat = curves[i]->getOriginal();
+//    if (windat->npts > 0 && windat->windid == (uintptr_t)curves[i]) { // Check for sanity of pointer
+//      curves[i]->set_size(windat->npts);      // number of points
+//      curves[i]->set_data(windat->fdata);
+//      curves[i]->set_caption(QString(windat->caption)); // title of curve
+//      //    curves[i]->set_polarity(windat->polarity); // polarity
+//      curves[i]->set_max(windat->max);        // curve max
+//      curves[i]->set_min(windat->min);        // curve min
+//      curves[i]->set_absmax(windat->absmax);     // abs max of above
+//      //    curves[i]->set_y_scale(windat->y_scale);    // Y axis scaling factor
+//      curves[i]->setOriginal(0);
+//    }
+//  }
   return 0;
 }
 

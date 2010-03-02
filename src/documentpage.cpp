@@ -894,6 +894,7 @@ void DocumentPage::stop()
 {
   if (m_csEngine->isRunning())
     m_csEngine->stop();
+    m_widgetLayout->engineStopped();
 }
 
 void DocumentPage::perfEnded()

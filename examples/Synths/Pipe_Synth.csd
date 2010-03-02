@@ -701,7 +701,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 98 25 970 749
+WindowBounds: 341 88 964 724
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -710,7 +710,7 @@ Options: -b128 -A -s -m167 -R
 ioView background {32125, 41634, 41120}
 ioText {3, 0} {952, 30} label 0.000000 0.00100 "" center "DejaVu Sans" 20 {0, 0, 0} {45056, 44544, 32512} background noborder SYNTH PIPE
 ioText {130, 402} {661, 185} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border REVERB
-ioText {6, 32} {297, 179} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border AIR ENVELOPPE
+ioText {6, 31} {297, 179} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border AIR ENVELOPPE
 ioSlider {23, 69} {19, 99} -20.000000 100.000000 7.878788 kC1
 ioText {20, 165} {30, 22} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Att
 ioText {14, 182} {51, 23} display 0.000000 0.00100 "kC1" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 7.8788
@@ -792,7 +792,7 @@ ioSlider {374, 69} {20, 100} 0.000000 120.000000 43.200000 kC8
 ioText {371, 163} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Cut
 ioText {363, 181} {52, 24} display 0.000000 0.00100 "kC8" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 43.2000
 ioText {375, 53} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 08
-ioSlider {427, 69} {20, 100} 0.000000 1.000000 0.570000 kC9
+ioSlider {427, 69} {20, 100} 0.000000 1.000000 0.560000 kC9
 ioText {424, 163} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Res
 ioText {416, 181} {52, 24} display 0.000000 0.00100 "kC9" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.6000
 ioText {428, 53} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 09
@@ -838,7 +838,7 @@ ioText {629, 182} {52, 24} display 0.000000 0.00100 "kC13" left "Helvetica" 8 {0
 ioText {641, 54} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 13
 ioText {670, 96} {46, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 14: Pol
 ioCheckbox {683, 124} {20, 20} on kC14
-ioText {732, 30} {219, 180} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border DELAY TUNE
+ioText {732, 31} {219, 180} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border DELAY TUNE
 ioSlider {741, 69} {20, 100} -60.000000 60.000000 0.000000 kC15
 ioText {739, 162} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Tune
 ioText {733, 179} {52, 24} display 0.000000 0.00100 "kC15" left "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0000
@@ -910,7 +910,7 @@ ioSlider {76, 441} {20, 100} 0.000000 1.000000 0.280000 kC31
 ioText {72, 537} {31, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Sym
 ioText {67, 553} {48, 24} display 0.000000 0.00100 "kC31" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.2800
 ioText {77, 425} {27, 23} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 31
-ioText {800, 402} {153, 185} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border MAIN
+ioText {797, 402} {153, 185} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {21760, 43520, 32512} background border MAIN
 ioKnob {810, 433} {80, 80} 0.000000 5.000000 0.010000 0.505051 kC50
 ioText {806, 514} {88, 27} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 50 : Volume
 ioText {821, 542} {57, 27} display 0.000000 0.00100 "kC50" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.5051

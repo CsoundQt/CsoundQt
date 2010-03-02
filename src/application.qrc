@@ -115,6 +115,7 @@
       <file>../examples/Useful/Audio_Thru_Test.csd</file>
       <file>../examples/Useful/MIDI_IO_Test.csd</file>
       <file>../examples/Useful/MIDI_Tunings.csd</file>
+      <file>../examples/Useful/MIDI_Recorder.csd</file>
       <file>../examples/Useful/IO_Test.csd</file>
       <file>../examples/Useful/File_to_Text.csd</file>
       <file>../examples/Useful/Pitch_Tracker.csd</file>

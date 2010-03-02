@@ -168,6 +168,7 @@ class qutecsound:public QMainWindow
     void createStatusBar();
     void readSettings();
     void writeSettings();
+    void clearSettings();
     int execute(QString executable, QString options);
 //    bool saveCurrent();
     void loadCompanionFile(const QString &fileName);
