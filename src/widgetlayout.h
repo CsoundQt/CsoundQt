@@ -79,6 +79,7 @@ class WidgetLayout : public QWidget
     void engineStopped(); // To let the widgets know engine has stopped (to free unused curve buffers)
     void showWidgetTooltips(bool show);
     void setWidgetToolTip(QuteWidget *widget, bool show);
+    void setContained(bool contained);
 
     void appendCurve(WINDAT *windat);
     void killCurve(WINDAT *windat);
@@ -135,6 +136,7 @@ class WidgetLayout : public QWidget
     void propertiesDialog();
     void applyProperties();
     void selectBgColor();
+    void setEditEnabled(bool enabled);
     void setEditMode(bool active);
 //    void toggleEditMode();
     void deselectAll();
@@ -228,7 +230,9 @@ class WidgetLayout : public QWidget
     int m_historyIndex; // Current point in history
     bool m_modified;
     bool m_editMode;
+    bool m_enableEdit; // Enable editing and properties dialog
     QString m_clipboard;
+    bool m_contained; // Whether contained in another widget (e.g. scrollbar in widget panel or widget panel)
 //    QKeySequence m_duplicateShortcut;
 
     // Contained Widgets

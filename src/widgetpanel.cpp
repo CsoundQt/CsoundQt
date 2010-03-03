@@ -55,18 +55,20 @@ WidgetPanel::~WidgetPanel()
 void WidgetPanel::setWidgetLayout(WidgetLayout *w)
 {
   // When this function is called, there must be no widget layout set, as this
-  // function will delete the set widget.
+  // function will delete the set widget in scrollarea->setWidget().
+  qDebug() << "WidgetPanel::setWidgetLayout";
   if (m_sbActive) {
     scrollArea->setWidget(w);
-    scrollArea->setAutoFillBackground(w->autoFillBackground());
-    scrollArea->setBackgroundRole(QPalette::Window);
-    scrollArea->setPalette(w->palette());
-    w->setAutoFillBackground(false);
+    w->setContained(true);
+    this->setPalette(QPalette());
+    this->setAutoFillBackground(false);
     w->show();
     scrollArea->show();
   }
   else {
+    qDebug() << " WidgetPanel::setWidgetLayout  not sb active";
     setWidget(w);
+    w->setContained(true);
     this->setAutoFillBackground(w->autoFillBackground());
     this->setBackgroundRole(QPalette::Window);
     this->setPalette(w->palette());
@@ -100,14 +102,15 @@ WidgetLayout * WidgetPanel::takeWidgetLayout()
 
 void WidgetPanel::setWidgetScrollBarsActive(bool act)
 {
-//   qDebug() << "WidgetPanel::setScrollBarsActive" << active;
+  qDebug() << "WidgetPanel::setScrollBarsActive" << act;
   if (act && !m_sbActive) {
     scrollArea = new QScrollArea(this);
     scrollArea->setWidget(widget());
     scrollArea->setFocusPolicy(Qt::NoFocus);
     setWidget(scrollArea);
-    scrollArea->setAutoFillBackground(true);
+    scrollArea->setAutoFillBackground(false);
     scrollArea->setBackgroundRole(QPalette::Window);
+//    this->setAutoFillBackground(false);
     scrollArea->show();
     scrollArea->setMouseTracking(true);
     connect(scrollArea->horizontalScrollBar(), SIGNAL(valueChanged(int)),
@@ -147,10 +150,10 @@ void WidgetPanel::widgetChanged()
   else {
     w = widget();
   }
-  this->setAutoFillBackground(true);
-  this->setBackgroundRole(QPalette::Window);
-  this->setPalette(w->palette());
-  w->setAutoFillBackground(false);
+//  this->setAutoFillBackground(true);
+//  this->setBackgroundRole(QPalette::Window);
+//  this->setPalette(w->palette());
+//  w->setAutoFillBackground(false);
 }
 
 

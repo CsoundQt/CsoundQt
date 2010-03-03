@@ -267,7 +267,7 @@ void CsoundEngine::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char 
 {
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
   // Csound reuses windat, so it is not guaranteed to be unique
-  qDebug() << "CsoundEngine::makeGraph() " << windat << "  " << name;
+//  qDebug() << "CsoundEngine::makeGraph() " << windat << "  " << name;
   ud->wl->appendCurve(windat);
 //  windat->windid = (uintptr_t) curve;
 //   qDebug("CsoundEngine::makeGraphCallback %i", windat->windid);
@@ -277,7 +277,7 @@ void CsoundEngine::drawGraphCallback(CSOUND *csound, WINDAT *windat)
 {
   CsoundUserData *udata = (CsoundUserData *) csoundGetHostData(csound);
   // This callback paints data on curves
-  qDebug("CsoundEngine::drawGraph()");
+//  qDebug("CsoundEngine::drawGraph()");
   udata->wl->updateCurve(windat);
 }
 

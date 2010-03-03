@@ -63,8 +63,12 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 
   m_trackMouse = true;
   m_editMode = false;
+  m_enableEdit = true;
 
   m_modified = false;
+  closing = 0;
+  xOffset = yOffset = 0;
+  m_contained = false;
 
   createSliderAct = new QAction(tr("Create Slider"),this);
   connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createNewSlider()));
@@ -130,8 +134,8 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   connect(distributeVerticalAct, SIGNAL(triggered()), this, SLOT(distributeVertical()));
 
 //  setFocusPolicy(Qt::NoFocus);
-  closing = 0;
-  xOffset = yOffset = 0;
+
+  setMouseTracking(true);
   updateData(); // Starts updataData timer
 }
 
@@ -244,10 +248,20 @@ QString WidgetLayout::getMacWidgetsText()
   // may cause crashing since widgets are not reentrant
   QString text = "";
   text = "<MacGUI>\n";
-  text += "ioView " + (this->parentWidget()->autoFillBackground()? QString("background "):QString("nobackground "));
-  text += "{" + QString::number((int) (this->parentWidget()->palette().button().color().redF()*65535.)) + ", ";
-  text +=  QString::number((int) (this->parentWidget()->palette().button().color().greenF()*65535.)) + ", ";
-  text +=  QString::number((int) (this->parentWidget()->palette().button().color().blueF()*65535.)) +"}\n";
+  QString bg, color;
+  if (m_contained) {
+    bg = this->parentWidget()->autoFillBackground()? QString("background"):QString("nobackground");
+    color = QString::number((int) (this->parentWidget()->palette().button().color().redF()*65535.)) + ", ";
+    color +=  QString::number((int) (this->parentWidget()->palette().button().color().greenF()*65535.)) + ", ";
+    color +=  QString::number((int) (this->parentWidget()->palette().button().color().blueF()*65535.));
+  }
+  else {
+    bg = this->parentWidget()->autoFillBackground()? QString("background"):QString("nobackground");
+    color = QString::number((int) (this->palette().button().color().redF()*65535.)) + ", ";
+    color +=  QString::number((int) (this->palette().button().color().greenF()*65535.)) + ", ";
+    color +=  QString::number((int) (this->palette().button().color().blueF()*65535.));
+  }
+  text += "ioView " + bg + " {" + color +"}\n";
 
   valueMutex.lock();
   for (int i = 0; i < m_widgets.size(); i++) {
@@ -512,6 +526,22 @@ void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
     widget->setToolTip("");
 }
 
+void WidgetLayout::setContained(bool contained)
+{
+  qDebug() << "WidgetLayout::setContained " << contained;
+  m_contained = contained;
+  if (m_contained) {
+    parentWidget()->setAutoFillBackground(this->autoFillBackground());
+    parentWidget()->setBackgroundRole(QPalette::Window);
+    parentWidget()->setPalette(this->palette());
+    this->setAutoFillBackground(false);
+  }
+  else {
+    this->setAutoFillBackground(parentWidget()->autoFillBackground());
+    this->setPalette(parentWidget()->palette());
+  }
+}
+
 void WidgetLayout::appendCurve(WINDAT *windat)
 {
   // Called from the Csound callback, creates a curve and queues it for processing
@@ -550,17 +580,17 @@ void WidgetLayout::appendCurve(WINDAT *windat)
                   windat);  //FIXME delete these when starting a new run
   windat->windid = (uintptr_t) curve;
   newCurveBuffer.append(curve);
-  qDebug() << "WidgetLayout::appendCurve " << curve << "__--__" << windat;
+//  qDebug() << "WidgetLayout::appendCurve " << curve << "__--__" << windat;
 }
 
 void WidgetLayout::newCurve(Curve* curve)
 {
   for (int i = 0; i < graphWidgets.size(); i++) {
     graphWidgets[i]->addCurve(curve);
-    curves.append(curve);
 //    qApp->processEvents(); // FIXME Kludge to allow correct resizing of graph view
     graphWidgets[i]->changeCurve(-1);
   }
+  curves.append(curve);
 }
 
 void WidgetLayout::setCurveData(Curve *curve)
@@ -578,9 +608,9 @@ void WidgetLayout::passWidgetClipboard(QString text)
 
 uintptr_t WidgetLayout::getCurveById(uintptr_t id)
 {
-  qDebug() << "WidgetLayout::getCurveById ";
+//  qDebug() << "WidgetLayout::getCurveById ";
   foreach (Curve *thisCurve, curves) {
-    qDebug() << "WidgetLayout::getCurveById " << (uintptr_t) thisCurve << " id " << id;
+//    qDebug() << "WidgetLayout::getCurveById " << (uintptr_t) thisCurve << " id " << id;
     if ((uintptr_t) thisCurve == id)
       return (uintptr_t) thisCurve;
   }
@@ -589,7 +619,7 @@ uintptr_t WidgetLayout::getCurveById(uintptr_t id)
 
 void WidgetLayout::updateCurve(WINDAT *windat)
 {
-  qDebug() << "WidgetLayout::updateCurve(WINDAT *windat) ";
+//  qDebug() << "WidgetLayout::updateCurve(WINDAT *windat) ";
   // FIXME dont allocate new memory
   WINDAT *windat_ = (WINDAT *) malloc(sizeof(WINDAT));
   *windat_ = *windat;
@@ -600,7 +630,7 @@ void WidgetLayout::updateCurve(WINDAT *windat)
 int WidgetLayout::killCurves(CSOUND *csound)
 {
   // FIXME free memory from curves
-  qDebug() << "qutecsound::killCurves";
+//  qDebug() << "qutecsound::killCurves";
   // FIXME this is a great idea, to copy data from the tables at the end of run, but the API is not working as expected
 //  for (int i = 0; i < curves.size(); i++) {
 //    WINDAT * windat = curves[i]->getOriginal();
@@ -994,6 +1024,7 @@ void WidgetLayout::applyProperties()
 {
   setBackground(bgCheckBox->isChecked(), this->palette().button().color());
   widgetChanged();
+  mouseBut2 = 0;  // Button un clicked is not propagated after opening the edit dialog. Do it artificially here
 }
 
 void WidgetLayout::selectBgColor()
@@ -1326,7 +1357,6 @@ void WidgetLayout::mouseMoveEvent(QMouseEvent *event)
     selectionChanged(QRect(x,y,width,height));
   }
 //  qDebug() << "WidgetPanel::mouseMoveEvent " << event->x();
-  //FIXME these are duplicated now!
   mouseX = event->globalX();
   mouseY = event->globalY();
   mouseRelX = event->x() + xOffset;
@@ -1352,8 +1382,10 @@ void WidgetLayout::mouseReleaseEvent(QMouseEvent *event)
 
 void WidgetLayout::contextMenuEvent(QContextMenuEvent *event)
 {
-  createContextMenu(event);
-  event->accept();
+  if (m_enableEdit) {
+    createContextMenu(event);
+    event->accept();
+  }
 }
 
 int WidgetLayout::createSlider(int x, int y, int width, int height, QString widgetLine)
@@ -1916,16 +1948,22 @@ int WidgetLayout::createDummy(int x, int y, int width, int height, QString widge
 
 void WidgetLayout::setBackground(bool bg, QColor bgColor)
 {
+//  qDebug() << "WidgetLayout::setBackground ";
+  QWidget *w;
+//  this->setPalette(QPalette());
+//  this->setAutoFillBackground(false);
+  w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget
   if (bg) {
-    this->setPalette(QPalette(bgColor));
-    this->setBackgroundRole(QPalette::Window);
-    this->setAutoFillBackground(true);
+    w->setPalette(QPalette(bgColor));
+    w->setBackgroundRole(QPalette::Window);
+    w->setAutoFillBackground(true);
   }
   else { // =="nobackground"
-    this->setPalette(QPalette());
-    this->setAutoFillBackground(false);
+    w->setPalette(QPalette(bgColor));
+    w->setAutoFillBackground(false);
   }
 }
+
 void WidgetLayout::setModified(bool mod)
 {
   qDebug() << "WidgetLayout::setModified";
@@ -2045,8 +2083,17 @@ void WidgetLayout::paste()
   markHistory();
 }
 
+void WidgetLayout::setEditEnabled(bool enabled)
+{
+  setEditMode(enabled);
+  m_enableEdit = enabled;
+}
+
 void WidgetLayout::setEditMode(bool active)
 {
+  if (!m_enableEdit) {
+    return;
+  }
   if (active) {
     foreach (FrameWidget *widget, editWidgets) {
       delete widget;
@@ -2328,19 +2375,19 @@ void WidgetLayout::updateData()
   while (!newCurveBuffer.isEmpty()) {
     Curve * curve = newCurveBuffer.takeFirst();
     newCurve(curve); // Register new curve
-    qDebug() << "WidgetLayout::updateData() new curve " << curve;
+//    qDebug() << "WidgetLayout::updateData() new curve " << curve;
   }
   // Check for graph updates after creating new curves
   for (int i = 0; i < curveUpdateBuffer.size(); i++) {
     Curve *curve = (Curve *) getCurveById(curveUpdateBuffer[i]->windid);
-    qDebug() << "WidgetLayout::updateData() " << i << " of " << curveUpdateBuffer.size() <<  " ---" << curveUpdateBuffer[i] << "  " << curve;
+//    qDebug() << "WidgetLayout::updateData() " << i << " of " << curveUpdateBuffer.size() <<  " ---" << curveUpdateBuffer[i] << "  " << curve;
     if (curve == 0) {
       break;
     }
     WINDAT * windat = curve->getOriginal();
     windat = curveUpdateBuffer[i];
     if (windat != 0) {
-      qDebug() << "WidgetLayout::updateData() " << windat->caption << "-" <<  curve->get_caption();
+//      qDebug() << "WidgetLayout::updateData() " << windat->caption << "-" <<  curve->get_caption();
       curve->set_size(windat->npts);      // number of points
       curve->set_data(windat->fdata);
       curve->set_caption(QString(windat->caption)); // title of curve

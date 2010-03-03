@@ -215,9 +215,10 @@ void qutecsound::changePage(int index)
   }
   curPage = index;
   if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
+    static_cast<WidgetLayout *>(widgetPanel->widget())->setContained(false);  // Must set before removing from container to get background
     QWidget *w = widgetPanel->takeWidgetLayout();
     if (w != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
-      w->setParent(0); //FIXME this is crashing ocasionally at startup
+      w->setParent(0); //FIXME this is crashing ocasionally at startup, seems not anymore?
     }
 //    documentPages[curPage]->setMacWidgetsText
     setCurrentFile(documentPages[curPage]->getFileName());
@@ -314,13 +315,13 @@ void qutecsound::closeEvent(QCloseEvent *event)
   }
   delete m_options;
   delete m_console;
-  delete helpPanel;
+//  delete helpPanel;  // FIXME This is crashing occasionally... why?
   delete widgetPanel;
   delete m_inspector;
   delete closeTabButton;
   delete opcodeTree;
-//  delete documentTabs;  // This is crashing occasionally... why?
-//  delete utilitiesDialog;  // This is crashing occasionally... why?
+//  delete documentTabs;  // FIXME  This is crashing occasionally... why?
+//  delete utilitiesDialog;  // FIXME This is crashing occasionally... why?
   event->accept();
   close();
 }
