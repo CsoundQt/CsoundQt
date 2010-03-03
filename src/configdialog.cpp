@@ -125,6 +125,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   RtMidiModuleComboBox->setCurrentIndex(m_options->rtMidiModule);
   RtMidiInputLineEdit->setText(m_options->rtMidiInputDevice);
   RtMidiOutputLineEdit->setText(m_options->rtMidiOutputDevice);
+  simultaneousCheckBox->setChecked(m_options->simultaneousRun);
 
   sampleFormatComboBox->setCurrentIndex(m_options->sampleFormat);
 
@@ -268,6 +269,7 @@ void ConfigDialog::accept()
   m_options->rtMidiModule = RtMidiModuleComboBox->currentIndex();
   m_options->rtMidiInputDevice = RtMidiInputLineEdit->text();
   m_options->rtMidiOutputDevice = RtMidiOutputLineEdit->text();
+  m_options->simultaneousRun = simultaneousCheckBox->isChecked();
 
   m_options->sampleFormat = sampleFormatComboBox->currentIndex();
 

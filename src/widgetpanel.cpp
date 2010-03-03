@@ -56,7 +56,7 @@ void WidgetPanel::setWidgetLayout(WidgetLayout *w)
 {
   // When this function is called, there must be no widget layout set, as this
   // function will delete the set widget in scrollarea->setWidget().
-  qDebug() << "WidgetPanel::setWidgetLayout";
+//  qDebug() << "WidgetPanel::setWidgetLayout";
   if (m_sbActive) {
     scrollArea->setWidget(w);
     w->setContained(true);

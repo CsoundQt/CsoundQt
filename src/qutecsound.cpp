@@ -58,6 +58,7 @@ uintptr_t csThread(void *clientData);
 //TODO why does qutecsound not end when it receives a terminate signal?
 qutecsound::qutecsound(QStringList fileNames)
 {
+  m_startingUp = true;
   qDebug() << "QuteCsound using Csound Version: " << csoundGetVersion();
   initialDir = QDir::current().path();
   setWindowTitle("QuteCsound[*]");
@@ -131,10 +132,6 @@ qutecsound::qutecsound(QStringList fileNames)
         loadFile(lastFile);
       }
     }
-    if (lastTabIndex < documentPages.size()) {
-      if (documentTabs->currentIndex() != lastTabIndex)
-        documentTabs->setCurrentIndex(lastTabIndex);
-    }
   }
   // Open files passed in the command line. Only valid for non OS X platforms
   foreach (QString fileName, fileNames) {
@@ -167,6 +164,14 @@ qutecsound::qutecsound(QStringList fileNames)
   int init = csoundInitialize(0,0,0);
   if (init < 0) {
     qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nQutecsound will probably crash if you try to run Csound.");
+  }
+  m_startingUp = false;
+  if (lastTabIndex < documentPages.size() && documentTabs->currentIndex() != lastTabIndex) {
+      documentTabs->setCurrentIndex(lastTabIndex);
+  }
+  else {
+    qDebug() << "qutecsound starting";
+    changePage(documentTabs->currentIndex());
   }
 }
 
@@ -205,6 +210,9 @@ void qutecsound::changePage(int index)
   // Previous page has already been destroyed here (if closed)
   // Remember this is called when opening, closing or switching tabs (including loading)
 //  qDebug() << "qutecsound::changePage " << curPage << "--" << index << "-" << documentPages.size();
+  if (m_startingUp) {  // If starting up don't bother with all this as files are being loaded
+    return;
+  }
   if (documentPages.size() > curPage && documentPages.size() > 0 && documentPages[curPage]) {
     disconnect(showLiveEventsAct, 0,0,0);
     disconnect(documentPages[curPage], SIGNAL(stopSignal()),0,0);
@@ -314,7 +322,7 @@ void qutecsound::closeEvent(QCloseEvent *event)
     logFile.close();
   }
   delete m_options;
-  delete m_console;
+//  delete m_console; // FIXME This is crashing occasionally... why?
 //  delete helpPanel;  // FIXME This is crashing occasionally... why?
   delete widgetPanel;
   delete m_inspector;
@@ -887,11 +895,12 @@ void qutecsound::play(bool realtime)
   m_options->fileName1 = runFileName1;
   m_options->fileName2 = runFileName2;
   m_options->rt = realtime;
-
-  if (_configlists.rtAudioNames[m_options->rtAudioModule] == "alsa"
-      or _configlists.rtAudioNames[m_options->rtAudioModule] == "coreaudio"
-      or _configlists.rtAudioNames[m_options->rtAudioModule] == "portaudio"
-      or _configlists.rtMidiNames[m_options->rtMidiModule] == "portmidi") {
+//
+//  if (_configlists.rtAudioNames[m_options->rtAudioModule] == "alsa"
+//      or _configlists.rtAudioNames[m_options->rtAudioModule] == "coreaudio"
+////      or _configlists.rtAudioNames[m_options->rtAudioModule] == "portaudio"
+//      or _configlists.rtMidiNames[m_options->rtMidiModule] == "portmidi") {
+  if (!m_options->simultaneousRun) {
     stopAll();
     runAct->setChecked(true);  // mark it correctly again after stopping...
   }
@@ -2397,6 +2406,7 @@ void qutecsound::readSettings()
   m_options->rtMidiModule = settings.value("rtMidiModule", 0).toInt();
   m_options->rtMidiInputDevice = settings.value("rtMidiInputDevice", "0").toString();
   m_options->rtMidiOutputDevice = settings.value("rtMidiOutputDevice", "").toString();
+  m_options->simultaneousRun = settings.value("simultaneousRun", "").toBool();
   m_options->sampleFormat = settings.value("sampleFormat", 0).toInt();
   settings.endGroup();
   settings.beginGroup("Environment");
@@ -2521,6 +2531,7 @@ void qutecsound::writeSettings()
   settings.setValue("rtMidiModule", m_options->rtMidiModule);
   settings.setValue("rtMidiInputDevice", m_options->rtMidiInputDevice);
   settings.setValue("rtMidiOutputDevice", m_options->rtMidiOutputDevice);
+  settings.setValue("simultaneousRun", m_options->simultaneousRun);
   settings.setValue("sampleFormat", m_options->sampleFormat);
   settings.endGroup();
   settings.beginGroup("Environment");

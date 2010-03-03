@@ -198,14 +198,21 @@ QString WidgetLayout::getWidgetsText()
   QString text = "";
   QString name = "QuteCsound"; // FIXME add setting of panel name
   text = "<bsbPanel>\n";
-  text += "<bgcolor mode=\""
-          + (this->parentWidget()->autoFillBackground()? QString("background"):QString("nobackground")) + "\">\n";
-  text +=  "<r>"
-          + QString::number((int) (this->parentWidget()->palette().button().color().redF()*256.)) + "</r>\n";
-  text +=  "<g>"
-          + QString::number((int) (this->parentWidget()->palette().button().color().greenF()*256.)) + "</g>\n";
-  text +=  "<b>"
-          + QString::number((int) (this->parentWidget()->palette().button().color().blueF()*256.)) + "</b>\n";
+  QString bg, red,green,blue;
+  if (m_contained) {
+    bg = this->parentWidget()->autoFillBackground()? QString("background"):QString("nobackground");
+    red = QString::number((int) (this->parentWidget()->palette().button().color().redF()*256.));
+    green =  QString::number((int) (this->parentWidget()->palette().button().color().greenF()*256.));
+    blue =  QString::number((int) (this->parentWidget()->palette().button().color().blueF()*256.));
+  }
+  else {
+    bg = this->autoFillBackground()? QString("background"):QString("nobackground");
+    red = QString::number((int) (this->palette().button().color().redF()*256.));
+    green =  QString::number((int) (this->palette().button().color().greenF()*256.));
+    blue =  QString::number((int) (this->palette().button().color().blueF()*256.));
+  }
+  text += "<bgcolor mode=\"" + bg + "\">\n";
+  text +=  "<r>" + red + "</r>\n" +  "<g>"  + green + "</g>\n" + "<b>" + blue + "</b>\n";
   text += "</bgcolor>\n";
 
   valueMutex.lock();
@@ -255,8 +262,8 @@ QString WidgetLayout::getMacWidgetsText()
     color +=  QString::number((int) (this->parentWidget()->palette().button().color().greenF()*65535.)) + ", ";
     color +=  QString::number((int) (this->parentWidget()->palette().button().color().blueF()*65535.));
   }
-  else {
-    bg = this->parentWidget()->autoFillBackground()? QString("background"):QString("nobackground");
+  else {  // Will usually be contained when this is run, but have this just in case
+    bg = this->autoFillBackground()? QString("background"):QString("nobackground");
     color = QString::number((int) (this->palette().button().color().redF()*65535.)) + ", ";
     color +=  QString::number((int) (this->palette().button().color().greenF()*65535.)) + ", ";
     color +=  QString::number((int) (this->palette().button().color().blueF()*65535.));
@@ -528,7 +535,7 @@ void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
 
 void WidgetLayout::setContained(bool contained)
 {
-  qDebug() << "WidgetLayout::setContained " << contained;
+//  qDebug() << "WidgetLayout::setContained " << contained;
   m_contained = contained;
   if (m_contained) {
     parentWidget()->setAutoFillBackground(this->autoFillBackground());

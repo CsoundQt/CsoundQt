@@ -282,6 +282,7 @@ class qutecsound:public QMainWindow
     QStringList tempScriptFiles; //Remember temp files to delete them later
     int lastTabIndex;
     QStringList m_deviceMessages; //stores messages from csound for device discovery
+    bool m_startingUp; // set while starting up
 
     UtilitiesDialog *utilitiesDialog;
 

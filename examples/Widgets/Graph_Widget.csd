@@ -41,14 +41,14 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 1157 252 404 597
+WindowBounds: 751 121 404 597
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {35466, 38293, 40092}
-ioGraph {7, 332} {373, 142} table 5.000000 1.000000 graph
+ioGraph {7, 332} {373, 142} table 0.000000 1.000000 graph
 ioText {116, 6} {160, 34} label 0.000000 0.00100 "" left "DejaVu Sans" 20 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Graph Widget
 ioText {7, 45} {376, 98} label 0.000000 0.00100 "" left "Helvetica" 8 {0, 0, 0} {48896, 52224, 59904} background noborder Graph Widgets display Csound's f-tables. The table shown can be changed with the mouse using the menu on the upper left corner. It can also be changed by sending values on the widget's channel Positive values change the table by index and negative values change the table by f-table number. Note that tabes are actually in reverse order in the menu. Graph widgets can also show the spectrum from signals using the dispfft opcode, or time varying signals (a-rate and k-rate) using the display opcode.
 ioText {97, 479} {45, 25} editnum 1.000000 1.000000 "tabnum" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000

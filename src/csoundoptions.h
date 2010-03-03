@@ -69,6 +69,7 @@ class CsoundOptions
     int rtMidiModule;
     QString rtMidiInputDevice;
     QString rtMidiOutputDevice;
+    bool simultaneousRun; // Allow running various instances (tabs) simultaneously.
 
     QString csdocdir;
     QString opcodedir;

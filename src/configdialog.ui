@@ -69,7 +69,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -235,7 +235,7 @@
        <x>10</x>
        <y>310</y>
        <width>661</width>
-       <height>211</height>
+       <height>261</height>
       </rect>
      </property>
      <property name="title">
@@ -408,6 +408,22 @@
         <widget class="QLineEdit" name="JackNameLineEdit"/>
        </item>
       </layout>
+     </widget>
+     <widget class="QCheckBox" name="simultaneousCheckBox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>210</y>
+        <width>641</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>Allow simultaneous play (May cause crashes with portmidi,coreaudio, and alsa audio) </string>
+      </property>
      </widget>
     </widget>
     <widget class="QCheckBox" name="DitherCheckBox">

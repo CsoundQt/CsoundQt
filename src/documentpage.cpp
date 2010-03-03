@@ -56,8 +56,8 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   m_console = new ConsoleWidget(parent);
   m_console->setReadOnly(true);
 
-  m_widgetLayout = new WidgetLayout(parent);
-  m_widgetLayout->show();
+  m_widgetLayout = new WidgetLayout(0);
+//  m_widgetLayout->show();
 
   m_csEngine = new CsoundEngine();
   m_csEngine->setWidgetLayout(m_widgetLayout);  // Pass widget layout to engine
