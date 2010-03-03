@@ -322,7 +322,7 @@ void QuteWidget::openProperties()
   dialog->exec();
   if (dialog->result() != QDialog::Accepted) {
     qDebug() << "QuteWidget::openProperties() dialog not accepted";
-    parentWidget()->setFocus(Qt::PopupFocusReason); // For some reason focus is grabbed away from the layout
+    parentWidget()->setFocus(Qt::MouseFocusReason); // For some reason focus is grabbed away from the layout
   }
   dialog->deleteLater();
 }

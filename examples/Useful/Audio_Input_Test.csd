@@ -37,6 +37,26 @@ kval		=		kdispval
 	endif
 	endop
 
+	opcode	ShowValue_a, 0, Sak
+;Shows an audio signal in an outvalue channel.
+;You can choose to show the value in dB or in raw amplitudes.
+;
+;Input:
+;Soutchan: string with the name of the outvalue channel
+;asig: audio signal which is to displayed
+;kdispfreq: refresh frequency (Hz)
+
+Soutchan, asig, ktrig	xin
+krms rms asig, 0.07
+asig upsamp krms
+kdispval	max_k	asig, ktrig, 1
+kdb 		= 		dbfsamp(kdispval)
+	if ktrig == 1 then
+		Stext sprintfk "%.1f", kdb
+		outvalue Soutchan, Stext
+	endif
+	endop
+
 	opcode ShowOver_a, 0, Sakk
 ;Shows if the incoming audio signal was more than 1 and stays there for some time
 ;Input:
@@ -121,6 +141,30 @@ kTrigDisp	metro		10; refresh rate of display
 		ShowLED_a	"in22", a22, kTrigDisp, 1, kdbrange
 		ShowLED_a	"in23", a23, kTrigDisp, 1, kdbrange
 		ShowLED_a	"in24", a24, kTrigDisp, 1, kdbrange
+		ShowValue_a	"db1", a1, kTrigDisp
+		ShowValue_a	"db2", a2, kTrigDisp
+		ShowValue_a	"db3", a3, kTrigDisp
+		ShowValue_a	"db4", a4, kTrigDisp
+		ShowValue_a	"db5", a5, kTrigDisp
+		ShowValue_a	"db6", a6, kTrigDisp
+		ShowValue_a	"db7", a7, kTrigDisp
+		ShowValue_a	"db8", a8, kTrigDisp
+		ShowValue_a	"db9", a9, kTrigDisp
+		ShowValue_a	"db10", a10, kTrigDisp
+		ShowValue_a	"db11", a11, kTrigDisp
+		ShowValue_a	"db12", a12, kTrigDisp
+		ShowValue_a	"db13", a13, kTrigDisp
+		ShowValue_a	"db14", a14, kTrigDisp
+		ShowValue_a	"db15", a15, kTrigDisp
+		ShowValue_a	"db16", a16, kTrigDisp
+		ShowValue_a	"db17", a17, kTrigDisp
+		ShowValue_a	"db18", a18, kTrigDisp
+		ShowValue_a	"db19", a19, kTrigDisp
+		ShowValue_a	"db20", a20, kTrigDisp
+		ShowValue_a	"db21", a21, kTrigDisp
+		ShowValue_a	"db22", a22, kTrigDisp
+		ShowValue_a	"db23", a23, kTrigDisp
+		ShowValue_a	"db24", a24, kTrigDisp
 		ShowOver_a	"in1over", a1, kTrigDisp, kpeakhold
 		ShowOver_a	"in2over", a2, kTrigDisp, kpeakhold
 		ShowOver_a	"in3over", a3, kTrigDisp, kpeakhold
@@ -158,50 +202,50 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 354 253 588 526
+WindowBounds: 948 179 591 612
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {43690, 43690, 32639}
-ioText {15, 304} {543, 58} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder This file tests whether your inputs are working. Please adjust it at the following places to your needs:
+ioText {14, 359} {543, 58} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder This file tests whether your inputs are working. Please adjust it at the following places to your needs:
 ioText {147, -1} {299, 44} label 0.000000 0.00100 "" center "Lucida Grande" 24 {0, 0, 0} {65280, 65280, 65280} nobackground noborder INPUT TESTER
-ioText {14, 362} {546, 56} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1. Change the nchnls (number of channels) parameter in the orchestra header to the value you wish and your output device can.
-ioText {13, 419} {546, 59} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2. Make sure you are using the appropriate device by selecting it on the Configure dialog
-ioMeter {13, 84} {20, 169} {0, 59904, 0} "in1" 0.000000 "hor8" 0.450000 fill 1 0 mouse
-ioMeter {13, 70} {20, 20} {50176, 3584, 3072} "in1over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {35, 84} {20, 169} {0, 59904, 0} "in2" 0.000000 "hor8" 0.450000 fill 1 0 mouse
-ioMeter {35, 70} {20, 20} {50176, 3584, 3072} "in2over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {57, 84} {20, 169} {0, 59904, 0} "in3" 0.000000 "hor8" 0.450000 fill 1 0 mouse
-ioMeter {57, 70} {20, 20} {50176, 3584, 3072} "in3over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {79, 84} {20, 169} {0, 59904, 0} "in4" 0.000000 "hor8" 0.450000 fill 1 0 mouse
-ioMeter {79, 70} {20, 20} {50176, 3584, 3072} "in4over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {101, 84} {20, 169} {0, 59904, 0} "in5" 0.000000 "hor8" 0.450000 fill 1 0 mouse
-ioMeter {101, 70} {20, 20} {50176, 3584, 3072} "in5over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {123, 84} {20, 169} {0, 59904, 0} "in6" 0.000000 "hor8" 0.450000 fill 1 0 mouse
-ioMeter {123, 70} {20, 20} {50176, 3584, 3072} "in6over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {145, 84} {20, 169} {0, 59904, 0} "in7" 0.000000 "hor8" 0.450000 fill 1 0 mouse
-ioMeter {145, 70} {20, 20} {50176, 3584, 3072} "in7over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {167, 84} {20, 169} {0, 59904, 0} "in8" 0.000000 "hor8" 0.450000 fill 1 0 mouse
-ioMeter {167, 70} {20, 20} {50176, 3584, 3072} "in8over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {200, 85} {20, 169} {0, 59904, 0} "out9" 0.000000 "hor8" 0.450000 fill 1 0 mouse
-ioMeter {200, 70} {20, 20} {50176, 3584, 3072} "out9over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {222, 85} {20, 169} {0, 59904, 0} "out10" 0.000000 "hor8" 0.450000 fill 1 0 mouse
-ioMeter {222, 70} {20, 20} {50176, 3584, 3072} "out10over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {243, 86} {20, 169} {0, 59904, 0} "out11" 0.000000 "hor8" 0.450000 fill 1 0 mouse
-ioMeter {243, 70} {20, 20} {50176, 3584, 3072} "out11over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {265, 86} {20, 169} {0, 59904, 0} "out12" 0.000000 "hor8" 0.450000 fill 1 0 mouse
-ioMeter {265, 70} {20, 20} {50176, 3584, 3072} "out12over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {287, 86} {20, 169} {0, 59904, 0} "out13" 0.000000 "hor8" 0.450000 fill 1 0 mouse
-ioMeter {287, 70} {20, 20} {50176, 3584, 3072} "out13over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {310, 86} {20, 169} {0, 59904, 0} "out14" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioText {14, 417} {546, 56} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1. Change the nchnls (number of channels) parameter in the orchestra header to the value you wish and your output device can.
+ioText {14, 474} {546, 59} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2. Make sure you are using the appropriate device by selecting it on the Configure dialog
+ioMeter {13, 87} {20, 169} {0, 59904, 0} "in1" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {13, 69} {20, 20} {50176, 3584, 3072} "in1over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
+ioMeter {35, 87} {20, 169} {0, 59904, 0} "in2" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {35, 69} {20, 20} {50176, 3584, 3072} "in2over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
+ioMeter {57, 87} {20, 169} {0, 59904, 0} "in3" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {57, 69} {20, 20} {50176, 3584, 3072} "in3over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
+ioMeter {79, 87} {20, 169} {0, 59904, 0} "in4" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {79, 69} {20, 20} {50176, 3584, 3072} "in4over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
+ioMeter {101, 87} {20, 169} {0, 59904, 0} "in5" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {101, 69} {20, 20} {50176, 3584, 3072} "in5over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
+ioMeter {123, 87} {20, 169} {0, 59904, 0} "in6" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {123, 69} {20, 20} {50176, 3584, 3072} "in6over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
+ioMeter {145, 87} {20, 169} {0, 59904, 0} "in7" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {145, 69} {20, 20} {50176, 3584, 3072} "in7over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
+ioMeter {167, 87} {20, 169} {0, 59904, 0} "in8" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {167, 69} {20, 20} {50176, 3584, 3072} "in8over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
+ioMeter {200, 87} {20, 169} {0, 59904, 0} "out9" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {200, 69} {20, 20} {50176, 3584, 3072} "out9over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
+ioMeter {222, 87} {20, 169} {0, 59904, 0} "out10" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {222, 69} {20, 20} {50176, 3584, 3072} "out10over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
+ioMeter {244, 87} {20, 169} {0, 59904, 0} "out11" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {244, 69} {20, 20} {50176, 3584, 3072} "out11over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
+ioMeter {266, 87} {20, 169} {0, 59904, 0} "out12" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {266, 69} {20, 20} {50176, 3584, 3072} "out12over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
+ioMeter {288, 87} {20, 169} {0, 59904, 0} "out13" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {288, 69} {20, 20} {50176, 3584, 3072} "out13over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
+ioMeter {310, 87} {20, 169} {0, 59904, 0} "out14" 0.000000 "hor8" 0.450000 fill 1 0 mouse
 ioMeter {310, 69} {20, 20} {50176, 3584, 3072} "out14over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {332, 86} {20, 169} {0, 59904, 0} "out15" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {332, 87} {20, 169} {0, 59904, 0} "out15" 0.000000 "hor8" 0.450000 fill 1 0 mouse
 ioMeter {332, 69} {20, 20} {50176, 3584, 3072} "out15over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {354, 86} {20, 169} {0, 59904, 0} "out16" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {354, 87} {20, 169} {0, 59904, 0} "out16" 0.000000 "hor8" 0.450000 fill 1 0 mouse
 ioMeter {354, 69} {20, 20} {50176, 3584, 3072} "out16over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioMeter {388, 86} {20, 169} {0, 59904, 0} "out17" 0.000000 "hor8" 0.450000 fill 1 0 mouse
+ioMeter {388, 87} {20, 169} {0, 59904, 0} "out17" 0.000000 "hor8" 0.450000 fill 1 0 mouse
 ioMeter {388, 69} {20, 20} {50176, 3584, 3072} "out17over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
 ioMeter {410, 87} {20, 169} {0, 59904, 0} "out18" 0.000000 "hor8" 0.450000 fill 1 0 mouse
 ioMeter {410, 69} {20, 20} {50176, 3584, 3072} "out18over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
@@ -217,33 +261,68 @@ ioMeter {520, 87} {20, 169} {0, 59904, 0} "out23" 0.000000 "hor8" 0.450000 fill 
 ioMeter {520, 69} {20, 20} {50176, 3584, 3072} "out23over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
 ioMeter {542, 87} {20, 169} {0, 59904, 0} "out24" 0.000000 "hor8" 0.450000 fill 1 0 mouse
 ioMeter {542, 69} {20, 20} {50176, 3584, 3072} "out24over" 0.000000 "DelayMute" 0.600000 fill 1 0 mouse
-ioText {10, 47} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1
-ioText {32, 47} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2
-ioText {54, 47} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3
-ioText {76, 47} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4
-ioText {98, 47} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 5
-ioText {120, 47} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 6
-ioText {142, 47} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 7
-ioText {164, 47} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 8
-ioText {196, 48} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 9
-ioText {218, 48} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 10
-ioText {240, 48} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 11
-ioText {262, 48} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 12
-ioText {284, 48} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 13
-ioText {307, 47} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 14
-ioText {329, 47} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 15
-ioText {351, 47} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 16
-ioText {383, 46} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 17
-ioText {405, 46} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 18
-ioText {427, 46} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 19
-ioText {449, 46} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 20
-ioText {471, 46} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 21
-ioText {493, 46} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 22
-ioText {515, 46} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 23
-ioText {537, 46} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 24
-ioText {178, 272} {80, 25} editnum 36.000000 0.100000 "dbrange" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 36.000000
-ioText {93, 270} {131, 27} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder dB Range
-ioText {422, 272} {57, 25} editnum 3.000000 1.000000 "peakhold" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3.000000
-ioText {300, 271} {131, 27} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Peak Hold time
+ioText {9, 49} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1
+ioText {32, 49} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2
+ioText {55, 49} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3
+ioText {77, 49} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4
+ioText {99, 49} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 5
+ioText {121, 49} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 6
+ioText {143, 49} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 7
+ioText {165, 49} {25, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 8
+ioText {194, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 9
+ioText {217, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 10
+ioText {240, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 11
+ioText {263, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 12
+ioText {285, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 13
+ioText {307, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 14
+ioText {329, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 15
+ioText {351, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 16
+ioText {384, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 17
+ioText {406, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 18
+ioText {428, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 19
+ioText {450, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 20
+ioText {472, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 21
+ioText {494, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 22
+ioText {516, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 23
+ioText {538, 49} {29, 23} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 24
+ioText {179, 327} {80, 25} editnum 40.000000 0.100000 "dbrange" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 40.000000
+ioText {104, 328} {131, 27} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder dB Range
+ioText {423, 327} {57, 25} editnum 2.000000 1.000000 "peakhold" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.000000
+ioText {312, 327} {131, 27} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Peak Hold time
+ioText {2, 261} {39, 22} display -83.100000 0.00100 "db1" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -83.1
+ioText {25, 285} {39, 22} display -83.100000 0.00100 "db2" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -83.1
+ioText {48, 261} {39, 22} display -inf 0.00100 "db3" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {71, 285} {39, 22} display -inf 0.00100 "db4" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {93, 261} {39, 22} display -inf 0.00100 "db5" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {115, 285} {39, 22} display -inf 0.00100 "db6" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {137, 261} {39, 22} display -inf 0.00100 "db7" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {159, 285} {39, 22} display -inf 0.00100 "db8" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {191, 261} {39, 22} display -inf 0.00100 "db9" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {214, 285} {39, 22} display -inf 0.00100 "db10" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {237, 261} {39, 22} display -inf 0.00100 "db11" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {260, 285} {39, 22} display -inf 0.00100 "db12" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {282, 261} {39, 22} display -inf 0.00100 "db13" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {304, 285} {39, 22} display -inf 0.00100 "db14" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {326, 261} {39, 22} display -inf 0.00100 "db15" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {348, 285} {39, 22} display -inf 0.00100 "db16" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {379, 261} {39, 22} display -inf 0.00100 "db17" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {402, 285} {39, 22} display -inf 0.00100 "db18" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {425, 261} {39, 22} display -inf 0.00100 "db19" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {448, 285} {39, 22} display -inf 0.00100 "db20" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {470, 261} {39, 22} display -inf 0.00100 "db21" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {492, 285} {39, 22} display -inf 0.00100 "db22" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {514, 261} {39, 22} display -inf 0.00100 "db23" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {536, 285} {39, 22} display -inf 0.00100 "db24" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background noborder -inf
+ioText {14, 535} {546, 59} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The white boxes show smoothed RMS values in dB FS.
 </MacGUI>
 
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="0" y="0" width="596" height="322"> 
+
+
+
+
+
+
+
+
+</EventPanel>

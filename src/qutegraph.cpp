@@ -156,19 +156,21 @@ void QuteGraph::setValue(double value)
   if (value < 0 ) {
     for (int i = 0; i < m_pageComboBox->count(); i++) {
       QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"), QString::SkipEmptyParts);
-//      qDebug() << "QuteGraph::setValue " << parts;
+      qDebug() << "QuteGraph::setValue " << parts << " " << value;
       if (parts.size() > 1) {
         int num = parts.last().toInt();
         if (curves.size() > num && curves[num]->get_caption().isEmpty())
           return;
         if (int(value) == -num) {
           changeCurve(i);
+          m_value = value;
         }
       }
     }
   }
   else if (value < curves.size()) {
     changeCurve((int) value);
+    m_value = value;
   }
   //Dont change value if not valid
 #ifdef  USE_WIDGET_MUTEX
@@ -224,7 +226,6 @@ void QuteGraph::changeCurve(int index)
   text += QString::number(max, 'g', 5) + " Min =" + QString::number(min, 'g', 5);
   m_label->setText(text);
   m_pageComboBox->setCurrentIndex(index);
-  m_value = (int) index;
 }
 
 void QuteGraph::clearCurves()

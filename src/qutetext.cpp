@@ -47,7 +47,7 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
   m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   setMouseTracking(true);
-  canFocus(true);
+//  canFocus(true);
 
 //   connect(static_cast<QLabel*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 }
