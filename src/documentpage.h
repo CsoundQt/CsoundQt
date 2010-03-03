@@ -40,6 +40,7 @@ class ConsoleWidget;
 class SndfileHandle;
 
 class Curve;
+class QuteButton; // For registering buttons with main application
 
 //TODO when refactoring is done, organize the methods in the nice order
 
@@ -180,6 +181,8 @@ class DocumentPage : public QObject
     void deleteLiveEventFrame(LiveEventFrame *frame);
     void showLiveEventFrames(bool visible);
 
+    void registerButton(QuteButton *button);
+
   protected:
 //    virtual void keyPressEvent(QKeyEvent *event);
 //    virtual void contextMenuEvent(QContextMenuEvent *event);
@@ -196,7 +199,7 @@ class DocumentPage : public QObject
     bool useXml;
 
     WidgetLayout * m_widgetLayout;
-    int m_x,m_y,m_width, m_height;  // Position of the widget panel
+//    int m_x,m_y,m_width, m_height;  // Position of the widget panel
     DocumentView *m_view;
     CsoundEngine *m_csEngine;
     ConsoleWidget *m_console;

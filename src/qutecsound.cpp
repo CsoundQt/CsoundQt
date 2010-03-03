@@ -235,8 +235,8 @@ void qutecsound::changePage(int index)
     documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
     documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
     documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
-    setWidgetPanelGeometry();
     widgetPanel->setWidgetLayout(documentPages[curPage]->getWidgetLayout());
+    setWidgetPanelGeometry();
     if (documentPages[curPage]->getFileName().endsWith(".py")) {
       widgetPanel->hide();
     }
@@ -2727,7 +2727,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
     fillFavoriteMenu();
   }
   statusBar()->showMessage(tr("File loaded"), 2000);
-  setWidgetPanelGeometry();
+//  setWidgetPanelGeometry();
 
 //  updateInspector();
   // FIXME put back

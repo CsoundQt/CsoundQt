@@ -32,7 +32,9 @@
 #include "highlighter.h"
 #include "widgetlayout.h"
 #include "console.h"
+
 #include "curve.h"
+#include "qutebutton.h"
 
 #include "cwindow.h"
 #include <csound.hpp>  // TODO These two are necessary for the WINDAT struct. Can they be moved?
@@ -94,6 +96,8 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
           m_csEngine,SLOT(registerScope(QuteScope*)));
   connect(m_widgetLayout, SIGNAL(registerGraph(QuteGraph*)),
           m_csEngine,SLOT(registerGraph(QuteGraph*)));
+  connect(m_widgetLayout, SIGNAL(registerButton(QuteButton*)),
+          this, SLOT(registerButton(QuteButton*)));
 
   // Register the console with the engine for message printing
   m_csEngine->registerConsole(m_console);
@@ -173,6 +177,17 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
         text.remove(text.indexOf("<MacOptions>") - 1, 1); //remove initial line break
       text.remove(text.indexOf("<MacOptions>"), options.size());
       //     qDebug("<MacOptions> present. %s", getMacOptions("WindowBounds").toStdString().c_str());
+      int index = macOptions.indexOf(QRegExp("WindowBounds: .*"));
+      if (index > 0) {
+        QString line = macOptions[index];
+        QStringList values = line.split(" ");
+        values.removeFirst();  //remove property name
+        m_widgetLayout->setOuterGeometry(values[0].toInt(),values[1].toInt(),
+                                    values[2].toInt(), values[3].toInt());
+      }
+      else {
+        qDebug ("DocumentPage::setTextString() no Geometry!");
+      }
     }
     else {
       qDebug() << "NOTE: New XML format present, ignoring exisiting old format options.";
@@ -338,7 +353,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     LiveEventFrame *e = createLiveEventFrame();
     e->setFromText(QString()); // Must set blank for undo history point
   }
-  m_view->setFullText(text);  // This must be here as some of the text has been removed along the way
+  m_view->setFullText(text);  // This must be last as some of the text has been removed along the way
   return 0;
 }
 
@@ -419,20 +434,21 @@ QString DocumentPage::getWidgetsText()
   QDomElement n = d.firstChildElement("bsbPanel");
   if (!n.isNull()) {
     qDebug() << "DocumentPage::getWidgetsText() bsbPanel found ";
+    QRect geo = m_widgetLayout->getOuterGeometry();
     QDomElement node = d.createElement("objectName");
     node.setNodeValue(fileName);
     n.appendChild(node);
     QDomElement nodex = d.createElement("x");
-    nodex.appendChild(d.createTextNode(QString::number(m_x)));
+    nodex.appendChild(d.createTextNode(QString::number(geo.x())));
     n.appendChild(nodex);
     QDomElement nodey = d.createElement("y");
-    nodey.appendChild(d.createTextNode(QString::number(m_y)));
+    nodey.appendChild(d.createTextNode(QString::number(geo.y())));
     n.appendChild(nodey);
     QDomElement nodew = d.createElement("width");
-    nodew.appendChild(d.createTextNode(QString::number(m_width)));
+    nodew.appendChild(d.createTextNode(QString::number(geo.width())));
     n.appendChild(nodew);
     QDomElement nodeh = d.createElement("height");
-    nodeh.appendChild(d.createTextNode(QString::number(m_height)));
+    nodeh.appendChild(d.createTextNode(QString::number(geo.height())));
     n.appendChild(nodeh);
     QDomElement nodev = d.createElement("visible");
     nodev.appendChild(d.createTextNode("true"));
@@ -498,18 +514,7 @@ QString DocumentPage::wordUnderCursor()
 
 QRect DocumentPage::getWidgetPanelGeometry()
 {
-  int index = macOptions.indexOf(QRegExp("WindowBounds: .*"));
-  if (index < 0) {
-//     qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
-    return QRect();
-  }
-  QString line = macOptions[index];
-  QStringList values = line.split(" ");
-  values.removeFirst();  //remove property name
-  return QRect(values[0].toInt(),
-               values[1].toInt(),
-               values[2].toInt(),
-               values[3].toInt());
+   return m_widgetLayout->getOuterGeometry();
 }
 
 QString DocumentPage::getFilePath()
@@ -863,6 +868,15 @@ void DocumentPage::showLiveEventFrames(bool visible)
   }
 }
 
+void DocumentPage::registerButton(QuteButton *b)
+{
+  qDebug() << " DocumentPage::registerButton";
+  connect(b, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(play()));
+  connect(b, SIGNAL(render()), static_cast<qutecsound *>(parent()), SLOT(render()));
+  connect(b, SIGNAL(pause()), static_cast<qutecsound *>(parent()), SLOT(pause()));
+  connect(b, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
+}
+
 void DocumentPage::deleteAllLiveEvents()
 {
   for (int i = 0; i < m_liveFrames.size(); i++) {
@@ -992,6 +1006,7 @@ void DocumentPage::setMacOption(QString option, QString newValue)
 
 void DocumentPage::setWidgetPanelPosition(QPoint position)
 {
+  m_widgetLayout->setOuterGeometry(position.x(), position.y(), -1, -1);
   int index = macOptions.indexOf(QRegExp("WindowBounds: .*"));
   if (index < 0) {
     qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
@@ -1004,14 +1019,13 @@ void DocumentPage::setWidgetPanelPosition(QPoint position)
   newline += parts[2] + " " + parts[3];
   macOptions[index] = newline;
 
-  m_x = position.x();
-  m_y = position.y();
 //   qDebug("DocumentPage::setWidgetPanelPosition() %i %i", position.x(), position.y());
 }
 
 void DocumentPage::setWidgetPanelSize(QSize size)
 {
   // TODO move this so that only updated when needed (e.g. full text read)
+  m_widgetLayout->setOuterGeometry(-1, -1, size.width(), size.height());
   int index = macOptions.indexOf(QRegExp("WindowBounds: .*"));
   if (index < 0) {
     qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
@@ -1025,8 +1039,6 @@ void DocumentPage::setWidgetPanelSize(QSize size)
   newline += QString::number(size.height());
   macOptions[index] = newline;
 
-  m_width = size.width();
-  m_height = size.height();
 //   qDebug("DocumentPage::setWidgetPanelSize() %i %i", size.width(), size.height());
 }
 

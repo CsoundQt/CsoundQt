@@ -35,6 +35,7 @@
 class QuteConsole;
 class QuteGraph;
 class QuteScope;
+class QuteButton;
 class FrameWidget;
 
 class WidgetLayout : public QWidget
@@ -60,6 +61,8 @@ class WidgetLayout : public QWidget
     void setValue(int index, QString value);
 
     void setKeyRepeatMode(bool repeat);
+    void setOuterGeometry(int newx, int newy, int neww, int newh); // Will only set if component >= 0
+    QRect getOuterGeometry();
 //    void setDuplicateShortcut(QKeySequence shortcut);
 
     void getValues(QVector<QString> *channelNames,
@@ -200,6 +203,7 @@ class WidgetLayout : public QWidget
     QVector<Curve *> curves;
 
     bool m_repeatKeys;
+    int m_x, m_y, m_w, m_h; // Position and size of panel (not this widget)
     bool m_trackMouse;
     int mouseX, mouseY, mouseRelX, mouseRelY, mouseBut1, mouseBut2;
     int xOffset, yOffset;
@@ -288,6 +292,7 @@ class WidgetLayout : public QWidget
     void changed(); // Should be triggered whenever widgets change, to let main document know
     void registerScope(QuteScope *scope);
     void registerGraph(QuteGraph *graph);
+    void registerButton(QuteButton *button);
     void queueEventSignal(QString eventLine);
     void setWidgetClipboardSignal(QString text);  // To propagate clipboard for sharing between pages
 };

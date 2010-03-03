@@ -308,6 +308,19 @@ void WidgetLayout::setKeyRepeatMode(bool repeat)
   m_repeatKeys = repeat;
 }
 
+void WidgetLayout::setOuterGeometry(int newx, int newy, int neww, int newh)
+{
+  m_x = newx >= 0 ? newx : m_x;
+  m_y = newy >= 0 ? newy : m_y;
+  m_w = neww >= 0 ? neww : m_w;
+  m_h = newh >= 0 ? newh : m_h;
+}
+
+QRect WidgetLayout::getOuterGeometry()
+{
+  return QRect(m_x, m_y, m_w, m_h);
+}
+
 //void WidgetLayout::setDuplicateShortcut(QKeySequence shortcut)
 //{
 //  m_duplicateShortcut = shortcut;
@@ -1676,10 +1689,7 @@ int WidgetLayout::createButton(int x, int y, int width, int height, QString widg
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
 
   // Play and render require the options from the main application, so must call play from it
-  connect(widget, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(play()));
-  connect(widget, SIGNAL(render()), static_cast<qutecsound *>(parent()), SLOT(render()));
-  connect(widget, SIGNAL(pause()), static_cast<qutecsound *>(parent()), SLOT(pause()));
-  connect(widget, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
+  emit registerButton(widget);
   connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
 
