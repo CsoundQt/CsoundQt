@@ -538,7 +538,7 @@ void ConfigDialog::browseDir(QString &destination)
 
 QList<QPair<QString, QString> > ConfigDialog::getMidiInputDevices()
 {
-  // Adapted from blue by Steven Yi
+  // based on code by Steven Yi
   QList<QPair<QString, QString> > deviceList;
   QString module = _configlists.rtMidiNames[RtMidiModuleComboBox->currentIndex()];
   if (module == "none") {
@@ -717,7 +717,7 @@ QList<QPair<QString, QString> > ConfigDialog::getMidiOutputDevices()
 
 QList<QPair<QString, QString> > ConfigDialog::getAudioInputDevices()
 {
-  qDebug("qutecsound::getAudioInputDevices()");
+//  qDebug("qutecsound::getAudioInputDevices()");
   QList<QPair<QString, QString> > deviceList;
   QString module = _configlists.rtAudioNames[RtModuleComboBox->currentIndex()];
   if (module == "none") {
@@ -872,7 +872,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioInputDevices()
 
 QList<QPair<QString, QString> > ConfigDialog::getAudioOutputDevices()
 {
-  qDebug("qutecsound::getAudioOutputDevices()");
+//  qDebug("qutecsound::getAudioOutputDevices()");
   QList<QPair<QString, QString> > deviceList;
   QString module = _configlists.rtAudioNames[RtModuleComboBox->currentIndex()];
   if (module == "none") {

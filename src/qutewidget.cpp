@@ -320,6 +320,11 @@ void QuteWidget::openProperties()
   connect(applyButton, SIGNAL(released()), this, SLOT(apply()));
   connect(cancelButton, SIGNAL(released()), dialog, SLOT(close()));
   dialog->exec();
+  if (dialog->result() != QDialog::Accepted) {
+    qDebug() << "QuteWidget::openProperties() dialog not accepted";
+    parentWidget()->setFocus(Qt::PopupFocusReason); // For some reason focus is grabbed away from the layout
+  }
+  dialog->deleteLater();
 }
 
 void QuteWidget::deleteWidget()
@@ -353,13 +358,9 @@ void QuteWidget::value2Changed(double value)
 
 void QuteWidget::createPropertiesDialog()
 {
-#ifdef Q_WS_MAC
-  dialog = new QDialog(static_cast<QWidget *>(this->parent()), Qt::WindowStaysOnTopHint);  // On OS X the widget panel may com in front of properties
-#else
-  dialog = new QDialog(static_cast<QWidget *>(this->parent()));
-#endif
+  dialog = new QDialog(this);
   dialog->resize(300, 300);
-  dialog->setModal(true);
+//  dialog->setModal(true);
   layout = new QGridLayout(dialog);
   QLabel *label = new QLabel(dialog);
   label->setText("X =");
@@ -409,11 +410,11 @@ void QuteWidget::applyProperties()
 {
   setChannelName(nameLineEdit->text());
   setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
-  delete dialog;
 
 //  this->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   emit(widgetChanged(this));
   emit propertiesAccepted();
+  parentWidget()->setFocus(Qt::PopupFocusReason); // For some reason focus is grabbed away from the layout
 }
 
 QList<QAction *> QuteWidget::getParentActionList()

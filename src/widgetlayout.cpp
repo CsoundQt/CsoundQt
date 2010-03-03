@@ -133,7 +133,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   distributeVerticalAct = new QAction(tr("Distribute Vertically"), this);
   connect(distributeVerticalAct, SIGNAL(triggered()), this, SLOT(distributeVertical()));
 
-//  setFocusPolicy(Qt::NoFocus);
+  setFocusPolicy(Qt::StrongFocus);
 
   setMouseTracking(true);
   updateData(); // Starts updataData timer
@@ -1256,7 +1256,7 @@ void WidgetLayout::distributeVertical()
 
 void WidgetLayout::keyPressEvent(QKeyEvent *event)
 {
-//  qDebug() << "WidgetLayout::keyPressEvent --- " << event->key();
+  qDebug() << "WidgetLayout::keyPressEvent --- " << event->key() << "___" << event->modifiers() << " control = " <<  Qt::ControlModifier;
 //  if (!event->isAutoRepeat() or m_repeatKeys) {
     QString key = event->text();
     if (event->key() == Qt::Key_D && (event->modifiers() & Qt::ControlModifier )) {
@@ -2156,6 +2156,7 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
   palette.setColor(QPalette::WindowText, QColor(Qt::red));
   frame->setWidget(widget);
   frame->setPalette(palette);
+  frame->setFocusProxy(this);
   frame->setGeometry(widget->x(), widget->y(), widget->width(), widget->height());
   frame->setFrameShape(QFrame::Box);
 //       frame->setMouseTracking(false);  //Only track mouse when buttons are pressed

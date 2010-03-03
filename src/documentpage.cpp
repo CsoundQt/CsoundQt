@@ -55,7 +55,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   m_view = new DocumentView(parent);
   m_view->setOpcodeTree(m_opcodeTree);
 
-  m_console = new ConsoleWidget(parent);
+  m_console = new ConsoleWidget(0);
   m_console->setReadOnly(true);
 
   m_widgetLayout = new WidgetLayout(0);
@@ -625,13 +625,16 @@ void DocumentPage::setCompanionFileName(QString name)
 void DocumentPage::copy()
 {
   // For some reason the shortcut takes this route on OS X but the direct route through keyEvent on each on Linux
-  if (m_widgetLayout->hasFocus())
-    m_widgetLayout->copy();
-  else {
-    for (int i = 0; i < m_liveFrames.size(); i++) {
-      if (m_liveFrames[i]->getSheet()->hasFocus())
-        m_liveFrames[i]->getSheet()->copy();
+  qDebug() << "DocumentPage::copy() " << m_widgetLayout->hasFocus();
+  bool liveeventfocus = false;
+  for (int i = 0; i < m_liveFrames.size(); i++) {
+    if (m_liveFrames[i]->getSheet()->hasFocus()) {
+      m_liveFrames[i]->getSheet()->copy();
+      liveeventfocus = true;
     }
+  }
+  if (!liveeventfocus) {
+    m_widgetLayout->copy();
   }
 }
 
@@ -847,7 +850,7 @@ void DocumentPage::useInvalue(bool use)
 
 void DocumentPage::useXmlFormat(bool use)
 {
-  qDebug() << "DocumentPage::useXmlFormat " << use;
+//  qDebug() << "DocumentPage::useXmlFormat " << use;
   useXml = use;
 }
 
@@ -870,7 +873,7 @@ void DocumentPage::showLiveEventFrames(bool visible)
 
 void DocumentPage::registerButton(QuteButton *b)
 {
-  qDebug() << " DocumentPage::registerButton";
+//  qDebug() << " DocumentPage::registerButton";
   connect(b, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(play()));
   connect(b, SIGNAL(render()), static_cast<qutecsound *>(parent()), SLOT(render()));
   connect(b, SIGNAL(pause()), static_cast<qutecsound *>(parent()), SLOT(pause()));

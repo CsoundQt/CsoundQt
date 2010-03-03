@@ -570,7 +570,7 @@ void CsoundEngine::processEventQueue()
     if (ud->perfThread != 0) {
       //ScoreEvent is not working
 //      ud->perfThread->ScoreEvent(0, type, eventElements.size(), pFields);
-      qDebug() << "CsoundEngine::processEventQueue()" << eventQueue[eventQueueSize];
+//      qDebug() << "CsoundEngine::processEventQueue()" << eventQueue[eventQueueSize];
        ud->perfThread
            ->InputMessage(eventQueue[eventQueueSize].toStdString().c_str());
     }
@@ -720,8 +720,8 @@ int CsoundEngine::runCsound()
 #else
     QString opcodedir = m_initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Resources/Opcodes";
     QString stdopcode = opcodedir + "/libstdopcod.dylib";
-    qDebug() << opcodedir;
-    qDebug() << stdopcode;
+//    qDebug() << opcodedir;
+//    qDebug() << stdopcode;
 #endif
     // TODO is this check robust enough? what if the standard library is not used? is it likely it is not?
     if (QFile::exists(stdopcode)) {

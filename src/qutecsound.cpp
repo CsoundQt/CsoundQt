@@ -165,6 +165,7 @@ qutecsound::qutecsound(QStringList fileNames)
   if (init < 0) {
     qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nQutecsound will probably crash if you try to run Csound.");
   }
+  qApp->processEvents(); // To finish settling dock widgets and other stuff before messing with them (does it actually work?)
   m_startingUp = false;
   if (lastTabIndex < documentPages.size() && documentTabs->currentIndex() != lastTabIndex) {
       documentTabs->setCurrentIndex(lastTabIndex);
@@ -994,7 +995,7 @@ void qutecsound::pause()
 void qutecsound::stop()
 {
   // Must guarantee that csound has stopped when it returns
-  qDebug("qutecsound::stop()");
+//  qDebug("qutecsound::stop()");
   if (documentPages[curPage]->isRunning())
     documentPages[curPage]->stop();
   runAct->setChecked(false);
@@ -2975,7 +2976,7 @@ int qutecsound::isOpen(QString fileName)
 
 QStringList qutecsound::runCsoundInternally(QStringList flags)
 {
-  qDebug() << "qutecsound::runCsoundInternally() " << flags.join(" ");
+//  qDebug() << "qutecsound::runCsoundInternally() " << flags.join(" ");
   static char *argv[33];
   int index = 0;
   foreach (QString flag, flags) {
@@ -3007,7 +3008,7 @@ QStringList qutecsound::runCsoundInternally(QStringList flags)
 // Put menu bar back
   SetMenuBar(menuBarHandle);
 #endif
-  qDebug() << "qutecsound::runCsoundInternally done";
+//  qDebug() << "qutecsound::runCsoundInternally done";
   return m_deviceMessages;
 }
 

@@ -62,6 +62,8 @@ void WidgetPanel::setWidgetLayout(WidgetLayout *w)
     w->setContained(true);
     this->setPalette(QPalette());
     this->setAutoFillBackground(false);
+    this->setFocusProxy(w);
+    scrollArea->setFocusProxy(w);
     w->show();
     scrollArea->show();
   }
@@ -73,6 +75,7 @@ void WidgetPanel::setWidgetLayout(WidgetLayout *w)
     this->setBackgroundRole(QPalette::Window);
     this->setPalette(w->palette());
     w->setAutoFillBackground(false);
+    this->setFocusProxy(w);
     w->show();
   }
   connect(w, SIGNAL(resized()), this, SLOT(widgetChanged()));
@@ -107,7 +110,6 @@ void WidgetPanel::setWidgetScrollBarsActive(bool act)
     scrollArea = new QScrollArea(this);
     scrollArea->setWidget(widget());
     scrollArea->setFocusPolicy(Qt::NoFocus);
-    setWidget(scrollArea);
     scrollArea->setAutoFillBackground(false);
     scrollArea->setBackgroundRole(QPalette::Window);
 //    this->setAutoFillBackground(false);
@@ -117,11 +119,12 @@ void WidgetPanel::setWidgetScrollBarsActive(bool act)
             this, SLOT(scrollBarMoved(int)) );
     connect(scrollArea->verticalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(scrollBarMoved(int)) );
+    setWidget(scrollArea);
 //    layoutWidget->setMouseTracking(false);
   }
   else if (!act && m_sbActive) {
     setWidget(scrollArea->takeWidget());
-    delete scrollArea;
+    scrollArea->deleteLater();
     widget()->setMouseTracking(true);
     static_cast<WidgetLayout *>(widget())->setMouseOffset(0,0);
   }
