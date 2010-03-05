@@ -72,6 +72,10 @@ CsoundEngine::CsoundEngine()
 CsoundEngine::~CsoundEngine()
 {
 //  qDebug() << "CsoundEngine::~CsoundEngine() ";
+  while (closing == -1) {  // Closing is -1 while the queue thread is processing. this is a simple lock
+    qApp->processEvents();
+    usleep(10000);
+  }
   closing = 1;
   stop();
   disconnect(this, 0,0,0);

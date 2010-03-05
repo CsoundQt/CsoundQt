@@ -2390,6 +2390,7 @@ void WidgetLayout::updateData()
     closing = 0;
     return;
   }
+  closing = -1;
   while (!newCurveBuffer.isEmpty()) {
     Curve * curve = newCurveBuffer.takeFirst();
     newCurve(curve); // Register new curve
@@ -2423,5 +2424,6 @@ void WidgetLayout::updateData()
   for (int i = 0; i < scopeWidgets.size(); i++) {
     scopeWidgets[i]->updateData();
   }
+  closing = 0;
   QTimer::singleShot(30, this, SLOT(updateData()));
 }

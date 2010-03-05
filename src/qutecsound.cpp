@@ -168,7 +168,7 @@ qutecsound::qutecsound(QStringList fileNames)
   qApp->processEvents(); // To finish settling dock widgets and other stuff before messing with them (does it actually work?)
   m_startingUp = false;
   if (lastTabIndex < documentPages.size() && documentTabs->currentIndex() != lastTabIndex) {
-      documentTabs->setCurrentIndex(lastTabIndex);
+    documentTabs->setCurrentIndex(lastTabIndex);
   }
   else {
     qDebug() << "qutecsound starting";
@@ -322,17 +322,17 @@ void qutecsound::closeEvent(QCloseEvent *event)
   if (logFile.isOpen()) {
     logFile.close();
   }
-  delete m_options;
-//  delete m_console; // FIXME This is crashing occasionally... why?
-//  delete helpPanel;  // FIXME This is crashing occasionally... why?
-  delete widgetPanel;
-  delete m_inspector;
-  delete closeTabButton;
-  delete opcodeTree;
-//  delete documentTabs;  // FIXME  This is crashing occasionally... why?
-//  delete utilitiesDialog;  // FIXME This is crashing occasionally... why?
+  helpPanel->deleteLater(); // FIXME Is this still crashing with delete later
+  utilitiesDialog->deleteLater(); // FIXME Is this still crashing with delete later
+  closeTabButton->deleteLater();
+  widgetPanel->deleteLater();
+  m_inspector->deleteLater();
+  documentTabs->deleteLater(); // FIXME Is this still crashing with delete later
+//  m_console->deleteLater(); // FIXME still causing crashing(because of access to a destroyed console) even with delete later
   event->accept();
   close();
+  delete m_options;
+//  delete opcodeTree;  // This is needed by some widgets which are detroyed later... leak for now...
 }
 
 //void qutecsound::keyPressEvent(QKeyEvent *event)
@@ -623,7 +623,7 @@ void qutecsound::deleteCurrentTab()
   documentPages[curPage]->showLiveEventFrames(false);
   DocumentPage *d = documentPages[curPage];
   documentPages.remove(curPage); // Must remove from the vector first
-  delete d;  // TODO do these have to be pointers now?
+  d->deleteLater();  // TODO do these have to be pointers now?
   if (curPage >= documentPages.size()) {
     curPage = documentPages.size() - 1;
   }
@@ -996,6 +996,9 @@ void qutecsound::stop()
 {
   // Must guarantee that csound has stopped when it returns
 //  qDebug("qutecsound::stop()");
+  if (curPage >= documentPages.size()) {
+    return; // A bit of a hack to avoid crashing when documents are deleted very quickly...
+  }
   if (documentPages[curPage]->isRunning())
     documentPages[curPage]->stop();
   runAct->setChecked(false);
