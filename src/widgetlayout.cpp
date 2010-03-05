@@ -36,6 +36,10 @@
 #include "qutedummy.h"
 #include "framewidget.h"
 
+#ifdef Q_OS_WIN32
+#include <unistd.h> // for usleep()
+#endif
+
 #include "qutecsound.h" // For passing the actions from button reserved channels
 
 #ifdef Q_OS_LINUX

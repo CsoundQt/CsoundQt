@@ -28,6 +28,10 @@
 #include "qutescope.h"  // Needed for passing the ud to the scope for display data
 #include "qutegraph.h"  // Needed for passing the ud to the graph for display data
 
+#ifdef Q_OS_WIN32
+#include <unistd.h> // for usleep()
+#endif
+
 CsoundEngine::CsoundEngine()
 {
   // Initialize user data pointer passed to Csound
@@ -863,7 +867,8 @@ void CsoundEngine::stopCsound()
     if (ud->PERF_STATUS == 1) {
       ud->PERF_STATUS = -1;
       while (ud->PERF_STATUS == -1) { // Wait until performance has stopped
-        sleep(0.1);
+        //sleep(0.1);
+          usleep(100000);
         qApp->processEvents();
       }
     }
