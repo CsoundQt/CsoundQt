@@ -86,6 +86,8 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 WidgetLayout * WidgetPanel::getWidgetLayout()
 {
   QScrollArea *s = (QScrollArea*) stack->currentWidget();
+  if (!s) // scroll area is sometimes null during startup and shutdown
+      return 0;
   qDebug() << "WidgetPanel::getWidgetLayout() " << s->widget();
   return (WidgetLayout *) s->widget();
 }
@@ -95,6 +97,8 @@ WidgetLayout * WidgetPanel::takeWidgetLayout()
   qDebug() << "WidgetPanel::takeWidgetLayout()";
   disconnect(this,SIGNAL(topLevelChanged(bool)));
   QScrollArea *s = (QScrollArea*) stack->currentWidget();
+  if (!s) // scroll area is sometimes null during startup and shutdown
+      return 0;
   WidgetLayout * w = (WidgetLayout *) s->takeWidget();
   stack->removeWidget(s);
   delete s;
@@ -183,6 +187,8 @@ void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 {
   QScrollArea *s = (QScrollArea*) stack->currentWidget();
+  if (!s) // scroll area is sometimes null during startup and shutdown
+      return;
   if (m_sbActive) {
     static_cast<WidgetLayout *>(s->widget())->createContextMenu(event);
   }
@@ -215,6 +221,8 @@ void WidgetPanel::mousePressEvent(QMouseEvent * event)
 //                Qt::NoModifier );
 
   QScrollArea *s = (QScrollArea*) stack->currentWidget();
+  if (!s) // scroll area is sometimes null during startup and shutdown
+      return;
   if (m_sbActive) {
     static_cast<WidgetLayout *>(s->widget())->mousePressEventParent(event);
   }
@@ -226,6 +234,8 @@ void WidgetPanel::mousePressEvent(QMouseEvent * event)
 void WidgetPanel::mouseReleaseEvent(QMouseEvent * event)
 {
   QScrollArea *s = (QScrollArea*) stack->currentWidget();
+  if (!s) // scroll area is sometimes null during startup and shutdown
+      return;
   if (m_sbActive) {
     static_cast<WidgetLayout *>(s->widget())->mouseReleaseEventParent(event);
   }
@@ -237,6 +247,8 @@ void WidgetPanel::mouseReleaseEvent(QMouseEvent * event)
 void WidgetPanel::mouseMoveEvent(QMouseEvent * event)
 {
   QScrollArea *s = (QScrollArea*) stack->currentWidget();
+  if (!s) // scroll area is sometimes null during startup and shutdown
+      return;
   if (m_sbActive) {
     WidgetLayout *w  = static_cast<WidgetLayout *>(s->widget());
     if (w != 0) {
@@ -260,6 +272,8 @@ void WidgetPanel::dockStateChanged(bool undocked)
 void WidgetPanel::scrollBarMoved(int value)
 {
   QScrollArea *s = (QScrollArea*) stack->currentWidget();
+  if (!s) // scroll area is sometimes null during startup and shutdown
+      return;
   if (m_sbActive) {
     int v = s->verticalScrollBar()->value();
     int h = s->horizontalScrollBar()->value();
