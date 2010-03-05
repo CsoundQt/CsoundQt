@@ -467,6 +467,7 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
 void CsoundEngine::setWidgetLayout(WidgetLayout *wl)
 {
   ud->wl = wl;
+  connect(wl, SIGNAL(destroyed()), this, SLOT(widgetLayoutDestroyed()));
   dispatchQueues(); // starts queue dispatcher timer
 }
 
@@ -488,6 +489,14 @@ void CsoundEngine::enableWidgets(bool enable)
 void CsoundEngine::setInitialDir(QString initialDir)
 {
   m_initialDir = initialDir;
+}
+
+void CsoundEngine::freeze()
+{
+  qDebug() << "CsoundEngine::freeze";
+  engineMutex.lock();
+  closing == 1;
+  engineMutex.unlock();
 }
 
 void CsoundEngine::registerConsole(ConsoleWidget *c)
@@ -885,12 +894,12 @@ void CsoundEngine::stopCsound()
 void CsoundEngine::dispatchQueues()
 {
 //   qDebug("qutecsound::dispatchQueues()");
-  if (closing == 1) {
-    closing = 0;
-    return;
-  }
   if (!engineMutex.tryLock(30)) {
     QTimer::singleShot(refreshTime, this, SLOT(dispatchQueues()));
+    return;
+  }
+  if (closing == 1) {
+    closing = 0;
     return;
   }
   int counter = 0;
@@ -941,6 +950,14 @@ void CsoundEngine::dispatchQueues()
   }
   engineMutex.unlock();
   QTimer::singleShot(refreshTime, this, SLOT(dispatchQueues()));
+}
+
+void CsoundEngine::widgetLayoutDestroyed()
+{
+  qDebug() << "CsoundEngine::widgetLayoutDestroyed()";
+  engineMutex.lock();
+  closing == 1;
+  engineMutex.unlock();
 }
 
 void CsoundEngine::queueMessage(QString message)

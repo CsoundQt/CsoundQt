@@ -2265,6 +2265,8 @@ void WidgetLayout::processNewValues()
 {
   // Apply values received
 //   qDebug("WidgetPanel::processNewValues");
+  if (closing != 0)
+    return;
   QList<QString> channelNames;
   valueMutex.lock();
   channelNames = newValues.keys();
