@@ -123,10 +123,13 @@ void WidgetPanel::setWidgetScrollBarsActive(bool act)
 //    layoutWidget->setMouseTracking(false);
   }
   else if (!act && m_sbActive) {
-    setWidget(scrollArea->takeWidget());
-    scrollArea->deleteLater();
-    widget()->setMouseTracking(true);
-    static_cast<WidgetLayout *>(widget())->setMouseOffset(0,0);
+    QWidget *w = scrollArea->takeWidget();
+    if (w != 0) {
+      setWidget(w);
+      scrollArea->deleteLater();
+      w->setMouseTracking(true);
+      static_cast<WidgetLayout *>(w)->setMouseOffset(0,0);
+    }
   }
   m_sbActive = act;
 }

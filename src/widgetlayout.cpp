@@ -142,11 +142,13 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 WidgetLayout::~WidgetLayout()
 {
   disconnect(this, 0,0,0);
+  layoutMutex.lock();
   closing = 1;
   while (closing == 1) {
     qApp->processEvents();
     usleep(10000);
   }
+  layoutMutex.unlock();
 }
 
 //void WidgetLayout::setPanel(WidgetPanel* panel)
@@ -199,6 +201,7 @@ QString WidgetLayout::getWidgetsText()
   QString name = "QuteCsound"; // FIXME add setting of panel name
   text = "<bsbPanel>\n";
   QString bg, red,green,blue;
+  layoutMutex.lock();
   if (m_contained) {
     bg = this->parentWidget()->autoFillBackground()? QString("background"):QString("nobackground");
     red = QString::number((int) (this->parentWidget()->palette().button().color().redF()*256.));
@@ -215,6 +218,7 @@ QString WidgetLayout::getWidgetsText()
   text +=  "<r>" + red + "</r>\n" +  "<g>"  + green + "</g>\n" + "<b>" + blue + "</b>\n";
   text += "</bgcolor>\n";
 
+  layoutMutex.unlock();
   valueMutex.lock();
   for (int i = 0; i < m_widgets.size(); i++) {
     text += m_widgets[i]->getWidgetXmlText() + "\n";
@@ -256,6 +260,7 @@ QString WidgetLayout::getMacWidgetsText()
   QString text = "";
   text = "<MacGUI>\n";
   QString bg, color;
+  layoutMutex.lock();
   if (m_contained) {
     bg = this->parentWidget()->autoFillBackground()? QString("background"):QString("nobackground");
     color = QString::number((int) (this->parentWidget()->palette().button().color().redF()*65535.)) + ", ";
@@ -268,6 +273,7 @@ QString WidgetLayout::getMacWidgetsText()
     color +=  QString::number((int) (this->palette().button().color().greenF()*65535.)) + ", ";
     color +=  QString::number((int) (this->palette().button().color().blueF()*65535.));
   }
+  layoutMutex.unlock();
   text += "ioView " + bg + " {" + color +"}\n";
 
   valueMutex.lock();
@@ -549,6 +555,10 @@ void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
 void WidgetLayout::setContained(bool contained)
 {
 //  qDebug() << "WidgetLayout::setContained " << contained;
+  if (m_contained == contained) {
+    return;
+  }
+  layoutMutex.lock();
   m_contained = contained;
   if (m_contained) {
     parentWidget()->setAutoFillBackground(this->autoFillBackground());
@@ -560,6 +570,7 @@ void WidgetLayout::setContained(bool contained)
     this->setAutoFillBackground(parentWidget()->autoFillBackground());
     this->setPalette(parentWidget()->palette());
   }
+  layoutMutex.unlock();
 }
 
 void WidgetLayout::appendCurve(WINDAT *windat)
@@ -1969,6 +1980,7 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
   QWidget *w;
 //  this->setPalette(QPalette());
 //  this->setAutoFillBackground(false);
+  layoutMutex.lock();
   w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget
   if (bg) {
     w->setPalette(QPalette(bgColor));
@@ -1979,6 +1991,7 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
     w->setPalette(QPalette(bgColor));
     w->setAutoFillBackground(false);
   }
+  layoutMutex.unlock();
 }
 
 void WidgetLayout::setModified(bool mod)
@@ -2390,7 +2403,10 @@ void WidgetLayout::updateData()
     closing = 0;
     return;
   }
-  closing = -1;
+  if (!layoutMutex.tryLock(30)) {
+    QTimer::singleShot(30, this, SLOT(updateData()));
+    return;
+  }
   while (!newCurveBuffer.isEmpty()) {
     Curve * curve = newCurveBuffer.takeFirst();
     newCurve(curve); // Register new curve
@@ -2424,6 +2440,7 @@ void WidgetLayout::updateData()
   for (int i = 0; i < scopeWidgets.size(); i++) {
     scopeWidgets[i]->updateData();
   }
+  layoutMutex.unlock();
   closing = 0;
   QTimer::singleShot(30, this, SLOT(updateData()));
 }

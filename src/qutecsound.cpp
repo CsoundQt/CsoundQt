@@ -224,9 +224,10 @@ void qutecsound::changePage(int index)
   }
   curPage = index;
   if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
-    static_cast<WidgetLayout *>(widgetPanel->widget())->setContained(false);  // Must set before removing from container to get background
-    QWidget *w = widgetPanel->takeWidgetLayout();
+    QWidget *w = widgetPanel->widget();
     if (w != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
+      static_cast<WidgetLayout *>(w)->setContained(false);  // Must set before removing from container to get background
+      w = widgetPanel->takeWidgetLayout();
       w->setParent(0); //FIXME this is crashing ocasionally at startup, seems not anymore?
     }
 //    documentPages[curPage]->setMacWidgetsText
