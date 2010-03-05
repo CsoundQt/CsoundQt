@@ -25,9 +25,6 @@
 
 #include <QtGui>
 
-//#include "qutewidget.h"
-//#include "widgetpreset.h"
-
 class WidgetLayout;
 
 class WidgetPanel : public QDockWidget
@@ -40,49 +37,15 @@ class WidgetPanel : public QDockWidget
     WidgetPanel(QWidget *parent);
     ~WidgetPanel();
 
-//    unsigned int widgetCount();
-    void setWidgetLayout(WidgetLayout *layoutWidget);
+    void addWidgetLayout(WidgetLayout *layoutWidget);
+    WidgetLayout * getWidgetLayout();
     WidgetLayout * takeWidgetLayout();
-//    unsigned long getKsmpsCount();
-
-//    void setValue(QString channelName, double value);
-//    void setValue(QString channelName, QString value);
-//    void setValue(int index, double value);
-//    void setValue(int index, QString value);
+    void setCurrentLayout(WidgetLayout *layoutWidget);
 
     void setWidgetScrollBarsActive(bool active);
-//    void setKeyRepeatMode(bool repeat);
-//    void loadWidgets(QString macWidgets);
-//    int newWidget(QString widgetLine, bool offset = false);
-//    QString widgetsText(bool tags = true);
-//    void appendMessage(QString message);
-//    void showTooltips(bool show);
-//    void setWidgetToolTip(QuteWidget *widget, bool show);
-//    void newCurve(Curve* curve);
-//     int getCurveIndex(Curve *curve);
-//    void setCurveData(Curve *curve);
-//    void clearGraphs();
-//    Curve * getCurveById(uintptr_t id);
-//    void flush();
-//    void refreshConsoles();
-//    QString getCabbageLines();
-//    void newValue(QPair<QString, double> channelValue);
-//    void newValue(QPair<QString, QString> channelValue);
 
   public slots:
-//    void newValue(QPair<QString, double> channelValue);
-//    void newValue(QPair<QString, QString> channelValue);
-//    void processNewValues();
-//    void widgetChanged(QuteWidget* widget = 0);
-//     void updateWidgetText();
-//    void deleteWidget(QuteWidget *widget);
-//    void queueEvent(QString eventLine);
-
-//    void selectionChanged(QRect selection);
-//    void widgetMoved(QPair<int, int>);
-//    void duplicate();
-    void widgetChanged();
-//    void adjustLayoutSize();
+//    void widgetChanged();
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
@@ -96,24 +59,15 @@ class WidgetPanel : public QDockWidget
     virtual void closeEvent(QCloseEvent * event);
 
   private:
-
-//    QAction *editAct;
-//    WidgetLayout *layoutWidget;   // Always owned by documentpage is this needed here?
-    QScrollArea *scrollArea;
-//    QStackedLayout *l;
+    QStackedWidget *stack;
 
     QStringList clipboard;
     QSize oldSize;
-//    bool m_tooltips;
     int m_width;
     int m_height;
     bool m_sbActive; // Scroll bars active
 
   private slots:
-//    void copy();
-//    void cut();
-//    void paste();
-//    void paste(QPoint pos);
     void dockStateChanged(bool);
     void scrollBarMoved(int);
 

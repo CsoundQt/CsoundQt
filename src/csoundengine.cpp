@@ -867,8 +867,7 @@ void CsoundEngine::stopCsound()
     if (ud->PERF_STATUS == 1) {
       ud->PERF_STATUS = -1;
       while (ud->PERF_STATUS == -1) { // Wait until performance has stopped
-        //sleep(0.1);
-          usleep(100000);
+        usleep(100000);
         qApp->processEvents();
       }
     }
@@ -880,7 +879,7 @@ void CsoundEngine::stopCsound()
 #ifdef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(ud->csound);
 #endif
-  flushMessageQueue();
+//  flushMessageQueue();
 }
 
 void CsoundEngine::dispatchQueues()
@@ -888,6 +887,10 @@ void CsoundEngine::dispatchQueues()
 //   qDebug("qutecsound::dispatchQueues()");
   if (closing == 1) {
     closing = 0;
+    return;
+  }
+  if (!engineMutex.tryLock(30)) {
+    QTimer::singleShot(refreshTime, this, SLOT(dispatchQueues()));
     return;
   }
   int counter = 0;
@@ -936,6 +939,7 @@ void CsoundEngine::dispatchQueues()
       stop();
     }
   }
+  engineMutex.unlock();
   QTimer::singleShot(refreshTime, this, SLOT(dispatchQueues()));
 }
 

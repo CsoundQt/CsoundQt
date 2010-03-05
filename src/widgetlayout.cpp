@@ -562,7 +562,7 @@ void WidgetLayout::setContained(bool contained)
   if (m_contained == contained) {
     return;
   }
-  layoutMutex.lock();
+//  layoutMutex.lock();
   m_contained = contained;
   if (m_contained) {
     parentWidget()->setAutoFillBackground(this->autoFillBackground());
@@ -574,7 +574,7 @@ void WidgetLayout::setContained(bool contained)
     this->setAutoFillBackground(parentWidget()->autoFillBackground());
     this->setPalette(parentWidget()->palette());
   }
-  layoutMutex.unlock();
+//  layoutMutex.unlock();
 }
 
 void WidgetLayout::appendCurve(WINDAT *windat)

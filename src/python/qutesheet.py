@@ -102,6 +102,19 @@ def set_text(text, new_first_row = -1, new_first_col = -1, new_num_rows = -1, ne
     out_text += text
     _write_out_file(out_text)
 
+def sort_by_start(rows):
+    new_data = []
+    for r in rows:
+        if len(r) < 3:
+            new_data.append(r)
+        else:
+            count = 0
+            while count < len(new_data):
+                if type(r[2]) != str and r[2] <= new_data[count][2]:
+                    break
+                count += 1
+            new_data.insert(count, r)
+
 #-----------------------------------------------------------------------------
 # Selection position data
 first_row = qutesheet_data.row
@@ -114,7 +127,9 @@ total_cols = qutesheet_data.total_cols
 # Data organized in different ways
 rows_selection = qutesheet_data.data
 rows = _all_cols(qutesheet_data.data_all, first_row, num_rows)
+rows_sorted = sort_by_start(_all_cols(qutesheet_data.data_all, first_row, num_rows))
 rows_all =  qutesheet_data.data_all
+rows_all_sorted = sort_by_start(qutesheet_data.data_all)
 
 #cols_selection = _transpose(qutesheet_data.data);
 cols = _transpose(_all_cols(_transpose(qutesheet_data.data_all), first_col, num_cols))

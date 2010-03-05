@@ -22,7 +22,6 @@
 
 #include "widgetpanel.h"
 #include "widgetlayout.h"
-// #include "curve.h"
 
 #include "qutecsound.h"
 
@@ -34,143 +33,146 @@ WidgetPanel::WidgetPanel(QWidget *parent)
 //   connect(this,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(dockLocationChanged(Qt::DockWidgetArea)));
   connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));
 
+  stack = new QStackedWidget(this);
+  stack->show();
+  setWidget(stack);
+
   m_sbActive = false;
   setWidgetScrollBarsActive(true);
   setMouseTracking(true);
 
 //  setFocusPolicy(Qt::NoFocus);
-//  l = new QStackedLayout(this);
-//  setLayout(l);
 }
 
 WidgetPanel::~WidgetPanel()
 {
 }
 
-//unsigned int WidgetPanel::widgetCount()
-//{
-//  return layoutWidget->widgetCount();
-//}
-
-void WidgetPanel::setWidgetLayout(WidgetLayout *w)
+void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 {
-  // When this function is called, there must be no widget layout set, as this
-  // function will delete the set widget in scrollarea->setWidget().
-//  qDebug() << "WidgetPanel::setWidgetLayout";
+  QScrollArea *scrollArea;
   if (m_sbActive) {
+    scrollArea = new QScrollArea(this);
     scrollArea->setWidget(w);
+    stack->addWidget(scrollArea);
     w->setContained(true);
-    this->setPalette(QPalette());
-    this->setAutoFillBackground(false);
-    this->setFocusProxy(w);
+    stack->setPalette(QPalette());
+    stack->setAutoFillBackground(false);
+    stack->setFocusProxy(w);
     scrollArea->setFocusProxy(w);
+//    QHBoxLayout *l = new QHBoxLayout(this);
+//    l->addWidget(scrollArea);
+//    stack->setLayout(l);
     w->show();
     scrollArea->show();
   }
-  else {
-    qDebug() << " WidgetPanel::setWidgetLayout  not sb active";
-    setWidget(w);
-    w->setContained(true);
-    this->setAutoFillBackground(w->autoFillBackground());
-    this->setBackgroundRole(QPalette::Window);
-    this->setPalette(w->palette());
-    w->setAutoFillBackground(false);
-    this->setFocusProxy(w);
-    w->show();
-  }
-  connect(w, SIGNAL(resized()), this, SLOT(widgetChanged()));
-  widgetChanged();
+//  else {
+//    qDebug() << " WidgetPanel::setWidgetLayout  not sb active";
+//    setWidget(w);
+//    w->setContained(true);
+//    this->setAutoFillBackground(w->autoFillBackground());
+//    this->setBackgroundRole(QPalette::Window);
+//    this->setPalette(w->palette());
+//    w->setAutoFillBackground(false);
+//    this->setFocusProxy(w);
+//    w->show();
+//  }
+  qDebug() << "WidgetPanel::addWidgetLayout " << w << " s=" << scrollArea;
+//  connect(w, SIGNAL(resized()), this, SLOT(widgetChanged()));
+//  widgetChanged();
 //  connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
+}
+
+WidgetLayout * WidgetPanel::getWidgetLayout()
+{
+  QScrollArea *s = (QScrollArea*) stack->currentWidget();
+  qDebug() << "WidgetPanel::getWidgetLayout() " << s->widget();
+  return (WidgetLayout *) s->widget();
 }
 
 WidgetLayout * WidgetPanel::takeWidgetLayout()
 {
+  qDebug() << "WidgetPanel::takeWidgetLayout()";
   disconnect(this,SIGNAL(topLevelChanged(bool)));
-  WidgetLayout * w;
-//  l->removeWidget(widget());
-  if (m_sbActive) {
-    w = static_cast<WidgetLayout *>(scrollArea->takeWidget());
-    if (w != 0)
-      w->setParent(0);
-  }
-  else {
-    w = static_cast<WidgetLayout *>(widget());
-  }
+  QScrollArea *s = (QScrollArea*) stack->currentWidget();
+  WidgetLayout * w = (WidgetLayout *) s->takeWidget();
+  stack->removeWidget(s);
+  delete s;
+//  if (m_sbActive) {
+//    w = static_cast<WidgetLayout *>(scrollArea->takeWidget());
+//    if (w != 0)
+//      w->setParent(0);
+//  }
+//  else {
+//    w = static_cast<WidgetLayout *>(widget());
+//  }
 //  disconnect(layoutWidget, SIGNAL(deselectAll()));
   if (w != 0)
     disconnect(w, SIGNAL(selection(QRect)));
   return w;
 }
 
+void WidgetPanel::setCurrentLayout(WidgetLayout *layoutWidget)
+{
+//  QWidget *w = layoutWidget->parentWidget();
+  for (int i = 0; i < stack->count(); i++) {
+    QScrollArea *s = (QScrollArea*) stack->widget(i);
+    qDebug() << "WidgetPanel::setCurrentLayout checking " << s;
+    if (s->widget() == layoutWidget) {
+      stack->setCurrentIndex(i);
+      s->show();
+      s->widget()->show();
+      return;
+    }
+  }
+  qDebug() << "WidgetPanel::setCurrentLayout widget not contained!! " << layoutWidget;
+}
 
 void WidgetPanel::setWidgetScrollBarsActive(bool act)
 {
+//  act = true;
   qDebug() << "WidgetPanel::setScrollBarsActive" << act;
-  if (act && !m_sbActive) {
-    scrollArea = new QScrollArea(this);
-    scrollArea->setWidget(widget());
-    scrollArea->setFocusPolicy(Qt::NoFocus);
-    scrollArea->setAutoFillBackground(false);
-    scrollArea->setBackgroundRole(QPalette::Window);
-//    this->setAutoFillBackground(false);
-    scrollArea->show();
-    scrollArea->setMouseTracking(true);
-    connect(scrollArea->horizontalScrollBar(), SIGNAL(valueChanged(int)),
-            this, SLOT(scrollBarMoved(int)) );
-    connect(scrollArea->verticalScrollBar(), SIGNAL(valueChanged(int)),
-            this, SLOT(scrollBarMoved(int)) );
-    setWidget(scrollArea);
-//    layoutWidget->setMouseTracking(false);
-  }
-  else if (!act && m_sbActive) {
-    QWidget *w = scrollArea->takeWidget();
-    if (w != 0) {
-      setWidget(w);
-      scrollArea->deleteLater();
-      w->setMouseTracking(true);
-      static_cast<WidgetLayout *>(w)->setMouseOffset(0,0);
-    }
-  }
+//  if (act && !m_sbActive) {
+//    scrollArea = new QScrollArea(this);
+//    scrollArea->setWidget(widget());
+//    scrollArea->setFocusPolicy(Qt::NoFocus);
+//    scrollArea->setAutoFillBackground(false);
+//    scrollArea->setBackgroundRole(QPalette::Window);
+////    this->setAutoFillBackground(false);
+//    scrollArea->show();
+//    scrollArea->setMouseTracking(true);
+//    connect(scrollArea->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+//            this, SLOT(scrollBarMoved(int)) );
+//    connect(scrollArea->verticalScrollBar(), SIGNAL(valueChanged(int)),
+//            this, SLOT(scrollBarMoved(int)) );
+//    setWidget(scrollArea);
+////    layoutWidget->setMouseTracking(false);
+//  }
+//  else if (!act && m_sbActive) {
+//    QWidget *w = scrollArea->takeWidget();
+//    if (w != 0) {
+//      setWidget(w);
+//      scrollArea->deleteLater();
+//      w->setMouseTracking(true);
+//      static_cast<WidgetLayout *>(w)->setMouseOffset(0,0);
+//    }
+//  }
   m_sbActive = act;
 }
 
-//void WidgetPanel::duplicate()
+//void WidgetPanel::widgetChanged()
 //{
-//  qDebug() << "WidgetPanel::duplicate()";
-//  QWidget *w;
-//  if (m_sbActive) {
-//    w = scrollArea->widget();
-//  }
-//  else {
-//    w = widget();
-//  }
-//  static_cast<WidgetLayout *>(w)->duplicate();
-//}
-
-void WidgetPanel::widgetChanged()
-{
-  QWidget *w;
-  if (m_sbActive) {
-    w = scrollArea->widget();
-  }
-  else {
-    w = widget();
-  }
-//  this->setAutoFillBackground(true);
-//  this->setBackgroundRole(QPalette::Window);
-//  this->setPalette(w->palette());
-//  w->setAutoFillBackground(false);
-}
-
-
-//void WidgetPanel::setKeyRepeatMode(bool repeat)
-//{
-//  layoutWidget->setKeyRepeatMode(repeat);
-//}
-
-//int WidgetPanel::newWidget(QString widgetLine, bool offset)
-//{
-//  return layoutWidget->newWidget(widgetLine, offset);
+////  QWidget *w;
+////  if (m_sbActive) {
+////    w = scrollArea->widget();
+////  }
+////  else {
+////    w = widget();
+////  }
+////  this->setAutoFillBackground(true);
+////  this->setBackgroundRole(QPalette::Window);
+////  this->setPalette(w->palette());
+////  w->setAutoFillBackground(false);
 //}
 
 void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
@@ -178,75 +180,15 @@ void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
   emit Close(false);
 }
 
-//QString WidgetPanel::widgetsText(bool tags)
-//{
-//  return layoutWidget->widgetsText(tags);
-//}
-
-
-
-//QString WidgetPanel::getCabbageLines()
-//{
-//  QString text = "";
-//  int unsupported = 0;
-//  foreach(QuteWidget *widget, widgets) {
-//    QString line = widget->getCabbageLine();
-//    if (line != "") {
-//      text += line;
-//    }
-//    else {
-//      unsupported++;
-//    }
-//  }
-//  qDebug() << "WidgetPanel:getCabbageLines() " << unsupported << " Unsupported widgets";
-//  return text;
-//}
-
-
-//void WidgetPanel::deleteWidget(QuteWidget *widget)
-//{
-//  int index = widgets.indexOf(widget);
-////   qDebug("WidgetPanel::deleteWidget %i", number);
-//  widget->close();
-//  widgets.remove(index);
-//  if (!editWidgets.isEmpty()) {
-//    delete(editWidgets[index]);
-//    editWidgets.remove(index);
-//  }
-//  index = consoleWidgets.indexOf(dynamic_cast<QuteConsole *>(widget));
-//  if (index >= 0) {
-//    consoleWidgets.remove(index);
-//  }
-//  index = graphWidgets.indexOf(dynamic_cast<QuteGraph *>(widget));
-//  if (index >= 0)
-//    graphWidgets.remove(index);
-//  index = scopeWidgets.indexOf(dynamic_cast<QuteScope *>(widget));
-//  if (index >= 0)
-//    scopeWidgets.remove(index);
-//  widgetChanged(widget);
-//}
-//
-//void WidgetPanel::queueEvent(QString eventLine)
-//{
-////   qDebug("WidgetPanel::queueEvent %s", eventLine.toStdString().c_str());
-//  if (eventQueueSize < QUTECSOUND_MAX_EVENTS) {
-////     eventMutex.lock();
-//    eventQueue[eventQueueSize] = eventLine;
-//    eventQueueSize++;
-////     eventMutex.unlock();
-//  }
-//  else
-//    qDebug("Warning: event queue full, event not processed");
-//}
-
 void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 {
+  QScrollArea *s = (QScrollArea*) stack->currentWidget();
   if (m_sbActive) {
-    static_cast<WidgetLayout *>(scrollArea->widget())->createContextMenu(event);
+    static_cast<WidgetLayout *>(s->widget())->createContextMenu(event);
   }
-  else {
-    static_cast<WidgetLayout *>(widget())->createContextMenu(event);
-  }
+//  else {
+//    static_cast<WidgetLayout *>(widget())->createContextMenu(event);
+//  }
 }
 
 void WidgetPanel::resizeEvent(QResizeEvent * event)
@@ -264,11 +206,6 @@ void WidgetPanel::moveEvent(QMoveEvent * event)
   emit moved(event->pos());
 }
 
-//void WidgetPanel::mouseMoveEvent(QMouseEvent * event)
-//{
-//  QWidget::mouseMoveEvent(event);
-//}
-//
 void WidgetPanel::mousePressEvent(QMouseEvent * event)
 {
 //  QMouseEvent e(QEvent::MouseButtonPress,
@@ -276,18 +213,21 @@ void WidgetPanel::mousePressEvent(QMouseEvent * event)
 //                event->button(),
 //                event->buttons(),
 //                Qt::NoModifier );
+
+  QScrollArea *s = (QScrollArea*) stack->currentWidget();
   if (m_sbActive) {
-    static_cast<WidgetLayout *>(scrollArea->widget())->mousePressEventParent(event);
+    static_cast<WidgetLayout *>(s->widget())->mousePressEventParent(event);
   }
-  else {
-    static_cast<WidgetLayout *>(widget())->mousePressEventParent(event);
-  }
+//  else {
+//    static_cast<WidgetLayout *>(widget())->mousePressEventParent(event);
+//  }
 }
 
 void WidgetPanel::mouseReleaseEvent(QMouseEvent * event)
 {
+  QScrollArea *s = (QScrollArea*) stack->currentWidget();
   if (m_sbActive) {
-    static_cast<WidgetLayout *>(scrollArea->widget())->mouseReleaseEventParent(event);
+    static_cast<WidgetLayout *>(s->widget())->mouseReleaseEventParent(event);
   }
   else {
     static_cast<WidgetLayout *>(widget())->mouseReleaseEventParent(event);
@@ -296,18 +236,19 @@ void WidgetPanel::mouseReleaseEvent(QMouseEvent * event)
 
 void WidgetPanel::mouseMoveEvent(QMouseEvent * event)
 {
+  QScrollArea *s = (QScrollArea*) stack->currentWidget();
   if (m_sbActive) {
-    WidgetLayout *w  = static_cast<WidgetLayout *>(scrollArea->widget());
+    WidgetLayout *w  = static_cast<WidgetLayout *>(s->widget());
     if (w != 0) {
       w->mouseMoveEventParent(event);
     }
   }
-  else {
-    WidgetLayout *w  = static_cast<WidgetLayout *>(scrollArea->widget());
-    if (w != 0) {
-      w->mouseMoveEventParent(event);
-    }
-  }
+//  else {
+//    WidgetLayout *w  = static_cast<WidgetLayout *>(scrollArea->widget());
+//    if (w != 0) {
+//      w->mouseMoveEventParent(event);
+//    }
+//  }
 //  qApp->processEvents();
 }
 
@@ -318,9 +259,10 @@ void WidgetPanel::dockStateChanged(bool undocked)
 
 void WidgetPanel::scrollBarMoved(int value)
 {
+  QScrollArea *s = (QScrollArea*) stack->currentWidget();
   if (m_sbActive) {
-    int v = scrollArea->verticalScrollBar()->value();
-    int h = scrollArea->horizontalScrollBar()->value();
-    static_cast<WidgetLayout *>(scrollArea->widget())->setMouseOffset(h, v);
+    int v = s->verticalScrollBar()->value();
+    int h = s->horizontalScrollBar()->value();
+    static_cast<WidgetLayout *>(s->widget())->setMouseOffset(h, v);
   }
 }

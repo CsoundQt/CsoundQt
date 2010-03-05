@@ -187,6 +187,7 @@ class CsoundEngine : public QObject
     QMutex keyMutex; // For keys pressed to pass to Csound from console and widget panel
     QStringList keyPressBuffer; // protected by keyMutex
     QStringList keyReleaseBuffer; // protected by keyMutex
+    QMutex engineMutex; // To protect when closing
 
     QMutex eventMutex;
     QVector<QString> eventQueue;
