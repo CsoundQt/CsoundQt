@@ -977,7 +977,7 @@ void qutecsound::runInTerm(bool realtime)
 #endif
 #ifdef Q_OS_WIN32
   options = scriptFileName;
-  qDebug() << "m_options.terminal == " << m_options.terminal;
+  qDebug() << "m_options.terminal == " << m_options->terminal;
 #endif
   execute(m_options->terminal, options);
   runAct->setChecked(false);
@@ -1407,7 +1407,7 @@ void qutecsound::runUtility(QString flags)
 //     if (m_options->ssdirActive)
 //       script += "set INCDIR=" + m_options->incdir + "\n";
 
-    script += "cd " + QFileInfo(documentPages[curPage]->fileName).absolutePath() + "\n";
+    script += "cd " + QFileInfo(documentPages[curPage]->getFileName()).absolutePath() + "\n";
     script += "csound " + flags + "\n";
 #else
     script = "#!/bin/sh\n";
@@ -2842,7 +2842,7 @@ QString qutecsound::generateScript(bool realtime, QString tempFileName)
 #ifndef Q_OS_WIN32
   script += "cd " + QFileInfo(documentPages[curPage]->getFileName()).absolutePath() + "\n";
 #else
-  QString script_cd = "@pushd " + QFileInfo(documentPages[curPage]->fileName).absolutePath() + "\n";
+  QString script_cd = "@pushd " + QFileInfo(documentPages[curPage]->getFileName()).absolutePath() + "\n";
   script_cd.replace("/", "\\");
   script += script_cd;
 #endif
