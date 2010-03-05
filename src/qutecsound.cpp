@@ -228,7 +228,8 @@ void qutecsound::changePage(int index)
     if (w != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
       static_cast<WidgetLayout *>(w)->setContained(false);  // Must set before removing from container to get background
       w = widgetPanel->takeWidgetLayout();
-      w->setParent(0); //FIXME this is crashing ocasionally at startup, seems not anymore?
+      if (w)
+          w->setParent(0); //FIXME this is crashing ocasionally at startup, seems not anymore?
     }
 //    documentPages[curPage]->setMacWidgetsText
     setCurrentFile(documentPages[curPage]->getFileName());
