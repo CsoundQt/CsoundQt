@@ -190,6 +190,7 @@ macx {
     # QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.5
     # QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk
     # DEFINES += MACOSX_PRE_SNOW # Use this if you are building for OS X < 10.6
+    CONFIG +=x86  # needed if you are on Snow Leopard and have a precompiled Csound
     LIBS += -framework \
         QtXml
     LIBS += -framework \

@@ -568,7 +568,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 86 22 1329 858
+WindowBounds: 234 105 1312 807
 CurrentView: io
 IOViewEdit: On
 Options:
@@ -592,9 +592,9 @@ ioText {807, 675} {82, 28} display 0.000000 0.00100 "normfreq" left "Lucida Gran
 ioText {267, 675} {541, 29} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Usual Frequency of this Key
 ioText {807, 701} {82, 30} display 0.000000 0.00100 "centdiff" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -185.2
 ioText {267, 701} {541, 31} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Cent Difference Real Frequency to Usual Frequency
-ioMeter {23, 184} {104, 23} {0, 59904, 0} "vert34" 0.000000 "scsel1" 1.000000 fill 1 0 mouse
-ioMeter {154, 184} {104, 23} {0, 59904, 0} "vert34" 0.000000 "scsel2" 0.000000 fill 1 0 mouse
-ioMeter {285, 184} {104, 23} {0, 59904, 0} "vert34" 0.000000 "scsel3" 0.000000 fill 1 0 mouse
+ioMeter {23, 184} {104, 23} {0, 59904, 0} "vert34" 0.434783 "scsel1" 0.000000 fill 1 0 mouse
+ioMeter {154, 184} {104, 23} {0, 59904, 0} "vert34" 0.434783 "scsel2" 0.000000 fill 1 0 mouse
+ioMeter {285, 184} {104, 23} {0, 59904, 0} "vert34" 0.434783 "scsel3" 1.000000 fill 1 0 mouse
 ioText {314, 50} {107, 26} editnum 261.625000 0.000001 "tunfreq" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 261.625000
 ioText {206, 44} {108, 28} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Related Pitch
 ioText {227, 65} {72, 25} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder (Hertz)
@@ -604,11 +604,11 @@ ioText {129, 50} {68, 26} editnum 60.000000 1.000000 "reftone" left "Lucida Gran
 ioText {12, 44} {117, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Reference Key
 ioText {29, 64} {87, 25} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder (Midi-Number)
 ioText {15, 120} {122, 43} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Equal TemperedÂ¬(1-10)
-ioMenu {145, 162} {126, 24} 0 303 "Pythagorean,Zarlino 1/4 Comma,Werckmeister III,Kirnberger II,Indian Sruti I,Indian Sruti II,User Defined,User Defined,User Defined,User Defined" various
+ioMenu {145, 162} {126, 24} 3 303 "Pythagorean,Zarlino 1/4 Comma,Werckmeister III,Kirnberger II,Indian Sruti I,Indian Sruti II,User Defined,User Defined,User Defined,User Defined" various
 ioText {148, 120} {122, 43} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder VariousÂ¬(11-20)
-ioMenu {275, 162} {126, 24} 0 303 "Equal Tempered,Ratios,Dur I Mode,Dur II Mode,Moll I (Delta) Mode,Moll II (Pierce) Mode,Gamma Mode,Harmonic Mode,Lambda Mode,User Defined" bohlen-pierce
+ioMenu {275, 162} {126, 24} 5 303 "Equal Tempered,Ratios,Dur I Mode,Dur II Mode,Moll I (Delta) Mode,Moll II (Pierce) Mode,Gamma Mode,Harmonic Mode,Lambda Mode,User Defined" bohlen-pierce
 ioText {278, 120} {122, 43} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Bohlen-PierceÂ¬(21-30)
-ioText {273, 487} {639, 103} display 0.000000 0.00100 "info" center "Lucida Grande" 12 {0, 0, 0} {60672, 43264, 27392} background noborder 7 TwelfsttoneÂ¬72 steps per octave with a ratio of 72th root of 2 = 1.009673...
+ioText {273, 487} {639, 103} display 0.000000 0.00100 "info" center "Lucida Grande" 12 {0, 0, 0} {60672, 43264, 27392} background noborder 26 Bohlen-Pierce Moll II Mode (Pierce):Â¬9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 25/9
 ioButton {471, 55} {91, 27} value 1.000000 "_Play" "START" "/" i1 0 10
 ioButton {585, 55} {91, 27} value 1.000000 "_Stop" "STOP" "/" i1 0 10
 ioText {268, 458} {652, 275} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground border OUTPUT
@@ -618,7 +618,7 @@ ioMeter {539, 745} {336, 22} {0, 59904, 0} "out1_post" 0.363636 "outL" 0.000000 
 ioMeter {873, 745} {27, 22} {50176, 3584, 3072} "outLover" 0.000000 "outLover" 0.000000 fill 1 0 mouse
 ioMeter {539, 771} {336, 22} {0, 59904, 0} "out2_post" 0.526316 "outR" 0.000000 fill 1 0 mouse
 ioMeter {873, 771} {27, 22} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
-ioText {404, 740} {98, 27} display 0.444000 0.00100 "vol" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.4440
+ioText {404, 740} {98, 27} display 0.000000 0.00100 "vol" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.4440
 ioText {926, 19} {374, 773} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground border Scale Pool
 ioText {452, 17} {449, 38} label 0.000000 0.00100 "" center "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground noborder PLAYING SCALES WITH A MIDI KEYBOARD
 ioText {459, 84} {440, 23} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder This CSD was designed to let you play virtually any scale with a standard MIDI keyboard. 
@@ -735,7 +735,7 @@ ioText {40, 723} {175, 30} label 0.000000 0.00100 "" center "Lucida Grande" 8 {0
 ioText {431, 400} {497, 51} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder NOTE: When you select a BP mode, it consists of 9 pitches (a unique subset of the 13 BP chromatic tones) and it is played on a MIDI keyboard chromatically starting from the REFERENCE KEY.  The 10th pitch is the "tritave" - a pure perfect 12th (an octave plus 5th) or a 3:1 frequency ratio.
 </MacGUI>
 
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" name="" x="360" y="248" width="596" height="322"> 
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="596" height="322"> 
  
  
  
