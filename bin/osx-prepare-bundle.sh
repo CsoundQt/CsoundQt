@@ -131,6 +131,39 @@ otool -L QuteCsound.app/Contents/libpng12.dylib
 otool -L QuteCsound.app/Contents/libfltk_images.dylib
 otool -L QuteCsound.app/Contents/libfluidsynth.dylib
 
+# Process plugin opcodes dylibs
+
+cd QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Opcodes/
+
+for f in *
+do
+  echo "---------------- Processing $f file..."
+  # take action on each file. $f store current file name
+
+install_name_tool -id @executable_path/../Frameworks/CsoundLib.framework/Versions/5.2/Resources/Opcodes/$f $f
+install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib $f
+install_name_tool -change /usr/local/lib/libportaudio.2.dylib @executable_path/../libportaudio.dylib $f
+install_name_tool -change /usr/local/lib/libfltk.1.1.dylib @executable_path/../libfltk.dylib $f
+otool -L $f
+#  cat $f
+done
+
+# Extra changes for plugins with dependencies
+
+install_name_tool -change /usr/local/lib/libfluidsynth.1.dylib @executable_path/../libfluidsynth.dylib libfluidOpcodes.dylib
+
+install_name_tool -change /usr/local/lib/liblo.0.dylib @executable_path/../liblo.dylib libimage.dylib
+install_name_tool -change /usr/local/lib/libpng12.0.dylib @executable_path/../libpng12.dylib libimage.dylib
+
+install_name_tool -change /usr/local/lib/liblo.0.dylib @executable_path/../liblo.dylib libosc.dylib
+install_name_tool -change /usr/local/lib/libpng12.0.dylib @executable_path/../libpng12.dylib libosc.dylib
+
+install_name_tool -change /usr/local/lib/libportmidi.dylib @executable_path/../libportmidi.dylib libpmidi.dylib
+
+cd ../../../../../../../../
+
+# Compress final archive
+
 if [ "$nflag" -ne 1 ]
         then
 tar -czvf QuteCsound-full.tar.gz QuteCsound.app
