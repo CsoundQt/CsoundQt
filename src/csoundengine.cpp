@@ -495,7 +495,7 @@ void CsoundEngine::freeze()
 {
   qDebug() << "CsoundEngine::freeze";
   engineMutex.lock();
-  closing == 1;
+  closing = 1;
   engineMutex.unlock();
 }
 
