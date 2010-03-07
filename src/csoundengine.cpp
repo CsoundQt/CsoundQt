@@ -956,7 +956,7 @@ void CsoundEngine::widgetLayoutDestroyed()
 {
   qDebug() << "CsoundEngine::widgetLayoutDestroyed()";
   engineMutex.lock();
-  closing == 1;
+  closing = 1;
   engineMutex.unlock();
 }
 

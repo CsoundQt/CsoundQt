@@ -238,7 +238,7 @@ void qutecsound::changePage(int index)
     documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
     documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
     documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
-    widgetPanel->setWidgetLayout(documentPages[curPage]->getWidgetLayout());
+    widgetPanel->addWidgetLayout(documentPages[curPage]->getWidgetLayout());
     setWidgetPanelGeometry();
     if (documentPages[curPage]->getFileName().endsWith(".py")) {
       widgetPanel->hide();

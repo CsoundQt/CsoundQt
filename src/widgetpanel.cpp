@@ -65,6 +65,7 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 //    stack->setLayout(l);
     w->show();
     scrollArea->show();
+    qDebug() << "WidgetPanel::addWidgetLayout  " << w << " s=" << scrollArea;
   }
 //  else {
 //    qDebug() << " WidgetPanel::setWidgetLayout  not sb active";
@@ -77,7 +78,6 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 //    this->setFocusProxy(w);
 //    w->show();
 //  }
-  qDebug() << "WidgetPanel::addWidgetLayout " << w << " s=" << scrollArea;
 //  connect(w, SIGNAL(resized()), this, SLOT(widgetChanged()));
 //  widgetChanged();
 //  connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
@@ -134,7 +134,7 @@ void WidgetPanel::setCurrentLayout(WidgetLayout *layoutWidget)
 
 void WidgetPanel::setWidgetScrollBarsActive(bool act)
 {
-//  act = true;
+  act = true;
   qDebug() << "WidgetPanel::setScrollBarsActive" << act;
 //  if (act && !m_sbActive) {
 //    scrollArea = new QScrollArea(this);
