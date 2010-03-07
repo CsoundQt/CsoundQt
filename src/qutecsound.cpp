@@ -2066,6 +2066,7 @@ void qutecsound::createMenus()
   synthFiles.append(":/examples/Synths/Phase_Mod_Synth.csd");
   synthFiles.append(":/examples/Synths/Formant_Synth.csd");
   synthFiles.append(":/examples/Synths/Pipe_Synth.csd");
+  synthFiles.append(":/examples/Synths/Waveform_Mix.csd");
   subMenus << synthFiles;
   subMenuNames << "Synths";
 
@@ -2085,6 +2086,7 @@ void qutecsound::createMenus()
   usefulFiles.append(":/examples/Useful/Audio_Thru_Test.csd");
   usefulFiles.append(":/examples/Useful/MIDI_Tunings.csd");
   usefulFiles.append(":/examples/Useful/MIDI_Recorder.csd");
+  usefulFiles.append(":/examples/Useful/ASCII_Key.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_buffer.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_buffer_2.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_HD.csd");
