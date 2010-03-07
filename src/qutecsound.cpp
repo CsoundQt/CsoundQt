@@ -2047,6 +2047,7 @@ void qutecsound::createMenus()
   widgetFiles.append(":/examples/Widgets/Display_Widget.csd");
   widgetFiles.append(":/examples/Widgets/Slider_Widget.csd");
   widgetFiles.append(":/examples/Widgets/Scrollnumber_Widget.csd");
+  widgetFiles.append(":/examples/Widgets/SpinBox_Widget.csd");
   widgetFiles.append(":/examples/Widgets/Graph_Widget.csd");
   widgetFiles.append(":/examples/Widgets/Button_Widget.csd");
   widgetFiles.append(":/examples/Widgets/Checkbox_Widget.csd");

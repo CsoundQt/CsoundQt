@@ -147,6 +147,7 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
   this->setColumnWidth(5, 50);
 
   m_name = "Events";
+  m_stopScript == false;
   createActions();
   connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
   // a bit of a hack to ensure that manual changes to the sheet are stored in the
@@ -159,8 +160,9 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
   loopTimer.setSingleShot(true);
   connect(&loopTimer, SIGNAL(timeout()), this, SLOT(sendEvents()));
 
-  builtinScripts << ":/python/sort_by_start.py";
-  converterScripts << ":/python/cps2mid.py" << ":/python/mid2cps.py" << ":/python/cps2pch.py" << ":/python/pch2cps.py";
+  builtinScripts << ":/python/sort_by_start.py" << ":/python/produce_score.py";
+  converterScripts << ":/python/cps2mid.py" << ":/python/mid2cps.py" << ":/python/cps2pch.py"
+      << ":/python/pch2cps.py" ;
   testScripts <<  ":/python/test/python_test.py" << ":/python/test/tk_test.py";
 
   noHistoryChange = 0;
@@ -828,9 +830,10 @@ void EventSheet::runScript(QString name)
   QProcess p;
   p.start("python " + name.mid(name.lastIndexOf("/") + 1));
 
-  if (!p.waitForFinished (30000)) {
-    qDebug() << "EventSheet::runScript Script took too long!! Current max is 30 secs.";
+  while (!p.waitForFinished (100) && !m_stopScript) {
+    qApp->processEvents();
   }
+  m_stopScript = false;
   QByteArray sout = p.readAllStandardOutput();
   QByteArray serr = p.readAllStandardError();
   qDebug() << "---------------\n" << serr;
@@ -958,6 +961,7 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
   }
   scriptMenu->addSeparator();
   addDirectoryToMenu(scriptMenu, scriptDir);
+  menu.addAction(stopScriptAct);
   menu.addSeparator();
 //  menu.addAction(insertColumnHereAct);
 //  menu.addAction(insertRowHereAct);
@@ -1309,6 +1313,11 @@ void EventSheet::createActions()
   deleteRowAct->setStatusTip(tr("Delete Rows"));
   deleteRowAct->setIconText(tr("Delete Rows"));
   connect(deleteRowAct, SIGNAL(triggered()), this, SLOT(deleteRows()));
+
+  stopScriptAct = new QAction(/*QIcon(":/a.png"),*/ tr("Stop running script"), this);
+//  stopScriptAct->setStatusTip(tr("Delete Rows"));
+//  stopScriptAct->setIconText(tr("Delete Rows"));
+  connect(stopScriptAct, SIGNAL(triggered()), this, SLOT(stopScript()));
 }
 
 QList<QPair<QString, QString> > EventSheet::parseLine(QString line)
@@ -1468,4 +1477,9 @@ void EventSheet::cellChangedSlot(int row, int column)
     noHistoryChange = 0;
   }
   emit modified();
+}
+
+void EventSheet::stopScript()
+{
+  m_stopScript = true;
 }

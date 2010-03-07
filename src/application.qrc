@@ -58,6 +58,7 @@
       <file>../examples/Widgets/Slider_Widget.csd</file>
       <file>../examples/Widgets/Lineedit_Widget.csd</file>
       <file>../examples/Widgets/Scrollnumber_Widget.csd</file>
+      <file>../examples/Widgets/SpinBox_Widget.csd</file>
       <file>../examples/Widgets/Graph_Widget.csd</file>
       <file>../examples/Widgets/Button_Widget.csd</file>
       <file>../examples/Widgets/Checkbox_Widget.csd</file>
@@ -142,6 +143,7 @@
       <file>python/mid2cps.py</file>
       <file>python/cps2pch.py</file>
       <file>python/pch2cps.py</file>
+      <file>python/produce_score.py</file>
       <file>python/test/tk_test.py</file>
       <file>python/test/python_test.py</file>
 

@@ -701,9 +701,6 @@ int CsoundEngine::runCsound()
   menuBarHandle = GetMenuBar();
 #endif
   eventQueueSize = 0; //Flush events gathered while idle
-  //   outValueQueue.clear();
-  //    inValueQueue.clear();
-  //    outStringQueue.clear();
   ud->audioOutputBuffer.allZero();
 
   QDir::setCurrent(m_options.fileName1);
@@ -811,11 +808,13 @@ int CsoundEngine::runCsound()
   //     PUBLIC int csoundGetSampleFormat(CSOUND *);
   //     PUBLIC int csoundGetSampleSize(CSOUND *);
   unsigned int numWidgets = ud->wl->widgetCount();  // FIXME still needed here?
-  ud->channelNames.resize(numWidgets*2);
-  ud->values.resize(numWidgets*2);
-  ud->stringValues.resize(numWidgets*2);
-  if (ud->threaded) {  // Run threaded
-    // First update values from widgets
+//  ud->channelNames.resize(numWidgets*2);
+//  ud->values.resize(numWidgets*2);
+//  ud->stringValues.resize(numWidgets*2);
+  if (ud->threaded) {
+    // First update values from widgets  not necessary if not threaded as this is done in csThread,
+    //    but it is necessary to call it here to have the values for the first ksmps processing, since
+    //    csThread is called by the perf thread after processKsmps
     if (ud->enableWidgets) {
       ud->wl->getValues(&ud->channelNames,
                         &ud->values,

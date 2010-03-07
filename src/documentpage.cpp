@@ -73,6 +73,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
           m_csEngine, SLOT(keyPressForCsound(QString)));
   connect(m_console, SIGNAL(keyReleased(QString)),
           m_csEngine, SLOT(keyReleaseForCsound(QString)));
+  // For logging of Csound output to file
   connect(m_console, SIGNAL(logMessage(QString)),
           static_cast<qutecsound *>(parent), SLOT(logMessage(QString)));
 
@@ -103,6 +104,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   m_csEngine->registerConsole(m_console);
 
   useXml = false; // use Mac widgets by default
+  m_pythonRunning = false;
 }
 
 DocumentPage::~DocumentPage()
@@ -568,7 +570,7 @@ bool DocumentPage::isModified()
 bool DocumentPage::isRunning()
 {
   // TODO what to do with pause?
-  return m_csEngine->isRunning();
+  return m_csEngine->isRunning() || m_pythonRunning;
 }
 
 bool DocumentPage::isRecording()
@@ -910,9 +912,15 @@ void DocumentPage::pause()
 
 void DocumentPage::stop()
 {
-  if (m_csEngine->isRunning())
+  qDebug() << "DocumentPage::stop()";
+  if (m_csEngine->isRunning()) {
     m_csEngine->stop();
     m_widgetLayout->engineStopped();
+  }
+  if (m_pythonRunning == true) {
+    m_pythonRunning = false;
+  }
+
 }
 
 void DocumentPage::perfEnded()
@@ -964,8 +972,8 @@ int DocumentPage::runPython()
   QProcess p;
   QDir::setCurrent(fileName.mid(fileName.lastIndexOf("/") + 1));
   p.start("python \"" + fileName + "\"");
-
-  while (!p.waitForFinished (1000)) {
+  m_pythonRunning = true;
+  while (!p.waitForFinished (100) && m_pythonRunning) {
     // TODO make stop button stop python too
     QByteArray sout = p.readAllStandardOutput();
     QByteArray serr = p.readAllStandardError();

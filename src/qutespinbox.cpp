@@ -201,10 +201,7 @@ void QuteSpinBox::setText(QString text)
 //   text.append("</font>");
   //TODO USE CORRECT CHARACTER for line break
 //   text = text.replace("�", "\n");
-  bool ok;
-  double value = text.toDouble(&ok);
-  if (ok)
-    static_cast<QDoubleSpinBox*>(m_widget)->setValue(value);
+
 }
 
 void QuteSpinBox::setResolution(double resolution)

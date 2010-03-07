@@ -197,6 +197,7 @@ class DocumentPage : public QObject
 //    QString macGUI;
     QDomElement widgetsXml;
     bool useXml;
+    bool m_pythonRunning;
 
     WidgetLayout * m_widgetLayout;
 //    int m_x,m_y,m_width, m_height;  // Position of the widget panel

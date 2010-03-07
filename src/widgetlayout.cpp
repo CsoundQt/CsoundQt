@@ -1029,7 +1029,7 @@ void WidgetLayout::propertiesDialog()
   QGridLayout *layout = new QGridLayout(dialog);
   bgCheckBox = new QCheckBox(dialog);
   bgCheckBox->setText("Enable Background");
-  bgCheckBox->setChecked(parentWidget()->autoFillBackground());
+  bgCheckBox->setChecked(this->autoFillBackground());
   layout->addWidget(bgCheckBox, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
   QLabel *label = new QLabel(dialog);
 //   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
@@ -1658,8 +1658,15 @@ int WidgetLayout::createSpinBox(int x, int y, int width, int height, QString wid
     labelText += lastParts[i] + " ";
     i++;
   }
-  labelText.chop(1);
-  widget->setText(labelText);
+  labelText.chop(1); 
+  bool ok;
+  double value = labelText.toDouble(&ok);
+  if (ok) {
+    widget->setValue(value);
+  }
+  else {
+    widget->setText(labelText);
+  }
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
@@ -1986,14 +1993,13 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
 //  this->setAutoFillBackground(false);
   layoutMutex.lock();
   w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget
+  w->setAutoFillBackground(bg);
   if (bg) {
     w->setPalette(QPalette(bgColor));
     w->setBackgroundRole(QPalette::Window);
-    w->setAutoFillBackground(true);
   }
   else { // =="nobackground"
     w->setPalette(QPalette(bgColor));
-    w->setAutoFillBackground(false);
   }
   layoutMutex.unlock();
 }
@@ -2240,7 +2246,7 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
     }
     else {
       newValues.insert(channelValue.first, channelValue.second);
-//      qDebug() << "WidgetLayout::newValue " << channelValue.first << " " << channelValue.second;
+      qDebug() << "WidgetLayout::newValue " << channelValue.first << " " << channelValue.second;
     }
     valueMutex.unlock();
   }

@@ -88,6 +88,7 @@ class EventSheet : public QTableWidget
   private:
     void createActions();
     QList<QPair<QString, QString> > parseLine(QString line);
+    bool m_stopScript;  // Order stopping python script
 
     // Operations
     void add(double value);
@@ -125,6 +126,7 @@ class EventSheet : public QTableWidget
 //    QAction *mirrorAct;
     QAction *rotateAct;
     QAction *fillAct;
+    QAction *stopScriptAct;
 
     QAction *insertColumnHereAct;
     QAction *insertRowHereAct;
@@ -158,6 +160,7 @@ class EventSheet : public QTableWidget
     void selectionChanged();
     void cellDoubleClickedSlot(int row, int column);
     void cellChangedSlot(int row, int column);
+    void stopScript();
 
     void runScript();
 

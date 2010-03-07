@@ -8,7 +8,7 @@ new_data = []
 
 for c in cells:
     if type(c) != str:
-        new_val = 440 * pow(2, (c - 69)/12)
+        new_val = 440.0 * pow(2, (c - 69)/12.0)
         new_data.append(new_val)
     else:
         new_data.append(c)
