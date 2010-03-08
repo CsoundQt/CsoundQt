@@ -115,11 +115,11 @@ DocumentPage::~DocumentPage()
   disconnect(m_view, 0,0,0);
   disconnect(m_csEngine, 0,0,0);
   disconnect(m_widgetLayout, 0,0,0);
+  m_csEngine->stop();
   m_csEngine->freeze();
   m_view->deleteLater();   // Must be destroyed before the widgetLayout
-  m_csEngine->stop();
+  m_widgetLayout->deleteLater();  //FIXME Still crashing ocassionally. This is leaking...
   m_csEngine->deleteLater();  // Must be destroyed before widgetLayout
-  m_widgetLayout->deleteLater();  //FIXME Still crashingocassionally. This is leaking...
 //  m_widgetLayout->setParent(0);  //To make sure the widget panel from the main application doesn't attempt to delete it as its child
 //  deleteAllLiveEvents(); // FIXME This is also crashing...
 }

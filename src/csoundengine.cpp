@@ -76,12 +76,8 @@ CsoundEngine::CsoundEngine()
 CsoundEngine::~CsoundEngine()
 {
 //  qDebug() << "CsoundEngine::~CsoundEngine() ";
-  engineMutex.lock();
-  if (closing != -1) {
-    closing = 1;
-  }
   stop();
-  engineMutex.unlock();
+  freeze();
   disconnect(this, 0,0,0);
   while (closing == 1) {
     qApp->processEvents();
@@ -494,11 +490,11 @@ void CsoundEngine::setInitialDir(QString initialDir)
 void CsoundEngine::freeze()
 {
   qDebug() << "CsoundEngine::freeze";
+  engineMutex.lock();
   if (closing != -1) {
-    engineMutex.lock();
     closing = 1;
-    engineMutex.unlock();
   }
+  engineMutex.unlock();
 }
 
 void CsoundEngine::registerConsole(ConsoleWidget *c)
