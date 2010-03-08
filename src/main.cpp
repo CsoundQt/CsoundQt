@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     if (!arg.startsWith("-p")) // avoid OS X arguments
       fileNames.append(arg);
   }
-  Q_INIT_RESOURCE(application);
+//  Q_INIT_RESOURCE(application);
   QApplication app(argc, argv);
 
   FileOpenEater *filterObj=new FileOpenEater();

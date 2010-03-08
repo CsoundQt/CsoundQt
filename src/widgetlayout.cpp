@@ -61,7 +61,6 @@
 
 WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 {
-//       m_panel = (WidgetPanel *) parent;
   selectionFrame = new QRubberBand(QRubberBand::Rectangle, this);
   selectionFrame->hide();
 
@@ -107,15 +106,8 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
 
   duplicateAct = new QAction(tr("Duplicate Selected"), this);
-//  duplicateAct->setShortcut(tr("Ctrl+D"));
-//  duplicateAct->setShortcutContext (Qt::ApplicationShortcut); // Needed because some key events are not propagation properly
   connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
-//  m_duplicateShortcut = QKeySequence("Ctrl+D");
   deleteAct = new QAction(tr("Delete Selected"), this);
-//  deleteAct->setShortcut(tr("Ctrl+M"));
-//   QList<QKeySequence> deleteShortcuts;
-//   deleteShortcuts << QKeySequence::Delete << Qt::Key_Backspace << Qt::Key_Delete;
-//   deleteAct->setShortcuts(deleteShortcuts);
   connect(deleteAct, SIGNAL(triggered()), this, SLOT(deleteSelected()));
   clearAct = new QAction(tr("Clear all widgets"), this);
   connect(clearAct, SIGNAL(triggered()), this, SLOT(clearWidgets()));
@@ -148,28 +140,12 @@ WidgetLayout::~WidgetLayout()
   disconnect(this, 0,0,0);
   layoutMutex.lock();
   closing = 1;
+  layoutMutex.unlock();
   while (closing == 1) {
     qApp->processEvents();
     usleep(10000);
   }
-  layoutMutex.unlock();
 }
-
-//void WidgetLayout::setPanel(WidgetPanel* panel)
-//{
-//  m_panel = panel;
-//}
-//
-//WidgetPanel * WidgetLayout::panel()
-//{
-//  return m_panel;
-//}
-//
-//void WidgetLayout::setUndoHistory(QVector<QString> *history, int *index)
-//{
-//  m_history = history;
-//  m_historyIndex = index;
-//}
 
 unsigned int WidgetLayout::widgetCount()
 {
@@ -206,18 +182,11 @@ QString WidgetLayout::getWidgetsText()
   text = "<bsbPanel>\n";
   QString bg, red,green,blue;
   layoutMutex.lock();
-  if (m_contained) {
-    bg = this->parentWidget()->autoFillBackground()? QString("background"):QString("nobackground");
-    red = QString::number((int) (this->parentWidget()->palette().button().color().redF()*256.));
-    green =  QString::number((int) (this->parentWidget()->palette().button().color().greenF()*256.));
-    blue =  QString::number((int) (this->parentWidget()->palette().button().color().blueF()*256.));
-  }
-  else {
-    bg = this->autoFillBackground()? QString("background"):QString("nobackground");
-    red = QString::number((int) (this->palette().button().color().redF()*256.));
-    green =  QString::number((int) (this->palette().button().color().greenF()*256.));
-    blue =  QString::number((int) (this->palette().button().color().blueF()*256.));
-  }
+  QColor bgColor = this->property("bgcolor").value<QColor>();
+  bg = this->property("bg").toBool()? QString("background"):QString("nobackground");
+  red = QString::number(bgColor.red());
+  green =  QString::number(bgColor.green());
+  blue =  QString::number(bgColor.blue());
   text += "<bgcolor mode=\"" + bg + "\">\n";
   text +=  "<r>" + red + "</r>\n" +  "<g>"  + green + "</g>\n" + "<b>" + blue + "</b>\n";
   text += "</bgcolor>\n";
@@ -247,14 +216,24 @@ QString WidgetLayout::getPresetsText()
     }
     text += "</bsbPreset>";
   }
-
   text += "</bsbPresets>\n";
   return text;
 }
 
-QStringList WidgetLayout::getSelectedWidgetsText()
+QString WidgetLayout::getSelectedWidgetsText()
 {
-  qDebug() << "WidgetLayout::getSelectedWidgetsText not implemented and will crash!";
+  qDebug() << "WidgetLayout::getSelectedWidgetsText not implemented!";
+  QString l;
+  valueMutex.lock();
+  for (int i = 0; i < editWidgets.size(); i++) {
+    if (editWidgets[i]->isSelected()) {
+      for (int i = 0; i < m_widgets.size(); i++) {
+       l += m_widgets[i]->getWidgetXmlText() + "\n";
+      }
+    }
+  }
+  valueMutex.unlock();
+  return l;
 }
 
 QString WidgetLayout::getMacWidgetsText()
@@ -265,18 +244,11 @@ QString WidgetLayout::getMacWidgetsText()
   text = "<MacGUI>\n";
   QString bg, color;
   layoutMutex.lock();
-  if (m_contained) {
-    bg = this->parentWidget()->autoFillBackground()? QString("background"):QString("nobackground");
-    color = QString::number((int) (this->parentWidget()->palette().button().color().redF()*65535.)) + ", ";
-    color +=  QString::number((int) (this->parentWidget()->palette().button().color().greenF()*65535.)) + ", ";
-    color +=  QString::number((int) (this->parentWidget()->palette().button().color().blueF()*65535.));
-  }
-  else {  // Will usually be contained when this is run, but have this just in case
-    bg = this->autoFillBackground()? QString("background"):QString("nobackground");
-    color = QString::number((int) (this->palette().button().color().redF()*65535.)) + ", ";
-    color +=  QString::number((int) (this->palette().button().color().greenF()*65535.)) + ", ";
-    color +=  QString::number((int) (this->palette().button().color().blueF()*65535.));
-  }
+  QColor bgColor = this->property("bgcolor").value<QColor>();
+  bg =  this->property("bg").toBool()? QString("background"):QString("nobackground");
+  color = QString::number((int) (bgColor.redF()*65535.)) + ", ";
+  color +=  QString::number((int) (bgColor.greenF()*65535.)) + ", ";
+  color +=  QString::number((int) (bgColor.blueF()*65535.));
   layoutMutex.unlock();
   text += "ioView " + bg + " {" + color +"}\n";
 
@@ -331,11 +303,6 @@ QRect WidgetLayout::getOuterGeometry()
   return QRect(m_x, m_y, m_w, m_h);
 }
 
-//void WidgetLayout::setDuplicateShortcut(QKeySequence shortcut)
-//{
-//  m_duplicateShortcut = shortcut;
-//}
-
 void WidgetLayout::setValue(QString channelName, QString value)
 {
   for (int i = 0; i < m_widgets.size(); i++) {
@@ -369,7 +336,7 @@ void WidgetLayout::getValues(QVector<QString> *channelNames,
                             QVector<double> *values,
                             QVector<QString> *stringValues)
 {
-  // This function is called from the Csound thread function, so it must not contain realtime compatible functions
+  // This function is called from the Csound thread function, so it must contain realtime compatible functions
   if (!this->isEnabled()) {
     return;
   }
@@ -439,7 +406,7 @@ int WidgetLayout::getMouseBut2()
 
 int WidgetLayout::newWidget(QString widgetLine, bool offset)
 {
-  //FIXME is it still necessary to pass an offeset?
+  //FIXME is it still necessary to pass an offset?
   // This function returns -1 on error, 0 when no widget was created and 1 if widget was created
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"'); //Remove this line whe not needed
@@ -562,16 +529,13 @@ void WidgetLayout::setContained(bool contained)
     return;
   }
   qDebug() << "WidgetLayout::setContained " << contained;
-//  layoutMutex.lock();
   m_contained = contained;
+  bool bg = this->property("bg").toBool();
+  QColor bgColor = this->property("bgcolor").value<QColor>();
+  setBackground(bg, bgColor);
   if (m_contained) {
-    setBackground(this->autoFillBackground(), this->palette().button().color());
     this->setAutoFillBackground(false);
   }
-  else {
-    setBackground(parentWidget()->autoFillBackground(), parentWidget()->palette().button().color());
-  }
-//  layoutMutex.unlock();
 }
 
 void WidgetLayout::appendCurve(WINDAT *windat)
@@ -693,7 +657,6 @@ void WidgetLayout::clearGraphs()
 
 void WidgetLayout::refreshConsoles()
 {
-  // Necessary
   for (int i=0; i < consoleWidgets.size(); i++) {
     consoleWidgets[i]->scrollToEnd();
   }
@@ -721,12 +684,6 @@ bool WidgetLayout::isModified()
   return m_modified;
 }
 
-//void WidgetLayout::setEditAct(QAction *_editAct)
-//{
-//  editAct = _editAct;
-//  connect(editAct, SIGNAL(triggered(bool)), this, SLOT(setEditMode(bool)));
-//}
-
 void WidgetLayout::createContextMenu(QContextMenuEvent *event)
 {
   QMenu menu;
@@ -745,12 +702,6 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
   menu.addAction(createGraphAct);
   menu.addAction(createScopeAct);
   menu.addSeparator();
-  // FIXME put actions back in menu
-//  menu.addAction(editAct);
-//  menu.addSeparator();
-//  menu.addAction(cutAct);
-//  menu.addAction(copyAct);
-//  menu.addAction(pasteAct);
   menu.addAction(selectAllAct);
   menu.addAction(duplicateAct);
   menu.addAction(deleteAct);
@@ -825,7 +776,6 @@ void WidgetLayout::mouseMoveEventParent(QMouseEvent *event)
 void WidgetLayout::adjustLayoutSize()
 {
   int width = 30, height = 30;
-//  int woff = 20, hoff = 45; // hack to avoid scrollbars...
   for (int i = 0; i< m_widgets.size(); i++) {
     if (m_widgets[i]->x() + m_widgets[i]->width() > width) {
       width = m_widgets[i]->x() + m_widgets[i]->width();
@@ -834,12 +784,6 @@ void WidgetLayout::adjustLayoutSize()
       height = m_widgets[i]->y() + m_widgets[i]->height();
     }
   }
-//  if (this->width() - woff > width) {
-//    width = this->width() - woff;
-//  }
-//  if  (this->height() - hoff > height) {
-//    height = this->height() - hoff;
-//  }
   this->resize(width, height);
   emit resized();
 }
@@ -1034,18 +978,20 @@ void WidgetLayout::propertiesDialog()
   }
   layout->addWidget(bgCheckBox, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
   QLabel *label = new QLabel(dialog);
-//   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   label->setText("Color");
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
   bgButton = new QPushButton(dialog);
   QPixmap pixmap = QPixmap(64,64);
+  QColor color;
   if (m_contained) {
-    pixmap.fill(parentWidget()->palette().button().color());
+    color = parentWidget()->palette().button().color();
   }
   else {
-    pixmap.fill(this->palette().button().color());
+    color = this->palette().button().color();
   }
+  bgButton->setProperty("color",QVariant(color));
+  pixmap.fill(color);
   bgButton->setIcon(pixmap);
   layout->addWidget(bgButton, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);
   QPushButton *applyButton = new QPushButton(tr("Apply"));
@@ -1064,7 +1010,7 @@ void WidgetLayout::propertiesDialog()
 
 void WidgetLayout::applyProperties()
 {
-  QColor color = bgButton->palette().button().color();
+  QColor color = bgButton->property("color").value<QColor>();
   setBackground(bgCheckBox->isChecked(), color);
   widgetChanged();
   mouseBut2 = 0;  // Button un clicked is not propagated after opening the edit dialog. Do it artificially here
@@ -1080,7 +1026,7 @@ void WidgetLayout::selectBgColor()
     color = QColorDialog::getColor(this->palette().button().color(), this);
   }
   if (color.isValid()) {
-    bgButton->setPalette(QPalette(color));
+    bgButton->setProperty("color",QVariant(color));
     QPixmap pixmap(64,64);
     pixmap.fill(color);
     bgButton->setIcon(pixmap);
@@ -1286,7 +1232,7 @@ void WidgetLayout::distributeVertical()
 void WidgetLayout::keyPressEvent(QKeyEvent *event)
 {
   qDebug() << "WidgetLayout::keyPressEvent --- " << event->key() << "___" << event->modifiers() << " control = " <<  Qt::ControlModifier;
-//  if (!event->isAutoRepeat() or m_repeatKeys) {
+  if (!event->isAutoRepeat() or m_repeatKeys) {
     QString key = event->text();
     if (event->key() == Qt::Key_D && (event->modifiers() & Qt::ControlModifier )) {
       this->duplicate();
@@ -1323,7 +1269,7 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
       emit keyPressed(key);
       QWidget::keyPressEvent(event); // Propagate event if not used
     }
-//  }
+  }
 }
 
 void WidgetLayout::keyReleaseEvent(QKeyEvent *event)
@@ -1337,11 +1283,6 @@ void WidgetLayout::keyReleaseEvent(QKeyEvent *event)
   }
   QWidget::keyReleaseEvent(event); // Propagate event
 }
-
-//void WidgetLayout::resizeEvent(QResizeEvent * event)
-//{
-//  qDebug() << "WidgetLayout::resizeEvent " << event->size() << event->oldSize();
-//}
 
 void WidgetLayout::widgetChanged(QuteWidget* widget)
 {
@@ -1360,11 +1301,6 @@ void WidgetLayout::widgetChanged(QuteWidget* widget)
   }
   adjustLayoutSize();
 }
-
-// void WidgetPanel::updateWidgetText()
-// {
-//   emit widgetsChanged(widgetsText());
-// }
 
 void WidgetLayout::mousePressEvent(QMouseEvent *event)
 {
@@ -1420,11 +1356,10 @@ void WidgetLayout::mouseReleaseEvent(QMouseEvent *event)
 //  qDebug() << "WidgetPanel::mouseMoveEvent " << event->x();
   if (event->button() == Qt::LeftButton)
     mouseBut1 = 0;
-  else if (event->button() == Qt::RightButton)
+  else if (event->button() == Qt::RightButton) {
+    emit deselectAll();
     mouseBut2 = 0;
-  //       if (event->button() & Qt::LeftButton) {
-  //         emit deselectAll();
-  //       }
+  }
   markHistory();
   QWidget::mouseReleaseEvent(event);
 }
@@ -2003,14 +1938,14 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
 {
   qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor;
   QWidget *w;
-//  this->setPalette(QPalette());
-//  this->setAutoFillBackground(false);
   layoutMutex.lock();
   w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget
-  w->setAutoFillBackground(bg);
   w->setPalette(QPalette(bgColor));
   w->setBackgroundRole(QPalette::Window);
+  w->setAutoFillBackground(bg);
   layoutMutex.unlock();
+  this->setProperty("bg", QVariant(bg));
+  this->setProperty("bgcolor", QVariant(bgColor));
 }
 
 void WidgetLayout::setModified(bool mod)
@@ -2160,26 +2095,6 @@ void WidgetLayout::setEditMode(bool active)
   }
   m_editMode = active;
 }
-
-//void WidgetLayout::toggleEditMode()
-//{
-//  m_editMode = !m_editMode;
-//  if (m_editMode) {
-//    foreach (FrameWidget *widget, editWidgets) {
-//      delete widget;
-//    }
-//    editWidgets.clear();
-//    foreach (QuteWidget * widget, m_widgets) {
-//      createEditFrame(widget);
-//    }
-//  }
-//  else {
-//    foreach (QFrame* frame, editWidgets) {
-//      delete(frame);
-//    }
-//    editWidgets.clear();
-//  }
-//}
 
 void WidgetLayout::createEditFrame(QuteWidget* widget)
 {

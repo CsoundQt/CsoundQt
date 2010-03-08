@@ -44,14 +44,11 @@ class WidgetLayout : public QWidget
   public:
     WidgetLayout(QWidget* parent);
     ~WidgetLayout();
-//    void setPanel(WidgetPanel* panel);
-//    WidgetPanel * panel();
-//    void setUndoHistory(QVector<QString> *history, int *index);
     unsigned int widgetCount();
     void loadWidgets(QString macWidgets);
     QString getWidgetsText(); // With full tags
     QString getPresetsText();
-    QStringList getSelectedWidgetsText();
+    QString getSelectedWidgetsText();
     QString getMacWidgetsText(); // With full tags
     QStringList getSelectedMacWidgetsText();
 
@@ -63,7 +60,6 @@ class WidgetLayout : public QWidget
     void setKeyRepeatMode(bool repeat);
     void setOuterGeometry(int newx, int newy, int neww, int newh); // Will only set if component >= 0
     QRect getOuterGeometry();
-//    void setDuplicateShortcut(QKeySequence shortcut);
 
     void getValues(QVector<QString> *channelNames,
                    QVector<double> *values,
@@ -77,7 +73,7 @@ class WidgetLayout : public QWidget
     int getMouseBut2();
 
     int newWidget(QString widgetLine, bool offset = false);
-    void appendMessage(QString message);  // TODO is this still necessary if all consoles are shared?
+    void appendMessage(QString message);
     void flush();
     void engineStopped(); // To let the widgets know engine has stopped (to free unused curve buffers)
     void showWidgetTooltips(bool show);
@@ -100,16 +96,13 @@ class WidgetLayout : public QWidget
 
     void createContextMenu(QContextMenuEvent *event);  // When done outside container widget
 
-    // Indispensable functions. Must be set before using this object
-//    void setEditAct(QAction *editAct);
-
     // Edition Actions
     QAction *clearAct;
     QAction *selectAllAct;
     QAction *duplicateAct;
     QAction *deleteAct;
     QAction *propertiesAct;
-//    QAction *editAct;  // This is set from the parent
+    
     // Alignment Actions
     QAction *alignLeftAct;
     QAction *alignRightAct;
@@ -141,7 +134,6 @@ class WidgetLayout : public QWidget
     void selectBgColor();
     void setEditEnabled(bool enabled);
     void setEditMode(bool active);
-//    void toggleEditMode();
     void deselectAll();
     void selectAll();
     void widgetMoved(QPair<int, int>);
@@ -173,7 +165,6 @@ class WidgetLayout : public QWidget
     void createEditFrame(QuteWidget* widget);
 
     void widgetChanged(QuteWidget* widget = 0);
-//     void updateWidgetText();
     void deleteWidget(QuteWidget *widget);
 
     void newValue(QPair<QString, double> channelValue);
@@ -188,10 +179,8 @@ class WidgetLayout : public QWidget
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);
-//    virtual void resizeEvent(QResizeEvent * event);
     QRubberBand *selectionFrame;
     int startx, starty;
-//    WidgetPanel *m_panel;
 
   private:
     QHash<QString, double> newValues;
@@ -238,7 +227,6 @@ class WidgetLayout : public QWidget
     bool m_enableEdit; // Enable editing and properties dialog
     QString m_clipboard;
     bool m_contained; // Whether contained in another widget (e.g. scrollbar in widget panel or widget panel)
-//    QKeySequence m_duplicateShortcut;
 
     // Contained Widgets
     QVector<QuteWidget *> m_widgets;
@@ -285,7 +273,6 @@ class WidgetLayout : public QWidget
     void updateData();
 
   signals:
-//    void deselectAll();
     void selection(QRect area);
     void keyPressed(QString key);
     void keyReleased(QString key);

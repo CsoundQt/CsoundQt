@@ -624,7 +624,7 @@ void qutecsound::deleteCurrentTab()
   }
   if (curPage < 0)
     curPage = 0; // deleting the document page decreases curPage, so must check
-//  documentTabs->removeTab(curPage);  // Tab is already removed when destroying the content
+  documentTabs->removeTab(curPage);  // Tab is already removed when destroying the content (OS X only?)
 }
 
 void qutecsound::openLogFile()
