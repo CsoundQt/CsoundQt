@@ -201,7 +201,7 @@ class CsoundEngine : public QObject
   private slots:
     void recordBuffer();
     void dispatchQueues();
-    void widgetLayoutDestroyed();
+//    void widgetLayoutDestroyed();
 
   signals:
     void errorLines(QList<int>);

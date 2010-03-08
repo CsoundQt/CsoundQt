@@ -121,10 +121,10 @@ QString OpEntryParser::getSyntax(QString opcodeName)
     i++;
   }
   if (i < size) {
-    QString syntax = opcodeList[i].outArgs;
+    QString syntax = opcodeList[i].outArgs.simplified();
     if (!opcodeList[i].outArgs.isEmpty())
       syntax += " ";
-    syntax += opcodeList[i].opcodeName + " " + opcodeList[i].inArgs;
+    syntax += opcodeList[i].opcodeName.simplified() + " " + opcodeList[i].inArgs.simplified();
     return syntax;
   }
   else

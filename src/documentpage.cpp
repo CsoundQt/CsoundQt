@@ -898,7 +898,7 @@ int DocumentPage::play(CsoundOptions *options)
   }
   if (!m_csEngine->isRunning()) {
     m_view->unmarkErrorLines();  // Clear error lines when running
-    m_console->reset(); // Clear consoles
+//    m_console->reset(); // Clear consoles
     m_widgetLayout->flush();   // Flush accumulated values
     m_widgetLayout->clearGraphs();
   }

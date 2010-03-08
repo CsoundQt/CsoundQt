@@ -76,12 +76,12 @@ CsoundEngine::CsoundEngine()
 CsoundEngine::~CsoundEngine()
 {
 //  qDebug() << "CsoundEngine::~CsoundEngine() ";
-  while (closing == -1) {  // Closing is -1 while the queue thread is processing. this is a simple lock
-    qApp->processEvents();
-    usleep(10000);
+  engineMutex.lock();
+  if (closing != -1) {
+    closing = 1;
   }
-  closing = 1;
   stop();
+  engineMutex.unlock();
   disconnect(this, 0,0,0);
   while (closing == 1) {
     qApp->processEvents();
@@ -467,7 +467,7 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
 void CsoundEngine::setWidgetLayout(WidgetLayout *wl)
 {
   ud->wl = wl;
-  connect(wl, SIGNAL(destroyed()), this, SLOT(widgetLayoutDestroyed()));
+//  connect(wl, SIGNAL(destroyed()), this, SLOT(widgetLayoutDestroyed()));
   dispatchQueues(); // starts queue dispatcher timer
 }
 
@@ -494,9 +494,11 @@ void CsoundEngine::setInitialDir(QString initialDir)
 void CsoundEngine::freeze()
 {
   qDebug() << "CsoundEngine::freeze";
-  engineMutex.lock();
-  closing = 1;
-  engineMutex.unlock();
+  if (closing != -1) {
+    engineMutex.lock();
+    closing = 1;
+    engineMutex.unlock();
+  }
 }
 
 void CsoundEngine::registerConsole(ConsoleWidget *c)
@@ -705,6 +707,10 @@ int CsoundEngine::runCsound()
 
   QDir::setCurrent(m_options.fileName1);
   ud->threaded = m_threaded;
+  for (int i = 0; i < consoles.size(); i++) {
+    consoles[0]->reset();
+  }
+
 #ifdef QUTECSOUND_DESTROY_CSOUND
   ud->csound=csoundCreate(0);
 #endif
@@ -887,18 +893,19 @@ void CsoundEngine::stopCsound()
 #ifdef QUTECSOUND_DESTROY_CSOUND
   csoundDestroy(ud->csound);
 #endif
-//  flushMessageQueue();
+  flushMessageQueue();
 }
 
 void CsoundEngine::dispatchQueues()
 {
 //   qDebug("qutecsound::dispatchQueues()");
-  if (!engineMutex.tryLock(30)) {
+  if (!engineMutex.tryLock(2)) {
     QTimer::singleShot(refreshTime, this, SLOT(dispatchQueues()));
     return;
   }
   if (closing == 1) {
-    closing = 0;
+    closing = -1;
+    engineMutex.unlock();
     return;
   }
   int counter = 0;
@@ -951,13 +958,11 @@ void CsoundEngine::dispatchQueues()
   QTimer::singleShot(refreshTime, this, SLOT(dispatchQueues()));
 }
 
-void CsoundEngine::widgetLayoutDestroyed()
-{
-  qDebug() << "CsoundEngine::widgetLayoutDestroyed()";
-  engineMutex.lock();
-  closing = 1;
-  engineMutex.unlock();
-}
+//void CsoundEngine::widgetLayoutDestroyed()
+//{
+//  qDebug() << "CsoundEngine::widgetLayoutDestroyed()";
+//  freeze();
+//}
 
 void CsoundEngine::queueMessage(QString message)
 {

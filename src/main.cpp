@@ -60,4 +60,3 @@ int main(int argc, char *argv[])
   filterObj->setMainWindow(mw);
   return app.exec();
 }
-

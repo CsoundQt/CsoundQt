@@ -324,7 +324,7 @@ void qutecsound::closeEvent(QCloseEvent *event)
   if (logFile.isOpen()) {
     logFile.close();
   }
-  helpPanel->deleteLater(); // FIXME Is this still crashing with delete later
+//  helpPanel->deleteLater(); // FIXME this is still crashing with delete later
   utilitiesDialog->deleteLater(); // FIXME Is this still crashing with delete later
   closeTabButton->deleteLater();
   widgetPanel->deleteLater();
@@ -650,7 +650,7 @@ void qutecsound::openLogFile()
     logFile.write(text.toAscii());
   }
   else {
-    qDebug() << "qutecsound::openLogFile() Error. Could not open log file! NO logging.";
+    qDebug() << "qutecsound::openLogFile() Error. Could not open log file! NO logging. " << logFile.fileName();
   }
 }
 
@@ -1160,31 +1160,29 @@ void qutecsound::openExternalPlayer()
 void qutecsound::setHelpEntry()
 {
   QString text = documentPages[curPage]->wordUnderCursor();
-  if (m_options->csdocdir != "") {
+  QString dir = m_options->csdocdir;
+  // For self contained app on OS X
+#ifdef Q_OS_MAC
+  if (dir == "") {
+#ifdef USE_DOUBLES
+    dir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib64.framework/Versions/5.2/Resources/Manual";
+#else
+    dir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Manual";
+#endif
+  }
+#endif
+  if (dir != "") {
     if (text == "0dbfs")
       text = "Zerodbfs";
     else if (text.contains("CsOptions"))
       text = "CommandUnifile";
-    helpPanel->docDir = m_options->csdocdir;
-#ifdef Q_OS_MAC
-    QString fileName = m_options->csdocdir + "/" + text + ".html";
-    QString defHelpdir;
-#ifdef USE_DOUBLES
-    defHelpdir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib64.framework/Versions/5.2/Resources/Manual";
-#else
-    defHelpdir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Resources/Manual";
-#endif
-    if (m_options->csdocdir == "") {
-      fileName = defHelpdir + "/" + text + ".html";
-    }
-#else
-    QString fileName = m_options->csdocdir + "/" + text + ".html";
-#endif
+    helpPanel->docDir = dir;
+    QString fileName = dir + "/" + text + ".html";
     if (QFile::exists(fileName)) {
         helpPanel->loadFile(fileName);
     }
     else {
-        helpPanel->loadFile(m_options->csdocdir + "/index.html");
+        helpPanel->loadFile(dir + "/index.html");
     }
     helpPanel->show();
   }
