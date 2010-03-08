@@ -208,7 +208,7 @@ void qutecsound::utilitiesMessageCallback(CSOUND *csound,
 
 void qutecsound::changePage(int index)
 {
-  // Previous page has already been destroyed here (if closed)
+  // Previous page has already been destroyed here (if it was closed)
   // Remember this is called when opening, closing or switching tabs (including loading)
 //  qDebug() << "qutecsound::changePage " << curPage << "--" << index << "-" << documentPages.size();
   if (m_startingUp) {  // If starting up don't bother with all this as files are being loaded
@@ -226,12 +226,10 @@ void qutecsound::changePage(int index)
   if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
     QWidget *w = widgetPanel->widget();
     if (w != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
-      static_cast<WidgetLayout *>(w)->setContained(false);  // Must set before removing from container to get background
       w = widgetPanel->takeWidgetLayout();
       if (w)
-          w->setParent(0); //FIXME this is crashing ocasionally at startup, seems not anymore?
+          w->setParent(0);
     }
-//    documentPages[curPage]->setMacWidgetsText
     setCurrentFile(documentPages[curPage]->getFileName());
     connectActions();
     documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
@@ -252,11 +250,6 @@ void qutecsound::changePage(int index)
     recAct->setChecked(documentPages[curPage]->isRecording());
 
   }
-//  if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL && index != curPage) {
-//    documentPages[curPage]->setWidgetLayout(widgetPanel->takeWidgetLayout());  // widget is destroyed by widget panel if it is still there when setting a new one, so we need to take it
-    //    QWidget *w = m_console->widget();
-//    w->setParent(0);
-//  }
   if (index < 0) {
     qDebug() << "qutecsound::changePage index < 0";
     return;
@@ -2231,9 +2224,11 @@ void qutecsound::fillFileMenu()
 void qutecsound::fillFavoriteMenu()
 {
   favoriteMenu->clear();
-  QDir dir(m_options->favoriteDir);
-  QStringList filters;
-  fillFavoriteSubMenu(dir.absolutePath(), favoriteMenu, 0);
+  if (!m_options->favoriteDir.isEmpty()) {
+    QDir dir(m_options->favoriteDir);
+    QStringList filters;
+    fillFavoriteSubMenu(dir.absolutePath(), favoriteMenu, 0);
+  }
 }
 
 void qutecsound::fillFavoriteSubMenu(QDir dir, QMenu *m, int depth)

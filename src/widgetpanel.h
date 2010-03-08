@@ -38,7 +38,7 @@ class WidgetPanel : public QDockWidget
     ~WidgetPanel();
 
     void addWidgetLayout(WidgetLayout *layoutWidget);
-    WidgetLayout * getWidgetLayout();
+//    WidgetLayout * getWidgetLayout();
     WidgetLayout * takeWidgetLayout();
     void setCurrentLayout(WidgetLayout *layoutWidget);
 

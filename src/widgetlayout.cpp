@@ -558,21 +558,18 @@ void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
 
 void WidgetLayout::setContained(bool contained)
 {
-//  qDebug() << "WidgetLayout::setContained " << contained;
   if (m_contained == contained) {
     return;
   }
+  qDebug() << "WidgetLayout::setContained " << contained;
 //  layoutMutex.lock();
   m_contained = contained;
   if (m_contained) {
-    parentWidget()->setAutoFillBackground(this->autoFillBackground());
-    parentWidget()->setBackgroundRole(QPalette::Window);
-    parentWidget()->setPalette(this->palette());
+    setBackground(this->autoFillBackground(), this->palette().button().color());
     this->setAutoFillBackground(false);
   }
   else {
-    this->setAutoFillBackground(parentWidget()->autoFillBackground());
-    this->setPalette(parentWidget()->palette());
+    setBackground(parentWidget()->autoFillBackground(), parentWidget()->palette().button().color());
   }
 //  layoutMutex.unlock();
 }
@@ -1029,7 +1026,12 @@ void WidgetLayout::propertiesDialog()
   QGridLayout *layout = new QGridLayout(dialog);
   bgCheckBox = new QCheckBox(dialog);
   bgCheckBox->setText("Enable Background");
-  bgCheckBox->setChecked(this->autoFillBackground());
+  if (m_contained) {
+    bgCheckBox->setChecked(parentWidget()->autoFillBackground());
+  }
+  else {
+    bgCheckBox->setChecked(this->autoFillBackground());
+  }
   layout->addWidget(bgCheckBox, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
   QLabel *label = new QLabel(dialog);
 //   label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
@@ -1038,7 +1040,12 @@ void WidgetLayout::propertiesDialog()
   layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
   bgButton = new QPushButton(dialog);
   QPixmap pixmap = QPixmap(64,64);
-  pixmap.fill(this->palette().button().color());
+  if (m_contained) {
+    pixmap.fill(parentWidget()->palette().button().color());
+  }
+  else {
+    pixmap.fill(this->palette().button().color());
+  }
   bgButton->setIcon(pixmap);
   layout->addWidget(bgButton, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);
   QPushButton *applyButton = new QPushButton(tr("Apply"));
@@ -1057,18 +1064,25 @@ void WidgetLayout::propertiesDialog()
 
 void WidgetLayout::applyProperties()
 {
-  setBackground(bgCheckBox->isChecked(), this->palette().button().color());
+  QColor color = bgButton->palette().button().color();
+  setBackground(bgCheckBox->isChecked(), color);
   widgetChanged();
   mouseBut2 = 0;  // Button un clicked is not propagated after opening the edit dialog. Do it artificially here
 }
 
 void WidgetLayout::selectBgColor()
 {
-  QColor color = QColorDialog::getColor(this->palette().button().color(), this);
+  QColor color;
+  if (m_contained) {
+    color = QColorDialog::getColor(parentWidget()->palette().button().color(), this);
+  }
+  else {
+    color = QColorDialog::getColor(this->palette().button().color(), this);
+  }
   if (color.isValid()) {
-    this->setPalette(QPalette(color));
+    bgButton->setPalette(QPalette(color));
     QPixmap pixmap(64,64);
-    pixmap.fill(this->palette().button().color());
+    pixmap.fill(color);
     bgButton->setIcon(pixmap);
   }
 }
@@ -1987,20 +2001,15 @@ int WidgetLayout::createDummy(int x, int y, int width, int height, QString widge
 
 void WidgetLayout::setBackground(bool bg, QColor bgColor)
 {
-//  qDebug() << "WidgetLayout::setBackground ";
+  qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor;
   QWidget *w;
 //  this->setPalette(QPalette());
 //  this->setAutoFillBackground(false);
   layoutMutex.lock();
   w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget
   w->setAutoFillBackground(bg);
-  if (bg) {
-    w->setPalette(QPalette(bgColor));
-    w->setBackgroundRole(QPalette::Window);
-  }
-  else { // =="nobackground"
-    w->setPalette(QPalette(bgColor));
-  }
+  w->setPalette(QPalette(bgColor));
+  w->setBackgroundRole(QPalette::Window);
   layoutMutex.unlock();
 }
 

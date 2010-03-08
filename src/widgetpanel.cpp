@@ -55,16 +55,14 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
     scrollArea = new QScrollArea(this);
     scrollArea->setWidget(w);
     stack->addWidget(scrollArea);
-    w->setContained(true);
-    stack->setPalette(QPalette());
-    stack->setAutoFillBackground(false);
     stack->setFocusProxy(w);
     scrollArea->setFocusProxy(w);
 //    QHBoxLayout *l = new QHBoxLayout(this);
 //    l->addWidget(scrollArea);
 //    stack->setLayout(l);
-    w->show();
     scrollArea->show();
+    w->show();
+    w->setContained(true);
     qDebug() << "WidgetPanel::addWidgetLayout  " << w << " s=" << scrollArea;
   }
 //  else {
@@ -83,14 +81,14 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 //  connect(layoutWidget, SIGNAL(deselectAll()), this, SLOT(deselectAll()));
 }
 
-WidgetLayout * WidgetPanel::getWidgetLayout()
-{
-  QScrollArea *s = (QScrollArea*) stack->currentWidget();
-  if (!s) // scroll area is sometimes null during startup and shutdown
-      return 0;
-  qDebug() << "WidgetPanel::getWidgetLayout() " << s->widget();
-  return (WidgetLayout *) s->widget();
-}
+//WidgetLayout * WidgetPanel::getWidgetLayout()
+//{
+//  QScrollArea *s = (QScrollArea*) stack->currentWidget();
+//  if (!s) // scroll area is sometimes null during startup and shutdown
+//      return 0;
+//  qDebug() << "WidgetPanel::getWidgetLayout() " << s->widget();
+//  return (WidgetLayout *) s->widget();
+//}
 
 WidgetLayout * WidgetPanel::takeWidgetLayout()
 {
@@ -99,7 +97,12 @@ WidgetLayout * WidgetPanel::takeWidgetLayout()
   QScrollArea *s = (QScrollArea*) stack->currentWidget();
   if (!s) // scroll area is sometimes null during startup and shutdown
       return 0;
-  WidgetLayout * w = (WidgetLayout *) s->takeWidget();
+  WidgetLayout * w = (WidgetLayout *) s->widget();
+  if (w != 0) {
+    w->setContained(false);  // Must set before removing from container to get background
+    disconnect(w, SIGNAL(selection(QRect)));
+  }
+  w = (WidgetLayout *) s->takeWidget();
   stack->removeWidget(s);
   delete s;
 //  if (m_sbActive) {
@@ -111,8 +114,6 @@ WidgetLayout * WidgetPanel::takeWidgetLayout()
 //    w = static_cast<WidgetLayout *>(widget());
 //  }
 //  disconnect(layoutWidget, SIGNAL(deselectAll()));
-  if (w != 0)
-    disconnect(w, SIGNAL(selection(QRect)));
   return w;
 }
 
@@ -154,6 +155,8 @@ void WidgetPanel::setWidgetScrollBarsActive(bool act)
 //  }
 //  else if (!act && m_sbActive) {
 //    QWidget *w = scrollArea->takeWidget();
+//  stack->setPalette(QPalette());
+//  stack->setAutoFillBackground(false);
 //    if (w != 0) {
 //      setWidget(w);
 //      scrollArea->deleteLater();
