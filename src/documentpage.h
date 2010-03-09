@@ -98,6 +98,7 @@ class DocumentPage : public QObject
     void setLineWrapMode(QTextEdit::LineWrapMode wrapLines);
     void setColorVariables(bool colorVariables);
     void setOpcodeNameList(QStringList opcodeNameList);
+    void setAutoComplete(bool autoComplete);
     void print(QPrinter *printer);
     void findReplace();
     void findString();  // For find again

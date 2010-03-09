@@ -920,7 +920,7 @@
        <rect>
         <x>520</x>
         <y>30</y>
-        <width>74</width>
+        <width>75</width>
         <height>69</height>
        </rect>
       </property>
@@ -1031,7 +1031,7 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>381</width>
+       <width>331</width>
        <height>571</height>
       </rect>
      </property>
@@ -1043,7 +1043,7 @@
        <rect>
         <x>10</x>
         <y>30</y>
-        <width>364</width>
+        <width>311</width>
         <height>97</height>
        </rect>
       </property>
@@ -1167,8 +1167,8 @@
        <rect>
         <x>10</x>
         <y>130</y>
-        <width>341</width>
-        <height>182</height>
+        <width>311</width>
+        <height>131</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="_3">
@@ -1182,6 +1182,52 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="iconTextCheckBox">
+         <property name="text">
+          <string>Show text for toolbar icons</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="wrapLinesCheckBox">
+         <property name="text">
+          <string>Wrap Lines</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="autoCompleteCheckBox">
+         <property name="text">
+          <string>Autocomplete menu while typing</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_10">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>10</y>
+       <width>331</width>
+       <height>571</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Behavior</string>
+     </property>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>311</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QCheckBox" name="autoplayCheckBox">
          <property name="enabled">
@@ -1206,20 +1252,6 @@
         <widget class="QCheckBox" name="rememberFileCheckBox">
          <property name="text">
           <string>Remember open files from previous session</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="iconTextCheckBox">
-         <property name="text">
-          <string>Show text for toolbar icons</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="wrapLinesCheckBox">
-         <property name="text">
-          <string>Wrap Lines</string>
          </property>
         </widget>
        </item>

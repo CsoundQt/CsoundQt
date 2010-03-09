@@ -741,6 +741,11 @@ void DocumentPage::setOpcodeNameList(QStringList opcodeNameList)
   m_view->setOpcodeNameList(opcodeNameList);
 }
 
+void DocumentPage::setAutoComplete(bool autoComplete)
+{
+  m_view->setAutoComplete(autoComplete);
+}
+
 void DocumentPage::print(QPrinter *printer)
 {
   m_view->print(printer);

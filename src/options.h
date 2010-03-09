@@ -48,6 +48,7 @@ class Options: public CsoundOptions{
     bool saveWidgets;
     bool iconText;
     bool wrapLines;
+    bool autoComplete;
 
     bool showWidgetsOnRun;
     bool showTooltips;

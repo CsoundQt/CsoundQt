@@ -232,8 +232,6 @@ void qutecsound::changePage(int index)
     }
     setCurrentFile(documentPages[curPage]->getFileName());
     connectActions();
-    documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
-    documentPages[curPage]->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
     documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
     documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
     widgetPanel->addWidgetLayout(documentPages[curPage]->getWidgetLayout());
@@ -1310,6 +1308,7 @@ void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
   p->setColorVariables(m_options->colorVariables);
   p->setTabStopWidth(m_options->tabWidth);
   p->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
+  p->setAutoComplete(m_options->autoComplete);
   p->setRunThreaded(m_options->thread);
   p->useInvalue(m_options->useInvalue);
   p->setWidgetEnabled(m_options->enableWidgets);
@@ -2360,6 +2359,7 @@ void qutecsound::readSettings()
   m_options->saveWidgets = settings.value("savewidgets", true).toBool();
   m_options->iconText = settings.value("iconText", true).toBool();
   m_options->wrapLines = settings.value("wrapLines", true).toBool();
+  m_options->autoComplete = settings.value("autoComplete", true).toBool();
   m_options->useInvalue = settings.value("useInvalue", true).toBool();
   m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
   m_options->showTooltips = settings.value("showTooltips", true).toBool();

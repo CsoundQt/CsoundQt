@@ -57,6 +57,7 @@ class DocumentView : public QScrollArea
     void setTabWidth(int width);
     void setTabStopWidth(int width);
     void setLineWrapMode(QTextEdit::LineWrapMode mode);
+    void setAutoComplete(bool autoComplete);
     void setColorVariables(bool color);
     void setOpcodeNameList(QStringList list);
     void setOpcodeTree(OpEntryParser *opcodeTree);
@@ -146,6 +147,7 @@ class DocumentView : public QScrollArea
     MySyntaxMenu *syntaxMenu;
     Highlighter m_highlighter;
     bool m_isModified;
+    bool m_autoComplete;
     bool errorMarked;
     bool internalChange;  // to let popoup opcode completion know if text change was internal
     //TODO this variable is duplicated in various places. Unify?

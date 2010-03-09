@@ -70,6 +70,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   saveWidgetsCheckBox->setChecked(m_options->saveWidgets);
   iconTextCheckBox->setChecked(m_options->iconText);
   wrapLinesCheckBox->setChecked(m_options->wrapLines);
+  autoCompleteCheckBox->setChecked(m_options->autoComplete);
   widgetsCheckBox->setChecked(m_options->enableWidgets);
   channelComboBox->setCurrentIndex(m_options->useInvalue ? 0: 1);
   showWidgetsOnRunCheckBox->setChecked(m_options->showWidgetsOnRun);
@@ -228,6 +229,7 @@ void ConfigDialog::accept()
   m_options->saveWidgets = saveWidgetsCheckBox->isChecked();
   m_options->iconText = iconTextCheckBox->isChecked();
   m_options->wrapLines = wrapLinesCheckBox->isChecked();
+  m_options->autoComplete = autoCompleteCheckBox->isChecked();
   m_options->enableWidgets = widgetsCheckBox->isChecked();
   m_options->useInvalue = channelComboBox->currentIndex() == 0;
   m_options->showWidgetsOnRun = showWidgetsOnRunCheckBox->isChecked();

@@ -124,7 +124,10 @@ QString OpEntryParser::getSyntax(QString opcodeName)
     QString syntax = opcodeList[i].outArgs.simplified();
     if (!opcodeList[i].outArgs.isEmpty())
       syntax += " ";
-    syntax += opcodeList[i].opcodeName.simplified() + " " + opcodeList[i].inArgs.simplified();
+    syntax += opcodeList[i].opcodeName.simplified();
+    if (!opcodeList[i].inArgs.isEmpty()) {
+      syntax += " " + opcodeList[i].inArgs.simplified();
+    }
     return syntax;
   }
   else

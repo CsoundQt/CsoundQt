@@ -165,6 +165,11 @@ void DocumentView::setLineWrapMode(QTextEdit::LineWrapMode mode)
   }
 }
 
+void DocumentView::setAutoComplete(bool autoComplete)
+{
+  m_autoComplete = autoComplete;
+}
+
 void DocumentView::setColorVariables(bool color)
 {
   m_highlighter.setColorVariables(color);
@@ -364,44 +369,46 @@ void DocumentView::textChanged()
   }
   unmarkErrorLines();
   if (m_mode == 0) {  // CSD mode
-    QTextCursor cursor = mainEditor->textCursor();
-    cursor.select(QTextCursor::WordUnderCursor);
-    QString word = cursor.selectedText();
-    if (word.size() > 2 && !word.startsWith("\"")
-       && cursor.position() > cursor.anchor() // Only at the end of the word
-      ) {
-      QVector<Opcode> syntax = m_opcodeTree->getPossibleSyntax(word);
-      if (syntax.size() > 0) {
-        syntaxMenu->clear();
-        for(int i = 0; i < syntax.size(); i++) {
-          QString text = syntax[i].opcodeName;
-          if (syntax[i].outArgs.simplified().startsWith("a")) {
-            text += " (audio-rate)";
+    if (m_autoComplete) {
+      QTextCursor cursor = mainEditor->textCursor();
+      cursor.select(QTextCursor::WordUnderCursor);
+      QString word = cursor.selectedText();
+      if (word.size() > 2 && !word.startsWith("\"")
+        && cursor.position() > cursor.anchor() // Only at the end of the word
+        ) {
+        QVector<Opcode> syntax = m_opcodeTree->getPossibleSyntax(word);
+        if (syntax.size() > 0) {
+          syntaxMenu->clear();
+          for(int i = 0; i < syntax.size(); i++) {
+            QString text = syntax[i].opcodeName;
+            if (syntax[i].outArgs.simplified().startsWith("a")) {
+              text += " (audio-rate)";
+            }
+            else if (syntax[i].outArgs.simplified().startsWith("k")) {
+              text += " (control-rate)";
+            }
+            else if (syntax[i].outArgs.simplified().startsWith("x")) {
+              text += " (multi-rate)";
+            }
+            else if (syntax[i].outArgs.simplified().startsWith("S")) {
+              text += " (string output)";
+            }
+            else if (syntax[i].outArgs.simplified().startsWith("f")) {
+              text += " (pvs)";
+            }
+            QAction *a = syntaxMenu->addAction(text,
+                                               this, SLOT(insertTextFromAction()));
+            a->setData(m_opcodeTree->getSyntax(syntax[i].opcodeName));
           }
-          else if (syntax[i].outArgs.simplified().startsWith("k")) {
-            text += " (control-rate)";
-          }
-          else if (syntax[i].outArgs.simplified().startsWith("x")) {
-            text += " (multi-rate)";
-          }
-          else if (syntax[i].outArgs.simplified().startsWith("S")) {
-            text += " (string output)";
-          }
-          else if (syntax[i].outArgs.simplified().startsWith("f")) {
-            text += " (pvs)";
-          }
-          QAction *a = syntaxMenu->addAction(text,
-                                             this, SLOT(insertTextFromAction()));
-          a->setData(m_opcodeTree->getSyntax(syntax[i].opcodeName));
+          QRect r =  mainEditor->cursorRect();
+          QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+          QPoint globalPoint =  mainEditor->mapToGlobal(p);
+          syntaxMenu->setWindowModality(Qt::NonModal);
+          syntaxMenu->popup (globalPoint);
+          //    syntaxMenu->move(QPoint(r.x() + r.width(), r.y() + r.height()));
+          //    syntaxMenu->show();
+          mainEditor->setFocus(Qt::OtherFocusReason);
         }
-        QRect r =  mainEditor->cursorRect();
-        QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-        QPoint globalPoint =  mainEditor->mapToGlobal(p);
-        syntaxMenu->setWindowModality(Qt::NonModal);
-        syntaxMenu->popup (globalPoint);
-        //    syntaxMenu->move(QPoint(r.x() + r.width(), r.y() + r.height()));
-        //    syntaxMenu->show();
-        mainEditor->setFocus(Qt::OtherFocusReason);
       }
     }
     syntaxCheck();
