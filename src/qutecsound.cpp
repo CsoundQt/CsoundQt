@@ -211,7 +211,7 @@ void qutecsound::changePage(int index)
   // Previous page has already been destroyed here (if it was closed)
   // Remember this is called when opening, closing or switching tabs (including loading)
 //  qDebug() << "qutecsound::changePage " << curPage << "--" << index << "-" << documentPages.size();
-  if (m_startingUp) {  // If starting up don't bother with all this as files are being loaded
+  if (m_startingUp) {  // If starting up or loading many, don't bother with all this as files are being loaded
     return;
   }
   if (documentPages.size() > curPage && documentPages.size() > 0 && documentPages[curPage]) {
@@ -369,7 +369,10 @@ void qutecsound::open()
     helpPanel->show();
   if (inspectorVisible)
     m_inspector->show();
+  m_startingUp = true; // To avoid changing all display unnecessarily
   foreach (QString fileName, fileNames) {
+    if (fileNames.last() == fileName)
+      m_startingUp = false;
     int index = isOpen(fileName);
     if (index != -1) {
       documentTabs->setCurrentIndex(index);
@@ -615,14 +618,15 @@ void qutecsound::deleteCurrentTab()
   documentPages[curPage]->stop();
   documentPages[curPage]->showLiveEventFrames(false);
   DocumentPage *d = documentPages[curPage];
-  documentPages.remove(curPage); // Must remove from the vector first
-  d->deleteLater();  // TODO do these have to be pointers now?
+  documentPages.remove(curPage);
+  documentTabs->removeTab(curPage);
+  delete d;
+//  d->deleteLater();  // TODO do these have to be pointers now?
   if (curPage >= documentPages.size()) {
     curPage = documentPages.size() - 1;
   }
   if (curPage < 0)
     curPage = 0; // deleting the document page decreases curPage, so must check
-  documentTabs->removeTab(curPage);  // Tab is already removed when destroying the content (OS X only?)
 }
 
 void qutecsound::openLogFile()
@@ -700,6 +704,7 @@ bool qutecsound::closeTab(bool askCloseApp)
     }
   }
   deleteCurrentTab();
+  changePage(curPage);
   return true;
 }
 
