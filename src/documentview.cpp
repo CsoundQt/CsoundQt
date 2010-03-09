@@ -473,8 +473,20 @@ void DocumentView::insertTextFromAction()
   cursor.insertText("");
   editors[0]->setTextCursor(cursor);
   QAction *action = static_cast<QAction *>(QObject::sender());
+  bool insertComplete = static_cast<MySyntaxMenu *>(action->parent())->insertComplete;
   internalChange = true;
-  editors[0]->insertPlainText(action->data().toString());
+  if (insertComplete) {
+    editors[0]->insertPlainText(action->data().toString());
+  }
+  else {
+    int index = action->text().indexOf(" ");
+    if (index > 0) {
+      editors[0]->insertPlainText(action->text().left(index));
+    }
+    else {
+      editors[0]->insertPlainText(action->text());
+    }
+  }
 }
 
 void DocumentView::findString(QString query)
@@ -803,6 +815,18 @@ void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
   if (event->key() == Qt::Key_Escape) {
     this->hide();
   }
+  else if (event->key() == Qt::Key_Tab) {
+    insertComplete = false;
+    QAction * a = activeAction();
+    this->hide();
+    if (a != 0) {
+      a->trigger();
+      return;
+    }
+    else {
+      emit keyPressed(event->text());
+    }
+  }
   else if (event->key() != Qt::Key_Up && event->key() != Qt::Key_Down
            && event->key() != Qt::Key_Return) {
     this->hide();
@@ -810,5 +834,6 @@ void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
       emit keyPressed(event->text());
     }
   }
+  insertComplete = true;
   QMenu::keyPressEvent(event);
 }

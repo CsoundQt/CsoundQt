@@ -169,18 +169,18 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 767 231 339 346
+WindowBounds: 767 231 353 393
 CurrentView: io
 IOViewEdit: On
 Options:
 </MacOptions>
 <MacGUI>
-ioView background {56934, 58538, 65535}
+ioView background {57054, 58596, 65535}
 ioButton {219, 247} {100, 30} event 1.000000 "button1" "Clear memory" "/" i202 0 1
 ioButton {78, 300} {170, 30} event 1.000000 "button1" "Play events" "/" i200 0 -3600
 ioButton {15, 247} {100, 30} event 1.000000 "button1" "Start Record" "/" i201 0 0.1 1
 ioButton {117, 247} {100, 30} event 1.000000 "button1" "Pause Record" "/" i201 0 0.1 0
-ioText {232, 221} {80, 25} display 5.000000 0.00100 "numnotes" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 5
+ioText {232, 221} {80, 25} display 0.000000 0.00100 "numnotes" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 5
 ioText {15, 198} {203, 45} display 0.000000 0.00100 "recording" left "Lucida Grande" 20 {49920, 8192, 0} {65280, 65280, 65280} background border 
 ioText {221, 198} {102, 24} label 0.000000 0.00100 "" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Number recorded
 ioText {24, 6} {292, 35} label 0.000000 0.00100 "" center "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground border MIDI Recorder

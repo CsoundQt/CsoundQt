@@ -36,10 +36,12 @@ class MySyntaxMenu: public QMenu
   public:
     MySyntaxMenu(QWidget * parent);
     ~MySyntaxMenu();
+
+    bool insertComplete; // Whether to insert full text or only opcode name
   protected:
     virtual void keyPressEvent(QKeyEvent * event);
   signals:
-    void keyPressed(QString text);
+    void keyPressed(QString text); // Used to send both pressed keys and full opcode text to be pasted
 };
 
 class DocumentView : public QScrollArea
