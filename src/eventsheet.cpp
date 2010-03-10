@@ -161,9 +161,9 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
   connect(&loopTimer, SIGNAL(timeout()), this, SLOT(sendEvents()));
 
   builtinScripts << ":/python/sort_by_start.py" << ":/python/produce_score.py";
-  converterScripts << ":/python/cps2mid.py" << ":/python/mid2cps.py" << ":/python/cps2pch.py"
-      << ":/python/pch2cps.py" ;
-  testScripts <<  ":/python/test/python_test.py" << ":/python/test/tk_test.py";
+  converterScripts << ":/python/Conversion/cps2mid.py" << ":/python/Conversion/mid2cps.py" << ":/python/Conversion/cps2pch.py"
+      << ":/python/Conversion/pch2cps.py" ;
+  testScripts <<  ":/python/Tests/python_test.py" << ":/python/Tests/tk_test.py";
 
   noHistoryChange = 0;
 }
@@ -942,7 +942,7 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
   menu.addAction(fillAct);
   menu.addSeparator();
   QMenu *scriptMenu = menu.addMenu(tr("Python Scripts"));
-  QMenu *converterMenu = scriptMenu->addMenu(tr("Conversions"));
+  QMenu *converterMenu = scriptMenu->addMenu(tr("Conversion"));
   for (int i = 0; i < converterScripts.size(); i++) {
     QAction *a = converterMenu->addAction(converterScripts[i].mid(converterScripts[i].lastIndexOf("/") + 1),
                                        this, SLOT(runScript() ));
