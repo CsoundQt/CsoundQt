@@ -147,7 +147,7 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
   this->setColumnWidth(5, 50);
 
   m_name = "Events";
-  m_stopScript == false;
+  m_stopScript = false;
   createActions();
   connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
   // a bit of a hack to ensure that manual changes to the sheet are stored in the
