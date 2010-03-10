@@ -46,7 +46,7 @@ QString CsoundOptions::generateCmdLineFlags()
       cmdline += " -+rtaudio=" + _configlists.rtAudioNames[rtAudioModule];
       cmdline += " -i" + (rtInputDevice == "" ? "adc":rtInputDevice);
       cmdline += " -o" + (rtOutputDevice == "" ? "dac":rtOutputDevice);
-      if (rtJackName != "") {
+      if (rtJackName != "" && _configlists.rtAudioNames[rtAudioModule] == "jack") {
         QString jackName = rtJackName;
         if (jackName.contains("*")) {
           jackName.replace("*",fileName1.mid(fileName1.lastIndexOf(QDir::separator()) + 1));
