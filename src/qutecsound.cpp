@@ -592,22 +592,23 @@ QString qutecsound::getSaveFileName()
 void qutecsound::createQuickRefPdf()
 {
   QString tempFileName(QDir::tempPath() + QDir::separator() + "QuteCsound Quick Reference.pdf");
-  if (!QFile::exists(tempFileName))
-  {
-      quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
-      quickRefFileName += _configlists.languageCodes[m_options->language];
-      quickRefFileName += ".pdf";
-      if (!QFile::exists(quickRefFileName)) {
-        quickRefFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
-      }
-      qDebug() << " Opening " << quickRefFileName;
-      QFile file(quickRefFileName);
-      file.open(QIODevice::ReadOnly);
-      QFile quickRefFile(tempFileName);
-      quickRefFile.open(QFile::WriteOnly);
-      QDataStream quickRefIn(&quickRefFile);
-      quickRefIn << file.readAll();
+//  if (QFile::exists(tempFileName))
+//  {
+//
+//  }
+  QString internalFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
+  internalFileName += _configlists.languageCodes[m_options->language];
+  internalFileName += ".pdf";
+  if (!QFile::exists(internalFileName)) {
+    internalFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
   }
+  qDebug() << "qutecsound::createQuickRefPdf() Opening " << internalFileName;
+  QFile file(internalFileName);
+  file.open(QIODevice::ReadOnly);
+  QFile quickRefFile(tempFileName);
+  quickRefFile.open(QFile::WriteOnly);
+  QDataStream quickRefIn(&quickRefFile);
+  quickRefIn << file.readAll();
   quickRefFileName = tempFileName;
 }
 
