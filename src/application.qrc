@@ -139,6 +139,7 @@
 
       <file>python/qutesheet.py</file>
       <file>python/sort_by_start.py</file>
+      <file>python/fill_text.py</file>
       <file>python/Conversion/cps2mid.py</file>
       <file>python/Conversion/mid2cps.py</file>
       <file>python/Conversion/cps2pch.py</file>

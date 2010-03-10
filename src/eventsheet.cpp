@@ -160,7 +160,7 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
   loopTimer.setSingleShot(true);
   connect(&loopTimer, SIGNAL(timeout()), this, SLOT(sendEvents()));
 
-  builtinScripts << ":/python/sort_by_start.py" << ":/python/produce_score.py";
+  builtinScripts << ":/python/sort_by_start.py" << ":/python/produce_score.py"<< ":/python/fill_text.py";
   converterScripts << ":/python/Conversion/cps2mid.py" << ":/python/Conversion/mid2cps.py" << ":/python/Conversion/cps2pch.py"
       << ":/python/Conversion/pch2cps.py" ;
   testScripts <<  ":/python/Tests/python_test.py" << ":/python/Tests/tk_test.py";
@@ -830,7 +830,7 @@ void EventSheet::runScript(QString name)
   QProcess p;
   p.start("python " + name.mid(name.lastIndexOf("/") + 1));
 
-  while (!p.waitForFinished (100) && !m_stopScript) {
+  while (!p.waitForFinished (10) && !m_stopScript) {
     qApp->processEvents();
   }
   m_stopScript = false;

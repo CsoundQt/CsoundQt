@@ -129,7 +129,7 @@ def produce_score():
         old_label_image = label_image
     else:
         l = Label(t, text="ImageTk module not available\nInstalling it will allow preview here.")
-        l.grid(row=0, column=0, columnspan=2)
+        l.grid(row=1, column=0, columnspan=2)
 #    print p
 
 
@@ -151,7 +151,7 @@ def make_ly_text(rows, staff_name, quant, time, p4):
                         sil_dur = int(4 * (1.0 /(remaining) ) )
                         remaining -= 4
                         if voice.index(r) == 0:
-                            ly_notes_text += 'r' + str(sil_dur) + ' '
+                            ly_notes_text += 's' + str(sil_dur) + ' '
                         else:
                             ly_notes_text += 's' + str(sil_dur) + ' '
                     else:
