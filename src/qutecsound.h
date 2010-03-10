@@ -139,7 +139,7 @@ class qutecsound:public QMainWindow
     void openExternalPlayer();
     void setHelpEntry();
     void openManualExample(QString fileName);
-    void openExternalBrowser();
+    void openExternalBrowser(QUrl url = QUrl());
     void openQuickRef();
     void openShortcutDialog();
 //    void utilitiesDialogOpen();

@@ -35,6 +35,7 @@
 #include "graphicwindow.h"
 #include "keyboardshortcuts.h"
 #include "liveeventframe.h"
+#include "about.h"
 //#include "eventsheet.h"
 
 // One day remove these from here for nicer abstraction....
@@ -1196,11 +1197,14 @@ void qutecsound::openManualExample(QString fileName)
   loadFile(fileName);
 }
 
-void qutecsound::openExternalBrowser()
+void qutecsound::openExternalBrowser(QUrl url)
 {
-  QString text = documentPages[curPage]->wordUnderCursor();
-  if (m_options->csdocdir != "") {
-    QString file =  m_options->csdocdir + "/" + text + ".html";
+  QString text;
+  if (!url.isEmpty()) {
+    execute(m_options->browser, url.toString());
+  }
+  else if (m_options->csdocdir != "") {
+    QString file =  m_options->csdocdir + "/" + documentPages[curPage]->wordUnderCursor() + ".html";
     execute(m_options->browser, file);
   }
   else {
@@ -1245,15 +1249,38 @@ void qutecsound::statusBarMessage(QString message)
 
 void qutecsound::about()
 {
-  QString text = tr("by: Andres Cabrera\nReleased under the LGPLv2 or GPLv3\nVersion %1\n").arg(QUTECSOUND_VERSION);
-  text += tr("French translation:\nFrancois Pinot\n");
-  //Why is the ç character not displayed correctly...?
-//   text += tr("French translation:\nFrançois Pinot\n");
-  text += tr("German translation:\nJoachim Heintz\n");
-  text += tr("Portuguese translation:\nVictor Lazzarini\n");
-  text += tr("Italian translation:\nFrancesco\n");
-  text += QString("qutecsound.sourceforge.net");
-  QMessageBox::about(this, tr("About QuteCsound"), text);
+
+  About *msgBox = new About(this);
+
+  QString text = tr("<h1>by: Andres Cabrera and others</h1><h2>Version %1</h2><h2>Released under the LGPLv2 or GPLv3</h2>").arg(QUTECSOUND_VERSION);
+  text += tr("French translation: Fran&ccedil;ois Pinot<br />");
+  text += tr("German translation: Joachim Heintz<br />");
+  text += tr("Portuguese translation: Victor Lazzarini<br />");
+  text += tr("Italian translation: Francesco<br />");
+  text += tr("Turkish translation: Ali Isciler<br />");
+  text += QString("<center><a href=\"http://qutecsound.sourceforge.net\">qutecsound.sourceforge.net</a></center><br /><br />");
+  text += tr("If you find QuteCsound useful, please consider donating to the project:<br />");
+  text += "<center><a href=\"http://sourceforge.net/donate/index.php?group_id=227265\"><img src=\":/images/project-support.jpg\" width=\"88\" height=\"32\" border=\"0\" alt=\"Support This Project\" /> </a></center>";
+
+  text += tr("Please file bug reports and feature suggestions in the QuteCsound tracker:<br />");
+  text += "<a href=\"http://sourceforge.net/tracker/?group_id=227265\">http://sourceforge.net/tracker/?group_id=227265</a><br />";
+  text += tr("Join the QuteCsound users mailing list:<br />");
+  text += "<a href=\"http://lists.sourceforge.net/lists/listinfo/qutecsound-users\">http://lists.sourceforge.net/lists/listinfo/qutecsound-users</a><br />";
+//  text += "Resources: cSounds.com\nCsound UDO repository\nCsound Blog\nCsound Journal\nCsound page at SourceForge";
+//  Join/Read QuteCsound Mailing List
+//  Join/Read Csound Mailing List
+//  Search/Read Csound Mailing List Archives
+//  Join/Read Csound Developer List
+//  Download Latest Csound Sources
+//  Post/Read Csound BugTracker
+//
+//  Supported by:
+//  INCONTRI
+  msgBox->getTextEdit()->setOpenLinks(false);
+  msgBox->setHtmlText(text);
+  connect(msgBox->getTextEdit(), SIGNAL(anchorClicked(QUrl)), this, SLOT(openExternalBrowser(QUrl)));
+  int ret = msgBox->exec();
+  delete msgBox;
 }
 
 void qutecsound::documentWasModified()

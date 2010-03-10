@@ -21,9 +21,7 @@ else {
     message(Building for float \(32- bit\) csound.)
     message(For doubles use qmake \"CONFIG += build64\")
 }
-libsndfile { 
-    !win32:LIBS += -lsndfile
-}
+libsndfile:!win32:LIBS += -lsndfile
 SOURCES += qutecsound.cpp \
     main.cpp \
     dockhelp.cpp \
@@ -63,7 +61,8 @@ SOURCES += qutecsound.cpp \
     widgetlayout.cpp \
     csoundengine.cpp \
     csoundoptions.cpp \
-    documentview.cpp
+    documentview.cpp \
+    about.cpp
 HEADERS += qutecsound.h \
     dockhelp.h \
     opentryparser.h \
@@ -103,7 +102,8 @@ HEADERS += qutecsound.h \
     widgetlayout.h \
     csoundengine.h \
     csoundoptions.h \
-    documentview.h
+    documentview.h \
+    about.h
 TEMPLATE = app
 CONFIG += warn_on \
     thread \
@@ -127,7 +127,8 @@ FORMS += configdialog.ui \
     findreplace.ui \
     keyboardshortcuts.ui \
     keyselector.ui \
-    liveeventframe.ui
+    liveeventframe.ui \
+    about.ui
 win32 { 
     QUTECSOUND_CSOUND_PATH = C:\Program \
         Files\Csound
@@ -149,14 +150,14 @@ win32 {
     }
     RC_FILE = qutecsound.rc
 }
-linux-g++ {
+linux-g++ { 
     INCLUDEPATH += /usr/local/include/csound/ \
         /usr/include/csound/
     qute_cpp:LIBS += -lcsnd
     build64:LIBS += -lcsound64
     else:LIBS += -lcsound
 }
-solaris-g++-64 {
+solaris-g++-64 { 
     INCLUDEPATH += /usr/local/include/csound/
     qute_cpp:LIBS += -lcsnd
     build64:LIBS += -lcsound64
@@ -190,7 +191,7 @@ macx {
     # QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.5
     # QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk
     # DEFINES += MACOSX_PRE_SNOW # Use this if you are building for OS X < 10.6
-    CONFIG +=x86  # needed if you are on Snow Leopard and have a precompiled Csound
+    CONFIG += x86 # needed if you are on Snow Leopard and have a precompiled Csound
     LIBS += -framework \
         QtXml
     LIBS += -framework \
