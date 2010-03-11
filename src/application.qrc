@@ -90,6 +90,14 @@
      <file>../examples/Getting Started/Realtime_Interaction/MIDI_Assign_Controllers.csd</file>
      <file>../examples/Getting Started/Realtime_Interaction/OpenSoundControl.csd</file>
 
+     <file>../examples/Getting Started/Language_Features/Function_Tables_1.csd</file>
+     <file>../examples/Getting Started/Language_Features/Function_Tables_2.csd</file>
+     <file>../examples/Getting Started/Language_Features/Loops_1.csd</file>
+     <file>../examples/Getting Started/Language_Features/Loops_2.csd</file>
+     <file>../examples/Getting Started/Language_Features/Console_Print.csd</file>
+     <file>../examples/Getting Started/Language_Features/Writing_Audio_Files.csd</file>
+     <file>../examples/Getting Started/Language_Features/Using_Udos.csd</file>
+
       <file>../examples/Getting Started/Toots/Toot1.csd</file>
       <file>../examples/Getting Started/Toots/Toot2.csd</file>
       <file>../examples/Getting Started/Toots/Toot3.csd</file>

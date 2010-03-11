@@ -2068,6 +2068,7 @@ void qutecsound::createMenus()
   QStringList tutFiles;
   QStringList basicsFiles;
   QStringList realtimeInteractionFiles;
+  QStringList featuresFiles;
   QStringList widgetFiles;
   QStringList synthFiles;
   QStringList musicFiles;
@@ -2190,13 +2191,30 @@ void qutecsound::createMenus()
   realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Assign_Controllers.csd");
   realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/OpenSoundControl.csd");
 
-   submenu = tutorialMenu->addMenu(tr("Realtime Interaction"));
+  submenu = tutorialMenu->addMenu(tr("Realtime Interaction"));
   foreach (QString fileName, realtimeInteractionFiles) {
     QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
     newAction = submenu->addAction(name);
     newAction->setData(fileName);
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
+
+  featuresFiles.append(":/examples/Getting Started/Language_Features/Function_Tables_1.csd");
+  featuresFiles.append(":/examples/Getting Started/Language_Features/Function_Tables_2.csd");
+  featuresFiles.append(":/examples/Getting Started/Language_Features/Loops_1.csd");
+  featuresFiles.append(":/examples/Getting Started/Language_Features/Loops_2.csd");
+  featuresFiles.append(":/examples/Getting Started/Language_Features/Console_Print.csd");
+  featuresFiles.append(":/examples/Getting Started/Language_Features/Writing_Audio_Files.csd");
+  featuresFiles.append(":/examples/Getting Started/Language_Features/Using_Udos.csd");
+
+  submenu = tutorialMenu->addMenu(tr("Language Features"));
+  foreach (QString fileName, featuresFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
   tutFiles.append(":/examples/Getting Started/Toots/Toot1.csd");
   tutFiles.append(":/examples/Getting Started/Toots/Toot2.csd");
   tutFiles.append(":/examples/Getting Started/Toots/Toot3.csd");
