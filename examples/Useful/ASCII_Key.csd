@@ -9,7 +9,7 @@ ksmps = 128
 
 ;;Get the ASCII key number;;
 ;;Example for QuteCsound;;
-;;joachim heintz mar 2010;;
+;;joachim heintz && andrés cabrera mar 2010;;
 
 
 strset		11, "Thank you!"
@@ -103,8 +103,8 @@ end:		xout		iftout
 instr 1
 ;;GET SPEED AND ESTIMATE THE USER'S AGE
 kspeed		invalue	"speed"
-kyears = 20*kspeed*1.8^kspeed
-kmonths = 10^kspeed % 12
+kyears 	=		20*kspeed*1.8^kspeed
+kmonths	=		10^kspeed % 12
 Sage		sprintfk	"Age estimated from your speed selection:\n%d years, %d months, %d days.",  kyears, kmonths, 10^kspeed % 30
 		outvalue	"age", Sage
 ;;TURN ON TYPE-IN DISPLAY PROMPT
@@ -139,7 +139,7 @@ instr 2
 endin 
 
 instr 10
-scoreline_i "i 2 0 1" ;First clear the display
+scoreline_i "i 2 0 .1" ;First clear the display
 ;;GENERATE A NOTE
   ;PITCH AND ENVELOPE
 ipch		RandInts_i	0, 45; 46 steps per octave 
@@ -194,19 +194,19 @@ Sisatotally	strcat		Sisatotally, " number, too."
 Sisatotally	strcat		Sisatotally, " number."
  endif
 
-S1 sprintf  "i 20 0 1 1 \"%s\"", Sthanks
-S2 sprintf  "i 20 0 1 2 \"%s\"", ""
-S3 sprintf  "i 20 0 1 3 \"%s\"", Schar
-S4 sprintf  "i 20 0 1 4 \"%s\"", ""
-S5 sprintf  "i 20 0 1 5 \"%s\"", ""
-S6 sprintf  "i 20 0 1 6 \"%s\"", Sascii
-S7 sprintf  "i 20 0 1 7 \"%s\"", ""
-S8 sprintf  "i 20 0 1 8 \"%s\"", ""
-S9 sprintf  "i 20 0 1 9 \"%s\"", Schar
-S10 sprintf  "i 20 0 1 10 \"%s\"", Sisavery
-S11 sprintf  "i 20 0 1 11 \"%s\"", ""
-S12 sprintf  "i 20 0 1 12 \"%s\"", Sascii
-S13 sprintf  "i 20 0 1 13 \"%s\"", Sisatotally
+S1		sprintf  	"i 20 0 1 1 \"%s\"", Sthanks
+S2		sprintf  	"i 20 0 1 2 \"%s\"", ""
+S3 		sprintf  	"i 20 0 1 3 \"%s\"", Schar
+S4 		sprintf  	"i 20 0 1 4 \"%s\"", ""
+S5 		sprintf  	"i 20 0 1 5 \"%s\"", ""
+S6 		sprintf  	"i 20 0 1 6 \"%s\"", Sascii
+S7 		sprintf  	"i 20 0 1 7 \"%s\"", ""
+S8 		sprintf  	"i 20 0 1 8 \"%s\"", ""
+S9 		sprintf  	"i 20 0 1 9 \"%s\"", Schar
+S10 		sprintf  	"i 20 0 1 10 \"%s\"", Sisavery
+S11 		sprintf  	"i 20 0 1 11 \"%s\"", ""
+S12 		sprintf  	"i 20 0 1 12 \"%s\"", Sascii
+S13 		sprintf  	"i 20 0 1 13 \"%s\"", Sisatotally
 
 igoto skipinit  ; Necessary to avoid initial init pass
 
@@ -233,7 +233,7 @@ if kclock > 6.5 then
 endif 
 if kclock > 9 then
 		scoreline S8, 1
-	endif
+endif
 if kclock > 15 then
 		scoreline S9, 1
 endif 
@@ -255,8 +255,8 @@ skipinit:
 endin
 
 instr 20 ;send text
-ichannel = p4
-Stext = p5
+ichannel	= 	p4
+Stext		=	p5
 if ichannel == 1 then
 	outvalue "thanks", Stext
 elseif ichannel == 2 then
@@ -301,7 +301,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 430 207 810 642
+WindowBounds: 277 82 810 642
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -311,7 +311,7 @@ ioView background {43690, 43690, 32639}
 ioText {359, 326} {49, 33} display 0.000000 0.00100 "showascii1" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioText {359, 288} {31, 30} display 0.000000 0.00100 "showchar1" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioText {119, 184} {102, 49} display 0.000000 0.00100 "typein1" right "Lucida Grande" 28 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {222, 184} {103, 49} display 0.000000 0.00100 "typein2" left "Lucida Grande" 28 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {223, 183} {103, 49} display 0.000000 0.00100 "typein2" left "Lucida Grande" 28 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioText {62, 242} {394, 33} display 0.000000 0.00100 "thanks" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioText {79, 290} {275, 30} display 0.000000 0.00100 "youtyped" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioText {65, 374} {381, 64} display 0.000000 0.00100 "asyouwill" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
@@ -328,7 +328,7 @@ ioText {48, 55} {722, 58} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0
 ioText {47, 112} {724, 48} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder First, select your personal speed at the slider on the right.Â¬Then, press the Start button.
 ioSlider {514, 222} {259, 27} 0.500000 2.000000 0.667954 speed
 ioText {513, 192} {260, 25} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select Your Personal Speed of Messages
-ioText {514, 277} {259, 97} display 0.000000 0.00100 "age" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Age estimated from your speed selection:Â¬20 years, 5 months, 5 days.
+ioText {514, 277} {259, 97} display 0.000000 0.00100 "age" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioButton {513, 373} {261, 28} value 1.000000 "_Play" "Start" "/" i1 0 10
 </MacGUI>
 
