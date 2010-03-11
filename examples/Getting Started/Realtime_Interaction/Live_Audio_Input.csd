@@ -23,31 +23,31 @@ nchnls = 1
 0dbfs = 1
 
 instr 1
-aInput inch 1							; read audiohardware channel 1
-ifftsize = 1024							; set the buffersize for later fft-analysis
-iwtype = 1   							; hanning window
+aInput inch 1						; read audiohardware channel 1
+ifftsize = 1024						; set the buffersize for later fft-analysis
+iwtype = 1   						; hanning window
 fsig pvsanal   aInput, ifftsize, ifftsize/4, ifftsize, iwtype	; generate an fsig from the mono audio source
-gkFreq, gkAmp pvspitch fsig, 0.01				; pitch and amplitude analysis tool
-outvalue "pitch", gkFreq					; send pitch-values to Widget
+gkFreq, gkAmp pvspitch fsig, 0.01			; pitch and amplitude analysis tool
+outvalue "pitch", gkFreq				; send pitch-values to Widget
 outvalue "amp", gkAmp					; send amplitude-values to Widget
 endin
 
 
 
 instr 2
-aSrc oscili gkAmp, gkFreq, 1					; instrument 1 uses global k-Variables, so they can be read-out here..
-kFeedback=0.6						; feedback-amount for the delay
+aSrc oscili gkAmp, gkFreq, 1			; instrument 1 used global k-variables, so they can be read-out here..
+kFeedback=0.6					; feedback-amount for the delay
 aDelay delayr 1						
 aWet	deltapi 0.2
 	delayw aSrc+(aWet*kFeedback)
-aOut = aSrc+(aWet*0.3)					; mixing the oscillator with the delay
+aOut = aSrc+(aWet*0.3)				; mixing the oscillator with the delay
 out aOut
 endin
 
 </CsInstruments>
 <CsScore>
 f 1 0 256 7 0 128 1 0 -1 128 0
-i 1 0 3600							; instrument 1 runs for one hour				
+i 1 0 3600						; instrument 1 runs for one hour				
 e					
 </CsScore>
 </CsoundSynthesizer>
@@ -62,7 +62,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 608 193 572 424
+WindowBounds: 883 62 400 483
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -76,10 +76,10 @@ ioText {190, 81} {80, 25} scroll 0.005510 0.000010 "amp" left "Lucida Grande" 8 
 ioText {188, 45} {135, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amplitude Detection (0-1)
 ioText {23, 162} {151, 31} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Instrument 2
 ioText {23, 7} {151, 31} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Instrument 1
-ioText {21, 196} {156, 61} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder This button plays a synth for 20 seconds, which gets the frequency, form the input-analysis.
+ioText {21, 196} {156, 61} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder This button plays a synth for 20 seconds, which gets the frequency, from the input-analysis.
 </MacGUI>
 
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" name="Events" x="320" y="218" width="513" height="322"> 
+<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="513" height="322"> 
  
  
  

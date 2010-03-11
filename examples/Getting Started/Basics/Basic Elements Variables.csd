@@ -1,4 +1,4 @@
-/*Getting started.. Basic Elements: Constants and Variables
+/*Getting started.. 1.4 Basic Elements: Constants and Variables
 
 Variables are named 'cells' or 'slots' which contain data. They may be updated at one of the available update rates: i, k and a, which stand for initialization, control and audio.
 The type of variable is determined by the first letter of its name (i,k,a). The names can be easier to read, if you start new words with big letters.
@@ -55,7 +55,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 832 162 310 570
+WindowBounds: 883 62 400 483
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -76,3 +76,13 @@ ioGraph {21, 165} {251, 109} table 0.000000 1.000000
 ioText {21, 105} {251, 61} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The pure waveform used by the oscillator is visable in the Graph display.
 </MacGUI>
 
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322"> 
+
+
+
+
+
+
+
+
+</EventPanel>

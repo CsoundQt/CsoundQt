@@ -31,11 +31,11 @@ gaOut =  (aFiltered*aEnv) + gaOut 			; the signal becomes scaled by the envelope
 							; that no information (from other sources, or simultaneous voices) which already exists on the global variable will be lost, itself needs to become added as well
 endin
 
-instr 2 						; SIne Oscillator triggered with notes on MIDI CH: 2
+instr 2 						; Sine Oscillator triggered with notes on MIDI CH: 2
 icps = p4
 iamp = p5/127
 aSrc oscili iamp, icps, 2				; this instrument reads from f-table 2, containing a sinus waveform
-aEnv madsr 0.01, 0.1, 0.9, 0.01			; madsr is used, now the instrument will be triggered by MIDI notes
+aEnv madsr 0.01, 0.1, 0.9, 0.01			; defining the envelope
 gaOut = (aSrc*aEnv) + gaOut
 endin
 
@@ -44,18 +44,18 @@ instr 101					 ; Global Feedback Delay
 kDryWet invalue "d_w_delay"			; receive values from the Widget Panel
 kDelTime invalue "time_delay"
 kFeedback invalue "feedb_delay"
-aDelay delayr 1					;  a delaylne, with 1 second maximum delay-time is initialised
+aDelay delayr 1					;  a delayline, with 1 second maximum delay-time is initialised
 aWet	deltapi kDelTime				; data at a flexible position is read from the delayline 
-	delayw gaOut+(aWet*kFeedback)		; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
+	delayw gaOut+(aWet*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
 gaOut	= (1-kDryWet) * gaOut + (kDryWet * aWet)	; the amount of pure-signal and delayed-signal is mixed, and written to the "g.a.Bus"
 endin
 
 instr 102					 			; Global Reverb
-kroomsize init 0.4								; fixed values for reverb-roomsize and damp, but you can add knobs or faders on the Widget Panel and invalue the data here...
+kroomsize init 0.4						; fixed values for reverb-roomsize and damp, but you can add knobs or faders on the Widget Panel and invalue the data here...
 khfdamp init  0.8
 kDryWet invalue "d_w_reverb"
 aWetL, aWetR freeverb gaOut, gaOut, kroomsize, khfdamp		; the freeverb opcode works with stereo input, so we read twice the "g.a.Bus"
-aOutL	 = (1-kDryWet) * gaOut + (kDryWet * aWetL)				; the amount of pure-signal (g.a.Bus) and reverbed-signal for the left side is mixed, and written to a local variable
+aOutL	 = (1-kDryWet) * gaOut + (kDryWet * aWetL)			; the amount of pure-signal (g.a.Bus) and reverbed-signal for the left side is mixed, and written to a local variable
 aOutR	 = (1-kDryWet) * gaOut + (kDryWet * aWetR)
 outs aOutL, aOutR								; main output of the final signal
 gaOut = 0.0									; clear the global audio channel for the next k-loop
@@ -79,7 +79,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 664 156 410 573
+WindowBounds: 883 62 400 489
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -104,10 +104,10 @@ ioText {223, 250} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 
 ioText {300, 251} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0-100 %
 ioText {19, 44} {273, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Filterfrequency Control for Instr 1
 ioText {19, 9} {184, 35} label 0.000000 0.00100 "" left "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground border SYNTH SECTION
-ioSlider {18, 68} {311, 38} 10.000000 5000.000000 1935.401929 filter_freq
+ioSlider {18, 68} {311, 38} 10.000000 5000.000000 1919.356913 filter_freq
 </MacGUI>
 
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" name="Events" x="60" y="304" width="513" height="322"> 
+<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="60" y="304" width="513" height="322"> 
  
  
  
