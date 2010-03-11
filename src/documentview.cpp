@@ -277,7 +277,19 @@ QString DocumentView::getScoText()
 QString DocumentView::getOptionsText()
 {
   // Without tags. For text that is being edited in the text editor
-  qDebug() << "DocumentView::getOptionsText() not implemented and will crash!";
+  QString text = "";
+  if (m_mode > 1) { // Split view
+    text = optionsEditor->toPlainText();
+  }
+  else { // Non Split view
+    QString edText = mainEditor->toPlainText();
+    int index = edText.indexOf("<CsOptions>");
+    if (index >= 0 && edText.contains("</CsOptions>")) {
+      text = edText.mid(index + 11, edText.indexOf("</CsOptions>") - index - 11);
+    }
+  }
+  qDebug() << "DocumentView::getOptionsText() " << text;
+  return text;
 }
 
 QString DocumentView::getMiscText()
@@ -552,6 +564,36 @@ void DocumentView::createContextMenu(QPoint pos)
   }
   menu->exec(editors[0]->mapToGlobal(pos));
   delete menu;
+}
+
+void DocumentView::cut()
+{
+  if (m_viewMode < 2) {
+    mainEditor->cut();
+  }
+  else {
+    qDebug() << "DocumentView::cut() not implemented for split view";
+  }
+}
+
+void DocumentView::copy()
+{
+  if (m_viewMode < 2) {
+    mainEditor->copy();
+  }
+  else {
+    qDebug() << "DocumentView::copy() not implemented for split view";
+  }
+}
+
+void DocumentView::paste()
+{
+  if (m_viewMode < 2) {
+    mainEditor->paste();
+  }
+  else {
+    qDebug() << "DocumentView::paste() not implemented for split view";
+  }
 }
 
 void DocumentView::comment()

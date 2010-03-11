@@ -172,7 +172,6 @@ qutecsound::qutecsound(QStringList fileNames)
     documentTabs->setCurrentIndex(lastTabIndex);
   }
   else {
-    qDebug() << "qutecsound starting";
     changePage(documentTabs->currentIndex());
   }
 }
@@ -603,7 +602,7 @@ void qutecsound::createQuickRefPdf()
   if (!QFile::exists(internalFileName)) {
     internalFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
   }
-  qDebug() << "qutecsound::createQuickRefPdf() Opening " << internalFileName;
+//  qDebug() << "qutecsound::createQuickRefPdf() Opening " << internalFileName;
   QFile file(internalFileName);
   file.open(QIODevice::ReadOnly);
   QFile quickRefFile(tempFileName);
@@ -1118,13 +1117,13 @@ void qutecsound::openExternalEditor()
   QString options = currentAudioFile;
   QString optionsText = documentPages[curPage]->getOptionsText();
   if (options == "") {
-    if (!optionsText.contains("-o")) {
+    if (!optionsText.contains(QRegExp("\\b-o"))) {
       options = "test.wav";
     }
     else {
-      //TODO this is not very robust...
-      optionsText = optionsText.mid(optionsText.indexOf("-o") + 2);
-      optionsText = optionsText.left(optionsText.indexOf(" -")).trimmed();
+      optionsText = optionsText.mid(optionsText.indexOf(QRegExp("\\b-o")) + 3);
+      optionsText = optionsText.left(optionsText.indexOf("\n")).trimmed();
+      optionsText = optionsText.left(optionsText.indexOf(QRegExp("\\b-"))).trimmed();
       if (!optionsText.startsWith("dac"))
         options = optionsText;
     }
@@ -2641,7 +2640,7 @@ void qutecsound::clearSettings()
 
 int qutecsound::execute(QString executable, QString options)
 {
-  qDebug() << "qutecsound::execute";
+//  qDebug() << "qutecsound::execute";
 //  QStringList optionlist;
 
 //  // cd to current directory on all platforms

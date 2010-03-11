@@ -528,7 +528,7 @@ void WidgetLayout::setContained(bool contained)
   if (m_contained == contained) {
     return;
   }
-  qDebug() << "WidgetLayout::setContained " << contained;
+//  qDebug() << "WidgetLayout::setContained " << contained;
   m_contained = contained;
   bool bg = this->property("bg").toBool();
   QColor bgColor = this->property("bgcolor").value<QColor>();
@@ -1936,7 +1936,7 @@ int WidgetLayout::createDummy(int x, int y, int width, int height, QString widge
 
 void WidgetLayout::setBackground(bool bg, QColor bgColor)
 {
-  qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor;
+//  qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor;
   QWidget *w;
   layoutMutex.lock();
   w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget

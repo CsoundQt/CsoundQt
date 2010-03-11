@@ -63,7 +63,7 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
     scrollArea->show();
     w->show();
     w->setContained(true);
-    qDebug() << "WidgetPanel::addWidgetLayout  " << w << " s=" << scrollArea;
+//    qDebug() << "WidgetPanel::addWidgetLayout  " << w << " s=" << scrollArea;
   }
 //  else {
 //    qDebug() << " WidgetPanel::setWidgetLayout  not sb active";
@@ -92,7 +92,7 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 
 WidgetLayout * WidgetPanel::takeWidgetLayout()
 {
-  qDebug() << "WidgetPanel::takeWidgetLayout()";
+//  qDebug() << "WidgetPanel::takeWidgetLayout()";
   disconnect(this,SIGNAL(topLevelChanged(bool)));
   QScrollArea *s = (QScrollArea*) stack->currentWidget();
   if (!s) // scroll area is sometimes null during startup and shutdown

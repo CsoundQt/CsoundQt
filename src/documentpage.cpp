@@ -637,7 +637,12 @@ void DocumentPage::copy()
     }
   }
   if (!liveeventfocus) {
-    m_widgetLayout->copy();
+    if (m_view->hasFocus()) {
+      m_view->copy();
+    }
+    else  {
+      m_widgetLayout->copy();
+    }
   }
 }
 
@@ -645,6 +650,8 @@ void DocumentPage::cut()
 {
   if (m_widgetLayout->hasFocus())
     m_widgetLayout->cut();
+  else if (m_view->hasFocus())
+    m_view->cut();
   else {
     for (int i = 0; i < m_liveFrames.size(); i++) {
       if (m_liveFrames[i]->getSheet()->hasFocus())
@@ -655,8 +662,10 @@ void DocumentPage::cut()
 
 void DocumentPage::paste()
 {
-    if (m_widgetLayout->hasFocus())
-      m_widgetLayout->paste();
+  if (m_widgetLayout->hasFocus())
+    m_widgetLayout->paste();
+  else if (m_view->hasFocus())
+    m_view->paste();
   else {
     for (int i = 0; i < m_liveFrames.size(); i++) {
       if (m_liveFrames[i]->getSheet()->hasFocus())

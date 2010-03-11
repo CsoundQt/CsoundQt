@@ -99,6 +99,9 @@ class DocumentView : public QScrollArea
     void findString(QString query = QString());
     void createContextMenu(QPoint pos);
 
+    void cut();
+    void copy();
+    void paste();
     void comment();
     void uncomment();
     void indent();
