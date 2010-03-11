@@ -16,12 +16,12 @@ strset		11, "Thank you!"
 strset		12, "My goodness!"
 strset		13, "Oh my god!"
 strset		14, "Why?"
-strset		15, "You did what you must do."
+strset		15, "You did what you must."
 strset		21, "is a very meaningful"
 strset		22, "is a totally senseless"
 strset		23, "is a deeply religious"
 strset		24, "is a rather useless"
-strset		25, "is a somehow symbolic"
+strset		25, "is a somewhat symbolic"
 strset		26, "is nothing more than a"
 strset		27, "is obviously a strange"
 strset		28, "is an enourmously irrational"
@@ -41,12 +41,12 @@ kplease	init		0
 kplease	=		kplease + 1
  endif 
  if kplease % 2 == 1 then
-		outvalue	"typein1", "PLEASE TYPE -->"
+		outvalue	"typein1", "TYPE"
  else	
 		outvalue	"typein1", ""
  endif 
  if kplease % 2 == 0 then
-		outvalue	"typein2", "HERE!"
+		outvalue	"typein2", "NOW!"
  else	
 		outvalue	"typein2", ""
  endif 
@@ -101,29 +101,27 @@ end:		xout		iftout
 
 
 instr 1
-;;INITIALIZE SOME DISPLAYS
-		event_i	"i", 2, 0, 0.1
 ;;GET SPEED AND ESTIMATE THE USER'S AGE
 kspeed		invalue	"speed"
-Sage		sprintfk	"Age estimated from your speed selection:\n%d years, %d months, %d days.", 20*kspeed*1.8^kspeed, 10^kspeed % 12, 10^kspeed % 30
+kyears = 20*kspeed*1.8^kspeed
+kmonths = 10^kspeed % 12
+Sage		sprintfk	"Age estimated from your speed selection:\n%d years, %d months, %d days.",  kyears, kmonths, 10^kspeed % 30
 		outvalue	"age", Sage
 ;;TURN ON TYPE-IN DISPLAY PROMPT
 konoff		init		1
 		TypeIn		konoff
-;;GET INPUT FROM LINEEDIT WIDGET 
-Sstr		invalue	"char"
-kchr		strchark	Sstr
-knewchar	changed	kchr
-;;CALL INSTR 10 IF SOMETHING NEW HAS BEEN TYPED, AND CLEAR LINEEDIT WIDGET 
-if kchr != 0 && knewchar == 1 then
+
+kchr, kkeydown sensekey
+;;CALL INSTR 10 IF SOMETHING NEW HAS BEEN TYPED
+if kchr != 0 && kkeydown == 1 then
 konoff		=		0
+		event		"i", -10, 0, 1 ; Turn off previous instance
 		event		"i", 10, 0, kspeed*24, kchr
 endif 
-		outvalue	"char", ""
 endin
 
 instr 2
-;;CLEAR DISPLAYS IF NECESSARY
+;;CLEAR DISPLAYS WHEN NECESSARY
 		outvalue	"thanks", ""
 		outvalue	"youtyped", ""
 		outvalue	"showchar1", ""
@@ -137,9 +135,11 @@ instr 2
 		outvalue	"isatotally", ""
 		outvalue	".", ""
 		outvalue	"!", ""
+		turnoff
 endin 
 
 instr 10
+scoreline_i "i 2 0 1" ;First clear the display
 ;;GENERATE A NOTE
   ;PITCH AND ENVELOPE
 ipch		RandInts_i	0, 45; 46 steps per octave 
@@ -180,74 +180,116 @@ ichr		=		p4; ascii code for actual character
 ispeed		=		p3/36; speed 
 Schar		sprintf	"%c", ichr; string with the typed character
 Sascii		sprintf	"%d", ichr; string with the ascii code
-  ;initialize output first (why is it necessary? try to comment out and see the result)
-		outvalue	"thanks", ""
-		outvalue	"youtyped", ""
-		outvalue	"showchar1", ""
-		outvalue	"ascii1", ""
-		outvalue	"showascii1", ""
-		outvalue	"asyouwill", ""
-		outvalue	"showchar2", ""
-		outvalue	"isavery", ""
-		outvalue	"theby", ""
-		outvalue	"showascii2", ""
-		outvalue	"isatotally", ""
-		outvalue	".", ""
-		outvalue	"!", ""
+
 ;;SHOW SEQUENTIAL OUTPUT
 kclock		line		0, ispeed, 1; start clock
-if kclock > .1 then		;select time (etc)
 Sthanks	strget		ithanks
-		outvalue	"thanks", Sthanks
-endif 
-if kclock > 2 then
-		outvalue	"youtyped", "You typed the character"
-endif 
-if kclock > 3 then
-		outvalue	"showchar1", Schar
-endif 
-if kclock > 3.5 then
-		outvalue	".", "."
-endif
-if kclock > 5 then
-		outvalue	"ascii1", "The ASCII code of this character is"
-endif 
-if kclock > 6 then
-		outvalue	"showascii1", Sascii
-endif 
-if kclock > 6.5 then
-		outvalue	"!", "!"
-endif 
-if kclock > 9 then
-		outvalue	"asyouwill", "As you will certainly have heard by the unique tone which is here for the first time presented as the result of long research among all times and cultures at least on earth"
-	endif
-if kclock > 15 then
-		outvalue	"showchar2", Schar
-endif 
-if kclock > 16 then
 Sisavery	strget		isavery
 Sisavery	strcat		Sisavery, " character."
-		outvalue	"isavery", Sisavery
-endif 
-if kclock > 18 then
-		outvalue	"theby", "The number, which for many reasons is specially related to this character, "
-endif 
-if kclock > 21 then
-		outvalue	"showascii2", Sascii
-endif 
-if kclock > 23 then
+
 Sisatotally	strget		isatotally
  if isatotally == isavery then
 Sisatotally	strcat		Sisatotally, " number, too."
  else 
 Sisatotally	strcat		Sisatotally, " number."
  endif
-		outvalue	"isatotally", Sisatotally
+
+S1 sprintf  "i 20 0 1 1 \"%s\"", Sthanks
+S2 sprintf  "i 20 0 1 2 \"%s\"", ""
+S3 sprintf  "i 20 0 1 3 \"%s\"", Schar
+S4 sprintf  "i 20 0 1 4 \"%s\"", ""
+S5 sprintf  "i 20 0 1 5 \"%s\"", ""
+S6 sprintf  "i 20 0 1 6 \"%s\"", Sascii
+S7 sprintf  "i 20 0 1 7 \"%s\"", ""
+S8 sprintf  "i 20 0 1 8 \"%s\"", ""
+S9 sprintf  "i 20 0 1 9 \"%s\"", Schar
+S10 sprintf  "i 20 0 1 10 \"%s\"", Sisavery
+S11 sprintf  "i 20 0 1 11 \"%s\"", ""
+S12 sprintf  "i 20 0 1 12 \"%s\"", Sascii
+S13 sprintf  "i 20 0 1 13 \"%s\"", Sisatotally
+
+igoto skipinit  ; Necessary to avoid initial init pass
+
+if kclock > .1 then		;select time (etc)
+		scoreline S1, 1
 endif 
+if kclock > 2 then
+		scoreline S2, 1
+endif 
+if kclock > 3 then
+		scoreline S3, 1
+endif 
+if kclock > 3.5 then
+		scoreline S4, 1
+endif
+if kclock > 5 then
+		scoreline S5, 1 
+endif 
+if kclock > 6 then
+		scoreline S6, 1
+endif 
+if kclock > 6.5 then
+		scoreline S7, 1
+endif 
+if kclock > 9 then
+		scoreline S8, 1
+	endif
+if kclock > 15 then
+		scoreline S9, 1
+endif 
+if kclock > 16 then 
+		scoreline S10, 1
+endif 
+if kclock > 18 then
+		scoreline S11, 1
+endif 
+if kclock > 21 then
+		scoreline S12, 1
+endif 
+if kclock > 23 then
+		scoreline S13, 1
+endif 
+
+skipinit:
+
+endin
+
+instr 20 ;send text
+ichannel = p4
+Stext = p5
+if ichannel == 1 then
+	outvalue "thanks", Stext
+elseif ichannel == 2 then
+	outvalue "youtyped", "You typed the character"
+elseif ichannel == 3 then
+	outvalue "showchar1", Stext
+elseif ichannel == 4 then
+	outvalue ".", "."
+elseif ichannel == 5 then
+	outvalue "ascii1", "The ASCII code of this character is"
+elseif ichannel == 6 then
+	outvalue "showascii1", Stext
+elseif ichannel == 7 then
+	outvalue "!", "!"
+elseif ichannel == 8 then
+	outvalue "asyouwill", "As you will certainly have heard by the unique tone which is presented here for the first time as the result of long research from all times and cultures at least on earth"
+elseif ichannel == 9 then
+	outvalue "showchar2", Stext
+elseif ichannel == 10 then
+	outvalue "isavery", Stext
+elseif ichannel == 11 then
+	outvalue "theby", "The number, which for many reasons is specially related to this character, "
+elseif ichannel == 12 then
+	outvalue "showascii2", Stext
+elseif ichannel == 13 then
+	outvalue "isatotally", Stext
+endif
+turnoff
 endin
 
 </CsInstruments>
 <CsScore>
+i 2 0 1
 i 1 0 36000; spend 10 hours in profund research and listen to the voice of the truth
 e
 </CsScore>
@@ -259,21 +301,20 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 340 119 810 642
+WindowBounds: 430 207 810 642
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {43690, 43690, 32639}
-ioText {227, 193} {59, 28} edit 0.000000 0.00100 "char" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioText {359, 326} {49, 33} display 0.000000 0.00100 "showascii1" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioText {359, 288} {31, 30} display 0.000000 0.00100 "showchar1" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {102, 193} {126, 28} display 0.000000 0.00100 "typein1" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {286, 193} {127, 28} display 0.000000 0.00100 "typein2" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {119, 184} {102, 49} display 0.000000 0.00100 "typein1" right "Lucida Grande" 28 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {222, 184} {103, 49} display 0.000000 0.00100 "typein2" left "Lucida Grande" 28 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioText {62, 242} {394, 33} display 0.000000 0.00100 "thanks" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioText {79, 290} {275, 30} display 0.000000 0.00100 "youtyped" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {65, 374} {381, 64} display 0.000000 0.00100 "asyouwill" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {65, 374} {381, 64} display 0.000000 0.00100 "asyouwill" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioText {82, 328} {275, 30} display 0.000000 0.00100 "ascii1" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioText {96, 451} {38, 30} display 0.000000 0.00100 "showchar2" right "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioText {137, 453} {275, 30} display 0.000000 0.00100 "isavery" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
@@ -285,10 +326,10 @@ ioText {393, 328} {41, 30} display 0.000000 0.00100 "!" left "Lucida Grande" 12 
 ioText {49, 16} {721, 41} label 0.000000 0.00100 "" center "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Get the ASCII Code of a Character
 ioText {48, 55} {722, 58} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder And learn a lot more about the symbolic function of characters and numbers.Â¬This can be very important for your future life.
 ioText {47, 112} {724, 48} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder First, select your personal speed at the slider on the right.Â¬Then, press the Start button.
-ioSlider {514, 222} {259, 27} 0.500000 2.000000 0.749035 speed
+ioSlider {514, 222} {259, 27} 0.500000 2.000000 0.667954 speed
 ioText {513, 192} {260, 25} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select Your Personal Speed of Messages
-ioText {514, 277} {259, 97} display 0.000000 0.00100 "age" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioButton {397, 193} {100, 30} value 1.000000 "_Play" "Start" "/" i1 0 10
+ioText {514, 277} {259, 97} display 0.000000 0.00100 "age" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Age estimated from your speed selection:Â¬20 years, 5 months, 5 days.
+ioButton {513, 373} {261, 28} value 1.000000 "_Play" "Start" "/" i1 0 10
 </MacGUI>
 
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="596" height="322"> 
