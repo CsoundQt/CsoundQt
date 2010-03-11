@@ -145,6 +145,7 @@ class qutecsound:public QMainWindow
 //    void utilitiesDialogOpen();
     void statusBarMessage(QString message);
     void about();
+    void donate();
     void documentWasModified();
 //    void syntaxCheck();
     void configure();
@@ -269,6 +270,7 @@ class qutecsound:public QMainWindow
     QAction *indentAct;
     QAction *unindentAct;
     QAction *aboutAct;
+    QAction *donateAct;
     QAction *aboutQtAct;
 
     int curPage;  // TODO use this or textEdit but not both!

@@ -1251,36 +1251,43 @@ void qutecsound::about()
 {
 
   About *msgBox = new About(this);
-
+  msgBox->setWindowFlags(msgBox->windowFlags() | Qt::FramelessWindowHint);
   QString text = tr("<h1>by: Andres Cabrera and others</h1><h2>Version %1</h2><h2>Released under the LGPLv2 or GPLv3</h2>").arg(QUTECSOUND_VERSION);
   text += tr("French translation: Fran&ccedil;ois Pinot<br />");
   text += tr("German translation: Joachim Heintz<br />");
   text += tr("Portuguese translation: Victor Lazzarini<br />");
   text += tr("Italian translation: Francesco<br />");
   text += tr("Turkish translation: Ali Isciler<br />");
-  text += QString("<center><a href=\"http://qutecsound.sourceforge.net\">qutecsound.sourceforge.net</a></center><br /><br />");
+  text += QString("<center><a href=\"http://qutecsound.sourceforge.net\">qutecsound.sourceforge.net</a></center><br />");
   text += tr("If you find QuteCsound useful, please consider donating to the project:<br />");
-  text += "<center><a href=\"http://sourceforge.net/donate/index.php?group_id=227265\"><img src=\":/images/project-support.jpg\" width=\"88\" height=\"32\" border=\"0\" alt=\"Support This Project\" /> </a></center>";
+  text += "<center><a href=\"http://sourceforge.net/donate/index.php?group_id=227265\"><img src=\":/images/project-support.jpg\" width=\"88\" height=\"32\" border=\"0\" alt=\"Support This Project\" /></a></center>";
 
-  text += tr("Please file bug reports and feature suggestions in the QuteCsound tracker:<br />");
-  text += "<a href=\"http://sourceforge.net/tracker/?group_id=227265\">http://sourceforge.net/tracker/?group_id=227265</a><br />";
-  text += tr("Join the QuteCsound users mailing list:<br />");
-  text += "<a href=\"http://lists.sourceforge.net/lists/listinfo/qutecsound-users\">http://lists.sourceforge.net/lists/listinfo/qutecsound-users</a><br />";
-//  text += "Resources: cSounds.com\nCsound UDO repository\nCsound Blog\nCsound Journal\nCsound page at SourceForge";
-//  Join/Read QuteCsound Mailing List
-//  Join/Read Csound Mailing List
-//  Search/Read Csound Mailing List Archives
-//  Join/Read Csound Developer List
-//  Download Latest Csound Sources
-//  Post/Read Csound BugTracker
-//
-//  Supported by:
+  text += tr("<br />Please file bug reports and feature suggestions in the ");
+  text += "<a href=\"http://sourceforge.net/tracker/?group_id=227265\">QuteCsound tracker</a>.<br />";
+
+  text +=tr("Mailing Lists:<br />");
+  text += "<a href=\"http://lists.sourceforge.net/lists/listinfo/qutecsound-users\">Join/Read QuteCsound Mailing List</a><br />";
+  text += "<a href=\"http://old.nabble.com/Csound-f480.html\">Join/Read Csound Mailing List</a><br />";
+  text += "<a href=\"https://lists.sourceforge.net/lists/listinfo/csound-devel\"> Join/Read Csound Developer List</a><br />";
+
+  text += tr("<br />Other Resources:<br />");
+  text += "<a href=\"http://www.csounds.com\">cSounds.com</a><br />";
+  text += "<a href=\"http://csound.sourceforge.net\">Csound Page at SourceForge</a><br />";
+  text += "<a href=\"http://csound.sourceforge.net\">Csound Journal</a><br />";
+  text += "<a href=\"http://csound.noisepages.com/\">The Csound Blog</a><br />";
+  text +=  tr("<br />Supported by:<br />");
 //  INCONTRI
+
   msgBox->getTextEdit()->setOpenLinks(false);
   msgBox->setHtmlText(text);
   connect(msgBox->getTextEdit(), SIGNAL(anchorClicked(QUrl)), this, SLOT(openExternalBrowser(QUrl)));
   int ret = msgBox->exec();
   delete msgBox;
+}
+
+void qutecsound::donate()
+{
+  openExternalBrowser(QUrl("http://sourceforge.net/donate/index.php?group_id=227265"));
 }
 
 void qutecsound::documentWasModified()
@@ -1864,6 +1871,11 @@ void qutecsound::createActions()
 //   aboutAct->setIconText(tr("About"));
   connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 
+  donateAct = new QAction(tr("Donate to QuteCsound"), this);
+  donateAct->setStatusTip(tr("Donate to support development of QuteCsound"));
+//   aboutAct->setIconText(tr("About"));
+  connect(donateAct, SIGNAL(triggered()), this, SLOT(donate()));
+
   aboutQtAct = new QAction(tr("About &Qt"), this);
   aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
 //   aboutQtAct->setIconText(tr("About Qt"));
@@ -2238,6 +2250,7 @@ void qutecsound::createMenus()
   helpMenu->addAction(openQuickRefAct);
   helpMenu->addSeparator();
   helpMenu->addAction(aboutAct);
+  helpMenu->addAction(donateAct);
   helpMenu->addAction(aboutQtAct);
 
 }
