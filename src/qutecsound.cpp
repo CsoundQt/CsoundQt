@@ -1248,34 +1248,39 @@ void qutecsound::statusBarMessage(QString message)
 
 void qutecsound::about()
 {
-
   About *msgBox = new About(this);
   msgBox->setWindowFlags(msgBox->windowFlags() | Qt::FramelessWindowHint);
-  QString text = tr("<h1>by: Andres Cabrera and others</h1><h2>Version %1</h2><h2>Released under the LGPLv2 or GPLv3</h2>").arg(QUTECSOUND_VERSION);
-  text += tr("French translation: Fran&ccedil;ois Pinot<br />");
-  text += tr("German translation: Joachim Heintz<br />");
-  text += tr("Portuguese translation: Victor Lazzarini<br />");
-  text += tr("Italian translation: Francesco<br />");
-  text += tr("Turkish translation: Ali Isciler<br />");
+  QString text ="<h1>";
+  text += tr("by: Andres Cabrera and others") +"</h1><h2>",
+  text += tr("Version %1").arg(QUTECSOUND_VERSION) + "</h2><h2>";
+  text += tr("Released under the LGPLv2 or GPLv3") + "</h2>";
+  text += tr("French translation: Fran&ccedil;ois Pinot") + "<br />";
+  text += tr("German translation: Joachim Heintz") + "<br />";
+  text += tr("Portuguese translation: Victor Lazzarini") + "<br />";
+  text += tr("Italian translation: Francesco") + "<br />";
+  text += tr("Turkish translation: Ali Isciler") + "<br />";
   text += QString("<center><a href=\"http://qutecsound.sourceforge.net\">qutecsound.sourceforge.net</a></center><br />");
-  text += tr("If you find QuteCsound useful, please consider donating to the project:<br />");
-  text += "<center><a href=\"http://sourceforge.net/donate/index.php?group_id=227265\"><img src=\":/images/project-support.jpg\" width=\"88\" height=\"32\" border=\"0\" alt=\"Support This Project\" /></a></center>";
+  text += tr("If you find QuteCsound useful, please consider donating to the project:");
+  text += "<br /><center><a href=\"http://sourceforge.net/donate/index.php?group_id=227265\"><img src=\":/images/project-support.jpg\" width=\"88\" height=\"32\" border=\"0\" alt=\"Support This Project\" /></a></center>";
 
-  text += tr("<br />Please file bug reports and feature suggestions in the ");
-  text += "<a href=\"http://sourceforge.net/tracker/?group_id=227265\">QuteCsound tracker</a>.<br />";
+  text += tr("Please file bug reports and feature suggestions in the ");
+  text += "<a href=\"http://sourceforge.net/tracker/?group_id=227265\">";
+  text += tr("QuteCsound tracker") + "</a>.<br />";
 
-  text +=tr("Mailing Lists:<br />");
-  text += "<a href=\"http://lists.sourceforge.net/lists/listinfo/qutecsound-users\">Join/Read QuteCsound Mailing List</a><br />";
+  text +=tr("Mailing Lists:");
+  text += "<br /><a href=\"http://lists.sourceforge.net/lists/listinfo/qutecsound-users\">Join/Read QuteCsound Mailing List</a><br />";
   text += "<a href=\"http://old.nabble.com/Csound-f480.html\">Join/Read Csound Mailing List</a><br />";
   text += "<a href=\"https://lists.sourceforge.net/lists/listinfo/csound-devel\"> Join/Read Csound Developer List</a><br />";
 
-  text += tr("<br />Other Resources:<br />");
+  text += "<br />"+ tr("Other Resources:") + "<br />";
   text += "<a href=\"http://www.csounds.com\">cSounds.com</a><br />";
   text += "<a href=\"http://csound.sourceforge.net\">Csound Page at SourceForge</a><br />";
   text += "<a href=\"http://csound.sourceforge.net\">Csound Journal</a><br />";
   text += "<a href=\"http://csound.noisepages.com/\">The Csound Blog</a><br />";
-  text +=  tr("<br />Supported by:<br />");
-//  INCONTRI
+  text +=  "<br />" + tr("Supported by:") +"<br />";
+  text +=  "<a href=\"http://www.hmt-hannover.de\">Incontri - HMT Hannover</a><br />";
+  text += "<a href=\"http//sourceforge.net/project/project_donations.php?group_id=227265\">";
+  text +=  tr("And other generous users.") + "</a><br />";
 
   msgBox->getTextEdit()->setOpenLinks(false);
   msgBox->setHtmlText(text);
