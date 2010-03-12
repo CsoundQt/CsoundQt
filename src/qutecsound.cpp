@@ -1114,9 +1114,13 @@ void qutecsound::render()
 
 void qutecsound::openExternalEditor()
 {
-  QString options = currentAudioFile;
+  QString options = "";
+  if (m_options->sfdirActive) {
+    options = m_options->sfdir + (m_options->sfdir.endsWith("/") ? "" : "/");
+  }
+  options += currentAudioFile;
   QString optionsText = documentPages[curPage]->getOptionsText();
-  if (options == "") {
+  if (currentAudioFile == "") {
     if (!optionsText.contains(QRegExp("\\b-o"))) {
       options = "test.wav";
     }
@@ -1135,16 +1139,20 @@ void qutecsound::openExternalEditor()
 
 void qutecsound::openExternalPlayer()
 {
-  QString options = currentAudioFile;
+  QString options = "";
+  if (m_options->sfdirActive) {
+    options = m_options->sfdir + (m_options->sfdir.endsWith("/") ? "" : "/");
+  }
+  options += currentAudioFile;
   QString optionsText = documentPages[curPage]->getOptionsText();
-  if (options == "") {
-    if (!optionsText.contains("-o")) {
-      options = "test.wav";
+  if (currentAudioFile == "") {
+    if (!optionsText.contains(QRegExp("\\b-o"))) {
+      options += "test.wav";
     }
     else {
-      //TODO this is not very robust...
-      optionsText = optionsText.mid(optionsText.indexOf("-o") + 2);
-      optionsText = optionsText.left(optionsText.indexOf(" -")).trimmed();
+      optionsText = optionsText.mid(optionsText.indexOf(QRegExp("\\b-o")) + 3);
+      optionsText = optionsText.left(optionsText.indexOf("\n")).trimmed();
+      optionsText = optionsText.left(optionsText.indexOf(QRegExp("\\b-"))).trimmed();
       if (!optionsText.startsWith("dac"))
         options = optionsText;
     }
@@ -1279,7 +1287,7 @@ void qutecsound::about()
   text += "<a href=\"http://csound.noisepages.com/\">The Csound Blog</a><br />";
   text +=  "<br />" + tr("Supported by:") +"<br />";
   text +=  "<a href=\"http://www.hmt-hannover.de\">Incontri - HMT Hannover</a><br />";
-  text += "<a href=\"http//sourceforge.net/project/project_donations.php?group_id=227265\">";
+  text += "<a href=\"http://sourceforge.net/project/project_donations.php?group_id=227265\">";
   text +=  tr("And other generous users.") + "</a><br />";
 
   msgBox->getTextEdit()->setOpenLinks(false);
@@ -2553,6 +2561,7 @@ void qutecsound::writeSettings()
   settings.setValue("savewidgets", m_options->saveWidgets);
   settings.setValue("iconText", m_options->iconText);
   settings.setValue("wrapLines", m_options->wrapLines);
+  settings.setValue("autoComplete", m_options->autoComplete);
   settings.setValue("enableWidgets", m_options->enableWidgets);
   settings.setValue("useInvalue", m_options->useInvalue);
   settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
