@@ -80,15 +80,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   m_isModified = false;
   m_highlighter.setDocument(mainEditor->document());
 
-  syntaxMenu = new MySyntaxMenu(mainEditor);
-//  syntaxMenu->setFocusPolicy(Qt::NoFocus);
-  syntaxMenu->setAutoFillBackground(true);
-  QPalette p =syntaxMenu-> palette();
-  p.setColor(QPalette::WindowText, Qt::blue);
-  p.setColor(QPalette::Active, static_cast<QPalette::ColorRole>(9), Qt::yellow);
-  syntaxMenu->setPalette(p);
-  connect(syntaxMenu,SIGNAL(keyPressed(QString)),
-          mainEditor, SLOT(insertPlainText(QString)));
+  syntaxMenu = 0;
 }
 
 DocumentView::~DocumentView()
@@ -122,6 +114,7 @@ void DocumentView::setViewMode(int mode)
       otherEditor->setVisible(m_viewMode & 128);
       widgetEditor->setVisible(m_viewMode & 256);
   }
+
 }
 
 void DocumentView::setFileType(int mode)
@@ -390,8 +383,16 @@ void DocumentView::textChanged()
         ) {
         QVector<Opcode> syntax = m_opcodeTree->getPossibleSyntax(word);
         if (syntax.size() > 0) {
+          if (syntaxMenu == 0) {
+            createSyntaxMenu();
+          }
           syntaxMenu->clear();
+          bool allEqual = true;
           for(int i = 0; i < syntax.size(); i++) {
+            if (syntax[i].opcodeName != word) {
+              qDebug() << "DocumentView::textChanged() -" << syntax[i].opcodeName << "-" << word;
+              allEqual = false;
+            }
             QString text = syntax[i].opcodeName;
             if (syntax[i].outArgs.simplified().startsWith("a")) {
               text += " (audio-rate)";
@@ -412,14 +413,19 @@ void DocumentView::textChanged()
                                                this, SLOT(insertTextFromAction()));
             a->setData(m_opcodeTree->getSyntax(syntax[i].opcodeName));
           }
-          QRect r =  mainEditor->cursorRect();
-          QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-          QPoint globalPoint =  mainEditor->mapToGlobal(p);
-          syntaxMenu->setWindowModality(Qt::NonModal);
-          syntaxMenu->popup (globalPoint);
-          //    syntaxMenu->move(QPoint(r.x() + r.width(), r.y() + r.height()));
-          //    syntaxMenu->show();
-          mainEditor->setFocus(Qt::OtherFocusReason);
+          if (!allEqual) {
+            QRect r =  mainEditor->cursorRect();
+            QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+            QPoint globalPoint =  mainEditor->mapToGlobal(p);
+            syntaxMenu->setWindowModality(Qt::NonModal);
+            syntaxMenu->popup(globalPoint);
+            //    syntaxMenu->move(QPoint(r.x() + r.width(), r.y() + r.height()));
+            //    syntaxMenu->show();
+            mainEditor->setFocus(Qt::OtherFocusReason);
+          }
+          else {
+            destroySyntaxMenu();
+          }
         }
       }
     }
@@ -840,12 +846,33 @@ QString DocumentView::changeToInvalue(QString text)
   return newText;
 }
 
+void DocumentView::createSyntaxMenu()
+{
+  syntaxMenu = new MySyntaxMenu(mainEditor);
+//  syntaxMenu->setFocusPolicy(Qt::NoFocus);
+  syntaxMenu->setAutoFillBackground(true);
+  QPalette p =syntaxMenu-> palette();
+  p.setColor(QPalette::WindowText, Qt::blue);
+  p.setColor(QPalette::Active, static_cast<QPalette::ColorRole>(9), Qt::yellow);
+  syntaxMenu->setPalette(p);
+  connect(syntaxMenu,SIGNAL(keyPressed(QString)),
+          mainEditor, SLOT(insertPlainText(QString)));
+  connect(syntaxMenu,SIGNAL(aboutToHide()),
+          this, SLOT(destroySyntaxMenu()));
+}
+
 void DocumentView::hideAllEditors()
 {
   for (int i = 0; i < editors.size(); i++) {
     editors[i]->hide();
     splitter->handle(i)->hide();
   }
+}
+
+void DocumentView::destroySyntaxMenu()
+{
+  syntaxMenu->deleteLater();
+  syntaxMenu = 0;
 }
 
 MySyntaxMenu::MySyntaxMenu(QWidget * parent) :

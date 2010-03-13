@@ -120,6 +120,7 @@ class DocumentView : public QScrollArea
   private:
     QString changeToChnget(QString text);
     QString changeToInvalue(QString text);
+    void createSyntaxMenu();
 
     void hideAllEditors();
     int m_viewMode; // 0 = csd without widget + preset section
@@ -159,6 +160,9 @@ class DocumentView : public QScrollArea
     bool lastCaseSensitive; // These last three are for search and replace
     QString lastSearch;
     QString lastReplace;
+
+  private slots:
+    void destroySyntaxMenu();
 
   signals:
     void opcodeSyntaxSignal(QString syntax);  // Report an opcode syntax under cursor
