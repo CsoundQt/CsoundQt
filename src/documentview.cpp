@@ -390,7 +390,6 @@ void DocumentView::textChanged()
           bool allEqual = true;
           for(int i = 0; i < syntax.size(); i++) {
             if (syntax[i].opcodeName != word) {
-              qDebug() << "DocumentView::textChanged() -" << syntax[i].opcodeName << "-" << word;
               allEqual = false;
             }
             QString text = syntax[i].opcodeName;
