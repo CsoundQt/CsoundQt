@@ -1121,15 +1121,15 @@ void qutecsound::openExternalEditor()
   options += currentAudioFile;
   QString optionsText = documentPages[curPage]->getOptionsText();
   if (currentAudioFile == "") {
-    if (!optionsText.contains(QRegExp("\\b-o"))) {
-      options = "test.wav";
+    if (!optionsText.contains(QRegExp("\\W-o"))) {
+      options += "test.wav";
     }
     else {
-      optionsText = optionsText.mid(optionsText.indexOf(QRegExp("\\b-o")) + 3);
+      optionsText = optionsText.mid(optionsText.indexOf(QRegExp("\\W-o")) + 3);
       optionsText = optionsText.left(optionsText.indexOf("\n")).trimmed();
-      optionsText = optionsText.left(optionsText.indexOf(QRegExp("\\b-"))).trimmed();
+      optionsText = optionsText.left(optionsText.indexOf("-")).trimmed();
       if (!optionsText.startsWith("dac"))
-        options = optionsText;
+        options += optionsText;
     }
   }
   options = "\"" + options + "\"";
@@ -1150,11 +1150,11 @@ void qutecsound::openExternalPlayer()
       options += "test.wav";
     }
     else {
-      optionsText = optionsText.mid(optionsText.indexOf(QRegExp("\\b-o")) + 3);
+      optionsText = optionsText.mid(optionsText.indexOf(QRegExp("\\W-o")) + 3);
       optionsText = optionsText.left(optionsText.indexOf("\n")).trimmed();
-      optionsText = optionsText.left(optionsText.indexOf(QRegExp("\\b-"))).trimmed();
+      optionsText = optionsText.left(optionsText.indexOf(QRegExp("\\W-"))).trimmed();
       if (!optionsText.startsWith("dac"))
-        options = optionsText;
+        options += optionsText;
     }
   }
   options = "\"" + options + "\"";
