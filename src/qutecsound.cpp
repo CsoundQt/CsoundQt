@@ -1146,13 +1146,13 @@ void qutecsound::openExternalPlayer()
   options += currentAudioFile;
   QString optionsText = documentPages[curPage]->getOptionsText();
   if (currentAudioFile == "") {
-    if (!optionsText.contains(QRegExp("\\b-o"))) {
+    if (!optionsText.contains(QRegExp("\\W-o"))) {
       options += "test.wav";
     }
     else {
       optionsText = optionsText.mid(optionsText.indexOf(QRegExp("\\W-o")) + 3);
       optionsText = optionsText.left(optionsText.indexOf("\n")).trimmed();
-      optionsText = optionsText.left(optionsText.indexOf(QRegExp("\\W-"))).trimmed();
+      optionsText = optionsText.left(optionsText.indexOf(QRegExp("-"))).trimmed();
       if (!optionsText.startsWith("dac"))
         options += optionsText;
     }
