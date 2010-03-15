@@ -69,7 +69,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -422,7 +422,7 @@
        <enum>Qt::LeftToRight</enum>
       </property>
       <property name="text">
-       <string>Allow simultaneous play (May cause crashes with portmidi,coreaudio, and alsa audio) </string>
+       <string>Allow simultaneous play (May have problems with portmidi,coreaudio, and alsa audio) </string>
       </property>
      </widget>
     </widget>
@@ -1049,7 +1049,7 @@
        <rect>
         <x>10</x>
         <y>30</y>
-        <width>341</width>
+        <width>363</width>
         <height>97</height>
        </rect>
       </property>

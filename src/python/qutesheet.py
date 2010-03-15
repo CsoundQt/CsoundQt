@@ -4,6 +4,11 @@
 # Please see QuteCsound fro more information
 # qutecsound.sourceforge.net
 
+version = "1.0.0"
+majorversion = 1
+minorversion = 0
+subversion   = 0
+
 class QuteSheet:
     """The QuteSheet API"""
     out_filename = "qutesheet_out_data.txt"
