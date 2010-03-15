@@ -101,7 +101,7 @@ QString DotGenerator::getDotText()
     dotText += "label=\"instr " + instrumentNames[i]  + "\"\n";
     int labelCounter = 0;
     for (int j = 0; j < instrumentGraphs[i].size(); j++) {
-      if (allInstrumentLabels[i].size() > 0 && allInstrumentLabels[i][labelCounter].second == j) {
+      if (allInstrumentLabels[i].size() < labelCounter && allInstrumentLabels[i][labelCounter].second == j) {
 //        qDebug() << "allInstrument " << allInstrumentLabels[i].size() << " " << allInstrumentLabels[i][labelCounter].second;
         if (labelCounter > 0) { // Close previous label
           dotText += "} /* closes cluster_l" + QString::number(labelCounter - 1) +" */\n";
