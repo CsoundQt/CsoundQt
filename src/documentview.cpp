@@ -735,9 +735,11 @@ void DocumentView::markErrorLines(QList<int> lines)
     }
     cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     cur.mergeCharFormat(errorFormat);
+    internalChange = true;
     editors[0]->setTextCursor(cur);
     cur.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
   }
+  internalChange = true;
   editors[0]->setTextCursor(cur);
   errorMarked = true;
 }
