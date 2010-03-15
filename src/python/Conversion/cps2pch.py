@@ -8,7 +8,7 @@ new_data = []
 
 for c in cells:
     if type(c) != str:
-        new_val = 69 + (12 *log10(c/440.0)/log10(2))
+        new_val = 117 + (12 *log10(c/440.0)/log10(2))
         c = int(new_val/12) - 1 + ((new_val%12) / 100)
         new_data.append(c)
     else:

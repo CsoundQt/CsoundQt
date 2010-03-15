@@ -100,7 +100,7 @@ class EventSheet : public QTableWidget
     void fill(double start, double end, double slope);
 
     void runScript(QString script);
-    QString generateDataText();
+    QString generateDataText(QString outFileName);
     void addDirectoryToMenu(QMenu *m, QString dir, int depth = 0);
 //    void rename(QString name);
 

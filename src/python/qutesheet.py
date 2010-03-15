@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # This file defines the QuteSheet API
 # It is part of QuteCsound and is licensed under the GPLv3 or LGPLv2
-# Please see QuteCsound fro more information
+# Please see QuteCsound for more information
 # qutecsound.sourceforge.net
 
 version = "1.0.0"
@@ -11,9 +11,8 @@ subversion   = 0
 
 class QuteSheet:
     """The QuteSheet API"""
-    out_filename = "qutesheet_out_data.txt"
     def __init__(self, qutesheet_data):
-        out_filename = "qutesheet_out_data.txt"
+        self.out_filename = qutesheet_data.out_filename
         self.first_row = qutesheet_data.row
         self.first_col = qutesheet_data.col
         self.num_rows = qutesheet_data.num_rows
@@ -36,13 +35,6 @@ class QuteSheet:
         self.cells_by_row_all = self._get_cells_by_row(self.rows_all)
         #cells_by_col = _get_cells_by_row(cols_selection)
         self.cells_by_col_all = self._get_cells_by_row(self.cols_all)
-
-    # ----------------
-    # Public Functions
-    
-    def set_out_filename(self, name):
-        """Set the filename for the text output from QuteSheet API scripts"""
-        out_filename = name
     
     # ----------------
     # Data setting functions (for data output from script)
@@ -87,7 +79,8 @@ class QuteSheet:
         for i in range(new_num_rows):
             out_data.append([])
             for j in range(new_num_cols):
-                out_data[i].append(new_data.pop(0))
+                if len(new_data) > 0:
+                    out_data[i].append(new_data.pop(0))
         set_rows(out_data, new_first_row, new_first_col, new_num_rows, new_num_cols)
     
     def set_cells_by_col(self, new_data, new_first_row = -1, new_first_col = -1, new_num_rows = -1, new_num_cols = -1):
@@ -146,7 +139,7 @@ class QuteSheet:
         return rows
     
     def _write_out_file(self, text):
-        f = open(out_filename, "w")
+        f = open(self.out_filename, "w")
         f.write(text);
         f.close()
 
@@ -168,7 +161,6 @@ _defObj = QuteSheet(qutesheet_data)
 # ----------------
 # Data gathering functions
 
-out_filename = _defObj.out_filename
 first_col = _defObj.first_col
 num_rows = _defObj.num_rows
 num_cols = _defObj.num_cols
@@ -190,12 +182,6 @@ cells_by_row = _defObj.cells_by_row
 cells_by_row_all = _defObj.cells_by_row_all
 #cells_by_col = _defObj.
 cells_by_col_all = _defObj.cells_by_col_all
-
-# ----------------
-# Functions
-def set_out_filename(name):
-    """Set the filename for the text output from QuteSheet API scripts"""
-    _defObj.set_out_filename(name)
     
 # ----------------
 # Data setting functions (for data output from script)
@@ -220,8 +206,8 @@ def set_text(text, new_first_row = -1, new_first_col = -1, new_num_rows = -1, ne
     """Set data from a text string, each line is interpreted as a row and each cell must be separated by a space."""
     _defObj.set_text(text, new_first_row, new_first_col, new_num_rows, new_num_cols)
     
-    # ----------------
-    # Utility functions
+# ----------------
+# Utility functions
 
 def sort_by_start(rows, p_field = 2):
     _defObj.sort_by_start(rows, p_field)

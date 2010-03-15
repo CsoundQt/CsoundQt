@@ -704,7 +704,7 @@ void EventSheet::runScript()
   runScript(static_cast<QAction *>(sender())->data().toString());
 }
 
-QString EventSheet::generateDataText()
+QString EventSheet::generateDataText(QString outFileName)
 {
   QModelIndexList list = this->selectedIndexes();
   int minRow = 999999, minCol = 999999, maxRow = -1, maxCol = -1;
@@ -724,7 +724,7 @@ QString EventSheet::generateDataText()
   }
   QString data = "[ ";
   for (int i = minRow; i <= maxRow; i++) {
-    data += "( ";
+    data += "[ ";
     for (int j = minCol; j <= maxCol; j++) {
       QTableWidgetItem * item = this->item(i, j);
       if ( item == 0) {
@@ -743,14 +743,14 @@ QString EventSheet::generateDataText()
       data += ", ";
     }
     data.chop(2);
-    data += " ),\n";
+    data += " ],\n";
   }
   data.chop(2);
   data += " ]";
 
   QString data_all = "[ ";
   for (int i = 0; i < this->rowCount(); i++) {
-    data_all += "( ";
+    data_all += "[ ";
     for (int j = 0; j < this->columnCount() ; j++) {
       QTableWidgetItem * item = this->item(i, j);
       if ( item == 0) {
@@ -770,7 +770,7 @@ QString EventSheet::generateDataText()
       data_all += ", ";
     }
     data_all.chop(2);
-    data_all += " ),\n";
+    data_all += " ],\n";
   }
   data_all.chop(2);
   data_all += " ]";
@@ -785,6 +785,7 @@ QString EventSheet::generateDataText()
 
   text += "data = " + data + "\n";
   text += "data_all = " + data_all + "\n";
+  text += "out_filename = '" + outFileName + "'\n";
   return text;
 }
 
@@ -822,7 +823,7 @@ void EventSheet::runScript(QString name)
   QFile dataFile(tempDir.absolutePath() + QDir::separator() + "qutesheet_data.py");
   dataFile.open(QFile::WriteOnly | QIODevice::Text);
   QTextStream dataStream(&dataFile);
-  dataStream << generateDataText();
+  dataStream << generateDataText(outFileName);
   dataFile.close();
 
   QFile outFile(tempDir.absolutePath() + QDir::separator() + outFileName);
