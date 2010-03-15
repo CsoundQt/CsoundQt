@@ -86,6 +86,7 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
     opcodeCategoryList.append(newCategory);
     n = n.nextSibling();
   }
+  addExtraOpcodes();
 }
 
 
@@ -93,6 +94,14 @@ OpEntryParser::~OpEntryParser()
 {
 }
 
+void OpEntryParser::addExtraOpcodes()
+{
+  Opcode opcode;
+  opcode.outArgs = "";
+  opcode.opcodeName = "then";
+  opcode.inArgs ="";
+  addOpcode(opcode);
+}
 
 QStringList OpEntryParser::opcodeNameList()
 {

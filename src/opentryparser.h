@@ -36,6 +36,7 @@ class OpEntryParser
 
     ~OpEntryParser();
 
+    void addExtraOpcodes();
     QStringList opcodeNameList();
     QString getSyntax(QString opcodeName);
     QVector<Opcode> getPossibleSyntax(QString word);

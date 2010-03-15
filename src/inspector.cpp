@@ -116,11 +116,32 @@ void Inspector::parsePythonText(const QString &text)
   m_treeWidget->clear();
   TreeItem *importItem = new TreeItem(m_treeWidget, QStringList(tr("Imports")));
   importItem->setLine(-1);
+  TreeItem *classItem = new TreeItem(m_treeWidget, QStringList(tr("Classes")));
+  classItem->setLine(-1);
   TreeItem *functionItem = new TreeItem(m_treeWidget, QStringList(tr("Functions")));
   functionItem->setLine(-1);
-  QStringList lines = text.split(QRegExp("[\n\r]"));
+  TreeItem *currentParent = 0;
+  QStringList lines = text.split(QRegExp("[\\n\\r]"));
   for (int i = 0; i< lines.size(); i++) {
-    if (lines[i].trimmed().contains("import")) {
+    if (lines[i].trimmed().startsWith("class ")) {
+      QStringList columnslist(lines[i].simplified());
+      TreeItem *newItem = new TreeItem(classItem, columnslist);
+      currentParent = newItem;
+      m_treeWidget->expandItem(newItem);
+//      QFont itemFont = newItem->font(0);
+//      itemFont.setBold(true);
+//      newItem->setBackground(1, QBrush(Qt::darkRed) );
+//      newItem->setFont(1, itemFont);
+      newItem->setLine(i + 1);
+    }
+    else if (lines[i].contains(QRegExp("[\\s]+def "))) {
+      QStringList columnslist(lines[i].simplified());
+      if (currentParent != 0) {
+        TreeItem *newItem = new TreeItem(currentParent, columnslist);
+        newItem->setLine(i + 1);
+      }
+    }
+    else if (lines[i].trimmed().contains(QRegExp("\\bimport\\b"))) {
       QStringList columnslist(lines[i].simplified());
       TreeItem *newItem = new TreeItem(importItem, columnslist);
       newItem->setLine(i + 1);
@@ -133,6 +154,7 @@ void Inspector::parsePythonText(const QString &text)
   }
   m_treeWidget->expandItem(importItem);
   m_treeWidget->expandItem(functionItem);
+  m_treeWidget->expandItem(classItem);
 }
 
 void Inspector::focusInEvent (QFocusEvent * event)
