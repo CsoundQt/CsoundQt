@@ -165,6 +165,7 @@ void Inspector::focusInEvent (QFocusEvent * event)
 
 void Inspector::closeEvent(QCloseEvent * /*event*/)
 {
+  qDebug() << "Inspector::closeEvent";
   emit Close(false);
 }
 

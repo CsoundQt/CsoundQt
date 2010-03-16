@@ -2027,6 +2027,7 @@ void qutecsound::connectActions()
   disconnect(m_inspector, 0, 0, 0);
   connect(m_inspector, SIGNAL(jumpToLine(int)),
           doc, SLOT(jumpToLine(int)));
+  connect(m_inspector, SIGNAL(Close(bool)), showInspectorAct, SLOT(setChecked(bool)));
 
   disconnect(showLiveEventsAct, 0,0,0);
   connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventFrames(bool)));
