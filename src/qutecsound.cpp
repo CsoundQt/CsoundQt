@@ -1114,52 +1114,62 @@ void qutecsound::render()
 
 void qutecsound::openExternalEditor()
 {
-  QString options = "";
+  QString name = "";
   if (m_options->sfdirActive) {
-    options = m_options->sfdir + (m_options->sfdir.endsWith("/") ? "" : "/");
+    name = m_options->sfdir + (m_options->sfdir.endsWith("/") ? "" : "/");
   }
-  options += currentAudioFile;
+  name += currentAudioFile;
   QString optionsText = documentPages[curPage]->getOptionsText();
   if (currentAudioFile == "") {
     if (!optionsText.contains(QRegExp("\\W-o"))) {
-      options += "test.wav";
+      name += "test.wav";
     }
     else {
       optionsText = optionsText.mid(optionsText.indexOf(QRegExp("\\W-o")) + 3);
       optionsText = optionsText.left(optionsText.indexOf("\n")).trimmed();
       optionsText = optionsText.left(optionsText.indexOf("-")).trimmed();
       if (!optionsText.startsWith("dac"))
-        options += optionsText;
+        name += optionsText;
     }
   }
-  options = "\"" + options + "\"";
-  QString waveeditor = "\"" + m_options->waveeditor + "\"";
-  execute(m_options->waveeditor, options);
+  if (!m_options->waveeditor.isEmpty()) {
+    name = "\"" + name + "\"";
+    QString waveeditor = "\"" + m_options->waveeditor + "\"";
+    execute(m_options->waveeditor, name);
+  }
+  else {
+    QDesktopServices::openUrl(QUrl::fromLocalFile (name));
+  }
 }
 
 void qutecsound::openExternalPlayer()
 {
-  QString options = "";
+  QString name = "";
   if (m_options->sfdirActive) {
-    options = m_options->sfdir + (m_options->sfdir.endsWith("/") ? "" : "/");
+    name = m_options->sfdir + (m_options->sfdir.endsWith("/") ? "" : "/");
   }
-  options += currentAudioFile;
+  name += currentAudioFile;
   QString optionsText = documentPages[curPage]->getOptionsText();
   if (currentAudioFile == "") {
     if (!optionsText.contains(QRegExp("\\W-o"))) {
-      options += "test.wav";
+      name += "test.wav";
     }
     else {
       optionsText = optionsText.mid(optionsText.indexOf(QRegExp("\\W-o")) + 3);
       optionsText = optionsText.left(optionsText.indexOf("\n")).trimmed();
       optionsText = optionsText.left(optionsText.indexOf(QRegExp("-"))).trimmed();
       if (!optionsText.startsWith("dac"))
-        options += optionsText;
+        name += optionsText;
     }
   }
-  options = "\"" + options + "\"";
-  QString waveplayer = "\"" + m_options->waveplayer + "\"";
-  execute(waveplayer, options);
+  if (!m_options->waveplayer.isEmpty()) {
+    name = "\"" + name + "\"";
+    QString waveplayer = "\"" + m_options->waveplayer + "\"";
+    execute(waveplayer, name);
+  }
+  else {
+    QDesktopServices::openUrl(QUrl::fromLocalFile (name));
+  }
 }
 
 void qutecsound::setHelpEntry()
@@ -1208,7 +1218,12 @@ void qutecsound::openExternalBrowser(QUrl url)
 {
   QString text;
   if (!url.isEmpty()) {
-    execute(m_options->browser, url.toString());
+    if (!m_options->browser.isEmpty()) {
+      execute(m_options->browser, url.toString());
+    }
+    else {
+      QDesktopServices::openUrl(url);
+    }
   }
   else if (m_options->csdocdir != "") {
     QString file =  m_options->csdocdir + "/" + documentPages[curPage]->wordUnderCursor() + ".html";
@@ -1224,17 +1239,22 @@ void qutecsound::openExternalBrowser(QUrl url)
 
 void qutecsound::openQuickRef()
 {
+  if (!m_options->pdfviewer.isEmpty()) {
 #ifndef Q_WS_MAC
-  if (!QFile::exists(m_options->pdfviewer)) {
-    QMessageBox::critical(this,
-                          tr("Error"),
-                          tr("PDF viewer not found!\n"
-                             "Please go to Edit->Options->Environment and select directory\n"));
-  }
+    if (!QFile::exists(m_options->pdfviewer)) {
+      QMessageBox::critical(this,
+                            tr("Error"),
+                            tr("PDF viewer not found!\n"
+                               "Please go to Edit->Options->Environment and select directory\n"));
+    }
 #endif
-  QString arg = "\"" + quickRefFileName + "\"";
-  qDebug() << arg;
-  execute(m_options->pdfviewer, arg);
+    QString arg = "\"" + quickRefFileName + "\"";
+//    qDebug() << arg;
+    execute(m_options->pdfviewer, arg);
+  }
+  else {
+    QDesktopServices::openUrl(QUrl::fromLocalFile (quickRefFileName));
+  }
 }
 
 void qutecsound::openShortcutDialog()
