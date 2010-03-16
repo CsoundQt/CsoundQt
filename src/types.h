@@ -69,11 +69,11 @@
 #ifdef Q_OS_WIN32
 #define DEFAULT_HTML_DIR "C:/Program Files/Csound/doc/manual"
 #define DEFAULT_TERM_EXECUTABLE "cmd.exe"
-#define DEFAULT_BROWSER_EXECUTABLE "firefox.exe"
-#define DEFAULT_WAVEEDITOR_EXECUTABLE "audacity.exe"
-#define DEFAULT_WAVEPLAYER_EXECUTABLE "wmplayer.exe"
-#define DEFAULT_PDFVIEWER_EXECUTABLE "C:/Program Files/"
-#define DEFAULT_DOT_EXECUTABLE "dot.exe"
+#define DEFAULT_BROWSER_EXECUTABLE ""
+#define DEFAULT_WAVEEDITOR_EXECUTABLE ""
+#define DEFAULT_WAVEPLAYER_EXECUTABLE ""
+#define DEFAULT_PDFVIEWER_EXECUTABLE ""
+#define DEFAULT_DOT_EXECUTABLE ""
 #define DEFAULT_LOG_FILE "~/qutecsound.log"
 #endif
 
