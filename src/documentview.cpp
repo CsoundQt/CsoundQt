@@ -564,7 +564,18 @@ void DocumentView::createContextMenu(QPoint pos)
     }
     foreach(Opcode opcode, m_opcodeTree->getOpcodeList(i)) {
       QAction *action = subMenu->addAction(opcode.opcodeName, this, SLOT(opcodeFromMenu()));
-      action->setData(opcode.outArgs + opcode.opcodeName + opcode.inArgs);
+      QString opcodeText = opcode.outArgs;
+      opcodeText += (!opcode.outArgs.isEmpty()
+                     && !opcode.outArgs.endsWith(" ")
+                     && !opcode.opcodeName.startsWith(" ") ?
+                     " " : "");
+      opcodeText += opcode.opcodeName;
+      opcodeText += (!opcode.inArgs.isEmpty()
+                     && !opcode.inArgs.startsWith(" ")
+                     && !opcode.opcodeName.endsWith(" ") ?
+                     " " : "");
+      opcodeText += opcode.inArgs;
+      action->setData(opcodeText);
     }
   }
   menu->exec(editors[0]->mapToGlobal(pos));
