@@ -87,8 +87,8 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   connect(m_widgetLayout, SIGNAL(setWidgetClipboardSignal(QString)),
           this, SLOT(setWidgetClipboard(QString)));
 
-  connect(m_csEngine, SIGNAL(errorLines(QList<int>)),
-          m_view, SLOT(markErrorLines(QList<int>)));
+  connect(m_csEngine, SIGNAL(errorLines(QList<QPair<int, QString> >)),
+          m_view, SLOT(markErrorLines(QList<QPair<int, QString> >)));
   connect(m_csEngine, SIGNAL(stopSignal()),
           this, SLOT(perfEnded()));
 
@@ -840,6 +840,13 @@ void DocumentPage::setScriptDirectory(QString dir)
 {
   for (int i = 0; i < m_liveFrames.size(); i++) {
     m_liveFrames[i]->getSheet()->setScriptDirectory(dir);
+  }
+}
+
+void DocumentPage::setDebugLiveEvents(bool debug)
+{
+  for (int i = 0; i < m_liveFrames.size(); i++) {
+    m_liveFrames[i]->getSheet()->setDebug(debug);
   }
 }
 

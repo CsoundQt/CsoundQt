@@ -1386,6 +1386,7 @@ void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
   p->setWidgetEnabled(m_options->enableWidgets);
   p->showWidgetTooltips(m_options->showTooltips);
   p->setKeyRepeatMode(m_options->keyRepeat);
+  p->setDebugLiveEvents(m_options->debugLiveEvents);
   p->setTextFont(QFont(m_options->font,
                        (int) m_options->fontPointSize));
   p->setConsoleFont(QFont(m_options->consoleFont,
@@ -2470,6 +2471,7 @@ void qutecsound::readSettings()
   m_options->useAPI = settings.value("useAPI", true).toBool();
   m_options->thread = settings.value("thread", true).toBool();
   m_options->keyRepeat = settings.value("keyRepeat", false).toBool();
+  m_options->debugLiveEvents = settings.value("debugLiveEvents", false).toBool();
   m_options->consoleBufferSize = settings.value("consoleBufferSize", 1024).toInt();
   m_options->bufferSize = settings.value("bufferSize", 1024).toInt();
   m_options->bufferSizeActive = settings.value("bufferSizeActive", false).toBool();
@@ -2603,6 +2605,7 @@ void qutecsound::writeSettings()
   settings.setValue("useAPI", m_options->useAPI);
   settings.setValue("thread", m_options->thread);
   settings.setValue("keyRepeat", m_options->keyRepeat);
+  settings.setValue("debugLiveEvents", m_options->debugLiveEvents);
   settings.setValue("consoleBufferSize", m_options->consoleBufferSize);
   settings.setValue("bufferSize", m_options->bufferSize);
   settings.setValue("bufferSizeActive", m_options->bufferSizeActive);

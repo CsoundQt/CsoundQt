@@ -121,6 +121,7 @@ class DocumentPage : public QObject
 
     // Event Sheet Properties
     void setScriptDirectory(QString dir);
+    void setDebugLiveEvents(bool debug);
 
     // Internal Options setters
     void setConsoleBufferSize(int size);

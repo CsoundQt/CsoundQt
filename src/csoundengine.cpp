@@ -509,11 +509,15 @@ void CsoundEngine::unregisterConsole(ConsoleWidget *c)
     consoles.remove(index);
 }
 
-QList<int> CsoundEngine::getErrorLines()
+QList<QPair<int, QString> > CsoundEngine::getErrorLines()
 {
-  QList<int> list;
+  QList<QPair<int, QString> > list;
   if (consoles.size() > 0) {
-    list = consoles[0]->errorLines;
+    QList<int> lines = consoles[0]->errorLines;
+    QStringList texts = consoles[0]->errorTexts;
+    for (int i = 0; i < lines.size(); i++) {
+      list.append(QPair<int, QString>(lines[i], texts[i]));
+    }
   }
   return list;
 }

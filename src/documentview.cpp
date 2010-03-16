@@ -728,7 +728,7 @@ void DocumentView::unindent()
   editors[0]->setTextCursor(cursor);
 }
 
-void DocumentView::markErrorLines(QList<int> lines)
+void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
 {
   // TODO implment for multiple views
   internalChange = true;
@@ -737,18 +737,24 @@ void DocumentView::markErrorLines(QList<int> lines)
   QTextCursor cur = editors[0]->textCursor();
   cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
   int lineCount = 1;
-  foreach(int line, lines) {
-    // Csound reports the line numbers incorrectly... but only on my machine apparently...
+  for(int i = 0; i < lines.size(); i++) {
+    int line = lines[i].first;
+    QString text = lines[i].second;
     while (lineCount < line) {
       lineCount++;
 //       cur.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
       cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
     }
     cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    cur.mergeCharFormat(errorFormat);
-    internalChange = true;
-    editors[0]->setTextCursor(cur);
-    cur.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    if (cur.selectedText().simplified() == text.simplified()) {
+      cur.mergeCharFormat(errorFormat);
+      internalChange = true;
+      editors[0]->setTextCursor(cur);
+      cur.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    }
+    else {
+      qDebug() << "DocumentView::markErrorLines: Error line text doesn't match\n" << text;
+    }
   }
   internalChange = true;
   editors[0]->setTextCursor(cur);

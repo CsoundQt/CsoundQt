@@ -25,6 +25,7 @@
 Console::Console(QWidget *parent) : QTextEdit(parent)
 {
   error = false;
+  errorLine = false;
   setReadOnly(true);
 }
 
@@ -37,13 +38,24 @@ void Console::appendMessage(QString msg)
 {
 //   lock.lock(); // This operation is already locked in qutecsound class
   setTextColor(m_textColor);
+  // FIXME use Csound's own message buffer to avoid having to use these hacks, or would the same thing happen?
+  if (errorLine) {  // Hack to capture strange message organization from Csound
+    errorLineText.append(msg);
+    if (msg == "\n" || errorLineText.contains("\n")) {
+      errorTexts.append(errorLineText.remove("\n"));
+      errorLineText.clear();
+      errorLine = false;
+    }
+  }
   if (error) {
     setTextColor(QColor("red"));
     if (msg.contains("line ")) {
       QStringList parts = msg.split("line ");
       int lineNumber = parts.last().remove(":").trimmed().toInt();
       errorLines.append(lineNumber);
+      qDebug() << "error line appended --- " << lineNumber;  //FIXME why are lines appended twice? (two consoles??)
       error = false;
+      errorLine = true;
     }
   }
   if (msg.contains("B ") or msg.contains("rtevent", Qt::CaseInsensitive)) {
@@ -90,6 +102,7 @@ void Console::reset()
 {
   clear();
   errorLines.clear();
+  errorTexts.clear();
   error = false;
 }
 

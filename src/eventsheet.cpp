@@ -318,6 +318,11 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
     this->setRowCount(1);
 }
 
+void EventSheet::setDebug(bool debug)
+{
+  m_debug = debug;
+}
+
 void EventSheet::setTempo(double value)
 {
 //  qDebug() << "EventSheet::setTempo " << value;
@@ -840,15 +845,24 @@ void EventSheet::runScript(QString name)
   qDebug() << "---------------\n" << serr;
   QDir::setCurrent(oldDir.absolutePath());
   if (p.exitCode() != 0) {
-    QMessageBox::critical(this, name.mid(name.lastIndexOf("/") + 1) ,
-                         QString(serr),
-                         QMessageBox::Ok);
+    if (m_debug) {
+      QMessageBox::critical(this, name.mid(name.lastIndexOf("/") + 1) ,
+                            QString(serr),
+                            QMessageBox::Ok);
+    }
+    else {
+      QMessageBox::critical(this, name.mid(name.lastIndexOf("/") + 1) ,
+                            tr("Error running script"),
+                            QMessageBox::Ok);
+    }
   }
   else {
+    if (m_debug) {
+      QMessageBox::information(this, name.mid(name.lastIndexOf("/") + 1) ,
+                               QString(sout),
+                               QMessageBox::Ok);
+    }
     qDebug() << sout;
-//    QMessageBox::information(this, name.mid(name.lastIndexOf("/") + 1) ,
-//                         QString(stdout),
-//                         QMessageBox::Ok);
     outFile.open(QIODevice::ReadWrite);
     QString text = outFile.readAll();
     QStringList lines = text.split("\n");

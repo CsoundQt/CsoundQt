@@ -89,6 +89,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   threadCheckBox->setChecked(m_options->thread);
   threadCheckBox->setEnabled(ApiRadioButton->isChecked());
   keyRepeatCheckBox->setChecked(m_options->keyRepeat);
+  debugLiveEventsCheckBox->setChecked(m_options->debugLiveEvents);
   int bufferIndex = consoleBufferComboBox->findText(QString::number(m_options->consoleBufferSize));
   if (bufferIndex < 0) {
     bufferIndex = consoleBufferComboBox->count() - 1;
@@ -242,6 +243,7 @@ void ConfigDialog::accept()
   m_options->useAPI = ApiRadioButton->isChecked();
   m_options->thread = threadCheckBox->isChecked();
   m_options->keyRepeat = keyRepeatCheckBox->isChecked();
+  m_options->debugLiveEvents = debugLiveEventsCheckBox->isChecked();
   m_options->consoleBufferSize = consoleBufferComboBox->itemText(consoleBufferComboBox->currentIndex()).toInt();
   if (m_options->consoleBufferSize < 0)
     m_options->consoleBufferSize = 0;

@@ -61,6 +61,7 @@ class Options: public CsoundOptions{
     bool useInvalue; // If false use chnget
     bool thread;
     bool keyRepeat;
+    bool debugLiveEvents;
     int consoleBufferSize;
 
     QString csdPath; //path of active csd needed for setting -o -i paths

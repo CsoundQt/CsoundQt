@@ -41,6 +41,7 @@ class Console : public QTextEdit
 //     void refresh();
 
     QList<int> errorLines;
+    QStringList errorTexts;
 
   public slots:
     void reset();
@@ -51,6 +52,8 @@ class Console : public QTextEdit
     virtual void keyReleaseEvent(QKeyEvent *event);
 
     bool error;
+    bool errorLine;
+    QString errorLineText;
     QColor m_textColor;
     QColor m_bgColor;
     bool m_repeatKeys;
