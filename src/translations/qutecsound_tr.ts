@@ -2,6 +2,17 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="tr_TR">
 <context>
+    <name>About</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>QuteCsound</source>
+        <translation type="unfinished">QuteCsound</translation>
+    </message>
+</context>
+<context>
     <name>ConfigDialog</name>
     <message>
         <source>Please note that OPCODEDIR will overwrite current settings so you will need to restart QuteCsound to return to default.</source>
@@ -427,6 +438,35 @@
         <source>Python Script Dir </source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Enabled</source>
+        <comment>Virtual MIDI keyboard Enabled</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow simultaneous play (May have problems with portmidi,coreaudio, and alsa audio) </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use new Widget Format (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Debug mode for Live Event Sheet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Autocomplete menu while typing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Behavior</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Log file</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConsoleWidget</name>
@@ -439,7 +479,11 @@
     <name>DockConsole</name>
     <message>
         <source>Csound Output Console</source>
-        <translation>Csound Çıkış Konsolu</translation>
+        <translation type="obsolete">Csound Çıkış Konsolu</translation>
+    </message>
+    <message>
+        <source>Output Console</source>
+        <translation type="unfinished">Çıkış Konsolu</translation>
     </message>
 </context>
 <context>
@@ -541,7 +585,7 @@ Baştan başlamak ister misiniz?</translation>
     </message>
     <message>
         <source>&amp;SendEvents</source>
-        <translation>&amp;SendEvents</translation>
+        <translation type="obsolete">&amp;SendEvents</translation>
     </message>
     <message>
         <source>Send Events to Csound</source>
@@ -746,14 +790,54 @@ Baştan başlamak ister misiniz?</translation>
     </message>
     <message>
         <source>Delete Current Row</source>
-        <translation>Aktüel Satırı sil</translation>
+        <translation type="obsolete">Aktüel Satırı sil</translation>
     </message>
     <message>
         <source>Delete Row</source>
-        <translation>Satırı sil</translation>
+        <translation type="obsolete">Satırı sil</translation>
     </message>
     <message>
         <source>Python Scripts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error running script</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Conversion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tests</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Send Events</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Send Events without offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send Events to Csound without offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send Events no offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete Selected Rows</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete Rows</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop running script</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -888,6 +972,22 @@ Baştan başlamak ister misiniz?</translation>
     <message>
         <source>Score</source>
         <translation>Score</translation>
+    </message>
+    <message>
+        <source>Macros</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Imports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Classes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Functions</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1789,7 +1889,7 @@ Baştan başlamak ister misiniz?</translation>
     <message>
         <source>Csound Files (*.csd *.orc *.sco);;All Files (*)</source>
         <translatorcomment>Csound Dosyaları (*.csd *.orc *.sco);; Tüm Dosyalar (*)</translatorcomment>
-        <translation>Csound Dosyaları (*.csd *.orc *.sco);;All Files (*)</translation>
+        <translation type="obsolete">Csound Dosyaları (*.csd *.orc *.sco);;All Files (*)</translation>
     </message>
     <message>
         <source>File already open</source>
@@ -1905,17 +2005,10 @@ Lütfen Edit-&gt;Options-&gt;Environment e gidin ve dosyayı seçin
 </translation>
     </message>
     <message>
-        <source>by: Andres Cabrera
-Released under the LGPLv2 or GPLv3
-Version %1
-</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>French translation:
 Francois Pinot
 </source>
-        <translation>Italyanca tercüme:
+        <translation type="obsolete">Italyanca tercüme:
 Francesco
 </translation>
     </message>
@@ -1923,7 +2016,7 @@ Francesco
         <source>German translation:
 Joachim Heintz
 </source>
-        <translation>Almanca tercüme:
+        <translation type="obsolete">Almanca tercüme:
 Joachim Heintz
 </translation>
     </message>
@@ -1931,7 +2024,7 @@ Joachim Heintz
         <source>Portuguese translation:
 Victor Lazzarini
 </source>
-        <translation>Portekizce tercüme:
+        <translation type="obsolete">Portekizce tercüme:
 Victor Lazzarini
 </translation>
     </message>
@@ -1939,13 +2032,13 @@ Victor Lazzarini
         <source>Italian translation:
 Francesco
 </source>
-        <translation>Italyanca tercüme:
+        <translation type="obsolete">Italyanca tercüme:
 Francesco
 </translation>
     </message>
     <message>
         <source>About QuteCsound</source>
-        <translation>QuteCsound Hakkında</translation>
+        <translation type="obsolete">QuteCsound Hakkında</translation>
     </message>
     <message>
         <source>API</source>
@@ -2704,6 +2797,82 @@ kapatmadan önce değişiklikleri kaydetmek istiyor musunuz?</translation>
     </message>
     <message>
         <source>Favorites</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco);;Python Files (*.py);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>by: Andres Cabrera and others</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Released under the LGPLv2 or GPLv3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>French translation: Fran&amp;ccedil;ois Pinot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>German translation: Joachim Heintz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Portuguese translation: Victor Lazzarini</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Italian translation: Francesco</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Turkish translation: Ali Isciler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you find QuteCsound useful, please consider donating to the project:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please file bug reports and feature suggestions in the </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>QuteCsound tracker</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mailing Lists:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Other Resources:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Supported by:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>And other generous users.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Donate to QuteCsound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Donate to support development of QuteCsound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Language Features</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
