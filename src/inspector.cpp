@@ -47,6 +47,7 @@ Inspector::~Inspector()
 void Inspector::parseText(const QString &text)
 {
 //  qDebug() << "Inspector:parseText";
+  int scoreLine = -1;
   m_treeWidget->clear();
   TreeItem *opcodeItem = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
   opcodeItem->setLine(-1);
@@ -57,7 +58,7 @@ void Inspector::parseText(const QString &text)
   TreeItem *ftableItem = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
   ftableItem->setLine(-1);
   TreeItem *scoreItem = new TreeItem(m_treeWidget, QStringList(tr("Score")));
-  scoreItem->setLine(-1);
+  scoreItem->setLine(-1);  // This might be overridden below
   TreeItem *currentInstrument = 0;
   QStringList lines = text.split(QRegExp("[\n\r]"));
   for (int i = 0; i< lines.size(); i++) {
@@ -101,6 +102,12 @@ void Inspector::parseText(const QString &text)
         TreeItem *newItem = new TreeItem(currentInstrument, columnslist);
         newItem->setLine(i + 1);
       }
+    }
+    else if (lines[i].trimmed().contains("<CsScore>")) {
+      scoreItem->setLine(i + 1);
+    }
+    else if (lines[i].trimmed().contains("<CsInstruments>")) {
+      instrItem->setLine(i + 1);
     }
   }
   m_treeWidget->expandItem(opcodeItem);
