@@ -183,17 +183,17 @@ void QuteSpinBox::setText(QString text)
 {
   m_text = text;
 //   int size;
-//   if (m_fontSize >= QUTE_XXLARGE)
+//   if (m_fontSize >= QCS_XXLARGE)
 //     size = 7;
-//   else if (m_fontSize >= QUTE_XLARGE)
+//   else if (m_fontSize >= QCS_XLARGE)
 //     size = 6;
-//   else if (m_fontSize >= QUTE_LARGE)
+//   else if (m_fontSize >= QCS_LARGE)
 //     size = 5;
-//   else if (m_fontSize >= QUTE_MEDIUM)
+//   else if (m_fontSize >= QCS_MEDIUM)
 //     size = 4;
-//   else if (m_fontSize >= QUTE_SMALL)
+//   else if (m_fontSize >= QCS_SMALL)
 //     size = 3;
-//   else if (m_fontSize >= QUTE_XSMALL)
+//   else if (m_fontSize >= QCS_XSMALL)
 //     size = 2;
 //   else
 //     size = 1;

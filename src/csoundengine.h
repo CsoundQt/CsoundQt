@@ -40,7 +40,7 @@ class Curve;
 
 // Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
 // This still necessary for 5.12
-#define QUTECSOUND_DESTROY_CSOUND
+#define QCS_DESTROY_CSOUND
 
 class CsoundEngine;
 class WidgetLayout;

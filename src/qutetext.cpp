@@ -26,13 +26,13 @@
 // Font point sizes equivalent for html
 // This seems necessary since qt rich text
 // only takes these values for font size
-#define QUTE_XXSMALL 8
-#define QUTE_XSMALL 10
-#define QUTE_SMALL 12
-#define QUTE_MEDIUM 16
-#define QUTE_LARGE 20
-#define QUTE_XLARGE 24
-#define QUTE_XXLARGE 28
+#define QCS_XXSMALL 8
+#define QCS_XSMALL 10
+#define QCS_SMALL 12
+#define QCS_MEDIUM 16
+#define QCS_LARGE 20
+#define QCS_XLARGE 24
+#define QCS_XXLARGE 28
 
 //number of decimal places shown on the widget
 #define QUTESLIDER_PRECISION 4
@@ -158,17 +158,17 @@ void QuteText::setText(QString text)
 {
   int size;
   m_text = text.replace("\u00AC", "\n");
-  if (m_fontSize >= QUTE_XXLARGE)
+  if (m_fontSize >= QCS_XXLARGE)
     size = 7;
-  else if (m_fontSize >= QUTE_XLARGE)
+  else if (m_fontSize >= QCS_XLARGE)
     size = 6;
-  else if (m_fontSize >= QUTE_LARGE)
+  else if (m_fontSize >= QCS_LARGE)
     size = 5;
-  else if (m_fontSize >= QUTE_MEDIUM)
+  else if (m_fontSize >= QCS_MEDIUM)
     size = 4;
-  else if (m_fontSize >= QUTE_SMALL)
+  else if (m_fontSize >= QCS_SMALL)
     size = 3;
-  else if (m_fontSize >= QUTE_XSMALL)
+  else if (m_fontSize >= QCS_XSMALL)
     size = 2;
   else
     size = 1;
@@ -317,13 +317,13 @@ void QuteText::createPropertiesDialog()
   label->setText("Font Size");
   layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
   fontSize = new QComboBox(dialog);
-  fontSize->addItem("XX-Small", QVariant((int) QUTE_XXSMALL));
-  fontSize->addItem("X-Small", QVariant((int) QUTE_XSMALL));
-  fontSize->addItem("Small", QVariant((int) QUTE_SMALL));
-  fontSize->addItem("Medium", QVariant((int) QUTE_MEDIUM));
-  fontSize->addItem("Large", QVariant((int) QUTE_LARGE));
-  fontSize->addItem("X-Large", QVariant((int) QUTE_XLARGE));
-  fontSize->addItem("XX-Large", QVariant((int) QUTE_XXLARGE));
+  fontSize->addItem("XX-Small", QVariant((int) QCS_XXSMALL));
+  fontSize->addItem("X-Small", QVariant((int) QCS_XSMALL));
+  fontSize->addItem("Small", QVariant((int) QCS_SMALL));
+  fontSize->addItem("Medium", QVariant((int) QCS_MEDIUM));
+  fontSize->addItem("Large", QVariant((int) QCS_LARGE));
+  fontSize->addItem("X-Large", QVariant((int) QCS_XLARGE));
+  fontSize->addItem("XX-Large", QVariant((int) QCS_XXLARGE));
   int i = m_fontSize;
   int index = -1;
   while (i > 0 and index == -1) {
@@ -607,17 +607,17 @@ void QuteScrollNumber::setText(QString text)
 {
   m_text = text;
   int size;
-  if (m_fontSize >= QUTE_XXLARGE)
+  if (m_fontSize >= QCS_XXLARGE)
     size = 7;
-  else if (m_fontSize >= QUTE_XLARGE)
+  else if (m_fontSize >= QCS_XLARGE)
     size = 6;
-  else if (m_fontSize >= QUTE_LARGE)
+  else if (m_fontSize >= QCS_LARGE)
     size = 5;
-  else if (m_fontSize >= QUTE_MEDIUM)
+  else if (m_fontSize >= QCS_MEDIUM)
     size = 4;
-  else if (m_fontSize >= QUTE_SMALL)
+  else if (m_fontSize >= QCS_SMALL)
     size = 3;
-  else if (m_fontSize >= QUTE_XSMALL)
+  else if (m_fontSize >= QCS_XSMALL)
     size = 2;
   else
     size = 1;

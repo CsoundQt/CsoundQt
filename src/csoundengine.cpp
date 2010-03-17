@@ -43,13 +43,13 @@ CsoundEngine::CsoundEngine()
   ud->perfThread = 0;
   ud->mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2 channels
 
-  pFields = (MYFLT *) calloc(EVENTS_MAX_PFIELDS, sizeof(MYFLT)); // Maximum number of p-fields for events
+  pFields = (MYFLT *) calloc(QCS_EVENTS_MAX_PFIELDS, sizeof(MYFLT)); // Maximum number of p-fields for events
 
   m_recording = false;
   bufferSize = 4096;
   recBuffer = (MYFLT *) calloc(bufferSize, sizeof(MYFLT));
 
-#ifndef QUTECSOUND_DESTROY_CSOUND
+#ifndef QCS_DESTROY_CSOUND
   // Create only once
   ud->csound=csoundCreate(0);
 #endif
@@ -57,12 +57,12 @@ CsoundEngine::CsoundEngine()
 //  csoundPreCompile(ud->csound);  // Precompile once, to preload dynamic libs (making first run faster)
 //  csoundCleanup(ud->csound);
 //
-//#ifndef QUTECSOUND_DESTROY_CSOUND
+//#ifndef QCS_DESTROY_CSOUND
 //  csoundDestroy(ud->csound);
 //#endif
 
-  eventQueue.resize(QUTECSOUND_MAX_EVENTS);
-  eventTimeStamps.resize(QUTECSOUND_MAX_EVENTS);
+  eventQueue.resize(QCS_MAX_EVENTS);
+  eventTimeStamps.resize(QCS_MAX_EVENTS);
   eventQueueSize = 0;
 
 //  qTimer = new QTimer(this);
@@ -83,7 +83,7 @@ CsoundEngine::~CsoundEngine()
     qApp->processEvents();
     usleep(10000);
   }
-#ifndef QUTECSOUND_DESTROY_CSOUND
+#ifndef QCS_DESTROY_CSOUND
   csoundDestroy(ud->csound);
 #endif
 //  flushMessageQueue();
@@ -115,6 +115,7 @@ void CsoundEngine::messageCallbackThread(CSOUND *csound,
                                           const char *fmt,
                                           va_list args)
 {
+
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
   QString msg;
   msg = msg.vsprintf(fmt, args);
@@ -596,7 +597,7 @@ void CsoundEngine::processEventQueue()
     else {
       char type = eventQueue[eventQueueSize][0].unicode();
       QStringList eventElements = eventQueue[eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts);
-      // eventElements.size() should never be larger than EVENTS_MAX_PFIELDS
+      // eventElements.size() should never be larger than QCS_EVENTS_MAX_PFIELDS
       for (int j = 0; j < eventElements.size(); j++) {
         pFields[j] = (MYFLT) eventElements[j].toDouble();
       }
@@ -686,7 +687,7 @@ void CsoundEngine::stopRecording()
 void CsoundEngine::queueEvent(QString eventLine, int delay)
 {
 //   qDebug("CsoundEngine::queueEvent %s", eventLine.toStdString().c_str());
-  if (eventQueueSize < QUTECSOUND_MAX_EVENTS) {
+  if (eventQueueSize < QCS_MAX_EVENTS) {
     eventMutex.lock();
     eventQueue[eventQueueSize] = eventLine;
     eventQueueSize++;
@@ -711,7 +712,7 @@ int CsoundEngine::runCsound()
     consoles[0]->reset();
   }
 
-#ifdef QUTECSOUND_DESTROY_CSOUND
+#ifdef QCS_DESTROY_CSOUND
   ud->csound=csoundCreate(0);
 #endif
 
@@ -841,7 +842,7 @@ int CsoundEngine::runCsound()
     ud->PERF_STATUS = 0;
     csoundStop(ud->csound);
     csoundSetMessageCallback(ud->csound, 0); // Does this fix the messages that appear when closing QCS?
-#ifdef QUTECSOUND_DESTROY_CSOUND
+#ifdef QCS_DESTROY_CSOUND
   csoundDestroy(ud->csound);
 #else
     csoundCleanup(ud->csound);
@@ -890,7 +891,7 @@ void CsoundEngine::stopCsound()
 // Put menu bar back
   SetMenuBar(menuBarHandle);
 #endif
-#ifdef QUTECSOUND_DESTROY_CSOUND
+#ifdef QCS_DESTROY_CSOUND
   csoundDestroy(ud->csound);
 #endif
   flushMessageQueue();
@@ -934,6 +935,7 @@ void CsoundEngine::dispatchQueues()
       messageQueue << "\nQUTECSOUND: Message buffer overflow. Messages discarded!\n";
     }
     messageMutex.unlock();
+
     //   QList<QString> channels = outValueQueue.keys();
     //   foreach (QString channel, channels) {
     //     widgetPanel->setValue(channel, outValueQueue[channel]);

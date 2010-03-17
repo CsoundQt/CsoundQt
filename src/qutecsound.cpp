@@ -1281,7 +1281,7 @@ void qutecsound::about()
   msgBox->setWindowFlags(msgBox->windowFlags() | Qt::FramelessWindowHint);
   QString text ="<h1>";
   text += tr("by: Andres Cabrera and others") +"</h1><h2>",
-  text += tr("Version %1").arg(QUTECSOUND_VERSION) + "</h2><h2>";
+  text += tr("Version %1").arg(QCS_VERSION) + "</h2><h2>";
   text += tr("Released under the LGPLv2 or GPLv3") + "</h2>";
   text += tr("French translation: Fran&ccedil;ois Pinot") + "<br />";
   text += tr("German translation: Joachim Heintz") + "<br />";
@@ -1668,7 +1668,7 @@ void qutecsound::createActions()
 //   closeTabAct->setIcon(QIcon(":/images/cross.png"));
   connect(printAct, SIGNAL(triggered()), this, SLOT(print()));
 
-//  for (int i = 0; i < QUTE_MAX_RECENT_FILES; i++) {
+//  for (int i = 0; i < QCS_MAX_RECENT_FILES; i++) {
 //    QAction *newAction = new QAction(this);
 //    openRecentAct.append(newAction);
 //    connect(newAction, SIGNAL(triggered()), this, SLOT(openFromAction()));
@@ -2825,7 +2825,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   }
   if (recentFiles.count(fileName) == 0 && fileName!="" && !fileName.startsWith(":/")) {
     recentFiles.prepend(fileName);
-    if (recentFiles.size() > QUTE_MAX_RECENT_FILES)
+    if (recentFiles.size() > QCS_MAX_RECENT_FILES)
       recentFiles.removeLast();
     fillFileMenu();
     fillFavoriteMenu();

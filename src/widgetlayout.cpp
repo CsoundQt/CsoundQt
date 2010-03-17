@@ -2127,7 +2127,7 @@ void WidgetLayout::markHistory()
   if (m_history[m_historyIndex] != text) {
     if (! m_history[m_historyIndex].isEmpty())
       m_historyIndex++;
-    if (m_historyIndex >= QUTE_MAX_UNDO) {
+    if (m_historyIndex >= QCS_MAX_UNDO) {
       m_history.pop_front();
       (m_historyIndex)--;
     }

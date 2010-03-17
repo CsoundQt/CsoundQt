@@ -612,6 +612,26 @@ void DocumentView::paste()
   }
 }
 
+void DocumentView::undo()
+{
+  if (m_viewMode < 2) {
+    mainEditor->undo();
+  }
+  else {
+    qDebug() << "DocumentView::undo() not implemented for split view";
+  }
+}
+
+void DocumentView::redo()
+{
+  if (m_viewMode < 2) {
+    mainEditor->redo();
+  }
+  else {
+    qDebug() << "DocumentView::redo() not implemented for split view";
+  }
+}
+
 void DocumentView::comment()
 {
   // TODO implment for multiple views

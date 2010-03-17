@@ -4,7 +4,6 @@
 CONFIG += qute_cpp \
     libsndfile
 
-# DEFINES += QUTE_USE_CSOUNDPERFORMANCETHREAD
 TRANSLATIONS = translations/qutecsound_es.ts \
     translations/qutecsound_en.ts \
     translations/qutecsound_de.ts \
@@ -130,23 +129,23 @@ FORMS += configdialog.ui \
     liveeventframe.ui \
     about.ui
 win32 { 
-    QUTECSOUND_CSOUND_PATH = C:\Program \
+    QCS_CSOUND_PATH = C:\Program \
         Files\Csound
     LIBSNDFILE_PATH = C:\Development \
         Files\libsndfile-1_0_17
-    INCLUDEPATH += "$${QUTECSOUND_CSOUND_PATH}\include"
-    HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\csound.h"
+    INCLUDEPATH += "$${QCS_CSOUND_PATH}\include"
+    HEADERS += "$${QCS_CSOUND_PATH}\include\csound.h"
     qute_cpp { 
-        HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\csound.hpp"
-        HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\csPerfThread.hpp"
-        HEADERS += "$${QUTECSOUND_CSOUND_PATH}\include\cwindow.h"
-        LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\csnd.dll"
+        HEADERS += "$${QCS_CSOUND_PATH}\include\csound.hpp"
+        HEADERS += "$${QCS_CSOUND_PATH}\include\csPerfThread.hpp"
+        HEADERS += "$${QCS_CSOUND_PATH}\include\cwindow.h"
+        LIBS += "$${QCS_CSOUND_PATH}\bin\csnd.dll"
     }
-    build64:LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\csound64.dll.5.2"
-    else:LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\csound32.dll.5.2"
+    build64:LIBS += "$${QCS_CSOUND_PATH}\bin\csound64.dll.5.2"
+    else:LIBS += "$${QCS_CSOUND_PATH}\bin\csound32.dll.5.2"
     libsndfile { 
         INCLUDEPATH += "$${LIBSNDFILE_PATH}"
-        LIBS += "$${QUTECSOUND_CSOUND_PATH}\bin\libsndfile-1.dll"
+        LIBS += "$${QCS_CSOUND_PATH}\bin\libsndfile-1.dll"
     }
     RC_FILE = qutecsound.rc
 }

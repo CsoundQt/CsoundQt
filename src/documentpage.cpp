@@ -679,6 +679,8 @@ void DocumentPage::undo()
   // For some reason the shortcut takes this route on OS X but the direct route through keyEvent on each on Linux
   if (m_widgetLayout->hasFocus())
     m_widgetLayout->undo();
+  else if (m_view->hasFocus())
+    m_view->undo();
   else {
     for (int i = 0; i < m_liveFrames.size(); i++) {
       if (m_liveFrames[i]->getSheet()->hasFocus())
@@ -692,6 +694,8 @@ void DocumentPage::redo()
   // For some reason the shortcut takes this route on OS X but the direct route through keyEvent on each on Linux
   if (m_widgetLayout->hasFocus())
     m_widgetLayout->redo();
+  else if (m_view->hasFocus())
+    m_view->redo();
   else {
     for (int i = 0; i < m_liveFrames.size(); i++) {
       if (m_liveFrames[i]->getSheet()->hasFocus())

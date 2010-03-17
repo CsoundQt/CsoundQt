@@ -102,6 +102,8 @@ class DocumentView : public QScrollArea
     void cut();
     void copy();
     void paste();
+    void undo();
+    void redo();
     void comment();
     void uncomment();
     void indent();
