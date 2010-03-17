@@ -141,6 +141,7 @@ class qutecsound:public QMainWindow
     void openManualExample(QString fileName);
     void openExternalBrowser(QUrl url = QUrl());
     void openQuickRef();
+    void resetPreferences();
     void openShortcutDialog();
 //    void utilitiesDialogOpen();
     void statusBarMessage(QString message);
@@ -272,6 +273,7 @@ class qutecsound:public QMainWindow
     QAction *aboutAct;
     QAction *donateAct;
     QAction *aboutQtAct;
+    QAction *resetPreferencesAct;
 
     int curPage;  // TODO use this or textEdit but not both!
     int configureTab; // Tab in last configure dialog accepted
@@ -285,6 +287,7 @@ class qutecsound:public QMainWindow
     int lastTabIndex;
     QStringList m_deviceMessages; //stores messages from csound for device discovery
     bool m_startingUp; // set while starting up
+    bool m_resetPrefs; // Flag to reset preferences to default when closing
 
     UtilitiesDialog *utilitiesDialog;
 

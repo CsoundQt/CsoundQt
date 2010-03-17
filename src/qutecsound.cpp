@@ -60,6 +60,7 @@ uintptr_t csThread(void *clientData);
 qutecsound::qutecsound(QStringList fileNames)
 {
   m_startingUp = true;
+  m_resetPrefs = false;
   qDebug() << "QuteCsound using Csound Version: " << csoundGetVersion();
   initialDir = QDir::current().path();
   setWindowTitle("QuteCsound[*]");
@@ -1258,6 +1259,19 @@ void qutecsound::openQuickRef()
   }
 }
 
+void qutecsound::resetPreferences()
+{
+  int ret = QMessageBox::question (this, tr("Reset Preferences"),
+                                   tr("Are you sure you want to revert QuteCsound's preferences\nto their initial default values? "),
+                                   QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok);
+  if (ret ==  QMessageBox::Ok) {
+    m_resetPrefs = true;
+    QMessageBox::information(this, tr("Reset Preferences"),
+                         tr("Preferences have been reset.\nYou must restart QuteCsound."),
+                         QMessageBox::Ok, QMessageBox::Ok);
+  }
+}
+
 void qutecsound::openShortcutDialog()
 {
   KeyboardShortcuts dialog(this, m_keyActions);
@@ -1915,6 +1929,10 @@ void qutecsound::createActions()
 //   aboutQtAct->setIconText(tr("About Qt"));
   connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
+  resetPreferencesAct = new QAction(tr("Reset Preferences"), this);
+  resetPreferencesAct->setStatusTip(tr("Reset QuteCsound's preferences to their original default state"));
+  connect(resetPreferencesAct, SIGNAL(triggered()), this, SLOT(resetPreferences()));
+
   duplicateAct = new QAction(this);
   duplicateAct->setShortcut(tr("Ctrl+D"));
   connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
@@ -2302,6 +2320,8 @@ void qutecsound::createMenus()
   helpMenu->addAction(showGenAct);
   helpMenu->addAction(openQuickRefAct);
   helpMenu->addSeparator();
+  helpMenu->addAction(resetPreferencesAct);
+  helpMenu->addSeparator();
   helpMenu->addAction(aboutAct);
   helpMenu->addAction(donateAct);
   helpMenu->addAction(aboutQtAct);
@@ -2551,120 +2571,155 @@ void qutecsound::readSettings()
 void qutecsound::writeSettings()
 {
   QSettings settings("csound", "qutecsound");
-  settings.setValue("settingsVersion", 2); // Version 1 when clearing additional flags, version 2 when setting jack client to *
+  if (!m_resetPrefs) {
+    settings.setValue("settingsVersion", 2); // Version 1 when clearing additional flags, version 2 when setting jack client to *
+  }
+  else {
+    settings.remove("");
+  }
   settings.beginGroup("GUI");
-  settings.setValue("pos", pos());
-  settings.setValue("size", size());
-  settings.setValue("dockstate", saveState());
-  settings.setValue("lastuseddir", lastUsedDir);
-  settings.setValue("lastfiledir", lastFileDir);
-  settings.setValue("language", _configlists.languageCodes[m_options->language]);
-//  settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
-  settings.setValue("recentFiles", recentFiles);
+  if (!m_resetPrefs) {
+    settings.setValue("pos", pos());
+    settings.setValue("size", size());
+    settings.setValue("dockstate", saveState());
+    settings.setValue("lastuseddir", lastUsedDir);
+    settings.setValue("lastfiledir", lastFileDir);
+    settings.setValue("language", _configlists.languageCodes[m_options->language]);
+    //  settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
+    settings.setValue("recentFiles", recentFiles);
+  }
+  else {
+    settings.remove("");
+  }
   settings.beginGroup("Shortcuts");
-  for (int i = 0; i < m_keyActions.size();i++) {
-//     QString key = m_keyActions[i]->text();
-    QString key = QString::number(i);
-    settings.setValue(key, m_keyActions[i]->shortcut().toString());
+  if (!m_resetPrefs) {
+    for (int i = 0; i < m_keyActions.size();i++) {
+      //     QString key = m_keyActions[i]->text();
+      QString key = QString::number(i);
+      settings.setValue(key, m_keyActions[i]->shortcut().toString());
+    }
+  }
+  else {
+    settings.remove("");
   }
   settings.endGroup();
   settings.endGroup();
   settings.beginGroup("Options");
   settings.beginGroup("Editor");
-  settings.setValue("font", m_options->font );
-  settings.setValue("fontsize", m_options->fontPointSize);
-  settings.setValue("consolefont", m_options->consoleFont );
-  settings.setValue("consolefontsize", m_options->consoleFontPointSize);
-  settings.setValue("consoleFontColor", QVariant(m_options->consoleFontColor));
-  settings.setValue("consoleBgColor", QVariant(m_options->consoleBgColor));
-  settings.setValue("tabWidth", m_options->tabWidth );
-  settings.setValue("colorvariables", m_options->colorVariables);
-  settings.setValue("autoplay", m_options->autoPlay);
-  settings.setValue("savechanges", m_options->saveChanges);
-  settings.setValue("rememberfile", m_options->rememberFile);
-  settings.setValue("savewidgets", m_options->saveWidgets);
-  settings.setValue("iconText", m_options->iconText);
-  settings.setValue("wrapLines", m_options->wrapLines);
-  settings.setValue("autoComplete", m_options->autoComplete);
-  settings.setValue("enableWidgets", m_options->enableWidgets);
-  settings.setValue("useInvalue", m_options->useInvalue);
-  settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
-  settings.setValue("showTooltips", m_options->showTooltips);
-  settings.setValue("enableFLTK", m_options->enableFLTK);
-  settings.setValue("terminalFLTK", m_options->terminalFLTK);
-  settings.setValue("scrollbars", m_options->scrollbars);
-  settings.setValue("newformat", m_options->newformat);
-  QStringList files;
-  if (m_options->rememberFile) {
-    for (int i = 0; i < documentPages.size(); i++ ) {
-      files.append(documentPages[i]->getFileName());
+  if (!m_resetPrefs) {
+    settings.setValue("font", m_options->font );
+    settings.setValue("fontsize", m_options->fontPointSize);
+    settings.setValue("consolefont", m_options->consoleFont );
+    settings.setValue("consolefontsize", m_options->consoleFontPointSize);
+    settings.setValue("consoleFontColor", QVariant(m_options->consoleFontColor));
+    settings.setValue("consoleBgColor", QVariant(m_options->consoleBgColor));
+    settings.setValue("tabWidth", m_options->tabWidth );
+    settings.setValue("colorvariables", m_options->colorVariables);
+    settings.setValue("autoplay", m_options->autoPlay);
+    settings.setValue("savechanges", m_options->saveChanges);
+    settings.setValue("rememberfile", m_options->rememberFile);
+    settings.setValue("savewidgets", m_options->saveWidgets);
+    settings.setValue("iconText", m_options->iconText);
+    settings.setValue("wrapLines", m_options->wrapLines);
+    settings.setValue("autoComplete", m_options->autoComplete);
+    settings.setValue("enableWidgets", m_options->enableWidgets);
+    settings.setValue("useInvalue", m_options->useInvalue);
+    settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
+    settings.setValue("showTooltips", m_options->showTooltips);
+    settings.setValue("enableFLTK", m_options->enableFLTK);
+    settings.setValue("terminalFLTK", m_options->terminalFLTK);
+    settings.setValue("scrollbars", m_options->scrollbars);
+    settings.setValue("newformat", m_options->newformat);
+    QStringList files;
+    if (m_options->rememberFile) {
+      for (int i = 0; i < documentPages.size(); i++ ) {
+        files.append(documentPages[i]->getFileName());
+      }
     }
+    settings.setValue("lastfiles", files);
+    settings.setValue("lasttabindex", documentTabs->currentIndex());
   }
-  settings.setValue("lastfiles", files);
-  settings.setValue("lasttabindex", documentTabs->currentIndex());
+  else {
+    settings.remove("");
+  }
   settings.endGroup();
   settings.beginGroup("Run");
-  settings.setValue("useAPI", m_options->useAPI);
-  settings.setValue("thread", m_options->thread);
-  settings.setValue("keyRepeat", m_options->keyRepeat);
-  settings.setValue("debugLiveEvents", m_options->debugLiveEvents);
-  settings.setValue("consoleBufferSize", m_options->consoleBufferSize);
-  settings.setValue("bufferSize", m_options->bufferSize);
-  settings.setValue("bufferSizeActive", m_options->bufferSizeActive);
-  settings.setValue("HwBufferSize",m_options->HwBufferSize);
-  settings.setValue("HwBufferSizeActive", m_options->HwBufferSizeActive);
-  settings.setValue("dither", m_options->dither);
-  settings.setValue("additionalFlags", m_options->additionalFlags);
-  settings.setValue("additionalFlagsActive", m_options->additionalFlagsActive);
-  settings.setValue("fileUseOptions", m_options->fileUseOptions);
-  settings.setValue("fileOverrideOptions", m_options->fileOverrideOptions);
-  settings.setValue("fileAskFilename", m_options->fileAskFilename);
-  settings.setValue("filePlayFinished", m_options->filePlayFinished);
-  settings.setValue("fileFileType", m_options->fileFileType);
-  settings.setValue("fileSampleFormat", m_options->fileSampleFormat);
-  settings.setValue("fileInputFilenameActive", m_options->fileInputFilenameActive);
-  settings.setValue("fileInputFilename", m_options->fileInputFilename);
-  settings.setValue("fileOutputFilenameActive", m_options->fileOutputFilenameActive);
-  settings.setValue("fileOutputFilename", m_options->fileOutputFilename);
-  settings.setValue("rtUseOptions", m_options->rtUseOptions);
-  settings.setValue("rtOverrideOptions", m_options->rtOverrideOptions);
-  settings.setValue("rtAudioModule", m_options->rtAudioModule);
-  settings.setValue("rtInputDevice", m_options->rtInputDevice);
-  settings.setValue("rtOutputDevice", m_options->rtOutputDevice);
-  settings.setValue("rtJackName", m_options->rtJackName);
-  settings.setValue("rtMidiModule", m_options->rtMidiModule);
-  settings.setValue("rtMidiInputDevice", m_options->rtMidiInputDevice);
-  settings.setValue("rtMidiOutputDevice", m_options->rtMidiOutputDevice);
-  settings.setValue("simultaneousRun", m_options->simultaneousRun);
-  settings.setValue("sampleFormat", m_options->sampleFormat);
+  if (!m_resetPrefs) {
+    settings.setValue("useAPI", m_options->useAPI);
+    settings.setValue("thread", m_options->thread);
+    settings.setValue("keyRepeat", m_options->keyRepeat);
+    settings.setValue("debugLiveEvents", m_options->debugLiveEvents);
+    settings.setValue("consoleBufferSize", m_options->consoleBufferSize);
+    settings.setValue("bufferSize", m_options->bufferSize);
+    settings.setValue("bufferSizeActive", m_options->bufferSizeActive);
+    settings.setValue("HwBufferSize",m_options->HwBufferSize);
+    settings.setValue("HwBufferSizeActive", m_options->HwBufferSizeActive);
+    settings.setValue("dither", m_options->dither);
+    settings.setValue("additionalFlags", m_options->additionalFlags);
+    settings.setValue("additionalFlagsActive", m_options->additionalFlagsActive);
+    settings.setValue("fileUseOptions", m_options->fileUseOptions);
+    settings.setValue("fileOverrideOptions", m_options->fileOverrideOptions);
+    settings.setValue("fileAskFilename", m_options->fileAskFilename);
+    settings.setValue("filePlayFinished", m_options->filePlayFinished);
+    settings.setValue("fileFileType", m_options->fileFileType);
+    settings.setValue("fileSampleFormat", m_options->fileSampleFormat);
+    settings.setValue("fileInputFilenameActive", m_options->fileInputFilenameActive);
+    settings.setValue("fileInputFilename", m_options->fileInputFilename);
+    settings.setValue("fileOutputFilenameActive", m_options->fileOutputFilenameActive);
+    settings.setValue("fileOutputFilename", m_options->fileOutputFilename);
+    settings.setValue("rtUseOptions", m_options->rtUseOptions);
+    settings.setValue("rtOverrideOptions", m_options->rtOverrideOptions);
+    settings.setValue("rtAudioModule", m_options->rtAudioModule);
+    settings.setValue("rtInputDevice", m_options->rtInputDevice);
+    settings.setValue("rtOutputDevice", m_options->rtOutputDevice);
+    settings.setValue("rtJackName", m_options->rtJackName);
+    settings.setValue("rtMidiModule", m_options->rtMidiModule);
+    settings.setValue("rtMidiInputDevice", m_options->rtMidiInputDevice);
+    settings.setValue("rtMidiOutputDevice", m_options->rtMidiOutputDevice);
+    settings.setValue("simultaneousRun", m_options->simultaneousRun);
+    settings.setValue("sampleFormat", m_options->sampleFormat);
+  }
+  else {
+    settings.remove("");
+  }
   settings.endGroup();
   settings.beginGroup("Environment");
-  settings.setValue("csdocdir", m_options->csdocdir);
-  settings.setValue("opcodedir",m_options->opcodedir);
-  settings.setValue("opcodedirActive",m_options->opcodedirActive);
-  settings.setValue("sadir",m_options->sadir);
-  settings.setValue("sadirActive",m_options->sadirActive);
-  settings.setValue("ssdir",m_options->ssdir);
-  settings.setValue("ssdirActive",m_options->ssdirActive);
-  settings.setValue("sfdir",m_options->sfdir);
-  settings.setValue("sfdirActive",m_options->sfdirActive);
-  settings.setValue("incdir",m_options->incdir);
-  settings.setValue("incdirActive",m_options->incdirActive);
-  settings.setValue("defaultCsd",m_options->defaultCsd);
-  settings.setValue("defaultCsdActive",m_options->defaultCsdActive);
-  settings.setValue("favoriteDir",m_options->favoriteDir);
-  settings.setValue("pythonDir",m_options->pythonDir);
-  settings.setValue("logFile",m_options->logFile);
-  settings.setValue("opcodexmldir", m_options->opcodexmldir);
-  settings.setValue("opcodexmldirActive",m_options->opcodexmldirActive);
+  if (!m_resetPrefs) {
+    settings.setValue("csdocdir", m_options->csdocdir);
+    settings.setValue("opcodedir",m_options->opcodedir);
+    settings.setValue("opcodedirActive",m_options->opcodedirActive);
+    settings.setValue("sadir",m_options->sadir);
+    settings.setValue("sadirActive",m_options->sadirActive);
+    settings.setValue("ssdir",m_options->ssdir);
+    settings.setValue("ssdirActive",m_options->ssdirActive);
+    settings.setValue("sfdir",m_options->sfdir);
+    settings.setValue("sfdirActive",m_options->sfdirActive);
+    settings.setValue("incdir",m_options->incdir);
+    settings.setValue("incdirActive",m_options->incdirActive);
+    settings.setValue("defaultCsd",m_options->defaultCsd);
+    settings.setValue("defaultCsdActive",m_options->defaultCsdActive);
+    settings.setValue("favoriteDir",m_options->favoriteDir);
+    settings.setValue("pythonDir",m_options->pythonDir);
+    settings.setValue("logFile",m_options->logFile);
+    settings.setValue("opcodexmldir", m_options->opcodexmldir);
+    settings.setValue("opcodexmldirActive",m_options->opcodexmldirActive);
+  }
+  else {
+    settings.remove("");
+  }
   settings.endGroup();
   settings.beginGroup("External");
-  settings.setValue("terminal", m_options->terminal);
-  settings.setValue("browser", m_options->browser);
-  settings.setValue("dot", m_options->dot);
-  settings.setValue("waveeditor", m_options->waveeditor);
-  settings.setValue("waveplayer", m_options->waveplayer);
-  settings.setValue("pdfviewer", m_options->pdfviewer);
+  if (!m_resetPrefs) {
+    settings.setValue("terminal", m_options->terminal);
+    settings.setValue("browser", m_options->browser);
+    settings.setValue("dot", m_options->dot);
+    settings.setValue("waveeditor", m_options->waveeditor);
+    settings.setValue("waveplayer", m_options->waveplayer);
+    settings.setValue("pdfviewer", m_options->pdfviewer);
+  }
+  else {
+    settings.remove("");
+  }
   settings.endGroup();
   settings.endGroup();
 }

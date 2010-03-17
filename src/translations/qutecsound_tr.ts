@@ -2876,5 +2876,23 @@ kapatmadan önce değişiklikleri kaydetmek istiyor musunuz?</translation>
         <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Reset Preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to revert QuteCsound&apos;s preferences
+to their initial default values? </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preferences have been reset.
+You must restart QuteCsound.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset QuteCsound&apos;s preferences to their original default state</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
