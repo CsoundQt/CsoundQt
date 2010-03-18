@@ -130,6 +130,7 @@ class qutecsound:public QMainWindow
     void findString();  // Direct to current Page
     void autoComplete();  // Direct to current Page
     void join();
+    void showUtilities(bool);
     void getToIn();
     void inToGet();
     void putCsladspaText();
@@ -143,7 +144,6 @@ class qutecsound:public QMainWindow
     void openQuickRef();
     void resetPreferences();
     void openShortcutDialog();
-//    void utilitiesDialogOpen();
     void statusBarMessage(QString message);
     void about();
     void donate();

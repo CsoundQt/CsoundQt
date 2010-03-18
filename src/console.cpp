@@ -36,9 +36,7 @@ Console::~Console()
 
 void Console::appendMessage(QString msg)
 {
-//   lock.lock(); // This operation is already locked in qutecsound class
   setTextColor(m_textColor);
-  // FIXME use Csound's own message buffer to avoid having to use these hacks, or would the same thing happen?
   if (errorLine) {  // Hack to capture strange message organization from Csound
     errorLineText.append(msg);
     if (msg == "\n" || errorLineText.contains("\n")) {
@@ -76,7 +74,6 @@ void Console::appendMessage(QString msg)
 //   text->moveCursor(QTextCursor::Start);
 //   text->moveCursor(QTextCursor::End);
   setTextColor(m_textColor);
-//   lock.unlock();
   logMessage(msg);
 }
 

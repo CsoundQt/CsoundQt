@@ -31,7 +31,6 @@ UtilitiesDialog::UtilitiesDialog(QWidget *parent, Options *options/*, ConfigList
 {
   setupUi(this);
 
-//   qDebug("UtilitiesDialog::UtilitiesDialog");
   helpBrowser->setAcceptRichText(true);
   QStringList searchPaths;
   searchPaths << m_options->csdocdir;
@@ -381,7 +380,8 @@ void UtilitiesDialog::browseDir(QString &destination)
 }
 
 void UtilitiesDialog::changeHelp(QString filename)
-{  
+{
+//  qDebug() << "UtilitiesDialog::changeHelp "  << filename;
   QFile file(filename);
   if (!file.open(QFile::ReadOnly | QFile::Text)) {
 //     QMessageBox::warning(this, tr("QuteCsound"),

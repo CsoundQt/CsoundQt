@@ -61,6 +61,7 @@ qutecsound::qutecsound(QStringList fileNames)
 {
   m_startingUp = true;
   m_resetPrefs = false;
+  utilitiesDialog = 0;
   qDebug() << "QuteCsound using Csound Version: " << csoundGetVersion();
   initialDir = QDir::current().path();
   setWindowTitle("QuteCsound[*]");
@@ -89,7 +90,6 @@ qutecsound::qutecsound(QStringList fileNames)
   widgetPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea |Qt::LeftDockWidgetArea);
   widgetPanel->setObjectName("widgetPanel");
   addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
-  utilitiesDialog = new UtilitiesDialog(this, m_options/*, _configlists*/);
 //  connect(widgetPanel,SIGNAL(topLevelChanged(bool)), this, SLOT(widgetDockStateChanged(bool)));
 
   m_inspector = new Inspector(this);
@@ -98,7 +98,7 @@ qutecsound::qutecsound(QStringList fileNames)
   addDockWidget(Qt::LeftDockWidgetArea, m_inspector);
 
   connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
-  connect(utilitiesDialog, SIGNAL(runUtility(QString)), this, SLOT(runUtility(QString)));
+
   createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
   readSettings();
 
@@ -203,6 +203,7 @@ void qutecsound::utilitiesMessageCallback(CSOUND *csound,
   DockConsole *console = (DockConsole *) csoundGetHostData(csound);
   QString msg;
   msg = msg.vsprintf(fmt, args);
+  qDebug() << msg;
   console->text->appendMessage(msg);
   console->text->scrollToEnd();
 }
@@ -221,6 +222,7 @@ void qutecsound::changePage(int index)
     documentPages[curPage]->showLiveEventFrames(false);
   }
   if (index < 0) { // No tabs left
+    qDebug() << "qutecsound::changePage index < 0";
     return;
   }
   curPage = index;
@@ -248,10 +250,6 @@ void qutecsound::changePage(int index)
     runAct->setChecked(documentPages[curPage]->isRunning());
     recAct->setChecked(documentPages[curPage]->isRecording());
 
-  }
-  if (index < 0) {
-    qDebug() << "qutecsound::changePage index < 0";
-    return;
   }
 }
 
@@ -295,9 +293,9 @@ void qutecsound::logMessage(QString msg)
 void qutecsound::closeEvent(QCloseEvent *event)
 {
   writeSettings();
-//  disconnect(documentTabs, 0,0,0)); // To avoid triggering changePage when destroying the tabs
   showWidgetsAct->setChecked(false);
   showLiveEventsAct->setChecked(false); // These two give faster shutdown times as the panels don't have to be called up as the tabs close
+
   while (!documentPages.isEmpty()) {
 //    if (!saveCurrent()) {
 //      event->ignore();
@@ -316,17 +314,18 @@ void qutecsound::closeEvent(QCloseEvent *event)
   if (logFile.isOpen()) {
     logFile.close();
   }
-//  helpPanel->deleteLater(); // FIXME this is still crashing with delete later
-  utilitiesDialog->deleteLater(); // FIXME Is this still crashing with delete later
-  closeTabButton->deleteLater();
-  widgetPanel->deleteLater();
-  m_inspector->deleteLater();
-  documentTabs->deleteLater(); // FIXME Is this still crashing with delete later
-//  m_console->deleteLater(); // FIXME still causing crashing(because of access to a destroyed console) even with delete later
+  showUtilities(false);
+  delete helpPanel;
+//  delete closeTabButton;
+  delete m_options;
+  widgetPanel->close();
+  m_inspector->close();
+  m_console->close();
+  documentTabs->close();
+  m_console->close();
   event->accept();
   close();
-  delete m_options;
-//  delete opcodeTree;  // This is needed by some widgets which are detroyed later... leak for now...
+  delete opcodeTree;  // This is needed by some widgets which are detroyed later... leak for now...
 }
 
 //void qutecsound::keyPressEvent(QKeyEvent *event)
@@ -623,8 +622,7 @@ void qutecsound::deleteCurrentTab()
   DocumentPage *d = documentPages[curPage];
   documentPages.remove(curPage);
   documentTabs->removeTab(curPage);
-  delete d;
-//  d->deleteLater();  // TODO do these have to be pointers now?
+ delete  d;
   if (curPage >= documentPages.size()) {
     curPage = documentPages.size() - 1;
   }
@@ -799,6 +797,22 @@ void qutecsound::join()
 //   else {
 //     qDebug("qutecsound::join() : No Action");
 //   }
+}
+
+void qutecsound::showUtilities(bool show)
+{
+  qDebug() << "qutecsound::showUtilities";
+  if (!show) {
+    if (utilitiesDialog != 0 && utilitiesDialog->close()) {
+      utilitiesDialog = 0;
+    }
+  }
+  else {
+    utilitiesDialog = new UtilitiesDialog(this, m_options/*, _configlists*/);
+    connect(utilitiesDialog, SIGNAL(Close(bool)), showUtilitiesAct, SLOT(setChecked(bool)));
+    connect(utilitiesDialog, SIGNAL(runUtility(QString)), this, SLOT(runUtility(QString)));
+    utilitiesDialog->exec();
+  }
 }
 
 void qutecsound::inToGet()
@@ -1279,11 +1293,6 @@ void qutecsound::openShortcutDialog()
   dialog.exec();
 }
 
-//void qutecsound::utilitiesDialogOpen()
-//{
-//  qDebug("qutecsound::utilitiesDialog()");
-//}
-
 void qutecsound::statusBarMessage(QString message)
 {
   statusBar()->showMessage(message);
@@ -1414,7 +1423,6 @@ void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
 
 void qutecsound::runUtility(QString flags)
 {
-  //TODO Run utilities from API using soundRunUtility(CSOUND *, const char *name, int argc, char **argv)
   qDebug("qutecsound::runUtility");
   if (m_options->useAPI) {
 #ifdef MACOSX_PRE_SNOW
@@ -1446,7 +1454,6 @@ void qutecsound::runUtility(QString flags)
       argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
       strcpy(argv[index],flag.toStdString().c_str());
       index++;
-//       qDebug("%s",flag.toStdString().c_str());
     }
     argv[index] = (char *) calloc(files[0].size()+1, sizeof(char));
     strcpy(argv[index++],files[0].toStdString().c_str());
@@ -1457,12 +1464,15 @@ void qutecsound::runUtility(QString flags)
     csoundU=csoundCreate(0);
     csoundReset(csoundU);
     csoundSetHostData(csoundU, (void *) m_console);
-    csoundSetMessageCallback(csoundU, &qutecsound::utilitiesMessageCallback);
     csoundPreCompile(csoundU);
+    csoundSetMessageCallback(csoundU, &qutecsound::utilitiesMessageCallback);
     // Utilities always run in the same thread as QuteCsound
     csoundRunUtility(csoundU, name.toStdString().c_str(), argc, argv);
 //    csoundCleanup(csoundU);
     csoundDestroy(csoundU);
+//    for (int i = 0; i < argc; i++) {
+//      free(argv[i]);
+//    }
 //     free(argv);
 #ifdef MACOSX_PRE_SNOW
 // Put menu bar back
@@ -1886,8 +1896,7 @@ void qutecsound::createActions()
   showUtilitiesAct->setChecked(false);
   showUtilitiesAct->setStatusTip(tr("Show the Csound Utilities dialog"));
   showUtilitiesAct->setIconText(tr("Utilities"));
-  connect(showUtilitiesAct, SIGNAL(triggered(bool)), utilitiesDialog, SLOT(setVisible(bool)));
-  connect(utilitiesDialog, SIGNAL(Close(bool)), showUtilitiesAct, SLOT(setChecked(bool)));
+  connect(showUtilitiesAct, SIGNAL(triggered(bool)), this, SLOT(showUtilities(bool)));
 
   setShortcutsAct = new QAction(tr("Set Keyboard Shortcuts"), this);
   setShortcutsAct->setStatusTip(tr("Set Keyboard Shortcuts"));
