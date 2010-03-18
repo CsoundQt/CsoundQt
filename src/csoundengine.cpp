@@ -440,7 +440,7 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
      if (ud->channelNames[i] != "") {
        if(csoundGetChannelPtr(ud->csound, &pvalue, ud->channelNames[i].toStdString().c_str(),
           CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-            ud->wl->setValue(i,*pvalue);
+         ud->wl->setValue(i,*pvalue);
        }
        else if(csoundGetChannelPtr(ud->csound, &pvalue, ud->channelNames[i].toStdString().c_str(),
          CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
@@ -814,7 +814,7 @@ int CsoundEngine::runCsound()
   //TODO is something here necessary to work with doubles?
   //     PUBLIC int csoundGetSampleFormat(CSOUND *);
   //     PUBLIC int csoundGetSampleSize(CSOUND *);
-  unsigned int numWidgets = ud->wl->widgetCount();  // FIXME still needed here?
+//  unsigned int numWidgets = ud->wl->widgetCount();  // FIXME still needed here?
 //  ud->channelNames.resize(numWidgets*2);
 //  ud->values.resize(numWidgets*2);
 //  ud->stringValues.resize(numWidgets*2);

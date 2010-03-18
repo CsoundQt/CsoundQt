@@ -31,7 +31,6 @@
 #include "curve.h"
 #include "widgetpreset.h"
 
-//class Curve;
 class QuteConsole;
 class QuteGraph;
 class QuteScope;
