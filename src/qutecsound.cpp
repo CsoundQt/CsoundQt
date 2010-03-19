@@ -1330,7 +1330,7 @@ void qutecsound::about()
   text += "<a href=\"http://csound.sourceforge.net\">Csound Journal</a><br />";
   text += "<a href=\"http://csound.noisepages.com/\">The Csound Blog</a><br />";
   text +=  "<br />" + tr("Supported by:") +"<br />";
-  text +=  "<a href=\"http://www.hmt-hannover.de\">Incontri - HMT Hannover</a><br />";
+  text +=  "<a href=\"http://www.incontri.hmt-hannover.de/\">Incontri - HMT Hannover</a><br />";
   text += "<a href=\"http://sourceforge.net/project/project_donations.php?group_id=227265\">";
   text +=  tr("And other generous users.") + "</a><br />";
 
