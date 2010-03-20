@@ -751,6 +751,7 @@ void DocumentView::unindent()
 void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
 {
   // TODO implment for multiple views
+  bool originallyMod = editors[0]->document()->isModified();
   internalChange = true;
   QTextCharFormat errorFormat;
   errorFormat.setBackground(QBrush(QColor(255, 182, 193)));
@@ -779,6 +780,9 @@ void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
   internalChange = true;
   editors[0]->setTextCursor(cur);
   errorMarked = true;
+  if (!originallyMod) {
+    editors[0]->document()->setModified(false);
+  }
 }
 
 void DocumentView::unmarkErrorLines()

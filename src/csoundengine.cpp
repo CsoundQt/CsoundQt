@@ -873,6 +873,7 @@ void CsoundEngine::stopCsound()
       ud->perfThread->Stop();
       qDebug() << "CsoundEngine::stopCsound() stopped";
       ud->perfThread->Join();
+      flushMessageQueue();
       qDebug() << "CsoundEngine::stopCsound() joined";
       delete ud->perfThread;
       ud->perfThread = 0;
@@ -894,7 +895,6 @@ void CsoundEngine::stopCsound()
 #ifdef QCS_DESTROY_CSOUND
   csoundDestroy(ud->csound);
 #endif
-  flushMessageQueue();
 }
 
 void CsoundEngine::dispatchQueues()

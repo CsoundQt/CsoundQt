@@ -811,7 +811,8 @@ void qutecsound::showUtilities(bool show)
     utilitiesDialog = new UtilitiesDialog(this, m_options/*, _configlists*/);
     connect(utilitiesDialog, SIGNAL(Close(bool)), showUtilitiesAct, SLOT(setChecked(bool)));
     connect(utilitiesDialog, SIGNAL(runUtility(QString)), this, SLOT(runUtility(QString)));
-    utilitiesDialog->exec();
+    utilitiesDialog->setModal(false);
+    utilitiesDialog->show();
   }
 }
 
