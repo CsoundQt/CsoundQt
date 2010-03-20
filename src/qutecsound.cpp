@@ -640,8 +640,8 @@ void qutecsound::openLogFile()
     return;
   if (logFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
     logFile.readAll();
-    QString text = "--**-- QuteCsound Logging Started: "
-                   + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss")
+    QString text = "--**-- " + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss")
+                   + " QuteCsound Logging Started: "
                    + "\n";
     logFile.write(text.toAscii());
   }
@@ -860,9 +860,12 @@ void qutecsound::play(bool realtime)
         return;
       }
   }
-  m_options->csdPath = "";
   QString fileName, fileName2;
   fileName = documentPages[curPage]->getFileName();
+  QString msg = "__**__ " + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss");
+  msg += " Play: " + fileName + "\n";
+  logMessage(msg);
+  m_options->csdPath = "";
   if (fileName.contains('/')) {
     //FIXME is it necessary to set the csdPath here?
 //    m_options->csdPath =

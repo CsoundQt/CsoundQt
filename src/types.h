@@ -44,7 +44,7 @@
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/aplay"
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
 #define DEFAULT_DOT_EXECUTABLE "dot"
-#define DEFAULT_LOG_FILE "~/.qutecsound.log"
+#define DEFAULT_LOG_FILE ""
 #endif
 #ifdef Q_OS_SOLARIS
 #define DEFAULT_HTML_DIR "/usr/local/share/doc/csound/html"
@@ -54,7 +54,7 @@
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/jmplay"
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
 #define DEFAULT_DOT_EXECUTABLE "dot"
-#define DEFAULT_LOG_FILE "~/.qutecsound.log"
+#define DEFAULT_LOG_FILE ""
 #endif
 #ifdef Q_WS_MAC
 #define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib.framework/Resources/Manual"
@@ -64,7 +64,7 @@
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/Applications/QuickTime Player.app"
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/Applications/Preview.app"
 #define DEFAULT_DOT_EXECUTABLE "/usr/local/bin/dot"
-#define DEFAULT_LOG_FILE "~/qutecsound.log"
+#define DEFAULT_LOG_FILE ""
 #endif
 #ifdef Q_OS_WIN32
 #define DEFAULT_HTML_DIR "C:/Program Files/Csound/doc/manual"
@@ -74,7 +74,7 @@
 #define DEFAULT_WAVEPLAYER_EXECUTABLE ""
 #define DEFAULT_PDFVIEWER_EXECUTABLE ""
 #define DEFAULT_DOT_EXECUTABLE ""
-#define DEFAULT_LOG_FILE "~/qutecsound.log"
+#define DEFAULT_LOG_FILE ""
 #endif
 
 #include <csound.h>

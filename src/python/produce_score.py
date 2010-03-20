@@ -1,7 +1,7 @@
 import qutesheet
 from Tkinter import *
 import tkFileDialog
-from math import modf, log10
+from math import modf, log10, fmod
 import sys, subprocess, shutil, os
 
 image_avail = True
@@ -23,6 +23,7 @@ else:
 # ---
 q_options = ["1/4", "1/8", "1/16", "1/32"]
 time_options = ["4/4", "3/4", "6/8", "5/4"]
+num_beats = [4, 3, 6, 5]  # number of beats for the available time_options
 note_names_sharp = [ 'c' , 'cis', 'd', 'dis', 'e', 'f', 'fis', 'g', 'gis', 'a', 'ais', 'b' ]
 note_names_flat = [ 'c' , 'des', 'd', 'ees', 'e', 'f', 'ges', 'g', 'aes', 'a', 'bes', 'b' ]
 note_names = []
@@ -50,23 +51,31 @@ def quantize(rows):
 
 def split_polyphony(rows):
     polyphony = [[]]
-    current = polyphony[0]
-    cur_edge = 0
+    cur_edges = [0]
+    cur_poly = 0
     for r in rows:
-        if len(r) > 3 and type(r[2]) !=str and r[2] < cur_edge:
-            new_voice = []
-            polyphony.append(new_voice)
-            current = new_voice
-        if len(r) > 3 and type(r[2]) !=str and r[2] + r[3] > cur_edge:
-            cur_edge = r[2] + r[3]
-        current.append(r)
+        if len(r) > 3 and type(r[2]) !=str and r[2] < cur_edges[cur_poly]:
+            for i, e in enumerate(cur_edges):
+            # Try to reuse a previous polyphony line if possible 
+                if e > r[2]:
+                    cur_poly = i
+                    break
+            if r[2] < cur_edges[cur_poly]:
+                new_voice = []
+                cur_edges.append(0)
+                polyphony.append(new_voice)
+                cur_poly = len(polyphony) - 1
+        if len(r) > 3 and type(r[2]) !=str and r[2] + r[3] > cur_edges[cur_poly]:
+            cur_edges[cur_poly] = r[2] + r[3]
+        polyphony[cur_poly].append(r)
     return polyphony
 
 
 def produce_score():
-    global rows_sorted, lilypond_exec, template_text, note_names, filename
+    global rows_sorted, lilypond_exec, num_beats, template_text, note_names, filename
     quant = q_var.get()
     time = time_var.get()
+    beats = num_beats[time_options.index(time_var.get())]
     title = title_var.get()
     p4 = p4_var.get()
     if acc_var.get() == 'sharp':
@@ -91,7 +100,7 @@ def produce_score():
                 instr_nums.append(i_num)
     for n in range(len(notes_by_instr)):
         staff_name = "instr " + str(instr_nums[n])
-        out_text += make_ly_text(notes_by_instr[n], staff_name, quant, time, p4)
+        out_text += make_ly_text(notes_by_instr[n], staff_name, quant, time, beats, p4)
     out_text += ''
     complete_text = template_text
     complete_text = complete_text.replace('<Notes Come Here>', out_text)
@@ -133,7 +142,7 @@ def produce_score():
 #    print p
 
 
-def make_ly_text(rows, staff_name, quant, time, p4):
+def make_ly_text(rows, staff_name, quant, time, num_beats, p4):
     polyphony = split_polyphony(rows)
     ly_notes_text = '\n\\new Staff {<< \\set Staff.instrumentName = \"' + staff_name + ' \"\n \\time ' + time + '\n'
     for voice in polyphony:
@@ -147,16 +156,19 @@ def make_ly_text(rows, staff_name, quant, time, p4):
                 remaining = r[2] - last_note_time
                 while remaining > 0:
                     sil_dur = 1
-                    if remaining <= 4:
-                        sil_dur = int(4 * (1.0 /(remaining) ) )
-                        remaining -= 4
+                    if remaining <= num_beats:
+                        if modf(1.0/remaining)[0] != 0:
+                            sil_dur = str( int(8 * (1.0/remaining)) ) + "."
+                        else:
+                            sil_dur = str( int(4 * (1.0/remaining)) )
+                        remaining -= num_beats
                         if voice.index(r) == 0:
-                            ly_notes_text += 's' + str(sil_dur) + ' '
+                            ly_notes_text += 'r' + str(sil_dur) + ' '
                         else:
                             ly_notes_text += 's' + str(sil_dur) + ' '
                     else:
                         ly_notes_text += 's1 ~ '
-                        remaining -= 4
+                        remaining -= num_beats
             p_class = 0
             if p4 == 'pitch class':
                 p_class = r[4] + 0.00005
@@ -183,10 +195,22 @@ def make_ly_text(rows, staff_name, quant, time, p4):
                  else:
                         note_text += ","
             dur = r[3]
-            dur_text = str( int(4 * (1.0/dur)) )
-            note_text += dur_text
+            beat_start = fmod(r[2], num_beats)
+            overshoot = fmod(beat_start + dur, num_beats)
             last_note_time = r[2] + dur
-            ly_notes_text += note_text + ' '
+            if overshoot > 0 and overshoot != dur:
+                ly_notes_text += note_text + str( int(4 * (1.0/ (num_beats - beat_start))) )
+                while overshoot > 0:
+                    new_part_dur = overshoot if overshoot < num_beats else num_beats
+                    ly_notes_text += ' ~ ' + note_text + str( int(4 * (1.0/ (num_beats - new_part_dur))) )
+                    overshoot = overshoot - new_part_dur
+            else:
+                if modf(1.0/dur)[0] != 0:
+                    dur_text = str( int(8 * (1.0/dur)) ) + "."
+                else:
+                    dur_text = str( int(4 * (1.0/dur)) )
+                note_text += dur_text
+                ly_notes_text += note_text + ' '
         ly_notes_text += '} \\\\'
     ly_notes_text += '\n>>}'
     return ly_notes_text
@@ -223,11 +247,11 @@ root = Tk()
 root.title("Produce lilypond Score")
 
 l = Label(root, text="Quantize to:")
-l.grid(row=0)
+#l.grid(row=0)
 q_var = StringVar(root)
 q_var.set(q_options[1]) # initial value
 q = apply(OptionMenu, (root, q_var) + tuple(q_options))
-q.grid(row=0, column=1)
+#q.grid(row=0, column=1)
 
 l = Label(root, text="Measure Time:")
 l.grid(row=1)
