@@ -1,4 +1,4 @@
-import qutesheet
+import qutesheet as q
 from Tkinter import *
 import tkFileDialog
 from math import modf, log10, fmod
@@ -11,7 +11,7 @@ except ImportError:
     image_avail = False
 
 # get rows already sorted
-rows_sorted = qutesheet.rows
+rows_sorted = q.selection_full_rows_sorted()
 
 if sys.platform == 'win32':
     lilypond_exec = 'lilypond.exe'

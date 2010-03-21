@@ -1636,9 +1636,10 @@ void qutecsound::setDefaultKeyboardShortcuts()
   showGenAct->setShortcut(tr(""));
   showOverviewAct->setShortcut(tr(""));
   showConsoleAct->setShortcut(tr("Alt+3"));
-  showUtilitiesAct->setShortcut(tr("Alt+4"));
-  createCodeGraphAct->setShortcut(tr("Alt+5"));
-  showInspectorAct->setShortcut(tr("Alt+6"));
+  createCodeGraphAct->setShortcut(tr("Alt+4"));
+  showInspectorAct->setShortcut(tr("Alt+5"));
+  showLiveEventsAct->setShortcut(tr("Alt+6"));
+  showUtilitiesAct->setShortcut(tr("Alt+7"));
   setHelpEntryAct->setShortcut(tr("Shift+F1"));
   browseBackAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
   browseForwardAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
@@ -2422,9 +2423,9 @@ void qutecsound::createToolBars()
   configureToolBar->addAction(showWidgetsAct);
   configureToolBar->addAction(showHelpAct);
   configureToolBar->addAction(showConsoleAct);
-  configureToolBar->addAction(showUtilitiesAct);
   configureToolBar->addAction(showInspectorAct);
   configureToolBar->addAction(showLiveEventsAct);
+  configureToolBar->addAction(showUtilitiesAct);
 
   Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
       Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);

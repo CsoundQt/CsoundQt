@@ -4,14 +4,28 @@
 # Please see QuteCsound for more information
 # qutecsound.sourceforge.net
 
-version = "1.0.0"
 majorversion = 1
 minorversion = 0
 subversion   = 0
 
+version_text = str(majorversion) + '.' + str(minorversion) + '.' + str(subversion)
+
+class InconsistentData(Exception):
+    """Exception raised for errors in the input.
+
+    Attributes:
+        expr -- input expression in which the error occurred
+        msg  -- explanation of the error
+    """
+
+    def __init__(self, expr, msg):
+        self.expr = expr
+        self.msg = msg
 class QuteSheet:
     """The QuteSheet API"""
     def __init__(self, qutesheet_data):
+        self.data = qutesheet_data
+        cons = self._test_consistency()
         self.out_filename = qutesheet_data.out_filename
         self.first_row = qutesheet_data.row
         self.first_col = qutesheet_data.col
@@ -20,22 +34,55 @@ class QuteSheet:
         self.total_rows = qutesheet_data.total_rows
         self.total_cols = qutesheet_data.total_cols
         
-        # Data organized in different ways
-        self.rows_selection = qutesheet_data.data
-        self.rows = self._all_cols(qutesheet_data.data_all, self.first_row, self.num_rows)
-        self.rows_sorted = self.sort_by_start(self._all_cols(qutesheet_data.data_all, self.first_row, self.num_rows))
-        self.rows_all =  qutesheet_data.data_all
-        self.rows_all_sorted = self.sort_by_start(qutesheet_data.data_all)
-        
-        #cols_selection = _transpose(qutesheet_data.data);
-        self.cols = self._transpose(self._all_cols(self._transpose(qutesheet_data.data_all), self.first_col, self.num_cols))
-        self.cols_all = self._transpose(self.rows_all);
-        
-        self.cells_by_row = self._get_cells_by_row(self.rows_selection)
-        self.cells_by_row_all = self._get_cells_by_row(self.rows_all)
-        #cells_by_col = _get_cells_by_row(cols_selection)
-        self.cells_by_col_all = self._get_cells_by_row(self.cols_all)
+    def text(self):
+        return self._rows_to_text(self.data.data_all);
     
+    def selection_text(self):
+        return self._rows_to_text(self.selection_by_rows());
+    
+    # By rows  
+    def selection_by_rows(self):
+        return self._some_cols(self.data.data_all, self.first_row, self.num_rows,
+            self.first_col, self.num_cols)
+    
+    def selection_full_rows(self):
+        return self._all_cols(self.data.data_all, self.first_row, self.num_rows)
+    
+    def selection_full_rows_sorted(self):
+        return self.sort_by_start(self._all_cols(self.data.data_all, 
+            self.first_row, self.num_rows))
+    
+    def all_rows(self):
+        return self.data.data_all
+    
+    def all_rows_sorted(self):
+        return self.sort_by_start(self.data.data_all)
+    
+    # By Columns   
+    def selection_by_cols(self):
+        return self._transpose(self._some_cols(self.data.data_all, self.first_row, self.num_rows,
+            self.first_col, self.num_cols))
+    
+    def selection_full_cols(self):
+        return self._transpose(self._some_cols(self.data.data_all, 0, self.total_rows,
+            self.first_col, self.num_cols))
+    
+    def all_cols(self):
+        return self._transpose(self.data.data_all);
+    
+    # By Cells
+    def cells_selection_by_row(self):
+        return self._get_cells_by_row(self.selection_by_rows());
+    
+    def cells_all_by_row(self):
+        return self._get_cells_by_row(self.data.data_all);
+    
+    def cells_selection_by_col(self):
+        return self._get_cells_by_row(self._transpose(self.selection_by_rows()));
+    
+    def cells_all_by_col(self):
+        return self._get_cells_by_row(self._transpose(self.data.data_all));
+
     # ----------------
     # Data setting functions (for data output from script)
     
@@ -51,13 +98,7 @@ class QuteSheet:
             new_num_cols = self.num_cols
         out_text = '__@ ' + str(new_first_row) + ' ' + str(new_first_col) 
         out_text += ' ' + str(new_num_rows) + ' ' + str(new_num_cols) + '\n'
-        for row in new_data:
-            for cell in row:
-                if type(cell)==str:
-                    out_text += "" + cell + " "
-                else:
-                    out_text += str(cell) + " "
-            out_text += '\n'
+        out_text += self._rows_to_text(new_data)
         self._write_out_file(out_text)
         sys.exit()
     
@@ -118,9 +159,17 @@ class QuteSheet:
                         break
                     count += 1
                 new_data.insert(count, r)
+        return new_data
 
     # ----------------
     # internal functions
+    
+    def _test_consistency(self):
+        d = self.data
+        if (d.total_rows != len(d.data_all)):
+            raise InconsistentData(d.num_rows, "Inconsistent number of rows.")
+        if (d.total_cols != len(self._transpose(d.data_all))):
+            raise InconsistentData(d.num_cols, "Inconsistent number of columns.")
 
     def _get_cells_by_row(self, rows):
         cells = []
@@ -132,11 +181,31 @@ class QuteSheet:
     def _transpose(self, mtx):
         return zip(*mtx)
     
+    def _some_cols(self, data, row, num_rows, col, num_cols):
+        rows = []
+        for r in range(row, row + num_rows):
+            new_row = []
+            for c in range(col, col + num_cols):
+                new_row.append(data[r][c])
+            rows.append(new_row)
+        return rows
+    
     def _all_cols(self, data, row, num_rows):
         rows = []
         for r in range(row, row + num_rows):
             rows.append(data[r])
         return rows
+    
+    def _rows_to_text(self, rows):
+        out_text = ""
+        for row in rows:
+            for cell in row:
+                if type(cell)==str:
+                    out_text += "" + cell + " "
+                else:
+                    out_text += str(cell) + " "
+            out_text += '\n'
+        return out_text
     
     def _write_out_file(self, text):
         f = open(self.out_filename, "w")
@@ -159,29 +228,74 @@ _defObj = QuteSheet(qutesheet_data)
 
 
 # ----------------
-# Data gathering functions
+# Data properties
 
 first_col = _defObj.first_col
+first_row = _defObj.first_row
 num_rows = _defObj.num_rows
 num_cols = _defObj.num_cols
 total_rows = _defObj.total_rows
 total_cols = _defObj.total_cols
 
-# Data organized in different ways
-rows_selection = _defObj.rows_selection
-rows = _defObj.rows
-rows_sorted = _defObj.rows_sorted
-rows_all =  _defObj.rows_all
-rows_all_sorted = _defObj.rows_all_sorted
+def text():
+    """Get the text of all data"""
+    return _defObj.text()
 
-#cols_selection = _transpose(qutesheet_data.data);
-cols = _defObj.cols
-cols_all = _defObj.cols_all
+def selection_text():
+    """Get the selected data text"""
+    return _defObj.selection_text()
 
-cells_by_row = _defObj.cells_by_row
-cells_by_row_all = _defObj.cells_by_row_all
-#cells_by_col = _defObj.
-cells_by_col_all = _defObj.cells_by_col_all
+# Data by rows
+def selection_by_rows():
+    """Get the selected data grouped in rows"""
+    return _defObj.selection_by_rows()
+
+def selection_full_rows():
+    """Get the selected data grouped in rows containing all (even non selected) columns"""
+    return _defObj.selection_full_rows()
+
+def selection_full_rows_sorted():
+    """Get the selected data grouped in rows containing all (even non selected) columns, sorted
+according to the third element (p2)"""
+    return _defObj.selection_full_rows_sorted()
+
+def all_rows():
+    """Get all the data grouped in rows"""
+    return _defObj.all_rows()
+
+def all_rows_sorted():
+    """Get all the data grouped in rows, sorted according to the third element (p2)"""
+    return _defObj.all_rows_sorted()
+
+# By Columns   
+def selection_by_cols():
+    """Get the selected data grouped in columns"""
+    return _defObj.selection_by_cols()
+
+def selection_full_cols():
+    """Get the selected data grouped in columns, containing all rows even non-selected ones"""
+    return _defObj.selection_full_cols()
+
+def all_cols():
+    """Get all the data grouped in columns"""
+    return _defObj.all_cols()
+
+# By Cells
+def cells_selection_by_row():
+    """Get the selection as separate elements, read row by row"""
+    return _defObj.cells_selection_by_row()
+
+def cells_all_by_row():
+    """Get all the data as separate elements, read row by row"""
+    return _defObj.cells_all_by_row()
+
+def cells_selection_by_col():
+    """Get the selection as separate elements, read column by column"""
+    return _defObj.cells_selection_by_col()
+
+def cells_all_by_col():
+    """Get all the data as separate elements, read column by column"""
+    return _defObj.cells_all_by_col()
     
 # ----------------
 # Data setting functions (for data output from script)

@@ -727,31 +727,31 @@ QString EventSheet::generateDataText(QString outFileName)
       minCol = list[i].column();
     }
   }
-  QString data = "[ ";
-  for (int i = minRow; i <= maxRow; i++) {
-    data += "[ ";
-    for (int j = minCol; j <= maxCol; j++) {
-      QTableWidgetItem * item = this->item(i, j);
-      if ( item == 0) {
-        data += "''";
-      }
-      else {
-        bool ok;
-        item->data(Qt::DisplayRole).toString().toDouble(&ok);
-        if (ok) {
-          data += item->data(Qt::DisplayRole).toString();
-        }
-        else {
-          data += "'" + item->data(Qt::DisplayRole).toString() + "'";
-        }
-      }
-      data += ", ";
-    }
-    data.chop(2);
-    data += " ],\n";
-  }
-  data.chop(2);
-  data += " ]";
+//  QString data = "[ ";
+//  for (int i = minRow; i <= maxRow; i++) {
+//    data += "[ ";
+//    for (int j = minCol; j <= maxCol; j++) {
+//      QTableWidgetItem * item = this->item(i, j);
+//      if ( item == 0) {
+//        data += "''";
+//      }
+//      else {
+//        bool ok;
+//        item->data(Qt::DisplayRole).toString().toDouble(&ok);
+//        if (ok) {
+//          data += item->data(Qt::DisplayRole).toString();
+//        }
+//        else {
+//          data += "'" + item->data(Qt::DisplayRole).toString() + "'";
+//        }
+//      }
+//      data += ", ";
+//    }
+//    data.chop(2);
+//    data += " ],\n";
+//  }
+//  data.chop(2);
+//  data += " ]";
 
   QString data_all = "[ ";
   for (int i = 0; i < this->rowCount(); i++) {
@@ -788,7 +788,7 @@ QString EventSheet::generateDataText(QString outFileName)
   text += "total_rows = " + QString::number(this->rowCount()) + "\n";
   text += "total_cols = " + QString::number(this->columnCount ()) + "\n";
 
-  text += "data = " + data + "\n";
+//  text += "data = " + data + "\n";
   text += "data_all = " + data_all + "\n";
   text += "out_filename = '" + outFileName + "'\n";
   return text;
@@ -857,8 +857,8 @@ void EventSheet::runScript(QString name)
     }
   }
   else {
-    if (m_debug) {
-      QMessageBox::information(this, name.mid(name.lastIndexOf("/") + 1) ,
+    if (m_debug && !sout.isEmpty()) {
+      QMessageBox::information(this, name.mid(name.lastIndexOf("/") + 1) + " Output" ,
                                QString(sout),
                                QMessageBox::Ok);
     }

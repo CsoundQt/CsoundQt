@@ -3,12 +3,11 @@ import qutesheet
 from Tkinter import *
 
 # get all cells by row
-cells = qutesheet.cells_by_row
+cells = qutesheet.cells_selection_by_row()
 new_data = []
 
 def fill():
     global cells
-    print text_var.get()
     for c in cells:
         new_data.append(text_var.get())
      # set output

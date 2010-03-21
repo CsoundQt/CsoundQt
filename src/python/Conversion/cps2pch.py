@@ -1,9 +1,9 @@
 #import event sheet module
-import qutesheet
+import qutesheet as q
 from math import log10
 
 # get all cells by row
-cells = qutesheet.cells_by_row
+cells = q.cells_selection_by_row()
 new_data = []
 
 for c in cells:
