@@ -1433,7 +1433,7 @@ void qutecsound::runUtility(QString flags)
 //Remember menu bar to set it after FLTK grabs it
     menuBarHandle = GetMenuBar();
 #endif
-    m_console->reset();
+//    m_console->reset();
     static char *argv[33];
     QString name = "";
     QString fileFlags = flags.mid(flags.indexOf("\""));
@@ -2841,7 +2841,6 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   QApplication::setOverrideCursor(Qt::WaitCursor);
   DocumentPage *newPage = new DocumentPage(this, opcodeTree);
   documentPages.insert(curPage + 1, newPage);
-//  widgetPanel->setWidgetLayout(newPage->getWidgetLayout());
   curPage += 1;
   setCurrentOptionsForPage(documentPages[curPage]);
   documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
@@ -2849,12 +2848,8 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   setCurrentOptionsForPage(documentPages[curPage]);
 
   connectActions();
-//  connect(documentPages[curPage], SIGNAL(doCut()), this, SLOT(cut()));
-//  connect(documentPages[curPage], SIGNAL(doCopy()), this, SLOT(copy()));
-//  connect(documentPages[curPage], SIGNAL(doPaste()), this, SLOT(paste()));
   connect(documentPages[curPage], SIGNAL(currentTextUpdated()), this, SLOT(updateInspector()));
   connect(documentPages[curPage], SIGNAL(modified()), this, SLOT(documentWasModified()));
-//  connect(documentPages[curPage], SIGNAL(selectionChanged()), this, SLOT(checkSelection()));
   connect(documentPages[curPage], SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
   connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
           this, SLOT(setWidgetClipboard(QString)));
@@ -2883,7 +2878,6 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   documentTabs->setCurrentIndex(curPage);
   QApplication::restoreOverrideCursor();
 
-//  documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
   documentPages[curPage]->setModified(false);
   setCurrentFile(fileName);
   setWindowModified(false);

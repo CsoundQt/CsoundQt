@@ -155,11 +155,11 @@ void Console::keyReleaseEvent(QKeyEvent *event)
 DockConsole::DockConsole(QWidget * parent): QDockWidget(parent)
 {
   setWindowTitle(tr("Output Console"));
-  text = new Console(parent);
-  text->setReadOnly(true);
-  text->setContextMenuPolicy(Qt::NoContextMenu);
-  text->document()->setDefaultFont(QFont("Courier", 10));
-  setWidget(text);
+//  text = new Console(parent);
+//  text->setReadOnly(true);
+//  text->setContextMenuPolicy(Qt::NoContextMenu);
+//  text->document()->setDefaultFont(QFont("Courier", 10));
+//  setWidget(text);
   //      QStackedLayout *l = new QStackedLayout(this);
   //      l->addWidget(text);
   //      setLayout(l);
@@ -170,17 +170,19 @@ DockConsole::~DockConsole()
 
 void DockConsole::copy()
 {
-  text->copy();
+  qDebug() << "DockConsole::copy()";
+  static_cast<Console *>(widget())->copy();
 }
 
 bool DockConsole::widgetHasFocus()
 {
-  return text->hasFocus();
+  return widget()->hasFocus();
 }
-void DockConsole::reset()
-{
-  text->clear();
-}
+
+//void DockConsole::reset()
+//{
+//  widget()->clear();
+//}
 
 void DockConsole::closeEvent(QCloseEvent * /*event*/)
 {

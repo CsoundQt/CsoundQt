@@ -77,7 +77,7 @@ class DockConsole : public QDockWidget
     Console *text; // Made public for access from main application for utilities
 
   public slots:
-    void reset();
+//    void reset();
 
   protected:
     virtual void closeEvent(QCloseEvent * event);
