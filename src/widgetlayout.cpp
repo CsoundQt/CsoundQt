@@ -129,7 +129,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   distributeVerticalAct = new QAction(tr("Distribute Vertically"), this);
   connect(distributeVerticalAct, SIGNAL(triggered()), this, SLOT(distributeVertical()));
 
-  setFocusPolicy(Qt::StrongFocus);
+//  setFocusPolicy(Qt::StrongFocus);
 
   setMouseTracking(true);
   updateData(); // Starts updataData timer
