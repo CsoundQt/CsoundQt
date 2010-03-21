@@ -569,7 +569,7 @@ void EventSheet::clearHistory()
 void EventSheet::setScriptDirectory(QString dir)
 {
   scriptDir = dir;
-  if (!scriptDir.endsWith("/"))
+  if (!scriptDir.endsWith("/") && !scriptDir.isEmpty())
     scriptDir += "/";
 }
 
@@ -974,8 +974,10 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
                                        this, SLOT(runScript() ));
     a->setData(builtinScripts[i]);
   }
-  scriptMenu->addSeparator();
-  addDirectoryToMenu(scriptMenu, scriptDir);
+  if (!scriptDir.isEmpty()) {
+    scriptMenu->addSeparator();
+    addDirectoryToMenu(scriptMenu, scriptDir);
+  }
   menu.addAction(stopScriptAct);
   menu.addSeparator();
 //  menu.addAction(insertColumnHereAct);
