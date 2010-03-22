@@ -7,7 +7,7 @@ cells = q.cells_selection_by_row()
 new_data = []
 
 for c in cells:
-    if type(c) != str:
+    if type(c) != str and c > 0:
         new_val = 117 + (12 *log10(c/440.0)/log10(2))
         c = int(new_val/12) - 1 + ((new_val%12) / 100)
         new_data.append(c)
