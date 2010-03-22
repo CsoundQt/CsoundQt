@@ -21,6 +21,7 @@ class InconsistentData(Exception):
     def __init__(self, expr, msg):
         self.expr = expr
         self.msg = msg
+
 class QuteSheet:
     """The QuteSheet API"""
     def __init__(self, qutesheet_data):

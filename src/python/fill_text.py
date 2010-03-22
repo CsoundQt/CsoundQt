@@ -1,18 +1,21 @@
 #import event sheet module
-import qutesheet
+import qutesheet as q
 from Tkinter import *
 
 # get all cells by row
-cells = qutesheet.cells_selection_by_row()
+cells = q.cells_selection_by_row()
 new_data = []
 
+root = Tk()
+
 def fill():
-    global cells
+    global cells, root
     for c in cells:
         new_data.append(text_var.get())
      # set output
-    qutesheet.set_cells_by_row(new_data)
+    q.set_cells_by_row(new_data)
     # and quit
+    root.destroy()
 
 root = Tk()
 root.title("Fill cells with text")

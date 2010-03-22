@@ -15,4 +15,4 @@ for c in cells:
         new_data.append(c)
 
 # set output
-qutesheet.set_cells_by_row(new_data)
+q.set_cells_by_row(new_data)
