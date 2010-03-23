@@ -26,6 +26,7 @@
 
 CsoundOptions::CsoundOptions()
 {
+  m_jackNameSize = 16; //a small default
 }
 
 QString CsoundOptions::generateCmdLineFlags()
@@ -60,6 +61,10 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
         if (jackName.contains("*")) {
           jackName.replace("*",fileName1.mid(fileName1.lastIndexOf(QDir::separator()) + 1));
           jackName.replace(" ","_");
+        }
+        if (rtJackName.size() > m_jackNameSize) {
+          rtJackName.resize(m_jackNameSize);
+//          qDebug() << "CsoundOptions::generateCmdLineFlagsList() Jack name too long " << m_jackNameSize;
         }
         list << "-+jack_client=" + jackName;
       }
@@ -129,4 +134,9 @@ int CsoundOptions::generateCmdLine(char **argv)
   }
 //  fprintf(stdout, "\nCsoundOptions::generateCmdLine  index %i\n", index);
   return index;
+}
+
+void CsoundOptions::setJackNameSize(int size)
+{
+  m_jackNameSize = size;
 }

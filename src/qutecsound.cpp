@@ -203,9 +203,8 @@ void qutecsound::utilitiesMessageCallback(CSOUND *csound,
   DockConsole *console = (DockConsole *) csoundGetHostData(csound);
   QString msg;
   msg = msg.vsprintf(fmt, args);
-  qDebug() << msg;
-  console->text->appendMessage(msg);
-  console->text->scrollToEnd();
+//  qDebug() << msg;
+  console->appendMessage(msg);
 }
 
 void qutecsound::changePage(int index)
@@ -1472,12 +1471,11 @@ void qutecsound::runUtility(QString flags)
     csoundSetMessageCallback(csoundU, &qutecsound::utilitiesMessageCallback);
     // Utilities always run in the same thread as QuteCsound
     csoundRunUtility(csoundU, name.toStdString().c_str(), argc, argv);
-//    csoundCleanup(csoundU);
     csoundDestroy(csoundU);
-//    for (int i = 0; i < argc; i++) {
-//      free(argv[i]);
-//    }
-//     free(argv);
+    for (int i = 0; i < argc; i++) {
+      free(argv[i]);
+    }
+     free(argv);
 #ifdef MACOSX_PRE_SNOW
 // Put menu bar back
     SetMenuBar(menuBarHandle);
@@ -1490,15 +1488,6 @@ void qutecsound::runUtility(QString flags)
     if (m_options->opcodedirActive)
       script += "set OPCODEDIR=" + m_options->opcodedir + "\n";
     // Only OPCODEDIR left here as it must be present before csound initializes
-    // The problem is that it won't be passed when using the API...
-//     if (m_options->sadirActive)
-//       script += "set SADIR=" + m_options->sadir + "\n";
-//     if (m_options->ssdirActive)
-//       script += "set SSDIR=" + m_options->ssdir + "\n";
-//     if (m_options->sfdirActive)
-//       script += "set SFDIR=" + m_options->sfdir + "\n";
-//     if (m_options->ssdirActive)
-//       script += "set INCDIR=" + m_options->incdir + "\n";
 
     script += "cd " + QFileInfo(documentPages[curPage]->getFileName()).absolutePath() + "\n";
     script += "csound " + flags + "\n";
@@ -1507,15 +1496,6 @@ void qutecsound::runUtility(QString flags)
     if (m_options->opcodedirActive)
       script += "export OPCODEDIR=" + m_options->opcodedir + "\n";
     // Only OPCODEDIR left here as it must be present before csound initializes
-    // The problem is that it won't be passed when using the API...
-//     if (m_options->sadirActive)
-//       script += "export SADIR=" + m_options->sadir + "\n";
-//     if (m_options->ssdirActive)
-//       script += "export SSDIR=" + m_options->ssdir + "\n";
-//     if (m_options->sfdirActive)
-//       script += "export SFDIR=" + m_options->sfdir + "\n";
-//     if (m_options->ssdirActive)
-//       script += "export INCDIR=" + m_options->incdir + "\n";
 
     script += "cd " + QFileInfo(documentPages[curPage]->getFileName()).absolutePath() + "\n";
 #ifdef Q_WS_MAC
@@ -1584,9 +1564,6 @@ void qutecsound::showLineNumber(int lineNumber)
 
 void qutecsound::updateInspector()
 {
-  // This slot is triggered when a tab is closed, so you need to check
-  // if curPage is valid.
-//  if (curPage < documentPages.size())
   if (!documentPages[curPage]->getFileName().endsWith("py")) {
     m_inspector->parseText(documentPages[curPage]->getBasicText());
   }

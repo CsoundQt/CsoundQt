@@ -179,6 +179,12 @@ bool DockConsole::widgetHasFocus()
   return widget()->hasFocus();
 }
 
+void DockConsole::appendMessage(QString msg)
+{
+  static_cast<Console *>(widget())->appendMessage(msg);
+  static_cast<Console *>(widget())->scrollToEnd();
+}
+
 //void DockConsole::reset()
 //{
 //  widget()->clear();

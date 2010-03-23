@@ -73,8 +73,7 @@ class DockConsole : public QDockWidget
     ~DockConsole();
     void copy();
     bool widgetHasFocus();
-
-    Console *text; // Made public for access from main application for utilities
+    void appendMessage(QString msg);
 
   public slots:
 //    void reset();
@@ -82,6 +81,8 @@ class DockConsole : public QDockWidget
   protected:
     virtual void closeEvent(QCloseEvent * event);
 
+private:
+    Console *text;
   signals:
     void Close(bool visible);
 };

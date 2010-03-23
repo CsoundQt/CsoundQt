@@ -34,6 +34,8 @@ class CsoundOptions
     QStringList generateCmdLineFlagsList();
     int generateCmdLine(char **argv);
 
+    void setJackNameSize(int size);
+
     QString fileName1;
     QString fileName2;
     bool rt; //FIXME make sure this is set!
@@ -82,6 +84,9 @@ class CsoundOptions
     bool sfdirActive;
     QString incdir;
     bool incdirActive;
+
+  private:
+    int m_jackNameSize;
 };
 
 #endif // CSOUNDOPTIONS_H

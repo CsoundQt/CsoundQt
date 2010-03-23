@@ -1231,7 +1231,7 @@ void WidgetLayout::distributeVertical()
 
 void WidgetLayout::keyPressEvent(QKeyEvent *event)
 {
-  qDebug() << "WidgetLayout::keyPressEvent --- " << event->key() << "___" << event->modifiers() << " control = " <<  Qt::ControlModifier;
+//  qDebug() << "WidgetLayout::keyPressEvent --- " << event->key() << "___" << event->modifiers() << " control = " <<  Qt::ControlModifier;
   if (!event->isAutoRepeat() or m_repeatKeys) {
     QString key = event->text();
     if (event->key() == Qt::Key_D && (event->modifiers() & Qt::ControlModifier )) {
@@ -2170,7 +2170,7 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
     }
     else {
       newValues.insert(channelValue.first, channelValue.second);
-      qDebug() << "WidgetLayout::newValue " << channelValue.first << " " << channelValue.second;
+//      qDebug() << "WidgetLayout::newValue " << channelValue.first << " " << channelValue.second;
     }
     valueMutex.unlock();
   }

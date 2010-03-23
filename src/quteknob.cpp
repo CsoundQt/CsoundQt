@@ -125,6 +125,7 @@ void QuteKnob::setRange(double min, double max)
 
 void QuteKnob::setValue(double value)
 {
+//  qDebug() << "QuteKnob::setValue " << value;
   if (value > m_max)
     m_value = m_max;
   else if (value < m_min)

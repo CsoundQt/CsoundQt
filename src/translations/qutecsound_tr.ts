@@ -2894,5 +2894,9 @@ You must restart QuteCsound.</source>
         <source>Reset QuteCsound&apos;s preferences to their original default state</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Alt+7</source>
+        <translation type="unfinished">Alt+7</translation>
+    </message>
 </context>
 </TS>
