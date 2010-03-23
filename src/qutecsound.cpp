@@ -1844,6 +1844,10 @@ void qutecsound::createActions()
   showOverviewAct->setStatusTip(tr("Show opcode overview"));
   connect(showOverviewAct, SIGNAL(triggered()), helpPanel, SLOT(showOverview()));
 
+  showOpcodeQuickRefAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("Opcode Quick Reference"), this);
+  showOpcodeQuickRefAct->setStatusTip(tr("Show opcode quick reference page"));
+  connect(showOpcodeQuickRefAct, SIGNAL(triggered()), helpPanel, SLOT(showOpcodeQuickRef()));
+
   showConsoleAct = new QAction(QIcon(":/images/gksu-root-terminal.png"), tr("Output Console"), this);
   showConsoleAct->setCheckable(true);
   showConsoleAct->setChecked(true);
@@ -1981,6 +1985,8 @@ void qutecsound::setKeyboardShortcutsList()
   m_keyActions.append(openQuickRefAct);
   m_keyActions.append(showInspectorAct);
   m_keyActions.append(showLiveEventsAct);
+  m_keyActions.append(showUtilitiesAct);
+  m_keyActions.append(showOpcodeQuickRefAct);
 }
 
 void qutecsound::connectActions()
@@ -2308,6 +2314,7 @@ void qutecsound::createMenus()
   helpMenu->addSeparator();
   helpMenu->addAction(showManualAct);
   helpMenu->addAction(showOverviewAct);
+  helpMenu->addAction(showOpcodeQuickRefAct);
   helpMenu->addAction(showGenAct);
   helpMenu->addAction(openQuickRefAct);
   helpMenu->addSeparator();

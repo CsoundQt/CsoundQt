@@ -256,6 +256,7 @@ class qutecsound:public QMainWindow
     QAction *showManualAct;
     QAction *showGenAct;
     QAction *showOverviewAct;
+    QAction *showOpcodeQuickRefAct;
     QAction *showConsoleAct;
     QAction *setHelpEntryAct;
     QAction *browseBackAct;

@@ -490,7 +490,7 @@ void CsoundEngine::setInitialDir(QString initialDir)
 
 void CsoundEngine::freeze()
 {
-  qDebug() << "CsoundEngine::freeze";
+//  qDebug() << "CsoundEngine::freeze";
   engineMutex.lock();
   if (closing != -1) {
     closing = 1;

@@ -55,6 +55,7 @@ class DockHelp : public QDockWidget
     void showManual();
     void showGen();
     void showOverview();
+    void showOpcodeQuickRef();
     void browseBack();
     void browseForward();
     void followLink(QUrl url);

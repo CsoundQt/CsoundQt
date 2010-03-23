@@ -87,6 +87,7 @@ void DockHelp::closeEvent(QCloseEvent * /*event*/)
 {
   emit Close(false);
 }
+
 void DockHelp::showManual()
 {
   this->setVisible(true);
@@ -103,6 +104,12 @@ void DockHelp::showOverview()
 {
   this->setVisible(true);
   this->loadFile(docDir + "/PartOpcodesOverview.html");
+}
+
+void DockHelp::showOpcodeQuickRef()
+{
+  this->setVisible(true);
+  this->loadFile(docDir + "/MiscQuickref.html");
 }
 
 void DockHelp::browseBack()
