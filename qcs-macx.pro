@@ -21,7 +21,7 @@ DEFAULT_LIBSNDFILE_INCLUDE_DIRS = /usr/local/include \
     /usr/include
 DEFAULT_LIBSNDFILE_LIBRARY_DIRS = /usr/local/lib \
     /usr/lib
-CSOUND_LIB = CsoundLib
+DEFAULT_CSOUND_LIBS = CsoundLib
 CSND_LIB = lib_csnd.dylib
 LIBSNDFILE_LIB = libsndfile.dylib
 include(config.pri)

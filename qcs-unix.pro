@@ -14,8 +14,8 @@ DEFAULT_CSOUND_LIBRARY_DIRS = /usr/local/lib \
     /usr/lib
 DEFAULT_LIBSNDFILE_INCLUDE_DIRS = /usr/include
 DEFAULT_LIBSNDFILE_LIBRARY_DIRS = /usr/lib
-build32: CSOUND_LIB = libcsound.a
-build64: CSOUND_LIB = libcsound64.a
+build32: DEFAULT_CSOUND_LIBS = libcsound.so libcsound.a
+build64: DEFAULT_CSOUND_LIBS = libcsound64.so libcsound64.a
 CSND_LIB = libcsnd.so
 LIBSNDFILE_LIB = libsndfile.a
 include(config.pri)

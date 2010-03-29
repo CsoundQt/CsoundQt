@@ -8,12 +8,12 @@
 build32: build64: CONFIG -= build32
 CONFIG -= debug_and_release debug_and_release_target \
     copy_dir_files precompile_header shared
-DEFAULT_CSOUND_INCLUDE_DIRS = "$$(PROGRAMFILES)/Csound/include"
-DEFAULT_CSOUND_LIBRARY_DIRS = "$$(PROGRAMFILES)/Csound/bin"
-DEFAULT_LIBSNDFILE_INCLUDE_DIRS = "$$(PROGRAMFILES)/Mega-Nerd/libsndfile/include"
+DEFAULT_CSOUND_INCLUDE_DIRS = "$$(PROGRAMFILES)\Csound\include"
+DEFAULT_CSOUND_LIBRARY_DIRS = "$$(PROGRAMFILES)\Csound\bin"
+DEFAULT_LIBSNDFILE_INCLUDE_DIRS = "$$(PROGRAMFILES)\Mega-Nerd\libsndfile\include"
 DEFAULT_LIBSNDFILE_LIBRARY_DIRS = $${DEFAULT_CSOUND_LIBRARY_DIRS}
-build32: CSOUND_LIB = csound32.dll.5.2
-build64: CSOUND_LIB = csound64.dll.5.2
+build32: DEFAULT_CSOUND_LIBS = csound32.dll.5.2
+build64: DEFAULT_CSOUND_LIBS = csound64.dll.5.2
 CSND_LIB = csnd.dll
 LIBSNDFILE_LIB = libsndfile-1.dll
 include(config.pri)

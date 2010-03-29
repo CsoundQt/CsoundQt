@@ -97,18 +97,32 @@ isEmpty(CSOUND_LIBRARY_DIR) {
     !no_messages: message(Csound library directory not specified.)
     for(dir, DEFAULT_CSOUND_LIBRARY_DIRS) {
         !no_messages: message(... searching in $${dir})
-        exists($${dir}): \
-        exists($${dir}/$${CSOUND_LIB}): \
-        exists($${dir}/$${CSND_LIB}) {
-            !no_messages {
-                message(CSOUND_LIBRARY_DIR set to $${dir})
-                message()
+        exists($${dir}) {
+            for(csound_lib, DEFAULT_CSOUND_LIBS) {
+                exists($${dir}/$${csound_lib}) {
+                    exists($${dir}/$${CSND_LIB}) {
+                        !no_messages {
+                            message(CSOUND_LIB set to $${csound_lib})
+                            message(CSOUND_LIBRARY_DIR set to $${dir})
+                            message()
+                        }
+                        CSOUND_LIB = $${csound_lib}
+                        CSOUND_LIBRARY_DIR = $${dir}
+                        break()
+                    }
+                }
             }
-            CSOUND_LIBRARY_DIR = $${dir}
-            break()
         }
     }
     isEmpty(CSOUND_LIBRARY_DIR): error(A valid Csound library directory was not found.)
+}
+isEmpty(CSOUND_LIB) {
+    for(csound_lib, DEFAULT_CSOUND_LIBS) {
+        exists($${CSOUND_LIBRARY_DIR}/$${csound_lib}) {
+            CSOUND_LIB = $${csound_lib}
+            break();
+        }
+    }
 }
 isEmpty(LIBSNDFILE_INCLUDE_DIR) {
     !no_messages: message(libsndfile include directory not specified.)
