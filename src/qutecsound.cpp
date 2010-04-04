@@ -1475,7 +1475,6 @@ void qutecsound::runUtility(QString flags)
     for (int i = 0; i < argc; i++) {
       free(argv[i]);
     }
-     free(argv);
 #ifdef MACOSX_PRE_SNOW
 // Put menu bar back
     SetMenuBar(menuBarHandle);
