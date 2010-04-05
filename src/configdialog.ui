@@ -69,7 +69,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -1187,7 +1187,7 @@
         <x>10</x>
         <y>130</y>
         <width>641</width>
-        <height>131</height>
+        <height>81</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="_3">
@@ -1198,13 +1198,6 @@
          </property>
          <property name="text">
           <string>Color Variables</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="iconTextCheckBox">
-         <property name="text">
-          <string>Show text for toolbar icons</string>
          </property>
         </widget>
        </item>
@@ -1235,7 +1228,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>Behavior</string>
+      <string>Interface</string>
      </property>
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
@@ -1243,7 +1236,7 @@
         <x>10</x>
         <y>30</y>
         <width>641</width>
-        <height>101</height>
+        <height>141</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -1271,6 +1264,20 @@
         <widget class="QCheckBox" name="rememberFileCheckBox">
          <property name="text">
           <string>Remember open files from previous session</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="iconTextCheckBox">
+         <property name="text">
+          <string>Show text for toolbar icons</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="toolbarCheckBox">
+         <property name="text">
+          <string>Show Toolbar</string>
          </property>
         </widget>
        </item>

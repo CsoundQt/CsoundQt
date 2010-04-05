@@ -1378,6 +1378,10 @@ void qutecsound::applySettings()
   editToolBar->setToolButtonStyle(toolButtonStyle);
   controlToolBar->setToolButtonStyle(toolButtonStyle);
   configureToolBar->setToolButtonStyle(toolButtonStyle);
+  fileToolBar->setVisible(m_options->showToolbar);
+  editToolBar->setVisible(m_options->showToolbar);
+  controlToolBar->setVisible(m_options->showToolbar);
+  configureToolBar->setVisible(m_options->showToolbar);
 
   QString currentOptions = (m_options->useAPI ? tr("API") : tr("Console")) + " ";
   if (m_options->useAPI) {
@@ -2474,6 +2478,7 @@ void qutecsound::readSettings()
   m_options->rememberFile = settings.value("rememberfile", true).toBool();
   m_options->saveWidgets = settings.value("savewidgets", true).toBool();
   m_options->iconText = settings.value("iconText", true).toBool();
+  m_options->showToolbar = settings.value("showToolbar", true).toBool();
   m_options->wrapLines = settings.value("wrapLines", true).toBool();
   m_options->autoComplete = settings.value("autoComplete", true).toBool();
   m_options->useInvalue = settings.value("useInvalue", true).toBool();
@@ -2617,6 +2622,7 @@ void qutecsound::writeSettings()
     settings.setValue("rememberfile", m_options->rememberFile);
     settings.setValue("savewidgets", m_options->saveWidgets);
     settings.setValue("iconText", m_options->iconText);
+    settings.setValue("showToolbar", m_options->showToolbar);
     settings.setValue("wrapLines", m_options->wrapLines);
     settings.setValue("autoComplete", m_options->autoComplete);
     settings.setValue("enableWidgets", m_options->enableWidgets);

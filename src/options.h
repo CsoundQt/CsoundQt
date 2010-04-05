@@ -47,6 +47,7 @@ class Options: public CsoundOptions{
     bool rememberFile;
     bool saveWidgets;
     bool iconText;
+    bool showToolbar;
     bool wrapLines;
     bool autoComplete;
 
