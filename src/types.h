@@ -90,6 +90,7 @@ class Opcode
     QString outArgs;
     QString opcodeName;
     QString inArgs;
+    QString desc;
 };
 
 static ConfigLists _configlists;

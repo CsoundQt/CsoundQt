@@ -1340,7 +1340,7 @@ void qutecsound::about()
   msgBox->getTextEdit()->setOpenLinks(false);
   msgBox->setHtmlText(text);
   connect(msgBox->getTextEdit(), SIGNAL(anchorClicked(QUrl)), this, SLOT(openExternalBrowser(QUrl)));
-  int ret = msgBox->exec();
+  msgBox->exec();
   delete msgBox;
 }
 

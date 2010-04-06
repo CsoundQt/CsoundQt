@@ -44,47 +44,49 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
   QDomElement docElem = m_doc->documentElement();
   QList<Opcode> opcodesInCategoryList;
 
-  QDomNode n = docElem.firstChild();
-  while(!n.isNull()) {
-    QString catName;
+  QDomElement cat = docElem.firstChildElement("category");
+  while(!cat.isNull()) {
+    QString catName = cat.attribute("name", "Miscellaneous");
     opcodesInCategoryList.clear();
-    QDomElement e = n.toElement();
-    if(!e.isNull()) {
-//       qDebug() << e.attribute("name", "Miscellaneous");
-      catName = e.attribute("name", "Miscellaneous");
-    }
-    QDomNode synop = e.firstChild();
-    while(!synop.isNull()) {
-      Opcode opcode;
-      QDomElement op = synop.toElement();
-      QDomNode node = op.firstChild();
-      QDomElement elem = node.toElement();
-      if (elem.tagName()=="opcodename") {
-        opcode.opcodeName = elem.text().simplified();
-        opcode.inArgs = node.nextSibling().toText().data();
+    QDomElement opcode = cat.firstChildElement("opcode");
+    while(!opcode.isNull()) {
+      QDomElement desc = opcode.firstChildElement("desc");
+      QString description = desc.text();
+      QDomElement synop = opcode.firstChildElement("synopsis");
+      while(!synop.isNull()) {
+        Opcode op;
+        op.desc = description;
+        QDomElement s = synop.toElement();
+        QDomNode node = s.firstChild();
+        QDomElement elem = node.toElement();
+        if (elem.tagName()=="opcodename") {
+          op.opcodeName = elem.text().simplified();
+          op.inArgs = node.nextSibling().toText().data();
+        }
+        else {
+          op.outArgs = node.toText().data().simplified();
+          node = node.nextSibling();
+          op.opcodeName = node.toElement().text().simplified();
+          node = node.nextSibling();
+          if (!node.isNull())
+            op.inArgs = node.toText().data().simplified();
+        }
+//               qDebug() << "out =" << op.outArgs << " op=" << op.opcodeName << " in=" << op.inArgs << "---" << description;
+        if (op.opcodeName != "" && excludedOpcodes.count(op.opcodeName) == 0
+            && catName !="Utilities") {
+          addOpcode(op);
+          opcodesInCategoryList << op;
+        }
+        synop = synop.nextSiblingElement("synopsis");
       }
-      else {
-        opcode.outArgs = node.toText().data().simplified();
-        node = node.nextSibling();
-        opcode.opcodeName = node.toElement().text().simplified();
-        node = node.nextSibling();
-        if (!node.isNull())
-          opcode.inArgs = node.toText().data().simplified();
-      }
-//       qDebug() << "out =" << opcode.outArgs << " op=" << opcode.opcodeName << " in=" << opcode.inArgs;
-      if (opcode.opcodeName != "" and excludedOpcodes.count(opcode.opcodeName)==0
-          and catName !="Utilities") {
-        addOpcode(opcode);
-        opcodesInCategoryList << opcode;
-      }
-      synop = synop.nextSibling();
+      opcode = opcode.nextSiblingElement("opcode");
     }
     QPair<QString, QList<Opcode> > newCategory(catName, opcodesInCategoryList);
     opcodeListCategory.append(opcodesInCategoryList);
     categoryList.append(catName);
 // 	qDebug() << "Category: " << categoryList.last();
     opcodeCategoryList.append(newCategory);
-    n = n.nextSibling();
+    cat = cat.nextSiblingElement("category");
   }
   addExtraOpcodes();
 }
@@ -124,6 +126,7 @@ void OpEntryParser::addOpcode(Opcode opcode)
 
 QString OpEntryParser::getSyntax(QString opcodeName)
 {
+  QString out = "";
   int i = 0;
   int size = opcodeList.size();
   while (i < size && !opcodeList[i].opcodeName.startsWith(opcodeName)) {
@@ -137,7 +140,8 @@ QString OpEntryParser::getSyntax(QString opcodeName)
     if (!opcodeList[i].inArgs.isEmpty()) {
       syntax += " " + opcodeList[i].inArgs.simplified();
     }
-    return syntax;
+    out = syntax + "    [ " + opcodeList[i].desc + " ]";
+    return out;
   }
   else
     return QString("");
