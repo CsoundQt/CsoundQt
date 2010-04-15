@@ -33,8 +33,8 @@ class QuteKnob : public QuteWidget
 
     ~QuteKnob();
 
-    virtual void loadFromXml(QString xmlText);
-    virtual void setWidgetLine(QString line);
+//    virtual void loadFromXml(QString xmlText);
+//    virtual void setWidgetLine(QString line);
     virtual void setWidgetGeometry(int x, int y, int width, int height);
     virtual QString getWidgetLine();
     virtual QString getCabbageLine();
@@ -43,8 +43,10 @@ class QuteKnob : public QuteWidget
     virtual QString getWidgetType();
     virtual double getValue();
     virtual void setValue(double value);
-    virtual void setResolution(double resolution);
+//    virtual void setResolution(double resolution);
     void setRange(double min, double max);
+
+    virtual void applyInternalProperties();
 
   protected:
     virtual void createPropertiesDialog();

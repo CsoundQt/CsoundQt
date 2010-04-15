@@ -36,178 +36,90 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
 //  m_widget->setWindowFlags(Qt::WindowStaysOnTopHint);
   canFocus(false);
 //   static_cast<MeterWidget *>(m_widget)->setRenderHints(QPainter::Antialiasing);
-  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+//  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
   connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValues(double, double)), this, SLOT(setValuesFromWidget(double,double)));
   connect(static_cast<MeterWidget *>(m_widget), SIGNAL(valueChanged(double)), this, SLOT(valueChanged(double)));
   connect(static_cast<MeterWidget *>(m_widget), SIGNAL(value2Changed(double)), this, SLOT(value2Changed(double)));
+
+  setProperty("QCS_xMin", 0.0);
+  setProperty("QCS_xMax", 1.0);
+  setProperty("QCS_yMin", 0.0);
+  setProperty("QCS_yMax", 1.0);
+
+  setProperty("QCS_type", "fill");
+  setProperty("QCS_pointsize", 1);
+  setProperty("QCS_fadeSpeed", 1.0);
+  setProperty("QCS_mouseControl", "jump");
+  setProperty("QCS_mouseControlAct", "press");
+
+  setProperty("QCS_color", QColor(Qt::green));
+  setProperty("QCS_bgcolor", QColor(Qt::black));
+  setProperty("QCS_randomizable", false);
+  setProperty("QCS_randomizableMode", "both");
+
 }
 
 QuteMeter::~QuteMeter()
 {
 }
 
-void QuteMeter::loadFromXml(QString xmlText)
-{
-  initFromXml(xmlText);
-  QDomDocument doc;
-  if (!doc.setContent(xmlText)) {
-    qDebug() << "QuteMeter::loadFromXml: Error parsing xml";
-    return;
-  }
-  QDomElement e = doc.firstChildElement("xMin");
-  if (e.isNull()) {
-    qDebug() << "QuteMeter::loadFromXml: Expecting xMin element";
-    return;
-  }
-  else {
-    m_xMin = e.nodeValue().toDouble();
-  }
-  e = doc.firstChildElement("xMin");
-  if (e.isNull()) {
-    qDebug() << "QuteMeter::loadFromXml: Expecting xMin element";
-    return;
-  }
-  else {
-    m_xMin = e.nodeValue().toDouble();
-  }
-  e = doc.firstChildElement("xMax");
-  if (e.isNull()) {
-    qDebug() << "QuteMeter::loadFromXml: Expecting xMax element";
-    return;
-  }
-  else {
-    m_xMax = e.nodeValue().toDouble();
-  }
-  e = doc.firstChildElement("yMin");
-  if (e.isNull()) {
-    qDebug() << "QuteMeter::loadFromXml: Expecting yMin element";
-    return;
-  }
-  else {
-    m_yMin = e.nodeValue().toDouble();
-  }
-  e = doc.firstChildElement("yMax");
-  if (e.isNull()) {
-    qDebug() << "QuteMeter::loadFromXml: Expecting yMax element";
-    return;
-  }
-  else {
-    m_yMax = e.nodeValue().toDouble();
-  }
-  e = doc.firstChildElement("xValue");
-  if (e.isNull()) {
-    qDebug() << "QuteMeter::loadFromXml: Expecting xValue element";
-    return;
-  }
-  else {
-    static_cast<MeterWidget *>(m_widget)->setValue(e.nodeValue().toDouble());
-  }
-  e = doc.firstChildElement("yValue");
-  if (e.isNull()) {
-    qDebug() << "QuteMeter::loadFromXml: Expecting yValue element";
-    return;
-  }
-  else {
-    static_cast<MeterWidget *>(m_widget)->setValue2(e.nodeValue().toDouble());
-  }
-  e = doc.firstChildElement("type");
-  if (e.isNull()) {
-    qDebug() << "QuteMeter::loadFromXml: Expecting type element";
-    return;
-  }
-  else {
-    static_cast<MeterWidget *>(m_widget)->setType(e.nodeValue());
-  }
-  e = doc.firstChildElement("pointsize");
-  if (e.isNull()) {
-    qDebug() << "QuteMeter::loadFromXml: Expecting pointsize element";
-    return;
-  }
-  else {
-    static_cast<MeterWidget *>(m_widget)->setPointSize(e.nodeValue().toInt());
-  }
-  e = doc.firstChildElement("fadeSpeed");
-  if (e.isNull()) {
-    qDebug() << "QuteMeter::loadFromXml: Expecting fadeSpeed element";
-    return;
-  }
-  else {
-    m_fadeSpeed = e.nodeValue().toInt();
-  }
-  e = doc.firstChildElement("behavior");
-  if (e.isNull()) {
-    qDebug() << "QuteMeter::loadFromXml: Expecting behavior element";
-    return;
-  }
-  else {
-    m_behavior = e.nodeValue();
-  }
-  e = doc.firstChildElement("color");
-  if (e.isNull()) {
-    qDebug() << "QuteMeter::loadFromXml: Expecting color element";
-    return;
-  }
-  else {
-    QDomElement e2 = e.firstChildElement("r");
-    m_color.setRed(e.nodeValue().toInt());
-    e.firstChildElement("g");
-    m_color.setGreen(e.nodeValue().toInt());
-    e.firstChildElement("b");
-    m_color.setBlue(e.nodeValue().toInt());
-  }
-  e = doc.firstChildElement("randomizable");
-  if (e.isNull()) {
-    qDebug() << "QuteMeter::loadFromXml: Expecting randomizable element";
-    return;
-  }
-  else {
-    qDebug() << "QuteMeter::loadFromXml: randomizable not implemented";
-  }
-}
-
 QString QuteMeter::getWidgetLine()
 {
   QString line = "ioMeter {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-  line += "{" + QString::number(m_color.red() * 256)
-      + ", " + QString::number(m_color.green() * 256)
-      + ", " + QString::number(m_color.blue() * 256) + "} ";
-  line += "\"" + m_name + "\" " + QString::number(static_cast<MeterWidget *>(m_widget)->getValue(), 'f', 6) + " ";
-  line += "\"" + m_name2 + "\" " + QString::number(static_cast<MeterWidget *>(m_widget)->getValue2(), 'f', 6) + " ";
-  line += static_cast<MeterWidget *>(m_widget)->getType() + " ";
-  line += QString::number(static_cast<MeterWidget *>(m_widget)->getPointSize()) + " ";
-  line += QString::number(m_fadeSpeed) + " ";
-  line += m_behavior;
+  QColor color = property("QCS_color").value<QColor>();
+  line += "{" + QString::number(color.red() * 256)
+      + ", " + QString::number(color.green() * 256)
+      + ", " + QString::number(color.blue() * 256) + "} ";
+  line += "\"" + property("QCS_objectName").toString() + "\" " + QString::number(static_cast<MeterWidget *>(m_widget)->getValue(), 'f', 6) + " ";
+  line += "\"" + property("QCS_objectName2").toString() + "\" " + QString::number(static_cast<MeterWidget *>(m_widget)->getValue2(), 'f', 6) + " ";
+  line += property("QCS_type").toString() + " ";
+  line += QString::number(property("QCS_pointsize").toInt()) + " ";
+  line += QString::number(property("QCS_fadeSpeed").toInt()) + " ";
+  line += "mouse";
 //   qDebug("QuteMeter::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
 
 QString QuteMeter::getWidgetXmlText()
 {
+  xmlText = "";
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
 
-  //TODO implement any range for controller
-  s.writeTextElement("xMin", QString::number(0.0, 'f', 8));
-  s.writeTextElement("xMax", QString::number(1.0, 'f', 8));
-  s.writeTextElement("yMin", QString::number(0.0, 'f', 8));
-  s.writeTextElement("yMax", QString::number(1.0, 'f', 8));
+  s.writeTextElement("objectName2", property("QCS_objectName2").toString());
+  s.writeTextElement("xMin", QString::number(property("QCS_xMin").toDouble(), 'f', 8));
+  s.writeTextElement("xMax", QString::number(property("QCS_xMax").toDouble(), 'f', 8));
+  s.writeTextElement("yMin", QString::number(property("QCS_yMin").toDouble(), 'f', 8));
+  s.writeTextElement("yMax", QString::number(property("QCS_yMax").toDouble(), 'f', 8));
   s.writeTextElement("xValue", QString::number(static_cast<MeterWidget *>(m_widget)->getValue(), 'f', 8));
   s.writeTextElement("yValue", QString::number(static_cast<MeterWidget *>(m_widget)->getValue2(), 'f', 8));
 
-  // These three come from blue, but they are not implemented here
-  s.writeTextElement("randomizable", "");
-   //These are not implemented in blue
-  s.writeTextElement("type", static_cast<MeterWidget *>(m_widget)->getType());
-  s.writeTextElement("pointsize", QString::number(static_cast<MeterWidget *>(m_widget)->getPointSize()));
-  s.writeTextElement("fadeSpeed", QString::number(m_fadeSpeed));
-  s.writeTextElement("behavior", m_behavior);
-
-  s.writeStartElement("color");
-  s.writeTextElement("r", QString::number(m_color.red()));
-  s.writeTextElement("g", QString::number(m_color.green()));
-  s.writeTextElement("b", QString::number(m_color.blue()));
+  s.writeTextElement("type", property("QCS_type").toString());
+  s.writeTextElement("pointsize", QString::number(property("QCS_pointsize").toInt()));
+  s.writeTextElement("fadeSpeed",QString::number(property("QCS_fadeSpeed").toDouble(),'f',8));
+  s.writeStartElement("mouseControl");
+  s.writeAttribute("act", property("QCS_mouseControlAct").toString());
+  s.writeCharacters(property("QCS_mouseControl").toString());
   s.writeEndElement();
+
+  QColor color = property("QCS_color").value<QColor>();
+  s.writeStartElement("color");
+  s.writeTextElement("r", QString::number(color.red()));
+  s.writeTextElement("g", QString::number(color.green()));
+  s.writeTextElement("b", QString::number(color.blue()));
+  s.writeEndElement();
+  s.writeStartElement("randomizable");
+  s.writeAttribute("mode", property("QCS_randomizableMode").toString());
+  s.writeCharacters(property("QCS_randomizable").toBool() ? "true":"false");
+  s.writeEndElement();
+
+//  QColor bgcolor = property("QCS_bgcolor").value<QColor>();
+//  s.writeStartElement("bgcolor");
+//  s.writeTextElement("r", QString::number(bgcolor.red()));
+//  s.writeTextElement("g", QString::number(bgcolor.green()));
+//  s.writeTextElement("b", QString::number(bgcolor.blue()));
+//  s.writeEndElement();
 
   s.writeEndElement();
   return xmlText;
@@ -221,13 +133,13 @@ QString QuteMeter::getWidgetType()
   }
 //  else if (type == "crosshair" or type == "point") {
 //  }
-  return QString("BSBXYController");
+  return QString("BSBController");
 }
 
-void QuteMeter::popUpMenu(QPoint pos)
-{
-  QuteWidget::popUpMenu(pos);
-}
+//void QuteMeter::popUpMenu(QPoint pos)
+//{
+//  QuteWidget::popUpMenu(pos);
+//}
 
 void QuteMeter::createPropertiesDialog()
 {
@@ -235,7 +147,7 @@ void QuteMeter::createPropertiesDialog()
   dialog->setWindowTitle("Controller");
   channelLabel->setText("Vertical Channel name =");
   channelLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-  nameLineEdit->setText(getChannelName());
+//  nameLineEdit->setText(getChannelName());
 
   QLabel *label = new QLabel(dialog);
   label = new QLabel(dialog);
@@ -292,6 +204,7 @@ void QuteMeter::createPropertiesDialog()
   if (static_cast<MeterWidget *>(m_widget)->getType() != "point") {
     label->setEnabled(false);
     pointSizeSpinBox->setEnabled(false);
+
   }
 
   label = new QLabel(dialog);
@@ -299,7 +212,7 @@ void QuteMeter::createPropertiesDialog()
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
   fadeSpeedSpinBox = new QSpinBox(dialog);
-  fadeSpeedSpinBox->setValue(m_fadeSpeed);
+  fadeSpeedSpinBox->setValue(property("QCS_fadeSpeed").toDouble());
   fadeSpeedSpinBox->setRange(0, 1000);
   layout->addWidget(fadeSpeedSpinBox, 7,3, Qt::AlignLeft|Qt::AlignVCenter);
   label->setEnabled(false);
@@ -310,28 +223,53 @@ void QuteMeter::createPropertiesDialog()
   label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
   behaviorComboBox = new QComboBox(dialog);
-  behaviorComboBox->addItem("notrack");
-  behaviorComboBox->addItem("mouse");
-  behaviorComboBox->addItem("mousezero");
-  behaviorComboBox->addItem("toggle");
-  behaviorComboBox->addItem("togglezero");
-  behaviorComboBox->setCurrentIndex(behaviorComboBox->findText(m_behavior));
+  behaviorComboBox->addItem("jump");
+  behaviorComboBox->addItem("relative");
+  behaviorComboBox->addItem("none");
+  behaviorComboBox->setCurrentIndex(behaviorComboBox->findText(property("QCS_mouseControl").toString()));
   layout->addWidget(behaviorComboBox,8, 1, Qt::AlignLeft|Qt::AlignVCenter);
   label->setEnabled(false);
   behaviorComboBox->setEnabled(false);
+  label = new QLabel(dialog);
+  label->setText("Min X value =");
+  layout->addWidget(label,9, 0, Qt::AlignRight|Qt::AlignVCenter);
+  m_xMinBox = new QDoubleSpinBox(dialog);
+  m_xMinBox->setValue(property("QCS_xMin").toDouble());
+  layout->addWidget(m_xMinBox, 9,1, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+  label->setText("Max X value =");
+  layout->addWidget(label, 9, 2, Qt::AlignRight|Qt::AlignVCenter);
+  m_xMaxBox = new QDoubleSpinBox(dialog);
+  m_xMaxBox->setValue(property("QCS_xMax").toDouble());
+  layout->addWidget(m_xMaxBox, 9,3, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+  label->setText("Min Y value =");
+  layout->addWidget(label, 10, 0, Qt::AlignRight|Qt::AlignVCenter);
+  m_yMinBox = new QDoubleSpinBox(dialog);
+  m_yMinBox->setValue(property("QCS_yMin").toDouble());
+  layout->addWidget(m_yMinBox, 10, 1, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+  label->setText("Max Y value =");
+  layout->addWidget(label, 10, 2, Qt::AlignRight|Qt::AlignVCenter);
+  m_yMaxBox = new QDoubleSpinBox(dialog);
+  m_yMaxBox->setValue(property("QCS_yMax").toDouble());
+  layout->addWidget(m_yMaxBox, 10,3, Qt::AlignLeft|Qt::AlignVCenter);
 }
 
 void QuteMeter::applyProperties()
 {
-  m_name = nameLineEdit->text();
-  m_name2 = name2LineEdit->text();
-  setColor(colorButton->palette().color(QPalette::Window));
-  static_cast<MeterWidget *>(m_widget)->setType(typeComboBox->currentText());
-  static_cast<MeterWidget *>(m_widget)->setPointSize(pointSizeSpinBox->value());
-  m_fadeSpeed = fadeSpeedSpinBox->value();
-  m_behavior = behaviorComboBox->currentText();
+//  setProperty("QCS_objectName", nameLineEdit->text());
+  setProperty("QCS_objectName2", name2LineEdit->text());
+  setProperty("QCS_color", colorButton->palette().color(QPalette::Window));
+  setProperty("QCS_type", typeComboBox->currentText());
+  setProperty("QCS_pointsize", pointSizeSpinBox->value());
+  setProperty("QCS_fadeSpeed", fadeSpeedSpinBox->value());
+  setProperty("QCS_mouseControl", behaviorComboBox->currentText());
+  setProperty("QCS_xMin", m_xMinBox->value());
+  setProperty("QCS_xMax", m_xMaxBox->value());
+  setProperty("QCS_yMin", m_yMinBox->value());
+  setProperty("QCS_yMax", m_yMaxBox->value());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
-  setValue(m_value); // To update controller type on change from fill to llif
   qDebug("QuteMeter::applyProperties()");
 }
 
@@ -345,10 +283,6 @@ void QuteMeter::setWidgetGeometry(int x,int y,int width,int height)
 
 void QuteMeter::setValue(double value)
 {
-  if (value < 0.0)
-    value = 0.0;
-  else if (value > 1.0)
-    value = 1.0;
 #ifdef  USE_WIDGET_MUTEX
   mutex.lock();
 #endif
@@ -361,10 +295,6 @@ void QuteMeter::setValue(double value)
 
 void QuteMeter::setValue2(double value)
 {
-  if (value < 0.0)
-    value = 0.0;
-  else if (value > 1.0)
-    value = 1.0;
 #ifdef  USE_WIDGET_MUTEX
   mutex.lock();
 #endif
@@ -384,52 +314,39 @@ double QuteMeter::getValue2()
   return static_cast<MeterWidget *>(m_widget)->getValue2();
 }
 
-// QString QuteMeter::getChannelName()
-// {
-//   return m_name;
-// }
-
 QString QuteMeter::getChannel2Name()
 {
-  return m_name2;
+  return property("QCS_objectName2").toString();
 }
 
 void QuteMeter::setChannel2Name(QString name)
 {
-  m_name2 = name;
-  if (m_name2.startsWith('$'))
-    m_name2.remove(0,1);  // $ symbol is reserved for identifying string channels
+  if (name.startsWith('$')) {
+    name.remove(0,1);  // $ symbol is reserved for identifying string channels
+  }
+  setProperty("QCS_objectName2", name);
 }
 
-void QuteMeter::setColor(QColor color)
+void QuteMeter::applyInternalProperties()
 {
-  static_cast<MeterWidget *>(m_widget)->setColor(color);
-  m_color = color;
+  QuteWidget::applyInternalProperties();
+  static_cast<MeterWidget *>(m_widget)->setColor(property("QCS_color").value<QColor>());
+  static_cast<MeterWidget *>(m_widget)->setType(property("QCS_type").toString());
+  static_cast<MeterWidget *>(m_widget)->setPointSize(property("QCS_pointsize").toInt());
+  static_cast<MeterWidget *>(m_widget)-> setRanges(property("QCS_xMin").toDouble(),
+                                                   property("QCS_xMax").toDouble(),
+                                                   property("QCS_yMin").toDouble(),
+                                                   property("QCS_yMax").toDouble());
+  m_value = property("QCS_xValue").toDouble();
+  m_value2 = property("QCS_yValue").toDouble();
+  setValue(m_value);
+  setValue2(m_value2);
 }
 
-void QuteMeter::setType(QString type)
-{
-  static_cast<MeterWidget *>(m_widget)->setType(type);
-}
-
-void QuteMeter::setPointSize(int size)
-{
-  static_cast<MeterWidget *>(m_widget)->setPointSize(size);
-}
-
-void QuteMeter::setFadeSpeed(int speed)
-{
-  m_fadeSpeed = speed;
-}
-
-void QuteMeter::setBehavior(QString behavior)
-{
-  m_behavior = behavior;
-}
 
 void QuteMeter::selectTextColor()
 {
-  QColor color = QColorDialog::getColor(m_color, this);
+  QColor color = QColorDialog::getColor(property("QCS_color").value<QColor>(), this);
   if (color.isValid()) {
     QPixmap pixmap(64,64);
     pixmap.fill(color);
@@ -442,8 +359,9 @@ void QuteMeter::selectTextColor()
 
 void QuteMeter::setValuesFromWidget(double value1, double value2)
 {
-  setValue(value1);
-  setValue2(value2);
+  QString type = property("QCS_type").toString();
+    setValue(value1);
+    setValue2(value2);
 }
 
 /* Meter Widget ----------------------------------------*/
@@ -489,30 +407,62 @@ double MeterWidget::getValue2()
 
 void MeterWidget::setValue(double value)
 {
-  if (isnan(value) != 0)
-    return;
+//  qDebug() << "MeterWidget::setValue " <<value;
+//  if (isnan(value) != 0)
+//    return;
+  if (value > m_xmax) {
+    value = m_xmax;
+  }
+  if (value < m_xmin) {
+    value = m_xmin;
+  }
   m_value = value;
+
+  double portionx = (m_value -  m_xmin) / (m_xmax - m_xmin);
+  double portiony = (m_value2 -  m_ymin) / (m_ymax - m_ymin);
   if (m_type == "fill" and m_vertical) {
-    m_block->setRect(0, (1-value)*height(), width(), height());
+    m_block->setRect(0, (1-portionx)*height(), width(), height());
   }
   else if (m_type == "llif" and m_vertical) {
-    m_block->setRect(0, 0, width(), (1-value)*height());
+    m_block->setRect(0, 0, width(), (1-portionx)*height());
   }
-  m_hline->setLine(0, (1-value)*height(), width(), (1-value)*height());
-  m_vline->setLine(m_value2*width(), 0 ,m_value2*width(), height());
-  m_point->setRect(m_value2*width()- (m_pointSize/2.0), (1-value)*height()- (m_pointSize/2.0), m_pointSize, m_pointSize);
+  else if (m_type == "line" and !m_vertical) {
+    m_hline->setLine(portionx*width(), 0 ,portionx*width(), height());
+  }
+  else {
+    m_hline->setLine(0, (1-portionx)*height(), width(), (1-portionx)*height());
+    m_point->setRect(portiony*width()- (m_pointSize/2.0), (1-portionx)*height()- (m_pointSize/2.0), m_pointSize, m_pointSize);
+  }
+  emit valueChanged(m_value);
 }
 
 void MeterWidget::setValue2(double value)
 {
+//  qDebug() << "MeterWidget::setValue2 " << value;
+  if (value > m_ymax) {
+    value = m_ymax;
+  }
+  if (value < m_ymin) {
+    value = m_ymin;
+  }
   m_value2 = value;
+
+  double portionx = (m_value -  m_xmin) / (m_xmax - m_xmin);
+  double portiony = (m_value2 -  m_ymin) / (m_ymax - m_ymin);
   if (m_type == "fill" and !m_vertical) {
-    m_block->setRect(0, 0, value*width(), height());
+    m_block->setRect(0, 0, portiony*width(), height());
   }
   else if (m_type == "llif" and !m_vertical) {
-    m_block->setRect(value*width(),0, width(), height());
+    m_block->setRect(portiony*width(),0, width(), height());
   }
-  setValue(m_value);
+  else if (m_type == "line" and !m_vertical) {
+    m_vline->setLine(portiony*width(), 0 ,portiony*width(), height());
+  }
+  else {
+    m_vline->setLine(portiony*width(), 0 ,portiony*width(), height());
+    m_point->setRect(portiony*width()- (m_pointSize/2.0), (1-portionx)*height()- (m_pointSize/2.0), m_pointSize, m_pointSize);
+  }
+  emit value2Changed(m_value2);
 }
 
 void MeterWidget::setType(QString type)
@@ -561,6 +511,14 @@ void MeterWidget::setType(QString type)
   }
 }
 
+void MeterWidget::setRanges(double xmin, double xmax, double ymin, double ymax)
+{
+  m_xmin = xmin;
+  m_xmax = xmax;
+  m_ymin = ymin;
+  m_ymax = ymax;
+}
+
 void MeterWidget::setPointSize(int size)
 {
   m_pointSize = size;
@@ -595,20 +553,26 @@ void MeterWidget::mouseMoveEvent(QMouseEvent* event)
   if (event->buttons() & Qt::LeftButton) {
 //     if (event->x() > 0 and event->x()< width() and
 //         event->y() > 0 and event->y()< height())
-    double newhor = (double)event->x()/ width();
-    double newvert = 1 - ((double)event->y()/ height());
+    double newhor = m_xmin + ((m_xmax - m_xmin ) * (double)event->x()/ width() );
+    double newvert = m_ymin + ((m_ymax - m_ymin ) * (1 - ((double)event->y()/ height())));
     emit newValues(newvert, newhor);
-    emit valueChanged(newvert); //FIXME this values are not constrained between 0 and 1
-    emit value2Changed(newhor);
+//    emit valueChanged(newvert); //FIXME this values are not constrained between 0 and 1
+//    emit value2Changed(newhor);
   }
 }
 
-//void MeterWidget::mousePressEvent(QMouseEvent* event)
-//{
-//  if (event->buttons() & Qt::LeftButton) {
-//    m_mouseDown = true;
-//  }
-//}
+void MeterWidget::mousePressEvent(QMouseEvent* event)
+{
+  if (event->buttons() & Qt::LeftButton) {
+//     if (event->x() > 0 and event->x()< width() and
+//         event->y() > 0 and event->y()< height())
+    double newhor =  m_xmin + ((m_xmax - m_xmin ) * (double)event->x()/ width());
+    double newvert = m_ymin + ((m_ymax - m_ymin ) * (1 - ((double)event->y()/ height())));
+    emit newValues(newvert, newhor);
+//    emit valueChanged(newvert); //FIXME this values are not constrained between 0 and 1
+//    emit value2Changed(newhor);
+  }
+}
 
 //void MeterWidget::mouseReleaseEvent(QMouseEvent* event)
 //{

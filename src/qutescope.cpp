@@ -28,9 +28,6 @@
 
 QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
 {
-  m_zoom = 2;
-  m_type = "scope";
-  m_channel = -1;
   QGraphicsScene *m_scene = new QGraphicsScene(this);
   m_scene->setBackgroundBrush(QBrush(Qt::black));
   m_widget = new ScopeWidget(this);
@@ -56,7 +53,15 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
   m_poincareData = new PoincareData(m_params);
   m_dataDisplay = (DataDisplay *)m_scopeData;
   m_dataDisplay->show();
-//   connect(static_cast<ScopeWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+
+// Default properties
+  setProperty("QCS_type", "scope");
+  setProperty("QCS_chan", 0);
+  setProperty("QCS_zoomx", 1.0);
+  setProperty("QCS_zoomy", 1.0);
+  setProperty("QCS_dispx", 1.0);
+  setProperty("QCS_dispy", 1.0);
+  setProperty("QCS_mode", "lin");
 }
 
 QuteScope::~QuteScope()
@@ -67,51 +72,31 @@ QuteScope::~QuteScope()
   delete m_params;
 }
 
-void QuteScope::loadFromXml(QString xmlText)
-{
-  initFromXml(xmlText);
-  QDomDocument doc;
-  if (!doc.setContent(xmlText)) {
-    qDebug() << "QuteCheckBox::loadFromXml: Error parsing xml";
-    return;
-  }
-  QDomElement e = doc.firstChildElement("type");
-  if (e.isNull()) {
-    qDebug() << "QuteScope::loadFromXml: Expecting type element";
-    return;
-  }
-  else {
-    m_type = e.nodeValue();
-  }
-  e = doc.firstChildElement("zoom");
-  if (e.isNull()) {
-    qDebug() << "QuteScope::loadFromXml: Expecting zoom element";
-    return;
-  }
-  else {
-    m_zoom = e.nodeValue().toInt();
-  }
-}
-
 QString QuteScope::getWidgetLine()
 {
   QString line = "ioGraph {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-  line += m_type + " " + QString::number(m_zoom, 'f', 6) + " ";
-  line += QString::number(m_channel, 'f', 6) + " ";
-  line += m_name;
+  line += property("QCS_type").toString() + " " + QString::number(property("QCS_zoomx").toDouble(), 'f', 6) + " ";
+  line += QString::number(property("QCS_chan").toDouble(), 'f', 6) + " ";
+  line += property("QCS_objectName").toString();
 //   qDebug("QuteScope::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
 
 QString QuteScope::getWidgetXmlText()
 {
+  xmlText = "";
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
    // Not implemented in blue
 
-  s.writeTextElement("type", m_type);
-  s.writeTextElement("zoom", QString::number(m_zoom, 'f', 8));
+  s.writeTextElement("type", property("QCS_type").toString());
+  s.writeTextElement("zoomx", QString::number(property("QCS_zoomx").toDouble(), 'f', 8));
+  s.writeTextElement("zoomy", QString::number(property("QCS_zoomy").toDouble(), 'f', 8));
+  s.writeTextElement("dispx", QString::number(property("QCS_dispx").toDouble(), 'f', 8));
+  s.writeTextElement("dispy", QString::number(property("QCS_dispy").toDouble(), 'f', 8));
+  s.writeTextElement("zoomy", QString::number(property("QCS_zoomy").toDouble(), 'f', 8));
+  s.writeTextElement("mode", QString::number(property("QCS_mode").toDouble(), 'f', 8));
 
   s.writeEndElement();
   return xmlText;
@@ -124,16 +109,15 @@ QString QuteScope::getWidgetType()
 
 void QuteScope::setType(QString type)
 {
-  m_type = type;
   updateLabel();
   m_dataDisplay->hide();
-  if (m_type == "scope") {
+  if (type == "scope") {
     m_dataDisplay = (DataDisplay *)m_scopeData;
   }
-  else if (m_type == "lissajou") {
+  else if (type == "lissajou") {
     m_dataDisplay = (DataDisplay *)m_lissajouData;
   }
-  else if (m_type == "poincare") {
+  else if (type == "poincare") {
     m_dataDisplay = (DataDisplay *)m_poincareData;
   }
   m_dataDisplay->show();
@@ -141,14 +125,7 @@ void QuteScope::setType(QString type)
 
 void QuteScope::setValue(double value)
 {
-  m_zoom = (int) value;
-  updateLabel();
-}
-
-void QuteScope::setChannel(int channel)
-{
-//   qDebug("QuteScope::setChannel %i", channel);
-  m_channel = channel;
+  setProperty("QCS_chan", (int) value);
   updateLabel();
 }
 
@@ -159,16 +136,17 @@ void QuteScope::setUd(CsoundUserData *ud)
 
 void QuteScope::updateLabel()
 {
-  QString chan = (m_channel == -1 ? tr("all") : QString::number(m_channel));
-  m_label->setText(tr("Scope ch:") + chan + tr("  dec:") + QString::number(m_zoom));
+  QString chan = (property("QCS_chan").toInt() <= 0 ? tr("all", "meaning 'all' channels in scope, must be very short (4 letter max)") : QString::number(property("QCS_chan").toInt()));
+  m_label->setText(tr("Scope ch:") + chan + tr("  dec:", "Decimation (zoom) value for scope widget, must be very short (4 letter max)")
+                   + QString::number(property("QCS_zoomx").toDouble(), 'f', 1) );
 }
 
-void QuteScope::setWidgetGeometry(int x,int y,int width,int height)
+void QuteScope::applyInternalProperties()
 {
-  QuteWidget::setWidgetGeometry(x, y, width, height);
-//   static_cast<ScopeWidget *>(m_widget)->setWidgetGeometry(0,0,width, height);
-//   if (index < 0)
-//     return;
+  QuteWidget::applyInternalProperties();
+  setType(property("QCS_type").toString());
+  setValue(property("QCS_chan").toInt());
+  updateLabel();
 }
 
 void QuteScope::createPropertiesDialog()
@@ -185,7 +163,7 @@ void QuteScope::createPropertiesDialog()
   typeComboBox->addItem("Lissajou curve", QVariant(QString("lissajou")));
   typeComboBox->addItem("Poincare map", QVariant(QString("poincare")));
 //   typeComboBox->addItem("Spectrogram", QVariant(QString("fft")));
-  typeComboBox->setCurrentIndex(typeComboBox->findData(QVariant(m_type)));
+  typeComboBox->setCurrentIndex(typeComboBox->findData(QVariant(property("QCS_type").toString())));
   layout->addWidget(typeComboBox, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Channel");
@@ -201,22 +179,22 @@ void QuteScope::createPropertiesDialog()
   channelBox->addItem("Ch.7",QVariant((int) 7));
   channelBox->addItem("Ch.8",QVariant((int) 8));
   channelBox->addItem("none", QVariant((int) 0));
-  channelBox->setCurrentIndex(channelBox->findData(QVariant((int)m_channel)));
+  channelBox->setCurrentIndex(channelBox->findData(QVariant(property("QCS_chan").toDouble())));
   layout->addWidget(channelBox, 6, 3, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Decimation");
   layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
   decimationBox = new QSpinBox(dialog);
-  decimationBox->setValue(m_zoom);
+  decimationBox->setValue(property("QCS_zoomx").toDouble());
   decimationBox->setRange(1, 20);
   layout->addWidget(decimationBox, 7, 3, Qt::AlignLeft|Qt::AlignVCenter);
 }
 
 void QuteScope::applyProperties()
 {
-  setType(typeComboBox->itemData(typeComboBox->currentIndex()).toString());
-  setChannel(channelBox->itemData(channelBox->currentIndex()).toInt());
-  setValue(decimationBox->value());
+  setProperty("QCS_type", typeComboBox->itemData(typeComboBox->currentIndex()).toString());
+  setValue(channelBox->itemData(channelBox->currentIndex()).toInt());
+  setProperty("QCS_zoomx", decimationBox->value());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
 
@@ -235,8 +213,8 @@ void QuteScope::resizeEvent(QResizeEvent * event)
 
 void QuteScope::updateData()
 {
-//   qDebug("QuteScope::updateData()");
-  m_dataDisplay->updateData(m_channel, m_zoom, static_cast<ScopeWidget *>(m_widget)->freeze);
+//  qDebug() <<"QuteScope::updateData() " << property( "QCS_chan").toInt() << "  " << property("QCS_zoomx").toDouble() ;
+  m_dataDisplay->updateData(property("QCS_chan").toInt(), property("QCS_zoomx").toDouble(), static_cast<ScopeWidget *>(m_widget)->freeze);
 }
 
 ScopeItem::ScopeItem(int width, int height)

@@ -29,6 +29,7 @@ class PresetData
 {
   public:
     QString id;
+    int mode; // 0=value 1=value2 4=stringValue
     float value;
     float value2;
     QString stringValue;
@@ -39,26 +40,30 @@ class WidgetPreset
   public:
     WidgetPreset();
 
+    QString getXmlText();
     QString getName();
+    int getNumber();
     QStringList getWidgetIds();
+    int getMode(QString id);
     double getValue(QString id);
     double getValue2(QString id);
     QString getStringValue(QString id);
 
     void setName(QString name);
-    void setValue(QString id, double value);
-    void setValue2(QString id, double value);
-    void setStringValue(QString id, QString value);
+    void setNumber(int number);
+    void addValue(QString id, double value);
+    void addValue2(QString id, double value);
+    void addStringValue(QString id, QString value);
 
     int idIndex(QString id);  // index of id data -1 if not exists
 
     void clear();
-    void purge();
+//    void purge();
 
   private:
     QString m_name;
+    int m_number;
     QVector<PresetData> m_data;
-
 };
 
 #endif // WIDGETPRESET_H

@@ -36,7 +36,7 @@ class QuteMeter : public QuteWidget
 
     ~QuteMeter();
 
-    virtual void loadFromXml(QString xmlText);
+//    virtual void loadFromXml(QString xmlText);
     virtual QString getWidgetLine();
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();
@@ -54,17 +54,18 @@ class QuteMeter : public QuteWidget
     virtual QString getChannel2Name();
 
     void setChannel2Name(QString name);
-    void setColor(QColor color);
-    void setType(QString type);
-    void setPointSize(int size);
-    void setFadeSpeed(int speed);
-    void setBehavior(QString behavior);
+//    void setColor(QColor color);
+//    void setType(QString type);
+//    void setPointSize(int size);
+//    void setFadeSpeed(int speed);
+//    void setBehavior(QString behavior);
+    void applyInternalProperties();
 
   protected:
-    QColor m_color;
-    double m_xMin, m_xMax, m_yMin, m_yMax;
-    int m_fadeSpeed;
-    QString m_behavior;
+//    QColor m_color;
+//    double m_xMin, m_xMax, m_yMin, m_yMax;
+//    int m_fadeSpeed;
+//    QString m_behavior;
 
   private:
     QLineEdit* name2LineEdit;
@@ -73,11 +74,14 @@ class QuteMeter : public QuteWidget
     QSpinBox* pointSizeSpinBox;
     QSpinBox* fadeSpeedSpinBox;
     QComboBox* behaviorComboBox;
+    QDoubleSpinBox* m_xMinBox;
+    QDoubleSpinBox* m_xMaxBox;
+    QDoubleSpinBox* m_yMinBox;
+    QDoubleSpinBox* m_yMaxBox;
 
   private slots:
     void selectTextColor();
     void setValuesFromWidget(double value1, double value2);
-
 };
 
 class MeterWidget : public QGraphicsView
@@ -91,6 +95,7 @@ class MeterWidget : public QGraphicsView
     void setValue(double value);
     void setValue2(double value2);
     void setType(QString type);
+    void setRanges(double minx,double  maxx,double  miny,double  maxy);
     void setPointSize(int size);
     void setColor(QColor color);
     void setWidgetGeometry(int x,int y,int width,int height);
@@ -103,14 +108,15 @@ class MeterWidget : public QGraphicsView
     bool m_vertical;
 
   protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event)
-    {emit(popUpMenu(event->globalPos()));}
+//    virtual void contextMenuEvent(QContextMenuEvent *event)
+//    {emit(popUpMenu(event->globalPos()));}
     virtual void mouseMoveEvent(QMouseEvent* event);
-//    virtual void mousePressEvent(QMouseEvent* event);
+    virtual void mousePressEvent(QMouseEvent* event);
 //    virtual void mouseReleaseEvent(QMouseEvent* event);
 
   private:
     double m_value, m_value2;  // value1 is vertical, value2 is horizontal
+    double m_xmin, m_xmax, m_ymin, m_ymax;
     QString m_type;
     int m_pointSize;
     bool m_mouseDown;
@@ -123,7 +129,7 @@ class MeterWidget : public QGraphicsView
     QGraphicsLineItem* m_hline;
 
   signals:
-    void popUpMenu(QPoint pos);
+//    void popUpMenu(QPoint pos);
     void newValues(double value1, double value2);
     void valueChanged(double value);
     void value2Changed(double value);

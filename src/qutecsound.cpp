@@ -43,10 +43,6 @@
 #include "documentview.h"
 #include "widgetlayout.h"
 
-// Structs for csound graphs
-#include <cwindow.h>
-#include "curve.h"
-
 #ifdef Q_OS_WIN32
 static const QString SCRIPT_NAME = "qutecsound_run_script-XXXXXX.bat";
 #else
@@ -257,13 +253,6 @@ void qutecsound::setWidgetTooltipsVisible(bool visible)
   documentPages[curPage]->showWidgetTooltips(visible);
 }
 
-//void qutecsound::updateWidgets()
-//{
-//  documentPages[curPage]->loadWidgets(documentPages[curPage]->getMacWidgetsText());
-//  documentPages[curPage]->widgetLayout()->markHistory();
-//  setWidgetTooltipsVisible(m_options->showTooltips);
-//}
-
 void qutecsound::openExample()
 {
   QObject *sender = QObject::sender();
@@ -280,14 +269,6 @@ void qutecsound::logMessage(QString msg)
     logFile.write(msg.toAscii());
   }
 }
-
-//void qutecsound::registerLiveEvent(QWidget *_e)
-//{
-//  qDebug() << "qutecsound::registerLiveEvent";
-//  EventSheet *e = static_cast<LiveEventFrame *>(_e)->getSheet();
-//
-//  connect(e,SIGNAL(sendEvent(QString)),widgetPanel,SLOT(queueEvent(QString)));
-//}
 
 void qutecsound::closeEvent(QCloseEvent *event)
 {
@@ -520,7 +501,7 @@ void qutecsound::paste()
 
 void qutecsound::undo()
 {
-  qDebug() << "qutecsound::undo()";
+//  qDebug() << "qutecsound::undo()";
   documentPages[curPage]->undo();
 }
 
@@ -665,6 +646,19 @@ bool qutecsound::saveNoWidgets()
     return saveFile(fileName, false);
   else
     return false;
+}
+
+void qutecsound::info()
+{
+  QString text = tr("Full Path:") + " " + documentPages[curPage]->getFileName() + "\n";
+  text += tr("Number of lines (csd only):") + " " + QString::number(documentPages[curPage]->lineCount()) + "\n";
+  text += tr("Number of characters (csd only):") + " " + QString::number(documentPages[curPage]->characterCount()) + "\n";
+  text += tr("Number of lines (total):") + " " + QString::number(documentPages[curPage]->lineCount(true)) + "\n";
+  text += tr("Number of characters (total):") + " " + QString::number(documentPages[curPage]->characterCount(true)) + "\n";
+  QMessageBox::information(this, tr("File Information"),
+                           text,
+                           QMessageBox::Ok,
+                           QMessageBox::Ok);
 }
 
 bool qutecsound::closeTab(bool askCloseApp)
@@ -1228,6 +1222,16 @@ void qutecsound::setHelpEntry()
   }
 }
 
+void qutecsound::setFullScreen(bool full)
+{
+  if (full) {
+    this->showFullScreen();
+  }
+  else {
+    this->showNormal();
+  }
+}
+
 void qutecsound::openManualExample(QString fileName)
 {
   loadFile(fileName);
@@ -1425,7 +1429,7 @@ void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
   p->setConsoleColors(m_options->consoleFontColor,
                       m_options->consoleBgColor);
   p->setScriptDirectory(m_options->pythonDir);
-  p->useXmlFormat(m_options->newformat);
+  p->useOldFormat(m_options->oldFormat);
 }
 
 void qutecsound::runUtility(QString flags)
@@ -1616,6 +1620,7 @@ void qutecsound::setDefaultKeyboardShortcuts()
   showGenAct->setShortcut(tr(""));
   showOverviewAct->setShortcut(tr(""));
   showConsoleAct->setShortcut(tr("Alt+3"));
+  viewFullScreenAct->setShortcut(tr("F11"));
   createCodeGraphAct->setShortcut(tr("Alt+4"));
   showInspectorAct->setShortcut(tr("Alt+5"));
   showLiveEventsAct->setShortcut(tr("Alt+6"));
@@ -1682,6 +1687,11 @@ void qutecsound::createActions()
 //    openRecentAct.append(newAction);
 //    connect(newAction, SIGNAL(triggered()), this, SLOT(openFromAction()));
 //  }
+
+  infoAct = new QAction(tr("File Information"), this);
+  infoAct->setStatusTip(tr("Show information for the current file"));
+//   exitAct->setIconText(tr("Exit"));
+  connect(infoAct, SIGNAL(triggered()), this, SLOT(info()));
 
   exitAct = new QAction(tr("E&xit"), this);
   exitAct->setStatusTip(tr("Exit the application"));
@@ -1859,6 +1869,12 @@ void qutecsound::createActions()
   connect(showConsoleAct, SIGNAL(toggled(bool)), m_console, SLOT(setVisible(bool)));
   connect(m_console, SIGNAL(Close(bool)), showConsoleAct, SLOT(setChecked(bool)));
 
+  viewFullScreenAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("View Full Screen"), this);
+  viewFullScreenAct->setCheckable(true);
+  viewFullScreenAct->setChecked(false);
+  viewFullScreenAct->setStatusTip(tr("Have QuteCsound occupy all the available screen space"));
+  connect(viewFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setFullScreen(bool)));
+
   setHelpEntryAct = new QAction(QIcon(":/images/gtk-info.png"), tr("Show Opcode Entry"), this);
   setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
   setHelpEntryAct->setIconText(tr("Manual for opcode"));
@@ -1990,6 +2006,8 @@ void qutecsound::setKeyboardShortcutsList()
   m_keyActions.append(showLiveEventsAct);
   m_keyActions.append(showUtilitiesAct);
   m_keyActions.append(showOpcodeQuickRefAct);
+  m_keyActions.append(infoAct);
+  m_keyActions.append(viewFullScreenAct);
 }
 
 void qutecsound::connectActions()
@@ -2067,6 +2085,7 @@ void qutecsound::createMenus()
 //   fileMenu->addAction(cabbageAct);
   fileMenu->addAction(closeTabAct);
   fileMenu->addAction(printAct);
+  fileMenu->addAction(infoAct);
   fileMenu->addSeparator();
   fileMenu->addAction(exitAct);
   fileMenu->addSeparator();
@@ -2118,6 +2137,8 @@ void qutecsound::createMenus()
   viewMenu->addAction(createCodeGraphAct);
   viewMenu->addAction(showInspectorAct);
   viewMenu->addAction(showLiveEventsAct);
+  viewMenu->addSeparator();
+  viewMenu->addAction(viewFullScreenAct);
 
   QStringList tutFiles;
   QStringList basicsFiles;
@@ -2487,7 +2508,7 @@ void qutecsound::readSettings()
   m_options->enableFLTK = settings.value("enableFLTK", true).toBool();
   m_options->terminalFLTK = settings.value("terminalFLTK", false).toBool();
   m_options->scrollbars = settings.value("scrollbars", true).toBool();
-  m_options->newformat = settings.value("newformat", false).toBool();  //TODO when format is stabilized, use by default
+  m_options->oldFormat = settings.value("oldFormat", true).toBool();
   lastFiles = settings.value("lastfiles", "").toStringList();
   lastTabIndex = settings.value("lasttabindex", "").toInt();
   settings.endGroup();
@@ -2632,7 +2653,7 @@ void qutecsound::writeSettings()
     settings.setValue("enableFLTK", m_options->enableFLTK);
     settings.setValue("terminalFLTK", m_options->terminalFLTK);
     settings.setValue("scrollbars", m_options->scrollbars);
-    settings.setValue("newformat", m_options->newformat);
+    settings.setValue("oldFormat", m_options->oldFormat);
     QStringList files;
     if (m_options->rememberFile) {
       for (int i = 0; i < documentPages.size(); i++ ) {
@@ -2788,28 +2809,6 @@ int qutecsound::execute(QString executable, QString options)
   return 0;
 }
 
-//bool qutecsound::saveCurrent()
-//{
-//  if (documentPages[curPage]->isModified()) {
-//    QString message = tr("The document ")
-//                      + (documentPages[curPage]->fileName != "" ? documentPages[curPage]->fileName: "untitled.csd")
-//                      + tr("\nhas been modified.\nDo you want to save the changes before closing?");
-//    int ret = QMessageBox::warning(this, tr("QuteCsound"),
-//                                   message,
-//                                   QMessageBox::Yes | QMessageBox::Default,
-//                                   QMessageBox::No,
-//                                   QMessageBox::Cancel | QMessageBox::Escape);
-//    if (ret == QMessageBox::Yes) {
-//      if (!save())
-//        return false;
-//    }
-//    else if (ret == QMessageBox::Cancel) {
-//      return false;
-//    }
-//  }
-//  return true; // If file saved correctly or not save is chosen. False if unable to save or cancelled
-//}
-
 bool qutecsound::loadFile(QString fileName, bool runNow)
 {
   QFile file(fileName);
@@ -2829,8 +2828,13 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   }
   QApplication::setOverrideCursor(Qt::WaitCursor);
   DocumentPage *newPage = new DocumentPage(this, opcodeTree);
-  documentPages.insert(curPage + 1, newPage);
+  int insertPoint = curPage + 1;
   curPage += 1;
+  if (documentPages.size() == 0) {
+    insertPoint = 0;
+    curPage = 0;
+  }
+  documentPages.insert(insertPoint, newPage);
   setCurrentOptionsForPage(documentPages[curPage]);
   documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
   documentPages[curPage]->setInitialDir(initialDir);
@@ -3097,15 +3101,21 @@ void qutecsound::getCompanionFileName()
 void qutecsound::setWidgetPanelGeometry()
 {
   QRect geometry = documentPages[curPage]->getWidgetPanelGeometry();
-  if (geometry.width() == 0)
-    return;
-  if (geometry.x() < 0) {
-    geometry.setX(10);
-    qDebug() << "qutecsound::setWidgetPanelGeometry() Warining: X is negative.";
+  if (geometry.width() <= 0) {
+    geometry.setWidth(400);
+    qDebug() << "qutecsound::setWidgetPanelGeometry() Warning: width invalid.";
   }
-  if (geometry.y() < 0) {
-    geometry.setY(10);
-    qDebug() << "qutecsound::setWidgetPanelGeometry() Warining: Y is negative.";
+  if (geometry.height() <= 0) {
+    geometry.setHeight(300);
+    qDebug() << "qutecsound::setWidgetPanelGeometry() Warning: height invalid.";
+  }
+  if (geometry.x() < 0 || geometry.x() > 4096) {
+    geometry.setX(50);
+    qDebug() << "qutecsound::setWidgetPanelGeometry() Warning: X position invalid.";
+  }
+  if (geometry.y() < 0 || geometry.y() > 4096) {
+    geometry.setY(50);
+    qDebug() << "qutecsound::setWidgetPanelGeometry() Warning: Y position invalid.";
   }
   widgetPanel->setGeometry(geometry);
 }
@@ -3122,12 +3132,6 @@ int qutecsound::isOpen(QString fileName)
   }
   return open;
 }
-
-//void qutecsound::markErrorLine()
-//{
-////   qDebug("qutecsound::markErrorLine()");
-//  documentPages[curPage]->markErrorLines(m_console->errorLines);
-//}
 
 QStringList qutecsound::runCsoundInternally(QStringList flags)
 {

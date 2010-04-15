@@ -376,8 +376,18 @@ void DocumentView::textChanged()
   if (m_mode == 0) {  // CSD mode
     if (m_autoComplete) {
       QTextCursor cursor = mainEditor->textCursor();
+      int curIndex = cursor.position();
       cursor.select(QTextCursor::WordUnderCursor);
       QString word = cursor.selectedText();
+      QTextCursor lineCursor = mainEditor->textCursor();
+      lineCursor.select(QTextCursor::LineUnderCursor);
+      QString line = lineCursor.selectedText();
+      int commentIndex = -1;
+      if (line.indexOf(";") != -1) {
+        commentIndex = lineCursor.position() - line.length() + line.indexOf(";");
+        if (commentIndex < curIndex)
+          return;
+      }
       if (word.size() > 2 && !word.startsWith("\"")
         && cursor.position() > cursor.anchor() // Only at the end of the word
         ) {
@@ -516,7 +526,7 @@ void DocumentView::insertTextFromAction()
 void DocumentView::findString(QString query)
 {
   // TODO search across all editors
-  qDebug() << "qutecsound::findString " << query;
+  qDebug() << "DocumentView::findString " << query;
   if (query == "") {
     query = lastSearch;
   }

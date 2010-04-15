@@ -33,7 +33,6 @@ class QuteButton : public QuteWidget
 
     ~QuteButton();
 
-    virtual void loadFromXml(QString xmlText);
     virtual void setValue(double value); // Value of button when pressed
     virtual double getValue(); // This value represents the state of the button
     virtual QString getStringValue(); // This value represents the filename from a _Browse channel button
@@ -41,11 +40,13 @@ class QuteButton : public QuteWidget
     virtual QString getCabbageLine();
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();
-    void setType(QString text);
+//    void setType(QString text);
     void setText(QString text);
-    void setFilename(QString filename);
-    void setEventLine(QString eventLine);
+//    void setFilename(QString filename);
+//    void setEventLine(QString eventLine);
     void popUpMenu(QPoint pos);
+
+    virtual void applyInternalProperties();
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent* event);
@@ -53,10 +54,10 @@ class QuteButton : public QuteWidget
     virtual void createPropertiesDialog();
 
   private:
-    QString m_eventLine;
-    QString m_type;  // can be event, value, pictevent, pictvalue, pict
-    QString m_filename;
-    QString m_imageFilename;
+//    QString m_eventLine;
+//    QString m_type;  // can be event, value, pictevent, pictvalue, pict
+//    QString m_filename;
+//    QString m_imageFilename;
 
     QComboBox *typeComboBox;
     QDoubleSpinBox *valueBox;

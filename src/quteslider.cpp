@@ -28,117 +28,52 @@ QuteSlider::QuteSlider(QWidget *parent) : QuteWidget(parent)
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
   m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   canFocus(false);
-  m_max = 1.0;
-  m_min = 0.0;
   if (width() > height())
     static_cast<QSlider *>(m_widget)->setOrientation(Qt::Horizontal);
   else
     static_cast<QSlider *>(m_widget)->setOrientation(Qt::Vertical);
 
   connect(static_cast<QSlider *>(m_widget), SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
+
+  setProperty("QCS_minimum", 0.0);
+  setProperty("QCS_maximum", 1.0);
+  setProperty("QCS_value", 0.0);
+  setProperty("QCS_mode", "lin");
+  setProperty("QCS_mouseControl", "continuous");
+  setProperty("QCS_mouseControlAct", "jump");
+  setProperty("QCS_resolution", -1.0);
+  setProperty("QCS_randomizable", false);
 }
 
 QuteSlider::~QuteSlider()
 {
 }
 
-void QuteSlider::loadFromXml(QString xmlText)
-{
-  initFromXml(xmlText);
-  QDomDocument doc;
-  if (!doc.setContent(xmlText)) {
-    qDebug() << "QuteSlider::loadFromXml: Error parsing xml";
-    return;
-  }
-  QDomElement e = doc.firstChildElement("minimum");
-  if (e.isNull()) {
-    qDebug() << "QuteSlider::loadFromXml: Expecting minimum element";
-    return;
-  }
-  else {
-    m_min = e.nodeValue().toDouble();
-  }
-  e = doc.firstChildElement("maximum");
-  if (e.isNull()) {
-    qDebug() << "QuteSlider::loadFromXml: Expecting maximum element";
-    return;
-  }
-  else {
-    m_max = e.nodeValue().toDouble();
-  }
-  e = doc.firstChildElement("value");
-  if (e.isNull()) {
-    qDebug() << "QuteSlider::loadFromXml: Expecting value element";
-    return;
-  }
-  else {
-    m_value = e.nodeValue().toDouble();
-  }
-  e = doc.firstChildElement("resolution");
-  if (e.isNull()) {
-    qDebug() << "QuteSlider::loadFromXml: Expecting resolution element";
-    return;
-  }
-  else {
-    qDebug() << "QuteSlider::loadFromXml: resolution element not implemented";
-  }
-  e = doc.firstChildElement("sliderWidth");
-  if (e.isNull()) {
-    qDebug() << "QuteSlider::loadFromXml: Expecting sliderWidth element";
-    return;
-  }
-  else {
-    qDebug() << "QuteSlider::loadFromXml: sliderWidth element not implemented";
-  }
-  e = doc.firstChildElement("randomizable");
-  if (e.isNull()) {
-    qDebug() << "QuteSlider::loadFromXml: Expecting randomizable element";
-    return;
-  }
-  else {
-    qDebug() << "QuteSlider::loadFromXml: randomizable element not implemented";
-  }
-}
-
 double QuteSlider::getValue()
 {
-//   QSlider *slider = static_cast<QSlider *>(m_widget);
-//   double normalized = (double) slider->value() / (double) m_len;
-//   m_value = m_min + (normalized * (m_max-m_min));
   return m_value;
 }
 
 void QuteSlider::valueChanged(int value)
 {
   double normalized = (double) value / (double) m_len;
-  m_value = m_min + (normalized * (m_max-m_min));
+  double min = property("QCS_minimum").toDouble();
+  double max = property("QCS_maximum").toDouble();
+  m_value =  min + (normalized * (max-min));
   QuteWidget::valueChanged(m_value);
-}
-
-void QuteSlider::setRange(double min, double max)
-{
-  if (max < min) {
-    double temp = max;
-    max = min;
-    min = temp;
-  }
-  m_min = min;
-  m_max = max;
-  if (m_value > m_max)
-    m_value = m_max;
-  else if (m_value > m_min)
-    m_value = m_min;
 }
 
 void QuteSlider::setValue(double value)
 {
-  if (value > m_max)
-    m_value = m_max;
-  else if (value < m_min)
-    m_value = m_min;
+  double max = property("QCS_maximum").toDouble();
+  double min = property("QCS_minimum").toDouble();
+  if (value > max)
+    setProperty("QCS_value", max);
+  else if (value < min)
+    setProperty("QCS_value", min);
   else
-    m_value = value;
-  int val = (int) (m_len * (m_value - m_min)/(m_max-m_min));
+    setProperty("QCS_value", value);
+  int val = (int) (m_len * (property("QCS_value").toDouble() - min)/(max- min));
 #ifdef  USE_WIDGET_MUTEX
   mutex.lock();
 #endif
@@ -146,6 +81,25 @@ void QuteSlider::setValue(double value)
 #ifdef  USE_WIDGET_MUTEX
   mutex.unlock();
 #endif
+}
+
+void QuteSlider::applyInternalProperties()
+{
+  QuteWidget::applyInternalProperties();
+//  qDebug() << "QuteSlider::applyInternalProperties()";
+  QVariant prop;
+
+  double max = property("QCS_maximum").toDouble();
+  double min = property("QCS_minimum").toDouble();
+  if (max < min) {
+    double temp = max;
+    max = min;
+    min = temp;
+  }
+  prop = property("QCS_value");
+  if (prop.isValid()) {
+    setValue(prop.toDouble());
+  }
 }
 
 void QuteSlider::setWidgetGeometry(int x, int y, int w, int h)
@@ -163,53 +117,49 @@ void QuteSlider::setWidgetGeometry(int x, int y, int w, int h)
   }
 }
 
-void QuteSlider::setWidgetLine(QString line)
-{
-  m_line = line;
-}
-
 QString QuteSlider::getWidgetLine()
 {
   QString line = "ioSlider {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-  line += QString::number(m_min, 'f', 6) + " " + QString::number(m_max, 'f', 6) + " ";
-  line += QString::number(m_value, 'f', 6) + " " + m_name;
+  line += QString::number(property("QCS_minimum").toDouble(), 'f', 6) + " ";
+  line += QString::number(property("QCS_maximum").toDouble(), 'f', 6) + " ";
+  line += QString::number(m_value, 'f', 6) + " " + property("QCS_objectName").toString();
 //   qDebug("QuteSlider::getWidgetLine() %s", line.toStdString().c_str());
   return line;
 }
 
 QString QuteSlider::getCabbageLine()
 {
-  QString line = "scrollbar chan(\"" + m_name + "\"),  ";
+  QString line = "scrollbar chan(\"" + property("QCS_objectName").toString() + "\"),  ";
   line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
   line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
-  line += "min("+ QString::number(m_min, 'f', 6) +"), ";
-  line += "max("+ QString::number(m_max, 'f', 6) +"), ";
-  line += "value(" + QString::number(m_value, 'f', 6) + "), ";
+  line += "min("+ QString::number(property("QCS_minimum").toDouble(), 'f', 8) +"), ";
+  line += "max("+ QString::number(property("QCS_maximum").toDouble(), 'f', 8) +"), ";
+  line += "value(" + QString::number(m_value, 'f', 8) + "), ";
   line += "kind(\"" + (width() > height()? QString("horizontal"):QString("vertical")) +"\")";
   return line;
 }
 
 QString QuteSlider::getCsladspaLine()
 {
-  QString line = "ControlPort=" + m_name + "|" + m_name + "\n";
-  line += "Range=" + QString::number(m_min, 'f', 6) + "|" + QString::number(m_max, 'f', 6);
+  QString line = "ControlPort=" + property("QCS_objectName").toString() + "|" + property("QCS_objectName").toString() + "\n";
+  line += "Range=" + QString::number(property("QCS_minimum").toDouble(), 'f', 8)
+          + "|" + QString::number(property("QCS_maximum").toDouble(), 'f', 8);
   return line;
 }
 
 QString QuteSlider::getWidgetXmlText()
 {
+  xmlText = "";
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
 
-  s.writeTextElement("minimum", QString::number(m_min, 'f', 8));
-  s.writeTextElement("maximum", QString::number(m_max, 'f', 8));
+  s.writeTextElement("minimum", QString::number(property("QCS_minimum").toDouble(), 'f', 8));
+  s.writeTextElement("maximum", QString::number(property("QCS_maximum").toDouble(), 'f', 8));
   s.writeTextElement("value", QString::number(m_value, 'f', 8));
+  s.writeTextElement("resolution", QString::number(property("QCS_resolution").toDouble(), 'f', 8));
+  s.writeTextElement("randomizable", property("QCS_resolution").toBool() ? "true" : "false");
 
-  // These come from blue, but they are not implemented here
-  s.writeTextElement("resolution", "");
-  s.writeTextElement("sliderWidth", "");
-  s.writeTextElement("randomizable", "");
   s.writeEndElement();
   return xmlText;
 }
@@ -229,7 +179,7 @@ void QuteSlider::createPropertiesDialog()
   minSpinBox = new QDoubleSpinBox(dialog);
   minSpinBox->setDecimals(6);
   minSpinBox->setRange(-99999.0, 99999.0);
-  minSpinBox->setValue(m_min);
+  minSpinBox->setValue(property("QCS_minimum").toDouble());
   layout->addWidget(minSpinBox, 2,1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Max =");
@@ -237,13 +187,14 @@ void QuteSlider::createPropertiesDialog()
   maxSpinBox = new QDoubleSpinBox(dialog);
   maxSpinBox->setDecimals(6);
   maxSpinBox->setRange(-99999.0, 99999.0);
-  maxSpinBox->setValue(m_max);
+  maxSpinBox->setValue(property("QCS_maximum").toDouble());
   layout->addWidget(maxSpinBox, 2,3, Qt::AlignLeft|Qt::AlignVCenter);
+  setProperty("QCS_value", m_value);
 }
 
 void QuteSlider::applyProperties()
 {
-  setRange(maxSpinBox->value(), minSpinBox->value());
-  QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
+  setProperty("QCS_maximum", maxSpinBox->value());
+  setProperty("QCS_minimum", minSpinBox->value());
+  QuteWidget::applyProperties();  // Must be last to make sure the widgetsChanged signal is last
 }
-

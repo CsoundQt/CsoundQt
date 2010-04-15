@@ -23,102 +23,26 @@
 #include "qutewidget.h"
 #include "widgetlayout.h"
 
-#include <QSlider>
 
-
-QuteWidget::QuteWidget(QWidget *parent/*, widgetType type*/):
-    QWidget(parent)/*, m_type(type)*/
+QuteWidget::QuteWidget(QWidget *parent):
+    QWidget(parent)
 {
-  propertiesAct = new QAction(/*QIcon(":/images/gtk-new.png"),*/ tr("&Properties"), this);
-//   propertiesAct->setShortcut(tr("Alt+P"));
-//  this->setWindowFlags(Qt::WindowStaysOnTopHint);
-//  canFocus(false);
+  propertiesAct = new QAction(tr("&Properties"), this);
   propertiesAct->setStatusTip(tr("Open widget properties"));
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(openProperties()));
 
-//   deleteAct = new QAction(/*QIcon(":/images/gtk-new.png"),*/ tr("Delete"), this);
-//   deleteAct->setStatusTip(tr("Delete this widget"));
-//   connect(deleteAct, SIGNAL(triggered()), this, SLOT(deleteWidget()));
-  m_name2 = "";
   m_value = 0.0;
   m_value2 = 0.0;
 
   this->setMinimumSize(2,2);
   this->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 
-  m_uuid = QUuid::createUuid().toString();
+  setProperty("QCS_uuid", QUuid::createUuid().toString());
 }
 
 
 QuteWidget::~QuteWidget()
 {
-}
-
-void QuteWidget::initFromXml(QString xmlText)
-{
-  qDebug() << "QuteWidget::initFromXml" << xmlText;
-
-  QDomDocument doc;
-  if (!doc.setContent(xmlText)) {
-    qDebug() << "QuteWidget::initFromXml: Error parsing xml";
-    return;
-  }
-  QDomElement e = doc.firstChildElement("objectName");
-  if (e.isNull()) {
-    qDebug() << "QuteWidget::initFromXml: Expecting objectName element";
-    return;
-  }
-  else {
-    m_name = e.nodeValue();
-  }
-  int posx, posy, w, h;
-  e = doc.firstChildElement("x");
-  if (e.isNull()) {
-    qDebug() << "QuteWidget::initFromXml: Expecting x element";
-    return;
-  }
-  else {
-    posx = e.nodeValue().toInt();
-  }
-  e = doc.firstChildElement("y");
-  if (e.isNull()) {
-    qDebug() << "QuteWidget::initFromXml: Expecting y element";
-    return;
-  }
-  else {
-    posy = e.nodeValue().toInt();
-  }
-  e = doc.firstChildElement("width");
-  if (e.isNull()) {
-    qDebug() << "QuteWidget::initFromXml: Expecting width element";
-    return;
-  }
-  else {
-    w = e.nodeValue().toInt();
-  }
-  e = doc.firstChildElement("height");
-  if (e.isNull()) {
-    qDebug() << "QuteWidget::initFromXml: Expecting height element";
-    return;
-  }
-  else {
-    h = e.nodeValue().toInt();
-  }
-  setWidgetGeometry(posx, posy, w, h);
-  e = doc.firstChildElement("uuid");
-  if (e.isNull()) {
-    qDebug() << "QuteWidget::initFromXml: Expecting eventLine element";
-    return;
-  }
-  else {
-    m_uuid = e.nodeValue();
-  }
-
-//   s.writeStartElement("bsbObject");
-//   s.writeAttribute("type", getWidgetType());
-//   if (getWidgetType() == "BSBKnob" or getWidgetType() == "BSBXYController")
-//     s.writeAttribute("version", "2");  // Only for compatibility with blue (absolute values)
-//
 }
 
 void QuteWidget::setWidgetLine(QString line)
@@ -128,64 +52,44 @@ void QuteWidget::setWidgetLine(QString line)
 
 void QuteWidget::setChannelName(QString name)
 {
-  m_name = name;
-  m_name.replace("\"", "'"); // Quotes are not allowed
-  if (m_name.startsWith('$'))
-    m_name.remove(0,1);  // $ symbol is reserved for identifying string channels
-  mutex.lock();
-  if (name != "")
+  name.replace("\"", "'"); // Quotes are not allowed
+  if (name.startsWith('$')) {
+    name.remove(0,1);  // $ symbol is reserved for identifying string channels
+  }
+  if (name != "") {
+    mutex.lock();
     m_widget->setObjectName(name);
-  mutex.unlock();
+    mutex.unlock();
+  }
 //   qDebug("QuteWidget::setChannelName %s", m_name.toStdString().c_str());
 }
 
 void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 {
-//   qDebug("QuteWidget::setWidgetGeometry %i %i %i %i",x,y,w,h );
-//   m_widget->setFixedSize(w,h);
-//  int yoff = 20;
-  this->setGeometry(QRect(x,y/*+yoff*/,w,h));
+//  qDebug("QuteWidget::setWidgetGeometry %i %i %i %i",x,y,w,h );
+  this->setGeometry(QRect(x,y,w,h));
   m_widget->setGeometry(QRect(0,0,w,h));
   this->markChanged();
 }
 
-void QuteWidget::setRange(int /*min*/, int /*max*/)
-{
-  qDebug("QuteWidget::setRange not implemented for widget type");
-}
-
-void QuteWidget::setValue(double /*value*/)
-{
-//   mutex.lock();
-//   mutex.unlock();
-}
-
-void QuteWidget::setValue2(double /*value*/)
-{
-}
-
-void QuteWidget::setValue(QString /*value*/)
-{
-}
-
-void QuteWidget::setResolution(double resolution)
-{
-  m_resolution = resolution;
-}
-
-void QuteWidget::setChecked(bool /*checked*/)
-{
-  qDebug("QuteWidget::setChecked not implemented for widget type");
-}
+//void QuteWidget::setRange(int /*min*/, int /*max*/)
+//{
+//  qDebug("QuteWidget::setRange not implemented for widget type");
+//}
+//
+//void QuteWidget::setChecked(bool /*checked*/)
+//{
+//  qDebug("QuteWidget::setChecked not implemented for widget type");
+//}
 
 QString QuteWidget::getChannelName()
 {
-  return m_name;
+  return property("QCS_objectName").toString();
 }
 
 QString QuteWidget::getChannel2Name()
 {
-  return m_name2;
+  return property("QCS_objectName2").toString();
 }
 
 QString QuteWidget::getWidgetLine()
@@ -203,22 +107,16 @@ void QuteWidget::createXmlWriter(QXmlStreamWriter &s)
 {
   s.writeStartElement("bsbObject");
   s.writeAttribute("type", getWidgetType());
-  if (getWidgetType() == "BSBKnob" or getWidgetType() == "BSBXYController")
-    s.writeAttribute("version", "2");  // Only for compatibility with blue (absolute values)
 
-  s.writeTextElement("objectName", m_name);
+  s.writeAttribute("version", "2");  // Only for compatibility with blue (absolute values)
+
+  s.writeTextElement("objectName", property("QCS_objectName").toString());
   s.writeTextElement("x", QString::number(x()));
   s.writeTextElement("y", QString::number(y()));
   s.writeTextElement("width", QString::number(width()));
   s.writeTextElement("height", QString::number(height()));
-  s.writeTextElement("uuid", m_uuid);
+  s.writeTextElement("uuid", property("QCS_uuid").toString());
 }
-
-// QString QuteWidget::getWidgetXmlText()
-// {
-//   createXmlWriter();
-//   return xmlText;
-// }
 
 double QuteWidget::getValue()
 {
@@ -227,22 +125,11 @@ double QuteWidget::getValue()
 
 double QuteWidget::getValue2()
 {
-//#ifdef DEBUG
-//  qDebug("QuteWidget::getValue2 not implemented for widget type");
-//#endif
   return 0.0;
-}
-
-double QuteWidget::getResolution()
-{
-  return m_resolution;
 }
 
 QString QuteWidget::getStringValue()
 {
-//#ifdef DEBUG
-//  qDebug("QuteWidget::getValue for QString not implemented for widget type");
-//#endif
   return QString("");
 }
 
@@ -254,7 +141,22 @@ QString QuteWidget::getCsladspaLine()
 
 QString QuteWidget::getUuid()
 {
-  return m_uuid;
+  if (property("QCS_uuid").isValid())
+    return property("QCS_uuid").toString();
+  else
+    return QString();
+}
+
+void QuteWidget::applyInternalProperties()
+{
+//  qDebug() << "QuteWidget::applyInternalProperties()";
+  int x,y,width, height;
+  x = property("QCS_x").toInt();
+  y = property("QCS_y").toInt();
+  width = property("QCS_width").toInt();
+  height = property("QCS_height").toInt();
+  setWidgetGeometry(x,y,width, height);
+  setChannelName(property("QCS_objectName").toString());
 }
 
 void QuteWidget::markChanged()
@@ -295,6 +197,7 @@ void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
 
 void QuteWidget::popUpMenu(QPoint pos)
 {
+  qDebug() << "QuteWidget::popUpMenu";
   QMenu menu(this);
   menu.addAction(propertiesAct);
   menu.addSeparator();
@@ -304,10 +207,43 @@ void QuteWidget::popUpMenu(QPoint pos)
   for (int i = 0; i < actionList.size(); i++) {
     menu.addAction(actionList[i]);
   }
+  WidgetLayout *layout = static_cast<WidgetLayout *>(this->parentWidget());
+  layout->setCurrentPosition(layout->mapFromGlobal(pos));
 
-//   menu.addSeparator();
-//   menu.addAction(deleteAct);
+  menu.addSeparator();
+  QMenu createMenu(tr("Create New", "Menu name in widget right-click menu"),&menu);
+  createMenu.addAction(layout->createSliderAct);
+  createMenu.addAction(layout->createLabelAct);
+  createMenu.addAction(layout->createDisplayAct);
+  createMenu.addAction(layout->createScrollNumberAct);
+  createMenu.addAction(layout->createLineEditAct);
+  createMenu.addAction(layout->createSpinBoxAct);
+  createMenu.addAction(layout->createButtonAct);
+  createMenu.addAction(layout->createKnobAct);
+  createMenu.addAction(layout->createCheckBoxAct);
+  createMenu.addAction(layout->createMenuAct);
+  createMenu.addAction(layout->createMeterAct);
+  createMenu.addAction(layout->createConsoleAct);
+  createMenu.addAction(layout->createGraphAct);
+  createMenu.addAction(layout->createScopeAct);
 
+  menu.addMenu(&createMenu);
+
+  menu.addSeparator();
+  menu.addAction(layout->storePresetAct);
+  menu.addAction(layout->newPresetAct);
+  menu.addAction(layout->recallPresetAct);
+  menu.addSeparator();
+
+  QMenu presetMenu(tr("Presets"),&menu);
+
+  QList<int> list = layout->getPresetNums();
+  for (int i = 0; i < list.size(); i++) {
+    QAction *act = new QAction(layout->getPresetName(list[i]), &menu);
+    act->setData(i);
+    connect(act, SIGNAL(triggered()), layout, SLOT(loadPresetFromAction()));
+    presetMenu.addAction(act);
+  }
   menu.exec(pos);
 }
 
@@ -333,31 +269,23 @@ void QuteWidget::deleteWidget()
   emit(deleteThisWidget(this));
 }
 
-void QuteWidget::valueChanged(int /*value*/)
-{
-  double doubleValue = getValue(); // int value is not always the real value
-  QPair<QString, double> channelValue;
-  channelValue = QPair<QString, double>(m_name, doubleValue);
-  emit newValue(channelValue);
-}
-
 void QuteWidget::valueChanged(double value)
 {
-//   double doubleValue = getValue();
   QPair<QString, double> channelValue;
-  channelValue = QPair<QString, double>(m_name, value);
+  channelValue = QPair<QString, double>(property("QCS_objectName").toString(), value);
   emit newValue(channelValue);
 }
 
 void QuteWidget::value2Changed(double value)
 {
   QPair<QString, double> channelValue;
-  channelValue = QPair<QString, double>(m_name2, value);
+  channelValue = QPair<QString, double>(property("QCS_objectName2").toString(), value);
   emit newValue(channelValue);
 }
 
 void QuteWidget::createPropertiesDialog()
 {
+  qDebug() << "QuteWidget::createPropertiesDialog()---Dynamic Properties:\n" << dynamicPropertyNames ();
   dialog = new QDialog(this);
   dialog->resize(300, 300);
 //  dialog->setModal(true);
@@ -399,17 +327,24 @@ void QuteWidget::createPropertiesDialog()
   nameLineEdit->selectAll();
   layout->addWidget(nameLineEdit, 3, 1, Qt::AlignLeft|Qt::AlignVCenter);
   acceptButton = new QPushButton(tr("Ok"));
-  layout->addWidget(acceptButton, 9, 3, Qt::AlignCenter|Qt::AlignVCenter);
+  layout->addWidget(acceptButton, 15, 3, Qt::AlignCenter|Qt::AlignVCenter);
   applyButton = new QPushButton(tr("Apply"));
-  layout->addWidget(applyButton, 9, 1, Qt::AlignCenter|Qt::AlignVCenter);
+  layout->addWidget(applyButton, 15, 1, Qt::AlignCenter|Qt::AlignVCenter);
   cancelButton = new QPushButton(tr("Cancel"));
-  layout->addWidget(cancelButton, 9, 2, Qt::AlignCenter|Qt::AlignVCenter);
+  layout->addWidget(cancelButton, 15, 2, Qt::AlignCenter|Qt::AlignVCenter);
 }
 
 void QuteWidget::applyProperties()
 {
-  setChannelName(nameLineEdit->text());
-  setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
+  qDebug() << "QuteWidget::applyProperties()";
+  setProperty("QCS_objectName", nameLineEdit->text());
+  setProperty("QCS_x", xSpinBox->value());
+  setProperty("QCS_y",ySpinBox->value());
+  setProperty("QCS_width", wSpinBox->value());
+  setProperty("QCS_height", hSpinBox->value());
+  applyInternalProperties();
+//  setChannelName(nameLineEdit->text());
+//  setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
 
 //  this->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   emit(widgetChanged(this));
@@ -422,20 +357,6 @@ QList<QAction *> QuteWidget::getParentActionList()
   QList<QAction *> actionList;
   // A bit of a kludge... Must get the Widget Panel, which is the parent to the widget which
   // holds the actual QuteWidgets
-//   qDebug() << parent() << parent()->parent();
-//  WidgetPanel *panel = static_cast<LayoutWidget *>(parent())->panel();
-//  actionList.append(panel->copyAct);
-//  actionList.append(panel->pasteAct);
-//  actionList.append(panel->cutAct);
-//  actionList.append(panel->duplicateAct);
-//  actionList.append(panel->deleteAct);
-//  actionList.append(panel->alignLeftAct);
-//  actionList.append(panel->alignRightAct);
-//  actionList.append(panel->alignTopAct);
-//  actionList.append(panel->alignBottomAct);
-//  actionList.append(panel->sendToBackAct);
-//  actionList.append(panel->distributeHorizontalAct);
-//  actionList.append(panel->distributeVerticalAct);
   WidgetLayout *layout = static_cast<WidgetLayout *>(this->parentWidget());
   // FIXME put cut/copy/paste actions in menu
 //  actionList.append(layout->copyAct);
@@ -454,6 +375,10 @@ QList<QAction *> QuteWidget::getParentActionList()
 //  actionList.append(layout->editAct);
   return actionList;
 }
+
+//QList<QAction *> QuteWidget::getPresetActionList()
+//{
+//}
 
 void QuteWidget::apply()
 {

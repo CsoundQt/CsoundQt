@@ -35,9 +35,9 @@ QuteConsole::~QuteConsole()
 {
 }
 
-void QuteConsole::loadFromXml(QString xmlText)
-{
-  initFromXml(xmlText);
+//void QuteConsole::loadFromXml(QString xmlText)
+//{
+//  initFromXml(xmlText);
 //  QDomDocument doc;
 //  if (!doc.setContent(xmlText)) {
 //    qDebug() << "QuteButton::loadFromXml: Error parsing xml";
@@ -51,7 +51,7 @@ void QuteConsole::loadFromXml(QString xmlText)
 //  else {
 //    m_type = e.nodeValue();
 //  }
-}
+//}
 
 QString QuteConsole::getWidgetLine()
 {
@@ -64,6 +64,7 @@ QString QuteConsole::getWidgetLine()
 QString QuteConsole::getWidgetXmlText()
 {
   // Consoles are not implemented in blue
+  xmlText = "";
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
   // Nothing else needed here

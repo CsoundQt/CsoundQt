@@ -65,9 +65,9 @@ class DocumentPage : public QObject
     QString getLiveEventsText();
     QString wordUnderCursor();
     QRect getWidgetPanelGeometry();
-//    void getToIn();
-//    void inToGet();
-//    void updateCsladspaText(QString text);
+
+    int lineCount(bool countExtras = false);
+    int characterCount(bool countExtras = false);
     QString getFilePath();
     QStringList getScheduledEvents(unsigned long ksmpscount);
     bool isModified();
@@ -81,14 +81,13 @@ class DocumentPage : public QObject
     void setFileName(QString name);
     void setCompanionFileName(QString name);
 
-    void copy();  // This actions are passed here for distribution
-    void cut();  // Can it be done better?
+    void copy();
+    void cut();
     void paste();
     void undo();
     void redo();
 
     DocumentView *getView();  // Needed to pass view for placing it as tab widget in main application
-//    void setWidgetLayout(WidgetLayout *w);  // In case the widget needs to be reparented (e.g. when putting it in a dock widget)
     WidgetLayout *getWidgetLayout();  // Needed to pass for placing in widget dock panel
     ConsoleWidget *getConsole();  // Needed to pass for placing in console dock panel
 
@@ -104,7 +103,6 @@ class DocumentPage : public QObject
     void findString();  // For find again
     void getToIn();
     void inToGet();
-//    void setEditAct(QAction *editAct);
 
     // Widget Layout properties
     void showWidgetTooltips(bool visible);
@@ -116,7 +114,6 @@ class DocumentPage : public QObject
     void setConsoleColors(QColor fontColor, QColor bgColor);
 
     //Engine Properties
-//    void setCsoundOptions(CsoundOptions &options);
     void setInitialDir(QString initialDir);
 
     // Event Sheet Properties
@@ -128,7 +125,7 @@ class DocumentPage : public QObject
     void setWidgetEnabled(bool enabled);
     void setRunThreaded(bool thread);
     void useInvalue(bool use);
-    void useXmlFormat(bool use);
+    void useOldFormat(bool use);
 
     // Member public variables
     bool askForFile;
@@ -137,14 +134,6 @@ class DocumentPage : public QObject
     QVector<QString> widgetHistory;  // Undo/ Redo history
     int widgetHistoryIndex; // Current point in history
 
-    // Actions from parent for passing to children
-//    QAction *runAct;
-//    QAction *copyAct;
-//    QAction *cutAct;
-//    QAction *pasteAct;
-    // Actions from widget layout
-//    QAction *editAct;
-
   public slots:
     int play(CsoundOptions *options);
     void pause();
@@ -152,13 +141,11 @@ class DocumentPage : public QObject
     void perfEnded();
     int record(int mode); // 0=16 bit int  1=32 bit int  2=float
     void stopRecording();
-    // Triggered from button, ask parent for options
-    void playParent();
+    void playParent(); // Triggered from button, ask parent for options
     void renderParent();
     int runPython();  // Called when file is a python file
 
-    void setMacWidgetsText(QString widgetText);
-    void setMacOptionsText(QString text);
+    void applyMacOptions(QStringList options);
     void setMacOption(QString option, QString newValue);
     void setWidgetPanelPosition(QPoint position);
     void setWidgetPanelSize(QSize size);
@@ -166,7 +153,6 @@ class DocumentPage : public QObject
 
     //Passed directly to widget layout
     void setWidgetEditMode(bool active);
-//    void toggleWidgetEditMode();
     void duplicateWidgets();
 
     // Passed directly to document view
@@ -177,7 +163,6 @@ class DocumentPage : public QObject
     void unindent();
     void autoComplete();
 
-//    void opcodeFromMenu();
     void newLiveEventFrame(QString text = QString());
     LiveEventFrame * createLiveEventFrame(QString text = QString());
     void deleteLiveEventFrame(LiveEventFrame *frame);
@@ -194,15 +179,13 @@ class DocumentPage : public QObject
     CsoundOptions getParentOptions();
     void deleteAllLiveEvents();
 
-    QStringList macOptions;
-    QString macPresets;
-//    QString macGUI;
+    QStringList m_macOptions;
+    QString m_macPresets;
+    QString m_macGUI;
     QDomElement widgetsXml;
-    bool useXml;
     bool m_pythonRunning;
 
     WidgetLayout * m_widgetLayout;
-//    int m_x,m_y,m_width, m_height;  // Position of the widget panel
     DocumentView *m_view;
     CsoundEngine *m_csEngine;
     ConsoleWidget *m_console;
@@ -215,26 +198,18 @@ class DocumentPage : public QObject
 
     // Options
     bool saveLiveEvents;
-//    bool saveChanges;
+    bool saveOldFormat;
 
   private slots:
     void textChanged();
     void liveEventFrameClosed();
     void opcodeSyntax(QString message);
     void setWidgetClipboard(QString text);
-//    void dispatchQueues();
-//    void queueMessage(QString message);
     void queueEvent(QString line, int delay = 0);
-//    void clearMessageQueue();
-//     void moved();
 
   signals:
     void currentLineChanged(int);
     void currentTextUpdated();  // To let inspector know it must update
-//    void doCopy();
-//    void doCut();
-//    void doPaste();
-//    void registerLiveEvent(QWidget *e);
     void setCurrentAudioFile(QString name);
     void liveEventsVisible(bool);  // To change the action in the main window
     void modified();  // Triggered whenever the children change

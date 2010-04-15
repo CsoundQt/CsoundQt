@@ -95,15 +95,7 @@ void Inspector::parseText(const QString &text)
       TreeItem *newItem = new TreeItem(scoreItem, columnslist);
       newItem->setLine(i + 1);
     }
-    else if (lines[i].trimmed().contains(QRegExp("^\\b*\\w+\\b*:"))) {
-      QString text = lines[i].trimmed();
-      QStringList columnslist(text.simplified());
-      if (currentInstrument != 0) {
-        TreeItem *newItem = new TreeItem(currentInstrument, columnslist);
-        newItem->setLine(i + 1);
-      }
-    }
-    else if (lines[i].trimmed().contains(";;")) {
+    else if (lines[i].trimmed().contains(QRegExp("\\w+:"))) {
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
       if (currentInstrument != 0) {

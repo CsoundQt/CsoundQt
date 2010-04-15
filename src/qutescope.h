@@ -49,23 +49,24 @@ class QuteScope : public QuteWidget
 
     ~QuteScope();
 
-    virtual void loadFromXml(QString xmlText);
     virtual QString getWidgetLine();
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();
-    virtual void setWidgetGeometry(int x,int y,int width,int height);
+//    virtual void setWidgetGeometry(int x,int y,int width,int height);
     virtual void createPropertiesDialog();
     void setType(QString type);
     void setValue(double value); //Value for this widget indicates zoom level
-    void setChannel(int channel);
+//    void setChannel(int channel);
     void setUd(CsoundUserData *ud);
     void updateLabel();
 
+    virtual void applyInternalProperties();
+
   protected:
+//    QString m_type;
+//    int m_channel;
+//    int m_zoom;
     QLabel * m_label;
-    QString m_type;
-    int m_channel;
-    int m_zoom;
     QComboBox *typeComboBox;
     QComboBox *channelBox;
     QSpinBox *decimationBox;

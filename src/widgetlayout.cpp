@@ -67,6 +67,8 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   m_trackMouse = true;
   m_editMode = false;
   m_enableEdit = true;
+  m_xmlFormat = true;
+  m_currentPreset = -1;
 
   m_modified = false;
   closing = 0;
@@ -129,6 +131,13 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   distributeVerticalAct = new QAction(tr("Distribute Vertically"), this);
   connect(distributeVerticalAct, SIGNAL(triggered()), this, SLOT(distributeVertical()));
 
+  storePresetAct = new QAction(tr("Store Preset"), this);
+  connect(storePresetAct, SIGNAL(triggered()), this, SLOT(savePreset()));
+  newPresetAct = new QAction(tr("New Preset"), this);
+  connect(newPresetAct, SIGNAL(triggered()), this, SLOT(newPreset()));
+  recallPresetAct = new QAction(tr("Recall Preset"), this);
+  connect(recallPresetAct, SIGNAL(triggered()), this, SLOT(loadPreset()));
+
   setFocusPolicy(Qt::StrongFocus);
 
   setMouseTracking(true);
@@ -152,19 +161,104 @@ unsigned int WidgetLayout::widgetCount()
   return m_widgets.size();
 }
 
-void WidgetLayout::loadWidgets(QString macWidgets)
+void WidgetLayout::loadWidgets(QString widgets)
 {
+  if (m_xmlFormat) {
+    loadXmlWidgets(widgets);
+  }
+  else {
+    loadMacWidgets(widgets);
+  }
+}
+
+void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
+{
+  m_xmlFormat = true;
+  clearWidgetLayout();
+  QDomDocument doc;
+  if (!doc.setContent(xmlWidgets)) {
+    qDebug() << "WidgetLayout::loadXmlWidgets Error parsing xml text! Aborting.";
+    return;
+  }
+  QDomNodeList panel =  doc.elementsByTagName ("bsbPanel");
+  if (panel.size() > 1) {
+    qDebug() << "WidgetLayout::loadXmlWidgets More than 1 panel available! Using first only";
+  }
+  QDomNode p = panel.item(0);
+  if (p.isNull()) {
+    qDebug() << "WidgetLayout::loadXmlWidgets no bsbPanel element! Aborting.";
+    return;
+  }
+  QDomNodeList c = p.childNodes();
+  for (int i = 0; i < c.size(); i++) {
+    parseXmlNode(c.item(i));
+  }
+  if (m_editMode) {
+    setEditMode(true);
+  }
+  adjustLayoutSize();
+}
+
+void WidgetLayout::loadXmlPresets(QString xmlPresets)
+{
+  QDomDocument doc;
+  if (!doc.setContent(xmlPresets)) {
+    qDebug() << "WidgetLayout::loadXmlPresets Error parsing preset text.";
+  }
+  QDomElement pl = doc.firstChildElement("bsbPresets");
+  QDomNodeList presetElements = pl.elementsByTagName("preset");
+  QList<int> usedNumbers;
+  for (int i = 0; i < presetElements.size(); i++) {
+    QDomElement presetElement = presetElements.item(i).toElement();
+    int newNumber = presetElement.attribute("number", "0").toInt();
+    if (!usedNumbers.contains(newNumber)) {
+      WidgetPreset newPreset;
+      newPreset.setName(presetElement.attribute("name", ""));
+      newPreset.setNumber(newNumber);
+      QDomNodeList presetValues = presetElement.elementsByTagName("value");
+      for (int i = 0; i < presetValues.size(); i++) {
+        QDomElement valueElement = presetValues.item(i).toElement();
+        QString id = valueElement.attribute("id", "");
+        int mode = valueElement.attribute("mode", "0").toInt();
+        if (mode & 1) {
+          double val = valueElement.text().toDouble();
+          newPreset.addValue(id, val);
+          qDebug() << "WidgetLayout::loadXmlPresets " << val;
+        }
+        if (mode & 2) {
+          double val = valueElement.text().toDouble();
+          newPreset.addValue2(id, val);
+          qDebug() << "WidgetLayout::loadXmlPresets value2" << val;
+        }
+        if (mode & 4) {
+          QString val = valueElement.text();
+          newPreset.addStringValue(id, val);
+          qDebug() << "WidgetLayout::loadXmlPresets string value" << val;
+        }
+      }
+      presets.append(newPreset);
+      usedNumbers.append(newNumber);
+    }
+    else {
+      qDebug() << "WidgetLayout::loadXmlPresets duplicate number. Ignored. " << newNumber;
+    }
+  }
+}
+
+void WidgetLayout::loadMacWidgets(QString macWidgets)
+{
+//  m_xmlFormat = false;
   clearWidgetLayout();
   QStringList widgetLines = macWidgets.split(QRegExp("[\n\r]"), QString::SkipEmptyParts);
   foreach (QString line, widgetLines) {
 //     qDebug("WidgetLine: %s", line.toStdString().c_str());
     if (line.startsWith("i")) {
-      if (newWidget(line) < 0)
-        qDebug() << "WidgetPanel::loadWidgets error processing line: " << line;
+      if (newMacWidget(line) < 0)
+        qDebug() << "WidgetPanel::loadMacWidgets error processing line: " << line;
     }
     else {
       if (!line.contains("<MacGUI>") && !line.contains("</MacGUI>"))
-      qDebug() << "WidgetPanel::loadWidgets error processing line: " << line;
+      qDebug() << "WidgetPanel::loadMacWidgets error processing line: " << line;
     }
   }
   if (m_editMode) {
@@ -182,8 +276,8 @@ QString WidgetLayout::getWidgetsText()
   text = "<bsbPanel>\n";
   QString bg, red,green,blue;
   layoutMutex.lock();
-  QColor bgColor = this->property("bgcolor").value<QColor>();
-  bg = this->property("bg").toBool()? QString("background"):QString("nobackground");
+  QColor bgColor = this->property("QCS_bgcolor").value<QColor>();
+  bg = this->property("QCS_bg").toBool()? QString("background"):QString("nobackground");
   red = QString::number(bgColor.red());
   green =  QString::number(bgColor.green());
   blue =  QString::number(bgColor.blue());
@@ -205,16 +299,7 @@ QString WidgetLayout::getPresetsText()
 {
   QString text = "<bsbPresets>\n";
   for (int i = 0; i < presets.size(); i++) {
-    text += "<bsbPreset name=\"" + presets[i].getName() + "\" type=\"user\">\n";
-    QStringList widgets = presets[i].getWidgetIds();
-    for (int j = 0; j < widgets.size(); j++) {
-      text += "<widget uuid=\"" + widgets[j] + "\">";
-      text += "<v1>" + QString::number(presets[i].getValue(widgets[j]), 'f', 10) + "<v1>";
-      text += "<v2>" + QString::number(presets[i].getValue2(widgets[j]), 'f', 10) + "<v2>";
-      text += "<s>" + presets[i].getStringValue(widgets[j]) + "<s>";
-      text += "</widget>\n";
-    }
-    text += "</bsbPreset>";
+    text += presets[i].getXmlText();
   }
   text += "</bsbPresets>\n";
   return text;
@@ -244,8 +329,8 @@ QString WidgetLayout::getMacWidgetsText()
   text = "<MacGUI>\n";
   QString bg, color;
   layoutMutex.lock();
-  QColor bgColor = this->property("bgcolor").value<QColor>();
-  bg =  this->property("bg").toBool()? QString("background"):QString("nobackground");
+  QColor bgColor = this->property("QCS_bgcolor").value<QColor>();
+  bg =  this->property("QCS_bg").toBool()? QString("background"):QString("nobackground");
   color = QString::number((int) (bgColor.redF()*65535.)) + ", ";
   color +=  QString::number((int) (bgColor.greenF()*65535.)) + ", ";
   color +=  QString::number((int) (bgColor.blueF()*65535.));
@@ -404,12 +489,207 @@ int WidgetLayout::getMouseBut2()
   return mouseBut2;
 }
 
-int WidgetLayout::newWidget(QString widgetLine, bool offset)
+int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 {
-  //FIXME is it still necessary to pass an offset?
+  if (mainnode.isNull()) {
+    qDebug() << "WidgetLayout::newXmlWidget null element! Aborting.";
+    return -1;
+  }
+  QuteWidget *widget = 0;
+  QDomNodeList c = mainnode.childNodes();
+  QString type = mainnode.toElement().attribute("type");
+  int version = mainnode.toElement().attribute("version").toInt();
+  if (version != 2) {
+    qDebug() << "WidgetLayout::newXmlWidget WARNING: widget version != 2";
+  }
+  if (type == "BSBLabel") {
+    QuteText *w= new QuteText(this);
+    w->setType("display");
+    QDomElement ebg = mainnode.toElement().firstChildElement("bgcolor");
+    if (!ebg.isNull()) {
+      if (mainnode.toElement().attribute("mode")== "background") {
+        w->setProperty("QCS_bgcolormode", true);
+      }
+      w->setProperty("QCS_bgcolor", QVariant(getColorFromElement(ebg)));
+    }
+    widget = static_cast<QuteWidget *>(w);
+  }
+  else if (type == "BSBSpinBox") {
+    widget = static_cast<QuteSpinBox *>(new QuteSpinBox(this));
+    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+  }
+  else if (type == "BSBLineEdit") {
+    widget = static_cast<QuteLineEdit *>(new QuteLineEdit(this));
+    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+    connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));
+  }
+  else if (type == "BSBCheckBox") {
+    widget = static_cast<QuteWidget *>(new QuteCheckBox(this));
+    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+  }
+  else if (type == "BSBSlider" || type == "BSBHSlider" || type == "BSBVSlider") {
+    widget = static_cast<QuteWidget *>( new QuteSlider(this));
+    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+  }
+  else if (type == "BSBKnob") {
+    widget = static_cast<QuteWidget *>(new QuteKnob(this));
+    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+  }
+  else if (type == "BSBScrollNumber") {
+    widget = static_cast<QuteScrollNumber *>(new QuteScrollNumber(this));
+    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+  }
+  else if (type == "BSBButton") {
+    QuteButton *w = new QuteButton(this);
+    widget = static_cast<QuteWidget *>(w);
+    connect(widget, SIGNAL(queueEvent(QString)), this, SLOT(queueEvent(QString)));
+    connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));
+    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+    emit registerButton(w);
+  }
+  else if (type == "BSBDropdown") {
+    widget = static_cast<QuteWidget *>(new QuteComboBox(this));
+    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+  }
+  else if (type == "BSBController") {
+    QuteMeter *w = new QuteMeter(this);
+    widget = static_cast<QuteWidget *>(w);
+    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+  }
+  else if (type == "BSBGraph") {
+    QuteGraph *w = new QuteGraph(this);
+    widget = static_cast<QuteWidget *>(w);
+    graphWidgets.append(w);
+    emit registerGraph(w);
+  }
+  else if (type == "BSBScope") {
+    QuteScope *w = new QuteScope(this);
+    widget = static_cast<QuteWidget *>(w);
+    scopeWidgets.append(w);
+    emit registerScope(w);
+  }
+  else if (type == "BSBConsole") {
+    QuteConsole *w = new QuteConsole(this);
+    widget = static_cast<QuteWidget *>(w);
+    consoleWidgets.append(w);
+//    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+  }
+  else {
+    qDebug() << "WidgetLayout::newXmlWidget " << type << " not implemented";
+  }
+  if (widget == 0) {
+    qDebug() << "WidgetLayout::newXmlWidget ERROR widget has not been created!";
+    return -2;
+  }
+  for (int i = 0; i < c.size() ; i++) {
+    QDomElement node = c.item(i).toElement();
+    QString nodeName = node.nodeName();
+    if (nodeName == "color" || nodeName == "bgcolor") {  // COLOR type
+//      qDebug() << "WidgetLayout::newXmlWidget property: " <<  nodeName.toLocal8Bit()
+//        << " set to: " << getColorFromElement(node);
+      if (node.attribute("mode") == "background") {
+        widget->setProperty("QCS_bgcolormode", true);
+      }
+      QDomNode n = node.firstChild();
+      nodeName.prepend("QCS_");
+      widget->setProperty(nodeName.toLocal8Bit(), getColorFromElement(node));
+    }
+    else if (nodeName == "value" || nodeName == "resolution"
+             || nodeName == "minimum" || nodeName == "maximum" ) {  // DOUBLE type
+      QDomNode n = node.firstChild();
+      nodeName.prepend("QCS_");
+//      qDebug() << "WidgetLayout::newXmlWidget DOUBLE property:  " << nodeName.toLocal8Bit() << "--" << n.nodeValue().toDouble();
+      widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toDouble());
+    }
+    else if (nodeName == "selectedIndex" ) {  // INT type
+      QDomNode n = node.firstChild();
+      nodeName.prepend("QCS_");
+      widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt());
+    }
+    else if (nodeName == "x" || nodeName == "y") {  // INT type
+      QDomNode n = node.firstChild();
+      nodeName.prepend("QCS_");
+      if (offset) {
+        widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt() + 20);
+      }
+      else {
+        widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt());
+      }
+    }
+    else if (nodeName == "width" || nodeName == "height"
+             || nodeName == "fontsize"
+             || nodeName == "borderradius"
+             || nodeName == "midichan"  || nodeName == "midicc"
+             || nodeName == "selectedIndex" ) {  // INT type
+      QDomNode n = node.firstChild();
+      nodeName.prepend("QCS_");
+      widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt());
+    }
+    else if (nodeName == "randomizable" || nodeName == "selected" ) {  // BOOL type
+      QDomNode n = node.firstChild();
+      nodeName.prepend("QCS_");
+      widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue() == "true");
+    }
+    else if (nodeName == "bsbDropdownItemList") {  // MENU ITEM type
+      if (node.attribute("mode") == "value") {
+        qDebug() << "bsbDropdownItem modes not implemented!";
+      }
+      else if (node.attribute("mode") == "string") {
+        qDebug() << "bsbDropdownItem modes not implemented!";
+      }
+      QDomElement item = node.firstChildElement("bsbDropdownItem");
+      while (!item.isNull()) {
+        QDomElement ename = item.firstChildElement("name");
+        QDomElement evalue = item.firstChildElement("value");
+        QDomElement estringvalue = item.firstChildElement("stringvalue");
+        static_cast<QuteComboBox *>(widget)->addItem(ename.firstChild().nodeValue(),
+                                                     evalue.firstChild().nodeValue().toDouble(),
+                                                     estringvalue.firstChild().nodeValue());
+        item = item.nextSiblingElement("bsbDropdownItem");
+      }
+    }
+    else if (nodeName == "uuid")  {  // STRING type
+      QDomNode n = node.firstChild();
+      QString uuid = n.nodeValue();
+      if (newId || uuid.isEmpty()) {
+        uuid = QUuid::createUuid().toString();
+      }
+      while (!uuidFree(uuid)) {
+        uuid = QUuid::createUuid().toString();
+      }
+      widget->setProperty("QCS_uuid", uuid);
+    }
+    else {  // STRING type (all the rest)
+      QDomNode n = node.firstChild();
+      nodeName.prepend("QCS_");
+      widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue());
+    }
+//    qDebug() << "WidgetLayout::newXmlWidget property: " <<  nodeName.toLocal8Bit()
+//        << " set to: " << widget->property(nodeName.toLocal8Bit())
+//        << " from: " << QVariant(n.nodeValue());
+  }
+  widget->applyInternalProperties();
+  registerWidget(widget);
+  return 0;
+}
+
+bool WidgetLayout::uuidFree(QString uuid)
+{
+  bool isFree = true;
+  for (int i = 0; i < m_widgets.size(); i++) {
+    if (m_widgets[i]->getUuid() == uuid) {
+      isFree = false;
+      break;
+    }
+  }
+  return isFree;
+}
+
+int WidgetLayout::newMacWidget(QString widgetLine, bool offset)
+{
   // This function returns -1 on error, 0 when no widget was created and 1 if widget was created
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-  QStringList quoteParts = widgetLine.split('"'); //Remove this line whe not needed
+  QStringList quoteParts = widgetLine.split('"');
   if (parts.size()<5)
     return -1;
   if (parts[0]=="ioView") {
@@ -475,11 +755,26 @@ int WidgetLayout::newWidget(QString widgetLine, bool offset)
     }
     else {
       // Unknown widget...
-      qDebug("WidgetPanel::newWidget Warning: unknown widget!");
+      qDebug("WidgetPanel::newMacWidget Warning: unknown widget!");
       return createDummy(x,y,width, height, widgetLine);
     }
   }
   return -1;
+}
+
+void WidgetLayout::registerWidget(QuteWidget * widget)
+{
+  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
+  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
+  m_widgets.append(widget);
+  if (m_editMode) {
+    createEditFrame(widget);
+    editWidgets.last()->select();
+  }
+  adjustLayoutSize();
+  setWidgetToolTip(widget, m_tooltips);
+  widget->show();
 }
 
 void WidgetLayout::appendMessage(QString message)
@@ -530,12 +825,17 @@ void WidgetLayout::setContained(bool contained)
   }
 //  qDebug() << "WidgetLayout::setContained " << contained;
   m_contained = contained;
-  bool bg = this->property("bg").toBool();
-  QColor bgColor = this->property("bgcolor").value<QColor>();
+  bool bg = this->property("QCS_bg").toBool();
+  QColor bgColor = this->property("QCS_bgcolor").value<QColor>();
   setBackground(bg, bgColor);
   if (m_contained) {
     this->setAutoFillBackground(false);
   }
+}
+
+void WidgetLayout::setCurrentPosition(QPoint pos)
+{
+  currentPosition = pos;
 }
 
 void WidgetLayout::appendCurve(WINDAT *windat)
@@ -576,7 +876,7 @@ void WidgetLayout::appendCurve(WINDAT *windat)
                   windat);  //FIXME delete these when starting a new run
   windat->windid = (uintptr_t) curve;
   newCurveBuffer.append(curve);
-//  qDebug() << "WidgetLayout::appendCurve " << curve << "__--__" << windat;
+  qDebug() << "WidgetLayout::appendCurve " << curve << "__--__" << windat;
 }
 
 void WidgetLayout::newCurve(Curve* curve)
@@ -623,7 +923,7 @@ void WidgetLayout::updateCurve(WINDAT *windat)
 }
 
 
-int WidgetLayout::killCurves(CSOUND *csound)
+int WidgetLayout::killCurves(CSOUND */*csound*/)
 {
   // FIXME free memory from curves
 //  qDebug() << "qutecsound::killCurves";
@@ -708,6 +1008,11 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
   menu.addAction(clearAct);
   menu.addSeparator();
   menu.addAction(propertiesAct);
+  menu.addSeparator();
+  menu.addAction(storePresetAct);
+  menu.addAction(recallPresetAct);
+  menu.addAction(newPresetAct);
+  menu.addSeparator();
   currentPosition = event->pos();
 //  if (m_sbActive) {
 //    currentPosition.setX(currentPosition.x() + scrollArea->horizontalScrollBar()->value());
@@ -990,7 +1295,7 @@ void WidgetLayout::propertiesDialog()
   else {
     color = this->palette().button().color();
   }
-  bgButton->setProperty("color",QVariant(color));
+  bgButton->setProperty("QCS_color",QVariant(color));
   pixmap.fill(color);
   bgButton->setIcon(pixmap);
   layout->addWidget(bgButton, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);
@@ -1010,7 +1315,7 @@ void WidgetLayout::propertiesDialog()
 
 void WidgetLayout::applyProperties()
 {
-  QColor color = bgButton->property("color").value<QColor>();
+  QColor color = bgButton->property("QCS_color").value<QColor>();
   setBackground(bgCheckBox->isChecked(), color);
   widgetChanged();
   mouseBut2 = 0;  // Button un clicked is not propagated after opening the edit dialog. Do it artificially here
@@ -1026,7 +1331,7 @@ void WidgetLayout::selectBgColor()
     color = QColorDialog::getColor(this->palette().button().color(), this);
   }
   if (color.isValid()) {
-    bgButton->setProperty("color",QVariant(color));
+    bgButton->setProperty("QCS_color",QVariant(color));
     QPixmap pixmap(64,64);
     pixmap.fill(color);
     bgButton->setIcon(pixmap);
@@ -1314,6 +1619,9 @@ void WidgetLayout::mousePressEvent(QMouseEvent *event)
       deselectAll();
     }
   }
+//  else if (m_editMode && (event->button() & Qt::RightButton)) {
+//
+//  }
 //  qDebug() << "WidgetPanel::mouseMoveEvent " << event->x();
   if (event->button() == Qt::LeftButton)
     mouseBut1 = 1;
@@ -1372,15 +1680,70 @@ void WidgetLayout::contextMenuEvent(QContextMenuEvent *event)
   }
 }
 
+bool WidgetLayout::parseXmlNode(QDomNode node)
+{
+  QString name = node.nodeName();
+  if (name == "objectName") {
+    this->setProperty("QCS_objectName", node.firstChild().nodeValue());
+  }
+  else if (name == "x") {
+    m_x = node.firstChild().nodeValue().toInt();
+  }
+  else if (name == "y") {
+    m_y = node.firstChild().nodeValue().toInt();
+  }
+  else if (name == "width") {
+    m_w = node.firstChild().nodeValue().toInt();
+  }
+  else if (name == "height") {
+    m_h = node.firstChild().nodeValue().toInt();
+  }
+  else if (name == "visible") {
+    qDebug()<< "WidgetLayout::parseXmlNode visible element not implemented.";
+  }
+  else if (name == "uuid") {
+    qDebug()<< "WidgetLayout::parseXmlNode uuid element not implemented.";
+  }
+  else if (name == "bgcolor") {
+    bool bg = false;
+    if (node.toElement().attribute("mode")== "background") {
+      bg = true;
+    }
+    QDomElement er = node.toElement().firstChildElement("r");
+    QDomElement eg = node.toElement().firstChildElement("g");
+    QDomElement eb = node.toElement().firstChildElement("b");
+
+    setBackground(bg, QColor(er.firstChild().nodeValue().toInt(),
+                             eg.firstChild().nodeValue().toInt(),
+                             eb.firstChild().nodeValue().toInt()) );
+  }
+  else if (name == "bsbObject") {
+    newXmlWidget(node);
+  }
+  else if (name == "bsbGroup") {
+    qDebug() << "WidgetLayout::parseXmlNode bsbGroup not implemented";
+  }
+  else {
+    qDebug() << "WidgetLayout::parseXmlNode unknown node name: "<< name;
+    return false;
+  }
+  return true;
+}
+
 int WidgetLayout::createSlider(int x, int y, int width, int height, QString widgetLine)
 {
 //   qDebug("ioSlider x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QuteSlider *widget= new QuteSlider(this);
   widget->setWidgetLine(widgetLine);
-  widget->setWidgetGeometry(x,y,width, height);
-  widget->setRange(parts[5].toDouble(), parts[6].toDouble());
-  widget->setValue(parts[7].toDouble());
+  widget->setProperty("QCS_x",x);
+  widget->setProperty("QCS_y",y);
+  widget->setProperty("QCS_width",width);
+  widget->setProperty("QCS_height",height);
+  widget->setProperty("QCS_minimum",parts[5].toDouble());
+  widget->setProperty("QCS_maximum",parts[6].toDouble());
+  widget->setProperty("QCS_value",parts[7].toDouble());
+
   if (parts.size()>8) {
     int i=8;
     QString channelName = "";
@@ -1389,20 +1752,11 @@ int WidgetLayout::createSlider(int x, int y, int width, int height, QString widg
       i++;
     }
     channelName.chop(1);  //remove last space
-    widget->setChannelName(channelName);
+    widget->setProperty("QCS_objectName", channelName);
   }
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
-  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  widget->applyInternalProperties();
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
-  connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  m_widgets.append(widget);
-  widget->show();
-  if (m_editMode) {
-    createEditFrame(widget);
-    editWidgets.last()->select();
-  }
-  adjustLayoutSize();
-  setWidgetToolTip(widget, m_tooltips);
+  registerWidget(widget);
   return 1;
 }
 
@@ -1417,46 +1771,34 @@ int WidgetLayout::createText(int x, int y, int width, int height, QString widget
     return -1;
   QuteText *widget= new QuteText(this);
   widget->setWidgetLine(widgetLine);
-  widget->setWidgetGeometry(x,y,width, height);
+  widget->setProperty("QCS_x",x);
+  widget->setProperty("QCS_y",y);
+  widget->setProperty("QCS_width",width);
+  widget->setProperty("QCS_height",height);
   widget->setType(parts[5]);
-  widget->setResolution(parts[7].toDouble());
-  widget->setChannelName(quoteParts[1]);
-  if (quoteParts[2] == " left ")
-    widget->setAlignment(0);
-  else if (quoteParts[2] == " center ")
-    widget->setAlignment(1);
-  else if (quoteParts[2] == " right ")
-    widget->setAlignment(2);
-  widget->setFont(quoteParts[3]);
-  widget->setFontSize(lastParts[0].toInt());
-  widget->setTextColor(QColor(lastParts[1].toDouble()/256.0,
-                       lastParts[2].toDouble()/256.0,
-                                             lastParts[3].toDouble()/256.0));
-  widget->setBgColor(QColor(lastParts[4].toDouble()/256.0,
-                     lastParts[5].toDouble()/256.0,
-                                           lastParts[6].toDouble()/256.0));
-  widget->setBg(lastParts[7] == "background");
-  widget->setBorder(lastParts[8] == "border");
+  widget->setProperty("QCS_objectName",quoteParts[1]);
+  widget->setProperty("QCS_alignment",quoteParts[2].simplified());
+  widget->setProperty("QCS_font",quoteParts[3].simplified());
+  widget->setProperty("QCS_fontsize",lastParts[0].toInt() - 2);
+  widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
+                                          lastParts[2].toDouble()/256.0,
+                                          lastParts[3].toDouble()/256.0));
+  widget->setProperty("QCS_bgcolor", QColor(lastParts[4].toDouble()/256.0,
+                                          lastParts[5].toDouble()/256.0,
+                                          lastParts[6].toDouble()/256.0));
+  widget->setProperty("QCS_bgcolormode", lastParts[7] == "background");
+  widget->setProperty("QCS_bordermode", lastParts[8]);
   QString labelText = "";
-//   int i = 9;
-//   while (lastParts.size() > i) {
-//     labelText += lastParts[i] + " ";
-//     i++;
-//   }
-//   labelText.chop(1);
   labelText = widgetLine.mid(widgetLine.indexOf("border") + 7);
-  widget->setText(labelText);
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
-  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  m_widgets.append(widget);
-  widget->show();
-  if (m_editMode) {
-    createEditFrame(widget);
-    editWidgets.last()->select();
+  if (parts[5] == "display" || parts[5] == "label") {
+    widget->setProperty("QCS_precision", 3);
   }
-  adjustLayoutSize();
-  setWidgetToolTip(widget, m_tooltips);
+  else {
+    widget->setProperty("QCS_resolution", parts[7].toDouble());
+  }
+  widget->setProperty("QCS_label", labelText.replace("\u00AC", "\n"));
+  widget->applyInternalProperties();
+  registerWidget(widget);
   return 1;
 }
 
@@ -1471,26 +1813,26 @@ int WidgetLayout::createScrollNumber(int x, int y, int width, int height, QStrin
     return -1;
   QuteScrollNumber *widget= new QuteScrollNumber(this);
   widget->setWidgetLine(widgetLine);
-  widget->setWidgetGeometry(x,y,width, height);
+
+  widget->setProperty("QCS_x",x);
+  widget->setProperty("QCS_y",y);
+  widget->setProperty("QCS_width",width);
+  widget->setProperty("QCS_height",height);
   widget->setType(parts[5]);
-  widget->setResolution(parts[7].toDouble());
-  widget->setChannelName(quoteParts[1]);
-  if (quoteParts[2] == " left ")
-    widget->setAlignment(0);
-  else if (quoteParts[2] == " center ")
-    widget->setAlignment(1);
-  else if (quoteParts[2] == " right ")
-    widget->setAlignment(2);
-  widget->setFont(quoteParts[3]);
-  widget->setFontSize(lastParts[0].toInt());
-  widget->setTextColor(QColor(lastParts[1].toDouble()/256.0,
-                       lastParts[2].toDouble()/256.0,
-                                             lastParts[3].toDouble()/256.0));
-  widget->setBgColor(QColor(lastParts[4].toDouble()/256.0,
-                     lastParts[5].toDouble()/256.0,
-                                           lastParts[6].toDouble()/256.0));
-  widget->setBg(lastParts[7] == "background");
-  widget->setBorder(lastParts[8] == "border");
+  widget->setProperty("QCS_resolution", parts[7].toDouble());
+  widget->setProperty("QCS_objectName",quoteParts[1]);
+  widget->setProperty("QCS_alignment",quoteParts[2].simplified());
+  widget->setProperty("QCS_font",quoteParts[3].simplified());
+  widget->setProperty("QCS_fontsize",lastParts[0].toInt() - 2);
+  widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
+                                          lastParts[2].toDouble()/256.0,
+                                          lastParts[3].toDouble()/256.0));
+  widget->setProperty("QCS_bgcolor", QColor(lastParts[4].toDouble()/256.0,
+                                          lastParts[5].toDouble()/256.0,
+                                          lastParts[6].toDouble()/256.0));
+  widget->setProperty("QCS_bgcolormode", lastParts[7] == "background");
+  widget->setProperty("QCS_bordermode", lastParts[8]);
+
   QString labelText = "";
   int i = 9;
   while (lastParts.size() > i) {
@@ -1498,22 +1840,11 @@ int WidgetLayout::createScrollNumber(int x, int y, int width, int height, QStrin
     i++;
   }
   labelText.chop(1);
-  bool ok;
-  widget->setValue(labelText.toDouble(&ok));
-  if (!ok)
-    widget->setText(labelText);
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
-  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  widget->setProperty("QCS_value", labelText.toDouble());
+//  widget->setValue(labelText.toDouble());
+  widget->applyInternalProperties();
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
-  connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  m_widgets.append(widget);
-  widget->show();
-  if (m_editMode) {
-    createEditFrame(widget);
-    editWidgets.last()->select();
-  }
-  adjustLayoutSize();
-  setWidgetToolTip(widget, m_tooltips);
+  registerWidget(widget);
   return 1;
 }
 
@@ -1528,45 +1859,31 @@ int WidgetLayout::createLineEdit(int x, int y, int width, int height, QString wi
     return -1;
   QuteLineEdit *widget= new QuteLineEdit(this);
   widget->setWidgetLine(widgetLine);
-  widget->setWidgetGeometry(x,y,width, height);
+
+  widget->setProperty("QCS_x",x);
+  widget->setProperty("QCS_y",y);
+  widget->setProperty("QCS_width",width);
+  widget->setProperty("QCS_height",height);
   widget->setType(parts[5]);
-  widget->setResolution(parts[7].toDouble());
-  widget->setChannelName(quoteParts[1]);
-  if (quoteParts[2] == " left ")
-    widget->setAlignment(0);
-  else if (quoteParts[2] == " center ")
-    widget->setAlignment(1);
-  else if (quoteParts[2] == " right ")
-    widget->setAlignment(2);
-  widget->setFont(quoteParts[3]);
-  widget->setFontSize(lastParts[0].toInt());
-  widget->setTextColor(QColor(lastParts[1].toDouble()/256.0,
-                       lastParts[2].toDouble()/256.0,
-                                             lastParts[3].toDouble()/256.0));
-  widget->setBgColor(QColor(lastParts[4].toDouble()/256.0,
-                     lastParts[5].toDouble()/256.0,
-                                           lastParts[6].toDouble()/256.0));
-  widget->setBg(lastParts[7] == "background");
-//   widget->setBorder(lastParts[8] == "border");
+  widget->setProperty("QCS_objectName",quoteParts[1]);
+  widget->setProperty("QCS_alignment",quoteParts[2].simplified());
+  widget->setProperty("QCS_font",quoteParts[3].simplified());
+  widget->setProperty("QCS_fontsize",lastParts[0].toInt() - 2);
+  widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
+                                          lastParts[2].toDouble()/256.0,
+                                          lastParts[3].toDouble()/256.0));
+  widget->setProperty("QCS_bgcolor", QColor(lastParts[4].toDouble()/256.0,
+                                          lastParts[5].toDouble()/256.0,
+                                          lastParts[6].toDouble()/256.0));
+  widget->setProperty("QCS_bgcolormode", lastParts[7] == "background");
+  widget->setProperty("QCS_bordermode", lastParts[8]);
   QString labelText = "";
-  int i = 9;
-  while (lastParts.size() > i) {
-    labelText += lastParts[i] + " ";
-    i++;
-  }
-  labelText.chop(1);
-  widget->setText(labelText);
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
-  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  m_widgets.append(widget);
-  widget->show();
-  if (m_editMode) {
-    createEditFrame(widget);
-    editWidgets.last()->select();
-  }
-  adjustLayoutSize();
-  setWidgetToolTip(widget, m_tooltips);
+  labelText = widgetLine.mid(widgetLine.indexOf("border") + 7);
+//  widget->setProperty("QCS_resolution", parts[7].toDouble());
+  widget->setProperty("QCS_label", labelText);
+  widget->applyInternalProperties();
+
+  registerWidget(widget);
   return 1;
 }
 
@@ -1581,53 +1898,37 @@ int WidgetLayout::createSpinBox(int x, int y, int width, int height, QString wid
     return -1;
   QuteSpinBox *widget= new QuteSpinBox(this);
   widget->setWidgetLine(widgetLine);
-  widget->setWidgetGeometry(x,y,width, height);
+
+  widget->setProperty("QCS_x",x);
+  widget->setProperty("QCS_y",y);
+  widget->setProperty("QCS_width",width);
+  widget->setProperty("QCS_height",height);
   widget->setType(parts[5]);
-  widget->setResolution(parts[7].toDouble());
-  widget->setChannelName(quoteParts[1]);
-  if (quoteParts[2] == " left ")
-    widget->setAlignment(0);
-  else if (quoteParts[2] == " center ")
-    widget->setAlignment(1);
-  else if (quoteParts[2] == " right ")
-    widget->setAlignment(2);
-  widget->setFont(quoteParts[3]);
-  widget->setFontSize(lastParts[0].toInt());
-  widget->setTextColor(QColor(lastParts[1].toDouble()/256.0,
-                       lastParts[2].toDouble()/256.0,
-                                             lastParts[3].toDouble()/256.0));
-  widget->setBgColor(QColor(lastParts[4].toDouble()/256.0,
-                     lastParts[5].toDouble()/256.0,
-                                           lastParts[6].toDouble()/256.0));
-  widget->setBg(lastParts[7] == "background");
-//   widget->setBorder(lastParts[8] == "border");
+  widget->setProperty("QCS_resolution",parts[7].toDouble());
+  widget->setProperty("QCS_objectName",quoteParts[1]);
+  widget->setProperty("QCS_alignment",quoteParts[2].simplified());
+  widget->setProperty("QCS_font",quoteParts[3].simplified());
+  widget->setProperty("QCS_fontsize",lastParts[0].toInt() - 2);
+  widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
+                                          lastParts[2].toDouble()/256.0,
+                                          lastParts[3].toDouble()/256.0));
+  widget->setProperty("QCS_bgcolor", QColor(lastParts[4].toDouble()/256.0,
+                                          lastParts[5].toDouble()/256.0,
+                                          lastParts[6].toDouble()/256.0));
+  widget->setProperty("QCS_bgcolormode", lastParts[7] == "background");
+  widget->setProperty("QCS_bordermode", lastParts[8]);
+
   QString labelText = "";
   int i = 9;
   while (lastParts.size() > i) {
     labelText += lastParts[i] + " ";
     i++;
   }
-  labelText.chop(1); 
-  bool ok;
-  double value = labelText.toDouble(&ok);
-  if (ok) {
-    widget->setValue(value);
-  }
-  else {
-    widget->setText(labelText);
-  }
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
-  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  labelText.chop(1);
+  widget->setValue(labelText.toDouble());
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
-  connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  m_widgets.append(widget);
-  widget->show();
-  if (m_editMode) {
-    createEditFrame(widget);
-    editWidgets.last()->select();
-  }
-  adjustLayoutSize();
-  setWidgetToolTip(widget, m_tooltips);
+  widget->applyInternalProperties();
+  registerWidget(widget);
   return 1;
 }
 
@@ -1643,33 +1944,27 @@ int WidgetLayout::createButton(int x, int y, int width, int height, QString widg
 //     return -1;
   QuteButton *widget= new QuteButton(this);
   widget->setWidgetLine(widgetLine);
-  widget->setWidgetGeometry(x,y,width, height);
-  widget->show();
-  m_widgets.append(widget);
-  widget->setValue(parts[6].toDouble());  //value produced by button
-  widget->setChannelName(quoteParts[1]);
+  widget->setProperty("QCS_x",x);
+  widget->setProperty("QCS_y",y);
+  widget->setProperty("QCS_width",width);
+  widget->setProperty("QCS_height",height);
+  widget->setProperty("QCS_objectName",quoteParts[1]);
+  widget->setProperty("QCS_type",parts[5]);
+  widget->setProperty("QCS_value",parts[6].toDouble()); //value produced by button when pushed
+//  widget->setProperty("QCS_stringvalue",parts[7].toDouble()); // Not available in old format
   widget->setText(quoteParts[3]);
-  widget->setFilename(quoteParts[5]);
-  widget->setType(parts[5]); // setType must come after setFilename so image is loaded
+  widget->setProperty("QCS_image",quoteParts[5]);
   if (quoteParts.size()>6) {
     quoteParts[6].remove(0,1); //remove initial space
-    widget->setEventLine(quoteParts[6]);
+    widget->setProperty("QCS_eventLine", quoteParts[6]);
   }
   connect(widget, SIGNAL(queueEvent(QString)), this, SLOT(queueEvent(QString)));
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
-  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-
-  // Play and render require the options from the main application, so must call play from it
-  emit registerButton(widget);
   connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));
-  connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
+  connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+  emit registerButton(widget);
+  widget->applyInternalProperties();
+  registerWidget(widget);
 
-  if (m_editMode) {
-    createEditFrame(widget);
-    editWidgets.last()->select();
-  }
-  adjustLayoutSize();
-  setWidgetToolTip(widget, m_tooltips);
   return 1;
 }
 
@@ -1679,10 +1974,14 @@ int WidgetLayout::createKnob(int x, int y, int width, int height, QString widget
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QuteKnob *widget= new QuteKnob(this);
   widget->setWidgetLine(widgetLine);
-  widget->setWidgetGeometry(x,y,width, height);
-  widget->setRange(parts[5].toDouble(), parts[6].toDouble());
-  //TODO set resolution of knob
-  widget->setValue(parts[8].toDouble());
+  widget->setProperty("QCS_x",x);
+  widget->setProperty("QCS_y",y);
+  widget->setProperty("QCS_width",width);
+  widget->setProperty("QCS_height",height);
+  widget->setProperty("QCS_minimum",parts[5].toDouble());
+  widget->setProperty("QCS_maximum",parts[6].toDouble());
+  widget->setProperty("QCS_resolution",parts[7].toDouble());
+  widget->setProperty("QCS_value",parts[8].toDouble());
   if (parts.size()>9) {
     int i=9;
     QString channelName = "";
@@ -1691,20 +1990,11 @@ int WidgetLayout::createKnob(int x, int y, int width, int height, QString widget
       i++;
     }
     channelName.chop(1);  //remove last space
-    widget->setChannelName(channelName);
+    widget->setProperty("QCS_objectName", channelName);
   }
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
-  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
-  connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  m_widgets.append(widget);
-  widget->show();
-  if (m_editMode) {
-    createEditFrame(widget);
-    editWidgets.last()->select();
-  }
-  adjustLayoutSize();
-  setWidgetToolTip(widget, m_tooltips);
+  widget->applyInternalProperties();
+  registerWidget(widget);
   return 1;
 }
 
@@ -1714,7 +2004,10 @@ int WidgetLayout::createCheckBox(int x, int y, int width, int height, QString wi
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QuteCheckBox *widget= new QuteCheckBox(this);
   widget->setWidgetLine(widgetLine);
-  widget->setWidgetGeometry(x,y,width, height);
+  widget->setProperty("QCS_x",x);
+  widget->setProperty("QCS_y",y);
+  widget->setProperty("QCS_width",width);
+  widget->setProperty("QCS_height",height);
   widget->setValue(parts[5]=="on");
   if (parts.size()>6) {
     int i=6;
@@ -1724,20 +2017,11 @@ int WidgetLayout::createCheckBox(int x, int y, int width, int height, QString wi
       i++;
     }
     channelName.chop(1);  //remove last space
-    widget->setChannelName(channelName);
+    widget->setProperty("QCS_objectName", channelName);
   }
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
-  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
-  connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  m_widgets.append(widget);
-  widget->show();
-  if (m_editMode) {
-    createEditFrame(widget);
-    editWidgets.last()->select();
-  }
-  adjustLayoutSize();
-  setWidgetToolTip(widget, m_tooltips);
+  widget->applyInternalProperties();
+  registerWidget(widget);
   return 1;
 }
 
@@ -1748,30 +2032,24 @@ int WidgetLayout::createMenu(int x, int y, int width, int height, QString widget
   QStringList quoteParts = widgetLine.split('"');
   QuteComboBox *widget= new QuteComboBox(this);
   widget->setWidgetLine(widgetLine);
-  widget->setWidgetGeometry(x,y,width, height);
-  widget->setSize(parts[6].toInt());
-  widget->setText(quoteParts[1]);
-  widget->setValue(parts[5].toDouble()); //setValue must be after setText otherwise ComboBox is empty
-  if (quoteParts.size() > 2)
-    widget->setChannelName(quoteParts[2].remove(0,1)); //remove initial space from channel name
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
-  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
-  connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  m_widgets.append(widget);
-  widget->show();
-  if (m_editMode) {
-    createEditFrame(widget);
-    editWidgets.last()->select();
+  widget->setProperty("QCS_x",x);
+  widget->setProperty("QCS_y",y);
+  widget->setProperty("QCS_width",width);
+  widget->setProperty("QCS_height",height);
+  if (quoteParts.size() > 2) {
+    widget->setProperty("QCS_objectName", quoteParts[2].remove(0,1)); //remove initial space from channel name
   }
-  adjustLayoutSize();
-  setWidgetToolTip(widget, m_tooltips);
+  widget->setProperty("QCS_selectedIndex", parts[5].toInt());
+
+  widget->setText(quoteParts[1]);
+  connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+  widget->applyInternalProperties();
+  registerWidget(widget);
   return 1;
 }
 
 int WidgetLayout::createMeter(int x, int y, int width, int height, QString widgetLine)
 {
-//   qDebug("ioMenu x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
   if (quoteParts.size() < 5) {
@@ -1784,32 +2062,30 @@ int WidgetLayout::createMeter(int x, int y, int width, int height, QString widge
     return 0;
   }
   QuteMeter *widget= new QuteMeter(this);
-  //TODO is setWidgetLine actually necessary?
   widget->setWidgetLine(widgetLine);
-  widget->setWidgetGeometry(x,y,width, height);
-  widget->setColor(QColor(parts[5].toDouble()/256.0,
-                       parts[6].toDouble()/256.0,
-                                         parts[7].toDouble()/256.0));
-  widget->setType(parts2[1]); // Important to set type before setting values since values are inverted for crosshair and point
-  widget->setChannelName(quoteParts[1]);
-  widget->setValue(quoteParts[2].toDouble());
-  widget->setChannel2Name(quoteParts[3]);
-  widget->setValue2(parts2[0].toDouble());
-  widget->setPointSize(parts2[2].toInt());
-  widget->setFadeSpeed(parts2[3].toInt());
-  widget->setBehavior(parts2[4]);
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
-  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
+  widget->setProperty("QCS_x",x);
+  widget->setProperty("QCS_y",y);
+  widget->setProperty("QCS_width",width);
+  widget->setProperty("QCS_height",height);
+  widget->setProperty("QCS_color" ,QColor(parts[5].toDouble()/256.0,
+                                          parts[6].toDouble()/256.0,
+                                          parts[7].toDouble()/256.0));
+  widget->setProperty("QCS_type", parts2[1]);
+  widget->setProperty("QCS_objectName", quoteParts[1]);
+  widget->setProperty("QCS_xValue", quoteParts[2].toDouble());
+  widget->setProperty("QCS_yValue", parts2[0].toDouble());
+  widget->setProperty("QCS_objectName2", quoteParts[3]);
+  widget->setProperty("QCS_pointsize", parts2[2].toInt());
+  widget->setProperty("QCS_fadeSpeed", parts2[3].toInt());
+  widget->setProperty("QCS_xMin", 0.0);
+  widget->setProperty("QCS_xMax", 1.0);
+  widget->setProperty("QCS_yMin", 0.0);
+  widget->setProperty("QCS_yMax", 1.0);
+//  widget->setBehavior(parts2[4]);
+
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
-  connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  m_widgets.append(widget);
-  widget->show();
-  if (m_editMode) {
-    createEditFrame(widget);
-    editWidgets.last()->select();
-  }
-  adjustLayoutSize();
-  setWidgetToolTip(widget, m_tooltips);
+  widget->applyInternalProperties();
+  registerWidget(widget);
   return 1;
 }
 
@@ -1819,19 +2095,14 @@ int WidgetLayout::createConsole(int x, int y, int width, int height, QString wid
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QuteConsole *widget= new QuteConsole(this);
   widget->setWidgetLine(widgetLine);
-  widget->setWidgetGeometry(x,y,width, height);
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
-  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  m_widgets.append(widget);
-  widget->show();
-  if (m_editMode) {
-    createEditFrame(widget);
-    editWidgets.last()->select();
-  }
-  adjustLayoutSize();
-  setWidgetToolTip(widget, m_tooltips);
+  widget->setProperty("QCS_x",x);
+  widget->setProperty("QCS_y",y);
+  widget->setProperty("QCS_width",width);
+  widget->setProperty("QCS_height",height);
+
+  widget->applyInternalProperties();
   consoleWidgets.append(widget);
+  registerWidget(widget);
   return 1;
 }
 
@@ -1841,15 +2112,18 @@ int WidgetLayout::createGraph(int x, int y, int width, int height, QString widge
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QuteGraph *widget= new QuteGraph(this);
   widget->setWidgetLine(widgetLine);
-  widget->setWidgetGeometry(x,y,width, height);
-  emit registerGraph(widget);
+  widget->setProperty("QCS_x",x);
+  widget->setProperty("QCS_y",y);
+  widget->setProperty("QCS_width",width);
+  widget->setProperty("QCS_height",height);
   //Graph widget is always of type "graph" part 5 is discarded
   if (parts.size() > 6)
     widget->setValue(parts[6].toDouble());
-  if (parts.size() > 7)
-    widget->setZoom(parts[7].toDouble());
+  if (parts.size() > 7) {
+    widget->setProperty("QCS_zoomx",parts[7].toDouble());
+  }
   else
-    widget->setZoom(1.0);
+    widget->setProperty("QCS_zoomx", 1.0);
   if (parts.size()>8) {
     int i = 8;
     QString channelName = "";
@@ -1858,20 +2132,12 @@ int WidgetLayout::createGraph(int x, int y, int width, int height, QString widge
       i++;
     }
     channelName.chop(1);  //remove last space
-    widget->setChannelName(channelName);
+    widget->setProperty("QCS_objectName", channelName);
   }
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
-  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  m_widgets.append(widget);
-  widget->show();
-  if (m_editMode) {
-    createEditFrame(widget);
-    editWidgets.last()->select();
-  }
-  adjustLayoutSize();
-  setWidgetToolTip(widget, m_tooltips);
   graphWidgets.append(widget);
+  widget->applyInternalProperties();
+  emit registerGraph(widget);
+  registerWidget(widget);
   return 1;
 }
 
@@ -1881,15 +2147,23 @@ int WidgetLayout::createScope(int x, int y, int width, int height, QString widge
 //   qDebug("%s",widgetLine.toStdString().c_str() );
   QuteScope *widget= new QuteScope(this);
   widget->setWidgetLine(widgetLine);
-  widget->setWidgetGeometry(x,y,width, height);
-  emit registerScope(widget);
+  widget->setProperty("QCS_x",x);
+  widget->setProperty("QCS_y",y);
+  widget->setProperty("QCS_width",width);
+  widget->setProperty("QCS_height",height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
-  if (parts.size() > 5)
-    widget->setType(parts[5]);
-  if (parts.size() > 6)
-    widget->setValue(parts[6].toDouble()); //Value here indicates zoom level
+  if (parts.size() > 5) {
+    widget->setProperty("QCS_type",parts[5]);
+  }
+  if (parts.size() > 6) {
+    widget->setProperty("QCS_zoomx",parts[6].toDouble());
+  }
   if (parts.size() > 7) {
-    widget->setChannel((int) parts[7].toDouble()); // Channel number to display
+    int chans = (int) parts[7].toDouble();
+    if (chans < 0) {
+      chans = -255; // Force all 8 channels when loading old format
+    }
+    widget->setProperty("QCS_chan", chans);
   }
   if (parts.size() > 8) {
     int i=8;
@@ -1899,21 +2173,12 @@ int WidgetLayout::createScope(int x, int y, int width, int height, QString widge
       i++;
     }
     channelName.chop(1);  //remove last space
-    widget->setChannelName(channelName);
+    widget->setProperty("QCS_objectName", channelName);
   }
-
-  connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
-  connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-  connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  m_widgets.append(widget);
-  widget->show();
-  if (m_editMode) {
-    createEditFrame(widget);
-    editWidgets.last()->select();
-  }
-  adjustLayoutSize();
-  setWidgetToolTip(widget, m_tooltips);
+  emit registerScope(widget);
   scopeWidgets.append(widget);
+  registerWidget(widget);
+  widget->applyInternalProperties();
   return 1;
 }
 
@@ -1921,7 +2186,10 @@ int WidgetLayout::createDummy(int x, int y, int width, int height, QString widge
 {
   QuteWidget *widget= new QuteDummy(this);
   widget->setWidgetLine(widgetLine);
-  widget->setWidgetGeometry(x,y,width, height);
+  widget->setProperty("QCS_x",x);
+  widget->setProperty("QCS_y",y);
+  widget->setProperty("QCS_width",width);
+  widget->setProperty("QCS_height",height);
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
   widget->show();
   m_widgets.append(widget);
@@ -1944,8 +2212,8 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
   w->setBackgroundRole(QPalette::Window);
   w->setAutoFillBackground(bg);
   layoutMutex.unlock();
-  this->setProperty("bg", QVariant(bg));
-  this->setProperty("bgcolor", QVariant(bgColor));
+  this->setProperty("QCS_bg", QVariant(bg));
+  this->setProperty("QCS_bgcolor", QVariant(bgColor));
 }
 
 void WidgetLayout::setModified(bool mod)
@@ -1968,60 +2236,214 @@ void WidgetLayout::clearHistory()
   m_historyIndex = 0;
 }
 
+int WidgetLayout::getPresetIndex(int number)
+{
+  int index = -1;
+  for (int i = 0; i < presets.size(); i++) {
+    if (presets[i].getNumber() == number) {
+      index = i;
+      break;
+    }
+  }
+  return index;
+}
+
+void WidgetLayout::loadPreset()
+{
+  QDialog d(this);
+  QVBoxLayout *l = new QVBoxLayout(&d);
+  QLabel *lab= new QLabel(&d);
+  QComboBox *box = new QComboBox(&d);
+  QPushButton *okButton = new QPushButton(tr("Ok"),&d);
+  QPushButton *cancelButton = new QPushButton(tr("Cancel"),&d);
+  lab->setText(tr("Select Preset to Load"));
+  l->addWidget(lab);
+  l->addWidget(box);
+  l->addWidget(cancelButton);
+  l->addWidget(okButton);
+  connect(okButton, SIGNAL(released()), &d, SLOT(accept()));
+  connect(cancelButton, SIGNAL(released()), &d, SLOT(reject()));
+
+  for (int i = 0; i < presets.size(); i++) {
+    QString itemText = QString::number(presets[i].getNumber()) + "  " + presets[i].getName();
+    box->addItem(itemText, presets[i].getNumber() );
+  }
+
+  int ret = d.exec();
+  if (ret == QDialog::Accepted) {
+    loadPreset(presets[box->currentIndex()].getNumber());
+  }
+}
+
+void WidgetLayout::loadPresetFromAction()
+{
+  QAction *s = static_cast<QAction *>(sender());
+  loadPreset(s->data().toInt());
+}
+
 void WidgetLayout::loadPreset(int num)
 {
-  WidgetPreset p = presets[num];
-  if (num >= 0 && num < presets.size()) {
-    for (int i = 0; i < m_widgets.size(); i++) {
-      QString id = m_widgets[i]->getUuid();
-      if (p.idIndex(id) > -1) {
+  int index = getPresetIndex(num);
+  qDebug() << "WidgetLayout::loadPreset " << num << "  " << index;
+  if (index < 0) {
+    qDebug() << "WidgetLayout::loadPreset num invalid.";
+    return;
+  }
+  WidgetPreset p = presets[index];
+  QStringList ids = p.getWidgetIds();
+  for (int i = 0; i < m_widgets.size(); i++) {
+    QString id = m_widgets[i]->getUuid();
+    qDebug() << "WidgetPreset::idIndex " << p.idIndex(id);
+    if (p.idIndex(id) > -1) {
+      int mode = p.getMode(id);
+      if (mode & 1) {
         m_widgets[i]->setValue(p.getValue(id));
+      }
+      if (mode & 2) {
         m_widgets[i]->setValue2(p.getValue2(id));
+      }
+      if (mode & 4) {
         m_widgets[i]->setValue(p.getStringValue(id));
       }
     }
   }
-  else {
-    qDebug() << "WidgetPanel::loadPreset invalid preset number";
+}
+
+void WidgetLayout::newPreset()
+{
+  QDialog d(this);
+  QGridLayout *l = new QGridLayout(&d);
+  QLabel *nameLabel = new QLabel(tr("New Preset Name:"), &d);
+  QLineEdit *nameLineEdit = new QLineEdit(&d);
+  QLabel *numberLabel = new QLabel(tr("Number:"), &d);
+  QSpinBox *numberSpinBox = new QSpinBox(&d);
+  QPushButton *okButton = new QPushButton(tr("Ok"),&d);
+  QPushButton *cancelButton = new QPushButton(tr("Cancel"),&d);
+  l->addWidget(nameLabel, 0,0, Qt::AlignRight);
+  l->addWidget(nameLineEdit, 0,1, Qt::AlignLeft);
+  l->addWidget(numberLabel, 1,0, Qt::AlignRight);
+  l->addWidget(numberSpinBox, 1,1, Qt::AlignLeft);
+  l->addWidget(cancelButton, 2,0, Qt::AlignCenter);
+  l->addWidget(okButton, 2,1, Qt::AlignCenter);
+  connect(okButton, SIGNAL(released()), &d, SLOT(accept()));
+  connect(cancelButton, SIGNAL(released()), &d, SLOT(reject()));
+
+  int ret = d.exec();
+  if (ret == QDialog::Accepted) {
+    savePreset(numberSpinBox->value(), nameLineEdit->text() );
+//    qDebug() << "WidgetLayout::newPreset() " << numberSpinBox->value() << "  " << nameLineEdit->text();
   }
 }
 
-void WidgetLayout::newPreset(QString name)
+//void WidgetLayout::newPreset(int number, QString name)
+//{
+//  presets.resize(presets.size() + 1);
+//  savePreset(number, name);
+//}
+
+void WidgetLayout::savePreset()
 {
-  presets.resize(presets.size() + 1);
-  savePreset(presets.size() - 1, name);
+  QDialog d(this);
+  QVBoxLayout *l = new QVBoxLayout(&d);
+  QLabel *lab= new QLabel(&d);
+  QComboBox *box = new QComboBox(&d);
+  QPushButton *okButton = new QPushButton(tr("Ok"),&d);
+  QPushButton *cancelButton = new QPushButton(tr("Cancel"),&d);
+  lab->setText(tr("Select Preset to save"));
+  l->addWidget(lab);
+  l->addWidget(box);
+  l->addWidget(cancelButton);
+  l->addWidget(okButton);
+  connect(okButton, SIGNAL(released()), &d, SLOT(accept()));
+  connect(cancelButton, SIGNAL(released()), &d, SLOT(reject()));
+
+  for (int i = 0; i < presets.size(); i++) {
+    QString itemText = QString::number(presets[i].getNumber()) + "  " + presets[i].getName();
+    box->addItem(itemText, presets[i].getNumber() );
+  }
+  box->setCurrentIndex(m_currentPreset);
+
+  int ret = d.exec();
+  if (ret == QDialog::Accepted) {
+    savePreset(box->currentIndex(), presets[box->currentIndex()].getName());
+    m_currentPreset = box->currentIndex();
+  }
 }
 
 void WidgetLayout::savePreset(int num, QString name)
 {
-  if (num >= 0 && num < presets.size()) {
-    presets[num].clear();
-  }
-  else if (num < 0) {
-    WidgetPreset p;
+  int index = getPresetIndex(num);
+  WidgetPreset p;
+  p.setName(name);
+  p.setNumber(num);
+  if (index == -1) {
+    qDebug() << "WidgetLayout::savePreset new preset";
     presets.append(p);
-    num = presets.size() - 1;
-  }
-  else {
-    qDebug() << "WidgetPanel::savePreset invalid preset number";
-    return;
+    index = presets.size() - 1;
   }
   for (int i = 0; i < m_widgets.size(); i++) {
     QString id = m_widgets[i]->getUuid();
-    WidgetPreset p;
-    p.setName(name);
-    p.setValue(id, m_widgets[i]->getValue());
-    p.setValue2(id, m_widgets[i]->getValue2());
-    p.setStringValue(id, m_widgets[i]->getStringValue());
-    presets.append(p);
+    if (!(m_widgets[i]->getWidgetType() == "BSBLabel")
+        && !(m_widgets[i]->getWidgetType() == "BSBTextEdit")
+        && !(m_widgets[i]->getWidgetType() == "BSBButton")
+        && !(m_widgets[i]->getWidgetType() == "BSBConsole")) {
+      p.addValue(id, m_widgets[i]->getValue());
+    }
+    if (m_widgets[i]->getWidgetType() == "BSBController"
+        || m_widgets[i]->getWidgetType() == "BSBXYController") {
+      p.addValue2(id, m_widgets[i]->getValue2());
+    }
+    if (m_widgets[i]->getWidgetType() == "BSBLabel"
+        || m_widgets[i]->getWidgetType() == "BSBButton"
+        || m_widgets[i]->getWidgetType() == "BSBTextEdit") {
+      p.addStringValue(id, m_widgets[i]->getStringValue());
+    }
   }
+  presets[index] = p;
 }
 
 void WidgetLayout::setPresetName(int num, QString name)
 {
   if (num >= 0 && num < presets.size()) {
-    presets[num].setName(name);
+    int index = getPresetIndex(num);
+    if (index >= 0) {
+      presets[getPresetIndex(num)].setName(name);
+    }
+    else {
+      qDebug() << "WidgetLayout::setPresetName invalud number.";
+    }
   }
+}
+
+QList<int> WidgetLayout::getPresetNums()
+{
+  QList<int> list;
+  for (int i = 0; i < presets.size(); i++) {
+    list.append(presets[i].getNumber());
+  }
+  return list;
+}
+
+QString WidgetLayout::getPresetName(int num)
+{
+  int index = getPresetIndex(num);
+  if (index >= 0) {
+    return presets[getPresetIndex(num)].getName();
+  }
+  else {
+    return QString();
+    qDebug() << "WidgetLayout::getPresetName invalud number.";
+  }
+}
+
+QColor WidgetLayout::getColorFromElement(QDomElement elem)
+{
+  QDomElement er = elem.firstChildElement("r");
+  QDomElement eg = elem.firstChildElement("g");
+  QDomElement eb = elem.firstChildElement("b");
+  return QColor(er.firstChild().nodeValue().toInt(),
+                eg.firstChild().nodeValue().toInt(),
+                eb.firstChild().nodeValue().toInt());
 }
 
 void WidgetLayout::copy()
@@ -2029,9 +2451,18 @@ void WidgetLayout::copy()
   qDebug() << "WidgetLayout::copy()";
   QString text;
   if (m_editMode) {
-    for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
-      if (editWidgets[i]->isSelected()) {
-        text += m_widgets[i]->getWidgetLine() + "\n";
+    if (m_xmlFormat) {
+      for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
+        if (editWidgets[i]->isSelected()) {
+          text += m_widgets[i]->getWidgetXmlText()+ "\n";
+        }
+      }
+    }
+    else {
+      for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
+        if (editWidgets[i]->isSelected()) {
+          text += m_widgets[i]->getWidgetLine() + "\n";
+        }
       }
     }
     m_clipboard = text;
@@ -2058,10 +2489,29 @@ void WidgetLayout::paste()
   qDebug() << "WidgetLayout::paste()";
   if (m_editMode) {
     deselectAll();
-    QStringList lines = m_clipboard.split("\n");
-    foreach (QString line, lines) {
-      newWidget(line);
-      editWidgets.last()->select();
+    if (m_xmlFormat) {
+      QDomDocument doc;
+      QString errorText;
+      int lineNumber, column;
+      if (!doc.setContent("<doc>" + m_clipboard + "</doc>", &errorText, &lineNumber, &column)) {
+        qDebug() << "WidgetLayout::paste Parsing Error: " << errorText <<  lineNumber << column << m_clipboard;
+      }
+      QDomElement docElement = doc.firstChildElement("doc");
+      QDomElement pl = docElement.firstChildElement("bsbObject");
+      qDebug() << "WidgetLayout::paste() " << doc.toString();
+      while (!pl.isNull()) {
+        qDebug() << "WidgetLayout::paste() " << pl.text();
+        newXmlWidget(pl);
+        editWidgets.last()->select();
+        pl = pl.nextSiblingElement("bsbObject");
+      }
+    }
+    else {
+      QStringList lines = m_clipboard.split("\n");
+      foreach (QString line, lines) {
+        newMacWidget(line);
+        editWidgets.last()->select();
+      }
     }
   }
   markHistory();
@@ -2119,7 +2569,13 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
 
 void WidgetLayout::markHistory()
 {
-  QString text = getMacWidgetsText();
+  QString text;
+  if (m_xmlFormat) {
+    text = getWidgetsText();
+  }
+  else {
+    text = getMacWidgetsText();
+  }
   if (m_history.isEmpty()) {
     m_history << "";
     m_historyIndex = 0;
@@ -2134,7 +2590,7 @@ void WidgetLayout::markHistory()
     if (m_history.size() != m_historyIndex + 1)
       m_history.resize(m_historyIndex + 1);
     m_history[m_historyIndex] = text;
-//    qDebug() << "WidgetLayout::markHistory "<< *m_historyIndex << " ....."  << text;
+    //    qDebug() << "WidgetLayout::markHistory "<< *m_historyIndex << " ....."  << text;
   }
 }
 
@@ -2276,9 +2732,9 @@ void WidgetLayout::queueEvent(QString eventLine)
   emit queueEventSignal(eventLine);
 }
 
-void WidgetLayout::paste(QPoint /*pos*/)
-{
-}
+//void WidgetLayout::paste(QPoint /*pos*/)
+//{
+//}
 
 void WidgetLayout::duplicate()
 {
@@ -2288,7 +2744,15 @@ void WidgetLayout::duplicate()
     for (int i = 0; i < size ; i++) {
       if (editWidgets[i]->isSelected()) {
         editWidgets[i]->deselect();
-        newWidget(m_widgets[i]->getWidgetLine(), true);
+        if (m_xmlFormat) {
+          QDomDocument doc;
+          doc.setContent(m_widgets[i]->getWidgetXmlText());
+          newXmlWidget(doc.firstChildElement("bsbObject"), true, true);
+//          qDebug() << "WidgetLayout::duplicate() " << m_widgets[i]->getWidgetXmlText();
+        }
+        else {
+          newMacWidget(m_widgets[i]->getWidgetLine(), true);
+        }
         editWidgets.last()->select();
       }
     }
@@ -2309,20 +2773,30 @@ void WidgetLayout::deleteSelected()
 
 void WidgetLayout::undo()
 {
-  qDebug("WidgetLayout::undo()");
+//  qDebug() << "WidgetLayout::undo()";
   if (m_historyIndex > 0) {
     (m_historyIndex)--;
-    qDebug() << "WidgetLayout::undo() " << m_historyIndex << "...." << m_history[m_historyIndex];
-    loadWidgets(m_history[m_historyIndex]);
+    if (m_xmlFormat) {
+      loadXmlWidgets(m_history[m_historyIndex]);
+    }
+    else {
+//      qDebug() << "WidgetLayout::undo() " << m_historyIndex << "...." << m_history[m_historyIndex];
+      loadMacWidgets(m_history[m_historyIndex]);
+    }
   }
 }
 
 void WidgetLayout::redo()
 {
-  qDebug("WidgetLayout::redo()");
+//  qDebug() << "WidgetLayout::redo()";
   if (m_historyIndex < m_history.size() - 1) {
     m_historyIndex++;
-    loadWidgets(m_history[m_historyIndex]);
+    if (m_xmlFormat) {
+      loadXmlWidgets(m_history[m_historyIndex]);
+    }
+    else {
+      loadMacWidgets(m_history[m_historyIndex]);
+    }
   }
 }
 

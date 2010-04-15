@@ -31,7 +31,6 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
   m_widget->setAutoFillBackground(true);
   m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
-//   static_cast<StackedLayoutWidget *>(m_widget)->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   m_label = new QLabel(this);
   QPalette palette = m_widget->palette();
   palette.setColor(QPalette::WindowText, Qt::white);
@@ -50,36 +49,19 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
           this, SLOT(changeCurve(int)));
   polygons.clear();
 //   connect(static_cast<StackedLayoutWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+
+// Default properties
+  setProperty("QCS_zoomx", 1.0);
+  setProperty("QCS_zoomy", 1.0);
+  setProperty("QCS_dispx", 1.0);
+  setProperty("QCS_dispy", 1.0);
+  setProperty("QCS_modex", "lin");
+  setProperty("QCS_modey", "lin");
+  setProperty("QCS_all", true);
 }
 
 QuteGraph::~QuteGraph()
 {
-}
-
-void QuteGraph::loadFromXml(QString xmlText)
-{
-  initFromXml(xmlText);
-  QDomDocument doc;
-  if (!doc.setContent(xmlText)) {
-    qDebug() << "QuteGraph::loadFromXml: Error parsing xml";
-    return;
-  }
-  QDomElement e = doc.firstChildElement("value");
-  if (e.isNull()) {
-    qDebug() << "QuteGraph::loadFromXml: Expecting value element";
-    return;
-  }
-  else {
-    m_value = e.nodeValue().toDouble();
-  }
-  e = doc.firstChildElement("zoom");
-  if (e.isNull()) {
-    qDebug() << "QuteGraph::loadFromXml: Expecting zoom element";
-    return;
-  }
-  else {
-    m_zoom = e.nodeValue().toDouble();
-  }
 }
 
 QString QuteGraph::getWidgetLine()
@@ -90,20 +72,27 @@ QString QuteGraph::getWidgetLine()
   QString line = "ioGraph {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} table ";
   line += QString::number(m_value, 'f', 6) + " ";
-  line += QString::number(m_zoom, 'f', 6) + " ";
-  line += m_name;
+  line += QString::number(property("QCS_zoomx").toDouble(), 'f', 6) + " ";
+  line += property("QCS_objectName").toString();
 //   qDebug("QuteGraph::getWidgetLine(): %s", line.toStdString().c_str());
   return line;
 }
 
 QString QuteGraph::getWidgetXmlText()
 {
-  // Consoles are not implemented in blue
+  // Graphs are not implemented in blue
+  xmlText = "";
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
 
-  s.writeTextElement("value", QString::number(m_value, 'f', 8));
-  s.writeTextElement("zoom", QString::number(m_zoom, 'f', 8));
+  s.writeTextElement("value", QString::number((int)m_value));
+  s.writeTextElement("zoomx", QString::number(property("QCS_zoomx").toDouble(), 'f', 8));
+  s.writeTextElement("zoomy", QString::number(property("QCS_zoomy").toDouble(), 'f', 8));
+  s.writeTextElement("dispx", QString::number(property("QCS_dispx").toDouble(), 'f', 8));
+  s.writeTextElement("dispy", QString::number(property("QCS_dispy").toDouble(), 'f', 8));
+  s.writeTextElement("modex", property("QCS_modex").toString());
+  s.writeTextElement("modey", property("QCS_modey").toString());
+  s.writeTextElement("all", property("QCS_all").toBool() ? "true" : "false");
   s.writeEndElement();
   return xmlText;
 }
@@ -131,7 +120,7 @@ void QuteGraph::createPropertiesDialog()
   label->setText("Zoom");
   layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
   zoomBox = new QDoubleSpinBox(dialog);
-  zoomBox->setValue(m_zoom);
+  zoomBox->setValue(property("QCS_zoomx").toDouble());
   zoomBox->setRange(1, 10.0);
   zoomBox->setDecimals(1);
   zoomBox->setSingleStep(0.5);
@@ -143,7 +132,13 @@ void QuteGraph::createPropertiesDialog()
 void QuteGraph::applyProperties()
 {
   QuteWidget::applyProperties();
-  setZoom(zoomBox->value());
+  setProperty("QCS_zoomx", zoomBox->value());
+  setProperty("QCS_zoomy", zoomBox->value());
+  setProperty("QCS_dispx", 1);
+  setProperty("QCS_dispy", 1);
+  setProperty("QCS_modex", "lin");
+  setProperty("QCS_modey", "lin");
+  setProperty("QCS_all", true);
 }
 
 void QuteGraph::setValue(double value)
@@ -168,24 +163,13 @@ void QuteGraph::setValue(double value)
       }
     }
   }
-  else if (value < curves.size()) {
+  else if (value < curves.size()) { //Dont change value if not valid
     changeCurve((int) value);
     m_value = value;
   }
-  //Dont change value if not valid
 #ifdef  USE_WIDGET_MUTEX
   mutex.unlock();
 #endif
-}
-
-void QuteGraph::setZoom(double zoom)
-{
-//   qDebug("QuteGraph::setZoom %f", zoom);
-  if (zoom >=1.0 && zoom <= 10.0)
-    m_zoom = zoom;
-  else
-    m_zoom = 1.0;
-  changeCurve(-2);  // Redraw
 }
 
 void QuteGraph::changeCurve(int index)
@@ -201,25 +185,26 @@ void QuteGraph::changeCurve(int index)
   drawCurve(curves[index], index);
   QGraphicsView *view = (QGraphicsView *) static_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
 
-//   view->setFocusPolicy(Qt::NoFocus);
   double max = - curves[index]->get_min();
   double min = - curves[index]->get_max();
+//  double span = max - min;
+//  FIXME implement dispx, dispy and modex, modey
   int size = curves[index]->get_size();
   view->setResizeAnchor(QGraphicsView::NoAnchor);
   if (curves[index]->get_caption().contains("ftable")) {
-    view->setSceneRect (0, min - ((max - min)*0.17),(double) size/m_zoom, (max - min)*1.17);
-    view->fitInView(0, min - ((max - min)*0.17) , (double) size/m_zoom, (max - min)*1.17);
+    view->setSceneRect (0, min - ((max - min)*0.17),(double) size/property("QCS_zoomx").toDouble(), (max - min)*1.17);
+    view->fitInView(0, min - ((max - min)*0.17) , (double) size/property("QCS_zoomy").toDouble(), (max - min)*1.17);
   }
   else {
     if (curves[index]->get_caption().contains("fft")) {
       view->setSceneRect (0, 0, size, 90.);
   //     view->fitInView(0, -30./m_zoom , (double) size/m_zoom, 100./m_zoom);
-      view->fitInView(0, -30. , (double) size/m_zoom, 100.);
+      view->fitInView(0, -30. , (double) size/property("QCS_zoomx").toDouble(), 100./property("QCS_zoomy").toDouble());
     }
     else { //from display opcode
       view->setSceneRect (0, -1, size, 2);
   //     view->fitInView(0, -30./m_zoom , (double) size/m_zoom, 100./m_zoom);
-      view->fitInView(0, -1 , (double) size/m_zoom, 2);
+      view->fitInView(0, -1 , (double) size/property("QCS_zoomx").toDouble(), 100./property("QCS_zoomy").toDouble());
     }
   }
   QString text = QString::number(size) + " pts Max=";
@@ -245,7 +230,6 @@ void QuteGraph::addCurve(Curve * curve)
   view->setContextMenuPolicy(Qt::NoContextMenu);
   scene->setBackgroundBrush(QBrush(Qt::black));
   int size = curve->get_size();
-//  qDebug("QuteGraph::addCurve2()");
   QGraphicsLineItem* line = new QGraphicsLineItem(0, 0, size, 0);
   line->setPen(QPen(QColor(Qt::white)));
   line->show();
@@ -298,14 +282,10 @@ int QuteGraph::getCurveIndex(Curve * curve)
   return index;
 }
 
-//Curve* QuteGraph::getCurveById(uintptr_t id)
-//{
-//}
-
 void QuteGraph::setCurveData(Curve * curve)
 {
-  int index = getCurveIndex(curve);
 //  qDebug("QuteGraph::setCurveData %i", index);
+  int index = getCurveIndex(curve);
   if (index >= curves.size() or index < 0)
     return;
   curves[index] = curve;
@@ -355,12 +335,18 @@ void QuteGraph::setUd(CsoundUserData *ud)
   m_ud = ud;
 }
 
+void QuteGraph::applyInternalProperties()
+{
+  QuteWidget::applyInternalProperties();
+  changeCurve(-2);  // Redraw
+//  qDebug() << "QuteSlider::applyInternalProperties()";
+}
+
 void QuteGraph::drawCurve(Curve * curve, int index)
 {
-//  qDebug() << "QuteGraph::drawCurve";
 //  qDebug() << "QuteGraph::drawCurve min=" << curve->getOriginal();
   bool live = curve->getOriginal() != 0;
-  live = false; // TODO will Csound ever allow polling the ftables from the graphs?
+  live = false;
   QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
   double max = live ? curve->getOriginal()->max :curve->get_max();
   int size = live ? curve->getOriginal()->npts:(int) curve->get_size();

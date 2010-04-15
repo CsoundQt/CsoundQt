@@ -36,22 +36,21 @@ class QuteGraph : public QuteWidget
 
     ~QuteGraph();
 
-    virtual void loadFromXml(QString xmlText);
+//    virtual void loadFromXml(QString xmlText);
     virtual QString getWidgetLine();
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();
     virtual void setWidgetGeometry(int x,int y,int width,int height);
     virtual void setValue(double value);
-    void setZoom(double zoom);
+//    void setZoom(double zoom);
     void clearCurves();
     void addCurve(Curve *curve);
     int getCurveIndex(Curve * curve);
     void setCurveData(Curve * curve);
-//    Curve* getCurveById(uintptr_t id);  // FIXME this should be moved from here, as curves are bieng copied as many times as there are graphs!
     void setUd(CsoundUserData *ud);
+    virtual void applyInternalProperties();
 
   protected:
-    double m_zoom;
     CsoundUserData *m_ud;
     QLabel * m_label;
     QComboBox *m_pageComboBox;

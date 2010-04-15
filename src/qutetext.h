@@ -25,6 +25,12 @@
 
 #include "qutewidget.h"
 
+#ifdef Q_WS_MAC
+#define QCS_FONT_OFFSET 5
+#else
+#define QCS_FONT_OFFSET 0
+#endif
+
 class QuteText : public QuteWidget
 {
   Q_OBJECT
@@ -33,17 +39,17 @@ class QuteText : public QuteWidget
 
     ~QuteText();
 
-    virtual void loadFromXml(QString xmlText);
     virtual QString getWidgetLine();
     virtual QString getWidgetType();
     virtual QString getWidgetXmlText();
 
     virtual double getValue();
+    virtual QString getStringValue();
     virtual void setValue(double value);
     virtual void setValue(QString value);
 
     void setType(QString type);
-    virtual void setAlignment(int alignment);
+    virtual void setAlignment(QString alignment);
     void setFont(QString font);
     void setFontSize(int fontSize);
     void setTextColor(QColor textColor);
@@ -51,30 +57,21 @@ class QuteText : public QuteWidget
     void setBg(bool bg);
     void setBorder(bool border);
     virtual void setText(QString text);
+    virtual void applyInternalProperties();
 
   protected:
     virtual void createPropertiesDialog();
     virtual void applyProperties();
 
-    double m_resolution;
-    QString m_type;
-//     int m_alignment;
-    QString m_font;
-    int m_fontSize;
-    QString m_text;
-//     QColor m_textColor;
-//     QColor m_bgColor;
-//     bool m_bg;
-//     bool m_border;
+    QString m_type;  // can be "label", "edit", "scroll". In old widget format can also be "display".
 
-//     QComboBox * typeComboBox;
     QTextEdit *text;
     QPushButton *textColor;
     QPushButton *bgColor;
     QCheckBox *bg;
     QCheckBox *border;
     QFontComboBox  *font;
-    QComboBox * fontSize;
+    QSpinBox * fontSize;
     QComboBox * alignment;
 
   private slots:
@@ -89,14 +86,15 @@ class QuteLineEdit : public QuteText
     QuteLineEdit(QWidget* parent);
     ~QuteLineEdit();
 
-    virtual void loadFromXml(QString xmlText);
-    virtual void setAlignment(int alignment);
+//    virtual void setAlignment(int alignment);
     virtual void setText(QString text);
     virtual QString getWidgetLine();
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();
     virtual QString getStringValue();
+    virtual double getValue();
     virtual void dropEvent(QDropEvent *event);
+    virtual void applyInternalProperties();
 
   protected:
     virtual void createPropertiesDialog();
@@ -110,8 +108,6 @@ class QuteScrollNumber : public QuteText
     QuteScrollNumber(QWidget* parent);
     ~QuteScrollNumber();
 
-    virtual void loadFromXml(QString xmlText);
-    virtual void setResolution(double resolution);
     virtual void setAlignment(int alignment);
     virtual void setText(QString text);
     virtual QString getWidgetLine();
@@ -122,6 +118,8 @@ class QuteScrollNumber : public QuteText
     virtual QString getStringValue();
     virtual double getValue();
 
+    virtual void applyInternalProperties();
+
   protected:
     virtual void createPropertiesDialog();
     virtual void applyProperties();
@@ -130,6 +128,7 @@ class QuteScrollNumber : public QuteText
     int m_places;
 
   public slots:
+    void setResolution(double resolution);
     void addValue(double delta);
     void setValue(double value);
 };
@@ -145,10 +144,10 @@ class ScrollNumberWidget : public QLabel
     {
       m_resolution = resolution;
     }
-    double getResolution()
-    {
-      return m_resolution;
-    }
+//    double getResolution()
+//    {
+//      return m_resolution;
+//    }
 
   protected:
     virtual void contextMenuEvent(QContextMenuEvent *event)

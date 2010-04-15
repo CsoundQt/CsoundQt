@@ -136,7 +136,7 @@ void WidgetPanel::setCurrentLayout(WidgetLayout *layoutWidget)
 void WidgetPanel::setWidgetScrollBarsActive(bool act)
 {
   act = true;
-  qDebug() << "WidgetPanel::setScrollBarsActive" << act;
+//  qDebug() << "WidgetPanel::setScrollBarsActive" << act;
 //  if (act && !m_sbActive) {
 //    scrollArea = new QScrollArea(this);
 //    scrollArea->setWidget(widget());

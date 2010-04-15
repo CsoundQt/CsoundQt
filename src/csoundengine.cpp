@@ -627,6 +627,7 @@ void CsoundEngine::queueOutString(QString channelName, QString value)
 
 int CsoundEngine::play(CsoundOptions *options)
 {
+//  qDebug() << "CsoundEngine::play";
   if (!isRunning()) {
     m_options = *options;
     return runCsound();
@@ -648,8 +649,9 @@ void CsoundEngine::stop()
 
 void CsoundEngine::pause()
 {
-  if (ud->perfThread->GetStatus() == 0)
-   ud->perfThread->Pause();
+  if (isRunning() && ud->perfThread->GetStatus() == 0) {
+    ud->perfThread->Pause();
+  }
 }
 
 int CsoundEngine::startRecording(int sampleformat, QString fileName)
@@ -754,7 +756,9 @@ int CsoundEngine::runCsound()
   csoundSetHostData(ud->csound, (void *) ud);
   csoundPreCompile(ud->csound);  //Need to run PreCompile to create the FLTK_Flags global variable
 
-  int variable = csoundCreateGlobalVariable(ud->csound, "FLTK_Flags", sizeof(int));
+  if (csoundCreateGlobalVariable(ud->csound, "FLTK_Flags", sizeof(int)) != CSOUND_SUCCESS) {
+    return -3;
+  }
   if (m_options.enableFLTK) {
     // disable FLTK graphs, but allow FLTK widgets
     *((int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags")) = 4;

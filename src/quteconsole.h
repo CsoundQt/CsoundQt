@@ -34,7 +34,7 @@ class QuteConsole : public QuteWidget
 
     ~QuteConsole();
 
-    virtual void loadFromXml(QString xmlText);
+//    virtual void loadFromXml(QString xmlText);
     virtual QString getWidgetLine();
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();

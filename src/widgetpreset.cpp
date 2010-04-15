@@ -26,9 +26,41 @@ WidgetPreset::WidgetPreset()
 {
 }
 
+QString WidgetPreset::getXmlText()
+{
+  QString out = QString();
+  out += "<preset name=\"" + m_name + "\" number=\""  + QString::number(m_number) + "\" >\n";
+  for (int i = 0; i < m_data.size(); i++) {
+
+    if (m_data[i].mode & 1) {
+      out += "<value id=\"" + m_data[i].id + "\" mode=\"1\" >";
+      out += QString::number(m_data[i].value, 'f', 8);
+      out += "</value>\n";
+    }
+    else if (m_data[i].mode & 2) {
+      out += "<value id=\"" + m_data[i].id + "\" mode=\"2\" >";
+      out += QString::number(m_data[i].value2, 'f', 8);
+      out += "</value>\n";
+    }
+    else if (m_data[i].mode & 4) {
+      out += "<value id=\"" + m_data[i].id + "\" mode=\"4\" >";
+      out += m_data[i].stringValue;
+      out += "</value>\n";
+    }
+  }
+  out += "</preset>\n";
+  qDebug() << "WidgetPreset::getXmlText() " << out;
+  return out;
+}
+
 QString WidgetPreset::getName()
 {
   return m_name;
+}
+
+int WidgetPreset::getNumber()
+{
+  return m_number;
 }
 
 QStringList WidgetPreset::getWidgetIds()
@@ -38,6 +70,15 @@ QStringList WidgetPreset::getWidgetIds()
     list << m_data[i].id;
   }
   return list;
+}
+
+int WidgetPreset::getMode(QString id)
+{
+  int index = idIndex(id);
+  if (index >= 0 && index < m_data.size()) {
+    return m_data[index].mode;
+  }
+  return -1;
 }
 
 double WidgetPreset::getValue(QString id)
@@ -75,49 +116,65 @@ void WidgetPreset::setName(QString name)
   m_name = name;
 }
 
-void WidgetPreset::setValue(QString id, double value)
+void WidgetPreset::setNumber(int number)
+{
+  m_number = number;
+}
+
+void WidgetPreset::addValue(QString id, double value)
 {
   int index = idIndex(id);
   if (index < 0) {
     PresetData p;
     m_data.append(p);
     index = m_data.size() - 1;
+    m_data[index].id = id;
+    m_data[index].mode = 0;
   }
   if (index >= m_data.size()) {
     qDebug() << "WidgetPreset::setValue index out of range";
     return;
   }
+  m_data[index].mode = m_data[index].mode | 1;
   m_data[index].value = value;
+  qDebug() << " WidgetPreset::addValue " << m_data[index].mode;
 }
 
-void WidgetPreset::setValue2(QString id, double value)
+void WidgetPreset::addValue2(QString id, double value)
 {
   int index = idIndex(id);
   if (index < 0) {
     PresetData p;
     m_data.append(p);
     index = m_data.size() - 1;
+    m_data[index].id = id;
+    m_data[index].mode = 0;
   }
   if (index >= m_data.size()) {
     qDebug() << "WidgetPreset::setValue2 index out of range";
     return;
   }
+  m_data[index].mode = m_data[index].mode | 2;
   m_data[index].value2 = value;
 }
 
-void WidgetPreset::setStringValue(QString id, QString value)
+void WidgetPreset::addStringValue(QString id, QString value)
 {
   int index = idIndex(id);
   if (index < 0) {
     PresetData p;
     m_data.append(p);
     index = m_data.size() - 1;
+    m_data[index].id = id;
+    m_data[index].mode = 0;
   }
   if (index >= m_data.size()) {
     qDebug() << "WidgetPreset::setStringValue index out of range";
     return;
   }
+  m_data[index].mode = m_data[index].mode | 4;
   m_data[index].stringValue = value;
+  qDebug() << "WidgetPreset::addStringValue " << value;
 }
 
 void WidgetPreset::clear()
@@ -125,16 +182,17 @@ void WidgetPreset::clear()
   m_data.clear();
 }
 
-void WidgetPreset::purge()
-{
-  // Discard repeated entries. Is this really necessary?
-  qDebug() << "WidgetPreset::purge() not implemented yet.";
-}
+//void WidgetPreset::purge()
+//{
+//  // Discard repeated entries. Is this really necessary?
+//  qDebug() << "WidgetPreset::purge() not implemented yet.";
+//}
 
 int WidgetPreset::idIndex(QString id)
 {
   int index = -1;
   for (int i = 0; i < m_data.size(); i++) {
+//    qDebug() << "WidgetPreset::idIndex " << id << "---" << m_data[i].id;
     if (m_data[i].id == id) {
       index = i;
       break;

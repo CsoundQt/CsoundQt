@@ -32,11 +32,10 @@ class QuteSpinBox : public QuteText
     QuteSpinBox(QWidget* parent);
     ~QuteSpinBox();
 
-    virtual void loadFromXml(QString xmlText);
-    virtual void setAlignment(int alignment);
+//    virtual void setAlignment(int alignment);
     virtual void setValue(double value);
     virtual void setText(QString text);
-    virtual void setResolution(double resolution);
+//    virtual void setResolution(double resolution);
     virtual double getValue();
     virtual QString getWidgetLine();
     virtual QString getCabbageLine();
@@ -45,27 +44,13 @@ class QuteSpinBox : public QuteText
     virtual QString getWidgetType();
     virtual QString getStringValue();
 
+    virtual void applyInternalProperties();
+
   protected:
     virtual void createPropertiesDialog();
     virtual void applyProperties();
 
     QDoubleSpinBox* resolutionSpinBox;
 };
-
-
-// class QDoubleSpinBox : public QDoubleSpinBox
-// {
-//   Q_OBJECT
-//   public:
-//     QDoubleSpinBox(QWidget* parent) : QDoubleSpinBox(parent) {}
-//     ~QDoubleSpinBox() {}
-// 
-//   protected:
-//     virtual void contextMenuEvent(QContextMenuEvent *event)
-//     {emit(popUpMenu(event->globalPos()));}
-// 
-//   signals:
-//     void popUpMenu(QPoint pos);
-// };
 
 #endif

@@ -33,7 +33,7 @@ class QuteComboBox : public QuteWidget
 
     ~QuteComboBox();
 
-    virtual void loadFromXml(QString xmlText);
+//    virtual void loadFromXml(QString xmlText);
     virtual void setValue(double value); // Current item select index
     virtual double getValue();
     virtual QString getWidgetLine();
@@ -42,18 +42,26 @@ class QuteComboBox : public QuteWidget
     virtual QString getWidgetType();
     void setSize(int size);
     void setText(QString text);  //Text for this widget is the item list separated by commas
+    void clearItems();
+    void addItem(QString text, double value, QString stringvalue);
     void popUpMenu(QPoint pos);
-    QString itemList();
+
+    virtual void applyInternalProperties();
 
   protected:
-    virtual void contextMenuEvent(QContextMenuEvent* event);
+//    virtual void contextMenuEvent(QContextMenuEvent* event);
     virtual void applyProperties();
     virtual void createPropertiesDialog();
 
   private:
-    int m_size;
+    QString itemList();
+    QStringList stringValues;
+//    int m_size;
     QLineEdit *text;
     QLineEdit *line;
+
+  private slots:
+    void valueChanged(int value);
 
 };
 

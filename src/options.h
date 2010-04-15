@@ -25,13 +25,12 @@
 
 #include <QString>
 #include <QColor>
-//#include "types.h"
+
 #include "csoundoptions.h"
 
 class Options: public CsoundOptions{
   public:
     Options();
-
     ~Options();
 
     QString font;
@@ -55,7 +54,7 @@ class Options: public CsoundOptions{
     bool showTooltips;
     bool terminalFLTK;
     bool scrollbars;
-    bool newformat;  // Use XML widget format
+    bool oldFormat;  // Store old MacCsound widget format
 
     bool useAPI;
     bool enableWidgets;

@@ -842,7 +842,7 @@ void EventSheet::runScript(QString name)
   m_stopScript = false;
   QByteArray sout = p.readAllStandardOutput();
   QByteArray serr = p.readAllStandardError();
-  qDebug() << "---------------\n" << serr;
+  qDebug() << "EventSheet::runScript Error -----\n" << serr;
   QDir::setCurrent(oldDir.absolutePath());
   if (p.exitCode() != 0) {
     if (m_debug) {

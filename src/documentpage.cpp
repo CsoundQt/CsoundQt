@@ -103,7 +103,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   // Register the console with the engine for message printing
   m_csEngine->registerConsole(m_console);
 
-  useXml = false; // use Mac widgets by default
+  saveOldFormat = true; // save Mac widgets by default
   m_pythonRunning = false;
 }
 
@@ -154,8 +154,10 @@ DocumentPage::~DocumentPage()
 
 int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 {
+//  qDebug() << "---- DocumentPage::setTextString";
   deleteAllLiveEvents();
   bool xmlFormatFound = false;
+  QString xmlPanels = QString();
   while (text.contains("<bsbPanel>") and text.contains("</bsbPanel>")) {
     QString panel = text.right(text.size()-text.indexOf("<bsbPanel>"));
     panel.resize(panel.indexOf("</bsbPanel>") + 11);
@@ -165,91 +167,85 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
       text.remove(text.indexOf("<bsbPanel>") - 1, 1); //remove initial line break
     text.remove(text.indexOf("<bsbPanel>"), panel.size());
     xmlFormatFound = true;
+    xmlPanels += panel;
     // TODO enable creation of several panels
-    // FIMXE here the options for the bsbPanel should be read and parsed.
+  }
+  if (xmlFormatFound) {
+     m_widgetLayout->loadXmlWidgets(xmlPanels);
+  }
+  if (text.contains("<bsbPresets>") and text.contains("</bsbPresets>")) {
+    QString presets = text.right(text.size()-text.indexOf("<bsbPresets>"));
+    presets.resize(presets.indexOf("</bsbPresets>") + 13);
+    if (text.indexOf("</bsbPresets>") + 13 < text.size() and text[text.indexOf("</bsbPresets>") + 15] == '\n')
+      text.remove(text.indexOf("</bsbPresets>") + 15, 1); //remove final line break
+    if (text.indexOf("<bsbPresets>") > 0 and text[text.indexOf("<bsbPresets>") - 1] == '\n')
+      text.remove(text.indexOf("<bsbPresets>") - 1, 1); //remove initial line break
+    text.remove(text.indexOf("<bsbPresets>"), presets.size());
+    m_widgetLayout->loadXmlPresets(presets);
   }
   if (text.contains("<MacOptions>") and text.contains("</MacOptions>")) {
+    QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
+    options.resize(options.indexOf("</MacOptions>") + 13);
+    //     qDebug("<MacOptions> present. \n%s", options.toStdString().c_str());
+    if (text.indexOf("</MacOptions>") + 13 < text.size() and text[text.indexOf("</MacOptions>") + 13] == '\n')
+      text.remove(text.indexOf("</MacOptions>") + 13, 1); //remove final line break
+    if (text.indexOf("<MacOptions>") > 0 and text[text.indexOf("<MacOptions>") - 1] == '\n')
+      text.remove(text.indexOf("<MacOptions>") - 1, 1); //remove initial line break
+    text.remove(text.indexOf("<MacOptions>"), options.size());
+    //     qDebug("<MacOptions> present. %s", getMacOptions("WindowBounds").toStdString().c_str());
+    m_macOptions = options.split('\n');
     if (!xmlFormatFound) {
-      QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
-      options.resize(options.indexOf("</MacOptions>") + 13);
-      setMacOptionsText(options);
-      //     qDebug("<MacOptions> present. \n%s", options.toStdString().c_str());
-      if (text.indexOf("</MacOptions>") + 13 < text.size() and text[text.indexOf("</MacOptions>") + 13] == '\n')
-        text.remove(text.indexOf("</MacOptions>") + 13, 1); //remove final line break
-      if (text.indexOf("<MacOptions>") > 0 and text[text.indexOf("<MacOptions>") - 1] == '\n')
-        text.remove(text.indexOf("<MacOptions>") - 1, 1); //remove initial line break
-      text.remove(text.indexOf("<MacOptions>"), options.size());
-      //     qDebug("<MacOptions> present. %s", getMacOptions("WindowBounds").toStdString().c_str());
-      int index = macOptions.indexOf(QRegExp("WindowBounds: .*"));
-      if (index > 0) {
-        QString line = macOptions[index];
-        QStringList values = line.split(" ");
-        values.removeFirst();  //remove property name
-        m_widgetLayout->setOuterGeometry(values[0].toInt(),values[1].toInt(),
-                                    values[2].toInt(), values[3].toInt());
-      }
-      else {
-        qDebug ("DocumentPage::setTextString() no Geometry!");
-      }
-    }
-    else {
-      qDebug() << "NOTE: New XML format present, ignoring exisiting old format options.";
+      applyMacOptions(m_macOptions);
+      qDebug("<MacOptions> loaded.");
     }
   }
   else {
     if (autoCreateMacCsoundSections && !xmlFormatFound) {
       QString defaultMacOptions = "<MacOptions>\nVersion: 3\nRender: Real\nAsk: Yes\nFunctions: ioObject\nListing: Window\nWindowBounds: 72 179 400 200\nCurrentView: io\nIOViewEdit: On\nOptions:\n</MacOptions>\n";
-      setMacOptionsText(defaultMacOptions);
+      m_macOptions = defaultMacOptions.split('\n');
+      applyMacOptions(m_macOptions);
     }
     else {
-      setMacOptionsText("");
+      m_macOptions = QStringList();
     }
   }
   if (text.contains("<MacPresets>") and text.contains("</MacPresets>")) {
-    if (!xmlFormatFound) {
-      macPresets = text.right(text.size()-text.indexOf("<MacPresets>"));
-      macPresets.resize(macPresets.indexOf("</MacPresets>") + 12);
-      if (text.indexOf("</MacPresets>") + 12 < text.size() and text[text.indexOf("</MacPresets>") + 12] == '\n')
-        text.remove(text.indexOf("</MacPresets>") + 12, 1); //remove final line break
-      if (text.indexOf("<MacPresets>") > 0 and text[text.indexOf("<MacPresets>") - 1] == '\n')
-        text.remove(text.indexOf("<MacPresets>") - 1, 1); //remove initial line break
-      text.remove(text.indexOf("<MacPresets>"), macPresets.size());
-      qDebug("<MacPresets> present.");
-    }
-    else {
-      qDebug() << "NOTE: New XML format present, ignoring exisiting old format presets.";
-    }
+    m_macPresets = text.right(text.size()-text.indexOf("<MacPresets>"));
+    m_macPresets.resize(m_macPresets.indexOf("</MacPresets>") + 12);
+    if (text.indexOf("</MacPresets>") + 12 < text.size() and text[text.indexOf("</MacPresets>") + 12] == '\n')
+      text.remove(text.indexOf("</MacPresets>") + 12, 1); //remove final line break
+    if (text.indexOf("<MacPresets>") > 0 and text[text.indexOf("<MacPresets>") - 1] == '\n')
+      text.remove(text.indexOf("<MacPresets>") - 1, 1); //remove initial line break
+    text.remove(text.indexOf("<MacPresets>"), m_macPresets.size());
+//    qDebug("<MacPresets> present.");
   }
   else {
-    macPresets = "";
+    m_macPresets = "";
   }
   if (text.contains("<MacGUI>") and text.contains("</MacGUI>")) {
-    if (!xmlFormatFound) {
-      QString macGUI = text.right(text.size()-text.indexOf("<MacGUI>"));
-      macGUI.resize(macGUI.indexOf("</MacGUI>") + 9);
-      m_widgetLayout->loadWidgets(macGUI);
+      QString m_macGUI = text.right(text.size()-text.indexOf("<MacGUI>"));
+      m_macGUI.resize(m_macGUI.indexOf("</MacGUI>") + 9);
       if (text.indexOf("</MacGUI>") + 9 < text.size() and text[text.indexOf("</MacGUI>") + 9] == '\n')
         text.remove(text.indexOf("</MacGUI>") + 9, 1); //remove final line break
       if (text.indexOf("<MacGUI>") > 0 and text[text.indexOf("<MacGUI>") - 1] == '\n')
         text.remove(text.indexOf("<MacGUI>") - 1, 1); //remove initial line break
-      text.remove(macGUI);
-      qDebug("<MacGUI> loaded.");
-    }
-    else {
-      qDebug() << "NOTE: New XML format present, ignoring exisiting old format widgets.";
-    }
+      text.remove(m_macGUI);
+      if (!xmlFormatFound) {
+        m_widgetLayout->loadMacWidgets(m_macGUI);
+        qDebug("<MacGUI> loaded.");
+      }
   }
   else {
     if (autoCreateMacCsoundSections && !xmlFormatFound) {
-      QString macGUI = "<MacGUI>\nioView nobackground {59352, 11885, 65535}\nioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1\n</MacGUI>";
-      m_widgetLayout->loadWidgets(macGUI);
+      QString m_macGUI = "<MacGUI>\nioView nobackground {59352, 11885, 65535}\nioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1\n</MacGUI>";
+      m_widgetLayout->loadMacWidgets(m_macGUI);
     }
-//    else {
-//      macGUI = "";
-//    }
+    else {
+      m_macGUI = "";
+    }
   }
   if (!xmlFormatFound) {  // Use the old options only if the new ones are not present
-  // This here is for compatibility with MacCsound
+  // This here is for compatibility with MacCsound (copy output filename from <MacOptions> to <CsOptions>)
     QString optionsText = getMacOptions("Options:");
     if (optionsText.contains(" -o")) {
       QString outFile = optionsText.mid(optionsText.indexOf(" -o") + 1);
@@ -367,15 +363,11 @@ QString DocumentPage::getFullText()
 //  if (!fullText.endsWith("\n"))
 //    fullText += "\n";
   if (fileName.endsWith(".csd",Qt::CaseInsensitive) or fileName == "") {
-    if (useXml) {
-      fullText += getWidgetsText() + "\n" ;
-      fullText += getPresetsText() + "\n";
+    fullText += getWidgetsText() + "\n" ;
+    fullText += getPresetsText() + "\n";
+    if (saveOldFormat) {
       fullText += getMacOptionsText() + "\n" + getMacWidgetsText() + "\n";
-      fullText += getMacPresetsText() + "\n";  // Put old format anyway for backward compatibility, at least for some time...
-    }
-    else {
-      fullText += getMacOptionsText() + "\n" + getMacWidgetsText() + "\n";
-      fullText += getMacPresetsText() + "\n";
+      fullText += getMacPresetsText() + "\n";  // Put old format for backward compatibility
     }
     QString liveEventsText = "";
     if (saveLiveEvents) { // Only add live events sections if file is a csd file
@@ -397,19 +389,21 @@ QString DocumentPage::getFullText()
     }
   }
   else { // Not a csd file
-
+// Nothing for now...
   }
   return fullText;
 }
 
 QString DocumentPage::getBasicText()
 {
-  return m_view->getBasicText();
+  QString text = m_view->getBasicText();
+  return text;
 }
 
 QString DocumentPage::getOptionsText()
 {
-  return m_view->getOptionsText();
+  QString text = m_view->getOptionsText();
+  return text;
 }
 
 QString DocumentPage::getDotText()
@@ -436,7 +430,7 @@ QString DocumentPage::getWidgetsText()
   d.setContent(text);
   QDomElement n = d.firstChildElement("bsbPanel");
   if (!n.isNull()) {
-    qDebug() << "DocumentPage::getWidgetsText() bsbPanel found ";
+    qDebug() << "DocumentPage::getWidgetsText() bsbPanel found";
     QRect geo = m_widgetLayout->getOuterGeometry();
     QDomElement node = d.createElement("objectName");
     node.setNodeValue(fileName);
@@ -479,12 +473,12 @@ QString DocumentPage::getMacWidgetsText()
 
 QString DocumentPage::getMacPresetsText()
 {
-  return macPresets;
+  return m_macPresets;
 }
 
 QString DocumentPage::getMacOptionsText()
 {
-  return macOptions.join("\n");
+  return m_macOptions.join("\n");
 }
 
 QString DocumentPage::getMacOptions(QString option)
@@ -493,12 +487,12 @@ QString DocumentPage::getMacOptions(QString option)
     option += ":";
   if (!option.endsWith(" "))
     option += " ";
-  int index = macOptions.indexOf(QRegExp(option + ".*"));
+  int index = m_macOptions.indexOf(QRegExp(option + ".*"));
   if (index < 0) {
     qDebug("DocumentPage::getMacOptions() Option %s not found!", option.toStdString().c_str());
     return QString("");
   }
-  return macOptions[index].mid(option.size());
+  return m_macOptions[index].mid(option.size());
 }
 
 QString DocumentPage::getLiveEventsText()
@@ -518,6 +512,32 @@ QString DocumentPage::wordUnderCursor()
 QRect DocumentPage::getWidgetPanelGeometry()
 {
    return m_widgetLayout->getOuterGeometry();
+}
+
+int DocumentPage::lineCount(bool countExtras)
+{
+  QString text;
+  if (countExtras) {
+    text = this->getBasicText();
+  }
+  else
+  {
+    text = this->getFullText();
+  }
+  return text.count("\n");
+}
+
+int DocumentPage::characterCount(bool countExtras)
+{
+  QString text;
+  if (countExtras) {
+    text = this->getBasicText();
+  }
+  else
+  {
+    text = this->getFullText();
+  }
+  return text.size();
 }
 
 QString DocumentPage::getFilePath()
@@ -677,10 +697,14 @@ void DocumentPage::paste()
 void DocumentPage::undo()
 {
   // For some reason the shortcut takes this route on OS X but the direct route through keyEvent on each on Linux
-  if (m_widgetLayout->hasFocus())
+//  qDebug() << "DocumentPage::undo()";
+  if (m_widgetLayout->hasFocus()) {
     m_widgetLayout->undo();
-  else if (m_view->hasFocus())
+    m_widgetLayout->setFocus(Qt::OtherFocusReason);
+  }
+  else if (m_view->hasFocus()) {
     m_view->undo();
+  }
   else {
     for (int i = 0; i < m_liveFrames.size(); i++) {
       if (m_liveFrames[i]->getSheet()->hasFocus())
@@ -692,8 +716,10 @@ void DocumentPage::undo()
 void DocumentPage::redo()
 {
   // For some reason the shortcut takes this route on OS X but the direct route through keyEvent on each on Linux
-  if (m_widgetLayout->hasFocus())
+  if (m_widgetLayout->hasFocus()) {
     m_widgetLayout->redo();
+    m_widgetLayout->setFocus(Qt::OtherFocusReason);
+  }
   else if (m_view->hasFocus())
     m_view->redo();
   else {
@@ -876,10 +902,10 @@ void DocumentPage::useInvalue(bool use)
   m_csEngine->useInvalue(use);  // This will take effect on next run of the engine
 }
 
-void DocumentPage::useXmlFormat(bool use)
+void DocumentPage::useOldFormat(bool use)
 {
 //  qDebug() << "DocumentPage::useXmlFormat " << use;
-  useXml = use;
+  saveOldFormat = use;
 }
 
 void DocumentPage::showLiveEventFrames(bool visible)
@@ -937,7 +963,7 @@ void DocumentPage::pause()
 
 void DocumentPage::stop()
 {
-  qDebug() << "DocumentPage::stop()";
+//  qDebug() << "DocumentPage::stop()";
   if (m_csEngine->isRunning()) {
     m_csEngine->stop();
     m_widgetLayout->engineStopped();
@@ -1014,16 +1040,26 @@ int DocumentPage::runPython()
   return p.exitCode();
 }
 
-void DocumentPage::setMacWidgetsText(QString widgetText)
-{
-//   qDebug() << "DocumentPage::setMacWidgetsText: ";
-//  macGUI = widgetText;
-//   document()->setModified(true);
-}
+//void DocumentPage::setMacWidgetsText(QString widgetText)
+//{
+////   qDebug() << "DocumentPage::setMacWidgetsText: ";
+//
+////   document()->setModified(true);
+//}
 
-void DocumentPage::setMacOptionsText(QString text)
+void DocumentPage::applyMacOptions(QStringList options)
 {
-  macOptions = text.split('\n');
+  int index = options.indexOf(QRegExp("WindowBounds: .*"));
+  if (index > 0) {
+    QString line = options[index];
+    QStringList values = line.split(" ");
+    values.removeFirst();  //remove property name
+    m_widgetLayout->setOuterGeometry(values[0].toInt(),values[1].toInt(),
+                                     values[2].toInt(), values[3].toInt());
+  }
+  else {
+    qDebug ("DocumentPage::applyMacOptions() no Geometry!");
+  }
 }
 
 void DocumentPage::setMacOption(QString option, QString newValue)
@@ -1032,29 +1068,29 @@ void DocumentPage::setMacOption(QString option, QString newValue)
     option += ":";
   if (!option.endsWith(" "))
     option += " ";
-  int index = macOptions.indexOf(QRegExp(option + ".*"));
+  int index = m_macOptions.indexOf(QRegExp(option + ".*"));
   if (index < 0) {
     qDebug("DocumentPage::setMacOption() Option not found!");
     return;
   }
-  macOptions[index] = option + newValue;
-  qDebug("DocumentPage::setMacOption() %s", macOptions[index].toStdString().c_str());
+  m_macOptions[index] = option + newValue;
+  qDebug("DocumentPage::setMacOption() %s", m_macOptions[index].toStdString().c_str());
 }
 
 void DocumentPage::setWidgetPanelPosition(QPoint position)
 {
   m_widgetLayout->setOuterGeometry(position.x(), position.y(), -1, -1);
-  int index = macOptions.indexOf(QRegExp("WindowBounds: .*"));
+  int index = m_macOptions.indexOf(QRegExp("WindowBounds: .*"));
   if (index < 0) {
-    qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
+//    qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
     return;
   }
-  QStringList parts = macOptions[index].split(" ");
+  QStringList parts = m_macOptions[index].split(" ");
   parts.removeFirst();
   QString newline = "WindowBounds: " + QString::number(position.x()) + " ";
   newline += QString::number(position.y()) + " ";
   newline += parts[2] + " " + parts[3];
-  macOptions[index] = newline;
+  m_macOptions[index] = newline;
 
 //   qDebug("DocumentPage::setWidgetPanelPosition() %i %i", position.x(), position.y());
 }
@@ -1063,18 +1099,18 @@ void DocumentPage::setWidgetPanelSize(QSize size)
 {
   // TODO move this so that only updated when needed (e.g. full text read)
   m_widgetLayout->setOuterGeometry(-1, -1, size.width(), size.height());
-  int index = macOptions.indexOf(QRegExp("WindowBounds: .*"));
+  int index = m_macOptions.indexOf(QRegExp("WindowBounds: .*"));
   if (index < 0) {
-    qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
+//    qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
     return;
   }
-  QStringList parts = macOptions[index].split(" ");
+  QStringList parts = m_macOptions[index].split(" ");
   parts.removeFirst();
   QString newline = "WindowBounds: ";
   newline += parts[0] + " " + parts[1] + " ";
   newline += QString::number(size.width()) + " ";
   newline += QString::number(size.height());
-  macOptions[index] = newline;
+  m_macOptions[index] = newline;
 
 //   qDebug("DocumentPage::setWidgetPanelSize() %i %i", size.width(), size.height());
 }

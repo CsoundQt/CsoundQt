@@ -72,9 +72,6 @@ class qutecsound:public QMainWindow
                                          va_list args);
 
     QStringList runCsoundInternally(QStringList flags); //returns csound messages
-//    void newCurve(Curve *curve);  //New graphs
-//    void updateCurve(WINDAT *windat); //graph updates
-//    int killCurves(CSOUND *csound);
 //    int popKeyPressEvent(); // return ASCII code of key press event for Csound or -1 if no event
 //    int popKeyReleaseEvent(); // return ASCII code of key release event for Csound -1 if no event
 
@@ -116,6 +113,7 @@ class qutecsound:public QMainWindow
     bool save();
     bool saveAs();
     bool saveNoWidgets();
+    void info();
     void copy();
     void cut();
     void paste();
@@ -139,6 +137,7 @@ class qutecsound:public QMainWindow
     void openExternalEditor();
     void openExternalPlayer();
     void setHelpEntry();
+    void setFullScreen(bool full);
     void openManualExample(QString fileName);
     void openExternalBrowser(QUrl url = QUrl());
     void openQuickRef();
@@ -148,7 +147,6 @@ class qutecsound:public QMainWindow
     void about();
     void donate();
     void documentWasModified();
-//    void syntaxCheck();
     void configure();
     void applySettings();
     void setCurrentOptionsForPage(DocumentPage *p);
@@ -225,6 +223,7 @@ class qutecsound:public QMainWindow
     QAction *closeTabAct;
     QAction *printAct;
     QAction *createCodeGraphAct;
+    QAction *infoAct;
     QAction *exitAct;
     QList<QAction *> openRecentAct;
     QAction *undoAct;
@@ -258,6 +257,7 @@ class qutecsound:public QMainWindow
     QAction *showOverviewAct;
     QAction *showOpcodeQuickRefAct;
     QAction *showConsoleAct;
+    QAction *viewFullScreenAct;
     QAction *setHelpEntryAct;
     QAction *browseBackAct;
     QAction *browseForwardAct;

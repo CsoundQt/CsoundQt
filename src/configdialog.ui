@@ -637,7 +637,7 @@
        <string>Scrollbars on widget panel</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="newFormatCheckBox">
+     <widget class="QCheckBox" name="oldFormatCheckBox">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -650,7 +650,7 @@
        <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
       </property>
       <property name="text">
-       <string>Use new Widget Format (experimental)</string>
+       <string>Store Old Widget Format</string>
       </property>
      </widget>
     </widget>
@@ -1187,7 +1187,7 @@
         <x>10</x>
         <y>130</y>
         <width>641</width>
-        <height>81</height>
+        <height>83</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="_3">
@@ -1228,7 +1228,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>Interface</string>
+      <string>Behavior</string>
      </property>
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
@@ -1277,7 +1277,7 @@
        <item>
         <widget class="QCheckBox" name="toolbarCheckBox">
          <property name="text">
-          <string>Show Toolbar</string>
+          <string>Show Toolbars</string>
          </property>
         </widget>
        </item>

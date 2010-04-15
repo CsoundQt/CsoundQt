@@ -33,22 +33,16 @@ class QuteWidget : public QWidget
   Q_OBJECT
   public:
     QuteWidget(QWidget* parent);
-
     ~QuteWidget();
 
-    const QString name() {return m_name;}
-
-    void initFromXml(QString xmlText);
-    virtual void loadFromXml(QString xmlText) = 0;
     virtual void setWidgetLine(QString line);
     virtual void setChannelName(QString name);
     virtual void setWidgetGeometry(int x, int y, int w, int h);
-    virtual void setRange(int min, int max);
-    virtual void setValue(double value);
-    virtual void setValue2(double value);
-    virtual void setValue(QString value);
-    virtual void setResolution(double resolution);
-    virtual void setChecked(bool checked);
+//    virtual void setRange(int min, int max);
+    virtual void setValue(double) { ;}
+    virtual void setValue2(double) { ;}
+    virtual void setValue(QString) { ;}
+//    virtual void setChecked(bool checked);
 
     virtual QString getChannelName();
     virtual QString getChannel2Name();
@@ -58,15 +52,19 @@ class QuteWidget : public QWidget
     virtual QString getWidgetXmlText() = 0;
     virtual double getValue();
     virtual double getValue2();
-    virtual double getResolution();
     virtual QString getStringValue();
     virtual QString getCsladspaLine();
     virtual QString getWidgetType() = 0;
 
     QString getUuid();
 
+    virtual void applyInternalProperties();
+
     void markChanged();
     void canFocus(bool can);
+
+  public slots:
+    void popUpMenu(QPoint pos);
 
   protected:
     QSpinBox *xSpinBox;
@@ -75,19 +73,13 @@ class QuteWidget : public QWidget
     QSpinBox *hSpinBox;
     QLabel *channelLabel;
     QLineEdit *nameLineEdit;
-    QString m_line;
-//    QWidget *m_layoutWidget;
     QWidget *m_widget;
     QDialog *dialog;
     QGridLayout *layout;  // For preference dialog
 
-    QString m_name, m_name2;
-    double m_min, m_max;
-    double m_resolution;
-//     double m_min2,m_max2;
+    QString m_line;  // Text line for old widget format
+//    QString m_name2;
     double m_value, m_value2;
-    QString m_uuid;
-    bool m_randomizable;
 
     QMutex mutex;
     QString xmlText;
@@ -100,25 +92,21 @@ class QuteWidget : public QWidget
     virtual void applyProperties();
 
     QList<QAction *> getParentActionList();
-
-  private:
-    QAction *propertiesAct;
-//     QAction *deleteAct;
-
-    QPushButton *applyButton;
-    QPushButton *cancelButton;
-    QPushButton *acceptButton;
-
-  public slots:
-    void popUpMenu(QPoint pos);
+    QList<QAction *> getParentPresetList();
 
   protected slots:
     void apply();
     void openProperties();
     void deleteWidget();
-    void valueChanged(int value);
-    void valueChanged(double value);
+    virtual void valueChanged(double value);
     void value2Changed(double value);
+
+  private:
+    QAction *propertiesAct;
+
+    QPushButton *applyButton;
+    QPushButton *cancelButton;
+    QPushButton *acceptButton;
 
   signals:
     void newValue(QPair<QString,double> channelValue);
@@ -126,7 +114,6 @@ class QuteWidget : public QWidget
     void widgetChanged(QuteWidget* widget);
     void deleteThisWidget(QuteWidget *thisWidget);
     void propertiesAccepted();
-//    void mouseReleased(); // used to set undo history
 };
 
 #endif

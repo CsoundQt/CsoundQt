@@ -44,7 +44,10 @@ class WidgetLayout : public QWidget
     WidgetLayout(QWidget* parent);
     ~WidgetLayout();
     unsigned int widgetCount();
-    void loadWidgets(QString macWidgets);
+    void loadWidgets(QString widgets);
+    void loadXmlWidgets(QString xmlWidgets);
+    void loadXmlPresets(QString xmlPresets);
+    void loadMacWidgets(QString macWidgets);
     QString getWidgetsText(); // With full tags
     QString getPresetsText();
     QString getSelectedWidgetsText();
@@ -71,13 +74,22 @@ class WidgetLayout : public QWidget
     int getMouseBut1();
     int getMouseBut2();
 
-    int newWidget(QString widgetLine, bool offset = false);
+    int newXmlWidget(QDomNode node, bool offset = false, bool newId = false);
+    bool uuidFree(QString uuid);
+    int newMacWidget(QString widgetLine, bool offset = false);  // Offset is used when pasting duplicated widgets
+    void registerWidget(QuteWidget *widget);
     void appendMessage(QString message);
     void flush();
     void engineStopped(); // To let the widgets know engine has stopped (to free unused curve buffers)
     void showWidgetTooltips(bool show);
     void setWidgetToolTip(QuteWidget *widget, bool show);
     void setContained(bool contained);
+    void setCurrentPosition(QPoint pos); // To set the mouse position for new widgets
+
+    // Preset methods
+    void setPresetName(int num, QString name);
+    QList<int> getPresetNums();
+    QString getPresetName(int num);
 
     void appendCurve(WINDAT *windat);
     void killCurve(WINDAT *windat);
@@ -101,6 +113,22 @@ class WidgetLayout : public QWidget
     QAction *duplicateAct;
     QAction *deleteAct;
     QAction *propertiesAct;
+
+    // Create new widget Actions
+    QAction *createSliderAct;
+    QAction *createLabelAct;
+    QAction *createDisplayAct;
+    QAction *createScrollNumberAct;
+    QAction *createLineEditAct;
+    QAction *createSpinBoxAct;
+    QAction *createButtonAct;
+    QAction *createKnobAct;
+    QAction *createCheckBoxAct;
+    QAction *createMenuAct;
+    QAction *createMeterAct;
+    QAction *createConsoleAct;
+    QAction *createGraphAct;
+    QAction *createScopeAct;
     
     // Alignment Actions
     QAction *alignLeftAct;
@@ -110,6 +138,11 @@ class WidgetLayout : public QWidget
     QAction *sendToBackAct;
     QAction *distributeHorizontalAct;
     QAction *distributeVerticalAct;
+
+    // Preset actions
+    QAction *storePresetAct;
+    QAction *newPresetAct;
+    QAction *recallPresetAct;
 
   public slots:
     void createNewLabel();
@@ -145,10 +178,19 @@ class WidgetLayout : public QWidget
     void setModified(bool mod = true);
     void setMouseOffset(int x, int y);
 
+    // Preset slots
+    void loadPreset(); // Show dialog and ask
+    void loadPresetFromAction();  // Triggered from menu item
+    void loadPreset(int num);
+    void newPreset(); // Show dialog asking for name
+//    void newPreset(int num, QString name);
+    void savePreset(); // Show dialog asking for name
+    void savePreset(int num, QString name);
+
     void copy();
     void cut();
     void paste();
-    void paste(QPoint pos);
+//    void paste(QPoint pos);
     void duplicate();
     void deleteSelected();
     void undo();
@@ -192,26 +234,11 @@ class WidgetLayout : public QWidget
     QVector<Curve *> curves;
 
     bool m_repeatKeys;
+    bool m_xmlFormat;
     int m_x, m_y, m_w, m_h; // Position and size of panel (not this widget)
     bool m_trackMouse;
     int mouseX, mouseY, mouseRelX, mouseRelY, mouseBut1, mouseBut2;
     int xOffset, yOffset;
-
-    // Create new widget Actions
-    QAction *createSliderAct;
-    QAction *createLabelAct;
-    QAction *createDisplayAct;
-    QAction *createScrollNumberAct;
-    QAction *createLineEditAct;
-    QAction *createSpinBoxAct;
-    QAction *createButtonAct;
-    QAction *createKnobAct;
-    QAction *createCheckBoxAct;
-    QAction *createMenuAct;
-    QAction *createMeterAct;
-    QAction *createConsoleAct;
-    QAction *createGraphAct;
-    QAction *createScopeAct;
 
     // For the properties dialog - they store the configuration data for the widget panel
     QPoint currentPosition;
@@ -227,6 +254,11 @@ class WidgetLayout : public QWidget
     QString m_clipboard;
     bool m_contained; // Whether contained in another widget (e.g. scrollbar in widget panel or widget panel)
 
+    bool m_tooltips;
+    QVector<WidgetPreset> presets;
+    int m_currentPreset; // If -1 no current preset
+    unsigned long m_ksmpscount;
+
     // Contained Widgets
     QVector<QuteWidget *> m_widgets;
     QVector<FrameWidget *> editWidgets;
@@ -238,6 +270,7 @@ class WidgetLayout : public QWidget
     QVector<QuteGraph *> graphWidgets;
     QVector<QuteScope *> scopeWidgets;
 
+    bool parseXmlNode(QDomNode node);
     int createSlider(int x, int y, int width, int height, QString widgetLine);
     int createText(int x, int y, int width, int height, QString widgetLine);
     int createScrollNumber(int x, int y, int width, int height, QString widgetLine);
@@ -255,18 +288,14 @@ class WidgetLayout : public QWidget
 
     void setBackground(bool bg, QColor bgColor);
 
-    bool m_tooltips;
-    QVector<WidgetPreset> presets;
-    unsigned long m_ksmpscount;
-
     //Undo history
     void clearHistory();
 
-    // Preset methods
-    void loadPreset(int num);
-    void newPreset(QString name);
-    void savePreset(int num, QString name);
-    void setPresetName(int num, QString name);
+    // Preset Methods
+    int getPresetIndex(int number);
+
+    //XML helper functions
+    QColor getColorFromElement(QDomElement elem);
 
   private slots:
     void updateData();

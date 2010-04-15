@@ -30,51 +30,12 @@ QuteComboBox::QuteComboBox(QWidget *parent) : QuteWidget(parent)
 //  canFocus(false);
 //   connect((QComboBox *)m_widget, SIGNAL(released()), this, SLOT(buttonReleased()));
   connect(static_cast<QComboBox *>(m_widget), SIGNAL(currentIndexChanged(int)), this, SLOT(valueChanged(int)));
+  setProperty("QCS_selectedIndex", 0);
+  setProperty("QCS_randomizable", false);
 }
 
 QuteComboBox::~QuteComboBox()
 {
-}
-
-void QuteComboBox::loadFromXml(QString xmlText)
-{
-  initFromXml(xmlText);
-  QDomDocument doc;
-  if (!doc.setContent(xmlText)) {
-    qDebug() << "QuteComboBox::loadFromXml: Error parsing xml";
-    return;
-  }
-  QDomElement e = doc.firstChildElement("bsbDropdownItemList");
-  if (e.isNull()) {
-    qDebug() << "QuteComboBox::loadFromXml: Expecting bsbDropdownItemList element";
-    return;
-  }
-  else {
-    QDomElement e2 = doc.firstChildElement("bsbDropdownItem");
-    while (!e2.isNull()) {
-      QDomElement e3 = doc.firstChildElement("name");
-      QDomElement e4 = doc.firstChildElement("value");
-      static_cast<QComboBox *>(m_widget)->addItem(e3.nodeValue(), QVariant(e4.nodeValue().toInt()));
-      // TODO: string values for item not implemented
-      e2 = e2.nextSiblingElement("bsbDropdownItem");
-    }
-  }
-  e = doc.firstChildElement("selectedIndex");
-  if (e.isNull()) {
-    qDebug() << "QuteComboBox::loadFromXml: Expecting selectedIndex element";
-    return;
-  }
-  else {
-    static_cast<QComboBox *>(m_widget)->setCurrentIndex(e.nodeValue().toInt());
-  }
-  e = doc.firstChildElement("randomizable");
-  if (e.isNull()) {
-    qDebug() << "QuteComboBox::loadFromXml: Expecting randomizable element";
-    return;
-  }
-  else {
-    qDebug() << "QuteComboBox::loadFromXml: randomizable not implemented";
-  }
 }
 
 void QuteComboBox::setValue(double value)
@@ -85,7 +46,7 @@ void QuteComboBox::setValue(double value)
   mutex.lock();
 #endif
   static_cast<QComboBox *>(m_widget)->setCurrentIndex((int) value);
-  m_value = static_cast<QComboBox *>(m_widget)->currentIndex();  //This confines the value to valid indices
+//  m_value = static_cast<QComboBox *>(m_widget)->currentIndex();  //This confines the value to valid indices
 #ifdef  USE_WIDGET_MUTEX
   mutex.unlock();
 #endif
@@ -93,30 +54,31 @@ void QuteComboBox::setValue(double value)
 
 double QuteComboBox::getValue()
 {
-  // Returns the current index
-  return (float) static_cast<QComboBox *>(m_widget)->currentIndex();
+  // Returns the user data for the current index
+  QComboBox *menu = static_cast<QComboBox *>(m_widget);
+  return menu->itemData(menu->currentIndex(), Qt::UserRole).toDouble() ;
 }
 
-void QuteComboBox::setSize(int size)
-{
-  m_size = size;
-}
+//void QuteComboBox::setSize(int size)
+//{
+//  m_size = size;
+//}
 
 QString QuteComboBox::getWidgetLine()
 {
   QString line = "ioMenu {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += QString::number(((QComboBox *)m_widget)->currentIndex()) + " ";
-  line += QString::number(m_size) + " ";
+  line += "303 ";
   line += "\"" + itemList() + "\" ";
-  line += m_name;
+  line += property("QCS_objectName").toString();
   return line;
 }
 
 QString QuteComboBox::getCabbageLine()
 {
 //   combobox channel("chanName"),  pos(Top, Left), size(Width, Height), value(val), items("item1", "item2", ...)
-  QString line = "combobox channel(\"" + m_name + "\"),  ";
+  QString line = "combobox channel(\"" + property("QCS_objectName").toString() + "\"),  ";
   line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
   line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
   line += "value(" + QString::number(((QComboBox *)m_widget)->currentIndex()) + "), ";
@@ -126,6 +88,7 @@ QString QuteComboBox::getCabbageLine()
 
 QString QuteComboBox::getWidgetXmlText()
 {
+  xmlText = "";
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
 
@@ -133,16 +96,13 @@ QString QuteComboBox::getWidgetXmlText()
   for (int i = 0; i < static_cast<QComboBox *>(m_widget)->count(); i++) {
     s.writeStartElement("bsbDropdownItem");
     s.writeTextElement("name", static_cast<QComboBox *>(m_widget)->itemText(i));
-    s.writeTextElement("value", QString::number(i) );  //From blue. Only partly supported. Blue supports strings here
+    s.writeTextElement("value", QString::number(static_cast<QComboBox *>(m_widget)->itemData(i).toInt()) );
+    s.writeTextElement("stringvalue", stringValues[i]);
     s.writeEndElement();
   }
   s.writeEndElement();
   s.writeTextElement("selectedIndex", QString::number(((QComboBox *)m_widget)->currentIndex()));
-  // These three come from blue, but they are not implemented here
-  s.writeTextElement("randomizable", "");
-   //These are not implemented in blue
-   //TODO: add index offset
-//    s.writeTextElement("indexoffset", "");
+  s.writeTextElement("randomizable",  property("QCS_randomizable").toBool() ? "true" : "false");
   s.writeEndElement();
   return xmlText;
 }
@@ -152,27 +112,62 @@ QString QuteComboBox::getWidgetType()
   return QString("BSBDropdown");
 }
 
-void QuteComboBox::applyProperties()
+QString QuteComboBox::itemList()
 {
-  setText(text->text());
-  //TODO set size for Menu widget according to value in widgetLine?
-//   setSize
-  setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
-  QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
+  // For old format
+  QString list = "";
+  for (int i = 0; i < static_cast<QComboBox *>(m_widget)->count(); i++) {
+    list += static_cast<QComboBox *>(m_widget)->itemText(i) + ",";
+  }
+  list.chop(1); //remove last comma
+  return list;
 }
 
-void QuteComboBox::contextMenuEvent(QContextMenuEvent* event)
+void QuteComboBox::setText(QString text)
 {
-  qDebug("QuteComboBox::contextMenuEvent");
-  QuteWidget::contextMenuEvent(event);
+  // For old format
+  clearItems();
+  QStringList items = text.split(",");
+  int counter = 0;
+  foreach (QString item, items) {
+    addItem(item, counter++, "");
+  }
 }
+
+void QuteComboBox::clearItems()
+{
+  static_cast<QComboBox *>(m_widget)->clear();
+}
+
+void QuteComboBox::addItem(QString text, double value, QString stringvalue)
+{
+  static_cast<QComboBox *>(m_widget)->addItem(text, value);
+  stringValues.append(stringvalue);
+}
+
+void QuteComboBox::popUpMenu(QPoint pos)
+{
+  QuteWidget::popUpMenu(pos);
+}
+
+void QuteComboBox::applyInternalProperties()
+{
+  QuteWidget::applyInternalProperties();
+//  qDebug() << "QuteComboBox::applyInternalProperties()";
+  static_cast<QComboBox *>(m_widget)->setCurrentIndex(property("QCS_selectedIndex").toInt());
+}
+
+//void QuteComboBox::contextMenuEvent(QContextMenuEvent* event)
+//{
+//  qDebug("QuteComboBox::contextMenuEvent");
+//  QuteWidget::contextMenuEvent(event);
+//}
 
 void QuteComboBox::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
   dialog->setWindowTitle("Menu");
   QLabel *label = new QLabel(dialog);
-  //TODO add size selection for combo box
 
   label = new QLabel(dialog);
   label->setText("Items (separated by commas):");
@@ -183,26 +178,15 @@ void QuteComboBox::createPropertiesDialog()
   text->setMinimumWidth(320);
 }
 
-void QuteComboBox::setText(QString text)
+void QuteComboBox::applyProperties()
 {
-  static_cast<QComboBox *>(m_widget)->clear();
-  QStringList items = text.split(",");
-  foreach (QString item, items) {
-    static_cast<QComboBox *>(m_widget)->addItem(item);
-  }
+  setText(text->text());
+//  setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
+  QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
 
-QString QuteComboBox::itemList()
-{
-  QString list = "";
-  for (int i = 0; i < static_cast<QComboBox *>(m_widget)->count(); i++) {
-    list += static_cast<QComboBox *>(m_widget)->itemText(i) + ",";
-  }
-  list.chop(1); //remove last comma
-  return list;
-}
 
-void QuteComboBox::popUpMenu(QPoint pos)
+void QuteComboBox::valueChanged(int value)
 {
-  QuteWidget::popUpMenu(pos);
+  QuteWidget::valueChanged((double) value);
 }
