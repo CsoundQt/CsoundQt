@@ -20,7 +20,7 @@
     02111-1307 USA
 */
 
-#include "LiveEventWidgetidget.h"
+#include "liveeventwidget.h"
 #include "liveeventframe.h"
 
 LiveEventWidget::LiveEventWidget(QWidget *parent)

@@ -272,6 +272,7 @@ void qutecsound::logMessage(QString msg)
 
 void qutecsound::closeEvent(QCloseEvent *event)
 {
+  this->showNormal();  // Don't store full screen size in preferences
   writeSettings();
   showWidgetsAct->setChecked(false);
   showLiveEventsAct->setChecked(false); // These two give faster shutdown times as the panels don't have to be called up as the tabs close
@@ -1620,7 +1621,11 @@ void qutecsound::setDefaultKeyboardShortcuts()
   showGenAct->setShortcut(tr(""));
   showOverviewAct->setShortcut(tr(""));
   showConsoleAct->setShortcut(tr("Alt+3"));
+#ifdef Q_WS_MAC
+  viewFullScreenAct->setShortcut(tr("Ctrl+Alt+F"));
+#else
   viewFullScreenAct->setShortcut(tr("F11"));
+#endif
   createCodeGraphAct->setShortcut(tr("Alt+4"));
   showInspectorAct->setShortcut(tr("Alt+5"));
   showLiveEventsAct->setShortcut(tr("Alt+6"));

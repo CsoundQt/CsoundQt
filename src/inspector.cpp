@@ -47,7 +47,6 @@ Inspector::~Inspector()
 void Inspector::parseText(const QString &text)
 {
 //  qDebug() << "Inspector:parseText";
-  int scoreLine = -1;
   m_treeWidget->clear();
   TreeItem *opcodeItem = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
   opcodeItem->setLine(-1);
@@ -176,7 +175,7 @@ void Inspector::closeEvent(QCloseEvent * /*event*/)
   emit Close(false);
 }
 
-void Inspector::itemActivated(QTreeWidgetItem * item, int column)
+void Inspector::itemActivated(QTreeWidgetItem * item, int /*column*/)
 {
   int line = static_cast<TreeItem *>(item)->getLine();
   if (line >= 0) {

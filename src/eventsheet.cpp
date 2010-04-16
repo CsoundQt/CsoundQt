@@ -1467,7 +1467,7 @@ void EventSheet::selectionChanged()
   }
 }
 
-void EventSheet::cellDoubleClickedSlot(int row, int column)
+void EventSheet::cellDoubleClickedSlot(int /*row*/, int /*column*/)
 {
   markHistory();
 }

@@ -272,7 +272,7 @@ void WidgetPanel::dockStateChanged(bool undocked)
   qDebug() << "WidgetPanel::dockStateChanged" << undocked;
 }
 
-void WidgetPanel::scrollBarMoved(int value)
+void WidgetPanel::scrollBarMoved(int /*value*/)
 {
   QScrollArea *s = (QScrollArea*) stack->currentWidget();
   if (!s) // scroll area is sometimes null during startup and shutdown

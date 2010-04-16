@@ -204,7 +204,7 @@ QString LiveEventFrame::getPlainText()
   return m_sheet->getPlainText();
 }
 
-void LiveEventFrame::getEvents(unsigned long ksmps, QStringList *eventText)
+void LiveEventFrame::getEvents(unsigned long /*ksmps*/, QStringList */*eventText*/)
 {
   // TODO: implement
 }
@@ -266,4 +266,5 @@ void LiveEventFrame::resizeEvent (QResizeEvent * event)
 void LiveEventFrame::closeEvent (QCloseEvent * event)
 {
   emit closed();
+  event->accept();
 }

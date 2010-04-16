@@ -223,7 +223,7 @@ ScopeItem::ScopeItem(int width, int height)
   m_height = height;
 }
 
-void ScopeItem::paint(QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void ScopeItem::paint(QPainter *p, const QStyleOptionGraphicsItem */*option*/, QWidget */*widget*/)
 {
   p->setPen(m_pen);
   p->drawPoints(m_polygon);

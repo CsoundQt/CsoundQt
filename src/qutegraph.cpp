@@ -151,7 +151,7 @@ void QuteGraph::setValue(double value)
   if (value < 0 ) {
     for (int i = 0; i < m_pageComboBox->count(); i++) {
       QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"), QString::SkipEmptyParts);
-      qDebug() << "QuteGraph::setValue " << parts << " " << value;
+//      qDebug() << "QuteGraph::setValue " << parts << " " << value;
       if (parts.size() > 1) {
         int num = parts.last().toInt();
         if (curves.size() > num && curves[num]->get_caption().isEmpty())

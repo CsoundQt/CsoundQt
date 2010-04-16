@@ -272,7 +272,7 @@ void Highlighter::highlightPythonBlock(const QString &text)
   }
 }
 
-void Highlighter::highlightXmlBlock(const QString &text)
+void Highlighter::highlightXmlBlock(const QString &/*text*/)
 {
 }
 
