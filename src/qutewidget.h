@@ -42,6 +42,8 @@ class QuteWidget : public QWidget
     virtual void setValue(double) { ;}
     virtual void setValue2(double) { ;}
     virtual void setValue(QString) { ;}
+    virtual void widgetMessage(QString /*path*/, QString /*text*/) {;};
+    virtual void widgetMessage(QString /*path*/, double /*value*/) {;};
 //    virtual void setChecked(bool checked);
 
     virtual QString getChannelName();

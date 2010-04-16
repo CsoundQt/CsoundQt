@@ -266,6 +266,9 @@ void QuteGraph::addCurve(Curve * curve)
   m_pageComboBox->addItem(curve->get_caption());
   static_cast<StackedLayoutWidget *>(m_widget)->addWidget(view);
   curves.append(curve);
+  if (curves.size() - 1 == m_value) {
+    setValue(m_value);
+  }
 //   qDebug("QuteGraph::addCurve() %i- %i", curves.size(), curve);
 }
 

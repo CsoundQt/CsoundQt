@@ -24,7 +24,7 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>qutecsound</string>
+        <string>@EXECUTABLE@</string>
 	<key>CFBundleGetInfoString</key>
 	<string>Created by Qt/QMake</string>
 	<key>CFBundleIconFile</key>

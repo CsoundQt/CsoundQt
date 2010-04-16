@@ -40,7 +40,7 @@ thread: CONFIG -= thread_off
 !isEqual(OUT_PWD, $${PWD}): !isEqual(OUT_PWD, $${PWD}/): \
     CONFIG *= shadow_build no_fixpath
 shadow_build: TMPDIR = $${OUT_PWD}
-!shadow_build: TMPDIR = $${PWD}/.build
+!shadow_build: TMPDIR = $${PWD}/build
 build32: TMPDIR = $${TMPDIR}/floats
 build64: TMPDIR = $${TMPDIR}/doubles
 debug: TMPDIR = $${TMPDIR}/debug

@@ -273,6 +273,7 @@ void qutecsound::logMessage(QString msg)
 void qutecsound::closeEvent(QCloseEvent *event)
 {
   this->showNormal();  // Don't store full screen size in preferences
+  qApp->processEvents();
   writeSettings();
   showWidgetsAct->setChecked(false);
   showLiveEventsAct->setChecked(false); // These two give faster shutdown times as the panels don't have to be called up as the tabs close

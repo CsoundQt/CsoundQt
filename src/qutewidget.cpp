@@ -258,9 +258,9 @@ void QuteWidget::openProperties()
   dialog->exec();
   if (dialog->result() != QDialog::Accepted) {
     qDebug() << "QuteWidget::openProperties() dialog not accepted";
-    parentWidget()->setFocus(Qt::MouseFocusReason); // For some reason focus is grabbed away from the layout
   }
-  dialog->deleteLater();
+//  dialog->deleteLater();
+  parentWidget()->setFocus(Qt::OtherFocusReason); // For some reason focus is grabbed away from the layout, but this doesn't solve the problem...
 }
 
 void QuteWidget::deleteWidget()

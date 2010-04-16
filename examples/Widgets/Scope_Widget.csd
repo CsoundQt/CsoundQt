@@ -22,13 +22,19 @@ f 1 0 4096 -7 1 2048 1 0 0 2048 0
 i 1 0 1000
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
+
+
 <bsbPanel>
- <bgcolor mode="background" >
+ <bgcolor mode="background">
   <r>138</r>
   <g>149</g>
   <b>156</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>144</x>
   <y>6</y>
@@ -45,7 +51,7 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -53,12 +59,12 @@ i 1 0 1000
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>9</x>
-  <y>49</y>
-  <width>463</width>
-  <height>36</height>
+  <x>10</x>
+  <y>41</y>
+  <width>465</width>
+  <height>44</height>
   <uuid>{5a8df46b-c8e6-46ce-bb0d-80380ff2884a}</uuid>
   <label>The Scope widget is an oscilloscope which can show the output of Csound. The oscilloscope can show individual channels or a sum of all output channels. Clicking on a Scope widget freezes it.</label>
   <alignment>left</alignment>
@@ -70,7 +76,7 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -78,7 +84,7 @@ i 1 0 1000
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject version="2" type="BSBScope">
   <objectName/>
   <x>9</x>
   <y>88</y>
@@ -93,7 +99,7 @@ i 1 0 1000
   <zoomy>1.00000000</zoomy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject version="2" type="BSBScope">
   <objectName/>
   <x>9</x>
   <y>188</y>
@@ -108,7 +114,7 @@ i 1 0 1000
   <zoomy>1.00000000</zoomy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject version="2" type="BSBScope">
   <objectName/>
   <x>9</x>
   <y>291</y>
@@ -123,7 +129,7 @@ i 1 0 1000
   <zoomy>1.00000000</zoomy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject version="2" type="BSBScope">
   <objectName/>
   <x>8</x>
   <y>432</y>
@@ -138,7 +144,7 @@ i 1 0 1000
   <zoomy>1.00000000</zoomy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>10</x>
   <y>393</y>
@@ -155,7 +161,7 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -163,7 +169,7 @@ i 1 0 1000
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject version="2" type="BSBScope">
   <objectName/>
   <x>247</x>
   <y>430</y>
@@ -178,7 +184,7 @@ i 1 0 1000
   <zoomy>1.00000000</zoomy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject version="2" type="BSBScope">
   <objectName/>
   <x>8</x>
   <y>528</y>
@@ -193,7 +199,7 @@ i 1 0 1000
   <zoomy>1.00000000</zoomy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject version="2" type="BSBScope">
   <objectName/>
   <x>100</x>
   <y>528</y>
@@ -208,7 +214,7 @@ i 1 0 1000
   <zoomy>1.00000000</zoomy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>193</x>
   <y>528</y>
@@ -225,7 +231,7 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -234,8 +240,8 @@ i 1 0 1000
   <borderradius>1</borderradius>
  </bsbObject>
  <objectName/>
- <x>624</x>
- <y>25</y>
+ <x>761</x>
+ <y>252</y>
  <width>491</width>
  <height>658</height>
  <visible>true</visible>
@@ -244,13 +250,29 @@ i 1 0 1000
 <bsbPresets>
 </bsbPresets>
 
+
+<MacGUI>
+ioView background {35466, 38293, 40092}
+ioText {144, 6} {191, 39} display 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Scope Widget
+ioText {9, 49} {463, 36} display 0.000000 0.00100 "" left "DejaVu Sans" 6 {0, 0, 0} {48896, 52224, 59904} nobackground noborder The Scope widget is an oscilloscope which can show the output of Csound. The oscilloscope can show individual channels or a sum of all output channels. Clicking on a Scope widget freezes it.
+ioGraph {9, 88} {466, 98} scope 2.000000 0.000000 
+ioGraph {9, 188} {467, 99} scope 2.000000 0.000000 
+ioGraph {9, 291} {466, 97} scope 2.000000 0.000000 
+ioGraph {8, 432} {231, 92} scope 8.000000 0.000000 
+ioText {10, 393} {466, 34} display 0.000000 0.00100 "" left "DejaVu Sans" 6 {0, 0, 0} {48896, 52224, 59904} nobackground noborder The decimation property averages sample, allowing a larger time frame to be displayed. The default without decimation is one audio sample per screen pixel.
+ioGraph {247, 430} {226, 91} scope 1.000000 0.000000 
+ioGraph {8, 528} {84, 84} lissajou 2.000000 0.000000 
+ioGraph {100, 528} {84, 84} poincare 2.000000 0.000000 
+ioText {193, 528} {281, 82} display 0.000000 0.00100 "" left "DejaVu Sans" 6 {0, 0, 0} {48896, 52224, 59904} nobackground noborder The Scope widget can also show Lissajou and Poincare graphs. The decimation parameter in these cases determines the "zoom".
+</MacGUI>
+
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="0" y="0" width="596" height="322"> 
-
-
-
-
-
-
-
-
-</EventPanel>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </EventPanel>

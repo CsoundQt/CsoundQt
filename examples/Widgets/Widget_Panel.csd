@@ -20,9 +20,6 @@ e
 </CsoundSynthesizer>
 
 
-<bsbPresets>
-</bsbPresets>
-
 
 <bsbPresets>
 </bsbPresets>
@@ -34,14 +31,19 @@ e
 
 <bsbPresets>
 </bsbPresets>
+
+
+<bsbPresets>
+</bsbPresets>
+
 
 <bsbPanel>
- <bgcolor mode="background" >
+ <bgcolor mode="background">
   <r>218</r>
   <g>218</g>
   <b>163</b>
  </bgcolor>
- <bsbObject version="2" type="BSBVSlider" >
+ <bsbObject version="2" type="BSBVSlider">
   <objectName>slider1</objectName>
   <x>17</x>
   <y>219</y>
@@ -54,7 +56,7 @@ e
   <resolution>-1.00000000</resolution>
   <randomizable>true</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>16</x>
   <y>55</y>
@@ -63,7 +65,7 @@ e
   <uuid>{e2d67816-aec0-4d10-9c1c-91e0aff6a55a}</uuid>
   <label>The widget panel contains widgets which can interact with Csound. It has two modes: an action mode and an edit mode. In the action mode widgets are used to send and receive values from Csound channels and can be modified using the mouse or the keyboard. In edit mode the widgets can be moved resized copied dupicated and pasted.</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Arial Unicode MS</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -71,7 +73,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -79,7 +81,7 @@ e
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>162</x>
   <y>218</y>
@@ -88,7 +90,7 @@ e
   <uuid>{992f7bb4-3b06-4921-89e7-62a852239c53}</uuid>
   <label>The modes are toggled using Ctrl+E or Command+E. When in edit mode red frames appear around every widget. Using these frames widgets can be moved and resized. You can also copy paste and duplicate widgets.</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Arial Unicode MS</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -96,7 +98,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -104,7 +106,7 @@ e
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob" >
+ <bsbObject version="2" type="BSBKnob">
   <objectName>knob3</objectName>
   <x>297</x>
   <y>49</y>
@@ -113,11 +115,11 @@ e
   <uuid>{b7fdac27-8f78-4a58-a7cc-2a8442859b2c}</uuid>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.28282828</value>
+  <value>0.26262626</value>
   <randomizable/>
   <resolution>0.01000000</resolution>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName/>
   <x>298</x>
   <y>109</y>
@@ -135,7 +137,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -146,7 +148,7 @@ e
   <borderradius>1</borderradius>
   <randomizable>false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>button1</objectName>
   <x>298</x>
   <y>140</y>
@@ -160,12 +162,12 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>menu6</objectName>
   <x>298</x>
   <y>176</y>
   <width>80</width>
-  <height>30</height>
+  <height>26</height>
   <uuid>{cff4de90-d3d2-4b91-a46f-3bd89cf01ce9}</uuid>
   <bsbDropdownItemList>
    <bsbDropdownItem>
@@ -187,7 +189,7 @@ e
   <selectedIndex>1</selectedIndex>
   <randomizable>false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber" >
+ <bsbObject version="2" type="BSBScrollNumber">
   <objectName/>
   <x>42</x>
   <y>219</y>
@@ -202,7 +204,7 @@ e
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>40</r>
    <g>79</g>
    <b>49</b>
@@ -214,9 +216,9 @@ e
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <randomizable>false</randomizable>
-  <mouseControl act="" />
+  <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>vert8</objectName>
   <x>41</x>
   <y>269</y>
@@ -233,24 +235,24 @@ e
   <type>crosshair</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" >false</randomizable>
+  <randomizable mode="both">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>16</x>
-  <y>358</y>
-  <width>291</width>
-  <height>111</height>
+  <x>15</x>
+  <y>357</y>
+  <width>292</width>
+  <height>126</height>
   <uuid>{39cc7164-674c-412c-b9d2-b4f7e2c9fec2}</uuid>
   <label>Widget properties can be accessed by right clicking on the widget and selecting 'Properties'. This works on both modes. Properties are different for every widget. If you right click where there are no widgets, you can set the Widget Panel's background color.</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Arial Unicode MS</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
   <color>
@@ -258,7 +260,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -266,7 +268,7 @@ e
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox" >
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>checkbox10</objectName>
   <x>321</x>
   <y>362</y>
@@ -278,7 +280,7 @@ e
   <value>1.00000000</value>
   <randomizable>false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName/>
   <x>319</x>
   <y>387</y>
@@ -295,23 +297,23 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>16</x>
-  <y>475</y>
+  <y>493</y>
   <width>388</width>
   <height>41</height>
   <uuid>{2528f251-f1cd-4b35-a099-65e0f983ffce}</uuid>
   <label>Note that none of the widgets shown here have effect since their channels are not being used by Csound.</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Arial Unicode MS</font>
   <fontsize>6</fontsize>
   <precision>3</precision>
   <color>
@@ -319,7 +321,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -327,7 +329,7 @@ e
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>75</x>
   <y>4</y>
@@ -344,7 +346,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>170</r>
    <g>170</g>
    <b>127</b>
@@ -353,8 +355,8 @@ e
   <borderradius>1</borderradius>
  </bsbObject>
  <objectName/>
- <x>776</x>
- <y>162</y>
+ <x>695</x>
+ <y>240</y>
  <width>425</width>
  <height>557</height>
  <visible>true</visible>
@@ -362,6 +364,25 @@ e
 
 <bsbPresets>
 </bsbPresets>
+
+
+<MacGUI>
+ioView background {56026, 56026, 41891}
+ioSlider {17, 219} {17, 128} 0.000000 1.000000 0.671875 slider1
+ioText {16, 55} {273, 155} display 0.000000 0.00100 "" left "Arial Unicode MS" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The widget panel contains widgets which can interact with Csound. It has two modes: an action mode and an edit mode. In the action mode widgets are used to send and receive values from Csound channels and can be modified using the mouse or the keyboard. In edit mode the widgets can be moved resized copied dupicated and pasted.
+ioText {162, 218} {243, 126} display 0.000000 0.00100 "" left "Arial Unicode MS" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The modes are toggled using Ctrl+E or Command+E. When in edit mode red frames appear around every widget. Using these frames widgets can be moved and resized. You can also copy paste and duplicate widgets.
+ioKnob {297, 49} {51, 53} 1.000000 0.000000 0.010000 0.262626 knob3
+ioText {298, 109} {100, 26} editnum 4502.010000 0.001000 "" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4502.010000
+ioButton {298, 140} {100, 30} event 1.000000 "button1" "New Button" "/" i1 0 10
+ioMenu {298, 176} {80, 26} 1 303 "item1,item2,item3" menu6
+ioText {42, 219} {105, 43} scroll 40.000000 1.000000 "" center "Courier New" 26 {65280, 65280, 65280} {10240, 20224, 12544} background noborder 
+ioMeter {41, 269} {107, 73} {0, 59904, 0} "vert8" 0.424658 "hor8" 0.383178 crosshair 1 0 mouse
+ioText {15, 357} {291, 111} display 0.000000 0.00100 "" left "Arial Unicode MS" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Widget properties can be accessed by right clicking on the widget and selecting 'Properties'. This works on both modes. Properties are different for every widget. If you right click where there are no widgets, you can set the Widget Panel's background color.
+ioCheckbox {321, 362} {20, 20} on checkbox10
+ioText {319, 387} {87, 25} edit 0.000000 0.00100 ""  "Lucida Grande" 6 {0, 0, 0} {58880, 56576, 54528} falsenoborder Type here
+ioText {16, 493} {388, 41} display 0.000000 0.00100 "" left "Arial Unicode MS" 6 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Note that none of the widgets shown here have effect since their channels are not being used by Csound.
+ioText {75, 4} {237, 38} display 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 0} {43520, 43520, 32512} nobackground noborder The Widget Panel
+</MacGUI>
 
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="0" y="0" width="596" height="322"> 
  

@@ -2231,11 +2231,11 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
 FrameWidget *WidgetLayout::getEditWidget(QuteWidget *widget)
 {
   FrameWidget *out = 0;
-  qDebug() << "WidgetLayout::getEditWidget";
+//  qDebug() << "WidgetLayout::getEditWidget";
   for (int i  = 0 ; i < m_widgets.size(); i++) {
     if (m_widgets[i] == widget) {
       if (editWidgets.size() > i) {
-        qDebug() << "WidgetLayout::getEditWidget " << editWidgets[i];
+//        qDebug() << "WidgetLayout::getEditWidget " << editWidgets[i];
         return editWidgets[i];
       }
     }
