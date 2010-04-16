@@ -807,15 +807,27 @@ void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
 {
   if (show) {
     if (widget->getChannel2Name() != "") {
-      widget->setToolTip(tr("ChannelV:") + widget->getChannelName()
-          + tr("\nChannelH:")+ widget->getChannel2Name());
+      QString text = tr("ChannelH:") + widget->getChannelName()
+          + "\n"+ tr("ChannelV:")+ widget->getChannel2Name();
+      widget->setToolTip(text);
+      if (getEditWidget(widget) != 0) {
+        getEditWidget(widget)->setToolTip(text);
+      }
     }
     else {
-      widget->setToolTip(tr("Channel:") + widget->getChannelName());
+      QString text = tr("Channel:") + widget->getChannelName();
+      widget->setToolTip(text);
+      if (getEditWidget(widget) != 0) {
+        getEditWidget(widget)->setToolTip(text);
+      }
     }
   }
-  else
+  else {
     widget->setToolTip("");
+      if (m_editMode && getEditWidget(widget) != 0) {
+        getEditWidget(widget)->setToolTip("");
+      }
+  }
 }
 
 void WidgetLayout::setContained(bool contained)
@@ -876,7 +888,7 @@ void WidgetLayout::appendCurve(WINDAT *windat)
                   windat);  //FIXME delete these when starting a new run
   windat->windid = (uintptr_t) curve;
   newCurveBuffer.append(curve);
-  qDebug() << "WidgetLayout::appendCurve " << curve << "__--__" << windat;
+//  qDebug() << "WidgetLayout::appendCurve " << curve << "__--__" << windat;
 }
 
 void WidgetLayout::newCurve(Curve* curve)
@@ -2216,6 +2228,21 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
   this->setProperty("QCS_bgcolor", QVariant(bgColor));
 }
 
+FrameWidget *WidgetLayout::getEditWidget(QuteWidget *widget)
+{
+  FrameWidget *out = 0;
+  qDebug() << "WidgetLayout::getEditWidget";
+  for (int i  = 0 ; i < m_widgets.size(); i++) {
+    if (m_widgets[i] == widget) {
+      if (editWidgets.size() > i) {
+        qDebug() << "WidgetLayout::getEditWidget " << editWidgets[i];
+        return editWidgets[i];
+      }
+    }
+  }
+  return out;
+}
+
 void WidgetLayout::setModified(bool mod)
 {
   qDebug() << "WidgetLayout::setModified";
@@ -2535,6 +2562,7 @@ void WidgetLayout::setEditMode(bool active)
     editWidgets.clear();
     foreach (QuteWidget * widget, m_widgets) {
       createEditFrame(widget);
+      setWidgetToolTip(widget,m_tooltips);
     }
   }
   else {

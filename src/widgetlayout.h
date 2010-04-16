@@ -287,6 +287,7 @@ class WidgetLayout : public QWidget
     int createDummy(int x, int y, int width, int height, QString widgetLine);
 
     void setBackground(bool bg, QColor bgColor);
+    FrameWidget *getEditWidget(QuteWidget *widget);
 
     //Undo history
     void clearHistory();
