@@ -652,11 +652,13 @@ bool qutecsound::saveNoWidgets()
 
 void qutecsound::info()
 {
-  QString text = tr("Full Path:") + " " + documentPages[curPage]->getFileName() + "\n";
-  text += tr("Number of lines (csd only):") + " " + QString::number(documentPages[curPage]->lineCount()) + "\n";
-  text += tr("Number of characters (csd only):") + " " + QString::number(documentPages[curPage]->characterCount()) + "\n";
-  text += tr("Number of lines (total):") + " " + QString::number(documentPages[curPage]->lineCount(true)) + "\n";
-  text += tr("Number of characters (total):") + " " + QString::number(documentPages[curPage]->characterCount(true)) + "\n";
+  QString text = tr("Full Path:") + " " + documentPages[curPage]->getFileName() + "\n\n";
+  text += tr("Number of lines (Csound Text):") + " " + QString::number(documentPages[curPage]->lineCount(true)) + "\n";
+  text += tr("Number of characters (Csound Text):") + " " + QString::number(documentPages[curPage]->characterCount(true)) + "\n";
+  text += tr("Number of lines (total):") + " " + QString::number(documentPages[curPage]->lineCount()) + "\n";
+  text += tr("Number of characters (total):") + " " + QString::number(documentPages[curPage]->characterCount()) + "\n";
+  text += tr("Number of instruments:") + " " + QString::number(documentPages[curPage]->instrumentCount()) + "\n";
+  text += tr("Number of UDOs:") + " " + QString::number(documentPages[curPage]->udoCount()) + "\n";
   QMessageBox::information(this, tr("File Information"),
                            text,
                            QMessageBox::Ok,

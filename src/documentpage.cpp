@@ -540,6 +540,18 @@ int DocumentPage::characterCount(bool countExtras)
   return text.size();
 }
 
+int DocumentPage::instrumentCount()
+{
+  QString text = this->getBasicText();
+  return text.count((QRegExp("\\n[ \\t]*instr\\s")));
+}
+
+int DocumentPage::udoCount()
+{
+  QString text = this->getBasicText();
+  return text.count((QRegExp("\\n[ \\t]*opcode\\s")));
+}
+
 QString DocumentPage::getFilePath()
 {
   return fileName.left(fileName.lastIndexOf("/"));

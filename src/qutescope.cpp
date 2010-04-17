@@ -56,7 +56,6 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
 
 // Default properties
   setProperty("QCS_type", "scope");
-  setProperty("QCS_chan", 0);
   setProperty("QCS_zoomx", 1.0);
   setProperty("QCS_zoomy", 1.0);
   setProperty("QCS_dispx", 1.0);
@@ -77,7 +76,7 @@ QString QuteScope::getWidgetLine()
   QString line = "ioGraph {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += property("QCS_type").toString() + " " + QString::number(property("QCS_zoomx").toDouble(), 'f', 6) + " ";
-  line += QString::number(property("QCS_chan").toDouble(), 'f', 6) + " ";
+  line += QString::number((int) m_value) + " ";
   line += property("QCS_objectName").toString();
 //   qDebug("QuteScope::getWidgetLine() %s", line.toStdString().c_str());
   return line;
@@ -88,8 +87,8 @@ QString QuteScope::getWidgetXmlText()
   xmlText = "";
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
-   // Not implemented in blue
 
+  s.writeTextElement("value", QString::number(m_value, 'f', 8));
   s.writeTextElement("type", property("QCS_type").toString());
   s.writeTextElement("zoomx", QString::number(property("QCS_zoomx").toDouble(), 'f', 8));
   s.writeTextElement("zoomy", QString::number(property("QCS_zoomy").toDouble(), 'f', 8));
@@ -125,7 +124,7 @@ void QuteScope::setType(QString type)
 
 void QuteScope::setValue(double value)
 {
-  setProperty("QCS_chan", (int) value);
+  m_value = (int) value;
   updateLabel();
 }
 
@@ -136,7 +135,7 @@ void QuteScope::setUd(CsoundUserData *ud)
 
 void QuteScope::updateLabel()
 {
-  QString chan = (property("QCS_chan").toInt() <= 0 ? tr("all", "meaning 'all' channels in scope, must be very short (4 letter max)") : QString::number(property("QCS_chan").toInt()));
+  QString chan = ((int) m_value <= 0 ? tr("all", "meaning 'all' channels in scope, must be very short (4 letter max)") : QString::number((int) m_value ));
   m_label->setText(tr("Scope ch:") + chan + tr("  dec:", "Decimation (zoom) value for scope widget, must be very short (4 letter max)")
                    + QString::number(property("QCS_zoomx").toDouble(), 'f', 1) );
 }
@@ -145,7 +144,7 @@ void QuteScope::applyInternalProperties()
 {
   QuteWidget::applyInternalProperties();
   setType(property("QCS_type").toString());
-  setValue(property("QCS_chan").toInt());
+  setValue((int) property("QCS_value").toDouble());
   updateLabel();
 }
 
@@ -179,7 +178,7 @@ void QuteScope::createPropertiesDialog()
   channelBox->addItem("Ch.7",QVariant((int) 7));
   channelBox->addItem("Ch.8",QVariant((int) 8));
   channelBox->addItem("none", QVariant((int) 0));
-  channelBox->setCurrentIndex(channelBox->findData(QVariant(property("QCS_chan").toDouble())));
+  channelBox->setCurrentIndex(channelBox->findData(QVariant((int) m_value)));
   layout->addWidget(channelBox, 6, 3, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Decimation");
@@ -214,7 +213,7 @@ void QuteScope::resizeEvent(QResizeEvent * event)
 void QuteScope::updateData()
 {
 //  qDebug() <<"QuteScope::updateData() " << property( "QCS_chan").toInt() << "  " << property("QCS_zoomx").toDouble() ;
-  m_dataDisplay->updateData(property("QCS_chan").toInt(), property("QCS_zoomx").toDouble(), static_cast<ScopeWidget *>(m_widget)->freeze);
+  m_dataDisplay->updateData((int) m_value, property("QCS_zoomx").toDouble(), static_cast<ScopeWidget *>(m_widget)->freeze);
 }
 
 ScopeItem::ScopeItem(int width, int height)

@@ -68,6 +68,8 @@ class DocumentPage : public QObject
 
     int lineCount(bool countExtras = false);
     int characterCount(bool countExtras = false);
+    int instrumentCount();
+    int udoCount();
     QString getFilePath();
     QStringList getScheduledEvents(unsigned long ksmpscount);
     bool isModified();

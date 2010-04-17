@@ -68,6 +68,12 @@ void Inspector::parseText(const QString &text)
       newItem->setLine(i + 1);
       currentInstrument = newItem;
     }
+    if (lines[i].trimmed().startsWith(";;")) {
+      QStringList columnslist(lines[i].trimmed().remove(0,2));
+      TreeItem *newItem = new TreeItem(instrItem, columnslist);
+      newItem->setForeground (0, QBrush(Qt::darkGreen) );
+      newItem->setLine(i + 1);
+    }
     else if (lines[i].trimmed().startsWith("opcode")) {
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());

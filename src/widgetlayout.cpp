@@ -2175,7 +2175,7 @@ int WidgetLayout::createScope(int x, int y, int width, int height, QString widge
     if (chans < 0) {
       chans = -255; // Force all 8 channels when loading old format
     }
-    widget->setProperty("QCS_chan", chans);
+    widget->setProperty("QCS_value", chans);
   }
   if (parts.size() > 8) {
     int i=8;
