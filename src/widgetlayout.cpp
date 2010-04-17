@@ -2245,7 +2245,7 @@ FrameWidget *WidgetLayout::getEditWidget(QuteWidget *widget)
 
 void WidgetLayout::setModified(bool mod)
 {
-  qDebug() << "WidgetLayout::setModified";
+//  qDebug() << "WidgetLayout::setModified";
   m_modified = mod;
   emit changed();
 }

@@ -69,7 +69,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -621,27 +621,11 @@
        <string>Run FLTK csds in Terminal</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="scrollbarsCheckBox">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>240</y>
-        <width>311</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
-      </property>
-      <property name="text">
-       <string>Scrollbars on widget panel</string>
-      </property>
-     </widget>
      <widget class="QCheckBox" name="oldFormatCheckBox">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>270</y>
+        <y>240</y>
         <width>301</width>
         <height>21</height>
        </rect>

@@ -79,7 +79,6 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   enableFLTKCheckBox->setChecked(m_options->enableFLTK);
   terminalFLTKCheckBox->setChecked(m_options->terminalFLTK);
   terminalFLTKCheckBox->setEnabled(m_options->enableFLTK);
-  scrollbarsCheckBox->setChecked(m_options->scrollbars);
   oldFormatCheckBox->setChecked(m_options->oldFormat);
 
   if (m_options->useAPI)
@@ -239,7 +238,6 @@ void ConfigDialog::accept()
   m_options->showTooltips = showTooltipsCheckBox->isChecked();
   m_options->enableFLTK = enableFLTKCheckBox->isChecked();
   m_options->terminalFLTK = terminalFLTKCheckBox->isChecked();
-  m_options->scrollbars = scrollbarsCheckBox->isChecked();
   m_options->oldFormat = oldFormatCheckBox->isChecked();
 
   m_options->useAPI = ApiRadioButton->isChecked();
@@ -341,7 +339,7 @@ void ConfigDialog::browseSadir()
 void ConfigDialog::browseSsdir()
 {
   browseDir(m_options->ssdir);
-  SsdirLineEdit->setText(m_options->sadir);
+  SsdirLineEdit->setText(m_options->ssdir);
 }
 
 void ConfigDialog::browseSfdir()

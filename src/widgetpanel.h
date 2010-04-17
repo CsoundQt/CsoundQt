@@ -38,7 +38,6 @@ class WidgetPanel : public QDockWidget
     ~WidgetPanel();
 
     void addWidgetLayout(WidgetLayout *layoutWidget);
-//    WidgetLayout * getWidgetLayout();
     WidgetLayout * takeWidgetLayout();
     void setCurrentLayout(WidgetLayout *layoutWidget);
 
@@ -65,7 +64,6 @@ class WidgetPanel : public QDockWidget
     QSize oldSize;
     int m_width;
     int m_height;
-    bool m_sbActive; // Scroll bars active
 
   private slots:
     void dockStateChanged(bool);

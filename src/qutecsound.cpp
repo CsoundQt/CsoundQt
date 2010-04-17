@@ -1379,7 +1379,6 @@ void qutecsound::applySettings()
   for (int i = 0; i < documentPages.size(); i++) {
     setCurrentOptionsForPage(documentPages[i]);
   }
-  widgetPanel->setWidgetScrollBarsActive(m_options->scrollbars);
   Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
       Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
   fileToolBar->setToolButtonStyle(toolButtonStyle);
@@ -2515,7 +2514,6 @@ void qutecsound::readSettings()
   m_options->showTooltips = settings.value("showTooltips", true).toBool();
   m_options->enableFLTK = settings.value("enableFLTK", true).toBool();
   m_options->terminalFLTK = settings.value("terminalFLTK", false).toBool();
-  m_options->scrollbars = settings.value("scrollbars", true).toBool();
   m_options->oldFormat = settings.value("oldFormat", true).toBool();
   lastFiles = settings.value("lastfiles", "").toStringList();
   lastTabIndex = settings.value("lasttabindex", "").toInt();
@@ -2660,7 +2658,6 @@ void qutecsound::writeSettings()
     settings.setValue("showTooltips", m_options->showTooltips);
     settings.setValue("enableFLTK", m_options->enableFLTK);
     settings.setValue("terminalFLTK", m_options->terminalFLTK);
-    settings.setValue("scrollbars", m_options->scrollbars);
     settings.setValue("oldFormat", m_options->oldFormat);
     QStringList files;
     if (m_options->rememberFile) {

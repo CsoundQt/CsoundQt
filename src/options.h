@@ -53,7 +53,6 @@ class Options: public CsoundOptions{
     bool showWidgetsOnRun;
     bool showTooltips;
     bool terminalFLTK;
-    bool scrollbars;
     bool oldFormat;  // Store old MacCsound widget format
 
     bool useAPI;
