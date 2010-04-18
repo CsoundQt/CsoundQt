@@ -25,6 +25,7 @@
 #include "csoundengine.h"
 #include "liveeventframe.h"
 #include "eventsheet.h"
+#include "liveeventcontrol.h"
 #include "qutecsound.h" // For playParent and renderParent functions (called from button reserved channels) and for connecting from console to log file
 #include "opentryparser.h"
 #include "types.h"
@@ -36,7 +37,7 @@
 #include "curve.h"
 #include "qutebutton.h"
 
-#include "cwindow.h"
+#include <cwindow.h>
 #include <csound.hpp>  // TODO These two are necessary for the WINDAT struct. Can they be moved?
 
 
@@ -60,6 +61,18 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 
   m_widgetLayout = new WidgetLayout(0);
 //  m_widgetLayout->show();
+  m_liveEventControl = new LiveEventControl(parent);
+  connect(m_liveEventControl, SIGNAL(closed()), this, SLOT(liveEventControlClosed()));
+  connect(m_liveEventControl, SIGNAL(stopAll()), this, SLOT(stopAllSlot()));
+  connect(m_liveEventControl, SIGNAL(newPanel()), this, SLOT(newPanelSlot()));
+  connect(m_liveEventControl, SIGNAL(playPanel(int)), this, SLOT(playPanelSlot(int)));
+  connect(m_liveEventControl, SIGNAL(loopPanel(int,bool)), this, SLOT(loopPanelSlot(int,bool)));
+  connect(m_liveEventControl, SIGNAL(stopPanel(int)), this, SLOT(stopPanelSlot(int)));
+  connect(m_liveEventControl, SIGNAL(setPanelVisible(int,bool)), this, SLOT(setPanelVisibleSlot(int,bool)));
+  connect(m_liveEventControl, SIGNAL(setPanelSync(int,int)), this, SLOT(setPanelSyncSlot(int,int)));
+  connect(m_liveEventControl, SIGNAL(setPanelName(int,QString)), this, SLOT(setPanelNameSlot(int,QString)));
+  connect(m_liveEventControl, SIGNAL(setPanelTempo(int,double)), this, SLOT(setPanelTempoSlot(int,double)));
+  connect(m_liveEventControl, SIGNAL(setPanelLoopLength(int,double)), this, SLOT(setPanelLoopLengthSlot(int,double)));
 
   m_csEngine = new CsoundEngine();
   m_csEngine->setWidgetLayout(m_widgetLayout);  // Pass widget layout to engine
@@ -275,83 +288,41 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   // Load Live Event Panels ------------------------
   while (text.contains("<EventPanel") and text.contains("</EventPanel>")) {
     QString liveEventsText = text.mid(text.indexOf("<EventPanel "),
-                                      text.indexOf("</EventPanel>") - text.indexOf("<EventPanel ") + 13);
-//    qDebug() << "DocumentPage::setTextString   " << liveEventsText;
-    LiveEventFrame *frame = createLiveEventFrame();
-    QString scoText = liveEventsText.mid(liveEventsText.indexOf(">") + 1,
-                                         liveEventsText.indexOf("</EventPanel>") - liveEventsText.indexOf(">") - 1 );
-    frame->getSheet()->setRowCount(1);
-    frame->getSheet()->setColumnCount(6);
-    frame->setFromText(scoText);
-    if (liveEventsText.contains("name=\"")) {
-      int index = liveEventsText.indexOf("name=\"") + 6;
-      QString name = liveEventsText.mid(index,
-                                        liveEventsText.indexOf("\"", index) - index );
-      frame->setName(name);
+                                      text.indexOf("</EventPanel>") - text.indexOf("<EventPanel ") + 13
+                                      + (text[text.indexOf("</EventPanel>") + 14] == '\n' ? 1:0));
+    QDomDocument doc("doc");
+    doc.setContent(liveEventsText);
+    QDomElement panelElement = doc.firstChildElement("EventPanel");
+    QString liveText = panelElement.text();
+//    qDebug() << "DocumentPage::setTextString   " << liveText;
+    QString panelName = panelElement.attribute("name","");
+    double tempo = panelElement.attribute("tempo","60.0").toDouble();
+    double loop = panelElement.attribute("loop","8.0").toDouble();
+    int posx = panelElement.attribute("x","-1").toDouble();
+    int posy = panelElement.attribute("y","-1").toDouble();
+    int width = panelElement.attribute("width","-1").toDouble();
+    int height = panelElement.attribute("height","-1").toDouble();
+    int visibleEnabled = panelElement.attribute("visible","true") == "true";
+
+    LiveEventFrame *panel = createLiveEventPanel();
+    panel->setFromText(liveText);
+    panel->setName(panelName);
+    panel->setTempo(tempo);
+    panel->setLoopLength(loop);
+    m_liveEventControl->appendPanel(visibleEnabled, false, false, 0, panelName,
+                                    loop, "0-4",tempo);
+    if (posx > 5 && posy > 5) {
+      panel->move(posx, posy);
     }
-    if (liveEventsText.contains("tempo=\"")) {
-      int index = liveEventsText.indexOf("tempo=\"") + 7;
-      QString tempostr = liveEventsText.mid(index,
-                                            liveEventsText.indexOf("\"", index) - index );
-      bool ok = false;
-      double tempo = tempostr.toDouble(&ok);
-      if (ok)
-        frame->setTempo(tempo);
+    if (width > 100 && height > 80) {
+      panel->resize(width, height);
     }
-    if (liveEventsText.contains("loop=\"")) {
-      int index = liveEventsText.indexOf("loop=\"") + 6;
-      QString loopstr = liveEventsText.mid(index,
-                                           liveEventsText.indexOf("\"", index) - index );
-      bool ok = false;
-      double loop = loopstr.toDouble(&ok);
-      if (ok)
-        frame->setLoopLength(loop);
-    }
-    int posx, posy, width, height;
-    if (liveEventsText.contains("x=\"")) {
-      int index = liveEventsText.indexOf("x=\"") + 3;
-      QString xstr = liveEventsText.mid(index,
-                                        liveEventsText.indexOf("\"", index) - index );
-      bool ok = false;
-      posx = xstr.toInt(&ok);
-      if (!ok || posx < 5)
-        posx = frame->x();
-    }
-    if (liveEventsText.contains("y=\"")) {
-      int index = liveEventsText.indexOf("y=\"") + 3;
-      QString ystr = liveEventsText.mid(index,
-                                        liveEventsText.indexOf("\"", index) - index );
-      bool ok = false;
-      posy = ystr.toInt(&ok);
-      if (!ok || posy < 5)
-        posy = frame->y();
-    }
-    if (liveEventsText.contains("width=\"")) {
-      int index = liveEventsText.indexOf("width=\"") + 7;
-      QString wstr = liveEventsText.mid(index,
-                                        liveEventsText.indexOf("\"", index) - index );
-      bool ok = false;
-      width = wstr.toInt(&ok);
-      if (!ok)
-        width = frame->width();
-    }
-    if (liveEventsText.contains("height=\"")) {
-      int index = liveEventsText.indexOf("height=\"") + 8;
-      QString hstr = liveEventsText.mid(index,
-                                        liveEventsText.indexOf("\"", index) - index );
-      bool ok = false;
-      height = hstr.toInt(&ok);
-      if (!ok)
-        height = frame->height();
-    }
-    frame->move(posx, posy);
-    frame->resize(width, height);
     text.remove(liveEventsText);
   }
-  if (m_liveFrames.size() == 0) {
-    LiveEventFrame *e = createLiveEventFrame();
-    e->setFromText(QString()); // Must set blank for undo history point
-  }
+//  if (m_liveFrames.size() == 0) {
+//    LiveEventFrame *e = createLiveEventPanel();
+//    e->setFromText(QString()); // Must set blank for undo history point
+//  }
   m_view->setFullText(text);  // This must be last as some of the text has been removed along the way
   return 0;
 }
@@ -372,17 +343,7 @@ QString DocumentPage::getFullText()
     QString liveEventsText = "";
     if (saveLiveEvents) { // Only add live events sections if file is a csd file
       for (int i = 0; i < m_liveFrames.size(); i++) {
-        QString panel = "<EventPanel name=\"";
-        panel += m_liveFrames[i]->getName() + "\" tempo=\"";
-        panel += QString::number(m_liveFrames[i]->getTempo(), 'f', 8) + "\" loop=\"";
-        panel += QString::number(m_liveFrames[i]->getLoopLength(), 'f', 8) + "\" x=\"";
-        panel += QString::number(m_liveFrames[i]->x()) + "\" y=\"";
-        panel += QString::number(m_liveFrames[i]->y()) + "\" width=\"";
-        panel += QString::number(m_liveFrames[i]->width()) + "\" height=\"";
-        panel += QString::number(m_liveFrames[i]->height()) + "\">";
-        panel += m_liveFrames[i]->getPlainText();
-        panel += "</EventPanel>";
-        liveEventsText += panel;
+        liveEventsText += m_liveFrames[i]->getPlainText();
 //        qDebug() << "DocumentPage::getFullText() " <<panel;
       }
       fullText += liveEventsText;
@@ -843,6 +804,11 @@ void DocumentPage::setKeyRepeatMode(bool keyRepeat)
   m_console->setKeyRepeatMode(keyRepeat);
 }
 
+void DocumentPage::setOpenProperties(bool open)
+{
+  m_widgetLayout->setProperty("openProperties", open);
+}
+
 void DocumentPage::passWidgetClipboard(QString text)
 {
   m_widgetLayout->passWidgetClipboard(text);
@@ -920,16 +886,20 @@ void DocumentPage::useOldFormat(bool use)
   saveOldFormat = use;
 }
 
-void DocumentPage::showLiveEventFrames(bool visible)
+void DocumentPage::showLiveEventPanels(bool visible)
 {
+  m_liveEventControl->setVisible(visible);
   for (int i = 0; i < m_liveFrames.size(); i++) {
     if (visible) {
-      //  qDebug() << "DocumentPage::showLiveEventFrames  " << visible << (int) this;
+      //  qDebug() << "DocumentPage::showLiveEventPanels  " << visible << (int) this;
       if (m_liveFrames[i]->isVisible())
         m_liveFrames[i]->raise();
-      else
-        m_liveFrames[i]->show();
-        m_liveFrames[i]->raise();
+      else {
+        if (m_liveFrames[i]->getVisibleEnabled()) {
+          m_liveFrames[i]->show();
+          m_liveFrames[i]->raise();
+        }
+      }
     }
     else {
       m_liveFrames[i]->hide();
@@ -937,6 +907,60 @@ void DocumentPage::showLiveEventFrames(bool visible)
   }
 }
 
+void DocumentPage::stopAllSlot()
+{
+  for (int i = 0; i < m_liveFrames.size(); i++) {
+    m_liveFrames[i]->getSheet()->stopAllEvents();
+  }
+}
+
+void DocumentPage::newPanelSlot()
+{
+  newLiveEventPanel();
+}
+
+void DocumentPage::playPanelSlot(int index)
+{
+   m_liveFrames[index]->getSheet()->sendAllEvents();
+}
+
+void DocumentPage::loopPanelSlot(int index, bool loop)
+{
+  qDebug() << "DocumentPage::loopPanelSlot not implemented";
+}
+
+void DocumentPage::stopPanelSlot(int index)
+{
+  qDebug() << "DocumentPage::stopPanelSlot not implemented";
+}
+
+void DocumentPage::setPanelVisibleSlot(int index, bool visible)
+{
+   m_liveFrames[index]->setVisible(visible);
+   m_liveFrames[index]->setVisibleEnabled(visible);
+}
+
+void DocumentPage::setPanelSyncSlot(int index, int mode)
+{
+  qDebug() << "DocumentPage::setPanelSyncSlot not implemented";
+}
+
+void DocumentPage::setPanelNameSlot(int index, QString name)
+{
+   m_liveFrames[index]->setName(name);
+}
+
+void DocumentPage::setPanelTempoSlot(int index, double tempo)
+{
+   m_liveFrames[index]->setTempo(tempo);
+}
+
+void DocumentPage::setPanelLoopLengthSlot(int index, double length)
+{
+   m_liveFrames[index]->setLoopLength(length);
+}
+
+    void setLoopLength(double length);
 void DocumentPage::registerButton(QuteButton *b)
 {
 //  qDebug() << " DocumentPage::registerButton";
@@ -949,7 +973,7 @@ void DocumentPage::registerButton(QuteButton *b)
 void DocumentPage::deleteAllLiveEvents()
 {
   for (int i = 0; i < m_liveFrames.size(); i++) {
-    deleteLiveEventFrame(m_liveFrames[i]);
+    deleteLiveEventPanel(m_liveFrames[i]);
   }
 }
 
@@ -1178,45 +1202,52 @@ void DocumentPage::autoComplete()
   m_view->autoComplete();
 }
 
-void DocumentPage::newLiveEventFrame(QString text)
+void DocumentPage::newLiveEventPanel(QString text)
 {
-  LiveEventFrame *e = createLiveEventFrame(text);
-  e->show();  //Assume that since slot was called ust be visible
+  LiveEventFrame *e = createLiveEventPanel(text);
+  m_liveEventControl->appendPanel(true, false, false, 0, "",
+                                    8.0, "0-4", 60.0);
+//  e->setVisible(false);
+  e->show();  //Assume that since slot was called must be visible
 }
 
-LiveEventFrame * DocumentPage::createLiveEventFrame(QString text)
+LiveEventFrame * DocumentPage::createLiveEventPanel(QString text)
 {
-//  qDebug() << "DocumentPage::newLiveEventFrame()";
-  LiveEventFrame *e = new LiveEventFrame("Live Event", m_view, Qt::Window);  //FIXME is it OK to have no parent?
+//  qDebug() << "DocumentPage::newLiveEventPanel()";
+  LiveEventFrame *e = new LiveEventFrame("Live Event", m_view, Qt::Window);
+  e->setVisible(false);
 //  e->setAttribute(Qt::WA_DeleteOnClose, false);
-  e->hide();
+  e->getSheet()->setRowCount(1);
+  e->getSheet()->setColumnCount(6);
 
   if (!text.isEmpty()) {
     e->setFromText(text);
   }
   m_liveFrames.append(e);
-  connect(e, SIGNAL(closed()), this, SLOT(liveEventFrameClosed()));
-  connect(e, SIGNAL(newFrameSignal(QString)), this, SLOT(newLiveEventFrame(QString)));
-  connect(e, SIGNAL(deleteFrameSignal(LiveEventFrame *)), this, SLOT(deleteLiveEventFrame(LiveEventFrame *)));
+//  connect(e, SIGNAL(closed()), this, SLOT(liveEventFrameClosed()));
+  connect(e, SIGNAL(newFrameSignal(QString)), this, SLOT(newLiveEventPanel(QString)));
+  connect(e, SIGNAL(deleteFrameSignal(LiveEventFrame *)), this, SLOT(deleteLiveEventPanel(LiveEventFrame *)));
+  connect(e, SIGNAL(renameFrame(LiveEventFrame *, QString)), this, SLOT(renameFrame(LiveEventFrame *,QString)));
   connect(e->getSheet(), SIGNAL(sendEvent(QString)),this,SLOT(queueEvent(QString)));
   connect(e->getSheet(), SIGNAL(modified()),this,SLOT(setModified()));
   return e;
 }
 
-void DocumentPage::deleteLiveEventFrame(LiveEventFrame *frame)
+void DocumentPage::deleteLiveEventPanel(LiveEventFrame *frame)
 {
-//  qDebug() << "deleteLiveEventFrame(LiveEventFrame *frame)";
+//  qDebug() << "deleteLiveEventPanel(LiveEventFrame *frame)";
   int index = m_liveFrames.indexOf(frame);
   if (index >= 0) {  // Frames should already have been deleted by parent document view widget
     if (frame != 0) {
       disconnect(frame, 0,0,0);
       disconnect(frame->getSheet(), 0,0,0);
       m_liveFrames.remove(index);
+      m_liveEventControl->removePanel(index);
       frame->close();
     }
   }
   else {
-    qDebug() << "DocumentPage::deleteLiveEventFrame frame not found";
+    qDebug() << "DocumentPage::deleteLiveEventPanel frame not found";
   }
 }
 
@@ -1227,19 +1258,35 @@ void DocumentPage::textChanged()
   emit currentTextUpdated();
 }
 
-void DocumentPage::liveEventFrameClosed()
-{
-//  qDebug() << "DocumentPage::liveEventFrameClosed()";
-  LiveEventFrame *e = dynamic_cast<LiveEventFrame *>(QObject::sender());
-//  if (e != 0) { // This shouldn't really be necessary but just in case
-  bool shown = false;
-  for (int i = 0; i < m_liveFrames.size(); i++) {
-    if (m_liveFrames[i]->isVisible()
-      && m_liveFrames[i] != e)  // frame that called has not been called yet
-      shown = true;
-  }
-  emit liveEventsVisible(shown);
+//void DocumentPage::liveEventFrameClosed()
+//{
+////  qDebug() << "DocumentPage::liveEventFrameClosed()";
+//  LiveEventFrame *e = dynamic_cast<LiveEventFrame *>(QObject::sender());
+////  if (e != 0) { // This shouldn't really be necessary but just in case
+//  bool shown = false;
+//  for (int i = 0; i < m_liveFrames.size(); i++) {
+//    if (m_liveFrames[i]->isVisible()
+//      && m_liveFrames[i] != e)  // frame that called has not been called yet
+//      shown = true;
 //  }
+//  emit liveEventsVisible(shown);
+////  }
+//}
+
+void DocumentPage::liveEventControlClosed()
+{
+  qDebug()<< "DocumentPage::liveEventControlClosed()";
+  showLiveEventPanels(false);
+  emit liveEventsVisible(false);
+}
+
+void DocumentPage::renameFrame(LiveEventFrame *frame,QString newName)
+{
+  int index = m_liveFrames.indexOf(frame);
+  if (index >= 0) {
+    m_liveEventControl->renamePanel(index, newName);
+    frame->setName(newName);
+  }
 }
 
 void DocumentPage::opcodeSyntax(QString message)

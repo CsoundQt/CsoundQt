@@ -37,6 +37,7 @@ class WidgetLayout;
 class LiveEventFrame;
 class CsoundEngine;
 class ConsoleWidget;
+class LiveEventControl;
 class SndfileHandle;
 
 class Curve;
@@ -109,6 +110,7 @@ class DocumentPage : public QObject
     // Widget Layout properties
     void showWidgetTooltips(bool visible);
     void setKeyRepeatMode(bool keyRepeat);  // Also for console widget
+    void setOpenProperties(bool open);
     void passWidgetClipboard(QString text);
 
     // Console properties
@@ -165,10 +167,21 @@ class DocumentPage : public QObject
     void unindent();
     void autoComplete();
 
-    void newLiveEventFrame(QString text = QString());
-    LiveEventFrame * createLiveEventFrame(QString text = QString());
-    void deleteLiveEventFrame(LiveEventFrame *frame);
-    void showLiveEventFrames(bool visible);
+    // Slots for live events
+    void newLiveEventPanel(QString text = QString());
+    LiveEventFrame * createLiveEventPanel(QString text = QString());
+    void deleteLiveEventPanel(LiveEventFrame *frame);
+    void showLiveEventPanels(bool visible);
+    void stopAllSlot();
+    void newPanelSlot();
+    void playPanelSlot(int index);
+    void loopPanelSlot(int index, bool loop);
+    void stopPanelSlot(int index);
+    void setPanelVisibleSlot(int index, bool visible);
+    void setPanelSyncSlot(int index, int mode);
+    void setPanelNameSlot(int index, QString name);
+    void setPanelTempoSlot(int index, double tempo);
+    void setPanelLoopLengthSlot(int index, double length);
 
     void registerButton(QuteButton *button);
 
@@ -192,6 +205,7 @@ class DocumentPage : public QObject
     CsoundEngine *m_csEngine;
     ConsoleWidget *m_console;
     QVector<LiveEventFrame *> m_liveFrames;
+    LiveEventControl *m_liveEventControl;
 
     OpEntryParser *m_opcodeTree;
 
@@ -204,7 +218,9 @@ class DocumentPage : public QObject
 
   private slots:
     void textChanged();
-    void liveEventFrameClosed();
+//    void liveEventFrameClosed();
+    void liveEventControlClosed();
+    void renameFrame(LiveEventFrame *frame,QString newName);
     void opcodeSyntax(QString message);
     void setWidgetClipboard(QString text);
     void queueEvent(QString line, int delay = 0);

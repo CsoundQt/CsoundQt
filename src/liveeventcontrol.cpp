@@ -27,22 +27,196 @@ LiveEventControl::LiveEventControl(QWidget *parent) :
     QWidget(parent),
     m_ui(new Ui::LiveEventControl)
 {
-    m_ui->setupUi(this);
+  this->setWindowFlags(Qt::Window);
+  m_ui->setupUi(this);
+  m_ui->panelTableWidget->setColumnWidth(0,40);
+  m_ui->panelTableWidget->setColumnWidth(1,40);
+  m_ui->panelTableWidget->setColumnWidth(2,40);
+  m_ui->panelTableWidget->setColumnWidth(3,40);
+  m_ui->panelTableWidget->setColumnWidth(4,300);
+  m_ui->panelTableWidget->setColumnWidth(5,80);
+  m_ui->panelTableWidget->setColumnWidth(6,80);
+  m_ui->panelTableWidget->setColumnWidth(7,50);
+  connect(m_ui->newButton,SIGNAL(released()), this, SLOT(newButtonReleased()));
+  connect(m_ui->panelTableWidget, SIGNAL(cellChanged ( int , int  )), this, SLOT(cellChangedSlot( int , int  )));
+  connect(m_ui->panelTableWidget, SIGNAL(cellClicked ( int , int  )), this, SLOT(cellClickedSlot( int , int  )));
 }
 
 LiveEventControl::~LiveEventControl()
 {
-    delete m_ui;
+  delete m_ui;
+}
+
+void LiveEventControl::renamePanel(int index, QString newName)
+{
+  QTableWidgetItem * item = getItem(index, 4);
+  item->setText(newName);
+}
+
+void LiveEventControl::removePanel(int index)
+{
+  qDebug() << "LiveEventControl::removePanel " << index;
+  m_ui->panelTableWidget->removeRow(index);
+}
+
+void LiveEventControl::appendPanel(bool visible, bool play, bool loop, int sync,
+                                   QString name, double loopLength, QString loopRange, double tempo)
+{
+  int newRow = m_ui->panelTableWidget->rowCount();
+  qDebug() << "LiveEventControl::appendPanel " << newRow;
+  m_ui->panelTableWidget->insertRow(newRow);
+  QTableWidgetItem *visibleItem = getItem(newRow, 0);
+  visibleItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
+  QTableWidgetItem *playItem = getItem(newRow, 1);
+//  playItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
+  QTableWidgetItem *loopItem = getItem(newRow, 2);
+//  loopItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
+  QTableWidgetItem *syncItem = getItem(newRow, 3);
+//  loopItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
+  QTableWidgetItem *nameItem = getItem(newRow, 4);
+  nameItem->setData(Qt::DisplayRole, QVariant(name));
+  QTableWidgetItem *loopLengthItem = getItem(newRow, 5);
+  loopLengthItem->setData(Qt::DisplayRole, QVariant(loopLength));
+  QTableWidgetItem *loopRangeItem = getItem(newRow, 6);
+//  loopRangeItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
+  QTableWidgetItem *tempoItem = getItem(newRow, 7);
+  tempoItem->setData(Qt::DisplayRole, QVariant(tempo));
+//  setPanelProperty(newRow, "LE_visible", visible);
+//  setPanelProperty(newRow, "LE_play", play);
+//  setPanelProperty(newRow, "LE_loop", loop);
+//  setPanelProperty(newRow, "LE_sync", sync);
+//  setPanelProperty(newRow, "LE_name", name);
+//  setPanelProperty(newRow, "LE_loopLength", loopLength);
+//  setPanelProperty(newRow, "LE_loopRange", loopRange);
+//  setPanelProperty(newRow, "LE_tempo", tempo);
+}
+
+void LiveEventControl::setPanelProperty(int index, QString property, QVariant value)
+{
+  if (index < 0 || index >= m_ui->panelTableWidget->rowCount()) {
+    qDebug() << "LiveEventControl::setPanelProperty invalid index " << index;
+    return;
+  }
+  if (property == "LE_visible") {
+    emit setPanelVisible(index, value.toBool());
+  }
+//  else if (property == "LE_play") {
+//    if (value.toBool()) {
+//      emit playPanel(index);
+//    }
+//    else {
+//      emit stopPanel(index);
+//    }
+//  }
+//  else if (property == "LE_loop") {
+//    emit loopPanel(index, value.toBool());
+//  }
+  else if (property == "LE_sync") {
+    emit setPanelSync(index, value.toInt());
+  }
+  else if (property == "LE_name") {
+    emit setPanelName(index, value.toString());
+  }
+  else {
+    qDebug() << "LiveEventControl::setPanelProperty unknown property " << property;
+  }
+}
+
+QTableWidgetItem * LiveEventControl::getItem(int row, int column)
+{
+  QTableWidgetItem * item = m_ui->panelTableWidget->item(row, column);
+  if (item == 0) {
+    item = new QTableWidgetItem(QTableWidgetItem::Type);
+    m_ui->panelTableWidget->setItem(row, column, item);
+  }
+  if (column == 0) {
+    item->setFlags(Qt::ItemIsUserCheckable |Qt::ItemIsEnabled);
+  }
+  else if (column == 4) {
+    item->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled);
+  }
+  else {
+    item->setFlags(Qt::ItemIsEnabled);
+  }
+  return item;
+}
+
+void LiveEventControl::openLoopRangeDialog(int row)
+{
+  QDialog d;
+  QVBoxLayout l(&d);
+  QLabel ls(tr("Loop start"),&d);
+  QDoubleSpinBox ss(&d);
+  QLabel le(tr("Loop end"),&d);
+  QDoubleSpinBox se(&d);
+  QPushButton okButton(tr("Ok"), &d);
+  QPushButton cancelButton(tr("Cancel"), &d);
+  connect(&okButton,SIGNAL(released()),&d,SLOT(accept()));
+  connect(&cancelButton,SIGNAL(released()),&d,SLOT(reject()));
+  l.addWidget(&ls);
+  l.addWidget(&ss);
+  l.addWidget(&le);
+  l.addWidget(&se);
+  l.addWidget(&okButton);
+  l.addWidget(&cancelButton);
+  int ret = d.exec();
+  if (ret == QDialog::Accepted) {
+    QString range = QString::number(ss.value()) + "-" + QString::number(se.value());
+    qDebug() << "LiveEventControl::openLoopRangeDialog " << row << range;
+    QTableWidgetItem *item = m_ui->panelTableWidget->item(row,6);
+    item->setText(range);
+  }
+}
+
+void LiveEventControl::closeEvent(QCloseEvent * event)
+{
+  qDebug() << "LiveEventControl::closeEvent";
+//  emit hidePanels(false);
+  emit closed();
+  event->accept();
 }
 
 void LiveEventControl::changeEvent(QEvent *e)
 {
-    QWidget::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        m_ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
+  QWidget::changeEvent(e);
+  switch (e->type()) {
+  case QEvent::LanguageChange:
+    m_ui->retranslateUi(this);
+    break;
+  default:
+    break;
+  }
+}
+
+void  LiveEventControl::newButtonReleased()
+{
+  emit newPanel();
+}
+
+void  LiveEventControl::cellChangedSlot(int row, int column)
+{
+  QTableWidgetItem *item = m_ui->panelTableWidget->item(row,column);
+  if (column == 0) { // Visible
+    emit setPanelVisible(row, item->checkState() == Qt::Checked);
+  }
+  else if (column == 4) { // Name
+    emit setPanelName(row, item->data(Qt::DisplayRole).toString());
+  }
+}
+
+void  LiveEventControl::cellClickedSlot(int row, int column)
+{
+  if (column == 1) { // Play
+    qDebug() << "LiveEventControl::cellChangedSlot play";
+    emit playPanel(row);
+  }
+  else if (column == 2) { // Loop
+    emit loopPanel(row, true);
+  }
+  else if (column == 3) { // Sync
+    qDebug() << "LiveEventControl::cellChangedSlot sync not implemented yet.";
+  }
+  else if (column == 6) { // Loop Range
+    openLoopRangeDialog(row);
+  }
 }

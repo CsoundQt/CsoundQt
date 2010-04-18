@@ -80,6 +80,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   terminalFLTKCheckBox->setChecked(m_options->terminalFLTK);
   terminalFLTKCheckBox->setEnabled(m_options->enableFLTK);
   oldFormatCheckBox->setChecked(m_options->oldFormat);
+  openPropertiesCheckBox->setChecked(m_options->openProperties);
 
   if (m_options->useAPI)
     ApiRadioButton->setChecked(true);
@@ -239,6 +240,7 @@ void ConfigDialog::accept()
   m_options->enableFLTK = enableFLTKCheckBox->isChecked();
   m_options->terminalFLTK = terminalFLTKCheckBox->isChecked();
   m_options->oldFormat = oldFormatCheckBox->isChecked();
+  m_options->openProperties = openPropertiesCheckBox->isChecked();
 
   m_options->useAPI = ApiRadioButton->isChecked();
   m_options->thread = threadCheckBox->isChecked();

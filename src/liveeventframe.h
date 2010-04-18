@@ -24,24 +24,28 @@
 #define LIVEEVENTFRAME_H
 
 #include "ui_liveeventframe.h"
+#include <cstdio>
 
 class EventSheet;
 class QTextEdit;
 
 class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
 {
-    Q_OBJECT
+  Q_OBJECT
+  Q_PROPERTY(bool visibleEnabled READ getVisibleEnabled WRITE setVisibleEnabled)
   public:
     LiveEventFrame(QString csdName, QWidget *parent = 0, Qt::WindowFlags f = 0 );
     ~LiveEventFrame();
     EventSheet * getSheet();
     void setName(QString name);
     void setFromText(QString text);
+    void setVisibleEnabled(bool visible) {m_visibleEnabled = visible; }
 
     double getTempo();
     QString getName();
     double getLoopLength();
     QString getPlainText();
+    bool getVisibleEnabled() { return m_visibleEnabled; }
 
     void getEvents(unsigned long ksmps, QStringList *eventText);
     bool isModified();
@@ -56,16 +60,23 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     void newFrame();
     void cloneFrame();
     void deleteFrame(bool ask = false);
-    void rename();
+
+    // To pass directly to live event sheet
+    void markLoop(int start = -1, int end = -1);
 
   protected:
     void changeEvent(QEvent *e);
 //    virtual void moveEvent (QMoveEvent * event);
-    virtual void resizeEvent (QResizeEvent * event);
-    virtual void closeEvent (QCloseEvent * event);
+    virtual void resizeEvent(QResizeEvent * event);
+    virtual void closeEvent(QCloseEvent * event);
+//    virtual void hideEvent(QHideEvent * event);
+//    virtual void showEvent(QShowEvent * event);
 
   private:
+    void renameDialog();
+
     int m_mode; // 0 = sheet 1 = text  2 = piano roll?
+    bool m_visibleEnabled;
     QString m_name;
     QTextEdit *m_editor; //TODO add text editor
     EventSheet *m_sheet;
@@ -75,7 +86,8 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
   signals:
     void newFrameSignal(QString text);
     void deleteFrameSignal(LiveEventFrame *frame);
-    void closed();  // To inform DocumentPage that live event panel has been closed
+    void renameFrame(LiveEventFrame *frame, QString newName);
+    void closed();  // To inform Live Event Control that live event panel has been closed
 };
 
 #endif // LIVEEVENTFRAME_H

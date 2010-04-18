@@ -214,7 +214,7 @@ void qutecsound::changePage(int index)
   if (documentPages.size() > curPage && documentPages.size() > 0 && documentPages[curPage]) {
     disconnect(showLiveEventsAct, 0,0,0);
     disconnect(documentPages[curPage], SIGNAL(stopSignal()),0,0);
-    documentPages[curPage]->showLiveEventFrames(false);
+    documentPages[curPage]->showLiveEventPanels(false);
   }
   if (index < 0) { // No tabs left
     qDebug() << "qutecsound::changePage index < 0";
@@ -230,7 +230,7 @@ void qutecsound::changePage(int index)
     }
     setCurrentFile(documentPages[curPage]->getFileName());
     connectActions();
-    documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
+    documentPages[curPage]->showLiveEventPanels(showLiveEventsAct->isChecked());
     documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
     widgetPanel->addWidgetLayout(documentPages[curPage]->getWidgetLayout());
     setWidgetPanelGeometry();
@@ -600,7 +600,7 @@ void qutecsound::deleteCurrentTab()
 //  qDebug() << "qutecsound::deleteCurrentTab()";
   disconnect(showLiveEventsAct, 0,0,0);
   documentPages[curPage]->stop();
-  documentPages[curPage]->showLiveEventFrames(false);
+  documentPages[curPage]->showLiveEventPanels(false);
   DocumentPage *d = documentPages[curPage];
   documentPages.remove(curPage);
   documentTabs->removeTab(curPage);
@@ -940,7 +940,7 @@ void qutecsound::play(bool realtime)
       if (!documentPages[curPage]->usesFltk()) { // Don't bring up widget panel if there's an FLTK panel
         widgetPanel->setVisible(true);
         widgetPanel->setFocus(Qt::OtherFocusReason);
-        documentPages[curPage]->showLiveEventFrames(showLiveEventsAct->isChecked());
+        documentPages[curPage]->showLiveEventPanels(showLiveEventsAct->isChecked());
         documentPages[curPage]->focusWidgets();
       }
     }
@@ -1424,6 +1424,7 @@ void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
   p->setWidgetEnabled(m_options->enableWidgets);
   p->showWidgetTooltips(m_options->showTooltips);
   p->setKeyRepeatMode(m_options->keyRepeat);
+  p->setOpenProperties(m_options->openProperties);
   p->setDebugLiveEvents(m_options->debugLiveEvents);
   p->setTextFont(QFont(m_options->font,
                        (int) m_options->fontPointSize));
@@ -2074,7 +2075,7 @@ void qutecsound::connectActions()
   connect(m_inspector, SIGNAL(Close(bool)), showInspectorAct, SLOT(setChecked(bool)));
 
   disconnect(showLiveEventsAct, 0,0,0);
-  connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventFrames(bool)));
+  connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventPanels(bool)));
   connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
   connect(doc, SIGNAL(stopSignal()), this, SLOT(stop()));
   connect(doc, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(statusBarMessage(QString)));
@@ -2515,6 +2516,7 @@ void qutecsound::readSettings()
   m_options->enableFLTK = settings.value("enableFLTK", true).toBool();
   m_options->terminalFLTK = settings.value("terminalFLTK", false).toBool();
   m_options->oldFormat = settings.value("oldFormat", true).toBool();
+  m_options->openProperties = settings.value("openProperties", true).toBool();
   lastFiles = settings.value("lastfiles", "").toStringList();
   lastTabIndex = settings.value("lasttabindex", "").toInt();
   settings.endGroup();
@@ -2659,6 +2661,7 @@ void qutecsound::writeSettings()
     settings.setValue("enableFLTK", m_options->enableFLTK);
     settings.setValue("terminalFLTK", m_options->terminalFLTK);
     settings.setValue("oldFormat", m_options->oldFormat);
+    settings.setValue("openProperties", m_options->openProperties);
     QStringList files;
     if (m_options->rememberFile) {
       for (int i = 0; i < documentPages.size(); i++ ) {
@@ -2874,7 +2877,6 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   documentPages[curPage]->setTextString(text, m_options->saveWidgets);
   documentTabs->insertTab(curPage, documentPages[curPage]->getView(),"");
   documentTabs->setCurrentIndex(curPage);
-  QApplication::restoreOverrideCursor();
 
   documentPages[curPage]->setModified(false);
   setCurrentFile(fileName);
@@ -2891,6 +2893,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
     fillFileMenu();
     fillFavoriteMenu();
   }
+  QApplication::restoreOverrideCursor();
   statusBar()->showMessage(tr("File loaded"), 2000);
 //  setWidgetPanelGeometry();
 

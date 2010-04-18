@@ -58,7 +58,6 @@ public:
     l->addWidget(lab);
     l->addWidget(box);
     connect(box, SIGNAL(editingFinished()), this, SLOT(accept ()) );
-
   }
 
   double value() { return box->value();}
@@ -148,6 +147,7 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
 
   m_name = "Events";
   m_stopScript = false;
+  m_looping = false;
   createActions();
   connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
   // a bit of a hack to ensure that manual changes to the sheet are stored in the
@@ -323,6 +323,22 @@ void EventSheet::setDebug(bool debug)
   m_debug = debug;
 }
 
+QPair<int, int> EventSheet::getSelectedRowsRange()
+{
+  QModelIndexList selection = this->selectedIndexes();
+  int min = 9999, max = -1;
+  for (int i = 0; i < selection.size(); i++) {
+    if (selection[i].row() > max) {
+      max = selection[i].row();
+    }
+    if (selection[i].row() < min) {
+      min = selection[i].row();
+    }
+  }
+  qDebug() << "EventSheet::getSelectedRowsRange " << min << " "<< max;
+  return QPair<int, int>(min,max);
+}
+
 void EventSheet::setTempo(double value)
 {
 //  qDebug() << "EventSheet::setTempo " << value;
@@ -338,24 +354,28 @@ void EventSheet::setLoopLength(double value)
 void EventSheet::sendEvents()
 {
   QModelIndexList list;
-  QList<int> selectedRows;
+  QPair<int, int> rowsRange;
   if (m_looping && sender() != sendEventsAct) {
     double time = 1000.0 * m_loopLength * 60.0 /m_tempo;
-    qDebug() << " EventSheet::sendEvents() " << time;
     loopTimer.start(time);
-    list = loopList;
+    qDebug() << " EventSheet::sendEvents() " << time;
+    rowsRange.first = m_loopStart;
+    rowsRange.second = m_loopEnd;
   }
   else {
-    list = this->selectedIndexes();
+    rowsRange = getSelectedRowsRange();
   }
-  for (int i = 0; i < list.size(); i++) {
-    if (!selectedRows.contains(list[i].row()) ) {
-      selectedRows.append(list[i].row());
-    }
-  }
-  for (int i = 0; i < selectedRows.size(); i++) {
+  for (int i = rowsRange.first; i <= rowsRange.second; i++) {
 //    double number = 0.0;
-    emit sendEvent(getLine(selectedRows[i], true, true, true));  // With tempo scaling
+    emit sendEvent(getLine(i, true, true, true));  // With tempo scaling
+  }
+}
+
+void EventSheet::sendAllEvents()
+{
+  for (int i = 0; i < this->rowCount(); i++) {
+    qDebug() << "EventSheet::sendAllEvents() " << i;
+    emit sendEvent(getLine(i, true, true, true));  // With tempo scaling
   }
 }
 
@@ -392,41 +412,50 @@ void EventSheet::sendEventsOffset()
 
 void EventSheet::loopEvents()
 {
-  for (int i = 0; i < loopList.size(); i++) {
-    QTableWidgetItem * item = this->item(loopList[i].row(), loopList[i].column());
-    if (item == 0) {
-        item = new QTableWidgetItem();
-        this->setItem(loopList[i].row(), loopList[i].column(), item );
-      }
-    item->setBackground(QBrush());
-  }
+  QPair<int, int> rowsRange = getSelectedRowsRange();
   m_looping = true;
-  loopList = this->selectedIndexes();
-  for (int i = 0; i < loopList.size(); i++) {
-    QTableWidgetItem * item = this->item(loopList[i].row(), loopList[i].column());
-    if (item == 0) {
-        item = new QTableWidgetItem();
-        this->setItem(loopList[i].row(), loopList[i].column(), item );
-      }
-    item->setBackground(QBrush(Qt::green));
-  }
+  markLoop(rowsRange.first,rowsRange.second);
   sendEvents();
+}
+
+void EventSheet::markLoop(int start, int end)
+{
+  QPair<int, int> rowsRange = getSelectedRowsRange();
+  if (start == -1) {
+    start = rowsRange.first;
+  }
+  if (end == -1) {
+    end = rowsRange.second;
+  }
+  m_loopStart = start;
+  m_loopEnd = end;
+  for (int i = 0; i < rowCount(); i++) {
+    for (int j = 0; j < 4; j++) {
+      QTableWidgetItem * item = this->item(i, j);
+      if (item == 0) {
+        item = new QTableWidgetItem();
+        this->setItem(i, j, item );
+      }
+      if (i < m_loopStart || i > m_loopEnd) {
+        item->setBackground(QBrush());
+      }
+      else {
+        if (m_looping) {
+          item->setBackground(QBrush(Qt::green));
+        }
+        else {
+          item->setBackground(QBrush(QColor(200,255,200)));
+        }
+      }
+    }
+  }
 }
 
 void EventSheet::stopAllEvents()
 {
-  m_looping = false;
-
-  for (int i = 0; i < loopList.size(); i++) {
-    QTableWidgetItem * item = this->item(loopList[i].row(), loopList[i].column());
-    if (item == 0) {
-        item = new QTableWidgetItem();
-        this->setItem(loopList[i].row(), loopList[i].column(), item );
-      }
-    item->setBackground(QBrush());
-  }
   loopTimer.stop();
-  // TODO is it necessary to protect this data from threaded access?
+  m_looping = false;
+  markLoop();
   while (!activeInstruments.isEmpty()) {
     QString event = "i -";
     event += QString::number(activeInstruments.takeFirst(), 'f', 10);
@@ -943,6 +972,7 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
   menu.addAction(sendEventsAct);
   menu.addAction(sendEventsOffsetAct);
   menu.addAction(loopEventsAct);
+  menu.addAction(markLoopAct);
   menu.addAction(stopAllEventsAct);
   menu.addSeparator();
   menu.addAction(subtractAct);
@@ -1241,9 +1271,13 @@ void EventSheet::createActions()
   connect(sendEventsOffsetAct, SIGNAL(triggered()), this, SLOT(sendEventsOffset()));
 
   loopEventsAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Loop Events"), this);
-  loopEventsAct->setStatusTip(tr("Loop Events to Csound"));
+  loopEventsAct->setStatusTip(tr("Send Selected Events in Loop to Csound"));
   loopEventsAct->setIconText(tr("Loop Events"));
   connect(loopEventsAct, SIGNAL(triggered()), this, SLOT(loopEvents()));
+
+  markLoopAct = new QAction(/*QIcon(":/a.png"),*/ tr("Mark Loop"), this);
+  markLoopAct->setStatusTip(tr("Set Loop to selection, without starting loop"));
+  connect(markLoopAct, SIGNAL(triggered()), this, SLOT(markLoop()));
 
   stopAllEventsAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Stop Events"), this);
   stopAllEventsAct->setStatusTip(tr("Stop all running and pending events"));

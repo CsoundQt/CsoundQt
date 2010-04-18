@@ -514,128 +514,162 @@
      <property name="title">
       <string>Widgets</string>
      </property>
-     <widget class="QCheckBox" name="widgetsCheckBox">
+     <widget class="QWidget" name="">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>30</y>
-        <width>301</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Enable Widgets</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="saveWidgetsCheckBox">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>90</y>
-        <width>291</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Save widgets in csd file</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="showWidgetsOnRunCheckBox">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>120</y>
-        <width>291</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Show Widgets on Play</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="showTooltipsCheckBox">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>150</y>
         <width>311</width>
-        <height>25</height>
+        <height>281</height>
        </rect>
       </property>
-      <property name="text">
-       <string>Show Tooltips for widgets</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="enableFLTKCheckBox">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>180</y>
-        <width>311</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
-      </property>
-      <property name="text">
-       <string>Enable FLTK</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="channelComboBox">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>60</y>
-        <width>191</width>
-        <height>27</height>
-       </rect>
-      </property>
-      <item>
-       <property name="text">
-        <string>Use invalue/outvalue</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Use chnget/chnset</string>
-       </property>
-      </item>
-     </widget>
-     <widget class="QCheckBox" name="terminalFLTKCheckBox">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>210</y>
-        <width>301</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
-      </property>
-      <property name="text">
-       <string>Run FLTK csds in Terminal</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="oldFormatCheckBox">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>240</y>
-        <width>301</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
-      </property>
-      <property name="text">
-       <string>Store Old Widget Format</string>
-      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QCheckBox" name="widgetsCheckBox">
+         <property name="text">
+          <string>Enable Widgets</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QComboBox" name="channelComboBox">
+           <item>
+            <property name="text">
+             <string>Use invalue/outvalue</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Use chnget/chnset</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="saveWidgetsCheckBox">
+         <property name="text">
+          <string>Save widgets in csd file</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="showWidgetsOnRunCheckBox">
+         <property name="text">
+          <string>Show Widgets on Play</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="showTooltipsCheckBox">
+         <property name="text">
+          <string>Show Tooltips for widgets</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="enableFLTKCheckBox">
+           <property name="toolTip">
+            <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
+           </property>
+           <property name="text">
+            <string>Enable FLTK</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="terminalFLTKCheckBox">
+         <property name="toolTip">
+          <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
+         </property>
+         <property name="text">
+          <string>Run FLTK csds in Terminal</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="oldFormatCheckBox">
+         <property name="toolTip">
+          <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
+         </property>
+         <property name="text">
+          <string>Store Old Widget Format</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="openPropertiesCheckBox">
+         <property name="toolTip">
+          <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
+         </property>
+         <property name="text">
+          <string>Open Properties when creating widget</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox_8">

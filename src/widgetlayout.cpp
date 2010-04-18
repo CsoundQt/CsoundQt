@@ -1133,6 +1133,9 @@ void WidgetLayout::createNewSlider()
   int posy = currentPosition.y();
   createSlider(posx, posy, 20, 100, QString("ioSlider {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(m_widgets.size())));
   widgetChanged();
+  if (getOpenProperties()) {
+    m_widgets.last()->openProperties();
+  }
   markHistory();
 }
 
@@ -1143,6 +1146,9 @@ void WidgetLayout::createNewLabel()
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder New Label";
   createText(posx, posy, 80, 25, line);
   widgetChanged();
+  if (getOpenProperties()) {
+    m_widgets.last()->openProperties();
+  }
   markHistory();
 }
 
@@ -1153,6 +1159,9 @@ void WidgetLayout::createNewDisplay()
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} display 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border Display";
   createText(posx, posy, 80, 25, line);
   widgetChanged();
+  if (getOpenProperties()) {
+    m_widgets.last()->openProperties();
+  }
   markHistory();
 }
 
@@ -1163,6 +1172,9 @@ void WidgetLayout::createNewScrollNumber()
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} scroll 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} background border 0.000000";
   createScrollNumber(posx, posy, 80, 25, line);
   widgetChanged();
+  if (getOpenProperties()) {
+    m_widgets.last()->openProperties();
+  }
   markHistory();
 }
 
@@ -1173,6 +1185,9 @@ void WidgetLayout::createNewLineEdit()
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 25} edit 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
   createLineEdit(posx, posy, 100, 25, line);
   widgetChanged();
+  if (getOpenProperties()) {
+    m_widgets.last()->openProperties();
+  }
   markHistory();
 }
 
@@ -1183,6 +1198,9 @@ void WidgetLayout::createNewSpinBox()
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} editnum 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
   createSpinBox(posx, posy, 80, 25, line);
   widgetChanged();
+  if (getOpenProperties()) {
+    m_widgets.last()->openProperties();
+  }
   markHistory();
 }
 
@@ -1193,6 +1211,9 @@ void WidgetLayout::createNewButton()
   QString line = "ioButton {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 30} event 1.000000 \"button1\" \"New Button\" \"/\" i1 0 10";
   createButton(posx, posy, 100, 30, line);
   widgetChanged();
+  if (getOpenProperties()) {
+    m_widgets.last()->openProperties();
+  }
   markHistory();
 }
 
@@ -1202,6 +1223,9 @@ void WidgetLayout::createNewKnob()
   int posy = currentPosition.y();
   createKnob(posx, posy, 80, 80, QString("ioKnob {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(m_widgets.size())));
   widgetChanged();
+  if (getOpenProperties()) {
+    m_widgets.last()->openProperties();
+  }
   markHistory();
 }
 
@@ -1211,6 +1235,9 @@ void WidgetLayout::createNewCheckBox()
   int posy = currentPosition.y();
   createCheckBox(posx, posy, 20, 20, QString("ioCheckbox {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 20} off checkbox" +QString::number(m_widgets.size())));
   widgetChanged();
+  if (getOpenProperties()) {
+    m_widgets.last()->openProperties();
+  }
   markHistory();
 }
 
@@ -1220,6 +1247,9 @@ void WidgetLayout::createNewMenu()
   int posy = currentPosition.y();
   createMenu(posx, posy, 80, 30, QString("ioMenu {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 25} 1 303 \"item1,item2,item3\" menu" +QString::number(m_widgets.size())));
   widgetChanged();
+  if (getOpenProperties()) {
+    m_widgets.last()->openProperties();
+  }
   markHistory();
 }
 
@@ -1229,6 +1259,9 @@ void WidgetLayout::createNewMeter()
   int posy = currentPosition.y();
   createMeter(posx, posy, 30, 80, QString("ioMeter {"+ QString::number(posx) +", "+ QString::number(posy) + "} {30, 80} {0, 60000, 0} \"vert" + QString::number(m_widgets.size()) + "\" 0.000000 \"hor" + QString::number(m_widgets.size()) + "\" 0.000000 fill 1 0 mouse"));
   widgetChanged();
+  if (getOpenProperties()) {
+    m_widgets.last()->openProperties();
+  }
   markHistory();
 }
 
@@ -1238,6 +1271,9 @@ void WidgetLayout::createNewConsole()
   int posy = currentPosition.y();
   createConsole(posx, posy, 320, 400, QString("ioListing {"+ QString::number(posx) +", "+ QString::number(posy) + "} {320, 400}"));
   widgetChanged();
+  if (getOpenProperties()) {
+    m_widgets.last()->openProperties();
+  }
   markHistory();
 }
 
@@ -1247,6 +1283,9 @@ void WidgetLayout::createNewGraph()
   int posy = currentPosition.y();
   createGraph(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150}"));
   widgetChanged();
+  if (getOpenProperties()) {
+    m_widgets.last()->openProperties();
+  }
   markHistory();
 }
 
@@ -1256,6 +1295,9 @@ void WidgetLayout::createNewScope()
   int posy = currentPosition.y();
   createScope(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150} scope 2.000000 -1.000000"));
   widgetChanged();
+  if (getOpenProperties()) {
+    m_widgets.last()->openProperties();
+  }
   markHistory();
 }
 

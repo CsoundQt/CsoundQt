@@ -67,6 +67,7 @@ class QuteWidget : public QWidget
 
   public slots:
     void popUpMenu(QPoint pos);
+    void openProperties();
 
   protected:
     QSpinBox *xSpinBox;
@@ -98,7 +99,6 @@ class QuteWidget : public QWidget
 
   protected slots:
     void apply();
-    void openProperties();
     void deleteWidget();
     virtual void valueChanged(double value);
     void value2Changed(double value);

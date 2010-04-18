@@ -56,6 +56,11 @@
         <string>Rename</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>Mark Loop</string>
+       </property>
+      </item>
      </widget>
     </item>
     <item>

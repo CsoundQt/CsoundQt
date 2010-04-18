@@ -40,6 +40,7 @@ class FrameWidget;
 class WidgetLayout : public QWidget
 {
   Q_OBJECT
+  Q_PROPERTY(bool openProperties READ getOpenProperties WRITE setOpenProperties);
   public:
     WidgetLayout(QWidget* parent);
     ~WidgetLayout();
@@ -53,6 +54,7 @@ class WidgetLayout : public QWidget
     QString getSelectedWidgetsText();
     QString getMacWidgetsText(); // With full tags
     QStringList getSelectedMacWidgetsText();
+    bool getOpenProperties() { return m_openProperties; }
 
     void setValue(QString channelName, double value);
     void setValue(QString channelName, QString value);
@@ -60,6 +62,7 @@ class WidgetLayout : public QWidget
     void setValue(int index, QString value);
 
     void setKeyRepeatMode(bool repeat);
+    void setOpenProperties(bool open) {m_openProperties = open; }
     void setOuterGeometry(int newx, int newy, int neww, int newh); // Will only set if component >= 0
     QRect getOuterGeometry();
 
@@ -256,6 +259,7 @@ class WidgetLayout : public QWidget
     int m_historyIndex; // Current point in history
     bool m_modified;
     bool m_editMode;
+    bool m_openProperties; // Open widget properties when creating widgets
     bool m_enableEdit; // Enable editing and properties dialog
     QString m_clipboard;
     bool m_contained; // Whether contained in another widget (e.g. scrollbar in widget panel or widget panel)

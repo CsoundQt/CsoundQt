@@ -23,7 +23,7 @@
 #ifndef LIVEEVENTCONTROL_H
 #define LIVEEVENTCONTROL_H
 
-#include <QtGui/QWidget>
+#include <QtGui>
 
 namespace Ui {
     class LiveEventControl;
@@ -31,15 +31,45 @@ namespace Ui {
 
 class LiveEventControl : public QWidget {
     Q_OBJECT
-public:
+  public:
     LiveEventControl(QWidget *parent = 0);
     ~LiveEventControl();
 
-protected:
+    void renamePanel(int index, QString newName);
+
+  public slots:
+    void removePanel(int index);
+    void appendPanel(bool visible, bool play, bool loop, int sync,
+                     QString name, double loopLength, QString loopRange, double tempo);
+    void setPanelProperty(int index, QString property, QVariant value);
+
+  protected:
+    void closeEvent(QCloseEvent * event);
     void changeEvent(QEvent *e);
 
-private:
+  private:
+    QTableWidgetItem * getItem(int row, int column);
+    void openLoopRangeDialog(int row);
     Ui::LiveEventControl *m_ui;
+
+  private slots:
+    void newButtonReleased();
+    void cellChangedSlot(int row, int column);
+    void cellClickedSlot(int row, int column);
+
+  signals:
+    void closed();  // To inform DocumentPage that live event panel has been closed
+//    void hidePanels(bool show);
+    void stopAll();
+    void newPanel();
+    void playPanel(int index);
+    void loopPanel(int index, bool loop);
+    void stopPanel(int index);
+    void setPanelVisible(int index, bool visible);
+    void setPanelSync(int index, int mode);
+    void setPanelName(int index, QString name);
+    void setPanelTempo(int index, double tempo);
+    void setPanelLoopLength(int index, double tempo);
 };
 
 #endif // LIVEEVENTCONTROL_H

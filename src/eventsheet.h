@@ -45,13 +45,16 @@ class EventSheet : public QTableWidget
     void setFromText(QString text, int rowOffset = 0, int columnOffset = 0,
                      int numRows = 0, int numColumns = 0, bool noHistoryMark = false);
     void setDebug(bool debug);
+    QPair<int, int> getSelectedRowsRange();
 
   public slots:
     void setTempo(double value);
     void setLoopLength(double value);
     void sendEvents();
+    void sendAllEvents();
     void sendEventsOffset();
     void loopEvents();
+    void markLoop(int start = -1, int end = -1);
     void stopAllEvents();
     void del();
     void cut();
@@ -116,6 +119,7 @@ class EventSheet : public QTableWidget
     QAction *sendEventsAct;
     QAction *sendEventsOffsetAct;
     QAction *loopEventsAct;
+    QAction *markLoopAct;
     QAction *stopAllEventsAct;
     QAction *subtractAct;
     QAction *addAct;
@@ -150,7 +154,8 @@ class EventSheet : public QTableWidget
 
     // Looping
     QTimer loopTimer;
-    QModelIndexList  loopList;
+    int m_loopStart, m_loopEnd; // Start and end rows for looping (both inclusive)
+//    QModelIndexList  loopList;
 
     // Python scripts
     QString scriptDir;

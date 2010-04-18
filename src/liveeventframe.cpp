@@ -39,11 +39,12 @@ LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags
     QFrame(parent, f), m_csdName(csdName)
 {
   setupUi(this);
+  this->setVisible(false);
 
   setWindowTitle(m_csdName);
 //  setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
   m_sheet = new EventSheet(this);
-  m_sheet->show();
+//  m_sheet->show();
   m_sheet->setTempo(60.0);
   m_sheet->setLoopLength(8.0);
   connect(m_sheet,SIGNAL(modified()), this, SLOT(setModified()));
@@ -59,6 +60,8 @@ LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags
   connect(tempoSpinBox,SIGNAL(valueChanged(double)), this, SLOT(setTempo(double)));
   connect(modeComboBox,SIGNAL(activated(int)), this, SLOT(setMode(int)));
   connect(loopLengthSpinBox,SIGNAL(valueChanged(double)), this, SLOT(setLoopLength(double)));
+
+  setVisibleEnabled(true);
 }
 
 LiveEventFrame::~LiveEventFrame()
@@ -141,7 +144,10 @@ void LiveEventFrame::doAction(int action)
     return;
   }
   else if (action == 4) {
-    rename();
+    renameDialog();
+  }
+  else if (action == 5) {
+    markLoop();
   }
   actionComboBox->setCurrentIndex(0);
 }
@@ -201,7 +207,18 @@ double LiveEventFrame::getLoopLength()
 
 QString LiveEventFrame::getPlainText()
 {
-  return m_sheet->getPlainText();
+  QString panel = "<EventPanel name=\"";
+  panel += getName() + "\" tempo=\"";
+  panel += QString::number(getTempo(), 'f', 8) + "\" loop=\"";
+  panel += QString::number(getLoopLength(), 'f', 8) + "\" x=\"";
+  panel += QString::number(x()) + "\" y=\"";
+  panel += QString::number(y()) + "\" width=\"";
+  panel += QString::number(width()) + "\" height=\"";
+  panel += QString::number(height()) + "\" visible=\"";
+  panel += QString(getVisibleEnabled()? "true":"false") + "\">";
+  panel += m_sheet->getPlainText();
+  panel += "</EventPanel>\n";
+  return panel;
 }
 
 void LiveEventFrame::getEvents(unsigned long /*ksmps*/, QStringList */*eventText*/)
@@ -219,11 +236,11 @@ bool LiveEventFrame::isModified()
 //  this->destroy();
 //}
 
-void LiveEventFrame::rename()
+void LiveEventFrame::renameDialog()
 {
   QDialog d;
   QVBoxLayout l(&d);
-  QLabel label("Enter new name");
+  QLabel label(tr("Enter new name", "New name for Live Event panel"));
   QLineEdit line;
 //  d.resize(300, d.height());
 //  line.resize(300, line.height());
@@ -233,8 +250,13 @@ void LiveEventFrame::rename()
   connect(&line, SIGNAL(editingFinished()), &d, SLOT(accept ()) );
   int ret = d.exec();
   if (ret == QDialog::Accepted) {
-    setName(line.text());
+    emit renameFrame(this, line.text());
   }
+}
+
+void LiveEventFrame::markLoop(int start, int end)
+{
+  m_sheet->markLoop(start, end);
 }
 
 void LiveEventFrame::changeEvent(QEvent *e)
@@ -268,3 +290,18 @@ void LiveEventFrame::closeEvent (QCloseEvent * event)
   emit closed();
   event->accept();
 }
+
+//void LiveEventFrame::hideEvent (QHideEvent * event)
+//{
+//  qDebug() << "LiveEventFrame::hideEvent";
+//  setVisibleEnabled(false);
+//  QFrame::hideEvent(event);
+//}
+//
+//void LiveEventFrame::showEvent (QShowEvent * event)
+//{
+//  qDebug() << "LiveEventFrame::showEvent";
+//  setVisibleEnabled(true);
+//  QFrame::showEvent(event);
+//}
+
