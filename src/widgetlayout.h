@@ -138,6 +138,8 @@ class WidgetLayout : public QWidget
     QAction *sendToBackAct;
     QAction *distributeHorizontalAct;
     QAction *distributeVerticalAct;
+    QAction *alignCenterHorizontalAct;
+    QAction *alignCenterVerticalAct;
 
     // Preset actions
     QAction *storePresetAct;
@@ -195,6 +197,7 @@ class WidgetLayout : public QWidget
     void deleteSelected();
     void undo();
     void redo();
+
     void alignLeft();
     void alignRight();
     void alignTop();
@@ -202,6 +205,9 @@ class WidgetLayout : public QWidget
     void sendToBack();
     void distributeHorizontal();
     void distributeVertical();
+    void alignCenterVertical();
+    void alignCenterHorizontal();
+
     void markHistory();
     void createEditFrame(QuteWidget* widget);
 

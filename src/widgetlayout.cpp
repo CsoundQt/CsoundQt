@@ -130,6 +130,10 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   connect(distributeHorizontalAct, SIGNAL(triggered()), this, SLOT(distributeHorizontal()));
   distributeVerticalAct = new QAction(tr("Distribute Vertically"), this);
   connect(distributeVerticalAct, SIGNAL(triggered()), this, SLOT(distributeVertical()));
+  alignCenterHorizontalAct = new QAction(tr("Center Vertically"), this);
+  connect(alignCenterHorizontalAct, SIGNAL(triggered()), this, SLOT(alignCenterVertical()));
+  alignCenterVerticalAct = new QAction(tr("Center Horizontally"), this);
+  connect(alignCenterVerticalAct, SIGNAL(triggered()), this, SLOT(alignCenterHorizontal()));
 
   storePresetAct = new QAction(tr("Store Preset"), this);
   connect(storePresetAct, SIGNAL(triggered()), this, SLOT(savePreset()));
@@ -1453,13 +1457,10 @@ void WidgetLayout::sendToBack()
 void WidgetLayout::distributeHorizontal()
 {
   if (m_editMode) {
-    int size = editWidgets.size();
-    if (size < 3)
-      return;  // do nothing for less than three selected
     int spacing, emptySpace, max = -9999, min = 9999, widgetWidth = 0;
     int num = 0;
     QVector<int> order;
-    for (int i = 0; i < size ; i++) { // First check free space
+    for (int i = 0; i < editWidgets.size() ; i++) { // First check free space
       if (editWidgets[i]->isSelected()) {
         widgetWidth += editWidgets[i]->width();
         num++;
@@ -1484,6 +1485,8 @@ void WidgetLayout::distributeHorizontal()
         }
       }
     }
+    if (num < 3)
+      return;  // do nothing for less than three selected
     emptySpace = max - min - widgetWidth;
 //    qDebug() << "WidgetLayout::distributeHorizontal " << emptySpace <<  "---" << order;
     int accum = min;
@@ -1501,13 +1504,10 @@ void WidgetLayout::distributeHorizontal()
 void WidgetLayout::distributeVertical()
 {
   if (m_editMode) {
-    int size = editWidgets.size();
-    if (size < 3)
-      return;  // do nothing for less than three selected
     int spacing, emptySpace, max = -9999, min = 9999, widgetHeight = 0;
     int num = 0;
     QVector<int> order;
-    for (int i = 0; i < size ; i++) { // First check free space
+    for (int i = 0; i < editWidgets.size() ; i++) { // First check free space
       if (editWidgets[i]->isSelected()) {
         num++;
         widgetHeight += editWidgets[i]->height();
@@ -1532,6 +1532,8 @@ void WidgetLayout::distributeVertical()
         }
       }
     }
+    if (num < 3)
+      return;  // do nothing for less than three selected
     emptySpace = max - min - widgetHeight;
 //    qDebug() << "WidgetLayout::distributeHorizontal " << emptySpace <<  "---" << order;
     int accum = min;
@@ -1542,6 +1544,46 @@ void WidgetLayout::distributeVertical()
 //      qDebug() << "WidgetLayout::distributeHorizontal --" << i;
       editWidgets[order[i]]->move(editWidgets[order[i]]->x(), accum);
       m_widgets[order[i]]->move(editWidgets[order[i]]->x(), accum);
+    }
+  }
+}
+
+void WidgetLayout::alignCenterVertical()
+{
+  if (m_editMode) {
+    int center = 0, min = 9999;
+    for (int i = 0; i < editWidgets.size() ; i++) { // First find center
+      if (editWidgets[i]->isSelected()) {
+        if (min > editWidgets[i]->y()) { // Upper widget
+          min = editWidgets[i]->y();
+          center = editWidgets[i]->x() + (editWidgets[i]->width()/2);
+        }
+      }
+    }
+    for (int i = 0; i < editWidgets.size() ; i++) {
+      int newx = center -  (editWidgets[i]->width()/2);
+      editWidgets[i]->move(newx, editWidgets[i]->y());
+      m_widgets[i]->move(newx, m_widgets[i]->y());
+    }
+  }
+}
+
+void WidgetLayout::alignCenterHorizontal()
+{
+  if (m_editMode) {
+    int center = 0, min = 9999;
+    for (int i = 0; i < editWidgets.size() ; i++) { // First find center
+      if (editWidgets[i]->isSelected()) {
+        if (min > editWidgets[i]->x()) { // Leftmost widget
+          min = editWidgets[i]->x();
+          center = editWidgets[i]->y() + (editWidgets[i]->height()/2);
+        }
+      }
+    }
+    for (int i = 0; i < editWidgets.size() ; i++) {
+      int newy = center -  (editWidgets[i]->height()/2);
+      editWidgets[i]->move(editWidgets[i]->x(), newy);
+      m_widgets[i]->move(m_widgets[i]->x(), newy);
     }
   }
 }

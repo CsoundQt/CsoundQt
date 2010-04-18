@@ -371,6 +371,8 @@ QList<QAction *> QuteWidget::getParentActionList()
   actionList.append(layout->sendToBackAct);
   actionList.append(layout->distributeHorizontalAct);
   actionList.append(layout->distributeVerticalAct);
+  actionList.append(layout->alignCenterHorizontalAct);
+  actionList.append(layout->alignCenterVerticalAct);
   // FIXME put edit action in menu
 //  actionList.append(layout->editAct);
   return actionList;
