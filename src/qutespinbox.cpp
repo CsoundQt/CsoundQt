@@ -145,6 +145,7 @@ QString QuteSpinBox::getWidgetXmlText()
   s.writeTextElement("maximum", QString::number(property("QCS_maximum").toDouble()));
   s.writeTextElement("bordermode", property("QCS_bordermode").toString());
   s.writeTextElement("borderradius", QString::number(property("QCS_borderradius").toInt()));
+  s.writeTextElement("borderwidth", QString::number(property("QCS_borderwidth").toInt()));
   s.writeTextElement("randomizable", property("QCS_randomizable").toBool() ? "true": "false");
   s.writeEndElement();
 
@@ -202,7 +203,7 @@ void QuteSpinBox::applyInternalProperties()
                           + "; color:" + property("QCS_color").value<QColor>().name()
                           + "; border-color:" + property("QCS_color").value<QColor>().name()
                           + "; border-radius:" + QString::number(property("QCS_borderradius").toInt()) + "px"
-                          + "; border-width: 1px"
+                          + "; border-width: :" + QString::number(property("QCS_borderwidth").toInt()) + "px"
                           + "; border-style: " + borderStyle
                           + "; }");
 //  qDebug() << "QuteSpinBox::applyInternalProperties() sylesheet" <<  m_widget->styleSheet();

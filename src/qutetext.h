@@ -70,6 +70,8 @@ class QuteText : public QuteWidget
     QPushButton *bgColor;
     QCheckBox *bg;
     QCheckBox *border;
+    QSpinBox *borderRadius;
+    QSpinBox *borderWidth;
     QFontComboBox  *font;
     QSpinBox * fontSize;
     QComboBox * alignment;
