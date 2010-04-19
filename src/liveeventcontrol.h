@@ -36,11 +36,12 @@ class LiveEventControl : public QWidget {
     ~LiveEventControl();
 
     void renamePanel(int index, QString newName);
+    void setPanelLoopRange(int index, double start, double end);
 
   public slots:
     void removePanel(int index);
     void appendPanel(bool visible, bool play, bool loop, int sync,
-                     QString name, double loopLength, QString loopRange, double tempo);
+                     QString name, double loopLength, double loopStart, double loopEnd, double tempo);
     void setPanelProperty(int index, QString property, QVariant value);
 
   protected:
@@ -69,7 +70,8 @@ class LiveEventControl : public QWidget {
     void setPanelSync(int index, int mode);
     void setPanelName(int index, QString name);
     void setPanelTempo(int index, double tempo);
-    void setPanelLoopLength(int index, double tempo);
+    void setPanelLoopLength(int index, double length);
+    void setPanelLoopRangeSignal(int index, double start, double end);
 };
 
 #endif // LIVEEVENTCONTROL_H

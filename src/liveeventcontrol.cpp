@@ -33,7 +33,7 @@ LiveEventControl::LiveEventControl(QWidget *parent) :
   m_ui->panelTableWidget->setColumnWidth(1,40);
   m_ui->panelTableWidget->setColumnWidth(2,40);
   m_ui->panelTableWidget->setColumnWidth(3,40);
-  m_ui->panelTableWidget->setColumnWidth(4,300);
+  m_ui->panelTableWidget->setColumnWidth(4,280);
   m_ui->panelTableWidget->setColumnWidth(5,80);
   m_ui->panelTableWidget->setColumnWidth(6,80);
   m_ui->panelTableWidget->setColumnWidth(7,50);
@@ -53,6 +53,12 @@ void LiveEventControl::renamePanel(int index, QString newName)
   item->setText(newName);
 }
 
+void LiveEventControl::setPanelLoopRange(int index, double start, double end)
+{
+  QTableWidgetItem * item = getItem(index, 6);
+  item->setText(QString::number(start + 1) + "-" + QString::number(end + 1));
+}
+
 void LiveEventControl::removePanel(int index)
 {
   qDebug() << "LiveEventControl::removePanel " << index;
@@ -60,17 +66,18 @@ void LiveEventControl::removePanel(int index)
 }
 
 void LiveEventControl::appendPanel(bool visible, bool play, bool loop, int sync,
-                                   QString name, double loopLength, QString loopRange, double tempo)
+                                   QString name, double loopLength, double loopStart, double loopEnd , double tempo)
 {
   int newRow = m_ui->panelTableWidget->rowCount();
   qDebug() << "LiveEventControl::appendPanel " << newRow;
   m_ui->panelTableWidget->insertRow(newRow);
+  m_ui->panelTableWidget->setRowHeight(newRow, 20);
   QTableWidgetItem *visibleItem = getItem(newRow, 0);
   visibleItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
   QTableWidgetItem *playItem = getItem(newRow, 1);
 //  playItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
   QTableWidgetItem *loopItem = getItem(newRow, 2);
-//  loopItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
+  loopItem->setCheckState(Qt::Unchecked);
   QTableWidgetItem *syncItem = getItem(newRow, 3);
 //  loopItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
   QTableWidgetItem *nameItem = getItem(newRow, 4);
@@ -78,6 +85,7 @@ void LiveEventControl::appendPanel(bool visible, bool play, bool loop, int sync,
   QTableWidgetItem *loopLengthItem = getItem(newRow, 5);
   loopLengthItem->setData(Qt::DisplayRole, QVariant(loopLength));
   QTableWidgetItem *loopRangeItem = getItem(newRow, 6);
+  loopRangeItem->setText(QString::number(loopStart + 1) + "-" + QString::number(loopEnd + 1) );
 //  loopRangeItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
   QTableWidgetItem *tempoItem = getItem(newRow, 7);
   tempoItem->setData(Qt::DisplayRole, QVariant(tempo));
@@ -129,7 +137,7 @@ QTableWidgetItem * LiveEventControl::getItem(int row, int column)
     item = new QTableWidgetItem(QTableWidgetItem::Type);
     m_ui->panelTableWidget->setItem(row, column, item);
   }
-  if (column == 0) {
+  if (column == 0 || column == 2) {
     item->setFlags(Qt::ItemIsUserCheckable |Qt::ItemIsEnabled);
   }
   else if (column == 4) {
@@ -146,9 +154,9 @@ void LiveEventControl::openLoopRangeDialog(int row)
   QDialog d;
   QVBoxLayout l(&d);
   QLabel ls(tr("Loop start"),&d);
-  QDoubleSpinBox ss(&d);
+  QSpinBox ss(&d);
   QLabel le(tr("Loop end"),&d);
-  QDoubleSpinBox se(&d);
+  QSpinBox se(&d);
   QPushButton okButton(tr("Ok"), &d);
   QPushButton cancelButton(tr("Cancel"), &d);
   connect(&okButton,SIGNAL(released()),&d,SLOT(accept()));
@@ -159,12 +167,23 @@ void LiveEventControl::openLoopRangeDialog(int row)
   l.addWidget(&se);
   l.addWidget(&okButton);
   l.addWidget(&cancelButton);
+  QTableWidgetItem *item = getItem(row,6);
+  QStringList bounds(item->text().split("-"));
+  if (bounds.size() > 1) {
+    if (bounds[0].toInt() >= 0) {
+      ss.setValue(bounds[0].toInt() + 1);
+    }
+    if (bounds[1].toInt() >= 0) {
+      se.setValue(bounds[1].toInt() + 1);
+    }
+  }
   int ret = d.exec();
   if (ret == QDialog::Accepted) {
     QString range = QString::number(ss.value()) + "-" + QString::number(se.value());
     qDebug() << "LiveEventControl::openLoopRangeDialog " << row << range;
     QTableWidgetItem *item = m_ui->panelTableWidget->item(row,6);
     item->setText(range);
+    emit setPanelLoopRangeSignal(row, ss.value() - 1,se.value() - 1);
   }
 }
 
@@ -195,9 +214,12 @@ void  LiveEventControl::newButtonReleased()
 
 void  LiveEventControl::cellChangedSlot(int row, int column)
 {
-  QTableWidgetItem *item = m_ui->panelTableWidget->item(row,column);
+  QTableWidgetItem *item = m_ui->panelTableWidget->item(row, column);
   if (column == 0) { // Visible
     emit setPanelVisible(row, item->checkState() == Qt::Checked);
+  }
+  else if (column == 2) { // Loop
+    emit loopPanel(row, item->checkState() == Qt::Checked);
   }
   else if (column == 4) { // Name
     emit setPanelName(row, item->data(Qt::DisplayRole).toString());
@@ -209,9 +231,6 @@ void  LiveEventControl::cellClickedSlot(int row, int column)
   if (column == 1) { // Play
     qDebug() << "LiveEventControl::cellChangedSlot play";
     emit playPanel(row);
-  }
-  else if (column == 2) { // Loop
-    emit loopPanel(row, true);
   }
   else if (column == 3) { // Sync
     qDebug() << "LiveEventControl::cellChangedSlot sync not implemented yet.";

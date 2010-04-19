@@ -418,17 +418,27 @@ void EventSheet::loopEvents()
   sendEvents();
 }
 
-void EventSheet::markLoop(int start, int end)
+void EventSheet::setLoopActive(bool loop)
 {
-  QPair<int, int> rowsRange = getSelectedRowsRange();
-  if (start == -1) {
-    start = rowsRange.first;
+  qDebug() << "EventSheet::setLoopActive " << loop;
+  if (loop) {
+    if (!m_looping) {
+      m_looping = true;
+      markLoop(m_loopStart, m_loopEnd);
+      sendEvents();
+    }
   }
-  if (end == -1) {
-    end = rowsRange.second;
+  else {
+    m_looping = false;
+    markLoop(m_loopStart, m_loopEnd);
   }
-  m_loopStart = start;
-  m_loopEnd = end;
+}
+
+void EventSheet::markLoop(double start, double end)
+{
+  // TODO move looping to eventframe class
+  m_loopStart = (int) start;
+  m_loopEnd = (int) end;
   for (int i = 0; i < rowCount(); i++) {
     for (int j = 0; j < 4; j++) {
       QTableWidgetItem * item = this->item(i, j);
@@ -449,6 +459,15 @@ void EventSheet::markLoop(int start, int end)
       }
     }
   }
+}
+
+void EventSheet::setLoopRange()
+{
+  qDebug() << "EventSheet::setLoopRange()";
+  QPair<int, int> rowsRange = getSelectedRowsRange();
+  double start = rowsRange.first;
+  double end = rowsRange.second;
+  emit setLoopRangeFromSheet(start,end);
 }
 
 void EventSheet::stopAllEvents()
@@ -971,7 +990,7 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
   QMenu menu;
   menu.addAction(sendEventsAct);
   menu.addAction(sendEventsOffsetAct);
-  menu.addAction(loopEventsAct);
+  menu.addAction(loopSelectionAct);
   menu.addAction(markLoopAct);
   menu.addAction(stopAllEventsAct);
   menu.addSeparator();
@@ -1270,14 +1289,20 @@ void EventSheet::createActions()
   sendEventsOffsetAct->setIconText(tr("Send Events no offset"));
   connect(sendEventsOffsetAct, SIGNAL(triggered()), this, SLOT(sendEventsOffset()));
 
-  loopEventsAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Loop Events"), this);
-  loopEventsAct->setStatusTip(tr("Send Selected Events in Loop to Csound"));
-  loopEventsAct->setIconText(tr("Loop Events"));
-  connect(loopEventsAct, SIGNAL(triggered()), this, SLOT(loopEvents()));
+  loopSelectionAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Loop Selection"), this);
+  loopSelectionAct->setStatusTip(tr("Mark loop to current selection and start looping"));
+  loopSelectionAct->setIconText(tr("Loop Events"));
+  connect(loopSelectionAct, SIGNAL(triggered()), this, SLOT(loopEvents()));
+
+  enableLoopAct = new QAction(/*QIcon(":/a.png"),*/ tr("Loop Active"), this);
+  enableLoopAct->setStatusTip(tr("Activate Loop"));
+  enableLoopAct->setCheckable(true);
+  enableLoopAct->setChecked(false);
+  connect(enableLoopAct, SIGNAL(toggled(bool)), this, SLOT(setLoopActive(bool)));
 
   markLoopAct = new QAction(/*QIcon(":/a.png"),*/ tr("Mark Loop"), this);
   markLoopAct->setStatusTip(tr("Set Loop to selection, without starting loop"));
-  connect(markLoopAct, SIGNAL(triggered()), this, SLOT(markLoop()));
+  connect(markLoopAct, SIGNAL(triggered()), this, SLOT(setLoopRange()));
 
   stopAllEventsAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Stop Events"), this);
   stopAllEventsAct->setStatusTip(tr("Stop all running and pending events"));

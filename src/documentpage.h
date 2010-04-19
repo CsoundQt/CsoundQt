@@ -182,6 +182,7 @@ class DocumentPage : public QObject
     void setPanelNameSlot(int index, QString name);
     void setPanelTempoSlot(int index, double tempo);
     void setPanelLoopLengthSlot(int index, double length);
+    void setPanelLoopRangeSlot(int index, double start, double end);
 
     void registerButton(QuteButton *button);
 
@@ -220,7 +221,8 @@ class DocumentPage : public QObject
     void textChanged();
 //    void liveEventFrameClosed();
     void liveEventControlClosed();
-    void renameFrame(LiveEventFrame *frame,QString newName);
+    void renamePanel(LiveEventFrame *panel,QString newName);
+    void setPanelLoopRange(LiveEventFrame *panel, double start, double end);
     void opcodeSyntax(QString message);
     void setWidgetClipboard(QString text);
     void queueEvent(QString line, int delay = 0);

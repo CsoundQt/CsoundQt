@@ -55,6 +55,7 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     void setMode(int mode);
     void setTempo(double tempo);
     void setLoopLength(double length);
+    void setLoopRange(double start, double end);
     void setModified(bool mod = true);
     void doAction(int action);
     void newFrame();
@@ -62,12 +63,11 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     void deleteFrame(bool ask = false);
 
     // To pass directly to live event sheet
-    void markLoop(int start = -1, int end = -1);
+    void markLoop(double start = -1, double end = -1);
+    void loopPanel(bool loop);
 
   protected:
-    void changeEvent(QEvent *e);
-//    virtual void moveEvent (QMoveEvent * event);
-    virtual void resizeEvent(QResizeEvent * event);
+//    void changeEvent(QEvent *e);
     virtual void closeEvent(QCloseEvent * event);
 //    virtual void hideEvent(QHideEvent * event);
 //    virtual void showEvent(QShowEvent * event);
@@ -82,11 +82,13 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     EventSheet *m_sheet;
     QString m_csdName;
     bool m_modified;
+    double m_loopStart, m_loopEnd; // TODO move looping to this class
 
   signals:
     void newFrameSignal(QString text);
     void deleteFrameSignal(LiveEventFrame *frame);
-    void renameFrame(LiveEventFrame *frame, QString newName);
+    void renamePanel(LiveEventFrame *frame, QString newName);
+    void setLoopRangeFromPanel(LiveEventFrame *frame, double start, double end);
     void closed();  // To inform Live Event Control that live event panel has been closed
 };
 

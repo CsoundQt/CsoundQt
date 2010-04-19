@@ -73,6 +73,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   connect(m_liveEventControl, SIGNAL(setPanelName(int,QString)), this, SLOT(setPanelNameSlot(int,QString)));
   connect(m_liveEventControl, SIGNAL(setPanelTempo(int,double)), this, SLOT(setPanelTempoSlot(int,double)));
   connect(m_liveEventControl, SIGNAL(setPanelLoopLength(int,double)), this, SLOT(setPanelLoopLengthSlot(int,double)));
+  connect(m_liveEventControl, SIGNAL(setPanelLoopRangeSignal(int,double,double)), this, SLOT(setPanelLoopRangeSlot(int,double,double)));
 
   m_csEngine = new CsoundEngine();
   m_csEngine->setWidgetLayout(m_widgetLayout);  // Pass widget layout to engine
@@ -303,14 +304,17 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     int width = panelElement.attribute("width","-1").toDouble();
     int height = panelElement.attribute("height","-1").toDouble();
     int visibleEnabled = panelElement.attribute("visible","true") == "true";
+    int loopStart = panelElement.attribute("loopStart","0.0").toDouble();
+    int loopEnd = panelElement.attribute("loopEnd","0.0").toDouble();
 
     LiveEventFrame *panel = createLiveEventPanel();
     panel->setFromText(liveText);
     panel->setName(panelName);
     panel->setTempo(tempo);
     panel->setLoopLength(loop);
+    panel->setLoopRange(loopStart, loopEnd);
     m_liveEventControl->appendPanel(visibleEnabled, false, false, 0, panelName,
-                                    loop, "0-4",tempo);
+                                    loop, loopStart, loopEnd ,tempo);
     if (posx > 5 && posy > 5) {
       panel->move(posx, posy);
     }
@@ -926,7 +930,7 @@ void DocumentPage::playPanelSlot(int index)
 
 void DocumentPage::loopPanelSlot(int index, bool loop)
 {
-  qDebug() << "DocumentPage::loopPanelSlot not implemented";
+   m_liveFrames[index]->loopPanel(loop);
 }
 
 void DocumentPage::stopPanelSlot(int index)
@@ -958,6 +962,11 @@ void DocumentPage::setPanelTempoSlot(int index, double tempo)
 void DocumentPage::setPanelLoopLengthSlot(int index, double length)
 {
    m_liveFrames[index]->setLoopLength(length);
+}
+
+void DocumentPage::setPanelLoopRangeSlot(int index, double start, double end)
+{
+   m_liveFrames[index]->setLoopRange(start,end);
 }
 
     void setLoopLength(double length);
@@ -1206,7 +1215,7 @@ void DocumentPage::newLiveEventPanel(QString text)
 {
   LiveEventFrame *e = createLiveEventPanel(text);
   m_liveEventControl->appendPanel(true, false, false, 0, "",
-                                    8.0, "0-4", 60.0);
+                                    8.0, 0.0, 0.0 , 60.0);
 //  e->setVisible(false);
   e->show();  //Assume that since slot was called must be visible
 }
@@ -1227,7 +1236,9 @@ LiveEventFrame * DocumentPage::createLiveEventPanel(QString text)
 //  connect(e, SIGNAL(closed()), this, SLOT(liveEventFrameClosed()));
   connect(e, SIGNAL(newFrameSignal(QString)), this, SLOT(newLiveEventPanel(QString)));
   connect(e, SIGNAL(deleteFrameSignal(LiveEventFrame *)), this, SLOT(deleteLiveEventPanel(LiveEventFrame *)));
-  connect(e, SIGNAL(renameFrame(LiveEventFrame *, QString)), this, SLOT(renameFrame(LiveEventFrame *,QString)));
+  connect(e, SIGNAL(renamePanel(LiveEventFrame *, QString)), this, SLOT(renamePanel(LiveEventFrame *,QString)));
+  connect(e, SIGNAL(setLoopRangeFromPanel(LiveEventFrame *, double, double)),
+          this, SLOT(setPanelLoopRange(LiveEventFrame *,double, double)));
   connect(e->getSheet(), SIGNAL(sendEvent(QString)),this,SLOT(queueEvent(QString)));
   connect(e->getSheet(), SIGNAL(modified()),this,SLOT(setModified()));
   return e;
@@ -1280,12 +1291,20 @@ void DocumentPage::liveEventControlClosed()
   emit liveEventsVisible(false);
 }
 
-void DocumentPage::renameFrame(LiveEventFrame *frame,QString newName)
+void DocumentPage::renamePanel(LiveEventFrame *panel,QString newName)
 {
-  int index = m_liveFrames.indexOf(frame);
+  int index = m_liveFrames.indexOf(panel);
   if (index >= 0) {
     m_liveEventControl->renamePanel(index, newName);
-    frame->setName(newName);
+    panel->setName(newName);
+  }
+}
+
+void DocumentPage::setPanelLoopRange(LiveEventFrame *panel, double start, double end)
+{
+  int index = m_liveFrames.indexOf(panel);
+  if (index >= 0) {
+    m_liveEventControl->setPanelLoopRange(index, start, end);
   }
 }
 

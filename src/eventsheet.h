@@ -54,7 +54,9 @@ class EventSheet : public QTableWidget
     void sendAllEvents();
     void sendEventsOffset();
     void loopEvents();
-    void markLoop(int start = -1, int end = -1);
+    void setLoopActive(bool loop);
+    void markLoop(double start = -1, double end = -1); // This does the actual marking and setting.
+    void setLoopRange(); // This is called internally, and it calls the mark loop function in event sheet panel
     void stopAllEvents();
     void del();
     void cut();
@@ -118,7 +120,8 @@ class EventSheet : public QTableWidget
 //    QAction *cutAct;
     QAction *sendEventsAct;
     QAction *sendEventsOffsetAct;
-    QAction *loopEventsAct;
+    QAction *loopSelectionAct;
+    QAction *enableLoopAct;
     QAction *markLoopAct;
     QAction *stopAllEventsAct;
     QAction *subtractAct;
@@ -173,6 +176,7 @@ class EventSheet : public QTableWidget
 
   signals:
     void sendEvent(QString event);
+    void setLoopRangeFromSheet(double start, double end);
 //    void cellDoubleClicked();
     void modified();
 };

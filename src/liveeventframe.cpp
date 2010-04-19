@@ -48,6 +48,8 @@ LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags
   m_sheet->setTempo(60.0);
   m_sheet->setLoopLength(8.0);
   connect(m_sheet,SIGNAL(modified()), this, SLOT(setModified()));
+  connect(m_sheet,SIGNAL(setLoopRangeFromSheet(double,double)), this, SLOT(markLoop(double,double)));
+
   scrollArea->setWidget(m_sheet);
 
   m_editor = new QTextEdit(this);
@@ -123,6 +125,13 @@ void LiveEventFrame::setLoopLength(double length)
   loopLengthSpinBox->setValue(length);
   m_sheet->setLoopLength(length);
   //TODO add sending length to other modes here too
+}
+
+void LiveEventFrame::setLoopRange(double start, double end)
+{
+  m_sheet->markLoop(start,end);
+  m_loopStart = start;
+  m_loopEnd = end;
 }
 
 void LiveEventFrame::setModified(bool mod)
@@ -215,7 +224,9 @@ QString LiveEventFrame::getPlainText()
   panel += QString::number(y()) + "\" width=\"";
   panel += QString::number(width()) + "\" height=\"";
   panel += QString::number(height()) + "\" visible=\"";
-  panel += QString(getVisibleEnabled()? "true":"false") + "\">";
+  panel += QString(getVisibleEnabled()? "true":"false") + "\" loopStart=\"";
+  panel += QString::number(m_loopStart) + "\" loopEnd=\"";
+  panel += QString::number(m_loopEnd) + "\">";
   panel += m_sheet->getPlainText();
   panel += "</EventPanel>\n";
   return panel;
@@ -250,40 +261,34 @@ void LiveEventFrame::renameDialog()
   connect(&line, SIGNAL(editingFinished()), &d, SLOT(accept ()) );
   int ret = d.exec();
   if (ret == QDialog::Accepted) {
-    emit renameFrame(this, line.text());
+    emit renamePanel(this, line.text());
   }
 }
 
-void LiveEventFrame::markLoop(int start, int end)
+void LiveEventFrame::markLoop(double start, double end)
 {
+  m_loopStart = start;
+  m_loopEnd = end;
   m_sheet->markLoop(start, end);
+  emit setLoopRangeFromPanel(this, start, end);  // Signal from sheet must go a long way to do this line...
 }
 
-void LiveEventFrame::changeEvent(QEvent *e)
+void LiveEventFrame::loopPanel(bool loop)
 {
-  QFrame::changeEvent(e);
-  switch (e->type()) {
-  case QEvent::LanguageChange:
-    retranslateUi(this);
-    break;
-  default:
-    break;
-  }
+  m_sheet->setLoopActive(loop);
 }
 
-//void LiveEventFrame::moveEvent (QResizeEvent * event)
+//void LiveEventFrame::changeEvent(QEvent *e)
 //{
-//  QSize s = event->size();
-//  s.setHeight(s.height() - 30);
-//  scrollArea->resize(s);
+//  QFrame::changeEvent(e);
+//  switch (e->type()) {
+//  case QEvent::LanguageChange:
+//    retranslateUi(this);
+//    break;
+//  default:
+//    break;
+//  }
 //}
-
-void LiveEventFrame::resizeEvent (QResizeEvent * event)
-{
-  QSize s = event->size();
-  s.setHeight(s.height() - 30);
-  scrollArea->resize(s);
-}
 
 void LiveEventFrame::closeEvent (QCloseEvent * event)
 {
