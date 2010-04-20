@@ -15,7 +15,7 @@ class ClearQuteCsoundPrefs : public QMainWindow
 public:
     ClearQuteCsoundPrefs(QWidget *parent = 0);
     ~ClearQuteCsoundPrefs();
-    void clearSettings();
+    bool clearSettings();
 
 private:
     Ui::ClearQuteCsoundPrefs *ui;
