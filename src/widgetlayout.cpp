@@ -1603,9 +1603,11 @@ void WidgetLayout::alignCenterVertical()
       }
     }
     for (int i = 0; i < editWidgets.size() ; i++) {
-      int newx = center -  (editWidgets[i]->width()/2);
-      editWidgets[i]->move(newx, editWidgets[i]->y());
-      m_widgets[i]->move(newx, m_widgets[i]->y());
+      if (editWidgets[i]->isSelected()) {
+        int newx = center -  (editWidgets[i]->width()/2);
+        editWidgets[i]->move(newx, editWidgets[i]->y());
+        m_widgets[i]->move(newx, m_widgets[i]->y());
+      }
     }
   }
 }
@@ -1623,9 +1625,11 @@ void WidgetLayout::alignCenterHorizontal()
       }
     }
     for (int i = 0; i < editWidgets.size() ; i++) {
-      int newy = center -  (editWidgets[i]->height()/2);
-      editWidgets[i]->move(editWidgets[i]->x(), newy);
-      m_widgets[i]->move(m_widgets[i]->x(), newy);
+      if (editWidgets[i]->isSelected()) {
+        int newy = center -  (editWidgets[i]->height()/2);
+        editWidgets[i]->move(editWidgets[i]->x(), newy);
+        m_widgets[i]->move(m_widgets[i]->x(), newy);
+      }
     }
   }
 }

@@ -901,7 +901,7 @@ void CsoundEngine::dispatchQueues()
 void CsoundEngine::queueMessage(QString message)
 {
   if (closing != 1) {
-    messageMutex.lock();
+    messageMutex.lock(); // FIXME this is still occasionally causing threading issues as Csound uses it unexpectedly
     messageQueue << message;
     messageMutex.unlock();
   }
