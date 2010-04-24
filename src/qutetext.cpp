@@ -51,7 +51,7 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
   setProperty("QCS_alignment", "left");
   setProperty("QCS_precision", 3);
   setProperty("QCS_font", "Arial");
-  setProperty("QCS_fontsize", 8);
+  setProperty("QCS_fontsize", 12);
   setProperty("QCS_bgcolor", QColor());
   setProperty("QCS_bgcolormode", false);
   setProperty("QCS_color", Qt::black);
@@ -197,7 +197,7 @@ void QuteText::applyInternalProperties()
   setTextColor(property("QCS_color").value<QColor>());
   QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
   m_widget->setStyleSheet("QLabel { font-family:\"" + property("QCS_font").toString()
-                          + "\"; font-size: " + QString::number(property("QCS_fontsize").toInt()  + QCS_FONT_OFFSET) + "pt"
+                          + "\"; font-size: " + QString::number(property("QCS_fontsize").toInt()  + QCS_FONT_OFFSET) + "px"
                           + (property("QCS_bgcolormode").toBool() ?
                                     QString("; background-color:") + property("QCS_bgcolor").value<QColor>().name() : QString("; "))
                           + "; color:" + property("QCS_color").value<QColor>().name()
@@ -556,7 +556,7 @@ void QuteLineEdit::applyInternalProperties()
   setTextColor(property("QCS_color").value<QColor>());
   QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
   m_widget->setStyleSheet("QLabel { font-family:\"" + property("QCS_font").toString()
-                          + "\"; font-size: " + QString::number(property("QCS_fontsize").toInt()  + QCS_FONT_OFFSET)  + "pt"
+                          + "\"; font-size: " + QString::number(property("QCS_fontsize").toInt()  + QCS_FONT_OFFSET)  + "px"
                           + (property("QCS_bgcolormode").toBool() ?
                                     QString("; background-color:") + property("QCS_bgcolor").value<QColor>().name() : QString("; "))
                           + "; color:" + property("QCS_color").value<QColor>().name()
@@ -842,7 +842,7 @@ void QuteScrollNumber::applyInternalProperties()
   setTextColor(property("QCS_color").value<QColor>());
   QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
   m_widget->setStyleSheet("QLabel { font-family:\"" + property("QCS_font").toString()
-                          + "\"; font-size: " + QString::number(property("QCS_fontsize").toInt()  + QCS_FONT_OFFSET)  + "pt"
+                          + "\"; font-size: " + QString::number(property("QCS_fontsize").toInt()  + QCS_FONT_OFFSET)  + "px"
                           + (property("QCS_bgcolormode").toBool() ?
                                     QString("; background-color:") + property("QCS_bgcolor").value<QColor>().name() : QString("; "))
                           + "; color:" + property("QCS_color").value<QColor>().name()

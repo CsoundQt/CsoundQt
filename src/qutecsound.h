@@ -184,6 +184,7 @@ class qutecsound:public QMainWindow
     void createQuickRefPdf();
     void deleteCurrentTab();
     void openLogFile();
+    void showNewFormatWarning();
 
 //     QHash<QString, double> outValueQueue;
 //    QHash<QString, double> inValueQueue;

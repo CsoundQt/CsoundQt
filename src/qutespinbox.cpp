@@ -30,7 +30,8 @@ QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
   m_widget = new QDoubleSpinBox(this);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
   m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
-  static_cast<QDoubleSpinBox*>(m_widget)->setRange(-99999.999999, 99999.999999);
+  static_cast<QDoubleSpinBox*>(m_widget)->setAccelerated(true);
+  static_cast<QDoubleSpinBox*>(m_widget)->setRange(-999999999999, 999999999999);
   connect(static_cast<QDoubleSpinBox *>(m_widget), SIGNAL(valueChanged(double)), this, SLOT(valueChanged(double)));
 //   connect(static_cast<QDoubleSpinBox*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
   m_type = "editnum";
@@ -38,9 +39,12 @@ QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
   setProperty("QCS_value", (double) 0.0);
   setProperty("QCS_resolution", (double) 0.1);
   setProperty("QCS_minimum",(double)  -999999999999.0);
-  setProperty("QCS_maximum", (double) 99999999999999.0);
+  setProperty("QCS_maximum", (double) 999999999999.0);
   setProperty("QCS_randomizable", false);
   setProperty("QCS_label", QVariant()); // Remove this property which is part of parent class.
+  setProperty("QCS_color", QVariant()); // Remove this property which is part of parent class.
+  setProperty("QCS_borderradius", QVariant()); // Remove this property which is part of parent class.
+  setProperty("QCS_borderwidth", QVariant()); // Remove this property which is part of parent class.
 }
 
 QuteSpinBox::~QuteSpinBox()
@@ -143,9 +147,9 @@ QString QuteSpinBox::getWidgetXmlText()
 
   s.writeTextElement("minimum", QString::number(property("QCS_minimum").toDouble()));
   s.writeTextElement("maximum", QString::number(property("QCS_maximum").toDouble()));
-  s.writeTextElement("bordermode", property("QCS_bordermode").toString());
-  s.writeTextElement("borderradius", QString::number(property("QCS_borderradius").toInt()));
-  s.writeTextElement("borderwidth", QString::number(property("QCS_borderwidth").toInt()));
+//  s.writeTextElement("bordermode", property("QCS_bordermode").toString());
+//  s.writeTextElement("borderradius", QString::number(property("QCS_borderradius").toInt()));
+//  s.writeTextElement("borderwidth", QString::number(property("QCS_borderwidth").toInt()));
   s.writeTextElement("randomizable", property("QCS_randomizable").toBool() ? "true": "false");
   s.writeEndElement();
 
@@ -173,6 +177,7 @@ void QuteSpinBox::applyInternalProperties()
 //  qDebug() << "QuteSpinBox::applyInternalProperties()";
 
   static_cast<QDoubleSpinBox*>(m_widget)->setValue(property("QCS_value").toDouble());
+  static_cast<QDoubleSpinBox*>(m_widget)->setRange(property("QCS_minimum").toDouble(),property("QCS_maximum").toDouble());
   double resolution = property("QCS_resolution").toDouble();
   int i;
   for (i = 0; i < 8; i++) {//     Check for used decimal places.
@@ -197,14 +202,14 @@ void QuteSpinBox::applyInternalProperties()
   setTextColor(property("QCS_color").value<QColor>());
   QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
   m_widget->setStyleSheet("QLabel { font-family:\"" + property("QCS_font").toString()
-                          + "\"; font-size: " + QString::number(property("QCS_fontsize").toInt()  + QCS_FONT_OFFSET) + "pt"
+                          + "\"; font-size: " + QString::number(property("QCS_fontsize").toInt()  + QCS_FONT_OFFSET) + "px"
                           + (property("QCS_bgcolormode").toBool() ?
                                     QString("; background-color:") + property("QCS_bgcolor").value<QColor>().name() : QString("; "))
                           + "; color:" + property("QCS_color").value<QColor>().name()
-                          + "; border-color:" + property("QCS_color").value<QColor>().name()
-                          + "; border-radius:" + QString::number(property("QCS_borderradius").toInt()) + "px"
-                          + "; border-width: :" + QString::number(property("QCS_borderwidth").toInt()) + "px"
-                          + "; border-style: " + borderStyle
+//                          + "; border-color:" + property("QCS_color").value<QColor>().name()
+//                          + "; border-radius:" + QString::number(property("QCS_borderradius").toInt()) + "px"
+//                          + "; border-width: :" + QString::number(property("QCS_borderwidth").toInt()) + "px"
+//                          + "; border-style: " + borderStyle
                           + "; }");
 //  qDebug() << "QuteSpinBox::applyInternalProperties() sylesheet" <<  m_widget->styleSheet();
   QuteWidget::applyInternalProperties();
@@ -221,16 +226,35 @@ void QuteSpinBox::createPropertiesDialog()
   resolutionSpinBox = new QDoubleSpinBox(dialog);
   resolutionSpinBox->setDecimals(6);
   resolutionSpinBox->setValue(property("QCS_resolution").toDouble());
+  resolutionSpinBox->setRange(0,999999999999);
   layout->addWidget(resolutionSpinBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
+  label = new QLabel(dialog);
+  label->setText("Min =");
+  layout->addWidget(label, 2, 0, Qt::AlignRight|Qt::AlignVCenter);
+  minSpinBox = new QDoubleSpinBox(dialog);
+  minSpinBox->setDecimals(6);
+  minSpinBox->setRange(-999999999999.0, 999999999999.0);
+  minSpinBox->setValue(property("QCS_minimum").toDouble());
+  layout->addWidget(minSpinBox, 2,1, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+  label->setText("Max =");
+  layout->addWidget(label, 2, 2, Qt::AlignRight|Qt::AlignVCenter);
+  maxSpinBox = new QDoubleSpinBox(dialog);
+  maxSpinBox->setDecimals(6);
+  maxSpinBox->setRange(-999999999999.0, 999999999999.0);
+  maxSpinBox->setValue(property("QCS_maximum").toDouble());
+  layout->addWidget(maxSpinBox, 2,3, Qt::AlignLeft|Qt::AlignVCenter);
   fontSize->hide();
   font->hide();
   border->hide();
   bg->hide();
   textColor->hide();
   bgColor->hide();
+  border->hide();
+  borderRadius->hide();
+  borderWidth->hide();
   text->setText(static_cast<QDoubleSpinBox *>(m_widget)->text());
-
 }
 
 void QuteSpinBox::applyProperties()
@@ -257,9 +281,8 @@ void QuteSpinBox::applyProperties()
   setProperty("QCS_bordermode", border->isChecked() ? "border" : "noborder");
   setProperty("QCS_resolution", resolutionSpinBox->value());
   setProperty("QCS_value", text->toPlainText().toDouble());
-
-//  setProperty("QCS_minimum",(double)  -999999999999.0);
-//  setProperty("QCS_maximum", (double) 99999999999999.0);
+  setProperty("QCS_maximum", maxSpinBox->value());
+  setProperty("QCS_minimum", minSpinBox->value());
 //  setProperty("QCS_randomizable",false);
 
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last

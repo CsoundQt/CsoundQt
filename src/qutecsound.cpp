@@ -632,6 +632,18 @@ void qutecsound::openLogFile()
   }
 }
 
+void qutecsound::showNewFormatWarning()
+{
+  QMessageBox::warning(this, tr("New widget format"),
+                       tr("  This version of QuteCsound implements a new format for storing widgets, which"
+                          "enables many of the new widget features you will find now.\n"
+                          "  The old format is still read and saved, so you will be able to open files in older versions"
+                          "but some of the features will not be passed to older versions.\n"
+                          "  Also, since the old format is not read if the new format is present in a file. "
+                          "Saving changes in the old format only may not be reflected in this version.\n"),
+                       QMessageBox::Ok);
+}
+
 bool qutecsound::saveAs()
 {
   QString fileName = getSaveFileName();
@@ -2460,6 +2472,9 @@ void qutecsound::readSettings()
 {
   QSettings settings("csound", "qutecsound");
   int settingsVersion = settings.value("settingsVersion", 0).toInt();
+  // Version 1 to remove "-d" from additional command line flags
+  // Version 2 to save default keyboard shortcuts (weren't saved previously)
+  // Version 2 to add "*" to jack client name
   settings.beginGroup("GUI");
   QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
   QSize size = settings.value("size", QSize(600, 500)).toSize();
@@ -2597,13 +2612,18 @@ void qutecsound::readSettings()
                                         ).toString();
   settings.endGroup();
   settings.endGroup();
+  if (settingsVersion < 3) {
+    showNewFormatWarning();
+  }
 }
 
 void qutecsound::writeSettings()
 {
   QSettings settings("csound", "qutecsound");
   if (!m_resetPrefs) {
-    settings.setValue("settingsVersion", 2); // Version 1 when clearing additional flags, version 2 when setting jack client to *
+    // Version 1 when clearing additional flags, version 2 when setting jack client to *
+    // version 3 to store that new widget format warning has been shown.
+    settings.setValue("settingsVersion", 3);
   }
   else {
     settings.remove("");

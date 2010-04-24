@@ -36,6 +36,16 @@ Inspector::Inspector(QWidget *parent)
           this, SLOT(itemActivated(QTreeWidgetItem*,int)));
 //  connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
 //          this, SLOT(itemActivated(QTreeWidgetItem*,int)));
+  opcodeItem = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
+  macroItem = new TreeItem(m_treeWidget, QStringList(tr("Macros")));
+  instrItem = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
+  ftableItem = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
+  scoreItem = new TreeItem(m_treeWidget, QStringList(tr("Score")));
+  m_treeWidget->expandItem(opcodeItem);
+  m_treeWidget->expandItem(macroItem);
+  m_treeWidget->expandItem(instrItem);
+  m_treeWidget->expandItem(ftableItem);
+  m_treeWidget->expandItem(scoreItem);
 }
 
 
@@ -47,16 +57,21 @@ Inspector::~Inspector()
 void Inspector::parseText(const QString &text)
 {
 //  qDebug() << "Inspector:parseText";
+  bool opcodeItemExpanded = opcodeItem->isExpanded();
+  bool macroItemExpanded = macroItem->isExpanded();
+  bool instrItemExpanded = instrItem->isExpanded();
+  bool ftableItemExpanded = ftableItem->isExpanded();
+  bool scoreItemExpanded = scoreItem->isExpanded();
   m_treeWidget->clear();
-  TreeItem *opcodeItem = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
+  opcodeItem = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
   opcodeItem->setLine(-1);
-  TreeItem *macroItem = new TreeItem(m_treeWidget, QStringList(tr("Macros")));
+  macroItem = new TreeItem(m_treeWidget, QStringList(tr("Macros")));
   macroItem->setLine(-1);
-  TreeItem *instrItem = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
+  instrItem = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
   instrItem->setLine(-1);
-  TreeItem *ftableItem = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
+  ftableItem = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
   ftableItem->setLine(-1);
-  TreeItem *scoreItem = new TreeItem(m_treeWidget, QStringList(tr("Score")));
+  scoreItem = new TreeItem(m_treeWidget, QStringList(tr("Score")));
   scoreItem->setLine(-1);  // This might be overridden below
   TreeItem *currentInstrument = 0;
   QStringList lines = text.split(QRegExp("[\n\r]"));
@@ -66,6 +81,7 @@ void Inspector::parseText(const QString &text)
       QStringList columnslist(QString("instr %1").arg(text).simplified());
       TreeItem *newItem = new TreeItem(instrItem, columnslist);
       newItem->setLine(i + 1);
+      newItem->setForeground (0, QBrush(Qt::darkMagenta) );
       currentInstrument = newItem;
     }
     if (lines[i].trimmed().startsWith(";;")) {
@@ -115,11 +131,36 @@ void Inspector::parseText(const QString &text)
       instrItem->setLine(i + 1);
     }
   }
-  m_treeWidget->expandItem(opcodeItem);
-  m_treeWidget->expandItem(macroItem);
-  m_treeWidget->expandItem(instrItem);
-  m_treeWidget->expandItem(ftableItem);
-  m_treeWidget->expandItem(scoreItem);
+  if (opcodeItemExpanded) {
+    m_treeWidget->expandItem(opcodeItem);
+  }
+  else {
+    m_treeWidget->collapseItem(opcodeItem);
+  }
+  if (macroItemExpanded) {
+    m_treeWidget->expandItem(macroItem);
+  }
+  else {
+    m_treeWidget->collapseItem(macroItem);
+  }
+  if (instrItemExpanded) {
+    m_treeWidget->expandItem(instrItem);
+  }
+  else {
+    m_treeWidget->collapseItem(instrItem);
+  }
+  if (ftableItemExpanded) {
+    m_treeWidget->expandItem(ftableItem);
+  }
+  else {
+    m_treeWidget->collapseItem(ftableItem);
+  }
+  if (scoreItemExpanded) {
+    m_treeWidget->expandItem(scoreItem);
+  }
+  else {
+    m_treeWidget->collapseItem(scoreItem);
+  }
 }
 
 void Inspector::parsePythonText(const QString &text)

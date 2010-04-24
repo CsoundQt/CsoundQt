@@ -55,6 +55,11 @@ class Inspector : public QDockWidget
 
   private:
     QTreeWidget *m_treeWidget;
+    TreeItem *opcodeItem;
+    TreeItem *macroItem;
+    TreeItem *instrItem;
+    TreeItem *ftableItem;
+    TreeItem *scoreItem;
 
   private slots:
     void itemActivated(QTreeWidgetItem * item, int column);

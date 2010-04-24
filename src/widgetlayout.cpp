@@ -1072,6 +1072,8 @@ void WidgetLayout::widgetResized(QPair<int, int> delta)
     if (editWidgets[i]->isSelected()) {
       int neww = m_widgets[i]->width() + delta.first;
       int newh = m_widgets[i]->height() + delta.second;
+      neww = neww > 5 ? neww : 5;
+      newh = newh > 5 ? newh : 5;
       m_widgets[i]->setWidgetGeometry(m_widgets[i]->x(), m_widgets[i]->y(), neww, newh);
       editWidgets[i]->resize(neww, newh);
     }
@@ -1879,7 +1881,7 @@ int WidgetLayout::createText(int x, int y, int width, int height, QString widget
   widget->setProperty("QCS_objectName",quoteParts[1]);
   widget->setProperty("QCS_alignment",quoteParts[2].simplified());
   widget->setProperty("QCS_font",quoteParts[3].simplified());
-  widget->setProperty("QCS_fontsize",lastParts[0].toInt() - 2);
+  widget->setProperty("QCS_fontsize",lastParts[0].toInt());
   widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
                                           lastParts[2].toDouble()/256.0,
                                           lastParts[3].toDouble()/256.0));
@@ -1923,7 +1925,7 @@ int WidgetLayout::createScrollNumber(int x, int y, int width, int height, QStrin
   widget->setProperty("QCS_objectName",quoteParts[1]);
   widget->setProperty("QCS_alignment",quoteParts[2].simplified());
   widget->setProperty("QCS_font",quoteParts[3].simplified());
-  widget->setProperty("QCS_fontsize",lastParts[0].toInt() - 2);
+  widget->setProperty("QCS_fontsize",lastParts[0].toInt());
   widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
                                           lastParts[2].toDouble()/256.0,
                                           lastParts[3].toDouble()/256.0));
@@ -1968,7 +1970,7 @@ int WidgetLayout::createLineEdit(int x, int y, int width, int height, QString wi
   widget->setProperty("QCS_objectName",quoteParts[1]);
   widget->setProperty("QCS_alignment",quoteParts[2].simplified());
   widget->setProperty("QCS_font",quoteParts[3].simplified());
-  widget->setProperty("QCS_fontsize",lastParts[0].toInt() - 2);
+  widget->setProperty("QCS_fontsize",lastParts[0].toInt());
   widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
                                           lastParts[2].toDouble()/256.0,
                                           lastParts[3].toDouble()/256.0));
@@ -2008,7 +2010,7 @@ int WidgetLayout::createSpinBox(int x, int y, int width, int height, QString wid
   widget->setProperty("QCS_objectName",quoteParts[1]);
   widget->setProperty("QCS_alignment",quoteParts[2].simplified());
   widget->setProperty("QCS_font",quoteParts[3].simplified());
-  widget->setProperty("QCS_fontsize",lastParts[0].toInt() - 2);
+  widget->setProperty("QCS_fontsize",lastParts[0].toInt());
   widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
                                           lastParts[2].toDouble()/256.0,
                                           lastParts[3].toDouble()/256.0));

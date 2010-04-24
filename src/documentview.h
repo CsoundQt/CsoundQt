@@ -27,6 +27,7 @@
 #include "highlighter.h"
 
 class OpEntryParser;
+class TextEditor;
 
 #include <QKeyEvent> // For syntax menu class
 
@@ -138,16 +139,16 @@ class DocumentView : public QScrollArea
                     //256 = show Widget, Preset and Extra Options sections
                     //512 = show <CsLadspa> text with tags
     QSplitter *splitter;
-    QTextEdit *mainEditor;
-    QTextEdit *scoreEditor;
-    QTextEdit *optionsEditor;
-    QTextEdit *filebEditor;
-    QTextEdit *versionEditor;
-    QTextEdit *licenceEditor;
-    QTextEdit *otherEditor;
-    QTextEdit *widgetEditor;
-    QTextEdit *ladspaEditor;
-    QVector<QTextEdit *> editors; // A vector to hold pointers for the above for easy processing
+    TextEditor *mainEditor;
+    TextEditor *scoreEditor;
+    TextEditor *optionsEditor;
+    TextEditor *filebEditor;
+    TextEditor *versionEditor;
+    TextEditor *licenceEditor;
+    TextEditor *otherEditor;
+    TextEditor *widgetEditor;
+    TextEditor *ladspaEditor;
+    QVector<TextEditor *> editors; // A vector to hold pointers for the above for easy processing
 
     OpEntryParser *m_opcodeTree;
     MySyntaxMenu *syntaxMenu;

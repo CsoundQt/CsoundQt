@@ -26,19 +26,20 @@
 #include "opentryparser.h"
 #include "node.h"
 #include "types.h"
+#include "texteditor.h"
 
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
     QScrollArea(parent),  m_opcodeTree(opcodeTree)
 {
-  mainEditor = new QTextEdit(this);
-  scoreEditor = new QTextEdit(this);
-  optionsEditor = new QTextEdit(this);
-  filebEditor = new QTextEdit(this);
-  versionEditor = new QTextEdit(this);
-  licenceEditor = new QTextEdit(this);
-  otherEditor = new QTextEdit(this);
-  widgetEditor = new QTextEdit(this);
-  ladspaEditor = new QTextEdit(this);
+  mainEditor = new TextEditor(this);
+  scoreEditor = new TextEditor(this);
+  optionsEditor = new TextEditor(this);
+  filebEditor = new TextEditor(this);
+  versionEditor = new TextEditor(this);
+  licenceEditor = new TextEditor(this);
+  otherEditor = new TextEditor(this);
+  widgetEditor = new TextEditor(this);
+  ladspaEditor = new TextEditor(this);
   editors << mainEditor << scoreEditor << optionsEditor << filebEditor
       << versionEditor << licenceEditor << otherEditor << widgetEditor
       << ladspaEditor;
@@ -750,8 +751,12 @@ void DocumentView::unindent()
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
   }
   QString text = cursor.selectedText();
-  if (text.startsWith(indentChar))
-    text.remove(indentChar);
+  while (indentChar == "    "  && text.startsWith("\t")) {
+    text.remove(0,1);
+  }
+  if (text.startsWith(indentChar)) {
+    text.remove(0,indentChar.size());
+  }
   text.replace(QChar(QChar::ParagraphSeparator), QString("\n"));
   text.replace("\n" + indentChar, QString("\n")); //TODO make more robust
   cursor.insertText(text);

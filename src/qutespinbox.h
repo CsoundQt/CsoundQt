@@ -50,6 +50,9 @@ class QuteSpinBox : public QuteText
     virtual void createPropertiesDialog();
     virtual void applyProperties();
 
+  private:
+    QDoubleSpinBox *minSpinBox;
+    QDoubleSpinBox *maxSpinBox;
     QDoubleSpinBox* resolutionSpinBox;
 };
 

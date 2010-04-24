@@ -25,8 +25,9 @@
 
 #include "qutewidget.h"
 
+// TODO remove this offset?
 #ifdef Q_WS_MAC
-#define QCS_FONT_OFFSET 5
+#define QCS_FONT_OFFSET 0
 #else
 #define QCS_FONT_OFFSET 0
 #endif
