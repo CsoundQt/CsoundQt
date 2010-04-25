@@ -44,12 +44,14 @@ QuteCheckBox::~QuteCheckBox()
 void QuteCheckBox::setValue(double value)
 {
 #ifdef  USE_WIDGET_MUTEX
-  mutex.lock();
+  widgetMutex.lockForWrite();
 #endif
   // value is 1 is checked, 0 if not
+  m_widget->blockSignals(true);
   static_cast<QCheckBox *>(m_widget)->setChecked(value != 0);
+  m_widget->blockSignals(false);
 #ifdef  USE_WIDGET_MUTEX
-  mutex.unlock();
+  widgetMutex.unlock();
 #endif
 }
 
@@ -60,7 +62,15 @@ void QuteCheckBox::setLabel(QString label)
 
 double QuteCheckBox::getValue()
 {
-  return (static_cast<QCheckBox *>(m_widget)->isChecked()? property("QCS_value").toDouble():0.0);
+  double value = 0.0;
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
+  value = static_cast<QCheckBox *>(m_widget)->isChecked() ? property("QCS_value").toDouble() : 0.0;
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
+  return value;
 }
 
 //QString QuteCheckBox::getLabel()
@@ -70,11 +80,17 @@ double QuteCheckBox::getValue()
 
 QString QuteCheckBox::getWidgetLine()
 {
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   QString line = "ioCheckbox {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += (static_cast<QCheckBox *>(m_widget)->isChecked()? QString("on "):QString("off "));
   line += property("QCS_objectName").toString();
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   return line;
 }
 
@@ -100,12 +116,19 @@ QString QuteCheckBox::getWidgetXmlText()
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
 
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
+
   s.writeTextElement("selected",
                      static_cast<QCheckBox *>(m_widget)->isChecked()? QString("true"):QString("false"));
   s.writeTextElement("label", property("QCS_label").toString());
   s.writeTextElement("value", QString::number(property("QCS_value").toDouble(), 'f', 8));
   s.writeTextElement("randomizable", property("QCS_randomizable").toBool() ? "true": "false");
   s.writeEndElement();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   return xmlText;
 }
 
@@ -128,5 +151,11 @@ void QuteCheckBox::stateChanged(int state)
 void QuteCheckBox::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   dialog->setWindowTitle("Check Box");
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
 }

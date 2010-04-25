@@ -41,11 +41,11 @@ class QuteText : public QuteWidget
     ~QuteText();
 
     virtual QString getWidgetLine();
-    virtual QString getWidgetType();
     virtual QString getWidgetXmlText();
 
     virtual double getValue();
     virtual QString getStringValue();
+    virtual QString getWidgetType();
     virtual void setValue(double value);
     virtual void setValue(QString value);
 
@@ -93,9 +93,9 @@ class QuteLineEdit : public QuteText
     virtual void setText(QString text);
     virtual QString getWidgetLine();
     virtual QString getWidgetXmlText();
-    virtual QString getWidgetType();
     virtual QString getStringValue();
     virtual double getValue();
+    virtual QString getWidgetType();
     virtual void dropEvent(QDropEvent *event);
     virtual void applyInternalProperties();
 
@@ -114,12 +114,12 @@ class QuteScrollNumber : public QuteText
     virtual void setAlignment(int alignment);
     virtual void setText(QString text);
     virtual QString getWidgetLine();
-    virtual QString getCabbageLine();
+//    virtual QString getCabbageLine();
     virtual QString getCsladspaLine();
     virtual QString getWidgetXmlText();
-    virtual QString getWidgetType();
     virtual QString getStringValue();
-    virtual double getValue();
+    virtual QString getWidgetType();
+//    virtual double getValue();
 
     virtual void applyInternalProperties();
 

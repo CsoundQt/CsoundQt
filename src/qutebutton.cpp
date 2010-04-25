@@ -50,37 +50,57 @@ QuteButton::~QuteButton()
 void QuteButton::setValue(double value)
 {
 #ifdef  USE_WIDGET_MUTEX
-  mutex.lock();
+  widgetMutex.lockForWrite();
 #endif
   // setValue sets the value the widget outputs while it is pressed
   static_cast<QPushButton *>(m_widget)->setChecked(value != 0);
 #ifdef  USE_WIDGET_MUTEX
-  mutex.unlock();
+  widgetMutex.unlock();
 #endif
 }
 
 double QuteButton::getValue()
 {
   // Returns the value for any button type.
+  double value = 0.0;
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   if ( static_cast<QPushButton *>(m_widget)->isDown() )
-    return property("QCS_value").toDouble();
-  else
-    return 0.0;
+    value = property("QCS_value").toDouble();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
+  return value;
 }
 
 QString QuteButton::getStringValue()
 {
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   QString name = property("QCS_objectName").toString();
+  QString stringValue;
   if (name.startsWith("_Browse")) {
-    return property("QCS_stringvalue").toString();
+    stringValue = property("QCS_stringvalue").toString();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   }
   else {
-    return QString::number(getValue());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
+    stringValue =  QString::number(getValue());
   }
+  return stringValue;
 }
 
 QString QuteButton::getWidgetLine()
 {
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   QString line = "ioButton {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line +=  property("QCS_type").toString()  + " ";
@@ -90,16 +110,25 @@ QString QuteButton::getWidgetLine()
   line += "\"" + property("QCS_image").toString() + "\" ";
   line += property("QCS_eventLine").toString();
 //   qDebug("QuteButton::getWidgetLine() %s", line.toStdString().c_str());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   return line;
 }
 
 QString QuteButton::getCabbageLine()
 {
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   QString line = "button channel(\"" + property("QCS_objectName").toString() + "\"),  ";
   line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
   line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
   line += "OnOffCaption(\"" + property("QCS_objectName").toString() + "\")"; // OffCaption is not supported in QuteCsound
-  qDebug() << "Warning: Cabbage does not support button values different than 1, images or event buttons";
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
+//  qDebug() << "Warning: Cabbage does not support button values different than 1, images or event buttons";
   return line;
 }
 
@@ -110,6 +139,10 @@ QString QuteButton::getWidgetXmlText()
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
 
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
+
   s.writeTextElement("type", property("QCS_type").toString());
   s.writeTextElement("value", QString::number(property("QCS_value").toDouble(),'f', 8));
   s.writeTextElement("stringvalue", property("QCS_stringvalue").toString());
@@ -118,6 +151,9 @@ QString QuteButton::getWidgetXmlText()
   s.writeTextElement("eventLine", property("QCS_eventLine").toString());
 
   s.writeEndElement();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   return xmlText;
 }
 
@@ -128,6 +164,9 @@ QString QuteButton::getWidgetType()
 
 void QuteButton::applyProperties()
 {
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForWrite();
+#endif
   QString eventLine = line->text();
   while (eventLine.size() > 0 and eventLine[0] == ' ') {
     eventLine.remove(0,1); //remove all spaces at the beginning. This is needed for event queue lines
@@ -139,6 +178,9 @@ void QuteButton::applyProperties()
   setProperty("QCS_type", typeComboBox->currentText());
 //  setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
 //  setType(typeComboBox->currentText());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
 
@@ -150,6 +192,9 @@ void QuteButton::contextMenuEvent(QContextMenuEvent* event)
 void QuteButton::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   dialog->setWindowTitle("Button");
 
   QLabel *label = new QLabel(dialog);
@@ -176,15 +221,15 @@ void QuteButton::createPropertiesDialog()
   label->setText("Text:");
   layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
   text = new QTextEdit(dialog);
+  text->setMinimumWidth(320);
   text->setText(property("QCS_text").toString());
   layout->addWidget(text, 5,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
-  text->setMinimumWidth(320);
   label = new QLabel(dialog);
   label->setText("Image:");
   layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
   filenameLineEdit = new QLineEdit(dialog);
-  filenameLineEdit->setText(property("QCS_image").toString());
   filenameLineEdit->setMinimumWidth(320);
+  filenameLineEdit->setText(property("QCS_image").toString());
   layout->addWidget(filenameLineEdit, 6,1,1,2, Qt::AlignLeft|Qt::AlignVCenter);
   QPushButton *browseButton = new QPushButton(dialog);
   browseButton->setText("...");
@@ -196,9 +241,12 @@ void QuteButton::createPropertiesDialog()
   layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
   line = new QLineEdit(dialog);
 //   text->setText(((QuteLabel *)m_widget)->toPlainText());
-  line->setText(property("QCS_eventLine").toString());
   layout->addWidget(line, 7,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
   line->setMinimumWidth(320);
+  line->setText(property("QCS_eventLine").toString());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
 }
 
 void QuteButton::setText(QString text)
@@ -230,7 +278,6 @@ void QuteButton::applyInternalProperties()
 {
   QuteWidget::applyInternalProperties();
 //  qDebug() << "QuteButton::applyInternalProperties()";
-
   QString type = property("QCS_type").toString();
   if (type == "event" or type == "value") {
     icon = QIcon();
@@ -251,14 +298,22 @@ void QuteButton::applyInternalProperties()
 void QuteButton::buttonReleased()
 {
   // Only produce events for event types
+#ifdef  USE_WIDGET_MUTEX
+      widgetMutex.lockForRead();
+#endif
   QString name = property("QCS_objectName").toString();
   QString type = property("QCS_type").toString();
+  double value = property("QCS_value").toDouble();
+  QString eventLine = property("QCS_eventLine").toString();
+#ifdef  USE_WIDGET_MUTEX
+      widgetMutex.unlock();
+#endif
   if (type == "event" or type == "pictevent")
-    emit(queueEvent(property("QCS_eventLine").toString()));
+    emit(queueEvent(eventLine));
   else if (type == "value" or type == "pictvalue") {
-    if (name == "_Play" && property("QCS_value").toDouble() == 1)
+    if (name == "_Play" &&  value == 1)
       emit play();
-    else if (name == "_Play" && property("QCS_value").toDouble() == 0)
+    else if (name == "_Play" && value == 0)
       emit stop();
     else if (name == "_Pause")
       emit pause();
@@ -268,10 +323,16 @@ void QuteButton::buttonReleased()
       emit render();
     else if (name.startsWith("_Browse")) {
       QString fileName = QFileDialog::getOpenFileName(this, tr("Select File"));
+#ifdef  USE_WIDGET_MUTEX
+      widgetMutex.lockForWrite();
+#endif
       if (fileName != "") {
         setProperty("QCS_stringvalue", fileName);
         emit newValue(QPair<QString, QString>(name, fileName));
       }
+#ifdef  USE_WIDGET_MUTEX
+      widgetMutex.unlock();
+#endif
     }
   }
 }

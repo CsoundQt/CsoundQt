@@ -55,9 +55,15 @@ QuteConsole::~QuteConsole()
 
 QString QuteConsole::getWidgetLine()
 {
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   QString line = "ioListing {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"}";
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   return line;
 }
 
@@ -67,9 +73,15 @@ QString QuteConsole::getWidgetXmlText()
   xmlText = "";
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   // Nothing else needed here
 
   s.writeEndElement();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   return xmlText;
 }
 

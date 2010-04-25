@@ -38,9 +38,10 @@ class QuteSlider : public QuteWidget
     virtual QString getCabbageLine();
     virtual QString getCsladspaLine();
     virtual QString getWidgetXmlText();
-    virtual QString getWidgetType();
 
     double getValue();
+    virtual QString getWidgetType();
+//    void setInternalValue(double value);
     void setValue(double value);
 
     virtual void applyInternalProperties();
@@ -50,12 +51,16 @@ class QuteSlider : public QuteWidget
     virtual void applyProperties();
 
   protected slots:
-    void valueChanged(int value);
+//    void valueChanged(int value);
 
   private:
     QDoubleSpinBox *minSpinBox;
     QDoubleSpinBox *maxSpinBox;
     int m_len; //length of the slider
+
+  private slots:
+    void sliderChanged(int value);
+    void setInternalValue(double value);   // This function must be protected using the widget mutex by the caller
 };
 
 #endif

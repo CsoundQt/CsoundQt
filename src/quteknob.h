@@ -40,8 +40,8 @@ class QuteKnob : public QuteWidget
     virtual QString getCabbageLine();
     virtual QString getCsladspaLine();
     virtual QString getWidgetXmlText();
-    virtual QString getWidgetType();
     virtual double getValue();
+    virtual QString getWidgetType();
     virtual void setValue(double value);
 //    virtual void setResolution(double resolution);
     void setRange(double min, double max);
@@ -53,9 +53,10 @@ class QuteKnob : public QuteWidget
     virtual void applyProperties();
 
   protected slots:
-    void valueChanged(int value);
+    void knobChanged(int value);
 
   private:
+    void setInternalValue(double value);
     QDoubleSpinBox *minSpinBox;
     QDoubleSpinBox *maxSpinBox;
     QDoubleSpinBox *resolutionSpinBox;

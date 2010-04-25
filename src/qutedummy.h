@@ -36,6 +36,8 @@ class QuteDummy : public QuteWidget
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();
 
+  protected:
+
 };
 
 #endif

@@ -39,8 +39,8 @@ class QuteCheckBox : public QuteWidget
 //    QString getLabel();
     virtual QString getWidgetLine();
     virtual QString getCabbageLine();
-    virtual QString getWidgetType();
     virtual QString getWidgetXmlText();
+    virtual QString getWidgetType();
     virtual void applyInternalProperties();
 
     void popUpMenu(QPoint pos);

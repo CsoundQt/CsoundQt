@@ -126,52 +126,60 @@ void CsoundEngine::outputValueCallback (CSOUND *csound,
                                      const char *channelName,
                                      MYFLT value)
 {
+  // Called by the csound running engine when 'outvalue' opcode is used
+  // To pass data from Csound to QuteCsound
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
   if (ud->cs->isRunning()) {
     QString name = QString(channelName);
-    ud->cs->perfMutex.lock();
+//    ud->cs->perfMutex.lock();
     if (name.startsWith('$')) {
       QString channelName = name;
       channelName.chop(name.size() - (int) value + 1);
       QString sValue = name;
       sValue = sValue.right(name.size() - (int) value);
       channelName.remove(0,1);
-      ud->cs->queueOutString(channelName, sValue);
+      ud->cs->passOutString(channelName, sValue);
     }
     else {
-      ud->cs->queueOutValue(name, value);
+      ud->cs->passOutValue(name, value);
     }
-    ud->cs->perfMutex.unlock();
+//    ud->cs->perfMutex.unlock();
   }
 }
 
-void CsoundEngine::inputValueCallback (CSOUND *csound,
+void CsoundEngine::inputValueCallback(CSOUND *csound,
                                      const char *channelName,
                                      MYFLT *value)
 {
-  // from qutecsound to Csound
+  // Called by the csound running engine when 'invalue' opcode is used
+  // To pass data from qutecsound to Csound
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
   if (ud->cs->isRunning()) {
     QString name = QString(channelName);
-    ud->cs->perfMutex.lock();
+//    ud->cs->perfMutex.lock();
     if (name.startsWith('$')) { // channel is a string channel
-      int index = ud->channelNames.indexOf(name.mid(1));
       char *string = (char *) value;
-      if (index>=0) {
-        strcpy(string, ud->stringValues[index].toStdString().c_str());
-      }
-      else {
-        string[0] = '\0'; //empty c string
-      }
+      // TODO: check string length
+      QString newValue = ud->wl->getStringForChannel(name.mid(1));
+      strcpy(string, newValue.toLocal8Bit());
+//      int index = ud->channelNames.indexOf(name.mid(1));
+//      if (index>=0) {
+//        strcpy(string, ud->stringValues[index].toStdString().c_str());
+//      }
+//      else {
+//        string[0] = '\0'; //empty c string
+//      }
     }
     else {  // Not a string channel
-      int index = ud->channelNames.indexOf(name);
-      if (index>=0)
-        *value = (MYFLT) ud->values[index];
-      else {
-        *value = 0;
-      }
-      //FIXME check if mouse tracking is active
+//      double newValue = ud->wl->getValueForChannel(name);
+      *value = (MYFLT) ud->wl->getValueForChannel(name);
+//      int index = ud->channelNames.indexOf(name);
+//      if (index>=0)
+//        *value = (MYFLT) ud->values[index];
+//      else {
+//        *value = 0;
+//      }
+      //FIXME check if mouse tracking is active, and move this from here
       if (name == "_MouseX") {
         *value = (MYFLT) ud->mouseValues[0];
       }
@@ -191,7 +199,7 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
         *value = (MYFLT) ud->mouseValues[5];
       }
     }
-    ud->cs->perfMutex.unlock();
+//    ud->cs->perfMutex.unlock();
   }
 }
 
@@ -286,14 +294,14 @@ void CsoundEngine::csThread(void *data)
   for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
     udata->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
   }
-  udata->wl->getValues(&udata->channelNames,
-                       &udata->values,
-                       &udata->stringValues);
+//  udata->wl->getValues(&udata->channelNames,
+//                       &udata->values,
+//                       &udata->stringValues);
   if (!udata->useInvalue) {
     writeWidgetValues(udata);
     readWidgetValues(udata);
   }
-  udata->cs->processEventQueue();  // This function locks a mutex, is that bad here?
+  udata->cs->processEventQueue();  // FIXME: This function locks a mutex, not ideal here
   (udata->ksmpscount)++;
 }
 
@@ -376,6 +384,7 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
      }
    }
 }
+
 //
 //void CsoundEngine::setFiles(QString fileName1, QString fileName2)
 //{
@@ -535,22 +544,16 @@ void CsoundEngine::processEventQueue()
   eventMutex.unlock();
 }
 
-void CsoundEngine::queueOutValue(QString channelName, double value)
+void CsoundEngine::passOutValue(QString channelName, double value)
 {
   ud->wl->newValue(QPair<QString, double>(channelName, value));
 }
 
-// void qutecsound::queueInValue(QString channelName, double value)
-// {
-//   inValueQueue.insert(channelName, value);
-// }
-
-void CsoundEngine::queueOutString(QString channelName, QString value)
+void CsoundEngine::passOutString(QString channelName, QString value)
 {
 //   qDebug() << "qutecsound::queueOutString";
   ud->wl->newValue(QPair<QString, QString>(channelName, value));
 }
-
 
 int CsoundEngine::play(CsoundOptions *options)
 {
@@ -754,11 +757,11 @@ int CsoundEngine::runCsound()
     // First update values from widgets  not necessary if not threaded as this is done in csThread,
     //    but it is necessary to call it here to have the values for the first ksmps processing, since
     //    csThread is called by the perf thread after processKsmps
-    if (ud->enableWidgets) {
-      ud->wl->getValues(&ud->channelNames,
-                        &ud->values,
-                        &ud->stringValues);
-    }
+//    if (ud->enableWidgets) {
+//      ud->wl->getValues(&ud->channelNames,
+//                        &ud->values,
+//                        &ud->stringValues);
+//    }
     ud->perfThread = new CsoundPerformanceThread(ud->csound);
     ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
     //      qDebug() << "qutecsound::runCsound perfThread->Play";
@@ -798,7 +801,7 @@ int CsoundEngine::runCsound()
 
 void CsoundEngine::stopCsound()
 {
-//  qDebug("CsoundEngine::stopCsound()");
+  qDebug() << "CsoundEngine::stopCsound()";
   if (ud->threaded) {
 //    perfThread->ScoreEvent(0, 'e', 0, 0);
     if (ud->perfThread != 0) {

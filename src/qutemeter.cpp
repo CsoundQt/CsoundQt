@@ -65,6 +65,9 @@ QuteMeter::~QuteMeter()
 
 QString QuteMeter::getWidgetLine()
 {
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   QString line = "ioMeter {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   QColor color = property("QCS_color").value<QColor>();
@@ -78,6 +81,9 @@ QString QuteMeter::getWidgetLine()
   line += QString::number(property("QCS_fadeSpeed").toInt()) + " ";
   line += "mouse";
 //   qDebug("QuteMeter::getWidgetLine() %s", line.toStdString().c_str());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   return line;
 }
 
@@ -87,6 +93,9 @@ QString QuteMeter::getWidgetXmlText()
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
 
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   s.writeTextElement("objectName2", property("QCS_objectName2").toString());
   s.writeTextElement("xMin", QString::number(property("QCS_xMin").toDouble(), 'f', 8));
   s.writeTextElement("xMax", QString::number(property("QCS_xMax").toDouble(), 'f', 8));
@@ -122,6 +131,9 @@ QString QuteMeter::getWidgetXmlText()
 //  s.writeEndElement();
 
   s.writeEndElement();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   return xmlText;
 }
 
@@ -144,14 +156,17 @@ QString QuteMeter::getWidgetType()
 void QuteMeter::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   dialog->setWindowTitle("Controller");
-  channelLabel->setText("Vertical Channel name =");
+  channelLabel->setText("Horizontal Channel name =");
   channelLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
 //  nameLineEdit->setText(getChannelName());
 
   QLabel *label = new QLabel(dialog);
   label = new QLabel(dialog);
-  label->setText("Horizontal Channel name =");
+  label->setText("Vertical Channel name =");
   layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
   name2LineEdit = new QLineEdit(dialog);
   name2LineEdit->setText(getChannel2Name());
@@ -159,12 +174,12 @@ void QuteMeter::createPropertiesDialog()
   layout->addWidget(name2LineEdit, 4,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
   if (static_cast<MeterWidget *>(m_widget)->getType() != "point" and ((MeterWidget *)m_widget)->getType() != "crosshair") {
     if (((MeterWidget *)m_widget)->m_vertical) {
-      label->setEnabled(false);
-      name2LineEdit->setEnabled(false);
-    }
-    else {
       channelLabel->setEnabled(false);
       nameLineEdit->setEnabled(false);
+    }
+    else {
+      label->setEnabled(false);
+      name2LineEdit->setEnabled(false);
     }
   }
 
@@ -234,31 +249,41 @@ void QuteMeter::createPropertiesDialog()
   label->setText("Min X value =");
   layout->addWidget(label,9, 0, Qt::AlignRight|Qt::AlignVCenter);
   m_xMinBox = new QDoubleSpinBox(dialog);
+  m_xMinBox->setRange(-999999999.0, 999999999.0);
   m_xMinBox->setValue(property("QCS_xMin").toDouble());
   layout->addWidget(m_xMinBox, 9,1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Max X value =");
   layout->addWidget(label, 9, 2, Qt::AlignRight|Qt::AlignVCenter);
   m_xMaxBox = new QDoubleSpinBox(dialog);
+  m_xMaxBox->setRange(-999999999.0, 999999999.0);
   m_xMaxBox->setValue(property("QCS_xMax").toDouble());
   layout->addWidget(m_xMaxBox, 9,3, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Min Y value =");
   layout->addWidget(label, 10, 0, Qt::AlignRight|Qt::AlignVCenter);
   m_yMinBox = new QDoubleSpinBox(dialog);
+  m_yMinBox->setRange(-999999999.0, 999999999.0);
   m_yMinBox->setValue(property("QCS_yMin").toDouble());
   layout->addWidget(m_yMinBox, 10, 1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Max Y value =");
   layout->addWidget(label, 10, 2, Qt::AlignRight|Qt::AlignVCenter);
   m_yMaxBox = new QDoubleSpinBox(dialog);
+  m_yMaxBox->setRange(-999999999.0, 999999999.0);
   m_yMaxBox->setValue(property("QCS_yMax").toDouble());
   layout->addWidget(m_yMaxBox, 10,3, Qt::AlignLeft|Qt::AlignVCenter);
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
 }
 
 void QuteMeter::applyProperties()
 {
 //  setProperty("QCS_objectName", nameLineEdit->text());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   setProperty("QCS_objectName2", name2LineEdit->text());
   setProperty("QCS_color", colorButton->palette().color(QPalette::Window));
   setProperty("QCS_type", typeComboBox->currentText());
@@ -269,6 +294,9 @@ void QuteMeter::applyProperties()
   setProperty("QCS_xMax", m_xMaxBox->value());
   setProperty("QCS_yMin", m_yMinBox->value());
   setProperty("QCS_yMax", m_yMaxBox->value());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
   qDebug("QuteMeter::applyProperties()");
 }
@@ -284,34 +312,70 @@ void QuteMeter::setWidgetGeometry(int x,int y,int width,int height)
 void QuteMeter::setValue(double value)
 {
 #ifdef  USE_WIDGET_MUTEX
-  mutex.lock();
+  widgetMutex.lockForWrite();
 #endif
+//  double min = property("QCS_minimum").toDouble();
+//  double max = property("QCS_maximum").toDouble();
+//  if (value > max) {
+//    value = max;
+//  }
+//  else if (value < min) {
+//    value = min;
+//  }
+  m_widget->blockSignals(true);
   static_cast<MeterWidget *>(m_widget)->setValue(value);
+  m_widget->blockSignals(false);
 //   m_value = value;
 #ifdef  USE_WIDGET_MUTEX
-  mutex.unlock();
+  widgetMutex.unlock();
 #endif
 }
 
 void QuteMeter::setValue2(double value)
 {
 #ifdef  USE_WIDGET_MUTEX
-  mutex.lock();
+  widgetMutex.lockForWrite();
 #endif
+//  double min = property("QCS_minimum").toDouble();
+//  double max = property("QCS_maximum").toDouble();
+//  if (value > max) {
+//    value = max;
+//  }
+//  else if (value < min) {
+//    value = min;
+//  }
+  m_widget->blockSignals(true);
   static_cast<MeterWidget *>(m_widget)->setValue2(value);
+  m_widget->blockSignals(false);
 #ifdef  USE_WIDGET_MUTEX
-  mutex.unlock();
+  widgetMutex.unlock();
 #endif
 }
 
 double QuteMeter::getValue()
 {
-  return static_cast<MeterWidget *>(m_widget)->getValue();
+  double value = 0.0;
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
+  value = static_cast<MeterWidget *>(m_widget)->getValue();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
+  return value;
 }
 
 double QuteMeter::getValue2()
 {
-  return static_cast<MeterWidget *>(m_widget)->getValue2();
+  double value = 0.0;
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
+  value = static_cast<MeterWidget *>(m_widget)->getValue2();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
+  return value;
 }
 
 QString QuteMeter::getChannel2Name()
@@ -333,7 +397,7 @@ void QuteMeter::applyInternalProperties()
   static_cast<MeterWidget *>(m_widget)->setColor(property("QCS_color").value<QColor>());
   static_cast<MeterWidget *>(m_widget)->setType(property("QCS_type").toString());
   static_cast<MeterWidget *>(m_widget)->setPointSize(property("QCS_pointsize").toInt());
-  static_cast<MeterWidget *>(m_widget)-> setRanges(property("QCS_xMin").toDouble(),
+  static_cast<MeterWidget *>(m_widget)->setRanges(property("QCS_xMin").toDouble(),
                                                    property("QCS_xMax").toDouble(),
                                                    property("QCS_yMin").toDouble(),
                                                    property("QCS_yMax").toDouble());
@@ -359,9 +423,12 @@ void QuteMeter::selectTextColor()
 
 void QuteMeter::setValuesFromWidget(double value1, double value2)
 {
-  QString type = property("QCS_type").toString();
-    setValue(value1);
-    setValue2(value2);
+//  QString type = property("QCS_type").toString();
+//  qDebug() << "QuteMeter::setValuesFromWidget " << value1 << "--" << value2;
+  valueChanged(value1);
+  value2Changed(value2);
+//  setValue(value1);
+//  setValue2(value2);
 }
 
 /* Meter Widget ----------------------------------------*/
@@ -396,12 +463,28 @@ QColor MeterWidget::getColor()
 double MeterWidget::getValue()
 {
   // Vertical value
+//  double value = 0.0;
+//#ifdef  USE_WIDGET_MUTEX
+//  mutex.lock();
+//#endif
+//  value =
+//#ifdef  USE_WIDGET_MUTEX
+//  mutex.unlock();
+//#endif
   return m_value;
 }
 
 double MeterWidget::getValue2()
 {
   // Horizontal value
+//  double value = 0.0;
+//#ifdef  USE_WIDGET_MUTEX
+//  mutex.lock();
+//#endif
+//  value =
+//#ifdef  USE_WIDGET_MUTEX
+//  mutex.unlock();
+//#endif
   return m_value2;
 }
 
@@ -420,18 +503,18 @@ void MeterWidget::setValue(double value)
 
   double portionx = (m_value -  m_xmin) / (m_xmax - m_xmin);
   double portiony = (m_value2 -  m_ymin) / (m_ymax - m_ymin);
-  if (m_type == "fill" and m_vertical) {
-    m_block->setRect(0, (1-portionx)*height(), width(), height());
+  if (m_type == "fill" and !m_vertical) {
+    m_block->setRect(0, 0, portionx*width(), height());
   }
-  else if (m_type == "llif" and m_vertical) {
-    m_block->setRect(0, 0, width(), (1-portionx)*height());
+  else if (m_type == "llif" and !m_vertical) {
+    m_block->setRect(portionx*width(),0, width(), height());
   }
   else if (m_type == "line" and !m_vertical) {
-    m_hline->setLine(portionx*width(), 0 ,portionx*width(), height());
+    m_vline->setLine(portionx*width(), 0 ,portionx*width(), height());
   }
   else {
-    m_hline->setLine(0, (1-portionx)*height(), width(), (1-portionx)*height());
-    m_point->setRect(portiony*width()- (m_pointSize/2.0), (1-portionx)*height()- (m_pointSize/2.0), m_pointSize, m_pointSize);
+    m_vline->setLine(portionx*width(), 0 ,portionx*width(), height());
+    m_point->setRect(portionx*width()- (m_pointSize/2.0), (1-portiony)*height()- (m_pointSize/2.0), m_pointSize, m_pointSize);
   }
   emit valueChanged(m_value);
 }
@@ -449,18 +532,18 @@ void MeterWidget::setValue2(double value)
 
   double portionx = (m_value -  m_xmin) / (m_xmax - m_xmin);
   double portiony = (m_value2 -  m_ymin) / (m_ymax - m_ymin);
-  if (m_type == "fill" and !m_vertical) {
-    m_block->setRect(0, 0, portiony*width(), height());
+  if (m_type == "fill" and m_vertical) {
+    m_block->setRect(0, (1-portiony)*height(), width(), height());
   }
-  else if (m_type == "llif" and !m_vertical) {
-    m_block->setRect(portiony*width(),0, width(), height());
+  else if (m_type == "llif" and m_vertical) {
+    m_block->setRect(0, 0, width(), (1-portiony)*height());
   }
-  else if (m_type == "line" and !m_vertical) {
-    m_vline->setLine(portiony*width(), 0 ,portiony*width(), height());
+  else if (m_type == "line" and m_vertical) {
+    m_hline->setLine(portiony*width(), 0 ,portiony*width(), height());
   }
   else {
-    m_vline->setLine(portiony*width(), 0 ,portiony*width(), height());
-    m_point->setRect(portiony*width()- (m_pointSize/2.0), (1-portionx)*height()- (m_pointSize/2.0), m_pointSize, m_pointSize);
+    m_hline->setLine(0, (1-portiony)*height(), width(), (1-portiony)*height());
+    m_point->setRect(portionx*width()- (m_pointSize/2.0), (1-portiony)*height()- (m_pointSize/2.0), m_pointSize, m_pointSize);
   }
   emit value2Changed(m_value2);
 }
@@ -555,8 +638,8 @@ void MeterWidget::mouseMoveEvent(QMouseEvent* event)
 //         event->y() > 0 and event->y()< height())
     double newhor = m_xmin + ((m_xmax - m_xmin ) * (double)event->x()/ width() );
     double newvert = m_ymin + ((m_ymax - m_ymin ) * (1 - ((double)event->y()/ height())));
-    emit newValues(newvert, newhor);
-//    emit valueChanged(newvert); //FIXME this values are not constrained between 0 and 1
+    emit newValues(newhor, newvert);
+//    emit valueChanged(newvert);
 //    emit value2Changed(newhor);
   }
 }
@@ -568,8 +651,8 @@ void MeterWidget::mousePressEvent(QMouseEvent* event)
 //         event->y() > 0 and event->y()< height())
     double newhor =  m_xmin + ((m_xmax - m_xmin ) * (double)event->x()/ width());
     double newvert = m_ymin + ((m_ymax - m_ymin ) * (1 - ((double)event->y()/ height())));
-    emit newValues(newvert, newhor);
-//    emit valueChanged(newvert); //FIXME this values are not constrained between 0 and 1
+    emit newValues(newhor, newvert);
+//    emit valueChanged(newvert);
 //    emit value2Changed(newhor);
   }
 }

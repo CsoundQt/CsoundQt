@@ -26,7 +26,7 @@
 #include <QtGui>
 #include <QtXml>
 
-//#define USE_WIDGET_MUTEX
+#define USE_WIDGET_MUTEX
 
 class QuteWidget : public QWidget
 {
@@ -42,26 +42,27 @@ class QuteWidget : public QWidget
     virtual void setValue(double) { ;}
     virtual void setValue2(double) { ;}
     virtual void setValue(QString) { ;}
-    virtual void widgetMessage(QString /*path*/, QString /*text*/) {;};
-    virtual void widgetMessage(QString /*path*/, double /*value*/) {;};
+
+    virtual void widgetMessage(QString /*path*/, QString /*text*/) {;}
+    virtual void widgetMessage(QString /*path*/, double /*value*/) {;}
 //    virtual void setChecked(bool checked);
 
-    virtual QString getChannelName();
-    virtual QString getChannel2Name();
     virtual QString getWidgetLine();
     virtual QString getCabbageLine();
-    void createXmlWriter(QXmlStreamWriter &s);
+    virtual QString getCsladspaLine();
     virtual QString getWidgetXmlText() = 0;
+    virtual QString getChannelName();
+    virtual QString getChannel2Name();
     virtual double getValue();
     virtual double getValue2();
     virtual QString getStringValue();
-    virtual QString getCsladspaLine();
-    virtual QString getWidgetType() = 0;
 
     QString getUuid();
+    virtual QString getWidgetType() = 0;
 
     virtual void applyInternalProperties();
 
+    void createXmlWriter(QXmlStreamWriter &s);
     void markChanged();
     void canFocus(bool can);
 
@@ -84,7 +85,7 @@ class QuteWidget : public QWidget
 //    QString m_name2;
     double m_value, m_value2;
 
-    QMutex mutex;
+    QReadWriteLock widgetMutex;
     QString xmlText;
 
     virtual void contextMenuEvent(QContextMenuEvent *event);
@@ -100,10 +101,11 @@ class QuteWidget : public QWidget
   protected slots:
     void apply();
     void deleteWidget();
-    virtual void valueChanged(double value);
+    virtual void valueChanged(double value);  // Called when a widget is moved with the mouse, to pass to widgets
     void value2Changed(double value);
 
   private:
+
     QAction *propertiesAct;
 
     QPushButton *applyButton;

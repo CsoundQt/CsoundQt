@@ -58,7 +58,6 @@ class QuteScope : public QuteWidget
     void setValue(double value); //Value for this widget indicates zoom level
 //    void setChannel(int channel);
     void setUd(CsoundUserData *ud);
-    void updateLabel();
 
     virtual void applyInternalProperties();
 
@@ -78,6 +77,9 @@ class QuteScope : public QuteWidget
 
     virtual void resizeEvent(QResizeEvent * event);
     virtual void applyProperties();
+
+  private:
+    void updateLabel();
 
   public slots:
     void updateData();
@@ -123,7 +125,7 @@ class ScopeParams
 {
   public:
     ScopeParams(CsoundUserData *ud, QGraphicsScene *scene, ScopeWidget *widget,
-                QMutex *mutex, int width, int height)
+                QReadWriteLock *mutex, int width, int height)
     {
       this->ud = ud;
       this->scene = scene;
@@ -144,7 +146,7 @@ class ScopeParams
     CsoundUserData *ud;
     QGraphicsScene *scene;
     ScopeWidget *widget;
-    QMutex *mutex;
+    QReadWriteLock *mutex;
     int width;
     int height;
 };

@@ -43,6 +43,8 @@ class QuteConsole : public QuteWidget
 
     void appendMessage(QString message);
     void scrollToEnd();
+
+  protected:
 };
 
 #endif

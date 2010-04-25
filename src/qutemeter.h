@@ -39,19 +39,14 @@ class QuteMeter : public QuteWidget
 //    virtual void loadFromXml(QString xmlText);
     virtual QString getWidgetLine();
     virtual QString getWidgetXmlText();
-    virtual QString getWidgetType();
-    virtual void createPropertiesDialog();
-    virtual void applyProperties();
-    virtual void setWidgetGeometry(int x,int y,int width,int height);
-
-    void popUpMenu(QPoint pos);
-
-    virtual void setValue(double value);
-    virtual void setValue2(double value);
     virtual double getValue();
     virtual double getValue2();
 //     virtual QString getChannelName();
     virtual QString getChannel2Name();
+    virtual QString getWidgetType();
+
+    virtual void setValue(double value);
+    virtual void setValue2(double value);
 
     void setChannel2Name(QString name);
 //    void setColor(QColor color);
@@ -59,6 +54,11 @@ class QuteMeter : public QuteWidget
 //    void setPointSize(int size);
 //    void setFadeSpeed(int speed);
 //    void setBehavior(QString behavior);
+    virtual void setWidgetGeometry(int x,int y,int width,int height);
+
+    void popUpMenu(QPoint pos);
+    virtual void createPropertiesDialog();
+    virtual void applyProperties();
     void applyInternalProperties();
 
   protected:

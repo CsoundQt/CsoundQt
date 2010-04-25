@@ -66,9 +66,11 @@ class WidgetLayout : public QWidget
     void setOuterGeometry(int newx, int newy, int neww, int newh); // Will only set if component >= 0
     QRect getOuterGeometry();
 
-    void getValues(QVector<QString> *channelNames,
-                   QVector<double> *values,
-                   QVector<QString> *stringValues);
+//    void getValues(QVector<QString> *channelNames,
+//                   QVector<double> *values,
+//                   QVector<QString> *stringValues);
+    QString getStringForChannel(QString channelName);
+    double getValueForChannel(QString channelName);
     void getMouseValues(QVector<double> *values);
     int getMouseX();
     int getMouseY();
@@ -237,6 +239,7 @@ class WidgetLayout : public QWidget
     QHash<QString, QString> newStringValues;
     QMutex valueMutex;
     QMutex stringValueMutex;
+    QMutex widgetsMutex;
     QMutex layoutMutex;
     QList<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
     QVector<WINDAT *> curveUpdateBuffer;

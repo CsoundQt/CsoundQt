@@ -41,8 +41,8 @@ class QuteSpinBox : public QuteText
     virtual QString getCabbageLine();
     virtual QString getCsladspaLine();
     virtual QString getWidgetXmlText();
-    virtual QString getWidgetType();
     virtual QString getStringValue();
+    virtual QString getWidgetType();
 
     virtual void applyInternalProperties();
 

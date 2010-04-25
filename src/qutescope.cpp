@@ -47,7 +47,7 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
   m_label->setText("Scope");
   m_label->move(85, 0);
   m_label->resize(500, 25);
-  m_params = new ScopeParams(0, m_scene, static_cast<ScopeWidget *>(m_widget), &mutex, this->width(), this->height());
+  m_params = new ScopeParams(0, m_scene, static_cast<ScopeWidget *>(m_widget), &widgetMutex, this->width(), this->height());
   m_scopeData = new ScopeData(m_params);
   m_lissajouData = new LissajouData(m_params);
   m_poincareData = new PoincareData(m_params);
@@ -73,12 +73,18 @@ QuteScope::~QuteScope()
 
 QString QuteScope::getWidgetLine()
 {
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   QString line = "ioGraph {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += property("QCS_type").toString() + " " + QString::number(property("QCS_zoomx").toDouble(), 'f', 6) + " ";
   line += QString::number((int) m_value) + " ";
   line += property("QCS_objectName").toString();
 //   qDebug("QuteScope::getWidgetLine() %s", line.toStdString().c_str());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   return line;
 }
 
@@ -87,6 +93,9 @@ QString QuteScope::getWidgetXmlText()
   xmlText = "";
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
 
   s.writeTextElement("value", QString::number(m_value, 'f', 8));
   s.writeTextElement("type", property("QCS_type").toString());
@@ -98,6 +107,9 @@ QString QuteScope::getWidgetXmlText()
   s.writeTextElement("mode", QString::number(property("QCS_mode").toDouble(), 'f', 8));
 
   s.writeEndElement();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   return xmlText;
 }
 
@@ -124,8 +136,14 @@ void QuteScope::setType(QString type)
 
 void QuteScope::setValue(double value)
 {
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForWrite();
+#endif
   m_value = (int) value;
   updateLabel();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
 }
 
 void QuteScope::setUd(CsoundUserData *ud)
@@ -162,7 +180,6 @@ void QuteScope::createPropertiesDialog()
   typeComboBox->addItem("Lissajou curve", QVariant(QString("lissajou")));
   typeComboBox->addItem("Poincare map", QVariant(QString("poincare")));
 //   typeComboBox->addItem("Spectrogram", QVariant(QString("fft")));
-  typeComboBox->setCurrentIndex(typeComboBox->findData(QVariant(property("QCS_type").toString())));
   layout->addWidget(typeComboBox, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Channel");
@@ -178,22 +195,35 @@ void QuteScope::createPropertiesDialog()
   channelBox->addItem("Ch.7",QVariant((int) 7));
   channelBox->addItem("Ch.8",QVariant((int) 8));
   channelBox->addItem("none", QVariant((int) 0));
-  channelBox->setCurrentIndex(channelBox->findData(QVariant((int) m_value)));
   layout->addWidget(channelBox, 6, 3, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Decimation");
   layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
   decimationBox = new QSpinBox(dialog);
-  decimationBox->setValue(property("QCS_zoomx").toDouble());
   decimationBox->setRange(1, 20);
   layout->addWidget(decimationBox, 7, 3, Qt::AlignLeft|Qt::AlignVCenter);
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
+  typeComboBox->setCurrentIndex(typeComboBox->findData(QVariant(property("QCS_type").toString())));
+  channelBox->setCurrentIndex(channelBox->findData(QVariant((int) m_value)));
+  decimationBox->setValue(property("QCS_zoomx").toDouble());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
 }
 
 void QuteScope::applyProperties()
 {
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   setProperty("QCS_type", typeComboBox->itemData(typeComboBox->currentIndex()).toString());
   setValue(channelBox->itemData(channelBox->currentIndex()).toInt());
   setProperty("QCS_zoomx", decimationBox->value());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
 
@@ -278,8 +308,8 @@ void ScopeData::updateData(int channel, int zoom, bool freeze)
   }
   channel = (channel != -1 ? channel - 1 : -1);
 #ifdef  USE_WIDGET_MUTEX
-  QMutex *mutex = m_params->mutex;
-  mutex->lock();
+  QReadWriteLock *mutex = m_params->mutex;  //FIXME is this locking needed, or should a separate locking mechanism be implemented?
+  mutex->lockForWrite();
 #endif
   // FIXME how to make sure the buffer is read before it is flushed when recorded? Have another buffer?
   RingBuffer *buffer = &ud->audioOutputBuffer;
@@ -365,8 +395,8 @@ void LissajouData::updateData(int channel, int zoom, bool freeze)
   }
   channel = (channel != -1 ? channel - 1 : 0);
 #ifdef  USE_WIDGET_MUTEX
-  QMutex *mutex = m_params->mutex;
-  mutex->lock();
+  QReadWriteLock *mutex = m_params->mutex;
+  mutex->lockForWrite();
 #endif
   RingBuffer *buffer = &ud->audioOutputBuffer;
   buffer->lock();
@@ -433,8 +463,8 @@ void PoincareData::updateData(int channel, int zoom, bool freeze)
   }
   channel = (channel != -1 ? channel - 1 : 0);
 #ifdef  USE_WIDGET_MUTEX
-  QMutex *mutex = m_params->mutex;
-  mutex->lock();
+  QReadWriteLock *mutex = m_params->mutex;
+  mutex->lockForWrite();
 #endif
   RingBuffer *buffer = &ud->audioOutputBuffer;
   buffer->lock();

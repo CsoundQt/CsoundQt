@@ -69,12 +69,18 @@ QString QuteGraph::getWidgetLine()
   // Extension to MacCsound: type of graph (table, ftt, scope), value (which hold the index of the
   // table displayed) zoom and channel name
   // channel number is unused in QuteGraph, but selects channel for scope
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   QString line = "ioGraph {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} table ";
   line += QString::number(m_value, 'f', 6) + " ";
   line += QString::number(property("QCS_zoomx").toDouble(), 'f', 6) + " ";
   line += property("QCS_objectName").toString();
 //   qDebug("QuteGraph::getWidgetLine(): %s", line.toStdString().c_str());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   return line;
 }
 
@@ -84,6 +90,9 @@ QString QuteGraph::getWidgetXmlText()
   xmlText = "";
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
 
   s.writeTextElement("value", QString::number((int)m_value));
   s.writeTextElement("zoomx", QString::number(property("QCS_zoomx").toDouble(), 'f', 8));
@@ -94,6 +103,9 @@ QString QuteGraph::getWidgetXmlText()
   s.writeTextElement("modey", property("QCS_modey").toString());
   s.writeTextElement("all", property("QCS_all").toBool() ? "true" : "false");
   s.writeEndElement();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   return xmlText;
 }
 
@@ -115,6 +127,9 @@ void QuteGraph::setWidgetGeometry(int x,int y,int width,int height)
 void QuteGraph::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   dialog->setWindowTitle("Graph");
   QLabel *label = new QLabel(dialog);
   label->setText("Zoom");
@@ -125,13 +140,19 @@ void QuteGraph::createPropertiesDialog()
   zoomBox->setDecimals(1);
   zoomBox->setSingleStep(0.5);
   layout->addWidget(zoomBox, 7, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
 //   channelLabel->hide();
 //   nameLineEdit->hide();
 }
 
 void QuteGraph::applyProperties()
 {
-  QuteWidget::applyProperties();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForWrite();
+#endif
   setProperty("QCS_zoomx", zoomBox->value());
   setProperty("QCS_zoomy", zoomBox->value());
   setProperty("QCS_dispx", 1);
@@ -139,15 +160,19 @@ void QuteGraph::applyProperties()
   setProperty("QCS_modex", "lin");
   setProperty("QCS_modey", "lin");
   setProperty("QCS_all", true);
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
+  QuteWidget::applyProperties();
 }
 
 void QuteGraph::setValue(double value)
 {
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForWrite();
+#endif
   if (m_value == value)
     return;
-#ifdef  USE_WIDGET_MUTEX
-  mutex.lock();
-#endif
   if (value < 0 ) {
     for (int i = 0; i < m_pageComboBox->count(); i++) {
       QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"), QString::SkipEmptyParts);
@@ -168,7 +193,7 @@ void QuteGraph::setValue(double value)
     m_value = value;
   }
 #ifdef  USE_WIDGET_MUTEX
-  mutex.unlock();
+  widgetMutex.unlock();
 #endif
 }
 

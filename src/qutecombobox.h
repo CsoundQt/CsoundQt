@@ -61,7 +61,7 @@ class QuteComboBox : public QuteWidget
     QLineEdit *line;
 
   private slots:
-    void valueChanged(int value);
+//    void indexChanged(int value);
 
 };
 

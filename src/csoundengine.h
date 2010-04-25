@@ -134,8 +134,8 @@ class CsoundEngine : public QObject
     int popKeyReleaseEvent();
 
     void processEventQueue();
-    void queueOutValue(QString channelName, double value);
-    void queueOutString(QString channelName, QString value);
+    void passOutValue(QString channelName, double value);
+    void passOutString(QString channelName, QString value);
     void queueMessage(QString message);
     void clearMessageQueue();
     void flushMessageQueue();
@@ -143,7 +143,7 @@ class CsoundEngine : public QObject
     bool isRunning();
     bool isRecording();
 
-    QMutex perfMutex;  // TODO is this still needed?
+//    QMutex perfMutex;  // TODO is this still needed?
 //    QTimer qTimer;  // This 4timer is started and stopped from the document page
 
   public slots:

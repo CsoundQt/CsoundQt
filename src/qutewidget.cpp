@@ -23,7 +23,6 @@
 #include "qutewidget.h"
 #include "widgetlayout.h"
 
-
 QuteWidget::QuteWidget(QWidget *parent):
     QWidget(parent)
 {
@@ -57,9 +56,7 @@ void QuteWidget::setChannelName(QString name)
     name.remove(0,1);  // $ symbol is reserved for identifying string channels
   }
   if (name != "") {
-    mutex.lock();
     m_widget->setObjectName(name);
-    mutex.unlock();
   }
 //   qDebug("QuteWidget::setChannelName %s", m_name.toStdString().c_str());
 }
@@ -120,16 +117,19 @@ void QuteWidget::createXmlWriter(QXmlStreamWriter &s)
 
 double QuteWidget::getValue()
 {
+  // When reimplementing this, remember to use the widget mutex to protect data, as this can be called from many different places
   return 0.0;
 }
 
 double QuteWidget::getValue2()
 {
+  // When reimplementing this, remember to use the widget mutex to protect data, as this can be called from many different places
   return 0.0;
 }
 
 QString QuteWidget::getStringValue()
 {
+  // When reimplementing this, remember to use the widget mutex to protect data, as this can be called from many different places
   return QString("");
 }
 
@@ -150,6 +150,9 @@ QString QuteWidget::getUuid()
 void QuteWidget::applyInternalProperties()
 {
 //  qDebug() << "QuteWidget::applyInternalProperties()";
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   int x,y,width, height;
   x = property("QCS_x").toInt();
   y = property("QCS_y").toInt();
@@ -157,6 +160,9 @@ void QuteWidget::applyInternalProperties()
   height = property("QCS_height").toInt();
   setWidgetGeometry(x,y,width, height);
   setChannelName(property("QCS_objectName").toString());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
 }
 
 void QuteWidget::markChanged()
@@ -271,15 +277,27 @@ void QuteWidget::deleteWidget()
 
 void QuteWidget::valueChanged(double value)
 {
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   QPair<QString, double> channelValue;
   channelValue = QPair<QString, double>(property("QCS_objectName").toString(), value);
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   emit newValue(channelValue);
 }
 
 void QuteWidget::value2Changed(double value)
 {
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   QPair<QString, double> channelValue;
   channelValue = QPair<QString, double>(property("QCS_objectName2").toString(), value);
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   emit newValue(channelValue);
 }
 
@@ -295,34 +313,30 @@ void QuteWidget::createPropertiesDialog()
   layout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
   xSpinBox = new QSpinBox(dialog);
   xSpinBox->setMaximum(9999);
-  xSpinBox->setValue(this->x());
   layout->addWidget(xSpinBox, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Y =");
   layout->addWidget(label, 0, 2, Qt::AlignRight|Qt::AlignVCenter);
   ySpinBox = new QSpinBox(dialog);
   ySpinBox->setMaximum(9999);
-  ySpinBox->setValue(this->y());
   layout->addWidget(ySpinBox, 0, 3, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText(tr("Width ="));
   layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
   wSpinBox = new QSpinBox(dialog);
   wSpinBox->setMaximum(9999);
-  wSpinBox->setValue(this->width());
   layout->addWidget(wSpinBox, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText(tr("Height ="));
   layout->addWidget(label, 1, 2, Qt::AlignRight|Qt::AlignVCenter);
   hSpinBox = new QSpinBox(dialog);
   hSpinBox->setMaximum(9999);
-  hSpinBox->setValue(this->height());
   layout->addWidget(hSpinBox, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
   channelLabel = new QLabel(dialog);
   channelLabel->setText(tr("Channel name ="));
   channelLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
   layout->addWidget(channelLabel, 3, 0, Qt::AlignLeft|Qt::AlignVCenter);
-  nameLineEdit = new QLineEdit(getChannelName(), dialog);
+  nameLineEdit = new QLineEdit(dialog);
   nameLineEdit->setFocus(Qt::OtherFocusReason);
   nameLineEdit->selectAll();
   layout->addWidget(nameLineEdit, 3, 1, Qt::AlignLeft|Qt::AlignVCenter);
@@ -332,16 +346,33 @@ void QuteWidget::createPropertiesDialog()
   layout->addWidget(applyButton, 15, 1, Qt::AlignCenter|Qt::AlignVCenter);
   cancelButton = new QPushButton(tr("Cancel"));
   layout->addWidget(cancelButton, 15, 2, Qt::AlignCenter|Qt::AlignVCenter);
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
+  xSpinBox->setValue(this->x());
+  ySpinBox->setValue(this->y());
+  wSpinBox->setValue(this->width());
+  hSpinBox->setValue(this->height());
+  nameLineEdit->setText(getChannelName());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
 }
 
 void QuteWidget::applyProperties()
 {
   qDebug() << "QuteWidget::applyProperties()";
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
   setProperty("QCS_objectName", nameLineEdit->text());
   setProperty("QCS_x", xSpinBox->value());
   setProperty("QCS_y",ySpinBox->value());
   setProperty("QCS_width", wSpinBox->value());
   setProperty("QCS_height", hSpinBox->value());
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
   applyInternalProperties();
 //  setChannelName(nameLineEdit->text());
 //  setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
