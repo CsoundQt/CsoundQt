@@ -47,7 +47,7 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
   m_label->setText("Scope");
   m_label->move(85, 0);
   m_label->resize(500, 25);
-  m_params = new ScopeParams(0, m_scene, static_cast<ScopeWidget *>(m_widget), &widgetMutex, this->width(), this->height());
+  m_params = new ScopeParams(0, m_scene, static_cast<ScopeWidget *>(m_widget), &widgetLock, this->width(), this->height());
   m_scopeData = new ScopeData(m_params);
   m_lissajouData = new LissajouData(m_params);
   m_poincareData = new PoincareData(m_params);

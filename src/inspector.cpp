@@ -57,11 +57,18 @@ Inspector::~Inspector()
 void Inspector::parseText(const QString &text)
 {
 //  qDebug() << "Inspector:parseText";
-  bool opcodeItemExpanded = opcodeItem->isExpanded();
-  bool macroItemExpanded = macroItem->isExpanded();
-  bool instrItemExpanded = instrItem->isExpanded();
-  bool ftableItemExpanded = ftableItem->isExpanded();
-  bool scoreItemExpanded = scoreItem->isExpanded();
+    bool opcodeItemExpanded = true;
+    bool macroItemExpanded = true;
+    bool instrItemExpanded = true;
+    bool ftableItemExpanded = true;
+    bool scoreItemExpanded = true;
+  if (opcodeItem !=0) {
+    opcodeItemExpanded = opcodeItem->isExpanded();
+    macroItemExpanded = macroItem->isExpanded();
+    instrItemExpanded = instrItem->isExpanded();
+    ftableItemExpanded = ftableItem->isExpanded();
+    scoreItemExpanded = scoreItem->isExpanded();
+  }
   m_treeWidget->clear();
   opcodeItem = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
   opcodeItem->setLine(-1);
@@ -167,6 +174,7 @@ void Inspector::parsePythonText(const QString &text)
 {
 //  qDebug() << "Inspector:parseText";
   m_treeWidget->clear();
+  opcodeItem = 0;
   TreeItem *importItem = new TreeItem(m_treeWidget, QStringList(tr("Imports")));
   importItem->setLine(-1);
   TreeItem *classItem = new TreeItem(m_treeWidget, QStringList(tr("Classes")));

@@ -46,6 +46,7 @@ class QuteButton : public QuteWidget
 //    void setEventLine(QString eventLine);
     void popUpMenu(QPoint pos);
 
+    virtual void refreshWidget();
     virtual void applyInternalProperties();
 
   protected:
@@ -58,6 +59,7 @@ class QuteButton : public QuteWidget
 //    QString m_type;  // can be event, value, pictevent, pictvalue, pict
 //    QString m_filename;
 //    QString m_imageFilename;
+    bool m_currentValue;
 
     QComboBox *typeComboBox;
     QDoubleSpinBox *valueBox;
@@ -68,6 +70,7 @@ class QuteButton : public QuteWidget
     QIcon icon;
 
   private slots:
+    void buttonPressed();
     void buttonReleased();
     void browseFile();
 

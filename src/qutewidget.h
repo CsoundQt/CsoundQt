@@ -26,8 +26,6 @@
 #include <QtGui>
 #include <QtXml>
 
-#define USE_WIDGET_MUTEX
-
 class QuteWidget : public QWidget
 {
   Q_OBJECT
@@ -39,9 +37,9 @@ class QuteWidget : public QWidget
     virtual void setChannelName(QString name);
     virtual void setWidgetGeometry(int x, int y, int w, int h);
 //    virtual void setRange(int min, int max);
-    virtual void setValue(double) { ;}
-    virtual void setValue2(double) { ;}
-    virtual void setValue(QString) { ;}
+    virtual void setValue(double);  // These should only be reimplemented if something special needs to be done with the value.
+    virtual void setValue2(double);
+    virtual void setValue(QString);
 
     virtual void widgetMessage(QString /*path*/, QString /*text*/) {;}
     virtual void widgetMessage(QString /*path*/, double /*value*/) {;}
@@ -59,6 +57,7 @@ class QuteWidget : public QWidget
 
     QString getUuid();
     virtual QString getWidgetType() = 0;
+    virtual void refreshWidget(QString) { ;}
 
     virtual void applyInternalProperties();
 
@@ -80,12 +79,16 @@ class QuteWidget : public QWidget
     QWidget *m_widget;
     QDialog *dialog;
     QGridLayout *layout;  // For preference dialog
+    double m_value, m_value2;
+    QString m_stringValue;
 
     QString m_line;  // Text line for old widget format
 //    QString m_name2;
-    double m_value, m_value2;
 
+    QReadWriteLock widgetLock;
+#ifdef  USE_WIDGET_MUTEX
     QReadWriteLock widgetMutex;
+#endif
     QString xmlText;
 
     virtual void contextMenuEvent(QContextMenuEvent *event);

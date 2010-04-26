@@ -69,6 +69,27 @@ void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
   this->markChanged();
 }
 
+void QuteWidget::setValue(double value)
+{
+  widgetLock.lockForWrite();
+  m_value = value;
+  widgetLock.unlock();
+}
+
+void QuteWidget::setValue2(double value)
+{
+  widgetLock.lockForWrite();
+  m_value2 = value;
+  widgetLock.unlock();
+}
+
+void QuteWidget::setValue(QString value)
+{
+  widgetLock.lockForWrite();
+  m_stringValue = value;
+  widgetLock.unlock();
+}
+
 //void QuteWidget::setRange(int /*min*/, int /*max*/)
 //{
 //  qDebug("QuteWidget::setRange not implemented for widget type");
@@ -81,12 +102,26 @@ void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 
 QString QuteWidget::getChannelName()
 {
-  return property("QCS_objectName").toString();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
+  QString name = property("QCS_objectName").toString();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
+  return name;
 }
 
 QString QuteWidget::getChannel2Name()
 {
-  return property("QCS_objectName2").toString();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.lockForRead();
+#endif
+  QString name = property("QCS_objectName2").toString();
+#ifdef  USE_WIDGET_MUTEX
+  widgetMutex.unlock();
+#endif
+  return name;
 }
 
 QString QuteWidget::getWidgetLine()

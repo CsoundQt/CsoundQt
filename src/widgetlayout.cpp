@@ -487,7 +487,7 @@ double WidgetLayout::getValueForChannel(QString channelName)
 
 void WidgetLayout::getMouseValues(QVector<double> *values)
 {
-  // values must have size of 4 for _MouseX _MouseY _MouseRelX and _MouseRelY
+  // values must have size of 6 for _MouseX _MouseY _MouseRelX _MouseRelY MouseBut1 and MouseBut2
   if (this->isEnabled()) {
     (*values)[0] = getMouseX();
     (*values)[1] = getMouseY();
@@ -812,10 +812,10 @@ int WidgetLayout::newMacWidget(QString widgetLine, bool offset)
 
 void WidgetLayout::registerWidget(QuteWidget * widget)
 {
+  widgetsMutex.lock();
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-  widgetsMutex.lock();
   m_widgets.append(widget);
   if (m_editMode) {
     createEditFrame(widget);
@@ -2411,7 +2411,6 @@ FrameWidget *WidgetLayout::getEditWidget(QuteWidget *widget)
   for (int i  = 0 ; i < m_widgets.size(); i++) {
     if (m_widgets[i] == widget) {
       if (editWidgets.size() > i) {
-        widgetsMutex.unlock();
 //        qDebug() << "WidgetLayout::getEditWidget " << editWidgets[i];
         return editWidgets[i];
       }
@@ -2891,80 +2890,80 @@ void WidgetLayout::processNewValues()
   if (closing != 0)
     return;
   QList<QString> channelNames;
-  valueMutex.lock();
-  channelNames = newValues.keys();
-  valueMutex.unlock();
-  widgetsMutex.lock();
-  foreach(QString name, channelNames) {
-    for (int i = 0; i < m_widgets.size(); i++){
-      if (m_widgets[i]->getChannelName() == name) {
-        m_widgets[i]->setValue(newValues.value(name));
-      }
-      if (m_widgets[i]->getChannel2Name() == name) {
-        m_widgets[i]->setValue2(newValues.value(name));
-      }
-      if (m_trackMouse) {
-        QString ch1name = m_widgets[i]->getChannelName();
-        if (ch1name == "_MouseX") {
-          m_widgets[i]->setValue(getMouseX());
-        }
-        else if (ch1name == "_MouseY") {
-          m_widgets[i]->setValue(getMouseY());
-        }
-        else if (ch1name == "_MouseRelX") {
-          m_widgets[i]->setValue(getMouseRelX());
-        }
-        else if (ch1name == "_MouseRelY") {
-          m_widgets[i]->setValue(getMouseRelY());
-        }
-        else if (ch1name == "_MouseBut1") {
-          m_widgets[i]->setValue(getMouseBut1());
-        }
-        else if (ch1name == "_MouseBut2") {
-          m_widgets[i]->setValue(getMouseBut2());
-        }
-        QString ch2name = m_widgets[i]->getChannel2Name();
-        if (ch2name == "_MouseX") {
-          m_widgets[i]->setValue2(getMouseX());
-        }
-        else if (ch2name == "_MouseY") {
-          m_widgets[i]->setValue2(getMouseY());
-        }
-        else if (ch2name == "_MouseRelX") {
-          m_widgets[i]->setValue2(getMouseRelX());
-        }
-        else if (ch2name == "_MouseRelY") {
-          m_widgets[i]->setValue2(getMouseRelY());
-        }
-        else if (ch2name == "_MouseBut1") {
-          m_widgets[i]->setValue2(getMouseBut1());
-        }
-        else if (ch2name == "_MouseBut2") {
-          m_widgets[i]->setValue2(getMouseBut2());
-        }
-      }
-    }
-  }
-  widgetsMutex.unlock();
-  valueMutex.lock();
-  newValues.clear();
-  valueMutex.unlock();
-  stringValueMutex.lock();
-  channelNames = newStringValues.keys();
-  // Now set string values
-  stringValueMutex.unlock();
-  widgetsMutex.lock();
-  foreach(QString name, channelNames) {
-    for (int i = 0; i < m_widgets.size(); i++){
-      if (m_widgets[i]->getChannelName() == name) {
-        m_widgets[i]->setValue(newStringValues.value(name));
-      }
-    }
-  }
-  widgetsMutex.unlock();
-  stringValueMutex.lock();
-  newStringValues.clear();
-  stringValueMutex.unlock();
+//  valueMutex.lock();
+//  channelNames = newValues.keys();
+//  valueMutex.unlock();
+//  widgetsMutex.lock();
+//  foreach(QString name, channelNames) {
+//    for (int i = 0; i < m_widgets.size(); i++){
+//      if (m_widgets[i]->getChannelName() == name) {
+//        m_widgets[i]->setValue(newValues.value(name));
+//      }
+//      if (m_widgets[i]->getChannel2Name() == name) {
+//        m_widgets[i]->setValue2(newValues.value(name));
+//      }
+//      if (m_trackMouse) {
+//        QString ch1name = m_widgets[i]->getChannelName();
+//        if (ch1name == "_MouseX") {
+//          m_widgets[i]->setValue(getMouseX());
+//        }
+//        else if (ch1name == "_MouseY") {
+//          m_widgets[i]->setValue(getMouseY());
+//        }
+//        else if (ch1name == "_MouseRelX") {
+//          m_widgets[i]->setValue(getMouseRelX());
+//        }
+//        else if (ch1name == "_MouseRelY") {
+//          m_widgets[i]->setValue(getMouseRelY());
+//        }
+//        else if (ch1name == "_MouseBut1") {
+//          m_widgets[i]->setValue(getMouseBut1());
+//        }
+//        else if (ch1name == "_MouseBut2") {
+//          m_widgets[i]->setValue(getMouseBut2());
+//        }
+//        QString ch2name = m_widgets[i]->getChannel2Name();
+//        if (ch2name == "_MouseX") {
+//          m_widgets[i]->setValue2(getMouseX());
+//        }
+//        else if (ch2name == "_MouseY") {
+//          m_widgets[i]->setValue2(getMouseY());
+//        }
+//        else if (ch2name == "_MouseRelX") {
+//          m_widgets[i]->setValue2(getMouseRelX());
+//        }
+//        else if (ch2name == "_MouseRelY") {
+//          m_widgets[i]->setValue2(getMouseRelY());
+//        }
+//        else if (ch2name == "_MouseBut1") {
+//          m_widgets[i]->setValue2(getMouseBut1());
+//        }
+//        else if (ch2name == "_MouseBut2") {
+//          m_widgets[i]->setValue2(getMouseBut2());
+//        }
+//      }
+//    }
+//  }
+//  widgetsMutex.unlock();
+//  valueMutex.lock();
+//  newValues.clear();
+//  valueMutex.unlock();
+//  stringValueMutex.lock();
+//  channelNames = newStringValues.keys();
+//  // Now set string values
+//  stringValueMutex.unlock();
+//  widgetsMutex.lock();
+//  foreach(QString name, channelNames) {
+//    for (int i = 0; i < m_widgets.size(); i++){
+//      if (m_widgets[i]->getChannelName() == name) {
+//        m_widgets[i]->setValue(newStringValues.value(name));
+//      }
+//    }
+//  }
+//  widgetsMutex.unlock();
+//  stringValueMutex.lock();
+//  newStringValues.clear();
+//  stringValueMutex.unlock();
 }
 
 void WidgetLayout::queueEvent(QString eventLine)

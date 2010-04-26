@@ -33,7 +33,7 @@ class QuteCheckBox : public QuteWidget
 
     ~QuteCheckBox();
 
-    virtual void setValue(double value); // Value of checkbox when pressed
+    virtual void setValue(double value); // Value of checkbox when pressed and state at the same time (if negative set value)
     void setLabel(QString label);
     virtual double getValue(); // This value represents the state of the button
 //    QString getLabel();
@@ -41,12 +41,16 @@ class QuteCheckBox : public QuteWidget
     virtual QString getCabbageLine();
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();
+
+    virtual void refreshWidget();
     virtual void applyInternalProperties();
 
     void popUpMenu(QPoint pos);
 
   protected:
     virtual void createPropertiesDialog();
+
+    double m_currentValue;
 
   private slots:
     void stateChanged(int state);

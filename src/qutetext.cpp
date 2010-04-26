@@ -187,9 +187,9 @@ void QuteText::setText(QString text)
   setProperty("QCS_label", text);
   QString displayText = text;
   displayText.replace("\n", "<br />");
-  m_widget->blockSignals(false);
-  static_cast<QLabel*>(m_widget)->setText(displayText);
   m_widget->blockSignals(true);
+  static_cast<QLabel*>(m_widget)->setText(displayText);
+  m_widget->blockSignals(false);
 }
 
 void QuteText::applyInternalProperties()
@@ -498,9 +498,9 @@ QuteLineEdit::~QuteLineEdit()
 void QuteLineEdit::setText(QString text)
 {
   setProperty("QCS_label", text);
-  m_widget->blockSignals(false);
-  static_cast<QLineEdit*>(m_widget)->setText(text);
   m_widget->blockSignals(true);
+  static_cast<QLineEdit*>(m_widget)->setText(text);
+  m_widget->blockSignals(false);
 }
 
 QString QuteLineEdit::getWidgetLine()
@@ -772,9 +772,9 @@ void QuteScrollNumber::setText(QString text)
 //  text.prepend("<font face=\"" + property("QCS_font").toString() + "\" size=\""
 //               + QString::number(property("QCS_fontsize").toInt()) + "\">");
 //  text.append("</font>");
-  m_widget->blockSignals(false);
-  static_cast<ScrollNumberWidget*>(m_widget)->setText(text);
   m_widget->blockSignals(true);
+  static_cast<ScrollNumberWidget*>(m_widget)->setText(text);
+  m_widget->blockSignals(false);
 }
 
 QString QuteScrollNumber::getWidgetLine()
@@ -994,9 +994,9 @@ void QuteScrollNumber::setValue(double value)
 #endif
   m_value = value;
 //   qDebug("QuteScrollNumber::setValue places = %i value = %f", m_places, m_value);
-  m_widget->blockSignals(false);
-  static_cast<ScrollNumberWidget*>(m_widget)->setText(QString::number(m_value, 'f', m_places));
   m_widget->blockSignals(true);
+  static_cast<ScrollNumberWidget*>(m_widget)->setText(QString::number(m_value, 'f', m_places));
+  m_widget->blockSignals(false);
 //  emit widgetChanged(this);
 #ifdef  USE_WIDGET_MUTEX
   widgetMutex.unlock();

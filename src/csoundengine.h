@@ -143,7 +143,7 @@ class CsoundEngine : public QObject
     bool isRunning();
     bool isRecording();
 
-//    QMutex perfMutex;  // TODO is this still needed?
+    QMutex perfMutex;  // TODO is this still needed?
 //    QTimer qTimer;  // This 4timer is started and stopped from the document page
 
   public slots:

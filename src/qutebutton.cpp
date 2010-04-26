@@ -30,6 +30,7 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
   setMouseTracking(true);
   canFocus(false);
 //  m_imageFilename = "/";
+  connect(static_cast<QPushButton *>(m_widget), SIGNAL(pressed()), this, SLOT(buttonPressed()));
   connect(static_cast<QPushButton *>(m_widget), SIGNAL(released()), this, SLOT(buttonReleased()));
 
   setProperty("QCS_type", "event");
@@ -49,48 +50,40 @@ QuteButton::~QuteButton()
 
 void QuteButton::setValue(double value)
 {
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
-#endif
-  // setValue sets the value the widget outputs while it is pressed
-  static_cast<QPushButton *>(m_widget)->setChecked(value != 0);
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
+  widgetLock.lockForWrite();
+  if (value <0) {
+    m_currentValue = -value;
+    m_value = -value;
+  }
+  else {
+    m_currentValue = value != 0 ? m_value : 0.0;
+  }
+  widgetLock.unlock();
 }
 
 double QuteButton::getValue()
 {
   // Returns the value for any button type.
   double value = 0.0;
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
-  if ( static_cast<QPushButton *>(m_widget)->isDown() )
-    value = property("QCS_value").toDouble();
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
+  widgetLock.lockForRead();
+  if (m_currentValue != 0) {
+    value = m_value;
+  }
+  widgetLock.unlock();
   return value;
 }
 
 QString QuteButton::getStringValue()
 {
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
-  QString name = property("QCS_objectName").toString();
+  widgetLock.lockForRead();
   QString stringValue;
+  QString name = property("QCS_objectName").toString();
   if (name.startsWith("_Browse")) {
-    stringValue = property("QCS_stringvalue").toString();
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
+    stringValue = m_stringValue;
+    widgetLock.unlock();
   }
   else {
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
+    widgetLock.unlock();
     stringValue =  QString::number(getValue());
   }
   return stringValue;
@@ -274,6 +267,19 @@ void QuteButton::popUpMenu(QPoint pos)
   QuteWidget::popUpMenu(pos);
 }
 
+void QuteButton::refreshWidget()
+{
+  // setValue sets the value the widget outputs while it is pressed
+//  static_cast<QPushButton *>(m_widget)->setChecked(m_value);
+  if (property("QCS_latch").toBool()) {
+    static_cast<QPushButton *>(m_widget)->setChecked(m_currentValue != 0);
+  }
+  widgetLock.lockForRead();
+  setProperty("QCS_value", m_value);
+  setProperty("QCS_stringvalue", m_stringValue);
+  widgetLock.unlock();
+}
+
 void QuteButton::applyInternalProperties()
 {
   QuteWidget::applyInternalProperties();
@@ -295,19 +301,30 @@ void QuteButton::applyInternalProperties()
   static_cast<QPushButton *>(m_widget)->setCheckable( property("QCS_latch").toBool());
 }
 
+void QuteButton::buttonPressed()
+{
+  widgetLock.lockForRead();
+  if (property("QCS_latch").toBool()) {
+    m_currentValue = (m_currentValue == 0 ? m_value: 0);
+  }
+  else {
+    m_currentValue = m_value;
+  }
+  widgetLock.unlock();
+}
+
 void QuteButton::buttonReleased()
 {
   // Only produce events for event types
-#ifdef  USE_WIDGET_MUTEX
-      widgetMutex.lockForRead();
-#endif
+  widgetLock.lockForRead();
   QString name = property("QCS_objectName").toString();
   QString type = property("QCS_type").toString();
   double value = property("QCS_value").toDouble();
   QString eventLine = property("QCS_eventLine").toString();
-#ifdef  USE_WIDGET_MUTEX
-      widgetMutex.unlock();
-#endif
+  if (!property("QCS_latch").toBool()) {
+    m_currentValue = 0;
+  }
+  widgetLock.unlock();
   if (type == "event" or type == "pictevent")
     emit(queueEvent(eventLine));
   else if (type == "value" or type == "pictvalue") {
@@ -323,16 +340,12 @@ void QuteButton::buttonReleased()
       emit render();
     else if (name.startsWith("_Browse")) {
       QString fileName = QFileDialog::getOpenFileName(this, tr("Select File"));
-#ifdef  USE_WIDGET_MUTEX
-      widgetMutex.lockForWrite();
-#endif
       if (fileName != "") {
+        widgetLock.lockForWrite();
         setProperty("QCS_stringvalue", fileName);
+        widgetLock.unlock();
         emit newValue(QPair<QString, QString>(name, fileName));
       }
-#ifdef  USE_WIDGET_MUTEX
-      widgetMutex.unlock();
-#endif
     }
   }
 }

@@ -131,7 +131,7 @@ void CsoundEngine::outputValueCallback (CSOUND *csound,
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
   if (ud->cs->isRunning()) {
     QString name = QString(channelName);
-//    ud->cs->perfMutex.lock();
+    ud->cs->perfMutex.lock();
     if (name.startsWith('$')) {
       QString channelName = name;
       channelName.chop(name.size() - (int) value + 1);
@@ -143,7 +143,7 @@ void CsoundEngine::outputValueCallback (CSOUND *csound,
     else {
       ud->cs->passOutValue(name, value);
     }
-//    ud->cs->perfMutex.unlock();
+    ud->cs->perfMutex.unlock();
   }
 }
 
@@ -156,10 +156,10 @@ void CsoundEngine::inputValueCallback(CSOUND *csound,
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
   if (ud->cs->isRunning()) {
     QString name = QString(channelName);
-//    ud->cs->perfMutex.lock();
+    ud->cs->perfMutex.lock();
     if (name.startsWith('$')) { // channel is a string channel
       char *string = (char *) value;
-      // TODO: check string length
+      // FIMXE: check string length
       QString newValue = ud->wl->getStringForChannel(name.mid(1));
       strcpy(string, newValue.toLocal8Bit());
 //      int index = ud->channelNames.indexOf(name.mid(1));
@@ -171,8 +171,8 @@ void CsoundEngine::inputValueCallback(CSOUND *csound,
 //      }
     }
     else {  // Not a string channel
-//      double newValue = ud->wl->getValueForChannel(name);
       *value = (MYFLT) ud->wl->getValueForChannel(name);
+//      double newValue = ud->wl->getValueForChannel(name);
 //      int index = ud->channelNames.indexOf(name);
 //      if (index>=0)
 //        *value = (MYFLT) ud->values[index];
@@ -199,7 +199,7 @@ void CsoundEngine::inputValueCallback(CSOUND *csound,
         *value = (MYFLT) ud->mouseValues[5];
       }
     }
-//    ud->cs->perfMutex.unlock();
+    ud->cs->perfMutex.unlock();
   }
 }
 
