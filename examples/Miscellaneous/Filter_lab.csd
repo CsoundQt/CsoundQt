@@ -15,7 +15,6 @@ nchnls = 2
 
 opcode lpf2pole, a, ak
 ain,kfc xin
-
 ktrig changed kfc
 if ktrig == 1 then
 	kvalue = tan($M_PI * kfc / sr)
@@ -39,7 +38,6 @@ endop
 
 opcode hpf2pole, a, ak
 ain,kfc xin
-
 ktrig changed kfc
 if ktrig == 1 then
 	kvalue = tan($M_PI * kfc / sr)
@@ -276,6 +274,8 @@ e
 
 
 
+
+
 <bsbPanel>
  <bgcolor mode="background">
   <r>204</r>
@@ -291,7 +291,7 @@ e
   <uuid>{0bd0d91d-2f3a-441f-a01b-6d78738906f2}</uuid>
   <minimum>1.00000000</minimum>
   <maximum>22050.00000000</maximum>
-  <value>3701.74894200</value>
+  <value>10481.27221439</value>
   <resolution>-1.00000000</resolution>
   <randomizable>true</randomizable>
  </bsbObject>
@@ -344,7 +344,7 @@ e
   <width>69</width>
   <height>24</height>
   <uuid>{01ad6a68-ac02-42bb-8bb2-50451a11a288}</uuid>
-  <label>3701.7489</label>
+  <label>10481.272</label>
   <alignment>right</alignment>
   <font>Helvetica</font>
   <fontsize>12</fontsize>
@@ -451,12 +451,22 @@ a1=-0.238      a2=0.182</label>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Bypass</name>
+    <name>First order All Pass</name>
     <value>5</value>
     <stringvalue/>
    </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>Second Order All Pass</name>
+    <value>6</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>Bypass</name>
+    <value>7</value>
+    <stringvalue/>
+   </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>2</selectedIndex>
+  <selectedIndex>6</selectedIndex>
   <randomizable>false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
@@ -468,7 +478,7 @@ a1=-0.238      a2=0.182</label>
   <uuid>{3d171c0d-cb02-4d2c-8388-0961068b8e4e}</uuid>
   <minimum>-20.00000000</minimum>
   <maximum>20.00000000</maximum>
-  <value>-19.19191900</value>
+  <value>16.76767677</value>
   <randomizable/>
   <resolution>0.01000000</resolution>
  </bsbObject>
@@ -505,7 +515,7 @@ a1=-0.238      a2=0.182</label>
   <width>69</width>
   <height>24</height>
   <uuid>{66349cae-8fcb-4efe-b691-46c3a667d1f8}</uuid>
-  <label>-19.1919</label>
+  <label>16.768</label>
   <alignment>left</alignment>
   <font>Helvetica</font>
   <fontsize>12</fontsize>
@@ -559,7 +569,7 @@ a1=-0.238      a2=0.182</label>
   <uuid>{ddba3cab-bc78-416b-b421-8fb9d8b845b1}</uuid>
   <minimum>0.10000000</minimum>
   <maximum>10.00000000</maximum>
-  <value>0.70000000</value>
+  <value>4.90000000</value>
   <randomizable/>
   <resolution>0.01000000</resolution>
  </bsbObject>
@@ -596,7 +606,7 @@ a1=-0.238      a2=0.182</label>
   <width>69</width>
   <height>24</height>
   <uuid>{094450ee-6000-47b1-a738-91ee9a291e4c}</uuid>
-  <label>0.7000</label>
+  <label>4.900</label>
   <alignment>left</alignment>
   <font>Helvetica</font>
   <fontsize>12</fontsize>
@@ -691,20 +701,20 @@ Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {52428, 52428, 52428}
-ioSlider {9, 205} {709, 35} 1.000000 22050.000000 3701.748942 freq
+ioSlider {9, 205} {709, 35} 1.000000 22050.000000 10481.272214 freq
 ioGraph {8, 263} {713, 213} table 0.000000 1.000000 
 ioText {393, 234} {41, 24} display 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Hz
-ioText {327, 234} {69, 24} display 0.000000 0.00100 "freq" right "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3701.7489
+ioText {327, 234} {69, 24} display 10481.272214 0.00100 "freq" right "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 10481.272
 ioText {410, 95} {312, 74} display 0.000000 0.00100 "coef2" left "Courier New" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder b0=0.516      b1=-0.658      b2=-0.028Â¬Â¬a1=-0.238      a2=0.182
 ioText {411, 67} {130, 25} display 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Biquad Coefficients
-ioMenu {213, 121} {176, 25} 2 303 "2nd order low-pass,2nd order hi-pass,2nd order low shelving,2nd order high shelving,Parametric eq,Bypass" type
-ioKnob {12, 87} {80, 80} 20.000000 -20.000000 0.010000 -19.191919 gain
+ioMenu {213, 121} {176, 25} 6 303 "2nd order low-pass,2nd order hi-pass,2nd order low shelving,2nd order high shelving,Parametric eq,First order All Pass,Second Order All Pass,Bypass" type
+ioKnob {12, 87} {80, 80} 20.000000 -20.000000 0.010000 16.767677 gain
 ioText {14, 59} {80, 25} display 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Gain
-ioText {18, 171} {69, 24} display 0.000000 0.00100 "gain" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -19.1919
+ioText {18, 171} {69, 24} display 16.767677 0.00100 "gain" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 16.768
 ioText {341, 180} {80, 25} display 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frequency
-ioKnob {102, 88} {80, 80} 10.000000 0.100000 0.010000 0.700000 Q
+ioKnob {102, 88} {80, 80} 10.000000 0.100000 0.010000 4.900000 Q
 ioText {104, 60} {80, 25} display 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Q
-ioText {108, 172} {69, 24} display 0.000000 0.00100 "Q" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.7000
+ioText {108, 172} {69, 24} display 4.900000 0.00100 "Q" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4.900
 ioText {213, 94} {130, 25} display 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Filter type
 ioText {13, 5} {709, 49} display 0.000000 0.00100 "" left "Lucida Grande" 28 {0, 0, 0} {45824, 45824, 45824} nobackground noborder Biquad Filter Lab
 </MacGUI>

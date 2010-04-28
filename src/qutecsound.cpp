@@ -2241,6 +2241,7 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/Miscellaneous/Live_Granular.csd");
   exampleFiles.append(":/examples/Miscellaneous/SF_Granular.csd");
   exampleFiles.append(":/examples/Miscellaneous/Oscillator_Aliasing.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Filter_Lab.csd");
   exampleFiles.append(":/examples/Miscellaneous/Circle.csd");
   exampleFiles.append(":/examples/Miscellaneous/Pvstencil.csd");
   exampleFiles.append(":/examples/Miscellaneous/Rms.csd");
