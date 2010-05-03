@@ -29,7 +29,11 @@
 class EventSheet;
 class QTextEdit;
 
-class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
+namespace Ui {
+    class LiveEventFrame;
+}
+
+class LiveEventFrame : public QWidget
 {
   Q_OBJECT
   Q_PROPERTY(bool visibleEnabled READ getVisibleEnabled WRITE setVisibleEnabled)
@@ -83,6 +87,8 @@ class LiveEventFrame : public QFrame, private Ui::LiveEventFrame
     QString m_csdName;
     bool m_modified;
     double m_loopStart, m_loopEnd; // TODO move looping to this class
+
+    Ui::LiveEventFrame *m_ui;
 
   signals:
     void newFrameSignal(QString text);

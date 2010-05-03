@@ -36,6 +36,9 @@ i 1 0 10  ;turn on instr 1 for 3600 seconds
 
 
 
+
+
+
 <bsbPanel>
  <bgcolor mode="background" >
   <r>97</r>
@@ -68,13 +71,14 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>7</x>
   <y>304</y>
-  <width>416</width>
-  <height>171</height>
+  <width>418</width>
+  <height>234</height>
   <uuid>{399dce6a-681a-4961-8ae8-7b8fb6d03fdf}</uuid>
   <label>File browsing</label>
   <alignment>left</alignment>
@@ -93,6 +97,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   </bgcolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton" >
   <objectName>_Browse1</objectName>
@@ -132,6 +137,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton" >
   <objectName>_Browse2</objectName>
@@ -171,6 +177,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit" >
   <objectName>_Browse1</objectName>
@@ -244,6 +251,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel" >
   <objectName/>
@@ -269,6 +277,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel" >
   <objectName/>
@@ -294,6 +303,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   </bgcolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton" >
   <objectName>_Play</objectName>
@@ -347,6 +357,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel" >
   <objectName/>
@@ -372,6 +383,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton" >
   <objectName>_Render</objectName>
@@ -413,6 +425,7 @@ Run offline
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel" >
   <objectName>counter</objectName>
@@ -438,6 +451,7 @@ Run offline
   </bgcolor>
   <bordermode>border</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel" >
   <objectName/>
@@ -463,6 +477,7 @@ Run offline
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton" >
   <objectName>_Pause</objectName>
@@ -502,25 +517,110 @@ Run offline
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>_MBrowse</objectName>
+  <x>284</x>
+  <y>472</y>
+  <width>124</width>
+  <height>25</height>
+  <uuid>{77158a8c-3e82-49c6-93b4-0b6609df4451}</uuid>
+  <type>value</type>
+  <value>1.00000000</value>
+  <stringvalue>/home/andres/src/qutecsound/trunk/qutecsound/bin/qutecsound-,-/home/andres/src/qutecsound/trunk/qutecsound/bin/qutecsound-f-debug</stringvalue>
+  <text>Browse Multiple</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>156</x>
+  <y>473</y>
+  <width>123</width>
+  <height>24</height>
+  <uuid>{91b7ceb5-d03d-460b-ac07-dc07d712410b}</uuid>
+  <label>_MBrowse channel -></label>
+  <alignment>right</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>6</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLineEdit" >
+  <objectName>_MBrowse</objectName>
+  <x>22</x>
+  <y>501</y>
+  <width>387</width>
+  <height>25</height>
+  <uuid>{b8e0ccf4-85f9-4796-9daf-ed969397268f}</uuid>
+  <label>/home/andres/src/qutecsound/trunk/qutecsound/bin/qutecsound-,-/home/andres/src/qutecsound/trunk/qutecsound/bin/qutecsound-f-debug</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>6</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>230</r>
+   <g>221</g>
+   <b>213</b>
+  </bgcolor>
+  <background>nobackground</background>
  </bsbObject>
  <objectName/>
- <x>795</x>
- <y>228</y>
+ <x>775</x>
+ <y>73</y>
  <width>444</width>
- <height>518</height>
+ <height>667</height>
  <visible>true</visible>
 </bsbPanel>
 
 <bsbPresets>
 </bsbPresets>
 
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="0" y="0" width="596" height="322"> 
- 
- 
- 
- 
- 
- 
- 
- 
- </EventPanel>
+
+<MacGUI>
+ioView background {24929, 34952, 26471}
+ioText {6, 11} {418, 94} display 0.000000 0.00100 "" center "DejaVu Sans" 8 {5120, 13312, 1536} {62464, 63488, 51200} nobackground noborder Some channel names are reserved for special operations inside QuteCsound. These channel names send information to QuteCsound instead of to Csound allowing you to control certain aspects of QuteCsound from the Widget Panel.Â¬Â¬NOTE: Buttons must be of "value" type for this to work!
+ioText {7, 304} {416, 171} display 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File browsing
+ioButton {327, 314} {80, 25} value 1.000000 "_Browse1" "Browse A" "/" i1 0 10
+ioText {204, 315} {118, 24} display 0.000000 0.00100 "" right "DejaVu Sans" 6 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Browse1 channel ->
+ioButton {327, 348} {80, 25} value 1.000000 "_Browse2" "Browse B" "/" i1 0 10
+ioText {204, 349} {118, 24} display 0.000000 0.00100 "" right "DejaVu Sans" 6 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Browse2 channel ->
+ioText {22, 379} {387, 25} edit 0.000000 0.00100 "_Browse1"  "Lucida Grande" 6 {0, 0, 0} {58880, 56576, 54528} falsenoborder 
+ioText {22, 434} {387, 25} edit 0.000000 0.00100 "_Browse2"  "Lucida Grande" 6 {0, 0, 0} {58880, 56576, 54528} falsenoborder 
+ioText {22, 351} {118, 24} display 0.000000 0.00100 "" left "DejaVu Sans" 6 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder File A:
+ioText {22, 408} {118, 24} display 0.000000 0.00100 "" left "DejaVu Sans" 6 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder File B:
+ioText {6, 112} {418, 184} display 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Transport
+ioButton {316, 126} {78, 26} value 1.000000 "_Play" "Play" "/" i1 0 10
+ioButton {318, 194} {80, 25} value 1.000000 "_Stop" "Stop" "/" i1 0 10
+ioText {211, 128} {101, 24} display 0.000000 0.00100 "" right "DejaVu Sans" 6 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Play channel ->
+ioText {212, 195} {101, 24} display 0.000000 0.00100 "" right "DejaVu Sans" 6 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Stop channel ->
+ioButton {319, 226} {80, 25} value 1.000000 "_Render" "Render" "/" i1 0 10
+ioText {157, 227} {157, 52} display 0.000000 0.00100 "" right "DejaVu Sans" 6 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Render channel ->Â¬Run offlineÂ¬(non-realtime)
+ioText {20, 164} {160, 63} display 0.000000 0.00100 "counter" center "DejaVu Sans" 26 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0
+ioText {43, 138} {115, 23} display 0.000000 0.00100 "" center "DejaVu Sans" 6 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Playback counter
+ioButton {317, 159} {78, 26} value 1.000000 "_Pause" "Pause" "/" i1 0 10
+ioText {212, 161} {101, 24} display 0.000000 0.00100 "" right "DejaVu Sans" 6 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Pause channel ->
+ioButton {284, 472} {124, 25} value 1.000000 "_MBrowse" "Browse Multiple" "/" i1 0 10
+ioText {156, 473} {118, 24} display 0.000000 0.00100 "" right "DejaVu Sans" 6 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _MBrowse channel ->
+ioText {22, 501} {387, 25} edit 0.000000 0.00100 "_MBrowse"  "Lucida Grande" 6 {0, 0, 0} {58880, 56576, 54528} falsenoborder /home/andres/src/qutecsound/trunk/qutecsound/bin/qutecsound-,-/home/andres/src/qutecsound/trunk/qutecsound/bin/qutecsound-f-debug
+</MacGUI>
+
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="3" y="48" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

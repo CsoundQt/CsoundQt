@@ -1,23 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>LiveEventFrame</class>
- <widget class="QFrame" name="LiveEventFrame">
+ <widget class="QWidget" name="LiveEventFrame">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>608</width>
-    <height>367</height>
+    <width>655</width>
+    <height>346</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Frame</string>
-  </property>
-  <property name="frameShape">
-   <enum>QFrame::StyledPanel</enum>
-  </property>
-  <property name="frameShadow">
-   <enum>QFrame::Raised</enum>
+   <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -165,8 +159,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>586</width>
-        <height>309</height>
+        <width>635</width>
+        <height>290</height>
        </rect>
       </property>
      </widget>

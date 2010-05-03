@@ -2241,7 +2241,7 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/Miscellaneous/Live_Granular.csd");
   exampleFiles.append(":/examples/Miscellaneous/SF_Granular.csd");
   exampleFiles.append(":/examples/Miscellaneous/Oscillator_Aliasing.csd");
-  exampleFiles.append(":/examples/Miscellaneous/Filter_Lab.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Filter_lab.csd");
   exampleFiles.append(":/examples/Miscellaneous/Circle.csd");
   exampleFiles.append(":/examples/Miscellaneous/Pvstencil.csd");
   exampleFiles.append(":/examples/Miscellaneous/Rms.csd");
@@ -2919,7 +2919,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
 //  setWidgetPanelGeometry();
 
 //  updateInspector();
-  // FIXME put back
+  //FIXME put back
 //  widgetPanel->clearHistory();
   if (runNow && m_options->autoPlay) {
     play();

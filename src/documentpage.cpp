@@ -308,6 +308,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     int loopEnd = panelElement.attribute("loopEnd","0.0").toDouble();
 
     LiveEventFrame *panel = createLiveEventPanel();
+
     panel->setFromText(liveText);
     panel->setName(panelName);
     panel->setTempo(tempo);
@@ -900,12 +901,14 @@ void DocumentPage::showLiveEventPanels(bool visible)
         m_liveFrames[i]->raise();
       else {
         if (m_liveFrames[i]->getVisibleEnabled()) {
+          m_liveFrames[i]->setWindowFlags(Qt::Window);
           m_liveFrames[i]->show();
           m_liveFrames[i]->raise();
         }
       }
     }
     else {
+      m_liveFrames[i]->setWindowFlags(Qt::Widget);
       m_liveFrames[i]->hide();
     }
   }
@@ -940,6 +943,12 @@ void DocumentPage::stopPanelSlot(int index)
 
 void DocumentPage::setPanelVisibleSlot(int index, bool visible)
 {
+   if (visible) {
+     m_liveFrames[index]->setWindowFlags(Qt::Window);
+   }
+   else {
+     m_liveFrames[index]->setWindowFlags(Qt::Widget);
+   }
    m_liveFrames[index]->setVisible(visible);
    m_liveFrames[index]->setVisibleEnabled(visible);
 }
@@ -1216,6 +1225,7 @@ void DocumentPage::newLiveEventPanel(QString text)
   LiveEventFrame *e = createLiveEventPanel(text);
   m_liveEventControl->appendPanel(true, false, false, 0, "",
                                     8.0, 0.0, 0.0 , 60.0);
+  e->setWindowFlags(Qt::Window);
 //  e->setVisible(false);
   e->show();  //Assume that since slot was called must be visible
 }
@@ -1223,7 +1233,7 @@ void DocumentPage::newLiveEventPanel(QString text)
 LiveEventFrame * DocumentPage::createLiveEventPanel(QString text)
 {
 //  qDebug() << "DocumentPage::newLiveEventPanel()";
-  LiveEventFrame *e = new LiveEventFrame("Live Event", m_view, Qt::Window);
+  LiveEventFrame *e = new LiveEventFrame("Live Event", m_view);
   e->setVisible(false);
 //  e->setAttribute(Qt::WA_DeleteOnClose, false);
   e->getSheet()->setRowCount(1);

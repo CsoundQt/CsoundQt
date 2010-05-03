@@ -27,5 +27,3 @@ build64:LCSOUND = -lcsound64
 LCSND = -lcsnd
 LSNDFILE = -lsndfile
 include(src/src.pri)
-HEADERS += 
-SOURCES += 

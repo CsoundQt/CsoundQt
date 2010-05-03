@@ -36,10 +36,10 @@
 #include <QtCore>
 
 LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags f) :
-    QFrame(parent, f), m_csdName(csdName)
+    QWidget(parent, f), m_csdName(csdName),
+    m_ui(new Ui::LiveEventFrame)
 {
-  setupUi(this);
-  this->setVisible(false);
+  m_ui->setupUi(this);
 
   setWindowTitle(m_csdName);
 //  setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
@@ -47,10 +47,11 @@ LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags
 //  m_sheet->show();
   m_sheet->setTempo(60.0);
   m_sheet->setLoopLength(8.0);
+  m_sheet->hide();
   connect(m_sheet,SIGNAL(modified()), this, SLOT(setModified()));
   connect(m_sheet,SIGNAL(setLoopRangeFromSheet(double,double)), this, SLOT(markLoop(double,double)));
 
-  scrollArea->setWidget(m_sheet);
+  m_ui->scrollArea->setWidget(m_sheet);
 
   m_editor = new QTextEdit(this);
   m_editor->hide();
@@ -58,24 +59,27 @@ LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags
   m_modified = false;
   m_mode = 0; // Sheet mode by default
 
-  connect(actionComboBox,SIGNAL(activated(int)), this, SLOT(doAction(int)));
-  connect(tempoSpinBox,SIGNAL(valueChanged(double)), this, SLOT(setTempo(double)));
-  connect(modeComboBox,SIGNAL(activated(int)), this, SLOT(setMode(int)));
-  connect(loopLengthSpinBox,SIGNAL(valueChanged(double)), this, SLOT(setLoopLength(double)));
+  connect(m_ui->actionComboBox,SIGNAL(activated(int)), this, SLOT(doAction(int)));
+  connect(m_ui->tempoSpinBox,SIGNAL(valueChanged(double)), this, SLOT(setTempo(double)));
+  connect(m_ui->modeComboBox,SIGNAL(activated(int)), this, SLOT(setMode(int)));
+  connect(m_ui->loopLengthSpinBox,SIGNAL(valueChanged(double)), this, SLOT(setLoopLength(double)));
 
-  setVisibleEnabled(true);
+//  setVisibleEnabled(true);
+//  this->setVisible(false);
+//  m_ui->hide();
 }
 
 LiveEventFrame::~LiveEventFrame()
 {
 //  qDebug() << "LiveEventFrame::~LiveEventFrame()";
-  disconnect(actionComboBox, 0,0,0);
-  disconnect(tempoSpinBox, 0,0,0);
-  disconnect(modeComboBox, 0,0,0);
-  disconnect(loopLengthSpinBox, 0,0,0);
+  disconnect(m_ui->actionComboBox, 0,0,0);
+  disconnect(m_ui->tempoSpinBox, 0,0,0);
+  disconnect(m_ui->modeComboBox, 0,0,0);
+  disconnect(m_ui->loopLengthSpinBox, 0,0,0);
   disconnect(m_sheet, 0,0,0);
   delete m_sheet;
   delete m_editor;
+  delete m_ui;
 }
 
 EventSheet * LiveEventFrame::getSheet()
@@ -89,17 +93,17 @@ void LiveEventFrame::setMode(int mode)
     return;
   if (mode == 0) {
     m_editor->hide();
-    m_editor = static_cast<QTextEdit *>(scrollArea->takeWidget());
+    m_editor = static_cast<QTextEdit *>(m_ui->scrollArea->takeWidget());
     m_sheet->setFromText(m_editor->toPlainText(), 0,0, -1, -1);
-    scrollArea->setWidget(m_sheet);
+    m_ui->scrollArea->setWidget(m_sheet);
     m_sheet->show();
   }
   else if (mode == 1) {
     m_sheet->stopAllEvents();
     m_sheet->hide();
-    m_sheet = static_cast<EventSheet *>(scrollArea->takeWidget());
+    m_sheet = static_cast<EventSheet *>(m_ui->scrollArea->takeWidget());
     m_editor->setText(m_sheet->getPlainText());
-    scrollArea->setWidget(m_editor);
+    m_ui->scrollArea->setWidget(m_editor);
     m_editor->show();
   }
   m_mode = mode;
@@ -108,7 +112,7 @@ void LiveEventFrame::setMode(int mode)
 void LiveEventFrame::setTempo(double tempo)
 {
 //  qDebug() << "LiveEventFrame::setTempo";
-  tempoSpinBox->setValue(tempo);
+  m_ui->tempoSpinBox->setValue(tempo);
   m_sheet->setTempo(tempo);
   //TODO add sending tempo to other modes here too
 }
@@ -122,7 +126,7 @@ void LiveEventFrame::setName(QString name)
 void LiveEventFrame::setLoopLength(double length)
 {
 //  qDebug() << "LiveEventFrame::setLoopLength";
-  loopLengthSpinBox->setValue(length);
+  m_ui->loopLengthSpinBox->setValue(length);
   m_sheet->setLoopLength(length);
   //TODO add sending length to other modes here too
 }
@@ -158,7 +162,7 @@ void LiveEventFrame::doAction(int action)
   else if (action == 5) {
     markLoop();
   }
-  actionComboBox->setCurrentIndex(0);
+  m_ui->actionComboBox->setCurrentIndex(0);
 }
 
 void LiveEventFrame::newFrame()
@@ -194,14 +198,13 @@ void LiveEventFrame::setFromText(QString text)
     m_modified = false;
   }
   else if (m_mode == 1) { // text mode
-
     m_modified = false;
   }
 }
 
 double LiveEventFrame::getTempo()
 {
-  return tempoSpinBox->value();
+  return m_ui->tempoSpinBox->value();
 }
 
 QString LiveEventFrame::getName()
@@ -211,7 +214,7 @@ QString LiveEventFrame::getName()
 
 double LiveEventFrame::getLoopLength()
 {
-  return loopLengthSpinBox->value();
+  return m_ui->loopLengthSpinBox->value();
 }
 
 QString LiveEventFrame::getPlainText()

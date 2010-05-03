@@ -78,7 +78,7 @@ QString QuteButton::getStringValue()
   widgetLock.lockForRead();
   QString stringValue;
   QString name = property("QCS_objectName").toString();
-  if (name.startsWith("_Browse")) {
+  if (name.startsWith("_Browse") ||  name.startsWith("_MBrowse") ) {
     stringValue = m_stringValue;
     widgetLock.unlock();
   }
@@ -345,6 +345,16 @@ void QuteButton::buttonReleased()
         setProperty("QCS_stringvalue", fileName);
         widgetLock.unlock();
         emit newValue(QPair<QString, QString>(name, fileName));
+      }
+    }
+    else if (name.startsWith("_MBrowse")) {
+      QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select File(s)"));
+      if (!fileNames.isEmpty()) {
+        QString joinedNames = fileNames.join("-,-");
+        widgetLock.lockForWrite();
+        setProperty("QCS_stringvalue", joinedNames);
+        widgetLock.unlock();
+        emit newValue(QPair<QString, QString>(name, joinedNames));
       }
     }
   }
