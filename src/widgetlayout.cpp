@@ -1758,6 +1758,8 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
       QWidget::keyPressEvent(event); // Propagate event if not used
     }
   }
+  // FIXME something here might be causing the beeping on OS X because the keyboard event is not being accepted
+  // http://sourceforge.net/tracker/index.php?func=detail&aid=2991838&group_id=227265&atid=1070588
 }
 
 void WidgetLayout::keyReleaseEvent(QKeyEvent *event)
