@@ -57,12 +57,12 @@ Inspector::~Inspector()
 void Inspector::parseText(const QString &text)
 {
 //  qDebug() << "Inspector:parseText";
-    bool opcodeItemExpanded = true;
-    bool macroItemExpanded = true;
-    bool instrItemExpanded = true;
-    bool ftableItemExpanded = true;
-    bool scoreItemExpanded = true;
-  if (opcodeItem !=0) {
+  bool opcodeItemExpanded = true;
+  bool macroItemExpanded = true;
+  bool instrItemExpanded = true;
+  bool ftableItemExpanded = true;
+  bool scoreItemExpanded = true;
+  if  (opcodeItem != 0) {
     opcodeItemExpanded = opcodeItem->isExpanded();
     macroItemExpanded = macroItem->isExpanded();
     instrItemExpanded = instrItem->isExpanded();

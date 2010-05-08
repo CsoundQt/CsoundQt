@@ -389,6 +389,9 @@ void DocumentView::textChanged()
         if (commentIndex < curIndex)
           return;
       }
+      if (line.contains("opcode") || line.contains("instr")) { // Don't pop menu in these cases.
+          return;
+      }
       if (word.size() > 2 && !word.startsWith("\"")
         && cursor.position() > cursor.anchor() // Only at the end of the word
         ) {
@@ -421,7 +424,14 @@ void DocumentView::textChanged()
             }
             QAction *a = syntaxMenu->addAction(text,
                                                this, SLOT(insertTextFromAction()));
-            a->setData(m_opcodeTree->getSyntax(syntax[i].opcodeName));
+            QString syntaxText = syntax[i].outArgs.simplified();
+            if (!syntax[i].outArgs.isEmpty())
+              syntaxText += " ";
+            syntaxText += syntax[i].opcodeName.simplified();
+            if (!syntax[i].inArgs.isEmpty()) {
+              syntaxText += " " + syntax[i].inArgs.simplified();
+            }
+            a->setData(syntaxText);
           }
           if (!allEqual) {
             QRect r =  mainEditor->cursorRect();
@@ -502,16 +512,31 @@ void DocumentView::autoComplete()
 
 void DocumentView::insertTextFromAction()
 {
+  qDebug() << "DocumentView::insertTextFromAction()";
   internalChange = true;
+  QAction *action = static_cast<QAction *>(QObject::sender());
+  bool insertComplete = static_cast<MySyntaxMenu *>(action->parent())->insertComplete;
   QTextCursor cursor = editors[0]->textCursor();
   cursor.select(QTextCursor::WordUnderCursor);
   cursor.insertText("");
   editors[0]->setTextCursor(cursor);
-  QAction *action = static_cast<QAction *>(QObject::sender());
-  bool insertComplete = static_cast<MySyntaxMenu *>(action->parent())->insertComplete;
+  
+  QTextCursor cursor2 = editors[0]->textCursor();
+  cursor2.movePosition(QTextCursor::StartOfLine,QTextCursor::KeepAnchor);
+  bool noOutargs = false;
+  if (!cursor2.selectedText().simplified().isEmpty()) { // Text before cursor, don't put outargs
+    noOutargs = true;
+  }
   internalChange = true;
   if (insertComplete) {
-    editors[0]->insertPlainText(action->data().toString());
+    if (noOutargs) {
+      QString syntaxText = action->data().toString();
+      int index =syntaxText.indexOf(QRegExp("\\w\\s+\\w"));
+      editors[0]->insertPlainText(syntaxText.mid(index + 1).trimmed());  // right returns the whole string if index < 0
+    }
+    else {
+      editors[0]->insertPlainText(action->data().toString());
+    }
   }
   else {
     int index = action->text().indexOf(" ");

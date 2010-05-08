@@ -32,7 +32,7 @@ QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
   m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   static_cast<QDoubleSpinBox*>(m_widget)->setAccelerated(true);
   static_cast<QDoubleSpinBox*>(m_widget)->setRange(-999999999999.0, 999999999999.0);
-//  connect(static_cast<QDoubleSpinBox *>(m_widget), SIGNAL(valueChanged(double)), this, SLOT(valueChanged(double)));
+  connect(static_cast<QDoubleSpinBox *>(m_widget), SIGNAL(valueChanged(double)), this, SLOT(valueChanged(double)));
 //   connect(static_cast<QDoubleSpinBox*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
   m_type = "editnum";
 
@@ -264,6 +264,7 @@ void QuteSpinBox::createPropertiesDialog()
   resolutionSpinBox = new QDoubleSpinBox(dialog);
   resolutionSpinBox->setDecimals(6);
   resolutionSpinBox->setRange(0,999999999999.0);
+  resolutionSpinBox->setRange(0,999999999999);
   layout->addWidget(resolutionSpinBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
   label = new QLabel(dialog);
