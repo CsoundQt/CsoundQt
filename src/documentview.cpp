@@ -512,7 +512,6 @@ void DocumentView::autoComplete()
 
 void DocumentView::insertTextFromAction()
 {
-  qDebug() << "DocumentView::insertTextFromAction()";
   internalChange = true;
   QAction *action = static_cast<QAction *>(QObject::sender());
   bool insertComplete = static_cast<MySyntaxMenu *>(action->parent())->insertComplete;

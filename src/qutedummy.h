@@ -32,7 +32,6 @@ class QuteDummy : public QuteWidget
     QuteDummy(QWidget *parent);
     ~QuteDummy();
 
-//    virtual void loadFromXml(QString xmlText);
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();
 

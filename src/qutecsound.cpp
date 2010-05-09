@@ -2895,7 +2895,15 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   if (fileName == ":/default.csd")
     fileName = QString("");
   documentPages[curPage]->setFileName(fileName);  // Must set before sending text to set highlighting mode
-  documentPages[curPage]->setTextString(text, m_options->saveWidgets);
+  if (documentPages[curPage]->setTextString(text, m_options->saveWidgets) == 1) { // Make backup copy if file has only old format.
+    QFile oldFile(fileName + ".old-format");
+    if (oldFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
+      qDebug() << "qutecsound::loadFile Writing backup file:" << fileName + ".old-format";
+      QTextStream out(&oldFile);
+      out << text;
+      oldFile.close();
+    }
+  }
   documentTabs->insertTab(curPage, documentPages[curPage]->getView(),"");
   documentTabs->setCurrentIndex(curPage);
 
@@ -2919,7 +2927,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
 //  setWidgetPanelGeometry();
 
 //  updateInspector();
-  //FIXME put back
+  // FIXME put back
 //  widgetPanel->clearHistory();
   if (runNow && m_options->autoPlay) {
     play();

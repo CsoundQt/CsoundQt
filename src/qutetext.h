@@ -27,7 +27,7 @@
 
 // TODO remove this offset?
 #ifdef Q_WS_MAC
-#define QCS_FONT_OFFSET 0
+#define QCS_FONT_OFFSET 3
 #else
 #define QCS_FONT_OFFSET 0
 #endif
@@ -43,8 +43,6 @@ class QuteText : public QuteWidget
     virtual QString getWidgetLine();
     virtual QString getWidgetXmlText();
 
-    virtual double getValue();
-    virtual QString getStringValue();
     virtual QString getWidgetType();
     virtual void setValue(double value);
     virtual void setValue(QString value);
@@ -58,6 +56,7 @@ class QuteText : public QuteWidget
     void setBg(bool bg);
     void setBorder(bool border);
     virtual void setText(QString text);
+    virtual void refreshWidget();
     virtual void applyInternalProperties();
 
   protected:
@@ -124,6 +123,7 @@ class QuteScrollNumber : public QuteText
     virtual void applyInternalProperties();
 
   protected:
+    virtual void refreshWidget();
     virtual void createPropertiesDialog();
     virtual void applyProperties();
 
@@ -140,7 +140,11 @@ class ScrollNumberWidget : public QLabel
 {
   Q_OBJECT
   public:
-    ScrollNumberWidget(QWidget* parent) : QLabel(parent) {pressed = false;}
+    ScrollNumberWidget(QWidget* parent) : QLabel(parent)
+    {
+      setContextMenuPolicy(Qt::NoContextMenu);
+      pressed = false;
+    }
     ~ScrollNumberWidget() {}
 
     void setResolution(double resolution)
@@ -153,8 +157,6 @@ class ScrollNumberWidget : public QLabel
 //    }
 
   protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event)
-    {emit(popUpMenu(event->globalPos()));}
 
     virtual void mouseMoveEvent(QMouseEvent * event)
     {
@@ -186,7 +188,6 @@ class ScrollNumberWidget : public QLabel
     bool pressed;
 
   signals:
-    void popUpMenu(QPoint pos);
     void addValue(double delta);
     void setValue(double value);
 };

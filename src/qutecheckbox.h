@@ -45,12 +45,16 @@ class QuteCheckBox : public QuteWidget
     virtual void refreshWidget();
     virtual void applyInternalProperties();
 
-    void popUpMenu(QPoint pos);
+//    void popUpMenu(QPoint pos);
 
   protected:
+    virtual void applyProperties();
     virtual void createPropertiesDialog();
 
+
+  private:
     double m_currentValue;
+    QDoubleSpinBox *valueBox;
 
   private slots:
     void stateChanged(int state);

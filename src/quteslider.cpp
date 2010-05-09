@@ -49,18 +49,6 @@ QuteSlider::~QuteSlider()
 {
 }
 
-double QuteSlider::getValue()
-{
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
-  double value = m_value;
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-  return value;
-}
-
 //void QuteSlider::sliderMoved(int value)
 //{
 //  QuteWidget::valueChanged(m_value);
@@ -70,25 +58,30 @@ void QuteSlider::setValue(double value)
 {
 //  qDebug() << "QuteSlider::setValue " << value;
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
+  widgetLock.lockForWrite();
 #endif
   setInternalValue(value);
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.unlock();
+#endif
+}
+
+void QuteSlider::refreshWidget()
+{
+  widgetLock.lockForRead();
   double min = property("QCS_minimum").toDouble();
   double max = property("QCS_maximum").toDouble();
   int val = (int) (m_len * (m_value - min)/(max- min));
+  widgetLock.unlock();
   m_widget->blockSignals(true);
   static_cast<QSlider *>(m_widget)->setValue(val);
   m_widget->blockSignals(false);
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
 }
 
 void QuteSlider::applyInternalProperties()
 {
   QuteWidget::applyInternalProperties();
 //  qDebug() << "QuteSlider::applyInternalProperties()";
-  QVariant prop;
 
   double max = property("QCS_maximum").toDouble();
   double min = property("QCS_minimum").toDouble();
@@ -96,10 +89,6 @@ void QuteSlider::applyInternalProperties()
     double temp = max;
     max = min;
     min = temp;
-  }
-  prop = property("QCS_value");
-  if (prop.isValid()) {
-    setValue(prop.toDouble());
   }
 }
 
@@ -121,7 +110,7 @@ void QuteSlider::setWidgetGeometry(int x, int y, int w, int h)
 QString QuteSlider::getWidgetLine()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString line = "ioSlider {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
@@ -130,7 +119,7 @@ QString QuteSlider::getWidgetLine()
   line += QString::number(m_value, 'f', 6) + " " + property("QCS_objectName").toString();
 //   qDebug("QuteSlider::getWidgetLine() %s", line.toStdString().c_str());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return line;
 }
@@ -138,7 +127,7 @@ QString QuteSlider::getWidgetLine()
 QString QuteSlider::getCabbageLine()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
+  widgetLock.lockForWrite();
 #endif
   QString line = "scrollbar chan(\"" + property("QCS_objectName").toString() + "\"),  ";
   line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
@@ -148,7 +137,7 @@ QString QuteSlider::getCabbageLine()
   line += "value(" + QString::number(m_value, 'f', 8) + "), ";
   line += "kind(\"" + (width() > height()? QString("horizontal"):QString("vertical")) +"\")";
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return line;
 }
@@ -156,14 +145,14 @@ QString QuteSlider::getCabbageLine()
 QString QuteSlider::getCsladspaLine()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString line = "ControlPort=" + property("QCS_objectName").toString() + "|" + property("QCS_objectName").toString() + "\n";
   line += "Range=" + QString::number(property("QCS_minimum").toDouble(), 'f', 8)
           + "|" + QString::number(property("QCS_maximum").toDouble(), 'f', 8);
 
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return line;
 }
@@ -175,7 +164,7 @@ QString QuteSlider::getWidgetXmlText()
   createXmlWriter(s);
 
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
+  widgetLock.lockForWrite();
 #endif
   s.writeTextElement("minimum", QString::number(property("QCS_minimum").toDouble(), 'f', 8));
   s.writeTextElement("maximum", QString::number(property("QCS_maximum").toDouble(), 'f', 8));
@@ -185,7 +174,7 @@ QString QuteSlider::getWidgetXmlText()
 
   s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return xmlText;
 }
@@ -214,25 +203,25 @@ void QuteSlider::createPropertiesDialog()
   maxSpinBox->setRange(-99999.0, 99999.0);
   layout->addWidget(maxSpinBox, 2,3, Qt::AlignLeft|Qt::AlignVCenter);
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
+  widgetLock.lockForWrite();
 #endif
   minSpinBox->setValue(property("QCS_minimum").toDouble());
   maxSpinBox->setValue(property("QCS_maximum").toDouble());
   setProperty("QCS_value", m_value);
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
 }
 
 void QuteSlider::applyProperties()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
+  widgetLock.lockForWrite();
 #endif
   setProperty("QCS_maximum", maxSpinBox->value());
   setProperty("QCS_minimum", minSpinBox->value());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   QuteWidget::applyProperties();  // Must be last to make sure the widgetsChanged signal is last
 }
@@ -240,7 +229,7 @@ void QuteSlider::applyProperties()
 void QuteSlider::sliderChanged(int value)
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   double normalized = (double) value / (double) m_len;
   double min = property("QCS_minimum").toDouble();
@@ -249,7 +238,7 @@ void QuteSlider::sliderChanged(int value)
   setInternalValue(scaledValue);
   QPair<QString, double> channelValue(property("QCS_objectName").toString(), m_value);
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   emit newValue(channelValue);
 }

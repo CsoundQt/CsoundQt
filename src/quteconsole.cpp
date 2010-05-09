@@ -35,34 +35,16 @@ QuteConsole::~QuteConsole()
 {
 }
 
-//void QuteConsole::loadFromXml(QString xmlText)
-//{
-//  initFromXml(xmlText);
-//  QDomDocument doc;
-//  if (!doc.setContent(xmlText)) {
-//    qDebug() << "QuteButton::loadFromXml: Error parsing xml";
-//    return;
-//  }
-//  QDomElement e = doc.firstChildElement("type"); // TODO add latch button and button bank
-//  if (e.isNull()) {
-//    qDebug() << "QuteButton::loadFromXml: Expecting type element";
-//    return;
-//  }
-//  else {
-//    m_type = e.nodeValue();
-//  }
-//}
-
 QString QuteConsole::getWidgetLine()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString line = "ioListing {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"}";
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return line;
 }
@@ -74,13 +56,13 @@ QString QuteConsole::getWidgetXmlText()
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   // Nothing else needed here
 
   s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return xmlText;
 }
@@ -89,11 +71,6 @@ QString QuteConsole::getWidgetType()
 {
   return QString("BSBConsole");
 }
-
-// void QuteConsole::popUpMenu(QPoint pos)
-// {
-//   QuteWidget::popUpMenu(pos);
-// }
 
 void QuteConsole::appendMessage(QString message)
 {

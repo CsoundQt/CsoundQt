@@ -32,6 +32,7 @@ QuteWidget::QuteWidget(QWidget *parent):
 
   m_value = 0.0;
   m_value2 = 0.0;
+  m_stringValue = "";
 
   this->setMinimumSize(2,2);
   this->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
@@ -102,25 +103,17 @@ void QuteWidget::setValue(QString value)
 
 QString QuteWidget::getChannelName()
 {
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
+  widgetLock.lockForRead();
   QString name = property("QCS_objectName").toString();
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
+  widgetLock.unlock();
   return name;
 }
 
 QString QuteWidget::getChannel2Name()
 {
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
+  widgetLock.lockForRead();
   QString name = property("QCS_objectName2").toString();
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
+  widgetLock.unlock();
   return name;
 }
 
@@ -153,19 +146,40 @@ void QuteWidget::createXmlWriter(QXmlStreamWriter &s)
 double QuteWidget::getValue()
 {
   // When reimplementing this, remember to use the widget mutex to protect data, as this can be called from many different places
-  return 0.0;
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.lockForRead();
+#endif
+  double value = m_value;
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.unlock();
+#endif
+  return value;
 }
 
 double QuteWidget::getValue2()
 {
   // When reimplementing this, remember to use the widget mutex to protect data, as this can be called from many different places
-  return 0.0;
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.lockForRead();
+#endif
+  double value = m_value2;
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.unlock();
+#endif
+  return value;
 }
 
 QString QuteWidget::getStringValue()
 {
   // When reimplementing this, remember to use the widget mutex to protect data, as this can be called from many different places
-  return QString("");
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.lockForRead();
+#endif
+  QString value = m_stringValue;
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.unlock();
+#endif
+  return value;
 }
 
 QString QuteWidget::getCsladspaLine()
@@ -186,7 +200,7 @@ void QuteWidget::applyInternalProperties()
 {
 //  qDebug() << "QuteWidget::applyInternalProperties()";
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   int x,y,width, height;
   x = property("QCS_x").toInt();
@@ -195,8 +209,11 @@ void QuteWidget::applyInternalProperties()
   height = property("QCS_height").toInt();
   setWidgetGeometry(x,y,width, height);
   setChannelName(property("QCS_objectName").toString());
+  m_value = property("QCS_value").toDouble();
+  m_value2 = property("QCS_value2").toDouble();
+  m_stringValue = property("QCS_stringValue").toDouble();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
 }
 
@@ -310,31 +327,29 @@ void QuteWidget::deleteWidget()
   emit(deleteThisWidget(this));
 }
 
-void QuteWidget::valueChanged(double value)
-{
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
-  QPair<QString, double> channelValue;
-  channelValue = QPair<QString, double>(property("QCS_objectName").toString(), value);
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-  emit newValue(channelValue);
-}
-
-void QuteWidget::value2Changed(double value)
-{
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
-  QPair<QString, double> channelValue;
-  channelValue = QPair<QString, double>(property("QCS_objectName2").toString(), value);
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-  emit newValue(channelValue);
-}
+//void QuteWidget::valueChanged(double value)
+//{
+//  widgetLock.lockForRead();
+//  m_value = value;
+//  QPair<QString, double> channelValue;
+//  channelValue = QPair<QString, double>(property("QCS_objectName").toString(), value);
+//  widgetLock.unlock();
+//  emit newValue(channelValue);
+//}
+//
+//void QuteWidget::value2Changed(double value)
+//{
+//#ifdef  USE_WIDGET_MUTEX
+//  widgetLock.lockForRead();
+//#endif
+//  m_value2 = value;
+//  QPair<QString, double> channelValue;
+//  channelValue = QPair<QString, double>(property("QCS_objectName2").toString(), value);
+//#ifdef  USE_WIDGET_MUTEX
+//  widgetLock.unlock();
+//#endif
+//  emit newValue(channelValue);
+//}
 
 void QuteWidget::createPropertiesDialog()
 {
@@ -382,7 +397,7 @@ void QuteWidget::createPropertiesDialog()
   cancelButton = new QPushButton(tr("Cancel"));
   layout->addWidget(cancelButton, 15, 2, Qt::AlignCenter|Qt::AlignVCenter);
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   xSpinBox->setValue(this->x());
   ySpinBox->setValue(this->y());
@@ -390,7 +405,7 @@ void QuteWidget::createPropertiesDialog()
   hSpinBox->setValue(this->height());
   nameLineEdit->setText(getChannelName());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
 }
 
@@ -398,7 +413,7 @@ void QuteWidget::applyProperties()
 {
   qDebug() << "QuteWidget::applyProperties()";
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   setProperty("QCS_objectName", nameLineEdit->text());
   setProperty("QCS_x", xSpinBox->value());
@@ -406,7 +421,7 @@ void QuteWidget::applyProperties()
   setProperty("QCS_width", wSpinBox->value());
   setProperty("QCS_height", hSpinBox->value());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   applyInternalProperties();
 //  setChannelName(nameLineEdit->text());

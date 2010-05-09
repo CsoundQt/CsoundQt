@@ -620,14 +620,19 @@ void CsoundEngine::queueEvent(QString eventLine, int delay)
 {
   // TODO: implement delayed events
 //   qDebug("CsoundEngine::queueEvent %s", eventLine.toStdString().c_str());
+  if (!isRunning()) {
+    queueMessage(tr("Csound is not running! Event ignored.\n"));
+    return;
+  }
   if (eventQueueSize < QCS_MAX_EVENTS) {
     eventMutex.lock();
     eventQueue[eventQueueSize] = eventLine;
     eventQueueSize++;
     eventMutex.unlock();
   }
-  else
+  else {
     qDebug("Warning: event queue full, event not processed");
+  }
 }
 
 int CsoundEngine::runCsound()
@@ -846,31 +851,32 @@ void CsoundEngine::dispatchQueues()
   }
   int counter = 0;
   ud->wl->getMouseValues(&ud->mouseValues);
-  ud->wl->processNewValues();  // Process values from widgets even if not running
-  if (isRunning()) {
-    while ((m_consoleBufferSize <= 0 || counter++ < m_consoleBufferSize)) {
-      messageMutex.lock();
-      if (messageQueue.isEmpty()) {
-        messageMutex.unlock();
-        break;
-      }
-      QString msg = messageQueue.takeFirst();
-      messageMutex.unlock();
-      for (int i = 0; i < ud->cs->consoles.size(); i++) {
-        ud->cs->consoles[i]->appendMessage(msg);
-        ud->cs->consoles[i]->scrollToEnd();
-      }
-      ud->wl->appendMessage(msg);
-//      qApp->processEvents(); //TODO Is this needed here to avoid display problems in the console?
-      ud->wl->refreshConsoles();  // Scroll to end of text all console widgets
-    }
+  ud->wl->refreshWidgets();
+  //  ud->wl->processNewValues();  // Process values from widgets even if not running, not needed anymore?
+  while ((m_consoleBufferSize <= 0 || counter++ < m_consoleBufferSize)) {
     messageMutex.lock();
-    if (!messageQueue.isEmpty() && m_consoleBufferSize > 0 && counter >= m_consoleBufferSize) {
-      messageQueue.clear();
-      messageQueue << "\nQUTECSOUND: Message buffer overflow. Messages discarded!\n";
+    if (messageQueue.isEmpty()) {
+      messageMutex.unlock();
+      break;
     }
+    QString msg = messageQueue.takeFirst();
     messageMutex.unlock();
+    for (int i = 0; i < ud->cs->consoles.size(); i++) {
+      ud->cs->consoles[i]->appendMessage(msg);
+      ud->cs->consoles[i]->scrollToEnd();
+    }
+    ud->wl->appendMessage(msg);
+    //      qApp->processEvents(); //TODO Is this needed here to avoid display problems in the console?
+    ud->wl->refreshConsoles();  // Scroll to end of text all console widgets
+  }
+  messageMutex.lock();
+  if (!messageQueue.isEmpty() && m_consoleBufferSize > 0 && counter >= m_consoleBufferSize) {
+    messageQueue.clear();
+    messageQueue << "\nQUTECSOUND: Message buffer overflow. Messages discarded!\n";
+  }
+  messageMutex.unlock();
 
+  if (isRunning()) {
     //   QList<QString> channels = outValueQueue.keys();
     //   foreach (QString channel, channels) {
     //     widgetPanel->setValue(channel, outValueQueue[channel]);

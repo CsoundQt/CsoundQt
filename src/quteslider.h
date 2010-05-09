@@ -39,11 +39,11 @@ class QuteSlider : public QuteWidget
     virtual QString getCsladspaLine();
     virtual QString getWidgetXmlText();
 
-    double getValue();
     virtual QString getWidgetType();
 //    void setInternalValue(double value);
     void setValue(double value);
 
+    virtual void refreshWidget();
     virtual void applyInternalProperties();
 
   protected:

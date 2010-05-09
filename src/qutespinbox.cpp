@@ -51,18 +51,6 @@ QuteSpinBox::~QuteSpinBox()
 {
 }
 
-void QuteSpinBox::setValue(double value)
-{
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
-#endif
-  static_cast<QDoubleSpinBox*>(m_widget)->setValue(value);
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-  setProperty("QCS_value", value);
-}
-
 void QuteSpinBox::setText(QString /*text*/)
 {
 //  qDebug() << "QuteSpinBox::setText not valid! setting to minimum";
@@ -74,23 +62,10 @@ void QuteSpinBox::setText(QString /*text*/)
 //  setProperty("QCS_resolution", resolution);
 //}
 
-double QuteSpinBox::getValue()
-{
-  double value = 0.0;
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
-  value = static_cast<QDoubleSpinBox*>(m_widget)->value();
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-  return value;
-}
-
 QString QuteSpinBox::getWidgetLine()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString line = "ioText {" + QString::number(property("QCS_x").toInt()) + ", " + QString::number(property("QCS_y").toInt()) + "} ";
   line += "{"+ QString::number(property("QCS_width").toInt()) +", "+ QString::number(property("QCS_height").toInt()) +"} ";
@@ -115,7 +90,7 @@ QString QuteSpinBox::getWidgetLine()
   // in the text field, but writes to both.
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return line;
 }
@@ -123,13 +98,13 @@ QString QuteSpinBox::getWidgetLine()
 QString QuteSpinBox::getCsladspaLine()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString line = "ControlPort=" + m_widget->property("QCS_objectName").toString()
                  + "|" + m_widget->property("QCS_objectName").toString() + "\n";
   line += "Range=-9999|9999";
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return line;
 }
@@ -141,7 +116,7 @@ QString QuteSpinBox::getWidgetXmlText()
   createXmlWriter(s);
 
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   s.writeTextElement("type", m_type);
   s.writeTextElement("value", QString::number(static_cast<QDoubleSpinBox*>(m_widget)->value()));
@@ -176,7 +151,7 @@ QString QuteSpinBox::getWidgetXmlText()
   s.writeEndElement();
 
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return xmlText;
 }
@@ -186,22 +161,13 @@ QString QuteSpinBox::getWidgetType()
   return QString("BSBSpinBox");
 }
 
-QString QuteSpinBox::getCabbageLine()
+void QuteSpinBox::refreshWidget()
 {
-  QString line = "";
-  return line;
-}
-
-QString QuteSpinBox::getStringValue()
-{
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
-  QString string = static_cast<QDoubleSpinBox *>(m_widget)->text();
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-  return string;
+  widgetLock.lockForRead();
+  m_widget->blockSignals(true);
+  static_cast<QDoubleSpinBox*>(m_widget)->setValue(m_value);
+  m_widget->blockSignals(false);
+  widgetLock.unlock();
 }
 
 void QuteSpinBox::applyInternalProperties()
@@ -209,9 +175,10 @@ void QuteSpinBox::applyInternalProperties()
 //  qDebug() << "QuteSpinBox::applyInternalProperties()";
 
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
+  widgetLock.lockForWrite();
 #endif
-  static_cast<QDoubleSpinBox*>(m_widget)->setValue(property("QCS_value").toDouble());
+//  static_cast<QDoubleSpinBox*>(m_widget)->setValue(property("QCS_value").toDouble());
+//  m_value = property("QCS_value").toDouble();
   static_cast<QDoubleSpinBox*>(m_widget)->setRange(property("QCS_minimum").toDouble(),property("QCS_maximum").toDouble());
   double resolution = property("QCS_resolution").toDouble();
   int i;
@@ -248,7 +215,7 @@ void QuteSpinBox::applyInternalProperties()
                           + "; }");
 //  qDebug() << "QuteSpinBox::applyInternalProperties() sylesheet" <<  m_widget->styleSheet();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   QuteWidget::applyInternalProperties();
 }
@@ -264,7 +231,6 @@ void QuteSpinBox::createPropertiesDialog()
   resolutionSpinBox = new QDoubleSpinBox(dialog);
   resolutionSpinBox->setDecimals(6);
   resolutionSpinBox->setRange(0,999999999999.0);
-  resolutionSpinBox->setRange(0,999999999999);
   layout->addWidget(resolutionSpinBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
   label = new QLabel(dialog);
@@ -291,14 +257,14 @@ void QuteSpinBox::createPropertiesDialog()
   borderRadius->hide();
   borderWidth->hide();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   resolutionSpinBox->setValue(property("QCS_resolution").toDouble());
   minSpinBox->setValue(property("QCS_minimum").toDouble());
   maxSpinBox->setValue(property("QCS_maximum").toDouble());
   text->setText(static_cast<QDoubleSpinBox *>(m_widget)->text());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
 }
 
@@ -325,10 +291,20 @@ void QuteSpinBox::applyProperties()
   setProperty("QCS_color", textColor->palette().color(QPalette::Window));
   setProperty("QCS_bordermode", border->isChecked() ? "border" : "noborder");
   setProperty("QCS_resolution", resolutionSpinBox->value());
-  setProperty("QCS_value", text->toPlainText().toDouble());
+  m_value = text->toPlainText().toDouble();
   setProperty("QCS_maximum", maxSpinBox->value());
   setProperty("QCS_minimum", minSpinBox->value());
 //  setProperty("QCS_randomizable",false);
 
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
+}
+
+void QuteSpinBox::valueChanged(double value)
+{
+  widgetLock.lockForWrite();
+  m_value = value;
+  m_stringValue = QString::number(value);
+  QPair<QString, double> channelValue(property("QCS_objectName").toString(), m_value);
+  widgetLock.unlock();
+  emit newValue(channelValue);
 }

@@ -169,6 +169,7 @@ DocumentPage::~DocumentPage()
 int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 {
 //  qDebug() << "---- DocumentPage::setTextString";
+  int ret = 0;
   deleteAllLiveEvents();
   bool xmlFormatFound = false;
   QString xmlPanels = QString();
@@ -280,11 +281,12 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
         text.insert(index, "<CsOptions>\n" + outFile + "\n</CsOptions>\n");
       }
     }
+    ret = 1;
   }
   if (!text.contains("<CsoundSynthesizer>") &&
       !text.contains("</CsoundSynthesizer>") ) { // When not a csd file
     m_view->setFullText(text);  // TODO do something different if not a csd file?
-    return 0;  // Don't add live event panel if not a csd file.
+    return ret;  // Don't add live event panel if not a csd file.
   }
   // Load Live Event Panels ------------------------
   while (text.contains("<EventPanel") and text.contains("</EventPanel>")) {
@@ -308,7 +310,6 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     int loopEnd = panelElement.attribute("loopEnd","0.0").toDouble();
 
     LiveEventFrame *panel = createLiveEventPanel();
-
     panel->setFromText(liveText);
     panel->setName(panelName);
     panel->setTempo(tempo);
@@ -329,7 +330,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 //    e->setFromText(QString()); // Must set blank for undo history point
 //  }
   m_view->setFullText(text);  // This must be last as some of the text has been removed along the way
-  return 0;
+  return ret;
 }
 
 QString DocumentPage::getFullText()
@@ -1233,7 +1234,7 @@ void DocumentPage::newLiveEventPanel(QString text)
 LiveEventFrame * DocumentPage::createLiveEventPanel(QString text)
 {
 //  qDebug() << "DocumentPage::newLiveEventPanel()";
-  LiveEventFrame *e = new LiveEventFrame("Live Event", m_view);
+  LiveEventFrame *e = new LiveEventFrame("Live Event", m_view, Qt::Window);
   e->setVisible(false);
 //  e->setAttribute(Qt::WA_DeleteOnClose, false);
   e->getSheet()->setRowCount(1);

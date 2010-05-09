@@ -30,26 +30,19 @@ class QuteComboBox : public QuteWidget
   Q_OBJECT
   public:
     QuteComboBox(QWidget *parent);
-
     ~QuteComboBox();
 
-//    virtual void loadFromXml(QString xmlText);
-    virtual void setValue(double value); // Current item select index
-    virtual double getValue();
     virtual QString getWidgetLine();
     virtual QString getCabbageLine();
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();
-    void setSize(int size);
     void setText(QString text);  //Text for this widget is the item list separated by commas
     void clearItems();
     void addItem(QString text, double value, QString stringvalue);
-    void popUpMenu(QPoint pos);
-
+    virtual void refreshWidget();
     virtual void applyInternalProperties();
 
   protected:
-//    virtual void contextMenuEvent(QContextMenuEvent* event);
     virtual void applyProperties();
     virtual void createPropertiesDialog();
 
@@ -61,7 +54,7 @@ class QuteComboBox : public QuteWidget
     QLineEdit *line;
 
   private slots:
-//    void indexChanged(int value);
+    void indexChanged(int value);
 
 };
 

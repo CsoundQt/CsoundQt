@@ -32,23 +32,22 @@ class QuteSpinBox : public QuteText
     QuteSpinBox(QWidget* parent);
     ~QuteSpinBox();
 
-//    virtual void setAlignment(int alignment);
-    virtual void setValue(double value);
     virtual void setText(QString text);
 //    virtual void setResolution(double resolution);
-    virtual double getValue();
     virtual QString getWidgetLine();
-    virtual QString getCabbageLine();
     virtual QString getCsladspaLine();
     virtual QString getWidgetXmlText();
-    virtual QString getStringValue();
     virtual QString getWidgetType();
 
+    virtual void refreshWidget();
     virtual void applyInternalProperties();
 
   protected:
     virtual void createPropertiesDialog();
     virtual void applyProperties();
+
+  protected slots:
+    void valueChanged(double value);
 
   private:
     QDoubleSpinBox *minSpinBox;

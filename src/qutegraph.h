@@ -36,12 +36,11 @@ class QuteGraph : public QuteWidget
 
     ~QuteGraph();
 
-//    virtual void loadFromXml(QString xmlText);
+//    virtual void setValue(double value); // if value is >=0 it is the index, otherwise it is the table number
     virtual QString getWidgetLine();
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();
     virtual void setWidgetGeometry(int x,int y,int width,int height);
-    virtual void setValue(double value);
 //    void setZoom(double zoom);
     void clearCurves();
     void addCurve(Curve *curve);
@@ -59,11 +58,13 @@ class QuteGraph : public QuteWidget
     QVector<QVector <QGraphicsLineItem *> > lines;
     QVector<QGraphicsPolygonItem *> polygons;
 
+    virtual void refreshWidget();
     virtual void createPropertiesDialog();
     virtual void applyProperties();
 
   public slots:
     void changeCurve(int index);
+    void indexChanged(int index);
 
   private:
     void drawCurve(Curve * curve, int index);
@@ -77,7 +78,7 @@ class StackedLayoutWidget : public QStackedWidget
     {
       setFrameShape(QFrame::StyledPanel);
     }
-    ~StackedLayoutWidget() {};
+    ~StackedLayoutWidget() {}
 
     void setWidgetGeometry(int x,int y,int width,int height)
     {

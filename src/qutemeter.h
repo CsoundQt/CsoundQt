@@ -36,17 +36,9 @@ class QuteMeter : public QuteWidget
 
     ~QuteMeter();
 
-//    virtual void loadFromXml(QString xmlText);
     virtual QString getWidgetLine();
     virtual QString getWidgetXmlText();
-    virtual double getValue();
-    virtual double getValue2();
-//     virtual QString getChannelName();
-    virtual QString getChannel2Name();
     virtual QString getWidgetType();
-
-    virtual void setValue(double value);
-    virtual void setValue2(double value);
 
     void setChannel2Name(QString name);
 //    void setColor(QColor color);
@@ -56,16 +48,13 @@ class QuteMeter : public QuteWidget
 //    void setBehavior(QString behavior);
     virtual void setWidgetGeometry(int x,int y,int width,int height);
 
-    void popUpMenu(QPoint pos);
     virtual void createPropertiesDialog();
+
+    virtual void refreshWidget();
     virtual void applyProperties();
     void applyInternalProperties();
 
   protected:
-//    QColor m_color;
-//    double m_xMin, m_xMax, m_yMin, m_yMax;
-//    int m_fadeSpeed;
-//    QString m_behavior;
 
   private:
     QLineEdit* name2LineEdit;
@@ -89,7 +78,6 @@ class MeterWidget : public QGraphicsView
   Q_OBJECT
   public:
     MeterWidget(QWidget *parent);
-
     ~MeterWidget();
 
     void setValue(double value);
@@ -103,13 +91,9 @@ class MeterWidget : public QGraphicsView
     QColor getColor();
     QString getType() {return m_type;}
     int getPointSize() {return m_pointSize;}
-    double getValue();
-    double getValue2();
     bool m_vertical;
 
   protected:
-//    virtual void contextMenuEvent(QContextMenuEvent *event)
-//    {emit(popUpMenu(event->globalPos()));}
     virtual void mouseMoveEvent(QMouseEvent* event);
     virtual void mousePressEvent(QMouseEvent* event);
 //    virtual void mouseReleaseEvent(QMouseEvent* event);
@@ -129,7 +113,6 @@ class MeterWidget : public QGraphicsView
     QGraphicsLineItem* m_hline;
 
   signals:
-//    void popUpMenu(QPoint pos);
     void newValues(double value1, double value2);
     void valueChanged(double value);
     void value2Changed(double value);

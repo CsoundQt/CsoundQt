@@ -50,7 +50,7 @@ class QuteButton : public QuteWidget
     virtual void applyInternalProperties();
 
   protected:
-    virtual void contextMenuEvent(QContextMenuEvent* event);
+//    virtual void contextMenuEvent(QContextMenuEvent* event);
     virtual void applyProperties();
     virtual void createPropertiesDialog();
 

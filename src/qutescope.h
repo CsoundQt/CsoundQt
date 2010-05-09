@@ -68,7 +68,8 @@ class QuteScope : public QuteWidget
     QLabel * m_label;
     QComboBox *typeComboBox;
     QComboBox *channelBox;
-    QSpinBox *decimationBox;
+    QDoubleSpinBox *zoomxBox;
+    QDoubleSpinBox *zoomyBox;
     ScopeParams *m_params;
     DataDisplay *m_dataDisplay;
     ScopeData *m_scopeData;
@@ -188,7 +189,7 @@ class DataDisplay
       m_params = params;
     }
     virtual void resize() = 0;
-    virtual void updateData(int channel, int zoom, bool freeze) = 0;
+    virtual void updateData(int channel, double zoomx, double zoomy, bool freeze) = 0;
     virtual void show() = 0;
     virtual void hide() = 0;
 
@@ -206,7 +207,7 @@ class ScopeData : public DataDisplay
     ScopeData(ScopeParams *params);
     virtual ~ScopeData() {}
     virtual void resize();
-    virtual void updateData(int channel, int zoom, bool freeze);
+    virtual void updateData(int channel, double zoomx, double zoomy, bool freeze);
     virtual void show();
     virtual void hide();
 
@@ -225,7 +226,7 @@ class LissajouData : public DataDisplay
     LissajouData(ScopeParams *params);
     virtual ~LissajouData() {}
     virtual void resize();
-    virtual void updateData(int channel, int zoom, bool freeze);
+    virtual void updateData(int channel, double zoomx, double zoomy, bool freeze);
     virtual void show();
     virtual void hide();
 
@@ -244,7 +245,7 @@ class PoincareData : public DataDisplay
     PoincareData(ScopeParams *params);
     virtual ~PoincareData() {}
     virtual void resize();
-    virtual void updateData(int channel, int zoom, bool freeze);
+    virtual void updateData(int channel, double zoomx, double zoomy, bool freeze);
     virtual void show();
     virtual void hide();
 

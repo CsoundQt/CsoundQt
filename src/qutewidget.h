@@ -26,6 +26,8 @@
 #include <QtGui>
 #include <QtXml>
 
+#define USE_WIDGET_MUTEX
+
 class QuteWidget : public QWidget
 {
   Q_OBJECT
@@ -57,7 +59,7 @@ class QuteWidget : public QWidget
 
     QString getUuid();
     virtual QString getWidgetType() = 0;
-    virtual void refreshWidget(QString) { ;}
+    virtual void refreshWidget() { ;}
 
     virtual void applyInternalProperties();
 
@@ -86,9 +88,9 @@ class QuteWidget : public QWidget
 //    QString m_name2;
 
     QReadWriteLock widgetLock;
-#ifdef  USE_WIDGET_MUTEX
-    QReadWriteLock widgetMutex;
-#endif
+//#ifdef  USE_WIDGET_MUTEX
+//    QReadWriteLock widgetMutex;
+//#endif
     QString xmlText;
 
     virtual void contextMenuEvent(QContextMenuEvent *event);
@@ -104,8 +106,8 @@ class QuteWidget : public QWidget
   protected slots:
     void apply();
     void deleteWidget();
-    virtual void valueChanged(double value);  // Called when a widget is moved with the mouse, to pass to widgets
-    void value2Changed(double value);
+//    virtual void valueChanged(double value);  // Called when a widget is moved with the mouse, to pass to widgets
+//    virtual void value2Changed(double value);
 
   private:
 

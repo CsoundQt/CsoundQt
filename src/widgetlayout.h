@@ -106,6 +106,7 @@ class WidgetLayout : public QWidget
     void clearGraphs();
 
     void refreshConsoles();
+    void refreshWidgets();
     QString getCsladspaLines();
     bool isModified();
     void passWidgetClipboard(QString text);

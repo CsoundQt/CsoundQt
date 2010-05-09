@@ -45,10 +45,9 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
   m_pageComboBox->setFocusPolicy(Qt::NoFocus);
   m_label->setFocusPolicy(Qt::NoFocus);
   canFocus(false);
-  connect(m_pageComboBox, SIGNAL(activated(int)),
-          this, SLOT(changeCurve(int)));
+  connect(m_pageComboBox, SIGNAL(currentIndexChanged(int)),
+          this, SLOT(indexChanged(int)));
   polygons.clear();
-//   connect(static_cast<StackedLayoutWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 
 // Default properties
   setProperty("QCS_zoomx", 1.0);
@@ -64,13 +63,18 @@ QuteGraph::~QuteGraph()
 {
 }
 
+//void QuteGraph::setValue(double value)
+//{
+//  QuteWidget::setValue(value);
+//}
+
 QString QuteGraph::getWidgetLine()
 {
   // Extension to MacCsound: type of graph (table, ftt, scope), value (which hold the index of the
   // table displayed) zoom and channel name
   // channel number is unused in QuteGraph, but selects channel for scope
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString line = "ioGraph {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} table ";
@@ -79,7 +83,7 @@ QString QuteGraph::getWidgetLine()
   line += property("QCS_objectName").toString();
 //   qDebug("QuteGraph::getWidgetLine(): %s", line.toStdString().c_str());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return line;
 }
@@ -91,7 +95,7 @@ QString QuteGraph::getWidgetXmlText()
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
 
   s.writeTextElement("value", QString::number((int)m_value));
@@ -104,7 +108,7 @@ QString QuteGraph::getWidgetXmlText()
   s.writeTextElement("all", property("QCS_all").toBool() ? "true" : "false");
   s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return xmlText;
 }
@@ -124,35 +128,56 @@ void QuteGraph::setWidgetGeometry(int x,int y,int width,int height)
   changeCurve(index);
 }
 
+void QuteGraph::refreshWidget()
+{
+  widgetLock.lockForRead();
+  int index = (int) m_value;
+  widgetLock.unlock();  // unlock
+  if (index < 0) {
+    for (int i = 0; i < m_pageComboBox->count(); i++) {
+      QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"), QString::SkipEmptyParts);
+//      qDebug() << "QuteGraph::setValue " << parts << " " << value;
+      if (parts.size() > 1) {
+        int num = parts.last().toInt();
+        if (curves.size() > num && curves[num]->get_caption().isEmpty()) { // Don't show if curve has no name. Is this likely?
+          return;
+        }
+        if (index == -num) {
+          index = i;
+          break;
+        }
+      }
+    }
+  }
+  m_pageComboBox->blockSignals(true);
+  m_pageComboBox->setCurrentIndex(index);
+  m_pageComboBox->blockSignals(false);
+  changeCurve(index);
+}
+
 void QuteGraph::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
   dialog->setWindowTitle("Graph");
   QLabel *label = new QLabel(dialog);
   label->setText("Zoom");
   layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
   zoomBox = new QDoubleSpinBox(dialog);
-  zoomBox->setValue(property("QCS_zoomx").toDouble());
   zoomBox->setRange(1, 10.0);
   zoomBox->setDecimals(1);
   zoomBox->setSingleStep(0.5);
   layout->addWidget(zoomBox, 7, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
+  widgetLock.lockForRead();
+  zoomBox->setValue(property("QCS_zoomx").toDouble());
+  widgetLock.unlock();
 //   channelLabel->hide();
 //   nameLineEdit->hide();
 }
 
 void QuteGraph::applyProperties()
 {
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
-#endif
+  widgetLock.lockForWrite();
   setProperty("QCS_zoomx", zoomBox->value());
   setProperty("QCS_zoomy", zoomBox->value());
   setProperty("QCS_dispx", 1);
@@ -160,53 +185,59 @@ void QuteGraph::applyProperties()
   setProperty("QCS_modex", "lin");
   setProperty("QCS_modey", "lin");
   setProperty("QCS_all", true);
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
+
+  widgetLock.unlock();
   QuteWidget::applyProperties();
 }
 
-void QuteGraph::setValue(double value)
-{
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
-#endif
-  if (m_value == value)
-    return;
-  if (value < 0 ) {
-    for (int i = 0; i < m_pageComboBox->count(); i++) {
-      QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"), QString::SkipEmptyParts);
-//      qDebug() << "QuteGraph::setValue " << parts << " " << value;
-      if (parts.size() > 1) {
-        int num = parts.last().toInt();
-        if (curves.size() > num && curves[num]->get_caption().isEmpty())
-          return;
-        if (int(value) == -num) {
-          changeCurve(i);
-          m_value = value;
-        }
-      }
-    }
-  }
-  else if (value < curves.size()) { //Dont change value if not valid
-    changeCurve((int) value);
-    m_value = value;
-  }
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-}
+//void QuteGraph::setValue(double value)
+//{
+//  widgetLock.lockForWrite();  // lock
+//  if (m_value == value) {
+//    widgetLock.unlock();
+//    return;
+//  }
+//  if (value < 0 ) {
+//    for (int i = 0; i < m_pageComboBox->count(); i++) {
+//      QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"), QString::SkipEmptyParts);
+////      qDebug() << "QuteGraph::setValue " << parts << " " << value;
+//      if (parts.size() > 1) {
+//        int num = parts.last().toInt();
+//        if (curves.size() > num && curves[num]->get_caption().isEmpty()) {
+//          widgetLock.unlock();  // unlock
+//          return;
+//        }
+//        if (int(value) == -num) {
+//          changeCurve(i);
+//          m_value = value;
+//        }
+//      }
+//    }
+//  }
+//  else if (value < curves.size()) { //Dont change value if not valid
+//    changeCurve((int) value);
+//    m_value = value;
+//  }
+//  widgetLock.unlock();  // unlock
+//}
 
 void QuteGraph::changeCurve(int index)
 {
 //   qDebug("QuteGraph::changeCurve %i", index);
+  if (index < 0  || index >= curves.size()
+    || curves.size() <= 0 || curves[index]->get_caption().isEmpty()) {
+    return;
+  }
+  qDebug() << "QuteGraph::changeCurve" << index;
   if (index == -1) // goto last curve
     index = static_cast<StackedLayoutWidget *>(m_widget)->count() - 1;
   if (index == -2)  // update curve but don't change which
     index = static_cast<StackedLayoutWidget *>(m_widget)->currentIndex();
-  if (index < 0 or curves[index]->get_caption().isEmpty())
+  StackedLayoutWidget *stacked =  static_cast<StackedLayoutWidget *>(m_widget);
+  if (stacked->currentIndex() == index) { // No need to refresh
     return;
-  static_cast<StackedLayoutWidget *>(m_widget)->setCurrentIndex(index);
+  }
+  stacked->setCurrentIndex(index);
   drawCurve(curves[index], index);
   QGraphicsView *view = (QGraphicsView *) static_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
 
@@ -235,7 +266,11 @@ void QuteGraph::changeCurve(int index)
   QString text = QString::number(size) + " pts Max=";
   text += QString::number(max, 'g', 5) + " Min =" + QString::number(min, 'g', 5);
   m_label->setText(text);
-  m_pageComboBox->setCurrentIndex(index);
+}
+
+void QuteGraph::indexChanged(int index)
+{
+  QuteWidget::setValue(index); // Don't update the combobox index, by not calling the function in this class
 }
 
 void QuteGraph::clearCurves()

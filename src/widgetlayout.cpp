@@ -293,11 +293,11 @@ QString WidgetLayout::getWidgetsText()
   text += "</bgcolor>\n";
 
   layoutMutex.unlock();
-//  widgetsMutex.lock();
+  widgetsMutex.lock();
   for (int i = 0; i < m_widgets.size(); i++) {
     text += m_widgets[i]->getWidgetXmlText() + "\n";
   }
-//  widgetsMutex.unlock();
+  widgetsMutex.unlock();
   text += "</bsbPanel>";
   return text;
 }
@@ -722,14 +722,14 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 bool WidgetLayout::uuidFree(QString uuid)
 {
   bool isFree = true;
-//  widgetsMutex.lock();
+  widgetsMutex.lock();
   for (int i = 0; i < m_widgets.size(); i++) {
     if (m_widgets[i]->getUuid() == uuid) {
       isFree = false;
       break;
     }
   }
-//  widgetsMutex.unlock();
+  widgetsMutex.unlock();
   return isFree;
 }
 
@@ -812,7 +812,7 @@ int WidgetLayout::newMacWidget(QString widgetLine, bool offset)
 
 void WidgetLayout::registerWidget(QuteWidget * widget)
 {
-//  widgetsMutex.lock();
+  widgetsMutex.lock();
   connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
@@ -822,7 +822,7 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
     editWidgets.last()->select();
   }
   setWidgetToolTip(widget, m_tooltips);
-//  widgetsMutex.unlock();
+  widgetsMutex.unlock();
   adjustLayoutSize();
   widget->show();
 }
@@ -1027,6 +1027,13 @@ void WidgetLayout::refreshConsoles()
   }
 }
 
+void WidgetLayout::refreshWidgets()
+{
+  for (int i=0; i < m_widgets.size(); i++) {
+    m_widgets[i]->refreshWidget();
+  }
+}
+
 QString WidgetLayout::getCsladspaLines()
 {
   QString text = "";
@@ -1105,7 +1112,7 @@ void WidgetLayout::selectAll()
 
 void WidgetLayout::widgetMoved(QPair<int, int> delta)
 {
-//  widgetsMutex.lock();
+  widgetsMutex.lock();
   for (int i = 0; i < m_widgets.size(); i++) {
     if (editWidgets[i]->isSelected()) {
       int newx = m_widgets[i]->x() + delta.first;
@@ -1114,14 +1121,14 @@ void WidgetLayout::widgetMoved(QPair<int, int> delta)
       editWidgets[i]->move(newx, newy);
     }
   }
-//  widgetsMutex.unlock();
+  widgetsMutex.unlock();
   adjustLayoutSize();
 }
 
 void WidgetLayout::widgetResized(QPair<int, int> delta)
 {
 //   qDebug("WidgetPanel::widgetResized %i  %i", delta.first, delta.second);
-//  widgetsMutex.lock();
+  widgetsMutex.lock();
   for (int i = 0; i< editWidgets.size(); i++) {
     if (editWidgets[i]->isSelected()) {
       int neww = m_widgets[i]->width() + delta.first;
@@ -1132,7 +1139,7 @@ void WidgetLayout::widgetResized(QPair<int, int> delta)
       editWidgets[i]->resize(neww, newh);
     }
   }
-//  widgetsMutex.unlock();
+  widgetsMutex.unlock();
   adjustLayoutSize();
 }
 
@@ -2258,10 +2265,10 @@ int WidgetLayout::createMeter(int x, int y, int width, int height, QString widge
                                           parts[6].toDouble()/256.0,
                                           parts[7].toDouble()/256.0));
   widget->setProperty("QCS_type", parts2[1]);
-  widget->setProperty("QCS_objectName", quoteParts[1]);
-  widget->setProperty("QCS_xValue", quoteParts[2].toDouble());
-  widget->setProperty("QCS_yValue", parts2[0].toDouble());
-  widget->setProperty("QCS_objectName2", quoteParts[3]);
+  widget->setProperty("QCS_objectName2", quoteParts[1]);
+  widget->setProperty("QCS_yValue", quoteParts[2].toDouble());
+  widget->setProperty("QCS_xValue", parts2[0].toDouble());
+  widget->setProperty("QCS_objectName", quoteParts[3]);
   widget->setProperty("QCS_pointsize", parts2[2].toInt());
   widget->setProperty("QCS_fadeSpeed", parts2[3].toInt());
   widget->setProperty("QCS_xMin", 0.0);
@@ -2660,7 +2667,7 @@ void WidgetLayout::copy()
   qDebug() << "WidgetLayout::copy()";
   QString text;
   if (m_editMode) {
-//    widgetsMutex.lock();
+    widgetsMutex.lock();
     if (m_xmlFormat) {
       for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
         if (editWidgets[i]->isSelected()) {
@@ -2676,7 +2683,7 @@ void WidgetLayout::copy()
       }
     }
     m_clipboard = text;
-//    widgetsMutex.unlock();
+    widgetsMutex.unlock();
     emit setWidgetClipboardSignal(m_clipboard);
   }
 }
@@ -2689,7 +2696,9 @@ void WidgetLayout::cut()
     widgetsMutex.lock();
     for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
       if (editWidgets[i]->isSelected()) {
+        widgetsMutex.unlock();
         deleteWidget(m_widgets[i]);
+        widgetsMutex.lock();
       }
     }
     widgetsMutex.unlock();
@@ -2832,22 +2841,25 @@ void WidgetLayout::deleteWidget(QuteWidget *widget)
   index = scopeWidgets.indexOf(dynamic_cast<QuteScope *>(widget));
   if (index >= 0)
     scopeWidgets.remove(index);
-  widgetsMutex.lock();
+  widgetsMutex.unlock();
   widgetChanged(widget);
 }
 
 void WidgetLayout::newValue(QPair<QString, double> channelValue)
 {
-//  widgetsMutex.lock();
-  for (int i = 0; i < m_widgets.size(); i++){
-    if (m_widgets[i]->getChannelName() == channelValue.first) {
-      m_widgets[i]->setValue(channelValue.second);
-    }
-    if (m_widgets[i]->getChannel2Name() == channelValue.first) {
-      m_widgets[i]->setValue2(channelValue.second);
+//  qDebug() << "WidgetLayout::newValue " << channelValue.first << "--" << channelValue.second;
+  widgetsMutex.lock();
+  if (!channelValue.first.isEmpty()) {
+    for (int i = 0; i < m_widgets.size(); i++){
+      if (m_widgets[i]->getChannelName() == channelValue.first) {
+        m_widgets[i]->setValue(channelValue.second);
+      }
+      if (m_widgets[i]->getChannel2Name() == channelValue.first) {
+        m_widgets[i]->setValue2(channelValue.second);
+      }
     }
   }
-//  widgetsMutex.unlock();
+  widgetsMutex.unlock();
 //  if (!channelValue.first.isEmpty()) {
 //    valueMutex.lock();
 //    if(newValues.contains(channelValue.first)) {
@@ -2982,7 +2994,7 @@ void WidgetLayout::duplicate()
 {
    qDebug("WidgetLayout::duplicate()");
   if (m_editMode) {
-//    widgetsMutex.lock();
+    widgetsMutex.lock();
     int size = editWidgets.size();
     for (int i = 0; i < size ; i++) {
       if (editWidgets[i]->isSelected()) {
@@ -2990,16 +3002,20 @@ void WidgetLayout::duplicate()
         if (m_xmlFormat) {
           QDomDocument doc;
           doc.setContent(m_widgets[i]->getWidgetXmlText());
+          widgetsMutex.unlock();
           newXmlWidget(doc.firstChildElement("bsbObject"), true, true);
+          widgetsMutex.lock();
 //          qDebug() << "WidgetLayout::duplicate() " << m_widgets[i]->getWidgetXmlText();
         }
         else {
+          widgetsMutex.unlock();
           newMacWidget(m_widgets[i]->getWidgetLine(), true);
+          widgetsMutex.lock();
         }
         editWidgets.last()->select();
       }
     }
-//    widgetsMutex&.unlock();
+    widgetsMutex.unlock();
   }
   markHistory();
 }

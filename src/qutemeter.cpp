@@ -66,7 +66,7 @@ QuteMeter::~QuteMeter()
 QString QuteMeter::getWidgetLine()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString line = "ioMeter {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
@@ -74,15 +74,15 @@ QString QuteMeter::getWidgetLine()
   line += "{" + QString::number(color.red() * 256)
       + ", " + QString::number(color.green() * 256)
       + ", " + QString::number(color.blue() * 256) + "} ";
-  line += "\"" + property("QCS_objectName").toString() + "\" " + QString::number(static_cast<MeterWidget *>(m_widget)->getValue(), 'f', 6) + " ";
-  line += "\"" + property("QCS_objectName2").toString() + "\" " + QString::number(static_cast<MeterWidget *>(m_widget)->getValue2(), 'f', 6) + " ";
+  line += "\"" + property("QCS_objectName").toString() + "\" " + QString::number(m_value, 'f', 6) + " ";
+  line += "\"" + property("QCS_objectName2").toString() + "\" " + QString::number(m_value2, 'f', 6) + " ";
   line += property("QCS_type").toString() + " ";
   line += QString::number(property("QCS_pointsize").toInt()) + " ";
   line += QString::number(property("QCS_fadeSpeed").toInt()) + " ";
   line += "mouse";
 //   qDebug("QuteMeter::getWidgetLine() %s", line.toStdString().c_str());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return line;
 }
@@ -94,15 +94,15 @@ QString QuteMeter::getWidgetXmlText()
   createXmlWriter(s);
 
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   s.writeTextElement("objectName2", property("QCS_objectName2").toString());
   s.writeTextElement("xMin", QString::number(property("QCS_xMin").toDouble(), 'f', 8));
   s.writeTextElement("xMax", QString::number(property("QCS_xMax").toDouble(), 'f', 8));
   s.writeTextElement("yMin", QString::number(property("QCS_yMin").toDouble(), 'f', 8));
   s.writeTextElement("yMax", QString::number(property("QCS_yMax").toDouble(), 'f', 8));
-  s.writeTextElement("xValue", QString::number(static_cast<MeterWidget *>(m_widget)->getValue(), 'f', 8));
-  s.writeTextElement("yValue", QString::number(static_cast<MeterWidget *>(m_widget)->getValue2(), 'f', 8));
+  s.writeTextElement("xValue", QString::number(m_value, 'f', 8));
+  s.writeTextElement("yValue", QString::number(m_value2, 'f', 8));
 
   s.writeTextElement("type", property("QCS_type").toString());
   s.writeTextElement("pointsize", QString::number(property("QCS_pointsize").toInt()));
@@ -132,7 +132,7 @@ QString QuteMeter::getWidgetXmlText()
 
   s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return xmlText;
 }
@@ -148,17 +148,11 @@ QString QuteMeter::getWidgetType()
   return QString("BSBController");
 }
 
-//void QuteMeter::popUpMenu(QPoint pos)
-//{
-//  QuteWidget::popUpMenu(pos);
-//}
-
 void QuteMeter::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
+
+  widgetLock.lockForRead();
   dialog->setWindowTitle("Controller");
   channelLabel->setText("Horizontal Channel name =");
   channelLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
@@ -273,16 +267,26 @@ void QuteMeter::createPropertiesDialog()
   m_yMaxBox->setRange(-999999999.0, 999999999.0);
   m_yMaxBox->setValue(property("QCS_yMax").toDouble());
   layout->addWidget(m_yMaxBox, 10,3, Qt::AlignLeft|Qt::AlignVCenter);
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
+
+  widgetLock.unlock();
+
+}
+
+void QuteMeter::refreshWidget()
+{
+  widgetLock.lockForRead();
+  m_widget->blockSignals(true);
+  static_cast<MeterWidget *>(m_widget)->setValue(m_value);
+  static_cast<MeterWidget *>(m_widget)->setValue2(m_value2);
+  m_widget->blockSignals(false);
+  widgetLock.unlock();
 }
 
 void QuteMeter::applyProperties()
 {
 //  setProperty("QCS_objectName", nameLineEdit->text());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   setProperty("QCS_objectName2", name2LineEdit->text());
   setProperty("QCS_color", colorButton->palette().color(QPalette::Window));
@@ -295,7 +299,7 @@ void QuteMeter::applyProperties()
   setProperty("QCS_yMin", m_yMinBox->value());
   setProperty("QCS_yMax", m_yMaxBox->value());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
   qDebug("QuteMeter::applyProperties()");
@@ -307,80 +311,6 @@ void QuteMeter::setWidgetGeometry(int x,int y,int width,int height)
   /* In MacCsound, meter widgets have an offset of about five pixels in every border
      This has proven problematic in Qt, as the graphicsScene*/
   static_cast<MeterWidget *>(m_widget)->setWidgetGeometry(0,0,width, height);
-}
-
-void QuteMeter::setValue(double value)
-{
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
-#endif
-//  double min = property("QCS_minimum").toDouble();
-//  double max = property("QCS_maximum").toDouble();
-//  if (value > max) {
-//    value = max;
-//  }
-//  else if (value < min) {
-//    value = min;
-//  }
-  m_widget->blockSignals(true);
-  static_cast<MeterWidget *>(m_widget)->setValue(value);
-  m_widget->blockSignals(false);
-//   m_value = value;
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-}
-
-void QuteMeter::setValue2(double value)
-{
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
-#endif
-//  double min = property("QCS_minimum").toDouble();
-//  double max = property("QCS_maximum").toDouble();
-//  if (value > max) {
-//    value = max;
-//  }
-//  else if (value < min) {
-//    value = min;
-//  }
-  m_widget->blockSignals(true);
-  static_cast<MeterWidget *>(m_widget)->setValue2(value);
-  m_widget->blockSignals(false);
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-}
-
-double QuteMeter::getValue()
-{
-  double value = 0.0;
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
-  value = static_cast<MeterWidget *>(m_widget)->getValue();
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-  return value;
-}
-
-double QuteMeter::getValue2()
-{
-  double value = 0.0;
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
-  value = static_cast<MeterWidget *>(m_widget)->getValue2();
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-  return value;
-}
-
-QString QuteMeter::getChannel2Name()
-{
-  return property("QCS_objectName2").toString();
 }
 
 void QuteMeter::setChannel2Name(QString name)
@@ -425,8 +355,17 @@ void QuteMeter::setValuesFromWidget(double value1, double value2)
 {
 //  QString type = property("QCS_type").toString();
 //  qDebug() << "QuteMeter::setValuesFromWidget " << value1 << "--" << value2;
-  valueChanged(value1);
-  value2Changed(value2);
+
+  widgetLock.lockForRead();
+  m_value = value1;
+  QPair<QString, double> channelValue;
+  channelValue = QPair<QString, double>(property("QCS_objectName").toString(), m_value);
+  m_value2 = value2;
+  QPair<QString, double> channel2Value;
+  channel2Value = QPair<QString, double>(property("QCS_objectName2").toString(), m_value2);
+  widgetLock.unlock();
+  emit newValue(channelValue);
+  emit newValue(channel2Value);
 //  setValue(value1);
 //  setValue2(value2);
 }
@@ -460,44 +399,19 @@ QColor MeterWidget::getColor()
   return m_block->brush().color();
 }
 
-double MeterWidget::getValue()
-{
-  // Vertical value
-//  double value = 0.0;
-//#ifdef  USE_WIDGET_MUTEX
-//  mutex.lock();
-//#endif
-//  value =
-//#ifdef  USE_WIDGET_MUTEX
-//  mutex.unlock();
-//#endif
-  return m_value;
-}
-
-double MeterWidget::getValue2()
-{
-  // Horizontal value
-//  double value = 0.0;
-//#ifdef  USE_WIDGET_MUTEX
-//  mutex.lock();
-//#endif
-//  value =
-//#ifdef  USE_WIDGET_MUTEX
-//  mutex.unlock();
-//#endif
-  return m_value2;
-}
-
 void MeterWidget::setValue(double value)
 {
 //  qDebug() << "MeterWidget::setValue " <<value;
 //  if (isnan(value) != 0)
 //    return;
-  if (value > m_xmax) {
-    value = m_xmax;
-  }
-  if (value < m_xmin) {
-    value = m_xmin;
+//  if (value > m_xmax) {
+//    value = m_xmax;
+//  }
+//  if (value < m_xmin) {
+//    value = m_xmin;
+//  }
+  if (m_value == value) {
+    return;
   }
   m_value = value;
 
@@ -522,11 +436,14 @@ void MeterWidget::setValue(double value)
 void MeterWidget::setValue2(double value)
 {
 //  qDebug() << "MeterWidget::setValue2 " << value;
-  if (value > m_ymax) {
-    value = m_ymax;
-  }
-  if (value < m_ymin) {
-    value = m_ymin;
+//  if (value > m_ymax) {
+//    value = m_ymax;
+//  }
+//  if (value < m_ymin) {
+//    value = m_ymin;
+//  }
+  if (m_value2 == value) {
+    return;
   }
   m_value2 = value;
 
@@ -539,7 +456,8 @@ void MeterWidget::setValue2(double value)
     m_block->setRect(0, 0, width(), (1-portiony)*height());
   }
   else if (m_type == "line" and m_vertical) {
-    m_hline->setLine(portiony*width(), 0 ,portiony*width(), height());
+    m_hline->setLine(0, (1-portiony)*height(), width(), (1-portiony)*height());
+//    m_hline->setLine(portiony*width(), 0 ,portiony*width(), height());
   }
   else {
     m_hline->setLine(0, (1-portiony)*height(), width(), (1-portiony)*height());
@@ -550,7 +468,7 @@ void MeterWidget::setValue2(double value)
 
 void MeterWidget::setType(QString type)
 {
-//   qDebug("MeterWidget::setType");
+   qDebug() << "MeterWidget::setType " << type << m_vertical;
   if (type == "fill") {
     m_type = type;
     m_block->show();
@@ -638,6 +556,18 @@ void MeterWidget::mouseMoveEvent(QMouseEvent* event)
 //         event->y() > 0 and event->y()< height())
     double newhor = m_xmin + ((m_xmax - m_xmin ) * (double)event->x()/ width() );
     double newvert = m_ymin + ((m_ymax - m_ymin ) * (1 - ((double)event->y()/ height())));
+    if (newhor > m_xmax) {
+      newhor = m_xmax;
+    }
+    else if (newhor < m_xmin) {
+      newhor = m_xmin;
+    }
+    if (newvert > m_ymax) {
+      newvert = m_ymax;
+    }
+    else if (newvert < m_ymin) {
+      newvert = m_ymin;
+    }
     emit newValues(newhor, newvert);
 //    emit valueChanged(newvert);
 //    emit value2Changed(newhor);
@@ -657,8 +587,3 @@ void MeterWidget::mousePressEvent(QMouseEvent* event)
   }
 }
 
-//void MeterWidget::mouseReleaseEvent(QMouseEvent* event)
-//{
-//  QGraphicsView::mouseReleaseEvent(event);
-//  m_mouseDown = false;
-//}

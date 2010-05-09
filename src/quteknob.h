@@ -30,22 +30,17 @@ class QuteKnob : public QuteWidget
   Q_OBJECT
   public:
     QuteKnob(QWidget *parent);
-
     ~QuteKnob();
 
-//    virtual void loadFromXml(QString xmlText);
-//    virtual void setWidgetLine(QString line);
     virtual void setWidgetGeometry(int x, int y, int width, int height);
     virtual QString getWidgetLine();
-    virtual QString getCabbageLine();
     virtual QString getCsladspaLine();
     virtual QString getWidgetXmlText();
-    virtual double getValue();
     virtual QString getWidgetType();
-    virtual void setValue(double value);
 //    virtual void setResolution(double resolution);
     void setRange(double min, double max);
 
+    virtual void refreshWidget();
     virtual void applyInternalProperties();
 
   protected:

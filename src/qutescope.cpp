@@ -74,7 +74,7 @@ QuteScope::~QuteScope()
 QString QuteScope::getWidgetLine()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString line = "ioGraph {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
@@ -83,7 +83,7 @@ QString QuteScope::getWidgetLine()
   line += property("QCS_objectName").toString();
 //   qDebug("QuteScope::getWidgetLine() %s", line.toStdString().c_str());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return line;
 }
@@ -94,7 +94,7 @@ QString QuteScope::getWidgetXmlText()
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
 
   s.writeTextElement("value", QString::number(m_value, 'f', 8));
@@ -108,7 +108,7 @@ QString QuteScope::getWidgetXmlText()
 
   s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return xmlText;
 }
@@ -136,14 +136,8 @@ void QuteScope::setType(QString type)
 
 void QuteScope::setValue(double value)
 {
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
-#endif
-  m_value = (int) value;
+  QuteWidget::setValue(value);
   updateLabel();
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
 }
 
 void QuteScope::setUd(CsoundUserData *ud)
@@ -162,8 +156,7 @@ void QuteScope::applyInternalProperties()
 {
   QuteWidget::applyInternalProperties();
   setType(property("QCS_type").toString());
-  setValue((int) property("QCS_value").toDouble());
-  updateLabel();
+  setValue(m_value);
 }
 
 void QuteScope::createPropertiesDialog()
@@ -197,33 +190,41 @@ void QuteScope::createPropertiesDialog()
   channelBox->addItem("none", QVariant((int) 0));
   layout->addWidget(channelBox, 6, 3, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
-  label->setText("Decimation");
-  layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
-  decimationBox = new QSpinBox(dialog);
-  decimationBox->setRange(1, 20);
-  layout->addWidget(decimationBox, 7, 3, Qt::AlignLeft|Qt::AlignVCenter);
+  label->setText("Zoom X");
+  layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
+  zoomxBox = new QDoubleSpinBox(dialog);
+  zoomxBox->setRange(1, 20);
+  layout->addWidget(zoomxBox, 8, 1, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+  label->setText("Zoom Y");
+  layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
+  zoomyBox = new QDoubleSpinBox(dialog);
+  zoomyBox->setRange(1, 20);
+  layout->addWidget(zoomyBox, 8, 3, Qt::AlignLeft|Qt::AlignVCenter);
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   typeComboBox->setCurrentIndex(typeComboBox->findData(QVariant(property("QCS_type").toString())));
   channelBox->setCurrentIndex(channelBox->findData(QVariant((int) m_value)));
-  decimationBox->setValue(property("QCS_zoomx").toDouble());
+  zoomxBox->setValue(property("QCS_zoomx").toDouble());
+  zoomyBox->setValue(property("QCS_zoomy").toDouble());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
 }
 
 void QuteScope::applyProperties()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   setProperty("QCS_type", typeComboBox->itemData(typeComboBox->currentIndex()).toString());
-  setValue(channelBox->itemData(channelBox->currentIndex()).toInt());
-  setProperty("QCS_zoomx", decimationBox->value());
+  setProperty("QCS_zoomx", zoomxBox->value());
+  setProperty("QCS_zoomy", zoomyBox->value());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
+  setValue(channelBox->itemData(channelBox->currentIndex()).toInt());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
 
@@ -243,7 +244,7 @@ void QuteScope::resizeEvent(QResizeEvent * event)
 void QuteScope::updateData()
 {
 //  qDebug() <<"QuteScope::updateData() " << property( "QCS_chan").toInt() << "  " << property("QCS_zoomx").toDouble() ;
-  m_dataDisplay->updateData((int) m_value, property("QCS_zoomx").toDouble(), static_cast<ScopeWidget *>(m_widget)->freeze);
+  m_dataDisplay->updateData((int) m_value, property("QCS_zoomx").toDouble(), property("QCS_zoomy").toDouble(), static_cast<ScopeWidget *>(m_widget)->freeze);
 }
 
 ScopeItem::ScopeItem(int width, int height)
@@ -290,7 +291,7 @@ void ScopeData::resize()
   curveData.resize(m_params->width + 2);
 }
 
-void ScopeData::updateData(int channel, int zoom, bool freeze)
+void ScopeData::updateData(int channel, double zoomx, double zoomy, bool freeze)
 {
   CsoundUserData *ud = m_params->ud;
   int width = m_params->width;
@@ -306,7 +307,7 @@ void ScopeData::updateData(int channel, int zoom, bool freeze)
 //     qDebug() << "QuteScope::updateData() Channel out of range " << channel;
     return;
   }
-  channel = (channel != -1 ? channel - 1 : -1);
+  channel = (channel < 0 ? -1: channel - 1);
 #ifdef  USE_WIDGET_MUTEX
   QReadWriteLock *mutex = m_params->mutex;  //FIXME is this locking needed, or should a separate locking mechanism be implemented?
   mutex->lockForWrite();
@@ -320,11 +321,11 @@ void ScopeData::updateData(int channel, int zoom, bool freeze)
   long offset = buffer->currentPos;
   for (int i = 0; i < width; i++) {
     value = 0;
-    for (int j = 0; j < (int) zoom; j++) {
+    for (int j = 0; j < (int) zoomx; j++) {
       if (channel == -1) {
         newValue = 0;
         for (int k = 0; k < numChnls; k++) {
-          int bufferIndex = (int)((((i* zoom)+ j)*numChnls) + offset + k) % listSize;
+          int bufferIndex = (int)((((i* zoomx)+ j)*numChnls) + offset + k) % listSize;
           newValue += list[bufferIndex];
         }
         newValue /= numChnls;
@@ -332,12 +333,12 @@ void ScopeData::updateData(int channel, int zoom, bool freeze)
           value = -(double) newValue;
       }
       else {
-        int bufferIndex = (int)((((i* zoom)+ j)*numChnls) + offset + channel) % listSize;
+        int bufferIndex = (int)((((i* zoomx)+ j)*numChnls) + offset + channel) % listSize;
         if (fabs(list[bufferIndex]) > fabs(value))
           value = (double) -list[bufferIndex];
       }
     }
-    curveData[i+1] = QPoint(i, value*height/(2/* * m_ud->zerodBFS*/));
+    curveData[i+1] = QPoint(i, zoomy*value*height/(2/* * m_ud->zerodBFS*/));
   }
   m_params->widget->setSceneRect(0, -height/2, width, height );
   curveData.last() = QPoint(width-4, 0);
@@ -375,7 +376,7 @@ void LissajouData::resize()
   curve->setSize(m_params->width, m_params->height);
 }
 
-void LissajouData::updateData(int channel, int zoom, bool freeze)
+void LissajouData::updateData(int channel, double zoomx, double zoomy, bool freeze)
 {
   // The decimation factor (zoom) is not used here
   CsoundUserData *ud = m_params->ud;
@@ -393,7 +394,7 @@ void LissajouData::updateData(int channel, int zoom, bool freeze)
 //     qDebug() << "QuteScope::updateData() Channel out of range " << channel;
     return;
   }
-  channel = (channel != -1 ? channel - 1 : 0);
+  channel = (channel < 0 ? 0 : channel - 1);
 #ifdef  USE_WIDGET_MUTEX
   QReadWriteLock *mutex = m_params->mutex;
   mutex->lockForWrite();
@@ -409,7 +410,7 @@ void LissajouData::updateData(int channel, int zoom, bool freeze)
     x = (double)list[bufferIndex];
     bufferIndex = (bufferIndex + 1) % listSize;
     y = (double) -list[bufferIndex];
-    curveData[i] = QPoint(x*width*zoom/4, y*height*zoom/4);
+    curveData[i] = QPoint(x*width*zoomx/4, y*height*zoomy/4);
   }
   m_params->widget->setSceneRect(-width/2, -height/2, width, height );
   curve->setPolygon(curveData);
@@ -446,7 +447,7 @@ void PoincareData::resize()
   curve->setSize(m_params->width, m_params->height);
 }
 
-void PoincareData::updateData(int channel, int zoom, bool freeze)
+void PoincareData::updateData(int channel, double zoomx, double zoomy, bool freeze)
 {
   CsoundUserData *ud = m_params->ud;
   int width = m_params->width;
@@ -461,7 +462,7 @@ void PoincareData::updateData(int channel, int zoom, bool freeze)
 //     qDebug() << "QuteScope::updateData() Channel out of range " << channel;
     return;
   }
-  channel = (channel != -1 ? channel - 1 : 0);
+  channel = (channel < 0 ? 0 :  channel - 1);
 #ifdef  USE_WIDGET_MUTEX
   QReadWriteLock *mutex = m_params->mutex;
   mutex->lockForWrite();
@@ -473,9 +474,9 @@ void PoincareData::updateData(int channel, int zoom, bool freeze)
   long listSize = list.size();
   long offset = buffer->currentPos;
   for (int i = 0; i < curveData.size(); i++) {
-    int bufferIndex = (int)((i*zoom*numChnls) + offset + channel) % listSize;
+    int bufferIndex = (int)((i*zoomx*numChnls) + offset + channel) % listSize;
     value = (double)list[bufferIndex];
-    curveData[i] = QPoint(lastValue*width/2, -value*height/2);
+    curveData[i] = QPoint(lastValue*width*zoomx/2, -value*height*zoomy/2);
     lastValue = value;
   }
   m_params->widget->setSceneRect(-width/2, -height/2, width, height );

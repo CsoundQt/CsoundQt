@@ -34,12 +34,6 @@ QuteDummy::~QuteDummy()
 {
 }
 
-//void QuteDummy::loadFromXml(QString xmlText)
-//{
-//  qDebug() << "loadFromXml not implemented for this widget yet";
-//}
-
-
 QString QuteDummy::getWidgetXmlText()
 {
   // Just an empty place holder

@@ -29,7 +29,7 @@ QuteComboBox::QuteComboBox(QWidget *parent) : QuteWidget(parent)
   m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 //  canFocus(false);
 //   connect((QComboBox *)m_widget, SIGNAL(released()), this, SLOT(buttonReleased()));
-//  connect(static_cast<QComboBox *>(m_widget), SIGNAL(currentIndexChanged(int)), this, SLOT(indexChanged(int)));
+  connect(static_cast<QComboBox *>(m_widget), SIGNAL(currentIndexChanged(int)), this, SLOT(indexChanged(int)));
   setProperty("QCS_selectedIndex", 0);
   setProperty("QCS_randomizable", false);
 }
@@ -38,43 +38,10 @@ QuteComboBox::~QuteComboBox()
 {
 }
 
-void QuteComboBox::setValue(double value)
-{
-//   qDebug("QuteComboBox::setValue %i", (int) value);
-  // setValue sets the current index of the ioMenu
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
-#endif
-  static_cast<QComboBox *>(m_widget)->setCurrentIndex((int) value);
-//  m_value = static_cast<QComboBox *>(m_widget)->currentIndex();  //This confines the value to valid indices
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-}
-
-double QuteComboBox::getValue()
-{
-  // Returns the user data for the current index
-  QComboBox *menu = static_cast<QComboBox *>(m_widget);
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
-  double value = menu->itemData(menu->currentIndex(), Qt::UserRole).toDouble();
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-  return  value;
-}
-
-//void QuteComboBox::setSize(int size)
-//{
-//  m_size = size;
-//}
-
 QString QuteComboBox::getWidgetLine()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString line = "ioMenu {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
@@ -83,7 +50,7 @@ QString QuteComboBox::getWidgetLine()
   line += "\"" + itemList() + "\" ";
   line += property("QCS_objectName").toString();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return line;
 }
@@ -106,7 +73,7 @@ QString QuteComboBox::getWidgetXmlText()
   createXmlWriter(s);
 
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
 
   s.writeStartElement("bsbDropdownItemList");
@@ -122,7 +89,7 @@ QString QuteComboBox::getWidgetXmlText()
   s.writeTextElement("randomizable",  property("QCS_randomizable").toBool() ? "true" : "false");
   s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return xmlText;
 }
@@ -145,50 +112,50 @@ QString QuteComboBox::itemList()
 
 void QuteComboBox::setText(QString text)
 {
-  // For old format
+  widgetLock.lockForWrite();
   clearItems();
   QStringList items = text.split(",");
   int counter = 0;
   foreach (QString item, items) {
     addItem(item, counter++, "");
   }
+  widgetLock.unlock();
 }
 
 void QuteComboBox::clearItems()
 {
+  m_widget->blockSignals(true);
   static_cast<QComboBox *>(m_widget)->clear();
+  m_widget->blockSignals(false);
 }
 
 void QuteComboBox::addItem(QString text, double value, QString stringvalue)
 {
+  m_widget->blockSignals(true);
   static_cast<QComboBox *>(m_widget)->addItem(text, value);
   stringValues.append(stringvalue);
+  m_widget->blockSignals(false);
 }
 
-void QuteComboBox::popUpMenu(QPoint pos)
+void QuteComboBox::refreshWidget()
 {
-  QuteWidget::popUpMenu(pos);
+  widgetLock.lockForRead();
+  m_widget->blockSignals(true);
+  static_cast<QComboBox *>(m_widget)->setCurrentIndex((int) m_value);
+  m_widget->blockSignals(false);
+  widgetLock.unlock();
 }
 
 void QuteComboBox::applyInternalProperties()
 {
   QuteWidget::applyInternalProperties();
 //  qDebug() << "QuteComboBox::applyInternalProperties()";
-  static_cast<QComboBox *>(m_widget)->setCurrentIndex(property("QCS_selectedIndex").toInt());
+  setValue(property("QCS_selectedIndex").toInt());
 }
-
-//void QuteComboBox::contextMenuEvent(QContextMenuEvent* event)
-//{
-//  qDebug("QuteComboBox::contextMenuEvent");
-//  QuteWidget::contextMenuEvent(event);
-//}
 
 void QuteComboBox::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
   dialog->setWindowTitle("Menu");
   QLabel *label = new QLabel(dialog);
 
@@ -196,29 +163,33 @@ void QuteComboBox::createPropertiesDialog()
   label->setText("Items (separated by commas):");
   layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
   text = new QLineEdit(dialog);
-  text->setText(itemList());
   layout->addWidget(text, 5,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
   text->setMinimumWidth(320);
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
+
+  widgetLock.lockForRead();
+  text->setText(itemList());
+  widgetLock.unlock();
 }
 
 void QuteComboBox::applyProperties()
 {
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
-#endif
-  setText(text->text());
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
+  setText(text->text()); // This line can't be locked, as itlocks itself internally
+
+//  widgetLock.lockForWrite();
+//  widgetLock.unlock();
 //  setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
 
 
-//void QuteComboBox::indexChanged(int value)
-//{
-//  QuteWidget::valueChanged((double) value);
-//}
+void QuteComboBox::indexChanged(int value)
+{
+//  qDebug() << "QuteComboBox::indexChanged" << value;
+
+  widgetLock.lockForRead();
+  m_value = value;
+  QPair<QString, double> channelValue(property("QCS_objectName").toString(), m_value);
+  widgetLock.unlock();
+
+  emit newValue(channelValue);
+}

@@ -27,7 +27,7 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
   //TODO add resolution to config dialog and set these values accordingly
   m_widget = new QDial(this);
   static_cast<QDial *>(m_widget)->setMinimum(0);
-  static_cast<QDial *>(m_widget)->setMaximum(99);
+  static_cast<QDial *>(m_widget)->setMaximum(100);
   static_cast<QDial *>(m_widget)->setNotchesVisible(true);
   m_widget->setPalette(QPalette(Qt::gray));
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
@@ -43,17 +43,17 @@ QuteKnob::~QuteKnob()
 {
 }
 
-double QuteKnob::getValue()
-{
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
-  double value = m_value;
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-  return value;
-}
+//double QuteKnob::getValue()
+//{
+//#ifdef  USE_WIDGET_MUTEX
+//  widgetLock.lockForRead();
+//#endif
+//  double value = m_value;
+//#ifdef  USE_WIDGET_MUTEX
+//  widgetLock.unlock();
+//#endif
+//  return value;
+//}
 
 void QuteKnob::setRange(double min, double max)
 {
@@ -71,6 +71,18 @@ void QuteKnob::setRange(double min, double max)
   setProperty("QCS_minimum", min);
 }
 
+void QuteKnob::refreshWidget()
+{
+  widgetLock.lockForRead();
+  double max = property("QCS_maximum").toDouble();
+  double min = property("QCS_minimum").toDouble();
+  int val = (int) (static_cast<QDial *>(m_widget)->maximum() * (m_value - min)/(max-min));
+  m_widget->blockSignals(true);
+  static_cast<QDial *>(m_widget)->setValue(val);
+  m_widget->blockSignals(false);
+  widgetLock.unlock();
+}
+
 void QuteKnob::applyInternalProperties()
 {
   QuteWidget::applyInternalProperties();
@@ -79,23 +91,22 @@ void QuteKnob::applyInternalProperties()
   setValue(property("QCS_value").toDouble());
 }
 
-void QuteKnob::setValue(double value)
-{
-//  qDebug() << "QuteKnob::setValue " << value;
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
-#endif
-  double max = property("QCS_maximum").toDouble();
-  double min = property("QCS_minimum").toDouble();
-  setInternalValue(value);
-  int val = (int) (static_cast<QDial *>(m_widget)->maximum() * (m_value - min)/(max-min));
-  static_cast<QSlider *>(m_widget)->blockSignals(true);
-  static_cast<QDial *>(m_widget)->setValue(val);
-  static_cast<QSlider *>(m_widget)->blockSignals(false);
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-}
+//void QuteKnob::setValue(double value)
+//{
+////  qDebug() << "QuteKnob::setValue " << value;
+//#ifdef  USE_WIDGET_MUTEX
+//  widgetLock.lockForWrite();
+//#endif
+//  double max = property("QCS_maximum").toDouble();
+//  double min = property("QCS_minimum").toDouble();
+//  int val = (int) (static_cast<QDial *>(m_widget)->maximum() * (m_value - min)/(max-min));
+//  m_widget->blockSignals(true);
+//  static_cast<QDial *>(m_widget)->setValue(val);
+//  m_widget->blockSignals(false);
+//#ifdef  USE_WIDGET_MUTEX
+//  widgetLock.unlock();
+//#endif
+//}
 
 //void QuteKnob::setResolution(double resolution)
 //{
@@ -118,7 +129,7 @@ void QuteKnob::setWidgetGeometry(int x, int y, int width, int height)
 QString QuteKnob::getWidgetLine()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString line = "ioKnob {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
@@ -128,27 +139,21 @@ QString QuteKnob::getWidgetLine()
   line += QString::number(m_value, 'f', 6) + " " + property("QCS_objectName").toString();
 //   qDebug("QuteKnob::getWidgetLine() %s", line.toStdString().c_str());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
-  return line;
-}
-
-QString QuteKnob::getCabbageLine()
-{
-  QString line = "";
   return line;
 }
 
 QString QuteKnob::getCsladspaLine()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString line = "ControlPort=" + property("QCS_objectName").toString() + "|" + property("QCS_objectName").toString() + "\n";
   line += "Range=" + QString::number(property("QCS_minimum").toDouble(), 'f', 8);
   line += "|" + QString::number(property("QCS_maximum").toDouble(), 'f', 8);
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return line;
 }
@@ -159,7 +164,7 @@ QString QuteKnob::getWidgetXmlText()
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
 
   s.writeTextElement("minimum", QString::number(property("QCS_minimum").toDouble(), 'f', 8));
@@ -172,7 +177,7 @@ QString QuteKnob::getWidgetXmlText()
   //s.writeTextElement("knobWidth", "");
   s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return xmlText;
 }
@@ -186,7 +191,7 @@ void QuteKnob::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   dialog->setWindowTitle("Knob");
   QLabel *label = new QLabel(dialog);
@@ -211,9 +216,9 @@ void QuteKnob::createPropertiesDialog()
 //   resolutionSpinBox->setDecimals(6);
 //   resolutionSpinBox->setValue(getResolution());
 //   layout->addWidget(resolutionSpinBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
-  setProperty("QCS_value", m_value);
+//  setProperty("QCS_value", m_value);
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
 }
 
@@ -222,13 +227,13 @@ void QuteKnob::applyProperties()
 //  m_max = maxSpinBox->value();
 //  m_min = minSpinBox->value();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   setProperty("QCS_maximum", maxSpinBox->value());
   setProperty("QCS_minimum", minSpinBox->value());
 //   m_resolution = resolutionSpinBox->value();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
@@ -236,31 +241,31 @@ void QuteKnob::applyProperties()
 void QuteKnob::knobChanged(int value)
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
+  widgetLock.lockForWrite();
 #endif
   double min = property("QCS_minimum").toDouble();
   double max = property("QCS_maximum").toDouble();
   QDial *knob = static_cast<QDial *>(m_widget);
   double normalized = (double) (value - knob->minimum())
         / (double) (knob->maximum() - knob->minimum());
-  double scaledValue =  min + (normalized * (max-min));
-  setInternalValue(scaledValue);
+  m_value =  min + (normalized * (max-min));
+//  setInternalValue(scaledValue);
   QPair<QString, double> channelValue(property("QCS_objectName").toString(), m_value);
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   emit newValue(channelValue);
 }
 
-void QuteKnob::setInternalValue(double value)
-{
-  double max = property("QCS_maximum").toDouble();
-  double min = property("QCS_minimum").toDouble();
-  if (value > max)
-    m_value = max;
-  else if (value < min)
-    m_value = min;
-  else
-    m_value = value;
-  setProperty("QCS_value", m_value);
-}
+//void QuteKnob::setInternalValue(double value)
+//{
+//  double max = property("QCS_maximum").toDouble();
+//  double min = property("QCS_minimum").toDouble();
+//  if (value > max)
+//    m_value = max;
+//  else if (value < min)
+//    m_value = min;
+//  else
+//    m_value = value;
+//  setProperty("QCS_value", m_value);
+//}

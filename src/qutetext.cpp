@@ -64,53 +64,30 @@ QuteText::~QuteText()
 {
 }
 
-double QuteText::getValue()
-{
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
-  double value = m_value;
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-  return value;
-}
-
-QString QuteText::getStringValue()
-{
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
-  QString string = static_cast<QLabel *>(m_widget)->text();
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-  return string;
-}
-
 void QuteText::setValue(double value)
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
+  widgetLock.lockForWrite();
 #endif
 //  if (m_type == "display") {
-    setText(QString::number(value, 'f', property("QCS_precision").toInt()));
-    m_value = value;
+  m_value = value;
+  m_stringValue = QString::number(value, 'f', property("QCS_precision").toInt());
 //  }
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
 }
 
 void QuteText::setValue(QString value)
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
+  widgetLock.lockForWrite();
 #endif
-  setText(value);
+//  setText(value);
+  m_stringValue = value;
   m_value = value.toDouble();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
 }
 
@@ -183,24 +160,36 @@ void QuteText::setBorder(bool border)
 
 void QuteText::setText(QString text)
 {
-//  text = text.replace("\u00AC", "\n");
+  widgetLock.lockForWrite();
+
   setProperty("QCS_label", text);
   QString displayText = text;
+  m_stringValue = text;
   displayText.replace("\n", "<br />");
+  widgetLock.unlock();
+
   m_widget->blockSignals(true);
   static_cast<QLabel*>(m_widget)->setText(displayText);
   m_widget->blockSignals(false);
+}
+
+void QuteText::refreshWidget()
+{
+  setText(m_stringValue);
 }
 
 void QuteText::applyInternalProperties()
 {
   QuteWidget::applyInternalProperties();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
+  widgetLock.lockForWrite();
 #endif
 //  qDebug() << "QuteText::applyInternalProperties()";
 
   static_cast<QLabel*>(m_widget)->setText(property("QCS_label").toString());
+  m_stringValue = property("QCS_label").toString();
+  m_value = m_stringValue.toDouble();
+//  qDebug() << "QuteText::applyInternalProperties()" << property("QCS_label").toString();
   Qt::Alignment align;
   QString alignText = property("QCS_alignment").toString();
   if (alignText == "left") {
@@ -229,14 +218,14 @@ void QuteText::applyInternalProperties()
 //  qDebug() << "QuteText::applyInternalProperties() sylesheet" <<  m_widget->styleSheet();
 
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
 }
 
 QString QuteText::getWidgetLine()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString line = "ioText {" + QString::number(property("QCS_x").toInt()) + ", " + QString::number(property("QCS_y").toInt()) + "} ";
   line += "{"+ QString::number(property("QCS_width").toInt()) +", "+ QString::number(property("QCS_height").toInt()) +"} ";
@@ -266,7 +255,7 @@ QString QuteText::getWidgetLine()
   outText.replace(QRegExp("[\n\r]"), "\u00AC");
   line += outText;
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return line;
 }
@@ -283,7 +272,7 @@ QString QuteText::getWidgetXmlText()
   createXmlWriter(s);
 
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   s.writeTextElement("label", property("QCS_label").toString());
   s.writeTextElement("alignment", property("QCS_alignment").toString());
@@ -311,7 +300,7 @@ QString QuteText::getWidgetXmlText()
   s.writeTextElement("borderwidth", QString::number(property("QCS_borderwidth").toInt()));
   s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return xmlText;
 }
@@ -381,7 +370,7 @@ void QuteText::createPropertiesDialog()
   layout->addWidget(alignment,9, 1, Qt::AlignLeft|Qt::AlignVCenter);
   connect(bgColor, SIGNAL(released()), this, SLOT(selectBgColor()));
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
 //   QPixmap pixmap(64,64);
   QPixmap pixmap(64,64);
@@ -416,7 +405,7 @@ void QuteText::createPropertiesDialog()
     align = 0;
   alignment->setCurrentIndex(align);
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
 }
 
@@ -506,7 +495,7 @@ void QuteLineEdit::setText(QString text)
 QString QuteLineEdit::getWidgetLine()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString line = "ioText {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
@@ -527,7 +516,7 @@ QString QuteLineEdit::getWidgetLine()
   line += static_cast<QLineEdit*>(m_widget)->text();
 //   qDebug("QuteLineEdit::getWidgetLine() %s", line.toStdString().c_str());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return line;
 }
@@ -538,7 +527,7 @@ QString QuteLineEdit::getWidgetXmlText()
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
 
   s.writeTextElement("label",  static_cast<QLineEdit *>(m_widget)->text());
@@ -570,7 +559,7 @@ QString QuteLineEdit::getWidgetXmlText()
 //  s.writeTextElement("randomizable", "");
   s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return xmlText;
 }
@@ -583,11 +572,11 @@ QString QuteLineEdit::getWidgetType()
 QString QuteLineEdit::getStringValue()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString stringValue = static_cast<QLineEdit *>(m_widget)->text();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return stringValue;
 }
@@ -595,11 +584,11 @@ QString QuteLineEdit::getStringValue()
 double QuteLineEdit::getValue()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   double value = static_cast<QLineEdit *>(m_widget)->text().toDouble();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
    return value;
 }
@@ -656,11 +645,11 @@ void QuteLineEdit::createPropertiesDialog()
   borderRadius->hide();
   borderWidth->hide();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   text->setText(property("QCS_label").toString());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
 }
 
@@ -772,15 +761,26 @@ void QuteScrollNumber::setText(QString text)
 //  text.prepend("<font face=\"" + property("QCS_font").toString() + "\" size=\""
 //               + QString::number(property("QCS_fontsize").toInt()) + "\">");
 //  text.append("</font>");
+
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.lockForWrite();
+#endif
+  setProperty("QCS_label", text);
+  QString displayText = text;
+  m_stringValue = text;
+  displayText.replace("\n", "<br />");
   m_widget->blockSignals(true);
   static_cast<ScrollNumberWidget*>(m_widget)->setText(text);
   m_widget->blockSignals(false);
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.unlock();
+#endif
 }
 
 QString QuteScrollNumber::getWidgetLine()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString line = "ioText {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
@@ -806,7 +806,7 @@ QString QuteScrollNumber::getWidgetLine()
   line += outText;
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return line;
 }
@@ -820,12 +820,12 @@ QString QuteScrollNumber::getWidgetLine()
 QString QuteScrollNumber::getCsladspaLine()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString line = "ControlPort=" + property("QCS_objectName").toString() + "|" + property("QCS_objectName").toString() + "\n";
   line += "Range=9999|9999";
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return line;
 }
@@ -837,7 +837,7 @@ QString QuteScrollNumber::getWidgetXmlText()
   createXmlWriter(s);
 
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   s.writeTextElement("alignment", property("QCS_alignment").toString());
   s.writeTextElement("font", property("QCS_font").toString());
@@ -871,7 +871,7 @@ QString QuteScrollNumber::getWidgetXmlText()
 
   s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return xmlText;
 }
@@ -884,11 +884,11 @@ QString QuteScrollNumber::getWidgetType()
 QString QuteScrollNumber::getStringValue()
 {
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
   QString string = static_cast<ScrollNumberWidget *>(m_widget)->text();
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
   return string;
 }
@@ -897,6 +897,15 @@ QString QuteScrollNumber::getStringValue()
 //{
 //  return QuteText::getValue();
 //}
+
+void QuteScrollNumber::refreshWidget()
+{
+  widgetLock.lockForRead();
+  m_widget->blockSignals(true);
+  static_cast<ScrollNumberWidget*>(m_widget)->setText(m_stringValue);
+  m_widget->blockSignals(false);
+  widgetLock.unlock();
+}
 
 void QuteScrollNumber::createPropertiesDialog()
 {
@@ -912,25 +921,21 @@ void QuteScrollNumber::createPropertiesDialog()
   resolutionSpinBox->setDecimals(6);
   layout->addWidget(resolutionSpinBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
+  widgetLock.lockForRead();
 #endif
 
   resolutionSpinBox->setValue(property("QCS_resolution").toDouble());
 #ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
+  widgetLock.unlock();
 #endif
 }
 
 void QuteScrollNumber::applyProperties()
 {
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForRead();
-#endif
+  widgetLock.lockForRead();
   setProperty("QCS_resolution", resolutionSpinBox->value());
-  setProperty("QCS_value", text->toPlainText().toDouble());
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
+  m_value = text->toPlainText().toDouble();
+  widgetLock.unlock();
 //  setValue(m_value);
   QuteText::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
@@ -973,32 +978,22 @@ void QuteScrollNumber::applyInternalProperties()
 
 void QuteScrollNumber::addValue(double delta)
 {
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
-#endif
-  m_value += delta;
+  widgetLock.lockForRead();
+  double value = m_value + delta;
+  widgetLock.unlock();
 //  m_resolution = static_cast<ScrollNumberWidget*>(m_widget)->getResolution();
 //   qDebug("QuteScrollNumber::addValue places = %i resolution = %f", places, m_resolution);
-  setText(QString::number(m_value, 'f', m_places));
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
-  valueChanged(m_value);
-  emit widgetChanged(this);
+  setValue(value);
 }
 
 void QuteScrollNumber::setValue(double value)
 {
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.lockForWrite();
-#endif
+  widgetLock.lockForWrite();
   m_value = value;
+  m_stringValue = QString::number(m_value, 'f', m_places);
 //   qDebug("QuteScrollNumber::setValue places = %i value = %f", m_places, m_value);
-  m_widget->blockSignals(true);
-  static_cast<ScrollNumberWidget*>(m_widget)->setText(QString::number(m_value, 'f', m_places));
-  m_widget->blockSignals(false);
 //  emit widgetChanged(this);
-#ifdef  USE_WIDGET_MUTEX
-  widgetMutex.unlock();
-#endif
+  widgetLock.unlock();
+//  valueChanged(value);
+  emit widgetChanged(this);
 }
