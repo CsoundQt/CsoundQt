@@ -114,8 +114,8 @@ class MeterWidget : public QGraphicsView
 
   signals:
     void newValues(double value1, double value2);
-    void valueChanged(double value);
-    void value2Changed(double value);
+//    void valueChanged(double value);
+//    void value2Changed(double value);
 };
 
 #endif

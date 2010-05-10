@@ -59,6 +59,8 @@
 #define LAYOUT_Y_OFFSET 25
 #endif
 
+#define QCS_CURRENT_XML_VERSION 2
+
 WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 {
   selectionFrame = new QRubberBand(QRubberBand::Rectangle, this);
@@ -187,7 +189,7 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
     qDebug() << "WidgetLayout::loadXmlWidgets Error parsing xml text! Aborting.";
     return;
   }
-  QDomNodeList panel =  doc.elementsByTagName ("bsbPanel");
+  QDomNodeList panel = doc.elementsByTagName("bsbPanel");
   if (panel.size() > 1) {
     qDebug() << "WidgetLayout::loadXmlWidgets More than 1 panel available! Using first only";
   }
@@ -196,6 +198,17 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
     qDebug() << "WidgetLayout::loadXmlWidgets no bsbPanel element! Aborting.";
     return;
   }
+  int version = p.toElement().attribute("version", "0").toInt();
+  if (version > QCS_CURRENT_XML_VERSION) {
+    qDebug() << "WidgetLayout::loadXmlWidgets Newer Widget Format version";
+    QMessageBox::warning(this, tr("Newer Widget Format"),
+                         tr("The file was was saved by a more recent version of QuteCsound.\n"
+                            "Some features may not be available and will not be saved!"));
+  }
+  else if (version < QCS_CURRENT_XML_VERSION) {
+    qDebug() << "WidgetLayout::loadXmlWidgets Older Widget Format version";
+  }
+
   QDomNodeList c = p.childNodes();
   for (int i = 0; i < c.size(); i++) {
     parseXmlNode(c.item(i));
@@ -280,7 +293,7 @@ QString WidgetLayout::getWidgetsText()
   // may cause crashing since widgets are not reentrant
   QString text = "";
   QString name = "QuteCsound"; // FIXME add setting of panel name
-  text = "<bsbPanel>\n";
+  text = "<bsbPanel version=\"" + QString::number(QCS_CURRENT_XML_VERSION) + "\">\n";
   QString bg, red,green,blue;
   layoutMutex.lock();
   QColor bgColor = this->property("QCS_bgcolor").value<QColor>();
@@ -1973,6 +1986,14 @@ int WidgetLayout::createText(int x, int y, int width, int height, QString widget
   widget->setProperty("QCS_objectName",quoteParts[1]);
   widget->setProperty("QCS_alignment",quoteParts[2].simplified());
   widget->setProperty("QCS_font",quoteParts[3].simplified());
+
+  //#define QCS_XXSMALL 8
+  //#define QCS_XSMALL 10
+  //#define QCS_SMALL 12
+  //#define QCS_MEDIUM 16
+  //#define QCS_LARGE 20
+  //#define QCS_XLARGE 24
+  //#define QCS_XXLARGE 28
   widget->setProperty("QCS_fontsize",lastParts[0].toInt());
   widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
                                           lastParts[2].toDouble()/256.0,

@@ -261,7 +261,7 @@ void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
 
 void QuteWidget::popUpMenu(QPoint pos)
 {
-  qDebug() << "QuteWidget::popUpMenu";
+//  qDebug() << "QuteWidget::popUpMenu";
   QMenu menu(this);
   menu.addAction(propertiesAct);
   menu.addSeparator();

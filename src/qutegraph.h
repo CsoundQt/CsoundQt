@@ -53,7 +53,8 @@ class QuteGraph : public QuteWidget
     CsoundUserData *m_ud;
     QLabel * m_label;
     QComboBox *m_pageComboBox;
-    QDoubleSpinBox *zoomBox;
+    QDoubleSpinBox *zoomxBox;
+    QDoubleSpinBox *zoomyBox;
     QVector<Curve *> curves;
     QVector<QVector <QGraphicsLineItem *> > lines;
     QVector<QGraphicsPolygonItem *> polygons;

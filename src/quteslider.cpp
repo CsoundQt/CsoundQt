@@ -74,6 +74,7 @@ void QuteSlider::refreshWidget()
   double min = property("QCS_minimum").toDouble();
   double max = property("QCS_maximum").toDouble();
   int val = (int) (m_len * (m_value - min)/(max- min));
+  m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif

@@ -23,17 +23,6 @@
 #include "qutetext.h"
 #include <math.h>
 
-// Font point sizes equivalent for html
-// This seems necessary since qt rich text
-// only takes these values for font size
-//#define QCS_XXSMALL 8
-//#define QCS_XSMALL 10
-//#define QCS_SMALL 12
-//#define QCS_MEDIUM 16
-//#define QCS_LARGE 20
-//#define QCS_XLARGE 24
-//#define QCS_XXLARGE 28
-
 QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 {
   m_value = 0.0;
@@ -690,11 +679,11 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
   m_widget = new ScrollNumberWidget(this);
 //  connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
   connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(addValue(double)), this, SLOT(addValue(double)));
-  connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(setValue(double)), this, SLOT(setValue(double)));
+  connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(setValue(double)), this, SLOT(setValueFromWidget(double)));
   m_type = "scroll";
 
   setProperty("QCS_value", (double) 0.0);
-  setProperty("QCS_resolution", (double) 0.1);
+  setProperty("QCS_resolution", (double) 0.01);
   setProperty("QCS_minimum",(double)  -999999999999.0);
   setProperty("QCS_maximum", (double) 99999999999999.0);
   setProperty("QCS_randomizable", false);
@@ -702,17 +691,12 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
   setProperty("QCS_precision", QVariant()); // Remove this property which is part of parent class.
   setProperty("QCS_mouseControl", "continuous");
 //  setProperty("QCS_mouseControlAct", "jump");
-  m_places = 1;
+  m_places = 2;
 }
 
 QuteScrollNumber::~QuteScrollNumber()
 {
 }
-
-//void QuteScrollNumber::loadFromXml(QString xmlText)
-//{
-//  qDebug() << "loadFromXml not implemented for this widget yet";
-//}
 
 void QuteScrollNumber::setResolution(double resolution)
 {
@@ -747,42 +731,36 @@ void QuteScrollNumber::setAlignment(int alignment)
   static_cast<ScrollNumberWidget*>(m_widget)->setAlignment(align);
 }
 
-void QuteScrollNumber::setText(QString text)
-{
-//  m_text = text;
-//  int size;
-//  if (m_fontSize >= QCS_XXLARGE)
-//    size = 7;
-//  else if (m_fontSize >= QCS_XLARGE)
-//    size = 6;
-//  else if (m_fontSize >= QCS_LARGE)
-//    size = 5;
-//  else if (m_fontSize >= QCS_MEDIUM)
-//    size = 4;
-//  else if (m_fontSize >= QCS_SMALL)
-//    size = 3;
-//  else if (m_fontSize >= QCS_XSMALL)
-//    size = 2;
-//  else
-//    size = 1;
-//  text.prepend("<font face=\"" + property("QCS_font").toString() + "\" size=\""
-//               + QString::number(property("QCS_fontsize").toInt()) + "\">");
-//  text.append("</font>");
-
-#ifdef  USE_WIDGET_MUTEX
-  widgetLock.lockForWrite();
-#endif
-  setProperty("QCS_label", text);
-  QString displayText = text;
-  m_stringValue = text;
-  displayText.replace("\n", "<br />");
-  m_widget->blockSignals(true);
-  static_cast<ScrollNumberWidget*>(m_widget)->setText(text);
-  m_widget->blockSignals(false);
-#ifdef  USE_WIDGET_MUTEX
-  widgetLock.unlock();
-#endif
-}
+//void QuteScrollNumber::setText(QString text)
+//{
+//  qDebug() << "QuteScrollNumber::setText" << text;
+////  m_text = text;
+////  int size;
+////  if (m_fontSize >= QCS_XXLARGE)
+////    size = 7;
+////  else if (m_fontSize >= QCS_XLARGE)
+////    size = 6;
+////  else if (m_fontSize >= QCS_LARGE)
+////    size = 5;
+////  else if (m_fontSize >= QCS_MEDIUM)
+////    size = 4;
+////  else if (m_fontSize >= QCS_SMALL)
+////    size = 3;
+////  else if (m_fontSize >= QCS_XSMALL)
+////    size = 2;
+////  else
+////    size = 1;
+////  text.prepend("<font face=\"" + property("QCS_font").toString() + "\" size=\""
+////               + QString::number(property("QCS_fontsize").toInt()) + "\">");
+////  text.append("</font>");
+//
+////  setProperty("QCS_label", text);
+//  setValue(text.toDouble());
+////  m_widget->blockSignals(true);
+////  static_cast<ScrollNumberWidget*>(m_widget)->setText(text);
+////  m_widget->blockSignals(false);
+//
+//}
 
 QString QuteScrollNumber::getWidgetLine()
 {
@@ -817,12 +795,6 @@ QString QuteScrollNumber::getWidgetLine()
 #endif
   return line;
 }
-
-//QString QuteScrollNumber::getCabbageLine()
-//{
-//  QString line = "";
-//  return line;
-//}
 
 QString QuteScrollNumber::getCsladspaLine()
 {
@@ -888,17 +860,17 @@ QString QuteScrollNumber::getWidgetType()
   return QString("BSBScrollNumber");
 }
 
-QString QuteScrollNumber::getStringValue()
-{
-#ifdef  USE_WIDGET_MUTEX
-  widgetLock.lockForRead();
-#endif
-  QString string = static_cast<ScrollNumberWidget *>(m_widget)->text();
-#ifdef  USE_WIDGET_MUTEX
-  widgetLock.unlock();
-#endif
-  return string;
-}
+//QString QuteScrollNumber::getStringValue()
+//{
+//#ifdef  USE_WIDGET_MUTEX
+//  widgetLock.lockForRead();
+//#endif
+//  QString string = static_cast<ScrollNumberWidget *>(m_widget)->text();
+//#ifdef  USE_WIDGET_MUTEX
+//  widgetLock.unlock();
+//#endif
+//  return string;
+//}
 
 //double QuteScrollNumber::getValue()
 //{
@@ -907,15 +879,17 @@ QString QuteScrollNumber::getStringValue()
 
 void QuteScrollNumber::refreshWidget()
 {
+  qDebug() << "QuteScrollNumber::refreshWidget " << m_stringValue;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
   QString text = m_stringValue;
+  m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
   m_widget->blockSignals(true);
-  static_cast<ScrollNumberWidget*>(m_widget)->setText(m_stringValue);
+  static_cast<ScrollNumberWidget*>(m_widget)->setText(text);
   m_widget->blockSignals(false);
 }
 
@@ -948,8 +922,7 @@ void QuteScrollNumber::applyProperties()
   widgetLock.lockForRead();
 #endif
   setProperty("QCS_resolution", resolutionSpinBox->value());
-  m_value = text->toPlainText().toDouble();
-  m_valueChanged = true;
+  setProperty("QCS_value",text->toPlainText().toDouble());
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
@@ -961,6 +934,7 @@ void QuteScrollNumber::applyInternalProperties()
 {
 //  qDebug() << "QuteScrollNumber::applyInternalProperties()";
 
+  QuteWidget::applyInternalProperties();
   setResolution(property("QCS_resolution").toDouble());
   setValue(property("QCS_value").toDouble());
 //  static_cast<QLabel*>(m_widget)->setText(property("QCS_label").toString());
@@ -990,7 +964,7 @@ void QuteScrollNumber::applyInternalProperties()
                           + "; }");
 //  qDebug() << property("QCS_bgcolormode").toBool();
 //  qDebug() << "QuteScrollNumber::applyInternalProperties() sylesheet" <<  m_widget->styleSheet();
-  QuteWidget::applyInternalProperties();
+  m_valueChanged = true;
 }
 
 void QuteScrollNumber::addValue(double delta)
@@ -1005,10 +979,19 @@ void QuteScrollNumber::addValue(double delta)
 //  m_resolution = static_cast<ScrollNumberWidget*>(m_widget)->getResolution();
 //   qDebug("QuteScrollNumber::addValue places = %i resolution = %f", places, m_resolution);
   setValue(value);
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.lockForRead();
+#endif
+  QPair<QString, double> channelValue(m_channel, m_value);
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.unlock();
+#endif
+  emit newValue(channelValue);
 }
 
 void QuteScrollNumber::setValue(double value)
 {
+  qDebug() << "QuteScrollNumber::setValue " << value;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
 #endif
@@ -1020,5 +1003,19 @@ void QuteScrollNumber::setValue(double value)
   widgetLock.unlock();
 #endif
 //  valueChanged(value);
-  emit widgetChanged(this);
+//  emit widgetChanged(this);
+}
+
+void QuteScrollNumber::setValueFromWidget(double value)
+{
+//  qDebug() << "QuteScrollNumber::setValueFromWidget";
+  setValue(value);
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.lockForRead();
+#endif
+  QPair<QString, double> channelValue(m_channel, m_value);
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.unlock();
+#endif
+  emit newValue(channelValue);
 }

@@ -794,7 +794,7 @@ int CsoundEngine::runCsound()
 
 void CsoundEngine::stopCsound()
 {
-  qDebug() << "CsoundEngine::stopCsound()";
+//  qDebug() << "CsoundEngine::stopCsound()";
   if (ud->threaded) {
 //    perfThread->ScoreEvent(0, 'e', 0, 0);
     if (ud->perfThread != 0) {

@@ -38,8 +38,8 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
 //   static_cast<MeterWidget *>(m_widget)->setRenderHints(QPainter::Antialiasing);
 //  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
   connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValues(double, double)), this, SLOT(setValuesFromWidget(double,double)));
-  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(valueChanged(double)), this, SLOT(valueChanged(double)));
-  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(value2Changed(double)), this, SLOT(value2Changed(double)));
+//  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(valueChanged(double)), this, SLOT(valueChanged(double)));
+//  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(value2Changed(double)), this, SLOT(value2Changed(double)));
 
   setProperty("QCS_xMin", 0.0);
   setProperty("QCS_xMax", 1.0);
@@ -168,16 +168,16 @@ void QuteMeter::createPropertiesDialog()
   name2LineEdit->setText(getChannel2Name());
   name2LineEdit->setMinimumWidth(320);
   layout->addWidget(name2LineEdit, 4,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
-  if (static_cast<MeterWidget *>(m_widget)->getType() != "point" and ((MeterWidget *)m_widget)->getType() != "crosshair") {
-    if (((MeterWidget *)m_widget)->m_vertical) {
-      channelLabel->setEnabled(false);
-      nameLineEdit->setEnabled(false);
-    }
-    else {
-      label->setEnabled(false);
-      name2LineEdit->setEnabled(false);
-    }
-  }
+//  if (static_cast<MeterWidget *>(m_widget)->getType() != "point" and ((MeterWidget *)m_widget)->getType() != "crosshair") {
+//    if (((MeterWidget *)m_widget)->m_vertical) {
+//      channelLabel->setEnabled(false);
+//      nameLineEdit->setEnabled(false);
+//    }
+//    else {
+//      label->setEnabled(false);
+//      name2LineEdit->setEnabled(false);
+//    }
+//  }
 
   label = new QLabel(dialog);
   label->setText("Color");
@@ -437,7 +437,7 @@ void MeterWidget::setValue(double value)
     m_vline->setLine(portionx*width(), 0 ,portionx*width(), height());
     m_point->setRect(portionx*width()- (m_pointSize/2.0), (1-portiony)*height()- (m_pointSize/2.0), m_pointSize, m_pointSize);
   }
-  emit valueChanged(m_value);
+//  emit valueChanged(m_value);
 }
 
 void MeterWidget::setValue2(double value)
@@ -469,7 +469,7 @@ void MeterWidget::setValue2(double value)
     m_hline->setLine(0, (1-portiony)*height(), width(), (1-portiony)*height());
     m_point->setRect(portionx*width()- (m_pointSize/2.0), (1-portiony)*height()- (m_pointSize/2.0), m_pointSize, m_pointSize);
   }
-  emit value2Changed(m_value2);
+//  emit value2Changed(m_value2);
 }
 
 void MeterWidget::setType(QString type)

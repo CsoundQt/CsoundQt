@@ -165,18 +165,29 @@ void QuteGraph::createPropertiesDialog()
   QuteWidget::createPropertiesDialog();
   dialog->setWindowTitle("Graph");
   QLabel *label = new QLabel(dialog);
-  label->setText("Zoom");
-  layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
-  zoomBox = new QDoubleSpinBox(dialog);
-  zoomBox->setRange(1, 10.0);
-  zoomBox->setDecimals(1);
-  zoomBox->setSingleStep(0.5);
-  layout->addWidget(zoomBox, 7, 3, Qt::AlignLeft|Qt::AlignVCenter);
+  label->setText("Zoom X");
+  layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
+  zoomxBox = new QDoubleSpinBox(dialog);
+  zoomxBox->setRange(1, 10.0);
+  zoomxBox->setDecimals(1);
+  zoomxBox->setSingleStep(0.5);
+  layout->addWidget(zoomxBox, 8, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+
+  label = new QLabel(dialog);
+  label->setText("Zoom Y");
+  layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
+  zoomyBox = new QDoubleSpinBox(dialog);
+  zoomyBox->setRange(1, 10.0);
+  zoomyBox->setDecimals(1);
+  zoomyBox->setSingleStep(0.5);
+  layout->addWidget(zoomyBox, 8, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
-  zoomBox->setValue(property("QCS_zoomx").toDouble());
+  zoomxBox->setValue(property("QCS_zoomx").toDouble());
+  zoomyBox->setValue(property("QCS_zoomy").toDouble());
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
@@ -189,8 +200,8 @@ void QuteGraph::applyProperties()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
 #endif
-  setProperty("QCS_zoomx", zoomBox->value());
-  setProperty("QCS_zoomy", zoomBox->value());
+  setProperty("QCS_zoomx", zoomxBox->value());
+  setProperty("QCS_zoomy", zoomyBox->value());
   setProperty("QCS_dispx", 1);
   setProperty("QCS_dispy", 1);
   setProperty("QCS_modex", "lin");
@@ -203,40 +214,9 @@ void QuteGraph::applyProperties()
   QuteWidget::applyProperties();
 }
 
-//void QuteGraph::setValue(double value)
-//{
-//  widgetLock.lockForWrite();  // lock
-//  if (m_value == value) {
-//    widgetLock.unlock();
-//    return;
-//  }
-//  if (value < 0 ) {
-//    for (int i = 0; i < m_pageComboBox->count(); i++) {
-//      QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"), QString::SkipEmptyParts);
-////      qDebug() << "QuteGraph::setValue " << parts << " " << value;
-//      if (parts.size() > 1) {
-//        int num = parts.last().toInt();
-//        if (curves.size() > num && curves[num]->get_caption().isEmpty()) {
-//          widgetLock.unlock();  // unlock
-//          return;
-//        }
-//        if (int(value) == -num) {
-//          changeCurve(i);
-//          m_value = value;
-//        }
-//      }
-//    }
-//  }
-//  else if (value < curves.size()) { //Dont change value if not valid
-//    changeCurve((int) value);
-//    m_value = value;
-//  }
-//  widgetLock.unlock();  // unlock
-//}
 
 void QuteGraph::changeCurve(int index)
 {
-//   qDebug("QuteGraph::changeCurve %i", index);
   if (index < 0  || index >= curves.size()
     || curves.size() <= 0 || curves[index]->get_caption().isEmpty()) {
     return;
@@ -261,8 +241,8 @@ void QuteGraph::changeCurve(int index)
   int size = curves[index]->get_size();
   view->setResizeAnchor(QGraphicsView::NoAnchor);
   if (curves[index]->get_caption().contains("ftable")) {
-    view->setSceneRect (0, min - ((max - min)*0.17),(double) size/property("QCS_zoomx").toDouble(), (max - min)*1.17);
-    view->fitInView(0, min - ((max - min)*0.17) , (double) size/property("QCS_zoomy").toDouble(), (max - min)*1.17);
+    view->setSceneRect (0, min - ((max - min)*0.17),(double) size/property("QCS_zoomx").toDouble(), (max - min)*1.17/property("QCS_zoomy").toDouble());
+    view->fitInView(0, min - ((max - min)*0.17) , (double) size/property("QCS_zoomx").toDouble(), (max - min)*1.17/property("QCS_zoomy").toDouble());
   }
   else {
     if (curves[index]->get_caption().contains("fft")) {

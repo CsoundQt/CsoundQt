@@ -420,7 +420,7 @@ void EventSheet::loopEvents()
 
 void EventSheet::setLoopActive(bool loop)
 {
-  qDebug() << "EventSheet::setLoopActive " << loop;
+//  qDebug() << "EventSheet::setLoopActive " << loop;
   if (loop) {
     if (!m_looping) {
       m_looping = true;

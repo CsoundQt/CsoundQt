@@ -69,7 +69,7 @@ void LiveEventControl::appendPanel(bool visible, bool play, bool loop, int sync,
                                    QString name, double loopLength, double loopStart, double loopEnd , double tempo)
 {
   int newRow = m_ui->panelTableWidget->rowCount();
-  qDebug() << "LiveEventControl::appendPanel " << newRow;
+//  qDebug() << "LiveEventControl::appendPanel " << newRow;
   m_ui->panelTableWidget->insertRow(newRow);
   m_ui->panelTableWidget->setRowHeight(newRow, 20);
   QTableWidgetItem *visibleItem = getItem(newRow, 0);

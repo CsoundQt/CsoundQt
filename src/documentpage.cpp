@@ -173,14 +173,14 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   deleteAllLiveEvents();
   bool xmlFormatFound = false;
   QString xmlPanels = QString();
-  while (text.contains("<bsbPanel>") and text.contains("</bsbPanel>")) {
-    QString panel = text.right(text.size()-text.indexOf("<bsbPanel>"));
+  while (text.contains("<bsbPanel") and text.contains("</bsbPanel>")) {
+    QString panel = text.right(text.size()-text.indexOf("<bsbPanel"));
     panel.resize(panel.indexOf("</bsbPanel>") + 11);
     if (text.indexOf("</bsbPanel>") + 11 < text.size() and text[text.indexOf("</bsbPanel>") + 13] == '\n')
       text.remove(text.indexOf("</bsbPanel>") + 13, 1); //remove final line break
-    if (text.indexOf("<bsbPanel>") > 0 and text[text.indexOf("<bsbPanel>") - 1] == '\n')
-      text.remove(text.indexOf("<bsbPanel>") - 1, 1); //remove initial line break
-    text.remove(text.indexOf("<bsbPanel>"), panel.size());
+    if (text.indexOf("<bsbPanel") > 0 and text[text.indexOf("<bsbPanel") - 1] == '\n')
+      text.remove(text.indexOf("<bsbPanel") - 1, 1); //remove initial line break
+    text.remove(text.indexOf("<bsbPanel"), panel.size());
     xmlFormatFound = true;
     xmlPanels += panel;
     // TODO enable creation of several panels

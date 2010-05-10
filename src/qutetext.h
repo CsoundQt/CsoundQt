@@ -88,7 +88,6 @@ class QuteLineEdit : public QuteText
     QuteLineEdit(QWidget* parent);
     ~QuteLineEdit();
 
-//    virtual void setAlignment(int alignment);
     virtual void setText(QString text);
     virtual QString getWidgetLine();
     virtual QString getWidgetXmlText();
@@ -111,14 +110,13 @@ class QuteScrollNumber : public QuteText
     ~QuteScrollNumber();
 
     virtual void setAlignment(int alignment);
-    virtual void setText(QString text);
+//    virtual void setText(QString text);
     virtual QString getWidgetLine();
-//    virtual QString getCabbageLine();
     virtual QString getCsladspaLine();
     virtual QString getWidgetXmlText();
-    virtual QString getStringValue();
+//    virtual QString getStringValue();
     virtual QString getWidgetType();
-//    virtual double getValue();
+    virtual void setValue(double value);
 
     virtual void applyInternalProperties();
 
@@ -133,7 +131,7 @@ class QuteScrollNumber : public QuteText
   public slots:
     void setResolution(double resolution);
     void addValue(double delta);
-    void setValue(double value);
+    void setValueFromWidget(double value);
 };
 
 class ScrollNumberWidget : public QLabel
@@ -151,10 +149,6 @@ class ScrollNumberWidget : public QLabel
     {
       m_resolution = resolution;
     }
-//    double getResolution()
-//    {
-//      return m_resolution;
-//    }
 
   protected:
 
@@ -169,7 +163,7 @@ class ScrollNumberWidget : public QLabel
     virtual void mousePressEvent(QMouseEvent * event)
     {
       if (event->button() & Qt::LeftButton) {
-        if (event->modifiers() & Qt::ShiftModifier) {
+        if (event->modifiers() & Qt::AltModifier) {
           emit setValue(0);
         }
         oldy = event->y();
