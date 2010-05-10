@@ -70,7 +70,7 @@ struct CsoundUserData {
   QVector<QString> stringValues;
   QVector<double> mouseValues;
   RingBuffer audioOutputBuffer;
-  unsigned long ksmpscount;
+  unsigned long ksmpscount;  // Use this or rely on the csound time counter? Is using this more efficient, since it is called so often?
 };
 
 class CsoundEngine : public QObject

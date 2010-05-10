@@ -32,6 +32,7 @@ class QuteDummy : public QuteWidget
     QuteDummy(QWidget *parent);
     ~QuteDummy();
 
+    virtual QString getWidgetLine();
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();
 

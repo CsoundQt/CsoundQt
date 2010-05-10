@@ -78,6 +78,7 @@ class QuteScope : public QuteWidget
 
     virtual void resizeEvent(QResizeEvent * event);
     virtual void applyProperties();
+    QReadWriteLock scopeLock;
 
   private:
     void updateLabel();

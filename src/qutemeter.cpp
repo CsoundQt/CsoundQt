@@ -74,8 +74,8 @@ QString QuteMeter::getWidgetLine()
   line += "{" + QString::number(color.red() * 256)
       + ", " + QString::number(color.green() * 256)
       + ", " + QString::number(color.blue() * 256) + "} ";
-  line += "\"" + property("QCS_objectName").toString() + "\" " + QString::number(m_value, 'f', 6) + " ";
-  line += "\"" + property("QCS_objectName2").toString() + "\" " + QString::number(m_value2, 'f', 6) + " ";
+  line += "\"" + m_channel + "\" " + QString::number(m_value, 'f', 6) + " ";
+  line += "\"" + m_channel2 + "\" " + QString::number(m_value2, 'f', 6) + " ";
   line += property("QCS_type").toString() + " ";
   line += QString::number(property("QCS_pointsize").toInt()) + " ";
   line += QString::number(property("QCS_fadeSpeed").toInt()) + " ";
@@ -96,7 +96,7 @@ QString QuteMeter::getWidgetXmlText()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
-  s.writeTextElement("objectName2", property("QCS_objectName2").toString());
+  s.writeTextElement("objectName2", m_channel2);
   s.writeTextElement("xMin", QString::number(property("QCS_xMin").toDouble(), 'f', 8));
   s.writeTextElement("xMax", QString::number(property("QCS_xMax").toDouble(), 'f', 8));
   s.writeTextElement("yMin", QString::number(property("QCS_yMin").toDouble(), 'f', 8));
@@ -152,7 +152,9 @@ void QuteMeter::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
 
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
+#endif
   dialog->setWindowTitle("Controller");
   channelLabel->setText("Horizontal Channel name =");
   channelLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
@@ -268,18 +270,27 @@ void QuteMeter::createPropertiesDialog()
   m_yMaxBox->setValue(property("QCS_yMax").toDouble());
   layout->addWidget(m_yMaxBox, 10,3, Qt::AlignLeft|Qt::AlignVCenter);
 
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
 
 }
 
 void QuteMeter::refreshWidget()
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
-  m_widget->blockSignals(true);
-  static_cast<MeterWidget *>(m_widget)->setValue(m_value);
-  static_cast<MeterWidget *>(m_widget)->setValue2(m_value2);
-  m_widget->blockSignals(false);
+#endif
+  double val1 = m_value;
+  double val2 = m_value2;
+  m_valueChanged = false;
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
+  m_widget->blockSignals(true);
+  static_cast<MeterWidget *>(m_widget)->setValue(val1);
+  static_cast<MeterWidget *>(m_widget)->setValue2(val2);
+  m_widget->blockSignals(false);
 }
 
 void QuteMeter::applyProperties()
@@ -288,6 +299,7 @@ void QuteMeter::applyProperties()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
+  // Only properties should be changed here as applyInternalProperties takes care of the rest
   setProperty("QCS_objectName2", name2LineEdit->text());
   setProperty("QCS_color", colorButton->palette().color(QPalette::Window));
   setProperty("QCS_type", typeComboBox->currentText());
@@ -311,14 +323,6 @@ void QuteMeter::setWidgetGeometry(int x,int y,int width,int height)
   /* In MacCsound, meter widgets have an offset of about five pixels in every border
      This has proven problematic in Qt, as the graphicsScene*/
   static_cast<MeterWidget *>(m_widget)->setWidgetGeometry(0,0,width, height);
-}
-
-void QuteMeter::setChannel2Name(QString name)
-{
-  if (name.startsWith('$')) {
-    name.remove(0,1);  // $ symbol is reserved for identifying string channels
-  }
-  setProperty("QCS_objectName2", name);
 }
 
 void QuteMeter::applyInternalProperties()
@@ -356,18 +360,21 @@ void QuteMeter::setValuesFromWidget(double value1, double value2)
 //  QString type = property("QCS_type").toString();
 //  qDebug() << "QuteMeter::setValuesFromWidget " << value1 << "--" << value2;
 
+  setValue(value1);
+  setValue2(value2);
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
-  m_value = value1;
+#endif
   QPair<QString, double> channelValue;
-  channelValue = QPair<QString, double>(property("QCS_objectName").toString(), m_value);
-  m_value2 = value2;
+  channelValue = QPair<QString, double>(m_channel, m_value);
   QPair<QString, double> channel2Value;
-  channel2Value = QPair<QString, double>(property("QCS_objectName2").toString(), m_value2);
+  channel2Value = QPair<QString, double>(m_channel2, m_value2);
+  m_valueChanged = true;
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
   emit newValue(channelValue);
   emit newValue(channel2Value);
-//  setValue(value1);
-//  setValue2(value2);
 }
 
 /* Meter Widget ----------------------------------------*/
@@ -446,7 +453,6 @@ void MeterWidget::setValue2(double value)
     return;
   }
   m_value2 = value;
-
   double portionx = (m_value -  m_xmin) / (m_xmax - m_xmin);
   double portiony = (m_value2 -  m_ymin) / (m_ymax - m_ymin);
   if (m_type == "fill" and m_vertical) {
@@ -468,7 +474,7 @@ void MeterWidget::setValue2(double value)
 
 void MeterWidget::setType(QString type)
 {
-   qDebug() << "MeterWidget::setType " << type << m_vertical;
+//   qDebug() << "MeterWidget::setType " << type << m_vertical;
   if (type == "fill") {
     m_type = type;
     m_block->show();

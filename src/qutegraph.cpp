@@ -80,7 +80,7 @@ QString QuteGraph::getWidgetLine()
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} table ";
   line += QString::number(m_value, 'f', 6) + " ";
   line += QString::number(property("QCS_zoomx").toDouble(), 'f', 6) + " ";
-  line += property("QCS_objectName").toString();
+  line += m_channel;
 //   qDebug("QuteGraph::getWidgetLine(): %s", line.toStdString().c_str());
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
@@ -130,9 +130,14 @@ void QuteGraph::setWidgetGeometry(int x,int y,int width,int height)
 
 void QuteGraph::refreshWidget()
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
+#endif
   int index = (int) m_value;
+  m_valueChanged = false;
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();  // unlock
+#endif
   if (index < 0) {
     for (int i = 0; i < m_pageComboBox->count(); i++) {
       QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"), QString::SkipEmptyParts);
@@ -168,16 +173,22 @@ void QuteGraph::createPropertiesDialog()
   zoomBox->setSingleStep(0.5);
   layout->addWidget(zoomBox, 7, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
+#endif
   zoomBox->setValue(property("QCS_zoomx").toDouble());
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
 //   channelLabel->hide();
 //   nameLineEdit->hide();
 }
 
 void QuteGraph::applyProperties()
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
+#endif
   setProperty("QCS_zoomx", zoomBox->value());
   setProperty("QCS_zoomy", zoomBox->value());
   setProperty("QCS_dispx", 1);
@@ -186,7 +197,9 @@ void QuteGraph::applyProperties()
   setProperty("QCS_modey", "lin");
   setProperty("QCS_all", true);
 
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
   QuteWidget::applyProperties();
 }
 

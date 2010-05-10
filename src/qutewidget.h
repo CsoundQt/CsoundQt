@@ -26,7 +26,7 @@
 #include <QtGui>
 #include <QtXml>
 
-#define USE_WIDGET_MUTEX
+//#define USE_WIDGET_MUTEX
 
 class QuteWidget : public QWidget
 {
@@ -35,19 +35,16 @@ class QuteWidget : public QWidget
     QuteWidget(QWidget* parent);
     ~QuteWidget();
 
-    virtual void setWidgetLine(QString line);
-    virtual void setChannelName(QString name);
+//    virtual void setWidgetLine(QString line) = 0;
     virtual void setWidgetGeometry(int x, int y, int w, int h);
-//    virtual void setRange(int min, int max);
     virtual void setValue(double);  // These should only be reimplemented if something special needs to be done with the value.
     virtual void setValue2(double);
     virtual void setValue(QString);
 
     virtual void widgetMessage(QString /*path*/, QString /*text*/) {;}
-    virtual void widgetMessage(QString /*path*/, double /*value*/) {;}
-//    virtual void setChecked(bool checked);
+    virtual void widgetMessage(QString /*path*/, double /*value*/) {;}  // TODO implement sending messages to widgets.
 
-    virtual QString getWidgetLine();
+    virtual QString getWidgetLine() = 0;
     virtual QString getCabbageLine();
     virtual QString getCsladspaLine();
     virtual QString getWidgetXmlText() = 0;
@@ -67,6 +64,8 @@ class QuteWidget : public QWidget
     void markChanged();
     void canFocus(bool can);
 
+    bool m_valueChanged;
+
   public slots:
     void popUpMenu(QPoint pos);
     void openProperties();
@@ -83,14 +82,14 @@ class QuteWidget : public QWidget
     QGridLayout *layout;  // For preference dialog
     double m_value, m_value2;
     QString m_stringValue;
+    QString m_channel, m_channel2;
 
-    QString m_line;  // Text line for old widget format
+//    QString m_line;  // Text line for old widget format
 //    QString m_name2;
 
+#ifdef  USE_WIDGET_MUTEX
     QReadWriteLock widgetLock;
-//#ifdef  USE_WIDGET_MUTEX
-//    QReadWriteLock widgetMutex;
-//#endif
+#endif
     QString xmlText;
 
     virtual void contextMenuEvent(QContextMenuEvent *event);

@@ -47,7 +47,7 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
   m_label->setText("Scope");
   m_label->move(85, 0);
   m_label->resize(500, 25);
-  m_params = new ScopeParams(0, m_scene, static_cast<ScopeWidget *>(m_widget), &widgetLock, this->width(), this->height());
+  m_params = new ScopeParams(0, m_scene, static_cast<ScopeWidget *>(m_widget), &scopeLock, this->width(), this->height());
   m_scopeData = new ScopeData(m_params);
   m_lissajouData = new LissajouData(m_params);
   m_poincareData = new PoincareData(m_params);
@@ -80,7 +80,7 @@ QString QuteScope::getWidgetLine()
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += property("QCS_type").toString() + " " + QString::number(property("QCS_zoomx").toDouble(), 'f', 6) + " ";
   line += QString::number((int) m_value) + " ";
-  line += property("QCS_objectName").toString();
+  line += m_channel;
 //   qDebug("QuteScope::getWidgetLine() %s", line.toStdString().c_str());
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();

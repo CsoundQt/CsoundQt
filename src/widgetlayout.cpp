@@ -458,7 +458,7 @@ void WidgetLayout::setValue(int index, QString value)
 
 QString WidgetLayout::getStringForChannel(QString channelName)
 {
-  widgetsMutex.lock();
+//  widgetsMutex.lock();
   for (int i = 0; i < m_widgets.size() ; i++) {
     if (m_widgets[i]->getChannelName() == channelName) {
       QString value = m_widgets[i]->getStringValue();
@@ -466,13 +466,13 @@ QString WidgetLayout::getStringForChannel(QString channelName)
       return value;
     }
   }
-  widgetsMutex.unlock();
+//  widgetsMutex.unlock();
   return QString();
 }
 
 double WidgetLayout::getValueForChannel(QString channelName)
 {
-  widgetsMutex.lock();
+//  widgetsMutex.lock();
   for (int i = 0; i < m_widgets.size() ; i++) {
 //    qDebug() << "WidgetLayout::getValueForChannel " << i << "  " << m_widgets[i]->getChannelName();
     if (m_widgets[i]->getChannelName() == channelName) {
@@ -481,7 +481,7 @@ double WidgetLayout::getValueForChannel(QString channelName)
       return value;
     }
   }
-  widgetsMutex.unlock();
+//  widgetsMutex.unlock();
   return 0.0;
 }
 
@@ -1030,7 +1030,9 @@ void WidgetLayout::refreshConsoles()
 void WidgetLayout::refreshWidgets()
 {
   for (int i=0; i < m_widgets.size(); i++) {
-    m_widgets[i]->refreshWidget();
+    if (m_widgets[i]->m_valueChanged) {
+      m_widgets[i]->refreshWidget();
+    }
   }
 }
 
@@ -1929,7 +1931,6 @@ int WidgetLayout::createSlider(int x, int y, int width, int height, QString widg
 //   qDebug("ioSlider x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QuteSlider *widget= new QuteSlider(this);
-  widget->setWidgetLine(widgetLine);
   widget->setProperty("QCS_x",x);
   widget->setProperty("QCS_y",y);
   widget->setProperty("QCS_width",width);
@@ -1964,7 +1965,6 @@ int WidgetLayout::createText(int x, int y, int width, int height, QString widget
   if (lastParts.size() < 9)
     return -1;
   QuteText *widget= new QuteText(this);
-  widget->setWidgetLine(widgetLine);
   widget->setProperty("QCS_x",x);
   widget->setProperty("QCS_y",y);
   widget->setProperty("QCS_width",width);
@@ -2006,7 +2006,6 @@ int WidgetLayout::createScrollNumber(int x, int y, int width, int height, QStrin
   if (lastParts.size() < 9)
     return -1;
   QuteScrollNumber *widget= new QuteScrollNumber(this);
-  widget->setWidgetLine(widgetLine);
 
   widget->setProperty("QCS_x",x);
   widget->setProperty("QCS_y",y);
@@ -2052,7 +2051,6 @@ int WidgetLayout::createLineEdit(int x, int y, int width, int height, QString wi
   if (lastParts.size() < 9)
     return -1;
   QuteLineEdit *widget= new QuteLineEdit(this);
-  widget->setWidgetLine(widgetLine);
 
   widget->setProperty("QCS_x",x);
   widget->setProperty("QCS_y",y);
@@ -2091,7 +2089,6 @@ int WidgetLayout::createSpinBox(int x, int y, int width, int height, QString wid
   if (lastParts.size() < 9)
     return -1;
   QuteSpinBox *widget= new QuteSpinBox(this);
-  widget->setWidgetLine(widgetLine);
 
   widget->setProperty("QCS_x",x);
   widget->setProperty("QCS_y",y);
@@ -2137,7 +2134,6 @@ int WidgetLayout::createButton(int x, int y, int width, int height, QString widg
 //   if (lastParts.size() < 9)
 //     return -1;
   QuteButton *widget= new QuteButton(this);
-  widget->setWidgetLine(widgetLine);
   widget->setProperty("QCS_x",x);
   widget->setProperty("QCS_y",y);
   widget->setProperty("QCS_width",width);
@@ -2167,7 +2163,6 @@ int WidgetLayout::createKnob(int x, int y, int width, int height, QString widget
 //   qDebug("ioKnob x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QuteKnob *widget= new QuteKnob(this);
-  widget->setWidgetLine(widgetLine);
   widget->setProperty("QCS_x",x);
   widget->setProperty("QCS_y",y);
   widget->setProperty("QCS_width",width);
@@ -2197,7 +2192,6 @@ int WidgetLayout::createCheckBox(int x, int y, int width, int height, QString wi
 //   qDebug("ioCheckBox x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QuteCheckBox *widget= new QuteCheckBox(this);
-  widget->setWidgetLine(widgetLine);
   widget->setProperty("QCS_x",x);
   widget->setProperty("QCS_y",y);
   widget->setProperty("QCS_width",width);
@@ -2225,7 +2219,6 @@ int WidgetLayout::createMenu(int x, int y, int width, int height, QString widget
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
   QuteComboBox *widget= new QuteComboBox(this);
-  widget->setWidgetLine(widgetLine);
   widget->setProperty("QCS_x",x);
   widget->setProperty("QCS_y",y);
   widget->setProperty("QCS_width",width);
@@ -2256,7 +2249,6 @@ int WidgetLayout::createMeter(int x, int y, int width, int height, QString widge
     return 0;
   }
   QuteMeter *widget= new QuteMeter(this);
-  widget->setWidgetLine(widgetLine);
   widget->setProperty("QCS_x",x);
   widget->setProperty("QCS_y",y);
   widget->setProperty("QCS_width",width);
@@ -2288,7 +2280,6 @@ int WidgetLayout::createConsole(int x, int y, int width, int height, QString wid
 //    qDebug("ioListing x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QuteConsole *widget= new QuteConsole(this);
-  widget->setWidgetLine(widgetLine);
   widget->setProperty("QCS_x",x);
   widget->setProperty("QCS_y",y);
   widget->setProperty("QCS_width",width);
@@ -2305,7 +2296,6 @@ int WidgetLayout::createGraph(int x, int y, int width, int height, QString widge
 //   qDebug("ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QuteGraph *widget= new QuteGraph(this);
-  widget->setWidgetLine(widgetLine);
   widget->setProperty("QCS_x",x);
   widget->setProperty("QCS_y",y);
   widget->setProperty("QCS_width",width);
@@ -2340,7 +2330,6 @@ int WidgetLayout::createScope(int x, int y, int width, int height, QString widge
 //   qDebug("WidgetPanel::createScope ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
 //   qDebug("%s",widgetLine.toStdString().c_str() );
   QuteScope *widget= new QuteScope(this);
-  widget->setWidgetLine(widgetLine);
   widget->setProperty("QCS_x",x);
   widget->setProperty("QCS_y",y);
   widget->setProperty("QCS_width",width);
@@ -2379,7 +2368,6 @@ int WidgetLayout::createScope(int x, int y, int width, int height, QString widge
 int WidgetLayout::createDummy(int x, int y, int width, int height, QString widgetLine)
 {
   QuteWidget *widget= new QuteDummy(this);
-  widget->setWidgetLine(widgetLine);
   widget->setProperty("QCS_x",x);
   widget->setProperty("QCS_y",y);
   widget->setProperty("QCS_width",width);
@@ -2852,6 +2840,7 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
   if (!channelValue.first.isEmpty()) {
     for (int i = 0; i < m_widgets.size(); i++){
       if (m_widgets[i]->getChannelName() == channelValue.first) {
+//        qDebug() << "WidgetLayout::newValue " << channelValue.first << "--" << m_widgets[i]->getChannelName();
         m_widgets[i]->setValue(channelValue.second);
       }
       if (m_widgets[i]->getChannel2Name() == channelValue.first) {
@@ -2860,18 +2849,6 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
     }
   }
   widgetsMutex.unlock();
-//  if (!channelValue.first.isEmpty()) {
-//    valueMutex.lock();
-//    if(newValues.contains(channelValue.first)) {
-//      newValues[channelValue.first] = channelValue.second;
-//    }
-//    else {
-//      newValues.insert(channelValue.first, channelValue.second);
-////      qDebug() << "WidgetLayout::newValue " << channelValue.first << " " << channelValue.second;
-//    }
-//    valueMutex.unlock();
-//  }
-//   widgetChanged();
 }
 
 void WidgetLayout::newValue(QPair<QString, QString> channelValue)

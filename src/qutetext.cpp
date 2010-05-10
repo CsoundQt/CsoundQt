@@ -72,6 +72,7 @@ void QuteText::setValue(double value)
 //  if (m_type == "display") {
   m_value = value;
   m_stringValue = QString::number(value, 'f', property("QCS_precision").toInt());
+  m_valueChanged = true;
 //  }
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
@@ -86,6 +87,7 @@ void QuteText::setValue(QString value)
 //  setText(value);
   m_stringValue = value;
   m_value = value.toDouble();
+  m_valueChanged = true;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
@@ -160,13 +162,17 @@ void QuteText::setBorder(bool border)
 
 void QuteText::setText(QString text)
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
+#endif
 
   setProperty("QCS_label", text);
   QString displayText = text;
   m_stringValue = text;
   displayText.replace("\n", "<br />");
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
 
   m_widget->blockSignals(true);
   static_cast<QLabel*>(m_widget)->setText(displayText);
@@ -189,6 +195,7 @@ void QuteText::applyInternalProperties()
   static_cast<QLabel*>(m_widget)->setText(property("QCS_label").toString());
   m_stringValue = property("QCS_label").toString();
   m_value = m_stringValue.toDouble();
+  m_valueChanged = true;
 //  qDebug() << "QuteText::applyInternalProperties()" << property("QCS_label").toString();
   Qt::Alignment align;
   QString alignText = property("QCS_alignment").toString();
@@ -230,7 +237,7 @@ QString QuteText::getWidgetLine()
   QString line = "ioText {" + QString::number(property("QCS_x").toInt()) + ", " + QString::number(property("QCS_y").toInt()) + "} ";
   line += "{"+ QString::number(property("QCS_width").toInt()) +", "+ QString::number(property("QCS_height").toInt()) +"} ";
   line += m_type + " ";
-  line += QString::number(m_value, 'f', 6) + " 0.00100 \"" + property("QCS_objectName").toString() + "\" ";
+  line += QString::number(m_value, 'f', 6) + " 0.00100 \"" + m_channel + "\" ";
   QString alignment = "";
   if (((QLabel *)m_widget)->alignment() & Qt::AlignLeft)
     alignment = "left";
@@ -500,7 +507,7 @@ QString QuteLineEdit::getWidgetLine()
   QString line = "ioText {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += m_type + " ";
-  line += QString::number(m_value, 'f', 6) + " 0.00100 \"" + property("QCS_objectName").toString() + "\" ";
+  line += QString::number(m_value, 'f', 6) + " 0.00100 \"" + m_channel + "\" ";
   line += property("QCS_alignmet").toString() + " ";
   line += "\"" + property("QCS_font").toString() + "\" " + QString::number(property("QCS_fontsize").toInt()) + " ";
   QColor color = property("QCS_color").value<QColor>();
@@ -681,7 +688,7 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
 {
   delete m_widget; //delete widget created by parent constructor
   m_widget = new ScrollNumberWidget(this);
-  connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
+//  connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
   connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(addValue(double)), this, SLOT(addValue(double)));
   connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(setValue(double)), this, SLOT(setValue(double)));
   m_type = "scroll";
@@ -787,7 +794,7 @@ QString QuteScrollNumber::getWidgetLine()
   line += m_type + " ";
   line += QString::number(m_value, 'f', 6) + " ";
   line += QString::number(property("QCS_resolution").toDouble(), 'f', 6);
-  line += + " \"" + property("QCS_objectName").toString() + "\" ";
+  line += + " \"" + m_channel + "\" ";
   line += property("QCS_alignment").toString() + " ";
   line += "\"" + property("QCS_font").toString() + "\" "
           + QString::number(property("QCS_fontsize").toInt()) + " ";
@@ -822,7 +829,7 @@ QString QuteScrollNumber::getCsladspaLine()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
-  QString line = "ControlPort=" + property("QCS_objectName").toString() + "|" + property("QCS_objectName").toString() + "\n";
+  QString line = "ControlPort=" + m_channel + "|" + m_channel + "\n";
   line += "Range=9999|9999";
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
@@ -900,11 +907,16 @@ QString QuteScrollNumber::getStringValue()
 
 void QuteScrollNumber::refreshWidget()
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
+#endif
+  QString text = m_stringValue;
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.unlock();
+#endif
   m_widget->blockSignals(true);
   static_cast<ScrollNumberWidget*>(m_widget)->setText(m_stringValue);
   m_widget->blockSignals(false);
-  widgetLock.unlock();
 }
 
 void QuteScrollNumber::createPropertiesDialog()
@@ -932,10 +944,15 @@ void QuteScrollNumber::createPropertiesDialog()
 
 void QuteScrollNumber::applyProperties()
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
+#endif
   setProperty("QCS_resolution", resolutionSpinBox->value());
   m_value = text->toPlainText().toDouble();
+  m_valueChanged = true;
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
 //  setValue(m_value);
   QuteText::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
@@ -978,9 +995,13 @@ void QuteScrollNumber::applyInternalProperties()
 
 void QuteScrollNumber::addValue(double delta)
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
+#endif
   double value = m_value + delta;
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
 //  m_resolution = static_cast<ScrollNumberWidget*>(m_widget)->getResolution();
 //   qDebug("QuteScrollNumber::addValue places = %i resolution = %f", places, m_resolution);
   setValue(value);
@@ -988,12 +1009,16 @@ void QuteScrollNumber::addValue(double delta)
 
 void QuteScrollNumber::setValue(double value)
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
+#endif
   m_value = value;
   m_stringValue = QString::number(m_value, 'f', m_places);
+  m_valueChanged = true;
 //   qDebug("QuteScrollNumber::setValue places = %i value = %f", m_places, m_value);
-//  emit widgetChanged(this);
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
 //  valueChanged(value);
   emit widgetChanged(this);
 }

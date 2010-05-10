@@ -45,7 +45,9 @@ QuteCheckBox::~QuteCheckBox()
 
 void QuteCheckBox::setValue(double value)
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
+#endif
   if (value >=0) {
     m_currentValue = value != 0 ? m_value : 0.0;
   }
@@ -53,8 +55,11 @@ void QuteCheckBox::setValue(double value)
     m_value = -value;
     m_currentValue = -value;
   }
+  m_valueChanged = true;
 //  qDebug( ) << "QuteCheckBox::setValue " << value << "---" << m_currentValue;
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
 }
 
 void QuteCheckBox::setLabel(QString label)
@@ -64,9 +69,13 @@ void QuteCheckBox::setLabel(QString label)
 
 double QuteCheckBox::getValue()
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
+#endif
   double value = m_currentValue;
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
   return value;
 }
 
@@ -83,7 +92,7 @@ QString QuteCheckBox::getWidgetLine()
   QString line = "ioCheckbox {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
   line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
   line += (static_cast<QCheckBox *>(m_widget)->isChecked()? QString("on "):QString("off "));
-  line += property("QCS_objectName").toString();
+  line += m_channel;
 //   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
@@ -93,7 +102,7 @@ QString QuteCheckBox::getWidgetLine()
 
 QString QuteCheckBox::getCabbageLine()
 {
-  QString line = "checkbox channel(\"" + property("QCS_objectName").toString() + "\"),  ";
+  QString line = "checkbox channel(\"" + m_channel + "\"),  ";
   line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
   line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
   line += "value(" + (static_cast<QCheckBox *>(m_widget)->isChecked()?
@@ -113,7 +122,9 @@ QString QuteCheckBox::getWidgetXmlText()
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
 
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
+#endif
 
   s.writeTextElement("selected",
                      m_currentValue != 0 ? QString("true"):QString("false"));
@@ -122,20 +133,27 @@ QString QuteCheckBox::getWidgetXmlText()
   s.writeTextElement("randomizable", property("QCS_randomizable").toBool() ? "true": "false");
   s.writeEndElement();
 
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
   return xmlText;
 }
 
 void QuteCheckBox::refreshWidget()
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
+#endif
 //  qDebug() << "QuteCheckBox::refreshWidget " << "--" << m_currentValue;
   m_widget->blockSignals(true);
   static_cast<QCheckBox *>(m_widget)->setChecked(m_currentValue != 0);
   m_widget->blockSignals(false);
 //  setProperty("QCS_pressedValue", m_value);
   setProperty("QCS_selected", m_currentValue != 0);
+  m_valueChanged = false;
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
 }
 
 void QuteCheckBox::applyInternalProperties()
@@ -149,10 +167,14 @@ void QuteCheckBox::applyInternalProperties()
 
 void QuteCheckBox::stateChanged(int state)
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
+#endif
   m_currentValue = (state != Qt::Unchecked ? property("QCS_pressedValue").toDouble() : 0);
-  QPair<QString, double> channelValue(property("QCS_objectName").toString(), m_currentValue);
+  QPair<QString, double> channelValue(m_channel, m_currentValue);
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
   emit newValue(channelValue);
 }
 

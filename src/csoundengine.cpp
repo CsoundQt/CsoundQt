@@ -129,7 +129,7 @@ void CsoundEngine::outputValueCallback (CSOUND *csound,
   // Called by the csound running engine when 'outvalue' opcode is used
   // To pass data from Csound to QuteCsound
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-  if (ud->cs->isRunning()) {
+//  if (ud->cs->isRunning()) {
     QString name = QString(channelName);
     ud->cs->perfMutex.lock();
     if (name.startsWith('$')) {
@@ -138,13 +138,13 @@ void CsoundEngine::outputValueCallback (CSOUND *csound,
       QString sValue = name;
       sValue = sValue.right(name.size() - (int) value);
       channelName.remove(0,1);
-      ud->cs->passOutString(channelName, sValue);
+//      ud->cs->passOutString(channelName, sValue);
     }
     else {
-      ud->cs->passOutValue(name, value);
+//      ud->cs->passOutValue(name, value);
     }
     ud->cs->perfMutex.unlock();
-  }
+//  }
 }
 
 void CsoundEngine::inputValueCallback(CSOUND *csound,
@@ -154,7 +154,7 @@ void CsoundEngine::inputValueCallback(CSOUND *csound,
   // Called by the csound running engine when 'invalue' opcode is used
   // To pass data from qutecsound to Csound
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-  if (ud->cs->isRunning()) {
+//  if (ud->cs->isRunning()) {
     QString name = QString(channelName);
     ud->cs->perfMutex.lock();
     if (name.startsWith('$')) { // channel is a string channel
@@ -162,23 +162,8 @@ void CsoundEngine::inputValueCallback(CSOUND *csound,
       // FIMXE: check string length
       QString newValue = ud->wl->getStringForChannel(name.mid(1));
       strcpy(string, newValue.toLocal8Bit());
-//      int index = ud->channelNames.indexOf(name.mid(1));
-//      if (index>=0) {
-//        strcpy(string, ud->stringValues[index].toStdString().c_str());
-//      }
-//      else {
-//        string[0] = '\0'; //empty c string
-//      }
     }
     else {  // Not a string channel
-      *value = (MYFLT) ud->wl->getValueForChannel(name);
-//      double newValue = ud->wl->getValueForChannel(name);
-//      int index = ud->channelNames.indexOf(name);
-//      if (index>=0)
-//        *value = (MYFLT) ud->values[index];
-//      else {
-//        *value = 0;
-//      }
       //FIXME check if mouse tracking is active, and move this from here
       if (name == "_MouseX") {
         *value = (MYFLT) ud->mouseValues[0];
@@ -198,9 +183,12 @@ void CsoundEngine::inputValueCallback(CSOUND *csound,
       else if(name == "_MouseBut2") {
         *value = (MYFLT) ud->mouseValues[5];
       }
+      else {
+        *value = (MYFLT) ud->wl->getValueForChannel(name);
+      }
     }
     ud->cs->perfMutex.unlock();
-  }
+//  }
 }
 
 void CsoundEngine::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *name)
@@ -852,7 +840,7 @@ void CsoundEngine::dispatchQueues()
   int counter = 0;
   ud->wl->getMouseValues(&ud->mouseValues);
   ud->wl->refreshWidgets();
-  //  ud->wl->processNewValues();  // Process values from widgets even if not running, not needed anymore?
+  ud->wl->processNewValues();  // Process values from widgets even if not running, not needed anymore?
   while ((m_consoleBufferSize <= 0 || counter++ < m_consoleBufferSize)) {
     messageMutex.lock();
     if (messageQueue.isEmpty()) {

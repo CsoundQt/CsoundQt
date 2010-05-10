@@ -34,6 +34,12 @@ QuteDummy::~QuteDummy()
 {
 }
 
+
+QString QuteDummy::getWidgetLine()
+{
+  return QString();
+}
+
 QString QuteDummy::getWidgetXmlText()
 {
   // Just an empty place holder

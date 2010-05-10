@@ -33,6 +33,7 @@ QuteWidget::QuteWidget(QWidget *parent):
   m_value = 0.0;
   m_value2 = 0.0;
   m_stringValue = "";
+  m_valueChanged = false;
 
   this->setMinimumSize(2,2);
   this->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
@@ -45,22 +46,10 @@ QuteWidget::~QuteWidget()
 {
 }
 
-void QuteWidget::setWidgetLine(QString line)
-{
-  m_line = line;
-}
-
-void QuteWidget::setChannelName(QString name)
-{
-  name.replace("\"", "'"); // Quotes are not allowed
-  if (name.startsWith('$')) {
-    name.remove(0,1);  // $ symbol is reserved for identifying string channels
-  }
-  if (name != "") {
-    m_widget->setObjectName(name);
-  }
-//   qDebug("QuteWidget::setChannelName %s", m_name.toStdString().c_str());
-}
+//void QuteWidget::setWidgetLine(QString line)
+//{
+//  m_line = line;
+//}
 
 void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 {
@@ -72,23 +61,38 @@ void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 
 void QuteWidget::setValue(double value)
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
+#endif
   m_value = value;
+  m_valueChanged = true;
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
 }
 
 void QuteWidget::setValue2(double value)
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
+#endif
   m_value2 = value;
+  m_valueChanged = true;
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
 }
 
 void QuteWidget::setValue(QString value)
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
+#endif
   m_stringValue = value;
+  m_valueChanged = true;
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
 }
 
 //void QuteWidget::setRange(int /*min*/, int /*max*/)
@@ -103,24 +107,24 @@ void QuteWidget::setValue(QString value)
 
 QString QuteWidget::getChannelName()
 {
-  widgetLock.lockForRead();
-  QString name = property("QCS_objectName").toString();
-  widgetLock.unlock();
+//  widgetLock.lockForRead();
+  QString name = m_channel;
+//  widgetLock.unlock();
   return name;
 }
 
 QString QuteWidget::getChannel2Name()
 {
-  widgetLock.lockForRead();
-  QString name = property("QCS_objectName2").toString();
-  widgetLock.unlock();
+//  widgetLock.lockForRead();
+  QString name = m_channel2;
+//  widgetLock.unlock();
   return name;
 }
 
-QString QuteWidget::getWidgetLine()
-{
-  return m_line;
-}
+//QString QuteWidget::getWidgetLine()
+//{
+//  return m_line;
+//}
 
 QString QuteWidget::getCabbageLine()
 {
@@ -135,7 +139,7 @@ void QuteWidget::createXmlWriter(QXmlStreamWriter &s)
 
   s.writeAttribute("version", "2");  // Only for compatibility with blue (absolute values)
 
-  s.writeTextElement("objectName", property("QCS_objectName").toString());
+  s.writeTextElement("objectName", m_channel);
   s.writeTextElement("x", QString::number(x()));
   s.writeTextElement("y", QString::number(y()));
   s.writeTextElement("width", QString::number(width()));
@@ -208,10 +212,12 @@ void QuteWidget::applyInternalProperties()
   width = property("QCS_width").toInt();
   height = property("QCS_height").toInt();
   setWidgetGeometry(x,y,width, height);
-  setChannelName(property("QCS_objectName").toString());
   m_value = property("QCS_value").toDouble();
   m_value2 = property("QCS_value2").toDouble();
+  m_channel = property("QCS_objectName").toString();
+  m_channel2 = property("QCS_objectName2").toString();
   m_stringValue = property("QCS_stringValue").toDouble();
+  m_valueChanged = true;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
@@ -327,30 +333,6 @@ void QuteWidget::deleteWidget()
   emit(deleteThisWidget(this));
 }
 
-//void QuteWidget::valueChanged(double value)
-//{
-//  widgetLock.lockForRead();
-//  m_value = value;
-//  QPair<QString, double> channelValue;
-//  channelValue = QPair<QString, double>(property("QCS_objectName").toString(), value);
-//  widgetLock.unlock();
-//  emit newValue(channelValue);
-//}
-//
-//void QuteWidget::value2Changed(double value)
-//{
-//#ifdef  USE_WIDGET_MUTEX
-//  widgetLock.lockForRead();
-//#endif
-//  m_value2 = value;
-//  QPair<QString, double> channelValue;
-//  channelValue = QPair<QString, double>(property("QCS_objectName2").toString(), value);
-//#ifdef  USE_WIDGET_MUTEX
-//  widgetLock.unlock();
-//#endif
-//  emit newValue(channelValue);
-//}
-
 void QuteWidget::createPropertiesDialog()
 {
   qDebug() << "QuteWidget::createPropertiesDialog()---Dynamic Properties:\n" << dynamicPropertyNames ();
@@ -431,6 +413,7 @@ void QuteWidget::applyProperties()
   emit(widgetChanged(this));
   emit propertiesAccepted();
   parentWidget()->setFocus(Qt::PopupFocusReason); // For some reason focus is grabbed away from the layout
+  m_valueChanged = true;
 }
 
 QList<QAction *> QuteWidget::getParentActionList()

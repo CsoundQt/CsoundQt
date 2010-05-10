@@ -27,7 +27,7 @@
 
 // TODO remove this offset?
 #ifdef Q_WS_MAC
-#define QCS_FONT_OFFSET 3
+#define QCS_FONT_OFFSET 2
 #else
 #define QCS_FONT_OFFSET 0
 #endif

@@ -48,7 +48,7 @@ QString QuteComboBox::getWidgetLine()
   line += QString::number(((QComboBox *)m_widget)->currentIndex()) + " ";
   line += "303 ";
   line += "\"" + itemList() + "\" ";
-  line += property("QCS_objectName").toString();
+  line += m_channel;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
@@ -58,10 +58,10 @@ QString QuteComboBox::getWidgetLine()
 QString QuteComboBox::getCabbageLine()
 {
 //   combobox channel("chanName"),  pos(Top, Left), size(Width, Height), value(val), items("item1", "item2", ...)
-  QString line = "combobox channel(\"" + property("QCS_objectName").toString() + "\"),  ";
+  QString line = "combobox channel(\"" + m_channel + "\"),  ";
   line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
   line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
-  line += "value(" + QString::number(((QComboBox *)m_widget)->currentIndex()) + "), ";
+  line += "value(" + QString::number(m_value) + "), ";
   line += "items(\"" + itemList() + "\")";
   return line;
 }
@@ -112,14 +112,18 @@ QString QuteComboBox::itemList()
 
 void QuteComboBox::setText(QString text)
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
+#endif
   clearItems();
   QStringList items = text.split(",");
   int counter = 0;
   foreach (QString item, items) {
     addItem(item, counter++, "");
   }
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
 }
 
 void QuteComboBox::clearItems()
@@ -139,11 +143,17 @@ void QuteComboBox::addItem(QString text, double value, QString stringvalue)
 
 void QuteComboBox::refreshWidget()
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
-  m_widget->blockSignals(true);
-  static_cast<QComboBox *>(m_widget)->setCurrentIndex((int) m_value);
-  m_widget->blockSignals(false);
+#endif
+  int val = (int) m_value;
+  m_valueChanged = false;
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
+  m_widget->blockSignals(true);
+  static_cast<QComboBox *>(m_widget)->setCurrentIndex(val);
+  m_widget->blockSignals(false);
 }
 
 void QuteComboBox::applyInternalProperties()
@@ -166,15 +176,21 @@ void QuteComboBox::createPropertiesDialog()
   layout->addWidget(text, 5,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
   text->setMinimumWidth(320);
 
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
+#endif
   text->setText(itemList());
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
 }
 
 void QuteComboBox::applyProperties()
 {
   setText(text->text()); // This line can't be locked, as itlocks itself internally
 
+//#ifdef  USE_WIDGET_MUTEX
+//#endif
 //  widgetLock.lockForWrite();
 //  widgetLock.unlock();
 //  setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
@@ -186,10 +202,15 @@ void QuteComboBox::indexChanged(int value)
 {
 //  qDebug() << "QuteComboBox::indexChanged" << value;
 
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
+#endif
   m_value = value;
-  QPair<QString, double> channelValue(property("QCS_objectName").toString(), m_value);
+  m_valueChanged = true;
+  QPair<QString, double> channelValue(m_channel, m_value);
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
 
   emit newValue(channelValue);
 }

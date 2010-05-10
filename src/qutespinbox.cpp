@@ -71,7 +71,7 @@ QString QuteSpinBox::getWidgetLine()
   line += "{"+ QString::number(property("QCS_width").toInt()) +", "+ QString::number(property("QCS_height").toInt()) +"} ";
   line += m_type + " ";
   line += QString::number(static_cast<QDoubleSpinBox*>(m_widget)->value(), 'f', 6) + " ";
-  line += QString::number(property("QCS_resolution").toDouble(), 'f', 6) + " \"" + m_widget->property("QCS_objectName").toString() + "\" ";
+  line += QString::number(property("QCS_resolution").toDouble(), 'f', 6) + " \"" + m_channel + "\" ";
   line += property("QCS_alignment").toString() + " ";
   line += "\"" + m_widget->property("QCS_font").toString() + "\" "
           + QString::number(m_widget->property("QCS_fontsize").toInt()) + " ";
@@ -100,8 +100,7 @@ QString QuteSpinBox::getCsladspaLine()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
-  QString line = "ControlPort=" + m_widget->property("QCS_objectName").toString()
-                 + "|" + m_widget->property("QCS_objectName").toString() + "\n";
+  QString line = "ControlPort=" + m_channel + "|" + m_channel + "\n";
   line += "Range=-9999|9999";
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
@@ -163,11 +162,17 @@ QString QuteSpinBox::getWidgetType()
 
 void QuteSpinBox::refreshWidget()
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
-  m_widget->blockSignals(true);
-  static_cast<QDoubleSpinBox*>(m_widget)->setValue(m_value);
-  m_widget->blockSignals(false);
+#endif
+  double val = m_value;
+  m_valueChanged = false;
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
+  m_widget->blockSignals(true);
+  static_cast<QDoubleSpinBox*>(m_widget)->setValue(val);
+  m_widget->blockSignals(false);
 }
 
 void QuteSpinBox::applyInternalProperties()
@@ -301,10 +306,15 @@ void QuteSpinBox::applyProperties()
 
 void QuteSpinBox::valueChanged(double value)
 {
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
+#endif
   m_value = value;
   m_stringValue = QString::number(value);
-  QPair<QString, double> channelValue(property("QCS_objectName").toString(), m_value);
+  m_valueChanged = true;
+  QPair<QString, double> channelValue(m_channel, m_value);
+#ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
+#endif
   emit newValue(channelValue);
 }

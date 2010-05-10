@@ -40,7 +40,7 @@ class QuteMeter : public QuteWidget
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();
 
-    void setChannel2Name(QString name);
+//    void setChannel2Name(QString name);
 //    void setColor(QColor color);
 //    void setType(QString type);
 //    void setPointSize(int size);
