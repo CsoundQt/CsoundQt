@@ -212,15 +212,15 @@ void QuteGraph::applyProperties()
 
 void QuteGraph::changeCurve(int index)
 {
-  if (index < 0  || index >= curves.size()
-    || curves.size() <= 0 || curves[index]->get_caption().isEmpty()) {
-    return;
-  }
 //  qDebug() << "QuteGraph::changeCurve" << index;
   if (index == -1) // goto last curve
     index = static_cast<StackedLayoutWidget *>(m_widget)->count() - 1;
   if (index == -2)  // update curve but don't change which
     index = static_cast<StackedLayoutWidget *>(m_widget)->currentIndex();
+  if (index < 0  || index >= curves.size()
+    || curves.size() <= 0 || curves[index]->get_caption().isEmpty()) {
+    return;
+  }
   StackedLayoutWidget *stacked =  static_cast<StackedLayoutWidget *>(m_widget);
   if (stacked->currentIndex() == index) { // No need to refresh
     return;
@@ -322,12 +322,14 @@ void QuteGraph::addCurve(Curve * curve)
   view->show();
   view->setResizeAnchor (QGraphicsView::NoAnchor);
   view->setFocusPolicy(Qt::NoFocus);
+  m_pageComboBox->blockSignals(true);
   m_pageComboBox->addItem(curve->get_caption());
+  m_pageComboBox->blockSignals(false);
   static_cast<StackedLayoutWidget *>(m_widget)->addWidget(view);
   curves.append(curve);
-  if (curves.size() - 1 == m_value) {
-    setValue(m_value);
-  }
+//  if (m_value == curves.size() - 1) { // If new curve created corresponds to current stored value
+//    changeCurve(m_value);
+//  }
 //   qDebug("QuteGraph::addCurve() %i- %i", curves.size(), curve);
 }
 
@@ -393,6 +395,7 @@ void QuteGraph::setCurveData(Curve * curve)
   view->horizontalScrollBar()->setValue(viewPosx);
   view->verticalScrollBar()->setValue(viewPosy);
 
+//  changeCurve(-2);
 }
 
 void QuteGraph::setUd(CsoundUserData *ud)

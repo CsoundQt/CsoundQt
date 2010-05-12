@@ -125,11 +125,11 @@ int CsoundOptions::generateCmdLine(char **argv)
 //    fprintf(stdout, "%i - %s.....", index, flag.toStdString().c_str()) ;
   }
   argv[index] = (char *) calloc(fileName1.size()+1, sizeof(char));
-  strcpy(argv[index++],fileName1.toStdString().c_str());
+  strcpy(argv[index++],fileName1.toLocal8Bit());
 //  fprintf(stdout, "%i - %s.....", index, fileName1.toStdString().c_str()) ;
   if (fileName2 != "") {
     argv[index] = (char *) calloc(fileName2.size()+1, sizeof(char));
-    strcpy(argv[index++],fileName2.toStdString().c_str());
+    strcpy(argv[index++],fileName2.toLocal8Bit());
 //    fprintf(stdout, "%i - %s.....", index, fileName2.toStdString().c_str()) ;
   }
 //  fprintf(stdout, "\nCsoundOptions::generateCmdLine  index %i\n", index);

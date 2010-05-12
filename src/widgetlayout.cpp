@@ -962,8 +962,6 @@ void WidgetLayout::newCurve(Curve* curve)
 {
   for (int i = 0; i < graphWidgets.size(); i++) {
     graphWidgets[i]->addCurve(curve);
-//    qApp->processEvents(); // FIXME Kludge to allow correct resizing of graph view
-    graphWidgets[i]->changeCurve(-1);
   }
   curves.append(curve);
 }
