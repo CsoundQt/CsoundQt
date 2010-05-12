@@ -879,7 +879,7 @@ QString QuteScrollNumber::getWidgetType()
 
 void QuteScrollNumber::refreshWidget()
 {
-  qDebug() << "QuteScrollNumber::refreshWidget " << m_stringValue;
+//  qDebug() << "QuteScrollNumber::refreshWidget " << m_stringValue;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
@@ -991,7 +991,7 @@ void QuteScrollNumber::addValue(double delta)
 
 void QuteScrollNumber::setValue(double value)
 {
-  qDebug() << "QuteScrollNumber::setValue " << value;
+//  qDebug() << "QuteScrollNumber::setValue " << value;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
 #endif

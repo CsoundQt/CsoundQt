@@ -618,6 +618,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
   else if (type == "BSBGraph") {
     QuteGraph *w = new QuteGraph(this);
     widget = static_cast<QuteWidget *>(w);
+    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
     graphWidgets.append(w);
     emit registerGraph(w);
   }
@@ -855,7 +856,7 @@ void WidgetLayout::flush()
 
 void WidgetLayout::engineStopped()
 {
-  curveUpdateBuffer.clear();
+//  curveUpdateBuffer.clear();
 }
 
 void WidgetLayout::showWidgetTooltips(bool show)
@@ -1028,8 +1029,17 @@ void WidgetLayout::clearGraphs()
   for (int i = 0; i < graphWidgets.size(); i++) {
     graphWidgets[i]->clearCurves();
   }
+  for (int i = 0; i < curves.size(); i++) {
+    delete curves[i];
+  }
   curves.clear();
+  for (int i = 0; i < curveUpdateBuffer.size(); i++) {
+    free(curveUpdateBuffer[i]);
+  }
   curveUpdateBuffer.clear();
+  for (int i = 0; i < newCurveBuffer.size(); i++) {
+    delete newCurveBuffer[i];
+  }
   newCurveBuffer.clear();
 }
 

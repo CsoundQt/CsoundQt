@@ -154,6 +154,7 @@ class qutecsound:public QMainWindow
 //     void widgetDockLocationChanged(Qt::DockWidgetArea area);
     void showLineNumber(int lineNumber);
     void updateInspector();
+    void markInspectorUpdate(); // Notification that inspector needs update
     void setDefaultKeyboardShortcuts();
 
   private:
@@ -290,6 +291,8 @@ class qutecsound:public QMainWindow
     QStringList m_deviceMessages; //stores messages from csound for device discovery
     bool m_startingUp; // set while starting up
     bool m_resetPrefs; // Flag to reset preferences to default when closing
+    bool m_inspectorNeedsUpdate;
+    bool m_closing; // QuteCsound is closing (to inform timer threads)
 
     UtilitiesDialog *utilitiesDialog;
 

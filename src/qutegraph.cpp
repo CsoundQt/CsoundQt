@@ -54,19 +54,14 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
   setProperty("QCS_zoomy", 1.0);
   setProperty("QCS_dispx", 1.0);
   setProperty("QCS_dispy", 1.0);
-  setProperty("QCS_modex", "lin");
-  setProperty("QCS_modey", "lin");
+  setProperty("QCS_modex", "auto");
+  setProperty("QCS_modey", "auto");
   setProperty("QCS_all", true);
 }
 
 QuteGraph::~QuteGraph()
 {
 }
-
-//void QuteGraph::setValue(double value)
-//{
-//  QuteWidget::setValue(value);
-//}
 
 QString QuteGraph::getWidgetLine()
 {
@@ -221,7 +216,7 @@ void QuteGraph::changeCurve(int index)
     || curves.size() <= 0 || curves[index]->get_caption().isEmpty()) {
     return;
   }
-  qDebug() << "QuteGraph::changeCurve" << index;
+//  qDebug() << "QuteGraph::changeCurve" << index;
   if (index == -1) // goto last curve
     index = static_cast<StackedLayoutWidget *>(m_widget)->count() - 1;
   if (index == -2)  // update curve but don't change which
@@ -236,24 +231,26 @@ void QuteGraph::changeCurve(int index)
 
   double max = - curves[index]->get_min();
   double min = - curves[index]->get_max();
+  double zoomx = property("QCS_zoomx").toDouble();
+  double zoomy = property("QCS_zoomy").toDouble();
 //  double span = max - min;
 //  FIXME implement dispx, dispy and modex, modey
   int size = curves[index]->get_size();
   view->setResizeAnchor(QGraphicsView::NoAnchor);
   if (curves[index]->get_caption().contains("ftable")) {
-    view->setSceneRect (0, min - ((max - min)*0.17),(double) size/property("QCS_zoomx").toDouble(), (max - min)*1.17/property("QCS_zoomy").toDouble());
-    view->fitInView(0, min - ((max - min)*0.17) , (double) size/property("QCS_zoomx").toDouble(), (max - min)*1.17/property("QCS_zoomy").toDouble());
+    view->setSceneRect (0, min - ((max - min)*0.17),(double) size/zoomx, (max - min)*1.17/zoomy);
+    view->fitInView(0, min - ((max - min)*0.17) , (double) size/zoomx, (max - min)*1.17/zoomy);
   }
   else {
     if (curves[index]->get_caption().contains("fft")) {
       view->setSceneRect (0, 0, size, 90.);
   //     view->fitInView(0, -30./m_zoom , (double) size/m_zoom, 100./m_zoom);
-      view->fitInView(0, -30. , (double) size/property("QCS_zoomx").toDouble(), 100./property("QCS_zoomy").toDouble());
+      view->fitInView(0, -30. , (double) size/zoomx, 100./zoomy);
     }
     else { //from display opcode
       view->setSceneRect (0, -1, size, 2);
   //     view->fitInView(0, -30./m_zoom , (double) size/m_zoom, 100./m_zoom);
-      view->fitInView(0, -1 , (double) size/property("QCS_zoomx").toDouble(), 100./property("QCS_zoomy").toDouble());
+      view->fitInView(0, -100./zoomy, (double) size/zoomx, 100./zoomy);
     }
   }
   QString text = QString::number(size) + " pts Max=";
@@ -263,7 +260,16 @@ void QuteGraph::changeCurve(int index)
 
 void QuteGraph::indexChanged(int index)
 {
-  QuteWidget::setValue(index); // Don't update the combobox index, by not calling the function in this class
+  setValue(index);
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.lockForRead();
+#endif
+//  qDebug() << "QuteGraph::indexChanged " << m_channel << m_value;
+  QPair<QString, double> channelValue(m_channel, m_value);
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.unlock();
+#endif
+  emit newValue(channelValue);
 }
 
 void QuteGraph::clearCurves()
@@ -347,6 +353,8 @@ void QuteGraph::setCurveData(Curve * curve)
   curves[index] = curve;
   StackedLayoutWidget *widget_ = static_cast<StackedLayoutWidget *>(m_widget);
   QGraphicsView *view = static_cast<QGraphicsView *>(widget_->widget(index));
+  QString modex = property("QCS_modex").toString();
+  QString modey = property("QCS_modey").toString();
   // Refitting curves in view resets the scrollbar so we need the previous value
   int viewPosx = view->horizontalScrollBar()->value();
   int viewPosy = view->verticalScrollBar()->value();
@@ -355,7 +363,7 @@ void QuteGraph::setCurveData(Curve * curve)
   }
   else {  // in case its not an ftable
     QPolygonF polygon;
-    if (curve->get_caption().contains("fft")) {
+    if (curve->get_caption().contains("fft")) { // from dispfft opcode
       polygon.append(QPointF(0,110));
     }
     else { //from display opcode
@@ -384,6 +392,7 @@ void QuteGraph::setCurveData(Curve * curve)
     changeCurve(-2); //update curve
   view->horizontalScrollBar()->setValue(viewPosx);
   view->verticalScrollBar()->setValue(viewPosy);
+
 }
 
 void QuteGraph::setUd(CsoundUserData *ud)

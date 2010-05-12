@@ -103,7 +103,7 @@ class WidgetLayout : public QWidget
     uintptr_t getCurveById(uintptr_t id);
     void updateCurve(WINDAT *windat);
     int killCurves(CSOUND *csound);
-    void clearGraphs();
+    void clearGraphs(); // This also frees the memory allocated by curves.
 
     void refreshConsoles();
     void refreshWidgets();

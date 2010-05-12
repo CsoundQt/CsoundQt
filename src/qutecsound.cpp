@@ -171,6 +171,9 @@ qutecsound::qutecsound(QStringList fileNames)
   else {
     changePage(documentTabs->currentIndex());
   }
+
+  m_closing = false;
+  updateInspector(); //Starts update inspector thread
 }
 
 qutecsound::~qutecsound()
@@ -246,6 +249,7 @@ void qutecsound::changePage(int index)
     recAct->setChecked(documentPages[curPage]->isRecording());
 
   }
+  m_inspectorNeedsUpdate = true;
 }
 
 void qutecsound::setWidgetTooltipsVisible(bool visible)
@@ -300,6 +304,8 @@ void qutecsound::closeEvent(QCloseEvent *event)
   delete helpPanel;
 //  delete closeTabButton;
   delete m_options;
+
+  m_closing = true;
   widgetPanel->close();
   m_inspector->close();
   m_console->close();
@@ -1587,12 +1593,21 @@ void qutecsound::showLineNumber(int lineNumber)
 
 void qutecsound::updateInspector()
 {
+  if (!m_inspectorNeedsUpdate || m_closing) {
+    return;
+  }
   if (!documentPages[curPage]->getFileName().endsWith("py")) {
     m_inspector->parseText(documentPages[curPage]->getBasicText());
   }
   else {
     m_inspector->parsePythonText(documentPages[curPage]->getBasicText());
   }
+  QTimer::singleShot(2000, this, SLOT(updateInspector()));
+}
+
+void qutecsound::markInspectorUpdate()
+{
+  m_inspectorNeedsUpdate = true;
 }
 
 void qutecsound::setDefaultKeyboardShortcuts()
@@ -2870,7 +2885,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   setCurrentOptionsForPage(documentPages[curPage]);
 
   connectActions();
-  connect(documentPages[curPage], SIGNAL(currentTextUpdated()), this, SLOT(updateInspector()));
+  connect(documentPages[curPage], SIGNAL(currentTextUpdated()), this, SLOT(markInspectorUpdate()));
   connect(documentPages[curPage], SIGNAL(modified()), this, SLOT(documentWasModified()));
   connect(documentPages[curPage], SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
   connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),

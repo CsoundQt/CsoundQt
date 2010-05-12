@@ -36,7 +36,6 @@ class QuteGraph : public QuteWidget
 
     ~QuteGraph();
 
-//    virtual void setValue(double value); // if value is >=0 it is the index, otherwise it is the table number
     virtual QString getWidgetLine();
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();

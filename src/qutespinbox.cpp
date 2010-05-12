@@ -165,7 +165,8 @@ void QuteSpinBox::refreshWidget()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
-  double val = m_value;
+  double resolution = property("QCS_resolution").toDouble();
+  double val = resolution * (int) ((m_value)/resolution);
   m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
