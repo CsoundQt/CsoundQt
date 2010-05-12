@@ -138,10 +138,10 @@ void CsoundEngine::outputValueCallback (CSOUND *csound,
       QString sValue = name;
       sValue = sValue.right(name.size() - (int) value);
       channelName.remove(0,1);
-//      ud->cs->passOutString(channelName, sValue);
+      ud->cs->passOutString(channelName, sValue);
     }
     else {
-//      ud->cs->passOutValue(name, value);
+      ud->cs->passOutValue(name, value);
     }
     ud->cs->perfMutex.unlock();
 //  }
