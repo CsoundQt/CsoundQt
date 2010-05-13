@@ -37,9 +37,9 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
   canFocus(false);
 //   static_cast<MeterWidget *>(m_widget)->setRenderHints(QPainter::Antialiasing);
 //  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
-  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValues(double, double)), this, SLOT(setValuesFromWidget(double,double)));
-//  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(valueChanged(double)), this, SLOT(valueChanged(double)));
-//  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(value2Changed(double)), this, SLOT(value2Changed(double)));
+//  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValues(double, double)), this, SLOT(setValuesFromWidget(double,double)));
+  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValue1(double)), this, SLOT(valueChanged(double)));
+  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValue2(double)), this, SLOT(value2Changed(double)));
 
   setProperty("QCS_xMin", 0.0);
   setProperty("QCS_xMax", 1.0);
@@ -269,7 +269,8 @@ void QuteMeter::createPropertiesDialog()
   m_yMaxBox->setRange(-999999999.0, 999999999.0);
   m_yMaxBox->setValue(property("QCS_yMax").toDouble());
   layout->addWidget(m_yMaxBox, 10,3, Qt::AlignLeft|Qt::AlignVCenter);
-
+  setProperty("QCS_xValue", m_value);
+  setProperty("QCS_yValue", m_value2);
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
@@ -288,8 +289,7 @@ void QuteMeter::refreshWidget()
   widgetLock.unlock();
 #endif
   m_widget->blockSignals(true);
-  static_cast<MeterWidget *>(m_widget)->setValue(val1);
-  static_cast<MeterWidget *>(m_widget)->setValue2(val2);
+  static_cast<MeterWidget *>(m_widget)->setValues(val1, val2);
   m_widget->blockSignals(false);
 }
 
@@ -337,6 +337,10 @@ void QuteMeter::applyInternalProperties()
                                                    property("QCS_yMax").toDouble());
   m_value = property("QCS_xValue").toDouble();
   m_value2 = property("QCS_yValue").toDouble();
+//  if (m_value2 == m_value) {
+//    qDebug() << "Warning! Controller Widget can't have the same name for both channels!";
+//    m_value2 = "";
+//  }
   setValue(m_value);
   setValue2(m_value2);
 }
@@ -355,26 +359,40 @@ void QuteMeter::selectTextColor()
   }
 }
 
-void QuteMeter::setValuesFromWidget(double value1, double value2)
+void QuteMeter::valueChanged(double value1)
 {
 //  QString type = property("QCS_type").toString();
-//  qDebug() << "QuteMeter::setValuesFromWidget " << value1 << "--" << value2;
+//  qDebug() << "QuteMeter::valueChanged " << value1;
 
-  setValue(value1);
-  setValue2(value2);
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
+  m_value = value1;
   QPair<QString, double> channelValue;
   channelValue = QPair<QString, double>(m_channel, m_value);
-  QPair<QString, double> channel2Value;
-  channel2Value = QPair<QString, double>(m_channel2, m_value2);
   m_valueChanged = true;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
   emit newValue(channelValue);
-  emit newValue(channel2Value);
+}
+
+void QuteMeter::value2Changed(double value2)
+{
+//  QString type = property("QCS_type").toString();
+//  qDebug() << "QuteMeter::value2Changed "<< value2;
+
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.lockForRead();
+#endif
+  m_value2 = value2;
+  QPair<QString, double> channelValue;
+  channelValue = QPair<QString, double>(m_channel2, m_value2);
+  m_valueChanged = true;
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.unlock();
+#endif
+  emit newValue(channelValue);
 }
 
 /* Meter Widget ----------------------------------------*/
@@ -420,6 +438,7 @@ void MeterWidget::setValue(double value)
   if (m_value == value) {
     return;
   }
+  mutex.lock();
   m_value = value;
 
   double portionx = (m_value -  m_xmin) / (m_xmax - m_xmin);
@@ -437,6 +456,7 @@ void MeterWidget::setValue(double value)
     m_vline->setLine(portionx*width(), 0 ,portionx*width(), height());
     m_point->setRect(portionx*width()- (m_pointSize/2.0), (1-portiony)*height()- (m_pointSize/2.0), m_pointSize, m_pointSize);
   }
+  mutex.unlock();
 //  emit valueChanged(m_value);
 }
 
@@ -452,6 +472,7 @@ void MeterWidget::setValue2(double value)
   if (m_value2 == value) {
     return;
   }
+  mutex.lock();
   m_value2 = value;
   double portionx = (m_value -  m_xmin) / (m_xmax - m_xmin);
   double portiony = (m_value2 -  m_ymin) / (m_ymax - m_ymin);
@@ -469,7 +490,44 @@ void MeterWidget::setValue2(double value)
     m_hline->setLine(0, (1-portiony)*height(), width(), (1-portiony)*height());
     m_point->setRect(portionx*width()- (m_pointSize/2.0), (1-portiony)*height()- (m_pointSize/2.0), m_pointSize, m_pointSize);
   }
+  mutex.unlock();
 //  emit value2Changed(m_value2);
+}
+
+void MeterWidget::setValues(double value1, double value2)
+{
+  mutex.unlock();
+  if (m_value2 == value1 && m_value == value2) {
+    return;
+  }
+  mutex.lock();
+  m_value = value1;
+  m_value2 = value2;
+  double portionx = (m_value -  m_xmin) / (m_xmax - m_xmin);
+  double portiony = (m_value2 -  m_ymin) / (m_ymax - m_ymin);
+  if (m_type == "fill") {
+    if (!m_vertical) {
+      m_block->setRect(0, 0, portionx*width(), height());
+    }
+    else {
+      m_block->setRect(0, (1-portiony)*height(), width(), height());
+    }
+  }
+  else if (m_type == "line") {
+    if (!m_vertical) {
+      m_vline->setLine(portionx*width(), 0 ,portionx*width(), height());
+    }
+    else {
+      m_hline->setLine(0, (1-portiony)*height(), width(), (1-portiony)*height());
+    }
+  }
+  else {
+    m_vline->setLine(portionx*width(), 0 ,portionx*width(), height());
+    m_hline->setLine(0, (1-portiony)*height(), width(), (1-portiony)*height());
+    m_point->setRect(portionx*width()- (m_pointSize/2.0), (1-portiony)*height()- (m_pointSize/2.0), m_pointSize, m_pointSize);
+  }
+  mutex.unlock();
+
 }
 
 void MeterWidget::setType(QString type)
@@ -574,7 +632,18 @@ void MeterWidget::mouseMoveEvent(QMouseEvent* event)
     else if (newvert < m_ymin) {
       newvert = m_ymin;
     }
-    emit newValues(newhor, newvert);
+    if ( m_type == "line" || m_type == "llif" || m_type == "fill" ) {
+      if (m_vertical) {
+        emit newValue2(newvert);
+      }
+      else {
+        emit newValue1(newhor);
+      }
+    }
+    else if (m_type == "crosshair" || m_type == "point") {
+      emit newValue1(newhor);
+      emit newValue2(newvert);
+    }
 //    emit valueChanged(newvert);
 //    emit value2Changed(newhor);
   }
@@ -587,7 +656,18 @@ void MeterWidget::mousePressEvent(QMouseEvent* event)
 //         event->y() > 0 and event->y()< height())
     double newhor =  m_xmin + ((m_xmax - m_xmin ) * (double)event->x()/ width());
     double newvert = m_ymin + ((m_ymax - m_ymin ) * (1 - ((double)event->y()/ height())));
-    emit newValues(newhor, newvert);
+    if ( (m_type == "line" || m_type == "llif" || m_type == "fill" )
+      &&  m_vertical
+          &&  newvert != m_value2 ) {
+      emit newValue2(newvert);
+    }
+    else if ( (m_type == "crosshair" || m_type == "point" )
+      &&  newvert != m_value2 ) {
+      emit newValue2(newvert);
+    }
+    else if (newhor != m_value) {
+      emit newValue1(newhor);
+    }
 //    emit valueChanged(newvert);
 //    emit value2Changed(newhor);
   }

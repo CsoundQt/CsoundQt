@@ -75,6 +75,7 @@ void LiveEventControl::appendPanel(bool visible, bool play, bool loop, int sync,
   QTableWidgetItem *visibleItem = getItem(newRow, 0);
   visibleItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
   QTableWidgetItem *playItem = getItem(newRow, 1);
+  playItem->setIcon(QIcon(":/images/gtk-media-play-ltr.png"));
 //  playItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
   QTableWidgetItem *loopItem = getItem(newRow, 2);
   loopItem->setCheckState(Qt::Unchecked);

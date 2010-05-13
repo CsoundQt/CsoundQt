@@ -70,7 +70,9 @@ class QuteMeter : public QuteWidget
 
   private slots:
     void selectTextColor();
-    void setValuesFromWidget(double value1, double value2);
+    void valueChanged(double value1);
+    void value2Changed(double value2);
+//    void setValuesFromWidget(double value1, double value2);
 };
 
 class MeterWidget : public QGraphicsView
@@ -82,6 +84,7 @@ class MeterWidget : public QGraphicsView
 
     void setValue(double value);
     void setValue2(double value2);
+    void setValues(double value1, double value2);
     void setType(QString type);
     void setRanges(double minx,double  maxx,double  miny,double  maxy);
     void setPointSize(int size);
@@ -112,8 +115,11 @@ class MeterWidget : public QGraphicsView
     QGraphicsLineItem* m_vline;
     QGraphicsLineItem* m_hline;
 
+    QMutex mutex;
+
   signals:
-    void newValues(double value1, double value2);
+    void newValue1(double value1);
+    void newValue2(double value2);
 //    void valueChanged(double value);
 //    void value2Changed(double value);
 };

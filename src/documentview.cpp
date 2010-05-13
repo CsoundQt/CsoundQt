@@ -389,7 +389,7 @@ void DocumentView::textChanged()
         if (commentIndex < curIndex)
           return;
       }
-      if (line.contains("opcode") || line.contains("instr")  || line.contains("=")) { // Don't pop menu in these cases.
+      if (line.contains("opcode") || line.contains("instr")  || line.contains("=") || line.contains("\"")) { // Don't pop menu in these cases.
         return;
       }
       if (line.indexOf(QRegExp("^\\s*\\w+\\s+\\w")) >= 0 || line.indexOf(QRegExp("\\s+\\w+\\s+\\w")) >= 0) {

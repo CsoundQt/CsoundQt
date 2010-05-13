@@ -84,6 +84,8 @@ class EventSheet : public QTableWidget
     void insertRowHere();
     void appendColumn();
     void appendRow();
+    void appendColumns();
+    void appendRows();
     void deleteColumn();
     void deleteRows();
 
@@ -140,6 +142,8 @@ class EventSheet : public QTableWidget
     QAction *insertRowHereAct;
     QAction *appendColumnAct;
     QAction *appendRowAct;
+    QAction *appendColumnsAct;
+    QAction *appendRowsAct;
     QAction *deleteColumnAct;
     QAction *deleteRowAct;
 

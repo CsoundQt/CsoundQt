@@ -287,8 +287,8 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
     QList<QPair<QString, QString> > fields = parseLine(line);
     int nColumns = numColumns == 0 ? fields.size() : numColumns;
     nColumns = (numColumns == -1 && nColumns <  this->columnCount()) ?  this->columnCount() : nColumns;
-    if (this->columnCount() < nColumns + columnOffset) {
-      this->setColumnCount(nColumns + columnOffset);
+    while (this->columnCount() < nColumns + columnOffset) {
+      appendColumn();
     }
     for (int j = 0; j < nColumns; j++) {
       if (nColumns != 0 && j >= nColumns) {  // Only paste up to a certain number of columns if not 0
@@ -957,7 +957,31 @@ void EventSheet::appendRow()
 {
 //  qDebug() << "EventSheet::appendRow()";
   this->insertRow(this->rowCount());
+}
 
+void EventSheet::appendColumns()
+{
+  OneValueDialog d(this, tr("Add columns:"));
+  d.box->setDecimals(0);
+  d.exec();
+  if (d.result() == QDialog::Accepted) {
+    for (int i = 0; i < d.value() && i < 256; i++) {
+      appendColumn();
+    }
+  }
+}
+
+
+void EventSheet::appendRows()
+{
+  OneValueDialog d(this, tr("Add Rows:"));
+  d.box->setDecimals(0);
+  d.exec();
+  if (d.result() == QDialog::Accepted) {
+    for (int i = 0; i < d.value() && i < 256; i++) {
+      appendRow();
+    }
+  }
 }
 
 void EventSheet::deleteColumn()
@@ -1033,6 +1057,8 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
 //  menu.addAction(insertRowHereAct);
   menu.addAction(appendColumnAct);
   menu.addAction(appendRowAct);
+  menu.addAction(appendColumnsAct);
+  menu.addAction(appendRowsAct);
   menu.addAction(deleteColumnAct);
   menu.addAction(deleteRowAct);
   menu.exec(event->globalPos());
@@ -1364,11 +1390,10 @@ void EventSheet::createActions()
   insertColumnHereAct->setIconText(tr("Insert Column"));
   connect(insertColumnHereAct, SIGNAL(triggered()), this, SLOT(insertColumnHere()));
 
-  insertRowHereAct = new QAction(/*QIcon(":/a.png"),*/ tr("&Insert Row"), this);
+  insertRowHereAct = new QAction(/*QIcon(":/a.png"),*/ tr("Insert Row"), this);
   insertRowHereAct->setStatusTip(tr("Insert a row at the current position"));
   insertRowHereAct->setIconText(tr("Insert Row"));
   connect(insertRowHereAct, SIGNAL(triggered()), this, SLOT(insertRowHere()));
-
 
   appendColumnAct = new QAction(/*QIcon(":/a.png"),*/ tr("Append Column"), this);
   appendColumnAct->setStatusTip(tr("Append a column to the sheet"));
@@ -1379,6 +1404,16 @@ void EventSheet::createActions()
   appendRowAct->setStatusTip(tr("Append a row to the sheet"));
   appendRowAct->setIconText(tr("Append Row"));
   connect(appendRowAct, SIGNAL(triggered()), this, SLOT(appendRow()));
+
+  appendColumnsAct = new QAction(/*QIcon(":/a.png"),*/ tr("Append Columns..."), this);
+  appendColumnsAct->setStatusTip(tr("Append columns to the sheet"));
+  appendColumnsAct->setIconText(tr("Append Columns..."));
+  connect(appendColumnsAct, SIGNAL(triggered()), this, SLOT(appendColumns()));
+
+  appendRowsAct = new QAction(/*QIcon(":/a.png"),*/ tr("Append Rows..."), this);
+  appendRowsAct->setStatusTip(tr("Append rows to the sheet"));
+  appendRowsAct->setIconText(tr("Append Rows..."));
+  connect(appendRowsAct, SIGNAL(triggered()), this, SLOT(appendRows()));
 
   deleteColumnAct = new QAction(/*QIcon(":/a.png"),*/ tr("Delete Last Column"), this);
   deleteColumnAct->setStatusTip(tr("Delete Last Column"));

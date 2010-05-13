@@ -286,8 +286,14 @@ void CsoundEngine::csThread(void *data)
 //                       &udata->values,
 //                       &udata->stringValues);
   if (!udata->useInvalue) {
-    writeWidgetValues(udata);
-    readWidgetValues(udata);
+//    CsoundChannelListEntry **channelList;
+//    int numChannels = csoundListChannels(udata->csound, channelList);
+//    csoundDeleteChannelList(udata->csound, *channelList);
+//    for (int j = 0; j < numChannels; j++) {
+//      qDebug() << (char*) channelList[j] << "--";
+//    }
+//    writeWidgetValues(udata);
+//    readWidgetValues(udata);
   }
   udata->cs->processEventQueue();  // FIXME: This function locks a mutex, not ideal here
   (udata->ksmpscount)++;
@@ -449,6 +455,7 @@ QList<QPair<int, QString> > CsoundEngine::getErrorLines()
 
 void CsoundEngine::setConsoleBufferSize(int size)
 {
+  qDebug() << "CsoundEngine::setConsoleBufferSize " << size;
   m_consoleBufferSize = size;
 }
 
@@ -742,19 +749,7 @@ int CsoundEngine::runCsound()
   //TODO is something here necessary to work with doubles?
   //     PUBLIC int csoundGetSampleFormat(CSOUND *);
   //     PUBLIC int csoundGetSampleSize(CSOUND *);
-//  unsigned int numWidgets = ud->wl->widgetCount();  // FIXME still needed here?
-//  ud->channelNames.resize(numWidgets*2);
-//  ud->values.resize(numWidgets*2);
-//  ud->stringValues.resize(numWidgets*2);
   if (ud->threaded) {
-    // First update values from widgets  not necessary if not threaded as this is done in csThread,
-    //    but it is necessary to call it here to have the values for the first ksmps processing, since
-    //    csThread is called by the perf thread after processKsmps
-//    if (ud->enableWidgets) {
-//      ud->wl->getValues(&ud->channelNames,
-//                        &ud->values,
-//                        &ud->stringValues);
-//    }
     ud->perfThread = new CsoundPerformanceThread(ud->csound);
     ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
     //      qDebug() << "qutecsound::runCsound perfThread->Play";
@@ -837,10 +832,9 @@ void CsoundEngine::dispatchQueues()
     engineMutex.unlock();
     return;
   }
-  int counter = 0;
   ud->wl->getMouseValues(&ud->mouseValues);
   ud->wl->refreshWidgets();
-  ud->wl->processNewValues();  // Process values from widgets even if not running, not needed anymore?
+  int counter = 0;
   while ((m_consoleBufferSize <= 0 || counter++ < m_consoleBufferSize)) {
     messageMutex.lock();
     if (messageQueue.isEmpty()) {
@@ -854,7 +848,6 @@ void CsoundEngine::dispatchQueues()
       ud->cs->consoles[i]->scrollToEnd();
     }
     ud->wl->appendMessage(msg);
-    //      qApp->processEvents(); //TODO Is this needed here to avoid display problems in the console?
     ud->wl->refreshConsoles();  // Scroll to end of text all console widgets
   }
   messageMutex.lock();
@@ -864,21 +857,6 @@ void CsoundEngine::dispatchQueues()
   }
   messageMutex.unlock();
 
-  if (isRunning()) {
-    //   QList<QString> channels = outValueQueue.keys();
-    //   foreach (QString channel, channels) {
-    //     widgetPanel->setValue(channel, outValueQueue[channel]);
-    //   }
-    //   outValueQueue.clear();
-
-//    stringValueMutex.lock();
-//    QStringList channels = outStringQueue.keys();
-//    for  (int i = 0; i < channels.size(); i++) {
-//      m_widgetLayout->setValue(channels[i], outStringQueue[channels[i]]);
-//    }
-//    outStringQueue.clear();
-//    stringValueMutex.unlock();
-  }
   if (ud->threaded && ud->perfThread) {
     if (ud->perfThread->GetStatus() > 0) {
 //      qDebug() << "CsoundEngine::dispatchQueues() perf finished";
@@ -888,12 +866,6 @@ void CsoundEngine::dispatchQueues()
   engineMutex.unlock();
   QTimer::singleShot(refreshTime, this, SLOT(dispatchQueues()));
 }
-
-//void CsoundEngine::widgetLayoutDestroyed()
-//{
-//  qDebug() << "CsoundEngine::widgetLayoutDestroyed()";
-//  freeze();
-//}
 
 void CsoundEngine::queueMessage(QString message)
 {

@@ -1994,14 +1994,6 @@ int WidgetLayout::createText(int x, int y, int width, int height, QString widget
   widget->setProperty("QCS_objectName",quoteParts[1]);
   widget->setProperty("QCS_alignment",quoteParts[2].simplified());
   widget->setProperty("QCS_font",quoteParts[3].simplified());
-
-  //#define QCS_XXSMALL 8
-  //#define QCS_XSMALL 10
-  //#define QCS_SMALL 12
-  //#define QCS_MEDIUM 16
-  //#define QCS_LARGE 20
-  //#define QCS_XLARGE 24
-  //#define QCS_XXLARGE 28
   widget->setProperty("QCS_fontsize",lastParts[0].toInt());
   widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
                                           lastParts[2].toDouble()/256.0,
@@ -2906,10 +2898,9 @@ void WidgetLayout::processNewValues()
   // Apply values received
 //   qDebug("WidgetPanel::processNewValues");
 
-  //FIXME clean this processes
-  if (closing != 0)
-    return;
-  QList<QString> channelNames;
+//  if (closing != 0)
+//    return;
+//  QList<QString> channelNames;
 //  valueMutex.lock();
 //  channelNames = newValues.keys();
 //  valueMutex.unlock();
