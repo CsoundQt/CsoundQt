@@ -513,6 +513,14 @@ void MeterWidget::setValues(double value1, double value2)
       m_block->setRect(0, (1-portiony)*height(), width(), height());
     }
   }
+  else if (m_type == "llif") {
+    if (!m_vertical) {
+      m_block->setRect(portionx*width(),0, width(), height());
+    }
+    else {
+      m_block->setRect(0, 0, width(), (1-portiony)*height());
+    }
+  }
   else if (m_type == "line") {
     if (!m_vertical) {
       m_vline->setLine(portionx*width(), 0 ,portionx*width(), height());
@@ -644,8 +652,6 @@ void MeterWidget::mouseMoveEvent(QMouseEvent* event)
       emit newValue1(newhor);
       emit newValue2(newvert);
     }
-//    emit valueChanged(newvert);
-//    emit value2Changed(newhor);
   }
 }
 
@@ -656,20 +662,18 @@ void MeterWidget::mousePressEvent(QMouseEvent* event)
 //         event->y() > 0 and event->y()< height())
     double newhor =  m_xmin + ((m_xmax - m_xmin ) * (double)event->x()/ width());
     double newvert = m_ymin + ((m_ymax - m_ymin ) * (1 - ((double)event->y()/ height())));
-    if ( (m_type == "line" || m_type == "llif" || m_type == "fill" )
-      &&  m_vertical
-          &&  newvert != m_value2 ) {
-      emit newValue2(newvert);
+    if ( (m_type == "line" || m_type == "llif" || m_type == "fill")) {
+      if (m_vertical) {
+        emit newValue2(newvert);
+      }
+      else {
+        emit newValue1(newhor);
+      }
     }
-    else if ( (m_type == "crosshair" || m_type == "point" )
-      &&  newvert != m_value2 ) {
-      emit newValue2(newvert);
-    }
-    else if (newhor != m_value) {
+    else if (m_type == "crosshair" || m_type == "point") {
       emit newValue1(newhor);
+      emit newValue2(newvert);
     }
-//    emit valueChanged(newvert);
-//    emit value2Changed(newhor);
   }
 }
 
