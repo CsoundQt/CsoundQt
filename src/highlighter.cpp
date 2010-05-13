@@ -126,16 +126,22 @@ void Highlighter::setColorVariables(bool color)
 void Highlighter::highlightBlock(const QString &text)
 {
   switch (m_mode) {
-    case 0:  // Csound mode
-      highlightCsoundBlock(text);
-      break;
-    case 1:  // Python mode
-      highlightPythonBlock(text);
-      break;
-    case 2:  // Xml mode
-      highlightXmlBlock(text);
-      break;
-    }
+  case 0:  // Csound mode
+    highlightCsoundBlock(text);
+    break;
+  case 1:  // Python mode
+    highlightPythonBlock(text);
+    break;
+  case 2:  // Xml mode
+    highlightXmlBlock(text);
+    break;
+  case 3:  // Orc
+    highlightCsoundBlock(text);
+    break;
+  case 4:  // Orc
+    highlightCsoundBlock(text);
+    break;
+  }
 }
 
 void Highlighter::highlightCsoundBlock(const QString &text)

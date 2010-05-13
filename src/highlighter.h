@@ -81,7 +81,8 @@
 
     QStringList m_list;
     bool colorVariables;
-    int m_mode;  // 0 = Csound generic mode, 1 = Python Mode, 2 = XML mode
+    // TODO this is duplicated in documentview class. Should it be unified?
+    int m_mode; //type of text 0=csound 1=python 2=xml 3=orc 4=sco   -1=anything else
 };
 
 #endif

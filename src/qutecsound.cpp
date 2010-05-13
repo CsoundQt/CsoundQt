@@ -247,7 +247,6 @@ void qutecsound::changePage(int index)
     updateInspector();
     runAct->setChecked(documentPages[curPage]->isRunning());
     recAct->setChecked(documentPages[curPage]->isRecording());
-
   }
   m_inspectorNeedsUpdate = true;
 }
@@ -1036,6 +1035,7 @@ void qutecsound::stop()
   if (documentPages[curPage]->isRunning())
     documentPages[curPage]->stop();
   runAct->setChecked(false);
+  recAct->setChecked(false);
 //  if (ud->isRunning()) {
 //    stopCsound();
 //  }
@@ -1051,6 +1051,7 @@ void qutecsound::stopAll()
     documentPages[i]->stop();
   }
   runAct->setChecked(false);
+  recAct->setChecked(false);
 }
 
 void qutecsound::perfEnded()
@@ -1593,20 +1594,27 @@ void qutecsound::showLineNumber(int lineNumber)
 
 void qutecsound::updateInspector()
 {
-  if (!m_inspectorNeedsUpdate || m_closing) {
-    return;
+  if (m_closing) {
+    return;  // And don't call this again from the timer
   }
-  if (!documentPages[curPage]->getFileName().endsWith("py")) {
+  if (!m_inspectorNeedsUpdate) {
+    QTimer::singleShot(2000, this, SLOT(updateInspector()));
+    return; // Retrigger timer, but do no update
+  }
+//  qDebug() << "qutecsound::updateInspector";
+  if (!documentPages[curPage]->getFileName().endsWith(".py")) {
     m_inspector->parseText(documentPages[curPage]->getBasicText());
   }
   else {
     m_inspector->parsePythonText(documentPages[curPage]->getBasicText());
   }
+  m_inspectorNeedsUpdate = false;
   QTimer::singleShot(2000, this, SLOT(updateInspector()));
 }
 
 void qutecsound::markInspectorUpdate()
 {
+//  qDebug() << "qutecsound::markInspectorUpdate()";
   m_inspectorNeedsUpdate = true;
 }
 

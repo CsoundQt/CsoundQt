@@ -321,7 +321,7 @@ QString WidgetLayout::getPresetsText()
   for (int i = 0; i < presets.size(); i++) {
     text += presets[i].getXmlText();
   }
-  text += "</bsbPresets>\n";
+  text += "</bsbPresets>";
   return text;
 }
 

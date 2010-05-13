@@ -172,6 +172,10 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   int ret = 0;
   deleteAllLiveEvents();
   bool xmlFormatFound = false;
+  if (!fileName.endsWith(".csd")) {
+    m_view->setFullText(text); // Put all text since not a csd file.
+    return ret;
+  }
   QString xmlPanels = QString();
   while (text.contains("<bsbPanel") and text.contains("</bsbPanel>")) {
     QString panel = text.right(text.size()-text.indexOf("<bsbPanel"));
@@ -343,8 +347,18 @@ QString DocumentPage::getFullText()
     fullText += getWidgetsText() + "\n" ;
     fullText += getPresetsText() + "\n";
     if (saveOldFormat) {
-      fullText += getMacOptionsText() + "\n" + getMacWidgetsText() + "\n";
-      fullText += getMacPresetsText() + "\n";  // Put old format for backward compatibility
+      QString macOptions = getMacOptionsText();
+      if (!macOptions.isEmpty()) {
+        fullText += macOptions + "\n";
+      }
+      QString macWidgets = getMacWidgetsText();
+      if (!macWidgets.isEmpty()) {
+        fullText += macWidgets + "\n";
+      }
+      QString macPresets = getMacPresetsText();
+      if (!macPresets.isEmpty()) {
+        fullText += macPresets + "\n";  // Put old format for backward compatibility
+      }
     }
     QString liveEventsText = "";
     if (saveLiveEvents) { // Only add live events sections if file is a csd file
@@ -614,8 +628,23 @@ QString DocumentPage::getCompanionFileName()
 void DocumentPage::setFileName(QString name)
 {
   fileName = name;
-  if (name.endsWith(".py")) {
+  if (name.endsWith(".csd")) {
+    m_view->setFileType(0);
+  }
+  else if (name.endsWith(".py")) {
     m_view->setFileType(1);
+  }
+  else if (name.endsWith(".xml")) {
+    m_view->setFileType(2);
+  }
+  else if (name.endsWith(".orc")) {
+    m_view->setFileType(3);
+  }
+  else if (name.endsWith(".sco")) {
+    m_view->setFileType(4);
+  }
+  else {
+    m_view->setFileType(-1);
   }
 }
 

@@ -346,22 +346,24 @@ QString DocumentView::wordUnderCursor()
 
 void DocumentView::syntaxCheck()
 {
-  // TODO implment for multiple views
+  // TODO implement for multiple views
 
   int line = currentLine();
   emit(lineNumberSignal(line));
 
-  QTextCursor cursor = mainEditor->textCursor();
-  cursor.select(QTextCursor::LineUnderCursor);
-  QStringList words = cursor.selectedText().split(QRegExp("\\b"));
-  foreach(QString word, words) {
-    // We need to remove all not possibly opcode
-    word.remove(QRegExp("[^\\d\\w]"));
-    if (!word.isEmpty()) {
-      QString syntax = m_opcodeTree->getSyntax(word);
-      if(!syntax.isEmpty()) {
-        emit(opcodeSyntaxSignal(syntax));
-        return;
+  if (m_mode == 0 || m_mode == 3) {  // CSD or ORC mode
+    QTextCursor cursor = mainEditor->textCursor();
+    cursor.select(QTextCursor::LineUnderCursor);
+    QStringList words = cursor.selectedText().split(QRegExp("\\b"));
+    foreach(QString word, words) {
+      // We need to remove all not possibly opcode
+      word.remove(QRegExp("[^\\d\\w]"));
+      if (!word.isEmpty()) {
+        QString syntax = m_opcodeTree->getSyntax(word);
+        if(!syntax.isEmpty()) {
+          emit(opcodeSyntaxSignal(syntax));
+          return;
+        }
       }
     }
   }
@@ -374,7 +376,7 @@ void DocumentView::textChanged()
     return;
   }
   unmarkErrorLines();
-  if (m_mode == 0) {  // CSD mode
+  if (m_mode == 0 || m_mode == 3) {  // CSD or ORC mode
     if (m_autoComplete) {
       QTextCursor cursor = mainEditor->textCursor();
       int curIndex = cursor.position();

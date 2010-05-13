@@ -157,8 +157,7 @@ class DocumentView : public QScrollArea
     bool m_autoComplete;
     bool errorMarked;
     bool internalChange;  // to let popoup opcode completion know if text change was internal
-    //TODO this variable is duplicated in various places. Unify?
-    int m_mode; //type of file 0= csound 1=python 2=xml
+    int m_mode; //type of text 0=csound 1=python 2=xml 3=orc 4=sco   -1=anything else
 
     bool lastCaseSensitive; // These last three are for search and replace
     QString lastSearch;
