@@ -72,6 +72,7 @@ class Options: public CsoundOptions{
     bool opcodexmldirActive;
     QString favoriteDir;
     QString pythonDir;
+    QString pythonExecutable;
     QString logFile;
 
     // External applications

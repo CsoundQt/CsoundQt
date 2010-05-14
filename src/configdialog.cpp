@@ -153,6 +153,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   defaultCsdLineEdit->setEnabled(m_options->defaultCsdActive);
   favoriteLineEdit->setText(m_options->favoriteDir);
   pythonDirLineEdit->setText(m_options->pythonDir);
+  pythonExecutableLineEdit->setText(m_options->pythonExecutable);
   logFileLineEdit->setText(m_options->logFile);
 
   TerminalLineEdit->setText(m_options->terminal);
@@ -294,6 +295,7 @@ void ConfigDialog::accept()
   m_options->defaultCsd = defaultCsdLineEdit->text();
   m_options->favoriteDir = favoriteLineEdit->text();
   m_options->pythonDir = pythonDirLineEdit->text();
+  m_options->pythonExecutable = pythonExecutableLineEdit->text();
   m_options->logFile = logFileLineEdit->text();
 
   m_options->terminal = TerminalLineEdit->text();

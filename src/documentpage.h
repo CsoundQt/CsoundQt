@@ -130,6 +130,7 @@ class DocumentPage : public QObject
     void setRunThreaded(bool thread);
     void useInvalue(bool use);
     void useOldFormat(bool use);
+    void setPythonExecutable(QString pythonExec);
 
     // Member public variables
     bool askForFile;
@@ -195,11 +196,15 @@ class DocumentPage : public QObject
     CsoundOptions getParentOptions();
     void deleteAllLiveEvents();
 
+    QString fileName;
+    QString companionFile;
     QStringList m_macOptions;
     QString m_macPresets;
     QString m_macGUI;
     QDomElement widgetsXml;
     bool m_pythonRunning;
+
+    QString m_pythonExecutable;
 
     WidgetLayout * m_widgetLayout;
     DocumentView *m_view;
@@ -209,9 +214,6 @@ class DocumentPage : public QObject
     LiveEventControl *m_liveEventControl;
 
     OpEntryParser *m_opcodeTree;
-
-    QString fileName;
-    QString companionFile;
 
     // Options
     bool saveLiveEvents;

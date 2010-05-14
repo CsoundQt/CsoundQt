@@ -1452,6 +1452,7 @@ void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
   p->setConsoleColors(m_options->consoleFontColor,
                       m_options->consoleBgColor);
   p->setScriptDirectory(m_options->pythonDir);
+  p->setPythonExecutable(m_options->pythonExecutable);
   p->useOldFormat(m_options->oldFormat);
 }
 
@@ -2617,6 +2618,7 @@ void qutecsound::readSettings()
   m_options->defaultCsdActive = settings.value("defaultCsdActive","").toBool();
   m_options->favoriteDir = settings.value("favoriteDir","").toString();
   m_options->pythonDir = settings.value("pythonDir","").toString();
+  m_options->pythonExecutable = settings.value("pythonExecutable","python").toString();
   m_options->logFile = settings.value("logFile",DEFAULT_LOG_FILE).toString();
   m_options->opcodexmldir = settings.value("opcodexmldir", "").toString();
   m_options->opcodexmldirActive = settings.value("opcodexmldirActive","").toBool();
@@ -2776,6 +2778,7 @@ void qutecsound::writeSettings()
     settings.setValue("defaultCsdActive",m_options->defaultCsdActive);
     settings.setValue("favoriteDir",m_options->favoriteDir);
     settings.setValue("pythonDir",m_options->pythonDir);
+    settings.setValue("pythonExecutable",m_options->pythonExecutable);
     settings.setValue("logFile",m_options->logFile);
     settings.setValue("opcodexmldir", m_options->opcodexmldir);
     settings.setValue("opcodexmldirActive",m_options->opcodexmldirActive);

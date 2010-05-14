@@ -921,6 +921,11 @@ void DocumentPage::useOldFormat(bool use)
   saveOldFormat = use;
 }
 
+void DocumentPage::setPythonExecutable(QString pythonExec)
+{
+  m_pythonExecutable = pythonExec;
+}
+
 void DocumentPage::showLiveEventPanels(bool visible)
 {
   m_liveEventControl->setVisible(visible);
@@ -1106,7 +1111,7 @@ int DocumentPage::runPython()
 {
   QProcess p;
   QDir::setCurrent(fileName.mid(fileName.lastIndexOf("/") + 1));
-  p.start("python \"" + fileName + "\"");
+  p.start(m_pythonExecutable + " \"" + fileName + "\"");
   m_pythonRunning = true;
   while (!p.waitForFinished (100) && m_pythonRunning) {
     // TODO make stop button stop python too
