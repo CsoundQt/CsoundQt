@@ -394,7 +394,7 @@ void DocumentView::textChanged()
       if (line.contains("opcode") || line.contains("instr")  || line.contains("=") || line.contains("\"")) { // Don't pop menu in these cases.
         return;
       }
-      if (line.indexOf(QRegExp("^\\s*\\w+\\s+\\w")) >= 0 || line.indexOf(QRegExp("\\s+\\w+\\s+\\w")) >= 0) {
+      if (line.indexOf(QRegExp("^\\s*[^kaigSf]\\w+\\s+\\w")) >= 0 || line.indexOf(QRegExp("\\s+\\w+\\s+\\w")) >= 0) {
         return;
       }
       if (word.size() > 2 && !word.startsWith("\"")

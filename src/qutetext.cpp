@@ -158,6 +158,7 @@ void QuteText::setText(QString text)
   setProperty("QCS_label", text);
   QString displayText = text;
   m_stringValue = text;
+  m_valueChanged = true;
   displayText.replace("\n", "<br />");
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
@@ -171,6 +172,7 @@ void QuteText::setText(QString text)
 void QuteText::refreshWidget()
 {
   setText(m_stringValue);
+  m_valueChanged = false;
 }
 
 void QuteText::applyInternalProperties()
@@ -469,6 +471,8 @@ QuteLineEdit::QuteLineEdit(QWidget* parent) : QuteText(parent)
   delete m_widget; //delete widget created by parent constructor
   m_widget = new QLineEdit(this);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+  connect(static_cast<QLineEdit*>(m_widget), SIGNAL(textEdited(QString)),
+          this, SLOT(textEdited(QString)));
 //   connect(static_cast<QLineEdit*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
   m_type = "edit";
   setProperty("QCS_bordermode", QVariant()); // Remove these property
@@ -594,7 +598,9 @@ void QuteLineEdit::applyInternalProperties()
   QuteWidget::applyInternalProperties();
 //  qDebug() << "QuteLineEdit::applyInternalProperties()";
 
-  static_cast<QLineEdit*>(m_widget)->setText(property("QCS_label").toString());
+//  static_cast<QLineEdit*>(m_widget)->setText(property("QCS_label").toString());
+  m_stringValue = property("QCS_label").toString();
+  m_valueChanged = true;
   Qt::Alignment align;
   QString alignText = property("QCS_alignment").toString();
   if (alignText == "left") {
@@ -668,6 +674,11 @@ void QuteLineEdit::applyProperties()
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
 
+void QuteLineEdit::textEdited(QString text)
+{
+  m_stringValue = text;
+  m_valueChanged = true;
+}
 
 /* -----------------------------------------------------------------*/
 /*               QuteScrollNumber class                             */

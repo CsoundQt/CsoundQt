@@ -168,7 +168,6 @@ void QuteGraph::createPropertiesDialog()
   zoomxBox->setSingleStep(0.5);
   layout->addWidget(zoomxBox, 8, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-
   label = new QLabel(dialog);
   label->setText("Zoom Y");
   layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
@@ -212,17 +211,16 @@ void QuteGraph::applyProperties()
 
 void QuteGraph::changeCurve(int index)
 {
-//  qDebug() << "QuteGraph::changeCurve" << index;
+  StackedLayoutWidget *stacked =  static_cast<StackedLayoutWidget *>(m_widget);
   if (index == -1) // goto last curve
     index = static_cast<StackedLayoutWidget *>(m_widget)->count() - 1;
-  if (index == -2)  // update curve but don't change which
+  else if (index == -2)  // update curve but don't change which
     index = static_cast<StackedLayoutWidget *>(m_widget)->currentIndex();
-  if (index < 0  || index >= curves.size()
-    || curves.size() <= 0 || curves[index]->get_caption().isEmpty()) {
+  else if (stacked->currentIndex() == index) {
     return;
   }
-  StackedLayoutWidget *stacked =  static_cast<StackedLayoutWidget *>(m_widget);
-  if (stacked->currentIndex() == index) { // No need to refresh
+  if (index < 0  || index >= curves.size()
+    || curves.size() <= 0 || curves[index]->get_caption().isEmpty()) { // Invalid index
     return;
   }
   stacked->setCurrentIndex(index);
@@ -236,6 +234,7 @@ void QuteGraph::changeCurve(int index)
 //  double span = max - min;
 //  FIXME implement dispx, dispy and modex, modey
   int size = curves[index]->get_size();
+  qDebug() << "QuteGraph::changeCurve"<< curves[index]->get_caption()<< index <<max<< min<< zoomx<< zoomy << size;
   view->setResizeAnchor(QGraphicsView::NoAnchor);
   if (curves[index]->get_caption().contains("ftable")) {
     view->setSceneRect (0, min - ((max - min)*0.17),(double) size/zoomx, (max - min)*1.17/zoomy);
@@ -327,9 +326,9 @@ void QuteGraph::addCurve(Curve * curve)
   m_pageComboBox->blockSignals(false);
   static_cast<StackedLayoutWidget *>(m_widget)->addWidget(view);
   curves.append(curve);
-//  if (m_value == curves.size() - 1) { // If new curve created corresponds to current stored value
-//    changeCurve(m_value);
-//  }
+  if (m_value == curves.size() - 1) { // If new curve created corresponds to current stored value
+    changeCurve(m_value);
+  }
 //   qDebug("QuteGraph::addCurve() %i- %i", curves.size(), curve);
 }
 
@@ -390,8 +389,10 @@ void QuteGraph::setCurveData(Curve * curve)
     polygons[index]->setPolygon(polygon);
   }
   m_pageComboBox->setItemText(index, curve->get_caption());
-  if (index == m_pageComboBox->currentIndex())
+  qDebug() << "QuteGraph::setCurveData " << index << m_pageComboBox->currentIndex();
+  if (index == m_pageComboBox->currentIndex()) {
     changeCurve(-2); //update curve
+  }
   view->horizontalScrollBar()->setValue(viewPosx);
   view->verticalScrollBar()->setValue(viewPosy);
 

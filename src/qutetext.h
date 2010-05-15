@@ -100,6 +100,9 @@ class QuteLineEdit : public QuteText
   protected:
     virtual void createPropertiesDialog();
     virtual void applyProperties();
+
+  protected slots:
+    void textEdited(QString text);
 };
 
 class QuteScrollNumber : public QuteText

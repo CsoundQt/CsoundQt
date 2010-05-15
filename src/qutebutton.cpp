@@ -308,6 +308,9 @@ void QuteButton::buttonPressed()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
+  if (m_channel.startsWith("_Browse")) {
+    return;
+  }
   if (property("QCS_latch").toBool()) {
     m_currentValue = (m_currentValue == 0 ? m_value: 0);
   }

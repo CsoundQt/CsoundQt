@@ -160,6 +160,7 @@ WidgetLayout::~WidgetLayout()
     qApp->processEvents();
     usleep(10000);
   }
+  clearGraphs();  // To free memory from curves.
 }
 
 unsigned int WidgetLayout::widgetCount()

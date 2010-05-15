@@ -796,10 +796,10 @@ void CsoundEngine::stopCsound()
       ud->perfThread->Stop();
       qDebug() << "CsoundEngine::stopCsound() stopped";
       ud->perfThread->Join();
-      flushMessageQueue();
       qDebug() << "CsoundEngine::stopCsound() joined";
       delete ud->perfThread;
       ud->perfThread = 0;
+      flushMessageQueue();
     }
   } /*if (ud->threaded)*/
   else {  // in same thread
