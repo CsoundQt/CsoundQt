@@ -871,7 +871,7 @@
        <x>10</x>
        <y>10</y>
        <width>661</width>
-       <height>361</height>
+       <height>381</height>
       </rect>
      </property>
      <property name="title">
@@ -882,8 +882,8 @@
        <rect>
         <x>10</x>
         <y>30</y>
-        <width>491</width>
-        <height>281</height>
+        <width>621</width>
+        <height>301</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -1083,6 +1083,36 @@
           <string>Open Properties when creating widget</string>
          </property>
         </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <widget class="QLabel" name="label_32">
+           <property name="text">
+            <string>Font scaling</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="fontScalingSpinBox"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_33">
+           <property name="text">
+            <string>Font offset</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="fontOffsetSpinBox"/>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>

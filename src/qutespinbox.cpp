@@ -125,7 +125,7 @@ QString QuteSpinBox::getWidgetXmlText()
   s.writeTextElement("alignment", property("QCS_alignment").toString());
 
   s.writeTextElement("font", property("QCS_font").toString());
-  s.writeTextElement("fontsize", QString::number(property("QCS_fontsize").toInt()));
+  s.writeTextElement("fontsize", QString::number(property("QCS_fontsize").toDouble()));
 
   QColor color = property("QCS_color").value<QColor>();
   s.writeStartElement("color");
@@ -210,7 +210,7 @@ void QuteSpinBox::applyInternalProperties()
   setTextColor(property("QCS_color").value<QColor>());
   QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
   m_widget->setStyleSheet("QLabel { font-family:\"" + property("QCS_font").toString()
-                          + "\"; font-size: " + QString::number(property("QCS_fontsize").toInt()  + QCS_FONT_OFFSET) + "pt"
+                          + "\"; font-size: " + QString::number((property("QCS_fontsize").toDouble()*m_fontScaling)  + m_fontOffset) + "pt"
                           + (property("QCS_bgcolormode").toBool() ?
                                     QString("; background-color:") + property("QCS_bgcolor").value<QColor>().name() : QString("; "))
                           + "; color:" + property("QCS_color").value<QColor>().name()

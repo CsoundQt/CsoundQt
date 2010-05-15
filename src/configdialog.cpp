@@ -81,6 +81,8 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   terminalFLTKCheckBox->setEnabled(m_options->enableFLTK);
   oldFormatCheckBox->setChecked(m_options->oldFormat);
   openPropertiesCheckBox->setChecked(m_options->openProperties);
+  fontScalingSpinBox->setValue(m_options->fontScaling);
+  fontOffsetSpinBox->setValue(m_options->fontOffset);
 
   if (m_options->useAPI)
     ApiRadioButton->setChecked(true);
@@ -242,6 +244,8 @@ void ConfigDialog::accept()
   m_options->terminalFLTK = terminalFLTKCheckBox->isChecked();
   m_options->oldFormat = oldFormatCheckBox->isChecked();
   m_options->openProperties = openPropertiesCheckBox->isChecked();
+  m_options->fontScaling = fontScalingSpinBox->value();
+  m_options->fontOffset = fontOffsetSpinBox->value();
 
   m_options->useAPI = ApiRadioButton->isChecked();
   m_options->thread = threadCheckBox->isChecked();

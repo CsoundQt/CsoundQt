@@ -1444,6 +1444,8 @@ void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
   p->showWidgetTooltips(m_options->showTooltips);
   p->setKeyRepeatMode(m_options->keyRepeat);
   p->setOpenProperties(m_options->openProperties);
+  p->setFontOffset(m_options->fontOffset);
+  p->setFontScaling(m_options->fontScaling);
   p->setDebugLiveEvents(m_options->debugLiveEvents);
   p->setTextFont(QFont(m_options->font,
                        (int) m_options->fontPointSize));
@@ -2557,6 +2559,14 @@ void qutecsound::readSettings()
   m_options->terminalFLTK = settings.value("terminalFLTK", false).toBool();
   m_options->oldFormat = settings.value("oldFormat", true).toBool();
   m_options->openProperties = settings.value("openProperties", true).toBool();
+#ifdef Q_OS_MAC
+  m_options->fontOffset = settings.value("fontOffset", 2.0).toDouble();
+  m_options->fontScaling = settings.value("fontScaling", 1.5).toDouble();
+#else
+  m_options->fontOffset = settings.value("fontOffset", 0.0).toDouble();
+  m_options->fontScaling = settings.value("fontScaling", 1.0).toDouble();
+#endif
+    qDebug() << "qutecsound::readSettings()" << m_options->fontOffset << m_options->fontScaling;
   lastFiles = settings.value("lastfiles", "").toStringList();
   lastTabIndex = settings.value("lasttabindex", "").toInt();
   settings.endGroup();
@@ -2708,6 +2718,8 @@ void qutecsound::writeSettings()
     settings.setValue("terminalFLTK", m_options->terminalFLTK);
     settings.setValue("oldFormat", m_options->oldFormat);
     settings.setValue("openProperties", m_options->openProperties);
+    settings.setValue("fontOffset", m_options->fontOffset);
+    settings.setValue("fontScaling", m_options->fontScaling);
     QStringList files;
     if (m_options->rememberFile) {
       for (int i = 0; i < documentPages.size(); i++ ) {

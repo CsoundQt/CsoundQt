@@ -26,11 +26,11 @@
 #include "qutewidget.h"
 
 // TODO remove this offset?
-#ifdef Q_WS_MAC
-#define QCS_FONT_OFFSET 2
-#else
-#define QCS_FONT_OFFSET 0
-#endif
+//#ifdef Q_WS_MAC
+//#define QCS_FONT_OFFSET 2
+//#else
+//#define QCS_FONT_OFFSET 0
+//#endif
 
 class QuteText : public QuteWidget
 {
@@ -59,11 +59,18 @@ class QuteText : public QuteWidget
     virtual void refreshWidget();
     virtual void applyInternalProperties();
 
+    // Configuraion (Not saved)
+    void setFontScaling(double scaling);
+    void setFontOffset(double offset);
+
   protected:
     virtual void createPropertiesDialog();
     virtual void applyProperties();
 
     QString m_type;  // can be "label", "edit", "scroll". In old widget format can also be "display".
+
+    //Configuration options
+    double m_fontScaling, m_fontOffset;
 
     QTextEdit *text;
     QPushButton *textColor;

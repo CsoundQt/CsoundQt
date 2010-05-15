@@ -90,6 +90,8 @@ class WidgetLayout : public QWidget
     void setWidgetToolTip(QuteWidget *widget, bool show);
     void setContained(bool contained);
     void setCurrentPosition(QPoint pos); // To set the mouse position for new widgets
+    void setFontOffset(double offset);
+    void setFontScaling(double scaling);
 
     // Preset methods
     void setPresetName(int num, QString name);
@@ -243,8 +245,8 @@ class WidgetLayout : public QWidget
     QMutex widgetsMutex;
     QMutex layoutMutex;
     QList<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
-    QVector<WINDAT *> curveUpdateBuffer;
-    QVector<Curve *> curves;
+    QList<WINDAT *> curveUpdateBuffer;
+    QList<Curve *> curves;
 
     bool m_repeatKeys;
     bool m_xmlFormat;
@@ -252,6 +254,7 @@ class WidgetLayout : public QWidget
     bool m_trackMouse;
     int mouseX, mouseY, mouseRelX, mouseRelY, mouseBut1, mouseBut2;
     int xOffset, yOffset;
+    double m_fontOffset, m_fontScaling;
 
     // For the properties dialog - they store the configuration data for the widget panel
     QPoint currentPosition;

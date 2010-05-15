@@ -55,6 +55,8 @@ class Options: public CsoundOptions{
     bool terminalFLTK;
     bool oldFormat;  // Store old MacCsound widget format
     bool openProperties;  // Open properties automatically when creating a widget
+    double fontScaling;
+    double fontOffset;
 
     bool useAPI;
     bool enableWidgets;

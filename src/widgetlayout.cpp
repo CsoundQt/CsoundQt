@@ -572,6 +572,9 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
       }
       w->setProperty("QCS_bgcolor", QVariant(getColorFromElement(ebg)));
     }
+    w->setFontOffset(m_fontOffset);
+    w->setFontScaling(m_fontScaling);
+//    qDebug() <<"WidgetLayout::newXmlWidget"<< m_fontOffset << m_fontScaling;
     widget = static_cast<QuteWidget *>(w);
   }
   else if (type == "BSBSpinBox") {
@@ -596,7 +599,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   }
   else if (type == "BSBScrollNumber") {
-    widget = static_cast<QuteScrollNumber *>(new QuteScrollNumber(this));
+    widget = static_cast<QuteWidget *>(new QuteScrollNumber(this));
     connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   }
   else if (type == "BSBButton") {
@@ -833,6 +836,7 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
   m_widgets.append(widget);
   if (m_editMode) {
+    deselectAll();
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -916,6 +920,26 @@ void WidgetLayout::setContained(bool contained)
 void WidgetLayout::setCurrentPosition(QPoint pos)
 {
   currentPosition = pos;
+}
+
+void WidgetLayout::setFontOffset(double offset)
+{
+  m_fontOffset = offset;
+  for (int i=0; i < m_widgets.size(); i++) {
+    if (m_widgets[i]->getWidgetType() == "BSBLabel" || m_widgets[i]->getWidgetType() == "BSBScrollNumber") {
+     static_cast<QuteText *>(m_widgets[i])->setFontOffset(offset);
+   }
+  }
+}
+
+void WidgetLayout::setFontScaling(double scaling)
+{
+  m_fontScaling = scaling;
+  for (int i=0; i < m_widgets.size(); i++) {
+    if (m_widgets[i]->getWidgetType() == "BSBLabel" || m_widgets[i]->getWidgetType() == "BSBScrollNumber") {
+     static_cast<QuteText *>(m_widgets[i])->setFontScaling(scaling);
+   }
+  }
 }
 
 void WidgetLayout::appendCurve(WINDAT *windat)
@@ -2013,6 +2037,8 @@ int WidgetLayout::createText(int x, int y, int width, int height, QString widget
     widget->setProperty("QCS_resolution", parts[7].toDouble());
   }
   widget->setProperty("QCS_label", labelText.replace("\u00AC", "\n"));
+  widget->setFontOffset(m_fontOffset);
+  widget->setFontScaling(m_fontScaling);
   widget->applyInternalProperties();
   registerWidget(widget);
   return 1;
@@ -3083,27 +3109,21 @@ void WidgetLayout::updateData()
 //    qDebug() << "WidgetLayout::updateData() new curve " << curve;
   }
   // Check for graph updates after creating new curves
-  for (int i = 0; i < curveUpdateBuffer.size(); i++) {
-    Curve *curve = (Curve *) getCurveById(curveUpdateBuffer[i]->windid);
-//    qDebug() << "WidgetLayout::updateData() " << i << " of " << curveUpdateBuffer.size() <<  " ---" << curveUpdateBuffer[i] << "  " << curve;
-    if (curve == 0) {
-      break;
-    }
-    WINDAT * windat = curve->getOriginal();
-    windat = curveUpdateBuffer[i];
-    if (windat != 0) {
+  while (!curveUpdateBuffer.isEmpty()) {
+    WINDAT * curveData = curveUpdateBuffer.takeFirst();
+    Curve *curve = (Curve *) getCurveById(curveData->windid);
+    qDebug() << "WidgetLayout::updateData() " << curveUpdateBuffer.size() <<  " ---" << curveData << "  " << curve;
+    if (curve != 0 && curveData != 0) {
 //      qDebug() << "WidgetLayout::updateData() " << windat->caption << "-" <<  curve->get_caption();
-      curve->set_size(windat->npts);      // number of points
-      curve->set_data(windat->fdata);
-      curve->set_caption(QString(windat->caption)); // title of curve
+      curve->set_size(curveData->npts);      // number of points
+      curve->set_data(curveData->fdata);
+      curve->set_caption(QString(curveData->caption)); // title of curve
       //      curve->set_polarity(windat->polarity); // polarity
-      curve->set_max(windat->max);        // curve max
-      curve->set_min(windat->min);        // curve min
-      curve->set_absmax(windat->absmax);     // abs max of above
+      curve->set_max(curveData->max);        // curve max
+      curve->set_min(curveData->min);        // curve min
+      curve->set_absmax(curveData->absmax);     // abs max of above
       //      curve->set_y_scale(windat->y_scale);    // Y axis scaling factor
       setCurveData(curve);
-      curveUpdateBuffer.remove(i);
-      i--;
     }
   }
 //  curveBuffer.clear();

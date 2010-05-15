@@ -111,6 +111,8 @@ class DocumentPage : public QObject
     void showWidgetTooltips(bool visible);
     void setKeyRepeatMode(bool keyRepeat);  // Also for console widget
     void setOpenProperties(bool open);
+    void setFontOffset(double offset);
+    void setFontScaling(double offset);
     void passWidgetClipboard(QString text);
 
     // Console properties

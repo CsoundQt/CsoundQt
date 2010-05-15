@@ -844,6 +844,16 @@ void DocumentPage::setOpenProperties(bool open)
   m_widgetLayout->setProperty("openProperties", open);
 }
 
+void DocumentPage::setFontOffset(double offset)
+{
+  m_widgetLayout->setFontOffset(offset);
+}
+
+void DocumentPage::setFontScaling(double offset)
+{
+  m_widgetLayout->setFontScaling(offset);
+}
+
 void DocumentPage::passWidgetClipboard(QString text)
 {
   m_widgetLayout->passWidgetClipboard(text);

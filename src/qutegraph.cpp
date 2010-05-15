@@ -163,18 +163,18 @@ void QuteGraph::createPropertiesDialog()
   label->setText("Zoom X");
   layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
   zoomxBox = new QDoubleSpinBox(dialog);
-  zoomxBox->setRange(1, 10.0);
+  zoomxBox->setRange(0.1, 10.0);
   zoomxBox->setDecimals(1);
-  zoomxBox->setSingleStep(0.5);
+  zoomxBox->setSingleStep(0.1);
   layout->addWidget(zoomxBox, 8, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
   label = new QLabel(dialog);
   label->setText("Zoom Y");
   layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
   zoomyBox = new QDoubleSpinBox(dialog);
-  zoomyBox->setRange(1, 10.0);
+  zoomyBox->setRange(0.1, 10.0);
   zoomyBox->setDecimals(1);
-  zoomyBox->setSingleStep(0.5);
+  zoomyBox->setSingleStep(0.1);
   layout->addWidget(zoomyBox, 8, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
 #ifdef  USE_WIDGET_MUTEX
@@ -223,7 +223,9 @@ void QuteGraph::changeCurve(int index)
     || curves.size() <= 0 || curves[index]->get_caption().isEmpty()) { // Invalid index
     return;
   }
+  stacked->blockSignals(true);
   stacked->setCurrentIndex(index);
+  stacked->blockSignals(false);
   drawCurve(curves[index], index);
   QGraphicsView *view = (QGraphicsView *) static_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
 
@@ -237,19 +239,17 @@ void QuteGraph::changeCurve(int index)
   qDebug() << "QuteGraph::changeCurve"<< curves[index]->get_caption()<< index <<max<< min<< zoomx<< zoomy << size;
   view->setResizeAnchor(QGraphicsView::NoAnchor);
   if (curves[index]->get_caption().contains("ftable")) {
-    view->setSceneRect (0, min - ((max - min)*0.17),(double) size/zoomx, (max - min)*1.17/zoomy);
-    view->fitInView(0, min - ((max - min)*0.17) , (double) size/zoomx, (max - min)*1.17/zoomy);
+//    view->setSceneRect (0, min - ((max - min)*0.17),(double) size/zoomx, (max - min)*1.17/zoomy);
+    view->fitInView(0, min - ((max - min)*0.17/zoomy) , (double) size/zoomx, (max - min)*1.17/zoomy);
   }
   else {
     if (curves[index]->get_caption().contains("fft")) {
       view->setSceneRect (0, 0, size, 90.);
-  //     view->fitInView(0, -30./m_zoom , (double) size/m_zoom, 100./m_zoom);
       view->fitInView(0, -30. , (double) size/zoomx, 100./zoomy);
     }
     else { //from display opcode
       view->setSceneRect (0, -1, size, 2);
-  //     view->fitInView(0, -30./m_zoom , (double) size/m_zoom, 100./m_zoom);
-      view->fitInView(0, -100./zoomy, (double) size/zoomx, 100./zoomy);
+      view->fitInView(0, -10./zoomy, (double) size/zoomx, 10./zoomy);
     }
   }
   QString text = QString::number(size) + " pts Max=";
@@ -282,7 +282,6 @@ void QuteGraph::clearCurves()
 
 void QuteGraph::addCurve(Curve * curve)
 {
-//  qDebug("QuteGraph::addCurve()");
   QGraphicsView *view = new QGraphicsView(m_widget);
   QGraphicsScene *scene = new QGraphicsScene(view);
   view->setContextMenuPolicy(Qt::NoContextMenu);
@@ -295,6 +294,7 @@ void QuteGraph::addCurve(Curve * curve)
   QVector<QGraphicsLineItem *> linesVector;
   linesVector.append(line);
   lines.append(linesVector);
+  qDebug() << "QuteGraph::addCurve()" << curve << curve->get_caption() ;
   if (curve->get_caption().contains("ftable")) {
 //     for (int i = 0; i < size; i++) {
 //       line = new QGraphicsLineItem(i, 0, i, - curve->get_data()[i]);
@@ -329,7 +329,6 @@ void QuteGraph::addCurve(Curve * curve)
   if (m_value == curves.size() - 1) { // If new curve created corresponds to current stored value
     changeCurve(m_value);
   }
-//   qDebug("QuteGraph::addCurve() %i- %i", curves.size(), curve);
 }
 
 int QuteGraph::getCurveIndex(Curve * curve)
@@ -413,7 +412,7 @@ void QuteGraph::applyInternalProperties()
 
 void QuteGraph::drawCurve(Curve * curve, int index)
 {
-//  qDebug() << "QuteGraph::drawCurve min=" << curve->getOriginal();
+  qDebug() << "QuteGraph::drawCurve" << curve->getOriginal();
   bool live = curve->getOriginal() != 0;
   live = false;
   QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
