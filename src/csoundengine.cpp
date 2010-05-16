@@ -453,7 +453,7 @@ QList<QPair<int, QString> > CsoundEngine::getErrorLines()
 
 void CsoundEngine::setConsoleBufferSize(int size)
 {
-  qDebug() << "CsoundEngine::setConsoleBufferSize " << size;
+//  qDebug() << "CsoundEngine::setConsoleBufferSize " << size;
   m_consoleBufferSize = size;
 }
 
@@ -852,6 +852,7 @@ void CsoundEngine::dispatchQueues()
   if (!messageQueue.isEmpty() && m_consoleBufferSize > 0 && counter >= m_consoleBufferSize) {
     messageQueue.clear();
     messageQueue << "\nQUTECSOUND: Message buffer overflow. Messages discarded!\n";
+    qDebug() << "CsoundEngine::dispatchQueues() " << m_consoleBufferSize << counter;
   }
   messageMutex.unlock();
 

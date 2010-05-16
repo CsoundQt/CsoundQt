@@ -1456,6 +1456,7 @@ void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
   p->setScriptDirectory(m_options->pythonDir);
   p->setPythonExecutable(m_options->pythonExecutable);
   p->useOldFormat(m_options->oldFormat);
+  p->setConsoleBufferSize(m_options->consoleBufferSize);
 }
 
 void qutecsound::runUtility(QString flags)
@@ -2902,7 +2903,6 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
     curPage = 0;
   }
   documentPages.insert(insertPoint, newPage);
-  setCurrentOptionsForPage(documentPages[curPage]);
   documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
   documentPages[curPage]->setInitialDir(initialDir);
   setCurrentOptionsForPage(documentPages[curPage]);

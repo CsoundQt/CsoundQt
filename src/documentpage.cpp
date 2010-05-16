@@ -628,7 +628,7 @@ QString DocumentPage::getCompanionFileName()
 void DocumentPage::setFileName(QString name)
 {
   fileName = name;
-  if (name.endsWith(".csd")) {
+  if (name.endsWith(".csd") || name.isEmpty()) {
     m_view->setFileType(0);
   }
   else if (name.endsWith(".py")) {
