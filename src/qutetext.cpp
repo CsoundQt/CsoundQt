@@ -502,9 +502,11 @@ QuteLineEdit::~QuteLineEdit()
 void QuteLineEdit::setText(QString text)
 {
   setProperty("QCS_label", text);
+  int cursorPos = static_cast<QLineEdit*>(m_widget)->cursorPosition();
   m_widget->blockSignals(true);
   static_cast<QLineEdit*>(m_widget)->setText(text);
   m_widget->blockSignals(false);
+  static_cast<QLineEdit*>(m_widget)->setCursorPosition(cursorPos);
 }
 
 QString QuteLineEdit::getWidgetLine()

@@ -2561,13 +2561,12 @@ void qutecsound::readSettings()
   m_options->oldFormat = settings.value("oldFormat", true).toBool();
   m_options->openProperties = settings.value("openProperties", true).toBool();
 #ifdef Q_OS_MAC
-  m_options->fontOffset = settings.value("fontOffset", 2.0).toDouble();
-  m_options->fontScaling = settings.value("fontScaling", 1.5).toDouble();
+  m_options->fontOffset = settings.value("fontOffset", 4.0).toDouble();
+  m_options->fontScaling = settings.value("fontScaling", 0.8).toDouble();
 #else
   m_options->fontOffset = settings.value("fontOffset", 0.0).toDouble();
   m_options->fontScaling = settings.value("fontScaling", 1.0).toDouble();
 #endif
-    qDebug() << "qutecsound::readSettings()" << m_options->fontOffset << m_options->fontScaling;
   lastFiles = settings.value("lastfiles", "").toStringList();
   lastTabIndex = settings.value("lasttabindex", "").toInt();
   settings.endGroup();

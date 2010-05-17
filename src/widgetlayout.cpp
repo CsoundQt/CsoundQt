@@ -1613,16 +1613,17 @@ void WidgetLayout::sendToBack()
     widgetsMutex.unlock();
     cut();
     paste();
-    widgetsMutex.lock();
-    for (int i = 0; i < editWidgets.size() ; i++) { // Now invert selection again
-      if (editWidgets[i]->isSelected()) {
-        editWidgets[i]->deselect();
-      }
-      else {
-        editWidgets[i]->select();
-      }
-    }
-    widgetsMutex.unlock();
+    deselectAll();
+//    widgetsMutex.lock();
+//    for (int i = 0; i < editWidgets.size() ; i++) { // Now invert selection again
+//      if (editWidgets[i]->isSelected()) {
+//        editWidgets[i]->deselect();
+//      }
+//      else {
+//        editWidgets[i]->select();
+//      }
+//    }
+//    widgetsMutex.unlock();
   }
 }
 
@@ -3050,7 +3051,9 @@ void WidgetLayout::deleteSelected()
   widgetsMutex.lock();
   for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
     if (editWidgets[i]->isSelected()) {
+      widgetsMutex.unlock();
       deleteWidget(m_widgets[i]);
+      widgetsMutex.lock();
     }
   }
   widgetsMutex.unlock();

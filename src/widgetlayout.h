@@ -40,7 +40,7 @@ class FrameWidget;
 class WidgetLayout : public QWidget
 {
   Q_OBJECT
-  Q_PROPERTY(bool openProperties READ getOpenProperties WRITE setOpenProperties);
+  Q_PROPERTY(bool openProperties READ getOpenProperties WRITE setOpenProperties); // To make sure only one properties dialog is displayed at any one time
   public:
     WidgetLayout(QWidget* parent);
     ~WidgetLayout();
