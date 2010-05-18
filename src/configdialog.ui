@@ -69,7 +69,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -1139,8 +1139,8 @@
        <rect>
         <x>10</x>
         <y>30</y>
-        <width>363</width>
-        <height>97</height>
+        <width>411</width>
+        <height>131</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="_2">
@@ -1256,13 +1256,37 @@
          </property>
         </widget>
        </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_34">
+         <property name="text">
+          <string>Line Ending Mode</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QComboBox" name="lineEndingComboBox">
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>Unix (LF)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Windows (CR+LF)</string>
+          </property>
+         </item>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="layoutWidget_7">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>130</y>
+        <y>180</y>
         <width>641</width>
         <height>83</height>
        </rect>

@@ -372,6 +372,9 @@ QString DocumentPage::getFullText()
   else { // Not a csd file
 // Nothing for now...
   }
+  if (m_lineEnding == 1) { // Windows line ending mode
+    fullText.replace("\n", "\r\n");
+  }
   return fullText;
 }
 
@@ -623,6 +626,11 @@ QString DocumentPage::getFileName()
 QString DocumentPage::getCompanionFileName()
 {
   return companionFile;
+}
+
+void DocumentPage::setLineEnding(int lineEndingMode)
+{
+  m_lineEnding = lineEndingMode;
 }
 
 void DocumentPage::setFileName(QString name)

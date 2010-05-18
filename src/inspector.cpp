@@ -212,6 +212,12 @@ void Inspector::parsePythonText(const QString &text)
       TreeItem *newItem = new TreeItem(functionItem, columnslist);
       newItem->setLine(i + 1);
     }
+    else if (lines[i].contains("##")) {
+      QStringList columnslist(lines[i].simplified());
+      TreeItem *newItem = new TreeItem(functionItem, columnslist);
+      newItem->setForeground (0, QBrush(Qt::darkGreen) );
+      newItem->setLine(i + 1);
+    }
   }
   m_treeWidget->expandItem(importItem);
   m_treeWidget->expandItem(functionItem);

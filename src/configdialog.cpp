@@ -49,6 +49,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
 
   fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
   fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));
+  lineEndingComboBox->setCurrentIndex(m_options->lineEnding);
   consoleFontComboBox->setCurrentIndex(consoleFontComboBox->findText(m_options->consoleFont) );
   consoleFontSizeComboBox->setCurrentIndex(consoleFontSizeComboBox->findText(QString::number((int) m_options->consoleFontPointSize)));
   QPixmap pixmap(64,64);
@@ -224,6 +225,7 @@ void ConfigDialog::accept()
 {
   m_options->font = fontComboBox->currentText();
   m_options->fontPointSize = fontSizeComboBox->currentText().toDouble();
+  m_options->lineEnding = lineEndingComboBox->currentIndex();
   m_options->consoleFont = consoleFontComboBox->currentText();
   m_options->consoleFontPointSize = consoleFontSizeComboBox->currentText().toDouble();
   m_options->tabWidth = tabWidthSpinBox->value();

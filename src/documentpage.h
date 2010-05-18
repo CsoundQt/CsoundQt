@@ -81,6 +81,7 @@ class DocumentPage : public QObject
     void focusWidgets();
     QString getFileName();
     QString getCompanionFileName();
+    void setLineEnding(int lineEndingMode);
     void setFileName(QString name);
     void setCompanionFileName(QString name);
 
@@ -220,6 +221,7 @@ class DocumentPage : public QObject
     // Options
     bool saveLiveEvents;
     bool saveOldFormat;
+    int m_lineEnding;
 
   private slots:
     void textChanged();

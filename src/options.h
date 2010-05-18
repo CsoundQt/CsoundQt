@@ -35,6 +35,7 @@ class Options: public CsoundOptions{
 
     QString font;
     float fontPointSize;
+    int lineEnding; // 0=Unix (LF) 1=Windows(CR+LF)
     QString consoleFont;
     float consoleFontPointSize;
     QColor consoleFontColor;
