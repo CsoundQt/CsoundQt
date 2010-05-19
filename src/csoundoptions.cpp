@@ -54,7 +54,9 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
       list << "-+ignore_csopts=1";
     if (_configlists.rtAudioNames[rtAudioModule] != "none") {
       list << "-+rtaudio=" + _configlists.rtAudioNames[rtAudioModule];
-      list << "-i" + (rtInputDevice == "" ? "adc":rtInputDevice);
+      if (rtInputDevice != "") {
+        list << "-i" + rtInputDevice;
+      }
       list << "-o" + (rtOutputDevice == "" ? "dac":rtOutputDevice);
       if (rtJackName != "" && _configlists.rtAudioNames[rtAudioModule] == "jack") {
         QString jackName = rtJackName;
