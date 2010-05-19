@@ -478,7 +478,7 @@ void DocumentView::findReplace()
                                         &lastSearch,
                                         &lastReplace,
                                         &lastCaseSensitive);
-  // lastSearch and lastReplace are passed by reference so they are
+  // lastSearch and lastReplace are passed by reference to be
   // updated by FindReplace dialog
   connect(dialog, SIGNAL(findString(QString)), this, SLOT(findString(QString)));
   dialog->show();

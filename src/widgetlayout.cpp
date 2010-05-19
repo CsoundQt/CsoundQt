@@ -59,7 +59,6 @@
 #define LAYOUT_Y_OFFSET 25
 #endif
 
-#define QCS_CURRENT_XML_VERSION 2
 
 WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 {
@@ -199,20 +198,28 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
     qDebug() << "WidgetLayout::loadXmlWidgets no bsbPanel element! Aborting.";
     return;
   }
-  int version = p.toElement().attribute("version", "0").toInt();
-  if (version > QCS_CURRENT_XML_VERSION) {
+  QDomNodeList c = p.childNodes();
+  int version = 0;
+  for (int i = 0; i < c.size(); i++) {
+    int ret = parseXmlNode(c.item(i));
+    if (ret == -1) {
+      qDebug() << "WidgetLayout::loadXmlWidgets Error in Xml node parsing";
+      QMessageBox::warning(this, tr("Unrecognized wigdet format"),
+                           tr("There is unrecognized widget information in the file!\n"
+                              "It may be saved with errors."));
+    }
+    if (ret > version) {
+      version = ret;
+    }
+  }
+  if (version > QString(QCS_CURRENT_XML_VERSION).toInt()) {
     qDebug() << "WidgetLayout::loadXmlWidgets Newer Widget Format version";
     QMessageBox::warning(this, tr("Newer Widget Format"),
                          tr("The file was was saved by a more recent version of QuteCsound.\n"
                             "Some features may not be available and will not be saved!"));
   }
-  else if (version < QCS_CURRENT_XML_VERSION) {
+  else if (version < QString(QCS_CURRENT_XML_VERSION).toInt()) {  // Just print a silent warning
     qDebug() << "WidgetLayout::loadXmlWidgets Older Widget Format version";
-  }
-
-  QDomNodeList c = p.childNodes();
-  for (int i = 0; i < c.size(); i++) {
-    parseXmlNode(c.item(i));
   }
   if (m_editMode) {
     setEditMode(true);
@@ -244,17 +251,17 @@ void WidgetLayout::loadXmlPresets(QString xmlPresets)
         if (mode & 1) {
           double val = valueElement.text().toDouble();
           newPreset.addValue(id, val);
-          qDebug() << "WidgetLayout::loadXmlPresets " << val;
+//          qDebug() << "WidgetLayout::loadXmlPresets " << val;
         }
         if (mode & 2) {
           double val = valueElement.text().toDouble();
           newPreset.addValue2(id, val);
-          qDebug() << "WidgetLayout::loadXmlPresets value2" << val;
+//          qDebug() << "WidgetLayout::loadXmlPresets value2" << val;
         }
         if (mode & 4) {
           QString val = valueElement.text();
           newPreset.addStringValue(id, val);
-          qDebug() << "WidgetLayout::loadXmlPresets string value" << val;
+//          qDebug() << "WidgetLayout::loadXmlPresets string value" << val;
         }
       }
       presets.append(newPreset);
@@ -294,7 +301,7 @@ QString WidgetLayout::getWidgetsText()
   // may cause crashing since widgets are not reentrant
   QString text = "";
   QString name = "QuteCsound"; // FIXME add setting of panel name
-  text = "<bsbPanel version=\"" + QString::number(QCS_CURRENT_XML_VERSION) + "\">\n";
+  text = "<bsbPanel>\n";
   QString bg, red,green,blue;
   layoutMutex.lock();
   QColor bgColor = this->property("QCS_bgcolor").value<QColor>();
@@ -555,13 +562,11 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     qDebug() << "WidgetLayout::newXmlWidget null element! Aborting.";
     return -1;
   }
+  int ret = 0;
   QuteWidget *widget = 0;
   QDomNodeList c = mainnode.childNodes();
   QString type = mainnode.toElement().attribute("type");
-  int version = mainnode.toElement().attribute("version").toInt();
-  if (version != 2) {
-    qDebug() << "WidgetLayout::newXmlWidget WARNING: widget version != 2";
-  }
+  ret = mainnode.toElement().attribute("version").toInt();
   if (type == "BSBLabel") {
     QuteText *w= new QuteText(this);
     w->setType("display");
@@ -734,7 +739,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
   }
   widget->applyInternalProperties();
   registerWidget(widget);
-  return 0;
+  return ret;
 }
 
 bool WidgetLayout::uuidFree(QString uuid)
@@ -1923,8 +1928,9 @@ void WidgetLayout::contextMenuEvent(QContextMenuEvent *event)
   }
 }
 
-bool WidgetLayout::parseXmlNode(QDomNode node)
+int WidgetLayout::parseXmlNode(QDomNode node)
 {
+  int ret = 0;
   QString name = node.nodeName();
   if (name == "objectName") {
     this->setProperty("QCS_objectName", node.firstChild().nodeValue());
@@ -1961,16 +1967,16 @@ bool WidgetLayout::parseXmlNode(QDomNode node)
                              eb.firstChild().nodeValue().toInt()) );
   }
   else if (name == "bsbObject") {
-    newXmlWidget(node);
+    ret = newXmlWidget(node);
   }
   else if (name == "bsbGroup") {
     qDebug() << "WidgetLayout::parseXmlNode bsbGroup not implemented";
   }
   else {
     qDebug() << "WidgetLayout::parseXmlNode unknown node name: "<< name;
-    return false;
+    return -1;
   }
-  return true;
+  return ret;
 }
 
 int WidgetLayout::createSlider(int x, int y, int width, int height, QString widgetLine)
@@ -2501,27 +2507,56 @@ void WidgetLayout::loadPreset()
 {
   QDialog d(this);
   QVBoxLayout *l = new QVBoxLayout(&d);
-  QLabel *lab= new QLabel(&d);
-  QComboBox *box = new QComboBox(&d);
-  QPushButton *okButton = new QPushButton(tr("Ok"),&d);
-  QPushButton *cancelButton = new QPushButton(tr("Cancel"),&d);
-  lab->setText(tr("Select Preset to Load"));
-  l->addWidget(lab);
-  l->addWidget(box);
-  l->addWidget(cancelButton);
-  l->addWidget(okButton);
-  connect(okButton, SIGNAL(released()), &d, SLOT(accept()));
-  connect(cancelButton, SIGNAL(released()), &d, SLOT(reject()));
+//  QLabel *lab= new QLabel(&d);
+//  QComboBox *box = new QComboBox(&d);
+  QPushButton *okButton = new QPushButton(tr("Close"),&d);
+  QPushButton *newButton = new QPushButton(tr("New Preset"),&d);
+//  QPushButton *cancelButton = new QPushButton(tr("Cancel"),&d);
 
+  QTreeWidget *treeWidget = new QTreeWidget(&d);
+
+  treeWidget->setHeaderLabel(tr("Select Preset to Load"));
+//  l->addWidget(lab);
+  l->addWidget(treeWidget);
+//  l->addWidget(box);
+//  l->addWidget(cancelButton);
+  l->addWidget(okButton);
+  l->addWidget(newButton);
+
+  connect(okButton, SIGNAL(released()), &d, SLOT(accept()));
+  connect(newButton, SIGNAL(released()), this, SLOT(newPreset()));
+  connect(newButton, SIGNAL(released()), &d, SLOT(reject()));  // For now just close the load preset window (instead of refreshing...
+//  connect(cancelButton, SIGNAL(released()), &d, SLOT(reject()));
+
+  treeWidget->setColumnCount(1);
+  QList<QTreeWidgetItem *> items;
   for (int i = 0; i < presets.size(); i++) {
     QString itemText = QString::number(presets[i].getNumber()) + "  " + presets[i].getName();
-    box->addItem(itemText, presets[i].getNumber() );
+    QTreeWidgetItem *item = new QTreeWidgetItem((QTreeWidget*)0, QStringList(itemText));
+    item->setData(0,Qt::UserRole,presets[i].getNumber());
+    items.append(item);
   }
+  QList<QTreeWidgetItem *> sortedItems;
+  for (int i = 0; i < items.size(); i++) {
+    int j = 0;
+    for (j = 0; j < sortedItems.size(); j++) {
+      if (items[i]->data(0,Qt::UserRole).toInt() < sortedItems[j]->data(0,Qt::UserRole).toInt()) {
+        break;
+      }
+    }
+    sortedItems.insert(j, items[i]);
+  }
+  treeWidget->insertTopLevelItems(0, sortedItems);
+  connect(treeWidget,SIGNAL(itemDoubleClicked (QTreeWidgetItem * , int)),
+                            this, SLOT(loadPresetFromItem(QTreeWidgetItem * , int)) );
 
-  int ret = d.exec();
-  if (ret == QDialog::Accepted) {
-    loadPreset(presets[box->currentIndex()].getNumber());
-  }
+  d.setModal(false);
+  d.exec();
+//  d.exec();
+//  if (ret == QDialog::Accepted) {
+//    qDebug() << "WidgetLayout::loadPreset()" << treeWidget->currentItem()->data(0,Qt::UserRole).toInt();
+//    loadPreset(presets[treeWidget->currentItem()->data(0,Qt::UserRole).toInt()].getNumber());
+//  }
 }
 
 void WidgetLayout::loadPresetFromAction()
@@ -2530,30 +2565,38 @@ void WidgetLayout::loadPresetFromAction()
   loadPreset(s->data().toInt());
 }
 
+void WidgetLayout::loadPresetFromItem(QTreeWidgetItem * item, int column)
+{
+  loadPreset(item->data(column,Qt::UserRole).toInt());
+}
+
 void WidgetLayout::loadPreset(int num)
 {
   int index = getPresetIndex(num);
-  qDebug() << "WidgetLayout::loadPreset " << num << "  " << index;
+//  qDebug() << "WidgetLayout::loadPreset " << num << "  " << index;
   if (index < 0) {
     qDebug() << "WidgetLayout::loadPreset num invalid.";
     return;
   }
+  m_currentPreset = index;
   WidgetPreset p = presets[index];
   QStringList ids = p.getWidgetIds();
   widgetsMutex.lock();
-  for (int i = 0; i < m_widgets.size(); i++) {
-    QString id = m_widgets[i]->getUuid();
-    qDebug() << "WidgetPreset::idIndex " << p.idIndex(id);
-    if (p.idIndex(id) > -1) {
-      int mode = p.getMode(id);
-      if (mode & 1) {
-        m_widgets[i]->setValue(p.getValue(id));
-      }
-      if (mode & 2) {
-        m_widgets[i]->setValue2(p.getValue2(id));
-      }
-      if (mode & 4) {
-        m_widgets[i]->setValue(p.getStringValue(id));
+  for (int i = 0; i < ids.size(); i++) {
+    QString savedId = ids[i];
+    for (int j = 0; j < m_widgets.size(); j++) {
+      QString id = m_widgets[j]->getUuid();
+      if (savedId == id) {
+        int mode = p.getMode(i);
+        if (mode & 1) {
+          m_widgets[j]->setValue(p.getValue(i));
+        }
+        if (mode & 2) {
+          m_widgets[j]->setValue2(p.getValue2(i));
+        }
+        if (mode & 4) {
+          m_widgets[j]->setValue(p.getStringValue(i));
+        }
       }
     }
   }
@@ -2581,7 +2624,17 @@ void WidgetLayout::newPreset()
 
   int ret = d.exec();
   if (ret == QDialog::Accepted) {
-    savePreset(numberSpinBox->value(), nameLineEdit->text() );
+    if (presetExists(numberSpinBox->value())) {
+      int ret = QMessageBox::question(this, tr("Preset Already Exists"),
+                                      tr("Preset %i already exists. Overwrite?").arg(numberSpinBox->value()),
+                                      QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
+      if (ret == QMessageBox::Yes) {
+        savePreset(numberSpinBox->value(), nameLineEdit->text() );
+      }
+    }
+    else {
+      savePreset(numberSpinBox->value(), nameLineEdit->text() );
+    }
 //    qDebug() << "WidgetLayout::newPreset() " << numberSpinBox->value() << "  " << nameLineEdit->text();
   }
 }
@@ -2616,8 +2669,12 @@ void WidgetLayout::savePreset()
 
   int ret = d.exec();
   if (ret == QDialog::Accepted) {
-    savePreset(box->currentIndex(), presets[box->currentIndex()].getName());
-    m_currentPreset = box->currentIndex();
+    if (box->currentIndex() < 0) {
+      newPreset();
+    }
+    else {
+      savePreset(presets[box->currentIndex()].getNumber(), presets[box->currentIndex()].getName());
+    }
   }
 }
 
@@ -2645,14 +2702,15 @@ void WidgetLayout::savePreset(int num, QString name)
         || m_widgets[i]->getWidgetType() == "BSBXYController") {
       p.addValue2(id, m_widgets[i]->getValue2());
     }
-    if (m_widgets[i]->getWidgetType() == "BSBLabel"
-        || m_widgets[i]->getWidgetType() == "BSBButton"
+    if (m_widgets[i]->getWidgetType() == "BSBButton"
         || m_widgets[i]->getWidgetType() == "BSBTextEdit") {
       p.addStringValue(id, m_widgets[i]->getStringValue());
     }
+     // Note that BSBLabel is left out from presets
   }
   widgetsMutex.unlock();
   presets[index] = p;
+  m_currentPreset = index;
 }
 
 void WidgetLayout::setPresetName(int num, QString name)
@@ -2687,6 +2745,11 @@ QString WidgetLayout::getPresetName(int num)
     return QString();
     qDebug() << "WidgetLayout::getPresetName invalud number.";
   }
+}
+
+bool WidgetLayout::presetExists(int num)
+{
+  return getPresetNums().contains(num);
 }
 
 QColor WidgetLayout::getColorFromElement(QDomElement elem)

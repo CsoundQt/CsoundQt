@@ -97,6 +97,7 @@ class WidgetLayout : public QWidget
     void setPresetName(int num, QString name);
     QList<int> getPresetNums();
     QString getPresetName(int num);
+    bool presetExists(int num);
 
     void appendCurve(WINDAT *windat);
     void killCurve(WINDAT *windat);
@@ -191,6 +192,7 @@ class WidgetLayout : public QWidget
     // Preset slots
     void loadPreset(); // Show dialog and ask
     void loadPresetFromAction();  // Triggered from menu item
+    void loadPresetFromItem(QTreeWidgetItem * item, int column);  // Triggered from tree widget
     void loadPreset(int num);
     void newPreset(); // Show dialog asking for name
 //    void newPreset(int num, QString name);
@@ -287,7 +289,7 @@ class WidgetLayout : public QWidget
     QVector<QuteGraph *> graphWidgets;
     QVector<QuteScope *> scopeWidgets;
 
-    bool parseXmlNode(QDomNode node);
+    int parseXmlNode(QDomNode node);
     int createSlider(int x, int y, int width, int height, QString widgetLine);
     int createText(int x, int y, int width, int height, QString widgetLine);
     int createScrollNumber(int x, int y, int width, int height, QString widgetLine);

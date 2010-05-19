@@ -26,6 +26,7 @@
 #include <QtGui>
 #include <QtXml>
 
+#define QCS_CURRENT_XML_VERSION "2"
 //#define USE_WIDGET_MUTEX
 
 class QuteWidget : public QWidget

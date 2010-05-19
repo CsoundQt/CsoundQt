@@ -37,12 +37,12 @@ QString WidgetPreset::getXmlText()
       out += QString::number(m_data[i].value, 'f', 8);
       out += "</value>\n";
     }
-    else if (m_data[i].mode & 2) {
+    if (m_data[i].mode & 2) {
       out += "<value id=\"" + m_data[i].id + "\" mode=\"2\" >";
       out += QString::number(m_data[i].value2, 'f', 8);
       out += "</value>\n";
     }
-    else if (m_data[i].mode & 4) {
+    if (m_data[i].mode & 4) {
       out += "<value id=\"" + m_data[i].id + "\" mode=\"4\" >";
       out += m_data[i].stringValue;
       out += "</value>\n";
@@ -72,43 +72,63 @@ QStringList WidgetPreset::getWidgetIds()
   return list;
 }
 
-int WidgetPreset::getMode(QString id)
+//int WidgetPreset::getMode(QString id)
+//{
+//  int index = idIndex(id);
+//  if (index >= 0 && index < m_data.size()) {
+//    return m_data[index].mode;
+//  }
+//  return -1;
+//}
+
+int WidgetPreset::getMode(int index)
 {
-  int index = idIndex(id);
-  if (index >= 0 && index < m_data.size()) {
-    return m_data[index].mode;
-  }
-  return -1;
+   return m_data[index].mode;
 }
 
-double WidgetPreset::getValue(QString id)
+//double WidgetPreset::getValue(QString id)
+//{
+//  int index = idIndex(id);
+//  if (index >= 0 && index < m_data.size()) {
+//    return m_data[index].value;
+//  }
+//  qDebug() << "WidgetPreset::getValue UUid not recognized!";
+//  return 0.0;
+//}
+
+double WidgetPreset::getValue(int index)
 {
-  int index = idIndex(id);
-  if (index >= 0 && index < m_data.size()) {
-    return m_data[index].value;
-  }
-  qDebug() << "WidgetPreset::getValue UUid not recognized!";
-  return 0.0;
+   return m_data[index].value;
 }
 
-double WidgetPreset::getValue2(QString id)
+//double WidgetPreset::getValue2(QString id)
+//{
+//  int index = idIndex(id);
+//  if (index >= 0 && index < m_data.size()) {
+//    return m_data[index].value2;
+//  }
+//  qDebug() << "WidgetPreset::getValue2 UUid not recognized!";
+//  return 0.0;
+//}
+
+double WidgetPreset::getValue2(int index)
 {
-  int index = idIndex(id);
-  if (index >= 0 && index < m_data.size()) {
-    return m_data[index].value2;
-  }
-  qDebug() << "WidgetPreset::getValue2 UUid not recognized!";
-  return 0.0;
+   return m_data[index].value2;
 }
 
-QString WidgetPreset::getStringValue(QString id)
+//QString WidgetPreset::getStringValue(QString id)
+//{
+//  int index = idIndex(id);
+//  if (index >= 0 && index < m_data.size()) {
+//    return m_data[index].stringValue;
+//  }
+//  qDebug() << "WidgetPreset::getStringValue UUid not recognized!";
+//  return QString();
+//}
+
+QString WidgetPreset::getStringValue(int index)
 {
-  int index = idIndex(id);
-  if (index >= 0 && index < m_data.size()) {
-    return m_data[index].stringValue;
-  }
-  qDebug() << "WidgetPreset::getStringValue UUid not recognized!";
-  return QString();
+   return m_data[index].stringValue;
 }
 
 void WidgetPreset::setName(QString name)
@@ -137,7 +157,7 @@ void WidgetPreset::addValue(QString id, double value)
   }
   m_data[index].mode = m_data[index].mode | 1;
   m_data[index].value = value;
-  qDebug() << " WidgetPreset::addValue " << m_data[index].mode;
+//  qDebug() << " WidgetPreset::addValue " << m_data[index].mode;
 }
 
 void WidgetPreset::addValue2(QString id, double value)
@@ -174,7 +194,7 @@ void WidgetPreset::addStringValue(QString id, QString value)
   }
   m_data[index].mode = m_data[index].mode | 4;
   m_data[index].stringValue = value;
-  qDebug() << "WidgetPreset::addStringValue " << value;
+//  qDebug() << "WidgetPreset::addStringValue " << value;
 }
 
 void WidgetPreset::clear()

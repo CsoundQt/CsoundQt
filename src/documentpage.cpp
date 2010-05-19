@@ -172,7 +172,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   int ret = 0;
   deleteAllLiveEvents();
   bool xmlFormatFound = false;
-  if (!fileName.endsWith(".csd")) {
+  if (!fileName.endsWith(".csd") && !fileName.isEmpty()) {
     m_view->setFullText(text); // Put all text since not a csd file.
     return ret;
   }
@@ -370,7 +370,7 @@ QString DocumentPage::getFullText()
     }
   }
   else { // Not a csd file
-// Nothing for now...
+    m_widgetLayout->clearWidgets(); // make sure no widgets are used.
   }
   if (m_lineEnding == 1) { // Windows line ending mode
     fullText.replace("\n", "\r\n");

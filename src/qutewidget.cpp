@@ -137,7 +137,7 @@ void QuteWidget::createXmlWriter(QXmlStreamWriter &s)
   s.writeStartElement("bsbObject");
   s.writeAttribute("type", getWidgetType());
 
-  s.writeAttribute("version", "2");  // Only for compatibility with blue (absolute values)
+  s.writeAttribute("version", QCS_CURRENT_XML_VERSION);  // Only for compatibility with blue (absolute values)
 
   s.writeTextElement("objectName", m_channel);
   s.writeTextElement("x", QString::number(x()));

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>714</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>500</width>
-    <height>714</height>
+    <height>600</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>500</width>
-    <height>714</height>
+    <height>600</height>
    </size>
   </property>
   <property name="palette">
@@ -102,7 +102,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>680</y>
+     <y>560</y>
      <width>481</width>
      <height>31</height>
     </rect>
@@ -123,7 +123,7 @@
      <x>10</x>
      <y>90</y>
      <width>481</width>
-     <height>581</height>
+     <height>461</height>
     </rect>
    </property>
    <property name="palette">
@@ -256,6 +256,8 @@
   </widget>
  </widget>
  <resources>
+  <include location="application.qrc"/>
+  <include location="application.qrc"/>
   <include location="application.qrc"/>
  </resources>
  <connections>

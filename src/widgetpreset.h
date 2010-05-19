@@ -29,7 +29,7 @@ class PresetData
 {
   public:
     QString id;
-    int mode; // 0=value 1=value2 4=stringValue
+    int mode; // 1=1 value 2=value2 4=stringValue  OR combination of these
     float value;
     float value2;
     QString stringValue;
@@ -44,10 +44,14 @@ class WidgetPreset
     QString getName();
     int getNumber();
     QStringList getWidgetIds();
-    int getMode(QString id);
-    double getValue(QString id);
-    double getValue2(QString id);
-    QString getStringValue(QString id);
+//    int getMode(QString id);
+//    double getValue(QString id);
+//    double getValue2(QString id);
+//    QString getStringValue(QString id);
+    int getMode(int index);
+    double getValue(int index);
+    double getValue2(int index);
+    QString getStringValue(int index);
 
     void setName(QString name);
     void setNumber(int number);
