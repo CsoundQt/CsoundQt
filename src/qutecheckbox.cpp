@@ -160,9 +160,9 @@ void QuteCheckBox::applyInternalProperties()
 {
   QuteWidget::applyInternalProperties();
 //  qDebug() << "QuteSlider::applyInternalProperties()";
+  m_value = property("QCS_pressedValue").toDouble(); // Pressed value must go before selected to make sure it has the right value...
   setValue(property("QCS_selected").toBool() ? 1:0);
   setLabel(property("QCS_label").toString());
-  m_value = property("QCS_pressedValue").toDouble();
 }
 
 void QuteCheckBox::stateChanged(int state)
@@ -175,6 +175,7 @@ void QuteCheckBox::stateChanged(int state)
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
+//  qDebug() << "QuteCheckBox::stateChanged" << state << property("QCS_pressedValue").toDouble() << m_currentValue;
   emit newValue(channelValue);
 }
 

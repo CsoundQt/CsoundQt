@@ -173,7 +173,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   deleteAllLiveEvents();
   bool xmlFormatFound = false;
   if (!fileName.endsWith(".csd") && !fileName.isEmpty()) {
-    m_view->setFullText(text); // Put all text since not a csd file.
+    m_view->setFullText(text); // Put all text since not a csd file (and not default file which has no name)
     return ret;
   }
   QString xmlPanels = QString();
