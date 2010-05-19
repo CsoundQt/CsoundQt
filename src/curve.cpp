@@ -34,7 +34,9 @@ void Curve::copy(size_t size, MYFLT *data)
 
 void Curve::destroy()
 {
-  free(m_data);
+  if (m_size != 0) {
+    free(m_data);
+  }
 }
 
 Curve::Curve(MYFLT *data, size_t size, const QString& caption,

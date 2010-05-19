@@ -49,7 +49,7 @@ QString WidgetPreset::getXmlText()
     }
   }
   out += "</preset>\n";
-  qDebug() << "WidgetPreset::getXmlText() " << out;
+//  qDebug() << "WidgetPreset::getXmlText() " << out;
   return out;
 }
 

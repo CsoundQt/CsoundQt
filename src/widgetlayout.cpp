@@ -1058,6 +1058,7 @@ void WidgetLayout::clearGraphs()
     graphWidgets[i]->clearCurves();
   }
   for (int i = 0; i < curves.size(); i++) {
+    qDebug() << "WidgetLayout::clearGraphs() " << i << "of" <<curves.size();
     delete curves[i];
   }
   curves.clear();
@@ -2820,9 +2821,9 @@ void WidgetLayout::paste()
       }
       QDomElement docElement = doc.firstChildElement("doc");
       QDomElement pl = docElement.firstChildElement("bsbObject");
-      qDebug() << "WidgetLayout::paste() " << doc.toString();
+//      qDebug() << "WidgetLayout::paste() " << doc.toString();
       while (!pl.isNull()) {
-        qDebug() << "WidgetLayout::paste() " << pl.text();
+//        qDebug() << "WidgetLayout::paste() " << pl.text();
         newXmlWidget(pl);
         editWidgets.last()->select();
         pl = pl.nextSiblingElement("bsbObject");
