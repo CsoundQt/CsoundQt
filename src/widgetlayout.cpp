@@ -1023,7 +1023,7 @@ uintptr_t WidgetLayout::getCurveById(uintptr_t id)
 void WidgetLayout::updateCurve(WINDAT *windat)
 {
 //  qDebug() << "WidgetLayout::updateCurve(WINDAT *windat) ";
-  // FIXME dont allocate new memory
+  // TODO is it possible to avoid allocating memory here?
   WINDAT *windat_ = (WINDAT *) malloc(sizeof(WINDAT));
   *windat_ = *windat;
   curveUpdateBuffer.append(windat_);
@@ -1032,9 +1032,8 @@ void WidgetLayout::updateCurve(WINDAT *windat)
 
 int WidgetLayout::killCurves(CSOUND */*csound*/)
 {
-  // FIXME free memory from curves
 //  qDebug() << "qutecsound::killCurves";
-  // FIXME this is a great idea, to copy data from the tables at the end of run, but the API is not working as expected
+  // TODO this is a great idea, to copy data from the tables at the end of run, but the API is not working as expected
 //  for (int i = 0; i < curves.size(); i++) {
 //    WINDAT * windat = curves[i]->getOriginal();
 //    if (windat->npts > 0 && windat->windid == (uintptr_t)curves[i]) { // Check for sanity of pointer
@@ -1049,6 +1048,8 @@ int WidgetLayout::killCurves(CSOUND */*csound*/)
 //      curves[i]->setOriginal(0);
 //    }
 //  }
+
+  // Curves are freed not when Csound finishes, but when Csound is run again, to have them available even if Csound is stopped.
   return 0;
 }
 
@@ -1820,8 +1821,7 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
       QWidget::keyPressEvent(event); // Propagate event if not used
     }
   }
-  // FIXME something here might be causing the beeping on OS X because the keyboard event is not being accepted
-  // http://sourceforge.net/tracker/index.php?func=detail&aid=2991838&group_id=227265&atid=1070588
+  event->accept();
 }
 
 void WidgetLayout::keyReleaseEvent(QKeyEvent *event)
