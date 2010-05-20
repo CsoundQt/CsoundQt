@@ -957,6 +957,10 @@ void WidgetLayout::appendCurve(WINDAT *windat)
 //      return;
 //    }
 //  }
+  if (curves.size() > QCS_CURVE_BUFFER_MAX) {
+    qDebug() << "WidgetLayout::appendCurve curve size exceeded. Curve discarded!";
+    return;
+  }
   windat->caption[CAPSIZE - 1] = 0; // Just in case...
   Polarity polarity;
   switch (windat->polarity) {
