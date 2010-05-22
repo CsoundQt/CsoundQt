@@ -284,13 +284,19 @@ void QuteMeter::refreshWidget()
 #endif
   double val1 = m_value;
   double val2 = m_value2;
+  if (val1 < property("QCS_xMin").toDouble()) { // Must check this in case number is -inf
+    val1 =  property("QCS_xMin").toDouble();
+  }
+  if (val2 < property("QCS_yMin").toDouble()) {
+    val2 =  property("QCS_yMin").toDouble();
+  }
+  m_widget->blockSignals(true);
+  static_cast<MeterWidget *>(m_widget)->setValues(val1, val2);
+  m_widget->blockSignals(false);
   m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
-  m_widget->blockSignals(true);
-  static_cast<MeterWidget *>(m_widget)->setValues(val1, val2);
-  m_widget->blockSignals(false);
 }
 
 void QuteMeter::applyProperties()
@@ -496,8 +502,7 @@ void MeterWidget::setValue2(double value)
 
 void MeterWidget::setValues(double value1, double value2)
 {
-  mutex.unlock();
-  if (m_value2 == value1 && m_value == value2) {
+  if (m_value2 == value2 && m_value == value1) {
     return;
   }
   mutex.lock();

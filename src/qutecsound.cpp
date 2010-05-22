@@ -299,7 +299,7 @@ void qutecsound::closeEvent(QCloseEvent *event)
   if (logFile.isOpen()) {
     logFile.close();
   }
-  showUtilities(false);
+  showUtilities(false);  // Close utilities dialog if open
   delete helpPanel;
 //  delete closeTabButton;
   delete m_options;
@@ -815,7 +815,7 @@ void qutecsound::join()
 
 void qutecsound::showUtilities(bool show)
 {
-  qDebug() << "qutecsound::showUtilities";
+  qDebug() << "qutecsound::showUtilities" << show;
   if (!show) {
     if (utilitiesDialog != 0 && utilitiesDialog->close()) {
       utilitiesDialog = 0;
