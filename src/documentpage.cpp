@@ -191,6 +191,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   }
   if (xmlFormatFound) {
      m_widgetLayout->loadXmlWidgets(xmlPanels);
+     m_widgetLayout->markHistory();
   }
   if (text.contains("<bsbPresets>") and text.contains("</bsbPresets>")) {
     QString presets = text.right(text.size()-text.indexOf("<bsbPresets>"));

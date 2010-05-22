@@ -841,7 +841,7 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
   m_widgets.append(widget);
   if (m_editMode) {
-    deselectAll();
+//    deselectAll();
     createEditFrame(widget);
     editWidgets.last()->select();
   }
@@ -1086,11 +1086,13 @@ void WidgetLayout::refreshConsoles()
 
 void WidgetLayout::refreshWidgets()
 {
+  widgetsMutex.lock();
   for (int i=0; i < m_widgets.size(); i++) {
     if (m_widgets[i]->m_valueChanged) {
       m_widgets[i]->refreshWidget();
     }
   }
+  widgetsMutex.unlock();
 }
 
 QString WidgetLayout::getCsladspaLines()
@@ -1258,6 +1260,7 @@ void WidgetLayout::createNewSlider()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
+  deselectAll();
   createSlider(posx, posy, 20, 100, QString("ioSlider {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(m_widgets.size())));
   widgetChanged();
   if (getOpenProperties()) {
@@ -1270,6 +1273,7 @@ void WidgetLayout::createNewLabel()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
+  deselectAll();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder New Label";
   createText(posx, posy, 80, 25, line);
   widgetChanged();
@@ -1283,6 +1287,7 @@ void WidgetLayout::createNewDisplay()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
+  deselectAll();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} display 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border Display";
   createText(posx, posy, 80, 25, line);
   widgetChanged();
@@ -1296,6 +1301,7 @@ void WidgetLayout::createNewScrollNumber()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
+  deselectAll();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} scroll 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} background border 0.000000";
   createScrollNumber(posx, posy, 80, 25, line);
   widgetChanged();
@@ -1309,6 +1315,7 @@ void WidgetLayout::createNewLineEdit()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
+  deselectAll();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 25} edit 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
   createLineEdit(posx, posy, 100, 25, line);
   widgetChanged();
@@ -1322,6 +1329,7 @@ void WidgetLayout::createNewSpinBox()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
+  deselectAll();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} editnum 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
   createSpinBox(posx, posy, 80, 25, line);
   widgetChanged();
@@ -1335,6 +1343,7 @@ void WidgetLayout::createNewButton()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
+  deselectAll();
   QString line = "ioButton {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 30} event 1.000000 \"button1\" \"New Button\" \"/\" i1 0 10";
   createButton(posx, posy, 100, 30, line);
   widgetChanged();
@@ -1348,6 +1357,7 @@ void WidgetLayout::createNewKnob()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
+  deselectAll();
   createKnob(posx, posy, 80, 80, QString("ioKnob {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(m_widgets.size())));
   widgetChanged();
   if (getOpenProperties()) {
@@ -1360,6 +1370,7 @@ void WidgetLayout::createNewCheckBox()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
+  deselectAll();
   createCheckBox(posx, posy, 20, 20, QString("ioCheckbox {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 20} off checkbox" +QString::number(m_widgets.size())));
   widgetChanged();
   if (getOpenProperties()) {
@@ -1372,6 +1383,7 @@ void WidgetLayout::createNewMenu()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
+  deselectAll();
   createMenu(posx, posy, 80, 30, QString("ioMenu {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 25} 1 303 \"item1,item2,item3\" menu" +QString::number(m_widgets.size())));
   widgetChanged();
   if (getOpenProperties()) {
@@ -1384,6 +1396,7 @@ void WidgetLayout::createNewMeter()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
+  deselectAll();
   createMeter(posx, posy, 30, 80, QString("ioMeter {"+ QString::number(posx) +", "+ QString::number(posy) + "} {30, 80} {0, 60000, 0} \"vert" + QString::number(m_widgets.size()) + "\" 0.000000 \"hor" + QString::number(m_widgets.size()) + "\" 0.000000 fill 1 0 mouse"));
   widgetChanged();
   if (getOpenProperties()) {
@@ -1396,6 +1409,7 @@ void WidgetLayout::createNewConsole()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
+  deselectAll();
   createConsole(posx, posy, 320, 400, QString("ioListing {"+ QString::number(posx) +", "+ QString::number(posy) + "} {320, 400}"));
   widgetChanged();
   if (getOpenProperties()) {
@@ -1408,6 +1422,7 @@ void WidgetLayout::createNewGraph()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
+  deselectAll();
   createGraph(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150}"));
   widgetChanged();
   if (getOpenProperties()) {
@@ -1420,6 +1435,7 @@ void WidgetLayout::createNewScope()
 {
   int posx = currentPosition.x();
   int posy = currentPosition.y();
+  deselectAll();
   createScope(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150} scope 2.000000 -1.000000"));
   widgetChanged();
   if (getOpenProperties()) {
@@ -3088,25 +3104,28 @@ void WidgetLayout::duplicate()
    qDebug("WidgetLayout::duplicate()");
   if (m_editMode) {
     widgetsMutex.lock();
-    int size = editWidgets.size();
-    for (int i = 0; i < size ; i++) {
+    QList<int> selectedWidgets;
+    for (int i = 0; i < editWidgets.size() ; i++) {
       if (editWidgets[i]->isSelected()) {
-        editWidgets[i]->deselect();
-        if (m_xmlFormat) {
-          QDomDocument doc;
-          doc.setContent(m_widgets[i]->getWidgetXmlText());
-          widgetsMutex.unlock();
-          newXmlWidget(doc.firstChildElement("bsbObject"), true, true);
-          widgetsMutex.lock();
-//          qDebug() << "WidgetLayout::duplicate() " << m_widgets[i]->getWidgetXmlText();
-        }
-        else {
-          widgetsMutex.unlock();
-          newMacWidget(m_widgets[i]->getWidgetLine(), true);
-          widgetsMutex.lock();
-        }
-        editWidgets.last()->select();
+        selectedWidgets << i;
       }
+    }
+    for (int i = 0; i < selectedWidgets.size() ; i++) {
+      int index = selectedWidgets[i];
+      editWidgets[index]->deselect();
+      if (m_xmlFormat) {
+        QDomDocument doc;
+        doc.setContent(m_widgets[index]->getWidgetXmlText());
+        widgetsMutex.unlock();
+        newXmlWidget(doc.firstChildElement("bsbObject"), true, true);
+        widgetsMutex.lock();
+      }
+      else {
+        widgetsMutex.unlock();
+        newMacWidget(m_widgets[index]->getWidgetLine(), true);
+        widgetsMutex.lock();
+      }
+//      editWidgets.last()->select();
     }
     widgetsMutex.unlock();
   }
@@ -3183,7 +3202,7 @@ void WidgetLayout::updateData()
   while (!curveUpdateBuffer.isEmpty()) {
     WINDAT * curveData = curveUpdateBuffer.takeFirst();
     Curve *curve = (Curve *) getCurveById(curveData->windid);
-    qDebug() << "WidgetLayout::updateData() " << curveUpdateBuffer.size() <<  " ---" << curveData << "  " << curve;
+//    qDebug() << "WidgetLayout::updateData() " << curveUpdateBuffer.size() <<  " ---" << curveData << "  " << curve;
     if (curve != 0 && curveData != 0) {
 //      qDebug() << "WidgetLayout::updateData() " << windat->caption << "-" <<  curve->get_caption();
       curve->set_size(curveData->npts);      // number of points

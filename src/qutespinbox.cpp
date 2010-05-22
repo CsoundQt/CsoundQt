@@ -23,7 +23,6 @@
 #include "qutespinbox.h"
 #include <cmath>
 
-
 QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
 {
   delete m_widget; //delete widget created by parent constructor
@@ -166,14 +165,16 @@ void QuteSpinBox::refreshWidget()
   widgetLock.lockForRead();
 #endif
   double resolution = property("QCS_resolution").toDouble();
-  double val = resolution * (int) ((m_value)/resolution);
+  double val = resolution * ceil((m_value)/resolution);
   m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
+  int cursorPos = static_cast<QLineEdit*>(m_widget)->cursorPosition();
   m_widget->blockSignals(true);
   static_cast<QDoubleSpinBox*>(m_widget)->setValue(val);
   m_widget->blockSignals(false);
+  static_cast<QLineEdit*>(m_widget)->setCursorPosition(cursorPos);
 }
 
 void QuteSpinBox::applyInternalProperties()
