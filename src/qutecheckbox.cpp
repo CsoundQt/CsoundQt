@@ -33,6 +33,7 @@ QuteCheckBox::QuteCheckBox(QWidget *parent) : QuteWidget(parent)
   setProperty("QCS_label", "");
   setProperty("QCS_pressedValue", 1.0);
   setProperty("QCS_randomizable", false);
+  setProperty("QCS_randomizableGroup", 0);
 
   m_currentValue = 0;
 
@@ -130,7 +131,10 @@ QString QuteCheckBox::getWidgetXmlText()
                      m_currentValue != 0 ? QString("true"):QString("false"));
   s.writeTextElement("label", property("QCS_label").toString());
   s.writeTextElement("pressedValue", QString::number(property("QCS_pressedValue").toDouble()));
-  s.writeTextElement("randomizable", property("QCS_randomizable").toBool() ? "true": "false");
+  s.writeStartElement("randomizable");
+  s.writeAttribute("group", QString::number(property("QCS_randomizableGroup").toInt()));
+  s.writeCharacters(property("QCS_randomizable").toBool() ? "true": "false");
+  s.writeEndElement();
   s.writeEndElement();
 
 #ifdef  USE_WIDGET_MUTEX

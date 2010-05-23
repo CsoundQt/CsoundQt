@@ -103,7 +103,6 @@ QString QuteScope::getWidgetXmlText()
   s.writeTextElement("zoomy", QString::number(property("QCS_zoomy").toDouble(), 'f', 8));
   s.writeTextElement("dispx", QString::number(property("QCS_dispx").toDouble(), 'f', 8));
   s.writeTextElement("dispy", QString::number(property("QCS_dispy").toDouble(), 'f', 8));
-  s.writeTextElement("zoomy", QString::number(property("QCS_zoomy").toDouble(), 'f', 8));
   s.writeTextElement("mode", QString::number(property("QCS_mode").toDouble(), 'f', 8));
 
   s.writeEndElement();

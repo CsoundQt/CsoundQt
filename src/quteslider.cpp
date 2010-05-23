@@ -43,6 +43,7 @@ QuteSlider::QuteSlider(QWidget *parent) : QuteWidget(parent)
   setProperty("QCS_mouseControlAct", "jump");
   setProperty("QCS_resolution", -1.0);
   setProperty("QCS_randomizable", false);
+  setProperty("QCS_randomizableGroup", 0);
 }
 
 QuteSlider::~QuteSlider()
@@ -174,8 +175,17 @@ QString QuteSlider::getWidgetXmlText()
   s.writeTextElement("minimum", QString::number(property("QCS_minimum").toDouble(), 'f', 8));
   s.writeTextElement("maximum", QString::number(property("QCS_maximum").toDouble(), 'f', 8));
   s.writeTextElement("value", QString::number(m_value, 'f', 8));
+  s.writeTextElement("mode", property("QCS_mode").toString());
+
+  s.writeStartElement("mouseControl");
+  s.writeAttribute("act", property("QCS_mouseControlAct").toString());
+  s.writeCharacters(property("QCS_mouseControl").toString());
+  s.writeEndElement();
   s.writeTextElement("resolution", QString::number(property("QCS_resolution").toDouble(), 'f', 8));
-  s.writeTextElement("randomizable", property("QCS_resolution").toBool() ? "true" : "false");
+  s.writeStartElement("randomizable");
+  s.writeAttribute("group", QString::number(property("QCS_randomizableGroup").toInt()));
+  s.writeCharacters(property("QCS_randomizable").toBool() ? "true": "false");
+  s.writeEndElement();
 
   s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX

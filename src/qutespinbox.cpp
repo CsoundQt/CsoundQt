@@ -40,6 +40,7 @@ QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
   setProperty("QCS_minimum",(double)  -999999999999.0);
   setProperty("QCS_maximum", (double) 999999999999.0);
   setProperty("QCS_randomizable", false);
+  setProperty("QCS_randomizableGroup", 0);
   setProperty("QCS_label", QVariant()); // Remove this property which is part of parent class.
   setProperty("QCS_color", QVariant()); // Remove this property which is part of parent class.
   setProperty("QCS_borderradius", QVariant()); // Remove this property which is part of parent class.
@@ -116,9 +117,7 @@ QString QuteSpinBox::getWidgetXmlText()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
-  s.writeTextElement("type", m_type);
-  s.writeTextElement("value", QString::number(static_cast<QDoubleSpinBox*>(m_widget)->value()));
-  s.writeTextElement("resolution", QString::number(property("QCS_resolution").toDouble(), 'f', 8));
+//  s.writeTextElement("type", m_type);
 
    //These are not implemented in blue
   s.writeTextElement("alignment", property("QCS_alignment").toString());
@@ -139,13 +138,18 @@ QString QuteSpinBox::getWidgetXmlText()
   s.writeTextElement("g", QString::number(color.green()));
   s.writeTextElement("b", QString::number(color.blue()));
   s.writeEndElement();
+  s.writeTextElement("resolution", QString::number(property("QCS_resolution").toDouble(), 'f', 8));
 
   s.writeTextElement("minimum", QString::number(property("QCS_minimum").toDouble()));
   s.writeTextElement("maximum", QString::number(property("QCS_maximum").toDouble()));
 //  s.writeTextElement("bordermode", property("QCS_bordermode").toString());
 //  s.writeTextElement("borderradius", QString::number(property("QCS_borderradius").toInt()));
 //  s.writeTextElement("borderwidth", QString::number(property("QCS_borderwidth").toInt()));
-  s.writeTextElement("randomizable", property("QCS_randomizable").toBool() ? "true": "false");
+  s.writeStartElement("randomizable");
+  s.writeAttribute("group", QString::number(property("QCS_randomizableGroup").toInt()));
+  s.writeCharacters(property("QCS_randomizable").toBool() ? "true": "false");
+  s.writeEndElement();
+  s.writeTextElement("value", QString::number(static_cast<QDoubleSpinBox*>(m_widget)->value()));
   s.writeEndElement();
 
 #ifdef  USE_WIDGET_MUTEX

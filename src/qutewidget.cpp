@@ -39,6 +39,9 @@ QuteWidget::QuteWidget(QWidget *parent):
   this->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 
   setProperty("QCS_uuid", QUuid::createUuid().toString());
+  setProperty("QCS_visible", true);
+  setProperty("QCS_midichan", 0);
+  setProperty("QCS_midicc", -3);
 }
 
 
@@ -145,6 +148,9 @@ void QuteWidget::createXmlWriter(QXmlStreamWriter &s)
   s.writeTextElement("width", QString::number(width()));
   s.writeTextElement("height", QString::number(height()));
   s.writeTextElement("uuid", property("QCS_uuid").toString());
+  s.writeTextElement("visible", property("QCS_visible").toBool() ? "true":"false");
+  s.writeTextElement("midichan", QString::number(property("QCS_midichan").toInt()));
+  s.writeTextElement("midicc", QString::number(property("QCS_midicc").toInt()));
 }
 
 double QuteWidget::getValue()

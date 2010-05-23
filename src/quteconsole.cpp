@@ -28,6 +28,11 @@ QuteConsole::QuteConsole(QWidget *parent) : QuteWidget(parent)
   m_widget->setAutoFillBackground(true);
   m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   canFocus(false);
+  setProperty("QCS_font", "Courier");
+  setProperty("QCS_fontsize", 8.0);
+  setProperty("QCS_bgcolor", QColor(Qt::white));
+  setProperty("QCS_bgcolormode", false);
+  setProperty("QCS_color", Qt::black);
 //   connect(static_cast<ConsoleWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 }
 
@@ -58,7 +63,22 @@ QString QuteConsole::getWidgetXmlText()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
-  // Nothing else needed here
+  s.writeTextElement("font", property("QCS_font").toString());
+  s.writeTextElement("fontsize", QString::number(property("QCS_fontsize").toInt()));
+
+  QColor color = property("QCS_color").value<QColor>();
+  s.writeStartElement("color");
+  s.writeTextElement("r", QString::number(color.red()));
+  s.writeTextElement("g", QString::number(color.green()));
+  s.writeTextElement("b", QString::number(color.blue()));
+  s.writeEndElement();
+  color = property("QCS_bgcolor").value<QColor>();
+  s.writeStartElement("bgcolor");
+  s.writeAttribute("mode", property("QCS_bgcolormode").toBool()? "background":"nobackground");
+  s.writeTextElement("r", QString::number(color.red()));
+  s.writeTextElement("g", QString::number(color.green()));
+  s.writeTextElement("b", QString::number(color.blue()));
+  s.writeEndElement();
 
   s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX

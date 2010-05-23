@@ -34,12 +34,13 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
   connect(static_cast<QPushButton *>(m_widget), SIGNAL(released()), this, SLOT(buttonReleased()));
 
   setProperty("QCS_type", "event");
-  setProperty("QCS_value", 1.0);
+  setProperty("QCS_pressedValue", 1.0);
   setProperty("QCS_stringvalue", "");
   setProperty("QCS_text", "");
   setProperty("QCS_image", "");
   setProperty("QCS_eventLine", "");
   setProperty("QCS_latch", false);
+  setProperty("QCS_latched", false);
 
 }
 
@@ -151,11 +152,13 @@ QString QuteButton::getWidgetXmlText()
 #endif
 
   s.writeTextElement("type", property("QCS_type").toString());
-  s.writeTextElement("value", QString::number(m_value,'f', 8));
+  s.writeTextElement("pressedValue", QString::number(m_value,'f', 8));
   s.writeTextElement("stringvalue", m_stringValue);
   s.writeTextElement("text", property("QCS_text").toString());
   s.writeTextElement("image", property("QCS_image").toString());
   s.writeTextElement("eventLine", property("QCS_eventLine").toString());
+  s.writeTextElement("latch", property("QCS_latch").toString());
+  s.writeTextElement("latched", property("QCS_latched").toString());
 
   s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX

@@ -146,6 +146,13 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   setFocusPolicy(Qt::StrongFocus);
 
   setMouseTracking(true);
+
+  // Default values for properties
+  m_objectName = "";
+  setWindowTitle("Widgets");
+  m_uuid = "";
+  m_visible = true;
+
   updateData(); // Starts updataData timer
 }
 
@@ -191,7 +198,10 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
   }
   QDomNodeList panel = doc.elementsByTagName("bsbPanel");
   if (panel.size() > 1) {
-    qDebug() << "WidgetLayout::loadXmlWidgets More than 1 panel available! Using first only";
+      QMessageBox::warning(this, tr("More than one panel"),
+                           tr("The csd file contains more than one widget panel!\n"
+                              "This is not suported by the current version,\n"
+                              "Addtional widget panels will be lost if the file is saved!"));
   }
   QDomNode p = panel.item(0);
   if (p.isNull()) {
@@ -300,10 +310,18 @@ QString WidgetLayout::getWidgetsText()
   // This function must be used with care as it accesses the widgets, which
   // may cause crashing since widgets are not reentrant
   QString text = "";
-  QString name = "QuteCsound"; // FIXME add setting of panel name
   text = "<bsbPanel>\n";
-  QString bg, red,green,blue;
   layoutMutex.lock();
+  text += "<label>" + windowTitle() +"</label>\n";
+  text += "<objectName>" + m_objectName +"</objectName>\n";
+  text += "<x>" +  QString::number(m_x) +"</x>\n";
+  text += "<y>" +  QString::number(m_y) +"</y>\n";
+  text += "<width>" +  QString::number(m_w) +"</width>\n";
+  text += "<height>" +  QString::number(m_h) +"</height>\n";
+  text += "<visible>" + (m_visible ? QString("true"):QString("false")) +"</visible>\n";
+  text += "<uuid>" + m_uuid +"</uuid>\n";
+
+  QString bg, red,green,blue;
   QColor bgColor = this->property("QCS_bgcolor").value<QColor>();
   bg = this->property("QCS_bg").toBool()? QString("background"):QString("nobackground");
   red = QString::number(bgColor.red());
@@ -670,12 +688,12 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 //      qDebug() << "WidgetLayout::newXmlWidget DOUBLE property:  " << nodeName.toLocal8Bit() << "--" << n.nodeValue().toDouble();
       widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toDouble());
     }
-    else if (nodeName == "selectedIndex" ) {  // INT type
+    else if (nodeName == "selectedIndex" || nodeName == "midichan" || nodeName == "midicc") {  // INT type
       QDomNode n = node.firstChild();
       nodeName.prepend("QCS_");
       widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt());
     }
-    else if (nodeName == "x" || nodeName == "y") {  // INT type
+    else if (nodeName == "x" || nodeName == "y") {  // INT type (with offset)
       QDomNode n = node.firstChild();
       nodeName.prepend("QCS_");
       if (offset) {
@@ -694,10 +712,16 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
       nodeName.prepend("QCS_");
       widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt());
     }
-    else if (nodeName == "randomizable" || nodeName == "selected" ) {  // BOOL type
+    else if (nodeName == "randomizable" || nodeName == "selected"
+             || nodeName == "visible" ) {  // BOOL type
       QDomNode n = node.firstChild();
       nodeName.prepend("QCS_");
       widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue() == "true");
+      if (nodeName == "randomizable") {
+        if (node.attribute("group") != "") {
+          widget->setProperty("QCS_randomizableGroup", node.attribute("group").toInt() );
+        }
+      }
     }
     else if (nodeName == "bsbDropdownItemList") {  // MENU ITEM type
       if (node.attribute("mode") == "value") {
@@ -744,7 +768,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 
 bool WidgetLayout::uuidFree(QString uuid)
 {
-  bool isFree = true;
+  bool isFree = true; // TODO need to check against uuid for widget panels and widget groups
   widgetsMutex.lock();
   for (int i = 0; i < m_widgets.size(); i++) {
     if (m_widgets[i]->getUuid() == uuid) {
@@ -1954,7 +1978,11 @@ int WidgetLayout::parseXmlNode(QDomNode node)
   int ret = 0;
   QString name = node.nodeName();
   if (name == "objectName") {
-    this->setProperty("QCS_objectName", node.firstChild().nodeValue());
+    m_objectName = node.firstChild().nodeValue();
+//    this->setProperty("QCS_objectName", node.firstChild().nodeValue());
+  }
+  else if (name == "label") {
+    this->setWindowTitle(node.firstChild().nodeValue());
   }
   else if (name == "x") {
     m_x = node.firstChild().nodeValue().toInt();
@@ -1969,10 +1997,10 @@ int WidgetLayout::parseXmlNode(QDomNode node)
     m_h = node.firstChild().nodeValue().toInt();
   }
   else if (name == "visible") {
-    qDebug()<< "WidgetLayout::parseXmlNode visible element not implemented.";
+    m_visible = node.firstChild().nodeValue() == "true";
   }
   else if (name == "uuid") {
-    qDebug()<< "WidgetLayout::parseXmlNode uuid element not implemented.";
+    m_uuid = node.firstChild().nodeValue();
   }
   else if (name == "bgcolor") {
     bool bg = false;

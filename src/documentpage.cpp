@@ -345,7 +345,7 @@ QString DocumentPage::getFullText()
 //  if (!fullText.endsWith("\n"))
 //    fullText += "\n";
   if (fileName.endsWith(".csd",Qt::CaseInsensitive) or fileName == "") {
-    fullText += getWidgetsText() + "\n" ;
+    fullText += getWidgetsText() ;
     fullText += getPresetsText() + "\n";
     if (saveOldFormat) {
       QString macOptions = getMacOptionsText();

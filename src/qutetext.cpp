@@ -50,6 +50,7 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 
   m_fontScaling = 1.0;
   m_fontOffset = 1.0;
+  m_type = "display";
 }
 
 QuteText::~QuteText()
@@ -715,10 +716,12 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
   setProperty("QCS_minimum",(double)  -999999999999.0);
   setProperty("QCS_maximum", (double) 99999999999999.0);
   setProperty("QCS_randomizable", false);
+  setProperty("QCS_randomizableGroup", 0);
+  setProperty("QCS_mouseControl", "continuous");
+  setProperty("QCS_mouseControlAct", "jump");
+
   setProperty("QCS_label", QVariant()); // Remove this property which is part of parent class.
   setProperty("QCS_precision", QVariant()); // Remove this property which is part of parent class.
-  setProperty("QCS_mouseControl", "continuous");
-//  setProperty("QCS_mouseControlAct", "jump");
   m_places = 2;
 }
 
@@ -871,7 +874,10 @@ QString QuteScrollNumber::getWidgetXmlText()
   s.writeTextElement("bordermode", property("QCS_bordermode").toString());
   s.writeTextElement("borderradius", QString::number(property("QCS_borderradius").toInt()));
   s.writeTextElement("borderwidth", QString::number(property("QCS_borderwidth").toInt()));
-  s.writeTextElement("randomizable", property("QCS_randomizable").toBool() ? "true": "false");
+  s.writeStartElement("randomizable");
+  s.writeAttribute("group", QString::number(property("QCS_randomizableGroup").toInt()));
+  s.writeCharacters(property("QCS_randomizable").toBool() ? "true": "false");
+  s.writeEndElement();
   s.writeStartElement("mouseControl");
   s.writeAttribute("act", property("QCS_mouseControl").toString());
   s.writeEndElement();

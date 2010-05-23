@@ -55,6 +55,7 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
   setProperty("QCS_color", QColor(Qt::green));
   setProperty("QCS_bgcolor", QColor(Qt::black));
   setProperty("QCS_randomizable", false);
+  setProperty("QCS_randomizableGroup", 0);
   setProperty("QCS_randomizableMode", "both");
 
 }
@@ -120,15 +121,16 @@ QString QuteMeter::getWidgetXmlText()
   s.writeEndElement();
   s.writeStartElement("randomizable");
   s.writeAttribute("mode", property("QCS_randomizableMode").toString());
+  s.writeAttribute("group", QString::number(property("QCS_randomizableGroup").toInt()));
   s.writeCharacters(property("QCS_randomizable").toBool() ? "true":"false");
   s.writeEndElement();
 
-//  QColor bgcolor = property("QCS_bgcolor").value<QColor>();
-//  s.writeStartElement("bgcolor");
-//  s.writeTextElement("r", QString::number(bgcolor.red()));
-//  s.writeTextElement("g", QString::number(bgcolor.green()));
-//  s.writeTextElement("b", QString::number(bgcolor.blue()));
-//  s.writeEndElement();
+  QColor bgcolor = property("QCS_bgcolor").value<QColor>();
+  s.writeStartElement("bgcolor");
+  s.writeTextElement("r", QString::number(bgcolor.red()));
+  s.writeTextElement("g", QString::number(bgcolor.green()));
+  s.writeTextElement("b", QString::number(bgcolor.blue()));
+  s.writeEndElement();
 
   s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX

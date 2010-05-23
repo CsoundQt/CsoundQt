@@ -33,9 +33,15 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
   m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 
-  setProperty("QCS_resolution", 0.01);
   setProperty("QCS_minimum", 0.0);
   setProperty("QCS_maximum", 99.0);
+  setProperty("QCS_value", 0.0);
+  setProperty("QCS_mode", "lin");
+  setProperty("QCS_mouseControl", "continuous");
+  setProperty("QCS_mouseControlAct", "jump");
+  setProperty("QCS_resolution", 0.01);
+  setProperty("QCS_randomizable", false);
+  setProperty("QCS_randomizableGroup", 0);
   connect(static_cast<QDial *>(m_widget), SIGNAL(valueChanged(int)), this, SLOT(knobChanged(int)));
 }
 
@@ -176,8 +182,16 @@ QString QuteKnob::getWidgetXmlText()
   s.writeTextElement("minimum", QString::number(property("QCS_minimum").toDouble(), 'f', 8));
   s.writeTextElement("maximum", QString::number(property("QCS_maximum").toDouble(), 'f', 8));
   s.writeTextElement("value", QString::number(m_value, 'f', 8));
-  s.writeTextElement("randomizable", "");
+  s.writeTextElement("mode", property("QCS_mode").toString());
+  s.writeStartElement("mouseControl");
+  s.writeAttribute("act", property("QCS_mouseControlAct").toString());
+  s.writeCharacters(property("QCS_mouseControl").toString());
+  s.writeEndElement();
   s.writeTextElement("resolution", QString::number(property("QCS_resolution").toDouble(), 'f', 8));
+  s.writeStartElement("randomizable");
+  s.writeAttribute("group", QString::number(property("QCS_randomizableGroup").toInt()));
+  s.writeCharacters(property("QCS_randomizable").toBool() ? "true": "false");
+  s.writeEndElement();
 
   // Thesecome from blue, but they are not implemented here
   //s.writeTextElement("knobWidth", "");

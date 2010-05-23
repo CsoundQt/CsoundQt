@@ -251,9 +251,15 @@ class WidgetLayout : public QWidget
     QList<WINDAT *> curveUpdateBuffer;
     QList<Curve *> curves;
 
+    // Properties of the panel (saved to xml file)
+    int m_x, m_y, m_w, m_h; // Position and size of panel (not this widget)
+    QString m_objectName;
+    QString m_uuid;
+    bool m_visible;
+
+    // Configuration
     bool m_repeatKeys;
     bool m_xmlFormat;
-    int m_x, m_y, m_w, m_h; // Position and size of panel (not this widget)
     bool m_trackMouse;
     int mouseX, mouseY, mouseRelX, mouseRelY, mouseBut1, mouseBut2;
     int xOffset, yOffset;

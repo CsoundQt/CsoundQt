@@ -32,6 +32,7 @@ QuteComboBox::QuteComboBox(QWidget *parent) : QuteWidget(parent)
   connect(static_cast<QComboBox *>(m_widget), SIGNAL(currentIndexChanged(int)), this, SLOT(indexChanged(int)));
   setProperty("QCS_selectedIndex", 0);
   setProperty("QCS_randomizable", false);
+  setProperty("QCS_randomizableGroup", 0);
 }
 
 QuteComboBox::~QuteComboBox()
@@ -86,7 +87,10 @@ QString QuteComboBox::getWidgetXmlText()
   }
   s.writeEndElement();
   s.writeTextElement("selectedIndex", QString::number(((QComboBox *)m_widget)->currentIndex()));
-  s.writeTextElement("randomizable",  property("QCS_randomizable").toBool() ? "true" : "false");
+  s.writeStartElement("randomizable");
+  s.writeAttribute("group", QString::number(property("QCS_randomizableGroup").toInt()));
+  s.writeCharacters(property("QCS_randomizable").toBool() ? "true": "false");
+  s.writeEndElement();
   s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
