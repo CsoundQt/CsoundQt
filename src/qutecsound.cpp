@@ -640,12 +640,10 @@ void qutecsound::openLogFile()
 void qutecsound::showNewFormatWarning()
 {
   QMessageBox::warning(this, tr("New widget format"),
-                       tr("  This version of QuteCsound implements a new format for storing widgets, which"
+                       tr("  This version of QuteCsound implements a new format for storing widgets, which "
                           "enables many of the new widget features you will find now.\n"
-                          "  The old format is still read and saved, so you will be able to open files in older versions"
-                          "but some of the features will not be passed to older versions.\n"
-                          "  Also, since the old format is not read if the new format is present in a file. "
-                          "Saving changes in the old format only may not be reflected in this version.\n"),
+                          "  The old format is still read and saved, so you will be able to open files in older versions "
+                          "but some of the features will not be passed to older versions.\n"),
                        QMessageBox::Ok);
 }
 
@@ -2568,9 +2566,14 @@ void qutecsound::readSettings()
   m_options->oldFormat = settings.value("oldFormat", true).toBool();
   m_options->openProperties = settings.value("openProperties", true).toBool();
 #ifdef Q_OS_MAC
-  m_options->fontOffset = settings.value("fontOffset", 4.0).toDouble();
+  m_options->fontOffset = settings.value("fontOffset", 3.0).toDouble();
   m_options->fontScaling = settings.value("fontScaling", 0.8).toDouble();
-#else
+#endif
+#ifdef Q_OS_LINUX
+  m_options->fontOffset = settings.value("fontOffset", 2.0).toDouble();
+  m_options->fontScaling = settings.value("fontScaling", 0.6).toDouble();
+#endif
+#ifdef Q_OS_WIN32
   m_options->fontOffset = settings.value("fontOffset", 0.0).toDouble();
   m_options->fontScaling = settings.value("fontScaling", 1.0).toDouble();
 #endif

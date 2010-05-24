@@ -2707,14 +2707,18 @@ void WidgetLayout::savePreset()
   QComboBox *box = new QComboBox(&d);
   QPushButton *okButton = new QPushButton(tr("Ok"),&d);
   QPushButton *cancelButton = new QPushButton(tr("Cancel"),&d);
+  QPushButton *newButton = new QPushButton(tr("New Preset"),&d);
+
   lab->setText(tr("Select Preset to save"));
   l->addWidget(lab);
   l->addWidget(box);
   l->addWidget(cancelButton);
+  l->addWidget(newButton);
   l->addWidget(okButton);
   connect(okButton, SIGNAL(released()), &d, SLOT(accept()));
   connect(cancelButton, SIGNAL(released()), &d, SLOT(reject()));
-
+  connect(newButton, SIGNAL(released()), this, SLOT(newPreset()));
+  connect(newButton, SIGNAL(released()), &d, SLOT(reject()));  // For now just close the load preset window (instead of refreshing...
   for (int i = 0; i < presets.size(); i++) {
     QString itemText = QString::number(presets[i].getNumber()) + "  " + presets[i].getName();
     box->addItem(itemText, presets[i].getNumber() );
@@ -2747,7 +2751,7 @@ void WidgetLayout::savePreset(int num, QString name)
   for (int i = 0; i < m_widgets.size(); i++) {
     QString id = m_widgets[i]->getUuid();
     if (!(m_widgets[i]->getWidgetType() == "BSBLabel")
-        && !(m_widgets[i]->getWidgetType() == "BSBTextEdit")
+        && !(m_widgets[i]->getWidgetType() == "BSBLineEdit")
         && !(m_widgets[i]->getWidgetType() == "BSBButton")
         && !(m_widgets[i]->getWidgetType() == "BSBConsole")) {
       p.addValue(id, m_widgets[i]->getValue());
@@ -2757,7 +2761,7 @@ void WidgetLayout::savePreset(int num, QString name)
       p.addValue2(id, m_widgets[i]->getValue2());
     }
     if (m_widgets[i]->getWidgetType() == "BSBButton"
-        || m_widgets[i]->getWidgetType() == "BSBTextEdit") {
+        || m_widgets[i]->getWidgetType() == "BSBLineEdit") {
       p.addStringValue(id, m_widgets[i]->getStringValue());
     }
      // Note that BSBLabel is left out from presets
