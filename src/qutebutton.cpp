@@ -303,7 +303,9 @@ void QuteButton::applyInternalProperties()
     qDebug() << "Warning! QuteButton::applyInternalProperties() unrecognized type:" << type;
   }
   static_cast<QPushButton *>(m_widget)->setText(property("QCS_text").toString());
-  static_cast<QPushButton *>(m_widget)->setCheckable( property("QCS_latch").toBool());
+  static_cast<QPushButton *>(m_widget)->setCheckable(property("QCS_latch").toBool());
+  m_widget->setStyleSheet("QPushButton { border-color:" + property("QCS_color").value<QColor>().name()
+                          + "; }");
 }
 
 void QuteButton::buttonPressed()

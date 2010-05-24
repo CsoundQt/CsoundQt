@@ -681,8 +681,11 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
       nodeName.prepend("QCS_");
       widget->setProperty(nodeName.toLocal8Bit(), getColorFromElement(node));
     }
+    // It's necessary to do a type conversion here rather than storing the values as QVariant strings and then converting
+    // because the proeprty will be rightly typed, and that can be queried
     else if (nodeName == "value" || nodeName == "resolution"
-             || nodeName == "minimum" || nodeName == "maximum" ) {  // DOUBLE type
+             || nodeName == "minimum" || nodeName == "maximum"
+             || nodeName == "pressedValue") {  // DOUBLE type
       QDomNode n = node.firstChild();
       nodeName.prepend("QCS_");
 //      qDebug() << "WidgetLayout::newXmlWidget DOUBLE property:  " << nodeName.toLocal8Bit() << "--" << n.nodeValue().toDouble();
@@ -705,6 +708,8 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     }
     else if (nodeName == "width" || nodeName == "height"
              || nodeName == "fontsize"
+             || nodeName == "precision"
+             || nodeName == "borderwidth"
              || nodeName == "borderradius"
              || nodeName == "midichan"  || nodeName == "midicc"
              || nodeName == "selectedIndex" ) {  // INT type

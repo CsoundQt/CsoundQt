@@ -236,7 +236,7 @@ void QuteGraph::changeCurve(int index)
 //  double span = max - min;
 //  FIXME implement dispx, dispy and modex, modey
   int size = curves[index]->get_size();
-  qDebug() << "QuteGraph::changeCurve"<< curves[index]->get_caption()<< index <<max<< min<< zoomx<< zoomy << size;
+//  qDebug() << "QuteGraph::changeCurve"<< curves[index]->get_caption()<< index <<max<< min<< zoomx<< zoomy << size;
   view->setResizeAnchor(QGraphicsView::NoAnchor);
   if (curves[index]->get_caption().contains("ftable")) {
 //    view->setSceneRect (0, min - ((max - min)*0.17),(double) size/zoomx, (max - min)*1.17/zoomy);
@@ -388,7 +388,7 @@ void QuteGraph::setCurveData(Curve * curve)
     polygons[index]->setPolygon(polygon);
   }
   m_pageComboBox->setItemText(index, curve->get_caption());
-  qDebug() << "QuteGraph::setCurveData " << index << m_pageComboBox->currentIndex();
+//  qDebug() << "QuteGraph::setCurveData " << index << m_pageComboBox->currentIndex();
   if (index == m_pageComboBox->currentIndex()) {
     changeCurve(-2); //update curve
   }
@@ -412,7 +412,7 @@ void QuteGraph::applyInternalProperties()
 
 void QuteGraph::drawCurve(Curve * curve, int index)
 {
-  qDebug() << "QuteGraph::drawCurve" << curve->getOriginal();
+//  qDebug() << "QuteGraph::drawCurve" << curve->getOriginal();
   bool live = curve->getOriginal() != 0;
   live = false;
   QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
