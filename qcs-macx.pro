@@ -31,7 +31,7 @@ LIBS += -framework QtCore -framework QtGui -framework QtXml
 LCSOUND = -framework $${MAC_LIB}
 LCSND = -l_csnd
 LSNDFILE = -lsndfile
-include(src/src.pri)
+
 QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist
 ICON = $${PWD}/images/qtcs.icns
-OTHER_FILES += $${QMAKE_INFO_PLIST}
+#OTHER_FILES += $${QMAKE_INFO_PLIST}
