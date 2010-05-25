@@ -587,6 +587,8 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
   ret = mainnode.toElement().attribute("version").toInt();
   if (type == "BSBLabel") {
     QuteText *w= new QuteText(this);
+    w->setFontOffset(m_fontOffset);
+    w->setFontScaling(m_fontScaling);
     w->setType("display");
     QDomElement ebg = mainnode.toElement().firstChildElement("bgcolor");
     if (!ebg.isNull()) {
@@ -595,8 +597,6 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
       }
       w->setProperty("QCS_bgcolor", QVariant(getColorFromElement(ebg)));
     }
-    w->setFontOffset(m_fontOffset);
-    w->setFontScaling(m_fontScaling);
 //    qDebug() <<"WidgetLayout::newXmlWidget"<< m_fontOffset << m_fontScaling;
     widget = static_cast<QuteWidget *>(w);
   }
@@ -622,7 +622,10 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   }
   else if (type == "BSBScrollNumber") {
-    widget = static_cast<QuteWidget *>(new QuteScrollNumber(this));
+    QuteScrollNumber *w = new QuteScrollNumber(this);
+    w->setFontOffset(m_fontOffset);
+    w->setFontScaling(m_fontScaling);
+    widget = static_cast<QuteWidget *>(w);
     connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   }
   else if (type == "BSBButton") {
@@ -2135,6 +2138,8 @@ int WidgetLayout::createScrollNumber(int x, int y, int width, int height, QStrin
   widget->setProperty("QCS_bgcolormode", lastParts[7] == "background");
   widget->setProperty("QCS_bordermode", lastParts[8]);
 
+  widget->setFontOffset(m_fontOffset);
+  widget->setFontScaling(m_fontScaling);
   QString labelText = "";
   int i = 9;
   while (lastParts.size() > i) {
