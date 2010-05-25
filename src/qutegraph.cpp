@@ -294,7 +294,7 @@ void QuteGraph::addCurve(Curve * curve)
   QVector<QGraphicsLineItem *> linesVector;
   linesVector.append(line);
   lines.append(linesVector);
-  qDebug() << "QuteGraph::addCurve()" << curve << curve->get_caption() ;
+//  qDebug() << "QuteGraph::addCurve()" << curve << curve->get_caption() ;
   if (curve->get_caption().contains("ftable")) {
 //     for (int i = 0; i < size; i++) {
 //       line = new QGraphicsLineItem(i, 0, i, - curve->get_data()[i]);

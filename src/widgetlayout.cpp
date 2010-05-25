@@ -501,7 +501,7 @@ QString WidgetLayout::getStringForChannel(QString channelName)
   for (int i = 0; i < m_widgets.size() ; i++) {
     if (m_widgets[i]->getChannelName() == channelName) {
       QString value = m_widgets[i]->getStringValue();
-      widgetsMutex.unlock();
+//      widgetsMutex.unlock();
       return value;
     }
   }
@@ -516,7 +516,7 @@ double WidgetLayout::getValueForChannel(QString channelName)
 //    qDebug() << "WidgetLayout::getValueForChannel " << i << "  " << m_widgets[i]->getChannelName();
     if (m_widgets[i]->getChannelName() == channelName) {
       double value = m_widgets[i]->getValue();
-      widgetsMutex.unlock();
+//      widgetsMutex.unlock();
       return value;
     }
   }

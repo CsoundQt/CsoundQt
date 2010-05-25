@@ -177,7 +177,7 @@ void LiveEventFrame::cloneFrame()
 
 void LiveEventFrame::deleteFrame(bool ask)
 {
-  int ret;
+  int ret = QMessageBox::Ok;
   if (ask) {
     ret = QMessageBox::question(this,
                                     tr("Delete Frame"),
