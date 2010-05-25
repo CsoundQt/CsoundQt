@@ -1307,7 +1307,7 @@ void WidgetLayout::createNewLabel()
   int posx = currentPosition.x();
   int posy = currentPosition.y();
   deselectAll();
-  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder New Label";
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder New Label";
   createText(posx, posy, 80, 25, line);
   widgetChanged();
   if (getOpenProperties()) {
@@ -1321,7 +1321,7 @@ void WidgetLayout::createNewDisplay()
   int posx = currentPosition.x();
   int posy = currentPosition.y();
   deselectAll();
-  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} display 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border Display";
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} display 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border Display";
   createText(posx, posy, 80, 25, line);
   widgetChanged();
   if (getOpenProperties()) {
@@ -1335,7 +1335,7 @@ void WidgetLayout::createNewScrollNumber()
   int posx = currentPosition.x();
   int posy = currentPosition.y();
   deselectAll();
-  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} scroll 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} background border 0.000000";
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} scroll 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} background border 0.000000";
   createScrollNumber(posx, posy, 80, 25, line);
   widgetChanged();
   if (getOpenProperties()) {
@@ -1349,7 +1349,7 @@ void WidgetLayout::createNewLineEdit()
   int posx = currentPosition.x();
   int posy = currentPosition.y();
   deselectAll();
-  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 25} edit 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 25} edit 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
   createLineEdit(posx, posy, 100, 25, line);
   widgetChanged();
   if (getOpenProperties()) {
@@ -1363,7 +1363,7 @@ void WidgetLayout::createNewSpinBox()
   int posx = currentPosition.x();
   int posy = currentPosition.y();
   deselectAll();
-  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} editnum 0.000000 0.001000 \"\" left \"Lucida Grande\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} editnum 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
   createSpinBox(posx, posy, 80, 25, line);
   widgetChanged();
   if (getOpenProperties()) {
@@ -2084,7 +2084,7 @@ int WidgetLayout::createText(int x, int y, int width, int height, QString widget
   widget->setProperty("QCS_objectName",quoteParts[1]);
   widget->setProperty("QCS_alignment",quoteParts[2].simplified());
   widget->setProperty("QCS_font",quoteParts[3].simplified());
-  widget->setProperty("QCS_fontsize",lastParts[0].toInt());
+  widget->setProperty("QCS_fontsize",(int) (lastParts[0].toInt()*0.6) + 2);
   widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
                                           lastParts[2].toDouble()/256.0,
                                           lastParts[3].toDouble()/256.0));
@@ -2129,7 +2129,7 @@ int WidgetLayout::createScrollNumber(int x, int y, int width, int height, QStrin
   widget->setProperty("QCS_objectName",quoteParts[1]);
   widget->setProperty("QCS_alignment",quoteParts[2].simplified());
   widget->setProperty("QCS_font",quoteParts[3].simplified());
-  widget->setProperty("QCS_fontsize",lastParts[0].toInt());
+  widget->setProperty("QCS_fontsize",(int) (lastParts[0].toInt()*0.6) + 2);
   widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
                                           lastParts[2].toDouble()/256.0,
                                           lastParts[3].toDouble()/256.0));
@@ -2175,7 +2175,7 @@ int WidgetLayout::createLineEdit(int x, int y, int width, int height, QString wi
   widget->setProperty("QCS_objectName",quoteParts[1]);
   widget->setProperty("QCS_alignment",quoteParts[2].simplified());
   widget->setProperty("QCS_font",quoteParts[3].simplified());
-  widget->setProperty("QCS_fontsize",lastParts[0].toInt());
+  widget->setProperty("QCS_fontsize",(int) (lastParts[0].toInt()*0.6) + 2);
   widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
                                           lastParts[2].toDouble()/256.0,
                                           lastParts[3].toDouble()/256.0));
@@ -2214,7 +2214,7 @@ int WidgetLayout::createSpinBox(int x, int y, int width, int height, QString wid
   widget->setProperty("QCS_objectName",quoteParts[1]);
   widget->setProperty("QCS_alignment",quoteParts[2].simplified());
   widget->setProperty("QCS_font",quoteParts[3].simplified());
-  widget->setProperty("QCS_fontsize",lastParts[0].toInt());
+  widget->setProperty("QCS_fontsize",(int) (lastParts[0].toInt()*0.6) + 2);
   widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
                                           lastParts[2].toDouble()/256.0,
                                           lastParts[3].toDouble()/256.0));

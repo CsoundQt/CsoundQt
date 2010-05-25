@@ -177,8 +177,8 @@ void QuteSpinBox::refreshWidget()
 //  int cursorPos = static_cast<QLineEdit*>(m_widget)->cursorPosition();
   m_widget->blockSignals(true);
   static_cast<QDoubleSpinBox*>(m_widget)->setValue(val);
+//  static_cast<QDoubleSpinBox*>(m_widget)->setCursorPosition(cursorPos);
   m_widget->blockSignals(false);
-//  static_cast<QLineEdit*>(m_widget)->setCursorPosition(cursorPos);
 }
 
 void QuteSpinBox::applyInternalProperties()
@@ -190,6 +190,9 @@ void QuteSpinBox::applyInternalProperties()
 #endif
 //  static_cast<QDoubleSpinBox*>(m_widget)->setValue(property("QCS_value").toDouble());
 //  m_value = property("QCS_value").toDouble();
+  m_value = property("QCS_value").toDouble();
+//  m_value2 = property("QCS_value2").toDouble();
+//  m_stringValue = property("QCS_stringValue").toDouble();
   static_cast<QDoubleSpinBox*>(m_widget)->setRange(property("QCS_minimum").toDouble(),property("QCS_maximum").toDouble());
   double resolution = property("QCS_resolution").toDouble();
   int i;

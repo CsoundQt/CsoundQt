@@ -2565,18 +2565,8 @@ void qutecsound::readSettings()
   m_options->terminalFLTK = settings.value("terminalFLTK", false).toBool();
   m_options->oldFormat = settings.value("oldFormat", true).toBool();
   m_options->openProperties = settings.value("openProperties", true).toBool();
-#ifdef Q_OS_MAC
-  m_options->fontOffset = settings.value("fontOffset", 3.0).toDouble();
-  m_options->fontScaling = settings.value("fontScaling", 0.8).toDouble();
-#endif
-#ifdef Q_OS_LINUX
-  m_options->fontOffset = settings.value("fontOffset", 2.0).toDouble();
-  m_options->fontScaling = settings.value("fontScaling", 0.6).toDouble();
-#endif
-#ifdef Q_OS_WIN32
   m_options->fontOffset = settings.value("fontOffset", 0.0).toDouble();
   m_options->fontScaling = settings.value("fontScaling", 1.0).toDouble();
-#endif
   lastFiles = settings.value("lastfiles", "").toStringList();
   lastTabIndex = settings.value("lasttabindex", "").toInt();
   settings.endGroup();
