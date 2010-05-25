@@ -218,11 +218,8 @@ void QuteWidget::applyInternalProperties()
   width = property("QCS_width").toInt();
   height = property("QCS_height").toInt();
   setWidgetGeometry(x,y,width, height);
-  m_value = property("QCS_value").toDouble();
-  m_value2 = property("QCS_value2").toDouble();
   m_channel = property("QCS_objectName").toString();
   m_channel2 = property("QCS_objectName2").toString();
-  m_stringValue = property("QCS_stringValue").toDouble();
   m_valueChanged = true;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();

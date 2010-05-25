@@ -971,6 +971,9 @@ void QuteScrollNumber::applyInternalProperties()
   QuteWidget::applyInternalProperties();
   setResolution(property("QCS_resolution").toDouble());
   setValue(property("QCS_value").toDouble());
+//  m_value = property("QCS_value").toDouble();
+//  m_value2 = property("QCS_value2").toDouble();
+//  m_stringValue = property("QCS_stringValue").toDouble();
 //  static_cast<QLabel*>(m_widget)->setText(property("QCS_label").toString());
   Qt::Alignment align;
   QString alignText = property("QCS_alignment").toString();

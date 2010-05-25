@@ -154,6 +154,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   m_visible = true;
 
   updateData(); // Starts updataData timer
+  qDebug() << "WidgetLayout::WidgetLayout " << this << " updateTimer " << &updateTimer;
 }
 
 WidgetLayout::~WidgetLayout()
@@ -3232,7 +3233,7 @@ void WidgetLayout::updateData()
     return;
   }
   if (!layoutMutex.tryLock(30)) {
-    QTimer::singleShot(30, this, SLOT(updateData()));
+    updateTimer.singleShot(30, this, SLOT(updateData()));
     return;
   }
   while (!newCurveBuffer.isEmpty()) {
@@ -3264,5 +3265,5 @@ void WidgetLayout::updateData()
   }
   layoutMutex.unlock();
   closing = 0;
-  QTimer::singleShot(30, this, SLOT(updateData()));
+  updateTimer.singleShot(30, this, SLOT(updateData()));
 }

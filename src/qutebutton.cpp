@@ -192,6 +192,7 @@ void QuteButton::applyProperties()
   widgetLock.unlock();
 #endif
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
+  qDebug() << "QuteButton::applyProperties()" << m_value;
 }
 
 void QuteButton::createPropertiesDialog()
@@ -289,6 +290,9 @@ void QuteButton::applyInternalProperties()
 {
   QuteWidget::applyInternalProperties();
 //  qDebug() << "QuteButton::applyInternalProperties()";
+//  m_value = property("QCS_value").toDouble();
+//  m_value2 = property("QCS_value2").toDouble();
+//  m_stringValue = property("QCS_stringValue").toDouble();
   QString type = property("QCS_type").toString();
   if (type == "event" or type == "value") {
     icon = QIcon();

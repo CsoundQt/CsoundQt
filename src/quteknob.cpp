@@ -100,6 +100,9 @@ void QuteKnob::applyInternalProperties()
   QuteWidget::applyInternalProperties();
 //  qDebug() << "QuteSlider::applyInternalProperties()";
 //  QVariant prop;
+//  m_value = property("QCS_value").toDouble();
+//  m_value2 = property("QCS_value2").toDouble();
+//  m_stringValue = property("QCS_stringValue").toDouble();
   setValue(property("QCS_value").toDouble());
 }
 

@@ -250,6 +250,7 @@ class WidgetLayout : public QWidget
     QList<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
     QList<WINDAT *> curveUpdateBuffer;
     QList<Curve *> curves;
+    QTimer updateTimer;
 
     // Properties of the panel (saved to xml file)
     int m_x, m_y, m_w, m_h; // Position and size of panel (not this widget)
