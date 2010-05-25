@@ -174,11 +174,11 @@ void QuteSpinBox::refreshWidget()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
-  int cursorPos = static_cast<QLineEdit*>(m_widget)->cursorPosition();
+//  int cursorPos = static_cast<QLineEdit*>(m_widget)->cursorPosition();
   m_widget->blockSignals(true);
   static_cast<QDoubleSpinBox*>(m_widget)->setValue(val);
   m_widget->blockSignals(false);
-  static_cast<QLineEdit*>(m_widget)->setCursorPosition(cursorPos);
+//  static_cast<QLineEdit*>(m_widget)->setCursorPosition(cursorPos);
 }
 
 void QuteSpinBox::applyInternalProperties()
