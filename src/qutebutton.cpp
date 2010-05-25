@@ -185,7 +185,7 @@ void QuteButton::applyProperties()
   setProperty("QCS_text", text->toPlainText());
   setProperty("QCS_image", filenameLineEdit->text());
   setProperty("QCS_type", typeComboBox->currentText());
-  m_value = valueBox->value();
+  setProperty("QCS_pressedValue", valueBox->value());
 //  setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
 //  setType(typeComboBox->currentText());
 #ifdef  USE_WIDGET_MUTEX
@@ -290,7 +290,7 @@ void QuteButton::applyInternalProperties()
 {
   QuteWidget::applyInternalProperties();
 //  qDebug() << "QuteButton::applyInternalProperties()";
-//  m_value = property("QCS_value").toDouble();
+  m_value = property("QCS_pressedValue").toDouble();
 //  m_value2 = property("QCS_value2").toDouble();
 //  m_stringValue = property("QCS_stringValue").toDouble();
   QString type = property("QCS_type").toString();

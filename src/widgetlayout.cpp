@@ -2255,7 +2255,7 @@ int WidgetLayout::createButton(int x, int y, int width, int height, QString widg
   widget->setProperty("QCS_height",height);
   widget->setProperty("QCS_objectName",quoteParts[1]);
   widget->setProperty("QCS_type",parts[5]);
-  widget->setProperty("QCS_value",parts[6].toDouble()); //value produced by button when pushed
+  widget->setProperty("QCS_pressedValue",parts[6].toDouble()); //value produced by button when pushed
 //  widget->setProperty("QCS_stringvalue",parts[7].toDouble()); // Not available in old format
   widget->setText(quoteParts[3]);
   widget->setProperty("QCS_image",quoteParts[5]);
