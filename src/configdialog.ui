@@ -976,6 +976,9 @@
        </item>
        <item>
         <widget class="QCheckBox" name="showWidgetsOnRunCheckBox">
+         <property name="toolTip">
+          <string>Make the widget panel visible when a csd is played</string>
+         </property>
          <property name="text">
           <string>Show Widgets on Play</string>
          </property>
@@ -1067,7 +1070,7 @@
        <item>
         <widget class="QCheckBox" name="oldFormatCheckBox">
          <property name="toolTip">
-          <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
+          <string>Store old widget format section in csd file, to allow older versions of QuteCsound to load most of the widget characteristics from the file</string>
          </property>
          <property name="text">
           <string>Store Old Widget Format</string>
@@ -1077,7 +1080,7 @@
        <item>
         <widget class="QCheckBox" name="openPropertiesCheckBox">
          <property name="toolTip">
-          <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
+          <string>Automatically open properties dialog when a new widget is created</string>
          </property>
          <property name="text">
           <string>Open Properties when creating widget</string>

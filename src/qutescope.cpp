@@ -155,7 +155,7 @@ void QuteScope::applyInternalProperties()
 {
   QuteWidget::applyInternalProperties();
   setType(property("QCS_type").toString());
-  setValue(m_value);
+  setValue(property("QCS_value").toDouble());
 }
 
 void QuteScope::createPropertiesDialog()
