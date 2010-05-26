@@ -107,7 +107,7 @@ class QuteLineEdit : public QuteText
 
   protected:
     virtual void createPropertiesDialog();
-    virtual void applyProperties();
+//    virtual void applyProperties();
 
   protected slots:
     void textEdited(QString text);

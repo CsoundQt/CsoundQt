@@ -310,9 +310,9 @@ void qutecsound::closeEvent(QCloseEvent *event)
   m_console->close();
   documentTabs->close();
   m_console->close();
+  delete opcodeTree;  // This is needed by some widgets which are detroyed later... leak for now...
   event->accept();
   close();
-  delete opcodeTree;  // This is needed by some widgets which are detroyed later... leak for now...
 }
 
 //void qutecsound::keyPressEvent(QKeyEvent *event)

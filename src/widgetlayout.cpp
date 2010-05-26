@@ -2084,7 +2084,7 @@ int WidgetLayout::createText(int x, int y, int width, int height, QString widget
   widget->setProperty("QCS_objectName",quoteParts[1]);
   widget->setProperty("QCS_alignment",quoteParts[2].simplified());
   widget->setProperty("QCS_font",quoteParts[3].simplified());
-  widget->setProperty("QCS_fontsize",(int) (lastParts[0].toInt()*0.6) + 2);
+  widget->setProperty("QCS_fontsize",lastParts[0].toInt() + 2);
   widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
                                           lastParts[2].toDouble()/256.0,
                                           lastParts[3].toDouble()/256.0));
@@ -2129,7 +2129,7 @@ int WidgetLayout::createScrollNumber(int x, int y, int width, int height, QStrin
   widget->setProperty("QCS_objectName",quoteParts[1]);
   widget->setProperty("QCS_alignment",quoteParts[2].simplified());
   widget->setProperty("QCS_font",quoteParts[3].simplified());
-  widget->setProperty("QCS_fontsize",(int) (lastParts[0].toInt()*0.6) + 2);
+  widget->setProperty("QCS_fontsize",lastParts[0].toInt() + 2);
   widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
                                           lastParts[2].toDouble()/256.0,
                                           lastParts[3].toDouble()/256.0));
@@ -2175,7 +2175,7 @@ int WidgetLayout::createLineEdit(int x, int y, int width, int height, QString wi
   widget->setProperty("QCS_objectName",quoteParts[1]);
   widget->setProperty("QCS_alignment",quoteParts[2].simplified());
   widget->setProperty("QCS_font",quoteParts[3].simplified());
-  widget->setProperty("QCS_fontsize",(int) (lastParts[0].toInt()*0.6) + 2);
+  widget->setProperty("QCS_fontsize",lastParts[0].toInt() + 2);
   widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
                                           lastParts[2].toDouble()/256.0,
                                           lastParts[3].toDouble()/256.0));
@@ -2214,7 +2214,7 @@ int WidgetLayout::createSpinBox(int x, int y, int width, int height, QString wid
   widget->setProperty("QCS_objectName",quoteParts[1]);
   widget->setProperty("QCS_alignment",quoteParts[2].simplified());
   widget->setProperty("QCS_font",quoteParts[3].simplified());
-  widget->setProperty("QCS_fontsize",(int) (lastParts[0].toInt()*0.6) + 2);
+  widget->setProperty("QCS_fontsize",lastParts[0].toInt() + 2);
   widget->setProperty("QCS_color", QColor(lastParts[1].toDouble()/256.0,
                                           lastParts[2].toDouble()/256.0,
                                           lastParts[3].toDouble()/256.0));

@@ -206,8 +206,26 @@ void QuteText::applyInternalProperties()
   static_cast<QLabel*>(m_widget)->setAlignment(align);
   setTextColor(property("QCS_color").value<QColor>());
   QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
+
+  int new_fontSize = 0;
+  int totalHeight = 0;
+  double fontSize = (property("QCS_fontsize").toDouble()*m_fontScaling) + m_fontOffset;
+
+  while (totalHeight < fontSize + 1) {
+    new_fontSize++;
+    QFont font(property("QCS_font").toString(), new_fontSize);
+    QFontMetricsF fm(font);
+    totalHeight = fm.ascent() + fm.descent();
+  }
+  QFont test(property("QCS_font").toString());
+  test.setPixelSize(fontSize);
+  QFontMetricsF fm(test);
+  totalHeight = fm.ascent() + fm.descent();
+  qDebug() << "QuteText::applyInternalProperties()---" << totalHeight;
+  qDebug() << "QuteText::applyInternalProperties()" <<  property("QCS_label").toString() << new_fontSize;
+
   m_widget->setStyleSheet("QLabel { font-family:\"" + property("QCS_font").toString()
-                          + "\"; font-size: " + QString::number((property("QCS_fontsize").toDouble()*m_fontScaling)  + m_fontOffset) + "pt"
+                          + "\"; font-size: " + QString::number(new_fontSize) + "pt"
                           + (property("QCS_bgcolormode").toBool() ?
                                     QString("; background-color:") + property("QCS_bgcolor").value<QColor>().name() : QString("; "))
                           + "; color:" + property("QCS_color").value<QColor>().name()
@@ -219,6 +237,7 @@ void QuteText::applyInternalProperties()
 //  qDebug() << property("QCS_bgcolormode").toBool();
 //  qDebug() << "QuteText::applyInternalProperties() sylesheet" <<  m_widget->styleSheet();
 
+  
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
@@ -622,19 +641,31 @@ void QuteLineEdit::applyInternalProperties()
   Qt::Alignment align;
   QString alignText = property("QCS_alignment").toString();
   if (alignText == "left") {
-    align = Qt::AlignLeft|Qt::AlignTop;
+    align = Qt::AlignLeft|Qt::AlignVCenter;
   }
   else if (alignText == "center") {
-    align = Qt::AlignHCenter|Qt::AlignTop;
+    align = Qt::AlignHCenter|Qt::AlignVCenter;
   }
   else if (alignText == "right") {
-    align = Qt::AlignRight|Qt::AlignTop;
+    align = Qt::AlignRight|Qt::AlignVCenter;
   }
   static_cast<QLineEdit*>(m_widget)->setAlignment(align);
   setTextColor(property("QCS_color").value<QColor>());
   QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
-  m_widget->setStyleSheet("QLabel { font-family:\"" + property("QCS_font").toString()
-                          + "\"; font-size: " + QString::number((property("QCS_fontsize").toDouble()*m_fontScaling)  + m_fontOffset)  + "pt"
+
+  int new_fontSize = 0;
+  int totalHeight = 0;
+  double fontSize = (property("QCS_fontsize").toDouble()*m_fontScaling) + m_fontOffset;
+
+  while (totalHeight < fontSize + 1) {
+    new_fontSize++;
+    QFont font(property("QCS_font").toString(), new_fontSize);
+    QFontMetricsF fm(font);
+    totalHeight = fm.ascent() + fm.descent();
+  }
+
+  m_widget->setStyleSheet("QLineEdit { font-family:\"" + property("QCS_font").toString()
+                          + "\"; font-size: " + QString::number(new_fontSize)  + "pt"
                           + (property("QCS_bgcolormode").toBool() ?
                                     QString("; background-color:") + property("QCS_bgcolor").value<QColor>().name() : QString("; "))
                           + "; color:" + property("QCS_color").value<QColor>().name()
@@ -656,12 +687,12 @@ void QuteLineEdit::createPropertiesDialog()
 {
   QuteText::createPropertiesDialog();
   dialog->setWindowTitle("Line Edit");
-  fontSize->hide();
-  font->hide();
-  border->hide();
-  bg->hide();
-  textColor->hide();
-  bgColor->hide();
+//  fontSize->hide();
+//  font->hide();
+//  border->hide();
+//  bg->hide();
+//  textColor->hide();
+//  bgColor->hide();
   borderRadius->hide();
   borderWidth->hide();
 #ifdef  USE_WIDGET_MUTEX
@@ -673,24 +704,24 @@ void QuteLineEdit::createPropertiesDialog()
 #endif
 }
 
-void QuteLineEdit::applyProperties()
-{
-  setProperty("QCS_label", text->toPlainText());
-  switch (alignment->currentIndex()) {
-    case 0:
-      setProperty("QCS_alignment", "left");
-      break;
-    case 1:
-      setProperty("QCS_alignment", "center");
-      break;
-    case 2:
-      setProperty("QCS_alignment", "right");
-      break;
-    default:
-      setProperty("QCS_alignment", "");
-  }
-  QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
-}
+//void QuteLineEdit::applyProperties()
+//{
+//  setProperty("QCS_label", text->toPlainText());
+//  switch (alignment->currentIndex()) {
+//    case 0:
+//      setProperty("QCS_alignment", "left");
+//      break;
+//    case 1:
+//      setProperty("QCS_alignment", "center");
+//      break;
+//    case 2:
+//      setProperty("QCS_alignment", "right");
+//      break;
+//    default:
+//      setProperty("QCS_alignment", "");
+//  }
+//  QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
+//}
 
 void QuteLineEdit::textEdited(QString text)
 {
@@ -978,19 +1009,31 @@ void QuteScrollNumber::applyInternalProperties()
   Qt::Alignment align;
   QString alignText = property("QCS_alignment").toString();
   if (alignText == "left") {
-    align = Qt::AlignLeft|Qt::AlignTop;
+    align = Qt::AlignLeft|Qt::AlignVCenter;
   }
   else if (alignText == "center") {
-    align = Qt::AlignHCenter|Qt::AlignTop;
+    align = Qt::AlignHCenter|Qt::AlignVCenter;
   }
   else if (alignText == "right") {
-    align = Qt::AlignRight|Qt::AlignTop;
+    align = Qt::AlignRight|Qt::AlignVCenter;
   }
   static_cast<ScrollNumberWidget*>(m_widget)->setAlignment(align);
   setTextColor(property("QCS_color").value<QColor>());
   QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
+
+  int new_fontSize = 0;
+  int totalHeight = 0;
+  double fontSize = (property("QCS_fontsize").toDouble()*m_fontScaling) + m_fontOffset;
+
+  while (totalHeight < fontSize + 1) {
+    new_fontSize++;
+    QFont font(property("QCS_font").toString(), new_fontSize);
+    QFontMetricsF fm(font);
+    totalHeight = fm.ascent() + fm.descent();
+  }
+
   m_widget->setStyleSheet("QLabel { font-family:\"" + property("QCS_font").toString()
-                          + "\"; font-size: " + QString::number((property("QCS_fontsize").toDouble()*m_fontScaling)  + m_fontOffset)  + "pt"
+                          + "\"; font-size: " + QString::number(new_fontSize)  + "pt"
                           + (property("QCS_bgcolormode").toBool() ?
                                     QString("; background-color:") + property("QCS_bgcolor").value<QColor>().name() : QString("; "))
                           + "; color:" + property("QCS_color").value<QColor>().name()

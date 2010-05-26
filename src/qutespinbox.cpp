@@ -206,19 +206,31 @@ void QuteSpinBox::applyInternalProperties()
   Qt::Alignment align;
   QString alignText = property("QCS_alignment").toString();
   if (alignText == "left") {
-    align = Qt::AlignLeft|Qt::AlignTop;
+    align = Qt::AlignLeft|Qt::AlignVCenter;
   }
   else if (alignText == "center") {
-    align = Qt::AlignHCenter|Qt::AlignTop;
+    align = Qt::AlignHCenter|Qt::AlignVCenter;
   }
   else if (alignText == "right") {
-    align = Qt::AlignRight|Qt::AlignTop;
+    align = Qt::AlignRight|Qt::AlignVCenter;
   }
   static_cast<QDoubleSpinBox*>(m_widget)->setAlignment(align);
   setTextColor(property("QCS_color").value<QColor>());
   QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
-  m_widget->setStyleSheet("QLabel { font-family:\"" + property("QCS_font").toString()
-                          + "\"; font-size: " + QString::number((property("QCS_fontsize").toDouble()*m_fontScaling)  + m_fontOffset) + "pt"
+
+  int new_fontSize = 0;
+  int totalHeight = 0;
+  double fontSize = (property("QCS_fontsize").toDouble()*m_fontScaling) + m_fontOffset;
+
+  while (totalHeight < fontSize + 1) {
+    new_fontSize++;
+    QFont font(property("QCS_font").toString(), new_fontSize);
+    QFontMetricsF fm(font);
+    totalHeight = fm.ascent() + fm.descent();
+  }
+
+  m_widget->setStyleSheet("QDoubleSpinBox { font-family:\"" + property("QCS_font").toString()
+                          + "\"; font-size: " + QString::number(new_fontSize) + "pt"
                           + (property("QCS_bgcolormode").toBool() ?
                                     QString("; background-color:") + property("QCS_bgcolor").value<QColor>().name() : QString("; "))
                           + "; color:" + property("QCS_color").value<QColor>().name()
@@ -261,13 +273,13 @@ void QuteSpinBox::createPropertiesDialog()
   maxSpinBox->setDecimals(6);
   maxSpinBox->setRange(-999999999999.0, 999999999999.0);
   layout->addWidget(maxSpinBox, 2,3, Qt::AlignLeft|Qt::AlignVCenter);
-  fontSize->hide();
-  font->hide();
-  border->hide();
-  bg->hide();
-  textColor->hide();
-  bgColor->hide();
-  border->hide();
+//  fontSize->hide();
+//  font->hide();
+//  border->hide();
+//  bg->hide();
+//  textColor->hide();
+//  bgColor->hide();
+//  border->hide();
   borderRadius->hide();
   borderWidth->hide();
 #ifdef  USE_WIDGET_MUTEX
