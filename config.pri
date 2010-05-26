@@ -123,6 +123,7 @@ isEmpty(CSOUND_LIB) {
             break()
         }
     }
+    isEmpty(CSOUND_LIB): error(A valid csound library was not found.)
 }
 isEmpty(LIBSNDFILE_INCLUDE_DIR) {
     !no_messages: message(libsndfile include directory not specified.)
