@@ -520,6 +520,11 @@ double WidgetLayout::getValueForChannel(QString channelName)
 //      widgetsMutex.unlock();
       return value;
     }
+    if (m_widgets[i]->getChannel2Name() == channelName) {
+      double value = m_widgets[i]->getValue2();
+//      widgetsMutex.unlock();
+      return value;
+    }
   }
 //  widgetsMutex.unlock();
   return 0.0;
