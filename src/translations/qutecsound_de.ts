@@ -86,22 +86,22 @@
         <location filename="../configdialog.ui" line="290"/>
         <location filename="../configdialog.ui" line="333"/>
         <location filename="../configdialog.ui" line="350"/>
-        <location filename="../configdialog.ui" line="1421"/>
-        <location filename="../configdialog.ui" line="1441"/>
-        <location filename="../configdialog.ui" line="1465"/>
-        <location filename="../configdialog.ui" line="1489"/>
-        <location filename="../configdialog.ui" line="1513"/>
-        <location filename="../configdialog.ui" line="1537"/>
-        <location filename="../configdialog.ui" line="1554"/>
-        <location filename="../configdialog.ui" line="1585"/>
-        <location filename="../configdialog.ui" line="1599"/>
-        <location filename="../configdialog.ui" line="1627"/>
-        <location filename="../configdialog.ui" line="1717"/>
-        <location filename="../configdialog.ui" line="1741"/>
-        <location filename="../configdialog.ui" line="1765"/>
-        <location filename="../configdialog.ui" line="1789"/>
-        <location filename="../configdialog.ui" line="1813"/>
-        <location filename="../configdialog.ui" line="1827"/>
+        <location filename="../configdialog.ui" line="1424"/>
+        <location filename="../configdialog.ui" line="1444"/>
+        <location filename="../configdialog.ui" line="1468"/>
+        <location filename="../configdialog.ui" line="1492"/>
+        <location filename="../configdialog.ui" line="1516"/>
+        <location filename="../configdialog.ui" line="1540"/>
+        <location filename="../configdialog.ui" line="1557"/>
+        <location filename="../configdialog.ui" line="1588"/>
+        <location filename="../configdialog.ui" line="1602"/>
+        <location filename="../configdialog.ui" line="1630"/>
+        <location filename="../configdialog.ui" line="1720"/>
+        <location filename="../configdialog.ui" line="1744"/>
+        <location filename="../configdialog.ui" line="1768"/>
+        <location filename="../configdialog.ui" line="1792"/>
+        <location filename="../configdialog.ui" line="1816"/>
+        <location filename="../configdialog.ui" line="1830"/>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -207,14 +207,14 @@
         <translation>Allgemein</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1123"/>
-        <location filename="../configdialog.ui" line="1135"/>
+        <location filename="../configdialog.ui" line="1126"/>
+        <location filename="../configdialog.ui" line="1138"/>
         <source>Editor</source>
         <translation>Editor</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="579"/>
-        <location filename="../configdialog.ui" line="1150"/>
+        <location filename="../configdialog.ui" line="1153"/>
         <source>Font</source>
         <translation>Schrift</translation>
     </message>
@@ -224,136 +224,151 @@
         <translation>Jack Client Name (für gegenwärtigen Dateinamen * benutzen)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1012"/>
+        <location filename="../configdialog.ui" line="1015"/>
         <source>Enable FLTK</source>
         <translation>FLTK ermöglichen</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="589"/>
-        <location filename="../configdialog.ui" line="1160"/>
+        <location filename="../configdialog.ui" line="1163"/>
         <source>Size</source>
         <translation>Größe</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="600"/>
-        <location filename="../configdialog.ui" line="1171"/>
+        <location filename="../configdialog.ui" line="1174"/>
         <source>6</source>
         <translation>6</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="605"/>
-        <location filename="../configdialog.ui" line="1176"/>
+        <location filename="../configdialog.ui" line="1179"/>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="610"/>
-        <location filename="../configdialog.ui" line="1181"/>
+        <location filename="../configdialog.ui" line="1184"/>
         <source>9</source>
         <translation>9</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="615"/>
-        <location filename="../configdialog.ui" line="1186"/>
+        <location filename="../configdialog.ui" line="1189"/>
         <source>10</source>
         <translation>10</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="620"/>
-        <location filename="../configdialog.ui" line="1191"/>
+        <location filename="../configdialog.ui" line="1194"/>
         <source>11</source>
         <translation>11</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="625"/>
-        <location filename="../configdialog.ui" line="1196"/>
+        <location filename="../configdialog.ui" line="1199"/>
         <source>12</source>
         <translation>12</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="630"/>
-        <location filename="../configdialog.ui" line="1201"/>
+        <location filename="../configdialog.ui" line="1204"/>
         <source>14</source>
         <translation>14</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="635"/>
-        <location filename="../configdialog.ui" line="1206"/>
+        <location filename="../configdialog.ui" line="1209"/>
         <source>18</source>
         <translation>18</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="640"/>
-        <location filename="../configdialog.ui" line="1211"/>
+        <location filename="../configdialog.ui" line="1214"/>
         <source>20</source>
         <translation>20</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="645"/>
-        <location filename="../configdialog.ui" line="1216"/>
+        <location filename="../configdialog.ui" line="1219"/>
         <source>24</source>
         <translation>24</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="650"/>
-        <location filename="../configdialog.ui" line="1221"/>
+        <location filename="../configdialog.ui" line="1224"/>
         <source>30</source>
         <translation>30</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="655"/>
-        <location filename="../configdialog.ui" line="1226"/>
+        <location filename="../configdialog.ui" line="1229"/>
         <source>36</source>
         <translation>36</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="660"/>
-        <location filename="../configdialog.ui" line="1231"/>
+        <location filename="../configdialog.ui" line="1234"/>
         <source>48</source>
         <translation>48</translation>
     </message>
     <message>
+        <location filename="../configdialog.ui" line="980"/>
+        <source>Make the widget panel visible when a csd is played</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../configdialog.ui" line="1073"/>
+        <source>Store old widget format section in csd file, to allow older versions of QuteCsound to load most of the widget characteristics from the file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1076"/>
         <source>Store Old Widget Format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1083"/>
+        <source>Automatically open properties dialog when a new widget is created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1086"/>
         <source>Open Properties when creating widget</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1092"/>
+        <location filename="../configdialog.ui" line="1095"/>
         <source>Font scaling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1105"/>
+        <location filename="../configdialog.ui" line="1108"/>
         <source>Font offset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1239"/>
+        <location filename="../configdialog.ui" line="1242"/>
         <source>Tab Width</source>
         <translation>Tabulatorbreite</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1262"/>
+        <location filename="../configdialog.ui" line="1265"/>
         <source>Line Ending Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1273"/>
+        <location filename="../configdialog.ui" line="1276"/>
         <source>Unix (LF)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1278"/>
+        <location filename="../configdialog.ui" line="1281"/>
         <source>Windows (CR+LF)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1301"/>
+        <location filename="../configdialog.ui" line="1304"/>
         <source>Color Variables</source>
         <translation>Variablen einfärben</translation>
     </message>
@@ -362,22 +377,22 @@
         <translation type="obsolete">Selbststart wenn aus Datei geladen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1360"/>
+        <location filename="../configdialog.ui" line="1363"/>
         <source>Save changes automatically on run</source>
         <translation>Veränderungen beim Starten sichern</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1367"/>
+        <location filename="../configdialog.ui" line="1370"/>
         <source>Remember open files from previous session</source>
         <translation>Dateien der vorigen Sitzung wieder öffnen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1374"/>
+        <location filename="../configdialog.ui" line="1377"/>
         <source>Show text for toolbar icons</source>
         <translation>Text für Symbole der Werkzeugleiste zeigen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1308"/>
+        <location filename="../configdialog.ui" line="1311"/>
         <source>Wrap Lines</source>
         <translation>Zeilenumbruch</translation>
     </message>
@@ -402,20 +417,18 @@
         <translation>Widgets in csd-Datei sichern</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="980"/>
+        <location filename="../configdialog.ui" line="983"/>
         <source>Show Widgets on Play</source>
         <translation>Widgets beim Abspielen zeigen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="987"/>
+        <location filename="../configdialog.ui" line="990"/>
         <source>Show Tooltips for widgets</source>
         <translation>Tooltips für Widgets zeigen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1009"/>
-        <location filename="../configdialog.ui" line="1060"/>
-        <location filename="../configdialog.ui" line="1070"/>
-        <location filename="../configdialog.ui" line="1080"/>
+        <location filename="../configdialog.ui" line="1012"/>
+        <location filename="../configdialog.ui" line="1063"/>
         <source>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</source>
         <translation>Csounds FLTK-Widgets können abstürzen wenn API benutzt wird. Besser nicht aktivieren und Csound beim Benutzen von FLTK-Widgets vom Terminal aus starten.</translation>
     </message>
@@ -434,7 +447,7 @@
         <translation>chnget/chnset benutzen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1063"/>
+        <location filename="../configdialog.ui" line="1066"/>
         <source>Run FLTK csds in Terminal</source>
         <translation>FLTK-csds im Terminal ausführen</translation>
     </message>
@@ -547,23 +560,23 @@
         <translation>Debug-Modus für Live Event Blatt</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1315"/>
+        <location filename="../configdialog.ui" line="1318"/>
         <source>Autocomplete menu while typing</source>
         <translation>Vervollständigung beim Eingeben</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1332"/>
+        <location filename="../configdialog.ui" line="1335"/>
         <source>Behavior</source>
         <translation>Verhalten</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1381"/>
+        <location filename="../configdialog.ui" line="1384"/>
         <source>Show Toolbars</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1391"/>
-        <location filename="../configdialog.ui" line="1403"/>
+        <location filename="../configdialog.ui" line="1394"/>
+        <location filename="../configdialog.ui" line="1406"/>
         <source>Environment</source>
         <translation>Umgebung</translation>
     </message>
@@ -572,113 +585,113 @@
         <translation type="obsolete">Verzeichnisse</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1428"/>
+        <location filename="../configdialog.ui" line="1431"/>
         <source>Select the location of the csound opcode plugin  directory (usually set by the installer)</source>
         <translation>Csound-Opcode-Plugin-Verzeichnis wählen (gewöhnlich durch den Installer gesetzt)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1431"/>
+        <location filename="../configdialog.ui" line="1434"/>
         <source>OPCODEDIR</source>
         <translation>OPCODEDIR</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1451"/>
+        <location filename="../configdialog.ui" line="1454"/>
         <source>SADIR</source>
         <translation>SADIR</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1475"/>
+        <location filename="../configdialog.ui" line="1478"/>
         <source>SSDIR</source>
         <translation>SSDIR</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1499"/>
+        <location filename="../configdialog.ui" line="1502"/>
         <source>SFDIR</source>
         <translation>SFDIR</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1523"/>
+        <location filename="../configdialog.ui" line="1526"/>
         <source>INCDIR</source>
         <translation>INCDIR</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1544"/>
+        <location filename="../configdialog.ui" line="1547"/>
         <source>Selects the location of the html documentation</source>
         <translation>Ort der Html-Dokumentation wählen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1547"/>
+        <location filename="../configdialog.ui" line="1550"/>
         <source>Html Doc Directory</source>
         <translation>Html-Doku-Verzeichnis</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1571"/>
+        <location filename="../configdialog.ui" line="1574"/>
         <source>Default csd</source>
         <translation>Default csd</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1592"/>
+        <location filename="../configdialog.ui" line="1595"/>
         <source>Favorite dir</source>
         <translation>Auswahlordner</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1634"/>
+        <location filename="../configdialog.ui" line="1637"/>
         <source>Python Executable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1641"/>
+        <location filename="../configdialog.ui" line="1644"/>
         <source>Python Script Dir </source>
         <translation>Python Skript Verzeichnis</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1613"/>
+        <location filename="../configdialog.ui" line="1616"/>
         <source>Log file</source>
         <translation>Log Datei</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1680"/>
-        <location filename="../configdialog.ui" line="1692"/>
+        <location filename="../configdialog.ui" line="1683"/>
+        <location filename="../configdialog.ui" line="1695"/>
         <source>External programs</source>
         <translation>Externe Programme</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1707"/>
+        <location filename="../configdialog.ui" line="1710"/>
         <source>Terminal</source>
         <translation>Terminal</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1727"/>
+        <location filename="../configdialog.ui" line="1730"/>
         <source>Wave Editor</source>
         <translation>Audio-Editor</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1751"/>
+        <location filename="../configdialog.ui" line="1754"/>
         <source>Wave Player</source>
         <translation>Abspielprogramm</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1782"/>
+        <location filename="../configdialog.ui" line="1785"/>
         <source>Browser</source>
         <translation>Browser</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1799"/>
+        <location filename="../configdialog.ui" line="1802"/>
         <source>Dot</source>
         <translation>Dot</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1820"/>
+        <location filename="../configdialog.ui" line="1823"/>
         <source>PDF viewer</source>
         <translation>PDF-Anzeiger</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1668"/>
+        <location filename="../configdialog.ui" line="1671"/>
         <source>Interface Language (requires restart)</source>
         <translation>Interface-Sprache (erfordert Neustart)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1350"/>
+        <location filename="../configdialog.ui" line="1353"/>
         <source>Autoplay files when launched from file</source>
         <translation>Selbststart wenn aus Datei geladen</translation>
     </message>
@@ -1474,8 +1487,8 @@ Von Anfang beginnen?</translation>
 <context>
     <name>KeyboardShortcuts</name>
     <message>
-        <location filename="../keyboardshortcuts.ui" line="22"/>
         <location filename="../keyboardshortcuts.cpp" line="30"/>
+        <location filename="../keyboardshortcuts.ui" line="22"/>
         <source>Keyboard Shortcuts</source>
         <translation>Tastenkombination</translation>
     </message>
@@ -1643,8 +1656,8 @@ Ist schon in Gebrauch.</translation>
         <translation>Loopdauer</translation>
     </message>
     <message>
-        <location filename="../liveeventframe.ui" line="38"/>
         <location filename="../liveeventframe.cpp" line="183"/>
+        <location filename="../liveeventframe.ui" line="38"/>
         <source>Delete Frame</source>
         <translation>Blatt löschen</translation>
     </message>
@@ -2507,8 +2520,8 @@ Ist schon in Gebrauch.</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="141"/>
-        <location filename="../widgetlayout.cpp" line="2573"/>
-        <location filename="../widgetlayout.cpp" line="2716"/>
+        <location filename="../widgetlayout.cpp" line="2578"/>
+        <location filename="../widgetlayout.cpp" line="2721"/>
         <source>New Preset</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2552,47 +2565,47 @@ Some features may not be available and will not be saved!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="920"/>
+        <location filename="../widgetlayout.cpp" line="925"/>
         <source>ChannelH:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="921"/>
+        <location filename="../widgetlayout.cpp" line="926"/>
         <source>ChannelV:</source>
         <translation>Vertikaler Kanal:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2572"/>
+        <location filename="../widgetlayout.cpp" line="2577"/>
         <source>Close</source>
         <translation type="unfinished">Schließen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2578"/>
+        <location filename="../widgetlayout.cpp" line="2583"/>
         <source>Select Preset to Load</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2670"/>
+        <location filename="../widgetlayout.cpp" line="2675"/>
         <source>New Preset Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2672"/>
+        <location filename="../widgetlayout.cpp" line="2677"/>
         <source>Number:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2688"/>
+        <location filename="../widgetlayout.cpp" line="2693"/>
         <source>Preset Already Exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2689"/>
+        <location filename="../widgetlayout.cpp" line="2694"/>
         <source>Preset %i already exists. Overwrite?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2718"/>
+        <location filename="../widgetlayout.cpp" line="2723"/>
         <source>Select Preset to save</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2603,26 +2616,26 @@ ChannelH:</source>
 Horizontaler Kanal:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="928"/>
+        <location filename="../widgetlayout.cpp" line="933"/>
         <source>Channel:</source>
         <translation>Kanal:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="1538"/>
+        <location filename="../widgetlayout.cpp" line="1543"/>
         <source>Apply</source>
         <translation>Anwenden</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="1540"/>
-        <location filename="../widgetlayout.cpp" line="2675"/>
-        <location filename="../widgetlayout.cpp" line="2715"/>
+        <location filename="../widgetlayout.cpp" line="1545"/>
+        <location filename="../widgetlayout.cpp" line="2680"/>
+        <location filename="../widgetlayout.cpp" line="2720"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="1542"/>
-        <location filename="../widgetlayout.cpp" line="2674"/>
-        <location filename="../widgetlayout.cpp" line="2714"/>
+        <location filename="../widgetlayout.cpp" line="1547"/>
+        <location filename="../widgetlayout.cpp" line="2679"/>
+        <location filename="../widgetlayout.cpp" line="2719"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>

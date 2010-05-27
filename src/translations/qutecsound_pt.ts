@@ -507,6 +507,18 @@
         <source>Python Executable</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Make the widget panel visible when a csd is played</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Store old widget format section in csd file, to allow older versions of QuteCsound to load most of the widget characteristics from the file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically open properties dialog when a new widget is created</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConsoleWidget</name>
