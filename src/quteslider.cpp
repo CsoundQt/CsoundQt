@@ -91,7 +91,7 @@ void QuteSlider::applyInternalProperties()
 
   m_value = property("QCS_value").toDouble();
 //  m_value2 = property("QCS_value2").toDouble();
-//  m_stringValue = property("QCS_stringValue").toDouble();
+//  m_stringValue = property("QCS_stringValue").toString();
   double max = property("QCS_maximum").toDouble();
   double min = property("QCS_minimum").toDouble();
   if (max < min) {

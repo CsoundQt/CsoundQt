@@ -292,7 +292,7 @@ void QuteButton::applyInternalProperties()
 //  qDebug() << "QuteButton::applyInternalProperties()";
   m_value = property("QCS_pressedValue").toDouble();
 //  m_value2 = property("QCS_value2").toDouble();
-  m_stringValue = property("QCS_stringValue").toDouble();
+  m_stringValue = property("QCS_stringValue").toString();
   QString type = property("QCS_type").toString();
   if (type == "event" or type == "value") {
     icon = QIcon();

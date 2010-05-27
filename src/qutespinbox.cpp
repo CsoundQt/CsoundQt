@@ -192,7 +192,7 @@ void QuteSpinBox::applyInternalProperties()
 //  m_value = property("QCS_value").toDouble();
   m_value = property("QCS_value").toDouble();
 //  m_value2 = property("QCS_value2").toDouble();
-//  m_stringValue = property("QCS_stringValue").toDouble();
+//  m_stringValue = property("QCS_stringValue").toString();
   static_cast<QDoubleSpinBox*>(m_widget)->setRange(property("QCS_minimum").toDouble(),property("QCS_maximum").toDouble());
   double resolution = property("QCS_resolution").toDouble();
   int i;
