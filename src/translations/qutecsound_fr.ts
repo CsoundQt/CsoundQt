@@ -313,12 +313,13 @@
     <message>
         <location filename="../configdialog.ui" line="980"/>
         <source>Make the widget panel visible when a csd is played</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer le panneau des widget lorqu&apos;un csd est joué</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1073"/>
         <source>Store old widget format section in csd file, to allow older versions of QuteCsound to load most of the widget characteristics from the file</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Stocker une section au format ancien de widget dans le fichier csd, pour que les anciennes versions de QuteCsound puissent charger l&apos;essentiel des caractéristiques des widgets</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1076"/>
@@ -328,7 +329,7 @@
     <message>
         <location filename="../configdialog.ui" line="1083"/>
         <source>Automatically open properties dialog when a new widget is created</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir automatiquement les propriétés quand un nouveau widget est créé</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1086"/>
