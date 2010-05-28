@@ -220,10 +220,10 @@ void QuteScope::applyProperties()
   setProperty("QCS_type", typeComboBox->itemData(typeComboBox->currentIndex()).toString());
   setProperty("QCS_zoomx", zoomxBox->value());
   setProperty("QCS_zoomy", zoomyBox->value());
+  setProperty("QCS_value", channelBox->itemData(channelBox->currentIndex()).toInt());
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
-  setValue(channelBox->itemData(channelBox->currentIndex()).toInt());
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
 

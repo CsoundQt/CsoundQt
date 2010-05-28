@@ -70,6 +70,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   m_enableEdit = true;
   m_xmlFormat = true;
   m_currentPreset = -1;
+  m_activeWidgets = 0;
 
   m_modified = false;
   closing = 0;
@@ -170,13 +171,13 @@ WidgetLayout::~WidgetLayout()
   clearGraphs();  // To free memory from curves.
 }
 
-unsigned int WidgetLayout::widgetCount()
-{
-  widgetsMutex.lock();
-  unsigned int number = m_widgets.size();
-  widgetsMutex.unlock();
-  return number;
-}
+//unsigned int WidgetLayout::widgetCount()
+//{
+//  widgetsMutex.lock();
+//  unsigned int number = m_widgets.size();
+//  widgetsMutex.unlock();
+//  return number;
+//}
 
 void WidgetLayout::loadWidgets(QString widgets)
 {
@@ -499,7 +500,7 @@ void WidgetLayout::setValue(int index, QString value)
 QString WidgetLayout::getStringForChannel(QString channelName)
 {
 //  widgetsMutex.lock();
-  for (int i = 0; i < m_widgets.size() ; i++) {
+  for (int i = 0; i < m_activeWidgets ; i++) {
     if (m_widgets[i]->getChannelName() == channelName) {
       QString value = m_widgets[i]->getStringValue();
 //      widgetsMutex.unlock();
@@ -513,7 +514,7 @@ QString WidgetLayout::getStringForChannel(QString channelName)
 double WidgetLayout::getValueForChannel(QString channelName)
 {
 //  widgetsMutex.lock();
-  for (int i = 0; i < m_widgets.size() ; i++) {
+  for (int i = 0; i < m_activeWidgets ; i++) {
 //    qDebug() << "WidgetLayout::getValueForChannel " << i << "  " << m_widgets[i]->getChannelName();
     if (m_widgets[i]->getChannelName() == channelName) {
       double value = m_widgets[i]->getValue();
@@ -884,6 +885,7 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
     editWidgets.last()->select();
   }
   setWidgetToolTip(widget, m_tooltips);
+  m_activeWidgets++;
   widgetsMutex.unlock();
   adjustLayoutSize();
   widget->show();
@@ -968,21 +970,25 @@ void WidgetLayout::setCurrentPosition(QPoint pos)
 void WidgetLayout::setFontOffset(double offset)
 {
   m_fontOffset = offset;
+  widgetsMutex.lock();
   for (int i=0; i < m_widgets.size(); i++) {
     if (m_widgets[i]->getWidgetType() == "BSBLabel" || m_widgets[i]->getWidgetType() == "BSBScrollNumber") {
      static_cast<QuteText *>(m_widgets[i])->setFontOffset(offset);
    }
   }
+  widgetsMutex.unlock();
 }
 
 void WidgetLayout::setFontScaling(double scaling)
 {
   m_fontScaling = scaling;
+  widgetsMutex.lock();
   for (int i=0; i < m_widgets.size(); i++) {
     if (m_widgets[i]->getWidgetType() == "BSBLabel" || m_widgets[i]->getWidgetType() == "BSBScrollNumber") {
      static_cast<QuteText *>(m_widgets[i])->setFontScaling(scaling);
    }
   }
+  widgetsMutex.unlock();
 }
 
 void WidgetLayout::appendCurve(WINDAT *windat)
@@ -1260,6 +1266,7 @@ void WidgetLayout::mouseMoveEventParent(QMouseEvent *event)
 void WidgetLayout::adjustLayoutSize()
 {
   int width = 30, height = 30;
+  // This function should not be locked as it is sometimes called from another function that locks.
 //  widgetsMutex.lock();
   for (int i = 0; i< m_widgets.size(); i++) {
     if (m_widgets[i]->x() + m_widgets[i]->width() > width) {
@@ -1492,6 +1499,7 @@ void WidgetLayout::clearWidgetLayout()
 {
 //   qDebug("WidgetLayout::clearWidgetLayout()");
   widgetsMutex.lock();
+  m_activeWidgets = 0;
   foreach (QuteWidget *widget, m_widgets) {
     delete widget;
   }
@@ -2994,6 +3002,7 @@ void WidgetLayout::deleteWidget(QuteWidget *widget)
   widgetsMutex.lock();
   int index = m_widgets.indexOf(widget);
 //   qDebug("WidgetPanel::deleteWidget %i", number);
+  m_activeWidgets = index;  // Allow all widgets before this one to be active
   widget->close();
   m_widgets.remove(index);
   if (!editWidgets.isEmpty()) {
@@ -3010,6 +3019,7 @@ void WidgetLayout::deleteWidget(QuteWidget *widget)
   index = scopeWidgets.indexOf(dynamic_cast<QuteScope *>(widget));
   if (index >= 0)
     scopeWidgets.remove(index);
+  m_activeWidgets = m_widgets.size();  // Allow all widgets again
   widgetsMutex.unlock();
   widgetChanged(widget);
 }

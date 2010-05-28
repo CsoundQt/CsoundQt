@@ -45,7 +45,7 @@ class WidgetLayout : public QWidget
   public:
     WidgetLayout(QWidget* parent);
     ~WidgetLayout();
-    unsigned int widgetCount();
+//    unsigned int widgetCount();
     void loadWidgets(QString widgets);
     void loadXmlWidgets(QString xmlWidgets);
     void loadXmlPresets(QString xmlPresets);
@@ -55,21 +55,13 @@ class WidgetLayout : public QWidget
     QString getSelectedWidgetsText();
     QString getMacWidgetsText(); // With full tags
     QStringList getSelectedMacWidgetsText();
-    bool getOpenProperties() { return m_openProperties; }
+    QString getCsladspaLines();
 
+    // Data to/from widgets
     void setValue(QString channelName, double value);
     void setValue(QString channelName, QString value);
     void setValue(int index, double value);
     void setValue(int index, QString value);
-
-    void setKeyRepeatMode(bool repeat);
-    void setOpenProperties(bool open) {m_openProperties = open; }
-    void setOuterGeometry(int newx, int newy, int neww, int newh); // Will only set if component >= 0
-    QRect getOuterGeometry();
-
-//    void getValues(QVector<QString> *channelNames,
-//                   QVector<double> *values,
-//                   QVector<QString> *stringValues);
     QString getStringForChannel(QString channelName);
     double getValueForChannel(QString channelName);
     void getMouseValues(QVector<double> *values);
@@ -80,13 +72,8 @@ class WidgetLayout : public QWidget
     int getMouseBut1();
     int getMouseBut2();
 
-    int newXmlWidget(QDomNode node, bool offset = false, bool newId = false);
-    bool uuidFree(QString uuid);
-    int newMacWidget(QString widgetLine, bool offset = false);  // Offset is used when pasting duplicated widgets
-    void registerWidget(QuteWidget *widget);
-    void appendMessage(QString message);
-    void flush();
-    void engineStopped(); // To let the widgets know engine has stopped (to free unused curve buffers)
+    // Behavior
+    void setKeyRepeatMode(bool repeat);
     void showWidgetTooltips(bool show);
     void setWidgetToolTip(QuteWidget *widget, bool show);
     void setContained(bool contained);
@@ -94,12 +81,35 @@ class WidgetLayout : public QWidget
     void setFontOffset(double offset);
     void setFontScaling(double scaling);
 
+    // Properties
+    bool getOpenProperties() { return m_openProperties; }
+    void setOpenProperties(bool open) {m_openProperties = open; }
+    void setOuterGeometry(int newx, int newy, int neww, int newh); // Will only set if component >= 0
+    QRect getOuterGeometry();
+
+//    void getValues(QVector<QString> *channelNames,
+//                   QVector<double> *values,
+//                   QVector<QString> *stringValues);
+
+    bool uuidFree(QString uuid);
+    int newXmlWidget(QDomNode node, bool offset = false, bool newId = false);
+    int newMacWidget(QString widgetLine, bool offset = false);  // Offset is used when pasting duplicated widgets
+    void registerWidget(QuteWidget *widget);
+
+    // Messages
+    void appendMessage(QString message);
+    void flush();
+
+    // Notifiations
+    void engineStopped(); // To let the widgets know engine has stopped (to free unused curve buffers)
+
     // Preset methods
     void setPresetName(int num, QString name);
     QList<int> getPresetNums();
     QString getPresetName(int num);
     bool presetExists(int num);
 
+    // Curves from API
     void appendCurve(WINDAT *windat);
     void killCurve(WINDAT *windat);
     void newCurve(Curve* curve);
@@ -111,7 +121,6 @@ class WidgetLayout : public QWidget
 
     void refreshConsoles();
     void refreshWidgets();
-    QString getCsladspaLines();
     bool isModified();
     void passWidgetClipboard(QString text);
 
@@ -173,6 +182,7 @@ class WidgetLayout : public QWidget
     void createNewScope();
     void clearWidgets();
     void clearWidgetLayout();
+
     void propertiesDialog();
     void applyProperties();
     void selectBgColor();
@@ -200,6 +210,7 @@ class WidgetLayout : public QWidget
     void savePreset(); // Show dialog asking for name
     void savePreset(int num, QString name);
 
+    // Editing
     void copy();
     void cut();
     void paste();
@@ -209,6 +220,7 @@ class WidgetLayout : public QWidget
     void undo();
     void redo();
 
+    // Alignment
     void alignLeft();
     void alignRight();
     void alignTop();
@@ -296,6 +308,7 @@ class WidgetLayout : public QWidget
     QVector<QuteConsole *> consoleWidgets;
     QVector<QuteGraph *> graphWidgets;
     QVector<QuteScope *> scopeWidgets;
+    int m_activeWidgets; // Keeps a number of widgets that can be currently accessed by value callbacks (e.g. set to 0 during paste). This is done to avoid locking the callbacks, which are called from a realtime thread
 
     int parseXmlNode(QDomNode node);
     int createSlider(int x, int y, int width, int height, QString widgetLine);

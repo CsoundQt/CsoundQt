@@ -26,6 +26,7 @@
 #include <QMutex>
 #include <QtGlobal>
 #include "configlists.h"
+#include <csound.h>
 
 // Time in milliseconds for widget and console messages updates
 #define QCS_QUEUETIMER_DEFAULT_TIME 50
@@ -76,8 +77,6 @@
 #define DEFAULT_DOT_EXECUTABLE ""
 #define DEFAULT_LOG_FILE ""
 #endif
-
-#include <csound.h>
 
 enum viewMode {
   VIEW_CSD,

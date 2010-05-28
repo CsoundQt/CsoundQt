@@ -317,7 +317,7 @@ void QuteButton::buttonPressed()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
-  if (m_channel.startsWith("_Browse")) {
+  if (m_channel.startsWith("_Browse") || m_channel.startsWith("_MBrowse")) {
     return;
   }
   if (property("QCS_latch").toBool()) {
@@ -378,7 +378,7 @@ void QuteButton::buttonReleased()
     else if (name.startsWith("_MBrowse")) {
       QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select File(s)"));
       if (!fileNames.isEmpty()) {
-        QString joinedNames = fileNames.join("-,-");
+        QString joinedNames = fileNames.join(",");
 #ifdef  USE_WIDGET_MUTEX
         widgetLock.lockForWrite();
 #endif

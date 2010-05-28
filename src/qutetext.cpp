@@ -221,8 +221,7 @@ void QuteText::applyInternalProperties()
   test.setPixelSize(fontSize);
   QFontMetricsF fm(test);
   totalHeight = fm.ascent() + fm.descent();
-  qDebug() << "QuteText::applyInternalProperties()---" << totalHeight;
-  qDebug() << "QuteText::applyInternalProperties()" <<  property("QCS_label").toString() << new_fontSize;
+//  qDebug() << "QuteText::applyInternalProperties()" <<  property("QCS_label").toString() << new_fontSize << totalHeight;
 
   m_widget->setStyleSheet("QLabel { font-family:\"" + property("QCS_font").toString()
                           + "\"; font-size: " + QString::number(new_fontSize) + "pt"
