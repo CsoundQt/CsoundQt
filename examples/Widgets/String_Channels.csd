@@ -41,15 +41,15 @@ i 1 0 1
  <x>577</x>
  <y>221</y>
  <width>200</width>
- <height>161</height>
+ <height>182</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
+ <bgcolor mode="background" >
   <r>170</r>
   <g>170</g>
   <b>127</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName>text</objectName>
   <x>38</x>
   <y>24</y>
@@ -69,7 +69,7 @@ i 1 0 1
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>221</r>
    <g>218</g>
    <b>185</b>
@@ -78,7 +78,7 @@ i 1 0 1
   <borderradius>10</borderradius>
   <borderwidth>5</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject version="2" type="BSBButton" >
   <objectName>button1</objectName>
   <x>45</x>
   <y>94</y>
@@ -101,7 +101,7 @@ i 1 0 1
  <x>577</x>
  <y>221</y>
  <width>200</width>
- <height>161</height>
+ <height>182</height>
  <visible>true</visible>
 </bsbPanel>
 <bsbPresets>

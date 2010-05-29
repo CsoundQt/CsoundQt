@@ -49,16 +49,16 @@ f 0 3600
  <objectName/>
  <x>654</x>
  <y>238</y>
- <width>352</width>
- <height>251</height>
+ <width>357</width>
+ <height>279</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
+ <bgcolor mode="background" >
   <r>138</r>
   <g>149</g>
   <b>156</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>83</x>
   <y>6</y>
@@ -78,7 +78,7 @@ f 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -87,7 +87,7 @@ f 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>23</x>
   <y>50</y>
@@ -107,7 +107,7 @@ f 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -116,7 +116,7 @@ f 0 3600
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject version="2" type="BSBDropdown" >
   <objectName>type</objectName>
   <x>91</x>
   <y>168</y>
@@ -144,9 +144,9 @@ f 0 3600
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
-  <randomizable group="0">false</randomizable>
+  <randomizable group="0" >false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject version="2" type="BSBButton" >
   <objectName>button1</objectName>
   <x>201</x>
   <y>167</y>
@@ -165,7 +165,7 @@ f 0 3600
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject version="2" type="BSBDropdown" >
   <objectName>transp</objectName>
   <x>92</x>
   <y>197</y>
@@ -193,9 +193,9 @@ f 0 3600
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>2</selectedIndex>
-  <randomizable group="0">false</randomizable>
+  <randomizable group="0" >false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject version="2" type="BSBButton" >
   <objectName>button1</objectName>
   <x>178</x>
   <y>197</y>
@@ -214,7 +214,7 @@ f 0 3600
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>36</x>
   <y>169</y>
@@ -234,7 +234,7 @@ f 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -243,7 +243,7 @@ f 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>13</x>
   <y>199</y>
@@ -263,7 +263,7 @@ f 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -275,21 +275,20 @@ f 0 3600
  <objectName/>
  <x>654</x>
  <y>238</y>
- <width>352</width>
- <height>251</height>
+ <width>357</width>
+ <height>279</height>
  <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
 <MacGUI>
 ioView background {35466, 38293, 40092}
-ioText {83, 6} {197, 41} display 0.000000 0.00100 "" left "Arial" 24 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Menu Widget
-ioText {23, 50} {291, 59} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Menu widgets can show menus with user defined elements. The elements are set as a comma separated list in the properties.The menu widget transmits the index of the currently selected item counting from 0. The current index can also be set from Csound
+ioText {83, 6} {197, 41} display 0.000000 0.00100 "" left "Arial" 24 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Menu Widget
+ioText {23, 50} {291, 104} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Menu widgets can show menus with user defined elements. The elements are set as a comma separated list in the properties.The menu widget transmits the index of the currently selected item counting from 0. The current index can also be set from Csound
 ioMenu {91, 168} {83, 26} 1 303 "wgflute,saw,shaker" type
 ioButton {201, 167} {105, 25} event 1.000000 "button1" "Make sound" "/" i1 0 2
 ioMenu {92, 197} {83, 27} 2 303 "12,0,-12" transp
 ioButton {178, 197} {151, 26} event 1.000000 "button1" "Randomize and play" "/" i2 0 1
-ioText {32, 119} {56, 25} display 0.000000 0.00100 "" right "Arial" 12 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Sound
-ioText {9, 149} {80, 25} display 0.000000 0.00100 "" right "Arial" 12 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Transposition
+ioText {36, 169} {56, 25} display 0.000000 0.00100 "" right "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Sound
+ioText {13, 199} {80, 25} display 0.000000 0.00100 "" right "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Transposition
 </MacGUI>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="425" y="326" width="614" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

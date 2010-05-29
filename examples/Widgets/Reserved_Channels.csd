@@ -28,36 +28,21 @@ f 1 0 1024 10 1
 i 1 0 3600  ;turn on instr 1 for 3600 seconds
 </CsScore>
 </CsoundSynthesizer>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>769</x>
- <y>218</y>
- <width>440</width>
- <height>568</height>
+ <x>537</x>
+ <y>90</y>
+ <width>448</width>
+ <height>607</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
+ <bgcolor mode="background" >
   <r>97</r>
   <g>136</g>
   <b>103</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>6</x>
   <y>11</y>
@@ -79,7 +64,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>52</g>
    <b>6</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>244</r>
    <g>248</g>
    <b>200</b>
@@ -88,7 +73,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>7</x>
   <y>315</y>
@@ -108,7 +93,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -117,7 +102,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject version="2" type="BSBButton" >
   <objectName>_Browse1</objectName>
   <x>327</x>
   <y>325</y>
@@ -136,7 +121,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>204</x>
   <y>326</y>
@@ -156,7 +141,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -165,7 +150,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject version="2" type="BSBButton" >
   <objectName>_Browse2</objectName>
   <x>327</x>
   <y>359</y>
@@ -184,7 +169,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>204</x>
   <y>360</y>
@@ -204,7 +189,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -213,7 +198,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject version="2" type="BSBLineEdit" >
   <objectName>_Browse1</objectName>
   <x>22</x>
   <y>390</y>
@@ -233,14 +218,14 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>232</r>
-   <g>232</g>
-   <b>232</b>
+  <bgcolor mode="nobackground" >
+   <r>230</r>
+   <g>221</g>
+   <b>213</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject version="2" type="BSBLineEdit" >
   <objectName>_Browse2</objectName>
   <x>22</x>
   <y>445</y>
@@ -260,14 +245,14 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>232</r>
-   <g>232</g>
-   <b>232</b>
+  <bgcolor mode="nobackground" >
+   <r>230</r>
+   <g>221</g>
+   <b>213</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>22</x>
   <y>362</y>
@@ -287,7 +272,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -296,7 +281,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>22</x>
   <y>419</y>
@@ -316,7 +301,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -325,7 +310,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>6</x>
   <y>123</y>
@@ -345,7 +330,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -354,7 +339,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject version="2" type="BSBButton" >
   <objectName>_Play</objectName>
   <x>316</x>
   <y>137</y>
@@ -373,7 +358,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject version="2" type="BSBButton" >
   <objectName>_Stop</objectName>
   <x>316</x>
   <y>204</y>
@@ -392,7 +377,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>211</x>
   <y>139</y>
@@ -412,7 +397,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -421,7 +406,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>212</x>
   <y>206</y>
@@ -441,7 +426,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -450,7 +435,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject version="2" type="BSBButton" >
   <objectName>_Render</objectName>
   <x>316</x>
   <y>237</y>
@@ -469,7 +454,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>157</x>
   <y>238</y>
@@ -491,7 +476,7 @@ Run offline
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -500,7 +485,7 @@ Run offline
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName>counter</objectName>
   <x>21</x>
   <y>175</y>
@@ -520,7 +505,7 @@ Run offline
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>166</r>
    <g>232</g>
    <b>171</b>
@@ -529,7 +514,7 @@ Run offline
   <borderradius>10</borderradius>
   <borderwidth>5</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>43</x>
   <y>149</y>
@@ -549,7 +534,7 @@ Run offline
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -558,7 +543,7 @@ Run offline
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject version="2" type="BSBButton" >
   <objectName>_Pause</objectName>
   <x>316</x>
   <y>170</y>
@@ -577,7 +562,7 @@ Run offline
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>211</x>
   <y>172</y>
@@ -597,7 +582,7 @@ Run offline
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -606,7 +591,7 @@ Run offline
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject version="2" type="BSBButton" >
   <objectName>_MBrowse</objectName>
   <x>284</x>
   <y>483</y>
@@ -625,7 +610,7 @@ Run offline
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>156</x>
   <y>484</y>
@@ -645,7 +630,7 @@ Run offline
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -654,7 +639,7 @@ Run offline
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject version="2" type="BSBLineEdit" >
   <objectName>_MBrowse</objectName>
   <x>22</x>
   <y>512</y>
@@ -674,47 +659,46 @@ Run offline
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>232</r>
-   <g>232</g>
-   <b>232</b>
+  <bgcolor mode="nobackground" >
+   <r>230</r>
+   <g>221</g>
+   <b>213</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
  <objectName/>
- <x>769</x>
- <y>218</y>
- <width>440</width>
- <height>568</height>
+ <x>537</x>
+ <y>90</y>
+ <width>448</width>
+ <height>607</height>
  <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
 <MacGUI>
 ioView background {24929, 34952, 26471}
-ioText {6, 11} {418, 94} display 0.000000 0.00100 "" center "Arial" 12 {5120, 13312, 1536} {62464, 63488, 51200} nobackground noborder Some channel names are reserved for special operations inside QuteCsound. These channel names send information to QuteCsound instead of to Csound allowing you to control certain aspects of QuteCsound from the Widget Panel.Â¬Â¬NOTE: Buttons must be of "value" type for this to work!
-ioText {7, 315} {418, 234} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {59392, 59392, 59392} nobackground noborder File browsing
+ioText {6, 11} {418, 106} display 0.000000 0.00100 "" center "Arial" 12 {5120, 13312, 1536} {62464, 63488, 51200} nobackground noborder Some channel names are reserved for special operations inside QuteCsound. These channel names send information to QuteCsound instead of to Csound allowing you to control certain aspects of QuteCsound from the Widget Panel.Â¬Â¬NOTE: Buttons must be of "value" type for this to work!
+ioText {7, 315} {418, 234} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File browsing
 ioButton {327, 325} {80, 25} value 1.000000 "_Browse1" "Browse A" "/" i1 0 10
-ioText {204, 326} {118, 24} display 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {59392, 59392, 59392} nobackground noborder _Browse1 channel ->
+ioText {204, 326} {118, 24} display 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Browse1 channel ->
 ioButton {327, 359} {80, 25} value 1.000000 "_Browse2" "Browse B" "/" i1 0 10
-ioText {204, 360} {118, 24} display 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {59392, 59392, 59392} nobackground noborder _Browse2 channel ->
-ioText {22, 390} {387, 25} edit 0.000000 0.00100 "_Browse1"  "Arial" 10 {0, 0, 0} {58880, 56576, 54528} falsenoborder 
-ioText {22, 445} {387, 25} edit 0.000000 0.00100 "_Browse2"  "Arial" 10 {0, 0, 0} {58880, 56576, 54528} falsenoborder 
-ioText {22, 362} {118, 24} display 0.000000 0.00100 "" left "Arial" 10 {65280, 65280, 65280} {59392, 59392, 59392} nobackground noborder File A:
-ioText {23, 419} {118, 24} display 0.000000 0.00100 "" left "Arial" 10 {65280, 65280, 65280} {59392, 59392, 59392} nobackground noborder File B:
-ioText {6, 123} {418, 184} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Transport
+ioText {204, 360} {118, 24} display 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Browse2 channel ->
+ioText {22, 390} {387, 25} edit 0.000000 0.00100 "_Browse1"  "Arial" 10 {0, 0, 0} {59392, 59392, 59392} falsenoborder 
+ioText {22, 445} {387, 25} edit 0.000000 0.00100 "_Browse2"  "Arial" 10 {0, 0, 0} {59392, 59392, 59392} falsenoborder 
+ioText {22, 362} {118, 24} display 0.000000 0.00100 "" left "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder File A:
+ioText {22, 419} {118, 24} display 0.000000 0.00100 "" left "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder File B:
+ioText {6, 123} {418, 184} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Transport
 ioButton {316, 137} {78, 26} value 1.000000 "_Play" "Play" "/" i1 0 10
 ioButton {316, 204} {80, 25} value 1.000000 "_Stop" "Stop" "/" i1 0 10
-ioText {211, 139} {101, 24} display 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {59392, 59392, 59392} nobackground noborder _Play channel ->
-ioText {212, 206} {101, 24} display 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {59392, 59392, 59392} nobackground noborder _Stop channel ->
+ioText {211, 139} {101, 24} display 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Play channel ->
+ioText {212, 206} {101, 24} display 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Stop channel ->
 ioButton {316, 237} {80, 25} value 1.000000 "_Render" "Render" "/" i1 0 10
-ioText {157, 238} {157, 52} display 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {59392, 59392, 59392} nobackground noborder _Render channel ->Â¬Run offlineÂ¬(non-realtime)
+ioText {157, 238} {157, 52} display 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Render channel ->Â¬Run offlineÂ¬(non-realtime)
 ioText {21, 175} {161, 115} display 0.000000 0.00100 "counter" center "Courier New" 80 {0, 0, 0} {42496, 59392, 43776} nobackground noborder 0
-ioText {43, 149} {115, 23} display 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Playback counter
+ioText {43, 149} {115, 23} display 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Playback counter
 ioButton {316, 170} {78, 26} value 1.000000 "_Pause" "Pause" "/" i1 0 10
-ioText {211, 172} {101, 24} display 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {59392, 59392, 59392} nobackground noborder _Pause channel ->
+ioText {211, 172} {101, 24} display 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Pause channel ->
 ioButton {284, 483} {124, 25} value 1.000000 "_MBrowse" "Browse Multiple" "/" i1 0 10
-ioText {156, 484} {123, 24} display 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {59392, 59392, 59392} nobackground noborder _MBrowse channel ->
-ioText {22, 512} {387, 25} edit 1.000000 0.00100 "_MBrowse"  "Arial" 10 {0, 0, 0} {58880, 56576, 54528} falsenoborder 
+ioText {156, 484} {123, 24} display 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _MBrowse channel ->
+ioText {22, 512} {387, 25} edit 0.000000 0.00100 "_MBrowse"  "Arial" 10 {0, 0, 0} {59392, 59392, 59392} falsenoborder 
 </MacGUI>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="425" y="326" width="614" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

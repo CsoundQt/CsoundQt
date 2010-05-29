@@ -25,18 +25,18 @@ i 1 0 1000
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>859</x>
- <y>253</y>
+ <x>326</x>
+ <y>88</y>
  <width>491</width>
  <height>658</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
+ <bgcolor mode="background" >
   <r>138</r>
   <g>149</g>
   <b>156</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>144</x>
   <y>1</y>
@@ -56,7 +56,7 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -65,7 +65,7 @@ i 1 0 1000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>10</x>
   <y>41</y>
@@ -85,7 +85,7 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -94,7 +94,7 @@ i 1 0 1000
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject version="2" type="BSBScope" >
   <objectName/>
   <x>9</x>
   <y>88</y>
@@ -112,7 +112,7 @@ i 1 0 1000
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject version="2" type="BSBScope" >
   <objectName/>
   <x>9</x>
   <y>188</y>
@@ -130,7 +130,7 @@ i 1 0 1000
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject version="2" type="BSBScope" >
   <objectName/>
   <x>9</x>
   <y>291</y>
@@ -148,7 +148,7 @@ i 1 0 1000
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject version="2" type="BSBScope" >
   <objectName/>
   <x>9</x>
   <y>437</y>
@@ -166,7 +166,7 @@ i 1 0 1000
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>10</x>
   <y>393</y>
@@ -186,7 +186,7 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -195,7 +195,7 @@ i 1 0 1000
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject version="2" type="BSBScope" >
   <objectName/>
   <x>248</x>
   <y>437</y>
@@ -213,7 +213,7 @@ i 1 0 1000
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject version="2" type="BSBScope" >
   <objectName/>
   <x>9</x>
   <y>535</y>
@@ -231,7 +231,7 @@ i 1 0 1000
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject version="2" type="BSBScope" >
   <objectName/>
   <x>101</x>
   <y>535</y>
@@ -249,7 +249,7 @@ i 1 0 1000
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>194</x>
   <y>535</y>
@@ -269,7 +269,7 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -279,8 +279,8 @@ i 1 0 1000
   <borderwidth>1</borderwidth>
  </bsbObject>
  <objectName/>
- <x>859</x>
- <y>253</y>
+ <x>326</x>
+ <y>88</y>
  <width>491</width>
  <height>658</height>
  <visible>true</visible>
@@ -289,16 +289,15 @@ i 1 0 1000
 </bsbPresets>
 <MacGUI>
 ioView background {35466, 38293, 40092}
-ioText {145, 6} {191, 39} display 0.000000 0.00100 "" center "Arial" 24 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Scope Widget
+ioText {144, 1} {191, 39} display 0.000000 0.00100 "" center "Arial" 24 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Scope Widget
 ioText {10, 41} {465, 44} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {48896, 52224, 59904} nobackground noborder The Scope widget is an oscilloscope which can show the output of Csound. The oscilloscope can show individual channels or a sum of all output channels. Clicking on a Scope widget freezes it.
 ioGraph {9, 88} {466, 98} scope 2.000000 1 
 ioGraph {9, 188} {467, 99} scope 2.000000 2 
 ioGraph {9, 291} {466, 97} scope 2.000000 -1 
 ioGraph {9, 437} {231, 90} scope 8.000000 -1 
-ioText {10, 393} {466, 34} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {48896, 52224, 59904} nobackground noborder The decimation property averages sample, allowing a larger time frame to be displayed. The default without decimation is one audio sample per screen pixel.
+ioText {10, 393} {465, 37} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {48896, 52224, 59904} nobackground noborder The decimation property averages sample, allowing a larger time frame to be displayed. The default without decimation is one audio sample per screen pixel.
 ioGraph {248, 437} {226, 90} scope 1.000000 -1 
 ioGraph {9, 535} {84, 84} lissajou 2.000000 -1 
 ioGraph {101, 535} {84, 84} poincare 2.000000 -1 
-ioText {193, 528} {281, 82} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {48896, 52224, 59904} nobackground noborder The Scope widget can also show Lissajou and Poincare graphs. The decimation parameter in these cases determines the "zoom".
+ioText {194, 535} {281, 82} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {48896, 52224, 59904} nobackground noborder The Scope widget can also show Lissajou and Poincare graphs. The decimation parameter in these cases determines the "zoom".
 </MacGUI>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="425" y="326" width="614" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

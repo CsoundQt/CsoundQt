@@ -44,22 +44,21 @@ endin
 i 1 0 1000
 i 2 0 1000
 </CsScore>
-</CsoundSynthesizer>
-<bsbPanel>
+</CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>692</x>
- <y>150</y>
- <width>402</width>
- <height>464</height>
+ <x>691</x>
+ <y>154</y>
+ <width>412</width>
+ <height>491</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
+ <bgcolor mode="background" >
   <r>138</r>
   <g>149</g>
   <b>156</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>74</x>
   <y>6</y>
@@ -79,7 +78,7 @@ i 2 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -88,7 +87,7 @@ i 2 0 1000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>7</x>
   <y>45</y>
@@ -108,7 +107,7 @@ i 2 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -117,7 +116,7 @@ i 2 0 1000
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>35</x>
   <y>111</y>
@@ -137,7 +136,7 @@ i 2 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -146,7 +145,7 @@ i 2 0 1000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>35</x>
   <y>138</y>
@@ -166,7 +165,7 @@ i 2 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -175,7 +174,7 @@ i 2 0 1000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject version="2" type="BSBGraph" >
   <objectName/>
   <x>12</x>
   <y>167</y>
@@ -194,7 +193,7 @@ i 2 0 1000
   <modey>lin</modey>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>12</x>
   <y>343</y>
@@ -214,7 +213,7 @@ i 2 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -223,7 +222,7 @@ i 2 0 1000
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject version="2" type="BSBCheckBox" >
   <objectName>checkbox</objectName>
   <x>19</x>
   <y>403</y>
@@ -236,9 +235,9 @@ i 2 0 1000
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
-  <randomizable group="0">false</randomizable>
+  <randomizable group="0" >false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>38</x>
   <y>402</y>
@@ -258,7 +257,7 @@ i 2 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -267,7 +266,7 @@ i 2 0 1000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject version="2" type="BSBCheckBox" >
   <objectName>enable</objectName>
   <x>19</x>
   <y>372</y>
@@ -280,9 +279,9 @@ i 2 0 1000
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
-  <randomizable group="0">false</randomizable>
+  <randomizable group="0" >false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>36</x>
   <y>372</y>
@@ -302,7 +301,7 @@ i 2 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -311,7 +310,7 @@ i 2 0 1000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject version="2" type="BSBCheckBox" >
   <objectName>hipass</objectName>
   <x>19</x>
   <y>112</y>
@@ -324,9 +323,9 @@ i 2 0 1000
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
-  <randomizable group="0">false</randomizable>
+  <randomizable group="0" >false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject version="2" type="BSBCheckBox" >
   <objectName>lowpass</objectName>
   <x>19</x>
   <y>139</y>
@@ -339,29 +338,29 @@ i 2 0 1000
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
-  <randomizable group="0">false</randomizable>
+  <randomizable group="0" >false</randomizable>
  </bsbObject>
  <objectName/>
- <x>692</x>
- <y>150</y>
- <width>402</width>
- <height>464</height>
+ <x>691</x>
+ <y>154</y>
+ <width>412</width>
+ <height>491</height>
  <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
 <MacGUI>
 ioView background {35466, 38293, 40092}
-ioText {74, 6} {247, 44} display 0.000000 0.00100 "" left "Arial" 24 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Checkbox Widget
+ioText {74, 6} {247, 44} display 0.000000 0.00100 "" left "Arial" 24 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Checkbox Widget
 ioText {7, 45} {377, 56} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder The checkbox widget is a simple widget which sends a value of 1 on its channel when its checked and a 0 when not. It's value can also be set using a channel.
-ioText {35, 111} {80, 25} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Hi Pass filter
-ioText {35, 138} {80, 25} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Low Pass filter
+ioText {35, 111} {80, 25} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Hi Pass filter
+ioText {35, 138} {80, 25} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Low Pass filter
 ioGraph {12, 167} {373, 172} table 0.000000 1.000000 
-ioText {11, 381} {372, 96} display 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Setting the value of a checkbox
+ioText {12, 343} {372, 96} display 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Setting the value of a checkbox
 ioCheckbox {19, 403} {22, 20} off checkbox
-ioText {37, 440} {313, 28} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {59392, 59392, 59392} nobackground noborder This Checkbox's value is set from Csound
+ioText {38, 402} {313, 28} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder This Checkbox's value is set from Csound
 ioCheckbox {19, 372} {21, 22} off enable
-ioText {35, 410} {336, 27} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Tick this checkbox to enable changing the one below
+ioText {36, 372} {336, 27} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Tick this checkbox to enable changing the one below
 ioCheckbox {19, 112} {23, 20} on hipass
 ioCheckbox {19, 139} {22, 19} off lowpass
 </MacGUI>

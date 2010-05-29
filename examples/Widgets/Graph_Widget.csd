@@ -35,34 +35,21 @@ i 20 0 3600
 
 </CsScore>
 </CsoundSynthesizer>
-
-
-
-
-
-
-
-
-
-
-
-
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>816</x>
- <y>231</y>
- <width>393</width>
- <height>583</height>
+ <x>486</x>
+ <y>72</y>
+ <width>409</width>
+ <height>622</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
+ <bgcolor mode="background" >
   <r>138</r>
   <g>149</g>
   <b>156</b>
  </bgcolor>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject version="2" type="BSBGraph" >
   <objectName>graph</objectName>
   <x>7</x>
   <y>332</y>
@@ -81,7 +68,7 @@ i 20 0 3600
   <modey>lin</modey>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>97</x>
   <y>6</y>
@@ -101,7 +88,7 @@ i 20 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -110,7 +97,7 @@ i 20 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>7</x>
   <y>41</y>
@@ -122,15 +109,15 @@ i 20 0 3600
   <midicc>-3</midicc>
   <label>Graph Widgets display Csound's f-tables. The table shown can be changed with the mouse using the menu on the upper left corner. It can also be changed by sending values on the widget's channel Positive values change the table by index and negative values change the table by f-table number. Note that tabes are actually in reverse order in the menu. Graph widgets can also show the spectrum from signals using the dispfft opcode, or time varying signals (a-rate and k-rate) using the display opcode.</label>
   <alignment>left</alignment>
-  <font>Helvetica</font>
-  <fontsize>10</fontsize>
+  <font>Arial</font>
+  <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -139,7 +126,7 @@ i 20 0 3600
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject version="2" type="BSBSpinBox" >
   <objectName>tabnum</objectName>
   <x>97</x>
   <y>479</y>
@@ -157,7 +144,7 @@ i 20 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -165,22 +152,22 @@ i 20 0 3600
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
   <maximum>5</maximum>
-  <randomizable group="0">false</randomizable>
+  <randomizable group="0" >false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>8</x>
-  <y>479</y>
-  <width>101</width>
-  <height>25</height>
+  <y>478</y>
+  <width>91</width>
+  <height>26</height>
   <uuid>{713fa927-1f41-48d2-9a62-9917b1394f7a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>Use f-table</label>
-  <alignment>left</alignment>
-  <font>Helvetica</font>
+  <alignment>right</alignment>
+  <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -188,7 +175,7 @@ i 20 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -197,7 +184,7 @@ i 20 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>7</x>
   <y>508</y>
@@ -209,15 +196,15 @@ i 20 0 3600
   <midicc>-3</midicc>
   <label>Note that the numbers in the lower section will only have effect if Csound is running as they pass through Csound, while the ones on the top are connected directly by channel number.</label>
   <alignment>left</alignment>
-  <font>Helvetica</font>
-  <fontsize>10</fontsize>
+  <font>Nimbus Sans L</font>
+  <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -226,7 +213,7 @@ i 20 0 3600
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject version="2" type="BSBCheckBox" >
   <objectName>spectrum</objectName>
   <x>161</x>
   <y>483</y>
@@ -239,12 +226,12 @@ i 20 0 3600
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
-  <randomizable group="0">false</randomizable>
+  <randomizable group="0" >false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
-  <x>179</x>
-  <y>480</y>
+  <x>177</x>
+  <y>481</y>
   <width>111</width>
   <height>27</height>
   <uuid>{fd65e87a-e8e2-4111-a0c9-3a4b758ac437}</uuid>
@@ -253,7 +240,7 @@ i 20 0 3600
   <midicc>-3</midicc>
   <label>Show spectrum</label>
   <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -261,7 +248,7 @@ i 20 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -270,7 +257,7 @@ i 20 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject version="2" type="BSBGraph" >
   <objectName>graph_direct</objectName>
   <x>7</x>
   <y>151</y>
@@ -289,7 +276,7 @@ i 20 0 3600
   <modey>lin</modey>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject version="2" type="BSBSpinBox" >
   <objectName>graph_direct</objectName>
   <x>150</x>
   <y>299</y>
@@ -300,14 +287,14 @@ i 20 0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -315,14 +302,14 @@ i 20 0 3600
   <resolution>1.00000000</resolution>
   <minimum>-5</minimum>
   <maximum>5</maximum>
-  <randomizable group="0">false</randomizable>
+  <randomizable group="0" >false</randomizable>
   <value>0</value>
  </bsbObject>
  <objectName/>
- <x>816</x>
- <y>231</y>
- <width>393</width>
- <height>583</height>
+ <x>486</x>
+ <y>72</y>
+ <width>409</width>
+ <height>622</height>
  <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
@@ -330,13 +317,13 @@ i 20 0 3600
 <MacGUI>
 ioView background {35466, 38293, 40092}
 ioGraph {7, 332} {373, 142} table 0.000000 1.000000 graph
-ioText {97, 6} {192, 41} display 0.000000 0.00100 "" center "Helvetica" 24 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Graph Widget
-ioText {7, 41} {374, 107} display 0.000000 0.00100 "" left "Helvetica" 10 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Graph Widgets display Csound's f-tables. The table shown can be changed with the mouse using the menu on the upper left corner. It can also be changed by sending values on the widget's channel Positive values change the table by index and negative values change the table by f-table number. Note that tabes are actually in reverse order in the menu. Graph widgets can also show the spectrum from signals using the dispfft opcode, or time varying signals (a-rate and k-rate) using the display opcode.
-ioText {97, 479} {45, 25} editnum 1.000000 1.000000 "tabnum" left "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 1.000000
-ioText {8, 479} {101, 25} display 0.000000 0.00100 "" left "Helvetica" 10 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Use f-table
-ioText {7, 508} {374, 53} display 0.000000 0.00100 "" left "Helvetica" 10 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Note that the numbers in the lower section will only have effect if Csound is running as they pass through Csound, while the ones on the top are connected directly by channel number.
+ioText {97, 6} {192, 41} display 0.000000 0.00100 "" center "Helvetica" 24 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Graph Widget
+ioText {7, 41} {374, 107} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Graph Widgets display Csound's f-tables. The table shown can be changed with the mouse using the menu on the upper left corner. It can also be changed by sending values on the widget's channel Positive values change the table by index and negative values change the table by f-table number. Note that tabes are actually in reverse order in the menu. Graph widgets can also show the spectrum from signals using the dispfft opcode, or time varying signals (a-rate and k-rate) using the display opcode.
+ioText {97, 479} {45, 25} editnum 1.000000 1.000000 "tabnum" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.000000
+ioText {8, 478} {91, 26} display 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Use f-table
+ioText {7, 508} {374, 53} display 0.000000 0.00100 "" left "Nimbus Sans L" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Note that the numbers in the lower section will only have effect if Csound is running as they pass through Csound, while the ones on the top are connected directly by channel number.
 ioCheckbox {161, 483} {20, 20} on spectrum
-ioText {179, 480} {111, 27} display 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Show spectrum
+ioText {178, 479} {111, 27} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Show spectrum
 ioGraph {7, 151} {373, 142} table 0.000000 1.000000 graph_direct
-ioText {150, 299} {80, 25} editnum 0.000000 1.000000 "graph_direct" left "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.000000
+ioText {150, 299} {80, 25} editnum 0.000000 1.000000 "graph_direct" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.000000
 </MacGUI>

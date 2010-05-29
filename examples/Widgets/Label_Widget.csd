@@ -16,33 +16,21 @@ endin
 <CsScore>
 </CsScore>
 </CsoundSynthesizer>
-
-
-
-
-
-
-
-
-
-
-
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>592</x>
  <y>184</y>
- <width>513</width>
- <height>454</height>
+ <width>519</width>
+ <height>486</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
+ <bgcolor mode="background" >
   <r>138</r>
   <g>149</g>
   <b>156</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>131</x>
   <y>20</y>
@@ -62,7 +50,7 @@ endin
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -71,7 +59,7 @@ endin
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>64</x>
   <y>58</y>
@@ -91,7 +79,7 @@ endin
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -100,7 +88,7 @@ endin
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>64</x>
   <y>149</y>
@@ -120,7 +108,7 @@ endin
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -129,7 +117,7 @@ endin
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>182</x>
   <y>144</y>
@@ -149,7 +137,7 @@ endin
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -158,7 +146,7 @@ endin
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>65</x>
   <y>210</y>
@@ -178,7 +166,7 @@ endin
    <g>105</g>
    <b>212</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -187,7 +175,7 @@ endin
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>191</x>
   <y>327</y>
@@ -207,7 +195,7 @@ endin
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>87</r>
    <g>132</g>
    <b>255</b>
@@ -216,7 +204,7 @@ endin
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>206</x>
   <y>265</y>
@@ -236,7 +224,7 @@ endin
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>139</r>
    <g>174</g>
    <b>255</b>
@@ -245,7 +233,7 @@ endin
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>181</x>
   <y>314</y>
@@ -265,7 +253,7 @@ endin
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>167</r>
    <g>207</g>
    <b>255</b>
@@ -274,7 +262,7 @@ endin
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>200</x>
   <y>367</y>
@@ -294,7 +282,7 @@ endin
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>28</r>
    <g>74</g>
    <b>98</b>
@@ -303,7 +291,7 @@ endin
   <borderradius>10</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>58</x>
   <y>314</y>
@@ -323,7 +311,7 @@ endin
    <g>91</g>
    <b>60</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -332,7 +320,7 @@ endin
   <borderradius>10</borderradius>
   <borderwidth>6</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>338</x>
   <y>217</y>
@@ -352,7 +340,7 @@ endin
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>139</r>
    <g>174</g>
    <b>255</b>
@@ -361,7 +349,7 @@ endin
   <borderradius>4</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>221</x>
   <y>268</y>
@@ -381,7 +369,7 @@ endin
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>167</r>
    <g>207</g>
    <b>255</b>
@@ -390,7 +378,7 @@ endin
   <borderradius>6</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>349</x>
   <y>253</y>
@@ -410,7 +398,7 @@ endin
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>117</r>
    <g>125</g>
    <b>189</b>
@@ -419,7 +407,7 @@ endin
   <borderradius>26</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>237</x>
   <y>233</y>
@@ -439,7 +427,7 @@ endin
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>117</r>
    <g>125</g>
    <b>189</b>
@@ -451,27 +439,26 @@ endin
  <objectName/>
  <x>592</x>
  <y>184</y>
- <width>513</width>
- <height>454</height>
+ <width>519</width>
+ <height>486</height>
  <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
 <MacGUI>
 ioView background {35466, 38293, 40092}
-ioText {76, 5} {249, 43} display 0.000000 0.00100 "" center "Arial" 24 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Label Widget
-ioText {9, 43} {377, 86} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder All the widgets you see here are label widgets. Their function is to display formatted text. You can choose text and background color, size, font, border and alignment. Note that labels do not send or receive data on their channels. If you want to receive data use a different widget like a SpinBox widget or a Scroll Number widget.
-ioText {9, 135} {112, 57} display 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder With border
-ioText {127, 129} {255, 72} display 0.000000 0.00100 "" right "Times New Roman" 26 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Large Times font with right alignment
-ioText {10, 195} {109, 98} display 0.000000 0.00100 "" center "Helvetica" 18 {19968, 26880, 54272} {59392, 59392, 59392} nobackground noborder Text color centered
-ioText {116, 324} {253, 84} display 0.000000 0.00100 "" left "DejaVu Sans" 6 {0, 0, 0} {22272, 33792, 65280} nobackground noborder 
-ioText {131, 262} {92, 78} display 0.000000 0.00100 "" left "DejaVu Sans" 6 {0, 0, 0} {35584, 44544, 65280} nobackground noborder 
-ioText {106, 311} {216, 38} display 0.000000 0.00100 "" left "DejaVu Sans" 6 {0, 0, 0} {42752, 52992, 65280} nobackground noborder 
-ioText {145, 352} {233, 35} display 0.000000 0.00100 "" center "Arial" 12 {65280, 65280, 65280} {7168, 18944, 25088} nobackground noborder Labels can be used as colored blocks
-ioText {5, 299} {88, 105} display 0.000000 0.00100 "" center "Arial" 18 {54272, 23296, 15360} {65280, 65280, 65280} nobackground noborder With Border and Background
-ioText {283, 202} {71, 107} display 0.000000 0.00100 "" left "Helvetica" 6 {0, 0, 0} {35584, 44544, 65280} nobackground noborder 
-ioText {166, 243} {216, 38} display 0.000000 0.00100 "" left "Helvetica" 6 {0, 0, 0} {42752, 52992, 65280} nobackground noborder 
-ioText {317, 231} {54, 54} display 0.000000 0.00100 "" left "Helvetica" 6 {0, 0, 0} {29952, 32000, 48384} nobackground noborder 
-ioText {167, 268} {56, 105} display 0.000000 0.00100 "" left "DejaVu Sans" 6 {0, 0, 0} {29952, 32000, 48384} nobackground noborder 
+ioText {131, 20} {249, 43} display 0.000000 0.00100 "" center "Arial" 24 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Label Widget
+ioText {64, 58} {377, 86} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder All the widgets you see here are label widgets. Their function is to display formatted text. You can choose text and background color, size, font, border and alignment. Note that labels do not send or receive data on their channels. If you want to receive data use a different widget like a SpinBox widget or a Scroll Number widget.
+ioText {64, 149} {112, 57} display 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder With border
+ioText {182, 144} {259, 71} display 0.000000 0.00100 "" right "Times New Roman" 26 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Large Times font with right alignment
+ioText {65, 210} {109, 98} display 0.000000 0.00100 "" center "Helvetica" 18 {19968, 26880, 54272} {58880, 56576, 54528} nobackground noborder Text color centered
+ioText {191, 327} {253, 84} display 0.000000 0.00100 "" left "DejaVu Sans" 6 {0, 0, 0} {22272, 33792, 65280} nobackground noborder 
+ioText {206, 265} {92, 78} display 0.000000 0.00100 "" left "DejaVu Sans" 6 {0, 0, 0} {35584, 44544, 65280} nobackground noborder 
+ioText {181, 314} {216, 38} display 0.000000 0.00100 "" left "DejaVu Sans" 6 {0, 0, 0} {42752, 52992, 65280} nobackground noborder 
+ioText {200, 367} {233, 35} display 0.000000 0.00100 "" center "Arial" 12 {65280, 65280, 65280} {7168, 18944, 25088} nobackground noborder Labels can be used as colored blocks
+ioText {58, 314} {121, 107} display 0.000000 0.00100 "" center "Arial" 18 {54272, 23296, 15360} {65280, 65280, 65280} nobackground noborder With Border and Background
+ioText {338, 217} {71, 107} display 0.000000 0.00100 "" left "Helvetica" 6 {0, 0, 0} {35584, 44544, 65280} nobackground noborder 
+ioText {221, 268} {216, 38} display 0.000000 0.00100 "" left "Helvetica" 6 {0, 0, 0} {42752, 52992, 65280} nobackground noborder 
+ioText {349, 253} {54, 54} display 0.000000 0.00100 "" left "Helvetica" 6 {0, 0, 0} {29952, 32000, 48384} nobackground noborder 
+ioText {237, 233} {56, 105} display 0.000000 0.00100 "" left "DejaVu Sans" 6 {0, 0, 0} {29952, 32000, 48384} nobackground noborder 
 </MacGUI>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="425" y="326" width="614" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

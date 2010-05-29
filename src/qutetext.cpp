@@ -753,6 +753,8 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
   setProperty("QCS_label", QVariant()); // Remove this property which is part of parent class.
   setProperty("QCS_precision", QVariant()); // Remove this property which is part of parent class.
   m_places = 2;
+  m_min = -999999999999.0;
+  m_max = 99999999999999;
 }
 
 QuteScrollNumber::~QuteScrollNumber()
@@ -970,11 +972,27 @@ void QuteScrollNumber::createPropertiesDialog()
   resolutionSpinBox = new QDoubleSpinBox(dialog);
   resolutionSpinBox->setDecimals(6);
   layout->addWidget(resolutionSpinBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+  label->setText("Min =");
+  layout->addWidget(label, 2, 0, Qt::AlignRight|Qt::AlignVCenter);
+  minSpinBox = new QDoubleSpinBox(dialog);
+  minSpinBox->setDecimals(6);
+  minSpinBox->setRange(-999999999999.0, 999999999999.0);
+  layout->addWidget(minSpinBox, 2,1, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+  label->setText("Max =");
+  layout->addWidget(label, 2, 2, Qt::AlignRight|Qt::AlignVCenter);
+  maxSpinBox = new QDoubleSpinBox(dialog);
+  maxSpinBox->setDecimals(6);
+  maxSpinBox->setRange(-999999999999.0, 999999999999.0);
+  layout->addWidget(maxSpinBox, 2,3, Qt::AlignLeft|Qt::AlignVCenter);
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
 
   resolutionSpinBox->setValue(property("QCS_resolution").toDouble());
+  minSpinBox->setValue(property("QCS_minimum").toDouble());
+  maxSpinBox->setValue(property("QCS_maximum").toDouble());
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
@@ -987,6 +1005,8 @@ void QuteScrollNumber::applyProperties()
 #endif
   setProperty("QCS_resolution", resolutionSpinBox->value());
   setProperty("QCS_value",text->toPlainText().toDouble());
+  setProperty("QCS_minimum",minSpinBox->value());
+  setProperty("QCS_maximum",maxSpinBox->value());
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
@@ -999,6 +1019,8 @@ void QuteScrollNumber::applyInternalProperties()
 //  qDebug() << "QuteScrollNumber::applyInternalProperties()";
 
   QuteWidget::applyInternalProperties();
+  m_min = property("QCS_minimum").toDouble();
+  m_max = property("QCS_maximum").toDouble();
   setResolution(property("QCS_resolution").toDouble());
   setValue(property("QCS_value").toDouble());
 //  m_value = property("QCS_value").toDouble();
@@ -1055,6 +1077,12 @@ void QuteScrollNumber::addValue(double delta)
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
+  if (value > m_max) {
+    value = m_max;
+  }
+  if (value < m_min) {
+    value = m_min;
+  }
 //  m_resolution = static_cast<ScrollNumberWidget*>(m_widget)->getResolution();
 //   qDebug("QuteScrollNumber::addValue places = %i resolution = %f", places, m_resolution);
   setValue(value);
@@ -1075,7 +1103,14 @@ void QuteScrollNumber::setValue(double value)
   widgetLock.lockForWrite();
 #endif
   m_value = value;
-  m_stringValue = QString::number(m_value, 'f', m_places);
+  double displayValue = m_value;
+  if (displayValue < m_min) {
+    displayValue = m_min;
+  }
+  if (displayValue > m_max) {
+    displayValue = m_max;
+  }
+  m_stringValue = QString::number(displayValue, 'f', m_places);
   m_valueChanged = true;
 //   qDebug("QuteScrollNumber::setValue places = %i value = %f", m_places, m_value);
 #ifdef  USE_WIDGET_MUTEX
@@ -1088,6 +1123,12 @@ void QuteScrollNumber::setValue(double value)
 void QuteScrollNumber::setValueFromWidget(double value)
 {
 //  qDebug() << "QuteScrollNumber::setValueFromWidget";
+  if (value > m_max) {
+    value = m_max;
+  }
+  if (value < m_min) {
+    value = m_min;
+  }
   setValue(value);
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();

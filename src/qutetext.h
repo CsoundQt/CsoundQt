@@ -137,7 +137,10 @@ class QuteScrollNumber : public QuteText
     virtual void applyProperties();
 
     QDoubleSpinBox* resolutionSpinBox;
+    QDoubleSpinBox *minSpinBox;
+    QDoubleSpinBox *maxSpinBox;
     int m_places;
+    double m_min, m_max;
 
   public slots:
     void setResolution(double resolution);
@@ -162,7 +165,6 @@ class ScrollNumberWidget : public QLabel
     }
 
   protected:
-
     virtual void mouseMoveEvent(QMouseEvent * event)
     {
       if (pressed) {
@@ -189,6 +191,7 @@ class ScrollNumberWidget : public QLabel
 
   private:
     double m_resolution;
+    double m_min, m_max;
     int oldy;
     bool pressed;
 

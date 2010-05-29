@@ -32,16 +32,16 @@ i 1 0 1000
  <objectName/>
  <x>608</x>
  <y>227</y>
- <width>400</width>
- <height>321</height>
+ <width>408</width>
+ <height>357</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background">
+ <bgcolor mode="background" >
   <r>138</r>
   <g>149</g>
   <b>156</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>102</x>
   <y>4</y>
@@ -61,7 +61,7 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -70,7 +70,7 @@ i 1 0 1000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>7</x>
   <y>45</y>
@@ -90,7 +90,7 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background">
+  <bgcolor mode="background" >
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -99,7 +99,7 @@ i 1 0 1000
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject version="2" type="BSBVSlider" >
   <objectName>amp</objectName>
   <x>41</x>
   <y>109</y>
@@ -113,11 +113,11 @@ i 1 0 1000
   <maximum>0.50000000</maximum>
   <value>0.23500000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="jump" >continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0">true</randomizable>
+  <randomizable group="0" >true</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject version="2" type="BSBHSlider" >
   <objectName>freq</objectName>
   <x>67</x>
   <y>109</y>
@@ -131,11 +131,11 @@ i 1 0 1000
   <maximum>1000.00000000</maximum>
   <value>689.45686901</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="jump" >continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0">true</randomizable>
+  <randomizable group="0" >true</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>140</x>
   <y>125</y>
@@ -155,7 +155,7 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -164,7 +164,7 @@ i 1 0 1000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject version="2" type="BSBLabel" >
   <objectName/>
   <x>10</x>
   <y>214</y>
@@ -184,7 +184,7 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="nobackground" >
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -193,7 +193,7 @@ i 1 0 1000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject version="2" type="BSBScope" >
   <objectName/>
   <x>100</x>
   <y>169</y>
@@ -214,20 +214,19 @@ i 1 0 1000
  <objectName/>
  <x>608</x>
  <y>227</y>
- <width>400</width>
- <height>321</height>
+ <width>408</width>
+ <height>357</height>
  <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
 <MacGUI>
 ioView background {35466, 38293, 40092}
-ioText {102, 4} {202, 41} display 0.000000 0.00100 "" center "Arial" 24 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Slider Widget
+ioText {102, 4} {202, 41} display 0.000000 0.00100 "" center "Arial" 24 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Slider Widget
 ioText {7, 45} {377, 56} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Sliders are used to send and receive data from the running Csound using channels. If a slider's width is greater than its height it becomes a horizontal slider. You can set a slider's range in it's properties.
 ioSlider {41, 109} {20, 100} 0.000000 0.500000 0.235000 amp
 ioSlider {67, 109} {313, 23} 100.000000 1000.000000 689.456869 freq
-ioText {140, 125} {198, 41} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Frequency (from 100 to 1000 transmitting on channel 'freq'
-ioText {10, 214} {86, 86} display 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Amplitude (transmitting from 0 to 0.5 on channel 'amp'
+ioText {140, 125} {198, 41} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Frequency (from 100 to 1000 transmitting on channel 'freq'
+ioText {10, 214} {86, 86} display 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Amplitude (transmitting from 0 to 0.5 on channel 'amp'
 ioGraph {100, 169} {281, 130} scope 2.000000 -1 
 </MacGUI>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="425" y="326" width="614" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
