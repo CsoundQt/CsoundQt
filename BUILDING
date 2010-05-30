@@ -6,8 +6,10 @@ Requirements:
 Building QuteCsound:
 
 1. Get the sources from http://sourceforge.net/svn/?group_id=227265
-2. Execute "qmake" on the src/ dir of the qutecsound sources.
+2. Execute "qmake qcs.pro" on qutecsound/ dir of the qutecsound sources.
 3. On Windows and GNU/Linux execute "make" in the same directory. On Mac, step 2 generates an Xcode project. Build the project in xcode.
 4. This provides a working executable which requires Qt to be installed. To create a Windows installer, compile the windows installer (NSIS required http://nsis.sourceforge.net). To create a standalone OS X bundle, enter the bin/ directory where QuteCsound was built and run the script "osx-prepare-bundle.sh".
+
+An easy way of building QuteCsound is opening the qcs.pro file in QtCreator and building from there.
 
 Enjoy!

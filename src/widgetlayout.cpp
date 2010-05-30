@@ -2244,7 +2244,7 @@ int WidgetLayout::createSpinBox(int x, int y, int width, int height, QString wid
     i++;
   }
   labelText.chop(1);
-  widget->setValue(labelText.toDouble());
+  widget->setProperty("QCS_value", labelText.toDouble());
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widget->applyInternalProperties();
   registerWidget(widget);

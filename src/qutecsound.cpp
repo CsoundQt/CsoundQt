@@ -1230,9 +1230,9 @@ void qutecsound::setHelpEntry()
     if (QFile::exists(fileName)) {
         helpPanel->loadFile(fileName);
     }
-    else {
-        helpPanel->loadFile(dir + "/index.html");
-    }
+//    else {
+//        helpPanel->loadFile(dir + "/index.html");
+//    }
     helpPanel->show();
   }
   else {

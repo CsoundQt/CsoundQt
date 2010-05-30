@@ -149,7 +149,7 @@ QString QuteSpinBox::getWidgetXmlText()
   s.writeAttribute("group", QString::number(property("QCS_randomizableGroup").toInt()));
   s.writeCharacters(property("QCS_randomizable").toBool() ? "true": "false");
   s.writeEndElement();
-  s.writeTextElement("value", QString::number(static_cast<QDoubleSpinBox*>(m_widget)->value()));
+  s.writeTextElement("value", QString::number(m_value));
   s.writeEndElement();
 
 #ifdef  USE_WIDGET_MUTEX
@@ -170,6 +170,7 @@ void QuteSpinBox::refreshWidget()
 #endif
   double resolution = property("QCS_resolution").toDouble();
   double val = resolution * ceil((m_value)/resolution);
+  qDebug()<< "QuteSpinBox::refreshWidget()" << val << m_value << resolution;
   m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
@@ -183,18 +184,19 @@ void QuteSpinBox::refreshWidget()
 
 void QuteSpinBox::applyInternalProperties()
 {
-//  qDebug() << "QuteSpinBox::applyInternalProperties()";
 
+  QuteWidget::applyInternalProperties();
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
 #endif
 //  static_cast<QDoubleSpinBox*>(m_widget)->setValue(property("QCS_value").toDouble());
-//  m_value = property("QCS_value").toDouble();
-  m_value = property("QCS_value").toDouble();
 //  m_value2 = property("QCS_value2").toDouble();
 //  m_stringValue = property("QCS_stringValue").toString();
   static_cast<QDoubleSpinBox*>(m_widget)->setRange(property("QCS_minimum").toDouble(),property("QCS_maximum").toDouble());
+  m_value = property("QCS_value").toDouble();
   double resolution = property("QCS_resolution").toDouble();
+  m_valueChanged = true;
+//  qDebug() << "QuteSpinBox::applyInternalProperties()" << property("QCS_value").toDouble() << m_value;
   int i;
   for (i = 0; i < 8; i++) {//     Check for used decimal places.
     if ((resolution * pow(10, i)) == (int) (resolution * pow(10,i)) )
@@ -243,7 +245,6 @@ void QuteSpinBox::applyInternalProperties()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
-  QuteWidget::applyInternalProperties();
 }
 
 void QuteSpinBox::createPropertiesDialog()
@@ -317,7 +318,7 @@ void QuteSpinBox::applyProperties()
   setProperty("QCS_color", textColor->palette().color(QPalette::Window));
   setProperty("QCS_bordermode", border->isChecked() ? "border" : "noborder");
   setProperty("QCS_resolution", resolutionSpinBox->value());
-  m_value = text->toPlainText().toDouble();
+  setProperty("QCS_value", text->toPlainText().toDouble());
   setProperty("QCS_maximum", maxSpinBox->value());
   setProperty("QCS_minimum", minSpinBox->value());
 //  setProperty("QCS_randomizable",false);
