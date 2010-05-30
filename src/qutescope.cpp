@@ -146,7 +146,16 @@ void QuteScope::setUd(CsoundUserData *ud)
 
 void QuteScope::updateLabel()
 {
-  QString chan = ((int) m_value <= 0 ? tr("all", "meaning 'all' channels in scope, must be very short (4 letter max)") : QString::number((int) m_value ));
+  QString chan;
+  if ((int) m_value < 0) {
+    chan = tr("all", "meaning 'all' channels in scope, must be very short (4 letter max)");
+  }
+  else if ((int) m_value <= 0) {
+    chan = tr("None", "meaning 'no' channels in scope, must be very short (4 letter max)");
+  }
+  else {
+    chan =  QString::number((int) m_value );
+  }
   m_label->setText(tr("Scope ch:") + chan + tr("  dec:", "Decimation (zoom) value for scope widget, must be very short (4 letter max)")
                    + QString::number(property("QCS_zoomx").toDouble(), 'f', 1) );
 }

@@ -517,7 +517,7 @@ void MeterWidget::setValues(double value1, double value2)
       m_block->setRect(0, 0, portionx*width(), height());
     }
     else {
-      m_block->setRect(0, (1-portiony)*height(), width(), height());
+      m_block->setRect(0, (1-portiony)*height(), width(), portiony * height());
     }
   }
   else if (m_type == "llif") {
