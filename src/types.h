@@ -78,6 +78,9 @@
 #define DEFAULT_LOG_FILE ""
 #endif
 
+#define QCS_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n<CsInstruments>\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>";
+
+
 enum viewMode {
   VIEW_CSD,
   VIEW_ORC_SCO

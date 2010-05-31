@@ -170,7 +170,7 @@ void QuteSpinBox::refreshWidget()
 #endif
   double resolution = property("QCS_resolution").toDouble();
   double val = resolution * ceil((m_value)/resolution);
-  qDebug()<< "QuteSpinBox::refreshWidget()" << val << m_value << resolution;
+//  qDebug()<< "QuteSpinBox::refreshWidget()" << val << m_value << resolution;
   m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();

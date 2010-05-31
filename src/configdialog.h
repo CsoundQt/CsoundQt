@@ -62,7 +62,7 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
     void browseSsdir();
     void browseSfdir();
     void browseIncdir();
-    void browseDefaultCsd();
+//    void browseDefaultCsd();
     void browseFavorite();
     void browsePythonDir();
     void browseLogFile();
@@ -78,6 +78,9 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
     void selectMidiOutput();
     void selectTextColor();
     void selectBgColor();
+
+    void clearTemplate();
+    void defaultTemplate();
 
   signals:
 //    void changeFont();

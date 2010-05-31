@@ -151,9 +151,9 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   IncdirCheckBox->setChecked(m_options->incdirActive);
   IncdirLineEdit->setText(m_options->incdir);
   IncdirLineEdit->setEnabled(m_options->incdirActive);
-  defaultCsdCheckBox->setChecked(m_options->defaultCsdActive);
-  defaultCsdLineEdit->setText(m_options->defaultCsd);
-  defaultCsdLineEdit->setEnabled(m_options->defaultCsdActive);
+//  defaultCsdCheckBox->setChecked(m_options->defaultCsdActive);
+//  defaultCsdLineEdit->setText(m_options->defaultCsd);
+//  defaultCsdLineEdit->setEnabled(m_options->defaultCsdActive);
   favoriteLineEdit->setText(m_options->favoriteDir);
   pythonDirLineEdit->setText(m_options->pythonDir);
   pythonExecutableLineEdit->setText(m_options->pythonExecutable);
@@ -167,6 +167,8 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   pdfViewerLineEdit->setText(m_options->pdfviewer);
   languageComboBox->setCurrentIndex(m_options->language);
 
+  templateTextEdit->setPlainText(m_options->csdTemplate);
+
   connect(inputFilenameToolButton, SIGNAL(clicked()), this, SLOT(browseInputFilename()));
   connect(outputFilenameToolButton, SIGNAL(clicked()), this, SLOT(browseOutputFilename()));
   connect(csdocdirToolButton, SIGNAL(clicked()), this, SLOT(browseCsdocdir()));
@@ -175,7 +177,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   connect(ssdirToolButton, SIGNAL(clicked()), this, SLOT(browseSsdir()));
   connect(sfdirToolButton, SIGNAL(clicked()), this, SLOT(browseSfdir()));
   connect(incdirToolButton, SIGNAL(clicked()), this, SLOT(browseIncdir()));
-  connect(defaultCsdToolButton, SIGNAL(clicked()), this, SLOT(browseDefaultCsd()));
+//  connect(defaultCsdToolButton, SIGNAL(clicked()), this, SLOT(browseDefaultCsd()));
   connect(favoriteToolButton, SIGNAL(clicked()), this, SLOT(browseFavorite()));
   connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
   connect(browserToolButton, SIGNAL(clicked()), this, SLOT(browseBrowser()));
@@ -192,6 +194,9 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   connect(midiOutputToolButton, SIGNAL(released()), this, SLOT(selectMidiOutput()));
   connect(consoleFontColorPushButton, SIGNAL(released()), this, SLOT(selectTextColor()));
   connect(consoleBgColorPushButton, SIGNAL(released()), this, SLOT(selectBgColor()));
+
+  connect(clearTemplatePushButton,SIGNAL(released()), this, SLOT(clearTemplate()));
+  connect(defaultTemplatePushButton,SIGNAL(released()), this, SLOT(defaultTemplate()));
 
   connect(OpcodedirCheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
 }
@@ -297,8 +302,8 @@ void ConfigDialog::accept()
   m_options->sfdir = SfdirLineEdit->text();
   m_options->incdirActive = IncdirCheckBox->isChecked();
   m_options->incdir = IncdirLineEdit->text();
-  m_options->defaultCsdActive = defaultCsdCheckBox->isChecked();
-  m_options->defaultCsd = defaultCsdLineEdit->text();
+//  m_options->defaultCsdActive = defaultCsdCheckBox->isChecked();
+//  m_options->defaultCsd = defaultCsdLineEdit->text();
   m_options->favoriteDir = favoriteLineEdit->text();
   m_options->pythonDir = pythonDirLineEdit->text();
   m_options->pythonExecutable = pythonExecutableLineEdit->text();
@@ -311,6 +316,8 @@ void ConfigDialog::accept()
   m_options->waveplayer = WavePlayerLineEdit->text();
   m_options->pdfviewer = pdfViewerLineEdit->text();
   m_options->language = languageComboBox->currentIndex();
+
+  m_options->csdTemplate = templateTextEdit->toPlainText();
 
 //  emit(changeFont());
   QDialog::accept();
@@ -364,16 +371,16 @@ void ConfigDialog::browseIncdir()
   IncdirLineEdit->setText(m_options->incdir);
 }
 
-void ConfigDialog::browseDefaultCsd()
-{
-  browseFile(m_options->defaultCsd);
-  if (!m_options->defaultCsd.endsWith(".csd")) {
-    QMessageBox::warning(this, tr("QuteCsound"),
-                         tr("Only files with extension .csd are accepted"));
-    return;
-  }
-  defaultCsdLineEdit->setText(m_options->defaultCsd);
-}
+//void ConfigDialog::browseDefaultCsd()
+//{
+//  browseFile(m_options->defaultCsd);
+//  if (!m_options->defaultCsd.endsWith(".csd")) {
+//    QMessageBox::warning(this, tr("QuteCsound"),
+//                         tr("Only files with extension .csd are accepted"));
+//    return;
+//  }
+//  defaultCsdLineEdit->setText(m_options->defaultCsd);
+//}
 
 void ConfigDialog::browseFavorite()
 {
@@ -1062,4 +1069,15 @@ void ConfigDialog::selectBgColor()
     QPalette palette(m_options->consoleBgColor);
     consoleBgColorPushButton->setPalette(palette);
   }
+}
+
+void ConfigDialog::clearTemplate()
+{
+  templateTextEdit->clear();
+}
+
+void ConfigDialog::defaultTemplate()
+{
+  QString defaultText = QCS_DEFAULT_TEMPLATE;
+  templateTextEdit->setPlainText(defaultText );
 }

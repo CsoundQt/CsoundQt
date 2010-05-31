@@ -62,11 +62,9 @@ void QuteText::setValue(double value)
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
 #endif
-//  if (m_type == "display") {
   m_value = value;
   m_stringValue = QString::number(value, 'f', property("QCS_precision").toInt());
   m_valueChanged = true;
-//  }
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
@@ -294,7 +292,8 @@ QString QuteText::getWidgetLine()
 
 QString QuteText::getWidgetType()
 {
-  return QString("BSBLabel");
+  QString type = (m_type=="label" ? "BSBLabel" : "BSBDisplay");
+  return type;
 }
 
 QString QuteText::getWidgetXmlText()
@@ -436,6 +435,12 @@ void QuteText::createPropertiesDialog()
   else
     align = 0;
   alignment->setCurrentIndex(align);
+//  label = new QLabel(dialog);
+//  label->setText(tr("Type"));
+//  layout->addWidget(label, 12, 0, Qt::AlignRight|Qt::AlignVCenter);
+//  label = new QComboBox(dialog);
+//  label->setText(tr("Type"));
+//  layout->addWidget(label, 12, 0, Qt::AlignLeft|Qt::AlignVCenter);
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif

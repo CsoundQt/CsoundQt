@@ -322,12 +322,14 @@ void qutecsound::closeEvent(QCloseEvent *event)
 
 void qutecsound::newFile()
 {
-  if (m_options->defaultCsdActive && m_options->defaultCsd.endsWith(".csd",Qt::CaseInsensitive)) {
-    loadFile(m_options->defaultCsd);
-  }
-  else {
-    loadFile(":/default.csd");
-  }
+//  if (m_options->defaultCsdActive && m_options->defaultCsd.endsWith(".csd",Qt::CaseInsensitive)) {
+//    loadFile(m_options->defaultCsd);
+//  }
+//  else {
+//    loadFile(":/default.csd");
+//  }
+  loadFile(":/default.csd");
+  documentPages[curPage]->setTextString(m_options->csdTemplate, false);
   documentPages[curPage]->setFileName("");
   setWindowModified(false);
   documentTabs->setTabIcon(curPage, modIcon);
@@ -2647,9 +2649,13 @@ void qutecsound::readSettings()
                                          DEFAULT_PDFVIEWER_EXECUTABLE
                                         ).toString();
   settings.endGroup();
+  settings.beginGroup("Template");
+  m_options->csdTemplate = settings.value("csdTemplate", "").toString();
   settings.endGroup();
-  if (settingsVersion < 3) {
+  settings.endGroup();
+  if (settingsVersion < 3 && settingsVersion > 0) {
     showNewFormatWarning();
+    m_options->csdTemplate = QCS_DEFAULT_TEMPLATE;
   }
 }
 
@@ -2812,6 +2818,9 @@ void qutecsound::writeSettings()
   else {
     settings.remove("");
   }
+  settings.endGroup();
+  settings.beginGroup("Template");
+  settings.setValue("csdTemplate", m_options->csdTemplate);
   settings.endGroup();
   settings.endGroup();
 }

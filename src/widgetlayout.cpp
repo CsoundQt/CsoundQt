@@ -592,11 +592,11 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
   QDomNodeList c = mainnode.childNodes();
   QString type = mainnode.toElement().attribute("type");
   ret = mainnode.toElement().attribute("version").toInt();
-  if (type == "BSBLabel") {
+  if (type == "BSBLabel" || type == "BSBDisplay") {
     QuteText *w= new QuteText(this);
     w->setFontOffset(m_fontOffset);
     w->setFontScaling(m_fontScaling);
-    w->setType("display");
+    w->setType(type == "BSBLabel" ? "label" : "display");
     QDomElement ebg = mainnode.toElement().firstChildElement("bgcolor");
     if (!ebg.isNull()) {
       if (mainnode.toElement().attribute("mode")== "background") {
@@ -1616,13 +1616,13 @@ void WidgetLayout::alignRight()
     int size = editWidgets.size();
     for (int i = 0; i < size ; i++) { // First find leftmost
       if (editWidgets[i]->isSelected()) {
-        newx =  editWidgets[i]->x() > newx ? editWidgets[i]->x(): newx;
+        newx =  editWidgets[i]->x() + editWidgets[i]->width() > newx ? editWidgets[i]->x()+ editWidgets[i]->width() : newx;
       }
     }
     for (int i = 0; i < size ; i++) { // Then put all x values to that
       if (editWidgets[i]->isSelected()) {
-        editWidgets[i]->move(newx, editWidgets[i]->y());
-        m_widgets[i]->move(newx, editWidgets[i]->y());
+        editWidgets[i]->move(newx - editWidgets[i]->width(), editWidgets[i]->y());
+        m_widgets[i]->move(newx - editWidgets[i]->width(), editWidgets[i]->y());
       }
     }
     widgetsMutex.unlock();
@@ -2674,6 +2674,14 @@ void WidgetLayout::loadPreset(int num)
     }
   }
   widgetsMutex.unlock();
+  QPair<QString, QString> channelValue;
+  channelValue.first = "_GetPresetName";
+  channelValue.second = p.getName();
+  newValue(channelValue);
+  QPair<QString, double> channelValue2;
+  channelValue2.first = "_GetPresetNumber";
+  channelValue2.second = (double) num;
+  newValue(channelValue2);
 }
 
 void WidgetLayout::newPreset()
@@ -2780,7 +2788,8 @@ void WidgetLayout::savePreset(int num, QString name)
       p.addValue2(id, m_widgets[i]->getValue2());
     }
     if (m_widgets[i]->getWidgetType() == "BSBButton"
-        || m_widgets[i]->getWidgetType() == "BSBLineEdit") {
+        || m_widgets[i]->getWidgetType() == "BSBLineEdit"
+        || m_widgets[i]->getWidgetType() == "BSBDisplay") {
       p.addStringValue(id, m_widgets[i]->getStringValue());
     }
      // Note that BSBLabel is left out from presets
