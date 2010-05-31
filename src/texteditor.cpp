@@ -26,10 +26,15 @@
 TextEditor::TextEditor(QWidget *parent) :
     QTextEdit(parent)
 {
+  setAcceptDrops(true);
+//  qDebug() << "TextEditor::TextEditor" << acceptDrops();
 }
 
 void TextEditor::keyPressEvent (QKeyEvent * event)
 {
+//  if (event->key() == Qt::Tab) {
+//
+//  }
   QTextEdit::keyPressEvent(event);
   if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
     QTextCursor cursor = textCursor();
@@ -43,4 +48,18 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
       insertPlainText(cursor.selectedText());
     }
   }
+}
+
+void TextEditor::dropEvent(QDropEvent *event)
+{
+  qDebug() << "TextEditor::dropEvent" << event->mimeData()->text();
+
+//    event->acceptProposedAction();
+}
+
+void TextEditor::dragEnterEvent(QDragEnterEvent *event)
+{
+  qDebug() << "TextEditor::dragEnterEvent" << event->mimeData()->text();
+
+//    event->acceptProposedAction();
 }

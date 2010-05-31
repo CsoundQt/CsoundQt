@@ -348,8 +348,9 @@ void QuteGraph::setCurveData(Curve * curve)
 {
 //  qDebug("QuteGraph::setCurveData %i", index);
   int index = getCurveIndex(curve);
-  if (index >= curves.size() or index < 0)
+  if (index >= curves.size() || index < 0) {
     return;
+  }
   curves[index] = curve;
   StackedLayoutWidget *widget_ = static_cast<StackedLayoutWidget *>(m_widget);
   QGraphicsView *view = static_cast<QGraphicsView *>(widget_->widget(index));
@@ -415,6 +416,10 @@ void QuteGraph::drawCurve(Curve * curve, int index)
 //  qDebug() << "QuteGraph::drawCurve" << curve->getOriginal();
   bool live = curve->getOriginal() != 0;
   live = false;
+  QString caption = live ? QString(curve->getOriginal()->caption) : curve->get_caption();
+  if (caption.isEmpty()) {
+    return;
+  }
   QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
   double max = live ? curve->getOriginal()->max :curve->get_max();
   int size = live ? curve->getOriginal()->npts:(int) curve->get_size();

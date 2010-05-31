@@ -1,5 +1,5 @@
 
-TEMPLATE = app
+#TEMPLATE = app
 
 unix {
     macx: include (qcs-macx.pro)

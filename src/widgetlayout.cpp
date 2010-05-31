@@ -656,6 +656,9 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     QuteGraph *w = new QuteGraph(this);
     widget = static_cast<QuteWidget *>(w);
     connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+    for (int i = 0; i < curves.size(); i++) {
+      w->addCurve(curves[i]);
+    }
     graphWidgets.append(w);
     emit registerGraph(w);
   }
@@ -1038,6 +1041,7 @@ void WidgetLayout::appendCurve(WINDAT *windat)
 
 void WidgetLayout::newCurve(Curve* curve)
 {
+//  qDebug() << "WidgetPanel::newCurve" << curve;
   for (int i = 0; i < graphWidgets.size(); i++) {
     graphWidgets[i]->addCurve(curve);
   }
@@ -1046,7 +1050,7 @@ void WidgetLayout::newCurve(Curve* curve)
 
 void WidgetLayout::setCurveData(Curve *curve)
 {
-//   qDebug("WidgetPanel::setCurveData");
+//  qDebug() << "WidgetPanel::setCurveData" <<curve;
   for (int i = 0; i < graphWidgets.size(); i++) {
     graphWidgets[i]->setCurveData(curve);
   }
@@ -2446,6 +2450,9 @@ int WidgetLayout::createGraph(int x, int y, int width, int height, QString widge
     channelName.chop(1);  //remove last space
     widget->setProperty("QCS_objectName", channelName);
   }
+  for (int i = 0; i < curves.size(); i++) {
+    widget->addCurve(curves[i]);
+  }
   graphWidgets.append(widget);
   emit registerGraph(widget);
   registerWidget(widget);
@@ -3267,14 +3274,14 @@ void WidgetLayout::updateData()
     closing = 0;
     return;
   }
-  if (!layoutMutex.tryLock(30)) {
+  if (!layoutMutex.tryLock(2)) {
     updateTimer.singleShot(30, this, SLOT(updateData()));
     return;
   }
   while (!newCurveBuffer.isEmpty()) {
     Curve * curve = newCurveBuffer.takeFirst();
     newCurve(curve); // Register new curve
-//    qDebug() << "WidgetLayout::updateData() new curve " << curve;
+    qDebug() << "WidgetLayout::updateData() new curve " << curve;
   }
   // Check for graph updates after creating new curves
   while (!curveUpdateBuffer.isEmpty()) {

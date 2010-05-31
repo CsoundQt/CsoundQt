@@ -15,7 +15,7 @@
 #
 ###############################################################################
 
-TEMPLATE = app
+#TEMPLATE = app
 CONFIG *= thread warn_on
 CONFIG -= stl
 QT *= xml
