@@ -759,7 +759,7 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
   setProperty("QCS_precision", QVariant()); // Remove this property which is part of parent class.
   m_places = 2;
   m_min = -999999999999.0;
-  m_max = 99999999999999;
+  m_max = 99999999999999.0;
 }
 
 QuteScrollNumber::~QuteScrollNumber()

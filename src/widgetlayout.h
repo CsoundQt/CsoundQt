@@ -205,6 +205,7 @@ class WidgetLayout : public QWidget
     void loadPresetFromAction();  // Triggered from menu item
     void loadPresetFromItem(QTreeWidgetItem * item, int column);  // Triggered from tree widget
     void loadPreset(int num);
+    void loadPresetFromIndex(int index);
     void newPreset(); // Show dialog asking for name
 //    void newPreset(int num, QString name);
     void savePreset(); // Show dialog asking for name
