@@ -2647,7 +2647,12 @@ void WidgetLayout::loadPreset(int num)
 {
   int index = getPresetIndex(num);
 //  qDebug() << "WidgetLayout::loadPreset " << num << "  " << index;
-  if (index < 0) {
+  loadPresetFromIndex(index);
+}
+
+void WidgetLayout::loadPresetFromIndex(int index)
+{
+  if (index < 0 || index >= presets.size()) {
     qDebug() << "WidgetLayout::loadPreset num invalid.";
     return;
   }
@@ -2680,7 +2685,7 @@ void WidgetLayout::loadPreset(int num)
   newValue(channelValue);
   QPair<QString, double> channelValue2;
   channelValue2.first = "_GetPresetNumber";
-  channelValue2.second = (double) num;
+  channelValue2.second = p.getNumber();
   newValue(channelValue2);
 }
 
@@ -3036,6 +3041,12 @@ void WidgetLayout::deleteWidget(QuteWidget *widget)
 void WidgetLayout::newValue(QPair<QString, double> channelValue)
 {
 //  qDebug() << "WidgetLayout::newValue " << channelValue.first << "--" << channelValue.second;
+  if (channelValue.first == "_SetPreset") {
+    loadPreset(channelValue.second);
+  }
+  if (channelValue.first == "_SetPresetIndex") {
+    loadPresetFromIndex(channelValue.second);
+  }
   widgetsMutex.lock();
   if (!channelValue.first.isEmpty()) {
     for (int i = 0; i < m_widgets.size(); i++){
