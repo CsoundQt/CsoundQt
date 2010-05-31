@@ -280,7 +280,7 @@ class WidgetLayout : public QWidget
     double m_fontOffset, m_fontScaling;
 
     // For the properties dialog - they store the configuration data for the widget panel
-    QPoint currentPosition;
+    QPoint currentPosition;  //TODO use proper variables instead of storing data in the widgets...
     QCheckBox *bgCheckBox;
     QPushButton *bgButton;
     int closing; // to control timer when destroying this object

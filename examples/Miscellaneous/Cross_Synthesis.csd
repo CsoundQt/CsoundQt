@@ -170,13 +170,2173 @@ i 1 0 3600
 e
 </CsScore>
 </CsoundSynthesizer>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>198</x>
+ <y>25</y>
+ <width>1074</width>
+ <height>750</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background" >
+  <r>170</r>
+  <g>170</g>
+  <b>127</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBDropdown" >
+  <objectName>timreadmeth</objectName>
+  <x>832</x>
+  <y>69</y>
+  <width>110</width>
+  <height>25</height>
+  <uuid>{2cbcd6fe-f4d6-4d9a-9710-df3bd7967c6d}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>Phasor</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>Live</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>Random</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>525</x>
+  <y>64</y>
+  <width>295</width>
+  <height>32</height>
+  <uuid>{168c30b1-7d68-4a87-8158-ea37ea82bd49}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Select a Method of Time Reading</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>492</x>
+  <y>96</y>
+  <width>473</width>
+  <height>98</height>
+  <uuid>{081f0ad6-9f99-4c24-9ea4-49be2561e886}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider" >
+  <objectName>phaspeed1</objectName>
+  <x>551</x>
+  <y>126</y>
+  <width>339</width>
+  <height>28</height>
+  <uuid>{2e02eb2b-d5df-4c0f-a804-1f02c8793592}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>-2.00000000</minimum>
+  <maximum>2.00000000</maximum>
+  <value>1.33923300</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay" >
+  <objectName>phaspeed1</objectName>
+  <x>889</x>
+  <y>128</y>
+  <width>70</width>
+  <height>26</height>
+  <uuid>{4d97c9db-8f7f-42a8-81f8-59eba003b2e3}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>1.3510</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider" >
+  <objectName>phaspeed2</objectName>
+  <x>550</x>
+  <y>154</y>
+  <width>339</width>
+  <height>28</height>
+  <uuid>{ccea15fb-2d06-4f1a-ba79-a11e881c1ac6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>-2.00000000</minimum>
+  <maximum>2.00000000</maximum>
+  <value>0.51327400</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay" >
+  <objectName>phaspeed2</objectName>
+  <x>888</x>
+  <y>156</y>
+  <width>70</width>
+  <height>26</height>
+  <uuid>{3abca60e-f8d0-4f35-90e2-8d05e4e5e21e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>0.5133</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>500</x>
+  <y>125</y>
+  <width>52</width>
+  <height>30</height>
+  <uuid>{56b2c881-3b85-47ad-aa0b-1356246164b6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>File 1</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>499</x>
+  <y>152</y>
+  <width>52</width>
+  <height>30</height>
+  <uuid>{191a3830-1496-4beb-9c2d-6a9b4784837f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>File 2</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>8</x>
+  <y>258</y>
+  <width>479</width>
+  <height>73</height>
+  <uuid>{3b051ce0-aec5-45fe-a70a-0cbd563a3c60}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>pvscross</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>8</x>
+  <y>397</y>
+  <width>479</width>
+  <height>70</height>
+  <uuid>{be3417c3-109a-4eb5-b6b8-8a07e457cbf8}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>pvsvoc</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>8</x>
+  <y>330</y>
+  <width>479</width>
+  <height>68</height>
+  <uuid>{f56027f7-40ef-45e3-a2cd-0bb4959f886c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>pvsfilter</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>8</x>
+  <y>466</y>
+  <width>479</width>
+  <height>134</height>
+  <uuid>{0bb4cf06-2b65-49d0-af53-827094c69029}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>pvsmorph</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider" >
+  <objectName>crossamp</objectName>
+  <x>74</x>
+  <y>293</y>
+  <width>275</width>
+  <height>29</height>
+  <uuid>{0d59f168-a4ec-4fae-8dac-a8e71b799f30}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.50181800</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay" >
+  <objectName>crossamp1</objectName>
+  <x>406</x>
+  <y>295</y>
+  <width>70</width>
+  <height>26</height>
+  <uuid>{6f1df2fd-883f-4b37-98c8-dac8ef4e09dd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>0.5709</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>17</x>
+  <y>292</y>
+  <width>52</width>
+  <height>30</height>
+  <uuid>{968f9b93-9265-4733-98fb-6f50e1c745ad}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>File 1</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>146</x>
+  <y>265</y>
+  <width>160</width>
+  <height>29</height>
+  <uuid>{e1f81f66-6b32-4cf5-82fe-244f4e5c390a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Amplitudes from </label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>351</x>
+  <y>294</y>
+  <width>52</width>
+  <height>30</height>
+  <uuid>{30652f9b-b5c4-4ca3-b506-d6b2a079bf8f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>File 2</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider" >
+  <objectName>morphfreq</objectName>
+  <x>79</x>
+  <y>559</y>
+  <width>275</width>
+  <height>29</height>
+  <uuid>{69d2e2c4-fd06-4522-beba-f80dcb6e3454}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.23636400</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay" >
+  <objectName>morphfreq</objectName>
+  <x>411</x>
+  <y>561</y>
+  <width>70</width>
+  <height>26</height>
+  <uuid>{86a5c15f-c431-4c0f-9529-a69fd184ffb0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>0.2364</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>22</x>
+  <y>558</y>
+  <width>52</width>
+  <height>30</height>
+  <uuid>{1844ce57-7b46-45c8-9dd5-d4db3ef30c8a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>File 1</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>88</x>
+  <y>531</y>
+  <width>307</width>
+  <height>29</height>
+  <uuid>{50b36f81-7b94-4d77-a8b4-42f3acdc1796}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Frequencies from </label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>356</x>
+  <y>560</y>
+  <width>52</width>
+  <height>30</height>
+  <uuid>{8aeb7e20-1038-4d0d-b124-5f5b415bb4a6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>File 2</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDropdown" >
+  <objectName>selcross</objectName>
+  <x>357</x>
+  <y>231</y>
+  <width>108</width>
+  <height>22</height>
+  <uuid>{d2474762-8299-44f9-9ffb-54562c752970}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>pvscross</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>pvsfilter</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>pvsvoc</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>pvsmorph</name>
+    <value>3</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>45</x>
+  <y>227</y>
+  <width>325</width>
+  <height>32</height>
+  <uuid>{eb3b80e1-f6e8-44d6-8978-147b2c1d6bd1}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Select a Method of Cross Synthesis</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider" >
+  <objectName>filtdepth</objectName>
+  <x>73</x>
+  <y>362</y>
+  <width>275</width>
+  <height>29</height>
+  <uuid>{dac15923-90a6-42a3-ad56-5dbd0943441c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.54909100</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay" >
+  <objectName>filtdepth</objectName>
+  <x>405</x>
+  <y>364</y>
+  <width>70</width>
+  <height>26</height>
+  <uuid>{eec0681a-631d-435b-b7a9-88f518b020dd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>0.5491</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>16</x>
+  <y>361</y>
+  <width>52</width>
+  <height>30</height>
+  <uuid>{45d8bfa5-61e5-4282-8013-e3e8bb3767a3}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>low</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>82</x>
+  <y>336</y>
+  <width>307</width>
+  <height>29</height>
+  <uuid>{d73cd00c-8161-4a9e-8d89-56d1df87f3c8}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Depth of filtering</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>350</x>
+  <y>363</y>
+  <width>52</width>
+  <height>30</height>
+  <uuid>{7b0b8888-a340-4ca1-8c89-94e57d45a0ba}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>high</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider" >
+  <objectName>vocdepth</objectName>
+  <x>71</x>
+  <y>429</y>
+  <width>275</width>
+  <height>29</height>
+  <uuid>{f21a4bb9-8efd-4893-9aec-0f61190df1bf}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.65090900</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay" >
+  <objectName>vocdepth</objectName>
+  <x>403</x>
+  <y>431</y>
+  <width>70</width>
+  <height>26</height>
+  <uuid>{6deed02e-065f-451c-bf0f-e70b46672cc3}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>0.6509</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>14</x>
+  <y>428</y>
+  <width>52</width>
+  <height>30</height>
+  <uuid>{18e960e1-b9f9-478c-b0a5-2d4320c52599}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>low</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>80</x>
+  <y>403</y>
+  <width>307</width>
+  <height>29</height>
+  <uuid>{9e0ea5b8-45ab-4bfb-8df1-8680d08cd749}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Depth of vocoding</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>348</x>
+  <y>430</y>
+  <width>52</width>
+  <height>30</height>
+  <uuid>{b131b405-391f-4d5b-a189-5fe20c1aad57}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>high</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider" >
+  <objectName>morphamp</objectName>
+  <x>79</x>
+  <y>497</y>
+  <width>275</width>
+  <height>29</height>
+  <uuid>{16fe1b07-104d-4d48-a58b-d73395aaec87}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.72363600</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay" >
+  <objectName>morphamp</objectName>
+  <x>411</x>
+  <y>499</y>
+  <width>70</width>
+  <height>26</height>
+  <uuid>{2ca1d067-43f7-4c2f-bc6f-0cf5b77e81aa}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>0.7236</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>22</x>
+  <y>496</y>
+  <width>52</width>
+  <height>30</height>
+  <uuid>{f04744bb-222e-411a-b82f-9362ccb545e2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>File 1</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>90</x>
+  <y>471</y>
+  <width>307</width>
+  <height>29</height>
+  <uuid>{08bf5006-02cc-41f8-9424-e27db96acc6c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Amplitudes from </label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>356</x>
+  <y>498</y>
+  <width>52</width>
+  <height>30</height>
+  <uuid>{4d8b3e36-27f7-4b78-b828-3b956fa02b6a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>File 2</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>499</x>
+  <y>101</y>
+  <width>227</width>
+  <height>27</height>
+  <uuid>{4ef6c3a5-b6a5-48f3-b983-754b6b527625}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>For Method "Phasor": Set Speed</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>492</x>
+  <y>196</y>
+  <width>474</width>
+  <height>291</height>
+  <uuid>{5e320d9a-d312-4c87-96d8-5720376186dc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>502</x>
+  <y>202</y>
+  <width>98</width>
+  <height>267</height>
+  <uuid>{950bbec5-894b-471f-bb5b-42f8e7a6b607}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>For Method "Live":
+Set Positions for File 1 from left to right and for File 2 from bottom to top</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController" >
+  <objectName>livepos1</objectName>
+  <x>631</x>
+  <y>201</y>
+  <width>313</width>
+  <height>280</height>
+  <uuid>{5e0ad7c5-d9a7-404d-8292-78249deb6ca2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>livepos2</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.61980800</xValue>
+  <yValue>0.67857100</yValue>
+  <type>crosshair</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press" >jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0" >false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>492</x>
+  <y>490</y>
+  <width>474</width>
+  <height>110</height>
+  <uuid>{fc78d3a5-b548-4e87-ad81-ebea05de93f2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>498</x>
+  <y>498</y>
+  <width>464</width>
+  <height>44</height>
+  <uuid>{146ba05b-f69f-4edd-ae9f-330eda2ff550}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>For Method "Random":
+Set Frequency for new Random Positions in File 1 and File 2</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider" >
+  <objectName>fqnewval1</objectName>
+  <x>518</x>
+  <y>542</y>
+  <width>170</width>
+  <height>27</height>
+  <uuid>{32cf9b48-6de5-4d37-9fcb-ea555f6e1371}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>2.00000000</maximum>
+  <value>0.40000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay" >
+  <objectName>fqnewval1</objectName>
+  <x>591</x>
+  <y>565</y>
+  <width>61</width>
+  <height>28</height>
+  <uuid>{550185bc-d9a3-4c3a-8a5a-2616e62234a9}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>0.4000</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider" >
+  <objectName>fqnewval2</objectName>
+  <x>728</x>
+  <y>541</y>
+  <width>171</width>
+  <height>28</height>
+  <uuid>{7188a16f-e72b-4d38-a20f-e1374dc759ba}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>2.00000000</maximum>
+  <value>0.42105300</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay" >
+  <objectName>fqnewval2</objectName>
+  <x>799</x>
+  <y>565</y>
+  <width>70</width>
+  <height>29</height>
+  <uuid>{ff509908-331c-4876-8717-d5c07cbe3d98}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>0.4211</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>536</x>
+  <y>564</y>
+  <width>52</width>
+  <height>30</height>
+  <uuid>{fe438499-51e2-44b5-871b-66dbe85c5ab1}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>File 1</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>747</x>
+  <y>564</y>
+  <width>52</width>
+  <height>30</height>
+  <uuid>{7ef3ee21-b834-4fa0-9827-cbde14ed0437}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>File 2</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>8</x>
+  <y>603</y>
+  <width>736</width>
+  <height>150</height>
+  <uuid>{2ab6d209-e394-45a4-9fc1-f8d60aa437e5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay" >
+  <objectName>kpnt1</objectName>
+  <x>114</x>
+  <y>656</y>
+  <width>81</width>
+  <height>28</height>
+  <uuid>{4b7d9ba8-26d2-49ea-ace1-9a8ce6adbbca}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>11.0347</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>12</x>
+  <y>642</y>
+  <width>103</width>
+  <height>43</height>
+  <uuid>{d4301dbf-d28a-4e2e-bbe2-2e8d4c16f390}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Position (sec) in File 1</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay" >
+  <objectName>kpnt2</objectName>
+  <x>115</x>
+  <y>708</y>
+  <width>81</width>
+  <height>28</height>
+  <uuid>{e866aefe-21a1-4b31-b495-cdb2ede852c4}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>1.9834</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>12</x>
+  <y>693</y>
+  <width>103</width>
+  <height>43</height>
+  <uuid>{e474027d-4dcc-4849-ac47-85ac0622bd9b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Position (sec) in File 2</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController" >
+  <objectName>out</objectName>
+  <x>372</x>
+  <y>683</y>
+  <width>336</width>
+  <height>22</height>
+  <uuid>{e55f4043-6c09-43a3-a29e-f305e09efac0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>out2_post</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.79058600</xValue>
+  <yValue>0.54545500</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press" >jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0" >false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController" >
+  <objectName>outover</objectName>
+  <x>706</x>
+  <y>683</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{50fe09c2-8d24-4a19-83c5-af2f513a8598}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>outRover</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press" >jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0" >false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox" >
+  <objectName>dbrange</objectName>
+  <x>654</x>
+  <y>715</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{ddde6659-b233-4f4d-a648-b40639b9a109}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>0.10000000</resolution>
+  <minimum>-1e+12</minimum>
+  <maximum>1e+12</maximum>
+  <randomizable group="0" >false</randomizable>
+  <value>50</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>575</x>
+  <y>714</y>
+  <width>80</width>
+  <height>26</height>
+  <uuid>{9b50cfd2-c51b-45a3-9130-295d06d769c6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>dB-Range</label>
+  <alignment>left</alignment>
+  <font>Helvetica</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>372</x>
+  <y>714</y>
+  <width>117</width>
+  <height>25</height>
+  <uuid>{f97232e1-a909-463b-b2f2-9d8131327613}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Show LED as</label>
+  <alignment>left</alignment>
+  <font>Helvetica</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDropdown" >
+  <objectName>showdb</objectName>
+  <x>489</x>
+  <y>714</y>
+  <width>84</width>
+  <height>26</height>
+  <uuid>{d115e7ab-2af9-48fb-a766-73c7bf646810}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>Amplitudes</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>dB</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>1</selectedIndex>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider" >
+  <objectName>vol</objectName>
+  <x>373</x>
+  <y>642</y>
+  <width>293</width>
+  <height>31</height>
+  <uuid>{ebcfb63c-0632-4c78-b7e1-150fc2f8747f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>4.00000000</maximum>
+  <value>0.50511900</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>396</x>
+  <y>618</y>
+  <width>307</width>
+  <height>29</height>
+  <uuid>{8bdddf0f-ecc8-4e21-962d-47cdd560ad0d}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Volume</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController" >
+  <objectName>showpos1</objectName>
+  <x>202</x>
+  <y>612</y>
+  <width>152</width>
+  <height>130</height>
+  <uuid>{f4530b8b-7c19-422c-a575-d893a308ba1a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>showpos2</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.94370200</xValue>
+  <yValue>0.34993200</yValue>
+  <type>crosshair</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press" >jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0" >false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay" >
+  <objectName>vol</objectName>
+  <x>665</x>
+  <y>645</y>
+  <width>69</width>
+  <height>27</height>
+  <uuid>{71104e80-4151-4b49-b061-1499603d3481}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>0.5051</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>12</x>
+  <y>612</y>
+  <width>147</width>
+  <height>30</height>
+  <uuid>{deaf3cae-bde6-4331-aefd-58404e4e50de}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Output</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>8</x>
+  <y>96</y>
+  <width>480</width>
+  <height>123</height>
+  <uuid>{b26bcd3f-601c-4261-84d3-81a13969175a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLineEdit" >
+  <objectName>_Browse1</objectName>
+  <x>14</x>
+  <y>117</y>
+  <width>358</width>
+  <height>22</height>
+  <uuid>{826e6a48-8782-47df-82d1-4111fbbe416f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>230</r>
+   <g>221</g>
+   <b>213</b>
+  </bgcolor>
+  <background>nobackground</background>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>_Browse1</objectName>
+  <x>373</x>
+  <y>115</y>
+  <width>107</width>
+  <height>29</height>
+  <uuid>{0d65e94b-7973-4189-a45a-0d29fa5f60b3}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>File 1</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLineEdit" >
+  <objectName>_Browse2</objectName>
+  <x>14</x>
+  <y>151</y>
+  <width>358</width>
+  <height>22</height>
+  <uuid>{43019fb8-7d96-441c-933f-14cfa550a79e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>230</r>
+   <g>221</g>
+   <b>213</b>
+  </bgcolor>
+  <background>nobackground</background>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>_Browse2</objectName>
+  <x>373</x>
+  <y>149</y>
+  <width>107</width>
+  <height>29</height>
+  <uuid>{cb9b3b67-c25f-42cf-a2c4-4b3efb8d2754}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue>/home/andres/src/qutecsound/trunk/qutecsound/examples/Miscellaneous/Cross_Synthesis.csd</stringvalue>
+  <text>File 2</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>14</x>
+  <y>184</y>
+  <width>311</width>
+  <height>27</height>
+  <uuid>{1030ef1f-618b-47ee-919d-588e04fa9869}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Let File 1 be File 2 and vice versa</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox" >
+  <objectName>changeorder</objectName>
+  <x>324</x>
+  <y>187</y>
+  <width>27</width>
+  <height>19</height>
+  <uuid>{c29f5713-6ca8-4c41-8de8-c83b5668742f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>43</x>
+  <y>66</y>
+  <width>190</width>
+  <height>30</height>
+  <uuid>{656b7160-e58b-4f79-ae41-aeaf91a60d79}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Choose Files</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>8</x>
+  <y>14</y>
+  <width>958</width>
+  <height>49</height>
+  <uuid>{d3ecca91-b2d8-4fea-b8a2-0748e3685de4}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>CROSS SYNTHESIS</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>26</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>747</x>
+  <y>603</y>
+  <width>219</width>
+  <height>150</height>
+  <uuid>{ca373e1b-b47e-42c2-9a7f-9b5f84522b22}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Here you can perform four different methods of Cross Synthesis in Csound.
+First, choose two files you want to cross. Second, select a method of cross synthesis (see the relevant manual pages for detailed descriptions).
+Third, select a method of time reading: phasor (constant speed), mouse input or random. </label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <objectName/>
+ <x>198</x>
+ <y>25</y>
+ <width>1074</width>
+ <height>750</height>
+ <visible>true</visible>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
 <MacOptions>
 Version: 3
 Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 198 30 1074 797
+WindowBounds: 198 25 1074 750
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -184,82 +2344,81 @@ Options: -b128 -A -s -m167 -R
 <MacGUI>
 ioView background {43690, 43690, 32639}
 ioMenu {832, 69} {110, 25} 0 303 "Phasor,Live,Random" timreadmeth
-ioText {525, 64} {295, 32} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select a Method of Time Reading
-ioText {492, 96} {473, 98} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border 
+ioText {525, 64} {295, 32} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Select a Method of Time Reading
+ioText {492, 96} {473, 98} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 
 ioSlider {551, 126} {339, 28} -2.000000 2.000000 1.339233 phaspeed1
-ioText {889, 128} {70, 26} display 0.000000 0.00100 "phaspeed1" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.3510
+ioText {889, 128} {70, 26} display 1.351000 0.00100 "phaspeed1" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.3510
 ioSlider {550, 154} {339, 28} -2.000000 2.000000 0.513274 phaspeed2
-ioText {888, 156} {70, 26} display 0.513274 0.00100 "phaspeed2" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.5133
-ioText {500, 125} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 1
-ioText {499, 152} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 2
-ioText {8, 258} {479, 73} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground border pvscross
-ioText {8, 397} {479, 70} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground border pvsvoc
-ioText {8, 330} {479, 68} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground border pvsfilter
-ioText {8, 466} {479, 134} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground border pvsmorph
+ioText {888, 156} {70, 26} display 0.513300 0.00100 "phaspeed2" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.5133
+ioText {500, 125} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 1
+ioText {499, 152} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 2
+ioText {8, 258} {479, 73} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder pvscross
+ioText {8, 397} {479, 70} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder pvsvoc
+ioText {8, 330} {479, 68} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder pvsfilter
+ioText {8, 466} {479, 134} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder pvsmorph
 ioSlider {74, 293} {275, 29} 0.000000 1.000000 0.501818 crossamp
-ioText {406, 295} {70, 26} display 0.000000 0.00100 "crossamp1" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.5709
-ioText {17, 292} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 1
-ioText {146, 265} {160, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amplitudes from 
-ioText {351, 294} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 2
+ioText {406, 295} {70, 26} display 0.570900 0.00100 "crossamp1" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.5709
+ioText {17, 292} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 1
+ioText {146, 265} {160, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Amplitudes from 
+ioText {351, 294} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 2
 ioSlider {79, 559} {275, 29} 0.000000 1.000000 0.236364 morphfreq
-ioText {411, 561} {70, 26} display 0.236364 0.00100 "morphfreq" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.2364
-ioText {22, 558} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 1
-ioText {88, 531} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frequencies from 
-ioText {356, 560} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 2
+ioText {411, 561} {70, 26} display 0.236400 0.00100 "morphfreq" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.2364
+ioText {22, 558} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 1
+ioText {88, 531} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Frequencies from 
+ioText {356, 560} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 2
 ioMenu {357, 231} {108, 22} 0 303 "pvscross,pvsfilter,pvsvoc,pvsmorph" selcross
-ioText {45, 227} {325, 32} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select a Method of Cross Synthesis
+ioText {45, 227} {325, 32} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Select a Method of Cross Synthesis
 ioSlider {73, 362} {275, 29} 0.000000 1.000000 0.549091 filtdepth
-ioText {405, 364} {70, 26} display 0.549091 0.00100 "filtdepth" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.5491
-ioText {16, 361} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder low
-ioText {82, 336} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Depth of filtering
-ioText {350, 363} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder high
+ioText {405, 364} {70, 26} display 0.549100 0.00100 "filtdepth" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.5491
+ioText {16, 361} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder low
+ioText {82, 336} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Depth of filtering
+ioText {350, 363} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder high
 ioSlider {71, 429} {275, 29} 0.000000 1.000000 0.650909 vocdepth
-ioText {403, 431} {70, 26} display 0.650909 0.00100 "vocdepth" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.6509
-ioText {14, 428} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder low
-ioText {80, 403} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Depth of vocoding
-ioText {348, 430} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder high
+ioText {403, 431} {70, 26} display 0.650900 0.00100 "vocdepth" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.6509
+ioText {14, 428} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder low
+ioText {80, 403} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Depth of vocoding
+ioText {348, 430} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder high
 ioSlider {79, 497} {275, 29} 0.000000 1.000000 0.723636 morphamp
-ioText {411, 499} {70, 26} display 0.723636 0.00100 "morphamp" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.7236
-ioText {22, 496} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 1
-ioText {90, 471} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amplitudes from 
-ioText {356, 498} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 2
-ioText {499, 101} {227, 27} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder For Method "Phasor": Set Speed
-ioText {492, 196} {474, 291} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border 
-ioText {502, 202} {98, 267} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder For Method "Live":Â¬Set Positions for File 1 from left to right and for File 2 from bottom to top
-ioMeter {631, 201} {313, 280} {0, 59904, 0} "livepos2" 0.678571 "livepos1" 0.619808 crosshair 1 0 mouse
-ioText {492, 490} {474, 110} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border 
-ioText {498, 498} {464, 44} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder For Method "Random":Â¬Set Frequency for new Random Positions in File 1 and File 2
+ioText {411, 499} {70, 26} display 0.723600 0.00100 "morphamp" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.7236
+ioText {22, 496} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 1
+ioText {90, 471} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Amplitudes from 
+ioText {356, 498} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 2
+ioText {499, 101} {227, 27} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder For Method "Phasor": Set Speed
+ioText {492, 196} {474, 291} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 
+ioText {502, 202} {98, 267} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder For Method "Live":Â¬Set Positions for File 1 from left to right and for File 2 from bottom to top
+ioMeter {631, 201} {313, 280} {0, 59904, 0} "livepos1" 0.619808 "livepos2" 0.678571 crosshair 1 0 mouse
+ioText {492, 490} {474, 110} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 
+ioText {498, 498} {464, 44} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder For Method "Random":Â¬Set Frequency for new Random Positions in File 1 and File 2
 ioSlider {518, 542} {170, 27} 0.000000 2.000000 0.400000 fqnewval1
-ioText {591, 565} {61, 28} display 0.000000 0.00100 "fqnewval1" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.4000
+ioText {591, 565} {61, 28} display 0.400000 0.00100 "fqnewval1" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.4000
 ioSlider {728, 541} {171, 28} 0.000000 2.000000 0.421053 fqnewval2
-ioText {799, 565} {70, 29} display 0.000000 0.00100 "fqnewval2" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.4211
-ioText {536, 564} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 1
-ioText {747, 564} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 2
-ioText {8, 603} {736, 150} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 
-ioText {114, 656} {81, 28} display 11.034742 0.00100 "kpnt1" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 11.0347
-ioText {12, 642} {103, 43} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Position (sec) in File 1
-ioText {115, 708} {81, 28} display 1.983411 0.00100 "kpnt2" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.9834
-ioText {12, 693} {103, 43} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Position (sec) in File 2
-ioMeter {372, 683} {336, 22} {0, 59904, 0} "out2_post" 0.545455 "out" 0.790586 fill 1 0 mouse
-ioMeter {706, 683} {27, 22} {50176, 3584, 3072} "outRover" 0.000000 "outover" 0.000000 fill 1 0 mouse
-ioText {654, 715} {80, 25} editnum 50.000000 0.100000 "dbrange" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 50.000000
-ioText {575, 714} {80, 26} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder dB-Range
-ioText {372, 714} {117, 25} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Show LED as
+ioText {799, 565} {70, 29} display 0.421100 0.00100 "fqnewval2" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.4211
+ioText {536, 564} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 1
+ioText {747, 564} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 2
+ioText {8, 603} {736, 150} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 
+ioText {114, 656} {81, 28} display 11.034700 0.00100 "kpnt1" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 11.0347
+ioText {12, 642} {103, 43} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Position (sec) in File 1
+ioText {115, 708} {81, 28} display 1.983400 0.00100 "kpnt2" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.9834
+ioText {12, 693} {103, 43} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Position (sec) in File 2
+ioMeter {372, 683} {336, 22} {0, 59904, 0} "out" 0.790586 "out2_post" 0.545455 fill 1 0 mouse
+ioMeter {706, 683} {27, 22} {50176, 3584, 3072} "outover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
+ioText {654, 715} {80, 25} editnum 50.000000 0.100000 "dbrange" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 50.000000
+ioText {575, 714} {80, 26} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder dB-Range
+ioText {372, 714} {117, 25} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Show LED as
 ioMenu {489, 714} {84, 26} 1 303 "Amplitudes,dB" showdb
 ioSlider {373, 642} {293, 31} 0.000000 4.000000 0.505119 vol
-ioText {396, 618} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Volume
-ioMeter {202, 612} {152, 130} {0, 59904, 0} "showpos2" 0.349932 "showpos1" 0.943702 crosshair 1 0 mouse
-ioText {665, 645} {69, 27} display 0.505119 0.00100 "vol" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.5051
-ioText {12, 612} {147, 30} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Output
-ioText {8, 96} {480, 123} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 
-ioText {14, 117} {358, 22} edit 0.000000 0.00100 "_Browse1" right "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {396, 618} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Volume
+ioMeter {202, 612} {152, 130} {0, 59904, 0} "showpos1" 0.943702 "showpos2" 0.349932 crosshair 1 0 mouse
+ioText {665, 645} {69, 27} display 0.505100 0.00100 "vol" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.5051
+ioText {12, 612} {147, 30} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Output
+ioText {8, 96} {480, 123} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 
+ioText {14, 117} {358, 22} edit 0.000000 0.00100 "_Browse1"  "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
 ioButton {373, 115} {107, 29} value 1.000000 "_Browse1" "File 1" "/" 
-ioText {14, 151} {358, 22} edit 0.000000 0.00100 "_Browse2" right "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {14, 151} {358, 22} edit 0.000000 0.00100 "_Browse2"  "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
 ioButton {373, 149} {107, 29} value 1.000000 "_Browse2" "File 2" "/" 
-ioText {14, 184} {311, 27} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Let File 1 be File 2 and vice versa
+ioText {14, 184} {311, 27} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Let File 1 be File 2 and vice versa
 ioCheckbox {324, 187} {27, 19} off changeorder
-ioText {43, 66} {190, 30} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Choose Files
-ioText {8, 14} {958, 49} label 0.000000 0.00100 "" center "Lucida Grande" 24 {0, 0, 0} {65280, 65280, 65280} nobackground noborder CROSS SYNTHESIS
-ioText {747, 603} {219, 150} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground border Here you can perform four different methods of Cross Synthesis in Csound.Â¬First, choose two files you want to cross. Second, select a method of cross synthesis (see the relevant manual pages for detailed descriptions).Â¬Third, select a method of time reading: phasor (constant speed), mouse input or random. 
+ioText {43, 66} {190, 30} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Choose Files
+ioText {8, 14} {958, 49} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {58880, 56576, 54528} nobackground noborder CROSS SYNTHESIS
+ioText {747, 603} {219, 150} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Here you can perform four different methods of Cross Synthesis in Csound.Â¬First, choose two files you want to cross. Second, select a method of cross synthesis (see the relevant manual pages for detailed descriptions).Â¬Third, select a method of time reading: phasor (constant speed), mouse input or random. 
 </MacGUI>
-

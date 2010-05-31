@@ -172,10 +172,10 @@ void LiveEventControl::openLoopRangeDialog(int row)
   QStringList bounds(item->text().split("-"));
   if (bounds.size() > 1) {
     if (bounds[0].toInt() >= 0) {
-      ss.setValue(bounds[0].toInt() + 1);
+      ss.setValue(bounds[0].toInt());
     }
     if (bounds[1].toInt() >= 0) {
-      se.setValue(bounds[1].toInt() + 1);
+      se.setValue(bounds[1].toInt());
     }
   }
   int ret = d.exec();

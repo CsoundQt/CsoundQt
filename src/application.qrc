@@ -68,6 +68,7 @@
       <file>../examples/Widgets/Controller_Widget.csd</file>
       <file>../examples/Widgets/Scope_Widget.csd</file>
       <file>../examples/Widgets/String_Channels.csd</file>
+      <file>../examples/Widgets/Presets.csd</file>
       <file>../examples/Widgets/Reserved_Channels.csd</file>
 
       <file>../examples/Getting Started/Basics/Hello World.csd</file>

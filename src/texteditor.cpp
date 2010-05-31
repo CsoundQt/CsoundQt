@@ -50,16 +50,16 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
   }
 }
 
-void TextEditor::dropEvent(QDropEvent *event)
-{
-  qDebug() << "TextEditor::dropEvent" << event->mimeData()->text();
-
-//    event->acceptProposedAction();
-}
+//void TextEditor::dropEvent(QDropEvent *event)
+//{
+//  qDebug() << "TextEditor::dropEvent" << event->mimeData()->text();
+//
+////    event->acceptProposedAction();
+//}
 
 void TextEditor::dragEnterEvent(QDragEnterEvent *event)
 {
   qDebug() << "TextEditor::dragEnterEvent" << event->mimeData()->text();
 
-//    event->acceptProposedAction();
+     event->acceptProposedAction();
 }

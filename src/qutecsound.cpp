@@ -2215,6 +2215,7 @@ void qutecsound::createMenus()
   widgetFiles.append(":/examples/Widgets/Lineedit_Widget.csd");
   widgetFiles.append(":/examples/Widgets/Scope_Widget.csd");
   widgetFiles.append(":/examples/Widgets/String_Channels.csd");
+  widgetFiles.append(":/examples/Widgets/Presets.csd");
   widgetFiles.append(":/examples/Widgets/Reserved_Channels.csd");
 
   subMenus << widgetFiles;

@@ -33,7 +33,7 @@ class TextEditor : public QTextEdit
 
   protected:
     virtual void keyPressEvent (QKeyEvent * event);
-    virtual void dropEvent(QDropEvent *event);
+//    virtual void dropEvent(QDropEvent *event);
     virtual void dragEnterEvent(QDragEnterEvent *event);
 };
 
