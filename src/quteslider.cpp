@@ -104,6 +104,7 @@ void QuteSlider::applyInternalProperties()
 void QuteSlider::setWidgetGeometry(int x, int y, int w, int h)
 {
   QuteWidget::setWidgetGeometry(x,y,w,h);
+  m_widget->blockSignals(true);
   if (width() > height()) {
     static_cast<QSlider *>(m_widget)->setOrientation(Qt::Horizontal);
     static_cast<QSlider *>(m_widget)->setMaximum(w);
@@ -114,6 +115,7 @@ void QuteSlider::setWidgetGeometry(int x, int y, int w, int h)
     static_cast<QSlider *>(m_widget)->setMaximum(h);
     m_len = h;
   }
+  m_widget->blockSignals(false);
 }
 
 QString QuteSlider::getWidgetLine()

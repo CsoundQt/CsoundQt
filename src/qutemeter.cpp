@@ -330,7 +330,9 @@ void QuteMeter::setWidgetGeometry(int x,int y,int width,int height)
   QuteWidget::setWidgetGeometry(x,y,width, height);
   /* In MacCsound, meter widgets have an offset of about five pixels in every border
      This has proven problematic in Qt, as the graphicsScene*/
+  m_widget->blockSignals(true);
   static_cast<MeterWidget *>(m_widget)->setWidgetGeometry(0,0,width, height);
+  m_widget->blockSignals(false);
 }
 
 void QuteMeter::applyInternalProperties()
