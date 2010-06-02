@@ -27,7 +27,7 @@ LIBSNDFILE_LIB = libsndfile.dylib
 include(config.pri)
 INCLUDEPATH += $${CSOUND_INCLUDE_DIR} $${LIBSNDFILE_INCLUDE_DIR}
 LIBS += -L$${CSOUND_LIBRARY_DIR} -L$${LIBSNDFILE_LIBRARY_DIR}
-LIBS += -framework QtCore -framework QtGui -framework QtXml
+#LIBS += -framework QtCore -framework QtGui -framework QtXml
 LCSOUND = -framework $${MAC_LIB}
 LCSND = -l_csnd
 LSNDFILE = -lsndfile

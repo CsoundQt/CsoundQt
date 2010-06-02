@@ -2943,7 +2943,8 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   if (fileName == ":/default.csd")
     fileName = QString("");
   documentPages[curPage]->setFileName(fileName);  // Must set before sending text to set highlighting mode
-  if (documentPages[curPage]->setTextString(text, m_options->saveWidgets) == 1) { // Make backup copy if file has only old format.
+  if (documentPages[curPage]->setTextString(text, m_options->saveWidgets) == 1
+      && fileName.endsWith(".csd")) { // Make backup copy if file has only old format.
     QFile oldFile(fileName + ".old-format");
     if (oldFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
       qDebug() << "qutecsound::loadFile Writing backup file:" << fileName + ".old-format";

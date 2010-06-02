@@ -2595,7 +2595,7 @@ void WidgetLayout::loadPreset()
 
   QTreeWidget *treeWidget = new QTreeWidget(&d);
 
-  treeWidget->setHeaderLabel(tr("Select Preset to Load"));
+  treeWidget->setHeaderLabel(tr("Double-click Preset to Load"));
 //  l->addWidget(lab);
   l->addWidget(treeWidget);
 //  l->addWidget(box);

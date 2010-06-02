@@ -82,6 +82,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   m_highlighter.setDocument(mainEditor->document());
 
   syntaxMenu = 0;
+  setAcceptDrops(true);
 }
 
 DocumentView::~DocumentView()
