@@ -42,8 +42,8 @@ class QuteWidget : public QWidget
     virtual void setValue2(double);
     virtual void setValue(QString);
 
-    virtual void widgetMessage(QString /*path*/, QString /*text*/) {;}
-    virtual void widgetMessage(QString /*path*/, double /*value*/) {;}  // TODO implement sending messages to widgets.
+    virtual void widgetMessage(QString path, QString text);
+    virtual void widgetMessage(QString path, double value);
 
     virtual QString getWidgetLine() = 0;
     virtual QString getCabbageLine();

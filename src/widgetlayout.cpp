@@ -109,6 +109,12 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   propertiesAct = new QAction(tr("Properties"),this);
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
 
+  cutAct = new QAction(tr("Cut"), this);
+  connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
+  copyAct = new QAction(tr("Copy"), this);
+  connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
+  pasteAct = new QAction(tr("Paste"), this);
+  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
   duplicateAct = new QAction(tr("Duplicate Selected"), this);
   connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
   deleteAct = new QAction(tr("Delete Selected"), this);
@@ -1164,6 +1170,7 @@ QString WidgetLayout::getCsladspaLines()
 
 bool WidgetLayout::isModified()
 {
+//  qDebug() << "WidgetLayout::isModified()" << m_modified;
   return m_modified;
 }
 
@@ -1185,6 +1192,9 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
   menu.addAction(createGraphAct);
   menu.addAction(createScopeAct);
   menu.addSeparator();
+  menu.addAction(cutAct);
+  menu.addAction(copyAct);
+  menu.addAction(pasteAct);
   menu.addAction(selectAllAct);
   menu.addAction(duplicateAct);
   menu.addAction(deleteAct);
@@ -1921,7 +1931,7 @@ void WidgetLayout::widgetChanged(QuteWidget* widget)
     }
     setWidgetToolTip(widget, m_tooltips);
 //    widgetsMutex.unlock();
-    emit changed();
+    setModified(true);
   }
   adjustLayoutSize();
 }
@@ -2553,7 +2563,7 @@ FrameWidget *WidgetLayout::getEditWidget(QuteWidget *widget)
 
 void WidgetLayout::setModified(bool mod)
 {
-//  qDebug() << "WidgetLayout::setModified";
+//  qDebug() << "WidgetLayout::setModified" << mod;
   m_modified = mod;
   emit changed();
 }
@@ -3054,12 +3064,20 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
   if (channelValue.first == "_SetPresetIndex") {
     loadPresetFromIndex(channelValue.second);
   }
+  QString channelName = channelValue.first.left(channelValue.first.indexOf("/"));
+  QString path = channelValue.first.mid(channelValue.first.indexOf("/") + 1);
+//  qDebug() << "WidgetLayout::newValue " << channelName << "--" << path;
   widgetsMutex.lock();
   if (!channelValue.first.isEmpty()) {
     for (int i = 0; i < m_widgets.size(); i++){
-      if (m_widgets[i]->getChannelName() == channelValue.first) {
+      if (m_widgets[i]->getChannelName() == channelName) {
 //        qDebug() << "WidgetLayout::newValue " << channelValue.first << "--" << m_widgets[i]->getChannelName();
-        m_widgets[i]->setValue(channelValue.second);
+        if (path.isEmpty()) {
+          m_widgets[i]->setValue(channelValue.second);
+        }
+        else {
+          m_widgets[i]->widgetMessage(path,channelValue.second);
+        }
       }
       if (m_widgets[i]->getChannel2Name() == channelValue.first) {
         m_widgets[i]->setValue2(channelValue.second);
@@ -3071,10 +3089,19 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
 
 void WidgetLayout::newValue(QPair<QString, QString> channelValue)
 {
+  QString channelName = channelValue.first.left(channelValue.first.indexOf("/"));
+  QString path = channelValue.first.mid(channelValue.first.indexOf("/") + 1);
   widgetsMutex.lock();
-  for (int i = 0; i < m_widgets.size(); i++){
-    if (m_widgets[i]->getChannelName() == channelValue.first) {
-      m_widgets[i]->setValue(channelValue.second);
+  if (!channelValue.first.isEmpty()) {
+    for (int i = 0; i < m_widgets.size(); i++){
+      if (m_widgets[i]->getChannelName() == channelName) {
+        if (path.isEmpty()) {
+          m_widgets[i]->setValue(channelValue.second);
+        }
+        else {
+          m_widgets[i]->widgetMessage(path,channelValue.second);
+        }
+      }
     }
   }
   widgetsMutex.unlock();

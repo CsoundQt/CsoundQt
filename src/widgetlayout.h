@@ -127,6 +127,9 @@ class WidgetLayout : public QWidget
     void createContextMenu(QContextMenuEvent *event);  // When done outside container widget
 
     // Edition Actions
+    QAction *cutAct;
+    QAction *copyAct;
+    QAction *pasteAct;
     QAction *clearAct;
     QAction *selectAllAct;
     QAction *duplicateAct;

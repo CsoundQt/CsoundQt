@@ -100,6 +100,24 @@ void QuteWidget::setValue(QString value)
 #endif
 }
 
+void QuteWidget::widgetMessage(QString path, QString text)
+{
+  qDebug() << "QuteWidget::widgetMessage" << text;
+  if (property(path.toLocal8Bit()).isValid()) {
+    setProperty(path.toLocal8Bit(), text);
+//    applyInternalProperties();
+  }
+}
+
+void QuteWidget::widgetMessage(QString path, double value)
+{
+  qDebug() << "QuteWidget::widgetMessage" << value;
+  if (property(path.toLocal8Bit()).isValid()) {
+    setProperty(path.toLocal8Bit(), value);
+//    applyInternalProperties();
+  }
+}
+
 //void QuteWidget::setRange(int /*min*/, int /*max*/)
 //{
 //  qDebug("QuteWidget::setRange not implemented for widget type");
@@ -427,10 +445,9 @@ QList<QAction *> QuteWidget::getParentActionList()
   // A bit of a kludge... Must get the Widget Panel, which is the parent to the widget which
   // holds the actual QuteWidgets
   WidgetLayout *layout = static_cast<WidgetLayout *>(this->parentWidget());
-  // FIXME put cut/copy/paste actions in menu
-//  actionList.append(layout->copyAct);
-//  actionList.append(layout->pasteAct);
-//  actionList.append(layout->cutAct);
+  actionList.append(layout->copyAct);
+  actionList.append(layout->pasteAct);
+  actionList.append(layout->cutAct);
   actionList.append(layout->deleteAct);
   actionList.append(layout->duplicateAct);
   actionList.append(layout->alignLeftAct);
