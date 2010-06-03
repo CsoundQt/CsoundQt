@@ -1,0 +1,665 @@
+Hi all!
+
+QuteCsound 0.6.0 is ready! QuteCsound has now come of age as it
+recently celebrated two years since its first svn commit! This release
+takes QuteCsound way beyond my original expectations thanks to the
+encouragement, ideas and work from many users. This is another
+milestone release, with the implementation of the new widget format,
+which opens the door to new functionality and extensibility.
+
+QuteCsound is a frontend for Csound featuring a highlighting
+editor with autocomplete, interactive widgets and integrated help. It
+can open files created in MacCsound, and aims to be a simple yet
+powerful and complete development environment for Csound.
+
+QuteCsound has been tested on Windows, OS X, Linux and Solaris,
+and it is free software released under the LGPLv2 or at your option
+GPLv3.
+
+There are binary packages for Windows and OS X, and a source package
+for other platforms.
+You can get it here:
+http://sourceforge.net/projects/qutecsound/files/QuteCsound/0.5.0/
+
+There's more information here:
+http://qutecsound.sourceforge.net/
+
+There is also an experimental package for OS X (called "-full"), which
+contains Csound inside, so you don't need a separate Csound installation,
+(which means it will work immediately without installation - very handy if
+you don't have the root password for a system).
+
+Please try it and let us know any issues.
+
+Questions, comments and suggestions for QuteCsound are very welcome
+and can be posted to the main Csound mailing list, but better still,
+join the QuteCsound users mailing list at:
+http://lists.sourceforge.net/lists/listinfo/qutecsound-users
+
+Thanks as usual to the testing team, who made sure regular users get a
+smooth ride by taking a bumpy ride...
+Thanks especially to Francois Pinot, Andy Fillebrown, Joachim Heintz
+and Rene Djack, but also to the translators and the rest of the testers.
+
+QuteCsound is now accepting donations. If you find QuteCsound useful
+and have some money to spare, please consider donating to the project,
+to support development:
+http://sourceforge.net/project/project_donations.php?group_id=227265
+
+New in version 0.6.0:
+ * New XML Widget format for storing widgets
+ * The new format allows many new funtionality like:
+    - Font, Font size, Font Color and background in a larger number of
+    widgets.
+    - Rounded borders and border width in various widgets.
+    - Font sizes are now approximate pixel values, which provides
+    better cross-platform font cmpatibility and a broader selection of
+    sizes
+    - x and y zoom for scope and graph widget
+    - If only old widget format is present in the file, a backup copy
+    is saved with extension .old-format
+    - Minimum and maximum values for spinbox, controller and scroll number
+ * Presets for Widgets are now available, and they will be stored as
+ XML text in the csd file. They can be used from the right click menu
+ in the widget panel.
+ * New reserved channel "_MBrowse" for buttons, which allows selection
+ of multiple files, which are separated by the "|" character.
+ * Font scaling and Font Offset configuration option for control over
+ global font rendering size.
+ * Added bookmarks in inspector (any comment starting by ";;" in a csd
+ file or "##" in python file is treated as a bookmark)
+ * Added option to save using Windows or Unix Line Endings (only for
+ saved files-text in editor still uses Unix line breaks...)
+ * Added option for specifying python executable
+ * new Live Event Controller, which simplifies usage of live event
+ sheets.
+ * Implemented looping and setting/saving loop points for live event sheets
+ * Added "append rows" and "appends columns" for event sheets
+ * Graph widget now sends values when an index is selected
+ * New filter Lab example
+ * Auto indent when previous line is indented
+ * Added option to have widgets open the properties dialog
+ automatically when they are created (enabled by default)
+ * Added center vertically and center horizontally widget layout options
+ * Added instrument count and udo count to file information.
+ * Added menu option to display file information.
+ * Added menu option to set full screen view.
+ * Description for opcodes is now printed on the status bar
+ * Added option to hide toolbar
+ * Added menu item for showing Opcode Quick Reference page from manual
+ * Added option to change shortcut for Utilities Dialog
+
+Fixed in version 0.6.0:
+ * Horrible memory leak from API graphs, QuteCsound consumed memory at
+ a terrible pace.
+ * -i flag is not added to options if it is empty. This is done to
+ allow using only flags like: "-+rtaudio=alsa -odac" without forcing -i
+ + Fixed beeping when key is pressed in widget layout
+ * About Dialog is now shorter for smaller screens.
+ * Improved syntax popup menu (now distinguishes whether first word is
+ a variable or an opcode to decide whether to pop up menu on next
+ word). Don't show syntax completion if line previously has "opcode"
+ or "instr" text.
+ * If something has been typed, autocomplete does not add the output
+ arguments, just the opcode name and input arguments.
+ * Non csd files no longer parse the widget text, even if it is there.
+ * Fixed addition of blank lines at end when saving
+ * Record button unlatches on stop.
+ * Fixed inspector update when switching tabs
+ * Status bar syntax is now only shown for csd and orc files
+ * Non python and non csd files are now not syntax highlighted
+ * Fixed editor sluggishness by running the inspector update on a slow
+ timer.
+ * Added logic to avoid completion pop up menu if an opcode has
+ already been used in the line or if there is a = operator in the line
+ * Auto complete now adds the correct rate text (previously the same
+ text was added, no matter what rate was chosen)
+ * Widgets no longer disappear if dragged to be too small
+ * Reorganized configuration dialog to make it fit in smaller screens
+ * Inspector now maintains state (collapsed/expanded) of items
+ * Fixed browse button for SSDIR
+ * Removed option to remove scrollbars. They are always active
+ now. This option was added when it created instability.
+ * Tooltip showing channel name shows up in edit mode as well.
+ * fixed bug in qutecsound::runUtility ("free" was being called on
+ argv which is allocated on stack, not heap)
+ * Truncate jack names if greater than 16 characters
+
+
+Internal changes in 0.6.0:
+ * New build system thanks to Andy Fillebrown, which keeps build
+ products more organized and performs a "configure" style step in
+ qmake which looks for the required dependencies
+ * New concurrency model. invalue now changes the channels for all
+ widgets synchronously. Might also have a positive effect on
+ performance, as widgets are only updated through a timer which will
+ usually run slower than k-rate. Threading model is now clearer, and
+ should be now crash proof (hopefully).
+
+
+Full ChangeLog:
+Revision 628 - Directory Listing
+Modified Fri May 28 16:40:49 2010 UTC (17 hours, 24 minutes ago) by mantaraya36
+
+Updated Widget examples for new version with correct font sizes and with
+rounded borders.
+Added m_activeWidgets variable which effectively serves as ablock when
+widgets are being deleted or created to avoid ocking memory when widgets
+are accessed from the value callbacks in the audio engine.
+Fixed issue with scope channel values.
+Some cleanup
+Multiple browse button now separates files using "," character (a single
+character is better for parsing in Csound.
+
+Revision 627
+Modified Thu May 27 09:22:55 2010 UTC (2 days ago) by mantaraya36
+
+Finished spanish translation and updated french translation by Francois Pinot
+
+Revision 626
+Modified Thu May 27 08:35:31 2010 UTC (2 days, 1 hour ago) by mantaraya36
+
+Fixed issue with csd file being interpreted as binary in other editors.
+Button widget was wrongliy saving string text.
+
+Revision 625
+Modified Thu May 27 07:27:18 2010 UTC (2 days, 2 hours ago) by mantaraya36
+
+Added french translation by Francois Pinot. Updated translations.
+
+Revision 624
+Modified Wed May 26 18:35:57 2010 UTC (2 days, 15 hours ago) by mantaraya36
+
+Fixed issue with value from second value of controller.
+
+Revision 623
+Modified Wed May 26 18:24:54 2010 UTC (2 days, 15 hours ago) by mantaraya36
+
+Fixed translations and finished spanish translation
+
+Revision 622
+Modified Wed May 26 17:56:22 2010 UTC (2 days, 16 hours ago) by mantaraya36
+
+Implemented font, font size and background color for spin box and line
+edit widgets.
+Widgets that have text now calculate the size from the number of pixels
+for the font using QFontMetrics.
+
+Revision 621
+Modified Wed May 26 12:31:39 2010 UTC (2 days, 21 hours ago) by afillebrown
+
+add qmake error in config.pri if no csound library is found
+
+Revision 620
+Modified Wed May 26 11:26:43 2010 UTC (2 days, 22 hours ago) by mantaraya36
+
+Fixed issue with scope widget channel
+Fixed tooltips for new properties
+
+Revision 619
+Modified Tue May 25 19:16:15 2010 UTC (3 days, 14 hours ago) by mantaraya36
+
+Fixed problem in spin box.
+Made default font scaling 1 and default font offset 0. Imports from old format are now scaled when importing instead of scaling the whole font system.
+
+Revision 618
+Modified Tue May 25 18:40:41 2010 UTC (3 days, 15 hours ago) by mantaraya36
+
+Button now stores its stringvalue
+
+Revision 617
+Modified Tue May 25 18:01:13 2010 UTC (3 days, 16 hours ago) by mantaraya36
+
+Fixed button properly this time
+
+Revision 616
+Modified Tue May 25 17:34:09 2010 UTC (3 days, 16 hours ago) by mantaraya36
+
+Minor change in widget layout update timer in hope of finding crashing
+bug.
+Fixed storing of button value
+
+Revision 615
+Modified Tue May 25 16:20:36 2010 UTC (3 days, 17 hours ago) by mantaraya36
+
+Fixed leftover widget locker...
+
+Revision 614
+Modified Tue May 25 14:28:21 2010 UTC (3 days, 19 hours ago) by mantaraya36
+
+Fix for Spin Box crash
+
+Revision 613
+Modified Tue May 25 12:57:24 2010 UTC (3 days, 21 hours ago) by afillebrown
+
+ignore build directory
+
+Revision 612
+Modified Tue May 25 12:56:20 2010 UTC (3 days, 21 hours ago) by afillebrown
+
+add src/src.pri include statement back in to qcs-win32.pro
+
+Revision 611
+Modified Tue May 25 12:54:11 2010 UTC (3 days, 21 hours ago) by afillebrown
+
+remove semi-colon in config.pri to fix qmake parse error on windows
+
+Revision 610
+Modified Tue May 25 08:21:25 2010 UTC (4 days, 1 hour ago) by mantaraya36
+
+Minor fix to font size of scroll number widget when created
+
+Revision 609
+Modified Mon May 24 21:03:08 2010 UTC (4 days, 13 hours ago) by mantaraya36
+
+Fixed build system
+
+Revision 608
+Modified Mon May 24 17:30:31 2010 UTC (4 days, 16 hours ago) by mantaraya36
+
+Added new preset button for save preset menu
+Fixed small issue with lineedit widget
+Fixed crashing with line edit widget
+Updated translation base files and completed spanish translation
+
+Revision 607
+Modified Mon May 24 13:27:05 2010 UTC (4 days, 20 hours ago) by mantaraya36
+
+Minor fixes
+
+Revision 606
+Modified Sun May 23 20:15:50 2010 UTC (5 days, 13 hours ago) by mantaraya36
+
+Finished implementing widget format (not all supported for editing, but
+format from future versions should be properly handled now)
+
+Revision 605
+Modified Sat May 22 10:28:44 2010 UTC (6 days, 23 hours ago) by mantaraya36
+
+Fixed crashing of meter widget when -inf is sent to it.
+
+Revision 604
+Modified Sat May 22 08:11:50 2010 UTC (7 days, 1 hour ago) by mantaraya36
+
+Fixed undo/redo in widget panel (history was being stored after the
+second change)
+Fixed widget selection after widget creation and duplication (all
+duplicated widgets are now selected, and only the new widget is selected
+respectively)
+Fixed manual entering of data for SpinBox
+
+Revision 603
+Modified Thu May 20 22:22:38 2010 UTC (8 days, 11 hours ago) by mantaraya36
+
+Added limit for curve buffer. Limit is set in QCS_CURVE_BUFFER_MAX
+macro.
+Improved IO_Test example
+
+Revision 602
+Modified Wed May 19 19:42:30 2010 UTC (9 days, 14 hours ago) by mantaraya36
+
+Fixed loading of checkbox state
+
+Revision 601
+Modified Wed May 19 16:46:35 2010 UTC (9 days, 17 hours ago) by mantaraya36
+
+-i flag is not added to options if it is empty. This is done to allow
+using only flags like: "-+rtaudio=alsa -odac" without forcing -i
+
+Revision 600
+Modified Wed May 19 14:12:59 2010 UTC (9 days, 19 hours ago) by mantaraya36
+
+Fixed beeping when key is pressed in widget layout
+
+Revision 599
+Modified Wed May 19 11:18:08 2010 UTC (9 days, 22 hours ago) by mantaraya36
+
+FIxed crashing when running a scend time due to bad cleanup of curves.
+Made a little less verbose
+
+Revision 598
+Modified Wed May 19 07:56:13 2010 UTC (10 days, 2 hours ago) by mantaraya36
+
+Added email to about dialog. About Dialog is now shorter for smaller
+screens.
+Improved interface for widget presets (now presents a list to double
+click presets). Fixed several bugs with preset recall/store.
+Widget version is now stored on each widget, not the widget panel.
+
+Revision 597
+Modified Tue May 18 16:39:17 2010 UTC (10 days, 17 hours ago) by mantaraya36
+
+Added markers for python files in inspector. Lines which contain "##"
+are now displayed green in the inspector list
+Added option to save using Windows or Unix Line Endings (only for saved
+files-text in editor still uses Unix line breaks...)
+
+Revision 596
+Modified Mon May 17 14:22:40 2010 UTC (11 days, 19 hours ago) by mantaraya36
+
+Fixed entrign of text for line edit (cursor now stays at the current
+position, was always jumping to end).
+Improved default values for font scaling and offset for OS X
+Fixed final selection after send to back (was selecting an unexpected
+group)
+
+Revision 595
+Modified Sun May 16 20:20:01 2010 UTC (12 days, 13 hours ago) by mantaraya36
+
+Fixed loading of default file.
+Fixed setting of console buffer size
+
+Revision 594
+Modified Sat May 15 14:09:34 2010 UTC (13 days, 19 hours ago) by mantaraya36
+
+Added option to set font scaling and font offset
+Graph widget mostly fixed (only display asig, 0.1 hs trouble. Things like
+display asig, 0.1, 4 works, though...)
+
+Revision 593
+Modified Sat May 15 09:31:30 2010 UTC (2 weeks ago) by mantaraya36
+
+FIxed LineEdit widget (was not taking input)
+Improved syntax popup menu (now distinguishes whether first word is a
+variable or an opcode to decide whether to pop up menu on next word)
+Button now does not transmit value if channel begins with "_Browse"
+
+Revision 592
+Modified Fri May 14 20:59:13 2010 UTC (2 weeks ago) by mantaraya36
+
+Added option for specifying python executable
+
+Revision 591
+Modified Thu May 13 17:21:50 2010 UTC (2 weeks, 1 day ago) by mantaraya36
+
+Non csd files no longer parse the widget text, even if it is there.
+Fixed addition of blank lines at end when saving
+Record button unlatches on stop.
+Fixed inspector update when switching tabs
+Status bar syntax is now only shown for csd and orc files.
+Non python and non csd files are now not syntax highlighted
+
+Revision 590
+Modified Thu May 13 13:17:13 2010 UTC (2 weeks, 1 day ago) by mantaraya36
+
+Minor changes
+
+Revision 589
+Modified Thu May 13 12:32:48 2010 UTC (2 weeks, 1 day ago) by mantaraya36
+
+Added "append rows" and "appends columns" for event sheets.
+Fixed names of columns when pasting in event sheet
+Added play icon in live event controller
+Some work on meter widget, not done yet...
+
+Revision 588
+Modified Wed May 12 20:53:06 2010 UTC (2 weeks, 2 days ago) by mantaraya36
+
+Unsuccesful attempt to solve issues with international characters in filename when running.
+Other minor changes
+
+Revision 587
+Modified Wed May 12 20:20:31 2010 UTC (2 weeks, 2 days ago) by mantaraya36
+
+Fixed editor sluggishness by running the inspector update on a slow
+timer.
+Fixed horrible memory leak from graphs
+SpinBox now displays according to resolution.
+Graph widget now sends values when an index is selected
+
+Revision 586
+Modified Wed May 12 17:11:11 2010 UTC (2 weeks, 2 days ago) by mantaraya36
+
+Small fixe to get outvalue working again.
+
+Revision 585
+Modified Mon May 10 22:06:59 2010 UTC (2 weeks, 4 days ago) by mantaraya36
+
+Added widget format version check. Current version is 2.
+Many other small fixes and improvements.
+
+Revision 584
+Modified Mon May 10 20:15:17 2010 UTC (2 weeks, 4 days ago) by mantaraya36
+
+Big improvement in CPU usage by not using the property() function, but
+storing the value in an internal variable.
+Also a modified variable is stored, to avoid sending information to the
+widgets on every refresh, so values are sent only when the value has
+changed.
+Have disabled locking of the widgets, and apparently it runs without
+issues. Need to test this further, to make sure it is really safe.
+
+Revision 583
+Modified Mon May 10 15:57:28 2010 UTC (2 weeks, 4 days ago) by mantaraya36
+
+Added logic to avoid completion pop up menu if an opcode has already
+been used in the line or if there is a = operator in the line
+
+Revision 582
+Modified Sun May 9 21:45:26 2010 UTC (2 weeks, 5 days ago) by mantaraya36
+
+Merged concurrency branch, new concurrency model. invalue now changes the channels for all widgets synchronously. Might also have a positive effect on performance, as widgets are only updated through a timer which will usually run slower than k-rate. Threading model is now clearer, and should be now crash proof (hopefully).
+Added x and y zoom for scope widget.
+Fixed binaural and controller exampes, which had been made wrong due to error in processing old widget format arguments.
+
+Revision 581
+Modified Sat May 8 20:37:38 2010 UTC (2 weeks, 6 days ago) by mantaraya36
+
+Fixed remaining widgets for new concurrency model. Only meter widget
+missing.
+If only old widget format is present in the file, a backup copy is saved
+with extension .old-format
+
+Revision 580
+Modified Sat May 8 08:01:35 2010 UTC (3 weeks ago) by mantaraya36
+
+Don't show syntax completion if line previously has "opcode" or "instr" text.
+If something has been typed, autocomplete does not add the output arguments, just the opcode name and input arguments.
+Auto complete now adds the correct rate text (previously the same text was added, no matter what rate was chosen)
+
+Revision 572
+Modified Mon May 3 20:34:48 2010 UTC (3 weeks, 4 days ago) by mantaraya36
+
+More failed attempts to avoid bothersome live event panels on startup.
+LiveEventFrame is now a subclass of QWidget not QFrame
+Removed some of the widget locking, to avoid locking, but this is very
+unsafe and needs to be looked at properly...
+Fixed Filter lab inclusion
+Added _MBrowse reserved channel for browsing multiple files. The output
+is separated by "-,-"
+
+Revision 570
+Modified Wed Apr 28 11:36:17 2010 UTC (4 weeks, 2 days ago) by mantaraya36
+
+Small fixes to Filter Lab example, and added it to the Examples Menu
+
+Revision 569
+Modified Tue Apr 27 20:46:32 2010 UTC (4 weeks, 3 days ago) by mantaraya36
+
+Added all pass filters to filter lab example
+
+Revision 568
+Modified Mon Apr 26 13:04:50 2010 UTC (4 weeks, 4 days ago) by mantaraya36
+
+Some work on python console.
+More work on concurrency
+
+Revision 567
+Modified Sun Apr 25 07:28:24 2010 UTC (4 weeks, 6 days ago) by mantaraya36
+
+Some work on changing concurrency model, but it's not really working well...
+
+Revision 565
+Modified Sat Apr 24 11:22:50 2010 UTC (4 weeks, 6 days ago) by mantaraya36
+
+Widgets no longer disappear if dragged to be too small
+Changed font size to use pixels in hopes of having better crossplatform font size compatibility
+Unindent now only unindents one level
+Auto indent when previous line is indented
+Reorganized configuration dialog to make it fit in smaller screens
+Remove Spinbox properties for border as they have no effect
+Added new widget format warning
+Added minimum and maximum values for spinbox
+Inspector now maintains state (collapsed/expanded) of items
+
+Revision 563
+Modified Wed Apr 21 19:50:15 2010 UTC (5 weeks, 2 days ago) by mantaraya36
+
+Fixed center widgets (was centering all widgets not only selected)
+
+Revision 562
+Modified Tue Apr 20 14:46:54 2010 UTC (5 weeks, 3 days ago) by mantaraya36
+
+Clear Preferences standalone application now logs activity
+
+Revision 560
+Modified Mon Apr 19 12:29:08 2010 UTC (5 weeks, 4 days ago) by mantaraya36
+
+Implemented looping and setting/saving loop points
+
+Revision 559
+Modified Sun Apr 18 21:33:08 2010 UTC (5 weeks, 5 days ago) by mantaraya36
+
+Added setting of borderradius and borderwidth properties for labels and
+scroll numbers.
+
+Revision 558
+Modified Sun Apr 18 21:02:47 2010 UTC (5 weeks, 5 days ago) by mantaraya36
+
+Added Live Event Controller Panel (unfinished but working)
+Added option to have widgets open the properties dialog automatically
+when they are created (enabled by default)
+
+Revision 557
+Modified Sun Apr 18 07:51:41 2010 UTC (5 weeks, 6 days ago) by mantaraya36
+
+Added center vertically and center horizontally widget layout options
+Some works started in Live Event Panel Controller
+
+Revision 556
+Modified Sat Apr 17 20:42:51 2010 UTC (5 weeks, 6 days ago) by mantaraya36
+
+Fixed browse button for SSDIR.
+Removed option to remove scrollbars. They are always active now. This
+option was added when it created instability.
+
+Revision 555
+Modified Sat Apr 17 20:07:07 2010 UTC (5 weeks, 6 days ago) by mantaraya36
+
+Added instrument count and udo count to file information.
+Fixed data for file information (csound only and complete were inverted)
+Fixed storing of channel for Scope widgets
+Added bookmarks (any comment starting by ";;" is treated as a bookmark)
+
+Revision 554
+Modified Fri Apr 16 20:59:11 2010 UTC (6 weeks ago) by mantaraya36
+
+Fixed bundle preparation for OS X for new build system.
+Fixed look of some examples on OS X
+
+Revision 553
+Modified Fri Apr 16 13:13:45 2010 UTC (6 weeks ago) by mantaraya36
+
+Tooltip showing channel name shows up in edit mode as well.
+
+Revision 552
+Modified Fri Apr 16 08:53:14 2010 UTC (6 weeks, 1 day ago) by mantaraya36
+
+Removed some compiler warnings and some cleanup
+
+Revision 550
+Modified Thu Apr 15 19:52:04 2010 UTC (6 weeks, 1 day ago) by mantaraya36
+
+Merged new widget format changes.
+Added menu option to display file information.
+Added menu option to set full screen view.
+
+Revision 549
+Modified Tue Apr 13 10:22:34 2010 UTC (6 weeks, 3 days ago) by mantaraya36
+
+Added Filter Lab example
+
+Revision 543
+Modified Tue Apr 6 14:46:44 2010 UTC (7 weeks, 3 days ago) by mantaraya36
+
+Made ;; be marked in the inspector
+If text is a string or comment, do not put it in the inspector when it
+contains a ":"
+
+Revision 542
+Modified Tue Apr 6 14:23:47 2010 UTC (7 weeks, 3 days ago) by mantaraya36
+
+Description for opcodes is now parsed and printed on the status bar
+
+Revision 541
+Modified Mon Apr 5 21:20:10 2010 UTC (7 weeks, 4 days ago) by mantaraya36
+
+Work on implementation of widget presets
+Implemented setting of minimum and maximum values for controller widget
+Added option to hide toolbar
+Some cleanup
+
+Revision 539
+Modified Sun Apr 4 04:34:29 2010 UTC (7 weeks, 6 days ago) by afillebrown
+
+fixed bug in qutecsound::runUtility ("free" was being called on argv which is allocated on stack, not heap)
+
+Revision 535
+Modified Mon Mar 29 15:34:45 2010 UTC (8 weeks, 4 days ago) by afillebrown
+
+add .so extension to list of csound C api libs searched for and checked during build
+
+Revision 534
+Modified Sun Mar 28 12:25:55 2010 UTC (2 months ago) by afillebrown
+
+ignore build files
+
+Revision 533
+Modified Sun Mar 28 12:21:04 2010 UTC (2 months ago) by afillebrown
+
+add new build projects to trunk
+
+Revision 532
+Modified Sun Mar 28 12:18:19 2010 UTC (2 months ago) by afillebrown
+
+fix #include of liveeventwidget.h in liveeventwidget.cpp
+
+Revision 527
+Modified Fri Mar 26 18:04:21 2010 UTC (2 months ago) by mantaraya36
+
+Fix jack client name issue
+
+Revision 522
+Modified Tue Mar 23 19:49:23 2010 UTC (2 months ago) by mantaraya36
+
+Added menu item for showing Opcode Quick Reference page from manual
+Added option to change shortcut for Utilities Dialog
+
+Revision 521
+Modified Tue Mar 23 16:12:34 2010 UTC (2 months ago) by afillebrown
+
+fix Windows nsis scripts to search qutecsound.h for #define QCS_VERSION instead of #define QUTECSOUND_VERSION
+
+Revision 520
+Modified Tue Mar 23 11:38:16 2010 UTC (2 months ago) by mantaraya36
+
+Fixed running utilities`
+A little cleanup and less verbosity on output
+Truncate jack names if greater than 16 characters
+Updated all available translations for release
+
+Revision 519
+Modified Mon Mar 22 21:08:24 2010 UTC (2 months ago) by mantaraya36
+
+Added check to avoid math error (log10 of 0)
+
+Revision 518
+Modified Mon Mar 22 20:58:20 2010 UTC (2 months ago) by mantaraya36
+
+Fixed python examples to comform to final version 1 of the qutesheet API
+
+Revision 517
+Modified Sun Mar 21 22:31:15 2010 UTC (2 months, 1 week ago) by mantaraya36
+
+Don't display python dir menu if configuration text is empty
+
