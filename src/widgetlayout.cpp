@@ -1010,6 +1010,14 @@ void WidgetLayout::appendCurve(WINDAT *windat)
 //      return;
 //    }
 //  }
+
+//  Unfortunately Csound sets the caption AFTER calling the makeGraph callback...
+//  for (int i = 0; i < curves.size(); i++) {  // Check if caption is already present to replace curve rather than create a new one.
+//    if (curves[i]->get_caption() == windat->caption) {
+//      windat->windid = (uintptr_t) curves[i];
+//      return;
+//    }
+//  }
   if (curves.size() > QCS_CURVE_BUFFER_MAX) {
     qDebug() << "WidgetLayout::appendCurve curve size exceeded. Curve discarded!";
     return;
@@ -2565,7 +2573,8 @@ void WidgetLayout::setModified(bool mod)
 {
 //  qDebug() << "WidgetLayout::setModified" << mod;
   m_modified = mod;
-  emit changed();
+  if (mod)
+    emit changed();
 }
 
 void WidgetLayout::setMouseOffset(int x, int y)

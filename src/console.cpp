@@ -36,6 +36,15 @@ Console::~Console()
 
 void Console::appendMessage(QString msg)
 {
+  logMessage(msg);
+  // Filter unnecessary messages
+  if (msg.startsWith("libsndfile-1") || msg.startsWith("UnifiedCSD: ")
+     || msg.startsWith("orchname: ") || msg.startsWith("scorename: ")
+     || msg.startsWith("PortMIDI real time MIDI plugin for Csound")
+    || msg.startsWith("PortAudio real-time audio module for Csound")
+    || msg.startsWith("virtual_keyboard real time MIDI plugin for Csound") ) {
+    return;
+  }
   setTextColor(m_textColor);
   if (errorLine) {  // Hack to capture strange message organization from Csound
     errorLineText.append(msg);
@@ -74,7 +83,6 @@ void Console::appendMessage(QString msg)
 //   text->moveCursor(QTextCursor::Start);
 //   text->moveCursor(QTextCursor::End);
   setTextColor(m_textColor);
-  logMessage(msg);
 }
 
 void Console::setDefaultFont(QFont font) 

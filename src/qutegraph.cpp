@@ -28,7 +28,7 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new StackedLayoutWidget(this);
   m_widget->show();
-  m_widget->setAutoFillBackground(true);
+//  m_widget->setAutoFillBackground(true);
   m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
   m_label = new QLabel(this);
@@ -125,34 +125,38 @@ void QuteGraph::setWidgetGeometry(int x,int y,int width,int height)
 
 void QuteGraph::refreshWidget()
 {
+  bool needsUpdate;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
   int index = (int) m_value;
+  needsUpdate = m_valueChanged;
   m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();  // unlock
 #endif
-  if (index < 0) {
-    for (int i = 0; i < m_pageComboBox->count(); i++) {
-      QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"), QString::SkipEmptyParts);
-//      qDebug() << "QuteGraph::setValue " << parts << " " << value;
-      if (parts.size() > 1) {
-        int num = parts.last().toInt();
-        if (index == -num) {
-          index = i;
-          break;
+  if (needsUpdate) {
+    if (index < 0) {
+      for (int i = 0; i < m_pageComboBox->count(); i++) {
+        QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"), QString::SkipEmptyParts);
+        //      qDebug() << "QuteGraph::setValue " << parts << " " << value;
+        if (parts.size() > 1) {
+          int num = parts.last().toInt();
+          if (index == -num) {
+            index = i;
+            break;
+          }
         }
       }
     }
+    if (index < 0 || index >= curves.size() || curves[index]->get_caption().isEmpty()) { // Don't show if curve has no name. Is this likely?
+      return;
+    }
+    m_pageComboBox->blockSignals(true);
+    m_pageComboBox->setCurrentIndex(index);
+    m_pageComboBox->blockSignals(false);
+    changeCurve(index);
   }
-  if (index >= curves.size() || curves[index]->get_caption().isEmpty()) { // Don't show if curve has no name. Is this likely?
-    return;
-  }
-  m_pageComboBox->blockSignals(true);
-  m_pageComboBox->setCurrentIndex(index);
-  m_pageComboBox->blockSignals(false);
-  changeCurve(index);
 }
 
 void QuteGraph::createPropertiesDialog()
@@ -213,9 +217,9 @@ void QuteGraph::changeCurve(int index)
 {
   StackedLayoutWidget *stacked =  static_cast<StackedLayoutWidget *>(m_widget);
   if (index == -1) // goto last curve
-    index = static_cast<StackedLayoutWidget *>(m_widget)->count() - 1;
+    index = stacked->count() - 1;
   else if (index == -2)  // update curve but don't change which
-    index = static_cast<StackedLayoutWidget *>(m_widget)->currentIndex();
+    index = stacked->currentIndex();
   else if (stacked->currentIndex() == index) {
     return;
   }
@@ -253,7 +257,7 @@ void QuteGraph::changeCurve(int index)
     }
   }
   QString text = QString::number(size) + " pts Max=";
-  text += QString::number(max, 'g', 5) + " Min =" + QString::number(min, 'g', 5);
+  text += QString::number(max) + " Min =" + QString::number(min);
   m_label->setText(text);
 }
 
@@ -413,16 +417,16 @@ void QuteGraph::applyInternalProperties()
 
 void QuteGraph::drawCurve(Curve * curve, int index)
 {
-  qDebug() << "QuteGraph::drawCurve" << curve->getOriginal() << curve->get_size() << curve->getOriginal()->npts;
-  bool live = curve->getOriginal() != 0;
-  live = false;
-  QString caption = live ? QString(curve->getOriginal()->caption) : curve->get_caption();
+//  bool live = curve->getOriginal() != 0;
+  QString caption = curve->get_caption();
+//  qDebug() << "QuteGraph::drawCurve" << caption << curve->getOriginal() << curve->get_size() << curve->getOriginal()->npts;
   if (caption.isEmpty()) {
     return;
   }
   QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
-  double max = live ? curve->getOriginal()->max :curve->get_max();
-  int size = live ? curve->getOriginal()->npts:(int) curve->get_size();
+  double max = curve->get_max();
+  max = max == 0 ? 1: max;
+  int size = (int) curve->get_size();
   int decimate = (int) size /1024;
   if (lines[index].size() != size) {
     foreach (QGraphicsLineItem *line, lines[index]) {
@@ -431,8 +435,9 @@ void QuteGraph::drawCurve(Curve * curve, int index)
     lines[index].clear();
     MYFLT decValue = 0.0;
     for (int i = 0; i < (int) curve->get_size(); i++) {
-      float value = live ? (curve->getOriginal()->windid != 0 ? (float) curve->getOriginal()->fdata[i]: curve->get_data(i))
-                    : curve->get_data(i);
+//      float value = live ? (curve->getOriginal()->windid != 0 ? (float) curve->getOriginal()->fdata[i]: curve->get_data(i))
+//                    : curve->get_data(i);
+      float value = curve->get_data(i);
       decValue = (fabs(decValue) < fabs(value) ? value : decValue);
       if (decimate == 0 or i%decimate == 0) {
         QGraphicsLineItem *line = new QGraphicsLineItem(i, 0, i, - decValue);
@@ -451,12 +456,16 @@ void QuteGraph::drawCurve(Curve * curve, int index)
   else {
     for (int i = 1; i < lines[index].size(); i++) { //skip first item, which is base line
       QGraphicsLineItem *line = static_cast<QGraphicsLineItem *>(lines[index][i]);
-      float prevvalue = live ? (float) curve->getOriginal()->fdata[i - 1] : curve->get_data(i - 1);
-      float value = live ? (float) curve->getOriginal()->fdata[i] : curve->get_data(i);
+//      float prevvalue = live ? (float) curve->getOriginal()->fdata[i - 1] : curve->get_data(i - 1);
+      float prevvalue = curve->get_data(i - 1);
+//      float value = live ? (float) curve->getOriginal()->fdata[i] : curve->get_data(i);
+      float value = curve->get_data(i);
       line->setLine(i - 1, 0, i - 1, - prevvalue);
-      line->setPen(QPen(QColor(30 + 220.0*fabs(value)/max,
+      int colorValue = (int) (220.0*fabs(value)/max);
+      colorValue = colorValue > 220 ? 220 : colorValue;
+      line->setPen(QPen(QColor(30 + colorValue,
                                220,
-                               255.*fabs(value)/max)));
+                               colorValue)));
       line->show();
     }
   }

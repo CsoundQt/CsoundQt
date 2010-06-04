@@ -61,7 +61,7 @@ void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
   m_widget->blockSignals(true);
   m_widget->setGeometry(QRect(0,0,w,h));
   m_widget->blockSignals(false);
-  this->markChanged();
+//  this->markChanged();  // It's better not to have geometry changes trigger markChanged as geometry changes can occur for various reasons (e.g. when calling applyInternalProperties)
 }
 
 void QuteWidget::setValue(double value)
