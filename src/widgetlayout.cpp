@@ -3064,15 +3064,18 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
   if (channelValue.first == "_SetPresetIndex") {
     loadPresetFromIndex(channelValue.second);
   }
-  QString channelName = channelValue.first.left(channelValue.first.indexOf("/"));
+  QString channelName = channelValue.first;
+  if (channelValue.first.contains("/")) {
+    channelName = channelValue.first.left(channelValue.first.indexOf("/"));
+  }
   QString path = channelValue.first.mid(channelValue.first.indexOf("/") + 1);
 //  qDebug() << "WidgetLayout::newValue " << channelName << "--" << path;
   widgetsMutex.lock();
-  if (!channelValue.first.isEmpty()) {
+  if (!channelName.isEmpty()) {
     for (int i = 0; i < m_widgets.size(); i++){
       if (m_widgets[i]->getChannelName() == channelName) {
 //        qDebug() << "WidgetLayout::newValue " << channelValue.first << "--" << m_widgets[i]->getChannelName();
-        if (path.isEmpty()) {
+        if (path == channelName) {
           m_widgets[i]->setValue(channelValue.second);
         }
         else {
@@ -3089,13 +3092,16 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
 
 void WidgetLayout::newValue(QPair<QString, QString> channelValue)
 {
-  QString channelName = channelValue.first.left(channelValue.first.indexOf("/"));
+  QString channelName = channelValue.first;
+  if (channelValue.first.contains("/")) {
+    channelName = channelValue.first.left(channelValue.first.indexOf("/"));
+  }
   QString path = channelValue.first.mid(channelValue.first.indexOf("/") + 1);
   widgetsMutex.lock();
-  if (!channelValue.first.isEmpty()) {
+  if (!channelName.isEmpty()) {
     for (int i = 0; i < m_widgets.size(); i++){
       if (m_widgets[i]->getChannelName() == channelName) {
-        if (path.isEmpty()) {
+        if (path == channelName) {
           m_widgets[i]->setValue(channelValue.second);
         }
         else {

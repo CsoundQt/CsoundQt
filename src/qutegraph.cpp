@@ -139,15 +139,15 @@ void QuteGraph::refreshWidget()
 //      qDebug() << "QuteGraph::setValue " << parts << " " << value;
       if (parts.size() > 1) {
         int num = parts.last().toInt();
-        if (curves.size() > num && curves[num]->get_caption().isEmpty()) { // Don't show if curve has no name. Is this likely?
-          return;
-        }
         if (index == -num) {
           index = i;
           break;
         }
       }
     }
+  }
+  if (index >= curves.size() || curves[index]->get_caption().isEmpty()) { // Don't show if curve has no name. Is this likely?
+    return;
   }
   m_pageComboBox->blockSignals(true);
   m_pageComboBox->setCurrentIndex(index);
@@ -413,7 +413,7 @@ void QuteGraph::applyInternalProperties()
 
 void QuteGraph::drawCurve(Curve * curve, int index)
 {
-//  qDebug() << "QuteGraph::drawCurve" << curve->getOriginal();
+  qDebug() << "QuteGraph::drawCurve" << curve->getOriginal() << curve->get_size() << curve->getOriginal()->npts;
   bool live = curve->getOriginal() != 0;
   live = false;
   QString caption = live ? QString(curve->getOriginal()->caption) : curve->get_caption();
