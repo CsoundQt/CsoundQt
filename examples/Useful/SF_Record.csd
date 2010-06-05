@@ -93,6 +93,7 @@ kbitdepth	invalue	"bitdepth"; 0=16bit, 1=24bit, 2=32bit
 kdbrange	invalue	"dbrange"
 kpeakhold	invalue	"peakhold"
 kampdisp	invalue	"ampdisp"; 0=dB, 1=raw
+kampdisp	=		(kampdisp == 1 ? 0 : 1); 1=dB, 0=raw
 kgain		invalue	"gain"
 Sgain_disp	sprintfk	"%+.2f dB", kgain
 		outvalue	"gain_disp", Sgain_disp
@@ -567,106 +568,2616 @@ endin
 i 1 0 36000
 e
 </CsScore>
-</CsoundSynthesizer>
+</CsoundSynthesizer><bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>361</x>
+ <y>84</y>
+ <width>813</width>
+ <height>730</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>170</r>
+  <g>170</g>
+  <b>127</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBLineEdit">
+  <objectName>_Browse1</objectName>
+  <x>27</x>
+  <y>131</y>
+  <width>324</width>
+  <height>24</height>
+  <uuid>{13ef4f41-afd7-401f-af30-ce7f8c53c3f1}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>/Users/jh/Desktop/record.wav</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <background>nobackground</background>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>440</x>
+  <y>559</y>
+  <width>129</width>
+  <height>33</height>
+  <uuid>{908e4f2c-66e4-4055-87f7-1fca6aa22364}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Post Fader</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>443</x>
+  <y>362</y>
+  <width>129</width>
+  <height>33</height>
+  <uuid>{42891488-8258-4fd6-b988-2b46ab37f8e9}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Pre Fader</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>434</x>
+  <y>609</y>
+  <width>164</width>
+  <height>101</height>
+  <uuid>{04f26f1f-e12c-4825-9a8c-dbbb5f2212d8}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Note: You can also use the Record Button in the QuteCsound interface for quick simple recording on any csd.</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>84</r>
+   <g>112</g>
+   <b>83</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>606</x>
+  <y>296</y>
+  <width>164</width>
+  <height>390</height>
+  <uuid>{951439c2-768b-4837-8dc1-06b29611b1a5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Records a soundfile (1-8 channels) with arbitrary input routing. The file will have as many channels as you select to record with the checkboxes. E.g. if you check channels 2, 3, 5 and 8 for recording, a sound file with 4 channels will be written. Set the nchnls in the orchestra header and select your audio device in the CsOptions or in the Configure dialog.</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in8over_post</objectName>
+  <x>398</x>
+  <y>518</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{617fca26-166b-476f-a634-c6a35e0e4ec0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>398</x>
+  <y>536</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{7e1097a0-da28-41c0-bd09-6a5df53452fb}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in8_post</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>-inf</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in7over_post</objectName>
+  <x>344</x>
+  <y>518</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{f7318335-811b-4b95-800a-2dedeffedd04}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>344</x>
+  <y>536</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{9fbd4836-8f1c-491f-8a06-ebe3d5e225d2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in7_post</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>-inf</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in6over_post</objectName>
+  <x>292</x>
+  <y>518</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{cecce0bd-30cc-46ce-9608-3f5120fdced5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>292</x>
+  <y>536</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{08c5446b-2c74-4a7f-95e8-9a96092861b9}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in6_post</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>-inf</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in5over_post</objectName>
+  <x>238</x>
+  <y>518</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{cd4b8086-1c5e-43ca-b665-95fd31b75cac}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>238</x>
+  <y>536</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{6f1fcd97-3760-4bfc-afcd-ad442dfc0950}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in5_post</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>-inf</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in4over_post</objectName>
+  <x>182</x>
+  <y>518</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{126f5cac-d10f-4805-a963-b87a22305fca}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>182</x>
+  <y>536</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{c5dc13f7-d9f2-4607-b5ab-942c4346821e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in4_post</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>-inf</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in3over_post</objectName>
+  <x>129</x>
+  <y>518</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{e17125b3-2f20-441d-a058-c67e7437f87d}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>129</x>
+  <y>536</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{bd44c863-c32d-4973-a25f-2f09cf541f1a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in3_post</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>-inf</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in2over_post</objectName>
+  <x>75</x>
+  <y>518</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{67724e73-c1fb-4606-8281-45dc80d08b47}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>75</x>
+  <y>536</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{04cb23a7-e299-4acd-95cf-b211fdb2fb7e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in2_post</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>0.42702988</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in1over_post</objectName>
+  <x>21</x>
+  <y>518</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{fbe5c18f-b4d1-45e7-9af3-ac14b334eef0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>21</x>
+  <y>536</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{a3d60196-1bb4-418e-a40d-dbbe4cf22ea0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1_post</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>0.42702988</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>435</x>
+  <y>412</y>
+  <width>167</width>
+  <height>130</height>
+  <uuid>{29679a5a-c1d8-47c5-a0cb-2519be7436b2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>LED Display Properties</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>457</x>
+  <y>299</y>
+  <width>129</width>
+  <height>25</height>
+  <uuid>{689683d6-a7a4-4c43-9cdc-e64b44632884}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Select Input Channels</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDropdown">
+  <objectName>ampdisp</objectName>
+  <x>537</x>
+  <y>502</y>
+  <width>61</width>
+  <height>26</height>
+  <uuid>{e163753c-83aa-4ffc-b643-a15462c9cb81}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>dB</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>raw</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>438</x>
+  <y>504</y>
+  <width>94</width>
+  <height>25</height>
+  <uuid>{df4d1cbc-feef-43f1-921d-25c2a318c038}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Amp Display</label>
+  <alignment>left</alignment>
+  <font>Helvetica</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>message2</objectName>
+  <x>559</x>
+  <y>114</y>
+  <width>212</width>
+  <height>104</height>
+  <uuid>{9e40f3d3-9067-42e6-8f11-cb1b465ccecc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDropdown">
+  <objectName>bitdepth</objectName>
+  <x>391</x>
+  <y>197</y>
+  <width>83</width>
+  <height>25</height>
+  <uuid>{8976122f-4026-4cb1-9182-588fb77616b0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>16bit</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>24bit</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>32bit</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>1</selectedIndex>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>379</x>
+  <y>161</y>
+  <width>101</width>
+  <height>32</height>
+  <uuid>{20f2a78a-57b2-4e24-a9da-5065a8b20d93}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Bit Depth</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDropdown">
+  <objectName>fileformat</objectName>
+  <x>389</x>
+  <y>127</y>
+  <width>83</width>
+  <height>25</height>
+  <uuid>{7ae09982-2f62-4f36-8438-1f2b6341c2b2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>WAV</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>AIFF</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>371</x>
+  <y>90</y>
+  <width>116</width>
+  <height>32</height>
+  <uuid>{76e056af-5663-46a0-80ab-041d67b00ca6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>File Format</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in8over_pre</objectName>
+  <x>397</x>
+  <y>330</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{68087bf2-5239-4f42-9f96-5d2f98bd1ea9}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>397</x>
+  <y>348</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{ecf2cc00-2499-4caf-b4e8-2d3870341bd4}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in8_pre</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>-inf</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in7over_pre</objectName>
+  <x>343</x>
+  <y>330</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{b80feb90-153f-4b1b-bd55-4a521a27de0b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>343</x>
+  <y>348</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{365eaebd-10f4-4161-9bdb-e4239f98d087}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in7_pre</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>-inf</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in6over_pre</objectName>
+  <x>291</x>
+  <y>330</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{578ae6da-9cc1-4485-84d4-2a27c108e380}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>291</x>
+  <y>348</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{81e2d6ae-0827-47ab-a854-5eb0be369ccc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in6_pre</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>-inf</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in5over_pre</objectName>
+  <x>237</x>
+  <y>330</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{4032e775-ab58-4556-9a34-c89b1eb54773}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>237</x>
+  <y>348</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{f2bce172-1501-4fc3-b4a6-889209f43db8}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in5_pre</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>-inf</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in4over_pre</objectName>
+  <x>181</x>
+  <y>330</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{ed5dd815-0ce1-43ec-9c6e-ff66c56a0e67}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>181</x>
+  <y>348</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{9a7c78fa-7191-4c2c-a205-091a649ad9b9}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in4_pre</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>-inf</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in3over_pre</objectName>
+  <x>128</x>
+  <y>330</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{3b428c95-05f1-4011-ab79-e72a94be2347}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>128</x>
+  <y>348</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{28866427-bf18-4553-9205-d47c173af814}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in3_pre</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>-inf</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in2over_pre</objectName>
+  <x>74</x>
+  <y>330</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{4977e06a-977a-4404-91b3-370563d2797a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>74</x>
+  <y>348</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{c7fc0494-b7fe-4eb1-a4ae-19655116e59b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in2_pre</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>0.42702988</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>in1over_pre</objectName>
+  <x>20</x>
+  <y>330</y>
+  <width>27</width>
+  <height>22</height>
+  <uuid>{2b8b84d7-c4d0-45c8-8cf2-069d20661cf5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1over</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.63636400</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>hor8</objectName>
+  <x>20</x>
+  <y>348</y>
+  <width>27</width>
+  <height>94</height>
+  <uuid>{6d3da117-7c00-4977-b271-65f92698df9b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>in1_pre</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.59259300</xValue>
+  <yValue>0.42702988</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox">
+  <objectName>chn8onoff</objectName>
+  <x>407</x>
+  <y>272</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{534bd3a1-c528-424e-9a09-3526ed16831a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>chn8</objectName>
+  <x>396</x>
+  <y>298</y>
+  <width>46</width>
+  <height>24</height>
+  <uuid>{35dfa325-e805-4129-b04d-aa970089b9a5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>1.00000000</resolution>
+  <minimum>1</minimum>
+  <maximum>1e+12</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>8</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox">
+  <objectName>chn7onoff</objectName>
+  <x>353</x>
+  <y>271</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{afb0987c-4e13-4e15-a997-7840575a22ad}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>chn7</objectName>
+  <x>342</x>
+  <y>297</y>
+  <width>46</width>
+  <height>24</height>
+  <uuid>{8af8cf71-dce7-49c4-be2b-c8ef25dd5990}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>1.00000000</resolution>
+  <minimum>1</minimum>
+  <maximum>1e+12</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>7</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox">
+  <objectName>chn6onoff</objectName>
+  <x>299</x>
+  <y>271</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{476cbcbe-7813-4256-8085-28b8b2922a97}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>chn6</objectName>
+  <x>288</x>
+  <y>297</y>
+  <width>46</width>
+  <height>24</height>
+  <uuid>{9f018654-8404-43c5-a2bb-9c207144bcd6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>1.00000000</resolution>
+  <minimum>1</minimum>
+  <maximum>1e+12</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>6</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox">
+  <objectName>chn5onoff</objectName>
+  <x>245</x>
+  <y>270</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{9135a666-1272-4ae1-a067-7c22cccff5a1}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>chn5</objectName>
+  <x>234</x>
+  <y>296</y>
+  <width>46</width>
+  <height>24</height>
+  <uuid>{ec7045f9-c406-454d-8541-f2a07c64cbc4}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>1.00000000</resolution>
+  <minimum>1</minimum>
+  <maximum>1e+12</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>5</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox">
+  <objectName>chn4onoff</objectName>
+  <x>190</x>
+  <y>271</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{94882fa4-d421-43d9-b2d2-0ac2c8efb45c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>chn4</objectName>
+  <x>179</x>
+  <y>297</y>
+  <width>46</width>
+  <height>24</height>
+  <uuid>{34e8adc1-1b29-43b9-b3f9-cf7b993af60d}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>1.00000000</resolution>
+  <minimum>1</minimum>
+  <maximum>1e+12</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>4</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox">
+  <objectName>chn3onoff</objectName>
+  <x>136</x>
+  <y>270</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{44a6a0ea-a97a-45c3-830e-64da5fa439fd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>chn3</objectName>
+  <x>125</x>
+  <y>296</y>
+  <width>46</width>
+  <height>24</height>
+  <uuid>{313fcf20-6a83-4d8a-98e2-3add34c94a4a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>1.00000000</resolution>
+  <minimum>1</minimum>
+  <maximum>1e+12</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>3</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox">
+  <objectName>chn2onoff</objectName>
+  <x>82</x>
+  <y>270</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{de51d045-5e82-47ed-a601-d107b13bc9d2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>true</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>chn2</objectName>
+  <x>71</x>
+  <y>296</y>
+  <width>46</width>
+  <height>24</height>
+  <uuid>{19ec1833-8ce6-4442-a859-7279b5e3ddc1}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>1.00000000</resolution>
+  <minimum>1</minimum>
+  <maximum>1e+12</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>2</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox">
+  <objectName>chn1onoff</objectName>
+  <x>28</x>
+  <y>269</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{c47bfdb9-3494-4095-93fa-3eae4461f4fb}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>true</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>133</x>
+  <y>227</y>
+  <width>189</width>
+  <height>30</height>
+  <uuid>{e2268fc2-cf52-45fa-b654-a8c601f1ccd5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Channels to Record</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>chn1</objectName>
+  <x>17</x>
+  <y>295</y>
+  <width>46</width>
+  <height>24</height>
+  <uuid>{745c8cba-6467-4659-9d40-ec087f7772a5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>1.00000000</resolution>
+  <minimum>1</minimum>
+  <maximum>1e+12</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>1</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>59</x>
+  <y>18</y>
+  <width>398</width>
+  <height>43</height>
+  <uuid>{f3f21629-5cab-4c50-a594-46213a503e87}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>SOUNDFILE RECORD</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>26</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>709</x>
+  <y>231</y>
+  <width>39</width>
+  <height>29</height>
+  <uuid>{1d062c89-e661-430e-8647-f03a8a4fadb0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>ms</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>660</x>
+  <y>231</y>
+  <width>39</width>
+  <height>29</height>
+  <uuid>{e18b5191-3e6c-4a61-a388-41f20c8f43d5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>sec</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>614</x>
+  <y>231</y>
+  <width>39</width>
+  <height>29</height>
+  <uuid>{634cb2c0-49e3-4ef0-b971-09ba27ff5129}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>min</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>569</x>
+  <y>231</y>
+  <width>39</width>
+  <height>29</height>
+  <uuid>{4cb96290-1301-43e5-bd39-cb8ed59f8d4d}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>hh</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>694</x>
+  <y>259</y>
+  <width>14</width>
+  <height>29</height>
+  <uuid>{3f0ac4fd-450b-482f-ab72-96412d3d8deb}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>:</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>603</x>
+  <y>260</y>
+  <width>14</width>
+  <height>29</height>
+  <uuid>{4beef8d4-ae1b-4c10-bc10-87c79e5ef023}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>:</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>ms</objectName>
+  <x>707</x>
+  <y>260</y>
+  <width>44</width>
+  <height>30</height>
+  <uuid>{d9a6d4d0-802f-4933-bc59-2bccd93d25e8}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>000</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>hor</objectName>
+  <x>572</x>
+  <y>258</y>
+  <width>32</width>
+  <height>32</height>
+  <uuid>{72671701-102b-4ea4-937e-44e883530d3f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>00</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>438</x>
+  <y>476</y>
+  <width>106</width>
+  <height>24</height>
+  <uuid>{c73bd282-1270-403a-9019-12f3d8695fab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Peak Hold Time</label>
+  <alignment>left</alignment>
+  <font>Helvetica</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>peakhold</objectName>
+  <x>546</x>
+  <y>476</y>
+  <width>48</width>
+  <height>24</height>
+  <uuid>{7fcab957-5c4b-4781-b99c-314a799a5fcc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>0.10000000</resolution>
+  <minimum>0.1</minimum>
+  <maximum>1e+12</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>2</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>438</x>
+  <y>449</y>
+  <width>87</width>
+  <height>28</height>
+  <uuid>{9ab8d9f1-6bfd-498c-bf17-ae5064433bcc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>dB Range</label>
+  <alignment>left</alignment>
+  <font>Helvetica</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>dbrange</objectName>
+  <x>539</x>
+  <y>448</y>
+  <width>56</width>
+  <height>28</height>
+  <uuid>{1da70b77-0f66-47ec-936c-80d334890a3d}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>1.00000000</resolution>
+  <minimum>1</minimum>
+  <maximum>1e+12</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>48</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>612</x>
+  <y>49</y>
+  <width>102</width>
+  <height>31</height>
+  <uuid>{b479e267-dbf7-4fa1-ae08-add2be618296}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Messages</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>message</objectName>
+  <x>560</x>
+  <y>80</y>
+  <width>208</width>
+  <height>28</height>
+  <uuid>{3a1133e2-10fd-4f4c-ae93-037ed64cb051}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>58</x>
+  <y>465</y>
+  <width>65</width>
+  <height>32</height>
+  <uuid>{29891b99-799b-4dd5-ad28-b964808743e6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>gain</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>649</x>
+  <y>259</y>
+  <width>14</width>
+  <height>29</height>
+  <uuid>{dd92fbfd-79d6-4290-8009-71394ba42296}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>:</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>sec</objectName>
+  <x>661</x>
+  <y>259</y>
+  <width>35</width>
+  <height>31</height>
+  <uuid>{776dbf01-4b01-4f20-9b43-879ef0e01b42}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>00</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>min</objectName>
+  <x>614</x>
+  <y>259</y>
+  <width>37</width>
+  <height>30</height>
+  <uuid>{ecfd7c3d-fce6-46a9-b1fc-cf364f93a1c6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>00</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton">
+  <objectName>stop</objectName>
+  <x>189</x>
+  <y>174</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{ffae3ed8-07b3-4b32-b5c8-e207d5948519}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Stop</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton">
+  <objectName>record</objectName>
+  <x>99</x>
+  <y>174</y>
+  <width>78</width>
+  <height>26</height>
+  <uuid>{17b5a29b-6c4d-46e0-b743-23f8dcd30d46}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Record</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>gain_disp</objectName>
+  <x>269</x>
+  <y>465</y>
+  <width>98</width>
+  <height>31</height>
+  <uuid>{8b592579-fea3-4ccc-afa8-8247970d271a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>+0.00 dB</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider">
+  <objectName>gain</objectName>
+  <x>128</x>
+  <y>465</y>
+  <width>136</width>
+  <height>31</height>
+  <uuid>{76022b63-0105-462d-ac4a-df6484e17d4b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>-18.00000000</minimum>
+  <maximum>18.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton">
+  <objectName>_Browse1</objectName>
+  <x>141</x>
+  <y>89</y>
+  <width>100</width>
+  <height>30</height>
+  <uuid>{f9e7606f-af68-4856-9eae-13c95f9d334f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Output File</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <objectName/>
+ <x>361</x>
+ <y>84</y>
+ <width>813</width>
+ <height>730</height>
+ <visible>true</visible>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
 <MacOptions>
 Version: 3
 Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 424 149 813 730
+WindowBounds: 361 84 813 730
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {43690, 43690, 32639}
-ioText {27, 131} {324, 24} edit 0.000000 0.00100 "_Browse1" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioButton {141, 89} {100, 30} value 1.000000 "_Browse1" "Output File" "/" 
-ioSlider {128, 465} {136, 31} -18.000000 18.000000 0.000000 gain
-ioText {269, 465} {98, 31} display 0.000000 0.00100 "gain_disp" right "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder +0.00 dB
-ioButton {99, 174} {78, 26} value 1.000000 "record" "Record" "/" 
-ioButton {189, 174} {80, 25} value 1.000000 "stop" "Stop" "/" 
-ioText {614, 259} {37, 30} display 0.000000 0.00100 "min" right "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
-ioText {661, 259} {35, 31} display 0.000000 0.00100 "sec" right "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
-ioText {649, 259} {14, 29} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder :
-ioText {58, 465} {65, 32} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder gain
-ioText {560, 80} {208, 28} display 0.000000 0.00100 "message" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Waiting ...
-ioText {612, 49} {102, 31} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Messages
-ioText {539, 448} {56, 28} editnum 48.000000 1.000000 "dbrange" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 48.000000
-ioText {446, 449} {87, 28} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder dB Range
-ioText {546, 476} {48, 24} editnum 2.000000 1.000000 "peakhold" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.000000
-ioText {438, 476} {106, 24} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Peak Hold Time
-ioText {572, 258} {32, 32} display 0.000000 0.00100 "hor" right "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
-ioText {707, 260} {44, 30} display 0.000000 0.00100 "ms" right "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 000
-ioText {603, 260} {14, 29} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder :
-ioText {694, 259} {14, 29} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder :
-ioText {569, 231} {39, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder hh
-ioText {614, 231} {39, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder min
-ioText {660, 231} {39, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder sec
-ioText {709, 231} {39, 29} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ms
-ioText {59, 18} {398, 43} label 0.000000 0.00100 "" center "Lucida Grande" 24 {0, 0, 0} {65280, 65280, 65280} nobackground noborder SOUNDFILE RECORD
-ioText {17, 295} {46, 24} editnum 1.000000 1.000000 "chn1" right "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
-ioText {133, 227} {189, 30} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Channels to Record
-ioCheckbox {28, 269} {20, 20} on chn1onoff
-ioText {71, 296} {46, 24} editnum 2.000000 1.000000 "chn2" right "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.000000
-ioCheckbox {82, 270} {20, 20} on chn2onoff
-ioText {125, 296} {46, 24} editnum 3.000000 1.000000 "chn3" right "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3.000000
-ioCheckbox {136, 270} {20, 20} off chn3onoff
-ioText {179, 297} {46, 24} editnum 4.000000 1.000000 "chn4" right "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4.000000
-ioCheckbox {190, 271} {20, 20} off chn4onoff
-ioText {234, 296} {46, 24} editnum 5.000000 1.000000 "chn5" right "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 5.000000
-ioCheckbox {245, 270} {20, 20} off chn5onoff
-ioText {288, 297} {46, 24} editnum 6.000000 1.000000 "chn6" right "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 6.000000
-ioCheckbox {299, 271} {20, 20} off chn6onoff
-ioText {342, 297} {46, 24} editnum 7.000000 1.000000 "chn7" right "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 7.000000
-ioCheckbox {353, 271} {20, 20} off chn7onoff
-ioText {396, 298} {46, 24} editnum 8.000000 1.000000 "chn8" right "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 8.000000
-ioCheckbox {407, 272} {20, 20} off chn8onoff
-ioMeter {20, 348} {27, 94} {0, 59904, 0} "in1_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {20, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in1over_pre" 0.000000 fill 1 0 mouse
-ioMeter {74, 348} {27, 94} {0, 59904, 0} "in2_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {74, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in2over_pre" 0.000000 fill 1 0 mouse
-ioMeter {128, 348} {27, 94} {0, 59904, 0} "in3_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {128, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in3over_pre" 0.000000 fill 1 0 mouse
-ioMeter {181, 348} {27, 94} {0, 59904, 0} "in4_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {181, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in4over_pre" 0.000000 fill 1 0 mouse
-ioMeter {237, 348} {27, 94} {0, 59904, 0} "in5_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {237, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in5over_pre" 0.000000 fill 1 0 mouse
-ioMeter {291, 348} {27, 94} {0, 59904, 0} "in6_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {291, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in6over_pre" 0.000000 fill 1 0 mouse
-ioMeter {343, 348} {27, 94} {0, 59904, 0} "in7_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {343, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in7over_pre" 0.000000 fill 1 0 mouse
-ioMeter {397, 348} {27, 94} {0, 59904, 0} "in8_pre" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {397, 330} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in8over_pre" 0.000000 fill 1 0 mouse
-ioText {371, 90} {116, 32} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File Format
-ioMenu {389, 127} {83, 25} 0 303 "WAV,AIFF" fileformat
-ioText {379, 161} {101, 32} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Bit Depth
-ioMenu {391, 197} {83, 25} 1 303 "16bit,24bit,32bit" bitdepth
+ioText {27, 131} {324, 24} edit 0.000000 0.00100 "_Browse1"  "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} falsenoborder /Users/jh/Desktop/record.wav
+ioText {440, 558} {129, 33} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Post Fader
+ioText {443, 362} {129, 33} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Pre Fader
+ioText {434, 609} {166, 71} label 0.000000 0.00100 "" left "Lucida Grande" 10 {21504, 28672, 21248} {65280, 65280, 65280} nobackground noborder Note: You can also use the Record Button in the QuteCsound interface for quick simple recording on any csd.
+ioText {606, 296} {164, 390} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Records a soundfile (1-8 channels) with arbitrary input routing. The file will have as many channels as you select to record with the checkboxes. E.g. if you check channels 2, 3, 5 and 8 for recording, a sound file with 4 channels will be written. Set the nchnls in the orchestra header and select your audio device in the CsOptions or in the Configure dialog.
+ioMeter {398, 518} {27, 22} {50176, 3584, 3072} "in8over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {398, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in8_post" -inf fill 1 0 mouse
+ioMeter {344, 518} {27, 22} {50176, 3584, 3072} "in7over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {344, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in7_post" -inf fill 1 0 mouse
+ioMeter {292, 518} {27, 22} {50176, 3584, 3072} "in6over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {292, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in6_post" -inf fill 1 0 mouse
+ioMeter {238, 518} {27, 22} {50176, 3584, 3072} "in5over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {238, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in5_post" -inf fill 1 0 mouse
+ioMeter {182, 518} {27, 22} {50176, 3584, 3072} "in4over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {182, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in4_post" -inf fill 1 0 mouse
+ioMeter {129, 518} {27, 22} {50176, 3584, 3072} "in3over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {129, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in3_post" -inf fill 1 0 mouse
+ioMeter {75, 518} {27, 22} {50176, 3584, 3072} "in2over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {75, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in2_post" 0.427030 fill 1 0 mouse
+ioMeter {21, 518} {27, 22} {50176, 3584, 3072} "in1over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {21, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in1_post" 0.427030 fill 1 0 mouse
+ioText {435, 412} {167, 130} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder LED Display Properties
+ioText {457, 299} {129, 25} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select Input Channels
+ioMenu {537, 502} {61, 26} 0 303 "dB,raw" ampdisp
+ioText {438, 504} {94, 25} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amp Display
 ioText {559, 114} {212, 104} display 0.000000 0.00100 "message2" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {442, 504} {94, 25} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amp Display
-ioMenu {537, 502} {61, 26} 1 303 "dB,raw" ampdisp
-ioText {457, 299} {129, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select Input Channels
-ioText {435, 412} {167, 130} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground border LED Display Properties
-ioMeter {21, 536} {27, 94} {0, 59904, 0} "in1_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {21, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in1over_post" 0.000000 fill 1 0 mouse
-ioMeter {75, 536} {27, 94} {0, 59904, 0} "in2_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {75, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in2over_post" 0.000000 fill 1 0 mouse
-ioMeter {129, 536} {27, 94} {0, 59904, 0} "in3_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {129, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in3over_post" 0.000000 fill 1 0 mouse
-ioMeter {182, 536} {27, 94} {0, 59904, 0} "in4_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {182, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in4over_post" 0.000000 fill 1 0 mouse
-ioMeter {238, 536} {27, 94} {0, 59904, 0} "in5_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {238, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in5over_post" 0.000000 fill 1 0 mouse
-ioMeter {292, 536} {27, 94} {0, 59904, 0} "in6_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {292, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in6over_post" 0.000000 fill 1 0 mouse
-ioMeter {344, 536} {27, 94} {0, 59904, 0} "in7_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {344, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in7over_post" 0.000000 fill 1 0 mouse
-ioMeter {398, 536} {27, 94} {0, 59904, 0} "in8_post" 0.000000 "hor8" 0.592593 fill 1 0 mouse
-ioMeter {398, 518} {27, 22} {50176, 3584, 3072} "in1over" 0.636364 "in8over_post" 0.000000 fill 1 0 mouse
-ioText {606, 296} {166, 327} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Records a soundfile (1-8 channels) with arbitrary input routing. The file will have as many channels as you select to record with the checkboxes. E.g. if you check channels 2, 3, 5 and 8 for recording, a sound file with 4 channels will be written. Set the nchnls in the orchestra header and select your audio device in the CsOptions or in the Configure dialog.
-ioText {434, 609} {166, 71} label 0.000000 0.00100 "" left "Lucida Grande" 8 {21504, 28672, 21248} {65280, 65280, 65280} nobackground noborder Note: You can also us the Record Button in the QuteCsound interface for quick simple recording on any csd.
-ioText {443, 362} {129, 33} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Pre Fader
-ioText {440, 558} {129, 33} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Post Fader
+ioMenu {391, 197} {83, 25} 1 303 "16bit,24bit,32bit" bitdepth
+ioText {379, 161} {101, 32} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Bit Depth
+ioMenu {389, 127} {83, 25} 0 303 "WAV,AIFF" fileformat
+ioText {371, 90} {116, 32} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File Format
+ioMeter {397, 330} {27, 22} {50176, 3584, 3072} "in8over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {397, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in8_pre" -inf fill 1 0 mouse
+ioMeter {343, 330} {27, 22} {50176, 3584, 3072} "in7over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {343, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in7_pre" -inf fill 1 0 mouse
+ioMeter {291, 330} {27, 22} {50176, 3584, 3072} "in6over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {291, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in6_pre" -inf fill 1 0 mouse
+ioMeter {237, 330} {27, 22} {50176, 3584, 3072} "in5over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {237, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in5_pre" -inf fill 1 0 mouse
+ioMeter {181, 330} {27, 22} {50176, 3584, 3072} "in4over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {181, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in4_pre" -inf fill 1 0 mouse
+ioMeter {128, 330} {27, 22} {50176, 3584, 3072} "in3over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {128, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in3_pre" -inf fill 1 0 mouse
+ioMeter {74, 330} {27, 22} {50176, 3584, 3072} "in2over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {74, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in2_pre" 0.427030 fill 1 0 mouse
+ioMeter {20, 330} {27, 22} {50176, 3584, 3072} "in1over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
+ioMeter {20, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in1_pre" 0.427030 fill 1 0 mouse
+ioCheckbox {407, 272} {20, 20} off chn8onoff
+ioText {396, 298} {46, 24} editnum 8.000000 1.000000 "chn8" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 8.000000
+ioCheckbox {353, 271} {20, 20} off chn7onoff
+ioText {342, 297} {46, 24} editnum 7.000000 1.000000 "chn7" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 7.000000
+ioCheckbox {299, 271} {20, 20} off chn6onoff
+ioText {288, 297} {46, 24} editnum 6.000000 1.000000 "chn6" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 6.000000
+ioCheckbox {245, 270} {20, 20} off chn5onoff
+ioText {234, 296} {46, 24} editnum 5.000000 1.000000 "chn5" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 5.000000
+ioCheckbox {190, 271} {20, 20} off chn4onoff
+ioText {179, 297} {46, 24} editnum 4.000000 1.000000 "chn4" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4.000000
+ioCheckbox {136, 270} {20, 20} off chn3onoff
+ioText {125, 296} {46, 24} editnum 3.000000 1.000000 "chn3" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3.000000
+ioCheckbox {82, 270} {20, 20} on chn2onoff
+ioText {71, 296} {46, 24} editnum 2.000000 1.000000 "chn2" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.000000
+ioCheckbox {28, 269} {20, 20} on chn1onoff
+ioText {133, 227} {189, 30} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Channels to Record
+ioText {17, 295} {46, 24} editnum 1.000000 1.000000 "chn1" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
+ioText {59, 18} {398, 43} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {65280, 65280, 65280} nobackground noborder SOUNDFILE RECORD
+ioText {709, 231} {39, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ms
+ioText {660, 231} {39, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder sec
+ioText {614, 231} {39, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder min
+ioText {569, 231} {39, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder hh
+ioText {694, 259} {14, 29} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder :
+ioText {603, 260} {14, 29} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder :
+ioText {707, 260} {44, 30} display 0.000000 0.00100 "ms" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 000
+ioText {572, 258} {32, 32} display 0.000000 0.00100 "hor" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
+ioText {438, 476} {106, 24} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Peak Hold Time
+ioText {546, 476} {48, 24} editnum 2.000000 0.100000 "peakhold" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.000000
+ioText {438, 449} {87, 28} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder dB Range
+ioText {539, 448} {56, 28} editnum 48.000000 1.000000 "dbrange" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 48.000000
+ioText {612, 49} {102, 31} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Messages
+ioText {560, 80} {208, 28} display 0.000000 0.00100 "message" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {58, 465} {65, 32} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder gain
+ioText {649, 259} {14, 29} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder :
+ioText {661, 259} {35, 31} display 0.000000 0.00100 "sec" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
+ioText {614, 259} {37, 30} display 0.000000 0.00100 "min" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
+ioButton {189, 174} {80, 25} value 1.000000 "stop" "Stop" "/" 
+ioButton {99, 174} {78, 26} value 1.000000 "record" "Record" "/" 
+ioText {269, 465} {98, 31} display 0.000000 0.00100 "gain_disp" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder +0.00 dB
+ioSlider {128, 465} {136, 31} -18.000000 18.000000 0.000000 gain
+ioButton {141, 89} {100, 30} value 1.000000 "_Browse1" "Output File" "/" 
 </MacGUI>
-
