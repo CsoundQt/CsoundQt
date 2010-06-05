@@ -221,5 +221,3 @@ bool Curve::has_same_caption(Curve *curve) const
 {
   return curve && m_caption == curve->m_caption;
 }
-
-

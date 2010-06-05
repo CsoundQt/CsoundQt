@@ -20,11 +20,11 @@
     </message>
     <message>
         <source>QuteCsound</source>
-        <translation>QuteCsound</translation>
+        <translation type="obsolete">QuteCsound</translation>
     </message>
     <message>
         <source>Only files with extension .csd are accepted</source>
-        <translation>Sadece csd uzantılı dosyalar kabul edilir</translation>
+        <translation type="obsolete">Sadece csd uzantılı dosyalar kabul edilir</translation>
     </message>
     <message>
         <source>Select File</source>
@@ -392,7 +392,7 @@
     </message>
     <message>
         <source>Default csd</source>
-        <translation>Default csd</translation>
+        <translation type="obsolete">Default csd</translation>
     </message>
     <message>
         <source>External programs</source>
@@ -509,6 +509,22 @@
     </message>
     <message>
         <source>Automatically open properties dialog when a new widget is created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Template</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>csd Template</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1337,7 +1353,12 @@ It is already used.</source>
     <message>
         <source>  dec:</source>
         <comment>Decimation (zoom) value for scope widget, must be very short (4 letter max)</comment>
-        <translation type="unfinished">  dec:</translation>
+        <translation type="obsolete">  dec:</translation>
+    </message>
+    <message>
+        <source>None</source>
+        <comment>meaning &apos;no&apos; channels in scope, must be very short (4 letter max)</comment>
+        <translation type="unfinished">Hiçbiri</translation>
     </message>
 </context>
 <context>
@@ -2004,10 +2025,6 @@ Some features may not be available and will not be saved!</source>
         <translation type="unfinished">Kapat</translation>
     </message>
     <message>
-        <source>Select Preset to Load</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>New Preset Name:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2025,6 +2042,22 @@ Some features may not be available and will not be saved!</source>
     </message>
     <message>
         <source>Select Preset to save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation type="unfinished">Kes</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Kopya</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation type="unfinished">Yapıştır</translation>
+    </message>
+    <message>
+        <source>Double-click Preset to Load</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

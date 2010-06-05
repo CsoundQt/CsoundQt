@@ -20,11 +20,11 @@
     </message>
     <message>
         <source>QuteCsound</source>
-        <translation>QuteCsound</translation>
+        <translation type="obsolete">QuteCsound</translation>
     </message>
     <message>
         <source>Only files with extension .csd are accepted</source>
-        <translation>Sono accettati solo file con estensione .csd</translation>
+        <translation type="obsolete">Sono accettati solo file con estensione .csd</translation>
     </message>
     <message>
         <source>Select File</source>
@@ -368,7 +368,7 @@
     </message>
     <message>
         <source>Default csd</source>
-        <translation>csd di default</translation>
+        <translation type="obsolete">csd di default</translation>
     </message>
     <message>
         <source>External programs</source>
@@ -517,6 +517,22 @@
     </message>
     <message>
         <source>Automatically open properties dialog when a new widget is created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Template</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>csd Template</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1343,7 +1359,12 @@ E&apos; già usata.</translation>
     <message>
         <source>  dec:</source>
         <comment>Decimation (zoom) value for scope widget, must be very short (4 letter max)</comment>
-        <translation type="unfinished">  dec:</translation>
+        <translation type="obsolete">  dec:</translation>
+    </message>
+    <message>
+        <source>None</source>
+        <comment>meaning &apos;no&apos; channels in scope, must be very short (4 letter max)</comment>
+        <translation type="unfinished">Nessuno</translation>
     </message>
 </context>
 <context>
@@ -2008,10 +2029,6 @@ Some features may not be available and will not be saved!</source>
         <translation type="unfinished">Chiudi</translation>
     </message>
     <message>
-        <source>Select Preset to Load</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>New Preset Name:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2029,6 +2046,22 @@ Some features may not be available and will not be saved!</source>
     </message>
     <message>
         <source>Select Preset to save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation type="unfinished">Taglia</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Copia</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation type="unfinished">Incolla</translation>
+    </message>
+    <message>
+        <source>Double-click Preset to Load</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
