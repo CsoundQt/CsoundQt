@@ -132,6 +132,9 @@
       <file>../examples/Useful/IO_Test.csd</file>
       <file>../examples/Useful/File_to_Text.csd</file>
       <file>../examples/Useful/Pitch_Tracker.csd</file>
+      <file>../examples/Useful/Mixdown_Player.csd</file>
+      <file>../examples/Useful/SF_Merger.csd</file>
+      <file>../examples/Useful/SF_Splitter.csd</file>
 
       <file>../examples/Music/Chowning-Stria.csd</file>
       <file>../examples/Music/Riley-In_C.csd</file>

@@ -2253,9 +2253,12 @@ void qutecsound::createMenus()
   usefulFiles.append(":/examples/Useful/SF_Play_from_HD.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_HD_2.csd");
   usefulFiles.append(":/examples/Useful/8_Chn_Player.csd");
+  usefulFiles.append(":/examples/Useful/Mixdown_Player.csd");
   usefulFiles.append(":/examples/Useful/SF_Record.csd");
   usefulFiles.append(":/examples/Useful/File_to_Text.csd");
   usefulFiles.append(":/examples/Useful/Pitch_Tracker.csd");
+  usefulFiles.append(":/examples/Useful/SF_Splitter.csd");
+  usefulFiles.append(":/examples/Useful/SF_Merger.csd");
 
   subMenus << usefulFiles;
   subMenuNames << tr("Useful");
