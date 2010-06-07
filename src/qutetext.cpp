@@ -729,8 +729,16 @@ void QuteLineEdit::createPropertiesDialog()
 
 void QuteLineEdit::textEdited(QString text)
 {
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.lockForRead();
+#endif
   m_stringValue = text;
   m_valueChanged = true;
+  QPair<QString, QString> channelValue(m_channel, m_stringValue);
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.unlock();
+#endif
+  emit newValue(channelValue);
 }
 
 /* -----------------------------------------------------------------*/

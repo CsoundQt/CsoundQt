@@ -673,13 +673,18 @@ i 99 0 3600
 </CsScore>
 </CsoundSynthesizer>
 
+
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>675</x>
- <y>175</y>
- <width>967</width>
- <height>780</height>
+ <x>585</x>
+ <y>124</y>
+ <width>964</width>
+ <height>787</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -692,7 +697,7 @@ i 99 0 3600
   <x>5</x>
   <y>5</y>
   <width>948</width>
-  <height>35</height>
+  <height>42</height>
   <uuid>{f83c8ed4-8272-4a39-bad4-3c33ba26d04c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -718,8 +723,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>124</x>
-  <y>411</y>
+  <x>123</x>
+  <y>421</y>
   <width>665</width>
   <height>180</height>
   <uuid>{f376f702-0fc4-49ee-b31d-2d81d753a714}</uuid>
@@ -747,8 +752,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>5</x>
-  <y>45</y>
+  <x>4</x>
+  <y>55</y>
   <width>299</width>
   <height>180</height>
   <uuid>{2ca39be8-1821-4dec-996a-f569b84a3e69}</uuid>
@@ -776,8 +781,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC1</objectName>
-  <x>24</x>
-  <y>83</y>
+  <x>23</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{7fd81566-d369-4ff6-9521-5075574ef5f4}</uuid>
@@ -794,10 +799,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>21</x>
-  <y>180</y>
-  <width>30</width>
-  <height>22</height>
+  <x>19</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{47f7f726-dea9-4e8a-9d9e-e8a59afed0e2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -821,39 +826,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>25</x>
-  <y>68</y>
-  <width>26</width>
-  <height>22</height>
-  <uuid>{4c49dc16-a21d-42bc-a0e5-409641544bc5}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>01</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC2</objectName>
-  <x>69</x>
-  <y>83</y>
+  <x>68</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{bff2ae19-cec4-450c-810d-c6488d7eb3db}</uuid>
@@ -870,10 +846,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>66</x>
-  <y>180</y>
-  <width>30</width>
-  <height>22</height>
+  <x>64</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{27a88303-354c-4d1f-bab0-07164d6017a8}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -899,16 +875,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC2</objectName>
-  <x>57</x>
-  <y>198</y>
-  <width>51</width>
-  <height>23</height>
+  <x>56</x>
+  <y>208</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{0fea90fb-ac1c-4925-bcd8-2b1e85d94751}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>20.800</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -926,39 +902,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>70</x>
-  <y>68</y>
-  <width>26</width>
-  <height>22</height>
-  <uuid>{341210f4-75c9-4c27-847a-35ac2136d62e}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>02</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC3</objectName>
-  <x>115</x>
-  <y>83</y>
+  <x>114</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{466c1f2d-3d92-45cb-9c78-0e7e7c2e0e51}</uuid>
@@ -975,10 +922,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>112</x>
-  <y>180</y>
-  <width>30</width>
-  <height>22</height>
+  <x>110</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{b7c3c7b2-2fe4-4a71-98ae-f10bdceb0f09}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1004,16 +951,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC3</objectName>
-  <x>103</x>
-  <y>198</y>
-  <width>51</width>
-  <height>23</height>
+  <x>106</x>
+  <y>208</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{ffbc0ada-d2d6-4b6c-9ae3-6451f3049a70}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1031,39 +978,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>116</x>
-  <y>68</y>
-  <width>26</width>
-  <height>22</height>
-  <uuid>{e4a9d5c7-32ad-4e9f-8ec6-5294608e53f2}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>03</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC4</objectName>
-  <x>160</x>
-  <y>83</y>
+  <x>159</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{43be06ea-c25a-46b0-af06-752d2cff8551}</uuid>
@@ -1080,10 +998,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>157</x>
-  <y>180</y>
-  <width>30</width>
-  <height>22</height>
+  <x>156</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{58df6e7c-5ff7-4b2b-8036-5e504d393732}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1109,10 +1027,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC4</objectName>
-  <x>148</x>
-  <y>198</y>
-  <width>51</width>
-  <height>23</height>
+  <x>147</x>
+  <y>208</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{0694c706-5d4e-4014-93d9-33d327a25321}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1136,39 +1054,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>161</x>
-  <y>68</y>
-  <width>26</width>
-  <height>22</height>
-  <uuid>{1e5ec1da-7c52-4e96-866d-18770603581c}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>04</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC5</objectName>
-  <x>208</x>
-  <y>83</y>
+  <x>207</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{28520397-fba4-4c4b-8150-b52fa58d9b99}</uuid>
@@ -1185,10 +1074,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>205</x>
-  <y>180</y>
-  <width>30</width>
-  <height>22</height>
+  <x>204</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{ab510ca9-6b0f-4398-bae2-946baaf02990}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1214,16 +1103,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC5</objectName>
-  <x>198</x>
-  <y>198</y>
-  <width>46</width>
-  <height>23</height>
+  <x>199</x>
+  <y>208</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{f50669c7-e80c-4bb2-b167-0c5c274ced7f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1241,39 +1130,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>209</x>
-  <y>68</y>
-  <width>26</width>
-  <height>22</height>
-  <uuid>{61ce8073-f63f-40af-b40f-f6bc1b2a48f9}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>05</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC6</objectName>
-  <x>254</x>
-  <y>83</y>
+  <x>253</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{24c1b37e-83f8-4b0b-9b02-3b9def7ecfa5}</uuid>
@@ -1290,10 +1150,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>252</x>
-  <y>180</y>
-  <width>30</width>
-  <height>22</height>
+  <x>249</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{8fce4f81-f2b3-4852-8d5d-3da6fab154cf}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1319,16 +1179,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC6</objectName>
-  <x>242</x>
-  <y>198</y>
-  <width>51</width>
-  <height>23</height>
+  <x>245</x>
+  <y>208</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{5b929364-1b98-42bf-ba22-52e4fda9cf68}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1346,39 +1206,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>254</x>
-  <y>68</y>
-  <width>26</width>
-  <height>22</height>
-  <uuid>{6f66a8db-37fc-493e-9f4a-7b8ea8a9c815}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>06</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC38</objectName>
-  <x>159</x>
-  <y>449</y>
+  <x>158</x>
+  <y>456</y>
   <width>19</width>
   <height>100</height>
   <uuid>{a986b8e4-01de-477e-85b6-714e13688232}</uuid>
@@ -1395,10 +1226,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>153</x>
-  <y>546</y>
-  <width>33</width>
-  <height>23</height>
+  <x>151</x>
+  <y>556</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{a6bccc4b-946b-4dd5-8242-cf08451d345c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1424,16 +1255,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC38</objectName>
-  <x>146</x>
-  <y>564</y>
-  <width>52</width>
-  <height>24</height>
+  <x>145</x>
+  <y>574</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{8aaae027-8c7a-49af-b6b1-a8a4b15683f8}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>28.800</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1451,39 +1282,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>160</x>
-  <y>434</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{47c4e65a-e511-4cd3-90bc-2754b3233e3e}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>38</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC39</objectName>
-  <x>212</x>
-  <y>449</y>
+  <x>211</x>
+  <y>456</y>
   <width>19</width>
   <height>100</height>
   <uuid>{671ab614-13de-4602-8709-f5db18fa64bc}</uuid>
@@ -1500,10 +1302,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>210</x>
-  <y>546</y>
-  <width>31</width>
-  <height>23</height>
+  <x>209</x>
+  <y>556</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{50922850-f5bf-48ba-a12d-a25b93ca44e3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1529,16 +1331,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC39</objectName>
-  <x>200</x>
-  <y>564</y>
-  <width>52</width>
-  <height>24</height>
+  <x>202</x>
+  <y>574</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{92d0f455-e73b-450a-afb0-739549eda08b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.380</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1556,39 +1358,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>213</x>
-  <y>434</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{ab46c837-9d06-4003-8e0b-6bb646321dff}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>39</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC40</objectName>
-  <x>265</x>
-  <y>449</y>
+  <x>264</x>
+  <y>456</y>
   <width>19</width>
   <height>100</height>
   <uuid>{4e074954-5881-4b46-a89e-301e06cae77f}</uuid>
@@ -1605,10 +1378,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>261</x>
-  <y>546</y>
-  <width>31</width>
-  <height>23</height>
+  <x>258</x>
+  <y>556</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{ade400d8-b038-4d5d-b1c7-7d27ed612351}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1634,16 +1407,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC40</objectName>
-  <x>252</x>
-  <y>564</y>
-  <width>52</width>
-  <height>24</height>
+  <x>253</x>
+  <y>574</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{44966c39-c062-4957-abc1-566fcf18a13e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>30.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1661,39 +1434,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>266</x>
-  <y>434</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{9a89fdbb-0764-4730-a2d1-d41d687bfaa4}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>40</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC41</objectName>
-  <x>318</x>
-  <y>449</y>
+  <x>317</x>
+  <y>456</y>
   <width>19</width>
   <height>100</height>
   <uuid>{0eb610ed-724e-4bb9-b114-c02de5747bf9}</uuid>
@@ -1711,9 +1455,9 @@ i 99 0 3600
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>316</x>
-  <y>546</y>
-  <width>31</width>
-  <height>23</height>
+  <y>556</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{9f27fb2a-695c-4038-bba7-a9345a833c52}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1739,16 +1483,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC41</objectName>
-  <x>306</x>
-  <y>564</y>
-  <width>52</width>
-  <height>24</height>
+  <x>305</x>
+  <y>574</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{b07cec19-c077-4b0c-b28a-a5aa4974fc6d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>60.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1766,39 +1510,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>319</x>
-  <y>434</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{55fc222e-b7b2-46fb-94b3-e4b222955a3c}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>41</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC42</objectName>
-  <x>371</x>
-  <y>449</y>
+  <x>370</x>
+  <y>456</y>
   <width>19</width>
   <height>100</height>
   <uuid>{99c0b327-ffcd-4bc9-a90e-1fe3bda7b065}</uuid>
@@ -1815,10 +1530,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>370</x>
-  <y>546</y>
-  <width>31</width>
-  <height>23</height>
+  <x>369</x>
+  <y>556</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{c4e3ac8f-beb5-45f5-876d-bd0be2ca0c53}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1845,15 +1560,15 @@ i 99 0 3600
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC42</objectName>
   <x>360</x>
-  <y>564</y>
-  <width>52</width>
-  <height>24</height>
+  <y>574</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{a6d6103e-8402-4e90-8e9f-0380c19e2bb6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>144.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1871,39 +1586,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>372</x>
-  <y>434</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{de1ad0d7-5578-43c9-ac4f-1ade7a2db211}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>42</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC43</objectName>
-  <x>424</x>
-  <y>449</y>
+  <x>423</x>
+  <y>456</y>
   <width>19</width>
   <height>100</height>
   <uuid>{1fa0c649-a386-4006-992a-a95697f3f7c0}</uuid>
@@ -1920,10 +1606,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>423</x>
-  <y>546</y>
-  <width>31</width>
-  <height>23</height>
+  <x>422</x>
+  <y>556</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{ff8cc24f-4dca-42f0-9cc4-20f58dd80000}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1949,16 +1635,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC43</objectName>
-  <x>412</x>
-  <y>564</y>
-  <width>52</width>
-  <height>24</height>
+  <x>415</x>
+  <y>574</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{38537cf0-ab8b-48a9-85a7-e4e73e3bb7f3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>1.800</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1976,39 +1662,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>425</x>
-  <y>434</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{f363acff-7c3e-421b-b143-f5c77ade95b1}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>43</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC44</objectName>
-  <x>477</x>
-  <y>449</y>
+  <x>476</x>
+  <y>456</y>
   <width>19</width>
   <height>100</height>
   <uuid>{90efec9c-f402-4cfd-8904-fa607901e247}</uuid>
@@ -2025,10 +1682,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>474</x>
-  <y>546</y>
-  <width>31</width>
-  <height>23</height>
+  <x>473</x>
+  <y>556</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{6fa8d1b1-b823-4bb2-8340-8bf9634cd545}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -2054,16 +1711,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC44</objectName>
-  <x>463</x>
-  <y>564</y>
-  <width>52</width>
-  <height>24</height>
+  <x>466</x>
+  <y>574</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{3566ce76-d79b-4d9e-a03f-dc1ac9e01743}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>1.800</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2081,39 +1738,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>478</x>
-  <y>434</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{166459ee-d38c-4674-ac30-e5d829426ae8}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>44</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC45</objectName>
-  <x>530</x>
-  <y>449</y>
+  <x>529</x>
+  <y>456</y>
   <width>19</width>
   <height>100</height>
   <uuid>{9de7cc67-9fc7-471e-8145-8d1a6d6eeff6}</uuid>
@@ -2130,10 +1758,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>526</x>
-  <y>546</y>
-  <width>31</width>
-  <height>23</height>
+  <x>523</x>
+  <y>556</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{f5bd7ffe-9f49-44d7-848a-34e16cced6d0}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -2159,16 +1787,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC45</objectName>
-  <x>518</x>
-  <y>564</y>
-  <width>52</width>
-  <height>24</height>
+  <x>520</x>
+  <y>574</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{2e81a519-a4b9-41f6-a608-3e11683ae600}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.420</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2186,39 +1814,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>531</x>
-  <y>434</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{07aa72eb-f2eb-4567-a5ba-89b98f02a442}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>45</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC46</objectName>
-  <x>583</x>
-  <y>449</y>
+  <x>582</x>
+  <y>456</y>
   <width>19</width>
   <height>100</height>
   <uuid>{374207f4-395f-42d7-8882-eedb7adb808a}</uuid>
@@ -2235,10 +1834,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>579</x>
-  <y>546</y>
-  <width>31</width>
-  <height>23</height>
+  <x>576</x>
+  <y>556</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{b2306a7e-a0c2-42b9-a738-d434b1f2810d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -2264,16 +1863,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC46</objectName>
-  <x>570</x>
-  <y>564</y>
-  <width>52</width>
-  <height>24</height>
+  <x>574</x>
+  <y>574</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{f435a121-b76c-4a37-a0a7-ad0325e77ac9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.300</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2291,39 +1890,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>584</x>
-  <y>434</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{47939b3f-7de1-4357-a37c-4252b4b5f78c}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>46</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC47</objectName>
-  <x>636</x>
-  <y>449</y>
+  <x>635</x>
+  <y>456</y>
   <width>19</width>
   <height>100</height>
   <uuid>{8d683189-6b51-44c6-a767-893da9e946ff}</uuid>
@@ -2340,10 +1910,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>628</x>
-  <y>546</y>
-  <width>36</width>
-  <height>23</height>
+  <x>626</x>
+  <y>556</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{85b73678-5e18-49e3-b3f7-d1bc396173a8}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -2369,16 +1939,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC47</objectName>
-  <x>622</x>
-  <y>564</y>
-  <width>52</width>
-  <height>24</height>
+  <x>626</x>
+  <y>574</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{96f462d5-ac3f-4af8-96b4-9eea077e7e79}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.200</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2396,39 +1966,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>637</x>
-  <y>434</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{16bd6e32-17f8-44d6-af1a-af4ba005ba53}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>47</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC48</objectName>
-  <x>689</x>
-  <y>449</y>
+  <x>688</x>
+  <y>456</y>
   <width>19</width>
   <height>100</height>
   <uuid>{10e3f36f-cc25-415a-a68a-e91700369291}</uuid>
@@ -2445,10 +1986,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>685</x>
-  <y>546</y>
-  <width>31</width>
-  <height>23</height>
+  <x>684</x>
+  <y>556</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{10977936-78d2-4edf-b15a-b5810cb6278e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -2474,16 +2015,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC48</objectName>
-  <x>675</x>
-  <y>564</y>
-  <width>52</width>
-  <height>24</height>
+  <x>678</x>
+  <y>574</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{675f8a7e-27b7-4890-90d5-847e16a649ad}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.750</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2501,39 +2042,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>690</x>
-  <y>434</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{f585930c-58b7-4e66-912c-2f0e5c887f63}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>48</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC49</objectName>
-  <x>742</x>
-  <y>449</y>
+  <x>741</x>
+  <y>456</y>
   <width>19</width>
   <height>100</height>
   <uuid>{724ee7ed-0664-4d23-8c8f-8a838961033e}</uuid>
@@ -2550,10 +2062,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>738</x>
-  <y>546</y>
-  <width>31</width>
-  <height>23</height>
+  <x>737</x>
+  <y>556</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{b376e3fd-8e78-4618-a80a-06cc32951b6b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -2579,16 +2091,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC49</objectName>
-  <x>726</x>
-  <y>564</y>
-  <width>52</width>
-  <height>24</height>
+  <x>730</x>
+  <y>574</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{f5c8b864-c25d-4794-95a5-f3375afe7441}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.750</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2608,37 +2120,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>743</x>
-  <y>434</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{2489a114-eba7-448a-905d-5242efebac48}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>49</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>307</x>
-  <y>45</y>
+  <x>306</x>
+  <y>55</y>
   <width>316</width>
   <height>180</height>
   <uuid>{21e2b54c-b094-4c9d-a216-e8584b0d1b41}</uuid>
@@ -2666,8 +2149,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC7</objectName>
-  <x>321</x>
-  <y>83</y>
+  <x>320</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{0ecb0018-3c93-4429-a1a2-2b24b39abb2b}</uuid>
@@ -2684,10 +2167,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>318</x>
-  <y>180</y>
-  <width>36</width>
-  <height>24</height>
+  <x>313</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{12c18cce-24ba-4c8d-aecb-6e4fdc2579d2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -2713,16 +2196,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC7</objectName>
-  <x>310</x>
-  <y>198</y>
-  <width>52</width>
-  <height>24</height>
+  <x>313</x>
+  <y>208</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{24473f93-644e-4ba6-b546-985061bed64f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>1.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2740,39 +2223,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>322</x>
-  <y>66</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{5068f5d4-713f-4429-b0be-8db04eda3997}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>07</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC8</objectName>
-  <x>375</x>
-  <y>83</y>
+  <x>374</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{030982cd-2ca9-4d8c-a4c5-bd52986694fc}</uuid>
@@ -2789,10 +2243,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>372</x>
-  <y>180</y>
-  <width>31</width>
-  <height>23</height>
+  <x>370</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{4edba405-eb55-4bef-a2e1-69bda2bfde3c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -2818,16 +2272,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC8</objectName>
-  <x>364</x>
-  <y>198</y>
-  <width>52</width>
-  <height>24</height>
+  <x>363</x>
+  <y>208</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{352c09d0-6a36-485b-888a-8061baa98105}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>120.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2845,39 +2299,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>376</x>
-  <y>67</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{ee2b4fcc-e2ec-4864-be2a-f7629a65f0fc}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>08</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC9</objectName>
-  <x>428</x>
-  <y>83</y>
+  <x>427</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{b0b80165-f444-46ab-b910-2460e89832ca}</uuid>
@@ -2894,10 +2319,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>425</x>
-  <y>180</y>
-  <width>31</width>
-  <height>23</height>
+  <x>423</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{7a78a651-b2b6-4a33-bb8b-58bab6661e9d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -2923,16 +2348,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC9</objectName>
-  <x>415</x>
-  <y>198</y>
-  <width>52</width>
-  <height>24</height>
+  <x>420</x>
+  <y>208</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{d7c5a314-9ce5-4f1c-90c6-9a5d024c32b6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2950,39 +2375,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>429</x>
-  <y>67</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{abc3597d-a823-4dde-93f7-af883750df6e}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>09</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC10</objectName>
-  <x>481</x>
-  <y>83</y>
+  <x>480</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{786c1d28-38eb-4413-a727-f694abd512c1}</uuid>
@@ -2999,10 +2395,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>478</x>
-  <y>180</y>
-  <width>31</width>
-  <height>23</height>
+  <x>477</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{a63a2bfa-1f65-4bef-bf63-debe1fbeb04f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -3028,16 +2424,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC10</objectName>
-  <x>468</x>
-  <y>198</y>
-  <width>52</width>
-  <height>24</height>
+  <x>471</x>
+  <y>208</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{4c91aaa7-9fe5-445c-969f-56ed424b5d6e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.300</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -3055,39 +2451,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>482</x>
-  <y>67</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{f9babd2f-676c-48f5-b8c3-137a2e3b47a9}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>10</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC11</objectName>
-  <x>534</x>
-  <y>83</y>
+  <x>533</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{fa7b7b5d-9826-4a5c-b7a4-bb79e9b8a1cd}</uuid>
@@ -3104,10 +2471,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>531</x>
-  <y>180</y>
-  <width>31</width>
-  <height>23</height>
+  <x>530</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{2271d147-cdea-4598-b60c-6f83e5602e71}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -3133,16 +2500,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC11</objectName>
-  <x>521</x>
-  <y>198</y>
-  <width>52</width>
-  <height>24</height>
+  <x>525</x>
+  <y>208</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{941dbfd1-06be-4cae-a2ac-2379813d77fa}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.590</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -3162,44 +2529,15 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>535</x>
-  <y>66</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{888b192a-b350-4e47-b431-ce4f86c7d828}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>11</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>567</x>
-  <y>110</y>
-  <width>46</width>
-  <height>24</height>
+  <x>575</x>
+  <y>160</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{978bad4d-b77d-4dd2-b12d-cc56aae66b1c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>12: 1P</label>
+  <label>1P</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
@@ -3220,8 +2558,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBCheckBox">
   <objectName>kC12</objectName>
-  <x>580</x>
-  <y>130</y>
+  <x>579</x>
+  <y>140</y>
   <width>20</width>
   <height>20</height>
   <uuid>{ffd14281-62ce-4b97-aa29-6e0011faffdd}</uuid>
@@ -3235,8 +2573,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>626</x>
-  <y>229</y>
+  <x>625</x>
+  <y>239</y>
   <width>325</width>
   <height>180</height>
   <uuid>{eed781d9-7cf6-4c73-bc9a-a1a9c7c814e7}</uuid>
@@ -3264,8 +2602,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC32</objectName>
-  <x>644</x>
-  <y>266</y>
+  <x>643</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{489e07b5-3656-4234-90e3-4a624792042a}</uuid>
@@ -3282,10 +2620,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>641</x>
-  <y>363</y>
-  <width>31</width>
-  <height>23</height>
+  <x>638</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{f002643f-2c79-4320-9c60-cf34f7fafd19}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -3312,15 +2650,15 @@ i 99 0 3600
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC32</objectName>
   <x>632</x>
-  <y>381</y>
-  <width>52</width>
-  <height>24</height>
+  <y>391</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{8eca1bef-7a98-4291-a154-6f6ea920ae32}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -3338,39 +2676,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>644</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{5d4c9008-9e17-486f-abff-4fe71c8faa00}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>32</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC33</objectName>
-  <x>697</x>
-  <y>266</y>
+  <x>696</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{ea8d2f19-8b05-4949-9475-f5c979385b29}</uuid>
@@ -3387,10 +2696,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>695</x>
-  <y>363</y>
-  <width>31</width>
-  <height>23</height>
+  <x>692</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{e485397d-a0a0-4ecf-81de-2cdcd695b472}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -3416,16 +2725,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC33</objectName>
-  <x>686</x>
-  <y>381</y>
-  <width>52</width>
-  <height>24</height>
+  <x>685</x>
+  <y>391</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{5fddf5db-b5d0-4efd-a334-f6c5b777a1cb}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -3443,39 +2752,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>698</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{1fda8da6-09a7-44d5-b879-8e5a882abd53}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>33</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC34</objectName>
-  <x>751</x>
-  <y>266</y>
+  <x>750</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{dec2259d-53e8-4816-8889-79df24673d63}</uuid>
@@ -3492,10 +2772,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>748</x>
-  <y>363</y>
-  <width>31</width>
-  <height>23</height>
+  <x>745</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{1569ca4d-b17c-452b-a846-6c55515b3c13}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -3521,16 +2801,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC34</objectName>
-  <x>739</x>
-  <y>381</y>
-  <width>52</width>
-  <height>24</height>
+  <x>742</x>
+  <y>391</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{c36e748b-b4fe-4542-ba69-86bf429e82c5}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>1.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -3548,39 +2828,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>751</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{372f19fa-6730-4646-aab2-ec6b1439c1ac}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>34</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC35</objectName>
-  <x>803</x>
-  <y>266</y>
+  <x>802</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{d5d6958b-3384-4309-b3c2-32bb51af3b54}</uuid>
@@ -3597,10 +2848,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>801</x>
-  <y>363</y>
-  <width>31</width>
-  <height>23</height>
+  <x>799</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{6345b7f7-fc94-4ade-9834-05696fe7e127}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -3626,16 +2877,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC35</objectName>
-  <x>792</x>
-  <y>381</y>
-  <width>52</width>
-  <height>24</height>
+  <x>790</x>
+  <y>391</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{4a1d3c47-18aa-49f7-ac8c-93d35233cafc}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>120.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -3653,39 +2904,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>804</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{e3b7d44d-4a39-4156-8b43-ea43c6644b98}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>35</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC36</objectName>
-  <x>856</x>
-  <y>266</y>
+  <x>855</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{c0341d29-c062-4ea0-9eba-bc3506bac638}</uuid>
@@ -3702,10 +2924,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>854</x>
-  <y>363</y>
-  <width>31</width>
-  <height>23</height>
+  <x>852</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{6e8ea7c5-2371-4454-9b4f-9f9f39d6619d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -3731,16 +2953,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC36</objectName>
-  <x>845</x>
-  <y>381</y>
-  <width>52</width>
-  <height>24</height>
+  <x>844</x>
+  <y>391</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{445be958-7d5d-4191-8242-a1baefd9d08d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>60.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -3758,39 +2980,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>857</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{a5e25be7-5a4b-4a67-a1ce-16cba84bc062}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>36</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC37</objectName>
-  <x>909</x>
-  <y>266</y>
+  <x>908</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{4e745abf-a50b-4f6b-9116-83e74d208f0d}</uuid>
@@ -3807,10 +3000,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>907</x>
-  <y>363</y>
-  <width>31</width>
-  <height>23</height>
+  <x>904</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{17ca2efd-c799-4615-b631-7241b5d31820}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -3837,15 +3030,15 @@ i 99 0 3600
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC37</objectName>
   <x>898</x>
-  <y>381</y>
-  <width>52</width>
-  <height>24</height>
+  <y>391</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{42ac1c06-8b9d-40a8-832b-43ed222d4f55}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>1.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -3865,37 +3058,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>910</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{3e5c500f-36ec-460c-b4f1-d1a9c183c418}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>37</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>626</x>
-  <y>45</y>
+  <x>625</x>
+  <y>55</y>
   <width>98</width>
   <height>180</height>
   <uuid>{70f0e897-7c06-49d8-9372-01a92d8fc58e}</uuid>
@@ -3923,8 +3087,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC13</objectName>
-  <x>643</x>
-  <y>83</y>
+  <x>642</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{ff8df6e8-8296-44ae-b47f-4557ed73739c}</uuid>
@@ -3941,10 +3105,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>638</x>
-  <y>180</y>
-  <width>31</width>
-  <height>23</height>
+  <x>637</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{158f7499-dbf4-4ba2-b8e0-dca3f1d39d6f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -3970,16 +3134,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC13</objectName>
-  <x>628</x>
-  <y>198</y>
-  <width>52</width>
-  <height>24</height>
+  <x>633</x>
+  <y>208</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{ad63500e-7fa6-48a7-8e4f-cbc819b7bc06}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -3999,44 +3163,15 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>642</x>
-  <y>68</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{d85370f7-ebdb-4275-ad6f-d392af973ab9}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>13</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>671</x>
-  <y>110</y>
-  <width>46</width>
-  <height>24</height>
+  <x>679</x>
+  <y>160</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{062f98cd-fdee-4488-9bd7-7029e85e1ebf}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>14: Pol</label>
+  <label>Pol</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
@@ -4057,8 +3192,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBCheckBox">
   <objectName>kC14</objectName>
-  <x>684</x>
-  <y>130</y>
+  <x>683</x>
+  <y>140</y>
   <width>20</width>
   <height>20</height>
   <uuid>{4d779359-0ae9-4707-a90e-f256666535b9}</uuid>
@@ -4072,8 +3207,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>727</x>
-  <y>45</y>
+  <x>726</x>
+  <y>55</y>
   <width>225</width>
   <height>180</height>
   <uuid>{33b5032c-d000-46db-b587-52d0b97f2d39}</uuid>
@@ -4101,8 +3236,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC15</objectName>
-  <x>747</x>
-  <y>83</y>
+  <x>746</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{75058e27-8b12-4dc2-a7ae-647dd9de3e49}</uuid>
@@ -4119,10 +3254,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>740</x>
-  <y>180</y>
-  <width>34</width>
-  <height>23</height>
+  <x>739</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{cc44bdf5-d32b-4a3f-b4d4-8bc0ae2c7674}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -4148,16 +3283,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC15</objectName>
-  <x>733</x>
-  <y>198</y>
-  <width>52</width>
-  <height>24</height>
+  <x>738</x>
+  <y>208</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{bb06148d-c105-475b-9e4a-163f8888ce4e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -4175,39 +3310,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>747</x>
-  <y>65</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{51bf00b1-d382-451b-b139-17a9a7839bfc}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>15</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC16</objectName>
-  <x>798</x>
-  <y>83</y>
+  <x>797</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{7780e271-fc33-403c-88cc-3001b50553bb}</uuid>
@@ -4224,10 +3330,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>794</x>
-  <y>180</y>
-  <width>31</width>
-  <height>23</height>
+  <x>793</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{b24303a8-a7d5-4a2d-8622-0ee547851769}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -4253,16 +3359,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC16</objectName>
-  <x>785</x>
-  <y>198</y>
-  <width>52</width>
-  <height>24</height>
+  <x>790</x>
+  <y>208</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{eeac9c7d-9ace-4107-9e35-bdd460e0918c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.080</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -4280,39 +3386,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>798</x>
-  <y>66</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{47feefe4-1db4-47ea-8c06-697bed588b5d}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>16</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC17</objectName>
-  <x>850</x>
-  <y>83</y>
+  <x>849</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{506f081b-e5c7-4e53-9971-c3764aad174c}</uuid>
@@ -4329,10 +3406,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>847</x>
-  <y>180</y>
-  <width>32</width>
-  <height>23</height>
+  <x>846</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{58cfff2d-1172-48ed-9b54-5f9fbb086f89}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -4358,16 +3435,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC17</objectName>
-  <x>838</x>
-  <y>198</y>
-  <width>52</width>
-  <height>24</height>
+  <x>841</x>
+  <y>208</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{b8dccf73-34ce-48b1-b276-6ad0f407580f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>-1.300</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -4385,39 +3462,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>851</x>
-  <y>66</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{96d2640e-561f-43b9-8c88-e7af92a961a8}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>17</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC18</objectName>
-  <x>903</x>
-  <y>83</y>
+  <x>902</x>
+  <y>90</y>
   <width>19</width>
   <height>100</height>
   <uuid>{b009a56e-e255-4ca5-a236-a8f6a076ed77}</uuid>
@@ -4434,10 +3482,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>900</x>
-  <y>180</y>
-  <width>31</width>
-  <height>23</height>
+  <x>899</x>
+  <y>190</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{a03159ce-b98b-4ae8-b916-17b81353f981}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -4463,16 +3511,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC18</objectName>
-  <x>891</x>
-  <y>198</y>
-  <width>52</width>
-  <height>24</height>
+  <x>896</x>
+  <y>208</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{2a1845b5-378c-42cf-a1a9-81aa4e9669b3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.160</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -4492,37 +3540,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>904</x>
-  <y>66</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{7ef70c76-1849-4d1c-ba69-02ef9e13c369}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>18</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>5</x>
-  <y>228</y>
+  <x>4</x>
+  <y>238</y>
   <width>163</width>
   <height>180</height>
   <uuid>{870a58b1-8c64-4f91-aabc-3a59bffe547b}</uuid>
@@ -4550,8 +3569,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC19</objectName>
-  <x>18</x>
-  <y>266</y>
+  <x>17</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{292cb4d1-41a9-44cb-a8fd-bc375600433f}</uuid>
@@ -4568,10 +3587,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>16</x>
-  <y>363</y>
-  <width>31</width>
-  <height>23</height>
+  <x>15</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{92e09f8c-3f90-43b8-b56b-b69b753a5f15}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -4598,15 +3617,15 @@ i 99 0 3600
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC19</objectName>
   <x>7</x>
-  <y>381</y>
-  <width>52</width>
-  <height>24</height>
+  <y>391</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{00ca8466-07bc-4875-9d42-49a11a31146e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>-44.400</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -4624,39 +3643,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>19</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{05dac42d-927f-4bb5-baa4-1637afe6ee52}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>19</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC20</objectName>
-  <x>72</x>
-  <y>266</y>
+  <x>71</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{53f7ad7e-4353-4adf-b1af-b8668cb8d86d}</uuid>
@@ -4673,10 +3663,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>70</x>
-  <y>363</y>
-  <width>31</width>
-  <height>23</height>
+  <x>69</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{83d77d3f-e562-4022-b460-6c1c718fa111}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -4702,16 +3692,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC20</objectName>
-  <x>58</x>
-  <y>381</y>
-  <width>52</width>
-  <height>24</height>
+  <x>62</x>
+  <y>391</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{5cca6723-c3ff-4a76-beb5-2bef0ca8f941}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.580</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -4729,39 +3719,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>73</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{1cf4822a-8b2b-4580-9a8f-b76879cf1bbb}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>20</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC21</objectName>
-  <x>125</x>
-  <y>266</y>
+  <x>124</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{4147e11e-5c11-41cf-9cc9-a14dbd1b17fa}</uuid>
@@ -4778,10 +3739,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>116</x>
-  <y>363</y>
-  <width>38</width>
-  <height>23</height>
+  <x>114</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{cd4e8717-d18a-4c75-a626-17654a30c9c4}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -4807,16 +3768,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC21</objectName>
-  <x>111</x>
-  <y>381</y>
-  <width>52</width>
-  <height>24</height>
+  <x>112</x>
+  <y>391</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{13745bf8-e49a-4773-a561-39c17e1ac831}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>19.200</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -4836,37 +3797,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>125</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{7ce138f0-10f1-4171-9219-998624525cb0}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>21</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>171</x>
-  <y>228</y>
+  <x>170</x>
+  <y>238</y>
   <width>210</width>
   <height>180</height>
   <uuid>{d182f4f9-356c-4df6-b1ee-efb4f1c18a10}</uuid>
@@ -4894,8 +3826,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC22</objectName>
-  <x>185</x>
-  <y>266</y>
+  <x>184</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{7fd7515c-a091-4d27-955d-5a6e08c44e0b}</uuid>
@@ -4912,10 +3844,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>180</x>
-  <y>363</y>
-  <width>37</width>
-  <height>22</height>
+  <x>178</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{e565f62b-1916-43ff-9ae6-d13f772204ca}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -4941,16 +3873,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC22</objectName>
-  <x>176</x>
-  <y>381</y>
-  <width>52</width>
-  <height>24</height>
+  <x>174</x>
+  <y>391</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{163a86c6-d25a-4415-a9eb-4669b81b21ef}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -4968,39 +3900,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>187</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{253e8a57-68ea-43fe-b7bf-1a253153c09d}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>22</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC23</objectName>
-  <x>240</x>
-  <y>266</y>
+  <x>239</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{ebf38056-f6fe-46de-87ab-89f0b4e5aa81}</uuid>
@@ -5017,10 +3920,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>236</x>
-  <y>363</y>
-  <width>31</width>
-  <height>23</height>
+  <x>235</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{d2fce105-f4f9-449a-a4e7-a453ff6142d7}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -5046,16 +3949,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC23</objectName>
-  <x>228</x>
-  <y>381</y>
-  <width>52</width>
-  <height>24</height>
+  <x>231</x>
+  <y>391</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{194a05f5-61ed-41ed-a89a-2c293dc12af4}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>-0.200</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -5073,39 +3976,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>241</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{1cd0367f-9815-4842-b7d6-a966836b34ce}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>23</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC24</objectName>
-  <x>293</x>
-  <y>266</y>
+  <x>292</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{2234b84c-6d59-4de2-84a6-486454385684}</uuid>
@@ -5122,10 +3996,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>289</x>
-  <y>363</y>
-  <width>31</width>
-  <height>23</height>
+  <x>287</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{1cc6bfce-23cd-4dba-8cfd-11251e7b0766}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -5151,16 +4025,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC24</objectName>
-  <x>280</x>
-  <y>381</y>
-  <width>52</width>
-  <height>24</height>
+  <x>283</x>
+  <y>391</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{76b958c4-6632-4f56-96cb-d59ebbe7b9fb}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>-1.300</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -5178,39 +4052,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>294</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{58eda6ba-6074-4f5d-b9d8-1482f1aa638e}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>24</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC25</objectName>
-  <x>345</x>
-  <y>266</y>
+  <x>344</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{72fc9987-a42a-46e8-96f6-0a02f25ae92f}</uuid>
@@ -5227,10 +4072,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>342</x>
-  <y>363</y>
-  <width>31</width>
-  <height>23</height>
+  <x>340</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{c34125cd-3519-43df-99d2-a89cdd0bc842}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -5256,16 +4101,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC25</objectName>
-  <x>337</x>
-  <y>381</y>
-  <width>43</width>
-  <height>24</height>
+  <x>336</x>
+  <y>391</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{5ef2257d-81b1-410f-bc1a-ce623b2c6f82}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.160</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -5285,37 +4130,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>346</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{39fc6c50-6b8f-4db9-8565-e33f82adca8a}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>25</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>384</x>
-  <y>228</y>
+  <x>383</x>
+  <y>238</y>
   <width>120</width>
   <height>180</height>
   <uuid>{6edcb84f-47f9-4648-8332-444296ecdc60}</uuid>
@@ -5343,8 +4159,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC26</objectName>
-  <x>412</x>
-  <y>266</y>
+  <x>411</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{86f9ba4b-d465-4b9c-9401-e96243ae08fa}</uuid>
@@ -5361,10 +4177,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>410</x>
-  <y>363</y>
-  <width>31</width>
-  <height>23</height>
+  <x>407</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{c29e0a66-4ef3-4b47-a230-714dc433bbc4}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -5390,16 +4206,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC26</objectName>
-  <x>400</x>
-  <y>381</y>
-  <width>52</width>
-  <height>24</height>
+  <x>402</x>
+  <y>391</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{e0723488-4eee-47e1-a218-ada83f1ff6af}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.860</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -5419,44 +4235,15 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>412</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{e646c4eb-e94f-4097-9407-88dd468c99b3}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>26</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>451</x>
-  <y>290</y>
-  <width>46</width>
-  <height>24</height>
+  <x>457</x>
+  <y>340</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{686e1c90-a13a-4955-8526-3260570c3ed8}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>27: On</label>
+  <label>On</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
@@ -5477,8 +4264,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBCheckBox">
   <objectName>kC27</objectName>
-  <x>461</x>
-  <y>310</y>
+  <x>460</x>
+  <y>320</y>
   <width>20</width>
   <height>20</height>
   <uuid>{d1f6a1c7-6c7e-42cc-90a7-7a775d971ebf}</uuid>
@@ -5492,8 +4279,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>507</x>
-  <y>229</y>
+  <x>506</x>
+  <y>239</y>
   <width>116</width>
   <height>180</height>
   <uuid>{2ce49cab-ac19-426f-999a-b9042e94522a}</uuid>
@@ -5521,8 +4308,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC28</objectName>
-  <x>527</x>
-  <y>266</y>
+  <x>526</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{69cc53a4-30b2-4a5e-900a-4acc0bddb704}</uuid>
@@ -5539,10 +4326,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>525</x>
-  <y>363</y>
-  <width>39</width>
-  <height>25</height>
+  <x>518</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{27fbefe4-3f1e-41ac-b4e7-33bd23c4dc69}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -5568,16 +4355,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC28</objectName>
-  <x>516</x>
-  <y>381</y>
-  <width>52</width>
-  <height>24</height>
+  <x>518</x>
+  <y>391</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{fdb58dea-80dc-4bed-8d1e-26b911fc19ae}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>1.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -5595,39 +4382,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>528</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{3fc94201-2499-41af-b181-b05c59b06c66}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>28</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC29</objectName>
-  <x>581</x>
-  <y>266</y>
+  <x>580</x>
+  <y>273</y>
   <width>19</width>
   <height>100</height>
   <uuid>{49df04c2-baac-4801-80dc-1dc7ee81b0f0}</uuid>
@@ -5644,10 +4402,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>579</x>
-  <y>363</y>
-  <width>33</width>
-  <height>23</height>
+  <x>574</x>
+  <y>373</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{4640cf8e-419b-48f3-a8e3-5d62af7389fb}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -5673,16 +4431,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC29</objectName>
-  <x>570</x>
-  <y>381</y>
-  <width>52</width>
-  <height>24</height>
+  <x>573</x>
+  <y>391</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{76447115-2a94-4b39-a237-2f2be5022e0e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -5702,37 +4460,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>582</x>
-  <y>251</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{7995c1d2-5df5-4a3a-b375-1979c71bb110}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>29</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>5</x>
-  <y>411</y>
+  <x>4</x>
+  <y>421</y>
   <width>116</width>
   <height>180</height>
   <uuid>{16f0808c-2bc4-4e19-ac21-6746f6110cd4}</uuid>
@@ -5760,8 +4489,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC30</objectName>
-  <x>23</x>
-  <y>449</y>
+  <x>22</x>
+  <y>456</y>
   <width>19</width>
   <height>100</height>
   <uuid>{03ca5ad6-5038-43dd-aab6-1ff801b9a819}</uuid>
@@ -5778,10 +4507,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>19</x>
-  <y>546</y>
-  <width>39</width>
-  <height>25</height>
+  <x>16</x>
+  <y>556</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{ac2ce990-042e-453e-9792-e125e244eb1b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -5807,16 +4536,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC30</objectName>
-  <x>12</x>
-  <y>564</y>
-  <width>52</width>
-  <height>24</height>
+  <x>14</x>
+  <y>574</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{faefc165-edb5-408b-a710-5c628066cc15}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>1.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -5834,39 +4563,10 @@ i 99 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>24</x>
-  <y>434</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{21b2634b-1883-411b-9c7b-b9822b3033cb}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>30</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>kC31</objectName>
-  <x>77</x>
-  <y>449</y>
+  <x>76</x>
+  <y>456</y>
   <width>19</width>
   <height>100</height>
   <uuid>{e0f63106-0a7d-46cd-8200-f9e62336cf10}</uuid>
@@ -5883,10 +4583,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>73</x>
-  <y>546</y>
-  <width>31</width>
-  <height>23</height>
+  <x>70</x>
+  <y>556</y>
+  <width>50</width>
+  <height>30</height>
   <uuid>{cfd899a5-b433-4e5a-b3d0-e8c1116bb2d3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -5913,15 +4613,15 @@ i 99 0 3600
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC31</objectName>
   <x>68</x>
-  <y>564</y>
-  <width>48</width>
-  <height>24</height>
+  <y>574</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{242cde03-7d61-492e-95fb-0f618c381ba2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>0.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -5941,37 +4641,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>78</x>
-  <y>434</y>
-  <width>27</width>
-  <height>23</height>
-  <uuid>{fa864547-2d6f-457e-9785-88f49583ceb2}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>31</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>792</x>
-  <y>412</y>
+  <x>791</x>
+  <y>422</y>
   <width>159</width>
   <height>324</height>
   <uuid>{1e61f964-13f2-4645-b869-89571c89516d}</uuid>
@@ -5999,8 +4670,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>kC50</objectName>
-  <x>816</x>
-  <y>475</y>
+  <x>815</x>
+  <y>485</y>
   <width>60</width>
   <height>60</height>
   <uuid>{d1d11f9a-d929-4b2d-bf8e-a057790e14f2}</uuid>
@@ -6017,15 +4688,15 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>807</x>
-  <y>546</y>
-  <width>88</width>
-  <height>27</height>
+  <x>819</x>
+  <y>556</y>
+  <width>100</width>
+  <height>35</height>
   <uuid>{15d2b8f3-a681-489c-84c8-8cfdf3391aa2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>50 : Volume</label>
+  <label>Volume</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
@@ -6046,16 +4717,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC50</objectName>
-  <x>818</x>
-  <y>564</y>
-  <width>57</width>
-  <height>27</height>
+  <x>824</x>
+  <y>574</y>
+  <width>80</width>
+  <height>30</height>
   <uuid>{f1edd2c7-0b12-4fd9-a6e1-67d43da336a7}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>3.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -6075,8 +4746,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor210</objectName>
-  <x>900</x>
-  <y>432</y>
+  <x>899</x>
+  <y>442</y>
   <width>14</width>
   <height>146</height>
   <uuid>{62b015b8-119a-4016-8372-b47f22d0a073}</uuid>
@@ -6089,7 +4760,7 @@ i 99 0 3600
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.42857099</xValue>
-  <yValue>0.01165210</yValue>
+  <yValue>0.01093521</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -6108,8 +4779,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor210</objectName>
-  <x>917</x>
-  <y>432</y>
+  <x>916</x>
+  <y>442</y>
   <width>14</width>
   <height>146</height>
   <uuid>{b076f37e-0a9e-4351-bd25-7a00befe5542}</uuid>
@@ -6122,7 +4793,7 @@ i 99 0 3600
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.42857099</xValue>
-  <yValue>0.01166659</yValue>
+  <yValue>0.00942687</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -6141,10 +4812,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>899</x>
-  <y>578</y>
-  <width>17</width>
-  <height>24</height>
+  <x>898</x>
+  <y>588</y>
+  <width>30</width>
+  <height>30</height>
   <uuid>{185aa014-45f3-4492-902c-bb1a2932f484}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -6170,10 +4841,10 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>915</x>
-  <y>578</y>
-  <width>17</width>
-  <height>24</height>
+  <x>914</x>
+  <y>588</y>
+  <width>30</width>
+  <height>30</height>
   <uuid>{7bcfd5cc-868d-4cd8-9b06-7e9fb33cfc48}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -6199,8 +4870,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName/>
-  <x>840</x>
-  <y>420</y>
+  <x>839</x>
+  <y>430</y>
   <width>10</width>
   <height>10</height>
   <uuid>{148f2aec-4b3e-4dd6-87ab-4ff2f32a5b6f}</uuid>
@@ -6232,8 +4903,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>5</x>
-  <y>595</y>
+  <x>4</x>
+  <y>605</y>
   <width>784</width>
   <height>140</height>
   <uuid>{e017f23d-c316-4143-9c96-3c867dc2d2b9}</uuid>
@@ -6261,16 +4932,16 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>kC1</objectName>
-  <x>11</x>
-  <y>198</y>
-  <width>51</width>
-  <height>23</height>
+  <x>10</x>
+  <y>208</y>
+  <width>60</width>
+  <height>30</height>
   <uuid>{115f6545-8b1e-4026-9b27-fecb23726c6b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>-20.000</label>
-  <alignment>center</alignment>
+  <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -6290,8 +4961,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBScope">
   <objectName/>
-  <x>17</x>
-  <y>604</y>
+  <x>16</x>
+  <y>614</y>
   <width>375</width>
   <height>120</height>
   <uuid>{17dcb866-30bb-4dac-bdf1-126e885d668b}</uuid>
@@ -6308,8 +4979,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBScope">
   <objectName/>
-  <x>402</x>
-  <y>604</y>
+  <x>401</x>
+  <y>614</y>
   <width>375</width>
   <height>120</height>
   <uuid>{0065ae48-aaaa-4992-9c61-42342bd369a8}</uuid>
@@ -6329,7 +5000,7 @@ i 99 0 3600
   <x>766</x>
   <y>8</y>
   <width>184</width>
-  <height>28</height>
+  <height>35</height>
   <uuid>{4868e68a-6bc0-4401-b7d3-978bdfba9fae}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -6384,8 +5055,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Pause</objectName>
-  <x>823</x>
-  <y>657</y>
+  <x>822</x>
+  <y>667</y>
   <width>100</width>
   <height>25</height>
   <uuid>{0de26e96-b126-4753-8fba-13e3ddb3a1c2}</uuid>
@@ -6403,8 +5074,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Stop</objectName>
-  <x>823</x>
-  <y>690</y>
+  <x>822</x>
+  <y>700</y>
   <width>100</width>
   <height>25</height>
   <uuid>{3c5cfd97-9bf2-45c7-b66d-8026870f0a92}</uuid>
@@ -6422,8 +5093,8 @@ i 99 0 3600
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Play</objectName>
-  <x>823</x>
-  <y>623</y>
+  <x>822</x>
+  <y>633</y>
   <width>100</width>
   <height>25</height>
   <uuid>{768a8172-bac8-4099-aa9b-7c382b00502d}</uuid>
@@ -6440,10 +5111,10 @@ i 99 0 3600
   <latched>false</latched>
  </bsbObject>
  <objectName/>
- <x>675</x>
- <y>175</y>
- <width>967</width>
- <height>780</height>
+ <x>585</x>
+ <y>124</y>
+ <width>964</width>
+ <height>787</height>
  <visible>true</visible>
 </bsbPanel>
 <bsbPresets>

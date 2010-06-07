@@ -66,6 +66,21 @@ void QuteButton::setValue(double value)
 #endif
 }
 
+void QuteButton::setValue(QString text)
+{
+  qDebug() << "QuteButton::setValue" << text;
+  #ifdef  USE_WIDGET_MUTEX
+  widgetLock.lockForWrite();
+#endif
+  if (m_channel.startsWith("_Browse") ||  m_channel.startsWith("_MBrowse") ) {
+    m_stringValue = text;
+    m_valueChanged = true;
+  }
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.unlock();
+#endif
+}
+
 double QuteButton::getValue()
 {
   // Returns the value for any button type.
@@ -292,7 +307,7 @@ void QuteButton::applyInternalProperties()
 //  qDebug() << "QuteButton::applyInternalProperties()";
   m_value = property("QCS_pressedValue").toDouble();
 //  m_value2 = property("QCS_value2").toDouble();
-  m_stringValue = property("QCS_stringValue").toString();
+  m_stringValue = property("QCS_stringvalue").toString();
   QString type = property("QCS_type").toString();
   if (type == "event" or type == "value") {
     icon = QIcon();

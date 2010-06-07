@@ -34,6 +34,7 @@ class QuteButton : public QuteWidget
     ~QuteButton();
 
     virtual void setValue(double value); // Value of button when pressed
+    virtual void setValue(QString text); // String Value (internal) of button (e.g. for filenames)
     virtual double getValue(); // This value represents the state of the button
     virtual QString getStringValue(); // This value represents the filename from a _Browse channel button
     virtual QString getWidgetLine();
