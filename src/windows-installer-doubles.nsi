@@ -58,7 +58,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "bin\QuteCsound-${PRODUCT_VERSION}-install-win32-d.exe"
+OutFile "..\bin\QuteCsound-${PRODUCT_VERSION}-install-win32-d.exe"
 InstallDir "$PROGRAMFILES\QuteCsound-d"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -71,7 +71,7 @@ FunctionEnd
 Section "Main" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "bin\qutecsound-d.exe"
+  File "..\bin\qutecsound-d.exe"
 
 ; Shortcuts
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -82,9 +82,9 @@ Section "Main" SEC01
 SectionEnd
 
 Section "Qt Libraries" SEC02
-  File "bin\QtXml4.dll"
-  File "bin\QtGui4.dll"
-  File "bin\QtCore4.dll"
+  File "..\bin\QtXml4.dll"
+  File "..\bin\QtGui4.dll"
+  File "..\bin\QtCore4.dll"
 
 ; Shortcuts
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -92,8 +92,8 @@ Section "Qt Libraries" SEC02
 SectionEnd
 
 Section "Mingw Runtime" SEC03
-  File "bin\libgcc_s_dw2-1.dll"
-  File "bin\mingwm10.dll"
+  File "..\bin\libgcc_s_dw2-1.dll"
+  File "..\bin\mingwm10.dll"
 
 ; Shortcuts
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
