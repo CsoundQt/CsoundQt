@@ -372,6 +372,11 @@ void qutecsound::open()
     else if (!fileName.isEmpty()) {
       loadCompanionFile(fileName);
       loadFile(fileName, true);
+      if (m_options->autoJoin) {
+        if (join(false)) {
+          saveAs();
+        }
+      }
     }
   }
 }
@@ -750,7 +755,7 @@ void qutecsound::autoComplete()
   documentPages[curPage]->autoComplete();
 }
 
-void qutecsound::join()
+bool qutecsound::join(bool ask)
 {
   QDialog dialog(this);
   dialog.resize(700, 350);
@@ -786,11 +791,13 @@ void qutecsound::join()
   if (itemList2.size() > 0)
     list2->setCurrentItem(itemList2[0]);
   if (itemList.size() == 0 or itemList.size() == 0) {
-    QMessageBox::warning(this, tr("Join"),
-                        tr("Please open the orc and sco files in QuteCsound first!"));
-    return;
+    if (!ask) {
+      QMessageBox::warning(this, tr("Join"),
+                           tr("Please open the orc and sco files in QuteCsound first!"));
+    }
+    return false;
   }
-  if (dialog.exec() == QDialog::Accepted) {
+  if (!ask || dialog.exec() == QDialog::Accepted) {
     QString orcText = "";
     QString scoText = "";
     for (int i = 0; i < documentPages.size(); i++) {
@@ -807,10 +814,12 @@ void qutecsound::join()
     text += "</CsScore>\n</CsoundSynthesizer>\n";
     newFile();
     documentPages[curPage]->setTextString(text, m_options->saveWidgets);
+    return true;
   }
 //   else {
 //     qDebug("qutecsound::join() : No Action");
 //   }
+  return false;
 }
 
 void qutecsound::showUtilities(bool show)
@@ -2557,6 +2566,7 @@ void qutecsound::readSettings()
   m_options->tabWidth = settings.value("tabWidth", 40).toInt();
   m_options->colorVariables = settings.value("colorvariables", true).toBool();
   m_options->autoPlay = settings.value("autoplay", false).toBool();
+  m_options->autoJoin = settings.value("autoJoin", true).toBool();
   m_options->saveChanges = settings.value("savechanges", true).toBool();
   m_options->rememberFile = settings.value("rememberfile", true).toBool();
   m_options->saveWidgets = settings.value("savewidgets", true).toBool();
@@ -2714,6 +2724,7 @@ void qutecsound::writeSettings()
     settings.setValue("tabWidth", m_options->tabWidth );
     settings.setValue("colorvariables", m_options->colorVariables);
     settings.setValue("autoplay", m_options->autoPlay);
+    settings.setValue("autoJoin", m_options->autoJoin);
     settings.setValue("savechanges", m_options->saveChanges);
     settings.setValue("rememberfile", m_options->rememberFile);
     settings.setValue("savewidgets", m_options->saveWidgets);
@@ -3004,7 +3015,7 @@ void qutecsound::loadCompanionFile(const QString &fileName)
 
 bool qutecsound::saveFile(const QString &fileName, bool saveWidgets)
 {
-  qDebug("qutecsound::saveFile");
+//  qDebug("qutecsound::saveFile");
   QString text;
   QApplication::setOverrideCursor(Qt::WaitCursor);
   if (m_options->saveWidgets && saveWidgets)

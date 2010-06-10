@@ -127,7 +127,7 @@ class qutecsound:public QMainWindow
     void findReplace();  // Direct to current Page
     void findString();  // Direct to current Page
     void autoComplete();  // Direct to current Page
-    void join();
+    bool join(bool ask = true);
     void showUtilities(bool);
     void getToIn();
     void inToGet();

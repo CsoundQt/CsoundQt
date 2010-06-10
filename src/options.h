@@ -43,6 +43,7 @@ class Options: public CsoundOptions{
     int tabWidth;
     bool colorVariables;
     bool autoPlay;
+    bool autoJoin;
     bool saveChanges;
     bool rememberFile;
     bool saveWidgets;

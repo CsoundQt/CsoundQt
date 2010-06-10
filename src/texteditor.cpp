@@ -50,24 +50,25 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
   }
 }
 
-void TextEditor::dropEvent(QDropEvent *event)
-{
-  qDebug() << "TextEditor::dropEvent" << event->format();
-//  QString fileName = QString(event->encodedData("text/uri-list")).remove("file://");
-//  event->;
-
-  event->acceptProposedAction();
-}
-
-void TextEditor::dragEnterEvent(QDragEnterEvent *event)
-{
-//  qDebug() << "TextEditor::dragEnterEvent" << event->format();
-  // TODO remove file:// text from text
-  event->acceptProposedAction();
-}
-
-void TextEditor::dragMoveEvent(QDragMoveEvent *event)
-{
-//  qDebug() << "TextEditor::dragMoveEvent" << event->mimeData()->text();
-  event->acceptProposedAction();
-}
+//The following makes the editor almost accept drop events on OS X, but breaks all dragging on the same document on linux
+//void TextEditor::dropEvent(QDropEvent *event)
+//{
+//  qDebug() << "TextEditor::dropEvent" << event->format();
+////  QString fileName = QString(event->encodedData("text/uri-list")).remove("file://");
+////  event->;
+//
+//  event->acceptProposedAction();
+//}
+//
+//void TextEditor::dragEnterEvent(QDragEnterEvent *event)
+//{
+////  qDebug() << "TextEditor::dragEnterEvent" << event->format();
+//  // TODO remove file:// text from text
+//  event->acceptProposedAction();
+//}
+//
+//void TextEditor::dragMoveEvent(QDragMoveEvent *event)
+//{
+////  qDebug() << "TextEditor::dragMoveEvent" << event->mimeData()->text();
+//  event->acceptProposedAction();
+//}

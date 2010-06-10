@@ -69,7 +69,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>6</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -1340,7 +1340,7 @@
         <x>10</x>
         <y>30</y>
         <width>641</width>
-        <height>141</height>
+        <height>170</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -1382,6 +1382,13 @@
         <widget class="QCheckBox" name="toolbarCheckBox">
          <property name="text">
           <string>Show Toolbars</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="autoJoinCheckBox">
+         <property name="text">
+          <string>Automatically Join orc/sco files</string>
          </property>
         </widget>
        </item>

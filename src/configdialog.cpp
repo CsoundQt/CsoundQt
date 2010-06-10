@@ -66,6 +66,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   tabWidthSpinBox->setValue(m_options->tabWidth);
   colorVariablesCheckBox->setChecked(m_options->colorVariables);
   autoplayCheckBox->setChecked(m_options->autoPlay);
+  autoJoinCheckBox->setChecked(m_options->autoJoin);
   saveChangesCheckBox->setChecked(m_options->saveChanges);
   rememberFileCheckBox->setChecked(m_options->rememberFile);
   saveWidgetsCheckBox->setChecked(m_options->saveWidgets);
@@ -236,6 +237,7 @@ void ConfigDialog::accept()
   m_options->tabWidth = tabWidthSpinBox->value();
   m_options->colorVariables = colorVariablesCheckBox->isChecked();
   m_options->autoPlay = autoplayCheckBox->isChecked();
+  m_options->autoJoin = autoJoinCheckBox->isChecked();
   m_options->saveChanges = saveChangesCheckBox->isChecked();
   m_options->rememberFile = rememberFileCheckBox->isChecked();
   m_options->saveWidgets = saveWidgetsCheckBox->isChecked();

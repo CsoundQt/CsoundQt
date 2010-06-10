@@ -33,9 +33,9 @@ class TextEditor : public QTextEdit
 
   protected:
     virtual void keyPressEvent (QKeyEvent * event);
-    virtual void dropEvent(QDropEvent *event);
-    virtual void dragEnterEvent(QDragEnterEvent *event);
-    virtual void dragMoveEvent(QDragMoveEvent *event);
+//    virtual void dropEvent(QDropEvent *event);  // See note on code
+//    virtual void dragEnterEvent(QDragEnterEvent *event);
+//    virtual void dragMoveEvent(QDragMoveEvent *event);
 };
 
 #endif // TEXTEDITOR_H
