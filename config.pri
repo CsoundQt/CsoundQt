@@ -48,6 +48,7 @@ release: TMPDIR = $${TMPDIR}/release
 build64: DEFINES += USE_DOUBLE
 RCC_DIR = "$${TMPDIR}/rcc"
 UI_DIR = "$${TMPDIR}/ui"
+INCDIR += "$${TMPDIR}/ui"
 MOC_DIR = "$${TMPDIR}/moc"
 OBJECTS_DIR = "$${TMPDIR}/obj"
 DESTDIR = "$${PWD}/bin"

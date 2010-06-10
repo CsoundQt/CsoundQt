@@ -370,9 +370,9 @@ void qutecsound::open()
       statusBar()->showMessage(tr("File already open"), 10000);
     }
     else if (!fileName.isEmpty()) {
-      loadCompanionFile(fileName);
+      bool hasCompanion = loadCompanionFile(fileName);
       loadFile(fileName, true);
-      if (m_options->autoJoin) {
+      if (m_options->autoJoin && hasCompanion) {
         if (join(false)) {
           saveAs();
         }
@@ -2998,7 +2998,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   return true;
 }
 
-void qutecsound::loadCompanionFile(const QString &fileName)
+bool qutecsound::loadCompanionFile(const QString &fileName)
 {
   QString companionFileName = fileName;
   if (fileName.endsWith(".orc")) {
@@ -3007,10 +3007,13 @@ void qutecsound::loadCompanionFile(const QString &fileName)
   else if (fileName.endsWith(".sco")) {
     companionFileName.replace(".sco", ".orc");
   }
-  else
-    return;
-  if (QFile::exists(companionFileName))
-    loadFile(companionFileName);
+  else {
+    return false;
+  }
+  if (QFile::exists(companionFileName)) {
+    return loadFile(companionFileName);
+  }
+  return false;
 }
 
 bool qutecsound::saveFile(const QString &fileName, bool saveWidgets)

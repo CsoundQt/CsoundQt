@@ -172,7 +172,7 @@ class qutecsound:public QMainWindow
     void clearSettings();
     int execute(QString executable, QString options);
 //    bool saveCurrent();
-    void loadCompanionFile(const QString &fileName);
+    bool loadCompanionFile(const QString &fileName);
     bool saveFile(const QString &fileName, bool saveWidgets = true);
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
