@@ -137,7 +137,7 @@ void QuteGraph::refreshWidget()
 #endif
   if (needsUpdate) {
     if (index < 0) {
-      for (int i = 0; i < m_pageComboBox->count(); i++) {
+      for (int i = m_pageComboBox->count() - 1; i >= 0; i--) {
         QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"), QString::SkipEmptyParts);
         //      qDebug() << "QuteGraph::setValue " << parts << " " << value;
         if (parts.size() > 1) {
