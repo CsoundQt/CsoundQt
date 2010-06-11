@@ -968,7 +968,12 @@ void WidgetLayout::setContained(bool contained)
   setBackground(bg, bgColor);
   if (m_contained) {
     this->setAutoFillBackground(false);
+//    if (this->selectionFrame !=)
+    qDebug() << "WidgetLayout::setContained" << this->selectionFrame;
     this->selectionFrame->setParent(this->parentWidget());
+  }
+  else {
+    this->selectionFrame->setParent(this); // To Avoid having it destroyed by parent
   }
 }
 
