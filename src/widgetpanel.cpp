@@ -141,6 +141,7 @@ void WidgetPanel::moveEvent(QMoveEvent * event)
 
 void WidgetPanel::mousePressEvent(QMouseEvent * event)
 {
+  qDebug() << "WidgetPanel::mousePressEvent";
 //  QMouseEvent e(QEvent::MouseButtonPress,
 //                QPoint(event->x(), event->y()),
 //                event->button(),

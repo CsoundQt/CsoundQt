@@ -968,6 +968,7 @@ void WidgetLayout::setContained(bool contained)
   setBackground(bg, bgColor);
   if (m_contained) {
     this->setAutoFillBackground(false);
+    this->selectionFrame->setParent(this->parentWidget());
   }
 }
 
@@ -1953,6 +1954,7 @@ void WidgetLayout::widgetChanged(QuteWidget* widget)
 
 void WidgetLayout::mousePressEvent(QMouseEvent *event)
 {
+  qDebug() << "WidgetLayout::mousePressEvent";
   if (m_editMode && (event->button() & Qt::LeftButton)) {
     this->setFocus(Qt::MouseFocusReason);
     selectionFrame->show();
@@ -1971,12 +1973,12 @@ void WidgetLayout::mousePressEvent(QMouseEvent *event)
     mouseBut1 = 1;
   else if (event->button() == Qt::RightButton)
     mouseBut2 = 1;
-  QWidget::mousePressEvent(event);
+//  QWidget::mousePressEvent(event);
 }
 
 void WidgetLayout::mouseMoveEvent(QMouseEvent *event)
 {
-  QWidget::mouseMoveEvent(event);
+//  QWidget::mouseMoveEvent(event);
   int x = startx;
   int y = starty;
   int width = abs(event->x() - startx - LAYOUT_X_OFFSET + xOffset);
@@ -2013,7 +2015,7 @@ void WidgetLayout::mouseReleaseEvent(QMouseEvent *event)
     mouseBut2 = 0;
   }
   markHistory();
-  QWidget::mouseReleaseEvent(event);
+//  QWidget::mouseReleaseEvent(event);
 }
 
 void WidgetLayout::contextMenuEvent(QContextMenuEvent *event)
