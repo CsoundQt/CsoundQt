@@ -95,6 +95,8 @@ class LiveEventFrame : public QWidget
     void deleteFrameSignal(LiveEventFrame *frame);
     void renamePanel(LiveEventFrame *frame, QString newName);
     void setLoopRangeFromPanel(LiveEventFrame *frame, double start, double end);
+    void setLoopLengthFromPanel(LiveEventFrame *frame, double length);
+    void setTempoFromPanel(LiveEventFrame *frame, double tempo);
     void closed();  // To inform Live Event Control that live event panel has been closed
 };
 

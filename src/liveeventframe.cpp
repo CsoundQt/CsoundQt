@@ -114,6 +114,7 @@ void LiveEventFrame::setTempo(double tempo)
 //  qDebug() << "LiveEventFrame::setTempo";
   m_ui->tempoSpinBox->setValue(tempo);
   m_sheet->setTempo(tempo);
+  emit setTempoFromPanel(this, tempo);  // Signal from sheet must go a long way to do this line...
   //TODO add sending tempo to other modes here too
 }
 
@@ -128,6 +129,7 @@ void LiveEventFrame::setLoopLength(double length)
 //  qDebug() << "LiveEventFrame::setLoopLength";
   m_ui->loopLengthSpinBox->setValue(length);
   m_sheet->setLoopLength(length);
+  emit setLoopLengthFromPanel(this, length);  // Signal from sheet must go a long way to do this line...
   //TODO add sending length to other modes here too
 }
 

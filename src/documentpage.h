@@ -228,7 +228,11 @@ class DocumentPage : public QObject
 //    void liveEventFrameClosed();
     void liveEventControlClosed();
     void renamePanel(LiveEventFrame *panel,QString newName);
+
     void setPanelLoopRange(LiveEventFrame *panel, double start, double end);
+    void setPanelLoopLength(LiveEventFrame *panel, double length);
+    void setPanelTempo(LiveEventFrame *panel, double tempo);
+
     void opcodeSyntax(QString message);
     void setWidgetClipboard(QString text);
     void queueEvent(QString line, int delay = 0);

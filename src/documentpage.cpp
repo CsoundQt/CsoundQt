@@ -70,9 +70,9 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   connect(m_liveEventControl, SIGNAL(stopPanel(int)), this, SLOT(stopPanelSlot(int)));
   connect(m_liveEventControl, SIGNAL(setPanelVisible(int,bool)), this, SLOT(setPanelVisibleSlot(int,bool)));
   connect(m_liveEventControl, SIGNAL(setPanelSync(int,int)), this, SLOT(setPanelSyncSlot(int,int)));
-  connect(m_liveEventControl, SIGNAL(setPanelName(int,QString)), this, SLOT(setPanelNameSlot(int,QString)));
-  connect(m_liveEventControl, SIGNAL(setPanelTempo(int,double)), this, SLOT(setPanelTempoSlot(int,double)));
-  connect(m_liveEventControl, SIGNAL(setPanelLoopLength(int,double)), this, SLOT(setPanelLoopLengthSlot(int,double)));
+  connect(m_liveEventControl, SIGNAL(setPanelNameSignal(int,QString)), this, SLOT(setPanelNameSlot(int,QString)));
+  connect(m_liveEventControl, SIGNAL(setPanelTempoSignal(int,double)), this, SLOT(setPanelTempoSlot(int,double)));
+  connect(m_liveEventControl, SIGNAL(setPanelLoopLengthSignal(int,double)), this, SLOT(setPanelLoopLengthSlot(int,double)));
   connect(m_liveEventControl, SIGNAL(setPanelLoopRangeSignal(int,double,double)), this, SLOT(setPanelLoopRangeSlot(int,double,double)));
 
   m_csEngine = new CsoundEngine();
@@ -1303,6 +1303,10 @@ LiveEventFrame * DocumentPage::createLiveEventPanel(QString text)
   connect(e, SIGNAL(renamePanel(LiveEventFrame *, QString)), this, SLOT(renamePanel(LiveEventFrame *,QString)));
   connect(e, SIGNAL(setLoopRangeFromPanel(LiveEventFrame *, double, double)),
           this, SLOT(setPanelLoopRange(LiveEventFrame *,double, double)));
+  connect(e, SIGNAL(setTempoFromPanel(LiveEventFrame *, double)),
+          this, SLOT(setPanelTempo(LiveEventFrame *,double)));
+  connect(e, SIGNAL(setLoopLengthFromPanel(LiveEventFrame *, double)),
+          this, SLOT(setPanelLoopLength(LiveEventFrame *,double)));
   connect(e->getSheet(), SIGNAL(sendEvent(QString)),this,SLOT(queueEvent(QString)));
   connect(e->getSheet(), SIGNAL(modified()),this,SLOT(setModified()));
   return e;
@@ -1369,6 +1373,22 @@ void DocumentPage::setPanelLoopRange(LiveEventFrame *panel, double start, double
   int index = m_liveFrames.indexOf(panel);
   if (index >= 0) {
     m_liveEventControl->setPanelLoopRange(index, start, end);
+  }
+}
+
+void DocumentPage::setPanelLoopLength(LiveEventFrame *panel, double length)
+{
+  int index = m_liveFrames.indexOf(panel);
+  if (index >= 0) {
+    m_liveEventControl->setPanelLoopLength(index, length);
+  }
+}
+
+void DocumentPage::setPanelTempo(LiveEventFrame *panel, double tempo)
+{
+  int index = m_liveFrames.indexOf(panel);
+  if (index >= 0) {
+    m_liveEventControl->setPanelTempo(index, tempo);
   }
 }
 

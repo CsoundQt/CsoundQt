@@ -37,6 +37,8 @@ class LiveEventControl : public QWidget {
 
     void renamePanel(int index, QString newName);
     void setPanelLoopRange(int index, double start, double end);
+    void setPanelLoopLength(int index, double length);
+    void setPanelTempo(int index, double tempo);
 
   public slots:
     void removePanel(int index);
@@ -68,9 +70,9 @@ class LiveEventControl : public QWidget {
     void stopPanel(int index);
     void setPanelVisible(int index, bool visible);
     void setPanelSync(int index, int mode);
-    void setPanelName(int index, QString name);
-    void setPanelTempo(int index, double tempo);
-    void setPanelLoopLength(int index, double length);
+    void setPanelNameSignal(int index, QString name);
+    void setPanelTempoSignal(int index, double tempo);
+    void setPanelLoopLengthSignal(int index, double length);
     void setPanelLoopRangeSignal(int index, double start, double end);
 };
 

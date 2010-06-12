@@ -59,6 +59,18 @@ void LiveEventControl::setPanelLoopRange(int index, double start, double end)
   item->setText(QString::number(start + 1) + "-" + QString::number(end + 1));
 }
 
+void LiveEventControl::setPanelLoopLength(int index, double length)
+{
+  QTableWidgetItem * item = getItem(index, 5);
+  item->setText(QString::number(length));
+}
+
+void LiveEventControl::setPanelTempo(int index, double tempo)
+{
+  QTableWidgetItem * item = getItem(index, 7);
+  item->setText(QString::number(tempo));
+}
+
 void LiveEventControl::removePanel(int index)
 {
   qDebug() << "LiveEventControl::removePanel " << index;
@@ -124,7 +136,7 @@ void LiveEventControl::setPanelProperty(int index, QString property, QVariant va
     emit setPanelSync(index, value.toInt());
   }
   else if (property == "LE_name") {
-    emit setPanelName(index, value.toString());
+    emit setPanelNameSignal(index, value.toString());
   }
   else {
     qDebug() << "LiveEventControl::setPanelProperty unknown property " << property;
@@ -223,7 +235,7 @@ void  LiveEventControl::cellChangedSlot(int row, int column)
     emit loopPanel(row, item->checkState() == Qt::Checked);
   }
   else if (column == 4) { // Name
-    emit setPanelName(row, item->data(Qt::DisplayRole).toString());
+    emit setPanelNameSignal(row, item->data(Qt::DisplayRole).toString());
   }
 }
 
