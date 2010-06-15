@@ -10,7 +10,7 @@ nchnls = 2
 ;                    PLAYING SCALES WITH A MIDI KEYBOARD                     ;
 ;============================================================================;
 ;                  by Joachim Heintz and Richard Boulanger                   ;
-;                             January 2010                                   ;
+;                                May 2010                                   ;
 ;============================================================================;
 
 
@@ -130,48 +130,161 @@ endif
 		xout		kchan, knot, kvel
   endop
 
-  opcode StrRatToF, i, S
-;converts a string containing a ratio to a float number; e.g. "1/2" returns 0.5
-Srat		xin
-idiv		strindex	Srat, "/"
-Snum		strsub		Srat, 0, idiv; numerator
-Sdenom		strsub		Srat, idiv+1;demoninator
-inum		strtod		Snum
-idenom		strtod		Sdenom
-ifloat		=		inum / idenom
-		xout		ifloat
-  endop
-
-  opcode StrNumsRToFT, i, So
-;transforms a string of numbers which are separated by one space to a function table containing these numbers and allows also ratios as "4/3". if no number for the ftable is given, ftgen is called with ifn=0
-String, iftno xin
-  ;first loop: check how many spaces are in String
-Scpy 		strcpy 	String
-ihowmany 	= 		-1
-loop1:
-ispace		strindex 	Scpy, " "
-Scpy 		strsub 	Scpy, ispace+1
-ihowmany 	= 		ihowmany + 1
- if ispace > -1 igoto loop1
-  ;second loop: write the by spaces separated substrings as numbers in iftout
-iftout 	ftgen 		iftno, 0, -(ihowmany+1), -2, 0
+  opcode StrayGetEl, ii, Sijj
+;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
+Stray, ielindx, isepA, isepB xin
+;;DEFINE THE SEPERATORS
+isep1		=		(isepA == -1 ? 32 : isepA)
+isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
+Sep1		sprintf	"%c", isep1
+Sep2		sprintf	"%c", isep2
+;;INITIALIZE SOME PARAMETERS
+ilen		strlen		Stray
+istartsel	=		-1; startindex for searched element
+iendsel	=		-1; endindex for searched element
+iel		=		0; actual number of element while searching
+iwarleer	=		1
 indx		=		0
-Scpy 		strcpy 	String; go back to the original string
-loop2:
-inext 		strindex 	Scpy, " "; position of next space
-Snum		strsub		Scpy, 0, inext; number as string
-irat		strindex	Snum, "/"; -1 if there is no /
-if irat == -1 then
-inum		strtod		Snum; number as simple transformation
-else
-inum		StrRatToF	Snum; number as ratio transformation
+ if ilen == 0 igoto end ;don't go into the loop if Stray is empty
+loop:
+Snext		strsub		Stray, indx, indx+1; next sign
+isep1p		strcmp		Snext, Sep1; returns 0 if Snext is sep1
+isep2p		strcmp		Snext, Sep2; 0 if Snext is sep2
+;;NEXT SIGN IS NOT SEP1 NOR SEP2
+if isep1p != 0 && isep2p != 0 then
+ if iwarleer == 1 then; first character after a seperator 
+  if iel == ielindx then; if searched element index
+istartsel	=		indx; set it
+iwarleer	=		0
+  else 			;if not searched element index
+iel		=		iel+1; increase it
+iwarleer	=		0; log that it's not a seperator 
+  endif 
+ endif 
+;;NEXT SIGN IS SEP1 OR SEP2
+else 
+ if istartsel > -1 then; if this is first selector after searched element
+iendsel	=		indx; set iendsel
+		igoto		end ;break
+ else	
+iwarleer	=		1
+ endif 
 endif
-		tabw_i 	inum, indx, iftout; write it to iftout
-Scpy 		strsub 	Scpy, inext+1; take the next part
-indx		=		indx + 1; increase write index
- if inext > -1 igoto loop2
-		xout		iftout
-  endop
+		loop_lt	indx, 1, ilen, loop 
+end: 		xout		istartsel, iendsel
+  endop 
+
+  opcode StrayLen, i, Sjj
+;returns the number of elements in Stray. elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1
+Stray, isepA, isepB xin
+;;DEFINE THE SEPERATORS
+isep1		=		(isepA == -1 ? 32 : isepA)
+isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
+Sep1		sprintf	"%c", isep1
+Sep2		sprintf	"%c", isep2
+;;INITIALIZE SOME PARAMETERS
+ilen		strlen		Stray
+icount		=		0; number of elements
+iwarsep	=		1
+indx		=		0
+ if ilen == 0 igoto end ;don't go into the loop if String is empty
+loop:
+Snext		strsub		Stray, indx, indx+1; next sign
+isep1p		strcmp		Snext, Sep1; returns 0 if Snext is sep1
+isep2p		strcmp		Snext, Sep2; 0 if Snext is sep2
+ if isep1p == 0 || isep2p == 0 then; if sep1 or sep2
+iwarsep	=		1; tell the log so
+ else 				; if not 
+  if iwarsep == 1 then	; and has been sep1 or sep2 before
+icount		=		icount + 1; increase counter
+iwarsep	=		0; and tell you are ot sep1 nor sep2 
+  endif 
+ endif	
+		loop_lt	indx, 1, ilen, loop 
+end: 		xout		icount
+  endop 
+
+  opcode StrayNumToFt, ii, Sojj
+;puts all numbers in Stray (which must not contain non-numerical elements) in a function table and returns its variable ift (which is produced by iftno, default=0) and the length of the elements written in it ilen. simple math expressions like +, -, *, /, ^ and % are allowed (no parentheses at the moment). elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1.
+;requires the UDOs StrayLen and StrayGetEl
+Stray, iftno, isepA, isepB xin
+isep1		=		(isepA == -1 ? 32 : isepA)
+isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
+Sep1		sprintf	"%c", isep1
+Sep2		sprintf	"%c", isep2
+ilen		StrayLen	Stray, isep1, isep2
+iftsize	=		(ilen < 2 ? 2 : ilen)
+ift		ftgen		iftno, 0, -iftsize, -2, 0 
+if ilen == 0 igoto end 
+indx		=		0
+loop:	
+istrt, iend	StrayGetEl	Stray, indx, isep1, isep2
+Snum		strsub		Stray, istrt, iend
+;test if Snum is an math expression
+isum		strindex	Snum, "+"; sum
+idif		strindex	Snum, "-"; difference
+ipro		strindex	Snum, "*"; product
+irat		strindex	Snum, "/"; ratio
+ipow		strindex	Snum, "^"; power
+imod		strindex	Snum, "%"; modulo
+ if ipow > -1 then
+ifirst		strindex	Snum, "^"
+S1		strsub		Snum, 0, ifirst
+S2		strsub		Snum, ifirst+1
+iratio		strindex	S2, "/"
+ifirst		strtod		S1
+  if iratio == -1 then
+isec		strtod		S2
+  else
+Snumer		strsub		S2, 0, iratio
+Sdenom		strsub		S2, iratio+1
+inumer		strtod		Snumer
+idenom		strtod		Sdenom
+isec		=		inumer / idenom
+  endif
+inum		=		ifirst ^ isec
+ elseif imod > -1 then
+ifirst		strindex	Snum, "%"
+S1		strsub		Snum, 0, ifirst
+S2		strsub		Snum, ifirst+1
+ifirst		strtod		S1
+isec		strtod		S2
+inum		=		ifirst % isec
+ elseif ipro > -1 then
+ifirst		strindex	Snum, "*"
+S1		strsub		Snum, 0, ifirst
+S2		strsub		Snum, ifirst+1
+ifirst		strtod		S1
+isec		strtod		S2
+inum		=		ifirst * isec
+ elseif irat > -1 then
+ifirst		strindex	Snum, "/"
+S1		strsub		Snum, 0, ifirst
+S2		strsub		Snum, ifirst+1
+ifirst		strtod		S1
+isec		strtod		S2
+inum		=		ifirst / isec
+ elseif isum > -1 then 
+ifirst		strindex	Snum, "+"
+S1		strsub		Snum, 0, ifirst
+S2		strsub		Snum, ifirst+1
+ifirst		strtod		S1
+isec		strtod		S2
+inum		=		ifirst + isec
+ elseif idif > -1 then
+ifirst		strrindex	Snum, "-";(last occurrence: -3-4 is possible, but not 3--4)
+S1		strsub		Snum, 0, ifirst
+S2		strsub		Snum, ifirst+1
+ifirst		strtod		S1
+isec		strtod		S2
+inum		=		ifirst - isec
+ else
+inum		strtod		Snum
+ endif
+		tabw_i 	inum, indx, ift;write correct value as float in iftout
+		loop_lt	indx, 1, ilen, loop 
+end:		xout		ift, ilen
+  endop 
 
   opcode ShowLED_a, 0, Sakkk
 ;Shows an audio signal in an outvalue channel. You can choose to show the value in dB or in raw amplitudes.
@@ -221,65 +334,65 @@ kon		=		0
 
 instr 1; building function tables 1-30 from the line edit widgets
 Scale1		invalue		"scale1"
-giScale1	StrNumsRToFT		Scale1, 1
+giScale1, i0	StrayNumToFt		Scale1, 1
 Scale2		invalue		"scale2"
-giScale2	StrNumsRToFT		Scale2, 2
+giScale2, i0	StrayNumToFt		Scale2, 2
 Scale3		invalue		"scale3"
-giScale3	StrNumsRToFT		Scale3, 3
+giScale3, i0	StrayNumToFt		Scale3, 3
 Scale4		invalue		"scale4"
-giScale4	StrNumsRToFT		Scale4, 4
+giScale4, i0	StrayNumToFt		Scale4, 4
 Scale5		invalue		"scale5"
-giScale5	StrNumsRToFT		Scale5, 5
+giScale5, i0	StrayNumToFt		Scale5, 5
 Scale6		invalue		"scale6"
-giScale6	StrNumsRToFT		Scale6, 6
+giScale6, i0	StrayNumToFt		Scale6, 6
 Scale7		invalue		"scale7"
-giScale7	StrNumsRToFT		Scale7, 7
+giScale7, i0	StrayNumToFt		Scale7, 7
 Scale8		invalue		"scale8"
-giScale8	StrNumsRToFT		Scale8, 8
+giScale8, i0	StrayNumToFt		Scale8, 8
 Scale9		invalue		"scale9"
-giScale9	StrNumsRToFT		Scale9, 9
+giScale9, i0	StrayNumToFt		Scale9, 9
 Scale10	invalue		"scale10"
-giScale10	StrNumsRToFT		Scale10, 10
+giScale10,i0	StrayNumToFt		Scale10, 10
 Scale11	invalue		"scale11"
-giScale11	StrNumsRToFT		Scale11, 11
+giScale11,i0	StrayNumToFt		Scale11, 11
 Scale12	invalue		"scale12"
-giScale12	StrNumsRToFT		Scale12, 12
+giScale12,i0	StrayNumToFt		Scale12, 12
 Scale13	invalue		"scale13"
-giScale13	StrNumsRToFT		Scale13, 13
+giScale13,i0	StrayNumToFt		Scale13, 13
 Scale14	invalue		"scale14"
-giScale14	StrNumsRToFT		Scale14, 14
+giScale14,i0	StrayNumToFt		Scale14, 14
 Scale15	invalue		"scale15"
-giScale15	StrNumsRToFT		Scale15, 15
+giScale15,i0	StrayNumToFt		Scale15, 15
 Scale16	invalue		"scale16"
-giScale16	StrNumsRToFT		Scale16, 16
+giScale16,i0	StrayNumToFt		Scale16, 16
 Scale17	invalue		"scale17"
-giScale17	StrNumsRToFT		Scale17, 17
+giScale17,i0	StrayNumToFt		Scale17, 17
 Scale18	invalue		"scale18"
-giScale18	StrNumsRToFT		Scale18, 18
+giScale18,i0	StrayNumToFt		Scale18, 18
 Scale19	invalue		"scale19"
-giScale19	StrNumsRToFT		Scale19, 19
+giScale19,i0	StrayNumToFt		Scale19, 19
 Scale20	invalue		"scale20"
-giScale20	StrNumsRToFT		Scale20, 20
+giScale20,i0	StrayNumToFt		Scale20, 20
 Scale21	invalue		"scale21"
-giScale21	StrNumsRToFT		Scale21, 21
+giScale21,i0	StrayNumToFt		Scale21, 21
 Scale22	invalue		"scale22"
-giScale22	StrNumsRToFT		Scale22, 22
+giScale22,i0	StrayNumToFt		Scale22, 22
 Scale23	invalue		"scale23"
-giScale23	StrNumsRToFT		Scale23, 23
+giScale23,i0	StrayNumToFt		Scale23, 23
 Scale24	invalue		"scale24"
-giScale24	StrNumsRToFT		Scale24, 24
+giScale24,i0	StrayNumToFt		Scale24, 24
 Scale25	invalue		"scale25"
-giScale25	StrNumsRToFT		Scale25, 25
+giScale25,i0	StrayNumToFt		Scale25, 25
 Scale26	invalue		"scale26"
-giScale26	StrNumsRToFT		Scale26, 26
+giScale26,i0	StrayNumToFt		Scale26, 26
 Scale27	invalue		"scale27"
-giScale27	StrNumsRToFT		Scale27, 27
+giScale27,i0	StrayNumToFt		Scale27, 27
 Scale28	invalue		"scale28"
-giScale28	StrNumsRToFT		Scale28, 28
+giScale28,i0	StrayNumToFt		Scale28, 28
 Scale29	invalue		"scale29"
-giScale29	StrNumsRToFT		Scale29, 29
+giScale29,i0	StrayNumToFt		Scale29, 29
 Scale30	invalue		"scale30"
-giScale30	StrNumsRToFT		Scale30, 30
+giScale30,i0	StrayNumToFt		Scale30, 30
 endin
 
 
@@ -562,31 +675,34 @@ e 36000
 </CsScore>
 </CsoundSynthesizer>
 
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>0</x>
- <y>25</y>
- <width>1280</width>
- <height>750</height>
+ <y>22</y>
+ <width>1425</width>
+ <height>842</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background" >
+ <bgcolor mode="background">
   <r>169</r>
   <g>171</g>
   <b>128</b>
  </bgcolor>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>key</objectName>
   <x>806</x>
   <y>595</y>
   <width>62</width>
   <height>27</height>
-  <uuid>{5e6414e6-b884-4d95-8f6d-fe0fa8a4ae85}</uuid>
+  <uuid>{3bc52c98-448f-4f87-bb44-571bbd00aa08}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>56</label>
+  <label>60</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -596,7 +712,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -605,13 +721,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>349</x>
+  <x>351</x>
   <y>595</y>
   <width>457</width>
   <height>28</height>
-  <uuid>{764ad5f0-aea6-4e5a-978e-544bbfe6cf8f}</uuid>
+  <uuid>{58bf0432-9be8-42aa-a453-521fd719a63f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -625,7 +741,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+ <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -634,13 +750,16 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+
+/*
+
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>-1684371923</x>
-  <y>-1632653318</y>
+  <x>-1684371968</x>
+  <y>-1632653312</y>
   <width>227</width>
   <height>25</height>
-  <uuid>{8bd25f52-af70-4c62-a08a-d5268a79364a}</uuid>
+  <uuid>{0da50f19-649f-4368-a51c-97f7d1af3e80}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -654,7 +773,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -663,17 +782,17 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>cent</objectName>
   <x>807</x>
   <y>623</y>
   <width>82</width>
   <height>27</height>
-  <uuid>{71f76305-3674-4be2-81c0-84d68dbd4c2b}</uuid>
+  <uuid>{47ed2c50-ebe4-4161-a4bd-b856a958806e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>-585.2</label>
+  <label>0.0</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -683,7 +802,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -692,13 +811,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>267</x>
   <y>623</y>
   <width>539</width>
   <height>27</height>
-  <uuid>{f742c31a-6b42-4ab7-afc2-28160bc8055f}</uuid>
+  <uuid>{6844d514-7a40-42a6-ab39-8a807fdea606}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -712,7 +831,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -721,17 +840,17 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>freq</objectName>
   <x>807</x>
   <y>649</y>
   <width>82</width>
   <height>27</height>
-  <uuid>{8e0b983f-27e5-488c-bc43-1d5182553f2f}</uuid>
+  <uuid>{7975f04a-23ae-4886-9391-3e348e3d82ad}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>186.5833</label>
+  <label>261.6250</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -741,7 +860,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -750,13 +869,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>266</x>
   <y>649</y>
   <width>542</width>
   <height>29</height>
-  <uuid>{f4692440-ef66-4ec7-9334-95ca2ad863eb}</uuid>
+  <uuid>{c91d9759-0b82-4717-9621-a4d4cf004e1e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -770,7 +889,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -779,13 +898,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>4</x>
   <y>35</y>
   <width>422</width>
   <height>214</height>
-  <uuid>{5c34e084-0047-4892-beb5-ac457a72dc50}</uuid>
+  <uuid>{8fee01a4-6aff-4a18-b9d3-682fd8b62927}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -799,7 +918,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>222</r>
    <g>143</g>
    <b>206</b>
@@ -808,17 +927,17 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>cent</objectName>
-  <x>-610629723</x>
-  <y>-1632653302</y>
+  <x>-610629696</x>
+  <y>-1632653312</y>
   <width>80</width>
   <height>25</height>
-  <uuid>{932c6c8c-4309-4ad3-a00e-0b2da3eda272}</uuid>
+  <uuid>{c6b8cedf-dade-4cab-b855-621dd91c9f0c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>-585.2</label>
+  <label>0.0</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -828,7 +947,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -837,13 +956,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>-610629955</x>
-  <y>-1632653304</y>
+  <x>-610629952</x>
+  <y>-1632653312</y>
   <width>227</width>
   <height>25</height>
-  <uuid>{2a73a077-48a7-4c58-bbb9-24bb13d073a1}</uuid>
+  <uuid>{5220cf67-bb03-4d41-a02a-1f2e55bd905a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -857,7 +976,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -866,13 +985,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>sound</objectName>
   <x>201</x>
   <y>215</y>
   <width>165</width>
   <height>25</height>
-  <uuid>{9f367f80-6519-4d53-ac68-4da2f34b0054}</uuid>
+  <uuid>{fcbc67a7-51c0-4ca5-94e3-98229024c81a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -909,15 +1028,15 @@ e 36000
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>5</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>43</x>
   <y>211</y>
   <width>160</width>
   <height>31</height>
-  <uuid>{826b3a7e-89d2-401e-aafa-5934a939700e}</uuid>
+  <uuid>{89a47f25-152d-40af-a3a2-0d2499bbdbc2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -931,7 +1050,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -940,17 +1059,17 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>742</x>
-  <y>57</y>
+  <x>737</x>
+  <y>47</y>
   <width>131</width>
   <height>24</height>
-  <uuid>{20843a64-5c42-408d-8a70-228b5732e44a}</uuid>
+  <uuid>{0a533a2f-56e9-45c3-b5c5-87962ec7dcf2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>jh &amp;&amp; rb 1/2010</label>
+  <label>jh &amp;&amp; rb 5/2010</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -960,7 +1079,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -969,17 +1088,17 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>normfreq</objectName>
   <x>807</x>
   <y>675</y>
   <width>82</width>
   <height>28</height>
-  <uuid>{a9f212bf-3c55-4c3f-be16-14305a721761}</uuid>
+  <uuid>{88acc66e-3cfe-43ee-be10-59666b1b2e28}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>207.6465</label>
+  <label>261.6255</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -989,7 +1108,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -998,13 +1117,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>267</x>
   <y>675</y>
   <width>541</width>
   <height>29</height>
-  <uuid>{5ad5843a-2ef2-4aa1-914b-7344ccef816e}</uuid>
+  <uuid>{28b05a3e-f445-486e-9945-664136d7b390}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1018,7 +1137,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1027,17 +1146,17 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>centdiff</objectName>
   <x>807</x>
   <y>701</y>
   <width>82</width>
   <height>30</height>
-  <uuid>{a2f18b1d-ec7d-450f-adb3-2da9033daabe}</uuid>
+  <uuid>{bb3b02d4-0dfd-44fc-8d2c-a9dd3925a597}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>-185.2</label>
+  <label>-0.0</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -1047,7 +1166,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1056,13 +1175,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>267</x>
   <y>701</y>
   <width>541</width>
   <height>31</height>
-  <uuid>{cdfd41ca-df55-4e29-9517-fc2610bb5732}</uuid>
+  <uuid>{3f7fe471-d23f-4472-a3eb-de1edd3334c6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1076,7 +1195,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1085,79 +1204,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>scsel1</objectName>
   <x>23</x>
   <y>184</y>
   <width>104</width>
   <height>23</height>
-  <uuid>{2b36073e-1a56-4ac1-ab71-5496405c74a8}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <objectName2>vert34</objectName2>
-  <xMin>0.00000000</xMin>
-  <xMax>1.00000000</xMax>
-  <yMin>0.00000000</yMin>
-  <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.43478300</yValue>
-  <type>fill</type>
-  <pointsize>1</pointsize>
-  <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
-  <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
-  </color>
-  <randomizable mode="both" group="0" >false</randomizable>
-  <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bgcolor>
- </bsbObject>
- <bsbObject version="2" type="BSBController" >
-  <objectName>scsel2</objectName>
-  <x>154</x>
-  <y>184</y>
-  <width>104</width>
-  <height>23</height>
-  <uuid>{b5b15996-6f58-494d-acf7-9b879ede8ee5}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <objectName2>vert34</objectName2>
-  <xMin>0.00000000</xMin>
-  <xMax>1.00000000</xMax>
-  <yMin>0.00000000</yMin>
-  <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.43478300</yValue>
-  <type>fill</type>
-  <pointsize>1</pointsize>
-  <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
-  <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
-  </color>
-  <randomizable mode="both" group="0" >false</randomizable>
-  <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bgcolor>
- </bsbObject>
- <bsbObject version="2" type="BSBController" >
-  <objectName>scsel3</objectName>
-  <x>285</x>
-  <y>184</y>
-  <width>104</width>
-  <height>23</height>
-  <uuid>{3c7eec88-4dae-49ce-affd-88ea6f9adcfb}</uuid>
+  <uuid>{fa1d2e5d-12c8-4900-af8a-b5a4feebf74f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1171,60 +1224,126 @@ e 36000
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBController">
+  <objectName>scsel2</objectName>
+  <x>154</x>
+  <y>184</y>
+  <width>104</width>
+  <height>23</height>
+  <uuid>{39ac622a-56e3-4d32-a2e9-b8f85dbec7b3}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>vert34</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.43478300</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>scsel3</objectName>
+  <x>285</x>
+  <y>184</y>
+  <width>104</width>
+  <height>23</height>
+  <uuid>{5b35e488-40f1-4be1-9dc2-079192003890}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>vert34</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.43478300</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>tunfreq</objectName>
-  <x>314</x>
-  <y>50</y>
+  <x>313</x>
+  <y>44</y>
   <width>107</width>
   <height>26</height>
-  <uuid>{89faabe5-e0a9-464c-a913-05b7b5a07b33}</uuid>
+  <uuid>{c014f205-06aa-45df-be4c-8b8bb3583229}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>0.00000100</resolution>
-  <minimum>-1e+12</minimum>
+  <minimum>1</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>261.625</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>206</x>
   <y>44</y>
   <width>108</width>
   <height>28</height>
-  <uuid>{0c9ea21e-0613-4a6e-acf2-7e94adb124f2}</uuid>
+  <uuid>{a9440b0b-595c-4c9b-b112-b55b7cd728bb}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>Related Pitch</label>
-  <alignment>center</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1233,7 +1352,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1242,13 +1361,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>227</x>
   <y>65</y>
   <width>72</width>
   <height>25</height>
-  <uuid>{fe651ebc-40b4-4b94-a38c-2c8250436da3}</uuid>
+  <uuid>{04c0e64a-16bb-4ddb-b286-62d57f752e34}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1262,7 +1381,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1271,13 +1390,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>equal_tmprd</objectName>
   <x>12</x>
   <y>162</y>
   <width>126</width>
   <height>24</height>
-  <uuid>{8d5a88e6-cad0-40f1-98f9-0c7fd66fa9a0}</uuid>
+  <uuid>{5ee933a0-615a-4995-b661-f16a24a14150}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1334,15 +1453,15 @@ e 36000
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>10</x>
   <y>93</y>
   <width>393</width>
   <height>30</height>
-  <uuid>{82ff91df-8ca6-4b6a-ae88-cab12e04ce98}</uuid>
+  <uuid>{8cc05c0f-ad73-46ae-ace2-556caad97763}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1356,7 +1475,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1365,47 +1484,47 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>reftone</objectName>
-  <x>129</x>
-  <y>50</y>
-  <width>68</width>
+  <x>136</x>
+  <y>44</y>
+  <width>62</width>
   <height>26</height>
-  <uuid>{6c9b0785-1ef2-4db6-a7b5-ec90878ea278}</uuid>
+  <uuid>{d62aecdf-74ab-43d1-a501-549e1973297c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>0</minimum>
+  <maximum>127</maximum>
+  <randomizable group="0">false</randomizable>
   <value>60</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>12</x>
+  <x>8</x>
   <y>44</y>
-  <width>117</width>
-  <height>27</height>
-  <uuid>{435beed4-c96d-4421-9f2f-ba8acb34c3d2}</uuid>
+  <width>130</width>
+  <height>28</height>
+  <uuid>{88e4e2ee-f553-4356-8ea4-554dfc18d3d5}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>Reference Key</label>
-  <alignment>center</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1414,7 +1533,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1423,13 +1542,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>29</x>
-  <y>64</y>
-  <width>87</width>
-  <height>25</height>
-  <uuid>{941b7e61-8548-4cf2-8fca-1aad1fdb72c7}</uuid>
+  <x>8</x>
+  <y>67</y>
+  <width>129</width>
+  <height>27</height>
+  <uuid>{d80338cb-8182-4796-a1ae-8a922f0d03cf}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1443,7 +1562,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1452,13 +1571,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>15</x>
   <y>120</y>
   <width>122</width>
   <height>43</height>
-  <uuid>{a77f14df-fbb5-4016-8c99-b9cd640ecdec}</uuid>
+  <uuid>{2b882335-a79a-4ce8-b5c7-15e51e2a2c4b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1473,7 +1592,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1482,13 +1601,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>various</objectName>
   <x>145</x>
   <y>162</y>
   <width>126</width>
   <height>24</height>
-  <uuid>{a9ba539d-805e-4719-85d8-36b2b9167836}</uuid>
+  <uuid>{64462832-bfe5-491c-8b85-6c00f2062b17}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1544,16 +1663,16 @@ e 36000
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>3</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <selectedIndex>9</selectedIndex>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>148</x>
   <y>120</y>
   <width>122</width>
   <height>43</height>
-  <uuid>{5310ed05-27eb-4572-88f6-b9b7f6d9065e}</uuid>
+  <uuid>{79d233f5-b289-442a-a78f-bc2a90c32392}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1568,7 +1687,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1577,13 +1696,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>bohlen-pierce</objectName>
   <x>275</x>
   <y>162</y>
   <width>126</width>
   <height>24</height>
-  <uuid>{8f48e71f-9e80-4058-be8c-33fb3202dbca}</uuid>
+  <uuid>{dd3f6092-bad8-4ae1-8e90-044dab957c1d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1639,16 +1758,16 @@ e 36000
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>5</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <selectedIndex>9</selectedIndex>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>278</x>
   <y>120</y>
   <width>122</width>
   <height>43</height>
-  <uuid>{a60c5a0c-4e3d-46b6-aa66-6f813ed8f679}</uuid>
+  <uuid>{6d2e6268-a18a-4196-b14c-eb4a6afada8a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1663,7 +1782,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1672,18 +1791,18 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>info</objectName>
-  <x>273</x>
-  <y>487</y>
+  <x>276</x>
+  <y>476</y>
   <width>639</width>
   <height>103</height>
-  <uuid>{e29ba28c-55bd-4918-ae82-d65e28620fe6}</uuid>
+  <uuid>{b6a1d2d0-6f91-4261-9e77-d46b08bc421c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>26 Bohlen-Pierce Moll II Mode (Pierce):
-9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 25/9</label>
+  <label>1 Halftone
+12 steps per octave with a ratio of 12th root of 2 = 1.059463...</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -1693,7 +1812,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>237</r>
    <g>169</g>
    <b>107</b>
@@ -1702,13 +1821,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Play</objectName>
-  <x>471</x>
-  <y>55</y>
+  <x>466</x>
+  <y>45</y>
   <width>91</width>
   <height>27</height>
-  <uuid>{3c1f3c79-7a97-4201-870e-b15fba4dce6f}</uuid>
+  <uuid>{7e1ef5ca-2594-48c8-abef-8c52de3f2ad9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1721,13 +1840,13 @@ e 36000
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Stop</objectName>
-  <x>585</x>
-  <y>55</y>
+  <x>580</x>
+  <y>45</y>
   <width>91</width>
   <height>27</height>
-  <uuid>{7d69e549-33e0-4dac-8c60-f8aff8fe5345}</uuid>
+  <uuid>{48ac72cc-9099-4bd7-8736-446ab91b48e6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1740,60 +1859,31 @@ e 36000
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
-  <objectName/>
-  <x>268</x>
-  <y>458</y>
-  <width>652</width>
-  <height>275</height>
-  <uuid>{ed1a7e90-a4a7-41dc-b20e-5903a582c9ca}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>OUTPUT</label>
-  <alignment>center</alignment>
-  <font>Lucida Grande</font>
-  <fontsize>18</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground" >
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>vol</objectName>
   <x>274</x>
   <y>769</y>
   <width>250</width>
   <height>28</height>
-  <uuid>{758e187b-b277-4632-8bcd-54bdbe98f201}</uuid>
+  <uuid>{ac58723d-0e06-4f05-bd62-b9647a2947b0}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.44400000</value>
+  <value>0.54800000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>309</x>
   <y>740</y>
   <width>97</width>
   <height>27</height>
-  <uuid>{ccd1fc56-dfd8-4c5b-828d-2419feb66ff2}</uuid>
+  <uuid>{687143f9-ea96-4984-8e67-5597ffa3f81d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1807,7 +1897,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1816,13 +1906,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>outL</objectName>
   <x>539</x>
   <y>745</y>
   <width>336</width>
   <height>22</height>
-  <uuid>{1cd59f08-62cf-4745-a069-cad158f75f11}</uuid>
+  <uuid>{56692e84-8339-4713-bedf-b81a5d5dea6b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1831,31 +1921,31 @@ e 36000
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
+  <xValue>-inf</xValue>
   <yValue>0.36363600</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>outLover</objectName>
   <x>873</x>
   <y>745</y>
   <width>27</width>
   <height>22</height>
-  <uuid>{ab2ca391-235a-43ee-8bb3-f3c9802ed3a9}</uuid>
+  <uuid>{9dbc1525-61ed-4dcc-aeb3-650eb87744db}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1869,26 +1959,26 @@ e 36000
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>196</r>
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>outR</objectName>
   <x>539</x>
   <y>771</y>
   <width>336</width>
   <height>22</height>
-  <uuid>{8120d993-bdf5-4108-82dc-2a3463dabbc4}</uuid>
+  <uuid>{09a3dabb-c32b-4652-b07c-a5149e90b11b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1897,31 +1987,31 @@ e 36000
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
+  <xValue>-inf</xValue>
   <yValue>0.52631600</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>outRover</objectName>
   <x>873</x>
   <y>771</y>
   <width>27</width>
   <height>22</height>
-  <uuid>{93e44bc6-7a17-46ed-a298-89baaa2c7190}</uuid>
+  <uuid>{d515ef65-7c19-46c4-a888-c5cbc4e5653c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1935,30 +2025,30 @@ e 36000
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>196</r>
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>vol</objectName>
   <x>404</x>
   <y>740</y>
   <width>98</width>
   <height>27</height>
-  <uuid>{ec332e82-4cb5-4fcc-a4c6-3aa73b056149}</uuid>
+  <uuid>{7e4a0ff0-63bb-41fe-a64c-41c8dc65828b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>0.4440</label>
+  <label>0.5480</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -1968,7 +2058,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1977,13 +2067,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>926</x>
+  <x>1012</x>
   <y>19</y>
   <width>374</width>
   <height>773</height>
-  <uuid>{cec5e239-e6be-4f8e-9c6e-cc0bb8f891a1}</uuid>
+  <uuid>{9f76fd32-ca50-46b5-940d-820fe800928e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1997,7 +2087,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2006,13 +2096,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>452</x>
-  <y>17</y>
+  <x>447</x>
+  <y>7</y>
   <width>449</width>
   <height>38</height>
-  <uuid>{e3e2fdfa-979e-4bea-bcce-c169fe42c528}</uuid>
+  <uuid>{460c390f-19ce-46a2-ae4e-2ca424395160}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2026,7 +2116,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2035,13 +2125,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>459</x>
-  <y>84</y>
-  <width>440</width>
-  <height>23</height>
-  <uuid>{dfb145ef-6bbb-4432-8f53-75daa7d578b4}</uuid>
+  <x>430</x>
+  <y>71</y>
+  <width>576</width>
+  <height>38</height>
+  <uuid>{321ab18e-c680-4bd3-81ae-696ef1e02fe2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2055,7 +2145,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2064,13 +2154,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>4</x>
   <y>256</y>
   <width>261</width>
   <height>311</height>
-  <uuid>{2a09b1e0-1afb-49a9-be96-ba36884e0948}</uuid>
+  <uuid>{50c3bfda-28ab-4c5a-82c0-14459384a68a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2084,7 +2174,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>222</r>
    <g>143</g>
    <b>206</b>
@@ -2093,13 +2183,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>gm1_scale</objectName>
   <x>10</x>
   <y>323</y>
   <width>108</width>
   <height>25</height>
-  <uuid>{867963ae-0b3c-4723-8f64-503f3406747c}</uuid>
+  <uuid>{94cd0db6-ab80-4318-ada1-489baaa49a6c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2256,73 +2346,73 @@ e 36000
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm1_key</objectName>
   <x>124</x>
   <y>323</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{3c53a9d9-5ada-4968-a0c2-c24477f29868}</uuid>
+  <uuid>{4edbfe44-aa5a-4cb1-811e-817d739605e3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>0</minimum>
+  <maximum>127</maximum>
+  <randomizable group="0">false</randomizable>
   <value>36</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm1_chn</objectName>
   <x>188</x>
   <y>323</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{3ed411fb-cf2d-46b6-b1d0-4ccfdcccec88}</uuid>
+  <uuid>{7a93960a-e5d8-4940-b320-4212e941ed6b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>1</minimum>
+  <maximum>16</maximum>
+  <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>18</x>
   <y>293</y>
   <width>83</width>
   <height>27</height>
-  <uuid>{54b04f4a-e308-4763-98f7-cac628f1ba27}</uuid>
+  <uuid>{34ddb657-9510-4824-b955-89185b1d6a71}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2336,7 +2426,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2345,13 +2435,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>125</x>
   <y>293</y>
   <width>50</width>
   <height>27</height>
-  <uuid>{c0aa3d19-b53c-4d4e-8abb-1c1bdd7317c5}</uuid>
+  <uuid>{391a889d-de9b-4019-af3b-ae4ab68fb663}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2365,7 +2455,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2374,13 +2464,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>181</x>
   <y>293</y>
   <width>73</width>
   <height>27</height>
-  <uuid>{e8f1fd58-2f12-4c02-98d5-966bb70cc17e}</uuid>
+  <uuid>{b056127d-4963-413f-9b90-f3df8811af4f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2394,7 +2484,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2403,13 +2493,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>gm2_scale</objectName>
   <x>10</x>
   <y>354</y>
   <width>108</width>
   <height>25</height>
-  <uuid>{7fb7cb10-cad4-4106-af3c-95af323543f8}</uuid>
+  <uuid>{a4ae0f35-4e5a-4480-b043-89f1256211cc}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2566,73 +2656,73 @@ e 36000
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>11</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm2_key</objectName>
   <x>124</x>
   <y>354</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{aade1ce8-c245-4b84-9808-fd5d020bf8c2}</uuid>
+  <uuid>{048b8812-0d96-4035-b4bb-9000b1786f02}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>0</minimum>
+  <maximum>127</maximum>
+  <randomizable group="0">false</randomizable>
   <value>37</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm2_chn</objectName>
   <x>188</x>
   <y>354</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{abdb9ba3-0524-4456-b686-9e159a5edac5}</uuid>
+  <uuid>{31698544-6623-484c-99d2-14945339d4c3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>1</minimum>
+  <maximum>16</maximum>
+  <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>gm3_scale</objectName>
   <x>10</x>
   <y>382</y>
   <width>108</width>
   <height>25</height>
-  <uuid>{882d149f-2bae-4648-8b2f-c7c4a6b1b725}</uuid>
+  <uuid>{ebc0eda5-bfae-4055-b3c1-4c45d8c0df99}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -2789,73 +2879,73 @@ e 36000
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>20</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm3_key</objectName>
   <x>124</x>
   <y>382</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{30e79057-7519-459e-b3b2-d3d19031122d}</uuid>
+  <uuid>{7d8605f3-241c-4e8e-8e8d-df51359091ac}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>0</minimum>
+  <maximum>127</maximum>
+  <randomizable group="0">false</randomizable>
   <value>38</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm3_chn</objectName>
   <x>188</x>
   <y>382</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{2ada44e2-e619-4883-a7ec-c142ffbd42b4}</uuid>
+  <uuid>{8ac519ad-9dfa-44f3-82a4-a55c607e29c2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>1</minimum>
+  <maximum>16</maximum>
+  <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>gm4_scale</objectName>
   <x>10</x>
   <y>413</y>
   <width>108</width>
   <height>25</height>
-  <uuid>{36909472-1b5f-4efd-bbed-42e553ef5a89}</uuid>
+  <uuid>{3a87415d-126b-4a43-80dd-cb5f8f076713}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3012,73 +3102,73 @@ e 36000
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>2</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm4_key</objectName>
   <x>124</x>
   <y>413</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{788417d6-7415-4a9a-a1ea-ccf62af90658}</uuid>
+  <uuid>{316bb9bd-fb55-4852-b227-dad4cd7794b9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>0</minimum>
+  <maximum>127</maximum>
+  <randomizable group="0">false</randomizable>
   <value>40</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm4_chn</objectName>
   <x>188</x>
   <y>413</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{a0de88f8-f863-46d9-a456-9d4cdfd8df11}</uuid>
+  <uuid>{1807bde7-43ce-4994-b20c-ade301dbfc88}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>1</minimum>
+  <maximum>16</maximum>
+  <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>gm5_scale</objectName>
   <x>10</x>
   <y>441</y>
   <width>108</width>
   <height>25</height>
-  <uuid>{133be560-63ed-40e9-adc5-aa7b06282d56}</uuid>
+  <uuid>{274ebd83-0d72-4a70-ad7b-8473364c9392}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3235,73 +3325,73 @@ e 36000
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>25</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm5_key</objectName>
   <x>124</x>
   <y>441</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{8f5c50af-1452-4f98-820e-a780f13ef759}</uuid>
+  <uuid>{67a7e03e-f0ad-4092-b182-7361c1b7bd78}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>0</minimum>
+  <maximum>127</maximum>
+  <randomizable group="0">false</randomizable>
   <value>41</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm5_chn</objectName>
   <x>188</x>
   <y>441</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{d8961f25-2faf-4b99-822b-21e82e0f19d0}</uuid>
+  <uuid>{f146f09c-4288-4042-8561-6e27cb9e4eff}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>1</minimum>
+  <maximum>16</maximum>
+  <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>gm6_scale</objectName>
   <x>10</x>
   <y>472</y>
   <width>108</width>
   <height>25</height>
-  <uuid>{de07cc1b-731a-4765-aa40-47f606560251}</uuid>
+  <uuid>{d34a9233-6773-44c6-b327-2b93b34f9aa7}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3458,73 +3548,73 @@ e 36000
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>10</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm6_key</objectName>
   <x>124</x>
   <y>472</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{e28a1c8a-5928-471d-92b1-184fff6e19c3}</uuid>
+  <uuid>{654afdbe-6baf-4630-baf9-583b50e9e93f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>0</minimum>
+  <maximum>127</maximum>
+  <randomizable group="0">false</randomizable>
   <value>43</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm6_chn</objectName>
   <x>188</x>
   <y>472</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{a4a1e982-1067-48ab-b10f-489e5b6e5d42}</uuid>
+  <uuid>{370d1312-dc97-4f4b-91c9-fd439ad33c63}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>1</minimum>
+  <maximum>16</maximum>
+  <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>gm7_scale</objectName>
   <x>10</x>
   <y>500</y>
   <width>108</width>
   <height>25</height>
-  <uuid>{86c24ab3-71e5-4bb4-9508-5d3f970f7888}</uuid>
+  <uuid>{551dd85c-08f1-4aee-90c3-03ce89cdeae1}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3681,73 +3771,73 @@ e 36000
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>12</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm7_key</objectName>
   <x>124</x>
   <y>500</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{370e80e8-ffa7-49ac-ac9b-7665edc32f55}</uuid>
+  <uuid>{2c4c42b0-7616-4e5a-acb9-1fd5bfb6378c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>0</minimum>
+  <maximum>127</maximum>
+  <randomizable group="0">false</randomizable>
   <value>45</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm7_chn</objectName>
   <x>188</x>
   <y>500</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{573c0887-f332-4db7-bfd0-acc3d3ac9955}</uuid>
+  <uuid>{0784db53-0760-4631-a367-64f2eb53dabf}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>1</minimum>
+  <maximum>16</maximum>
+  <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>gm8_scale</objectName>
   <x>10</x>
   <y>531</y>
   <width>108</width>
   <height>25</height>
-  <uuid>{24f48013-3406-4cba-b106-93347a9edb8c}</uuid>
+  <uuid>{b9e13efc-7de6-4c27-94b5-35d922782236}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3904,73 +3994,73 @@ e 36000
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>4</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm8_key</objectName>
   <x>124</x>
   <y>531</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{21a7beaa-621e-4d7c-84ad-d9624f12ae3b}</uuid>
+  <uuid>{7f6a41d8-2c24-4e30-a513-a0c8576a9673}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>0</minimum>
+  <maximum>127</maximum>
+  <randomizable group="0">false</randomizable>
   <value>47</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>gm8_chn</objectName>
   <x>188</x>
   <y>531</y>
   <width>61</width>
   <height>25</height>
-  <uuid>{ba4dc687-bc71-403c-947b-90707d3dae48}</uuid>
+  <uuid>{74754e99-71ea-4e0b-a34b-ad9ae57445a1}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <alignment>left</alignment>
+  <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
-  <minimum>-1e+12</minimum>
-  <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <minimum>1</minimum>
+  <maximum>16</maximum>
+  <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>midi_event</objectName>
   <x>276</x>
   <y>299</y>
   <width>137</width>
   <height>71</height>
-  <uuid>{6fd8cf81-4774-4731-9a41-c81f690310a8}</uuid>
+  <uuid>{b0139093-9747-4da9-aaf1-848c9c3b7589}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -3984,7 +4074,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -3993,13 +4083,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>276</x>
   <y>276</y>
   <width>137</width>
   <height>25</height>
-  <uuid>{fed7398a-9f96-4e59-aa18-257a35ec0fc4}</uuid>
+  <uuid>{39a0c8be-fb8f-4a5e-9c79-f8694e516142}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4013,7 +4103,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4022,13 +4112,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>9</x>
   <y>263</y>
   <width>252</width>
   <height>31</height>
-  <uuid>{87959b31-23c2-4341-b534-30793e4335e4}</uuid>
+  <uuid>{61aaff8a-e262-49a0-b834-8e124e9340e4}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4042,7 +4132,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4051,13 +4141,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>431</x>
   <y>108</y>
-  <width>80</width>
+  <width>158</width>
   <height>25</height>
-  <uuid>{b650b820-d7e1-4d70-8804-2aae9eed2396}</uuid>
+  <uuid>{1f650c2a-caaa-45d1-8405-66a7b7ab147a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4071,7 +4161,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4080,13 +4170,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>431</x>
   <y>131</y>
-  <width>492</width>
-  <height>65</height>
-  <uuid>{ead78b9f-7756-4601-8c25-0ceaaa903e95}</uuid>
+  <width>578</width>
+  <height>78</height>
+  <uuid>{c6919d13-0dde-4b29-8628-3e8f74241f42}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4100,7 +4190,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4109,13 +4199,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>431</x>
-  <y>195</y>
-  <width>257</width>
-  <height>26</height>
-  <uuid>{60bd2f0f-6b7f-4fed-8467-7b65748068b2}</uuid>
+  <y>207</y>
+  <width>466</width>
+  <height>27</height>
+  <uuid>{36e69f68-86a5-436a-a774-0d64767cd5f3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4129,7 +4219,7 @@ e 36000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4138,13 +4228,13 @@ e 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>431</x>
-  <y>220</y>
-  <width>495</width>
-  <height>136</height>
-  <uuid>{d74afc6f-ca3a-4fc2-92bf-f9684bba873c}</uuid>
+  <y>233</y>
+  <width>583</width>
+  <height>155</height>
+  <uuid>{41ba012c-7cc4-4060-a02e-05afaf5762b7}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4163,7 +4253,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4172,17 +4262,17 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
-  <objectName/>
-  <x>431</x>
-  <y>354</y>
-  <width>101</width>
+ <bsbObject version="2" type="BSBLineEdit">
+  <objectName>scale1</objectName>
+  <x>1156</x>
+  <y>51</y>
+  <width>220</width>
   <height>24</height>
-  <uuid>{b9a278db-605e-43f5-b25c-b87436eb16e8}</uuid>
+  <uuid>{41924a59-97b1-43bc-8481-d36acf53cc47}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>WARNING</label>
+  <label>2 12</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -4192,78 +4282,20 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
-  <objectName/>
-  <x>431</x>
-  <y>377</y>
-  <width>501</width>
-  <height>25</height>
-  <uuid>{c6bf5b08-a03e-4cc0-bc9c-d9e87d7a67b7}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>Scales must have EXACTLY ONE space between the values and NO space at the beginning or the end.</label>
-  <alignment>left</alignment>
-  <font>Lucida Grande</font>
-  <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground" >
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
-  <objectName>scale1</objectName>
-  <x>1071</x>
-  <y>50</y>
-  <width>220</width>
-  <height>24</height>
-  <uuid>{391981ca-b82a-43f9-a70c-e32c21707362}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>2 12</label>
-  <alignment>left</alignment>
-  <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>50</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{6f17068e-80ee-4551-816a-7fd85e9b2fbf}</uuid>
+  <uuid>{47e38419-62ba-460b-a267-7cf6da2f961e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4277,7 +4309,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4286,40 +4318,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale2</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>75</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{12ce2be0-7c51-4636-b89d-c05a3059eda8}</uuid>
+  <uuid>{148c7136-1bf7-4c90-839e-2a2687c7773f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 18</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>75</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{c20763e6-ef97-4dd6-94c4-b1a2cbda1ce9}</uuid>
+  <uuid>{ca945a81-40a8-49e4-b4ce-f3c440c2b42f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4333,7 +4365,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4342,40 +4374,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale3</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>99</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{368f56e2-b1ff-4d12-ba32-19c721e4be1e}</uuid>
+  <uuid>{b4667509-0101-4453-8b9b-fe8920cbcf93}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 24</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>99</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{6d88d5b4-6745-468d-ab5a-6a2e600297a6}</uuid>
+  <uuid>{726509f4-50ff-4564-9e2a-b1c786b962f7}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4389,7 +4421,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4398,40 +4430,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale4</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>124</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{502ee456-5221-46c0-83e9-c7b6715a3d83}</uuid>
+  <uuid>{3a86087a-c910-4e2d-8aa8-06078cbd63b6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 30</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>124</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{5b46c05f-72c6-4bcc-bbc3-35de7bd3e0c4}</uuid>
+  <uuid>{0025791b-f77a-439a-b39e-7c9ff252c8b3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4445,7 +4477,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4454,40 +4486,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale5</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>148</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{4771c781-6964-4dac-a7ed-8a6a5ef9a8f1}</uuid>
+  <uuid>{5db08c35-cf97-4111-8f52-fb05460e4e0d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 36</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>148</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{311f8a0b-94a7-45e6-b8a8-13913813586d}</uuid>
+  <uuid>{a31c3cf5-4e7d-4314-8700-fbf3badf98c3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4501,7 +4533,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4510,40 +4542,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale6</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>173</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{c04fd167-fc36-480e-bb60-331fe3096de1}</uuid>
+  <uuid>{4127e44d-5013-4b66-95f1-d0c0a42fd1bc}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 48</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>173</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{d0e4969d-5735-4929-99b1-d6a1758635a5}</uuid>
+  <uuid>{cfb79d3e-2555-43a6-af4c-9289b9673791}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4557,7 +4589,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4566,40 +4598,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale7</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>197</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{9a73f4ce-0ac4-483b-9568-a58dbfcccfa5}</uuid>
+  <uuid>{bf4933e2-13b2-4c42-a4a8-e40cb672cb81}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 72</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>197</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{d86a47b9-347d-45dd-917c-24e7cfeddccd}</uuid>
+  <uuid>{5d94d8ff-6383-4486-9dca-41d0c51deab0}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4613,7 +4645,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4622,40 +4654,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale8</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>222</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{71bc0e3a-98f9-4c8e-8926-a86a6e8e026e}</uuid>
+  <uuid>{1af2b968-3f9d-4b8a-895d-ce312149c3b3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 96</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>222</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{a16800c6-b64c-4855-95b5-f533a20d9da4}</uuid>
+  <uuid>{a1abea1c-f33e-4dd9-9c64-677f4b8cfddc}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4669,7 +4701,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4678,40 +4710,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale9</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>245</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{9df907f0-ae84-4f42-acb8-f5e62d8791c5}</uuid>
+  <uuid>{5db50544-26b2-47b2-b93e-6b028c94b79d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>5 25</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>245</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{41c82ae8-5e2e-48e1-9cf7-15d70caebf42}</uuid>
+  <uuid>{a43bea2e-a2ee-4004-ac9e-002877d3c6ed}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4725,7 +4757,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4734,40 +4766,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale10</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>270</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{32feb9f6-4ed2-46cb-9353-8b2ff9fea313}</uuid>
+  <uuid>{166d0f00-2be7-413d-93f9-f24f6e03aed6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>2 12</label>
+  <label>2 13</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>270</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{0b582503-b172-4be9-99e8-439bea92891d}</uuid>
+  <uuid>{0ff548f1-c6b9-42e2-a499-e16f8849045f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4781,7 +4813,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4790,40 +4822,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale11</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>294</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{80841211-790e-4557-930b-09ed8f3d8c9b}</uuid>
+  <uuid>{b5593333-b902-4ce2-b4fa-5f516ea3ff23}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 1 2187/2048 9/8 32/27 81/64 4/3 729/512 3/2 6561/4096 27/16 16/9 243/128</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>294</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{0bd857be-3523-4193-8232-51c7d87b6a86}</uuid>
+  <uuid>{a423fbc0-cc68-4629-85aa-8f481b3139f2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4837,7 +4869,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4846,40 +4878,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale12</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>319</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{9272f3c5-3427-4931-8209-52446c82a7fc}</uuid>
+  <uuid>{ead660d7-fc87-4ee7-a4b9-072d057c2aa4}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 0 76 193 310 386 503 579 697 773 890 1007 1083</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>319</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{0d2c1d7c-6e0f-465d-8b71-129e332c9daa}</uuid>
+  <uuid>{2cf5d943-5bcf-4661-b338-b9721e7c8917}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4893,7 +4925,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4902,40 +4934,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale13</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>343</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{30983c57-86ca-4cdd-b472-4cd6ce103eb2}</uuid>
+  <uuid>{3a058ccc-fa3d-407e-9bc7-8245f6b0965a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 0 90 192 294 390 498 588 696 792 888 996 1092</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>343</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{9509e664-d8c3-4272-ab4c-6f5e1a736793}</uuid>
+  <uuid>{e5546b76-099b-47b8-a13e-5ba6a491495b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -4949,7 +4981,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4958,40 +4990,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale14</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>368</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{5eb3dacd-7363-467c-be6a-a13fb0379313}</uuid>
+  <uuid>{8ae1ce39-54d9-406a-8ebd-caf9510bcac6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 0 90 204 294 386 498 590 702 792 895 996 1088</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>368</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{656b0c59-018c-4a29-9568-124368032a26}</uuid>
+  <uuid>{e2aaccf0-a0d3-4dbd-a237-019cf77d605c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5005,7 +5037,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5014,40 +5046,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale15</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>392</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{5ca8abec-f81f-4868-b514-4d19d1291554}</uuid>
+  <uuid>{9c571518-20fb-4b2f-a3d3-91248bcad372}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 0 90 112 182 204 294 316 386 408 498 520 590 610 702 792 814 884 906 996 1018 1088 1110</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>392</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{fbebff02-6877-4de0-bf6c-d982baaf2024}</uuid>
+  <uuid>{afd9fdfe-7be2-40c3-9421-3e22df9c8c8e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5061,7 +5093,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5070,40 +5102,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale16</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>417</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{264c9237-22eb-40f9-af98-fef7ad39fd02}</uuid>
+  <uuid>{4cea0667-fa01-4b06-9009-34485bfe62a8}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 0 68.6 135.3 200.21 263.46 325.13 385.33 444.13 501.62 557.85 612.91 666.85 719.73 771.6 822.5 872.48 921.59 969.86 1017.33 1064.04 1110.01 1155.28</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>417</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{928c17c3-9550-49d4-9df6-94506e32c2aa}</uuid>
+  <uuid>{12c5d630-064d-4b8a-89b6-cb167158fb41}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5117,7 +5149,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5126,40 +5158,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale17</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>440</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{734875f6-ed75-4a7d-bf15-78ec80a59f8b}</uuid>
+  <uuid>{da80b6f0-7db6-4c30-b796-0bb35da95d0d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>2 12</label>
+  <label>2 1 2^1/12 2^1/11 2^1/10 2^1/9 2^1/8 2^1/7 2^1/6 2^1/5 2^1/4 2^1/3 2^1/2 </label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>440</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{9efdbdc0-07a6-467c-a6ae-185ba1514033}</uuid>
+  <uuid>{d4445e61-4c3d-4dc8-a198-e3c2ac272655}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5173,7 +5205,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5182,40 +5214,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale18</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>465</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{b798352c-6529-4b33-bcaf-be0349af4b35}</uuid>
+  <uuid>{bf20c58c-cda9-4281-9d33-dfe23868ead1}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 12</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>465</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{d30655e0-46c4-47e8-8d37-3bcd2fd7f792}</uuid>
+  <uuid>{328ce731-1a06-48ee-921c-93e55971f145}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5229,7 +5261,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5238,40 +5270,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale19</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>489</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{a2fabf9e-8b35-4580-bb8c-6a46c49c5b23}</uuid>
+  <uuid>{83143afb-dfdc-4d2b-9992-c88ce0f6a2dc}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 12</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>489</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{1c9e42c6-d1b8-4e95-8731-b64db680207b}</uuid>
+  <uuid>{5ac37219-6934-4896-8ef6-f586e712a2f9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5285,7 +5317,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5294,40 +5326,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale20</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>514</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{2121ead2-6085-47a7-8fd3-66b96eb70455}</uuid>
+  <uuid>{20e8cf37-0ac9-4450-8dd4-b70c5a6aaeb6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>2 12</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>514</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{a570e8d8-334f-46dc-8b48-76ff93173d79}</uuid>
+  <uuid>{42d0d5df-6975-4cd5-809d-e3560fb76be6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5341,7 +5373,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5350,40 +5382,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale21</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>538</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{da12a60c-e9c6-4c04-8fa2-81dd8538b7a5}</uuid>
+  <uuid>{0a8fe8ca-3efe-4f22-a7ad-999b94cb4178}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>3 13</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>538</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{537cae3c-ea16-48ed-8c18-2b81e2586bf6}</uuid>
+  <uuid>{29d5a91d-ed88-4bb5-9fcf-2f5ab99477c6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5397,7 +5429,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5406,40 +5438,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale22</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>563</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{b184ce52-3366-48e1-8f1f-9caf0469be4c}</uuid>
+  <uuid>{264738ea-cb2b-4cc5-be17-ac17ea7f337e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>3 1 27/25 25/21 9/7 7/5 75/49 5/3 9/5 49/25 15/7 7/3 63/25 25/9</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>563</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{4852f6d5-785a-4928-804e-b76d810d0438}</uuid>
+  <uuid>{9af90ad2-5c07-43f9-87b8-5a711a9096e4}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5453,7 +5485,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5462,40 +5494,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale23</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>586</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{47534a68-3191-409f-a470-6aa8aa9140dd}</uuid>
+  <uuid>{d0a3b549-3434-449b-949e-36e0d509ffff}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>3 1 27/25 9/7 7/5 5/3 9/5 49/25 7/3 63/25</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>586</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{61e8204a-6c27-47d4-9c86-f05b0cfa6a5f}</uuid>
+  <uuid>{2ad8b869-ec31-45a3-8767-f44237a1d126}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5509,7 +5541,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5518,40 +5550,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale24</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>611</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{f73bfed4-f034-415c-a4b7-b3bcf2f2de46}</uuid>
+  <uuid>{fa85f026-2fc3-4e31-90fb-16f0f53136ad}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>3 1 25/21 9/7 7/5 5/3 9/5 15/7 7/3 63/25</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>611</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{3a0395fe-434c-4155-9466-af5ee1dede69}</uuid>
+  <uuid>{af80d63e-d5eb-4adb-982c-4b00237e6160}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5565,7 +5597,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5574,40 +5606,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale25</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>635</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{d90fcdda-7afd-4593-a219-72dd1bcd9554}</uuid>
+  <uuid>{43124faa-e689-4af2-b29f-cdf06b58e766}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>3 1 25/21 9/7 75/49 5/3 9/5 15/7 7/3 25/9</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>635</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{a68fb918-7f54-4de9-9e90-9f041d80b930}</uuid>
+  <uuid>{bd925631-99bd-42d0-8134-b2d27f0e380b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5621,7 +5653,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5630,40 +5662,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale26</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>660</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{c0a29f80-cd58-4396-b5bb-52f72168dc2d}</uuid>
+  <uuid>{f5dabc23-5f3c-465a-a0d5-ee9ce9955943}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>3 1 27/25 9/7 7/5 5/3 9/5 15/7 7/3 25/9</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>660</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{3939f07b-a18d-41da-afae-afd89ca94f69}</uuid>
+  <uuid>{7cf4bea9-f231-4db8-bf51-81bf6fa24d06}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5677,7 +5709,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5686,40 +5718,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale27</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>684</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{bdcb518a-ea73-4da5-b1be-3573c10b0556}</uuid>
+  <uuid>{3d8a2466-18ca-48e3-94d8-e349a7814f97}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>3 1 27/25 9/7 7/5 5/3 9/5 49/25 7/3 25/9</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>684</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{bfd29ccd-3b04-4d8d-bc63-81e1fc16d124}</uuid>
+  <uuid>{675ca19b-cf4f-46c8-ab64-b606dea3a710}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5733,7 +5765,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5742,40 +5774,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale28</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>709</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{9c53cf7e-d939-420a-ac4b-ee3578f75cac}</uuid>
+  <uuid>{3768fb29-0b74-4640-b7f3-c45c95d3fb1f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>3 1 27/25 9/7 7/5 5/3 9/5 15/7 7/3 63/25</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>709</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{c43d2074-c086-4d40-b94f-39a2998bc850}</uuid>
+  <uuid>{c2485292-109a-4afd-bf12-667a05984b7e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5789,7 +5821,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5798,40 +5830,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale29</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>733</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{e418f6a0-9c5a-4b2a-b97d-3220836a2cec}</uuid>
+  <uuid>{644240e6-34ce-44c0-afe9-5c5733c98ef7}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>3 1 25/21 9/7 7/5 5/3 9/5 15/7 7/3 25/9</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>733</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{0c4fe393-c2a0-495f-9c14-5f1991ce5bb6}</uuid>
+  <uuid>{e3d2642a-6c5b-425e-9b42-83ba92498712}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5845,7 +5877,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5854,40 +5886,40 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>scale30</objectName>
-  <x>1071</x>
+  <x>1156</x>
   <y>758</y>
   <width>220</width>
   <height>24</height>
-  <uuid>{58daadf6-3a40-4f45-af81-eb8edfafc6ac}</uuid>
+  <uuid>{699ad52a-6334-4c81-85ed-b0c0c62dff8b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>3 13</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>933</x>
+  <x>1018</x>
   <y>758</y>
   <width>138</width>
   <height>24</height>
-  <uuid>{99a44410-bd9e-460f-9a5e-dd41c1a6dbfa}</uuid>
+  <uuid>{cb60f824-d334-4897-b678-8600ac4a0ede}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5901,7 +5933,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5910,13 +5942,13 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>2</x>
   <y>597</y>
   <width>261</width>
   <height>201</height>
-  <uuid>{7a6bd644-b51a-40a5-a277-e55a49067a61}</uuid>
+  <uuid>{764f7fce-c3ca-4869-a1f4-90a5bd098426}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5930,7 +5962,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5939,13 +5971,13 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>wdmix</objectName>
   <x>52</x>
   <y>642</y>
   <width>160</width>
   <height>28</height>
-  <uuid>{aa56b191-398f-43b1-a8cb-8192c5d2931f}</uuid>
+  <uuid>{05f629ba-fed7-41ac-9efd-f1614cf08fa9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5953,17 +5985,17 @@ The SECOND VALUE lets you choose between three cases:
   <maximum>1.00000000</maximum>
   <value>0.62500000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>3</x>
   <y>643</y>
   <width>49</width>
   <height>25</height>
-  <uuid>{84925a10-12d4-4db2-a882-ef583fb89f59}</uuid>
+  <uuid>{e522ff72-282b-4b83-948a-952b9d2b7664}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -5977,7 +6009,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5986,13 +6018,13 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>212</x>
   <y>644</y>
   <width>48</width>
   <height>25</height>
-  <uuid>{b8068579-ba3e-4ebf-bafe-1c7efb18eb01}</uuid>
+  <uuid>{a556f13f-b772-4baf-8d29-b4d955f36bda}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -6006,7 +6038,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -6015,13 +6047,13 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>73</x>
   <y>619</y>
   <width>109</width>
   <height>24</height>
-  <uuid>{6f37159e-511c-40ab-94cb-dbd9fc077c40}</uuid>
+  <uuid>{2b72ce0e-23e3-4903-a4be-3d1c03bf14f9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -6035,7 +6067,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -6044,13 +6076,13 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>roomsize</objectName>
   <x>51</x>
   <y>694</y>
   <width>161</width>
   <height>30</height>
-  <uuid>{789626ee-bf39-4f41-86a0-82f3803f235b}</uuid>
+  <uuid>{c92bd11e-57a8-4b00-a2f0-5172e2382e8f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -6058,17 +6090,17 @@ The SECOND VALUE lets you choose between three cases:
   <maximum>1.00000000</maximum>
   <value>0.30434800</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>1</x>
   <y>696</y>
   <width>50</width>
   <height>25</height>
-  <uuid>{6e25f6f4-7d5e-4fed-bd72-6faa7f336e1d}</uuid>
+  <uuid>{f955e85e-6c4d-4908-9710-c3d6559a5408}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -6082,7 +6114,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -6091,13 +6123,13 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>210</x>
   <y>696</y>
   <width>52</width>
   <height>24</height>
-  <uuid>{ddcafad5-cfcd-49b8-8155-79dd300499c0}</uuid>
+  <uuid>{aadcb08e-dfaf-47c2-b913-19bd09dd0e5f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -6111,7 +6143,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -6120,13 +6152,13 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>72</x>
   <y>670</y>
   <width>110</width>
   <height>24</height>
-  <uuid>{f11dd5d6-94c7-4dbf-b798-72938484a053}</uuid>
+  <uuid>{094b23b0-6d2a-4f79-b03f-8a7473b41956}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -6140,7 +6172,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -6149,13 +6181,13 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>hfdamp</objectName>
   <x>46</x>
   <y>753</y>
   <width>160</width>
   <height>31</height>
-  <uuid>{957d63d4-6f07-4e61-9fbd-daa2a83084a3}</uuid>
+  <uuid>{6f8db5c1-b0b6-4740-ae4c-b32b0d6b2b9c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -6163,17 +6195,17 @@ The SECOND VALUE lets you choose between three cases:
   <maximum>1.00000000</maximum>
   <value>0.36875000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>2</x>
   <y>756</y>
   <width>44</width>
   <height>26</height>
-  <uuid>{23f09fc9-9c45-4853-9768-d0d9883c9822}</uuid>
+  <uuid>{615df0d8-51da-4a6f-82dd-6360b33f98ad}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -6187,7 +6219,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -6196,13 +6228,13 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>204</x>
   <y>757</y>
   <width>59</width>
   <height>25</height>
-  <uuid>{0968c24e-23b4-49a3-977f-6326478a4751}</uuid>
+  <uuid>{2bfde5cc-dc42-4add-a9ec-1346575f5f53}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -6216,7 +6248,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -6225,13 +6257,13 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>40</x>
   <y>723</y>
   <width>175</width>
   <height>30</height>
-  <uuid>{6e733013-9c84-4a36-b307-47bec8a485a5}</uuid>
+  <uuid>{c8577a79-24bc-4075-8d88-d66383ea66ce}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -6245,7 +6277,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -6254,13 +6286,13 @@ The SECOND VALUE lets you choose between three cases:
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>431</x>
-  <y>400</y>
-  <width>497</width>
-  <height>51</height>
-  <uuid>{5f8b8069-6861-43b0-9c3b-f3c628d230f3}</uuid>
+  <y>387</y>
+  <width>584</width>
+  <height>78</height>
+  <uuid>{bf72fd7e-bb12-4d4f-acb9-d21ac8b8c3e6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -6274,7 +6306,7 @@ The SECOND VALUE lets you choose between three cases:
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -6285,183 +6317,15 @@ The SECOND VALUE lets you choose between three cases:
  </bsbObject>
  <objectName/>
  <x>0</x>
- <y>25</y>
- <width>1280</width>
- <height>750</height>
+ <y>22</y>
+ <width>1425</width>
+ <height>842</height>
  <visible>true</visible>
+
+*/
+
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 0 25 1280 750
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-<MacGUI>
-ioView background {43433, 43947, 32896}
-ioText {806, 595} {62, 27} display 56.000000 0.00100 "key" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 56
-ioText {349, 595} {457, 28} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Key Pressed
-ioText {-1684371923, -1632653318} {227, 25} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Cent Deviation
-ioText {807, 623} {82, 27} display -585.200000 0.00100 "cent" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder -585.2
-ioText {267, 623} {539, 27} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Cent Difference in Relation to the Reference Frequency
-ioText {807, 649} {82, 27} display 186.583300 0.00100 "freq" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 186.5833
-ioText {266, 649} {542, 29} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Frequency of this Key
-ioText {4, 35} {422, 214} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 
-ioText {-610629723, -1632653302} {80, 25} display -585.200000 0.00100 "cent" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder -585.2
-ioText {-610629955, -1632653304} {227, 25} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Cent Deviation
-ioMenu {201, 215} {165, 25} 5 303 "sine,saw,square,square vco2,waveguide-clarinet,pluck" sound
-ioText {43, 211} {160, 31} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Select Sound
-ioText {742, 57} {131, 24} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder jh && rb 1/2010
-ioText {807, 675} {82, 28} display 207.646500 0.00100 "normfreq" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 207.6465
-ioText {267, 675} {541, 29} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Usual Frequency of this Key
-ioText {807, 701} {82, 30} display -185.200000 0.00100 "centdiff" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder -185.2
-ioText {267, 701} {541, 31} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Cent Difference Real Frequency to Usual Frequency
-ioMeter {23, 184} {104, 23} {0, 59904, 0} "scsel1" 0.000000 "vert34" 0.434783 fill 1 0 mouse
-ioMeter {154, 184} {104, 23} {0, 59904, 0} "scsel2" 0.000000 "vert34" 0.434783 fill 1 0 mouse
-ioMeter {285, 184} {104, 23} {0, 59904, 0} "scsel3" 1.000000 "vert34" 0.434783 fill 1 0 mouse
-ioText {314, 50} {107, 26} editnum 261.625000 0.000001 "tunfreq" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 261.625000
-ioText {206, 44} {108, 28} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Related Pitch
-ioText {227, 65} {72, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder (Hertz)
-ioMenu {12, 162} {126, 24} 0 303 "Halftones,Thirdtones,Quartertones,Fifthtones,Sixthtones,Eighttones,Twelfthtones,Sixteenthtones,Stockhausen Studie II,UserDefined" equal_tmprd
-ioText {10, 93} {393, 30} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Select Scale By Menu
-ioText {129, 50} {68, 26} editnum 60.000000 1.000000 "reftone" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 60.000000
-ioText {12, 44} {117, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Reference Key
-ioText {29, 64} {87, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder (Midi-Number)
-ioText {15, 120} {122, 43} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Equal TemperedÂ¬(1-10)
-ioMenu {145, 162} {126, 24} 3 303 "Pythagorean,Zarlino 1/4 Comma,Werckmeister III,Kirnberger II,Indian Sruti I,Indian Sruti II,User Defined,User Defined,User Defined,User Defined" various
-ioText {148, 120} {122, 43} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder VariousÂ¬(11-20)
-ioMenu {275, 162} {126, 24} 5 303 "Equal Tempered,Ratios,Dur I Mode,Dur II Mode,Moll I (Delta) Mode,Moll II (Pierce) Mode,Gamma Mode,Harmonic Mode,Lambda Mode,User Defined" bohlen-pierce
-ioText {278, 120} {122, 43} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Bohlen-PierceÂ¬(21-30)
-ioText {273, 487} {639, 103} display 0.000000 0.00100 "info" center "Lucida Grande" 14 {0, 0, 0} {60672, 43264, 27392} nobackground noborder 26 Bohlen-Pierce Moll II Mode (Pierce):Â¬9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 25/9
-ioButton {471, 55} {91, 27} value 1.000000 "_Play" "START" "/" i1 0 10
-ioButton {585, 55} {91, 27} value 1.000000 "_Stop" "STOP" "/" i1 0 10
-ioText {268, 458} {652, 275} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder OUTPUT
-ioSlider {274, 769} {250, 28} 0.000000 1.000000 0.444000 vol
-ioText {309, 740} {97, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Volume
-ioMeter {539, 745} {336, 22} {0, 59904, 0} "outL" 0.000000 "out1_post" 0.363636 fill 1 0 mouse
-ioMeter {873, 745} {27, 22} {50176, 3584, 3072} "outLover" 0.000000 "outLover" 0.000000 fill 1 0 mouse
-ioMeter {539, 771} {336, 22} {0, 59904, 0} "outR" 0.000000 "out2_post" 0.526316 fill 1 0 mouse
-ioMeter {873, 771} {27, 22} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
-ioText {404, 740} {98, 27} display 0.444000 0.00100 "vol" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.4440
-ioText {926, 19} {374, 773} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Scale Pool
-ioText {452, 17} {449, 38} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {58880, 56576, 54528} nobackground noborder PLAYING SCALES WITH A MIDI KEYBOARD
-ioText {459, 84} {440, 23} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder This CSD was designed to let you play virtually any scale with a standard MIDI keyboard. 
-ioText {4, 256} {261, 311} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 
-ioMenu {10, 323} {108, 25} 0 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I (Delta) Mode,26 BP Moll II (Pierce) Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm1_scale
-ioText {124, 323} {61, 25} editnum 36.000000 1.000000 "gm1_key" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 36.000000
-ioText {188, 323} {61, 25} editnum 2.000000 1.000000 "gm1_chn" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 2.000000
-ioText {18, 293} {83, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Scale
-ioText {125, 293} {50, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Key
-ioText {181, 293} {73, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Channel
-ioMenu {10, 354} {108, 25} 11 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I (Delta) Mode,26 BP Moll II (Pierce) Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm2_scale
-ioText {124, 354} {61, 25} editnum 37.000000 1.000000 "gm2_key" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 37.000000
-ioText {188, 354} {61, 25} editnum 2.000000 1.000000 "gm2_chn" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 2.000000
-ioMenu {10, 382} {108, 25} 20 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I Mode,26 BP Moll II Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm3_scale
-ioText {124, 382} {61, 25} editnum 38.000000 1.000000 "gm3_key" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 38.000000
-ioText {188, 382} {61, 25} editnum 2.000000 1.000000 "gm3_chn" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 2.000000
-ioMenu {10, 413} {108, 25} 2 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I (Delta) Mode,26 BP Moll II (Pierce) Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm4_scale
-ioText {124, 413} {61, 25} editnum 40.000000 1.000000 "gm4_key" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 40.000000
-ioText {188, 413} {61, 25} editnum 2.000000 1.000000 "gm4_chn" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 2.000000
-ioMenu {10, 441} {108, 25} 25 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I Mode,26 BP Moll II Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm5_scale
-ioText {124, 441} {61, 25} editnum 41.000000 1.000000 "gm5_key" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 41.000000
-ioText {188, 441} {61, 25} editnum 2.000000 1.000000 "gm5_chn" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 2.000000
-ioMenu {10, 472} {108, 25} 10 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I (Delta) Mode,26 BP Moll II (Pierce) Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm6_scale
-ioText {124, 472} {61, 25} editnum 43.000000 1.000000 "gm6_key" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 43.000000
-ioText {188, 472} {61, 25} editnum 2.000000 1.000000 "gm6_chn" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 2.000000
-ioMenu {10, 500} {108, 25} 12 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I (Delta) Mode,26 BP Moll II (Pierce) Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm7_scale
-ioText {124, 500} {61, 25} editnum 45.000000 1.000000 "gm7_key" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 45.000000
-ioText {188, 500} {61, 25} editnum 2.000000 1.000000 "gm7_chn" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 2.000000
-ioMenu {10, 531} {108, 25} 4 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I (Delta) Mode,26 BP Moll II (Pierce) Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm8_scale
-ioText {124, 531} {61, 25} editnum 47.000000 1.000000 "gm8_key" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 47.000000
-ioText {188, 531} {61, 25} editnum 2.000000 1.000000 "gm8_chn" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 2.000000
-ioText {276, 299} {137, 71} display 0.000000 0.00100 "midi_event" center "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 
-ioText {276, 276} {137, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Current MIDI Event
-ioText {9, 263} {252, 31} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Select Scale By MIDI Keys
-ioText {431, 108} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder PLAYING
-ioText {431, 131} {492, 65} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Just connect your MIDI keyboard (see the Configuration panel to select the MIDI input). Press START, select a scale from one of the menus on the left, and select a sound. If you wish, you can associate and trigger up to 8 scales with specific MIDI keys thereby allowing for fast switching and easy comparison.
-ioText {431, 195} {257, 26} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder ADDING USER DEFINED or NEW SCALES
-ioText {431, 220} {495, 136} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder In the Scale Pool at the right you find a number of predefined scales. You can add any scale in the "User Defined" slots (10,17,18,19,20,30), or you can change or replace any of the scales in the following way:Â¬Type in the FIRST VALUE as the UNIT MULTIPLIER (2 = octave, 3 = perfect 12th, etc.).Â¬The SECOND VALUE lets you choose between three cases:Â¬1) if you type 0 you are giving a list of CENT values;Â¬2) if you type 1 you are giving a list of PROPORTIONS;Â¬3) any other value indicates an Equal Tempered Scale and gives as the second value the number of steps per Unit Multiplier.
-ioText {431, 354} {101, 24} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder WARNING
-ioText {431, 377} {501, 25} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Scales must have EXACTLY ONE space between the values and NO space at the beginning or the end.
-ioText {1071, 50} {220, 24} edit 0.000000 0.00100 "scale1"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 12
-ioText {933, 50} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1 Halftones
-ioText {1071, 75} {220, 24} edit 0.000000 0.00100 "scale2"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 18
-ioText {933, 75} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 2 Thirdtones
-ioText {1071, 99} {220, 24} edit 0.000000 0.00100 "scale3"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 24
-ioText {933, 99} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 3 Quartertones
-ioText {1071, 124} {220, 24} edit 0.000000 0.00100 "scale4"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 30
-ioText {933, 124} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 4 Fifthtones
-ioText {1071, 148} {220, 24} edit 0.000000 0.00100 "scale5"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 36
-ioText {933, 148} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 5 Sixthtones
-ioText {1071, 173} {220, 24} edit 0.000000 0.00100 "scale6"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 48
-ioText {933, 173} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 6 Eighttones
-ioText {1071, 197} {220, 24} edit 0.000000 0.00100 "scale7"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 72
-ioText {933, 197} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 7 Twelfthtones
-ioText {1071, 222} {220, 24} edit 0.000000 0.00100 "scale8"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 96
-ioText {933, 222} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 8 Sixteenthtones
-ioText {1071, 245} {220, 24} edit 0.000000 0.00100 "scale9"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 5 25
-ioText {933, 245} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 9 Stockhausen Studie II
-ioText {1071, 270} {220, 24} edit 0.000000 0.00100 "scale10"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 12
-ioText {933, 270} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 10 User Defined
-ioText {1071, 294} {220, 24} edit 0.000000 0.00100 "scale11"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 1 2187/2048 9/8 32/27 81/64 4/3 729/512 3/2 6561/4096 27/16 16/9 243/128
-ioText {933, 294} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 11 Pythagorean
-ioText {1071, 319} {220, 24} edit 0.000000 0.00100 "scale12"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 0 76 193 310 386 503 579 697 773 890 1007 1083
-ioText {933, 319} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 12 Zarlino 1/4 Comma
-ioText {1071, 343} {220, 24} edit 0.000000 0.00100 "scale13"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 0 90 192 294 390 498 588 696 792 888 996 1092
-ioText {933, 343} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 13 Werckmeister III
-ioText {1071, 368} {220, 24} edit 0.000000 0.00100 "scale14"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 0 90 204 294 386 498 590 702 792 895 996 1088
-ioText {933, 368} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 14 Kirnberger II
-ioText {1071, 392} {220, 24} edit 0.000000 0.00100 "scale15"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 0 90 112 182 204 294 316 386 408 498 520 590 610 702 792 814 884 906 996 1018 1088 1110
-ioText {933, 392} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 15 Indian Sruti I
-ioText {1071, 417} {220, 24} edit 0.000000 0.00100 "scale16"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 0 68.6 135.3 200.21 263.46 325.13 385.33 444.13 501.62 557.85 612.91 666.85 719.73 771.6 822.5 872.48 921.59 969.86 1017.33 1064.04 1110.01 1155.28
-ioText {933, 417} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 16 Indian Sruti II
-ioText {1071, 440} {220, 24} edit 0.000000 0.00100 "scale17"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 12
-ioText {933, 440} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 17 User Defined
-ioText {1071, 465} {220, 24} edit 0.000000 0.00100 "scale18"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 12
-ioText {933, 465} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 18 User Defined
-ioText {1071, 489} {220, 24} edit 0.000000 0.00100 "scale19"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 12
-ioText {933, 489} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 19 User Defined
-ioText {1071, 514} {220, 24} edit 0.000000 0.00100 "scale20"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 12
-ioText {933, 514} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 20 User Defined
-ioText {1071, 538} {220, 24} edit 0.000000 0.00100 "scale21"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 13
-ioText {933, 538} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 21 BP Equal Tempered
-ioText {1071, 563} {220, 24} edit 0.000000 0.00100 "scale22"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 27/25 25/21 9/7 7/5 75/49 5/3 9/5 49/25 15/7 7/3 63/25 25/9
-ioText {933, 563} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 22 BP Ratios
-ioText {1071, 586} {220, 24} edit 0.000000 0.00100 "scale23"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 27/25 9/7 7/5 5/3 9/5 49/25 7/3 63/25
-ioText {933, 586} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 23 BP Dur I Mode
-ioText {1071, 611} {220, 24} edit 0.000000 0.00100 "scale24"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 25/21 9/7 7/5 5/3 9/5 15/7 7/3 63/25
-ioText {933, 611} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 24 BP Dur II Mode
-ioText {1071, 635} {220, 24} edit 0.000000 0.00100 "scale25"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 25/21 9/7 75/49 5/3 9/5 15/7 7/3 25/9
-ioText {933, 635} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 25 BP Moll I (Pierce) Mode 
-ioText {1071, 660} {220, 24} edit 0.000000 0.00100 "scale26"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 27/25 9/7 7/5 5/3 9/5 15/7 7/3 25/9
-ioText {933, 660} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 26 BP Moll II (Delta) Mode
-ioText {1071, 684} {220, 24} edit 0.000000 0.00100 "scale27"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 27/25 9/7 7/5 5/3 9/5 49/25 7/3 25/9
-ioText {933, 684} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 27 BP Gamma Mode
-ioText {1071, 709} {220, 24} edit 0.000000 0.00100 "scale28"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 27/25 9/7 7/5 5/3 9/5 15/7 7/3 63/25
-ioText {933, 709} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 28 BP Harmonic Mode
-ioText {1071, 733} {220, 24} edit 0.000000 0.00100 "scale29"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 25/21 9/7 7/5 5/3 9/5 15/7 7/3 25/9
-ioText {933, 733} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 29 BP Lambda Mode
-ioText {1071, 758} {220, 24} edit 0.000000 0.00100 "scale30"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 13
-ioText {933, 758} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 30 User Defined
-ioText {2, 597} {261, 201} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Reverb (freeverb)
-ioSlider {52, 642} {160, 28} 0.000000 1.000000 0.625000 wdmix
-ioText {3, 643} {49, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Dry
-ioText {212, 644} {48, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Wet
-ioText {73, 619} {109, 24} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Mix
-ioSlider {51, 694} {161, 30} 0.000000 1.000000 0.304348 roomsize
-ioText {1, 696} {50, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Small
-ioText {210, 696} {52, 24} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Large
-ioText {72, 670} {110, 24} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Room Size
-ioSlider {46, 753} {160, 31} 0.000000 1.000000 0.368750 hfdamp
-ioText {2, 756} {44, 26} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder No
-ioText {204, 757} {59, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Yes
-ioText {40, 723} {175, 30} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder High Frequency Attenuation
-ioText {431, 400} {497, 51} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder NOTE: When you select a BP mode, it consists of 9 pitches (a unique subset of the 13 BP chromatic tones) and it is played on a MIDI keyboard chromatically starting from the REFERENCE KEY.  The 10th pitch is the "tritave" - a pure perfect 12th (an octave plus 5th) or a 3:1 frequency ratio.
-</MacGUI>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="612" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
