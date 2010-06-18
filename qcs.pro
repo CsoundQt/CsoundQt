@@ -16,5 +16,7 @@ TRANSLATIONS = "src/translations/qutecsound_en.ts" \
     "src/translations/qutecsound_fr.ts" \
     "src/translations/qutecsound_it.ts" \
     "src/translations/qutecsound_tr.ts" \
-    "src/translations/qutecsound_el.ts"
+    "src/translations/qutecsound_el.ts" \
+    "src/translations/qutecsound_uk.ts"
+
 #SUBDIRS += ClearQuteCsoundPrefs/ClearQuteCsoundPrefs.pro

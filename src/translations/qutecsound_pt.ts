@@ -535,6 +535,10 @@
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Automatically Join orc/sco files</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConsoleWidget</name>
