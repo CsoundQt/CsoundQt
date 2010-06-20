@@ -1130,11 +1130,13 @@ void EventSheet::add(double value)
       bool ok = false;
       double n = item->data(Qt::DisplayRole).toDouble(&ok);
       if (ok) {
+        noHistoryChange = 1;
         item->setData(Qt::DisplayRole,
                       QVariant(n + value));
       }
     }
   }
+  noHistoryChange = 0;
   markHistory();
 }
 
@@ -1147,11 +1149,13 @@ void EventSheet::multiply(double value)
       bool ok = false;
       double n = item->data(Qt::DisplayRole).toDouble(&ok);
       if (ok) {
+        noHistoryChange = 1;
         item->setData(Qt::DisplayRole,
                       QVariant(n * value));
       }
     }
   }
+  noHistoryChange = 0;
   markHistory();
 }
 
@@ -1164,11 +1168,13 @@ void EventSheet::divide(double value)
       bool ok = false;
       double n = item->data(Qt::DisplayRole).toDouble(&ok);
       if (ok) {
+        noHistoryChange = 1;
         item->setData(Qt::DisplayRole,
                       QVariant(n / value));
       }
     }
   }
+  noHistoryChange = 0;
   markHistory();
 }
 
@@ -1183,6 +1189,7 @@ void EventSheet::randomize(double min, double max, int mode)
     QTableWidgetItem * item = this->item(list[i].row(), list[i].column());
     if (item == 0) {
       item = new QTableWidgetItem();
+      noHistoryChange = 1;
       this->setItem(list[i].row(), list[i].column(), item);
     }
     double value = 0.0;
@@ -1192,9 +1199,11 @@ void EventSheet::randomize(double min, double max, int mode)
     else /*if (mode == 1)*/ {  // Integers only
       value = min + (qrand() % (int) (max - min + 1)); // Include max value as a possibility
     }
+    noHistoryChange = 1;
     item->setData(Qt::DisplayRole,
                   QVariant(value));
   }
+  noHistoryChange = 0;
   markHistory();
 }
 
@@ -1219,15 +1228,20 @@ void EventSheet::shuffle(int iterations)
     }
     else {
       item1 = new QTableWidgetItem();
+      noHistoryChange = 1;
       this->setItem(list[i].row(), list[i].column(), item1);
     }
     if (item2 == 0) {
       item2 = new QTableWidgetItem();
+      noHistoryChange = 1;
       this->setItem(list[i].row(), list[i].column(), item2);
     }
+    noHistoryChange = 1;
     item1->setData(Qt::DisplayRole,item2->data(Qt::DisplayRole));
+    noHistoryChange = 1;
     item2->setData(Qt::DisplayRole,value1);
   }
+  noHistoryChange = 0;
   markHistory();
 }
 
@@ -1248,11 +1262,14 @@ void EventSheet::rotate(int amount)
     QTableWidgetItem * item = this->item(list[i].row(), list[i].column());
     if (item == 0) {
       item = new QTableWidgetItem();
+      noHistoryChange = 1;
       this->setItem(list[i].row(), list[i].column(), item);
     }
     int index = (i - amount + list.size())%list.size();
+    noHistoryChange = 1;
     item->setData(Qt::DisplayRole,oldValues[index]);
   }
+  noHistoryChange = 0;
   markHistory();
 }
 
@@ -1266,8 +1283,10 @@ void EventSheet::fill(double start, double end, double slope)
     QTableWidgetItem * item = this->item(list[i].row(), list[i].column());
     if (item == 0) {
       item = new QTableWidgetItem();
+      noHistoryChange = 1;
       this->setItem(list[i].row(), list[i].column(), item);
     }
+    noHistoryChange = 1;
     item->setData(Qt::DisplayRole,
                   QVariant(value));
     if (slope == 1.0) {
@@ -1282,6 +1301,7 @@ void EventSheet::fill(double start, double end, double slope)
       value += (end-start) * (exp(((i + 1.0) / (list.size() - 1.0)) * log(slope))-1.0) / (slope-1.0);
     }
   }
+  noHistoryChange = 0;
   markHistory();
 }
 
