@@ -1269,6 +1269,16 @@ void DocumentPage::unindent()
   m_view->unindent();
 }
 
+void DocumentPage::killToEnd()
+{
+  m_view->killToEnd();
+}
+
+void DocumentPage::killLine()
+{
+  m_view->killLine();
+}
+
 void DocumentPage::autoComplete()
 {
   m_view->autoComplete();

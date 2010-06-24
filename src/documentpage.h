@@ -169,6 +169,8 @@ class DocumentPage : public QObject
     void uncomment();
     void indent();
     void unindent();
+    void killLine();
+    void killToEnd();
     void autoComplete();
 
     // Slots for live events

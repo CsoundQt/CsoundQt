@@ -1692,6 +1692,8 @@ void qutecsound::setDefaultKeyboardShortcuts()
   uncommentAct->setShortcut(tr("Shift+Ctrl+/"));
   indentAct->setShortcut(tr("Ctrl+I"));
   unindentAct->setShortcut(tr("Shift+Ctrl+I"));
+  killLineAct->setShortcut(tr("Ctrl+K"));
+  killToEndAct->setShortcut(tr("Shift+Ctrl+K"));
 }
 
 void qutecsound::createActions()
@@ -1986,6 +1988,12 @@ void qutecsound::createActions()
 //   unindentAct->setIconText(tr("Unindent"));
 //   connect(unindentAct, SIGNAL(triggered()), this, SLOT(unindent()));
 
+  killLineAct = new QAction(tr("Kill Line"), this);
+  killLineAct->setStatusTip(tr("Completeley delete current line"));
+
+  killToEndAct = new QAction(tr("Kill to End of Line"), this);
+  killToEndAct->setStatusTip(tr("Delete everything from cursor to the end of the current line"));
+
   aboutAct = new QAction(tr("&About QuteCsound"), this);
   aboutAct->setStatusTip(tr("Show the application's About box"));
 //   aboutAct->setIconText(tr("About"));
@@ -2066,6 +2074,8 @@ void qutecsound::setKeyboardShortcutsList()
   m_keyActions.append(showOpcodeQuickRefAct);
   m_keyActions.append(infoAct);
   m_keyActions.append(viewFullScreenAct);
+  m_keyActions.append(killLineAct);
+  m_keyActions.append(killToEndAct);
 }
 
 void qutecsound::connectActions()
@@ -2087,12 +2097,16 @@ void qutecsound::connectActions()
   disconnect(uncommentAct, 0, 0, 0);
   disconnect(indentAct, 0, 0, 0);
   disconnect(unindentAct, 0, 0, 0);
+  disconnect(killLineAct, 0, 0, 0);
+  disconnect(killToEndAct, 0, 0, 0);
 //  disconnect(findAct, 0, 0, 0);
 //  disconnect(findAgainAct, 0, 0, 0);
   connect(commentAct, SIGNAL(triggered()), doc, SLOT(comment()));
   connect(uncommentAct, SIGNAL(triggered()), doc, SLOT(uncomment()));
   connect(indentAct, SIGNAL(triggered()), doc, SLOT(indent()));
   connect(unindentAct, SIGNAL(triggered()), doc, SLOT(unindent()));
+  connect(killLineAct, SIGNAL(triggered()), doc, SLOT(killLine()));
+  connect(killToEndAct, SIGNAL(triggered()), doc, SLOT(killToEnd()));
 
 //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
 //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
@@ -2166,6 +2180,8 @@ void qutecsound::createMenus()
   editMenu->addAction(uncommentAct);
   editMenu->addAction(indentAct);
   editMenu->addAction(unindentAct);
+  editMenu->addAction(killLineAct);
+  editMenu->addAction(killToEndAct);
   editMenu->addSeparator();
   editMenu->addAction(joinAct);
   editMenu->addAction(inToGetAct);

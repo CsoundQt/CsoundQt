@@ -329,7 +329,11 @@ QString DocumentView::wordUnderCursor()
 {
   QTextCursor cursor = editors[0]->textCursor();
   cursor.select(QTextCursor::WordUnderCursor);
-  return cursor.selectedText();
+  QString word = cursor.selectedText();
+  if (word.startsWith('#')) {
+    word.remove(0,1);
+  }
+  return word;
 }
 
 //void DocumentView::updateDocumentModel()
@@ -791,6 +795,43 @@ void DocumentView::unindent()
   text.replace("\n" + indentChar, QString("\n")); //TODO make more robust
   cursor.insertText(text);
   editors[0]->setTextCursor(cursor);
+}
+
+void DocumentView::killLine()
+{
+  // TODO implment for multiple views
+//  internalChange = true;
+  QString indentChar = "";
+//  if (m_mode == 0) {
+//    indentChar = "\t";
+//  }
+//  else if (m_mode == 1) { // Python Mode
+//    indentChar = "    ";
+//  }
+  QTextCursor cursor = editors[0]->textCursor();
+  if (!cursor.atBlockStart()) {
+    cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+  }
+  cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+  cursor.insertText("");
+}
+
+void DocumentView::killToEnd()
+{
+  // TODO implment for multiple views
+//  internalChange = true;
+  QString indentChar = "";
+//  if (m_mode == 0) {
+//    indentChar = "\t";
+//  }
+//  else if (m_mode == 1) { // Python Mode
+//    indentChar = "    ";
+//  }
+  QTextCursor cursor = editors[0]->textCursor();
+  if (!cursor.atBlockEnd()) {
+    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+  }
+  cursor.insertText("");
 }
 
 void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)

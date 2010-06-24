@@ -109,6 +109,8 @@ class DocumentView : public QScrollArea
     void uncomment();
     void indent();
     void unindent();
+    void killLine();
+    void killToEnd();
 
     void markErrorLines(QList<QPair<int, QString> > lines);
     void unmarkErrorLines();

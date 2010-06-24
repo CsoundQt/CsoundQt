@@ -273,6 +273,8 @@ class qutecsound:public QMainWindow
     QAction *uncommentAct;
     QAction *indentAct;
     QAction *unindentAct;
+    QAction *killLineAct;
+    QAction *killToEndAct;
     QAction *aboutAct;
     QAction *donateAct;
     QAction *aboutQtAct;
