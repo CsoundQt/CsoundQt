@@ -34,14 +34,17 @@ APP_NAME=${NEW_NAME}.app
 
 mv $ORIG_APP_NAME/ $APP_NAME/
 
+
 if [ "$nflag" -ne 1 ]
         then
-tar -czvf ${NEW_NAME}-noQt.tar.gz $APP_NAME &>/dev/null
+  echo "---------------- Making noQt package"
+  tar -czvf ${NEW_NAME}-noQt.tar.gz $APP_NAME &>/dev/null
 fi
 
 mkdir $APP_NAME/Contents/Frameworks
 
 # make version including Qt
+echo "---------------- Making incQt package"
 cp -R /Library/Frameworks/QtCore.framework $APP_NAME/Contents/Frameworks/
 cp -R /Library/Frameworks/QtGui.framework $APP_NAME/Contents/Frameworks/
 cp -R /Library/Frameworks/QtXml.framework $APP_NAME/Contents/Frameworks/
@@ -68,6 +71,7 @@ tar -czvf ${NEW_NAME}-incQt.tar.gz $APP_NAME &>/dev/null
 fi
 
 # make Standalone application
+echo "---------------- Making standalone app"
 cp -R /Library/Frameworks/CsoundLib.framework $APP_NAME/Contents/Frameworks/
 cp /usr/local/lib/libsndfile.1.dylib $APP_NAME/Contents/libsndfile.dylib
 cp /usr/local/lib/libportaudio.2.0.0.dylib $APP_NAME/Contents/libportaudio.dylib
@@ -143,7 +147,7 @@ cd $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Opco
 for f in *
 do
   echo "---------------- Processing $f file..."
-  # take action on each file. $f store current file name
+  # take action on each file. $f stores current file name
 
 install_name_tool -id @executable_path/../Frameworks/CsoundLib.framework/Versions/5.2/Resources/Opcodes/$f $f
 install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib $f

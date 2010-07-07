@@ -884,12 +884,15 @@ void CsoundEngine::clearMessageQueue()
 
 void CsoundEngine::flushMessageQueue()
 {
-  foreach (QString msg, messageQueue) { //Flush pending messages
+  messageMutex.lock();
+  while (!messageQueue.isEmpty()) {
+    QString msg = messageQueue.takeFirst();
     for (int i = 0; i < ud->cs->consoles.size(); i++) {
       ud->cs->consoles[i]->appendMessage(msg);
     }
     ud->wl->appendMessage(msg);
   }
+  messageMutex.unlock();
   for (int i = 0; i < ud->cs->consoles.size(); i++) {
     ud->cs->consoles[i]->scrollToEnd();
   }

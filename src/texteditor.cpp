@@ -27,6 +27,7 @@ TextEditor::TextEditor(QWidget *parent) :
     QTextEdit(parent)
 {
   setAcceptDrops(true);
+  setAcceptRichText(false);
 //  qDebug() << "TextEditor::TextEditor" << acceptDrops();
 }
 

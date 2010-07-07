@@ -34,4 +34,6 @@ LSNDFILE = -lsndfile
 
 QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist
 ICON = $${PWD}/images/qtcs.icns
+
+CONFIG += x86
 #OTHER_FILES += $${QMAKE_INFO_PLIST}

@@ -413,35 +413,9 @@ QString DocumentPage::getWidgetsText()
   QString text = m_widgetLayout->getWidgetsText();
   QDomDocument d;
   d.setContent(text);
-  QDomElement n = d.firstChildElement("bsbPanel");
-  if (!n.isNull()) {
-    qDebug() << "DocumentPage::getWidgetsText() bsbPanel found";
-    QRect geo = m_widgetLayout->getOuterGeometry();
-    QDomElement node = d.createElement("objectName");
-    node.setNodeValue(fileName);
-    n.appendChild(node);
-    QDomElement nodex = d.createElement("x");
-    nodex.appendChild(d.createTextNode(QString::number(geo.x())));
-    n.appendChild(nodex);
-    QDomElement nodey = d.createElement("y");
-    nodey.appendChild(d.createTextNode(QString::number(geo.y())));
-    n.appendChild(nodey);
-    QDomElement nodew = d.createElement("width");
-    nodew.appendChild(d.createTextNode(QString::number(geo.width())));
-    n.appendChild(nodew);
-    QDomElement nodeh = d.createElement("height");
-    nodeh.appendChild(d.createTextNode(QString::number(geo.height())));
-    n.appendChild(nodeh);
-    QDomElement nodev = d.createElement("visible");
-    nodev.appendChild(d.createTextNode("true"));
-    n.appendChild(nodev);
-    //TODO add uuid for widget layout
-//    newtext = "<uuid>" "</uuid>";
-//    node.setContent(newtext);
-//    d.appendChild(node);
-  }
-//  qDebug() << n.toText().nodeValue();
-//  qDebug() << d.toString();
+//  QDomElement n = d.firstChildElement("bsbPanel");
+//  if (!n.isNull()) {
+//  }
   return d.toString();
 }
 
