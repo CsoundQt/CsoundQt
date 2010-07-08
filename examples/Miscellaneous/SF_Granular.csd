@@ -165,6 +165,7 @@ arndpos		linrand	 kposrand	; random offset in phase values
 ;add random deviation to the time pointer
 asamplepos		= afilposphas + arndpos; resulting phase values (0-1)
 gksamplepos		downsamp	asamplepos; export pointer position 
+		outvalue	"posdisp", gksamplepos
 
 agrL, agrR	partikkel kgrainrate, kdist, giDisttab, async, kenv2amt, ienv2tab, \
 		ienv_attack, ienv_decay, ksustain_amount, ka_d_ratio, kgrainsize, kamp, igainmasks, \
@@ -204,7 +205,7 @@ e
  <label>Widgets</label>
  <objectName/>
  <x>350</x>
- <y>27</y>
+ <y>45</y>
  <width>906</width>
  <height>818</height>
  <visible>true</visible>
@@ -370,7 +371,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>0.971</label>
+  <label>0.580</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -401,7 +402,7 @@ e
   <midicc>-3</midicc>
   <minimum>-2.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.97142857</value>
+  <value>0.57959184</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -571,7 +572,7 @@ e
   <midicc>-3</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/Joachim/Materialien/SamplesKlangbearbeitung/SpracheMono.aiff</stringvalue>
+  <stringvalue/>
   <text>Open File</text>
   <image>/</image>
   <eventLine/>
@@ -609,8 +610,8 @@ e
   <objectName/>
   <x>634</x>
   <y>392</y>
-  <width>185</width>
-  <height>27</height>
+  <width>217</width>
+  <height>28</height>
   <uuid>{1203e7e5-3b2e-498e-9eef-820f953c2e68}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1488,7 +1489,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.50323272</xValue>
+  <xValue>0.87425840</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1630,7 +1631,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.51188666</xValue>
+  <xValue>0.92437929</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1681,9 +1682,71 @@ e
    <b>0</b>
   </bgcolor>
  </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>posdisp</objectName>
+  <x>608</x>
+  <y>706</y>
+  <width>260</width>
+  <height>31</height>
+  <uuid>{5c334baa-687d-4daf-8a6c-e81209a7349e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>vert55</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.19870219</xValue>
+  <yValue>0.00000000</yValue>
+  <type>line</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>114</r>
+   <g>49</g>
+   <b>234</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>634</x>
+  <y>669</y>
+  <width>215</width>
+  <height>30</height>
+  <uuid>{f665fc9d-8ec8-4f3a-82da-beb4a2c65961}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Position in the soundfile</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
  <objectName/>
  <x>350</x>
- <y>27</y>
+ <y>45</y>
  <width>906</width>
  <height>818</height>
  <visible>true</visible>
@@ -1696,7 +1759,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 350 27 906 818
+WindowBounds: 350 45 906 818
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -1709,8 +1772,8 @@ ioText {475, 386} {20, 25} label 1.000000 0.00100 "" left "Lucida Grande" 14 {0,
 ioText {288, 386} {20, 25} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0
 ioCheckbox {496, 388} {20, 20} off speed1
 ioCheckbox {268, 388} {20, 20} off speed0
-ioText {303, 439} {172, 29} display 0.971000 0.00100 "speed" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.971
-ioSlider {269, 415} {245, 28} -2.000000 2.000000 0.971429 speed
+ioText {303, 439} {172, 29} display 0.579592 0.00100 "speed" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.580
+ioSlider {269, 415} {245, 28} -2.000000 2.000000 0.579592 speed
 ioText {334, 386} {119, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Playback Speed
 ioText {149, 683} {71, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder wide
 ioText {27, 683} {71, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder narrow
@@ -1751,12 +1814,14 @@ ioText {400, 209} {61, 28} editnum 50.000000 1.000000 "dbrange" left "" 0 {0, 0,
 ioText {9, 58} {872, 66} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Granulates a stored sound. You can use either a mono or stereo soundfile (from the latter just channel 1 is used).
 ioText {9, 9} {872, 43} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {65280, 65280, 65280} nobackground noborder GRANULAR SYNTHESIS OF A SOUNDFILE
 ioText {499, 129} {383, 119} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder  OUTPUT
-ioMeter {511, 197} {335, 18} {0, 59904, 0} "outL" 0.503233 "out2_post" 0.000000 fill 1 0 mouse
+ioMeter {511, 197} {335, 18} {0, 59904, 0} "outL" 0.874258 "out2_post" 0.000000 fill 1 0 mouse
 ioMeter {844, 197} {26, 18} {50176, 3584, 3072} "outLover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
 ioText {510, 164} {95, 27} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Output Gain
 ioSlider {606, 165} {205, 24} 0.000000 5.000000 1.000000 gain
 ioText {812, 164} {61, 27} display 1.000000 0.00100 "gain" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000
-ioMeter {511, 222} {335, 18} {0, 59904, 0} "outR" 0.511887 "out2_post" 0.000000 fill 1 0 mouse
+ioMeter {511, 222} {335, 18} {0, 59904, 0} "outR" 0.924379 "out2_post" 0.000000 fill 1 0 mouse
 ioMeter {844, 222} {26, 18} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
+ioMeter {608, 706} {260, 31} {29184, 12544, 59904} "posdisp" 0.198702 "vert55" 0.000000 line 1 0 mouse
+ioText {650, 668} {185, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Position in the soundfile
 </MacGUI>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="612" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
