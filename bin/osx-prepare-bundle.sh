@@ -9,6 +9,16 @@
 
 clear
 
+echo Enter version number/name:
+read QUTECSOUND_VERSION
+echo "Enter Architecture (Enter for default: 'OSX-Universal'):"
+read QUTECSOUND_ARCH
+
+if [ $QUTECSOUND_ARCH = ""]
+        then
+  QUTECSOUND_ARCH="OSX-Universal"
+fi
+
 nflag=0
 vflag=
 while getopts 'nv:' OPTION
@@ -30,7 +40,7 @@ ORIGINAL_NAME=qutecsound-f
 NEW_NAME=QuteCsound
 
 ORIG_APP_NAME=${ORIGINAL_NAME}.app
-APP_NAME=${NEW_NAME}.app
+APP_NAME=${NEW_NAME}-${QUTECSOUND_VERSION}.app
 
 mv $ORIG_APP_NAME/ $APP_NAME/
 
@@ -38,7 +48,7 @@ mv $ORIG_APP_NAME/ $APP_NAME/
 if [ "$nflag" -ne 1 ]
         then
   echo "---------------- Making noQt package"
-  tar -czvf ${NEW_NAME}-noQt.tar.gz $APP_NAME &>/dev/null
+  tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}-${QUTECSOUND_ARCH}-noQt.tar.gz $APP_NAME &>/dev/null
 fi
 
 mkdir $APP_NAME/Contents/Frameworks
@@ -67,7 +77,7 @@ otool -L $APP_NAME/Contents/MacOS/$ORIGINAL_NAME
 
 if [ "$nflag"  -ne 1 ]
         then
-tar -czvf ${NEW_NAME}-incQt.tar.gz $APP_NAME &>/dev/null
+tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}-${QUTECSOUND_ARCH}-incQt.tar.gz $APP_NAME &>/dev/null
 fi
 
 # make Standalone application
@@ -176,7 +186,7 @@ cd ../../../../../../../../
 
 if [ "$nflag" -ne 1 ]
         then
-tar -czvf ${NEW_NAME}-full.tar.gz $APP_NAME &>/dev/null
+tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}-${QUTECSOUND_ARCH}-full.tar.gz $APP_NAME &>/dev/null
 fi
 
 
