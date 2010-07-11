@@ -3,11 +3,10 @@
 </CsOptions>
 <CsInstruments>
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Stria
 ;;; by John Chowning
-;;; Reconstruction - ORChestra csound code
+;;; Reconstruction -
 ;;; Kevin Dahan 2007
 ;;; kevin.dahan@wanadoo.fr
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -670,20 +669,110 @@ e
 
 </CsScore>
 
-</CsoundSynthesizer>
+</CsoundSynthesizer><bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>504</x>
+ <y>194</y>
+ <width>397</width>
+ <height>300</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background" >
+  <r>170</r>
+  <g>170</g>
+  <b>255</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>6</x>
+  <y>3</y>
+  <width>374</width>
+  <height>196</height>
+  <uuid>{1e8715a7-c653-4db3-9520-dc7d19d53692}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>                 Stria
+;;; by John Chowning
+;;; Reconstruction:
+;;; Kevin Dahan 2007
+;;; kevin.dahan@wanadoo.fr
+
+The basis for this code was the original MUS10 orchestra file with modifications by John Chowning and Kevin Dahan</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>16</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>5</borderradius>
+  <borderwidth>2</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>_Pause</objectName>
+  <x>204</x>
+  <y>208</y>
+  <width>100</width>
+  <height>30</height>
+  <uuid>{c4002dba-d687-4354-b91a-67822e7777c7}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Pause</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>_Play</objectName>
+  <x>84</x>
+  <y>208</y>
+  <width>100</width>
+  <height>30</height>
+  <uuid>{192c01d7-a5de-4662-b202-1603730eb47c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Start/Resume</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
 <MacOptions>
 Version: 3
 Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 72 179 400 247
+WindowBounds: 504 194 397 300
 CurrentView: io
 IOViewEdit: On
 Options:
 </MacOptions>
 <MacGUI>
-ioView nobackground {61423, 60395, 59367}
-ioText {5, 3} {374, 196} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} background border ;;; StriaÂ¬;;; by John ChowningÂ¬;;; Reconstruction - ORChestra csound codeÂ¬;;; Kevin Dahan 2007Â¬;;; kevin.dahan@wanadoo.frÂ¬;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Â¬The basis for this code was the original MUS10 orchestra fileÂ¬with modifications by John Chowning and Kevin Dahan
+ioView background {43690, 43690, 65535}
+ioText {6, 3} {374, 196} label 0.000000 0.00100 "" left "DejaVu Sans" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder                  StriaÂ¬;;; by John ChowningÂ¬;;; Reconstruction:Â¬;;; Kevin Dahan 2007Â¬;;; kevin.dahan@wanadoo.frÂ¬Â¬The basis for this code was the original MUS10 orchestra file with modifications by John Chowning and Kevin Dahan
+ioButton {204, 208} {100, 30} value 1.000000 "_Pause" "Pause" "/" i1 0 10
+ioButton {84, 208} {100, 30} value 1.000000 "_Play" "Start/Resume" "/" i1 0 10
 </MacGUI>
-

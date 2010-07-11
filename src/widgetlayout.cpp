@@ -43,12 +43,12 @@
 #include "qutecsound.h" // For passing the actions from button reserved channels
 
 #ifdef Q_OS_LINUX
-#define LAYOUT_X_OFFSET 5
-#define LAYOUT_Y_OFFSET 30
+#define LAYOUT_X_OFFSET 0
+#define LAYOUT_Y_OFFSET 0
 #endif
 #ifdef Q_OS_SOLARIS
 #define LAYOUT_X_OFFSET 0
-#define LAYOUT_Y_OFFSET 25
+#define LAYOUT_Y_OFFSET 0
 #endif
 #ifdef Q_OS_MAC
 #define LAYOUT_X_OFFSET 0
@@ -56,7 +56,7 @@
 #endif
 #ifdef Q_OS_WIN32
 #define LAYOUT_X_OFFSET 0
-#define LAYOUT_Y_OFFSET 25
+#define LAYOUT_Y_OFFSET 0
 #endif
 
 
@@ -185,15 +185,15 @@ WidgetLayout::~WidgetLayout()
 //  return number;
 //}
 
-void WidgetLayout::loadWidgets(QString widgets)
-{
-  if (m_xmlFormat) {
-    loadXmlWidgets(widgets);
-  }
-  else {
-    loadMacWidgets(widgets);
-  }
-}
+//void WidgetLayout::loadWidgets(QString widgets)
+//{
+//  if (m_xmlFormat) {
+//    loadXmlWidgets(widgets);
+//  }
+//  else {
+//    loadMacWidgets(widgets);
+//  }
+//}
 
 void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 {
@@ -682,6 +682,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
   }
   else {
     qDebug() << "WidgetLayout::newXmlWidget " << type << " not implemented";
+    QuteDummy *w = new QuteDummy(this);
   }
   if (widget == 0) {
     qDebug() << "WidgetLayout::newXmlWidget ERROR widget has not been created!";
@@ -2150,7 +2151,8 @@ int WidgetLayout::createText(int x, int y, int width, int height, QString widget
   else {
     widget->setProperty("QCS_resolution", parts[7].toDouble());
   }
-  widget->setProperty("QCS_label", labelText.replace("\u00AC", "\n"));
+  labelText.replace("\u00AC", "\n");
+  widget->setProperty("QCS_label", labelText);
   widget->setFontOffset(m_fontOffset);
   widget->setFontScaling(m_fontScaling);
   widget->applyInternalProperties();

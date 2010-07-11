@@ -678,19 +678,119 @@ e
 
 </CsScore>
 </CsoundSynthesizer>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>588</x>
+ <y>168</y>
+ <width>385</width>
+ <height>363</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground" >
+  <r>230</r>
+  <g>221</g>
+  <b>213</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>4</x>
+  <y>6</y>
+  <width>362</width>
+  <height>262</height>
+  <uuid>{27322e7e-4690-4757-ae3e-5cfb788f78b6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>;                            == TRAPPED IN CONVERT ==                        ;
+;                                Richard Boulanger                           ;
+;============================================================================;
+;============================================================================;
+;                                   ORCHESTRA                                ;
+;============================================================================;
+;============================================================================;
+;============================================================================;
+;                            written July 1979 in music11                    ;
+;                          M.I.T. Experimental Music Studio                  ;
+;                            revised June 1986 in Csound                     ;
+;                                M.I.T. Media Lab                            ;
+;                          revised July 1996 in SHARCsound                   ;
+;                                Analog Devices Inc.                         ;
+;============================================================================;
+;============================================================================;</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>_Play</objectName>
+  <x>69</x>
+  <y>282</y>
+  <width>100</width>
+  <height>30</height>
+  <uuid>{192c01d7-a5de-4662-b202-1603730eb47c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Start/Resume</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>_Pause</objectName>
+  <x>189</x>
+  <y>282</y>
+  <width>100</width>
+  <height>30</height>
+  <uuid>{c4002dba-d687-4354-b91a-67822e7777c7}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Pause</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
 <MacOptions>
 Version: 3
 Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 170 289 386 315
+WindowBounds: 588 168 385 363
 CurrentView: io
 IOViewEdit: On
 Options:
 </MacOptions>
 <MacGUI>
 ioView nobackground {59110, 56797, 54741}
-ioText {4, 6} {362, 262} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} background border ;                            == TRAPPED IN CONVERT ==                        ;Â¬;                                Richard Boulanger                           ;Â¬;============================================================================;Â¬;============================================================================;Â¬;                                   ORCHESTRA                                ;Â¬;============================================================================;Â¬;============================================================================;Â¬;============================================================================;Â¬;                            written July 1979 in music11                    ;Â¬;                          M.I.T. Experimental Music Studio                  ;Â¬;                            revised June 1986 in Csound                     ;Â¬;                                M.I.T. Media Lab                            ;Â¬;                          revised July 1996 in SHARCsound                   ;Â¬;                                Analog Devices Inc.                         ;Â¬;============================================================================;Â¬;============================================================================;
+ioText {4, 6} {362, 262} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ;                            == TRAPPED IN CONVERT ==                        ;Â¬;                                Richard Boulanger                           ;Â¬;============================================================================;Â¬;============================================================================;Â¬;                                   ORCHESTRA                                ;Â¬;============================================================================;Â¬;============================================================================;Â¬;============================================================================;Â¬;                            written July 1979 in music11                    ;Â¬;                          M.I.T. Experimental Music Studio                  ;Â¬;                            revised June 1986 in Csound                     ;Â¬;                                M.I.T. Media Lab                            ;Â¬;                          revised July 1996 in SHARCsound                   ;Â¬;                                Analog Devices Inc.                         ;Â¬;============================================================================;Â¬;============================================================================;
+ioButton {69, 282} {100, 30} value 1.000000 "_Play" "Start/Resume" "/" i1 0 10
+ioButton {189, 282} {100, 30} value 1.000000 "_Pause" "Pause" "/" i1 0 10
 </MacGUI>
-

@@ -1,46 +1,38 @@
 ;This file is released with CC-by-sa license. http://creativecommons.org
 
-;Created by: Stefano Valli  - www.triceratupuz.altervista.org - email: 
+;Created by: Stefano Valli  - www.triceratupuz.altervista.org - email:
 ;vallste at libero.it
 ;www.triceratupuz.altervista.org
 
-;Ftables inclusion and testing by: Joachim Heintz - www.joachimheintz.de - 
+;For Csound 5.00 and above
+;Ftables inclusion and testing by: Joachim Heintz - www.joachimheintz.de -
 ;email: jh at joachimheintz.de
 
 ;Table reading optimization to 1 instrument by Andres Cabrera
 
-;If you have problems to play this file in QuteCsound,
-;go to the Configurations dialog and choose "Run FLTK in Terminal"
-
 <CsoundSynthesizer>
 <CsOptions>
--nm0  ;No output messages
+-fdhm0 -odac:plughw -b256 -B1024 --expression-opt -+rtaudio=alsa -+rtmidi=null
 </CsOptions>
 <CsInstruments>
-sr	= 44100
-kr	= 4410
+sr		= 44100
+ksmps	= 10
 nchnls	= 2
-zakinit 20, 1
-;-------------------------MACROS--------------------------
-;Interface column
-#define PLAYINT(NUM)
-#ix$NUM init 10 + ($NUM - 1) *50
-ihandle FLbox "Player $NUM", 8, 1, 12, 50, 23, ix$NUM, 1
-gkpatt_index$NUM, giflbuttbank$NUM FLbutBank 12, 1, 53, 50, 672, ix$NUM, 49, -1
-gkOnOff$NUM, gihOnOff$NUM FLbutton	"@|>",	1, 0, 2, 50, 30, ix$NUM, 19, 0, 1, 0, -1#
+
+		zakinit	20, 1
 
 ;---------------------INITIALIZATION-----------------
-gisin ftgen 1, 0, 16384, 10, 1; sine wave
-gisqu ftgen 2, 0, 16384, 10, 1, 0, .333, 0, .25, 0, .14285; square wave
-gitri ftgen 3, 0, 16384, 10, 1, 0, .11111, 0, .04, 0, .0204; triangle wave
-gisaw ftgen 4, 0, 16384, 10, 1, .5, .3333, .25, .2, .1666, .142857, .125, .111;sawtooth
+gisin ftgen	1, 0, 16384, 10, 1											; sine wave
+gisqu ftgen	2, 0, 16384, 10, 1, 0, .333, 0, .25, 0, .14285					; square wave
+gitri ftgen	3, 0, 16384, 10, 1, 0, .11111, 0, .04, 0, .0204					; triangle wave
+gisaw ftgen	4, 0, 16384, 10, 1, .5, .3333, .25, .2, .1666, .142857, .125, .111	; sawtooth
 
 ;table that store pattern length
-gipattdur ftgen 100, 0, 64, -2,  11, 22,	33,	44,	55,	66,	77,	88,	99,	0,	0,	0,	0,	0,	0,	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+gipattdur	ftgen	100, 0, 64, -2, 11, 22, 33, 44, 55, 66, 77, 88, 99, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 ;pattern tables
-;table dimension must be equal or higher of the table recorded numbers and power of 2
+;table dimension must be equal or higher of the table recorded numbers
 ;p6=legato 1 or 0
-;middle C = 261.626 C4 Midi60 8.00 
+;middle C = 261.626 C4 Midi60 8.00
 itab01 ftgen 101, 0, -54, -2, \
 	0,	0,	.1,	30000,	8.00,\
 	0,	.1,	.9,	30000,	8.04,\
@@ -92,9 +84,9 @@ itab06 ftgen 106, 0, -24, -2, \
 	-1,	-1,	-1,	-1,	-1
 
 itab07 ftgen 107, 0, -30, -2, \
-	0,	3.5,	0.25,	30000,	8.00,\
+	0,	3.5,		0.25,	30000,	8.00,\
 	0,	3.75,	0.25,	30000,	8.00,\
-	0,	4,	0.50,	30000,	8.00,\
+	0,	4,		0.50,	30000,	8.00,\
 	-1,	9,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
@@ -107,25 +99,25 @@ itab08 ftgen 108, 0, -30, -2, \
 
 itab09 ftgen 109, 0, -30, -2, \
 	0,	0,	0.25,	30000,	8.11,\
-	0,	0.25,	0.25,	30000,	8.07,\
+	0,	0.25,0.25,	30000,	8.07,\
 	0,	4,	0.25,	30000,	8.11,\
 	-1,	4,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab10 ftgen 110, 0, -30, -2, \
 	0,	0,	0.25,	30000,	8.11,\
-	0,	0.25,	0.25,	30000,	8.07,\
+	0,	0.25,0.25,	30000,	8.07,\
 	0,	0.5,	0.25,	30000,	8.11,\
 	-1,	0.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab11 ftgen 111, 0, -54, -2, \
 	0,	0,	0.25,	30000,	8.05,\
-	0,	0.25,	0.25,	30000,	8.07,\
+	0,	0.25,0.25,	30000,	8.07,\
 	0,	0.5,	0.25,	30000,	8.11,\
-	0,	0.75,	0.25,	30000,	8.07,\
+	0,	0.75,0.25,	30000,	8.07,\
 	0,	1,	0.25,	30000,	8.11,\
-	0,	1.25,	0.25,	30000,	8.07,\
+	0,	1.25,0.25,	30000,	8.07,\
 	0,	1.5,	0.25,	30000,	8.05,\
 	-1,	1.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
@@ -141,11 +133,11 @@ itab12 ftgen 112, 0, -42, -2, \
 
 itab13 ftgen 113, 0, -54, -2, \
 	0,	0,	0.25,	30000,	8.11,\
-	0,	0.25,	0.75,	30000,	8.07,\
+	0,	0.25,0.75,	30000,	8.07,\
 	0,	1,	0.25,	30000,	8.07,\
-	0,	1.25,	0.25,	30000,	8.05,\
+	0,	1.25,0.25,	30000,	8.05,\
 	0,	1.5,	0.50,	30000,	8.07,\
-	0,	2.75,	3.25,	30000,	8.07,\
+	0,	2.75,3.25,	30000,	8.07,\
 	0,	6,	0.25,	30000,	8.11,\
 	-1,	6,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
@@ -167,18 +159,18 @@ itab15 ftgen 115, 0, -24, -2, \
 
 itab16 ftgen 116, 0, -42, -2, \
 	0,	0,	0.25,	30000,	8.07,\
-	0,	0.25,	0.25,	30000,	8.11,\
+	0,	0.25,0.25,	30000,	8.11,\
 	0,	0.5,	0.25,	30000,	9.00,\
-	0,	0.75,	0.25,	30000,	8.11,\
+	0,	0.75,0.25,	30000,	8.11,\
 	0,	1,	0.25,	30000,	8.07,\
 	-1,	1,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab17 ftgen 117, 0, -48, -2, \
 	0,	0,	0.25,	30000,	8.11,\
-	0,	0.25,	0.25,	30000,	9.00,\
+	0,	0.25,0.25,	30000,	9.00,\
 	0,	0.5,	0.25,	30000,	8.11,\
-	0,	0.75,	0.25,	30000,	9.00,\
+	0,	0.75,0.25,	30000,	9.00,\
 	0,	1,	0.25,	30000,	8.11,\
 	0,	1.5,	0.25,	30000,	8.11,\
 	-1,	1.5,	-1,	-1,	-1,\
@@ -186,29 +178,29 @@ itab17 ftgen 117, 0, -48, -2, \
 
 itab18 ftgen 118, 0, -54, -2, \
 	0,	0,	0.25,	30000,	8.04,\
-	0,	0.25,	0.25,	30000,	8.06,\
+	0,	0.25,0.25,	30000,	8.06,\
 	0,	0.5,	0.25,	30000,	8.04,\
-	0,	0.75,	0.25,	30000,	8.06,\
+	0,	0.75,0.25,	30000,	8.06,\
 	0,	1,	0.75,	30000,	8.04,\
-	0,	1.75,	0.25,	30000,	8.04,\
+	0,	1.75,0.25,	30000,	8.04,\
 	0,	2,	0.25,	30000,	8.04,\
 	-1,	2,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab19 ftgen 119, 0, -30, -2, \
 	0,	0,	1.50,	0,	8.04,\
-	0,	1.5,	1.50,	30000,	9.07,\
+	0,	1.5,	1.50,30000,	9.07,\
 	0,	3,	1.50,	0,	8.04,\
 	-1,	3,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab20 ftgen 120, 0, -78, -2, \
 	0,	0,	0.25,	30000,	8.04,\
-	0,	0.25,	0.25,	30000,	8.06,\
+	0,	0.25,0.25,	30000,	8.06,\
 	0,	0.5,	0.25,	30000,	8.04,\
-	0,	0.75,	0.25,	30000,	8.06,\
+	0,	0.75,0.25,	30000,	8.06,\
 	0,	1,	0.75,	30000,	7.07,\
-	0,	1.75,	0.25,	30000,	8.04,\
+	0,	1.75,0.25,	30000,	8.04,\
 	0,	2,	1.00,	30000,	8.06,\
 	0,	3,	1.00,	30000,	8.04,\
 	0,	4,	1.00,	30000,	8.06,\
@@ -231,9 +223,9 @@ itab22 ftgen 122, 0, -72, -2, \
 	0,	6,	1.50,	30000,	8.04,\
 	0,	7.5,	1.50,	30000,	8.06,\
 	0,	9,	1.50,	30000,	8.07,\
-	0,	10.5,	1.50,	30000,	8.09,\
+	0,	10.5,1.50,	30000,	8.09,\
 	0,	12,	0.50,	30000,	8.11,\
-	0,	12.5,	1.50,	30000,	8.04,\
+	0,	12.5,1.50,	30000,	8.04,\
 	-1,	12.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
@@ -275,7 +267,7 @@ itab25 ftgen 125, 0, -72, -2, \
 	0,	6,	1.50,	30000,	8.09,\
 	0,	7.5,	1.50,	30000,	8.09,\
 	0,	9,	1.50,	30000,	8.11,\
-	0,	10.5,	0.50,	30000,	8.04,\
+	0,	10.5,0.50,	30000,	8.04,\
 	-1,	10.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
@@ -295,27 +287,27 @@ itab26 ftgen 126, 0, -72, -2, \
 
 itab27 ftgen 127, 0, -84, -2, \
 	0,	0,	0.25,	30000,	8.04,\
-	0,	0.25,	0.25,	30000,	8.06,\
+	0,	0.25,0.25,	30000,	8.06,\
 	0,	0.5,	0.25,	30000,	8.04,\
-	0,	0.75,	0.25,	30000,	8.06,\
+	0,	0.75,0.25,	30000,	8.06,\
 	0,	1,	0.50,	30000,	8.07,\
 	0,	1.5,	0.25,	30000,	8.04,\
-	0,	1.75,	0.25,	30000,	8.07,\
+	0,	1.75,0.25,	30000,	8.07,\
 	0,	2,	0.25,	30000,	8.06,\
-	0,	2.25,	0.25,	30000,	8.04,\
+	0,	2.25,0.25,	30000,	8.04,\
 	0,	2.5,	0.25,	30000,	8.06,\
-	0,	2.75,	0.25,	30000,	8.04,\
+	0,	2.75,0.25,	30000,	8.04,\
 	0,	3,	0.25,	30000,	8.04,\
 	-1,	3,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab28 ftgen 128, 0, -54, -2, \
 	0,	0,	0.25,	30000,	8.04,\
-	0,	0.25,	0.25,	30000,	8.06,\
+	0,	0.25,0.25,	30000,	8.06,\
 	0,	0.5,	0.25,	30000,	8.04,\
-	0,	0.75,	0.25,	30000,	8.06,\
+	0,	0.75,0.25,	30000,	8.06,\
 	0,	1,	0.75,	30000,	8.04,\
-	0,	1.75,	0.25,	30000,	8.04,\
+	0,	1.75,0.25,	30000,	8.04,\
 	0,	2,	0.25,	30000,	8.04,\
 	-1,	2,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
@@ -336,22 +328,22 @@ itab30 ftgen 130, 0, -24, -2, \
 
 itab31 ftgen 131, 0, -54, -2, \
 	0,	0,	0.25,	30000,	8.07,\
-	0,	0.25,	0.25,	30000,	8.05,\
+	0,	0.25,0.25,	30000,	8.05,\
 	0,	0.5,	0.25,	30000,	8.07,\
-	0,	0.75,	0.25,	30000,	8.11,\
+	0,	0.75,0.25,	30000,	8.11,\
 	0,	1,	0.25,	30000,	8.07,\
-	0,	1.25,	0.25,	30000,	8.11,\
+	0,	1.25,0.25,	30000,	8.11,\
 	0,	1.5,	0.25,	30000,	8.07,\
 	-1,	1.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab32 ftgen 132, 0, -60, -2, \
 	0,	0,	0.25,	30000,	8.05,\
-	0,	0.25,	0.25,	30000,	8.07,\
+	0,	0.25,0.25,	30000,	8.07,\
 	0,	0.5,	0.25,	30000,	8.05,\
-	0,	0.75,	0.25,	30000,	8.07,\
+	0,	0.75,0.25,	30000,	8.07,\
 	0,	1,	0.25,	30000,	8.11,\
-	0,	1.25,	3.25,	30000,	8.05,\
+	0,	1.25,3.25,	30000,	8.05,\
 	0,	4.5,	1.50,	30000,	8.07,\
 	0,	6,	0.25,	30000,	8.05,\
 	-1,	6,	-1,	-1,	-1,\
@@ -359,40 +351,40 @@ itab32 ftgen 132, 0, -60, -2, \
 
 itab33 ftgen 133, 0, -30, -2, \
 	0,	0,	0.25,	30000,	8.07,\
-	0,	0.25,	0.25,	30000,	8.05,\
+	0,	0.25,0.25,	30000,	8.05,\
 	0,	1,	0.25,	30000,	8.07,\
 	-1,	1,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab34 ftgen 134, 0, -30, -2, \
 	0,	0,	0.25,	30000,	8.07,\
-	0,	0.25,	0.25,	30000,	8.05,\
+	0,	0.25,0.25,	30000,	8.05,\
 	0,	0.5,	0.25,	30000,	8.07,\
 	-1,	0.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab35 ftgen 135, 0, -150, -2, \
 	0,	0,	0.25,	30000,	8.05,\
-	0,	0.25,	0.25,	30000,	8.07,\
+	0,	0.25,0.25,	30000,	8.07,\
 	0,	0.5,	0.25,	30000,	8.11,\
-	0,	0.75,	0.25,	30000,	8.07,\
+	0,	0.75,0.25,	30000,	8.07,\
 	0,	1,	0.25,	30000,	8.11,\
-	0,	1.25,	0.25,	30000,	8.07,\
+	0,	1.25,0.25,	30000,	8.07,\
 	0,	1.5,	0.25,	30000,	8.11,\
-	0,	1.75,	0.25,	30000,	8.07,\
+	0,	1.75,0.25,	30000,	8.07,\
 	0,	2,	0.25,	30000,	8.11,\
-	0,	2.25,	0.25,	30000,	8.07,\
+	0,	2.25,0.25,	30000,	8.07,\
 	0,	6,	1.00,	30000,	8.10,\
 	0,	7,	3.00,	30000,	9.07,\
 	0,	10,	0.50,	30000,	9.09,\
-	0,	10.5,	1.00,	30000,	9.07,\
-	0,	11.5,	0.50,	30000,	9.11,\
+	0,	10.5,1.00,	30000,	9.07,\
+	0,	11.5,0.50,	30000,	9.11,\
 	0,	12,	1.50,	30000,	9.09,\
-	0,	13.5,	0.50,	30000,	9.07,\
+	0,	13.5,0.50,	30000,	9.07,\
 	0,	14,	3.00,	30000,	9.04,\
 	0,	17,	0.50,	30000,	9.07,\
-	0,	17.5,	3.50,	30000,	9.06,\
-	0,	23.5,	2.50,	30000,	9.04,\
+	0,	17.5,3.50,	30000,	9.06,\
+	0,	23.5,2.50,	30000,	9.04,\
 	0,	26,	6.00,	30000,	9.05,\
 	0,	32,	0.25,	30000,	8.05,\
 	-1,	32,	-1,	-1,	-1,\
@@ -400,52 +392,52 @@ itab35 ftgen 135, 0, -150, -2, \
 
 itab36 ftgen 136, 0, -54, -2, \
 	0,	0,	0.25,	30000,	8.05,\
-	0,	0.25,	0.25,	30000,	8.07,\
+	0,	0.25,0.25,	30000,	8.07,\
 	0,	0.5,	0.25,	30000,	8.11,\
-	0,	0.75,	0.25,	30000,	8.07,\
+	0,	0.75,0.25,	30000,	8.07,\
 	0,	1,	0.25,	30000,	8.11,\
-	0,	1.25,	0.25,	30000,	8.07,\
+	0,	1.25,0.25,	30000,	8.07,\
 	0,	1.5,	0.25,	30000,	8.05,\
 	-1,	1.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab37 ftgen 137, 0, -30, -2, \
 	0,	0,	0.25,	30000,	8.05,\
-	0,	0.25,	0.25,	30000,	8.07,\
+	0,	0.25,0.25,	30000,	8.07,\
 	0,	0.5,	0.25,	30000,	8.05,\
 	-1,	0.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab38 ftgen 138, 0, -36, -2, \
-	0,	0,	0.25,	30000,	8.05,\
+	0,	0,		0.25,	30000,	8.05,\
 	0,	0.25,	0.25,	30000,	8.07,\
-	0,	0.5,	0.25,	30000,	8.11,\
+	0,	0.5,		0.25,	30000,	8.11,\
 	0,	0.75,	0.25,	30000,	8.05,\
 	-1,	0.75,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab39 ftgen 139, 0, -54, -2, \
-	0,	0,	0.25,	30000,	8.11,\
+	0,	0,		0.25,	30000,	8.11,\
 	0,	0.25,	0.25,	30000,	8.07,\
-	0,	0.5,	0.25,	30000,	8.05,\
+	0,	0.5,		0.25,	30000,	8.05,\
 	0,	0.75,	0.25,	30000,	8.07,\
-	0,	1,	0.25,	30000,	8.11,\
+	0,	1,		0.25,	30000,	8.11,\
 	0,	1.25,	0.25,	30000,	9.00,\
-	0,	1.5,	0.25,	30000,	8.11,\
+	0,	1.5,		0.25,	30000,	8.11,\
 	-1,	1.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab40 ftgen 140, 0, -30, -2, \
-	0,	0,	0.25,	30000,	8.11,\
+	0,	0,		0.25,	30000,	8.11,\
 	0,	0.25,	0.25,	30000,	8.05,\
-	0,	0.5,	0.25,	30000,	8.11,\
+	0,	0.5,		0.25,	30000,	8.11,\
 	-1,	0.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab41 ftgen 141, 0, -30, -2, \
-	0,	0,	0.25,	30000,	8.11,\
+	0,	0,		0.25,	30000,	8.11,\
 	0,	0.25,	0.25,	30000,	8.07,\
-	0,	0.5,	0.25,	30000,	8.11,\
+	0,	0.5,		0.25,	30000,	8.11,\
 	-1,	0.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
@@ -459,16 +451,16 @@ itab42 ftgen 142, 0, -42, -2, \
 	-1,	-1,	-1,	-1,	-1
 
 itab43 ftgen 143, 0, -72, -2, \
-	0,	0,	0.25,	30000,	9.05,\
+	0,	0,		0.25,	30000,	9.05,\
 	0,	0.25,	0.25,	30000,	9.04,\
-	0,	0.5,	0.25,	30000,	9.05,\
+	0,	0.5,		0.25,	30000,	9.05,\
 	0,	0.75,	0.25,	30000,	9.04,\
-	0,	1,	0.50,	30000,	9.04,\
-	0,	1.5,	0.50,	30000,	9.04,\
-	0,	2,	0.50,	30000,	9.04,\
-	0,	2.5,	0.25,	30000,	9.05,\
+	0,	1,		0.50,	30000,	9.04,\
+	0,	1.5,		0.50,	30000,	9.04,\
+	0,	2,		0.50,	30000,	9.04,\
+	0,	2.5,		0.25,	30000,	9.05,\
 	0,	2.75,	0.25,	30000,	9.04,\
-	0,	3,	0.25,	30000,	9.05,\
+	0,	3,		0.25,	30000,	9.05,\
 	-1,	3,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
@@ -490,26 +482,26 @@ itab45 ftgen 145, 0, -36, -2, \
 	-1,	-1,	-1,	-1,	-1
 
 itab46 ftgen 146, 0, -84, -2, \
-	0,	0,	0.25,	30000,	8.07,\
+	0,	0,		0.25,	30000,	8.07,\
 	0,	0.25,	0.25,	30000,	9.02,\
-	0,	0.5,	0.25,	30000,	9.04,\
+	0,	0.5,		0.25,	30000,	9.04,\
 	0,	0.75,	0.25,	30000,	9.02,\
-	0,	1.5,	0.50,	30000,	8.07,\
-	0,	2.5,	0.50,	30000,	8.07,\
-	0,	3.5,	0.50,	30000,	8.07,\
-	0,	4,	0.25,	30000,	8.07,\
+	0,	1.5,		0.50,	30000,	8.07,\
+	0,	2.5,		0.50,	30000,	8.07,\
+	0,	3.5,		0.50,	30000,	8.07,\
+	0,	4,		0.25,	30000,	8.07,\
 	0,	4.25,	0.25,	30000,	9.02,\
-	0,	4.5,	0.25,	30000,	9.04,\
+	0,	4.5,		0.25,	30000,	9.04,\
 	0,	4.75,	0.25,	30000,	9.02,\
-	0,	5,	0.25,	30000,	8.07,\
+	0,	5,		0.25,	30000,	8.07,\
 	-1,	5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab47 ftgen 147, 0, -36, -2, \
-	0,	0,	0.25,	30000,	9.02,\
+	0,	0,		0.25,	30000,	9.02,\
 	0,	0.25,	0.25,	30000,	9.04,\
-	0,	0.5,	0.50,	30000,	9.02,\
-	0,	1,	0.25,	30000,	9.02,\
+	0,	0.5,		0.50,	30000,	9.02,\
+	0,	1,		0.25,	30000,	9.02,\
 	-1,	1,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
@@ -522,181 +514,162 @@ itab48 ftgen 148, 0, -36, -2, \
 	-1,	-1,	-1,	-1,	-1
 
 itab49 ftgen 149, 0, -54, -2, \
-	0,	0,	0.25,	30000,	8.05,\
+	0,	0,		0.25,	30000,	8.05,\
 	0,	0.25,	0.25,	30000,	8.07,\
-	0,	0.5,	0.25,	30000,	8.10,\
+	0,	0.5,		0.25,	30000,	8.10,\
 	0,	0.75,	0.25,	30000,	8.07,\
-	0,	1,	0.25,	30000,	8.10,\
+	0,	1,		0.25,	30000,	8.10,\
 	0,	1.25,	0.25,	30000,	8.07,\
-	0,	1.5,	0.25,	30000,	8.05,\
+	0,	1.5,		0.25,	30000,	8.05,\
 	-1,	1.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab50 ftgen 150, 0, -30, -2, \
-	0,	0,	0.25,	30000,	8.05,\
+	0,	0,		0.25,	30000,	8.05,\
 	0,	0.25,	0.25,	30000,	8.07,\
-	0,	0.5,	0.25,	30000,	8.05,\
+	0,	0.5,		0.25,	30000,	8.05,\
 	-1,	0.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab51 ftgen 151, 0, -36, -2, \
-	0,	0,	0.25,	30000,	8.05,\
+	0,	0,		0.25,	30000,	8.05,\
 	0,	0.25,	0.25,	30000,	8.07,\
-	0,	0.5,	0.25,	30000,	8.10,\
+	0,	0.5,		0.25,	30000,	8.10,\
 	0,	0.75,	0.25,	30000,	8.05,\
 	-1,	0.75,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab52 ftgen 152, 0, -30, -2, \
-	0,	0,	0.25,	30000,	8.07,\
+	0,	0,		0.25,	30000,	8.07,\
 	0,	0.25,	0.25,	30000,	8.10,\
-	0,	0.5,	0.25,	30000,	8.07,\
+	0,	0.5,		0.25,	30000,	8.07,\
 	-1,	0.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
 itab53 ftgen 153, 0, -30, -2, \
-	0,	0,	0.25,	30000,	8.10,\
+	0,	0,		0.25,	30000,	8.10,\
 	0,	0.25,	0.25,	30000,	8.07,\
-	0,	0.5,	0.25,	30000,	8.10,\
+	0,	0.5,		0.25,	30000,	8.10,\
 	-1,	0.5,	-1,	-1,	-1,\
 	-1,	-1,	-1,	-1,	-1
 
+;MACROS-----------------------------------------------------------
+;Toggle switch with one led
+opcode	SWITCH1, k, S
+S_SWITCH 			xin
+S_SWITCH_B		strcat	S_SWITCH, "_B"
+S_SWITCH_L		strcat	S_SWITCH, "_L"
 
+kB_Status			invalue	S_SWITCH_B
+kTrig			trigger	kB_Status, 0.5, 0
+kStatus_L			invalue	S_SWITCH_L
 
+if (kTrig == 1) then
+	if (kStatus_L == 0) then
+		outvalue	S_SWITCH_L, 1
+	else
+		outvalue	S_SWITCH_L, 0
+	endif
+endif
+		xout		kStatus_L
+endop
 
-
-
-;------------------------INTERFACE-----------------------
-FLpanel "In C Player", 1010, 723, 1, 1, 1, 1, 0
+instr	1	; Interface
 ;Metronome
-gkBPM, iBMP FLtext "BMP", 20, 200, .5, 1, 70, 40, 550, 20
-FLsetVal_i 120, iBMP
-gkmetrovol, ihOnOff FLknob "Pulse Vol", 0, 28000, 0, 1, -4, 60, 635, 10, 20
-gkc1, ihanc1 FLbutton "C1", 1, 0, 3, 30, 30, 700, 10, -1
-gkc2, ihanc1 FLbutton "C2", 1, 0, 3, 30, 30, 740, 10, -1
-gkc3, ihanc1 FLbutton "C3", 1, 0, 3, 30, 30, 780, 10, -1
-gkc4, ihanc1 FLbutton "C4", 1, 0, 3, 30, 30, 820, 10, -1
-gkc5, ihanc1 FLbutton "C5", 1, 0, 3, 30, 30, 700, 50, -1
-gkc6, ihanc1 FLbutton "C6", 1, 0, 3, 30, 30, 740, 50, -1
-gkc7, ihanc1 FLbutton "C7", 1, 0, 3, 30, 30, 780, 50, -1
-gkc8, ihanc1 FLbutton "C8", 1, 0, 3, 30, 30, 820, 50, -1
-$PLAYINT(1)
-$PLAYINT(2)
-$PLAYINT(3)
-$PLAYINT(4)
-$PLAYINT(5)
-$PLAYINT(6)
-$PLAYINT(7)
-$PLAYINT(8)
-$PLAYINT(9)
-ihandle FLbox "Player 1", 8, 1, 12, 50, 25, 550, 100
-ihandle FLbox "Player 2", 8, 1, 12, 50, 25, 600, 100
-ihandle FLbox "Player 3", 8, 1, 12, 50, 25, 650, 100
-ihandle FLbox "Player 4", 8, 1, 12, 50, 25, 700, 100
-ihandle FLbox "Player 5", 8, 1, 12, 50, 25, 750, 100
-ihandle FLbox "Player 6", 8, 1, 12, 50, 25, 800, 100
-ihandle FLbox "Player 7", 8, 1, 12, 50, 25, 850, 100
-ihandle FLbox "Player 8", 8, 1, 12, 50, 25, 900, 100
-ihandle FLbox "Player 9", 8, 1, 12, 50, 25, 950, 100
-ihandle FLbox "@|>", 8, 1, 12, 50, 25, 500, 125
-ihandle FLbox "q", 8, 1, 12, 50, 25, 550, 125
-ihandle FLbox "w", 8, 1, 12, 50, 25, 600, 125
-ihandle FLbox "e", 8, 1, 12, 50, 25, 650, 125
-ihandle FLbox "r", 8, 1, 12, 50, 25, 700, 125
-ihandle FLbox "t", 8, 1, 12, 50, 25, 750, 125
-ihandle FLbox "y", 8, 1, 12, 50, 25, 800, 125
-ihandle FLbox "u", 8, 1, 12, 50, 25, 850, 125
-ihandle FLbox "i", 8, 1, 12, 50, 25, 900, 125
-ihandle FLbox "o", 8, 1, 12, 50, 25, 950, 125
-ihandle FLbox "Next", 8, 1, 12, 50, 25, 500, 150
-ihandle FLbox "a", 8, 1, 12, 50, 25, 550, 150
-ihandle FLbox "s", 8, 1, 12, 50, 25, 600, 150
-ihandle FLbox "d", 8, 1, 12, 50, 25, 650, 150
-ihandle FLbox "f", 8, 1, 12, 50, 25, 700, 150
-ihandle FLbox "g", 8, 1, 12, 50, 25, 750, 150
-ihandle FLbox "h", 8, 1, 12, 50, 25, 800, 150
-ihandle FLbox "j", 8, 1, 12, 50, 25, 850, 150
-ihandle FLbox "k", 8, 1, 12, 50, 25, 900, 150
-ihandle FLbox "l", 8, 1, 12, 50, 25, 950, 150
-ihandle FLbox "Volume", 8, 1, 12, 50, 250, 500, 175
-gkvol1, gihanv1 FLslider "", 0, 1, 0, 6, -75, 30, 240, 560, 180
-gkvol2, gihanv2 FLslider "", 0, 1, 0, 6, -75, 30, 240, 610, 180
-gkvol3, gihanv3 FLslider "", 0, 1, 0, 6, -75, 30, 240, 660, 180
-gkvol4, gihanv4 FLslider "", 0, 1, 0, 6, -75, 30, 240, 710, 180
-gkvol5, gihanv5 FLslider "", 0, 1, 0, 6, -75, 30, 240, 760, 180
-gkvol6, gihanv6 FLslider "", 0, 1, 0, 6, -75, 30, 240, 810, 180
-gkvol7, gihanv7 FLslider "", 0, 1, 0, 6, -75, 30, 240, 860, 180
-gkvol8, gihanv8 FLslider "", 0, 1, 0, 6, -75, 30, 240, 910, 180
-gkvol9, gihanv9 FLslider "", 0, 1, 0, 6, -75, 30, 240, 960, 180
-ihandle FLbox "Pan", 8, 1, 12, 50, 25, 500, 425
-gkpan1, ihanp1 FLslider "", 0, 1, 0, 5, -75, 50, 25, 550, 425
-gkpan2, ihanp2 FLslider "", 0, 1, 0, 5, -75, 50, 25, 600, 425
-gkpan3, ihanp3 FLslider "", 0, 1, 0, 5, -75, 50, 25, 650, 425
-gkpan4, ihanp4 FLslider "", 0, 1, 0, 5, -75, 50, 25, 700, 425
-gkpan5, ihanp5 FLslider "", 0, 1, 0, 5, -75, 50, 25, 750, 425
-gkpan6, ihanp6 FLslider "", 0, 1, 0, 5, -75, 50, 25, 800, 425
-gkpan7, ihanp7 FLslider "", 0, 1, 0, 5, -75, 50, 25, 850, 425
-gkpan8, ihanp8 FLslider "", 0, 1, 0, 5, -75, 50, 25, 900, 425
-gkpan9, ihanp9 FLslider "", 0, 1, 0, 5, -75, 50, 25, 950, 425
-FLsetVal_i .2, gihanv1
-FLsetVal_i .2, gihanv2
-FLsetVal_i .2, gihanv3
-FLsetVal_i .2, gihanv4
-FLsetVal_i .2, gihanv5
-FLsetVal_i .2, gihanv6
-FLsetVal_i .2, gihanv7
-FLsetVal_i .2, gihanv8
-FLsetVal_i .2, gihanv9
-FLsetVal_i .5, ihanp1
-FLsetVal_i .5, ihanp2
-FLsetVal_i .5, ihanp3
-FLsetVal_i .5, ihanp4
-FLsetVal_i .5, ihanp5
-FLsetVal_i .5, ihanp6
-FLsetVal_i .5, ihanp7
-FLsetVal_i .5, ihanp8
-FLsetVal_i .5, ihanp9
-ihandle FLbox "Wrong\nTiming", 8, 1, 12, 50, 50, 500, 450
-gktimi1, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 550, 450, 20
-gktimi2, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 600, 450, 20
-gktimi3, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 650, 450, 20
-gktimi4, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 700, 450, 20
-gktimi5, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 750, 450, 20
-gktimi6, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 800, 450, 20
-gktimi7, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 850, 450, 20
-gktimi8, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 900, 450, 20
-gktimi9, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 950, 450, 20
-ihandle FLbox "Wrong\nIntensity", 8, 1, 12, 50, 50, 500, 500
-gkinte1, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 550, 500, 20
-gkinte2, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 600, 500, 20
-gkinte3, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 650, 500, 20
-gkinte4, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 700, 500, 20
-gkinte5, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 750, 500, 20
-gkinte6, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 800, 500, 20
-gkinte7, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 850, 500, 20
-gkinte8, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 900, 500, 20
-gkinte9, iktimi FLknob "", 0, 1, 0, 1, -1, 50, 950, 500, 20
+gkBPM		invalue	"BMP"
+gkmetrovol	invalue	"Pulse_Vol"
+
+;Pulse
+gkc1			invalue	"C1"
+gkc2			invalue	"C2"
+gkc3			invalue	"C3"
+gkc4			invalue	"C4"
+gkc5			invalue	"C5"
+gkc6			invalue	"C6"
+gkc7			invalue	"C7"
+gkc8			invalue	"C8"
+
+;Pattern
+gkpatt_index1	invalue	"Patt_index1"
+gkpatt_index2	invalue	"Patt_index2"
+gkpatt_index3	invalue	"Patt_index3"
+gkpatt_index4	invalue	"Patt_index4"
+gkpatt_index5	invalue	"Patt_index5"
+gkpatt_index6	invalue	"Patt_index6"
+gkpatt_index7	invalue	"Patt_index7"
+gkpatt_index8	invalue	"Patt_index8"
+gkpatt_index9	invalue	"Patt_index9"
+
+;Player
+gkOnOff1		SWITCH1	"OnOff1"
+gkOnOff2		SWITCH1	"OnOff2"
+gkOnOff3		SWITCH1	"OnOff3"
+gkOnOff4		SWITCH1	"OnOff4"
+gkOnOff5		SWITCH1	"OnOff5"
+gkOnOff6		SWITCH1	"OnOff6"
+gkOnOff7		SWITCH1	"OnOff7"
+gkOnOff8		SWITCH1	"OnOff8"
+gkOnOff9		SWITCH1	"OnOff9"
+
+;Volume
+gkvol1		invalue	"Vol1"
+gkvol2		invalue	"Vol2"
+gkvol3		invalue	"Vol3"
+gkvol4		invalue	"Vol4"
+gkvol5		invalue	"Vol5"
+gkvol6		invalue	"Vol6"
+gkvol7		invalue	"Vol7"
+gkvol8		invalue	"Vol8"
+gkvol9		invalue	"Vol9"
+
+;Pan
+gkpan1		invalue	"Pan1"
+gkpan2		invalue	"Pan2"
+gkpan3		invalue	"Pan3"
+gkpan4		invalue	"Pan4"
+gkpan5		invalue	"Pan5"
+gkpan6		invalue	"Pan6"
+gkpan7		invalue	"Pan7"
+gkpan8		invalue	"Pan8"
+gkpan9		invalue	"Pan9"
+
+;Wrong Timing
+gktimi1		invalue	"Timi1"
+gktimi2		invalue	"Timi2"
+gktimi3		invalue	"Timi3"
+gktimi4		invalue	"Timi4"
+gktimi5		invalue	"Timi5"
+gktimi6		invalue	"Timi6"
+gktimi7		invalue	"Timi7"
+gktimi8		invalue	"Timi8"
+gktimi9		invalue	"Timi9"
+
+;Wrong Intensity
+gkinte1		invalue	"Inte1"
+gkinte2		invalue	"Inte2"
+gkinte3		invalue	"Inte3"
+gkinte4		invalue	"Inte4"
+gkinte5		invalue	"Inte5"
+gkinte6		invalue	"Inte6"
+gkinte7		invalue	"Inte7"
+gkinte8		invalue	"Inte8"
+gkinte9		invalue	"Inte9"
+
 ;Globals
-ihandle FLbox "Global", 8, 1, 12, 50, 100, 500, 550
-ihandle FLbox "Volume", 8, 1, 12, 60, 25, 550, 550
-gkpppfff, ipppfff FLknob "ppp - fff", 0.01, 2, 0, 1, -1, 60, 550, 575, 20 
-ihandle FLbox "Alt Key\nAll the\nPlayers\ntogether\nOnOff", 8, 1, 12, 60, 75, 610, 550
-gkOnOffAll, gihOnOffAll FLbutton	"@|>",	1, 0, 2, 60, 25, 610, 625, 0, 1, 0, -1
-FLsetVal_i 1, ipppfff
-ihandle FLbox "Reverb", 8, 1, 12, 180, 25, 670, 550
-gkwet, iwet FLknob "dry-wet", 0, 1, 0, 1, -1, 60, 670, 575, 20 
-gkfblvl, ifblvl FLknob "feedback", 0, 1, 0, 1, -1, 60, 730, 575, 20
-gkfcoff, icuto FLknob "cutoff", 0, sr/2, 0, 1, -1, 60, 790, 575, 20
-FLsetVal_i sr/4, icuto
+gkpppfff		invalue	"gVolume"
+gkOnOffAll	SWITCH1 	"OnOffAll"
+
+gkwet		invalue	"Dry-Wet"
+gkfblvl		invalue	"Feedback"
+gkfcoff		invalue	"Cutoff"
+
 ;Record performance
-ihandle FLbox "Recording", 8, 1, 12, 100, 25, 850, 550
-gkRecPerfo, giRecPerfo FLbutton	"Rec\ndon't\nswitch\nOff",	1, 0, 2, 100, 75, 850, 575, 0, 402, 0, -1
-FLpanelEnd
-FLrun
+gkRecPerfo 	SWITCH1	"RecPerfo"
+
+endin
 
 ;Tab readers ---------------------------------------------------
-instr 1
-;TABREADER
+instr 2	;Tab reader
 ;find duration of patterns stored into tables
 ;read the table pattern length to find the value of the loop
 ;lenght of Patterns are analized then stored into a ftable 1
@@ -712,14 +685,14 @@ back:
 calcul:
 	iipattdur table ipointpattern+1, 100 + p4
 	tableiw iipattdur, p4, 100
-	prints "Pattern %i : %i \n", p4, iipattdur
+	prints "Pattern %i : %f \n", p4, iipattdur
 	turnoff
 endin
 
 ;Control-----------------------------------------------------------
-instr 98; initialize some variables
+instr 98;initialize some variables
 gkpatt_index1 init 0
-gkpatt_duration01 table gkpatt_index1+1, gipattdur
+gkpatt_duration01 table gkpatt_index1+1, gipattdur	;table that store pattern length
 gkpatt_duration_new01 = gkpatt_duration01
 
 gkpatt_index2 init 0
@@ -730,7 +703,7 @@ gkpatt_index3 init 0
 gkpatt_duration03 table gkpatt_index3+1, gipattdur
 gkpatt_duration_new03 = gkpatt_duration03
 
-gkpatt_index4 init 0
+gkpatt_index4 		init 0
 gkpatt_duration04 table gkpatt_index4+1, gipattdur
 gkpatt_duration_new04 = gkpatt_duration04
 
@@ -756,8 +729,7 @@ gkpatt_duration_new09 = gkpatt_duration09
 turnoff
 endin
 
-
-instr 99
+instr 99	;Control
 gkc1 init 0
 gkc2 init 0
 gkc3 init 0
@@ -793,30 +765,31 @@ endif
 if (gkc8 == 1) then
 	schedkwhen   kPulse, -1, -1, 300, 0, 15/gkBPM, gkmetrovol*.1, 12.00
 endif
+
 ;COmputer Keyboard Control
-gkkeypressed FLkeyIn
-keyactivation changed gkkeypressed
-;Start stop keys
-;q key
-kbuttonq init 0
-if (gkkeypressed == 113 && keyactivation == 1) then
-	if (kbuttonq == 0) then
-		kbuttonq = 1
-		FLsetVal 1, kbuttonq, gihOnOff1
+gkkeypressed, keyactivation	sensekey
+
+;Start stop keys (for AZERTY keyboard)
+;a key
+kbuttona init 0
+if (gkkeypressed == 97 && keyactivation == 1) then
+	if (kbuttona == 0) then
+		kbuttona = 1
+		outvalue	"OnOff1_L", 1
 	else
-		kbuttonq = 0
-		FLsetVal 1, kbuttonq, gihOnOff1
+		kbuttona = 0
+		outvalue	"OnOff1_L", 0
 	endif
 endif
-;w key
-kbuttonw init 0
-if (gkkeypressed == 119 && keyactivation == 1) then
-	if (kbuttonw == 0) then
-		kbuttonw = 1
-		FLsetVal 1, kbuttonw, gihOnOff2
+;z key
+kbuttonz init 0
+if (gkkeypressed == 122 && keyactivation == 1) then
+	if (kbuttonz == 0) then
+		kbuttonz = 1
+		outvalue	"OnOff2_L", 1
 	else
-		kbuttonw = 0
-		FLsetVal 1, kbuttonw, gihOnOff2
+		kbuttonz = 0
+		outvalue	"OnOff2_L", 0
 	endif
 endif
 ;e key
@@ -824,10 +797,10 @@ kbuttone init 0
 if (gkkeypressed == 101 && keyactivation == 1) then
 	if (kbuttone == 0) then
 		kbuttone = 1
-		FLsetVal 1, kbuttone, gihOnOff3
+		outvalue	"OnOff3_L", 1
 	else
 		kbuttone = 0
-		FLsetVal 1, kbuttone, gihOnOff3
+		outvalue	"OnOff3_L", 0
 	endif
 endif
 ;r key
@@ -835,10 +808,10 @@ kbuttonr init 0
 if (gkkeypressed == 114 && keyactivation == 1) then
 	if (kbuttonr == 0) then
 		kbuttonr = 1
-		FLsetVal 1, kbuttonr, gihOnOff4
+		outvalue	"OnOff4_L", 1
 	else
 		kbuttonr = 0
-		FLsetVal 1, kbuttonr, gihOnOff4
+		outvalue	"OnOff4_L", 0
 	endif
 endif
 ;t key
@@ -846,10 +819,10 @@ kbuttont init 0
 if (gkkeypressed == 116 && keyactivation == 1) then
 	if (kbuttont == 0) then
 		kbuttont = 1
-		FLsetVal 1, kbuttont, gihOnOff5
+		outvalue	"OnOff5_L", 1
 	else
 		kbuttont = 0
-		FLsetVal 1, kbuttont, gihOnOff5
+		outvalue	"OnOff5_L", 0
 	endif
 endif
 ;y key
@@ -857,10 +830,10 @@ kbuttony init 0
 if (gkkeypressed == 121 && keyactivation == 1) then
 	if (kbuttony == 0) then
 		kbuttony = 1
-		FLsetVal 1, kbuttony, gihOnOff6
+		outvalue	"OnOff6_L", 1
 	else
 		kbuttony = 0
-		FLsetVal 1, kbuttony, gihOnOff6
+		outvalue	"OnOff6_L", 0
 	endif
 endif
 ;u key
@@ -868,10 +841,10 @@ kbuttonu init 0
 if (gkkeypressed == 117 && keyactivation == 1) then
 	if (kbuttonu == 0) then
 		kbuttonu = 1
-		FLsetVal 1, kbuttonu, gihOnOff7
+		outvalue	"OnOff7_L", 1
 	else
 		kbuttonu = 0
-		FLsetVal 1, kbuttonu, gihOnOff7
+		outvalue	"OnOff7_L", 0
 	endif
 endif
 ;i key
@@ -879,10 +852,10 @@ kbuttoni init 0
 if (gkkeypressed == 105 && keyactivation == 1) then
 	if (kbuttoni == 0) then
 		kbuttoni = 1
-		FLsetVal 1, kbuttoni, gihOnOff8
+		outvalue	"OnOff8_L", 1
 	else
 		kbuttoni = 0
-		FLsetVal 1, kbuttoni, gihOnOff8
+		outvalue	"OnOff8_L", 0
 	endif
 endif
 ;o key
@@ -890,123 +863,103 @@ kbuttono init 0
 if (gkkeypressed == 111 && keyactivation == 1) then
 	if (kbuttono == 0) then
 		kbuttono = 1
-		FLsetVal 1, kbuttono, gihOnOff9
+		outvalue	"OnOff9_L", 1
 	else
 		kbuttono = 0
-		FLsetVal 1, kbuttono, gihOnOff9
+		outvalue	"OnOff9_L", 0
 	endif
 endif
 
 ;activate all the players together!
 kbuttonAlt init 0
-if (gkkeypressed == 489 && keyactivation == 1) then
+if (gkkeypressed == 32 && keyactivation == 1) then
 	if (gkOnOffAll == 0) then
-		FLsetVal 1, 1, gihOnOffAll
+		outvalue	"OnOffAll_L", 1
 	elseif (gkOnOffAll == 1) then
-		FLsetVal 1, 0, gihOnOffAll
+		outvalue	"OnOffAll_L", 0
 	endif
 endif
 
 ktriggAll changed gkOnOffAll
 if (ktriggAll == 1) then
 	if (gkOnOffAll == 1) then
-		FLsetVal 1, 1, gihOnOff1
-		FLsetVal 1, 1, gihOnOff2
-		FLsetVal 1, 1, gihOnOff3
-		FLsetVal 1, 1, gihOnOff4
-		FLsetVal 1, 1, gihOnOff5
-		FLsetVal 1, 1, gihOnOff6
-		FLsetVal 1, 1, gihOnOff7
-		FLsetVal 1, 1, gihOnOff8
-		FLsetVal 1, 1, gihOnOff9
+		outvalue	"OnOff1_L", 1
+		outvalue	"OnOff2_L", 1
+		outvalue	"OnOff3_L", 1
+		outvalue	"OnOff4_L", 1
+		outvalue	"OnOff5_L", 1
+		outvalue	"OnOff6_L", 1
+		outvalue	"OnOff7_L", 1
+		outvalue	"OnOff8_L", 1
+		outvalue	"OnOff9_L", 1
 	elseif (gkOnOffAll == 0) then
-		FLsetVal 1, 0, gihOnOff1
-		FLsetVal 1, 0, gihOnOff2
-		FLsetVal 1, 0, gihOnOff3
-		FLsetVal 1, 0, gihOnOff4
-		FLsetVal 1, 0, gihOnOff5
-		FLsetVal 1, 0, gihOnOff6
-		FLsetVal 1, 0, gihOnOff7
-		FLsetVal 1, 0, gihOnOff8
-		FLsetVal 1, 0, gihOnOff9
+		outvalue	"OnOff1_L", 0
+		outvalue	"OnOff2_L", 0
+		outvalue	"OnOff3_L", 0
+		outvalue	"OnOff4_L", 0
+		outvalue	"OnOff5_L", 0
+		outvalue	"OnOff6_L", 0
+		outvalue	"OnOff7_L", 0
+		outvalue	"OnOff8_L", 0
+		outvalue	"OnOff9_L", 0
 	endif
 endif
 
-;Next pattern keys
-;a key
-kbuttona init 0
-if (gkkeypressed == 97 && keyactivation == 1) then
-	if (kbuttona < 52) then
-		kbuttona = kbuttona + 1
-		FLsetVal 1, kbuttona, giflbuttbank1
-	endif
+;Next pattern keys (for AZERTY keyboard)
+;q key
+kbuttonq init 0
+if (gkkeypressed == 113 && keyactivation == 1) then
+	kbuttonq = (kbuttonq + 1) % 53
+	outvalue	"Patt_index1", kbuttonq
 endif
 ;s key
 kbuttons init 0
 if (gkkeypressed == 115 && keyactivation == 1) then
-	if (kbuttons < 52) then
-		kbuttons = kbuttons + 1
-		FLsetVal 1, kbuttons, giflbuttbank2
-	endif
+	kbuttons = (kbuttons + 1) % 53
+	outvalue	"Patt_index2", kbuttons
 endif
 ;d key
 kbuttond init 0
 if (gkkeypressed == 100 && keyactivation == 1) then
-	if (kbuttond < 52) then
-		kbuttond = kbuttond + 1
-		FLsetVal 1, kbuttond, giflbuttbank3
-	endif
+	kbuttond = (kbuttond + 1) % 53
+	outvalue	"Patt_index3", kbuttond
 endif
 ;f key
 kbuttonf init 0
 if (gkkeypressed == 102 && keyactivation == 1) then
-	if (kbuttonf < 52) then
-		kbuttonf = kbuttonf + 1
-		FLsetVal 1, kbuttonf, giflbuttbank4
-	endif
+	kbuttonf = (kbuttonf + 1) % 53
+	outvalue	"Patt_index4", kbuttonf
 endif
 ;g key
 kbuttong init 0
 if (gkkeypressed == 103 && keyactivation == 1) then
-	if (kbuttong < 52) then
-		kbuttong = kbuttong + 1
-		FLsetVal 1, kbuttong, giflbuttbank5
-	endif
+	kbuttong = (kbuttong + 1) % 53
+	outvalue	"Patt_index5", kbuttong
 endif
 ;h key
 kbuttonh init 0
 if (gkkeypressed == 104 && keyactivation == 1) then
-	if (kbuttonh < 52) then
-		kbuttonh = kbuttonh + 1
-		FLsetVal 1, kbuttonh, giflbuttbank6
-	endif
+	kbuttonh = (kbuttonh + 1) % 53
+	outvalue	"Patt_index6", kbuttonh
 endif
 ;j key
 kbuttonj init 0
 if (gkkeypressed == 106 && keyactivation == 1) then
-	if (kbuttonj < 52) then
-		kbuttonj = kbuttonj + 1
-		FLsetVal 1, kbuttonj, giflbuttbank7
-	endif
+	kbuttonj = (kbuttonj + 1) % 53
+	outvalue	"Patt_index7", kbuttonj
 endif
 ;k key
 kbuttonk init 0
 if (gkkeypressed == 107 && keyactivation == 1) then
-	if (kbuttonk < 52) then
-		kbuttonk = kbuttonk + 1
-		FLsetVal 1, kbuttonk, giflbuttbank8
-	endif
+	kbuttonk = (kbuttonk + 1) % 53
+	outvalue	"Patt_index8", kbuttonk
 endif
 ;l key
 kbuttonl init 0
 if (gkkeypressed == 108 && keyactivation == 1) then
-	if (kbuttonl < 52) then
-		kbuttonl = kbuttonl + 1
-		FLsetVal 1, kbuttonl, giflbuttbank9
-	endif
+	kbuttonl = (kbuttonl + 1) % 53
+	outvalue	"Patt_index9", kbuttonl
 endif
-
-
 
 
 ;---------------------------------------------------------------
@@ -1016,11 +969,11 @@ if (kpulse_quantize = 1) then
 	ktrigOn1 trigger gkOnOff1, 0.5, 0
 		schedkwhen ktrigOn1, 0, 0, 101, 0, -1
 endif
-;Turn Off the trigger instrument and the pattern reader whenever needed 
-;without syncro to metronome signal 
+;Turn Off the trigger instrument and the pattern reader whenever needed
+;without syncro to metronome signal
 ktrigOff1 trigger gkOnOff1, 0.5, 1
-	schedkwhen ktrigOff1, 0, 0, -101, 0, 1 
-	schedkwhen ktrigOff1, 0, 0, -201, 0, 1  
+	schedkwhen ktrigOff1, 0, 0, -101, 0, 1
+	schedkwhen ktrigOff1, 0, 0, -201, 0, 1
 
 ;Player 2
 ;Sync Sequencer-On with metro pulse signal
@@ -1028,11 +981,11 @@ if (kpulse_quantize = 1) then
 	ktrigOn2 trigger gkOnOff2, 0.5, 0
 		schedkwhen ktrigOn2, 0, 0, 102, 0, -1
 endif
-;Turn Off the trigger instrument and the pattern reader whenever needed 
-;without syncro to metronome signal 
+;Turn Off the trigger instrument and the pattern reader whenever needed
+;without syncro to metronome signal
 ktrigOff2 trigger gkOnOff2, 0.5, 1
-	schedkwhen ktrigOff2, 0, 0, -102, 0, 1 
-	schedkwhen ktrigOff2, 0, 0, -202, 0, 1  
+	schedkwhen ktrigOff2, 0, 0, -102, 0, 1
+	schedkwhen ktrigOff2, 0, 0, -202, 0, 1
 
 ;Player 3
 ;Sync Sequencer-On with metro pulse signal
@@ -1040,11 +993,11 @@ if (kpulse_quantize = 1) then
 	ktrigOn3 trigger gkOnOff3, 0.5, 0
 		schedkwhen ktrigOn3, 0, 0, 103, 0, -1
 endif
-;Turn Off the trigger instrument and the pattern reader whenever needed 
-;without syncro to metronome signal 
+;Turn Off the trigger instrument and the pattern reader whenever needed
+;without syncro to metronome signal
 ktrigOff3 trigger gkOnOff3, 0.5, 1
-	schedkwhen ktrigOff3, 0, 0, -103, 0, 1 
-	schedkwhen ktrigOff3, 0, 0, -203, 0, 1  
+	schedkwhen ktrigOff3, 0, 0, -103, 0, 1
+	schedkwhen ktrigOff3, 0, 0, -203, 0, 1
 
 ;Player 4
 ;Sync Sequencer-On with metro pulse signal
@@ -1052,11 +1005,11 @@ if (kpulse_quantize = 1) then
 	ktrigOn4 trigger gkOnOff4, 0.5, 0
 		schedkwhen ktrigOn4, 0, 0, 104, 0, -1
 endif
-;Turn Off the trigger instrument and the pattern reader whenever needed 
-;without syncro to metronome signal 
+;Turn Off the trigger instrument and the pattern reader whenever needed
+;without syncro to metronome signal
 ktrigOff4 trigger gkOnOff4, 0.5, 1
-	schedkwhen ktrigOff4, 0, 0, -104, 0, 1 
-	schedkwhen ktrigOff4, 0, 0, -204, 0, 1  
+	schedkwhen ktrigOff4, 0, 0, -104, 0, 1
+	schedkwhen ktrigOff4, 0, 0, -204, 0, 1
 
 ;Player 5
 ;Sync Sequencer-On with metro pulse signal
@@ -1064,11 +1017,11 @@ if (kpulse_quantize = 1) then
 	ktrigOn5 trigger gkOnOff5, 0.5, 0
 		schedkwhen ktrigOn5, 0, 0, 105, 0, -1
 endif
-;Turn Off the trigger instrument and the pattern reader whenever needed 
-;without syncro to metronome signal 
+;Turn Off the trigger instrument and the pattern reader whenever needed
+;without syncro to metronome signal
 ktrigOff5 trigger gkOnOff5, 0.5, 1
-	schedkwhen ktrigOff5, 0, 0, -105, 0, 1 
-	schedkwhen ktrigOff5, 0, 0, -205, 0, 1  
+	schedkwhen ktrigOff5, 0, 0, -105, 0, 1
+	schedkwhen ktrigOff5, 0, 0, -205, 0, 1
 
 ;Player 6
 ;Sync Sequencer-On with metro pulse signal
@@ -1076,11 +1029,11 @@ if (kpulse_quantize = 1) then
 	ktrigOn6 trigger gkOnOff6, 0.5, 0
 		schedkwhen ktrigOn6, 0, 0, 106, 0, -1
 endif
-;Turn Off the trigger instrument and the pattern reader whenever needed 
-;without syncro to metronome signal 
+;Turn Off the trigger instrument and the pattern reader whenever needed
+;without syncro to metronome signal
 ktrigOff6 trigger gkOnOff6, 0.5, 1
-	schedkwhen ktrigOff6, 0, 0, -106, 0, 1 
-	schedkwhen ktrigOff6, 0, 0, -206, 0, 1  
+	schedkwhen ktrigOff6, 0, 0, -106, 0, 1
+	schedkwhen ktrigOff6, 0, 0, -206, 0, 1
 
 ;Player 7
 ;Sync Sequencer-On with metro pulse signal
@@ -1088,11 +1041,11 @@ if (kpulse_quantize = 1) then
 	ktrigOn7 trigger gkOnOff7, 0.5, 0
 		schedkwhen ktrigOn7, 0, 0, 107, 0, -1
 endif
-;Turn Off the trigger instrument and the pattern reader whenever needed 
-;without syncro to metronome signal 
+;Turn Off the trigger instrument and the pattern reader whenever needed
+;without syncro to metronome signal
 ktrigOff7 trigger gkOnOff7, 0.5, 1
-	schedkwhen ktrigOff7, 0, 0, -107, 0, 1 
-	schedkwhen ktrigOff7, 0, 0, -207, 0, 1  
+	schedkwhen ktrigOff7, 0, 0, -107, 0, 1
+	schedkwhen ktrigOff7, 0, 0, -207, 0, 1
 
 ;Player 8
 ;Sync Sequencer-On with metro pulse signal
@@ -1100,11 +1053,11 @@ if (kpulse_quantize = 1) then
 	ktrigOn8 trigger gkOnOff8, 0.5, 0
 		schedkwhen ktrigOn8, 0, 0, 108, 0, -1
 endif
-;Turn Off the trigger instrument and the pattern reader whenever needed 
-;without syncro to metronome signal 
+;Turn Off the trigger instrument and the pattern reader whenever needed
+;without syncro to metronome signal
 ktrigOff8 trigger gkOnOff8, 0.5, 1
-	schedkwhen ktrigOff8, 0, 0, -108, 0, 1 
-	schedkwhen ktrigOff8, 0, 0, -208, 0, 1  
+	schedkwhen ktrigOff8, 0, 0, -108, 0, 1
+	schedkwhen ktrigOff8, 0, 0, -208, 0, 1
 
 ;Player 9
 ;Sync Sequencer-On with metro pulse signal
@@ -1112,15 +1065,15 @@ if (kpulse_quantize = 1) then
 	ktrigOn9 trigger gkOnOff9, 0.5, 0
 		schedkwhen ktrigOn9, 0, 0, 109, 0, -1
 endif
-;Turn Off the trigger instrument and the pattern reader whenever needed 
-;without syncro to metronome signal 
+;Turn Off the trigger instrument and the pattern reader whenever needed
+;without syncro to metronome signal
 ktrigOff9 trigger gkOnOff9, 0.5, 1
-	schedkwhen ktrigOff9, 0, 0, -109, 0, 1 
-	schedkwhen ktrigOff9, 0, 0, -209, 0, 1  
+	schedkwhen ktrigOff9, 0, 0, -109, 0, 1
+	schedkwhen ktrigOff9, 0, 0, -209, 0, 1
 
 endin
 
-instr 101 ;trigger a performer on providing the table in the pfield 
+instr 101 ;trigger a performer on providing the table in the pfield
 gkp101 init 0
 gkp201 init 0
 gkp301 init 0
@@ -1147,7 +1100,7 @@ stopstart201:
 nothing:
 endin
 
-instr 102 ;trigger a performer on providing the table in the pfield 
+instr 102 ;trigger a performer on providing the table in the pfield
 gkp102 init 0
 gkp202 init 0
 gkp302 init 0
@@ -1174,7 +1127,7 @@ stopstart202:
 nothing:
 endin
 
-instr 103 ;trigger a performer on providing the table in the pfield 
+instr 103 ;trigger a performer on providing the table in the pfield
 gkp103 init 0
 gkp203 init 0
 gkp303 init 0
@@ -1201,7 +1154,7 @@ stopstart203:
 nothing:
 endin
 
-instr 104 ;trigger a performer on providing the table in the pfield 
+instr 104 ;trigger a performer on providing the table in the pfield
 gkp104 init 0
 gkp204 init 0
 gkp304 init 0
@@ -1228,7 +1181,7 @@ stopstart204:
 nothing:
 endin
 
-instr 105 ;trigger a performer on providing the table in the pfield 
+instr 105 ;trigger a performer on providing the table in the pfield
 gkp105 init 0
 gkp205 init 0
 gkp305 init 0
@@ -1255,7 +1208,7 @@ stopstart205:
 nothing:
 endin
 
-instr 106 ;trigger a performer on providing the table in the pfield 
+instr 106 ;trigger a performer on providing the table in the pfield
 gkp106 init 0
 gkp206 init 0
 gkp306 init 0
@@ -1282,7 +1235,7 @@ stopstart206:
 nothing:
 endin
 
-instr 107 ;trigger a performer on providing the table in the pfield 
+instr 107 ;trigger a performer on providing the table in the pfield
 gkp107 init 0
 gkp207 init 0
 gkp307 init 0
@@ -1309,7 +1262,7 @@ stopstart207:
 nothing:
 endin
 
-instr 108 ;trigger a performer on providing the table in the pfield 
+instr 108 ;trigger a performer on providing the table in the pfield
 gkp108 init 0
 gkp208 init 0
 gkp308 init 0
@@ -1336,7 +1289,7 @@ stopstart208:
 nothing:
 endin
 
-instr 109 ;trigger a performer on providing the table in the pfield 
+instr 109 ;trigger a performer on providing the table in the pfield
 gkp109 init 0
 gkp209 init 0
 gkp309 init 0
@@ -1375,7 +1328,7 @@ gkphs01 phasor gkBPM / (k(p5)* 60)
 kphs = gkphs01 * k(p5)
 ktrig   timedseq kphs,p4,gkp101,gkp201,gkp301,gkp401,gkp501
 gkdur01 = (60/gkBPM) * gkp301 ;resize duration according to the BPM selected
-	schedkwhen   ktrig, -1, -1, 301 + .001 * ktiming, ktiming, gkdur01, gkp401 * (1 - gkvol1) * gkpppfff * kvolvar, gkp501
+	schedkwhen   ktrig, -1, -1, 301 + .001 * ktiming, ktiming, gkdur01, gkp401 * gkvol1 * gkpppfff * kvolvar, gkp501
 endin
 
 instr 202 ;read the table selected
@@ -1388,7 +1341,7 @@ gkphs02 phasor gkBPM / (k(p5)* 60)
 kphs = gkphs02 * k(p5)
 ktrig   timedseq kphs,p4,gkp102,gkp202,gkp302,gkp402,gkp502
 gkdur02 = (60/gkBPM) * gkp302 ;resize duration according to the BPM selected
-	schedkwhen   ktrig, -1, -1, 302 + .001 * ktiming, ktiming, gkdur02, gkp402 * (1 - gkvol2) * gkpppfff * kvolvar, gkp502
+	schedkwhen   ktrig, -1, -1, 302 + .001 * ktiming, ktiming, gkdur02, gkp402 * gkvol2 * gkpppfff * kvolvar, gkp502
 endin
 
 instr 203 ;read the table selected
@@ -1401,7 +1354,7 @@ gkphs03 phasor gkBPM / (k(p5)* 60)
 kphs = gkphs03 * k(p5)
 ktrig   timedseq kphs,p4,gkp103,gkp203,gkp303,gkp403,gkp503
 gkdur03 = (60/gkBPM) * gkp303 ;resize duration according to the BPM selected
-	schedkwhen   ktrig, -1, -1, 303 + .001 * ktiming, ktiming, gkdur03, gkp403 * (1 - gkvol3) * gkpppfff * kvolvar, gkp503
+	schedkwhen   ktrig, -1, -1, 303 + .001 * ktiming, ktiming, gkdur03, gkp403 * gkvol3 * gkpppfff * kvolvar, gkp503
 endin
 
 instr 204 ;read the table selected
@@ -1414,7 +1367,7 @@ gkphs04 phasor gkBPM / (k(p5)* 60)
 kphs = gkphs04 * k(p5)
 ktrig   timedseq kphs,p4,gkp104,gkp204,gkp304,gkp404,gkp504
 gkdur04 = (60/gkBPM) * gkp304 ;resize duration according to the BPM selected
-	schedkwhen   ktrig, -1, -1, 304 + .001 * ktiming, ktiming, gkdur04, gkp404 * (1 - gkvol4) * gkpppfff * kvolvar, gkp504
+	schedkwhen   ktrig, -1, -1, 304 + .001 * ktiming, ktiming, gkdur04, gkp404 * gkvol4 * gkpppfff * kvolvar, gkp504
 endin
 
 instr 205 ;read the table selected
@@ -1427,7 +1380,7 @@ gkphs05 phasor gkBPM / (k(p5)* 60)
 kphs = gkphs05 * k(p5)
 ktrig   timedseq kphs,p4,gkp105,gkp205,gkp305,gkp405,gkp505
 gkdur05 = (60/gkBPM) * gkp305 ;resize duration according to the BPM selected
-	schedkwhen   ktrig, -1, -1, 305 + .001 * ktiming, ktiming, gkdur05, gkp405 * (1 - gkvol5) * gkpppfff * kvolvar, gkp505
+	schedkwhen   ktrig, -1, -1, 305 + .001 * ktiming, ktiming, gkdur05, gkp405 * gkvol5 * gkpppfff * kvolvar, gkp505
 endin
 
 instr 206 ;read the table selected
@@ -1440,7 +1393,7 @@ gkphs06 phasor gkBPM / (k(p5)* 60)
 kphs = gkphs06 * k(p5)
 ktrig   timedseq kphs,p4,gkp106,gkp206,gkp306,gkp406,gkp506
 gkdur06 = (60/gkBPM) * gkp306 ;resize duration according to the BPM selected
-	schedkwhen   ktrig, -1, -1, 306 + .001 * ktiming, ktiming, gkdur06, gkp406 * (1 - gkvol6) * gkpppfff * kvolvar, gkp506
+	schedkwhen   ktrig, -1, -1, 306 + .001 * ktiming, ktiming, gkdur06, gkp406 * gkvol6 * gkpppfff * kvolvar, gkp506
 endin
 
 instr 207 ;read the table selected
@@ -1453,7 +1406,7 @@ gkphs07 phasor gkBPM / (k(p5)* 60)
 kphs = gkphs07 * k(p5)
 ktrig   timedseq kphs,p4,gkp107,gkp207,gkp307,gkp407,gkp507
 gkdur07 = (60/gkBPM) * gkp307 ;resize duration according to the BPM selected
-	schedkwhen   ktrig, -1, -1, 307 + .001 * ktiming, ktiming, gkdur07, gkp407 * (1 - gkvol7) * gkpppfff * kvolvar, gkp507
+	schedkwhen   ktrig, -1, -1, 307 + .001 * ktiming, ktiming, gkdur07, gkp407 * gkvol7 * gkpppfff * kvolvar, gkp507
 endin
 
 instr 208 ;read the table selected
@@ -1466,7 +1419,7 @@ gkphs08 phasor gkBPM / (k(p5)* 60)
 kphs = gkphs08 * k(p5)
 ktrig   timedseq kphs,p4,gkp108,gkp208,gkp308,gkp408,gkp508
 gkdur08 = (60/gkBPM) * gkp308 ;resize duration according to the BPM selected
-	schedkwhen   ktrig, -1, -1, 308 + .001 * ktiming, ktiming, gkdur08, gkp408 * (1 - gkvol8) * gkpppfff * kvolvar, gkp508
+	schedkwhen   ktrig, -1, -1, 308 + .001 * ktiming, ktiming, gkdur08, gkp408 * gkvol8 * gkpppfff * kvolvar, gkp508
 endin
 
 instr 209 ;read the table selected
@@ -1479,15 +1432,14 @@ gkphs09 phasor gkBPM / (k(p5)* 60)
 kphs = gkphs09 * k(p5)
 ktrig   timedseq kphs,p4,gkp109,gkp209,gkp309,gkp409,gkp509
 gkdur09 = (60/gkBPM) * gkp309 ;resize duration according to the BPM selected
-	schedkwhen   ktrig, -1, -1, 309, ktiming + .001 * ktiming, gkdur09, gkp409 * (1 - gkvol9) * gkpppfff * kvolvar, gkp509
+	schedkwhen   ktrig, -1, -1, 309, ktiming + .001 * ktiming, gkdur09, gkp409 * gkvol9 * gkpppfff * kvolvar, gkp509
 endin
 
 
-;Audio Generators ----------------------------------------------------------------------------- 
-instr 300
-;Pulse Sound
+;Audio Generators -----------------------------------------------------------------------------
+instr 300	;Pulse Sound
 inote = cpspch(p5)
-kres linseg 0, .005, p4 , .01, p4*.8 ,p3-.1, p4*.67, .05, 0 
+kres linseg 0, .005, p4 , .01, p4*.8 ,p3-.1, p4*.67, .05, 0
 kston linseg 1.3, .01, .99 , p3, 1
 a1 oscil kres, inote, 3, .5
 a2 oscil kres*.3, inote*2*kston, 3
@@ -1496,20 +1448,20 @@ aenv = a1 + a2 + a3
 zawm aenv, 0
 endin
 
-instr 301
-;Player 1
-ktot linseg 0, .01, 1, p3-.03, 1, .015, 0
-inote = cpspch(p5)
-ivol = p4 *.5
-ares fmvoice ivol, inote, 1, 0, .002, 4, 3, 1, 1, 1, 3
-kpanl = sqrt(1-gkpan1)
-kpanr = sqrt(gkpan1)
-zaw ares*kpanl*ktot, 1
-zaw ares*kpanr*ktot, 2
+instr 301	;Player 1
+ktot		linseg		0, .01, 1, p3-.03, 1, .015, 0
+inote	= cpspch(p5)
+ivol		= p4 *.5
+
+ares		fmvoice		ivol, inote, 1, 0, .002, 4, 3, 1, 1, 1, 3
+
+kpanl	= sqrt(1-gkpan1)
+kpanr	= sqrt(gkpan1)
+		zaw			ares*kpanl*ktot, 1
+		zaw			ares*kpanr*ktot, 2
 endin
 
-instr 302
-;Player 2
+instr 302	;Player 2
 ktot linseg 0, .01, 1, p3-.03, 1, .015, 0
 inote = cpspch(p5)
 ivol = p4 *.1
@@ -1524,13 +1476,12 @@ zaw acarr*kpanl*ktot, 3
 zaw acarr*kpanr*ktot, 4
 endin
 
-instr 303
-;Player 3
+instr 303	;Player 3
 ktot linseg 0, .01, 1, p3-.03, 1, .015, 0
 inote = cpspch(p5)
 ivol = p4 *.3
 kenvelope linseg 0, .08, 1, .05, .95 ,p3-.20, .67, .05, 0
-kpw expseg .001, p3, .6 
+kpw expseg .001, p3, .6
 ares vco inote*.25, inote, 3, kpw
 acarr oscil ivol, inote+ares, 3
 acarr = acarr * kenvelope
@@ -1540,8 +1491,7 @@ zaw acarr*kpanl*ktot, 5
 zaw acarr*kpanr*ktot, 6
 endin
 
-instr 304
-;Player 4
+instr 304	;Player 4
 iplk1 = .27
 iplk2 = .2
 ivel = p4 *.25
@@ -1564,8 +1514,7 @@ zaw (abass+amid)*kpanl, 7
 zaw (abass+amid)*kpanr, 8
 endin
 
-instr 305
-;Player 5
+instr 305	;Player 5
 ktot linseg 0, .09, 1, p3-.03, 1, .015, 0
 inote = cpspch(p5)
 ivol = p4 *.05
@@ -1579,8 +1528,7 @@ zaw acarr*kpanl*ktot, 9
 zaw acarr*kpanr*ktot, 10
 endin
 
-instr 306
-;Player 6
+instr 306	;Player 6
 ;Player 1
 ktot linseg 0, .01, 1, p3-.03, 1, .015, 0
 inote = cpspch(p5)
@@ -1592,8 +1540,7 @@ zaw ares*kpanl*ktot, 11
 zaw ares*kpanr*ktot, 12
 endin
 
-instr 307
-;Player 7
+instr 307	;Player 7
 ktot linseg 0, .05, 1, p3-.7, 1, .02, 0
 inote = cpspch(p5)
 ivol = p4 *.5
@@ -1608,13 +1555,12 @@ zaw acarr*kpanl*ktot, 13
 zaw acarr*kpanr*ktot, 14
 endin
 
-instr 308
-;Player 8
+instr 308	;Player 8
 ktot linseg 0, .2, 1, p3-.3, 1, .1, 0
 inote = cpspch(p5)
 ivol = p4 *.1
 kenvelope linseg 0, .096, 1, p3-.15, .97, .1, 0
-kbtt line .7, p3, 1.1 
+kbtt line .7, p3, 1.1
 kmod oscil kbtt, inote *2, 3
 acarr oscil (kmod*ivol), inote, 1
 kpanl = sqrt(1-gkpan8)
@@ -1623,8 +1569,7 @@ zaw acarr*kpanl*ktot, 15
 zaw acarr*kpanr*ktot, 16
 endin
 
-instr 309
-;Player 9
+instr 309	;Player 9
 iplk1 = .37
 iplk2 = .15
 ivel = p4 *.25
@@ -1647,8 +1592,7 @@ zaw (abass+amid)*kpanl, 17
 zaw (abass+amid)*kpanr, 18
 endin
 
-instr 400
-;mixer
+instr 400	;mixer
 apulse zar 0
 a1l zar 1
 a1r zar 2
@@ -1677,15 +1621,13 @@ k6correction init 1
 k7correction init 1
 k8correction init 1
 k9correction init 1
-;galeft = apulse + a1l + a2l + a3l + a4l + a5l + a6l + a7l + a8l + a9l
-;garight = apulse + a1r + a2r + a3r + a4r + a5r + a6r + a7r + a8r + a9r
 
 galeft = apulse + a1l * k1correction + a2l * k2correction + a3l * k2correction + a4l * k4correction + a5l * k5correction + a6l * k6correction + a7l * k1correction + a8l * k8correction + a9l * k9correction
 garight = apulse + a1r * k1correction + a2r * k2correction + a3r * k2correction + a4r * k4correction + a5r * k5correction + a6r * k6correction + a7r * k7correction + a8r * k8correction + a9r * k9correction
 zacl 0, 19
 endin
 
-instr 401
+instr 401	;Reverb
 ;room
 ipitchm = 1
 gaoutL, gaoutR reverbsc galeft, garight, gkfblvl, gkfcoff, sr, ipitchm
@@ -1694,100 +1636,5922 @@ gaeffRH = (garight * (1 -gkwet) + gaoutR * gkwet)
 outs gaeffLH, gaeffRH
 endin
 
-instr 402
-;record performance
+instr 402	;record performance
 ;if gkRecPerfo == 0 then
 ;	turnoff
 ;endif
+
 fout "incout.wav", 14, gaeffLH, gaeffRH
+
 gaeffLH = 0
 gaeffRH = 0
 endin
-
 </CsInstruments>
 <CsScore>
-#define TR(INSNUM) #i 1	0 1 $INSNUM#
 #define OPEN #7200#
-f	0	$OPEN
-;inst	sta	dur	note	veloc
-$TR(1)
-$TR(2)
-$TR(3)
-$TR(4)
-$TR(5)
-$TR(6)
-$TR(7)
-$TR(8)
-$TR(9)
-$TR(10)
-$TR(11)
-$TR(12)
-$TR(13)
-$TR(14)
-$TR(15)
-$TR(16)
-$TR(17)
-$TR(18)
-$TR(19)
-$TR(20)
-$TR(21)
-$TR(22)
-$TR(23)
-$TR(24)
-$TR(25)
-$TR(26)
-$TR(27)
-$TR(28)
-$TR(29)
-$TR(30)
-$TR(31)
-$TR(32)
-$TR(33)
-$TR(34)
-$TR(35)
-$TR(36)
-$TR(37)
-$TR(38)
-$TR(39)
-$TR(40)
-$TR(41)
-$TR(42)
-$TR(43)
-$TR(44)
-$TR(45)
-$TR(46)
-$TR(47)
-$TR(48)
-$TR(49)
-$TR(50)
-$TR(51)
-$TR(52)
-$TR(53)
 
-i 98 0 1
-i 99 0 $OPEN
-i 400 0 $OPEN
-i 401 0 $OPEN
+i 1	0	$OPEN	;Interface
+
+;inst	sta	dur	Insnum
+i 2 0 1 1
+i 2 0 1 2
+i 2 0 1 3
+i 2 0 1 4
+i 2 0 1 5
+i 2 0 1 6
+i 2 0 1 7
+i 2 0 1 8
+i 2 0 1 9
+i 2 0 1 10
+i 2 0 1 11
+i 2 0 1 12
+i 2 0 1 13
+i 2 0 1 14
+i 2 0 1 15
+i 2 0 1 16
+i 2 0 1 17
+i 2 0 1 18
+i 2 0 1 19
+i 2 0 1 20
+i 2 0 1 21
+i 2 0 1 22
+i 2 0 1 23
+i 2 0 1 24
+i 2 0 1 25
+i 2 0 1 26
+i 2 0 1 27
+i 2 0 1 28
+i 2 0 1 29
+i 2 0 1 30
+i 2 0 1 31
+i 2 0 1 32
+i 2 0 1 33
+i 2 0 1 34
+i 2 0 1 35
+i 2 0 1 36
+i 2 0 1 37
+i 2 0 1 38
+i 2 0 1 39
+i 2 0 1 40
+i 2 0 1 41
+i 2 0 1 42
+i 2 0 1 43
+i 2 0 1 44
+i 2 0 1 45
+i 2 0 1 46
+i 2 0 1 47
+i 2 0 1 48
+i 2 0 1 49
+i 2 0 1 50
+i 2 0 1 51
+i 2 0 1 52
+i 2 0 1 53
+
+i 98		0	1
+i 99		0	$OPEN
+i 400	0	$OPEN
+i 401	0	$OPEN
 e
 </CsScore>
 </CsoundSynthesizer>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>288</x>
+ <y>35</y>
+ <width>810</width>
+ <height>675</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background" >
+  <r>0</r>
+  <g>170</g>
+  <b>255</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>2</x>
+  <y>52</y>
+  <width>530</width>
+  <height>60</height>
+  <uuid>{da6cfe57-989d-40a9-86f3-f2e86cc76121}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background" >
+   <r>170</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>OnOff1_B</objectName>
+  <x>58</x>
+  <y>67</y>
+  <width>63</width>
+  <height>30</height>
+  <uuid>{e342b7d4-feb1-41a5-bb7c-6dcca2f000e1}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>  On</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController" >
+  <objectName>hor2</objectName>
+  <x>63</x>
+  <y>75</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{72df9346-a468-4b43-ba73-6b96f03f3ad1}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>OnOff1_L</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.40000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press" >jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0" >false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDropdown" >
+  <objectName>Patt_index1</objectName>
+  <x>127</x>
+  <y>67</y>
+  <width>51</width>
+  <height>30</height>
+  <uuid>{e1f72ed3-3b98-40bf-ad93-03fbbca97031}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>00</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>01</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>02</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>03</name>
+    <value>3</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>04</name>
+    <value>4</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>05</name>
+    <value>5</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>06</name>
+    <value>6</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>07</name>
+    <value>7</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>08</name>
+    <value>8</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>09</name>
+    <value>9</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>10</name>
+    <value>10</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>11</name>
+    <value>11</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>12</name>
+    <value>12</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>13</name>
+    <value>13</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>14</name>
+    <value>14</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>15</name>
+    <value>15</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>16</name>
+    <value>16</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>17</name>
+    <value>17</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>18</name>
+    <value>18</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>19</name>
+    <value>19</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>20</name>
+    <value>20</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>21</name>
+    <value>21</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>22</name>
+    <value>22</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>23</name>
+    <value>23</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>24</name>
+    <value>24</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>25</name>
+    <value>25</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>26</name>
+    <value>26</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>27</name>
+    <value>27</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>28</name>
+    <value>28</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>29</name>
+    <value>29</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>30</name>
+    <value>30</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>31</name>
+    <value>31</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>32</name>
+    <value>32</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>33</name>
+    <value>33</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>34</name>
+    <value>34</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>35</name>
+    <value>35</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>36</name>
+    <value>36</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>37</name>
+    <value>37</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>38</name>
+    <value>38</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>39</name>
+    <value>39</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>40</name>
+    <value>40</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>41</name>
+    <value>41</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>42</name>
+    <value>42</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>43</name>
+    <value>43</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>44</name>
+    <value>44</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>45</name>
+    <value>45</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>46</name>
+    <value>46</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>47</name>
+    <value>47</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>48</name>
+    <value>48</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>49</name>
+    <value>49</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>50</name>
+    <value>50</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>51</name>
+    <value>51</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>52</name>
+    <value>52</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>9</x>
+  <y>67</y>
+  <width>30</width>
+  <height>32</height>
+  <uuid>{f1785581-04d1-4b06-9cd4-3e62e9edc602}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>1</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>72</r>
+   <g>72</g>
+   <b>72</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Vol1</objectName>
+  <x>195</x>
+  <y>57</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{f1cf09b1-0de3-4108-a85d-8a8f587a21f0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Pan1</objectName>
+  <x>255</x>
+  <y>57</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{6b26739f-fc56-4f39-917f-594a65614836}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.01010100</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Timi1</objectName>
+  <x>315</x>
+  <y>57</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{459aefe4-3bef-4fe7-b0bc-a705656c798b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Inte1</objectName>
+  <x>375</x>
+  <y>57</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{f0bc09f5-d132-4323-bed0-6a082f160a88}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.01010100</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>450</x>
+  <y>67</y>
+  <width>61</width>
+  <height>30</height>
+  <uuid>{8c2e7ea1-87db-46be-8b9a-34959085c98d}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>a / q</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>2</x>
+  <y>2</y>
+  <width>530</width>
+  <height>45</height>
+  <uuid>{0efe3e96-c963-4e12-8833-6592d5935230}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background" >
+   <r>170</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>188</x>
+  <y>13</y>
+  <width>69</width>
+  <height>28</height>
+  <uuid>{f04060dd-b782-4aaa-bed7-0c3245c74d9d}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Volume</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>253</x>
+  <y>13</y>
+  <width>55</width>
+  <height>27</height>
+  <uuid>{ceb53559-22a7-4361-9400-0e9aa359a383}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Pan</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>308</x>
+  <y>2</y>
+  <width>67</width>
+  <height>46</height>
+  <uuid>{18ca374c-8881-4d23-8d54-ff8bb1365d7c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Wrong
+Timing</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>368</x>
+  <y>3</y>
+  <width>77</width>
+  <height>45</height>
+  <uuid>{34cc17d2-227a-4264-87ab-2d8da8f218f2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Wrong
+Intensity</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>11</x>
+  <y>13</y>
+  <width>83</width>
+  <height>30</height>
+  <uuid>{a888a464-c836-4b7b-bdfe-bd0ec1d45909}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Player</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>72</r>
+   <g>72</g>
+   <b>72</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>440</x>
+  <y>2</y>
+  <width>91</width>
+  <height>46</height>
+  <uuid>{c1e0fd56-0e18-466c-868b-8f15b0d92a08}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Keyboard
+Start / Next</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>120</x>
+  <y>13</y>
+  <width>68</width>
+  <height>28</height>
+  <uuid>{3e4b505a-37be-4ee1-94b0-2d6223aa70be}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Pattern</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>2</x>
+  <y>117</y>
+  <width>530</width>
+  <height>60</height>
+  <uuid>{f2f516fb-2e80-46a4-b60a-02194799fb6d}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background" >
+   <r>170</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>OnOff2_B</objectName>
+  <x>58</x>
+  <y>132</y>
+  <width>63</width>
+  <height>30</height>
+  <uuid>{f4e4e122-97f5-4cdc-9654-26ea43b71932}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>  On</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController" >
+  <objectName>hor2</objectName>
+  <x>63</x>
+  <y>140</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{40cc8394-bc6e-4682-bc8a-6639bbb7f8e7}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>OnOff2_L</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.40000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press" >jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0" >false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDropdown" >
+  <objectName>Patt_index2</objectName>
+  <x>127</x>
+  <y>132</y>
+  <width>51</width>
+  <height>30</height>
+  <uuid>{632af272-a979-4681-89cc-72c64f008896}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>00</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>01</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>02</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>03</name>
+    <value>3</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>04</name>
+    <value>4</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>05</name>
+    <value>5</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>06</name>
+    <value>6</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>07</name>
+    <value>7</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>08</name>
+    <value>8</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>09</name>
+    <value>9</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>10</name>
+    <value>10</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>11</name>
+    <value>11</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>12</name>
+    <value>12</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>13</name>
+    <value>13</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>14</name>
+    <value>14</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>15</name>
+    <value>15</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>16</name>
+    <value>16</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>17</name>
+    <value>17</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>18</name>
+    <value>18</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>19</name>
+    <value>19</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>20</name>
+    <value>20</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>21</name>
+    <value>21</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>22</name>
+    <value>22</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>23</name>
+    <value>23</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>24</name>
+    <value>24</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>25</name>
+    <value>25</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>26</name>
+    <value>26</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>27</name>
+    <value>27</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>28</name>
+    <value>28</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>29</name>
+    <value>29</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>30</name>
+    <value>30</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>31</name>
+    <value>31</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>32</name>
+    <value>32</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>33</name>
+    <value>33</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>34</name>
+    <value>34</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>35</name>
+    <value>35</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>36</name>
+    <value>36</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>37</name>
+    <value>37</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>38</name>
+    <value>38</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>39</name>
+    <value>39</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>40</name>
+    <value>40</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>41</name>
+    <value>41</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>42</name>
+    <value>42</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>43</name>
+    <value>43</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>44</name>
+    <value>44</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>45</name>
+    <value>45</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>46</name>
+    <value>46</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>47</name>
+    <value>47</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>48</name>
+    <value>48</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>49</name>
+    <value>49</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>50</name>
+    <value>50</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>51</name>
+    <value>51</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>52</name>
+    <value>52</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>9</x>
+  <y>132</y>
+  <width>30</width>
+  <height>32</height>
+  <uuid>{203e63b8-085f-4559-bc72-81d419b37ad6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>2</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>72</r>
+   <g>72</g>
+   <b>72</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Vol2</objectName>
+  <x>195</x>
+  <y>122</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{9bd629bf-38a6-494f-b1f8-d0d2328d293a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Pan2</objectName>
+  <x>255</x>
+  <y>122</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{81e4ddbc-4e90-4e53-9d23-3a842e11b535}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.79798000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Timi2</objectName>
+  <x>315</x>
+  <y>122</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{add2323e-059b-4e6f-94c4-31a79c612707}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.01010100</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Inte2</objectName>
+  <x>375</x>
+  <y>122</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{d2dd19b3-d6ff-48f8-83fe-3a9e8757161e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>450</x>
+  <y>132</y>
+  <width>61</width>
+  <height>30</height>
+  <uuid>{23eda8e3-d432-4b45-b613-5917f77ce503}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>z / s</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>2</x>
+  <y>183</y>
+  <width>530</width>
+  <height>60</height>
+  <uuid>{fbc73574-dd67-486b-936e-6134710bd843}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background" >
+   <r>170</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>OnOff3_B</objectName>
+  <x>58</x>
+  <y>198</y>
+  <width>63</width>
+  <height>30</height>
+  <uuid>{84ea3465-6c0b-4113-9dbe-0d3372e6b2d2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>  On</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController" >
+  <objectName>hor2</objectName>
+  <x>63</x>
+  <y>206</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{61765893-b147-4bf9-b2d3-9d14f8a94e77}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>OnOff3_L</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.40000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press" >jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0" >false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDropdown" >
+  <objectName>Patt_index3</objectName>
+  <x>127</x>
+  <y>198</y>
+  <width>51</width>
+  <height>30</height>
+  <uuid>{d38c7936-8c81-4d42-8db2-29c6fa9ce931}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>00</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>01</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>02</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>03</name>
+    <value>3</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>04</name>
+    <value>4</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>05</name>
+    <value>5</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>06</name>
+    <value>6</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>07</name>
+    <value>7</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>08</name>
+    <value>8</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>09</name>
+    <value>9</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>10</name>
+    <value>10</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>11</name>
+    <value>11</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>12</name>
+    <value>12</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>13</name>
+    <value>13</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>14</name>
+    <value>14</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>15</name>
+    <value>15</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>16</name>
+    <value>16</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>17</name>
+    <value>17</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>18</name>
+    <value>18</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>19</name>
+    <value>19</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>20</name>
+    <value>20</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>21</name>
+    <value>21</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>22</name>
+    <value>22</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>23</name>
+    <value>23</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>24</name>
+    <value>24</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>25</name>
+    <value>25</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>26</name>
+    <value>26</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>27</name>
+    <value>27</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>28</name>
+    <value>28</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>29</name>
+    <value>29</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>30</name>
+    <value>30</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>31</name>
+    <value>31</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>32</name>
+    <value>32</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>33</name>
+    <value>33</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>34</name>
+    <value>34</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>35</name>
+    <value>35</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>36</name>
+    <value>36</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>37</name>
+    <value>37</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>38</name>
+    <value>38</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>39</name>
+    <value>39</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>40</name>
+    <value>40</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>41</name>
+    <value>41</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>42</name>
+    <value>42</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>43</name>
+    <value>43</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>44</name>
+    <value>44</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>45</name>
+    <value>45</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>46</name>
+    <value>46</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>47</name>
+    <value>47</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>48</name>
+    <value>48</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>49</name>
+    <value>49</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>50</name>
+    <value>50</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>51</name>
+    <value>51</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>52</name>
+    <value>52</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>9</x>
+  <y>198</y>
+  <width>30</width>
+  <height>32</height>
+  <uuid>{e4d0a865-91da-4f1a-8593-8348ebbbc9a4}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>3</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>72</r>
+   <g>72</g>
+   <b>72</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Vol3</objectName>
+  <x>195</x>
+  <y>188</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{8ecc1d8e-f8b1-4918-8cd7-69d83aabdefb}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.81818200</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Pan3</objectName>
+  <x>255</x>
+  <y>188</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{629f47ff-be1f-48f1-b10c-1996d5c5a3d4}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.07070700</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Timi3</objectName>
+  <x>315</x>
+  <y>188</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{3143bd60-7b79-49e7-9e05-aeada113b2a6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Inte3</objectName>
+  <x>375</x>
+  <y>188</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{b39e5437-80d2-4cfd-9aae-07ff044c22ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>450</x>
+  <y>198</y>
+  <width>61</width>
+  <height>30</height>
+  <uuid>{b1f10662-d376-40f9-8928-c9455cd8ee44}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>e / d</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>2</x>
+  <y>248</y>
+  <width>530</width>
+  <height>60</height>
+  <uuid>{acacffa0-1c70-4a57-a7d1-3bc185d295e8}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background" >
+   <r>170</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>OnOff4_B</objectName>
+  <x>58</x>
+  <y>263</y>
+  <width>63</width>
+  <height>30</height>
+  <uuid>{03949409-c304-4b86-9127-81dc57ffba84}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>  On</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController" >
+  <objectName>hor2</objectName>
+  <x>63</x>
+  <y>271</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{9e9d5e91-d736-4c82-bcdc-74d625d959e9}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>OnOff4_L</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.40000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press" >jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0" >false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDropdown" >
+  <objectName>Patt_index4</objectName>
+  <x>127</x>
+  <y>263</y>
+  <width>51</width>
+  <height>30</height>
+  <uuid>{1502138a-1041-4310-bbde-aee93f8a7730}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>00</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>01</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>02</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>03</name>
+    <value>3</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>04</name>
+    <value>4</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>05</name>
+    <value>5</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>06</name>
+    <value>6</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>07</name>
+    <value>7</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>08</name>
+    <value>8</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>09</name>
+    <value>9</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>10</name>
+    <value>10</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>11</name>
+    <value>11</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>12</name>
+    <value>12</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>13</name>
+    <value>13</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>14</name>
+    <value>14</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>15</name>
+    <value>15</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>16</name>
+    <value>16</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>17</name>
+    <value>17</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>18</name>
+    <value>18</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>19</name>
+    <value>19</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>20</name>
+    <value>20</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>21</name>
+    <value>21</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>22</name>
+    <value>22</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>23</name>
+    <value>23</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>24</name>
+    <value>24</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>25</name>
+    <value>25</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>26</name>
+    <value>26</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>27</name>
+    <value>27</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>28</name>
+    <value>28</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>29</name>
+    <value>29</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>30</name>
+    <value>30</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>31</name>
+    <value>31</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>32</name>
+    <value>32</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>33</name>
+    <value>33</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>34</name>
+    <value>34</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>35</name>
+    <value>35</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>36</name>
+    <value>36</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>37</name>
+    <value>37</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>38</name>
+    <value>38</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>39</name>
+    <value>39</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>40</name>
+    <value>40</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>41</name>
+    <value>41</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>42</name>
+    <value>42</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>43</name>
+    <value>43</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>44</name>
+    <value>44</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>45</name>
+    <value>45</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>46</name>
+    <value>46</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>47</name>
+    <value>47</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>48</name>
+    <value>48</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>49</name>
+    <value>49</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>50</name>
+    <value>50</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>51</name>
+    <value>51</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>52</name>
+    <value>52</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>9</x>
+  <y>263</y>
+  <width>30</width>
+  <height>32</height>
+  <uuid>{d6249f1f-ef21-4abf-be38-857470ebb4a5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>4</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>72</r>
+   <g>72</g>
+   <b>72</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Vol4</objectName>
+  <x>195</x>
+  <y>253</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{51001fd9-810a-4cc2-8e34-1ea1817e702e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Pan4</objectName>
+  <x>255</x>
+  <y>253</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{1c4ae11d-a9ee-4848-9247-428db580f8b1}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.77777800</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Timi4</objectName>
+  <x>315</x>
+  <y>253</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{9e6861ac-dafb-49f5-8c13-9e724bdd0c01}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Inte4</objectName>
+  <x>375</x>
+  <y>253</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{35ab4a22-4d1b-4472-9c68-744eff2f61be}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>450</x>
+  <y>263</y>
+  <width>61</width>
+  <height>30</height>
+  <uuid>{60077f78-df72-480c-bc51-f00989b37ec6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>r / f</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>2</x>
+  <y>315</y>
+  <width>530</width>
+  <height>60</height>
+  <uuid>{e323fd82-1de3-4abd-8306-f7211c686697}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background" >
+   <r>170</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>OnOff5_B</objectName>
+  <x>58</x>
+  <y>330</y>
+  <width>63</width>
+  <height>30</height>
+  <uuid>{74ad1171-4f8c-4035-a3e3-094fe9f91239}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>  On</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController" >
+  <objectName>hor2</objectName>
+  <x>63</x>
+  <y>338</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{e1962052-5d45-4234-ab7c-982d9abf4a25}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>OnOff5_L</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.40000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press" >jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0" >false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDropdown" >
+  <objectName>Patt_index5</objectName>
+  <x>127</x>
+  <y>330</y>
+  <width>51</width>
+  <height>30</height>
+  <uuid>{371bc98e-ec25-47e7-85a0-a2e5d7b8312f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>00</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>01</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>02</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>03</name>
+    <value>3</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>04</name>
+    <value>4</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>05</name>
+    <value>5</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>06</name>
+    <value>6</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>07</name>
+    <value>7</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>08</name>
+    <value>8</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>09</name>
+    <value>9</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>10</name>
+    <value>10</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>11</name>
+    <value>11</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>12</name>
+    <value>12</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>13</name>
+    <value>13</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>14</name>
+    <value>14</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>15</name>
+    <value>15</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>16</name>
+    <value>16</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>17</name>
+    <value>17</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>18</name>
+    <value>18</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>19</name>
+    <value>19</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>20</name>
+    <value>20</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>21</name>
+    <value>21</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>22</name>
+    <value>22</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>23</name>
+    <value>23</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>24</name>
+    <value>24</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>25</name>
+    <value>25</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>26</name>
+    <value>26</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>27</name>
+    <value>27</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>28</name>
+    <value>28</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>29</name>
+    <value>29</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>30</name>
+    <value>30</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>31</name>
+    <value>31</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>32</name>
+    <value>32</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>33</name>
+    <value>33</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>34</name>
+    <value>34</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>35</name>
+    <value>35</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>36</name>
+    <value>36</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>37</name>
+    <value>37</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>38</name>
+    <value>38</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>39</name>
+    <value>39</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>40</name>
+    <value>40</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>41</name>
+    <value>41</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>42</name>
+    <value>42</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>43</name>
+    <value>43</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>44</name>
+    <value>44</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>45</name>
+    <value>45</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>46</name>
+    <value>46</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>47</name>
+    <value>47</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>48</name>
+    <value>48</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>49</name>
+    <value>49</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>50</name>
+    <value>50</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>51</name>
+    <value>51</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>52</name>
+    <value>52</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>9</x>
+  <y>330</y>
+  <width>30</width>
+  <height>32</height>
+  <uuid>{69c5d968-53fc-4e5e-b83b-1ad3c4ac4b6c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>5</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>72</r>
+   <g>72</g>
+   <b>72</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Vol5</objectName>
+  <x>195</x>
+  <y>320</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{7e394781-85da-4048-a870-85ad80f82d1b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Pan5</objectName>
+  <x>255</x>
+  <y>320</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{b08a4557-3e87-4e5c-919b-50b0a7b9b10c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Timi5</objectName>
+  <x>315</x>
+  <y>320</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{9cce2cc2-d909-46c5-903a-9042d2b8350b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>450</x>
+  <y>330</y>
+  <width>61</width>
+  <height>30</height>
+  <uuid>{66ad8a76-6522-4d9a-9a07-139f126cf042}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>t / g</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>2</x>
+  <y>380</y>
+  <width>530</width>
+  <height>60</height>
+  <uuid>{61961c85-a9cf-44a9-82e2-83fc79fdb1a9}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background" >
+   <r>170</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>OnOff6_B</objectName>
+  <x>58</x>
+  <y>395</y>
+  <width>63</width>
+  <height>30</height>
+  <uuid>{b8ecd0d9-13ca-4360-b7de-3b35914546e7}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>  On</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController" >
+  <objectName>hor2</objectName>
+  <x>63</x>
+  <y>403</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{178fc3be-bc09-4f38-8444-446fe2c9f6bc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>OnOff6_L</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.40000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press" >jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0" >false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDropdown" >
+  <objectName>Patt_index6</objectName>
+  <x>127</x>
+  <y>395</y>
+  <width>51</width>
+  <height>30</height>
+  <uuid>{50283a56-7e3c-431f-8f8a-884470cb0cee}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>00</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>01</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>02</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>03</name>
+    <value>3</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>04</name>
+    <value>4</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>05</name>
+    <value>5</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>06</name>
+    <value>6</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>07</name>
+    <value>7</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>08</name>
+    <value>8</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>09</name>
+    <value>9</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>10</name>
+    <value>10</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>11</name>
+    <value>11</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>12</name>
+    <value>12</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>13</name>
+    <value>13</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>14</name>
+    <value>14</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>15</name>
+    <value>15</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>16</name>
+    <value>16</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>17</name>
+    <value>17</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>18</name>
+    <value>18</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>19</name>
+    <value>19</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>20</name>
+    <value>20</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>21</name>
+    <value>21</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>22</name>
+    <value>22</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>23</name>
+    <value>23</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>24</name>
+    <value>24</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>25</name>
+    <value>25</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>26</name>
+    <value>26</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>27</name>
+    <value>27</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>28</name>
+    <value>28</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>29</name>
+    <value>29</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>30</name>
+    <value>30</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>31</name>
+    <value>31</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>32</name>
+    <value>32</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>33</name>
+    <value>33</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>34</name>
+    <value>34</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>35</name>
+    <value>35</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>36</name>
+    <value>36</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>37</name>
+    <value>37</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>38</name>
+    <value>38</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>39</name>
+    <value>39</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>40</name>
+    <value>40</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>41</name>
+    <value>41</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>42</name>
+    <value>42</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>43</name>
+    <value>43</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>44</name>
+    <value>44</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>45</name>
+    <value>45</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>46</name>
+    <value>46</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>47</name>
+    <value>47</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>48</name>
+    <value>48</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>49</name>
+    <value>49</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>50</name>
+    <value>50</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>51</name>
+    <value>51</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>52</name>
+    <value>52</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>9</x>
+  <y>395</y>
+  <width>30</width>
+  <height>32</height>
+  <uuid>{055cb923-d753-47d2-9b4c-98ea3b254327}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>6</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>72</r>
+   <g>72</g>
+   <b>72</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Vol6</objectName>
+  <x>195</x>
+  <y>385</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{d142ea81-f3f6-4bf5-8668-c95abd7e7867}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Pan6</objectName>
+  <x>255</x>
+  <y>385</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{6de1a928-bb0b-4bb2-8bdf-49fa7012f1e6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.79798000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Timi6</objectName>
+  <x>315</x>
+  <y>385</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{5cf302ae-b433-494b-80e1-d14145e0f87f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Inte6</objectName>
+  <x>375</x>
+  <y>385</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{8ff63604-2a4d-444e-99da-25662e945516}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>450</x>
+  <y>395</y>
+  <width>61</width>
+  <height>30</height>
+  <uuid>{9011a9f4-05f2-4264-a45b-88ff957cc8ff}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>y / h</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>2</x>
+  <y>446</y>
+  <width>530</width>
+  <height>60</height>
+  <uuid>{a65503aa-eff7-46d5-8b27-0c32e3acb0eb}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background" >
+   <r>170</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>OnOff7_B</objectName>
+  <x>58</x>
+  <y>461</y>
+  <width>63</width>
+  <height>30</height>
+  <uuid>{837b0528-2fee-4a9d-9536-9655fadb4c4b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>  On</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController" >
+  <objectName>hor2</objectName>
+  <x>63</x>
+  <y>469</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{67dbb7d0-c6a5-4495-a5a5-cf1dbb666db9}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>OnOff7_L</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.40000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press" >jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0" >false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDropdown" >
+  <objectName>Patt_index7</objectName>
+  <x>127</x>
+  <y>461</y>
+  <width>51</width>
+  <height>30</height>
+  <uuid>{4bde3add-6ca6-4140-bad0-e7c18172b6e2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>00</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>01</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>02</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>03</name>
+    <value>3</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>04</name>
+    <value>4</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>05</name>
+    <value>5</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>06</name>
+    <value>6</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>07</name>
+    <value>7</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>08</name>
+    <value>8</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>09</name>
+    <value>9</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>10</name>
+    <value>10</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>11</name>
+    <value>11</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>12</name>
+    <value>12</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>13</name>
+    <value>13</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>14</name>
+    <value>14</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>15</name>
+    <value>15</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>16</name>
+    <value>16</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>17</name>
+    <value>17</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>18</name>
+    <value>18</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>19</name>
+    <value>19</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>20</name>
+    <value>20</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>21</name>
+    <value>21</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>22</name>
+    <value>22</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>23</name>
+    <value>23</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>24</name>
+    <value>24</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>25</name>
+    <value>25</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>26</name>
+    <value>26</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>27</name>
+    <value>27</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>28</name>
+    <value>28</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>29</name>
+    <value>29</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>30</name>
+    <value>30</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>31</name>
+    <value>31</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>32</name>
+    <value>32</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>33</name>
+    <value>33</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>34</name>
+    <value>34</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>35</name>
+    <value>35</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>36</name>
+    <value>36</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>37</name>
+    <value>37</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>38</name>
+    <value>38</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>39</name>
+    <value>39</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>40</name>
+    <value>40</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>41</name>
+    <value>41</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>42</name>
+    <value>42</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>43</name>
+    <value>43</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>44</name>
+    <value>44</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>45</name>
+    <value>45</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>46</name>
+    <value>46</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>47</name>
+    <value>47</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>48</name>
+    <value>48</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>49</name>
+    <value>49</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>50</name>
+    <value>50</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>51</name>
+    <value>51</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>52</name>
+    <value>52</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>9</x>
+  <y>461</y>
+  <width>30</width>
+  <height>32</height>
+  <uuid>{875aedea-78b5-4af4-ad3c-1625a4bfb1ed}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>7</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>72</r>
+   <g>72</g>
+   <b>72</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Vol7</objectName>
+  <x>195</x>
+  <y>451</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{7a2d676a-0656-41a2-b698-3cfef7cb70e2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Pan7</objectName>
+  <x>255</x>
+  <y>451</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{b3a6572e-cc44-4333-a8d2-d87f49bdfe92}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.06060600</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Timi7</objectName>
+  <x>315</x>
+  <y>451</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{9b1db0e3-42fb-4311-b0f3-6680e86fc202}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Inte7</objectName>
+  <x>375</x>
+  <y>451</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{17748e91-832f-42a0-9a41-e3a11a6570cf}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>450</x>
+  <y>461</y>
+  <width>61</width>
+  <height>30</height>
+  <uuid>{b7873f1e-6052-48d8-8b39-3cfaa2d90c98}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>u / j</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>2</x>
+  <y>511</y>
+  <width>530</width>
+  <height>60</height>
+  <uuid>{d9bf38c8-5f12-4a92-887b-04bb41b87d65}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background" >
+   <r>170</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>OnOff8_B</objectName>
+  <x>58</x>
+  <y>526</y>
+  <width>63</width>
+  <height>30</height>
+  <uuid>{544533ae-a7d8-425c-aed4-945932947c12}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>  On</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController" >
+  <objectName>hor2</objectName>
+  <x>63</x>
+  <y>534</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{1d330048-214a-486c-b854-0e37adbf6833}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>OnOff8_L</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.40000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press" >jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0" >false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDropdown" >
+  <objectName>Patt_index8</objectName>
+  <x>127</x>
+  <y>526</y>
+  <width>51</width>
+  <height>30</height>
+  <uuid>{7225b1ea-5aca-4ace-bc2e-2cc86526797e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>00</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>01</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>02</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>03</name>
+    <value>3</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>04</name>
+    <value>4</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>05</name>
+    <value>5</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>06</name>
+    <value>6</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>07</name>
+    <value>7</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>08</name>
+    <value>8</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>09</name>
+    <value>9</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>10</name>
+    <value>10</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>11</name>
+    <value>11</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>12</name>
+    <value>12</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>13</name>
+    <value>13</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>14</name>
+    <value>14</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>15</name>
+    <value>15</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>16</name>
+    <value>16</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>17</name>
+    <value>17</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>18</name>
+    <value>18</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>19</name>
+    <value>19</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>20</name>
+    <value>20</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>21</name>
+    <value>21</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>22</name>
+    <value>22</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>23</name>
+    <value>23</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>24</name>
+    <value>24</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>25</name>
+    <value>25</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>26</name>
+    <value>26</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>27</name>
+    <value>27</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>28</name>
+    <value>28</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>29</name>
+    <value>29</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>30</name>
+    <value>30</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>31</name>
+    <value>31</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>32</name>
+    <value>32</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>33</name>
+    <value>33</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>34</name>
+    <value>34</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>35</name>
+    <value>35</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>36</name>
+    <value>36</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>37</name>
+    <value>37</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>38</name>
+    <value>38</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>39</name>
+    <value>39</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>40</name>
+    <value>40</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>41</name>
+    <value>41</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>42</name>
+    <value>42</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>43</name>
+    <value>43</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>44</name>
+    <value>44</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>45</name>
+    <value>45</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>46</name>
+    <value>46</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>47</name>
+    <value>47</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>48</name>
+    <value>48</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>49</name>
+    <value>49</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>50</name>
+    <value>50</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>51</name>
+    <value>51</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>52</name>
+    <value>52</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>9</x>
+  <y>526</y>
+  <width>30</width>
+  <height>32</height>
+  <uuid>{00bf8145-92f5-454b-aec1-b5bd0b788e33}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>8</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>72</r>
+   <g>72</g>
+   <b>72</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Vol8</objectName>
+  <x>195</x>
+  <y>516</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{0df9dee6-be25-4988-9ca0-e02bc80e4504}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Pan8</objectName>
+  <x>255</x>
+  <y>516</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{9f0765b5-78f0-46a9-b099-e2b2c6ed26fc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.79798000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Timi8</objectName>
+  <x>315</x>
+  <y>516</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{2085e177-16a7-41d2-b19b-8326a8d34d68}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Inte8</objectName>
+  <x>375</x>
+  <y>516</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{8ef04d4d-97d7-4dd9-82c5-6f360d1d95bf}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>450</x>
+  <y>526</y>
+  <width>61</width>
+  <height>30</height>
+  <uuid>{1e90da32-a4cb-432b-a277-d91512f3bb0a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>i / k</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>2</x>
+  <y>577</y>
+  <width>530</width>
+  <height>60</height>
+  <uuid>{e362dd81-a808-480a-aa2b-0ba4cd1117cc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background" >
+   <r>170</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>OnOff9_B</objectName>
+  <x>58</x>
+  <y>592</y>
+  <width>63</width>
+  <height>30</height>
+  <uuid>{7914eb6d-b0d0-48a1-929c-c913d2f6e2e7}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>  On</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController" >
+  <objectName>hor2</objectName>
+  <x>63</x>
+  <y>600</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{ab1ab987-7da0-4ea6-acac-a593b1cb158c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>OnOff9_L</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.40000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press" >jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0" >false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDropdown" >
+  <objectName>Patt_index9</objectName>
+  <x>127</x>
+  <y>592</y>
+  <width>51</width>
+  <height>30</height>
+  <uuid>{1cbf393c-7eb2-49ab-a76c-fef576604118}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>00</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>01</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>02</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>03</name>
+    <value>3</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>04</name>
+    <value>4</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>05</name>
+    <value>5</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>06</name>
+    <value>6</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>07</name>
+    <value>7</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>08</name>
+    <value>8</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>09</name>
+    <value>9</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>10</name>
+    <value>10</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>11</name>
+    <value>11</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>12</name>
+    <value>12</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>13</name>
+    <value>13</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>14</name>
+    <value>14</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>15</name>
+    <value>15</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>16</name>
+    <value>16</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>17</name>
+    <value>17</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>18</name>
+    <value>18</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>19</name>
+    <value>19</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>20</name>
+    <value>20</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>21</name>
+    <value>21</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>22</name>
+    <value>22</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>23</name>
+    <value>23</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>24</name>
+    <value>24</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>25</name>
+    <value>25</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>26</name>
+    <value>26</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>27</name>
+    <value>27</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>28</name>
+    <value>28</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>29</name>
+    <value>29</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>30</name>
+    <value>30</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>31</name>
+    <value>31</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>32</name>
+    <value>32</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>33</name>
+    <value>33</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>34</name>
+    <value>34</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>35</name>
+    <value>35</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>36</name>
+    <value>36</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>37</name>
+    <value>37</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>38</name>
+    <value>38</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>39</name>
+    <value>39</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>40</name>
+    <value>40</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>41</name>
+    <value>41</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>42</name>
+    <value>42</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>43</name>
+    <value>43</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>44</name>
+    <value>44</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>45</name>
+    <value>45</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>46</name>
+    <value>46</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>47</name>
+    <value>47</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>48</name>
+    <value>48</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>49</name>
+    <value>49</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>50</name>
+    <value>50</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>51</name>
+    <value>51</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>52</name>
+    <value>52</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>9</x>
+  <y>592</y>
+  <width>30</width>
+  <height>32</height>
+  <uuid>{70e68654-d07b-46f1-8e2d-f3d8294ad585}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>9</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>72</r>
+   <g>72</g>
+   <b>72</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Vol9</objectName>
+  <x>195</x>
+  <y>582</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{f25fed74-4e2e-499b-8755-654e4cb9f0cf}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Pan9</objectName>
+  <x>255</x>
+  <y>582</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{3b97ea9d-6c37-424c-948f-ea835f98945b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.10101000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Timi9</objectName>
+  <x>315</x>
+  <y>582</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{deca2bab-66c1-47ae-95b0-ceea5f7e65df}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.01010100</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Inte9</objectName>
+  <x>375</x>
+  <y>582</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{0df386d6-1431-4df1-84ba-25e042b5cd4b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>450</x>
+  <y>592</y>
+  <width>61</width>
+  <height>30</height>
+  <uuid>{c2d40d34-0ba8-4f3d-b7e4-fdd47c38ef32}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>o / l</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>535</x>
+  <y>118</y>
+  <width>262</width>
+  <height>518</height>
+  <uuid>{e6e0fd35-8b85-4335-a290-a1f57eafa530}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background" >
+   <r>170</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>540</x>
+  <y>136</y>
+  <width>64</width>
+  <height>30</height>
+  <uuid>{7b56c126-7fe0-479a-9354-b9523268b8d2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>BMP</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Inte5</objectName>
+  <x>375</x>
+  <y>320</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{c12af5af-8d10-477a-b4fa-2d0881797c80}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Pulse_Vol</objectName>
+  <x>608</x>
+  <y>240</y>
+  <width>60</width>
+  <height>60</height>
+  <uuid>{610e6455-0a27-4405-8c6a-eae5cd952663}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>28000.00000000</maximum>
+  <value>11030.30303000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox" >
+  <objectName>BMP</objectName>
+  <x>603</x>
+  <y>139</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{138f11f9-ef71-4bfb-bed3-7d177625adcd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>1.00000000</resolution>
+  <minimum>-1e+12</minimum>
+  <maximum>1e+12</maximum>
+  <randomizable group="0" >false</randomizable>
+  <value>0</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>gVolume</objectName>
+  <x>608</x>
+  <y>378</y>
+  <width>60</width>
+  <height>60</height>
+  <uuid>{c8da2156-e8f8-43e5-8886-4dcc59419a24}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.01000000</minimum>
+  <maximum>2.00000000</maximum>
+  <value>2.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Dry-Wet</objectName>
+  <x>613</x>
+  <y>493</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{d0edf587-6103-4e10-8604-67df4db17dc6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.52525300</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Feedback</objectName>
+  <x>673</x>
+  <y>493</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{037c187f-6692-4281-ad0a-b27fa5ee5ef3}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.12121200</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob" >
+  <objectName>Cutoff</objectName>
+  <x>733</x>
+  <y>493</y>
+  <width>50</width>
+  <height>50</height>
+  <uuid>{680b498f-bbe3-4719-9072-d257b0222fb5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>22050.00000000</maximum>
+  <value>10022.72727300</value>
+  <mode>lin</mode>
+  <mouseControl act="jump" >continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>599</x>
+  <y>348</y>
+  <width>78</width>
+  <height>28</height>
+  <uuid>{5dc973e4-c4f0-4736-9e58-0ab63c21abc7}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Volume</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>540</x>
+  <y>503</y>
+  <width>75</width>
+  <height>29</height>
+  <uuid>{43bdad06-adef-4c34-a102-7c340e7f2d80}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>REVERB</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>540</x>
+  <y>586</y>
+  <width>80</width>
+  <height>30</height>
+  <uuid>{209a4b5a-45d1-4530-81de-fbe06c60d035}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>RECORD</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>RecPerfo_B</objectName>
+  <x>617</x>
+  <y>585</y>
+  <width>63</width>
+  <height>30</height>
+  <uuid>{4adec4a0-0cc4-4ee9-8091-22e594c3af29}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>  On</text>
+  <image>/</image>
+  <eventLine>i402 0 -1</eventLine>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController" >
+  <objectName>hor2</objectName>
+  <x>622</x>
+  <y>592</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{10b9c876-32b1-4be3-bbf5-6eae42334b6e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>RecPerfo_L</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.40000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press" >jump</mouseControl>
+  <color>
+   <r>255</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0" >false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>682</x>
+  <y>580</y>
+  <width>111</width>
+  <height>41</height>
+  <uuid>{e02b36d4-95be-4c79-af08-c8952dfd17d0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Rec
+Don't switch Off</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>602</x>
+  <y>464</y>
+  <width>66</width>
+  <height>24</height>
+  <uuid>{6ef6168d-c4cd-469f-b207-2f888a14433d}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Dry / Wet</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>664</x>
+  <y>464</y>
+  <width>66</width>
+  <height>24</height>
+  <uuid>{6282a3d5-09fb-4e14-b54f-112e8828b3ad}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Feedback</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>725</x>
+  <y>464</y>
+  <width>66</width>
+  <height>24</height>
+  <uuid>{78104eb5-4d22-4c91-8976-fa13d3920a0b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Cutoff</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>536</x>
+  <y>388</y>
+  <width>75</width>
+  <height>30</height>
+  <uuid>{acb7b198-3258-4931-9746-e6511252c998}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>GLOBAL</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>OnOffAll_B</objectName>
+  <x>705</x>
+  <y>401</y>
+  <width>63</width>
+  <height>30</height>
+  <uuid>{650c9bc2-086d-412e-a6aa-b2b368240fdc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>  On</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController" >
+  <objectName>hor2</objectName>
+  <x>709</x>
+  <y>408</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{958003d4-d371-4f14-99cc-f160f775bd83}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>OnOffAll_L</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.40000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press" >jump</mouseControl>
+  <color>
+   <r>85</r>
+   <g>255</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0" >false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>685</x>
+  <y>340</y>
+  <width>109</width>
+  <height>56</height>
+  <uuid>{ea721a49-3b2c-43a7-ae03-2c05585b79d0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Space Key
+All the players
+together On Off</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>599</x>
+  <y>210</y>
+  <width>81</width>
+  <height>29</height>
+  <uuid>{6fc43ffc-a9a4-4d0d-80ca-41772498bdfc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Volume</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox" >
+  <objectName>C1</objectName>
+  <x>696</x>
+  <y>208</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{b94af8a0-299a-4f69-86e2-2d626eb1aca4}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>706</x>
+  <y>204</y>
+  <width>33</width>
+  <height>26</height>
+  <uuid>{0a500546-7d0d-4c65-9225-77ec46c4322e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>C1</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox" >
+  <objectName>C3</objectName>
+  <x>696</x>
+  <y>268</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{7e4456da-1bb6-4bab-93b0-72e038b0f7b0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox" >
+  <objectName>C2</objectName>
+  <x>696</x>
+  <y>238</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{b001fca6-198a-4271-94c3-65d4cbf9605e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox" >
+  <objectName>C5</objectName>
+  <x>736</x>
+  <y>208</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{624e52ce-4d3b-4bcf-bbd3-075203d9a3e9}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>706</x>
+  <y>264</y>
+  <width>33</width>
+  <height>26</height>
+  <uuid>{a78bc8d3-36b7-4080-8a80-e47edf3ba76f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>C3</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>706</x>
+  <y>234</y>
+  <width>33</width>
+  <height>26</height>
+  <uuid>{8a1c1411-09a8-4f13-a1a5-7d44dcb015df}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>C2</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>706</x>
+  <y>294</y>
+  <width>33</width>
+  <height>26</height>
+  <uuid>{b3c21240-a3f3-43ed-b944-ddf7708d5fe0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>C4</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox" >
+  <objectName>C4</objectName>
+  <x>696</x>
+  <y>298</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{9673c7f6-9039-40ee-ab97-c7818fbc8cbd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>746</x>
+  <y>204</y>
+  <width>33</width>
+  <height>26</height>
+  <uuid>{939c7723-1858-45ef-a7f9-ec062af5ae4a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>C5</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox" >
+  <objectName>C7</objectName>
+  <x>736</x>
+  <y>268</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{245e8593-2beb-4875-be06-ac0fab8053cd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox" >
+  <objectName>C6</objectName>
+  <x>736</x>
+  <y>238</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{01b59770-62c6-4be5-997a-03b07a750565}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox" >
+  <objectName>C8</objectName>
+  <x>736</x>
+  <y>298</y>
+  <width>15</width>
+  <height>15</height>
+  <uuid>{4c6875be-177b-4935-bf50-e42f7b81cff2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0" >false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>746</x>
+  <y>264</y>
+  <width>33</width>
+  <height>26</height>
+  <uuid>{b4fb1cde-41d8-472c-93b2-f3b28e10ae01}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>C7</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>746</x>
+  <y>234</y>
+  <width>33</width>
+  <height>26</height>
+  <uuid>{2380bf0b-9966-4257-93e4-7c600d3f31ae}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>C6</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>746</x>
+  <y>294</y>
+  <width>33</width>
+  <height>26</height>
+  <uuid>{e02db2e0-7bec-44fa-9a7e-830b52d0ee8e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>C8</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>536</x>
+  <y>2</y>
+  <width>262</width>
+  <height>111</height>
+  <uuid>{3a8981d0-fbea-4f20-9f24-055b2e41e49b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>In C Player
+Created by Stefano Valli</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="background" >
+   <r>170</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>541</x>
+  <y>53</y>
+  <width>246</width>
+  <height>56</height>
+  <uuid>{b220eeac-d31e-4ea1-b4c4-8b7173b62817}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>www.triceratupuz.altervista.org
+email: vallste at libero.it
+license: http://creativecommons.org</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>540</x>
+  <y>252</y>
+  <width>64</width>
+  <height>30</height>
+  <uuid>{1e37e020-7902-4710-8873-6f156b0b3f74}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>PULSE</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>127</b>
+  </color>
+  <bgcolor mode="nobackground" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
 <MacOptions>
 Version: 3
 Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 746 479 400 200
+WindowBounds: 288 35 810 675
 CurrentView: io
 IOViewEdit: On
 Options:
 </MacOptions>
 <MacGUI>
-ioView nobackground {59110, 56797, 54741}
-ioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1
-ioSlider {45, 5} {20, 100} 0.000000 1.000000 0.000000 slider2
-ioSlider {85, 5} {20, 100} 0.000000 1.000000 0.000000 slider3
-ioSlider {125, 5} {20, 100} 0.000000 1.000000 0.000000 slider4
-ioSlider {165, 5} {20, 100} 0.000000 1.000000 0.000000 slider5
+ioView background {0, 43690, 65535}
+ioText {2, 52} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 67} {63, 30} value 1.000000 "OnOff1_B" "  On" "/" 
+ioMeter {63, 75} {15, 15} {0, 59904, 0} "hor2" 0.400000 "OnOff1_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 67} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index1
+ioText {9, 67} {30, 32} label 1.000000 0.00100 "" center "DejaVu Sans" 22 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder 1
+ioKnob {195, 57} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol1
+ioKnob {255, 57} {50, 50} 1.000000 0.000000 0.010000 0.010101 Pan1
+ioKnob {315, 57} {50, 50} 1.000000 0.000000 0.010000 0.000000 Timi1
+ioKnob {375, 57} {50, 50} 1.000000 0.000000 0.010000 0.010101 Inte1
+ioText {450, 67} {61, 30} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder a / q
+ioText {2, 2} {530, 45} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioText {188, 13} {69, 28} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder Volume
+ioText {253, 13} {55, 27} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder Pan
+ioText {308, 2} {67, 46} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder WrongÂ¬Timing
+ioText {368, 3} {77, 45} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder WrongÂ¬Intensity
+ioText {11, 13} {83, 30} label 0.000000 0.00100 "" left "DejaVu Sans" 22 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder Player
+ioText {440, 2} {91, 46} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder KeyboardÂ¬Start / Next
+ioText {120, 13} {68, 28} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder Pattern
+ioText {2, 117} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 132} {63, 30} value 1.000000 "OnOff2_B" "  On" "/" 
+ioMeter {63, 140} {15, 15} {0, 59904, 0} "hor2" 0.400000 "OnOff2_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 132} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index2
+ioText {9, 132} {30, 32} label 2.000000 0.00100 "" center "DejaVu Sans" 22 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder 2
+ioKnob {195, 122} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol2
+ioKnob {255, 122} {50, 50} 1.000000 0.000000 0.010000 0.797980 Pan2
+ioKnob {315, 122} {50, 50} 1.000000 0.000000 0.010000 0.010101 Timi2
+ioKnob {375, 122} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte2
+ioText {450, 132} {61, 30} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder z / s
+ioText {2, 183} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 198} {63, 30} value 1.000000 "OnOff3_B" "  On" "/" 
+ioMeter {63, 206} {15, 15} {0, 59904, 0} "hor2" 0.400000 "OnOff3_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 198} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index3
+ioText {9, 198} {30, 32} label 3.000000 0.00100 "" center "DejaVu Sans" 22 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder 3
+ioKnob {195, 188} {50, 50} 1.000000 0.000000 0.010000 0.818182 Vol3
+ioKnob {255, 188} {50, 50} 1.000000 0.000000 0.010000 0.070707 Pan3
+ioKnob {315, 188} {50, 50} 1.000000 0.000000 0.010000 0.000000 Timi3
+ioKnob {375, 188} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte3
+ioText {450, 198} {61, 30} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder e / d
+ioText {2, 248} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 263} {63, 30} value 1.000000 "OnOff4_B" "  On" "/" 
+ioMeter {63, 271} {15, 15} {0, 59904, 0} "hor2" 0.400000 "OnOff4_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 263} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index4
+ioText {9, 263} {30, 32} label 4.000000 0.00100 "" center "DejaVu Sans" 22 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder 4
+ioKnob {195, 253} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol4
+ioKnob {255, 253} {50, 50} 1.000000 0.000000 0.010000 0.777778 Pan4
+ioKnob {315, 253} {50, 50} 1.000000 0.000000 0.010000 0.000000 Timi4
+ioKnob {375, 253} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte4
+ioText {450, 263} {61, 30} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder r / f
+ioText {2, 315} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 330} {63, 30} value 1.000000 "OnOff5_B" "  On" "/" 
+ioMeter {63, 338} {15, 15} {0, 59904, 0} "hor2" 0.400000 "OnOff5_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 330} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index5
+ioText {9, 330} {30, 32} label 5.000000 0.00100 "" center "DejaVu Sans" 22 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder 5
+ioKnob {195, 320} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol5
+ioKnob {255, 320} {50, 50} 1.000000 0.000000 0.010000 0.000000 Pan5
+ioKnob {315, 320} {50, 50} 1.000000 0.000000 0.010000 0.000000 Timi5
+ioText {450, 330} {61, 30} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder t / g
+ioText {2, 380} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 395} {63, 30} value 1.000000 "OnOff6_B" "  On" "/" 
+ioMeter {63, 403} {15, 15} {0, 59904, 0} "hor2" 0.400000 "OnOff6_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 395} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index6
+ioText {9, 395} {30, 32} label 6.000000 0.00100 "" center "DejaVu Sans" 22 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder 6
+ioKnob {195, 385} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol6
+ioKnob {255, 385} {50, 50} 1.000000 0.000000 0.010000 0.797980 Pan6
+ioKnob {315, 385} {50, 50} 1.000000 0.000000 0.010000 0.000000 Timi6
+ioKnob {375, 385} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte6
+ioText {450, 395} {61, 30} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder y / h
+ioText {2, 446} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 461} {63, 30} value 1.000000 "OnOff7_B" "  On" "/" 
+ioMeter {63, 469} {15, 15} {0, 59904, 0} "hor2" 0.400000 "OnOff7_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 461} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index7
+ioText {9, 461} {30, 32} label 7.000000 0.00100 "" center "DejaVu Sans" 22 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder 7
+ioKnob {195, 451} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol7
+ioKnob {255, 451} {50, 50} 1.000000 0.000000 0.010000 0.060606 Pan7
+ioKnob {315, 451} {50, 50} 1.000000 0.000000 0.010000 0.000000 Timi7
+ioKnob {375, 451} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte7
+ioText {450, 461} {61, 30} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder u / j
+ioText {2, 511} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 526} {63, 30} value 1.000000 "OnOff8_B" "  On" "/" 
+ioMeter {63, 534} {15, 15} {0, 59904, 0} "hor2" 0.400000 "OnOff8_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 526} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index8
+ioText {9, 526} {30, 32} label 8.000000 0.00100 "" center "DejaVu Sans" 22 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder 8
+ioKnob {195, 516} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol8
+ioKnob {255, 516} {50, 50} 1.000000 0.000000 0.010000 0.797980 Pan8
+ioKnob {315, 516} {50, 50} 1.000000 0.000000 0.010000 0.000000 Timi8
+ioKnob {375, 516} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte8
+ioText {450, 526} {61, 30} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder i / k
+ioText {2, 577} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 592} {63, 30} value 1.000000 "OnOff9_B" "  On" "/" 
+ioMeter {63, 600} {15, 15} {0, 59904, 0} "hor2" 0.400000 "OnOff9_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 592} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index9
+ioText {9, 592} {30, 32} label 9.000000 0.00100 "" center "DejaVu Sans" 22 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder 9
+ioKnob {195, 582} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol9
+ioKnob {255, 582} {50, 50} 1.000000 0.000000 0.010000 0.101010 Pan9
+ioKnob {315, 582} {50, 50} 1.000000 0.000000 0.010000 0.010101 Timi9
+ioKnob {375, 582} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte9
+ioText {450, 592} {61, 30} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder o / l
+ioText {535, 118} {262, 518} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioText {540, 136} {64, 30} label 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder BMP
+ioKnob {375, 320} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte5
+ioKnob {608, 240} {60, 60} 28000.000000 0.000000 0.010000 11030.303030 Pulse_Vol
+ioText {603, 139} {80, 25} editnum 0.000000 1.000000 "BMP" center "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.000000
+ioKnob {608, 378} {60, 60} 2.000000 0.010000 0.010000 2.000000 gVolume
+ioKnob {613, 493} {50, 50} 1.000000 0.000000 0.010000 0.525253 Dry-Wet
+ioKnob {673, 493} {50, 50} 1.000000 0.000000 0.010000 0.121212 Feedback
+ioKnob {733, 493} {50, 50} 22050.000000 0.000000 0.010000 10022.727273 Cutoff
+ioText {599, 348} {78, 28} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder Volume
+ioText {540, 503} {75, 29} label 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder REVERB
+ioText {540, 586} {80, 30} label 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder RECORD
+ioButton {617, 585} {63, 30} event 1.000000 "RecPerfo_B" "  On" "/" i402 0 -1
+ioMeter {622, 592} {15, 15} {65280, 0, 0} "hor2" 0.400000 "RecPerfo_L" 0.000000 fill 1 0 mouse
+ioText {682, 580} {111, 41} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder RecÂ¬Don't switch Off
+ioText {602, 464} {66, 24} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder Dry / Wet
+ioText {664, 464} {66, 24} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder Feedback
+ioText {725, 464} {66, 24} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder Cutoff
+ioText {536, 388} {75, 30} label 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder GLOBAL
+ioButton {705, 401} {63, 30} value 1.000000 "OnOffAll_B" "  On" "/" 
+ioMeter {709, 408} {15, 15} {21760, 65280, 0} "hor2" 0.400000 "OnOffAll_L" 0.000000 fill 1 0 mouse
+ioText {685, 340} {109, 56} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder Space KeyÂ¬All the playersÂ¬together On Off
+ioText {599, 210} {81, 29} label 0.000000 0.00100 "" center "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder Volume
+ioCheckbox {696, 208} {15, 15} off C1
+ioText {706, 204} {33, 26} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder C1
+ioCheckbox {696, 268} {15, 15} off C3
+ioCheckbox {696, 238} {15, 15} off C2
+ioCheckbox {736, 208} {15, 15} off C5
+ioText {706, 264} {33, 26} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder C3
+ioText {706, 234} {33, 26} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder C2
+ioText {706, 294} {33, 26} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder C4
+ioCheckbox {696, 298} {15, 15} off C4
+ioText {746, 204} {33, 26} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder C5
+ioCheckbox {736, 268} {15, 15} off C7
+ioCheckbox {736, 238} {15, 15} off C6
+ioCheckbox {736, 298} {15, 15} off C8
+ioText {746, 264} {33, 26} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder C7
+ioText {746, 234} {33, 26} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder C6
+ioText {746, 294} {33, 26} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder C8
+ioText {536, 2} {262, 111} label 0.000000 0.00100 "" center "DejaVu Sans" 22 {0, 0, 32512} {43520, 65280, 65280} nobackground noborder In C PlayerÂ¬Created by Stefano Valli
+ioText {541, 53} {246, 56} label 0.000000 0.00100 "" left "DejaVu Sans" 14 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder www.triceratupuz.altervista.orgÂ¬email: vallste at libero.itÂ¬license: http://creativecommons.org
+ioText {540, 252} {64, 30} label 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 32512} {58880, 56576, 54528} nobackground noborder PULSE
 </MacGUI>
-
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="0" y="0" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

@@ -46,7 +46,7 @@ class WidgetLayout : public QWidget
     WidgetLayout(QWidget* parent);
     ~WidgetLayout();
 //    unsigned int widgetCount();
-    void loadWidgets(QString widgets);
+//    void loadWidgets(QString widgets);
     void loadXmlWidgets(QString xmlWidgets);
     void loadXmlPresets(QString xmlPresets);
     void loadMacWidgets(QString macWidgets);

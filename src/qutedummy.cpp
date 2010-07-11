@@ -47,8 +47,13 @@ QString QuteDummy::getWidgetXmlText()
   QXmlStreamWriter s(&xmlText);
   createXmlWriter(s);
 
-//   s.writeTextElement("randomizable", "");
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.lockForRead();
+#endif
   s.writeEndElement();
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.unlock();
+#endif
   return xmlText;
 }
 

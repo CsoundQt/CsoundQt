@@ -228,20 +228,125 @@ e
 
 </CsScore>
 </CsoundSynthesizer>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>391</x>
+ <y>132</y>
+ <width>454</width>
+ <height>477</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground" >
+  <r>230</r>
+  <g>221</g>
+  <b>213</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBLabel" >
+  <objectName/>
+  <x>5</x>
+  <y>5</y>
+  <width>431</width>
+  <height>381</height>
+  <uuid>{4db41777-5f89-4859-b4bd-8cbf0be5c649}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>;       Score for final project in Digital Audio Processing
+;       ---------------------------------------------------
+
+;           Piece entitled :  X A N A D U (short version)
+;                           Joseph T. Kung, 12/12/88
+
+;           The first part of the score will specify all function
+;       tables used in the piece. The second part specifies
+;       the instruments and notes. The latter is divided into
+;       7 sections, each playing a chord on a different
+;                 instrument.
+;       The chords are uncommon guitar chords that use the open
+;       B and E strings often. These will be transposed by
+;       octaves on some chords.
+
+;       Each instrument will play a chord for 15 seconds. The
+;                 timbre
+;       of the instrument will change in that interval and join
+;       with the next instrument/chord sequence. Instrument 3
+;       uses a modified FM synthesis technique. This is joined
+;       by an additional plucked-string instrument
+;       (instruments 1 and 2).</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background" >
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>5</borderradius>
+  <borderwidth>4</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>_Play</objectName>
+  <x>108</x>
+  <y>401</y>
+  <width>100</width>
+  <height>30</height>
+  <uuid>{192c01d7-a5de-4662-b202-1603730eb47c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Start/Resume</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton" >
+  <objectName>_Pause</objectName>
+  <x>228</x>
+  <y>401</y>
+  <width>100</width>
+  <height>30</height>
+  <uuid>{c4002dba-d687-4354-b91a-67822e7777c7}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Pause</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
 <MacOptions>
 Version: 3
 Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 78 219 347 425
+WindowBounds: 391 132 454 477
 CurrentView: io
 IOViewEdit: On
 Options:
 </MacOptions>
-
 <MacGUI>
 ioView nobackground {59110, 56797, 54741}
-ioText {7, 11} {318, 370} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} background border ;       Score for final project in Digital Audio ProcessingÂ¬;       ---------------------------------------------------Â¬Â¬;           Piece entitled :  X A N A D U (short version)Â¬;                           Joseph T. Kung, 12/12/88Â¬Â¬;           The first part of the score will specify all functionÂ¬;       tables used in the piece. The second part specifiesÂ¬;       the instruments and notes. The latter is divided intoÂ¬;       7 sections, each playing a chord on a differentÂ¬;                 instrument.Â¬;       The chords are uncommon guitar chords that use the openÂ¬;       B and E strings often. These will be transposed byÂ¬;       octaves on some chords.Â¬Â¬;       Each instrument will play a chord for 15 seconds. TheÂ¬;                 timbreÂ¬;       of the instrument will change in that interval and joinÂ¬;       with the next instrument/chord sequence. Instrument 3Â¬;       uses a modified FM synthesis technique. This is joinedÂ¬;       by an additional plucked-string instrumentÂ¬;       (instruments 1 and 2).
+ioText {5, 5} {431, 381} label 0.000000 0.00100 "" left "DejaVu Sans" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ;       Score for final project in Digital Audio ProcessingÂ¬;       ---------------------------------------------------Â¬Â¬;           Piece entitled :  X A N A D U (short version)Â¬;                           Joseph T. Kung, 12/12/88Â¬Â¬;           The first part of the score will specify all functionÂ¬;       tables used in the piece. The second part specifiesÂ¬;       the instruments and notes. The latter is divided intoÂ¬;       7 sections, each playing a chord on a differentÂ¬;                 instrument.Â¬;       The chords are uncommon guitar chords that use the openÂ¬;       B and E strings often. These will be transposed byÂ¬;       octaves on some chords.Â¬Â¬;       Each instrument will play a chord for 15 seconds. TheÂ¬;                 timbreÂ¬;       of the instrument will change in that interval and joinÂ¬;       with the next instrument/chord sequence. Instrument 3Â¬;       uses a modified FM synthesis technique. This is joinedÂ¬;       by an additional plucked-string instrumentÂ¬;       (instruments 1 and 2).
+ioButton {108, 401} {100, 30} value 1.000000 "_Play" "Start/Resume" "/" i1 0 10
+ioButton {228, 401} {100, 30} value 1.000000 "_Pause" "Pause" "/" i1 0 10
 </MacGUI>
-
