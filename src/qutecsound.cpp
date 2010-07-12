@@ -2307,6 +2307,7 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/Miscellaneous/Reinit_Example.csd");
   exampleFiles.append(":/examples/Miscellaneous/No_Reinit.csd");
   exampleFiles.append(":/examples/Miscellaneous/Binaural_Panning.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Spatialization.csd");
   exampleFiles.append(":/examples/Miscellaneous/Noise_Reduction.csd");
 
   subMenus << exampleFiles;

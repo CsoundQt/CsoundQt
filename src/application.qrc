@@ -53,6 +53,7 @@
       <file>../examples/Miscellaneous/Reinit_Example.csd</file>
       <file>../examples/Miscellaneous/No_Reinit.csd</file>
       <file>../examples/Miscellaneous/Binaural_Panning.csd</file>
+      <file>../examples/Miscellaneous/Spatialization.csd</file>
 
       <file>../examples/Widgets/Widget_Panel.csd</file>
       <file>../examples/Widgets/Label_Widget.csd</file>
