@@ -312,37 +312,37 @@
     <message>
         <location filename="../configdialog.ui" line="980"/>
         <source>Make the widget panel visible when a csd is played</source>
-        <translation type="unfinished"></translation>
+        <translation>Widget Fenster zeigen wenn eine Csound Datei gespielt wird</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1073"/>
         <source>Store old widget format section in csd file, to allow older versions of QuteCsound to load most of the widget characteristics from the file</source>
-        <translation type="unfinished"></translation>
+        <translation>Altes Widget-Format sichern, um älteren Versionen von QuteCsound zu erlauben, die meisten der Eigenschaften zu laden</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1076"/>
         <source>Store Old Widget Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Altes Widget Format sichern</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1083"/>
         <source>Automatically open properties dialog when a new widget is created</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigenschaften automatisch öffnen wenn ein neues Widget erzeugt wird</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1086"/>
         <source>Open Properties when creating widget</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigenschaften öffnen wenn Widget erzeugt wird</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1095"/>
         <source>Font scaling</source>
-        <translation type="unfinished"></translation>
+        <translation>Font Skalierung</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1108"/>
         <source>Font offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Font offset</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1242"/>
@@ -352,17 +352,17 @@
     <message>
         <location filename="../configdialog.ui" line="1265"/>
         <source>Line Ending Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modus fürs Zeilenende</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1276"/>
         <source>Unix (LF)</source>
-        <translation type="unfinished"></translation>
+        <translation>Unix (LF)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1281"/>
         <source>Windows (CR+LF)</source>
-        <translation type="unfinished"></translation>
+        <translation>Windows (CR+LF)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1304"/>
@@ -372,27 +372,27 @@
     <message>
         <location filename="../configdialog.ui" line="1391"/>
         <source>Automatically Join orc/sco files</source>
-        <translation type="unfinished"></translation>
+        <translation>orc/sco automatisch verbinden</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1830"/>
         <source>Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Muster</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1842"/>
         <source>csd Template</source>
-        <translation type="unfinished"></translation>
+        <translation>csd-Musterdatei</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1864"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1877"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Default</translation>
     </message>
     <message>
         <source>Autoplay when launched from file</source>
@@ -594,7 +594,7 @@
     <message>
         <location filename="../configdialog.ui" line="1384"/>
         <source>Show Toolbars</source>
-        <translation type="unfinished"></translation>
+        <translation>Werkzeugleiste zeigen</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1401"/>
@@ -658,7 +658,7 @@
     <message>
         <location filename="../configdialog.ui" line="1620"/>
         <source>Python Executable</source>
-        <translation type="unfinished"></translation>
+        <translation>Python Executable</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1627"/>
@@ -730,7 +730,7 @@
         <location filename="../csoundengine.cpp" line="617"/>
         <source>Csound is not running! Event ignored.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Csound läuft nicht! Event wird ignoriert.</translation>
     </message>
 </context>
 <context>
@@ -904,12 +904,12 @@ Von Anfang beginnen?</translation>
     <message>
         <location filename="../eventsheet.cpp" line="964"/>
         <source>Add columns:</source>
-        <translation type="unfinished"></translation>
+        <translation>Spalten dazu</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="977"/>
         <source>Add Rows:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeilen dazu</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1032"/>
@@ -962,22 +962,22 @@ Von Anfang beginnen?</translation>
     <message>
         <location filename="../eventsheet.cpp" line="1343"/>
         <source>Loop Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Loop aktiv</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1344"/>
         <source>Activate Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Loop aktivieren</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1349"/>
         <source>Mark Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Loop markieren</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1350"/>
         <source>Set Loop to selection, without starting loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Auswahl als Loop setzen ohne Loop zu starten</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1353"/>
@@ -1123,23 +1123,23 @@ Von Anfang beginnen?</translation>
         <location filename="../eventsheet.cpp" line="1428"/>
         <location filename="../eventsheet.cpp" line="1430"/>
         <source>Append Columns...</source>
-        <translation type="unfinished"></translation>
+        <translation>Spalten anhängen…</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1429"/>
         <source>Append columns to the sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Spalten an das Blatt anhängen</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1433"/>
         <location filename="../eventsheet.cpp" line="1435"/>
         <source>Append Rows...</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeilen anhängen…</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1434"/>
         <source>Append rows to the sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeilen an das Blatt anhängen</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1443"/>
@@ -1194,12 +1194,12 @@ Von Anfang beginnen?</translation>
     <message>
         <location filename="../eventsheet.cpp" line="1338"/>
         <source>&amp;Loop Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Auswahl loopen</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1339"/>
         <source>Mark loop to current selection and start looping</source>
-        <translation type="unfinished"></translation>
+        <translation>Gegenwärtige Auswahl als Loop markieren und Loop starten</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1418"/>
@@ -1542,77 +1542,77 @@ Ist schon in Gebrauch.</translation>
         <location filename="../liveeventcontrol.ui" line="14"/>
         <source>LE Controller</source>
         <extracomment>(Live Event Controller)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>LE Controller</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="66"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeigen</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="77"/>
         <source>Play</source>
-        <translation type="unfinished">In Echtzeit abspielen</translation>
+        <translation>In Echtzeit abspielen</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="88"/>
         <source>Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Loop</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="98"/>
         <source>Sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Sync</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="108"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="118"/>
         <source>Loop length</source>
-        <translation type="unfinished"></translation>
+        <translation>Loopdauer</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="128"/>
         <source>Loop Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Loop Range</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="138"/>
         <source>Tempo</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="153"/>
         <source>New</source>
-        <translation type="unfinished">Neu</translation>
+        <translation>Neu</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="160"/>
         <source>Stop All</source>
-        <translation type="unfinished">Alles stoppen</translation>
+        <translation>Alles stoppen</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.cpp" line="169"/>
         <source>Loop start</source>
-        <translation type="unfinished"></translation>
+        <translation>Loopstart</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.cpp" line="171"/>
         <source>Loop end</source>
-        <translation type="unfinished"></translation>
+        <translation>Loop Ende</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.cpp" line="173"/>
         <source>Ok</source>
-        <translation type="unfinished">Ok</translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.cpp" line="174"/>
         <source>Cancel</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
 </context>
 <context>
@@ -1624,7 +1624,7 @@ Ist schon in Gebrauch.</translation>
     <message>
         <location filename="../liveeventframe.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../liveeventframe.ui" line="23"/>
@@ -1649,7 +1649,7 @@ Ist schon in Gebrauch.</translation>
     <message>
         <location filename="../liveeventframe.ui" line="48"/>
         <source>Mark Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Loop markieren</translation>
     </message>
     <message>
         <location filename="../liveeventframe.ui" line="69"/>
@@ -1691,7 +1691,7 @@ Ist schon in Gebrauch.</translation>
         <location filename="../liveeventframe.cpp" line="259"/>
         <source>Enter new name</source>
         <comment>New name for Live Event panel</comment>
-        <translation type="unfinished"></translation>
+        <translation>Neuen Namen eingeben</translation>
     </message>
 </context>
 <context>
@@ -1705,7 +1705,7 @@ Ist schon in Gebrauch.</translation>
     <message>
         <location filename="../qutebutton.cpp" line="394"/>
         <source>Select File(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei(en) auswählen</translation>
     </message>
 </context>
 <context>
@@ -1718,13 +1718,14 @@ Ist schon in Gebrauch.</translation>
         <location filename="../qutescope.cpp" line="151"/>
         <source>all</source>
         <comment>meaning &apos;all&apos; channels in scope, must be very short (4 letter max)</comment>
-        <translation type="unfinished">alle</translation>
+        <translation>alle</translation>
     </message>
     <message>
         <location filename="../qutescope.cpp" line="154"/>
         <source>None</source>
         <comment>meaning &apos;no&apos; channels in scope, must be very short (4 letter max)</comment>
-        <translation type="unfinished">Keine</translation>
+        <translatorcomment>5 is minimum ...</translatorcomment>
+        <translation>Keine</translation>
     </message>
     <message>
         <location filename="../qutescope.cpp" line="159"/>
@@ -1746,60 +1747,60 @@ Ist schon in Gebrauch.</translation>
     <message>
         <location filename="../qutetext.cpp" line="352"/>
         <source>Text:</source>
-        <translation type="unfinished"></translation>
+        <translation>Text:</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="360"/>
         <source>Text Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Textfarbe</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="366"/>
         <source>Background Color</source>
-        <translation type="unfinished">Hintergrundfarbe</translation>
+        <translation>Hintergrundfarbe</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="375"/>
         <source>Font</source>
-        <translation type="unfinished">Schrift</translation>
+        <translation>Schrift</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="380"/>
         <source>Font Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Schriftgröße</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="385"/>
         <source>Border Radius</source>
-        <translation type="unfinished"></translation>
+        <translation>Border Radius</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="390"/>
         <source>Border Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Border Width</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="395"/>
         <source>Alignment</source>
-        <translation type="unfinished"></translation>
+        <translation>Anordnung</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="398"/>
         <source>Left</source>
         <comment>Alignment</comment>
-        <translation type="unfinished"></translation>
+        <translation>Links</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="399"/>
         <source>Center</source>
         <comment>Alignment</comment>
-        <translation type="unfinished"></translation>
+        <translation>Mitte</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="400"/>
         <source>Right</source>
         <comment>Alignment</comment>
-        <translation type="unfinished"></translation>
+        <translation>Rechts</translation>
     </message>
 </context>
 <context>
@@ -1818,12 +1819,12 @@ Ist schon in Gebrauch.</translation>
         <location filename="../qutewidget.cpp" line="301"/>
         <source>Create New</source>
         <comment>Menu name in widget right-click menu</comment>
-        <translation type="unfinished"></translation>
+        <translation>Neu erzeugen</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="325"/>
         <source>Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Presets</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="400"/>
@@ -2477,17 +2478,17 @@ Ist schon in Gebrauch.</translation>
     <message>
         <location filename="../widgetlayout.cpp" line="112"/>
         <source>Cut</source>
-        <translation type="unfinished">Raus</translation>
+        <translation>Raus</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="114"/>
         <source>Copy</source>
-        <translation type="unfinished">Kopieren</translation>
+        <translation>Kopieren</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="116"/>
         <source>Paste</source>
-        <translation type="unfinished">Rein</translation>
+        <translation>Rein</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="118"/>
@@ -2547,68 +2548,72 @@ Ist schon in Gebrauch.</translation>
     <message>
         <location filename="../widgetlayout.cpp" line="141"/>
         <source>Center Vertically</source>
-        <translation type="unfinished"></translation>
+        <translation>Center Vertically</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="143"/>
         <source>Center Horizontally</source>
-        <translation type="unfinished"></translation>
+        <translation>Center Horizontally</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="146"/>
         <source>Store Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset speichern</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="148"/>
         <location filename="../widgetlayout.cpp" line="2626"/>
         <location filename="../widgetlayout.cpp" line="2782"/>
         <source>New Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Preset</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="150"/>
         <source>Recall Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset zurückholen</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="209"/>
         <source>More than one panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Mehr als ein Fenster</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="210"/>
         <source>The csd file contains more than one widget panel!
 This is not suported by the current version,
 Addtional widget panels will be lost if the file is saved!</source>
-        <translation type="unfinished"></translation>
+        <translation>Die csd-Datei enthält mehr als ein Widget-Fenster!
+Dies wird von der laufenden Version nicht unterstützt.
+Die zusätzlichen Widgetfenster werden verlorengehen wenn die Datei gesichert wird!</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="225"/>
         <source>Unrecognized wigdet format</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekanntes Widget-Format</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="226"/>
         <source>There is unrecognized widget information in the file!
 It may be saved with errors.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es gibt unbekannte Widget-Informationen in der Datei!
+Sie wurde möglicherweise fehlerhaft gespeichert.</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="235"/>
         <source>Newer Widget Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Neueres Widget-Format</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="236"/>
         <source>The file was was saved by a more recent version of QuteCsound.
 Some features may not be available and will not be saved!</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Datei wurde von einer jüngeren Version von QuteCsound gespeichert.
+Einige Features könnten nicht verfügbar sein und werden nicht gesichert!</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="936"/>
         <source>ChannelH:</source>
-        <translation type="unfinished"></translation>
+        <translation>KanalHor:</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="937"/>
@@ -2618,37 +2623,37 @@ Some features may not be available and will not be saved!</source>
     <message>
         <location filename="../widgetlayout.cpp" line="2625"/>
         <source>Close</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="2631"/>
         <source>Double-click Preset to Load</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset doppelklicken um zu laden</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="2736"/>
         <source>New Preset Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Neuer Preset-Name</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="2738"/>
         <source>Number:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nummer:</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="2754"/>
         <source>Preset Already Exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset existiert schon</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="2755"/>
         <source>Preset %i already exists. Overwrite?</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset %i existiert schon. Überschreiben?</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="2784"/>
         <source>Select Preset to save</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset auswählen um zu sichern</translation>
     </message>
     <message>
         <source>
@@ -3314,55 +3319,57 @@ Version </translation>
     <message>
         <location filename="../qutecsound.cpp" line="649"/>
         <source>New widget format</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Widget-Format</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="650"/>
         <source>  This version of QuteCsound implements a new format for storing widgets, which enables many of the new widget features you will find now.
   The old format is still read and saved, so you will be able to open files in older versions but some of the features will not be passed to older versions.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>  Diese Version von QuteCsound implementiert ein neues Format zur Speicherung von Widgets,das viele der neuen Widget-Features ermöglicht.
+  Das alte Format wird weiterhin gelesen und gespeichert. Es können also weiterhin Dateien aus älteren Versionen geöffnet werden, aber einige der neuen Features (z.B. Presets) können nicht an die älteren Versionen übergeben werden.
+</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="677"/>
         <source>Full Path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompletter Pfad:</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="678"/>
         <source>Number of lines (Csound Text):</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl der Zeilen (Csound-Text):</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="679"/>
         <source>Number of characters (Csound Text):</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl der Zeichen (Csound-Text):</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="680"/>
         <source>Number of lines (total):</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl der Zeilen (insgesamt):</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="681"/>
         <source>Number of characters (total):</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl der Zeichen (insgesamt):</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="682"/>
         <source>Number of instruments:</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl der Instrumente:</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="683"/>
         <source>Number of UDOs:</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl der UDOs:</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="684"/>
         <location filename="../qutecsound.cpp" line="1751"/>
         <source>File Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei-Information</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1317"/>
@@ -3462,17 +3469,17 @@ Bitte QuteCsound neu starten.</translation>
     <message>
         <location filename="../qutecsound.cpp" line="1678"/>
         <source>Ctrl+Alt+F</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+F</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1680"/>
         <source>F11</source>
-        <translation type="unfinished"></translation>
+        <translation>F11</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1752"/>
         <source>Show information for the current file</source>
-        <translation type="unfinished"></translation>
+        <translation>Information für diese Datei zeigen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1789"/>
@@ -3933,7 +3940,7 @@ Francesco</translation>
     <message>
         <location filename="../qutecsound.cpp" line="1685"/>
         <source>Alt+7</source>
-        <translation type="unfinished">Alt+7</translation>
+        <translation>Alt+7</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1691"/>
@@ -3948,12 +3955,12 @@ Francesco</translation>
     <message>
         <location filename="../qutecsound.cpp" line="1695"/>
         <source>Ctrl+K</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+K</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1696"/>
         <source>Shift+Ctrl+K</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Ctrl+K</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1728"/>
@@ -4041,22 +4048,22 @@ Francesco</translation>
     <message>
         <location filename="../qutecsound.cpp" line="1920"/>
         <source>Opcode Quick Reference</source>
-        <translation type="unfinished"></translation>
+        <translation>Opcode Quick Reference</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1921"/>
         <source>Show opcode quick reference page</source>
-        <translation type="unfinished"></translation>
+        <translation>Opcode-Kurzinfo zeigen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1932"/>
         <source>View Full Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Ganzer Bildschirm</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1935"/>
         <source>Have QuteCsound occupy all the available screen space</source>
-        <translation type="unfinished"></translation>
+        <translation>QuteCsound den gesamten verfügbaren Platz auf dem Monitor geben</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1955"/>
@@ -4082,22 +4089,22 @@ Francesco</translation>
     <message>
         <location filename="../qutecsound.cpp" line="1991"/>
         <source>Kill Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile löschen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1992"/>
         <source>Completeley delete current line</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile komplett löschen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1994"/>
         <source>Kill to End of Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Bis Ende der Zeile löschen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1995"/>
         <source>Delete everything from cursor to the end of the current line</source>
-        <translation type="unfinished"></translation>
+        <translation>Alles vom Cursor bis ans Ende der Zeile löschen.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1997"/>

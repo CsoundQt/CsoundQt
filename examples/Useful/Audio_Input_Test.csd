@@ -89,6 +89,7 @@ instr 1
 
 kdbrange invalue "dbrange"  ;dB range for the meters
 kpeakhold invalue "peakhold"  ;Duration of clip indicator hold in seconds
+kinchsel invalue "inchsel"
 
 ;input channels
 a1		inch		1
@@ -115,6 +116,14 @@ a21		inch		21
 a22		inch		22
 a23		inch		23
 a24		inch		24
+ if kinchsel > nchnls then
+Smsg		sprintfk	"%s", "Selected input channel out of range!\nThe nchnls value must be increased."
+asel		=		0
+ else
+Smsg		sprintfk	"%s", ""
+asel		inch		kinchsel
+ endif
+		outvalue	"msg", Smsg
 ;GUI
 kTrigDisp	metro		10; refresh rate of display
 		ShowLED_a	"in1", a1, kTrigDisp, 1, kdbrange
@@ -141,6 +150,7 @@ kTrigDisp	metro		10; refresh rate of display
 		ShowLED_a	"in22", a22, kTrigDisp, 1, kdbrange
 		ShowLED_a	"in23", a23, kTrigDisp, 1, kdbrange
 		ShowLED_a	"in24", a24, kTrigDisp, 1, kdbrange
+		ShowLED_a	"insel", asel, kTrigDisp, 1, kdbrange
 		ShowValue_a	"db1", a1, kTrigDisp
 		ShowValue_a	"db2", a2, kTrigDisp
 		ShowValue_a	"db3", a3, kTrigDisp
@@ -165,6 +175,7 @@ kTrigDisp	metro		10; refresh rate of display
 		ShowValue_a	"db22", a22, kTrigDisp
 		ShowValue_a	"db23", a23, kTrigDisp
 		ShowValue_a	"db24", a24, kTrigDisp
+		ShowValue_a	"dbsel", asel, kTrigDisp
 		ShowOver_a	"in1over", a1, kTrigDisp, kpeakhold
 		ShowOver_a	"in2over", a2, kTrigDisp, kpeakhold
 		ShowOver_a	"in3over", a3, kTrigDisp, kpeakhold
@@ -189,6 +200,7 @@ kTrigDisp	metro		10; refresh rate of display
 		ShowOver_a	"in22over", a22, kTrigDisp, kpeakhold
 		ShowOver_a	"in23over", a23, kTrigDisp, kpeakhold
 		ShowOver_a	"in24over", a24, kTrigDisp, kpeakhold
+		ShowOver_a	"inselover", asel, kTrigDisp, kpeakhold
 endin
 </CsInstruments>
 <CsScore>
@@ -199,10 +211,10 @@ e
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>352</x>
- <y>175</y>
- <width>591</width>
- <height>612</height>
+ <x>486</x>
+ <y>71</y>
+ <width>624</width>
+ <height>711</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -212,8 +224,8 @@ e
  </bgcolor>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>14</x>
-  <y>359</y>
+  <x>15</x>
+  <y>428</y>
   <width>543</width>
   <height>58</height>
   <uuid>{e827ab0d-6f6b-416e-93a5-5671105847e9}</uuid>
@@ -270,8 +282,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>14</x>
-  <y>417</y>
+  <x>15</x>
+  <y>486</y>
   <width>546</width>
   <height>56</height>
   <uuid>{0054fba7-f236-436e-8963-a8cb42fe48f3}</uuid>
@@ -299,8 +311,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>14</x>
-  <y>474</y>
+  <x>15</x>
+  <y>543</y>
   <width>546</width>
   <height>59</height>
   <uuid>{07c73fd7-6c11-4aad-a117-f74ce7eba95e}</uuid>
@@ -342,7 +354,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.07594776</yValue>
+  <yValue>0.60217690</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -408,7 +420,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.07594776</yValue>
+  <yValue>0.60217690</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2608,8 +2620,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>dbrange</objectName>
-  <x>183</x>
-  <y>326</y>
+  <x>112</x>
+  <y>384</y>
   <width>62</width>
   <height>29</height>
   <uuid>{36eef67d-17c0-4db9-9d19-a98e72ceaf72}</uuid>
@@ -2637,8 +2649,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>85</x>
-  <y>326</y>
+  <x>14</x>
+  <y>384</y>
   <width>93</width>
   <height>30</height>
   <uuid>{88dece71-3aab-478c-9347-55684c2d86be}</uuid>
@@ -2666,8 +2678,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>peakhold</objectName>
-  <x>425</x>
-  <y>327</y>
+  <x>287</x>
+  <y>385</y>
   <width>51</width>
   <height>29</height>
   <uuid>{c96d5f20-b90b-4e74-bcab-317ac5a426f8}</uuid>
@@ -2691,12 +2703,12 @@ e
   <minimum>0</minimum>
   <maximum>10</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2</value>
+  <value>1</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>317</x>
-  <y>327</y>
+  <x>179</x>
+  <y>385</y>
   <width>104</width>
   <height>29</height>
   <uuid>{bc556111-6c70-4b47-bd85-b44fae5decf5}</uuid>
@@ -2732,7 +2744,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>-26.2</label>
+  <label>-29.3</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -2761,7 +2773,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>-26.2</label>
+  <label>-29.3</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -3420,8 +3432,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>14</x>
-  <y>535</y>
+  <x>15</x>
+  <y>604</y>
   <width>546</width>
   <height>59</height>
   <uuid>{e89c7c22-d239-4277-9711-933f89fea435}</uuid>
@@ -3447,12 +3459,189 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <objectName/>
- <x>352</x>
- <y>175</y>
- <width>591</width>
- <height>612</height>
- <visible>true</visible>
+ <bsbObject version="2" type="BSBController">
+  <objectName>insel</objectName>
+  <x>174</x>
+  <y>337</y>
+  <width>254</width>
+  <height>30</height>
+  <uuid>{4d575819-9193-4488-b590-3cdac26c1db3}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>insel</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.60217690</xValue>
+  <yValue>0.60217690</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBController">
+  <objectName>inselover</objectName>
+  <x>425</x>
+  <y>337</y>
+  <width>29</width>
+  <height>30</height>
+  <uuid>{77238555-aa61-40b1-8b36-ee6cee31f477}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>inselover</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>196</r>
+   <g>14</g>
+   <b>12</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>dbsel</objectName>
+  <x>455</x>
+  <y>337</y>
+  <width>54</width>
+  <height>28</height>
+  <uuid>{6fabd7b4-dad6-4865-8a24-199f0a1e94c0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>-29.9</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>16</x>
+  <y>329</y>
+  <width>106</width>
+  <height>44</height>
+  <uuid>{558a2baf-3d2d-49ed-9a20-54681c72667e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>or select
+one channel</label>
+  <alignment>left</alignment>
+  <font>Helvetica</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>inchsel</objectName>
+  <x>122</x>
+  <y>335</y>
+  <width>51</width>
+  <height>31</height>
+  <uuid>{671956d9-d551-4e24-a32d-558aaad0499a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>1.00000000</resolution>
+  <minimum>1</minimum>
+  <maximum>100</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>1</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>msg</objectName>
+  <x>350</x>
+  <y>377</y>
+  <width>237</width>
+  <height>42</height>
+  <uuid>{f1cffca1-d8b5-48eb-8e71-bbd4ce905609}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
@@ -3462,7 +3651,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 352 175 591 612
+WindowBounds: 486 71 624 711
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -3473,9 +3662,9 @@ ioText {14, 359} {543, 58} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0,
 ioText {147, -1} {299, 44} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {65280, 65280, 65280} nobackground noborder INPUT TESTER
 ioText {14, 417} {546, 56} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1. Change the nchnls (number of channels) parameter in the orchestra header to the value you wish and your output device can.
 ioText {14, 474} {546, 59} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2. Make sure you are using the appropriate device by selecting it on the Configure dialog
-ioMeter {13, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "in1" 0.075948 fill 1 0 mouse
+ioMeter {13, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "in1" 0.602177 fill 1 0 mouse
 ioMeter {13, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "in1over" 0.000000 fill 1 0 mouse
-ioMeter {35, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "in2" 0.075948 fill 1 0 mouse
+ioMeter {35, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "in2" 0.602177 fill 1 0 mouse
 ioMeter {35, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "in2over" 0.000000 fill 1 0 mouse
 ioMeter {57, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "in3" -inf fill 1 0 mouse
 ioMeter {57, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "in3over" 0.000000 fill 1 0 mouse
@@ -3547,10 +3736,10 @@ ioText {516, 49} {29, 23} label 23.000000 0.00100 "" center "Lucida Grande" 12 {
 ioText {538, 49} {29, 23} label 24.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 24
 ioText {183, 326} {62, 29} editnum 60.000000 0.100000 "dbrange" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 60.000000
 ioText {85, 326} {93, 30} label 0.000000 0.00100 "" left "DejaVu Sans" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder dB Range
-ioText {425, 327} {51, 29} editnum 2.000000 1.000000 "peakhold" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.000000
+ioText {425, 327} {51, 29} editnum 1.000000 1.000000 "peakhold" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
 ioText {317, 327} {104, 29} label 0.000000 0.00100 "" left "DejaVu Sans" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Peak Hold time
-ioText {2, 261} {39, 22} display -26.200000 0.00100 "db1" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -26.2
-ioText {25, 285} {39, 22} display -26.200000 0.00100 "db2" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -26.2
+ioText {2, 261} {39, 22} display -29.300000 0.00100 "db1" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -29.3
+ioText {25, 285} {39, 22} display -29.300000 0.00100 "db2" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -29.3
 ioText {48, 261} {39, 22} display -inf 0.00100 "db3" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
 ioText {71, 285} {39, 22} display -inf 0.00100 "db4" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
 ioText {93, 261} {39, 22} display -inf 0.00100 "db5" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
@@ -3574,5 +3763,11 @@ ioText {492, 285} {39, 22} display -inf 0.00100 "db22" center "Lucida Grande" 10
 ioText {514, 261} {39, 22} display -inf 0.00100 "db23" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
 ioText {536, 285} {39, 22} display -inf 0.00100 "db24" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
 ioText {14, 535} {546, 59} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The white boxes show smoothed RMS values in dB FS.
+ioMeter {174, 337} {254, 30} {0, 59904, 0} "insel" 0.602177 "insel" 0.602177 fill 1 0 mouse
+ioMeter {425, 337} {29, 30} {50176, 3584, 3072} "inselover" 0.000000 "inselover" 0.000000 fill 1 0 mouse
+ioText {455, 337} {54, 28} display -29.900000 0.00100 "dbsel" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -29.9
+ioText {16, 326} {125, 50} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder or selectÂ¬one channel
+ioText {144, 336} {62, 29} editnum 1.000000 1.000000 "inchsel" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
+ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 </MacGUI>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="392" y="275" width="612" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
