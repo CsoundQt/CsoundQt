@@ -52,6 +52,7 @@ class QuteGraph : public QuteWidget
     CsoundUserData *m_ud;
     QLabel * m_label;
     QComboBox *m_pageComboBox;
+    QLineEdit* name2LineEdit;
     QDoubleSpinBox *zoomxBox;
     QDoubleSpinBox *zoomyBox;
     QVector<Curve *> curves;
@@ -68,6 +69,7 @@ class QuteGraph : public QuteWidget
 
   private:
     void drawCurve(Curve * curve, int index);
+    int getTableNumForIndex(int index);
 };
 
 class StackedLayoutWidget : public QStackedWidget

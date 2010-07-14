@@ -34,6 +34,7 @@ QuteWidget::QuteWidget(QWidget *parent):
   m_value2 = 0.0;
   m_stringValue = "";
   m_valueChanged = false;
+  m_value2Changed = false;
 
   this->setMinimumSize(2,2);
   this->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
@@ -44,15 +45,9 @@ QuteWidget::QuteWidget(QWidget *parent):
   setProperty("QCS_midicc", -3);
 }
 
-
 QuteWidget::~QuteWidget()
 {
 }
-
-//void QuteWidget::setWidgetLine(QString line)
-//{
-//  m_line = line;
-//}
 
 void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 {
@@ -82,7 +77,7 @@ void QuteWidget::setValue2(double value)
   widgetLock.lockForWrite();
 #endif
   m_value2 = value;
-  m_valueChanged = true;
+  m_value2Changed = true;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
@@ -118,16 +113,6 @@ void QuteWidget::widgetMessage(QString path, double value)
   }
 }
 
-//void QuteWidget::setRange(int /*min*/, int /*max*/)
-//{
-//  qDebug("QuteWidget::setRange not implemented for widget type");
-//}
-//
-//void QuteWidget::setChecked(bool /*checked*/)
-//{
-//  qDebug("QuteWidget::setChecked not implemented for widget type");
-//}
-
 QString QuteWidget::getChannelName()
 {
 //  widgetLock.lockForRead();
@@ -143,11 +128,6 @@ QString QuteWidget::getChannel2Name()
 //  widgetLock.unlock();
   return name;
 }
-
-//QString QuteWidget::getWidgetLine()
-//{
-//  return m_line;
-//}
 
 QString QuteWidget::getCabbageLine()
 {
@@ -267,20 +247,6 @@ void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
 {
   popUpMenu(event->globalPos());
 }
-
-//void QuteWidget::mousePressEvent(QMouseEvent *event)
-//{
-////   qDebug("QuteWidget::mousePressEvent");
-//  emit mouseReleased();
-//  QWidget::mouseReleaseEvent(event);
-//}
-
-//void QuteWidget::mouseReleaseEvent(QMouseEvent *event)
-//{
-////   qDebug("QuteWidget::mousePressEvent");
-//  emit mouseReleased();
-//  QWidget::mouseReleaseEvent(event);
-//}
 
 void QuteWidget::popUpMenu(QPoint pos)
 {
@@ -463,10 +429,6 @@ QList<QAction *> QuteWidget::getParentActionList()
 //  actionList.append(layout->editAct);
   return actionList;
 }
-
-//QList<QAction *> QuteWidget::getPresetActionList()
-//{
-//}
 
 void QuteWidget::apply()
 {

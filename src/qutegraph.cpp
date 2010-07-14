@@ -94,6 +94,7 @@ QString QuteGraph::getWidgetXmlText()
 #endif
 
   s.writeTextElement("value", QString::number((int)m_value));
+  s.writeTextElement("objectName2", m_channel2);
   s.writeTextElement("zoomx", QString::number(property("QCS_zoomx").toDouble(), 'f', 8));
   s.writeTextElement("zoomy", QString::number(property("QCS_zoomy").toDouble(), 'f', 8));
   s.writeTextElement("dispx", QString::number(property("QCS_dispx").toDouble(), 'f', 8));
@@ -125,13 +126,25 @@ void QuteGraph::setWidgetGeometry(int x,int y,int width,int height)
 
 void QuteGraph::refreshWidget()
 {
-  bool needsUpdate;
+  bool needsUpdate = false;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
-  int index = (int) m_value;
-  needsUpdate = m_valueChanged;
-  m_valueChanged = false;
+  int index;
+  if (m_valueChanged) {
+    index = (int) m_value;
+    m_valueChanged = false;
+    needsUpdate = true;
+    m_value2 = getTableNumForIndex(index);
+    if (m_value2 > 0) {
+      m_value2Changed = true;
+    }
+  }
+  else if (m_value2Changed) {
+    index = (int) -m_value2;
+    m_value2Changed = false;
+    needsUpdate = true;
+  }
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();  // unlock
 #endif
@@ -163,7 +176,21 @@ void QuteGraph::createPropertiesDialog()
 {
   QuteWidget::createPropertiesDialog();
   dialog->setWindowTitle("Graph");
+
+  channelLabel->setText("Index Channel name =");
+  channelLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+//  nameLineEdit->setText(getChannelName());
+
   QLabel *label = new QLabel(dialog);
+  label = new QLabel(dialog);
+  label->setText("F-table Channel name =");
+  layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
+  name2LineEdit = new QLineEdit(dialog);
+  name2LineEdit->setText(getChannel2Name());
+  name2LineEdit->setMinimumWidth(320);
+  layout->addWidget(name2LineEdit, 4,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
+
+  label = new QLabel(dialog);
   label->setText("Zoom X");
   layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
   zoomxBox = new QDoubleSpinBox(dialog);
@@ -198,6 +225,7 @@ void QuteGraph::applyProperties()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
 #endif
+  setProperty("QCS_objectName2", name2LineEdit->text());
   setProperty("QCS_zoomx", zoomxBox->value());
   setProperty("QCS_zoomy", zoomyBox->value());
   setProperty("QCS_dispx", 1);
@@ -216,10 +244,16 @@ void QuteGraph::applyProperties()
 void QuteGraph::changeCurve(int index)
 {
   StackedLayoutWidget *stacked =  static_cast<StackedLayoutWidget *>(m_widget);
-  if (index == -1) // goto last curve
+  if (index == -1) {// goto last curve
+    m_pageComboBox->blockSignals(true);
     index = stacked->count() - 1;
-  else if (index == -2)  // update curve but don't change which
+    m_pageComboBox->blockSignals(false);
+  }
+  else if (index == -2) { // update curve but don't change which
+    m_pageComboBox->blockSignals(true);
     index = stacked->currentIndex();
+    m_pageComboBox->blockSignals(false);
+  }
   else if (stacked->currentIndex() == index) {
     return;
   }
@@ -231,6 +265,7 @@ void QuteGraph::changeCurve(int index)
   stacked->setCurrentIndex(index);
   stacked->blockSignals(false);
   drawCurve(curves[index], index);
+  m_value = index;
   QGraphicsView *view = (QGraphicsView *) static_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
 
   double max = - curves[index]->get_min();
@@ -240,20 +275,28 @@ void QuteGraph::changeCurve(int index)
 //  double span = max - min;
 //  FIXME implement dispx, dispy and modex, modey
   int size = curves[index]->get_size();
-  qDebug() << "QuteGraph::changeCurve"<< curves[index]->get_caption()<< index <<max<< min<< zoomx<< zoomy << size;
+  QString caption = curves[index]->get_caption();
+//  qDebug() << "QuteGraph::changeCurve"<< curves[index]->get_caption()<< index <<max<< min<< zoomx<< zoomy << size;
   view->setResizeAnchor(QGraphicsView::NoAnchor);
-  if (curves[index]->get_caption().contains("ftable")) {
+  if (caption.contains("ftable")) {
 //    view->setSceneRect (0, min - ((max - min)*0.17),(double) size/zoomx, (max - min)*1.17/zoomy);
     view->fitInView(0, min - ((max - min)*0.17/zoomy) , (double) size/zoomx, (max - min)*1.17/zoomy);
+    int ftable = getTableNumForIndex(index);
+    if (m_value2 != ftable) {
+      m_value2 = ftable;
+      m_value2Changed = true;
+    }
   }
   else {
-    if (curves[index]->get_caption().contains("fft")) {
+    if (caption.contains("fft")) {
       view->setSceneRect (0, 0, size, 90.);
       view->fitInView(0, -30. , (double) size/zoomx, 100./zoomy);
+      m_value2 = -1;
     }
     else { //from display opcode
       view->setSceneRect (0, -1, size, 2);
       view->fitInView(0, -10./zoomy, (double) size/zoomx, 10./zoomy);
+      m_value2 = -1;
     }
   }
   QString text = QString::number(size) + " pts Max=";
@@ -267,12 +310,15 @@ void QuteGraph::indexChanged(int index)
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
-//  qDebug() << "QuteGraph::indexChanged " << m_channel << m_value;
+  m_value2 = getTableNumForIndex(m_value);
   QPair<QString, double> channelValue(m_channel, m_value);
+  QPair<QString, double> channel2Value(m_channel2, m_value2);
+  qDebug() << "QuteGraph::indexChanged " << m_channel << m_value << m_channel2 << m_value2;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
   emit newValue(channelValue);
+  emit newValue(channel2Value);
 }
 
 void QuteGraph::clearCurves()
@@ -299,27 +345,15 @@ void QuteGraph::addCurve(Curve * curve)
   linesVector.append(line);
   lines.append(linesVector);
 //  qDebug() << "QuteGraph::addCurve()" << curve << curve->get_caption() ;
-  if (curve->get_caption().contains("ftable")) {
-//     for (int i = 0; i < size; i++) {
-//       line = new QGraphicsLineItem(i, 0, i, - curve->get_data()[i]);
-//       line->setPen(QPen(Qt::white));
-// //       line->setPen(QPen(QColor(30 + 220.0*fabs(curve->get_data()[i])/max,
-// //                   220,
-// //                   255.*fabs(curve->get_data()[i])/max)));
-//       scene->addItem(line);
-//       line->show();
-//       linesVector.append(line);
-//     }
-    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  }
-  else {
-    QGraphicsPolygonItem * item = new QGraphicsPolygonItem(/*polygon*/);
-    item->setPen(QPen(Qt::yellow));
-    item->show();
-    polygons.append(item);
-    scene->addItem(item);
-    //TODO add labels for frequencies
-  }
+//  if (curve->get_caption().contains("ftable")) {
+//    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//  }
+  // Add dummy polygon for all graphs when they are created
+  QGraphicsPolygonItem * item = new QGraphicsPolygonItem(/*polygon*/);
+  item->setPen(QPen(Qt::yellow));
+  item->show();
+  polygons.append(item);
+  scene->addItem(item);
   view->setScene(scene);
 //   view->setObjectName(curve->get_caption());
   view->show();
@@ -469,4 +503,17 @@ void QuteGraph::drawCurve(Curve * curve, int index)
       line->show();
     }
   }
+}
+
+int QuteGraph::getTableNumForIndex(int index)
+{
+  if (index < 0  || index >= curves.size()
+    || curves.size() <= 0 || curves[index]->get_caption().isEmpty()) { // Invalid index
+    return -1;
+  }
+  QString caption = curves[index]->get_caption();
+  int ftable = caption.mid(caption.indexOf(" ") + 1,
+                           caption.indexOf(":") - caption.indexOf(" ") - 1).toInt();
+  qDebug() << "QuteGraph::getTableNumForIndex ftable" << ftable;
+  return ftable;
 }

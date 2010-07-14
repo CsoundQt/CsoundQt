@@ -36,7 +36,6 @@ class QuteWidget : public QWidget
     QuteWidget(QWidget* parent);
     ~QuteWidget();
 
-//    virtual void setWidgetLine(QString line) = 0;
     virtual void setWidgetGeometry(int x, int y, int w, int h);
     virtual void setValue(double);  // These should only be reimplemented if something special needs to be done with the value.
     virtual void setValue2(double);
@@ -66,6 +65,7 @@ class QuteWidget : public QWidget
     void canFocus(bool can);
 
     bool m_valueChanged;
+    bool m_value2Changed;
 
   public slots:
     void popUpMenu(QPoint pos);
@@ -85,17 +85,12 @@ class QuteWidget : public QWidget
     QString m_stringValue;
     QString m_channel, m_channel2;
 
-//    QString m_line;  // Text line for old widget format
-//    QString m_name2;
-
 #ifdef  USE_WIDGET_MUTEX
     QReadWriteLock widgetLock;
 #endif
     QString xmlText;
 
     virtual void contextMenuEvent(QContextMenuEvent *event);
-//    virtual void mousePressEvent(QMouseEvent *event);
-//    virtual void mouseReleaseEvent(QMouseEvent *event);
 
     virtual void createPropertiesDialog();
     virtual void applyProperties();
@@ -106,8 +101,6 @@ class QuteWidget : public QWidget
   protected slots:
     void apply();
     void deleteWidget();
-//    virtual void valueChanged(double value);  // Called when a widget is moved with the mouse, to pass to widgets
-//    virtual void value2Changed(double value);
 
   private:
 

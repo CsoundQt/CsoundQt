@@ -889,6 +889,7 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
   connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
   connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
   m_widgets.append(widget);
+  qDebug() << "WidgetLayout::registerWidget " << m_widgets.size() << widget;
   if (m_editMode) {
 //    deselectAll();
     createEditFrame(widget);
@@ -969,8 +970,7 @@ void WidgetLayout::setContained(bool contained)
   setBackground(bg, bgColor);
   if (m_contained) {
     this->setAutoFillBackground(false);
-//    if (this->selectionFrame !=)
-    qDebug() << "WidgetLayout::setContained" << this->selectionFrame;
+//    qDebug() << "WidgetLayout::setContained" << this->selectionFrame;
     this->selectionFrame->setParent(this->parentWidget());
   }
   else {
@@ -1164,7 +1164,8 @@ void WidgetLayout::refreshWidgets()
 {
   widgetsMutex.lock();
   for (int i=0; i < m_widgets.size(); i++) {
-    if (m_widgets[i]->m_valueChanged) {
+    if (m_widgets[i]->m_valueChanged || m_widgets[i]->m_value2Changed) {
+      qDebug() << "WidgetLayout::refreshWidgets()" << i  << m_widgets[i]->m_valueChanged << m_widgets[i]->m_value2Changed;
       m_widgets[i]->refreshWidget();
     }
   }
@@ -1960,7 +1961,7 @@ void WidgetLayout::widgetChanged(QuteWidget* widget)
 
 void WidgetLayout::mousePressEvent(QMouseEvent *event)
 {
-  qDebug() << "WidgetLayout::mousePressEvent";
+//  qDebug() << "WidgetLayout::mousePressEvent";
   if (m_editMode && (event->button() & Qt::LeftButton)) {
     this->setFocus(Qt::MouseFocusReason);
     selectionFrame->show();

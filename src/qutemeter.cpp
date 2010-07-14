@@ -296,6 +296,7 @@ void QuteMeter::refreshWidget()
   static_cast<MeterWidget *>(m_widget)->setValues(val1, val2);
   m_widget->blockSignals(false);
   m_valueChanged = false;
+  m_value2Changed = false;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
@@ -398,7 +399,7 @@ void QuteMeter::value2Changed(double value2)
   m_value2 = value2;
   QPair<QString, double> channelValue;
   channelValue = QPair<QString, double>(m_channel2, m_value2);
-  m_valueChanged = true;
+  m_value2Changed = true;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
