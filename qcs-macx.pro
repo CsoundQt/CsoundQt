@@ -5,7 +5,7 @@
     message(Building QuteCsound for Macintosh OS X.)
 }
 
-CONFIG += PPC
+!intel: CONFIG += PPC
 
 !build32: !build64: CONFIG += build32
 build32: build64: CONFIG -= build32
