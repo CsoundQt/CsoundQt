@@ -1989,7 +1989,7 @@ void qutecsound::createActions()
 //   connect(unindentAct, SIGNAL(triggered()), this, SLOT(unindent()));
 
   killLineAct = new QAction(tr("Kill Line"), this);
-  killLineAct->setStatusTip(tr("Completeley delete current line"));
+  killLineAct->setStatusTip(tr("Completely delete current line"));
 
   killToEndAct = new QAction(tr("Kill to End of Line"), this);
   killToEndAct->setStatusTip(tr("Delete everything from cursor to the end of the current line"));
@@ -2985,6 +2985,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
       oldFile.close();
     }
   }
+  documentPages[curPage]->showLiveEventPanels(false);
   documentTabs->insertTab(curPage, documentPages[curPage]->getView(),"");
   documentTabs->setCurrentIndex(curPage);
 

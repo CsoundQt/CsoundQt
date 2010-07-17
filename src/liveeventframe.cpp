@@ -66,7 +66,7 @@ LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags
 
 //  setVisibleEnabled(true);
 //  this->setVisible(false);
-//  m_ui->hide();
+  this->hide();
 }
 
 LiveEventFrame::~LiveEventFrame()

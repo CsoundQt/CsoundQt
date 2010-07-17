@@ -3366,15 +3366,15 @@ You must restart QuteCsound.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Completeley delete current line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Kill to End of Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete everything from cursor to the end of the current line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Completely delete current line</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

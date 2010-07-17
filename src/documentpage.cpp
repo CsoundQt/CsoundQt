@@ -62,6 +62,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   m_widgetLayout = new WidgetLayout(0);
 //  m_widgetLayout->show();
   m_liveEventControl = new LiveEventControl(parent);
+  m_liveEventControl->hide();
   connect(m_liveEventControl, SIGNAL(closed()), this, SLOT(liveEventControlClosed()));
   connect(m_liveEventControl, SIGNAL(stopAll()), this, SLOT(stopAllSlot()));
   connect(m_liveEventControl, SIGNAL(newPanel()), this, SLOT(newPanelSlot()));
@@ -924,7 +925,7 @@ void DocumentPage::showLiveEventPanels(bool visible)
   m_liveEventControl->setVisible(visible);
   for (int i = 0; i < m_liveFrames.size(); i++) {
     if (visible) {
-      //  qDebug() << "DocumentPage::showLiveEventPanels  " << visible << (int) this;
+//        qDebug() << "DocumentPage::showLiveEventPanels  " << visible << (int) this;
       if (m_liveFrames[i]->isVisible())
         m_liveFrames[i]->raise();
       else {
@@ -1271,8 +1272,9 @@ void DocumentPage::newLiveEventPanel(QString text)
 LiveEventFrame * DocumentPage::createLiveEventPanel(QString text)
 {
 //  qDebug() << "DocumentPage::newLiveEventPanel()";
-  LiveEventFrame *e = new LiveEventFrame("Live Event", m_view, Qt::Window);
-  e->setVisible(false);
+  LiveEventFrame *e = new LiveEventFrame("Live Event", m_liveEventControl, Qt::Window);
+  e->hide();
+//  e->setVisible(false);
 //  e->setAttribute(Qt::WA_DeleteOnClose, false);
   e->getSheet()->setRowCount(1);
   e->getSheet()->setColumnCount(6);

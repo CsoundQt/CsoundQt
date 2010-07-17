@@ -372,27 +372,27 @@
     <message>
         <location filename="../configdialog.ui" line="1391"/>
         <source>Automatically Join orc/sco files</source>
-        <translation type="unfinished"></translation>
+        <translation>Unir orc/sco automáticamente</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1830"/>
         <source>Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Plantilla</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1842"/>
         <source>csd Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Plantilla csd</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1864"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Limpiar</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1877"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Por Defecto</translation>
     </message>
     <message>
         <source>Autoplay when launched from file</source>
@@ -773,12 +773,12 @@
 <context>
     <name>DocumentPage</name>
     <message>
-        <location filename="../documentpage.cpp" line="1094"/>
+        <location filename="../documentpage.cpp" line="1069"/>
         <source>QuteCsound</source>
         <translation>QuteCsound</translation>
     </message>
     <message>
-        <location filename="../documentpage.cpp" line="1095"/>
+        <location filename="../documentpage.cpp" line="1070"/>
         <source>You must save the examples to use Record.</source>
         <translation>Debe salvar los ejemplos para Grabar.</translation>
     </message>
@@ -1698,13 +1698,13 @@ Ya está en uso por otra acción.</translation>
 <context>
     <name>QuteButton</name>
     <message>
-        <location filename="../qutebutton.cpp" line="381"/>
-        <location filename="../qutebutton.cpp" line="416"/>
+        <location filename="../qutebutton.cpp" line="382"/>
+        <location filename="../qutebutton.cpp" line="417"/>
         <source>Select File</source>
         <translation>Seleccione archivo</translation>
     </message>
     <message>
-        <location filename="../qutebutton.cpp" line="394"/>
+        <location filename="../qutebutton.cpp" line="395"/>
         <source>Select File(s)</source>
         <translation>Seleccione archivo(s)</translation>
     </message>
@@ -1725,7 +1725,7 @@ Ya está en uso por otra acción.</translation>
         <location filename="../qutescope.cpp" line="154"/>
         <source>None</source>
         <comment>meaning &apos;no&apos; channels in scope, must be very short (4 letter max)</comment>
-        <translation type="unfinished">Ninguna</translation>
+        <translation>Ning.</translation>
     </message>
     <message>
         <location filename="../qutescope.cpp" line="159"/>
@@ -1812,43 +1812,43 @@ Ya está en uso por otra acción.</translation>
         <translation>Abrir propiedades de widget</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="301"/>
+        <location filename="../qutewidget.cpp" line="267"/>
         <source>Create New</source>
         <comment>Menu name in widget right-click menu</comment>
         <translation>Crear nuevo</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="325"/>
+        <location filename="../qutewidget.cpp" line="291"/>
         <source>Presets</source>
         <translation>Presets</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="400"/>
+        <location filename="../qutewidget.cpp" line="366"/>
         <source>Apply</source>
         <translation>Aplicar</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="402"/>
+        <location filename="../qutewidget.cpp" line="368"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="398"/>
+        <location filename="../qutewidget.cpp" line="364"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="379"/>
+        <location filename="../qutewidget.cpp" line="345"/>
         <source>Width =</source>
         <translation>Ancho =</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="385"/>
+        <location filename="../qutewidget.cpp" line="351"/>
         <source>Height =</source>
         <translation>Alto =</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="391"/>
+        <location filename="../qutewidget.cpp" line="357"/>
         <source>Channel name =</source>
         <translation>Nombre de canal =</translation>
     </message>
@@ -2474,17 +2474,17 @@ Ya está en uso por otra acción.</translation>
     <message>
         <location filename="../widgetlayout.cpp" line="112"/>
         <source>Cut</source>
-        <translation type="unfinished">Cortar</translation>
+        <translation>Cortar</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="114"/>
         <source>Copy</source>
-        <translation type="unfinished">Copiar</translation>
+        <translation>Copiar</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="116"/>
         <source>Paste</source>
-        <translation type="unfinished">Pegar</translation>
+        <translation>Pegar</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="118"/>
@@ -2558,8 +2558,8 @@ Ya está en uso por otra acción.</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="148"/>
-        <location filename="../widgetlayout.cpp" line="2626"/>
-        <location filename="../widgetlayout.cpp" line="2782"/>
+        <location filename="../widgetlayout.cpp" line="2629"/>
+        <location filename="../widgetlayout.cpp" line="2785"/>
         <source>New Preset</source>
         <translation>Nuevo Preset</translation>
     </message>
@@ -2607,51 +2607,51 @@ Some features may not be available and will not be saved!</source>
 Algunas funciones no están disponibles y no serán guardadas!</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="936"/>
+        <location filename="../widgetlayout.cpp" line="938"/>
         <source>ChannelH:</source>
         <translation>Canal Horiz.:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="937"/>
+        <location filename="../widgetlayout.cpp" line="939"/>
         <source>ChannelV:</source>
         <translation>Canal Vertical:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2625"/>
+        <location filename="../widgetlayout.cpp" line="2628"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2631"/>
+        <location filename="../widgetlayout.cpp" line="2634"/>
         <source>Double-click Preset to Load</source>
-        <translation type="unfinished"></translation>
+        <translation>Doble click para cargar</translation>
     </message>
     <message>
         <source>Select Preset to Load</source>
         <translation type="obsolete">Seleccione Preset a cargar</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2736"/>
+        <location filename="../widgetlayout.cpp" line="2739"/>
         <source>New Preset Name:</source>
         <translation>Nombre de Nuevo Preset:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2738"/>
+        <location filename="../widgetlayout.cpp" line="2741"/>
         <source>Number:</source>
         <translation>Número:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2754"/>
+        <location filename="../widgetlayout.cpp" line="2757"/>
         <source>Preset Already Exists</source>
         <translation>Preset ya existe</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2755"/>
+        <location filename="../widgetlayout.cpp" line="2758"/>
         <source>Preset %i already exists. Overwrite?</source>
         <translation>Preset %i ya existe. Desea sobreescribirlo?</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2784"/>
+        <location filename="../widgetlayout.cpp" line="2787"/>
         <source>Select Preset to save</source>
         <translation>Seleccione el Preset a salvar</translation>
     </message>
@@ -2661,26 +2661,26 @@ ChannelH:</source>
         <translation type="obsolete">Canal Horizontal:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="944"/>
+        <location filename="../widgetlayout.cpp" line="946"/>
         <source>Channel:</source>
         <translation>Canal:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="1586"/>
+        <location filename="../widgetlayout.cpp" line="1588"/>
         <source>Apply</source>
         <translation>Aplicar</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="1588"/>
-        <location filename="../widgetlayout.cpp" line="2741"/>
-        <location filename="../widgetlayout.cpp" line="2781"/>
+        <location filename="../widgetlayout.cpp" line="1590"/>
+        <location filename="../widgetlayout.cpp" line="2744"/>
+        <location filename="../widgetlayout.cpp" line="2784"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="1590"/>
-        <location filename="../widgetlayout.cpp" line="2740"/>
-        <location filename="../widgetlayout.cpp" line="2780"/>
+        <location filename="../widgetlayout.cpp" line="1592"/>
+        <location filename="../widgetlayout.cpp" line="2743"/>
+        <location filename="../widgetlayout.cpp" line="2783"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -2832,8 +2832,8 @@ ChannelH:</source>
         <location filename="../qutecsound.cpp" line="923"/>
         <location filename="../qutecsound.cpp" line="954"/>
         <location filename="../qutecsound.cpp" line="1139"/>
-        <location filename="../qutecsound.cpp" line="2924"/>
-        <location filename="../qutecsound.cpp" line="3083"/>
+        <location filename="../qutecsound.cpp" line="2926"/>
+        <location filename="../qutecsound.cpp" line="3086"/>
         <source>QuteCsound</source>
         <translation></translation>
     </message>
@@ -2854,7 +2854,7 @@ QuteCsound probablemente se cerrará si trata de correr Csound.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="370"/>
-        <location filename="../qutecsound.cpp" line="2934"/>
+        <location filename="../qutecsound.cpp" line="2936"/>
         <source>File already open</source>
         <translation>Archivo ya abierto</translation>
     </message>
@@ -2905,7 +2905,7 @@ Desea salvarlo?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="763"/>
-        <location filename="../qutecsound.cpp" line="3172"/>
+        <location filename="../qutecsound.cpp" line="3175"/>
         <source>Ok</source>
         <translation></translation>
     </message>
@@ -3767,12 +3767,12 @@ Francesco
     <message>
         <location filename="../qutecsound.cpp" line="1695"/>
         <source>Ctrl+K</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1696"/>
         <source>Shift+Ctrl+K</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1728"/>
@@ -3906,22 +3906,17 @@ Francesco
     <message>
         <location filename="../qutecsound.cpp" line="1991"/>
         <source>Kill Line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="1992"/>
-        <source>Completeley delete current line</source>
-        <translation type="unfinished"></translation>
+        <translation>Matar línea</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1994"/>
         <source>Kill to End of Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Matar al fin de línea</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1995"/>
         <source>Delete everything from cursor to the end of the current line</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar el texto desde el cursor hasta el final de la línea actual</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1997"/>
@@ -3960,19 +3955,19 @@ Francesco
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2150"/>
-        <location filename="../qutecsound.cpp" line="2483"/>
+        <location filename="../qutecsound.cpp" line="2485"/>
         <source>File</source>
         <translation>Archivo</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2167"/>
-        <location filename="../qutecsound.cpp" line="2489"/>
+        <location filename="../qutecsound.cpp" line="2491"/>
         <source>Edit</source>
         <translation>Editar</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2196"/>
-        <location filename="../qutecsound.cpp" line="2497"/>
+        <location filename="../qutecsound.cpp" line="2499"/>
         <source>Control</source>
         <translation>Control</translation>
     </message>
@@ -3986,12 +3981,12 @@ Francesco
         <translation type="obsolete">Sintes</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2314"/>
+        <location filename="../qutecsound.cpp" line="2316"/>
         <source>Examples</source>
         <translation>Ejemplos</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2411"/>
+        <location filename="../qutecsound.cpp" line="2413"/>
         <source>Help</source>
         <translation>Ayuda</translation>
     </message>
@@ -4002,9 +3997,14 @@ Francesco
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1828"/>
-        <location filename="../qutecsound.cpp" line="2507"/>
+        <location filename="../qutecsound.cpp" line="2509"/>
         <source>Configure</source>
         <translation>Configurar</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1992"/>
+        <source>Completely delete current line</source>
+        <translation>Borrar completamente la línea actual</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2266"/>
@@ -4012,42 +4012,42 @@ Francesco
         <translation>Música</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2289"/>
+        <location filename="../qutecsound.cpp" line="2290"/>
         <source>Useful</source>
         <translation>Utiles</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2312"/>
+        <location filename="../qutecsound.cpp" line="2314"/>
         <source>Miscellaneous</source>
         <translation>Misceláneo</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2327"/>
+        <location filename="../qutecsound.cpp" line="2329"/>
         <source>Getting Started</source>
         <translation>Introducción</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2328"/>
+        <location filename="../qutecsound.cpp" line="2330"/>
         <source>Basics</source>
         <translation>Básico</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2348"/>
+        <location filename="../qutecsound.cpp" line="2350"/>
         <source>Realtime Interaction</source>
         <translation>Interacción en tiempo real</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2364"/>
+        <location filename="../qutecsound.cpp" line="2366"/>
         <source>Language Features</source>
         <translation>Características del Lenguaje</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2407"/>
+        <location filename="../qutecsound.cpp" line="2409"/>
         <source>Favorites</source>
         <translation>Favoritos</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2527"/>
+        <location filename="../qutecsound.cpp" line="2529"/>
         <source>Ready</source>
         <translation>Listo</translation>
     </message>
@@ -4066,41 +4066,41 @@ ha sido modificado.
 Desea salvar los cambios antes de cerrar?</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2925"/>
+        <location filename="../qutecsound.cpp" line="2927"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation>No es posible leer el archivo %1:
 %2.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3005"/>
+        <location filename="../qutecsound.cpp" line="3008"/>
         <source>File loaded</source>
         <translation>Archivo cargado</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3059"/>
+        <location filename="../qutecsound.cpp" line="3062"/>
         <source>Application</source>
         <translation>Aplicación</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3060"/>
+        <location filename="../qutecsound.cpp" line="3063"/>
         <source>Cannot write file %1:
 %2.</source>
         <translation>No es posible escribir el archivo %1:
 %2.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3071"/>
+        <location filename="../qutecsound.cpp" line="3074"/>
         <source>File saved</source>
         <translation>Archivo salvado</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3083"/>
+        <location filename="../qutecsound.cpp" line="3086"/>
         <source>%1[*] - %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3178"/>
+        <location filename="../qutecsound.cpp" line="3181"/>
         <source>Do not ask again</source>
         <translation>No preguntar nuevamente</translation>
     </message>
