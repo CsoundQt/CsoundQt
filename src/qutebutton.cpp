@@ -26,6 +26,7 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 {
   m_widget = new QPushButton(this);
   m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+  m_currentValue = 0;
   m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   setMouseTracking(true);
   canFocus(false);

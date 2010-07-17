@@ -812,7 +812,7 @@ void DocumentView::killLine()
   if (!cursor.atBlockStart()) {
     cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
   }
-  cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+  cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
   cursor.insertText("");
 }
 
