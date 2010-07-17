@@ -323,8 +323,12 @@ void QuteGraph::indexChanged(int index)
 
 void QuteGraph::clearCurves()
 {
+  m_widget->blockSignals(true);
   static_cast<StackedLayoutWidget *>(m_widget)->clearCurves();
+  m_widget->blockSignals(false);
+  m_pageComboBox->blockSignals(true);
   m_pageComboBox->clear();
+  m_pageComboBox->blockSignals(false);
   curves.clear();
   lines.clear();
   polygons.clear();
