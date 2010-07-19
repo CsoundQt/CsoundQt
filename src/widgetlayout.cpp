@@ -1017,7 +1017,6 @@ void WidgetLayout::appendCurve(WINDAT *windat)
 //      return;
 //    }
 //  }
-
 //  Unfortunately Csound sets the caption AFTER calling the makeGraph callback...
 //  for (int i = 0; i < curves.size(); i++) {  // Check if caption is already present to replace curve rather than create a new one.
 //    if (curves[i]->get_caption() == windat->caption) {
@@ -1044,19 +1043,33 @@ void WidgetLayout::appendCurve(WINDAT *windat)
     default:
       polarity = POLARITY_NOPOL;
   }
-  Curve *curve
-      = new Curve(windat->fdata,
-                  windat->npts,
-                  windat->caption,
-                  polarity,
-                  windat->max,
-                  windat->min,
-                  windat->absmax,
-                  windat->oabsmax,
-                  windat->danflag,
-                  windat);  //FIXME delete these when starting a new run
-  windat->windid = (uintptr_t) curve;
-  newCurveBuffer.append(curve);
+  int indexInBuffer = -1;
+  for (int i = 0; i < newCurveBuffer.size(); i++) {
+    if (newCurveBuffer[i]->getOriginal()->windid = windat->windid) {
+      indexInBuffer = i;
+      break;
+    }
+  }
+  if (indexInBuffer < 0) {
+    Curve *curve
+        = new Curve(windat->fdata,
+                    windat->npts,
+                    windat->caption,
+                    polarity,
+                    windat->max,
+                    windat->min,
+                    windat->absmax,
+                    windat->oabsmax,
+                    windat->danflag,
+                    windat);  //FIXME delete these when starting a new run
+    windat->windid = (uintptr_t) curve;
+    newCurveBuffer.append(curve);
+  }
+  else {
+      qDebug() << "WidgetLayout::appendCurve reusing curve buffer " <<indexInBuffer;
+    newCurveBuffer[indexInBuffer]->set_data(windat->fdata);
+    newCurveBuffer[indexInBuffer]->setOriginal(windat);
+  }
 //  qDebug() << "WidgetLayout::appendCurve " << curve << "__--__" << windat;
 }
 
@@ -1103,7 +1116,7 @@ uintptr_t WidgetLayout::getCurveById(uintptr_t id)
 void WidgetLayout::updateCurve(WINDAT *windat)
 {
 //  qDebug() << "WidgetLayout::updateCurve(WINDAT *windat) ";
-  // TODO is it possible to avoid allocating memory here?
+  // FIXME is it possible to avoid allocating memory here?
   WINDAT *windat_ = (WINDAT *) malloc(sizeof(WINDAT));
   *windat_ = *windat;
   curveUpdateBuffer.append(windat_);
@@ -1135,22 +1148,22 @@ int WidgetLayout::killCurves(CSOUND */*csound*/)
 
 void WidgetLayout::clearGraphs()
 {
+  qDebug() << "WidgetLayout::clearGraphs() ";
   for (int i = 0; i < graphWidgets.size(); i++) {
     graphWidgets[i]->clearCurves();
   }
-  for (int i = 0; i < curves.size(); i++) {
-    qDebug() << "WidgetLayout::clearGraphs() " << i << "of" <<curves.size();
-    delete curves[i];
+  while (curves.size() > 0) {
+    Curve * c = curves.takeFirst();
+    delete c;
   }
-  curves.clear();
-  for (int i = 0; i < curveUpdateBuffer.size(); i++) {
-    free(curveUpdateBuffer[i]);
+  while (curveUpdateBuffer.size() > 0) {
+    WINDAT * w = curveUpdateBuffer.takeFirst();
+    free(w);
   }
-  curveUpdateBuffer.clear();
-  for (int i = 0; i < newCurveBuffer.size(); i++) {
-    delete newCurveBuffer[i];
+  while (newCurveBuffer.size() > 0) {
+    Curve * c = newCurveBuffer.takeFirst();
+    delete c;
   }
-  newCurveBuffer.clear();
 }
 
 void WidgetLayout::refreshConsoles()
@@ -3333,14 +3346,14 @@ void WidgetLayout::updateData()
     closing = 0;
     return;
   }
-  if (!layoutMutex.tryLock(2)) {
+  if (!layoutMutex.tryLock(1)) {
     updateTimer.singleShot(30, this, SLOT(updateData()));
     return;
   }
   while (!newCurveBuffer.isEmpty()) {
     Curve * curve = newCurveBuffer.takeFirst();
     newCurve(curve); // Register new curve
-    qDebug() << "WidgetLayout::updateData() new curve " << curve;
+//    qDebug() << "WidgetLayout::updateData() new curve " << curve;
   }
   // Check for graph updates after creating new curves
   while (!curveUpdateBuffer.isEmpty()) {
@@ -3360,7 +3373,6 @@ void WidgetLayout::updateData()
       setCurveData(curve);
     }
   }
-//  curveBuffer.clear();
   for (int i = 0; i < scopeWidgets.size(); i++) {
     scopeWidgets[i]->updateData();
   }

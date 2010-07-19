@@ -40,7 +40,7 @@ class QuteGraph : public QuteWidget
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();
     virtual void setWidgetGeometry(int x,int y,int width,int height);
-//    void setZoom(double zoom);
+    void setValue(double value);
     void clearCurves();
     void addCurve(Curve *curve);
     int getCurveIndex(Curve * curve);
@@ -70,6 +70,9 @@ class QuteGraph : public QuteWidget
   private:
     void drawCurve(Curve * curve, int index);
     int getTableNumForIndex(int index);
+    int getIndexForTableNum(int ftable);
+
+//    QMutex curveLock;
 };
 
 class StackedLayoutWidget : public QStackedWidget

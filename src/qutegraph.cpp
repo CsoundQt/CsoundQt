@@ -124,24 +124,30 @@ void QuteGraph::setWidgetGeometry(int x,int y,int width,int height)
   changeCurve(index);
 }
 
+void QuteGraph::setValue(double value)
+{
+  QuteWidget::setValue(value);
+  m_value2 = getTableNumForIndex((int) value);
+}
+
 void QuteGraph::refreshWidget()
 {
   bool needsUpdate = false;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
-  int index;
+  int index = 0;
+  qDebug() << "QuteGraph::refreshWidget()" << m_value << m_valueChanged << m_value2 << m_value2Changed;
   if (m_valueChanged) {
     index = (int) m_value;
     m_valueChanged = false;
     needsUpdate = true;
     m_value2 = getTableNumForIndex(index);
-    if (m_value2 > 0) {
-      m_value2Changed = true;
-    }
+    m_value2Changed = false;
   }
   else if (m_value2Changed) {
-    index = (int) -m_value2;
+    index = getIndexForTableNum(m_value2);
+    m_value = index;
     m_value2Changed = false;
     needsUpdate = true;
   }
@@ -150,24 +156,14 @@ void QuteGraph::refreshWidget()
 #endif
   if (needsUpdate) {
     if (index < 0) {
-      for (int i = m_pageComboBox->count() - 1; i >= 0; i--) {
-        QStringList parts = m_pageComboBox->itemText(i).split(QRegExp("[ :]"), QString::SkipEmptyParts);
-        //      qDebug() << "QuteGraph::setValue " << parts << " " << value;
-        if (parts.size() > 1) {
-          int num = parts.last().toInt();
-          if (index == -num) {
-            index = i;
-            break;
-          }
-        }
-      }
+      index = getIndexForTableNum(-index);
     }
     if (index < 0 || index >= curves.size() || curves[index]->get_caption().isEmpty()) { // Don't show if curve has no name. Is this likely?
       return;
     }
-    m_pageComboBox->blockSignals(true);
-    m_pageComboBox->setCurrentIndex(index);
-    m_pageComboBox->blockSignals(false);
+//    m_pageComboBox->blockSignals(true);
+//    m_pageComboBox->setCurrentIndex(index);
+//    m_pageComboBox->blockSignals(false);
     changeCurve(index);
   }
 }
@@ -243,20 +239,18 @@ void QuteGraph::applyProperties()
 
 void QuteGraph::changeCurve(int index)
 {
+  qDebug() << "QuteGraph::changeCurve" << index;
   StackedLayoutWidget *stacked =  static_cast<StackedLayoutWidget *>(m_widget);
   if (index == -1) {// goto last curve
-    m_pageComboBox->blockSignals(true);
     index = stacked->count() - 1;
-    m_pageComboBox->blockSignals(false);
   }
   else if (index == -2) { // update curve but don't change which
-    m_pageComboBox->blockSignals(true);
     index = stacked->currentIndex();
-    m_pageComboBox->blockSignals(false);
   }
   else if (stacked->currentIndex() == index) {
     return;
   }
+  qDebug() << "QuteGraph::changeCurve --- " << index;
   if (index < 0  || index >= curves.size()
     || curves.size() <= 0 || curves[index]->get_caption().isEmpty()) { // Invalid index
     return;
@@ -306,23 +300,23 @@ void QuteGraph::changeCurve(int index)
 
 void QuteGraph::indexChanged(int index)
 {
-  setValue(index);
+//  setValue(index);
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
-  m_value2 = getTableNumForIndex(m_value);
-  QPair<QString, double> channelValue(m_channel, m_value);
-  QPair<QString, double> channel2Value(m_channel2, m_value2);
+  QPair<QString, double> channelValue(m_channel, index);
+  QPair<QString, double> channel2Value(m_channel2, getTableNumForIndex(index));
   qDebug() << "QuteGraph::indexChanged " << m_channel << m_value << m_channel2 << m_value2;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
   emit newValue(channelValue);
-  emit newValue(channel2Value);
+//  emit newValue(channel2Value);
 }
 
 void QuteGraph::clearCurves()
 {
+//  curveLock.lock();
   m_widget->blockSignals(true);
   static_cast<StackedLayoutWidget *>(m_widget)->clearCurves();
   m_widget->blockSignals(false);
@@ -332,6 +326,7 @@ void QuteGraph::clearCurves()
   curves.clear();
   lines.clear();
   polygons.clear();
+//  curveLock.unlock();
 }
 
 void QuteGraph::addCurve(Curve * curve)
@@ -366,8 +361,10 @@ void QuteGraph::addCurve(Curve * curve)
   m_pageComboBox->blockSignals(true);
   m_pageComboBox->addItem(curve->get_caption());
   m_pageComboBox->blockSignals(false);
+//  curveLock.lock();
   static_cast<StackedLayoutWidget *>(m_widget)->addWidget(view);
   curves.append(curve);
+//  curveLock.unlock();
   if (m_value == curves.size() - 1) { // If new curve created corresponds to current stored value
     changeCurve(m_value);
   }
@@ -431,7 +428,7 @@ void QuteGraph::setCurveData(Curve * curve)
     polygons[index]->setPolygon(polygon);
   }
   m_pageComboBox->setItemText(index, curve->get_caption());
-//  qDebug() << "QuteGraph::setCurveData " << index << m_pageComboBox->currentIndex();
+  qDebug() << "QuteGraph::setCurveData " << index << m_pageComboBox->currentIndex();
   if (index == m_pageComboBox->currentIndex()) {
     changeCurve(-2); //update curve
   }
@@ -512,12 +509,35 @@ void QuteGraph::drawCurve(Curve * curve, int index)
 int QuteGraph::getTableNumForIndex(int index)
 {
   if (index < 0  || index >= curves.size()
-    || curves.size() <= 0 || curves[index]->get_caption().isEmpty()) { // Invalid index
+    || curves.size() <= 0) { // Invalid index
     return -1;
   }
   QString caption = curves[index]->get_caption();
-  int ftable = caption.mid(caption.indexOf(" ") + 1,
-                           caption.indexOf(":") - caption.indexOf(" ") - 1).toInt();
-  qDebug() << "QuteGraph::getTableNumForIndex ftable" << ftable;
+  int ftable = -1;
+  if (caption.contains("ftable")) {
+    ftable= caption.mid(caption.indexOf(" ") + 1,
+                        caption.indexOf(":") - caption.indexOf(" ") - 1).toInt();
+  }
+  qDebug() << "QuteGraph::getTableNumForIndex ftable" << ftable << index;
   return ftable;
+}
+
+int QuteGraph::getIndexForTableNum(int ftable)
+{
+  int index = -1;
+  for (int i = 0; i < curves.size(); i++) {
+    QString text = curves[i]->get_caption();
+    if (text.contains("ftable")) {
+      QStringList parts = text.split(QRegExp("[ :]"), QString::SkipEmptyParts);
+      //      qDebug() << "QuteGraph::setValue " << parts << " " << value;
+      if (parts.size() > 1) {
+        int num = parts.last().toInt();
+        if (ftable == num) {
+          index = i;
+          break;
+        }
+      }
+  }
+  }
+  return index;
 }
