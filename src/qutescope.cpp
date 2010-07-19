@@ -185,7 +185,7 @@ void QuteScope::createPropertiesDialog()
   label->setText("Channel");
   layout->addWidget(label, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
   channelBox = new QComboBox(dialog);
-  channelBox->addItem("all", QVariant((int) -1));
+  channelBox->addItem("all", QVariant((int) -255));
   channelBox->addItem("Ch.1",QVariant((int) 1));
   channelBox->addItem("Ch.2",QVariant((int) 2));
   channelBox->addItem("Ch.3",QVariant((int) 3));

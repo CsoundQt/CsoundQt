@@ -1044,12 +1044,13 @@ void WidgetLayout::appendCurve(WINDAT *windat)
       polarity = POLARITY_NOPOL;
   }
   int indexInBuffer = -1;
-  for (int i = 0; i < newCurveBuffer.size(); i++) {
-    if (newCurveBuffer[i]->getOriginal()->windid = windat->windid) {
-      indexInBuffer = i;
-      break;
-    }
-  }
+  //This is not working... makes fft graphs ge ignored...
+//  for (int i = 0; i < newCurveBuffer.size(); i++) {
+//    if (strcmp(newCurveBuffer[i]->getOriginal()->caption,windat->caption) && strlen(newCurveBuffer[i]->getOriginal()->caption) > 0) {
+//      indexInBuffer = i;
+//      break;
+//    }
+//  }
   if (indexInBuffer < 0) {
     Curve *curve
         = new Curve(windat->fdata,
@@ -1066,7 +1067,7 @@ void WidgetLayout::appendCurve(WINDAT *windat)
     newCurveBuffer.append(curve);
   }
   else {
-      qDebug() << "WidgetLayout::appendCurve reusing curve buffer " <<indexInBuffer;
+    qDebug() << "WidgetLayout::appendCurve reusing curve buffer " <<indexInBuffer;
     newCurveBuffer[indexInBuffer]->set_data(windat->fdata);
     newCurveBuffer[indexInBuffer]->setOriginal(windat);
   }
@@ -1117,6 +1118,7 @@ void WidgetLayout::updateCurve(WINDAT *windat)
 {
 //  qDebug() << "WidgetLayout::updateCurve(WINDAT *windat) ";
   // FIXME is it possible to avoid allocating memory here?
+  // When f-tables are created in the same k-period, this function will be called very quickly together, so a new windat must be created for each...
   WINDAT *windat_ = (WINDAT *) malloc(sizeof(WINDAT));
   *windat_ = *windat;
   curveUpdateBuffer.append(windat_);
@@ -1148,13 +1150,9 @@ int WidgetLayout::killCurves(CSOUND */*csound*/)
 
 void WidgetLayout::clearGraphs()
 {
-  qDebug() << "WidgetLayout::clearGraphs() ";
+//  qDebug() << "WidgetLayout::clearGraphs() ";
   for (int i = 0; i < graphWidgets.size(); i++) {
     graphWidgets[i]->clearCurves();
-  }
-  while (curves.size() > 0) {
-    Curve * c = curves.takeFirst();
-    delete c;
   }
   while (curveUpdateBuffer.size() > 0) {
     WINDAT * w = curveUpdateBuffer.takeFirst();
@@ -1162,6 +1160,10 @@ void WidgetLayout::clearGraphs()
   }
   while (newCurveBuffer.size() > 0) {
     Curve * c = newCurveBuffer.takeFirst();
+    delete c;
+  }
+  while (curves.size() > 0) {
+    Curve * c = curves.takeFirst();
     delete c;
   }
 }
@@ -3372,6 +3374,7 @@ void WidgetLayout::updateData()
       //      curve->set_y_scale(windat->y_scale);    // Y axis scaling factor
       setCurveData(curve);
     }
+//    delete curveData; //FIXME don't do this deleting here...
   }
   for (int i = 0; i < scopeWidgets.size(); i++) {
     scopeWidgets[i]->updateData();

@@ -137,7 +137,7 @@ void QuteGraph::refreshWidget()
   widgetLock.lockForRead();
 #endif
   int index = 0;
-  qDebug() << "QuteGraph::refreshWidget()" << m_value << m_valueChanged << m_value2 << m_value2Changed;
+//  qDebug() << "QuteGraph::refreshWidget()" << m_value << m_valueChanged << m_value2 << m_value2Changed;
   if (m_valueChanged) {
     index = (int) m_value;
     m_valueChanged = false;
@@ -147,7 +147,9 @@ void QuteGraph::refreshWidget()
   }
   else if (m_value2Changed) {
     index = getIndexForTableNum(m_value2);
-    m_value = index;
+    if (index >= 0) {
+      m_value = index;
+    }
     m_value2Changed = false;
     needsUpdate = true;
   }
@@ -239,18 +241,23 @@ void QuteGraph::applyProperties()
 
 void QuteGraph::changeCurve(int index)
 {
-  qDebug() << "QuteGraph::changeCurve" << index;
+//  qDebug() << "QuteGraph::changeCurve" << index;
   StackedLayoutWidget *stacked =  static_cast<StackedLayoutWidget *>(m_widget);
   if (index == -1) {// goto last curve
     index = stacked->count() - 1;
   }
   else if (index == -2) { // update curve but don't change which
-    index = stacked->currentIndex();
+    if (m_value < 0) {
+      index = getIndexForTableNum(-m_value);
+    }
+    else {
+      index = (int) m_value;
+    }
   }
   else if (stacked->currentIndex() == index) {
     return;
   }
-  qDebug() << "QuteGraph::changeCurve --- " << index;
+//  qDebug() << "QuteGraph::changeCurve --- " << index;
   if (index < 0  || index >= curves.size()
     || curves.size() <= 0 || curves[index]->get_caption().isEmpty()) { // Invalid index
     return;
@@ -258,6 +265,9 @@ void QuteGraph::changeCurve(int index)
   stacked->blockSignals(true);
   stacked->setCurrentIndex(index);
   stacked->blockSignals(false);
+  m_pageComboBox->blockSignals(true);
+  m_pageComboBox->setCurrentIndex(index);
+  m_pageComboBox->blockSignals(false);
   drawCurve(curves[index], index);
   m_value = index;
   QGraphicsView *view = (QGraphicsView *) static_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
@@ -306,7 +316,7 @@ void QuteGraph::indexChanged(int index)
 #endif
   QPair<QString, double> channelValue(m_channel, index);
   QPair<QString, double> channel2Value(m_channel2, getTableNumForIndex(index));
-  qDebug() << "QuteGraph::indexChanged " << m_channel << m_value << m_channel2 << m_value2;
+//  qDebug() << "QuteGraph::indexChanged " << m_channel << m_value << m_channel2 << m_value2;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
@@ -428,7 +438,7 @@ void QuteGraph::setCurveData(Curve * curve)
     polygons[index]->setPolygon(polygon);
   }
   m_pageComboBox->setItemText(index, curve->get_caption());
-  qDebug() << "QuteGraph::setCurveData " << index << m_pageComboBox->currentIndex();
+//  qDebug() << "QuteGraph::setCurveData " << index << m_pageComboBox->currentIndex();
   if (index == m_pageComboBox->currentIndex()) {
     changeCurve(-2); //update curve
   }
@@ -518,7 +528,7 @@ int QuteGraph::getTableNumForIndex(int index)
     ftable= caption.mid(caption.indexOf(" ") + 1,
                         caption.indexOf(":") - caption.indexOf(" ") - 1).toInt();
   }
-  qDebug() << "QuteGraph::getTableNumForIndex ftable" << ftable << index;
+//  qDebug() << "QuteGraph::getTableNumForIndex ftable" << ftable << index;
   return ftable;
 }
 

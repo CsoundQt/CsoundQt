@@ -268,6 +268,8 @@ class WidgetLayout : public QWidget
     QList<Curve *> curves;
     QTimer updateTimer;
 
+    unsigned long m_ksmpscount;  // Ksmps counter for Csound engine (Really needed here?)
+
     // Properties of the panel (saved to xml file)
     int m_x, m_y, m_w, m_h; // Position and size of panel (not this widget)
     QString m_objectName;
@@ -278,6 +280,9 @@ class WidgetLayout : public QWidget
     bool m_repeatKeys;
     bool m_xmlFormat;
     bool m_trackMouse;
+    bool m_openProperties; // Open widget properties when creating widgets
+    bool m_enableEdit; // Enable editing and properties dialog
+    bool m_tooltips;  // Show widget tooltips
     int mouseX, mouseY, mouseRelX, mouseRelY, mouseBut1, mouseBut2;
     int xOffset, yOffset;
     double m_fontOffset, m_fontScaling;
@@ -292,15 +297,11 @@ class WidgetLayout : public QWidget
     int m_historyIndex; // Current point in history
     bool m_modified;
     bool m_editMode;
-    bool m_openProperties; // Open widget properties when creating widgets
-    bool m_enableEdit; // Enable editing and properties dialog
     QString m_clipboard;
     bool m_contained; // Whether contained in another widget (e.g. scrollbar in widget panel or widget panel)
 
-    bool m_tooltips;
     QVector<WidgetPreset> presets;
     int m_currentPreset; // If -1 no current preset
-    unsigned long m_ksmpscount;
 
     // Contained Widgets
     QVector<QuteWidget *> m_widgets;
@@ -340,7 +341,7 @@ class WidgetLayout : public QWidget
     int getPresetIndex(int number);
 
     //XML helper functions
-    QColor getColorFromElement(QDomElement elem);
+    QColor getColorFromElement(QDomElement elem);  // Converts an XML color element to a QColor structure
 
   private slots:
     void updateData();
