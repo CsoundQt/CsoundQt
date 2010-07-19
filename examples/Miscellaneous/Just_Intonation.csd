@@ -67,21 +67,104 @@ i . ^ . [7/4] 0
 e
 </CsScore>
 </CsoundSynthesizer>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>518</x>
+ <y>222</y>
+ <width>606</width>
+ <height>347</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>62</r>
+  <g>162</g>
+  <b>69</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBScope">
+  <objectName/>
+  <x>9</x>
+  <y>8</y>
+  <width>290</width>
+  <height>299</height>
+  <uuid>{efed7bdd-1a9e-49ef-9f95-15ddcc36e9ee}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <value>-255.00000000</value>
+  <type>lissajou</type>
+  <zoomx>2.00000000</zoomx>
+  <zoomy>2.00000000</zoomy>
+  <dispx>1.00000000</dispx>
+  <dispy>1.00000000</dispy>
+  <mode>0.00000000</mode>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>310</x>
+  <y>10</y>
+  <width>277</width>
+  <height>255</height>
+  <uuid>{bda8811b-e831-48b2-969a-5b571eb11896}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>
+This file shows the difference for a few intervals with Equal temperament and Just Intonation. One note of the interval is placed on the left channel and the other note on the right. The lissajous scope on the left shows the correlation between the channels. Since just intonation intervals are more closely related the graphic dispay is cleaner.</label>
+  <alignment>center</alignment>
+  <font>Helvetica</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton">
+  <objectName>_Play</objectName>
+  <x>310</x>
+  <y>273</y>
+  <width>278</width>
+  <height>33</height>
+  <uuid>{52bc96cf-049f-41b8-9103-1186aaea8fdd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Run</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
 <MacOptions>
 Version: 3
 Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 518 254 606 347
+WindowBounds: 518 222 606 347
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {15934, 41634, 17733}
-ioGraph {9, 8} {290, 299} lissajou 2.000000 -1.000000 
-ioText {310, 10} {277, 255} label 0.000000 0.00100 "" center "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} background border This file shows the difference for a few intervals with Equal temperament and Just Intonation. One note of the interval is placed on the left channel and the other note on the right. The lissajous scope on the left shows the correlation between the channels. Since just intonation intervals are more closely related the graphic dispay is cleaner.
+ioGraph {9, 8} {290, 299} lissajou 2.000000 -255 
+ioText {310, 10} {277, 255} label 0.000000 0.00100 "" center "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Â¬This file shows the difference for a few intervals with Equal temperament and Just Intonation. One note of the interval is placed on the left channel and the other note on the right. The lissajous scope on the left shows the correlation between the channels. Since just intonation intervals are more closely related the graphic dispay is cleaner.
 ioButton {310, 273} {278, 33} value 1.000000 "_Play" "Run" "/" 
 </MacGUI>
-

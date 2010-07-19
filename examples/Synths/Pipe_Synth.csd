@@ -685,7 +685,7 @@ i 99 0 3600
  <label>Widgets</label>
  <objectName/>
  <x>89</x>
- <y>25</y>
+ <y>55</y>
  <width>969</width>
  <height>738</height>
  <visible>true</visible>

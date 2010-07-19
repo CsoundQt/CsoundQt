@@ -169,22 +169,21 @@ endin
 i 1 0 3600
 e
 </CsScore>
-</CsoundSynthesizer>
-<bsbPanel>
+</CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>198</x>
- <y>25</y>
- <width>1074</width>
- <height>750</height>
+ <x>122</x>
+ <y>82</y>
+ <width>992</width>
+ <height>774</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background" >
+ <bgcolor mode="background">
   <r>170</r>
   <g>170</g>
   <b>127</b>
  </bgcolor>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>timreadmeth</objectName>
   <x>832</x>
   <y>69</y>
@@ -212,9 +211,9 @@ e
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>525</x>
   <y>64</y>
@@ -234,7 +233,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -243,7 +242,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>492</x>
   <y>96</y>
@@ -263,7 +262,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -272,7 +271,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>phaspeed1</objectName>
   <x>551</x>
   <y>126</y>
@@ -286,11 +285,11 @@ e
   <maximum>2.00000000</maximum>
   <value>1.33923300</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>phaspeed1</objectName>
   <x>889</x>
   <y>128</y>
@@ -310,7 +309,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -319,7 +318,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>phaspeed2</objectName>
   <x>550</x>
   <y>154</y>
@@ -333,11 +332,11 @@ e
   <maximum>2.00000000</maximum>
   <value>0.51327400</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>phaspeed2</objectName>
   <x>888</x>
   <y>156</y>
@@ -357,7 +356,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -366,7 +365,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>500</x>
   <y>125</y>
@@ -386,7 +385,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -395,7 +394,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>499</x>
   <y>152</y>
@@ -415,7 +414,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -424,7 +423,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>8</x>
   <y>258</y>
@@ -444,7 +443,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -453,7 +452,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>8</x>
   <y>397</y>
@@ -473,7 +472,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -482,7 +481,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>8</x>
   <y>330</y>
@@ -502,7 +501,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -511,7 +510,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>8</x>
   <y>466</y>
@@ -531,7 +530,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -540,7 +539,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>crossamp</objectName>
   <x>74</x>
   <y>293</y>
@@ -554,11 +553,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.50181800</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>crossamp1</objectName>
   <x>406</x>
   <y>295</y>
@@ -578,7 +577,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -587,7 +586,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>17</x>
   <y>292</y>
@@ -607,7 +606,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -616,7 +615,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>146</x>
   <y>265</y>
@@ -636,7 +635,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -645,7 +644,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>351</x>
   <y>294</y>
@@ -665,7 +664,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -674,7 +673,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>morphfreq</objectName>
   <x>79</x>
   <y>559</y>
@@ -688,11 +687,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.23636400</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>morphfreq</objectName>
   <x>411</x>
   <y>561</y>
@@ -712,7 +711,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -721,7 +720,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>22</x>
   <y>558</y>
@@ -741,7 +740,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -750,7 +749,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>88</x>
   <y>531</y>
@@ -770,7 +769,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -779,7 +778,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>356</x>
   <y>560</y>
@@ -799,7 +798,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -808,7 +807,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>selcross</objectName>
   <x>357</x>
   <y>231</y>
@@ -841,9 +840,9 @@ e
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>45</x>
   <y>227</y>
@@ -863,7 +862,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -872,7 +871,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>filtdepth</objectName>
   <x>73</x>
   <y>362</y>
@@ -886,11 +885,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.54909100</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>filtdepth</objectName>
   <x>405</x>
   <y>364</y>
@@ -910,7 +909,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -919,7 +918,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>16</x>
   <y>361</y>
@@ -939,7 +938,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -948,7 +947,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>82</x>
   <y>336</y>
@@ -968,7 +967,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -977,7 +976,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>350</x>
   <y>363</y>
@@ -997,7 +996,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1006,7 +1005,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>vocdepth</objectName>
   <x>71</x>
   <y>429</y>
@@ -1020,11 +1019,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.65090900</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>vocdepth</objectName>
   <x>403</x>
   <y>431</y>
@@ -1044,7 +1043,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1053,7 +1052,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>14</x>
   <y>428</y>
@@ -1073,7 +1072,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1082,7 +1081,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>80</x>
   <y>403</y>
@@ -1102,7 +1101,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1111,7 +1110,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>348</x>
   <y>430</y>
@@ -1131,7 +1130,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1140,7 +1139,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>morphamp</objectName>
   <x>79</x>
   <y>497</y>
@@ -1154,11 +1153,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.72363600</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>morphamp</objectName>
   <x>411</x>
   <y>499</y>
@@ -1178,7 +1177,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1187,7 +1186,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>22</x>
   <y>496</y>
@@ -1207,7 +1206,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1216,7 +1215,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>90</x>
   <y>471</y>
@@ -1236,7 +1235,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1245,7 +1244,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>356</x>
   <y>498</y>
@@ -1265,7 +1264,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1274,7 +1273,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>499</x>
   <y>101</y>
@@ -1294,7 +1293,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1303,7 +1302,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>492</x>
   <y>196</y>
@@ -1323,7 +1322,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1332,7 +1331,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>502</x>
   <y>202</y>
@@ -1353,7 +1352,7 @@ Set Positions for File 1 from left to right and for File 2 from bottom to top</l
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1362,7 +1361,7 @@ Set Positions for File 1 from left to right and for File 2 from bottom to top</l
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>livepos1</objectName>
   <x>631</x>
   <y>201</y>
@@ -1382,20 +1381,20 @@ Set Positions for File 1 from left to right and for File 2 from bottom to top</l
   <type>crosshair</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>492</x>
   <y>490</y>
@@ -1415,7 +1414,7 @@ Set Positions for File 1 from left to right and for File 2 from bottom to top</l
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1424,7 +1423,7 @@ Set Positions for File 1 from left to right and for File 2 from bottom to top</l
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>498</x>
   <y>498</y>
@@ -1445,7 +1444,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1454,7 +1453,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>fqnewval1</objectName>
   <x>518</x>
   <y>542</y>
@@ -1468,11 +1467,11 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <maximum>2.00000000</maximum>
   <value>0.40000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>fqnewval1</objectName>
   <x>591</x>
   <y>565</y>
@@ -1492,7 +1491,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1501,7 +1500,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>fqnewval2</objectName>
   <x>728</x>
   <y>541</y>
@@ -1515,11 +1514,11 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <maximum>2.00000000</maximum>
   <value>0.42105300</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>fqnewval2</objectName>
   <x>799</x>
   <y>565</y>
@@ -1539,7 +1538,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1548,7 +1547,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>536</x>
   <y>564</y>
@@ -1568,7 +1567,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1577,7 +1576,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>747</x>
   <y>564</y>
@@ -1597,7 +1596,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1606,7 +1605,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>8</x>
   <y>603</y>
@@ -1626,7 +1625,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1635,7 +1634,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>kpnt1</objectName>
   <x>114</x>
   <y>656</y>
@@ -1655,7 +1654,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1664,7 +1663,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>12</x>
   <y>642</y>
@@ -1684,7 +1683,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1693,7 +1692,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>kpnt2</objectName>
   <x>115</x>
   <y>708</y>
@@ -1713,7 +1712,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1722,7 +1721,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>12</x>
   <y>693</y>
@@ -1742,7 +1741,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1751,7 +1750,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>out</objectName>
   <x>372</x>
   <y>683</y>
@@ -1771,20 +1770,20 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>outover</objectName>
   <x>706</x>
   <y>683</y>
@@ -1804,20 +1803,20 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>196</r>
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>dbrange</objectName>
   <x>654</x>
   <y>715</y>
@@ -1835,7 +1834,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1843,10 +1842,10 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <resolution>0.10000000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>50</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>575</x>
   <y>714</y>
@@ -1866,7 +1865,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1875,7 +1874,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>372</x>
   <y>714</y>
@@ -1895,7 +1894,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1904,7 +1903,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>showdb</objectName>
   <x>489</x>
   <y>714</y>
@@ -1927,9 +1926,9 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>vol</objectName>
   <x>373</x>
   <y>642</y>
@@ -1943,11 +1942,11 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <maximum>4.00000000</maximum>
   <value>0.50511900</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>396</x>
   <y>618</y>
@@ -1967,7 +1966,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1976,7 +1975,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>showpos1</objectName>
   <x>202</x>
   <y>612</y>
@@ -1996,20 +1995,20 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <type>crosshair</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>vol</objectName>
   <x>665</x>
   <y>645</y>
@@ -2029,7 +2028,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2038,7 +2037,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>12</x>
   <y>612</y>
@@ -2058,7 +2057,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2067,7 +2066,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>8</x>
   <y>96</y>
@@ -2087,7 +2086,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2096,7 +2095,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse1</objectName>
   <x>14</x>
   <y>117</y>
@@ -2116,14 +2115,14 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Browse1</objectName>
   <x>373</x>
   <y>115</y>
@@ -2142,7 +2141,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse2</objectName>
   <x>14</x>
   <y>151</y>
@@ -2162,14 +2161,14 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Browse2</objectName>
   <x>373</x>
   <y>149</y>
@@ -2188,7 +2187,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>14</x>
   <y>184</y>
@@ -2208,7 +2207,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2217,7 +2216,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox" >
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>changeorder</objectName>
   <x>324</x>
   <y>187</y>
@@ -2230,9 +2229,9 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>43</x>
   <y>66</y>
@@ -2252,7 +2251,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2261,7 +2260,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>8</x>
   <y>14</y>
@@ -2281,7 +2280,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2290,7 +2289,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>747</x>
   <y>603</y>
@@ -2312,7 +2311,7 @@ Third, select a method of time reading: phasor (constant speed), mouse input or 
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2321,12 +2320,6 @@ Third, select a method of time reading: phasor (constant speed), mouse input or 
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <objectName/>
- <x>198</x>
- <y>25</y>
- <width>1074</width>
- <height>750</height>
- <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
@@ -2336,7 +2329,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 198 25 1074 750
+WindowBounds: 122 82 992 774
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -2344,81 +2337,81 @@ Options: -b128 -A -s -m167 -R
 <MacGUI>
 ioView background {43690, 43690, 32639}
 ioMenu {832, 69} {110, 25} 0 303 "Phasor,Live,Random" timreadmeth
-ioText {525, 64} {295, 32} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Select a Method of Time Reading
-ioText {492, 96} {473, 98} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 
+ioText {525, 64} {295, 32} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select a Method of Time Reading
+ioText {492, 96} {473, 98} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioSlider {551, 126} {339, 28} -2.000000 2.000000 1.339233 phaspeed1
-ioText {889, 128} {70, 26} display 1.351000 0.00100 "phaspeed1" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.3510
+ioText {889, 128} {70, 26} display 1.351000 0.00100 "phaspeed1" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.3510
 ioSlider {550, 154} {339, 28} -2.000000 2.000000 0.513274 phaspeed2
-ioText {888, 156} {70, 26} display 0.513300 0.00100 "phaspeed2" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.5133
-ioText {500, 125} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 1
-ioText {499, 152} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 2
-ioText {8, 258} {479, 73} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder pvscross
-ioText {8, 397} {479, 70} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder pvsvoc
-ioText {8, 330} {479, 68} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder pvsfilter
-ioText {8, 466} {479, 134} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder pvsmorph
+ioText {888, 156} {70, 26} display 0.513300 0.00100 "phaspeed2" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.5133
+ioText {500, 125} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 1
+ioText {499, 152} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 2
+ioText {8, 258} {479, 73} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder pvscross
+ioText {8, 397} {479, 70} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder pvsvoc
+ioText {8, 330} {479, 68} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder pvsfilter
+ioText {8, 466} {479, 134} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder pvsmorph
 ioSlider {74, 293} {275, 29} 0.000000 1.000000 0.501818 crossamp
-ioText {406, 295} {70, 26} display 0.570900 0.00100 "crossamp1" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.5709
-ioText {17, 292} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 1
-ioText {146, 265} {160, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Amplitudes from 
-ioText {351, 294} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 2
+ioText {406, 295} {70, 26} display 0.570900 0.00100 "crossamp1" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.5709
+ioText {17, 292} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 1
+ioText {146, 265} {160, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amplitudes from 
+ioText {351, 294} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 2
 ioSlider {79, 559} {275, 29} 0.000000 1.000000 0.236364 morphfreq
-ioText {411, 561} {70, 26} display 0.236400 0.00100 "morphfreq" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.2364
-ioText {22, 558} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 1
-ioText {88, 531} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Frequencies from 
-ioText {356, 560} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 2
+ioText {411, 561} {70, 26} display 0.236400 0.00100 "morphfreq" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.2364
+ioText {22, 558} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 1
+ioText {88, 531} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frequencies from 
+ioText {356, 560} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 2
 ioMenu {357, 231} {108, 22} 0 303 "pvscross,pvsfilter,pvsvoc,pvsmorph" selcross
-ioText {45, 227} {325, 32} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Select a Method of Cross Synthesis
+ioText {45, 227} {325, 32} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select a Method of Cross Synthesis
 ioSlider {73, 362} {275, 29} 0.000000 1.000000 0.549091 filtdepth
-ioText {405, 364} {70, 26} display 0.549100 0.00100 "filtdepth" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.5491
-ioText {16, 361} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder low
-ioText {82, 336} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Depth of filtering
-ioText {350, 363} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder high
+ioText {405, 364} {70, 26} display 0.549100 0.00100 "filtdepth" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.5491
+ioText {16, 361} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder low
+ioText {82, 336} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Depth of filtering
+ioText {350, 363} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder high
 ioSlider {71, 429} {275, 29} 0.000000 1.000000 0.650909 vocdepth
-ioText {403, 431} {70, 26} display 0.650900 0.00100 "vocdepth" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.6509
-ioText {14, 428} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder low
-ioText {80, 403} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Depth of vocoding
-ioText {348, 430} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder high
+ioText {403, 431} {70, 26} display 0.650900 0.00100 "vocdepth" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.6509
+ioText {14, 428} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder low
+ioText {80, 403} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Depth of vocoding
+ioText {348, 430} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder high
 ioSlider {79, 497} {275, 29} 0.000000 1.000000 0.723636 morphamp
-ioText {411, 499} {70, 26} display 0.723600 0.00100 "morphamp" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.7236
-ioText {22, 496} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 1
-ioText {90, 471} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Amplitudes from 
-ioText {356, 498} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 2
-ioText {499, 101} {227, 27} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder For Method "Phasor": Set Speed
-ioText {492, 196} {474, 291} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 
-ioText {502, 202} {98, 267} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder For Method "Live":Â¬Set Positions for File 1 from left to right and for File 2 from bottom to top
+ioText {411, 499} {70, 26} display 0.723600 0.00100 "morphamp" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.7236
+ioText {22, 496} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 1
+ioText {90, 471} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amplitudes from 
+ioText {356, 498} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 2
+ioText {499, 101} {227, 27} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder For Method "Phasor": Set Speed
+ioText {492, 196} {474, 291} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {502, 202} {98, 267} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder For Method "Live":Â¬Set Positions for File 1 from left to right and for File 2 from bottom to top
 ioMeter {631, 201} {313, 280} {0, 59904, 0} "livepos1" 0.619808 "livepos2" 0.678571 crosshair 1 0 mouse
-ioText {492, 490} {474, 110} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 
-ioText {498, 498} {464, 44} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder For Method "Random":Â¬Set Frequency for new Random Positions in File 1 and File 2
+ioText {492, 490} {474, 110} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {498, 498} {464, 44} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder For Method "Random":Â¬Set Frequency for new Random Positions in File 1 and File 2
 ioSlider {518, 542} {170, 27} 0.000000 2.000000 0.400000 fqnewval1
-ioText {591, 565} {61, 28} display 0.400000 0.00100 "fqnewval1" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.4000
+ioText {591, 565} {61, 28} display 0.400000 0.00100 "fqnewval1" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.4000
 ioSlider {728, 541} {171, 28} 0.000000 2.000000 0.421053 fqnewval2
-ioText {799, 565} {70, 29} display 0.421100 0.00100 "fqnewval2" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.4211
-ioText {536, 564} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 1
-ioText {747, 564} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File 2
-ioText {8, 603} {736, 150} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 
-ioText {114, 656} {81, 28} display 11.034700 0.00100 "kpnt1" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 11.0347
-ioText {12, 642} {103, 43} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Position (sec) in File 1
-ioText {115, 708} {81, 28} display 1.983400 0.00100 "kpnt2" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.9834
-ioText {12, 693} {103, 43} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Position (sec) in File 2
+ioText {799, 565} {70, 29} display 0.421100 0.00100 "fqnewval2" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.4211
+ioText {536, 564} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 1
+ioText {747, 564} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File 2
+ioText {8, 603} {736, 150} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {114, 656} {81, 28} display 11.034700 0.00100 "kpnt1" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 11.0347
+ioText {12, 642} {103, 43} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Position (sec) in File 1
+ioText {115, 708} {81, 28} display 1.983400 0.00100 "kpnt2" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.9834
+ioText {12, 693} {103, 43} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Position (sec) in File 2
 ioMeter {372, 683} {336, 22} {0, 59904, 0} "out" 0.790586 "out2_post" 0.545455 fill 1 0 mouse
 ioMeter {706, 683} {27, 22} {50176, 3584, 3072} "outover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
-ioText {654, 715} {80, 25} editnum 50.000000 0.100000 "dbrange" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 50.000000
-ioText {575, 714} {80, 26} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder dB-Range
-ioText {372, 714} {117, 25} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Show LED as
+ioText {654, 715} {80, 25} editnum 50.000000 0.100000 "dbrange" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 50.000000
+ioText {575, 714} {80, 26} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder dB-Range
+ioText {372, 714} {117, 25} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Show LED as
 ioMenu {489, 714} {84, 26} 1 303 "Amplitudes,dB" showdb
 ioSlider {373, 642} {293, 31} 0.000000 4.000000 0.505119 vol
-ioText {396, 618} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Volume
+ioText {396, 618} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Volume
 ioMeter {202, 612} {152, 130} {0, 59904, 0} "showpos1" 0.943702 "showpos2" 0.349932 crosshair 1 0 mouse
-ioText {665, 645} {69, 27} display 0.505100 0.00100 "vol" right "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.5051
-ioText {12, 612} {147, 30} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Output
-ioText {8, 96} {480, 123} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 
-ioText {14, 117} {358, 22} edit 0.000000 0.00100 "_Browse1"  "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
+ioText {665, 645} {69, 27} display 0.505100 0.00100 "vol" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.5051
+ioText {12, 612} {147, 30} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Output
+ioText {8, 96} {480, 123} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {14, 117} {358, 22} edit 0.000000 0.00100 "_Browse1"  "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} falsenoborder 
 ioButton {373, 115} {107, 29} value 1.000000 "_Browse1" "File 1" "/" 
-ioText {14, 151} {358, 22} edit 0.000000 0.00100 "_Browse2"  "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
+ioText {14, 151} {358, 22} edit 0.000000 0.00100 "_Browse2"  "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} falsenoborder 
 ioButton {373, 149} {107, 29} value 1.000000 "_Browse2" "File 2" "/" 
-ioText {14, 184} {311, 27} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Let File 1 be File 2 and vice versa
+ioText {14, 184} {311, 27} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Let File 1 be File 2 and vice versa
 ioCheckbox {324, 187} {27, 19} off changeorder
-ioText {43, 66} {190, 30} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Choose Files
-ioText {8, 14} {958, 49} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {58880, 56576, 54528} nobackground noborder CROSS SYNTHESIS
-ioText {747, 603} {219, 150} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Here you can perform four different methods of Cross Synthesis in Csound.Â¬First, choose two files you want to cross. Second, select a method of cross synthesis (see the relevant manual pages for detailed descriptions).Â¬Third, select a method of time reading: phasor (constant speed), mouse input or random. 
+ioText {43, 66} {190, 30} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Choose Files
+ioText {8, 14} {958, 49} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {65280, 65280, 65280} nobackground noborder CROSS SYNTHESIS
+ioText {747, 603} {219, 150} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Here you can perform four different methods of Cross Synthesis in Csound.Â¬First, choose two files you want to cross. Second, select a method of cross synthesis (see the relevant manual pages for detailed descriptions).Â¬Third, select a method of time reading: phasor (constant speed), mouse input or random. 
 </MacGUI>

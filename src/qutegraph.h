@@ -71,6 +71,7 @@ class QuteGraph : public QuteWidget
     void drawCurve(Curve * curve, int index);
     int getTableNumForIndex(int index);
     int getIndexForTableNum(int ftable);
+    void setInternalValue(double value);
 
 //    QMutex curveLock;
 };

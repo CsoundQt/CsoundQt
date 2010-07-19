@@ -48,28 +48,65 @@ e
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Mar. 2010) - Incontri HMT-Hannover 
 
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>825</x>
+ <y>316</y>
+ <width>359</width>
+ <height>167</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>137</x>
+  <y>55</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{31b59d0f-c6d7-4353-b51e-78dec450ad9f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Nothing here...</label>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
 <MacOptions>
 Version: 3
 Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 1078 327 359 167
+WindowBounds: 825 316 359 167
 CurrentView: io
 IOViewEdit: On
 Options:
 </MacOptions>
 <MacGUI>
 ioView background {65535, 65535, 65535}
+ioText {137, 55} {80, 25} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Nothing here...
 </MacGUI>
-
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322"> 
- 
- 
- 
- 
- 
- 
- 
- 
- </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

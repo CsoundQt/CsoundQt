@@ -13,6 +13,7 @@ instr 1 ;turned on by button event
 	outs asig, asig
 endin
 
+
 instr 2  ;turned on in the score
 	kvalue invalue "value"  ;changes between 0 and 1000
 	asig oscil 0.1, kvalue, 1

@@ -216,17 +216,17 @@ e
  <label>Widgets</label>
  <objectName/>
  <x>333</x>
- <y>179</y>
+ <y>163</y>
  <width>714</width>
  <height>556</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background" >
+ <bgcolor mode="background">
   <r>162</r>
   <g>123</g>
   <b>134</b>
  </bgcolor>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>amp1</objectName>
   <x>26</x>
   <y>55</y>
@@ -240,11 +240,11 @@ e
   <maximum>1.00000000</maximum>
   <value>1.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>amp2</objectName>
   <x>26</x>
   <y>80</y>
@@ -258,11 +258,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.50000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>amp3</objectName>
   <x>26</x>
   <y>105</y>
@@ -276,11 +276,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.33333334</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>amp4</objectName>
   <x>26</x>
   <y>130</y>
@@ -294,11 +294,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.25000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>amp5</objectName>
   <x>27</x>
   <y>155</y>
@@ -312,11 +312,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.20000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>amp6</objectName>
   <x>27</x>
   <y>180</y>
@@ -330,11 +330,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.16666667</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>amp7</objectName>
   <x>27</x>
   <y>205</y>
@@ -348,11 +348,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.14285715</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>amp8</objectName>
   <x>27</x>
   <y>230</y>
@@ -366,11 +366,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.12500000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>amp9</objectName>
   <x>27</x>
   <y>254</y>
@@ -384,11 +384,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.11111111</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>amp10</objectName>
   <x>27</x>
   <y>279</y>
@@ -402,11 +402,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.10000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>amp11</objectName>
   <x>27</x>
   <y>304</y>
@@ -420,11 +420,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.09090909</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>amp12</objectName>
   <x>27</x>
   <y>329</y>
@@ -438,11 +438,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.08333334</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>8</x>
   <y>54</y>
@@ -462,7 +462,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -471,7 +471,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>8</x>
   <y>78</y>
@@ -491,7 +491,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -500,7 +500,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>8</x>
   <y>103</y>
@@ -520,7 +520,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -529,7 +529,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>8</x>
   <y>131</y>
@@ -549,7 +549,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -558,7 +558,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>9</x>
   <y>156</y>
@@ -578,7 +578,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -587,7 +587,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>9</x>
   <y>180</y>
@@ -607,7 +607,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -616,7 +616,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>9</x>
   <y>202</y>
@@ -636,7 +636,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -645,7 +645,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>9</x>
   <y>226</y>
@@ -665,7 +665,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -674,7 +674,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>9</x>
   <y>251</y>
@@ -694,7 +694,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -703,7 +703,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>4</x>
   <y>278</y>
@@ -723,7 +723,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -732,7 +732,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>5</x>
   <y>303</y>
@@ -752,7 +752,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -761,7 +761,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>5</x>
   <y>327</y>
@@ -781,7 +781,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -790,7 +790,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob" >
+ <bsbObject version="2" type="BSBKnob">
   <objectName>freq</objectName>
   <x>532</x>
   <y>100</y>
@@ -804,11 +804,11 @@ e
   <maximum>1500.00000000</maximum>
   <value>352.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>freq</objectName>
   <x>532</x>
   <y>179</y>
@@ -828,7 +828,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -837,7 +837,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>531</x>
   <y>82</y>
@@ -857,7 +857,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -866,7 +866,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox" >
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>on</objectName>
   <x>537</x>
   <y>52</y>
@@ -879,9 +879,9 @@ e
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>556</x>
   <y>50</y>
@@ -901,7 +901,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -910,7 +910,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject version="2" type="BSBScope">
   <objectName/>
   <x>4</x>
   <y>358</y>
@@ -928,7 +928,7 @@ e
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>449</x>
   <y>37</y>
@@ -948,7 +948,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -957,7 +957,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>freq1</objectName>
   <x>455</x>
   <y>54</y>
@@ -977,7 +977,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -986,7 +986,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>freq2</objectName>
   <x>454</x>
   <y>77</y>
@@ -1006,7 +1006,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1015,7 +1015,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>freq3</objectName>
   <x>454</x>
   <y>103</y>
@@ -1035,7 +1035,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1044,7 +1044,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>freq4</objectName>
   <x>456</x>
   <y>130</y>
@@ -1064,7 +1064,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1073,7 +1073,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>freq5</objectName>
   <x>456</x>
   <y>155</y>
@@ -1093,7 +1093,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1102,7 +1102,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>freq6</objectName>
   <x>456</x>
   <y>179</y>
@@ -1122,7 +1122,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1131,7 +1131,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>freq7</objectName>
   <x>454</x>
   <y>204</y>
@@ -1151,7 +1151,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1160,7 +1160,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>freq8</objectName>
   <x>455</x>
   <y>229</y>
@@ -1180,7 +1180,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1189,7 +1189,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>freq9</objectName>
   <x>454</x>
   <y>254</y>
@@ -1209,7 +1209,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1218,7 +1218,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>freq10</objectName>
   <x>455</x>
   <y>278</y>
@@ -1238,7 +1238,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1247,7 +1247,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>freq11</objectName>
   <x>454</x>
   <y>304</y>
@@ -1267,7 +1267,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1276,7 +1276,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>freq12</objectName>
   <x>452</x>
   <y>328</y>
@@ -1296,7 +1296,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1305,7 +1305,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob" >
+ <bsbObject version="2" type="BSBKnob">
   <objectName>level</objectName>
   <x>618</x>
   <y>122</y>
@@ -1319,11 +1319,11 @@ e
   <maximum>0.50000000</maximum>
   <value>0.09000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>619</x>
   <y>179</y>
@@ -1343,7 +1343,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1352,7 +1352,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>7</x>
   <y>5</y>
@@ -1372,7 +1372,7 @@ e
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>33</r>
    <g>34</g>
    <b>36</b>
@@ -1381,7 +1381,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>531</x>
   <y>213</y>
@@ -1401,7 +1401,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1410,7 +1410,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>349</x>
   <y>37</y>
@@ -1430,7 +1430,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1439,7 +1439,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac1</objectName>
   <x>356</x>
   <y>54</y>
@@ -1457,7 +1457,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1465,10 +1465,10 @@ e
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>1.02</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac2</objectName>
   <x>356</x>
   <y>79</y>
@@ -1486,7 +1486,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1494,10 +1494,10 @@ e
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>1.05</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac3</objectName>
   <x>356</x>
   <y>104</y>
@@ -1515,7 +1515,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1523,10 +1523,10 @@ e
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>1.12</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac4</objectName>
   <x>356</x>
   <y>127</y>
@@ -1544,7 +1544,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1552,10 +1552,10 @@ e
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>1.14</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac5</objectName>
   <x>356</x>
   <y>153</y>
@@ -1573,7 +1573,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1581,10 +1581,10 @@ e
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>1.19</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac6</objectName>
   <x>356</x>
   <y>180</y>
@@ -1602,7 +1602,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1610,10 +1610,10 @@ e
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>1.21</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac7</objectName>
   <x>356</x>
   <y>206</y>
@@ -1631,7 +1631,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1639,10 +1639,10 @@ e
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>1.26</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac8</objectName>
   <x>356</x>
   <y>230</y>
@@ -1660,7 +1660,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1668,10 +1668,10 @@ e
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>1.29</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac9</objectName>
   <x>356</x>
   <y>254</y>
@@ -1689,7 +1689,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1697,10 +1697,10 @@ e
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>1.32</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac10</objectName>
   <x>356</x>
   <y>278</y>
@@ -1718,7 +1718,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1726,10 +1726,10 @@ e
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>1.35</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac11</objectName>
   <x>356</x>
   <y>301</y>
@@ -1747,7 +1747,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1755,10 +1755,10 @@ e
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>1.36</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac12</objectName>
   <x>356</x>
   <y>327</y>
@@ -1776,7 +1776,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1784,10 +1784,10 @@ e
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>1.39</value>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>reset</objectName>
   <x>535</x>
   <y>286</y>
@@ -1806,7 +1806,7 @@ e
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>amp1</objectName>
   <x>263</x>
   <y>54</y>
@@ -1824,7 +1824,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1832,10 +1832,10 @@ e
   <resolution>0.00010000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>amp2</objectName>
   <x>263</x>
   <y>79</y>
@@ -1853,7 +1853,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1861,10 +1861,10 @@ e
   <resolution>0.00010000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>0.5</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>amp3</objectName>
   <x>263</x>
   <y>104</y>
@@ -1882,7 +1882,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1890,10 +1890,10 @@ e
   <resolution>0.00010000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>0.333333</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>amp4</objectName>
   <x>263</x>
   <y>129</y>
@@ -1911,7 +1911,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1919,10 +1919,10 @@ e
   <resolution>0.00010000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>0.25</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>amp5</objectName>
   <x>263</x>
   <y>154</y>
@@ -1940,7 +1940,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1948,10 +1948,10 @@ e
   <resolution>0.00010000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>0.2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>amp6</objectName>
   <x>263</x>
   <y>179</y>
@@ -1969,7 +1969,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1977,10 +1977,10 @@ e
   <resolution>0.00010000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>0.166667</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>amp7</objectName>
   <x>263</x>
   <y>203</y>
@@ -1998,7 +1998,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2006,10 +2006,10 @@ e
   <resolution>0.00010000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>0.142857</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>amp8</objectName>
   <x>263</x>
   <y>228</y>
@@ -2027,7 +2027,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2035,10 +2035,10 @@ e
   <resolution>0.00010000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>0.125</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>amp9</objectName>
   <x>263</x>
   <y>253</y>
@@ -2056,7 +2056,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2064,10 +2064,10 @@ e
   <resolution>0.00010000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>0.111111</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>amp10</objectName>
   <x>263</x>
   <y>276</y>
@@ -2085,7 +2085,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2093,10 +2093,10 @@ e
   <resolution>0.00010000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>0.1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>amp11</objectName>
   <x>263</x>
   <y>301</y>
@@ -2114,7 +2114,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2122,10 +2122,10 @@ e
   <resolution>0.00010000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>0.0909091</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>amp12</objectName>
   <x>263</x>
   <y>326</y>
@@ -2143,7 +2143,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2151,10 +2151,10 @@ e
   <resolution>0.00010000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>0.0833333</value>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>reset</objectName>
   <x>535</x>
   <y>320</y>
@@ -2173,12 +2173,12 @@ e
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>rel</objectName>
   <x>537</x>
   <y>233</y>
   <width>155</width>
-  <height>30</height>
+  <height>25</height>
   <uuid>{fa7b55f0-4387-47e0-ab2e-28dab55622d4}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -2211,9 +2211,9 @@ e
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>button1</objectName>
   <x>615</x>
   <y>48</y>
@@ -2241,7 +2241,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 333 179 714 556
+WindowBounds: 333 163 714 556
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -2260,68 +2260,68 @@ ioSlider {27, 254} {229, 22} 0.000000 1.000000 0.111111 amp9
 ioSlider {27, 279} {229, 22} 0.000000 1.000000 0.100000 amp10
 ioSlider {27, 304} {229, 22} 0.000000 1.000000 0.090909 amp11
 ioSlider {27, 329} {229, 22} 0.000000 1.000000 0.083333 amp12
-ioText {8, 54} {17, 25} label 1.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1
-ioText {8, 78} {17, 25} label 2.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 2
-ioText {8, 103} {17, 25} label 3.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 3
-ioText {8, 131} {17, 25} label 4.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 4
-ioText {9, 156} {17, 25} label 5.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 5
-ioText {9, 180} {17, 25} label 6.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 6
-ioText {9, 202} {17, 25} label 7.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 7
-ioText {9, 226} {17, 25} label 8.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 8
-ioText {9, 251} {17, 25} label 9.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 9
-ioText {4, 278} {24, 25} label 10.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 10
-ioText {5, 303} {24, 25} label 11.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 11
-ioText {5, 327} {24, 25} label 12.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 12
+ioText {8, 54} {17, 25} label 1.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1
+ioText {8, 78} {17, 25} label 2.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2
+ioText {8, 103} {17, 25} label 3.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3
+ioText {8, 131} {17, 25} label 4.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4
+ioText {9, 156} {17, 25} label 5.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 5
+ioText {9, 180} {17, 25} label 6.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 6
+ioText {9, 202} {17, 25} label 7.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 7
+ioText {9, 226} {17, 25} label 8.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 8
+ioText {9, 251} {17, 25} label 9.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 9
+ioText {4, 278} {24, 25} label 10.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 10
+ioText {5, 303} {24, 25} label 11.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 11
+ioText {5, 327} {24, 25} label 12.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 12
 ioKnob {532, 100} {80, 80} 1500.000000 100.000000 0.010000 352.000000 freq
-ioText {532, 179} {80, 25} display 352.000000 0.00100 "freq" center "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 352.000
-ioText {531, 82} {80, 25} label 0.000000 0.00100 "" center "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Base Freq
+ioText {532, 179} {80, 25} display 352.000000 0.00100 "freq" center "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 352.000
+ioText {531, 82} {80, 25} label 0.000000 0.00100 "" center "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Base Freq
 ioCheckbox {537, 52} {20, 20} off on
-ioText {556, 50} {35, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder On
+ioText {556, 50} {35, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder On
 ioGraph {4, 358} {692, 157} scope 2.000000 -255 
-ioText {449, 37} {80, 316} label 0.000000 0.00100 "" center "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Freq. (Hz)
-ioText {455, 54} {68, 25} display 359.039978 0.00100 "freq1" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 359.040
-ioText {454, 77} {68, 25} display 369.599976 0.00100 "freq2" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 369.600
-ioText {454, 103} {68, 25} display 394.239990 0.00100 "freq3" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 394.240
-ioText {456, 130} {68, 25} display 401.279999 0.00100 "freq4" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 401.280
-ioText {456, 155} {68, 25} display 418.880005 0.00100 "freq5" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 418.880
-ioText {456, 179} {68, 25} display 425.920013 0.00100 "freq6" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 425.920
-ioText {454, 204} {68, 25} display 443.519989 0.00100 "freq7" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 443.520
-ioText {455, 229} {68, 25} display 454.079987 0.00100 "freq8" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 454.080
-ioText {454, 254} {68, 25} display 464.640015 0.00100 "freq9" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 464.640
-ioText {455, 278} {68, 25} display 475.200012 0.00100 "freq10" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 475.200
-ioText {454, 304} {68, 25} display 478.720001 0.00100 "freq11" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 478.720
-ioText {452, 328} {68, 25} display 489.279999 0.00100 "freq12" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 489.280
+ioText {449, 37} {80, 316} label 0.000000 0.00100 "" center "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Freq. (Hz)
+ioText {455, 54} {68, 25} display 359.040000 0.00100 "freq1" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 359.040
+ioText {454, 77} {68, 25} display 369.600000 0.00100 "freq2" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 369.600
+ioText {454, 103} {68, 25} display 394.240000 0.00100 "freq3" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 394.240
+ioText {456, 130} {68, 25} display 401.280000 0.00100 "freq4" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 401.280
+ioText {456, 155} {68, 25} display 418.880000 0.00100 "freq5" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 418.880
+ioText {456, 179} {68, 25} display 425.920000 0.00100 "freq6" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 425.920
+ioText {454, 204} {68, 25} display 443.520000 0.00100 "freq7" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 443.520
+ioText {455, 229} {68, 25} display 454.080000 0.00100 "freq8" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 454.080
+ioText {454, 254} {68, 25} display 464.640000 0.00100 "freq9" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 464.640
+ioText {455, 278} {68, 25} display 475.200000 0.00100 "freq10" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 475.200
+ioText {454, 304} {68, 25} display 478.720000 0.00100 "freq11" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 478.720
+ioText {452, 328} {68, 25} display 489.280000 0.00100 "freq12" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 489.280
 ioKnob {618, 122} {66, 60} 0.500000 0.000000 0.010000 0.090000 level
-ioText {619, 179} {64, 25} label 0.000000 0.00100 "" center "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Level
+ioText {619, 179} {64, 25} label 0.000000 0.00100 "" center "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Level
 ioText {7, 5} {248, 43} label 0.000000 0.00100 "" left "DejaVu Sans" 22 {65280, 65280, 65280} {8448, 8704, 9216} nobackground noborder Additive syntheziser
-ioText {531, 213} {166, 68} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Partial relationship:
-ioText {349, 37} {96, 316} label 0.000000 0.00100 "" center "DejaVu Sans" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Freq. Factor
-ioText {356, 54} {80, 25} editnum 1.020000 0.001000 "fac1" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.020000
-ioText {356, 79} {80, 25} editnum 1.050000 0.001000 "fac2" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.050000
-ioText {356, 104} {80, 25} editnum 1.121000 0.001000 "fac3" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.121000
-ioText {356, 127} {80, 25} editnum 1.140000 0.001000 "fac4" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.140000
-ioText {356, 153} {80, 25} editnum 1.191000 0.001000 "fac5" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.191000
-ioText {356, 180} {80, 25} editnum 1.211000 0.001000 "fac6" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.211000
-ioText {356, 206} {80, 25} editnum 1.260000 0.001000 "fac7" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.260000
-ioText {356, 230} {80, 25} editnum 1.290000 0.001000 "fac8" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.290000
-ioText {356, 254} {80, 25} editnum 1.321000 0.001000 "fac9" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.321000
-ioText {356, 278} {80, 25} editnum 1.351000 0.001000 "fac10" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.351000
-ioText {356, 301} {80, 25} editnum 1.361000 0.001000 "fac11" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.361000
-ioText {356, 327} {80, 25} editnum 1.390000 0.001000 "fac12" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.390000
+ioText {531, 213} {166, 68} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Partial relationship:
+ioText {349, 37} {96, 316} label 0.000000 0.00100 "" center "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Freq. Factor
+ioText {356, 54} {80, 25} editnum 1.020000 0.001000 "fac1" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.020000
+ioText {356, 79} {80, 25} editnum 1.050000 0.001000 "fac2" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.050000
+ioText {356, 104} {80, 25} editnum 1.120000 0.001000 "fac3" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.120000
+ioText {356, 127} {80, 25} editnum 1.140000 0.001000 "fac4" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.140000
+ioText {356, 153} {80, 25} editnum 1.190000 0.001000 "fac5" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.190000
+ioText {356, 180} {80, 25} editnum 1.210000 0.001000 "fac6" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.210000
+ioText {356, 206} {80, 25} editnum 1.260000 0.001000 "fac7" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.260000
+ioText {356, 230} {80, 25} editnum 1.290000 0.001000 "fac8" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.290000
+ioText {356, 254} {80, 25} editnum 1.320000 0.001000 "fac9" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.320000
+ioText {356, 278} {80, 25} editnum 1.350000 0.001000 "fac10" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.350000
+ioText {356, 301} {80, 25} editnum 1.360000 0.001000 "fac11" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.360000
+ioText {356, 327} {80, 25} editnum 1.390000 0.001000 "fac12" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.390000
 ioButton {535, 286} {157, 30} value 1.000000 "reset" "Reset Phase" "/" i 50 0 1
-ioText {263, 54} {80, 25} editnum 1.000000 0.000100 "amp1" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1.000000
-ioText {263, 79} {80, 26} editnum 0.500000 0.000100 "amp2" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.500000
-ioText {263, 104} {80, 26} editnum 0.333400 0.000100 "amp3" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.333400
-ioText {263, 129} {80, 25} editnum 0.250000 0.000100 "amp4" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.250000
-ioText {263, 154} {80, 26} editnum 0.200100 0.000100 "amp5" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.200100
-ioText {263, 179} {80, 26} editnum 0.166700 0.000100 "amp6" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.166700
-ioText {263, 203} {80, 25} editnum 0.142900 0.000100 "amp7" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.142900
-ioText {263, 228} {80, 26} editnum 0.125000 0.000100 "amp8" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.125000
-ioText {263, 253} {80, 26} editnum 0.111200 0.000100 "amp9" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.111200
-ioText {263, 276} {80, 25} editnum 0.100100 0.000100 "amp10" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.100100
-ioText {263, 301} {80, 26} editnum 0.091000 0.000100 "amp11" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.091000
-ioText {263, 326} {80, 26} editnum 0.083400 0.000100 "amp12" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.083400
+ioText {263, 54} {80, 25} editnum 1.000000 0.000100 "amp1" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
+ioText {263, 79} {80, 26} editnum 0.500000 0.000100 "amp2" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.500000
+ioText {263, 104} {80, 26} editnum 0.333400 0.000100 "amp3" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.333400
+ioText {263, 129} {80, 25} editnum 0.250000 0.000100 "amp4" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.250000
+ioText {263, 154} {80, 26} editnum 0.200000 0.000100 "amp5" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.200000
+ioText {263, 179} {80, 26} editnum 0.166700 0.000100 "amp6" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.166700
+ioText {263, 203} {80, 25} editnum 0.142900 0.000100 "amp7" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.142900
+ioText {263, 228} {80, 26} editnum 0.125000 0.000100 "amp8" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.125000
+ioText {263, 253} {80, 26} editnum 0.111200 0.000100 "amp9" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.111200
+ioText {263, 276} {80, 25} editnum 0.100000 0.000100 "amp10" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.100000
+ioText {263, 301} {80, 26} editnum 0.091000 0.000100 "amp11" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.091000
+ioText {263, 326} {80, 26} editnum 0.083400 0.000100 "amp12" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.083400
 ioButton {535, 320} {158, 31} event 1.000000 "reset" "Amp = 1/n" "/" i100 0 1
-ioMenu {537, 233} {155, 30} 0 303 "all harmonics,even harmonics,inharmonic1,inharmonic2,inharmonic3" rel
+ioMenu {537, 233} {155, 25} 0 303 "all harmonics,even harmonics,inharmonic1,inharmonic2,inharmonic3" rel
 ioButton {615, 48} {69, 30} event 1.000000 "button1" "Note" "/" i1 0 3
 </MacGUI>

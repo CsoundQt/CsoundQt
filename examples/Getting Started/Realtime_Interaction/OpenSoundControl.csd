@@ -57,54 +57,622 @@ e 3600
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
+
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>507</x>
+ <y>301</y>
+ <width>629</width>
+ <height>433</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>125</r>
+  <g>162</g>
+  <b>160</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>320</x>
+  <y>9</y>
+  <width>286</width>
+  <height>407</height>
+  <uuid>{954fadd5-cce1-413e-8112-89e726e598da}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Instr 1001 receives OSC messages from port:</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>96</r>
+   <g>219</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>14</x>
+  <y>8</y>
+  <width>286</width>
+  <height>407</height>
+  <uuid>{0e2ba158-c297-43ef-a8c0-97ee46884040}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Instr 1000 send values via OSC to port:</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>246</r>
+   <g>255</g>
+   <b>17</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBScrollNumber">
+  <objectName>sendNumber</objectName>
+  <x>16</x>
+  <y>154</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{054cd8e1-4a4f-44a5-9668-70e87bff0d9b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <value>7.80000000</value>
+  <resolution>0.10000000</resolution>
+  <minimum>-999999999999.00000000</minimum>
+  <maximum>99999999999999.00000000</maximum>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act="continuous"/>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>sendSlider</objectName>
+  <x>22</x>
+  <y>245</y>
+  <width>20</width>
+  <height>100</height>
+  <uuid>{10bd35db-21e2-4728-9b72-49ccd89f4343}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.48000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>16</x>
+  <y>128</y>
+  <width>104</width>
+  <height>25</height>
+  <uuid>{0ce4364a-da5a-4e7a-ba83-1557f1fb9857}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Send this value</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBScrollNumber">
+  <objectName>rcvNumber</objectName>
+  <x>329</x>
+  <y>143</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{c548dd30-0a6b-4914-ab04-38fcedf9b1da}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <value>7.80000019</value>
+  <resolution>0.00100000</resolution>
+  <minimum>-999999999999.00000000</minimum>
+  <maximum>99999999999999.00000000</maximum>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act="continuous"/>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>325</x>
+  <y>113</y>
+  <width>108</width>
+  <height>24</height>
+  <uuid>{f90b1400-53b9-4b93-b88d-09ab8f2bf22a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Receive the value</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>17</x>
+  <y>217</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{32dde0b5-87c9-4230-bb82-453cc2cce1bd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Send this value</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>329</x>
+  <y>225</y>
+  <width>109</width>
+  <height>25</height>
+  <uuid>{b77c687c-f1e7-4a12-99d6-3cb8db6ac855}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Receive the value</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>sndPortNum</objectName>
+  <x>219</x>
+  <y>10</y>
+  <width>58</width>
+  <height>24</height>
+  <uuid>{31b2e623-6866-4939-a2ce-6d0057dfbe8a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>47120</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>rcvPortNum</objectName>
+  <x>548</x>
+  <y>11</y>
+  <width>51</width>
+  <height>24</height>
+  <uuid>{daa3b24a-6504-4f71-b8c1-adc5b21f5ae9}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>47120</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>16</x>
+  <y>32</y>
+  <width>281</width>
+  <height>70</height>
+  <uuid>{4569ab26-f769-4f4a-8519-1b075ec54720}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>You can set the send port in the orc, by changing the macro S_PORT. The messages can be received by other OSC software like Pd, Max/Msp or SuperCollider, if Csound is not receiving the same port.</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>321</x>
+  <y>33</y>
+  <width>281</width>
+  <height>70</height>
+  <uuid>{a1f95929-e6b8-4062-8eeb-0f95cb1c26c4}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>You can set the receive port in the orc by the macro R_PORT. Pay attention that no other software (like Pd or SuperCollider) is already bound to the same Port, otherwhise Csound will crash.</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>sendSlider</objectName>
+  <x>17</x>
+  <y>350</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{98463a56-ef4a-4b20-b396-a8a64441ae16}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>0.480</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>rcvSlider</objectName>
+  <x>325</x>
+  <y>359</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{b123860f-78bb-4fdf-a8c2-318cd7ce69ea}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>0.480</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>rcvSlider</objectName>
+  <x>332</x>
+  <y>253</y>
+  <width>22</width>
+  <height>99</height>
+  <uuid>{17bc5558-e8b2-4705-9b4c-417fe548d1d5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.47999999</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>95</x>
+  <y>155</y>
+  <width>151</width>
+  <height>24</height>
+  <uuid>{23b1c772-14d1-4112-ae09-010b4f8c51de}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>-> Channel "sendNumber"</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>92</x>
+  <y>278</y>
+  <width>151</width>
+  <height>24</height>
+  <uuid>{f79c35f4-b208-4337-9c1b-7d98e98c8a3f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>-> Channel "sendSlider"</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>413</x>
+  <y>296</y>
+  <width>151</width>
+  <height>24</height>
+  <uuid>{375a1727-8231-45e4-bd40-8896b0c9fbe7}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Channel "rcvSlider"</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>415</x>
+  <y>144</y>
+  <width>151</width>
+  <height>24</height>
+  <uuid>{8ba9eac0-f85d-4121-8bbd-d31bb788f056}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Channel "rcvNumber"</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
 <MacOptions>
 Version: 3
 Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 507 333 629 423
+WindowBounds: 507 301 629 433
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {32125, 41634, 41120}
-ioText {314, 1} {286, 407} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {24576, 56064, 65280} background noborder Instr 1001 receives OSC messages from port:
-ioText {8, 0} {286, 407} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {62976, 65280, 4352} background noborder Instr 1000 send values via OSC to port:
-ioText {10, 146} {80, 25} scroll 6.600000 0.100000 "sendNumber" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background border 6.6
-ioSlider {16, 237} {20, 100} 0.000000 1.000000 0.660000 sendSlider
-ioText {10, 120} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Send this value
-ioText {323, 135} {80, 25} scroll 6.600000 0.001000 "rcvNumber" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} background border 6.600
-ioText {319, 105} {108, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Receive the value
-ioText {11, 209} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Send this value
-ioText {323, 217} {109, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Receive the value
-ioText {196, 0} {80, 25} display 0.000000 0.00100 "sndPortNum" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 47120
-ioText {527, 1} {69, 25} display 0.000000 0.00100 "rcvPortNum" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 47120
-ioText {10, 24} {281, 70} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder You can set the send port in the orc, by changing the macro S_PORT. The messages can be received by other OSC software like Pd, Max/Msp or SuperCollider, if Csound is not receiving the same port.
-ioText {315, 25} {281, 70} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder You can set the receive port in the orc by the macro R_PORT. Pay attention that no other software (like Pd or SuperCollider) is already bound to the same Port, otherwhise Csound will crash.
-ioText {11, 342} {80, 25} display 0.000000 0.00100 "sendSlider" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.6600
-ioText {319, 351} {80, 25} display 0.000000 0.00100 "rcvSlider" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 0.6600
-ioSlider {326, 245} {22, 99} 0.000000 1.000000 0.656566 rcvSlider
-ioText {89, 147} {151, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -> Channel "sendNumber"
-ioText {86, 270} {151, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -> Channel "sendSlider"
-ioText {407, 288} {151, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Channel "rcvSlider"
-ioText {409, 136} {151, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Channel "rcvNumber"
+ioText {314, 1} {286, 407} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {24576, 56064, 65280} nobackground noborder Instr 1001 receives OSC messages from port:
+ioText {8, 0} {286, 407} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {62976, 65280, 4352} nobackground noborder Instr 1000 send values via OSC to port:
+ioText {16, 154} {80, 25} scroll 7.800000 0.100000 "sendNumber" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} background noborder 
+ioSlider {22, 245} {20, 100} 0.000000 1.000000 0.480000 sendSlider
+ioText {10, 120} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Send this value
+ioText {329, 143} {80, 25} scroll 7.800000 0.001000 "rcvNumber" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} background noborder 
+ioText {319, 105} {108, 24} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Receive the value
+ioText {11, 209} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Send this value
+ioText {323, 217} {109, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Receive the value
+ioText {219, 10} {58, 24} display 47120.000000 0.00100 "sndPortNum" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 47120
+ioText {548, 11} {51, 25} display 47120.000000 0.00100 "rcvPortNum" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 47120
+ioText {10, 24} {281, 70} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder You can set the send port in the orc, by changing the macro S_PORT. The messages can be received by other OSC software like Pd, Max/Msp or SuperCollider, if Csound is not receiving the same port.
+ioText {315, 25} {281, 70} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder You can set the receive port in the orc by the macro R_PORT. Pay attention that no other software (like Pd or SuperCollider) is already bound to the same Port, otherwhise Csound will crash.
+ioText {11, 342} {80, 25} display 0.480000 0.00100 "sendSlider" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.480
+ioText {319, 351} {80, 25} display 0.480000 0.00100 "rcvSlider" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.480
+ioSlider {332, 253} {22, 99} 0.000000 1.000000 0.480000 rcvSlider
+ioText {89, 147} {151, 24} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -> Channel "sendNumber"
+ioText {86, 270} {151, 24} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -> Channel "sendSlider"
+ioText {407, 288} {151, 24} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Channel "rcvSlider"
+ioText {409, 136} {151, 24} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Channel "rcvNumber"
 </MacGUI>
-
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" name="Events" x="320" y="218" width="513" height="322"> 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- </EventPanel>
+<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

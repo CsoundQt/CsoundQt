@@ -140,15 +140,16 @@ void QuteGraph::refreshWidget()
 //  qDebug() << "QuteGraph::refreshWidget()" << m_value << m_valueChanged << m_value2 << m_value2Changed;
   if (m_valueChanged) {
     index = (int) m_value;
-    m_valueChanged = false;
-    needsUpdate = true;
     m_value2 = getTableNumForIndex(index);
     m_value2Changed = false;
+    m_valueChanged = false;
+    needsUpdate = true;
   }
   else if (m_value2Changed) {
     index = getIndexForTableNum(m_value2);
     if (index >= 0) {
       m_value = index;
+//      m_valueChanged = false;
     }
     m_value2Changed = false;
     needsUpdate = true;
@@ -241,7 +242,6 @@ void QuteGraph::applyProperties()
 
 void QuteGraph::changeCurve(int index)
 {
-//  qDebug() << "QuteGraph::changeCurve" << index;
   StackedLayoutWidget *stacked =  static_cast<StackedLayoutWidget *>(m_widget);
   if (index == -1) {// goto last curve
     index = stacked->count() - 1;
@@ -257,7 +257,6 @@ void QuteGraph::changeCurve(int index)
   else if (stacked->currentIndex() == index) {
     return;
   }
-//  qDebug() << "QuteGraph::changeCurve --- " << index;
   if (index < 0  || index >= curves.size()
     || curves.size() <= 0 || curves[index]->get_caption().isEmpty()) { // Invalid index
     return;
@@ -310,18 +309,27 @@ void QuteGraph::changeCurve(int index)
 
 void QuteGraph::indexChanged(int index)
 {
-//  setValue(index);
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
-  QPair<QString, double> channelValue(m_channel, index);
-  QPair<QString, double> channel2Value(m_channel2, getTableNumForIndex(index));
+  if (m_channel == "") {
+    setInternalValue(index);
+  }
+  else {
+    QPair<QString, double> channelValue(m_channel, index);
+    emit newValue(channelValue);
+  }
+//  if (m_channel2 != "") {
+//    setValue2(getTableNumForIndex(index));
+//  }
+//  else {
+//    QPair<QString, double> channel2Value(m_channel2, getTableNumForIndex(index));
+//    emit newValue(channel2Value);
+//  }
 //  qDebug() << "QuteGraph::indexChanged " << m_channel << m_value << m_channel2 << m_value2;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
-  emit newValue(channelValue);
-//  emit newValue(channel2Value);
 }
 
 void QuteGraph::clearCurves()
@@ -550,4 +558,10 @@ int QuteGraph::getIndexForTableNum(int ftable)
   }
   }
   return index;
+}
+
+void QuteGraph::setInternalValue(double value)
+{
+  m_value = value;
+  m_valueChanged = true;
 }

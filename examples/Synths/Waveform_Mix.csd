@@ -23,24 +23,25 @@ itabsiz	=		(itabsiz == 0 ? 1024 : itabsiz)
 iftemp		ftgen		0, 0, -(inparts * 3), -2, 0;temp ftab for writing the str-pna-phas vals
 indx		=		1
 loop:
-if iwf == 1 then; saw = 1, 1/2, 1/3, ... as strength of partials
+if iwf == 1 then ; saw = 1, 1/2, 1/3, ... as strength of partials
 		tabw_i		1/indx, (indx-1)*3, iftemp; writes strength of partial
 		tabw_i		indx, (indx-1)*3+1, iftemp; writes partial number
-elseif iwf == 2 then; square = 1, 1/3, 1/5, ... for odd partials
+elseif iwf == 2 then ; square = 1, 1/3, 1/5, ... for odd partials
 		tabw_i		1/(indx*2-1), (indx-1)*3, iftemp; writes strength of partial
 		tabw_i		indx*2-1, (indx-1)*3+1, iftemp; writes partial number
-elseif iwf == 3 then; triangle = 1, -1/9, 1/25, -1/49, 1/81, ... for odd partials
+elseif iwf == 3 then ; triangle = 1, -1/9, 1/25, -1/49, 1/81, ... for odd partials
 ieven		=		indx % 2; 0 = even index, 1 = odd index
 istr		=		(ieven == 0 ? -1/(indx*2-1)^2 : 1/(indx*2-1)^2); results in 1, -1/9, 1/25, ...
 		tabw_i		istr, (indx-1)*3, iftemp; writes strength of partial
 		tabw_i		indx*2-1, (indx-1)*3+1, iftemp; writes partial number
-else; impulse = 1, 1, 1, ... for all partials
+elseif iwf == 4 then ; impulse = 1, 1, 1, ... for all partials
 		tabw_i		1, (indx-1)*3, iftemp; writes strength of partial (always 1)
 		tabw_i		indx, (indx-1)*3+1, iftemp; writes partial number
 endif
-		tabw_i		0, (indx-1)*3+2, iftemp; writes phase (always 0)
+
 		loop_le	indx, 1, inparts, loop
-iftout		ftgen		ifno, 0, itabsiz, 34, iftemp, inparts, 1; write table with GEN34 
+
+iftout	ftgen		ifno, 0, itabsiz, 34, iftemp, inparts, 1; write table with GEN34 
 		ftfree		iftemp, 0; remove iftemp
 		xout		iftout
   endop
@@ -201,12 +202,12 @@ e
  <height>629</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background" >
+ <bgcolor mode="background">
   <r>170</r>
   <g>170</g>
   <b>127</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>34</x>
   <y>265</y>
@@ -226,7 +227,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -235,7 +236,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>73</x>
   <y>116</y>
@@ -255,7 +256,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -264,7 +265,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph" >
+ <bsbObject version="2" type="BSBGraph">
   <objectName>sine</objectName>
   <x>35</x>
   <y>161</y>
@@ -274,7 +275,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>-1</value>
+  <value>0</value>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -283,7 +284,7 @@ e
   <modey>auto</modey>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>290</x>
   <y>116</y>
@@ -303,7 +304,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -312,7 +313,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph" >
+ <bsbObject version="2" type="BSBGraph">
   <objectName>saw</objectName>
   <x>252</x>
   <y>161</y>
@@ -322,7 +323,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>-2</value>
+  <value>0</value>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -331,7 +332,7 @@ e
   <modey>auto</modey>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>509</x>
   <y>115</y>
@@ -351,7 +352,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -360,7 +361,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph" >
+ <bsbObject version="2" type="BSBGraph">
   <objectName>square</objectName>
   <x>471</x>
   <y>160</y>
@@ -370,7 +371,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>-3</value>
+  <value>0</value>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -379,7 +380,7 @@ e
   <modey>auto</modey>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>713</x>
   <y>115</y>
@@ -399,7 +400,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -408,7 +409,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph" >
+ <bsbObject version="2" type="BSBGraph">
   <objectName>triangle</objectName>
   <x>675</x>
   <y>160</y>
@@ -418,7 +419,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>-4</value>
+  <value>0</value>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -427,7 +428,7 @@ e
   <modey>auto</modey>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>922</x>
   <y>114</y>
@@ -447,7 +448,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -456,7 +457,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph" >
+ <bsbObject version="2" type="BSBGraph">
   <objectName>impulse</objectName>
   <x>884</x>
   <y>159</y>
@@ -466,7 +467,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>-5</value>
+  <value>0</value>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -475,7 +476,7 @@ e
   <modey>auto</modey>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>np_saw</objectName>
   <x>314</x>
   <y>272</y>
@@ -493,7 +494,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -501,10 +502,10 @@ e
   <resolution>1.00000000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>8</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>np_squ</objectName>
   <x>533</x>
   <y>272</y>
@@ -522,7 +523,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -530,10 +531,10 @@ e
   <resolution>1.00000000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>8</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>np_tri</objectName>
   <x>740</x>
   <y>272</y>
@@ -551,7 +552,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -559,10 +560,10 @@ e
   <resolution>1.00000000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>8</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>np_imp</objectName>
   <x>949</x>
   <y>272</y>
@@ -580,7 +581,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -588,10 +589,10 @@ e
   <resolution>1.00000000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>8</value>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject version="2" type="BSBScope">
   <objectName/>
   <x>26</x>
   <y>407</y>
@@ -609,7 +610,7 @@ e
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>hor21</objectName>
   <x>824</x>
   <y>405</y>
@@ -629,20 +630,20 @@ e
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>hor21</objectName>
   <x>855</x>
   <y>405</y>
@@ -662,20 +663,20 @@ e
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>hor21</objectName>
   <x>886</x>
   <y>405</y>
@@ -695,20 +696,20 @@ e
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>hor21</objectName>
   <x>917</x>
   <y>405</y>
@@ -728,20 +729,20 @@ e
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>hor21</objectName>
   <x>947</x>
   <y>405</y>
@@ -761,20 +762,20 @@ e
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>824</x>
   <y>345</y>
@@ -794,7 +795,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -803,7 +804,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider" >
+ <bsbObject version="2" type="BSBVSlider">
   <objectName>vol</objectName>
   <x>1008</x>
   <y>406</y>
@@ -817,11 +818,11 @@ e
   <maximum>2.00000000</maximum>
   <value>0.64242424</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
   <x>1039</x>
   <y>424</y>
@@ -841,20 +842,20 @@ e
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>in1over_pre</objectName>
   <x>1039</x>
   <y>406</y>
@@ -874,20 +875,20 @@ e
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>196</r>
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>999</x>
   <y>346</y>
@@ -908,7 +909,7 @@ Volume</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -917,7 +918,7 @@ Volume</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>63</x>
   <y>368</y>
@@ -937,7 +938,7 @@ Volume</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -946,7 +947,7 @@ Volume</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Play</objectName>
   <x>372</x>
   <y>363</y>
@@ -965,7 +966,7 @@ Volume</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Stop</objectName>
   <x>486</x>
   <y>363</y>
@@ -984,7 +985,7 @@ Volume</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>35</x>
   <y>273</y>
@@ -1004,7 +1005,7 @@ Volume</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1013,7 +1014,7 @@ Volume</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>91</x>
   <y>59</y>
@@ -1033,7 +1034,7 @@ Volume</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1042,7 +1043,7 @@ Volume</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>190</x>
   <y>11</y>
@@ -1062,7 +1063,7 @@ Volume</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1071,7 +1072,7 @@ Volume</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName/>
   <x>592</x>
   <y>363</y>
@@ -1112,41 +1113,41 @@ Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {43690, 43690, 32639}
-ioText {34, 265} {1028, 44} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 
-ioText {73, 116} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Sine
-ioGraph {35, 161} {178, 96} table -1.000000 1.000000 sine
-ioText {290, 116} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Saw
-ioGraph {252, 161} {178, 96} table -2.000000 1.000000 saw
-ioText {509, 115} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Square
-ioGraph {471, 160} {178, 96} table -3.000000 1.000000 square
-ioText {713, 115} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Triangle
-ioGraph {675, 160} {178, 96} table -4.000000 1.000000 triangle
-ioText {922, 114} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Impulse
-ioGraph {884, 159} {178, 96} table -5.000000 1.000000 impulse
-ioText {314, 272} {59, 28} editnum 8.000000 1.000000 "np_saw" right "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 8.000000
-ioText {533, 272} {59, 28} editnum 8.000000 1.000000 "np_squ" right "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 8.000000
-ioText {740, 272} {59, 28} editnum 8.000000 1.000000 "np_tri" right "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 8.000000
-ioText {949, 272} {59, 28} editnum 8.000000 1.000000 "np_imp" right "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 8.000000
+ioText {34, 265} {1028, 44} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 
+ioText {73, 116} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Sine
+ioGraph {35, 161} {178, 96} table 0.000000 1.000000 sine
+ioText {290, 116} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Saw
+ioGraph {252, 161} {178, 96} table 0.000000 1.000000 saw
+ioText {509, 115} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Square
+ioGraph {471, 160} {178, 96} table 0.000000 1.000000 square
+ioText {713, 115} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Triangle
+ioGraph {675, 160} {178, 96} table 0.000000 1.000000 triangle
+ioText {922, 114} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Impulse
+ioGraph {884, 159} {178, 96} table 0.000000 1.000000 impulse
+ioText {314, 272} {59, 28} editnum 8.000000 1.000000 "np_saw" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 8.000000
+ioText {533, 272} {59, 28} editnum 8.000000 1.000000 "np_squ" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 8.000000
+ioText {740, 272} {59, 28} editnum 8.000000 1.000000 "np_tri" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 8.000000
+ioText {949, 272} {59, 28} editnum 8.000000 1.000000 "np_imp" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 8.000000
 ioGraph {26, 407} {766, 165} scope 1.000000 -1 
 ioMeter {824, 405} {31, 166} {0, 59904, 0} "hor21" 0.322581 "amp_sin" 0.192771 fill 1 0 mouse
 ioMeter {855, 405} {31, 166} {0, 59904, 0} "hor21" 0.322581 "amp_saw" 0.162651 fill 1 0 mouse
 ioMeter {886, 405} {31, 166} {0, 59904, 0} "hor21" 0.322581 "amp_squ" 0.265060 fill 1 0 mouse
 ioMeter {917, 405} {31, 166} {0, 59904, 0} "hor21" 0.322581 "amp_tri" 0.409639 fill 1 0 mouse
 ioMeter {947, 405} {31, 166} {0, 59904, 0} "hor21" 0.322581 "amp_imp" 0.722892 fill 1 0 mouse
-ioText {824, 345} {148, 54} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Relative Strength of the Five Waveforms
+ioText {824, 345} {148, 54} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Relative Strength of the Five Waveforms
 ioSlider {1008, 406} {22, 165} 0.000000 2.000000 0.642424 vol
 ioMeter {1039, 424} {18, 147} {0, 59904, 0} "hor8" 0.592593 "out" 0.000000 fill 1 0 mouse
 ioMeter {1039, 406} {18, 23} {50176, 3584, 3072} "in1over_pre" 0.000000 "outover" 0.000000 fill 1 0 mouse
-ioText {999, 346} {64, 55} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder MasterÂ¬Volume
-ioText {63, 368} {214, 33} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Scope Resulting Waveform
+ioText {999, 346} {64, 55} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder MasterÂ¬Volume
+ioText {63, 368} {214, 33} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Scope Resulting Waveform
 ioButton {372, 363} {91, 27} value 1.000000 "_Play" "START" "/" i1 0 10
 ioButton {486, 363} {91, 27} value 1.000000 "_Stop" "STOP" "/" i1 0 10
-ioText {35, 273} {176, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Number of Harmonics:
-ioText {91, 59} {903, 53} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Standard Waveforms are built here by superposition of harmonics. The higher the number of harmonics, the sharper the shape. You can change here in realtime the number of harmonics and the relative strength of the five shapes in the resulting mix.
-ioText {190, 11} {712, 43} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Waveform Mix
+ioText {35, 273} {176, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Number of Harmonics:
+ioText {91, 59} {903, 53} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Standard Waveforms are built here by superposition of harmonics. The higher the number of harmonics, the sharper the shape. You can change here in realtime the number of harmonics and the relative strength of the five shapes in the resulting mix.
+ioText {190, 11} {712, 43} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Waveform Mix
 ioButton {592, 363} {199, 28} event 1.000000 "" "MAKE AUDIO" "/" i2 0 3 440 0.2
 </MacGUI>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="543" y="318" width="596" height="322" visible="true" loopStart="0" loopEnd="0">i 1 0 3 
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="543" y="318" width="614" height="322" visible="true" loopStart="0" loopEnd="0">i 1 0 3 
     
     
     

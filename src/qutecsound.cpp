@@ -2385,17 +2385,6 @@ void qutecsound::createMenus()
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
 
-  tutFiles.clear();
-  tutFiles.append(":/examples/Getting Started/Widgets_1.csd");
-  tutFiles.append(":/examples/Getting Started/Widgets_2.csd");
-  submenu = tutorialMenu->addMenu("Other");
-  foreach (QString fileName, tutFiles) {
-    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-    newAction = submenu->addAction(name);
-    newAction->setData(fileName);
-    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-  }
-
   for (int i = 0; i < subMenus.size(); i++) {
     submenu = examplesMenu->addMenu(subMenuNames[i]);
     foreach (QString fileName, subMenus[i]) {
@@ -3231,11 +3220,11 @@ void qutecsound::setWidgetPanelGeometry()
     qDebug() << "qutecsound::setWidgetPanelGeometry() Warning: height invalid.";
   }
   if (geometry.x() < 0 || geometry.x() > 4096) {
-    geometry.setX(50);
+    geometry.setX(20);
     qDebug() << "qutecsound::setWidgetPanelGeometry() Warning: X position invalid.";
   }
-  if (geometry.y() < 0 || geometry.y() > 4096) {
-    geometry.setY(50);
+  if (geometry.y() < 30 || geometry.y() > 4096) {
+    geometry.setY(30);
     qDebug() << "qutecsound::setWidgetPanelGeometry() Warning: Y position invalid.";
   }
   widgetPanel->setGeometry(geometry);

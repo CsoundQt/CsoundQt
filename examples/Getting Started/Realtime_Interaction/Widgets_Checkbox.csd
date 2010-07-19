@@ -72,42 +72,311 @@ e
 
 
 
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>498</x>
+ <y>177</y>
+ <width>597</width>
+ <height>485</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>132</r>
+  <g>162</g>
+  <b>8</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBController">
+  <objectName>point_y</objectName>
+  <x>30</x>
+  <y>195</y>
+  <width>318</width>
+  <height>253</height>
+  <uuid>{7b88d65c-1539-4552-8c37-0c566fb3c631}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <objectName2>point_x</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.61348438</xValue>
+  <yValue>0.47489458</yValue>
+  <type>point</type>
+  <pointsize>7</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable mode="both" group="0">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>31</x>
+  <y>32</y>
+  <width>134</width>
+  <height>30</height>
+  <uuid>{5d76e7c2-5c54-4aa6-b637-344e10818acd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>1. Run Csound</label>
+  <alignment>left</alignment>
+  <font>Helvetica</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>31</x>
+  <y>123</y>
+  <width>135</width>
+  <height>73</height>
+  <uuid>{a61ce639-4796-4143-9d31-67e36f6ce9d5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Read out the point position and print it to the console.</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>361</x>
+  <y>123</y>
+  <width>120</width>
+  <height>70</height>
+  <uuid>{85a10aea-c364-4c4e-a872-505d4d0c0776}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Send random position data to the point.</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>182</x>
+  <y>124</y>
+  <width>161</width>
+  <height>64</height>
+  <uuid>{224f540f-525e-43d3-98b1-f5367dd76d89}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Use point position data to control an oscils amplitude and frequency.</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBConsole">
+  <objectName/>
+  <x>361</x>
+  <y>195</y>
+  <width>183</width>
+  <height>252</height>
+  <uuid>{a75f9ef6-a277-4f6b-bcf7-4b3d0ddfc6fe}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <font>Courier</font>
+  <fontsize>8</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>30</x>
+  <y>66</y>
+  <width>514</width>
+  <height>39</height>
+  <uuid>{5e3f1106-b2bd-4a74-98a1-2023743bda81}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>2. Press one of these three buttons and move the point.</label>
+  <alignment>left</alignment>
+  <font>Helvetica</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton">
+  <objectName>_Play</objectName>
+  <x>173</x>
+  <y>32</y>
+  <width>100</width>
+  <height>30</height>
+  <uuid>{b8851d94-4074-488b-95f4-9cfb9d01a4aa}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Run Csound</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox">
+  <objectName>read</objectName>
+  <x>30</x>
+  <y>103</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{15e01f48-48f0-4107-8a0d-ca8e9a9c2b5f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox">
+  <objectName>sound</objectName>
+  <x>183</x>
+  <y>103</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{cfba4b21-f2fd-4235-bd00-2d1078632488}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox">
+  <objectName>dance</objectName>
+  <x>360</x>
+  <y>105</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{281f87bc-d138-4dbf-b70e-fc8ca1ed78ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
 <MacOptions>
 Version: 3
 Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 498 209 597 485
+WindowBounds: 498 177 597 485
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {33924, 41634, 2056}
-ioMeter {36, 168} {318, 253} {0, 59904, 0} "point_x" 0.810277 "point_y" 0.100629 point 7 0 mouse
-ioText {37, 2} {134, 30} label 0.000000 0.00100 "" left "DejaVu Sans" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1. Run Csound
-ioText {37, 93} {135, 73} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Read out the point position and print it to the console.
-ioText {367, 93} {120, 70} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Send random position data to the point.
-ioText {188, 94} {161, 64} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Use point position data to control an oscils amplitude and frequency.
-ioListing {367, 165} {183, 252}
-ioText {36, 36} {514, 39} label 0.000000 0.00100 "" left "DejaVu Sans" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2. Press one of these three buttons and move the point.
-ioButton {179, 2} {100, 30} value 1.000000 "_Play" "Run Csound" "/" i1 0 10
-ioCheckbox {36, 73} {20, 20} on read
-ioCheckbox {189, 73} {20, 20} off sound
-ioCheckbox {366, 75} {20, 20} off dance
+ioMeter {30, 195} {318, 253} {0, 59904, 0} "point_y" 0.613484 "point_x" 0.474895 point 7 0 mouse
+ioText {37, 2} {134, 30} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1. Run Csound
+ioText {37, 93} {135, 73} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Read out the point position and print it to the console.
+ioText {367, 93} {120, 70} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Send random position data to the point.
+ioText {188, 94} {161, 64} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Use point position data to control an oscils amplitude and frequency.
+ioListing {361, 195} {183, 252}
+ioText {36, 36} {514, 39} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2. Press one of these three buttons and move the point.
+ioButton {173, 32} {100, 30} value 1.000000 "_Play" "Run Csound" "/" i1 0 10
+ioCheckbox {30, 103} {20, 20} off read
+ioCheckbox {183, 103} {20, 20} off sound
+ioCheckbox {360, 105} {20, 20} off dance
 </MacGUI>
-
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" name="" x="320" y="218" width="513" height="322"> 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
