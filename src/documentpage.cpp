@@ -514,8 +514,8 @@ int DocumentPage::udoCount()
 
 int DocumentPage::widgetCount()
 {
-  QString text = this->getBasicText();
-  return text.count((QRegExp("<BSB")));
+  QString text = this->getWidgetsText();
+  return text.count("<bsbObject");
 }
 
 QString DocumentPage::getFilePath()
