@@ -2270,15 +2270,14 @@ void qutecsound::createMenus()
   usefulFiles.append(":/examples/Useful/Audio_Input_Test.csd");
   usefulFiles.append(":/examples/Useful/Audio_Output_Test.csd");
   usefulFiles.append(":/examples/Useful/Audio_Thru_Test.csd");
-  usefulFiles.append(":/examples/Useful/MIDI_Tunings.csd");
   usefulFiles.append(":/examples/Useful/MIDI_Recorder.csd");
   usefulFiles.append(":/examples/Useful/ASCII_Key.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_buffer.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_buffer_2.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_HD.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_HD_2.csd");
-  usefulFiles.append(":/examples/Useful/8_Chn_Player.csd");
   usefulFiles.append(":/examples/Useful/Jukebox.csd");
+  usefulFiles.append(":/examples/Useful/Multichannel_Player.csd");
   usefulFiles.append(":/examples/Useful/Mixdown_Player.csd");
   usefulFiles.append(":/examples/Useful/SF_Record.csd");
   usefulFiles.append(":/examples/Useful/File_to_Text.csd");
@@ -2289,6 +2288,7 @@ void qutecsound::createMenus()
   subMenus << usefulFiles;
   subMenuNames << tr("Useful");
 
+  exampleFiles.append(":/examples/Miscellaneous/MIDI_Tunings.csd");
   exampleFiles.append(":/examples/Miscellaneous/Keyboard_Control.csd");
   exampleFiles.append(":/examples/Miscellaneous/Just_Intonation.csd");
   exampleFiles.append(":/examples/Miscellaneous/Mouse_Control.csd");

@@ -33,6 +33,7 @@
         <file>opcodes.xml</file>
         <file>default.csd</file>
         <file>test.csd</file>
+        <file>../examples/Miscellaneous/MIDI_Tunings.csd</file>
         <file>../examples/Miscellaneous/Keyboard_Control.csd</file>
         <file>../examples/Miscellaneous/Just_Intonation.csd</file>
         <file>../examples/Miscellaneous/Mouse_Control.csd</file>
@@ -111,14 +112,13 @@
         <file>../examples/Useful/SF_Play_from_buffer_2.csd</file>
         <file>../examples/Useful/SF_Play_from_HD.csd</file>
         <file>../examples/Useful/SF_Play_from_HD_2.csd</file>
-        <file>../examples/Useful/8_Chn_Player.csd</file>
+        <file>../examples/Useful/Multichannel_Player.csd</file>
         <file>../examples/Useful/Jukebox.csd</file>
         <file>../examples/Useful/SF_Record.csd</file>
         <file>../examples/Useful/Audio_Input_Test.csd</file>
         <file>../examples/Useful/Audio_Output_Test.csd</file>
         <file>../examples/Useful/Audio_Thru_Test.csd</file>
         <file>../examples/Useful/MIDI_IO_Test.csd</file>
-        <file>../examples/Useful/MIDI_Tunings.csd</file>
         <file>../examples/Useful/MIDI_Recorder.csd</file>
         <file>../examples/Useful/ASCII_Key.csd</file>
         <file>../examples/Useful/IO_Test.csd</file>

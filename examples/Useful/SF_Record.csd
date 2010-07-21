@@ -3071,12 +3071,6 @@ e
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <objectName/>
- <x>361</x>
- <y>84</y>
- <width>813</width>
- <height>730</height>
- <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
@@ -3094,9 +3088,9 @@ Options: -b128 -A -s -m167 -R
 <MacGUI>
 ioView background {43690, 43690, 32639}
 ioText {27, 131} {324, 24} edit 0.000000 0.00100 "_Browse1"  "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} falsenoborder /Users/jh/Desktop/record.wav
-ioText {440, 558} {129, 33} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Post Fader
+ioText {440, 559} {129, 33} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Post Fader
 ioText {443, 362} {129, 33} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Pre Fader
-ioText {434, 609} {166, 71} label 0.000000 0.00100 "" left "Lucida Grande" 10 {21504, 28672, 21248} {65280, 65280, 65280} nobackground noborder Note: You can also use the Record Button in the QuteCsound interface for quick simple recording on any csd.
+ioText {434, 609} {164, 101} label 0.000000 0.00100 "" left "Lucida Grande" 10 {21504, 28672, 21248} {65280, 65280, 65280} nobackground noborder Note: You can also use the Record Button in the QuteCsound interface for quick simple recording on any csd.
 ioText {606, 296} {164, 390} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Records a soundfile (1-8 channels) with arbitrary input routing. The file will have as many channels as you select to record with the checkboxes. E.g. if you check channels 2, 3, 5 and 8 for recording, a sound file with 4 channels will be written. Set the nchnls in the orchestra header and select your audio device in the CsOptions or in the Configure dialog.
 ioMeter {398, 518} {27, 22} {50176, 3584, 3072} "in8over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
 ioMeter {398, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in8_post" -inf fill 1 0 mouse

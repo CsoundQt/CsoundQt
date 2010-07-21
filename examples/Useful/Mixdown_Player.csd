@@ -89,37 +89,6 @@ iwarsep	=		0; and tell you are ot sep1 nor sep2
 		loop_lt	indx, 1, ilen, loop 
 end: 		xout		icount
   endop 
-  
-  opcode FildurMax, i, Sj
-;returns the duration of the longest file in a list of filenames
-Stray, isep	xin; list of filenames and seperator as ascii code (default=124)
-isep		=		(isep == -1 ? 124 : isep)
-infiles	StrayLen	Stray, isep
-indx		=		0
-imaxdur	=		0
-loop:
-ist, ien	StrayGetEl	Stray, indx, isep
-Sel		strsub		Stray, ist, ien
-idur		filelen	Sel
-imaxdur	=		(idur > imaxdur ? idur : imaxdur)
-		loop_lt	indx, 1, infiles, loop
-		xout		imaxdur
-  endop
-  
-  opcode Checksr, 0, Sj
-Stray, isep	xin; list of filenames and seperator as ascii code (default=124)
-isep		=		(isep == -1 ? 124 : isep)
-infiles	StrayLen	Stray, isep
-indx		=		0
-loop:
-ist, ien	StrayGetEl	Stray, indx, isep
-Sel		strsub		Stray, ist, ien
-ifilsr		filesr		Sel
- if ifilsr != sr then
-printf_i "WARNING: Samplerate of file %s does not match the orchestra's sr (%d vs %d). Samplerate will be converted by diskin2.\n", 1, Sel, ifilsr, sr
- endif
-		loop_lt	indx, 1, infiles, loop
-  endop
 
   opcode MxdwnPlay, 0, Siiiiki
 Stray, ilen, ichnls, ifirstchn iel, kvol, iskip xin
@@ -131,7 +100,7 @@ Soutch2	sprintf	"outchn%d", ioutch2
 ipan2		=		frac(ipan)
 ist, ien	StrayGetEl	Stray, iel, 124
 Sel		strsub		Stray, ist, ien
-asig		diskin2	Sel, 1, iskip
+asig		soundin	Sel, iskip
 iscale		=		ichnls / ilen
 a1, a2		pan2		asig*iscale*kvol, ipan2
 		chnmix 	a1, Soutch1
@@ -211,8 +180,9 @@ acollect	chnget		Soutchn
 instr 1
 ;input values
 Stray 		invalue	"_MBrowse"
-		Checksr	Stray
-idur		FildurMax	Stray
+ist, ien	StrayGetEl	Stray, 0, 124; get duration from the first element
+Sfirst		strsub		Stray, ist, ien
+idur		filelen	Sfirst
 ilen		StrayLen	Stray, 124
 kchnls		invalue	"numoutch"
 kfirstout	invalue	"firstout"
@@ -253,8 +223,8 @@ e
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>351</x>
- <y>137</y>
+ <x>547</x>
+ <y>55</y>
  <width>463</width>
  <height>581</height>
  <visible>true</visible>
@@ -1107,8 +1077,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>-5</x>
-  <y>231</y>
+  <x>253</x>
+  <y>188</y>
   <width>80</width>
   <height>25</height>
   <uuid>{6d596540-3556-428d-bf81-e3302d85780c}</uuid>
@@ -1154,8 +1124,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>skip</objectName>
-  <x>78</x>
-  <y>230</y>
+  <x>336</x>
+  <y>187</y>
   <width>65</width>
   <height>27</height>
   <uuid>{1eeb0757-ffae-471e-a3fa-4210eaa86a53}</uuid>
@@ -1184,8 +1154,8 @@ e
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_MBrowse</objectName>
   <x>19</x>
-  <y>189</y>
-  <width>305</width>
+  <y>228</y>
+  <width>417</width>
   <height>27</height>
   <uuid>{ea4bc9f6-b558-4a2a-9410-25edec264224}</uuid>
   <visible>true</visible>
@@ -1210,8 +1180,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_MBrowse</objectName>
-  <x>327</x>
-  <y>189</y>
+  <x>71</x>
+  <y>186</y>
   <width>100</width>
   <height>30</height>
   <uuid>{368327a9-899a-403b-a55b-95357c3dbafe}</uuid>
@@ -1242,8 +1212,8 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-inf</xValue>
-  <yValue>-inf</yValue>
+  <xValue>0.00000000</xValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1261,7 +1231,7 @@ e
   </bgcolor>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
-  <objectName>over2</objectName>
+  <objectName>over1</objectName>
   <x>32</x>
   <y>395</y>
   <width>25</width>
@@ -1270,7 +1240,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <objectName2>over2</objectName2>
+  <objectName2>over1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -1308,8 +1278,8 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-inf</xValue>
-  <yValue>-inf</yValue>
+  <xValue>0.00000000</xValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1327,7 +1297,7 @@ e
   </bgcolor>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
-  <objectName>over1</objectName>
+  <objectName>over2</objectName>
   <x>64</x>
   <y>395</y>
   <width>25</width>
@@ -1336,13 +1306,13 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <objectName2>over1</objectName2>
+  <objectName2>over2</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>0.04000000</xValue>
+  <yValue>0.04000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2045,88 +2015,6 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
-  <objectName>_Start</objectName>
-  <x>148</x>
-  <y>230</y>
-  <width>73</width>
-  <height>28</height>
-  <uuid>{6cbdcf1e-784e-4e9b-9b92-9f6b8465a20a}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <type>value</type>
-  <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
-  <text>Start</text>
-  <image>/</image>
-  <eventLine/>
-  <latch>false</latch>
-  <latched>false</latched>
- </bsbObject>
- <bsbObject version="2" type="BSBButton">
-  <objectName>_Stop</objectName>
-  <x>222</x>
-  <y>230</y>
-  <width>73</width>
-  <height>28</height>
-  <uuid>{7a569dc3-eb33-443e-97a1-9f545ba5f4f7}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <type>value</type>
-  <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
-  <text>Stop</text>
-  <image>/</image>
-  <eventLine/>
-  <latch>false</latch>
-  <latched>false</latched>
- </bsbObject>
- <bsbObject version="2" type="BSBButton">
-  <objectName>_Pause</objectName>
-  <x>295</x>
-  <y>230</y>
-  <width>73</width>
-  <height>28</height>
-  <uuid>{a8df2037-d751-47eb-aa7c-bb5b69c9c94e}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <type>value</type>
-  <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
-  <text>Pause</text>
-  <image>/</image>
-  <eventLine/>
-  <latch>false</latch>
-  <latched>false</latched>
- </bsbObject>
- <bsbObject version="2" type="BSBButton">
-  <objectName>_Play</objectName>
-  <x>368</x>
-  <y>230</y>
-  <width>73</width>
-  <height>28</height>
-  <uuid>{0c7f121e-3908-4a27-8a4e-81bbbf5b0d22}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <type>value</type>
-  <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
-  <text>Resume</text>
-  <image>/</image>
-  <eventLine/>
-  <latch>false</latch>
-  <latched>false</latched>
- </bsbObject>
- <objectName/>
- <x>351</x>
- <y>137</y>
- <width>463</width>
- <height>581</height>
- <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
@@ -2164,12 +2052,12 @@ ioText {320, 277} {52, 28} display 0.000000 0.00100 "db" left "Arial" 12 {0, 0, 
 ioText {253, 188} {80, 25} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Skiptime
 ioSlider {109, 277} {212, 28} -12.000000 12.000000 0.000000 db
 ioText {336, 187} {65, 27} editnum 0.000000 0.001000 "skip" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.000000
-ioText {19, 189} {305, 27} edit 0.000000 0.00100 "_MBrowse"  "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
-ioButton {327, 189} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
-ioMeter {32, 419} {25, 100} {0, 59904, 0} "out1" -inf "out1" -inf fill 1 0 mouse
-ioMeter {32, 395} {25, 25} {39680, 768, 0} "over2" 0.000000 "over2" 0.000000 fill 1 0 mouse
-ioMeter {64, 419} {25, 100} {0, 59904, 0} "out2" -inf "out2" -inf fill 1 0 mouse
-ioMeter {64, 395} {25, 25} {39680, 768, 0} "over1" 0.000000 "over1" 0.000000 fill 1 0 mouse
+ioText {19, 228} {417, 27} edit 0.000000 0.00100 "_MBrowse"  "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
+ioButton {71, 186} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
+ioMeter {32, 419} {25, 100} {0, 59904, 0} "out1" 0.000000 "out1" 0.000000 fill 1 0 mouse
+ioMeter {32, 395} {25, 25} {39680, 768, 0} "over1" 0.000000 "over1" 0.000000 fill 1 0 mouse
+ioMeter {64, 419} {25, 100} {0, 59904, 0} "out2" 0.000000 "out2" 0.000000 fill 1 0 mouse
+ioMeter {64, 395} {25, 25} {39680, 768, 0} "over2" 0.040000 "over2" 0.040000 fill 1 0 mouse
 ioMeter {97, 419} {25, 100} {0, 59904, 0} "out3" -inf "out3" -inf fill 1 0 mouse
 ioMeter {97, 395} {25, 25} {39680, 768, 0} "over3" 0.000000 "over3" 0.000000 fill 1 0 mouse
 ioMeter {129, 419} {25, 100} {0, 59904, 0} "out4" -inf "out4" -inf fill 1 0 mouse
@@ -2192,8 +2080,4 @@ ioText {226, 527} {26, 28} display 0.000000 0.00100 "chn7" center "Arial" 14 {0,
 ioText {259, 527} {26, 28} display 0.000000 0.00100 "chn8" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioText {324, 531} {80, 25} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Output Channel
 ioText {319, 396} {116, 123} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Make sure your nchnls value in the orchestra header matches the desired number of channels!
-ioButton {148, 230} {73, 28} value 1.000000 "_Start" "Start" "/" 
-ioButton {222, 230} {73, 28} value 1.000000 "_Stop" "Stop" "/" 
-ioButton {295, 230} {73, 28} value 1.000000 "_Pause" "Pause" "/" 
-ioButton {368, 230} {73, 28} value 1.000000 "_Play" "Resume" "/" 
 </MacGUI>
