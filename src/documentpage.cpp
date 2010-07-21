@@ -512,6 +512,12 @@ int DocumentPage::udoCount()
   return text.count((QRegExp("\\n[ \\t]*opcode\\s")));
 }
 
+int DocumentPage::widgetCount()
+{
+  QString text = this->getBasicText();
+  return text.count((QRegExp("<BSB")));
+}
+
 QString DocumentPage::getFilePath()
 {
   return fileName.left(fileName.lastIndexOf("/"));

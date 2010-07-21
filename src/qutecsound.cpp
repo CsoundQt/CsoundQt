@@ -681,6 +681,7 @@ void qutecsound::info()
   text += tr("Number of characters (total):") + " " + QString::number(documentPages[curPage]->characterCount()) + "\n";
   text += tr("Number of instruments:") + " " + QString::number(documentPages[curPage]->instrumentCount()) + "\n";
   text += tr("Number of UDOs:") + " " + QString::number(documentPages[curPage]->udoCount()) + "\n";
+  text += tr("Number of Widgets:") + " " + QString::number(documentPages[curPage]->widgetCount()) + "\n";
   QMessageBox::information(this, tr("File Information"),
                            text,
                            QMessageBox::Ok,
@@ -2910,8 +2911,9 @@ int qutecsound::execute(QString executable, QString options)
 
 bool qutecsound::loadFile(QString fileName, bool runNow)
 {
+//  qDebug() << "qutecsound::loadFile" << fileName;
   QFile file(fileName);
-  if (!file.open(QFile::ReadOnly | QFile::Text)) {
+  if (!file.open(QFile::ReadOnly)) {
     QMessageBox::warning(this, tr("QuteCsound"),
                          tr("Cannot read file %1:\n%2.")
                              .arg(fileName)
@@ -2954,8 +2956,12 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   QString text;
   while (!file.atEnd()) {
     QByteArray line = file.readLine();
-    line.replace("\r\n", "\n");
-    line.replace("\r", "\n");  //Change Mac returns to line endings
+    while (line.contains("\r\n")) {
+      line.replace("\r\n", "\n");  //Change Win returns to line endings
+    }
+    while (line.contains("\r")) {
+      line.replace("\r", "\n");  //Change Mac returns to line endings
+    }
     QTextDecoder decoder(QTextCodec::codecForLocale());
     text = text + decoder.toUnicode(line);
     if (!line.endsWith("\n"))

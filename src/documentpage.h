@@ -71,6 +71,7 @@ class DocumentPage : public QObject
     int characterCount(bool countExtras = false);
     int instrumentCount();
     int udoCount();
+    int widgetCount();
     QString getFilePath();
     QStringList getScheduledEvents(unsigned long ksmpscount);
     bool isModified();

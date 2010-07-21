@@ -229,8 +229,8 @@ e
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>541</x>
- <y>194</y>
+ <x>966</x>
+ <y>203</y>
  <width>440</width>
  <height>609</height>
  <visible>true</visible>
@@ -242,8 +242,8 @@ e
  </bgcolor>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>skiptime</objectName>
-  <x>92</x>
-  <y>209</y>
+  <x>116</x>
+  <y>208</y>
   <width>80</width>
   <height>25</height>
   <uuid>{cb3713f7-e95e-4e71-b4a6-3b0c4e9b85cc}</uuid>
@@ -299,8 +299,8 @@ e
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>2</x>
-  <y>206</y>
-  <width>92</width>
+  <y>207</y>
+  <width>114</width>
   <height>30</height>
   <uuid>{fb3305a5-9d5b-4f81-9dec-ace2f3726a5d}</uuid>
   <visible>true</visible>
@@ -1618,10 +1618,10 @@ Channels</label>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>329</x>
-  <y>209</y>
+  <x>328</x>
+  <y>212</y>
   <width>68</width>
-  <height>32</height>
+  <height>27</height>
   <uuid>{4830e3ab-8055-4a68-b804-c03657adf9d8}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1731,7 +1731,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 541 194 440 609
+WindowBounds: 966 203 440 609
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
