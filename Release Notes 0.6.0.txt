@@ -1,6 +1,6 @@
 Hi all!
 
-QuteCsound 0.6.0 is ready! QuteCsound has now come of age as it
+QuteCsound 0.6.0 is finally ready! QuteCsound has now come of age as it
 recently celebrated two years since its first svn commit! This release
 takes QuteCsound way beyond my original expectations thanks to the
 encouragement, ideas and work from many users. This is another
@@ -19,9 +19,9 @@ GPLv3.
 There are binary packages for Windows and OS X, and a source package
 for other platforms.
 You can get it here:
-http://sourceforge.net/projects/qutecsound/files/QuteCsound/0.5.0/
+http://sourceforge.net/projects/qutecsound/files/QuteCsound/0.6.0/
 
-There's more information here:
+There's more information here (along with an overdue home page revamp):
 http://qutecsound.sourceforge.net/
 
 There is also an experimental package for OS X (called "-full"), which
@@ -47,7 +47,8 @@ to support development:
 http://sourceforge.net/project/project_donations.php?group_id=227265
 
 New in version 0.6.0:
- * New XML Widget format for storing widgets
+ * New XML Widget format for storing widgets. If file only contains the
+ old widget format a backup file is saved just in case.
  * The new format allows many new funtionality like:
     - Font, Font size, Font Color and background in a larger number of
     widgets.
@@ -62,8 +63,11 @@ New in version 0.6.0:
  * Presets for Widgets are now available, and they will be stored as
  XML text in the csd file. They can be used from the right click menu
  in the widget panel.
+ * Added reserved channels "_GetPresetName", "_GetPresetNumber", 
+ "_SetPreset" and "_SetPresetIndex", which allows control of presets from
+ Csound or other widgets.
  * New reserved channel "_MBrowse" for buttons, which allows selection
- of multiple files, which are separated by the "|" character.
+ of multiple files, which are separated by the "," character.
  * Font scaling and Font Offset configuration option for control over
  global font rendering size.
  * Added bookmarks in inspector (any comment starting by ";;" in a csd
@@ -76,7 +80,8 @@ New in version 0.6.0:
  * Implemented looping and setting/saving loop points for live event sheets
  * Added "append rows" and "appends columns" for event sheets
  * Graph widget now sends values when an index is selected
- * New filter Lab example
+ * New Filter Lab, Mixdown_Player, SF_Splitter, SF_Merger, Jukebox, 
+ Spatialization examples
  * Auto indent when previous line is indented
  * Added option to have widgets open the properties dialog
  automatically when they are created (enabled by default)
@@ -88,6 +93,14 @@ New in version 0.6.0:
  * Added option to hide toolbar
  * Added menu item for showing Opcode Quick Reference page from manual
  * Added option to change shortcut for Utilities Dialog
+ * Default "New File" is now set in a text box in the config dialog, 
+ not a separate file.
+ * Added filtering for some unnecessary console messages from Csound.
+ * Added auto join option to minimize user interaction when opening 
+ orc/sco files.
+ * Added second channel to Graph widget which sends/receives f-table 
+ number instead of index.
+
 
 Fixed in version 0.6.0:
  * Horrible memory leak from API graphs, QuteCsound consumed memory at
@@ -124,7 +137,12 @@ Fixed in version 0.6.0:
  * fixed bug in qutecsound::runUtility ("free" was being called on
  argv which is allocated on stack, not heap)
  * Truncate jack names if greater than 16 characters
-
+ * Graph widgets now paint curves, even if they are created after Csound
+ has started.
+ * Event sheet actions now register as a single event for undo purposes.
+ * Added kill Line and kill to End of Line actions.
+ * Fixed pasting of rich text in editor (paste from open office calc was
+resulting in extraneous text and formating).
 
 Internal changes in 0.6.0:
  * New build system thanks to Andy Fillebrown, which keeps build
@@ -138,6 +156,352 @@ Internal changes in 0.6.0:
 
 
 Full ChangeLog:
+
+Revision 682 - Directory Listing
+Modified Sun Jul 25 18:31:29 2010 UTC (20 minutes, 28 seconds ago) by mantaraya36
+
+graph widget transmits table number again on channel 2.
+Made less verbose for release.
+Bumped version to 0.6.0 for release
+curveUpdateBuffer now preallocates a buffer for curve data. No more allocs
+in rt thread and no more leaking here.
+Updated final translations.
+Fixed setting of size 0 in initialization of QuteText widgets.
+
+Revision 681 - Directory Listing
+Modified Sun Jul 25 08:57:10 2010 UTC (9 hours, 54 minutes ago) by afillebrown
+
+fix auto-complete menu's handling of backspace key presses
+
+Revision 680 - Directory Listing
+Modified Sun Jul 25 07:27:17 2010 UTC (11 hours, 24 minutes ago) by mantaraya36
+
+Changed the way the syntax menu is displayed, hopefully will fix the
+issues on Windows.
+Changed color of About window.
+Some cleanup
+
+Revision 679 - Directory Listing
+Modified Sun Jul 25 07:16:37 2010 UTC (11 hours, 35 minutes ago) by mantaraya36
+
+Added french translation by Francois Pinot
+
+Revision 678 - Directory Listing
+Modified Wed Jul 21 20:05:41 2010 UTC (3 days, 22 hours ago) by mantaraya36
+
+Fixed widget count information
+
+Revision 677 - Directory Listing
+Modified Wed Jul 21 16:07:49 2010 UTC (4 days, 2 hours ago) by mantaraya36
+
+Added widget count to file information dialog.
+Fixed issue with mac line endings.
+
+Revision 676 - Directory Listing
+Modified Wed Jul 21 14:02:01 2010 UTC (4 days, 4 hours ago) by joachimheintz
+
+example changes and fixes
+
+Revision 675 - Directory Listing
+Modified Mon Jul 19 17:27:13 2010 UTC (6 days, 1 hour ago) by mantaraya36
+
+Revised all examples for release.
+
+Revision 674 - Directory Listing
+Modified Mon Jul 19 15:47:26 2010 UTC (6 days, 3 hours ago) by mantaraya36
+
+Fixed issues with Graph widget.
+
+Revision 673 - Directory Listing
+Modified Mon Jul 19 12:34:58 2010 UTC (6 days, 6 hours ago) by mantaraya36
+
+Some work on fixing graphs, but not done yet
+
+Revision 672 - Directory Listing
+Modified Sat Jul 17 20:01:38 2010 UTC (7 days, 22 hours ago) by mantaraya36
+
+Made Pipe Synth a little smaller to fit lower resolution screens.
+Fixed crashing bug with graphs when pressing play.
+
+Revision 671 - Directory Listing
+Modified Sat Jul 17 19:15:41 2010 UTC (7 days, 23 hours ago) by mantaraya36
+
+Updated translations. Finished spanish translation for release.
+Hopefully fixed the issue with live event windows not hiding on startup.
+
+Revision 670 - Directory Listing
+Modified Sat Jul 17 17:53:41 2010 UTC (8 days ago) by mantaraya36
+
+Fixed button initial state (was undefined when first loading the csd).
+Kill line now kills end of line
+
+Revision 669 - Directory Listing
+Modified Wed Jul 14 12:56:31 2010 UTC (11 days, 5 hours ago) by mantaraya36
+
+Added second channel to Graph widget which sends/receives f-table number
+instead of index. Changed example to reflect this.
+
+Revision 668 - Directory Listing
+Modified Wed Jul 14 07:59:28 2010 UTC (11 days, 10 hours ago) by mantaraya36
+
+Allow building intel only version on OS X.
+
+Revision 667 - Directory Listing
+Modified Mon Jul 12 20:46:27 2010 UTC (12 days, 22 hours ago) by joachimheintz
+
+new example: Miscellaneous>Spatialization added
+
+Revision 666 - Directory Listing
+Modified Mon Jul 12 12:11:03 2010 UTC (13 days, 6 hours ago) by joachimheintz
+
+german translation completed. example Audio_Input_Test.csd improved
+
+Revision 665 - Directory Listing
+Modified Sun Jul 11 08:15:46 2010 UTC (2 weeks ago) by mantaraya36
+
+Revision 664 - Directory Listing
+Modified Fri Jul 9 17:37:11 2010 UTC (2 weeks, 2 days ago) by mantaraya36
+
+Improved bundle builder script (also made QCS build Universal)
+
+Revision 663 - Directory Listing
+Modified Thu Jul 8 06:34:03 2010 UTC (2 weeks, 3 days ago) by joachimheintz
+
+new example Jukebox. examples SF_Granular and Mixdown_Player improved.
+
+Revision 662 - Directory Listing
+Modified Wed Jul 7 17:24:50 2010 UTC (2 weeks, 4 days ago) by mantaraya36
+
+Fixed double printing of closing text when stopping a csd run.
+Fixed pasting of rich text in editor (paste from open office calc was
+resulting in extraneous text and formating).
+Fixed double x,y, width, height and visibility tags in xml format for
+main panel.
+
+Revision 661 - Directory Listing
+Modified Thu Jun 24 10:17:27 2010 UTC (4 weeks, 3 days ago) by mantaraya36
+
+Updated translations and added french translations by Francois Pinot.
+
+Revision 660 - Directory Listing
+Modified Thu Jun 24 08:00:54 2010 UTC (4 weeks, 3 days ago) by mantaraya36
+
+Added kill Line and kill to End of Line actions.
+online help is now opened correctly fro line like #define #dispfft #
+
+Revision 659 - Directory Listing
+Modified Sun Jun 20 17:39:54 2010 UTC (5 weeks ago) by mantaraya36
+
+Event sheet actions now register as a single event for undo purposes.
+
+Revision 658 - Directory Listing
+Modified Fri Jun 18 08:21:57 2010 UTC (5 weeks, 2 days ago) by mantaraya36
+
+Added Ukranian translation and updated other translations
+
+Revision 657 - Directory Listing
+Modified Tue Jun 15 20:22:22 2010 UTC (5 weeks, 4 days ago) by joachimheintz
+
+hackish fix of problems with the MIDI_Tunings example on osx 10.5
+
+Revision 656 - Directory Listing
+Modified Sun Jun 13 08:43:00 2010 UTC (6 weeks ago) by mantaraya36
+
+Committed MIDI Tunings example saved with new format to see if it fixes messed up display.
+
+Revision 655 - Directory Listing
+Modified Sat Jun 12 13:30:53 2010 UTC (6 weeks, 1 day ago) by mantaraya36
+
+Live Event Controller now shows changes to tempo and loop length
+produced by Live event panel
+
+Revision 654 - Directory Listing
+Modified Fri Jun 11 16:01:22 2010 UTC (6 weeks, 2 days ago) by mantaraya36
+
+Fixed crashing from last change.
+
+Revision 653 - Directory Listing
+Modified Fri Jun 11 15:36:14 2010 UTC (6 weeks, 2 days ago) by mantaraya36
+
+Fixed issues with selection box in widget panel (would be offset
+depending on scroll bar position and would not be visible in the lowest
+part)
+
+Revision 652 - Directory Listing
+Modified Thu Jun 10 18:39:24 2010 UTC (6 weeks, 3 days ago) by mantaraya36
+
+Fixed dialog box when loading csd file (by-product of recent auto join
+feature
+
+Revision 651 - Directory Listing
+Modified Thu Jun 10 13:48:52 2010 UTC (6 weeks, 3 days ago) by mantaraya36
+
+Improvements to Waveform mix example
+Looking for an ftable number in the graph widget now goes from last to
+first, to make sure the most recent version of an f-table is displayed
+
+Revision 650 - Directory Listing
+Modified Thu Jun 10 09:55:41 2010 UTC (6 weeks, 3 days ago) by mantaraya36
+
+Added auto join option to minimize user interaction when opening orc/sco
+files.
+Removed drag/drop work which interferes with drag/drop within a document
+
+Revision 649 - Directory Listing
+Modified Tue Jun 8 12:17:44 2010 UTC (6 weeks, 5 days ago) by afillebrown
+
+fix windows installers
+
+Revision 648 - Directory Listing
+Modified Mon Jun 7 20:05:14 2010 UTC (6 weeks, 5 days ago) by mantaraya36
+
+Buttons with browse chaanels now store and update their string value
+properly.
+Commit changes to Pipe Synth by Rene
+
+Revision 647 - Directory Listing
+Modified Sun Jun 6 20:43:34 2010 UTC (6 weeks, 6 days ago) by joachimheintz
+
+added new examples: Mixdown_Player, SF_Splitter, SF_Merger
+
+Revision 646 - Directory Listing
+Modified Sat Jun 5 16:23:10 2010 UTC (7 weeks, 1 day ago) by joachimheintz
+
+small changes to some examples
+
+Revision 645 - Directory Listing
+Modified Sat Jun 5 15:51:12 2010 UTC (7 weeks, 1 day ago) by mantaraya36
+
+Some improvements in bundle script, but not fully working yet
+
+Revision 644 - Directory Listing
+Modified Sat Jun 5 12:46:11 2010 UTC (7 weeks, 1 day ago) by mantaraya36
+
+Bumped version to 0.6.0-beta for release
+Improvements to app bundle script on OS X (untested)
+Updated translation files for release
+
+Revision 643 - Directory Listing
+Modified Fri Jun 4 16:33:17 2010 UTC (7 weeks, 2 days ago) by mantaraya36
+
+Fixed modified status from widget panel. File is not modified state when
+loading and whenver a widget is moved or modified, the file is marked as
+changed
+Fixed rgb error messages for graph widget
+Added filtering for some unnecessary messages from Csound.
+
+Revision 642 - Directory Listing
+Modified Fri Jun 4 14:59:20 2010 UTC (7 weeks, 2 days ago) by mantaraya36
+
+Widgets were not sending values properly after adding code to handle
+widget messages.
+
+Revision 641 - Directory Listing
+Modified Thu Jun 3 13:38:48 2010 UTC (7 weeks, 3 days ago) by mantaraya36
+
+Added preliminary release notes for 0.6.0
+
+Revision 640 - Directory Listing
+Modified Thu Jun 3 13:37:48 2010 UTC (7 weeks, 3 days ago) by mantaraya36
+
+Put cut/copy/paste action in widget pop up menu.
+Some work towards enabling widget messages.
+Removed "dec" text from scopes as it is not relevant anymore
+
+Revision 639 - Directory Listing
+Modified Wed Jun 2 16:14:47 2010 UTC (7 weeks, 4 days ago) by mantaraya36
+
+Made sure that when changing a widget's geometry the value changed
+signal is not sent, because it generates spurious crashes
+
+Revision 638 - Directory Listing
+Modified Wed Jun 2 14:38:22 2010 UTC (7 weeks, 4 days ago) by mantaraya36
+
+Updated Pipe Synth with Presets by Rene Djack
+If file is not csd file, dont save .old-format backup
+Preset recall window now reads "double-click"
+A little more work towards enabling drag and drop on OS X...
+
+Revision 637 - Directory Listing
+Modified Mon May 31 23:33:45 2010 UTC (7 weeks, 5 days ago) by mantaraya36
+
+Some work towards enabling drag and drop to editor
+Added Preset example
+Fixed loop range dialog in live event controller (was showing an offset of 1)
+Improved Event panel example and Cross Synthesis example
+
+Revision 636 - Directory Listing
+Modified Mon May 31 19:05:36 2010 UTC (7 weeks, 5 days ago) by mantaraya36
+
+Graph widgets now paint curves, even if they are created after Csound
+has started.
+Hopefully fixed responsiveness issues with curves.
+Initial work on having text edit accept drops.
+Fixed rgb errors in graphs
+
+Revision 635 - Directory Listing
+Modified Mon May 31 14:52:08 2010 UTC (7 weeks, 6 days ago) by mantaraya36
+
+Fixed build.
+
+Revision 634 - Directory Listing
+Modified Mon May 31 13:03:07 2010 UTC (7 weeks, 6 days ago) by mantaraya36
+
+Changed character for _MBrowse file separation to "|"
+
+Revision 633 - Directory Listing
+Modified Mon May 31 12:25:21 2010 UTC (7 weeks, 6 days ago) by mantaraya36
+
+Added _SetPreset and _SetPresetIndex reserved channels.
+
+Revision 632 - Directory Listing
+Modified Mon May 31 10:18:17 2010 UTC (7 weeks, 6 days ago) by mantaraya36
+
+Default "new file" is now set in a text box, not a file.
+Added BSBDisplay widget. The difference with BSBLabel is that displays
+save their value in presets.
+Fixed align right widgets.
+Added reserved channels "_GetPresetName" and "_GetPresetNumber", which
+receive the values when a preset is set.
+
+Revision 631 - Directory Listing
+Modified Sun May 30 21:30:48 2010 UTC (7 weeks, 6 days ago) by mantaraya36
+
+Updated building instructions
+Fixed loading of initial value for SpinBox
+When manual page for current text does not exist, only show the help
+panel, but don't go to the main page.
+
+Revision 630 - Directory Listing
+Modified Sun May 30 07:47:47 2010 UTC (8 weeks ago) by mantaraya36
+
+Fixed controller widget behavior when channel value is greater than
+maximum (no black bar under color bar)
+Fixed label for Scope when channels are "None"
+
+Revision 629 - Directory Listing
+Modified Sat May 29 19:15:28 2010 UTC (8 weeks ago) by mantaraya36
+
+Scroll number now limits the values it sends, as well as the values it
+displays.
+Updated Widget examples to look good on Linux
+
+Revision 628 - Directory Listing
+Modified Fri May 28 16:40:49 2010 UTC (8 weeks, 2 days ago) by mantaraya36
+
+Updated Widget examples for new version with correct font sizes and with
+rounded borders.
+Added m_activeWidgets variable which effectively serves as ablock when
+widgets are being deleted or created to avoid ocking memory when widgets
+are accessed from the value callbacks in the audio engine.
+Fixed issue with scope channel values.
+Some cleanup
+Multiple browse button now separates files using "," character (a single
+character is better for parsing in Csound.
+
+
+
+
 Revision 628 - Directory Listing
 Modified Fri May 28 16:40:49 2010 UTC (17 hours, 24 minutes ago) by mantaraya36
 
