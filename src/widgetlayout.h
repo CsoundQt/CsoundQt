@@ -118,6 +118,7 @@ class WidgetLayout : public QWidget
     void updateCurve(WINDAT *windat);
     int killCurves(CSOUND *csound);
     void clearGraphs(); // This also frees the memory allocated by curves.
+    void flushGraphBuffer();
 
     void refreshConsoles();
     void refreshWidgets();
@@ -264,7 +265,8 @@ class WidgetLayout : public QWidget
     QMutex widgetsMutex;
     QMutex layoutMutex;
     QList<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
-    QList<WINDAT *> curveUpdateBuffer;
+    QVector<WINDAT> curveUpdateBuffer;
+    int curveUpdateBufferCount;
     QList<Curve *> curves;
     QTimer updateTimer;
 

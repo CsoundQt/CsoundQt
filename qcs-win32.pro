@@ -16,6 +16,13 @@ build32: DEFAULT_CSOUND_LIBS = csound32.dll.5.2
 build64: DEFAULT_CSOUND_LIBS = csound64.dll.5.2
 CSND_LIB = csnd.dll
 LIBSNDFILE_LIB = libsndfile-1.dll
+
+pythonqt {
+DEFAULT_PYTHONQT_INCLUDE_DIRS = "$$(PROGRAMFILES)\PythonQt"
+DEFAULT_PYTHONQT_LIBRARY_DIRS =  "$$(PROGRAMFILES)\PythonQt"
+PYTHONQT_LIB = libPythonQt_QtAll.dll
+}
+
 include(config.pri)
 RC_FILE = "$${PWD}/src/qutecsound.rc"
 INCLUDEPATH += $${CSOUND_INCLUDE_DIR} \

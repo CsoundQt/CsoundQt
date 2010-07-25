@@ -25,13 +25,6 @@
 
 #include "qutewidget.h"
 
-// TODO remove this offset?
-//#ifdef Q_WS_MAC
-//#define QCS_FONT_OFFSET 2
-//#else
-//#define QCS_FONT_OFFSET 0
-//#endif
-
 class QuteText : public QuteWidget
 {
   Q_OBJECT
@@ -121,11 +114,9 @@ class QuteScrollNumber : public QuteText
     ~QuteScrollNumber();
 
     virtual void setAlignment(int alignment);
-//    virtual void setText(QString text);
     virtual QString getWidgetLine();
     virtual QString getCsladspaLine();
     virtual QString getWidgetXmlText();
-//    virtual QString getStringValue();
     virtual QString getWidgetType();
     virtual void setValue(double value);
 

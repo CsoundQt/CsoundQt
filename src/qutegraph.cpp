@@ -319,13 +319,13 @@ void QuteGraph::indexChanged(int index)
     QPair<QString, double> channelValue(m_channel, index);
     emit newValue(channelValue);
   }
-//  if (m_channel2 != "") {
-//    setValue2(getTableNumForIndex(index));
-//  }
-//  else {
-//    QPair<QString, double> channel2Value(m_channel2, getTableNumForIndex(index));
-//    emit newValue(channel2Value);
-//  }
+  if (m_channel2 == "") {
+    setValue2(getTableNumForIndex(index));
+  }
+  else {
+    QPair<QString, double> channel2Value(m_channel2, getTableNumForIndex(index));
+    emit newValue(channel2Value);
+  }
 //  qDebug() << "QuteGraph::indexChanged " << m_channel << m_value << m_channel2 << m_value2;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
@@ -349,6 +349,7 @@ void QuteGraph::clearCurves()
 
 void QuteGraph::addCurve(Curve * curve)
 {
+  Q_ASSERT(curve != 0);
   QGraphicsView *view = new QGraphicsView(m_widget);
   QGraphicsScene *scene = new QGraphicsScene(view);
   view->setContextMenuPolicy(Qt::NoContextMenu);
@@ -390,6 +391,7 @@ void QuteGraph::addCurve(Curve * curve)
 
 int QuteGraph::getCurveIndex(Curve * curve)
 {
+  Q_ASSERT(curve != 0);
   int index = -1;
   for (int i = 0; i < curves.size(); i++) {
     if (curves[i] == curve) {
@@ -403,8 +405,9 @@ int QuteGraph::getCurveIndex(Curve * curve)
 
 void QuteGraph::setCurveData(Curve * curve)
 {
-//  qDebug("QuteGraph::setCurveData %i", index);
+  Q_ASSERT(curve != 0);
   int index = getCurveIndex(curve);
+//  qDebug() << "QuteGraph::setCurveData " << index << curve;
   if (index >= curves.size() || index < 0) {
     return;
   }
@@ -471,6 +474,7 @@ void QuteGraph::applyInternalProperties()
 void QuteGraph::drawCurve(Curve * curve, int index)
 {
 //  bool live = curve->getOriginal() != 0;
+  Q_ASSERT(index >= 0);
   QString caption = curve->get_caption();
 //  qDebug() << "QuteGraph::drawCurve" << caption << curve->getOriginal() << curve->get_size() << curve->getOriginal()->npts;
   if (caption.isEmpty()) {

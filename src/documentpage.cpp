@@ -1037,10 +1037,10 @@ int DocumentPage::play(CsoundOptions *options)
     return runPython();
   }
   if (!m_csEngine->isRunning()) {
-    m_widgetLayout->clearGraphs();
     m_view->unmarkErrorLines();  // Clear error lines when running
 //    m_console->reset(); // Clear consoles
     m_widgetLayout->flush();   // Flush accumulated values
+    m_widgetLayout->clearGraphs();
   }
   return m_csEngine->play(options);
 }

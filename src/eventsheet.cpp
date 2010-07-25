@@ -374,7 +374,7 @@ void EventSheet::sendEvents()
 void EventSheet::sendAllEvents()
 {
   for (int i = 0; i < this->rowCount(); i++) {
-    qDebug() << "EventSheet::sendAllEvents() " << i;
+//    qDebug() << "EventSheet::sendAllEvents() " << i;
     emit sendEvent(getLine(i, true, true, true));  // With tempo scaling
   }
 }

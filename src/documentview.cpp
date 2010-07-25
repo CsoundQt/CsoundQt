@@ -90,8 +90,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   syntaxMenu->setPalette(p);
   connect(syntaxMenu,SIGNAL(keyPressed(QString)),
           mainEditor, SLOT(insertPlainText(QString)));
-  connect(syntaxMenu,SIGNAL(aboutToHide()),
-          this, SLOT(destroySyntaxMenu()));
+//  connect(syntaxMenu,SIGNAL(aboutToHide()),
+//          this, SLOT(destroySyntaxMenu()));
 
   setAcceptDrops(true);
 }
@@ -418,9 +418,9 @@ void DocumentView::textChanged()
         ) {
         QVector<Opcode> syntax = m_opcodeTree->getPossibleSyntax(word);
         if (syntax.size() > 0) {
-          //if (syntaxMenu == 0) {
-          //  createSyntaxMenu();
-          //}
+//          if (syntaxMenu == 0) {
+//            createSyntaxMenu();
+//          }
           syntaxMenu->show();
           syntaxMenu->clear();
           bool allEqual = true;
@@ -455,7 +455,7 @@ void DocumentView::textChanged()
             }
             a->setData(syntaxText);
           }
-          if (!allEqual) {
+          if (!allEqual && syntax.size() > 0) {
             QRect r =  mainEditor->cursorRect();
             QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
             QPoint globalPoint =  mainEditor->mapToGlobal(p);

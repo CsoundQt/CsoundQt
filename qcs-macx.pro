@@ -27,6 +27,15 @@ DEFAULT_LIBSNDFILE_LIBRARY_DIRS = /usr/local/lib \
 DEFAULT_CSOUND_LIBS = CsoundLib
 CSND_LIB = lib_csnd.dylib
 LIBSNDFILE_LIB = libsndfile.dylib
+
+pythonqt {
+DEFAULT_PYTHONQT_INCLUDE_DIRS = /usr/local/include \
+    /usr/include
+DEFAULT_PYTHONQT_LIBRARY_DIRS = /usr/local/lib \
+    /usr/lib
+PYTHONQT_LIB = libPythonQt_QtAll.dylib
+}
+
 include(config.pri)
 INCLUDEPATH += $${CSOUND_INCLUDE_DIR} $${LIBSNDFILE_INCLUDE_DIR}
 LIBS += -L$${CSOUND_LIBRARY_DIR} -L$${LIBSNDFILE_LIBRARY_DIR}

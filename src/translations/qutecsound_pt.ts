@@ -5,11 +5,11 @@
     <name>About</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogo</translation>
     </message>
     <message>
         <source>QuteCsound</source>
-        <translation type="unfinished">QuteCsound</translation>
+        <translation>QuteCsound</translation>
     </message>
 </context>
 <context>
@@ -436,108 +436,108 @@
     </message>
     <message>
         <source>Jack client name (use * for current filename)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome do cliente Jack (use * for nome corrente de arquivo)</translation>
     </message>
     <message>
         <source>Favorite dir</source>
-        <translation type="unfinished"></translation>
+        <translation>Diretorio favorito</translation>
     </message>
     <message>
         <source>Python Script Dir </source>
-        <translation type="unfinished"></translation>
+        <translation>Diretorio de scripts Python</translation>
     </message>
     <message>
         <source>Enabled</source>
         <comment>Virtual MIDI keyboard Enabled</comment>
-        <translation type="unfinished"></translation>
+        <translation>Habilitado</translation>
     </message>
     <message>
         <source>Allow simultaneous play (May have problems with portmidi,coreaudio, and alsa audio) </source>
-        <translation type="unfinished"></translation>
+        <translation>Tocar simultaneo (pode apresentar problemas com portmidi, coreaudio e alsa)</translation>
     </message>
     <message>
         <source>Debug mode for Live Event Sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo de debug para lista de eventos ao vivo</translation>
     </message>
     <message>
         <source>Autocomplete menu while typing</source>
-        <translation type="unfinished"></translation>
+        <translation>Menu de autocompletamentacao enquanto digitando</translation>
     </message>
     <message>
         <source>Behavior</source>
-        <translation type="unfinished"></translation>
+        <translation>Comportamento</translation>
     </message>
     <message>
         <source>Log file</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivo de log</translation>
     </message>
     <message>
         <source>Store Old Widget Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Guarde formato de widgets antigo</translation>
     </message>
     <message>
         <source>Open Properties when creating widget</source>
-        <translation type="unfinished"></translation>
+        <translation>abra janela de propriedades quando criar widget</translation>
     </message>
     <message>
         <source>Font scaling</source>
-        <translation type="unfinished"></translation>
+        <translation>Escala de fontes</translation>
     </message>
     <message>
         <source>Font offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Offset de fontes</translation>
     </message>
     <message>
         <source>Line Ending Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo de terminacao de linha</translation>
     </message>
     <message>
         <source>Unix (LF)</source>
-        <translation type="unfinished"></translation>
+        <translation>Unix (LF)</translation>
     </message>
     <message>
         <source>Windows (CR+LF)</source>
-        <translation type="unfinished"></translation>
+        <translation>Windows (CR+LF)</translation>
     </message>
     <message>
         <source>Show Toolbars</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar barras de ferramenta</translation>
     </message>
     <message>
         <source>Python Executable</source>
-        <translation type="unfinished"></translation>
+        <translation>Executavel de Python</translation>
     </message>
     <message>
         <source>Make the widget panel visible when a csd is played</source>
-        <translation type="unfinished"></translation>
+        <translation>Fazer o painel de widgets visivel quando um csd e&apos; tocado</translation>
     </message>
     <message>
         <source>Store old widget format section in csd file, to allow older versions of QuteCsound to load most of the widget characteristics from the file</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar o formato antigo de widgets em arquivo csd, para possibilitar versoes antigas de QuteCsound carregarem a maioria das caracteristicas das widgets do arquivo</translation>
     </message>
     <message>
         <source>Automatically open properties dialog when a new widget is created</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir a janela de propriedades quando uma nova widget e&apos; criada</translation>
     </message>
     <message>
         <source>Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <source>csd Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Forma de csd</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Default</translation>
     </message>
     <message>
         <source>Automatically Join orc/sco files</source>
-        <translation type="unfinished"></translation>
+        <translation>Juntar orc/sco automaticamente</translation>
     </message>
 </context>
 <context>
@@ -552,7 +552,7 @@
     <message>
         <source>Csound is not running! Event ignored.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Csound nao esta&apos; rodando! Evento ignorado.</translation>
     </message>
 </context>
 <context>
@@ -563,7 +563,7 @@
     </message>
     <message>
         <source>Output Console</source>
-        <translation type="unfinished">Console</translation>
+        <translation>Console</translation>
     </message>
 </context>
 <context>
@@ -589,23 +589,23 @@
     <name>DocumentPage</name>
     <message>
         <source>QuteCsound</source>
-        <translation type="unfinished">QuteCsound</translation>
+        <translation>QuteCsound</translation>
     </message>
     <message>
         <source>You must save the examples to use Record.</source>
-        <translation type="unfinished">Você precisa salvar os exemplos antes de gravar</translation>
+        <translation>Você precisa salvar os exemplos antes de gravar</translation>
     </message>
 </context>
 <context>
     <name>DocumentView</name>
     <message>
         <source>Find and replace</source>
-        <translation type="unfinished">Achar e substituir</translation>
+        <translation>Achar e substituir</translation>
     </message>
     <message>
         <source>The string was not found.
 Would you like to start from the top?</source>
-        <translation type="unfinished">O texto não foi encontrado. Começar do topo?</translation>
+        <translation>O texto não foi encontrado. Começar do topo?</translation>
     </message>
 </context>
 <context>
@@ -872,95 +872,95 @@ Would you like to start from the top?</source>
     </message>
     <message>
         <source>Python Scripts</source>
-        <translation type="unfinished"></translation>
+        <translation>Scripts Python</translation>
     </message>
     <message>
         <source>Error running script</source>
-        <translation type="unfinished"></translation>
+        <translation>Erro executando script</translation>
     </message>
     <message>
         <source>Conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>Conversao</translation>
     </message>
     <message>
         <source>Tests</source>
-        <translation type="unfinished"></translation>
+        <translation>Testes</translation>
     </message>
     <message>
         <source>&amp;Send Events</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar eventos</translation>
     </message>
     <message>
         <source>&amp;Send Events without offset</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Enviar eventos sem offset</translation>
     </message>
     <message>
         <source>Send Events to Csound without offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar eventos para Csound sem offset</translation>
     </message>
     <message>
         <source>Send Events no offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar eventos sem offset</translation>
     </message>
     <message>
         <source>Delete Selected Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar a Seleção</translation>
     </message>
     <message>
         <source>Delete Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar linha</translation>
     </message>
     <message>
         <source>Stop running script</source>
-        <translation type="unfinished"></translation>
+        <translation>Parar de executar script</translation>
     </message>
     <message>
         <source>Add columns:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Add Rows:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&amp;Loop Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecao de Loop</translation>
     </message>
     <message>
         <source>Mark loop to current selection and start looping</source>
-        <translation type="unfinished"></translation>
+        <translation>Marcar a selecao corrente como loop e comecar a executar loop</translation>
     </message>
     <message>
         <source>Loop Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Loop ativo</translation>
     </message>
     <message>
         <source>Activate Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Ativar loop</translation>
     </message>
     <message>
         <source>Mark Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Marcar loop</translation>
     </message>
     <message>
         <source>Set Loop to selection, without starting loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Marcar a selecao como loop, sem comecar a executar o loop</translation>
     </message>
     <message>
         <source>Append Columns...</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar colunas ao final</translation>
     </message>
     <message>
         <source>Append columns to the sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar coluna ao final da tabela</translation>
     </message>
     <message>
         <source>Append Rows...</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar linha</translation>
     </message>
     <message>
         <source>Append rows to the sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar linha ao final tabela</translation>
     </message>
 </context>
 <context>
@@ -1101,19 +1101,19 @@ Would you like to start from the top?</source>
     </message>
     <message>
         <source>Macros</source>
-        <translation type="unfinished"></translation>
+        <translation>Macros</translation>
     </message>
     <message>
         <source>Imports</source>
-        <translation type="unfinished"></translation>
+        <translation>Importes</translation>
     </message>
     <message>
         <source>Classes</source>
-        <translation type="unfinished"></translation>
+        <translation>Classes</translation>
     </message>
     <message>
         <source>Functions</source>
-        <translation type="unfinished"></translation>
+        <translation>Funções</translation>
     </message>
 </context>
 <context>
@@ -1195,63 +1195,63 @@ It is already used.</source>
     <message>
         <source>LE Controller</source>
         <extracomment>(Live Event Controller)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Controlador de Eventos ao Vivo</translation>
     </message>
     <message>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Tocar</translation>
+        <translation>Tocar</translation>
     </message>
     <message>
         <source>Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Loop</translation>
     </message>
     <message>
         <source>Sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Sincronizar</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Loop length</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamanho do Loop</translation>
     </message>
     <message>
         <source>Loop Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Gama do loop</translation>
     </message>
     <message>
         <source>Tempo</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Novo</translation>
+        <translation>Novo</translation>
     </message>
     <message>
         <source>Stop All</source>
-        <translation type="unfinished"></translation>
+        <translation>Parar tudo</translation>
     </message>
     <message>
         <source>Loop start</source>
-        <translation type="unfinished"></translation>
+        <translation>Comeco do Loop</translation>
     </message>
     <message>
         <source>Loop end</source>
-        <translation type="unfinished"></translation>
+        <translation>Fim do Loop</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished">Ok</translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
@@ -1306,16 +1306,16 @@ It is already used.</source>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Formulario</translation>
     </message>
     <message>
         <source>Mark Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Marcar Loop</translation>
     </message>
     <message>
         <source>Enter new name</source>
         <comment>New name for Live Event panel</comment>
-        <translation type="unfinished"></translation>
+        <translation>Entrar novo nome</translation>
     </message>
 </context>
 <context>
@@ -1326,7 +1326,7 @@ It is already used.</source>
     </message>
     <message>
         <source>Select File(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione Arquivo</translation>
     </message>
 </context>
 <context>
@@ -1346,7 +1346,7 @@ It is already used.</source>
     <message>
         <source>all</source>
         <comment>meaning &apos;all&apos; channels in scope, must be very short (4 letter max)</comment>
-        <translation type="unfinished">tudo</translation>
+        <translation>todos</translation>
     </message>
     <message>
         <source>  dec:</source>
@@ -1356,57 +1356,57 @@ It is already used.</source>
     <message>
         <source>None</source>
         <comment>meaning &apos;no&apos; channels in scope, must be very short (4 letter max)</comment>
-        <translation type="unfinished">Nenhum</translation>
+        <translation>Zero</translation>
     </message>
 </context>
 <context>
     <name>QuteText</name>
     <message>
         <source>Text:</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto:</translation>
     </message>
     <message>
         <source>Text Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Cor do texto</translation>
     </message>
     <message>
         <source>Background Color</source>
-        <translation type="unfinished">Cor de Fundo</translation>
+        <translation>Cor de Fundo</translation>
     </message>
     <message>
         <source>Font</source>
-        <translation type="unfinished">Fonte</translation>
+        <translation>Fonte</translation>
     </message>
     <message>
         <source>Font Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamanho de Fonte</translation>
     </message>
     <message>
         <source>Border Radius</source>
-        <translation type="unfinished"></translation>
+        <translation>Raio da borda</translation>
     </message>
     <message>
         <source>Border Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Largura da borda</translation>
     </message>
     <message>
         <source>Alignment</source>
-        <translation type="unfinished"></translation>
+        <translation>Alinhamento</translation>
     </message>
     <message>
         <source>Left</source>
         <comment>Alignment</comment>
-        <translation type="unfinished"></translation>
+        <translation>Esquerda</translation>
     </message>
     <message>
         <source>Center</source>
         <comment>Alignment</comment>
-        <translation type="unfinished"></translation>
+        <translation>Centro</translation>
     </message>
     <message>
         <source>Right</source>
         <comment>Alignment</comment>
-        <translation type="unfinished"></translation>
+        <translation>Direita</translation>
     </message>
 </context>
 <context>
@@ -1446,11 +1446,11 @@ It is already used.</source>
     <message>
         <source>Create New</source>
         <comment>Menu name in widget right-click menu</comment>
-        <translation type="unfinished"></translation>
+        <translation>Criar nova</translation>
     </message>
     <message>
         <source>Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Presets</translation>
     </message>
 </context>
 <context>
@@ -1836,111 +1836,111 @@ It is already used.</source>
     <name>WidgetLayout</name>
     <message>
         <source>Create Slider</source>
-        <translation type="unfinished">Criar Slider</translation>
+        <translation>Criar Slider</translation>
     </message>
     <message>
         <source>Create Label</source>
-        <translation type="unfinished">Criar rótulo</translation>
+        <translation>Criar rótulo</translation>
     </message>
     <message>
         <source>Create Display</source>
-        <translation type="unfinished">Criar Display</translation>
+        <translation>Criar Display</translation>
     </message>
     <message>
         <source>Create ScrollNumber</source>
-        <translation type="unfinished">Criar ScrollNumber</translation>
+        <translation>Criar ScrollNumber</translation>
     </message>
     <message>
         <source>Create LineEdit</source>
-        <translation type="unfinished">Criar LineEdit</translation>
+        <translation>Criar LineEdit</translation>
     </message>
     <message>
         <source>Create SpinBox</source>
-        <translation type="unfinished">Criar SpinBox</translation>
+        <translation>Criar SpinBox</translation>
     </message>
     <message>
         <source>Create Button</source>
-        <translation type="unfinished">Criar Botão</translation>
+        <translation>Criar Botão</translation>
     </message>
     <message>
         <source>Create Knob</source>
-        <translation type="unfinished">Criar potenciômetro</translation>
+        <translation>Criar potenciômetro</translation>
     </message>
     <message>
         <source>Create Checkbox</source>
-        <translation type="unfinished">Criar Caixa-de-tique</translation>
+        <translation>Criar Caixa-de-tique</translation>
     </message>
     <message>
         <source>Create Menu</source>
-        <translation type="unfinished">Criar Menu</translation>
+        <translation>Criar Menu</translation>
     </message>
     <message>
         <source>Create Controller</source>
-        <translation type="unfinished">Criar Controlador</translation>
+        <translation>Criar Controlador</translation>
     </message>
     <message>
         <source>Create Console</source>
-        <translation type="unfinished">Criar Console</translation>
+        <translation>Criar Console</translation>
     </message>
     <message>
         <source>Create Graph</source>
-        <translation type="unfinished">Criar Gráfico</translation>
+        <translation>Criar Gráfico</translation>
     </message>
     <message>
         <source>Create Scope</source>
-        <translation type="unfinished">Criar Osciloscópio</translation>
+        <translation>Criar Osciloscópio</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation type="unfinished">Propriedades</translation>
+        <translation>Propriedades</translation>
     </message>
     <message>
         <source>Duplicate Selected</source>
-        <translation type="unfinished">Duplicar a Seleção</translation>
+        <translation>Duplicar a Seleção</translation>
     </message>
     <message>
         <source>Delete Selected</source>
-        <translation type="unfinished">Apagar a Seleção</translation>
+        <translation>Apagar a Seleção</translation>
     </message>
     <message>
         <source>Clear all widgets</source>
-        <translation type="unfinished">Apagar todas as Widgets</translation>
+        <translation>Apagar todas as Widgets</translation>
     </message>
     <message>
         <source>Select all widgets</source>
-        <translation type="unfinished">Selecionar todas as Widgets</translation>
+        <translation>Selecionar todas as Widgets</translation>
     </message>
     <message>
         <source>Align Left</source>
-        <translation type="unfinished">alinhar à esquerda</translation>
+        <translation>alinhar à esquerda</translation>
     </message>
     <message>
         <source>Align Right</source>
-        <translation type="unfinished">alinhar à direita</translation>
+        <translation>alinhar à direita</translation>
     </message>
     <message>
         <source>Align Top</source>
-        <translation type="unfinished">alinhar ao topo</translation>
+        <translation>alinhar ao topo</translation>
     </message>
     <message>
         <source>Align Bottom</source>
-        <translation type="unfinished">alinhar abaixo</translation>
+        <translation>alinhar abaixo</translation>
     </message>
     <message>
         <source>Send to back</source>
-        <translation type="unfinished">Mandar para o fundo</translation>
+        <translation>Mandar para o fundo</translation>
     </message>
     <message>
         <source>Distribute Horizontally</source>
-        <translation type="unfinished">Distribuir horizontalmente</translation>
+        <translation>Distribuir horizontalmente</translation>
     </message>
     <message>
         <source>Distribute Vertically</source>
-        <translation type="unfinished">Distribuir verticalmente</translation>
+        <translation>Distribuir verticalmente</translation>
     </message>
     <message>
         <source>ChannelV:</source>
-        <translation type="unfinished">CanallV:</translation>
+        <translation>CanallV:</translation>
     </message>
     <message>
         <source>
@@ -1950,111 +1950,111 @@ CanallH:</translation>
     </message>
     <message>
         <source>Channel:</source>
-        <translation type="unfinished">Canal</translation>
+        <translation>Canal</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation type="unfinished">Aplicar</translation>
+        <translation>Aplicar</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished">Ok</translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <source>Center Vertically</source>
-        <translation type="unfinished"></translation>
+        <translation>Centrar Verticalmente</translation>
     </message>
     <message>
         <source>Center Horizontally</source>
-        <translation type="unfinished"></translation>
+        <translation>Centrar Horizontalmente</translation>
     </message>
     <message>
         <source>Store Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar Preset</translation>
     </message>
     <message>
         <source>New Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Novo Preset</translation>
     </message>
     <message>
         <source>Recall Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Recall Preset</translation>
     </message>
     <message>
         <source>More than one panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Mais que um painel</translation>
     </message>
     <message>
         <source>The csd file contains more than one widget panel!
 This is not suported by the current version,
 Addtional widget panels will be lost if the file is saved!</source>
-        <translation type="unfinished"></translation>
+        <translation>Este CSD contain mais que um painel de widgets, Isto nao e&apos; suportado nesta versao. Paineis adicionais serao perdidos se o arquivo for salvo</translation>
     </message>
     <message>
         <source>Unrecognized wigdet format</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato de widgets nao reconhecido</translation>
     </message>
     <message>
         <source>There is unrecognized widget information in the file!
 It may be saved with errors.</source>
-        <translation type="unfinished"></translation>
+        <translation>Informacoes nao reconhecidas sobre widgets no arquivo : sera&apos; salvo com erros</translation>
     </message>
     <message>
         <source>Newer Widget Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Novo format de widgets</translation>
     </message>
     <message>
         <source>The file was was saved by a more recent version of QuteCsound.
 Some features may not be available and will not be saved!</source>
-        <translation type="unfinished"></translation>
+        <translation>Este arquivo foi salvo por uma versao mais recente do programa. Alguns elementos poderao nao estar disponiveis e nao serao salvos</translation>
     </message>
     <message>
         <source>ChannelH:</source>
-        <translation type="unfinished"></translation>
+        <translation>CanalH:</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>Fechar</translation>
     </message>
     <message>
         <source>New Preset Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Novo Nome de Preset</translation>
     </message>
     <message>
         <source>Number:</source>
-        <translation type="unfinished"></translation>
+        <translation>Numero:</translation>
     </message>
     <message>
         <source>Preset Already Exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset ja&apos; existe</translation>
     </message>
     <message>
         <source>Preset %i already exists. Overwrite?</source>
-        <translation type="unfinished"></translation>
+        <translation>Presete %i ja&apos; existe. Re-escrever?</translation>
     </message>
     <message>
         <source>Select Preset to save</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecionar Preset para salvar</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation type="unfinished">Cortar</translation>
+        <translation>Cortar</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Copiar</translation>
+        <translation>Copiar</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation type="unfinished">Colar</translation>
+        <translation>Colar</translation>
     </message>
     <message>
         <source>Double-click Preset to Load</source>
-        <translation type="unfinished"></translation>
+        <translation>Clique duplo no Preset para carregar</translation>
     </message>
 </context>
 <context>
@@ -3150,231 +3150,237 @@ Francesco
     </message>
     <message>
         <source>Internal error running Csound.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erro interno executando Csound</translation>
     </message>
     <message>
         <source>Ctrl+.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+.</translation>
     </message>
     <message>
         <source>Ctrl+/</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+/</translation>
     </message>
     <message>
         <source>Shift+Ctrl+/</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Ctrl+/</translation>
     </message>
     <message>
         <source>Widget Edit Mode</source>
-        <translation type="unfinished">Modo de Edição de Widgets</translation>
+        <translation>Modo de Edição de Widgets</translation>
     </message>
     <message>
         <source>Activate Edit Mode for Widget Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo de Edição Ativo de Widgets</translation>
     </message>
     <message>
         <source>Stop All</source>
-        <translation type="unfinished"></translation>
+        <translation>Parar tudo</translation>
     </message>
     <message>
         <source>Stop all running documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Parar a execucao de todos os documentos </translation>
     </message>
     <message>
         <source>Favorites</source>
-        <translation type="unfinished"></translation>
+        <translation>Favoritos</translation>
     </message>
     <message>
         <source>by: Andres Cabrera and others</source>
-        <translation type="unfinished"></translation>
+        <translation>por: Andres Cabrera e outros</translation>
     </message>
     <message>
         <source>Version %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Versao:%1</translation>
     </message>
     <message>
         <source>Released under the LGPLv2 or GPLv3</source>
-        <translation type="unfinished"></translation>
+        <translation>Lancado usando LGPLv2 or GPLv3</translation>
     </message>
     <message>
         <source>French translation: Fran&amp;ccedil;ois Pinot</source>
-        <translation type="unfinished"></translation>
+        <translation>Tradução francesa: Francois Pinot</translation>
     </message>
     <message>
         <source>German translation: Joachim Heintz</source>
-        <translation type="unfinished"></translation>
+        <translation>Tradução alemã:
+Joachim Heintz
+</translation>
     </message>
     <message>
         <source>Portuguese translation: Victor Lazzarini</source>
-        <translation type="unfinished"></translation>
+        <translation>Tradução portuguesa: Victor Lazzarini</translation>
     </message>
     <message>
         <source>Italian translation: Francesco</source>
-        <translation type="unfinished"></translation>
+        <translation>Tradução italiana: Francesco</translation>
     </message>
     <message>
         <source>Turkish translation: Ali Isciler</source>
-        <translation type="unfinished"></translation>
+        <translation>Tradução Turca: Ali Isciler</translation>
     </message>
     <message>
         <source>If you find QuteCsound useful, please consider donating to the project:</source>
-        <translation type="unfinished"></translation>
+        <translation>Por favor considere um donativo ao projeto</translation>
     </message>
     <message>
         <source>Please file bug reports and feature suggestions in the </source>
-        <translation type="unfinished"></translation>
+        <translation>Reporte bugs em</translation>
     </message>
     <message>
         <source>QuteCsound tracker</source>
-        <translation type="unfinished"></translation>
+        <translation>Tracker QuteCsound</translation>
     </message>
     <message>
         <source>Mailing Lists:</source>
-        <translation type="unfinished"></translation>
+        <translation>Listas de e-mail</translation>
     </message>
     <message>
         <source>Other Resources:</source>
-        <translation type="unfinished"></translation>
+        <translation>Outros recursos</translation>
     </message>
     <message>
         <source>Supported by:</source>
-        <translation type="unfinished"></translation>
+        <translation>Suportado por</translation>
     </message>
     <message>
         <source>And other generous users.</source>
-        <translation type="unfinished"></translation>
+        <translation>E outros usuarios generosos</translation>
     </message>
     <message>
         <source>Donate to QuteCsound</source>
-        <translation type="unfinished"></translation>
+        <translation>Doe para QuteCsound</translation>
     </message>
     <message>
         <source>Donate to support development of QuteCsound</source>
-        <translation type="unfinished"></translation>
+        <translation>Doe para suportar desenvolvimento futuro</translation>
     </message>
     <message>
         <source>Language Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Recursos de linguagem</translation>
     </message>
     <message>
         <source>Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco);;Python Files (*.py);;All Files (*)</source>
         <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos conhecidos (*.csd *.orc *.sco *.py);;arquivos Csound (*.csd *.orc *.sco);;arquivos Python (*.py);;todos os arquivos (*)</translation>
     </message>
     <message>
         <source>Reset Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetar as preferencias</translation>
     </message>
     <message>
         <source>Are you sure you want to revert QuteCsound&apos;s preferences
 to their initial default values? </source>
-        <translation type="unfinished"></translation>
+        <translation>Tem certeza que voce quer voltar as preferencias iniciais?</translation>
     </message>
     <message>
         <source>Preferences have been reset.
 You must restart QuteCsound.</source>
-        <translation type="unfinished"></translation>
+        <translation>As preferencias foram reiniciadas. Voce deve reabrir o programa.</translation>
     </message>
     <message>
         <source>Reset QuteCsound&apos;s preferences to their original default state</source>
-        <translation type="unfinished"></translation>
+        <translation>Recolocar as preferencias em seu estado original</translation>
     </message>
     <message>
         <source>Alt+7</source>
-        <translation type="unfinished">Alt+7</translation>
+        <translation>Alt+7</translation>
     </message>
     <message>
         <source>New widget format</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>  This version of QuteCsound implements a new format for storing widgets, which enables many of the new widget features you will find now.
   The old format is still read and saved, so you will be able to open files in older versions but some of the features will not be passed to older versions.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Esta versao do programa implementa um novo format de widgets. O formato antigo ainda e&apos; lido e salvo.</translation>
     </message>
     <message>
         <source>Full Path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Path completo:</translation>
     </message>
     <message>
         <source>Number of lines (Csound Text):</source>
-        <translation type="unfinished"></translation>
+        <translation>Numero de linhas (texto de Csound):</translation>
     </message>
     <message>
         <source>Number of characters (Csound Text):</source>
-        <translation type="unfinished"></translation>
+        <translation>Numero de caracteres (texo de Csound):</translation>
     </message>
     <message>
         <source>Number of lines (total):</source>
-        <translation type="unfinished"></translation>
+        <translation>Numero de linhas (total):</translation>
     </message>
     <message>
         <source>Number of characters (total):</source>
-        <translation type="unfinished"></translation>
+        <translation>Numero de caracteres (total):</translation>
     </message>
     <message>
         <source>Number of instruments:</source>
-        <translation type="unfinished"></translation>
+        <translation>Numero de instrumentos:</translation>
     </message>
     <message>
         <source>Number of UDOs:</source>
-        <translation type="unfinished"></translation>
+        <translation>Numerod de UDOs:</translation>
     </message>
     <message>
         <source>File Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informacao sobre arquivo</translation>
     </message>
     <message>
         <source>Ctrl+Alt+F</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+F</translation>
     </message>
     <message>
         <source>F11</source>
-        <translation type="unfinished"></translation>
+        <translation>F11</translation>
     </message>
     <message>
         <source>Show information for the current file</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostre informacao sonbre o arquivo corrente</translation>
     </message>
     <message>
         <source>Opcode Quick Reference</source>
-        <translation type="unfinished"></translation>
+        <translation>Referencia rapida de opcodes</translation>
     </message>
     <message>
         <source>Show opcode quick reference page</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostre a referencia rapida de opcodes</translation>
     </message>
     <message>
         <source>View Full Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Ver em tela cheia</translation>
     </message>
     <message>
         <source>Have QuteCsound occupy all the available screen space</source>
-        <translation type="unfinished"></translation>
+        <translation>Fazer o programa ocupar toda a tela</translation>
     </message>
     <message>
         <source>Ctrl+K</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+K</translation>
     </message>
     <message>
         <source>Shift+Ctrl+K</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Ctrl+K</translation>
     </message>
     <message>
         <source>Kill Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Matar a linha</translation>
     </message>
     <message>
         <source>Kill to End of Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Matar ate&apos; o fim da linha</translation>
     </message>
     <message>
         <source>Delete everything from cursor to the end of the current line</source>
-        <translation type="unfinished"></translation>
+        <translation>Deletar tudo do cursor ao fim da linha</translation>
     </message>
     <message>
         <source>Completely delete current line</source>
+        <translation>Deletar completamente a linha corrente</translation>
+    </message>
+    <message>
+        <source>Number of Widgets:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -18,6 +18,7 @@
 ###############################################################################
 # BUILD OPTIONS:
 # CONFIG+=build64    To build doubles version
+# CONFIG+=pythonqt   To build with PythonQt support
 #
 # OS X only OPTIONS:
 # CONFIG+=intel         To build intel only version (Universal is the default)

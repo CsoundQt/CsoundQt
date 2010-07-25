@@ -23,7 +23,7 @@
 #ifndef QUTECSOUND_H
 #define QUTECSOUND_H
 
-#define QCS_VERSION "0.6.0-beta"
+#define QCS_VERSION "0.6.0"
 
 #include <QtGui>
 

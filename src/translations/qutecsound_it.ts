@@ -3389,5 +3389,9 @@ You must restart QuteCsound.</source>
         <source>Completely delete current line</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Number of Widgets:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

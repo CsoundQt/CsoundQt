@@ -42,24 +42,6 @@
 
 #include "qutecsound.h" // For passing the actions from button reserved channels
 
-#ifdef Q_OS_LINUX
-#define LAYOUT_X_OFFSET 0
-#define LAYOUT_Y_OFFSET 0
-#endif
-#ifdef Q_OS_SOLARIS
-#define LAYOUT_X_OFFSET 0
-#define LAYOUT_Y_OFFSET 0
-#endif
-#ifdef Q_OS_MAC
-#define LAYOUT_X_OFFSET 0
-#define LAYOUT_Y_OFFSET 0
-#endif
-#ifdef Q_OS_WIN32
-#define LAYOUT_X_OFFSET 0
-#define LAYOUT_Y_OFFSET 0
-#endif
-
-
 WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 {
   selectionFrame = new QRubberBand(QRubberBand::Rectangle, this);
@@ -76,6 +58,9 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   closing = 0;
   xOffset = yOffset = 0;
   m_contained = false;
+
+  curveUpdateBuffer.resize(QCS_CURVE_BUFFER_SIZE);
+  curveUpdateBufferCount = 0;
 
   createSliderAct = new QAction(tr("Create Slider"),this);
   connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createNewSlider()));
@@ -161,7 +146,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   m_visible = true;
 
   updateData(); // Starts updataData timer
-  qDebug() << "WidgetLayout::WidgetLayout " << this << " updateTimer " << &updateTimer;
+//  qDebug() << "WidgetLayout::WidgetLayout " << this << " updateTimer " << &updateTimer;
 }
 
 WidgetLayout::~WidgetLayout()
@@ -917,7 +902,7 @@ void WidgetLayout::flush()
 
 void WidgetLayout::engineStopped()
 {
-//  curveUpdateBuffer.clear();
+  flushGraphBuffer();
 }
 
 void WidgetLayout::showWidgetTooltips(bool show)
@@ -1067,13 +1052,20 @@ void WidgetLayout::appendCurve(WINDAT *windat)
                     windat);  //FIXME delete these when starting a new run
     windat->windid = (uintptr_t) curve;
     newCurveBuffer.append(curve);
+//    qDebug() << "WidgetLayout::appendCurve " << curve << "__--__" << windat;
   }
   else {
     qDebug() << "WidgetLayout::appendCurve reusing curve buffer " <<indexInBuffer;
     newCurveBuffer[indexInBuffer]->set_data(windat->fdata);
     newCurveBuffer[indexInBuffer]->setOriginal(windat);
   }
-//  qDebug() << "WidgetLayout::appendCurve " << curve << "__--__" << windat;
+}
+
+void WidgetLayout::killCurve(WINDAT *windat)
+{
+  qDebug() << "WidgetLayout::killCurve()";
+  Curve *curve = (Curve *) getCurveById(windat->windid);
+  curve->setOriginal(0);
 }
 
 void WidgetLayout::newCurve(Curve* curve)
@@ -1086,10 +1078,10 @@ void WidgetLayout::newCurve(Curve* curve)
 //    }
 //  }
 
+  curves.append(curve);
   for (int i = 0; i < graphWidgets.size(); i++) {
     graphWidgets[i]->addCurve(curve);
   }
-  curves.append(curve);
 }
 
 void WidgetLayout::setCurveData(Curve *curve)
@@ -1118,12 +1110,11 @@ uintptr_t WidgetLayout::getCurveById(uintptr_t id)
 
 void WidgetLayout::updateCurve(WINDAT *windat)
 {
-//  qDebug() << "WidgetLayout::updateCurve(WINDAT *windat) ";
-  // FIXME is it possible to avoid allocating memory here?
-  // When f-tables are created in the same k-period, this function will be called very quickly together, so a new windat must be created for each...
-  WINDAT *windat_ = (WINDAT *) malloc(sizeof(WINDAT));
-  *windat_ = *windat;
-  curveUpdateBuffer.append(windat_);
+//  qDebug() << "WidgetLayout::updateCurve(WINDAT *windat) " << windat->windid;
+  if (curveUpdateBufferCount < QCS_CURVE_BUFFER_SIZE) {
+    curveUpdateBufferCount++;
+    curveUpdateBuffer[curveUpdateBufferCount] = *windat;
+  }
 }
 
 
@@ -1153,21 +1144,26 @@ int WidgetLayout::killCurves(CSOUND */*csound*/)
 void WidgetLayout::clearGraphs()
 {
 //  qDebug() << "WidgetLayout::clearGraphs() ";
+  flushGraphBuffer();
   for (int i = 0; i < graphWidgets.size(); i++) {
     graphWidgets[i]->clearCurves();
-  }
-  while (curveUpdateBuffer.size() > 0) {
-    WINDAT * w = curveUpdateBuffer.takeFirst();
-    free(w);
-  }
-  while (newCurveBuffer.size() > 0) {
-    Curve * c = newCurveBuffer.takeFirst();
-    delete c;
   }
   while (curves.size() > 0) {
     Curve * c = curves.takeFirst();
     delete c;
   }
+//  qDebug() << "WidgetLayout::clearGraphs() done";
+}
+
+void WidgetLayout::flushGraphBuffer()
+{
+  layoutMutex.lock();
+  while (newCurveBuffer.size() > 0) {
+    Curve * c = newCurveBuffer.takeFirst();
+    delete c;
+  }
+  curveUpdateBufferCount = 0;
+  layoutMutex.unlock();
 }
 
 void WidgetLayout::refreshConsoles()
@@ -1982,8 +1978,8 @@ void WidgetLayout::mousePressEvent(QMouseEvent *event)
   if (m_editMode && (event->button() & Qt::LeftButton)) {
     this->setFocus(Qt::MouseFocusReason);
     selectionFrame->show();
-    startx = event->x() - LAYOUT_X_OFFSET + xOffset;
-    starty = event->y() - LAYOUT_Y_OFFSET + yOffset;
+    startx = event->x() + xOffset;
+    starty = event->y() + yOffset;
     selectionFrame->setGeometry(startx, starty, 0,0);
     if (event->button() & Qt::LeftButton) {
       deselectAll();
@@ -2005,8 +2001,8 @@ void WidgetLayout::mouseMoveEvent(QMouseEvent *event)
 //  QWidget::mouseMoveEvent(event);
   int x = startx;
   int y = starty;
-  int width = abs(event->x() - startx - LAYOUT_X_OFFSET + xOffset);
-  int height = abs(event->y() - starty - LAYOUT_Y_OFFSET + yOffset);
+  int width = abs(event->x() - startx + xOffset);
+  int height = abs(event->y() - starty + yOffset);
   if (event->buttons() & Qt::LeftButton) {  // Currently dragging selection
     if (event->x() < startx) {
       x = event->x() + xOffset;
@@ -3337,13 +3333,6 @@ void WidgetLayout::redo()
   }
 }
 
-void WidgetLayout::killCurve(WINDAT *windat)
-{
-  qDebug() << "WidgetLayout::killCurve()";
-  Curve *curve = (Curve *) getCurveById(windat->windid);
-  curve->setOriginal(0);
-}
-
 void WidgetLayout::updateData()
 {
   if (closing == 1) {
@@ -3360,8 +3349,8 @@ void WidgetLayout::updateData()
 //    qDebug() << "WidgetLayout::updateData() new curve " << curve;
   }
   // Check for graph updates after creating new curves
-  while (!curveUpdateBuffer.isEmpty()) {
-    WINDAT * curveData = curveUpdateBuffer.takeFirst();
+  while (curveUpdateBufferCount > 0) {
+    WINDAT * curveData = &curveUpdateBuffer[curveUpdateBufferCount--];
     Curve *curve = (Curve *) getCurveById(curveData->windid);
 //    qDebug() << "WidgetLayout::updateData() " << curveUpdateBuffer.size() <<  " ---" << curveData << "  " << curve;
     if (curve != 0 && curveData != 0) {

@@ -138,7 +138,7 @@ class CsoundEngine : public QObject
     void passOutString(QString channelName, QString value);
     void queueMessage(QString message);
     void clearMessageQueue();
-    void flushMessageQueue();
+    void flushQueues();
 
     bool isRunning();
     bool isRecording();

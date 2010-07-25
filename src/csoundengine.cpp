@@ -86,7 +86,7 @@ CsoundEngine::~CsoundEngine()
 #ifndef QCS_DESTROY_CSOUND
   csoundDestroy(ud->csound);
 #endif
-//  flushMessageQueue();
+//  flushQueues();
 //  free(ud);
 //  consoles.clear();
 //  for (int i = 0; i < consoles.size(); i++) {
@@ -654,14 +654,9 @@ int CsoundEngine::runCsound()
   else {
     csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackNoThread);
   }
-  //    QString oldOpcodeDir = "";
   if (m_options.opcodedirActive) {
     // csoundGetEnv must be called after Compile or Precompile,
-    // But I need to set OPCODEDIR before compile....
-    //      char *name = 0;
-    //      csoundGetEnv(csound,name);
-    //      oldOpcodeDir = QString(name);
-    //      qDebug() << oldOpcodeDir;
+    // But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
     csoundSetGlobalEnv("OPCODEDIR", m_options.opcodedir.toLocal8Bit());
   }
 #ifdef Q_OS_MAC
@@ -672,8 +667,6 @@ int CsoundEngine::runCsound()
 #else
     QString opcodedir = m_initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Resources/Opcodes";
     QString stdopcode = opcodedir + "/libstdopcod.dylib";
-//    qDebug() << opcodedir;
-//    qDebug() << stdopcode;
 #endif
     // TODO is this check robust enough? what if the standard library is not used? is it likely it is not?
     if (QFile::exists(stdopcode)) {
@@ -697,11 +690,13 @@ int CsoundEngine::runCsound()
     *((int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags")) = 3;
   }
 
-  csoundSetIsGraphable(ud->csound, true);
-  csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
-  csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
-  csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
-  csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
+  if (true) {
+    csoundSetIsGraphable(ud->csound, true);
+    csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
+    csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
+    csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
+    csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
+  }
 
   if (ud->enableWidgets) {
     if (ud->useInvalue) {
@@ -710,7 +705,7 @@ int CsoundEngine::runCsound()
     }
     else {
       // Not really sure that this is worth the trouble, as it
-      // is used only with chnsend and chnrecv which are deprecated
+      // is used only with chnsend and chnrecv which are unfinished
       //         qDebug() << "csoundSetChannelIOCallback";
       //         csoundSetChannelIOCallback(csound, &qutecsound::ioCallback);
     }
@@ -729,7 +724,7 @@ int CsoundEngine::runCsound()
   ud->result=csoundCompile(ud->csound,argc,argv);
   if (ud->result!=CSOUND_SUCCESS) {
     qDebug() << "Csound compile failed! "  << ud->result;
-    flushMessageQueue();
+    flushQueues();
     for (int i = 0; i < argc; i++) {
       qDebug() << argv[i];
       free(argv[i]);
@@ -744,13 +739,10 @@ int CsoundEngine::runCsound()
   ud->outputBufferSize = csoundGetKsmps(ud->csound);
   ud->ksmpscount = 0;
 
-  //TODO is something here necessary to work with doubles?
-  //     PUBLIC int csoundGetSampleFormat(CSOUND *);
-  //     PUBLIC int csoundGetSampleSize(CSOUND *);
   if (ud->threaded) {
     ud->perfThread = new CsoundPerformanceThread(ud->csound);
     ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
-    //      qDebug() << "qutecsound::runCsound perfThread->Play";
+//    qDebug() << "qutecsound::runCsound perfThread->Play";
     ud->perfThread->Play();
   } /*if (ud->thread)*/
   else { // Run in the same thread
@@ -763,12 +755,12 @@ int CsoundEngine::runCsound()
     ud->PERF_STATUS = 0;
     csoundStop(ud->csound);
     csoundSetMessageCallback(ud->csound, 0); // Does this fix the messages that appear when closing QCS?
-#ifdef QCS_DESTROY_CSOUND
-  csoundDestroy(ud->csound);
-#else
     csoundCleanup(ud->csound);
+#ifdef QCS_DESTROY_CSOUND
+    csoundDestroy(ud->csound);
+#else
 #endif
-    flushMessageQueue();  // To flush pending queues
+    flushQueues();  // To flush pending queues
 #ifdef MACOSX_PRE_SNOW
     // Put menu bar back
     SetMenuBar(menuBarHandle);
@@ -792,12 +784,12 @@ void CsoundEngine::stopCsound()
 //    perfThread->ScoreEvent(0, 'e', 0, 0);
     if (ud->perfThread != 0) {
       ud->perfThread->Stop();
-      qDebug() << "CsoundEngine::stopCsound() stopped";
+//      qDebug() << "CsoundEngine::stopCsound() stopped";
       ud->perfThread->Join();
       qDebug() << "CsoundEngine::stopCsound() joined";
       delete ud->perfThread;
       ud->perfThread = 0;
-      flushMessageQueue();
+      flushQueues();
     }
   } /*if (ud->threaded)*/
   else {  // in same thread
@@ -882,7 +874,7 @@ void CsoundEngine::clearMessageQueue()
   messageMutex.unlock();
 }
 
-void CsoundEngine::flushMessageQueue()
+void CsoundEngine::flushQueues()
 {
   messageMutex.lock();
   while (!messageQueue.isEmpty()) {
@@ -896,6 +888,7 @@ void CsoundEngine::flushMessageQueue()
   for (int i = 0; i < ud->cs->consoles.size(); i++) {
     ud->cs->consoles[i]->scrollToEnd();
   }
+  ud->wl->flushGraphBuffer();
   qApp->processEvents();
 }
 

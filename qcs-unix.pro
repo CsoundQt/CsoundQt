@@ -17,6 +17,15 @@ build64:DEFAULT_CSOUND_LIBS = libcsound64.so \
     libcsound64.a
 CSND_LIB = libcsnd.so
 LIBSNDFILE_LIB = libsndfile.a
+
+pythonqt {
+DEFAULT_PYTHONQT_INCLUDE_DIRS = /usr/local/include \
+    /usr/include
+DEFAULT_PYTHONQT_LIBRARY_DIRS = /usr/local/lib \
+    /usr/lib
+PYTHONQT_LIB = libPythonQt_QtAll.so
+}
+
 include(config.pri)
 INCLUDEPATH += $${CSOUND_INCLUDE_DIR} \
     $${LIBSNDFILE_INCLUDE_DIR}

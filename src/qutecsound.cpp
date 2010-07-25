@@ -825,7 +825,7 @@ bool qutecsound::join(bool ask)
 
 void qutecsound::showUtilities(bool show)
 {
-  qDebug() << "qutecsound::showUtilities" << show;
+//  qDebug() << "qutecsound::showUtilities" << show;
   if (!show) {
     if (utilitiesDialog != 0 && utilitiesDialog->close()) {
       utilitiesDialog = 0;

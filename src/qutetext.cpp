@@ -243,13 +243,13 @@ void QuteText::applyInternalProperties()
 void QuteText::setFontScaling(double scaling)
 {
   m_fontScaling = scaling;
-  applyInternalProperties();
+//  applyInternalProperties();
 }
 
 void QuteText::setFontOffset(double offset)
 {
   m_fontOffset = offset;
-  applyInternalProperties();
+//  applyInternalProperties();
 }
 
 QString QuteText::getWidgetLine()
@@ -449,6 +449,9 @@ void QuteText::createPropertiesDialog()
 void QuteText::applyProperties()
 {
   qDebug() << "QuteText::applyProperties()";
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.lockForWrite();
+#endif
   setProperty("QCS_label", text->toPlainText());
   switch (alignment->currentIndex()) {
     case 0:
@@ -472,6 +475,9 @@ void QuteText::applyProperties()
   setProperty("QCS_borderradius", borderRadius->value());
   setProperty("QCS_borderwidth", borderWidth->value());
 
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.unlock();
+#endif
   QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
 }
 
@@ -806,37 +812,6 @@ void QuteScrollNumber::setAlignment(int alignment)
   }
   static_cast<ScrollNumberWidget*>(m_widget)->setAlignment(align);
 }
-
-//void QuteScrollNumber::setText(QString text)
-//{
-//  qDebug() << "QuteScrollNumber::setText" << text;
-////  m_text = text;
-////  int size;
-////  if (m_fontSize >= QCS_XXLARGE)
-////    size = 7;
-////  else if (m_fontSize >= QCS_XLARGE)
-////    size = 6;
-////  else if (m_fontSize >= QCS_LARGE)
-////    size = 5;
-////  else if (m_fontSize >= QCS_MEDIUM)
-////    size = 4;
-////  else if (m_fontSize >= QCS_SMALL)
-////    size = 3;
-////  else if (m_fontSize >= QCS_XSMALL)
-////    size = 2;
-////  else
-////    size = 1;
-////  text.prepend("<font face=\"" + property("QCS_font").toString() + "\" size=\""
-////               + QString::number(property("QCS_fontsize").toInt()) + "\">");
-////  text.append("</font>");
-//
-////  setProperty("QCS_label", text);
-//  setValue(text.toDouble());
-////  m_widget->blockSignals(true);
-////  static_cast<ScrollNumberWidget*>(m_widget)->setText(text);
-////  m_widget->blockSignals(false);
-//
-//}
 
 QString QuteScrollNumber::getWidgetLine()
 {

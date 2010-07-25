@@ -39,6 +39,10 @@ QuteWidget::QuteWidget(QWidget *parent):
   this->setMinimumSize(2,2);
   this->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 
+  setProperty("QCS_x", 0);
+  setProperty("QCS_y", 0);
+  setProperty("width", 20);
+  setProperty("height", 20);
   setProperty("QCS_uuid", QUuid::createUuid().toString());
   setProperty("QCS_visible", true);
   setProperty("QCS_midichan", 0);
@@ -51,7 +55,8 @@ QuteWidget::~QuteWidget()
 
 void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 {
-//  qDebug("QuteWidget::setWidgetGeometry %i %i %i %i",x,y,w,h );
+//  qDebug() << "QuteWidget::setWidgetGeometry" <<x<<y<<w<<h;
+  Q_ASSERT(x >= 0 && y > 0 and w > 0 && h > 0);
   this->setGeometry(QRect(x,y,w,h));
   m_widget->blockSignals(true);
   m_widget->setGeometry(QRect(0,0,w,h));
