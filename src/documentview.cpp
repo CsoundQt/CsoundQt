@@ -418,9 +418,10 @@ void DocumentView::textChanged()
         ) {
         QVector<Opcode> syntax = m_opcodeTree->getPossibleSyntax(word);
         if (syntax.size() > 0) {
-          if (syntaxMenu == 0) {
-            createSyntaxMenu();
-          }
+          //if (syntaxMenu == 0) {
+          //  createSyntaxMenu();
+          //}
+          syntaxMenu->show();
           syntaxMenu->clear();
           bool allEqual = true;
           for(int i = 0; i < syntax.size(); i++) {
@@ -458,10 +459,10 @@ void DocumentView::textChanged()
             QRect r =  mainEditor->cursorRect();
             QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
             QPoint globalPoint =  mainEditor->mapToGlobal(p);
-            syntaxMenu->setWindowModality(Qt::NonModal);
-            syntaxMenu->popup(globalPoint);
-            //    syntaxMenu->move(QPoint(r.x() + r.width(), r.y() + r.height()));
-            //    syntaxMenu->show();
+            //syntaxMenu->setWindowModality(Qt::NonModal);
+            //syntaxMenu->popup(globalPoint);
+            syntaxMenu->move(globalPoint);
+            syntaxMenu->show();
             mainEditor->setFocus(Qt::OtherFocusReason);
           }
           else {
@@ -1034,9 +1035,14 @@ void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
   }
   else if (event->key() != Qt::Key_Up && event->key() != Qt::Key_Down
            && event->key() != Qt::Key_Return) {
-    this->hide();
+    this->close();
     if (event->key() != Qt::Key_Backspace) {
       emit keyPressed(event->text());
+    }
+    else {
+        QObject *par = parent();
+        if (par)
+            par->event(event);
     }
   }
   insertComplete = true;
