@@ -990,6 +990,7 @@ void WidgetLayout::setFontOffset(double offset)
   for (int i=0; i < m_widgets.size(); i++) {
     if (m_widgets[i]->getWidgetType() == "BSBLabel" || m_widgets[i]->getWidgetType() == "BSBScrollNumber") {
      static_cast<QuteText *>(m_widgets[i])->setFontOffset(offset);
+     m_widgets[i]->applyInternalProperties();
    }
   }
   widgetsMutex.unlock();
@@ -1002,6 +1003,7 @@ void WidgetLayout::setFontScaling(double scaling)
   for (int i=0; i < m_widgets.size(); i++) {
     if (m_widgets[i]->getWidgetType() == "BSBLabel" || m_widgets[i]->getWidgetType() == "BSBScrollNumber") {
      static_cast<QuteText *>(m_widgets[i])->setFontScaling(scaling);
+     m_widgets[i]->applyInternalProperties();
    }
   }
   widgetsMutex.unlock();

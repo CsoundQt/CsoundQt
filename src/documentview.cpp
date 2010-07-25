@@ -81,7 +81,18 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   m_isModified = false;
   m_highlighter.setDocument(mainEditor->document());
 
-  syntaxMenu = 0;
+  syntaxMenu = new MySyntaxMenu(mainEditor);
+//  syntaxMenu->setFocusPolicy(Qt::NoFocus);
+  syntaxMenu->setAutoFillBackground(true);
+  QPalette p =syntaxMenu-> palette();
+  p.setColor(QPalette::WindowText, Qt::blue);
+  p.setColor(QPalette::Active, static_cast<QPalette::ColorRole>(9), Qt::yellow);
+  syntaxMenu->setPalette(p);
+  connect(syntaxMenu,SIGNAL(keyPressed(QString)),
+          mainEditor, SLOT(insertPlainText(QString)));
+  connect(syntaxMenu,SIGNAL(aboutToHide()),
+          this, SLOT(destroySyntaxMenu()));
+
   setAcceptDrops(true);
 }
 
@@ -976,17 +987,7 @@ QString DocumentView::changeToInvalue(QString text)
 
 void DocumentView::createSyntaxMenu()
 {
-  syntaxMenu = new MySyntaxMenu(mainEditor);
-//  syntaxMenu->setFocusPolicy(Qt::NoFocus);
-  syntaxMenu->setAutoFillBackground(true);
-  QPalette p =syntaxMenu-> palette();
-  p.setColor(QPalette::WindowText, Qt::blue);
-  p.setColor(QPalette::Active, static_cast<QPalette::ColorRole>(9), Qt::yellow);
-  syntaxMenu->setPalette(p);
-  connect(syntaxMenu,SIGNAL(keyPressed(QString)),
-          mainEditor, SLOT(insertPlainText(QString)));
-  connect(syntaxMenu,SIGNAL(aboutToHide()),
-          this, SLOT(destroySyntaxMenu()));
+  syntaxMenu->show();
 }
 
 void DocumentView::hideAllEditors()
@@ -999,8 +1000,8 @@ void DocumentView::hideAllEditors()
 
 void DocumentView::destroySyntaxMenu()
 {
-  syntaxMenu->deleteLater();
-  syntaxMenu = 0;
+  syntaxMenu->hide();
+//  syntaxMenu = 0;
 }
 
 MySyntaxMenu::MySyntaxMenu(QWidget * parent) :

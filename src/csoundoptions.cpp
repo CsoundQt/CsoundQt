@@ -66,7 +66,6 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
         }
         if (rtJackName.size() > m_jackNameSize) {
           rtJackName.resize(m_jackNameSize);
-//          qDebug() << "CsoundOptions::generateCmdLineFlagsList() Jack name too long " << m_jackNameSize;
         }
         list << "-+jack_client=" + jackName;
       }
@@ -86,18 +85,6 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
       list << "-i" + fileInputFilename + "";
     if (fileOutputFilenameActive or fileAskFilename) {
       list << "-o" + fileOutputFilename + "";
-//      if (fileOutputFilename.startsWith('/'))
-//        list << "-o" + fileOutputFilename + "";
-//      else {
-//        if (sfdirActive) {
-//          list << "-o" + fileOutputFilename + "";
-//        }
-//        else {
-//          // FIXME is csdPath needed here for the output to be in the correct place?
-////          cmdline += " -o" + csdPath + fileOutputFilename + "";
-//          list << " -o" + fileOutputFilename + "";
-//        }
-//      }
     }
   }
   if (sadirActive)
@@ -119,22 +106,17 @@ int CsoundOptions::generateCmdLine(char **argv)
   strcpy(argv[index++], "csound");
   QStringList indFlags = generateCmdLineFlagsList();
   foreach (QString flag, indFlags) {
-//    flag = "-" + flag;
     flag = flag.simplified();
     argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
     strcpy(argv[index],flag.toStdString().c_str());
     index++;
-//    fprintf(stdout, "%i - %s.....", index, flag.toStdString().c_str()) ;
   }
   argv[index] = (char *) calloc(fileName1.size()+1, sizeof(char));
   strcpy(argv[index++],fileName1.toLocal8Bit());
-//  fprintf(stdout, "%i - %s.....", index, fileName1.toStdString().c_str()) ;
   if (fileName2 != "") {
     argv[index] = (char *) calloc(fileName2.size()+1, sizeof(char));
     strcpy(argv[index++],fileName2.toLocal8Bit());
-//    fprintf(stdout, "%i - %s.....", index, fileName2.toStdString().c_str()) ;
   }
-//  fprintf(stdout, "\nCsoundOptions::generateCmdLine  index %i\n", index);
   return index;
 }
 
