@@ -421,41 +421,42 @@ void DocumentView::textChanged()
 //          if (syntaxMenu == 0) {
 //            createSyntaxMenu();
 //          }
-          syntaxMenu->show();
-          syntaxMenu->clear();
           bool allEqual = true;
           for(int i = 0; i < syntax.size(); i++) {
             if (syntax[i].opcodeName != word) {
               allEqual = false;
             }
-            QString text = syntax[i].opcodeName;
-            if (syntax[i].outArgs.simplified().startsWith("a")) {
-              text += " (audio-rate)";
-            }
-            else if (syntax[i].outArgs.simplified().startsWith("k")) {
-              text += " (control-rate)";
-            }
-            else if (syntax[i].outArgs.simplified().startsWith("x")) {
-              text += " (multi-rate)";
-            }
-            else if (syntax[i].outArgs.simplified().startsWith("S")) {
-              text += " (string output)";
-            }
-            else if (syntax[i].outArgs.simplified().startsWith("f")) {
-              text += " (pvs)";
-            }
-            QAction *a = syntaxMenu->addAction(text,
-                                               this, SLOT(insertTextFromAction()));
-            QString syntaxText = syntax[i].outArgs.simplified();
-            if (!syntax[i].outArgs.isEmpty())
-              syntaxText += " ";
-            syntaxText += syntax[i].opcodeName.simplified();
-            if (!syntax[i].inArgs.isEmpty()) {
-              syntaxText += " " + syntax[i].inArgs.simplified();
-            }
-            a->setData(syntaxText);
           }
           if (!allEqual && syntax.size() > 0) {
+            syntaxMenu->clear();
+            for(int i = 0; i < syntax.size(); i++) {
+              QString text = syntax[i].opcodeName;
+              if (syntax[i].outArgs.simplified().startsWith("a")) {
+                text += " (audio-rate)";
+              }
+              else if (syntax[i].outArgs.simplified().startsWith("k")) {
+                text += " (control-rate)";
+              }
+              else if (syntax[i].outArgs.simplified().startsWith("x")) {
+                text += " (multi-rate)";
+              }
+              else if (syntax[i].outArgs.simplified().startsWith("S")) {
+                text += " (string output)";
+              }
+              else if (syntax[i].outArgs.simplified().startsWith("f")) {
+                text += " (pvs)";
+              }
+              QString syntaxText = syntax[i].outArgs.simplified();
+              if (!syntax[i].outArgs.isEmpty())
+                syntaxText += " ";
+              syntaxText += syntax[i].opcodeName.simplified();
+              if (!syntax[i].inArgs.isEmpty()) {
+                syntaxText += " " + syntax[i].inArgs.simplified();
+              }
+              QAction *a = syntaxMenu->addAction(text,
+                                                 this, SLOT(insertTextFromAction()));
+              a->setData(syntaxText);
+            }
             QRect r =  mainEditor->cursorRect();
             QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
             QPoint globalPoint =  mainEditor->mapToGlobal(p);
@@ -986,10 +987,10 @@ QString DocumentView::changeToInvalue(QString text)
   return newText;
 }
 
-void DocumentView::createSyntaxMenu()
-{
-  syntaxMenu->show();
-}
+//void DocumentView::createSyntaxMenu()
+//{
+//  syntaxMenu->show();
+//}
 
 void DocumentView::hideAllEditors()
 {

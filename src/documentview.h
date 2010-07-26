@@ -125,7 +125,7 @@ class DocumentView : public QScrollArea
   private:
     QString changeToChnget(QString text);
     QString changeToInvalue(QString text);
-    void createSyntaxMenu();
+//    void createSyntaxMenu();
 
     void hideAllEditors();
     int m_viewMode; // 0 = csd without widget + preset section
