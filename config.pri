@@ -62,8 +62,10 @@ exists(config.user.pri) {
 }
 isEmpty(CSOUND_API_INCLUDE_DIR) {
 	!isEmpty(CSOUND_INCLUDE_DIR): CSOUND_API_INCLUDE_DIR = $${CSOUND_INCLUDE_DIR}
-	else !isEmpty(CSOUND_SOURCE_TREE): CSOUND_API_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/H
-	else {
+        isEmpty(CSOUND_API_INCLUDE_DIR) {
+            !isEmpty(CSOUND_SOURCE_TREE): CSOUND_API_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/H
+        }
+        isEmpty(CSOUND_API_INCLUDE_DIR) {
 		!no_messages: message(Csound API include directory not specified.)
 		for(dir, DEFAULT_CSOUND_API_INCLUDE_DIRS) {
 			!no_messages: message(... searching in $${dir})
@@ -83,9 +85,11 @@ isEmpty(CSOUND_API_INCLUDE_DIR) {
 }
 isEmpty(CSOUND_INTERFACES_INCLUDE_DIR) {
 	!isEmpty(CSOUND_INCLUDE_DIR): CSOUND_INTERFACES_INCLUDE_DIR = $${CSOUND_INCLUDE_DIR}
-	else !isEmpty(CSOUND_SOURCE_TREE): CSOUND_INTERFACES_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/interfaces
-	else {
-		!no_messages: message(Csound include directory not specified.)
+        isEmpty(CSOUND_INTERFACES_INCLUDE_DIR) {
+            !isEmpty(CSOUND_SOURCE_TREE): CSOUND_INTERFACES_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/interfaces
+        }
+        isEmpty(CSOUND_INTERFACES_INCLUDE_DIR) {
+                !no_messages: message(Csound interfaces include directory not specified.)
 		for(dir, DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS) {
 			!no_messages: message(... searching in $${dir})
 			exists($${dir}):
@@ -176,7 +180,8 @@ win32 {
 	LIBSNDFILE_LIBRARY_DIR = $$replace(LIBSNDFILE_LIBRARY_DIR, \\\\, /)
 }
 !no_messages {
-	message(Csound include directory is $${CSOUND_INCLUDE_DIR})
+        message(Csound API include directory is $${CSOUND_API_INCLUDE_DIR})
+        message(Csound interfaces include directory is $${CSOUND_INTERFACES_INCLUDE_DIR})
 	message(Csound library directory is $${CSOUND_LIBRARY_DIR})
 	message(libsndfile include directory is $${LIBSNDFILE_INCLUDE_DIR})
 	message(libsndfile library directory is $${LIBSNDFILE_LIBRARY_DIR})
@@ -213,8 +218,8 @@ win32 {
 	!directoryExists($${LIBSNDFILE_INCLUDE_DIR}): error(libsndfile include directory not found)
 	!directoryExists($${LIBSNDFILE_LIBRARY_DIR}): error(libsndfile library directory not found)
 	!csoundApiHeaderExists(csound.h): error(csound.h not found)
+        !csoundApiHeaderExists(csound.hpp): error(csound.hpp not found)
 	!csoundApiHeaderExists(cwindow.h): error(cwindow.h not found)
-	!csoundInterfacesHeaderExists(csound.hpp): error(csound.hpp not found)
 	!csoundInterfacesHeaderExists(csPerfThread.hpp): error(csPerfThread.hpp not found)
 	!csoundLibraryExists($${CSOUND_LIB}): error(Csound API library not found)
 	!csoundLibraryExists($${CSND_LIB}): error(Csound C++ interface library not found)
