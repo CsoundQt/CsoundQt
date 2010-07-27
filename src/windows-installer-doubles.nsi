@@ -115,6 +115,18 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
+  
+  ;; Add CS_OMIT_LIBS environment variable for all users so Csound ignores fluidOpcodes.dll, virtual.dll, and widgets.dll
+  ;;
+   ; include for some of the windows messages defines
+   !include "winmessages.nsh"
+   ; HKLM (all users) vs HKCU (current user) defines
+   !define env_hklm 'HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"'
+   !define env_hkcu 'HKCU "Environment"'
+   ; set variable
+   WriteRegExpandStr ${env_hklm} CS_OMIT_LIBS fluidOpcodes,virtual,widgets
+   ; make sure windows knows about the change
+   SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 SectionEnd
 
 ; Section descriptions
@@ -156,4 +168,10 @@ Section Uninstall
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
   SetAutoClose true
+  
+  ;; Delete CS_OMIT_LIBS environment variable.
+   ; delete variable
+   DeleteRegValue ${env_hklm} CS_OMIT_LIBS
+   ; make sure windows knows about the change
+   SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 SectionEnd
