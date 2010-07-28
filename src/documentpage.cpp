@@ -55,6 +55,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 
   m_view = new DocumentView(parent);
   m_view->setOpcodeTree(m_opcodeTree);
+  connect(m_view, SIGNAL(evaluate(QString)), this, SLOT(evaluatePython(QString)));
 
   m_console = new ConsoleWidget(0);
   m_console->setReadOnly(true);
@@ -474,6 +475,11 @@ QRect DocumentPage::getWidgetPanelGeometry()
    return m_widgetLayout->getOuterGeometry();
 }
 
+void *DocumentPage::getCsound()
+{
+  return m_csEngine->getCsound();
+}
+
 int DocumentPage::lineCount(bool countExtras)
 {
   QString text;
@@ -781,6 +787,11 @@ void DocumentPage::setOpcodeNameList(QStringList opcodeNameList)
 void DocumentPage::setAutoComplete(bool autoComplete)
 {
   m_view->setAutoComplete(autoComplete);
+}
+
+QString DocumentPage::getActiveText()
+{
+  return m_view->getActiveText();
 }
 
 void DocumentPage::print(QPrinter *printer)
@@ -1392,6 +1403,11 @@ void DocumentPage::opcodeSyntax(QString message)
 void DocumentPage::setWidgetClipboard(QString message)
 {
   emit setWidgetClipboardSignal(message);
+}
+
+void DocumentPage::evaluatePython(QString code)
+{
+  emit evaluatePythonSignal(code);
 }
 
 void DocumentPage::queueEvent(QString eventLine, int delay)

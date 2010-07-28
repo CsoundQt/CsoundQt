@@ -29,11 +29,15 @@
 # CONFIG+=intel         To build intel only version (Universal is the default)
 ###############################################################################
 
+!build32:!build64:CONFIG += build32
+build32:build64:CONFIG -= build32
+
 unix {
 	macx: include (qcs-macx.pro)
 	else: include (qcs-unix.pro)
 }
 win32-g++: include (qcs-win32.pro)
+
 
 include(src/src.pri)
 
@@ -45,6 +49,16 @@ TRANSLATIONS = "src/translations/qutecsound_en.ts" \
 	"src/translations/qutecsound_it.ts" \
 	"src/translations/qutecsound_tr.ts" \
 	"src/translations/qutecsound_el.ts" \
-	"src/translations/qutecsound_uk.ts"
+        "src/translations/qutecsound_uk.ts" \
+        "src/translations/qutecsound_fi.ts"
+
+
+INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
+INCLUDEPATH *= $${CSOUND_INTERFACES_INCLUDE_DIR}
+INCLUDEPATH *= $${LIBSNDFILE_INCLUDE_DIR}
+
+pythonqt: DEFINES += QCS_PYTHONQT
+
+#OTHER_FILES += $${QMAKE_INFO_PLIST}
 
 #SUBDIRS += ClearQuteCsoundPrefs/ClearQuteCsoundPrefs.pro

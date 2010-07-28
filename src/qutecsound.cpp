@@ -38,6 +38,10 @@
 #include "about.h"
 //#include "eventsheet.h"
 
+#ifdef QCS_PYTHONQT
+#include "pythonconsole.h"
+#endif
+
 // One day remove these from here for nicer abstraction....
 #include "csoundengine.h"
 #include "documentview.h"
@@ -58,6 +62,7 @@ qutecsound::qutecsound(QStringList fileNames)
   m_startingUp = true;
   m_resetPrefs = false;
   utilitiesDialog = 0;
+  curCsdPage = 0;
   qDebug() << "QuteCsound using Csound Version: " << csoundGetVersion();
   initialDir = QDir::current().path();
   setWindowTitle("QuteCsound[*]");
@@ -92,6 +97,13 @@ qutecsound::qutecsound(QStringList fileNames)
   m_inspector->parseText(QString());
   m_inspector->setObjectName("Inspector");
   addDockWidget(Qt::LeftDockWidgetArea, m_inspector);
+
+#ifdef QCS_PYTHONQT
+  m_pythonConsole = new PythonConsole(this);
+  addDockWidget(Qt::LeftDockWidgetArea, m_pythonConsole);
+  m_pythonConsole->setObjectName("Python Console");
+  m_pythonConsole->show();
+#endif
 
   connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
 
@@ -247,6 +259,9 @@ void qutecsound::changePage(int index)
     updateInspector();
     runAct->setChecked(documentPages[curPage]->isRunning());
     recAct->setChecked(documentPages[curPage]->isRecording());
+    if (documentPages[curPage]->getFileName().endsWith(".csd")) {
+      curCsdPage = curPage;
+    }
   }
   m_inspectorNeedsUpdate = true;
 }
@@ -523,6 +538,22 @@ void qutecsound::redo()
 {
   documentPages[curPage]->redo();
 }
+
+ void qutecsound::evaluatePython(QString code)
+ {
+#ifdef QCS_PYTHONQT
+   QString evalCode = QString();
+   if (code == QString()) { //evaluate current selection in current document
+     evalCode = documentPages[curPage]->getActiveText();
+   }
+   else {
+     evalCode = code;
+   }
+   m_pythonConsole->evaluate(evalCode);
+#else
+   showNoPythonQtWarning();
+#endif
+ }
 
 void qutecsound::setWidgetEditMode(bool active)
 {
@@ -865,9 +896,20 @@ void qutecsound::setCurrentAudioFile(const QString fileName)
   currentAudioFile = fileName;
 }
 
-void qutecsound::play(bool realtime)
+void qutecsound::play(bool realtime, int index)
 {
   // TODO make csound pause if it is already running
+  int docIndex = index;
+  if (docIndex == -1) {
+    docIndex = curPage;
+  }
+  else {
+    qDebug() << "qutecsound::play index not implemented " << docIndex;
+  }
+  if (docIndex < 0 && docIndex >= documentPages.size()) {
+    qDebug() << "qutecsound::play index out of range " << docIndex;
+    return;
+  }
   runAct->setChecked(true);  // In case the call comes from a button
   if (documentPages[curPage]->getFileName().isEmpty()) {
     QMessageBox::warning(this, tr("QuteCsound"),
@@ -1027,24 +1069,35 @@ void qutecsound::runInTerm(bool realtime)
     tempScriptFiles << scriptFileName;
 }
 
-void qutecsound::pause()
+void qutecsound::pause(int index)
 {
-  documentPages[curPage]->pause();
+  int docIndex = index;
+  if (docIndex == -1) {
+    docIndex = curPage;
+  }
+  if (docIndex >= 0 && docIndex < documentPages.size()) {
+    documentPages[docIndex]->pause();
+  }
 //  if (ud->isRunning()) {
 //    perfThread->TogglePause();
 //  }
 }
 
-void qutecsound::stop()
+void qutecsound::stop(int index)
 {
   // Must guarantee that csound has stopped when it returns
 //  qDebug("qutecsound::stop()");
+  int docIndex = index;
+  if (docIndex == -1) {
+    docIndex = curPage;
+  }
   if (curPage >= documentPages.size()) {
     return; // A bit of a hack to avoid crashing when documents are deleted very quickly...
   }
-  if (documentPages[curPage]->isRunning())
-    documentPages[curPage]->stop();
-  runAct->setChecked(false);
+  if (docIndex >= 0 && docIndex < documentPages.size()) {
+    if (documentPages[docIndex]->isRunning())
+      documentPages[docIndex]->stop();
+    runAct->setChecked(false);
   recAct->setChecked(false);
 //  if (ud->isRunning()) {
 //    stopCsound();
@@ -1053,6 +1106,7 @@ void qutecsound::stop()
 //  if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
 //    //widgetPanel->setVisible(false);
 //  }
+  }
 }
 
 void qutecsound::stopAll()
@@ -1086,6 +1140,23 @@ void qutecsound::record()
   }
   else {
     documentPages[curPage]->stopRecording();
+  }
+}
+
+
+void qutecsound::sendEvent(QString eventLine, double delay)
+{
+  sendEvent(curCsdPage, eventLine, delay);
+}
+
+void qutecsound::sendEvent(int index, QString eventLine, double delay)
+{
+  int docIndex = index;
+  if (docIndex == -1) {
+    docIndex = curPage;
+  }
+  if (docIndex >= 0 && docIndex < documentPages.size()) {
+    documentPages[docIndex]->queueEvent(eventLine, delay);
   }
 }
 
@@ -1683,7 +1754,7 @@ void qutecsound::setDefaultKeyboardShortcuts()
   createCodeGraphAct->setShortcut(tr("Alt+4"));
   showInspectorAct->setShortcut(tr("Alt+5"));
   showLiveEventsAct->setShortcut(tr("Alt+6"));
-  showUtilitiesAct->setShortcut(tr("Alt+7"));
+  showUtilitiesAct->setShortcut(tr("Alt+9"));
   setHelpEntryAct->setShortcut(tr("Shift+F1"));
   browseBackAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
   browseForwardAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
@@ -1693,8 +1764,18 @@ void qutecsound::setDefaultKeyboardShortcuts()
   uncommentAct->setShortcut(tr("Shift+Ctrl+/"));
   indentAct->setShortcut(tr("Ctrl+I"));
   unindentAct->setShortcut(tr("Shift+Ctrl+I"));
+  evaluateAct->setShortcut(QKeySequence(Qt::Key_Enter));
+  showPythonConsoleAct->setShortcut(tr("Alt+7"));
   killLineAct->setShortcut(tr("Ctrl+K"));
   killToEndAct->setShortcut(tr("Shift+Ctrl+K"));
+}
+
+void qutecsound::showNoPythonQtWarning()
+{
+  QMessageBox::warning(this, tr("No PythonQt support"),
+                       tr("This version of QuteCsound has been compiled without PythonQt support.\n"
+                          "Extended Python features are not available"));
+  qDebug() << "qutecsound::showNoPythonQtWarning()";
 }
 
 void qutecsound::createActions()
@@ -1796,6 +1877,11 @@ void qutecsound::createActions()
   joinAct->setStatusTip(tr("Join orc/sco files in a single csd file"));
 //   joinAct->setIconText(tr("Join"));
   connect(joinAct, SIGNAL(triggered()), this, SLOT(join()));
+
+  evaluateAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Evaluate selection"), this);
+  evaluateAct->setStatusTip(tr("Evaluate selection in Python Console"));
+//   joinAct->setIconText(tr("Join"));
+  connect(evaluateAct, SIGNAL(triggered()), this, SLOT(evaluatePython()));
 
   inToGetAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Invalue->Chnget"), this);
   inToGetAct->setStatusTip(tr("Convert invalue/outvalue to chnget/chnset"));
@@ -1905,6 +1991,18 @@ void qutecsound::createActions()
 //  showLiveEventsAct->setChecked(true);  // Unnecessary because it is set by options
   showLiveEventsAct->setStatusTip(tr("Show Live Events Panels"));
   showLiveEventsAct->setIconText(tr("Live Events"));
+
+  showPythonConsoleAct = new QAction(/*QIcon(":/images/note.png"),*/ tr("Python Console"), this);
+  showPythonConsoleAct->setCheckable(true);
+//  showPythonConsoleAct->setChecked(true);  // Unnecessary because it is set by options
+  showPythonConsoleAct->setStatusTip(tr("Show Python Console"));
+  showPythonConsoleAct->setIconText(tr("Python"));
+#ifdef QCS_PYTHONQT
+  connect(showPythonConsoleAct, SIGNAL(triggered(bool)), m_pythonConsole, SLOT(setVisible(bool)));
+  connect(m_pythonConsole, SIGNAL(Close(bool)), showPythonConsoleAct, SLOT(setChecked(bool)));
+#else
+  connect(showPythonConsoleAct, SIGNAL(triggered()), this, SLOT(showNoPythonQtWarning()));
+#endif
 
   showManualAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("Csound Manual"), this);
   showManualAct->setStatusTip(tr("Show the Csound manual in the help panel"));
@@ -2077,6 +2175,8 @@ void qutecsound::setKeyboardShortcutsList()
   m_keyActions.append(viewFullScreenAct);
   m_keyActions.append(killLineAct);
   m_keyActions.append(killToEndAct);
+  m_keyActions.append(evaluateAct);
+  m_keyActions.append(showPythonConsoleAct);
 }
 
 void qutecsound::connectActions()
@@ -2172,6 +2272,7 @@ void qutecsound::createMenus()
   editMenu->addAction(cutAct);
   editMenu->addAction(copyAct);
   editMenu->addAction(pasteAct);
+  editMenu->addAction(evaluateAct);
   editMenu->addSeparator();
   editMenu->addAction(findAct);
   editMenu->addAction(findAgainAct);
@@ -2212,6 +2313,8 @@ void qutecsound::createMenus()
   viewMenu->addAction(createCodeGraphAct);
   viewMenu->addAction(showInspectorAct);
   viewMenu->addAction(showLiveEventsAct);
+  viewMenu->addAction(showPythonConsoleAct);
+  viewMenu->addAction(showUtilitiesAct);
   viewMenu->addSeparator();
   viewMenu->addAction(viewFullScreenAct);
 
@@ -2950,6 +3053,8 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
           this, SLOT(setCurrentAudioFile(QString)));
   connect(documentPages[curPage]->getView(), SIGNAL(lineNumberSignal(int)),
           this, SLOT(showLineNumber(int)));
+  connect(documentPages[curPage], SIGNAL(evaluatePythonSignal(QString)),
+          this, SLOT(evaluatePython(QString)));
 
   if (fileName.startsWith(m_options->csdocdir))
     documentPages[curPage]->readOnly = true;
@@ -2983,7 +3088,9 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   documentPages[curPage]->showLiveEventPanels(false);
   documentTabs->insertTab(curPage, documentPages[curPage]->getView(),"");
   documentTabs->setCurrentIndex(curPage);
-
+  if (documentPages[curPage]->getFileName().endsWith(".csd")) {
+    curCsdPage = curPage;
+  }
   documentPages[curPage]->setModified(false);
   setCurrentFile(fileName);
   setWindowModified(false);
@@ -3285,6 +3392,21 @@ QStringList qutecsound::runCsoundInternally(QStringList flags)
 #endif
 //  qDebug() << "qutecsound::runCsoundInternally done";
   return m_deviceMessages;
+}
+
+void *qutecsound::getCurrentCsound()
+{
+  return (void *)documentPages[curCsdPage]->getCsound();
+}
+
+QString qutecsound::setDocument(int index)
+{
+  QString name = QString();
+  if (index < documentTabs->count() && index >= 0) {
+    documentTabs->setCurrentIndex(index);
+    name = documentPages[index]->getFileName();
+  }
+  return name;
 }
 
 //void qutecsound::newCurve(Curve * curve)

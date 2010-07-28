@@ -347,6 +347,21 @@ QString DocumentView::wordUnderCursor()
   return word;
 }
 
+QString DocumentView::getActiveText()
+{
+  QTextCursor cursor = editors[0]->textCursor();
+  QString selection = cursor.selectedText();
+  if (selection == "") {
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    selection = cursor.selectedText();
+
+  }
+  selection.replace(QChar(0x2029), QChar('\n'));
+  return selection;
+}
+
+
 //void DocumentView::updateDocumentModel()
 //{
 //  // this should update the document model when needed
@@ -362,24 +377,22 @@ QString DocumentView::wordUnderCursor()
 
 void DocumentView::syntaxCheck()
 {
-  // TODO implement for multiple views
+  // TODO implment for multiple views
 
   int line = currentLine();
   emit(lineNumberSignal(line));
 
-  if (m_mode == 0 || m_mode == 3) {  // CSD or ORC mode
-    QTextCursor cursor = mainEditor->textCursor();
-    cursor.select(QTextCursor::LineUnderCursor);
-    QStringList words = cursor.selectedText().split(QRegExp("\\b"));
-    foreach(QString word, words) {
-      // We need to remove all not possibly opcode
-      word.remove(QRegExp("[^\\d\\w]"));
-      if (!word.isEmpty()) {
-        QString syntax = m_opcodeTree->getSyntax(word);
-        if(!syntax.isEmpty()) {
-          emit(opcodeSyntaxSignal(syntax));
-          return;
-        }
+  QTextCursor cursor = mainEditor->textCursor();
+  cursor.select(QTextCursor::LineUnderCursor);
+  QStringList words = cursor.selectedText().split(QRegExp("\\b"));
+  foreach(QString word, words) {
+    // We need to remove all not possibly opcode
+    word.remove(QRegExp("[^\\d\\w]"));
+    if (!word.isEmpty()) {
+      QString syntax = m_opcodeTree->getSyntax(word);
+      if(!syntax.isEmpty()) {
+        emit(opcodeSyntaxSignal(syntax));
+        return;
       }
     }
   }
@@ -599,9 +612,16 @@ void DocumentView::findString(QString query)
   }
 }
 
+void DocumentView::evaluate()
+{
+  emit evaluate(getActiveText());
+}
+
 void DocumentView::createContextMenu(QPoint pos)
 {
   QMenu *menu = editors[0]->createStandardContextMenu();
+  menu->addSeparator();
+  menu->addAction(tr("Evaluate Selection"), this, SLOT(evaluate()));
   menu->addSeparator();
   QMenu *opcodeMenu = menu->addMenu("Opcodes");
   QMenu *mainMenu = 0;

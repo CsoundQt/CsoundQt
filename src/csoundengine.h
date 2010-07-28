@@ -143,6 +143,9 @@ class CsoundEngine : public QObject
     bool isRunning();
     bool isRecording();
 
+    // To pass to parent document for access from python scripting
+    void * getCsound();
+
     QMutex perfMutex;  // TODO is this still needed?
 //    QTimer qTimer;  // This 4timer is started and stopped from the document page
 

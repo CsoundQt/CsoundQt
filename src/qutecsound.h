@@ -42,6 +42,9 @@ class QTextEdit;
 class DockHelp;
 class WidgetPanel;
 class Inspector;
+#ifdef QCS_PYTHONQT
+class PythonConsole;
+#endif
 class DockConsole;
 class OpEntryParser;
 class Options;
@@ -72,6 +75,11 @@ class qutecsound:public QMainWindow
                                          va_list args);
 
     QStringList runCsoundInternally(QStringList flags); //returns csound messages
+
+    // For usage from python (external) interface
+    void *getCurrentCsound();
+    QString setDocument(int index); // Returns document name
+
 //    int popKeyPressEvent(); // return ASCII code of key press event for Csound or -1 if no event
 //    int popKeyReleaseEvent(); // return ASCII code of key release event for Csound -1 if no event
 
@@ -79,14 +87,16 @@ class qutecsound:public QMainWindow
 
   public slots:
     bool loadFile(QString fileName, bool runNow = false);
-    void play(bool realtime = true);
+    void play(bool realtime = true, int index = -1);
     void runInTerm(bool realtime = true);
-    void pause();
-    void stop();
+    void pause(int index = -1);
+    void stop(int index = -1);
     void stopAll();
     void perfEnded();
     void render();
     void record();
+    void sendEvent(QString eventLine, double delay = 0);
+    void sendEvent(int index, QString line, double delay = 0);
 //     void selectMidiInDevice(QPoint pos);
 //     void selectMidiOutDevice(QPoint pos);
 //     void selectAudioInDevice(QPoint pos);
@@ -119,6 +129,7 @@ class qutecsound:public QMainWindow
     void paste();
     void undo();
     void redo();
+    void evaluatePython(QString code = QString());
     void setWidgetEditMode(bool);  // This is not necessary as the action is passed and connected in the widget layout
     void setWidgetClipboard(QString text);
     void duplicate();
@@ -156,6 +167,7 @@ class qutecsound:public QMainWindow
     void updateInspector();
     void markInspectorUpdate(); // Notification that inspector needs update
     void setDefaultKeyboardShortcuts();
+    void showNoPythonQtWarning();
 
   private:
     void createActions();
@@ -200,6 +212,9 @@ class qutecsound:public QMainWindow
     WidgetPanel *widgetPanel;  // Dock widget, for containing the widget layout
     QString m_widgetClipboard;
     Inspector *m_inspector;
+#ifdef QCS_PYTHONQT
+    PythonConsole *m_pythonConsole;
+#endif
     QToolButton *closeTabButton;
     QFile logFile;
 
@@ -235,6 +250,7 @@ class qutecsound:public QMainWindow
     QAction *pasteAct;
     QAction *duplicateAct;
     QAction *joinAct;
+    QAction *evaluateAct;
     QAction *getToInAct;
     QAction *inToGetAct;
     QAction *csladspaAct;
@@ -269,6 +285,7 @@ class qutecsound:public QMainWindow
     QAction *showWidgetsAct;
     QAction *showInspectorAct;
     QAction *showLiveEventsAct;
+    QAction *showPythonConsoleAct;
     QAction *commentAct;
     QAction *uncommentAct;
     QAction *indentAct;
@@ -280,7 +297,8 @@ class qutecsound:public QMainWindow
     QAction *aboutQtAct;
     QAction *resetPreferencesAct;
 
-    int curPage;  // TODO use this or textEdit but not both!
+    int curPage;
+    int curCsdPage;  // To recall last csd visited
     int configureTab; // Tab in last configure dialog accepted
     QString lastUsedDir;
     QString lastFileDir;

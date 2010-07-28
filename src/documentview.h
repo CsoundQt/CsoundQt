@@ -82,6 +82,7 @@ class DocumentView : public QScrollArea
     QString getWidgetsText(); // With tags including presets, in new xml format
 
     QString wordUnderCursor();
+    QString getActiveText();
     int currentLine();
     bool isModified();
     void print(QPrinter *printer);
@@ -98,6 +99,7 @@ class DocumentView : public QScrollArea
     void autoComplete();
     void insertTextFromAction();
     void findString(QString query = QString());
+    void evaluate();
     void createContextMenu(QPoint pos);
 
     void cut();
@@ -172,6 +174,7 @@ class DocumentView : public QScrollArea
     void opcodeSyntaxSignal(QString syntax);  // Report an opcode syntax under cursor
     void lineNumberSignal(int number); // Sends current line number when cursor is moved
     void contentsChanged();
+    void evaluate(QString code);
 };
 
 #endif // DOCUMENTVIEW_H

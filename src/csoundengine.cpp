@@ -39,7 +39,7 @@ CsoundEngine::CsoundEngine()
   ud->PERF_STATUS = 0;
   ud->cs = this;
   ud->threaded = true;
-  ud->csound = NULL;
+  ud->csound = 0;
   ud->perfThread = 0;
   ud->mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2 channels
 
@@ -156,7 +156,7 @@ void CsoundEngine::inputValueCallback(CSOUND *csound,
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
 //  if (ud->cs->isRunning()) {
     QString name = QString(channelName);
-    ud->cs->perfMutex.lock();
+    ud->cs->perfMutex.lock(); //FIXME get rid of this mutex
     if (name.startsWith('$')) { // channel is a string channel
       char *string = (char *) value;
       // FIMXE: check string length
@@ -687,6 +687,7 @@ int CsoundEngine::runCsound()
   }
   else {
     //       qDebug("play() FLTK Disabled");
+    csoundSetGlobalEnv("CS_OMIT_LIBS", "fluidOpcodes,virtual,widgets");
     *((int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags")) = 3;
   }
 
@@ -755,10 +756,10 @@ int CsoundEngine::runCsound()
     ud->PERF_STATUS = 0;
     csoundStop(ud->csound);
     csoundSetMessageCallback(ud->csound, 0); // Does this fix the messages that appear when closing QCS?
-    csoundCleanup(ud->csound);
 #ifdef QCS_DESTROY_CSOUND
     csoundDestroy(ud->csound);
 #else
+    csoundCleanup(ud->csound);
 #endif
     flushQueues();  // To flush pending queues
 #ifdef MACOSX_PRE_SNOW
@@ -807,6 +808,8 @@ void CsoundEngine::stopCsound()
 #endif
 #ifdef QCS_DESTROY_CSOUND
   csoundDestroy(ud->csound);
+#else
+  csoundCleanup(ud->csound);
 #endif
 }
 
@@ -844,7 +847,7 @@ void CsoundEngine::dispatchQueues()
   if (!messageQueue.isEmpty() && m_consoleBufferSize > 0 && counter >= m_consoleBufferSize) {
     messageQueue.clear();
     messageQueue << "\nQUTECSOUND: Message buffer overflow. Messages discarded!\n";
-    qDebug() << "CsoundEngine::dispatchQueues() " << m_consoleBufferSize << counter;
+//    qDebug() << "CsoundEngine::dispatchQueues() " << m_consoleBufferSize << counter;
   }
   messageMutex.unlock();
 
@@ -928,3 +931,7 @@ bool CsoundEngine::isRecording()
   return m_recording;
 }
 
+void *CsoundEngine::getCsound()
+{
+  return (void *) ud->csound;
+}
