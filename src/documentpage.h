@@ -66,6 +66,7 @@ class DocumentPage : public QObject
     QString getLiveEventsText();
     QString wordUnderCursor();
     QRect getWidgetPanelGeometry();
+    void *getCsound();
 
     int lineCount(bool countExtras = false);
     int characterCount(bool countExtras = false);
@@ -103,6 +104,7 @@ class DocumentPage : public QObject
     void setColorVariables(bool colorVariables);
     void setOpcodeNameList(QStringList opcodeNameList);
     void setAutoComplete(bool autoComplete);
+    QString getActiveText();
     void print(QPrinter *printer);
     void findReplace();
     void findString();  // For find again
@@ -153,6 +155,7 @@ class DocumentPage : public QObject
     void playParent(); // Triggered from button, ask parent for options
     void renderParent();
     int runPython();  // Called when file is a python file
+    void queueEvent(QString line, int delay = 0);
 
     void applyMacOptions(QStringList options);
     void setMacOption(QString option, QString newValue);
@@ -238,7 +241,7 @@ class DocumentPage : public QObject
 
     void opcodeSyntax(QString message);
     void setWidgetClipboard(QString text);
-    void queueEvent(QString line, int delay = 0);
+    void evaluatePython(QString code);
 
   signals:
     void currentLineChanged(int);
@@ -249,6 +252,7 @@ class DocumentPage : public QObject
     void stopSignal(); // To tell main application that running has stopped
     void opcodeSyntaxSignal(QString message); // Propagated from view
     void setWidgetClipboardSignal(QString text);
+    void evaluatePythonSignal(QString code);
 };
 
 #endif

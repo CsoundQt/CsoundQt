@@ -785,12 +785,12 @@
 <context>
     <name>DocumentView</name>
     <message>
-        <location filename="../documentview.cpp" line="576"/>
+        <location filename="../documentview.cpp" line="588"/>
         <source>Find and replace</source>
         <translation>Finden und ersetzen</translation>
     </message>
     <message>
-        <location filename="../documentview.cpp" line="577"/>
+        <location filename="../documentview.cpp" line="589"/>
         <source>The string was not found.
 Would you like to start from the top?</source>
         <translation>Nicht gefunden.
@@ -2401,184 +2401,184 @@ Ist schon in Gebrauch.</translation>
 <context>
     <name>WidgetLayout</name>
     <message>
-        <location filename="../widgetlayout.cpp" line="80"/>
+        <location filename="../widgetlayout.cpp" line="65"/>
         <source>Create Slider</source>
         <translation>Slider erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="82"/>
+        <location filename="../widgetlayout.cpp" line="67"/>
         <source>Create Label</source>
         <translation>Label erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="84"/>
+        <location filename="../widgetlayout.cpp" line="69"/>
         <source>Create Display</source>
         <translation>Display erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="86"/>
+        <location filename="../widgetlayout.cpp" line="71"/>
         <source>Create ScrollNumber</source>
         <translation>ScrollNumber erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="89"/>
+        <location filename="../widgetlayout.cpp" line="74"/>
         <source>Create LineEdit</source>
         <translation>LineEdit erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="91"/>
+        <location filename="../widgetlayout.cpp" line="76"/>
         <source>Create SpinBox</source>
         <translation>SpinBox erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="93"/>
+        <location filename="../widgetlayout.cpp" line="78"/>
         <source>Create Button</source>
         <translation>Button erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="95"/>
+        <location filename="../widgetlayout.cpp" line="80"/>
         <source>Create Knob</source>
         <translation>Knob erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="97"/>
+        <location filename="../widgetlayout.cpp" line="82"/>
         <source>Create Checkbox</source>
         <translation>Checkbox erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="99"/>
+        <location filename="../widgetlayout.cpp" line="84"/>
         <source>Create Menu</source>
         <translation>Menu erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="101"/>
+        <location filename="../widgetlayout.cpp" line="86"/>
         <source>Create Controller</source>
         <translation>Controller erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="103"/>
+        <location filename="../widgetlayout.cpp" line="88"/>
         <source>Create Console</source>
         <translation>Konsole erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="105"/>
+        <location filename="../widgetlayout.cpp" line="90"/>
         <source>Create Graph</source>
         <translation>Graph erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="107"/>
+        <location filename="../widgetlayout.cpp" line="92"/>
         <source>Create Scope</source>
         <translation>Scope erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="109"/>
+        <location filename="../widgetlayout.cpp" line="94"/>
         <source>Properties</source>
         <translation>Eigenschaften</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="112"/>
+        <location filename="../widgetlayout.cpp" line="97"/>
         <source>Cut</source>
         <translation>Raus</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="114"/>
+        <location filename="../widgetlayout.cpp" line="99"/>
         <source>Copy</source>
         <translation>Kopieren</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="116"/>
+        <location filename="../widgetlayout.cpp" line="101"/>
         <source>Paste</source>
         <translation>Rein</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="118"/>
+        <location filename="../widgetlayout.cpp" line="103"/>
         <source>Duplicate Selected</source>
         <translation>Auswahl duplizieren</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="120"/>
+        <location filename="../widgetlayout.cpp" line="105"/>
         <source>Delete Selected</source>
         <translation>Auswahl löschen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="122"/>
+        <location filename="../widgetlayout.cpp" line="107"/>
         <source>Clear all widgets</source>
         <translation>Alle Widgets entfernen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="124"/>
+        <location filename="../widgetlayout.cpp" line="109"/>
         <source>Select all widgets</source>
         <translation>Alle Widgets auswählen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="127"/>
+        <location filename="../widgetlayout.cpp" line="112"/>
         <source>Align Left</source>
         <translation>Links ausrichten</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="129"/>
+        <location filename="../widgetlayout.cpp" line="114"/>
         <source>Align Right</source>
         <translation>Rechts ausrichten</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="131"/>
+        <location filename="../widgetlayout.cpp" line="116"/>
         <source>Align Top</source>
         <translation>Oben ausrichten</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="133"/>
+        <location filename="../widgetlayout.cpp" line="118"/>
         <source>Align Bottom</source>
         <translation>Unten ausrichten</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="135"/>
+        <location filename="../widgetlayout.cpp" line="120"/>
         <source>Send to back</source>
         <translation>In den Hintergrund rücken</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="137"/>
+        <location filename="../widgetlayout.cpp" line="122"/>
         <source>Distribute Horizontally</source>
         <translation>Waagerecht verteilen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="139"/>
+        <location filename="../widgetlayout.cpp" line="124"/>
         <source>Distribute Vertically</source>
         <translation>Senkrecht verteilen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="141"/>
+        <location filename="../widgetlayout.cpp" line="126"/>
         <source>Center Vertically</source>
         <translation>Center Vertically</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="143"/>
+        <location filename="../widgetlayout.cpp" line="128"/>
         <source>Center Horizontally</source>
         <translation>Center Horizontally</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="146"/>
+        <location filename="../widgetlayout.cpp" line="131"/>
         <source>Store Preset</source>
         <translation>Preset speichern</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="148"/>
-        <location filename="../widgetlayout.cpp" line="2646"/>
-        <location filename="../widgetlayout.cpp" line="2802"/>
+        <location filename="../widgetlayout.cpp" line="133"/>
+        <location filename="../widgetlayout.cpp" line="2642"/>
+        <location filename="../widgetlayout.cpp" line="2798"/>
         <source>New Preset</source>
         <translation>Neues Preset</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="150"/>
+        <location filename="../widgetlayout.cpp" line="135"/>
         <source>Recall Preset</source>
         <translation>Preset zurückholen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="209"/>
+        <location filename="../widgetlayout.cpp" line="194"/>
         <source>More than one panel</source>
         <translation>Mehr als ein Fenster</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="210"/>
+        <location filename="../widgetlayout.cpp" line="195"/>
         <source>The csd file contains more than one widget panel!
 This is not suported by the current version,
 Addtional widget panels will be lost if the file is saved!</source>
@@ -2587,71 +2587,71 @@ Dies wird von der laufenden Version nicht unterstützt.
 Die zusätzlichen Widgetfenster werden verlorengehen wenn die Datei gesichert wird!</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="225"/>
+        <location filename="../widgetlayout.cpp" line="210"/>
         <source>Unrecognized wigdet format</source>
         <translation>Unbekanntes Widget-Format</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="226"/>
+        <location filename="../widgetlayout.cpp" line="211"/>
         <source>There is unrecognized widget information in the file!
 It may be saved with errors.</source>
         <translation>Es gibt unbekannte Widget-Informationen in der Datei!
 Sie wurde möglicherweise fehlerhaft gespeichert.</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="235"/>
+        <location filename="../widgetlayout.cpp" line="220"/>
         <source>Newer Widget Format</source>
         <translation>Neueres Widget-Format</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="236"/>
+        <location filename="../widgetlayout.cpp" line="221"/>
         <source>The file was was saved by a more recent version of QuteCsound.
 Some features may not be available and will not be saved!</source>
         <translation>Die Datei wurde von einer jüngeren Version von QuteCsound gespeichert.
 Einige Features könnten nicht verfügbar sein und werden nicht gesichert!</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="938"/>
+        <location filename="../widgetlayout.cpp" line="923"/>
         <source>ChannelH:</source>
         <translation>KanalHor:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="939"/>
+        <location filename="../widgetlayout.cpp" line="924"/>
         <source>ChannelV:</source>
         <translation>Vertikaler Kanal:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2645"/>
+        <location filename="../widgetlayout.cpp" line="2641"/>
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2651"/>
+        <location filename="../widgetlayout.cpp" line="2647"/>
         <source>Double-click Preset to Load</source>
         <translation>Preset doppelklicken um zu laden</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2756"/>
+        <location filename="../widgetlayout.cpp" line="2752"/>
         <source>New Preset Name:</source>
         <translation>Neuer Preset-Name</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2758"/>
+        <location filename="../widgetlayout.cpp" line="2754"/>
         <source>Number:</source>
         <translation>Nummer:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2774"/>
+        <location filename="../widgetlayout.cpp" line="2770"/>
         <source>Preset Already Exists</source>
         <translation>Preset existiert schon</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2775"/>
+        <location filename="../widgetlayout.cpp" line="2771"/>
         <source>Preset %i already exists. Overwrite?</source>
         <translation>Preset %i existiert schon. Überschreiben?</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2804"/>
+        <location filename="../widgetlayout.cpp" line="2800"/>
         <source>Select Preset to save</source>
         <translation>Preset auswählen um zu sichern</translation>
     </message>
@@ -2662,26 +2662,26 @@ ChannelH:</source>
 Horizontaler Kanal:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="946"/>
+        <location filename="../widgetlayout.cpp" line="931"/>
         <source>Channel:</source>
         <translation>Kanal:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="1605"/>
+        <location filename="../widgetlayout.cpp" line="1601"/>
         <source>Apply</source>
         <translation>Anwenden</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="1607"/>
-        <location filename="../widgetlayout.cpp" line="2761"/>
-        <location filename="../widgetlayout.cpp" line="2801"/>
+        <location filename="../widgetlayout.cpp" line="1603"/>
+        <location filename="../widgetlayout.cpp" line="2757"/>
+        <location filename="../widgetlayout.cpp" line="2797"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="1609"/>
-        <location filename="../widgetlayout.cpp" line="2760"/>
-        <location filename="../widgetlayout.cpp" line="2800"/>
+        <location filename="../widgetlayout.cpp" line="1605"/>
+        <location filename="../widgetlayout.cpp" line="2756"/>
+        <location filename="../widgetlayout.cpp" line="2796"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>

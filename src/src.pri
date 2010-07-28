@@ -105,5 +105,11 @@ DISTFILES += "$${PWD}/default.csd" \
     "$${PWD}/opcodes.xml" \
     "$${PWD}/qutecsound.rc" \
     "$${PWD}/test.csd"
+
+pythonqt {
+HEADERS += "$${PWD}/pythonconsole.h"
+SOURCES += "$${PWD}/pythonconsole.cpp"
+}
+
 #OTHER_FILES = $${DISTFILES}
 

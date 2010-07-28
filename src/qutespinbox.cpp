@@ -169,7 +169,8 @@ void QuteSpinBox::refreshWidget()
   widgetLock.lockForRead();
 #endif
   double resolution = property("QCS_resolution").toDouble();
-  double val = resolution * ceil((m_value)/resolution);
+//  double val = resolution * (int(m_value /resolution) + 1.0); // ceil or int won't work here...
+  double val = m_value;
 //  qDebug()<< "QuteSpinBox::refreshWidget()" << val << m_value << resolution;
   m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
@@ -331,12 +332,18 @@ void QuteSpinBox::valueChanged(double value)
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
 #endif
-  m_value = value;
-  m_stringValue = QString::number(value);
-  m_valueChanged = true;
-  QPair<QString, double> channelValue(m_channel, m_value);
+  setInternalValue(value);
+  QPair<QString, double> channelValue(m_channel, value);
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
   emit newValue(channelValue);
+}
+
+void QuteSpinBox::setInternalValue(double value)
+{
+  m_value = value;
+//  m_stringValue = QString::number(value);
+  m_valueChanged = true;
+//  setProperty("QCS_value", m_value);
 }

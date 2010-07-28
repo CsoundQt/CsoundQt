@@ -3,11 +3,11 @@
 	message()
 	message(Building QuteCsound for Unix-based system.)
 }
-!build32:!build64:CONFIG += build32
-build32:build64:CONFIG -= build32
+
+# Set default paths
 DEFAULT_CSOUND_API_INCLUDE_DIRS = /usr/local/include/csound \
 	/usr/include/csound
-DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_DIRS}
+DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
 DEFAULT_CSOUND_LIBRARY_DIRS = /usr/local/lib \
 	/usr/lib
 DEFAULT_LIBSNDFILE_INCLUDE_DIRS = /usr/include
@@ -19,18 +19,16 @@ build64:DEFAULT_CSOUND_LIBS = libcsound64.so \
 CSND_LIB = libcsnd.so
 LIBSNDFILE_LIB = libsndfile.a
 
-pythonqt {
 DEFAULT_PYTHONQT_INCLUDE_DIRS = /usr/local/include \
 	/usr/include
 DEFAULT_PYTHONQT_LIBRARY_DIRS = /usr/local/lib \
 	/usr/lib
 PYTHONQT_LIB = libPythonQt_QtAll.so
-}
 
+# Do configuration step
 include(config.pri)
-INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
-INCLUDEPATH *= $${CSOUND_INTERFACES_INCLUDE_DIR}
-INCLUDEPATH *= $${LIBSNDFILE_INCLUDE_DIR}
+
+# Use results from config step
 LIBS *= -L$${CSOUND_LIBRARY_DIR}
 LIBS *= -L$${LIBSNDFILE_LIBRARY_DIR}
 build32:LCSOUND = -lcsound
