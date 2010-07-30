@@ -39,7 +39,7 @@ class WidgetPanel : public QDockWidget
 
     void addWidgetLayout(WidgetLayout *layoutWidget);
     WidgetLayout * takeWidgetLayout();
-    void setCurrentLayout(WidgetLayout *layoutWidget);
+//    void setCurrentLayout(WidgetLayout *layoutWidget);
 
     void setWidgetScrollBarsActive(bool active);
 
@@ -70,7 +70,7 @@ class WidgetPanel : public QDockWidget
     void scrollBarMoved(int);
 
   signals:
-    void widgetsChanged(QString text);
+//    void widgetsChanged(QString text);
     void Close(bool visible);
     void moved(QPoint position);
     void resized(QSize size);

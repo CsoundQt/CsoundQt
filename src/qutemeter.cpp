@@ -322,7 +322,7 @@ void QuteMeter::applyProperties()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
-  QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
+  QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
   qDebug("QuteMeter::applyProperties()");
 }
 

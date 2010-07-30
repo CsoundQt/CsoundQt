@@ -230,6 +230,7 @@ void qutecsound::changePage(int index)
     disconnect(showLiveEventsAct, 0,0,0);
     disconnect(documentPages[curPage], SIGNAL(stopSignal()),0,0);
     documentPages[curPage]->showLiveEventPanels(false);
+    documentPages[curPage]->hideWidgets();
   }
   if (index < 0) { // No tabs left
     qDebug() << "qutecsound::changePage index < 0";
@@ -237,17 +238,23 @@ void qutecsound::changePage(int index)
   }
   curPage = index;
   if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
-    QWidget *w = widgetPanel->widget();
-    if (w != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
-      w = widgetPanel->takeWidgetLayout();
-      if (w)
-          w->setParent(0);
+    if (m_options->layoutsDocked) {
+      QWidget *w = widgetPanel->widget();
+      if (w != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
+        w = widgetPanel->takeWidgetLayout();
+      }
     }
     setCurrentFile(documentPages[curPage]->getFileName());
     connectActions();
     documentPages[curPage]->showLiveEventPanels(showLiveEventsAct->isChecked());
     documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
-    widgetPanel->addWidgetLayout(documentPages[curPage]->getWidgetLayout());
+    documentPages[curPage]->showWidgets();
+    if (m_options->layoutsDocked) {
+      widgetPanel->addWidgetLayout(documentPages[curPage]->getWidgetLayout());
+    }
+    else {
+      documentPages[curPage]->hideWidgets();
+    }
     setWidgetPanelGeometry();
     if (documentPages[curPage]->getFileName().endsWith(".py")) {
       widgetPanel->hide();
@@ -816,10 +823,17 @@ bool qutecsound::join(bool ask)
   }
   QString name = documentPages[curPage]->getFileName();
   QList<QListWidgetItem *> itemList = list1->findItems(name, Qt::MatchExactly);
-  if (itemList.size() > 0)
+  if (itemList.size() == 0) {
+    itemList = list1->findItems(name.replace(".sco", ".orc"),Qt::MatchExactly);
+  }
+  if (itemList.size() > 0) {
     list1->setCurrentItem(itemList[0]);
+  }
   QList<QListWidgetItem *> itemList2 = list2->findItems(name.replace(".orc", ".sco"),
       Qt::MatchExactly);
+  if (itemList2.size() == 0) {
+    itemList2 = list1->findItems(name,Qt::MatchExactly);
+  }
   if (itemList2.size() > 0)
     list2->setCurrentItem(itemList2[0]);
   if (itemList.size() == 0 or itemList.size() == 0) {
@@ -2193,7 +2207,6 @@ void qutecsound::connectActions()
 //  disconnect(pasteAct, 0, 0, 0);
 //  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
 
-
   disconnect(commentAct, 0, 0, 0);
   disconnect(uncommentAct, 0, 0, 0);
   disconnect(indentAct, 0, 0, 0);
@@ -2220,7 +2233,7 @@ void qutecsound::connectActions()
 //  disconnect(doc, SIGNAL(textChanged()), 0, 0);
 //  disconnect(doc, SIGNAL(cursorPositionChanged()), 0, 0);
 
-  disconnect(widgetPanel, SIGNAL(widgetsChanged(QString)),0,0);
+//  disconnect(widgetPanel, SIGNAL(widgetsChanged(QString)),0,0);
 //   connect(widgetPanel, SIGNAL(widgetsChanged(QString)),
 //           doc, SLOT(setMacWidgetsText(QString)) );
   disconnect(widgetPanel, SIGNAL(moved(QPoint)),0,0);
@@ -2681,6 +2694,7 @@ void qutecsound::readSettings()
   m_options->saveChanges = settings.value("savechanges", true).toBool();
   m_options->rememberFile = settings.value("rememberfile", true).toBool();
   m_options->saveWidgets = settings.value("savewidgets", true).toBool();
+  m_options->layoutsDocked = settings.value("layoutsDocked", true).toBool();
   m_options->iconText = settings.value("iconText", true).toBool();
   m_options->showToolbar = settings.value("showToolbar", true).toBool();
   m_options->wrapLines = settings.value("wrapLines", true).toBool();
@@ -2839,6 +2853,7 @@ void qutecsound::writeSettings()
     settings.setValue("savechanges", m_options->saveChanges);
     settings.setValue("rememberfile", m_options->rememberFile);
     settings.setValue("savewidgets", m_options->saveWidgets);
+    settings.setValue("layoutsDocked", m_options->layoutsDocked);
     settings.setValue("iconText", m_options->iconText);
     settings.setValue("showToolbar", m_options->showToolbar);
     settings.setValue("wrapLines", m_options->wrapLines);

@@ -198,7 +198,7 @@ void QuteComboBox::applyProperties()
 //  widgetLock.lockForWrite();
 //  widgetLock.unlock();
 //  setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
-  QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
+  QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
 }
 
 

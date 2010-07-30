@@ -265,7 +265,7 @@ class WidgetLayout : public QWidget
     QMutex widgetsMutex;
     QMutex layoutMutex;
     QList<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets
-    QVector<WINDAT> curveUpdateBuffer;
+    QVector<WINDAT> curveUpdateBuffer; // FIXME move these buffers to documentpage to avoid duplication when having multiple panels
     int curveUpdateBufferCount;
     QList<Curve *> curves;
     QTimer updateTimer;

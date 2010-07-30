@@ -324,7 +324,7 @@ void QuteSpinBox::applyProperties()
   setProperty("QCS_minimum", minSpinBox->value());
 //  setProperty("QCS_randomizable",false);
 
-  QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
+  QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
 }
 
 void QuteSpinBox::valueChanged(double value)

@@ -74,27 +74,30 @@ WidgetLayout * WidgetPanel::takeWidgetLayout()
     w->setContained(false);  // Must set before removing from container to get background
     disconnect(w, SIGNAL(selection(QRect)));
   }
-  w = (WidgetLayout *) s->takeWidget();
+  w = (WidgetLayout *) s->takeWidget();  //This transfers ownership of the widget to the caller
+  if (w) {
+    w->setParent(0);
+  }
   stack->removeWidget(s);
   delete s;
   return w;
 }
 
-void WidgetPanel::setCurrentLayout(WidgetLayout *layoutWidget)
-{
-//  QWidget *w = layoutWidget->parentWidget();
-  for (int i = 0; i < stack->count(); i++) {
-    QScrollArea *s = (QScrollArea*) stack->widget(i);
-    qDebug() << "WidgetPanel::setCurrentLayout checking " << s;
-    if (s->widget() == layoutWidget) {
-      stack->setCurrentIndex(i);
-      s->show();
-      s->widget()->show();
-      return;
-    }
-  }
-  qDebug() << "WidgetPanel::setCurrentLayout widget not contained!! " << layoutWidget;
-}
+//void WidgetPanel::setCurrentLayout(WidgetLayout *layoutWidget)
+//{
+////  QWidget *w = layoutWidget->parentWidget();
+//  for (int i = 0; i < stack->count(); i++) {
+//    QScrollArea *s = (QScrollArea*) stack->widget(i);
+//    qDebug() << "WidgetPanel::setCurrentLayout checking " << s;
+//    if (s->widget() == layoutWidget) {
+//      stack->setCurrentIndex(i);
+//      s->show();
+//      s->widget()->show();
+//      return;
+//    }
+//  }
+//  qDebug() << "WidgetPanel::setCurrentLayout widget not contained!! " << layoutWidget;
+//}
 
 //void WidgetPanel::widgetChanged()
 //{

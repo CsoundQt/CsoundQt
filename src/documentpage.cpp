@@ -43,7 +43,7 @@
 
 // TODO is is possible to move the editor to a separate child class, to be able to use a cleaner class?
 DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
-    QObject(parent), m_opcodeTree(opcodeTree)
+    QObject(parent), m_csEngine(0), m_opcodeTree(opcodeTree)
 {
   fileName = "";
   companionFile = "";
@@ -60,7 +60,6 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   m_console = new ConsoleWidget(0);
   m_console->setReadOnly(true);
 
-  m_widgetLayout = new WidgetLayout(0);
 //  m_widgetLayout->show();
   m_liveEventControl = new LiveEventControl(parent);
   m_liveEventControl->hide();
@@ -78,7 +77,6 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   connect(m_liveEventControl, SIGNAL(setPanelLoopRangeSignal(int,double,double)), this, SLOT(setPanelLoopRangeSlot(int,double,double)));
 
   m_csEngine = new CsoundEngine();
-  m_csEngine->setWidgetLayout(m_widgetLayout);  // Pass widget layout to engine
 
   // Connect for clearing marked lines and letting inspector know text has changed
   connect(m_view, SIGNAL(contentsChanged()), this, SLOT(textChanged()));
@@ -89,35 +87,23 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
           m_csEngine, SLOT(keyPressForCsound(QString)));
   connect(m_console, SIGNAL(keyReleased(QString)),
           m_csEngine, SLOT(keyReleaseForCsound(QString)));
-  // For logging of Csound output to file
-  connect(m_console, SIGNAL(logMessage(QString)),
-          static_cast<qutecsound *>(parent), SLOT(logMessage(QString)));
-
-  // Key presses on widget layout and console are passed to the engine
-  connect(m_widgetLayout, SIGNAL(keyPressed(QString)),
-          m_csEngine, SLOT(keyPressForCsound(QString)));
-  connect(m_widgetLayout, SIGNAL(keyReleased(QString)),
-          m_csEngine, SLOT(keyReleaseForCsound(QString)));
-  connect(m_widgetLayout, SIGNAL(changed()), this, SLOT(setModified()));
-  connect(m_widgetLayout, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
-  connect(m_widgetLayout, SIGNAL(setWidgetClipboardSignal(QString)),
-          this, SLOT(setWidgetClipboard(QString)));
-
   connect(m_csEngine, SIGNAL(errorLines(QList<QPair<int, QString> >)),
           m_view, SLOT(markErrorLines(QList<QPair<int, QString> >)));
   connect(m_csEngine, SIGNAL(stopSignal()),
           this, SLOT(perfEnded()));
 
-  // Register scopes and graphs to pass them the engine's user data
-  connect(m_widgetLayout, SIGNAL(registerScope(QuteScope*)),
-          m_csEngine,SLOT(registerScope(QuteScope*)));
-  connect(m_widgetLayout, SIGNAL(registerGraph(QuteGraph*)),
-          m_csEngine,SLOT(registerGraph(QuteGraph*)));
-  connect(m_widgetLayout, SIGNAL(registerButton(QuteButton*)),
-          this, SLOT(registerButton(QuteButton*)));
+  // For logging of Csound output to file
+  connect(m_console, SIGNAL(logMessage(QString)),
+          static_cast<qutecsound *>(parent), SLOT(logMessage(QString)));
 
   // Register the console with the engine for message printing
   m_csEngine->registerConsole(m_console);
+
+  //FIXME widgetlayout should have the chance of being empty
+  m_widgetLayouts.append(newWidgetLayout());
+  //FIXME should pass all the widgetLayouts
+  connectLayoutToEngine(m_widgetLayouts[0]); // FIXME do these connections inside the following function?
+  m_csEngine->setWidgetLayout(m_widgetLayouts[0]);  // Pass first widget layout to engine
 
   saveOldFormat = true; // save Mac widgets by default
   m_pythonRunning = false;
@@ -130,12 +116,15 @@ DocumentPage::~DocumentPage()
   disconnect(m_console, 0,0,0);
   disconnect(m_view, 0,0,0);
   disconnect(m_csEngine, 0,0,0);
-  disconnect(m_widgetLayout, 0,0,0);
+//  disconnect(m_widgetLayout, 0,0,0);
   m_csEngine->stop();
   m_csEngine->freeze();
 //  m_view->deleteLater();   // Crashes. Already destroyed?
 //  m_widgetLayout->setParent(0);  //To make sure the widget panel from the main application doesn't attempt to delete it as its child
-  m_widgetLayout->deleteLater();  //FIXME Still crashing ocassionally. This is leaking...
+  while (!m_widgetLayouts.isEmpty()) {
+    WidgetLayout *wl = m_widgetLayouts.takeLast();
+    wl->deleteLater();  //FIXME Still crashing ocassionally?
+  }
   m_csEngine->deleteLater();
 //  deleteAllLiveEvents(); // FIXME This is also crashing...
 }
@@ -192,8 +181,9 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     // TODO enable creation of several panels
   }
   if (xmlFormatFound) {
-     m_widgetLayout->loadXmlWidgets(xmlPanels);
-     m_widgetLayout->markHistory();
+    //FIXME allow multiple layouts
+    m_widgetLayouts[0]->loadXmlWidgets(xmlPanels);
+    m_widgetLayouts[0]->markHistory();
   }
   if (text.contains("<bsbPresets>") and text.contains("</bsbPresets>")) {
     QString presets = text.right(text.size()-text.indexOf("<bsbPresets>"));
@@ -203,7 +193,8 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     if (text.indexOf("<bsbPresets>") > 0 and text[text.indexOf("<bsbPresets>") - 1] == '\n')
       text.remove(text.indexOf("<bsbPresets>") - 1, 1); //remove initial line break
     text.remove(text.indexOf("<bsbPresets>"), presets.size());
-    m_widgetLayout->loadXmlPresets(presets);
+    //FIXME allow multiple
+    m_widgetLayouts[0]->loadXmlPresets(presets);
   }
   if (text.contains("<MacOptions>") and text.contains("</MacOptions>")) {
     QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
@@ -253,14 +244,16 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
         text.remove(text.indexOf("<MacGUI>") - 1, 1); //remove initial line break
       text.remove(m_macGUI);
       if (!xmlFormatFound) {
-        m_widgetLayout->loadMacWidgets(m_macGUI);
+        //FIXME allow multiple
+        m_widgetLayouts[0]->loadMacWidgets(m_macGUI);
         qDebug("<MacGUI> loaded.");
       }
   }
   else {
     if (autoCreateMacCsoundSections && !xmlFormatFound) {
       QString m_macGUI = "<MacGUI>\nioView nobackground {59352, 11885, 65535}\nioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1\n</MacGUI>";
-      m_widgetLayout->loadMacWidgets(m_macGUI);
+      //FIXME allow multiple
+      m_widgetLayouts[0]->loadMacWidgets(m_macGUI);
     }
     else {
       m_macGUI = "";
@@ -373,7 +366,9 @@ QString DocumentPage::getFullText()
     }
   }
   else { // Not a csd file
-    m_widgetLayout->clearWidgets(); // make sure no widgets are used.
+    foreach (WidgetLayout * wl, m_widgetLayouts) {
+      wl->clearWidgets(); // make sure no widgets are used.
+    }
   }
   if (m_lineEnding == 1) { // Windows line ending mode
     fullText.replace("\n", "\r\n");
@@ -412,7 +407,8 @@ QString DocumentPage::getDotText()
 
 QString DocumentPage::getWidgetsText()
 {
-  QString text = m_widgetLayout->getWidgetsText();
+  //FIXME allow multiple
+  QString text = m_widgetLayouts[0]->getWidgetsText();
   QDomDocument d;
   d.setContent(text);
 //  QDomElement n = d.firstChildElement("bsbPanel");
@@ -423,13 +419,15 @@ QString DocumentPage::getWidgetsText()
 
 QString DocumentPage::getPresetsText()
 {
-  return m_widgetLayout->getPresetsText();
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->getPresetsText();
 }
 
 QString DocumentPage::getMacWidgetsText()
 {
   QString t = getWidgetsText();  // TODO only for testing. remove later
-  return m_widgetLayout->getMacWidgetsText();
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->getMacWidgetsText();
 }
 
 QString DocumentPage::getMacPresetsText()
@@ -472,7 +470,8 @@ QString DocumentPage::wordUnderCursor()
 
 QRect DocumentPage::getWidgetPanelGeometry()
 {
-   return m_widgetLayout->getOuterGeometry();
+  //FIXME allow multiple
+   return m_widgetLayouts[0]->getOuterGeometry();
 }
 
 void *DocumentPage::getCsound()
@@ -551,19 +550,51 @@ void DocumentPage::setModified(bool mod)
   }
   else {
     m_view->setModified(false);
-    m_widgetLayout->setModified(false);
+    foreach (WidgetLayout  *wl, m_widgetLayouts) {
+      wl->setModified(false);
+    }
     for (int i = 0; i < m_liveFrames.size(); i++) {
       m_liveFrames[i]->setModified(false);
     }
   }
 }
 
+WidgetLayout* DocumentPage::newWidgetLayout()
+{
+  WidgetLayout* wl = new WidgetLayout(0);
+  return wl;
+}
+
+void DocumentPage::connectLayoutToEngine(WidgetLayout* layout)
+{
+  Q_ASSERT(m_csEngine != 0); // Engine must already exist
+  // Key presses on widget layout and console are passed to the engine
+  connect(layout, SIGNAL(keyPressed(QString)),
+          m_csEngine, SLOT(keyPressForCsound(QString)));
+  connect(layout, SIGNAL(keyReleased(QString)),
+          m_csEngine, SLOT(keyReleaseForCsound(QString)));
+  connect(layout, SIGNAL(changed()), this, SLOT(setModified()));
+  connect(layout, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
+  connect(layout, SIGNAL(setWidgetClipboardSignal(QString)),
+          this, SLOT(setWidgetClipboard(QString)));
+
+  // Register scopes and graphs to pass them the engine's user data
+  connect(layout, SIGNAL(registerScope(QuteScope*)),
+          m_csEngine,SLOT(registerScope(QuteScope*)));
+  connect(layout, SIGNAL(registerGraph(QuteGraph*)),
+          m_csEngine,SLOT(registerGraph(QuteGraph*)));
+  connect(layout, SIGNAL(registerButton(QuteButton*)),
+          this, SLOT(registerButton(QuteButton*)));
+}
+
 bool DocumentPage::isModified()
 {
   if (m_view->isModified())
     return true;
-  if (m_widgetLayout->isModified())
-    return true;
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    if (wl->isModified())
+      return true;
+  }
   for (int i = 0; i < m_liveFrames.size(); i++) {
     if (m_liveFrames[i]->isModified())
       return true;
@@ -596,14 +627,17 @@ void DocumentPage::updateCsLadspaText()
   QString id = QString::number(qrand());
   text += "UniqueID=" + id + "\n";
   text += "Copyright=none\n";
-  text += m_widgetLayout->getCsladspaLines();
+  //FIXME allow multiple
+  text += m_widgetLayouts[0]->getCsladspaLines();
   text += "</csLADSPA>";
   m_view->setLadspaText(text);
 }
 
 void DocumentPage::focusWidgets()
 {
-  m_widgetLayout->setFocus();
+  //FIXME allow multiple
+  //TODO is this really required?
+  m_widgetLayouts[0]->setFocus();
 }
 
 QString DocumentPage::getFileName()
@@ -652,7 +686,8 @@ void DocumentPage::setCompanionFileName(QString name)
 void DocumentPage::copy()
 {
   // For some reason the shortcut takes this route on OS X but the direct route through keyEvent on each on Linux
-  qDebug() << "DocumentPage::copy() " << m_widgetLayout->hasFocus();
+  // FIXME allow multiple layouts
+  qDebug() << "DocumentPage::copy() " << m_widgetLayouts[0]->hasFocus();
   bool liveeventfocus = false;
   for (int i = 0; i < m_liveFrames.size(); i++) {
     if (m_liveFrames[i]->getSheet()->hasFocus()) {
@@ -665,16 +700,20 @@ void DocumentPage::copy()
       m_view->copy();
     }
     else  {
-      m_widgetLayout->copy();
+      m_widgetLayouts[0]->copy();
     }
   }
 }
 
 void DocumentPage::cut()
 {
-  if (m_widgetLayout->hasFocus())
-    m_widgetLayout->cut();
-  else if (m_view->hasFocus())
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    if (wl->hasFocus()) {
+      wl->cut();
+      return;
+    }
+  }
+  if (m_view->hasFocus())
     m_view->cut();
   else {
     for (int i = 0; i < m_liveFrames.size(); i++) {
@@ -686,8 +725,14 @@ void DocumentPage::cut()
 
 void DocumentPage::paste()
 {
-  if (m_widgetLayout->hasFocus())
-    m_widgetLayout->paste();
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    if (wl->hasFocus()) {
+      wl->cut();
+      return;
+    }
+  }
+  if (m_widgetLayouts[0]->hasFocus())
+    m_widgetLayouts[0]->paste();
   else if (m_view->hasFocus())
     m_view->paste();
   else {
@@ -702,9 +747,14 @@ void DocumentPage::undo()
 {
   // For some reason the shortcut takes this route on OS X but the direct route through keyEvent on each on Linux
 //  qDebug() << "DocumentPage::undo()";
-  if (m_widgetLayout->hasFocus()) {
-    m_widgetLayout->undo();
-    m_widgetLayout->setFocus(Qt::OtherFocusReason);
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    if (wl->hasFocus()) {
+      wl->undo();
+      wl->setFocus(Qt::OtherFocusReason);  // Why is this here?
+      return;
+    }
+  }
+  if (m_widgetLayouts[0]->hasFocus()) {
   }
   else if (m_view->hasFocus()) {
     m_view->undo();
@@ -720,11 +770,14 @@ void DocumentPage::undo()
 void DocumentPage::redo()
 {
   // For some reason the shortcut takes this route on OS X but the direct route through keyEvent on each on Linux
-  if (m_widgetLayout->hasFocus()) {
-    m_widgetLayout->redo();
-    m_widgetLayout->setFocus(Qt::OtherFocusReason);
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    if (wl->hasFocus()) {
+      wl->redo();
+      wl->setFocus(Qt::OtherFocusReason);  // Why is this here?
+      return;
+    }
   }
-  else if (m_view->hasFocus())
+  if (m_view->hasFocus())
     m_view->redo();
   else {
     for (int i = 0; i < m_liveFrames.size(); i++) {
@@ -751,7 +804,8 @@ DocumentView *DocumentPage::getView()
 
 WidgetLayout *DocumentPage::getWidgetLayout()
 {
-  return m_widgetLayout;
+  //FIXME allow multiple layouts
+  return m_widgetLayouts[0];
 }
 
 ConsoleWidget *DocumentPage::getConsole()
@@ -831,33 +885,45 @@ void DocumentPage::inToGet()
 
 void DocumentPage::showWidgetTooltips(bool visible)
 {
-  m_widgetLayout->showWidgetTooltips(visible);
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    wl->showWidgetTooltips(visible);
+  }
 }
 
 void DocumentPage::setKeyRepeatMode(bool keyRepeat)
 {
-  m_widgetLayout->setKeyRepeatMode(keyRepeat);
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    wl->setKeyRepeatMode(keyRepeat);
+  }
   m_console->setKeyRepeatMode(keyRepeat);
 }
 
 void DocumentPage::setOpenProperties(bool open)
 {
-  m_widgetLayout->setProperty("openProperties", open);
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    wl->setProperty("openProperties", open);
+  }
 }
 
 void DocumentPage::setFontOffset(double offset)
 {
-  m_widgetLayout->setFontOffset(offset);
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    wl->setFontOffset(offset);
+  }
 }
 
 void DocumentPage::setFontScaling(double offset)
 {
-  m_widgetLayout->setFontScaling(offset);
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    wl->setFontScaling(offset);
+  }
 }
 
 void DocumentPage::passWidgetClipboard(QString text)
 {
-  m_widgetLayout->passWidgetClipboard(text);
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    wl->passWidgetClipboard(text);
+  }
 }
 
 void DocumentPage::setConsoleFont(QFont font)
@@ -1050,8 +1116,10 @@ int DocumentPage::play(CsoundOptions *options)
   if (!m_csEngine->isRunning()) {
     m_view->unmarkErrorLines();  // Clear error lines when running
 //    m_console->reset(); // Clear consoles
-    m_widgetLayout->flush();   // Flush accumulated values
-    m_widgetLayout->clearGraphs();
+    foreach (WidgetLayout *wl, m_widgetLayouts) {
+      wl->flush();   // Flush accumulated values
+      wl->clearGraphs();
+    }
   }
   return m_csEngine->play(options);
 }
@@ -1066,7 +1134,9 @@ void DocumentPage::stop()
 //  qDebug() << "DocumentPage::stop()";
   if (m_csEngine->isRunning()) {
     m_csEngine->stop();
-    m_widgetLayout->engineStopped();
+    foreach (WidgetLayout *wl, m_widgetLayouts) {
+      wl->engineStopped();  // TODO only needed to flush graph buffer, but this should be moved to this class
+    }
   }
   if (m_pythonRunning == true) {
     m_pythonRunning = false;
@@ -1140,6 +1210,27 @@ int DocumentPage::runPython()
   return p.exitCode();
 }
 
+void DocumentPage::queueEvent(QString eventLine, int delay)
+{
+//   qDebug("WidgetPanel::queueEvent %s", eventLine.toStdString().c_str());
+  m_csEngine->queueEvent(eventLine, delay);  //TODO  implement passing of timestamp
+}
+
+void DocumentPage::showWidgets()
+{
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    wl->setWindowFlags(Qt::Window);
+    wl->show();
+  }
+}
+
+void DocumentPage::hideWidgets()
+{
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    wl->hide();
+  }
+}
+
 //void DocumentPage::setMacWidgetsText(QString widgetText)
 //{
 ////   qDebug() << "DocumentPage::setMacWidgetsText: ";
@@ -1154,7 +1245,8 @@ void DocumentPage::applyMacOptions(QStringList options)
     QString line = options[index];
     QStringList values = line.split(" ");
     values.removeFirst();  //remove property name
-    m_widgetLayout->setOuterGeometry(values[0].toInt(),values[1].toInt(),
+    // FIXME allow multiple layouts
+    m_widgetLayouts[0]->setOuterGeometry(values[0].toInt(),values[1].toInt(),
                                      values[2].toInt(), values[3].toInt());
   }
   else {
@@ -1179,7 +1271,8 @@ void DocumentPage::setMacOption(QString option, QString newValue)
 
 void DocumentPage::setWidgetPanelPosition(QPoint position)
 {
-  m_widgetLayout->setOuterGeometry(position.x(), position.y(), -1, -1);
+  //FIXME allow multiple layout
+  m_widgetLayouts[0]->setOuterGeometry(position.x(), position.y(), -1, -1);
   int index = m_macOptions.indexOf(QRegExp("WindowBounds: .*"));
   if (index < 0) {
 //    qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
@@ -1198,7 +1291,8 @@ void DocumentPage::setWidgetPanelPosition(QPoint position)
 void DocumentPage::setWidgetPanelSize(QSize size)
 {
   // TODO move this so that only updated when needed (e.g. full text read)
-  m_widgetLayout->setOuterGeometry(-1, -1, size.width(), size.height());
+  //FIXME allow multiple layouts
+  m_widgetLayouts[0]->setOuterGeometry(-1, -1, size.width(), size.height());
   int index = m_macOptions.indexOf(QRegExp("WindowBounds: .*"));
   if (index < 0) {
 //    qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
@@ -1218,7 +1312,9 @@ void DocumentPage::setWidgetPanelSize(QSize size)
 void DocumentPage::setWidgetEditMode(bool active)
 {
 //  qDebug() << "DocumentPage::setWidgetEditMode";
-  m_widgetLayout->setEditMode(active);
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    wl->setEditMode(active);
+  }
 }
 
 //void DocumentPage::toggleWidgetEditMode()
@@ -1229,8 +1325,10 @@ void DocumentPage::setWidgetEditMode(bool active)
 
 void DocumentPage::duplicateWidgets()
 {
-  if (m_widgetLayout->hasFocus()) {
-    m_widgetLayout->duplicate();
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    if (wl->hasFocus()) {
+      wl->duplicate();
+    }
   }
 }
 
@@ -1323,7 +1421,7 @@ void DocumentPage::deleteLiveEventPanel(LiveEventFrame *frame)
     if (frame != 0) {
       disconnect(frame, 0,0,0);
       disconnect(frame->getSheet(), 0,0,0);
-      m_liveFrames.remove(index);
+      m_liveFrames.removeAt(index);
       m_liveEventControl->removePanel(index);
       frame->close();
     }
@@ -1408,10 +1506,4 @@ void DocumentPage::setWidgetClipboard(QString message)
 void DocumentPage::evaluatePython(QString code)
 {
   emit evaluatePythonSignal(code);
-}
-
-void DocumentPage::queueEvent(QString eventLine, int delay)
-{
-//   qDebug("WidgetPanel::queueEvent %s", eventLine.toStdString().c_str());
-  m_csEngine->queueEvent(eventLine, delay);  //TODO  implement passing of timestamp
 }

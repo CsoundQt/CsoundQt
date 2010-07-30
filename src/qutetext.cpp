@@ -478,7 +478,7 @@ void QuteText::applyProperties()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
-  QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
+  QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
 }
 
 void QuteText::selectTextColor()
@@ -730,7 +730,7 @@ void QuteLineEdit::createPropertiesDialog()
 //    default:
 //      setProperty("QCS_alignment", "");
 //  }
-//  QuteWidget::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
+//  QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
 //}
 
 void QuteLineEdit::textEdited(QString text)
@@ -999,7 +999,7 @@ void QuteScrollNumber::applyProperties()
   widgetLock.unlock();
 #endif
 //  setValue(m_value);
-  QuteText::applyProperties();  //Must be last to make sure the widgetsChanged signal is last
+  QuteText::applyProperties();  //Must be last to make sure the widgetChanged signal is last
 }
 
 void QuteScrollNumber::applyInternalProperties()

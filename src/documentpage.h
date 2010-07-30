@@ -157,11 +157,17 @@ class DocumentPage : public QObject
     int runPython();  // Called when file is a python file
     void queueEvent(QString line, int delay = 0);
 
+    void showWidgets();
+    void hideWidgets();
+
     void applyMacOptions(QStringList options);
     void setMacOption(QString option, QString newValue);
     void setWidgetPanelPosition(QPoint position);
     void setWidgetPanelSize(QSize size);
     void setModified(bool mod = true);
+
+    WidgetLayout* newWidgetLayout();
+    void connectLayoutToEngine(WidgetLayout* layout);
 
     //Passed directly to widget layout
     void setWidgetEditMode(bool active);
@@ -215,11 +221,11 @@ class DocumentPage : public QObject
 
     QString m_pythonExecutable;
 
-    WidgetLayout * m_widgetLayout;
+    QList<WidgetLayout *> m_widgetLayouts;
     DocumentView *m_view;
     CsoundEngine *m_csEngine;
     ConsoleWidget *m_console;
-    QVector<LiveEventFrame *> m_liveFrames;
+    QList<LiveEventFrame *> m_liveFrames;
     LiveEventControl *m_liveEventControl;
 
     OpEntryParser *m_opcodeTree;
