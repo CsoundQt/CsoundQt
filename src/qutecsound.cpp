@@ -2006,7 +2006,7 @@ void qutecsound::createActions()
   showLiveEventsAct->setStatusTip(tr("Show Live Events Panels"));
   showLiveEventsAct->setIconText(tr("Live Events"));
 
-  showPythonConsoleAct = new QAction(/*QIcon(":/images/note.png"),*/ tr("Python Console"), this);
+  showPythonConsoleAct = new QAction(QIcon(":/images/pyroom.png"), tr("Python Console"), this);
   showPythonConsoleAct->setCheckable(true);
 //  showPythonConsoleAct->setChecked(true);  // Unnecessary because it is set by options
   showPythonConsoleAct->setStatusTip(tr("Show Python Console"));
