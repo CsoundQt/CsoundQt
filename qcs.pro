@@ -38,7 +38,7 @@ unix {
 }
 win32-g++: include (qcs-win32.pro)
 
-
+pythonqt: DEFINES += QCS_PYTHONQT
 include(src/src.pri)
 
 TRANSLATIONS = "src/translations/qutecsound_en.ts" \
@@ -52,12 +52,28 @@ TRANSLATIONS = "src/translations/qutecsound_en.ts" \
         "src/translations/qutecsound_uk.ts" \
         "src/translations/qutecsound_fi.ts"
 
+pythonqt {
+#include ( $${PYTHONQT_TREE_DIR}/build/common.prf )
+include ( $${PYTHONQT_TREE_DIR}/build/PythonQt.prf )
+include ( $${PYTHONQT_TREE_DIR}/build/PythonQt_QtAll.prf )
+
+win32::LIBS -= $${PYTHONQT_TREE_DIR}/lib/PythonQt$${DEBUG_EXT}.lib
+unix::LIBS -= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt$${DEBUG_EXT}
+win32::LIBS -= $${PYTHONQT_TREE_DIR}/lib/PythonQt_QtAll$${DEBUG_EXT}.lib
+unix::LIBS -= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt_QtAll$${DEBUG_EXT}
+# Override and always use release version of PythonQT even if building for debug
+DEBUG_EXT =
+win32::LIBS += $${PYTHONQT_TREE_DIR}/lib/PythonQt$${DEBUG_EXT}.lib
+unix::LIBS += -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt$${DEBUG_EXT}
+win32::LIBS += $${PYTHONQT_TREE_DIR}/lib/PythonQt_QtAll$${DEBUG_EXT}.lib
+unix::LIBS += -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt_QtAll$${DEBUG_EXT}
+INCLUDEPATH += $${PYTHONQT_TREE_DIR}/src
+}
 
 INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
 INCLUDEPATH *= $${CSOUND_INTERFACES_INCLUDE_DIR}
 INCLUDEPATH *= $${LIBSNDFILE_INCLUDE_DIR}
 
-pythonqt: DEFINES += QCS_PYTHONQT
 
 #OTHER_FILES += $${QMAKE_INFO_PLIST}
 

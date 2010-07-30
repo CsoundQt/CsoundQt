@@ -2619,6 +2619,7 @@ void qutecsound::createToolBars()
   configureToolBar->addAction(showHelpAct);
   configureToolBar->addAction(showConsoleAct);
   configureToolBar->addAction(showInspectorAct);
+  configureToolBar->addAction(showPythonConsoleAct);
   configureToolBar->addAction(showLiveEventsAct);
   configureToolBar->addAction(showUtilitiesAct);
 

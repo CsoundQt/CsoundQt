@@ -175,37 +175,20 @@ isEmpty(LIBSNDFILE_LIBRARY_DIR) {
 	isEmpty(LIBSNDFILE_LIBRARY_DIR): error(A valid libsndfile library directory was not found.)
 }
 pythonqt {
-isEmpty(PYTHONQT_INCLUDE_DIR) {
-        !no_messages: message(PythonQt include directory not specified.)
-        for(dir, DEFAULT_PYTHONQT_INCLUDE_DIRS) {
-                !no_messages: message(... searching in $${dir})
-                exists($${dir}): \
-                exists($${dir}/PythonQt.h) {
-                        !no_messages {
-                                message(PYTHONQT_INCLUDE_DIR set to $${dir})
-                                message()
-                        }
-                        PYTHONQT_INCLUDE_DIR = $${dir}
-                        break()
-                }
-        }
-        isEmpty(PYTHONQT_INCLUDE_DIR): error(A valid PythonQt include directory was not found.)
-}
-isEmpty(PYTHONQT_LIBRARY_DIR) {
+isEmpty(PYTHONQT_TREE_DIR) {
         !no_messages: message(PythonQt library directory not specified.)
-        for(dir, DEFAULT_PYTHONQT_LIBRARY_DIRS) {
+        for(dir, DEFAULT_PYTHONQT_TREE_DIRS) {
                 !no_messages: message(... searching in $${dir})
-                exists($${dir}): \
-                exists($${dir}/$${PYTHONQT_LIB}) {
+                exists($${dir}) {
                         !no_messages {
-                                message(PYTHONQT_LIBRARY_DIR set to $${dir})
+                                message(PYTHONQT_TREE_DIR set to $${dir})
                                 message()
                         }
-                        PYTHONQT_LIBRARY_DIR = $${dir}
+                        PYTHONQT_TREE_DIR = $${dir}
                         break()
                 }
         }
-        isEmpty(PYTHONQT_LIBRARY_DIR): error(A valid PythonQt library directory was not found.)
+        isEmpty(PYTHONQT_TREE_DIR): error(A valid PythonQt library directory was not found.)
 
 }
 }
@@ -222,8 +205,9 @@ win32 {
 	message(libsndfile include directory is $${LIBSNDFILE_INCLUDE_DIR})
 	message(libsndfile library directory is $${LIBSNDFILE_LIBRARY_DIR})
 pythonqt {
-        message(PythonQt include directory is $${PYTHONQT_INCLUDE_DIR})
-        message(PythonQt library directory is $${PYTHONQT_LIBRARY_DIR})
+#        message(PythonQt include directory is $${PYTHONQT_INCLUDE_DIR})
+#        message(PythonQt library directory is $${PYTHONQT_LIBRARY_DIR})
+        message(PythonQt source tree directory is $${PYTHONQT_TREE_DIR})
 }
 	message()
 }
@@ -258,8 +242,9 @@ pythonqt {
 	!directoryExists($${LIBSNDFILE_INCLUDE_DIR}): error(libsndfile include directory not found)
 	!directoryExists($${LIBSNDFILE_LIBRARY_DIR}): error(libsndfile library directory not found)
 pythonqt {
-        !exists($${PYTHONQT_INCLUDE_DIR}): error(PythonQt include directory not found)
-        !exists($${PYTHONQT_LIBRARY_DIR}): error(PythonQt llinrary directory not found)
+#        !exists($${PYTHONQT_INCLUDE_DIR}): error(PythonQt include directory not found)
+#        !exists($${PYTHONQT_LIBRARY_DIR}): error(PythonQt library directory not found)
+        !exists($${PYTHONQT_TREE_DIR}): error(PythonQt source tree directory not found)
 }
 	!csoundApiHeaderExists(csound.h): error(csound.h not found)
         !csoundApiHeaderExists(csound.hpp): error(csound.hpp not found)

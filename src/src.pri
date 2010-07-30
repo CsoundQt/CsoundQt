@@ -107,8 +107,10 @@ DISTFILES += "$${PWD}/default.csd" \
     "$${PWD}/test.csd"
 
 pythonqt {
-HEADERS += "$${PWD}/pythonconsole.h"
-SOURCES += "$${PWD}/pythonconsole.cpp"
+HEADERS += "$${PWD}/pythonconsole.h" \
+  "$${PWD}/pyqcsobject.h"
+SOURCES += "$${PWD}/pythonconsole.cpp" \
+  "$${PWD}/pyqcsobject.cpp"
 }
 
 #OTHER_FILES = $${DISTFILES}
