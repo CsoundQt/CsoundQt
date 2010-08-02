@@ -62,10 +62,10 @@ exists(config.user.pri) {
 }
 isEmpty(CSOUND_API_INCLUDE_DIR) {
 	!isEmpty(CSOUND_INCLUDE_DIR): CSOUND_API_INCLUDE_DIR = $${CSOUND_INCLUDE_DIR}
-        isEmpty(CSOUND_API_INCLUDE_DIR) {
-            !isEmpty(CSOUND_SOURCE_TREE): CSOUND_API_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/H
-        }
-        isEmpty(CSOUND_API_INCLUDE_DIR) {
+		isEmpty(CSOUND_API_INCLUDE_DIR) {
+			!isEmpty(CSOUND_SOURCE_TREE): CSOUND_API_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/H
+		}
+		isEmpty(CSOUND_API_INCLUDE_DIR) {
 		!no_messages: message(Csound API include directory not specified.)
 		for(dir, DEFAULT_CSOUND_API_INCLUDE_DIRS) {
 			!no_messages: message(... searching in $${dir})
@@ -85,11 +85,11 @@ isEmpty(CSOUND_API_INCLUDE_DIR) {
 }
 isEmpty(CSOUND_INTERFACES_INCLUDE_DIR) {
 	!isEmpty(CSOUND_INCLUDE_DIR): CSOUND_INTERFACES_INCLUDE_DIR = $${CSOUND_INCLUDE_DIR}
-        isEmpty(CSOUND_INTERFACES_INCLUDE_DIR) {
-            !isEmpty(CSOUND_SOURCE_TREE): CSOUND_INTERFACES_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/interfaces
-        }
-        isEmpty(CSOUND_INTERFACES_INCLUDE_DIR) {
-                !no_messages: message(Csound interfaces include directory not specified.)
+		isEmpty(CSOUND_INTERFACES_INCLUDE_DIR) {
+			!isEmpty(CSOUND_SOURCE_TREE): CSOUND_INTERFACES_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/interfaces
+		}
+		isEmpty(CSOUND_INTERFACES_INCLUDE_DIR) {
+				!no_messages: message(Csound interfaces include directory not specified.)
 		for(dir, DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS) {
 			!no_messages: message(... searching in $${dir})
 			exists($${dir}):
@@ -113,8 +113,8 @@ isEmpty(CSOUND_LIBRARY_DIR) {
 		for(dir, DEFAULT_CSOUND_LIBRARY_DIRS) {
 			!no_messages: message(... searching in $${dir})
 			exists($${dir}) {
-                        !no_messages: message(... in $${dir} for $${DEFAULT_CSOUND_LIBS})
-                                for(csound_lib, DEFAULT_CSOUND_LIBS) {
+						!no_messages: message(... in $${dir} for $${DEFAULT_CSOUND_LIBS})
+								for(csound_lib, DEFAULT_CSOUND_LIBS) {
 					exists($${dir}/$${csound_lib}) {
 						exists($${dir}/$${CSND_LIB}) {
 							!no_messages {
@@ -175,22 +175,38 @@ isEmpty(LIBSNDFILE_LIBRARY_DIR) {
 	isEmpty(LIBSNDFILE_LIBRARY_DIR): error(A valid libsndfile library directory was not found.)
 }
 pythonqt {
-isEmpty(PYTHONQT_TREE_DIR) {
-        !no_messages: message(PythonQt library directory not specified.)
-        for(dir, DEFAULT_PYTHONQT_TREE_DIRS) {
-                !no_messages: message(... searching in $${dir})
-                exists($${dir}) {
-                        !no_messages {
-                                message(PYTHONQT_TREE_DIR set to $${dir})
-                                message()
-                        }
-                        PYTHONQT_TREE_DIR = $${dir}
-                        break()
-                }
-        }
-        isEmpty(PYTHONQT_TREE_DIR): error(A valid PythonQt library directory was not found.)
-
-}
+	win32 {
+		isEmpty(PYTHON_INCLUDE_DIR) {
+			!no_messages: message(Python include directory not specified.)
+			for(dir, DEFAULT_PYTHON_INCLUDE_DIRS) {
+				!no_messages: message(... searching in $${dir})
+				exists($${dir}) {
+					!no_messages {
+						message(PYTHON_INCLUDE_DIR set to $${dir})
+						message()
+					}
+					PYTHON_INCLUDE_DIR = $${dir}
+					break()
+				}
+			}
+			isEmpty(PYTHON_INCLUDE_DIR): error(A valid Python include directory was not found.)
+		}
+	}
+	isEmpty(PYTHONQT_TREE_DIR) {
+		!no_messages: message(PythonQt library directory not specified.)
+		for(dir, DEFAULT_PYTHONQT_TREE_DIRS) {
+			!no_messages: message(... searching in $${dir})
+			exists($${dir}) {
+				!no_messages {
+					message(PYTHONQT_TREE_DIR set to $${dir})
+					message()
+				}
+				PYTHONQT_TREE_DIR = $${dir}
+				break()
+			}
+		}
+		isEmpty(PYTHONQT_TREE_DIR): error(A valid PythonQt library directory was not found.)
+	}
 }
 win32 {
 	CSOUND_INCLUDE_DIR = $$replace(CSOUND_INCLUDE_DIR, \\\\, /)
@@ -199,16 +215,15 @@ win32 {
 	LIBSNDFILE_LIBRARY_DIR = $$replace(LIBSNDFILE_LIBRARY_DIR, \\\\, /)
 }
 !no_messages {
-        message(Csound API include directory is $${CSOUND_API_INCLUDE_DIR})
-        message(Csound interfaces include directory is $${CSOUND_INTERFACES_INCLUDE_DIR})
+	message(Csound API include directory is $${CSOUND_API_INCLUDE_DIR})
+	message(Csound interfaces include directory is $${CSOUND_INTERFACES_INCLUDE_DIR})
 	message(Csound library directory is $${CSOUND_LIBRARY_DIR})
 	message(libsndfile include directory is $${LIBSNDFILE_INCLUDE_DIR})
 	message(libsndfile library directory is $${LIBSNDFILE_LIBRARY_DIR})
-pythonqt {
-#        message(PythonQt include directory is $${PYTHONQT_INCLUDE_DIR})
-#        message(PythonQt library directory is $${PYTHONQT_LIBRARY_DIR})
-        message(PythonQt source tree directory is $${PYTHONQT_TREE_DIR})
-}
+	pythonqt {
+		win32: message(Python include directory is $${PYTHON_INCLUDE_DIR})
+		message(PythonQt source tree directory is $${PYTHONQT_TREE_DIR})
+	}
 	message()
 }
 !no_checks {
@@ -241,17 +256,16 @@ pythonqt {
 	!directoryExists($${CSOUND_LIBRARY_DIR}): error(Csound library directory not found)
 	!directoryExists($${LIBSNDFILE_INCLUDE_DIR}): error(libsndfile include directory not found)
 	!directoryExists($${LIBSNDFILE_LIBRARY_DIR}): error(libsndfile library directory not found)
-pythonqt {
-#        !exists($${PYTHONQT_INCLUDE_DIR}): error(PythonQt include directory not found)
-#        !exists($${PYTHONQT_LIBRARY_DIR}): error(PythonQt library directory not found)
-        !exists($${PYTHONQT_TREE_DIR}): error(PythonQt source tree directory not found)
-}
+	pythonqt {
+		win32: !directoryExists($${PYTHON_INCLUDE_DIR}): error(Python include directory not found)
+		!directoryExists($${PYTHONQT_TREE_DIR}): error(PythonQt source tree directory not found)
+	}
 	!csoundApiHeaderExists(csound.h): error(csound.h not found)
-        !csoundApiHeaderExists(csound.hpp): error(csound.hpp not found)
+	!csoundApiHeaderExists(csound.hpp): error(csound.hpp not found)
 	!csoundApiHeaderExists(cwindow.h): error(cwindow.h not found)
 	!csoundInterfacesHeaderExists(csPerfThread.hpp): error(csPerfThread.hpp not found)
 	!csoundLibraryExists($${CSOUND_LIB}): error(Csound API library not found)
 	!csoundLibraryExists($${CSND_LIB}): error(Csound C++ interface library not found)
 	!libsndfileHeaderExists(sndfile.h): error(sndfile.h not found)
-        !libsndfileLibraryExists($${LIBSNDFILE_LIB}): error(libsndfile library not found)
+	!libsndfileLibraryExists($${LIBSNDFILE_LIB}): error(libsndfile library not found)
 }
