@@ -184,6 +184,7 @@ class qutecsound:public QMainWindow
     void clearSettings();
     int execute(QString executable, QString options);
 //    bool saveCurrent();
+    void makeNewPage(QString fileName, QString text);
     bool loadCompanionFile(const QString &fileName);
     bool saveFile(const QString &fileName, bool saveWidgets = true);
     void setCurrentFile(const QString &fileName);
