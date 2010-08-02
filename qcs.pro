@@ -54,7 +54,7 @@ TRANSLATIONS = "src/translations/qutecsound_en.ts" \
 
 pythonqt {
 	include ( $${PYTHONQT_TREE_DIR}/build/PythonQt.prf )
-	include ( $${PYTHONQT_TREE_DIR}/build/PythonQt_QtAll.prf )
+#	include ( $${PYTHONQT_TREE_DIR}/build/PythonQt_QtAll.prf )
 
 	win32: INCLUDEPATH *= $${PYTHON_INCLUDE_DIR}
 	INCLUDEPATH *= $${PYTHONQT_TREE_DIR}/src
@@ -63,13 +63,13 @@ pythonqt {
 	win32: LIBS -= $(PYTHON_LIB)/libpython$${PYTHON_VERSION}$${DEBUG_EXT}.a
 	win32: LIBS -= $${PYTHONQT_TREE_DIR}/build/../lib/libPythonQt$${DEBUG_EXT}.a
 	unix: LIBS -= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt$${DEBUG_EXT}
-	win32: LIBS -= $${PYTHONQT_TREE_DIR}/build/../lib/PythonQt_QtAll$${DEBUG_EXT}.lib
-	unix: LIBS -= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt_QtAll$${DEBUG_EXT}
+#	win32: LIBS -= $${PYTHONQT_TREE_DIR}/build/../lib/PythonQt_QtAll$${DEBUG_EXT}.lib
+#	unix: LIBS -= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt_QtAll$${DEBUG_EXT}
 	win32: LIBS *= $(PYTHON_LIB)/libpython$${PYTHON_VERSION}.a
 	win32: LIBS *= $${PYTHONQT_TREE_DIR}/lib/libPythonQt.a
 	unix: LIBS *= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt
-	win32: LIBS *= $${PYTHONQT_TREE_DIR}/lib/libPythonQt_QtAll.a
-	unix: LIBS *= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt_QtAll
+#	win32: LIBS *= $${PYTHONQT_TREE_DIR}/lib/libPythonQt_QtAll.a
+#	unix: LIBS *= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt_QtAll
 }
 
 INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
