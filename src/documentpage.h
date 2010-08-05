@@ -27,6 +27,7 @@
 #include <QTextEdit>
 #include <QDomElement>
 #include <QStack>
+#include <QDockWidget>
 
 #include "types.h"
 #include "csoundoptions.h"
@@ -52,7 +53,7 @@ class DocumentPage : public QObject
     DocumentPage(QWidget *parent, OpEntryParser *opcodeTree);
     ~DocumentPage();
 
-    int setTextString(QString text, bool autoCreateMacCsoundSections = true);
+    // Needed for main application, but not for standalone
     QString getFullText();
     QString getBasicText();
     QString getOptionsText();
@@ -66,7 +67,6 @@ class DocumentPage : public QObject
     QString getLiveEventsText();
     QString wordUnderCursor();
     QRect getWidgetPanelGeometry();
-    void *getCsound();
 
     int lineCount(bool countExtras = false);
     int characterCount(bool countExtras = false);
@@ -83,19 +83,27 @@ class DocumentPage : public QObject
     void focusWidgets();
     QString getFileName();
     QString getCompanionFileName();
-    void setLineEnding(int lineEndingMode);
-    void setFileName(QString name);
-    void setCompanionFileName(QString name);
 
+    // Edition- are routed to section with focus
     void copy();
     void cut();
     void paste();
     void undo();
     void redo();
 
+    // Needed for both standalone and main application
+    int setTextString(QString text, bool autoCreateMacCsoundSections = true);
+
+    void setLineEnding(int lineEndingMode);
+
+    void setFileName(QString name);
+    void setCompanionFileName(QString name);
+
+    // Get internal components
     DocumentView *getView();  // Needed to pass view for placing it as tab widget in main application
     WidgetLayout *getWidgetLayout();  // Needed to pass for placing in widget dock panel
     ConsoleWidget *getConsole();  // Needed to pass for placing in console dock panel
+    void *getCsound();
 
     // Document view properties and actions
     void setTextFont(QFont font);
@@ -159,6 +167,8 @@ class DocumentPage : public QObject
 
     void showWidgets();
     void hideWidgets();
+    void detachWidgets();
+    void attachWidgets(QDockWidget *panel);
 
     void applyMacOptions(QStringList options);
     void setMacOption(QString option, QString newValue);
@@ -167,7 +177,6 @@ class DocumentPage : public QObject
     void setModified(bool mod = true);
 
     WidgetLayout* newWidgetLayout();
-    void connectLayoutToEngine(WidgetLayout* layout);
 
     //Passed directly to widget layout
     void setWidgetEditMode(bool active);

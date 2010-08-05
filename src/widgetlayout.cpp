@@ -46,7 +46,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 {
   selectionFrame = new QRubberBand(QRubberBand::Rectangle, this);
   selectionFrame->hide();
-
+  setOuterGeometry(100, 100, 100, 100);
   m_trackMouse = true;
   m_editMode = false;
   m_enableEdit = true;

@@ -101,10 +101,9 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 
   //FIXME widgetlayout should have the chance of being empty
   m_widgetLayouts.append(newWidgetLayout());
-  //FIXME should pass all the widgetLayouts
-  connectLayoutToEngine(m_widgetLayouts[0]); // FIXME do these connections inside the following function?
   m_csEngine->setWidgetLayout(m_widgetLayouts[0]);  // Pass first widget layout to engine
 
+//  detachWidgets();
   saveOldFormat = true; // save Mac widgets by default
   m_pythonRunning = false;
 }
@@ -562,29 +561,13 @@ void DocumentPage::setModified(bool mod)
 WidgetLayout* DocumentPage::newWidgetLayout()
 {
   WidgetLayout* wl = new WidgetLayout(0);
-  return wl;
-}
-
-void DocumentPage::connectLayoutToEngine(WidgetLayout* layout)
-{
-  Q_ASSERT(m_csEngine != 0); // Engine must already exist
-  // Key presses on widget layout and console are passed to the engine
-  connect(layout, SIGNAL(keyPressed(QString)),
-          m_csEngine, SLOT(keyPressForCsound(QString)));
-  connect(layout, SIGNAL(keyReleased(QString)),
-          m_csEngine, SLOT(keyReleaseForCsound(QString)));
-  connect(layout, SIGNAL(changed()), this, SLOT(setModified()));
-  connect(layout, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
-  connect(layout, SIGNAL(setWidgetClipboardSignal(QString)),
+  connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
+  connect(wl, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
+  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
           this, SLOT(setWidgetClipboard(QString)));
-
-  // Register scopes and graphs to pass them the engine's user data
-  connect(layout, SIGNAL(registerScope(QuteScope*)),
-          m_csEngine,SLOT(registerScope(QuteScope*)));
-  connect(layout, SIGNAL(registerGraph(QuteGraph*)),
-          m_csEngine,SLOT(registerGraph(QuteGraph*)));
-  connect(layout, SIGNAL(registerButton(QuteButton*)),
+  connect(wl, SIGNAL(registerButton(QuteButton*)),
           this, SLOT(registerButton(QuteButton*)));
+  return wl;
 }
 
 bool DocumentPage::isModified()
@@ -1090,7 +1073,6 @@ void DocumentPage::setPanelLoopRangeSlot(int index, double start, double end)
    m_liveFrames[index]->setLoopRange(start,end);
 }
 
-    void setLoopLength(double length);
 void DocumentPage::registerButton(QuteButton *b)
 {
 //  qDebug() << " DocumentPage::registerButton";
@@ -1219,7 +1201,6 @@ void DocumentPage::queueEvent(QString eventLine, int delay)
 void DocumentPage::showWidgets()
 {
   foreach (WidgetLayout *wl, m_widgetLayouts) {
-    wl->setWindowFlags(Qt::Window);
     wl->show();
   }
 }
@@ -1229,6 +1210,22 @@ void DocumentPage::hideWidgets()
   foreach (WidgetLayout *wl, m_widgetLayouts) {
     wl->hide();
   }
+}
+
+void DocumentPage::detachWidgets()
+{
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    wl->setParent(static_cast<QWidget *>(parent()));
+    wl->setWindowFlags(Qt::Window);
+  }
+}
+
+void DocumentPage::attachWidgets(QDockWidget *panel)
+{
+  panel->setWidget(m_widgetLayouts[0]);
+//  foreach (WidgetLayout *wl, m_widgetLayouts) {
+//  }
+  //FIXME fix when implementing multiple widget panels
 }
 
 //void DocumentPage::setMacWidgetsText(QString widgetText)

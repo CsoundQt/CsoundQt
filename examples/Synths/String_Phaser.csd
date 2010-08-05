@@ -1,5 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
+--midi-key-cps=4 --midi-velocity=5
 </CsOptions>
 <CsInstruments>
 
@@ -9,7 +10,7 @@
 
 sr = 44100
 ksmps = 128
-nchnls = 1
+nchnls = 2
 0dbfs = 1
 
 gasig2 init 0	; global variable to send pulse waves to ensemble section
@@ -18,7 +19,7 @@ ga2 init 0	; global variable to send output of ensemble to reverb
 
 instr 1	; Used to generate simple sawtooth-like waveforms
 
-ifreq  cpsmidi
+ifreq  = 440 * 2 ^((p4 -69)/12)
 print ifreq
 iharms=(sr*.4) / ifreq	; Limits number of harmonics in bandlimited
 			; pulse waveform
@@ -39,8 +40,8 @@ instr 22	; Ensemble section. Takes static sawtooth waves,
 		; output. The phase shifter follows the output
 		; of the ensemble.
 
-kVcf1 invalue "Vfc1"
-kVcf2 invalue "Vfc2"
+kVcf1 invalue "Vcf1"
+kVcf2 invalue "Vcf2"
 kLfoWave invalue "LfoWave"
 kLfoDepth invalue "LfoDepth"
 kLfoFreq invalue "LfoFreq"
@@ -76,8 +77,7 @@ asig2	deltap3	ktime2 + .012
 asig3 	deltap3	ktime3 + .012
 	delayw	gasig2
 
-aVcfIn = (asig1 + asig2 + asig3) * .33
-
+aVcfIn = (asig1 + asig2 + asig3) * .1
 ;Vcf
 klow limit 1-kVcf2,0,1
 kband mirror kVcf2,0,1
@@ -86,6 +86,7 @@ khigh limit kVcf2-1,0,1
 alow, ahigh, aband	svfilter	aVcfIn, kVcf1, 10
 aPhaserIn mac klow,alow,kband,aband,khigh,ahigh
 
+outs aband, aband
 ;Lfo
 lfo:
 ilfowave = 10+i(kLfoWave)
@@ -113,10 +114,8 @@ if istages == kPhStages kgoto skip1
 reinit phaser
 skip1:
 	
-ga2 = ga2 + .37 * aout2
+ga2 = ga2 + aout2
 
-kRevWet invalue "RevWet"
-out	aout2*(1-kRevWet)
 
 gasig2 = 0
 end:
@@ -135,7 +134,8 @@ atap	multitap ga2, 0.00043, 0.0215, 0.00268, 0.0298, 0.00485, 0.0572, 0.00595, 0
 
 aRvb_Free nreverb	tanh(.5*ga2), kRevSize, kRevCutoff, 0, 8, 71, 4, 72
 
-out 6000*((tanh(.5*aRvb_Free) + atap)*kRevWet)
+outs	ga2*(1-kRevWet), ga2*(1-kRevWet)
+outs 0.2*((tanh(.5*aRvb_Free) + atap)*kRevWet),0.2*((tanh(.5*aRvb_Free) + atap)*kRevWet)
 
 ga2 = 0
 
@@ -167,11 +167,12 @@ i99 0 3600 .93 1.2 1 7000 1
 
 e
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>802</x>
- <y>195</y>
+ <x>863</x>
+ <y>250</y>
  <width>417</width>
  <height>351</height>
  <visible>true</visible>
@@ -496,7 +497,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.53000000</value>
+  <value>0.42000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -514,7 +515,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.05000000</minimum>
   <maximum>5.00000000</maximum>
-  <value>1.98050000</value>
+  <value>4.65350000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -532,7 +533,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.48000000</value>
+  <value>0.70000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -706,7 +707,7 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>8.00000000</value>
+  <value>13.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>1.00000000</minimum>
   <maximum>16.00000000</maximum>
@@ -728,7 +729,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.25000000</minimum>
   <maximum>4.00000000</maximum>
-  <value>1.97500000</value>
+  <value>3.58750000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -746,7 +747,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.25000000</minimum>
   <maximum>4.00000000</maximum>
-  <value>2.42500000</value>
+  <value>0.92500000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -764,7 +765,7 @@ e
   <midicc>-3</midicc>
   <minimum>-0.99000000</minimum>
   <maximum>0.95000000</maximum>
-  <value>0.48440000</value>
+  <value>0.89180000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -782,7 +783,7 @@ e
   <midicc>-3</midicc>
   <minimum>200.00000000</minimum>
   <maximum>8000.00000000</maximum>
-  <value>5348.00000000</value>
+  <value>3008.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -832,8 +833,8 @@ e
   <xMax>10000.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>2.00000000</yMax>
-  <xValue>4060.00000000</xValue>
-  <yValue>1.21333333</yValue>
+  <xValue>3377.24137931</xValue>
+  <yValue>0.77333333</yValue>
   <type>crosshair</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -895,20 +896,21 @@ ioKnob {135, 37} {40, 43} 20.000000 0.001000 0.010000 9.000550 LfoFreq
 ioText {342, 83} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Color
 ioText {297, 83} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Size
 ioText {257, 83} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder d/w
-ioKnob {340, 37} {40, 43} 1.000000 0.000000 0.010000 0.530000 RevCutoff
-ioKnob {295, 37} {40, 43} 5.000000 0.050000 0.010000 1.980500 RevSize
-ioKnob {252, 37} {40, 43} 1.000000 0.000000 0.010000 0.480000 RevWet
+ioKnob {340, 37} {40, 43} 1.000000 0.000000 0.010000 0.420000 RevCutoff
+ioKnob {295, 37} {40, 43} 5.000000 0.050000 0.010000 4.653500 RevSize
+ioKnob {252, 37} {40, 43} 1.000000 0.000000 0.010000 0.700000 RevWet
 ioText {60, 263} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Order
 ioText {128, 269} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Sep
 ioText {126, 202} {41, 24} label 0.000000 0.00100 "" center "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Q
 ioText {83, 202} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Fdbk
 ioText {35, 202} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Freq
-ioText {62, 241} {37, 24} scroll 8.000000 1.000000 "PhStages" left "Arial" 18 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioKnob {129, 227} {40, 43} 4.000000 0.250000 0.010000 1.975000 PhSep
-ioKnob {126, 156} {40, 43} 4.000000 0.250000 0.010000 2.425000 PhQ
-ioKnob {81, 156} {40, 43} 0.950000 -0.990000 0.010000 0.484400 PhFdbk
-ioKnob {38, 156} {40, 43} 8000.000000 200.000000 0.010000 5348.000000 PhFreq
+ioText {62, 241} {37, 24} scroll 13.000000 1.000000 "PhStages" left "Arial" 18 {0, 0, 0} {65280, 65280, 65280} background noborder 
+ioKnob {129, 227} {40, 43} 4.000000 0.250000 0.010000 3.587500 PhSep
+ioKnob {126, 156} {40, 43} 4.000000 0.250000 0.010000 0.925000 PhQ
+ioKnob {81, 156} {40, 43} 0.950000 -0.990000 0.010000 0.891800 PhFdbk
+ioKnob {38, 156} {40, 43} 8000.000000 200.000000 0.010000 3008.000000 PhFreq
 ioText {209, 123} {190, 183} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Phaser
-ioMeter {232, 147} {145, 150} {65280, 21760, 0} "Vcf1" 4060.000000 "Vcf2" 1.213333 crosshair 1 0 mouse
+ioMeter {232, 147} {145, 150} {65280, 21760, 0} "Vcf1" 3377.241379 "Vcf2" 0.773333 crosshair 1 0 mouse
 ioText {14, 47} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Shape
 </MacGUI>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="171" y="321" width="655" height="346" visible="true" loopStart="0" loopEnd="0">i 1 0 7 60 100 </EventPanel>

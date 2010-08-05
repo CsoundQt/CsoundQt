@@ -393,6 +393,17 @@ void CsoundEngine::setWidgetLayout(WidgetLayout *wl)
 {
   ud->wl = wl;
 //  connect(wl, SIGNAL(destroyed()), this, SLOT(widgetLayoutDestroyed()));
+  // Key presses on widget layout and console are passed to the engine
+  connect(wl, SIGNAL(keyPressed(QString)),
+          this, SLOT(keyPressForCsound(QString)));
+  connect(wl, SIGNAL(keyReleased(QString)),
+          this, SLOT(keyReleaseForCsound(QString)));
+
+  // Register scopes and graphs to pass them the engine's user data
+  connect(wl, SIGNAL(registerScope(QuteScope*)),
+          this,SLOT(registerScope(QuteScope*)));
+  connect(wl, SIGNAL(registerGraph(QuteGraph*)),
+          this,SLOT(registerGraph(QuteGraph*)));
   dispatchQueues(); // starts queue dispatcher timer
 }
 
