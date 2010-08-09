@@ -238,7 +238,7 @@ void qutecsound::changePage(int index)
   }
   curPage = index;
   if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
-    if (m_options->layoutsDocked) {
+    if (!m_options->widgetsIndependent) {
       QWidget *w = widgetPanel->widget();
       if (w != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
         w = widgetPanel->takeWidgetLayout();
@@ -249,7 +249,7 @@ void qutecsound::changePage(int index)
     documentPages[curPage]->showLiveEventPanels(showLiveEventsAct->isChecked());
     documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
     documentPages[curPage]->showWidgets();
-    if (m_options->layoutsDocked) {
+    if (!m_options->widgetsIndependent) {
       widgetPanel->addWidgetLayout(documentPages[curPage]->getWidgetLayout());
     }
     else {
@@ -1442,6 +1442,7 @@ void qutecsound::about()
   text += tr("Portuguese translation: Victor Lazzarini") + "<br />";
   text += tr("Italian translation: Francesco") + "<br />";
   text += tr("Turkish translation: Ali Isciler") + "<br />";
+  text += tr("Finnish translation: Niko Humalamäki") + "<br />";
   text += QString("<center><a href=\"http://qutecsound.sourceforge.net\">qutecsound.sourceforge.net</a></center>");
   text += QString("<center><a href=\"mailto:mantaraya36@gmail.com\">mantaraya36@gmail.com</a></center><br />");
   text += tr("If you find QuteCsound useful, please consider donating to the project:");
@@ -2701,7 +2702,7 @@ void qutecsound::readSettings()
   m_options->saveChanges = settings.value("savechanges", true).toBool();
   m_options->rememberFile = settings.value("rememberfile", true).toBool();
   m_options->saveWidgets = settings.value("savewidgets", true).toBool();
-  m_options->layoutsDocked = settings.value("layoutsDocked", true).toBool();
+  m_options->widgetsIndependent = settings.value("widgetsIndependent", false).toBool();
   m_options->iconText = settings.value("iconText", true).toBool();
   m_options->showToolbar = settings.value("showToolbar", true).toBool();
   m_options->wrapLines = settings.value("wrapLines", true).toBool();
@@ -2860,7 +2861,7 @@ void qutecsound::writeSettings()
     settings.setValue("savechanges", m_options->saveChanges);
     settings.setValue("rememberfile", m_options->rememberFile);
     settings.setValue("savewidgets", m_options->saveWidgets);
-    settings.setValue("layoutsDocked", m_options->layoutsDocked);
+    settings.setValue("widgetsIndependent", m_options->widgetsIndependent);
     settings.setValue("iconText", m_options->iconText);
     settings.setValue("showToolbar", m_options->showToolbar);
     settings.setValue("wrapLines", m_options->wrapLines);
@@ -3429,11 +3430,11 @@ void qutecsound::getCompanionFileName()
 void qutecsound::setWidgetPanelGeometry()
 {
   QRect geometry = documentPages[curPage]->getWidgetPanelGeometry();
-  if (geometry.width() <= 0) {
+  if (geometry.width() <= 0 || geometry.width() > 4096) {
     geometry.setWidth(400);
     qDebug() << "qutecsound::setWidgetPanelGeometry() Warning: width invalid.";
   }
-  if (geometry.height() <= 0) {
+  if (geometry.height() <= 0 || geometry.height() > 4096) {
     geometry.setHeight(300);
     qDebug() << "qutecsound::setWidgetPanelGeometry() Warning: height invalid.";
   }

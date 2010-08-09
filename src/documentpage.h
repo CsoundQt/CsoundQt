@@ -167,8 +167,8 @@ class DocumentPage : public QObject
 
     void showWidgets();
     void hideWidgets();
-    void detachWidgets();
-    void attachWidgets(QDockWidget *panel);
+//    void detachWidgets();
+//    void attachWidgets(QDockWidget *panel);
 
     void applyMacOptions(QStringList options);
     void setMacOption(QString option, QString newValue);

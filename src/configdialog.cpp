@@ -70,6 +70,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   saveChangesCheckBox->setChecked(m_options->saveChanges);
   rememberFileCheckBox->setChecked(m_options->rememberFile);
   saveWidgetsCheckBox->setChecked(m_options->saveWidgets);
+  widgetsIndependentCheckBox->setChecked(m_options->widgetsIndependent);
   iconTextCheckBox->setChecked(m_options->iconText);
   toolbarCheckBox->setChecked(m_options->showToolbar);
   wrapLinesCheckBox->setChecked(m_options->wrapLines);
@@ -239,6 +240,7 @@ void ConfigDialog::accept()
   m_options->autoPlay = autoplayCheckBox->isChecked();
   m_options->autoJoin = autoJoinCheckBox->isChecked();
   m_options->saveChanges = saveChangesCheckBox->isChecked();
+  m_options->widgetsIndependent = widgetsIndependentCheckBox->isChecked();
   m_options->rememberFile = rememberFileCheckBox->isChecked();
   m_options->saveWidgets = saveWidgetsCheckBox->isChecked();
   m_options->iconText = iconTextCheckBox->isChecked();

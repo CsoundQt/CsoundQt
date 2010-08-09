@@ -77,7 +77,7 @@ asig2	deltap3	ktime2 + .012
 asig3 	deltap3	ktime3 + .012
 	delayw	gasig2
 
-aVcfIn = (asig1 + asig2 + asig3) * .1
+aVcfIn = (asig1 + asig2 + asig3) * .01
 ;Vcf
 klow limit 1-kVcf2,0,1
 kband mirror kVcf2,0,1
@@ -126,16 +126,15 @@ instr 99	; Simple implementation of Feedback Delay Network (FDN)
 		; reverb, as described by John Stautner and Miller 
 		; Puckette, "Designing Multi-Channel Reverberators," 
 
-kRevSize invalue "RevSize"
-kRevCutoff invalue "RevCutoff"
 kRevWet invalue "RevWet"
+kRevSize invalue "RevSize"
+kRevColor invalue "RevColor"
 
 atap	multitap ga2, 0.00043, 0.0215, 0.00268, 0.0298, 0.00485, 0.0572, 0.00595, 0.0708, 0.00741, 0.0797, 0.0142, 0.134, 0.0217, 0.181, 0.0272, 0.192, 0.0379, 0.346, 0.0841, 0.504
 
-aRvb_Free nreverb	tanh(.5*ga2), kRevSize, kRevCutoff, 0, 8, 71, 4, 72
+aRvb_FreeL, aRvb_FreeR freeverb ga2, ga2, kRevSize, kRevColor
 
-outs	ga2*(1-kRevWet), ga2*(1-kRevWet)
-outs 0.2*((tanh(.5*aRvb_Free) + atap)*kRevWet),0.2*((tanh(.5*aRvb_Free) + atap)*kRevWet)
+outs aRvb_FreeL*kRevWet + ga2*(1-kRevWet), aRvb_FreeR*kRevWet + ga2*(1-kRevWet)
 
 ga2 = 0
 
@@ -171,9 +170,9 @@ e
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>863</x>
- <y>250</y>
- <width>417</width>
+ <x>674</x>
+ <y>160</y>
+ <width>419</width>
  <height>351</height>
  <visible>true</visible>
  <uuid/>
@@ -301,7 +300,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>1</selectedIndex>
+  <selectedIndex>3</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -374,7 +373,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.50000000</value>
+  <value>0.93000001</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -392,7 +391,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00100000</minimum>
   <maximum>20.00000000</maximum>
-  <value>9.00055000</value>
+  <value>18.20009041</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -486,7 +485,7 @@ e
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
-  <objectName>RevCutoff</objectName>
+  <objectName>RevColor</objectName>
   <x>340</x>
   <y>37</y>
   <width>40</width>
@@ -497,7 +496,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.42000000</value>
+  <value>0.98000002</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -505,7 +504,7 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>RevSize</objectName>
-  <x>295</x>
+  <x>296</x>
   <y>37</y>
   <width>40</width>
   <height>43</height>
@@ -514,8 +513,8 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <minimum>0.05000000</minimum>
-  <maximum>5.00000000</maximum>
-  <value>4.65350000</value>
+  <maximum>0.99000000</maximum>
+  <value>0.92420000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -533,7 +532,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.70000000</value>
+  <value>0.94000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -707,7 +706,7 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>13.00000000</value>
+  <value>16.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>1.00000000</minimum>
   <maximum>16.00000000</maximum>
@@ -719,7 +718,7 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>PhSep</objectName>
-  <x>129</x>
+  <x>126</x>
   <y>227</y>
   <width>40</width>
   <height>43</height>
@@ -729,7 +728,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.25000000</minimum>
   <maximum>4.00000000</maximum>
-  <value>3.58750000</value>
+  <value>3.54999995</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -747,7 +746,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.25000000</minimum>
   <maximum>4.00000000</maximum>
-  <value>0.92500000</value>
+  <value>3.81250000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -755,7 +754,7 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>PhFdbk</objectName>
-  <x>81</x>
+  <x>82</x>
   <y>156</y>
   <width>40</width>
   <height>43</height>
@@ -765,7 +764,7 @@ e
   <midicc>-3</midicc>
   <minimum>-0.99000000</minimum>
   <maximum>0.95000000</maximum>
-  <value>0.89180000</value>
+  <value>0.89179999</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -783,7 +782,7 @@ e
   <midicc>-3</midicc>
   <minimum>200.00000000</minimum>
   <maximum>8000.00000000</maximum>
-  <value>3008.00000000</value>
+  <value>7376.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -833,8 +832,8 @@ e
   <xMax>10000.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>2.00000000</yMax>
-  <xValue>3377.24137931</xValue>
-  <yValue>0.77333333</yValue>
+  <xValue>7883.44824219</xValue>
+  <yValue>0.31999999</yValue>
   <type>crosshair</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -882,35 +881,77 @@ e
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
+<preset name="Maxed out" number="1" >
+<value id="{3dd45672-e874-4f17-af99-0d7f46ee1043}" mode="1" >3.00000000</value>
+<value id="{55d4da74-c0fa-4bea-abe5-ae64d7232af5}" mode="1" >0.93000001</value>
+<value id="{2c434385-4be7-4f8f-bef3-0e0b3892bfad}" mode="1" >18.20009041</value>
+<value id="{c4e6f6b1-59cf-4eb6-8d93-4aa0c46f6ca3}" mode="1" >0.98000002</value>
+<value id="{874550d5-aa2c-4eaa-b0fd-0aec3075a0c4}" mode="1" >0.92420000</value>
+<value id="{d5658549-3527-409e-a69c-eb98c38a8092}" mode="1" >0.94000000</value>
+<value id="{95465008-7833-49b2-a298-3991593482bc}" mode="1" >16.00000000</value>
+<value id="{d2011f69-e261-4299-a5a5-aa2cd78f210f}" mode="1" >3.54999995</value>
+<value id="{83b17987-41d6-4f70-9c25-6943e9f35d59}" mode="1" >3.81250000</value>
+<value id="{c67fe76f-be50-46fa-8e13-21164d40b28f}" mode="1" >0.89179999</value>
+<value id="{7781cd16-eaab-49e7-bf6f-95f7f9981766}" mode="1" >7376.00000000</value>
+<value id="{54d46c69-3b11-4f33-934f-e487e18fb8d5}" mode="1" >7883.44824219</value>
+<value id="{54d46c69-3b11-4f33-934f-e487e18fb8d5}" mode="2" >0.31999999</value>
+</preset>
+<preset name="Min" number="2" >
+<value id="{3dd45672-e874-4f17-af99-0d7f46ee1043}" mode="1" >0.00000000</value>
+<value id="{55d4da74-c0fa-4bea-abe5-ae64d7232af5}" mode="1" >0.56000000</value>
+<value id="{2c434385-4be7-4f8f-bef3-0e0b3892bfad}" mode="1" >2.00090003</value>
+<value id="{c4e6f6b1-59cf-4eb6-8d93-4aa0c46f6ca3}" mode="1" >0.14000000</value>
+<value id="{874550d5-aa2c-4eaa-b0fd-0aec3075a0c4}" mode="1" >0.20039999</value>
+<value id="{d5658549-3527-409e-a69c-eb98c38a8092}" mode="1" >0.19000000</value>
+<value id="{95465008-7833-49b2-a298-3991593482bc}" mode="1" >1.00000000</value>
+<value id="{d2011f69-e261-4299-a5a5-aa2cd78f210f}" mode="1" >0.77499998</value>
+<value id="{83b17987-41d6-4f70-9c25-6943e9f35d59}" mode="1" >0.77499998</value>
+<value id="{c67fe76f-be50-46fa-8e13-21164d40b28f}" mode="1" >-0.05880000</value>
+<value id="{7781cd16-eaab-49e7-bf6f-95f7f9981766}" mode="1" >1292.00000000</value>
+<value id="{54d46c69-3b11-4f33-934f-e487e18fb8d5}" mode="1" >1533.79309082</value>
+<value id="{54d46c69-3b11-4f33-934f-e487e18fb8d5}" mode="2" >1.79999995</value>
+</preset>
 </bsbPresets>
 <MacGUI>
 ioView background {0, 0, 0}
 ioText {5, 123} {197, 183} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Phaser
 ioText {6, 15} {225, 102} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder LFO
 ioText {238, 15} {159, 102} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Hard Freeverb
-ioMenu {14, 70} {112, 24} 1 303 "Sine,Saw Down,Saw Up,Triangle" LfoWave
+ioMenu {14, 70} {112, 24} 3 303 "Sine,Saw Down,Saw Up,Triangle" LfoWave
 ioText {180, 83} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Depth
 ioText {135, 83} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Freq
-ioKnob {178, 37} {40, 43} 1.000000 0.000000 0.010000 0.500000 LfoDepth
-ioKnob {135, 37} {40, 43} 20.000000 0.001000 0.010000 9.000550 LfoFreq
+ioKnob {178, 37} {40, 43} 1.000000 0.000000 0.010000 0.930000 LfoDepth
+ioKnob {135, 37} {40, 43} 20.000000 0.001000 0.010000 18.200090 LfoFreq
 ioText {342, 83} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Color
 ioText {297, 83} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Size
 ioText {257, 83} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder d/w
-ioKnob {340, 37} {40, 43} 1.000000 0.000000 0.010000 0.420000 RevCutoff
-ioKnob {295, 37} {40, 43} 5.000000 0.050000 0.010000 4.653500 RevSize
-ioKnob {252, 37} {40, 43} 1.000000 0.000000 0.010000 0.700000 RevWet
+ioKnob {340, 37} {40, 43} 1.000000 0.000000 0.010000 0.980000 RevColor
+ioKnob {296, 37} {40, 43} 0.990000 0.050000 0.010000 0.924200 RevSize
+ioKnob {252, 37} {40, 43} 1.000000 0.000000 0.010000 0.940000 RevWet
 ioText {60, 263} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Order
 ioText {128, 269} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Sep
 ioText {126, 202} {41, 24} label 0.000000 0.00100 "" center "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Q
 ioText {83, 202} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Fdbk
 ioText {35, 202} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Freq
-ioText {62, 241} {37, 24} scroll 13.000000 1.000000 "PhStages" left "Arial" 18 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioKnob {129, 227} {40, 43} 4.000000 0.250000 0.010000 3.587500 PhSep
-ioKnob {126, 156} {40, 43} 4.000000 0.250000 0.010000 0.925000 PhQ
-ioKnob {81, 156} {40, 43} 0.950000 -0.990000 0.010000 0.891800 PhFdbk
-ioKnob {38, 156} {40, 43} 8000.000000 200.000000 0.010000 3008.000000 PhFreq
+ioText {62, 241} {37, 24} scroll 16.000000 1.000000 "PhStages" left "Arial" 18 {0, 0, 0} {65280, 65280, 65280} background noborder 
+ioKnob {126, 227} {40, 43} 4.000000 0.250000 0.010000 3.550000 PhSep
+ioKnob {126, 156} {40, 43} 4.000000 0.250000 0.010000 3.812500 PhQ
+ioKnob {82, 156} {40, 43} 0.950000 -0.990000 0.010000 0.891800 PhFdbk
+ioKnob {38, 156} {40, 43} 8000.000000 200.000000 0.010000 7376.000000 PhFreq
 ioText {209, 123} {190, 183} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Phaser
-ioMeter {232, 147} {145, 150} {65280, 21760, 0} "Vcf1" 3377.241379 "Vcf2" 0.773333 crosshair 1 0 mouse
+ioMeter {232, 147} {145, 150} {65280, 21760, 0} "Vcf1" 7883.448242 "Vcf2" 0.320000 crosshair 1 0 mouse
 ioText {14, 47} {41, 24} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Shape
 </MacGUI>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="171" y="321" width="655" height="346" visible="true" loopStart="0" loopEnd="0">i 1 0 7 60 100 </EventPanel>
+<EventPanel name="Theme 1" tempo="90.00000000" loop="8.00000000" x="586" y="279" width="680" height="492" visible="true" loopStart="2" loopEnd="8">         
+;type      ;inst      ;start      ;dur      ;note      ;veloc    
+i 1 0 1.25 57 100    
+i 1 1 1.5 47 100    
+i 1 2 1 35 100    
+i 1 3 0.75 58 100    
+i 1 4 1.75 51 100    
+i 1 5 0.5 36 100    
+i 1 6 2 52 100    
+         
+         
+         </EventPanel>
+<EventPanel name="Drone" tempo="60.00000000" loop="8.00000000" x="52" y="415" width="655" height="346" visible="true" loopStart="0" loopEnd="0">i 1 0 15 32 100 </EventPanel>

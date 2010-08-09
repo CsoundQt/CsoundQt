@@ -108,6 +108,7 @@
         <file>../examples/Synths/Phase_Mod_Synth.csd</file>
         <file>../examples/Synths/Formant_Synth.csd</file>
         <file>../examples/Synths/Pipe_Synth.csd</file>
+        <file>../examples/Synths/String_Phaser.csd</file>
         <file>../examples/Synths/Waveform_Mix.csd</file>
         <file>../examples/Useful/SF_Play_from_buffer.csd</file>
         <file>../examples/Useful/SF_Play_from_buffer_2.csd</file>
@@ -141,6 +142,7 @@
         <file>translations/qutecsound_it.qm</file>
         <file>translations/qutecsound_tr.qm</file>
         <file>translations/qutecsound_el.qm</file>
+        <file>translations/qutecsound_fi.qm</file>
         <file>python/qutesheet.py</file>
         <file>python/sort_by_start.py</file>
         <file>python/fill_text.py</file>

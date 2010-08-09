@@ -420,10 +420,10 @@ void WidgetLayout::setKeyRepeatMode(bool repeat)
 
 void WidgetLayout::setOuterGeometry(int newx, int newy, int neww, int newh)
 {
-  m_x = newx >= 0 ? newx : m_x;
-  m_y = newy >= 0 ? newy : m_y;
-  m_w = neww >= 0 ? neww : m_w;
-  m_h = newh >= 0 ? newh : m_h;
+  m_x = newx >= 0 && newx < 4096? newx : m_x;
+  m_y = newy >= 0 && newy < 4096? newy : m_y;
+  m_w = neww >= 0 && neww < 4096? neww : m_w;
+  m_h = newh >= 0 && newh < 4096? newh : m_h;
 }
 
 QRect WidgetLayout::getOuterGeometry()
@@ -2058,16 +2058,20 @@ int WidgetLayout::parseXmlNode(QDomNode node)
     this->setWindowTitle(node.firstChild().nodeValue());
   }
   else if (name == "x") {
-    m_x = node.firstChild().nodeValue().toInt();
+    int newx = node.firstChild().nodeValue().toInt();
+    m_x = newx >= 0 && newx < 4096? newx : m_x;
   }
   else if (name == "y") {
-    m_y = node.firstChild().nodeValue().toInt();
+    int newy = node.firstChild().nodeValue().toInt();
+    m_y = newy >= 0 && newy < 4096? newy : m_y;
   }
   else if (name == "width") {
-    m_w = node.firstChild().nodeValue().toInt();
+    int neww = node.firstChild().nodeValue().toInt();
+    m_w = neww >= 0 && neww < 4096? neww : m_w;
   }
   else if (name == "height") {
-    m_h = node.firstChild().nodeValue().toInt();
+    int newh = node.firstChild().nodeValue().toInt();
+    m_h = newh >= 0 && newh < 4096? newh : m_h;
   }
   else if (name == "visible") {
     m_visible = node.firstChild().nodeValue() == "true";

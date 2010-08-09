@@ -539,6 +539,10 @@
         <source>Automatically Join orc/sco files</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Widgets are an independent window</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConsoleWidget</name>
@@ -607,6 +611,10 @@
 Would you like to start from the top?</source>
         <translation type="unfinished">La stringa non è stata trovata.
 Volete partire dall&apos;inizio?</translation>
+    </message>
+    <message>
+        <source>Evaluate Selection</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3391,6 +3399,43 @@ You must restart QuteCsound.</source>
     </message>
     <message>
         <source>Number of Widgets:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Finnish translation: Niko HumalamÃ¤ki</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+9</source>
+        <translation type="unfinished">Alt+9</translation>
+    </message>
+    <message>
+        <source>No PythonQt support</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This version of QuteCsound has been compiled without PythonQt support.
+Extended Python features are not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Evaluate selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Evaluate selection in Python Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Python Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Python Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Python</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

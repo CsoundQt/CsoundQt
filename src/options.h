@@ -62,7 +62,7 @@ class Options: public CsoundOptions{
 
     bool useAPI;
     bool enableWidgets;
-    bool layoutsDocked;  // Widget layouts in Dock Panel (instead of free floating windows)
+    bool widgetsIndependent;  // Widget layouts in Separate Window (instead of Dock Widget)
     bool useInvalue; // If false use chnget
     bool thread;
     bool keyRepeat;

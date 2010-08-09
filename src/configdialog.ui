@@ -168,7 +168,7 @@
         <x>340</x>
         <y>58</y>
         <width>301</width>
-        <height>64</height>
+        <height>70</height>
        </rect>
       </property>
       <layout class="QGridLayout">
@@ -393,7 +393,7 @@
         <x>10</x>
         <y>170</y>
         <width>641</width>
-        <height>28</height>
+        <height>29</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -455,7 +455,7 @@
        <x>10</x>
        <y>10</y>
        <width>311</width>
-       <height>61</height>
+       <height>62</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout10">
@@ -734,7 +734,7 @@
         <x>10</x>
         <y>110</y>
         <width>471</width>
-        <height>31</height>
+        <height>33</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -791,7 +791,7 @@
         <x>10</x>
         <y>30</y>
         <width>281</width>
-        <height>30</height>
+        <height>33</height>
        </rect>
       </property>
       <layout class="QHBoxLayout">
@@ -883,7 +883,7 @@
         <x>10</x>
         <y>30</y>
         <width>621</width>
-        <height>301</height>
+        <height>324</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -1088,6 +1088,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="widgetsIndependentCheckBox">
+         <property name="text">
+          <string>Widgets are an independent window</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_7">
          <item>
           <widget class="QLabel" name="label_32">
@@ -1143,7 +1150,7 @@
         <x>10</x>
         <y>30</y>
         <width>411</width>
-        <height>131</height>
+        <height>140</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="_2">
@@ -1644,7 +1651,7 @@
        <x>10</x>
        <y>430</y>
        <width>661</width>
-       <height>31</height>
+       <height>33</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">

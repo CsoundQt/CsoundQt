@@ -1212,21 +1212,23 @@ void DocumentPage::hideWidgets()
   }
 }
 
-void DocumentPage::detachWidgets()
-{
-  foreach (WidgetLayout *wl, m_widgetLayouts) {
-    wl->setParent(static_cast<QWidget *>(parent()));
-    wl->setWindowFlags(Qt::Window);
-  }
-}
-
-void DocumentPage::attachWidgets(QDockWidget *panel)
-{
-  panel->setWidget(m_widgetLayouts[0]);
+//void DocumentPage::detachWidgets()
+//{
 //  foreach (WidgetLayout *wl, m_widgetLayouts) {
+////    wl->setParent(static_cast<QWidget *>(parent()));
+//    qDebug() << "DocumentPage::detachWidgets() " << wl;
+//    wl->setParent(0);
+//    wl->setWindowFlags(Qt::Window);
 //  }
-  //FIXME fix when implementing multiple widget panels
-}
+//}
+//
+//void DocumentPage::attachWidgets(QDockWidget *panel)
+//{
+//  panel->setWidget(m_widgetLayouts[0]);
+////  foreach (WidgetLayout *wl, m_widgetLayouts) {
+////  }
+//  //FIXME fix when implementing multiple widget panels
+//}
 
 //void DocumentPage::setMacWidgetsText(QString widgetText)
 //{
