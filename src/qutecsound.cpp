@@ -2376,6 +2376,7 @@ void qutecsound::createMenus()
   synthFiles.append(":/examples/Synths/Phase_Mod_Synth.csd");
   synthFiles.append(":/examples/Synths/Formant_Synth.csd");
   synthFiles.append(":/examples/Synths/Pipe_Synth.csd");
+  synthFiles.append(":/examples/Synths/String_Phaser.csd");
   synthFiles.append(":/examples/Synths/Waveform_Mix.csd");
   subMenus << synthFiles;
   subMenuNames << "Synths";
