@@ -271,15 +271,16 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
   // Separataion is stored in UserRole of items
   // remember to treat comments and formulas properly
   QStringList lines = text.split("\n");
-  int nRows = numRows == 0 ? lines.size() : numRows;  // 0 pastes only available data
-  nRows = (numRows == -1  && nRows <  this->rowCount()) ?  this->rowCount() : nRows; //-1 pastes all of numColumns even if not in data
-  if (this->rowCount() <nRows + rowOffset) {
+  int nRows = 0; // Number of actual rows to process
+  // numRows = 0 : don't remove rows, only add if necessary. numRows = -1 limit rows to the ones in text
+  nRows = numRows <= 0 ? lines.size() : numRows;
+  if (this->rowCount() < nRows + rowOffset || numRows == -1) {
     this->setRowCount(nRows + rowOffset);
   }
   for (int i = 0; i < nRows; i++) {
-    if (nRows != 0 && i >= nRows) {  // Only paste up to a certain number of rows if not 0
-      break;
-    }
+//    if (nRows != 0 && i >= nRows) {  // Only paste up to a certain number of rows if not 0
+//      break;
+//    }
     QString line = "";
     if (i < lines.size()) {
       line = lines[i].trimmed(); //Remove whitespace from start and end
@@ -538,7 +539,7 @@ void EventSheet::copy(bool cut)
 
 void EventSheet::paste()
 {
-  qDebug() << "EventSheet::paste() text = " << qApp->clipboard()->text();
+//  qDebug() << "EventSheet::paste() text = " << qApp->clipboard()->text();
   QModelIndexList list = this->selectedIndexes();
   QList<int> selectedRows;
   QList<int> selectedColumns;

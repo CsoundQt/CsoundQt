@@ -988,23 +988,25 @@ void DocumentPage::setPythonExecutable(QString pythonExec)
 
 void DocumentPage::showLiveEventPanels(bool visible)
 {
-  m_liveEventControl->setVisible(visible);
-  for (int i = 0; i < m_liveFrames.size(); i++) {
-    if (visible) {
-//        qDebug() << "DocumentPage::showLiveEventPanels  " << visible << (int) this;
-      if (m_liveFrames[i]->isVisible())
-        m_liveFrames[i]->raise();
-      else {
-        if (m_liveFrames[i]->getVisibleEnabled()) {
-          m_liveFrames[i]->setWindowFlags(Qt::Window);
-          m_liveFrames[i]->show();
+  if (fileName.endsWith(".csd")) {
+    m_liveEventControl->setVisible(visible);
+    for (int i = 0; i < m_liveFrames.size(); i++) {
+      if (visible) {
+        //        qDebug() << "DocumentPage::showLiveEventPanels  " << visible << (int) this;
+        if (m_liveFrames[i]->isVisible())
           m_liveFrames[i]->raise();
+        else {
+          if (m_liveFrames[i]->getVisibleEnabled()) {
+            m_liveFrames[i]->setWindowFlags(Qt::Window);
+            m_liveFrames[i]->show();
+            m_liveFrames[i]->raise();
+          }
         }
       }
-    }
-    else {
-      m_liveFrames[i]->setWindowFlags(Qt::Widget);
-      m_liveFrames[i]->hide();
+      else {
+        m_liveFrames[i]->setWindowFlags(Qt::Widget);
+        m_liveFrames[i]->hide();
+      }
     }
   }
 }
