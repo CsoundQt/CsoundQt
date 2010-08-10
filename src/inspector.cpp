@@ -69,6 +69,12 @@ void Inspector::parseText(const QString &text)
     ftableItemExpanded = ftableItem->isExpanded();
     scoreItemExpanded = scoreItem->isExpanded();
   }
+  QHash<QString, bool> instrumentExpanded;  // Remember if instrument is expanded in menu
+  for (int i = 0; i < instrItem->childCount(); i++) {
+    QTreeWidgetItem * instr = instrItem->child(i);
+    instrumentExpanded[instr->text(0)] = instr->isExpanded();
+  }
+
   m_treeWidget->clear();
   opcodeItem = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
   opcodeItem->setLine(-1);
@@ -80,7 +86,7 @@ void Inspector::parseText(const QString &text)
   ftableItem->setLine(-1);
   scoreItem = new TreeItem(m_treeWidget, QStringList(tr("Score")));
   scoreItem->setLine(-1);  // This might be overridden below
-  TreeItem *currentInstrument = 0;
+  TreeItem *currentInstrument = instrItem;
   QStringList lines = text.split(QRegExp("[\n\r]"));
   for (int i = 0; i< lines.size(); i++) {
     if (lines[i].trimmed().startsWith("instr")) {
@@ -93,9 +99,12 @@ void Inspector::parseText(const QString &text)
     }
     if (lines[i].trimmed().startsWith(";;")) {
       QStringList columnslist(lines[i].trimmed().remove(0,2));
-      TreeItem *newItem = new TreeItem(instrItem, columnslist);
+      TreeItem *newItem = new TreeItem(currentInstrument, columnslist);
       newItem->setForeground (0, QBrush(Qt::darkGreen) );
       newItem->setLine(i + 1);
+    }
+    else if (lines[i].trimmed().startsWith("endin")) {
+      currentInstrument = instrItem; // everything between instruments is placed in the main instrument menu
     }
     else if (lines[i].trimmed().startsWith("opcode")) {
       QString text = lines[i].trimmed();
@@ -133,40 +142,23 @@ void Inspector::parseText(const QString &text)
     }
     else if (lines[i].trimmed().contains("<CsScore>")) {
       scoreItem->setLine(i + 1);
+      currentInstrument = scoreItem;
     }
     else if (lines[i].trimmed().contains("<CsInstruments>")) {
       instrItem->setLine(i + 1);
     }
   }
-  if (opcodeItemExpanded) {
-    m_treeWidget->expandItem(opcodeItem);
-  }
-  else {
-    m_treeWidget->collapseItem(opcodeItem);
-  }
-  if (macroItemExpanded) {
-    m_treeWidget->expandItem(macroItem);
-  }
-  else {
-    m_treeWidget->collapseItem(macroItem);
-  }
-  if (instrItemExpanded) {
-    m_treeWidget->expandItem(instrItem);
-  }
-  else {
-    m_treeWidget->collapseItem(instrItem);
-  }
-  if (ftableItemExpanded) {
-    m_treeWidget->expandItem(ftableItem);
-  }
-  else {
-    m_treeWidget->collapseItem(ftableItem);
-  }
-  if (scoreItemExpanded) {
-    m_treeWidget->expandItem(scoreItem);
-  }
-  else {
-    m_treeWidget->collapseItem(scoreItem);
+  opcodeItem->setExpanded(opcodeItemExpanded);
+  macroItem->setExpanded(macroItemExpanded);
+  instrItem->setExpanded(instrItemExpanded);
+  ftableItem->setExpanded(ftableItemExpanded);
+  scoreItem->setExpanded(scoreItemExpanded);
+
+  for (int i = 0; i < instrItem->childCount(); i++) {
+    QTreeWidgetItem * instr = instrItem->child(i);
+    if (instrumentExpanded.contains(instr->text(0))) {
+      instr->setExpanded(instrumentExpanded[instr->text(0)]);
+    }
   }
 }
 
