@@ -26,24 +26,21 @@ f 1 0 1024 10 1
 i 2 0 3600
 </CsScore>
 </CsoundSynthesizer>
-
-
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>382</x>
- <y>61</y>
+ <y>91</y>
  <width>401</width>
  <height>606</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background" >
+ <bgcolor mode="background">
   <r>138</r>
   <g>149</g>
   <b>156</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>87</x>
   <y>5</y>
@@ -63,7 +60,7 @@ i 2 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -72,7 +69,7 @@ i 2 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>4</x>
   <y>44</y>
@@ -92,7 +89,7 @@ i 2 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -101,12 +98,12 @@ i 2 0 3600
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>4</x>
-  <y>488</y>
+  <y>502</y>
   <width>377</width>
-  <height>74</height>
+  <height>64</height>
   <uuid>{a7da460d-cfe1-487c-8ec1-6fc05692d212}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -121,7 +118,7 @@ i 2 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -130,12 +127,12 @@ i 2 0 3600
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>200</x>
   <y>118</y>
   <width>179</width>
-  <height>210</height>
+  <height>239</height>
   <uuid>{f43311a3-c5f0-4368-925a-3ab5324658ac}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -150,7 +147,7 @@ i 2 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -159,17 +156,18 @@ i 2 0 3600
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>5</x>
   <y>118</y>
   <width>188</width>
-  <height>210</height>
+  <height>239</height>
   <uuid>{16f25933-2318-4091-ab37-b57f1a656ab9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>Value type buttons transmit always 0 on their channels when they are not pressed. When they are pressed they transmit the value set in the preferences. The button above transmits a value of 1000 which is used to control the frequency of instrument 2.</label>
+  <label>Value type buttons transmit always 0 on their channels when they are not pressed. When they are pressed they transmit the value set in the preferences. The button above transmits a value of 1000 which is used to control the frequency of instrument 2.
+Buttons can be set to "latch".</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -179,7 +177,7 @@ i 2 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -188,10 +186,10 @@ i 2 0 3600
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>12</x>
-  <y>459</y>
+  <y>473</y>
   <width>167</width>
   <height>29</height>
   <uuid>{3e9f4268-b2f7-496f-94ea-a22e8f68736c}</uuid>
@@ -208,7 +206,7 @@ i 2 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -217,12 +215,12 @@ i 2 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>4</x>
-  <y>333</y>
-  <width>376</width>
-  <height>124</height>
+  <y>362</y>
+  <width>375</width>
+  <height>109</height>
   <uuid>{2767b528-7849-4306-85be-7b0aeeffccef}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -237,7 +235,7 @@ i 2 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -246,10 +244,10 @@ i 2 0 3600
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>value</objectName>
-  <x>44</x>
-  <y>292</y>
+  <x>49</x>
+  <y>279</y>
   <width>100</width>
   <height>30</height>
   <uuid>{03723e12-b763-4641-b1ab-3ffdee02428d}</uuid>
@@ -263,9 +261,9 @@ i 2 0 3600
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>button1</objectName>
   <x>243</x>
   <y>292</y>
@@ -282,12 +280,12 @@ i 2 0 3600
   <image>/</image>
   <eventLine>i 1 0 3</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Play</objectName>
   <x>256</x>
-  <y>417</y>
+  <y>430</y>
   <width>100</width>
   <height>30</height>
   <uuid>{9a1f4b9d-3757-4fb5-b522-0b6981bb9b4d}</uuid>
@@ -301,27 +299,41 @@ i 2 0 3600
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
- <objectName/>
- <x>382</x>
- <y>61</y>
- <width>401</width>
- <height>606</height>
- <visible>true</visible>
+ <bsbObject version="2" type="BSBButton">
+  <objectName>value</objectName>
+  <x>23</x>
+  <y>317</y>
+  <width>150</width>
+  <height>30</height>
+  <uuid>{7df9afbe-0376-4602-8cb8-40a1877c4be3}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1000.00000000</pressedValue>
+  <stringvalue/>
+  <text>Value Latched</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+  <latch>true</latch>
+  <latched>true</latched>
+ </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
 <MacGUI>
 ioView background {35466, 38293, 40092}
-ioText {87, 5} {218, 41} display 0.000000 0.00100 "" center "Helvetica" 24 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Button Widget
-ioText {4, 44} {375, 69} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Buttons in QuteCsound can have two purposes. They can transmit a value when they are pressed and they can generate score events in realtime when they are pressed. Their exact function depends on the type of button.
-ioText {4, 488} {377, 74} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder There are three other type of buttons for buttons with images. Pictevent and Pictvalue are equivalent to Event and Value buttons but display a picture. The Pict button is simply a decoration.
-ioText {200, 118} {179, 210} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Event buttons apart from transmitiing a different value while they are pressed can also send score events to Csound. Any valid score event can be triggered by a button but preprocessor symbols like carry are not accepted. The event generated by this button is 'i 1 0 3'. It turns on instrument 1 immediately for 3 seconds.
-ioText {5, 118} {188, 210} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Value type buttons transmit always 0 on their channels when they are not pressed. When they are pressed they transmit the value set in the preferences. The button above transmits a value of 1000 which is used to control the frequency of instrument 2.
-ioText {12, 459} {167, 29} display 0.000000 0.00100 "" left "Arial" 20 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Pict buttons
-ioText {4, 333} {376, 124} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder There are some reserved channels which can send information to QuteCsound instead of Csound. The channel '_Play' can start and stop Csound. The channel '_Stop' can start and stop Csound. The button must be of type value or pictvalue.
-ioButton {44, 292} {100, 30} value 1000.000000 "value" "Value" "/" i1 0 10
+ioText {87, 5} {218, 41} label 0.000000 0.00100 "" center "Helvetica" 24 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Button Widget
+ioText {4, 44} {375, 69} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Buttons in QuteCsound can have two purposes. They can transmit a value when they are pressed and they can generate score events in realtime when they are pressed. Their exact function depends on the type of button.
+ioText {4, 502} {377, 64} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder There are three other type of buttons for buttons with images. Pictevent and Pictvalue are equivalent to Event and Value buttons but display a picture. The Pict button is simply a decoration.
+ioText {200, 118} {179, 239} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Event buttons apart from transmitiing a different value while they are pressed can also send score events to Csound. Any valid score event can be triggered by a button but preprocessor symbols like carry are not accepted. The event generated by this button is 'i 1 0 3'. It turns on instrument 1 immediately for 3 seconds.
+ioText {5, 118} {188, 239} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Value type buttons transmit always 0 on their channels when they are not pressed. When they are pressed they transmit the value set in the preferences. The button above transmits a value of 1000 which is used to control the frequency of instrument 2.Â¬Buttons can be set to "latch".
+ioText {12, 473} {167, 29} label 0.000000 0.00100 "" left "Arial" 20 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Pict buttons
+ioText {4, 362} {375, 109} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder There are some reserved channels which can send information to QuteCsound instead of Csound. The channel '_Play' can start and stop Csound. The channel '_Stop' can start and stop Csound. The button must be of type value or pictvalue.
+ioButton {49, 279} {100, 30} value 1000.000000 "value" "Value" "/" i1 0 10
 ioButton {243, 292} {100, 30} event 1.000000 "button1" "Event" "/" i 1 0 3
-ioButton {256, 417} {100, 30} value 1.000000 "_Play" "Play" "/" i1 0 10
+ioButton {256, 430} {100, 30} value 1.000000 "_Play" "Play" "/" i1 0 10
+ioButton {23, 317} {150, 30} value 1000.000000 "value" "Value Latched" "/" i1 0 10
 </MacGUI>
