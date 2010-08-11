@@ -202,6 +202,7 @@ void QuteButton::applyProperties()
   setProperty("QCS_image", filenameLineEdit->text());
   setProperty("QCS_type", typeComboBox->currentText());
   setProperty("QCS_pressedValue", valueBox->value());
+  setProperty("QCS_latch", latchCheckBox->isChecked());
 //  setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
 //  setType(typeComboBox->currentText());
 #ifdef  USE_WIDGET_MUTEX
@@ -231,6 +232,10 @@ void QuteButton::createPropertiesDialog()
   typeComboBox->setCurrentIndex(typeComboBox->findText(property("QCS_type").toString()));
   layout->addWidget(typeComboBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
+  latchCheckBox = new QCheckBox(dialog);
+  latchCheckBox->setText(tr("Latch"));
+  layout->addWidget(latchCheckBox, 5, 1, 1,2, Qt::AlignLeft|Qt::AlignVCenter);
+  latchCheckBox->setChecked(property("QCS_latch").toBool());
   label = new QLabel(dialog);
   label->setText("Value");
   layout->addWidget(label, 4, 2, Qt::AlignRight|Qt::AlignVCenter);
@@ -241,29 +246,29 @@ void QuteButton::createPropertiesDialog()
   layout->addWidget(valueBox, 4, 3, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Text:");
-  layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
   text = new QTextEdit(dialog);
   text->setMinimumWidth(320);
   text->setText(property("QCS_text").toString());
-  layout->addWidget(text, 5,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
+  layout->addWidget(text, 6,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
   label = new QLabel(dialog);
   label->setText("Image:");
-  layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
   filenameLineEdit = new QLineEdit(dialog);
   filenameLineEdit->setMinimumWidth(320);
   filenameLineEdit->setText(property("QCS_image").toString());
-  layout->addWidget(filenameLineEdit, 6,1,1,2, Qt::AlignLeft|Qt::AlignVCenter);
+  layout->addWidget(filenameLineEdit, 7,1,1,2, Qt::AlignLeft|Qt::AlignVCenter);
   QPushButton *browseButton = new QPushButton(dialog);
   browseButton->setText("...");
-  layout->addWidget(browseButton, 6, 3, Qt::AlignCenter|Qt::AlignVCenter);
+  layout->addWidget(browseButton, 7, 3, Qt::AlignCenter|Qt::AlignVCenter);
   connect(browseButton, SIGNAL(released()), this, SLOT(browseFile()));
 
   label = new QLabel(dialog);
   label->setText("Event:");
-  layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+  layout->addWidget(label, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
   line = new QLineEdit(dialog);
 //   text->setText(((QuteLabel *)m_widget)->toPlainText());
-  layout->addWidget(line, 7,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
+  layout->addWidget(line, 9,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
   line->setMinimumWidth(320);
   line->setText(property("QCS_eventLine").toString());
 #ifdef  USE_WIDGET_MUTEX
@@ -291,9 +296,10 @@ void QuteButton::refreshWidget()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
-  if (property("QCS_latch").toBool()) {
-    static_cast<QPushButton *>(m_widget)->setChecked(m_currentValue != 0);
-  }
+
+//  if (property("QCS_latch").toBool()) {
+//    static_cast<QPushButton *>(m_widget)->setDown(m_currentValue != 0);
+//  }
 //  setProperty("QCS_value", m_value);
 //  setProperty("QCS_stringvalue", m_stringValue);
   m_valueChanged = false;
@@ -325,7 +331,7 @@ void QuteButton::applyInternalProperties()
   static_cast<QPushButton *>(m_widget)->setText(property("QCS_text").toString());
   static_cast<QPushButton *>(m_widget)->setCheckable(property("QCS_latch").toBool());
   m_widget->setStyleSheet("QPushButton { border-color:" + property("QCS_color").value<QColor>().name()
-                          + "; }");
+                          + "; }");  // Why is this here?
 }
 
 void QuteButton::buttonPressed()

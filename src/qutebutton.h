@@ -60,9 +60,10 @@ class QuteButton : public QuteWidget
 //    QString m_type;  // can be event, value, pictevent, pictvalue, pict
 //    QString m_filename;
 //    QString m_imageFilename;
-    bool m_currentValue;
+    double m_currentValue;
 
     QComboBox *typeComboBox;
+    QCheckBox *latchCheckBox;
     QDoubleSpinBox *valueBox;
     QTextEdit *text;
     QLineEdit *filenameLineEdit;
