@@ -165,7 +165,7 @@ class DocumentPage : public QObject
     int runPython();  // Called when file is a python file
     void queueEvent(QString line, int delay = 0);
 
-    void showWidgets();
+    void showWidgets(bool show = true);
     void hideWidgets();
 //    void detachWidgets();
 //    void attachWidgets(QDockWidget *panel);

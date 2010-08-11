@@ -57,6 +57,7 @@ Inspector::~Inspector()
 void Inspector::parseText(const QString &text)
 {
 //  qDebug() << "Inspector:parseText";
+  inspectorMutex.lock();
   bool opcodeItemExpanded = true;
   bool macroItemExpanded = true;
   bool instrItemExpanded = true;
@@ -160,11 +161,13 @@ void Inspector::parseText(const QString &text)
       instr->setExpanded(instrumentExpanded[instr->text(0)]);
     }
   }
+  inspectorMutex.unlock();
 }
 
 void Inspector::parsePythonText(const QString &text)
 {
 //  qDebug() << "Inspector:parseText";
+  inspectorMutex.lock();
   m_treeWidget->clear();
   opcodeItem = 0;
   TreeItem *importItem = new TreeItem(m_treeWidget, QStringList(tr("Imports")));
@@ -214,6 +217,7 @@ void Inspector::parsePythonText(const QString &text)
   m_treeWidget->expandItem(importItem);
   m_treeWidget->expandItem(functionItem);
   m_treeWidget->expandItem(classItem);
+  inspectorMutex.unlock();
 }
 
 void Inspector::focusInEvent (QFocusEvent * event)

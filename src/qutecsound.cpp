@@ -1989,8 +1989,6 @@ void qutecsound::createActions()
   //showWidgetsAct->setChecked(true);
   showWidgetsAct->setStatusTip(tr("Show Realtime Widgets"));
   showWidgetsAct->setIconText(tr("Widgets"));
-  connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
-  connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
 
   showInspectorAct = new QAction(QIcon(":/images/edit-find.png"), tr("Inspector"), this);
   showInspectorAct->setCheckable(true);
@@ -2264,6 +2262,17 @@ void qutecsound::connectActions()
   connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
   connect(doc, SIGNAL(stopSignal()), this, SLOT(stop()));
   connect(doc, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(statusBarMessage(QString)));
+
+
+  disconnect(showWidgetsAct, 0,0,0);
+  if (m_options->widgetsIndependent) {
+    connect(showWidgetsAct, SIGNAL(triggered(bool)), doc, SLOT(showWidgets()));
+    connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
+  }
+  else {
+    connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
+    connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
+  }
 }
 
 void qutecsound::createMenus()

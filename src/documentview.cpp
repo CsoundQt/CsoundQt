@@ -890,14 +890,19 @@ void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
       cur.mergeCharFormat(errorFormat);
       internalChange = true;
       editors[0]->setTextCursor(cur);
+      cur.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor);
+      cur.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor);
+      cur.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor);
+      cur.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor);
+      cur.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor); // go up 5 lines
       cur.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
     }
     else {
       qDebug() << "DocumentView::markErrorLines: Error line text doesn't match\n" << text;
     }
   }
-  internalChange = true;
-  editors[0]->setTextCursor(cur);
+//  internalChange = true;
+//  editors[0]->setTextCursor(cur);
   errorMarked = true;
   if (!originallyMod) {
     editors[0]->document()->setModified(false);

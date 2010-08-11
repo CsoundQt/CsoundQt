@@ -1200,10 +1200,15 @@ void DocumentPage::queueEvent(QString eventLine, int delay)
   m_csEngine->queueEvent(eventLine, delay);  //TODO  implement passing of timestamp
 }
 
-void DocumentPage::showWidgets()
+void DocumentPage::showWidgets(bool show)
 {
+  if (!show) {
+    hideWidgets();
+    return;
+  }
   foreach (WidgetLayout *wl, m_widgetLayouts) {
     wl->show();
+    wl->raise();
   }
 }
 

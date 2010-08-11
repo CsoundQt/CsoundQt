@@ -25,6 +25,7 @@
 
 #include <QDockWidget>
 #include <QTreeWidget>
+#include <QMutex>
 
 class TreeItem : public QTreeWidgetItem
 {
@@ -60,6 +61,8 @@ class Inspector : public QDockWidget
     TreeItem *instrItem;
     TreeItem *ftableItem;
     TreeItem *scoreItem;
+
+    QMutex inspectorMutex;
 
   private slots:
     void itemActivated(QTreeWidgetItem * item, int column);

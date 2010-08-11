@@ -725,12 +725,12 @@
 <context>
     <name>DocumentPage</name>
     <message>
-        <location filename="../documentpage.cpp" line="1138"/>
+        <location filename="../documentpage.cpp" line="1140"/>
         <source>QuteCsound</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../documentpage.cpp" line="1139"/>
+        <location filename="../documentpage.cpp" line="1141"/>
         <source>You must save the examples to use Record.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -762,396 +762,396 @@ Would you like to start from the top?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="626"/>
-        <location filename="../eventsheet.cpp" line="1360"/>
+        <location filename="../eventsheet.cpp" line="627"/>
+        <location filename="../eventsheet.cpp" line="1361"/>
         <source>Subtract</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="635"/>
-        <location filename="../eventsheet.cpp" line="1365"/>
+        <location filename="../eventsheet.cpp" line="636"/>
+        <location filename="../eventsheet.cpp" line="1366"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="644"/>
+        <location filename="../eventsheet.cpp" line="645"/>
         <source>Multiply by</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="653"/>
+        <location filename="../eventsheet.cpp" line="654"/>
         <source>Divide by</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="663"/>
+        <location filename="../eventsheet.cpp" line="664"/>
         <source>Minimum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="663"/>
+        <location filename="../eventsheet.cpp" line="664"/>
         <source>Maximum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="663"/>
+        <location filename="../eventsheet.cpp" line="664"/>
         <source>Mode: 0=decimals 1=Integers only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="714"/>
+        <location filename="../eventsheet.cpp" line="715"/>
         <source>Iterations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="731"/>
+        <location filename="../eventsheet.cpp" line="732"/>
         <source>Rotate by</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="743"/>
+        <location filename="../eventsheet.cpp" line="744"/>
         <source>From</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="743"/>
+        <location filename="../eventsheet.cpp" line="744"/>
         <source>To</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="743"/>
+        <location filename="../eventsheet.cpp" line="744"/>
         <source>Slope (1=Linear)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="903"/>
+        <location filename="../eventsheet.cpp" line="904"/>
         <source>Error running script</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="964"/>
+        <location filename="../eventsheet.cpp" line="965"/>
         <source>Add columns:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="977"/>
+        <location filename="../eventsheet.cpp" line="978"/>
         <source>Add Rows:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1032"/>
+        <location filename="../eventsheet.cpp" line="1033"/>
         <source>Python Scripts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1033"/>
+        <location filename="../eventsheet.cpp" line="1034"/>
         <source>Conversion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1039"/>
+        <location filename="../eventsheet.cpp" line="1040"/>
         <source>Tests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1327"/>
+        <location filename="../eventsheet.cpp" line="1328"/>
         <source>&amp;Send Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1328"/>
+        <location filename="../eventsheet.cpp" line="1329"/>
         <source>Send Events to Csound</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1329"/>
+        <location filename="../eventsheet.cpp" line="1330"/>
         <source>Send Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1333"/>
+        <location filename="../eventsheet.cpp" line="1334"/>
         <source>&amp;Send Events without offset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1334"/>
+        <location filename="../eventsheet.cpp" line="1335"/>
         <source>Send Events to Csound without offset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1335"/>
+        <location filename="../eventsheet.cpp" line="1336"/>
         <source>Send Events no offset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1340"/>
+        <location filename="../eventsheet.cpp" line="1341"/>
         <source>Loop Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1343"/>
+        <location filename="../eventsheet.cpp" line="1344"/>
         <source>Loop Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1344"/>
+        <location filename="../eventsheet.cpp" line="1345"/>
         <source>Activate Loop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1349"/>
+        <location filename="../eventsheet.cpp" line="1350"/>
         <source>Mark Loop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1350"/>
+        <location filename="../eventsheet.cpp" line="1351"/>
         <source>Set Loop to selection, without starting loop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1353"/>
+        <location filename="../eventsheet.cpp" line="1354"/>
         <source>&amp;Stop Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1354"/>
+        <location filename="../eventsheet.cpp" line="1355"/>
         <source>Stop all running and pending events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1355"/>
+        <location filename="../eventsheet.cpp" line="1356"/>
         <source>Stop Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1358"/>
+        <location filename="../eventsheet.cpp" line="1359"/>
         <source>&amp;Subtract</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1359"/>
+        <location filename="../eventsheet.cpp" line="1360"/>
         <source>Subtract a value from the selected cells</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1363"/>
+        <location filename="../eventsheet.cpp" line="1364"/>
         <source>&amp;Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1364"/>
+        <location filename="../eventsheet.cpp" line="1365"/>
         <source>Add a value to the selected cells</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1368"/>
+        <location filename="../eventsheet.cpp" line="1369"/>
         <source>&amp;Multiply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1369"/>
+        <location filename="../eventsheet.cpp" line="1370"/>
         <source>Multiply the selected cells by a value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1370"/>
+        <location filename="../eventsheet.cpp" line="1371"/>
         <source>Multiply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1373"/>
+        <location filename="../eventsheet.cpp" line="1374"/>
         <source>&amp;Divide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1374"/>
+        <location filename="../eventsheet.cpp" line="1375"/>
         <source>Divide the selected cells by a value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1375"/>
+        <location filename="../eventsheet.cpp" line="1376"/>
         <source>Divide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1378"/>
+        <location filename="../eventsheet.cpp" line="1379"/>
         <source>&amp;Randomize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1379"/>
+        <location filename="../eventsheet.cpp" line="1380"/>
         <source>Randomize the selected cells</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1380"/>
+        <location filename="../eventsheet.cpp" line="1381"/>
         <source>Randomize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1383"/>
+        <location filename="../eventsheet.cpp" line="1384"/>
         <source>&amp;Reverse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1384"/>
+        <location filename="../eventsheet.cpp" line="1385"/>
         <source>Reverse the selected cells by column</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1385"/>
+        <location filename="../eventsheet.cpp" line="1386"/>
         <source>Reverse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1388"/>
+        <location filename="../eventsheet.cpp" line="1389"/>
         <source>&amp;Shuffle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1389"/>
+        <location filename="../eventsheet.cpp" line="1390"/>
         <source>Shuffle the selected cells</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1390"/>
+        <location filename="../eventsheet.cpp" line="1391"/>
         <source>Shuffle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1398"/>
+        <location filename="../eventsheet.cpp" line="1399"/>
         <source>&amp;Rotate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1399"/>
+        <location filename="../eventsheet.cpp" line="1400"/>
         <source>Rotate the selected cells</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1400"/>
+        <location filename="../eventsheet.cpp" line="1401"/>
         <source>Rotate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1403"/>
+        <location filename="../eventsheet.cpp" line="1404"/>
         <source>&amp;Fill Cells</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1404"/>
+        <location filename="../eventsheet.cpp" line="1405"/>
         <source>Fill selected cells</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1405"/>
+        <location filename="../eventsheet.cpp" line="1406"/>
         <source>Fill</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1408"/>
+        <location filename="../eventsheet.cpp" line="1409"/>
         <source>&amp;Insert Column</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1409"/>
+        <location filename="../eventsheet.cpp" line="1410"/>
         <source>Insert a column at the current position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1410"/>
+        <location filename="../eventsheet.cpp" line="1411"/>
         <source>Insert Column</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1414"/>
+        <location filename="../eventsheet.cpp" line="1415"/>
         <source>Insert a row at the current position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1413"/>
-        <location filename="../eventsheet.cpp" line="1415"/>
+        <location filename="../eventsheet.cpp" line="1414"/>
+        <location filename="../eventsheet.cpp" line="1416"/>
         <source>Insert Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1338"/>
+        <location filename="../eventsheet.cpp" line="1339"/>
         <source>&amp;Loop Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1339"/>
+        <location filename="../eventsheet.cpp" line="1340"/>
         <source>Mark loop to current selection and start looping</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1418"/>
-        <location filename="../eventsheet.cpp" line="1420"/>
+        <location filename="../eventsheet.cpp" line="1419"/>
+        <location filename="../eventsheet.cpp" line="1421"/>
         <source>Append Column</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1419"/>
+        <location filename="../eventsheet.cpp" line="1420"/>
         <source>Append a column to the sheet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1423"/>
+        <location filename="../eventsheet.cpp" line="1424"/>
         <source>&amp;Append Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1424"/>
+        <location filename="../eventsheet.cpp" line="1425"/>
         <source>Append a row to the sheet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1425"/>
+        <location filename="../eventsheet.cpp" line="1426"/>
         <source>Append Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1428"/>
-        <location filename="../eventsheet.cpp" line="1430"/>
+        <location filename="../eventsheet.cpp" line="1429"/>
+        <location filename="../eventsheet.cpp" line="1431"/>
         <source>Append Columns...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1429"/>
+        <location filename="../eventsheet.cpp" line="1430"/>
         <source>Append columns to the sheet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1433"/>
-        <location filename="../eventsheet.cpp" line="1435"/>
+        <location filename="../eventsheet.cpp" line="1434"/>
+        <location filename="../eventsheet.cpp" line="1436"/>
         <source>Append Rows...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1434"/>
+        <location filename="../eventsheet.cpp" line="1435"/>
         <source>Append rows to the sheet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1438"/>
         <location filename="../eventsheet.cpp" line="1439"/>
         <location filename="../eventsheet.cpp" line="1440"/>
+        <location filename="../eventsheet.cpp" line="1441"/>
         <source>Delete Last Column</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1443"/>
+        <location filename="../eventsheet.cpp" line="1444"/>
         <source>Delete Selected Rows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1444"/>
         <location filename="../eventsheet.cpp" line="1445"/>
+        <location filename="../eventsheet.cpp" line="1446"/>
         <source>Delete Rows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1448"/>
+        <location filename="../eventsheet.cpp" line="1449"/>
         <source>Stop running script</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1303,46 +1303,46 @@ Would you like to start from the top?</source>
     </message>
     <message>
         <location filename="../inspector.cpp" line="39"/>
-        <location filename="../inspector.cpp" line="73"/>
+        <location filename="../inspector.cpp" line="80"/>
         <source>Opcodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../inspector.cpp" line="40"/>
-        <location filename="../inspector.cpp" line="75"/>
+        <location filename="../inspector.cpp" line="82"/>
         <source>Macros</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../inspector.cpp" line="41"/>
-        <location filename="../inspector.cpp" line="77"/>
+        <location filename="../inspector.cpp" line="84"/>
         <source>Instruments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../inspector.cpp" line="42"/>
-        <location filename="../inspector.cpp" line="79"/>
+        <location filename="../inspector.cpp" line="86"/>
         <source>F-tables</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../inspector.cpp" line="43"/>
-        <location filename="../inspector.cpp" line="81"/>
+        <location filename="../inspector.cpp" line="88"/>
         <source>Score</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inspector.cpp" line="178"/>
+        <location filename="../inspector.cpp" line="173"/>
         <source>Imports</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inspector.cpp" line="180"/>
+        <location filename="../inspector.cpp" line="175"/>
         <source>Classes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inspector.cpp" line="182"/>
+        <location filename="../inspector.cpp" line="177"/>
         <source>Functions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2572,8 +2572,8 @@ Some features may not be available and will not be saved!</source>
         <location filename="../qutecsound.cpp" line="986"/>
         <location filename="../qutecsound.cpp" line="1017"/>
         <location filename="../qutecsound.cpp" line="1231"/>
-        <location filename="../qutecsound.cpp" line="3044"/>
-        <location filename="../qutecsound.cpp" line="3295"/>
+        <location filename="../qutecsound.cpp" line="3053"/>
+        <location filename="../qutecsound.cpp" line="3304"/>
         <source>QuteCsound</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2590,7 +2590,7 @@ Some features may not be available and will not be saved!</source>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="392"/>
-        <location filename="../qutecsound.cpp" line="3054"/>
+        <location filename="../qutecsound.cpp" line="3063"/>
         <source>File already open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2634,7 +2634,7 @@ File not saved!</source>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="808"/>
-        <location filename="../qutecsound.cpp" line="3384"/>
+        <location filename="../qutecsound.cpp" line="3393"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2705,7 +2705,7 @@ Please go to Edit-&gt;Options-&gt;Environment and select directory
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1515"/>
-        <location filename="../qutecsound.cpp" line="2048"/>
+        <location filename="../qutecsound.cpp" line="2046"/>
         <source>Console</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2920,12 +2920,12 @@ Please go to Edit-&gt;Options-&gt;Environment and select directory
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2112"/>
+        <location filename="../qutecsound.cpp" line="2110"/>
         <source>Completely delete current line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2137"/>
+        <location filename="../qutecsound.cpp" line="2135"/>
         <source>Ctrl+D</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2995,7 +2995,7 @@ Please go to Edit-&gt;Options-&gt;Environment and select directory
     <message>
         <location filename="../qutecsound.cpp" line="1409"/>
         <location filename="../qutecsound.cpp" line="1414"/>
-        <location filename="../qutecsound.cpp" line="2132"/>
+        <location filename="../qutecsound.cpp" line="2130"/>
         <source>Reset Preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3417,7 +3417,7 @@ Extended Python features are not available</source>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1936"/>
-        <location filename="../qutecsound.cpp" line="2623"/>
+        <location filename="../qutecsound.cpp" line="2632"/>
         <source>Configure</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3533,364 +3533,364 @@ Extended Python features are not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1995"/>
-        <location filename="../qutecsound.cpp" line="1998"/>
+        <location filename="../qutecsound.cpp" line="1993"/>
+        <location filename="../qutecsound.cpp" line="1996"/>
         <source>Inspector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1997"/>
+        <location filename="../qutecsound.cpp" line="1995"/>
         <source>Show Inspector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2002"/>
+        <location filename="../qutecsound.cpp" line="2000"/>
         <source>Help Panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2005"/>
+        <location filename="../qutecsound.cpp" line="2003"/>
         <source>Show the Csound Manual Panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2006"/>
+        <location filename="../qutecsound.cpp" line="2004"/>
         <source>Manual</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2010"/>
-        <location filename="../qutecsound.cpp" line="2014"/>
+        <location filename="../qutecsound.cpp" line="2008"/>
+        <location filename="../qutecsound.cpp" line="2012"/>
         <source>Live Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2013"/>
+        <location filename="../qutecsound.cpp" line="2011"/>
         <source>Show Live Events Panels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2016"/>
+        <location filename="../qutecsound.cpp" line="2014"/>
         <source>Python Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2019"/>
+        <location filename="../qutecsound.cpp" line="2017"/>
         <source>Show Python Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2020"/>
+        <location filename="../qutecsound.cpp" line="2018"/>
         <source>Python</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2028"/>
+        <location filename="../qutecsound.cpp" line="2026"/>
         <source>Csound Manual</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2029"/>
+        <location filename="../qutecsound.cpp" line="2027"/>
         <source>Show the Csound manual in the help panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2032"/>
+        <location filename="../qutecsound.cpp" line="2030"/>
         <source>GEN Routines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2033"/>
+        <location filename="../qutecsound.cpp" line="2031"/>
         <source>Show the GEN Routines Manual page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2036"/>
+        <location filename="../qutecsound.cpp" line="2034"/>
         <source>Opcode Overview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2037"/>
+        <location filename="../qutecsound.cpp" line="2035"/>
         <source>Show opcode overview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2040"/>
+        <location filename="../qutecsound.cpp" line="2038"/>
         <source>Opcode Quick Reference</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2041"/>
+        <location filename="../qutecsound.cpp" line="2039"/>
         <source>Show opcode quick reference page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2044"/>
+        <location filename="../qutecsound.cpp" line="2042"/>
         <source>Output Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2047"/>
+        <location filename="../qutecsound.cpp" line="2045"/>
         <source>Show Csound&apos;s message console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2052"/>
+        <location filename="../qutecsound.cpp" line="2050"/>
         <source>View Full Screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2055"/>
+        <location filename="../qutecsound.cpp" line="2053"/>
         <source>Have QuteCsound occupy all the available screen space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2058"/>
+        <location filename="../qutecsound.cpp" line="2056"/>
         <source>Show Opcode Entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2059"/>
+        <location filename="../qutecsound.cpp" line="2057"/>
         <source>Show Opcode Entry in help panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2060"/>
+        <location filename="../qutecsound.cpp" line="2058"/>
         <source>Manual for opcode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2063"/>
+        <location filename="../qutecsound.cpp" line="2061"/>
         <source>Help Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2064"/>
+        <location filename="../qutecsound.cpp" line="2062"/>
         <source>Go back in help page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2067"/>
+        <location filename="../qutecsound.cpp" line="2065"/>
         <source>Help Forward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2068"/>
+        <location filename="../qutecsound.cpp" line="2066"/>
         <source>Go forward in help page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2071"/>
+        <location filename="../qutecsound.cpp" line="2069"/>
         <source>Show Opcode Entry in External Browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2072"/>
+        <location filename="../qutecsound.cpp" line="2070"/>
         <source>Show Opcode Entry in external browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2075"/>
+        <location filename="../qutecsound.cpp" line="2073"/>
         <source>Open Quick Reference Guide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2076"/>
+        <location filename="../qutecsound.cpp" line="2074"/>
         <source>Open Quick Reference Guide in PDF viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2079"/>
-        <location filename="../qutecsound.cpp" line="2083"/>
+        <location filename="../qutecsound.cpp" line="2077"/>
+        <location filename="../qutecsound.cpp" line="2081"/>
         <source>Utilities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2082"/>
+        <location filename="../qutecsound.cpp" line="2080"/>
         <source>Show the Csound Utilities dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2086"/>
-        <location filename="../qutecsound.cpp" line="2087"/>
+        <location filename="../qutecsound.cpp" line="2084"/>
+        <location filename="../qutecsound.cpp" line="2085"/>
         <source>Set Keyboard Shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2088"/>
+        <location filename="../qutecsound.cpp" line="2086"/>
         <source>Set Shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2091"/>
+        <location filename="../qutecsound.cpp" line="2089"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2092"/>
+        <location filename="../qutecsound.cpp" line="2090"/>
         <source>Comment selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2096"/>
+        <location filename="../qutecsound.cpp" line="2094"/>
         <source>Uncomment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2097"/>
+        <location filename="../qutecsound.cpp" line="2095"/>
         <source>Uncomment selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2101"/>
+        <location filename="../qutecsound.cpp" line="2099"/>
         <source>Indent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2102"/>
+        <location filename="../qutecsound.cpp" line="2100"/>
         <source>Indent selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2106"/>
+        <location filename="../qutecsound.cpp" line="2104"/>
         <source>Unindent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2107"/>
+        <location filename="../qutecsound.cpp" line="2105"/>
         <source>Unindent selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2111"/>
+        <location filename="../qutecsound.cpp" line="2109"/>
         <source>Kill Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2114"/>
+        <location filename="../qutecsound.cpp" line="2112"/>
         <source>Kill to End of Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2115"/>
+        <location filename="../qutecsound.cpp" line="2113"/>
         <source>Delete everything from cursor to the end of the current line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2117"/>
+        <location filename="../qutecsound.cpp" line="2115"/>
         <source>&amp;About QuteCsound</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2118"/>
+        <location filename="../qutecsound.cpp" line="2116"/>
         <source>Show the application&apos;s About box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2122"/>
+        <location filename="../qutecsound.cpp" line="2120"/>
         <source>Donate to QuteCsound</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2123"/>
+        <location filename="../qutecsound.cpp" line="2121"/>
         <source>Donate to support development of QuteCsound</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2127"/>
+        <location filename="../qutecsound.cpp" line="2125"/>
         <source>About &amp;Qt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2128"/>
+        <location filename="../qutecsound.cpp" line="2126"/>
         <source>Show the Qt library&apos;s About box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2133"/>
+        <location filename="../qutecsound.cpp" line="2131"/>
         <source>Reset QuteCsound&apos;s preferences to their original default state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2271"/>
-        <location filename="../qutecsound.cpp" line="2599"/>
+        <location filename="../qutecsound.cpp" line="2280"/>
+        <location filename="../qutecsound.cpp" line="2608"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2286"/>
+        <location filename="../qutecsound.cpp" line="2295"/>
         <source>Recent files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2288"/>
-        <location filename="../qutecsound.cpp" line="2605"/>
+        <location filename="../qutecsound.cpp" line="2297"/>
+        <location filename="../qutecsound.cpp" line="2614"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2318"/>
-        <location filename="../qutecsound.cpp" line="2613"/>
+        <location filename="../qutecsound.cpp" line="2327"/>
+        <location filename="../qutecsound.cpp" line="2622"/>
         <source>Control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2328"/>
+        <location filename="../qutecsound.cpp" line="2337"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2391"/>
+        <location filename="../qutecsound.cpp" line="2400"/>
         <source>Music</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2414"/>
+        <location filename="../qutecsound.cpp" line="2423"/>
         <source>Useful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2439"/>
+        <location filename="../qutecsound.cpp" line="2448"/>
         <source>Miscellaneous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2441"/>
+        <location filename="../qutecsound.cpp" line="2450"/>
         <source>Examples</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2454"/>
+        <location filename="../qutecsound.cpp" line="2463"/>
         <source>Getting Started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2455"/>
+        <location filename="../qutecsound.cpp" line="2464"/>
         <source>Basics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2475"/>
+        <location filename="../qutecsound.cpp" line="2484"/>
         <source>Realtime Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2491"/>
+        <location filename="../qutecsound.cpp" line="2500"/>
         <source>Language Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2523"/>
+        <location filename="../qutecsound.cpp" line="2532"/>
         <source>Favorites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2527"/>
+        <location filename="../qutecsound.cpp" line="2536"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2644"/>
+        <location filename="../qutecsound.cpp" line="2653"/>
         <source>Ready</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3912,39 +3912,39 @@ Do you want to save the changes before closing?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3045"/>
+        <location filename="../qutecsound.cpp" line="3054"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3158"/>
+        <location filename="../qutecsound.cpp" line="3167"/>
         <source>File loaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3271"/>
+        <location filename="../qutecsound.cpp" line="3280"/>
         <source>Application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3272"/>
+        <location filename="../qutecsound.cpp" line="3281"/>
         <source>Cannot write file %1:
 %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3283"/>
+        <location filename="../qutecsound.cpp" line="3292"/>
         <source>File saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3295"/>
+        <location filename="../qutecsound.cpp" line="3304"/>
         <source>%1[*] - %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3390"/>
+        <location filename="../qutecsound.cpp" line="3399"/>
         <source>Do not ask again</source>
         <translation type="unfinished"></translation>
     </message>
