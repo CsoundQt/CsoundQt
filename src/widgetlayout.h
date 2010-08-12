@@ -347,6 +347,7 @@ class WidgetLayout : public QWidget
 
   private slots:
     void updateData();
+    void layoutResized();
 
   signals:
     void selection(QRect area);

@@ -24,7 +24,7 @@ DEFAULT_PYTHONQT_INCLUDE_DIRS = /usr/local/include \
 DEFAULT_PYTHONQT_LIBRARY_DIRS = /usr/local/lib \
 	/usr/lib
 DEFAULT_PYTHONQT_TREE_DIRS =
-PYTHONQT_LIB = libPythonQt_QtAll.so
+PYTHONQT_LIB = libPythonQt_QtAll$${DEBUG_EXT}.so
 
 # Do configuration step
 include(config.pri)

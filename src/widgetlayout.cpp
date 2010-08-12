@@ -135,6 +135,8 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   recallPresetAct = new QAction(tr("Recall Preset"), this);
   connect(recallPresetAct, SIGNAL(triggered()), this, SLOT(loadPreset()));
 
+  connect(this, SIGNAL(resized()), this, SLOT(layoutResized()));
+
   setFocusPolicy(Qt::StrongFocus);
 
   setMouseTracking(true);
@@ -424,6 +426,10 @@ void WidgetLayout::setOuterGeometry(int newx, int newy, int neww, int newh)
   m_y = newy >= 0 && newy < 4096? newy : m_y;
   m_w = neww >= 0 && neww < 4096? neww : m_w;
   m_h = newh >= 0 && newh < 4096? newh : m_h;
+  if (!m_contained) {
+    this->move(m_x, m_y);
+    this->resize(m_w,m_h);
+  }
 }
 
 QRect WidgetLayout::getOuterGeometry()
@@ -3377,4 +3383,14 @@ void WidgetLayout::updateData()
   layoutMutex.unlock();
   closing = 0;
   updateTimer.singleShot(30, this, SLOT(updateData()));
+}
+
+void WidgetLayout::layoutResized()
+{
+//  qDebug() << "WidgetLayout::layoutResized()";
+  if (!m_contained) {
+    QRect r = this->geometry();
+    qDebug() << "WidgetLayout::layoutResized()" <<r.width() << r.height() ;
+    setOuterGeometry(r.x(), r.y(), r.width(), r.height());
+  }
 }

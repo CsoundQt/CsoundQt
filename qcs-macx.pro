@@ -24,7 +24,7 @@ DEFAULT_CSOUND_LIBRARY_DIRS = $${CSOUND_FRAMEWORK_DIR} \
 DEFAULT_LIBSNDFILE_INCLUDE_DIRS = /usr/local/include \
 	/usr/include
 DEFAULT_LIBSNDFILE_LIBRARY_DIRS = /usr/local/lib \
-	/usr/lib
+        /usr/lib
 DEFAULT_CSOUND_LIBS = CsoundLib
 CSND_LIB = lib_csnd.dylib
 LIBSNDFILE_LIB = libsndfile.dylib
@@ -34,7 +34,7 @@ DEFAULT_PYTHONQT_INCLUDE_DIRS = /usr/local/include \
 DEFAULT_PYTHONQT_LIBRARY_DIRS = /usr/local/lib \
         /usr/lib
 DEFAULT_PYTHONQT_TREE_DIRS =
-PYTHONQT_LIB = libPythonQt_QtAll.dylib
+PYTHONQT_LIB = libPythonQt_QtAll$${DEBUG_EXT}.dylib
 
 # Do configuration step
 include(config.pri)

@@ -560,7 +560,9 @@ void DocumentPage::setModified(bool mod)
 
 WidgetLayout* DocumentPage::newWidgetLayout()
 {
-  WidgetLayout* wl = new WidgetLayout(0);
+  WidgetLayout* wl = new WidgetLayout((QWidget *) this->parent());
+  qDebug() << "DocumentPage::newWidgetLayout()" << wl->windowFlags();
+  wl->setWindowFlags(Qt::Window | wl->windowFlags());
   connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
   connect(wl, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
   connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
@@ -1202,6 +1204,7 @@ void DocumentPage::queueEvent(QString eventLine, int delay)
 
 void DocumentPage::showWidgets(bool show)
 {
+//  qDebug() << "DocumentPage::showWidgets" << show;
   if (!show) {
     hideWidgets();
     return;
@@ -1214,6 +1217,7 @@ void DocumentPage::showWidgets(bool show)
 
 void DocumentPage::hideWidgets()
 {
+//  qDebug() << " DocumentPage::hideWidgets()";
   foreach (WidgetLayout *wl, m_widgetLayouts) {
     wl->hide();
   }
