@@ -2854,6 +2854,11 @@ void WidgetLayout::savePreset(int num, QString name)
         && !(m_widgets[i]->getWidgetType() == "BSBConsole")) {
       p.addValue(id, m_widgets[i]->getValue());
     }
+    if (m_widgets[i]->getWidgetType() == "BSBButton") {
+      if (static_cast<QuteButton *>(m_widgets[i])->property("QCS_latch").toBool()) {
+        p.addValue(id, m_widgets[i]->getValue());
+      }
+    }
     if (m_widgets[i]->getWidgetType() == "BSBController"
         || m_widgets[i]->getWidgetType() == "BSBXYController") {
       p.addValue2(id, m_widgets[i]->getValue2());
