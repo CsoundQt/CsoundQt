@@ -79,6 +79,7 @@ PyObject* PyQcsObject::getMainModule() {
 CSOUND* PyQcsObject::getCurrentCsound()
 {
   CSOUND *cs = (CSOUND *) m_qcs->getCurrentCsound();
+  return cs;
 }
 
 void PyQcsObject::play(int index, bool realtime)
@@ -109,6 +110,91 @@ void PyQcsObject::setDocument(int index)
   QString path = name.left(name.lastIndexOf("/"));
   mainContext.call("os.chdir", QVariantList() << path );
   mainContext.evalScript("print 'cd \"" + path + "\"'");
+}
+
+void PyQcsObject::insertText(QString text, int index, int section)
+{
+  return m_qcs->insertText(text, index,section);
+}
+
+void PyQcsObject::setCsd(QString text, int index)
+{
+  return m_qcs->setCsd(text, index);
+}
+
+void PyQcsObject::setFullText(QString text, int index)
+{
+  return m_qcs->setFullText(text, index);
+}
+
+void PyQcsObject::setOrc(QString text, int index)
+{
+  return m_qcs->setOrc(text, index);
+}
+
+void PyQcsObject::setSco(QString text, int index)
+{
+  return m_qcs->setSco(text, index);
+}
+
+void PyQcsObject::setWidgetsText(QString text, int index)
+{
+  return m_qcs->setWidgetsText(text, index);
+}
+
+void PyQcsObject::setPresetsText(QString text, int index)
+{
+  return m_qcs->setPresetsText(text, index);
+}
+
+void PyQcsObject::setOptionsText(QString text, int index)
+{
+  return m_qcs->setOptionsText(text, index);
+}
+
+int PyQcsObject::getDocument(QString name)
+{
+  return m_qcs->getDocument(name);
+}
+
+QString PyQcsObject::getSelectedText(int index, int section)
+{
+  return m_qcs->getSelectedText(index,section);
+}
+
+QString PyQcsObject::getCsd(int index)
+{
+  return m_qcs->getCsd(index);
+}
+
+QString PyQcsObject::getFullText(int index)
+{
+  return m_qcs->getFullText(index);
+}
+
+QString PyQcsObject::getOrc(int index)
+{
+  return m_qcs->getOrc(index);
+}
+
+QString PyQcsObject::getSco(int index)
+{
+  return m_qcs->getSco(index);
+}
+
+QString PyQcsObject::getWidgetsText(int index)
+{
+  return m_qcs->getWidgetsText(index);
+}
+
+QString PyQcsObject::getPresetsText(int index)
+{
+  return m_qcs->getPresetsText(index);
+}
+
+QString PyQcsObject::getOptionsText(int index)
+{
+  return m_qcs->getOptionsText(index);
 }
 
 void PyQcsObject::schedule(QVariant time, QVariant event)
@@ -173,4 +259,20 @@ QVariantList PyQcsObject::readTableToList(int ftable, int offset, int count)
 //    count--;
 //  }
   return list;
+}
+
+void PyQcsObject::writeArrayToTable(int ftable, QVariantList values, int offset, int count)
+{
+  qDebug() << "PyQcsObject::writeArrayToTable not implemented";
+}
+
+QVariantList PyQcsObject::readArrayToList(int ftable, int offset, int count)
+{
+  qDebug() << "PyQcsObject::readArrayToList not implemented";
+  return QVariantList();
+}
+
+void  PyQcsObject::registerProcessCallback()
+{
+  qDebug() << "PyQcsObject::registerProcessCallback not implemented";
 }

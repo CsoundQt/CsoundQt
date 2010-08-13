@@ -3600,6 +3600,185 @@ QString qutecsound::setDocument(int index)
   return name;
 }
 
+void qutecsound::insertText(QString text, int index, int section)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->insertText(text);
+  }
+}
+
+void qutecsound::setCsd(QString text, int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->setBasicText(text);
+  }
+}
+
+void qutecsound::setFullText(QString text, int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->setFullText(text);
+  }
+}
+
+void qutecsound::setOrc(QString text, int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->setOrc(text);
+  }
+}
+
+void qutecsound::setSco(QString text, int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+   documentPages[index]->setSco(text);
+  }
+}
+
+void qutecsound::setWidgetsText(QString text, int index)
+{
+  qDebug() << "qutecsound::setWidgetsText not implemented";
+}
+
+void qutecsound::setPresetsText(QString text, int index)
+{
+  qDebug() << "qutecsound::setPresetsText not implemented";
+}
+
+void qutecsound::setOptionsText(QString text, int index)
+{
+  qDebug() << "qutecsound::setOptionsText not implemented";
+}
+
+int qutecsound::getDocument(QString name)
+{
+  int index = curPage;
+  if (!name.isEmpty()) {
+    index = -1;
+    for (int i = 0; i < documentPages.size(); i++) {
+      QString fileName = documentPages[i]->getFileName();
+      QString relName = fileName.mid(fileName.lastIndexOf("/")+1);
+      if (name == fileName  || name == relName  ) {
+        index = i;
+        break;
+      }
+    }
+  }
+  return index;
+}
+
+QString qutecsound::getSelectedText(int index, int section)
+{
+  QString text = QString();
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    text = documentPages[index]->getSelectedText(section);
+  }
+  return text;
+}
+
+QString qutecsound::getCsd(int index)
+{
+  QString text = QString();
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    text = documentPages[index]->getBasicText();
+  }
+  return text;
+}
+
+QString qutecsound::getFullText(int index)
+{
+  QString text = QString();
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    text = documentPages[index]->getFullText();
+  }
+  return text;
+}
+
+QString qutecsound::getOrc(int index)
+{
+  QString text = QString();
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    text = documentPages[index]->getOrc();
+  }
+  return text;
+}
+
+QString qutecsound::getSco(int index)
+{
+  QString text = QString();
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    text = documentPages[index]->getSco();
+  }
+  return text;
+}
+
+QString qutecsound::getWidgetsText(int index)
+{
+  QString text = QString();
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    text = documentPages[index]->getWidgetsText();
+  }
+  return text;
+}
+
+QString qutecsound::getPresetsText(int index)
+{
+  QString text = QString();
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    text = documentPages[index]->getPresetsText();
+  }
+  return text;
+}
+
+QString qutecsound::getOptionsText(int index)
+{
+  QString text = QString();
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    text = documentPages[index]->getOptionsText();
+  }
+  return text;
+}
+
+
 //void qutecsound::newCurve(Curve * curve)
 //{
 //  newCurveBuffer.append(curve);

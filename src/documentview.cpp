@@ -208,10 +208,68 @@ void DocumentView::setOpcodeTree(OpEntryParser *opcodeTree)
   m_opcodeTree = opcodeTree;
 }
 
+void DocumentView::insertText(QString text, int section)
+{
+  if (section == -1 || section < 0) {
+    section = 0;  // TODO implment for multiple views
+  }
+  if (section < editors.size()) {
+    QTextCursor cursor = editors[section]->textCursor();
+    cursor.insertText(text);
+    editors[section]->setTextCursor(cursor);
+  }
+}
+
 void DocumentView::setFullText(QString text)
 {
-  editors[0]->setText(text);
-  setModified(false);
+  QTextCursor cursor = editors[0]->textCursor();
+  cursor.select(QTextCursor::Document);
+  cursor.insertText(text);
+  editors[0]->setTextCursor(cursor);  // TODO implment for multiple views
+}
+
+void DocumentView::setBasicText(QString text)
+{
+  QTextCursor cursor = editors[0]->textCursor();
+  cursor.select(QTextCursor::Document);
+  cursor.insertText(text);
+  editors[0]->setTextCursor(cursor);  // TODO implment for multiple views
+}
+
+void DocumentView::setOrc(QString text)
+{
+  QTextCursor cursor = editors[0]->textCursor();
+  QString csdText = getBasicText();
+  if (csdText.contains("<CsInstruments>") and csdText.contains("</CsInstruments>")) {
+    QString preText = csdText.mid(0, csdText.indexOf("<CsInstruments>") + 15);
+    QString postText = csdText.mid(csdText.lastIndexOf("</CsInstruments>"));
+    if (!text.startsWith("\n")) {
+      text.prepend("\n");
+    }
+    if (!text.endsWith("\n")) {
+      text.append("\n");
+    }
+    csdText = preText + text + postText;
+    setBasicText(csdText);
+  }
+}
+
+void DocumentView::setSco(QString text)
+{
+  QTextCursor cursor = editors[0]->textCursor();
+  QString csdText = getBasicText();
+  if (csdText.contains("<CsScore>") and csdText.contains("</CsScore>")) {
+    QString preText = csdText.mid(0, csdText.indexOf("<CsScore>") + 9);
+    QString postText = csdText.mid(csdText.lastIndexOf("</CsScore>"));
+    if (!text.startsWith("\n")) {
+      text.prepend("\n");
+    }
+    if (!text.endsWith("\n")) {
+      text.append("\n");
+    }
+    csdText = preText + text + postText;
+    setBasicText(csdText);
+  }
 }
 
 void DocumentView::setLadspaText(QString text)
@@ -246,6 +304,18 @@ void DocumentView::setLadspaText(QString text)
   edit->moveCursor(QTextCursor::Start);
 }
 
+QString DocumentView::getSelectedText(int section)
+{
+  QString text;
+  if (section == -1 || section < 0) {
+    section = 0;  // TODO implment for multiple views
+  }
+  if (section < editors.size()) {
+    text = editors[section]->textCursor().selectedText();
+  }
+  return text;
+}
+
 QString DocumentView::getFullText()
 {
   QString text;
@@ -269,15 +339,33 @@ QString DocumentView::getBasicText()
   return text;
 }
 
-QString DocumentView::getOrcText()
-{// Without tags
-  qDebug() << "DocumentView::getOrcText() not implemented and will crash!";
+QString DocumentView::getOrc()
+{
+  QString text = "";
+  if (m_viewMode < 2) { // A single editor (orc and sco are not split)
+    text = mainEditor->toPlainText();
+    text = text.mid(text.lastIndexOf("<CsInstruments>" )+ 15);
+    qDebug() << text;
+    text.remove(text.lastIndexOf("</CsInstruments>"), text.size());
+  }
+  else {
+    text = mainEditor->toPlainText();
+  }
+  return text;
 }
 
-QString DocumentView::getScoText()
+QString DocumentView::getSco()
 {
-  // Without tags
-  qDebug() << "DocumentView::getScoText() not implemented and will crash!";
+  QString text = "";
+  if (m_viewMode < 2) { // A single editor (orc and sco are not split)
+    text = mainEditor->toPlainText();
+    text = text.mid(text.lastIndexOf("<CsScore>") + 9);
+    text.remove(text.lastIndexOf("</CsScore>"), text.size());
+  }
+  else {
+    text = scoreEditor->toPlainText();
+  }
+  return text;
 }
 
 QString DocumentView::getOptionsText()

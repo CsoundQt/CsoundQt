@@ -63,15 +63,20 @@ class DocumentView : public QScrollArea
     void setOpcodeNameList(QStringList list);
     void setOpcodeTree(OpEntryParser *opcodeTree);
 
+    void insertText(QString text, int section = -1);
     void setFullText(QString text);
+    void setBasicText(QString text);
+    void setOrc(QString text);
+    void setSco(QString text);
     void setLadspaText(QString text);
 
     // TODO add all text inputs here as below
 
+    QString getSelectedText(int section = -1);
     QString getFullText();
     QString getBasicText();  // What Csound needs (no widgets, misc text, etc.)
-    QString getOrcText();  // Without tags
-    QString getScoText();  // Without tags
+    QString getOrc();  // Without tags
+    QString getSco();  // Without tags
     QString getOptionsText();  // Without tags
     QString getMiscText();  // All other tags like version and licence with tags
     QString getExtraText(); // Text outside any known tags

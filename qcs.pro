@@ -24,6 +24,7 @@
 # BUILD OPTIONS:
 # CONFIG+=build64    To build doubles version
 # CONFIG+=pythonqt   To build with PythonQt support
+# CONFIG+=portmidi   To build with Portmidi support
 #
 # OS X only OPTIONS:
 # CONFIG+=intel         To build intel only version (Universal is the default)
@@ -39,6 +40,7 @@ unix {
 win32-g++: include (qcs-win32.pro)
 
 pythonqt: DEFINES += QCS_PYTHONQT
+portmidi: DEFINES += QCS_PORTMIDI
 include(src/src.pri)
 
 TRANSLATIONS = "src/translations/qutecsound_en.ts" \
@@ -60,16 +62,16 @@ pythonqt {
 	INCLUDEPATH *= $${PYTHONQT_TREE_DIR}/src
 
 	# Override and always use release version of PythonQT even if building for debug
-	win32: LIBS -= $(PYTHON_LIB)/libpython$${PYTHON_VERSION}$${DEBUG_EXT}.a
-	win32: LIBS -= $${PYTHONQT_TREE_DIR}/build/../lib/libPythonQt$${DEBUG_EXT}.a
-	unix: LIBS -= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt$${DEBUG_EXT}
-#	win32: LIBS -= $${PYTHONQT_TREE_DIR}/build/../lib/PythonQt_QtAll$${DEBUG_EXT}.lib
-#	unix: LIBS -= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt_QtAll$${DEBUG_EXT}
-	win32: LIBS *= $(PYTHON_LIB)/libpython$${PYTHON_VERSION}.a
-	win32: LIBS *= $${PYTHONQT_TREE_DIR}/lib/libPythonQt.a
-	unix: LIBS *= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt
-#	win32: LIBS *= $${PYTHONQT_TREE_DIR}/lib/libPythonQt_QtAll.a
-#	unix: LIBS *= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt_QtAll
+#	win32: LIBS -= $(PYTHON_LIB)/libpython$${PYTHON_VERSION}$${DEBUG_EXT}.a
+#	win32: LIBS -= $${PYTHONQT_TREE_DIR}/build/../lib/libPythonQt$${DEBUG_EXT}.a
+#	unix: LIBS -= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt$${DEBUG_EXT}
+#	win32: LIBS *= $(PYTHON_LIB)/libpython$${PYTHON_VERSION}.a
+#	win32: LIBS *= $${PYTHONQT_TREE_DIR}/lib/libPythonQt.a
+#	unix: LIBS *= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt
+}
+portmidi {
+        INCLUDEPATH *= $${PORTMIDI_INCLUDE_DIR}
+        LIBS += -L$${PORTMIDI_LIB_DIR} -l$${PORTMIDI_LIB}
 }
 
 INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}

@@ -54,8 +54,18 @@ class DocumentPage : public QObject
     ~DocumentPage();
 
     // Needed for main application, but not for standalone
+    void insertText(QString text, int section = -1);
+    void setFullText(QString text);
+    void setBasicText(QString text);
+    void setOrc(QString text);
+    void setSco(QString text);
+    void setLadspaText(QString text);
+
     QString getFullText();
     QString getBasicText();
+    QString getSelectedText(int section = -1);
+    QString getOrc();
+    QString getSco();
     QString getOptionsText();
     QString getDotText();
     QString getWidgetsText();

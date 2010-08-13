@@ -78,7 +78,26 @@ class qutecsound:public QMainWindow
 
     // For usage from python (external) interface
     void *getCurrentCsound();
+    // Editor
     QString setDocument(int index); // Returns document name
+    void insertText(QString text, int index = -1, int section = -1);
+    void setCsd(QString text, int index = -1);
+    void setFullText(QString text, int index = -1);
+    void setOrc(QString text, int index = -1);
+    void setSco(QString text, int index = -1);
+    void setWidgetsText(QString text, int index = -1);
+    void setPresetsText(QString text, int index = -1);
+    void setOptionsText(QString text, int index = -1);
+
+    int getDocument(QString name = ""); // Returns document index. -1 if not current open
+    QString getSelectedText(int index = -1, int section = 0);
+    QString getCsd(int index);
+    QString getFullText(int index);
+    QString getOrc(int index);
+    QString getSco(int index);
+    QString getWidgetsText(int index);
+    QString getPresetsText(int index);
+    QString getOptionsText(int index);
 
 //    int popKeyPressEvent(); // return ASCII code of key press event for Csound or -1 if no event
 //    int popKeyReleaseEvent(); // return ASCII code of key release event for Csound -1 if no event
@@ -124,6 +143,7 @@ class qutecsound:public QMainWindow
     bool saveAs();
     bool saveNoWidgets();
     void info();
+    // Edition
     void copy();
     void cut();
     void paste();

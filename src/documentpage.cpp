@@ -164,6 +164,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   bool xmlFormatFound = false;
   if (!fileName.endsWith(".csd") && !fileName.isEmpty()) {
     m_view->setFullText(text); // Put all text since not a csd file (and not default file which has no name)
+    m_view->setModified(false);
     return ret;
   }
   QString xmlPanels = QString();
@@ -285,6 +286,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   if (!text.contains("<CsoundSynthesizer>") &&
       !text.contains("</CsoundSynthesizer>") ) { // When not a csd file
     m_view->setFullText(text);  // TODO do something different if not a csd file?
+    m_view->setModified(false);
     return ret;  // Don't add live event panel if not a csd file.
   }
   // Load Live Event Panels ------------------------
@@ -329,7 +331,38 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 //    e->setFromText(QString()); // Must set blank for undo history point
 //  }
   m_view->setFullText(text);  // This must be last as some of the text has been removed along the way
+  m_view->setModified(false);
   return ret;
+}
+
+void DocumentPage::insertText(QString text, int section)
+{
+  return m_view->insertText(text, section);
+}
+
+void DocumentPage::setFullText(QString text)
+{
+  return m_view->setFullText(text);
+}
+
+void DocumentPage::setBasicText(QString text)
+{
+  return m_view->setBasicText(text);
+}
+
+void DocumentPage::setOrc(QString text)
+{
+  return m_view->setOrc(text);
+}
+
+void DocumentPage::setSco(QString text)
+{
+  return m_view->setSco(text);
+}
+
+void DocumentPage::setLadspaText(QString text)
+{
+  return m_view->setLadspaText(text);
 }
 
 QString DocumentPage::getFullText()
@@ -378,6 +411,24 @@ QString DocumentPage::getFullText()
 QString DocumentPage::getBasicText()
 {
   QString text = m_view->getBasicText();
+  return text;
+}
+
+QString DocumentPage::getSelectedText(int section)
+{
+  QString text = m_view->getSelectedText(section);
+  return text;
+}
+
+QString DocumentPage::getOrc()
+{
+  QString text = m_view->getOrc();
+  return text;
+}
+
+QString DocumentPage::getSco()
+{
+  QString text = m_view->getSco();
   return text;
 }
 

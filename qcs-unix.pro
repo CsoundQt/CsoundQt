@@ -26,6 +26,12 @@ DEFAULT_PYTHONQT_LIBRARY_DIRS = /usr/local/lib \
 DEFAULT_PYTHONQT_TREE_DIRS =
 PYTHONQT_LIB = libPythonQt_QtAll$${DEBUG_EXT}.so
 
+DEFAULT_PORTMIDI_INCLUDE_DIRS =  /usr/local/include \
+        /usr/include
+DEFAULT_PORTMIDI_LIB_DIRS =  /usr/local/lib \
+        /usr/lib
+PORTMIDI_LIB = portmidi
+
 # Do configuration step
 include(config.pri)
 

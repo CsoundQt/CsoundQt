@@ -208,6 +208,38 @@ pythonqt {
 		isEmpty(PYTHONQT_TREE_DIR): error(A valid PythonQt library directory was not found.)
 	}
 }
+portmidi {
+                isEmpty(PORTMIDI_INCLUDE_DIR) {
+                        !no_messages: message(Portmidi include directory not specified.)
+                        for(dir, DEFAULT_PORTMIDI_INCLUDE_DIRS) {
+                                !no_messages: message(... searching in $${dir})
+                                exists($${dir}) {
+                                        !no_messages {
+                                                message(PORTMIDI_INCLUDE_DIR set to $${dir})
+                                                message()
+                                        }
+                                        PORTMIDI_INCLUDE_DIR = $${dir}
+                                        break()
+                                }
+                        }
+                        isEmpty(PORTMIDI_INCLUDE_DIR): error(A valid Portmidi include directory was not found.)
+                }
+        isEmpty(PORTMIDI_LIB_DIR) {
+                !no_messages: message(Portmidi library directory not specified.)
+                for(dir, DEFAULT_PORTMIDI_LIB_DIRS) {
+                        !no_messages: message(... searching in $${dir})
+                        exists($${dir}) {
+                                !no_messages {
+                                        message(PORTMIDI_LIB_DIR set to $${dir})
+                                        message()
+                                }
+                                PORTMIDI_LIB_DIR = $${dir}
+                                break()
+                        }
+                }
+                isEmpty(PORTMIDI_LIB_DIR): error(A valid Portmidi library directory was not found.)
+        }
+}
 win32 {
 	CSOUND_INCLUDE_DIR = $$replace(CSOUND_INCLUDE_DIR, \\\\, /)
 	CSOUND_LIBRARY_DIR = $$replace(CSOUND_LIBRARY_DIR, \\\\, /)
@@ -224,6 +256,10 @@ win32 {
 		win32: message(Python include directory is $${PYTHON_INCLUDE_DIR})
 		message(PythonQt source tree directory is $${PYTHONQT_TREE_DIR})
 	}
+        portmidi {
+                message(Portmidi include directory is $${PORTMIDI_INCLUDE_DIR})
+                message(Portmidi library directory is $${PORTMIDI_LIB_DIR})
+        }
 	message()
 }
 !no_checks {
