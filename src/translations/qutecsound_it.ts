@@ -1339,6 +1339,13 @@ E&apos; già usata.</translation>
     </message>
 </context>
 <context>
+    <name>PythonConsole</name>
+    <message>
+        <source>Python Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QuteButton</name>
     <message>
         <source>Select File</source>
@@ -1346,6 +1353,10 @@ E&apos; già usata.</translation>
     </message>
     <message>
         <source>Select File(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Latch</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -1334,6 +1334,13 @@ Zaten kullanılmaktadır.</translation>
     </message>
 </context>
 <context>
+    <name>PythonConsole</name>
+    <message>
+        <source>Python Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QuteButton</name>
     <message>
         <source>Select File</source>
@@ -1341,6 +1348,10 @@ Zaten kullanılmaktadır.</translation>
     </message>
     <message>
         <source>Select File(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Latch</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
