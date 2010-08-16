@@ -1357,10 +1357,10 @@ void WidgetLayout::selectionChanged(QRect selection)
   widgetsMutex.unlock();
 }
 
-void WidgetLayout::createNewSlider()
+void WidgetLayout::createNewSlider(int x, int y)
 {
-  int posx = currentPosition.x();
-  int posy = currentPosition.y();
+  int posx = x >= 0 ? x : currentPosition.x();
+  int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   createSlider(posx, posy, 20, 100, QString("ioSlider {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(m_widgets.size())));
   widgetChanged();
@@ -1370,10 +1370,10 @@ void WidgetLayout::createNewSlider()
   markHistory();
 }
 
-void WidgetLayout::createNewLabel()
+void WidgetLayout::createNewLabel(int x, int y)
 {
-  int posx = currentPosition.x();
-  int posy = currentPosition.y();
+  int posx = x >= 0 ? x : currentPosition.x();
+  int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder New Label";
   createText(posx, posy, 80, 25, line);
@@ -1384,10 +1384,10 @@ void WidgetLayout::createNewLabel()
   markHistory();
 }
 
-void WidgetLayout::createNewDisplay()
+void WidgetLayout::createNewDisplay(int x, int y)
 {
-  int posx = currentPosition.x();
-  int posy = currentPosition.y();
+  int posx = x >= 0 ? x : currentPosition.x();
+  int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} display 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border Display";
   createText(posx, posy, 80, 25, line);
@@ -1398,10 +1398,10 @@ void WidgetLayout::createNewDisplay()
   markHistory();
 }
 
-void WidgetLayout::createNewScrollNumber()
+void WidgetLayout::createNewScrollNumber(int x, int y)
 {
-  int posx = currentPosition.x();
-  int posy = currentPosition.y();
+  int posx = x >= 0 ? x : currentPosition.x();
+  int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} scroll 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} background border 0.000000";
   createScrollNumber(posx, posy, 80, 25, line);
@@ -1412,10 +1412,10 @@ void WidgetLayout::createNewScrollNumber()
   markHistory();
 }
 
-void WidgetLayout::createNewLineEdit()
+void WidgetLayout::createNewLineEdit(int x, int y)
 {
-  int posx = currentPosition.x();
-  int posy = currentPosition.y();
+  int posx = x >= 0 ? x : currentPosition.x();
+  int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 25} edit 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
   createLineEdit(posx, posy, 100, 25, line);
@@ -1426,10 +1426,10 @@ void WidgetLayout::createNewLineEdit()
   markHistory();
 }
 
-void WidgetLayout::createNewSpinBox()
+void WidgetLayout::createNewSpinBox(int x, int y)
 {
-  int posx = currentPosition.x();
-  int posy = currentPosition.y();
+  int posx = x >= 0 ? x : currentPosition.x();
+  int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} editnum 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
   createSpinBox(posx, posy, 80, 25, line);
@@ -1440,10 +1440,10 @@ void WidgetLayout::createNewSpinBox()
   markHistory();
 }
 
-void WidgetLayout::createNewButton()
+void WidgetLayout::createNewButton(int x, int y)
 {
-  int posx = currentPosition.x();
-  int posy = currentPosition.y();
+  int posx = x >= 0 ? x : currentPosition.x();
+  int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   QString line = "ioButton {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 30} event 1.000000 \"button1\" \"New Button\" \"/\" i1 0 10";
   createButton(posx, posy, 100, 30, line);
@@ -1454,10 +1454,10 @@ void WidgetLayout::createNewButton()
   markHistory();
 }
 
-void WidgetLayout::createNewKnob()
+void WidgetLayout::createNewKnob(int x, int y)
 {
-  int posx = currentPosition.x();
-  int posy = currentPosition.y();
+  int posx = x >= 0 ? x : currentPosition.x();
+  int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   createKnob(posx, posy, 80, 80, QString("ioKnob {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(m_widgets.size())));
   widgetChanged();
@@ -1467,10 +1467,10 @@ void WidgetLayout::createNewKnob()
   markHistory();
 }
 
-void WidgetLayout::createNewCheckBox()
+void WidgetLayout::createNewCheckBox(int x, int y)
 {
-  int posx = currentPosition.x();
-  int posy = currentPosition.y();
+  int posx = x >= 0 ? x : currentPosition.x();
+  int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   createCheckBox(posx, posy, 20, 20, QString("ioCheckbox {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 20} off checkbox" +QString::number(m_widgets.size())));
   widgetChanged();
@@ -1480,10 +1480,10 @@ void WidgetLayout::createNewCheckBox()
   markHistory();
 }
 
-void WidgetLayout::createNewMenu()
+void WidgetLayout::createNewMenu(int x, int y)
 {
-  int posx = currentPosition.x();
-  int posy = currentPosition.y();
+  int posx = x >= 0 ? x : currentPosition.x();
+  int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   createMenu(posx, posy, 80, 30, QString("ioMenu {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 25} 1 303 \"item1,item2,item3\" menu" +QString::number(m_widgets.size())));
   widgetChanged();
@@ -1493,10 +1493,10 @@ void WidgetLayout::createNewMenu()
   markHistory();
 }
 
-void WidgetLayout::createNewMeter()
+void WidgetLayout::createNewMeter(int x, int y)
 {
-  int posx = currentPosition.x();
-  int posy = currentPosition.y();
+  int posx = x >= 0 ? x : currentPosition.x();
+  int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   createMeter(posx, posy, 30, 80, QString("ioMeter {"+ QString::number(posx) +", "+ QString::number(posy) + "} {30, 80} {0, 60000, 0} \"vert" + QString::number(m_widgets.size()) + "\" 0.000000 \"hor" + QString::number(m_widgets.size()) + "\" 0.000000 fill 1 0 mouse"));
   widgetChanged();
@@ -1506,10 +1506,10 @@ void WidgetLayout::createNewMeter()
   markHistory();
 }
 
-void WidgetLayout::createNewConsole()
+void WidgetLayout::createNewConsole(int x, int y)
 {
-  int posx = currentPosition.x();
-  int posy = currentPosition.y();
+  int posx = x >= 0 ? x : currentPosition.x();
+  int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   createConsole(posx, posy, 320, 400, QString("ioListing {"+ QString::number(posx) +", "+ QString::number(posy) + "} {320, 400}"));
   widgetChanged();
@@ -1519,10 +1519,10 @@ void WidgetLayout::createNewConsole()
   markHistory();
 }
 
-void WidgetLayout::createNewGraph()
+void WidgetLayout::createNewGraph(int x, int y)
 {
-  int posx = currentPosition.x();
-  int posy = currentPosition.y();
+  int posx = x >= 0 ? x : currentPosition.x();
+  int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   createGraph(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150}"));
   widgetChanged();
@@ -1532,10 +1532,10 @@ void WidgetLayout::createNewGraph()
   markHistory();
 }
 
-void WidgetLayout::createNewScope()
+void WidgetLayout::createNewScope(int x, int y)
 {
-  int posx = currentPosition.x();
-  int posy = currentPosition.y();
+  int posx = x >= 0 ? x : currentPosition.x();
+  int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   createScope(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150} scope 2.000000 -1.000000"));
   widgetChanged();

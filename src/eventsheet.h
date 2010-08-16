@@ -33,7 +33,7 @@ class EventSheet : public QTableWidget
   Q_OBJECT
   public:
 
-    EventSheet(QWidget *parent);
+    EventSheet(QWidget *parent = 0);
     ~EventSheet();
 
     QString getPlainText(bool scaleTempo = false);

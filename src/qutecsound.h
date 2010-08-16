@@ -99,6 +99,26 @@ class qutecsound:public QMainWindow
     QString getPresetsText(int index);
     QString getOptionsText(int index);
 
+    // Widgets
+    void setChannelValue(QString channel, double value, int index = -1);
+    double getChannelValue(QString channel, int index = -1);
+    void setChannelString(QString channel, QString value, int index = -1);
+    QString getChannelString(QString channel, int index = -1);
+
+    void createNewLabel(int x = -1, int y = -1, int index = -1);
+    void createNewDisplay(int x = -1, int y = -1, int index = -1);
+    void createNewScrollNumber(int x = -1, int y = -1, int index = -1);
+    void createNewLineEdit(int x = -1, int y = -1, int index = -1);
+    void createNewSpinBox(int x = -1, int y = -1, int index = -1);
+    void createNewSlider(int x = -1, int y = -1, int index = -1);
+    void createNewButton(int x = -1, int y = -1, int index = -1);
+    void createNewKnob(int x = -1, int y = -1, int index = -1);
+    void createNewCheckBox(int x = -1, int y = -1, int index = -1);
+    void createNewMenu(int x = -1, int y = -1, int index = -1);
+    void createNewMeter(int x = -1, int y = -1, int index = -1);
+    void createNewConsole(int x = -1, int y = -1, int index = -1);
+    void createNewGraph(int x = -1, int y = -1, int index = -1);
+    void createNewScope(int x = -1, int y = -1, int index = -1);
 //    int popKeyPressEvent(); // return ASCII code of key press event for Csound or -1 if no event
 //    int popKeyReleaseEvent(); // return ASCII code of key release event for Csound -1 if no event
 

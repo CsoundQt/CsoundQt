@@ -82,6 +82,11 @@ CSOUND* PyQcsObject::getCurrentCsound()
   return cs;
 }
 
+QString PyQcsObject::getVersion()
+{
+  return QString(PYQCSVERSION);
+}
+
 void PyQcsObject::play(int index, bool realtime)
 {
   // Notice arguments are inverted...
@@ -195,6 +200,107 @@ QString PyQcsObject::getPresetsText(int index)
 QString PyQcsObject::getOptionsText(int index)
 {
   return m_qcs->getOptionsText(index);
+}
+
+void PyQcsObject::setChannelValue(QString channel, double value, int index)
+{
+  return m_qcs->setChannelValue(channel, value, index);
+}
+
+double PyQcsObject::getChannelValue(QString channel, int index)
+{
+  return m_qcs->getChannelValue(channel, index);
+}
+
+void PyQcsObject::setChannelString(QString channel, QString value, int index)
+{
+  return m_qcs->setChannelString(channel, value, index);
+}
+
+QString PyQcsObject::getChannelString(QString channel, int index)
+{
+  return m_qcs->getChannelString(channel, index);
+}
+
+void PyQcsObject::createNewLabel(int x, int y, int index)
+{
+  return m_qcs->createNewLabel(x,y, index);
+}
+
+void PyQcsObject::createNewDisplay(int x, int y, int index)
+{
+  return m_qcs->createNewDisplay(x,y, index);
+}
+
+void PyQcsObject::createNewScrollNumber(int x, int y, int index)
+{
+  return m_qcs->createNewScrollNumber(x,y, index);
+}
+
+void PyQcsObject::createNewLineEdit(int x, int y, int index)
+{
+  return m_qcs->createNewLineEdit(x,y, index);
+}
+
+void PyQcsObject::createNewSpinBox(int x, int y, int index)
+{
+  return m_qcs->createNewSpinBox(x,y, index);
+}
+
+void PyQcsObject::createNewSlider(int x, int y, int index)
+{
+  return m_qcs->createNewSlider(x,y, index);
+}
+
+void PyQcsObject::createNewButton(int x, int y, int index)
+{
+  return m_qcs->createNewButton(x,y, index);
+}
+
+void PyQcsObject::createNewKnob(int x, int y, int index)
+{
+  return m_qcs->createNewKnob(x,y, index);
+}
+
+void PyQcsObject::createNewCheckBox(int x, int y, int index)
+{
+  return m_qcs->createNewCheckBox(x,y, index);
+}
+
+void PyQcsObject::createNewMenu(int x, int y, int index)
+{
+  return m_qcs->createNewMenu(x,y, index);
+}
+
+void PyQcsObject::createNewMeter(int x, int y, int index)
+{
+  return m_qcs->createNewMeter(x,y, index);
+}
+
+void PyQcsObject::createNewConsole(int x, int y, int index)
+{
+  return m_qcs->createNewConsole(x,y, index);
+}
+
+void PyQcsObject::createNewGraph(int x, int y, int index)
+{
+  return m_qcs->createNewGraph(x,y, index);
+}
+
+void PyQcsObject::createNewScope(int x, int y, int index)
+{
+  return m_qcs->createNewScope(x,y, index);
+}
+
+PyObject* PyQcsObject::getSheet(int index, int sheetIndex)
+{
+
+
+}
+
+PyObject* PyQcsObject::getSheet(int index, QString sheetName)
+{
+
 }
 
 void PyQcsObject::schedule(QVariant time, QVariant event)

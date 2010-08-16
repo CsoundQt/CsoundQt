@@ -3778,6 +3778,190 @@ QString qutecsound::getOptionsText(int index)
   return text;
 }
 
+void qutecsound::setChannelValue(QString channel, double value, int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->setChannelValue(channel, value);
+  }
+}
+
+double qutecsound::getChannelValue(QString channel, int index)
+{
+  double value = 0.0;
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    value = documentPages[index]->getChannelValue(channel);
+  }
+  return value;
+}
+
+void qutecsound::setChannelString(QString channel, QString value, int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->setChannelString(channel, value);
+  }
+}
+
+QString qutecsound::getChannelString(QString channel, int index)
+{
+  QString value = "";
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    value = documentPages[index]->getChannelString(channel);
+  }
+  return value;
+}
+
+
+void qutecsound::createNewLabel(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->createNewLabel(x,y);
+  }
+}
+
+void qutecsound::createNewDisplay(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->createNewDisplay(x,y);
+  }
+}
+
+void qutecsound::createNewScrollNumber(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->createNewScrollNumber(x,y);
+  }
+}
+
+void qutecsound::createNewLineEdit(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->createNewLineEdit(x,y);
+  }
+}
+
+void qutecsound::createNewSpinBox(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->createNewSpinBox(x,y);
+  }
+}
+
+void qutecsound::createNewSlider(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->createNewSlider(x,y);
+  }
+}
+
+void qutecsound::createNewButton(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->createNewButton(x,y);
+  }
+}
+
+void qutecsound::createNewKnob(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->createNewKnob(x,y);
+  }
+}
+
+void qutecsound::createNewCheckBox(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->createNewCheckBox(x,y);
+  }
+}
+
+void qutecsound::createNewMenu(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->createNewMenu(x,y);
+  }
+}
+
+void qutecsound::createNewMeter(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->createNewMeter(x,y);
+  }
+}
+
+void qutecsound::createNewConsole(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->createNewConsole(x,y);
+  }
+}
+
+void qutecsound::createNewGraph(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->createNewGraph(x,y);
+  }
+}
+
+void qutecsound::createNewScope(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->createNewScope(x,y);
+  }
+}
 
 //void qutecsound::newCurve(Curve * curve)
 //{

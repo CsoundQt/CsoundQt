@@ -170,20 +170,20 @@ class WidgetLayout : public QWidget
     QAction *recallPresetAct;
 
   public slots:
-    void createNewLabel();
-    void createNewDisplay();
-    void createNewScrollNumber();
-    void createNewLineEdit();
-    void createNewSpinBox();
-    void createNewSlider();
-    void createNewButton();
-    void createNewKnob();
-    void createNewCheckBox();
-    void createNewMenu();
-    void createNewMeter();
-    void createNewConsole();
-    void createNewGraph();
-    void createNewScope();
+    void createNewLabel(int x = -1, int y = -1);
+    void createNewDisplay(int x = -1, int y = -1);
+    void createNewScrollNumber(int x = -1, int y = -1);
+    void createNewLineEdit(int x = -1, int y = -1);
+    void createNewSpinBox(int x = -1, int y = -1);
+    void createNewSlider(int x = -1, int y = -1);
+    void createNewButton(int x = -1, int y = -1);
+    void createNewKnob(int x = -1, int y = -1);
+    void createNewCheckBox(int x = -1, int y = -1);
+    void createNewMenu(int x = -1, int y = -1);
+    void createNewMeter(int x = -1, int y = -1);
+    void createNewConsole(int x = -1, int y = -1);
+    void createNewGraph(int x = -1, int y = -1);
+    void createNewScope(int x = -1, int y = -1);
     void clearWidgets();
     void clearWidgetLayout();
 

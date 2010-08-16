@@ -524,6 +524,114 @@ QRect DocumentPage::getWidgetPanelGeometry()
    return m_widgetLayouts[0]->getOuterGeometry();
 }
 
+void DocumentPage::setChannelValue(QString channel, double value)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->setValue(channel, value);
+}
+
+double DocumentPage::getChannelValue(QString channel)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->getValueForChannel(channel);
+}
+
+void DocumentPage::setChannelString(QString channel, QString value)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->setValue(channel, value);
+}
+
+QString DocumentPage::getChannelString(QString channel)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->getStringForChannel(channel);
+}
+
+void DocumentPage::createNewLabel(int x, int y)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->createNewLabel(x, y);
+}
+
+void DocumentPage::createNewDisplay(int x, int y)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->createNewDisplay(x, y);
+}
+
+void DocumentPage::createNewScrollNumber(int x, int y)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->createNewScrollNumber(x, y);
+}
+
+void DocumentPage::createNewLineEdit(int x, int y)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->createNewLineEdit(x, y);
+}
+
+void DocumentPage::createNewSpinBox(int x, int y)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->createNewSpinBox(x, y);
+}
+
+void DocumentPage::createNewSlider(int x, int y)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->createNewSlider(x, y);
+}
+
+void DocumentPage::createNewButton(int x, int y)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->createNewButton(x, y);
+}
+
+void DocumentPage::createNewKnob(int x, int y)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->createNewKnob(x, y);
+}
+
+void DocumentPage::createNewCheckBox(int x, int y)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->createNewCheckBox(x, y);
+}
+
+void DocumentPage::createNewMenu(int x, int y)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->createNewMenu(x, y);
+}
+
+void DocumentPage::createNewMeter(int x, int y)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->createNewMeter(x, y);
+}
+
+void DocumentPage::createNewConsole(int x, int y)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->createNewConsole(x, y);
+}
+
+void DocumentPage::createNewGraph(int x, int y)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->createNewGraph(x, y);
+}
+
+void DocumentPage::createNewScope(int x, int y)
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->createNewScope(x, y);
+}
+
 void *DocumentPage::getCsound()
 {
   return m_csEngine->getCsound();

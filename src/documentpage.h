@@ -78,6 +78,26 @@ class DocumentPage : public QObject
     QString wordUnderCursor();
     QRect getWidgetPanelGeometry();
 
+    void setChannelValue(QString channel, double value);
+    double getChannelValue(QString channel);
+    void setChannelString(QString channel, QString value);
+    QString getChannelString(QString channel);
+
+    void createNewLabel(int x = -1, int y = -1);
+    void createNewDisplay(int x = -1, int y = -1);
+    void createNewScrollNumber(int x = -1, int y = -1);
+    void createNewLineEdit(int x = -1, int y = -1);
+    void createNewSpinBox(int x = -1, int y = -1);
+    void createNewSlider(int x = -1, int y = -1);
+    void createNewButton(int x = -1, int y = -1);
+    void createNewKnob(int x = -1, int y = -1);
+    void createNewCheckBox(int x = -1, int y = -1);
+    void createNewMenu(int x = -1, int y = -1);
+    void createNewMeter(int x = -1, int y = -1);
+    void createNewConsole(int x = -1, int y = -1);
+    void createNewGraph(int x = -1, int y = -1);
+    void createNewScope(int x = -1, int y = -1);
+
     int lineCount(bool countExtras = false);
     int characterCount(bool countExtras = false);
     int instrumentCount();

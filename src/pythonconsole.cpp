@@ -26,6 +26,7 @@
 //#include "PythonQt_QtAll.h"
 #include "gui/PythonQtScriptingConsole.h"
 #include "pyqcsobject.h"
+#include "qutesheet.h"
 
 #include "qutecsound.h"
 
@@ -44,6 +45,7 @@ PythonConsole::PythonConsole(QWidget *parent) : QDockWidget(parent)
   // add a QObject to the namespace of the main python context
   m_pqcs = new PyQcsObject() ;
   m_pqcs->setQuteCsound(static_cast<qutecsound *>(parentWidget()));
+  PythonQt::self()->registerCPPClass("QuteSheet", "","", PythonQtCreateObject<QuteSheetWrapper>);
   mainContext.addObject("q", m_pqcs);
 //  mainContext.evalScript("print 'QuteCsound Python Console.'");
   mainContext.evalScript("s = q.schedule");
