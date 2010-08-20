@@ -55,6 +55,7 @@ class Curve;
 class GraphicWindow;
 class KeyboardShortcuts;
 class EventDispatcher;
+class EventSheet;
 
 class qutecsound:public QMainWindow
 {
@@ -120,7 +121,11 @@ class qutecsound:public QMainWindow
     void createNewGraph(int x = -1, int y = -1, int index = -1);
     void createNewScope(int x = -1, int y = -1, int index = -1);
 //    int popKeyPressEvent(); // return ASCII code of key press event for Csound or -1 if no event
-//    int popKeyReleaseEvent(); // return ASCII code of key release event for Csound -1 if no event
+//    int popKeyReleaseEvent(); // return ASCII code of key release event for Csound -1 if no
+
+    //Live Event Sheets
+    EventSheet* getSheet(int index, int sheetIndex);
+    EventSheet* getSheet(int index, QString sheetName);
 
     OpEntryParser *opcodeTree;
 

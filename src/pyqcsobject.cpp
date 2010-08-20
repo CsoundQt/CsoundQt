@@ -22,6 +22,7 @@
 
 #include "pyqcsobject.h"
 #include "qutecsound.h"
+#include "qutesheet.h"
 
 #include <QMessageBox>
 #include <QDir>
@@ -37,9 +38,9 @@ void PyQcsObject::setQuteCsound(qutecsound *qcs)
   m_qcs = qcs;
 }
 
-PyObject* PyQcsObject::getMainModule() {
-  return PythonQt::self()->getMainModule();
-}
+//PyObject* PyQcsObject::getMainModule() {
+//  return PythonQt::self()->getMainModule();
+//}
 
 //void PyQcsObject::showInformation(const QString& str)
 //{
@@ -89,6 +90,7 @@ QString PyQcsObject::getVersion()
 
 void PyQcsObject::play(int index, bool realtime)
 {
+  qDebug() << "PyQcsObject::play " << index << realtime;
   // Notice arguments are inverted...
   m_qcs->play(realtime, index);
 }
@@ -292,15 +294,14 @@ void PyQcsObject::createNewScope(int x, int y, int index)
   return m_qcs->createNewScope(x,y, index);
 }
 
-PyObject* PyQcsObject::getSheet(int index, int sheetIndex)
+QuteSheet* PyQcsObject::getSheet(int index, int sheetIndex)
 {
-
-
+  return new QuteSheet(this, m_qcs->getSheet(index,sheetIndex));
 }
 
-PyObject* PyQcsObject::getSheet(int index, QString sheetName)
+QuteSheet* PyQcsObject::getSheet(int index, QString sheetName)
 {
-
+  return new QuteSheet(this, m_qcs->getSheet(index,sheetName));
 }
 
 void PyQcsObject::schedule(QVariant time, QVariant event)
@@ -325,16 +326,22 @@ void PyQcsObject::schedule(QVariant time, QVariant event)
   }
 }
 
-void PyQcsObject::sendEvent(QVariant events)
+void PyQcsObject::sendEvent(QString events)
 {
 //  qDebug() << "PyQcsObject::sendEvent" << events;
-  if (events.type() == QVariant::String )  { // a single event in a string
-    m_qcs->sendEvent(events.toString());
+  m_qcs->sendEvent(events);
+//  if (events.type() == QVariant::String )  { // a single event in a string
+//    m_qcs->sendEvent(events.toString());
 //    qDebug() << "PyQcsObject::sendEvent sent: " << events.toString();
-  }
+//  }
 //  else if (time.canConvert<QVariantList>()) { // list of events
 //
 //  }
+}
+
+void PyQcsObject::sendEvent(int index, QString events)
+{
+
 }
 
 void PyQcsObject::writeListToTable(int ftable, QVariantList values, int offset, int count)

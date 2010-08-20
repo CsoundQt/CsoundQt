@@ -50,7 +50,8 @@ HEADERS = "$${PWD}/about.h" \
     "$${PWD}/widgetlayout.h" \
     "$${PWD}/widgetpanel.h" \
     "$${PWD}/widgetpreset.h" \
-    "$${PWD}/qutesheet.h"
+    "$${PWD}/qutesheet.h" \
+    "$${PWD}/basedocument.h"
 SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/configdialog.cpp" \
     "$${PWD}/configlists.cpp" \
@@ -94,7 +95,8 @@ SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/widgetlayout.cpp" \
     "$${PWD}/widgetpanel.cpp" \
     "$${PWD}/widgetpreset.cpp" \
-    "$${PWD}/qutesheet.cpp"
+    "$${PWD}/qutesheet.cpp" \
+    "$${PWD}/basedocument.cpp"
 LIBS += $${LCSOUND} \
     $${LCSND} \
     $${LSNDFILE}

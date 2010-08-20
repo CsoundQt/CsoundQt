@@ -37,6 +37,7 @@
 #define PYQCSVERSION "1.0.0"
 
 class qutecsound;
+class QuteSheet;
 
 class PyQcsObject : public QObject {
   Q_OBJECT
@@ -47,8 +48,8 @@ class PyQcsObject : public QObject {
 
   public slots:
 
-  //! example for passing a PyObject directly from Qt to Python (without extra mashalling)
-    PyObject* getMainModule();
+//  ! example for passing a PyObject directly from Qt to Python (without extra mashalling)
+//    PyObject* getMainModule();
 
 //  void showInformation(const QString& str);
 //
@@ -114,12 +115,13 @@ class PyQcsObject : public QObject {
     void createNewScope(int x = -1, int y = -1, int index = -1);
 
     // Live Events
-    PyObject* getSheet(int index = -1, int sheetIndex = -1);
-    PyObject* getSheet(int index, QString sheetName);
+    QuteSheet* getSheet(int index = -1, int sheetIndex = -1);
+    QuteSheet* getSheet(int index, QString sheetName);
 
     //Scheduler
     void schedule(QVariant time, QVariant event);
-    void sendEvent(QVariant events);
+    void sendEvent(int index, QString events);
+    void sendEvent(QString events);
 
     // To/From Csound Engine
     void writeListToTable(int ftable, QVariantList values, int offset = 0, int count = -1);

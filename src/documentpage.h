@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2008, 2009 Andres Cabrera
+    Copyright (C) 2008-2010 Andres Cabrera
     mantaraya36@gmail.com
 
     This file is part of QuteCsound.
@@ -36,6 +36,7 @@ class OpEntryParser;
 class DocumentView;
 class WidgetLayout;
 class LiveEventFrame;
+class EventSheet;
 class CsoundEngine;
 class ConsoleWidget;
 class LiveEventControl;
@@ -97,6 +98,9 @@ class DocumentPage : public QObject
     void createNewConsole(int x = -1, int y = -1);
     void createNewGraph(int x = -1, int y = -1);
     void createNewScope(int x = -1, int y = -1);
+
+    EventSheet* getSheet(int sheetIndex);
+    EventSheet* getSheet(QString sheetName);
 
     int lineCount(bool countExtras = false);
     int characterCount(bool countExtras = false);

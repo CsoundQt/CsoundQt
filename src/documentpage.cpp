@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2008, 2009 Andres Cabrera
+    Copyright (C) 2008-2010 Andres Cabrera
     mantaraya36@gmail.com
 
     This file is part of QuteCsound.
@@ -630,6 +630,23 @@ void DocumentPage::createNewScope(int x, int y)
 {
   //FIXME allow multiple
   return m_widgetLayouts[0]->createNewScope(x, y);
+}
+
+
+EventSheet* DocumentPage::getSheet(int sheetIndex)
+{
+  if (sheetIndex == -1) {
+    sheetIndex = 0; //FIXME find sheet
+  }
+  if (sheetIndex < m_liveFrames.size() && sheetIndex >= 0) {
+    return m_liveFrames[sheetIndex]->getSheet();
+  }
+  return 0;
+}
+
+EventSheet* DocumentPage::getSheet(QString sheetName)
+{
+
 }
 
 void *DocumentPage::getCsound()

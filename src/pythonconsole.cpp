@@ -45,19 +45,20 @@ PythonConsole::PythonConsole(QWidget *parent) : QDockWidget(parent)
   // add a QObject to the namespace of the main python context
   m_pqcs = new PyQcsObject() ;
   m_pqcs->setQuteCsound(static_cast<qutecsound *>(parentWidget()));
-  PythonQt::self()->registerCPPClass("QuteSheet", "","", PythonQtCreateObject<QuteSheetWrapper>);
+  PythonQt::self()->registerCPPClass("QuteSheet", "","qs", PythonQtCreateObject<QuteSheet>);
   mainContext.addObject("q", m_pqcs);
+  mainContext.evalScript("from PythonQt.qs import QuteSheet");
 //  mainContext.evalScript("print 'QuteCsound Python Console.'");
-  mainContext.evalScript("s = q.schedule");
-  mainContext.evalScript("import os");
+//  mainContext.evalScript("s = q.schedule");
+//  mainContext.evalScript("import os");
 
   // TODO is pyqcs.py necessary since everything is being done in C++?
 //  mainContext.evalFile(":python/pyqcs.py");
 
   setWidget(m_console);
-//  console->setCurrentFont(QFont("Courier New"));
-//  console->setFontFamily("Courier New");
-  m_console->setAcceptRichText (false);
+//  m_console->setCurrentFont(QFont("Courier New"));
+  m_console->setFontFamily("Courier New");
+//  m_console->setAcceptRichText (false);
   m_console->show();
 }
 
@@ -69,7 +70,8 @@ PythonConsole::~PythonConsole()
 
 void PythonConsole::evaluate(QString evalCode)
 {
-  PythonQtObjectPtr  mainContext = m_pqcs->getMainModule();
+  PythonQtObjectPtr  mainContext = PythonQt::self()->getMainModule();
+//  PythonQtObjectPtr  mainContext = m_pqcs->getMainModule();
   mainContext.evalScript(evalCode);
   QString printScript = "print 'Evaluated " + QString::number(evalCode.count("\n") + 1 );
   printScript += " lines.'";

@@ -266,6 +266,26 @@ QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber, bool 
   return line;
 }
 
+QList< QList<QVariant> > EventSheet::getData()
+{
+  // TODO this can be made a lot more efficient
+  QList< QList<QVariant> > data;
+  for (int i = 0; i < this->rowCount(); i++) {
+    QList<QVariant> row;
+    for (int j = 0; j < this->columnCount(); j++) {
+      QTableWidgetItem * item = this->item(i, j);
+      if (item != 0) { // Item is not empty
+        row.append(item->data(Qt::DisplayRole));
+      }
+      else {
+        row.append(QVariant());
+      }
+    }
+    data << row;
+  }
+  return data;
+}
+
 void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int numRows, int numColumns, bool noHistoryMark)
 {
   // Separataion is stored in UserRole of items

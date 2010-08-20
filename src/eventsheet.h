@@ -40,6 +40,7 @@ class EventSheet : public QTableWidget
     QString getLine(int number, bool scaleTempo = false,
                     bool storeNumber = false, bool preprocess = false,
                     double startOffset = 0.0);
+    QList< QList<QVariant> > getData();
 //    double getTempo();
 //    QString getName();
     void setFromText(QString text, int rowOffset = 0, int columnOffset = 0,

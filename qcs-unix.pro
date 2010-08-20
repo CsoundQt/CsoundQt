@@ -23,7 +23,9 @@ DEFAULT_PYTHONQT_INCLUDE_DIRS = /usr/local/include \
 	/usr/include
 DEFAULT_PYTHONQT_LIBRARY_DIRS = /usr/local/lib \
 	/usr/lib
-DEFAULT_PYTHONQT_TREE_DIRS =
+DEFAULT_PYTHONQT_TREE_DIRS = ../../../PythonQt2.0.1 \
+        ../PythonQt2.0.1 \
+        PythonQt2.0.1
 PYTHONQT_LIB = libPythonQt_QtAll$${DEBUG_EXT}.so
 
 DEFAULT_PORTMIDI_INCLUDE_DIRS =  /usr/local/include \

@@ -36,7 +36,7 @@
 #include "keyboardshortcuts.h"
 #include "liveeventframe.h"
 #include "about.h"
-//#include "eventsheet.h"
+#include "eventsheet.h"
 
 #ifdef QCS_PYTHONQT
 #include "pythonconsole.h"
@@ -1118,7 +1118,7 @@ void qutecsound::pause(int index)
 void qutecsound::stop(int index)
 {
   // Must guarantee that csound has stopped when it returns
-//  qDebug("qutecsound::stop()");
+  qDebug() <<"qutecsound::stop() " <<  index;
   int docIndex = index;
   if (docIndex == -1) {
     docIndex = curPage;
@@ -3960,6 +3960,26 @@ void qutecsound::createNewScope(int x , int y , int index)
   }
   if (index < documentTabs->count() && index >= 0) {
     documentPages[index]->createNewScope(x,y);
+  }
+}
+
+EventSheet* qutecsound::getSheet(int index, int sheetIndex)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->getSheet(sheetIndex);
+  }
+}
+
+EventSheet* qutecsound::getSheet(int index, QString sheetName)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->getSheet(sheetName);
   }
 }
 
