@@ -143,16 +143,6 @@
         <file>translations/qutecsound_tr.qm</file>
         <file>translations/qutecsound_el.qm</file>
         <file>translations/qutecsound_fi.qm</file>
-        <file>python/qutesheet.py</file>
-        <file>python/sort_by_start.py</file>
-        <file>python/fill_text.py</file>
-        <file>python/Conversion/cps2mid.py</file>
-        <file>python/Conversion/mid2cps.py</file>
-        <file>python/Conversion/cps2pch.py</file>
-        <file>python/Conversion/pch2cps.py</file>
-        <file>python/produce_score.py</file>
-        <file>python/Tests/tk_test.py</file>
-        <file>python/Tests/python_test.py</file>
         <file>../doc/QuteCsound Quick Reference (0.4).pdf</file>
         <file>../doc/QuteCsound Quick Reference (0.4)-es.pdf</file>
         <file>../doc/QuteCsound Quick Reference (0.4)-fr.pdf</file>

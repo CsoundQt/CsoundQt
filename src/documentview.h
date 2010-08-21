@@ -64,7 +64,7 @@ class DocumentView : public QScrollArea
     void setOpcodeTree(OpEntryParser *opcodeTree);
 
     void insertText(QString text, int section = -1);
-    void setFullText(QString text);
+    void setFullText(QString text, bool goToTop = false);
     void setBasicText(QString text);
     void setOrc(QString text);
     void setSco(QString text);

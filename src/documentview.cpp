@@ -220,12 +220,15 @@ void DocumentView::insertText(QString text, int section)
   }
 }
 
-void DocumentView::setFullText(QString text)
+void DocumentView::setFullText(QString text, bool goToTop)
 {
   QTextCursor cursor = editors[0]->textCursor();
   cursor.select(QTextCursor::Document);
   cursor.insertText(text);
   editors[0]->setTextCursor(cursor);  // TODO implment for multiple views
+  if (goToTop) {
+    editors[0]->moveCursor(QTextCursor::Start);
+  }
 }
 
 void DocumentView::setBasicText(QString text)

@@ -163,7 +163,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   deleteAllLiveEvents();
   bool xmlFormatFound = false;
   if (!fileName.endsWith(".csd") && !fileName.isEmpty()) {
-    m_view->setFullText(text); // Put all text since not a csd file (and not default file which has no name)
+    m_view->setFullText(text, true); // Put all text since not a csd file (and not default file which has no name)
     m_view->setModified(false);
     return ret;
   }
@@ -285,7 +285,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   }
   if (!text.contains("<CsoundSynthesizer>") &&
       !text.contains("</CsoundSynthesizer>") ) { // When not a csd file
-    m_view->setFullText(text);  // TODO do something different if not a csd file?
+    m_view->setFullText(text, true);  // TODO do something different if not a csd file?
     m_view->setModified(false);
     return ret;  // Don't add live event panel if not a csd file.
   }
@@ -330,7 +330,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 //    LiveEventFrame *e = createLiveEventPanel();
 //    e->setFromText(QString()); // Must set blank for undo history point
 //  }
-  m_view->setFullText(text);  // This must be last as some of the text has been removed along the way
+  m_view->setFullText(text,true);  // This must be last as some of the text has been removed along the way
   m_view->setModified(false);
   return ret;
 }

@@ -339,6 +339,16 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
     this->setRowCount(1);
 }
 
+void EventSheet::setCell(int row, int column, QVariant value)
+{
+  QTableWidgetItem * item = this->item(row, column);
+  if (item == 0) {
+    item = new QTableWidgetItem();
+    this->setItem(row, column, item);
+  }
+  item->setData(Qt::DisplayRole, value);
+}
+
 void EventSheet::setDebug(bool debug)
 {
   m_debug = debug;
@@ -883,7 +893,7 @@ void EventSheet::runScript(QString name)
   moduleStream << file.readAll();
   file.close();
   module.close();
-  qDebug() << module.fileName();
+  qDebug() << "EventSheet::runScript module " << module.fileName();
 
   QFile script(tempDir.absolutePath() + QDir::separator() + name.mid(name.lastIndexOf("/") + 1));
   script.open(QFile::WriteOnly | QIODevice::Text);

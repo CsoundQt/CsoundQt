@@ -45,6 +45,7 @@ class EventSheet : public QTableWidget
 //    QString getName();
     void setFromText(QString text, int rowOffset = 0, int columnOffset = 0,
                      int numRows = 0, int numColumns = 0, bool noHistoryMark = false);
+    void setCell(int row, int column, QVariant text);
     void setDebug(bool debug);
     QPair<int, int> getSelectedRowsRange();
 

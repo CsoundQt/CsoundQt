@@ -1159,12 +1159,12 @@ void qutecsound::record()
 {
   if (!documentPages[curPage]->isRunning()) {
     play();
-    if (!documentPages[curPage]->isRunning()) {
-      recAct->setChecked(false);
-      return;
-    }
+//    if (!documentPages[curPage]->isRunning()) {
+//      recAct->setChecked(false);
+//      return;
+//    }
   }
-  if (recAct->isChecked()) {
+  if (!recAct->isChecked()) {
     int ret = documentPages[curPage]->record(m_options->sampleFormat);
     if (ret != 0) {
       recAct->setChecked(false);

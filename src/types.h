@@ -38,7 +38,7 @@
 #define QCS_MAX_UNDO 256
 
 #ifdef Q_OS_LINUX
-#define DEFAULT_HTML_DIR "/usr/local/share/doc/csound/html"
+#define DEFAULT_HTML_DIR "/usr/share/doc/csound-doc/html"
 #define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"
 #define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/bin/audacity"

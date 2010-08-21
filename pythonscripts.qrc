@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/python">
+        <file>src/python/fill_text.py</file>
+        <file>src/python/produce_score.py</file>
+        <file>src/python/qutesheet.py</file>
+        <file>src/python/sort_by_start.py</file>
+        <file>src/python/Conversion/cps2mid.py</file>
+        <file>src/python/Conversion/cps2pch.py</file>
+        <file>src/python/Conversion/mid2cps.py</file>
+        <file>src/python/Conversion/pch2cps.py</file>
+        <file>src/python/Tests/python_test.py</file>
+        <file>src/python/Tests/test_api.py</file>
+        <file>src/python/Tests/tk_test.py</file>
+    </qresource>
+</RCC>
