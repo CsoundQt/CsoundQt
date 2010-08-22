@@ -38,6 +38,7 @@ class PythonConsole : public QDockWidget
   public slots:
 //    void runCommand(QString command);
     void evaluate(QString evalCode);
+    void runScript(QString fileName);
 
   protected:
     virtual void closeEvent(QCloseEvent * event);

@@ -71,6 +71,9 @@ class PyQcsObject : public QObject {
     void stop(int index = -1);
     void stopAll();
 
+    //Csound Language
+    bool opcodeExists(QString opcodeName);
+
     // Editor
     void setDocument(int index);
     void insertText(QString text, int index = -1, int section = -1);

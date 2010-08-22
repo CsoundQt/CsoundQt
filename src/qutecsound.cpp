@@ -129,6 +129,7 @@ qutecsound::qutecsound(QStringList fileNames)
 
   fillFileMenu(); // Must be placed after readSettings to include recent Files
   fillFavoriteMenu(); // Must be placed after readSettings to know directory
+  fillScriptsMenu(); // Must be placed after readSettings to know directory
   if (m_options->opcodexmldir == "") {
     opcodeTree = new OpEntryParser(":/opcodes.xml");
   }
@@ -377,7 +378,7 @@ void qutecsound::open()
   if (inspectorVisible && m_inspector->isFloating())
     m_inspector->hide(); // Necessary for Mac, as widget Panel covers open dialog
   fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"), lastUsedDir ,
-                                            tr("Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco);;Python Files (*.py);;All Files (*)",
+                                            tr("Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Files (*.py);;All Files (*)",
                                                 "Be careful to respect spacing parenthesis and usage of punctuation"));
   if (widgetsVisible) {
     if (!m_options->widgetsIndependent) {
@@ -436,6 +437,21 @@ void qutecsound::openFromAction(QString fileName)
         loadCompanionFile(fileName);
         loadFile(fileName);
       }
+    }
+}
+
+void qutecsound::runScriptFromAction()
+{
+  QString fileName = static_cast<QAction *>(sender())->data().toString();
+  runScript(fileName);
+}
+
+void qutecsound::runScript(QString fileName)
+{
+    if (!fileName.isEmpty()) {
+#ifdef QCS_PYTHONQT
+  m_pythonConsole->runScript(fileName);
+#endif
     }
 }
 
@@ -609,7 +625,8 @@ QString qutecsound::getSaveFileName()
   dir += name.mid(name.lastIndexOf("/") + 1);
   QString fileName = QFileDialog::getSaveFileName(this, tr("Save File As"),
                                                   dir,
-                                                  tr("Csound Files (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)"));
+                                                  tr("Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Files (*.py);;All Files (*)",
+                                                  "Be careful to respect spacing parenthesis and usage of punctuation"));
   if (widgetsVisible) {
     if (!m_options->widgetsIndependent) {
       widgetPanel->show(); // Necessary for Mac, as widget Panel covers open dialog
@@ -968,6 +985,13 @@ void qutecsound::play(bool realtime, int index)
 //        documentPages[curPage]->fileName.left(documentPages[curPage]->fileName.lastIndexOf('/'));
     QDir::setCurrent(fileName.left(fileName.lastIndexOf('/')));
   }
+#ifdef QCS_PYTHONQT
+  if (fileName.endsWith(".py",Qt::CaseInsensitive)) {
+    m_pythonConsole->runScript(fileName);
+    runAct->setChecked(false);
+    return;
+  }
+#endif
   if (!fileName.endsWith(".csd",Qt::CaseInsensitive) && !fileName.endsWith(".py",Qt::CaseInsensitive))  {
     if (documentPages[curPage]->askForFile)
       getCompanionFileName();
@@ -1067,7 +1091,8 @@ void qutecsound::runInTerm(bool realtime)
       tempScriptFiles << fileName;
   }
 //  QString script = generateScript(m_options->realtime, fileName);
-  QString script = generateScript(realtime, fileName);
+  QString executable = fileName.endsWith(".py") ? m_options->pythonExecutable : "";
+  QString script = generateScript(realtime, fileName, executable);
   QTemporaryFile scriptFile(QDir::tempPath() + QDir::separator() + SCRIPT_NAME);
   scriptFile.setAutoRemove(false);
   if (!scriptFile.open()) {
@@ -1542,6 +1567,7 @@ void qutecsound::applySettings()
   runAct->setStatusTip(tr("Play") + playOptions);
   renderAct->setStatusTip(tr("Render to file") + renderOptions);
   fillFavoriteMenu();
+  fillScriptsMenu();
   if (m_options->logFile != logFile.fileName()) {
     openLogFile();
   }
@@ -1717,6 +1743,7 @@ void qutecsound::updateInspector()
   if (m_closing) {
     return;  // And don't call this again from the timer
   }
+  Q_ASSERT(documentPages.size() > curPage);
   if (!m_inspectorNeedsUpdate) {
     QTimer::singleShot(2000, this, SLOT(updateInspector()));
     return; // Retrigger timer, but do no update
@@ -2604,7 +2631,11 @@ void qutecsound::createMenus()
     }
   }
 
-  favoriteMenu = examplesMenu->addMenu(tr("Favorites"));
+  favoriteMenu = menuBar()->addMenu(tr("Favorites"));
+  scriptsMenu = menuBar()->addMenu(tr("Scripts"));
+#ifndef QCS_PYTHONQT
+  scriptsMenu->hide();
+#endif
 
   menuBar()->addSeparator();
 
@@ -2668,6 +2699,83 @@ void qutecsound::fillFavoriteSubMenu(QDir dir, QMenu *m, int depth)
       if (dirs[i] != "." && dirs[i] != "..") {
         QMenu *menu = m->addMenu(dirs[i]);
         fillFavoriteSubMenu(newDir.absolutePath(), menu, depth + 1);
+      }
+    }
+  }
+  for (int i = 0; i < files.size() &&  i < 64; i++) {
+    QAction *newAction = m->addAction(files[i],
+                                      this, SLOT(openFromAction()));
+    newAction->setData(dir.absoluteFilePath(files[i]));
+  }
+}
+
+void qutecsound::fillScriptsMenu()
+{
+#ifdef QCS_PYTHONQT
+  scriptsMenu->clear();
+  if (!m_options->pythonDir.isEmpty()) {
+    QDir dir(m_options->pythonDir);
+    QStringList filters;
+    fillScriptsSubMenu(dir.absolutePath(), scriptsMenu, 0);
+  }
+  scriptsMenu->addSeparator();
+  QMenu *editMenu = scriptsMenu->addMenu("Edit");
+  if (!m_options->pythonDir.isEmpty()) {
+    QDir dir(m_options->pythonDir);
+    QStringList filters;
+    fillEditScriptsSubMenu(dir.absolutePath(), editMenu, 0);
+  }
+#else
+  scriptsMenu->hide();
+#endif
+}
+
+void qutecsound::fillScriptsSubMenu(QDir dir, QMenu *m, int depth)
+{
+  QStringList filters;
+  filters << "*.py";
+  dir.setNameFilters(filters);
+  QStringList files = dir.entryList(QDir::Files,QDir::Name);
+  QStringList dirs = dir.entryList(QDir::AllDirs,QDir::Name);
+  if (depth > 3)
+    return;
+  for (int i = 0; i < dirs.size() && i < 64; i++) {
+    QDir newDir(dir.absolutePath() + "/" + dirs[i]);
+    newDir.setNameFilters(filters);
+    QStringList newFiles = dir.entryList(QDir::Files,QDir::Name);
+    QStringList newDirs = dir.entryList(QDir::AllDirs,QDir::Name);
+    if (newFiles.size() > 0 ||  newDirs.size() > 0) {
+      if (dirs[i] != "." && dirs[i] != "..") {
+        QMenu *menu = m->addMenu(dirs[i]);
+        fillScriptsSubMenu(newDir.absolutePath(), menu, depth + 1);
+      }
+    }
+  }
+  for (int i = 0; i < files.size() &&  i < 64; i++) {
+    QAction *newAction = m->addAction(files[i],
+                                      this, SLOT(runScriptFromAction()));
+    newAction->setData(dir.absoluteFilePath(files[i]));
+  }
+}
+
+void qutecsound::fillEditScriptsSubMenu(QDir dir, QMenu *m, int depth)
+{
+  QStringList filters;
+  filters << "*.py";
+  dir.setNameFilters(filters);
+  QStringList files = dir.entryList(QDir::Files,QDir::Name);
+  QStringList dirs = dir.entryList(QDir::AllDirs,QDir::Name);
+  if (depth > 3)
+    return;
+  for (int i = 0; i < dirs.size() && i < 64; i++) {
+    QDir newDir(dir.absolutePath() + "/" + dirs[i]);
+    newDir.setNameFilters(filters);
+    QStringList newFiles = dir.entryList(QDir::Files,QDir::Name);
+    QStringList newDirs = dir.entryList(QDir::AllDirs,QDir::Name);
+    if (newFiles.size() > 0 ||  newDirs.size() > 0) {
+      if (dirs[i] != "." && dirs[i] != "..") {
+        QMenu *menu = m->addMenu(dirs[i]);
+        fillEditScriptsSubMenu(newDir.absolutePath(), menu, depth + 1);
       }
     }
   }
@@ -3306,7 +3414,6 @@ void qutecsound::makeNewPage(QString fileName, QString text)
     if (recentFiles.size() > QCS_MAX_RECENT_FILES)
       recentFiles.removeLast();
     fillFileMenu();
-    fillFavoriteMenu();
   }
 }
 
@@ -3386,14 +3493,13 @@ QString qutecsound::strippedName(const QString &fullFileName)
   return QFileInfo(fullFileName).fileName();
 }
 
-QString qutecsound::generateScript(bool realtime, QString tempFileName)
+QString qutecsound::generateScript(bool realtime, QString tempFileName, QString executable)
 {
 #ifndef Q_OS_WIN32
   QString script = "#!/bin/sh\n";
 #else
   QString script = "";
 #endif
-
   QString cmdLine = "";
   if (m_options->opcodedirActive)
     script += "export OPCODEDIR=" + m_options->opcodedir + "\n";
@@ -3416,11 +3522,19 @@ QString qutecsound::generateScript(bool realtime, QString tempFileName)
   script += script_cd;
 #endif
 
+  if (executable.isEmpty()) {
 #ifdef Q_WS_MAC
-  cmdLine = "/usr/local/bin/csound ";
+    cmdLine = "/usr/local/bin/csound ";
 #else
-  cmdLine = "csound ";
+    cmdLine = "csound ";
 #endif
+    m_options->rt = (realtime and m_options->rtUseOptions)
+                    or (!realtime and m_options->fileUseOptions);
+    cmdLine += m_options->generateCmdLineFlags() + " ";
+  }
+  else {
+    cmdLine = executable + " ";
+  }
 
   if (tempFileName == ""){
     QString fileName = documentPages[curPage]->getFileName();
@@ -3440,9 +3554,9 @@ QString qutecsound::generateScript(bool realtime, QString tempFileName)
   else {
     cmdLine += "\""  + tempFileName + "\" ";
   }
-  m_options->rt = (realtime and m_options->rtUseOptions)
-                  or (!realtime and m_options->fileUseOptions);
-  cmdLine += m_options->generateCmdLineFlags();
+//  m_options->rt = (realtime and m_options->rtUseOptions)
+//                  or (!realtime and m_options->fileUseOptions);
+//  cmdLine += m_options->generateCmdLineFlags();
   script += "echo \"" + cmdLine + "\"\n";
   script += cmdLine + "\n";
 

@@ -162,6 +162,8 @@ class qutecsound:public QMainWindow
     void reload();
     void openFromAction();
     void openFromAction(QString fileName);
+    void runScriptFromAction();
+    void runScript(QString fileName);
     void createCodeGraph();
     void closeGraph();
     bool save();
@@ -222,6 +224,9 @@ class qutecsound:public QMainWindow
     void fillFileMenu();
     void fillFavoriteMenu();
     void fillFavoriteSubMenu(QDir dir, QMenu *m, int depth);
+    void fillScriptsMenu();
+    void fillScriptsSubMenu(QDir dir, QMenu *m, int depth);
+    void fillEditScriptsSubMenu(QDir dir, QMenu *m, int depth);
     void createToolBars();
     void createStatusBar();
     void readSettings();
@@ -234,7 +239,7 @@ class qutecsound:public QMainWindow
     bool saveFile(const QString &fileName, bool saveWidgets = true);
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
-    QString generateScript(bool realtime = true, QString tempFileName = "");
+    QString generateScript(bool realtime = true, QString tempFileName = "", QString executable = "");
     void getCompanionFileName();
     void setWidgetPanelGeometry();
     int isOpen(QString fileName);  // Returns index of document if open -1 if not open
@@ -271,8 +276,9 @@ class qutecsound:public QMainWindow
     QMenu *editMenu;
     QMenu *controlMenu;
     QMenu *viewMenu;
-    QMenu *helpMenu;
     QMenu *favoriteMenu;
+    QMenu *scriptsMenu;
+    QMenu *helpMenu;
     QToolBar *fileToolBar;
     QToolBar *editToolBar;
     QToolBar *controlToolBar;

@@ -23,6 +23,7 @@
 #include "pyqcsobject.h"
 #include "qutecsound.h"
 #include "qutesheet.h"
+#include "opentryparser.h"
 
 #include <QMessageBox>
 #include <QDir>
@@ -108,6 +109,11 @@ void PyQcsObject::stop(int index)
 void PyQcsObject::stopAll()
 {
   m_qcs->stopAll();
+}
+
+bool PyQcsObject::opcodeExists(QString opcodeName)
+{
+  return m_qcs->opcodeTree->isOpcode(opcodeName);
 }
 
 void PyQcsObject::setDocument(int index)

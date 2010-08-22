@@ -56,7 +56,7 @@ Inspector::~Inspector()
 
 void Inspector::parseText(const QString &text)
 {
-//  qDebug() << "Inspector:parseText";
+//  qDebug() << "Inspector::parseText";
   inspectorMutex.lock();
   bool opcodeItemExpanded = true;
   bool macroItemExpanded = true;

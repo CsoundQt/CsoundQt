@@ -52,12 +52,9 @@ PythonConsole::PythonConsole(QWidget *parent) : QDockWidget(parent)
 //  mainContext.evalScript("s = q.schedule");
 //  mainContext.evalScript("import os");
 
-  // TODO is pyqcs.py necessary since everything is being done in C++?
-//  mainContext.evalFile(":python/pyqcs.py");
-
   setWidget(m_console);
 //  m_console->setCurrentFont(QFont("Courier New"));
-  m_console->setFontFamily("Courier New");
+//  m_console->setFontFamily("Courier New");
 //  m_console->setAcceptRichText (false);
   m_console->show();
 }
@@ -77,6 +74,24 @@ void PythonConsole::evaluate(QString evalCode)
   printScript += " lines.'";
   mainContext.evalScript(printScript);
   m_console->appendCommandPrompt();
+}
+
+void PythonConsole::runScript(QString fileName)
+{
+  PythonQtObjectPtr  mainContext = PythonQt::self()->getMainModule();
+//  PythonQtObjectPtr  mainContext = m_pqcs->getMainModule();
+  QFile file(fileName);
+  if (!file.open(QIODevice::ReadOnly)) {
+    QString printScript = "print 'Error opening file: " + fileName + "'";
+    mainContext.evalScript(printScript);
+  }
+  QString evalCode = QString(file.readAll());
+  mainContext.evalScript(evalCode);
+  QString printScript = "print 'Evaluated " + QString::number(evalCode.count("\n") + 1 );
+  printScript += " lines.'";
+  mainContext.evalScript(printScript);
+  m_console->appendCommandPrompt();
+
 }
 
 void PythonConsole::closeEvent(QCloseEvent * /*event*/)
