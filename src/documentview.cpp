@@ -822,10 +822,16 @@ void DocumentView::comment()
   if (!cursor.atBlockStart()) {
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
   }
+  int start = cursor.selectionStart();
   QString text = cursor.selectedText();
   text.prepend(commentChar);
   text.replace(QChar(QChar::ParagraphSeparator), QString("\n" + commentChar));
+  if (text.endsWith("\n" + commentChar) ) {
+    text.chop(1);
+  }
   cursor.insertText(text);
+  cursor.setPosition(start);
+  cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
   editors[0]->setTextCursor(cursor);
 }
 
@@ -851,11 +857,15 @@ void DocumentView::uncomment()
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
     text = cursor.selectedText();
   }
-  if (text.startsWith(commentChar))
+  if (text.startsWith(commentChar)) {
     text.remove(0,1);
+  }
+  int start = cursor.selectionStart();
   text.replace(QChar(QChar::ParagraphSeparator), QString("\n"));
   text.replace(QString("\n" + commentChar), QString("\n")); //TODO make more robust
   cursor.insertText(text);
+  cursor.setPosition(start);
+  cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
   editors[0]->setTextCursor(cursor);
 }
 
@@ -880,11 +890,16 @@ void DocumentView::indent()
   if (!cursor.atBlockStart()) {
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
   }
+  int start = cursor.selectionStart();
   QString text = cursor.selectedText();
   text.prepend(indentChar);
   text.replace(QChar(QChar::ParagraphSeparator), "\n" + indentChar);
-  text.replace(QChar(QChar::ParagraphSeparator), "\n" + indentChar);
+  if (text.endsWith("\n" + indentChar) ) {
+    text.chop(1);
+  }
   cursor.insertText(text);
+  cursor.setPosition(start);
+  cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
   editors[0]->setTextCursor(cursor);
 }
 
@@ -908,6 +923,7 @@ void DocumentView::unindent()
   if (!cursor.atBlockStart()) {
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
   }
+  int start = cursor.selectionStart();
   QString text = cursor.selectedText();
   while (indentChar == "    "  && text.startsWith("\t")) {
     text.remove(0,1);
@@ -918,6 +934,8 @@ void DocumentView::unindent()
   text.replace(QChar(QChar::ParagraphSeparator), QString("\n"));
   text.replace("\n" + indentChar, QString("\n")); //TODO make more robust
   cursor.insertText(text);
+  cursor.setPosition(start);
+  cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
   editors[0]->setTextCursor(cursor);
 }
 
