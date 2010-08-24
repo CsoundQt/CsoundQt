@@ -29,11 +29,14 @@ DEFAULT_CSOUND_LIBS = CsoundLib
 CSND_LIB = lib_csnd.dylib
 LIBSNDFILE_LIB = libsndfile.dylib
 
+# For OS X, the PythonQt.1.0.0.dylib and the libPythonQt.1.dylib must be on /usr/local/lib or other lib path
 DEFAULT_PYTHONQT_INCLUDE_DIRS = /usr/local/include \
         /usr/include
 DEFAULT_PYTHONQT_LIBRARY_DIRS = /usr/local/lib \
         /usr/lib
-DEFAULT_PYTHONQT_TREE_DIRS =
+DEFAULT_PYTHONQT_TREE_DIRS = ../../../PythonQt2.0.1 \
+        ../PythonQt2.0.1 \
+        PythonQt2.0.1
 PYTHONQT_LIB = libPythonQt_QtAll$${DEBUG_EXT}.dylib
 
 DEFAULT_PORTMIDI_INCLUDE_DIRS =  /usr/local/include \
