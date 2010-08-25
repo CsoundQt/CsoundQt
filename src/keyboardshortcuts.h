@@ -37,7 +37,6 @@ class KeyboardShortcuts : public QDialog, private Ui::KeyboardShortcuts
     KeyboardShortcuts(QWidget *parent, const QVector<QAction *> keyActions);
     ~KeyboardShortcuts();
 
-    void registerAction(QAction *action);
     void refreshTable();
     bool shortcutTaken(QString shortcut);
 
@@ -47,6 +46,7 @@ class KeyboardShortcuts : public QDialog, private Ui::KeyboardShortcuts
   private slots:
     void restoreDefaults();
     void assignShortcut(int row, int column);
+    QString getShortcut(QString action);
 
   signals:
     void restoreDefaultShortcuts();

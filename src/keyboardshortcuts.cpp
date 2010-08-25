@@ -28,11 +28,7 @@ KeyboardShortcuts::KeyboardShortcuts(QWidget *parent, const QVector<QAction *> k
 {
   setupUi(this);
   setWindowTitle(tr("Keyboard Shortcuts"));
-  for (int i = 0; i < m_keyActions.size(); i++) {
-    registerAction(m_keyActions[i]);
-  }
-  tableWidget->setColumnWidth(0, 320);
-  tableWidget->setColumnWidth(1, 170);
+  refreshTable();
 //   QDialog::setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
   connect(restorePushButton, SIGNAL(released()), this, SLOT(restoreDefaults()));
   connect(tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(assignShortcut(int, int)));
@@ -40,25 +36,27 @@ KeyboardShortcuts::KeyboardShortcuts(QWidget *parent, const QVector<QAction *> k
 
 KeyboardShortcuts::~KeyboardShortcuts()
 {
-}
-
-void KeyboardShortcuts::registerAction(QAction *action)
-{
-  int newRow = tableWidget->rowCount();
-  tableWidget->insertRow(newRow);
-  QTableWidgetItem *name = new QTableWidgetItem(action->text().remove("&"));
-  name->setFlags(Qt::ItemIsEnabled);
-  tableWidget->setItem(newRow, 0, name);
-  QTableWidgetItem *key = new QTableWidgetItem(action->shortcut().toString());
-  key->setFlags(Qt::ItemIsEnabled);
-  tableWidget->setItem(newRow, 1, key);
+  for (int i = 0; i < m_keyActions.size(); i++) {
+    m_keyActions[i]->setShortcut(getShortcut(m_keyActions[i]->text().remove("&")));
+  }
 }
 
 void KeyboardShortcuts::refreshTable()
 {
+  tableWidget->setColumnWidth(0, 320);
+  tableWidget->setColumnWidth(1, 170);
+  tableWidget->setRowCount(m_keyActions.size());
   for (int i = 0; i < m_keyActions.size(); i++) {
     QTableWidgetItem *name = tableWidget->item(i, 0);
     QTableWidgetItem *key = tableWidget->item(i, 1);
+    if (name == 0) {
+      name = new QTableWidgetItem();
+      tableWidget->setItem(i,0, name);
+    }
+    if (key == 0) {
+      key = new QTableWidgetItem();
+      tableWidget->setItem(i,1, key);
+    }
     name->setText(m_keyActions[i]->text().remove("&"));
     key->setText(m_keyActions[i]->shortcut().toString());
   }
@@ -66,23 +64,55 @@ void KeyboardShortcuts::refreshTable()
 
 bool KeyboardShortcuts::shortcutTaken(QString shortcut)
 {
-  for (int i = 0; i < m_keyActions.size(); i++) {
-    if (m_keyActions[i]->shortcut().toString() == shortcut)
+  int rows = tableWidget->rowCount();
+  for (int i = 0; i < rows; i++) {
+    QTableWidgetItem *key = tableWidget->item(i, 1);
+    if (key != 0 && key->text() == shortcut) {
       return true;
+    }
   }
   return false;
 }
 
+QString KeyboardShortcuts::getShortcut(QString action)
+{
+  int rows = tableWidget->rowCount();
+  for (int i = 0; i < rows; i++) {
+    QTableWidgetItem *name = tableWidget->item(i, 0);
+    QTableWidgetItem *key = tableWidget->item(i, 1);
+    if (name != 0 && name->text() == action) {
+      if (key != 0) {
+        return key->text();
+      }
+      break;
+    }
+  }
+  return QString();
+}
+
 void KeyboardShortcuts::restoreDefaults()
 {
-  emit restoreDefaultShortcuts();
+  emit restoreDefaultShortcuts();  // To have the main application restore the default shortcuts in the m_keyActions pointer
   refreshTable();
 }
 
 void KeyboardShortcuts::assignShortcut(int row, int /*column*/)
 {
-  QAction *action = m_keyActions[row];
-  KeySelector dialog(this, action->text().remove("&"),action->shortcut());
+  Q_ASSERT(m_keyActions.size() > row);
+  Q_ASSERT(tableWidget->rowCount() > row);
+  QTableWidgetItem *nameItem = tableWidget->item(row, 0);
+  QTableWidgetItem *keyitem = tableWidget->item(row, 1);
+  if (nameItem == 0) {
+    nameItem = new QTableWidgetItem();
+    tableWidget->setItem(row,0, nameItem);
+  }
+  if (keyitem == 0) {
+    keyitem = new QTableWidgetItem();
+    tableWidget->setItem(row,1, keyitem);
+  }
+  QString name = nameItem->text();
+  QString key = keyitem->text();
+  KeySelector dialog(this, name, key);
   if (dialog.exec() == QDialog::Accepted) {
     if (dialog.newShortcut == "")
       return;
@@ -93,8 +123,8 @@ void KeyboardShortcuts::assignShortcut(int row, int /*column*/)
                                 QMessageBox::Ok);
       return;
     }
-    m_keyActions[row]->setShortcut(dialog.newShortcut);
-    refreshTable();
+    keyitem->setText(dialog.newShortcut);
+//    refreshTable();
   }
 }
 

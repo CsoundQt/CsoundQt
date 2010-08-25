@@ -1821,7 +1821,7 @@ void qutecsound::setDefaultKeyboardShortcuts()
   externalBrowserAct->setShortcut(tr("Shift+Alt+F1"));
   openQuickRefAct->setShortcut(tr(""));
   commentAct->setShortcut(tr("Ctrl+/"));
-  uncommentAct->setShortcut(tr("Shift+Ctrl+/"));
+//  uncommentAct->setShortcut(tr("Shift+Ctrl+/"));
   indentAct->setShortcut(tr("Ctrl+I"));
   unindentAct->setShortcut(tr("Shift+Ctrl+I"));
   evaluateAct->setShortcut(QKeySequence(Qt::Key_Enter));
@@ -2177,15 +2177,15 @@ void qutecsound::createActions()
   setShortcutsAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(setShortcutsAct, SIGNAL(triggered()), this, SLOT(openShortcutDialog()));
 
-  commentAct = new QAction(tr("Comment"), this);
-  commentAct->setStatusTip(tr("Comment selection"));
+  commentAct = new QAction(tr("Comment/Uncomment"), this);
+  commentAct->setStatusTip(tr("Comment/Uncomment selection"));
   commentAct->setShortcutContext(Qt::ApplicationShortcut);
 //  commentAct->setIconText(tr("Comment"));
 //  connect(commentAct, SIGNAL(triggered()), this, SLOT(controlD()));
 
-  uncommentAct = new QAction(tr("Uncomment"), this);
-  uncommentAct->setStatusTip(tr("Uncomment selection"));
-  uncommentAct->setShortcutContext(Qt::ApplicationShortcut);
+//  uncommentAct = new QAction(tr("Uncomment"), this);
+//  uncommentAct->setStatusTip(tr("Uncomment selection"));
+//  uncommentAct->setShortcutContext(Qt::ApplicationShortcut);
 //   uncommentAct->setIconText(tr("Uncomment"));
 //   connect(uncommentAct, SIGNAL(triggered()), this, SLOT(uncomment()));
 
@@ -2273,7 +2273,6 @@ void qutecsound::setKeyboardShortcutsList()
   m_keyActions.append(recAct);
   m_keyActions.append(renderAct);
   m_keyActions.append(commentAct);
-  m_keyActions.append(uncommentAct);
   m_keyActions.append(indentAct);
   m_keyActions.append(unindentAct);
   m_keyActions.append(externalPlayerAct);
@@ -2283,21 +2282,21 @@ void qutecsound::setKeyboardShortcutsList()
   m_keyActions.append(showGenAct);
   m_keyActions.append(showOverviewAct);
   m_keyActions.append(showConsoleAct);
+  m_keyActions.append(showInspectorAct);
+  m_keyActions.append(showLiveEventsAct);
+  m_keyActions.append(showPythonConsoleAct);
+  m_keyActions.append(showUtilitiesAct);
   m_keyActions.append(setHelpEntryAct);
   m_keyActions.append(browseBackAct);
   m_keyActions.append(browseForwardAct);
   m_keyActions.append(externalBrowserAct);
   m_keyActions.append(openQuickRefAct);
-  m_keyActions.append(showInspectorAct);
-  m_keyActions.append(showLiveEventsAct);
-  m_keyActions.append(showUtilitiesAct);
   m_keyActions.append(showOpcodeQuickRefAct);
   m_keyActions.append(infoAct);
   m_keyActions.append(viewFullScreenAct);
   m_keyActions.append(killLineAct);
   m_keyActions.append(killToEndAct);
   m_keyActions.append(evaluateAct);
-  m_keyActions.append(showPythonConsoleAct);
 }
 
 void qutecsound::connectActions()
@@ -2315,7 +2314,7 @@ void qutecsound::connectActions()
 //  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
 
   disconnect(commentAct, 0, 0, 0);
-  disconnect(uncommentAct, 0, 0, 0);
+//  disconnect(uncommentAct, 0, 0, 0);
   disconnect(indentAct, 0, 0, 0);
   disconnect(unindentAct, 0, 0, 0);
   disconnect(killLineAct, 0, 0, 0);
@@ -2323,7 +2322,7 @@ void qutecsound::connectActions()
 //  disconnect(findAct, 0, 0, 0);
 //  disconnect(findAgainAct, 0, 0, 0);
   connect(commentAct, SIGNAL(triggered()), doc, SLOT(comment()));
-  connect(uncommentAct, SIGNAL(triggered()), doc, SLOT(uncomment()));
+//  connect(uncommentAct, SIGNAL(triggered()), doc, SLOT(uncomment()));
   connect(indentAct, SIGNAL(triggered()), doc, SLOT(indent()));
   connect(unindentAct, SIGNAL(triggered()), doc, SLOT(unindent()));
   connect(killLineAct, SIGNAL(triggered()), doc, SLOT(killLine()));
@@ -2410,7 +2409,7 @@ void qutecsound::createMenus()
   editMenu->addAction(autoCompleteAct);
   editMenu->addSeparator();
   editMenu->addAction(commentAct);
-  editMenu->addAction(uncommentAct);
+//  editMenu->addAction(uncommentAct);
   editMenu->addAction(indentAct);
   editMenu->addAction(unindentAct);
   editMenu->addAction(killLineAct);
@@ -2859,20 +2858,23 @@ void qutecsound::readSettings()
     m_options->language = 0;
   recentFiles.clear();
   recentFiles = settings.value("recentFiles").toStringList();
-  settings.beginGroup("Shortcuts");
-  if (settings.contains("0")) {
-    for (int i = 0; i < m_keyActions.size();i++) {
-      QString shortcut = settings.value(QString::number(i), "").toString();
-      m_keyActions[i]->setShortcut(shortcut);
+  QHash<QString, QVariant> actionList = settings.value("shortcuts").toHash();
+  if (actionList.count() != 0) {
+    QHashIterator<QString, QVariant> i(actionList);
+    while (i.hasNext()) {
+      i.next();
+      QString shortcut = i.value().toString();
+      foreach (QAction *act, m_keyActions) {
+        if (act->text().remove("&") == i.key()) {
+          act->setShortcut(shortcut);
+          break;
+        }
+      }
     }
   }
-  else { // No shortcuts are saved, so it is a new installation.
+  else { // No shortcuts are stored
     setDefaultKeyboardShortcuts();
   }
-  if (settingsVersion < 2) {
-    setDefaultKeyboardShortcuts();  // Changes in structure, so reset shortcuts
-  }
-  settings.endGroup();
   settings.endGroup();
   settings.beginGroup("Options");
   settings.beginGroup("Editor");
@@ -3024,18 +3026,11 @@ void qutecsound::writeSettings()
   else {
     settings.remove("");
   }
-  settings.beginGroup("Shortcuts");
-  if (!m_resetPrefs) {
-    for (int i = 0; i < m_keyActions.size();i++) {
-      //     QString key = m_keyActions[i]->text();
-      QString key = QString::number(i);
-      settings.setValue(key, m_keyActions[i]->shortcut().toString());
-    }
+  QHash<QString, QVariant> shortcuts;
+  foreach (QAction *act, m_keyActions) {
+    shortcuts[act->text().remove("&")] = QVariant(act->shortcut().toString());
   }
-  else {
-    settings.remove("");
-  }
-  settings.endGroup();
+  settings.setValue("shortcuts", QVariant(shortcuts));
   settings.endGroup();
   settings.beginGroup("Options");
   settings.beginGroup("Editor");

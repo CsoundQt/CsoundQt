@@ -72,7 +72,9 @@ void Inspector::parseText(const QString &text)
   }
   QHash<QString, bool> instrumentExpanded;  // Remember if instrument is expanded in menu
   for (int i = 0; i < instrItem->childCount(); i++) {
+    qDebug() << "Inspector::parseText" <<  instrItem->childCount();
     QTreeWidgetItem * instr = instrItem->child(i);
+    Q_ASSERT(instr != 0);
     instrumentExpanded[instr->text(0)] = instr->isExpanded();
   }
 

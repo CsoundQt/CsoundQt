@@ -339,7 +339,7 @@ class qutecsound:public QMainWindow
     QAction *showLiveEventsAct;
     QAction *showPythonConsoleAct;
     QAction *commentAct;
-    QAction *uncommentAct;
+//    QAction *uncommentAct;
     QAction *indentAct;
     QAction *unindentAct;
     QAction *killLineAct;

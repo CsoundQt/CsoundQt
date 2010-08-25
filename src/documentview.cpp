@@ -824,6 +824,10 @@ void DocumentView::comment()
   }
   int start = cursor.selectionStart();
   QString text = cursor.selectedText();
+  if (text.startsWith(commentChar)) {
+    uncomment();
+    return;
+  }
   text.prepend(commentChar);
   text.replace(QChar(QChar::ParagraphSeparator), QString("\n" + commentChar));
   if (text.endsWith("\n" + commentChar) ) {

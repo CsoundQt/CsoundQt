@@ -1526,7 +1526,7 @@ void DocumentPage::jumpToLine(int line)
 
 void DocumentPage::comment()
 {
-  qDebug() << "DocumentPage::comment()";
+//  qDebug() << "DocumentPage::comment()";
   m_view->comment();
 }
 
