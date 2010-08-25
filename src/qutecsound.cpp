@@ -1784,6 +1784,7 @@ void qutecsound::setDefaultKeyboardShortcuts()
   cutAct->setShortcut(tr("Ctrl+X"));
   copyAct->setShortcut(tr("Ctrl+C"));
   pasteAct->setShortcut(tr("Ctrl+V"));
+  duplicateAct->setShortcut(tr("Ctrl+D"));
   joinAct->setShortcut(tr(""));
   inToGetAct->setShortcut(tr(""));
   getToInAct->setShortcut(tr(""));
@@ -2232,8 +2233,7 @@ void qutecsound::createActions()
   resetPreferencesAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(resetPreferencesAct, SIGNAL(triggered()), this, SLOT(resetPreferences()));
 
-  duplicateAct = new QAction(this);
-  duplicateAct->setShortcut(tr("Ctrl+D"));
+  duplicateAct = new QAction(tr("Duplicate Widgets"), this);
   duplicateAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
 
@@ -2258,6 +2258,7 @@ void qutecsound::setKeyboardShortcutsList()
   m_keyActions.append(cutAct);
   m_keyActions.append(copyAct);
   m_keyActions.append(pasteAct);
+  m_keyActions.append(duplicateAct);
   m_keyActions.append(joinAct);
   m_keyActions.append(inToGetAct);
   m_keyActions.append(getToInAct);

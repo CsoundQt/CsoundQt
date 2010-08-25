@@ -846,8 +846,6 @@ void DocumentPage::setCompanionFileName(QString name)
 
 void DocumentPage::copy()
 {
-  // For some reason the shortcut takes this route on OS X but the direct route through keyEvent on each on Linux
-  // FIXME allow multiple layouts
   qDebug() << "DocumentPage::copy() " << m_widgetLayouts[0]->hasFocus();
   bool liveeventfocus = false;
   for (int i = 0; i < m_liveFrames.size(); i++) {
@@ -860,7 +858,7 @@ void DocumentPage::copy()
     if (m_view->hasFocus()) {
       m_view->copy();
     }
-    else  {
+    else  { // FIXME allow multiple layouts
       m_widgetLayouts[0]->copy();
     }
   }
@@ -888,7 +886,7 @@ void DocumentPage::paste()
 {
   foreach (WidgetLayout *wl, m_widgetLayouts) {
     if (wl->hasFocus()) {
-      wl->cut();
+      wl->paste();
       return;
     }
   }
@@ -906,7 +904,6 @@ void DocumentPage::paste()
 
 void DocumentPage::undo()
 {
-  // For some reason the shortcut takes this route on OS X but the direct route through keyEvent on each on Linux
 //  qDebug() << "DocumentPage::undo()";
   foreach (WidgetLayout *wl, m_widgetLayouts) {
     if (wl->hasFocus()) {
@@ -930,7 +927,6 @@ void DocumentPage::undo()
 
 void DocumentPage::redo()
 {
-  // For some reason the shortcut takes this route on OS X but the direct route through keyEvent on each on Linux
   foreach (WidgetLayout *wl, m_widgetLayouts) {
     if (wl->hasFocus()) {
       wl->redo();

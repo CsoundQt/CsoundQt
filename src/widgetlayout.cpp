@@ -95,10 +95,13 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
 
   cutAct = new QAction(tr("Cut"), this);
+//  cutAct->setShortcut(tr("Ctrl+X"));
   connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
   copyAct = new QAction(tr("Copy"), this);
+//  copyAct->setShortcut(tr("Ctrl+C"));
   connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
   pasteAct = new QAction(tr("Paste"), this);
+//  pasteAct->setShortcut(tr("Ctrl+V"));
   connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
   duplicateAct = new QAction(tr("Duplicate Selected"), this);
   connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
@@ -1238,7 +1241,7 @@ void WidgetLayout::createContextMenu(QContextMenuEvent *event)
   menu.addAction(copyAct);
   menu.addAction(pasteAct);
   menu.addAction(selectAllAct);
-  menu.addAction(duplicateAct);
+//  menu.addAction(duplicateAct); // Shortcut from the duplicate action is not working from some reason...
   menu.addAction(deleteAct);
   menu.addAction(clearAct);
   menu.addSeparator();
@@ -1907,43 +1910,46 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
 //  qDebug() << "WidgetLayout::keyPressEvent --- " << event->key() << "___" << event->modifiers() << " control = " <<  Qt::ControlModifier;
   if (!event->isAutoRepeat() or m_repeatKeys) {
     QString key = event->text();
-    if (event->key() == Qt::Key_D && (event->modifiers() & Qt::ControlModifier )) {
+    if (event->key() == Qt::Key_D && (event->modifiers() & Qt::ControlModifier )) { // TODO why is this necessary? The shortcut from the duplicate action in the main app is not working!
       this->duplicate();
       event->accept();
       return;
     }
-    // Why are these not working here?????
-    if (event->key() == Qt::Key_X && (event->modifiers() & Qt::ControlModifier )) {
-      this->cut();
-      event->accept();
-      return;
-    }
-    else if (event->key() == Qt::Key_C && (event->modifiers() & Qt::ControlModifier )) {
-      this->copy();
-      event->accept();
-      return;
-    }
-    else if (event->key() == Qt::Key_V && (event->modifiers() & Qt::ControlModifier )) {
-      this->paste();
-      event->accept();
-      return;
-    }
-    else if (event->matches(QKeySequence::Delete)) {
+//    if (event->key() == Qt::Key_X && (event->modifiers() & Qt::ControlModifier )) {
+//      this->cut();
+//      event->accept();
+//      return;
+//    }
+//    else if (event->key() == Qt::Key_C && (event->modifiers() & Qt::ControlModifier )) {
+//      this->copy();
+//      event->accept();
+//      return;
+//    }
+//    else if (event->key() == Qt::Key_V && (event->modifiers() & Qt::ControlModifier )) {
+//      this->paste();
+//      event->accept();
+//      return;
+//    }
+    if (event->key()  == Qt::Key_Delete || event->key()  == Qt::Key_Backspace) {
       this->deleteSelected();
+      event->accept();
     }
-    else if (event->matches(QKeySequence::Undo)) {
-      this->undo();
-    }
-    else if (event->matches(QKeySequence::Redo)) {
-      this->redo();
-    }
+//    else if (event->matches(QKeySequence::Undo)) {
+//      this->undo();
+//      event->accept();
+//    }
+//    else if (event->matches(QKeySequence::Redo)) {
+//      this->redo();
+//      event->accept();
+//    }
     else if (key != "") {
+//      qDebug() << "WidgetLayout::keyPressEvent" << key;
 //           appendMessage(key);
-      emit keyPressed(key);
       QWidget::keyPressEvent(event); // Propagate event if not used
+      emit keyPressed(key);
+//      event->accept();
     }
   }
-  event->accept();
 }
 
 void WidgetLayout::keyReleaseEvent(QKeyEvent *event)

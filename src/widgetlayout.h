@@ -127,7 +127,7 @@ class WidgetLayout : public QWidget
 
     void createContextMenu(QContextMenuEvent *event);  // When done outside container widget
 
-    // Edition Actions
+    // Edition Actions  (Local edit actions without keyboard shortcuts as the main application handles that)
     QAction *cutAct;
     QAction *copyAct;
     QAction *pasteAct;
