@@ -56,11 +56,11 @@ class Inspector : public QDockWidget
 
   private:
     QTreeWidget *m_treeWidget;
-    TreeItem *opcodeItem;
-    TreeItem *macroItem;
-    TreeItem *instrItem;
-    TreeItem *ftableItem;
-    TreeItem *scoreItem;
+    TreeItem *treeItem1;
+    TreeItem *treeItem2;
+    TreeItem *treeItem3;
+    TreeItem *treeItem4;
+    TreeItem *treeItem5;
 
     QMutex inspectorMutex;
 

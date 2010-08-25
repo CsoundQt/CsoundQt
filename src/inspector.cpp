@@ -36,16 +36,17 @@ Inspector::Inspector(QWidget *parent)
           this, SLOT(itemActivated(QTreeWidgetItem*,int)));
 //  connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
 //          this, SLOT(itemActivated(QTreeWidgetItem*,int)));
-  opcodeItem = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
-  macroItem = new TreeItem(m_treeWidget, QStringList(tr("Macros")));
-  instrItem = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
-  ftableItem = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
-  scoreItem = new TreeItem(m_treeWidget, QStringList(tr("Score")));
-  m_treeWidget->expandItem(opcodeItem);
-  m_treeWidget->expandItem(macroItem);
-  m_treeWidget->expandItem(instrItem);
-  m_treeWidget->expandItem(ftableItem);
-  m_treeWidget->expandItem(scoreItem);
+  treeItem1 = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
+  treeItem2 = new TreeItem(m_treeWidget, QStringList(tr("Macros")));
+  treeItem3 = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
+  treeItem4 = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
+  treeItem5 = new TreeItem(m_treeWidget, QStringList(tr("Score")));
+  
+  m_treeWidget->expandItem(treeItem1);
+  m_treeWidget->expandItem(treeItem2);
+  m_treeWidget->expandItem(treeItem3);
+  m_treeWidget->expandItem(treeItem4);
+  m_treeWidget->expandItem(treeItem5);
 }
 
 
@@ -58,44 +59,43 @@ void Inspector::parseText(const QString &text)
 {
 //  qDebug() << "Inspector::parseText";
   inspectorMutex.lock();
-  bool opcodeItemExpanded = true;
-  bool macroItemExpanded = true;
-  bool instrItemExpanded = true;
-  bool ftableItemExpanded = true;
-  bool scoreItemExpanded = true;
-  if  (opcodeItem != 0) {
-    opcodeItemExpanded = opcodeItem->isExpanded();
-    macroItemExpanded = macroItem->isExpanded();
-    instrItemExpanded = instrItem->isExpanded();
-    ftableItemExpanded = ftableItem->isExpanded();
-    scoreItemExpanded = scoreItem->isExpanded();
+  bool treeItem1Expanded = true;
+  bool treeItem2Expanded = true;
+  bool treeItem3Expanded = true;
+  bool treeItem4Expanded = true;
+  bool treeItem5Expanded = true;
+  if  (treeItem1 != 0) {
+    treeItem1Expanded = treeItem1->isExpanded();
+    treeItem2Expanded = treeItem2->isExpanded();
+    treeItem3Expanded = treeItem3->isExpanded();
+    treeItem4Expanded = (treeItem4 != 0 ? treeItem4->isExpanded() : false);
+    treeItem5Expanded = (treeItem5 != 0 ? treeItem5->isExpanded() : false);
   }
   QHash<QString, bool> instrumentExpanded;  // Remember if instrument is expanded in menu
-  for (int i = 0; i < instrItem->childCount(); i++) {
-    qDebug() << "Inspector::parseText" <<  instrItem->childCount();
-    QTreeWidgetItem * instr = instrItem->child(i);
-    Q_ASSERT(instr != 0);
+  for (int i = 0; i < treeItem3->childCount(); i++) {
+    QTreeWidgetItem * instr = treeItem3->child(i);
+    Q_ASSERT(instr->columnCount() > 0);
     instrumentExpanded[instr->text(0)] = instr->isExpanded();
   }
 
   m_treeWidget->clear();
-  opcodeItem = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
-  opcodeItem->setLine(-1);
-  macroItem = new TreeItem(m_treeWidget, QStringList(tr("Macros")));
-  macroItem->setLine(-1);
-  instrItem = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
-  instrItem->setLine(-1);
-  ftableItem = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
-  ftableItem->setLine(-1);
-  scoreItem = new TreeItem(m_treeWidget, QStringList(tr("Score")));
-  scoreItem->setLine(-1);  // This might be overridden below
-  TreeItem *currentInstrument = instrItem;
+  treeItem1 = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
+  treeItem1->setLine(-1);
+  treeItem2 = new TreeItem(m_treeWidget, QStringList(tr("Macros")));
+  treeItem2->setLine(-1);
+  treeItem3 = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
+  treeItem3->setLine(-1);
+  treeItem4 = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
+  treeItem4->setLine(-1);
+  treeItem5 = new TreeItem(m_treeWidget, QStringList(tr("Score")));
+  treeItem5->setLine(-1);  // This might be overridden below
+  TreeItem *currentInstrument = treeItem3;
   QStringList lines = text.split(QRegExp("[\n\r]"));
   for (int i = 0; i< lines.size(); i++) {
     if (lines[i].trimmed().startsWith("instr")) {
       QString text = lines[i].mid(lines[i].indexOf("instr") + 6);
       QStringList columnslist(QString("instr %1").arg(text).simplified());
-      TreeItem *newItem = new TreeItem(instrItem, columnslist);
+      TreeItem *newItem = new TreeItem(treeItem3, columnslist);
       newItem->setLine(i + 1);
       newItem->setForeground (0, QBrush(Qt::darkMagenta) );
       currentInstrument = newItem;
@@ -107,32 +107,32 @@ void Inspector::parseText(const QString &text)
       newItem->setLine(i + 1);
     }
     else if (lines[i].trimmed().startsWith("endin")) {
-      currentInstrument = instrItem; // everything between instruments is placed in the main instrument menu
+      currentInstrument = treeItem3; // everything between instruments is placed in the main instrument menu
     }
     else if (lines[i].trimmed().startsWith("opcode")) {
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
-      TreeItem *newItem = new TreeItem(opcodeItem, columnslist);
+      TreeItem *newItem = new TreeItem(treeItem1, columnslist);
       newItem->setLine(i + 1);
     }
     else if (lines[i].trimmed().startsWith("#define") or lines[i].trimmed().startsWith("# define")) {
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
-      TreeItem *newItem = new TreeItem(macroItem, columnslist);
+      TreeItem *newItem = new TreeItem(treeItem2, columnslist);
       newItem->setLine(i + 1);
     }
     else if (lines[i].trimmed().contains(QRegExp("^f\\s*\\d")) ||
         lines[i].trimmed().contains(QRegExp("^[\\w]*[\\s]*ftgen"))) {
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
-      TreeItem *newItem = new TreeItem(ftableItem, columnslist);
+      TreeItem *newItem = new TreeItem(treeItem4, columnslist);
       newItem->setLine(i + 1);
     }
     else if (lines[i].trimmed().contains(QRegExp("^s\\s*\\b")) ||
         lines[i].trimmed().contains(QRegExp("^m\\s*\\b"))) {
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
-      TreeItem *newItem = new TreeItem(scoreItem, columnslist);
+      TreeItem *newItem = new TreeItem(treeItem5, columnslist);
       newItem->setLine(i + 1);
     }
     else if (lines[i].trimmed().contains(QRegExp("\\w+:"))) {
@@ -144,21 +144,21 @@ void Inspector::parseText(const QString &text)
       }
     }
     else if (lines[i].trimmed().contains("<CsScore>")) {
-      scoreItem->setLine(i + 1);
-      currentInstrument = scoreItem;
+      treeItem5->setLine(i + 1);
+      currentInstrument = treeItem5;
     }
     else if (lines[i].trimmed().contains("<CsInstruments>")) {
-      instrItem->setLine(i + 1);
+      treeItem3->setLine(i + 1);
     }
   }
-  opcodeItem->setExpanded(opcodeItemExpanded);
-  macroItem->setExpanded(macroItemExpanded);
-  instrItem->setExpanded(instrItemExpanded);
-  ftableItem->setExpanded(ftableItemExpanded);
-  scoreItem->setExpanded(scoreItemExpanded);
+  treeItem1->setExpanded(treeItem1Expanded);
+  treeItem2->setExpanded(treeItem2Expanded);
+  treeItem3->setExpanded(treeItem3Expanded);
+  treeItem4->setExpanded(treeItem4Expanded);
+  treeItem5->setExpanded(treeItem5Expanded);
 
-  for (int i = 0; i < instrItem->childCount(); i++) {
-    QTreeWidgetItem * instr = instrItem->child(i);
+  for (int i = 0; i < treeItem3->childCount(); i++) {
+    QTreeWidgetItem * instr = treeItem3->child(i);
     if (instrumentExpanded.contains(instr->text(0))) {
       instr->setExpanded(instrumentExpanded[instr->text(0)]);
     }
@@ -171,19 +171,21 @@ void Inspector::parsePythonText(const QString &text)
 //  qDebug() << "Inspector:parseText";
   inspectorMutex.lock();
   m_treeWidget->clear();
-  opcodeItem = 0;
-  TreeItem *importItem = new TreeItem(m_treeWidget, QStringList(tr("Imports")));
-  importItem->setLine(-1);
-  TreeItem *classItem = new TreeItem(m_treeWidget, QStringList(tr("Classes")));
-  classItem->setLine(-1);
-  TreeItem *functionItem = new TreeItem(m_treeWidget, QStringList(tr("Functions")));
-  functionItem->setLine(-1);
+  treeItem1 = 0;
+  treeItem1 = new TreeItem(m_treeWidget, QStringList(tr("Imports")));
+  treeItem1->setLine(-1);
+  treeItem2 = new TreeItem(m_treeWidget, QStringList(tr("Classes")));
+  treeItem2->setLine(-1);
+  treeItem3 = new TreeItem(m_treeWidget, QStringList(tr("Functions")));
+  treeItem3->setLine(-1);
+  treeItem4 = 0;
+  treeItem5 = 0;
   TreeItem *currentParent = 0;
   QStringList lines = text.split(QRegExp("[\\n\\r]"));
   for (int i = 0; i< lines.size(); i++) {
     if (lines[i].trimmed().startsWith("class ")) {
       QStringList columnslist(lines[i].simplified());
-      TreeItem *newItem = new TreeItem(classItem, columnslist);
+      TreeItem *newItem = new TreeItem(treeItem2, columnslist);
       currentParent = newItem;
       m_treeWidget->expandItem(newItem);
 //      QFont itemFont = newItem->font(0);
@@ -201,24 +203,24 @@ void Inspector::parsePythonText(const QString &text)
     }
     else if (lines[i].trimmed().contains(QRegExp("\\bimport\\b"))) {
       QStringList columnslist(lines[i].simplified());
-      TreeItem *newItem = new TreeItem(importItem, columnslist);
+      TreeItem *newItem = new TreeItem(treeItem1, columnslist);
       newItem->setLine(i + 1);
     }
     else if (lines[i].trimmed().startsWith("def ")) {
       QStringList columnslist(lines[i].simplified());
-      TreeItem *newItem = new TreeItem(functionItem, columnslist);
+      TreeItem *newItem = new TreeItem(treeItem3, columnslist);
       newItem->setLine(i + 1);
     }
     else if (lines[i].contains("##")) {
       QStringList columnslist(lines[i].simplified());
-      TreeItem *newItem = new TreeItem(functionItem, columnslist);
+      TreeItem *newItem = new TreeItem(treeItem3, columnslist);
       newItem->setForeground (0, QBrush(Qt::darkGreen) );
       newItem->setLine(i + 1);
     }
   }
-  m_treeWidget->expandItem(importItem);
-  m_treeWidget->expandItem(functionItem);
-  m_treeWidget->expandItem(classItem);
+  m_treeWidget->expandItem(treeItem1);
+  m_treeWidget->expandItem(treeItem2);
+  m_treeWidget->expandItem(treeItem3);
   inspectorMutex.unlock();
 }
 
