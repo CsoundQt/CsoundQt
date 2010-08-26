@@ -51,10 +51,9 @@ QuteSpinBox::~QuteSpinBox()
 {
 }
 
-void QuteSpinBox::setText(QString /*text*/)
+void QuteSpinBox::setText(QString text)
 {
-//  qDebug() << "QuteSpinBox::setText not valid! setting to minimum";
-  setValue(0.0);
+  setValue(text.toDouble());
 }
 
 //void QuteSpinBox::setResolution(double resolution)
@@ -197,11 +196,13 @@ void QuteSpinBox::applyInternalProperties()
   m_value = property("QCS_value").toDouble();
   double resolution = property("QCS_resolution").toDouble();
   m_valueChanged = true;
-//  qDebug() << "QuteSpinBox::applyInternalProperties()" << property("QCS_value").toDouble() << m_value;
   int i;
   for (i = 0; i < 8; i++) {//     Check for used decimal places.
-    if ((resolution * pow(10, i)) == (int) (resolution * pow(10,i)) )
+    double fractpart, intpart;
+    fractpart = modf (resolution * pow(10, i), &intpart);
+    if (fractpart < 1e-200) {
       break;
+    }
   }
   static_cast<QDoubleSpinBox*>(m_widget)->setDecimals(i);
   static_cast<QDoubleSpinBox*>(m_widget)->setSingleStep(resolution);
