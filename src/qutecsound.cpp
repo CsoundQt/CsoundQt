@@ -1346,6 +1346,12 @@ void qutecsound::openExternalPlayer()
   }
 }
 
+void qutecsound::setEditorFocus()
+{
+  documentPages[curPage]->setEditorFocus();
+  this->raise();
+}
+
 void qutecsound::setHelpEntry()
 {
   QString text = documentPages[curPage]->wordUnderCursor();
@@ -1802,6 +1808,7 @@ void qutecsound::setDefaultKeyboardShortcuts()
   renderAct->setShortcut(tr("Alt+F"));
   externalPlayerAct->setShortcut(tr(""));
   externalEditorAct->setShortcut(tr(""));
+  focusEditorAct->setShortcut(tr("Alt+0"));
   showWidgetsAct->setShortcut(tr("Alt+1"));
   showHelpAct->setShortcut(tr("Alt+2"));
   showGenAct->setShortcut(tr(""));
@@ -2073,6 +2080,12 @@ void qutecsound::createActions()
   connect(showInspectorAct, SIGNAL(triggered(bool)), m_inspector, SLOT(setVisible(bool)));
   connect(m_inspector, SIGNAL(Close(bool)), showInspectorAct, SLOT(setChecked(bool)));
 
+  focusEditorAct = new QAction(tr("Focus Text Editor", "Give keyboard focus to the text editor"), this);
+  focusEditorAct->setStatusTip(tr("Give keyboard focus to the text editor"));
+  focusEditorAct->setIconText(tr("Editor"));
+  focusEditorAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(focusEditorAct, SIGNAL(triggered()), this, SLOT(setEditorFocus()));
+
   showHelpAct = new QAction(QIcon(":/images/gtk-info.png"), tr("Help Panel"), this);
   showHelpAct->setCheckable(true);
   showHelpAct->setChecked(true);
@@ -2278,6 +2291,7 @@ void qutecsound::setKeyboardShortcutsList()
   m_keyActions.append(unindentAct);
   m_keyActions.append(externalPlayerAct);
   m_keyActions.append(externalEditorAct);
+  m_keyActions.append(focusEditorAct);
   m_keyActions.append(showWidgetsAct);
   m_keyActions.append(showHelpAct);
   m_keyActions.append(showGenAct);
@@ -2365,7 +2379,6 @@ void qutecsound::connectActions()
   connect(doc, SIGNAL(stopSignal()), this, SLOT(stop()));
   connect(doc, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(statusBarMessage(QString)));
 
-
   disconnect(showWidgetsAct, 0,0,0);
   if (m_options->widgetsIndependent) {
     connect(showWidgetsAct, SIGNAL(triggered(bool)), doc, SLOT(showWidgets(bool)));
@@ -2437,6 +2450,7 @@ void qutecsound::createMenus()
   controlMenu->addAction(externalPlayerAct);
 
   viewMenu = menuBar()->addMenu(tr("View"));
+  viewMenu->addAction(focusEditorAct);
   viewMenu->addAction(showWidgetsAct);
   viewMenu->addAction(showHelpAct);
   viewMenu->addAction(showConsoleAct);

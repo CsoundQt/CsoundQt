@@ -55,6 +55,7 @@ class DocumentPage : public QObject
     ~DocumentPage();
 
     // Needed for main application, but not for standalone
+    void setEditorFocus();
     void insertText(QString text, int section = -1);
     void setFullText(QString text);
     void setBasicText(QString text);

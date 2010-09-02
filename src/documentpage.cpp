@@ -335,6 +335,11 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
   return ret;
 }
 
+void DocumentPage::setEditorFocus()
+{
+  m_view->setFocus();
+}
+
 void DocumentPage::insertText(QString text, int section)
 {
   return m_view->insertText(text, section);

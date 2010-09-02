@@ -65,7 +65,8 @@ class Inspector : public QDockWidget
     QMutex inspectorMutex;
 
   private slots:
-    void itemActivated(QTreeWidgetItem * item, int column);
+    void itemActivated(QTreeWidgetItem * item, int column = 0);
+    void itemChanged(QTreeWidgetItem * newItem, QTreeWidgetItem * oldItem);
 
   signals:
     void Close(bool visible);

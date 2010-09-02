@@ -194,6 +194,7 @@ class qutecsound:public QMainWindow
     void setCurrentAudioFile(const QString fileName);
     void openExternalEditor();
     void openExternalPlayer();
+    void setEditorFocus();
     void setHelpEntry();
     void setFullScreen(bool full);
     void openManualExample(QString fileName);
@@ -321,6 +322,7 @@ class qutecsound:public QMainWindow
     QAction *renderAct;
     QAction *externalEditorAct;
     QAction *externalPlayerAct;
+    QAction *focusEditorAct;
     QAction *showHelpAct;
     QAction *showManualAct;
     QAction *showGenAct;

@@ -32,8 +32,10 @@ Inspector::Inspector(QWidget *parent)
   m_treeWidget->setHeaderLabel(tr("Inspector"));
   m_treeWidget->show();
   setWidget(m_treeWidget);
-  connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
-          this, SLOT(itemActivated(QTreeWidgetItem*,int)));
+//  connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
+//          this, SLOT(itemActivated(QTreeWidgetItem*,int)));
+  connect(m_treeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
+          this, SLOT(itemChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
 //  connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
 //          this, SLOT(itemActivated(QTreeWidgetItem*,int)));
   treeItem1 = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
@@ -239,6 +241,14 @@ void Inspector::closeEvent(QCloseEvent * /*event*/)
 void Inspector::itemActivated(QTreeWidgetItem * item, int /*column*/)
 {
   int line = static_cast<TreeItem *>(item)->getLine();
+  if (line >= 0) {
+    emit jumpToLine(line);
+  }
+}
+
+void Inspector::itemChanged(QTreeWidgetItem * newItem, QTreeWidgetItem * /*oldItem*/)
+{
+  int line = static_cast<TreeItem *>(newItem)->getLine();
   if (line >= 0) {
     emit jumpToLine(line);
   }
