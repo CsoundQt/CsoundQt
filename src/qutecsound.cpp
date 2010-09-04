@@ -2467,6 +2467,8 @@ void qutecsound::createMenus()
   QStringList basicsFiles;
   QStringList realtimeInteractionFiles;
   QStringList featuresFiles;
+  QStringList flossman02Files;
+  QStringList flossman03Files;
   QStringList widgetFiles;
   QStringList synthFiles;
   QStringList musicFiles;
@@ -2635,6 +2637,30 @@ void qutecsound::createMenus()
     newAction->setData(fileName);
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
+
+  flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/0201.csd");
+  flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/0202.csd");
+
+  QMenu *flossmanMenu = examplesMenu->addMenu(tr("FLOSS Manual Examples"));
+  submenu = flossmanMenu->addMenu(tr("02 Quick Start"));
+  foreach (QString fileName, flossman02Files) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
+  flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/0301.csd");
+  flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/0302.csd");
+
+  submenu = flossmanMenu->addMenu(tr("03 Csound Language"));
+  foreach (QString fileName, flossman03Files) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
 
   for (int i = 0; i < subMenus.size(); i++) {
     submenu = examplesMenu->addMenu(subMenuNames[i]);
