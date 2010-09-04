@@ -248,6 +248,9 @@ void Inspector::itemActivated(QTreeWidgetItem * item, int /*column*/)
 
 void Inspector::itemChanged(QTreeWidgetItem * newItem, QTreeWidgetItem * /*oldItem*/)
 {
+  if (newItem == 0) {
+    return;
+  }
   int line = static_cast<TreeItem *>(newItem)->getLine();
   if (line >= 0) {
     emit jumpToLine(line);

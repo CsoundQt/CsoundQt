@@ -107,6 +107,7 @@
         <file>../examples/Synths/Simple_FM_Synth.csd</file>
         <file>../examples/Synths/Phase_Mod_Synth.csd</file>
         <file>../examples/Synths/Formant_Synth.csd</file>
+        <file>../examples/Synths/Diffamator.csd</file>
         <file>../examples/Synths/Pipe_Synth.csd</file>
         <file>../examples/Synths/String_Phaser.csd</file>
         <file>../examples/Synths/Waveform_Mix.csd</file>
