@@ -34,6 +34,19 @@ Console::~Console()
   disconnect(this, 0,0,0);
 }
 
+struct CursorUpdater
+{
+    Console &console;
+    CursorUpdater(Console &console_) : console(console_)
+    {
+    }
+    ~CursorUpdater()
+    {
+        console.moveCursor(QTextCursor::End);
+        console.ensureCursorVisible();
+    }
+};
+
 void Console::appendMessage(QString msg)
 {
   logMessage(msg);
@@ -45,6 +58,7 @@ void Console::appendMessage(QString msg)
     || msg.startsWith("virtual_keyboard real time MIDI plugin for Csound") ) {
     return;
   }
+  CursorUpdater cursorUpdater(*this);
   setTextColor(m_textColor);
   if (errorLine) {  // Hack to capture strange message organization from Csound
     errorLineText.append(msg);
@@ -80,8 +94,6 @@ void Console::appendMessage(QString msg)
     setTextColor(QColor("orange"));
   }
   insertPlainText(msg);
-//   text->moveCursor(QTextCursor::Start);
-//   text->moveCursor(QTextCursor::End);
   setTextColor(m_textColor);
 }
 
