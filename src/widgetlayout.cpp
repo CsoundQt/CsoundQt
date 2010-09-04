@@ -1664,6 +1664,8 @@ void WidgetLayout::alignLeft()
       }
     }
     widgetsMutex.unlock();
+    markHistory();
+    setModified(true);
   }
 }
 
@@ -1685,6 +1687,8 @@ void WidgetLayout::alignRight()
       }
     }
     widgetsMutex.unlock();
+    markHistory();
+    setModified(true);
   }
 }
 
@@ -1706,6 +1710,8 @@ void WidgetLayout::alignTop()
       }
     }
     widgetsMutex.unlock();
+    markHistory();
+    setModified(true);
   }
 }
 
@@ -1727,6 +1733,8 @@ void WidgetLayout::alignBottom()
       }
     }
     widgetsMutex.unlock();
+    markHistory();
+    setModified(true);
   }
 }
 
@@ -1746,6 +1754,8 @@ void WidgetLayout::sendToBack()
     cut();
     paste();
     deselectAll();
+    markHistory();
+    setModified(true);
 //    widgetsMutex.lock();
 //    for (int i = 0; i < editWidgets.size() ; i++) { // Now invert selection again
 //      if (editWidgets[i]->isSelected()) {
@@ -1805,6 +1815,8 @@ void WidgetLayout::distributeHorizontal()
       m_widgets[order[i]]->move(accum, editWidgets[order[i]]->y());
     }
     widgetsMutex.unlock();
+    markHistory();
+    setModified(true);
   }
 }
 
@@ -1854,6 +1866,8 @@ void WidgetLayout::distributeVertical()
       m_widgets[order[i]]->move(editWidgets[order[i]]->x(), accum);
     }
     widgetsMutex.unlock();
+    markHistory();
+    setModified(true);
   }
 }
 
@@ -1878,6 +1892,8 @@ void WidgetLayout::alignCenterVertical()
       }
     }
     widgetsMutex.unlock();
+    markHistory();
+    setModified(true);
   }
 }
 
@@ -1902,6 +1918,8 @@ void WidgetLayout::alignCenterHorizontal()
       }
     }
     widgetsMutex.unlock();
+    markHistory();
+    setModified(true);
   }
 }
 
