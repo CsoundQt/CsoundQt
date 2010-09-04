@@ -43,6 +43,11 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
   setProperty("QCS_latch", false);
   setProperty("QCS_latched", false);
 
+  QPixmap p = QPixmap(8, 8);
+  p.fill(QColor(Qt::green));
+  onIcon.addPixmap(p, QIcon::Normal, QIcon::On);
+  p.fill(QColor(Qt::black));
+  onIcon.addPixmap(p, QIcon::Normal, QIcon::Off);
 }
 
 QuteButton::~QuteButton()
@@ -207,12 +212,13 @@ void QuteButton::applyProperties()
   setProperty("QCS_pressedValue", valueBox->value());
   setProperty("QCS_latch", latchCheckBox->isChecked());
 //  setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
-//  setType(typeComboBox->currentText());
+  //  setType(typeComboBox->currentText());
+
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
   QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
-  qDebug() << "QuteButton::applyProperties()" << m_value;
+//  qDebug() << "QuteButton::applyProperties()" << m_value;
 }
 
 void QuteButton::createPropertiesDialog()
@@ -332,6 +338,12 @@ void QuteButton::applyInternalProperties()
   }
   static_cast<QPushButton *>(m_widget)->setText(property("QCS_text").toString());
   static_cast<QPushButton *>(m_widget)->setCheckable(property("QCS_latch").toBool());
+  if (property("QCS_latch").toBool()) {
+    static_cast<QPushButton *>(m_widget)->setIcon(onIcon);
+  }
+  else {
+    static_cast<QPushButton *>(m_widget)->setIcon(QIcon());
+  }
   m_widget->setStyleSheet("QPushButton { border-color:" + property("QCS_color").value<QColor>().name()
                           + "; }");  // Why is this here?
 }

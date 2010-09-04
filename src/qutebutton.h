@@ -70,6 +70,7 @@ class QuteButton : public QuteWidget
     QLineEdit *line;
 
     QIcon icon;
+    QIcon onIcon;
 
   private slots:
     void buttonPressed();
