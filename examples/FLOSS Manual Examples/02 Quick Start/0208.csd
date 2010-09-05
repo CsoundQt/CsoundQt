@@ -1,8 +1,8 @@
-see http://en.flossmanuals.net/bin/view/Csound/MakeCsoundRun
+see http://en.flossmanuals.net/bin/view/Csound/RENDERINGTOFILE
 
 <CsoundSynthesizer>
 <CsOptions>
--odac
+-o Render.wav
 </CsOptions>
 <CsInstruments>
 instr 1
@@ -12,6 +12,7 @@ endin
 </CsInstruments>
 <CsScore>
 i 1 0 1
+e
 </CsScore>
 </CsoundSynthesizer>
 

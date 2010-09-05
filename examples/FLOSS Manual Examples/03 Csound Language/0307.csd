@@ -1,17 +1,13 @@
-see http://en.flossmanuals.net/bin/view/Csound/MakeCsoundRun
+see http://en.flossmanuals.net/bin/view/Csound/InitAndPerfPass
 
 <CsoundSynthesizer>
-<CsOptions>
--odac
-</CsOptions>
 <CsInstruments>
 instr 1
-aSin      oscils    0dbfs/4, 440, 0
-          out       aSin
+prints "%nHello Eternity!%n%n"
 endin
 </CsInstruments>
 <CsScore>
-i 1 0 1
+i 1 0 0 ;let instrument 1 play for zero seconds ...
 </CsScore>
 </CsoundSynthesizer>
 

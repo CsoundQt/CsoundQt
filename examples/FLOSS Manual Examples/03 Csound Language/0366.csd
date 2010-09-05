@@ -1,17 +1,27 @@
-see http://en.flossmanuals.net/bin/view/Csound/MakeCsoundRun
+see http://en.flossmanuals.net/bin/view/Csound/Userdefinedopcodes
 
 <CsoundSynthesizer>
-<CsOptions>
--odac
-</CsOptions>
 <CsInstruments>
+
+  opcode Defaults, iii, opj
+ia, ib, ic xin
+xout ia, ib, ic
+  endop
+
 instr 1
-aSin      oscils    0dbfs/4, 440, 0
-          out       aSin
+ia, ib, ic Defaults
+           print     ia, ib, ic
+ia, ib, ic Defaults  10
+           print     ia, ib, ic
+ia, ib, ic Defaults  10, 100
+           print     ia, ib, ic
+ia, ib, ic Defaults  10, 100, 1000
+           print     ia, ib, ic
 endin
+
 </CsInstruments>
 <CsScore>
-i 1 0 1
+i 1 0 0
 </CsScore>
 </CsoundSynthesizer>
 

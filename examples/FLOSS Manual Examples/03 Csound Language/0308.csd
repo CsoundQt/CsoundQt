@@ -1,17 +1,21 @@
-see http://en.flossmanuals.net/bin/view/Csound/MakeCsoundRun
+see http://en.flossmanuals.net/bin/view/Csound/InitAndPerfPass
 
 <CsoundSynthesizer>
 <CsOptions>
--odac
 </CsOptions>
 <CsInstruments>
-instr 1
-aSin      oscils    0dbfs/4, 440, 0
-          out       aSin
+sr = 44100
+ksmps = 4410; try 44100 or 2205 instead
+
+instr 1; prints the time once in each control cycle
+kTimek   timek
+kTimes   times
+         printks    "Number of control cycles = %d%n", 0, kTimek
+         printks    "Time = %f%n%n", 0, kTimes
 endin
 </CsInstruments>
 <CsScore>
-i 1 0 1
+i 1 0 10
 </CsScore>
 </CsoundSynthesizer>
 

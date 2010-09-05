@@ -6,20 +6,32 @@ see http://en.flossmanuals.net/bin/view/Csound/InitAndPerfPass
 </CsOptions>
 <CsInstruments>
 sr = 44100
-ksmps = 441
+ksmps = 128 ;increase or decrease to hear the difference more or less evident
 nchnls = 2
 0dbfs = 1
-instr 1
-iAmp      =         p4 ;amplitude taken from the 4th parameter of the score line
-iFreq     =         p5 ;frequency taken from the 5th parameter
-kPan      line      0, p3, 1 ;move from 0 to 1 in the duration of this instrument call (p3)
-aNote     oscils    iAmp, iFreq, 0 ;create an audio signal
-aL, aR    pan2      aNote, kPan ;let the signal move from left to right
-          outs      aL, aR ;write it to the output
+
+instr 1 ;envelope at k-time
+aSine     oscils    .5, 800, 0
+kEnv      transeg   0, .1, 5, 1, .1, -5, 0
+aOut      =         aSine * kEnv
+          outs      aOut, aOut
 endin
+
+instr 2 ;envelope at a-time
+aSine     oscils    .5, 800, 0
+aEnv      transeg   0, .1, 5, 1, .1, -5, 0
+aOut      =         aSine * aEnv
+          outs      aOut, aOut
+endin
+
 </CsInstruments>
 <CsScore>
-i 1 0 3 0.2 443
+r 5 ;repeat the following line 5 times
+i 1 0 1
+s ;end of section
+r 5
+i 2 0 1
+e
 </CsScore>
 </CsoundSynthesizer>
 
@@ -43,4 +55,3 @@ i 1 0 3 0.2 443
 <MacGUI>
 ioView background {59117, 36032, 9346}
 </MacGUI>
-

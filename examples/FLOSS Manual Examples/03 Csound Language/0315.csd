@@ -1,14 +1,19 @@
-see http://en.flossmanuals.net/bin/view/Csound/MakeCsoundRun
+see http://en.flossmanuals.net/bin/view/Csound/LOCALANDGLOBALVARIABLES
 
 <CsoundSynthesizer>
-<CsOptions>
--odac
-</CsOptions>
 <CsInstruments>
-instr 1
-aSin      oscils    0dbfs/4, 440, 0
-          out       aSin
-endin
+sr = 44100
+ksmps = 4410; very high because of printing
+nchnls = 2
+0dbfs = 1
+
+  instr 1
+kSum      init      0; sum is zero at init pass
+kAdd      =         1; control signal to add
+kSum      =         kSum + kAdd; new sum in each k-cycle
+          printk    0, kSum; print the sum
+  endin
+
 </CsInstruments>
 <CsScore>
 i 1 0 1

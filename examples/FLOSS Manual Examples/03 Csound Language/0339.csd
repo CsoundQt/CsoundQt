@@ -1,17 +1,31 @@
-see http://en.flossmanuals.net/bin/view/Csound/MakeCsoundRun
+see http://en.flossmanuals.net/bin/view/Csound/CONTROLSTRUCTURES
 
 <CsoundSynthesizer>
 <CsOptions>
 -odac
 </CsOptions>
 <CsInstruments>
-instr 1
-aSin      oscils    0dbfs/4, 440, 0
-          out       aSin
-endin
+sr = 44100
+ksmps = 32
+nchnls = 2
+0dbfs = 1
+
+  instr 1; triggering instrument
+kTrig     metro     2; outputs "1" twice a second
+ if kTrig == 1 then
+          event     "i", 2, 0, 1
+ endif
+  endin
+
+  instr 2; triggered instrument
+aSig      oscils    .2, 400, 0
+aEnv      transeg   1, p3, -10, 0
+          outs      aSig*aEnv, aSig*aEnv
+  endin
+
 </CsInstruments>
 <CsScore>
-i 1 0 1
+i 1 0 10
 </CsScore>
 </CsoundSynthesizer>
 

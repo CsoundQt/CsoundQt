@@ -1,17 +1,27 @@
-see http://en.flossmanuals.net/bin/view/Csound/MakeCsoundRun
+see http://en.flossmanuals.net/bin/view/Csound/CONFIGURINGMIDI
 
 <CsoundSynthesizer>
 <CsOptions>
--odac
+-+rtmidi=virtual -M1 -odac
 </CsOptions>
 <CsInstruments>
+
+sr = 44100
+ksmps = 32
+nchnls = 2
+0dbfs = 1
+
+giSine ftgen 0,0,2^10,10,1
+
 instr 1
-aSin      oscils    0dbfs/4, 440, 0
-          out       aSin
+kFreq ctrl7  1, 1, 220, 440 ;receive controller number 1 on channel 1 and scale from 220 to 440
+aOut  poscil 0.2, kFreq, giSine ;use this value as varying frequency for a sine wave
+      outs   aOut, aOut
 endin
 </CsInstruments>
 <CsScore>
-i 1 0 1
+i 1 0 60
+e
 </CsScore>
 </CsoundSynthesizer>
 

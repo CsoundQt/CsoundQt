@@ -1,17 +1,15 @@
-see http://en.flossmanuals.net/bin/view/Csound/MakeCsoundRun
+see http://en.flossmanuals.net/bin/view/Csound/LIVEAUDIO
 
 <CsoundSynthesizer>
 <CsOptions>
--odac
+-iadc999 -odac999
 </CsOptions>
 <CsInstruments>
 instr 1
-aSin      oscils    0dbfs/4, 440, 0
-          out       aSin
 endin
 </CsInstruments>
 <CsScore>
-i 1 0 1
+e
 </CsScore>
 </CsoundSynthesizer>
 

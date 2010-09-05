@@ -1,14 +1,19 @@
-see http://en.flossmanuals.net/bin/view/Csound/MakeCsoundRun
+see http://en.flossmanuals.net/bin/view/Csound/InitAndPerfPass
 
 <CsoundSynthesizer>
-<CsOptions>
--odac
-</CsOptions>
 <CsInstruments>
+sr = 44100
+ksmps = 4410
+
 instr 1
-aSin      oscils    0dbfs/4, 440, 0
-          out       aSin
+icount    init      0; set icount to 0 first
+new:
+icount    =         icount + 1; increase
+          print     icount; print the value
+          reinit    new; reinit the section each k-pass
+          rireturn
 endin
+
 </CsInstruments>
 <CsScore>
 i 1 0 1
