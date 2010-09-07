@@ -22,7 +22,7 @@
 
 #include "inspector.h"
 
-#include <QtCore>
+#include <QtGui>
 
 Inspector::Inspector(QWidget *parent)
   : QDockWidget(parent)
