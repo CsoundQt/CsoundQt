@@ -122,8 +122,7 @@ void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 {
   QScrollArea *s = (QScrollArea*) stack->currentWidget();
-  if (!s) // scroll area is sometimes null during startup and shutdown
-      return;
+  Q_ASSERT(s != 0);
   static_cast<WidgetLayout *>(s->widget())->createContextMenu(event);
 }
 
@@ -132,7 +131,10 @@ void WidgetPanel::resizeEvent(QResizeEvent * event)
 //   qDebug( ) << "WidgetPanel::resizeEvent() " << event->oldSize() << event->size() ;
   QDockWidget::resizeEvent(event);
   oldSize = event->oldSize();
-  emit resized(event->size());
+  QScrollArea *s = (QScrollArea*) stack->currentWidget();
+  if (s != 0) {
+    emit resized(s->maximumViewportSize());
+  }
 //  adjustLayoutSize();
 }
 

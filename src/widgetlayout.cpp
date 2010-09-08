@@ -138,8 +138,6 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   recallPresetAct = new QAction(tr("Recall Preset"), this);
   connect(recallPresetAct, SIGNAL(triggered()), this, SLOT(loadPreset()));
 
-  connect(this, SIGNAL(resized()), this, SLOT(layoutResized()));
-
   setFocusPolicy(Qt::StrongFocus);
 
   setMouseTracking(true);
@@ -191,6 +189,8 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
   clearWidgetLayout();
   QDomDocument doc;
   if (!doc.setContent(xmlWidgets)) {
+    QMessageBox::warning(this, tr("Widget Error"),
+                         tr("Widgets can't be read! No widgets created."));
     qDebug() << "WidgetLayout::loadXmlWidgets Error parsing xml text! Aborting.";
     return;
   }
@@ -432,6 +432,13 @@ void WidgetLayout::setOuterGeometry(int newx, int newy, int neww, int newh)
   if (!m_contained) {
     this->move(m_x, m_y);
     this->resize(m_w,m_h);
+  }
+  else {
+    QSize s = getUsedSize();
+    int neww, newh;
+    neww = m_w < s.width() ? s.width() : m_w;
+    newh = m_h < s.height() ? s.height() : m_h;
+    this->resize(neww,newh);
   }
 }
 
@@ -1322,11 +1329,9 @@ void WidgetLayout::mouseMoveEventParent(QMouseEvent *event)
   WidgetLayout::mouseMoveEvent(event);
 }
 
-void WidgetLayout::adjustLayoutSize()
+QSize WidgetLayout::getUsedSize()
 {
   int width = 30, height = 30;
-  // This function should not be locked as it is sometimes called from another function that locks.
-//  widgetsMutex.lock();
   for (int i = 0; i< m_widgets.size(); i++) {
     if (m_widgets[i]->x() + m_widgets[i]->width() > width) {
       width = m_widgets[i]->x() + m_widgets[i]->width();
@@ -1335,9 +1340,23 @@ void WidgetLayout::adjustLayoutSize()
       height = m_widgets[i]->y() + m_widgets[i]->height();
     }
   }
+  return QSize(width, height);
+}
+
+void WidgetLayout::adjustLayoutSize()
+{
+  // This function should not be locked as it is sometimes called from another function that locks.
+//  widgetsMutex.lock();
+  QSize s = getUsedSize();
 //  widgetsMutex.unlock();
-  this->resize(width, height);
-  emit resized();
+  if (this->size() != s) {
+    this->resize(s);
+    if (!m_contained) {
+      QRect r = this->geometry();
+  //    qDebug() << "WidgetLayout::layoutResized()" <<r.width() << r.height() ;
+      setOuterGeometry(r.x(), r.y(), r.width(), r.height());
+    }
+  }
 }
 
 void WidgetLayout::selectionChanged(QRect selection)
@@ -2074,6 +2093,20 @@ void WidgetLayout::contextMenuEvent(QContextMenuEvent *event)
     createContextMenu(event);
     event->accept();
   }
+}
+
+void WidgetLayout::resizeEvent(QResizeEvent * event)
+{
+  QWidget::resizeEvent(event);
+  QSize s = event->size();
+  setOuterGeometry(-1, -1, s.width(), s.height());
+}
+
+void WidgetLayout::moveEvent(QMoveEvent * event)
+{
+  QWidget::moveEvent(event);
+  QPoint p = event->pos();
+  setOuterGeometry(p.x(), p.y(), -1, -1);
 }
 
 int WidgetLayout::parseXmlNode(QDomNode node)
@@ -3412,14 +3445,4 @@ void WidgetLayout::updateData()
   layoutMutex.unlock();
   closing = 0;
   updateTimer.singleShot(30, this, SLOT(updateData()));
-}
-
-void WidgetLayout::layoutResized()
-{
-//  qDebug() << "WidgetLayout::layoutResized()";
-  if (!m_contained) {
-    QRect r = this->geometry();
-    qDebug() << "WidgetLayout::layoutResized()" <<r.width() << r.height() ;
-    setOuterGeometry(r.x(), r.y(), r.width(), r.height());
-  }
 }

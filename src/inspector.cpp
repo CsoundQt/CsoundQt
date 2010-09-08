@@ -116,6 +116,7 @@ void Inspector::parseText(const QString &text)
       QStringList columnslist(text.simplified());
       TreeItem *newItem = new TreeItem(treeItem1, columnslist);
       newItem->setLine(i + 1);
+      currentInstrument = newItem;
     }
     else if (lines[i].trimmed().startsWith("#define") or lines[i].trimmed().startsWith("# define")) {
       QString text = lines[i].trimmed();
@@ -137,7 +138,7 @@ void Inspector::parseText(const QString &text)
       TreeItem *newItem = new TreeItem(treeItem5, columnslist);
       newItem->setLine(i + 1);
     }
-    else if (lines[i].trimmed().contains(QRegExp("\\w+:"))) {
+    else if (lines[i].trimmed().contains(QRegExp("[^;]\\w+:"))) {
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
       if (currentInstrument != 0) {

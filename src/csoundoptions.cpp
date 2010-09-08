@@ -93,7 +93,7 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
     list << "--env:SSDIR='" + ssdir + "'";
   if (sfdirActive)
     list << "--env:SFDIR='" + sfdir + "'";
-  if (ssdirActive)
+  if (incdirActive)
     list << "--env:INCDIR='" + incdir + "'";
   list << "--env:CSNOSTOP=yes";
   return list;

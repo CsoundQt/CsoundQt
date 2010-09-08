@@ -1477,8 +1477,8 @@ void DocumentPage::setWidgetPanelPosition(QPoint position)
 
 void DocumentPage::setWidgetPanelSize(QSize size)
 {
-  // TODO move this so that only updated when needed (e.g. full text read)
   //FIXME allow multiple layouts
+//  qDebug("DocumentPage::setWidgetPanelSize() %i %i", size.width(), size.height());
   m_widgetLayouts[0]->setOuterGeometry(-1, -1, size.width(), size.height());
   int index = m_macOptions.indexOf(QRegExp("WindowBounds: .*"));
   if (index < 0) {
@@ -1492,8 +1492,6 @@ void DocumentPage::setWidgetPanelSize(QSize size)
   newline += QString::number(size.width()) + " ";
   newline += QString::number(size.height());
   m_macOptions[index] = newline;
-
-//   qDebug("DocumentPage::setWidgetPanelSize() %i %i", size.width(), size.height());
 }
 
 void DocumentPage::setWidgetEditMode(bool active)

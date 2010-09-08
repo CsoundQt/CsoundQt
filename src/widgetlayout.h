@@ -200,6 +200,7 @@ class WidgetLayout : public QWidget
     void mouseReleaseEventParent(QMouseEvent *event);
     void mouseMoveEventParent(QMouseEvent *event);
     void selectionChanged(QRect selection);
+    QSize getUsedSize();
     void adjustLayoutSize();
     void setModified(bool mod = true);
     void setMouseOffset(int x, int y);
@@ -254,6 +255,8 @@ class WidgetLayout : public QWidget
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);
+    virtual void resizeEvent (QResizeEvent * event);
+    virtual void moveEvent (QMoveEvent * event);
     QRubberBand *selectionFrame;
     int startx, starty;
 
@@ -347,13 +350,11 @@ class WidgetLayout : public QWidget
 
   private slots:
     void updateData();
-    void layoutResized();
 
   signals:
     void selection(QRect area);
     void keyPressed(QString key);
     void keyReleased(QString key);
-    void resized(); // To let widget panel know widget layout has changed size
     void changed(); // Should be triggered whenever widgets change, to let main document know
     void registerScope(QuteScope *scope);
     void registerGraph(QuteGraph *graph);

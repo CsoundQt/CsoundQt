@@ -55,7 +55,8 @@ void Console::appendMessage(QString msg)
      || msg.startsWith("orchname: ") || msg.startsWith("scorename: ")
      || msg.startsWith("PortMIDI real time MIDI plugin for Csound")
     || msg.startsWith("PortAudio real-time audio module for Csound")
-    || msg.startsWith("virtual_keyboard real time MIDI plugin for Csound") ) {
+    || msg.startsWith("virtual_keyboard real time MIDI plugin for Csound")
+    || msg.startsWith("Removing temporary file") ) {
     return;
   }
   CursorUpdater cursorUpdater(*this);
