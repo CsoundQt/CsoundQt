@@ -16,21 +16,21 @@ giSine    ftgen     0, 0, 2^10, 10, 1 ;sine table
 instr 1 ;i-rate random
 iPch      random    300, 600
 aAmp      linseg    .5, p3, 0
-aSine     oscil3    aAmp, iPch, giSine
+aSine     poscil    aAmp, iPch, giSine
           outs      aSine, aSine
 endin
 
 instr 2 ;k-rate random: noisy
 kPch      random    300, 600
 aAmp      linseg    .5, p3, 0
-aSine     oscil3    aAmp, kPch, giSine
+aSine     poscil    aAmp, kPch, giSine
           outs      aSine, aSine
 endin
 
 instr 3 ;k-rate random with interpolation: sliding pitch
 kPch      randomi   300, 600, 3
 aAmp      linseg    .5, p3, 0
-aSine     oscil3    aAmp, kPch, giSine
+aSine     poscil    aAmp, kPch, giSine
           outs      aSine, aSine
 endin
 

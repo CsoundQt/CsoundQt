@@ -30,7 +30,7 @@ ifreq2    =         ifreq1 - idiff; final frequency
 kFreq     expseg    ifreq1, p3, ifreq2; glissando
 iMaxdb    random    -12, 0; peak randomly between -12 and 0 dB
 kAmp      transeg   ampdb(iMaxdb), p3, -10, 0; envelope
-aTone     oscil3    kAmp, kFreq, giSine
+aTone     poscil    kAmp, kFreq, giSine
           outs      aTone, aTone
   endin
 
@@ -39,7 +39,6 @@ aTone     oscil3    kAmp, kFreq, giSine
 i 1 0 30
 </CsScore>
 </CsoundSynthesizer>  
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -58,5 +57,5 @@ i 1 0 30
 <bsbPresets>
 </bsbPresets>
 <MacGUI>
-ioView background {59117, 36032, 9346}
+ioView background {59110, 35980, 9252}
 </MacGUI>
