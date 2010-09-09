@@ -2469,6 +2469,7 @@ void qutecsound::createMenus()
   QStringList featuresFiles;
   QStringList flossman02Files;
   QStringList flossman03Files;
+  QStringList flossman07Files;
   QStringList widgetFiles;
   QStringList synthFiles;
   QStringList musicFiles;
@@ -2638,6 +2639,8 @@ void qutecsound::createMenus()
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
 
+  QMenu *flossmanMenu = examplesMenu->addMenu(tr("FLOSS Manual Examples"));
+
   flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/0201.csd");
   flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/0202.csd");
   flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/0203.csd");
@@ -2648,7 +2651,6 @@ void qutecsound::createMenus()
   flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/0208.csd");
   flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/0209.csd");
 
-  QMenu *flossmanMenu = examplesMenu->addMenu(tr("FLOSS Manual Examples"));
   submenu = flossmanMenu->addMenu(tr("02 Quick Start"));
   foreach (QString fileName, flossman02Files) {
     QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
@@ -2738,6 +2740,25 @@ void qutecsound::createMenus()
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
 
+  flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/0701.csd");
+  flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/0702.csd");
+  flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/0703.csd");
+  flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/0704.csd");
+  flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/0705.csd");
+  flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/0706.csd");
+  flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/0707.csd");
+  flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/0708.csd");
+  flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/0709.csd");
+  flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/0710.csd");
+  flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/0711.csd");
+
+  submenu = flossmanMenu->addMenu(tr("07 MIDI"));
+  foreach (QString fileName, flossman07Files) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
 
   for (int i = 0; i < subMenus.size(); i++) {
     submenu = examplesMenu->addMenu(subMenuNames[i]);
