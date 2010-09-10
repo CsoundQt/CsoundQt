@@ -385,8 +385,28 @@ void QuteButton::buttonReleased()
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
-  if (type == "event" or type == "pictevent")
-    emit(queueEvent(eventLine));
+  if (type == "event" or type == "pictevent") {
+     if (property("QCS_latch").toBool() && eventLine.size() > 0) {
+       QStringList lineElements = eventLine.split(QRegExp("[i ]"),QString::SkipEmptyParts);
+       lineElements[0].remove("i");
+       if (lineElements.size() > 2 && lineElements[2].toDouble() < 0) { // If duration is negative, use button to turn note on and off
+         if (m_currentValue == 0) { // Button has turned off. Turn off instrument
+           lineElements[0].prepend("-");
+           lineElements.prepend("i");
+           emit(queueEvent(lineElements.join(" ")));
+         }
+         else { // Button has turned on. Turn on instrument
+           emit(queueEvent(eventLine));
+         }
+       }
+       else {
+         emit(queueEvent(eventLine));
+       }
+     }
+     else {
+       emit(queueEvent(eventLine));
+     }
+  }
   else if (type == "value" or type == "pictvalue") {
     if (name == "_Play" &&  value == 1)
       emit play();
