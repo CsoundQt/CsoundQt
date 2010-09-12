@@ -84,7 +84,7 @@ class WidgetLayout : public QWidget
     // Properties
     bool getOpenProperties() { return m_openProperties; }
     void setOpenProperties(bool open) {m_openProperties = open; }
-    void setOuterGeometry(int newx, int newy, int neww, int newh); // Will only set if component >= 0
+    void setOuterGeometry(int newx = -1 , int newy = -1 , int neww = -1, int newh = -1); // Will only set if component >= 0
     QRect getOuterGeometry();
 
 //    void getValues(QVector<QString> *channelNames,
@@ -255,8 +255,9 @@ class WidgetLayout : public QWidget
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);
-    virtual void resizeEvent (QResizeEvent * event);
-    virtual void moveEvent (QMoveEvent * event);
+    virtual void resizeEvent(QResizeEvent * event);
+    virtual void moveEvent(QMoveEvent * event);
+//    virtual void showEvent(QShowEvent * event);
     QRubberBand *selectionFrame;
     int startx, starty;
 
@@ -276,7 +277,7 @@ class WidgetLayout : public QWidget
     unsigned long m_ksmpscount;  // Ksmps counter for Csound engine (Really needed here?)
 
     // Properties of the panel (saved to xml file)
-    int m_x, m_y, m_w, m_h; // Position and size of panel (not this widget)
+    int m_posx, m_posy, m_w, m_h; // Position and size of panel (not this widget)
     QString m_objectName;
     QString m_uuid;
     bool m_visible;

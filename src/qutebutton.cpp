@@ -388,7 +388,6 @@ void QuteButton::buttonReleased()
   if (type == "event" or type == "pictevent") {
      if (property("QCS_latch").toBool() && eventLine.size() > 0) {
        QStringList lineElements = eventLine.split(QRegExp("[i ]"),QString::SkipEmptyParts);
-       lineElements[0].remove("i");
        if (lineElements.size() > 2 && lineElements[2].toDouble() < 0) { // If duration is negative, use button to turn note on and off
          if (m_currentValue == 0) { // Button has turned off. Turn off instrument
            lineElements[0].prepend("-");

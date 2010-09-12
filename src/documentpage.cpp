@@ -43,7 +43,7 @@
 
 // TODO is is possible to move the editor to a separate child class, to be able to use a cleaner class?
 DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
-    QObject(parent), m_csEngine(0), m_opcodeTree(opcodeTree)
+    BaseDocument(parent), m_opcodeTree(opcodeTree)
 {
   fileName = "";
   companionFile = "";
@@ -53,12 +53,15 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   //TODO this should be set from QuteCsound configuration
   saveLiveEvents = true;
 
-  m_view = new DocumentView(parent);
   m_view->setOpcodeTree(m_opcodeTree);
   connect(m_view, SIGNAL(evaluate(QString)), this, SLOT(evaluatePython(QString)));
 
   m_console = new ConsoleWidget(0);
   m_console->setReadOnly(true);
+  connect(m_console, SIGNAL(keyPressed(QString)),
+          m_csEngine, SLOT(keyPressForCsound(QString)));
+  connect(m_console, SIGNAL(keyReleased(QString)),
+          m_csEngine, SLOT(keyReleaseForCsound(QString)));
 
 //  m_widgetLayout->show();
   m_liveEventControl = new LiveEventControl(parent);
@@ -76,17 +79,12 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
   connect(m_liveEventControl, SIGNAL(setPanelLoopLengthSignal(int,double)), this, SLOT(setPanelLoopLengthSlot(int,double)));
   connect(m_liveEventControl, SIGNAL(setPanelLoopRangeSignal(int,double,double)), this, SLOT(setPanelLoopRangeSlot(int,double,double)));
 
-  m_csEngine = new CsoundEngine();
 
   // Connect for clearing marked lines and letting inspector know text has changed
   connect(m_view, SIGNAL(contentsChanged()), this, SLOT(textChanged()));
   connect(m_view, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(opcodeSyntax(QString)));
 //   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(moved()));
 
-  connect(m_console, SIGNAL(keyPressed(QString)),
-          m_csEngine, SLOT(keyPressForCsound(QString)));
-  connect(m_console, SIGNAL(keyReleased(QString)),
-          m_csEngine, SLOT(keyReleaseForCsound(QString)));
   connect(m_csEngine, SIGNAL(errorLines(QList<QPair<int, QString> >)),
           m_view, SLOT(markErrorLines(QList<QPair<int, QString> >)));
   connect(m_csEngine, SIGNAL(stopSignal()),
@@ -111,91 +109,49 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
 DocumentPage::~DocumentPage()
 {
 //  qDebug() << "DocumentPage::~DocumentPage()";
-//  m_csEngine->qTimer.stop();
   disconnect(m_console, 0,0,0);
   disconnect(m_view, 0,0,0);
-  disconnect(m_csEngine, 0,0,0);
-//  disconnect(m_widgetLayout, 0,0,0);
-  m_csEngine->stop();
-  m_csEngine->freeze();
-//  m_view->deleteLater();   // Crashes. Already destroyed?
-//  m_widgetLayout->setParent(0);  //To make sure the widget panel from the main application doesn't attempt to delete it as its child
-  while (!m_widgetLayouts.isEmpty()) {
-    WidgetLayout *wl = m_widgetLayouts.takeLast();
-    wl->deleteLater();  //FIXME Still crashing ocassionally?
-  }
-  m_csEngine->deleteLater();
 //  deleteAllLiveEvents(); // FIXME This is also crashing...
 }
 
-//void DocumentPage::keyPressEvent(QKeyEvent *event)
-//{
-//  qDebug() << "DocumentPage::keyPressEvent " << event->key();
-//  // TODO is this function necessary any more?
-//  if (event == QKeySequence::Cut)
-//  {
-//    emit doCut();
-//    return;
-//  }
-//  if (event == QKeySequence::Copy)
-//  {
-//    emit doCopy();
-//    return;
-//  }
-//  if (event == QKeySequence::Paste)
-//  {
-//    emit doPaste();
-//    return;
-//  }
-////  QTextEdit::keyPressEvent(event);
-//}
+void DocumentPage::setFileName(QString name)
+{
+  fileName = name;
+  if (name.endsWith(".csd") || name.isEmpty()) {
+    m_view->setFileType(0);
+  }
+  else if (name.endsWith(".py")) {
+    m_view->setFileType(1);
+  }
+  else if (name.endsWith(".xml")) {
+    m_view->setFileType(2);
+  }
+  else if (name.endsWith(".orc")) {
+    m_view->setFileType(3);
+  }
+  else if (name.endsWith(".sco")) {
+    m_view->setFileType(4);
+  }
+  else {
+    m_view->setFileType(-1);
+  }
+}
 
-//void DocumentPage::closeEvent(QCloseEvent *event)
-//{
-//  qDebug() << "DocumentPage::closeEvent";
-//  QTextEdit::closeEvent(event);
-//}
+void DocumentPage::setCompanionFileName(QString name)
+{
+  companionFile = name;
+}
 
 int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 {
-//  qDebug() << "---- DocumentPage::setTextString";
   int ret = 0;
   deleteAllLiveEvents();
-  bool xmlFormatFound = false;
   if (!fileName.endsWith(".csd") && !fileName.isEmpty()) {
     m_view->setFullText(text, true); // Put all text since not a csd file (and not default file which has no name)
     m_view->setModified(false);
     return ret;
   }
-  QString xmlPanels = QString();
-  while (text.contains("<bsbPanel") and text.contains("</bsbPanel>")) {
-    QString panel = text.right(text.size()-text.indexOf("<bsbPanel"));
-    panel.resize(panel.indexOf("</bsbPanel>") + 11);
-    if (text.indexOf("</bsbPanel>") + 11 < text.size() and text[text.indexOf("</bsbPanel>") + 13] == '\n')
-      text.remove(text.indexOf("</bsbPanel>") + 13, 1); //remove final line break
-    if (text.indexOf("<bsbPanel") > 0 and text[text.indexOf("<bsbPanel") - 1] == '\n')
-      text.remove(text.indexOf("<bsbPanel") - 1, 1); //remove initial line break
-    text.remove(text.indexOf("<bsbPanel"), panel.size());
-    xmlFormatFound = true;
-    xmlPanels += panel;
-    // TODO enable creation of several panels
-  }
-  if (xmlFormatFound) {
-    //FIXME allow multiple layouts
-    m_widgetLayouts[0]->loadXmlWidgets(xmlPanels);
-    m_widgetLayouts[0]->markHistory();
-  }
-  if (text.contains("<bsbPresets>") and text.contains("</bsbPresets>")) {
-    QString presets = text.right(text.size()-text.indexOf("<bsbPresets>"));
-    presets.resize(presets.indexOf("</bsbPresets>") + 13);
-    if (text.indexOf("</bsbPresets>") + 13 < text.size() and text[text.indexOf("</bsbPresets>") + 15] == '\n')
-      text.remove(text.indexOf("</bsbPresets>") + 15, 1); //remove final line break
-    if (text.indexOf("<bsbPresets>") > 0 and text[text.indexOf("<bsbPresets>") - 1] == '\n')
-      text.remove(text.indexOf("<bsbPresets>") - 1, 1); //remove initial line break
-    text.remove(text.indexOf("<bsbPresets>"), presets.size());
-    //FIXME allow multiple
-    m_widgetLayouts[0]->loadXmlPresets(presets);
-  }
+  int baseRet = BaseDocument::setTextString(text);
   if (text.contains("<MacOptions>") and text.contains("</MacOptions>")) {
     QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
     options.resize(options.indexOf("</MacOptions>") + 13);
@@ -207,20 +163,6 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     text.remove(text.indexOf("<MacOptions>"), options.size());
     //     qDebug("<MacOptions> present. %s", getMacOptions("WindowBounds").toStdString().c_str());
     m_macOptions = options.split('\n');
-    if (!xmlFormatFound) {
-      applyMacOptions(m_macOptions);
-      qDebug("<MacOptions> loaded.");
-    }
-  }
-  else {
-    if (autoCreateMacCsoundSections && !xmlFormatFound) {
-      QString defaultMacOptions = "<MacOptions>\nVersion: 3\nRender: Real\nAsk: Yes\nFunctions: ioObject\nListing: Window\nWindowBounds: 72 179 400 200\nCurrentView: io\nIOViewEdit: On\nOptions:\n</MacOptions>\n";
-      m_macOptions = defaultMacOptions.split('\n');
-      applyMacOptions(m_macOptions);
-    }
-    else {
-      m_macOptions = QStringList();
-    }
   }
   if (text.contains("<MacPresets>") and text.contains("</MacPresets>")) {
     m_macPresets = text.right(text.size()-text.indexOf("<MacPresets>"));
@@ -230,27 +172,27 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     if (text.indexOf("<MacPresets>") > 0 and text[text.indexOf("<MacPresets>") - 1] == '\n')
       text.remove(text.indexOf("<MacPresets>") - 1, 1); //remove initial line break
     text.remove(text.indexOf("<MacPresets>"), m_macPresets.size());
-//    qDebug("<MacPresets> present.");
+    //    qDebug("<MacPresets> present.");
   }
   else {
     m_macPresets = "";
   }
   if (text.contains("<MacGUI>") and text.contains("</MacGUI>")) {
-      QString m_macGUI = text.right(text.size()-text.indexOf("<MacGUI>"));
-      m_macGUI.resize(m_macGUI.indexOf("</MacGUI>") + 9);
-      if (text.indexOf("</MacGUI>") + 9 < text.size() and text[text.indexOf("</MacGUI>") + 9] == '\n')
-        text.remove(text.indexOf("</MacGUI>") + 9, 1); //remove final line break
-      if (text.indexOf("<MacGUI>") > 0 and text[text.indexOf("<MacGUI>") - 1] == '\n')
-        text.remove(text.indexOf("<MacGUI>") - 1, 1); //remove initial line break
-      text.remove(m_macGUI);
-      if (!xmlFormatFound) {
-        //FIXME allow multiple
-        m_widgetLayouts[0]->loadMacWidgets(m_macGUI);
-        qDebug("<MacGUI> loaded.");
-      }
+    QString m_macGUI = text.right(text.size()-text.indexOf("<MacGUI>"));
+    m_macGUI.resize(m_macGUI.indexOf("</MacGUI>") + 9);
+    if (text.indexOf("</MacGUI>") + 9 < text.size() and text[text.indexOf("</MacGUI>") + 9] == '\n')
+      text.remove(text.indexOf("</MacGUI>") + 9, 1); //remove final line break
+    if (text.indexOf("<MacGUI>") > 0 and text[text.indexOf("<MacGUI>") - 1] == '\n')
+      text.remove(text.indexOf("<MacGUI>") - 1, 1); //remove initial line break
+    text.remove(m_macGUI);
+    if (baseRet != 1) {
+      //FIXME allow multiple
+      m_widgetLayouts[0]->loadMacWidgets(m_macGUI);
+      qDebug("<MacGUI> loaded.");
+    }
   }
   else {
-    if (autoCreateMacCsoundSections && !xmlFormatFound) {
+    if (autoCreateMacCsoundSections && baseRet != 1) {
       QString m_macGUI = "<MacGUI>\nioView nobackground {59352, 11885, 65535}\nioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1\n</MacGUI>";
       //FIXME allow multiple
       m_widgetLayouts[0]->loadMacWidgets(m_macGUI);
@@ -259,35 +201,43 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
       m_macGUI = "";
     }
   }
-  if (!xmlFormatFound) {  // Use the old options only if the new ones are not present
+if (baseRet != 1) {  // Use the old options only if the new ones are not present
   // This here is for compatibility with MacCsound (copy output filename from <MacOptions> to <CsOptions>)
-    QString optionsText = getMacOptions("Options:");
-    if (optionsText.contains(" -o")) {
-      QString outFile = optionsText.mid(optionsText.indexOf(" -o") + 1);
-      int index = outFile.indexOf(" -");
-      if (index > 0) {
-        outFile = outFile.left(index);
-      }
-      optionsText.remove(outFile);
-      setMacOption("Options:", optionsText);
-      index = text.indexOf("<CsOptions>");
-      int endindex = text.indexOf("</CsOptions>");
-      if (index >= 0 and endindex > index) {
-        text.remove(index, endindex - index);
-        text.insert(index, "<CsOptions>\n" + outFile);
-      }
-      else {
-        index = text.indexOf("<CsInstruments>");
-        text.insert(index, "<CsOptions>\n" + outFile + "\n</CsOptions>\n");
-      }
+  QString optionsText = getMacOptions("Options:");
+  if (optionsText.contains(" -o")) {
+    QString outFile = optionsText.mid(optionsText.indexOf(" -o") + 1);
+    int index = outFile.indexOf(" -");
+    if (index > 0) {
+      outFile = outFile.left(index);
     }
-    ret = 1;
+    optionsText.remove(outFile);
+    setMacOption("Options:", optionsText);
+    index = text.indexOf("<CsOptions>");
+    int endindex = text.indexOf("</CsOptions>");
+    if (index >= 0 and endindex > index) {
+      text.remove(index, endindex - index);
+      text.insert(index, "<CsOptions>\n" + outFile);
+    }
+    else {
+      index = text.indexOf("<CsInstruments>");
+      text.insert(index, "<CsOptions>\n" + outFile + "\n</CsOptions>\n");
+    }
   }
-  if (!text.contains("<CsoundSynthesizer>") &&
-      !text.contains("</CsoundSynthesizer>") ) { // When not a csd file
-    m_view->setFullText(text, true);  // TODO do something different if not a csd file?
-    m_view->setModified(false);
-    return ret;  // Don't add live event panel if not a csd file.
+  ret = 1;
+}
+if (baseRet != 1) {
+  applyMacOptions(m_macOptions);
+    qDebug("<MacOptions> loaded.");
+  }
+  else {
+    if (autoCreateMacCsoundSections && baseRet==1) {
+      QString defaultMacOptions = "<MacOptions>\nVersion: 3\nRender: Real\nAsk: Yes\nFunctions: ioObject\nListing: Window\nWindowBounds: 72 179 400 200\nCurrentView: io\nIOViewEdit: On\nOptions:\n</MacOptions>\n";
+      m_macOptions = defaultMacOptions.split('\n');
+      applyMacOptions(m_macOptions);
+    }
+    else {
+      m_macOptions = QStringList();
+    }
   }
   // Load Live Event Panels ------------------------
   while (text.contains("<EventPanel") and text.contains("</EventPanel>")) {
@@ -298,7 +248,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     doc.setContent(liveEventsText);
     QDomElement panelElement = doc.firstChildElement("EventPanel");
     QString liveText = panelElement.text();
-//    qDebug() << "DocumentPage::setTextString   " << liveText;
+//    qDebug() << "BaseDocument::setTextString   " << liveText;
     QString panelName = panelElement.attribute("name","");
     double tempo = panelElement.attribute("tempo","60.0").toDouble();
     double loop = panelElement.attribute("loop","8.0").toDouble();
@@ -739,19 +689,6 @@ void DocumentPage::setModified(bool mod)
   }
 }
 
-WidgetLayout* DocumentPage::newWidgetLayout()
-{
-  WidgetLayout* wl = new WidgetLayout((QWidget *) this->parent());
-  qDebug() << "DocumentPage::newWidgetLayout()" << wl->windowFlags();
-  wl->setWindowFlags(Qt::Window | wl->windowFlags());
-  connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
-  connect(wl, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
-  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
-          this, SLOT(setWidgetClipboard(QString)));
-  connect(wl, SIGNAL(registerButton(QuteButton*)),
-          this, SLOT(registerButton(QuteButton*)));
-  return wl;
-}
 
 bool DocumentPage::isModified()
 {
@@ -821,33 +758,7 @@ void DocumentPage::setLineEnding(int lineEndingMode)
   m_lineEnding = lineEndingMode;
 }
 
-void DocumentPage::setFileName(QString name)
-{
-  fileName = name;
-  if (name.endsWith(".csd") || name.isEmpty()) {
-    m_view->setFileType(0);
-  }
-  else if (name.endsWith(".py")) {
-    m_view->setFileType(1);
-  }
-  else if (name.endsWith(".xml")) {
-    m_view->setFileType(2);
-  }
-  else if (name.endsWith(".orc")) {
-    m_view->setFileType(3);
-  }
-  else if (name.endsWith(".sco")) {
-    m_view->setFileType(4);
-  }
-  else {
-    m_view->setFileType(-1);
-  }
-}
 
-void DocumentPage::setCompanionFileName(QString name)
-{
-  companionFile = name;
-}
 
 void DocumentPage::copy()
 {
@@ -1270,46 +1181,37 @@ void DocumentPage::deleteAllLiveEvents()
   }
 }
 
+WidgetLayout* DocumentPage::newWidgetLayout()
+{
+  WidgetLayout* wl = new WidgetLayout(0);
+//  qDebug() << "BaseDocument::newWidgetLayout()" << wl->windowFlags();
+  wl->setWindowFlags(Qt::Window | wl->windowFlags());
+  connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
+  connect(wl, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
+  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
+          this, SLOT(setWidgetClipboard(QString)));
+  connect(wl, SIGNAL(registerButton(QuteButton*)),
+          this, SLOT(registerButton(QuteButton*)));
+  return wl;
+}
+
 int DocumentPage::play(CsoundOptions *options)
 {
   if (fileName.endsWith(".py")) {
     m_console->reset(); // Clear consoles
     return runPython();
   }
-  if (!m_csEngine->isRunning()) {
-    m_view->unmarkErrorLines();  // Clear error lines when running
-//    m_console->reset(); // Clear consoles
-    foreach (WidgetLayout *wl, m_widgetLayouts) {
-      wl->flush();   // Flush accumulated values
-      wl->clearGraphs();
-    }
+  else {
+    return BaseDocument::play(options);
   }
-  return m_csEngine->play(options);
-}
-
-void DocumentPage::pause()
-{
-  m_csEngine->pause();
 }
 
 void DocumentPage::stop()
 {
-//  qDebug() << "DocumentPage::stop()";
-  if (m_csEngine->isRunning()) {
-    m_csEngine->stop();
-    foreach (WidgetLayout *wl, m_widgetLayouts) {
-      wl->engineStopped();  // TODO only needed to flush graph buffer, but this should be moved to this class
-    }
-  }
+  BaseDocument::stop();
   if (m_pythonRunning == true) {
     m_pythonRunning = false;
   }
-
-}
-
-void DocumentPage::perfEnded()
-{
-  emit stopSignal();
 }
 
 int DocumentPage::record(int format)
@@ -1336,19 +1238,9 @@ int DocumentPage::record(int format)
   return m_csEngine->startRecording(format, recName);
 }
 
-void DocumentPage::stopRecording()
+void DocumentPage::perfEnded()
 {
-  m_csEngine->stopRecording();
-}
-
-void DocumentPage::playParent()
-{
-  static_cast<qutecsound *>(parent())->play();
-}
-
-void DocumentPage::renderParent()
-{
-  static_cast<qutecsound *>(parent())->render();
+  emit stopSignal();
 }
 
 int DocumentPage::runPython()
@@ -1387,7 +1279,7 @@ void DocumentPage::showWidgets(bool show)
     return;
   }
   foreach (WidgetLayout *wl, m_widgetLayouts) {
-    wl->show();
+    wl->setVisible(true);
     wl->raise();
   }
 }
@@ -1396,7 +1288,7 @@ void DocumentPage::hideWidgets()
 {
 //  qDebug() << " DocumentPage::hideWidgets()";
   foreach (WidgetLayout *wl, m_widgetLayouts) {
-    wl->hide();
+    wl->setVisible(false);
   }
 }
 
@@ -1477,6 +1369,7 @@ void DocumentPage::setWidgetPanelPosition(QPoint position)
 
 void DocumentPage::setWidgetPanelSize(QSize size)
 {
+  // Slot called from resizing Widget panel container
   //FIXME allow multiple layouts
 //  qDebug("DocumentPage::setWidgetPanelSize() %i %i", size.width(), size.height());
   m_widgetLayouts[0]->setOuterGeometry(-1, -1, size.width(), size.height());

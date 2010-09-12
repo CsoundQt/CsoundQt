@@ -23,10 +23,44 @@
 #ifndef BASEDOCUMENT_H
 #define BASEDOCUMENT_H
 
-class BaseDocument
+#include "types.h"
+#include "csoundoptions.h"
+
+#include <QWidget>
+
+class WidgetLayout;
+class CsoundEngine;
+class DocumentView;
+class QuteButton; // For registering buttons with main application
+
+class BaseDocument : public QWidget
 {
-public:
-    BaseDocument();
+  Q_OBJECT
+  public:
+    BaseDocument(QWidget *parent);
+    ~BaseDocument();
+
+    int setTextString(QString text);
+    virtual WidgetLayout* newWidgetLayout();
+
+  public slots:
+    int play(CsoundOptions *options);
+    void pause();
+    void stop();
+    int record(int mode); // 0=16 bit int  1=32 bit int  2=float
+    void stopRecording();
+//    void playParent(); // Triggered from button, ask parent for options
+//    void renderParent();
+
+    virtual void registerButton(QuteButton *button);
+
+  protected:
+    QList<WidgetLayout *> m_widgetLayouts;
+    DocumentView *m_view;
+    CsoundEngine *m_csEngine;
+
+  private:
+
 };
 
 #endif // BASEDOCUMENT_H

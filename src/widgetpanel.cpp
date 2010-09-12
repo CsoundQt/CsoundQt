@@ -135,7 +135,6 @@ void WidgetPanel::resizeEvent(QResizeEvent * event)
   if (s != 0) {
     emit resized(s->maximumViewportSize());
   }
-//  adjustLayoutSize();
 }
 
 void WidgetPanel::moveEvent(QMoveEvent * event)

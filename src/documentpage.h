@@ -23,38 +23,32 @@
 #ifndef DOCUMENTPAGE_H
 #define DOCUMENTPAGE_H
 
-#include <QWidget>
 #include <QTextEdit>
 #include <QDomElement>
 #include <QStack>
 #include <QDockWidget>
 
-#include "types.h"
-#include "csoundoptions.h"
+#include "basedocument.h"
 
 class OpEntryParser;
 class DocumentView;
-class WidgetLayout;
 class LiveEventFrame;
 class EventSheet;
-class CsoundEngine;
 class ConsoleWidget;
 class LiveEventControl;
 class SndfileHandle;
 
-class Curve;
-class QuteButton; // For registering buttons with main application
 
-//TODO when refactoring is done, organize the methods in the nice order
-
-class DocumentPage : public QObject
+class DocumentPage : public BaseDocument
 {
   Q_OBJECT
   public:
     DocumentPage(QWidget *parent, OpEntryParser *opcodeTree);
     ~DocumentPage();
 
-    // Needed for main application, but not for standalone
+    void setFileName(QString name);
+    int setTextString(QString text, bool autoCreateMacCsoundSections);
+    void setCompanionFileName(QString name);
     void setEditorFocus();
     void insertText(QString text, int section = -1);
     void setFullText(QString text);
@@ -79,6 +73,8 @@ class DocumentPage : public QObject
     QString getLiveEventsText();
     QString wordUnderCursor();
     QRect getWidgetPanelGeometry();
+
+    void setLineEnding(int lineEndingMode);
 
     void setChannelValue(QString channel, double value);
     double getChannelValue(QString channel);
@@ -126,13 +122,6 @@ class DocumentPage : public QObject
     void undo();
     void redo();
 
-    // Needed for both standalone and main application
-    int setTextString(QString text, bool autoCreateMacCsoundSections = true);
-
-    void setLineEnding(int lineEndingMode);
-
-    void setFileName(QString name);
-    void setCompanionFileName(QString name);
 
     // Get internal components
     DocumentView *getView();  // Needed to pass view for placing it as tab widget in main application
@@ -181,6 +170,8 @@ class DocumentPage : public QObject
     void useOldFormat(bool use);
     void setPythonExecutable(QString pythonExec);
 
+    virtual void registerButton(QuteButton *button);
+
     // Member public variables
     bool askForFile;
     bool readOnly; // Used for manual files and internal examples
@@ -190,13 +181,9 @@ class DocumentPage : public QObject
 
   public slots:
     int play(CsoundOptions *options);
-    void pause();
     void stop();
+    int record(int format);
     void perfEnded();
-    int record(int mode); // 0=16 bit int  1=32 bit int  2=float
-    void stopRecording();
-    void playParent(); // Triggered from button, ask parent for options
-    void renderParent();
     int runPython();  // Called when file is a python file
     void queueEvent(QString line, int delay = 0);
 
@@ -210,8 +197,6 @@ class DocumentPage : public QObject
     void setWidgetPanelPosition(QPoint position);
     void setWidgetPanelSize(QSize size);
     void setModified(bool mod = true);
-
-    WidgetLayout* newWidgetLayout();
 
     //Passed directly to widget layout
     void setWidgetEditMode(bool active);
@@ -244,8 +229,6 @@ class DocumentPage : public QObject
     void setPanelLoopLengthSlot(int index, double length);
     void setPanelLoopRangeSlot(int index, double start, double end);
 
-    void registerButton(QuteButton *button);
-
   protected:
 //    virtual void keyPressEvent(QKeyEvent *event);
 //    virtual void contextMenuEvent(QContextMenuEvent *event);
@@ -254,20 +237,17 @@ class DocumentPage : public QObject
   private:
     CsoundOptions getParentOptions();
     void deleteAllLiveEvents();
+    virtual WidgetLayout* newWidgetLayout();
 
     QString fileName;
     QString companionFile;
     QStringList m_macOptions;
     QString m_macPresets;
     QString m_macGUI;
-    QDomElement widgetsXml;
     bool m_pythonRunning;
 
     QString m_pythonExecutable;
 
-    QList<WidgetLayout *> m_widgetLayouts;
-    DocumentView *m_view;
-    CsoundEngine *m_csEngine;
     ConsoleWidget *m_console;
     QList<LiveEventFrame *> m_liveFrames;
     LiveEventControl *m_liveEventControl;
@@ -281,7 +261,6 @@ class DocumentPage : public QObject
 
   private slots:
     void textChanged();
-//    void liveEventFrameClosed();
     void liveEventControlClosed();
     void renamePanel(LiveEventFrame *panel,QString newName);
 

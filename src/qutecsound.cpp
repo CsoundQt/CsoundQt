@@ -404,7 +404,7 @@ void qutecsound::open()
         loadFile(fileName, true);
       }
       else {
-        bool hasCompanion = loadCompanionFile(fileName);
+        loadCompanionFile(fileName);
         loadFile(fileName, true);
       }
     }

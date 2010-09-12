@@ -46,7 +46,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 {
   selectionFrame = new QRubberBand(QRubberBand::Rectangle, this);
   selectionFrame->hide();
-  setOuterGeometry(100, 100, 100, 100);
+//  setOuterGeometry(100, 100, 100, 100);
   m_trackMouse = true;
   m_editMode = false;
   m_enableEdit = true;
@@ -232,7 +232,18 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
   if (m_editMode) {
     setEditMode(true);
   }
-  adjustLayoutSize();
+  setOuterGeometry();
+  if (!m_contained) {
+    this->move(m_posx, m_posy);
+    this->resize(m_w,m_h);
+  }
+  else {
+    QSize s = getUsedSize();
+    int neww, newh;
+    neww = m_w < s.width() ? s.width() : m_w;
+    newh = m_h < s.height() ? s.height() : m_h;
+    this->resize(neww,newh);
+  }
 }
 
 void WidgetLayout::loadXmlPresets(QString xmlPresets)
@@ -312,8 +323,8 @@ QString WidgetLayout::getWidgetsText()
   layoutMutex.lock();
   text += "<label>" + windowTitle() +"</label>\n";
   text += "<objectName>" + m_objectName +"</objectName>\n";
-  text += "<x>" +  QString::number(m_x) +"</x>\n";
-  text += "<y>" +  QString::number(m_y) +"</y>\n";
+  text += "<x>" +  QString::number(m_posx) +"</x>\n";
+  text += "<y>" +  QString::number(m_posy) +"</y>\n";
   text += "<width>" +  QString::number(m_w) +"</width>\n";
   text += "<height>" +  QString::number(m_h) +"</height>\n";
   text += "<visible>" + (m_visible ? QString("true"):QString("false")) +"</visible>\n";
@@ -425,26 +436,16 @@ void WidgetLayout::setKeyRepeatMode(bool repeat)
 
 void WidgetLayout::setOuterGeometry(int newx, int newy, int neww, int newh)
 {
-  m_x = newx >= 0 && newx < 4096? newx : m_x;
-  m_y = newy >= 0 && newy < 4096? newy : m_y;
+  qDebug() << "WidgetLayout::setOuterGeometry" << newx << newy << neww << newh;
+  m_posx = newx >= 0 && newx < 4096? newx : m_posx;
+  m_posy = newy >= 0 && newy < 4096? newy : m_posy;
   m_w = neww >= 0 && neww < 4096? neww : m_w;
   m_h = newh >= 0 && newh < 4096? newh : m_h;
-  if (!m_contained) {
-    this->move(m_x, m_y);
-    this->resize(m_w,m_h);
-  }
-  else {
-    QSize s = getUsedSize();
-    int neww, newh;
-    neww = m_w < s.width() ? s.width() : m_w;
-    newh = m_h < s.height() ? s.height() : m_h;
-    this->resize(neww,newh);
-  }
 }
 
 QRect WidgetLayout::getOuterGeometry()
 {
-  return QRect(m_x, m_y, m_w, m_h);
+  return QRect(m_posx, m_posy, m_w, m_h);
 }
 
 void WidgetLayout::setValue(QString channelName, QString value)
@@ -1350,11 +1351,11 @@ void WidgetLayout::adjustLayoutSize()
   QSize s = getUsedSize();
 //  widgetsMutex.unlock();
   if (this->size() != s) {
-    this->resize(s);
+//    this->resize(s);
     if (!m_contained) {
-      QRect r = this->geometry();
+//      QRect r = this->geometry();
   //    qDebug() << "WidgetLayout::layoutResized()" <<r.width() << r.height() ;
-      setOuterGeometry(r.x(), r.y(), r.width(), r.height());
+//      setOuterGeometry(r.x(), r.y(), r.width(), r.height());
     }
   }
 }
@@ -2109,6 +2110,12 @@ void WidgetLayout::moveEvent(QMoveEvent * event)
   setOuterGeometry(p.x(), p.y(), -1, -1);
 }
 
+//void WidgetLayout::showEvent(QShowEvent * event)
+//{
+//  QWidget::showEvent(event);
+//  setOuterGeometry();
+//}
+
 int WidgetLayout::parseXmlNode(QDomNode node)
 {
   int ret = 0;
@@ -2122,11 +2129,11 @@ int WidgetLayout::parseXmlNode(QDomNode node)
   }
   else if (name == "x") {
     int newx = node.firstChild().nodeValue().toInt();
-    m_x = newx >= 0 && newx < 4096? newx : m_x;
+    m_posx = newx >= 0 && newx < 4096? newx : m_posx;
   }
   else if (name == "y") {
     int newy = node.firstChild().nodeValue().toInt();
-    m_y = newy >= 0 && newy < 4096? newy : m_y;
+    m_posy = newy >= 0 && newy < 4096? newy : m_posy;
   }
   else if (name == "width") {
     int neww = node.firstChild().nodeValue().toInt();

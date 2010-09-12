@@ -191,10 +191,11 @@ void CsoundEngine::inputValueCallback(CSOUND *csound,
 //  }
 }
 
-void CsoundEngine::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *name)
+void CsoundEngine::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char * /*name*/)
 {
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
   // Csound reuses windat, so it is not guaranteed to be unique
+  // name seems not to be used.
 //  qDebug() << "CsoundEngine::makeGraph() " << windat << "  " << name<< windat->windid;
   ud->wl->appendCurve(windat);
 }
@@ -578,7 +579,6 @@ void CsoundEngine::stop()
 {
   stopRecording();
   stopCsound();
-  emit stopSignal();
 }
 
 void CsoundEngine::pause()
@@ -665,6 +665,30 @@ int CsoundEngine::runCsound()
   else {
     csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackNoThread);
   }
+  if (m_options.sadirActive){
+    int ret = csoundSetGlobalEnv("SADIR", m_options.sadir.toLocal8Bit());
+    if (ret != 0) {
+      qDebug() << "CsoundEngine::runCsound() Error setting SADIR";
+    }
+  }
+  if (m_options.ssdirActive){
+    int ret = csoundSetGlobalEnv("SSDIR", m_options.ssdir.toLocal8Bit());
+    if (ret != 0) {
+      qDebug() << "CsoundEngine::runCsound() Error setting SSDIR";
+    }
+  }
+  if (m_options.sfdirActive){
+    int ret = csoundSetGlobalEnv("SFDIR", m_options.sfdir.toLocal8Bit());
+    if (ret != 0) {
+      qDebug() << "CsoundEngine::runCsound() Error setting SFDIR";
+    }
+  }
+  if (m_options.incdirActive){
+    int ret = csoundSetGlobalEnv("INCDIR", m_options.incdir.toLocal8Bit());
+    if (ret != 0) {
+      qDebug() << "CsoundEngine::runCsound() Error setting INCDIR";
+    }
+  }
   if (m_options.opcodedirActive) {
     // csoundGetEnv must be called after Compile or Precompile,
     // But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
@@ -685,7 +709,7 @@ int CsoundEngine::runCsound()
     }
   }
 #endif
-  csoundReset(ud->csound);
+//  csoundReset(ud->csound);
   csoundSetHostData(ud->csound, (void *) ud);
   csoundPreCompile(ud->csound);  //Need to run PreCompile to create the FLTK_Flags global variable
 
@@ -766,7 +790,7 @@ int CsoundEngine::runCsound()
     }
     ud->PERF_STATUS = 0;
     csoundStop(ud->csound);
-    csoundSetMessageCallback(ud->csound, 0); // Does this fix the messages that appear when closing QCS?
+    csoundSetMessageCallback(ud->csound, 0); // This seems to fix the messages that appear when closing QCS?
 #ifdef QCS_DESTROY_CSOUND
     csoundDestroy(ud->csound);
 #else
@@ -795,13 +819,15 @@ void CsoundEngine::stopCsound()
   if (ud->threaded) {
 //    perfThread->ScoreEvent(0, 'e', 0, 0);
     if (ud->perfThread != 0) {
-      ud->perfThread->Stop();
-//      qDebug() << "CsoundEngine::stopCsound() stopped";
-      ud->perfThread->Join();
-      qDebug() << "CsoundEngine::stopCsound() joined";
-      delete ud->perfThread;
+      CsoundPerformanceThread *pt = ud->perfThread;
       ud->perfThread = 0;
+      pt->Stop();
+//      qDebug() << "CsoundEngine::stopCsound() stopped";
+      pt->Join();
+      qDebug() << "CsoundEngine::stopCsound() joined";
+      delete pt;
       flushQueues();
+      emit stopSignal();
     }
   } /*if (ud->threaded)*/
   else {  // in same thread
@@ -811,6 +837,7 @@ void CsoundEngine::stopCsound()
         usleep(100000);
         qApp->processEvents();
       }
+      emit stopSignal();
     }
   }
 #ifdef MACOSX_PRE_SNOW
@@ -820,7 +847,7 @@ void CsoundEngine::stopCsound()
 #ifdef QCS_DESTROY_CSOUND
   csoundDestroy(ud->csound);
 #else
-  csoundCleanup(ud->csound);
+  csoundReset(ud->csound);
 #endif
 }
 
@@ -863,7 +890,7 @@ void CsoundEngine::dispatchQueues()
   messageMutex.unlock();
 
   if (ud->threaded && ud->perfThread) {
-    if (ud->perfThread->GetStatus() > 0) {
+    if (ud->perfThread->GetStatus() != 0) {
 //      qDebug() << "CsoundEngine::dispatchQueues() perf finished";
       stop();
     }
