@@ -93,7 +93,7 @@ int BaseDocument::setTextString(QString text)
   }
   return ret;
 }
-
+Broke build delibrately, Ugly bug!!
 WidgetLayout* BaseDocument::newWidgetLayout()
 {
   WidgetLayout* wl = new WidgetLayout(0);
