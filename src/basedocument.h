@@ -40,7 +40,7 @@ class BaseDocument : public QWidget
     BaseDocument(QWidget *parent);
     ~BaseDocument();
 
-    int setTextString(QString text);
+    int setTextString(QString &text);
     virtual WidgetLayout* newWidgetLayout();
 
   public slots:

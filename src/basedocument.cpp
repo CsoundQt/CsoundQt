@@ -51,7 +51,7 @@ BaseDocument::~BaseDocument()
   //  m_widgetLayout->setParent(0);  //To make sure the widget panel from the main application doesn't attempt to delete it as its child
 }
 
-int BaseDocument::setTextString(QString text)
+int BaseDocument::setTextString(QString &text)
 {
 //  qDebug() << "---- BaseDocument::setTextString";
   int ret = 0;
@@ -93,7 +93,7 @@ int BaseDocument::setTextString(QString text)
   }
   return ret;
 }
-Broke build delibrately, Ugly bug!!
+
 WidgetLayout* BaseDocument::newWidgetLayout()
 {
   WidgetLayout* wl = new WidgetLayout(0);
