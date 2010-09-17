@@ -28,7 +28,7 @@
 //#include "qutebutton.h"
 
 BaseDocument::BaseDocument(QWidget *parent) :
-    QWidget(parent), m_csEngine(0)
+    QObject(parent), m_csEngine(0)
 {
   m_view = new DocumentView(parent);
 

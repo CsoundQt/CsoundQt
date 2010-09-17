@@ -33,7 +33,7 @@ class CsoundEngine;
 class DocumentView;
 class QuteButton; // For registering buttons with main application
 
-class BaseDocument : public QWidget
+class BaseDocument : public QObject
 {
   Q_OBJECT
   public:
