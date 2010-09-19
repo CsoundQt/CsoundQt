@@ -776,7 +776,7 @@ int CsoundEngine::runCsound()
   ud->ksmpscount = 0;
 
   if (ud->threaded) {
-    ud->perfThread = new CsoundPerformanceThread(ud->csound);
+    ud->perfThread = new QCsPerfThread(ud->csound);
     ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
 //    qDebug() << "qutecsound::runCsound perfThread->Play";
     ud->perfThread->Play();
@@ -819,7 +819,7 @@ void CsoundEngine::stopCsound()
   if (ud->threaded) {
 //    perfThread->ScoreEvent(0, 'e', 0, 0);
     if (ud->perfThread != 0) {
-      CsoundPerformanceThread *pt = ud->perfThread;
+      QCsPerfThread *pt = ud->perfThread;
       ud->perfThread = 0;
       pt->Stop();
 //      qDebug() << "CsoundEngine::stopCsound() stopped";
@@ -902,7 +902,7 @@ void CsoundEngine::dispatchQueues()
 void CsoundEngine::queueMessage(QString message)
 {
   if (closing != 1) {
-    messageMutex.lock(); // FIXME this is still occasionally causing threading issues as Csound uses it unexpectedly. Confirmed (with dssi?)
+    messageMutex.lock(); // FIXME this is still occasionally causing threading issues as Csound uses it unexpectedly when closing. Confirmed
     messageQueue << message;
     messageMutex.unlock();
   }

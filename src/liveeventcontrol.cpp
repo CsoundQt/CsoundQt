@@ -80,11 +80,13 @@ void LiveEventControl::removePanel(int index)
 void LiveEventControl::appendPanel(bool visible, bool play, bool loop, int sync,
                                    QString name, double loopLength, double loopStart, double loopEnd , double tempo)
 {
+  this->blockSignals(true);  // To avoid showing the panels when adding them (e.g. when starting up)
   int newRow = m_ui->panelTableWidget->rowCount();
 //  qDebug() << "LiveEventControl::appendPanel " << newRow;
   m_ui->panelTableWidget->insertRow(newRow);
   m_ui->panelTableWidget->setRowHeight(newRow, 20);
   QTableWidgetItem *visibleItem = getItem(newRow, 0);
+//  visibleItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
   visibleItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
   QTableWidgetItem *playItem = getItem(newRow, 1);
   playItem->setIcon(QIcon(":/images/gtk-media-play-ltr.png"));
@@ -102,6 +104,8 @@ void LiveEventControl::appendPanel(bool visible, bool play, bool loop, int sync,
 //  loopRangeItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
   QTableWidgetItem *tempoItem = getItem(newRow, 7);
   tempoItem->setData(Qt::DisplayRole, QVariant(tempo));
+
+  this->blockSignals(false);
 //  setPanelProperty(newRow, "LE_visible", visible);
 //  setPanelProperty(newRow, "LE_play", play);
 //  setPanelProperty(newRow, "LE_loop", loop);

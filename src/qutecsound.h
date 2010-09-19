@@ -231,7 +231,7 @@ class qutecsound:public QMainWindow
     void createToolBars();
     void createStatusBar();
     void readSettings();
-    void writeSettings();
+    void writeSettings(QStringList openFiles=QStringList(), int lastIndex = 0);
     void clearSettings();
     int execute(QString executable, QString options);
 //    bool saveCurrent();

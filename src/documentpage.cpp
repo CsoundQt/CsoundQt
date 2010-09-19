@@ -274,6 +274,7 @@ if (baseRet != 1) {
     if (width > 100 && height > 80) {
       panel->resize(width, height);
     }
+    panel->hide();
     text.remove(liveEventsText);
   }
 //  if (m_liveFrames.size() == 0) {
@@ -1466,7 +1467,6 @@ LiveEventFrame * DocumentPage::createLiveEventPanel(QString text)
 {
 //  qDebug() << "DocumentPage::newLiveEventPanel()";
   LiveEventFrame *e = new LiveEventFrame("Live Event", m_liveEventControl, Qt::Window);
-  e->hide();
 //  e->setVisible(false);
 //  e->setAttribute(Qt::WA_DeleteOnClose, false);
   e->getSheet()->setRowCount(1);

@@ -251,12 +251,8 @@ void qutecsound::changePage(int index)
     connectActions();
     documentPages[curPage]->showLiveEventPanels(showLiveEventsAct->isChecked());
     documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
-    documentPages[curPage]->showWidgets();
     if (!m_options->widgetsIndependent) {
       widgetPanel->addWidgetLayout(documentPages[curPage]->getWidgetLayout());
-    }
-    else {
-      documentPages[curPage]->hideWidgets();
     }
     setWidgetPanelGeometry();
     if (documentPages[curPage]->getFileName().endsWith(".py")) {
@@ -264,7 +260,11 @@ void qutecsound::changePage(int index)
     }
     else {
       if (!m_options->widgetsIndependent) {
+        documentPages[curPage]->showWidgets();
         widgetPanel->setVisible(showWidgetsAct->isChecked());
+      }
+      else {
+        documentPages[curPage]->showWidgets(showWidgetsAct->isChecked());
       }
     }
     m_console->setWidget(documentPages[curPage]->getConsole());
@@ -304,10 +304,16 @@ void qutecsound::closeEvent(QCloseEvent *event)
 {
   this->showNormal();  // Don't store full screen size in preferences
   qApp->processEvents();
-  writeSettings();
   showWidgetsAct->setChecked(false);
   showLiveEventsAct->setChecked(false); // These two give faster shutdown times as the panels don't have to be called up as the tabs close
 
+  QStringList files;
+  if (m_options->rememberFile) {
+    for (int i = 0; i < documentPages.size(); i++ ) {
+      files.append(documentPages[i]->getFileName());
+    }
+  }
+  int lastIndex = documentTabs->currentIndex();
   while (!documentPages.isEmpty()) {
 //    if (!saveCurrent()) {
 //      event->ignore();
@@ -327,6 +333,7 @@ void qutecsound::closeEvent(QCloseEvent *event)
     logFile.close();
   }
   showUtilities(false);  // Close utilities dialog if open
+  writeSettings(files, lastIndex);
   delete helpPanel;
 //  delete closeTabButton;
   delete m_options;
@@ -2504,6 +2511,7 @@ void qutecsound::createMenus()
   synthFiles.append(":/examples/Synths/Phase_Mod_Synth.csd");
   synthFiles.append(":/examples/Synths/Formant_Synth.csd");
   synthFiles.append(":/examples/Synths/Diffamator.csd");
+  synthFiles.append(":/examples/Synths/Sruti-Drone_Box.csd");
   synthFiles.append(":/examples/Synths/Pipe_Synth.csd");
   synthFiles.append(":/examples/Synths/String_Phaser.csd");
   synthFiles.append(":/examples/Synths/Waveform_Mix.csd");
@@ -3051,7 +3059,7 @@ void qutecsound::readSettings()
   m_options->openProperties = settings.value("openProperties", true).toBool();
   m_options->fontOffset = settings.value("fontOffset", 0.0).toDouble();
   m_options->fontScaling = settings.value("fontScaling", 1.0).toDouble();
-  lastFiles = settings.value("lastfiles", "").toStringList();
+  lastFiles = settings.value("lastfiles", QStringList()).toStringList();
   lastTabIndex = settings.value("lasttabindex", "").toInt();
   settings.endGroup();
   settings.beginGroup("Run");
@@ -3141,7 +3149,7 @@ void qutecsound::readSettings()
   }
 }
 
-void qutecsound::writeSettings()
+void qutecsound::writeSettings(QStringList openFiles, int lastIndex)
 {
   QSettings settings("csound", "qutecsound");
   if (!m_resetPrefs) {
@@ -3204,14 +3212,8 @@ void qutecsound::writeSettings()
     settings.setValue("openProperties", m_options->openProperties);
     settings.setValue("fontOffset", m_options->fontOffset);
     settings.setValue("fontScaling", m_options->fontScaling);
-    QStringList files;
-    if (m_options->rememberFile) {
-      for (int i = 0; i < documentPages.size(); i++ ) {
-        files.append(documentPages[i]->getFileName());
-      }
-    }
-    settings.setValue("lastfiles", files);
-    settings.setValue("lasttabindex", documentTabs->currentIndex());
+    settings.setValue("lastfiles", openFiles);
+    settings.setValue("lasttabindex", lastIndex);
   }
   else {
     settings.remove("");

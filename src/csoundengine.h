@@ -24,14 +24,14 @@
 #define CSOUNDENGINE_H
 
 #include <QtCore>
-
-#include "cwindow.h" // Necessary for WINDAT struct
 #include <csound.hpp>
-#include <csPerfThread.hpp>
-
 #include <sndfile.hh>
+#include <cwindow.h> // Necessary for WINDAT struct
+
+
 #include "types.h"
 #include "csoundoptions.h"
+#include "qcsperfthread.h"
 
 class ConsoleWidget;
 class QuteScope;
@@ -48,7 +48,7 @@ class WidgetLayout;
 struct CsoundUserData {
   int result; //result of csoundCompile()
   CSOUND *csound; // instance of csound
-  CsoundPerformanceThread *perfThread;
+  QCsPerfThread *perfThread;
   CsoundEngine *cs; // Pass engine
   WidgetLayout *wl; // Pass widgets
   /* current configuration */
