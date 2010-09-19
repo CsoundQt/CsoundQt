@@ -279,7 +279,7 @@ int QCsPerfThread::Perform()
     int retval = 0;
     do {
       while (firstMessage) {
-        csoundLockMutex(queueLock);
+        queueLock.lock();
         do {
           CsoundPerformanceThreadMessage *msg;
           // get oldest message
@@ -298,7 +298,7 @@ int QCsPerfThread::Perform()
           csoundWaitThreadLock(pauseLock, (size_t) 0);
         // mark queue as empty
         csoundNotifyThreadLock(flushLock);
-        csoundUnlockMutex(queueLock);
+        queueLock.unlock();
         // if error or end of score, return now
         if (retval)
           goto endOfPerf;
@@ -308,6 +308,7 @@ int QCsPerfThread::Perform()
         csoundWaitThreadLockNoTimeout(pauseLock);
         csoundNotifyThreadLock(pauseLock);
       }
+      qApp->processEvents();
       if(processcallback != NULL)
            processcallback(cdata);
       retval = csoundPerformKsmps(csound);
@@ -316,7 +317,7 @@ int QCsPerfThread::Perform()
     status = retval;
     csoundCleanup(csound);
     // delete any pending messages
-    csoundLockMutex(queueLock);
+    queueLock.lock();
     {
       CsoundPerformanceThreadMessage *msg;
       msg = (CsoundPerformanceThreadMessage*) firstMessage;
@@ -329,37 +330,33 @@ int QCsPerfThread::Perform()
       }
     }
     csoundNotifyThreadLock(flushLock);
-    csoundUnlockMutex(queueLock);
+    queueLock.unlock();
     running = 1;
     return retval;
 }
 
 
-extern "C" {
-  static uintptr_t QCsPerfThread_(void *userData)
-  {
-    CsPerfThread_PerformScore p(userData);
-    // perform the score
-    int retval = p.Perform();
-    // return positive value if stopped or end of score, and negative on error
-    return (uintptr_t) ((unsigned int) retval);
-  }
-}
+//extern "C" {
+//  static uintptr_t QCsPerfThread_(void *userData)
+//  {
+//    CsPerfThread_PerformScore p(userData);
+//    // perform the score
+//    int retval = p.Perform();
+//    // return positive value if stopped or end of score, and negative on error
+//    return (uintptr_t) ((unsigned int) retval);
+//  }
+//}
 
 void QCsPerfThread::csPerfThread_constructor(CSOUND *csound)
 {
     firstMessage = (CsoundPerformanceThreadMessage*) 0;
     lastMessage = (CsoundPerformanceThreadMessage*) 0;
     this->csound = csound;
-    queueLock = (void*) 0;
     pauseLock = (void*) 0;
     flushLock = (void*) 0;
-    perfThread = (void*) 0;
+    perfThread = (QCsoundThread*) 0;
     paused = 1;
     status = CSOUND_MEMORY;
-    queueLock = csoundCreateMutex(0);
-    if (!queueLock)
-      return;
     pauseLock = csoundCreateThreadLock();
     if (!pauseLock)
       return;
@@ -375,9 +372,11 @@ void QCsPerfThread::csPerfThread_constructor(CSOUND *csound)
     processcallback = NULL;
     running = 0;
     firstMessage = lastMessage;
-    perfThread = csoundCreateThread(QCsPerfThread_, (void*) this);
-    if (perfThread)
+    perfThread = new QCsoundThread(this);
+    if (perfThread != 0) {
       status = 0;
+      perfThread->start();
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -426,7 +425,7 @@ void QCsPerfThread::QueueMessage(CsoundPerformanceThreadMessage *msg)
       delete msg;
       return;
     }
-    csoundLockMutex(queueLock);
+    queueLock.lock();
     // link message into FIFO
     if (!lastMessage)
       firstMessage = msg;
@@ -437,7 +436,7 @@ void QCsPerfThread::QueueMessage(CsoundPerformanceThreadMessage *msg)
     csoundWaitThreadLock(flushLock, (size_t) 0);
     // wake up from pause
     csoundNotifyThreadLock(pauseLock);
-    csoundUnlockMutex(queueLock);
+    queueLock.unlock();
 }
 
 /**
@@ -524,8 +523,16 @@ int QCsPerfThread::Join()
     retval = status;
 
     if (perfThread) {
-      retval = csoundJoinThread(perfThread);
-      perfThread = (void*) 0;
+      retval = perfThread->wait(8000);
+      if (retval) {
+        perfThread = (QCsoundThread *) 0;
+      }
+      else {
+        perfThread->terminate();
+        qDebug() << "QCsPerfThread::Join(): Error! Forced termination of Csound";
+        delete perfThread;
+        perfThread = (QCsoundThread*) 0;
+      }
     }
 
     // delete any pending messages
@@ -541,10 +548,6 @@ int QCsPerfThread::Join()
       }
     }
     // delete all thread locks
-    if (queueLock) {
-      csoundDestroyMutex(queueLock);
-      queueLock = (void*) 0;
-    }
     if (pauseLock) {
       csoundNotifyThreadLock(pauseLock);
       csoundDestroyThreadLock(pauseLock);

@@ -26,13 +26,16 @@
 #define QCSPERFTHREAD_H
 
 
-#include <QMutex>
+#include <QtCore>
 #include <csound.hpp>
+
 
 class CsoundPerformanceThreadMessage;
 class CsPerfThread_PerformScore;
+class QCsoundThread;
 
-class QCsPerfThread {
+class QCsPerfThread:public QObject {
+  Q_OBJECT
   public:
     QCsPerfThread(Csound *);
     QCsPerfThread(CSOUND *);
@@ -84,14 +87,16 @@ class QCsPerfThread {
     void FlushMessageQueue();
     friend class CsoundPerformanceThreadMessage;
     friend class CsPerfThread_PerformScore;
+    friend class QCsoundThread;
   private:
      volatile CsoundPerformanceThreadMessage *firstMessage;
      CsoundPerformanceThreadMessage *lastMessage;
      CSOUND  *csound;
-     void * queueLock;         // this is actually a mutex
+     QMutex queueLock;         // this is actually a mutex
      void * pauseLock;
      void * flushLock;
-     void    *perfThread;
+     QCsoundThread *perfThread;
+//     void    *perfThread;
      int     paused;
      int     status;
      void *    cdata;
@@ -102,5 +107,23 @@ class QCsPerfThread {
      void (*processcallback)(void *cdata);
 };
 
+class QCsoundThread : public QThread
+{
+  Q_OBJECT
+public:
+  QCsoundThread(QCsPerfThread *pt):
+      m_pt(pt)
+  {
+    ;
+  }
+
+protected:
+  void run()
+  {
+    m_pt->Perform();
+//    return (int) ((unsigned int) retval);
+  }
+  QCsPerfThread *m_pt;
+};
 
 #endif // QCSPERFTHREAD_H
