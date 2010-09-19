@@ -42,5 +42,5 @@ LIBS *= -L$${CSOUND_LIBRARY_DIR}
 LIBS *= -L$${LIBSNDFILE_LIBRARY_DIR}
 build32:LCSOUND = -lcsound
 build64:LCSOUND = -lcsound64
-LCSND = -lcsnd
+#LCSND = -lcsnd
 LSNDFILE = -lsndfile

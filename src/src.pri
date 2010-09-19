@@ -101,7 +101,7 @@ SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/basedocument.cpp" \
     "$${PWD}/qcsperfthread.cpp"
 LIBS += $${LCSOUND} \
-    $${LCSND} \
+#    $${LCSND} \
     $${LSNDFILE}
 DISTFILES += "$${PWD}/default.csd" \
     "$${PWD}/opcodes.xml" \

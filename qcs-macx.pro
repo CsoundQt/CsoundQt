@@ -53,7 +53,7 @@ LIBS *= -L$${CSOUND_LIBRARY_DIR}
 LIBS *= -L$${LIBSNDFILE_LIBRARY_DIR}
 #LIBS += -framework QtCore -framework QtGui -framework QtXml
 LCSOUND = -framework $${MAC_LIB}
-LCSND = -l_csnd
+#LCSND = -l_csnd
 LSNDFILE = -lsndfile
 
 QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist
