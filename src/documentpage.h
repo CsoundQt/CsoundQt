@@ -27,6 +27,7 @@
 #include <QDomElement>
 #include <QStack>
 #include <QDockWidget>
+#include <vector>
 
 #include "basedocument.h"
 
@@ -121,7 +122,6 @@ class DocumentPage : public BaseDocument
     void paste();
     void undo();
     void redo();
-
 
     // Get internal components
     DocumentView *getView();  // Needed to pass view for placing it as tab widget in main application

@@ -41,6 +41,7 @@ class QuteWidget : public QWidget
     virtual void setValue(double);  // These should only be reimplemented if something special needs to be done with the value.
     virtual void setValue2(double);
     virtual void setValue(QString);
+    virtual void setMidiValue(int value);
 
     virtual void widgetMessage(QString path, QString text);
     virtual void widgetMessage(QString path, double value);
@@ -79,12 +80,15 @@ class QuteWidget : public QWidget
     QSpinBox *hSpinBox;
     QLabel *channelLabel;
     QLineEdit *nameLineEdit;
+    QSpinBox *midiccSpinBox;
+    QSpinBox *midichanSpinBox;
     QWidget *m_widget;
     QDialog *dialog;
     QGridLayout *layout;  // For preference dialog
     double m_value, m_value2;
     QString m_stringValue;
     QString m_channel, m_channel2;
+    int m_midicc, m_midichan;
 
 #ifdef  USE_WIDGET_MUTEX
     QReadWriteLock widgetLock;

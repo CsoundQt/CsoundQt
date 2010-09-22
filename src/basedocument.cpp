@@ -27,13 +27,12 @@
 #include "csoundengine.h"
 //#include "qutebutton.h"
 
+
 BaseDocument::BaseDocument(QWidget *parent) :
     QObject(parent), m_csEngine(0)
 {
   m_view = new DocumentView(parent);
-
   m_csEngine = new CsoundEngine();
-
 }
 
 BaseDocument::~BaseDocument()

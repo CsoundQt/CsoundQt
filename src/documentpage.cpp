@@ -20,6 +20,9 @@
     02111-1307 USA
 */
 
+#include <cwindow.h>
+#include <csound.hpp>  // TODO These two are necessary for the WINDAT struct. Can they be moved?
+
 #include "documentpage.h"
 #include "documentview.h"
 #include "csoundengine.h"
@@ -36,9 +39,6 @@
 
 #include "curve.h"
 #include "qutebutton.h"
-
-#include <cwindow.h>
-#include <csound.hpp>  // TODO These two are necessary for the WINDAT struct. Can they be moved?
 
 
 // TODO is is possible to move the editor to a separate child class, to be able to use a cleaner class?
@@ -690,7 +690,6 @@ void DocumentPage::setModified(bool mod)
   }
 }
 
-
 bool DocumentPage::isModified()
 {
   if (m_view->isModified())
@@ -758,8 +757,6 @@ void DocumentPage::setLineEnding(int lineEndingMode)
 {
   m_lineEnding = lineEndingMode;
 }
-
-
 
 void DocumentPage::copy()
 {
@@ -1317,6 +1314,7 @@ void DocumentPage::hideWidgets()
 //
 ////   document()->setModified(true);
 //}
+
 
 void DocumentPage::applyMacOptions(QStringList options)
 {

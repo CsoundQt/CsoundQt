@@ -1108,6 +1108,19 @@ void QuteScrollNumber::setValue(double value)
 //  emit widgetChanged(this);
 }
 
+void QuteScrollNumber::setMidiValue(int value)
+{
+  double max = property("QCS_maximum").toDouble();
+  double min = property("QCS_minimum").toDouble();
+  if (max != 99999999999999.0 && min != -999999999999.0) {
+    double newValue = min + ((value / 127.0)* (max - min));
+    setValue(newValue);
+  }
+  else {
+    qDebug() << "QuteScrollNumber::setMidiValue ranges not set.";
+  }
+}
+
 void QuteScrollNumber::setValueFromWidget(double value)
 {
 //  qDebug() << "QuteScrollNumber::setValueFromWidget";

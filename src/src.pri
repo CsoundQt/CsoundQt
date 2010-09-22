@@ -102,7 +102,8 @@ SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/qcsperfthread.cpp"
 LIBS += $${LCSOUND} \
 #    $${LCSND} \
-    $${LSNDFILE}
+    $${LSNDFILE} \
+    $${RTMIDI}
 DISTFILES += "$${PWD}/default.csd" \
     "$${PWD}/opcodes.xml" \
     "$${PWD}/qutecsound.rc" \
@@ -112,4 +113,9 @@ pythonqt {
         "$${PWD}/pyqcsobject.h"
     SOURCES += "$${PWD}/pythonconsole.cpp" \
         "$${PWD}/pyqcsobject.cpp"
+}
+rtmidi {
+#    HEADERS += "$${PWD}/../$${RTMIDI_DIR}/RtMidi.h"
+#    SOURCES += "$${PWD}/../$${RTMIDI_DIR}/RtMidi.cpp"
+    INCLUDEPATH += $${PWD}/$${RTMIDI_DIR}
 }

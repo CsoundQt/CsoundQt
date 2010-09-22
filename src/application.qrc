@@ -38,6 +38,7 @@
         <file>../examples/Miscellaneous/Keyboard_Control.csd</file>
         <file>../examples/Miscellaneous/Just_Intonation.csd</file>
         <file>../examples/Miscellaneous/Mouse_Control.csd</file>
+        <file>../examples/Miscellaneous/Autotuner.csd</file>
         <file>../examples/Miscellaneous/Event_Panel.csd</file>
         <file>../examples/Miscellaneous/Score_Tricks.csd</file>
         <file>../examples/Miscellaneous/Simple_Convolution.csd</file>
@@ -216,6 +217,7 @@
         <file>../examples/Useful/Audio_Thru_Test.csd</file>
         <file>../examples/Useful/MIDI_IO_Test.csd</file>
         <file>../examples/Useful/MIDI_Recorder.csd</file>
+        <file>../examples/Useful/MIDI_Layering.csd</file>
         <file>../examples/Useful/ASCII_Key.csd</file>
         <file>../examples/Useful/IO_Test.csd</file>
         <file>../examples/Useful/File_to_Text.csd</file>

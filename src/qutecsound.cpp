@@ -42,6 +42,10 @@
 #include "pythonconsole.h"
 #endif
 
+#ifdef QCS_RTMIDI
+#include "RtMidi.h"
+#endif
+
 // One day remove these from here for nicer abstraction....
 #include "csoundengine.h"
 #include "documentview.h"
@@ -53,8 +57,28 @@ static const QString SCRIPT_NAME = "qutecsound_run_script-XXXXXX.bat";
 static const QString SCRIPT_NAME = "qutecsound_run_script-XXXXXX.sh";
 #endif
 
-//csound performance thread function prototype
-uintptr_t csThread(void *clientData);
+
+static void midiMessageCallback(double deltatime,
+                                std::vector< unsigned char > *message,
+                                void *userData)
+{
+  WidgetLayout *d = (WidgetLayout *) userData;
+  unsigned int nBytes = message->size();
+  if ( ((d->midiWriteCounter + 1) % MAX_MIDI_QUEUE) != d->midiReadCounter) {
+    int index = d->midiWriteCounter;
+    d->midiWriteCounter++;
+    d->midiWriteCounter = d->midiWriteCounter % MAX_MIDI_QUEUE;
+    for (unsigned int i = 0; i < nBytes; i++) {
+      d->midiQueue[index][i] = (int)message->at(i);
+    }
+  }
+  //  if (nBytes > 0) {
+  //    qDebug() << "stamp = " << deltatime;
+  //  }
+}
+
+////csound performance thread function prototype
+//uintptr_t csThread(void *clientData);
 
 //TODO why does qutecsound not end when it receives a terminate signal?
 qutecsound::qutecsound(QStringList fileNames)
@@ -63,6 +87,9 @@ qutecsound::qutecsound(QStringList fileNames)
   m_resetPrefs = false;
   utilitiesDialog = 0;
   curCsdPage = 0;
+#ifdef QCS_RTMIDI
+  m_midiin = 0;
+#endif
   qDebug() << "QuteCsound using Csound Version: " << csoundGetVersion();
   initialDir = QDir::current().path();
   setWindowTitle("QuteCsound[*]");
@@ -271,6 +298,12 @@ void qutecsound::changePage(int index)
     updateInspector();
     runAct->setChecked(documentPages[curPage]->isRunning());
     recAct->setChecked(documentPages[curPage]->isRecording());
+#ifdef QCS_RTMIDI
+    if (m_midiin != 0) {
+      m_midiin->cancelCallback();
+      m_midiin->setCallback(&midiMessageCallback, documentPages[curPage]->getWidgetLayout());  //TODO enable multiple layouts
+    }
+#endif
     if (documentPages[curPage]->getFileName().endsWith(".csd")) {
       curCsdPage = curPage;
     }
@@ -720,6 +753,55 @@ void qutecsound::openLogFile()
   else {
     qDebug() << "qutecsound::openLogFile() Error. Could not open log file! NO logging. " << logFile.fileName();
   }
+}
+
+
+void qutecsound::setMidiInterface(int number)
+{
+  if (number >= 0 && number < 9998) {
+    openMidiPort(number);
+  }
+  else {
+    closeMidiPort();
+  }
+}
+
+void qutecsound::openMidiPort(int port)
+{
+#ifdef QCS_RTMIDI
+  try {
+    closeMidiPort();
+  }
+  catch ( RtError &error ) {
+    error.printMessage();
+  }
+
+  m_midiin = new RtMidiIn();
+  try {
+    m_midiin->openPort(port, std::string("QuteCsound"));
+  }
+  catch ( RtError &error ) {
+    qDebug() << "WidgetLayout::openMidiPort Error opening port";
+    error.printMessage();
+    m_midiin = 0;
+    return;
+  }
+  qDebug() << "qutecsound::openMidiPort opened port " << port;
+  m_midiin->cancelCallback();
+  m_midiin->setCallback(&midiMessageCallback, documentPages[curPage]->getWidgetLayout());  //TODO enable multiple layouts
+#endif
+//  m_midiin->ignoreTypes(false, false, false);
+}
+
+void qutecsound::closeMidiPort()
+{
+#ifdef QCS_RTMIDI
+  if (m_midiin != 0) {
+    m_midiin->closePort();
+    delete m_midiin;
+  }
+  m_midiin = 0;
+#endif
 }
 
 void qutecsound::showNewFormatWarning()
@@ -1362,6 +1444,9 @@ void qutecsound::setEditorFocus()
 void qutecsound::setHelpEntry()
 {
   QString text = documentPages[curPage]->wordUnderCursor();
+  if (text.startsWith('#')) { // For #define and friends
+    text.remove(0,1);
+  }
   QString dir = m_options->csdocdir;
   // For self contained app on OS X
 #ifdef Q_OS_MAC
@@ -1373,7 +1458,10 @@ void qutecsound::setHelpEntry()
 #endif
   }
 #endif
-  if (dir != "") {
+  if (text.startsWith("http://")) {
+    openExternalBrowser(QUrl(text));
+  }
+  else if (dir != "") {
     if (text == "0dbfs")
       text = "Zerodbfs";
     else if (text.contains("CsOptions"))
@@ -1579,6 +1667,7 @@ void qutecsound::applySettings()
   renderOptions += currentOptions;
   runAct->setStatusTip(tr("Play") + playOptions);
   renderAct->setStatusTip(tr("Render to file") + renderOptions);
+  setMidiInterface(m_options->midiInterface);
   fillFavoriteMenu();
   fillScriptsMenu();
   if (m_options->logFile != logFile.fileName()) {
@@ -2533,6 +2622,7 @@ void qutecsound::createMenus()
   usefulFiles.append(":/examples/Useful/Audio_Output_Test.csd");
   usefulFiles.append(":/examples/Useful/Audio_Thru_Test.csd");
   usefulFiles.append(":/examples/Useful/MIDI_Recorder.csd");
+  usefulFiles.append(":/examples/Useful/MIDI_Layering.csd");
   usefulFiles.append(":/examples/Useful/ASCII_Key.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_buffer.csd");
   usefulFiles.append(":/examples/Useful/SF_Play_from_buffer_2.csd");
@@ -2554,6 +2644,7 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/Miscellaneous/Keyboard_Control.csd");
   exampleFiles.append(":/examples/Miscellaneous/Just_Intonation.csd");
   exampleFiles.append(":/examples/Miscellaneous/Mouse_Control.csd");
+  exampleFiles.append(":/examples/Miscellaneous/Autotuner.csd");
   exampleFiles.append(":/examples/Miscellaneous/Event_Panel.csd");
   exampleFiles.append(":/examples/Miscellaneous/Score_Tricks.csd");
   exampleFiles.append(":/examples/Miscellaneous/Simple_Convolution.csd");
@@ -3068,6 +3159,7 @@ void qutecsound::readSettings()
   m_options->keyRepeat = settings.value("keyRepeat", false).toBool();
   m_options->debugLiveEvents = settings.value("debugLiveEvents", false).toBool();
   m_options->consoleBufferSize = settings.value("consoleBufferSize", 1024).toInt();
+  m_options->midiInterface = settings.value("midiInterface", 9999).toInt();
   m_options->bufferSize = settings.value("bufferSize", 1024).toInt();
   m_options->bufferSizeActive = settings.value("bufferSizeActive", false).toBool();
   m_options->HwBufferSize = settings.value("HwBufferSize", 1024).toInt();
@@ -3226,6 +3318,7 @@ void qutecsound::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("keyRepeat", m_options->keyRepeat);
     settings.setValue("debugLiveEvents", m_options->debugLiveEvents);
     settings.setValue("consoleBufferSize", m_options->consoleBufferSize);
+    settings.setValue("midiInterface", m_options->midiInterface);
     settings.setValue("bufferSize", m_options->bufferSize);
     settings.setValue("bufferSizeActive", m_options->bufferSizeActive);
     settings.setValue("HwBufferSize",m_options->HwBufferSize);
@@ -4220,7 +4313,10 @@ EventSheet* qutecsound::getSheet(int index, int sheetIndex)
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->getSheet(sheetIndex);
+    return documentPages[index]->getSheet(sheetIndex);
+  }
+  else {
+    return 0;
   }
 }
 
@@ -4230,7 +4326,10 @@ EventSheet* qutecsound::getSheet(int index, QString sheetName)
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->getSheet(sheetName);
+    return documentPages[index]->getSheet(sheetName);
+  }
+  else {
+    return 0;
   }
 }
 

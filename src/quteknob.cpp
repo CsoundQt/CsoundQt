@@ -78,6 +78,14 @@ void QuteKnob::setRange(double min, double max)
   m_valueChanged = true;
 }
 
+void QuteKnob::setMidiValue(int value)
+{
+  double max = property("QCS_maximum").toDouble();
+  double min = property("QCS_minimum").toDouble();
+  double newValue = min + ((value / 127.0)* (max - min));
+  setValue(newValue);
+}
+
 void QuteKnob::refreshWidget()
 {
 #ifdef  USE_WIDGET_MUTEX

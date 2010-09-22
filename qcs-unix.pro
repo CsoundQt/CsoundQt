@@ -22,17 +22,16 @@ LIBSNDFILE_LIB = libsndfile.so
 DEFAULT_PYTHONQT_INCLUDE_DIRS = /usr/local/include \
 	/usr/include
 DEFAULT_PYTHONQT_LIBRARY_DIRS = /usr/local/lib \
-	/usr/lib
+        /usr/lib\
+        ../../../PythonQt2.0.1 \
+        ../PythonQt2.0.1 \
+        PythonQt2.0.1
 DEFAULT_PYTHONQT_TREE_DIRS = ../../../PythonQt2.0.1 \
         ../PythonQt2.0.1 \
         PythonQt2.0.1
 PYTHONQT_LIB = libPythonQt_QtAll$${DEBUG_EXT}.so
 
-DEFAULT_PORTMIDI_INCLUDE_DIRS =  /usr/local/include \
-        /usr/include
-DEFAULT_PORTMIDI_LIB_DIRS =  /usr/local/lib \
-        /usr/lib
-PORTMIDI_LIB = portmidi
+DEFAULT_PORTMIDI_DIR =  /usr/local/include
 
 # Do configuration step
 include(config.pri)
@@ -40,7 +39,11 @@ include(config.pri)
 # Use results from config step
 LIBS *= -L$${CSOUND_LIBRARY_DIR}
 LIBS *= -L$${LIBSNDFILE_LIBRARY_DIR}
+rtmidi {
+LIBS *= $${RTMIDI_DIR}/tests/Release/RtMidi.o
+}
 build32:LCSOUND = -lcsound
 build64:LCSOUND = -lcsound64
 #LCSND = -lcsnd
 LSNDFILE = -lsndfile
+

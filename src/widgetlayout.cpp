@@ -20,6 +20,12 @@
     02111-1307 USA
 */
 
+#include <cstdlib>
+
+#ifdef Q_OS_WIN32
+#include <unistd.h> // for usleep()
+#endif
+
 #include "widgetlayout.h"
 #include "qutewidget.h"
 #include "quteslider.h"
@@ -36,11 +42,8 @@
 #include "qutedummy.h"
 #include "framewidget.h"
 
-#ifdef Q_OS_WIN32
-#include <unistd.h> // for usleep()
-#endif
-
 #include "qutecsound.h" // For passing the actions from button reserved channels
+
 
 WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 {
@@ -58,6 +61,13 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   closing = 0;
   xOffset = yOffset = 0;
   m_contained = false;
+
+  midiWriteCounter = 0;
+  midiReadCounter = 0;
+  midiQueue.resize(MAX_MIDI_QUEUE);
+  for (int i = 0; i <MAX_MIDI_QUEUE; i++ ) {
+    midiQueue[i].resize(3);
+  }
 
   curveUpdateBuffer.resize(QCS_CURVE_BUFFER_SIZE);
   curveUpdateBufferCount = 0;
@@ -713,7 +723,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 //      qDebug() << "WidgetLayout::newXmlWidget DOUBLE property:  " << nodeName.toLocal8Bit() << "--" << n.nodeValue().toDouble();
       widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toDouble());
     }
-    else if (nodeName == "selectedIndex" || nodeName == "midichan" || nodeName == "midicc") {  // INT type
+    else if (nodeName == "selectedIndex") {  // INT type
       QDomNode n = node.firstChild();
       nodeName.prepend("QCS_");
       widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt());
@@ -733,11 +743,22 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
              || nodeName == "precision"
              || nodeName == "borderwidth"
              || nodeName == "borderradius"
-             || nodeName == "midichan"  || nodeName == "midicc"
              || nodeName == "selectedIndex" ) {  // INT type
       QDomNode n = node.firstChild();
       nodeName.prepend("QCS_");
       widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt());
+    }
+    else if (nodeName == "midichan") {
+      QDomNode n = node.firstChild();
+      nodeName.prepend("QCS_");
+      widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt());
+      registerWidgetChannel(widget, n.nodeValue().toInt());
+    }
+    else if (nodeName == "midicc") {
+      QDomNode n = node.firstChild();
+      nodeName.prepend("QCS_");
+      widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt());
+      registerWidgetController(widget, n.nodeValue().toInt());
     }
     else if (nodeName == "randomizable" || nodeName == "selected"
              || nodeName == "visible" ) {  // BOOL type
@@ -1192,6 +1213,22 @@ void WidgetLayout::refreshConsoles()
 
 void WidgetLayout::refreshWidgets()
 {
+  while (midiReadCounter != midiWriteCounter) { // TODO it is inefficient to have this per layout (when more than one layout is available)
+    int index =midiReadCounter;
+    int status = midiQueue[index][0];
+    if (status & 176) { // MIDI control change
+      int channel = (status ^ 176) + 1;
+      for (int i = 0; i < registeredControllers.size(); i++) {
+        if (registeredControllers[i].cc == midiQueue[index][1]) {
+          if (registeredControllers[i].chan == 0 || channel == registeredControllers[i].chan) {
+            registeredControllers[i].widget->setMidiValue(midiQueue[index][2]);
+          }
+        }
+      }
+    }
+    midiReadCounter++;
+    midiReadCounter = midiReadCounter%MAX_MIDI_QUEUE;
+  }
   widgetsMutex.lock();
   for (int i=0; i < m_widgets.size(); i++) {
     if (m_widgets[i]->m_valueChanged || m_widgets[i]->m_value2Changed) {
@@ -2017,6 +2054,12 @@ void WidgetLayout::widgetChanged(QuteWidget* widget)
     }
     setWidgetToolTip(widget, m_tooltips);
 //    widgetsMutex.unlock();
+    int cc = widget->property("QCS_midicc").toInt();  // Is it safe to query these here?
+    int chan = widget->property("QCS_midichan").toInt();
+    if (cc != 0 && chan != 0) {
+      registerWidgetController(widget, cc);
+      registerWidgetChannel(widget, chan);
+    }
     setModified(true);
   }
   adjustLayoutSize();
@@ -2671,6 +2714,43 @@ FrameWidget *WidgetLayout::getEditWidget(QuteWidget *widget)
     }
   }
   return out;
+}
+
+void WidgetLayout::registerWidgetController(QuteWidget *widget, int cc)
+{
+  for (int i = 0; i < registeredControllers.size(); i++) {
+    if (registeredControllers[i].widget == widget) {
+      registeredControllers[i].cc = cc;
+      return;
+    }
+  }
+  registeredControllers << RegisteredController(widget, cc, 0);
+}
+
+void WidgetLayout::registerWidgetChannel(QuteWidget *widget, int chan)
+{
+  for (int i = 0; i < registeredControllers.size(); i++) {
+    if (registeredControllers[i].widget == widget) {
+      registeredControllers[i].chan = chan;
+      return;
+    }
+  }
+  registeredControllers << RegisteredController(widget, 1, chan);
+}
+
+void WidgetLayout::unregisterWidgetController(QuteWidget *widget)
+{
+  for (int i = 0; i < registeredControllers.size(); i++) {
+    if (registeredControllers[i].widget == widget) {
+      registeredControllers.removeAt(i);
+      return;
+    }
+  }
+}
+
+void WidgetLayout::clearWidgetControllers()
+{
+  registeredControllers.clear();
 }
 
 void WidgetLayout::setModified(bool mod)

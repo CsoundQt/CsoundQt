@@ -100,6 +100,11 @@ void QuteWidget::setValue(QString value)
 #endif
 }
 
+void QuteWidget::setMidiValue(int value)
+{
+  qDebug() << "QuteWidget::setMidiValue not available for this widget." << this;
+}
+
 void QuteWidget::widgetMessage(QString path, QString text)
 {
   qDebug() << "QuteWidget::widgetMessage" << text;
@@ -225,6 +230,8 @@ void QuteWidget::applyInternalProperties()
   setWidgetGeometry(x,y,width, height);
   m_channel = property("QCS_objectName").toString();
   m_channel2 = property("QCS_objectName2").toString();
+  m_midicc = property("QCS_midicc").toInt();
+  m_midichan = property("QCS_midichan").toInt();
   m_valueChanged = true;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
@@ -366,6 +373,18 @@ void QuteWidget::createPropertiesDialog()
   nameLineEdit->setFocus(Qt::OtherFocusReason);
   nameLineEdit->selectAll();
   layout->addWidget(nameLineEdit, 3, 1, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+  label->setText("MIDI CC =");
+  layout->addWidget(label, 14, 0, Qt::AlignRight|Qt::AlignVCenter);
+  midiccSpinBox = new QSpinBox(dialog);
+  midiccSpinBox->setRange(0,119);
+  layout->addWidget(midiccSpinBox, 14,1, Qt::AlignLeft|Qt::AlignVCenter);
+  label = new QLabel(dialog);
+  label->setText("MIDI Channel =");
+  layout->addWidget(label, 14, 2, Qt::AlignRight|Qt::AlignVCenter);
+  midichanSpinBox = new QSpinBox(dialog);
+  midichanSpinBox->setRange(0,127);
+  layout->addWidget(midichanSpinBox, 14,3, Qt::AlignLeft|Qt::AlignVCenter);
   acceptButton = new QPushButton(tr("Ok"));
   layout->addWidget(acceptButton, 15, 3, Qt::AlignCenter|Qt::AlignVCenter);
   applyButton = new QPushButton(tr("Apply"));
@@ -380,6 +399,8 @@ void QuteWidget::createPropertiesDialog()
   wSpinBox->setValue(this->width());
   hSpinBox->setValue(this->height());
   nameLineEdit->setText(getChannelName());
+  midiccSpinBox->setValue(this->m_midicc);
+  midichanSpinBox->setValue(this->m_midichan);
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
@@ -396,6 +417,8 @@ void QuteWidget::applyProperties()
   setProperty("QCS_y",ySpinBox->value());
   setProperty("QCS_width", wSpinBox->value());
   setProperty("QCS_height", hSpinBox->value());
+  setProperty("QCS_midicc", midiccSpinBox->value());
+  setProperty("QCS_midichan", midichanSpinBox->value());
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif

@@ -26,6 +26,10 @@
 #include "options.h"
 #include "types.h"
 
+#ifdef QCS_RTMIDI
+#include "RtMidi.h"
+#endif
+
 ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   : QDialog(parent), m_parent(parent), m_options(options)
 {
@@ -46,6 +50,21 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   for (int i = 0; i < _configlists.languages.size(); i++) {
     languageComboBox->addItem(_configlists.languages[i], QVariant(_configlists.languageCodes[i]));
   }
+  midiInterfaceComboBox->clear();
+
+#ifdef QCS_RTMIDI
+  try {
+    RtMidiIn midiin;
+    for (int i = 0; i < (int) midiin.getPortCount(); i++) {
+      midiInterfaceComboBox->addItem(QString::fromStdString(midiin.getPortName(i)), QVariant(i));
+    }
+  }
+  catch (RtError &error) {
+    // Handle the exception here
+    error.printMessage();
+  }
+#endif
+  midiInterfaceComboBox->addItem(QString(tr("None", "No MIDI internal interface")), QVariant(9999));
 
   fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
   fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));
@@ -263,6 +282,7 @@ void ConfigDialog::accept()
   m_options->keyRepeat = keyRepeatCheckBox->isChecked();
   m_options->debugLiveEvents = debugLiveEventsCheckBox->isChecked();
   m_options->consoleBufferSize = consoleBufferComboBox->itemText(consoleBufferComboBox->currentIndex()).toInt();
+  m_options->midiInterface = midiInterfaceComboBox->itemData(midiInterfaceComboBox->currentIndex()).toInt();
   if (m_options->consoleBufferSize < 0)
     m_options->consoleBufferSize = 0;
   m_options->bufferSize = BufferSizeLineEdit->text().toInt();

@@ -56,6 +56,9 @@ class GraphicWindow;
 class KeyboardShortcuts;
 class EventDispatcher;
 class EventSheet;
+#ifdef QCS_PYTHONQT
+class RtMidiIn;
+#endif
 
 class qutecsound:public QMainWindow
 {
@@ -249,6 +252,10 @@ class qutecsound:public QMainWindow
     void createQuickRefPdf();
     void deleteCurrentTab();
     void openLogFile();
+
+    void setMidiInterface(int number);
+    void openMidiPort(int port);
+    void closeMidiPort();
     void showNewFormatWarning();
 
 //     QHash<QString, double> outValueQueue;
@@ -266,6 +273,9 @@ class qutecsound:public QMainWindow
     Inspector *m_inspector;
 #ifdef QCS_PYTHONQT
     PythonConsole *m_pythonConsole;
+#endif
+#ifdef QCS_RTMIDI
+    RtMidiIn *m_midiin;
 #endif
     QToolButton *closeTabButton;
     QFile logFile;

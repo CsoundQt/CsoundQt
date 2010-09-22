@@ -6,6 +6,7 @@
 # CSOUND_LIBRARY_DIR
 # LIBSNDFILE_INCLUDE_DIR
 # LIBSNDFILE_LIBRARY_DIR
+# RTMIDI_DIR
 # If the Csound headers and libraries you are using were built from source but
 # not installed, set CSOUND_SOURCE_TREE to the directory containing the Csound
 # source tree.  In this case, the CSOUND_INCLUDE_DIR and CSOUND_LIBRARY_DIR
@@ -17,7 +18,7 @@
 # BUILD OPTIONS:
 # CONFIG+=build64    To build doubles version
 # CONFIG+=pythonqt   To build with PythonQt support
-# CONFIG+=portmidi   To build with Portmidi support
+# CONFIG+=rtmidi   To build with Portmidi support
 # OS X only OPTIONS:
 # CONFIG+=intel         To build intel only version (Universal is the default)
 # ##############################################################################
@@ -29,7 +30,7 @@ unix {
 }
 win32-g++:include (qcs-win32.pro)
 pythonqt:DEFINES += QCS_PYTHONQT
-portmidi:DEFINES += QCS_PORTMIDI
+rtmidi:DEFINES += QCS_RTMIDI
 include(src/src.pri)
 TRANSLATIONS = "src/translations/qutecsound_en.ts" \
     "src/translations/qutecsound_es.ts" \
@@ -56,11 +57,12 @@ pythonqt {
 # win32: LIBS *= $(PYTHON_LIB)/libpython$${PYTHON_VERSION}.a
 # win32: LIBS *= $${PYTHONQT_TREE_DIR}/lib/libPythonQt.a
 # unix: LIBS *= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt
-portmidi { 
-    INCLUDEPATH *= $${PORTMIDI_INCLUDE_DIR}
-    LIBS += -L$${PORTMIDI_LIB_DIR} \
-        -l$${PORTMIDI_LIB}
-}
+#rtmidi {
+#    INCLUDEPATH *= $${RTMIDI_INCLUDE_DIR}
+#    LIBS += -L$${RTMIDI_LIB_DIR} \
+#        -l$${RTMIDI_LIB}
+#}
+
 INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
 INCLUDEPATH *= $${CSOUND_INTERFACES_INCLUDE_DIR}
 INCLUDEPATH *= $${LIBSNDFILE_INCLUDE_DIR}

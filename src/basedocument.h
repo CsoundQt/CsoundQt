@@ -54,12 +54,13 @@ class BaseDocument : public QObject
 
     virtual void registerButton(QuteButton *button);
 
-  protected:
+
+protected:
     QList<WidgetLayout *> m_widgetLayouts;
     DocumentView *m_view;
     CsoundEngine *m_csEngine;
 
-  private:
+private:
 
 };
 

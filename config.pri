@@ -40,6 +40,12 @@ TARGET = qutecsound
 build32:TARGET = $${TARGET}-f
 build64:TARGET = $${TARGET}-d
 debug:TARGET = $${TARGET}-debug
+
+DEFAULT_RTMIDI_DIRNAME="rtmidi-1.0.11"
+DEFAULT_RTMIDI_DIRS = $${DEFAULT_RTMIDI_DIRNAME} \
+  ../$${DEFAULT_RTMIDI_DIRNAME} \
+  ../../../$${DEFAULT_RTMIDI_DIRNAME}
+
 exists(config.user.pri) { 
     include(config.user.pri)
     !no_messages:message(... config.user.pri found)
@@ -190,38 +196,24 @@ pythonqt {
         isEmpty(PYTHONQT_TREE_DIR):error(A valid PythonQt library directory was not found.)
     }
 }
-portmidi { 
-    isEmpty(PORTMIDI_INCLUDE_DIR) { 
-        !no_messages:message(Portmidi include directory not specified.)
-        for(dir, DEFAULT_PORTMIDI_INCLUDE_DIRS) { 
+    isEmpty(RTMIDI_DIR) {
+        !no_messages:message(RtMidi include directory not specified.)
+        for(dir, DEFAULT_RTMIDI_DIRS) {
             !no_messages:message(... searching in $${dir})
-            exists($${dir}) { 
+            exists($${dir}) {
+            #exists($${dir}/tests/Release/RtMidi.o) {
                 !no_messages { 
-                    message(PORTMIDI_INCLUDE_DIR set to $${dir})
+                    message(RTMIDI_DIR set to $${dir})
                     message()
                 }
-                PORTMIDI_INCLUDE_DIR = $${dir}
+                RTMIDI_DIR = $${dir}
+                DEFINES += QCS_RTMIDI
+                CONFIG += rtmidi
                 break()
+            #}
             }
         }
-        isEmpty(PORTMIDI_INCLUDE_DIR):error(A valid Portmidi include directory was not found.)
     }
-    isEmpty(PORTMIDI_LIB_DIR) { 
-        !no_messages:message(Portmidi library directory not specified.)
-        for(dir, DEFAULT_PORTMIDI_LIB_DIRS) { 
-            !no_messages:message(... searching in $${dir})
-            exists($${dir}) { 
-                !no_messages { 
-                    message(PORTMIDI_LIB_DIR set to $${dir})
-                    message()
-                }
-                PORTMIDI_LIB_DIR = $${dir}
-                break()
-            }
-        }
-        isEmpty(PORTMIDI_LIB_DIR):error(A valid Portmidi library directory was not found.)
-    }
-}
 win32 { 
     CSOUND_INCLUDE_DIR = $$replace(CSOUND_INCLUDE_DIR, \\\\, /)
     CSOUND_LIBRARY_DIR = $$replace(CSOUND_LIBRARY_DIR, \\\\, /)
@@ -238,9 +230,9 @@ win32 {
         win32:message(Python include directory is $${PYTHON_INCLUDE_DIR})
         message(PythonQt source tree directory is $${PYTHONQT_TREE_DIR})
     }
-    portmidi { 
-        message(Portmidi include directory is $${PORTMIDI_INCLUDE_DIR})
-        message(Portmidi library directory is $${PORTMIDI_LIB_DIR})
+    rtmidi {
+        message(RtMidi directory is $${RTMIDI_DIR})
+        INCLUDEPATH *= $${RTMIDI_DIR}
     }
     message()
 }

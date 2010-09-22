@@ -39,6 +39,7 @@ class QuteKnob : public QuteWidget
     virtual QString getWidgetType();
 //    virtual void setResolution(double resolution);
     void setRange(double min, double max);
+    virtual void setMidiValue(int value);
 
     virtual void refreshWidget();
     virtual void applyInternalProperties();

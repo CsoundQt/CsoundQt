@@ -33,6 +33,7 @@ class QuteSpinBox : public QuteText
     ~QuteSpinBox();
 
     virtual void setText(QString text);
+    virtual void setMidiValue(int value);
 //    virtual void setResolution(double resolution);
     virtual QString getWidgetLine();
     virtual QString getCsladspaLine();

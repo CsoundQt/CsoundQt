@@ -38,6 +38,18 @@ class QuteScope;
 class QuteButton;
 class FrameWidget;
 
+class RegisteredController {
+public:
+  RegisteredController(QuteWidget * _widget, int _chan,int  _cc) {
+    widget = _widget;
+    chan = _chan;
+    cc = _cc;
+  }
+  int chan;
+  int cc;
+  QuteWidget * widget;
+};
+
 class WidgetLayout : public QWidget
 {
   Q_OBJECT
@@ -56,6 +68,8 @@ class WidgetLayout : public QWidget
     QString getMacWidgetsText(); // With full tags
     QStringList getSelectedMacWidgetsText();
     QString getCsladspaLines();
+    bool openMidiPort(int port);
+    void closeMidiPort();
 
     // Data to/from widgets
     void setValue(QString channelName, double value);
@@ -95,6 +109,10 @@ class WidgetLayout : public QWidget
     int newXmlWidget(QDomNode node, bool offset = false, bool newId = false);
     int newMacWidget(QString widgetLine, bool offset = false);  // Offset is used when pasting duplicated widgets
     void registerWidget(QuteWidget *widget);
+
+    QVector<QVector<int> > midiQueue;
+    int midiWriteCounter;
+    int midiReadCounter;
 
     // Messages
     void appendMessage(QString message);
@@ -309,6 +327,8 @@ class WidgetLayout : public QWidget
     QVector<WidgetPreset> presets;
     int m_currentPreset; // If -1 no current preset
 
+    QList<RegisteredController> registeredControllers;
+
     // Contained Widgets
     QVector<QuteWidget *> m_widgets;
     QVector<FrameWidget *> editWidgets;
@@ -339,6 +359,11 @@ class WidgetLayout : public QWidget
 
     void setBackground(bool bg, QColor bgColor);
     FrameWidget *getEditWidget(QuteWidget *widget);
+
+    void registerWidgetController(QuteWidget *widget, int cc);
+    void registerWidgetChannel(QuteWidget *widget, int chan);
+    void unregisterWidgetController(QuteWidget *widget);
+    void clearWidgetControllers();
 
     //Undo history
     void clearHistory();

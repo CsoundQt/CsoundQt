@@ -37,6 +37,9 @@
 // Maximum undo history depth for widget panel and event sheet
 #define QCS_MAX_UNDO 256
 
+// Maximum MIDI message queue size for internal control
+#define MAX_MIDI_QUEUE 128
+
 #ifdef Q_OS_LINUX
 #define DEFAULT_HTML_DIR "/usr/share/doc/csound-doc/html"
 #define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"

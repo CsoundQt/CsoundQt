@@ -41,7 +41,8 @@ class QuteSlider : public QuteWidget
 
     virtual QString getWidgetType();
 //    void setInternalValue(double value);
-    void setValue(double value);
+    virtual void setValue(double value);
+    virtual void setMidiValue(int value);
 
     virtual void refreshWidget();
     virtual void applyInternalProperties();

@@ -68,6 +68,7 @@ class Options: public CsoundOptions{
     bool keyRepeat;
     bool debugLiveEvents;
     int consoleBufferSize;
+    int midiInterface; // For internal QuteCsound MIDI control
 
     QString csdPath; //path of active csd needed for setting -o -i paths
 

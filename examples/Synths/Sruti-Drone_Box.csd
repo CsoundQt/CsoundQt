@@ -329,8 +329,8 @@ e
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>272</x>
- <y>123</y>
+ <x>343</x>
+ <y>161</y>
  <width>490</width>
  <height>603</height>
  <visible>true</visible>
@@ -1214,7 +1214,7 @@ e
   <image>/</image>
   <eventLine>i 3.1 0 -1 1</eventLine>
   <latch>true</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>btn_on2</objectName>
@@ -1233,7 +1233,7 @@ e
   <image>/</image>
   <eventLine>i 3.2 0 -1 2</eventLine>
   <latch>true</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>btn_on4</objectName>
@@ -1252,7 +1252,7 @@ e
   <image>/</image>
   <eventLine>i 3.4 0 -1 4</eventLine>
   <latch>true</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>btn_on3</objectName>
@@ -1271,7 +1271,7 @@ e
   <image>/</image>
   <eventLine>i 3.3 0 -1 3</eventLine>
   <latch>true</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1597,8 +1597,8 @@ e
   <height>20</height>
   <uuid>{5d4975a8-7006-449c-8c23-6d3b3dfa80f7}</uuid>
   <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midichan>1</midichan>
+  <midicc>1</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.01000000</value>
@@ -2022,7 +2022,7 @@ ioSlider {273, 222} {150, 20} 0.000000 1.000000 0.010000 risset_offset
 ioText {307, 242} {80, 25} scroll 0.010000 0.010000 "risoff_display" right "Arial" 13 {0, 65280, 0} {0, 0, 0} background noborder 
 ioText {98, 291} {102, 27} label 0.000000 0.00100 "" center "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Binaural Beats
 ioText {318, 291} {60, 27} label 0.000000 0.00100 "" center "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Reverb
-ioText {170, 2} {144, 25} label 0.000000 0.00100 "" center "Arial" 18 {65280, 65280, 65280} {0, 0, 0} nobackground noborder Sruti/Drone Box 2.5
-ioText {139, 552} {160, 22} label 0.000000 0.00100 "" center "Arial" 10 {65280, 65280, 65280} {0, 0, 0} nobackground noborder Dave Seidel <mysterybear.net/>
+ioText {152, 2} {200, 31} label 0.000000 0.00100 "" center "Arial" 18 {65280, 65280, 65280} {0, 0, 0} nobackground noborder Sruti/Drone Box 2.5
+ioText {185, 553} {160, 22} label 0.000000 0.00100 "" center "Arial" 10 {65280, 65280, 65280} {0, 0, 0} nobackground noborder Dave Seidel <mysterybear.net/>
 </MacGUI>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="127" y="179" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

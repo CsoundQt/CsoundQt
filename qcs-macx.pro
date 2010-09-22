@@ -39,18 +39,15 @@ DEFAULT_PYTHONQT_TREE_DIRS = ../../../PythonQt2.0.1 \
         PythonQt2.0.1
 PYTHONQT_LIB = libPythonQt_QtAll$${DEBUG_EXT}.dylib
 
-DEFAULT_PORTMIDI_INCLUDE_DIRS =  /usr/local/include \
-        /usr/include
-DEFAULT_PORTMIDI_LIB_DIRS =  /usr/local/lib \
-        /usr/lib
-PORTMIDI_LIB = portmidi.dylib
-
 # Do configuration step
 include(config.pri)
 
 # Use results from config step
 LIBS *= -L$${CSOUND_LIBRARY_DIR}
 LIBS *= -L$${LIBSNDFILE_LIBRARY_DIR}
+rtmidi {
+LIBS *= $${RTMIDI_DIR}/tests/Release/RtMidi.o
+}
 #LIBS += -framework QtCore -framework QtGui -framework QtXml
 LCSOUND = -framework $${MAC_LIB}
 #LCSND = -l_csnd

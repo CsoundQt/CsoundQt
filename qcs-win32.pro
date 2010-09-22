@@ -22,11 +22,6 @@ LIBSNDFILE_LIB = libsndfile-1.dll
 DEFAULT_PYTHON_INCLUDE_DIRS = "$$(HOMEDRIVE)\Python26\include"
 DEFAULT_PYTHONQT_TREE_DIRS = "$$(PROGRAMFILES)\PythonQt"
 
-DEFAULT_PORTMIDI_INCLUDE_DIRS =  /usr/local/include \
-        /usr/include
-DEFAULT_PORTMIDI_LIB_DIRS =  /usr/local/lib \
-        /usr/lib
-PORTMIDI_LIB = portmidi
 
 # Do configuration step
 include(config.pri)
@@ -37,3 +32,7 @@ INCLUDEPATH += $${PYTHON_INCLUDE_DIR}
 LCSOUND = "$${CSOUND_LIBRARY_DIR}/$${CSOUND_LIB}"
 #LCSND = "$${CSOUND_LIBRARY_DIR}/$${CSND_LIB}"
 LSNDFILE = "$${LIBSNDFILE_LIBRARY_DIR}/$${LIBSNDFILE_LIB}"
+
+rtmidi {
+LIBS *= $${RTMIDI_DIR}/tests/Release/RtMidi.o
+}

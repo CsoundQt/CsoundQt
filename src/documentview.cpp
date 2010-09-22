@@ -430,10 +430,10 @@ int DocumentView::currentLine()
 QString DocumentView::wordUnderCursor()
 {
   QTextCursor cursor = editors[0]->textCursor();
-  cursor.select(QTextCursor::WordUnderCursor);
   QString word = cursor.selectedText();
-  if (word.startsWith('#')) {
-    word.remove(0,1);
+  if (word.isEmpty()) {
+    cursor.select(QTextCursor::WordUnderCursor);
+    word = cursor.selectedText();
   }
   return word;
 }

@@ -56,6 +56,19 @@ void QuteSpinBox::setText(QString text)
   setValue(text.toDouble());
 }
 
+void QuteSpinBox::setMidiValue(int value)
+{
+  double max = property("QCS_maximum").toDouble();
+  double min = property("QCS_minimum").toDouble();
+  if (max != 999999999999.0 && min != -999999999999.0) {
+    double newValue = min + ((value / 127.0)* (max - min));
+    setValue(newValue);
+  }
+  else {
+    qDebug() << "QuteSpinBox::setMidiValue ranges not set.";
+  }
+}
+
 //void QuteSpinBox::setResolution(double resolution)
 //{
 //  setProperty("QCS_resolution", resolution);

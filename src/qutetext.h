@@ -119,6 +119,7 @@ class QuteScrollNumber : public QuteText
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();
     virtual void setValue(double value);
+    virtual void setMidiValue(int value);
 
     virtual void applyInternalProperties();
 

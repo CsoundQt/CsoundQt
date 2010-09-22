@@ -369,7 +369,7 @@ QVariantList PyQcsObject::readTableToList(int ftable, int offset, int count)
     mainContext.evalScript("print '''readTableToList(): Invalid table " + QString::number(ftable) + "'''");
 //    return QVariantList();
   }
-  MYFLT **tablePtr;
+  MYFLT **tablePtr = 0;
   int ret = csoundGetTable(cs, tablePtr, ftable);
 //  qDebug() << "PyQcsObject::readTableToList " << tablePtr << "--" << tabLen;
 //  while (offset < tabLen && count > 0) {
