@@ -115,7 +115,7 @@ pythonqt {
         "$${PWD}/pyqcsobject.cpp"
 }
 rtmidi {
-#    HEADERS += "$${PWD}/../$${RTMIDI_DIR}/RtMidi.h"
-#    SOURCES += "$${PWD}/../$${RTMIDI_DIR}/RtMidi.cpp"
-    INCLUDEPATH += $${PWD}/$${RTMIDI_DIR}
+    HEADERS += "$${PWD}/../$${RTMIDI_DIR}/RtMidi.h"
+    SOURCES += "$${PWD}/../$${RTMIDI_DIR}/RtMidi.cpp"
+    INCLUDEPATH += $${PWD}/../$${RTMIDI_DIR}
 }

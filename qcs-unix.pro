@@ -40,7 +40,7 @@ include(config.pri)
 LIBS *= -L$${CSOUND_LIBRARY_DIR}
 LIBS *= -L$${LIBSNDFILE_LIBRARY_DIR}
 rtmidi {
-LIBS *= $${RTMIDI_DIR}/tests/Release/RtMidi.o
+DEFINES += __LINUX_ALSASEQ__
 }
 build32:LCSOUND = -lcsound
 build64:LCSOUND = -lcsound64

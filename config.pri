@@ -232,7 +232,6 @@ win32 {
     }
     rtmidi {
         message(RtMidi directory is $${RTMIDI_DIR})
-        INCLUDEPATH *= $${RTMIDI_DIR}
     }
     message()
 }

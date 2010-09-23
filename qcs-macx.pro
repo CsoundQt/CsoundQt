@@ -46,7 +46,7 @@ include(config.pri)
 LIBS *= -L$${CSOUND_LIBRARY_DIR}
 LIBS *= -L$${LIBSNDFILE_LIBRARY_DIR}
 rtmidi {
-LIBS *= $${RTMIDI_DIR}/tests/Release/RtMidi.o
+DEFINES += __MACOSX_CORE__
 }
 #LIBS += -framework QtCore -framework QtGui -framework QtXml
 LCSOUND = -framework $${MAC_LIB}
