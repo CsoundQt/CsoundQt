@@ -73,6 +73,14 @@ install_name_tool -change  QtCore.framework/Versions/4/QtCore @executable_path/.
 #rm $APP_NAME/Contents/Info.plist
 #cp ../src/MyInfo.plist $APP_NAME/Contents/Info.plist
 
+# Remove debugging info
+rm -f $APP_NAME/Contents/Frameworks/QtGui.framework/QtGui_debug.dSYM
+rm -f $APP_NAME/Contents/Frameworks/QtGui.framework/Versions/4/QtGui_debug
+rm -f $APP_NAME/Contents/Frameworks/QtCore.framework/QtCore_debug.dSYM
+rm -f $APP_NAME/Contents/Frameworks/QtCore.framework/Versions/4/QtCore_debug
+rm -f $APP_NAME/Contents/Frameworks/QXml.framework/QtXml_debug.dSYM
+rm -f $APP_NAME/Contents/Frameworks/QtXml.framework/Versions/4/QtXml_debug
+
 otool -L $APP_NAME/Contents/MacOS/$ORIGINAL_NAME
 
 if [ "$nflag"  -ne 1 ]
