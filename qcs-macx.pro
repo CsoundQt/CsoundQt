@@ -47,6 +47,7 @@ LIBS *= -L$${CSOUND_LIBRARY_DIR}
 LIBS *= -L$${LIBSNDFILE_LIBRARY_DIR}
 rtmidi {
 DEFINES += __MACOSX_CORE__
+LIBS += -framework CoreMidi -framework CoreAudio -framework CoreFoundation
 }
 #LIBS += -framework QtCore -framework QtGui -framework QtXml
 LCSOUND = -framework $${MAC_LIB}
