@@ -653,10 +653,14 @@ instr 100; global reverb and display
 kwdmix		invalue	"wdmix";(between 0=dry und 1=reverberating)
 kroomsize	invalue	"roomsize"; 0-1 (for freeverb)
 khfdamp	invalue	"hfdamp"; attenuation of high frequencies (0-1) (for freeverb)
+kvol		invalue	"vol" ;volume slider
+kvol		port		kvol, .1 ;smooth changes
 ;;REVERB AND AUDIO OUTPUT
 awetL, awetR	freeverb	gadryL, gadryR, kroomsize, khfdamp
 aoutL		=		(1-kwdmix) * gadryL + (kwdmix * awetL)
 aoutR		=		(1-kwdmix) * gadryR + (kwdmix * awetR)
+aoutL		=		aoutL * kvol
+aoutR		=		aoutR * kvol
 		outs		aoutL, aoutR
 ;; send to GUI
 kTrigDisp	metro		10
@@ -893,9 +897,9 @@ e 36000
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>737</x>
-  <y>47</y>
+  <y>44</y>
   <width>131</width>
-  <height>24</height>
+  <height>28</height>
   <uuid>{0a533a2f-56e9-45c3-b5c5-87962ec7dcf2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1820,52 +1824,52 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <bsbDropdownItemList>
    <bsbDropdownItem>
-    <name>Halftones</name>
+    <name>1 Halftones</name>
     <value>0</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Thirdtones</name>
+    <name>2 Thirdtones</name>
     <value>1</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Quartertones</name>
+    <name>3 Quartertones</name>
     <value>2</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Fifthtones</name>
+    <name>4 Fifthtones</name>
     <value>3</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Sixthtones</name>
+    <name>5 Sixthtones</name>
     <value>4</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Eighttones</name>
+    <name>6 Eighttones</name>
     <value>5</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Twelfthtones</name>
+    <name>7 Twelfthtones</name>
     <value>6</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Sixteenthtones</name>
+    <name>8 Sixteenthtones</name>
     <value>7</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Stockhausen Studie II</name>
+    <name>9 Stockhausen Studie II</name>
     <value>8</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>UserDefined</name>
+    <name>10 UserDefined</name>
     <value>9</value>
     <stringvalue/>
    </bsbDropdownItem>
@@ -2021,9 +2025,9 @@ The SECOND VALUE lets you choose between three cases:
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>various</objectName>
-  <x>145</x>
+  <x>141</x>
   <y>167</y>
-  <width>126</width>
+  <width>132</width>
   <height>24</height>
   <uuid>{64462832-bfe5-491c-8b85-6c00f2062b17}</uuid>
   <visible>true</visible>
@@ -2031,52 +2035,52 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <bsbDropdownItemList>
    <bsbDropdownItem>
-    <name>Pythagorean</name>
+    <name>11 Pythagorean</name>
     <value>0</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Zarlino 1/4 Comma</name>
+    <name>12 Zarlino 1/4 Comma</name>
     <value>1</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Werckmeister III</name>
+    <name>13 Werckmeister III</name>
     <value>2</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Kirnberger II</name>
+    <name>14 Kirnberger II</name>
     <value>3</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Indian Sruti I</name>
+    <name>15 Indian Sruti I</name>
     <value>4</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Indian Sruti II</name>
+    <name>16 Indian Sruti II</name>
     <value>5</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>User Defined</name>
+    <name>17 User Defined</name>
     <value>6</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>User Defined</name>
+    <name>18 User Defined</name>
     <value>7</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>User Defined</name>
+    <name>19 User Defined</name>
     <value>8</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>User Defined</name>
+    <name>20 User Defined</name>
     <value>9</value>
     <stringvalue/>
    </bsbDropdownItem>
@@ -2118,7 +2122,7 @@ The SECOND VALUE lets you choose between three cases:
   <objectName>bohlen-pierce</objectName>
   <x>275</x>
   <y>167</y>
-  <width>126</width>
+  <width>136</width>
   <height>24</height>
   <uuid>{dd3f6092-bad8-4ae1-8e90-044dab957c1d}</uuid>
   <visible>true</visible>
@@ -2126,52 +2130,52 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <bsbDropdownItemList>
    <bsbDropdownItem>
-    <name>Equal Tempered</name>
+    <name>21 Equal Tempered</name>
     <value>0</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Ratios</name>
+    <name>22 Ratios</name>
     <value>1</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Dur I Mode</name>
+    <name>23 Dur I Mode</name>
     <value>2</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Dur II Mode</name>
+    <name>24 Dur II Mode</name>
     <value>3</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Moll I (Delta) Mode</name>
+    <name>25 Moll I (Delta) Mode</name>
     <value>4</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Moll II (Pierce) Mode</name>
+    <name>26 Moll II (Pierce) Mode</name>
     <value>5</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Gamma Mode</name>
+    <name>27 Gamma Mode</name>
     <value>6</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Harmonic Mode</name>
+    <name>28 Harmonic Mode</name>
     <value>7</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Lambda Mode</name>
+    <name>29 Lambda Mode</name>
     <value>8</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>User Defined</name>
+    <name>30 User Defined</name>
     <value>9</value>
     <stringvalue/>
    </bsbDropdownItem>
@@ -6228,7 +6232,7 @@ Data2 = 64</label>
 </bsbPresets>
 <MacGUI>
 ioView background {48830, 48316, 36751}
-ioText {1012, 19} {374, 773} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Scale Pool
+ioText {1010, 17} {374, 773} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Scale Pool
 ioText {846, 595} {62, 27} display 60.000000 0.00100 "key" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 60
 ioText {391, 595} {457, 28} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Key Pressed
 ioText {847, 623} {82, 27} display 0.000000 0.00100 "cent" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0
@@ -6236,7 +6240,7 @@ ioText {307, 623} {539, 27} label 0.000000 0.00100 "" right "Lucida Grande" 14 {
 ioText {847, 649} {82, 27} display 261.625000 0.00100 "freq" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 261.625
 ioText {306, 649} {542, 29} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frequency of this Key
 ioText {737, 47} {131, 24} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder jh && rb 5/2010
-ioText {847, 675} {82, 28} display 261.625549 0.00100 "normfreq" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 261.626
+ioText {847, 675} {82, 28} display 261.626000 0.00100 "normfreq" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 261.626
 ioText {307, 675} {541, 29} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Usual Frequency of this Key
 ioText {847, 701} {82, 30} display 0.000000 0.00100 "centdiff" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -0.0
 ioText {307, 701} {541, 31} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Cent Difference Real Frequency to Usual Frequency
@@ -6257,25 +6261,25 @@ ioText {431, 131} {578, 78} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0
 ioText {431, 207} {466, 27} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ADDING USER DEFINED or NEW SCALES
 ioText {431, 233} {583, 155} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder In the Scale Pool at the right you find a number of predefined scales. You can add any scale in the "User Defined" slots (10,17,18,19,20,30), or you can change or replace any of the scales in the following way:Â¬Type in the FIRST VALUE as the UNIT MULTIPLIER (2 = octave, 3 = perfect 12th, etc.).Â¬The SECOND VALUE lets you choose between three cases:Â¬1) if you type 0 you are giving a list of CENT values;Â¬2) if you type 1 you are giving a list of PROPORTIONS;Â¬3) any other value indicates an Equal Tempered Scale and gives as the second value the number of steps per Unit Multiplier.
 ioText {431, 387} {584, 78} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder NOTE: When you select a BP mode, it consists of 9 pitches (a unique subset of the 13 BP chromatic tones) and it is played on a MIDI keyboard chromatically starting from the REFERENCE KEY.  The 10th pitch is the "tritave" - a pure perfect 12th (an octave plus 5th) or a 3:1 frequency ratio.
-ioText {4, 35} {422, 214} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {3, 33} {422, 217} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioMenu {201, 220} {165, 25} 5 303 "sine,saw,square,square vco2,waveguide-clarinet,pluck" sound
-ioText {43, 211} {160, 31} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select Sound
+ioText {43, 216} {160, 31} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select Sound
 ioMeter {23, 189} {104, 23} {0, 59904, 0} "scsel1" 1.000000 "vert34" 0.434783 fill 1 0 mouse
 ioMeter {154, 189} {104, 23} {0, 59904, 0} "scsel2" 0.000000 "vert34" 0.434783 fill 1 0 mouse
 ioMeter {285, 189} {104, 23} {0, 59904, 0} "scsel3" 0.000000 "vert34" 0.434783 fill 1 0 mouse
 ioText {313, 44} {107, 26} editnum 261.625000 0.000001 "tunfreq" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 261.625000
 ioText {206, 44} {108, 28} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Related Pitch
 ioText {227, 65} {72, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder (Hertz)
-ioMenu {12, 167} {126, 24} 0 303 "Halftones,Thirdtones,Quartertones,Fifthtones,Sixthtones,Eighttones,Twelfthtones,Sixteenthtones,Stockhausen Studie II,UserDefined" equal_tmprd
+ioMenu {12, 167} {126, 24} 0 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 UserDefined" equal_tmprd
 ioText {10, 93} {393, 30} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select Scale By Menu
 ioText {136, 44} {62, 26} editnum 60.000000 1.000000 "reftone" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 60.000000
 ioText {8, 44} {130, 28} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Reference Key
 ioText {8, 67} {129, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder (Midi-Number)
-ioText {15, 120} {122, 43} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Equal TemperedÂ¬(1-10)
-ioMenu {145, 167} {126, 24} 9 303 "Pythagorean,Zarlino 1/4 Comma,Werckmeister III,Kirnberger II,Indian Sruti I,Indian Sruti II,User Defined,User Defined,User Defined,User Defined" various
-ioText {148, 120} {122, 43} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder VariousÂ¬(11-20)
-ioMenu {275, 167} {126, 24} 9 303 "Equal Tempered,Ratios,Dur I Mode,Dur II Mode,Moll I (Delta) Mode,Moll II (Pierce) Mode,Gamma Mode,Harmonic Mode,Lambda Mode,User Defined" bohlen-pierce
-ioText {278, 120} {122, 43} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Bohlen-PierceÂ¬(21-30)
+ioText {15, 120} {121, 47} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Equal TemperedÂ¬(1-10)
+ioMenu {141, 167} {132, 24} 9 303 "11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined" various
+ioText {148, 120} {121, 47} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder VariousÂ¬(11-20)
+ioMenu {275, 167} {136, 24} 9 303 "21 Equal Tempered,22 Ratios,23 Dur I Mode,24 Dur II Mode,25 Moll I (Delta) Mode,26 Moll II (Pierce) Mode,27 Gamma Mode,28 Harmonic Mode,29 Lambda Mode,30 User Defined" bohlen-pierce
+ioText {278, 120} {121, 47} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Bohlen-PierceÂ¬(21-30)
 ioText {4, 256} {261, 311} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 ioMenu {10, 323} {108, 25} 0 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I (Delta) Mode,26 BP Moll II (Pierce) Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm1_scale
 ioText {124, 323} {61, 25} editnum 36.000000 1.000000 "gm1_key" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 36.000000
@@ -6321,63 +6325,63 @@ ioText {2, 756} {44, 26} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0,
 ioText {204, 757} {59, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Yes
 ioText {40, 723} {175, 30} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder High Frequency Attenuation
 ioText {1156, 51} {220, 24} edit 0.000000 0.00100 "scale1"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 12
-ioText {1018, 50} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1 Halftones
+ioText {1018, 50} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1 Halftones
 ioText {1156, 75} {220, 24} edit 0.000000 0.00100 "scale2"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 18
-ioText {1018, 75} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2 Thirdtones
+ioText {1018, 75} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2 Thirdtones
 ioText {1156, 99} {220, 24} edit 0.000000 0.00100 "scale3"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 24
-ioText {1018, 99} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3 Quartertones
+ioText {1018, 99} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3 Quartertones
 ioText {1156, 124} {220, 24} edit 0.000000 0.00100 "scale4"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 30
-ioText {1018, 124} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4 Fifthtones
+ioText {1018, 124} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4 Fifthtones
 ioText {1156, 148} {220, 24} edit 0.000000 0.00100 "scale5"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 36
-ioText {1018, 148} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 5 Sixthtones
+ioText {1018, 148} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 5 Sixthtones
 ioText {1156, 173} {220, 24} edit 0.000000 0.00100 "scale6"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 48
-ioText {1018, 173} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 6 Eighttones
+ioText {1018, 173} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 6 Eighttones
 ioText {1156, 197} {220, 24} edit 0.000000 0.00100 "scale7"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 72
-ioText {1018, 197} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 7 Twelfthtones
+ioText {1018, 197} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 7 Twelfthtones
 ioText {1156, 222} {220, 24} edit 0.000000 0.00100 "scale8"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 96
-ioText {1018, 222} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 8 Sixteenthtones
+ioText {1018, 222} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 8 Sixteenthtones
 ioText {1156, 245} {220, 24} edit 0.000000 0.00100 "scale9"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 5 25
-ioText {1018, 245} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 9 Stockhausen Studie II
+ioText {1018, 245} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 9 Stockhausen Studie II
 ioText {1156, 270} {220, 24} edit 0.000000 0.00100 "scale10"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 13
-ioText {1018, 270} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 10 User Defined
+ioText {1018, 270} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 10 User Defined
 ioText {1156, 294} {220, 24} edit 0.000000 0.00100 "scale11"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 1 2187/2048 9/8 32/27 81/64 4/3 729/512 3/2 6561/4096 27/16 16/9 243/128
-ioText {1018, 294} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 11 Pythagorean
+ioText {1018, 294} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 11 Pythagorean
 ioText {1156, 319} {220, 24} edit 0.000000 0.00100 "scale12"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 0 76 193 310 386 503 579 697 773 890 1007 1083
-ioText {1018, 319} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 12 Zarlino 1/4 Comma
+ioText {1018, 319} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 12 Zarlino 1/4 Comma
 ioText {1156, 343} {220, 24} edit 0.000000 0.00100 "scale13"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 0 90 192 294 390 498 588 696 792 888 996 1092
-ioText {1018, 343} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 13 Werckmeister III
+ioText {1018, 343} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 13 Werckmeister III
 ioText {1156, 368} {220, 24} edit 0.000000 0.00100 "scale14"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 0 90 204 294 386 498 590 702 792 895 996 1088
-ioText {1018, 368} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 14 Kirnberger II
+ioText {1018, 368} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 14 Kirnberger II
 ioText {1156, 392} {220, 24} edit 0.000000 0.00100 "scale15"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 0 90 112 182 204 294 316 386 408 498 520 590 610 702 792 814 884 906 996 1018 1088 1110
-ioText {1018, 392} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 15 Indian Sruti I
+ioText {1018, 392} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 15 Indian Sruti I
 ioText {1156, 417} {220, 24} edit 0.000000 0.00100 "scale16"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 0 68.6 135.3 200.21 263.46 325.13 385.33 444.13 501.62 557.85 612.91 666.85 719.73 771.6 822.5 872.48 921.59 969.86 1017.33 1064.04 1110.01 1155.28
-ioText {1018, 417} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 16 Indian Sruti II
+ioText {1018, 417} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 16 Indian Sruti II
 ioText {1156, 440} {220, 24} edit 0.000000 0.00100 "scale17"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 1 2^1/12 2^1/11 2^1/10 2^1/9 2^1/8 2^1/7 2^1/6 2^1/5 2^1/4 2^1/3 2^1/2 
-ioText {1018, 440} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 17 User Defined
+ioText {1018, 440} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 17 User Defined
 ioText {1156, 465} {220, 24} edit 0.000000 0.00100 "scale18"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 12
-ioText {1018, 465} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 18 User Defined
+ioText {1018, 465} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 18 User Defined
 ioText {1156, 489} {220, 24} edit 0.000000 0.00100 "scale19"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 12
-ioText {1018, 489} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 19 User Defined
+ioText {1018, 489} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 19 User Defined
 ioText {1156, 514} {220, 24} edit 0.000000 0.00100 "scale20"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 12
-ioText {1018, 514} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 20 User Defined
+ioText {1018, 514} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 20 User Defined
 ioText {1156, 538} {220, 24} edit 0.000000 0.00100 "scale21"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 13
-ioText {1018, 538} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 21 BP Equal Tempered
+ioText {1018, 538} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 21 BP Equal Tempered
 ioText {1156, 563} {220, 24} edit 0.000000 0.00100 "scale22"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 27/25 25/21 9/7 7/5 75/49 5/3 9/5 49/25 15/7 7/3 63/25 25/9
-ioText {1018, 563} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 22 BP Ratios
+ioText {1018, 563} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 22 BP Ratios
 ioText {1156, 586} {220, 24} edit 0.000000 0.00100 "scale23"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 27/25 9/7 7/5 5/3 9/5 49/25 7/3 63/25
-ioText {1018, 586} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 23 BP Dur I Mode
+ioText {1018, 586} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 23 BP Dur I Mode
 ioText {1156, 611} {220, 24} edit 0.000000 0.00100 "scale24"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 25/21 9/7 7/5 5/3 9/5 15/7 7/3 63/25
-ioText {1018, 611} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 24 BP Dur II Mode
+ioText {1018, 611} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 24 BP Dur II Mode
 ioText {1156, 635} {220, 24} edit 0.000000 0.00100 "scale25"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 25/21 9/7 75/49 5/3 9/5 15/7 7/3 25/9
-ioText {1018, 635} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 25 BP Moll I (Pierce) Mode 
+ioText {1018, 635} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 25 BP Moll I (Pierce) Mode 
 ioText {1156, 660} {220, 24} edit 0.000000 0.00100 "scale26"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 27/25 9/7 7/5 5/3 9/5 15/7 7/3 25/9
-ioText {1018, 660} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 26 BP Moll II (Delta) Mode
+ioText {1018, 660} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 26 BP Moll II (Delta) Mode
 ioText {1156, 684} {220, 24} edit 0.000000 0.00100 "scale27"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 27/25 9/7 7/5 5/3 9/5 49/25 7/3 25/9
-ioText {1018, 684} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 27 BP Gamma Mode
+ioText {1018, 684} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 27 BP Gamma Mode
 ioText {1156, 709} {220, 24} edit 0.000000 0.00100 "scale28"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 27/25 9/7 7/5 5/3 9/5 15/7 7/3 63/25
-ioText {1018, 709} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 28 BP Harmonic Mode
+ioText {1018, 709} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 28 BP Harmonic Mode
 ioText {1156, 733} {220, 24} edit 0.000000 0.00100 "scale29"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 25/21 9/7 7/5 5/3 9/5 15/7 7/3 25/9
-ioText {1018, 733} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 29 BP Lambda Mode
+ioText {1018, 733} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 29 BP Lambda Mode
 ioText {1156, 758} {220, 24} edit 0.000000 0.00100 "scale30"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 13
-ioText {1018, 758} {138, 24} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 30 User Defined
+ioText {1018, 758} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 30 User Defined
 </MacGUI>
