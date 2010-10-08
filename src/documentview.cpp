@@ -438,6 +438,34 @@ QString DocumentView::wordUnderCursor()
   return word;
 }
 
+QString DocumentView::getActiveSection()
+{
+  QTextCursor cursor = editors[0]->textCursor();
+  cursor.select(QTextCursor::LineUnderCursor);
+  bool sectionStart = cursor.selectedText().simplified().startsWith("##");
+  while (!sectionStart && !cursor.atStart()) {
+    cursor.movePosition(QTextCursor::PreviousBlock);
+    cursor.select(QTextCursor::LineUnderCursor);
+    sectionStart = cursor.selectedText().simplified().startsWith("##");
+  }
+  int start = cursor.position();
+  cursor = editors[0]->textCursor();
+  cursor.movePosition(QTextCursor::NextBlock);
+  cursor.select(QTextCursor::LineUnderCursor);
+  bool sectionEnd = cursor.selectedText().simplified().startsWith("##");
+  while (!sectionEnd && !cursor.atEnd()) {
+    cursor.movePosition(QTextCursor::NextBlock);
+    cursor.select(QTextCursor::LineUnderCursor);
+    sectionEnd = cursor.selectedText().simplified().startsWith("##");
+  }
+  cursor.movePosition(QTextCursor::StartOfLine);
+  cursor.setPosition(start, QTextCursor::KeepAnchor);
+  editors[0]->setTextCursor(cursor);
+  QString section = cursor.selectedText();
+  section.replace(QChar(0x2029), QChar('\n'));
+  return section;
+}
+
 QString DocumentView::getActiveText()
 {
   QTextCursor cursor = editors[0]->textCursor();

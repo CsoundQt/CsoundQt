@@ -179,6 +179,7 @@ class qutecsound:public QMainWindow
     void paste();
     void undo();
     void redo();
+    void evaluateSection();
     void evaluatePython(QString code = QString());
     void setWidgetEditMode(bool);  // This is not necessary as the action is passed and connected in the widget layout
     void setWidgetClipboard(QString text);
@@ -314,6 +315,7 @@ class qutecsound:public QMainWindow
     QAction *duplicateAct;
     QAction *joinAct;
     QAction *evaluateAct;
+    QAction *evaluateSectionAct;
     QAction *getToInAct;
     QAction *inToGetAct;
     QAction *csladspaAct;

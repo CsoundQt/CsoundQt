@@ -87,6 +87,7 @@ class DocumentView : public QScrollArea
     QString getWidgetsText(); // With tags including presets, in new xml format
 
     QString wordUnderCursor();
+    QString getActiveSection();
     QString getActiveText();
     int currentLine();
     bool isModified();

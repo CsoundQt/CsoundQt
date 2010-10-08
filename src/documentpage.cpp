@@ -914,6 +914,11 @@ void DocumentPage::setAutoComplete(bool autoComplete)
   m_view->setAutoComplete(autoComplete);
 }
 
+QString DocumentPage::getActiveSection()
+{
+  return m_view->getActiveSection();
+}
+
 QString DocumentPage::getActiveText()
 {
   return m_view->getActiveText();

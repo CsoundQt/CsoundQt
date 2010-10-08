@@ -615,6 +615,11 @@ void qutecsound::redo()
   documentPages[curPage]->redo();
 }
 
+void qutecsound::evaluateSection()
+{
+  evaluatePython(documentPages[curPage]->getActiveSection());
+}
+
  void qutecsound::evaluatePython(QString code)
  {
 #ifdef QCS_PYTHONQT
@@ -1347,12 +1352,15 @@ void qutecsound::render()
         + _configlists.fileTypeExtensions[m_options->fileFileType] + ")");
     dialog.setFilter(filter);
     if (dialog.exec() == QDialog::Accepted) {
-//       QString extension = _configlists.fileTypeExtensions[m_options->fileFileType].left(_configlists.fileTypeExtensions[m_options->fileFileType].indexOf(";"));
+       QString extension = _configlists.fileTypeExtensions[m_options->fileFileType].left(_configlists.fileTypeExtensions[m_options->fileFileType].indexOf(";"));
 //       // Remove the '*' from the extension
-//       extension.remove(0,1);
+       extension.remove(0,1);
       m_options->fileOutputFilename = dialog.selectedFiles()[0];
-//       if (!m_options->fileOutputFilename.endsWith(extension))
-//         m_options->fileOutputFilename += extension;
+       if (!m_options->fileOutputFilename.endsWith(".wav")
+         || !m_options->fileOutputFilename.endsWith(".aif")
+         || !m_options->fileOutputFilename.endsWith(extension) ) {
+         m_options->fileOutputFilename += extension;
+       }
       if (QFile::exists(m_options->fileOutputFilename)) {
         int ret = QMessageBox::warning(this, tr("QuteCsound"),
                 tr("The file %1 \nalready exists.\n"
@@ -1928,7 +1936,8 @@ void qutecsound::setDefaultKeyboardShortcuts()
 //  uncommentAct->setShortcut(tr("Shift+Ctrl+/"));
   indentAct->setShortcut(tr("Ctrl+I"));
   unindentAct->setShortcut(tr("Shift+Ctrl+I"));
-  evaluateAct->setShortcut(QKeySequence(Qt::Key_Enter));
+  evaluateAct->setShortcut(tr("Alt+E"));
+  evaluateSectionAct->setShortcut(tr("Shift+Alt+E"));
   showPythonConsoleAct->setShortcut(tr("Alt+7"));
   killLineAct->setShortcut(tr("Ctrl+K"));
   killToEndAct->setShortcut(tr("Shift+Ctrl+K"));
@@ -2061,9 +2070,13 @@ void qutecsound::createActions()
 
   evaluateAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Evaluate selection"), this);
   evaluateAct->setStatusTip(tr("Evaluate selection in Python Console"));
-//   joinAct->setIconText(tr("Join"));
   evaluateAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(evaluateAct, SIGNAL(triggered()), this, SLOT(evaluatePython()));
+
+  evaluateSectionAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Evaluate section"), this);
+  evaluateSectionAct->setStatusTip(tr("Evaluate current section in Python Console"));
+  evaluateSectionAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(evaluateSectionAct, SIGNAL(triggered()), this, SLOT(evaluateSection()));
 
   inToGetAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Invalue->Chnget"), this);
   inToGetAct->setStatusTip(tr("Convert invalue/outvalue to chnget/chnset"));
@@ -2408,6 +2421,7 @@ void qutecsound::setKeyboardShortcutsList()
   m_keyActions.append(killLineAct);
   m_keyActions.append(killToEndAct);
   m_keyActions.append(evaluateAct);
+  m_keyActions.append(evaluateSectionAct);
 }
 
 void qutecsound::connectActions()
@@ -2513,6 +2527,7 @@ void qutecsound::createMenus()
   editMenu->addAction(copyAct);
   editMenu->addAction(pasteAct);
   editMenu->addAction(evaluateAct);
+  editMenu->addAction(evaluateSectionAct);
   editMenu->addSeparator();
   editMenu->addAction(findAct);
   editMenu->addAction(findAgainAct);

@@ -136,6 +136,7 @@ class DocumentPage : public BaseDocument
     void setColorVariables(bool colorVariables);
     void setOpcodeNameList(QStringList opcodeNameList);
     void setAutoComplete(bool autoComplete);
+    QString getActiveSection();
     QString getActiveText();
     void print(QPrinter *printer);
     void findReplace();
