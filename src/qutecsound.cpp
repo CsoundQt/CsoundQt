@@ -1347,7 +1347,7 @@ void qutecsound::render()
     }
     QFileDialog dialog(this,tr("Output Filename"),defaultFile);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setConfirmOverwrite(false);
+//    dialog.setConfirmOverwrite(false);
     QString filter = QString(_configlists.fileTypeLongNames[m_options->fileFileType] + " Files ("
         + _configlists.fileTypeExtensions[m_options->fileFileType] + ")");
     dialog.setFilter(filter);
@@ -1357,8 +1357,8 @@ void qutecsound::render()
        extension.remove(0,1);
       m_options->fileOutputFilename = dialog.selectedFiles()[0];
        if (!m_options->fileOutputFilename.endsWith(".wav")
-         || !m_options->fileOutputFilename.endsWith(".aif")
-         || !m_options->fileOutputFilename.endsWith(extension) ) {
+         && !m_options->fileOutputFilename.endsWith(".aif")
+         && !m_options->fileOutputFilename.endsWith(extension) ) {
          m_options->fileOutputFilename += extension;
        }
       if (QFile::exists(m_options->fileOutputFilename)) {
@@ -1638,8 +1638,8 @@ void qutecsound::configure()
   dialog.setCurrentTab(configureTab);
   if (dialog.exec() == QDialog::Accepted) {
     applySettings();
-    configureTab = dialog.currentTab();
   }
+  configureTab = dialog.currentTab();
 }
 
 void qutecsound::applySettings()
@@ -3626,6 +3626,9 @@ void qutecsound::makeNewPage(QString fileName, QString text)
   setCurrentFile(fileName);
 
   documentPages[curPage]->setFileName(fileName);  // Must set before sending text to set highlighting mode
+#ifdef QCS_PYTHONQT
+  documentPages[curPage]->getEngine()->setPythonConsole(m_pythonConsole);
+#endif
 
   connectActions();
   connect(documentPages[curPage], SIGNAL(currentTextUpdated()), this, SLOT(markInspectorUpdate()));
@@ -3944,10 +3947,10 @@ QStringList qutecsound::runCsoundInternally(QStringList flags)
   return m_deviceMessages;
 }
 
-void *qutecsound::getCurrentCsound()
-{
-  return (void *)documentPages[curCsdPage]->getCsound();
-}
+//void *qutecsound::getCurrentCsound()
+//{
+//  return (void *)documentPages[curCsdPage]->getCsound();
+//}
 
 QString qutecsound::setDocument(int index)
 {
@@ -4329,6 +4332,19 @@ EventSheet* qutecsound::getSheet(int index, int sheetIndex)
   }
   if (index < documentTabs->count() && index >= 0) {
     return documentPages[index]->getSheet(sheetIndex);
+  }
+  else {
+    return 0;
+  }
+}
+
+CsoundEngine *qutecsound::getEngine(int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    return documentPages[index]->getEngine();
   }
   else {
     return 0;

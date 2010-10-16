@@ -47,18 +47,12 @@ class PyQcsObject : public QObject {
     void setQuteCsound(qutecsound *qcs);
 
   public slots:
-
 //  ! example for passing a PyObject directly from Qt to Python (without extra mashalling)
 //    PyObject* getMainModule();
-
 //  void showInformation(const QString& str);
-//
 //  QStringList readDirectory(const QString& dir);
-//
 //  QMainWindow* createWindow();
-//
 //  QObject* findChild(QObject* o, const QString& name);
-//
 //  QVariantMap testMap();
 
     CSOUND* getCurrentCsound();
@@ -133,7 +127,7 @@ class PyQcsObject : public QObject {
     QVariantList readArrayToList(int ftable, int offset = 0, int count = -1); // Numpy arrays
 
     // Register callback
-    void registerProcessCallback();
+    void registerProcessCallback(QString func, int skipPeriods = 0);
 
   private:
     qutecsound *m_qcs;

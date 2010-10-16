@@ -127,7 +127,8 @@ class DocumentPage : public BaseDocument
     DocumentView *getView();  // Needed to pass view for placing it as tab widget in main application
     WidgetLayout *getWidgetLayout();  // Needed to pass for placing in widget dock panel
     ConsoleWidget *getConsole();  // Needed to pass for placing in console dock panel
-    void *getCsound();
+    CsoundEngine *getEngine(); // Needed to pass to python interpreter
+//    void *getCsound();
 
     // Document view properties and actions
     void setTextFont(QFont font);

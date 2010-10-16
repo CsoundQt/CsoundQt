@@ -303,7 +303,7 @@ void QuteGraph::changeCurve(int index)
     }
   }
   QString text = QString::number(size) + " pts Max=";
-  text += QString::number(max) + " Min =" + QString::number(min);
+  text += QString::number(-max) + " Min =" + QString::number(-min);
   m_label->setText(text);
 }
 

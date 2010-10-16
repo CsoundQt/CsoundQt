@@ -65,15 +65,18 @@ PythonConsole::~PythonConsole()
   delete m_pqcs;
 }
 
-void PythonConsole::evaluate(QString evalCode)
+
+void PythonConsole::evaluate(QString evalCode, bool notify)
 {
   PythonQtObjectPtr  mainContext = PythonQt::self()->getMainModule();
 //  PythonQtObjectPtr  mainContext = m_pqcs->getMainModule();
   mainContext.evalScript(evalCode);
-  QString printScript = "print 'Evaluated " + QString::number(evalCode.count("\n") + 1 );
-  printScript += " lines.'";
-  mainContext.evalScript(printScript);
-  m_console->appendCommandPrompt();
+  if (notify) {
+    QString printScript = "print 'Evaluated " + QString::number(evalCode.count("\n") + 1 );
+    printScript += " lines.'";
+    mainContext.evalScript(printScript);
+    m_console->appendCommandPrompt();
+  }
 }
 
 void PythonConsole::runScript(QString fileName)

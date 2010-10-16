@@ -604,11 +604,11 @@ EventSheet* DocumentPage::getSheet(QString sheetName)
 {
 
 }
-
-void *DocumentPage::getCsound()
-{
-  return m_csEngine->getCsound();
-}
+//
+//void *DocumentPage::getCsound()
+//{
+//  return m_csEngine->getCsound();
+//}
 
 int DocumentPage::lineCount(bool countExtras)
 {
@@ -882,6 +882,11 @@ WidgetLayout *DocumentPage::getWidgetLayout()
 ConsoleWidget *DocumentPage::getConsole()
 {
   return m_console;
+}
+
+CsoundEngine *DocumentPage::getEngine()
+{
+  return m_csEngine;
 }
 
 void DocumentPage::setTextFont(QFont font)

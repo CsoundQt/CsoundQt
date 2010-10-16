@@ -7,9 +7,9 @@ nchnls = 2
 ksmps = 128
 0dbfs = 1
 
-;;Get the ASCII key number;;
-;;Example for QuteCsound;;
-;;joachim heintz && andrés cabrera mar 2010;;
+;Get the ASCII key number
+;Example for QuteCsound
+;joachim heintz && andrés cabrera mar 2010
 
 
 strset		11, "Thank you!"
@@ -115,13 +115,13 @@ kchr, kkeydown sensekey
 ;;CALL INSTR 10 IF SOMETHING NEW HAS BEEN TYPED
 if kchr != 0 && kkeydown == 1 then
 konoff		=		0
-		event		"i", -10, 0, 1 ; Turn off previous instance
-		event		"i", 10, 0, kspeed*24, kchr
+		turnoff2 10, 0, 0 ; Turn off previous instance
+		event		"i", 10, 0.1, kspeed*24, kchr
 endif 
 endin
 
-instr 2
-;;CLEAR DISPLAYS WHEN NECESSARY
+instr 2 ;;CLEAR DISPLAYS WHEN NECESSARY
+
 		outvalue	"thanks", ""
 		outvalue	"youtyped", ""
 		outvalue	"showchar1", ""
@@ -139,7 +139,7 @@ instr 2
 endin 
 
 instr 10
-scoreline_i "i 2 0 .1" ;First clear the display
+scoreline_i "i 2 0 0" ;First clear the display
 ;;GENERATE A NOTE
   ;PITCH AND ENVELOPE
 ipch		RandInts_i	0, 45; 46 steps per octave 
@@ -154,7 +154,7 @@ afreq		expseg		ifreq, idur, iglissfreq; frequency with glissando
 ivol1		RandInts_i	2, 5
 ivol		=		0dbfs/ivol1; volume as 1/2, 1/3, 1/4 or 1/5 0dbfs
 aenv		transeg	ivol, idur, -iglissrel, 0, p3-idur, 0, 0; envelope
-  ;FUNCTION TABLE AND REVERB
+  ;;FUNCTION TABLE AND REVERB
 ipercparts	=		50; how many percent maximum change of partials in gimodel
 ipercstrs	=		100; how many percent maximum change of strengths in gimodel
 iftparts	ChangeTable	gimodel, ipercparts, 3, 1; change the partial values according to ipercparts
@@ -295,6 +295,643 @@ e
 </CsScore>
 </CsoundSynthesizer>
 
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>332</x>
+ <y>178</y>
+ <width>821</width>
+ <height>593</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>170</r>
+  <g>170</g>
+  <b>127</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>showascii1</objectName>
+  <x>359</x>
+  <y>326</y>
+  <width>49</width>
+  <height>33</height>
+  <uuid>{a55e0ce0-8c52-4047-bf13-0b1ba20e7fab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>showchar1</objectName>
+  <x>359</x>
+  <y>288</y>
+  <width>31</width>
+  <height>30</height>
+  <uuid>{8532d68c-d5df-4af5-b42c-112356c3b1c6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>typein1</objectName>
+  <x>119</x>
+  <y>184</y>
+  <width>102</width>
+  <height>49</height>
+  <uuid>{46574579-d664-4984-87d8-c253e399baac}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>30</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>typein2</objectName>
+  <x>223</x>
+  <y>183</y>
+  <width>103</width>
+  <height>49</height>
+  <uuid>{87b2b136-82f1-40b7-9039-e8e77395e512}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>30</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>thanks</objectName>
+  <x>62</x>
+  <y>242</y>
+  <width>394</width>
+  <height>33</height>
+  <uuid>{0752771e-37c3-49e2-b666-f2b41a1c5bcf}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Thank you!</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>youtyped</objectName>
+  <x>79</x>
+  <y>290</y>
+  <width>275</width>
+  <height>30</height>
+  <uuid>{69c3c6d8-c4c0-4b64-a861-35735d0fcae0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>You typed the character</label>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>asyouwill</objectName>
+  <x>65</x>
+  <y>374</y>
+  <width>391</width>
+  <height>76</height>
+  <uuid>{027dd6d8-79fe-4004-a52b-9205a9a8d176}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>ascii1</objectName>
+  <x>82</x>
+  <y>328</y>
+  <width>275</width>
+  <height>30</height>
+  <uuid>{1b8bc0dc-fc3c-4f85-b5a0-f041d7b5db79}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>showchar2</objectName>
+  <x>96</x>
+  <y>451</y>
+  <width>38</width>
+  <height>30</height>
+  <uuid>{3dc69a6f-7567-4667-ad9e-c938ae55d612}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>isavery</objectName>
+  <x>137</x>
+  <y>453</y>
+  <width>275</width>
+  <height>30</height>
+  <uuid>{78ff5969-7917-4dba-afe9-507d6124be33}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>isatotally</objectName>
+  <x>139</x>
+  <y>546</y>
+  <width>275</width>
+  <height>30</height>
+  <uuid>{2b58f46d-0510-439e-a835-9fed0d30f81e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>theby</objectName>
+  <x>66</x>
+  <y>492</y>
+  <width>382</width>
+  <height>47</height>
+  <uuid>{ca22476a-8dc2-4288-912f-4cfa3cf1eb6f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>showascii2</objectName>
+  <x>78</x>
+  <y>544</y>
+  <width>59</width>
+  <height>33</height>
+  <uuid>{a9301c1b-f6c8-4a21-af60-f8ee6557ada2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>.</objectName>
+  <x>375</x>
+  <y>290</y>
+  <width>41</width>
+  <height>30</height>
+  <uuid>{43373687-936d-468d-9260-f7396ab1061c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>!</objectName>
+  <x>393</x>
+  <y>328</y>
+  <width>41</width>
+  <height>30</height>
+  <uuid>{81764181-1f22-48a4-9a9a-293419d282b1}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>49</x>
+  <y>16</y>
+  <width>721</width>
+  <height>41</height>
+  <uuid>{041fe329-d209-4e3d-ad7a-56e9abf09631}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Get the ASCII Code of a Character</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>48</x>
+  <y>55</y>
+  <width>722</width>
+  <height>58</height>
+  <uuid>{6a149d69-516e-49ac-8253-16e048b92ceb}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>And learn a lot more about the symbolic function of characters and numbers.
+This can be very important for your future life.</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>47</x>
+  <y>112</y>
+  <width>724</width>
+  <height>48</height>
+  <uuid>{98fcf679-a848-4a34-996b-9ce180492cb6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>First, select your personal speed at the slider on the right.
+Then, press the Start button.</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider">
+  <objectName>speed</objectName>
+  <x>514</x>
+  <y>222</y>
+  <width>259</width>
+  <height>27</height>
+  <uuid>{05335d5c-63bc-43c9-80fb-d041d424167b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.50000000</minimum>
+  <maximum>2.00000000</maximum>
+  <value>0.66795400</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>513</x>
+  <y>192</y>
+  <width>260</width>
+  <height>25</height>
+  <uuid>{79ee3261-6f9b-4714-9126-bba72b4d5d3b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Select Your Personal Speed of Messages</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>age</objectName>
+  <x>514</x>
+  <y>277</y>
+  <width>259</width>
+  <height>97</height>
+  <uuid>{e0e9bba2-2adf-4981-af08-9bd45d2be198}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Age estimated from your speed selection:
+20 years, 5 months, 5 days.</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton">
+  <objectName>_Play</objectName>
+  <x>513</x>
+  <y>373</y>
+  <width>261</width>
+  <height>28</height>
+  <uuid>{0ad23d88-6832-4d56-8ca4-b3ecac93a75e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Start</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
 <MacOptions>
 Version: 3
 Render: Real
@@ -308,37 +945,27 @@ Options: -b128 -A -s -m167 -R
 </MacOptions>
 <MacGUI>
 ioView background {43690, 43690, 32639}
-ioText {359, 326} {49, 33} display 0.000000 0.00100 "showascii1" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {359, 288} {31, 30} display 0.000000 0.00100 "showchar1" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {119, 184} {102, 49} display 0.000000 0.00100 "typein1" right "Lucida Grande" 28 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {223, 183} {103, 49} display 0.000000 0.00100 "typein2" left "Lucida Grande" 28 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {62, 242} {394, 33} display 0.000000 0.00100 "thanks" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {79, 290} {275, 30} display 0.000000 0.00100 "youtyped" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {65, 374} {381, 64} display 0.000000 0.00100 "asyouwill" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {82, 328} {275, 30} display 0.000000 0.00100 "ascii1" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {96, 451} {38, 30} display 0.000000 0.00100 "showchar2" right "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {137, 453} {275, 30} display 0.000000 0.00100 "isavery" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {139, 546} {275, 30} display 0.000000 0.00100 "isatotally" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {66, 492} {382, 47} display 0.000000 0.00100 "theby" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {78, 544} {59, 33} display 0.000000 0.00100 "showascii2" right "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {375, 290} {41, 30} display 0.000000 0.00100 "." left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {393, 328} {41, 30} display 0.000000 0.00100 "!" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {49, 16} {721, 41} label 0.000000 0.00100 "" center "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Get the ASCII Code of a Character
-ioText {48, 55} {722, 58} label 0.000000 0.00100 "" center "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder And learn a lot more about the symbolic function of characters and numbers.Â¬This can be very important for your future life.
-ioText {47, 112} {724, 48} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder First, select your personal speed at the slider on the right.Â¬Then, press the Start button.
+ioText {359, 326} {49, 33} display 0.000000 0.00100 "showascii1" left "Lucida Grande" 18 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
+ioText {359, 288} {31, 30} display 0.000000 0.00100 "showchar1" left "Lucida Grande" 18 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
+ioText {119, 184} {102, 49} display 0.000000 0.00100 "typein1" right "Lucida Grande" 30 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
+ioText {223, 183} {103, 49} display 0.000000 0.00100 "typein2" left "Lucida Grande" 30 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
+ioText {62, 242} {394, 33} display 0.000000 0.00100 "thanks" center "Lucida Grande" 18 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Thank you!
+ioText {79, 290} {275, 30} display 0.000000 0.00100 "youtyped" right "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder You typed the character
+ioText {65, 374} {381, 64} display 0.000000 0.00100 "asyouwill" center "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
+ioText {82, 328} {275, 30} display 0.000000 0.00100 "ascii1" right "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
+ioText {96, 451} {38, 30} display 0.000000 0.00100 "showchar2" right "Lucida Grande" 18 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
+ioText {137, 453} {275, 30} display 0.000000 0.00100 "isavery" left "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
+ioText {139, 546} {275, 30} display 0.000000 0.00100 "isatotally" left "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
+ioText {66, 492} {382, 47} display 0.000000 0.00100 "theby" left "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
+ioText {78, 544} {59, 33} display 0.000000 0.00100 "showascii2" right "Lucida Grande" 18 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
+ioText {375, 290} {41, 30} display 0.000000 0.00100 "." left "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
+ioText {393, 328} {41, 30} display 0.000000 0.00100 "!" left "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
+ioText {49, 16} {721, 41} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Get the ASCII Code of a Character
+ioText {48, 55} {722, 58} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {63232, 62720, 61952} nobackground noborder And learn a lot more about the symbolic function of characters and numbers.Â¬This can be very important for your future life.
+ioText {47, 112} {724, 48} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder First, select your personal speed at the slider on the right.Â¬Then, press the Start button.
 ioSlider {514, 222} {259, 27} 0.500000 2.000000 0.667954 speed
-ioText {513, 192} {260, 25} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select Your Personal Speed of Messages
-ioText {514, 277} {259, 97} display 0.000000 0.00100 "age" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {513, 192} {260, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Select Your Personal Speed of Messages
+ioText {514, 277} {259, 97} display 0.000000 0.00100 "age" center "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Age estimated from your speed selection:Â¬20 years, 5 months, 5 days.
 ioButton {513, 373} {261, 28} value 1.000000 "_Play" "Start" "/" i1 0 10
 </MacGUI>
-
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="596" height="322"> 
- 
- 
- 
- 
- 
- 
- 
- 
- </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

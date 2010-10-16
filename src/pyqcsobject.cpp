@@ -24,6 +24,7 @@
 #include "qutecsound.h"
 #include "qutesheet.h"
 #include "opentryparser.h"
+#include "csoundengine.h"
 
 #include <QMessageBox>
 #include <QDir>
@@ -80,7 +81,7 @@ void PyQcsObject::setQuteCsound(qutecsound *qcs)
 
 CSOUND* PyQcsObject::getCurrentCsound()
 {
-  CSOUND *cs = (CSOUND *) m_qcs->getCurrentCsound();
+  CSOUND *cs = m_qcs->getEngine()->getCsound();
   return cs;
 }
 
@@ -357,7 +358,7 @@ void PyQcsObject::writeListToTable(int ftable, QVariantList values, int offset, 
 
 QVariantList PyQcsObject::readTableToList(int ftable, int offset, int count)
 {
-  CSOUND *cs = getCurrentCsound();
+  CSOUND *cs = m_qcs->getEngine()->getCsound();
   PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
   QVariantList list;
   if (cs == 0) {
@@ -391,7 +392,10 @@ QVariantList PyQcsObject::readArrayToList(int ftable, int offset, int count)
   return QVariantList();
 }
 
-void  PyQcsObject::registerProcessCallback()
+void  PyQcsObject::registerProcessCallback(QString func, int skipPeriods)
 {
-  qDebug() << "PyQcsObject::registerProcessCallback not implemented";
+  m_qcs->getEngine()->registerProcessCallback(func, skipPeriods);
+  qDebug() << "PyQcsObject::registerProcessCallback" << func << skipPeriods;
+//  PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
+//  mainContext.evalScript(func);
 }

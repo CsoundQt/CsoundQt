@@ -80,7 +80,7 @@ void Console::appendMessage(QString msg)
       errorLine = true;
     }
   }
-  if (msg.contains("B ") or msg.contains("rtevent", Qt::CaseInsensitive)) {
+  if (msg.startsWith("B ") or msg.contains("rtevent", Qt::CaseInsensitive)) {
     setTextColor(QColor("blue"));
   }
   if (msg.contains("error:", Qt::CaseInsensitive)) {

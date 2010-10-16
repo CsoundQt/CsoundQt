@@ -34,7 +34,6 @@
 #include <Carbon/Carbon.h>
 #endif
 
-
 class QAction;
 class QMenu;
 class QTextEdit;
@@ -56,7 +55,8 @@ class GraphicWindow;
 class KeyboardShortcuts;
 class EventDispatcher;
 class EventSheet;
-#ifdef QCS_PYTHONQT
+class CsoundEngine;
+#ifdef QCS_RTMIDI
 class RtMidiIn;
 #endif
 
@@ -80,8 +80,6 @@ class qutecsound:public QMainWindow
 
     QStringList runCsoundInternally(QStringList flags); //returns csound messages
 
-    // For usage from python (external) interface
-    void *getCurrentCsound();
     // Editor
     QString setDocument(int index); // Returns document name
     void insertText(QString text, int index = -1, int section = -1);
@@ -127,8 +125,11 @@ class qutecsound:public QMainWindow
 //    int popKeyReleaseEvent(); // return ASCII code of key release event for Csound -1 if no
 
     //Live Event Sheets
-    EventSheet* getSheet(int index, int sheetIndex);
-    EventSheet* getSheet(int index, QString sheetName);
+    EventSheet* getSheet(int index = -1, int sheetIndex = -1);
+    EventSheet* getSheet(int index = -1, QString sheetName = QString());
+
+    // Engine
+    CsoundEngine *getEngine(int index = -1);
 
     OpEntryParser *opcodeTree;
 

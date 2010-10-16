@@ -28,22 +28,23 @@
 #include <sndfile.hh>
 #include <cwindow.h> // Necessary for WINDAT struct
 
-
 #include "types.h"
 #include "csoundoptions.h"
 #include "qcsperfthread.h"
+#ifdef QCS_PYTHONQT
+#include "pythonconsole.h"
+#endif
 
 class ConsoleWidget;
 class QuteScope;
 class QuteGraph;
 class Curve;
+class CsoundEngine;
+class WidgetLayout;
 
 // Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
 // This still necessary for 5.12
 #define QCS_DESTROY_CSOUND
-
-class CsoundEngine;
-class WidgetLayout;
 
 struct CsoundUserData {
   int result; //result of csoundCompile()
@@ -71,6 +72,12 @@ struct CsoundUserData {
   QVector<double> mouseValues;
   RingBuffer audioOutputBuffer;
   unsigned long ksmpscount;  // Use this or rely on the csound time counter? Is using this more efficient, since it is called so often?
+#ifdef QCS_PYTHONQT
+  PythonConsole *m_pythonConsole;
+  QString m_pythonCallback;
+  int m_pythonCallbackCounter;
+  int m_pythonCallbackSkip;
+#endif
 };
 
 class CsoundEngine : public QObject
@@ -144,7 +151,11 @@ class CsoundEngine : public QObject
     bool isRecording();
 
     // To pass to parent document for access from python scripting
-    void * getCsound();
+    CSOUND * getCsound();
+    void registerProcessCallback(QString func, int skipPeriods);
+#ifdef QCS_PYTHONQT
+    void setPythonConsole(PythonConsole *pc);
+#endif
 
     QMutex perfMutex;  // TODO is this still needed?
 //    QTimer qTimer;  // This 4timer is started and stopped from the document page
@@ -169,7 +180,7 @@ class CsoundEngine : public QObject
 
     CsoundUserData *ud;
 
-    SndfileHandle *outfile;
+    SndfileHandle *m_outfile;
     long samplesWritten;
     bool m_recording;
     MYFLT *recBuffer; // for temporary copy of Csound output buffer when recording to file

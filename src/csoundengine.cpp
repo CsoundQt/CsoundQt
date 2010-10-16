@@ -42,6 +42,7 @@ CsoundEngine::CsoundEngine()
   ud->csound = 0;
   ud->perfThread = 0;
   ud->mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2 channels
+  ud->m_pythonCallback = "";
 
   pFields = (MYFLT *) calloc(QCS_EVENTS_MAX_PFIELDS, sizeof(MYFLT)); // Maximum number of p-fields for events
 
@@ -294,8 +295,17 @@ void CsoundEngine::csThread(void *data)
 //    writeWidgetValues(udata);
 //    readWidgetValues(udata);
   }
-  udata->cs->processEventQueue();  // FIXME: This function locks a mutex, not ideal here
+  udata->cs->processEventQueue();
   (udata->ksmpscount)++;
+#ifdef QCS_PYTHONQT
+  if (udata->m_pythonCallbackCounter >= udata->m_pythonCallbackSkip) {
+    udata->m_pythonConsole->evaluate(udata->m_pythonCallback, false);
+    udata->m_pythonCallbackCounter = 0;
+  }
+  else {
+    udata->m_pythonCallbackCounter++;
+  }
+#endif
 }
 
 void CsoundEngine::readWidgetValues(CsoundUserData *ud)
@@ -605,9 +615,9 @@ int CsoundEngine::startRecording(int sampleformat, QString fileName)
     break;
   }
   qDebug("start recording: %s", fileName.toStdString().c_str());
-  outfile = new SndfileHandle(fileName.toStdString().c_str(), SFM_WRITE, format, channels, sampleRate);
+  m_outfile = new SndfileHandle(fileName.toStdString().c_str(), SFM_WRITE, format, channels, sampleRate);
   // clip instead of wrap when converting floats to ints
-  outfile->command(SFC_SET_CLIPPING, NULL, SF_TRUE);
+  m_outfile->command(SFC_SET_CLIPPING, NULL, SF_TRUE);
   samplesWritten = 0;
   m_recording = true;
 
@@ -654,17 +664,6 @@ int CsoundEngine::runCsound()
     consoles[0]->reset();
   }
 
-#ifdef QCS_DESTROY_CSOUND
-  ud->csound=csoundCreate(0);
-#endif
-
-  // Message Callbacks must be set before compile, otherwise some information is missed
-  if (ud->threaded) {
-    csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackThread);
-  }
-  else {
-    csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackNoThread);
-  }
   if (m_options.sadirActive){
     int ret = csoundSetGlobalEnv("SADIR", m_options.sadir.toLocal8Bit());
     if (ret != 0) {
@@ -709,6 +708,19 @@ int CsoundEngine::runCsound()
     }
   }
 #endif
+
+#ifdef QCS_DESTROY_CSOUND
+  ud->csound=csoundCreate(0);
+#endif
+
+  // Message Callbacks must be set before compile, otherwise some information is missed
+  if (ud->threaded) {
+    csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackThread);
+  }
+  else {
+    csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackNoThread);
+  }
+
 //  csoundReset(ud->csound);
   csoundSetHostData(ud->csound, (void *) ud);
   csoundPreCompile(ud->csound);  //Need to run PreCompile to create the FLTK_Flags global variable
@@ -768,6 +780,9 @@ int CsoundEngine::runCsound()
     free(argv);
     emit (errorLines(getErrorLines()));
     return -3;
+  }
+  for (int i = 0; i < argc; i++) {
+    qDebug() << argv[i];
   }
   ud->zerodBFS = csoundGet0dBFS(ud->csound);
   ud->sampleRate = csoundGetSr(ud->csound);
@@ -937,7 +952,7 @@ void CsoundEngine::recordBuffer()
 {
   if (m_recording) {
     if (ud->audioOutputBuffer.copyAvailableBuffer(recBuffer, bufferSize)) {
-      int samps = outfile->write(recBuffer, bufferSize);
+      int samps = m_outfile->write(recBuffer, bufferSize);
       samplesWritten += samps;
     }
     else {
@@ -946,7 +961,7 @@ void CsoundEngine::recordBuffer()
     recordTimer.singleShot(20, this, SLOT(recordBuffer()));
   }
   else { //Stop recording
-    delete outfile;
+    delete m_outfile;
     qDebug("Recording stopped. Written %li samples", samplesWritten);
   }
 }
@@ -969,7 +984,18 @@ bool CsoundEngine::isRecording()
   return m_recording;
 }
 
-void *CsoundEngine::getCsound()
+CSOUND *CsoundEngine::getCsound()
 {
-  return (void *) ud->csound;
+  return ud->csound;
+}
+
+void CsoundEngine::registerProcessCallback(QString func, int skipPeriods)
+{
+  ud->m_pythonCallback = func;
+  ud->m_pythonCallbackSkip = skipPeriods;
+}
+
+void CsoundEngine::setPythonConsole(PythonConsole *pc)
+{
+  ud->m_pythonConsole = pc;
 }

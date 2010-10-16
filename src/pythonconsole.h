@@ -37,7 +37,7 @@ class PythonConsole : public QDockWidget
 
   public slots:
 //    void runCommand(QString command);
-    void evaluate(QString evalCode);
+    void evaluate(QString evalCode, bool notify = true);
     void runScript(QString fileName);
 
   protected:
