@@ -21,32 +21,17 @@
 */
 
 #include "documentview.h"
-#include "highlighter.h"
 #include "findreplace.h"
 #include "opentryparser.h"
 #include "node.h"
 #include "types.h"
+
+#include "highlighter.h"
 #include "texteditor.h"
 
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
-    QScrollArea(parent),  m_opcodeTree(opcodeTree)
+    BaseView(parent,opcodeTree)
 {
-  mainEditor = new TextEditor(this);
-  scoreEditor = new TextEditor(this);
-  optionsEditor = new TextEditor(this);
-  filebEditor = new TextEditor(this);
-  versionEditor = new TextEditor(this);
-  licenceEditor = new TextEditor(this);
-  otherEditor = new TextEditor(this);
-  widgetEditor = new TextEditor(this);
-  ladspaEditor = new TextEditor(this);
-  editors << mainEditor << scoreEditor << optionsEditor << filebEditor
-      << versionEditor << licenceEditor << otherEditor << widgetEditor
-      << ladspaEditor;
-  splitter = new QSplitter(this);
-  splitter->setOrientation(Qt::Vertical);
-  splitter->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-  splitter->setContextMenuPolicy (Qt::NoContextMenu);
   for (int i = 0; i < editors.size(); i++) {
     connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
     splitter->addWidget(editors[i]);
@@ -54,12 +39,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
     connect(editors[i], SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(createContextMenu(QPoint)));
   }
-  QStackedLayout *l = new QStackedLayout(this);
-  l->addWidget(splitter);
-  setLayout(l);
   setFocusProxy(mainEditor);  // for comment action from main application
-
-  m_mode = 0;
   internalChange = false;
 
 //  m_highlighter = new Highlighter();
@@ -75,11 +55,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 //  connect(scoreEditor, SIGNAL(cursorPositionChanged()),
 //          this, SLOT(syntaxCheck()));
 
-  setViewMode(0);
-
   errorMarked = false;
   m_isModified = false;
-  m_highlighter.setDocument(mainEditor->document());
 
   syntaxMenu = new MySyntaxMenu(mainEditor);
 //  syntaxMenu->setFocusPolicy(Qt::NoFocus);
@@ -102,90 +79,6 @@ DocumentView::~DocumentView()
 //  delete m_highlighter;
 }
 
-void DocumentView::setViewMode(int mode)
-{
-//  if (m_viewMode == mode)
-//    return;
-  m_viewMode = mode;
-  hideAllEditors();
-
-  // TODO implement modes properly
-  switch (m_viewMode) {
-    case 0: // csd without extra sections
-      mainEditor->show();
-      break;
-    case 1: // full plain text
-      mainEditor->show();
-      break;
-    default:
-      mainEditor->setVisible(m_viewMode & 2);
-      scoreEditor->setVisible(m_viewMode & 4);
-      optionsEditor->setVisible(m_viewMode & 8);
-      filebEditor->setVisible(m_viewMode & 16);
-      versionEditor->setVisible(m_viewMode & 32);
-      licenceEditor->setVisible(m_viewMode & 64);
-      otherEditor->setVisible(m_viewMode & 128);
-      widgetEditor->setVisible(m_viewMode & 256);
-  }
-
-}
-
-void DocumentView::setFileType(int mode)
-{
-  m_highlighter.setMode(mode);
-  m_mode = mode;
-}
-
-void DocumentView::setFont(QFont font)
-{
-  for (int i = 0; i < editors.size(); i++) {
-    editors[i]->setFont(font);
-  }
-}
-
-void DocumentView::setFontPointSize(float size)
-{
-  for (int i = 0; i < editors.size(); i++) {
-    editors[i]->setFontPointSize(size);
-  }
-}
-
-void DocumentView::setTabWidth(int width)
-{
-  for (int i = 0; i < editors.size(); i++) {
-    editors[i]->setTabStopWidth(width);
-  }
-}
-
-void DocumentView::setTabStopWidth(int width)
-{
-  for (int i = 0; i < editors.size(); i++) {
-    editors[i]->setTabStopWidth(width);
-  }
-}
-
-void DocumentView::setLineWrapMode(QTextEdit::LineWrapMode mode)
-{
-  for (int i = 0; i < editors.size(); i++) {
-    editors[i]->setLineWrapMode(mode);
-  }
-}
-
-void DocumentView::setAutoComplete(bool autoComplete)
-{
-  m_autoComplete = autoComplete;
-}
-
-void DocumentView::setColorVariables(bool color)
-{
-  m_highlighter.setColorVariables(color);
-}
-
-void DocumentView::setOpcodeNameList(QStringList list)
-{
-  m_highlighter.setOpcodeNameList(list);
-}
-
 bool DocumentView::isModified()
 {
   return m_isModified;
@@ -203,11 +96,6 @@ void DocumentView::setModified(bool mod)
   m_isModified = mod;
 }
 
-void DocumentView::setOpcodeTree(OpEntryParser *opcodeTree)
-{
-  m_opcodeTree = opcodeTree;
-}
-
 void DocumentView::insertText(QString text, int section)
 {
   if (section == -1 || section < 0) {
@@ -217,17 +105,6 @@ void DocumentView::insertText(QString text, int section)
     QTextCursor cursor = editors[section]->textCursor();
     cursor.insertText(text);
     editors[section]->setTextCursor(cursor);
-  }
-}
-
-void DocumentView::setFullText(QString text, bool goToTop)
-{
-  QTextCursor cursor = editors[0]->textCursor();
-  cursor.select(QTextCursor::Document);
-  cursor.insertText(text);
-  editors[0]->setTextCursor(cursor);  // TODO implment for multiple views
-  if (goToTop) {
-    editors[0]->moveCursor(QTextCursor::Start);
   }
 }
 
@@ -305,6 +182,11 @@ void DocumentView::setLadspaText(QString text)
     edit->insertPlainText(QString("\n") + text + QString("\n"));
   }
   edit->moveCursor(QTextCursor::Start);
+}
+
+void DocumentView::setAutoComplete(bool autoComplete)
+{
+  m_autoComplete = autoComplete;
 }
 
 QString DocumentView::getSelectedText(int section)
@@ -1157,14 +1039,6 @@ QString DocumentView::changeToInvalue(QString text)
 //{
 //  syntaxMenu->show();
 //}
-
-void DocumentView::hideAllEditors()
-{
-  for (int i = 0; i < editors.size(); i++) {
-    editors[i]->hide();
-    splitter->handle(i)->hide();
-  }
-}
 
 void DocumentView::destroySyntaxMenu()
 {

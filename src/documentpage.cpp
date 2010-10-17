@@ -43,67 +43,9 @@
 
 // TODO is is possible to move the editor to a separate child class, to be able to use a cleaner class?
 DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
-    BaseDocument(parent), m_opcodeTree(opcodeTree)
+    BaseDocument(parent, opcodeTree)
 {
-  fileName = "";
-  companionFile = "";
-  askForFile = true;
-  readOnly = false;
-
-  //TODO this should be set from QuteCsound configuration
-  saveLiveEvents = true;
-
-  m_view->setOpcodeTree(m_opcodeTree);
-  connect(m_view, SIGNAL(evaluate(QString)), this, SLOT(evaluatePython(QString)));
-
-  m_console = new ConsoleWidget(0);
-  m_console->setReadOnly(true);
-  connect(m_console, SIGNAL(keyPressed(QString)),
-          m_csEngine, SLOT(keyPressForCsound(QString)));
-  connect(m_console, SIGNAL(keyReleased(QString)),
-          m_csEngine, SLOT(keyReleaseForCsound(QString)));
-
-//  m_widgetLayout->show();
-  m_liveEventControl = new LiveEventControl(parent);
-  m_liveEventControl->hide();
-  connect(m_liveEventControl, SIGNAL(closed()), this, SLOT(liveEventControlClosed()));
-  connect(m_liveEventControl, SIGNAL(stopAll()), this, SLOT(stopAllSlot()));
-  connect(m_liveEventControl, SIGNAL(newPanel()), this, SLOT(newPanelSlot()));
-  connect(m_liveEventControl, SIGNAL(playPanel(int)), this, SLOT(playPanelSlot(int)));
-  connect(m_liveEventControl, SIGNAL(loopPanel(int,bool)), this, SLOT(loopPanelSlot(int,bool)));
-  connect(m_liveEventControl, SIGNAL(stopPanel(int)), this, SLOT(stopPanelSlot(int)));
-  connect(m_liveEventControl, SIGNAL(setPanelVisible(int,bool)), this, SLOT(setPanelVisibleSlot(int,bool)));
-  connect(m_liveEventControl, SIGNAL(setPanelSync(int,int)), this, SLOT(setPanelSyncSlot(int,int)));
-  connect(m_liveEventControl, SIGNAL(setPanelNameSignal(int,QString)), this, SLOT(setPanelNameSlot(int,QString)));
-  connect(m_liveEventControl, SIGNAL(setPanelTempoSignal(int,double)), this, SLOT(setPanelTempoSlot(int,double)));
-  connect(m_liveEventControl, SIGNAL(setPanelLoopLengthSignal(int,double)), this, SLOT(setPanelLoopLengthSlot(int,double)));
-  connect(m_liveEventControl, SIGNAL(setPanelLoopRangeSignal(int,double,double)), this, SLOT(setPanelLoopRangeSlot(int,double,double)));
-
-
-  // Connect for clearing marked lines and letting inspector know text has changed
-  connect(m_view, SIGNAL(contentsChanged()), this, SLOT(textChanged()));
-  connect(m_view, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(opcodeSyntax(QString)));
-//   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(moved()));
-
-  connect(m_csEngine, SIGNAL(errorLines(QList<QPair<int, QString> >)),
-          m_view, SLOT(markErrorLines(QList<QPair<int, QString> >)));
-  connect(m_csEngine, SIGNAL(stopSignal()),
-          this, SLOT(perfEnded()));
-
-  // For logging of Csound output to file
-  connect(m_console, SIGNAL(logMessage(QString)),
-          static_cast<qutecsound *>(parent), SLOT(logMessage(QString)));
-
-  // Register the console with the engine for message printing
-  m_csEngine->registerConsole(m_console);
-
-  //FIXME widgetlayout should have the chance of being empty
-  m_widgetLayouts.append(newWidgetLayout());
-  m_csEngine->setWidgetLayout(m_widgetLayouts[0]);  // Pass first widget layout to engine
-
-//  detachWidgets();
-  saveOldFormat = true; // save Mac widgets by default
-  m_pythonRunning = false;
+  init(parent, opcodeTree);
 }
 
 DocumentPage::~DocumentPage()
@@ -142,6 +84,11 @@ void DocumentPage::setCompanionFileName(QString name)
   companionFile = name;
 }
 
+void DocumentPage::setTextString(QString &text)
+{
+  setTextString(text, false);
+}
+
 int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 {
   int ret = 0;
@@ -151,7 +98,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     m_view->setModified(false);
     return ret;
   }
-  int baseRet = BaseDocument::setTextString(text);
+  int baseRet = parseTextString(text);
   if (text.contains("<MacOptions>") and text.contains("</MacOptions>")) {
     QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
     options.resize(options.indexOf("</MacOptions>") + 13);
@@ -860,6 +807,7 @@ void DocumentPage::redo()
 
 DocumentView *DocumentPage::getView()
 {
+  Q_ASSERT(m_view != 0);
   return m_view;
 }
 
@@ -907,11 +855,6 @@ void DocumentPage::setLineWrapMode(QTextEdit::LineWrapMode wrapLines)
 void DocumentPage::setColorVariables(bool colorVariables)
 {
   m_view->setColorVariables(colorVariables);
-}
-
-void DocumentPage::setOpcodeNameList(QStringList opcodeNameList)
-{
-  m_view->setOpcodeNameList(opcodeNameList);
 }
 
 void DocumentPage::setAutoComplete(bool autoComplete)
@@ -1182,6 +1125,70 @@ void DocumentPage::registerButton(QuteButton *b)
   connect(b, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
 }
 
+void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
+{
+  qDebug() << "DocumentPage::init";
+  fileName = "";
+  companionFile = "";
+  askForFile = true;
+  readOnly = false;
+
+  //TODO this should be set from QuteCsound configuration
+  saveLiveEvents = true;
+
+  m_view = new DocumentView(parent, opcodeTree);
+  connect(m_view, SIGNAL(evaluate(QString)), this, SLOT(evaluatePython(QString)));
+
+  m_console = new ConsoleWidget(0);
+  m_console->setReadOnly(true);
+  connect(m_console, SIGNAL(keyPressed(QString)),
+          m_csEngine, SLOT(keyPressForCsound(QString)));
+  connect(m_console, SIGNAL(keyReleased(QString)),
+          m_csEngine, SLOT(keyReleaseForCsound(QString)));
+
+//  m_widgetLayout->show();
+  m_liveEventControl = new LiveEventControl(parent);
+  m_liveEventControl->hide();
+  connect(m_liveEventControl, SIGNAL(closed()), this, SLOT(liveEventControlClosed()));
+  connect(m_liveEventControl, SIGNAL(stopAll()), this, SLOT(stopAllSlot()));
+  connect(m_liveEventControl, SIGNAL(newPanel()), this, SLOT(newPanelSlot()));
+  connect(m_liveEventControl, SIGNAL(playPanel(int)), this, SLOT(playPanelSlot(int)));
+  connect(m_liveEventControl, SIGNAL(loopPanel(int,bool)), this, SLOT(loopPanelSlot(int,bool)));
+  connect(m_liveEventControl, SIGNAL(stopPanel(int)), this, SLOT(stopPanelSlot(int)));
+  connect(m_liveEventControl, SIGNAL(setPanelVisible(int,bool)), this, SLOT(setPanelVisibleSlot(int,bool)));
+  connect(m_liveEventControl, SIGNAL(setPanelSync(int,int)), this, SLOT(setPanelSyncSlot(int,int)));
+  connect(m_liveEventControl, SIGNAL(setPanelNameSignal(int,QString)), this, SLOT(setPanelNameSlot(int,QString)));
+  connect(m_liveEventControl, SIGNAL(setPanelTempoSignal(int,double)), this, SLOT(setPanelTempoSlot(int,double)));
+  connect(m_liveEventControl, SIGNAL(setPanelLoopLengthSignal(int,double)), this, SLOT(setPanelLoopLengthSlot(int,double)));
+  connect(m_liveEventControl, SIGNAL(setPanelLoopRangeSignal(int,double,double)), this, SLOT(setPanelLoopRangeSlot(int,double,double)));
+
+
+  // Connect for clearing marked lines and letting inspector know text has changed
+  connect(m_view, SIGNAL(contentsChanged()), this, SLOT(textChanged()));
+  connect(m_view, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(opcodeSyntax(QString)));
+//   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(moved()));
+
+  connect(m_csEngine, SIGNAL(errorLines(QList<QPair<int, QString> >)),
+          m_view, SLOT(markErrorLines(QList<QPair<int, QString> >)));
+  connect(m_csEngine, SIGNAL(stopSignal()),
+          this, SLOT(perfEnded()));
+
+  // For logging of Csound output to file
+  connect(m_console, SIGNAL(logMessage(QString)),
+          static_cast<qutecsound *>(parent), SLOT(logMessage(QString)));
+
+  // Register the console with the engine for message printing
+  m_csEngine->registerConsole(m_console);
+
+  //FIXME widgetlayout should have the chance of being empty
+  m_widgetLayouts.append(newWidgetLayout());
+  m_csEngine->setWidgetLayout(m_widgetLayouts[0]);  // Pass first widget layout to engine
+
+//  detachWidgets();
+  saveOldFormat = true; // save Mac widgets by default
+  m_pythonRunning = false;
+}
+
 void DocumentPage::deleteAllLiveEvents()
 {
   for (int i = 0; i < m_liveFrames.size(); i++) {
@@ -1210,6 +1217,7 @@ int DocumentPage::play(CsoundOptions *options)
     return runPython();
   }
   else {
+    m_view->unmarkErrorLines();  // Clear error lines when running
     return BaseDocument::play(options);
   }
 }

@@ -53,7 +53,8 @@ HEADERS = "$${PWD}/about.h" \
     "$${PWD}/widgetpreset.h" \
     "$${PWD}/qutesheet.h" \
     "$${PWD}/basedocument.h" \
-    "$${PWD}/qcsperfthread.h"
+    "$${PWD}/qcsperfthread.h" \
+    "$${PWD}/baseview.h"
 SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/configdialog.cpp" \
     "$${PWD}/configlists.cpp" \
@@ -99,9 +100,9 @@ SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/widgetpreset.cpp" \
     "$${PWD}/qutesheet.cpp" \
     "$${PWD}/basedocument.cpp" \
-    "$${PWD}/qcsperfthread.cpp"
-LIBS += $${LCSOUND} \
-#    $${LCSND} \
+    "$${PWD}/qcsperfthread.cpp" \
+    "$${PWD}/baseview.cpp"
+LIBS += $${LCSOUND} \ # $${LCSND} \
     $${LSNDFILE} \
     $${RTMIDI}
 DISTFILES += "$${PWD}/default.csd" \
@@ -114,7 +115,7 @@ pythonqt {
     SOURCES += "$${PWD}/pythonconsole.cpp" \
         "$${PWD}/pyqcsobject.cpp"
 }
-rtmidi {
+rtmidi { 
     HEADERS += "$${PWD}/../$${RTMIDI_DIR}/RtMidi.h"
     SOURCES += "$${PWD}/../$${RTMIDI_DIR}/RtMidi.cpp"
     INCLUDEPATH += $${PWD}/../$${RTMIDI_DIR}

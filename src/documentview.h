@@ -24,10 +24,7 @@
 #define DOCUMENTVIEW_H
 
 #include <QtGui>
-#include "highlighter.h"
-
-class OpEntryParser;
-class TextEditor;
+#include "baseview.h"
 
 #include <QKeyEvent> // For syntax menu class
 
@@ -45,30 +42,19 @@ class MySyntaxMenu: public QMenu
     void keyPressed(QString text); // Used to send both pressed keys and full opcode text to be pasted
 };
 
-class DocumentView : public QScrollArea
+class DocumentView : public BaseView
 {
   Q_OBJECT
   public:
     DocumentView(QWidget * parent, OpEntryParser *opcodeTree = 0);
     ~DocumentView();
-    void setViewMode(int mode);
-    void setFileType(int mode); // For higlighting mode
-    void setFont(QFont font);
-    void setFontPointSize(float size);
-    void setTabWidth(int width);
-    void setTabStopWidth(int width);
-    void setLineWrapMode(QTextEdit::LineWrapMode mode);
-    void setAutoComplete(bool autoComplete);
-    void setColorVariables(bool color);
-    void setOpcodeNameList(QStringList list);
-    void setOpcodeTree(OpEntryParser *opcodeTree);
 
     void insertText(QString text, int section = -1);
-    void setFullText(QString text, bool goToTop = false);
     void setBasicText(QString text);
     void setOrc(QString text);
     void setSco(QString text);
     void setLadspaText(QString text);
+    void setAutoComplete(bool autoComplete);
 
     // TODO add all text inputs here as below
 
@@ -135,39 +121,11 @@ class DocumentView : public QScrollArea
     QString changeToInvalue(QString text);
 //    void createSyntaxMenu();
 
-    void hideAllEditors();
-    int m_viewMode; // 0 = csd without widget + preset section
-                    // 1 = full plain text
-                    // From here on, you can have an or'd combination
-                    // 2 = show CsInstruments Section
-                    // 4 = show CsScore Section
-                    // 8 = show CsOptions Section
-                    // 16 = show <CsFileB> Section(s)
-                    // 32 = show <CsVersion> Section(s)
-                    // 64 = show <CsLicence>/<CsLicense> Section(s)
-                    //128 = show Text outside any tag
-                    //256 = show Widget, Preset and Extra Options sections
-                    //512 = show <CsLadspa> text with tags
-    QSplitter *splitter;
-    TextEditor *mainEditor;
-    TextEditor *scoreEditor;
-    TextEditor *optionsEditor;
-    TextEditor *filebEditor;
-    TextEditor *versionEditor;
-    TextEditor *licenceEditor;
-    TextEditor *otherEditor;
-    TextEditor *widgetEditor;
-    TextEditor *ladspaEditor;
-    QVector<TextEditor *> editors; // A vector to hold pointers for the above for easy processing
-
-    OpEntryParser *m_opcodeTree;
     MySyntaxMenu *syntaxMenu;
-    Highlighter m_highlighter;
     bool m_isModified;
     bool m_autoComplete;
     bool errorMarked;
     bool internalChange;  // to let popoup opcode completion know if text change was internal
-    int m_mode; //type of text 0=csound 1=python 2=xml 3=orc 4=sco   -1=anything else
 
     bool lastCaseSensitive; // These last three are for search and replace
     QString lastSearch;

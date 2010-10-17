@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/main">
+        <file>opcodes.xml</file>
+    </qresource>
+</RCC>

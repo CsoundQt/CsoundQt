@@ -3614,7 +3614,7 @@ void qutecsound::makeNewPage(QString fileName, QString text)
     curPage = 0;
   }
   documentPages.insert(insertPoint, newPage);
-  documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
+//  documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
   documentPages[curPage]->setInitialDir(initialDir);
   documentPages[curPage]->showLiveEventPanels(false);
   documentTabs->insertTab(curPage, documentPages[curPage]->getView(),"");

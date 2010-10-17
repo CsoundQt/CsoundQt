@@ -30,21 +30,24 @@
 
 class WidgetLayout;
 class CsoundEngine;
-class DocumentView;
+class BaseView;
+class OpEntryParser;
 class QuteButton; // For registering buttons with main application
 
 class BaseDocument : public QObject
 {
   Q_OBJECT
   public:
-    BaseDocument(QWidget *parent);
+    BaseDocument(QWidget *parent, OpEntryParser *opcodeTree);
     ~BaseDocument();
 
-    int setTextString(QString &text);
+    virtual void setTextString(QString &text) = 0;
+    int parseTextString(QString &text);
     virtual WidgetLayout* newWidgetLayout();
+    void setOpcodeNameList(QStringList opcodeNameList);
 
   public slots:
-    int play(CsoundOptions *options);
+    virtual int play(CsoundOptions *options);
     void pause();
     void stop();
     int record(int mode); // 0=16 bit int  1=32 bit int  2=float
@@ -56,8 +59,12 @@ class BaseDocument : public QObject
 
 
 protected:
+    virtual void init(QWidget *parent, OpEntryParser *opcodeTree) = 0;
+//    virtual BaseView *createView(QWidget *parent, O8pEntryParser *opcodeTree);
+
     QList<WidgetLayout *> m_widgetLayouts;
-    DocumentView *m_view;
+    OpEntryParser *m_opcodeTree;
+    BaseView *m_view;
     CsoundEngine *m_csEngine;
 
 private:

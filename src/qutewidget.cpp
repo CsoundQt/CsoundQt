@@ -100,7 +100,7 @@ void QuteWidget::setValue(QString value)
 #endif
 }
 
-void QuteWidget::setMidiValue(int value)
+void QuteWidget::setMidiValue(int /* value */)
 {
   qDebug() << "QuteWidget::setMidiValue not available for this widget." << this;
 }

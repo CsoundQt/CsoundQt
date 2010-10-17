@@ -23,16 +23,20 @@
 #include "basedocument.h"
 
 #include "widgetlayout.h"
-#include "documentview.h"
+#include "baseview.h"
 #include "csoundengine.h"
 //#include "qutebutton.h"
 
 
-BaseDocument::BaseDocument(QWidget *parent) :
-    QObject(parent), m_csEngine(0)
+BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree) :
+    QObject(parent), m_opcodeTree(opcodeTree), m_csEngine(0)
 {
-  m_view = new DocumentView(parent);
+  qDebug() << "BaseDocument::BaseDocument";
+  m_view = 0;
   m_csEngine = new CsoundEngine();
+  m_widgetLayouts.append(newWidgetLayout());
+  m_csEngine->setWidgetLayout(m_widgetLayouts[0]);  // Pass first widget layout to engine
+//  m_view->setOpcodeTree(m_opcodeTree);
 }
 
 BaseDocument::~BaseDocument()
@@ -50,7 +54,15 @@ BaseDocument::~BaseDocument()
   //  m_widgetLayout->setParent(0);  //To make sure the widget panel from the main application doesn't attempt to delete it as its child
 }
 
-int BaseDocument::setTextString(QString &text)
+void BaseDocument::init(QWidget *parent, OpEntryParser *opcodeTree)
+{
+  qDebug() << "BaseDocument::init";
+//  m_view = createView(parent, opcodeTree);
+  m_view = new BaseView(parent, opcodeTree);
+  m_view->setFileType(0);
+}
+
+int BaseDocument::parseTextString(QString &text)
 {
 //  qDebug() << "---- BaseDocument::setTextString";
   int ret = 0;
@@ -85,11 +97,6 @@ int BaseDocument::setTextString(QString &text)
     }
     ret = 1;
   }
-  if (!text.contains("<CsoundSynthesizer>") &&
-      !text.contains("</CsoundSynthesizer>") ) { // When not a csd file
-    m_view->setFullText(text, true);  // TODO do something different if not a csd file?
-    m_view->setModified(false);
-  }
   return ret;
 }
 
@@ -107,11 +114,14 @@ WidgetLayout* BaseDocument::newWidgetLayout()
   return wl;
 }
 
+void BaseDocument::setOpcodeNameList(QStringList opcodeNameList)
+{
+  m_view->setOpcodeNameList(opcodeNameList);
+}
+
 int BaseDocument::play(CsoundOptions *options)
 {
   if (!m_csEngine->isRunning()) {
-    m_view->unmarkErrorLines();  // Clear error lines when running
-//    m_console->reset(); // Clear consoles
     foreach (WidgetLayout *wl, m_widgetLayouts) {
       wl->flush();   // Flush accumulated values
       wl->clearGraphs();
@@ -164,4 +174,3 @@ void BaseDocument::registerButton(QuteButton *b)
 //  connect(b, SIGNAL(pause()), static_cast<qutecsound *>(parent()), SLOT(pause()));
 //  connect(b, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
 }
-

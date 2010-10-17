@@ -57,12 +57,12 @@ pythonqt {
 # win32: LIBS *= $(PYTHON_LIB)/libpython$${PYTHON_VERSION}.a
 # win32: LIBS *= $${PYTHONQT_TREE_DIR}/lib/libPythonQt.a
 # unix: LIBS *= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt
-#rtmidi {
-#    INCLUDEPATH *= $${RTMIDI_INCLUDE_DIR}
-#    LIBS += -L$${RTMIDI_LIB_DIR} \
-#        -l$${RTMIDI_LIB}
-#}
-
+# rtmidi {
+# INCLUDEPATH *= $${RTMIDI_INCLUDE_DIR}
+# LIBS += -L$${RTMIDI_LIB_DIR} \
+# -l$${RTMIDI_LIB}
+# }
 INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
 INCLUDEPATH *= $${CSOUND_INTERFACES_INCLUDE_DIR}
 INCLUDEPATH *= $${LIBSNDFILE_INCLUDE_DIR}
+

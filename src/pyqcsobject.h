@@ -121,10 +121,10 @@ class PyQcsObject : public QObject {
     void sendEvent(QString events);
 
     // To/From Csound Engine
-    void writeListToTable(int ftable, QVariantList values, int offset = 0, int count = -1);
-    QVariantList readTableToList(int ftable, int offset = 0, int count = -1);
-    void writeArrayToTable(int ftable, QVariantList values, int offset = 0, int count = -1); // Numpy arrays
-    QVariantList readArrayToList(int ftable, int offset = 0, int count = -1); // Numpy arrays
+//    void writeListToTable(int ftable, QVariantList values, int offset = 0, int count = -1);
+//    QVariantList readTableToList(int ftable, int offset = 0, int count = -1);
+//    void writeArrayToTable(int ftable, QVariantList values, int offset = 0, int count = -1); // Numpy arrays
+//    QVariantList readArrayToList(int ftable, int offset = 0, int count = -1); // Numpy arrays
 
     // Register callback
     void registerProcessCallback(QString func, int skipPeriods = 0);

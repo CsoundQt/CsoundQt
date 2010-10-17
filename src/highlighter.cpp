@@ -315,6 +315,7 @@ void Highlighter::setLastRules()
 int Highlighter::findOpcode(QString opcodeName, int start, int end)
 {
 //   fprintf(stderr, "%i - %i\n", start, end);
+  Q_ASSERT(m_list.size() > 0);
   int pos = ((end - start)/2) + start;
   if (opcodeName == m_list[pos])
     return pos;

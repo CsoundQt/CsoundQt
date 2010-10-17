@@ -348,49 +348,49 @@ void PyQcsObject::sendEvent(QString events)
 
 void PyQcsObject::sendEvent(int index, QString events)
 {
-
+  m_qcs->sendEvent(index, events);
 }
 
-void PyQcsObject::writeListToTable(int ftable, QVariantList values, int offset, int count)
-{
-  
-}
+//void PyQcsObject::writeListToTable(int ftable, QVariantList values, int offset, int count)
+//{
+//
+//}
 
-QVariantList PyQcsObject::readTableToList(int ftable, int offset, int count)
-{
-  CSOUND *cs = m_qcs->getEngine()->getCsound();
-  PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
-  QVariantList list;
-  if (cs == 0) {
-    mainContext.evalScript("print 'Csound Engine invalid.'");
-    return list;
-  }
-  int tabLen = csoundTableLength(cs, ftable);
-  if (tabLen < 0) {
-    mainContext.evalScript("print '''readTableToList(): Invalid table " + QString::number(ftable) + "'''");
-//    return QVariantList();
-  }
-  MYFLT **tablePtr = 0;
-  int ret = csoundGetTable(cs, tablePtr, ftable);
-//  qDebug() << "PyQcsObject::readTableToList " << tablePtr << "--" << tabLen;
-//  while (offset < tabLen && count > 0) {
-//    list << *(tablePtr[offset]);
-//    offset++;
-//    count--;
+//QVariantList PyQcsObject::readTableToList(int ftable, int offset, int count)
+//{
+//  CSOUND *cs = m_qcs->getEngine()->getCsound();
+//  PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
+//  QVariantList list;
+//  if (cs == 0) {
+//    mainContext.evalScript("print 'Csound Engine invalid.'");
+//    return list;
 //  }
-  return list;
-}
+//  int tabLen = csoundTableLength(cs, ftable);
+//  if (tabLen < 0) {
+//    mainContext.evalScript("print '''readTableToList(): Invalid table " + QString::number(ftable) + "'''");
+////    return QVariantList();
+//  }
+//  MYFLT **tablePtr = 0;
+//  int ret = csoundGetTable(cs, tablePtr, ftable);
+////  qDebug() << "PyQcsObject::readTableToList " << tablePtr << "--" << tabLen;
+////  while (offset < tabLen && count > 0) {
+////    list << (double) *(tablePtr[offset]);
+////    offset++;
+////    count--;
+////  }
+//  return list;
+//}
 
-void PyQcsObject::writeArrayToTable(int ftable, QVariantList values, int offset, int count)
-{
-  qDebug() << "PyQcsObject::writeArrayToTable not implemented";
-}
-
-QVariantList PyQcsObject::readArrayToList(int ftable, int offset, int count)
-{
-  qDebug() << "PyQcsObject::readArrayToList not implemented";
-  return QVariantList();
-}
+//void PyQcsObject::writeArrayToTable(int ftable, QVariantList values, int offset, int count)
+//{
+//  qDebug() << "PyQcsObject::writeArrayToTable not implemented";
+//}
+//
+//QVariantList PyQcsObject::readArrayToList(int ftable, int offset, int count)
+//{
+//  qDebug() << "PyQcsObject::readArrayToList not implemented";
+//  return QVariantList();
+//}
 
 void  PyQcsObject::registerProcessCallback(QString func, int skipPeriods)
 {

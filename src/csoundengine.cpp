@@ -42,7 +42,9 @@ CsoundEngine::CsoundEngine()
   ud->csound = 0;
   ud->perfThread = 0;
   ud->mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2 channels
+#ifdef QCS_PYTHONQT
   ud->m_pythonCallback = "";
+#endif
 
   pFields = (MYFLT *) calloc(QCS_EVENTS_MAX_PFIELDS, sizeof(MYFLT)); // Maximum number of p-fields for events
 
@@ -298,12 +300,14 @@ void CsoundEngine::csThread(void *data)
   udata->cs->processEventQueue();
   (udata->ksmpscount)++;
 #ifdef QCS_PYTHONQT
-  if (udata->m_pythonCallbackCounter >= udata->m_pythonCallbackSkip) {
-    udata->m_pythonConsole->evaluate(udata->m_pythonCallback, false);
-    udata->m_pythonCallbackCounter = 0;
-  }
-  else {
-    udata->m_pythonCallbackCounter++;
+  if (!udata->m_pythonCallback.isEmpty()) {
+    if (udata->m_pythonCallbackCounter >= udata->m_pythonCallbackSkip) {
+      udata->m_pythonConsole->evaluate(udata->m_pythonCallback, false);
+      udata->m_pythonCallbackCounter = 0;
+    }
+    else {
+      udata->m_pythonCallbackCounter++;
+    }
   }
 #endif
 }
@@ -989,6 +993,7 @@ CSOUND *CsoundEngine::getCsound()
   return ud->csound;
 }
 
+#ifdef QCS_PYTHONQT
 void CsoundEngine::registerProcessCallback(QString func, int skipPeriods)
 {
   ud->m_pythonCallback = func;
@@ -999,3 +1004,4 @@ void CsoundEngine::setPythonConsole(PythonConsole *pc)
 {
   ud->m_pythonConsole = pc;
 }
+#endif

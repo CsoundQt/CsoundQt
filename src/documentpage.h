@@ -48,6 +48,7 @@ class DocumentPage : public BaseDocument
     ~DocumentPage();
 
     void setFileName(QString name);
+    virtual void setTextString(QString &text);
     int setTextString(QString text, bool autoCreateMacCsoundSections);
     void setCompanionFileName(QString name);
     void setEditorFocus();
@@ -135,7 +136,7 @@ class DocumentPage : public BaseDocument
     void setTabStopWidth(int tabWidth);
     void setLineWrapMode(QTextEdit::LineWrapMode wrapLines);
     void setColorVariables(bool colorVariables);
-    void setOpcodeNameList(QStringList opcodeNameList);
+//    void setOpcodeNameList(QStringList opcodeNameList);
     void setAutoComplete(bool autoComplete);
     QString getActiveSection();
     QString getActiveText();
@@ -182,7 +183,7 @@ class DocumentPage : public BaseDocument
     int widgetHistoryIndex; // Current point in history
 
   public slots:
-    int play(CsoundOptions *options);
+    virtual int play(CsoundOptions *options);
     void stop();
     int record(int format);
     void perfEnded();
@@ -237,6 +238,7 @@ class DocumentPage : public BaseDocument
 //    virtual void closeEvent(QCloseEvent *event);
 
   private:
+    virtual void init(QWidget *parent,OpEntryParser *opcodeTree);
     CsoundOptions getParentOptions();
     void deleteAllLiveEvents();
     virtual WidgetLayout* newWidgetLayout();
@@ -254,7 +256,7 @@ class DocumentPage : public BaseDocument
     QList<LiveEventFrame *> m_liveFrames;
     LiveEventControl *m_liveEventControl;
 
-    OpEntryParser *m_opcodeTree;
+    DocumentView *m_view;
 
     // Options
     bool saveLiveEvents;

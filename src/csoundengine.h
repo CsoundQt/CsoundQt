@@ -152,8 +152,8 @@ class CsoundEngine : public QObject
 
     // To pass to parent document for access from python scripting
     CSOUND * getCsound();
-    void registerProcessCallback(QString func, int skipPeriods);
 #ifdef QCS_PYTHONQT
+    void registerProcessCallback(QString func, int skipPeriods);
     void setPythonConsole(PythonConsole *pc);
 #endif
 
