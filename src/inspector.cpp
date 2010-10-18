@@ -114,6 +114,9 @@ void Inspector::parseText(const QString &text)
     else if (lines[i].trimmed().startsWith("opcode")) {
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
+      if (treeItem1->childCount() == 0) { // set line for element to the first one found
+        treeItem1->setLine(i + 1);
+      }
       TreeItem *newItem = new TreeItem(treeItem1, columnslist);
       newItem->setLine(i + 1);
       currentInstrument = newItem;
@@ -121,6 +124,9 @@ void Inspector::parseText(const QString &text)
     else if (lines[i].trimmed().startsWith("#define") or lines[i].trimmed().startsWith("# define")) {
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
+      if (treeItem2->childCount() == 0) { // set line for element to the first one found
+        treeItem2->setLine(i + 1);
+      }
       TreeItem *newItem = new TreeItem(treeItem2, columnslist);
       newItem->setLine(i + 1);
     }
@@ -128,6 +134,9 @@ void Inspector::parseText(const QString &text)
         lines[i].trimmed().contains(QRegExp("^[\\w]*[\\s]*ftgen"))) {
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
+      if (treeItem4->childCount() == 0) { // set line for element to the first one found
+        treeItem4->setLine(i + 1);
+      }
       TreeItem *newItem = new TreeItem(treeItem4, columnslist);
       newItem->setLine(i + 1);
     }
