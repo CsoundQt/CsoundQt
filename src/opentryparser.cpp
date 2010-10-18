@@ -31,9 +31,12 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
 {
   m_doc = new QDomDocument("opcodes");
   QFile file(m_opcodeFile);
-  if (!file.open(QIODevice::ReadOnly))
+  if (!file.open(QIODevice::ReadOnly)) {
+    qDebug() << "OpEntryParser::OpEntryParser could not find opcode file:" << opcodeFile;
     return;
+  }
   if (!m_doc->setContent(&file)) {
+    qDebug() << "OpEntryParser::OpEntryParser set content";
     file.close();
     return;
   }

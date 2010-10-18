@@ -44,7 +44,9 @@ class BaseDocument : public QObject
     virtual void setTextString(QString &text) = 0;
     int parseTextString(QString &text);
     virtual WidgetLayout* newWidgetLayout();
-    void setOpcodeNameList(QStringList opcodeNameList);
+//    void setOpcodeNameList(QStringList opcodeNameList);
+
+    WidgetLayout *getWidgetLayout();  // Needed to pass for placing in widget dock panel
 
   public slots:
     virtual int play(CsoundOptions *options);

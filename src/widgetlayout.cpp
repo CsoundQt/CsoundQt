@@ -1032,6 +1032,15 @@ void WidgetLayout::setFontScaling(double scaling)
   widgetsMutex.unlock();
 }
 
+void WidgetLayout::setWidgetsLocked(bool lock)
+{
+  widgetsMutex.lock();
+  for (int i=0; i < m_widgets.size(); i++) {
+     m_widgets[i]->setLocked(lock);
+  }
+  widgetsMutex.unlock();
+}
+
 void WidgetLayout::appendCurve(WINDAT *windat)
 {
   // Called from the Csound callback, creates a curve and queues it for processing

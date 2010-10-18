@@ -821,12 +821,6 @@ DocumentView *DocumentPage::getView()
 //  }
 //}
 
-WidgetLayout *DocumentPage::getWidgetLayout()
-{
-  //FIXME allow multiple layouts
-  return m_widgetLayouts[0];
-}
-
 ConsoleWidget *DocumentPage::getConsole()
 {
   return m_console;

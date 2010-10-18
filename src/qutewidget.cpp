@@ -35,6 +35,7 @@ QuteWidget::QuteWidget(QWidget *parent):
   m_stringValue = "";
   m_valueChanged = false;
   m_value2Changed = false;
+  m_locked = false;
 
   this->setMinimumSize(2,2);
   this->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
@@ -263,6 +264,9 @@ void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
 void QuteWidget::popUpMenu(QPoint pos)
 {
 //  qDebug() << "QuteWidget::popUpMenu";
+  if (m_locked) {
+    return;
+  }
   QMenu menu(this);
   menu.addAction(propertiesAct);
   menu.addSeparator();

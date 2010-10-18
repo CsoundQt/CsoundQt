@@ -143,15 +143,15 @@ void BaseView::setColorVariables(bool color)
   m_highlighter.setColorVariables(color);
 }
 
-void BaseView::setOpcodeNameList(QStringList list)
-{
-  m_highlighter.setOpcodeNameList(list);
-}
+//void BaseView::setOpcodeNameList(QStringList list)
+//{
+//  m_highlighter.setOpcodeNameList(list);
+//}
 
-void BaseView::setOpcodeTree(OpEntryParser *opcodeTree)
-{
-  m_opcodeTree = opcodeTree;
-}
+//void BaseView::setOpcodeTree(OpEntryParser *opcodeTree)
+//{
+//  m_opcodeTree = opcodeTree;
+//}
 
 void BaseView::hideAllEditors()
 {

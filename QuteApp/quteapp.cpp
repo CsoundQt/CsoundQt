@@ -32,17 +32,19 @@ QuteApp::QuteApp(QWidget *parent)
 {
   QDir::setCurrent("/data");
   m_options = new CsoundOptions;
-  OpEntryParser *opcodeTree = new OpEntryParser(":/opcodes.xml");
-  m_doc = new SimpleDocument(this, opcodeTree);
-  m_doc->setOpcodeNameList(opcodeTree->opcodeNameList());
-//  documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
+  OpEntryParser *m_opcodeTree = new OpEntryParser(":/main/opcodes.xml");
+  m_doc = new SimpleDocument(this, m_opcodeTree);
+  setCentralWidget((QWidget *) m_doc->getWidgetLayout());
   loadCsd();
+//  start();
 }
 
 QuteApp::~QuteApp()
 {
-
+  delete m_options;
+  delete m_opcodeTree;
 }
+
 void QuteApp::start()
 {
   m_doc->play(m_options);

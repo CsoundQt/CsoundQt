@@ -44,8 +44,8 @@ class BaseView : public QScrollArea
     void setLineWrapMode(QTextEdit::LineWrapMode mode);
     void setAutoComplete(bool autoComplete);
     void setColorVariables(bool color);
-    void setOpcodeNameList(QStringList list);
-    void setOpcodeTree(OpEntryParser *opcodeTree);
+//    void setOpcodeNameList(QStringList list);
+//    void setOpcodeTree(OpEntryParser *opcodeTree);
 
   signals:
 

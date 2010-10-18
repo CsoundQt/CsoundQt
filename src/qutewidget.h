@@ -42,6 +42,7 @@ class QuteWidget : public QWidget
     virtual void setValue2(double);
     virtual void setValue(QString);
     virtual void setMidiValue(int value);
+    virtual void setLocked(bool locked) {m_locked = locked;};
 
     virtual void widgetMessage(QString path, QString text);
     virtual void widgetMessage(QString path, double value);
@@ -89,6 +90,7 @@ class QuteWidget : public QWidget
     QString m_stringValue;
     QString m_channel, m_channel2;
     int m_midicc, m_midichan;
+    bool m_locked; // Allow modification of widget (properties, alignment, etc.)
 
 #ifdef  USE_WIDGET_MUTEX
     QReadWriteLock widgetLock;

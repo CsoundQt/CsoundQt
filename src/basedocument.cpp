@@ -36,6 +36,7 @@ BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree) :
   m_csEngine = new CsoundEngine();
   m_widgetLayouts.append(newWidgetLayout());
   m_csEngine->setWidgetLayout(m_widgetLayouts[0]);  // Pass first widget layout to engine
+//  m_view->setOpcodeNameList(opcodeNameList);
 //  m_view->setOpcodeTree(m_opcodeTree);
 }
 
@@ -114,9 +115,15 @@ WidgetLayout* BaseDocument::newWidgetLayout()
   return wl;
 }
 
-void BaseDocument::setOpcodeNameList(QStringList opcodeNameList)
+//void BaseDocument::setOpcodeNameList(QStringList opcodeNameList)
+//{
+//  m_view->setOpcodeNameList(opcodeNameList);
+//}
+
+WidgetLayout *BaseDocument::getWidgetLayout()
 {
-  m_view->setOpcodeNameList(opcodeNameList);
+  //FIXME allow multiple layouts
+  return m_widgetLayouts[0];
 }
 
 int BaseDocument::play(CsoundOptions *options)

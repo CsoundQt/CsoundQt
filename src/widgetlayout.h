@@ -94,6 +94,7 @@ class WidgetLayout : public QWidget
     void setCurrentPosition(QPoint pos); // To set the mouse position for new widgets
     void setFontOffset(double offset);
     void setFontScaling(double scaling);
+    void setWidgetsLocked(bool lock);
 
     // Properties
     bool getOpenProperties() { return m_openProperties; }

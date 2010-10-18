@@ -20,6 +20,7 @@
 
 #include "simpledocument.h"
 #include "baseview.h"
+#include "widgetlayout.h"
 
 SimpleDocument::SimpleDocument(QWidget *parent, OpEntryParser *opcodeTree) :
     BaseDocument(parent,opcodeTree)
@@ -29,11 +30,15 @@ SimpleDocument::SimpleDocument(QWidget *parent, OpEntryParser *opcodeTree) :
 
 void SimpleDocument::setTextString(QString &text)
 {
+  m_widgetLayouts[0]->setFontScaling(1.0);
   parseTextString(text);
+  m_widgetLayouts[0]->show();
+  m_widgetLayouts[0]->setWidgetsLocked(true);
   m_view->setFullText(text, true);  // TODO do something different if not a csd file?
 }
 
 void SimpleDocument::init(QWidget *parent, OpEntryParser *opcodeTree)
 {
   m_view = new BaseView(parent, opcodeTree);
+  m_view->hide();
 }

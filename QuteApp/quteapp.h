@@ -27,6 +27,7 @@
 
 class SimpleDocument;
 class CsoundOptions;
+class OpEntryParser;
 
 class QuteApp : public QMainWindow
 {
@@ -45,6 +46,7 @@ private:
     bool loadCsd();
     CsoundOptions *m_options;
     SimpleDocument *m_doc;
+    OpEntryParser *m_opcodeTree;
 };
 
 #endif // QTAPP_H

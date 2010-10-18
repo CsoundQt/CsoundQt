@@ -126,7 +126,6 @@ class DocumentPage : public BaseDocument
 
     // Get internal components
     DocumentView *getView();  // Needed to pass view for placing it as tab widget in main application
-    WidgetLayout *getWidgetLayout();  // Needed to pass for placing in widget dock panel
     ConsoleWidget *getConsole();  // Needed to pass for placing in console dock panel
     CsoundEngine *getEngine(); // Needed to pass to python interpreter
 //    void *getCsound();
