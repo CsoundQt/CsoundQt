@@ -12,6 +12,7 @@ gibeats init 0
 
 instr 1  ; Always on
 	ktime timeinsts
+	ktempo invalue "tempo"
 	outvalue "time", ktime
 
 	kfreq = ktempo/60
@@ -36,18 +37,18 @@ i 1 0 3600
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>445</x>
- <y>182</y>
+ <x>854</x>
+ <y>231</y>
  <width>400</width>
  <height>303</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background" >
+ <bgcolor mode="background">
   <r>138</r>
   <g>149</g>
   <b>156</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>82</x>
   <y>5</y>
@@ -67,7 +68,7 @@ i 1 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -76,7 +77,7 @@ i 1 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>6</x>
   <y>45</y>
@@ -96,7 +97,7 @@ i 1 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>191</r>
    <g>204</g>
    <b>234</b>
@@ -105,7 +106,7 @@ i 1 0 3600
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName>time</objectName>
   <x>203</x>
   <y>111</y>
@@ -125,7 +126,7 @@ i 1 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>219</r>
    <g>255</g>
    <b>221</b>
@@ -134,7 +135,7 @@ i 1 0 3600
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>87</x>
   <y>117</y>
@@ -154,7 +155,7 @@ i 1 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -163,7 +164,7 @@ i 1 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>tempo</objectName>
   <x>12</x>
   <y>155</y>
@@ -177,11 +178,11 @@ i 1 0 3600
   <maximum>180.00000000</maximum>
   <value>103.49397590</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >true</randomizable>
+  <randomizable group="0">true</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>117</x>
   <y>178</y>
@@ -201,7 +202,7 @@ i 1 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -210,7 +211,7 @@ i 1 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName>tempo</objectName>
   <x>259</x>
   <y>153</y>
@@ -230,7 +231,7 @@ i 1 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -239,7 +240,7 @@ i 1 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>326</x>
   <y>153</y>
@@ -259,7 +260,7 @@ i 1 0 3600
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -268,7 +269,7 @@ i 1 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName>location</objectName>
   <x>10</x>
   <y>205</y>
@@ -288,7 +289,7 @@ i 1 0 3600
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>98</r>
    <g>98</g>
    <b>98</b>
@@ -297,24 +298,30 @@ i 1 0 3600
   <borderradius>5</borderradius>
   <borderwidth>3</borderwidth>
  </bsbObject>
- <objectName/>
- <x>445</x>
- <y>182</y>
- <width>400</width>
- <height>303</height>
- <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
+<MacOptions>
+Version: 3
+Render: Real
+Ask: Yes
+Functions: ioObject
+Listing: Window
+WindowBounds: 72 179 400 200
+CurrentView: io
+IOViewEdit: On
+Options:
+</MacOptions>
+
 <MacGUI>
 ioView background {35466, 38293, 40092}
-ioText {82, 5} {211, 40} display 0.000000 0.00100 "" center "Arial" 24 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Display Widget
-ioText {6, 45} {362, 58} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Display widgets are labels whose value can be set from Csound through channels. The Display Widget can display both numbers and text.
-ioText {203, 111} {166, 35} display 12.934000 0.00100 "time" center "Courier New" 20 {0, 0, 0} {56064, 65280, 56576} nobackground noborder 12.934
-ioText {87, 117} {116, 29} display 0.000000 0.00100 "" right "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Time elapsed:
+ioText {82, 5} {211, 40} label 0.000000 0.00100 "" center "Arial" 24 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Display Widget
+ioText {6, 45} {362, 58} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Display widgets are labels whose value can be set from Csound through channels. The Display Widget can display both numbers and text.
+ioText {203, 111} {166, 35} label 12.934000 0.00100 "time" center "Courier New" 20 {0, 0, 0} {56064, 65280, 56576} nobackground noborder 12.934
+ioText {87, 117} {116, 29} label 0.000000 0.00100 "" right "Arial" 12 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Time elapsed:
 ioSlider {12, 155} {249, 26} 30.000000 180.000000 103.493976 tempo
-ioText {117, 178} {80, 25} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Tempo
-ioText {259, 153} {68, 26} display 103.494000 0.00100 "tempo" right "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 103.494
-ioText {326, 153} {49, 25} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder bpm
-ioText {10, 205} {367, 48} display 0.000000 0.00100 "location" center "Arial" 24 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder Bar:Beat - 4:3
+ioText {117, 178} {80, 25} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Tempo
+ioText {259, 153} {68, 26} label 103.494000 0.00100 "tempo" right "Arial" 12 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 103.494
+ioText {326, 153} {49, 25} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {63232, 62720, 61952} nobackground noborder bpm
+ioText {10, 205} {367, 48} label 0.000000 0.00100 "location" center "Arial" 24 {65280, 65280, 65280} {63232, 62720, 61952} nobackground noborder Bar:Beat - 4:3
 </MacGUI>

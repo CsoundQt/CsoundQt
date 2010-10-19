@@ -56,8 +56,9 @@ class BaseDocument : public QObject
     void stopRecording();
 //    void playParent(); // Triggered from button, ask parent for options
 //    void renderParent();
+    void queueEvent(QString line, int delay = 0);
 
-    virtual void registerButton(QuteButton *button);
+    virtual void registerButton(QuteButton *button) = 0;
 
 
 protected:

@@ -29,6 +29,7 @@ Q_OBJECT
 public:
     explicit SimpleDocument(QWidget *parent = 0, OpEntryParser *opcodeTree = 0);
     virtual void setTextString(QString &text);
+    virtual void registerButton(QuteButton *button);
 
 signals:
 

@@ -25,7 +25,8 @@
 #include "widgetlayout.h"
 #include "baseview.h"
 #include "csoundengine.h"
-//#include "qutebutton.h"
+#include "qutecsound.h"
+#include "qutebutton.h"
 
 
 BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree) :
@@ -163,6 +164,12 @@ void BaseDocument::stopRecording()
   m_csEngine->stopRecording();
 }
 
+void BaseDocument::queueEvent(QString eventLine, int delay)
+{
+//   qDebug("WidgetPanel::queueEvent %s", eventLine.toStdString().c_str());
+  m_csEngine->queueEvent(eventLine, delay);  //TODO  implement passing of timestamp
+}
+
 //void BaseDocument::playParent()
 //{
 //  static_cast<qutecsound *>(parent())->play();
@@ -173,11 +180,10 @@ void BaseDocument::stopRecording()
 //  static_cast<qutecsound *>(parent())->render();
 //}
 
-void BaseDocument::registerButton(QuteButton *b)
-{
-  qDebug() << "BaseDocument::registerButton not implemented.";
+//void BaseDocument::registerButton(QuteButton *b)
+//{
 //  connect(b, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(play()));
 //  connect(b, SIGNAL(render()), static_cast<qutecsound *>(parent()), SLOT(render()));
 //  connect(b, SIGNAL(pause()), static_cast<qutecsound *>(parent()), SLOT(pause()));
 //  connect(b, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
-}
+//}

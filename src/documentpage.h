@@ -187,7 +187,6 @@ class DocumentPage : public BaseDocument
     int record(int format);
     void perfEnded();
     int runPython();  // Called when file is a python file
-    void queueEvent(QString line, int delay = 0);
 
     void showWidgets(bool show = true);
     void hideWidgets();
@@ -240,7 +239,7 @@ class DocumentPage : public BaseDocument
     virtual void init(QWidget *parent,OpEntryParser *opcodeTree);
     CsoundOptions getParentOptions();
     void deleteAllLiveEvents();
-    virtual WidgetLayout* newWidgetLayout();
+//    virtual WidgetLayout* newWidgetLayout();
 
     QString fileName;
     QString companionFile;

@@ -1175,7 +1175,7 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
   m_csEngine->registerConsole(m_console);
 
   //FIXME widgetlayout should have the chance of being empty
-  m_widgetLayouts.append(newWidgetLayout());
+//  m_widgetLayouts.append(newWidgetLayout());
   m_csEngine->setWidgetLayout(m_widgetLayouts[0]);  // Pass first widget layout to engine
 
 //  detachWidgets();
@@ -1189,20 +1189,20 @@ void DocumentPage::deleteAllLiveEvents()
     deleteLiveEventPanel(m_liveFrames[i]);
   }
 }
-
-WidgetLayout* DocumentPage::newWidgetLayout()
-{
-  WidgetLayout* wl = new WidgetLayout(0);
-//  qDebug() << "BaseDocument::newWidgetLayout()" << wl->windowFlags();
-  wl->setWindowFlags(Qt::Window | wl->windowFlags());
-  connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
-  connect(wl, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
-  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
-          this, SLOT(setWidgetClipboard(QString)));
-  connect(wl, SIGNAL(registerButton(QuteButton*)),
-          this, SLOT(registerButton(QuteButton*)));
-  return wl;
-}
+//
+//WidgetLayout* DocumentPage::newWidgetLayout()
+//{
+//  WidgetLayout* wl = new WidgetLayout(0);
+////  qDebug() << "BaseDocument::newWidgetLayout()" << wl->windowFlags();
+//  wl->setWindowFlags(Qt::Window | wl->windowFlags());
+//  connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
+//  connect(wl, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
+//  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
+//          this, SLOT(setWidgetClipboard(QString)));
+//  connect(wl, SIGNAL(registerButton(QuteButton*)),
+//          this, SLOT(registerButton(QuteButton*)));
+//  return wl;
+//}
 
 int DocumentPage::play(CsoundOptions *options)
 {
@@ -1273,12 +1273,6 @@ int DocumentPage::runPython()
   m_console->appendMessage(serr);
   emit stopSignal();
   return p.exitCode();
-}
-
-void DocumentPage::queueEvent(QString eventLine, int delay)
-{
-//   qDebug("WidgetPanel::queueEvent %s", eventLine.toStdString().c_str());
-  m_csEngine->queueEvent(eventLine, delay);  //TODO  implement passing of timestamp
 }
 
 void DocumentPage::showWidgets(bool show)

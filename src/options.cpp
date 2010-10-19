@@ -27,6 +27,64 @@
 
 Options::Options()
 {
+  font = "Courier";
+  fontPointSize = 10;
+  lineEnding = 0; // 0=Unix (LF) 1=Windows(CR+LF)
+  consoleFont = "Courier";
+  consoleFontPointSize = 10;
+  consoleFontColor = Qt::black;
+  consoleBgColor = Qt::white;
+  tabWidth = 8;
+  colorVariables = true;
+  autoPlay = true;
+  autoJoin = false;
+  saveChanges = true;
+  rememberFile = true;
+  saveWidgets = true;
+  iconText = true;
+  showToolbar = true;
+  wrapLines = true;
+  autoComplete = true;
+
+  showWidgetsOnRun = true;
+  showTooltips = false;
+  terminalFLTK = false;
+  oldFormat = false;  // Store old MacCsound widget format
+  openProperties = true;  // Open properties automatically when creating a widget
+  fontScaling = 1.0;
+  fontOffset = 0.0;
+
+  useAPI = true;
+  enableWidgets = true;
+  widgetsIndependent = true;  // Widget layouts in Separate Window (instead of Dock Widget)
+  useInvalue = true; // If false use chnget
+  thread = true;
+  keyRepeat = true;
+  debugLiveEvents = false;
+  consoleBufferSize = 1024;
+  midiInterface = 0; // For internal QuteCsound MIDI control
+
+  csdPath = "./"; //path of active csd needed for setting -o -i paths
+
+  defaultCsd = "";
+  defaultCsdActive = false;
+  opcodexmldir = "";
+  opcodexmldirActive = false;
+  favoriteDir = "";
+  pythonDir = "";
+  pythonExecutable = "python";
+  logFile = "log.txt";
+
+  // External applications
+  terminal = "";
+  browser = "";
+  dot = "";
+  waveeditor = "";
+  waveplayer = "";
+  pdfviewer = "";
+  language = 0;  // Interface language
+
+  csdTemplate = "";
 }
 
 

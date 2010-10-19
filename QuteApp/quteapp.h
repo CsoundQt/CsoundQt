@@ -39,6 +39,7 @@ class QuteApp : public QMainWindow
 
   public slots:
     void start();
+    void pause();
     void stop();
     void save();
 

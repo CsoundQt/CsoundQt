@@ -27,6 +27,54 @@
 CsoundOptions::CsoundOptions()
 {
   m_jackNameSize = 16; //a small default
+
+  rt = true;
+
+  enableFLTK = true;
+  bufferSize = 1024;
+  bufferSizeActive = false;
+  HwBufferSize = 2048;
+  HwBufferSizeActive = false;
+  dither = false;
+  additionalFlags = "";
+  additionalFlagsActive = false;
+
+  fileUseOptions = false;
+  fileOverrideOptions = false;
+  fileAskFilename = false;
+  filePlayFinished = false;
+  fileFileType = 0;
+  fileSampleFormat = 0;
+  fileInputFilenameActive = false;
+  fileInputFilename = "";
+  fileOutputFilenameActive = false;
+  fileOutputFilename = "";
+
+  sampleFormat = 0;
+
+  rtUseOptions = true;
+  rtOverrideOptions = false;
+  rtAudioModule = 0;
+  rtInputDevice = "adc";
+  rtOutputDevice = "dac";
+  rtJackName = "*";
+  rtMidiModule = 0;
+  rtMidiInputDevice = "0";
+  rtMidiOutputDevice = "0";
+  simultaneousRun = true; // Allow running various instances (tabs) simultaneously.
+
+  csdocdir = "";
+  opcodedir = "";
+  opcodedirActive = false;
+  sadir = "";
+  sadirActive = false;
+  ssdir = "";
+  ssdirActive = false;
+  sfdir = "";
+  sfdirActive = false;
+  incdir = "";
+  incdirActive = false;
+
 }
 
 QString CsoundOptions::generateCmdLineFlags()

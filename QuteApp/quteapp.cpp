@@ -26,12 +26,14 @@
 #include "csoundoptions.h"
 #include "simpledocument.h"
 #include "opentryparser.h"
+#include "widgetlayout.h"
 
 QuteApp::QuteApp(QWidget *parent)
     : QMainWindow(parent)
 {
   QDir::setCurrent("/data");
   m_options = new CsoundOptions;
+  m_options->fileName1 = "data/quteapp.csd";
   OpEntryParser *m_opcodeTree = new OpEntryParser(":/main/opcodes.xml");
   m_doc = new SimpleDocument(this, m_opcodeTree);
   setCentralWidget((QWidget *) m_doc->getWidgetLayout());
@@ -50,6 +52,11 @@ void QuteApp::start()
   m_doc->play(m_options);
 }
 
+void QuteApp::pause()
+{
+  m_doc->pause();
+}
+
 void QuteApp::stop()
 {
   m_doc->stop();
@@ -62,7 +69,7 @@ void QuteApp::save()
 
 bool QuteApp::loadCsd()
 {
-  QString fileName = "data/quteapp.csd";
+  QString fileName = m_options->fileName1;
   QFile file(fileName);
   if (!file.open(QFile::ReadOnly)) {
     QMessageBox::warning(this, tr("QuteCsound"),
@@ -118,5 +125,6 @@ bool QuteApp::loadCsd()
 //  if (runNow && m_options->autoPlay) {
 //    play();
 //  }
+  this->resize(m_doc->getWidgetLayout()->size());
   return true;
 }
