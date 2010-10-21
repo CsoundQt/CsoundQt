@@ -5,12 +5,13 @@
 <CsInstruments>
 ksmps = 64
 nchnls = 2
+0dbfs = 1
 
 ;============================================================================;
 ;                    PLAYING SCALES WITH A MIDI KEYBOARD                     ;
 ;============================================================================;
 ;                  by Joachim Heintz and Richard Boulanger                   ;
-;                                May 2010                                   ;
+;                                October 2010                                ;
 ;============================================================================;
 
 
@@ -45,7 +46,7 @@ ifreq		=		iref_freq * (iumult ^ (istep / istepspu))
   endop
 
   opcode FreqByCentTab, i, iiii
-;;frequency calculation of a step of a scale which is defined by a list of cent values
+  ;frequency calculation of a step of a scale which is defined by a list of cent values
 ;iftcent:	function table with the number of cent values per unit multiplier (usually 2 = octave)
 	;the first value must be 0 and matches iref_freq, if istep == 0
 	;the size of the table must be equal to the number of cent values in it (use -size and -2 as GEN)
@@ -64,7 +65,7 @@ ifreq		=		ibasfreq * cent(icent); get frequency
   endop
 
   opcode FreqByRatioTab, i, iiii
-;;frequency calculation of a step of a scale which is defined by a list of proportions
+  ;frequency calculation of a step of a scale which is defined by a list of proportions
 ;iftprops:	function table with the number of proportions per unit multiplier (usually 2 = octave)
 	;the first value must be 1 and matches iref_freq, if istep == 0
 	;the size of the table must be equal to the number of proportions in it (use -size and -2 as GEN)
@@ -83,7 +84,7 @@ ifreq		=		ibasfreq * iprop; get frequency
   endop
 
   opcode TabMkPartCp_i, i, iiio
-;copies ihowmany values starting from index istrtindx in isrc to a new function table (starting at index istrtwrite which defaults to 0) and returns its number
+  ;copies ihowmany values starting from index istrtindx in isrc to a new function table (starting at index istrtwrite which defaults to 0) and returns its number
 isrc, istrtindx, ihowmany, istrtwrite xin
 icop		ftgen		0, 0, -(ihowmany + istrtwrite), -2, 0
 ireadindx	=		istrtindx
@@ -96,7 +97,7 @@ istrtwrite	=		istrtwrite + 1
   endop
 
   opcode FreqByECRTab, i, iii
-;frequency calculation by either equal steps, cent list, or ratio list. the first value in ift gives the unit multiplier of the scale (e.g. 2 = octave or 3 = perfect 12th). the methods are distinguished by the second value in ift:
+  ;frequency calculation by either equal steps, cent list, or ratio list. the first value in ift gives the unit multiplier of the scale (e.g. 2 = octave or 3 = perfect 12th). the methods are distinguished by the second value in ift:
 ;if the second value is 0, ift is considered to be a centlist
 ;if the second value is 1, ift is considered to be a list of proportions
 ;else the second value is read as the number of equal tempered steps in the unit multiplier (e.g. 12 gives the usual keyboard tuning with a ratio of 12th root by 2 for each step when the first table value is 2)
@@ -116,7 +117,7 @@ endif
   endop
 
   opcode MidiNoteIn, kkk, 0
-;returns channel, key an velocity from a MIDI Note-On event. if no note-on event is received, -1 is returned for all three output values
+  ;returns channel, key and velocity from a MIDI Note-On event. if no note-on event is received, -1 is returned for all three output values
 keventin, kchanin, knotin, kvelin midiin
 if keventin == 144 then
 kchan		=		kchanin
@@ -131,14 +132,14 @@ endif
   endop
 
   opcode StrayGetEl, ii, Sijj
-;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
+  ;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
 Stray, ielindx, isepA, isepB xin
-;;DEFINE THE SEPERATORS
+ ;DEFINE THE SEPERATORS
 isep1		=		(isepA == -1 ? 32 : isepA)
 isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
 Sep1		sprintf	"%c", isep1
 Sep2		sprintf	"%c", isep2
-;;INITIALIZE SOME PARAMETERS
+ ;INITIALIZE SOME PARAMETERS
 ilen		strlen		Stray
 istartsel	=		-1; startindex for searched element
 iendsel	=		-1; endindex for searched element
@@ -150,7 +151,7 @@ loop:
 Snext		strsub		Stray, indx, indx+1; next sign
 isep1p		strcmp		Snext, Sep1; returns 0 if Snext is sep1
 isep2p		strcmp		Snext, Sep2; 0 if Snext is sep2
-;;NEXT SIGN IS NOT SEP1 NOR SEP2
+ ;NEXT SIGN IS NOT SEP1 NOR SEP2
 if isep1p != 0 && isep2p != 0 then
  if iwarleer == 1 then; first character after a seperator 
   if iel == ielindx then; if searched element index
@@ -161,7 +162,7 @@ iel		=		iel+1; increase it
 iwarleer	=		0; log that it's not a seperator 
   endif 
  endif 
-;;NEXT SIGN IS SEP1 OR SEP2
+ ;NEXT SIGN IS SEP1 OR SEP2
 else 
  if istartsel > -1 then; if this is first selector after searched element
 iendsel	=		indx; set iendsel
@@ -175,14 +176,14 @@ end: 		xout		istartsel, iendsel
   endop 
 
   opcode StrayLen, i, Sjj
-;returns the number of elements in Stray. elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1
+  ;returns the number of elements in Stray. elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1
 Stray, isepA, isepB xin
-;;DEFINE THE SEPERATORS
+ ;DEFINE THE SEPERATORS
 isep1		=		(isepA == -1 ? 32 : isepA)
 isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
 Sep1		sprintf	"%c", isep1
 Sep2		sprintf	"%c", isep2
-;;INITIALIZE SOME PARAMETERS
+ ;INITIALIZE SOME PARAMETERS
 ilen		strlen		Stray
 icount		=		0; number of elements
 iwarsep	=		1
@@ -205,7 +206,7 @@ end: 		xout		icount
   endop 
 
   opcode StrayNumToFt, ii, Sojj
-;puts all numbers in Stray (which must not contain non-numerical elements) in a function table and returns its variable ift (which is produced by iftno, default=0) and the length of the elements written in it ilen. simple math expressions like +, -, *, /, ^ and % are allowed (no parentheses at the moment). elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1.
+  ;puts all numbers in Stray (which must not contain non-numerical elements) in a function table and returns its variable ift (which is produced by iftno, default=0) and the length of the elements written in it ilen. simple math expressions like +, -, *, /, ^ and % are allowed (no parentheses at the moment). elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1.
 ;requires the UDOs StrayLen and StrayGetEl
 Stray, iftno, isepA, isepB xin
 isep1		=		(isepA == -1 ? 32 : isepA)
@@ -287,8 +288,8 @@ end:		xout		ift, ilen
   endop 
 
   opcode ShowLED_a, 0, Sakkk
-;Shows an audio signal in an outvalue channel. You can choose to show the value in dB or in raw amplitudes.
-;;Input:
+ ;Shows an audio signal in an outvalue channel. You can choose to show the value in dB or in raw amplitudes.
+;Input:
 ;Soutchan: string with the name of the outvalue channel
 ;asig: audio signal which is to displayed
 ;kdispfreq: refresh frequency (Hz)
@@ -306,8 +307,8 @@ kval		=		kdispval
   endop
 
   opcode ShowOver_a, 0, Sakk
-;Shows if the incoming audio signal was more than 1 and stays there for some time
-;;Input:
+ ;Shows if the incoming audio signal was more than 1 and stays there for some time
+;Input:
 ;Soutchan: string with the name of the outvalue channel
 ;asig: audio signal which is to displayed
 ;kdispfreq: refresh frequency (Hz)
@@ -332,67 +333,22 @@ kon		=		0
   endop
 
 
-instr 1; building function tables 1-30 from the line edit widgets
-Scale1		invalue		"scale1"
-giScale1, i0	StrayNumToFt		Scale1, 1
-Scale2		invalue		"scale2"
-giScale2, i0	StrayNumToFt		Scale2, 2
-Scale3		invalue		"scale3"
-giScale3, i0	StrayNumToFt		Scale3, 3
-Scale4		invalue		"scale4"
-giScale4, i0	StrayNumToFt		Scale4, 4
-Scale5		invalue		"scale5"
-giScale5, i0	StrayNumToFt		Scale5, 5
-Scale6		invalue		"scale6"
-giScale6, i0	StrayNumToFt		Scale6, 6
-Scale7		invalue		"scale7"
-giScale7, i0	StrayNumToFt		Scale7, 7
-Scale8		invalue		"scale8"
-giScale8, i0	StrayNumToFt		Scale8, 8
-Scale9		invalue		"scale9"
-giScale9, i0	StrayNumToFt		Scale9, 9
-Scale10	invalue		"scale10"
-giScale10,i0	StrayNumToFt		Scale10, 10
-Scale11	invalue		"scale11"
-giScale11,i0	StrayNumToFt		Scale11, 11
-Scale12	invalue		"scale12"
-giScale12,i0	StrayNumToFt		Scale12, 12
-Scale13	invalue		"scale13"
-giScale13,i0	StrayNumToFt		Scale13, 13
-Scale14	invalue		"scale14"
-giScale14,i0	StrayNumToFt		Scale14, 14
-Scale15	invalue		"scale15"
-giScale15,i0	StrayNumToFt		Scale15, 15
-Scale16	invalue		"scale16"
-giScale16,i0	StrayNumToFt		Scale16, 16
-Scale17	invalue		"scale17"
-giScale17,i0	StrayNumToFt		Scale17, 17
-Scale18	invalue		"scale18"
-giScale18,i0	StrayNumToFt		Scale18, 18
-Scale19	invalue		"scale19"
-giScale19,i0	StrayNumToFt		Scale19, 19
-Scale20	invalue		"scale20"
-giScale20,i0	StrayNumToFt		Scale20, 20
-Scale21	invalue		"scale21"
-giScale21,i0	StrayNumToFt		Scale21, 21
-Scale22	invalue		"scale22"
-giScale22,i0	StrayNumToFt		Scale22, 22
-Scale23	invalue		"scale23"
-giScale23,i0	StrayNumToFt		Scale23, 23
-Scale24	invalue		"scale24"
-giScale24,i0	StrayNumToFt		Scale24, 24
-Scale25	invalue		"scale25"
-giScale25,i0	StrayNumToFt		Scale25, 25
-Scale26	invalue		"scale26"
-giScale26,i0	StrayNumToFt		Scale26, 26
-Scale27	invalue		"scale27"
-giScale27,i0	StrayNumToFt		Scale27, 27
-Scale28	invalue		"scale28"
-giScale28,i0	StrayNumToFt		Scale28, 28
-Scale29	invalue		"scale29"
-giScale29,i0	StrayNumToFt		Scale29, 29
-Scale30	invalue		"scale30"
-giScale30,i0	StrayNumToFt		Scale30, 30
+instr 1; building and refreshing function tables containing scale values
+;;BUILDING FUNCTION TABLES 1-30 FROM THE LINE EDIT WIDGETS
+build:
+istart 	= 		1
+loop:
+Sinvchn 	sprintf 	"scale%d", istart
+Stray 		invalue 	Sinvchn
+ift, ilen StrayNumToFt 	Stray, istart
+		loop_lt 	istart, 1, 31, loop
+		rireturn
+;;REINITIALIZE IF A SCALE HAS BEEN CHANGED
+knew		invalue	"new"
+kchange	changed	knew
+ if knew == 1 && kchange == 1 then
+ 		reinit		build
+ endif
 endin
 
 
@@ -662,13 +618,13 @@ aoutR		=		(1-kwdmix) * gadryR + (kwdmix * awetR)
 aoutL		=		aoutL * kvol
 aoutR		=		aoutR * kvol
 		outs		aoutL, aoutR
-;; send to GUI
+;;SEND TO GUI
 kTrigDisp	metro		10
 		ShowLED_a	"outL", aoutL, kTrigDisp, 1, 50
 		ShowLED_a	"outR", aoutR, kTrigDisp, 1, 50
 		ShowOver_a	"outLover", aoutL/0dbfs, kTrigDisp, 1
 		ShowOver_a	"outRover", aoutR/0dbfs, kTrigDisp, 1
-;; reset global audio
+;;RESET GLOBAL AUDIO
 gadryL		=		0	
 gadryR		=		0
 endin
@@ -680,10 +636,10 @@ e 36000
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>6</x>
- <y>41</y>
- <width>1392</width>
- <height>820</height>
+ <x>17</x>
+ <y>63</y>
+ <width>1403</width>
+ <height>814</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -730,7 +686,7 @@ e 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>60</label>
+  <label>53</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -788,7 +744,7 @@ e 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>0.0</label>
+  <label>-1200.0</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -846,7 +802,7 @@ e 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>261.625</label>
+  <label>130.812</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -896,15 +852,15 @@ e 36000
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>737</x>
+  <x>736</x>
   <y>44</y>
   <width>131</width>
   <height>28</height>
   <uuid>{0a533a2f-56e9-45c3-b5c5-87962ec7dcf2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>jh &amp;&amp; rb 5/2010</label>
+  <midicc>0</midicc>
+  <label>jh &amp;&amp; rb 10/2010</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -933,7 +889,7 @@ e 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>261.626</label>
+  <label>174.609</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -991,7 +947,7 @@ e 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>-0.0</label>
+  <label>-500.0</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -4113,67 +4069,6 @@ The SECOND VALUE lets you choose between three cases:
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>midi_event</objectName>
-  <x>276</x>
-  <y>299</y>
-  <width>137</width>
-  <height>71</height>
-  <uuid>{b0139093-9747-4da9-aaf1-848c9c3b7589}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>Note Off
-Channel = 1
-Data1 = 60
-Data2 = 64</label>
-  <alignment>center</alignment>
-  <font>Lucida Grande</font>
-  <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>276</x>
-  <y>276</y>
-  <width>137</width>
-  <height>25</height>
-  <uuid>{39a0c8be-fb8f-4a5e-9c79-f8694e516142}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>Current MIDI Event</label>
-  <alignment>center</alignment>
-  <font>Lucida Grande</font>
-  <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>9</x>
@@ -5061,7 +4956,7 @@ Data2 = 64</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>2 13</label>
+  <label>2 7</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -6227,22 +6122,197 @@ Data2 = 64</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>267</x>
+  <y>375</y>
+  <width>162</width>
+  <height>93</height>
+  <uuid>{30bb34d6-d258-4378-bd08-c2a4a8cd442d}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>270</x>
+  <y>378</y>
+  <width>156</width>
+  <height>59</height>
+  <uuid>{834120d4-1a7f-401e-8671-9257529f95cc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Click here if you changed scales while Csound is running</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton">
+  <objectName>new</objectName>
+  <x>297</x>
+  <y>436</y>
+  <width>100</width>
+  <height>30</height>
+  <uuid>{4c65b8b1-6b84-49b5-9b41-86f4796e4005}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>New Values!</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+  <latch>false</latch>
+  <latched>true</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>268</x>
+  <y>257</y>
+  <width>161</width>
+  <height>111</height>
+  <uuid>{6494ec80-5dcf-4335-ba2d-99aa2e2f31cd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>277</x>
+  <y>265</y>
+  <width>137</width>
+  <height>25</height>
+  <uuid>{39a0c8be-fb8f-4a5e-9c79-f8694e516142}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Current MIDI Event</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>midi_event</objectName>
+  <x>278</x>
+  <y>288</y>
+  <width>137</width>
+  <height>71</height>
+  <uuid>{b0139093-9747-4da9-aaf1-848c9c3b7589}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
+<MacOptions>
+Version: 3
+Render: Real
+Ask: Yes
+Functions: ioObject
+Listing: Window
+WindowBounds: 17 63 1403 814
+CurrentView: io
+IOViewEdit: On
+Options:
+</MacOptions>
 <MacGUI>
 ioView background {48830, 48316, 36751}
 ioText {1010, 17} {374, 773} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Scale Pool
-ioText {846, 595} {62, 27} display 60.000000 0.00100 "key" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 60
+ioText {846, 595} {62, 27} display 53.000000 0.00100 "key" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 53
 ioText {391, 595} {457, 28} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Key Pressed
-ioText {847, 623} {82, 27} display 0.000000 0.00100 "cent" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0
+ioText {847, 623} {82, 27} display -1200.000000 0.00100 "cent" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -1200.0
 ioText {307, 623} {539, 27} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Cent Difference in Relation to the Reference Frequency
-ioText {847, 649} {82, 27} display 261.625000 0.00100 "freq" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 261.625
+ioText {847, 649} {82, 27} display 130.812000 0.00100 "freq" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 130.812
 ioText {306, 649} {542, 29} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frequency of this Key
-ioText {737, 47} {131, 24} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder jh && rb 5/2010
-ioText {847, 675} {82, 28} display 261.626000 0.00100 "normfreq" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 261.626
+ioText {736, 44} {131, 28} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder jh && rb 10/2010
+ioText {847, 675} {82, 28} display 174.609000 0.00100 "normfreq" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 174.609
 ioText {307, 675} {541, 29} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Usual Frequency of this Key
-ioText {847, 701} {82, 30} display 0.000000 0.00100 "centdiff" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -0.0
+ioText {847, 701} {82, 30} display -500.000000 0.00100 "centdiff" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -500.0
 ioText {307, 701} {541, 31} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Cent Difference Real Frequency to Usual Frequency
 ioText {316, 476} {639, 103} display 0.000000 0.00100 "info" center "Lucida Grande" 14 {0, 0, 0} {60672, 43264, 27392} nobackground noborder 1 HalftoneÂ¬12 steps per octave with a ratio of 12th root of 2 = 1.059463...
 ioButton {466, 45} {91, 27} value 1.000000 "_Play" "START" "/" i1 0 10
@@ -6308,8 +6378,6 @@ ioText {188, 500} {61, 25} editnum 2.000000 1.000000 "gm7_chn" right "" 0 {0, 0,
 ioMenu {10, 531} {108, 25} 4 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I (Delta) Mode,26 BP Moll II (Pierce) Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm8_scale
 ioText {124, 531} {61, 25} editnum 47.000000 1.000000 "gm8_key" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 47.000000
 ioText {188, 531} {61, 25} editnum 2.000000 1.000000 "gm8_chn" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.000000
-ioText {276, 299} {137, 71} display 0.000000 0.00100 "midi_event" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Note OffÂ¬Channel = 1Â¬Data1 = 60Â¬Data2 = 64
-ioText {276, 276} {137, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Current MIDI Event
 ioText {9, 263} {252, 31} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select Scale By MIDI Keys
 ioText {2, 597} {261, 201} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Reverb (freeverb)
 ioSlider {52, 642} {160, 28} 0.000000 1.000000 0.487500 wdmix
@@ -6342,7 +6410,7 @@ ioText {1156, 222} {220, 24} edit 0.000000 0.00100 "scale8"  "Lucida Grande" 14 
 ioText {1018, 222} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 8 Sixteenthtones
 ioText {1156, 245} {220, 24} edit 0.000000 0.00100 "scale9"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 5 25
 ioText {1018, 245} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 9 Stockhausen Studie II
-ioText {1156, 270} {220, 24} edit 0.000000 0.00100 "scale10"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 13
+ioText {1156, 270} {220, 24} edit 0.000000 0.00100 "scale10"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 7
 ioText {1018, 270} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 10 User Defined
 ioText {1156, 294} {220, 24} edit 0.000000 0.00100 "scale11"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 1 2187/2048 9/8 32/27 81/64 4/3 729/512 3/2 6561/4096 27/16 16/9 243/128
 ioText {1018, 294} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 11 Pythagorean
@@ -6384,4 +6452,10 @@ ioText {1156, 733} {220, 24} edit 0.000000 0.00100 "scale29"  "Lucida Grande" 14
 ioText {1018, 733} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 29 BP Lambda Mode
 ioText {1156, 758} {220, 24} edit 0.000000 0.00100 "scale30"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 13
 ioText {1018, 758} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 30 User Defined
+ioText {279, 494} {80, 25} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {268, 376} {156, 59} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Click here if you changed scales while Csound is running
+ioButton {297, 436} {100, 30} value 1.000000 "new" "New Values!" "/" i1 0 10
+ioText {287, 395} {162, 93} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {277, 269} {137, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Current MIDI Event
+ioText {277, 292} {137, 71} display 0.000000 0.00100 "midi_event" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
 </MacGUI>
