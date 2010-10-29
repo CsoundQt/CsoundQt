@@ -14,6 +14,9 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
+    <number>5</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -159,8 +162,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>635</width>
-        <height>290</height>
+        <width>641</width>
+        <height>291</height>
        </rect>
       </property>
      </widget>

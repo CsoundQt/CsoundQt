@@ -6,14 +6,17 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>698</width>
-    <height>258</height>
+    <width>681</width>
+    <height>283</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string extracomment="(Live Event Controller)">LE Controller</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
+   <property name="margin">
+    <number>5</number>
+   </property>
    <item row="1" column="0">
     <widget class="QTableWidget" name="panelTableWidget">
      <property name="sizePolicy">

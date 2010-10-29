@@ -21,7 +21,8 @@ fi
 
 nflag=0
 vflag=
-while getopts 'nv:' OPTION
+debug=
+while getopts 'nvd:' OPTION
 do
 case $OPTION in
 n)	nflag=1
@@ -29,7 +30,9 @@ n)	nflag=1
 v)	vflag=1
 bval="$OPTARG"
 ;;
-?)	printf "Usage: %s: [-n] [-n version] args\n" $(basename $0) >&2
+d)	debug="_d"
+;;
+?)	printf "Usage: %s: [-d] [-n] [-n version] args\n" $(basename $0) >&2
 exit 2
 ;;
 esac
@@ -59,9 +62,12 @@ cp -R /Library/Frameworks/QtCore.framework $APP_NAME/Contents/Frameworks/
 cp -R /Library/Frameworks/QtGui.framework $APP_NAME/Contents/Frameworks/
 cp -R /Library/Frameworks/QtXml.framework $APP_NAME/Contents/Frameworks/
 
+cp -R ../../../../PythonQt2.0.1/lib/libPythonQt${debug}.1.0.0.dylib $APP_NAME/Contents/MacOS/libPythonQt${debug}.1.dylib
+
 install_name_tool -change QtCore.framework/Versions/4/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4/QtCore $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
 install_name_tool -change QtGui.framework/Versions/4/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/4/QtGui $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
 install_name_tool -change QtXml.framework/Versions/4/QtXml @executable_path/../Frameworks/QtXml.framework/Versions/4/QtXml $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
+install_name_tool -change libPythonQt${debug}.1.dylib @executable_path/libPythonQt${debug}.1.dylib $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
 
 install_name_tool -id @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore $APP_NAME/Contents/Frameworks/QtCore.framework/Versions/4/QtCore
 install_name_tool -id @executable_path/../Frameworks/QtGui.framework/Versions/4.0/QtGui $APP_NAME/Contents/Frameworks/QtGui.framework/Versions/4/QtGui
@@ -70,16 +76,19 @@ install_name_tool -id @executable_path/../Frameworks/QtXml.framework/Versions/4.
 install_name_tool -change  QtCore.framework/Versions/4/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore $APP_NAME/Contents/Frameworks/QtGui.framework/Versions/4.0/QtGui
 install_name_tool -change  QtCore.framework/Versions/4/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore $APP_NAME/Contents/Frameworks/QtXml.framework/Versions/4.0/QtXml
 
+install_name_tool -change QtCore.framework/Versions/4/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4/QtCore $APP_NAME/Contents/MacOS/libPythonQt${debug}.1.dylib
+install_name_tool -change QtGui.framework/Versions/4/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/4/QtGui $APP_NAME/Contents/MacOS/libPythonQt${debug}.1.dylib
+
 #rm $APP_NAME/Contents/Info.plist
 #cp ../src/MyInfo.plist $APP_NAME/Contents/Info.plist
 
 # Remove debugging info
-rm -f $APP_NAME/Contents/Frameworks/QtGui.framework/QtGui_debug.dSYM
-rm -f $APP_NAME/Contents/Frameworks/QtGui.framework/Versions/4/QtGui_debug
-rm -f $APP_NAME/Contents/Frameworks/QtCore.framework/QtCore_debug.dSYM
-rm -f $APP_NAME/Contents/Frameworks/QtCore.framework/Versions/4/QtCore_debug
-rm -f $APP_NAME/Contents/Frameworks/QXml.framework/QtXml_debug.dSYM
-rm -f $APP_NAME/Contents/Frameworks/QtXml.framework/Versions/4/QtXml_debug
+rm -Rf $APP_NAME/Contents/Frameworks/QtGui.framework/QtGui_debug.dSYM
+rm -Rf $APP_NAME/Contents/Frameworks/QtGui.framework/Versions/4/QtGui_debug
+rm -Rf $APP_NAME/Contents/Frameworks/QtCore.framework/QtCore_debug.dSYM
+rm -Rf $APP_NAME/Contents/Frameworks/QtCore.framework/Versions/4/QtCore_debug
+rm -Rf $APP_NAME/Contents/Frameworks/QXml.framework/QtXml_debug.dSYM
+rm -Rf $APP_NAME/Contents/Frameworks/QtXml.framework/Versions/4/QtXml_debug
 
 otool -L $APP_NAME/Contents/MacOS/$ORIGINAL_NAME
 
