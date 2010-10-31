@@ -19,6 +19,8 @@ if [ $QUTECSOUND_ARCH = ""]
   QUTECSOUND_ARCH="OSX-Universal"
 fi
 
+#CSOUNDLIBNAME=
+
 nflag=0
 vflag=
 debug=

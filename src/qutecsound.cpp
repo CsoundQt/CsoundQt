@@ -564,7 +564,7 @@ void qutecsound::closeGraph()
 bool qutecsound::save()
 {
   QString fileName = documentPages[curPage]->getFileName();
-  if (fileName.isEmpty() or fileName.startsWith(":/examples/")) {
+  if (fileName.isEmpty() or fileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
     return saveAs();
   }
   else if (documentPages[curPage]->readOnly){
@@ -1100,7 +1100,7 @@ void qutecsound::play(bool realtime, int index)
   }
   QString runFileName1, runFileName2;
   QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
-  if (fileName.startsWith(":/examples/") || !m_options->saveChanges) {
+  if (fileName.startsWith(":/examples/", Qt::CaseInsensitive) || !m_options->saveChanges) {
     QString tmpFileName = QDir::tempPath();
     if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
       tmpFileName += QDir::separator();
@@ -2578,6 +2578,7 @@ void qutecsound::createMenus()
   QStringList basicsFiles;
   QStringList realtimeInteractionFiles;
   QStringList featuresFiles;
+  QStringList mccurdyFiles;
   QStringList flossman02Files;
   QStringList flossman03Files;
   QStringList flossman07Files;
@@ -2874,6 +2875,32 @@ void qutecsound::createMenus()
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
 
+  QMenu *mccurdyMenu = examplesMenu->addMenu(tr("McCurdy Collection"));
+  mccurdyFiles.append(":/Examples/McCurdy Collection/3DAudio/hrtfer_hrtfmove_hrtfmove2_hrtfstat.csd");
+
+  submenu = mccurdyMenu->addMenu(tr("3D Audio"));
+  foreach (QString fileName, mccurdyFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
+  mccurdyFiles.clear();
+  mccurdyFiles.append(":/Examples/McCurdy Collection/AdditiveSynthesis/HarmonicAdditiveSynthesis1.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/AdditiveSynthesis/HarmonicAdditiveSynthesis2.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/AdditiveSynthesis/InharmonicAdditiveSynthesis.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/AdditiveSynthesis/AdditiveSynthesisSpectralSketching.csd");
+
+  submenu = mccurdyMenu->addMenu(tr("Additive Synthesis"));
+  foreach (QString fileName, mccurdyFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
+  // Add the rest
   for (int i = 0; i < subMenus.size(); i++) {
     submenu = examplesMenu->addMenu(subMenuNames[i]);
     foreach (QString fileName, subMenus[i]) {

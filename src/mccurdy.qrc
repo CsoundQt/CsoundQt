@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Examples/McCurdy Collection/AdditiveSynthesis/AdditiveSynthesisSpectralSketching.csd</file>
+        <file>Examples/McCurdy Collection/AdditiveSynthesis/HarmonicAdditiveSynthesis1.csd</file>
+        <file>Examples/McCurdy Collection/AdditiveSynthesis/HarmonicAdditiveSynthesis2.csd</file>
+        <file>Examples/McCurdy Collection/AdditiveSynthesis/InharmonicAdditiveSynthesis.csd</file>
+        <file>Examples/McCurdy Collection/3DAudio/hrtfer_hrtfmove_hrtfmove2_hrtfstat.csd</file>
+    </qresource>
+</RCC>
