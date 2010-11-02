@@ -5,5 +5,27 @@
         <file>Examples/McCurdy Collection/AdditiveSynthesis/HarmonicAdditiveSynthesis2.csd</file>
         <file>Examples/McCurdy Collection/AdditiveSynthesis/InharmonicAdditiveSynthesis.csd</file>
         <file>Examples/McCurdy Collection/3DAudio/hrtfer_hrtfmove_hrtfmove2_hrtfstat.csd</file>
+        <file>Examples/McCurdy Collection/Convolution/convolve.csd</file>
+        <file>Examples/McCurdy Collection/Convolution/dconv.csd</file>
+        <file>Examples/McCurdy Collection/Convolution/pconvolve.csd</file>
+        <file>Examples/McCurdy Collection/Delays/01delayw_delayr_deltap.csd</file>
+        <file>Examples/McCurdy Collection/Delays/02delayportamento.csd</file>
+        <file>Examples/McCurdy Collection/Delays/03delayfeedback.csd</file>
+        <file>Examples/McCurdy Collection/Delays/04delayfiltersinloop.csd</file>
+        <file>Examples/McCurdy Collection/Delays/05delayflanger.csd</file>
+        <file>Examples/McCurdy Collection/Delays/06delayThruZeroFlanger.csd</file>
+        <file>Examples/McCurdy Collection/Delays/07delayStereoChorus.csd</file>
+        <file>Examples/McCurdy Collection/Delays/08delaySimplePitchShifter.csd</file>
+        <file>Examples/McCurdy Collection/Delays/09delayCompletedPitchShifter.csd</file>
+        <file>Examples/McCurdy Collection/Delays/10DelayDoppler.csd</file>
+        <file>Examples/McCurdy Collection/Delays/11StereoPingPongDelay.csd</file>
+        <file>Examples/McCurdy Collection/Delays/12MultitapDelay.csd</file>
+        <file>Examples/McCurdy Collection/Delays/13Delays.csd</file>
+        <file>Examples/McCurdy Collection/Distortion/BitDepthReduction.csd</file>
+        <file>Examples/McCurdy Collection/Distortion/clip.csd</file>
+        <file>Examples/McCurdy Collection/Distortion/distort.csd</file>
+        <file>Examples/McCurdy Collection/Distortion/distort1.csd</file>
+        <file>Examples/McCurdy Collection/Distortion/fold.csd</file>
+        <file>Examples/McCurdy Collection/Distortion/powershape.csd</file>
     </qresource>
 </RCC>

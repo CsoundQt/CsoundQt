@@ -2900,6 +2900,58 @@ void qutecsound::createMenus()
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
 
+  mccurdyFiles.clear();
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Convolution/dconv.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Convolution/pconvolve.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Convolution/convolve.csd");
+
+  submenu = mccurdyMenu->addMenu(tr("Convolution"));
+  foreach (QString fileName, mccurdyFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
+  mccurdyFiles.clear();
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Delays/01delayw_delayr_deltap.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Delays/02delayportamento.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Delays/03delayfeedback.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Delays/04delayfiltersinloop.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Delays/05delayflanger.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Delays/06delayThruZeroFlanger.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Delays/07delayStereoChorus.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Delays/08delaySimplePitchShifter.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Delays/09delayCompletedPitchShifter.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Delays/10DelayDoppler.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Delays/11StereoPingPongDelay.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Delays/12MultitapDelay.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Delays/13Delays.csd");
+
+  submenu = mccurdyMenu->addMenu(tr("Delays"));
+  foreach (QString fileName, mccurdyFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
+  mccurdyFiles.clear();
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Distortion/BitDepthReduction.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Distortion/distort1.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Distortion/fold.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Distortion/clip.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Distortion/distort.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Distortion/powershape.csd");
+
+  submenu = mccurdyMenu->addMenu(tr("Distortion"));
+  foreach (QString fileName, mccurdyFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
   // Add the rest
   for (int i = 0; i < subMenus.size(); i++) {
     submenu = examplesMenu->addMenu(subMenuNames[i]);
