@@ -55,7 +55,8 @@ HEADERS = "$${PWD}/about.h" \
     "$${PWD}/qutesheet.h" \
     "$${PWD}/basedocument.h" \
     "$${PWD}/qcsperfthread.h" \
-    "$${PWD}/baseview.h"
+    "$${PWD}/baseview.h" \
+    "$${PWD}/appwizard.h"
 SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/configdialog.cpp" \
     "$${PWD}/configlists.cpp" \
@@ -102,7 +103,8 @@ SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/qutesheet.cpp" \
     "$${PWD}/basedocument.cpp" \
     "$${PWD}/qcsperfthread.cpp" \
-    "$${PWD}/baseview.cpp"
+    "$${PWD}/baseview.cpp" \
+    "$${PWD}/appwizard.cpp"
 LIBS += $${LCSOUND} \ # $${LCSND} \
     $${LSNDFILE} \
     $${RTMIDI}
