@@ -107,10 +107,7 @@ WidgetLayout* BaseDocument::newWidgetLayout()
   WidgetLayout* wl = new WidgetLayout(0);
 //  qDebug() << "BaseDocument::newWidgetLayout()" << wl->windowFlags();
   wl->setWindowFlags(Qt::Window | wl->windowFlags());
-  connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
   connect(wl, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
-  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
-          this, SLOT(setWidgetClipboard(QString)));
   connect(wl, SIGNAL(registerButton(QuteButton*)),
           this, SLOT(registerButton(QuteButton*)));
   return wl;

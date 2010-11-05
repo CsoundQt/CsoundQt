@@ -1189,20 +1189,15 @@ void DocumentPage::deleteAllLiveEvents()
     deleteLiveEventPanel(m_liveFrames[i]);
   }
 }
-//
-//WidgetLayout* DocumentPage::newWidgetLayout()
-//{
-//  WidgetLayout* wl = new WidgetLayout(0);
-////  qDebug() << "BaseDocument::newWidgetLayout()" << wl->windowFlags();
-//  wl->setWindowFlags(Qt::Window | wl->windowFlags());
-//  connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
-//  connect(wl, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
-//  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
-//          this, SLOT(setWidgetClipboard(QString)));
-//  connect(wl, SIGNAL(registerButton(QuteButton*)),
-//          this, SLOT(registerButton(QuteButton*)));
-//  return wl;
-//}
+
+WidgetLayout* DocumentPage::newWidgetLayout()
+{
+  WidgetLayout* wl = BaseDocument::newWidgetLayout();
+  connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
+  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
+        this, SLOT(setWidgetClipboard(QString)));
+  return wl;
+}
 
 int DocumentPage::play(CsoundOptions *options)
 {
