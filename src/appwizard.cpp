@@ -28,13 +28,14 @@
 #include <QRadioButton>
 #include <QVBoxLayout>
 #include <QGridLayout>
+#include <QListWidget>
 
 
 AppWizard::AppWizard(QWidget *parent) :
     QWizard(parent)
 {
-//  addPage(new PathPage);
-//  addPage(new ClassInfoPage);
+  addPage(new PathPage);
+  addPage(new PluginsPage);
 //  addPage(new CodeStylePage);
 //  addPage(new OutputFilesPage);
 //  addPage(new ConclusionPage);
@@ -106,3 +107,9 @@ PathPage::PathPage(QWidget *parent)
     setLayout(layout);
 }
 
+
+PluginsPage::PluginsPage(QWidget *parent)
+    : QWizardPage(parent)
+{
+
+}

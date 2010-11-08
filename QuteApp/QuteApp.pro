@@ -52,7 +52,8 @@ SOURCES += "$${QCSPWD}/configlists.cpp" \
     main.cpp \
     quteapp.cpp \
     quteappwizard.cpp \
-    simpledocument.cpp
+    simpledocument.cpp \
+    settingsdialog.cpp \
 HEADERS += "$${QCSPWD}/configlists.h" \
     "$${QCSPWD}/console.h" \
     "$${QCSPWD}/csoundengine.h" \
@@ -85,8 +86,10 @@ HEADERS += "$${QCSPWD}/configlists.h" \
     "$${QCSPWD}/widgetpreset.h" \
     quteapp.h \
     quteappwizard.h \
-    simpledocument.h
-FORMS += quteappwizard.ui
+    simpledocument.h \
+    settingsdialog.h \
+FORMS += quteappwizard.ui \
+    settingsdialog.ui \
 LIBS += $${LCSOUND} \ # $${LCSND} \
     $${LSNDFILE} \
     $${RTMIDI}

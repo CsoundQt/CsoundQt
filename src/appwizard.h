@@ -30,6 +30,7 @@ class QGroupBox;
 class QLabel;
 class QLineEdit;
 class QRadioButton;
+class QListWidget;
 
 class AppWizard : public QWizard
 {
@@ -61,6 +62,18 @@ private:
    QRadioButton *qwidgetCtorRadioButton;
    QRadioButton *defaultCtorRadioButton;
    QCheckBox *copyCtorCheckBox;
+};
+
+class PluginsPage : public QWizardPage
+{
+   Q_OBJECT
+
+public:
+   PluginsPage(QWidget *parent = 0);
+
+private:
+   QLabel *pluginsLabel;
+   QListWidget *pluginList;
 };
 
 #endif // APPWIZARD_H

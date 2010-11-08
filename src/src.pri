@@ -8,7 +8,9 @@ FORMS = "$${PWD}/about.ui" \
     "$${PWD}/keyselector.ui" \
     "$${PWD}/liveeventcontrol.ui" \
     "$${PWD}/liveeventframe.ui" \
-    "$${PWD}/utilitiesdialog.ui"
+    "$${PWD}/utilitiesdialog.ui" \
+    "$${PWD}/appdetailspage.ui" \
+    "$${PWD}/pluginspage.ui"
 HEADERS = "$${PWD}/about.h" \
     "$${PWD}/configdialog.h" \
     "$${PWD}/configlists.h" \
@@ -56,7 +58,9 @@ HEADERS = "$${PWD}/about.h" \
     "$${PWD}/basedocument.h" \
     "$${PWD}/qcsperfthread.h" \
     "$${PWD}/baseview.h" \
-    "$${PWD}/appwizard.h"
+    "$${PWD}/appwizard.h" \
+    "$${PWD}/appdetailspage.cpp" \
+    "$${PWD}/pluginspage.h"
 SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/configdialog.cpp" \
     "$${PWD}/configlists.cpp" \
@@ -104,7 +108,9 @@ SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/basedocument.cpp" \
     "$${PWD}/qcsperfthread.cpp" \
     "$${PWD}/baseview.cpp" \
-    "$${PWD}/appwizard.cpp"
+    "$${PWD}/appwizard.cpp" \
+    "$${PWD}/appdetailspage.cpp" \
+    "$${PWD}/pluginspage.cpp"
 LIBS += $${LCSOUND} \ # $${LCSND} \
     $${LSNDFILE} \
     $${RTMIDI}
