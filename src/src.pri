@@ -59,7 +59,7 @@ HEADERS = "$${PWD}/about.h" \
     "$${PWD}/qcsperfthread.h" \
     "$${PWD}/baseview.h" \
     "$${PWD}/appwizard.h" \
-    "$${PWD}/appdetailspage.cpp" \
+    "$${PWD}/appdetailspage.h" \
     "$${PWD}/pluginspage.h"
 SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/configdialog.cpp" \

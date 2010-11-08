@@ -64,16 +64,5 @@ private:
    QCheckBox *copyCtorCheckBox;
 };
 
-class PluginsPage : public QWizardPage
-{
-   Q_OBJECT
-
-public:
-   PluginsPage(QWidget *parent = 0);
-
-private:
-   QLabel *pluginsLabel;
-   QListWidget *pluginList;
-};
 
 #endif // APPWIZARD_H
