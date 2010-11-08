@@ -37,6 +37,7 @@
 #include "liveeventframe.h"
 #include "about.h"
 #include "eventsheet.h"
+#include "appwizard.h"
 
 #ifdef QCS_PYTHONQT
 #include "pythonconsole.h"
@@ -826,6 +827,12 @@ bool qutecsound::saveAs()
     return saveFile(fileName);
   else
     return false;
+}
+
+void qutecsound::createApp()
+{
+  AppWizard wizard(this);
+  wizard.exec();
 }
 
 bool qutecsound::saveNoWidgets()
@@ -1883,6 +1890,7 @@ void qutecsound::setDefaultKeyboardShortcuts()
   reloadAct->setShortcut(tr(""));
   saveAct->setShortcut(tr("Ctrl+S"));
   saveAsAct->setShortcut(tr("Shift+Ctrl+S"));
+  createAppAct->setShortcut(tr(""));
   closeTabAct->setShortcut(tr("Ctrl+W"));
 
   printAct->setShortcut(tr("Ctrl+P"));
@@ -1984,6 +1992,11 @@ void qutecsound::createActions()
   saveAsAct->setIconText(tr("Save as"));
   saveAsAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
+
+  createAppAct = new QAction(tr("Create App..."), this);
+  createAppAct->setStatusTip(tr("Create Standalone application"));
+  createAppAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(createAppAct, SIGNAL(triggered()), this, SLOT(createApp()));
 
   saveNoWidgetsAct = new QAction(tr("Export without widgets"), this);
   saveNoWidgetsAct->setStatusTip(tr("Save to new file without including widget sections"));
@@ -2364,13 +2377,12 @@ void qutecsound::createActions()
 
 void qutecsound::setKeyboardShortcutsList()
 {
-  // Do not change the order of these actions because the settings
-  // read shortcuts for a number. Only add at the end.
   m_keyActions.append(newAct);
   m_keyActions.append(openAct);
   m_keyActions.append(reloadAct);
   m_keyActions.append(saveAct);
   m_keyActions.append(saveAsAct);
+  m_keyActions.append(createAppAct);
   m_keyActions.append(closeTabAct);
   m_keyActions.append(printAct);
   m_keyActions.append(exitAct);
@@ -2508,8 +2520,9 @@ void qutecsound::createMenus()
   fileMenu->addAction(saveAct);
   fileMenu->addAction(saveAsAct);
   fileMenu->addAction(saveNoWidgetsAct);
+  fileMenu->addAction(createAppAct);
   fileMenu->addAction(reloadAct);
-//   fileMenu->addAction(cabbageAct);
+  // fileMenu->addAction(cabbageAct);
   fileMenu->addAction(closeTabAct);
   fileMenu->addAction(printAct);
   fileMenu->addAction(infoAct);

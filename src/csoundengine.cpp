@@ -877,7 +877,7 @@ void CsoundEngine::dispatchQueues()
     QTimer::singleShot(refreshTime, this, SLOT(dispatchQueues()));
     return;
   }
-  if (closing == 1) {
+  if (closing == 1 || closing == -1) {
     closing = -1;
     engineMutex.unlock();
     return;

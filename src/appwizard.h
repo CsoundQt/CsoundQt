@@ -44,25 +44,5 @@ public slots:
 
 };
 
-class PathPage : public QWizardPage
-{
-   Q_OBJECT
-
-public:
-   PathPage(QWidget *parent = 0);
-
-private:
-   QLabel *classNameLabel;
-   QLabel *baseClassLabel;
-   QLineEdit *classNameLineEdit;
-   QLineEdit *baseClassLineEdit;
-   QCheckBox *qobjectMacroCheckBox;
-   QGroupBox *groupBox;
-   QRadioButton *qobjectCtorRadioButton;
-   QRadioButton *qwidgetCtorRadioButton;
-   QRadioButton *defaultCtorRadioButton;
-   QCheckBox *copyCtorCheckBox;
-};
-
 
 #endif // APPWIZARD_H

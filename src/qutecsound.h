@@ -143,10 +143,6 @@ class qutecsound:public QMainWindow
     void record();
     void sendEvent(QString eventLine, double delay = 0);
     void sendEvent(int index, QString line, double delay = 0);
-//     void selectMidiInDevice(QPoint pos);
-//     void selectMidiOutDevice(QPoint pos);
-//     void selectAudioInDevice(QPoint pos);
-//     void selectAudioOutDevice(QPoint pos);
     void changePage(int index);
     void setWidgetTooltipsVisible(bool visible);
 //    void updateWidgets();
@@ -170,6 +166,7 @@ class qutecsound:public QMainWindow
     void closeGraph();
     bool save();
     bool saveAs();
+    void createApp();
     bool saveNoWidgets();
     void info();
     // Edition
@@ -258,10 +255,6 @@ class qutecsound:public QMainWindow
     void closeMidiPort();
     void showNewFormatWarning();
 
-//     QHash<QString, double> outValueQueue;
-//    QHash<QString, double> inValueQueue;
-//    QHash<QString, QString> outStringQueue;
-
     QTabWidget *documentTabs;
     GraphicWindow *m_graphic;  // To display the code graph images
     QVector<DocumentPage *> documentPages;
@@ -299,6 +292,7 @@ class qutecsound:public QMainWindow
     QAction *reloadAct;
     QAction *saveAct;
     QAction *saveAsAct;
+    QAction *createAppAct;
     QAction *saveNoWidgetsAct;
     QAction *closeTabAct;
     QAction *printAct;

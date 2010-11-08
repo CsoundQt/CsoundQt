@@ -20,7 +20,6 @@
     02111-1307 USA
 */
 
-#include "appwizard.h"
 #include <QCheckBox>
 #include <QGroupBox>
 #include <QLabel>
@@ -31,11 +30,16 @@
 #include <QListWidget>
 
 
+#include "appwizard.h"
+#include "appdetailspage.h"
+#include "pluginspage.h"
+
+
 AppWizard::AppWizard(QWidget *parent) :
     QWizard(parent)
 {
-  addPage(new PathPage);
-//  addPage(new PluginsPage);
+  addPage(new AppDetailsPage);
+  addPage(new PluginsPage);
 //  addPage(new CodeStylePage);
 //  addPage(new OutputFilesPage);
 //  addPage(new ConclusionPage);
@@ -51,59 +55,4 @@ AppWizard::AppWizard(QWidget *parent) :
 //  QDialog::accept();
 //}
 
-PathPage::PathPage(QWidget *parent)
-    : QWizardPage(parent)
-{
-    setTitle(tr("Class Information"));
-    setSubTitle(tr("Specify basic information about the class for which you "
-                   "want to generate skeleton source code files."));
-    setPixmap(QWizard::LogoPixmap, QPixmap(":/images/logo1.png"));
-
-    classNameLabel = new QLabel(tr("&Class name:"));
-    classNameLineEdit = new QLineEdit;
-    classNameLabel->setBuddy(classNameLineEdit);
-
-    baseClassLabel = new QLabel(tr("B&ase class:"));
-    baseClassLineEdit = new QLineEdit;
-    baseClassLabel->setBuddy(baseClassLineEdit);
-
-    qobjectMacroCheckBox = new QCheckBox(tr("Generate Q_OBJECT &macro"));
-
-    groupBox = new QGroupBox(tr("C&onstructor"));
-
-    qobjectCtorRadioButton = new QRadioButton(tr("&QObject-style constructor"));
-    qwidgetCtorRadioButton = new QRadioButton(tr("Q&Widget-style constructor"));
-    defaultCtorRadioButton = new QRadioButton(tr("&Default constructor"));
-    copyCtorCheckBox = new QCheckBox(tr("&Generate copy constructor and "
-                                        "operator="));
-
-    defaultCtorRadioButton->setChecked(true);
-
-    connect(defaultCtorRadioButton, SIGNAL(toggled(bool)),
-            copyCtorCheckBox, SLOT(setEnabled(bool)));
-
-    registerField("className*", classNameLineEdit);
-    registerField("baseClass", baseClassLineEdit);
-    registerField("qobjectMacro", qobjectMacroCheckBox);
-    registerField("qobjectCtor", qobjectCtorRadioButton);
-    registerField("qwidgetCtor", qwidgetCtorRadioButton);
-    registerField("defaultCtor", defaultCtorRadioButton);
-    registerField("copyCtor", copyCtorCheckBox);
-
-    QVBoxLayout *groupBoxLayout = new QVBoxLayout;
-    groupBoxLayout->addWidget(qobjectCtorRadioButton);
-    groupBoxLayout->addWidget(qwidgetCtorRadioButton);
-    groupBoxLayout->addWidget(defaultCtorRadioButton);
-    groupBoxLayout->addWidget(copyCtorCheckBox);
-    groupBox->setLayout(groupBoxLayout);
-
-    QGridLayout *layout = new QGridLayout;
-    layout->addWidget(classNameLabel, 0, 0);
-    layout->addWidget(classNameLineEdit, 0, 1);
-    layout->addWidget(baseClassLabel, 1, 0);
-    layout->addWidget(baseClassLineEdit, 1, 1);
-    layout->addWidget(qobjectMacroCheckBox, 2, 0, 1, 2);
-    layout->addWidget(groupBox, 3, 0, 1, 2);
-    setLayout(layout);
-}
 
