@@ -178,7 +178,6 @@ qutecsound::qutecsound(QStringList fileNames)
       loadFile(fileName, true); // FIXME Something here seems to be causing spurious crashes
     }
   }
-  qDebug() << "qutecsound::qutecsound()";
   if (!m_options->widgetsIndependent) {
     if (widgetsVisible) { // Reshow widget panel if necessary
       widgetPanel->show();
@@ -2958,6 +2957,36 @@ void qutecsound::createMenus()
   mccurdyFiles.append(":/Examples/McCurdy Collection/Distortion/powershape.csd");
 
   submenu = mccurdyMenu->addMenu(tr("Distortion"));
+  foreach (QString fileName, mccurdyFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
+  mccurdyFiles.clear();
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/01pvsanal_pvsynth.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/02pvsfread.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/03pvscale.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/04pvshift.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/05pvshift_pvscale.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/06pvsfreeze.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/07pvsblur.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/08pvsmooth.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/09pvsarp.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/10pvsvoc.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/11pvscross.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/12pvsbufread.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/13pvsbandp.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/14pvsbandr.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/15pvscross.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/16pvsfilter.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/17pvsmorph.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/18pvsadsyn.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/pvadd.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/pvoc.csd");
+
+  submenu = mccurdyMenu->addMenu(tr("FFT"));
   foreach (QString fileName, mccurdyFiles) {
     QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
     newAction = submenu->addAction(name);

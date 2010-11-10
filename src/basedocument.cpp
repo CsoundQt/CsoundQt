@@ -32,7 +32,6 @@
 BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree) :
     QObject(parent), m_opcodeTree(opcodeTree), m_csEngine(0)
 {
-  qDebug() << "BaseDocument::BaseDocument";
   m_view = 0;
   m_csEngine = new CsoundEngine();
   m_widgetLayouts.append(newWidgetLayout());

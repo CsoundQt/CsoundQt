@@ -26,7 +26,6 @@
 BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
     QScrollArea(parent), m_opcodeTree(opcodeTree)
 {
-  qDebug() << "BaseView::BaseView";
   mainEditor = new TextEditor(this);
   scoreEditor = new TextEditor(this);
   optionsEditor = new TextEditor(this);

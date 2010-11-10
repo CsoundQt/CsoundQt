@@ -1121,7 +1121,6 @@ void DocumentPage::registerButton(QuteButton *b)
 
 void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 {
-  qDebug() << "DocumentPage::init";
   fileName = "";
   companionFile = "";
   askForFile = true;

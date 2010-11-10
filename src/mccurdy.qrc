@@ -27,5 +27,25 @@
         <file>Examples/McCurdy Collection/Distortion/distort1.csd</file>
         <file>Examples/McCurdy Collection/Distortion/fold.csd</file>
         <file>Examples/McCurdy Collection/Distortion/powershape.csd</file>
+        <file>Examples/McCurdy Collection/FFT/01pvsanal_pvsynth.csd</file>
+        <file>Examples/McCurdy Collection/FFT/02pvsfread.csd</file>
+        <file>Examples/McCurdy Collection/FFT/03pvscale.csd</file>
+        <file>Examples/McCurdy Collection/FFT/04pvshift.csd</file>
+        <file>Examples/McCurdy Collection/FFT/05pvshift_pvscale.csd</file>
+        <file>Examples/McCurdy Collection/FFT/06pvsfreeze.csd</file>
+        <file>Examples/McCurdy Collection/FFT/07pvsblur.csd</file>
+        <file>Examples/McCurdy Collection/FFT/08pvsmooth.csd</file>
+        <file>Examples/McCurdy Collection/FFT/09pvsarp.csd</file>
+        <file>Examples/McCurdy Collection/FFT/10pvsvoc.csd</file>
+        <file>Examples/McCurdy Collection/FFT/11pvscross.csd</file>
+        <file>Examples/McCurdy Collection/FFT/12pvsbufread.csd</file>
+        <file>Examples/McCurdy Collection/FFT/13pvsbandp.csd</file>
+        <file>Examples/McCurdy Collection/FFT/14pvsbandr.csd</file>
+        <file>Examples/McCurdy Collection/FFT/15pvscross.csd</file>
+        <file>Examples/McCurdy Collection/FFT/16pvsfilter.csd</file>
+        <file>Examples/McCurdy Collection/FFT/17pvsmorph.csd</file>
+        <file>Examples/McCurdy Collection/FFT/18pvsadsyn.csd</file>
+        <file>Examples/McCurdy Collection/FFT/pvadd.csd</file>
+        <file>Examples/McCurdy Collection/FFT/pvoc.csd</file>
     </qresource>
 </RCC>
