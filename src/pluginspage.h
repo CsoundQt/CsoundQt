@@ -34,7 +34,7 @@ class PluginsPage : public QWizardPage
 {
 Q_OBJECT
 public:
-    PluginsPage(QWidget *parent = 0);
+    PluginsPage(QWidget *parent = 0, QString opcodeDir = QString());
     ~PluginsPage();
 
 

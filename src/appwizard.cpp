@@ -35,11 +35,11 @@
 #include "pluginspage.h"
 
 
-AppWizard::AppWizard(QWidget *parent) :
+AppWizard::AppWizard(QWidget *parent,QString opcodeDir) :
     QWizard(parent)
 {
   addPage(new AppDetailsPage);
-  addPage(new PluginsPage);
+  addPage(new PluginsPage(this, opcodeDir));
 //  addPage(new CodeStylePage);
 //  addPage(new OutputFilesPage);
 //  addPage(new ConclusionPage);

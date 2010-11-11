@@ -34,13 +34,19 @@ class QListWidget;
 
 class AppWizard : public QWizard
 {
-Q_OBJECT
-public:
-    explicit AppWizard(QWidget *parent = 0);
+  Q_OBJECT
+  public:
+    explicit AppWizard(QWidget *parent = 0, QString opcodeDir = QString());
 
-signals:
+    void setOpcodeDir(QString opcodeDir) {m_opcodeDir = opcodeDir;}
 
-public slots:
+  signals:
+
+  public slots:
+
+  private:
+    QString m_opcodeDir;
+
 
 };
 

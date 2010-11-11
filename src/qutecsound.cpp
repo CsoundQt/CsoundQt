@@ -830,7 +830,25 @@ bool qutecsound::saveAs()
 
 void qutecsound::createApp()
 {
-  AppWizard wizard(this);
+  QString opcodeDir;
+  if (m_options->opcodedirActive) {
+    opcodeDir = m_options->opcodedir.toLocal8Bit();
+  }
+  else {
+#ifdef USE_DOUBLES
+#ifdef Q_OS_MAC
+    opcodeDir = "/Library/Frameworks/CsoundLib64.framework/Resources/Opcodes";
+//    opcodeDir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib64.framework/Resources/Opcodes";
+#endif
+#else
+#ifdef Q_OS_MAC
+    opcodeDir = "/Library/Frameworks/CsoundLib.framework/Resources/Opcodes";
+//    opcodeDir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Resources/Opcodes";
+#endif
+#endif
+  }
+
+  AppWizard wizard(this, opcodeDir);
   wizard.exec();
 }
 

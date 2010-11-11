@@ -23,11 +23,20 @@
 #include "pluginspage.h"
 #include "ui_pluginspage.h"
 
-PluginsPage::PluginsPage(QWidget *parent) :
+#include <QDir>
+
+PluginsPage::PluginsPage(QWidget *parent, QString opcodeDir) :
     QWizardPage(parent),
     ui(new Ui::PluginsPage)
 {
     ui->setupUi(this);
+    QStringList filters;
+    filters << "*.dylib";
+    QStringList plugins = QDir(opcodeDir).entryList(filters);
+    foreach (QString plugin, plugins) {
+      ui->listWidget->addItem(plugin);
+    }
+    ui->listWidget->selectAll();
 }
 
 PluginsPage::~PluginsPage()
