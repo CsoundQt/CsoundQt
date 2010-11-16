@@ -94,8 +94,8 @@ kdbrange	invalue	"dbrange"
 kpeakhold	invalue	"peakhold"
 kampdisp	invalue	"ampdisp"; 0=dB, 1=raw
 kampdisp	=		(kampdisp == 1 ? 0 : 1); 1=dB, 0=raw
-kgain		invalue	"gain"
-Sgain_disp	sprintfk	"%+.2f dB", kgain
+gkgain		invalue	"gain"
+Sgain_disp	sprintfk	"%+.2f dB", gkgain
 		outvalue	"gain_disp", Sgain_disp
 
 ;saying hello
@@ -164,14 +164,14 @@ ain8pre	inch		kchn8
 		ShowOver_a	"in6over_pre", ain6pre, kTrigDisp, kpeakhold
 		ShowOver_a	"in7over_pre", ain7pre, kTrigDisp, kpeakhold
 		ShowOver_a	"in8over_pre", ain8pre, kTrigDisp, kpeakhold
-ain1post	=		ain1pre * ampdbfs(kgain)
-ain2post	=		ain2pre * ampdbfs(kgain)
-ain3post	=		ain3pre * ampdbfs(kgain)
-ain4post	=		ain4pre * ampdbfs(kgain)
-ain5post	=		ain5pre * ampdbfs(kgain)
-ain6post	=		ain6pre * ampdbfs(kgain)
-ain7post	=		ain7pre * ampdbfs(kgain)
-ain8post	=		ain8pre * ampdbfs(kgain)
+ain1post	=		ain1pre * ampdbfs(gkgain)
+ain2post	=		ain2pre * ampdbfs(gkgain)
+ain3post	=		ain3pre * ampdbfs(gkgain)
+ain4post	=		ain4pre * ampdbfs(gkgain)
+ain5post	=		ain5pre * ampdbfs(gkgain)
+ain6post	=		ain6pre * ampdbfs(gkgain)
+ain7post	=		ain7pre * ampdbfs(gkgain)
+ain8post	=		ain8pre * ampdbfs(gkgain)
 		ShowLED_a	"in1_post", ain1post, kTrigDisp, kampdisp, kdbrange
 		ShowLED_a	"in2_post", ain2post, kTrigDisp, kampdisp, kdbrange
 		ShowLED_a	"in3_post", ain3post, kTrigDisp, kampdisp, kdbrange
@@ -212,7 +212,7 @@ inchn1		tab_i		0, itab
 Smessage	sprintf	"Writing input channel %d to file %s", inchn1, gSfile
 		outvalue	"message2", Smessage
 a1		inch		inchn1
-		fout		gSfile, iformat, a1
+		fout		gSfile, iformat, a1*ampdbfs(gkgain)
 
    ;showing the clock
 ktimout	timeinsts	
@@ -253,7 +253,7 @@ Smessage	sprintf	"Writing input channels %d and %d to file %s", inchn1, inchn2, 
 		outvalue	"message2", Smessage
 a1		inch		inchn1
 a2		inch		inchn2
-		fout		gSfile, iformat, a1, a2
+		fout		gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain)
 
    ;showing the clock
 ktimout	timeinsts	
@@ -296,7 +296,7 @@ Smessage	sprintf	"Writing input channels %d, %d and %d to file %s", inchn1, inch
 a1		inch		inchn1
 a2		inch		inchn2
 a3		inch		inchn3
-		fout		gSfile, iformat, a1, a2, a3
+		fout		gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain)
 
    ;showing the clock
 ktimout	timeinsts	
@@ -341,7 +341,7 @@ a1		inch		inchn1
 a2		inch		inchn2
 a3		inch		inchn3
 a4		inch		inchn4
-		fout		gSfile, iformat, a1, a2, a3, a4
+		fout		gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain)
 
    ;showing the clock
 ktimout	timeinsts	
@@ -389,7 +389,7 @@ a2		inch		inchn2
 a3		inch		inchn3
 a4		inch		inchn4
 a5		inch		inchn5
-		fout		gSfile, iformat, a1, a2, a3, a4, a5
+		fout		gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain)
 
    ;showing the clock
 ktimout	timeinsts	
@@ -439,7 +439,7 @@ a3		inch		inchn3
 a4		inch		inchn4
 a5		inch		inchn5
 a6		inch		inchn6
-		fout		gSfile, iformat, a1, a2, a3, a4, a5, a6
+		fout		gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain), a6*ampdbfs(gkgain)
 
    ;showing the clock
 ktimout	timeinsts	
@@ -491,7 +491,7 @@ a4		inch		inchn4
 a5		inch		inchn5
 a6		inch		inchn6
 a7		inch		inchn7
-		fout		gSfile, iformat, a1, a2, a3, a4, a5, a6, a7
+		fout		gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain), a6*ampdbfs(gkgain), a7*ampdbfs(gkgain)
 
    ;showing the clock
 ktimout	timeinsts	
@@ -545,7 +545,7 @@ a5		inch		inchn5
 a6		inch		inchn6
 a7		inch		inchn7
 a8		inch		inchn8
-		fout		gSfile, iformat, a1, a2, a3, a4, a5, a6, a7, a8
+		fout		gSfile, iformat, a1*ampdbfs(gkgain), a2*ampdbfs(gkgain), a3*ampdbfs(gkgain), a4*ampdbfs(gkgain), a5*ampdbfs(gkgain), a6*ampdbfs(gkgain), a7*ampdbfs(gkgain), a8*ampdbfs(gkgain)
 
    ;showing the clock
 ktimout	timeinsts	
@@ -571,8 +571,8 @@ e
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>361</x>
- <y>84</y>
+ <x>491</x>
+ <y>65</y>
  <width>813</width>
  <height>730</height>
  <visible>true</visible>
@@ -1170,7 +1170,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.59259300</xValue>
-  <yValue>0.42702988</yValue>
+  <yValue>0.18599693</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1236,7 +1236,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.59259300</xValue>
-  <yValue>0.42702988</yValue>
+  <yValue>0.18599693</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1952,7 +1952,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.59259300</xValue>
-  <yValue>0.42702988</yValue>
+  <yValue>0.56099695</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2018,7 +2018,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.59259300</xValue>
-  <yValue>0.42702988</yValue>
+  <yValue>0.56099695</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2629,7 +2629,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>000</label>
+  <label>204</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
@@ -2832,7 +2832,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <label>Record stopped.</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -2919,7 +2919,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>00</label>
+  <label>19</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
@@ -3015,7 +3015,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>+0.00 dB</label>
+  <label>-18.00 dB</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
@@ -3046,7 +3046,7 @@ e
   <midicc>-3</midicc>
   <minimum>-18.00000000</minimum>
   <maximum>18.00000000</maximum>
-  <value>0.00000000</value>
+  <value>-18.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3080,7 +3080,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 361 84 813 730
+WindowBounds: 491 65 813 730
 CurrentView: io
 IOViewEdit: On
 Options: -b128 -A -s -m167 -R
@@ -3105,9 +3105,9 @@ ioMeter {182, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in4_post" -inf fill 1
 ioMeter {129, 518} {27, 22} {50176, 3584, 3072} "in3over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
 ioMeter {129, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in3_post" -inf fill 1 0 mouse
 ioMeter {75, 518} {27, 22} {50176, 3584, 3072} "in2over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {75, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in2_post" 0.427030 fill 1 0 mouse
+ioMeter {75, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in2_post" 0.185997 fill 1 0 mouse
 ioMeter {21, 518} {27, 22} {50176, 3584, 3072} "in1over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {21, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in1_post" 0.427030 fill 1 0 mouse
+ioMeter {21, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in1_post" 0.185997 fill 1 0 mouse
 ioText {435, 412} {167, 130} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder LED Display Properties
 ioText {457, 299} {129, 25} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select Input Channels
 ioMenu {537, 502} {61, 26} 0 303 "dB,raw" ampdisp
@@ -3130,9 +3130,9 @@ ioMeter {181, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in4_pre" -inf fill 1 
 ioMeter {128, 330} {27, 22} {50176, 3584, 3072} "in3over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
 ioMeter {128, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in3_pre" -inf fill 1 0 mouse
 ioMeter {74, 330} {27, 22} {50176, 3584, 3072} "in2over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {74, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in2_pre" 0.427030 fill 1 0 mouse
+ioMeter {74, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in2_pre" 0.560997 fill 1 0 mouse
 ioMeter {20, 330} {27, 22} {50176, 3584, 3072} "in1over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {20, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in1_pre" 0.427030 fill 1 0 mouse
+ioMeter {20, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in1_pre" 0.560997 fill 1 0 mouse
 ioCheckbox {407, 272} {20, 20} off chn8onoff
 ioText {396, 298} {46, 24} editnum 8.000000 1.000000 "chn8" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 8.000000
 ioCheckbox {353, 271} {20, 20} off chn7onoff
@@ -3157,21 +3157,21 @@ ioText {614, 231} {39, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {
 ioText {569, 231} {39, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder hh
 ioText {694, 259} {14, 29} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder :
 ioText {603, 260} {14, 29} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder :
-ioText {707, 260} {44, 30} display 0.000000 0.00100 "ms" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 000
+ioText {707, 260} {44, 30} display 204.000000 0.00100 "ms" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 204
 ioText {572, 258} {32, 32} display 0.000000 0.00100 "hor" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
 ioText {438, 476} {106, 24} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Peak Hold Time
 ioText {546, 476} {48, 24} editnum 2.000000 0.100000 "peakhold" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.000000
 ioText {438, 449} {87, 28} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder dB Range
 ioText {539, 448} {56, 28} editnum 48.000000 1.000000 "dbrange" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 48.000000
 ioText {612, 49} {102, 31} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Messages
-ioText {560, 80} {208, 28} display 0.000000 0.00100 "message" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {560, 80} {208, 28} display 0.000000 0.00100 "message" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Record stopped.
 ioText {58, 465} {65, 32} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder gain
 ioText {649, 259} {14, 29} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder :
-ioText {661, 259} {35, 31} display 0.000000 0.00100 "sec" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
+ioText {661, 259} {35, 31} display 19.000000 0.00100 "sec" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 19
 ioText {614, 259} {37, 30} display 0.000000 0.00100 "min" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
 ioButton {189, 174} {80, 25} value 1.000000 "stop" "Stop" "/" 
 ioButton {99, 174} {78, 26} value 1.000000 "record" "Record" "/" 
-ioText {269, 465} {98, 31} display 0.000000 0.00100 "gain_disp" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder +0.00 dB
-ioSlider {128, 465} {136, 31} -18.000000 18.000000 0.000000 gain
+ioText {269, 465} {98, 31} display 0.000000 0.00100 "gain_disp" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -18.00 dB
+ioSlider {128, 465} {136, 31} -18.000000 18.000000 -18.000000 gain
 ioButton {141, 89} {100, 30} value 1.000000 "_Browse1" "Output File" "/" 
 </MacGUI>
