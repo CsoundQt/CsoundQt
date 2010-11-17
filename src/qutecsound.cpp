@@ -175,7 +175,7 @@ qutecsound::qutecsound(QStringList fileNames)
   // Open files passed in the command line. Only valid for non OS X platforms
   foreach (QString fileName, fileNames) {
     if (fileName!="") {
-      loadFile(fileName, true); // FIXME Something here seems to be causing spurious crashes
+      loadFile(fileName, true);
     }
   }
   if (!m_options->widgetsIndependent) {

@@ -28,6 +28,9 @@ AppDetailsPage::AppDetailsPage(QWidget *parent) :
     ui(new Ui::AppDetailsPage)
 {
     ui->setupUi(this);
+    registerField("appName", ui->appNameLineEdit);
+    registerField("targetDir", ui->targetDirLineEdit);
+    registerField("autorun", ui->autorunCheckBox);
 }
 
 AppDetailsPage::~AppDetailsPage()

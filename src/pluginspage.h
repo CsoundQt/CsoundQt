@@ -33,15 +33,21 @@ namespace Ui {
 class PluginsPage : public QWizardPage
 {
 Q_OBJECT
-public:
+  public:
     PluginsPage(QWidget *parent = 0, QString opcodeDir = QString());
     ~PluginsPage();
 
+  public slots:
+    void selectAll();
+    void selectNone();
+    void deselectFltk();
 
-protected:
+
+
+  protected:
     void changeEvent(QEvent *e);
 
-private:
+  private:
     Ui::PluginsPage *ui;
 };
 
