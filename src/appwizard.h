@@ -43,6 +43,7 @@ class AppWizard : public QWizard
   signals:
 
   public slots:
+    virtual void accept();
 
   private:
     QString m_opcodeDir;

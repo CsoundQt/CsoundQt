@@ -50,9 +50,13 @@ AppWizard::AppWizard(QWidget *parent,QString opcodeDir) :
   setWindowTitle(tr("Standalone Application Generator"));
 }
 
-//void AppWizard::accept()
-//{
-//  QDialog::accept();
-//}
+void AppWizard::accept()
+{
+  QString appName =  field("appName").toString();
+  QString targetDir =  field("targetDir").toString();
+  bool autorun =  field("autorun").toBool();
+//  int platform =  field("platform").toBool();
+  QDialog::accept();
+}
 
 

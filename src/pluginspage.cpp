@@ -30,6 +30,9 @@ PluginsPage::PluginsPage(QWidget *parent, QString opcodeDir) :
     ui(new Ui::PluginsPage)
 {
     ui->setupUi(this);
+    connect(ui->selectAllButton, SIGNAL(released()), this, SLOT(selectAll()));
+    connect(ui->selectNoneButton, SIGNAL(released()), this, SLOT(selectNone()));
+    connect(ui->deselectFltkButton, SIGNAL(released()), this, SLOT(deselectFltk()));
     QStringList filters;
     filters << "*.dylib";
     QStringList plugins = QDir(opcodeDir).entryList(filters);
@@ -42,6 +45,22 @@ PluginsPage::PluginsPage(QWidget *parent, QString opcodeDir) :
 PluginsPage::~PluginsPage()
 {
     delete ui;
+}
+
+void PluginsPage::selectAll()
+{
+  ui->listWidget->selectAll();
+}
+
+void PluginsPage::selectNone()
+{
+  ui->listWidget->clearSelection();
+}
+
+void PluginsPage::deselectFltk()
+{
+  ui->listWidget->clearSelection();
+
 }
 
 void PluginsPage::changeEvent(QEvent *e)

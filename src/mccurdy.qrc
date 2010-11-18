@@ -47,5 +47,34 @@
         <file>Examples/McCurdy Collection/FFT/18pvsadsyn.csd</file>
         <file>Examples/McCurdy Collection/FFT/pvadd.csd</file>
         <file>Examples/McCurdy Collection/FFT/pvoc.csd</file>
+        <file>Examples/McCurdy Collection/Filters/areson.csd</file>
+        <file>Examples/McCurdy Collection/Filters/atone.csd</file>
+        <file>Examples/McCurdy Collection/Filters/atonex.csd</file>
+        <file>Examples/McCurdy Collection/Filters/bqrez.csd</file>
+        <file>Examples/McCurdy Collection/Filters/butterbp.csd</file>
+        <file>Examples/McCurdy Collection/Filters/butterbr.csd</file>
+        <file>Examples/McCurdy Collection/Filters/butterhp.csd</file>
+        <file>Examples/McCurdy Collection/Filters/butterlp.csd</file>
+        <file>Examples/McCurdy Collection/Filters/clfilt.csd</file>
+        <file>Examples/McCurdy Collection/Filters/FormantFilter.csd</file>
+        <file>Examples/McCurdy Collection/Filters/hilbert.csd</file>
+        <file>Examples/McCurdy Collection/Filters/lowpass2.csd</file>
+        <file>Examples/McCurdy Collection/Filters/lowres.csd</file>
+        <file>Examples/McCurdy Collection/Filters/lowresx.csd</file>
+        <file>Examples/McCurdy Collection/Filters/lpf18.csd</file>
+        <file>Examples/McCurdy Collection/Filters/moogladder.csd</file>
+        <file>Examples/McCurdy Collection/Filters/moogvcf.csd</file>
+        <file>Examples/McCurdy Collection/Filters/pareq.csd</file>
+        <file>Examples/McCurdy Collection/Filters/rbjeq.csd</file>
+        <file>Examples/McCurdy Collection/Filters/reson.csd</file>
+        <file>Examples/McCurdy Collection/Filters/reson_resonr_resonz.csd</file>
+        <file>Examples/McCurdy Collection/Filters/resony.csd</file>
+        <file>Examples/McCurdy Collection/Filters/rezzy.csd</file>
+        <file>Examples/McCurdy Collection/Filters/statevar.csd</file>
+        <file>Examples/McCurdy Collection/Filters/svfilter.csd</file>
+        <file>Examples/McCurdy Collection/Filters/tbvcf.csd</file>
+        <file>Examples/McCurdy Collection/Filters/tone.csd</file>
+        <file>Examples/McCurdy Collection/Filters/tonex.csd</file>
+        <file>Examples/McCurdy Collection/Filters/vlowres.csd</file>
     </qresource>
 </RCC>

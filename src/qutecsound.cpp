@@ -3012,6 +3012,45 @@ void qutecsound::createMenus()
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
 
+  mccurdyFiles.clear();
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/areson.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/clfilt.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/moogvcf.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/svfilter.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/atone.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/FormantFilter.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/pareq.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/tbvcf.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/atonex.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/hilbert.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/rbjeq.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/tone.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/bqrez.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/lowpass2.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/reson.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/tonex.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/butterbp.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/lowres.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/reson_resonr_resonz.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/vlowres.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/butterbr.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/lowresx.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/resony.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/butterhp.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/lpf18.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/rezzy.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/butterlp.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/moogladder.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/statevar.csd");
+
+  submenu = mccurdyMenu->addMenu(tr("Filters"));
+  foreach (QString fileName, mccurdyFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
   // Add the rest
   for (int i = 0; i < subMenus.size(); i++) {
     submenu = examplesMenu->addMenu(subMenuNames[i]);
