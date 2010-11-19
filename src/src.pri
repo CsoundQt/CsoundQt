@@ -10,7 +10,8 @@ FORMS = "$${PWD}/about.ui" \
     "$${PWD}/liveeventframe.ui" \
     "$${PWD}/utilitiesdialog.ui" \
     "$${PWD}/appdetailspage.ui" \
-    "$${PWD}/pluginspage.ui"
+    "$${PWD}/pluginspage.ui" \
+    "$${PWD}/additionalfilespage.ui"
 HEADERS = "$${PWD}/about.h" \
     "$${PWD}/configdialog.h" \
     "$${PWD}/configlists.h" \
@@ -60,7 +61,8 @@ HEADERS = "$${PWD}/about.h" \
     "$${PWD}/baseview.h" \
     "$${PWD}/appwizard.h" \
     "$${PWD}/appdetailspage.h" \
-    "$${PWD}/pluginspage.h"
+    "$${PWD}/pluginspage.h" \
+    "$${PWD}/additionalfilespage.h"
 SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/configdialog.cpp" \
     "$${PWD}/configlists.cpp" \
@@ -110,7 +112,8 @@ SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/baseview.cpp" \
     "$${PWD}/appwizard.cpp" \
     "$${PWD}/appdetailspage.cpp" \
-    "$${PWD}/pluginspage.cpp"
+    "$${PWD}/pluginspage.cpp" \
+    "$${PWD}/additionalfilespage.cpp"
 LIBS += $${LCSOUND} \ # $${LCSND} \
     $${LSNDFILE} \
     $${RTMIDI}

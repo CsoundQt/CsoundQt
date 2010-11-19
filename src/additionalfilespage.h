@@ -20,43 +20,26 @@
     02111-1307 USA
 */
 
-#ifndef APPWIZARD_H
-#define APPWIZARD_H
+#ifndef ADDITIONALFILESPAGE_H
+#define ADDITIONALFILESPAGE_H
 
-#include <QWizard>
+#include <QWizardPage>
 
-class QCheckBox;
-class QGroupBox;
-class QLabel;
-class QLineEdit;
-class QRadioButton;
-class QListWidget;
+namespace Ui {
+    class AdditionalFilesPage;
+}
 
-class AppWizard : public QWizard
-{
-  Q_OBJECT
-  public:
-    explicit AppWizard(QWidget *parent = 0, QString opcodeDir = QString());
+class AdditionalFilesPage : public QWizardPage {
+    Q_OBJECT
+public:
+    AdditionalFilesPage(QWidget *parent = 0);
+    ~AdditionalFilesPage();
 
-    void setOpcodeDir(QString opcodeDir) {m_opcodeDir = opcodeDir;}
+protected:
+    void changeEvent(QEvent *e);
 
-  signals:
-
-  public slots:
-    virtual void accept();
-
-  private:
-    QString m_opcodeDir;
-    QString m_winSDKfloats;
-    QString m_winSDKdoubles;
-    QString m_macSDKfloats;
-    QString m_macSDKdoubles;
-    QString m_linuxSDKfloats;
-    QString m_linuxSDKdoubles;
-
-    QStringList libFiles;
-    QStringList dataFiles;
+private:
+    Ui::AdditionalFilesPage *ui;
 };
 
-
-#endif // APPWIZARD_H
+#endif // ADDITIONALFILESPAGE_H

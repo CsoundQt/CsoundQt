@@ -32,6 +32,7 @@
 
 #include "appwizard.h"
 #include "appdetailspage.h"
+#include "additionalfilespage.h"
 #include "pluginspage.h"
 
 
@@ -40,6 +41,7 @@ AppWizard::AppWizard(QWidget *parent,QString opcodeDir) :
 {
   addPage(new AppDetailsPage);
   addPage(new PluginsPage(this, opcodeDir));
+  addPage(new AdditionalFilesPage(this));
 //  addPage(new CodeStylePage);
 //  addPage(new OutputFilesPage);
 //  addPage(new ConclusionPage);

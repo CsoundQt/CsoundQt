@@ -19,44 +19,29 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
     02111-1307 USA
 */
+#include "additionalfilespage.h"
+#include "ui_additionalfilespage.h"
 
-#ifndef APPWIZARD_H
-#define APPWIZARD_H
-
-#include <QWizard>
-
-class QCheckBox;
-class QGroupBox;
-class QLabel;
-class QLineEdit;
-class QRadioButton;
-class QListWidget;
-
-class AppWizard : public QWizard
+AdditionalFilesPage::AdditionalFilesPage(QWidget *parent) :
+    QWizardPage(parent),
+    ui(new Ui::AdditionalFilesPage)
 {
-  Q_OBJECT
-  public:
-    explicit AppWizard(QWidget *parent = 0, QString opcodeDir = QString());
+    ui->setupUi(this);
+}
 
-    void setOpcodeDir(QString opcodeDir) {m_opcodeDir = opcodeDir;}
+AdditionalFilesPage::~AdditionalFilesPage()
+{
+    delete ui;
+}
 
-  signals:
-
-  public slots:
-    virtual void accept();
-
-  private:
-    QString m_opcodeDir;
-    QString m_winSDKfloats;
-    QString m_winSDKdoubles;
-    QString m_macSDKfloats;
-    QString m_macSDKdoubles;
-    QString m_linuxSDKfloats;
-    QString m_linuxSDKdoubles;
-
-    QStringList libFiles;
-    QStringList dataFiles;
-};
-
-
-#endif // APPWIZARD_H
+void AdditionalFilesPage::changeEvent(QEvent *e)
+{
+    QWizardPage::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
