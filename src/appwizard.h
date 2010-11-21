@@ -47,15 +47,13 @@ class AppWizard : public QWizard
 
   private:
     QString m_opcodeDir;
-    QString m_winSDKfloats;
-    QString m_winSDKdoubles;
-    QString m_macSDKfloats;
-    QString m_macSDKdoubles;
-    QString m_linuxSDKfloats;
-    QString m_linuxSDKdoubles;
 
-    QStringList libFiles;
-    QStringList dataFiles;
+    void createWinApp(QString appName, QString appDir, QStringList dataFiles,
+                      QStringList plugins, QString sdkDir, bool useDoubles = true);
+    void createMacApp(QString appName, QString appDir, QStringList dataFiles,
+                      QStringList plugins, QString sdkDir, bool useDoubles = true);
+    void createLinuxApp(QString appName, QString appDir, QStringList dataFiles,
+                        QStringList plugins, QString sdkDir, bool useDoubles = true);
 };
 
 

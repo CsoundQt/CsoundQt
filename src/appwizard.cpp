@@ -42,9 +42,6 @@ AppWizard::AppWizard(QWidget *parent,QString opcodeDir) :
   addPage(new AppDetailsPage);
   addPage(new PluginsPage(this, opcodeDir));
   addPage(new AdditionalFilesPage(this));
-//  addPage(new CodeStylePage);
-//  addPage(new OutputFilesPage);
-//  addPage(new ConclusionPage);
 //
 //  setPixmap(QWizard::BannerPixmap, QPixmap(":/images/banner.png"));
 //  setPixmap(QWizard::BackgroundPixmap, QPixmap(":/images/background.png"));
@@ -57,8 +54,43 @@ void AppWizard::accept()
   QString appName =  field("appName").toString();
   QString targetDir =  field("targetDir").toString();
   bool autorun =  field("autorun").toBool();
-//  int platform =  field("platform").toBool();
+  int platform =  field("platform").toBool();
+  bool useDoubles = field("useDoubles").toBool();
+  QStringList plugins = field("plugins").toStringList();
+  QStringList dataFiles = field("dataFiles").toStringList();
+  QString sdkDir;
+  switch (platform) {
+  case 0:
+    sdkDir =  field("linuxSdkDir").toString();
+    createLinuxApp(appName, targetDir, dataFiles, plugins, sdkDir, useDoubles);
+    break;
+  case 1:
+    sdkDir =  field("macSdkDir").toString();
+    createMacApp(appName, targetDir, dataFiles, plugins, sdkDir, useDoubles);
+    break;
+  case 2:
+    sdkDir =  field("winSdkDir").toString();
+    createWinApp(appName, targetDir, dataFiles, plugins, sdkDir, useDoubles);
+
+  }
+
   QDialog::accept();
 }
 
 
+void AppWizard::createWinApp(QString appName, QString appDir, QStringList dataFiles,
+                  QStringList plugins, QString sdkDir, bool useDoubles)
+{
+
+}
+
+void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFiles,
+                  QStringList plugins, QString sdkDir, bool useDoubles)
+{
+
+}
+void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList dataFiles,
+                    QStringList plugins, QString sdkDir, bool useDoubles)
+{
+
+}

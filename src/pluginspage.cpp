@@ -40,6 +40,7 @@ PluginsPage::PluginsPage(QWidget *parent, QString opcodeDir) :
       ui->listWidget->addItem(plugin);
     }
     ui->listWidget->selectAll();
+    registerField("plugins", ui->listWidget);
 }
 
 PluginsPage::~PluginsPage()
