@@ -2065,10 +2065,8 @@ void WidgetLayout::widgetChanged(QuteWidget* widget)
 //    widgetsMutex.unlock();
     int cc = widget->property("QCS_midicc").toInt();  // Is it safe to query these here?
     int chan = widget->property("QCS_midichan").toInt();
-    if (cc != 0 && chan != 0) {
-      registerWidgetController(widget, cc);
-      registerWidgetChannel(widget, chan);
-    }
+    registerWidgetController(widget, cc);
+    registerWidgetChannel(widget, chan);
     setModified(true);
   }
   adjustLayoutSize();
