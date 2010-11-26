@@ -1113,8 +1113,10 @@ void QuteScrollNumber::setMidiValue(int value)
   double max = property("QCS_maximum").toDouble();
   double min = property("QCS_minimum").toDouble();
   if (max != 99999999999999.0 && min != -999999999999.0) {
-    double newValue = min + ((value / 127.0)* (max - min));
-    setValue(newValue);
+    double newval = min + ((value / 127.0)* (max - min));
+    setValue(newval);
+    QPair<QString, double> channelValue(m_channel, newval);
+    emit newValue(channelValue);
   }
   else {
     qDebug() << "QuteScrollNumber::setMidiValue ranges not set.";

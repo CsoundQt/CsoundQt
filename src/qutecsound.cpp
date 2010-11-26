@@ -3003,6 +3003,8 @@ void qutecsound::createMenus()
   mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/18pvsadsyn.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/pvadd.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/pvoc.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/mincer.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/FFT/temposcal.csd");
 
   submenu = mccurdyMenu->addMenu(tr("FFT"));
   foreach (QString fileName, mccurdyFiles) {
@@ -3042,6 +3044,7 @@ void qutecsound::createMenus()
   mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/butterlp.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/moogladder.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/statevar.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/bandpass.csd");
 
   submenu = mccurdyMenu->addMenu(tr("Filters"));
   foreach (QString fileName, mccurdyFiles) {

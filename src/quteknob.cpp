@@ -49,18 +49,6 @@ QuteKnob::~QuteKnob()
 {
 }
 
-//double QuteKnob::getValue()
-//{
-//#ifdef  USE_WIDGET_MUTEX
-//  widgetLock.lockForRead();
-//#endif
-//  double value = m_value;
-//#ifdef  USE_WIDGET_MUTEX
-//  widgetLock.unlock();
-//#endif
-//  return value;
-//}
-
 void QuteKnob::setRange(double min, double max)
 {
   // TODO when knob is resized, its internal range should be adjusted...
@@ -82,8 +70,10 @@ void QuteKnob::setMidiValue(int value)
 {
   double max = property("QCS_maximum").toDouble();
   double min = property("QCS_minimum").toDouble();
-  double newValue = min + ((value / 127.0)* (max - min));
-  setValue(newValue);
+  double newval= min + ((value / 127.0)* (max - min));
+  setValue(newval);
+  QPair<QString, double> channelValue(m_channel, newval);
+  emit newValue(channelValue);
 }
 
 void QuteKnob::refreshWidget()
@@ -114,23 +104,6 @@ void QuteKnob::applyInternalProperties()
   setValue(property("QCS_value").toDouble());
 }
 
-//void QuteKnob::setValue(double value)
-//{
-////  qDebug() << "QuteKnob::setValue " << value;
-//#ifdef  USE_WIDGET_MUTEX
-//  widgetLock.lockForWrite();
-//#endif
-//  double max = property("QCS_maximum").toDouble();
-//  double min = property("QCS_minimum").toDouble();
-//  int val = (int) (static_cast<QDial *>(m_widget)->maximum() * (m_value - min)/(max-min));
-//  m_widget->blockSignals(true);
-//  static_cast<QDial *>(m_widget)->setValue(val);
-//  m_widget->blockSignals(false);
-//#ifdef  USE_WIDGET_MUTEX
-//  widgetLock.unlock();
-//#endif
-//}
-
 //void QuteKnob::setResolution(double resolution)
 //{
 //  setProperty("QCS_resolution", resolution);
@@ -145,7 +118,6 @@ void QuteKnob::setWidgetGeometry(int x, int y, int width, int height)
 {
 //  qDebug() << "QuteKnob::setWidgetGeometry " << width << "," << height;
   QuteWidget::setWidgetGeometry(x,y,width,height);
-//  m_widget->move(5,5);
 
   m_widget->blockSignals(true);
   m_widget->setFixedSize(width, height);
@@ -258,8 +230,6 @@ void QuteKnob::createPropertiesDialog()
 
 void QuteKnob::applyProperties()
 {
-//  m_max = maxSpinBox->value();
-//  m_min = minSpinBox->value();
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForRead();
 #endif
@@ -292,15 +262,3 @@ void QuteKnob::knobChanged(int value)
   emit newValue(channelValue);
 }
 
-//void QuteKnob::setInternalValue(double value)
-//{
-//  double max = property("QCS_maximum").toDouble();
-//  double min = property("QCS_minimum").toDouble();
-//  if (value > max)
-//    m_value = max;
-//  else if (value < min)
-//    m_value = min;
-//  else
-//    m_value = value;
-//  setProperty("QCS_value", m_value);
-//}
