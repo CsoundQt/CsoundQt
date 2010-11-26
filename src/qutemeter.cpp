@@ -64,6 +64,31 @@ QuteMeter::~QuteMeter()
 {
 }
 
+
+void QuteMeter::setMidiValue(int value)
+{
+  double max, min;
+  bool vertical;
+  if (m_widget->width() > m_widget->height()) {
+    vertical = false;
+  }
+  else {
+    vertical = true;
+  }
+  if (vertical) {
+    double max = property("QCS_yMax").toDouble();
+    double min = property("QCS_yMin").toDouble();
+  }
+  else {
+    double max = property("QCS_xMax").toDouble();
+    double min = property("QCS_xMin").toDouble();
+  }
+  double newval = min + ((value / 127.0)* (max - min));
+  setValue(newval);
+  QPair<QString, double> channelValue(m_channel, newval);
+  emit newValue(channelValue);
+}
+
 QString QuteMeter::getWidgetLine()
 {
 #ifdef  USE_WIDGET_MUTEX

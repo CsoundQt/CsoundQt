@@ -106,6 +106,11 @@ void QuteWidget::setMidiValue(int /* value */)
   qDebug() << "QuteWidget::setMidiValue not available for this widget." << this;
 }
 
+void QuteWidget::setMidiValue2(int /* value */)
+{
+  qDebug() << "QuteWidget::setMidiValue2 not available for this widget." << this;
+}
+
 void QuteWidget::widgetMessage(QString path, QString text)
 {
   qDebug() << "QuteWidget::widgetMessage" << text;

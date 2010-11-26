@@ -36,6 +36,8 @@ class QuteMeter : public QuteWidget
 
     ~QuteMeter();
 
+    virtual void setMidiValue(int value);
+//    virtual void setMidiValue2(int value);
     virtual QString getWidgetLine();
     virtual QString getWidgetXmlText();
     virtual QString getWidgetType();

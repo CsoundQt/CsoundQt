@@ -66,7 +66,7 @@ void QuteButton::setValue(double value)
   else {
     m_currentValue = value != 0 ? m_value : 0.0;
     if (property("QCS_latch").toBool()) {
-      static_cast<QPushButton *>(m_widget)->setDown(m_currentValue != 0);
+      static_cast<QPushButton *>(m_widget)->setChecked(m_currentValue != 0);
     }
   }
   m_valueChanged = true;
@@ -309,7 +309,7 @@ void QuteButton::refreshWidget()
 //  setProperty("QCS_value", m_value);
 //  setProperty("QCS_stringvalue", m_stringValue);
 
-  setProperty("QCS_latched", m_currentValue == 0);
+  setProperty("QCS_latched", m_currentValue != 0);
   m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
@@ -356,7 +356,18 @@ void QuteButton::buttonPressed()
   if (m_channel.startsWith("_Browse") || m_channel.startsWith("_MBrowse")) {
     return;
   }
-  m_currentValue = m_value;
+  if (property("QCS_latch").toBool()) {
+    if (!static_cast<QPushButton *>(m_widget)->isChecked()) {
+      m_currentValue =m_value;
+    }
+    else {
+      m_currentValue = 0;
+    }
+  }
+  else {
+    m_currentValue = m_value;
+  }
+
   QPair<QString, double> channelValue(m_channel, m_currentValue);
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
@@ -375,9 +386,12 @@ void QuteButton::buttonReleased()
   double value = m_value;
   QString eventLine = property("QCS_eventLine").toString();
   if (property("QCS_latch").toBool()) {
-    if (!static_cast<QPushButton *>(m_widget)->isChecked()) {
-      m_currentValue = 0;
-    }
+//    if (!static_cast<QPushButton *>(m_widget)->isChecked()) {
+//      m_currentValue = 0;
+//    }
+//    else {
+//      m_currentValue = value;
+//    }
   }
   else {
     m_currentValue = 0;

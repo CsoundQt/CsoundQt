@@ -42,6 +42,7 @@ class QuteWidget : public QWidget
     virtual void setValue2(double);
     virtual void setValue(QString);
     virtual void setMidiValue(int value);
+    virtual void setMidiValue2(int value);
     virtual void setLocked(bool locked) {m_locked = locked;};
 
     virtual void widgetMessage(QString path, QString text);
