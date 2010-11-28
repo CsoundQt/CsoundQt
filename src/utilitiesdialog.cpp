@@ -54,10 +54,68 @@ UtilitiesDialog::UtilitiesDialog(QWidget *parent, Options *options/*, ConfigList
   connect(lpInputLineEdit, SIGNAL(textChanged(QString)), this, SLOT(setLpanalOutput(QString)));
   connect(cvInputLineEdit, SIGNAL(textChanged(QString)), this, SLOT(setCvanalOutput(QString)));
   changeHelp(m_options->csdocdir + "/cvanal.html");
-}
 
-UtilitiesDialog::~UtilitiesDialog()
-{
+  atsaInputLineEdit->setText(options->atsInputName);
+  atsaOutputLineEdit->setText(options->atsOutputName);
+  atsaBeginLineEdit->setText(options->atsBeginTime);
+  atsaEndLineEdit->setText(options->atsEndTime);
+  atsaLowestLineEdit->setText(options->atsLowestFreq);
+  atsaHighestLineEdit->setText(options->atsHighestFreq);
+  atsaDeviationLineEdit->setText(options->atsFreqDeviat);
+  atsaCycleLineEdit->setText(options->atsWinCycle);
+  atsaHopSizeLineEdit->setText(options->atsHopSize);
+  atsaMagnitudeLineEdit->setText(options->atsLowestMag);
+  atsaLengthLineEdit->setText(options->atsTrackLen);
+  atsaMinSegmentLineEdit->setText(options->atsMinSegLen);
+  atsaMinGapLineEdit->setText(options->atsMinGapLen);
+  atsaThresholdLineEdit->setText(options->atsSmrThresh);
+  atsaLastPeakLineEdit->setText(options->atsLastPkCon);
+  atsaSmrLineEdit->setText(options->atsSmrContr);
+  atsaFileTypeComboBox->setCurrentIndex(options->atsFileType);
+  atsaWindowComboBox->setCurrentIndex(options->atsWindow);
+
+  cvInputLineEdit->setText(options->cvInputName);
+  cvOutputLineEdit->setText(options->cvOutputName);
+  cvSrLineEdit->setText(options->cvSampleRate);
+  cvBeginLineEdit->setText(options->cvBeginTime);
+  cvDurationLineEdit->setText(options->cvDuration);
+  cvChannelLineEdit->setText(options->cvChannels);
+
+  hetInputLineEdit->setText(options->hetInputName);
+  hetOutputLineEdit->setText(options->hetOutputName);
+  hetSrLineEdit->setText(options->hetSampleRate);
+  hetChannelLineEdit->setText(options->hetChannel);
+  hetBeginLineEdit->setText(options->hetBeginTime);
+  hetDurationLineEdit->setText(options->hetDuration);
+  hetStartLineEdit->setText(options->hetStartFrequency);
+  hetPartialsLineEdit->setText(options->hetNumPartials);
+  hetMaxLineEdit->setText(options->hetMaxAmplitude);
+  hetMinLineEdit->setText(options->hetMinAplitude);
+  hetBreakpointsLineEdit->setText(options->hetNumBreakPoints);
+  hetCutoffLineEdit->setText(options->hetFilterCutoff),
+
+  lpInputLineEdit->setText(options->lpInputName);
+  lpOutputLineEdit->setText(options->lpOutputName);
+  lpSrLineEdit->setText(options->lpSampleRate);
+  lpChannelLineEdit->setText(options->lpChannel);
+  lpBeginLineEdit->setText(options->lpBeginTime);
+  lpDurationLineEdit->setText(options->lpDuration);
+  lpPolesLineEdit->setText(options->lpNumPoles);
+  lpHopSizeLineEdit->setText(options->lpHopSize);
+  lpLowestLineEdit->setText(options->lpLowestFreq);
+  lpVerbosityComboBox->setCurrentIndex(options->lpVerbosity);
+  lpAlternateCheckBox->setChecked(options->lpAlternateStorage);
+
+  pvInputLineEdit->setText(options->pvInputName);
+  pvOutputLineEdit->setText(options->pvOutputName);
+  pvSrLineEdit->setText(options->pvSampleRate);
+  pvChannelLineEdit->setText(options->pvChannel);
+  pvBeginLineEdit->setText(options->pvBeginTime);
+  pvDurationLineEdit->setText(options->pvDuration);
+  pvFrameLineEdit->setText(options->pvFrameSize);
+  pvOverlapLineEdit->setText(options->pvOverlap);
+  pvWindowComboBox->setCurrentIndex(options->pvWindow);
+  pvBetaLineEdit->setText(options->pvBeta);
 }
 
 void UtilitiesDialog::runAtsa()
@@ -247,6 +305,7 @@ void UtilitiesDialog::resetLpanal()
   lpDurationLineEdit->setText("0.0");
   lpPolesLineEdit->setText("34");
   lpHopSizeLineEdit->setText("200");
+  lpLowestLineEdit->setText("");
   lpVerbosityComboBox->setCurrentIndex(0);
   lpAlternateCheckBox->setChecked(true);
 }
@@ -430,5 +489,67 @@ void UtilitiesDialog::changeTab(int tab)
 
 void UtilitiesDialog::closeEvent(QCloseEvent * /*event*/)
 {
+  m_options->cvInputName = cvInputLineEdit->text();
+  m_options->cvOutputName = cvOutputLineEdit->text();
+  m_options->cvSampleRate =  cvSrLineEdit->text();
+  m_options->cvBeginTime = cvBeginLineEdit->text();
+  m_options->cvDuration = cvDurationLineEdit->text();
+  m_options->cvChannels = cvChannelLineEdit->text();
+
+  m_options->hetInputName = hetInputLineEdit->text();
+  m_options->hetOutputName = hetOutputLineEdit->text();
+  m_options->hetSampleRate = hetSrLineEdit->text();
+  m_options->hetChannel = hetChannelLineEdit->text();
+  m_options->hetBeginTime = hetBeginLineEdit->text();
+  m_options->hetDuration = hetDurationLineEdit->text();
+  m_options->hetStartFrequency = hetStartLineEdit->text();
+  m_options->hetNumPartials = hetPartialsLineEdit->text();
+  m_options->hetMaxAmplitude = hetMaxLineEdit->text();
+  m_options->hetMinAplitude = hetMinLineEdit->text() ;
+  m_options->hetNumBreakPoints = hetBreakpointsLineEdit->text();
+  m_options->hetFilterCutoff = hetCutoffLineEdit->text();
+
+  m_options->lpInputName = lpInputLineEdit->text();
+  m_options->lpOutputName =  lpOutputLineEdit->text();
+  m_options->lpSampleRate = lpSrLineEdit->text();
+  m_options->lpChannel =  lpChannelLineEdit->text();
+  m_options->lpBeginTime = lpBeginLineEdit->text();
+  m_options->lpDuration = lpDurationLineEdit->text();
+  m_options->lpNumPoles =  lpPolesLineEdit->text();
+  m_options->lpHopSize =  lpHopSizeLineEdit->text();
+  m_options->lpLowestFreq = lpLowestLineEdit->text();
+  m_options->lpVerbosity = lpVerbosityComboBox->currentIndex();
+  m_options->lpAlternateStorage = lpAlternateCheckBox->isChecked();
+
+  m_options->pvInputName =  pvInputLineEdit->text();
+  m_options->pvOutputName = pvOutputLineEdit->text();
+  m_options->pvSampleRate = pvSrLineEdit->text();
+  m_options->pvChannel =  pvChannelLineEdit->text();
+  m_options->pvBeginTime = pvBeginLineEdit->text();
+  m_options->pvDuration = pvDurationLineEdit->text();
+  m_options->pvFrameSize = pvFrameLineEdit->text() ;
+  m_options->pvOverlap = pvOverlapLineEdit->text();
+  m_options->pvWindow = pvWindowComboBox->currentIndex();
+  m_options->pvBeta = pvBetaLineEdit->text();
+
+  m_options->atsInputName = atsaInputLineEdit->text();
+  m_options->atsOutputName = atsaOutputLineEdit->text();
+  m_options->atsBeginTime = atsaBeginLineEdit->text();
+  m_options->atsEndTime = atsaEndLineEdit->text();
+  m_options->atsLowestFreq = atsaLowestLineEdit->text();
+  m_options->atsHighestFreq =  atsaHighestLineEdit->text();
+  m_options->atsFreqDeviat = atsaDeviationLineEdit->text();
+  m_options->atsWinCycle =  atsaCycleLineEdit->text();
+  m_options->atsHopSize = atsaHopSizeLineEdit->text();
+  m_options->atsLowestMag = atsaMagnitudeLineEdit->text();
+  m_options->atsTrackLen = atsaLengthLineEdit->text();
+  m_options->atsMinSegLen = atsaMinSegmentLineEdit->text();
+  m_options->atsMinGapLen = atsaMinGapLineEdit->text();
+  m_options->atsSmrThresh =  atsaThresholdLineEdit->text();
+  m_options->atsLastPkCon = atsaLastPeakLineEdit->text();
+  m_options->atsSmrContr = atsaSmrLineEdit->text();
+  m_options->atsFileType = atsaFileTypeComboBox->currentIndex();
+  m_options-> atsWindow = atsaWindowComboBox->currentIndex();
+
   emit Close(false);
 }

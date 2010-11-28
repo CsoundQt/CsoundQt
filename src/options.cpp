@@ -85,6 +85,69 @@ Options::Options()
   language = 0;  // Interface language
 
   csdTemplate = "";
+
+  // Csound Utilities options
+   cvInputName = "input.wav";
+   cvOutputName = "input.cv";
+   cvSampleRate = "44100";
+   cvBeginTime = "0.0";
+   cvDuration = "0.0";
+   cvChannels = "";
+
+   hetInputName = "input.wav";
+   hetOutputName = "output.het";
+   hetSampleRate = "44100";
+   hetChannel = "1";
+   hetBeginTime = "0.0";
+   hetDuration = "0.0";
+   hetStartFrequency = "0.0";
+   hetNumPartials = "10";
+   hetMaxAmplitude = "32767";
+   hetMinAplitude = "64";
+   hetNumBreakPoints = "256";
+   hetFilterCutoff = "0";
+
+   lpInputName = "input.wav";
+   lpOutputName = "output.lp";
+   lpSampleRate ="44100" ;
+   lpChannel = "1";
+   lpBeginTime = "0.0";
+   lpDuration = "0.0";
+   lpNumPoles = "34";
+   lpHopSize = "200";
+   lpLowestFreq = "";
+   lpVerbosity = 0;
+   lpAlternateStorage = true;
+
+   pvInputName = "input.wav";
+   pvOutputName = "output.pvx";
+   pvSampleRate = "";
+   pvChannel = "1";
+   pvBeginTime = "0.0";
+   pvDuration = "0.0";
+   pvFrameSize = "1024";
+   pvOverlap = "4";
+   pvWindow = 0;
+   pvBeta = "6.4";
+
+   atsInputName = "input.wav";
+   atsOutputName = "output.ats";
+   atsBeginTime = "0.0";
+   atsEndTime = "0.0";
+   atsLowestFreq = "20";
+   atsHighestFreq = "20000";
+   atsFreqDeviat = "0.1";
+   atsWinCycle = "4";
+   atsHopSize = "0.25";
+   atsLowestMag = "-60";
+   atsTrackLen = "3";
+   atsMinSegLen = "3";
+   atsMinGapLen = "3";
+  atsSmrThresh = "30";
+  atsLastPkCon = "0.0";
+  atsSmrContr = "0.5";
+  atsFileType = 0;
+  atsWindow = 0;
 }
 
 

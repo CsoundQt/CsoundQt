@@ -91,6 +91,69 @@ class Options: public CsoundOptions{
     int language;  // Interface language
 
     QString csdTemplate;
+
+    // Csound Utilities options
+    QString cvInputName;
+    QString cvOutputName;
+    QString cvSampleRate;
+    QString cvBeginTime;
+    QString cvDuration;
+    QString cvChannels;
+
+    QString hetInputName;
+    QString hetOutputName;
+    QString hetSampleRate;
+    QString hetChannel;
+    QString hetBeginTime;
+    QString hetDuration;
+    QString hetStartFrequency;
+    QString hetNumPartials;
+    QString hetMaxAmplitude;
+    QString hetMinAplitude;
+    QString hetNumBreakPoints;
+    QString hetFilterCutoff;
+
+    QString lpInputName;
+    QString lpOutputName;
+    QString lpSampleRate;
+    QString lpChannel;
+    QString lpBeginTime;
+    QString lpDuration;
+    QString lpNumPoles;
+    QString lpHopSize;
+    QString lpLowestFreq;
+    int lpVerbosity;
+    bool lpAlternateStorage;
+
+    QString pvInputName;
+    QString pvOutputName;
+    QString pvSampleRate;
+    QString pvChannel;
+    QString pvBeginTime;
+    QString pvDuration;
+    QString pvFrameSize;
+    QString pvOverlap;
+    int pvWindow;
+    QString pvBeta;
+
+    QString atsInputName;
+    QString atsOutputName;
+    QString atsBeginTime;
+    QString atsEndTime;
+    QString atsLowestFreq;
+    QString atsHighestFreq;
+    QString atsFreqDeviat;
+    QString atsWinCycle;
+    QString atsHopSize;
+    QString atsLowestMag;
+    QString atsTrackLen;
+    QString atsMinSegLen;
+    QString atsMinGapLen;
+    QString atsSmrThresh;
+    QString atsLastPkCon;
+    QString atsSmrContr;
+    int atsFileType;
+    int atsWindow;
     
 };
 

@@ -34,8 +34,6 @@ class UtilitiesDialog : public QDialog, private Ui::UtilitiesDialog
   public:
     UtilitiesDialog(QWidget *parent, Options *options/*, ConfigLists *m_configlist*/);
 
-    ~UtilitiesDialog();
-
   private:
     Options *m_options;
     QString m_helpDir; // Html help directory
