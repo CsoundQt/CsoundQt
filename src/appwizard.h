@@ -36,7 +36,8 @@ class AppWizard : public QWizard
 {
   Q_OBJECT
   public:
-    explicit AppWizard(QWidget *parent = 0, QString opcodeDir = QString());
+    explicit AppWizard(QWidget *parent = 0, QString opcodeDir = QString(),
+                       QString appName = QString(), QString targetDir = QString());
 
     void setOpcodeDir(QString opcodeDir) {m_opcodeDir = opcodeDir;}
 

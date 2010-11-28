@@ -31,6 +31,7 @@ AppDetailsPage::AppDetailsPage(QWidget *parent) :
     registerField("appName", ui->appNameLineEdit);
     registerField("targetDir", ui->targetDirLineEdit);
     registerField("autorun", ui->autorunCheckBox);
+    registerField("presicion", ui->presicionComboBox);
 }
 
 AppDetailsPage::~AppDetailsPage()

@@ -28,6 +28,10 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QListWidget>
+#include <QDir>
+#include <QFile>
+#include <QMessageBox>
+#include <QDebug>
 
 
 #include "appwizard.h"
@@ -36,12 +40,15 @@
 #include "pluginspage.h"
 
 
-AppWizard::AppWizard(QWidget *parent,QString opcodeDir) :
+AppWizard::AppWizard(QWidget *parent,QString opcodeDir,
+                     QString appName, QString targetDir) :
     QWizard(parent)
 {
   addPage(new AppDetailsPage);
   addPage(new PluginsPage(this, opcodeDir));
   addPage(new AdditionalFilesPage(this));
+  setField("appName", appName);
+  setField("targetDir", targetDir);
 //
 //  setPixmap(QWizard::BannerPixmap, QPixmap(":/images/banner.png"));
 //  setPixmap(QWizard::BackgroundPixmap, QPixmap(":/images/background.png"));
@@ -81,7 +88,34 @@ void AppWizard::accept()
 void AppWizard::createWinApp(QString appName, QString appDir, QStringList dataFiles,
                   QStringList plugins, QString sdkDir, bool useDoubles)
 {
-
+  QDir dir(appDir);
+  if (dir.exists()) {
+    if (QDir(appDir + QDir::separator() + appName).exists()) {
+      QMessageBox::critical(this, tr("QuteCsound App Creator"),
+                            tr("Destination directory exists. Please delete."));
+      return;
+    }
+    if (dir.mkdir(appName)) {
+      dir.cd(appName);
+      dir.mkdir("lib");
+      dir.mkdir("data");
+      dir.cd("data");
+      foreach(QString file, dataFiles) {
+        QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
+        QFile::copy(file, destName);
+        qDebug() << "createWinApp " << destName;
+      }
+    }
+    else {
+      QMessageBox::critical(this, tr("QuteCsound App Creator"),
+                            tr("Error creating app directory."));
+    }
+  }
+  else {
+    QMessageBox::critical(this, tr("QuteCsound App Creator"),
+                          tr("The destination directory does not exist!\n"
+                             "Aborting."));
+  }
 }
 
 void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFiles,
@@ -92,5 +126,43 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
 void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList dataFiles,
                     QStringList plugins, QString sdkDir, bool useDoubles)
 {
+  qDebug() << "AppWizard::createLinuxApp";
+  QDir dir(appDir);
+  if (dir.exists()) {
+    if (QDir(appDir + QDir::separator() + appName).exists()) {
+      QMessageBox::critical(this, tr("QuteCsound App Creator"),
+                            tr("Destination directory exists. Please remove."));
+      return;
+    }
+    if (dir.mkdir(appName)) {
+      dir.cd(appName);
+      dir.mkdir("lib");
+      dir.mkdir("data");
+      dir.cd("data");
+      foreach(QString file, dataFiles) {
+        QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
+        QFile::copy(file, destName);
+        qDebug() << "createLinuxApp " << destName;
+      }
+      dir.cd("../lib");
+      QStringList libFiles;
+//      libFiles << "libportaudio.so" << "libportmidi.so";
+      libFiles << "libcsound.so" << "libcsound.so.5.2";
+      foreach(QString file, dataFiles) {
+        QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
+        QFile::copy(file, destName);
+        qDebug() << "createLinuxApp " << destName;
+      }
+    }
+    else {
+      QMessageBox::critical(this, tr("QuteCsound App Creator"),
+                            tr("Error creating app directory."));
+    }
+  }
+  else {
+    QMessageBox::critical(this, tr("QuteCsound App Creator"),
+                          tr("The destination directory does not exist!\n"
+                             "Aborting."));
+  }
 
 }

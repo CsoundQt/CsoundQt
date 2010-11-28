@@ -668,26 +668,31 @@ int CsoundEngine::runCsound()
     consoles[0]->reset();
   }
 
+#ifdef QCS_DESTROY_CSOUND
+  ud->csound=csoundCreate(0);
+#endif
+
+  // Environment variables must be set before csoundCompile
   if (m_options.sadirActive){
-    int ret = csoundSetGlobalEnv("SADIR", m_options.sadir.toLocal8Bit());
+    int ret = csoundSetGlobalEnv("SADIR", m_options.sadir.toLocal8Bit().constData());
     if (ret != 0) {
       qDebug() << "CsoundEngine::runCsound() Error setting SADIR";
     }
   }
   if (m_options.ssdirActive){
-    int ret = csoundSetGlobalEnv("SSDIR", m_options.ssdir.toLocal8Bit());
+    int ret = csoundSetGlobalEnv("SSDIR", m_options.ssdir.toLocal8Bit().constData());
     if (ret != 0) {
       qDebug() << "CsoundEngine::runCsound() Error setting SSDIR";
     }
   }
   if (m_options.sfdirActive){
-    int ret = csoundSetGlobalEnv("SFDIR", m_options.sfdir.toLocal8Bit());
+    int ret = csoundSetGlobalEnv("SFDIR", m_options.sfdir.toLocal8Bit().constData());
     if (ret != 0) {
       qDebug() << "CsoundEngine::runCsound() Error setting SFDIR";
     }
   }
   if (m_options.incdirActive){
-    int ret = csoundSetGlobalEnv("INCDIR", m_options.incdir.toLocal8Bit());
+    int ret = csoundSetGlobalEnv("INCDIR", m_options.incdir.toLocal8Bit().constData());
     if (ret != 0) {
       qDebug() << "CsoundEngine::runCsound() Error setting INCDIR";
     }
@@ -695,7 +700,7 @@ int CsoundEngine::runCsound()
   if (m_options.opcodedirActive) {
     // csoundGetEnv must be called after Compile or Precompile,
     // But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
-    csoundSetGlobalEnv("OPCODEDIR", m_options.opcodedir.toLocal8Bit());
+    csoundSetGlobalEnv("OPCODEDIR", m_options.opcodedir.toLocal8Bit().constData());
   }
 #ifdef Q_OS_MAC
   else {
@@ -708,13 +713,9 @@ int CsoundEngine::runCsound()
 #endif
     // TODO is this check robust enough? what if the standard library is not used? is it likely it is not?
     if (QFile::exists(stdopcode)) {
-      csoundSetGlobalEnv("OPCODEDIR", opcodedir.toLocal8Bit());
+      csoundSetGlobalEnv("OPCODEDIR", opcodedir.toLocal8Bit().constData());
     }
   }
-#endif
-
-#ifdef QCS_DESTROY_CSOUND
-  ud->csound=csoundCreate(0);
 #endif
 
   // Message Callbacks must be set before compile, otherwise some information is missed

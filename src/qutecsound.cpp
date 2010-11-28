@@ -847,8 +847,11 @@ void qutecsound::createApp()
 #endif
 #endif
   }
-
-  AppWizard wizard(this, opcodeDir);
+  QString fullPath = documentPages[curPage]->getFileName();
+  QString appName = fullPath.mid(fullPath.lastIndexOf(QDir::separator()) + 1);
+  appName = appName.remove(".csd");
+  QString appDir = fullPath.left(fullPath.lastIndexOf(QDir::separator()) );
+  AppWizard wizard(this, opcodeDir, appName, appDir);
   wizard.exec();
 }
 
