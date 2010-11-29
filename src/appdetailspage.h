@@ -30,16 +30,21 @@ namespace Ui {
 }
 
 class AppDetailsPage : public QWizardPage {
-    Q_OBJECT
-public:
+  Q_OBJECT
+  public:
     AppDetailsPage(QWidget *parent = 0);
     ~AppDetailsPage();
 
-protected:
+  protected:
     void changeEvent(QEvent *e);
 
-private:
+  private:
     Ui::AppDetailsPage *ui;
+
+  private slots:
+    void browseTarget();
+    void browseLibrary();
+    void browseOpcodes();
 };
 
 #endif // APPDETAILSPAGE_H

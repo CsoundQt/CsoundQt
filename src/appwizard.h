@@ -45,7 +45,6 @@ class AppWizard : public QWizard
 
   public slots:
     virtual void accept();
-
   private:
     QString m_opcodeDir;
 
@@ -55,6 +54,7 @@ class AppWizard : public QWizard
                       QStringList plugins, QString sdkDir, bool useDoubles = true);
     void createLinuxApp(QString appName, QString appDir, QStringList dataFiles,
                         QStringList plugins, QString sdkDir, bool useDoubles = true);
+
 };
 
 

@@ -23,6 +23,8 @@
 #include "appdetailspage.h"
 #include "ui_appdetailspage.h"
 
+#include <QFileDialog>
+
 AppDetailsPage::AppDetailsPage(QWidget *parent) :
     QWizardPage(parent),
     ui(new Ui::AppDetailsPage)
@@ -31,7 +33,17 @@ AppDetailsPage::AppDetailsPage(QWidget *parent) :
     registerField("appName", ui->appNameLineEdit);
     registerField("targetDir", ui->targetDirLineEdit);
     registerField("autorun", ui->autorunCheckBox);
+    registerField("platform", ui->platformComboBox);
     registerField("presicion", ui->presicionComboBox);
+    registerField("libDir", ui->libLineEdit);
+    registerField("opcodeDir", ui->opcodeLineEdit);
+
+    connect(ui->browseTargetButton,SIGNAL(released()),
+            this, SLOT(browseTarget()));
+    connect(ui->browseLibraryButton,SIGNAL(released()),
+            this, SLOT(browseLibrary()));
+    connect(ui->browseOpcodesButton,SIGNAL(released()),
+            this, SLOT(browseOpcodes()));
 }
 
 AppDetailsPage::~AppDetailsPage()
@@ -50,3 +62,31 @@ void AppDetailsPage::changeEvent(QEvent *e)
         break;
     }
 }
+
+void AppDetailsPage::browseTarget()
+{
+  QString destination = field("targetDir").toString();
+  QString dir =  QFileDialog::QFileDialog::getExistingDirectory(this,tr("Select Target Directory"),destination);
+  if (dir!="") {
+    setField("targetDir", dir);
+  }
+}
+
+void AppDetailsPage::browseLibrary()
+{
+  QString destination = field("libDir").toString();
+  QString dir =  QFileDialog::QFileDialog::getExistingDirectory(this,tr("Select Csound Library Directory"),destination);
+  if (dir!="") {
+    setField("libDir", dir);
+  }
+}
+
+void AppDetailsPage::browseOpcodes()
+{
+  QString destination = field("opcodeDir").toString();
+  QString dir =  QFileDialog::QFileDialog::getExistingDirectory(this,tr("Select Csound Opcodes Directory"),destination);
+  if (dir!="") {
+    setField("opcodeDir", dir);
+  }
+}
+

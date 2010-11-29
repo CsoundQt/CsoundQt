@@ -34,8 +34,18 @@ PluginsPage::PluginsPage(QWidget *parent, QString opcodeDir) :
     connect(ui->selectNoneButton, SIGNAL(released()), this, SLOT(selectNone()));
     connect(ui->deselectFltkButton, SIGNAL(released()), this, SLOT(deselectFltk()));
     QStringList filters;
-    filters << "*.dylib";
-    QStringList plugins = QDir(opcodeDir).entryList(filters);
+    QStringList plugins;
+    QString platform = field("platform").toString();
+    if (platform == 0) { // Linux
+      filters << "*.so";
+    }
+    else if (platform == 0) { // OS X
+      filters << "*.dylib";
+    }
+    else if  (platform == 0) { // Windows
+      filters << "*.dll";
+    }
+    plugins = QDir(opcodeDir).entryList(filters);
     foreach (QString plugin, plugins) {
       ui->listWidget->addItem(plugin);
     }

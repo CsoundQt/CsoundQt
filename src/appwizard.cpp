@@ -44,15 +44,14 @@ AppWizard::AppWizard(QWidget *parent,QString opcodeDir,
                      QString appName, QString targetDir) :
     QWizard(parent)
 {
-  addPage(new AppDetailsPage);
-  addPage(new PluginsPage(this, opcodeDir));
-  addPage(new AdditionalFilesPage(this));
+  int appPage = addPage(new AppDetailsPage);
+  int pluginsPage = addPage(new PluginsPage(this, opcodeDir));
+  int additionalsPage = addPage(new AdditionalFilesPage(this));
   setField("appName", appName);
   setField("targetDir", targetDir);
 //
 //  setPixmap(QWizard::BannerPixmap, QPixmap(":/images/banner.png"));
 //  setPixmap(QWizard::BackgroundPixmap, QPixmap(":/images/background.png"));
-
   setWindowTitle(tr("Standalone Application Generator"));
 }
 
@@ -83,7 +82,6 @@ void AppWizard::accept()
 
   QDialog::accept();
 }
-
 
 void AppWizard::createWinApp(QString appName, QString appDir, QStringList dataFiles,
                   QStringList plugins, QString sdkDir, bool useDoubles)

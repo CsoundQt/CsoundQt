@@ -836,15 +836,30 @@ void qutecsound::createApp()
   }
   else {
 #ifdef USE_DOUBLES
+#ifdef Q_OS_LINUX
+#endif
+#ifdef Q_OS_SOLARIS
+#endif
+#ifdef Q_OS_WIN32
+#endif
 #ifdef Q_OS_MAC
     opcodeDir = "/Library/Frameworks/CsoundLib64.framework/Resources/Opcodes";
 //    opcodeDir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib64.framework/Resources/Opcodes";
 #endif
 #else
+
+#ifdef Q_OS_LINUX
+#endif
+#ifdef Q_OS_SOLARS
+#endif
+#ifdef Q_OS_WIN32
+#endif
 #ifdef Q_OS_MAC
     opcodeDir = "/Library/Frameworks/CsoundLib.framework/Resources/Opcodes";
 //    opcodeDir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Resources/Opcodes";
 #endif
+
+
 #endif
   }
   QString fullPath = documentPages[curPage]->getFileName();
