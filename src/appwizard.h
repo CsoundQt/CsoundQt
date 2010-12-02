@@ -47,13 +47,14 @@ class AppWizard : public QWizard
     virtual void accept();
   private:
     QString m_opcodeDir;
+    int m_pluginsPage;
 
     void createWinApp(QString appName, QString appDir, QStringList dataFiles,
-                      QStringList plugins, QString sdkDir, bool useDoubles = true);
+                      QStringList plugins, QString libDir, QString opcodeDir, bool useDoubles = true);
     void createMacApp(QString appName, QString appDir, QStringList dataFiles,
-                      QStringList plugins, QString sdkDir, bool useDoubles = true);
+                      QStringList plugins, QString libDir, QString opcodeDir, bool useDoubles = true);
     void createLinuxApp(QString appName, QString appDir, QStringList dataFiles,
-                        QStringList plugins, QString sdkDir, bool useDoubles = true);
+                        QStringList plugins, QString libDir, QString opcodeDir, bool useDoubles = true);
 
 };
 

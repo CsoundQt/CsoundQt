@@ -34,7 +34,7 @@ AppDetailsPage::AppDetailsPage(QWidget *parent) :
     registerField("targetDir", ui->targetDirLineEdit);
     registerField("autorun", ui->autorunCheckBox);
     registerField("platform", ui->platformComboBox);
-    registerField("presicion", ui->presicionComboBox);
+    registerField("useDoubles", ui->presicionComboBox);
     registerField("libDir", ui->libLineEdit);
     registerField("opcodeDir", ui->opcodeLineEdit);
 
@@ -44,6 +44,11 @@ AppDetailsPage::AppDetailsPage(QWidget *parent) :
             this, SLOT(browseLibrary()));
     connect(ui->browseOpcodesButton,SIGNAL(released()),
             this, SLOT(browseOpcodes()));
+    connect(ui->opcodeLineEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(opcodeDirChanged()));
+#ifdef Q_OS_MAC
+    ui->libLabel->setText("Framework Dir");
+#endif
 }
 
 AppDetailsPage::~AppDetailsPage()
@@ -88,5 +93,10 @@ void AppDetailsPage::browseOpcodes()
   if (dir!="") {
     setField("opcodeDir", dir);
   }
+}
+
+void AppDetailsPage::opcodeDirChanged()
+{
+  emit opcodeDirChangedSignal();
 }
 

@@ -27,6 +27,7 @@ AdditionalFilesPage::AdditionalFilesPage(QWidget *parent) :
     ui(new Ui::AdditionalFilesPage)
 {
     ui->setupUi(this);
+    registerField("dataFiles", ui->additionalListWidget);
 }
 
 AdditionalFilesPage::~AdditionalFilesPage()

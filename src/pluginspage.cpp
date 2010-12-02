@@ -24,33 +24,22 @@
 #include "ui_pluginspage.h"
 
 #include <QDir>
+#include <QDebug>
 
 PluginsPage::PluginsPage(QWidget *parent, QString opcodeDir) :
     QWizardPage(parent),
     ui(new Ui::PluginsPage)
 {
-    ui->setupUi(this);
-    connect(ui->selectAllButton, SIGNAL(released()), this, SLOT(selectAll()));
-    connect(ui->selectNoneButton, SIGNAL(released()), this, SLOT(selectNone()));
-    connect(ui->deselectFltkButton, SIGNAL(released()), this, SLOT(deselectFltk()));
-    QStringList filters;
-    QStringList plugins;
-    QString platform = field("platform").toString();
-    if (platform == 0) { // Linux
-      filters << "*.so";
-    }
-    else if (platform == 0) { // OS X
-      filters << "*.dylib";
-    }
-    else if  (platform == 0) { // Windows
-      filters << "*.dll";
-    }
-    plugins = QDir(opcodeDir).entryList(filters);
-    foreach (QString plugin, plugins) {
-      ui->listWidget->addItem(plugin);
-    }
-    ui->listWidget->selectAll();
-    registerField("plugins", ui->listWidget);
+  ui->setupUi(this);
+  connect(ui->selectAllButton, SIGNAL(released()), this, SLOT(selectAll()));
+  connect(ui->selectNoneButton, SIGNAL(released()), this, SLOT(selectNone()));
+  connect(ui->deselectFltkButton, SIGNAL(released()), this, SLOT(deselectFltk()));
+  registerField("plugins", ui->pluginsListWidget);
+  connect(ui->pluginsListWidget, SIGNAL(itemSelectionChanged () ), this, SLOT(selectionChanged()));
+  if (!opcodeDir.isEmpty()) {
+    setField("opcodeDir", opcodeDir);
+    updateOpcodeDir(opcodeDir);
+  }
 }
 
 PluginsPage::~PluginsPage()
@@ -60,18 +49,53 @@ PluginsPage::~PluginsPage()
 
 void PluginsPage::selectAll()
 {
-  ui->listWidget->selectAll();
+  ui->pluginsListWidget->selectAll();
 }
 
 void PluginsPage::selectNone()
 {
-  ui->listWidget->clearSelection();
+  ui->pluginsListWidget->clearSelection();
 }
 
 void PluginsPage::deselectFltk()
 {
-  ui->listWidget->clearSelection();
+  QList<QString> fltkNames;
+  fltkNames << "libwidgets" << "libvirtual" << "libfluidsynth";
+  QList<QListWidgetItem *> selected = ui->pluginsListWidget->selectedItems();
+  foreach (QListWidgetItem *item, selected) {
+    foreach (QString name, fltkNames) {
+      if (item->text().startsWith(name)) {
+        item->setSelected(false);
+      }
+    }
+  }
+}
 
+void PluginsPage::updateOpcodeDir(QString opcodeDir)
+{
+  QStringList filters;
+  QStringList plugins;
+  if (opcodeDir.isEmpty()) {
+    opcodeDir = field("opcodeDir").toString();
+  }
+  QString platform = field("platform").toString();
+  qDebug() << "PluginsPage::updateOpcodeDir " << opcodeDir;
+  if (platform == 0) { // Linux
+    filters << "*.so";
+  }
+  else if (platform == 0) { // OS X
+    filters << "*.dylib";
+  }
+  else if  (platform == 0) { // Windows
+    filters << "*.dll";
+  }
+  plugins = QDir(opcodeDir).entryList(filters);
+  foreach (QString plugin, plugins) {
+    if (!plugin.startsWith(".")) {
+      ui->pluginsListWidget->addItem(plugin);
+    }
+  }
+  ui->pluginsListWidget->selectAll();
 }
 
 void PluginsPage::changeEvent(QEvent *e)
@@ -84,4 +108,14 @@ void PluginsPage::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void PluginsPage::selectionChanged()
+{
+  QList<QListWidgetItem *> selected = ui->pluginsListWidget->selectedItems();
+  QStringList plugins;
+  foreach (QListWidgetItem *item, selected) {
+    plugins << item->text();
+  }
+  setProperty("plugins", plugins);
 }
