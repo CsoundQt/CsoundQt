@@ -27,6 +27,7 @@
 #include "simpledocument.h"
 #include "opentryparser.h"
 #include "widgetlayout.h"
+#include "console.h"
 
 QuteApp::QuteApp(QWidget *parent)
     : QMainWindow(parent)
@@ -36,6 +37,11 @@ QuteApp::QuteApp(QWidget *parent)
   m_options->fileName1 = "data/quteapp.csd";
   OpEntryParser *m_opcodeTree = new OpEntryParser(":/main/opcodes.xml");
   m_doc = new SimpleDocument(this, m_opcodeTree);
+  m_console = m_doc->getConsole();
+  m_console->setWindowTitle(tr("Console"));
+  m_console->setWindowFlags(Qt::Window);
+  m_console->show();
+  createMenus();
   setCentralWidget((QWidget *) m_doc->getWidgetLayout());
   loadCsd();
 //  start();
@@ -45,6 +51,14 @@ QuteApp::~QuteApp()
 {
   delete m_options;
   delete m_opcodeTree;
+}
+
+void QuteApp::createMenus()
+{
+  QMenu *menu = menuBar()->addMenu(tr("&File"));
+  menu->addAction("Run", this, SLOT(start()), QKeySequence("Ctrl+R"));
+  menu->addAction("Stop", this, SLOT(stop()), QKeySequence("Ctrl+."));
+  menu->addAction("Show Console Output", this, SLOT(showConsole()));
 }
 
 void QuteApp::start()
@@ -65,6 +79,11 @@ void QuteApp::stop()
 void QuteApp::save()
 {
   qDebug() << "QuteApp::save() not implemented yet.";
+}
+
+void QuteApp::showConsole()
+{
+  m_console->setVisible(!m_console->isVisible());
 }
 
 bool QuteApp::loadCsd()

@@ -28,6 +28,7 @@
 class SimpleDocument;
 class CsoundOptions;
 class OpEntryParser;
+class ConsoleWidget;
 
 class QuteApp : public QMainWindow
 {
@@ -37,16 +38,20 @@ class QuteApp : public QMainWindow
     QuteApp(QWidget *parent = 0);
     ~QuteApp();
 
+    void createMenus();
+
   public slots:
     void start();
     void pause();
     void stop();
     void save();
+    void showConsole();
 
 private:
     bool loadCsd();
     CsoundOptions *m_options;
     SimpleDocument *m_doc;
+    ConsoleWidget *m_console;
     OpEntryParser *m_opcodeTree;
 };
 

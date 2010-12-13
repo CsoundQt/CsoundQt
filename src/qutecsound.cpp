@@ -791,7 +791,7 @@ void qutecsound::openMidiPort(int port)
     m_midiin = 0;
     return;
   }
-  qDebug() << "qutecsound::openMidiPort opened port " << port;
+//  qDebug() << "qutecsound::openMidiPort opened port " << port;
   m_midiin->cancelCallback();
   m_midiin->setCallback(&midiMessageCallback, documentPages[curPage]->getWidgetLayout());  //TODO enable multiple layouts
 #endif

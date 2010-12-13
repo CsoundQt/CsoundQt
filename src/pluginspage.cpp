@@ -38,8 +38,8 @@ PluginsPage::PluginsPage(QWidget *parent, QString opcodeDir) :
   connect(ui->pluginsListWidget, SIGNAL(itemSelectionChanged () ), this, SLOT(selectionChanged()));
   if (!opcodeDir.isEmpty()) {
     setField("opcodeDir", opcodeDir);
-    updateOpcodeDir(opcodeDir);
   }
+  updateOpcodeDir();
 }
 
 PluginsPage::~PluginsPage()
@@ -71,22 +71,27 @@ void PluginsPage::deselectFltk()
   }
 }
 
-void PluginsPage::updateOpcodeDir(QString opcodeDir)
+void PluginsPage::updateOpcodeDir()
 {
   QStringList filters;
   QStringList plugins;
-  if (opcodeDir.isEmpty()) {
-    opcodeDir = field("opcodeDir").toString();
+  QString opcodeDir = field("opcodeDir").toString();
+  int platform = field("platform").toInt();
+#ifdef Q_OS_MAC
+  opcodeDir = field("libDir").toString() + "/CsoundLib";
+  if (field("useDoubles").toBool()) {
+    opcodeDir += "64";
   }
-  QString platform = field("platform").toString();
+  opcodeDir += ".framework/Resources/Opcodes";
+#endif
   qDebug() << "PluginsPage::updateOpcodeDir " << opcodeDir;
   if (platform == 0) { // Linux
     filters << "*.so";
   }
-  else if (platform == 0) { // OS X
+  else if (platform == 1) { // OS X
     filters << "*.dylib";
   }
-  else if  (platform == 0) { // Windows
+  else if  (platform == 2) { // Windows
     filters << "*.dll";
   }
   plugins = QDir(opcodeDir).entryList(filters);

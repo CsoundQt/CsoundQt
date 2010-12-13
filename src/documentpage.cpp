@@ -821,11 +821,6 @@ DocumentView *DocumentPage::getView()
 //  }
 //}
 
-ConsoleWidget *DocumentPage::getConsole()
-{
-  return m_console;
-}
-
 CsoundEngine *DocumentPage::getEngine()
 {
   return m_csEngine;
@@ -1132,12 +1127,9 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
   m_view = new DocumentView(parent, opcodeTree);
   connect(m_view, SIGNAL(evaluate(QString)), this, SLOT(evaluatePython(QString)));
 
-  m_console = new ConsoleWidget(0);
-  m_console->setReadOnly(true);
-  connect(m_console, SIGNAL(keyPressed(QString)),
-          m_csEngine, SLOT(keyPressForCsound(QString)));
-  connect(m_console, SIGNAL(keyReleased(QString)),
-          m_csEngine, SLOT(keyReleaseForCsound(QString)));
+  // For logging of Csound output to file
+  connect(m_console, SIGNAL(logMessage(QString)),
+          static_cast<qutecsound *>(parent), SLOT(logMessage(QString)));
 
 //  m_widgetLayout->show();
   m_liveEventControl = new LiveEventControl(parent);
@@ -1155,7 +1147,6 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
   connect(m_liveEventControl, SIGNAL(setPanelLoopLengthSignal(int,double)), this, SLOT(setPanelLoopLengthSlot(int,double)));
   connect(m_liveEventControl, SIGNAL(setPanelLoopRangeSignal(int,double,double)), this, SLOT(setPanelLoopRangeSlot(int,double,double)));
 
-
   // Connect for clearing marked lines and letting inspector know text has changed
   connect(m_view, SIGNAL(contentsChanged()), this, SLOT(textChanged()));
   connect(m_view, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(opcodeSyntax(QString)));
@@ -1166,12 +1157,6 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
   connect(m_csEngine, SIGNAL(stopSignal()),
           this, SLOT(perfEnded()));
 
-  // For logging of Csound output to file
-  connect(m_console, SIGNAL(logMessage(QString)),
-          static_cast<qutecsound *>(parent), SLOT(logMessage(QString)));
-
-  // Register the console with the engine for message printing
-  m_csEngine->registerConsole(m_console);
 
   //FIXME widgetlayout should have the chance of being empty
 //  m_widgetLayouts.append(newWidgetLayout());

@@ -48,8 +48,17 @@ AppWizard::AppWizard(QWidget *parent,QString opcodeDir,
   setField("appName", appName);
   setField("targetDir", targetDir);
   setField("opcodeDir", opcodeDir);
+  m_pluginsPage = addPage(new PluginsPage(this, field("opcodeDir").toString()));
+  int additionalsPage = addPage(new AdditionalFilesPage(this));
+  connect(static_cast<AppDetailsPage *>(this->page(appPage)), SIGNAL(opcodeDirChangedSignal()),
+          static_cast<PluginsPage *>(this->page(m_pluginsPage)), SLOT(updateOpcodeDir()));
+  connect(static_cast<AppDetailsPage *>(this->page(appPage)), SIGNAL(platformChangedSignal()),
+          static_cast<PluginsPage *>(this->page(m_pluginsPage)), SLOT(updateOpcodeDir()));
+  connect(static_cast<AppDetailsPage *>(this->page(appPage)), SIGNAL(libDirChangedSignal()),
+          static_cast<PluginsPage *>(this->page(m_pluginsPage)), SLOT(updateOpcodeDir()));
   QString libDir;
 #ifdef Q_OS_LINUX
+  setField("platform", 0);
   setField("libDir", "/usr/local/lib");
   if (opcodeDir.isEmpty()) {
     setField("opcodeDir", "/usr/local/lib/csound/plugins");
@@ -62,18 +71,16 @@ AppWizard::AppWizard(QWidget *parent,QString opcodeDir,
   }
 #endif
 #ifdef Q_OS_WIN32
+  setField("platform", 2);
   setField("libDir", "");
   if (opcodeDir.isEmpty()) {
     setField("opcodeDir", "");
   }
 #endif
 #ifdef Q_OS_MAC
-  setField("libDir", "/System/Frameworks");
+  setField("platform", 1);
+  setField("libDir", "/Library/Frameworks");
 #endif
-  m_pluginsPage = addPage(new PluginsPage(this, field("opcodeDir").toString()));
-  int additionalsPage = addPage(new AdditionalFilesPage(this));
-  connect(static_cast<AppDetailsPage *>(this->page(appPage)), SIGNAL(opcodeDirChangedSignal()),
-          static_cast<PluginsPage *>(this->page(m_pluginsPage)), SLOT(updateOpcodeDir()));
 //
 //  setPixmap(QWizard::BannerPixmap, QPixmap(":/images/banner.png"));
 //  setPixmap(QWizard::BackgroundPixmap, QPixmap(":/images/background.png"));
@@ -96,7 +103,7 @@ void AppWizard::accept()
     createLinuxApp(appName, targetDir, dataFiles, plugins, libDir, opcodeDir, useDoubles);
     break;
   case 1:
-    createMacApp(appName, targetDir, dataFiles, plugins, libDir, opcodeDir, useDoubles);
+    createMacApp(appName, targetDir, dataFiles, plugins, libDir, useDoubles);
     break;
   case 2:
     createWinApp(appName, targetDir, dataFiles, plugins, libDir, opcodeDir, useDoubles);
@@ -148,7 +155,7 @@ void AppWizard::createWinApp(QString appName, QString appDir, QStringList dataFi
 }
 
 void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFiles,
-                  QStringList plugins, QString libDir, QString opcodeDir,  bool useDoubles)
+                  QStringList plugins, QString libDir, bool useDoubles)
 {
 
 }

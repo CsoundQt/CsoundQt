@@ -45,10 +45,15 @@ class AppDetailsPage : public QWizardPage {
     void browseTarget();
     void browseLibrary();
     void browseOpcodes();
+    void browseSdk();
+    void platformChanged();
     void opcodeDirChanged();
+    void libDirChanged();
 
   signals:
+    void platformChangedSignal();
     void opcodeDirChangedSignal();
+    void libDirChangedSignal();
 };
 
 #endif // APPDETAILSPAGE_H

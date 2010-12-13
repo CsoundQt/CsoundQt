@@ -35,7 +35,6 @@ class OpEntryParser;
 class DocumentView;
 class LiveEventFrame;
 class EventSheet;
-class ConsoleWidget;
 class LiveEventControl;
 class SndfileHandle;
 
@@ -126,7 +125,6 @@ class DocumentPage : public BaseDocument
 
     // Get internal components
     DocumentView *getView();  // Needed to pass view for placing it as tab widget in main application
-    ConsoleWidget *getConsole();  // Needed to pass for placing in console dock panel
     CsoundEngine *getEngine(); // Needed to pass to python interpreter
 //    void *getCsound();
 
@@ -250,7 +248,6 @@ class DocumentPage : public BaseDocument
 
     QString m_pythonExecutable;
 
-    ConsoleWidget *m_console;
     QList<LiveEventFrame *> m_liveFrames;
     LiveEventControl *m_liveEventControl;
 

@@ -41,7 +41,7 @@ Q_OBJECT
     void selectAll();
     void selectNone();
     void deselectFltk();
-    void updateOpcodeDir(QString opcodeDir = QString());
+    void updateOpcodeDir();
 
   protected:
     void changeEvent(QEvent *e);

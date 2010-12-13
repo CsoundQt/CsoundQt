@@ -32,6 +32,7 @@ class WidgetLayout;
 class CsoundEngine;
 class BaseView;
 class OpEntryParser;
+class ConsoleWidget;
 class QuteButton; // For registering buttons with main application
 
 class BaseDocument : public QObject
@@ -46,7 +47,9 @@ class BaseDocument : public QObject
     virtual WidgetLayout* newWidgetLayout();
 //    void setOpcodeNameList(QStringList opcodeNameList);
 
+    // Get internal components
     WidgetLayout *getWidgetLayout();  // Needed to pass for placing in widget dock panel
+    ConsoleWidget *getConsole();  // Needed to pass for placing in console dock panel
 
   public slots:
     virtual int play(CsoundOptions *options);
@@ -60,7 +63,6 @@ class BaseDocument : public QObject
 
     virtual void registerButton(QuteButton *button) = 0;
 
-
 protected:
     virtual void init(QWidget *parent, OpEntryParser *opcodeTree) = 0;
 //    virtual BaseView *createView(QWidget *parent, O8pEntryParser *opcodeTree);
@@ -68,6 +70,7 @@ protected:
     QList<WidgetLayout *> m_widgetLayouts;
     OpEntryParser *m_opcodeTree;
     BaseView *m_view;
+    ConsoleWidget *m_console;
     CsoundEngine *m_csEngine;
 
 private:

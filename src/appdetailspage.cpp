@@ -29,25 +29,34 @@ AppDetailsPage::AppDetailsPage(QWidget *parent) :
     QWizardPage(parent),
     ui(new Ui::AppDetailsPage)
 {
-    ui->setupUi(this);
-    registerField("appName", ui->appNameLineEdit);
-    registerField("targetDir", ui->targetDirLineEdit);
-    registerField("autorun", ui->autorunCheckBox);
-    registerField("platform", ui->platformComboBox);
-    registerField("useDoubles", ui->presicionComboBox);
-    registerField("libDir", ui->libLineEdit);
-    registerField("opcodeDir", ui->opcodeLineEdit);
+  ui->setupUi(this);
+  registerField("appName", ui->appNameLineEdit);
 
-    connect(ui->browseTargetButton,SIGNAL(released()),
-            this, SLOT(browseTarget()));
-    connect(ui->browseLibraryButton,SIGNAL(released()),
-            this, SLOT(browseLibrary()));
-    connect(ui->browseOpcodesButton,SIGNAL(released()),
-            this, SLOT(browseOpcodes()));
-    connect(ui->opcodeLineEdit, SIGNAL(textChanged(QString)),
-            this, SLOT(opcodeDirChanged()));
+  registerField("targetDir", ui->targetDirLineEdit);
+  registerField("autorun", ui->autorunCheckBox);
+  registerField("platform", ui->platformComboBox);
+  registerField("useDoubles", ui->presicionComboBox);
+  registerField("libDir", ui->libLineEdit);
+  registerField("opcodeDir", ui->opcodeLineEdit);
+  registerField("sdkDir", ui->sdkLineEdit);
+
+  connect(ui->browseTargetButton,SIGNAL(released()),
+          this, SLOT(browseTarget()));
+  connect(ui->browseLibraryButton,SIGNAL(released()),
+          this, SLOT(browseLibrary()));
+  connect(ui->browseOpcodesButton,SIGNAL(released()),
+          this, SLOT(browseOpcodes()));
+  connect(ui->browseSdkButton,SIGNAL(released()),
+          this, SLOT(browseSdk()));
+  connect(ui->opcodeLineEdit, SIGNAL(textChanged(QString)),
+          this, SLOT(opcodeDirChanged()));
+  connect(ui->libLineEdit, SIGNAL(textChanged(QString)),
+          this, SLOT(libDirChanged()));
 #ifdef Q_OS_MAC
-    ui->libLabel->setText("Framework Dir");
+  ui->libLabel->setText("Framework Dir");
+  ui->opcodeLineEdit->hide();
+  ui->browseOpcodesButton->hide();
+  ui->opcodeDirLabel->hide();
 #endif
 }
 
@@ -95,8 +104,28 @@ void AppDetailsPage::browseOpcodes()
   }
 }
 
+void AppDetailsPage::browseSdk()
+{
+  QString destination = field("sdkDir").toString();
+  QString dir =  QFileDialog::QFileDialog::getExistingDirectory(this,tr("Select QuteCsound SDK Directory"),destination);
+  if (dir!="") {
+    setField("sdkDir", dir);
+  }
+}
+
+
+void AppDetailsPage::platformChanged()
+{
+  emit platformChangedSignal();
+}
+
 void AppDetailsPage::opcodeDirChanged()
 {
   emit opcodeDirChangedSignal();
+}
+
+void AppDetailsPage::libDirChanged()
+{
+  emit libDirChangedSignal();
 }
 

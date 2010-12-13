@@ -27,6 +27,7 @@
 #include "csoundengine.h"
 #include "qutecsound.h"
 #include "qutebutton.h"
+#include "console.h"
 
 
 BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree) :
@@ -38,6 +39,14 @@ BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree) :
   m_csEngine->setWidgetLayout(m_widgetLayouts[0]);  // Pass first widget layout to engine
 //  m_view->setOpcodeNameList(opcodeNameList);
 //  m_view->setOpcodeTree(m_opcodeTree);
+  m_console = new ConsoleWidget(0);
+  m_console->setReadOnly(true);
+  // Register the console with the engine for message printing
+  m_csEngine->registerConsole(m_console);
+  connect(m_console, SIGNAL(keyPressed(QString)),
+          m_csEngine, SLOT(keyPressForCsound(QString)));
+  connect(m_console, SIGNAL(keyReleased(QString)),
+          m_csEngine, SLOT(keyReleaseForCsound(QString)));
 }
 
 BaseDocument::~BaseDocument()
@@ -55,13 +64,13 @@ BaseDocument::~BaseDocument()
   //  m_widgetLayout->setParent(0);  //To make sure the widget panel from the main application doesn't attempt to delete it as its child
 }
 
-void BaseDocument::init(QWidget *parent, OpEntryParser *opcodeTree)
-{
-  qDebug() << "BaseDocument::init";
-//  m_view = createView(parent, opcodeTree);
-  m_view = new BaseView(parent, opcodeTree);
-  m_view->setFileType(0);
-}
+//void BaseDocument::init(QWidget *parent, OpEntryParser *opcodeTree)
+//{
+//  qDebug() << "BaseDocument::init";
+////  m_view = createView(parent, opcodeTree);
+//  m_view = new BaseView(parent, opcodeTree);
+//  m_view->setFileType(0);
+//}
 
 int BaseDocument::parseTextString(QString &text)
 {
@@ -121,6 +130,11 @@ WidgetLayout *BaseDocument::getWidgetLayout()
 {
   //FIXME allow multiple layouts
   return m_widgetLayouts[0];
+}
+
+ConsoleWidget *BaseDocument::getConsole()
+{
+  return m_console;
 }
 
 int BaseDocument::play(CsoundOptions *options)

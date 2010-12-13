@@ -52,7 +52,7 @@ class AppWizard : public QWizard
     void createWinApp(QString appName, QString appDir, QStringList dataFiles,
                       QStringList plugins, QString libDir, QString opcodeDir, bool useDoubles = true);
     void createMacApp(QString appName, QString appDir, QStringList dataFiles,
-                      QStringList plugins, QString libDir, QString opcodeDir, bool useDoubles = true);
+                      QStringList plugins, QString libDir, bool useDoubles = true);
     void createLinuxApp(QString appName, QString appDir, QStringList dataFiles,
                         QStringList plugins, QString libDir, QString opcodeDir, bool useDoubles = true);
 
