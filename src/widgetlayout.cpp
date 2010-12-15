@@ -3082,14 +3082,14 @@ void WidgetLayout::copy()
   if (m_editMode) {
     widgetsMutex.lock();
     if (m_xmlFormat) {
-      for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
+      for (int i = 0; i < editWidgets.size() ; i++) {
         if (editWidgets[i]->isSelected()) {
           text += m_widgets[i]->getWidgetXmlText()+ "\n";
         }
       }
     }
     else {
-      for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
+      for (int i = 0; i < editWidgets.size() ; i++) {
         if (editWidgets[i]->isSelected()) {
           text += m_widgets[i]->getWidgetLine() + "\n";
         }

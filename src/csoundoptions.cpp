@@ -135,14 +135,15 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
       list << "-o" + fileOutputFilename + "";
     }
   }
-  if (sadirActive)
-    list << "--env:SADIR='" + sadir + "'";
-  if (ssdirActive)
-    list << "--env:SSDIR='" + ssdir + "'";
-  if (sfdirActive)
-    list << "--env:SFDIR='" + sfdir + "'";
-  if (incdirActive)
-    list << "--env:INCDIR='" + incdir + "'";
+  // These lines break setting of variables. Are they actually needed here for some reason?
+//  if (sadirActive)
+//    list << "--env:SADIR='" + sadir + "'";
+//  if (ssdirActive)
+//    list << "--env:SSDIR='" + ssdir + "'";
+//  if (sfdirActive)
+//    list << "--env:SFDIR='" + sfdir + "'";
+//  if (incdirActive)
+//    list << "--env:INCDIR='" + incdir + "'";
   list << "--env:CSNOSTOP=yes";
   return list;
 }

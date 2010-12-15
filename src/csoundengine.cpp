@@ -679,11 +679,17 @@ int CsoundEngine::runCsound()
       qDebug() << "CsoundEngine::runCsound() Error setting SADIR";
     }
   }
+  else {
+    csoundSetGlobalEnv("SADIR", "");
+  }
   if (m_options.ssdirActive){
     int ret = csoundSetGlobalEnv("SSDIR", m_options.ssdir.toLocal8Bit().constData());
     if (ret != 0) {
       qDebug() << "CsoundEngine::runCsound() Error setting SSDIR";
     }
+  }
+  else {
+    csoundSetGlobalEnv("SSDIR", "");
   }
   if (m_options.sfdirActive){
     int ret = csoundSetGlobalEnv("SFDIR", m_options.sfdir.toLocal8Bit().constData());
@@ -691,11 +697,17 @@ int CsoundEngine::runCsound()
       qDebug() << "CsoundEngine::runCsound() Error setting SFDIR";
     }
   }
+  else {
+    csoundSetGlobalEnv("SFDIR", "");
+  }
   if (m_options.incdirActive){
     int ret = csoundSetGlobalEnv("INCDIR", m_options.incdir.toLocal8Bit().constData());
     if (ret != 0) {
       qDebug() << "CsoundEngine::runCsound() Error setting INCDIR";
     }
+  }
+  else {
+    csoundSetGlobalEnv("INCDIR", "");
   }
   if (m_options.opcodedirActive) {
     // csoundGetEnv must be called after Compile or Precompile,
