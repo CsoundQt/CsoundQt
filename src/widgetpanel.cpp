@@ -58,6 +58,10 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
   //    l->addWidget(scrollArea);
   //    stack->setLayout(l);
   scrollArea->show();
+  connect(scrollArea->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+          this, SLOT(scrollBarMoved(int)));
+  connect(scrollArea->verticalScrollBar(), SIGNAL(valueChanged(int)),
+          this, SLOT(scrollBarMoved(int)));
   w->show();
   w->setContained(true);
 }

@@ -242,17 +242,17 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
   if (m_editMode) {
     setEditMode(true);
   }
-  setOuterGeometry();
+  QSize s = getUsedSize();
+  int neww, newh;
+  neww = m_w < s.width() ? s.width() : m_w;
+  newh = m_h < s.height() ? s.height() : m_h;
+  this->resize(neww,newh);
   if (!m_contained) {
     this->move(m_posx, m_posy);
-    this->resize(m_w,m_h);
+//    setOuterGeometry();
   }
   else {
-    QSize s = getUsedSize();
-    int neww, newh;
-    neww = m_w < s.width() ? s.width() : m_w;
-    newh = m_h < s.height() ? s.height() : m_h;
-    this->resize(neww,newh);
+    setOuterGeometry(m_posx, m_posx, s.width(), s.height());
   }
 }
 
@@ -2113,7 +2113,7 @@ void WidgetLayout::mouseMoveEvent(QMouseEvent *event)
       //         height = event->y() - starty;
     }
     selectionFrame->setGeometry(x, y, width, height);
-    selectionChanged(QRect(x,y,width,height));
+    selectionChanged(QRect(x - xOffset, y - yOffset, width, height));
   }
 //  qDebug() << "WidgetPanel::mouseMoveEvent " << event->x();
   mouseX = event->globalX();
@@ -2770,8 +2770,8 @@ void WidgetLayout::setModified(bool mod)
 
 void WidgetLayout::setMouseOffset(int x, int y)
 {
-  xOffset = x;
-  yOffset = y;
+  xOffset = -x;
+  yOffset = -y;
 }
 
 void WidgetLayout::clearHistory()
