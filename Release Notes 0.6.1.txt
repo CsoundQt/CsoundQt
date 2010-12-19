@@ -1,0 +1,629 @@
+Hi all!
+
+QuteCsound 0.6.1 is out! It's been so long since the last release, that
+even though some of the features I wanted to complete for it aren't done,
+the amount of changes and fixes, will hopefully be welcome.
+
+QuteCsound is a frontend for Csound featuring a highlighting
+editor with autocomplete, interactive widgets and integrated help. It
+can open files created in MacCsound, and aims to be a simple yet
+powerful and complete development environment for Csound.
+
+QuteCsound has been tested on Windows, OS X, Linux and Solaris,
+and it is free software released under the LGPLv2 or at your option
+GPLv3.
+
+There are binary packages for Windows and OS X, and a source package
+for other platforms.
+You can get it here:
+http://sourceforge.net/projects/qutecsound/files/QuteCsound/0.6.1/
+
+There's more information here (along with an overdue home page revamp):
+http://qutecsound.sourceforge.net/
+
+There is also an experimental package for OS X (called "-full"), which
+contains Csound inside, so you don't need a separate Csound installation,
+(which means it will work immediately without installation - very handy if
+you don't have the root password for a system).
+
+Please try it and let us know any issues.
+
+Questions, comments and suggestions for QuteCsound are very welcome
+and can be posted to the main Csound mailing list, but better still,
+join the QuteCsound users mailing list at:
+http://lists.sourceforge.net/lists/listinfo/qutecsound-users
+
+Thanks as usual to the testing team, who made sure regular users get a
+smooth ride by taking a bumpy ride...
+Thanks especially to Francois Pinot, Andy Fillebrown, Joachim Heintz
+and Rene Djack, but also to the translators and the rest of the testers.
+
+QuteCsound accepts donations. If you find QuteCsound useful
+and have some money to spare, please consider donating to the project,
+to support development:
+http://sourceforge.net/project/project_donations.php?group_id=227265
+
+New in version 0.6.1:
+-Added support for MIDI controller assign for widgets.
+-Implemented Latch button
+-Joachim Heintz added a whole set of examples from the FLOSS manual project
+-Added many examples from the McCurdy collection ported from FLTK opcodes
+to QuteCsound by Rene Djack
+-Utilities window now remembers previous choices (within the same
+QuteCsound run)
+-Implemented evaluate section for python scripts. This evaluates all the
+text between the nearest "##" at the begining of a line. This way you
+can mark large blocks of code that can be easily evaluated without
+having to manually select them.
+-Changed evaluate default shortcut to Alt+E
+-Added Diffamator, String Phaser, Autotuner, MIDI layering and Sruti-Drone Box examples.
+-Added set Editor Focus action (Alt+0 default shortcut)
+-Auto join orc/sco is now transparent and automatically creates and saves
+a csd file.
+-Merged uncomment action into comment. Comment action now acts as a
+comment toggle.
+-Unindent/indent Uncomment/comment can now be made in succession to the
+same block.
+-Unindent/indent Uncomment/comment will no longer affect the next line
+when the line ending is selected.
+-Added new finnish translations by Niko Humalamäki
+-Added jumping to line to inspector headers (according to the first
+element under the header)
+
+Fixed in version 0.6.1:
+-Put back support for chnget/chnset.
+-Fixed setting of environment variables (SSDIR, SFDIR, etc.)
+-When an error is found, and the text editor is moved to the line, the
+editor will leave at least 5 lines at the top. If error text does not
+match, the editor will not scroll to the reported line.
+-Finally fixed widgets windows which showed up at start by saving the binary
+state of the application after closing all documents.
+-Corrected offset in widget selection.
+-Fixed order of widgets when copy/paste and when send to back.
+-SF_Record and other examples fixed
+-Extension to render filenames is now automatically appended.
+-Improved looks of live events panels reducing borders
+-Improved coloring of csound console messages to avoid spurious blue when
+"B" character is present.
+-Fixed live events showing when they shouldn't.
+-Chowning Stria example updated by Kevin Dahan
+-Labels inside UDOs are now placed in the right place in the inspector
+-Alignment actions now mark the document as modified, so a save is
+prompted when document is closed.
+-Alignment actions now register correctly for undo.
+-Config Dialog now scales with window.
+-Keyboard shortcuts window now scales properly
+-Inspector now switches to appropriate line when keyboard is used to
+navigate it.
+-Fixed display of decimal places according to resolution in spinbox.
+-Spinboxes now recieve strings and if possible convert them a a number,
+otherwise they set 0.
+-Fixed copy,paste and duplicate issues with widget panel.
+-Fixed crashing due to inspector parsing
+-Documents are now displayed at the first line (instead of the last) when
+just loaded.
+-Instruments in inspector now retain their collapsed/expanded state if
+text is modified.
+-Comments are now placed in correct places in the inspector, if they are
+inside instruments and if they are in the score.
+-Improved performance of syntax popup menu on OS X.
+
+Internal changes in 0.6.1:
+-Reduced size of OS X bundle by removing debug Qt binaries
+-Removed need to use libcsnd, as perfthread is no longer used.
+-Fixed linking to libsndfile, thanks to Andrew Antle.
+-Improved internal keyboard shortcut storage to make it more flexible.
+This means however that keyboard shortcuts are reset.
+
+
+Full ChangeLog:
+Revision 780
+Modified Sun Dec 19 19:40:48 2010 UTC (9 minutes, 58 seconds ago) by mantaraya36
+Put back support for chnget/chnset.
+
+Revision 779
+Modified Thu Dec 16 20:57:18 2010 UTC (2 days, 22 hours ago) by mantaraya36
+Corrected offset in selection (still some wierdness when selecting
+upwards but much better).
+Improved setting of size and position (not perfect but better).
+
+Revision 778
+Modified Wed Dec 15 10:14:25 2010 UTC (4 days, 9 hours ago) by mantaraya36
+Fixed order of widgets when copy/paste and when send to back.
+Fixed setting of environment variables (SSDIR, SFDIR, etc.)
+
+Revision 777
+Modified Mon Dec 13 19:21:43 2010 UTC (6 days ago) by mantaraya36
+Added menus and console to QuteApp.
+Fixed plugin listing on OS X.
+
+Revision 776
+Modified Thu Dec 9 14:48:55 2010 UTC (10 days, 5 hours ago) by mantaraya36
+Fixed building of standalone base app
+
+Revision 775
+Modified Thu Dec 2 09:47:08 2010 UTC (2 weeks, 3 days ago) by mantaraya36
+Plugin and lib files are now copied correctly to app directory on Linux
+
+Revision 774
+Modified Mon Nov 29 09:41:17 2010 UTC (2 weeks, 6 days ago) by mantaraya36
+Added lines to set opcode dir and lib dir with browse buttons to app
+wizard
+
+Revision 773
+Modified Sun Nov 28 22:01:19 2010 UTC (2 weeks, 6 days ago) by mantaraya36
+More work on App Creator
+
+Revision 772
+Modified Sun Nov 28 09:30:51 2010 UTC (3 weeks ago) by mantaraya36
+Utilities window now remembers previous choices (within the same
+QuteCsound run)
+
+Revision 771
+Modified Fri Nov 26 09:12:10 2010 UTC (3 weeks, 2 days ago) by mantaraya36
+Fixed behavior of latch button when it had channel assigned.
+Added MIDI control of first value for controller widget (only one value
+can be controlled for now)
+
+Revision 770
+Modified Fri Nov 26 08:29:59 2010 UTC (3 weeks, 2 days ago) by mantaraya36
+Fixed propagation of value to other widgets when value is received from MIDI.
+Added mincer, temposcal and bandpass example files in the MacCurdy collection. Ported by Rene Djack
+
+Revision 769
+Modified Mon Nov 22 09:10:16 2010 UTC (3 weeks, 6 days ago) by mantaraya36
+Fixed MIDI controller "unbinding"
+
+Revision 768
+Modified Sun Nov 21 20:54:38 2010 UTC (3 weeks, 6 days ago) by mantaraya36
+Some more work on app creator
+
+Revision 767
+Modified Fri Nov 19 21:31:12 2010 UTC (4 weeks, 1 day ago) by mantaraya36
+Added additional files page in app export wizard
+
+Revision 766
+Modified Fri Nov 19 19:06:23 2010 UTC (4 weeks, 2 days ago) by mantaraya36
+Minor changes
+
+Revision 765
+Modified Thu Nov 18 10:50:37 2010 UTC (4 weeks, 3 days ago) by mantaraya36
+Added Filters examples from the McCurdy collection, ported by Rene Djack
+
+Revision 764
+Modified Wed Nov 17 17:25:53 2010 UTC (4 weeks, 4 days ago) by mantaraya36
+More work on app wizard
+
+Revision 763
+Modified Tue Nov 16 22:15:44 2010 UTC (4 weeks, 4 days ago) by joachimheintz
+SF_Record example fixed
+
+Revision 762
+Modified Thu Nov 11 18:57:11 2010 UTC (5 weeks, 3 days ago) by mantaraya36
+App Wizard now lists plugins from OPCODEDIR (OS X only for now)
+
+Revision 761
+Modified Wed Nov 10 09:30:24 2010 UTC (5 weeks, 4 days ago) by mantaraya36
+Added FFT examples from the McCurdy collection, ported by Rene Djack
+
+Revision 760
+Modified Mon Nov 8 20:58:19 2010 UTC (5 weeks, 5 days ago) by mantaraya36
+Added Menu item for Create App, which now displays the forms
+
+Revision 759
+Modified Mon Nov 8 20:12:07 2010 UTC (5 weeks, 5 days ago) by mantaraya36
+Fixed building issues
+
+Revision 758
+Modified Mon Nov 8 20:08:59 2010 UTC (5 weeks, 5 days ago) by mantaraya36
+Internal work on App Wizard
+
+Revision 757
+Modified Fri Nov 5 16:53:44 2010 UTC (6 weeks, 2 days ago) by mantaraya36
+Fixed disconnected signals.
+
+Revision 756
+Modified Thu Nov 4 15:40:29 2010 UTC (6 weeks, 3 days ago) by mantaraya36
+Started work on App Wizard
+
+Revision 755
+Modified Tue Nov 2 10:22:05 2010 UTC (6 weeks, 5 days ago) by mantaraya36
+Added more examples from the McCurdy collection ported by Rene Djack
+
+Revision 754
+Modified Sun Oct 31 07:32:31 2010 UTC (7 weeks ago) by mantaraya36
+Added examples from the McCurdy Collection adapted by Rene Djack for QuteCsound
+
+Revision 753
+Modified Fri Oct 29 16:20:46 2010 UTC (7 weeks, 2 days ago) by mantaraya36
+Improved looks of live events panels reducing borders
+Added pythonqt to mac os app builder script, untested, but hopefully works
+
+Revision 752
+Modified Thu Oct 21 21:01:55 2010 UTC (8 weeks, 2 days ago) by joachimheintz
+midi tunings example improved
+
+Revision 751
+Modified Tue Oct 19 18:14:55 2010 UTC (2 months ago) by mantaraya36
+Fixed double widget panel window.
+QuteApp now runs, but doesn't produce right sound.
+
+Revision 750
+Modified Mon Oct 18 07:42:22 2010 UTC (2 months ago) by mantaraya36
+Added jumping to line to inspector headers (according to the first
+element under the header)
+
+Revision 749
+Modified Mon Oct 18 07:34:33 2010 UTC (2 months ago) by mantaraya36
+csd is now loaded and widgets displayed properly in QuteApp
+
+Revision 748
+Modified Sun Oct 17 20:07:36 2010 UTC (2 months ago) by mantaraya36
+Work towards standalone app. Loader is now underway but still not there.
+
+Revision 747
+Modified Sat Oct 16 19:11:37 2010 UTC (2 months ago) by mantaraya36
+Improved coloring of csound console messages to avoid spurious blue when
+"B" character is present.
+Updated Sruti-Drone Box to version 2.7
+
+Revision 746
+Modified Fri Oct 8 11:10:21 2010 UTC (2 months, 1 week ago) by joachimheintz
+small examples fixes
+
+Revision 745
+Modified Fri Oct 8 07:46:28 2010 UTC (2 months, 1 week ago) by mantaraya36
+Implemented evaluate section for python scripts. This evaluates all the
+text between the nearest "##" at the begining of a line. This way you
+can mark large blocks of code that can be easily evaluated without
+having to manually select them.
+Extension to render filenames is now automatically appended.
+Changed evaluate default shortcut to Alt+E
+
+Revision 744
+Modified Fri Sep 24 11:24:12 2010 UTC (2 months, 3 weeks ago) by mantaraya36
+Reduced size of OS X bundle by removing debug Qt binaries
+
+Revision 743
+Modified Fri Sep 24 10:08:23 2010 UTC (2 months, 3 weeks ago) by mantaraya36
+Now fixed compilation on OS X for RtMidi
+
+Revision 742
+Modified Thu Sep 23 17:11:57 2010 UTC (2 months, 3 weeks ago) by mantaraya36
+Improved handling of RtMidi. Now compiled by qmake itself, thanks to
+pointers by Andy.
+
+Revision 741
+Modified Wed Sep 22 19:27:19 2010 UTC (2 months, 3 weeks ago) by mantaraya36
+Added Autotuner, MIDI layering and Sruti-Drone Box examples.
+Added support for MIDI control for widgets.
+
+Revision 740
+Modified Sun Sep 19 09:24:39 2010 UTC (3 months ago) by mantaraya36
+Removed need to use libcsnd, as perfthread is no longer used.
+
+Revision 739
+Modified Sun Sep 19 08:52:45 2010 UTC (3 months ago) by mantaraya36
+More work on QCsPerfThread, most things now converted to Qt.
+
+Revision 738
+Modified Sun Sep 19 07:24:53 2010 UTC (3 months ago) by mantaraya36
+Finally fixed widgets windows which showed up at start by saving the binary state of the application after closing all documents.
+Fixed live events showing when they shouldn't.
+Added Sruti-Drone Box example by Dave Seidel.
+Created QCsPerfThread class to implement threading for Csound using QThreads in hope of getting rid of the Windows clipboard issues.
+
+Revision 737
+Modified Fri Sep 17 15:16:13 2010 UTC (3 months ago) by mantaraya36
+Made BaseDocument a child class of QObject instead of QWidget to avoid having an invisible widget which blocks menu usage.
+
+Revision 736
+Modified Mon Sep 13 15:36:29 2010 UTC (3 months ago) by mantaraya36
+Fixed saving error.
+
+Revision 735
+Modified Mon Sep 13 06:57:48 2010 UTC (3 months ago) by mantaraya36
+Fixed linking to libsndfile, thanks to Andrew Antle.
+Broke build, because widget format is not being saved with latest
+changes!
+
+Revision 734
+Modified Sun Sep 12 20:18:43 2010 UTC (3 months ago) by mantaraya36
+Separated base document class from document page, to enable standalone
+apps.
+Some more work towards correct behavior of widget panel as separate
+window.
+Set environment variables when running using the API (apparently not
+working?)
+
+Revision 733
+Modified Fri Sep 10 18:26:37 2010 UTC (3 months, 1 week ago) by mantaraya36
+If latch button is of event type and duration is negative, it is turned
+on wen button is latched and turned off when button is unlatched.
+
+Revision 732
+Modified Thu Sep 9 16:06:24 2010 UTC (3 months, 1 week ago) by joachimheintz
+FLOSS Manual Examples '07 MIDI' added
+
+Revision 731
+Modified Thu Sep 9 13:26:53 2010 UTC (3 months, 1 week ago) by joachimheintz
+Chowning Stria example updated by Kevin Dahan
+
+Revision 730
+Modified Wed Sep 8 20:36:08 2010 UTC (3 months, 1 week ago) by mantaraya36
+Some work towards fixing saving and loading of widget container position
+and size. Not finished yet
+Labels inside UDOs are now placed in the right place in the inspector
+
+Revision 729
+Modified Tue Sep 7 16:30:10 2010 UTC (3 months, 1 week ago) by mantaraya36
+Fixed modality problems when resizing keyboard shortcut dialog
+
+Revision 728
+Modified Sun Sep 5 09:59:02 2010 UTC (3 months, 2 weeks ago) by joachimheintz
+FLOSS Manual Examples completed
+
+Revision 727
+Modified Sat Sep 4 19:02:30 2010 UTC (3 months, 2 weeks ago) by joachimheintz
+Examples menu item for Csound FLOSS Manual examples created
+
+Revision 726
+Modified Sat Sep 4 18:47:55 2010 UTC (3 months, 2 weeks ago) by mantaraya36
+Alignment actions now mark the document as modified, so a save as is
+prompted when document is closed.
+Alignment actions now register correctly for undo.
+
+Revision 725
+Modified Sat Sep 4 16:16:16 2010 UTC (3 months, 2 weeks ago) by gogins
+Resource acquisition is initialization class to ensure cursor is always properly updated in the console.
+
+Revision 724
+Modified Sat Sep 4 15:19:31 2010 UTC (3 months, 2 weeks ago) by mantaraya36
+Added Diffamator synth, thanks to Rene Djack
+
+Revision 723
+Modified Sat Sep 4 09:50:48 2010 UTC (3 months, 2 weeks ago) by mantaraya36
+Latch buttons now have a light indicating their state.
+Config Dialog now scales with window.
+
+Revision 722
+Modified Thu Sep 2 20:09:28 2010 UTC (3 months, 2 weeks ago) by mantaraya36
+Keyboard shortcuts window now scales properly
+Added set Editor Focus action (Alt+0 default shortcut)
+Inspector now switches to appropriate line when keyboard is used to
+navigate it.
+
+Revision 721
+Modified Thu Aug 26 08:04:59 2010 UTC (3 months, 3 weeks ago) by mantaraya36
+Fixed display of decimal places according to resolution in spinbox.
+Spinboxes now recieve strings and if possible convert them a a number,
+otherwise they set 0.
+
+Revision 720
+Modified Wed Aug 25 18:12:35 2010 UTC (3 months, 3 weeks ago) by mantaraya36
+Fixed copy,paste and duplicate issues with widget panel.
+
+Revision 719
+Modified Wed Aug 25 10:13:42 2010 UTC (3 months, 3 weeks ago) by mantaraya36
+Fixed crashing due to inspector parsing
+
+Revision 718
+Modified Wed Aug 25 08:24:24 2010 UTC (3 months, 3 weeks ago) by mantaraya36
+Merged uncomment action into comment. Comment action now acts as a
+comment toggle.
+Improved internal keyboard shortcut storage to make it more flexible.
+This means however that keyboard shortcuts are reset.
+
+Revision 717
+Modified Tue Aug 24 17:33:30 2010 UTC (3 months, 3 weeks ago) by mantaraya36
+Minor changes to fix build of PythonQt features on OS X
+
+Revision 716
+Modified Tue Aug 24 11:53:58 2010 UTC (3 months, 3 weeks ago) by mantaraya36
+Unindent/indent Uncomment/comment can now be made in succession to the
+same block.
+Unindent/indent Uncomment/comment will no longer affect the next line
+when the line ending is selected.
+
+Revision 715
+Modified Sun Aug 22 20:50:34 2010 UTC (3 months, 3 weeks ago) by mantaraya36
+Added menu for python scripts in main application window.
+If PythonQt is available, run in a python file runs it in the internal
+interpreter. Run in term will run it on a separate terminal.
+Added opcodeExists() function to API.
+
+Revision 714
+Modified Sat Aug 21 21:07:20 2010 UTC (3 months, 4 weeks ago) by mantaraya36
+More work on API. Now some functionality from event sheets is exposed,
+through a revamped QuteSheet API.
+Documents are now displayed at the first line (instead of the last) when
+just loaded.
+
+Revision 713
+Modified Fri Aug 20 15:32:04 2010 UTC (3 months, 4 weeks ago) by mantaraya36
+Initial work towards exposing Event sheets in python api.
+
+Revision 712
+Modified Mon Aug 16 16:18:08 2010 UTC (4 months ago) by mantaraya36
+Updated translation. Added new finnish translations bu Niko Humalamäki
+
+Revision 711
+Modified Mon Aug 16 16:14:02 2010 UTC (4 months ago) by mantaraya36
+Added new functions for widget control from python console api:
++    void setChannelValue(QString channel, double value, int index =
+-1);
++    double getChannelValue(QString channel, int index = -1);
++    void setChannelString(QString channel, QString value, int index =
+-1);
++    QString getChannelString(QString channel, int index = -1);
++
++    void createNewLabel(int x = -1, int y = -1, int index = -1);
++    void createNewDisplay(int x = -1, int y = -1, int index = -1);
++    void createNewScrollNumber(int x = -1, int y = -1, int index = -1);
++    void createNewLineEdit(int x = -1, int y = -1, int index = -1);
++    void createNewSpinBox(int x = -1, int y = -1, int index = -1);
++    void createNewSlider(int x = -1, int y = -1, int index = -1);
++    void createNewButton(int x = -1, int y = -1, int index = -1);
++    void createNewKnob(int x = -1, int y = -1, int index = -1);
++    void createNewCheckBox(int x = -1, int y = -1, int index = -1);
++    void createNewMenu(int x = -1, int y = -1, int index = -1);
++    void createNewMeter(int x = -1, int y = -1, int index = -1);
++    void createNewConsole(int x = -1, int y = -1, int index = -1);
++    void createNewGraph(int x = -1, int y = -1, int index = -1);
++    void createNewScope(int x = -1, int y = -1, int index = -1);
+
+Revision 710
+Modified Fri Aug 13 08:52:55 2010 UTC (4 months ago) by mantaraya36
+Added checks for portmidi libs and headers for future work.
+Linking to PythonQt should now be done to the correct lib (debug|
+Added functions to the python pyqcsobject object to manipulate the
+editor. The new functions are:
+insertText(QString text, int index = -1, int section = -1)
+setFullText(QString text, int index = -1)
+setCsd(QString text, int index = -1)
+setOrc(QString text, int index = -1)
+setSco(QString text, int index = -1)
+setWidgetsText(QString text, int index = -1);
+setPresetsText(QString text, int index = -1);
+setOptionsText(QString text, int index = -1);
+
+getSelectedText(int section = -1)
+getFullText(int index)
+getCsdint index()
+getOrc(int index)
+getSco(int index)
+getWidgetsText(int index);
+getPresetsText(int index);
+getOptionsText(int index);
+
+Revision 709
+Modified Thu Aug 12 15:54:40 2010 UTC (4 months, 1 week ago) by mantaraya36
+Button widget now saves its latched state in presets.
+
+Revision 708
+Modified Thu Aug 12 15:30:37 2010 UTC (4 months, 1 week ago) by mantaraya36
+Build now links to appropriate PythonQt lib (debug/release)
+Keyboard shortcuts now work fine in separate widget window and live
+events windows.
+Separate widget window now takes correct size saved.
+
+Revision 707
+Modified Wed Aug 11 20:16:13 2010 UTC (4 months, 1 week ago) by mantaraya36
+Fixed receiving of value by latch buttons
+Added note about latch in example.
+
+Revision 706
+Modified Wed Aug 11 18:57:23 2010 UTC (4 months, 1 week ago) by mantaraya36
+Implemented Latch button
+
+Revision 705
+Modified Wed Aug 11 15:13:23 2010 UTC (4 months, 1 week ago) by mantaraya36
+Added updated to turkish translation by Alis Isciler
+More improvements toward independent widget window
+When an error is found, and the text editor is moved to the line, the
+editor will leave at least 5 lines at the top. If error text does not
+match, the editor will not scroll to the reported line.
+
+Revision 704
+Modified Tue Aug 10 06:10:21 2010 UTC (4 months, 1 week ago) by mantaraya36
+Instruments in inspector now retain their collapsed/expanded state if
+text is modified.
+Comments are now placed in correct places in the inspector, if they are
+inside instruments and if they are in the score.
+
+Revision 703
+Modified Mon Aug 9 10:42:08 2010 UTC (4 months, 1 week ago) by mantaraya36
+Fixed event sheet issue: when editing in text and adding lines, these
+would not show up when changing back to sheet view
+Live Events are now longer shown for Python files.
+
+Revision 702
+Modified Mon Aug 9 08:13:59 2010 UTC (4 months, 1 week ago) by mantaraya36
+Updated translation. Now added String Phaser example.
+
+Revision 701
+Modified Mon Aug 9 06:40:08 2010 UTC (4 months, 1 week ago) by mantaraya36
+Added Finnish translation by Niko Humalamäki.
+Added config option to set widgets in separate window, but not working yet...
+Improvements in String Phaser example, added it to menu
+
+Revision 700
+Modified Thu Aug 5 12:57:34 2010 UTC (4 months, 2 weeks ago) by mantaraya36
+More work towards widgets on an independent window. Fixed String Phaser example.
+
+Revision 699
+Modified Tue Aug 3 14:35:41 2010 UTC (4 months, 2 weeks ago) by mantaraya36
+Added initial version of String Phaser synth
+
+Revision 698
+Modified Mon Aug 2 18:36:22 2010 UTC (4 months, 2 weeks ago) by afillebrown
+comment out PythonQt_QtAll dependencies
+
+Revision 697
+Modified Mon Aug 2 13:22:12 2010 UTC (4 months, 2 weeks ago) by afillebrown
+get compiling with mingw working with CONFIG+=pythonqt
+
+Revision 696
+Modified Mon Aug 2 12:05:52 2010 UTC (4 months, 2 weeks ago) by mantaraya36
+Auto join orc/sco is now transparent and automatically creates and saves
+a csd file. Needs a bit more testing but it seems to be working fine.
+
+Revision 695
+Modified Fri Jul 30 21:59:57 2010 UTC (4 months, 2 weeks ago) by mantaraya36
+Added snake icon for Python console.
+
+Revision 694
+Modified Fri Jul 30 20:16:07 2010 UTC (4 months, 2 weeks ago) by mantaraya36
+Fixed build with PythonQt. To build you must use:
+CONFIG+=pythonqt PYTHONQT_TREE_DIR=/el/directorio/de/PythonQt2.0.1
+
+Revision 693
+Modified Fri Jul 30 13:00:31 2010 UTC (4 months, 2 weeks ago) by mantaraya36
+Work towards implementing multiple widget panels and allowing panels to
+be an independent window.
+Join orc/sco now works if used from the sco file.
+
+Revision 691
+Modified Wed Jul 28 19:50:40 2010 UTC (4 months, 3 weeks ago) by mantaraya36
+Merged PythonQt work into trunk (although trying to build with PythonQt
+currently fails). use CONFIG+=pythonqt to see it in action.
+Cleanup of the build system.
+Fixed rounding errors in SpinBox, as a consequence it no longer rounds
+to the precision but displays the received value.
+The environment value CS_OMIT_LIBS is now set to ignore fltk opcodes
+using csoundSetGlobalEnv (which is not currently working...)
+
+Revision 690
+Modified Wed Jul 28 19:49:56 2010 UTC (4 months, 3 weeks ago) by mantaraya36
+Merged PythonQt work into trunk (although trying to build with PythonQt
+currently fails). use CONFIG+=pythonqt to see it in action.
+Cleanup of the build system.
+Fixed rounding errors in SpinBox, as a consequence it no longer rounds
+to the precision but displays the received value.
+The environment value CS_OMIT_LIBS is now set to ignore fltk opcodes
+using csoundSetGlobalEnv (which is not currently working...)
+
+Revision 689
+Modified Tue Jul 27 15:38:02 2010 UTC (4 months, 3 weeks ago) by afillebrown
+add CS_OMIT_LIBS fluidOpcodes,virtual,widgets to system environment variables in Windows installers
+
+Revision 688
+Modified Tue Jul 27 14:29:57 2010 UTC (4 months, 3 weeks ago) by afillebrown
+fix ending curly-brace typo in .pro files
+
+Revision 687
+Modified Tue Jul 27 13:34:31 2010 UTC (4 months, 3 weeks ago) by afillebrown
+fix bad commit when trying to fix directory issues when building against Csound source trees
+
+Revision 686
+Modified Tue Jul 27 13:03:17 2010 UTC (4 months, 3 weeks ago) by afillebrown
+split CSOUND_INCLUDE_DIR into CSOUND_API_INCLUDE_DIR and CSOUND_INTERFACES_INCLUDE_DIR for building against Csound when it has not been installed
+
+Revision 685
+Modified Mon Jul 26 17:28:04 2010 UTC (4 months, 3 weeks ago) by mantaraya36
+Put back showing opcode description in status bar.
+
+Revision 684
+Modified Mon Jul 26 14:37:29 2010 UTC (4 months, 3 weeks ago) by mantaraya36
+Improved performance of syntax popup menu on OS X.
+

@@ -13,6 +13,128 @@
     </message>
 </context>
 <context>
+    <name>AdditionalFilesPage</name>
+    <message>
+        <source>WizardPage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Addional files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AppDetailsPage</name>
+    <message>
+        <source>WizardPage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>App Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source>Autorun Csound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Platform</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linux</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mac</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Windows</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Presicion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>floats</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>doubles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Csound Lib Dir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opcode Dir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>QuteCsound SDK Dir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select Target Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select Csound Library Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select Csound Opcodes Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select QuteCsound SDK Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AppWizard</name>
+    <message>
+        <source>Standalone Application Generator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>QuteCsound App Creator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Destination directory exists. Please remove.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error creating app directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The destination directory does not exist!
+Aborting.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ConfigDialog</name>
     <message>
         <source>Please note that OPCODEDIR will overwrite current settings so you will need to restart QuteCsound to return to default.</source>
@@ -534,6 +656,15 @@
         <source>Enabled</source>
         <comment>Virtual MIDI keyboard Enabled</comment>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal MIDI interface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None</source>
+        <comment>No MIDI internal interface</comment>
+        <translation type="unfinished">Hiçbiri</translation>
     </message>
 </context>
 <context>
@@ -1334,6 +1465,29 @@ Zaten kullanılmaktadır.</translation>
     </message>
 </context>
 <context>
+    <name>PluginsPage</name>
+    <message>
+        <source>WizardPage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please highlight the Csound plugins you want to include in the Standalone App. If unsure, highlight all.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deselect FLTK</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PythonConsole</name>
     <message>
         <source>Python Console</source>
@@ -2072,6 +2226,14 @@ Some features may not be available and will not be saved!</source>
         <source>Select Preset to save</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Widget Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Widgets can&apos;t be read! No widgets created.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WidgetPanel</name>
@@ -2287,7 +2449,7 @@ www.graphviz.org</translation>
     </message>
     <message>
         <source>Csound Files (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)</source>
-        <translation>Csound Files (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)</translation>
+        <translation type="obsolete">Csound Files (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)</translation>
     </message>
     <message>
         <source>The file is already open in another tab.
@@ -3001,19 +3163,19 @@ Francesco
     </message>
     <message>
         <source>Comment</source>
-        <translation>Yorum </translation>
+        <translation type="obsolete">Yorum </translation>
     </message>
     <message>
         <source>Comment selection</source>
-        <translation>Yorum seçimi</translation>
+        <translation type="obsolete">Yorum seçimi</translation>
     </message>
     <message>
         <source>Uncomment</source>
-        <translation>Yorumlayınız</translation>
+        <translation type="obsolete">Yorumlayınız</translation>
     </message>
     <message>
         <source>Uncomment selection</source>
-        <translation>Yorumlayınız seçimi</translation>
+        <translation type="obsolete">Yorumlayınız seçimi</translation>
     </message>
     <message>
         <source>Indent</source>
@@ -3137,11 +3299,6 @@ kapatmadan önce değişiklikleri kaydetmek istiyor musunuz?</translation>
     <message>
         <source>Do not ask again</source>
         <translation>Bir daha sorma</translation>
-    </message>
-    <message>
-        <source>Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco);;Python Files (*.py);;All Files (*)</source>
-        <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>New widget format</source>
@@ -3292,10 +3449,6 @@ You must restart QuteCsound.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Shift+Ctrl+/</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Alt+7</source>
         <translation type="unfinished">Alt+7</translation>
     </message>
@@ -3414,6 +3567,116 @@ Extended Python features are not available</source>
     </message>
     <message>
         <source>Favorites</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Files (*.py);;All Files (*)</source>
+        <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+0</source>
+        <translation type="unfinished">Alt+0</translation>
+    </message>
+    <message>
+        <source>Alt+E</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+E</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create App...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create Standalone application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Evaluate section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Evaluate current section in Python Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Focus Text Editor</source>
+        <comment>Give keyboard focus to the text editor</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Give keyboard focus to the text editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Editor</source>
+        <translation type="unfinished">Editör</translation>
+    </message>
+    <message>
+        <source>Comment/Uncomment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comment/Uncomment selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicate Widgets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FLOSS Manual Examples</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>02 Quick Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>03 Csound Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>07 MIDI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>McCurdy Collection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>3D Audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Additive Synthesis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Convolution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delays</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Distortion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scripts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

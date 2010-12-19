@@ -1,0 +1,131 @@
+Hi all!
+
+QuteCsound 0.7.0 is out! It's been so long since the last release, that
+even though some of the features I wanted to complete for it aren't done,
+the amount of changes and fixes, will hopefully be welcome.
+
+QuteCsound is a frontend for Csound featuring a highlighting
+editor with autocomplete, interactive widgets and integrated help. It
+can open files created in MacCsound, and aims to be a simple yet
+powerful and complete development environment for Csound.
+
+QuteCsound has been tested on Windows, OS X, Linux and Solaris,
+and it is free software released under the LGPLv2 or at your option
+GPLv3.
+
+There are binary packages for Windows and OS X, and a source package
+for other platforms.
+You can get it here:
+http://sourceforge.net/projects/qutecsound/files/QuteCsound/0.7.0/
+
+There's more information here (along with an overdue home page revamp):
+http://qutecsound.sourceforge.net/
+
+There is also an experimental package for OS X (called "-full"), which
+contains Csound inside, so you don't need a separate Csound installation,
+(which means it will work immediately without installation - very handy if
+you don't have the root password for a system).
+
+Please try it and let us know any issues.
+
+Questions, comments and suggestions for QuteCsound are very welcome
+and can be posted to the main Csound mailing list, but better still,
+join the QuteCsound users mailing list at:
+http://lists.sourceforge.net/lists/listinfo/qutecsound-users
+
+Thanks as usual to the testing team, who made sure regular users get a
+smooth ride by taking a bumpy ride...
+Thanks especially to Francois Pinot, Andy Fillebrown, Joachim Heintz
+and Rene Djack, but also to the translators and the rest of the testers.
+
+QuteCsound accepts donations. If you find QuteCsound useful
+and have some money to spare, please consider donating to the project,
+to support development:
+http://sourceforge.net/project/project_donations.php?group_id=227265
+
+New in version 0.7.0:
+
+Fixed in version 0.7.0:
+
+Internal changes in 0.7.0:
+
+
+If PythonQt is available, run in a python file runs it in the internal
+interpreter. Run in term will run it on a separate terminal.
+
+
+Revision 712
+Modified Mon Aug 16 16:18:08 2010 UTC (4 months ago) by mantaraya36
+Updated translation.
+
+Revision 711
+Modified Mon Aug 16 16:14:02 2010 UTC (4 months ago) by mantaraya36
+Added new functions for widget control from python console api:
++    void setChannelValue(QString channel, double value, int index =
+-1);
++    double getChannelValue(QString channel, int index = -1);
++    void setChannelString(QString channel, QString value, int index =
+-1);
++    QString getChannelString(QString channel, int index = -1);
++
++    void createNewLabel(int x = -1, int y = -1, int index = -1);
++    void createNewDisplay(int x = -1, int y = -1, int index = -1);
++    void createNewScrollNumber(int x = -1, int y = -1, int index = -1);
++    void createNewLineEdit(int x = -1, int y = -1, int index = -1);
++    void createNewSpinBox(int x = -1, int y = -1, int index = -1);
++    void createNewSlider(int x = -1, int y = -1, int index = -1);
++    void createNewButton(int x = -1, int y = -1, int index = -1);
++    void createNewKnob(int x = -1, int y = -1, int index = -1);
++    void createNewCheckBox(int x = -1, int y = -1, int index = -1);
++    void createNewMenu(int x = -1, int y = -1, int index = -1);
++    void createNewMeter(int x = -1, int y = -1, int index = -1);
++    void createNewConsole(int x = -1, int y = -1, int index = -1);
++    void createNewGraph(int x = -1, int y = -1, int index = -1);
++    void createNewScope(int x = -1, int y = -1, int index = -1);
+
+Added opcodeExists() function to API.
+
+
+Revision 710
+Modified Fri Aug 13 08:52:55 2010 UTC (4 months ago) by mantaraya36
+Added checks for portmidi libs and headers for future work.
+Linking to PythonQt should now be done to the correct lib (debug|
+Added functions to the python pyqcsobject object to manipulate the
+editor. The new functions are:
+insertText(QString text, int index = -1, int section = -1)
+setFullText(QString text, int index = -1)
+setCsd(QString text, int index = -1)
+setOrc(QString text, int index = -1)
+setSco(QString text, int index = -1)
+setWidgetsText(QString text, int index = -1);
+setPresetsText(QString text, int index = -1);
+setOptionsText(QString text, int index = -1);
+
+getSelectedText(int section = -1)
+getFullText(int index)
+getCsdint index()
+getOrc(int index)
+getSco(int index)
+getWidgetsText(int index);
+getPresetsText(int index);
+getOptionsText(int index);
+
+
+Revision 704
+Modified Tue Aug 10 06:10:21 2010 UTC (4 months, 1 week ago) by mantaraya36
+
+
+Revision 703
+Modified Mon Aug 9 10:42:08 2010 UTC (4 months, 1 week ago) by mantaraya36
+Fixed event sheet issue: when editing in text and adding lines, these
+would not show up when changing back to sheet view
+Live Events are now longer shown for Python files.
+
+
+
+
+
+
+
+Full ChangeLog:
+
