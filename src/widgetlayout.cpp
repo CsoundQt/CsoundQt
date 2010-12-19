@@ -493,28 +493,6 @@ void WidgetLayout::setValue(int index, QString value)
   widgetsMutex.unlock();
 }
 
-//void WidgetLayout::getValues(QVector<QString> *channelNames,
-//                            QVector<double> *values,
-//                            QVector<QString> *stringValues)
-//{
-//  // This function is called from the Csound thread function, so it must contain realtime compatible functions
-//  if (!this->isEnabled()) {
-//    return;
-//  }
-//  if (m_widgets.size() > (channelNames->size()/2) ) { // This allocation is not realtime, but the user can expect dropouts when creating widgets while running
-//    channelNames->resize(m_widgets.size() *2);
-//    values->resize(m_widgets.size() *2);
-//    stringValues->resize(m_widgets.size() *2);
-//  }
-//  for (int i = 0; i < m_widgets.size() ; i++) {
-//    (*channelNames)[i*2] = m_widgets[i]->getChannelName();
-//    (*values)[i*2] = m_widgets[i]->getValue();
-//    (*stringValues)[i*2] = m_widgets[i]->getStringValue();
-//    (*channelNames)[i*2 + 1] = m_widgets[i]->getChannel2Name();
-//    (*values)[i*2 + 1] = m_widgets[i]->getValue2();
-//  }
-//}
-
 QString WidgetLayout::getStringForChannel(QString channelName)
 {
 //  widgetsMutex.lock();
@@ -3270,13 +3248,13 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
     loadPresetFromIndex(channelValue.second);
   }
   QString channelName = channelValue.first;
-  if (channelValue.first.contains("/")) {
-    channelName = channelValue.first.left(channelValue.first.indexOf("/"));
+  if (channelName.contains("/")) {
+    channelName = channelName.left(channelName.indexOf("/"));
   }
   QString path = channelValue.first.mid(channelValue.first.indexOf("/") + 1);
 //  qDebug() << "WidgetLayout::newValue " << channelName << "--" << path;
   widgetsMutex.lock();
-  if (!channelName.isEmpty()) {
+  if (!channelName.isEmpty()) {  // Pass the value on to the other widgets
     for (int i = 0; i < m_widgets.size(); i++){
       if (m_widgets[i]->getChannelName() == channelName) {
 //        qDebug() << "WidgetLayout::newValue " << channelValue.first << "--" << m_widgets[i]->getChannelName();

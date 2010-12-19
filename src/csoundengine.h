@@ -66,10 +66,16 @@ struct CsoundUserData {
   bool threaded; // Whether running in a separate thread or not
   bool useInvalue; // To select between invalue/outvalue and chnget/chnset
 
-  QVector<QString> channelNames;
-  QVector<double> values;
-  QVector<QString> stringValues;
+  CsoundChannelListEntry **channelList;
+  int numChannels;
+  QList<QString> inputChannelNames;
+  QList<QString> outputChannelNames;
+  QList<QVariant> inputValues;
+  QList<QVariant> outputValues;
+  QList<bool> outputValueChanged;
+
   QVector<double> mouseValues;
+
   RingBuffer audioOutputBuffer;
   unsigned long ksmpscount;  // Use this or rely on the csound time counter? Is using this more efficient, since it is called so often?
 #ifdef QCS_PYTHONQT
