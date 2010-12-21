@@ -121,6 +121,14 @@ WidgetLayout* BaseDocument::newWidgetLayout()
   return wl;
 }
 
+void BaseDocument::widgetsVisible(bool visible)
+{
+  for (int i = 0; i < m_widgetLayouts.size(); i++) {
+    m_widgetLayouts[i]->setVisible(visible);
+    m_widgetLayouts[i]->raise();
+  }
+}
+
 //void BaseDocument::setOpcodeNameList(QStringList opcodeNameList)
 //{
 //  m_view->setOpcodeNameList(opcodeNameList);

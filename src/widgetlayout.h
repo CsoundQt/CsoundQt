@@ -76,8 +76,8 @@ class WidgetLayout : public QWidget
     void setValue(QString channelName, QString value);
     void setValue(int index, double value);
     void setValue(int index, QString value);
-    QString getStringForChannel(QString channelName);
-    double getValueForChannel(QString channelName);
+    QString getStringForChannel(QString channelName, bool *modified = 0);
+    double getValueForChannel(QString channelName, bool *modified = 0);
     void getMouseValues(QVector<double> *values);
     int getMouseX();
     int getMouseY();

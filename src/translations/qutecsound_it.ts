@@ -15,10 +15,6 @@
 <context>
     <name>AdditionalFilesPage</name>
     <message>
-        <source>WizardPage</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Addional files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -33,10 +29,6 @@
 </context>
 <context>
     <name>AppDetailsPage</name>
-    <message>
-        <source>WizardPage</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>App Name</source>
         <translation type="unfinished"></translation>
@@ -1471,10 +1463,6 @@ E&apos; già usata.</translation>
 </context>
 <context>
     <name>PluginsPage</name>
-    <message>
-        <source>WizardPage</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Please highlight the Csound plugins you want to include in the Standalone App. If unsure, highlight all.</source>
         <translation type="unfinished"></translation>

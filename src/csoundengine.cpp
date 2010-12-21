@@ -314,13 +314,21 @@ void CsoundEngine::readWidgetValues(CsoundUserData *ud)
   for (int i = 0; i < ud->inputChannelNames.size(); i++) {
     if(csoundGetChannelPtr(ud->csound, &pvalue, ud->inputChannelNames[i].toLocal8Bit().constData(),
         CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-      *pvalue = (MYFLT) ud->wl->getValueForChannel(ud->inputChannelNames[i]);
+      bool modified = false;
+      double value = ud->wl->getValueForChannel(ud->inputChannelNames[i]);
+      if (modified) {
+        *pvalue = (MYFLT) value;
+      }
 //      *pvalue = (MYFLT) (ud->inputValues[i].toDouble());
     }
     else if(csoundGetChannelPtr(ud->csound, &pvalue, ud->inputChannelNames[i].toLocal8Bit().constData(),
        CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
+      bool modified = false;
       char *string = (char *) pvalue;
-      strcpy(string, ud->wl->getStringForChannel(ud->inputChannelNames[i]).toLocal8Bit().constData());
+      QString value = ud->wl->getStringForChannel(ud->inputChannelNames[i]);
+      if (modified) {
+        strcpy(string, value.toLocal8Bit().constData());
+      }
     }
     else {
       qDebug() << "CsoundEngine::readWidgetValues invalid input channel: " << ud->inputChannelNames[i];

@@ -1182,13 +1182,14 @@ void qutecsound::play(bool realtime, int index)
   }
   int ret = documentPages[curPage]->play(m_options);
   if (ret == -1) {
-    runAct->setChecked(false);
     QMessageBox::critical(this,
                           tr("QuteCsound"),
                           tr("Internal error running Csound."),
                           QMessageBox::Ok);
   }
   else if (ret == -2) { // Error creating temporary file
+    runAct->setChecked(false);
+    qDebug() << "qutecsound::play - Error creating temporary file";
   }
   else if (ret == -3) { // Csound compilation failed
     runAct->setChecked(false);
@@ -1199,6 +1200,9 @@ void qutecsound::play(bool realtime, int index)
       if (!documentPages[curPage]->usesFltk()) { // Don't bring up widget panel if there's an FLTK panel
         if (!m_options->widgetsIndependent) {
           widgetPanel->setVisible(true);
+        }
+        else {
+          documentPages[curPage]->widgetsVisible(true);
         }
         widgetPanel->setFocus(Qt::OtherFocusReason);
         documentPages[curPage]->showLiveEventPanels(showLiveEventsAct->isChecked());

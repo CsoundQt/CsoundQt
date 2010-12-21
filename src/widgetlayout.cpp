@@ -246,13 +246,14 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
   int neww, newh;
   neww = m_w < s.width() ? s.width() : m_w;
   newh = m_h < s.height() ? s.height() : m_h;
-  this->resize(neww,newh);
-  if (!m_contained) {
-    this->move(m_posx, m_posy);
-//    setOuterGeometry();
+  if (m_contained) {
+    this->resize(s.width(), s.height());
+    setOuterGeometry(m_posx, m_posx, s.width(), s.height());
   }
   else {
-    setOuterGeometry(m_posx, m_posx, s.width(), s.height());
+    this->move(m_posx, m_posy);
+    this->resize(neww,newh);
+//    setOuterGeometry();
   }
 }
 
@@ -493,12 +494,15 @@ void WidgetLayout::setValue(int index, QString value)
   widgetsMutex.unlock();
 }
 
-QString WidgetLayout::getStringForChannel(QString channelName)
+QString WidgetLayout::getStringForChannel(QString channelName, bool *modified)
 {
 //  widgetsMutex.lock();
   for (int i = 0; i < m_activeWidgets ; i++) {
     if (m_widgets[i]->getChannelName() == channelName) {
       QString value = m_widgets[i]->getStringValue();
+//      if (modified != 0) {
+//        *modified =false;
+//      }
 //      widgetsMutex.unlock();
       return value;
     }
@@ -507,7 +511,7 @@ QString WidgetLayout::getStringForChannel(QString channelName)
   return QString();
 }
 
-double WidgetLayout::getValueForChannel(QString channelName)
+double WidgetLayout::getValueForChannel(QString channelName, bool *modified)
 {
 //  widgetsMutex.lock();
   for (int i = 0; i < m_activeWidgets ; i++) {
@@ -1371,17 +1375,16 @@ QSize WidgetLayout::getUsedSize()
 void WidgetLayout::adjustLayoutSize()
 {
   // This function should not be locked as it is sometimes called from another function that locks.
-//  widgetsMutex.lock();
+
   QSize s = getUsedSize();
-//  widgetsMutex.unlock();
-  if (this->size() != s) {
-//    this->resize(s);
-    if (!m_contained) {
-//      QRect r = this->geometry();
-  //    qDebug() << "WidgetLayout::layoutResized()" <<r.width() << r.height() ;
-//      setOuterGeometry(r.x(), r.y(), r.width(), r.height());
+  if (m_contained) {
+    if (this->size() != s) {
+      this->resize(s);
     }
   }
+//  QRect r = this->geometry();
+//  //      qDebug() << "WidgetLayout::layoutResized()" <<r.width() << r.height() ;
+//      setOuterGeometry(r.x(), r.y(), r.width(), r.height());
 }
 
 void WidgetLayout::selectionChanged(QRect selection)
@@ -3273,6 +3276,8 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
   widgetsMutex.unlock();
 }
 
+//FIXME there's no need to go through here coming from the widgets...
+// at least not to set the widget's value...
 void WidgetLayout::newValue(QPair<QString, QString> channelValue)
 {
   QString channelName = channelValue.first;

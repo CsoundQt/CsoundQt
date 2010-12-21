@@ -45,6 +45,7 @@ class BaseDocument : public QObject
     virtual void setTextString(QString &text) = 0;
     int parseTextString(QString &text);
     virtual WidgetLayout* newWidgetLayout();
+    void widgetsVisible(bool visible);
 //    void setOpcodeNameList(QStringList opcodeNameList);
 
     // Get internal components
