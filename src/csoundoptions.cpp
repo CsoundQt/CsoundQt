@@ -112,8 +112,8 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
           jackName.replace("*",fileName1.mid(fileName1.lastIndexOf(QDir::separator()) + 1));
           jackName.replace(" ","_");
         }
-        if (rtJackName.size() > m_jackNameSize) {
-          rtJackName.resize(m_jackNameSize);
+        if (jackName.size() > m_jackNameSize) {
+          jackName = jackName.left(m_jackNameSize);
         }
         list << "-+jack_client=" + jackName;
       }

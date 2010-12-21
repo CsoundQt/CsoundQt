@@ -732,7 +732,7 @@ void qutecsound::deleteCurrentTab()
   DocumentPage *d = documentPages[curPage];
   documentPages.remove(curPage);
   documentTabs->removeTab(curPage);
- delete  d;
+  delete  d;
   if (curPage >= documentPages.size()) {
     curPage = documentPages.size() - 1;
   }
@@ -3075,6 +3075,38 @@ void qutecsound::createMenus()
     newAction->setData(fileName);
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
+
+  mccurdyFiles.clear();
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/01FMSynthesisVibratoToSideBands.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/02SimpleModulatorCarrier.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/03ModulatorCarrier.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/04ModulatorCarrierWithEnvelopes.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/05_2xModulatorCarrierWithEnvelopes.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/06FMModModCar.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/07FMModModCarEnvelopes.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/08FM2ModCar.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/09FM3ModCar.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/10FMMod2Car.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/11FMModCarModCar.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/12PhaseModulationSynthesisCf.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/13PhaseModulationSynthesisMfC.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/14PhaseModulationSynthesisMCf.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/15PhaseModulationSynthesisMM_C.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/16PhaseModulationSynthesisMMM_C.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/17PhaseModulationSynthesisMMC.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/18PhaseModulationSynthesisMMMC.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/foscil_foscili.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/RingModulationAmplitudeModulation.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Modulation/TX81Z.csd");
+
+  submenu = mccurdyMenu->addMenu(tr("Modulation"));
+  foreach (QString fileName, mccurdyFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
 
   // Add the rest
   for (int i = 0; i < subMenus.size(); i++) {

@@ -57,6 +57,7 @@ BaseDocument::~BaseDocument()
   m_csEngine->freeze();
   while (!m_widgetLayouts.isEmpty()) {
     WidgetLayout *wl = m_widgetLayouts.takeLast();
+    wl->hide();
     wl->deleteLater();  //FIXME Still crashing ocassionally?
   }
   m_csEngine->deleteLater();

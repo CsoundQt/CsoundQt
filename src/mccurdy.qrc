@@ -79,5 +79,26 @@
         <file>Examples/McCurdy Collection/FFT/mincer.csd</file>
         <file>Examples/McCurdy Collection/FFT/temposcal.csd</file>
         <file>Examples/McCurdy Collection/Filters/bandpass.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/01FMSynthesisVibratoToSideBands.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/02SimpleModulatorCarrier.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/03ModulatorCarrier.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/04ModulatorCarrierWithEnvelopes.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/05_2xModulatorCarrierWithEnvelopes.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/06FMModModCar.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/07FMModModCarEnvelopes.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/08FM2ModCar.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/09FM3ModCar.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/10FMMod2Car.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/11FMModCarModCar.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/12PhaseModulationSynthesisCf.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/13PhaseModulationSynthesisMfC.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/14PhaseModulationSynthesisMCf.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/15PhaseModulationSynthesisMM_C.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/16PhaseModulationSynthesisMMM_C.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/17PhaseModulationSynthesisMMC.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/18PhaseModulationSynthesisMMMC.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/foscil_foscili.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/RingModulationAmplitudeModulation.csd</file>
+        <file>Examples/McCurdy Collection/Modulation/TX81Z.csd</file>
     </qresource>
 </RCC>
