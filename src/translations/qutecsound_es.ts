@@ -3045,8 +3045,8 @@ ChannelH:</source>
         <location filename="../qutecsound.cpp" line="1156"/>
         <location filename="../qutecsound.cpp" line="1186"/>
         <location filename="../qutecsound.cpp" line="1411"/>
-        <location filename="../qutecsound.cpp" line="3684"/>
-        <location filename="../qutecsound.cpp" line="3937"/>
+        <location filename="../qutecsound.cpp" line="3738"/>
+        <location filename="../qutecsound.cpp" line="3991"/>
         <source>QuteCsound</source>
         <translation></translation>
     </message>
@@ -3067,7 +3067,7 @@ QuteCsound probablemente se cerrará si trata de correr Csound.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="440"/>
-        <location filename="../qutecsound.cpp" line="3694"/>
+        <location filename="../qutecsound.cpp" line="3748"/>
         <source>File already open</source>
         <translation>Archivo ya abierto</translation>
     </message>
@@ -3118,7 +3118,7 @@ Desea salvarlo?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="971"/>
-        <location filename="../qutecsound.cpp" line="4033"/>
+        <location filename="../qutecsound.cpp" line="4087"/>
         <source>Ok</source>
         <translation></translation>
     </message>
@@ -4264,19 +4264,19 @@ La funcionalidad extendida de Python no está disponible</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2556"/>
-        <location filename="../qutecsound.cpp" line="3247"/>
+        <location filename="../qutecsound.cpp" line="3301"/>
         <source>File</source>
         <translation>Archivo</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2574"/>
-        <location filename="../qutecsound.cpp" line="3253"/>
+        <location filename="../qutecsound.cpp" line="3307"/>
         <source>Edit</source>
         <translation>Editar</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2605"/>
-        <location filename="../qutecsound.cpp" line="3261"/>
+        <location filename="../qutecsound.cpp" line="3315"/>
         <source>Control</source>
         <translation>Control</translation>
     </message>
@@ -4290,12 +4290,12 @@ La funcionalidad extendida de Python no está disponible</translation>
         <translation type="obsolete">Sintes</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2737"/>
+        <location filename="../qutecsound.cpp" line="2738"/>
         <source>Examples</source>
         <translation>Ejemplos</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3098"/>
+        <location filename="../qutecsound.cpp" line="3152"/>
         <source>Help</source>
         <translation>Ayuda</translation>
     </message>
@@ -4313,7 +4313,7 @@ La funcionalidad extendida de Python no está disponible</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2168"/>
-        <location filename="../qutecsound.cpp" line="3271"/>
+        <location filename="../qutecsound.cpp" line="3325"/>
         <source>Configure</source>
         <translation>Configurar</translation>
     </message>
@@ -4323,112 +4323,122 @@ La funcionalidad extendida de Python no está disponible</translation>
         <translation>Borrar completamente la línea actual</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2685"/>
+        <location filename="../qutecsound.cpp" line="2686"/>
         <source>Music</source>
         <translation>Música</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2709"/>
+        <location filename="../qutecsound.cpp" line="2710"/>
         <source>Useful</source>
         <translation>Utiles</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2735"/>
+        <location filename="../qutecsound.cpp" line="2736"/>
         <source>Miscellaneous</source>
         <translation>Misceláneo</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2750"/>
+        <location filename="../qutecsound.cpp" line="2751"/>
         <source>Getting Started</source>
         <translation>Introducción</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2751"/>
+        <location filename="../qutecsound.cpp" line="2752"/>
         <source>Basics</source>
         <translation>Básico</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2771"/>
+        <location filename="../qutecsound.cpp" line="2772"/>
         <source>Realtime Interaction</source>
         <translation>Interacción en tiempo real</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2787"/>
+        <location filename="../qutecsound.cpp" line="2788"/>
         <source>Language Features</source>
         <translation>Características del Lenguaje</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2809"/>
+        <location filename="../qutecsound.cpp" line="2810"/>
         <source>FLOSS Manual Examples</source>
         <translation>Ejemplos del manual FLOSS</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2821"/>
+        <location filename="../qutecsound.cpp" line="2822"/>
         <source>02 Quick Start</source>
         <translation>02 Introducción rápida</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2902"/>
+        <location filename="../qutecsound.cpp" line="2903"/>
         <source>03 Csound Language</source>
         <translation>03 Lenguaje de Csound</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2922"/>
+        <location filename="../qutecsound.cpp" line="2923"/>
         <source>07 MIDI</source>
         <translation>07 MIDI</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2930"/>
+        <location filename="../qutecsound.cpp" line="2931"/>
         <source>McCurdy Collection</source>
         <translation>Colección McCurdy</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2933"/>
+        <location filename="../qutecsound.cpp" line="2934"/>
         <source>3D Audio</source>
         <translation>Audio 3D</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2947"/>
+        <location filename="../qutecsound.cpp" line="2948"/>
         <source>Additive Synthesis</source>
         <translation>Síntesis aditiva</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2960"/>
+        <location filename="../qutecsound.cpp" line="2961"/>
         <source>Convolution</source>
         <translation>Convolución</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2983"/>
+        <location filename="../qutecsound.cpp" line="2984"/>
         <source>Delays</source>
         <translation>Delays (Retrasos)</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2999"/>
+        <location filename="../qutecsound.cpp" line="3000"/>
         <source>Distortion</source>
         <translation>Distorsión</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3031"/>
+        <location filename="../qutecsound.cpp" line="3032"/>
         <source>FFT</source>
         <translation>FFT</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3071"/>
+        <location filename="../qutecsound.cpp" line="3072"/>
         <source>Filters</source>
         <translation>Filtros</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3090"/>
+        <location filename="../qutecsound.cpp" line="3103"/>
+        <source>Modulation</source>
+        <translation>Modulación</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3125"/>
+        <source>GranularSynthesis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3144"/>
         <source>Favorites</source>
         <translation>Favoritos</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3091"/>
+        <location filename="../qutecsound.cpp" line="3145"/>
         <source>Scripts</source>
         <translation>Scripts</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3292"/>
+        <location filename="../qutecsound.cpp" line="3346"/>
         <source>Ready</source>
         <translation>Listo</translation>
     </message>
@@ -4447,41 +4457,41 @@ ha sido modificado.
 Desea salvar los cambios antes de cerrar?</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3685"/>
+        <location filename="../qutecsound.cpp" line="3739"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation>No es posible leer el archivo %1:
 %2.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3798"/>
+        <location filename="../qutecsound.cpp" line="3852"/>
         <source>File loaded</source>
         <translation>Archivo cargado</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3913"/>
+        <location filename="../qutecsound.cpp" line="3967"/>
         <source>Application</source>
         <translation>Aplicación</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3914"/>
+        <location filename="../qutecsound.cpp" line="3968"/>
         <source>Cannot write file %1:
 %2.</source>
         <translation>No es posible escribir el archivo %1:
 %2.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3925"/>
+        <location filename="../qutecsound.cpp" line="3979"/>
         <source>File saved</source>
         <translation>Archivo salvado</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3937"/>
+        <location filename="../qutecsound.cpp" line="3991"/>
         <source>%1[*] - %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4039"/>
+        <location filename="../qutecsound.cpp" line="4093"/>
         <source>Do not ask again</source>
         <translation>No preguntar nuevamente</translation>
     </message>

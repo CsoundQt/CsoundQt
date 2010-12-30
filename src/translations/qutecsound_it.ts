@@ -3700,5 +3700,13 @@ Extended Python features are not available</source>
         <source>Scripts</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Modulation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GranularSynthesis</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

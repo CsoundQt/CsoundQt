@@ -244,6 +244,7 @@
         <file>../examples/Synths/Simple_FM_Synth.csd</file>
         <file>../examples/Synths/Phase_Mod_Synth.csd</file>
         <file>../examples/Synths/Formant_Synth.csd</file>
+        <file>../examples/Synths/B6_Hammond.csd</file>
         <file>../examples/Synths/Diffamator.csd</file>
         <file>../examples/Synths/Sruti-Drone_Box.csd</file>
         <file>../examples/Synths/Pipe_Synth.csd</file>

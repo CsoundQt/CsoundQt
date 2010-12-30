@@ -2671,6 +2671,7 @@ void qutecsound::createMenus()
   synthFiles.append(":/examples/Synths/Simple_FM_Synth.csd");
   synthFiles.append(":/examples/Synths/Phase_Mod_Synth.csd");
   synthFiles.append(":/examples/Synths/Formant_Synth.csd");
+  synthFiles.append(":/examples/Synths/B6_Hammond.csd");
   synthFiles.append(":/examples/Synths/Diffamator.csd");
   synthFiles.append(":/examples/Synths/Sruti-Drone_Box.csd");
   synthFiles.append(":/examples/Synths/Pipe_Synth.csd");
@@ -3198,6 +3199,27 @@ flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E06.csd");
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
 
+  mccurdyFiles.clear();
+  mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/fof.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/fof2.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/fog.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/fofx6_Mono.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/fofx6_Poly.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/grain3.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/granule.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesissyncgrain/.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/syncloop.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/MorphingPresets.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/SchedkwhenGranulation.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/sndwarp.csd");
+
+  submenu = mccurdyMenu->addMenu(tr("GranularSynthesis"));
+  foreach (QString fileName, mccurdyFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
 
   // Add the rest
   for (int i = 0; i < subMenus.size(); i++) {
