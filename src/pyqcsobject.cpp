@@ -217,6 +217,16 @@ QString PyQcsObject::getOptionsText(int index)
   return m_qcs->getOptionsText(index);
 }
 
+QString PyQcsObject::getFileName(int index)
+{
+  return m_qcs->getFileName(index);
+}
+
+QString PyQcsObject::getFilePath(int index)
+{
+  return m_qcs->getFilePath(index);
+}
+
 void PyQcsObject::setChannelValue(QString channel, double value, int index)
 {
   return m_qcs->setChannelValue(channel, value, index);

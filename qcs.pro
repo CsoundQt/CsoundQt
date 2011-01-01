@@ -44,10 +44,12 @@ TRANSLATIONS = "src/translations/qutecsound_en.ts" \
     "src/translations/qutecsound_fi.ts"
 pythonqt { 
     include ( $${PYTHONQT_TREE_DIR}/build/PythonQt.prf )
+    include ( $${PYTHONQT_TREE_DIR}/build/PythonQt_QtAll.prf )
     
     # include ( $${PYTHONQT_TREE_DIR}/build/PythonQt_QtAll.prf )
     win32:INCLUDEPATH *= $${PYTHON_INCLUDE_DIR}
     INCLUDEPATH *= $${PYTHONQT_TREE_DIR}/src
+    INCLUDEPATH *= $${PYTHONQT_TREE_DIR}/extensions/PythonQt_QtAll
 }
 
 # Override and always use release version of PythonQT even if building for debug

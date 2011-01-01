@@ -23,40 +23,23 @@
 #include "pythonconsole.h"
 #include "PythonQt.h"
 //#include "PythonQtGui.h"
-//#include "PythonQt_QtAll.h"
+#include "PythonQt_QtAll.h"
 #include "gui/PythonQtScriptingConsole.h"
 #include "pyqcsobject.h"
 #include "qutesheet.h"
 
 #include "qutecsound.h"
 
-PythonConsole::PythonConsole(QWidget *parent) : QDockWidget(parent)
+PythonConsole::PythonConsole(QWidget *parent)
+  : QDockWidget(parent), m_pqcs(0), m_console(0)
 {
 //  m_text = new QTextEdit(this);
 //  m_text->setReadOnly(true);
 
   setWindowTitle(tr("Python Console"));
   PythonQt::init(PythonQt::RedirectStdOut);
-//  PythonQt_QtAll::init();
-
-  PythonQtObjectPtr  mainContext = PythonQt::self()->getMainModule();
-  m_console = new PythonQtScriptingConsole(this, mainContext);
-
-  // add a QObject to the namespace of the main python context
-  m_pqcs = new PyQcsObject() ;
-  m_pqcs->setQuteCsound(static_cast<qutecsound *>(parentWidget()));
-  PythonQt::self()->registerCPPClass("QuteSheet", "","qs", PythonQtCreateObject<QuteSheet>);
-  mainContext.addObject("q", m_pqcs);
-  mainContext.evalScript("from PythonQt.qs import QuteSheet");
-//  mainContext.evalScript("print 'QuteCsound Python Console.'");
-//  mainContext.evalScript("s = q.schedule");
-//  mainContext.evalScript("import os");
-
-  setWidget(m_console);
-//  m_console->setCurrentFont(QFont("Courier New"));
-//  m_console->setFontFamily("Courier New");
-//  m_console->setAcceptRichText (false);
-  m_console->show();
+  PythonQt_QtAll::init();
+  initializeInterpreter();
 }
 
 PythonConsole::~PythonConsole()
@@ -95,6 +78,34 @@ void PythonConsole::runScript(QString fileName)
   mainContext.evalScript(printScript);
   m_console->appendCommandPrompt();
 
+}
+
+void PythonConsole::initializeInterpreter()
+{
+  PythonQtObjectPtr  mainContext = PythonQt::self()->getMainModule();
+  if (m_console != 0) {
+    delete m_console;
+  }
+  if (m_pqcs != 0) {
+    delete m_pqcs;
+  }
+  m_console = new PythonQtScriptingConsole(this, mainContext);
+
+  // add a QObject to the namespace of the main python context
+  m_pqcs = new PyQcsObject() ;
+  m_pqcs->setQuteCsound(static_cast<qutecsound *>(parentWidget()));
+  PythonQt::self()->registerCPPClass("QuteSheet", "","qs", PythonQtCreateObject<QuteSheet>);
+  mainContext.addObject("q", m_pqcs);
+  mainContext.evalScript("from PythonQt.qs import QuteSheet");
+  mainContext.evalScript("print 'QuteCsound Python Interpreter Initialized.'");
+  //  mainContext.evalScript("s = q.schedule");
+  //  mainContext.evalScript("import os");
+
+    setWidget(m_console);
+  //  m_console->setCurrentFont(QFont("Courier New"));
+  //  m_console->setFontFamily("Courier New");
+  //  m_console->setAcceptRichText (false);
+    m_console->show();
 }
 
 void PythonConsole::closeEvent(QCloseEvent * /*event*/)

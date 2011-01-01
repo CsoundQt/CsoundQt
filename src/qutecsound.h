@@ -98,6 +98,8 @@ class qutecsound:public QMainWindow
     QString getWidgetsText(int index);
     QString getPresetsText(int index);
     QString getOptionsText(int index);
+    QString getFileName(int index);
+    QString getFilePath(int index);
 
     // Widgets
     void setChannelValue(QString channel, double value, int index = -1);

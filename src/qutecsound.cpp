@@ -440,13 +440,7 @@ void qutecsound::open()
       statusBar()->showMessage(tr("File already open"), 10000);
     }
     else if (!fileName.isEmpty()) {
-      if (m_options->autoJoin) {
-        loadFile(fileName, true);
-      }
-      else {
-        loadCompanionFile(fileName);
-        loadFile(fileName, true);
-      }
+      loadFile(fileName, true);
     }
   }
 }
@@ -822,10 +816,14 @@ void qutecsound::showNewFormatWarning()
 bool qutecsound::saveAs()
 {
   QString fileName = getSaveFileName();
-  if (fileName != "")
-    return saveFile(fileName);
-  else
-    return false;
+  if (fileName != "") {
+    if (saveFile(fileName)) {
+      setCurrentFile(fileName);
+      documentPages[curPage]->setFileName(fileName);
+      return true;
+    }
+  }
+  return false;
 }
 
 void qutecsound::createApp()
@@ -3908,6 +3906,10 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
       }
     }
   }
+  else {
+    loadCompanionFile(fileName);
+  }
+
   if (fileName == ":/default.csd")
     fileName = QString("");
 
@@ -4484,6 +4486,30 @@ QString qutecsound::getOptionsText(int index)
   }
   if (index < documentTabs->count() && index >= 0) {
     text = documentPages[index]->getOptionsText();
+  }
+  return text;
+}
+
+QString qutecsound::getFileName(int index)
+{
+  QString text = QString();
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    text = documentPages[index]->getFileName();
+  }
+  return text;
+}
+
+QString qutecsound::getFilePath(int index)
+{
+  QString text = QString();
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    text = documentPages[index]->getFilePath();
   }
   return text;
 }

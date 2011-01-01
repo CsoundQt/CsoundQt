@@ -89,6 +89,8 @@ class PyQcsObject : public QObject {
     QString getWidgetsText(int index = -1);
     QString getPresetsText(int index = -1);
     QString getOptionsText(int index = -1);
+    QString getFileName(int index = -1);
+    QString getFilePath(int index = -1);
 
     //Widgets
     void setChannelValue(QString channel, double value, int index = -1);

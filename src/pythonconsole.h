@@ -39,6 +39,7 @@ class PythonConsole : public QDockWidget
 //    void runCommand(QString command);
     void evaluate(QString evalCode, bool notify = true);
     void runScript(QString fileName);
+    void initializeInterpreter();
 
   protected:
     virtual void closeEvent(QCloseEvent * event);
