@@ -34,7 +34,7 @@
 
 #include <csound.hpp>
 
-#define PYQCSVERSION "1.0.0"
+#define PYQCSVERSION "0.9.0"
 
 class qutecsound;
 class QuteSheet;
@@ -77,7 +77,7 @@ class PyQcsObject : public QObject {
     void setSco(QString text, int index = -1);
     void setWidgetsText(QString text, int index = -1); //FIXME how to handle parsing errors?
     void setPresetsText(QString text, int index = -1); //FIXME how to handle parsing errors?
-    void setOptionsText(QString text, int index = -1);
+    void setOptionsText(QString text, int index = -1); // TODO: implement
 
     int getDocument(QString name = ""); // Returns document index. -1 if not current open
 
@@ -95,28 +95,30 @@ class PyQcsObject : public QObject {
     double getChannelValue(QString channel, int index = -1);
     void setChannelString(QString channel, QString value, int index = -1);
     QString getChannelString(QString channel, int index = -1);
+    void setWidgetProperty(QString channel, QString property, QVariant value, int index= -1);
+    QVariant getWidgetProperty(QString channel, QString property, int index= -1);
 
-    void createNewLabel(int x = -1, int y = -1, int index = -1);
-    void createNewDisplay(int x = -1, int y = -1, int index = -1);
-    void createNewScrollNumber(int x = -1, int y = -1, int index = -1);
-    void createNewLineEdit(int x = -1, int y = -1, int index = -1);
-    void createNewSpinBox(int x = -1, int y = -1, int index = -1);
-    void createNewSlider(int x = -1, int y = -1, int index = -1);
-    void createNewButton(int x = -1, int y = -1, int index = -1);
-    void createNewKnob(int x = -1, int y = -1, int index = -1);
-    void createNewCheckBox(int x = -1, int y = -1, int index = -1);
-    void createNewMenu(int x = -1, int y = -1, int index = -1);
-    void createNewMeter(int x = -1, int y = -1, int index = -1);
-    void createNewConsole(int x = -1, int y = -1, int index = -1);
-    void createNewGraph(int x = -1, int y = -1, int index = -1);
-    void createNewScope(int x = -1, int y = -1, int index = -1);
+    QString createNewLabel(int x, int y, int index = -1);
+    QString createNewDisplay(int x, int y, int index = -1);
+    QString createNewScrollNumber(int x, int y, int index = -1);
+    QString createNewLineEdit(int x, int y, int index = -1);
+    QString createNewSpinBox(int x, int y, int index = -1);
+    QString createNewSlider(int x, int y, int index = -1);
+    QString createNewButton(int x, int y, int index = -1);
+    QString createNewKnob(int x, int y, int index = -1);
+    QString createNewCheckBox(int x, int y, int index = -1);
+    QString createNewMenu(int x, int y, int index = -1);
+    QString createNewMeter(int x, int y, int index = -1);
+    QString createNewConsole(int x, int y, int index = -1);
+    QString createNewGraph(int x, int y, int index = -1);
+    QString createNewScope(int x, int y, int index = -1);
 
     // Live Events
-    QuteSheet* getSheet(int index = -1, int sheetIndex = -1);
+    QuteSheet* getSheet(int index = -1, int sheetIndex = -1);  //TODO implement both getSheet functions
     QuteSheet* getSheet(int index, QString sheetName);
 
     //Scheduler
-    void schedule(QVariant time, QVariant event);
+    void schedule(QVariant time, QVariant event);  // TODO implement receiving lists
     void sendEvent(int index, QString events);
     void sendEvent(QString events);
 

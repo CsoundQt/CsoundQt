@@ -4532,145 +4532,181 @@ QString qutecsound::getChannelString(QString channel, int index)
   return value;
 }
 
-
-void qutecsound::createNewLabel(int x , int y , int index)
+void qutecsound::setWidgetProperty(QString channel, QString property, QVariant value, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->createNewLabel(x,y);
+    documentPages[index]->setWidgetProperty(channel, property, value);
   }
 }
 
-void qutecsound::createNewDisplay(int x , int y , int index)
+QVariant qutecsound::getWidgetProperty(QString channel, QString property, int index)
 {
+  QVariant value;
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->createNewDisplay(x,y);
+    value = documentPages[index]->getWidgetProperty(channel, property);
   }
+  return value;
 }
 
-void qutecsound::createNewScrollNumber(int x , int y , int index)
+
+QString qutecsound::createNewLabel(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->createNewScrollNumber(x,y);
+    return documentPages[index]->createNewLabel(x,y);
   }
+  return QString();
 }
 
-void qutecsound::createNewLineEdit(int x , int y , int index)
+QString qutecsound::createNewDisplay(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->createNewLineEdit(x,y);
+    return documentPages[index]->createNewDisplay(x,y);
   }
+  return QString();
 }
 
-void qutecsound::createNewSpinBox(int x , int y , int index)
+QString qutecsound::createNewScrollNumber(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->createNewSpinBox(x,y);
+    return documentPages[index]->createNewScrollNumber(x,y);
   }
+  return QString();
 }
 
-void qutecsound::createNewSlider(int x , int y , int index)
+QString qutecsound::createNewLineEdit(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->createNewSlider(x,y);
+    return documentPages[index]->createNewLineEdit(x,y);
   }
+  return QString();
 }
 
-void qutecsound::createNewButton(int x , int y , int index)
+QString qutecsound::createNewSpinBox(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->createNewButton(x,y);
+    return documentPages[index]->createNewSpinBox(x,y);
   }
+  return QString();
 }
 
-void qutecsound::createNewKnob(int x , int y , int index)
+QString qutecsound::createNewSlider(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->createNewKnob(x,y);
+    return documentPages[index]->createNewSlider(x,y);
   }
+  return QString();
 }
 
-void qutecsound::createNewCheckBox(int x , int y , int index)
+QString qutecsound::createNewButton(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->createNewCheckBox(x,y);
+    return documentPages[index]->createNewButton(x,y);
   }
+  return QString();
 }
 
-void qutecsound::createNewMenu(int x , int y , int index)
+QString qutecsound::createNewKnob(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->createNewMenu(x,y);
+    return documentPages[index]->createNewKnob(x,y);
   }
+  return QString();
 }
 
-void qutecsound::createNewMeter(int x , int y , int index)
+QString qutecsound::createNewCheckBox(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->createNewMeter(x,y);
+    return documentPages[index]->createNewCheckBox(x,y);
   }
+  return QString();
 }
 
-void qutecsound::createNewConsole(int x , int y , int index)
+QString qutecsound::createNewMenu(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->createNewConsole(x,y);
+    return documentPages[index]->createNewMenu(x,y);
   }
+  return QString();
 }
 
-void qutecsound::createNewGraph(int x , int y , int index)
+QString qutecsound::createNewMeter(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->createNewGraph(x,y);
+    return documentPages[index]->createNewMeter(x,y);
   }
+  return QString();
 }
 
-void qutecsound::createNewScope(int x , int y , int index)
+QString qutecsound::createNewConsole(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->createNewScope(x,y);
+    return documentPages[index]->createNewConsole(x,y);
   }
+  return QString();
+}
+
+QString qutecsound::createNewGraph(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    return documentPages[index]->createNewGraph(x,y);
+  }
+  return QString();
+}
+
+QString qutecsound::createNewScope(int x , int y , int index)
+{
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    return documentPages[index]->createNewScope(x,y);
+  }
+  return QString();
 }
 
 EventSheet* qutecsound::getSheet(int index, int sheetIndex)

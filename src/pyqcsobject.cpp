@@ -153,16 +153,22 @@ void PyQcsObject::setSco(QString text, int index)
 
 void PyQcsObject::setWidgetsText(QString text, int index)
 {
+  PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
+  mainContext.evalScript("print ''setWidgetsText() not implemented yet.");
   return m_qcs->setWidgetsText(text, index);
 }
 
 void PyQcsObject::setPresetsText(QString text, int index)
 {
+  PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
+  mainContext.evalScript("print ''setPresetsText() not implemented yet.");
   return m_qcs->setPresetsText(text, index);
 }
 
 void PyQcsObject::setOptionsText(QString text, int index)
 {
+  PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
+  mainContext.evalScript("print ''setOptionsText() not implemented yet.");
   return m_qcs->setOptionsText(text, index);
 }
 
@@ -231,72 +237,82 @@ QString PyQcsObject::getChannelString(QString channel, int index)
   return m_qcs->getChannelString(channel, index);
 }
 
-void PyQcsObject::createNewLabel(int x, int y, int index)
+void PyQcsObject::setWidgetProperty(QString channel, QString property, QVariant value, int index)
+{
+  return m_qcs->setWidgetProperty(channel, property, value, index);
+}
+
+QVariant PyQcsObject::getWidgetProperty(QString channel, QString property, int index)
+{
+  return m_qcs->getWidgetProperty(channel, property, index);
+}
+
+QString PyQcsObject::createNewLabel(int x, int y, int index)
 {
   return m_qcs->createNewLabel(x,y, index);
 }
 
-void PyQcsObject::createNewDisplay(int x, int y, int index)
+QString PyQcsObject::createNewDisplay(int x, int y, int index)
 {
   return m_qcs->createNewDisplay(x,y, index);
 }
 
-void PyQcsObject::createNewScrollNumber(int x, int y, int index)
+QString PyQcsObject::createNewScrollNumber(int x, int y, int index)
 {
   return m_qcs->createNewScrollNumber(x,y, index);
 }
 
-void PyQcsObject::createNewLineEdit(int x, int y, int index)
+QString PyQcsObject::createNewLineEdit(int x, int y, int index)
 {
   return m_qcs->createNewLineEdit(x,y, index);
 }
 
-void PyQcsObject::createNewSpinBox(int x, int y, int index)
+QString PyQcsObject::createNewSpinBox(int x, int y, int index)
 {
   return m_qcs->createNewSpinBox(x,y, index);
 }
 
-void PyQcsObject::createNewSlider(int x, int y, int index)
+QString PyQcsObject::createNewSlider(int x, int y, int index)
 {
   return m_qcs->createNewSlider(x,y, index);
 }
 
-void PyQcsObject::createNewButton(int x, int y, int index)
+QString PyQcsObject::createNewButton(int x, int y, int index)
 {
   return m_qcs->createNewButton(x,y, index);
 }
 
-void PyQcsObject::createNewKnob(int x, int y, int index)
+QString PyQcsObject::createNewKnob(int x, int y, int index)
 {
   return m_qcs->createNewKnob(x,y, index);
 }
 
-void PyQcsObject::createNewCheckBox(int x, int y, int index)
+QString PyQcsObject::createNewCheckBox(int x, int y, int index)
 {
   return m_qcs->createNewCheckBox(x,y, index);
 }
 
-void PyQcsObject::createNewMenu(int x, int y, int index)
+QString PyQcsObject::createNewMenu(int x, int y, int index)
 {
   return m_qcs->createNewMenu(x,y, index);
 }
 
-void PyQcsObject::createNewMeter(int x, int y, int index)
+QString PyQcsObject::createNewMeter(int x, int y, int index)
 {
   return m_qcs->createNewMeter(x,y, index);
 }
 
-void PyQcsObject::createNewConsole(int x, int y, int index)
+QString PyQcsObject::createNewConsole(int x, int y, int index)
 {
   return m_qcs->createNewConsole(x,y, index);
 }
 
-void PyQcsObject::createNewGraph(int x, int y, int index)
+QString PyQcsObject::createNewGraph(int x, int y, int index)
 {
   return m_qcs->createNewGraph(x,y, index);
 }
 
-void PyQcsObject::createNewScope(int x, int y, int index)
+QString PyQcsObject::createNewScope(int x, int y, int index)
 {
   return m_qcs->createNewScope(x,y, index);
 }
@@ -330,6 +346,7 @@ void PyQcsObject::schedule(QVariant time, QVariant event)
     qDebug() << "PyQcsObject::schedule: " << eventLine;
   }
   else if (time.canConvert<QVariantList>()) { // list of events
+
   }
 }
 

@@ -85,6 +85,8 @@ class WidgetLayout : public QWidget
     int getMouseRelY();
     int getMouseBut1();
     int getMouseBut2();
+    void setWidgetProperty(QString channel, QString property, QVariant value);
+    QVariant getWidgetProperty(QString channel, QString property);
 
     // Behavior
     void setKeyRepeatMode(bool repeat);
@@ -108,7 +110,7 @@ class WidgetLayout : public QWidget
 
     bool uuidFree(QString uuid);
     int newXmlWidget(QDomNode node, bool offset = false, bool newId = false);
-    int newMacWidget(QString widgetLine, bool offset = false);  // Offset is used when pasting duplicated widgets
+    QString newMacWidget(QString widgetLine, bool offset = false);  // Offset is used when pasting duplicated widgets
     void registerWidget(QuteWidget *widget);
 
     QVector<QVector<int> > midiQueue;
@@ -189,20 +191,20 @@ class WidgetLayout : public QWidget
     QAction *recallPresetAct;
 
   public slots:
-    void createNewLabel(int x = -1, int y = -1);
-    void createNewDisplay(int x = -1, int y = -1);
-    void createNewScrollNumber(int x = -1, int y = -1);
-    void createNewLineEdit(int x = -1, int y = -1);
-    void createNewSpinBox(int x = -1, int y = -1);
-    void createNewSlider(int x = -1, int y = -1);
-    void createNewButton(int x = -1, int y = -1);
-    void createNewKnob(int x = -1, int y = -1);
-    void createNewCheckBox(int x = -1, int y = -1);
-    void createNewMenu(int x = -1, int y = -1);
-    void createNewMeter(int x = -1, int y = -1);
-    void createNewConsole(int x = -1, int y = -1);
-    void createNewGraph(int x = -1, int y = -1);
-    void createNewScope(int x = -1, int y = -1);
+    QString createNewLabel(int x = -1, int y = -1);
+    QString createNewDisplay(int x = -1, int y = -1);
+    QString createNewScrollNumber(int x = -1, int y = -1);
+    QString createNewLineEdit(int x = -1, int y = -1);
+    QString createNewSpinBox(int x = -1, int y = -1);
+    QString createNewSlider(int x = -1, int y = -1);
+    QString createNewButton(int x = -1, int y = -1);
+    QString createNewKnob(int x = -1, int y = -1);
+    QString createNewCheckBox(int x = -1, int y = -1);
+    QString createNewMenu(int x = -1, int y = -1);
+    QString createNewMeter(int x = -1, int y = -1);
+    QString createNewConsole(int x = -1, int y = -1);
+    QString createNewGraph(int x = -1, int y = -1);
+    QString createNewScope(int x = -1, int y = -1);
     void clearWidgets();
     void clearWidgetLayout();
 
@@ -343,20 +345,20 @@ class WidgetLayout : public QWidget
     int m_activeWidgets; // Keeps a number of widgets that can be currently accessed by value callbacks (e.g. set to 0 during paste). This is done to avoid locking the callbacks, which are called from a realtime thread
 
     int parseXmlNode(QDomNode node);
-    int createSlider(int x, int y, int width, int height, QString widgetLine);
-    int createText(int x, int y, int width, int height, QString widgetLine);
-    int createScrollNumber(int x, int y, int width, int height, QString widgetLine);
-    int createLineEdit(int x, int y, int width, int height, QString widgetLine);
-    int createSpinBox(int x, int y, int width, int height, QString widgetLine);
-    int createButton(int x, int y, int width, int height, QString widgetLine);
-    int createKnob(int x, int y, int width, int height, QString widgetLine);
-    int createCheckBox(int x, int y, int width, int height, QString widgetLine);
-    int createMenu(int x, int y, int width, int height, QString widgetLine);
-    int createMeter(int x, int y, int width, int height, QString widgetLine);
-    int createConsole(int x, int y, int width, int height, QString widgetLine);
-    int createGraph(int x, int y, int width, int height, QString widgetLine);
-    int createScope(int x, int y, int width, int height, QString widgetLine);
-    int createDummy(int x, int y, int width, int height, QString widgetLine);
+    QString createSlider(int x, int y, int width, int height, QString widgetLine);
+    QString createText(int x, int y, int width, int height, QString widgetLine);
+    QString createScrollNumber(int x, int y, int width, int height, QString widgetLine);
+    QString createLineEdit(int x, int y, int width, int height, QString widgetLine);
+    QString createSpinBox(int x, int y, int width, int height, QString widgetLine);
+    QString createButton(int x, int y, int width, int height, QString widgetLine);
+    QString createKnob(int x, int y, int width, int height, QString widgetLine);
+    QString createCheckBox(int x, int y, int width, int height, QString widgetLine);
+    QString createMenu(int x, int y, int width, int height, QString widgetLine);
+    QString createMeter(int x, int y, int width, int height, QString widgetLine);
+    QString createConsole(int x, int y, int width, int height, QString widgetLine);
+    QString createGraph(int x, int y, int width, int height, QString widgetLine);
+    QString createScope(int x, int y, int width, int height, QString widgetLine);
+    QString createDummy(int x, int y, int width, int height, QString widgetLine);
 
     void setBackground(bool bg, QColor bgColor);
     FrameWidget *getEditWidget(QuteWidget *widget);

@@ -311,7 +311,7 @@ void WidgetLayout::loadMacWidgets(QString macWidgets)
   foreach (QString line, widgetLines) {
 //     qDebug("WidgetLine: %s", line.toStdString().c_str());
     if (line.startsWith("i")) {
-      if (newMacWidget(line) < 0)
+      if (newMacWidget(line) == "")
         qDebug() << "WidgetPanel::loadMacWidgets error processing line: " << line;
     }
     else {
@@ -581,6 +581,35 @@ int WidgetLayout::getMouseBut2()
   return mouseBut2;
 }
 
+void WidgetLayout::setWidgetProperty(QString channel, QString property, QVariant value)
+{
+  for (int i = 0; i < m_widgets.size(); i++) {
+    if (m_widgets[i]->getUuid() == channel) {
+      m_widgets[i]->setProperty(property.toAscii().constData(), value);
+      m_widgets[i]->applyInternalProperties();
+      break;
+    }
+    else if (m_widgets[i]->getChannelName() == channel) {
+      m_widgets[i]->setProperty(property.toAscii().constData(), value);
+      m_widgets[i]->applyInternalProperties();
+      break;
+    }
+  }
+}
+
+QVariant WidgetLayout::getWidgetProperty(QString channel, QString property)
+{
+  for (int i = 0; i < m_widgets.size(); i++) {
+    if (m_widgets[i]->getUuid() == channel) {
+      return m_widgets[i]->property(property.toAscii().constData());
+    }
+    else if (m_widgets[i]->getChannelName() == channel) {
+      return m_widgets[i]->property(property.toAscii().constData());
+    }
+  }
+  return QVariant();
+}
+
 int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 {
   if (mainnode.isNull()) {
@@ -810,13 +839,13 @@ bool WidgetLayout::uuidFree(QString uuid)
   return isFree;
 }
 
-int WidgetLayout::newMacWidget(QString widgetLine, bool offset)
+QString WidgetLayout::newMacWidget(QString widgetLine, bool offset)
 {
   // This function returns -1 on error, 0 when no widget was created and 1 if widget was created
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
   if (parts.size()<5)
-    return -1;
+    return "";
   if (parts[0]=="ioView") {
   // Colors in MacCsound have a range of 0-65535
     setBackground(parts[1]=="background",
@@ -884,7 +913,7 @@ int WidgetLayout::newMacWidget(QString widgetLine, bool offset)
       return createDummy(x,y,width, height, widgetLine);
     }
   }
-  return -1;
+  return "";
 }
 
 void WidgetLayout::registerWidget(QuteWidget * widget)
@@ -1407,192 +1436,220 @@ void WidgetLayout::selectionChanged(QRect selection)
   widgetsMutex.unlock();
 }
 
-void WidgetLayout::createNewSlider(int x, int y)
+QString WidgetLayout::createNewSlider(int x, int y)
 {
+  QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  createSlider(posx, posy, 20, 100, QString("ioSlider {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(m_widgets.size())));
+  uuid = createSlider(posx, posy, 20, 100, QString("ioSlider {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 100} 0.000000 1.000000 0.000000 slider" +QString::number(m_widgets.size())));
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
+  return uuid;
 }
 
-void WidgetLayout::createNewLabel(int x, int y)
+QString WidgetLayout::createNewLabel(int x, int y)
 {
+  QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder New Label";
-  createText(posx, posy, 80, 25, line);
+  uuid = createText(posx, posy, 80, 25, line);
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
+  return uuid;
 }
 
-void WidgetLayout::createNewDisplay(int x, int y)
+QString WidgetLayout::createNewDisplay(int x, int y)
 {
+  QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} display 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border Display";
-  createText(posx, posy, 80, 25, line);
+  uuid = createText(posx, posy, 80, 25, line);
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
+  return uuid;
 }
 
-void WidgetLayout::createNewScrollNumber(int x, int y)
+QString WidgetLayout::createNewScrollNumber(int x, int y)
 {
+  QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} scroll 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} background border 0.000000";
-  createScrollNumber(posx, posy, 80, 25, line);
+  uuid = createScrollNumber(posx, posy, 80, 25, line);
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
+  return uuid;
 }
 
-void WidgetLayout::createNewLineEdit(int x, int y)
+QString WidgetLayout::createNewLineEdit(int x, int y)
 {
+  QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 25} edit 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
-  createLineEdit(posx, posy, 100, 25, line);
+  uuid = createLineEdit(posx, posy, 100, 25, line);
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
+  return uuid;
 }
 
-void WidgetLayout::createNewSpinBox(int x, int y)
+QString WidgetLayout::createNewSpinBox(int x, int y)
 {
+  QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} editnum 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
-  createSpinBox(posx, posy, 80, 25, line);
+  uuid = createSpinBox(posx, posy, 80, 25, line);
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
+  return uuid;
 }
 
-void WidgetLayout::createNewButton(int x, int y)
+QString WidgetLayout::createNewButton(int x, int y)
 {
+  QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   QString line = "ioButton {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 30} event 1.000000 \"button1\" \"New Button\" \"/\" i1 0 10";
-  createButton(posx, posy, 100, 30, line);
+  uuid = createButton(posx, posy, 100, 30, line);
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
+  return uuid;
 }
 
-void WidgetLayout::createNewKnob(int x, int y)
+QString WidgetLayout::createNewKnob(int x, int y)
 {
+  QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  createKnob(posx, posy, 80, 80, QString("ioKnob {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(m_widgets.size())));
+  uuid = createKnob(posx, posy, 80, 80, QString("ioKnob {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(m_widgets.size())));
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
+  return uuid;
 }
 
-void WidgetLayout::createNewCheckBox(int x, int y)
+QString WidgetLayout::createNewCheckBox(int x, int y)
 {
+  QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  createCheckBox(posx, posy, 20, 20, QString("ioCheckbox {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 20} off checkbox" +QString::number(m_widgets.size())));
+  uuid = createCheckBox(posx, posy, 20, 20, QString("ioCheckbox {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 20} off checkbox" +QString::number(m_widgets.size())));
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
+  return uuid;
 }
 
-void WidgetLayout::createNewMenu(int x, int y)
+QString WidgetLayout::createNewMenu(int x, int y)
 {
+  QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  createMenu(posx, posy, 80, 30, QString("ioMenu {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 25} 1 303 \"item1,item2,item3\" menu" +QString::number(m_widgets.size())));
+  uuid = createMenu(posx, posy, 80, 30, QString("ioMenu {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 25} 1 303 \"item1,item2,item3\" menu" +QString::number(m_widgets.size())));
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
+  return uuid;
 }
 
-void WidgetLayout::createNewMeter(int x, int y)
+QString WidgetLayout::createNewMeter(int x, int y)
 {
+  QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  createMeter(posx, posy, 30, 80, QString("ioMeter {"+ QString::number(posx) +", "+ QString::number(posy) + "} {30, 80} {0, 60000, 0} \"vert" + QString::number(m_widgets.size()) + "\" 0.000000 \"hor" + QString::number(m_widgets.size()) + "\" 0.000000 fill 1 0 mouse"));
+  uuid = createMeter(posx, posy, 30, 80, QString("ioMeter {"+ QString::number(posx) +", "+ QString::number(posy) + "} {30, 80} {0, 60000, 0} \"vert" + QString::number(m_widgets.size()) + "\" 0.000000 \"hor" + QString::number(m_widgets.size()) + "\" 0.000000 fill 1 0 mouse"));
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
+  return uuid;
 }
 
-void WidgetLayout::createNewConsole(int x, int y)
+QString WidgetLayout::createNewConsole(int x, int y)
 {
+  QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  createConsole(posx, posy, 320, 400, QString("ioListing {"+ QString::number(posx) +", "+ QString::number(posy) + "} {320, 400}"));
+  uuid = createConsole(posx, posy, 320, 400, QString("ioListing {"+ QString::number(posx) +", "+ QString::number(posy) + "} {320, 400}"));
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
+  return uuid;
 }
 
-void WidgetLayout::createNewGraph(int x, int y)
+QString WidgetLayout::createNewGraph(int x, int y)
 {
+  QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  createGraph(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150}"));
+  uuid = createGraph(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150}"));
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
+  return uuid;
 }
 
-void WidgetLayout::createNewScope(int x, int y)
+QString WidgetLayout::createNewScope(int x, int y)
 {
+  QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  createScope(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150} scope 2.000000 -1.000000"));
+  uuid = createScope(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150} scope 2.000000 -1.000000"));
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
+  return uuid;
 }
 
 void WidgetLayout::clearWidgets()
@@ -2206,7 +2263,7 @@ int WidgetLayout::parseXmlNode(QDomNode node)
   return ret;
 }
 
-int WidgetLayout::createSlider(int x, int y, int width, int height, QString widgetLine)
+QString WidgetLayout::createSlider(int x, int y, int width, int height, QString widgetLine)
 {
 //   qDebug("ioSlider x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
@@ -2232,18 +2289,18 @@ int WidgetLayout::createSlider(int x, int y, int width, int height, QString widg
   widget->applyInternalProperties();
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   registerWidget(widget);
-  return 1;
+  return widget->getUuid();
 }
 
-int WidgetLayout::createText(int x, int y, int width, int height, QString widgetLine)
+QString WidgetLayout::createText(int x, int y, int width, int height, QString widgetLine)
 {
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
   if (parts.size()<20 or quoteParts.size()<5)
-    return -1;
+    return "";
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   if (lastParts.size() < 9)
-    return -1;
+    return "";
   QuteText *widget= new QuteText(this);
   widget->setProperty("QCS_x",x);
   widget->setProperty("QCS_y",y);
@@ -2276,18 +2333,18 @@ int WidgetLayout::createText(int x, int y, int width, int height, QString widget
   widget->setFontScaling(m_fontScaling);
   widget->applyInternalProperties();
   registerWidget(widget);
-  return 1;
+  return widget->getUuid();
 }
 
-int WidgetLayout::createScrollNumber(int x, int y, int width, int height, QString widgetLine)
+QString WidgetLayout::createScrollNumber(int x, int y, int width, int height, QString widgetLine)
 {
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
   if (parts.size()<20 or quoteParts.size()<5)
-    return -1;
+    return "";
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   if (lastParts.size() < 9)
-    return -1;
+    return "";
   QuteScrollNumber *widget= new QuteScrollNumber(this);
 
   widget->setProperty("QCS_x",x);
@@ -2323,18 +2380,18 @@ int WidgetLayout::createScrollNumber(int x, int y, int width, int height, QStrin
   widget->applyInternalProperties();
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   registerWidget(widget);
-  return 1;
+  return widget->getUuid();
 }
 
-int WidgetLayout::createLineEdit(int x, int y, int width, int height, QString widgetLine)
+QString WidgetLayout::createLineEdit(int x, int y, int width, int height, QString widgetLine)
 {
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
   if (parts.size()<20 or quoteParts.size()<5)
-    return -1;
+    return "";
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   if (lastParts.size() < 9)
-    return -1;
+    return "";
   QuteLineEdit *widget= new QuteLineEdit(this);
 
   widget->setProperty("QCS_x",x);
@@ -2361,18 +2418,18 @@ int WidgetLayout::createLineEdit(int x, int y, int width, int height, QString wi
   widget->applyInternalProperties();
 
   registerWidget(widget);
-  return 1;
+  return widget->getUuid();
 }
 
-int WidgetLayout::createSpinBox(int x, int y, int width, int height, QString widgetLine)
+QString WidgetLayout::createSpinBox(int x, int y, int width, int height, QString widgetLine)
 {
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
   if (parts.size()<20 or quoteParts.size()<5)
-    return -1;
+    return "";
   QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   if (lastParts.size() < 9)
-    return -1;
+    return "";
   QuteSpinBox *widget= new QuteSpinBox(this);
 
   widget->setProperty("QCS_x",x);
@@ -2405,10 +2462,10 @@ int WidgetLayout::createSpinBox(int x, int y, int width, int height, QString wid
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widget->applyInternalProperties();
   registerWidget(widget);
-  return 1;
+  return widget->getUuid();
 }
 
-int WidgetLayout::createButton(int x, int y, int width, int height, QString widgetLine)
+QString WidgetLayout::createButton(int x, int y, int width, int height, QString widgetLine)
 {
 //   qDebug("WidgetPanel::createButton");
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
@@ -2439,11 +2496,10 @@ int WidgetLayout::createButton(int x, int y, int width, int height, QString widg
   emit registerButton(widget);
   widget->applyInternalProperties();
   registerWidget(widget);
-
-  return 1;
+  return widget->getUuid();
 }
 
-int WidgetLayout::createKnob(int x, int y, int width, int height, QString widgetLine)
+QString WidgetLayout::createKnob(int x, int y, int width, int height, QString widgetLine)
 {
 //   qDebug("ioKnob x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
@@ -2469,10 +2525,10 @@ int WidgetLayout::createKnob(int x, int y, int width, int height, QString widget
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widget->applyInternalProperties();
   registerWidget(widget);
-  return 1;
+  return widget->getUuid();
 }
 
-int WidgetLayout::createCheckBox(int x, int y, int width, int height, QString widgetLine)
+QString WidgetLayout::createCheckBox(int x, int y, int width, int height, QString widgetLine)
 {
 //   qDebug("ioCheckBox x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
@@ -2495,10 +2551,10 @@ int WidgetLayout::createCheckBox(int x, int y, int width, int height, QString wi
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widget->applyInternalProperties();
   registerWidget(widget);
-  return 1;
+  return widget->getUuid();
 }
 
-int WidgetLayout::createMenu(int x, int y, int width, int height, QString widgetLine)
+QString WidgetLayout::createMenu(int x, int y, int width, int height, QString widgetLine)
 {
 //   qDebug("ioMenu x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
@@ -2517,10 +2573,10 @@ int WidgetLayout::createMenu(int x, int y, int width, int height, QString widget
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widget->applyInternalProperties();
   registerWidget(widget);
-  return 1;
+  return widget->getUuid();
 }
 
-int WidgetLayout::createMeter(int x, int y, int width, int height, QString widgetLine)
+QString WidgetLayout::createMeter(int x, int y, int width, int height, QString widgetLine)
 {
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
   QStringList quoteParts = widgetLine.split('"');
@@ -2557,10 +2613,10 @@ int WidgetLayout::createMeter(int x, int y, int width, int height, QString widge
   connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
   widget->applyInternalProperties();
   registerWidget(widget);
-  return 1;
+  return widget->getUuid();
 }
 
-int WidgetLayout::createConsole(int x, int y, int width, int height, QString widgetLine)
+QString WidgetLayout::createConsole(int x, int y, int width, int height, QString widgetLine)
 {
 //    qDebug("ioListing x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
@@ -2573,10 +2629,10 @@ int WidgetLayout::createConsole(int x, int y, int width, int height, QString wid
   widget->applyInternalProperties();
   consoleWidgets.append(widget);
   registerWidget(widget);
-  return 1;
+  return widget->getUuid();
 }
 
-int WidgetLayout::createGraph(int x, int y, int width, int height, QString widgetLine)
+QString WidgetLayout::createGraph(int x, int y, int width, int height, QString widgetLine)
 {
 //   qDebug("ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
   QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
@@ -2610,10 +2666,10 @@ int WidgetLayout::createGraph(int x, int y, int width, int height, QString widge
   emit registerGraph(widget);
   registerWidget(widget);
   widget->applyInternalProperties();
-  return 1;
+  return widget->getUuid();
 }
 
-int WidgetLayout::createScope(int x, int y, int width, int height, QString widgetLine)
+QString WidgetLayout::createScope(int x, int y, int width, int height, QString widgetLine)
 {
 //   qDebug("WidgetPanel::createScope ioGraph x=%i y=%i w=%i h=%i", x,y, width, height);
 //   qDebug("%s",widgetLine.toStdString().c_str() );
@@ -2650,10 +2706,10 @@ int WidgetLayout::createScope(int x, int y, int width, int height, QString widge
   scopeWidgets.append(widget);
   registerWidget(widget);
   widget->applyInternalProperties();
-  return 1;
+  return widget->getUuid();
 }
 
-int WidgetLayout::createDummy(int x, int y, int width, int height, QString widgetLine)
+QString WidgetLayout::createDummy(int x, int y, int width, int height, QString widgetLine)
 {
   QuteWidget *widget= new QuteDummy(this);
   widget->setProperty("QCS_x",x);
@@ -2671,7 +2727,7 @@ int WidgetLayout::createDummy(int x, int y, int width, int height, QString widge
   setWidgetToolTip(widget, m_tooltips);
   widgetsMutex.unlock();
   adjustLayoutSize();
-  return 1;
+  return widget->getUuid();
 }
 
 void WidgetLayout::setBackground(bool bg, QColor bgColor)
