@@ -142,6 +142,16 @@ void BaseView::setColorVariables(bool color)
   m_highlighter.setColorVariables(color);
 }
 
+void BaseView::setBackgroundColor(QColor color)
+{
+  for (int i = 0; i < editors.size(); i++) {
+    QPalette p = editors[i]->palette();
+//    p.setColor(QPalette::WindowText, textColor);
+    p.setColor(static_cast<QPalette::ColorRole>(9), color);
+    editors[i]->setPalette(p);
+  }
+}
+
 //void BaseView::setOpcodeNameList(QStringList list)
 //{
 //  m_highlighter.setOpcodeNameList(list);

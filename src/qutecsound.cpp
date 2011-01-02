@@ -81,7 +81,6 @@ static void midiMessageCallback(double deltatime,
 ////csound performance thread function prototype
 //uintptr_t csThread(void *clientData);
 
-//TODO why does qutecsound not end when it receives a terminate signal?
 qutecsound::qutecsound(QStringList fileNames)
 {
   m_startingUp = true;
@@ -131,6 +130,10 @@ qutecsound::qutecsound(QStringList fileNames)
   addDockWidget(Qt::LeftDockWidgetArea, m_pythonConsole);
   m_pythonConsole->setObjectName("Python Console");
   m_pythonConsole->show();
+  m_scratchPad = new QDockWidget(this);
+  m_scratchPad->setObjectName("Python Scratch Pad");
+  m_scratchPad->setWindowTitle(tr("Python Scratch Pad"));
+  addDockWidget(Qt::LeftDockWidgetArea, m_scratchPad);
 #endif
 
   connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
@@ -141,6 +144,11 @@ qutecsound::qutecsound(QStringList fileNames)
   bool widgetsVisible = !widgetPanel->isHidden(); // Must be after readSettings() to save last state
   if (widgetsVisible)
     widgetPanel->hide();  // Hide until QuteCsound has finished loading
+#ifdef QCS_PYTHONQT
+  bool scratchPadVisible = !m_scratchPad->isHidden(); // Must be after readSettings() to save last state
+  if (scratchPadVisible)
+    m_scratchPad->hide();  // Hide until QuteCsound has finished loading
+#endif
 
   createMenus();
   createToolBars();
@@ -159,11 +167,21 @@ qutecsound::qutecsound(QStringList fileNames)
   fillFavoriteMenu(); // Must be placed after readSettings to know directory
   fillScriptsMenu(); // Must be placed after readSettings to know directory
   if (m_options->opcodexmldir == "") {
-    opcodeTree = new OpEntryParser(":/opcodes.xml");
+    m_opcodeTree = new OpEntryParser(":/opcodes.xml");
   }
   else
-    opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + "/opcodes.xml"));
+    m_opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + "/opcodes.xml"));
 
+#ifdef QCS_PYTHONQT
+   DocumentView *view = new DocumentView(m_scratchPad, m_opcodeTree);
+   view->setBackgroundColor(QColor(240, 230, 230));
+   view->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
+   view->setFileType(1); // Python type (for highlighting and completion)
+   view->show();
+   connect(view, SIGNAL(evaluate(QString)), m_pythonConsole, SLOT(evaluate(QString)));
+   m_scratchPad->setWidget(view);
+   m_scratchPad->setFocusProxy(view);
+#endif
   // Open files saved from last session
   if (!lastFiles.isEmpty()) {
     foreach (QString lastFile, lastFiles) {
@@ -176,11 +194,6 @@ qutecsound::qutecsound(QStringList fileNames)
   foreach (QString fileName, fileNames) {
     if (fileName!="") {
       loadFile(fileName, true);
-    }
-  }
-  if (!m_options->widgetsIndependent) {
-    if (widgetsVisible) { // Reshow widget panel if necessary
-      widgetPanel->show();
     }
   }
   showWidgetsAct->setChecked(widgetsVisible);  // Button will initialize to current state of panel
@@ -216,6 +229,16 @@ qutecsound::qutecsound(QStringList fileNames)
 
   m_closing = false;
   updateInspector(); //Starts update inspector thread
+  if (!m_options->widgetsIndependent) {
+    if (widgetsVisible) { // Reshow widget panel if necessary
+      widgetPanel->show();
+    }
+  }
+#ifdef QCS_PYTHONQT
+  if (scratchPadVisible) { // Reshow scratch panel if necessary
+    m_scratchPad->show();
+  }
+#endif
 }
 
 qutecsound::~qutecsound()
@@ -377,7 +400,7 @@ void qutecsound::closeEvent(QCloseEvent *event)
   m_console->close();
   documentTabs->close();
   m_console->close();
-  delete opcodeTree;  // This is needed by some widgets which are detroyed later... leak for now...
+  delete m_opcodeTree;
   event->accept();
   close();
 }
@@ -611,7 +634,12 @@ void qutecsound::redo()
 
 void qutecsound::evaluateSection()
 {
-  evaluatePython(documentPages[curPage]->getActiveSection());
+  if (!m_scratchPad->hasFocus()) {
+    evaluatePython(documentPages[curPage]->getActiveSection());
+  }
+  else {
+    evaluatePython(static_cast<DocumentView *>(m_scratchPad->widget())->getActiveSection());
+  }
 }
 
  void qutecsound::evaluatePython(QString code)
@@ -619,7 +647,12 @@ void qutecsound::evaluateSection()
 #ifdef QCS_PYTHONQT
    QString evalCode = QString();
    if (code == QString()) { //evaluate current selection in current document
-     evalCode = documentPages[curPage]->getActiveText();
+     if (!m_scratchPad->hasFocus()) {
+       evalCode = documentPages[curPage]->getActiveText();
+     }
+     else {
+       evalCode = static_cast<DocumentView *>(m_scratchPad->widget())->getActiveText();
+     }
    }
    else {
      evalCode = code;
@@ -1627,12 +1660,14 @@ void qutecsound::about()
   text += tr("by: Andres Cabrera and others") +"</h1><h2>",
   text += tr("Version %1").arg(QCS_VERSION) + "</h2><h2>";
   text += tr("Released under the LGPLv2 or GPLv3") + "</h2>";
+  text += tr("Using Csound version:") + QString::number(csoundGetVersion()) + " ";
+  text += tr("Precision:") + (csoundGetSizeOfMYFLT() == 8 ? "double (64-bit)" : "float (32-bit)") + "<br />";
   text += tr("French translation: Fran&ccedil;ois Pinot") + "<br />";
   text += tr("German translation: Joachim Heintz") + "<br />";
   text += tr("Portuguese translation: Victor Lazzarini") + "<br />";
   text += tr("Italian translation: Francesco") + "<br />";
   text += tr("Turkish translation: Ali Isciler") + "<br />";
-  text += tr("Finnish translation: Niko Humalamäki") + "<br />";
+  text += tr("Finnish translation: Niko Humalam&auml;ki") + "<br />";
   text += QString("<center><a href=\"http://qutecsound.sourceforge.net\">qutecsound.sourceforge.net</a></center>");
   text += QString("<center><a href=\"mailto:mantaraya36@gmail.com\">mantaraya36@gmail.com</a></center><br />");
   text += tr("If you find QuteCsound useful, please consider donating to the project:");
@@ -1722,6 +1757,9 @@ void qutecsound::applySettings()
   setMidiInterface(m_options->midiInterface);
   fillFavoriteMenu();
   fillScriptsMenu();
+  DocumentView *pad =  static_cast<DocumentView *>(m_scratchPad->widget());
+  pad->setFont(QFont(m_options->font,
+                     (int) m_options->fontPointSize));
   if (m_options->logFile != logFile.fileName()) {
     openLogFile();
   }
@@ -1984,6 +2022,7 @@ void qutecsound::setDefaultKeyboardShortcuts()
   evaluateAct->setShortcut(tr("Alt+E"));
   evaluateSectionAct->setShortcut(tr("Shift+Alt+E"));
   showPythonConsoleAct->setShortcut(tr("Alt+7"));
+  showPythonScratchPadAct->setShortcut(tr("Alt+8"));
   killLineAct->setShortcut(tr("Ctrl+K"));
   killToEndAct->setShortcut(tr("Shift+Ctrl+K"));
 }
@@ -2274,6 +2313,19 @@ void qutecsound::createActions()
   connect(showPythonConsoleAct, SIGNAL(triggered()), this, SLOT(showNoPythonQtWarning()));
 #endif
 
+  showPythonScratchPadAct = new QAction(QIcon(":/images/scratchpad.png"), tr("ScratchPad"), this);
+  showPythonScratchPadAct->setCheckable(true);
+//  showPythonConsoleAct->setChecked(true);  // Unnecessary because it is set by options
+  showPythonScratchPadAct->setStatusTip(tr("Show Python Scratch Pad"));
+  showPythonScratchPadAct->setIconText(tr("ScratchPad"));
+  showPythonScratchPadAct->setShortcutContext(Qt::ApplicationShortcut);
+#ifdef QCS_PYTHONQT
+  connect(showPythonScratchPadAct, SIGNAL(triggered(bool)), m_scratchPad, SLOT(setVisible(bool)));
+  connect(m_scratchPad, SIGNAL(visibilityChanged(bool)), showPythonScratchPadAct, SLOT(setChecked(bool)));
+#else
+  connect(showPythonScratchPadAct, SIGNAL(triggered()), this, SLOT(showNoPythonQtWarning()));
+#endif
+
   showManualAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("Csound Manual"), this);
   showManualAct->setStatusTip(tr("Show the Csound manual in the help panel"));
   showManualAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -2458,6 +2510,7 @@ void qutecsound::setKeyboardShortcutsList()
   m_keyActions.append(showInspectorAct);
   m_keyActions.append(showLiveEventsAct);
   m_keyActions.append(showPythonConsoleAct);
+  m_keyActions.append(showPythonScratchPadAct);
   m_keyActions.append(showUtilitiesAct);
   m_keyActions.append(setHelpEntryAct);
   m_keyActions.append(browseBackAct);
@@ -2620,6 +2673,7 @@ void qutecsound::createMenus()
   viewMenu->addAction(showInspectorAct);
   viewMenu->addAction(showLiveEventsAct);
   viewMenu->addAction(showPythonConsoleAct);
+  viewMenu->addAction(showPythonScratchPadAct);
   viewMenu->addAction(showUtilitiesAct);
   viewMenu->addSeparator();
   viewMenu->addAction(viewFullScreenAct);
@@ -3418,8 +3472,9 @@ void qutecsound::createToolBars()
   configureToolBar->addAction(showHelpAct);
   configureToolBar->addAction(showConsoleAct);
   configureToolBar->addAction(showInspectorAct);
-  configureToolBar->addAction(showPythonConsoleAct);
   configureToolBar->addAction(showLiveEventsAct);
+  configureToolBar->addAction(showPythonConsoleAct);
+  configureToolBar->addAction(showPythonScratchPadAct);
   configureToolBar->addAction(showUtilitiesAct);
 
   Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
@@ -3956,7 +4011,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
 
 void qutecsound::makeNewPage(QString fileName, QString text)
 {
-  DocumentPage *newPage = new DocumentPage(this, opcodeTree);
+  DocumentPage *newPage = new DocumentPage(this, m_opcodeTree);
   int insertPoint = curPage + 1;
   curPage += 1;
   if (documentPages.size() == 0) {
@@ -3964,7 +4019,7 @@ void qutecsound::makeNewPage(QString fileName, QString text)
     curPage = 0;
   }
   documentPages.insert(insertPoint, newPage);
-//  documentPages[curPage]->setOpcodeNameList(opcodeTree->opcodeNameList());
+//  documentPages[curPage]->setOpcodeNameList(m_opcodeTree->opcodeNameList());
   documentPages[curPage]->setInitialDir(initialDir);
   documentPages[curPage]->showLiveEventPanels(false);
   documentTabs->insertTab(curPage, documentPages[curPage]->getView(),"");

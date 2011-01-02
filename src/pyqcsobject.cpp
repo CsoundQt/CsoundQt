@@ -114,7 +114,7 @@ void PyQcsObject::stopAll()
 
 bool PyQcsObject::opcodeExists(QString opcodeName)
 {
-  return m_qcs->opcodeTree->isOpcode(opcodeName);
+  return m_qcs->m_opcodeTree->isOpcode(opcodeName);
 }
 
 void PyQcsObject::setDocument(int index)

@@ -31,7 +31,7 @@ class BaseView : public QScrollArea
 {
   Q_OBJECT
   public:
-    explicit BaseView(QWidget *parent = 0, OpEntryParser *opcodeTree = 0);
+    explicit BaseView(QWidget *parent, OpEntryParser *opcodeTree);
     ~BaseView();
 
     void setFullText(QString text, bool goToTop = false);
@@ -44,6 +44,7 @@ class BaseView : public QScrollArea
     void setLineWrapMode(QTextEdit::LineWrapMode mode);
     void setAutoComplete(bool autoComplete);
     void setColorVariables(bool color);
+    void setBackgroundColor(QColor color);
 //    void setOpcodeNameList(QStringList list);
 //    void setOpcodeTree(OpEntryParser *opcodeTree);
 

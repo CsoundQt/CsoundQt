@@ -114,7 +114,7 @@ SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/appdetailspage.cpp" \
     "$${PWD}/pluginspage.cpp" \
     "$${PWD}/additionalfilespage.cpp"
-LIBS += $${LCSOUND} \ # $${LCSND} \
+LIBS += $${LCSOUND} \ 
     $${LSNDFILE} \
     $${RTMIDI}
 DISTFILES += "$${PWD}/default.csd" \

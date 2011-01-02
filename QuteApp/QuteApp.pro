@@ -90,7 +90,7 @@ HEADERS += "$${QCSPWD}/configlists.h" \
     settingsdialog.h
 FORMS += quteappwizard.ui \
     settingsdialog.ui
-LIBS += $${LCSOUND} \ # $${LCSND} \
+LIBS += $${LCSOUND} \
     $${LSNDFILE} \
     $${RTMIDI}
 rtmidi { 

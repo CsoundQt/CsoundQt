@@ -41,6 +41,12 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
     QTextCursor cursor = textCursor();
     if (!cursor.atStart()) {
       cursor.movePosition(QTextCursor::PreviousBlock);
+      QTextCursor linecursor = cursor;
+      linecursor.select(QTextCursor::LineUnderCursor);
+      QString line = linecursor.selectedText().trimmed();
+      if (line.endsWith(":")) {
+        textCursor().insertText("    ");
+      }
       cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
       while (cursor.selectedText().endsWith(" ") || cursor.selectedText().endsWith("\t") ) {
         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);

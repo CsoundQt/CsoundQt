@@ -44,6 +44,5 @@ DEFINES += __LINUX_ALSASEQ__
 }
 build32:LCSOUND = -lcsound
 build64:LCSOUND = -lcsound64
-#LCSND = -lcsnd
 LSNDFILE = -lsndfile
 

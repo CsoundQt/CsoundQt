@@ -53,7 +53,7 @@ void PythonConsole::evaluate(QString evalCode, bool notify)
 {
   PythonQtObjectPtr  mainContext = PythonQt::self()->getMainModule();
 //  PythonQtObjectPtr  mainContext = m_pqcs->getMainModule();
-  mainContext.evalScript(evalCode);
+  mainContext.evalScript(evalCode.trimmed() + "\n");
   if (notify) {
     QString printScript = "print 'Evaluated " + QString::number(evalCode.count("\n") + 1 );
     printScript += " lines.'";
@@ -97,7 +97,7 @@ void PythonConsole::initializeInterpreter()
   PythonQt::self()->registerCPPClass("QuteSheet", "","qs", PythonQtCreateObject<QuteSheet>);
   mainContext.addObject("q", m_pqcs);
   mainContext.evalScript("from PythonQt.qs import QuteSheet");
-  mainContext.evalScript("print 'QuteCsound Python Interpreter Initialized.'");
+//  mainContext.evalScript("print 'QuteCsound Python Interpreter Initialized.'");
   //  mainContext.evalScript("s = q.schedule");
   //  mainContext.evalScript("import os");
 

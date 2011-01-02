@@ -133,7 +133,7 @@ class qutecsound:public QMainWindow
     // Engine
     CsoundEngine *getEngine(int index = -1);
 
-    OpEntryParser *opcodeTree;
+    OpEntryParser *m_opcodeTree;
 
   public slots:
     bool loadFile(QString fileName, bool runNow = false);
@@ -266,6 +266,7 @@ class qutecsound:public QMainWindow
     DockConsole *m_console;
     DockHelp *helpPanel;
     WidgetPanel *widgetPanel;  // Dock widget, for containing the widget layout
+    QDockWidget *m_scratchPad;
     QString m_widgetClipboard;
     Inspector *m_inspector;
 #ifdef QCS_PYTHONQT
@@ -349,6 +350,7 @@ class qutecsound:public QMainWindow
     QAction *showInspectorAct;
     QAction *showLiveEventsAct;
     QAction *showPythonConsoleAct;
+    QAction *showPythonScratchPadAct;
     QAction *commentAct;
 //    QAction *uncommentAct;
     QAction *indentAct;

@@ -51,7 +51,6 @@ LIBS += -framework CoreMidi -framework CoreAudio -framework CoreFoundation
 }
 #LIBS += -framework QtCore -framework QtGui -framework QtXml
 LCSOUND = -framework $${MAC_LIB}
-#LCSND = -l_csnd
 LSNDFILE = -lsndfile
 
 QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist

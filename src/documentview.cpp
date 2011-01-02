@@ -63,7 +63,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   syntaxMenu->setAutoFillBackground(true);
   QPalette p =syntaxMenu-> palette();
   p.setColor(QPalette::WindowText, Qt::blue);
-  p.setColor(QPalette::Active, static_cast<QPalette::ColorRole>(9), Qt::yellow);
+  p.setColor(static_cast<QPalette::ColorRole>(9), Qt::yellow);
   syntaxMenu->setPalette(p);
   connect(syntaxMenu,SIGNAL(keyPressed(QString)),
           mainEditor, SLOT(insertPlainText(QString)));
@@ -325,12 +325,12 @@ QString DocumentView::getActiveSection()
   QTextCursor cursor = editors[0]->textCursor();
   cursor.select(QTextCursor::LineUnderCursor);
   bool sectionStart = cursor.selectedText().simplified().startsWith("##");
-  while (!sectionStart && !cursor.atStart()) {
+  while (!sectionStart && !cursor.anchor() == 0) {
     cursor.movePosition(QTextCursor::PreviousBlock);
     cursor.select(QTextCursor::LineUnderCursor);
     sectionStart = cursor.selectedText().simplified().startsWith("##");
   }
-  int start = cursor.position();
+  int start = cursor.anchor();
   cursor = editors[0]->textCursor();
   cursor.movePosition(QTextCursor::NextBlock);
   cursor.select(QTextCursor::LineUnderCursor);
@@ -340,7 +340,7 @@ QString DocumentView::getActiveSection()
     cursor.select(QTextCursor::LineUnderCursor);
     sectionEnd = cursor.selectedText().simplified().startsWith("##");
   }
-  cursor.movePosition(QTextCursor::StartOfLine);
+  cursor.movePosition(QTextCursor::EndOfLine);
   cursor.setPosition(start, QTextCursor::KeepAnchor);
   editors[0]->setTextCursor(cursor);
   QString section = cursor.selectedText();
