@@ -196,10 +196,14 @@ qutecsound::qutecsound(QStringList fileNames)
       loadFile(fileName, true);
     }
   }
-  showWidgetsAct->setChecked(widgetsVisible);  // Button will initialize to current state of panel
-  showConsoleAct->setChecked(!m_console->isHidden());  // Button will initialize to current state of panel
-  showHelpAct->setChecked(!helpPanel->isHidden());  // Button will initialize to current state of panel
-  showInspectorAct->setChecked(!m_inspector->isHidden());  // Button will initialize to current state of panel
+  // Initialize buttons to current state of panels
+  showConsoleAct->setChecked(m_console->isVisible());
+  showHelpAct->setChecked(helpPanel->isVisible());
+  showInspectorAct->setChecked(m_inspector->isVisible());
+  showPythonConsoleAct->setChecked(m_pythonConsole->isVisible());
+#ifdef QCS_PYTHONQT
+  showPythonScratchPadAct->setChecked(scratchPadVisible->isVisible());
+#endif
 
   if (documentPages.size() == 0) { // No files yet open. Open default
     newFile();
@@ -232,6 +236,7 @@ qutecsound::qutecsound(QStringList fileNames)
   if (!m_options->widgetsIndependent) {
     if (widgetsVisible) { // Reshow widget panel if necessary
       widgetPanel->show();
+      showWidgetsAct->setChecked(widgetsVisible);
     }
   }
 #ifdef QCS_PYTHONQT
