@@ -200,8 +200,8 @@ qutecsound::qutecsound(QStringList fileNames)
   showConsoleAct->setChecked(m_console->isVisible());
   showHelpAct->setChecked(helpPanel->isVisible());
   showInspectorAct->setChecked(m_inspector->isVisible());
-  showPythonConsoleAct->setChecked(m_pythonConsole->isVisible());
 #ifdef QCS_PYTHONQT
+  showPythonConsoleAct->setChecked(m_pythonConsole->isVisible());
   showPythonScratchPadAct->setChecked(m_scratchPad->isVisible());
 #endif
 
@@ -1762,9 +1762,11 @@ void qutecsound::applySettings()
   setMidiInterface(m_options->midiInterface);
   fillFavoriteMenu();
   fillScriptsMenu();
+#ifdef QCS_PYTHONQT
   DocumentView *pad =  static_cast<DocumentView *>(m_scratchPad->widget());
   pad->setFont(QFont(m_options->font,
                      (int) m_options->fontPointSize));
+#endif
   if (m_options->logFile != logFile.fileName()) {
     openLogFile();
   }
