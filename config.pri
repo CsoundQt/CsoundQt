@@ -4,15 +4,15 @@ CONFIG -= stl
 QT *= xml
 CONFIG(debug, debug|release):CONFIG -= release
 CONFIG(release, debug|release):CONFIG -= debug
-debug { 
+debug {
     CONFIG -= debug
     CONFIG += debug
 }
-release { 
+release {
     CONFIG -= release
     CONFIG += release
 }
-warn_on { 
+warn_on {
     CONFIG -= warn_on
     CONFIG += warn_on
 }
@@ -46,11 +46,11 @@ DEFAULT_RTMIDI_DIRS = $${DEFAULT_RTMIDI_DIRNAME} \
   ../$${DEFAULT_RTMIDI_DIRNAME} \
   ../../../$${DEFAULT_RTMIDI_DIRNAME}
 
-exists(config.user.pri) { 
+exists(config.user.pri) {
     include(config.user.pri)
     !no_messages:message(... config.user.pri found)
 }
-!no_messages { 
+!no_messages {
     message()
     build32:message(Building QuteCsound for the single precision version of Csound.)
     build64:message(Building QuteCsound for the double precision version of Csound.)
@@ -65,15 +65,15 @@ exists(config.user.pri) {
     message(QuteCsound bin directory is $${DESTDIR})
     message()
 }
-isEmpty(CSOUND_API_INCLUDE_DIR) { 
+isEmpty(CSOUND_API_INCLUDE_DIR) {
     !isEmpty(CSOUND_INCLUDE_DIR):CSOUND_API_INCLUDE_DIR = $${CSOUND_INCLUDE_DIR}
     isEmpty(CSOUND_API_INCLUDE_DIR):!isEmpty(CSOUND_SOURCE_TREE):CSOUND_API_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/H
-    isEmpty(CSOUND_API_INCLUDE_DIR) { 
+    isEmpty(CSOUND_API_INCLUDE_DIR) {
         !no_messages:message(Csound API include directory not specified.)
-        for(dir, DEFAULT_CSOUND_API_INCLUDE_DIRS) { 
+        for(dir, DEFAULT_CSOUND_API_INCLUDE_DIRS) {
             !no_messages:message(... searching in $${dir})
-            exists($${dir}):exists($${dir}/csound.h):exists($${dir}/cwindow.h) { 
-                !no_messages { 
+            exists($${dir}):exists($${dir}/csound.h):exists($${dir}/cwindow.h) {
+                !no_messages {
                     message(CSOUND_API_INCLUDE_DIR set to $${dir})
                     message()
                 }
@@ -84,16 +84,16 @@ isEmpty(CSOUND_API_INCLUDE_DIR) {
     }
     isEmpty(CSOUND_API_INCLUDE_DIR):error(A valid Csound API include directory was not found.)
 }
-isEmpty(CSOUND_INTERFACES_INCLUDE_DIR) { 
+isEmpty(CSOUND_INTERFACES_INCLUDE_DIR) {
     !isEmpty(CSOUND_INCLUDE_DIR):CSOUND_INTERFACES_INCLUDE_DIR = $${CSOUND_INCLUDE_DIR}
     isEmpty(CSOUND_INTERFACES_INCLUDE_DIR):!isEmpty(CSOUND_SOURCE_TREE):CSOUND_INTERFACES_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/interfaces
-    isEmpty(CSOUND_INTERFACES_INCLUDE_DIR) { 
+    isEmpty(CSOUND_INTERFACES_INCLUDE_DIR) {
         !no_messages:message(Csound interfaces include directory not specified.)
-        for(dir, DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS) { 
+        for(dir, DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS) {
             !no_messages:message(... searching in $${dir})
             exists($${dir}):
-            exists($${dir}/csound.hpp):exists($${dir}/csPerfThread.hpp) { 
-                !no_messages { 
+            exists($${dir}/csound.hpp):exists($${dir}/csPerfThread.hpp) {
+                !no_messages {
                     message(CSOUND_INTERFACES_INCLUDE_DIR set to $${dir})
                     message()
                 }
@@ -104,16 +104,16 @@ isEmpty(CSOUND_INTERFACES_INCLUDE_DIR) {
     }
     isEmpty(CSOUND_INTERFACES_INCLUDE_DIR):error(A valid Csound interfaces include directory was not found.)
 }
-isEmpty(CSOUND_LIBRARY_DIR) { 
+isEmpty(CSOUND_LIBRARY_DIR) {
     !isEmpty(CSOUND_SOURCE_TREE):CSOUND_LIBRARY_DIR = $${CSOUND_SOURCE_TREE}
-    else { 
+    else {
         !no_messages:message(Csound library directory not specified.)
-        for(dir, DEFAULT_CSOUND_LIBRARY_DIRS) { 
+        for(dir, DEFAULT_CSOUND_LIBRARY_DIRS) {
             !no_messages:message(... searching in $${dir})
-            exists($${dir}) { 
+            exists($${dir}) {
                 !no_messages:message(... in $${dir} for $${DEFAULT_CSOUND_LIBS})
-                for(csound_lib, DEFAULT_CSOUND_LIBS):exists($${dir}/$${csound_lib}):exists($${dir}/$${CSND_LIB}) { 
-                    !no_messages { 
+                for(csound_lib, DEFAULT_CSOUND_LIBS):exists($${dir}/$${csound_lib}):exists($${dir}/$${CSND_LIB}) {
+                    !no_messages {
                         message(CSOUND_LIB set to $${csound_lib})
                         message(CSOUND_LIBRARY_DIR set to $${dir})
                         message()
@@ -127,19 +127,19 @@ isEmpty(CSOUND_LIBRARY_DIR) {
     }
     isEmpty(CSOUND_LIBRARY_DIR):error(A valid Csound library directory was not found.)
 }
-isEmpty(CSOUND_LIB) { 
-    for(csound_lib, DEFAULT_CSOUND_LIBS):exists($${CSOUND_LIBRARY_DIR}/$${csound_lib}) { 
+isEmpty(CSOUND_LIB) {
+    for(csound_lib, DEFAULT_CSOUND_LIBS):exists($${CSOUND_LIBRARY_DIR}/$${csound_lib}) {
         CSOUND_LIB = $${csound_lib}
         break()
     }
     isEmpty(CSOUND_LIB):error(A valid csound library was not found.)
 }
-isEmpty(LIBSNDFILE_INCLUDE_DIR) { 
+isEmpty(LIBSNDFILE_INCLUDE_DIR) {
     !no_messages:message(libsndfile include directory not specified.)
-    for(dir, DEFAULT_LIBSNDFILE_INCLUDE_DIRS) { 
+    for(dir, DEFAULT_LIBSNDFILE_INCLUDE_DIRS) {
         !no_messages:message(... searching in $${dir})
-        exists($${dir}):exists($${dir}/sndfile.h) { 
-            !no_messages { 
+        exists($${dir}):exists($${dir}/sndfile.h) {
+            !no_messages {
                 message(LIBSNDFILE_INCLUDE_DIR set to $${dir})
                 message()
             }
@@ -149,12 +149,12 @@ isEmpty(LIBSNDFILE_INCLUDE_DIR) {
     }
     isEmpty(LIBSNDFILE_INCLUDE_DIR):error(A valid libsndfile include directory was not found.)
 }
-isEmpty(LIBSNDFILE_LIBRARY_DIR) { 
+isEmpty(LIBSNDFILE_LIBRARY_DIR) {
     !no_messages:message(libsndfile library directory not specified.)
-    for(dir, DEFAULT_LIBSNDFILE_LIBRARY_DIRS) { 
+    for(dir, DEFAULT_LIBSNDFILE_LIBRARY_DIRS) {
         !no_messages:message(... searching in $${dir})
-        exists($${dir}):exists($${dir}/$${LIBSNDFILE_LIB}) { 
-            !no_messages { 
+        exists($${dir}):exists($${dir}/$${LIBSNDFILE_LIB}) {
+            !no_messages {
                 message(LIBSNDFILE_LIBRARY_DIR set to $${dir})
                 message()
             }
@@ -164,13 +164,13 @@ isEmpty(LIBSNDFILE_LIBRARY_DIR) {
     }
     isEmpty(LIBSNDFILE_LIBRARY_DIR):error(A valid libsndfile library directory was not found.)
 }
-pythonqt { 
-    win32:isEmpty(PYTHON_INCLUDE_DIR) { 
+pythonqt {
+    win32:isEmpty(PYTHON_INCLUDE_DIR) {
         !no_messages:message(Python include directory not specified.)
-        for(dir, DEFAULT_PYTHON_INCLUDE_DIRS) { 
+        for(dir, DEFAULT_PYTHON_INCLUDE_DIRS) {
             !no_messages:message(... searching in $${dir})
-            exists($${dir}) { 
-                !no_messages { 
+            exists($${dir}) {
+                !no_messages {
                     message(PYTHON_INCLUDE_DIR set to $${dir})
                     message()
                 }
@@ -180,12 +180,12 @@ pythonqt {
         }
         isEmpty(PYTHON_INCLUDE_DIR):error(A valid Python include directory was not found.)
     }
-    isEmpty(PYTHONQT_TREE_DIR) { 
+    isEmpty(PYTHONQT_TREE_DIR) {
         !no_messages:message(PythonQt library directory not specified.)
-        for(dir, DEFAULT_PYTHONQT_TREE_DIRS) { 
+        for(dir, DEFAULT_PYTHONQT_TREE_DIRS) {
             !no_messages:message(... searching in $${dir})
-            exists($${dir}) { 
-                !no_messages { 
+            exists($${dir}) {
+                !no_messages {
                     message(PYTHONQT_TREE_DIR set to $${dir})
                     message()
                 }
@@ -196,37 +196,35 @@ pythonqt {
         isEmpty(PYTHONQT_TREE_DIR):error(A valid PythonQt library directory was not found.)
     }
 }
-    isEmpty(RTMIDI_DIR) {
-        !no_messages:message(RtMidi include directory not specified.)
-        for(dir, DEFAULT_RTMIDI_DIRS) {
-            !no_messages:message(... searching in $${dir})
-            exists($${dir}) {
-            #exists($${dir}/tests/Release/RtMidi.o) {
-                !no_messages { 
-                    message(RTMIDI_DIR set to $${dir})
-                    message()
-                }
-                RTMIDI_DIR = $${dir}
-                DEFINES += QCS_RTMIDI
-                CONFIG += rtmidi
-                break()
-            #}
+isEmpty(RTMIDI_DIR) {
+    !no_messages:message(RtMidi include directory not specified.)
+    for(dir, DEFAULT_RTMIDI_DIRS) {
+        !no_messages:message(... searching in $${dir})
+        exists($${dir}) {
+            !no_messages {
+                message(RTMIDI_DIR set to $${dir})
+                message()
             }
+            RTMIDI_DIR = $${dir}
+            DEFINES += QCS_RTMIDI
+            CONFIG += rtmidi
+            break()
         }
     }
-win32 { 
+}
+win32 {
     CSOUND_INCLUDE_DIR = $$replace(CSOUND_INCLUDE_DIR, \\\\, /)
     CSOUND_LIBRARY_DIR = $$replace(CSOUND_LIBRARY_DIR, \\\\, /)
     LIBSNDFILE_INCLUDE_DIR = $$replace(LIBSNDFILE_INCLUDE_DIR, \\\\, /)
     LIBSNDFILE_LIBRARY_DIR = $$replace(LIBSNDFILE_LIBRARY_DIR, \\\\, /)
 }
-!no_messages { 
+!no_messages {
     message(Csound API include directory is $${CSOUND_API_INCLUDE_DIR})
     message(Csound interfaces include directory is $${CSOUND_INTERFACES_INCLUDE_DIR})
     message(Csound library directory is $${CSOUND_LIBRARY_DIR})
     message(libsndfile include directory is $${LIBSNDFILE_INCLUDE_DIR})
     message(libsndfile library directory is $${LIBSNDFILE_LIBRARY_DIR})
-    pythonqt { 
+    pythonqt {
         win32:message(Python include directory is $${PYTHON_INCLUDE_DIR})
         message(PythonQt source tree directory is $${PYTHONQT_TREE_DIR})
     }
@@ -235,28 +233,28 @@ win32 {
     }
     message()
 }
-!no_checks { 
-    defineTest(directoryExists) { 
+!no_checks {
+    defineTest(directoryExists) {
         exists($${1}):return(true)
         return(false)
     }
-    defineTest(csoundApiHeaderExists) { 
+    defineTest(csoundApiHeaderExists) {
         exists($${CSOUND_API_INCLUDE_DIR}/$${1}):return(true)
         return(false)
     }
-    defineTest(csoundInterfacesHeaderExists) { 
+    defineTest(csoundInterfacesHeaderExists) {
         exists($${CSOUND_INTERFACES_INCLUDE_DIR}/$${1}):return(true)
         return(false)
     }
-    defineTest(csoundLibraryExists) { 
+    defineTest(csoundLibraryExists) {
         exists($${CSOUND_LIBRARY_DIR}/$${1}):return(true)
         return(false)
     }
-    defineTest(libsndfileHeaderExists) { 
+    defineTest(libsndfileHeaderExists) {
         exists($${LIBSNDFILE_INCLUDE_DIR}/$${1}):return(true)
         return(false)
     }
-    defineTest(libsndfileLibraryExists) { 
+    defineTest(libsndfileLibraryExists) {
         exists($${LIBSNDFILE_LIBRARY_DIR}/$${1}):return(true)
         return(false)
     }
@@ -265,7 +263,7 @@ win32 {
     !directoryExists($${CSOUND_LIBRARY_DIR}):error(Csound library directory not found)
     !directoryExists($${LIBSNDFILE_INCLUDE_DIR}):error(libsndfile include directory not found)
     !directoryExists($${LIBSNDFILE_LIBRARY_DIR}):error(libsndfile library directory not found)
-    pythonqt { 
+    pythonqt {
         win32:!directoryExists($${PYTHON_INCLUDE_DIR}):error(Python include directory not found)
         !directoryExists($${PYTHONQT_TREE_DIR}):error(PythonQt source tree directory not found)
     }
