@@ -57,7 +57,7 @@ QuteWidget::~QuteWidget()
 void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 {
 //  qDebug() << "QuteWidget::setWidgetGeometry" <<x<<y<<w<<h;
-  Q_ASSERT(x >= 0 && y > 0 and w > 0 && h > 0);
+  Q_ASSERT(x > 0 && y > 0 and w > 0 && h > 0);
   this->setGeometry(QRect(x,y,w,h));
   m_widget->blockSignals(true);
   m_widget->setGeometry(QRect(0,0,w,h));

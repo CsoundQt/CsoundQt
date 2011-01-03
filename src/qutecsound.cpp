@@ -131,9 +131,9 @@ qutecsound::qutecsound(QStringList fileNames)
   m_pythonConsole->setObjectName("Python Console");
   m_pythonConsole->show();
   m_scratchPad = new QDockWidget(this);
+  addDockWidget(Qt::LeftDockWidgetArea, m_scratchPad);
   m_scratchPad->setObjectName("Python Scratch Pad");
   m_scratchPad->setWindowTitle(tr("Python Scratch Pad"));
-  addDockWidget(Qt::LeftDockWidgetArea, m_scratchPad);
 #endif
 
   connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
@@ -173,7 +173,7 @@ qutecsound::qutecsound(QStringList fileNames)
     m_opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + "/opcodes.xml"));
 
 #ifdef QCS_PYTHONQT
-   DocumentView *view = new DocumentView(m_scratchPad, m_opcodeTree);
+   DocumentView *view = new DocumentView(this, m_opcodeTree);
    view->setBackgroundColor(QColor(240, 230, 230));
    view->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
    view->setFileType(1); // Python type (for highlighting and completion)
@@ -202,7 +202,7 @@ qutecsound::qutecsound(QStringList fileNames)
   showInspectorAct->setChecked(m_inspector->isVisible());
   showPythonConsoleAct->setChecked(m_pythonConsole->isVisible());
 #ifdef QCS_PYTHONQT
-  showPythonScratchPadAct->setChecked(scratchPadVisible->isVisible());
+  showPythonScratchPadAct->setChecked(m_scratchPad->isVisible());
 #endif
 
   if (documentPages.size() == 0) { // No files yet open. Open default
