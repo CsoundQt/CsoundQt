@@ -22,10 +22,6 @@
 
 #include <cstdlib>
 
-#ifdef Q_OS_WIN32
-#include <unistd.h> // for usleep()
-#endif
-
 #include "widgetlayout.h"
 #include "qutewidget.h"
 #include "quteslider.h"
@@ -43,6 +39,10 @@
 #include "framewidget.h"
 
 #include "qutecsound.h" // For passing the actions from button reserved channels
+
+#ifdef Q_OS_WIN32
+#include <unistd.h> // for usleep()
+#endif
 
 
 WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
