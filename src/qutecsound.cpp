@@ -2617,7 +2617,7 @@ void qutecsound::createMenus()
   fileMenu->addAction(saveAct);
   fileMenu->addAction(saveAsAct);
   fileMenu->addAction(saveNoWidgetsAct);
-  fileMenu->addAction(createAppAct);
+//  fileMenu->addAction(createAppAct); // TODO put this back
   fileMenu->addAction(reloadAct);
   // fileMenu->addAction(cabbageAct);
   fileMenu->addAction(closeTabAct);
@@ -2679,8 +2679,10 @@ void qutecsound::createMenus()
   viewMenu->addAction(createCodeGraphAct);
   viewMenu->addAction(showInspectorAct);
   viewMenu->addAction(showLiveEventsAct);
+#ifdef QCS_PYTHONQT
   viewMenu->addAction(showPythonConsoleAct);
   viewMenu->addAction(showPythonScratchPadAct);
+#endif
   viewMenu->addAction(showUtilitiesAct);
   viewMenu->addSeparator();
   viewMenu->addAction(viewFullScreenAct);
@@ -3480,8 +3482,10 @@ void qutecsound::createToolBars()
   configureToolBar->addAction(showConsoleAct);
   configureToolBar->addAction(showInspectorAct);
   configureToolBar->addAction(showLiveEventsAct);
+#ifdef QCS_PYTHONQT
   configureToolBar->addAction(showPythonConsoleAct);
   configureToolBar->addAction(showPythonScratchPadAct);
+#endif
   configureToolBar->addAction(showUtilitiesAct);
 
   Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?

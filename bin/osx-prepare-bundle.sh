@@ -9,15 +9,9 @@
 
 clear
 
-echo Enter version number/name:
+echo Enter version number/name (e.g. 0.7.0-alpha-py):
 read QUTECSOUND_VERSION
-echo "Enter Architecture (Enter for default: 'OSX-Universal'):"
-read QUTECSOUND_ARCH
 
-if [ $QUTECSOUND_ARCH = ""]
-        then
-  QUTECSOUND_ARCH="OSX-Universal"
-fi
 
 #CSOUNDLIBNAME=
 
@@ -42,9 +36,27 @@ done
 shift $(($OPTIND - 1))
 
 ORIGINAL_NAME=qutecsound-f
+ORIGINAL_NAME_D=qutecsound-d
 NEW_NAME=QuteCsound
 
+# Build everything just to make sure all versions packaged are synchronized
+qmake ../qcs.pro CONFIG+=rtmidi
+../make
+qmake ../qcs.pro CONFIG+=rtmidi CONFIG+=build64
+../make
+#qmake ../qcs.pro CONFIG+=rtmidi CONFIG+=pythonqt
+#../make
+#qmake ../qcs.pro CONFIG+=rtmidi CONFIG+=build64 CONFIG+=pythonqt
+#../make
+
+lipo ${ORIGINAL_NAME}.app/Contents/MacOS/${ORIGINAL_NAME} ${ORIGINAL_NAME_D}.app/Contents/MacOS/${ORIGINAL_NAME_D} --create --output ${ORIGINAL_NAME}.app/Contents/MacOS/qutecsound
+
+# Remove unused to avoid confusion
+rm ${ORIGINAL_NAME}.app/Contents/MacOS/${ORIGINAL_NAME}
+rm -R ${ORIGINAL_NAME_D}.app
+
 ORIG_APP_NAME=${ORIGINAL_NAME}.app
+ORIGINAL_NAME = qutecsound
 APP_NAME=${NEW_NAME}-${QUTECSOUND_VERSION}.app
 
 mv $ORIG_APP_NAME/ $APP_NAME/
@@ -53,7 +65,7 @@ mv $ORIG_APP_NAME/ $APP_NAME/
 if [ "$nflag" -ne 1 ]
         then
   echo "---------------- Making noQt package"
-  tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}-${QUTECSOUND_ARCH}-noQt.tar.gz $APP_NAME &>/dev/null
+  tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}-noQt.tar.gz $APP_NAME &>/dev/null
 fi
 
 mkdir $APP_NAME/Contents/Frameworks
@@ -96,7 +108,7 @@ otool -L $APP_NAME/Contents/MacOS/$ORIGINAL_NAME
 
 if [ "$nflag"  -ne 1 ]
         then
-tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}-${QUTECSOUND_ARCH}-incQt.tar.gz $APP_NAME &>/dev/null
+tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}-incQt.tar.gz $APP_NAME &>/dev/null
 fi
 
 # make Standalone application
@@ -205,7 +217,7 @@ cd ../../../../../../../../
 
 if [ "$nflag" -ne 1 ]
         then
-tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}-${QUTECSOUND_ARCH}-full.tar.gz $APP_NAME &>/dev/null
+tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}-full.tar.gz $APP_NAME &>/dev/null
 fi
 
 

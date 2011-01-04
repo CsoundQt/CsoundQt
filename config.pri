@@ -39,6 +39,7 @@ DESTDIR = "$${PWD}/bin"
 TARGET = qutecsound
 build32:TARGET = $${TARGET}-f
 build64:TARGET = $${TARGET}-d
+pythonqt:TARGET = $${TARGET}-py
 debug:TARGET = $${TARGET}-debug
 
 DEFAULT_RTMIDI_DIRNAME="rtmidi-1.0.11"
