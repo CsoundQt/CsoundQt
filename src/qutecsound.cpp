@@ -2736,6 +2736,7 @@ void qutecsound::createMenus()
   synthFiles.append(":/examples/Synths/Diffamator.csd");
   synthFiles.append(":/examples/Synths/Sruti-Drone_Box.csd");
   synthFiles.append(":/examples/Synths/Pipe_Synth.csd");
+  synthFiles.append(":/examples/Synths/Piano_phase.csd");
   synthFiles.append(":/examples/Synths/String_Phaser.csd");
   synthFiles.append(":/examples/Synths/Waveform_Mix.csd");
   subMenus << synthFiles;
