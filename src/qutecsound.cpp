@@ -1667,6 +1667,9 @@ void qutecsound::about()
   text += tr("Released under the LGPLv2 or GPLv3") + "</h2>";
   text += tr("Using Csound version:") + QString::number(csoundGetVersion()) + " ";
   text += tr("Precision:") + (csoundGetSizeOfMYFLT() == 8 ? "double (64-bit)" : "float (32-bit)") + "<br />";
+#ifdef QCS_PYTHONQT
+  text += tr("Built with PythonQt support.")+ "<br />";
+#endif
   text += tr("French translation: Fran&ccedil;ois Pinot") + "<br />";
   text += tr("German translation: Joachim Heintz") + "<br />";
   text += tr("Portuguese translation: Victor Lazzarini") + "<br />";
