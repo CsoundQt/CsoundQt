@@ -1255,6 +1255,50 @@ void WidgetLayout::refreshWidgets()
 //      qDebug() << "WidgetLayout::refreshWidgets()" << i  << m_widgets[i]->m_valueChanged << m_widgets[i]->m_value2Changed;
       m_widgets[i]->refreshWidget();
     }
+    if (m_trackMouse) {
+      QString ch1name = m_widgets[i]->getChannelName();
+      if (ch1name.startsWith("_Mouse")) {
+        if (ch1name == "_MouseX") {
+          m_widgets[i]->setValue(getMouseX());
+        }
+        else if (ch1name == "_MouseY") {
+          m_widgets[i]->setValue(getMouseY());
+        }
+        else if (ch1name == "_MouseRelX") {
+          m_widgets[i]->setValue(getMouseRelX());
+        }
+        else if (ch1name == "_MouseRelY") {
+          m_widgets[i]->setValue(getMouseRelY());
+        }
+        else if (ch1name == "_MouseBut1") {
+          m_widgets[i]->setValue(getMouseBut1());
+        }
+        else if (ch1name == "_MouseBut2") {
+          m_widgets[i]->setValue(getMouseBut2());
+        }
+      }
+      QString ch2name = m_widgets[i]->getChannel2Name();
+      if (ch2name.startsWith("_Mouse")) {
+        if (ch2name == "_MouseX") {
+          m_widgets[i]->setValue2(getMouseX());
+        }
+        else if (ch2name == "_MouseY") {
+          m_widgets[i]->setValue2(getMouseY());
+        }
+        else if (ch2name == "_MouseRelX") {
+          m_widgets[i]->setValue2(getMouseRelX());
+        }
+        else if (ch2name == "_MouseRelY") {
+          m_widgets[i]->setValue2(getMouseRelY());
+        }
+        else if (ch2name == "_MouseBut1") {
+          m_widgets[i]->setValue2(getMouseBut1());
+        }
+        else if (ch2name == "_MouseBut2") {
+          m_widgets[i]->setValue2(getMouseBut2());
+        }
+      }
+    }
   }
   widgetsMutex.unlock();
 }
