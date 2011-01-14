@@ -144,7 +144,7 @@ class WidgetLayout : public QWidget
     void refreshConsoles();
     void refreshWidgets();
     bool isModified();
-    void passWidgetClipboard(QString text);
+//    void passWidgetClipboard(QString text);
 
     void createContextMenu(QContextMenuEvent *event);  // When done outside container widget
 
@@ -324,7 +324,7 @@ class WidgetLayout : public QWidget
     int m_historyIndex; // Current point in history
     bool m_modified;
     bool m_editMode;
-    QString m_clipboard;
+//    QString m_clipboard;
     bool m_contained; // Whether contained in another widget (e.g. scrollbar in widget panel or widget panel)
 
     QVector<WidgetPreset> presets;
@@ -389,7 +389,7 @@ class WidgetLayout : public QWidget
     void registerGraph(QuteGraph *graph);
     void registerButton(QuteButton *button);
     void queueEventSignal(QString eventLine);
-    void setWidgetClipboardSignal(QString text);  // To propagate clipboard for sharing between pages
+//    void setWidgetClipboardSignal(QString text);  // To propagate clipboard for sharing between pages
 };
 
 #endif // WIDGETLAYOUT_H

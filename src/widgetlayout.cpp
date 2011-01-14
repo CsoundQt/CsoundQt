@@ -64,8 +64,8 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 
   midiWriteCounter = 0;
   midiReadCounter = 0;
-  midiQueue.resize(MAX_MIDI_QUEUE);
-  for (int i = 0; i <MAX_MIDI_QUEUE; i++ ) {
+  midiQueue.resize(QCS_MAX_MIDI_QUEUE);
+  for (int i = 0; i <QCS_MAX_MIDI_QUEUE; i++ ) {
     midiQueue[i].resize(3);
   }
 
@@ -1150,10 +1150,10 @@ void WidgetLayout::setCurveData(Curve *curve)
   }
 }
 
-void WidgetLayout::passWidgetClipboard(QString text)
-{
-  m_clipboard = text;
-}
+//void WidgetLayout::passWidgetClipboard(QString text)
+//{
+//  m_clipboard = text;
+//}
 
 uintptr_t WidgetLayout::getCurveById(uintptr_t id)
 {
@@ -1247,7 +1247,7 @@ void WidgetLayout::refreshWidgets()
       }
     }
     midiReadCounter++;
-    midiReadCounter = midiReadCounter%MAX_MIDI_QUEUE;
+    midiReadCounter = midiReadCounter%QCS_MAX_MIDI_QUEUE;
   }
   widgetsMutex.lock();
   for (int i=0; i < m_widgets.size(); i++) {
@@ -3132,9 +3132,9 @@ void WidgetLayout::copy()
         }
       }
     }
-    m_clipboard = text;
     widgetsMutex.unlock();
-    emit setWidgetClipboardSignal(m_clipboard);
+    QClipboard *clipboard = qApp->clipboard();
+    clipboard->setText(text);
   }
 }
 
@@ -3161,12 +3161,14 @@ void WidgetLayout::paste()
   qDebug() << "WidgetLayout::paste()";
   if (m_editMode) {
     deselectAll();
+    QClipboard *clipboard = qApp->clipboard();
+    QString clipboardText = clipboard->text();
     if (m_xmlFormat) {
       QDomDocument doc;
       QString errorText;
       int lineNumber, column;
-      if (!doc.setContent("<doc>" + m_clipboard + "</doc>", &errorText, &lineNumber, &column)) {
-        qDebug() << "WidgetLayout::paste Parsing Error: " << errorText <<  lineNumber << column << m_clipboard;
+      if (!doc.setContent("<doc>" + clipboardText + "</doc>", &errorText, &lineNumber, &column)) {
+        qDebug() << "WidgetLayout::paste Parsing Error: " << errorText <<  lineNumber << column << clipboardText;
       }
       QDomElement docElement = doc.firstChildElement("doc");
       QDomElement pl = docElement.firstChildElement("bsbObject");
@@ -3179,7 +3181,7 @@ void WidgetLayout::paste()
       }
     }
     else {
-      QStringList lines = m_clipboard.split("\n");
+      QStringList lines = clipboardText.split("\n");
       foreach (QString line, lines) {
         newMacWidget(line);
         editWidgets.last()->select();

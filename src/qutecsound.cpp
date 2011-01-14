@@ -65,10 +65,10 @@ static void midiMessageCallback(double deltatime,
 {
   WidgetLayout *d = (WidgetLayout *) userData;
   unsigned int nBytes = message->size();
-  if ( ((d->midiWriteCounter + 1) % MAX_MIDI_QUEUE) != d->midiReadCounter) {
+  if ( ((d->midiWriteCounter + 1) % QCS_MAX_MIDI_QUEUE) != d->midiReadCounter) {
     int index = d->midiWriteCounter;
     d->midiWriteCounter++;
-    d->midiWriteCounter = d->midiWriteCounter % MAX_MIDI_QUEUE;
+    d->midiWriteCounter = d->midiWriteCounter % QCS_MAX_MIDI_QUEUE;
     for (unsigned int i = 0; i < nBytes; i++) {
       d->midiQueue[index][i] = (int)message->at(i);
     }
@@ -305,7 +305,7 @@ void qutecsound::changePage(int index)
     setCurrentFile(documentPages[curPage]->getFileName());
     connectActions();
     documentPages[curPage]->showLiveEventPanels(showLiveEventsAct->isChecked());
-    documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
+//    documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
     if (!m_options->widgetsIndependent) {
       widgetPanel->addWidgetLayout(documentPages[curPage]->getWidgetLayout());
     }
@@ -675,10 +675,13 @@ void qutecsound::setWidgetEditMode(bool active)
   }
 }
 
-void qutecsound::setWidgetClipboard(QString text)
-{
-  m_widgetClipboard = text;
-}
+//void qutecsound::setWidgetClipboard(QString text)
+//{
+//  m_widgetClipboard = text;
+//  for (int i = 0; i < documentPages.size(); i++) {
+//    documentPages[i]->passWidgetClipboard(m_widgetClipboard);
+//  }
+//}
 
 void qutecsound::duplicate()
 {
@@ -4054,8 +4057,8 @@ void qutecsound::makeNewPage(QString fileName, QString text)
   connect(documentPages[curPage], SIGNAL(currentTextUpdated()), this, SLOT(markInspectorUpdate()));
   connect(documentPages[curPage], SIGNAL(modified()), this, SLOT(documentWasModified()));
   connect(documentPages[curPage], SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
-  connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
-          this, SLOT(setWidgetClipboard(QString)));
+//  connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
+//          this, SLOT(setWidgetClipboard(QString)));
   connect(documentPages[curPage], SIGNAL(setCurrentAudioFile(QString)),
           this, SLOT(setCurrentAudioFile(QString)));
   connect(documentPages[curPage]->getView(), SIGNAL(lineNumberSignal(int)),

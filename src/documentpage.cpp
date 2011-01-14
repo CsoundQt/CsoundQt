@@ -946,12 +946,12 @@ void DocumentPage::setFontScaling(double offset)
   }
 }
 
-void DocumentPage::passWidgetClipboard(QString text)
-{
-  foreach (WidgetLayout *wl, m_widgetLayouts) {
-    wl->passWidgetClipboard(text);
-  }
-}
+//void DocumentPage::passWidgetClipboard(QString text)
+//{
+//  foreach (WidgetLayout *wl, m_widgetLayouts) {
+//    wl->passWidgetClipboard(text);
+//  }
+//}
 
 void DocumentPage::setConsoleFont(QFont font)
 {
@@ -1171,9 +1171,6 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
   connect(m_csEngine, SIGNAL(stopSignal()),
           this, SLOT(perfEnded()));
 
-
-  //FIXME widgetlayout should have the chance of being empty
-//  m_widgetLayouts.append(newWidgetLayout());
   m_csEngine->setWidgetLayout(m_widgetLayouts[0]);  // Pass first widget layout to engine
 
 //  detachWidgets();
@@ -1192,8 +1189,8 @@ WidgetLayout* DocumentPage::newWidgetLayout()
 {
   WidgetLayout* wl = BaseDocument::newWidgetLayout();
   connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
-  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
-        this, SLOT(setWidgetClipboard(QString)));
+//  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
+//        this, SLOT(setWidgetClipboard(QString)));
   return wl;
 }
 
@@ -1573,10 +1570,10 @@ void DocumentPage::opcodeSyntax(QString message)
   emit opcodeSyntaxSignal(message);
 }
 
-void DocumentPage::setWidgetClipboard(QString message)
-{
-  emit setWidgetClipboardSignal(message);
-}
+//void DocumentPage::setWidgetClipboard(QString message)
+//{
+//  emit setWidgetClipboardSignal(message);
+//}
 
 void DocumentPage::evaluatePython(QString code)
 {

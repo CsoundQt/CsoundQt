@@ -182,7 +182,7 @@ class qutecsound:public QMainWindow
     void evaluateSection();
     void evaluatePython(QString code = QString());
     void setWidgetEditMode(bool);  // This is not necessary as the action is passed and connected in the widget layout
-    void setWidgetClipboard(QString text);
+//    void setWidgetClipboard(QString text);
     void duplicate();
     bool closeTab(bool askCloseApp = false);
     void print();
@@ -267,7 +267,7 @@ class qutecsound:public QMainWindow
     DockHelp *helpPanel;
     WidgetPanel *widgetPanel;  // Dock widget, for containing the widget layout
     QDockWidget *m_scratchPad;
-    QString m_widgetClipboard;
+//    QString m_widgetClipboard;
     Inspector *m_inspector;
 #ifdef QCS_PYTHONQT
     PythonConsole *m_pythonConsole;

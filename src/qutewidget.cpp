@@ -153,6 +153,7 @@ QString QuteWidget::getCabbageLine()
 
 void QuteWidget::createXmlWriter(QXmlStreamWriter &s)
 {
+  s.setAutoFormatting(true);
   s.writeStartElement("bsbObject");
   s.writeAttribute("type", getWidgetType());
 

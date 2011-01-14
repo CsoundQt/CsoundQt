@@ -151,7 +151,7 @@ class DocumentPage : public BaseDocument
     void setOpenProperties(bool open);
     void setFontOffset(double offset);
     void setFontScaling(double offset);
-    void passWidgetClipboard(QString text);
+//    void passWidgetClipboard(QString text);
 
     // Console properties
     void setConsoleFont(QFont font);
@@ -270,7 +270,7 @@ class DocumentPage : public BaseDocument
     void setPanelTempo(LiveEventFrame *panel, double tempo);
 
     void opcodeSyntax(QString message);
-    void setWidgetClipboard(QString text);
+//    void setWidgetClipboard(QString text);
     void evaluatePython(QString code);
 
   signals:

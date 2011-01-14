@@ -28,7 +28,7 @@
 #include "configlists.h"
 #include <csound.h>
 
-#define QCS_VERSION "0.6.0"
+#define QCS_VERSION "0.6.1"
 
 // Time in milliseconds for widget and console messages updates
 #define QCS_QUEUETIMER_DEFAULT_TIME 50
@@ -40,7 +40,7 @@
 #define QCS_MAX_UNDO 256
 
 // Maximum MIDI message queue size for internal control
-#define MAX_MIDI_QUEUE 128
+#define QCS_MAX_MIDI_QUEUE 128
 
 #ifdef Q_OS_LINUX
 #define DEFAULT_HTML_DIR "/usr/share/doc/csound-doc/html"
