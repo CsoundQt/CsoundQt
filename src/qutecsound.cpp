@@ -3210,6 +3210,7 @@ flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E06.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/rbjeq.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/tone.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/bqrez.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/eqfil.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/lowpass2.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/reson.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/Filters/tonex.csd");
@@ -3282,6 +3283,18 @@ flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E06.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/sndwarp.csd");
 
   submenu = mccurdyMenu->addMenu(tr("GranularSynthesis"));
+  foreach (QString fileName, mccurdyFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
+  mccurdyFiles.clear();
+  mccurdyFiles.append(":/Examples/McCurdy Collection/DynamicsProcessing/dam.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/DynamicsProcessing/compress.csd");
+
+  submenu = mccurdyMenu->addMenu(tr("Dynamics Processors"));
   foreach (QString fileName, mccurdyFiles) {
     QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
     newAction = submenu->addAction(name);

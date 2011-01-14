@@ -116,5 +116,8 @@
         <file>Examples/McCurdy Collection/GranularSynthesis/sndwarp.csd</file>
         <file>Examples/McCurdy Collection/GranularSynthesis/syncgrain.csd</file>
         <file>Examples/McCurdy Collection/GranularSynthesis/syncloop.csd</file>
+        <file>Examples/McCurdy Collection/Filters/eqfil.csd</file>
+        <file>Examples/McCurdy Collection/DynamicsProcessing/compress.csd</file>
+        <file>Examples/McCurdy Collection/DynamicsProcessing/dam.csd</file>
     </qresource>
 </RCC>
