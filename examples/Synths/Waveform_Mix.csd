@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac --midi-key-cps=4 --midi-velocity-amp=5
+--midi-key-cps=4 --midi-velocity-amp=5 -m0
 </CsOptions>
 <CsInstruments>
 /*****WAVEFORM MIX*****/
@@ -23,8 +23,8 @@ itabsiz	=		(itabsiz == 0 ? 1024 : itabsiz)
 iftemp		ftgen		0, 0, -(inparts * 3), -2, 0;temp ftab for writing the str-pna-phas vals
 indx		=		1
 loop:
-if iwf == 1 then ; saw = 1, 1/2, 1/3, ... as strength of partials
-		tabw_i		1/indx, (indx-1)*3, iftemp; writes strength of partial
+if iwf == 1 then ; saw = 1, -1/2, 1/3, -1/4, ... as strength of partials
+		tabw_i		1/(indx % 2 == 0 ? -indx : indx), (indx-1)*3, iftemp; writes strength of partial
 		tabw_i		indx, (indx-1)*3+1, iftemp; writes partial number
 elseif iwf == 2 then ; square = 1, 1/3, 1/5, ... for odd partials
 		tabw_i		1/(indx*2-1), (indx-1)*3, iftemp; writes strength of partial
@@ -41,11 +41,11 @@ endif
 
 		loop_le	indx, 1, inparts, loop
 
-iftout	ftgen		ifno, 0, itabsiz, 34, iftemp, inparts, 1; write table with GEN34 
+iftout		ftgen		ifno, 0, itabsiz, 34, iftemp, inparts, 1; write table with GEN34 
 		ftfree		iftemp, 0; remove iftemp
 		xout		iftout
   endop
-
+  	
   opcode ShowLED_a, 0, Sakkk
 ;Shows an audio signal in an outvalue channel. You can choose to show the value in dB or in raw amplitudes.
 ;;Input:
@@ -156,7 +156,7 @@ gkamp_squ	port		gkamp_squ, .1
 gkamp_tri	port		gkamp_tri, .1
 gkamp_imp	port		gkamp_imp, .1
 gk_vol		port		gk_vol, .1
-;LET THE GRAPH WIDGET SHOW THE WAVEFORMS (and be happy if it happens)
+;LET THE GRAPH WIDGET SHOW THE WAVEFORMS
 		outvalue	"sine", -1
 		outvalue	"saw", -2
 		outvalue	"square", -3
@@ -166,12 +166,11 @@ endin
 
 instr 2;;PLAY ONE NOTE
 ;GENERATE THE FIVE AUDIO SIGNALS
-print p4,p5
-asin		oscil3		p5, p4, giftsin
-asaw		oscil3		p5, p4, giftsaw
-asqu		oscil3		p5, p4, giftsqu
-atri		oscil3		p5, p4, gifttri
-aimp		oscil3		p5, p4, giftimp
+asin		poscil		p5, p4, giftsin
+asaw		poscil		p5, p4, giftsaw
+asqu		poscil		p5, p4, giftsqu
+atri		poscil		p5, p4, gifttri
+aimp		poscil		p5, p4, giftimp
 ;MIX THEM, APPLY A SIMPLE ENVELOPE AND SEND THE MIX OUT
 amix		sum		asin*gkamp_sin, asaw*gkamp_saw, asqu*gkamp_squ, atri*gkamp_tri, aimp*gkamp_imp
 kenv		linsegr	0, .1, 1, p3-.1, 1, .1, 0; simple envelope
@@ -180,10 +179,10 @@ aenv		=		amix*kenv*gk_vol; apply alo master volume
 endin
 
 instr 3; SHOW THE SUM OF ALL SINGLE NOTES TO SEE CLIPPING
-aout		monitor
+aL,aR		monitor
 kTrigDisp	metro		10
-		ShowLED_a	"out", aout, kTrigDisp, 1, 50
-		ShowOver_a	"outover", aout/0dbfs, kTrigDisp, 1
+		ShowLED_a	"out", aL, kTrigDisp, 1, 50
+		ShowOver_a	"outover", aL, kTrigDisp, 1
 endin
 
 </CsInstruments>
@@ -196,8 +195,8 @@ e
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>737</x>
- <y>267</y>
+ <x>131</x>
+ <y>85</y>
  <width>1134</width>
  <height>629</height>
  <visible>true</visible>
@@ -275,7 +274,8 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>0</value>
+  <value>-1</value>
+  <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -323,7 +323,8 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>0</value>
+  <value>-2</value>
+  <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -371,7 +372,8 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>0</value>
+  <value>-3</value>
+  <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -419,7 +421,8 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>0</value>
+  <value>-4</value>
+  <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -467,7 +470,8 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>0</value>
+  <value>-5</value>
+  <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -816,14 +820,14 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.64242424</value>
+  <value>0.54545455</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
-  <objectName>hor8</objectName>
+  <objectName>out</objectName>
   <x>1039</x>
   <y>424</y>
   <width>18</width>
@@ -831,14 +835,14 @@ e
   <uuid>{adfe8e43-acf9-42b6-88ed-d02595ea2f7d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <objectName2>out</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.59259300</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>-inf</xValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -856,7 +860,7 @@ e
   </bgcolor>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
-  <objectName>in1over_pre</objectName>
+  <objectName>outover</objectName>
   <x>1039</x>
   <y>406</y>
   <width>18</width>
@@ -864,7 +868,7 @@ e
   <uuid>{e4f880e1-6ed1-415f-bac9-bab6acafe0cf}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <objectName2>outover</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -964,7 +968,7 @@ Volume</label>
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Stop</objectName>
@@ -983,7 +987,7 @@ Volume</label>
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1091,12 +1095,6 @@ Volume</label>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <objectName/>
- <x>737</x>
- <y>267</y>
- <width>1134</width>
- <height>629</height>
- <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
@@ -1106,45 +1104,46 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 737 267 1134 629
+WindowBounds: 72 179 400 200
 CurrentView: io
 IOViewEdit: On
-Options: -b128 -A -s -m167 -R
+Options:
 </MacOptions>
+
 <MacGUI>
 ioView background {43690, 43690, 32639}
-ioText {34, 265} {1028, 44} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 
-ioText {73, 116} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Sine
-ioGraph {35, 161} {178, 96} table 0.000000 1.000000 sine
-ioText {290, 116} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Saw
-ioGraph {252, 161} {178, 96} table 0.000000 1.000000 saw
-ioText {509, 115} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Square
-ioGraph {471, 160} {178, 96} table 0.000000 1.000000 square
-ioText {713, 115} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Triangle
-ioGraph {675, 160} {178, 96} table 0.000000 1.000000 triangle
-ioText {922, 114} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Impulse
-ioGraph {884, 159} {178, 96} table 0.000000 1.000000 impulse
-ioText {314, 272} {59, 28} editnum 8.000000 1.000000 "np_saw" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 8.000000
-ioText {533, 272} {59, 28} editnum 8.000000 1.000000 "np_squ" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 8.000000
-ioText {740, 272} {59, 28} editnum 8.000000 1.000000 "np_tri" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 8.000000
-ioText {949, 272} {59, 28} editnum 8.000000 1.000000 "np_imp" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 8.000000
+ioText {34, 265} {1028, 44} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {73, 116} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Sine
+ioGraph {35, 161} {178, 96} table -1.000000 1.000000 sine
+ioText {290, 116} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Saw
+ioGraph {252, 161} {178, 96} table -2.000000 1.000000 saw
+ioText {509, 115} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Square
+ioGraph {471, 160} {178, 96} table -3.000000 1.000000 square
+ioText {713, 115} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Triangle
+ioGraph {675, 160} {178, 96} table -4.000000 1.000000 triangle
+ioText {922, 114} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Impulse
+ioGraph {884, 159} {178, 96} table -5.000000 1.000000 impulse
+ioText {314, 272} {59, 28} editnum 8.000000 1.000000 "np_saw" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 8.000000
+ioText {533, 272} {59, 28} editnum 8.000000 1.000000 "np_squ" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 8.000000
+ioText {740, 272} {59, 28} editnum 8.000000 1.000000 "np_tri" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 8.000000
+ioText {949, 272} {59, 28} editnum 8.000000 1.000000 "np_imp" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 8.000000
 ioGraph {26, 407} {766, 165} scope 1.000000 -1 
 ioMeter {824, 405} {31, 166} {0, 59904, 0} "hor21" 0.322581 "amp_sin" 0.192771 fill 1 0 mouse
 ioMeter {855, 405} {31, 166} {0, 59904, 0} "hor21" 0.322581 "amp_saw" 0.162651 fill 1 0 mouse
 ioMeter {886, 405} {31, 166} {0, 59904, 0} "hor21" 0.322581 "amp_squ" 0.265060 fill 1 0 mouse
 ioMeter {917, 405} {31, 166} {0, 59904, 0} "hor21" 0.322581 "amp_tri" 0.409639 fill 1 0 mouse
 ioMeter {947, 405} {31, 166} {0, 59904, 0} "hor21" 0.322581 "amp_imp" 0.722892 fill 1 0 mouse
-ioText {824, 345} {148, 54} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Relative Strength of the Five Waveforms
-ioSlider {1008, 406} {22, 165} 0.000000 2.000000 0.642424 vol
-ioMeter {1039, 424} {18, 147} {0, 59904, 0} "hor8" 0.592593 "out" 0.000000 fill 1 0 mouse
-ioMeter {1039, 406} {18, 23} {50176, 3584, 3072} "in1over_pre" 0.000000 "outover" 0.000000 fill 1 0 mouse
-ioText {999, 346} {64, 55} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder MasterÂ¬Volume
-ioText {63, 368} {214, 33} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Scope Resulting Waveform
+ioText {824, 345} {148, 54} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Relative Strength of the Five Waveforms
+ioSlider {1008, 406} {22, 165} 0.000000 2.000000 0.545455 vol
+ioMeter {1039, 424} {18, 147} {0, 59904, 0} "out" -inf "out" -inf fill 1 0 mouse
+ioMeter {1039, 406} {18, 23} {50176, 3584, 3072} "outover" 0.000000 "outover" 0.000000 fill 1 0 mouse
+ioText {999, 346} {64, 55} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder MasterÂ¬Volume
+ioText {63, 368} {214, 33} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Scope Resulting Waveform
 ioButton {372, 363} {91, 27} value 1.000000 "_Play" "START" "/" i1 0 10
 ioButton {486, 363} {91, 27} value 1.000000 "_Stop" "STOP" "/" i1 0 10
-ioText {35, 273} {176, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Number of Harmonics:
-ioText {91, 59} {903, 53} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Standard Waveforms are built here by superposition of harmonics. The higher the number of harmonics, the sharper the shape. You can change here in realtime the number of harmonics and the relative strength of the five shapes in the resulting mix.
-ioText {190, 11} {712, 43} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Waveform Mix
+ioText {35, 273} {176, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Number of Harmonics:
+ioText {91, 59} {903, 53} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Standard Waveforms are built here by superposition of harmonics. The higher the number of harmonics, the sharper the shape. You can change here in realtime the number of harmonics and the relative strength of the five shapes in the resulting mix.
+ioText {190, 11} {712, 43} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Waveform Mix
 ioButton {592, 363} {199, 28} event 1.000000 "" "MAKE AUDIO" "/" i2 0 3 440 0.2
 </MacGUI>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="543" y="318" width="614" height="322" visible="true" loopStart="0" loopEnd="0">i 1 0 3 
