@@ -25,8 +25,9 @@ DEFAULT_LIBSNDFILE_INCLUDE_DIRS = /usr/local/include \
 	/usr/include
 DEFAULT_LIBSNDFILE_LIBRARY_DIRS = /usr/local/lib \
         /usr/lib
-DEFAULT_CSOUND_LIBS = CsoundLib
-CSND_LIB = lib_csnd.dylib
+build32:DEFAULT_CSOUND_LIBS = CsoundLib
+build64:DEFAULT_CSOUND_LIBS = CsoundLib64
+#CSND_LIB = lib_csnd.dylib
 LIBSNDFILE_LIB = libsndfile.dylib
 
 # For OS X, the PythonQt.1.0.0.dylib and the libPythonQt.1.dylib must be on /usr/local/lib or other lib path

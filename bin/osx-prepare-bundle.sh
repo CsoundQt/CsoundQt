@@ -9,7 +9,7 @@
 
 clear
 
-echo Enter version number/name (e.g. 0.7.0-alpha-py):
+echo "Enter version number/name (e.g. 0.7.0-alpha-py):"
 read QUTECSOUND_VERSION
 
 
@@ -35,28 +35,26 @@ esac
 done
 shift $(($OPTIND - 1))
 
-ORIGINAL_NAME=qutecsound-f
-ORIGINAL_NAME_D=qutecsound-d
+PRECISION=-f
+ORIGINAL_NAME=qutecsound${PRECISION}
 NEW_NAME=QuteCsound
 
 # Build everything just to make sure all versions packaged are synchronized
-qmake ../qcs.pro CONFIG+=rtmidi
-../make
-qmake ../qcs.pro CONFIG+=rtmidi CONFIG+=build64
-../make
-#qmake ../qcs.pro CONFIG+=rtmidi CONFIG+=pythonqt
-#../make
-#qmake ../qcs.pro CONFIG+=rtmidi CONFIG+=build64 CONFIG+=pythonqt
-#../make
+cd ..
+qmake qcs.pro CONFIG+=rtmidi -spec macx-g++ -r CONFIG+=release
+make
+#qmake qcs.pro CONFIG+=rtmidi CONFIG+=build64 -spec macx-g++ -r CONFIG+=release
+#make
+#qmake qcs.pro CONFIG+=rtmidi CONFIG+=pythonqt
+#make
+#qmake qcs.pro CONFIG+=rtmidi CONFIG+=build64 CONFIG+=pythonqt
+#make
+cd bin
 
-lipo ${ORIGINAL_NAME}.app/Contents/MacOS/${ORIGINAL_NAME} ${ORIGINAL_NAME_D}.app/Contents/MacOS/${ORIGINAL_NAME_D} --create --output ${ORIGINAL_NAME}.app/Contents/MacOS/qutecsound
-
-# Remove unused to avoid confusion
-rm ${ORIGINAL_NAME}.app/Contents/MacOS/${ORIGINAL_NAME}
-rm -R ${ORIGINAL_NAME_D}.app
+#lipo ${ORIGINAL_NAME}.app/Contents/MacOS/${ORIGINAL_NAME} ${ORIGINAL_NAME_D}.app/Contents/MacOS/${ORIGINAL_NAME_D} -create --output ${ORIGINAL_NAME}.app/Contents/MacOS/qutecsound
 
 ORIG_APP_NAME=${ORIGINAL_NAME}.app
-ORIGINAL_NAME = qutecsound
+ORIGINAL_NAME=qutecsound
 APP_NAME=${NEW_NAME}-${QUTECSOUND_VERSION}.app
 
 mv $ORIG_APP_NAME/ $APP_NAME/

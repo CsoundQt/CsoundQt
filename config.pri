@@ -113,9 +113,9 @@ isEmpty(CSOUND_LIBRARY_DIR) {
             !no_messages:message(... searching in $${dir})
             exists($${dir}) {
                 !no_messages:message(... in $${dir} for $${DEFAULT_CSOUND_LIBS})
-                for(csound_lib, DEFAULT_CSOUND_LIBS):exists($${dir}/$${csound_lib}):exists($${dir}/$${CSND_LIB}) {
+                for(csound_lib, DEFAULT_CSOUND_LIBS):exists($${dir}/$${csound_lib}) {
                     !no_messages {
-                        message(CSOUND_LIB set to $${csound_lib})
+                        #message(CSOUND_LIB set to $${csound_lib})
                         message(CSOUND_LIBRARY_DIR set to $${dir})
                         message()
                     }
@@ -273,7 +273,7 @@ win32 {
     !csoundApiHeaderExists(cwindow.h):error(cwindow.h not found)
     !csoundInterfacesHeaderExists(csPerfThread.hpp):error(csPerfThread.hpp not found)
     !csoundLibraryExists($${CSOUND_LIB}):error(Csound API library not found)
-    !csoundLibraryExists($${CSND_LIB}):error(Csound C++ interface library not found)
+    #!csoundLibraryExists($${CSND_LIB}):error(Csound C++ interface library not found)
     !libsndfileHeaderExists(sndfile.h):error(sndfile.h not found)
     !libsndfileLibraryExists($${LIBSNDFILE_LIB}):error(libsndfile library not found)
 }

@@ -56,7 +56,7 @@ text between the nearest "##" at the begining of a line. This way you
 can mark large blocks of code that can be easily evaluated without
 having to manually select them.
 -Changed evaluate default shortcut to Alt+E
--Added Diffamator, String Phaser, Autotuner, MIDI layering and Sruti-Drone Box examples.
+-Added B6 Hammond, Diffamator, String Phaser, Autotuner, MIDI layering and Sruti-Drone Box examples.
 -Added set Editor Focus action (Alt+0 default shortcut)
 -Auto join orc/sco is now transparent and automatically creates and saves
 a csd file.
@@ -69,6 +69,9 @@ when the line ending is selected.
 -Added new finnish translations by Niko Humalamäki
 -Added jumping to line to inspector headers (according to the first
 element under the header)
+-About Box now displayes the currently used Csound version and precision.
+-Python editor now indents when line ends with ':'
+-Widgets can now be pasted to/from a text editor in case you want to edit them as text.
 
 Fixed in version 0.6.1:
 -Put back support for chnget/chnset.
@@ -107,6 +110,9 @@ text is modified.
 -Comments are now placed in correct places in the inspector, if they are
 inside instruments and if they are in the score.
 -Improved performance of syntax popup menu on OS X.
+-FLOSS Manual Examples reordered and added.
+-Csound Consoles now set background color properly.
+-Fixed reserved mouse channels _MouseX, _MouseY, _MouseRelX, _MouseRelY and _MouseBut1
 
 Internal changes in 0.6.1:
 -Reduced size of OS X bundle by removing debug Qt binaries
@@ -117,6 +123,135 @@ This means however that keyboard shortcuts are reset.
 
 
 Full ChangeLog:
+Revision 806
+Modified Sun Jan 16 12:35:21 2011 UTC (28 hours, 22 minutes ago) by joachimheintz
+Waveform_Mix example improved
+
+Revision 805
+Modified Fri Jan 14 12:57:21 2011 UTC (3 days, 4 hours ago) by mantaraya36
+Fixed setting of widget values from Mouse reserved channels
+
+Revision 804
+Modified Fri Jan 14 12:19:58 2011 UTC (3 days, 4 hours ago) by mantaraya36
+Added new examples from McCurdy collection by Rene Djack
+
+Revision 803
+Modified Fri Jan 14 09:24:24 2011 UTC (3 days, 7 hours ago) by mantaraya36
+Fixed copying widgets to clipboard (was only working within document).
+This allows copying the widgets xml text to and from a text document.
+Bumped version to 0.6.1
+
+Revision 802
+Modified Fri Jan 7 09:17:42 2011 UTC (10 days, 7 hours ago) by mantaraya36
+Added text about PythonQt compilation status in About QuteCsound box.
+Improved the Koenig Essay python script
+
+Revision 801
+Modified Wed Jan 5 19:07:46 2011 UTC (11 days, 21 hours ago) by mantaraya36
+Added piano phase example thanks to Rene Djack
+
+Revision 800
+Modified Tue Jan 4 16:46:42 2011 UTC (13 days ago) by mantaraya36
+Hid python actions when not built using PythonQt and hid create app menu
+item for release.
+Changes to OS X packaging script to create universal QuteCsound using
+lipo. (untested)
+
+Revision 799
+Modified Mon Jan 3 18:42:02 2011 UTC (13 days, 22 hours ago) by afillebrown
+move #ifdef Q_OS_WIN32 to follow last include in widgetlayout.cpp, so qglobal.h has a chance to define it before it's checked for the unistd.h include
+
+Revision 798
+Modified Mon Jan 3 18:38:54 2011 UTC (13 days, 22 hours ago) by afillebrown
+fix qutecsound.cpp so it builds without QCS_PYTHONQT defined
+
+Revision 797
+Modified Mon Jan 3 18:37:13 2011 UTC (13 days, 22 hours ago) by afillebrown
+escape backslashes in qcs-win32.pro
+
+Revision 796
+Modified Mon Jan 3 18:36:23 2011 UTC (13 days, 22 hours ago) by afillebrown
+cleanup config.pri
+
+Revision 795
+Modified Mon Jan 3 18:35:52 2011 UTC (13 days, 22 hours ago) by afillebrown
+move pythonscripts.qrc from root directory to src
+
+Revision 794
+Modified Mon Jan 3 13:15:24 2011 UTC (2 weeks ago) by mantaraya36
+Minor fixes
+
+Revision 793
+Modified Mon Jan 3 13:14:34 2011 UTC (2 weeks ago) by mantaraya36
+Updated Finnish translation for release, thanks to Niko.
+
+Revision 792
+Modified Sun Jan 2 16:00:15 2011 UTC (2 weeks, 1 day ago) by mantaraya36
+Fixed state of toolbar buttons at startup
+
+Revision 791
+Modified Sun Jan 2 15:47:04 2011 UTC (2 weeks, 1 day ago) by mantaraya36
+Fixed bugs with behaviour of python console and python code execution.
+Added python scratchpad Dock Widget.
+About Box now displayes the currently used Csound version and precision.
+Python editor now indents when line ends with ':'
+Csound Consoles now set background color properly.
+
+
+Revision 790
+Modified Sat Jan 1 22:19:05 2011 UTC (2 weeks, 1 day ago) by mantaraya36
+Added Marco Gasperini's Rendering of Koenig's Essay, with a python rendering script by me.
+Added getFileName and getFilePath functions to pyqcsobject class
+Fixed bug with save as... not changing the internal filename.
+Added indent.py script to automatically indent files
+
+Revision 789
+Modified Sat Jan 1 10:40:43 2011 UTC (2 weeks, 2 days ago) by mantaraya36
+When creating new widgets using the python api, the uuid of the widget
+is returned.
+Added setWidgetProperty and getWidgetProperty to python api, to query
+and modify widget characteristics.
+
+Revision 788
+Modified Fri Dec 31 09:42:12 2010 UTC (2 weeks, 3 days ago) by mantaraya36
+Updated French translation by Francois Pinot and updated Spanish translation.
+
+Revision 787
+Modified Thu Dec 30 22:03:14 2010 UTC (2 weeks, 3 days ago) by joachimheintz
+german translation updated
+
+Revision 786
+Modified Thu Dec 30 15:16:13 2010 UTC (2 weeks, 4 days ago) by mantaraya36
+Added B6 Hammond example ported to QuteCsound by Rene Djack/Jopi
+Added Granular Synthesis examples from McCurdy collection ported by Rene Djack
+Updated translations for release
+
+Revision 785
+Modified Sat Dec 25 22:47:05 2010 UTC (3 weeks, 1 day ago) by joachimheintz
+Completing FM examples.
+
+Revision 784
+Modified Sat Dec 25 22:41:46 2010 UTC (3 weeks, 1 day ago) by joachimheintz
+FLOSS Manual Examples reordered and added.
+
+Revision 783
+Modified Tue Dec 21 12:29:22 2010 UTC (3 weeks, 6 days ago) by mantaraya36
+Added Modulation examples from McCurdy collection ported to QuteCsound by Rene Djack.
+Made widget panel close when closing document tab
+Fixed truncation of jack client name when too long
+
+Revision 782
+Modified Tue Dec 21 11:36:52 2010 UTC (3 weeks, 6 days ago) by mantaraya36
+Fixed resizing of internal widget panel when it is conatined in a dock
+widget.
+Removed unnecesary translation strings.
+Fixed setting visibility internally for widget panel when it is a
+separate window.
+
+Revision 781
+Modified Sun Dec 19 21:01:05 2010 UTC (4 weeks ago) by mantaraya36
+Updated translations and release notes
+
 Revision 780
 Modified Sun Dec 19 19:40:48 2010 UTC (9 minutes, 58 seconds ago) by mantaraya36
 Put back support for chnget/chnset.
