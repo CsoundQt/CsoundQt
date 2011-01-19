@@ -119,5 +119,8 @@
         <file>Examples/McCurdy Collection/Filters/eqfil.csd</file>
         <file>Examples/McCurdy Collection/DynamicsProcessing/compress.csd</file>
         <file>Examples/McCurdy Collection/DynamicsProcessing/dam.csd</file>
+        <file>Examples/McCurdy Collection/Mouse/MouseBass.csd</file>
+        <file>Examples/McCurdy Collection/Mouse/MouseChord.csd</file>
+        <file>Examples/McCurdy Collection/Mouse/MouseKeyboard.csd</file>
     </qresource>
 </RCC>

@@ -123,6 +123,12 @@ This means however that keyboard shortcuts are reset.
 
 
 Full ChangeLog:
+Revision 807
+Modified Mon Jan 17 17:07:09 2011 UTC (14 minutes, 54 seconds ago) by mantaraya36
+Fixed packaging script for OS X.
+Removed check for libcsnd as it is no longer needed.
+Updated Release notes.
+
 Revision 806
 Modified Sun Jan 16 12:35:21 2011 UTC (28 hours, 22 minutes ago) by joachimheintz
 Waveform_Mix example improved

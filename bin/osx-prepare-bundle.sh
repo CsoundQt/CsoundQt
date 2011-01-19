@@ -54,7 +54,6 @@ cd bin
 #lipo ${ORIGINAL_NAME}.app/Contents/MacOS/${ORIGINAL_NAME} ${ORIGINAL_NAME_D}.app/Contents/MacOS/${ORIGINAL_NAME_D} -create --output ${ORIGINAL_NAME}.app/Contents/MacOS/qutecsound
 
 ORIG_APP_NAME=${ORIGINAL_NAME}.app
-ORIGINAL_NAME=qutecsound
 APP_NAME=${NEW_NAME}-${QUTECSOUND_VERSION}.app
 
 mv $ORIG_APP_NAME/ $APP_NAME/
