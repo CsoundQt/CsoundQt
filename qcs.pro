@@ -22,6 +22,7 @@
 # OS X only OPTIONS:
 # CONFIG+=intel         To build intel only version (Universal is the default)
 # ##############################################################################
+
 !build32:!build64:CONFIG += build32
 build32:build64:CONFIG -= build32
 unix { 

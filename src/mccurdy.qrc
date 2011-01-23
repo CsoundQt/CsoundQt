@@ -122,5 +122,12 @@
         <file>Examples/McCurdy Collection/Mouse/MouseBass.csd</file>
         <file>Examples/McCurdy Collection/Mouse/MouseChord.csd</file>
         <file>Examples/McCurdy Collection/Mouse/MouseKeyboard.csd</file>
+        <file>Examples/McCurdy Collection/LiveAudioIn/01ins.csd</file>
+        <file>Examples/McCurdy Collection/LiveAudioIn/02meters.csd</file>
+        <file>Examples/McCurdy Collection/LiveAudioIn/03follow2gate.csd</file>
+        <file>Examples/McCurdy Collection/LiveAudioIn/follow2EnvelopeFilter.csd</file>
+        <file>Examples/McCurdy Collection/LiveAudioIn/MIDIKeyboardControlledPitchShifter.csd</file>
+        <file>Examples/McCurdy Collection/LiveAudioIn/pitch.csd</file>
+        <file>Examples/McCurdy Collection/LiveAudioIn/pitchamdf.csd</file>
     </qresource>
 </RCC>

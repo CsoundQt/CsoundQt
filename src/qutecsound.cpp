@@ -3276,7 +3276,7 @@ flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E06.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/fofx6_Poly.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/grain3.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/granule.csd");
-  mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesissyncgrain/.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/syncgrain.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/syncloop.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/MorphingPresets.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/GranularSynthesis/SchedkwhenGranulation.csd");
@@ -3308,6 +3308,23 @@ flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E06.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/Mouse/MouseKeyboard.csd");
 
   submenu = mccurdyMenu->addMenu(tr("Mouse"));
+  foreach (QString fileName, mccurdyFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
+  mccurdyFiles.clear();
+  mccurdyFiles.append(":/Examples/McCurdy Collection/LiveAudioIn/01ins.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/LiveAudioIn/02meters.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/LiveAudioIn/03follow2gate.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/LiveAudioIn/pitch.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/LiveAudioIn/pitchamdf.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/LiveAudioIn/follow2EnvelopeFilter.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/LiveAudioIn/MIDIKeyboardControlledPitchShifter.csd");
+
+  submenu = mccurdyMenu->addMenu(tr("LiveAudioIn"));
   foreach (QString fileName, mccurdyFiles) {
     QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
     newAction = submenu->addAction(name);
