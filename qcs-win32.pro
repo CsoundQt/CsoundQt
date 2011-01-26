@@ -34,4 +34,5 @@ LSNDFILE = "$${LIBSNDFILE_LIBRARY_DIR}/$${LIBSNDFILE_LIB}"
 
 rtmidi {
 DEFINES += __WINDOWS_MM__
+LIBS += -lwinmm
 }
