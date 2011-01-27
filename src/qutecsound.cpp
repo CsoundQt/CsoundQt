@@ -1256,7 +1256,7 @@ void qutecsound::runInTerm(bool realtime)
   QString fileName = documentPages[curPage]->getFileName();
   QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "QuteCsoundExample-XXXXXX.csd");
   tempFile.setAutoRemove(false);
-  if (fileName.startsWith(":/examples/")) {
+  if (fileName.startsWith(":/")) {
     if (!tempFile.open()) {
       qDebug() << "qutecsound::runCsound() : Error creating temp file";
       runAct->setChecked(false);
