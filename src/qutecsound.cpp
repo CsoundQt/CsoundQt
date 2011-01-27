@@ -1461,10 +1461,14 @@ void qutecsound::render()
       return;
     }
   }
+  QString outName = m_options->fileOutputFilename;
 #ifdef Q_OS_WIN32
-  m_options->fileOutputFilename.replace('\\', '/');
+  outName = outName.replace('\\', '/');
 #endif
-  setCurrentAudioFile(m_options->fileOutputFilename);
+  if (outName.isEmpty()) {
+    outName = "test.wav";
+  }
+  setCurrentAudioFile(outName);
   play(false);
 }
 
