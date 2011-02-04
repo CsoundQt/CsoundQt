@@ -53,6 +53,7 @@ class DocumentView : public BaseView
     void setBasicText(QString text);
     void setOrc(QString text);
     void setSco(QString text);
+    void setFileB(QString text);
     void setLadspaText(QString text);
     void setAutoComplete(bool autoComplete);
 
@@ -64,6 +65,7 @@ class DocumentView : public BaseView
     QString getOrc();  // Without tags
     QString getSco();  // Without tags
     QString getOptionsText();  // Without tags
+    QString getFileB(); // Embedded files
     QString getMiscText();  // All other tags like version and licence with tags
     QString getExtraText(); // Text outside any known tags
     // These two should be used with care as they are only here in case

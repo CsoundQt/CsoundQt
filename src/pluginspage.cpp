@@ -34,7 +34,7 @@ PluginsPage::PluginsPage(QWidget *parent, QString opcodeDir) :
   connect(ui->selectAllButton, SIGNAL(released()), this, SLOT(selectAll()));
   connect(ui->selectNoneButton, SIGNAL(released()), this, SLOT(selectNone()));
   connect(ui->deselectFltkButton, SIGNAL(released()), this, SLOT(deselectFltk()));
-  registerField("plugins", ui->pluginsListWidget);
+//  registerField("plugins", ui->pluginsListWidget);
   connect(ui->pluginsListWidget, SIGNAL(itemSelectionChanged () ), this, SLOT(selectionChanged()));
   if (!opcodeDir.isEmpty()) {
     setField("opcodeDir", opcodeDir);

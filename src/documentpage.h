@@ -107,6 +107,7 @@ class DocumentPage : public BaseDocument
     int instrumentCount();
     int udoCount();
     int widgetCount();
+    QString embeddedFiles();
     QString getFilePath();
     QStringList getScheduledEvents(unsigned long ksmpscount);
     bool isModified();

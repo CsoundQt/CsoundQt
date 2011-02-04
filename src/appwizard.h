@@ -48,6 +48,7 @@ class AppWizard : public QWizard
   private:
     QString m_opcodeDir;
     int m_pluginsPage;
+    int m_additionalsPage;
 
     void createWinApp(QString appName, QString appDir, QStringList dataFiles,
                       QStringList plugins, QString libDir, QString opcodeDir, bool useDoubles = true);

@@ -35,11 +35,18 @@ public:
     AdditionalFilesPage(QWidget *parent = 0);
     ~AdditionalFilesPage();
 
+    void setFiles(QStringList files);
+    void setSearchDirectories(QStringList directories);
+
 protected:
     void changeEvent(QEvent *e);
 
 private:
     Ui::AdditionalFilesPage *ui;
+    QStringList m_searchDirectories;
+
+private slots:
+    void selectionChanged();
 };
 
 #endif // ADDITIONALFILESPAGE_H

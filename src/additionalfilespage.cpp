@@ -22,6 +22,9 @@
 #include "additionalfilespage.h"
 #include "ui_additionalfilespage.h"
 
+#include <QFile>
+#include <QDir>
+
 AdditionalFilesPage::AdditionalFilesPage(QWidget *parent) :
     QWizardPage(parent),
     ui(new Ui::AdditionalFilesPage)
@@ -35,6 +38,19 @@ AdditionalFilesPage::~AdditionalFilesPage()
     delete ui;
 }
 
+void AdditionalFilesPage::setFiles(QStringList files)
+{
+  foreach (QString file, files) {
+      ui->additionalListWidget->addItem(file);
+  }
+  ui->additionalListWidget->selectAll();
+}
+
+void AdditionalFilesPage::setSearchDirectories(QStringList directories)
+{
+  m_searchDirectories = directories;
+}
+
 void AdditionalFilesPage::changeEvent(QEvent *e)
 {
     QWizardPage::changeEvent(e);
@@ -45,4 +61,23 @@ void AdditionalFilesPage::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void AdditionalFilesPage::selectionChanged()
+{
+  QList<QListWidgetItem *> selected = ui->additionalListWidget->selectedItems();
+  QStringList files;
+  foreach (QListWidgetItem *item, selected) {
+    QString name = item->text();
+    foreach(QString directory, m_searchDirectories) {
+      if (directory.endsWith("/")) {
+        directory += "/";
+      }
+      if (QFile::exists(directory + name)) {
+        files << directory + name;
+        break;
+      }
+    }
+  }
+  setProperty("dataFiles", files);
 }

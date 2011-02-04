@@ -49,7 +49,8 @@ AppWizard::AppWizard(QWidget *parent,QString opcodeDir,
   setField("targetDir", targetDir);
   setField("opcodeDir", opcodeDir);
   m_pluginsPage = addPage(new PluginsPage(this, field("opcodeDir").toString()));
-  int additionalsPage = addPage(new AdditionalFilesPage(this));
+  m_additionalsPage = addPage(new AdditionalFilesPage(this));
+//  static_cast<PluginsPage *>(this->page(m_pluginsPage))->
   connect(static_cast<AppDetailsPage *>(this->page(appPage)), SIGNAL(opcodeDirChangedSignal()),
           static_cast<PluginsPage *>(this->page(m_pluginsPage)), SLOT(updateOpcodeDir()));
   connect(static_cast<AppDetailsPage *>(this->page(appPage)), SIGNAL(platformChangedSignal()),
@@ -97,7 +98,7 @@ void AppWizard::accept()
   QString libDir =  field("libDir").toString();
   QString opcodeDir =  field("opcodeDir").toString();
   QStringList plugins = this->page(m_pluginsPage)->property("plugins").toStringList();
-  QStringList dataFiles = field("dataFiles").toStringList();
+  QStringList dataFiles = this->page(m_additionalsPage)->property("dataFiles").toStringList();
   switch (platform) {
   case 0:
     createLinuxApp(appName, targetDir, dataFiles, plugins, libDir, opcodeDir, useDoubles);

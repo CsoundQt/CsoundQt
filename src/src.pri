@@ -121,13 +121,13 @@ DISTFILES += "$${PWD}/default.csd" \
     "$${PWD}/opcodes.xml" \
     "$${PWD}/qutecsound.rc" \
     "$${PWD}/test.csd"
-pythonqt {
+pythonqt { 
     HEADERS += "$${PWD}/pythonconsole.h" \
         "$${PWD}/pyqcsobject.h"
     SOURCES += "$${PWD}/pythonconsole.cpp" \
         "$${PWD}/pyqcsobject.cpp"
 }
-rtmidi {
+rtmidi { 
     HEADERS += "$${PWD}/../$${RTMIDI_DIR}/RtMidi.h"
     SOURCES += "$${PWD}/../$${RTMIDI_DIR}/RtMidi.cpp"
     INCLUDEPATH += $${PWD}/../$${RTMIDI_DIR}

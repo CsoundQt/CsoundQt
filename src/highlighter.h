@@ -60,6 +60,8 @@
 
     QRegExp commentStartExpression;
     QRegExp commentEndExpression;
+//    QRegExp b64encStartExpression;
+//    QRegExp b64encEndExpression;
 
     QTextCharFormat /*csdBlockFormat,*/ csdtagFormat, instFormat;
     QTextCharFormat irateFormat, krateFormat, arateFormat, girateFormat, gkrateFormat, garateFormat;

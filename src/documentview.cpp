@@ -152,6 +152,11 @@ void DocumentView::setSco(QString text)
   }
 }
 
+void DocumentView::setFileB(QString text)
+{
+  filebEditor->setPlainText(text);
+}
+
 void DocumentView::setLadspaText(QString text)
 {
   QTextCursor cursor;
@@ -204,7 +209,14 @@ QString DocumentView::getSelectedText(int section)
 QString DocumentView::getFullText()
 {
   QString text;
-  text += mainEditor->toPlainText();
+  text = mainEditor->toPlainText();
+  int closeIndex = text.lastIndexOf("</CsoundSynthesizer>");
+  if (closeIndex > 0) { // Embedded files must be within synthesizer
+    text.insert(closeIndex,getFileB());
+  }
+  else {
+    text += getFileB();
+  }
   return text;
 }
 
@@ -213,14 +225,10 @@ QString DocumentView::getBasicText()
 //   What Csound needs (no widgets, misc text, etc.)
   // TODO implement modes
   QString text;
-  switch (m_viewMode) {
-    case 0: // csd without extra sections
-      text = mainEditor->toPlainText();
-    case 1:
-      break;
-    default:
-      break;
-    }
+  text = mainEditor->toPlainText(); // csd without extra sections
+  if (m_viewMode & 16) {
+    text += getFileB();
+  }
   return text;
 }
 
@@ -269,6 +277,11 @@ QString DocumentView::getOptionsText()
   }
   qDebug() << "DocumentView::getOptionsText() " << text;
   return text;
+}
+
+QString DocumentView::getFileB()
+{
+  return filebEditor->toPlainText();
 }
 
 QString DocumentView::getMiscText()

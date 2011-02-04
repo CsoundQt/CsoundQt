@@ -28,6 +28,8 @@ Highlighter::Highlighter(QTextDocument *parent)
 {
   commentStartExpression = QRegExp("/\\*");
   commentEndExpression = QRegExp("\\*/");
+//  b64encStartExpression = QRegExp("<CsFileB .*>");
+//  b64encEndExpression = QRegExp("<CsFileB>");
   colorVariables = true;
   m_mode = 0; // default to Csound mode
 
@@ -228,8 +230,9 @@ void Highlighter::highlightCsoundBlock(const QString &text)
   setCurrentBlockState(0);
 
   int startIndex = 0;
-  if (previousBlockState() != 1)
+  if (previousBlockState() != 1) {
     startIndex = text.indexOf(commentStartExpression);
+  }
 
   while (startIndex >= 0) {
     int endIndex = text.indexOf(commentEndExpression, startIndex);

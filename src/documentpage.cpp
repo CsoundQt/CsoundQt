@@ -148,32 +148,32 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
       m_macGUI = "";
     }
   }
-if (baseRet != 1) {  // Use the old options only if the new ones are not present
-  // This here is for compatibility with MacCsound (copy output filename from <MacOptions> to <CsOptions>)
-  QString optionsText = getMacOptions("Options:");
-  if (optionsText.contains(" -o")) {
-    QString outFile = optionsText.mid(optionsText.indexOf(" -o") + 1);
-    int index = outFile.indexOf(" -");
-    if (index > 0) {
-      outFile = outFile.left(index);
+  if (baseRet != 1) {  // Use the old options only if the new ones are not present
+    // This here is for compatibility with MacCsound (copy output filename from <MacOptions> to <CsOptions>)
+    QString optionsText = getMacOptions("Options:");
+    if (optionsText.contains(" -o")) {
+      QString outFile = optionsText.mid(optionsText.indexOf(" -o") + 1);
+      int index = outFile.indexOf(" -");
+      if (index > 0) {
+        outFile = outFile.left(index);
+      }
+      optionsText.remove(outFile);
+      setMacOption("Options:", optionsText);
+      index = text.indexOf("<CsOptions>");
+      int endindex = text.indexOf("</CsOptions>");
+      if (index >= 0 and endindex > index) {
+        text.remove(index, endindex - index);
+        text.insert(index, "<CsOptions>\n" + outFile);
+      }
+      else {
+        index = text.indexOf("<CsInstruments>");
+        text.insert(index, "<CsOptions>\n" + outFile + "\n</CsOptions>\n");
+      }
     }
-    optionsText.remove(outFile);
-    setMacOption("Options:", optionsText);
-    index = text.indexOf("<CsOptions>");
-    int endindex = text.indexOf("</CsOptions>");
-    if (index >= 0 and endindex > index) {
-      text.remove(index, endindex - index);
-      text.insert(index, "<CsOptions>\n" + outFile);
-    }
-    else {
-      index = text.indexOf("<CsInstruments>");
-      text.insert(index, "<CsOptions>\n" + outFile + "\n</CsOptions>\n");
-    }
+    ret = 1;
   }
-  ret = 1;
-}
-if (baseRet != 1) {
-  applyMacOptions(m_macOptions);
+  if (baseRet != 1) {
+    applyMacOptions(m_macOptions);
     qDebug("<MacOptions> loaded.");
   }
   else {
@@ -195,7 +195,7 @@ if (baseRet != 1) {
     doc.setContent(liveEventsText);
     QDomElement panelElement = doc.firstChildElement("EventPanel");
     QString liveText = panelElement.text();
-//    qDebug() << "BaseDocument::setTextString   " << liveText;
+    //    qDebug() << "BaseDocument::setTextString   " << liveText;
     QString panelName = panelElement.attribute("name","");
     double tempo = panelElement.attribute("tempo","60.0").toDouble();
     double loop = panelElement.attribute("loop","8.0").toDouble();
@@ -224,10 +224,24 @@ if (baseRet != 1) {
     panel->hide();
     text.remove(liveEventsText);
   }
-//  if (m_liveFrames.size() == 0) {
-//    LiveEventFrame *e = createLiveEventPanel();
-//    e->setFromText(QString()); // Must set blank for undo history point
-//  }
+  // Load Embedded Files ------------------------
+  QString fileText = "";
+  while (text.contains("<CsFileB ") and text.contains("</CsFileB>")) {
+    bool endsWithBreak = false;
+    if (text.indexOf("</CsFileB>") + 10 < text.size() && text[text.indexOf("</CsFileB>") + 10] == '\n' ) {
+      endsWithBreak = true;
+    }
+    QString currentFileText = text.mid(text.indexOf("<CsFileB "),
+                                       text.indexOf("</CsFileB>") - text.indexOf("<CsFileB ") + 10
+                                       + (endsWithBreak ? 1:0));
+    text.remove(text.indexOf("<CsFileB "), currentFileText.size());
+    fileText += currentFileText;
+  }
+  m_view->setFileB(fileText);
+  //  if (m_liveFrames.size() == 0) {
+  //    LiveEventFrame *e = createLiveEventPanel();
+  //    e->setFromText(QString()); // Must set blank for undo history point
+  //  }
   m_view->setFullText(text,true);  // This must be last as some of the text has been removed along the way
   m_view->setModified(false);
   return ret;
@@ -613,6 +627,12 @@ int DocumentPage::widgetCount()
 {
   QString text = this->getWidgetsText();
   return text.count("<bsbObject");
+}
+
+QString DocumentPage::embeddedFiles()
+{
+  QString text = m_view->getFileB();
+  return QString::number(text.count("<CsFileB "));
 }
 
 QString DocumentPage::getFilePath()
