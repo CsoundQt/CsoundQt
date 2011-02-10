@@ -7,6 +7,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <opcode><desc>Sets the control rate.</desc><synopsis><opcodename>kr</opcodename> = iarg</synopsis></opcode>
 <opcode><desc>Sets the number of samples in a control period.</desc><synopsis><opcodename>ksmps</opcodename> = iarg</synopsis></opcode>
 <opcode><desc>Sets the number of channels of audio output.</desc><synopsis><opcodename>nchnls</opcodename> = iarg</synopsis></opcode>
+<opcode><desc>Sets the number of channels of audio input.</desc><synopsis><opcodename>nchns_i</opcodename> = iarg</synopsis></opcode>
 <opcode><desc>Sets the audio sampling rate.</desc><synopsis><opcodename>sr</opcodename> = iarg</synopsis></opcode>
 </category>
 <category name="Orchestra Syntax:Block Statements">
@@ -239,6 +240,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <opcode><desc>Generates a controlled pseudo-random number series between min and max values according to a trigger.</desc><synopsis>kout <opcodename>trandom</opcodename> ktrig, kmin, kmax</synopsis></opcode>
 <opcode><desc>Triangular distribution random number generator</desc><synopsis>ares <opcodename>trirand</opcodename> krange</synopsis><synopsis>ires <opcodename>trirand</opcodename> krange</synopsis><synopsis>kres <opcodename>trirand</opcodename> krange</synopsis></opcode>
 <opcode><desc>Uniform distribution random number generator (positive values only).</desc><synopsis>ares <opcodename>unirand</opcodename> krange</synopsis><synopsis>ires <opcodename>unirand</opcodename> krange</synopsis><synopsis>kres <opcodename>unirand</opcodename> krange</synopsis></opcode>
+<opcode><desc>truly random opcodes with controllable range.</desc><synopsis>ax <opcodename>urandom</opcodename> [imin, imax]</synopsis><synopsis>ix <opcodename>urandom</opcodename> [imin, imax]</synopsis><synopsis>kx <opcodename>urandom</opcodename> [imin, imax]</synopsis></opcode>
 <opcode><desc>A discrete user-defined-distribution random generator that can be used as a function.</desc><synopsis>aout = <opcodename>urd</opcodename>(ktableNum)</synopsis><synopsis>iout = <opcodename>urd</opcodename>(itableNum)</synopsis><synopsis>kout = <opcodename>urd</opcodename>(ktableNum)</synopsis></opcode>
 <opcode><desc>Weibull distribution random number generator (positive values only).</desc><synopsis>ares <opcodename>weibull</opcodename> ksigma, ktau</synopsis><synopsis>ires <opcodename>weibull</opcodename> ksigma, ktau</synopsis><synopsis>kres <opcodename>weibull</opcodename> ksigma, ktau</synopsis></opcode>
 </category>
@@ -268,11 +270,11 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
       ar15, ar16] <opcodename>loscilx</opcodename> xamp, kcps, ifn \
       [, iwsize, ibas, istrt, imod1, ibeg1, iend1]</synopsis></opcode>
 <opcode><desc>Generates a table index for sample playback</desc><synopsis>ares <opcodename>lphasor</opcodename> xtrns [, ilps] [, ilpe] [, imode] [, istrt] [, istor]</synopsis></opcode>
-<opcode><desc>Read sampled sound from a table with optional looping and high precision.</desc><synopsis>ares <opcodename>lposcil</opcodename> kamp, kfreqratio, kloop, kend, ifn [, iphs]</synopsis></opcode>
+<opcode><desc>Read sampled sound from a table with looping and high precision.</desc><synopsis>ares <opcodename>lposcil</opcodename> kamp, kfreqratio, kloop, kend, ifn [, iphs]</synopsis></opcode>
 <opcode><desc>Read sampled sound from a table with high precision and cubic interpolation.</desc><synopsis>ares <opcodename>lposcil3</opcodename> kamp, kfreqratio, kloop, kend, ifn [, iphs]</synopsis></opcode>
-<opcode><desc>Read sampled sound from a table with optional looping and high precision.</desc><synopsis>ar <opcodename>lposcila</opcodename> aamp, kfreqratio, kloop, kend, ift [,iphs] </synopsis></opcode>
-<opcode><desc>Read stereo sampled sound from a table with optional looping and high precision.</desc><synopsis>ar1, ar2 <opcodename>lposcilsa</opcodename> aamp, kfreqratio, kloop, kend, ift [,iphs] </synopsis></opcode>
-<opcode><desc>Read stereo sampled sound from a table with optional looping and high precision.</desc><synopsis>ar1, ar2 <opcodename>lposcilsa2</opcodename> aamp, kfreqratio, kloop, kend, ift [,iphs] </synopsis></opcode>
+<opcode><desc>Read sampled sound from a table with looping and high precision.</desc><synopsis>ar <opcodename>lposcila</opcodename> aamp, kfreqratio, kloop, kend, ift [,iphs] </synopsis></opcode>
+<opcode><desc>Read stereo sampled sound from a table with looping and high precision.</desc><synopsis>ar1, ar2 <opcodename>lposcilsa</opcodename> aamp, kfreqratio, kloop, kend, ift [,iphs] </synopsis></opcode>
+<opcode><desc>Read stereo sampled sound from a table with looping and high precision.</desc><synopsis>ar1, ar2 <opcodename>lposcilsa2</opcodename> aamp, kfreqratio, kloop, kend, ift [,iphs] </synopsis></opcode>
 <opcode><desc>Prints a list of all instruments of a previously loaded SoundFont2 (SF2) file.</desc><synopsis><opcodename>sfilist</opcodename> ifilhandle</synopsis></opcode>
 <opcode><desc>Plays a SoundFont2 (SF2) sample instrument, generating a stereo sound.</desc><synopsis>ar1, ar2 <opcodename>sfinstr</opcodename> ivel, inotenum, xamp, xfreq, instrnum, ifilhandle \
       [, iflag] [, ioffset]</synopsis></opcode>
@@ -367,7 +369,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <opcode><desc>Reads a 32-channel audio signal from an external device or stream.</desc><synopsis>ar1, ar2, ar3, ar4, ar5, ar6, ar7, ar8, ar9, ar10, ar11, ar12, ar13, ar14, \
       ar15, ar16, ar17, ar18, ar19, ar20, ar21, ar22, ar23, ar24, ar25, ar26, \
       ar27, ar28, ar29, ar30, ar31, ar32 <opcodename>in32</opcodename></synopsis></opcode>
-<opcode><desc>Reads from a numbered channel in an external audio signal or stream.</desc><synopsis>ain <opcodename>inch</opcodename> kchan</synopsis></opcode>
+<opcode><desc>Reads from numbered channels in an external audio signal or stream.</desc><synopsis>ain1[, ...] <opcodename>inch</opcodename> kchan1[,...]</synopsis></opcode>
 <opcode><desc>Reads six-channel audio data from an external device or stream.</desc><synopsis>ar1, ar2, ar3, ar4, ar5, ar6 <opcodename>inh</opcodename></synopsis></opcode>
 <opcode><desc>Reads eight-channel audio data from an external device or stream.</desc><synopsis>ar1, ar2, ar3, ar4, ar5, ar6, ar7, ar8 <opcodename>ino</opcodename></synopsis></opcode>
 <opcode><desc>Reads quad audio data from an external device or stream.</desc><synopsis>ar1, ar2,  ar3, a4 <opcodename>inq</opcodename></synopsis></opcode>
@@ -443,6 +445,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <opcode><desc>Returns the number of channels in a sound file.</desc><synopsis>ir <opcodename>filenchnls</opcodename> ifilcod [, iallowraw]</synopsis></opcode>
 <opcode><desc>Returns the peak absolute value of a sound file.</desc><synopsis>ir <opcodename>filepeak</opcodename> ifilcod [, ichnl]</synopsis></opcode>
 <opcode><desc>Returns the sample rate of a sound file.</desc><synopsis>ir <opcodename>filesr</opcodename> ifilcod [, iallowraw]</synopsis></opcode>
+<opcode><desc>Checks that a file can be used.</desc><synopsis>ir <opcodename>filevalid</opcodename> ifilcod</synopsis></opcode>
 </category>
 <category name="Signal Modifiers:Amplitude Modifiers">
 <opcode><desc>Adjust one audio signal according to the values of another.</desc><synopsis>ares <opcodename>balance</opcodename> asig, acomp [, ihp] [, iskip]</synopsis></opcode>
@@ -473,7 +476,6 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <opcode><desc>Taps a delay line at variable offset times.</desc><synopsis>ares <opcodename>deltapn</opcodename> xnumsamps</synopsis></opcode>
 <opcode><desc>Read from or write to a delay line with interpolation.</desc><synopsis>aout <opcodename>deltapx</opcodename> adel, iwsize</synopsis></opcode>
 <opcode><desc>Mixes the input signal to a delay line.</desc><synopsis><opcodename>deltapxw</opcodename> ain, adel, iwsize</synopsis></opcode>
-<opcode><desc>Short description. Single line for opcode listing.</desc><synopsis>outarg1, outarg2 <opcodename>newopcodename</opcodename> inarg1, inarg2</synopsis></opcode>
 <opcode><desc>Multitap delay line implementation.</desc><synopsis>ares <opcodename>multitap</opcodename> asig [, itime1] [, igain1] [, itime2] [, igain2] [...]</synopsis></opcode>
 <opcode><desc>Short description. Single line for opcode listing.</desc><synopsis>outarg1, outarg2 <opcodename>newopcodename</opcodename> inarg1, inarg2</synopsis></opcode>
 <opcode><desc>An interpolating variable time delay.</desc><synopsis>ares <opcodename>vdelay</opcodename> asig, adel, imaxdel [, iskip]</synopsis></opcode>
@@ -512,7 +514,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
       aleft, aright <opcodename>hrtfstat</opcodename> asrc, iAz, iElev, ifilel, ifiler [,iradius, isr]
     </synopsis></opcode>
 <opcode><desc>Distributes the audio signals of a previous</desc><synopsis>a1, a2 <opcodename>locsend</opcodename></synopsis><synopsis>a1, a2,  a3, a4 <opcodename>locsend</opcodename></synopsis></opcode>
-<opcode><desc>Takes and input signal and distributes between 2 or 4 channels.</desc><synopsis>a1, a2 <opcodename>locsig</opcodename> asig, kdegree, kdistance, kreverbsend</synopsis><synopsis>a1, a2,  a3, a4 <opcodename>locsig</opcodename> asig, kdegree, kdistance, kreverbsend</synopsis></opcode>
+<opcode><desc>Takes an input signal and distributes between 2 or 4 channels.</desc><synopsis>a1, a2 <opcodename>locsig</opcodename> asig, kdegree, kdistance, kreverbsend</synopsis><synopsis>a1, a2,  a3, a4 <opcodename>locsig</opcodename> asig, kdegree, kdistance, kreverbsend</synopsis></opcode>
 <opcode><desc>Distribute an audio signal amongst four channels.</desc><synopsis>a1, a2, a3, a4 <opcodename>pan</opcodename> asig, kx, ky, ifn [, imode] [, ioffset]</synopsis></opcode>
 <opcode><desc>Distribute an audio signal across two channels.</desc><synopsis>a1, a2 <opcodename>pan2</opcodename> asig, xp [, imode]</synopsis></opcode>
 <opcode><desc>Distributes an input signal among 4 channels using cartesian coordinates.</desc><synopsis>a1, a2, a3, a4  <opcodename>space</opcodename> asig, ifn, ktime, kreverbsend, kx, ky</synopsis></opcode>
@@ -727,11 +729,11 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <opcode><desc>Conditional branch during p-time depending on elapsed note time.</desc><synopsis><opcodename>timout</opcodename> istrt, idur, label</synopsis></opcode>
 </category>
 <category name="Instrument Control:Realtime Performance Control">
-<opcode><desc>Returns the number of active instances of an instrument.</desc><synopsis>ir <opcodename>active</opcodename> insnum</synopsis><synopsis>kres <opcodename>active</opcodename> kinsnum</synopsis></opcode>
-<opcode><desc>Control allocation of cpu resources on a per-instrument basis, to optimize realtime output.</desc><synopsis><opcodename>cpuprc</opcodename> insnum, ipercent</synopsis></opcode>
+<opcode><desc>Returns the number of active instances of an instrument.</desc><synopsis>ir <opcodename>active</opcodename> insnum [,iopt]</synopsis><synopsis>ir <opcodename>active</opcodename> Sinsname [,iopt]</synopsis><synopsis>kres <opcodename>active</opcodename> kinsnum [,iopt]</synopsis></opcode>
+<opcode><desc>Control allocation of cpu resources on a per-instrument basis, to optimize realtime output.</desc><synopsis><opcodename>cpuprc</opcodename> insnum, ipercent</synopsis><synopsis><opcodename>cpuprc</opcodename> Sinsname, ipercent</synopsis></opcode>
 <opcode><desc>Exit Csound as fast as possible, with no cleaning up.</desc><synopsis><opcodename>exitnow</opcodename></synopsis></opcode>
 <opcode><desc>Start/stop jack_transport and can optionally relocate the playback head.</desc><synopsis><opcodename>jacktransport</opcodename> icommand [, ilocation]</synopsis></opcode>
-<opcode><desc>Limits the number of allocations of an instrument.</desc><synopsis><opcodename>maxalloc</opcodename> insnum, icount</synopsis></opcode>
+<opcode><desc>Limits the number of allocations of an instrument.</desc><synopsis><opcodename>maxalloc</opcodename> insnum, icount</synopsis><synopsis><opcodename>maxalloc</opcodename> Sinsname, icount</synopsis></opcode>
 <opcode><desc>Creates space for instruments but does not run them.</desc><synopsis><opcodename>prealloc</opcodename> insnum, icount</synopsis><synopsis><opcodename>prealloc</opcodename> &quot;insname&quot;, icount</synopsis></opcode>
 </category>
 <category name="Instrument Control:Initialization and Reinitialization">
@@ -740,7 +742,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <opcode><desc>Returns the number of a named instrument.</desc><synopsis>insno <opcodename>nstrnum</opcodename> &quot;name&quot;</synopsis></opcode>
 <opcode><desc>Show the value in a given p-field.</desc><synopsis><opcodename>p</opcodename>(x) </synopsis></opcode>
 <opcode><desc>Assigns a range of p-fields to ivariables.</desc><synopsis> ivar1, ... <opcodename>passign</opcodename> [istart]</synopsis></opcode>
-<opcode><desc>Defines and initializes numeric arrays at orchestra load time.</desc><synopsis><opcodename>pset</opcodename> icon1 [, icon2] [...]</synopsis></opcode>
+<opcode><desc>Defines and initializes p-fields.</desc><synopsis><opcodename>pset</opcodename> ip1 [, ip2] [...]</synopsis></opcode>
 <opcode><desc>Suspends a performance while a special initialization pass is executed.</desc><synopsis><opcodename>reinit</opcodename> label</synopsis></opcode>
 <opcode><desc>Transfers control during a reinit pass.</desc><synopsis><opcodename>rigoto</opcodename> label</synopsis></opcode>
 <opcode><desc>Terminates a reinit pass.</desc><synopsis><opcodename>rireturn</opcodename></synopsis></opcode>
@@ -811,14 +813,13 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <category name="Table Control">
 <opcode><desc>Deletes function table.</desc><synopsis><opcodename>ftfree</opcodename> ifno, iwhen</synopsis></opcode>
 <opcode><desc>Generate a score function table from within the orchestra.</desc><synopsis>gir <opcodename>ftgen</opcodename> ifn, itime, isize, igen, iarga [, iargb ] [...]</synopsis></opcode>
-<opcode><desc>Generate a function table from within an instrument definition, without 
-      duplication of data.</desc><synopsis>ifno <opcodename>ftgenonce</opcodename> ip1dummy, ip2dummy, isize, igen, iarga, iargb, ...</synopsis></opcode>
 <opcode><desc>Generate a score function table from within the orchestra, which is deleted at the end of the note.</desc><synopsis>ifno <opcodename>ftgentmp</opcodename> ip1, ip2dummy, isize, igen, iarga, iargb, ...</synopsis></opcode>
 <opcode><desc>Loads a sound file into memory for use by</desc><synopsis><opcodename>sndload</opcodename> Sfname[, ifmt[, ichns[, isr[, ibas[, iamp[, istrt   \
       [, ilpmod[, ilps[, ilpe]]]]]]]]]</synopsis></opcode>
 </category>
 <category name="Table Control:Table Queries">
 <opcode><desc>Returns the number of channels in a stored function table.</desc><synopsis><opcodename>ftchnls</opcodename>(x) (init-rate args only)</synopsis></opcode>
+<opcode><desc>Returns the base frequency of a stored function table in Hz.</desc><synopsis><opcodename>ftcps</opcodename>(x) (init-rate args only)</synopsis></opcode>
 <opcode><desc>Returns the size of a stored function table.</desc><synopsis><opcodename>ftlen</opcodename>(x) (init-rate args only)</synopsis></opcode>
 <opcode><desc>Returns the loop segment start-time of a stored function table number.</desc><synopsis><opcodename>ftlptim</opcodename>(x) (init-rate args only)</synopsis></opcode>
 <opcode><desc>Returns the sampling-rate of a stored function table.</desc><synopsis><opcodename>ftsr</opcodename>(x) (init-rate args only)</synopsis></opcode>
@@ -849,13 +850,13 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <opcode><desc>Writes tables in sequential locations.</desc><synopsis>kstart <opcodename>tablewa</opcodename> kfn, asig, koff</synopsis></opcode>
 <opcode><desc>Change the contents of existing function tables.</desc><synopsis><opcodename>tablewkt</opcodename> asig, andx, kfn [, ixmode] [, ixoff] [, iwgmode]</synopsis><synopsis><opcodename>tablewkt</opcodename> ksig, kndx, kfn [, ixmode] [, ixoff] [, iwgmode]</synopsis></opcode>
 <opcode><desc>Allow morphing between a set of tables.</desc><synopsis>kout <opcodename>tabmorph</opcodename> kindex, kweightpoint, ktabnum1, ktabnum2, \
-      ifn1, ifn2 [, ifn3, ifn4, ... ifnN]</synopsis></opcode>
+      ifn1, ifn2 [, ifn3, ifn4, ...,ifnN]</synopsis></opcode>
 <opcode><desc>Allow morphing between a set of tables at audio rate with interpolation.</desc><synopsis>aout <opcodename>tabmorpha</opcodename> aindex, aweightpoint, atabnum1, atabnum2, \
       ifn1, ifn2 [, ifn3, ifn4, ... ifnN]</synopsis></opcode>
 <opcode><desc>Allow morphing between a set of tables at audio rate with interpolation.</desc><synopsis>aout <opcodename>tabmorphak</opcodename> aindex, kweightpoint, ktabnum1, ktabnum2, \
       ifn1, ifn2 [, ifn3, ifn4, ... ifnN]</synopsis></opcode>
 <opcode><desc>Allow morphing between a set of tables with interpolation.</desc><synopsis>kout <opcodename>tabmorphi</opcodename> kindex, kweightpoint, ktabnum1, ktabnum2, \
-      ifn1, ifn2 [, ifn3, ifn4, ... ifnN]</synopsis></opcode>
+      ifn1, ifn2 [, ifn3, ifn4, ..., ifnN]</synopsis></opcode>
 <opcode><desc>Playing-back control signals.</desc><synopsis><opcodename>tabplay</opcodename>  ktrig, knumtics, kfn, kout1 [,kout2,..., koutN]</synopsis></opcode>
 <opcode><desc>Recording of control signals.</desc><synopsis><opcodename>tabrec</opcodename>   ktrig_start, ktrig_stop, knumtics, kfn, kin1 [,kin2,...,kinN]</synopsis></opcode>
 </category>
@@ -1077,7 +1078,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 </category>
 <category name="Real-time MIDI:Converters">
 <opcode><desc>Get the velocity of the current MIDI event.</desc><synopsis>iamp <opcodename>ampmidi</opcodename> iscal [, ifn]</synopsis></opcode>
-<opcode><desc>Rescale a MIDI velocity number to a fit a dynamic range ian decibels.</desc><synopsis>xamp<opcodename>ampmidid</opcodename>kvelocity, idecibels</synopsis></opcode>
+<opcode><desc>Musically map MIDI velocity to peak amplitude within a specified dynamic range in decibels.</desc><synopsis>iamplitude <opcodename>ampmidid</opcodename> ivelocity, idecibels</synopsis><synopsis>kamplitude <opcodename>ampmidid</opcodename> kvelocity, idecibels</synopsis></opcode>
 <opcode><desc>Get the note number of the current MIDI event, expressed in cycles-per-second.</desc><synopsis>icps <opcodename>cpsmidi</opcodename></synopsis></opcode>
 <opcode><desc>Get the note number of the current MIDI event and modify it by the current pitch-bend value, express it in cycles-per-second.</desc><synopsis>icps <opcodename>cpsmidib</opcodename> [irange]</synopsis><synopsis>kcps <opcodename>cpsmidib</opcodename> [irange]</synopsis></opcode>
 <opcode><desc>Get a MIDI note number (allows customized micro-tuning scales).</desc><synopsis>icps <opcodename>cpstmid</opcodename> ifn</synopsis></opcode>
@@ -1144,7 +1145,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
       ..., ictlnum32, imin32, imax32, init32, ifn32, icutoff32</synopsis></opcode>
 <opcode><desc>Stores a bank of 32 different MIDI control messages to a table.</desc><synopsis>kflag <opcodename>slider32table</opcodename> ichan, ioutTable, ioffset, ictlnum1, imin1, \
       imax1, init1, ifn1, .... , ictlnum32, imin32, imax32, init32, ifn32</synopsis></opcode>
-<opcode><desc>Creates a bank of 32 different MIDI control message numbers, filtered before output.</desc><synopsis>kflag <opcodename>slider32tablef</opcodename> ichan, ioutTable, ioffset, ictlnum1, imin1, imax1, \
+<opcode><desc>Stores a bank of 32 different MIDI control messages to a table, filtered before output.</desc><synopsis>kflag <opcodename>slider32tablef</opcodename> ichan, ioutTable, ioffset, ictlnum1, imin1, imax1, \
       init1, ifn1, icutoff1, .... , ictlnum32, imin32, imax32, init32, ifn32, icutoff32</synopsis></opcode>
 <opcode><desc>Creates a bank of 64 different MIDI control message numbers.</desc><synopsis>i1,...,i64 <opcodename>slider64</opcodename> ichan, ictlnum1, imin1, imax1, init1, ifn1,..., \
       ictlnum64, imin64, imax64, init64, ifn64</synopsis><synopsis>k1,...,k64 <opcodename>slider64</opcodename> ichan, ictlnum1, imin1, imax1, init1, ifn1,..., \
@@ -1166,19 +1167,6 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
       init1, ifn1, icutoff1, .... , ictlnum8, imin8, imax8, init8, ifn8, icutoff8</synopsis></opcode>
 <opcode><desc>Creates a bank of 16 different MIDI control message numbers from a KAWAI MM-16 midi mixer.</desc><synopsis>k1, k2, ...., k16 <opcodename>sliderKawai</opcodename> imin1, imax1, init1, ifn1, \
       imin2, imax2, init2, ifn2, ..., imin16, imax16, init16, ifn16</synopsis></opcode>
-</category>
-<category name="Signal Flow Graph">
-<opcode><desc>Activates the indicated instrument in the orchestra header,
-      without need for an i statement. Instruments must be 
-      activated in the same order as they are defined.</desc><synopsis><opcodename>alwayson </opcodename>Tinstrument [p4, ..., pn]</synopsis></opcode>
-<opcode><desc>Connects the named outlet ports of source instruments to the 
-      named inlet ports of sink instruments.</desc><synopsis><opcodename>connect </opcodename>Tsource1, Soutlet1, Tsink1, Sinlet1</synopsis></opcode>
-<opcode><desc>Receives an arate signal into an instrument through a named port.</desc><synopsis>asignal <opcodename>inleta </opcodename>Sname</synopsis></opcode>
-<opcode><desc>Receives an frate signal (fsig) into an instrument from a named port.</desc><synopsis>fsignal <opcodename>inletf </opcodename>Sname</synopsis></opcode>
-<opcode><desc>Receives a krate signal into an instrument from a named port.</desc><synopsis>ksignal <opcodename>inletk </opcodename>Sname</synopsis></opcode>
-<opcode><desc>Sends an arate signal out from an instrument to a named port.</desc><synopsis><opcodename>outleta </opcodename>Sname, asignal</synopsis></opcode>
-<opcode><desc>Sends a frate signal (fsig) out from an instrument to a named port.</desc><synopsis><opcodename>outletf </opcodename>Sname, fsignal</synopsis></opcode>
-<opcode><desc>Sends a krate signal out from an instrument to a named port.</desc><synopsis><opcodename>outletk </opcodename>Sname, ksignal</synopsis></opcode>
 </category>
 <category name="Spectral Processing:STFT">
 <opcode><desc>Deprecated.</desc><synopsis><opcodename>ktableseg</opcodename> ifn1, idur1, ifn2 [, idur2] [, ifn3] [...]</synopsis></opcode>
@@ -1230,7 +1218,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
     a specified time.</desc><synopsis>fsig <opcodename>pvsblur</opcodename> fsigin, kblurtime, imaxdel</synopsis></opcode>
 <opcode><desc>This opcode creates and writes to a circular buffer for f-signals (streaming PV signals).</desc><synopsis>ihandle, ktime  <opcodename>pvsbuffer</opcodename> fsig, ilen </synopsis></opcode>
 <opcode><desc>This opcode reads a circular buffer of f-signals (streaming PV signals).</desc><synopsis>fsig <opcodename>pvsbufread</opcodename>  ktime, khandle[, ilo, ihi] </synopsis></opcode>
-<opcode><desc>Scale the frequency components of a pv stream.</desc><synopsis>fsig <opcodename>pvscale</opcodename> fsigin, kscal[, ikeepform, igain]]</synopsis></opcode>
+<opcode><desc>Scale the frequency components of a pv stream.</desc><synopsis>fsig <opcodename>pvscale</opcodename> fsigin, kscal[, kkeepform, kgain, kcoefs]</synopsis></opcode>
 <opcode><desc>Calculate the spectral centroid of a signal.</desc><synopsis>kcent <opcodename>pvscent</opcodename> fsig</synopsis></opcode>
 <opcode><desc>Performs cross-synthesis between two source fsigs.</desc><synopsis>fsig <opcodename>pvscross</opcodename> fsrc, fdest, kamp1, kamp2</synopsis></opcode>
 <opcode><desc>Spectral azimuth-based de-mixing of stereo sources.</desc><synopsis>fsig <opcodename>pvsdemix</opcodename> fleft, fright, kpos, kwidth, ipoints</synopsis></opcode>
@@ -1245,11 +1233,12 @@ pvoc stream, with dynamic scaling.</desc><synopsis>fsig <opcodename>pvsfilter</o
 <opcode><desc>Writes amplitude and/or frequency data to function tables.</desc><synopsis>kflag <opcodename>pvsftw</opcodename> fsrc, ifna [, ifnf]</synopsis></opcode>
 <opcode><desc>Write a fsig to a PVOCEX file.</desc><synopsis><opcodename>pvsfwrite</opcodename> fsig, ifile</synopsis></opcode>
 <opcode><desc>Shift the frequency components of a pv stream, stretching/compressing
-its spectrum.</desc><synopsis>fsig <opcodename>pvshift</opcodename> fsigin, kshift, klowest[, ikeepform, igain]</synopsis></opcode>
+its spectrum.</desc><synopsis>fsig <opcodename>pvshift</opcodename> fsigin, kshift, klowest[, kkeepform, igain, kcoefs]</synopsis></opcode>
 <opcode><desc>Instantaneous Frequency Distribution, magnitude and phase analysis.</desc><synopsis>ffr,fphs <opcodename>pvsifd</opcodename> ain, ifftsize, ihopsize, iwintype[,iscal]</synopsis></opcode>
 <opcode><desc>Retrieve an fsig from the input software bus; a pvs equivalent to chani.</desc><synopsis>fsig <opcodename>pvsin</opcodename> kchan[,isize,iolap,iwinsize,iwintype,iformat]</synopsis></opcode>
 <opcode><desc>Get information from a PVOC-EX formatted source.</desc><synopsis>ioverlap, inumbins, iwinsize, iformat <opcodename>pvsinfo</opcodename> fsrc</synopsis></opcode>
 <opcode><desc>Initialise a spectral (f) variable to zero.</desc><synopsis>fsig <opcodename>pvsinit</opcodename> isize[,iolap,iwinsize,iwintype, iformat]</synopsis></opcode>
+<opcode><desc>Frequency lock an input fsig</desc><synopsis>fsig <opcodename>pvslock</opcodename> fsigin, klock</synopsis></opcode>
 <opcode><desc>Modify amplitudes using a function table, with dynamic scaling.</desc><synopsis>fsig <opcodename>pvsmaska</opcodename> fsrc, ifn, kdepth</synopsis></opcode>
 <opcode><desc>Mix 'seamlessly' two pv signals.</desc><synopsis>fsig <opcodename>pvsmix</opcodename> fsigin1, fsigin2</synopsis></opcode>
 <opcode><desc>Smooth the amplitude and frequency time functions of a pv stream using parallel 1st order
@@ -1259,7 +1248,8 @@ its spectrum.</desc><synopsis>fsig <opcodename>pvshift</opcodename> fsigin, kshi
 <opcode><desc>Write a fsig to the pvs output bus.</desc><synopsis><opcodename>pvsout</opcodename> fsig, kchan</synopsis></opcode>
 <opcode><desc>Track the pitch and amplitude of a PVS signal.</desc><synopsis>kfr, kamp <opcodename>pvspitch</opcodename> fsig, kthresh</synopsis></opcode>
 <opcode><desc>Transforms a pvoc stream according to a masking function table.</desc><synopsis>fsig <opcodename>pvstencil</opcodename> fsigin, kgain, klevel, iftable</synopsis></opcode>
-<opcode><desc>Combine the spectral envelope of one fsig with the excitation (frequencies) of another.</desc><synopsis>fsig <opcodename>pvsvoc</opcodename> famp, fexc, kdepth, kgain</synopsis></opcode>
+<opcode><desc>Combine the spectral envelope of one fsig with the excitation (frequencies) of another.</desc><synopsis>fsig <opcodename>pvsvoc</opcodename> famp, fexc, kdepth, kgain [,kcoefs]</synopsis></opcode>
+<opcode><desc>Warp the spectral envelope of a PVS signal</desc><synopsis>fsig <opcodename>pvswarp</opcodename> fsigin, kscal, kshift[, klowest, kmeth, kgain, kcoefs]</synopsis></opcode>
 <opcode><desc>Resynthesise using a FFT overlap-add.</desc><synopsis>ares <opcodename>pvsynth</opcodename> fsrc, [iinit]</synopsis></opcode>
 <opcode><desc>Streaming partial track additive synthesis with cubic phase interpolation with
 pitch control and support for timescale-modified input</desc><synopsis>asig <opcodename>resyn</opcodename> fin, kscal, kpitch, kmaxtracks, ifn</synopsis></opcode>
@@ -1310,7 +1300,7 @@ pitch control and support for timescale-modified input</desc><synopsis>asig <opc
 </category>
 <category name="Strings:Manipulation">
 <opcode><desc>Print a string constant or variable</desc><synopsis><opcodename>puts</opcodename> Sstr, ktrig[, inonl]</synopsis></opcode>
-<opcode><desc>printf-style formatted output to a string variable.</desc><synopsis>Sdst <opcodename>sprintf</opcodename> Sfmt, xarg1[, xarg2[, ... ]]</synopsis><synopsis>Sdst <opcodename>sprintfk</opcodename> Sfmt, xarg1[, xarg2[, ... ]]</synopsis></opcode>
+<opcode><desc>printf-style formatted output to a string variable.</desc><synopsis>Sdst <opcodename>sprintf</opcodename> Sfmt, xarg1[, xarg2[, ... ]]</synopsis></opcode>
 <opcode><desc>printf-style formatted output to a string variable at k-rate.</desc><synopsis>Sdst <opcodename>sprintfk</opcodename> Sfmt, xarg1[, xarg2[, ... ]]</synopsis></opcode>
 <opcode><desc>Concatenate strings</desc><synopsis>Sdst <opcodename>strcat</opcodename> Ssrc1, Ssrc2</synopsis></opcode>
 <opcode><desc>Concatenate strings (k-rate)</desc><synopsis>Sdst <opcodename>strcatk</opcodename> Ssrc1, Ssrc2</synopsis></opcode>
@@ -1455,10 +1445,10 @@ pitch control and support for timescale-modified input</desc><synopsis>asig <opc
     ilength</synopsis><synopsis><opcodename>stsend</opcodename> asig, Sipaddr, iport</synopsis></opcode>
 </category>
 <category name="Remote Opcodes">
-<opcode><desc>An opcode which can be used to implement a remote orchestra. This opcode will send note events from a source machine to many destinations.</desc><synopsis><opcodename>insglobal</opcodename>isource, instrnum [,instrnum...] </synopsis></opcode>
-<opcode><desc>An opcode which can be used to implement a remote orchestra. This opcode will send note events from a source machine to one destination.</desc><synopsis><opcodename>insremot</opcodename>idestination, isource, instrnum [,instrnum...] </synopsis></opcode>
-<opcode><desc>An opcode which can be used to implement a remote midi orchestra. This opcode will broadcast the midi events to all the machines involved in the remote concert.</desc><synopsis><opcodename>midglobal</opcodename>isource, instrnum [,instrnum...] </synopsis></opcode>
-<opcode><desc>An opcode which can be used to implement a remote midi orchestra. This opcode will send midi events from a source machine to one destination.</desc><synopsis><opcodename>midremot</opcodename>idestination, isource, instrnum [,instrnum...] </synopsis></opcode>
+<opcode><desc>An opcode which can be used to implement a remote orchestra. This opcode will send note events from a source machine to many destinations.</desc><synopsis><opcodename>insglobal</opcodename> isource, instrnum [,instrnum...] </synopsis></opcode>
+<opcode><desc>An opcode which can be used to implement a remote orchestra. This opcode will send note events from a source machine to one destination.</desc><synopsis><opcodename>insremot</opcodename> idestination, isource, instrnum [,instrnum...] </synopsis></opcode>
+<opcode><desc>An opcode which can be used to implement a remote midi orchestra. This opcode will broadcast the midi events to all the machines involved in the remote concert.</desc><synopsis><opcodename>midglobal</opcodename> isource, instrnum [,instrnum...] </synopsis></opcode>
+<opcode><desc>An opcode which can be used to implement a remote midi orchestra. This opcode will send midi events from a source machine to one destination.</desc><synopsis><opcodename>midremot</opcodename> idestination, isource, instrnum [,instrnum...] </synopsis></opcode>
 </category>
 <category name="Mixer Opcodes">
 <opcode><desc>Resets all channels of a buss to 0.</desc><synopsis><opcodename>MixerClear</opcodename></synopsis></opcode>
@@ -1482,11 +1472,11 @@ pitch control and support for timescale-modified input</desc><synopsis>asig <opc
 <category name="Image Processing Opcodes">
 <opcode><desc>Create an empty image of a given size.</desc><synopsis>iimagenum <opcodename>imagecreate</opcodename> iwidth, iheight</synopsis></opcode>
 <opcode><desc>Frees memory allocated for a previously loaded or created image.</desc><synopsis><opcodename>imagefree</opcodename> iimagenum</synopsis></opcode>
-<opcode><desc>Return the RGB pixel values of a previously opened or created image.</desc><synopsis>ared agreen ablue <opcodename>imagegetpixel</opcodename> iimagenum, ax, ay</synopsis><synopsis>kred kgreen kblue <opcodename>imagegetpixel</opcodename> iimagenum, kx, ky</synopsis></opcode>
+<opcode><desc>Return the RGB pixel values of a previously opened or created image.</desc><synopsis>ared, agreen, ablue <opcodename>imagegetpixel</opcodename> iimagenum, ax, ay</synopsis><synopsis>kred, kgreen, kblue <opcodename>imagegetpixel</opcodename> iimagenum, kx, ky</synopsis></opcode>
 <opcode><desc>Load an image.</desc><synopsis>iimagenum <opcodename>imageload</opcodename> filename</synopsis></opcode>
 <opcode><desc>Save a previously created image.</desc><synopsis><opcodename>imagesave</opcodename> iimagenum, filename</synopsis></opcode>
 <opcode><desc>Set the RGB value of a pixel inside a previously opened or created image.</desc><synopsis><opcodename>imagegetpixel</opcodename> iimagenum, ax, ay, ared, agreen, ablue</synopsis><synopsis><opcodename>imagegetpixel</opcodename> iimagenum, kx, ky, kred, kgreen, kblue</synopsis></opcode>
-<opcode><desc>Return the width and height of a previously opened or created image.</desc><synopsis>iwidth iheight <opcodename>imagesize</opcodename> iimagenum</synopsis></opcode>
+<opcode><desc>Return the width and height of a previously opened or created image.</desc><synopsis>iwidth, iheight <opcodename>imagesize</opcodename> iimagenum</synopsis></opcode>
 </category>
 <category name="Miscellaneous">
 <opcode><desc></desc></opcode>
@@ -1505,6 +1495,8 @@ pitch control and support for timescale-modified input</desc><synopsis>asig <opc
 <opcode><desc></desc></opcode>
 <opcode><desc></desc></opcode>
 <opcode><desc></desc></opcode>
+<opcode><desc>returns the length of a Farey Sequence.</desc><synopsis>kfl <opcodename>fareylen</opcodename> kfn</synopsis></opcode>
+<opcode><desc>returns the length of a Farey Sequence.</desc><synopsis>ifl <opcodename>fareyleni</opcodename> ifn</synopsis></opcode>
 <opcode><desc></desc></opcode>
 <opcode><desc></desc></opcode>
 <opcode><desc></desc></opcode>
@@ -1584,6 +1576,8 @@ inum_parm, kupdate</synopsis></opcode>
 <opcode><desc></desc></opcode>
 <opcode><desc></desc></opcode>
 <opcode><desc>Call an external program via the system call</desc><synopsis>ires <opcodename>system_i</opcodename> itrig, Scmd, [inowait]</synopsis><synopsis>kres <opcodename>system</opcodename> ktrig, Scmd, [knowait]</synopsis></opcode>
+<opcode><desc>shuffles the content of a function table so that each element of the source
+      table is put into a different random position.</desc><synopsis><opcodename>tableshuffle</opcodename> ktablenum</synopsis><synopsis><opcodename>tableshufflei</opcodename> itablenum</synopsis></opcode>
 <opcode><desc></desc></opcode>
 <opcode><desc></desc></opcode>
 <opcode><desc></desc></opcode>
@@ -1624,7 +1618,7 @@ inum_parm, kupdate</synopsis></opcode>
 <opcode><desc>Converts a soundfile into a series of short-time Fourier transform frames.</desc><synopsis><opcodename>csound -U pvanal</opcodename> [flags] infilename outfilename</synopsis><synopsis><opcodename>pvanal</opcodename> [flags] infilename outfilename</synopsis></opcode>
 <opcode><desc>View formatted text output of STFT analysis files.</desc><synopsis><opcodename>csound</opcodename> -U <opcodename>pvlook</opcodename> [flags] infilename</synopsis><synopsis><opcodename>pvlook</opcodename> [flags] infilename</synopsis></opcode>
 <opcode><desc>Scale the amplitude of a sound file.</desc><synopsis><opcodename>scale</opcodename> [OPTIONS ... ] infile</synopsis></opcode>
-<opcode><desc>Converts SDIF files to files usable by adsynt.</desc><synopsis><opcodename>sdif2ad</opcodename> [flags] infilename outfilename</synopsis></opcode>
+<opcode><desc>Converts SDIF files to files usable by adsyn.</desc><synopsis><opcodename>sdif2ad</opcodename> [flags] infilename outfilename</synopsis></opcode>
 <opcode><desc>Displays information about a soundfile.</desc><synopsis><opcodename>csound -U sndinfo</opcodename> [options] soundfilenames ...</synopsis><synopsis><opcodename>sndinfo</opcodename> [options] soundfilenames ...</synopsis></opcode>
 <opcode><desc>Converts the sample rate of an audio file.</desc><synopsis><opcodename>srconv</opcodename> [flags] infile</synopsis></opcode>
 </category>
