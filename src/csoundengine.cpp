@@ -472,6 +472,7 @@ void CsoundEngine::setConsoleBufferSize(int size)
 
 void CsoundEngine::keyPressForCsound(QString key)
 {
+//  qDebug() << "CsoundEngine::keyPressForCsound " << key;
   keyMutex.lock();
   keyPressBuffer << key;
   keyMutex.unlock();
