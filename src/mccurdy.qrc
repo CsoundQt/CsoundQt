@@ -129,5 +129,6 @@
         <file>Examples/McCurdy Collection/LiveAudioIn/MIDIKeyboardControlledPitchShifter.csd</file>
         <file>Examples/McCurdy Collection/LiveAudioIn/pitch.csd</file>
         <file>Examples/McCurdy Collection/LiveAudioIn/pitchamdf.csd</file>
+        <file>Examples/McCurdy Collection/Convolution/dconv-embedded.csd</file>
     </qresource>
 </RCC>

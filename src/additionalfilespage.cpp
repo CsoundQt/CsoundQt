@@ -30,6 +30,7 @@ AdditionalFilesPage::AdditionalFilesPage(QWidget *parent) :
     ui(new Ui::AdditionalFilesPage)
 {
     ui->setupUi(this);
+    connect(ui->additionalListWidget, SIGNAL(itemSelectionChanged () ), this, SLOT(selectionChanged()));
     registerField("dataFiles", ui->additionalListWidget);
 }
 
@@ -69,15 +70,7 @@ void AdditionalFilesPage::selectionChanged()
   QStringList files;
   foreach (QListWidgetItem *item, selected) {
     QString name = item->text();
-    foreach(QString directory, m_searchDirectories) {
-      if (directory.endsWith("/")) {
-        directory += "/";
-      }
-      if (QFile::exists(directory + name)) {
-        files << directory + name;
-        break;
-      }
-    }
+    files << name;
   }
   setProperty("dataFiles", files);
 }

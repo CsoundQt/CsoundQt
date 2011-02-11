@@ -2632,7 +2632,7 @@ void qutecsound::createMenus()
   fileMenu->addAction(saveAct);
   fileMenu->addAction(saveAsAct);
   fileMenu->addAction(saveNoWidgetsAct);
-//  fileMenu->addAction(createAppAct); // TODO put this back
+  fileMenu->addAction(createAppAct);
   fileMenu->addAction(reloadAct);
   // fileMenu->addAction(cabbageAct);
   fileMenu->addAction(closeTabAct);
@@ -3123,8 +3123,11 @@ flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E06.csd");
 
   mccurdyFiles.clear();
   mccurdyFiles.append(":/Examples/McCurdy Collection/Convolution/dconv.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/Convolution/dconv-embedded.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/Convolution/pconvolve.csd");
+//  mccurdyFiles.append(":/Examples/McCurdy Collection/Convolution/pconvolve-embedded.csd");
   mccurdyFiles.append(":/Examples/McCurdy Collection/Convolution/convolve.csd");
+//  mccurdyFiles.append(":/Examples/McCurdy Collection/Convolution/convolve-embedded.csd");
 
   submenu = mccurdyMenu->addMenu(tr("Convolution"));
   foreach (QString fileName, mccurdyFiles) {

@@ -85,6 +85,8 @@ AppWizard::AppWizard(QWidget *parent,QString opcodeDir,
   setField("platform", 1);
   setField("libDir", "/Library/Frameworks");
 #endif
+  m_dataFiles = processDataFiles();
+  static_cast<AdditionalFilesPage *>(this->page(m_additionalsPage))->setFiles(m_dataFiles);
 //
 //  setPixmap(QWizard::BannerPixmap, QPixmap(":/images/banner.png"));
 //  setPixmap(QWizard::BackgroundPixmap, QPixmap(":/images/background.png"));
@@ -115,6 +117,49 @@ void AppWizard::accept()
   }
 
   QDialog::accept();
+}
+
+QStringList AppWizard::processDataFiles()
+{
+  QFile csdFile(m_csd);
+  if (!csdFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    return QStringList();
+  }
+  QStringList list;
+  QTextStream in(&csdFile);
+  while (!in.atEnd()) {
+    QString line = in.readLine();
+    if (line.count("\"") == 2) {
+      int startIndex = line.indexOf("\"");
+      if ((line.contains(";") && (line.indexOf(";") > startIndex)) ||
+          !line.contains(";")) { // Quotes are not part of a comment
+        if (!line.contains("outvalue") && !line.contains("invalue") &&
+            !line.contains("if") && !line.contains("=") &&
+            !line.contains("elseif") && !line.contains("=") ) { // exclude opcodes which use strings which are not filenames
+          int endIndex = line.lastIndexOf("\"");
+          QString dataName = line.mid(startIndex + 1, endIndex-startIndex - 1);
+          QString newDataName = dataName;
+#ifdef Q_OS_WIN32
+          if (newDataName.startsWith(QRegExp("\w\:"))) { // Absolute path
+#else
+          if (newDataName.startsWith("/")) { // Absolute path
+#endif
+            newDataName = "data/" + newDataName.right(newDataName.lastIndexOf("/") + 1);
+          }
+          else {
+            newDataName += "data/";
+          }
+          list << dataName;
+          line.replace(dataName,newDataName);
+        }
+      }
+    }
+    m_fullText += line + "\n";
+    if (line.trimmed().startsWith("</CsoundSynthesizer>")) {
+      break;
+    }
+  }
+  return list;
 }
 
 void AppWizard::createWinApp(QString appName, QString appDir, QStringList dataFiles,
@@ -176,14 +221,19 @@ void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList data
       return;
     }
     if (dir.mkdir(appName)) {
-      QFile::copy(m_csd, "./");
       dir.cd(appName);
       dir.mkdir("lib");
       dir.mkdir("data");
       dir.cd("data");
       foreach(QString file, dataFiles) {
         QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
-        qDebug() << "createLinuxApp " << destName;
+        if (file.startsWith("/")) { // Absolute path
+          QFile::copy(file, destName);
+        }
+        else { // Relative path
+          QFile::copy(m_csd.left(m_csd.lastIndexOf("/")), destName);
+        }
+        qDebug() << "createLinuxApp data:" << destName;
       }
       dir.cd("../lib");
       QStringList libFiles;

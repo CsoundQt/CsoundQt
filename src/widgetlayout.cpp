@@ -2109,7 +2109,7 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
 //      event->accept();
 //    }
     else if (key != "") {
-//      qDebug() << "WidgetLayout::keyPressEvent" << key;
+//      qDebug() << "WidgetLayout::keyPressEvent" <convolve< key;
 //           appendMessage(key);
       QWidget::keyPressEvent(event); // Propagate event if not used
       emit keyPressed(key);
