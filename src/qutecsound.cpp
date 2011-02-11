@@ -870,6 +870,12 @@ bool qutecsound::saveAs()
 void qutecsound::createApp()
 {
   QString opcodeDir;
+  if (documentPages[curPage]->isModified()) {
+    bool ret = saveAs();
+    if (!ret) {
+      return;
+    }
+  }
   if (m_options->opcodedirActive) {
     opcodeDir = m_options->opcodedir.toLocal8Bit();
   }
@@ -902,10 +908,8 @@ void qutecsound::createApp()
 #endif
   }
   QString fullPath = documentPages[curPage]->getFileName();
-  QString appName = fullPath.mid(fullPath.lastIndexOf(QDir::separator()) + 1);
-  appName = appName.remove(".csd");
   QString appDir = fullPath.left(fullPath.lastIndexOf(QDir::separator()) );
-  AppWizard wizard(this, opcodeDir, appName, appDir);
+  AppWizard wizard(this, opcodeDir, documentPages[curPage]->getFileName(), appDir);
   wizard.exec();
 }
 

@@ -27,12 +27,12 @@ About::About(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::About)
 {
-    ui->setupUi(this);
+  ui->setupUi(this);
 }
 
 About::~About()
 {
-    delete ui;
+  delete ui;
 }
 
 void About::setHtmlText(QString text)
@@ -47,12 +47,12 @@ QTextBrowser *About::getTextEdit()
 
 void About::changeEvent(QEvent *e)
 {
-    QDialog::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
+  QDialog::changeEvent(e);
+  switch (e->type()) {
+  case QEvent::LanguageChange:
+    ui->retranslateUi(this);
+    break;
+  default:
+    break;
+  }
 }

@@ -37,16 +37,17 @@ class AppWizard : public QWizard
   Q_OBJECT
   public:
     explicit AppWizard(QWidget *parent = 0, QString opcodeDir = QString(),
-                       QString appName = QString(), QString targetDir = QString());
+                       QString csd = QString(), QString targetDir = QString());
 
-    void setOpcodeDir(QString opcodeDir) {m_opcodeDir = opcodeDir;}
+//    void setOpcodeDir(QString opcodeDir) {m_opcodeDir = opcodeDir;}
 
   signals:
 
   public slots:
     virtual void accept();
   private:
-    QString m_opcodeDir;
+//    QString m_opcodeDir;
+    QString m_csd;
     int m_pluginsPage;
     int m_additionalsPage;
 

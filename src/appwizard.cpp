@@ -41,10 +41,13 @@
 
 
 AppWizard::AppWizard(QWidget *parent,QString opcodeDir,
-                     QString appName, QString targetDir) :
-    QWizard(parent)
+                     QString csd, QString targetDir) :
+    QWizard(parent), m_csd(csd)
 {
   int appPage = addPage(new AppDetailsPage(this));
+  QString fullPath = m_csd;
+  QString appName = fullPath.mid(fullPath.lastIndexOf(QDir::separator()) + 1);
+  appName = appName.remove(".csd");
   setField("appName", appName);
   setField("targetDir", targetDir);
   setField("opcodeDir", opcodeDir);
@@ -173,13 +176,13 @@ void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList data
       return;
     }
     if (dir.mkdir(appName)) {
+      QFile::copy(m_csd, "./");
       dir.cd(appName);
       dir.mkdir("lib");
       dir.mkdir("data");
       dir.cd("data");
       foreach(QString file, dataFiles) {
         QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
-        QFile::copy(file, destName);
         qDebug() << "createLinuxApp " << destName;
       }
       dir.cd("../lib");

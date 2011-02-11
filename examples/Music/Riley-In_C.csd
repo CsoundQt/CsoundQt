@@ -18,7 +18,6 @@
 
 ;	This example use the ascii keyboard to control the Players. It uses an always on instrument (99),
 ;	which listens to key events to turns on and off Players and change Patterns.
-;	IT IS IMPORTANT TO GIVE FOCUS TO THE MAIN CSOUND OUTPUT CONSOLE (GIVING FOCUS TO THE WIDGETS WINDOW WILL NOT WORK!)
 
 ;	Tables giASCII_Player and giASCII_Next are for a AZERTY keyboard
 
@@ -36,10 +35,10 @@ nchnls	= 2
 
 
 ;tables that store ASCII keyboard values for sensekey
-;Start/Stop Player keys                              a    z    e    r    t    y    u    i    o
-giASCII_Player			ftgen	10, 0, 16, -2, 0, 097, 122, 101, 114, 116, 121, 117, 105, 111 
-;Next Pattern keys			                       q    s    d    f    g    h    j    k    l				
-giASCII_Next			ftgen	20, 0, 16, -2, 0, 113, 115, 100, 102, 103, 104, 106, 107, 108 
+;Start/Stop Player keys                              q    w    e    r    t    y    u    i    o
+giASCII_Player			ftgen	10, 0, 16, -2, 0, 113, 119, 101, 114, 116, 121, 117, 105, 111 
+;Next Pattern keys			                       a    s    d    f    g    h    j    k    l				
+giASCII_Next			ftgen	20, 0, 16, -2, 0, 097, 115, 100, 102, 103, 104, 106, 107, 108 
 
 #define SPACE	#32#
 
@@ -1202,13 +1201,14 @@ i 401	0	$OPEN
 </CsScore>
 </CsoundSynthesizer>
 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>881</x>
- <y>408</y>
- <width>798</width>
- <height>637</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -6778,4 +6778,154 @@ license: http://creativecommons.org</label>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
+<MacOptions>
+Version: 3
+Render: Real
+Ask: Yes
+Functions: ioObject
+Listing: Window
+WindowBounds: 72 179 400 200
+CurrentView: io
+IOViewEdit: On
+Options:
+</MacOptions>
+
+<MacGUI>
+ioView background {0, 43690, 65535}
+ioText {2, 52} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 67} {63, 30} value 1.000000 "OnOff1_B" "  On" "/" 
+ioMeter {64, 77} {10, 10} {0, 59904, 0} "hor2" 0.400000 "OnOff1_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 67} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index1
+ioText {9, 67} {30, 32} label 1.000000 0.00100 "" center "Liberation Sans" 22 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder 1
+ioKnob {195, 57} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol1
+ioKnob {255, 57} {50, 50} 1.000000 0.000000 0.010000 0.010101 Pan1
+ioKnob {315, 57} {50, 50} 1.000000 0.000000 0.010000 0.000000 Timi1
+ioKnob {375, 57} {50, 50} 1.000000 0.000000 0.010000 0.010101 Inte1
+ioText {450, 67} {61, 30} label 0.000000 0.00100 "" center "Liberation Sans" 16 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder a / q
+ioText {2, 2} {530, 45} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioText {188, 13} {69, 28} label 0.000000 0.00100 "" center "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder Volume
+ioText {253, 13} {55, 27} label 0.000000 0.00100 "" center "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder Pan
+ioText {308, 2} {67, 46} label 0.000000 0.00100 "" center "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder WrongÂ¬Timing
+ioText {368, 2} {77, 45} label 0.000000 0.00100 "" center "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder WrongÂ¬Intensity
+ioText {16, 13} {83, 30} label 0.000000 0.00100 "" left "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder Player
+ioText {440, 2} {91, 46} label 0.000000 0.00100 "" center "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder KeyboardÂ¬Start / Next
+ioText {120, 13} {68, 28} label 0.000000 0.00100 "" center "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder Pattern
+ioText {2, 117} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 132} {63, 30} value 1.000000 "OnOff2_B" "  On" "/" 
+ioMeter {64, 142} {10, 10} {0, 59904, 0} "hor2" 0.400000 "OnOff2_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 132} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index2
+ioText {9, 132} {30, 32} label 2.000000 0.00100 "" center "Liberation Sans" 22 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder 2
+ioKnob {195, 122} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol2
+ioKnob {255, 122} {50, 50} 1.000000 0.000000 0.010000 0.797980 Pan2
+ioKnob {315, 122} {50, 50} 1.000000 0.000000 0.010000 0.010101 Timi2
+ioKnob {375, 122} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte2
+ioText {450, 132} {61, 30} label 0.000000 0.00100 "" center "Liberation Sans" 16 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder z / s
+ioText {2, 183} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 198} {63, 30} value 1.000000 "OnOff3_B" "  On" "/" 
+ioMeter {64, 208} {10, 10} {0, 59904, 0} "hor2" 0.400000 "OnOff3_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 198} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index3
+ioText {9, 198} {30, 32} label 3.000000 0.00100 "" center "Liberation Sans" 22 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder 3
+ioKnob {195, 188} {50, 50} 1.000000 0.000000 0.010000 0.818182 Vol3
+ioKnob {255, 188} {50, 50} 1.000000 0.000000 0.010000 0.070707 Pan3
+ioKnob {315, 188} {50, 50} 1.000000 0.000000 0.010000 0.000000 Timi3
+ioKnob {375, 188} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte3
+ioText {450, 198} {61, 30} label 0.000000 0.00100 "" center "Liberation Sans" 16 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder e / d
+ioText {2, 248} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 263} {63, 30} value 1.000000 "OnOff4_B" "  On" "/" 
+ioMeter {64, 273} {10, 10} {0, 59904, 0} "hor2" 0.400000 "OnOff4_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 263} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index4
+ioText {9, 263} {30, 32} label 4.000000 0.00100 "" center "Liberation Sans" 22 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder 4
+ioKnob {195, 253} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol4
+ioKnob {255, 253} {50, 50} 1.000000 0.000000 0.010000 0.777778 Pan4
+ioKnob {315, 253} {50, 50} 1.000000 0.000000 0.010000 0.000000 Timi4
+ioKnob {375, 253} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte4
+ioText {450, 263} {61, 30} label 0.000000 0.00100 "" center "Liberation Sans" 16 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder r / f
+ioText {2, 315} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 330} {63, 30} value 1.000000 "OnOff5_B" "  On" "/" 
+ioMeter {64, 340} {10, 10} {0, 59904, 0} "hor2" 0.400000 "OnOff5_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 330} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index5
+ioText {9, 330} {30, 32} label 5.000000 0.00100 "" center "Liberation Sans" 22 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder 5
+ioKnob {195, 320} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol5
+ioKnob {255, 320} {50, 50} 1.000000 0.000000 0.010000 0.000000 Pan5
+ioKnob {315, 320} {50, 50} 1.000000 0.000000 0.010000 0.000000 Timi5
+ioText {450, 330} {61, 30} label 0.000000 0.00100 "" center "Liberation Sans" 16 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder t / g
+ioText {2, 380} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 395} {63, 30} value 1.000000 "OnOff6_B" "  On" "/" 
+ioMeter {64, 405} {10, 10} {0, 59904, 0} "hor2" 0.400000 "OnOff6_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 395} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index6
+ioText {9, 395} {30, 32} label 6.000000 0.00100 "" center "Liberation Sans" 22 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder 6
+ioKnob {195, 385} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol6
+ioKnob {255, 385} {50, 50} 1.000000 0.000000 0.010000 0.797980 Pan6
+ioKnob {315, 385} {50, 50} 1.000000 0.000000 0.010000 0.000000 Timi6
+ioKnob {375, 385} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte6
+ioText {450, 395} {61, 30} label 0.000000 0.00100 "" center "Liberation Sans" 16 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder y / h
+ioText {2, 446} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 461} {63, 30} value 1.000000 "OnOff7_B" "  On" "/" 
+ioMeter {64, 471} {10, 10} {0, 59904, 0} "hor2" 0.400000 "OnOff7_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 461} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index7
+ioText {9, 461} {30, 32} label 7.000000 0.00100 "" center "Liberation Sans" 22 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder 7
+ioKnob {195, 451} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol7
+ioKnob {255, 451} {50, 50} 1.000000 0.000000 0.010000 0.060606 Pan7
+ioKnob {315, 451} {50, 50} 1.000000 0.000000 0.010000 0.000000 Timi7
+ioKnob {375, 451} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte7
+ioText {450, 461} {61, 30} label 0.000000 0.00100 "" center "Liberation Sans" 16 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder u / j
+ioText {2, 511} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 526} {63, 30} value 1.000000 "OnOff8_B" "  On" "/" 
+ioMeter {64, 536} {10, 10} {0, 59904, 0} "hor2" 0.400000 "OnOff8_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 526} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index8
+ioText {9, 526} {30, 32} label 8.000000 0.00100 "" center "Liberation Sans" 22 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder 8
+ioKnob {195, 516} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol8
+ioKnob {255, 516} {50, 50} 1.000000 0.000000 0.010000 0.797980 Pan8
+ioKnob {315, 516} {50, 50} 1.000000 0.000000 0.010000 0.000000 Timi8
+ioKnob {375, 516} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte8
+ioText {450, 526} {61, 30} label 0.000000 0.00100 "" center "Liberation Sans" 16 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder i / k
+ioText {2, 577} {530, 60} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioButton {58, 592} {63, 30} value 1.000000 "OnOff9_B" "  On" "/" 
+ioMeter {64, 602} {10, 10} {0, 59904, 0} "hor2" 0.400000 "OnOff9_L" 0.000000 fill 1 0 mouse
+ioMenu {127, 592} {51, 30} 0 303 "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52" Patt_index9
+ioText {9, 592} {30, 32} label 9.000000 0.00100 "" center "Liberation Sans" 22 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder 9
+ioKnob {195, 582} {50, 50} 1.000000 0.000000 0.010000 1.000000 Vol9
+ioKnob {255, 582} {50, 50} 1.000000 0.000000 0.010000 0.101010 Pan9
+ioKnob {315, 582} {50, 50} 1.000000 0.000000 0.010000 0.010101 Timi9
+ioKnob {375, 582} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte9
+ioText {450, 592} {61, 30} label 0.000000 0.00100 "" center "Liberation Sans" 16 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder o / l
+ioText {535, 118} {262, 518} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {43520, 65280, 65280} nobackground noborder 
+ioText {540, 136} {64, 30} label 0.000000 0.00100 "" left "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder BMP
+ioKnob {375, 320} {50, 50} 1.000000 0.000000 0.010000 0.000000 Inte5
+ioKnob {608, 240} {60, 60} 28000.000000 0.000000 0.010000 28000.000000 Pulse_Vol
+ioText {603, 139} {80, 25} editnum 130.000000 1.000000 "BMP" center "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 130.000000
+ioKnob {608, 378} {60, 60} 2.000000 0.010000 0.010000 2.000000 gVolume
+ioKnob {613, 493} {50, 50} 1.000000 0.000000 0.010000 0.790000 Dry-Wet
+ioKnob {673, 493} {50, 50} 1.000000 0.000000 0.010000 0.510000 Feedback
+ioKnob {733, 493} {50, 50} 22050.000000 0.000000 0.010000 17640.000000 Cutoff
+ioText {599, 348} {78, 28} label 0.000000 0.00100 "" center "Liberation Sans" 16 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder Volume
+ioText {540, 503} {75, 29} label 0.000000 0.00100 "" left "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder REVERB
+ioText {602, 464} {66, 24} label 0.000000 0.00100 "" center "Liberation Sans" 12 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder Dry / Wet
+ioText {664, 464} {66, 24} label 0.000000 0.00100 "" center "Liberation Sans" 12 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder Feedback
+ioText {725, 464} {66, 24} label 0.000000 0.00100 "" center "Liberation Sans" 12 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder Cutoff
+ioText {536, 388} {75, 30} label 0.000000 0.00100 "" left "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder GLOBAL
+ioButton {705, 401} {63, 30} value 1.000000 "OnOffAll_B" "  On" "/" 
+ioMeter {710, 410} {10, 10} {21760, 65280, 0} "hor2" 0.400000 "OnOffAll_L" 0.000000 fill 1 0 mouse
+ioText {685, 340} {109, 56} label 0.000000 0.00100 "" center "Liberation Sans" 12 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder Space KeyÂ¬All the playersÂ¬together On Off
+ioText {599, 210} {81, 29} label 0.000000 0.00100 "" center "Liberation Sans" 16 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder Volume
+ioCheckbox {696, 208} {15, 15} off C1
+ioText {706, 204} {33, 26} label 0.000000 0.00100 "" center "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder C1
+ioCheckbox {696, 268} {15, 15} on C3
+ioCheckbox {696, 238} {15, 15} off C2
+ioCheckbox {736, 208} {15, 15} off C5
+ioText {706, 264} {33, 26} label 0.000000 0.00100 "" center "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder C3
+ioText {706, 234} {33, 26} label 0.000000 0.00100 "" center "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder C2
+ioText {706, 294} {33, 26} label 0.000000 0.00100 "" center "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder C4
+ioCheckbox {696, 298} {15, 15} on C4
+ioText {746, 204} {33, 26} label 0.000000 0.00100 "" center "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder C5
+ioCheckbox {736, 268} {15, 15} on C7
+ioCheckbox {736, 238} {15, 15} on C6
+ioCheckbox {736, 298} {15, 15} off C8
+ioText {746, 264} {33, 26} label 0.000000 0.00100 "" center "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder C7
+ioText {746, 234} {33, 26} label 0.000000 0.00100 "" center "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder C6
+ioText {746, 294} {33, 26} label 0.000000 0.00100 "" center "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder C8
+ioText {536, 2} {262, 111} label 0.000000 0.00100 "" center "Liberation Sans" 18 {0, 0, 32512} {43520, 65280, 65280} nobackground noborder In C PlayerÂ¬Created by Stefano Valli
+ioText {541, 53} {246, 56} label 0.000000 0.00100 "" left "Liberation Sans" 12 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder www.triceratupuz.altervista.orgÂ¬email: vallste at libero.itÂ¬license: http://creativecommons.org
+ioText {540, 252} {64, 30} label 0.000000 0.00100 "" left "Liberation Sans" 14 {0, 0, 32512} {65280, 65280, 65280} nobackground noborder PULSE
+</MacGUI>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="0" y="0" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
