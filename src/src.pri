@@ -62,7 +62,8 @@ HEADERS = "$${PWD}/about.h" \
     "$${PWD}/appwizard.h" \
     "$${PWD}/appdetailspage.h" \
     "$${PWD}/pluginspage.h" \
-    "$${PWD}/additionalfilespage.h"
+    "$${PWD}/additionalfilespage.h" \
+    "$${PWD}/scoreeditor.h"
 SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/configdialog.cpp" \
     "$${PWD}/configlists.cpp" \
@@ -113,7 +114,8 @@ SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/appwizard.cpp" \
     "$${PWD}/appdetailspage.cpp" \
     "$${PWD}/pluginspage.cpp" \
-    "$${PWD}/additionalfilespage.cpp"
+    "$${PWD}/additionalfilespage.cpp" \
+    "$${PWD}/scoreeditor.cpp"
 LIBS += $${LCSOUND} \
     $${LSNDFILE} \
     $${RTMIDI}

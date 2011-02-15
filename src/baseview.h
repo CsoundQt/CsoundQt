@@ -23,6 +23,7 @@
 
 #include <QtGui>
 #include "highlighter.h"
+#include "scoreeditor.h"
 
 class TextEditor;
 class OpEntryParser;
@@ -39,7 +40,6 @@ class BaseView : public QScrollArea
     void setFileType(int mode); // For higlighting mode
     void setFont(QFont font);
     void setFontPointSize(float size);
-    void setTabWidth(int width);
     void setTabStopWidth(int width);
     void setLineWrapMode(QTextEdit::LineWrapMode mode);
     void setAutoComplete(bool autoComplete);
@@ -71,15 +71,15 @@ class BaseView : public QScrollArea
     OpEntryParser *m_opcodeTree;
     QSplitter *splitter;
     TextEditor *mainEditor;
-    TextEditor *scoreEditor;
+    ScoreEditor *scoreEditor;
     TextEditor *optionsEditor;
     TextEditor *filebEditor;
     TextEditor *versionEditor;
     TextEditor *licenceEditor;
-    TextEditor *otherEditor;
+    TextEditor *otherEditor;  // Extra text after removing all sections. All this text is to be presented at the start of the csd
     TextEditor *widgetEditor;
     TextEditor *ladspaEditor;
-    QVector<TextEditor *> editors; // A vector to hold pointers for the above for easy processing
+    QVector<QWidget *> editors; // A vector to hold pointers for the above for easy processing
 };
 
 #endif // BASEVIEW_H

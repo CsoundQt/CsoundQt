@@ -65,7 +65,7 @@ class DocumentView : public BaseView
     QString getOrc();  // Without tags
     QString getSco();  // Without tags
     QString getOptionsText();  // Without tags
-    QString getFileB(); // Embedded files
+    QString getFileB(); // Embedded files. With tags (for filenames)
     QString getMiscText();  // All other tags like version and licence with tags
     QString getExtraText(); // Text outside any known tags
     // These two should be used with care as they are only here in case

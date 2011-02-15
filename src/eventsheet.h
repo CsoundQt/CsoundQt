@@ -37,6 +37,7 @@ class EventSheet : public QTableWidget
     ~EventSheet();
 
     QString getPlainText(bool scaleTempo = false);
+    QString getSelection(bool cut = false);
     QString getLine(int number, bool scaleTempo = false,
                     bool storeNumber = false, bool preprocess = false,
                     double startOffset = 0.0);

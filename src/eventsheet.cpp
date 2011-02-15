@@ -183,6 +183,41 @@ QString EventSheet::getPlainText(bool scaleTempo)
   return t;
 }
 
+QString EventSheet::getSelection(bool cut)
+{
+  QModelIndexList list = this->selectedIndexes();
+  QList<int> selectedRows;
+  QList<int> selectedColumns;
+  for (int i = 0; i < list.size(); i++) { // Get list of selected rows
+    if (!selectedRows.contains(list[i].row()) ) {
+      selectedRows.append(list[i].row());
+    }
+    if (!selectedColumns.contains(list[i].column()) ) {
+      selectedColumns.append(list[i].column());
+    }
+  }
+  QString text = "";
+  for (int i = 0; i < selectedRows.size(); i++) {
+    QString line = "";
+    for (int j = 0; j < selectedColumns.size(); j++) {
+      QTableWidgetItem * item = this->item(selectedRows[i], selectedColumns[j]);
+      if (item != 0) { // Item is not empty
+        line += item->data(Qt::DisplayRole).toString();
+        QString space = item->data(Qt::UserRole).toString();
+        if (!space.isEmpty())
+          line += space;
+        else
+          line += " ";
+        if (cut)
+          delete item;
+      }
+    }
+    text += line + "\n";
+  }
+  text.chop(1); // remove last line break
+  return text;
+}
+
 QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber, bool preprocess, double startOffset)
 {
   QString line = "";
@@ -534,37 +569,7 @@ void EventSheet::cut()
 
 void EventSheet::copy(bool cut)
 {
-  QModelIndexList list = this->selectedIndexes();
-  QList<int> selectedRows;
-  QList<int> selectedColumns;
-  for (int i = 0; i < list.size(); i++) { // Get list of selected rows
-    if (!selectedRows.contains(list[i].row()) ) {
-      selectedRows.append(list[i].row());
-    }
-    if (!selectedColumns.contains(list[i].column()) ) {
-      selectedColumns.append(list[i].column());
-    }
-  }
-  QString text = "";
-  for (int i = 0; i < selectedRows.size(); i++) {
-    QString line = "";
-    for (int j = 0; j < selectedColumns.size(); j++) {
-      QTableWidgetItem * item = this->item(selectedRows[i], selectedColumns[j]);
-      if (item != 0) { // Item is not empty
-        line += item->data(Qt::DisplayRole).toString();
-        QString space = item->data(Qt::UserRole).toString();
-        if (!space.isEmpty())
-          line += space;
-        else
-          line += " ";
-        if (cut)
-          delete item;
-      }
-    }
-    text += line + "\n";
-  }
-  text.chop(1); // remove last line break
-  qApp->clipboard()->setText(text);
+  qApp->clipboard()->setText(getSelection(cut));
 }
 
 void EventSheet::paste()

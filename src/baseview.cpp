@@ -27,7 +27,7 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
     QScrollArea(parent), m_opcodeTree(opcodeTree)
 {
   mainEditor = new TextEditor(this);
-  scoreEditor = new TextEditor(this);
+  scoreEditor = new ScoreEditor(this);
   optionsEditor = new TextEditor(this);
   filebEditor = new TextEditor(this);
   versionEditor = new TextEditor(this);
@@ -60,12 +60,12 @@ BaseView::~BaseView()
 
 void BaseView::setFullText(QString text, bool goToTop)
 {
-  QTextCursor cursor = editors[0]->textCursor();
+  QTextCursor cursor = mainEditor->textCursor();
   cursor.select(QTextCursor::Document);
   cursor.insertText(text);
-  editors[0]->setTextCursor(cursor);  // TODO implment for multiple views
+  mainEditor->setTextCursor(cursor);  // TODO implement for multiple views
   if (goToTop) {
-    editors[0]->moveCursor(QTextCursor::Start);
+    mainEditor->moveCursor(QTextCursor::Start);
   }
 }
 
@@ -104,37 +104,54 @@ void BaseView::setFileType(int mode)
 
 void BaseView::setFont(QFont font)
 {
-  for (int i = 0; i < editors.size(); i++) {
-    editors[i]->setFont(font);
-  }
+  mainEditor->setFont(font);
+  scoreEditor->setFont(font);
+  optionsEditor->setFont(font);
+  filebEditor->setFont(font);
+  versionEditor->setFont(font);
+  licenceEditor->setFont(font);
+  otherEditor->setFont(font);
+  widgetEditor->setFont(font);
+  ladspaEditor->setFont(font);
 }
 
 void BaseView::setFontPointSize(float size)
 {
-  for (int i = 0; i < editors.size(); i++) {
-    editors[i]->setFontPointSize(size);
-  }
-}
-
-void BaseView::setTabWidth(int width)
-{
-  for (int i = 0; i < editors.size(); i++) {
-    editors[i]->setTabStopWidth(width);
-  }
+  mainEditor->setFontPointSize(size);
+  scoreEditor->setFontPointSize(size);
+  optionsEditor->setFontPointSize(size);
+  filebEditor->setFontPointSize(size);
+  versionEditor->setFontPointSize(size);
+  licenceEditor->setFontPointSize(size);
+  otherEditor->setFontPointSize(size);
+  widgetEditor->setFontPointSize(size);
+  ladspaEditor->setFontPointSize(size);
 }
 
 void BaseView::setTabStopWidth(int width)
 {
-  for (int i = 0; i < editors.size(); i++) {
-    editors[i]->setTabStopWidth(width);
-  }
+  mainEditor->setTabStopWidth(width);
+  scoreEditor->setTabStopWidth(width);
+  optionsEditor->setTabStopWidth(width);
+  filebEditor->setTabStopWidth(width);
+  versionEditor->setTabStopWidth(width);
+  licenceEditor->setTabStopWidth(width);
+  otherEditor->setTabStopWidth(width);
+  widgetEditor->setTabStopWidth(width);
+  ladspaEditor->setTabStopWidth(width);
 }
 
 void BaseView::setLineWrapMode(QTextEdit::LineWrapMode mode)
 {
-  for (int i = 0; i < editors.size(); i++) {
-    editors[i]->setLineWrapMode(mode);
-  }
+  mainEditor->setLineWrapMode(mode);
+  scoreEditor->setLineWrapMode(mode);
+  optionsEditor->setLineWrapMode(mode);
+  filebEditor->setLineWrapMode(mode);
+  versionEditor->setLineWrapMode(mode);
+  licenceEditor->setLineWrapMode(mode);
+  otherEditor->setLineWrapMode(mode);
+  widgetEditor->setLineWrapMode(mode);
+  ladspaEditor->setLineWrapMode(mode);
 }
 
 void BaseView::setColorVariables(bool color)
@@ -144,12 +161,33 @@ void BaseView::setColorVariables(bool color)
 
 void BaseView::setBackgroundColor(QColor color)
 {
-  for (int i = 0; i < editors.size(); i++) {
-    QPalette p = editors[i]->palette();
-//    p.setColor(QPalette::WindowText, textColor);
-    p.setColor(static_cast<QPalette::ColorRole>(9), color);
-    editors[i]->setPalette(p);
-  }
+  QPalette p = mainEditor->palette();
+  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+  mainEditor->setPalette(p);
+  p = scoreEditor->palette();
+  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+  scoreEditor->setPalette(p);
+  p = optionsEditor->palette();
+  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+  optionsEditor->setPalette(p);
+  p = filebEditor->palette();
+  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+  filebEditor->setPalette(p);
+  p = versionEditor->palette();
+  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+  versionEditor->setPalette(p);
+  p = licenceEditor->palette();
+  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+  licenceEditor->setPalette(p);
+  p = otherEditor->palette();
+  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+  otherEditor->setPalette(p);
+  p = widgetEditor->palette();
+  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+  widgetEditor->setPalette(p);
+  p = ladspaEditor->palette();
+  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+  ladspaEditor->setPalette(p);
 }
 
 //void BaseView::setOpcodeNameList(QStringList list)
@@ -164,11 +202,19 @@ void BaseView::setBackgroundColor(QColor color)
 
 void BaseView::hideAllEditors()
 {
-  for (int i = 0; i < editors.size(); i++) {
-    editors[i]->hide();
-    QSplitterHandle *h = splitter->handle(i);
-    if (h) {
-      h->hide();
+    mainEditor->hide();
+    scoreEditor->hide();
+    optionsEditor->hide();
+    filebEditor->hide();
+    versionEditor->hide();
+    licenceEditor->hide();
+    otherEditor->hide();
+    widgetEditor->hide();
+    ladspaEditor->hide();
+    for (int i = 0; i < 9; i++) {
+      QSplitterHandle *h = splitter->handle(i);
+      if (h) {
+        h->hide();
+      }
     }
-  }
 }

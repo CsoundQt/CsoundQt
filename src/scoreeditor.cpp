@@ -1,0 +1,111 @@
+/*
+    Copyright (C) 2011 Andres Cabrera
+    mantaraya36@gmail.com
+
+    This file is part of QuteCsound.
+
+    QuteCsound is free software; you can redistribute it
+    and/or modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    QuteCsound is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with Csound; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+    02111-1307 USA
+*/
+
+#include "scoreeditor.h"
+
+ScoreEditor::ScoreEditor(QWidget *parent) :
+    QWidget(parent)
+{
+  m_textEditor = new TextEditor(this);
+  m_sheet = new EventSheet(this);
+  setMode(0); // Text view by default
+}
+
+void ScoreEditor::setMode(int mode)
+{
+  m_mode = mode;
+  switch (m_mode) {
+  case 0:
+    m_textEditor->show();
+    m_sheet->hide();
+    this->setFocusProxy(m_textEditor);
+    break;
+  case 1:
+    m_sheet->show();
+    m_textEditor->hide();
+    this->setFocusProxy(m_sheet);
+    break;
+  default:
+    break;
+  }
+}
+
+void ScoreEditor::setPlainText(QString text)
+{
+  switch (m_mode) {
+  case 0:
+    m_textEditor->setPlainText(text);
+    break;
+  case 1:
+    m_sheet->setFromText(text);
+    break;
+  default:
+    break;
+  }
+}
+
+void ScoreEditor::setFontPointSize(float size)
+{
+  m_textEditor->setFontPointSize(size);
+}
+
+void ScoreEditor::setTabStopWidth(int width)
+{
+  m_textEditor->setTabStopWidth(width);
+}
+
+void ScoreEditor::setLineWrapMode(QTextEdit::LineWrapMode mode)
+{
+  m_textEditor->setLineWrapMode(mode);
+}
+
+QString ScoreEditor::getPlainText()
+{
+  QString text;
+  switch (m_mode) {
+  case 0:
+    text = m_textEditor->toPlainText();
+    break;
+  case 1:
+    text = m_sheet->getPlainText();
+    break;
+  default:
+    break;
+  }
+  return text;
+}
+
+QString ScoreEditor::getSelection()
+{
+  QString text;
+  switch (m_mode) {
+  case 0:
+    text = m_textEditor->textCursor().selectedText();
+    break;
+  case 1:
+    text = m_sheet->getPlainText();
+    break;
+  default:
+    break;
+  }
+  return text;
+}
