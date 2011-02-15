@@ -70,6 +70,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 //  connect(syntaxMenu,SIGNAL(aboutToHide()),
 //          this, SLOT(destroySyntaxMenu()));
 
+  setViewMode(1);
+  setViewMode(0);  // To force a change
   setAcceptDrops(true);
 }
 
@@ -139,114 +141,40 @@ void DocumentView::insertText(QString text, int section)
   }
 }
 
-void DocumentView::setBasicText(QString text)
-{
-  QTextCursor cursor = mainEditor->textCursor();
-  cursor.select(QTextCursor::Document);
-  cursor.insertText(text);
-  mainEditor->setTextCursor(cursor);  // TODO implment for multiple views
-}
-
-void DocumentView::setOrc(QString text)
-{
-  if (m_viewMode < 2) { // View is not split
-    if (m_mode != 0) {
-      qDebug() << "DocumentView::setOrc Current file is not a csd file. Text not inserted!";
-      return;
-    }
-    QString csdText = getBasicText();
-    if (csdText.contains("<CsInstruments>") and csdText.contains("</CsInstruments>")) {
-      QString preText = csdText.mid(0, csdText.indexOf("<CsInstruments>") + 15);
-      QString postText = csdText.mid(csdText.lastIndexOf("</CsInstruments>"));
-      if (!text.startsWith("\n")) {
-        text.prepend("\n");
-      }
-      if (!text.endsWith("\n")) {
-        text.append("\n");
-      }
-      csdText = preText + text + postText;
-      setBasicText(csdText);
-    }
-    else {
-      qDebug() << "DocumentView::setOrc Orchestra section not found in csd. Text not inserted!";
-    }
-  }
-  else {
-    mainEditor->setPlainText(text);
-  }
-}
-
-void DocumentView::setSco(QString text)
-{
-  if (m_viewMode < 2) { // View is not split
-    if (m_mode != 0) {
-      qDebug() << "DocumentView::setSco Current file is not a csd file. Text not inserted!";
-      return;
-    }
-    QString csdText = getBasicText();
-    if (csdText.contains("<CsScore>") and csdText.contains("</CsScore>")) {
-      QString preText = csdText.mid(0, csdText.indexOf("<CsScore>") + 9);
-      QString postText = csdText.mid(csdText.lastIndexOf("</CsScore>"));
-      if (!text.startsWith("\n")) {
-        text.prepend("\n");
-      }
-      if (!text.endsWith("\n")) {
-        text.append("\n");
-      }
-      csdText = preText + text + postText;
-      setBasicText(csdText);
-    }
-    else {
-      qDebug() << "DocumentView::setSco Orchestra section not found in csd. Text not inserted!";
-    }
-  }
-  else {
-    scoreEditor->setPlainText(text);
-  }
-}
-
-void DocumentView::setFileB(QString text)
-{
-  filebEditor->setPlainText(text);
-}
-
-void DocumentView::setLadspaText(QString text)
-{
-  if (m_viewMode < 2) { // View is not split
-    if (m_mode != 0) {
-      qDebug() << "DocumentView::setLadspaText Current file is not a csd file. Text not inserted!";
-      return;
-    }
-    QTextCursor cursor;
-    cursor = mainEditor->textCursor();
-    mainEditor->moveCursor(QTextCursor::Start);
-    if (mainEditor->find("<csLADSPA>") and mainEditor->find("</csLADSPA>")) {
-      QString curText = getBasicText();
-      int index = curText.indexOf("<csLADSPA>");
-      int endIndex = curText.indexOf("</csLADSPA>") + 11;
-      if (curText.size() > endIndex + 1 && curText[endIndex + 1] == '\n') {
-        endIndex++; // Include last line break
-      }
-      curText.remove(index, endIndex - index);
-      curText.insert(index, text);
-      setBasicText(curText);
-      mainEditor->moveCursor(QTextCursor::Start);
-    }
-    else { //csLADSPA section not present, or incomplete
-      mainEditor->find("<CsoundSynthesizer>"); //cursor moves there
-      mainEditor->moveCursor(QTextCursor::EndOfLine);
-      mainEditor->insertPlainText(QString("\n") + text + QString("\n"));
-    }
-  }
-  else {
-    ladspaEditor->setText(text);
-    ladspaEditor->moveCursor(QTextCursor::Start);
-  }
-}
-
 void DocumentView::setAutoComplete(bool autoComplete)
 {
   m_autoComplete = autoComplete;
+}
+
+void DocumentView::setViewMode(int mode)
+{
+  if (m_viewMode == mode)
+    return;
+  QString fullText = getFullText();
+  m_viewMode = mode;
+  setFullText(fullText); // Update text for new mode
+  hideAllEditors();
+
+  // TODO implement modes properly
+  switch (m_viewMode) {
+    case 0: // csd without extra sections
+      mainEditor->show();
+      break;
+    case 1: // full plain text
+      mainEditor->show();
+      break;
+    default:
+      mainEditor->setVisible(m_viewMode & 2);
+      scoreEditor->setVisible(m_viewMode & 4);
+      optionsEditor->setVisible(m_viewMode & 8);
+      filebEditor->setVisible(m_viewMode & 16);
+      versionEditor->setVisible(m_viewMode & 32);
+      licenceEditor->setVisible(m_viewMode & 64);
+      otherEditor->setVisible(m_viewMode & 128);
+      otherCsdEditor->setVisible(m_viewMode & 256);
+      widgetEditor->setVisible(m_viewMode & 512);
+      ladspaEditor->setVisible(m_viewMode & 1024);
+  }
 }
 
 QString DocumentView::getSelectedText(int section)
@@ -279,13 +207,14 @@ QString DocumentView::getSelectedText(int section)
     text = otherEditor->textCursor().selectedText();
     break;
   case 7:
-    text = widgetEditor->textCursor().selectedText();
+    text = otherCsdEditor->textCursor().selectedText();
     break;
   case 8:
+    text = widgetEditor->textCursor().selectedText();
+    break;
+  case 9:
     text = ladspaEditor->textCursor().selectedText();
     break;
-//  case 9:
-//    break;
   default:
     qDebug() <<"DocumentView::insertText section " << section << " not implemented.";
   }
@@ -329,23 +258,12 @@ QString DocumentView::getFullText()
       text += "<CsLicense>\n" + sectionText + "</CsLicense>\n";
     }
     text += "<CsInstruments>\n" + mainEditor->toPlainText() + "</CsInstruments>\n";
-    text += "<CsScore>\n" + mainEditor->toPlainText() + "</CsScore>\n";
+    text += "<CsScore>\n" + scoreEditor->getPlainText() + "</CsScore>\n";
     sectionText = getFileB();
     if (!sectionText.isEmpty()) {
       text += getFileB();
     }
-  }
-  return text;
-}
-
-QString DocumentView::getBasicText()
-{
-//   What Csound needs (no widgets, misc text, etc.)
-  // TODO implement modes
-  QString text;
-  text = mainEditor->toPlainText(); // csd without extra sections
-  if (m_viewMode & 16) {
-    text += getFileB();
+    text += otherCsdEditor->toPlainText();
   }
   return text;
 }
@@ -426,6 +344,10 @@ QString DocumentView::getWidgetsText()
   qDebug() << "DocumentView::getWidgetsText() not implemented and will crash!";
 }
 
+int DocumentView::getViewMode()
+{
+  return m_viewMode;
+}
 
 int DocumentView::currentLine()
 {

@@ -71,6 +71,7 @@ class DocumentPage : public BaseDocument
     QString getMacPresetsText();
     QString getMacOptionsText();
     QString getMacOptions(QString option);
+    int getViewMode();
     QString getLiveEventsText();
     QString wordUnderCursor();
     QRect getWidgetPanelGeometry();
@@ -213,6 +214,7 @@ class DocumentPage : public BaseDocument
     void killLine();
     void killToEnd();
     void autoComplete();
+    void setViewMode(int mode);
 
     // Slots for live events
     void newLiveEventPanel(QString text = QString());

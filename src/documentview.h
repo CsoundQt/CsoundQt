@@ -50,18 +50,13 @@ class DocumentView : public BaseView
     ~DocumentView();
 
     void insertText(QString text, int section = -1);
-    void setBasicText(QString text);
-    void setOrc(QString text);
-    void setSco(QString text);
-    void setFileB(QString text);
-    void setLadspaText(QString text);
     void setAutoComplete(bool autoComplete);
+    void setViewMode(int mode);
 
     // TODO add all text inputs here as below
 
     QString getSelectedText(int section = -1);
     QString getFullText();
-    QString getBasicText();  // What Csound needs (no widgets, misc text, etc.)
     QString getOrc();  // Without tags
     QString getSco();  // Without tags
     QString getOptionsText();  // Without tags
@@ -73,6 +68,7 @@ class DocumentView : public BaseView
     // get the widgets Text from the widget layout object
     QString getMacWidgetsText(); // With tags including presets
     QString getWidgetsText(); // With tags including presets, in new xml format
+    int getViewMode();
 
     QString wordUnderCursor();
     QString getActiveSection();

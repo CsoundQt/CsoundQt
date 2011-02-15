@@ -326,6 +326,7 @@ void qutecsound::changePage(int index)
     updateInspector();
     runAct->setChecked(documentPages[curPage]->isRunning());
     recAct->setChecked(documentPages[curPage]->isRecording());
+    splitViewAct->setChecked(documentPages[curPage]->getViewMode() > 1);
 #ifdef QCS_RTMIDI
     if (m_midiin != 0) {
       m_midiin->cancelCallback();
@@ -1596,6 +1597,16 @@ void qutecsound::setFullScreen(bool full)
   }
 }
 
+void qutecsound::splitView(bool split)
+{
+  if (split) {
+    documentPages[curPage]->setViewMode(2+4+8+128);
+  }
+  else {
+    documentPages[curPage]->setViewMode(0);
+  }
+}
+
 void qutecsound::openManualExample(QString fileName)
 {
   loadFile(fileName);
@@ -2028,6 +2039,7 @@ void qutecsound::setDefaultKeyboardShortcuts()
 #else
   viewFullScreenAct->setShortcut(tr("F11"));
 #endif
+  splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
   createCodeGraphAct->setShortcut(tr("Alt+4"));
   showInspectorAct->setShortcut(tr("Alt+5"));
   showLiveEventsAct->setShortcut(tr("Alt+6"));
@@ -2384,6 +2396,13 @@ void qutecsound::createActions()
   viewFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(viewFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setFullScreen(bool)));
 
+  splitViewAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Split View"), this);
+  splitViewAct->setCheckable(true);
+  splitViewAct->setChecked(false);
+  splitViewAct->setStatusTip(tr("Toggle between full csd and split text display"));
+  splitViewAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(splitViewAct, SIGNAL(toggled(bool)), this, SLOT(splitView(bool)));
+
   setHelpEntryAct = new QAction(QIcon(":/images/gtk-info.png"), tr("Show Opcode Entry"), this);
   setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
   setHelpEntryAct->setIconText(tr("Manual for opcode"));
@@ -2542,6 +2561,7 @@ void qutecsound::setKeyboardShortcutsList()
   m_keyActions.append(showOpcodeQuickRefAct);
   m_keyActions.append(infoAct);
   m_keyActions.append(viewFullScreenAct);
+  m_keyActions.append(splitViewAct);
   m_keyActions.append(killLineAct);
   m_keyActions.append(killToEndAct);
   m_keyActions.append(evaluateAct);
@@ -2701,6 +2721,8 @@ void qutecsound::createMenus()
   viewMenu->addAction(showUtilitiesAct);
   viewMenu->addSeparator();
   viewMenu->addAction(viewFullScreenAct);
+  viewMenu->addSeparator();
+  viewMenu->addAction(splitViewAct);
 
   QStringList tutFiles;
   QStringList basicsFiles;

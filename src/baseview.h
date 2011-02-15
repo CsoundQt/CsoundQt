@@ -36,7 +36,7 @@ class BaseView : public QScrollArea
     ~BaseView();
 
     void setFullText(QString text, bool goToTop = false);
-    void setViewMode(int mode);
+    void setBasicText(QString text);
     void setFileType(int mode); // For higlighting mode
     void setFont(QFont font);
     void setFontPointSize(float size);
@@ -47,6 +47,12 @@ class BaseView : public QScrollArea
     void setBackgroundColor(QColor color);
 //    void setOpcodeNameList(QStringList list);
 //    void setOpcodeTree(OpEntryParser *opcodeTree);
+    void setOrc(QString text);
+    void setSco(QString text);
+    void setFileB(QString text);
+    void setLadspaText(QString text);
+
+    QString getBasicText();  // What Csound needs (no widgets, misc text, etc.)
 
   signals:
 
@@ -64,9 +70,10 @@ class BaseView : public QScrollArea
                     // 16 = show <CsFileB> Section(s)
                     // 32 = show <CsVersion> Section(s)
                     // 64 = show <CsLicence>/<CsLicense> Section(s)
-                    //128 = show Text outside any tag
-                    //256 = show Widget, Preset and Extra Options sections
-                    //512 = show <CsLadspa> text with tags
+                    //128 = show remaining Text outside CsoundSynthesizer tag
+                    //256 = show remaining text inside CsoundSynthesizer tag
+                    //512 = show Widget, Preset and Extra Options sections
+                    //1024 = show <CsLadspa> text with tags
     Highlighter m_highlighter;
     OpEntryParser *m_opcodeTree;
     QSplitter *splitter;
@@ -76,6 +83,7 @@ class BaseView : public QScrollArea
     TextEditor *filebEditor;
     TextEditor *versionEditor;
     TextEditor *licenceEditor;
+    TextEditor *otherCsdEditor;  // Extra text and tags inside CsoundSynthesizer tags
     TextEditor *otherEditor;  // Extra text after removing all sections. All this text is to be presented at the start of the csd
     TextEditor *widgetEditor;
     TextEditor *ladspaEditor;

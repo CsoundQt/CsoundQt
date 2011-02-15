@@ -201,6 +201,7 @@ class qutecsound:public QMainWindow
     void setEditorFocus();
     void setHelpEntry();
     void setFullScreen(bool full);
+    void splitView(bool split);
     void openManualExample(QString fileName);
     void openExternalBrowser(QUrl url = QUrl());
     void openQuickRef();
@@ -340,6 +341,7 @@ class qutecsound:public QMainWindow
     QAction *showOpcodeQuickRefAct;
     QAction *showConsoleAct;
     QAction *viewFullScreenAct;
+    QAction *splitViewAct;
     QAction *setHelpEntryAct;
     QAction *browseBackAct;
     QAction *browseForwardAct;

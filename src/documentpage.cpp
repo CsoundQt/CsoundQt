@@ -91,6 +91,7 @@ void DocumentPage::setTextString(QString &text)
 
 int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 {
+  // FIXME parsing should rely more on the document view section separator, to avoid code duplication.
   int ret = 0;
   deleteAllLiveEvents();
   if (!fileName.endsWith(".csd") && !fileName.isEmpty()) {
@@ -419,6 +420,11 @@ QString DocumentPage::getMacOptions(QString option)
     return QString("");
   }
   return m_macOptions[index].mid(option.size());
+}
+
+int DocumentPage::getViewMode()
+{
+  return m_view->getViewMode();
 }
 
 QString DocumentPage::getLiveEventsText()
@@ -1465,6 +1471,11 @@ void DocumentPage::killLine()
 void DocumentPage::autoComplete()
 {
   m_view->autoComplete();
+}
+
+void DocumentPage::setViewMode(int mode)
+{
+  m_view->setViewMode(mode);
 }
 
 void DocumentPage::newLiveEventPanel(QString text)

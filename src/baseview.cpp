@@ -33,10 +33,11 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
   versionEditor = new TextEditor(this);
   licenceEditor = new TextEditor(this);
   otherEditor = new TextEditor(this);
+  otherCsdEditor = new TextEditor(this);
   widgetEditor = new TextEditor(this);
   ladspaEditor = new TextEditor(this);
   editors << mainEditor << scoreEditor << optionsEditor << filebEditor
-      << versionEditor << licenceEditor << otherEditor << widgetEditor
+      << versionEditor << licenceEditor << otherEditor << otherCsdEditor << widgetEditor
       << ladspaEditor;
 
   splitter = new QSplitter(this);
@@ -48,7 +49,6 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
   l->addWidget(splitter);
   setLayout(l);
   m_mode = 0;
-  setViewMode(0);
   m_highlighter.setOpcodeNameList(opcodeTree->opcodeNameList());
   m_highlighter.setDocument(mainEditor->document());
 }
@@ -60,40 +60,89 @@ BaseView::~BaseView()
 
 void BaseView::setFullText(QString text, bool goToTop)
 {
+  if (m_viewMode < 2) {  // Unified view
+    QTextCursor cursor = mainEditor->textCursor();
+    cursor.select(QTextCursor::Document);
+    cursor.insertText(text);
+    mainEditor->setTextCursor(cursor);  // TODO implement for multiple views
+    if (goToTop) {
+      mainEditor->moveCursor(QTextCursor::Start);
+    }
+  }
+  else { // Split view
+    int startIndex,endIndex;
+    QString sectionText = "";
+    // Find orchestra section
+    startIndex = text.indexOf("<CsInstruments>");
+    if (text.size() > startIndex + 1 && text[startIndex+1] == '\n') {
+      startIndex++;
+    }
+    endIndex = text.indexOf("</CsInstruments>") + 16;
+    if (text.size() > endIndex + 1 && text[endIndex+1] == '\n') {
+      endIndex++;
+    }
+    if (endIndex > startIndex) {
+      sectionText = text.mid(startIndex, endIndex - startIndex);
+    }
+    text.remove(sectionText);
+    setOrc(sectionText.mid(15, sectionText.size() - 15 - 16));
+    // Find score section
+    sectionText = "";
+    startIndex = text.indexOf("<CsScore>");
+    if (text.size() > startIndex + 1 && text[startIndex+1] == '\n') {
+      startIndex++;
+    }
+    endIndex = text.indexOf("</CsScore>") + 10;
+    if (text.size() > endIndex + 1 && text[endIndex+1] == '\n') {
+      endIndex++;
+    }
+    if (endIndex > startIndex) {
+      sectionText = text.mid(startIndex, endIndex - startIndex);
+    }
+    text.remove(sectionText);
+    setSco(sectionText.mid(9, sectionText.size() - 9 - 10));
+    // Find ladspa section
+    sectionText = "";
+    startIndex = text.indexOf("<csLADSPA>");
+    if (text.size() > startIndex + 1 && text[startIndex+1] == '\n') {
+      startIndex++;
+    }
+    endIndex = text.indexOf("</csLADSPA>") + 11;
+    if (text.size() > endIndex + 1 && text[endIndex+1] == '\n') {
+      endIndex++;
+    }
+    if (endIndex > startIndex) {
+      sectionText = text.mid(startIndex, endIndex - startIndex);
+    }
+    text.remove(sectionText);
+    setLadspaText(sectionText.mid(10, sectionText.size() - 10 - 11));
+    // Find File section
+    sectionText = "";
+    startIndex = text.indexOf("<csLADSPA>");
+    if (text.size() > startIndex + 1 && text[startIndex+1] == '\n') {
+      startIndex++;
+    }
+    endIndex = text.indexOf("</csLADSPA>") + 11;
+    if (text.size() > endIndex + 1 && text[endIndex+1] == '\n') {
+      endIndex++;
+    }
+    if (endIndex > startIndex) {
+      sectionText = text.mid(startIndex, endIndex - startIndex);
+    }
+    text.remove(sectionText);
+    setLadspaText(sectionText.mid(10, sectionText.size() - 10 - 11));
+  }
+
+//  void setFileB(QString text);
+//  void setLadspaText(QString text);
+}
+
+void BaseView::setBasicText(QString text)
+{
   QTextCursor cursor = mainEditor->textCursor();
   cursor.select(QTextCursor::Document);
   cursor.insertText(text);
   mainEditor->setTextCursor(cursor);  // TODO implement for multiple views
-  if (goToTop) {
-    mainEditor->moveCursor(QTextCursor::Start);
-  }
-}
-
-void BaseView::setViewMode(int mode)
-{
-//  if (m_viewMode == mode)
-//    return;
-  m_viewMode = mode;
-  hideAllEditors();
-
-  // TODO implement modes properly
-  switch (m_viewMode) {
-    case 0: // csd without extra sections
-      mainEditor->show();
-      break;
-    case 1: // full plain text
-      mainEditor->show();
-      break;
-    default:
-      mainEditor->setVisible(m_viewMode & 2);
-      scoreEditor->setVisible(m_viewMode & 4);
-      optionsEditor->setVisible(m_viewMode & 8);
-      filebEditor->setVisible(m_viewMode & 16);
-      versionEditor->setVisible(m_viewMode & 32);
-      licenceEditor->setVisible(m_viewMode & 64);
-      otherEditor->setVisible(m_viewMode & 128);
-      widgetEditor->setVisible(m_viewMode & 256);
-  }
 }
 
 void BaseView::setFileType(int mode)
@@ -111,6 +160,7 @@ void BaseView::setFont(QFont font)
   versionEditor->setFont(font);
   licenceEditor->setFont(font);
   otherEditor->setFont(font);
+  otherCsdEditor->setFont(font);
   widgetEditor->setFont(font);
   ladspaEditor->setFont(font);
 }
@@ -124,6 +174,7 @@ void BaseView::setFontPointSize(float size)
   versionEditor->setFontPointSize(size);
   licenceEditor->setFontPointSize(size);
   otherEditor->setFontPointSize(size);
+  otherCsdEditor->setFontPointSize(size);
   widgetEditor->setFontPointSize(size);
   ladspaEditor->setFontPointSize(size);
 }
@@ -137,6 +188,7 @@ void BaseView::setTabStopWidth(int width)
   versionEditor->setTabStopWidth(width);
   licenceEditor->setTabStopWidth(width);
   otherEditor->setTabStopWidth(width);
+  otherCsdEditor->setTabStopWidth(width);
   widgetEditor->setTabStopWidth(width);
   ladspaEditor->setTabStopWidth(width);
 }
@@ -150,6 +202,7 @@ void BaseView::setLineWrapMode(QTextEdit::LineWrapMode mode)
   versionEditor->setLineWrapMode(mode);
   licenceEditor->setLineWrapMode(mode);
   otherEditor->setLineWrapMode(mode);
+  otherCsdEditor->setLineWrapMode(mode);
   widgetEditor->setLineWrapMode(mode);
   ladspaEditor->setLineWrapMode(mode);
 }
@@ -179,6 +232,9 @@ void BaseView::setBackgroundColor(QColor color)
   p = licenceEditor->palette();
   p.setColor(static_cast<QPalette::ColorRole>(9), color);
   licenceEditor->setPalette(p);
+  p = otherCsdEditor->palette();
+  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+  otherCsdEditor->setPalette(p);
   p = otherEditor->palette();
   p.setColor(static_cast<QPalette::ColorRole>(9), color);
   otherEditor->setPalette(p);
@@ -188,6 +244,116 @@ void BaseView::setBackgroundColor(QColor color)
   p = ladspaEditor->palette();
   p.setColor(static_cast<QPalette::ColorRole>(9), color);
   ladspaEditor->setPalette(p);
+}
+
+void BaseView::setOrc(QString text)
+{
+  if (m_viewMode < 2) { // View is not split
+    if (m_mode != 0) {
+      qDebug() << "DocumentView::setOrc Current file is not a csd file. Text not inserted!";
+      return;
+    }
+    QString csdText = getBasicText();
+    if (csdText.contains("<CsInstruments>") and csdText.contains("</CsInstruments>")) {
+      QString preText = csdText.mid(0, csdText.indexOf("<CsInstruments>") + 15);
+      QString postText = csdText.mid(csdText.lastIndexOf("</CsInstruments>"));
+      if (!text.startsWith("\n")) {
+        text.prepend("\n");
+      }
+      if (!text.endsWith("\n")) {
+        text.append("\n");
+      }
+      csdText = preText + text + postText;
+      setBasicText(csdText);
+    }
+    else {
+      qDebug() << "DocumentView::setOrc Orchestra section not found in csd. Text not inserted!";
+    }
+  }
+  else {
+    mainEditor->setPlainText(text);
+  }
+}
+
+void BaseView::setSco(QString text)
+{
+  if (m_viewMode < 2) { // View is not split
+    if (m_mode != 0) {
+      qDebug() << "DocumentView::setSco Current file is not a csd file. Text not inserted!";
+      return;
+    }
+    QString csdText = getBasicText();
+    if (csdText.contains("<CsScore>") and csdText.contains("</CsScore>")) {
+      QString preText = csdText.mid(0, csdText.indexOf("<CsScore>") + 9);
+      QString postText = csdText.mid(csdText.lastIndexOf("</CsScore>"));
+      if (!text.startsWith("\n")) {
+        text.prepend("\n");
+      }
+      if (!text.endsWith("\n")) {
+        text.append("\n");
+      }
+      csdText = preText + text + postText;
+      setBasicText(csdText);
+    }
+    else {
+      qDebug() << "DocumentView::setSco Orchestra section not found in csd. Text not inserted!";
+    }
+  }
+  else {
+    scoreEditor->setPlainText(text);
+  }
+}
+
+void BaseView::setFileB(QString text)
+{
+  filebEditor->setPlainText(text);
+}
+
+void BaseView::setLadspaText(QString text)
+{
+  if (m_viewMode < 2) { // View is not split
+    if (m_mode != 0) {
+      qDebug() << "DocumentView::setLadspaText Current file is not a csd file. Text not inserted!";
+      return;
+    }
+    QTextCursor cursor;
+    cursor = mainEditor->textCursor();
+    mainEditor->moveCursor(QTextCursor::Start);
+    if (mainEditor->find("<csLADSPA>") and mainEditor->find("</csLADSPA>")) {
+      QString curText = getBasicText();
+      int index = curText.indexOf("<csLADSPA>");
+      int endIndex = curText.indexOf("</csLADSPA>") + 11;
+      if (curText.size() > endIndex + 1 && curText[endIndex + 1] == '\n') {
+        endIndex++; // Include last line break
+      }
+      curText.remove(index, endIndex - index);
+      curText.insert(index, text);
+      setBasicText(curText);
+      mainEditor->moveCursor(QTextCursor::Start);
+    }
+    else { //csLADSPA section not present, or incomplete
+      mainEditor->find("<CsoundSynthesizer>"); //cursor moves there
+      mainEditor->moveCursor(QTextCursor::EndOfLine);
+      mainEditor->insertPlainText(QString("\n") + text + QString("\n"));
+    }
+  }
+  else {
+    ladspaEditor->setText(text);
+    ladspaEditor->moveCursor(QTextCursor::Start);
+  }
+}
+
+
+QString BaseView::getBasicText()
+{
+//   What Csound needs (no widgets, misc text, etc.)
+  // TODO implement modes
+  QString text;
+  text = mainEditor->toPlainText(); // csd without extra sections
+  if (m_viewMode & 16) {
+    text += filebEditor->toPlainText();
+  }
+  return text;
 }
 
 //void BaseView::setOpcodeNameList(QStringList list)
@@ -209,6 +375,7 @@ void BaseView::hideAllEditors()
     versionEditor->hide();
     licenceEditor->hide();
     otherEditor->hide();
+    otherCsdEditor->hide();
     widgetEditor->hide();
     ladspaEditor->hide();
     for (int i = 0; i < 9; i++) {
