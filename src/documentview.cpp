@@ -35,6 +35,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   for (int i = 0; i < editors.size(); i++) {
     connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
     splitter->addWidget(editors[i]);
+    editors[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     editors[i]->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(editors[i], SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(createContextMenu(QPoint)));
@@ -110,31 +111,34 @@ void DocumentView::insertText(QString text, int section)
     cursor.insertText(text);
     mainEditor->setTextCursor(cursor);
     break;
-//  case 1:
+    //  case 1:
+        //    orcEditor;
+    //    break;
+//  case 2:
     //    scoreEditor;
 //    break;
-//  case 2:
+//  case 3:
     //    optionsEditor;
 //    break;
-//  case 3:
+//  case 4:
     //    filebEditor;
 //    break;
-//  case 4:
+//  case 5:
     //    versionEditor;
 //    break;
-//  case 5:
+//  case 6:
     //    licenceEditor;
 //    break;
-//  case 6:
+//  case 7:
     //    otherEditor;
 //    break;
-//  case 7:
+//  case 8:
     //    widgetEditor;
 //    break;
-//  case 8:
+//  case 9:
     //    ladspaEditor;
 //    break;
-//  case 9:
+//  case 10:
 //    break;
   default:
     qDebug() <<"DocumentView::insertText section " << section << " not implemented.";
@@ -159,12 +163,15 @@ void DocumentView::setViewMode(int mode)
   switch (m_viewMode) {
     case 0: // csd without extra sections
       mainEditor->show();
+      m_highlighter.setDocument(mainEditor->document());
       break;
     case 1: // full plain text
       mainEditor->show();
+      m_highlighter.setDocument(mainEditor->document());
       break;
     default:
-      mainEditor->setVisible(m_viewMode & 2);
+      m_highlighter.setDocument(orcEditor->document());
+      orcEditor->setVisible(m_viewMode & 2);
       scoreEditor->setVisible(m_viewMode & 4);
       optionsEditor->setVisible(m_viewMode & 8);
       filebEditor->setVisible(m_viewMode & 16);
@@ -188,31 +195,34 @@ QString DocumentView::getSelectedText(int section)
     text = mainEditor->textCursor().selectedText();
     break;
   case 1:
-    text = scoreEditor->getSelection();
+    text = orcEditor->textCursor().selectedText();
     break;
   case 2:
+    text = scoreEditor->getSelection();
+    break;
+  case 3:
     text = optionsEditor->textCursor().selectedText();
     //    ;
     break;
-  case 3:
+  case 4:
     //    filebEditor;
     break;
-  case 4:
+  case 5:
     text = versionEditor->textCursor().selectedText();
     break;
-  case 5:
+  case 6:
     text = licenceEditor->textCursor().selectedText();
     break;
-  case 6:
+  case 7:
     text = otherEditor->textCursor().selectedText();
     break;
-  case 7:
+  case 8:
     text = otherCsdEditor->textCursor().selectedText();
     break;
-  case 8:
+  case 9:
     text = widgetEditor->textCursor().selectedText();
     break;
-  case 9:
+  case 10:
     text = ladspaEditor->textCursor().selectedText();
     break;
   default:
@@ -240,30 +250,31 @@ QString DocumentView::getFullText()
   else { // Split view
     QString sectionText;
     text += otherEditor->toPlainText();
-    sectionText = ladspaEditor->toPlainText();
-    if (!sectionText.isEmpty()) {
-      text += "<csLADSPA>\n" + sectionText + "</csLADSPA>\n";
-    }
     text += "<CsoundSynthesizer>\n";
     sectionText = optionsEditor->toPlainText();
     if (!sectionText.isEmpty()) {
       text += "<CsOptions>\n" + sectionText + "</CsOptions>\n";
     }
+    sectionText = ladspaEditor->toPlainText();
+    if (!sectionText.isEmpty()) {
+      text += "<csLADSPA>\n" + sectionText + "</csLADSPA>\n";
+    }
     sectionText = versionEditor->toPlainText();
     if (!sectionText.isEmpty()) {
       text += "<CsVersion>\n" + sectionText + "</CsVersion>\n";
     }
-    sectionText = versionEditor->toPlainText();
+    sectionText = licenceEditor->toPlainText();
     if (!sectionText.isEmpty()) {
       text += "<CsLicense>\n" + sectionText + "</CsLicense>\n";
     }
-    text += "<CsInstruments>\n" + mainEditor->toPlainText() + "</CsInstruments>\n";
+    text += "<CsInstruments>\n" + orcEditor->toPlainText() + "</CsInstruments>\n";
     text += "<CsScore>\n" + scoreEditor->getPlainText() + "</CsScore>\n";
     sectionText = getFileB();
     if (!sectionText.isEmpty()) {
       text += getFileB();
     }
     text += otherCsdEditor->toPlainText();
+    text += "</CsoundSynthesizer>\n";
   }
   return text;
 }
@@ -278,7 +289,7 @@ QString DocumentView::getOrc()
     text.remove(text.lastIndexOf("</CsInstruments>"), text.size());
   }
   else {
-    text = mainEditor->toPlainText();
+    text = orcEditor->toPlainText();
   }
   return text;
 }
@@ -483,6 +494,7 @@ void DocumentView::textChanged()
     return;
   }
   unmarkErrorLines();
+  // TODO implement for split view
   if (m_mode == 0 || m_mode == 3) {  // CSD or ORC mode
     if (m_autoComplete) {
       QTextCursor cursor = mainEditor->textCursor();
@@ -1040,7 +1052,7 @@ void DocumentView::killToEnd()
 
 void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
 {
-  // TODO implment for multiple views
+  // TODO implement for multiple views
   if (m_viewMode < 2) {
     bool originallyMod = mainEditor->document()->isModified();
     internalChange = true;
@@ -1068,6 +1080,10 @@ void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
         cur.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor);
         cur.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor); // go up 5 lines
         cur.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+        errorMarked = true;
+        if (!originallyMod) {
+          mainEditor->document()->setModified(false);
+        }
       }
       else {
         qDebug() << "DocumentView::markErrorLines: Error line text doesn't match\n" << text;
@@ -1075,10 +1091,6 @@ void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
     }
     //  internalChange = true;
     //  editors[0]->setTextCursor(cur);
-    errorMarked = true;
-    if (!originallyMod) {
-      mainEditor->document()->setModified(false);
-    }
   }
   else {
     qDebug() << "DocumentView::markErrorLines() not implemented for split view";

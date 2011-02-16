@@ -21,13 +21,24 @@
 */
 
 #include "scoreeditor.h"
+#include <QHBoxLayout>
 
 ScoreEditor::ScoreEditor(QWidget *parent) :
     QWidget(parent)
 {
   m_textEditor = new TextEditor(this);
+  m_textEditor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
   m_sheet = new EventSheet(this);
-  setMode(0); // Text view by default
+  m_textEditor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+  setMode(1); // Text view by default
+  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+
+  QHBoxLayout *layout = new QHBoxLayout;
+  layout->setContentsMargins (5,5,5,5);
+  layout->addWidget(m_textEditor);
+  layout->addWidget(m_sheet);
+
+  setLayout(layout);
 }
 
 void ScoreEditor::setMode(int mode)

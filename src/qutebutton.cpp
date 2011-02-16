@@ -401,14 +401,22 @@ void QuteButton::buttonReleased()
 #endif
   if (type == "event" or type == "pictevent") {
      if (property("QCS_latch").toBool() && eventLine.size() > 0) {
-       QStringList lineElements = eventLine.split(QRegExp("[i ]"),QString::SkipEmptyParts);
+       QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
+       if (lineElements.size() > 0 && lineElements[0] == "i") {
+         lineElements.removeAt(0); // Remove first element if it is "i"
+       }
+       else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
+         lineElements[0] = lineElements[0].mid(1); // Remove "i" character
+       }
        if (lineElements.size() > 2 && lineElements[2].toDouble() < 0) { // If duration is negative, use button to turn note on and off
          if (m_currentValue == 0) { // Button has turned off. Turn off instrument
            lineElements[0].prepend("-");
            lineElements.prepend("i");
+           setValue(0);
            emit(queueEvent(lineElements.join(" ")));
          }
          else { // Button has turned on. Turn on instrument
+           setValue(1);
            emit(queueEvent(eventLine));
          }
        }

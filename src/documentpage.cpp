@@ -225,20 +225,6 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     panel->hide();
     text.remove(liveEventsText);
   }
-  // Load Embedded Files ------------------------
-  QString fileText = "";
-  while (text.contains("<CsFileB ") and text.contains("</CsFileB>")) {
-    bool endsWithBreak = false;
-    if (text.indexOf("</CsFileB>") + 10 < text.size() && text[text.indexOf("</CsFileB>") + 10] == '\n' ) {
-      endsWithBreak = true;
-    }
-    QString currentFileText = text.mid(text.indexOf("<CsFileB "),
-                                       text.indexOf("</CsFileB>") - text.indexOf("<CsFileB ") + 10
-                                       + (endsWithBreak ? 1:0));
-    text.remove(text.indexOf("<CsFileB "), currentFileText.size());
-    fileText += currentFileText;
-  }
-  m_view->setFileB(fileText);
   //  if (m_liveFrames.size() == 0) {
   //    LiveEventFrame *e = createLiveEventPanel();
   //    e->setFromText(QString()); // Must set blank for undo history point

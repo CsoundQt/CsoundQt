@@ -175,7 +175,7 @@ qutecsound::qutecsound(QStringList fileNames)
 #ifdef QCS_PYTHONQT
    DocumentView *view = new DocumentView(this, m_opcodeTree);
    view->setBackgroundColor(QColor(240, 230, 230));
-   view->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
+   view->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
    view->setFileType(1); // Python type (for highlighting and completion)
    view->show();
    connect(view, SIGNAL(evaluate(QString)), m_pythonConsole, SLOT(evaluate(QString)));

@@ -50,6 +50,7 @@ class BaseView : public QScrollArea
     void setOrc(QString text);
     void setSco(QString text);
     void setFileB(QString text);
+    void setOptionsText(QString text);
     void setLadspaText(QString text);
 
     QString getBasicText();  // What Csound needs (no widgets, misc text, etc.)
@@ -78,6 +79,7 @@ class BaseView : public QScrollArea
     OpEntryParser *m_opcodeTree;
     QSplitter *splitter;
     TextEditor *mainEditor;
+    TextEditor *orcEditor;
     ScoreEditor *scoreEditor;
     TextEditor *optionsEditor;
     TextEditor *filebEditor;
