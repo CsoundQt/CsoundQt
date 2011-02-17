@@ -340,6 +340,7 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
     if (i < lines.size()) {
       line = lines[i].trimmed(); //Remove whitespace from start and end
     }
+    this->blockSignals(true); // To avoid triggering changed signal which goes to undo for each cell
     QList<QPair<QString, QString> > fields = parseLine(line);
     int nColumns = numColumns == 0 ? fields.size() : numColumns;
     nColumns = (numColumns == -1 && nColumns <  this->columnCount()) ?  this->columnCount() : nColumns;
@@ -347,9 +348,6 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
       appendColumn();
     }
     for (int j = 0; j < nColumns; j++) {
-      if (nColumns != 0 && j >= nColumns) {  // Only paste up to a certain number of columns if not 0
-        break;
-      }
       QTableWidgetItem * item = this->item(i + rowOffset, j + columnOffset);
       if (item == 0) {
         item = new QTableWidgetItem();
@@ -369,6 +367,10 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
         item->setData(Qt::UserRole, "");
       }
     }
+  }
+  this->blockSignals(false);
+  if (!noHistoryMark) {
+    emit ( cellChanged(rowOffset, columnOffset) );
   }
   if (this->rowCount() == 0)
     this->setRowCount(1);

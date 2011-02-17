@@ -129,6 +129,7 @@ class DocumentView : public BaseView
     QString lastSearch;
     QString lastReplace;
 
+
   private slots:
     void destroySyntaxMenu();
 

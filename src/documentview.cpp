@@ -434,14 +434,16 @@ QString DocumentView::getActiveText()
   QString selection;
   if (m_viewMode < 2) {
     QTextCursor cursor = mainEditor->textCursor();
-    QString selection = cursor.selectedText();
+    selection = cursor.selectedText();
     if (selection == "") {
       cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
       cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
       selection = cursor.selectedText();
-
     }
     selection.replace(QChar(0x2029), QChar('\n'));
+    if (!selection.endsWith("\n")) {
+      selection.append("\n");
+    }
   }
   else { //  Split view
     // TODO check properly for line number also from other editors

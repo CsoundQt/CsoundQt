@@ -89,6 +89,7 @@ class BaseView : public QScrollArea
     TextEditor *otherEditor;  // Extra text after removing all sections. All this text is to be presented at the start of the csd
     TextEditor *widgetEditor;
     TextEditor *ladspaEditor;
+
     QVector<QWidget *> editors; // A vector to hold pointers for the above for easy processing
 };
 

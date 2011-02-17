@@ -173,14 +173,15 @@ qutecsound::qutecsound(QStringList fileNames)
     m_opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + "/opcodes.xml"));
 
 #ifdef QCS_PYTHONQT
-   DocumentView *view = new DocumentView(this, m_opcodeTree);
-   view->setBackgroundColor(QColor(240, 230, 230));
-   view->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-   view->setFileType(1); // Python type (for highlighting and completion)
-   view->show();
-   connect(view, SIGNAL(evaluate(QString)), m_pythonConsole, SLOT(evaluate(QString)));
-   m_scratchPad->setWidget(view);
-   m_scratchPad->setFocusProxy(view);
+   DocumentView *padview = new DocumentView(m_scratchPad, m_opcodeTree);
+   padview->setBackgroundColor(QColor(240, 230, 230));
+   padview->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+   padview->setFileType(1); // Python type (for highlighting and completion)
+   padview->show();
+   padview->setFullText("");
+   connect(padview, SIGNAL(evaluate(QString)), m_pythonConsole, SLOT(evaluate(QString)));
+   m_scratchPad->setWidget(padview);
+   m_scratchPad->setFocusProxy(padview);
 #endif
   // Open files saved from last session
   if (!lastFiles.isEmpty()) {
@@ -1789,7 +1790,8 @@ void qutecsound::applySettings()
   fillFavoriteMenu();
   fillScriptsMenu();
 #ifdef QCS_PYTHONQT
-  DocumentView *pad =  static_cast<DocumentView *>(m_scratchPad->widget());
+  DocumentView *pad =  static_cast<DocumentView *>(
+      m_scratchPad->widget());
   pad->setFont(QFont(m_options->font,
                      (int) m_options->fontPointSize));
 #endif

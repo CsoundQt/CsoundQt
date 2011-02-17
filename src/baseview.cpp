@@ -40,7 +40,6 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
   editors << mainEditor << orcEditor << scoreEditor << optionsEditor << filebEditor
       << versionEditor << licenceEditor << otherEditor << otherCsdEditor << widgetEditor
       << ladspaEditor;
-
   splitter = new QSplitter(this); // Deleted with parent
   splitter->setOrientation(Qt::Vertical);
   splitter->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
