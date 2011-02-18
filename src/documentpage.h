@@ -56,7 +56,6 @@ class DocumentPage : public BaseDocument
     void setBasicText(QString text);
     void setOrc(QString text);
     void setSco(QString text);
-    void setLadspaText(QString text);
 
     QString getFullText();
     QString getBasicText();
@@ -215,6 +214,13 @@ class DocumentPage : public BaseDocument
     void killToEnd();
     void autoComplete();
     void setViewMode(int mode);
+    void showOrc(bool);
+    void showScore(bool);
+    void showOptions(bool);
+    void showFileB(bool);
+    void showOther(bool);
+    void showOtherCsd(bool);
+    void showWidgetEdit(bool);
 
     // Slots for live events
     void newLiveEventPanel(QString text = QString());

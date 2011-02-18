@@ -30,16 +30,13 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
   orcEditor = new TextEditor(this);
   scoreEditor = new ScoreEditor(this);
   optionsEditor = new TextEditor(this);
+  optionsEditor->setMaximumHeight(60);
   filebEditor = new TextEditor(this);
-  versionEditor = new TextEditor(this);
-  licenceEditor = new TextEditor(this);
   otherEditor = new TextEditor(this);
   otherCsdEditor = new TextEditor(this);
   widgetEditor = new TextEditor(this);
-  ladspaEditor = new TextEditor(this);
   editors << mainEditor << orcEditor << scoreEditor << optionsEditor << filebEditor
-      << versionEditor << licenceEditor << otherEditor << otherCsdEditor << widgetEditor
-      << ladspaEditor;
+      << otherEditor << otherCsdEditor << widgetEditor;
   splitter = new QSplitter(this); // Deleted with parent
   splitter->setOrientation(Qt::Vertical);
   splitter->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -136,23 +133,6 @@ void BaseView::setFullText(QString text, bool goToTop)
       text.remove(sectionText);
     }
     setOptionsText(sectionText.mid(tag.size() + 2, sectionText.size() - (tag.size()*2) - 5));
-    // Find ladspa section
-    sectionText = "";
-    tag = "csLADSPA";
-    startIndex = text.indexOf("<" + tag + ">");
-    if (text.size() > startIndex + tag.size() + 2
-        && text[startIndex +  tag.size() + 2] == '\n') {
-      startIndex++;
-    }
-    endIndex = text.indexOf("</" + tag + ">") + tag.size() + 3;
-    if (text.size() > endIndex + 1 && text[endIndex+1] == '\n') {
-      endIndex++;
-    }
-    if (startIndex >= 0 && endIndex > startIndex) {
-      sectionText = text.mid(startIndex, endIndex - startIndex);
-      text.remove(sectionText);
-    }
-    setLadspaText(sectionText.mid(tag.size() + 2, sectionText.size() - (tag.size()*2) - 5));
   }
 }
 
@@ -182,12 +162,9 @@ void BaseView::setFont(QFont font)
   scoreEditor->setFont(font);
   optionsEditor->setFont(font);
   filebEditor->setFont(font);
-  versionEditor->setFont(font);
-  licenceEditor->setFont(font);
   otherEditor->setFont(font);
   otherCsdEditor->setFont(font);
   widgetEditor->setFont(font);
-  ladspaEditor->setFont(font);
 }
 
 void BaseView::setFontPointSize(float size)
@@ -197,12 +174,9 @@ void BaseView::setFontPointSize(float size)
   scoreEditor->setFontPointSize(size);
   optionsEditor->setFontPointSize(size);
   filebEditor->setFontPointSize(size);
-  versionEditor->setFontPointSize(size);
-  licenceEditor->setFontPointSize(size);
   otherEditor->setFontPointSize(size);
   otherCsdEditor->setFontPointSize(size);
   widgetEditor->setFontPointSize(size);
-  ladspaEditor->setFontPointSize(size);
 }
 
 void BaseView::setTabStopWidth(int width)
@@ -212,12 +186,9 @@ void BaseView::setTabStopWidth(int width)
   scoreEditor->setTabStopWidth(width);
   optionsEditor->setTabStopWidth(width);
   filebEditor->setTabStopWidth(width);
-  versionEditor->setTabStopWidth(width);
-  licenceEditor->setTabStopWidth(width);
   otherEditor->setTabStopWidth(width);
   otherCsdEditor->setTabStopWidth(width);
   widgetEditor->setTabStopWidth(width);
-  ladspaEditor->setTabStopWidth(width);
 }
 
 void BaseView::setLineWrapMode(QTextEdit::LineWrapMode mode)
@@ -227,12 +198,9 @@ void BaseView::setLineWrapMode(QTextEdit::LineWrapMode mode)
   scoreEditor->setLineWrapMode(mode);
   optionsEditor->setLineWrapMode(mode);
   filebEditor->setLineWrapMode(mode);
-  versionEditor->setLineWrapMode(mode);
-  licenceEditor->setLineWrapMode(mode);
   otherEditor->setLineWrapMode(mode);
   otherCsdEditor->setLineWrapMode(mode);
   widgetEditor->setLineWrapMode(mode);
-  ladspaEditor->setLineWrapMode(mode);
 }
 
 void BaseView::setColorVariables(bool color)
@@ -257,12 +225,6 @@ void BaseView::setBackgroundColor(QColor color)
   p = filebEditor->palette();
   p.setColor(static_cast<QPalette::ColorRole>(9), color);
   filebEditor->setPalette(p);
-  p = versionEditor->palette();
-  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-  versionEditor->setPalette(p);
-  p = licenceEditor->palette();
-  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-  licenceEditor->setPalette(p);
   p = otherCsdEditor->palette();
   p.setColor(static_cast<QPalette::ColorRole>(9), color);
   otherCsdEditor->setPalette(p);
@@ -272,9 +234,6 @@ void BaseView::setBackgroundColor(QColor color)
   p = widgetEditor->palette();
   p.setColor(static_cast<QPalette::ColorRole>(9), color);
   widgetEditor->setPalette(p);
-  p = ladspaEditor->palette();
-  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-  ladspaEditor->setPalette(p);
 }
 
 void BaseView::setOrc(QString text)
@@ -390,8 +349,7 @@ void BaseView::setLadspaText(QString text)
     }
   }
   else {
-    ladspaEditor->setText(text);
-    ladspaEditor->moveCursor(QTextCursor::Start);
+    qDebug() << "BaseView::setLadspaText() not implemented for split view";
   }
 }
 
@@ -430,12 +388,9 @@ void BaseView::hideAllEditors()
     scoreEditor->hide();
     optionsEditor->hide();
     filebEditor->hide();
-    versionEditor->hide();
-    licenceEditor->hide();
     otherEditor->hide();
     otherCsdEditor->hide();
     widgetEditor->hide();
-    ladspaEditor->hide();
     for (int i = 0; i < 9; i++) {
       QSplitterHandle *h = splitter->handle(i);
       if (h) {

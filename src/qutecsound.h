@@ -221,6 +221,13 @@ class qutecsound:public QMainWindow
     void markInspectorUpdate(); // Notification that inspector needs update
     void setDefaultKeyboardShortcuts();
     void showNoPythonQtWarning();
+    void showOrc(bool);
+    void showScore(bool);
+    void showOptions(bool);
+    void showFileB(bool);
+    void showOther(bool);
+    void showOtherCsd(bool);
+    void showWidgetEdit(bool);
 
   private:
     void createActions();
@@ -342,6 +349,15 @@ class qutecsound:public QMainWindow
     QAction *showConsoleAct;
     QAction *viewFullScreenAct;
     QAction *splitViewAct;
+
+    QAction *showOrcAct;
+    QAction *showScoreAct;
+    QAction *showOptionsAct;
+    QAction *showFileBAct;
+    QAction *showOtherAct;
+    QAction *showOtherCsdAct;
+    QAction *showWidgetEditAct;
+
     QAction *setHelpEntryAct;
     QAction *browseBackAct;
     QAction *browseForwardAct;

@@ -1601,7 +1601,14 @@ void qutecsound::setFullScreen(bool full)
 void qutecsound::splitView(bool split)
 {
   if (split) {
-    documentPages[curPage]->setViewMode(2+4+8+128);
+    documentPages[curPage]->setViewMode(2+4+8);
+    showOrcAct->setChecked(true);
+    showScoreAct->setChecked(true);
+    showOptionsAct->setChecked(true);
+    showFileBAct->setChecked(false);
+    showOtherAct->setChecked(false);
+    showOtherCsdAct->setChecked(false);
+    showWidgetEditAct->setChecked(false);
   }
   else {
     documentPages[curPage]->setViewMode(0);
@@ -2060,7 +2067,14 @@ void qutecsound::setDefaultKeyboardShortcuts()
   showPythonConsoleAct->setShortcut(tr("Alt+7"));
   showPythonScratchPadAct->setShortcut(tr("Alt+8"));
   killLineAct->setShortcut(tr("Ctrl+K"));
-  killToEndAct->setShortcut(tr("Shift+Ctrl+K"));
+  killToEndAct->setShortcut(tr("Shift+Alt+K"));
+  showOrcAct->setShortcut(tr("Shift+Alt+1"));
+  showScoreAct->setShortcut(tr("Shift+Alt+2"));
+  showOptionsAct->setShortcut(tr("Shift+Alt+3"));
+  showFileBAct->setShortcut(tr("Shift+Alt+4"));
+  showOtherAct->setShortcut(tr("Shift+Alt+5"));
+  showOtherCsdAct->setShortcut(tr("Shift+Alt+6"));
+  showWidgetEditAct->setShortcut(tr("Shift+Alt+7"));
 }
 
 void qutecsound::showNoPythonQtWarning()
@@ -2069,6 +2083,41 @@ void qutecsound::showNoPythonQtWarning()
                        tr("This version of QuteCsound has been compiled without PythonQt support.\n"
                           "Extended Python features are not available"));
   qDebug() << "qutecsound::showNoPythonQtWarning()";
+}
+
+void qutecsound::showOrc(bool show)
+{
+  documentPages[curPage]->showOrc(show);
+}
+
+void qutecsound::showScore(bool show)
+{
+  documentPages[curPage]->showScore(show);
+}
+
+void qutecsound::showOptions(bool show)
+{
+  documentPages[curPage]->showOptions(show);
+}
+
+void qutecsound::showFileB(bool show)
+{
+  documentPages[curPage]->showFileB(show);
+}
+
+void qutecsound::showOther(bool show)
+{
+  documentPages[curPage]->showOther(show);
+}
+
+void qutecsound::showOtherCsd(bool show)
+{
+  documentPages[curPage]->showOtherCsd(show);
+}
+
+void qutecsound::showWidgetEdit(bool show)
+{
+  documentPages[curPage]->showWidgetEdit(show);
 }
 
 void qutecsound::createActions()
@@ -2405,6 +2454,69 @@ void qutecsound::createActions()
   splitViewAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(splitViewAct, SIGNAL(toggled(bool)), this, SLOT(splitView(bool)));
 
+  showOrcAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show Orchestra"), this);
+  showOrcAct->setCheckable(true);
+  showOrcAct->setChecked(false);
+  showOrcAct->setEnabled(false);
+  showOrcAct->setStatusTip(tr("Show orchestra panel in split view"));
+  showOrcAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(showOrcAct, SIGNAL(toggled(bool)), this, SLOT(showOrc(bool)));
+  connect(splitViewAct, SIGNAL(toggled(bool)), showOrcAct, SLOT(setEnabled(bool)));
+
+  showScoreAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show Score"), this);
+  showScoreAct->setCheckable(true);
+  showScoreAct->setChecked(false);
+  showScoreAct->setEnabled(false);
+  showScoreAct->setStatusTip(tr("Show orchestra panel in split view"));
+  showScoreAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(showScoreAct, SIGNAL(toggled(bool)), this, SLOT(showScore(bool)));
+  connect(splitViewAct, SIGNAL(toggled(bool)), showScoreAct, SLOT(setEnabled(bool)));
+
+  showOptionsAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show CsOptions"), this);
+  showOptionsAct->setCheckable(true);
+  showOptionsAct->setChecked(false);
+  showOptionsAct->setEnabled(false);
+  showOptionsAct->setStatusTip(tr("Show CsOptions section panel in split view"));
+  showOptionsAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(showOptionsAct, SIGNAL(toggled(bool)), this, SLOT(showOptions(bool)));
+  connect(splitViewAct, SIGNAL(toggled(bool)), showOptionsAct, SLOT(setEnabled(bool)));
+
+  showFileBAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show Embedded files"), this);
+  showFileBAct->setCheckable(true);
+  showFileBAct->setChecked(false);
+  showFileBAct->setEnabled(false);
+  showFileBAct->setStatusTip(tr("Show Embedded files panel in split view"));
+  showFileBAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(showFileBAct, SIGNAL(toggled(bool)), this, SLOT(showFileB(bool)));
+  connect(splitViewAct, SIGNAL(toggled(bool)), showFileBAct, SLOT(setEnabled(bool)));
+
+  showOtherAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show Information Text"), this);
+  showOtherAct->setCheckable(true);
+  showOtherAct->setChecked(false);
+  showOtherAct->setEnabled(false);
+  showOtherAct->setStatusTip(tr("Show information text panel in split view"));
+  showOtherAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(showOtherAct, SIGNAL(toggled(bool)), this, SLOT(showOther(bool)));
+  connect(splitViewAct, SIGNAL(toggled(bool)), showOtherAct, SLOT(setEnabled(bool)));
+
+  showOtherCsdAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show Extra Tags"), this);
+  showOtherCsdAct->setCheckable(true);
+  showOtherCsdAct->setChecked(false);
+  showOtherCsdAct->setEnabled(false);
+  showOtherCsdAct->setStatusTip(tr("Show extra tags panel in split view"));
+  showOtherCsdAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(showOtherCsdAct, SIGNAL(toggled(bool)), this, SLOT(showOtherCsd(bool)));
+  connect(splitViewAct, SIGNAL(toggled(bool)), showOtherCsdAct, SLOT(setEnabled(bool)));
+
+  showWidgetEditAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show Widgets Text"), this);
+  showWidgetEditAct->setCheckable(true);
+  showWidgetEditAct->setChecked(false);
+  showWidgetEditAct->setEnabled(false);
+  showWidgetEditAct->setStatusTip(tr("Show Widgets text panel in split view"));
+  showWidgetEditAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(showWidgetEditAct, SIGNAL(toggled(bool)), this, SLOT(showWidgetEdit(bool)));
+  connect(splitViewAct, SIGNAL(toggled(bool)), showWidgetEditAct, SLOT(setEnabled(bool)));
+
   setHelpEntryAct = new QAction(QIcon(":/images/gtk-info.png"), tr("Show Opcode Entry"), this);
   setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
   setHelpEntryAct->setIconText(tr("Manual for opcode"));
@@ -2568,6 +2680,13 @@ void qutecsound::setKeyboardShortcutsList()
   m_keyActions.append(killToEndAct);
   m_keyActions.append(evaluateAct);
   m_keyActions.append(evaluateSectionAct);
+  m_keyActions.append(showOrcAct);
+  m_keyActions.append(showScoreAct);
+  m_keyActions.append(showOptionsAct);
+  m_keyActions.append(showFileBAct);
+  m_keyActions.append(showOtherAct);
+  m_keyActions.append(showOtherCsdAct);
+  m_keyActions.append(showWidgetEditAct);
 }
 
 void qutecsound::connectActions()
@@ -2725,6 +2844,14 @@ void qutecsound::createMenus()
   viewMenu->addAction(viewFullScreenAct);
   viewMenu->addSeparator();
   viewMenu->addAction(splitViewAct);
+  viewMenu->addSeparator();
+  viewMenu->addAction(showOrcAct);
+  viewMenu->addAction(showScoreAct);
+  viewMenu->addAction(showOptionsAct);
+  viewMenu->addAction(showFileBAct);
+  viewMenu->addAction(showOtherAct);
+  viewMenu->addAction(showOtherCsdAct);
+  viewMenu->addAction(showWidgetEditAct);
 
   QStringList tutFiles;
   QStringList basicsFiles;

@@ -69,12 +69,9 @@ class BaseView : public QScrollArea
                     // 4 = show CsScore Section
                     // 8 = show CsOptions Section
                     // 16 = show <CsFileB> Section(s)
-                    // 32 = show <CsVersion> Section(s)
-                    // 64 = show <CsLicence>/<CsLicense> Section(s)
-                    //128 = show remaining Text outside CsoundSynthesizer tag
-                    //256 = show remaining text inside CsoundSynthesizer tag
-                    //512 = show Widget, Preset and Extra Options sections
-                    //1024 = show <CsLadspa> text with tags
+                    // 32 = show remaining Text outside CsoundSynthesizer tag
+                    // 64 = show remaining text inside CsoundSynthesizer tag
+                    // 128 = show Widget, Preset and Extra Options sections
     Highlighter m_highlighter;
     OpEntryParser *m_opcodeTree;
     QSplitter *splitter;
@@ -83,12 +80,9 @@ class BaseView : public QScrollArea
     ScoreEditor *scoreEditor;
     TextEditor *optionsEditor;
     TextEditor *filebEditor;
-    TextEditor *versionEditor;
-    TextEditor *licenceEditor;
+    TextEditor *otherEditor;  // Extra text after removing all sections. All this text is to be presented at the start of the csd. Also called information text elsewhere
     TextEditor *otherCsdEditor;  // Extra text and tags inside CsoundSynthesizer tags
-    TextEditor *otherEditor;  // Extra text after removing all sections. All this text is to be presented at the start of the csd
     TextEditor *widgetEditor;
-    TextEditor *ladspaEditor;
 
     QVector<QWidget *> editors; // A vector to hold pointers for the above for easy processing
 };

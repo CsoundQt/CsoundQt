@@ -175,12 +175,9 @@ void DocumentView::setViewMode(int mode)
       scoreEditor->setVisible(m_viewMode & 4);
       optionsEditor->setVisible(m_viewMode & 8);
       filebEditor->setVisible(m_viewMode & 16);
-      versionEditor->setVisible(m_viewMode & 32);
-      licenceEditor->setVisible(m_viewMode & 64);
-      otherEditor->setVisible(m_viewMode & 128);
-      otherCsdEditor->setVisible(m_viewMode & 256);
-      widgetEditor->setVisible(m_viewMode & 512);
-      ladspaEditor->setVisible(m_viewMode & 1024);
+      otherEditor->setVisible(m_viewMode & 32);
+      otherCsdEditor->setVisible(m_viewMode & 64);
+      widgetEditor->setVisible(m_viewMode & 128);
   }
 }
 
@@ -208,22 +205,13 @@ QString DocumentView::getSelectedText(int section)
     //    filebEditor;
     break;
   case 5:
-    text = versionEditor->textCursor().selectedText();
-    break;
-  case 6:
-    text = licenceEditor->textCursor().selectedText();
-    break;
-  case 7:
     text = otherEditor->textCursor().selectedText();
     break;
-  case 8:
+  case 6:
     text = otherCsdEditor->textCursor().selectedText();
     break;
-  case 9:
+  case 7:
     text = widgetEditor->textCursor().selectedText();
-    break;
-  case 10:
-    text = ladspaEditor->textCursor().selectedText();
     break;
   default:
     qDebug() <<"DocumentView::insertText section " << section << " not implemented.";
@@ -254,18 +242,6 @@ QString DocumentView::getFullText()
     sectionText = optionsEditor->toPlainText();
     if (!sectionText.isEmpty()) {
       text += "<CsOptions>\n" + sectionText + "</CsOptions>\n";
-    }
-    sectionText = ladspaEditor->toPlainText();
-    if (!sectionText.isEmpty()) {
-      text += "<csLADSPA>\n" + sectionText + "</csLADSPA>\n";
-    }
-    sectionText = versionEditor->toPlainText();
-    if (!sectionText.isEmpty()) {
-      text += "<CsVersion>\n" + sectionText + "</CsVersion>\n";
-    }
-    sectionText = licenceEditor->toPlainText();
-    if (!sectionText.isEmpty()) {
-      text += "<CsLicense>\n" + sectionText + "</CsLicense>\n";
     }
     text += "<CsInstruments>\n" + orcEditor->toPlainText() + "</CsInstruments>\n";
     text += "<CsScore>\n" + scoreEditor->getPlainText() + "</CsScore>\n";
@@ -330,15 +306,16 @@ QString DocumentView::getFileB()
   return filebEditor->toPlainText();
 }
 
-QString DocumentView::getMiscText()
+QString DocumentView::getExtraCsdText()
 {
   // All other tags like version and licence with tags. For text that is being edited in the text editor
-  qDebug() << "DocumentView::getMiscText() not implemented and will crash!";
+  return otherCsdEditor->toPlainText();
 }
 
 QString DocumentView::getExtraText()
-{// Text outside any known tags. For text that is being edited in the text editor
-  qDebug() << "DocumentView::getFullOptionsText() not implemented and will crash!";
+{
+  // Text outside any known tags. For text that is being edited in the text editor
+  return otherEditor->toPlainText();
 }
 
 QString DocumentView::getMacWidgetsText()
@@ -790,6 +767,63 @@ void DocumentView::createContextMenu(QPoint pos)
   else { //  Split view
     // TODO check properly for line number also from other editors
     qDebug() << "DocumentView::createContextMenu() not implemented for split view.";
+  }
+}
+
+
+void DocumentView::showOrc(bool show)
+{
+  // FIXME set m_viewmode
+  if (m_viewMode >= 2) {
+    orcEditor->setVisible(show);
+  }
+}
+
+void DocumentView::showScore(bool show)
+{
+  // FIXME set m_viewmode
+  if (m_viewMode >= 2) {
+    scoreEditor->setVisible(show);
+  }
+}
+
+void DocumentView::showOptions(bool show)
+{
+  // FIXME set m_viewmode
+  if (m_viewMode >= 2) {
+    optionsEditor->setVisible(show);
+  }
+}
+
+void DocumentView::showFileB(bool show)
+{
+  // FIXME set m_viewmode
+  if (m_viewMode >= 2) {
+    filebEditor->setVisible(show);
+  }
+}
+
+void DocumentView::showOther(bool show)
+{
+  // FIXME set m_viewmode
+  if (m_viewMode >= 2) {
+    otherEditor->setVisible(show);
+  }
+}
+
+void DocumentView::showOtherCsd(bool show)
+{
+  // FIXME set m_viewmode
+  if (m_viewMode >= 2) {
+    otherCsdEditor->setVisible(show);
+  }
+}
+
+void DocumentView::showWidgetEdit(bool show)
+{
+  // FIXME set m_viewmode
+  if (m_viewMode >= 2) {
+    widgetEditor->setVisible(show);
   }
 }
 

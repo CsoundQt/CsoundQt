@@ -264,11 +264,6 @@ void DocumentPage::setSco(QString text)
   return m_view->setSco(text);
 }
 
-void DocumentPage::setLadspaText(QString text)
-{
-  return m_view->setLadspaText(text);
-}
-
 QString DocumentPage::getFullText()
 {
   QString fullText;
@@ -1462,6 +1457,42 @@ void DocumentPage::autoComplete()
 void DocumentPage::setViewMode(int mode)
 {
   m_view->setViewMode(mode);
+}
+
+
+void DocumentPage::showOrc(bool show)
+{
+  m_view->showOrc(show);
+}
+
+void DocumentPage::showScore(bool show)
+{
+  m_view->showScore(show);
+}
+
+void DocumentPage::showOptions(bool show)
+{
+  m_view->showOptions(show);
+}
+
+void DocumentPage::showFileB(bool show)
+{
+  m_view->showFileB(show);
+}
+
+void DocumentPage::showOther(bool show)
+{
+  m_view->showOther(show);
+}
+
+void DocumentPage::showOtherCsd(bool show)
+{
+  m_view->showOtherCsd(show);
+}
+
+void DocumentPage::showWidgetEdit(bool show)
+{
+  m_view->showWidgetEdit(show);
 }
 
 void DocumentPage::newLiveEventPanel(QString text)

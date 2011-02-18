@@ -61,7 +61,7 @@ class DocumentView : public BaseView
     QString getSco();  // Without tags
     QString getOptionsText();  // Without tags
     QString getFileB(); // Embedded files. With tags (for filenames)
-    QString getMiscText();  // All other tags like version and licence with tags
+    QString getExtraCsdText();  // All other tags like version and licence with tags
     QString getExtraText(); // Text outside any known tags
     // These two should be used with care as they are only here in case
     // Widgets are being edited in text format. In most cases, you want to
@@ -91,6 +91,14 @@ class DocumentView : public BaseView
     void findString(QString query = QString());
     void evaluate();
     void createContextMenu(QPoint pos);
+
+    void showOrc(bool);
+    void showScore(bool);
+    void showOptions(bool);
+    void showFileB(bool);
+    void showOther(bool);
+    void showOtherCsd(bool);
+    void showWidgetEdit(bool);
 
     void cut();
     void copy();
