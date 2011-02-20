@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac -m0
+-odac -m128
 </CsOptions>
 <CsInstruments>
 nchnls = 2
@@ -9,7 +9,7 @@ ksmps = 128
 
 ;Get the ASCII key number
 ;Example for QuteCsound
-;joachim heintz && andrés cabrera mar 2010
+;joachim heintz && andrés cabrera mar 2010 / feb 2011
 
 
 strset		11, "Thank you!"
@@ -99,6 +99,15 @@ indx		=		indx + ihop
 end:		xout		iftout
   endop 
 
+  opcode KeyOnce, kk, kkk
+;returns '1' just in the k-cycle a certain key has been pressed (kdown) or released (kup)
+key, kd, kascii    xin ;sensekey output and ascii code of the key (e.g. 32 for space)
+knew      changed   key
+kdown     =         (key == kascii && knew == 1 && kd == 1 ? 1 : 0)
+kup       =         (key == kascii && knew == 1 && kd == 0 ? 1 : 0)
+          xout      kdown, kup
+  endop
+
 
 instr 1
 ;;GET SPEED AND ESTIMATE THE USER'S AGE
@@ -112,10 +121,11 @@ konoff		init		1
 		TypeIn		konoff
 
 kchr, kkeydown sensekey
+
 ;;CALL INSTR 10 IF SOMETHING NEW HAS BEEN TYPED
-if kchr != 0 && kkeydown == 1 then
+kdwn, k0	KeyOnce	kchr, kkeydown, kchr
+if kchr != 0 && kdwn == 1 then
 konoff		=		0
-		turnoff2 10, 0, 0 ; Turn off previous instance
 		event		"i", 10, 0.1, kspeed*24, kchr
 endif 
 endin
@@ -139,7 +149,7 @@ instr 2 ;;CLEAR DISPLAYS WHEN NECESSARY
 endin 
 
 instr 10
-scoreline_i "i 2 0 0" ;First clear the display
+		event_i 	"i", 2, 0, .1 ;clear display first
 ;;GENERATE A NOTE
   ;PITCH AND ENVELOPE
 ipch		RandInts_i	0, 45; 46 steps per octave 
@@ -164,6 +174,7 @@ asound		oscili		aenv, afreq, iftsound
 iromsiz	random		.5, .9; choose random value for freeverb's roomsize
 aL, aR		freeverb 	asound, asound, iromsiz, .5; apply reverb 
 		outs		aL, aR	; send sound out 
+	
 
 ;;GENERATE IMPORTANT INFORMATION FOR THE USER
 if gicount == 0 then; at the first time use these values
@@ -181,8 +192,6 @@ ispeed		=		p3/36; speed
 Schar		sprintf	"%c", ichr; string with the typed character
 Sascii		sprintf	"%d", ichr; string with the ascii code
 
-;;SHOW SEQUENTIAL OUTPUT
-kclock		line		0, ispeed, 1; start clock
 Sthanks	strget		ithanks
 Sisavery	strget		isavery
 Sisavery	strcat		Sisavery, " character."
@@ -194,64 +203,35 @@ Sisatotally	strcat		Sisatotally, " number, too."
 Sisatotally	strcat		Sisatotally, " number."
  endif
 
-S1		sprintf  	"i 20 0 1 1 \"%s\"", Sthanks
-S2		sprintf  	"i 20 0 1 2 \"%s\"", ""
-S3 		sprintf  	"i 20 0 1 3 \"%s\"", Schar
-S4 		sprintf  	"i 20 0 1 4 \"%s\"", ""
-S5 		sprintf  	"i 20 0 1 5 \"%s\"", ""
-S6 		sprintf  	"i 20 0 1 6 \"%s\"", Sascii
-S7 		sprintf  	"i 20 0 1 7 \"%s\"", ""
-S8 		sprintf  	"i 20 0 1 8 \"%s\"", ""
-S9 		sprintf  	"i 20 0 1 9 \"%s\"", Schar
-S10 		sprintf  	"i 20 0 1 10 \"%s\"", Sisavery
-S11 		sprintf  	"i 20 0 1 11 \"%s\"", ""
-S12 		sprintf  	"i 20 0 1 12 \"%s\"", Sascii
-S13 		sprintf  	"i 20 0 1 13 \"%s\"", Sisatotally
-
-igoto skipinit  ; Necessary to avoid initial init pass
-
-if kclock > .1 then		;select time (etc)
-		scoreline S1, 1
-endif 
-if kclock > 2 then
-		scoreline S2, 1
-endif 
-if kclock > 3 then
-		scoreline S3, 1
-endif 
-if kclock > 3.5 then
-		scoreline S4, 1
-endif
-if kclock > 5 then
-		scoreline S5, 1 
-endif 
-if kclock > 6 then
-		scoreline S6, 1
-endif 
-if kclock > 6.5 then
-		scoreline S7, 1
-endif 
-if kclock > 9 then
-		scoreline S8, 1
-endif
-if kclock > 15 then
-		scoreline S9, 1
-endif 
-if kclock > 16 then 
-		scoreline S10, 1
-endif 
-if kclock > 18 then
-		scoreline S11, 1
-endif 
-if kclock > 21 then
-		scoreline S12, 1
-endif 
-if kclock > 23 then
-		scoreline S13, 1
-endif 
-
-skipinit:
-
+;;SHOW SEQUENTIAL OUTPUT 
+ishow		=		ispeed/4 ;speed of progression
+ ;call i 20 at the different starting times
+S1		sprintf  	"i 20 %f 1 1 \"%s\"", ishow, Sthanks
+S2		sprintf  	"i 20 %f 1 2 \"\"", ishow*10
+S3 		sprintf  	"i 20 %f 1 3 \"%s\"", ishow*20, Schar
+S4 		sprintf  	"i 20 %f 1 4 \"\"", ishow*35
+S5 		sprintf  	"i 20 %f 1 5 \"\"", ishow*50
+S6 		sprintf  	"i 20 %f 1 6 \"%s\"", ishow*60, Sascii
+S7 		sprintf  	"i 20 %f 1 7 \"\"", ishow*65
+S8 		sprintf  	"i 20 %f 1 8 \"\"", ishow*90
+S9 		sprintf  	"i 20 %f 1 9 \"%s\"", ishow*150, Schar
+S10 		sprintf  	"i 20 %f 1 10 \"%s\"", ishow*160, Sisavery
+S11 		sprintf  	"i 20 %f 1 11 \"\"", ishow*180
+S12 		sprintf  	"i 20 %f 1 12 \"%s\"", ishow*210, Sascii
+S13 		sprintf  	"i 20 %f 1 13 \"%s\"", ishow*230, Sisatotally
+		scoreline_i 	S1
+		scoreline_i	S2
+		scoreline_i 	S3
+		scoreline_i	S4
+		scoreline_i 	S5
+		scoreline_i 	S6
+		scoreline_i 	S7
+		scoreline_i 	S8
+		scoreline_i 	S9
+		scoreline_i 	S10
+		scoreline_i 	S11
+		scoreline_i 	S12
+		scoreline_i 	S13
 endin
 
 instr 20 ;send text
@@ -294,12 +274,11 @@ i 1 0 36000; spend 10 hours in profund research and listen to the voice of the t
 e
 </CsScore>
 </CsoundSynthesizer>
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>332</x>
- <y>178</y>
+ <x>335</x>
+ <y>145</y>
  <width>821</width>
  <height>593</height>
  <visible>true</visible>
@@ -434,10 +413,10 @@ e
   <uuid>{0752771e-37c3-49e2-b666-f2b41a1c5bcf}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>Thank you!</label>
+  <midicc>0</midicc>
+  <label/>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>DejaVu Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -464,7 +443,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>You typed the character</label>
+  <label/>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -842,10 +821,10 @@ Then, press the Start button.</label>
   <uuid>{05335d5c-63bc-43c9-80fb-d041d424167b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <minimum>0.50000000</minimum>
+  <midicc>0</midicc>
+  <minimum>0.10000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.66795400</value>
+  <value>0.74555985</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -891,7 +870,7 @@ Then, press the Start button.</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <label>Age estimated from your speed selection:
-20 years, 5 months, 5 days.</label>
+23 years, 6 months, 6 days.</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -927,7 +906,7 @@ Then, press the Start button.</label>
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
@@ -938,34 +917,35 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 277 82 810 642
+WindowBounds: 72 179 400 200
 CurrentView: io
 IOViewEdit: On
-Options: -b128 -A -s -m167 -R
+Options:
 </MacOptions>
+
 <MacGUI>
 ioView background {43690, 43690, 32639}
-ioText {359, 326} {49, 33} display 0.000000 0.00100 "showascii1" left "Lucida Grande" 18 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
-ioText {359, 288} {31, 30} display 0.000000 0.00100 "showchar1" left "Lucida Grande" 18 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
-ioText {119, 184} {102, 49} display 0.000000 0.00100 "typein1" right "Lucida Grande" 30 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
-ioText {223, 183} {103, 49} display 0.000000 0.00100 "typein2" left "Lucida Grande" 30 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
-ioText {62, 242} {394, 33} display 0.000000 0.00100 "thanks" center "Lucida Grande" 18 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Thank you!
-ioText {79, 290} {275, 30} display 0.000000 0.00100 "youtyped" right "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder You typed the character
-ioText {65, 374} {381, 64} display 0.000000 0.00100 "asyouwill" center "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
-ioText {82, 328} {275, 30} display 0.000000 0.00100 "ascii1" right "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
-ioText {96, 451} {38, 30} display 0.000000 0.00100 "showchar2" right "Lucida Grande" 18 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
-ioText {137, 453} {275, 30} display 0.000000 0.00100 "isavery" left "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
-ioText {139, 546} {275, 30} display 0.000000 0.00100 "isatotally" left "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
-ioText {66, 492} {382, 47} display 0.000000 0.00100 "theby" left "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
-ioText {78, 544} {59, 33} display 0.000000 0.00100 "showascii2" right "Lucida Grande" 18 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
-ioText {375, 290} {41, 30} display 0.000000 0.00100 "." left "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
-ioText {393, 328} {41, 30} display 0.000000 0.00100 "!" left "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 
-ioText {49, 16} {721, 41} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Get the ASCII Code of a Character
-ioText {48, 55} {722, 58} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {63232, 62720, 61952} nobackground noborder And learn a lot more about the symbolic function of characters and numbers.Â¬This can be very important for your future life.
-ioText {47, 112} {724, 48} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder First, select your personal speed at the slider on the right.Â¬Then, press the Start button.
-ioSlider {514, 222} {259, 27} 0.500000 2.000000 0.667954 speed
-ioText {513, 192} {260, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Select Your Personal Speed of Messages
-ioText {514, 277} {259, 97} display 0.000000 0.00100 "age" center "Lucida Grande" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Age estimated from your speed selection:Â¬20 years, 5 months, 5 days.
+ioText {359, 326} {49, 33} display 0.000000 0.00100 "showascii1" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {359, 288} {31, 30} display 0.000000 0.00100 "showchar1" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {119, 184} {102, 49} display 0.000000 0.00100 "typein1" right "Lucida Grande" 30 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {223, 183} {103, 49} display 0.000000 0.00100 "typein2" left "Lucida Grande" 30 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {62, 242} {394, 33} display 0.000000 0.00100 "thanks" center "DejaVu Sans" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {79, 290} {275, 30} display 0.000000 0.00100 "youtyped" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {65, 374} {391, 76} display 0.000000 0.00100 "asyouwill" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {82, 328} {275, 30} display 0.000000 0.00100 "ascii1" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {96, 451} {38, 30} display 0.000000 0.00100 "showchar2" right "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {137, 453} {275, 30} display 0.000000 0.00100 "isavery" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {139, 546} {275, 30} display 0.000000 0.00100 "isatotally" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {66, 492} {382, 47} display 0.000000 0.00100 "theby" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {78, 544} {59, 33} display 0.000000 0.00100 "showascii2" right "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {375, 290} {41, 30} display 0.000000 0.00100 "." left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {393, 328} {41, 30} display 0.000000 0.00100 "!" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {49, 16} {721, 41} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Get the ASCII Code of a Character
+ioText {48, 55} {722, 58} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder And learn a lot more about the symbolic function of characters and numbers.Â¬This can be very important for your future life.
+ioText {47, 112} {724, 48} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder First, select your personal speed at the slider on the right.Â¬Then, press the Start button.
+ioSlider {514, 222} {259, 27} 0.100000 2.000000 0.745560 speed
+ioText {513, 192} {260, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Select Your Personal Speed of Messages
+ioText {514, 277} {259, 97} display 0.000000 0.00100 "age" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Age estimated from your speed selection:Â¬23 years, 6 months, 6 days.
 ioButton {513, 373} {261, 28} value 1.000000 "_Play" "Start" "/" i1 0 10
 </MacGUI>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="596" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
