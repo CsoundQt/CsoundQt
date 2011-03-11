@@ -64,6 +64,7 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
     error.printMessage();
   }
 #endif
+
   midiInterfaceComboBox->addItem(QString(tr("None", "No MIDI internal interface")), QVariant(9999));
 
   fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
@@ -111,8 +112,14 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   else
     ExternalRadioButton->setChecked(true);
 
-  threadCheckBox->setChecked(m_options->thread);
-  threadCheckBox->setEnabled(ApiRadioButton->isChecked());
+
+   noMessagesCheckBox->setChecked(m_options->noMessages);
+   noBufferCheckBox->setChecked(m_options->noBuffer);
+   noPythonCheckBox->setChecked(m_options->noPython);
+   noEventsCheckBox->setChecked(m_options->noEvents);
+
+//  threadCheckBox->setChecked(m_options->thread);
+//  threadCheckBox->setEnabled(ApiRadioButton->isChecked());
   keyRepeatCheckBox->setChecked(m_options->keyRepeat);
   debugLiveEventsCheckBox->setChecked(m_options->debugLiveEvents);
   int bufferIndex = consoleBufferComboBox->findText(QString::number(m_options->consoleBufferSize));
@@ -278,11 +285,15 @@ void ConfigDialog::accept()
   m_options->fontOffset = fontOffsetSpinBox->value();
 
   m_options->useAPI = ApiRadioButton->isChecked();
-  m_options->thread = threadCheckBox->isChecked();
+//  m_options->thread = threadCheckBox->isChecked();
   m_options->keyRepeat = keyRepeatCheckBox->isChecked();
   m_options->debugLiveEvents = debugLiveEventsCheckBox->isChecked();
   m_options->consoleBufferSize = consoleBufferComboBox->itemText(consoleBufferComboBox->currentIndex()).toInt();
   m_options->midiInterface = midiInterfaceComboBox->itemData(midiInterfaceComboBox->currentIndex()).toInt();
+  m_options->noMessages = noMessagesCheckBox->isChecked();
+  m_options->noBuffer = noBufferCheckBox->isChecked();
+  m_options->noPython = noPythonCheckBox->isChecked();
+  m_options->noEvents = noEventsCheckBox->isChecked();
   if (m_options->consoleBufferSize < 0)
     m_options->consoleBufferSize = 0;
   m_options->bufferSize = BufferSizeLineEdit->text().toInt();

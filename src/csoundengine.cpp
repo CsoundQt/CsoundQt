@@ -41,6 +41,7 @@ CsoundEngine::CsoundEngine()
   ud->threaded = true;
   ud->csound = 0;
   ud->perfThread = 0;
+  ud->flags = QCS_NO_FLAGS;
   ud->mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2 channels
 #ifdef QCS_PYTHONQT
   ud->m_pythonCallback = "";
@@ -120,9 +121,11 @@ void CsoundEngine::messageCallbackThread(CSOUND *csound,
 {
 
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-  QString msg;
-  msg = msg.vsprintf(fmt, args);
-  ud->cs->queueMessage(msg);
+  if (!(ud->flags & QCS_NO_CONSOLE_MESSAGES)) {
+    QString msg;
+    msg = msg.vsprintf(fmt, args);
+    ud->cs->queueMessage(msg);
+  }
 }
 
 void CsoundEngine::outputValueCallback (CSOUND *csound,
@@ -280,28 +283,34 @@ int CsoundEngine::keyEventCallback(void *userData,
 void CsoundEngine::csThread(void *data)
 {
   CsoundUserData* udata = (CsoundUserData*)data;
-  udata->outputBuffer = csoundGetSpout(udata->csound);
-  for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
-    udata->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
+  if (!(udata->flags & QCS_NO_COPY_BUFFER)) {
+    udata->outputBuffer = csoundGetSpout(udata->csound);
+    for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
+      udata->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
+    }
   }
 //  udata->wl->getValues(&udata->channelNames,
 //                       &udata->values,
 //                       &udata->stringValues);
   if (!udata->useInvalue) {
-//        csoundDeleteChannelList(udata->csound, *channelList);
+    //        csoundDeleteChannelList(udata->csound, *channelList);
     writeWidgetValues(udata);
     readWidgetValues(udata);
   }
-  udata->cs->processEventQueue();
+  if (!(udata->flags & QCS_NO_RT_EVENTS)) {
+    udata->cs->processEventQueue();
+  }
   (udata->ksmpscount)++;
 #ifdef QCS_PYTHONQT
-  if (!udata->m_pythonCallback.isEmpty()) {
-    if (udata->m_pythonCallbackCounter >= udata->m_pythonCallbackSkip) {
-      udata->m_pythonConsole->evaluate(udata->m_pythonCallback, false);
-      udata->m_pythonCallbackCounter = 0;
-    }
-    else {
-      udata->m_pythonCallbackCounter++;
+  if (!(udata->flags & QCS_NO_PYTHON_CALLBACK)) {
+    if (!udata->m_pythonCallback.isEmpty()) {
+      if (udata->m_pythonCallbackCounter >= udata->m_pythonCallbackSkip) {
+        udata->m_pythonConsole->evaluate(udata->m_pythonCallback, false);
+        udata->m_pythonCallbackCounter = 0;
+      }
+      else {
+        udata->m_pythonCallbackCounter++;
+      }
     }
   }
 #endif

@@ -100,6 +100,7 @@ qutecsound::qutecsound(QStringList fileNames)
   curPage = -1;
 
   m_options = new Options();
+  m_options->thread = true; // Always run threaded
   // Create GUI panels
   lineNumberLabel = new QLabel("Line 1"); // Line number display
   statusBar()->addPermanentWidget(lineNumberLabel); // This must be done before a file is loaded
@@ -1777,9 +1778,9 @@ void qutecsound::applySettings()
   configureToolBar->setVisible(m_options->showToolbar);
 
   QString currentOptions = (m_options->useAPI ? tr("API") : tr("Console")) + " ";
-  if (m_options->useAPI) {
-    currentOptions +=  (m_options->thread ? tr("Thread") : tr("NoThread")) + " ";
-  }
+//  if (m_options->useAPI) {
+//    currentOptions +=  (m_options->thread ? tr("Thread") : tr("NoThread")) + " ";
+//  }
 
   // Display a summary of options on the status bar
   currentOptions +=  (m_options->saveWidgets ? tr("SaveWidgets") : tr("DontSaveWidgets")) + " ";
@@ -1833,6 +1834,12 @@ void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
   p->setPythonExecutable(m_options->pythonExecutable);
   p->useOldFormat(m_options->oldFormat);
   p->setConsoleBufferSize(m_options->consoleBufferSize);
+
+  int flags = m_options->noBuffer ? QCS_NO_COPY_BUFFER : 0;
+  flags |= m_options->noPython ? QCS_NO_PYTHON_CALLBACK : 0;
+  flags |= m_options->noMessages ? QCS_NO_CONSOLE_MESSAGES : 0;
+  flags |= m_options->noEvents ? QCS_NO_RT_EVENTS : 0;
+  p->setFlags(flags);
 }
 
 void qutecsound::runUtility(QString flags)
@@ -3795,11 +3802,16 @@ void qutecsound::readSettings()
   settings.endGroup();
   settings.beginGroup("Run");
   m_options->useAPI = settings.value("useAPI", true).toBool();
-  m_options->thread = settings.value("thread", true).toBool();
+//  m_options->thread = settings.value("thread", true).toBool();
   m_options->keyRepeat = settings.value("keyRepeat", false).toBool();
   m_options->debugLiveEvents = settings.value("debugLiveEvents", false).toBool();
   m_options->consoleBufferSize = settings.value("consoleBufferSize", 1024).toInt();
   m_options->midiInterface = settings.value("midiInterface", 9999).toInt();
+  m_options->noBuffer = settings.value("noBuffer", false).toBool();
+  m_options->noPython = settings.value("noPython", false).toBool();
+  m_options->noMessages = settings.value("noMessages", false).toBool();
+  m_options->noEvents = settings.value("noEvents", false).toBool();
+
   m_options->bufferSize = settings.value("bufferSize", 1024).toInt();
   m_options->bufferSizeActive = settings.value("bufferSizeActive", false).toBool();
   m_options->HwBufferSize = settings.value("HwBufferSize", 1024).toInt();
@@ -3954,11 +3966,15 @@ void qutecsound::writeSettings(QStringList openFiles, int lastIndex)
   settings.beginGroup("Run");
   if (!m_resetPrefs) {
     settings.setValue("useAPI", m_options->useAPI);
-    settings.setValue("thread", m_options->thread);
+//    settings.setValue("thread", m_options->thread);
     settings.setValue("keyRepeat", m_options->keyRepeat);
     settings.setValue("debugLiveEvents", m_options->debugLiveEvents);
     settings.setValue("consoleBufferSize", m_options->consoleBufferSize);
     settings.setValue("midiInterface", m_options->midiInterface);
+    settings.setValue("noBuffer", m_options->noBuffer);
+    settings.setValue("noPython", m_options->noPython);
+    settings.setValue("noMessages", m_options->noMessages);
+    settings.setValue("noEvents", m_options->noEvents);
     settings.setValue("bufferSize", m_options->bufferSize);
     settings.setValue("bufferSizeActive", m_options->bufferSizeActive);
     settings.setValue("HwBufferSize",m_options->HwBufferSize);

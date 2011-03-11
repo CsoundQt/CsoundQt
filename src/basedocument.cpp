@@ -131,6 +131,11 @@ void BaseDocument::widgetsVisible(bool visible)
   }
 }
 
+void BaseDocument::setFlags(int flags)
+{
+  m_csEngine->setFlags((PerfFlags) flags);
+}
+
 //void BaseDocument::setOpcodeNameList(QStringList opcodeNameList)
 //{
 //  m_view->setOpcodeNameList(opcodeNameList);

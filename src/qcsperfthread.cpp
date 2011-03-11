@@ -308,7 +308,6 @@ int QCsPerfThread::Perform()
         csoundWaitThreadLockNoTimeout(pauseLock);
         csoundNotifyThreadLock(pauseLock);
       }
-      qApp->processEvents();
       if(processcallback != NULL)
            processcallback(cdata);
       retval = csoundPerformKsmps(csound);

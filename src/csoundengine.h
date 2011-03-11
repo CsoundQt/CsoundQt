@@ -46,6 +46,14 @@ class WidgetLayout;
 // This still necessary for 5.12
 #define QCS_DESTROY_CSOUND
 
+typedef enum {
+  QCS_NO_FLAGS = 0,
+  QCS_NO_COPY_BUFFER = 1,
+  QCS_NO_PYTHON_CALLBACK = 2,
+  QCS_NO_CONSOLE_MESSAGES = 4,
+  QCS_NO_RT_EVENTS = 8
+} PerfFlags;
+
 struct CsoundUserData {
   int result; //result of csoundCompile()
   CSOUND *csound; // instance of csound
@@ -78,6 +86,8 @@ struct CsoundUserData {
 
   RingBuffer audioOutputBuffer;
   unsigned long ksmpscount;  // Use this or rely on the csound time counter? Is using this more efficient, since it is called so often?
+  PerfFlags flags;
+
 #ifdef QCS_PYTHONQT
   PythonConsole *m_pythonConsole;
   QString m_pythonCallback;
@@ -179,6 +189,7 @@ class CsoundEngine : public QObject
     void registerScope(QuteScope *scope);
 //    void unregisterScope(QuteScope *scope);
     void registerGraph(QuteGraph *scope);
+    void setFlags(PerfFlags flags) {ud->flags = flags;}
 
   private:
     int runCsound();

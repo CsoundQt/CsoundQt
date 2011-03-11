@@ -69,6 +69,11 @@ class Options: public CsoundOptions{
     bool debugLiveEvents;
     int consoleBufferSize;
     int midiInterface; // For internal QuteCsound MIDI control
+    // Csound engine flags
+    bool noBuffer;
+    bool noPython;
+    bool noMessages;
+    bool noEvents;
 
     QString csdPath; //path of active csd needed for setting -o -i paths
 

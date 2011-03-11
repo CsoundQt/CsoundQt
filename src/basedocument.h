@@ -46,6 +46,7 @@ class BaseDocument : public QObject
     int parseTextString(QString &text);
     virtual WidgetLayout* newWidgetLayout();
     void widgetsVisible(bool visible);
+    void setFlags(int flags);
 //    void setOpcodeNameList(QStringList opcodeNameList);
 
     // Get internal components

@@ -453,32 +453,22 @@
          <x>10</x>
          <y>10</y>
          <width>321</width>
-         <height>161</height>
+         <height>71</height>
         </rect>
        </property>
        <property name="title">
-        <string>Csound execution</string>
+        <string>Run Utilities and Render using:</string>
        </property>
        <widget class="QWidget" name="layoutWidget_6">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>60</y>
+          <y>20</y>
           <width>301</width>
-          <height>91</height>
+          <height>51</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="layout14">
-         <item>
-          <widget class="QLabel" name="label_13">
-           <property name="text">
-            <string>Run Utilities and Render using:</string>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
          <item>
           <widget class="QRadioButton" name="ApiRadioButton">
            <property name="text">
@@ -498,26 +488,13 @@
          </item>
         </layout>
        </widget>
-       <widget class="QCheckBox" name="threadCheckBox">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>301</width>
-          <height>24</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Run in separate thread</string>
-        </property>
-       </widget>
       </widget>
       <widget class="QGroupBox" name="groupBox_6">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>260</y>
-         <width>661</width>
+         <y>240</y>
+         <width>651</width>
          <height>151</height>
         </rect>
        </property>
@@ -737,8 +714,8 @@
       <widget class="QGroupBox" name="groupBox_9">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>180</y>
+         <x>340</x>
+         <y>170</y>
          <width>321</width>
          <height>71</height>
         </rect>
@@ -824,9 +801,9 @@
       <widget class="QGroupBox" name="groupBox_12">
        <property name="geometry">
         <rect>
-         <x>360</x>
-         <y>180</y>
-         <width>291</width>
+         <x>340</x>
+         <y>90</y>
+         <width>321</width>
          <height>71</height>
         </rect>
        </property>
@@ -838,10 +815,86 @@
          <rect>
           <x>10</x>
           <y>30</y>
-          <width>251</width>
+          <width>301</width>
           <height>31</height>
          </rect>
         </property>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_13">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>10</y>
+         <width>321</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Interface language (Requires restart)</string>
+       </property>
+       <widget class="QComboBox" name="languageComboBox">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>30</y>
+          <width>301</width>
+          <height>31</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_14">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>90</y>
+         <width>321</width>
+         <height>151</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Performance tweaks</string>
+       </property>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>30</y>
+          <width>301</width>
+          <height>121</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="QCheckBox" name="noMessagesCheckBox">
+           <property name="text">
+            <string>No messages to consoles</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="noBufferCheckBox">
+           <property name="text">
+            <string>Disable recording and scopes</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="noEventsCheckBox">
+           <property name="text">
+            <string>Disable realtime score events</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="noPythonCheckBox">
+           <property name="text">
+            <string>Disable python callback</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </widget>
      </widget>
@@ -1628,28 +1681,6 @@
          </item>
         </layout>
        </widget>
-      </widget>
-      <widget class="QWidget" name="layoutWidget13">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>430</y>
-         <width>661</width>
-         <height>33</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="label_25">
-          <property name="text">
-           <string>Interface Language (requires restart)</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="languageComboBox"/>
-        </item>
-       </layout>
       </widget>
      </widget>
      <widget class="QWidget" name="tab_5">
