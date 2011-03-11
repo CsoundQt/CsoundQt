@@ -133,6 +133,7 @@ void BaseView::setFullText(QString text, bool goToTop)
       text.remove(sectionText);
     }
     setOptionsText(sectionText.mid(tag.size() + 2, sectionText.size() - (tag.size()*2) - 5));
+//    otherEditor->setText(text); // Any remaining text
   }
 }
 

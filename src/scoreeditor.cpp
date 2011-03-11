@@ -67,6 +67,7 @@ void ScoreEditor::setPlainText(QString text)
     m_textEditor->setPlainText(text);
     break;
   case 1:
+    m_sheet->clear();
     m_sheet->setFromText(text);
     break;
   default:

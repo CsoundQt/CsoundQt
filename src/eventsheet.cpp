@@ -347,7 +347,8 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
     while (this->columnCount() < nColumns + columnOffset) {
       appendColumn();
     }
-    for (int j = 0; j < nColumns; j++) {
+    int j;
+    for (j = 0; j < nColumns; j++) {
       QTableWidgetItem * item = this->item(i + rowOffset, j + columnOffset);
       if (item == 0) {
         item = new QTableWidgetItem();
@@ -366,6 +367,10 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
         noHistoryChange = (noHistoryMark ? 1: 0);
         item->setData(Qt::UserRole, "");
       }
+    }
+    while (j < numColumns && j + columnOffset < this->columnCount()) {
+      this->removeCellWidget(i + rowOffset, j + columnOffset);
+      j++;
     }
   }
   this->blockSignals(false);
@@ -1495,7 +1500,6 @@ QList<QPair<QString, QString> > EventSheet::parseLine(QString line)
   QPair<QString, QString> field;
 
   int count = 0;
-  int pcount = 0;
   bool formula = false;
   bool string = false;
   bool isp = true; // Assume starting on a pfield, not white space
@@ -1524,7 +1528,6 @@ QList<QPair<QString, QString> > EventSheet::parseLine(QString line)
           field.first = pvalue;
           field.second = spacing;
           list.append(field);
-          pcount++;
         }
         // Now add comment
         count++;
@@ -1539,13 +1542,12 @@ QList<QPair<QString, QString> > EventSheet::parseLine(QString line)
           }
           field.second = "";
           list.append(field);
-          pcount++;
         }
         isp = false;  // last p-field has been processed here
         break; // Nothing more todo for this line
       }  // End of comment processing
       // ----
-      if (line[count].isSpace() && !formula && !string) { // White space so p-field has finished
+      if ( (line[count] == ' ' || line[count] == '\t') && !formula && !string) { // White space so p-field has finished
         spacing = line[count];
         isp = false;
       }
@@ -1562,10 +1564,9 @@ QList<QPair<QString, QString> > EventSheet::parseLine(QString line)
         formula = true;
       }
       else if (line[count] == ';') { // comment
-//        field.first = pvalue;
-//        field.second = spacing;
-//        list.append(field);  //Should only append when pcount is incremented
-//        pcount++;
+        field.first = pvalue;
+        field.second = spacing;
+        list.append(field);  //Should only append when pcount is incremented
         count++;
         QString comment = line.mid(count);
         QStringList parts = comment.split(";");
@@ -1578,19 +1579,18 @@ QList<QPair<QString, QString> > EventSheet::parseLine(QString line)
           }
           field.second = "";
           list.append(field);
-          pcount++;
         }
         isp = false;  // last p-field has been processed here
         break; // Nothing more todo for this line
       }
       // ---
-      if (!line[count].isSpace()) { // Not White space so new p-field has started
+      if (line[count] != ' ' && line[count] != '\t') { // Not White space so new p-field has started
         field.second = spacing;
         list.append(field);  //Should only append when pcount is incremented
-        pcount++;
         isp = true;
         pvalue = line[count];
         field.first = pvalue;
+        field.second = "";
         spacing = "";
       }
       else { // Continue p-field processing
