@@ -52,6 +52,8 @@ class BaseView : public QScrollArea
     void setFileB(QString text);
     void setOptionsText(QString text);
     void setLadspaText(QString text);
+    void setOtherCsdText(QString text);
+    void setOtherText(QString text);
 
     QString getBasicText();  // What Csound needs (no widgets, misc text, etc.)
 
@@ -75,14 +77,17 @@ class BaseView : public QScrollArea
     Highlighter m_highlighter;
     OpEntryParser *m_opcodeTree;
     QSplitter *splitter;
-    TextEditor *mainEditor;
-    TextEditor *orcEditor;
-    ScoreEditor *scoreEditor;
-    TextEditor *optionsEditor;
-    TextEditor *filebEditor;
-    TextEditor *otherEditor;  // Extra text after removing all sections. All this text is to be presented at the start of the csd. Also called information text elsewhere
-    TextEditor *otherCsdEditor;  // Extra text and tags inside CsoundSynthesizer tags
-    TextEditor *widgetEditor;
+    TextEditor *m_mainEditor;
+    TextEditor *m_orcEditor;
+    ScoreEditor *m_scoreEditor;
+    TextEditor *m_optionsEditor;
+    TextEditor *m_filebEditor;
+    TextEditor *m_otherEditor;  // Extra text after removing all sections. All this text is to be presented at the start of the csd. Also called information text elsewhere
+    TextEditor *m_otherCsdEditor;  // Extra text and tags inside CsoundSynthesizer tags
+    TextEditor *m_widgetEditor;
+
+    int m_orcStartLine;
+    int m_scoStartLine;
 
     QVector<QWidget *> editors; // A vector to hold pointers for the above for easy processing
 };

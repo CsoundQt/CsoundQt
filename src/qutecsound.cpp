@@ -1602,14 +1602,17 @@ void qutecsound::setFullScreen(bool full)
 void qutecsound::splitView(bool split)
 {
   if (split) {
-    documentPages[curPage]->setViewMode(2+4+8);
-    showOrcAct->setChecked(true);
-    showScoreAct->setChecked(true);
-    showOptionsAct->setChecked(true);
-    showFileBAct->setChecked(false);
-    showOtherAct->setChecked(false);
-    showOtherCsdAct->setChecked(false);
-    showWidgetEditAct->setChecked(false);
+    int mode = showOrcAct->isChecked() ? 2 : 0 ;
+    mode |= showScoreAct->isChecked() ? 4 : 0 ;
+    mode |= showOptionsAct->isChecked() ? 8 : 0 ;
+    mode |= showFileBAct->isChecked() ? 16 : 0 ;
+    mode |= showOtherAct->isChecked() ? 32 : 0 ;
+    mode |= showOtherCsdAct->isChecked() ? 64 : 0 ;
+    mode |= showWidgetEditAct->isChecked() ? 128 : 0 ;
+    if (mode == 0) {
+      mode = 2+4+8;
+    }
+    documentPages[curPage]->setViewMode(mode);
   }
   else {
     documentPages[curPage]->setViewMode(0);
@@ -2463,7 +2466,7 @@ void qutecsound::createActions()
 
   showOrcAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show Orchestra"), this);
   showOrcAct->setCheckable(true);
-  showOrcAct->setChecked(false);
+  showOrcAct->setChecked(true);
   showOrcAct->setEnabled(false);
   showOrcAct->setStatusTip(tr("Show orchestra panel in split view"));
   showOrcAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -2472,7 +2475,7 @@ void qutecsound::createActions()
 
   showScoreAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show Score"), this);
   showScoreAct->setCheckable(true);
-  showScoreAct->setChecked(false);
+  showScoreAct->setChecked(true);
   showScoreAct->setEnabled(false);
   showScoreAct->setStatusTip(tr("Show orchestra panel in split view"));
   showScoreAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -2481,7 +2484,7 @@ void qutecsound::createActions()
 
   showOptionsAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show CsOptions"), this);
   showOptionsAct->setCheckable(true);
-  showOptionsAct->setChecked(false);
+  showOptionsAct->setChecked(true);
   showOptionsAct->setEnabled(false);
   showOptionsAct->setStatusTip(tr("Show CsOptions section panel in split view"));
   showOptionsAct->setShortcutContext(Qt::ApplicationShortcut);

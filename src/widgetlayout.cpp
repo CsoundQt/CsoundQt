@@ -2186,22 +2186,22 @@ void WidgetLayout::mouseMoveEvent(QMouseEvent *event)
   int width = abs(event->x() - startx + xOffset);
   int height = abs(event->y() - starty + yOffset);
   if (event->buttons() & Qt::LeftButton) {  // Currently dragging selection
-    if (event->x() < startx) {
+    if (event->x() < (startx - xOffset)) {
       x = event->x() + xOffset;
       //         width = event->x() - startx;
     }
-    if (event->y() < starty) {
+    if (event->y() < (starty - yOffset)) {
       y = event->y() + yOffset;
       //         height = event->y() - starty;
     }
     selectionFrame->setGeometry(x, y, width, height);
     selectionChanged(QRect(x - xOffset, y - yOffset, width, height));
   }
-//  qDebug() << "WidgetPanel::mouseMoveEvent " << event->x();
+//  qDebug() << "WidgetPanel::mouseMoveEvent " << event->y();
   mouseX = event->globalX();
   mouseY = event->globalY();
   mouseRelX = event->x() + xOffset;
-  mouseRelY = event->y() + xOffset;
+  mouseRelY = event->y() + yOffset;
 }
 
 void WidgetLayout::mouseReleaseEvent(QMouseEvent *event)

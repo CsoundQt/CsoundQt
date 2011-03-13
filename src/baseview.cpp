@@ -26,17 +26,30 @@
 BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
     QScrollArea(parent), m_opcodeTree(opcodeTree)
 {
-  mainEditor = new TextEditor(this);
-  orcEditor = new TextEditor(this);
-  scoreEditor = new ScoreEditor(this);
-  optionsEditor = new TextEditor(this);
-  optionsEditor->setMaximumHeight(60);
-  filebEditor = new TextEditor(this);
-  otherEditor = new TextEditor(this);
-  otherCsdEditor = new TextEditor(this);
-  widgetEditor = new TextEditor(this);
-  editors << mainEditor << orcEditor << scoreEditor << optionsEditor << filebEditor
-      << otherEditor << otherCsdEditor << widgetEditor;
+  QPalette p = palette();
+  m_mainEditor = new TextEditor(this);
+  m_orcEditor = new TextEditor(this);
+  m_scoreEditor = new ScoreEditor(this);
+  m_optionsEditor = new TextEditor(this);
+  m_optionsEditor->setMaximumHeight(60);
+  p.setColor(QPalette::WindowText, QColor("darkRed"));
+  p.setColor(static_cast<QPalette::ColorRole>(9), QColor(200, 200, 200));
+  m_optionsEditor->setPalette(p);
+  m_optionsEditor->setTextColor(QColor("darkGreen"));
+  m_filebEditor = new TextEditor(this);
+  m_otherEditor = new TextEditor(this);
+  p.setColor(QPalette::WindowText, QColor("darkGreen"));
+  p.setColor(static_cast<QPalette::ColorRole>(9), QColor(200, 200, 200));
+  m_otherEditor->setPalette(p);
+  m_otherEditor->setTextColor(QColor("darkGreen"));
+  m_otherCsdEditor = new TextEditor(this);
+  p.setColor(QPalette::WindowText, QColor("gray"));
+  p.setColor(static_cast<QPalette::ColorRole>(9), QColor(200, 200, 200));
+  m_otherCsdEditor->setPalette(p);
+  m_otherCsdEditor->setTextColor(QColor("gray"));
+  m_widgetEditor = new TextEditor(this);
+  editors << m_mainEditor << m_orcEditor << m_scoreEditor << m_optionsEditor << m_filebEditor
+      << m_otherEditor << m_otherCsdEditor << m_widgetEditor;
   splitter = new QSplitter(this); // Deleted with parent
   splitter->setOrientation(Qt::Vertical);
   splitter->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -47,7 +60,7 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
   setLayout(l);
   m_mode = 0;
   m_highlighter.setOpcodeNameList(opcodeTree->opcodeNameList());
-  m_highlighter.setDocument(mainEditor->document());
+  m_highlighter.setDocument(m_mainEditor->document());
 }
 
 BaseView::~BaseView()
@@ -57,7 +70,7 @@ BaseView::~BaseView()
 void BaseView::setFullText(QString text, bool goToTop)
 {
   // Load Embedded Files ------------------------
-  // Must be done here to remove the files for single file view
+  // Must be done initially to remove the files for both view modes
   QString fileText = "";
   while (text.contains("<CsFileB ") and text.contains("</CsFileB>")) {
     bool endsWithBreak = false;
@@ -72,67 +85,77 @@ void BaseView::setFullText(QString text, bool goToTop)
   }
   setFileB(fileText);
   if (m_viewMode < 2) {  // Unified view
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     cursor.select(QTextCursor::Document);
     cursor.insertText(text);
-    mainEditor->setTextCursor(cursor);  // TODO implement for multiple views
+    m_mainEditor->setTextCursor(cursor);  // TODO implement for multiple views
     if (goToTop) {
-      mainEditor->moveCursor(QTextCursor::Start);
+      m_mainEditor->moveCursor(QTextCursor::Start);
     }
   }
   else { // Split view
-    int startIndex,endIndex;
-    QString sectionText = "";
+    int startIndex,endIndex, offset, endoffset;
+    QString tag, sectionText;
     // Find orchestra section
-    QString tag = "CsInstruments";
+    sectionText = "";
+    tag = "CsInstruments";
     startIndex = text.indexOf("<" + tag + ">");
-    if (text.size() > startIndex + tag.size() + 2
-        && text[startIndex +  tag.size() + 2] == '\n') {
-      startIndex++;
-    }
+    offset = text.size() > startIndex + tag.size() + 2
+                 && text[startIndex +  tag.size() + 2] == '\n' ? 1: 0;
     endIndex = text.indexOf("</" + tag + ">") + tag.size() + 3;
-    if (text.size() > endIndex + 1 && text[endIndex+1] == '\n') {
-      endIndex++;
-    }
+    endoffset = text.size() > endIndex
+                && text[endIndex] == '\n' ? 1: 0;
     if (startIndex >= 0 && endIndex > startIndex) {
-      sectionText = text.mid(startIndex, endIndex - startIndex);
+      sectionText = text.mid(startIndex, endIndex - startIndex + endoffset);
       text.remove(sectionText);
     }
-    setOrc(sectionText.mid(tag.size() + 2, sectionText.size() - (tag.size()*2) - 5));
+    setOrc(sectionText.mid(tag.size() + 2 + offset, sectionText.size() - (tag.size()*2) - 5 - offset - endoffset));
     // Find score section
     sectionText = "";
     tag = "CsScore";
     startIndex = text.indexOf("<" + tag + ">");
-    if (text.size() > startIndex + tag.size() + 2
-        && text[startIndex +  tag.size() + 2] == '\n') {
-      startIndex++;
-    }
+    offset = text.size() > startIndex + tag.size() + 2
+                 && text[startIndex +  tag.size() + 2] == '\n' ? 1: 0;
     endIndex = text.indexOf("</" + tag + ">") + tag.size() + 3;
-    if (text.size() > endIndex + 1 && text[endIndex+1] == '\n') {
-      endIndex++;
-    }
+    endoffset = text.size() > endIndex
+                && text[endIndex] == '\n' ? 1: 0;
     if (startIndex >= 0 && endIndex > startIndex) {
-      sectionText = text.mid(startIndex, endIndex - startIndex);
+      sectionText = text.mid(startIndex, endIndex - startIndex + endoffset);
       text.remove(sectionText);
     }
-    setSco(sectionText.mid(tag.size() + 2, sectionText.size() - (tag.size()*2) - 5));
+    setSco(sectionText.mid(tag.size() + 2 + offset, sectionText.size() - (tag.size()*2) - 5 - offset - endoffset));
     // Set options text
     sectionText = "";
     tag = "CsOptions";
     startIndex = text.indexOf("<" + tag + ">");
-    if (text.size() > startIndex + tag.size() + 2
-        && text[startIndex +  tag.size() + 2] == '\n') {
-      startIndex++;
-    }
+    offset = text.size() > startIndex + tag.size() + 2
+                 && text[startIndex +  tag.size() + 2] == '\n' ? 1: 0;
     endIndex = text.indexOf("</" + tag + ">") + tag.size() + 3;
-    if (text.size() > endIndex + 1 && text[endIndex+1] == '\n') {
-      endIndex++;
-    }
+    endoffset = text.size() > endIndex
+                && text[endIndex] == '\n' ? 1: 0;
     if (startIndex >= 0 && endIndex > startIndex) {
-      sectionText = text.mid(startIndex, endIndex - startIndex);
+      sectionText = text.mid(startIndex, endIndex - startIndex + endoffset);
       text.remove(sectionText);
     }
-    setOptionsText(sectionText.mid(tag.size() + 2, sectionText.size() - (tag.size()*2) - 5));
+    setOptionsText(sectionText.mid(tag.size() + 2 + offset, sectionText.size() - (tag.size()*2) - 5 - offset - endoffset));
+
+
+    // Remaining text inside CsSynthesizer tags
+    sectionText = "";
+    tag = "CsoundSynthesizer";
+    startIndex = text.indexOf("<" + tag + ">");
+    offset = text.size() > startIndex + tag.size() + 2
+                 && text[startIndex +  tag.size() + 2] == '\n' ? 1: 0;
+    endIndex = text.indexOf("</" + tag + ">") + tag.size() + 3;
+    endoffset = text.size() > endIndex
+                && text[endIndex] == '\n' ? 1: 0;
+    if (startIndex >= 0 && endIndex > startIndex) {
+      sectionText = text.mid(startIndex, endIndex - startIndex + endoffset);
+      text.remove(sectionText);
+    }
+    setOtherCsdText(sectionText.mid(tag.size() + 2 + offset, sectionText.size() - (tag.size()*2) - 5 - offset - endoffset));
+    // Remaining text after all this
+    setOtherText(text);
 //    otherEditor->setText(text); // Any remaining text
   }
 }
@@ -140,10 +163,10 @@ void BaseView::setFullText(QString text, bool goToTop)
 void BaseView::setBasicText(QString text)
 {
   if (m_viewMode < 2) {  // Unified view
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     cursor.select(QTextCursor::Document);
     cursor.insertText(text);
-    mainEditor->setTextCursor(cursor);  // TODO implement for multiple views
+    m_mainEditor->setTextCursor(cursor);  // TODO implement for multiple views
   }
   else {
     qDebug() << "BaseView::setBasicText not implemented for Split view.";
@@ -158,50 +181,50 @@ void BaseView::setFileType(int mode)
 
 void BaseView::setFont(QFont font)
 {
-  mainEditor->setFont(font);
-  orcEditor->setFont(font);
-  scoreEditor->setFont(font);
-  optionsEditor->setFont(font);
-  filebEditor->setFont(font);
-  otherEditor->setFont(font);
-  otherCsdEditor->setFont(font);
-  widgetEditor->setFont(font);
+  m_mainEditor->setFont(font);
+  m_orcEditor->setFont(font);
+  m_scoreEditor->setFont(font);
+  m_optionsEditor->setFont(font);
+  m_filebEditor->setFont(font);
+  m_otherEditor->setFont(font);
+  m_otherCsdEditor->setFont(font);
+  m_widgetEditor->setFont(font);
 }
 
 void BaseView::setFontPointSize(float size)
 {
-  mainEditor->setFontPointSize(size);
-  orcEditor->setFontPointSize(size);
-  scoreEditor->setFontPointSize(size);
-  optionsEditor->setFontPointSize(size);
-  filebEditor->setFontPointSize(size);
-  otherEditor->setFontPointSize(size);
-  otherCsdEditor->setFontPointSize(size);
-  widgetEditor->setFontPointSize(size);
+  m_mainEditor->setFontPointSize(size);
+  m_orcEditor->setFontPointSize(size);
+  m_scoreEditor->setFontPointSize(size);
+  m_optionsEditor->setFontPointSize(size);
+  m_filebEditor->setFontPointSize(size);
+  m_otherEditor->setFontPointSize(size);
+  m_otherCsdEditor->setFontPointSize(size);
+  m_widgetEditor->setFontPointSize(size);
 }
 
 void BaseView::setTabStopWidth(int width)
 {
-  mainEditor->setTabStopWidth(width);
-  orcEditor->setTabStopWidth(width);
-  scoreEditor->setTabStopWidth(width);
-  optionsEditor->setTabStopWidth(width);
-  filebEditor->setTabStopWidth(width);
-  otherEditor->setTabStopWidth(width);
-  otherCsdEditor->setTabStopWidth(width);
-  widgetEditor->setTabStopWidth(width);
+  m_mainEditor->setTabStopWidth(width);
+  m_orcEditor->setTabStopWidth(width);
+  m_scoreEditor->setTabStopWidth(width);
+  m_optionsEditor->setTabStopWidth(width);
+  m_filebEditor->setTabStopWidth(width);
+  m_otherEditor->setTabStopWidth(width);
+  m_otherCsdEditor->setTabStopWidth(width);
+  m_widgetEditor->setTabStopWidth(width);
 }
 
 void BaseView::setLineWrapMode(QTextEdit::LineWrapMode mode)
 {
-  mainEditor->setLineWrapMode(mode);
-  orcEditor->setLineWrapMode(mode);
-  scoreEditor->setLineWrapMode(mode);
-  optionsEditor->setLineWrapMode(mode);
-  filebEditor->setLineWrapMode(mode);
-  otherEditor->setLineWrapMode(mode);
-  otherCsdEditor->setLineWrapMode(mode);
-  widgetEditor->setLineWrapMode(mode);
+  m_mainEditor->setLineWrapMode(mode);
+  m_orcEditor->setLineWrapMode(mode);
+  m_scoreEditor->setLineWrapMode(mode);
+  m_optionsEditor->setLineWrapMode(mode);
+  m_filebEditor->setLineWrapMode(mode);
+  m_otherEditor->setLineWrapMode(mode);
+  m_otherCsdEditor->setLineWrapMode(mode);
+  m_widgetEditor->setLineWrapMode(mode);
 }
 
 void BaseView::setColorVariables(bool color)
@@ -211,30 +234,30 @@ void BaseView::setColorVariables(bool color)
 
 void BaseView::setBackgroundColor(QColor color)
 {
-  QPalette p = mainEditor->palette();
+  QPalette p = m_mainEditor->palette();
   p.setColor(static_cast<QPalette::ColorRole>(9), color);
-  mainEditor->setPalette(p);
-  p = orcEditor->palette();
-  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-  orcEditor->setPalette(p);
-  p = scoreEditor->palette();
-  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-  scoreEditor->setPalette(p);
-  p = optionsEditor->palette();
-  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-  optionsEditor->setPalette(p);
-  p = filebEditor->palette();
-  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-  filebEditor->setPalette(p);
-  p = otherCsdEditor->palette();
-  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-  otherCsdEditor->setPalette(p);
-  p = otherEditor->palette();
-  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-  otherEditor->setPalette(p);
-  p = widgetEditor->palette();
-  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-  widgetEditor->setPalette(p);
+  m_mainEditor->setPalette(p);
+//  p = m_orcEditor->palette();
+//  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+//  m_orcEditor->setPalette(p);
+//  p = m_scoreEditor->palette();
+//  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+//  m_scoreEditor->setPalette(p);
+//  p = m_optionsEditor->palette();
+//  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+//  m_optionsEditor->setPalette(p);
+//  p = m_filebEditor->palette();
+//  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+//  m_filebEditor->setPalette(p);
+//  p = m_otherCsdEditor->palette();
+//  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+//  m_otherCsdEditor->setPalette(p);
+//  p = m_otherEditor->palette();
+//  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+//  m_otherEditor->setPalette(p);
+//  p = m_widgetEditor->palette();
+//  p.setColor(static_cast<QPalette::ColorRole>(9), color);
+//  m_widgetEditor->setPalette(p);
 }
 
 void BaseView::setOrc(QString text)
@@ -262,7 +285,7 @@ void BaseView::setOrc(QString text)
     }
   }
   else { // Split view
-    orcEditor->setPlainText(text);
+    m_orcEditor->setPlainText(text);
   }
 }
 
@@ -291,13 +314,13 @@ void BaseView::setSco(QString text)
     }
   }
   else {
-    scoreEditor->setPlainText(text);
+    m_scoreEditor->setPlainText(text);
   }
 }
 
 void BaseView::setFileB(QString text)
 {
-  filebEditor->setPlainText(text);
+  m_filebEditor->setPlainText(text);
 }
 
 void BaseView::setOptionsText(QString text)
@@ -308,15 +331,16 @@ void BaseView::setOptionsText(QString text)
       return;
     }
     QTextCursor cursor;
-    cursor = mainEditor->textCursor();
-    mainEditor->moveCursor(QTextCursor::Start);
-    mainEditor->find("<CsoundSynthesizer>"); //cursor moves there
-    mainEditor->moveCursor(QTextCursor::EndOfLine);
-    mainEditor->insertPlainText(QString("\n") + text + QString("\n"));
+    cursor = m_mainEditor->textCursor();
+    // FIXME must remove old options tag if present!
+    m_mainEditor->moveCursor(QTextCursor::Start);
+    m_mainEditor->find("<CsoundSynthesizer>"); //cursor moves there
+    m_mainEditor->moveCursor(QTextCursor::EndOfLine);
+    m_mainEditor->insertPlainText(QString("\n") + text + QString("\n"));
   }
   else {
-    optionsEditor->setText(text);
-    optionsEditor->moveCursor(QTextCursor::Start);
+    m_optionsEditor->setText(text);
+    m_optionsEditor->moveCursor(QTextCursor::Start);
   }
 
 }
@@ -329,9 +353,9 @@ void BaseView::setLadspaText(QString text)
       return;
     }
     QTextCursor cursor;
-    cursor = mainEditor->textCursor();
-    mainEditor->moveCursor(QTextCursor::Start);
-    if (mainEditor->find("<csLADSPA>") and mainEditor->find("</csLADSPA>")) {
+    cursor = m_mainEditor->textCursor();
+    m_mainEditor->moveCursor(QTextCursor::Start);
+    if (m_mainEditor->find("<csLADSPA>") and m_mainEditor->find("</csLADSPA>")) {
       QString curText = getBasicText();
       int index = curText.indexOf("<csLADSPA>");
       int endIndex = curText.indexOf("</csLADSPA>") + 11;
@@ -341,12 +365,12 @@ void BaseView::setLadspaText(QString text)
       curText.remove(index, endIndex - index);
       curText.insert(index, text);
       setBasicText(curText);
-      mainEditor->moveCursor(QTextCursor::Start);
+      m_mainEditor->moveCursor(QTextCursor::Start);
     }
     else { //csLADSPA section not present, or incomplete
-      mainEditor->find("<CsoundSynthesizer>"); //cursor moves there
-      mainEditor->moveCursor(QTextCursor::EndOfLine);
-      mainEditor->insertPlainText(QString("\n") + text + QString("\n"));
+      m_mainEditor->find("<CsoundSynthesizer>"); //cursor moves there
+      m_mainEditor->moveCursor(QTextCursor::EndOfLine);
+      m_mainEditor->insertPlainText(QString("\n") + text + QString("\n"));
     }
   }
   else {
@@ -354,6 +378,42 @@ void BaseView::setLadspaText(QString text)
   }
 }
 
+void BaseView::setOtherCsdText(QString text)
+{
+  if (m_viewMode < 2) { // View is not split
+    if (m_mode != 0) {
+      qDebug() << "DocumentView::setOtherCsdText Current file is not a csd file. Text not inserted!";
+      return;
+    }
+    QTextCursor cursor;
+    cursor = m_mainEditor->textCursor();
+    m_mainEditor->moveCursor(QTextCursor::Start);
+    m_mainEditor->find("</CsoundSynthesizer>");
+    m_mainEditor->insertPlainText(text); // TODO this is a bit flakey. What happens if there is already text there?
+  }
+  else {
+    m_otherCsdEditor->setText(text);
+    m_otherCsdEditor->moveCursor(QTextCursor::Start);
+  }
+}
+
+void BaseView::setOtherText(QString text)
+{
+  if (m_viewMode < 2) { // View is not split
+    if (m_mode != 0) {
+      qDebug() << "DocumentView::setOtherText Current file is not a csd file. Text not inserted!";
+      return;
+    }
+    QTextCursor cursor;
+    cursor = m_mainEditor->textCursor();
+    m_mainEditor->moveCursor(QTextCursor::Start);
+    m_mainEditor->insertPlainText(text); // TODO this is a bit flakey. What happens if there is already text there?
+  }
+  else {
+    m_otherEditor->setText(text);
+    m_otherEditor->moveCursor(QTextCursor::Start);
+  }
+}
 
 QString BaseView::getBasicText()
 {
@@ -361,9 +421,9 @@ QString BaseView::getBasicText()
   // TODO implement modes
   QString text;
   if (m_viewMode < 2) {
-    text = mainEditor->toPlainText(); // csd without extra sections
+    text = m_mainEditor->toPlainText(); // csd without extra sections
     if (m_viewMode & 16) {
-      text += filebEditor->toPlainText();
+      text += m_filebEditor->toPlainText();
     }
   }
   else {
@@ -384,14 +444,14 @@ QString BaseView::getBasicText()
 
 void BaseView::hideAllEditors()
 {
-    mainEditor->hide();
-    orcEditor->hide();
-    scoreEditor->hide();
-    optionsEditor->hide();
-    filebEditor->hide();
-    otherEditor->hide();
-    otherCsdEditor->hide();
-    widgetEditor->hide();
+    m_mainEditor->hide();
+    m_orcEditor->hide();
+    m_scoreEditor->hide();
+    m_optionsEditor->hide();
+    m_filebEditor->hide();
+    m_otherEditor->hide();
+    m_otherCsdEditor->hide();
+    m_widgetEditor->hide();
     for (int i = 0; i < 9; i++) {
       QSplitterHandle *h = splitter->handle(i);
       if (h) {

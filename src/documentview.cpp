@@ -40,14 +40,14 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
     connect(editors[i], SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(createContextMenu(QPoint)));
   }
-  setFocusProxy(mainEditor);  // for comment action from main application
+  setFocusProxy(m_mainEditor);  // for comment action from main application
   internalChange = false;
 
 //  m_highlighter = new Highlighter();
 
-  connect(mainEditor, SIGNAL(textChanged()),
+  connect(m_mainEditor, SIGNAL(textChanged()),
           this, SLOT(textChanged()));
-  connect(mainEditor, SIGNAL(cursorPositionChanged()),
+  connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
           this, SLOT(syntaxCheck()));
 
   //TODO put this for line reporting for score editor
@@ -59,7 +59,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   errorMarked = false;
   m_isModified = false;
 
-  syntaxMenu = new MySyntaxMenu(mainEditor);
+  syntaxMenu = new MySyntaxMenu(m_mainEditor);
 //  syntaxMenu->setFocusPolicy(Qt::NoFocus);
   syntaxMenu->setAutoFillBackground(true);
   QPalette p =syntaxMenu-> palette();
@@ -67,7 +67,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   p.setColor(static_cast<QPalette::ColorRole>(9), Qt::yellow);
   syntaxMenu->setPalette(p);
   connect(syntaxMenu,SIGNAL(keyPressed(QString)),
-          mainEditor, SLOT(insertPlainText(QString)));
+          m_mainEditor, SLOT(insertPlainText(QString)));
 //  connect(syntaxMenu,SIGNAL(aboutToHide()),
 //          this, SLOT(destroySyntaxMenu()));
 
@@ -89,7 +89,7 @@ bool DocumentView::isModified()
 
 void DocumentView::print(QPrinter *printer)
 {
-  mainEditor->print(printer);
+  m_mainEditor->print(printer);
 }
 
 void DocumentView::setModified(bool mod)
@@ -107,9 +107,9 @@ void DocumentView::insertText(QString text, int section)
   QTextCursor cursor;
   switch(section) {
   case 0:
-    cursor = mainEditor->textCursor();
+    cursor = m_mainEditor->textCursor();
     cursor.insertText(text);
-    mainEditor->setTextCursor(cursor);
+    m_mainEditor->setTextCursor(cursor);
     break;
     //  case 1:
         //    orcEditor;
@@ -162,22 +162,22 @@ void DocumentView::setViewMode(int mode)
   // TODO implement modes properly
   switch (m_viewMode) {
     case 0: // csd without extra sections
-      mainEditor->show();
-      m_highlighter.setDocument(mainEditor->document());
+      m_mainEditor->show();
+      m_highlighter.setDocument(m_mainEditor->document());
       break;
     case 1: // full plain text
-      mainEditor->show();
-      m_highlighter.setDocument(mainEditor->document());
+      m_mainEditor->show();
+      m_highlighter.setDocument(m_mainEditor->document());
       break;
     default:
-      m_highlighter.setDocument(orcEditor->document());
-      orcEditor->setVisible(m_viewMode & 2);
-      scoreEditor->setVisible(m_viewMode & 4);
-      optionsEditor->setVisible(m_viewMode & 8);
-      filebEditor->setVisible(m_viewMode & 16);
-      otherEditor->setVisible(m_viewMode & 32);
-      otherCsdEditor->setVisible(m_viewMode & 64);
-      widgetEditor->setVisible(m_viewMode & 128);
+      m_highlighter.setDocument(m_orcEditor->document());
+      m_orcEditor->setVisible(m_viewMode & 2);
+      m_scoreEditor->setVisible(m_viewMode & 4);
+      m_optionsEditor->setVisible(m_viewMode & 8);
+      m_filebEditor->setVisible(m_viewMode & 16);
+      m_otherEditor->setVisible(m_viewMode & 32);
+      m_otherCsdEditor->setVisible(m_viewMode & 64);
+      m_widgetEditor->setVisible(m_viewMode & 128);
   }
 }
 
@@ -189,29 +189,29 @@ QString DocumentView::getSelectedText(int section)
   QString text;
   switch(section) {
   case 0:
-    text = mainEditor->textCursor().selectedText();
+    text = m_mainEditor->textCursor().selectedText();
     break;
   case 1:
-    text = orcEditor->textCursor().selectedText();
+    text = m_orcEditor->textCursor().selectedText();
     break;
   case 2:
-    text = scoreEditor->getSelection();
+    text = m_scoreEditor->getSelection();
     break;
   case 3:
-    text = optionsEditor->textCursor().selectedText();
+    text = m_optionsEditor->textCursor().selectedText();
     //    ;
     break;
   case 4:
     //    filebEditor;
     break;
   case 5:
-    text = otherEditor->textCursor().selectedText();
+    text = m_otherEditor->textCursor().selectedText();
     break;
   case 6:
-    text = otherCsdEditor->textCursor().selectedText();
+    text = m_otherCsdEditor->textCursor().selectedText();
     break;
   case 7:
-    text = widgetEditor->textCursor().selectedText();
+    text = m_widgetEditor->textCursor().selectedText();
     break;
   default:
     qDebug() <<"DocumentView::insertText section " << section << " not implemented.";
@@ -223,7 +223,7 @@ QString DocumentView::getFullText()
 {
   QString text;
   if (m_viewMode < 2) { // View is not split
-    text = mainEditor->toPlainText();
+    text = m_mainEditor->toPlainText();
     int closeIndex = text.lastIndexOf("</CsoundSynthesizer>");
     QString fileBText = getFileB();
     if (!fileBText.isEmpty()) {
@@ -237,19 +237,25 @@ QString DocumentView::getFullText()
   }
   else { // Split view
     QString sectionText;
-    text += otherEditor->toPlainText();
+    sectionText = m_otherEditor->toPlainText();
+    if (!sectionText.isEmpty()) {
+      text += sectionText;
+    }
     text += "<CsoundSynthesizer>\n";
-    sectionText = optionsEditor->toPlainText();
+    sectionText = m_optionsEditor->toPlainText();
     if (!sectionText.isEmpty()) {
       text += "<CsOptions>\n" + sectionText + "</CsOptions>\n";
     }
-    text += "<CsInstruments>\n" + orcEditor->toPlainText() + "</CsInstruments>\n";
-    text += "<CsScore>\n" + scoreEditor->getPlainText() + "</CsScore>\n";
+    text += "<CsInstruments>\n" + m_orcEditor->toPlainText() + "</CsInstruments>\n";
+    text += "<CsScore>\n" + m_scoreEditor->getPlainText() + "</CsScore>\n";
     sectionText = getFileB();
     if (!sectionText.isEmpty()) {
-      text += getFileB();
+      text += sectionText;
     }
-    text += otherCsdEditor->toPlainText();
+    sectionText = m_otherCsdEditor->toPlainText();
+    if (!sectionText.isEmpty()) {
+      text += sectionText;
+    }
     text += "</CsoundSynthesizer>\n";
   }
   return text;
@@ -259,13 +265,12 @@ QString DocumentView::getOrc()
 {
   QString text = "";
   if (m_viewMode < 2) { // A single editor (orc and sco are not split)
-    text = mainEditor->toPlainText();
+    text = m_mainEditor->toPlainText();
     text = text.mid(text.lastIndexOf("<CsInstruments>" )+ 15);
-    qDebug() << text;
     text.remove(text.lastIndexOf("</CsInstruments>"), text.size());
   }
   else {
-    text = orcEditor->toPlainText();
+    text = m_orcEditor->toPlainText();
   }
   return text;
 }
@@ -274,12 +279,12 @@ QString DocumentView::getSco()
 {
   QString text = "";
   if (m_viewMode < 2) {
-    text = mainEditor->toPlainText();
+    text = m_mainEditor->toPlainText();
     text = text.mid(text.lastIndexOf("<CsScore>") + 9);
     text.remove(text.lastIndexOf("</CsScore>"), text.size());
   }
   else { // Split view
-    text = scoreEditor->getPlainText();
+    text = m_scoreEditor->getPlainText();
   }
   return text;
 }
@@ -289,33 +294,33 @@ QString DocumentView::getOptionsText()
   // Returns text without tags
   QString text = "";
   if (m_viewMode < 2) {// A single editor (orc and sco are not split)
-    QString edText = mainEditor->toPlainText();
+    QString edText = m_mainEditor->toPlainText();
     int index = edText.indexOf("<CsOptions>");
     if (index >= 0 && edText.contains("</CsOptions>")) {
       text = edText.mid(index + 11, edText.indexOf("</CsOptions>") - index - 11);
     }
   }
   else { //  Split view
-    text = optionsEditor->toPlainText();
+    text = m_optionsEditor->toPlainText();
   }
   return text;
 }
 
 QString DocumentView::getFileB()
 {
-  return filebEditor->toPlainText();
+  return m_filebEditor->toPlainText();
 }
 
 QString DocumentView::getExtraCsdText()
 {
   // All other tags like version and licence with tags. For text that is being edited in the text editor
-  return otherCsdEditor->toPlainText();
+  return m_otherCsdEditor->toPlainText();
 }
 
 QString DocumentView::getExtraText()
 {
   // Text outside any known tags. For text that is being edited in the text editor
-  return otherEditor->toPlainText();
+  return m_otherEditor->toPlainText();
 }
 
 QString DocumentView::getMacWidgetsText()
@@ -342,12 +347,19 @@ int DocumentView::currentLine()
   // Returns text without tags
   int line = -1;
   if (m_viewMode < 2) {// A single editor (orc and sco are not split)
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     line = cursor.blockNumber() + 1;
   }
   else { //  Split view
     // TODO check properly for line number also from other editors
-    qDebug() << "DocumentView::currentLine() not implemented for split view.";
+    QWidget *w = this->focusWidget(); // Gives last child of this widget that has had focus.
+    if (w == m_scoreEditor) {
+      qDebug() << "DocumentView::currentLine() not implemented for score editor.";
+    }
+    else  {
+      QTextCursor cursor = static_cast<TextEditor *>(w)->textCursor();
+      line = cursor.blockNumber() + 1;
+    }
   }
   return line;
 }
@@ -356,7 +368,7 @@ QString DocumentView::wordUnderCursor()
 {
   QString word;
   if (m_viewMode < 2) {// A single editor (orc and sco are not split)
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     word = cursor.selectedText();
     if (word.isEmpty()) {
       cursor.select(QTextCursor::WordUnderCursor);
@@ -375,7 +387,7 @@ QString DocumentView::getActiveSection()
   // Will return all document if there are no ## boundaries (for any kind of file)
   QString section;
   if (m_viewMode < 2) {
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     cursor.select(QTextCursor::LineUnderCursor);
     bool sectionStart = cursor.selectedText().simplified().startsWith("##");
     while (!sectionStart && !cursor.anchor() == 0) {
@@ -384,7 +396,7 @@ QString DocumentView::getActiveSection()
       sectionStart = cursor.selectedText().simplified().startsWith("##");
     }
     int start = cursor.anchor();
-    cursor = mainEditor->textCursor();
+    cursor = m_mainEditor->textCursor();
     cursor.movePosition(QTextCursor::NextBlock);
     cursor.select(QTextCursor::LineUnderCursor);
     bool sectionEnd = cursor.selectedText().simplified().startsWith("##");
@@ -395,7 +407,7 @@ QString DocumentView::getActiveSection()
     }
     cursor.movePosition(QTextCursor::EndOfLine);
     cursor.setPosition(start, QTextCursor::KeepAnchor);
-    mainEditor->setTextCursor(cursor);
+    m_mainEditor->setTextCursor(cursor);
     section = cursor.selectedText();
     section.replace(QChar(0x2029), QChar('\n'));
   }
@@ -410,7 +422,7 @@ QString DocumentView::getActiveText()
 {
   QString selection;
   if (m_viewMode < 2) {
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     selection = cursor.selectedText();
     if (selection == "") {
       cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
@@ -450,7 +462,7 @@ void DocumentView::syntaxCheck()
   int line = currentLine();
   emit(lineNumberSignal(line));
 
-  QTextCursor cursor = mainEditor->textCursor();
+  QTextCursor cursor = m_mainEditor->textCursor();
   cursor.select(QTextCursor::LineUnderCursor);
   QStringList words = cursor.selectedText().split(QRegExp("\\b"));
   foreach(QString word, words) {
@@ -476,11 +488,11 @@ void DocumentView::textChanged()
   // TODO implement for split view
   if (m_mode == 0 || m_mode == 3) {  // CSD or ORC mode
     if (m_autoComplete) {
-      QTextCursor cursor = mainEditor->textCursor();
+      QTextCursor cursor = m_mainEditor->textCursor();
       int curIndex = cursor.position();
       cursor.select(QTextCursor::WordUnderCursor);
       QString word = cursor.selectedText();
-      QTextCursor lineCursor = mainEditor->textCursor();
+      QTextCursor lineCursor = m_mainEditor->textCursor();
       lineCursor.select(QTextCursor::LineUnderCursor);
       QString line = lineCursor.selectedText();
       int commentIndex = -1;
@@ -539,14 +551,14 @@ void DocumentView::textChanged()
                                                  this, SLOT(insertTextFromAction()));
               a->setData(syntaxText);
             }
-            QRect r =  mainEditor->cursorRect();
+            QRect r =  m_mainEditor->cursorRect();
             QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-            QPoint globalPoint =  mainEditor->mapToGlobal(p);
+            QPoint globalPoint =  m_mainEditor->mapToGlobal(p);
             //syntaxMenu->setWindowModality(Qt::NonModal);
             //syntaxMenu->popup(globalPoint);
             syntaxMenu->move(globalPoint);
             syntaxMenu->show();
-            mainEditor->setFocus(Qt::OtherFocusReason);
+            m_mainEditor->setFocus(Qt::OtherFocusReason);
           }
           else {
             destroySyntaxMenu();
@@ -567,7 +579,7 @@ void DocumentView::findReplace()
   // TODO implment for multiple views
   internalChange = true;
   if (m_viewMode < 2) {
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     QString word = cursor.selectedText();
     cursor.select(QTextCursor::WordUnderCursor);
     QString word2 = cursor.selectedText();
@@ -575,7 +587,7 @@ void DocumentView::findReplace()
       lastSearch = word;
     }
     FindReplace *dialog = new FindReplace(this,
-                                          mainEditor,
+                                          m_mainEditor,
                                           &lastSearch,
                                           &lastReplace,
                                           &lastCaseSensitive);
@@ -595,8 +607,8 @@ void DocumentView::getToIn()
   // TODO implment for multiple views
   if (m_viewMode < 2) {
     internalChange = true;
-    mainEditor->setPlainText(changeToInvalue(mainEditor->toPlainText()));
-    mainEditor->document()->setModified(true);  // Necessary, or is setting it locally enough?
+    m_mainEditor->setPlainText(changeToInvalue(m_mainEditor->toPlainText()));
+    m_mainEditor->document()->setModified(true);  // Necessary, or is setting it locally enough?
   }
   else { //  Split view
     qDebug() << "DocumentView::getToIn() not implemented for split view.";
@@ -608,8 +620,8 @@ void DocumentView::inToGet()
   // TODO implment for multiple views
   if (m_viewMode < 2) {
     internalChange = true;
-    mainEditor->setPlainText(changeToChnget(mainEditor->toPlainText()));
-    mainEditor->document()->setModified(true);
+    m_mainEditor->setPlainText(changeToChnget(m_mainEditor->toPlainText()));
+    m_mainEditor->document()->setModified(true);
   }
   else { //  Split view
     // TODO check properly for line number also from other editors
@@ -621,16 +633,16 @@ void DocumentView::autoComplete()
 {
   if (m_viewMode < 2) {
     internalChange = true;
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     cursor.select(QTextCursor::WordUnderCursor);
     QString opcodeName = cursor.selectedText();
     if (opcodeName=="")
       return;
-    mainEditor->setTextCursor(cursor);
-    mainEditor->cut();
+    m_mainEditor->setTextCursor(cursor);
+    m_mainEditor->cut();
     QString syntax = m_opcodeTree->getSyntax(opcodeName);
     internalChange = true;
-    mainEditor->insertPlainText(syntax);
+    m_mainEditor->insertPlainText(syntax);
   }
   else { //  Split view
     // TODO check properly for line number also from other editors
@@ -644,12 +656,12 @@ void DocumentView::insertTextFromAction()
     internalChange = true;
     QAction *action = static_cast<QAction *>(QObject::sender());
     bool insertComplete = static_cast<MySyntaxMenu *>(action->parent())->insertComplete;
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     cursor.select(QTextCursor::WordUnderCursor);
     cursor.insertText("");
-    mainEditor->setTextCursor(cursor);
+    m_mainEditor->setTextCursor(cursor);
 
-    QTextCursor cursor2 = mainEditor->textCursor();
+    QTextCursor cursor2 = m_mainEditor->textCursor();
     cursor2.movePosition(QTextCursor::StartOfLine,QTextCursor::KeepAnchor);
     bool noOutargs = false;
     if (!cursor2.selectedText().simplified().isEmpty()) { // Text before cursor, don't put outargs
@@ -660,19 +672,19 @@ void DocumentView::insertTextFromAction()
       if (noOutargs) {
         QString syntaxText = action->data().toString();
         int index =syntaxText.indexOf(QRegExp("\\w\\s+\\w"));
-        mainEditor->insertPlainText(syntaxText.mid(index + 1).trimmed());  // right returns the whole string if index < 0
+        m_mainEditor->insertPlainText(syntaxText.mid(index + 1).trimmed());  // right returns the whole string if index < 0
       }
       else {
-        mainEditor->insertPlainText(action->data().toString());
+        m_mainEditor->insertPlainText(action->data().toString());
       }
     }
     else {
       int index = action->text().indexOf(" ");
       if (index > 0) {
-        mainEditor->insertPlainText(action->text().left(index));
+        m_mainEditor->insertPlainText(action->text().left(index));
       }
       else {
-        mainEditor->insertPlainText(action->text());
+        m_mainEditor->insertPlainText(action->text());
       }
     }
   }
@@ -692,11 +704,11 @@ void DocumentView::findString(QString query)
     }
     bool found = false;
     if (lastCaseSensitive) {
-      found = mainEditor->find(query,
+      found = m_mainEditor->find(query,
                                QTextDocument::FindCaseSensitively);
     }
     else
-      found = mainEditor->find(query);
+      found = m_mainEditor->find(query);
     if (!found) {
       int ret = QMessageBox::question(this, tr("Find and replace"),
                                       tr("The string was not found.\n"
@@ -705,7 +717,7 @@ void DocumentView::findString(QString query)
                                           QMessageBox::No
                                      );
       if (ret == QMessageBox::Yes) {
-        mainEditor->moveCursor(QTextCursor::Start);
+        m_mainEditor->moveCursor(QTextCursor::Start);
         findString();
       }
     }
@@ -724,7 +736,7 @@ void DocumentView::evaluate()
 void DocumentView::createContextMenu(QPoint pos)
 {
   if (m_viewMode < 2) {
-    QMenu *menu = mainEditor->createStandardContextMenu();
+    QMenu *menu = m_mainEditor->createStandardContextMenu();
     menu->addSeparator();
     menu->addAction(tr("Evaluate Selection"), this, SLOT(evaluate()));
     menu->addSeparator();
@@ -761,7 +773,7 @@ void DocumentView::createContextMenu(QPoint pos)
         action->setData(opcodeText);
       }
     }
-    menu->exec(mainEditor->mapToGlobal(pos));
+    menu->exec(m_mainEditor->mapToGlobal(pos));
     delete menu;
   }
   else { //  Split view
@@ -775,7 +787,7 @@ void DocumentView::showOrc(bool show)
 {
   // FIXME set m_viewmode
   if (m_viewMode >= 2) {
-    orcEditor->setVisible(show);
+    m_orcEditor->setVisible(show);
   }
 }
 
@@ -783,7 +795,7 @@ void DocumentView::showScore(bool show)
 {
   // FIXME set m_viewmode
   if (m_viewMode >= 2) {
-    scoreEditor->setVisible(show);
+    m_scoreEditor->setVisible(show);
   }
 }
 
@@ -791,7 +803,7 @@ void DocumentView::showOptions(bool show)
 {
   // FIXME set m_viewmode
   if (m_viewMode >= 2) {
-    optionsEditor->setVisible(show);
+    m_optionsEditor->setVisible(show);
   }
 }
 
@@ -799,7 +811,7 @@ void DocumentView::showFileB(bool show)
 {
   // FIXME set m_viewmode
   if (m_viewMode >= 2) {
-    filebEditor->setVisible(show);
+    m_filebEditor->setVisible(show);
   }
 }
 
@@ -807,7 +819,7 @@ void DocumentView::showOther(bool show)
 {
   // FIXME set m_viewmode
   if (m_viewMode >= 2) {
-    otherEditor->setVisible(show);
+    m_otherEditor->setVisible(show);
   }
 }
 
@@ -815,7 +827,7 @@ void DocumentView::showOtherCsd(bool show)
 {
   // FIXME set m_viewmode
   if (m_viewMode >= 2) {
-    otherCsdEditor->setVisible(show);
+    m_otherCsdEditor->setVisible(show);
   }
 }
 
@@ -823,14 +835,14 @@ void DocumentView::showWidgetEdit(bool show)
 {
   // FIXME set m_viewmode
   if (m_viewMode >= 2) {
-    widgetEditor->setVisible(show);
+    m_widgetEditor->setVisible(show);
   }
 }
 
 void DocumentView::cut()
 {
   if (m_viewMode < 2) {
-    mainEditor->cut();
+    m_mainEditor->cut();
   }
   else {
     qDebug() << "DocumentView::cut() not implemented for split view";
@@ -840,7 +852,7 @@ void DocumentView::cut()
 void DocumentView::copy()
 {
   if (m_viewMode < 2) {
-    mainEditor->copy();
+    m_mainEditor->copy();
   }
   else {
     qDebug() << "DocumentView::copy() not implemented for split view";
@@ -850,7 +862,7 @@ void DocumentView::copy()
 void DocumentView::paste()
 {
   if (m_viewMode < 2) {
-    mainEditor->paste();
+    m_mainEditor->paste();
   }
   else {
     qDebug() << "DocumentView::paste() not implemented for split view";
@@ -860,7 +872,7 @@ void DocumentView::paste()
 void DocumentView::undo()
 {
   if (m_viewMode < 2) {
-    mainEditor->undo();
+    m_mainEditor->undo();
   }
   else {
     qDebug() << "DocumentView::undo() not implemented for split view";
@@ -870,7 +882,7 @@ void DocumentView::undo()
 void DocumentView::redo()
 {
   if (m_viewMode < 2) {
-    mainEditor->redo();
+    m_mainEditor->redo();
   }
   else {
     qDebug() << "DocumentView::redo() not implemented for split view";
@@ -890,7 +902,7 @@ void DocumentView::comment()
     else if (m_mode == 1) { // Python Mode
       commentChar = "#";
     }
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     if (cursor.position() > cursor.anchor()) {
       int temp = cursor.anchor();
       cursor.setPosition(cursor.position());
@@ -913,7 +925,7 @@ void DocumentView::comment()
     cursor.insertText(text);
     cursor.setPosition(start);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
-    mainEditor->setTextCursor(cursor);
+    m_mainEditor->setTextCursor(cursor);
   }
   else {
     qDebug() << "DocumentView::comment() not implemented for split view";
@@ -932,7 +944,7 @@ void DocumentView::uncomment()
     else if (m_mode == 1) { // Python Mode
       commentChar = "#";
     }
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     if (cursor.position() > cursor.anchor()) {
       int temp = cursor.anchor();
       cursor.setPosition(cursor.position());
@@ -952,7 +964,7 @@ void DocumentView::uncomment()
     cursor.insertText(text);
     cursor.setPosition(start);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
-    mainEditor->setTextCursor(cursor);
+    m_mainEditor->setTextCursor(cursor);
   }
   else {
     qDebug() << "DocumentView::uncomment() not implemented for split view";
@@ -972,7 +984,7 @@ void DocumentView::indent()
     else if (m_mode == 1) { // Python Mode
       indentChar = "    ";
     }
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     if (cursor.position() > cursor.anchor()) {
       int temp = cursor.anchor();
       cursor.setPosition(cursor.position());
@@ -991,7 +1003,7 @@ void DocumentView::indent()
     cursor.insertText(text);
     cursor.setPosition(start);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
-    mainEditor->setTextCursor(cursor);
+    m_mainEditor->setTextCursor(cursor);
   }
   else {
     qDebug() << "DocumentView::indent() not implemented for split view";
@@ -1010,7 +1022,7 @@ void DocumentView::unindent()
     else if (m_mode == 1) { // Python Mode
       indentChar = "    ";
     }
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     if (cursor.position() > cursor.anchor()) {
       int temp = cursor.anchor();
       cursor.setPosition(cursor.position());
@@ -1032,7 +1044,7 @@ void DocumentView::unindent()
     cursor.insertText(text);
     cursor.setPosition(start);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
-    mainEditor->setTextCursor(cursor);
+    m_mainEditor->setTextCursor(cursor);
   }
   else {
     qDebug() << "DocumentView::unindent() not implemented for split view";
@@ -1051,7 +1063,7 @@ void DocumentView::killLine()
     //  else if (m_mode == 1) { // Python Mode
     //    indentChar = "    ";
     //  }
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     if (!cursor.atBlockStart()) {
       cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
     }
@@ -1075,7 +1087,7 @@ void DocumentView::killToEnd()
     //  else if (m_mode == 1) { // Python Mode
     //    indentChar = "    ";
     //  }
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     if (!cursor.atBlockEnd()) {
       cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     }
@@ -1090,11 +1102,11 @@ void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
 {
   // TODO implement for multiple views
   if (m_viewMode < 2) {
-    bool originallyMod = mainEditor->document()->isModified();
+    bool originallyMod = m_mainEditor->document()->isModified();
     internalChange = true;
     QTextCharFormat errorFormat;
     errorFormat.setBackground(QBrush(QColor(255, 182, 193)));
-    QTextCursor cur = mainEditor->textCursor();
+    QTextCursor cur = m_mainEditor->textCursor();
     cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
     int lineCount = 1;
     for(int i = 0; i < lines.size(); i++) {
@@ -1109,7 +1121,7 @@ void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
       if (cur.selectedText().simplified() == text.simplified()) {
         cur.mergeCharFormat(errorFormat);
         internalChange = true;
-        mainEditor->setTextCursor(cur);
+        m_mainEditor->setTextCursor(cur);
         cur.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor);
         cur.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor);
         cur.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor);
@@ -1118,7 +1130,7 @@ void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
         cur.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         errorMarked = true;
         if (!originallyMod) {
-          mainEditor->document()->setModified(false);
+          m_mainEditor->document()->setModified(false);
         }
       }
       else {
@@ -1140,20 +1152,20 @@ void DocumentView::unmarkErrorLines()
     return;
 //   qDebug("DocumentPage::unmarkErrorLines()");
   if (m_viewMode < 2) {
-    int position = mainEditor->verticalScrollBar()->value();
-    QTextCursor currentCursor = mainEditor->textCursor();
+    int position = m_mainEditor->verticalScrollBar()->value();
+    QTextCursor currentCursor = m_mainEditor->textCursor();
     errorMarked = false;
-    mainEditor->selectAll();
+    m_mainEditor->selectAll();
     internalChange = true;
-    QTextCursor cur = mainEditor->textCursor();
+    QTextCursor cur = m_mainEditor->textCursor();
     QTextCharFormat format = cur.blockCharFormat();
     format.clearBackground();
     cur.setCharFormat(format);
     internalChange = true;
-    mainEditor->setTextCursor(cur);  //sets format
+    m_mainEditor->setTextCursor(cur);  //sets format
     internalChange = true;
-    mainEditor->setTextCursor(currentCursor); //returns cursor to initial position
-    mainEditor->verticalScrollBar()->setValue(position); //return document display to initial position
+    m_mainEditor->setTextCursor(currentCursor); //returns cursor to initial position
+    m_mainEditor->verticalScrollBar()->setValue(position); //return document display to initial position
   }
   else {
     qDebug() << "DocumentView::unmarkErrorLines() not implemented for split view";
@@ -1165,15 +1177,15 @@ void DocumentView::jumpToLine(int line)
   // TODO implment for multiple views
   if (m_viewMode < 2) {
     int lineCount = 1;
-    QTextCursor cur = mainEditor->textCursor();
+    QTextCursor cur = m_mainEditor->textCursor();
     cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
     while (lineCount < line) {
       lineCount++;
       //       cur.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
       cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
     }
-    mainEditor->moveCursor(QTextCursor::End); // go to end to make sure line is put at the top of text
-    mainEditor->setTextCursor(cur);
+    m_mainEditor->moveCursor(QTextCursor::End); // go to end to make sure line is put at the top of text
+    m_mainEditor->setTextCursor(cur);
   }
   else {
     qDebug() << "DocumentView::jumpToLine() not implemented for split view";
@@ -1184,7 +1196,7 @@ void DocumentView::opcodeFromMenu()
 {
   QAction *action = (QAction *) QObject::sender();
   if (m_viewMode < 2) {
-    QTextCursor cursor = mainEditor->textCursor();
+    QTextCursor cursor = m_mainEditor->textCursor();
     QString text = action->data().toString();
     cursor.insertText(text);
   }
