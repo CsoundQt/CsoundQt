@@ -27,19 +27,14 @@
 int main(int argc, char *argv[])
 {
   QStringList fileNames;
-
-  for (int i = 1; i < argc; i++) {
-#ifdef Q_OS_WIN32
-    QString arg = QString::fromLocal8Bit(argv[i]);
-#else
-    QString arg = QString::fromUtf8(argv[i]);
-#endif
+  QApplication app(argc, argv);
+  QStringList args = app.arguments();
+  args.removeAt(0); // Remove program name
+  foreach (QString arg, args) {
     if (!arg.startsWith("-p")) {// avoid OS X arguments
       fileNames.append(arg);
     }
   }
-//  Q_INIT_RESOURCE(application);
-  QApplication app(argc, argv);
 
   FileOpenEater *filterObj=new FileOpenEater();
   app.installEventFilter(filterObj);

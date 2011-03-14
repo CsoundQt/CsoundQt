@@ -192,12 +192,6 @@ qutecsound::qutecsound(QStringList fileNames)
       }
     }
   }
-  // Open files passed in the command line. Only valid for non OS X platforms
-  foreach (QString fileName, fileNames) {
-    if (fileName!="") {
-      loadFile(fileName, true);
-    }
-  }
   // Initialize buttons to current state of panels
   showConsoleAct->setChecked(m_console->isVisible());
   showHelpAct->setChecked(helpPanel->isVisible());
@@ -231,6 +225,15 @@ qutecsound::qutecsound(QStringList fileNames)
   }
   else {
     changePage(documentTabs->currentIndex());
+  }
+  // Open files passed in the command line. Here to make sure they are the active tab.
+  foreach (QString fileName, fileNames) {
+    if (QFile::exists(fileName)) {
+      loadFile(fileName, true);
+    }
+    else {
+      qDebug() << "qutecsound::qutecsound could not open file:" << fileName;
+    }
   }
 
   m_closing = false;
