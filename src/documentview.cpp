@@ -356,7 +356,7 @@ int DocumentView::currentLine()
     if (w == m_scoreEditor) {
       qDebug() << "DocumentView::currentLine() not implemented for score editor.";
     }
-    else  {
+    else if (w != 0) {
       QTextCursor cursor = static_cast<TextEditor *>(w)->textCursor();
       line = cursor.blockNumber() + 1;
     }
