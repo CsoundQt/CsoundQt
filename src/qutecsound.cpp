@@ -2907,6 +2907,7 @@ void qutecsound::createMenus()
   subMenuNames << "Widgets";
 
   synthFiles.append(":/examples/Synths/Additive_Synth.csd");
+  synthFiles.append(":/examples/Synths/Imitative_Additive.csd");
   synthFiles.append(":/examples/Synths/Simple_Subtractive.csd");
   synthFiles.append(":/examples/Synths/Simple_FM_Synth.csd");
   synthFiles.append(":/examples/Synths/Phase_Mod_Synth.csd");
@@ -2947,6 +2948,7 @@ void qutecsound::createMenus()
   usefulFiles.append(":/examples/Useful/Mixdown_Player.csd");
   usefulFiles.append(":/examples/Useful/SF_Record.csd");
   usefulFiles.append(":/examples/Useful/File_to_Text.csd");
+  usefulFiles.append(":/examples/Useful/Envelope_Extractor.csd");
   usefulFiles.append(":/examples/Useful/Pitch_Tracker.csd");
   usefulFiles.append(":/examples/Useful/SF_Splitter.csd");
   usefulFiles.append(":/examples/Useful/SF_Merger.csd");

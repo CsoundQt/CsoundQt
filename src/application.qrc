@@ -241,6 +241,7 @@
 <file>../examples/FLOSS Manual Examples/07 MIDI/07E05.csd</file>
 <file>../examples/FLOSS Manual Examples/07 MIDI/07E06.csd</file>
        <file>../examples/Synths/Additive_Synth.csd</file>
+       <file>../examples/Synths/Imitative_Additive.csd</file>
         <file>../examples/Synths/Simple_Subtractive.csd</file>
         <file>../examples/Synths/Simple_FM_Synth.csd</file>
         <file>../examples/Synths/Phase_Mod_Synth.csd</file>
@@ -268,6 +269,7 @@
         <file>../examples/Useful/ASCII_Key.csd</file>
         <file>../examples/Useful/IO_Test.csd</file>
         <file>../examples/Useful/File_to_Text.csd</file>
+        <file>../examples/Useful/Envelope_Extractor.csd</file>
         <file>../examples/Useful/Pitch_Tracker.csd</file>
         <file>../examples/Useful/Mixdown_Player.csd</file>
         <file>../examples/Useful/SF_Merger.csd</file>
