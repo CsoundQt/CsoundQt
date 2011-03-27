@@ -187,7 +187,7 @@ Snamsuf   strsub    Sfile, ilslash+1
 ilsuf     strrindex Snamsuf, "."
 Sname     strsub    Snamsuf, 0, ilsuf
 
-Sformat   sprintf   "gi_%s ftgen %d, -%d, -2", Sname, iftnum, inpoints
+Sformat   sprintf   "gi_%s ftgen %d, 0, -%d, -2", Sname, iftnum, inpoints
           ;fprints   gSoutfil, Sformat
 
 ifilen    filelen   Sfile
@@ -221,8 +221,8 @@ i 1 0 1
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>226</x>
- <y>142</y>
+ <x>228</x>
+ <y>196</y>
  <width>747</width>
  <height>418</height>
  <visible>true</visible>
@@ -288,7 +288,7 @@ i 1 0 1
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>100 300 2 15</label>
+  <label>100</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -374,7 +374,7 @@ function tables to be created</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>4001 4002 4003 4004</label>
+  <label>4000 4001 4002 4003</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -576,7 +576,7 @@ to textfile!</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
@@ -597,15 +597,15 @@ Options:
 ioView background {43690, 43690, 32639}
 ioText {276, 245} {343, 29} edit 0.000000 0.00100 "_MBrowse"  "DejaVu Sans" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder /home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Glocke_Ganze1.aiff
 ioButton {623, 244} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
-ioText {276, 316} {343, 29} edit 0.000000 0.00100 "npoints"  "Arial" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder 100 300 2 15
-ioText {147, 20} {188, 30} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Files to be analyzed
-ioText {97, 56} {237, 40} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Number of points in theÂ¬function tables to be created
-ioText {276, 359} {343, 29} edit 0.000000 0.00100 "ftnums"  "Arial" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder 4001 4002 4003 4004
-ioText {96, 101} {240, 41} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder identification number of theÂ¬function tables to be created
+ioText {276, 316} {343, 29} edit 100.000000 0.00100 "npoints"  "Arial" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder 100
+ioText {87, 244} {188, 30} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Files to be analyzed
+ioText {36, 310} {239, 43} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Number of points in theÂ¬function tables to be created
+ioText {276, 359} {343, 29} edit 0.000000 0.00100 "ftnums"  "Arial" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder 4000 4001 4002 4003
+ioText {35, 355} {240, 41} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder identification number of theÂ¬function tables to be created
 ioText {276, 279} {343, 29} edit 0.000000 0.00100 "_Browse"  "Arial" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder /home/linux/Desktop/test2.txt
 ioButton {623, 278} {100, 30} value 1.000000 "_Browse" "Select File" "/" 
-ioText {146, 146} {188, 30} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Text file to be written as result
-ioText {144, 29} {80, 25} label 0.000000 0.00100 "" center "Arial" 40 {0, 0, 0} {58624, 58624, 58624} nobackground noborder ENVELOPE EXTRACTOR
-ioText {20, 69} {700, 100} label 0.000000 0.00100 "" left "Arial" 16 {0, 0, 0} {58624, 58624, 58624} nobackground noborder This instrument analyses the envelope(s) of one or more given sample(s) and returns the result as function tables in this format:Â¬gi_'filename' ftgen 'ftnum', 0, 'points', -2, val1, val2, ...Â¬The number of points gives the resolution of your analysis. If the duration of your sample is two seconds, and you write a table of size 100 points, you will get the mean amplitude for each 2/100 = 0.02 seconds.Â¬Select one or some sound files for analyzing, and a text file for writing the result to. Enter the desired number of points for the analysis, and the identification number of the table (for both either one number which is applied to all input files, or one number for each file).
+ioText {34, 279} {241, 29} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Text file to be written as result
+ioText {21, 7} {699, 56} label 0.000000 0.00100 "" center "Arial" 40 {0, 0, 0} {58624, 58624, 58624} nobackground noborder ENVELOPE EXTRACTOR
+ioText {20, 69} {699, 169} label 0.000000 0.00100 "" left "Arial" 16 {0, 0, 0} {58624, 58624, 58624} nobackground noborder This instrument analyses the envelope(s) of one or more given sample(s) and returns the result as function tables in this format:Â¬gi_'filename' ftgen 'ftnum', 0, 'points', -2, val1, val2, ...Â¬The number of points gives the resolution of your analysis. If the duration of your sample is two seconds, and you write a table of size 100 points, you will get the mean amplitude for each 2/100 = 0.02 seconds.Â¬Select one or some sound files for analyzing, and a text file for writing the result to. Enter the desired number of points for the analysis, and the identification number of the table (for both either one number which is applied to all input files, or one number for each file).
 ioButton {623, 315} {100, 74} value 1.000000 "_Render" "AnalyseÂ¬and writeÂ¬to textfile!" "/" 
 </MacGUI>

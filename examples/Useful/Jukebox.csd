@@ -4,6 +4,8 @@
 </CsOptions>
 <CsInstruments>
 
+;example by joachim heintz
+
 sr = 44100
 ksmps = 16
 nchnls = 2
@@ -323,10 +325,10 @@ e
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>550</x>
- <y>70</y>
+ <x>296</x>
+ <y>52</y>
  <width>621</width>
- <height>772</height>
+ <height>686</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -983,8 +985,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBCheckBox">
   <objectName>random_play</objectName>
-  <x>554</x>
-  <y>400</y>
+  <x>541</x>
+  <y>399</y>
   <width>20</width>
   <height>20</height>
   <uuid>{bc4ddf65-040e-472e-bcb7-14cc9948c797}</uuid>
@@ -998,10 +1000,10 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>456</x>
-  <y>396</y>
-  <width>96</width>
-  <height>31</height>
+  <x>425</x>
+  <y>394</y>
+  <width>117</width>
+  <height>29</height>
   <uuid>{fe676d54-cc7f-42a4-a4f7-507bf8d94880}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1056,8 +1058,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBCheckBox">
   <objectName>loop_play</objectName>
-  <x>434</x>
-  <y>401</y>
+  <x>404</x>
+  <y>399</y>
   <width>20</width>
   <height>20</height>
   <uuid>{926529c2-1bfb-45a4-8a01-4f14ac52c72e}</uuid>
@@ -1071,8 +1073,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>356</x>
-  <y>397</y>
+  <x>328</x>
+  <y>394</y>
   <width>77</width>
   <height>29</height>
   <uuid>{61de22f6-f0e1-4b2a-8ccd-274574b24947}</uuid>
@@ -1100,8 +1102,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Play</objectName>
-  <x>28</x>
-  <y>397</y>
+  <x>25</x>
+  <y>394</y>
   <width>78</width>
   <height>29</height>
   <uuid>{161fb4a0-a186-4e82-9e59-e69868368e9c}</uuid>
@@ -1119,8 +1121,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Stop</objectName>
-  <x>269</x>
-  <y>397</y>
+  <x>239</x>
+  <y>394</y>
   <width>80</width>
   <height>30</height>
   <uuid>{f2f3ba8e-7bd0-492d-88cb-f01c66486e03}</uuid>
@@ -1138,8 +1140,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>paus</objectName>
-  <x>130</x>
-  <y>397</y>
+  <x>111</x>
+  <y>394</y>
   <width>122</width>
   <height>29</height>
   <uuid>{82718941-23a6-4bc6-a74b-da0f6aa78951}</uuid>
@@ -1205,9 +1207,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>229</r>
+   <g>229</g>
+   <b>229</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -1239,10 +1241,10 @@ e
   <uuid>{0caf8b77-7ebe-4f5d-b5a7-c49ec844c940}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>(MP3 files are possible if filenames end as .mp3)</label>
+  <midicc>0</midicc>
+  <label>(MP3 files are possible if filenames end as .mp3 but durations may be wrong)</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -1259,12 +1261,6 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <objectName/>
- <x>550</x>
- <y>70</y>
- <width>621</width>
- <height>772</height>
- <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
@@ -1274,11 +1270,12 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 550 70 621 772
+WindowBounds: 72 179 400 200
 CurrentView: io
 IOViewEdit: On
-Options: -b128 -A -s -m167 -R
+Options:
 </MacOptions>
+
 <MacGUI>
 ioView background {43690, 43690, 32639}
 ioMeter {26, 574} {250, 28} {0, 59904, 0} "outL" -0.031860 "out1_post" 0.578947 fill 1 0 mouse
@@ -1286,33 +1283,33 @@ ioMeter {273, 574} {21, 28} {50176, 3584, 3072} "outLover" 0.000000 "outLover" 0
 ioMeter {26, 608} {250, 28} {0, 59904, 0} "outR" -0.031860 "out2_post" 1.000000 fill 1 0 mouse
 ioMeter {273, 608} {21, 28} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
 ioSlider {320, 609} {269, 30} -18.000000 18.000000 -5.553903 db
-ioText {447, 572} {98, 31} display 0.000000 0.00100 "db_disp" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -8.50 dB
-ioText {357, 572} {88, 30} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Volume
-ioText {28, 655} {116, 47} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Time Remaining
+ioText {447, 572} {98, 31} display 0.000000 0.00100 "db_disp" right "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder -8.50 dB
+ioText {357, 572} {88, 30} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Volume
+ioText {28, 655} {116, 47} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Time Remaining
 ioMeter {150, 663} {292, 37} {14848, 16640, 38656} "timrem" 0.999976 "vert23" 0.135135 llif 1 0 mouse
-ioText {453, 676} {37, 28} display 0.000000 0.00100 "tr_min" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
-ioText {500, 676} {35, 29} display 0.000000 0.00100 "tr_sec" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
-ioText {488, 676} {14, 27} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder :
-ioText {546, 677} {44, 28} display 0.000000 0.00100 "tr_ms" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 000
-ioText {533, 676} {14, 27} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder :
-ioText {453, 656} {39, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder min
-ioText {499, 656} {39, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder sec
-ioText {548, 656} {39, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ms
-ioText {23, 12} {546, 35} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder JUKEBOX
-ioText {23, 43} {546, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Let Csound play a list of files
-ioText {166, 430} {43, 31} editnum 2.000000 1.000000 "paustim" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.000000
-ioText {25, 430} {142, 32} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Make a pause of
-ioText {207, 430} {323, 31} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder seconds before each new file/track
-ioCheckbox {554, 400} {20, 20} off random_play
-ioText {456, 396} {96, 31} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Random Play
-ioText {26, 143} {549, 245} display 0.000000 0.00100 "showfiles" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioCheckbox {434, 401} {20, 20} off loop_play
-ioText {356, 397} {77, 29} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Loop Play
-ioButton {28, 397} {78, 29} value 1.000000 "_Play" "Play" "/" 
-ioButton {269, 397} {80, 30} value 1.000000 "_Stop" "Stop" "/" i 1 0 .1
-ioButton {130, 397} {122, 29} value 1.000000 "paus" "Pause/Resume" "/" i 3 0 .1
-ioText {24, 466} {548, 92} display 0.000000 0.00100 "showplay" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
+ioText {453, 676} {37, 28} display 0.000000 0.00100 "tr_min" right "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 00
+ioText {500, 676} {35, 29} display 0.000000 0.00100 "tr_sec" right "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 00
+ioText {488, 676} {14, 27} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder :
+ioText {546, 677} {44, 28} display 0.000000 0.00100 "tr_ms" right "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 000
+ioText {533, 676} {14, 27} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder :
+ioText {453, 656} {39, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder min
+ioText {499, 656} {39, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder sec
+ioText {548, 656} {39, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder ms
+ioText {23, 12} {546, 35} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {58624, 58624, 58624} nobackground noborder JUKEBOX
+ioText {23, 43} {546, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Let Csound play a list of files
+ioText {166, 430} {43, 31} editnum 2.000000 1.000000 "paustim" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 2.000000
+ioText {25, 430} {142, 32} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Make a pause of
+ioText {207, 430} {323, 31} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder seconds before each new file/track
+ioCheckbox {541, 399} {20, 20} off random_play
+ioText {456, 396} {96, 31} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Random Play
+ioText {26, 143} {549, 245} display 0.000000 0.00100 "showfiles" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioCheckbox {404, 399} {20, 20} off loop_play
+ioText {356, 397} {77, 29} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Loop Play
+ioButton {25, 394} {78, 29} value 1.000000 "_Play" "Play" "/" 
+ioButton {239, 394} {80, 30} value 1.000000 "_Stop" "Stop" "/" i 1 0 .1
+ioButton {111, 394} {122, 29} value 1.000000 "paus" "Pause/Resume" "/" i 3 0 .1
+ioText {24, 466} {548, 92} display 0.000000 0.00100 "showplay" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
 ioText {24, 84} {448, 29} edit 0.000000 0.00100 "_MBrowse"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
 ioButton {471, 82} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
-ioText {24, 115} {548, 26} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder (MP3 files are possible if filenames end as .mp3)
+ioText {24, 115} {548, 26} label 0.000000 0.00100 "" center "DejaVu Sans" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder (MP3 files are possible if filenames end as .mp3 but durations may be wrong)
 </MacGUI>

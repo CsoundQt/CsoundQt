@@ -7,13 +7,13 @@
 /*****GRANULAR SYNTHESIS OF A SOUNDFILE*****/
 ;example for qutecsound
 ;written by joachim heintz (with thanks to Oeyvind Brandtsegg)
-;jan 2010
+;jan 2010 / mar 2011
 ;please send bug reports and suggestions
 ;to jh at joachimheintz.de
 
 
 nchnls = 2
-ksmps = 16
+ksmps = 32
 0dbfs = 1
 
 giWin1		ftgen		1, 0, 4096, 20, 1, 1		; Hamming
@@ -22,12 +22,15 @@ giWin3		ftgen		3, 0, 4096, 20, 3, 1		; Triangle (Bartlett)
 giWin4		ftgen		4, 0, 4096, 20, 4, 1		; Blackman (3-term)
 giWin5		ftgen		5, 0, 4096, 20, 5, 1		; Blackman-Harris (4-term)
 giWin6		ftgen		6, 0, 4096, 20, 6, 1		; Gauss
-giWin7		ftgen		7, 0, 4096, 20, 7, 1, 6		; Kaiser
+giWin7		ftgen		7, 0, 4096, 20, 7, 1, 6	; Kaiser
 giWin8		ftgen		8, 0, 4096, 20, 8, 1		; Rectangle
 giWin9		ftgen		9, 0, 4096, 20, 9, 1		; Sync
+giSigmoRise 	ftgen		0, 0, 8193, 19, 0.5, 1, 270, 1 ; rising sigmoid
+giSigmoFall 	ftgen		0, 0, 8193, 19, 0.5, 1, 90, 1 ; falling sigmoid
+giExpFall	ftgen		0, 0, 8193, 5, 1, 8193, 0.00001 ; exponential decay
 giDisttab	ftgen		0, 0, 32768, 7, 0, 32768, 1	; for kdistribution
-giCosine	ftgen		0, 0, 8193, 9, 1, 1, 90		; cosine
-giPan		ftgen		0, 0, 32768, -21, 1			; for panning (random values between 0 and 1)
+giCosine	ftgen		0, 0, 8193, 9, 1, 1, 90 ; cosine
+giPan		ftgen		0, 0, 32768, -21, 1 ; for panning (random values between 0 and 1)
 
 
   opcode	ShowLED_a, 0, Sakkk
@@ -105,8 +108,10 @@ kspeed0	invalue	"speed0"; set playback speed to 0
 kspeed1	invalue	"speed1"; set playback speed to 1
 kgrainrate	invalue	"grainrate"; grains per second
 kgrainsize	invalue	"grainsize"; length of the grains in ms
+ksizrandev	invalue	"sizrandev" ;addition random deviation in ms
 kcent		invalue	"transp"; pitch transposition in cent
-kgrainamp	invalue	"gain"; volume
+kgraindb	invalue	"db"; volume
+kgrainamp	=		ampdb(kgraindb)	
 kdist		invalue	"dist"; distribution (0=periodic, 1=scattered)
 kposrand	invalue	"posrand"; time position randomness (offset) of the read pointer in ms
 kcentrand	invalue	"centrand"; transposition randomness in cents (up and down)
@@ -123,8 +128,11 @@ kspeed		=		(kspeed0==1 && kspeed1==1 ? 1 : (kspeed0==1 ? 0 : (kspeed1==1 ? 1 : k
 async		= 		0; sync input (disabled)	
 kenv2amt	= 		1; use only secondary envelope
 ienv2tab 	= 		iwin; grain (secondary) envelope
-ienv_attack	= 		-1; default attack envelope (flat)
-ienv_decay	= 		-1; default decay envelope (flat)
+;ienv_attack	= 		-1; default attack envelope (flat)
+;ienv_decay	= 		-1; default decay envelope (flat)
+ienv_attack	= 		giSigmoRise; grain attack shape (from table)
+ienv_decay	= 		giSigmoFall; grain decay shape (from table)
+
 ksustain_amount = 		0.5; no meaning in this case (use only secondary envelope, ienv2tab)
 ka_d_ratio	= 		0.5; no meaning in this case (use only secondary envelope, ienv2tab)
 igainmasks	= 		-1; (default) no gain masking
@@ -145,6 +153,9 @@ kwavekey	= 		1; original key for each source waveform
 ;get length of source wave file, needed for both transposition and time pointer
 ifilen		tableng	giFile
 ifildur	= 		ifilen / sr
+;grainsize
+ksizrandev	random		0, ksizrandev
+kgrainsize	=		kgrainsize + ksizrandev
 ;amplitude
 kamp		= 		kgrainamp * 0dbfs; grain amplitude
 ;transposition
@@ -161,10 +172,18 @@ afilposphas		phasor kspeed / ifildur, igksamplepos; in general
 ;generate random deviation of the time pointer
 kposrandsec		= kposrand / 1000	; ms -> sec
 kposrand		= kposrandsec / ifildur	; phase values (0-1)
-arndpos		linrand	 kposrand	; random offset in phase values
-;add random deviation to the time pointer
-asamplepos		= afilposphas + arndpos; resulting phase values (0-1)
-gksamplepos		downsamp	asamplepos; export pointer position 
+arndpos1		random	 0, kposrand ; random offset in phase values
+arndpos2		random	 0, kposrand
+arndpos3		random	 0, kposrand
+arndpos4		random	 0, kposrand
+;add random deviation to the time pointer and make sure not to wrap around
+asamplepos1	mirror 	afilposphas+arndpos1, 0, 1
+asamplepos2	mirror 	afilposphas+arndpos2, 0, 1
+asamplepos3	mirror 	afilposphas+arndpos3, 0, 1 
+asamplepos4	mirror 	afilposphas+arndpos4, 0, 1 
+
+
+gksamplepos		downsamp	asamplepos1; export pointer position 
 		outvalue	"posdisp", gksamplepos
 
 agrL, agrR	partikkel kgrainrate, kdist, giDisttab, async, kenv2amt, ienv2tab, \
@@ -172,7 +191,7 @@ agrL, agrR	partikkel kgrainrate, kdist, giDisttab, async, kenv2amt, ienv2tab, \
 		kwavfreq, ksweepshape, iwavfreqstarttab, iwavfreqendtab, awavfm, \
 		ifmamptab, kfmenv, icosine, kTrainCps, knumpartials, \
 		kchroma, ichannelmasks, krandommask, kwaveform, kwaveform, kwaveform, kwaveform, \
-		iwaveamptab, asamplepos, asamplepos, asamplepos, asamplepos, \
+		iwaveamptab, asamplepos1, asamplepos2, asamplepos3, asamplepos4, \
 		kwavekey, kwavekey, kwavekey, kwavekey, imax_grains
 
 ;panning, modifying the values of ichannelmasks
@@ -204,10 +223,10 @@ e
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>350</x>
- <y>45</y>
- <width>906</width>
- <height>818</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -217,8 +236,8 @@ e
  </bgcolor>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>10</x>
-  <y>352</y>
+  <x>9</x>
+  <y>314</y>
   <width>873</width>
   <height>399</height>
   <uuid>{e0537137-cfa6-4441-8576-3fe2ab14d60f}</uuid>
@@ -247,7 +266,7 @@ e
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>9</x>
-  <y>130</y>
+  <y>91</y>
   <width>483</width>
   <height>72</height>
   <uuid>{17717d1a-dbf5-4814-95d0-39437215af3e}</uuid>
@@ -275,8 +294,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>475</x>
-  <y>386</y>
+  <x>466</x>
+  <y>349</y>
   <width>20</width>
   <height>25</height>
   <uuid>{e0700869-2c92-400f-a0c4-4f09f4626412}</uuid>
@@ -304,8 +323,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>288</x>
-  <y>386</y>
+  <x>279</x>
+  <y>349</y>
   <width>20</width>
   <height>25</height>
   <uuid>{081bb308-dc0b-4432-ad36-17573f136ffd}</uuid>
@@ -333,23 +352,23 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBCheckBox">
   <objectName>speed1</objectName>
-  <x>496</x>
-  <y>388</y>
+  <x>487</x>
+  <y>351</y>
   <width>20</width>
   <height>20</height>
   <uuid>{c6f473d7-2310-42c4-a9e0-c839e2037e3f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <selected>false</selected>
+  <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBCheckBox">
   <objectName>speed0</objectName>
-  <x>268</x>
-  <y>388</y>
+  <x>259</x>
+  <y>351</y>
   <width>20</width>
   <height>20</height>
   <uuid>{b51c9dbe-8e6c-45a1-bff0-a29e081e8561}</uuid>
@@ -363,15 +382,15 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>speed</objectName>
-  <x>303</x>
-  <y>439</y>
+  <x>294</x>
+  <y>402</y>
   <width>172</width>
   <height>29</height>
   <uuid>{8346eeff-42ae-480a-a87e-a04a8bbf6263}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>0.580</label>
+  <label>0.139</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -392,8 +411,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>speed</objectName>
-  <x>269</x>
-  <y>415</y>
+  <x>260</x>
+  <y>378</y>
   <width>245</width>
   <height>28</height>
   <uuid>{06660c1a-e37b-4058-a66e-662293199f71}</uuid>
@@ -402,7 +421,7 @@ e
   <midicc>-3</midicc>
   <minimum>-2.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.57959184</value>
+  <value>0.13877551</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -410,8 +429,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>334</x>
-  <y>386</y>
+  <x>325</x>
+  <y>349</y>
   <width>119</width>
   <height>27</height>
   <uuid>{b09ff3d9-2114-43ca-8afa-06a084083c46}</uuid>
@@ -439,8 +458,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>149</x>
-  <y>683</y>
+  <x>140</x>
+  <y>646</y>
   <width>71</width>
   <height>29</height>
   <uuid>{2339c577-b179-4e25-894b-8ff7c1bfb83b}</uuid>
@@ -468,8 +487,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>27</x>
-  <y>683</y>
+  <x>18</x>
+  <y>646</y>
   <width>71</width>
   <height>29</height>
   <uuid>{fe94abf9-4e96-4baa-8838-aa2905330e9b}</uuid>
@@ -497,17 +516,17 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>pan</objectName>
-  <x>46</x>
-  <y>663</y>
-  <width>152</width>
+  <x>12</x>
+  <y>625</y>
+  <width>200</width>
   <height>25</height>
   <uuid>{937dd04a-9dc6-4236-a5ab-08529ed68e86}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.50657900</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -515,8 +534,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>51</x>
-  <y>637</y>
+  <x>42</x>
+  <y>600</y>
   <width>143</width>
   <height>27</height>
   <uuid>{6790e8b2-4f34-431e-a2a0-f6fddd51c51d}</uuid>
@@ -544,14 +563,14 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBScope">
   <objectName/>
-  <x>452</x>
-  <y>254</y>
-  <width>431</width>
+  <x>692</x>
+  <y>216</y>
+  <width>190</width>
   <height>82</height>
   <uuid>{3a37f45c-31f6-411d-89a9-a2500d0cb3f5}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <value>2.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -563,7 +582,7 @@ e
  <bsbObject version="2" type="BSBButton">
   <objectName>_Browse1</objectName>
   <x>383</x>
-  <y>160</y>
+  <y>121</y>
   <width>100</width>
   <height>30</height>
   <uuid>{00d370ee-10a7-480f-a12a-ed4b140b578d}</uuid>
@@ -572,7 +591,7 @@ e
   <midicc>-3</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
+  <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</stringvalue>
   <text>Open File</text>
   <image>/</image>
   <eventLine/>
@@ -582,14 +601,14 @@ e
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse1</objectName>
   <x>20</x>
-  <y>163</y>
+  <y>124</y>
   <width>360</width>
   <height>25</height>
   <uuid>{6d1afe68-fe9b-45d5-a207-af0265d40304}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <label>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -600,16 +619,16 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>229</r>
+   <g>229</g>
+   <b>229</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>634</x>
-  <y>392</y>
+  <x>625</x>
+  <y>355</y>
   <width>217</width>
   <height>28</height>
   <uuid>{1203e7e5-3b2e-498e-9eef-820f953c2e68}</uuid>
@@ -637,8 +656,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>648</x>
-  <y>442</y>
+  <x>639</x>
+  <y>405</y>
   <width>168</width>
   <height>27</height>
   <uuid>{1832987b-e31f-4de4-b7c9-72f731ce543c}</uuid>
@@ -666,15 +685,16 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBGraph">
   <objectName>ftab</objectName>
-  <x>607</x>
-  <y>470</y>
+  <x>598</x>
+  <y>433</y>
   <width>264</width>
   <height>176</height>
   <uuid>{ae60ca04-b53e-4a5a-b226-358ed138c70f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>-2</value>
+  <value>0</value>
+  <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
@@ -685,8 +705,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>winshape</objectName>
-  <x>664</x>
-  <y>417</y>
+  <x>655</x>
+  <y>380</y>
   <width>144</width>
   <height>24</height>
   <uuid>{347c0175-ce76-48c2-ac77-85331be89dba}</uuid>
@@ -740,13 +760,13 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>1</selectedIndex>
+  <selectedIndex>8</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>676</x>
-  <y>366</y>
+  <x>667</x>
+  <y>329</y>
   <width>115</width>
   <height>28</height>
   <uuid>{31b41406-2e32-495a-be42-a822c0d1c281}</uuid>
@@ -774,9 +794,9 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>143</x>
-  <y>518</y>
-  <width>71</width>
+  <x>134</x>
+  <y>481</y>
+  <width>89</width>
   <height>29</height>
   <uuid>{d44230ec-63ad-498a-b665-8a4ccb7d2d5f}</uuid>
   <visible>true</visible>
@@ -803,8 +823,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>21</x>
-  <y>518</y>
+  <x>12</x>
+  <y>481</y>
   <width>71</width>
   <height>29</height>
   <uuid>{8042a8ed-f5c6-4748-842e-529bb1808d2d}</uuid>
@@ -832,8 +852,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>271</x>
-  <y>638</y>
+  <x>262</x>
+  <y>601</y>
   <width>234</width>
   <height>25</height>
   <uuid>{3ede498a-f0bc-4805-aacf-73ede037006d}</uuid>
@@ -861,8 +881,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>centrand</objectName>
-  <x>351</x>
-  <y>688</y>
+  <x>342</x>
+  <y>651</y>
   <width>81</width>
   <height>26</height>
   <uuid>{102b6f01-2310-4198-8ebc-0d5ded52e7ce}</uuid>
@@ -890,8 +910,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>centrand</objectName>
-  <x>271</x>
-  <y>661</y>
+  <x>262</x>
+  <y>624</y>
   <width>242</width>
   <height>26</height>
   <uuid>{30f0d292-88f2-46ac-af20-9a2d1afec787}</uuid>
@@ -908,17 +928,17 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>posrand</objectName>
-  <x>312</x>
-  <y>522</y>
-  <width>148</width>
-  <height>26</height>
+  <x>259</x>
+  <y>485</y>
+  <width>65</width>
+  <height>25</height>
   <uuid>{e6c2c0a9-906f-42ce-af8b-74204b5f17be}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <label>0.000</label>
-  <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -937,16 +957,16 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>posrand</objectName>
-  <x>269</x>
-  <y>500</y>
+  <x>260</x>
+  <y>463</y>
   <width>248</width>
   <height>26</height>
   <uuid>{7aae7c4c-5488-4212-9d69-d7800c74b523}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <minimum>0.00000000</minimum>
-  <maximum>1000.00000000</maximum>
+  <maximum>10.00000000</maximum>
   <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
@@ -955,8 +975,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>264</x>
-  <y>475</y>
+  <x>255</x>
+  <y>438</y>
   <width>258</width>
   <height>27</height>
   <uuid>{e603e9ea-3ea5-4308-9f4c-ad2aa1ed7280}</uuid>
@@ -984,17 +1004,17 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>dist</objectName>
-  <x>40</x>
-  <y>498</y>
-  <width>152</width>
+  <x>14</x>
+  <y>459</y>
+  <width>200</width>
   <height>25</height>
   <uuid>{bc72340b-5d10-4976-aa8f-d222c6188757}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>1.00000000</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1002,8 +1022,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>45</x>
-  <y>472</y>
+  <x>36</x>
+  <y>435</y>
   <width>143</width>
   <height>27</height>
   <uuid>{816ebc5f-cba8-449a-af48-355c30a25f74}</uuid>
@@ -1031,17 +1051,17 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>grainrate</objectName>
-  <x>74</x>
-  <y>438</y>
+  <x>14</x>
+  <y>401</y>
   <width>81</width>
   <height>26</height>
   <uuid>{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>86.099</label>
-  <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <midicc>0</midicc>
+  <label>100.000</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1060,17 +1080,17 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>grainrate</objectName>
-  <x>42</x>
-  <y>416</y>
-  <width>152</width>
+  <x>14</x>
+  <y>378</y>
+  <width>200</width>
   <height>25</height>
   <uuid>{02a36a56-c7bb-42b4-ad6f-cf8e450de841}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <minimum>1.00000000</minimum>
   <maximum>200.00000000</maximum>
-  <value>86.09868421</value>
+  <value>100.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1078,15 +1098,15 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>grainsize</objectName>
-  <x>73</x>
-  <y>603</y>
+  <x>24</x>
+  <y>570</y>
   <width>81</width>
   <height>26</height>
   <uuid>{471f7698-cee0-4cce-b367-c32f0590dd4e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>29.007</label>
+  <label>100.000</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -1107,17 +1127,17 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>grainsize</objectName>
-  <x>41</x>
-  <y>580</y>
-  <width>152</width>
-  <height>25</height>
+  <x>12</x>
+  <y>545</y>
+  <width>128</width>
+  <height>27</height>
   <uuid>{9e02285d-69f1-4e00-be8f-dfa2d8af03a6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <minimum>1.00000000</minimum>
-  <maximum>100.00000000</maximum>
-  <value>29.00657895</value>
+  <maximum>200.00000000</maximum>
+  <value>100.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1125,17 +1145,17 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>66</x>
-  <y>558</y>
-  <width>101</width>
-  <height>25</height>
+  <x>10</x>
+  <y>520</y>
+  <width>128</width>
+  <height>26</height>
   <uuid>{5022e21c-c236-493b-a866-39c8bb38a905}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <label>Grainsize (ms)</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1154,8 +1174,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>transp</objectName>
-  <x>307</x>
-  <y>603</y>
+  <x>298</x>
+  <y>566</y>
   <width>169</width>
   <height>26</height>
   <uuid>{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}</uuid>
@@ -1183,8 +1203,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>transp</objectName>
-  <x>269</x>
-  <y>579</y>
+  <x>260</x>
+  <y>542</y>
   <width>242</width>
   <height>25</height>
   <uuid>{18461081-9d88-4948-a7a2-f78cacc1d6bd}</uuid>
@@ -1201,8 +1221,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>279</x>
-  <y>555</y>
+  <x>270</x>
+  <y>518</y>
   <width>235</width>
   <height>25</height>
   <uuid>{f99b1872-a1ee-4fd9-a39d-e6abc167194d}</uuid>
@@ -1230,8 +1250,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>47</x>
-  <y>389</y>
+  <x>38</x>
+  <y>352</y>
   <width>143</width>
   <height>27</height>
   <uuid>{79559e45-cb8f-4a81-9ba5-a16fb1083771}</uuid>
@@ -1259,14 +1279,14 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBScope">
   <objectName/>
-  <x>9</x>
-  <y>254</y>
-  <width>432</width>
+  <x>498</x>
+  <y>216</y>
+  <width>190</width>
   <height>82</height>
   <uuid>{c6c00efe-b5d1-4ba5-aefe-b589731dfe41}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <value>1.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -1277,10 +1297,10 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>showdb</objectName>
-  <x>171</x>
-  <y>208</y>
-  <width>108</width>
-  <height>28</height>
+  <x>280</x>
+  <y>170</y>
+  <width>75</width>
+  <height>26</height>
   <uuid>{bdedaf7e-e1f4-4bd1-99a3-ed326f980bc2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1302,9 +1322,9 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>9</x>
-  <y>208</y>
-  <width>163</width>
+  <x>175</x>
+  <y>170</y>
+  <width>106</width>
   <height>26</height>
   <uuid>{0c0a32f8-865c-49f8-a844-57969e8c1eba}</uuid>
   <visible>true</visible>
@@ -1331,9 +1351,9 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>280</x>
-  <y>209</y>
-  <width>120</width>
+  <x>355</x>
+  <y>170</y>
+  <width>76</width>
   <height>28</height>
   <uuid>{088c57ee-a211-43cb-baf9-9bf4909a1e75}</uuid>
   <visible>true</visible>
@@ -1360,8 +1380,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>dbrange</objectName>
-  <x>400</x>
-  <y>209</y>
+  <x>430</x>
+  <y>170</y>
   <width>61</width>
   <height>28</height>
   <uuid>{75b03faf-7718-4827-b6b0-2353c2013cfa}</uuid>
@@ -1392,7 +1412,7 @@ e
   <x>9</x>
   <y>58</y>
   <width>872</width>
-  <height>66</height>
+  <height>29</height>
   <uuid>{3a700a79-958c-4530-85db-22fd656b4243}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1448,7 +1468,7 @@ e
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>499</x>
-  <y>129</y>
+  <y>90</y>
   <width>383</width>
   <height>119</height>
   <uuid>{6a974593-2ae3-47fd-a1e7-c53a5295a823}</uuid>
@@ -1477,7 +1497,7 @@ e
  <bsbObject version="2" type="BSBController">
   <objectName>outL</objectName>
   <x>511</x>
-  <y>197</y>
+  <y>158</y>
   <width>335</width>
   <height>18</height>
   <uuid>{fa64908d-5557-4436-ae9d-e6c3131c1385}</uuid>
@@ -1489,7 +1509,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.87425840</xValue>
+  <xValue>0.74160630</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1510,7 +1530,7 @@ e
  <bsbObject version="2" type="BSBController">
   <objectName>outLover</objectName>
   <x>844</x>
-  <y>197</y>
+  <y>158</y>
   <width>26</width>
   <height>18</height>
   <uuid>{f813f37d-8db0-4bc3-b802-1a294c716337}</uuid>
@@ -1543,7 +1563,7 @@ e
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>510</x>
-  <y>164</y>
+  <y>125</y>
   <width>95</width>
   <height>27</height>
   <uuid>{035cb071-b24a-4ffa-b835-1065cab0d936}</uuid>
@@ -1570,36 +1590,36 @@ e
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
-  <objectName>gain</objectName>
+  <objectName>db</objectName>
   <x>606</x>
-  <y>165</y>
+  <y>126</y>
   <width>205</width>
   <height>24</height>
   <uuid>{e58853c0-86f8-4e0c-a0ff-e9c0f2ea2239}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <minimum>0.00000000</minimum>
-  <maximum>5.00000000</maximum>
-  <value>1.00000000</value>
+  <midicc>0</midicc>
+  <minimum>-30.00000000</minimum>
+  <maximum>12.00000000</maximum>
+  <value>-20.16585350</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
-  <objectName>gain</objectName>
+  <objectName>db</objectName>
   <x>812</x>
-  <y>164</y>
-  <width>61</width>
-  <height>27</height>
+  <y>125</y>
+  <width>42</width>
+  <height>25</height>
   <uuid>{b7e21e98-3040-468e-9f1f-9c71e5502b88}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>1.000</label>
-  <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <midicc>0</midicc>
+  <label>-20.166</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1619,7 +1639,7 @@ e
  <bsbObject version="2" type="BSBController">
   <objectName>outR</objectName>
   <x>511</x>
-  <y>222</y>
+  <y>183</y>
   <width>335</width>
   <height>18</height>
   <uuid>{e0ed741c-9b75-48b4-b91a-62e483519a08}</uuid>
@@ -1631,7 +1651,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.92437929</xValue>
+  <xValue>0.74160630</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1652,7 +1672,7 @@ e
  <bsbObject version="2" type="BSBController">
   <objectName>outRover</objectName>
   <x>844</x>
-  <y>222</y>
+  <y>183</y>
   <width>26</width>
   <height>18</height>
   <uuid>{8b872a2e-b013-4c43-b10e-a7a47f8e0068}</uuid>
@@ -1684,29 +1704,29 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>posdisp</objectName>
-  <x>608</x>
-  <y>706</y>
+  <x>599</x>
+  <y>669</y>
   <width>260</width>
   <height>31</height>
   <uuid>{5c334baa-687d-4daf-8a6c-e81209a7349e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <objectName2>vert55</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.19870219</xValue>
+  <xValue>0.10693227</xValue>
   <yValue>0.00000000</yValue>
   <type>line</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>114</r>
-   <g>49</g>
-   <b>234</b>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </color>
   <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
@@ -1717,8 +1737,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>634</x>
-  <y>669</y>
+  <x>625</x>
+  <y>632</y>
   <width>215</width>
   <height>30</height>
   <uuid>{f665fc9d-8ec8-4f3a-82da-beb4a2c65961}</uuid>
@@ -1744,14 +1764,872 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <objectName/>
- <x>350</x>
- <y>45</y>
- <width>906</width>
- <height>818</height>
- <visible>true</visible>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>137</x>
+  <y>518</y>
+  <width>112</width>
+  <height>49</height>
+  <uuid>{26ba043c-d257-4d0f-86f3-4af5d01cdab1}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>plus random deviation</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>sizrandev</objectName>
+  <x>158</x>
+  <y>567</y>
+  <width>63</width>
+  <height>26</height>
+  <uuid>{9808aaf4-bd15-4400-a22f-f858fdadb810}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>0.10000000</resolution>
+  <minimum>0</minimum>
+  <maximum>100</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>0</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton">
+  <objectName>_Play</objectName>
+  <x>9</x>
+  <y>169</y>
+  <width>58</width>
+  <height>29</height>
+  <uuid>{87b80b9f-536f-47f4-8a45-2e677562611f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</stringvalue>
+  <text>Start</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton">
+  <objectName>_Stop</objectName>
+  <x>73</x>
+  <y>169</y>
+  <width>58</width>
+  <height>29</height>
+  <uuid>{6df984e2-620b-4f41-b510-70890fd7284c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</stringvalue>
+  <text>Stop</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>852</x>
+  <y>124</y>
+  <width>30</width>
+  <height>27</height>
+  <uuid>{a5e4c33e-ed37-41e1-a6c5-4a6ca04b592c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>dB</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>8</x>
+  <y>204</y>
+  <width>486</width>
+  <height>105</height>
+  <uuid>{75ff4be9-8cc2-43e5-bfe9-74d5e5e77473}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>PRESETS</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>_SetPresetIndex</objectName>
+  <x>15</x>
+  <y>233</y>
+  <width>47</width>
+  <height>26</height>
+  <uuid>{b00b7ada-e33c-40f3-985c-02844e9bb94f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>1.00000000</resolution>
+  <minimum>0</minimum>
+  <maximum>100</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>0</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>_GetPresetName</objectName>
+  <x>12</x>
+  <y>259</y>
+  <width>121</width>
+  <height>49</height>
+  <uuid>{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>natural</label>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>134</x>
+  <y>205</y>
+  <width>362</width>
+  <height>102</height>
+  <uuid>{2759d324-5f3d-4b13-80ac-194638a7141c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Combination of the Parameters depend both on your ideas and on the qualities of the sound you are using. The presets here show some possibilities for a sound which can be downloaded here: 
+http://joachimheintz.de/soft/softsamps/BratscheMono.wav</label>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>321</x>
+  <y>485</y>
+  <width>159</width>
+  <height>25</height>
+  <uuid>{9c73c07a-58aa-4930-975e-08f26956a7e5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>set larger values here</label>
+  <alignment>right</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>posrand</objectName>
+  <x>478</x>
+  <y>485</y>
+  <width>63</width>
+  <height>26</height>
+  <uuid>{df284c15-f1c7-4108-82ec-db829ff67323}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <alignment>right</alignment>
+  <font>Arial</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>1.00000000</resolution>
+  <minimum>0</minimum>
+  <maximum>100000</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>0</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>73</x>
+  <y>404</y>
+  <width>97</width>
+  <height>24</height>
+  <uuid>{f60618bc-d565-4ee9-b262-dfe69e0e9e9e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>or set here</label>
+  <alignment>right</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>grainrate</objectName>
+  <x>169</x>
+  <y>404</y>
+  <width>63</width>
+  <height>26</height>
+  <uuid>{a04e2aaa-8c72-49e4-ac27-a48d1b4d19dc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <alignment>right</alignment>
+  <font>Arial</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>1.00000000</resolution>
+  <minimum>0</minimum>
+  <maximum>100000</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>100</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>12</x>
+  <y>676</y>
+  <width>570</width>
+  <height>34</height>
+  <uuid>{27ccabd3-8bd4-4f2b-a798-c34a9314290b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Note that the actual grain size is smaller than the value above because of multiple enveloping.</label>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
 </bsbPanel>
 <bsbPresets>
+<preset name="natural" number="1" >
+<value id="{c6f473d7-2310-42c4-a9e0-c839e2037e3f}" mode="1" >1.00000000</value>
+<value id="{b51c9dbe-8e6c-45a1-bff0-a29e081e8561}" mode="1" >0.00000000</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="1" >0.13900000</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="4" >0.139</value>
+<value id="{06660c1a-e37b-4058-a66e-662293199f71}" mode="1" >0.13877551</value>
+<value id="{937dd04a-9dc6-4236-a5ab-08529ed68e86}" mode="1" >0.00000000</value>
+<value id="{3a37f45c-31f6-411d-89a9-a2500d0cb3f5}" mode="1" >2.00000000</value>
+<value id="{00d370ee-10a7-480f-a12a-ed4b140b578d}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{6d1afe68-fe9b-45d5-a207-af0265d40304}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{ae60ca04-b53e-4a5a-b226-358ed138c70f}" mode="1" >-9.00000000</value>
+<value id="{347c0175-ce76-48c2-ac77-85331be89dba}" mode="1" >8.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="1" >0.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="4" >0.000</value>
+<value id="{30f0d292-88f2-46ac-af20-9a2d1afec787}" mode="1" >0.00000000</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="1" >0.00000000</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="4" >0.000</value>
+<value id="{7aae7c4c-5488-4212-9d69-d7800c74b523}" mode="1" >0.00000000</value>
+<value id="{bc72340b-5d10-4976-aa8f-d222c6188757}" mode="1" >0.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="1" >100.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="4" >100.000</value>
+<value id="{02a36a56-c7bb-42b4-ad6f-cf8e450de841}" mode="1" >100.00000000</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="1" >100.00000000</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="4" >100.000</value>
+<value id="{9e02285d-69f1-4e00-be8f-dfa2d8af03a6}" mode="1" >100.00000000</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="1" >0.00000000</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="4" >0.000</value>
+<value id="{18461081-9d88-4948-a7a2-f78cacc1d6bd}" mode="1" >0.00000000</value>
+<value id="{c6c00efe-b5d1-4ba5-aefe-b589731dfe41}" mode="1" >1.00000000</value>
+<value id="{bdedaf7e-e1f4-4bd1-99a3-ed326f980bc2}" mode="1" >1.00000000</value>
+<value id="{75b03faf-7718-4827-b6b0-2353c2013cfa}" mode="1" >50.00000000</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="1" >0.74160630</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="2" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="1" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="2" >0.00000000</value>
+<value id="{e58853c0-86f8-4e0c-a0ff-e9c0f2ea2239}" mode="1" >-20.16585350</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="1" >-20.16585350</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="4" >-20.166</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="1" >0.74160630</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="2" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="1" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="2" >0.00000000</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="1" >0.10693227</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="2" >0.00000000</value>
+<value id="{9808aaf4-bd15-4400-a22f-f858fdadb810}" mode="1" >0.00000000</value>
+<value id="{87b80b9f-536f-47f4-8a45-2e677562611f}" mode="4" >0</value>
+<value id="{6df984e2-620b-4f41-b510-70890fd7284c}" mode="4" >0</value>
+<value id="{b00b7ada-e33c-40f3-985c-02844e9bb94f}" mode="1" >1.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="1" >0.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="4" >Max</value>
+<value id="{df284c15-f1c7-4108-82ec-db829ff67323}" mode="1" >0.00000000</value>
+<value id="{a04e2aaa-8c72-49e4-ac27-a48d1b4d19dc}" mode="1" >100.00000000</value>
+</preset>
+<preset name="natural time strech" number="2" >
+<value id="{c6f473d7-2310-42c4-a9e0-c839e2037e3f}" mode="1" >0.00000000</value>
+<value id="{b51c9dbe-8e6c-45a1-bff0-a29e081e8561}" mode="1" >0.00000000</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="1" >0.13900000</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="4" >0.139</value>
+<value id="{06660c1a-e37b-4058-a66e-662293199f71}" mode="1" >0.13877551</value>
+<value id="{937dd04a-9dc6-4236-a5ab-08529ed68e86}" mode="1" >0.15000001</value>
+<value id="{3a37f45c-31f6-411d-89a9-a2500d0cb3f5}" mode="1" >2.00000000</value>
+<value id="{00d370ee-10a7-480f-a12a-ed4b140b578d}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{6d1afe68-fe9b-45d5-a207-af0265d40304}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{ae60ca04-b53e-4a5a-b226-358ed138c70f}" mode="1" >-9.00000000</value>
+<value id="{347c0175-ce76-48c2-ac77-85331be89dba}" mode="1" >8.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="1" >0.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="4" >0.000</value>
+<value id="{30f0d292-88f2-46ac-af20-9a2d1afec787}" mode="1" >0.00000000</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="1" >1.77419353</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="4" >1.774</value>
+<value id="{7aae7c4c-5488-4212-9d69-d7800c74b523}" mode="1" >1.77419353</value>
+<value id="{bc72340b-5d10-4976-aa8f-d222c6188757}" mode="1" >0.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="1" >200.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="4" >200.000</value>
+<value id="{02a36a56-c7bb-42b4-ad6f-cf8e450de841}" mode="1" >200.00000000</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="1" >100.00000000</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="4" >100.000</value>
+<value id="{9e02285d-69f1-4e00-be8f-dfa2d8af03a6}" mode="1" >100.00000000</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="1" >0.00000000</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="4" >0.000</value>
+<value id="{18461081-9d88-4948-a7a2-f78cacc1d6bd}" mode="1" >0.00000000</value>
+<value id="{c6c00efe-b5d1-4ba5-aefe-b589731dfe41}" mode="1" >1.00000000</value>
+<value id="{bdedaf7e-e1f4-4bd1-99a3-ed326f980bc2}" mode="1" >1.00000000</value>
+<value id="{75b03faf-7718-4827-b6b0-2353c2013cfa}" mode="1" >50.00000000</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="1" >0.95380324</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="2" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="1" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="2" >0.00000000</value>
+<value id="{e58853c0-86f8-4e0c-a0ff-e9c0f2ea2239}" mode="1" >-20.16585350</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="1" >-20.16585350</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="4" >-20.166</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="1" >0.94774020</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="2" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="1" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="2" >0.00000000</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="1" >0.35033330</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="2" >0.00000000</value>
+<value id="{9808aaf4-bd15-4400-a22f-f858fdadb810}" mode="1" >10.00000000</value>
+<value id="{87b80b9f-536f-47f4-8a45-2e677562611f}" mode="4" >0</value>
+<value id="{6df984e2-620b-4f41-b510-70890fd7284c}" mode="4" >0</value>
+<value id="{b00b7ada-e33c-40f3-985c-02844e9bb94f}" mode="1" >1.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="1" >0.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="4" >Max</value>
+<value id="{df284c15-f1c7-4108-82ec-db829ff67323}" mode="1" >1.77419353</value>
+<value id="{a04e2aaa-8c72-49e4-ac27-a48d1b4d19dc}" mode="1" >200.00000000</value>
+</preset>
+<preset name="natural freeze" number="3" >
+<value id="{c6f473d7-2310-42c4-a9e0-c839e2037e3f}" mode="1" >0.00000000</value>
+<value id="{b51c9dbe-8e6c-45a1-bff0-a29e081e8561}" mode="1" >1.00000000</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="1" >0.13900000</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="4" >0.139</value>
+<value id="{06660c1a-e37b-4058-a66e-662293199f71}" mode="1" >0.13877551</value>
+<value id="{937dd04a-9dc6-4236-a5ab-08529ed68e86}" mode="1" >0.00000000</value>
+<value id="{3a37f45c-31f6-411d-89a9-a2500d0cb3f5}" mode="1" >2.00000000</value>
+<value id="{00d370ee-10a7-480f-a12a-ed4b140b578d}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{6d1afe68-fe9b-45d5-a207-af0265d40304}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{ae60ca04-b53e-4a5a-b226-358ed138c70f}" mode="1" >-9.00000000</value>
+<value id="{347c0175-ce76-48c2-ac77-85331be89dba}" mode="1" >8.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="1" >0.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="4" >0.000</value>
+<value id="{30f0d292-88f2-46ac-af20-9a2d1afec787}" mode="1" >0.00000000</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="1" >5.32258081</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="4" >5.323</value>
+<value id="{7aae7c4c-5488-4212-9d69-d7800c74b523}" mode="1" >5.32258081</value>
+<value id="{bc72340b-5d10-4976-aa8f-d222c6188757}" mode="1" >0.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="1" >200.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="4" >200.000</value>
+<value id="{02a36a56-c7bb-42b4-ad6f-cf8e450de841}" mode="1" >200.00000000</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="1" >100.00000000</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="4" >100.000</value>
+<value id="{9e02285d-69f1-4e00-be8f-dfa2d8af03a6}" mode="1" >100.00000000</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="1" >0.00000000</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="4" >0.000</value>
+<value id="{18461081-9d88-4948-a7a2-f78cacc1d6bd}" mode="1" >0.00000000</value>
+<value id="{c6c00efe-b5d1-4ba5-aefe-b589731dfe41}" mode="1" >1.00000000</value>
+<value id="{bdedaf7e-e1f4-4bd1-99a3-ed326f980bc2}" mode="1" >1.00000000</value>
+<value id="{75b03faf-7718-4827-b6b0-2353c2013cfa}" mode="1" >50.00000000</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="1" >0.86477876</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="2" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="1" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="2" >0.00000000</value>
+<value id="{e58853c0-86f8-4e0c-a0ff-e9c0f2ea2239}" mode="1" >-20.16585350</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="1" >-20.16585350</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="4" >-20.166</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="1" >0.86477876</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="2" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="1" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="2" >0.00000000</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="1" >0.21293312</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="2" >0.00000000</value>
+<value id="{9808aaf4-bd15-4400-a22f-f858fdadb810}" mode="1" >10.00000000</value>
+<value id="{87b80b9f-536f-47f4-8a45-2e677562611f}" mode="4" >0</value>
+<value id="{6df984e2-620b-4f41-b510-70890fd7284c}" mode="4" >0</value>
+<value id="{b00b7ada-e33c-40f3-985c-02844e9bb94f}" mode="1" >1.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="1" >0.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="4" >Max</value>
+<value id="{df284c15-f1c7-4108-82ec-db829ff67323}" mode="1" >5.32258081</value>
+<value id="{a04e2aaa-8c72-49e4-ac27-a48d1b4d19dc}" mode="1" >200.00000000</value>
+</preset>
+<preset name="time compress" number="4" >
+<value id="{c6f473d7-2310-42c4-a9e0-c839e2037e3f}" mode="1" >0.00000000</value>
+<value id="{b51c9dbe-8e6c-45a1-bff0-a29e081e8561}" mode="1" >0.00000000</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="1" >2.00000000</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="4" >2.000</value>
+<value id="{06660c1a-e37b-4058-a66e-662293199f71}" mode="1" >2.00000000</value>
+<value id="{937dd04a-9dc6-4236-a5ab-08529ed68e86}" mode="1" >0.00000000</value>
+<value id="{3a37f45c-31f6-411d-89a9-a2500d0cb3f5}" mode="1" >2.00000000</value>
+<value id="{00d370ee-10a7-480f-a12a-ed4b140b578d}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{6d1afe68-fe9b-45d5-a207-af0265d40304}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{ae60ca04-b53e-4a5a-b226-358ed138c70f}" mode="1" >-9.00000000</value>
+<value id="{347c0175-ce76-48c2-ac77-85331be89dba}" mode="1" >8.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="1" >0.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="4" >0.000</value>
+<value id="{30f0d292-88f2-46ac-af20-9a2d1afec787}" mode="1" >0.00000000</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="1" >2.78225803</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="4" >2.782</value>
+<value id="{7aae7c4c-5488-4212-9d69-d7800c74b523}" mode="1" >2.78225803</value>
+<value id="{bc72340b-5d10-4976-aa8f-d222c6188757}" mode="1" >0.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="1" >200.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="4" >200.000</value>
+<value id="{02a36a56-c7bb-42b4-ad6f-cf8e450de841}" mode="1" >200.00000000</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="1" >200.00000000</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="4" >200.000</value>
+<value id="{9e02285d-69f1-4e00-be8f-dfa2d8af03a6}" mode="1" >200.00000000</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="1" >0.00000000</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="4" >0.000</value>
+<value id="{18461081-9d88-4948-a7a2-f78cacc1d6bd}" mode="1" >0.00000000</value>
+<value id="{c6c00efe-b5d1-4ba5-aefe-b589731dfe41}" mode="1" >1.00000000</value>
+<value id="{bdedaf7e-e1f4-4bd1-99a3-ed326f980bc2}" mode="1" >1.00000000</value>
+<value id="{75b03faf-7718-4827-b6b0-2353c2013cfa}" mode="1" >50.00000000</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="1" >0.88569182</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="2" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="1" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="2" >0.00000000</value>
+<value id="{e58853c0-86f8-4e0c-a0ff-e9c0f2ea2239}" mode="1" >-23.44390297</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="1" >-23.44390297</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="4" >-23.444</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="1" >0.88569182</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="2" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="1" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="2" >0.00000000</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="1" >0.46802402</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="2" >0.00000000</value>
+<value id="{9808aaf4-bd15-4400-a22f-f858fdadb810}" mode="1" >10.00000000</value>
+<value id="{87b80b9f-536f-47f4-8a45-2e677562611f}" mode="4" >0</value>
+<value id="{6df984e2-620b-4f41-b510-70890fd7284c}" mode="4" >0</value>
+<value id="{b00b7ada-e33c-40f3-985c-02844e9bb94f}" mode="1" >1.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="1" >0.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="4" >Max</value>
+<value id="{df284c15-f1c7-4108-82ec-db829ff67323}" mode="1" >2.78225803</value>
+<value id="{a04e2aaa-8c72-49e4-ac27-a48d1b4d19dc}" mode="1" >200.00000000</value>
+</preset>
+<preset name="medium granulated" number="5" >
+<value id="{c6f473d7-2310-42c4-a9e0-c839e2037e3f}" mode="1" >1.00000000</value>
+<value id="{b51c9dbe-8e6c-45a1-bff0-a29e081e8561}" mode="1" >0.00000000</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="1" >2.00000000</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="4" >2.000</value>
+<value id="{06660c1a-e37b-4058-a66e-662293199f71}" mode="1" >2.00000000</value>
+<value id="{937dd04a-9dc6-4236-a5ab-08529ed68e86}" mode="1" >1.00000000</value>
+<value id="{3a37f45c-31f6-411d-89a9-a2500d0cb3f5}" mode="1" >2.00000000</value>
+<value id="{00d370ee-10a7-480f-a12a-ed4b140b578d}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{6d1afe68-fe9b-45d5-a207-af0265d40304}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{ae60ca04-b53e-4a5a-b226-358ed138c70f}" mode="1" >-9.00000000</value>
+<value id="{347c0175-ce76-48c2-ac77-85331be89dba}" mode="1" >8.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="1" >0.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="4" >0.000</value>
+<value id="{30f0d292-88f2-46ac-af20-9a2d1afec787}" mode="1" >0.00000000</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="1" >0.00000000</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="4" >0.000</value>
+<value id="{7aae7c4c-5488-4212-9d69-d7800c74b523}" mode="1" >0.00000000</value>
+<value id="{bc72340b-5d10-4976-aa8f-d222c6188757}" mode="1" >1.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="1" >164.17999268</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="4" >164.180</value>
+<value id="{02a36a56-c7bb-42b4-ad6f-cf8e450de841}" mode="1" >164.17999268</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="1" >47.64062500</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="4" >47.641</value>
+<value id="{9e02285d-69f1-4e00-be8f-dfa2d8af03a6}" mode="1" >47.64062500</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="1" >0.00000000</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="4" >0.000</value>
+<value id="{18461081-9d88-4948-a7a2-f78cacc1d6bd}" mode="1" >0.00000000</value>
+<value id="{c6c00efe-b5d1-4ba5-aefe-b589731dfe41}" mode="1" >1.00000000</value>
+<value id="{bdedaf7e-e1f4-4bd1-99a3-ed326f980bc2}" mode="1" >1.00000000</value>
+<value id="{75b03faf-7718-4827-b6b0-2353c2013cfa}" mode="1" >50.00000000</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="1" >0.70957154</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="2" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="1" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="2" >0.00000000</value>
+<value id="{e58853c0-86f8-4e0c-a0ff-e9c0f2ea2239}" mode="1" >-23.44390297</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="1" >-23.44390297</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="4" >-23.444</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="1" >0.70485604</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="2" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="1" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="2" >0.00000000</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="1" >0.38639462</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="2" >0.00000000</value>
+<value id="{9808aaf4-bd15-4400-a22f-f858fdadb810}" mode="1" >10.00000000</value>
+<value id="{87b80b9f-536f-47f4-8a45-2e677562611f}" mode="4" >0</value>
+<value id="{6df984e2-620b-4f41-b510-70890fd7284c}" mode="4" >0</value>
+<value id="{b00b7ada-e33c-40f3-985c-02844e9bb94f}" mode="1" >1.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="1" >0.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="4" >Max</value>
+<value id="{df284c15-f1c7-4108-82ec-db829ff67323}" mode="1" >0.00000000</value>
+<value id="{a04e2aaa-8c72-49e4-ac27-a48d1b4d19dc}" mode="1" >164.17999268</value>
+</preset>
+<preset name="short grains" number="6" >
+<value id="{c6f473d7-2310-42c4-a9e0-c839e2037e3f}" mode="1" >1.00000000</value>
+<value id="{b51c9dbe-8e6c-45a1-bff0-a29e081e8561}" mode="1" >0.00000000</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="1" >2.00000000</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="4" >2.000</value>
+<value id="{06660c1a-e37b-4058-a66e-662293199f71}" mode="1" >2.00000000</value>
+<value id="{937dd04a-9dc6-4236-a5ab-08529ed68e86}" mode="1" >1.00000000</value>
+<value id="{3a37f45c-31f6-411d-89a9-a2500d0cb3f5}" mode="1" >2.00000000</value>
+<value id="{00d370ee-10a7-480f-a12a-ed4b140b578d}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{6d1afe68-fe9b-45d5-a207-af0265d40304}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{ae60ca04-b53e-4a5a-b226-358ed138c70f}" mode="1" >-9.00000000</value>
+<value id="{347c0175-ce76-48c2-ac77-85331be89dba}" mode="1" >8.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="1" >0.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="4" >0.000</value>
+<value id="{30f0d292-88f2-46ac-af20-9a2d1afec787}" mode="1" >0.00000000</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="1" >0.00000000</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="4" >0.000</value>
+<value id="{7aae7c4c-5488-4212-9d69-d7800c74b523}" mode="1" >0.00000000</value>
+<value id="{bc72340b-5d10-4976-aa8f-d222c6188757}" mode="1" >1.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="1" >300.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="4" >300.000</value>
+<value id="{02a36a56-c7bb-42b4-ad6f-cf8e450de841}" mode="1" >200.00000000</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="1" >16.54687500</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="4" >16.547</value>
+<value id="{9e02285d-69f1-4e00-be8f-dfa2d8af03a6}" mode="1" >16.54687500</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="1" >0.00000000</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="4" >0.000</value>
+<value id="{18461081-9d88-4948-a7a2-f78cacc1d6bd}" mode="1" >0.00000000</value>
+<value id="{c6c00efe-b5d1-4ba5-aefe-b589731dfe41}" mode="1" >1.00000000</value>
+<value id="{bdedaf7e-e1f4-4bd1-99a3-ed326f980bc2}" mode="1" >1.00000000</value>
+<value id="{75b03faf-7718-4827-b6b0-2353c2013cfa}" mode="1" >50.00000000</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="1" >0.58902609</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="2" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="1" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="2" >0.00000000</value>
+<value id="{e58853c0-86f8-4e0c-a0ff-e9c0f2ea2239}" mode="1" >-23.44390297</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="1" >-23.44390297</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="4" >-23.444</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="1" >0.59866405</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="2" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="1" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="2" >0.00000000</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="1" >0.14967759</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="2" >0.00000000</value>
+<value id="{9808aaf4-bd15-4400-a22f-f858fdadb810}" mode="1" >1.00000000</value>
+<value id="{87b80b9f-536f-47f4-8a45-2e677562611f}" mode="4" >0</value>
+<value id="{6df984e2-620b-4f41-b510-70890fd7284c}" mode="4" >0</value>
+<value id="{b00b7ada-e33c-40f3-985c-02844e9bb94f}" mode="1" >1.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="1" >0.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="4" >Max</value>
+<value id="{df284c15-f1c7-4108-82ec-db829ff67323}" mode="1" >0.00000000</value>
+<value id="{a04e2aaa-8c72-49e4-ac27-a48d1b4d19dc}" mode="1" >300.00000000</value>
+</preset>
+<preset name="position grain cloud" number="7" >
+<value id="{c6f473d7-2310-42c4-a9e0-c839e2037e3f}" mode="1" >1.00000000</value>
+<value id="{b51c9dbe-8e6c-45a1-bff0-a29e081e8561}" mode="1" >0.00000000</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="1" >0.22040816</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="4" >0.220</value>
+<value id="{06660c1a-e37b-4058-a66e-662293199f71}" mode="1" >0.22040816</value>
+<value id="{937dd04a-9dc6-4236-a5ab-08529ed68e86}" mode="1" >1.00000000</value>
+<value id="{3a37f45c-31f6-411d-89a9-a2500d0cb3f5}" mode="1" >2.00000000</value>
+<value id="{00d370ee-10a7-480f-a12a-ed4b140b578d}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{6d1afe68-fe9b-45d5-a207-af0265d40304}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{ae60ca04-b53e-4a5a-b226-358ed138c70f}" mode="1" >-9.00000000</value>
+<value id="{347c0175-ce76-48c2-ac77-85331be89dba}" mode="1" >8.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="1" >0.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="4" >0.000</value>
+<value id="{30f0d292-88f2-46ac-af20-9a2d1afec787}" mode="1" >0.00000000</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="1" >1000.00000000</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="4" >1000.000</value>
+<value id="{7aae7c4c-5488-4212-9d69-d7800c74b523}" mode="1" >10.00000000</value>
+<value id="{bc72340b-5d10-4976-aa8f-d222c6188757}" mode="1" >1.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="1" >300.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="4" >300.000</value>
+<value id="{02a36a56-c7bb-42b4-ad6f-cf8e450de841}" mode="1" >200.00000000</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="1" >16.54687500</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="4" >16.547</value>
+<value id="{9e02285d-69f1-4e00-be8f-dfa2d8af03a6}" mode="1" >16.54687500</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="1" >0.00000000</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="4" >0.000</value>
+<value id="{18461081-9d88-4948-a7a2-f78cacc1d6bd}" mode="1" >0.00000000</value>
+<value id="{c6c00efe-b5d1-4ba5-aefe-b589731dfe41}" mode="1" >1.00000000</value>
+<value id="{bdedaf7e-e1f4-4bd1-99a3-ed326f980bc2}" mode="1" >1.00000000</value>
+<value id="{75b03faf-7718-4827-b6b0-2353c2013cfa}" mode="1" >50.00000000</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="1" >0.69184899</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="2" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="1" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="2" >0.00000000</value>
+<value id="{e58853c0-86f8-4e0c-a0ff-e9c0f2ea2239}" mode="1" >-23.44390297</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="1" >-23.44390297</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="4" >-23.444</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="1" >0.60557264</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="2" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="1" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="2" >0.00000000</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="1" >0.64298904</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="2" >0.00000000</value>
+<value id="{9808aaf4-bd15-4400-a22f-f858fdadb810}" mode="1" >1.00000000</value>
+<value id="{87b80b9f-536f-47f4-8a45-2e677562611f}" mode="4" >0</value>
+<value id="{6df984e2-620b-4f41-b510-70890fd7284c}" mode="4" >0</value>
+<value id="{b00b7ada-e33c-40f3-985c-02844e9bb94f}" mode="1" >1.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="1" >0.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="4" >Max</value>
+<value id="{df284c15-f1c7-4108-82ec-db829ff67323}" mode="1" >1000.00000000</value>
+<value id="{a04e2aaa-8c72-49e4-ac27-a48d1b4d19dc}" mode="1" >300.00000000</value>
+</preset>
+<preset name="transposition grain cloud" number="8" >
+<value id="{c6f473d7-2310-42c4-a9e0-c839e2037e3f}" mode="1" >1.00000000</value>
+<value id="{b51c9dbe-8e6c-45a1-bff0-a29e081e8561}" mode="1" >0.00000000</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="1" >0.22040816</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="4" >0.220</value>
+<value id="{06660c1a-e37b-4058-a66e-662293199f71}" mode="1" >0.22040816</value>
+<value id="{937dd04a-9dc6-4236-a5ab-08529ed68e86}" mode="1" >1.00000000</value>
+<value id="{3a37f45c-31f6-411d-89a9-a2500d0cb3f5}" mode="1" >2.00000000</value>
+<value id="{00d370ee-10a7-480f-a12a-ed4b140b578d}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{6d1afe68-fe9b-45d5-a207-af0265d40304}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{ae60ca04-b53e-4a5a-b226-358ed138c70f}" mode="1" >-9.00000000</value>
+<value id="{347c0175-ce76-48c2-ac77-85331be89dba}" mode="1" >8.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="1" >600.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="4" >600.000</value>
+<value id="{30f0d292-88f2-46ac-af20-9a2d1afec787}" mode="1" >600.00000000</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="1" >0.00000000</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="4" >0.000</value>
+<value id="{7aae7c4c-5488-4212-9d69-d7800c74b523}" mode="1" >0.00000000</value>
+<value id="{bc72340b-5d10-4976-aa8f-d222c6188757}" mode="1" >1.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="1" >300.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="4" >300.000</value>
+<value id="{02a36a56-c7bb-42b4-ad6f-cf8e450de841}" mode="1" >200.00000000</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="1" >16.54687500</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="4" >16.547</value>
+<value id="{9e02285d-69f1-4e00-be8f-dfa2d8af03a6}" mode="1" >16.54687500</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="1" >0.00000000</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="4" >0.000</value>
+<value id="{18461081-9d88-4948-a7a2-f78cacc1d6bd}" mode="1" >0.00000000</value>
+<value id="{c6c00efe-b5d1-4ba5-aefe-b589731dfe41}" mode="1" >1.00000000</value>
+<value id="{bdedaf7e-e1f4-4bd1-99a3-ed326f980bc2}" mode="1" >1.00000000</value>
+<value id="{75b03faf-7718-4827-b6b0-2353c2013cfa}" mode="1" >50.00000000</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="1" >0.62019593</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="2" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="1" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="2" >0.00000000</value>
+<value id="{e58853c0-86f8-4e0c-a0ff-e9c0f2ea2239}" mode="1" >-23.44390297</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="1" >-23.44390297</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="4" >-23.444</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="1" >0.68111283</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="2" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="1" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="2" >0.00000000</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="1" >0.69203818</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="2" >0.00000000</value>
+<value id="{9808aaf4-bd15-4400-a22f-f858fdadb810}" mode="1" >1.00000000</value>
+<value id="{87b80b9f-536f-47f4-8a45-2e677562611f}" mode="4" >0</value>
+<value id="{6df984e2-620b-4f41-b510-70890fd7284c}" mode="4" >0</value>
+<value id="{b00b7ada-e33c-40f3-985c-02844e9bb94f}" mode="1" >1.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="1" >0.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="4" >Max</value>
+<value id="{df284c15-f1c7-4108-82ec-db829ff67323}" mode="1" >0.00000000</value>
+<value id="{a04e2aaa-8c72-49e4-ac27-a48d1b4d19dc}" mode="1" >300.00000000</value>
+</preset>
+<preset name="natural transposition" number="9" >
+<value id="{c6f473d7-2310-42c4-a9e0-c839e2037e3f}" mode="1" >1.00000000</value>
+<value id="{b51c9dbe-8e6c-45a1-bff0-a29e081e8561}" mode="1" >0.00000000</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="1" >0.22040816</value>
+<value id="{8346eeff-42ae-480a-a87e-a04a8bbf6263}" mode="4" >0.220</value>
+<value id="{06660c1a-e37b-4058-a66e-662293199f71}" mode="1" >0.22040816</value>
+<value id="{937dd04a-9dc6-4236-a5ab-08529ed68e86}" mode="1" >0.00000000</value>
+<value id="{3a37f45c-31f6-411d-89a9-a2500d0cb3f5}" mode="1" >2.00000000</value>
+<value id="{00d370ee-10a7-480f-a12a-ed4b140b578d}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{6d1afe68-fe9b-45d5-a207-af0265d40304}" mode="4" >/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</value>
+<value id="{ae60ca04-b53e-4a5a-b226-358ed138c70f}" mode="1" >-9.00000000</value>
+<value id="{347c0175-ce76-48c2-ac77-85331be89dba}" mode="1" >8.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="1" >0.00000000</value>
+<value id="{102b6f01-2310-4198-8ebc-0d5ded52e7ce}" mode="4" >0.000</value>
+<value id="{30f0d292-88f2-46ac-af20-9a2d1afec787}" mode="1" >0.00000000</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="1" >3.06451607</value>
+<value id="{e6c2c0a9-906f-42ce-af8b-74204b5f17be}" mode="4" >3.065</value>
+<value id="{7aae7c4c-5488-4212-9d69-d7800c74b523}" mode="1" >3.06451607</value>
+<value id="{bc72340b-5d10-4976-aa8f-d222c6188757}" mode="1" >0.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="1" >300.00000000</value>
+<value id="{e1990b56-329e-4ed0-9f41-cf43ad6e2b46}" mode="4" >300.000</value>
+<value id="{02a36a56-c7bb-42b4-ad6f-cf8e450de841}" mode="1" >200.00000000</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="1" >200.00000000</value>
+<value id="{471f7698-cee0-4cce-b367-c32f0590dd4e}" mode="4" >200.000</value>
+<value id="{9e02285d-69f1-4e00-be8f-dfa2d8af03a6}" mode="1" >200.00000000</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="1" >644.62811279</value>
+<value id="{b5f86b53-5f2a-4521-86d6-9bb4d225ba18}" mode="4" >644.628</value>
+<value id="{18461081-9d88-4948-a7a2-f78cacc1d6bd}" mode="1" >644.62811279</value>
+<value id="{c6c00efe-b5d1-4ba5-aefe-b589731dfe41}" mode="1" >1.00000000</value>
+<value id="{bdedaf7e-e1f4-4bd1-99a3-ed326f980bc2}" mode="1" >1.00000000</value>
+<value id="{75b03faf-7718-4827-b6b0-2353c2013cfa}" mode="1" >50.00000000</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="1" >0.76461089</value>
+<value id="{fa64908d-5557-4436-ae9d-e6c3131c1385}" mode="2" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="1" >0.00000000</value>
+<value id="{f813f37d-8db0-4bc3-b802-1a294c716337}" mode="2" >0.00000000</value>
+<value id="{e58853c0-86f8-4e0c-a0ff-e9c0f2ea2239}" mode="1" >-25.90243912</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="1" >-25.90243912</value>
+<value id="{b7e21e98-3040-468e-9f1f-9c71e5502b88}" mode="4" >-25.902</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="1" >0.76461089</value>
+<value id="{e0ed741c-9b75-48b4-b91a-62e483519a08}" mode="2" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="1" >0.00000000</value>
+<value id="{8b872a2e-b013-4c43-b10e-a7a47f8e0068}" mode="2" >0.00000000</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="1" >0.52014583</value>
+<value id="{5c334baa-687d-4daf-8a6c-e81209a7349e}" mode="2" >0.00000000</value>
+<value id="{9808aaf4-bd15-4400-a22f-f858fdadb810}" mode="1" >10.00000000</value>
+<value id="{87b80b9f-536f-47f4-8a45-2e677562611f}" mode="4" >0</value>
+<value id="{6df984e2-620b-4f41-b510-70890fd7284c}" mode="4" >0</value>
+<value id="{b00b7ada-e33c-40f3-985c-02844e9bb94f}" mode="1" >1.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="1" >0.00000000</value>
+<value id="{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}" mode="4" >Max</value>
+<value id="{df284c15-f1c7-4108-82ec-db829ff67323}" mode="1" >3.06451607</value>
+<value id="{a04e2aaa-8c72-49e4-ac27-a48d1b4d19dc}" mode="1" >300.00000000</value>
+</preset>
 </bsbPresets>
 <MacOptions>
 Version: 3
@@ -1759,69 +2637,84 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 350 45 906 818
+WindowBounds: 72 179 400 200
 CurrentView: io
 IOViewEdit: On
-Options: -b128 -A -s -m167 -R
+Options:
 </MacOptions>
+
 <MacGUI>
 ioView background {43690, 43690, 32639}
-ioText {10, 352} {873, 399} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder GRANULAR
-ioText {9, 130} {483, 72} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder  INPUT
-ioText {475, 386} {20, 25} label 1.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1
-ioText {288, 386} {20, 25} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0
-ioCheckbox {496, 388} {20, 20} off speed1
-ioCheckbox {268, 388} {20, 20} off speed0
-ioText {303, 439} {172, 29} display 0.579592 0.00100 "speed" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.580
-ioSlider {269, 415} {245, 28} -2.000000 2.000000 0.579592 speed
-ioText {334, 386} {119, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Playback Speed
-ioText {149, 683} {71, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder wide
-ioText {27, 683} {71, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder narrow
-ioSlider {46, 663} {152, 25} 0.000000 1.000000 0.506579 pan
-ioText {51, 637} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Panning
-ioGraph {452, 254} {431, 82} scope 2.000000 2 
-ioButton {383, 160} {100, 30} value 1.000000 "_Browse1" "Open File" "/" 
-ioText {20, 163} {360, 25} edit 0.000000 0.00100 "_Browse1"  "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
-ioText {634, 392} {185, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select window function ...
-ioText {648, 442} {168, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ... and see its shape
-ioGraph {607, 470} {264, 176} table -2.000000 1.000000 ftab
-ioMenu {664, 417} {144, 24} 1 303 "Hamming,von Hann,Triangle,Blackman,Blackman-Harris,Gauss,Kaiser,Rectangle,Sync" winshape
-ioText {676, 366} {115, 28} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Window Shape
-ioText {143, 518} {71, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder scattered
-ioText {21, 518} {71, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder periodic
-ioText {271, 638} {234, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Transposition Randomness (Cent)
-ioText {351, 688} {81, 26} display 0.000000 0.00100 "centrand" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.000
-ioSlider {271, 661} {242, 26} 0.000000 600.000000 0.000000 centrand
-ioText {312, 522} {148, 26} display 0.000000 0.00100 "posrand" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.000
-ioSlider {269, 500} {248, 26} 0.000000 1000.000000 0.000000 posrand
-ioText {264, 475} {258, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Position Randomness (ms)
-ioSlider {40, 498} {152, 25} 0.000000 1.000000 1.000000 dist
-ioText {45, 472} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Distribution
-ioText {74, 438} {81, 26} display 86.099000 0.00100 "grainrate" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 86.099
-ioSlider {42, 416} {152, 25} 1.000000 200.000000 86.098684 grainrate
-ioText {73, 603} {81, 26} display 29.007000 0.00100 "grainsize" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 29.007
-ioSlider {41, 580} {152, 25} 1.000000 100.000000 29.006579 grainsize
-ioText {66, 558} {101, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Grainsize (ms)
-ioText {307, 603} {169, 26} display 0.000000 0.00100 "transp" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.000
-ioSlider {269, 579} {242, 25} -1200.000000 1200.000000 0.000000 transp
-ioText {279, 555} {235, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Transposition (Cent)
-ioText {47, 389} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Grains per Second
-ioGraph {9, 254} {432, 82} scope 2.000000 1 
-ioMenu {171, 208} {108, 28} 1 303 "Amplitudes,dB" showdb
-ioText {9, 208} {163, 26} label 0.000000 0.00100 "" right "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Show LED's as
-ioText {280, 209} {120, 28} label 0.000000 0.00100 "" right "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder dB-Range
-ioText {400, 209} {61, 28} editnum 50.000000 1.000000 "dbrange" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 50.000000
-ioText {9, 58} {872, 66} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Granulates a stored sound. You can use either a mono or stereo soundfile (from the latter just channel 1 is used).
-ioText {9, 9} {872, 43} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {65280, 65280, 65280} nobackground noborder GRANULAR SYNTHESIS OF A SOUNDFILE
-ioText {499, 129} {383, 119} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder  OUTPUT
-ioMeter {511, 197} {335, 18} {0, 59904, 0} "outL" 0.874258 "out2_post" 0.000000 fill 1 0 mouse
-ioMeter {844, 197} {26, 18} {50176, 3584, 3072} "outLover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
-ioText {510, 164} {95, 27} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Output Gain
-ioSlider {606, 165} {205, 24} 0.000000 5.000000 1.000000 gain
-ioText {812, 164} {61, 27} display 1.000000 0.00100 "gain" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000
-ioMeter {511, 222} {335, 18} {0, 59904, 0} "outR" 0.924379 "out2_post" 0.000000 fill 1 0 mouse
-ioMeter {844, 222} {26, 18} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
-ioMeter {608, 706} {260, 31} {29184, 12544, 59904} "posdisp" 0.198702 "vert55" 0.000000 line 1 0 mouse
-ioText {650, 668} {185, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Position in the soundfile
+ioText {9, 314} {873, 399} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder GRANULAR
+ioText {9, 91} {483, 72} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder  INPUT
+ioText {466, 349} {20, 25} label 1.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 1
+ioText {279, 349} {20, 25} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0
+ioCheckbox {487, 351} {20, 20} on speed1
+ioCheckbox {259, 351} {20, 20} off speed0
+ioText {294, 402} {172, 29} display 0.139000 0.00100 "speed" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.139
+ioSlider {260, 378} {245, 28} -2.000000 2.000000 0.138776 speed
+ioText {325, 349} {119, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Playback Speed
+ioText {140, 646} {71, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder wide
+ioText {18, 646} {71, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder narrow
+ioSlider {12, 625} {200, 25} 0.000000 1.000000 0.000000 pan
+ioText {42, 600} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Panning
+ioGraph {692, 216} {190, 82} scope 2.000000 2 
+ioButton {383, 121} {100, 30} value 1.000000 "_Browse1" "Open File" "/" 
+ioText {20, 124} {360, 25} edit 0.000000 0.00100 "_Browse1"  "Lucida Grande" 12 {0, 0, 0} {58624, 58624, 58624} falsenoborder /home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff
+ioText {625, 355} {217, 28} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Select window function ...
+ioText {639, 405} {168, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder ... and see its shape
+ioGraph {598, 433} {264, 176} table 0.000000 1.000000 ftab
+ioMenu {655, 380} {144, 24} 8 303 "Hamming,von Hann,Triangle,Blackman,Blackman-Harris,Gauss,Kaiser,Rectangle,Sync" winshape
+ioText {667, 329} {115, 28} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Window Shape
+ioText {134, 481} {89, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder scattered
+ioText {12, 481} {71, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder periodic
+ioText {262, 601} {234, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Transposition Randomness (Cent)
+ioText {342, 651} {81, 26} display 0.000000 0.00100 "centrand" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.000
+ioSlider {262, 624} {242, 26} 0.000000 600.000000 0.000000 centrand
+ioText {259, 485} {65, 25} display 0.000000 0.00100 "posrand" left "DejaVu Sans" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.000
+ioSlider {260, 463} {248, 26} 0.000000 10.000000 0.000000 posrand
+ioText {255, 438} {258, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Position Randomness (ms)
+ioSlider {14, 459} {200, 25} 0.000000 1.000000 0.000000 dist
+ioText {36, 435} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Distribution
+ioText {14, 401} {81, 26} display 100.000000 0.00100 "grainrate" left "DejaVu Sans" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 100.000
+ioSlider {14, 378} {200, 25} 1.000000 200.000000 100.000000 grainrate
+ioText {24, 570} {81, 26} display 100.000000 0.00100 "grainsize" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 100.000
+ioSlider {12, 545} {128, 27} 1.000000 200.000000 100.000000 grainsize
+ioText {10, 520} {128, 26} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Grainsize (ms)
+ioText {298, 566} {169, 26} display 0.000000 0.00100 "transp" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.000
+ioSlider {260, 542} {242, 25} -1200.000000 1200.000000 0.000000 transp
+ioText {270, 518} {235, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Transposition (Cent)
+ioText {38, 352} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Grains per Second
+ioGraph {498, 216} {190, 82} scope 2.000000 1 
+ioMenu {280, 170} {75, 26} 1 303 "Amplitudes,dB" showdb
+ioText {175, 170} {106, 26} label 0.000000 0.00100 "" right "Helvetica" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Show LED's as
+ioText {355, 170} {76, 28} label 0.000000 0.00100 "" right "Helvetica" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder dB-Range
+ioText {430, 170} {61, 28} editnum 50.000000 1.000000 "dbrange" left "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 50.000000
+ioText {9, 58} {872, 29} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Granulates a stored sound. You can use either a mono or stereo soundfile (from the latter just channel 1 is used).
+ioText {9, 9} {872, 43} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {58624, 58624, 58624} nobackground noborder GRANULAR SYNTHESIS OF A SOUNDFILE
+ioText {499, 90} {383, 119} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder  OUTPUT
+ioMeter {511, 158} {335, 18} {0, 59904, 0} "outL" 0.741606 "out2_post" 0.000000 fill 1 0 mouse
+ioMeter {844, 158} {26, 18} {50176, 3584, 3072} "outLover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
+ioText {510, 125} {95, 27} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Output Gain
+ioSlider {606, 126} {205, 24} -30.000000 12.000000 -20.165854 db
+ioText {812, 125} {42, 25} display -20.166000 0.00100 "db" left "DejaVu Sans" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder -20.166
+ioMeter {511, 183} {335, 18} {0, 59904, 0} "outR" 0.741606 "out2_post" 0.000000 fill 1 0 mouse
+ioMeter {844, 183} {26, 18} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
+ioMeter {599, 669} {260, 31} {65280, 65280, 65280} "posdisp" 0.106932 "vert55" 0.000000 line 1 0 mouse
+ioText {625, 632} {215, 30} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Position in the soundfile
+ioText {137, 518} {112, 49} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder plus random deviation
+ioText {158, 567} {63, 26} editnum 0.000000 0.100000 "sizrandev" left "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.000000
+ioButton {9, 169} {58, 29} value 1.000000 "_Play" "Start" "/" 
+ioButton {73, 169} {58, 29} value 1.000000 "_Stop" "Stop" "/" 
+ioText {852, 124} {30, 27} label 0.000000 0.00100 "" left "DejaVu Sans" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder dB
+ioText {8, 204} {486, 105} label 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder PRESETS
+ioText {15, 233} {47, 26} editnum 0.000000 1.000000 "_SetPresetIndex" left "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.000000
+ioText {12, 259} {121, 49} display 0.000000 0.00100 "_GetPresetName" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder natural
+ioText {134, 205} {362, 102} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Combination of the Parameters depend both on your ideas and on the qualities of the sound you are using. The presets here show some possibilities for a sound which can be downloaded here: Â¬http://joachimheintz.de/soft/softsamps/BratscheMono.wav
+ioText {321, 485} {159, 25} label 0.000000 0.00100 "" right "DejaVu Sans" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder set larger values here
+ioText {478, 485} {63, 26} editnum 0.000000 1.000000 "posrand" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.000000
+ioText {73, 404} {97, 24} label 0.000000 0.00100 "" right "DejaVu Sans" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder or set here
+ioText {169, 404} {63, 26} editnum 100.000000 1.000000 "grainrate" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 100.000000
+ioText {12, 676} {570, 34} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Note that the actual grain size is smaller than the value above because of multiple enveloping.
 </MacGUI>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="612" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="612" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
