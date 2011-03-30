@@ -1,7 +1,7 @@
 ;Written by Iain McCurdy, 2006
 
-; Modified for QuteCsound by René, October 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, October 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 ;	Add table(s) for exp slider
@@ -61,9 +61,9 @@ endin
 instr	2	;pvoc INSTRUMENT
 	iporttime	=		.1														;DEFINE A VALUE FOR PORTAMENTO TIME (THIS WILL BE USED TO SMOOTH FLTK SLIDER MOVEMENTS) 
 	kporttime	linseg	0, .001, iporttime, 1, iporttime								;DEFINE A RAMPING UP, K-RATE FUNCTION THAT WILL BE USED FOR PORTAMENTO TIME (BASED ON THE I-RATE VALUE DEFINED IN THE PREVIOUS LINE). RAMPING UP THIS VALUE FROM ZERO PREVENTS VARIABLE FROM SLIDING UP TO THEIR REQUIRED INITIAL VALUES EACH TIME THE INSTRUMENT IS RESTARTED.
-	kporttime	=		kporttime * gkporttime										;FLTK SLIDER FOR PORTAMENTO TIME MULTIPLIED TO kporttime FUNCTION
-	kptr		portk	gkptr, kporttime											;APPLY PORTAMENTO TO THE FLTK SLIDER DERIVED VAIABLE 'gkptr'. A NEW VARIABLE CALLED 'kptr' IS OUTPUTTED.
-	kpch		portk	gkpch, kporttime											;APPLY PORTAMENTO TO THE FLTK SLIDER DERIVED VAIABLE 'gkpch'. A NEW VARIABLE CALLED 'kpch' IS OUTPUTTED.
+	kporttime	=		kporttime * gkporttime										;SLIDER FOR PORTAMENTO TIME MULTIPLIED TO kporttime FUNCTION
+	kptr		portk	gkptr, kporttime											;APPLY PORTAMENTO TO THE SLIDER DERIVED VAIABLE 'gkptr'. A NEW VARIABLE CALLED 'kptr' IS OUTPUTTED.
+	kpch		portk	gkpch, kporttime											;APPLY PORTAMENTO TO THE SLIDER DERIVED VAIABLE 'gkpch'. A NEW VARIABLE CALLED 'kpch' IS OUTPUTTED.
 	kSwitch	changed	gkspec, gkptrswitch, gkextractmode, gkfreqlim, gkgatefn, gkfile		;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
 	if	kSwitch=1	then															;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
 		reinit	START														;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
@@ -94,10 +94,10 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>407</x>
- <y>175</y>
- <width>98</width>
- <height>28</height>
+ <x>577</x>
+ <y>311</y>
+ <width>1036</width>
+ <height>502</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -117,7 +117,7 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <midicc>0</midicc>
   <label>pvoc</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -146,7 +146,7 @@ i  1      0       3600		;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <midicc>0</midicc>
   <label>pvoc</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -210,7 +210,7 @@ Pvoc performs FFT resynthesis on a analysis data file that has been previously c
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Portamento_Amount</objectName>
@@ -300,12 +300,12 @@ Pvoc performs FFT resynthesis on a analysis data file that has been previously c
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/Analysis/loop.pvx</stringvalue>
+  <stringvalue>loop.pvx</stringvalue>
   <text>Browse Analysis File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse</objectName>
@@ -317,7 +317,7 @@ Pvoc performs FFT resynthesis on a analysis data file that has been previously c
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/Analysis/loop.pvx</label>
+  <label>loop.pvx</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -886,7 +886,7 @@ Limit</label>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

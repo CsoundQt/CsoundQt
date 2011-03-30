@@ -1,10 +1,11 @@
 ;Written by Iain McCurdy 2006
 
-; Modified for QuteCsound by René, September 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, September 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
-;	Add Browser for audio files
+;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
+
 
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
@@ -22,6 +23,20 @@ giFFTattributes0	ftgen	1, 0, 4, -2,  512, 256, 1024, 1
 giFFTattributes1	ftgen	2, 0, 4, -2, 1024, 256, 1024, 1
 giFFTattributes2	ftgen	3, 0, 4, -2, 2048, 128, 2048, 1
 giFFTattributes3	ftgen	4, 0, 4, -2, 4096, 128, 4096, 1
+
+
+opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
+	;gives stereo output regardless your soundfile is mono or stereo
+	Sfil, kspeed, iskip, iloop	xin
+	ichn		filenchnls	Sfil
+	if ichn == 1 then
+		aL		diskin2	Sfil, kspeed, iskip, iloop
+		aR		=		aL
+	else
+		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
+	endif
+		xout		aL, aR
+endop
 
 
 instr	10	;GUI
@@ -52,12 +67,12 @@ instr	1
 		asig		inch		1													;READ AUDIO FROM THE COMPUTER'S LIVE INPUT CHANNEL 1 (LEFT)
 	elseif		gkinput=1 && (gkfreeza + gkfreezf)!=2 	then							;IF 'INPUT' SWITCH IS SET TO 'Voice' AND FREEZE ALL IS NOT ACTIVATED THEN IMPLEMENT THE NEXT LINE OF CODE
 		Sfile1	invalue		"_Browse1"
-		;OUTPUT	OPCODE		FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig		diskin2		Sfile1,     1,      0,        1						;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+		;OUTPUT		OPCODE		FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
+		asig, asigR	FilePlay2		Sfile1,     1,      0,        1					;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 	elseif		gkinput=2	then													;IF 'INPUT' SWITCH IS SET TO 'Drum Loop' THEN IMPLEMENT THE NEXT LINE OF CODE
 		Sfile2	invalue		"_Browse2"
-		;OUTPUT	OPCODE		FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig		diskin2		Sfile2,     1,      0,        1						;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+		;OUTPUT		OPCODE		FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
+		asig, asigR	FilePlay2		Sfile2,     1,      0,        1					;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 	endif																	;END OF 'IF'...'THEN' BRANCHING
 	kSwitch		changed		gkFFTattributes									;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
 	if	kSwitch=1	then															;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
@@ -74,23 +89,21 @@ instr	1
 	fsig2 	pvsfreeze 	fsig1,       gkfreeza,          gkfreezf					;FREEZE AMPLITUDES OR FREQUENCIES (OR NEITHER) ACCORDING TO THE SWITCHES gkfreeza AND gkfreezf
 	;OUTPUT	OPCODE		INPUT
 	aresyn 	pvsynth  		fsig2                      								;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
-			outs			aresyn * gkOutGain, aresyn * gkOutGain						;SEND THE RESCALED, RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
 			rireturn															;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
+			outs			aresyn * gkOutGain, aresyn * gkOutGain						;SEND THE RESCALED, RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
 endin
 </CsInstruments>
 <CsScore>
 ;INSTR | START | DURATION
 i 10		0	   3600	;GUI
 </CsScore>
-</CsoundSynthesizer>
-
-<bsbPanel>
+</CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>367</x>
- <y>183</y>
- <width>950</width>
- <height>425</height>
+ <x>492</x>
+ <y>398</y>
+ <width>895</width>
+ <height>375</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -103,14 +116,14 @@ i 10		0	   3600	;GUI
   <x>2</x>
   <y>2</y>
   <width>513</width>
-  <height>360</height>
+  <height>370</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvsfreeze</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -132,14 +145,14 @@ i 10		0	   3600	;GUI
   <x>516</x>
   <y>2</y>
   <width>371</width>
-  <height>360</height>
+  <height>370</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvsfreeze</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -193,7 +206,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName>ON_OFF</objectName>
+  <objectName/>
   <x>8</x>
   <y>8</y>
   <width>100</width>
@@ -209,7 +222,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>Freeze</objectName>
@@ -337,7 +350,7 @@ If this happens just cycle the 'On/Off' switch.</label>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>9</x>
-  <y>281</y>
+  <y>291</y>
   <width>497</width>
   <height>73</height>
   <uuid>{f0c4875d-4e35-4d37-b043-9c1476025645}</uuid>
@@ -366,7 +379,7 @@ If this happens just cycle the 'On/Off' switch.</label>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>166</x>
-  <y>287</y>
+  <y>297</y>
   <width>300</width>
   <height>30</height>
   <uuid>{c2cdd204-e32b-488e-b5c2-70688fb2defa}</uuid>
@@ -395,7 +408,7 @@ If this happens just cycle the 'On/Off' switch.</label>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>FFTattributes</objectName>
   <x>166</x>
-  <y>307</y>
+  <y>317</y>
   <width>274</width>
   <height>32</height>
   <uuid>{c8c311f9-c1b7-4bbb-becf-9c9f1fa862c9}</uuid>
@@ -424,7 +437,7 @@ If this happens just cycle the 'On/Off' switch.</label>
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
@@ -515,12 +528,12 @@ If this happens just cycle the 'On/Off' switch.</label>
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/AndItsAll.wav</stringvalue>
-  <text>Browse Mono Audio File</text>
+  <stringvalue>AndItsAll.wav</stringvalue>
+  <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse1</objectName>
@@ -532,7 +545,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/AndItsAll.wav</label>
+  <label>AndItsAll.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -617,7 +630,7 @@ If this happens just cycle the 'On/Off' switch.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/loop.wav</label>
+  <label>loop.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -646,12 +659,70 @@ If this happens just cycle the 'On/Off' switch.</label>
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/loop.wav</stringvalue>
-  <text>Browse Mono Audio File</text>
+  <stringvalue>loop.wav</stringvalue>
+  <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>178</x>
+  <y>206</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the audio file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>179</x>
+  <y>263</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{26a09414-3c43-4ce8-94ca-1bb1f479570e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the audio file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

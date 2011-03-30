@@ -85,26 +85,6 @@ isEmpty(CSOUND_API_INCLUDE_DIR) {
     }
     isEmpty(CSOUND_API_INCLUDE_DIR):error(A valid Csound API include directory was not found.)
 }
-isEmpty(CSOUND_INTERFACES_INCLUDE_DIR) {
-    !isEmpty(CSOUND_INCLUDE_DIR):CSOUND_INTERFACES_INCLUDE_DIR = $${CSOUND_INCLUDE_DIR}
-    isEmpty(CSOUND_INTERFACES_INCLUDE_DIR):!isEmpty(CSOUND_SOURCE_TREE):CSOUND_INTERFACES_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/interfaces
-    isEmpty(CSOUND_INTERFACES_INCLUDE_DIR) {
-        !no_messages:message(Csound interfaces include directory not specified.)
-        for(dir, DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS) {
-            !no_messages:message(... searching in $${dir})
-            exists($${dir}):
-            exists($${dir}/csound.hpp):exists($${dir}/csPerfThread.hpp) {
-                !no_messages {
-                    message(CSOUND_INTERFACES_INCLUDE_DIR set to $${dir})
-                    message()
-                }
-                CSOUND_INTERFACES_INCLUDE_DIR = $${dir}
-                break()
-            }
-        }
-    }
-    isEmpty(CSOUND_INTERFACES_INCLUDE_DIR):error(A valid Csound interfaces include directory was not found.)
-}
 isEmpty(CSOUND_LIBRARY_DIR) {
     !isEmpty(CSOUND_SOURCE_TREE):CSOUND_LIBRARY_DIR = $${CSOUND_SOURCE_TREE}
     else {
@@ -260,7 +240,6 @@ win32 {
         return(false)
     }
     !directoryExists($${CSOUND_API_INCLUDE_DIR}):error(Csound API include directory not found)
-    !directoryExists($${CSOUND_INTERFACES_INCLUDE_DIR}):error(Csound interfaces include directory not found)
     !directoryExists($${CSOUND_LIBRARY_DIR}):error(Csound library directory not found)
     !directoryExists($${LIBSNDFILE_INCLUDE_DIR}):error(libsndfile include directory not found)
     !directoryExists($${LIBSNDFILE_LIBRARY_DIR}):error(libsndfile library directory not found)
@@ -271,7 +250,6 @@ win32 {
     !csoundApiHeaderExists(csound.h):error(csound.h not found)
     !csoundApiHeaderExists(csound.hpp):error(csound.hpp not found)
     !csoundApiHeaderExists(cwindow.h):error(cwindow.h not found)
-    !csoundInterfacesHeaderExists(csPerfThread.hpp):error(csPerfThread.hpp not found)
     !csoundLibraryExists($${CSOUND_LIB}):error(Csound API library not found)
     #!csoundLibraryExists($${CSND_LIB}):error(Csound C++ interface library not found)
     !libsndfileHeaderExists(sndfile.h):error(sndfile.h not found)

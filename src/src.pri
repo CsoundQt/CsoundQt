@@ -11,7 +11,8 @@ FORMS = "$${PWD}/about.ui" \
     "$${PWD}/utilitiesdialog.ui" \
     "$${PWD}/appdetailspage.ui" \
     "$${PWD}/pluginspage.ui" \
-    "$${PWD}/additionalfilespage.ui"
+    "$${PWD}/additionalfilespage.ui" \
+    "$${PWD}/filebeditor.ui"
 HEADERS = "$${PWD}/about.h" \
     "$${PWD}/configdialog.h" \
     "$${PWD}/configlists.h" \
@@ -63,7 +64,8 @@ HEADERS = "$${PWD}/about.h" \
     "$${PWD}/appdetailspage.h" \
     "$${PWD}/pluginspage.h" \
     "$${PWD}/additionalfilespage.h" \
-    "$${PWD}/scoreeditor.h"
+    "$${PWD}/scoreeditor.h" \
+    "$${PWD}/filebeditor.h"
 SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/configdialog.cpp" \
     "$${PWD}/configlists.cpp" \
@@ -115,7 +117,8 @@ SOURCES = "$${PWD}/about.cpp" \
     "$${PWD}/appdetailspage.cpp" \
     "$${PWD}/pluginspage.cpp" \
     "$${PWD}/additionalfilespage.cpp" \
-    "$${PWD}/scoreeditor.cpp"
+    "$${PWD}/scoreeditor.cpp" \
+    "$${PWD}/filebeditor.cpp"
 LIBS += $${LCSOUND} \
     $${LSNDFILE} \
     $${RTMIDI}

@@ -24,6 +24,7 @@
 #include <QtGui>
 #include "highlighter.h"
 #include "scoreeditor.h"
+#include "filebeditor.h"
 
 class TextEditor;
 class OpEntryParser;
@@ -49,7 +50,8 @@ class BaseView : public QScrollArea
 //    void setOpcodeTree(OpEntryParser *opcodeTree);
     void setOrc(QString text);
     void setSco(QString text);
-    void setFileB(QString text);
+    void clearFileBText();
+    void appendFileBText(QString text);
     void setOptionsText(QString text);
     void setLadspaText(QString text);
     void setOtherCsdText(QString text);
@@ -81,7 +83,7 @@ class BaseView : public QScrollArea
     TextEditor *m_orcEditor;
     ScoreEditor *m_scoreEditor;
     TextEditor *m_optionsEditor;
-    TextEditor *m_filebEditor;
+    FileBEditor *m_filebEditor;
     TextEditor *m_otherEditor;  // Extra text after removing all sections. All this text is to be presented at the start of the csd. Also called information text elsewhere
     TextEditor *m_otherCsdEditor;  // Extra text and tags inside CsoundSynthesizer tags
     TextEditor *m_widgetEditor;

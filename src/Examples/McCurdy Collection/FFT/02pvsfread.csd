@@ -1,7 +1,7 @@
 ;Written by Iain McCurdy
 
-; Modified for QuteCsound by René, September 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, September 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 ;	ksmps changed from 100 to 10	to avoid the message pvsfread: analysis frame overlap must be >= ksmps
@@ -50,11 +50,11 @@ instr 	2
 	if	gkinput=0	then
 		;OUTPUT	OPCODE	POINTER     |   FILE
 		fsig1  	pvsfread	kptr * klen, SAnalysisFile1		;READ AN ANALYSIS FILE FROM THE HARD DRIVE ACCORDING TO THE GIVEN FILE POINTER LOCATION. OUTPUT AN F-SIGNAL.
-	aresyn 		pvsynth  	fsig1                      		;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
+		aresyn 	pvsynth  	fsig1                      		;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
 	else	
 		;OUTPUT	OPCODE	POINTER     |   FILE
 		fsig2  	pvsfread	kptr * klen, SAnalysisFile2		;READ AN ANALYSIS FILE FROM THE HARD DRIVE ACCORDING TO THE GIVEN FILE POINTER LOCATION. OUTPUT AN F-SIGNAL.
-	aresyn 		pvsynth  	fsig2                      		;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
+		aresyn	pvsynth  	fsig2                      		;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
 	endif
 				outs		aresyn * gkGain, aresyn * gkGain	;SEND THE RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS AND RESCALE USING ON-SCREEN GAIN CONTROL
 endin
@@ -66,10 +66,10 @@ i 1		0	   3600	;GUI
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>216</x>
- <y>210</y>
- <width>928</width>
- <height>395</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -82,14 +82,14 @@ i 1		0	   3600	;GUI
   <x>2</x>
   <y>2</y>
   <width>518</width>
-  <height>350</height>
+  <height>368</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvsfread</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -111,14 +111,14 @@ i 1		0	   3600	;GUI
   <x>521</x>
   <y>2</y>
   <width>314</width>
-  <height>350</height>
+  <height>368</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvsfread</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -169,7 +169,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName>On_Off</objectName>
+  <objectName/>
   <x>8</x>
   <y>8</y>
   <width>100</width>
@@ -185,7 +185,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>PtrMode</objectName>
@@ -251,7 +251,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.202</label>
+  <label>0.286</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -282,7 +282,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.20200000</value>
+  <value>0.28600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -327,7 +327,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>-1.424</label>
+  <label>0.800</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -358,7 +358,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <minimum>-2.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>-1.42400000</value>
+  <value>0.80000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -535,12 +535,12 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/Analysis/AndItsAll.pvx</stringvalue>
+  <stringvalue>AndItsAll.pvx</stringvalue>
   <text>Browse Analysis File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse1</objectName>
@@ -552,7 +552,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/Analysis/AndItsAll.pvx</label>
+  <label>AndItsAll.pvx</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -608,7 +608,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/Analysis/loop.pvx</label>
+  <label>loop.pvx</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -637,12 +637,12 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/Analysis/loop.pvx</stringvalue>
+  <stringvalue>loop.pvx</stringvalue>
   <text>Browse Analysis File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -658,6 +658,64 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>180</x>
+  <y>280</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>180</x>
+  <y>338</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{eae1d56f-d485-4090-b51f-b1780c714c5d}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>

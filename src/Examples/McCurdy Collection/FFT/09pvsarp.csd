@@ -1,11 +1,11 @@
 ;Written by Iain McCurdy
 
-; Modified for QuteCsound by René, 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, September 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 ;	Add table(s) for exp slider
-;	Add Browser for audio files
+;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
 ;	Add giDummy table to avoid INIT ERROR in instr 1: Invalid ftable no. 6.000000
 
 
@@ -32,6 +32,20 @@ gidummy		ftgen	6,0, 129, 10, 1						;not used
 giExp2000		ftgen	0, 0, 129, -25, 0, 0.001, 128, 2000
 
 
+opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
+	;gives stereo output regardless your soundfile is mono or stereo
+	Sfil, kspeed, iskip, iloop	xin
+	ichn		filenchnls	Sfil
+	if ichn == 1 then
+		aL		diskin2	Sfil, kspeed, iskip, iloop
+		aR		=		aL
+	else
+		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
+	endif
+		xout		aL, aR
+endop
+
+
 instr	10	;GUI
 	ktrig	metro	10
 	if (ktrig == 1)	then
@@ -50,7 +64,7 @@ endin
 instr	1
 	Sfile	invalue	"_Browse"
 	;OUTPUT	OPCODE	FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
-	aL, aR	diskin2	Sfile,      1,      0,        1					;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+	aL, aR	FilePlay2	Sfile,      1,      0,        1					;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 	
 	fsig1L 	pvsanal	aL, 1024, 256, 1024, 1							;ANALYSE THE  LEFT AUDIO SIGNAL
 	fsig1R 	pvsanal	aR, 1024, 256, 1024, 1							;ANALYSE THE RIGHT AUDIO SIGNAL
@@ -60,19 +74,22 @@ instr	1
 			reinit	START										;BEGIN A REINITIALISATION PASS FROM LABEL 'START'
 	endif														;END OF CONDITIONAL BRANCHING
 	START:														;LABEL
-	if		gkLFOfn<=4	then
+	if		gkLFOfn <= 4	then
 		kbin		oscili	gkLFOdepth, gkLFOspeed, i(gkLFOfn)+1
-	elseif	gkLFOfn=5		then
+	elseif	gkLFOfn = 5	then
 		kbin		randomh	-gkLFOdepth, gkLFOdepth, gkLFOspeed
      endif
 
 	kbin			=		kbin + gkLFOoffset	
 	kbin			limit	kbin, 0, 1	
 				rireturn											;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
+
 	fsig2L		pvsarp 	fsig1L, kbin, gkdepth, gkgain	
 	fsig2R		pvsarp 	fsig1R, kbin, gkdepth, gkgain	
+
 	aresynL 		pvsynth  	fsig2L                      					;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
 	aresynR 		pvsynth  	fsig2R                     					;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
+
 				outs		aresynL, aresynR							;SEND THE RESCALED, RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
 endin
 </CsInstruments>
@@ -83,10 +100,10 @@ i 10		0	   3600	;GUI
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>341</x>
- <y>253</y>
- <width>905</width>
- <height>406</height>
+ <x>522</x>
+ <y>348</y>
+ <width>801</width>
+ <height>373</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -99,14 +116,14 @@ i 10		0	   3600	;GUI
   <x>2</x>
   <y>2</y>
   <width>515</width>
-  <height>350</height>
+  <height>368</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvsarp</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -128,14 +145,14 @@ i 10		0	   3600	;GUI
   <x>519</x>
   <y>2</y>
   <width>282</width>
-  <height>350</height>
+  <height>368</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvsarp</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -187,7 +204,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName>ON_OFF</objectName>
+  <objectName/>
   <x>8</x>
   <y>8</y>
   <width>100</width>
@@ -551,7 +568,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>1</selectedIndex>
+  <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -698,7 +715,7 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/Songpan.wav</label>
+  <label>Songpan.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -727,12 +744,41 @@ This opcode has been inspired by the Spectral Arpeggiator in Trevor Wishart's 'C
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/Songpan.wav</stringvalue>
-  <text>Browse Stereo Audio File</text>
+  <stringvalue>Songpan.wav</stringvalue>
+  <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>180</x>
+  <y>340</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the audio file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

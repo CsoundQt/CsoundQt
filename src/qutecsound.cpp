@@ -3510,6 +3510,21 @@ flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E06.csd");
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
 
+  mccurdyFiles.clear();
+  mccurdyFiles.append(":/Examples/McCurdy Collection/LiveSampling/DiskRecAndPlayback.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/LiveSampling/MultiTableRec.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/LiveSampling/TableRecBasic.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/LiveSampling/DynamicTriggeredRecord.csd");
+  mccurdyFiles.append(":/Examples/McCurdy Collection/LiveSampling/sndloop.csd");
+
+  submenu = mccurdyMenu->addMenu(tr("LiveSampling"));
+  foreach (QString fileName, mccurdyFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+
   // Add the rest
   for (int i = 0; i < subMenus.size(); i++) {
     submenu = examplesMenu->addMenu(subMenuNames[i]);

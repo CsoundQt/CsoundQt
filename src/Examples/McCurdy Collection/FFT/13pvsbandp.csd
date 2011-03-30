@@ -1,14 +1,11 @@
 ;Written by Iain McCurdy, 2009
 
-; Modified for QuteCsound by René, October 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
-
-; NOT STABLE, freeze Csound and QuteCsound (same with FLTK original csd) !!!!!!!!
-
+;Modified for QuteCsound by René, September 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 ;	Add table(s) for exp slider
-;	Add Browser for audio files
+;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
 
 ;	Cannot display more than one space in Label, so can't display the diagram as below:
 ;
@@ -44,6 +41,20 @@ giFFTattributes3	ftgen	4, 0, 4, -2, 4096, 256, 4096, 1
 giExp20000		ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000
 
 
+opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
+	;gives stereo output regardless your soundfile is mono or stereo
+	Sfil, kspeed, iskip, iloop	xin
+	ichn		filenchnls	Sfil
+	if ichn == 1 then
+		aL		diskin2	Sfil, kspeed, iskip, iloop
+		aR		=		aL
+	else
+		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
+	endif
+		xout		aL, aR
+endop
+
+
 instr	10	;GUI
 	ktrig	metro	10
 	if (ktrig == 1)	then
@@ -77,8 +88,8 @@ instr 	1
 		asig		inch		1											;READ AUDIO FROM THE COMPUTER'S LIVE INPUT CHANNEL 1 (LEFT)
 	else																;IF 'INPUT' SWITCH IS NOT SET TO 'STORED FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
 		Sfile	invalue	"_Browse"
-		;OUTPUT	OPCODE	FILE_PATH | SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig		diskin2	Sfile,       1,      0,        1					;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+		;OUTPUT		OPCODE	FILE_PATH | SPEED | INSKIP | WRAPAROUND (1=ON)
+		asig, asigR	FilePlay2	Sfile,       1,      0,        1				;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 	endif															;END OF 'IF'...'THEN' BRANCHING
 
 	iFFTsize	table	0, i(gkFFTattributes)+1								;READ FFT SIZE FROM APPROPRIATE TABLE    
@@ -92,22 +103,19 @@ instr 	1
 	;OUTPUT	OPCODE	INPUT
 	aresyn 	pvsynth  	fsig2	                   							;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
 			outs		aresyn, aresyn										;SEND THE RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
-	rireturn
 endin
 </CsInstruments>
 <CsScore>
 ;INSTR | START | DURATION
 i 10		0	   3600	;GUI
 </CsScore>
-</CsoundSynthesizer>
-
-<bsbPanel>
+</CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>320</x>
- <y>223</y>
- <width>877</width>
- <height>480</height>
+ <x>546</x>
+ <y>233</y>
+ <width>829</width>
+ <height>457</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -120,14 +128,14 @@ i 10		0	   3600	;GUI
   <x>2</x>
   <y>2</y>
   <width>516</width>
-  <height>432</height>
+  <height>450</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvsbandp</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -149,14 +157,14 @@ i 10		0	   3600	;GUI
   <x>520</x>
   <y>2</y>
   <width>299</width>
-  <height>432</height>
+  <height>450</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvsbandp</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -190,7 +198,7 @@ The diagram (taken from the Csound Manual) shown in csd, helps to illustrate thi
 Using this system the user can continuously vary the cutoff slope of the filter. The input parameter 'type' defines the shape of the cutoff slope. A value of zero will give a linear shape, positive values will result in an exponential shape and negative values will give a logarithmic shape. The user can select between a variety of combinations of parameters for the FFT analysis. Larger values for FFT size will give better harmonic reproduction but greater time smearing effects and higher computational cost.
 Lower values will result in less time smearing but greater harmonic distortion. The user can choose between different input sources which includes the computer's live input.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -208,7 +216,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName>ON_OFF</objectName>
+  <objectName/>
   <x>8</x>
   <y>8</y>
   <width>100</width>
@@ -224,7 +232,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -272,7 +280,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Sound File</name>
+    <name>Audio File</name>
     <value>1</value>
     <stringvalue/>
    </bsbDropdownItem>
@@ -282,8 +290,8 @@ Lower values will result in less time smearing but greater harmonic distortion. 
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>9</x>
-  <y>356</y>
+  <x>10</x>
+  <y>373</y>
   <width>502</width>
   <height>70</height>
   <uuid>{f0c4875d-4e35-4d37-b043-9c1476025645}</uuid>
@@ -311,8 +319,8 @@ Lower values will result in less time smearing but greater harmonic distortion. 
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>168</x>
-  <y>362</y>
+  <x>169</x>
+  <y>379</y>
   <width>300</width>
   <height>28</height>
   <uuid>{c2cdd204-e32b-488e-b5c2-70688fb2defa}</uuid>
@@ -340,8 +348,8 @@ Lower values will result in less time smearing but greater harmonic distortion. 
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>FFTattributes</objectName>
-  <x>168</x>
-  <y>382</y>
+  <x>169</x>
+  <y>399</y>
   <width>274</width>
   <height>32</height>
   <uuid>{c8c311f9-c1b7-4bbb-becf-9c9f1fa862c9}</uuid>
@@ -383,7 +391,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>507.089</label>
+  <label>500.234</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -414,7 +422,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.46800000</value>
+  <value>0.46600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -490,7 +498,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.48200000</value>
+  <value>0.49400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -506,7 +514,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>558.680</label>
+  <label>606.937</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -566,7 +574,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.56800000</value>
+  <value>0.49400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -582,7 +590,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1011.954</label>
+  <label>606.937</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -642,7 +650,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.55200000</value>
+  <value>0.56200000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -658,7 +666,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>906.091</label>
+  <label>970.660</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -689,12 +697,12 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/AndItsAll.wav</stringvalue>
-  <text>Browse Mono Audio File</text>
+  <stringvalue>AndItsAll.wav</stringvalue>
+  <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -735,7 +743,7 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/AndItsAll.wav</label>
+  <label>AndItsAll.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -813,6 +821,35 @@ Lower values will result in less time smearing but greater harmonic distortion. 
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>181</x>
+  <y>349</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the audio file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>

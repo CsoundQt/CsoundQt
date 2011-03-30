@@ -1,7 +1,7 @@
 ;WRITTEN BY IAIN MCCURDY, 2006
 
-; Modified for QuteCsound by René, 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, September 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 ;	Add table(s) for exp slider
@@ -49,8 +49,6 @@ instr	1	;SIGNAL GENERATOR
 		ioct		= p4												;READ MIDI PITCH INFORMATION FROM A MIDI KEYBOARD
 		iamp		= p5
 
-print iamp
-
 		;PITCH BEND INFORMATION IS READ
 		iSemitoneBendRange = 2										;PITCH BEND RANGE IN SEMITONES (WILL BE DEFINED FURTHER LATER)
 		imin		= 0												;EQUILIBRIUM POSITION
@@ -79,8 +77,8 @@ print iamp
 endin
 
 instr	3
-		if	gkinput>=1 then										;IF 'INPUT' SWITCH IS SET TO 'STORED FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
-		if	gkinput!=1 kgoto	SKIP1
+	if	gkinput>=1 then											;IF 'INPUT' SWITCH IS SET TO 'STORED FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
+	if	gkinput!=1 kgoto	SKIP1
 
 	SAnalysisFile1	invalue		"_Browse1"
 	ilen1		filelen		SAnalysisFile1							;DERIVE THE FILE LENGTH (IN SECONDS) OF THE CHOSEN ANALYSIS FILE	
@@ -141,10 +139,10 @@ i  3		0 		3600			;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERF
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>387</x>
- <y>179</y>
- <width>952</width>
- <height>662</height>
+ <x>492</x>
+ <y>213</y>
+ <width>860</width>
+ <height>599</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -164,7 +162,7 @@ i  3		0 		3600			;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERF
   <midicc>0</midicc>
   <label>pvscross</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -193,7 +191,7 @@ i  3		0 		3600			;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERF
   <midicc>0</midicc>
   <label>pvscross</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -499,7 +497,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -545,7 +543,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.82184056</xValue>
+  <xValue>0.49766830</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -573,7 +571,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.822</label>
+  <label>0.498</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -714,7 +712,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <image>/</image>
   <eventLine>i 4 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -755,7 +753,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <type>event</type>
+  <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>Amplitude Gate</text>
@@ -774,7 +772,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.500</label>
+  <label>0.762</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -805,7 +803,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.50000000</value>
+  <value>0.76200000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -850,7 +848,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.000</label>
+  <label>0.054</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -881,7 +879,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
+  <value>0.05400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -928,12 +926,12 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/Analysis/AndItsAll.pvx</stringvalue>
+  <stringvalue>AndItsAll.pvx</stringvalue>
   <text>Browse Analysis File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -974,7 +972,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/Analysis/AndItsAll.pvx</label>
+  <label>AndItsAll.pvx</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -1001,7 +999,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/Analysis/loop.pvx</label>
+  <label>loop.pvx</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -1059,12 +1057,41 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/Analysis/loop.pvx</stringvalue>
+  <stringvalue>loop.pvx</stringvalue>
   <text>Browse Analysis File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>177</x>
+  <y>66</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the analysis  file(s).</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

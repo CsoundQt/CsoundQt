@@ -586,7 +586,7 @@ void EventSheet::paste()
   QList<int> selectedRows;
   QList<int> selectedColumns;
   int rowCount, columnCount;
-  int lowestRow = 99999, lowestColumn = 99999;
+  int lowestRow = 0x0fffffff, lowestColumn = 0x0fffffff;
   for (int i = 0; i < list.size(); i++) { // Get list of selected rows
     if (!selectedRows.contains(list[i].row()) ) {
       selectedRows.append(list[i].row());
@@ -600,6 +600,12 @@ void EventSheet::paste()
         lowestColumn = list[i].column();
       }
     }
+  }
+  if (lowestRow == 0x0fffffff) { // If there is no selection
+    lowestRow = 0;
+  }
+  if (lowestColumn == 0x0fffffff) { // If there is no selection
+    lowestColumn = 0;
   }
   rowCount = selectedRows.size();
   columnCount = selectedColumns.size();
@@ -1004,7 +1010,7 @@ void EventSheet::appendRow()
 
 void EventSheet::appendColumns()
 {
-  OneValueDialog d(this, tr("Add columns:"));
+  OneValueDialog d(this, tr("Add columns:"), 5);
   d.box->setDecimals(0);
   d.exec();
   if (d.result() == QDialog::Accepted) {
@@ -1014,10 +1020,9 @@ void EventSheet::appendColumns()
   }
 }
 
-
 void EventSheet::appendRows()
 {
-  OneValueDialog d(this, tr("Add Rows:"));
+  OneValueDialog d(this, tr("Add Rows:"), 10);
   d.box->setDecimals(0);
   d.exec();
   if (d.result() == QDialog::Accepted) {

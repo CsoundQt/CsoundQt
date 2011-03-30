@@ -1,7 +1,7 @@
 ;Written by Iain McCurdy, 2010
 
-; Modified for QuteCsound by René, November 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, November 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 ;	Add table(s) for exp slider
@@ -23,6 +23,7 @@ nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
 
 giFFTsizes	ftgen	0,0,8,-2,128,256,512,1024,2048,4096,8192	;FFT SIZES
 giExp4		ftgen	0, 0, 129, -25, 0, 0.125, 128, 4.0			;TABLE FOR EXP SLIDER
+
 
 instr	10	;GUI
 	ktrig	metro	10
@@ -69,7 +70,7 @@ instr 1
 	endif
 	NEW_FILE:
 		
-	ifile	ftgentmp	0, 0, 0, 1, Sfile,0,0,1
+	ifile	ftgentmp	0, 0, 0, 1, Sfile,0,0,1											;READ MONO OR STEREO AUDIO FILE CHANNEL 1
 			rireturn																;RETURN FROM REINITIALIZATION PASS
 
 	kamp			portk	gkamp, kporttime											;APPLY PORTAMENTO SMOOTHING TO AMPLITUDE SLIDER VALUE
@@ -110,10 +111,10 @@ i  4      0.1       0	;INIT
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>191</x>
- <y>278</y>
- <width>1231</width>
- <height>438</height>
+ <x>577</x>
+ <y>439</y>
+ <width>934</width>
+ <height>292</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -133,7 +134,7 @@ i  4      0.1       0	;INIT
   <midicc>0</midicc>
   <label>temposcal</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -162,7 +163,7 @@ i  4      0.1       0	;INIT
   <midicc>0</midicc>
   <label>temposcal</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -192,7 +193,7 @@ i  4      0.1       0	;INIT
   <label>-----------------------------------------------------------------------------------------------------
 temposcal uses phase vocoding with the option of phase locking to resynthesize a sound file stored in a GEN 1 function table. Movement through the sound file is controlled using a time scaling control.On screen switches allow the user to instantly freeze the sound or restore normal speed. Pitch can be controlled independently using a pitch ratio control. Unison can be restored using an on screen switch. The user can choose  any mono or stereo sound file, only channel one is loaded. A variety of FFT sizes can be explored - smaller sizes will will result in less time smearing by more spectral distortion larger sizes will result in less spectral distortion but more time smearing. This example can also be activated from a MIDI keyboard in which case MIDI pitch is mapped to the the pitch ratio used by temposcal. In this mode the slider for pitch will be ignored. Middle C is the point of no transposition.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -226,7 +227,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -343,12 +344,12 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/synthloop.wav</stringvalue>
+  <stringvalue>synthloop.wav</stringvalue>
   <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse</objectName>
@@ -360,7 +361,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/synthloop.wav</label>
+  <label>synthloop.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -437,7 +438,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <midicc>0</midicc>
   <minimum>-2.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>-0.36220472</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -453,7 +454,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>-0.368</label>
+  <label>1.000</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -513,7 +514,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.60000000</value>
+  <value>0.60000002</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -641,7 +642,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <image>/</image>
   <eventLine>i2 0 0 1 </eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -660,7 +661,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <image>/</image>
   <eventLine>i2 0 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -679,7 +680,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <image>/</image>
   <eventLine>i3 0 0 0.6</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

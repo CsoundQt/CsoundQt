@@ -1,10 +1,10 @@
 ;Written by Iain McCurdy, 2007
 
-; Modified for QuteCsound by René, September 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, September 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
-;	Add Browser for audio file(s)
+;	Add Browser for audio file and use of FilePlay2 udo, now accept mono or stereo wav files
 
 
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
@@ -19,6 +19,20 @@ nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
 
+opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
+	;gives stereo output regardless your soundfile is mono or stereo
+	Sfil, kspeed, iskip, iloop	xin
+	ichn		filenchnls	Sfil
+	if ichn == 1 then
+		aL		diskin2	Sfil, kspeed, iskip, iloop
+		aR		=		aL
+	else
+		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
+	endif
+		xout		aL, aR
+endop
+
+
 instr	1	;GUI
 	ktrig	metro	10
 	if (ktrig == 1)	then
@@ -28,11 +42,11 @@ instr	1	;GUI
 endin
 
 instr 	2
-	if	gkinput==1	then													;IF 'INPUT' SWITCH IS SET TO 'SOUND FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
+	if	gkinput==1	then													;IF 'INPUT' SWITCH IS SET TO 'AUDIO FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
 		Sfile	invalue		"_Browse1"
-		;OUTPUT	OPCODE		FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig		diskin2		Sfile,       1,      0,        1					;READ A STORED AUDIO FILE FROM THE HARD DRIVE
-	else																	;IF 'INPUT' SWITCH IS NOT SET TO 'SOUND FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
+		;OUTPUT		OPCODE		FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
+		asig, asigR	FilePlay2		Sfile,       1,      0,        1				;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+	else																	;IF 'INPUT' SWITCH IS NOT SET TO 'AUDIO FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
 		asig		inch			1											;READ AUDIO FROM THE COMPUTER'S LIVE INPUT CHANNEL 1 (LEFT)
 	endif
 
@@ -73,7 +87,7 @@ i 1		0	   3600	;GUI
   <midicc>0</midicc>
   <label>pvsanal and pvsynth</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -94,15 +108,15 @@ i 1		0	   3600	;GUI
   <objectName/>
   <x>519</x>
   <y>2</y>
-  <width>486</width>
-  <height>323</height>
+  <width>584</width>
+  <height>280</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvsanal and pvsynth</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -123,18 +137,18 @@ i 1		0	   3600	;GUI
   <objectName/>
   <x>522</x>
   <y>22</y>
-  <width>481</width>
-  <height>301</height>
+  <width>574</width>
+  <height>252</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>---------------------------------------------------------------------------------------------------------------------
+  <label>---------------------------------------------------------------------------------------------------------------------------------------------
 Pvsanal and pvsynth are two of the core opcodes used when when working with streaming phase vocoding analysis in Csound.
 Pvsanal is used to create a streaming FFT analysis signal of an audio signal input. It outputs an 'fsig' signal which can be read and modified by Csound's streaming FFT opcodes.
 Pvsynth is the compliment to pvsanal in that it takes an fsig signal and reynthesises it into an audio signal. This example is rather undramatic in that it merely takes an audio signal (either the live input or a stored sound file), converts it into an fsig, and then resynthesises it back into its initial state as an audio signal. Normally, as demonstrated in subsequent examples, further processing of the fsig would be applied before the resynthesis. Pvsanal also allows the user to make settings for aspects of the analysis such as window size, window type, FFT size and overlap but these setting should normally hard set into the code and left unchanged. The settings used in this example represent a good default setting. For further information regarding these parameters refer to the Csound Reference Manual.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -192,7 +206,7 @@ Pvsynth is the compliment to pvsanal in that it takes an fsig signal and reynthe
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.21000000</value>
+  <value>0.27000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -208,7 +222,7 @@ Pvsynth is the compliment to pvsanal in that it takes an fsig signal and reynthe
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.210</label>
+  <label>0.270</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -228,7 +242,7 @@ Pvsynth is the compliment to pvsanal in that it takes an fsig signal and reynthe
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName>On_Off</objectName>
+  <objectName/>
   <x>8</x>
   <y>8</y>
   <width>100</width>
@@ -244,7 +258,7 @@ Pvsynth is the compliment to pvsanal in that it takes an fsig signal and reynthe
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>Input</objectName>
@@ -263,7 +277,7 @@ Pvsynth is the compliment to pvsanal in that it takes an fsig signal and reynthe
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Sound File</name>
+    <name>Audio File</name>
     <value>1</value>
     <stringvalue/>
    </bsbDropdownItem>
@@ -312,12 +326,12 @@ Pvsynth is the compliment to pvsanal in that it takes an fsig signal and reynthe
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/AndItsAll.wav</stringvalue>
-  <text>Browse Mono Audio File</text>
+  <stringvalue>AndItsAll.wav</stringvalue>
+  <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse1</objectName>
@@ -329,7 +343,7 @@ Pvsynth is the compliment to pvsanal in that it takes an fsig signal and reynthe
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/AndItsAll.wav</label>
+  <label>AndItsAll.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -345,6 +359,35 @@ Pvsynth is the compliment to pvsanal in that it takes an fsig signal and reynthe
    <b>226</b>
   </bgcolor>
   <background>nobackground</background>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>178</x>
+  <y>233</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the audio file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

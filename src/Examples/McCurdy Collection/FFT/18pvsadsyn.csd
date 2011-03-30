@@ -1,11 +1,11 @@
 ;Written by Iain McCurdy 2009
 
-; Modified for QuteCsound by René, October 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, September 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 ;	Add table(s) for exp slider
-;	Add Browser for audio files
+;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
 
 
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
@@ -29,6 +29,20 @@ giFFTattributes3	ftgen	4, 0, 4, -2, 4096, 256, 4096, 1
 giExp2			ftgen	0, 0, 129, -25, 0, 0.25, 128, 2.0
 
 
+opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
+	;gives stereo output regardless your soundfile is mono or stereo
+	Sfil, kspeed, iskip, iloop	xin
+	ichn		filenchnls	Sfil
+	if ichn == 1 then
+		aL		diskin2	Sfil, kspeed, iskip, iloop
+		aR		=		aL
+	else
+		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
+	endif
+		xout		aL, aR
+endop
+
+
 instr	10	;GUI
 	ktrig	metro	10
 	if (ktrig == 1)	then
@@ -50,7 +64,7 @@ instr 	1
 	else																					;IF 'INPUT' SWITCH IS SET TO 'Sound File' THEN IMPLEMENT THE NEXT LINE OF CODE
 		Sfile	invalue	"_Browse"
 		;OUTPUT	OPCODE	FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig, aR	diskin2	Sfile,       1,      0,        1										;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+		asig, aR	FilePlay2	Sfile,       1,      0,        1										;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 	endif																				;END OF 'IF'...'THEN' BRANCHING
 
 	iFFTsize	table	0, i(gkFFTattributes)+1													;READ FFT SIZE FROM APPROPRIATE TABLE    
@@ -79,7 +93,6 @@ instr 	1
 	aresyn 	pvsadsyn fsig1, inoscs, gkfmod , i(gkbinoffset), i(gkbinincr)							;RESYNTHESIZE FROM THE fsig USING pvsadsyn
 	;OUTPUT	OPCODE		INPUT
 			outs		aresyn, aresyn															;SEND THE RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
-			rireturn																		;RETURN TO NORMAL PERFORMANCE TIME AFTER A RE-INITIALIZATION PASS
 endin
 </CsInstruments>
 <CsScore>
@@ -89,10 +102,10 @@ i 10		0	   3600	;GUI
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>319</x>
- <y>189</y>
- <width>1246</width>
- <height>482</height>
+ <x>278</x>
+ <y>282</y>
+ <width>1122</width>
+ <height>537</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -112,7 +125,7 @@ i 10		0	   3600	;GUI
   <midicc>0</midicc>
   <label>pvsadsyn</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -141,7 +154,7 @@ i 10		0	   3600	;GUI
   <midicc>0</midicc>
   <label>pvsadsyn</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -205,7 +218,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -381,14 +394,14 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <x>6</x>
   <y>222</y>
   <width>506</width>
-  <height>95</height>
+  <height>110</height>
   <uuid>{cdc434d0-b9e7-4f6f-aa90-800ec76dced6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -417,12 +430,12 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/Songpan.wav</stringvalue>
-  <text>Browse Stereo Audio File</text>
+  <stringvalue>Songpan.wav</stringvalue>
+  <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>Input</objectName>
@@ -441,7 +454,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Sound File</name>
+    <name>Audio File</name>
     <value>1</value>
     <stringvalue/>
    </bsbDropdownItem>
@@ -459,7 +472,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/Songpan.wav</label>
+  <label>Songpan.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -649,6 +662,35 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <maximum>2048</maximum>
   <randomizable group="0">false</randomizable>
   <value>1</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>179</x>
+  <y>309</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the audio file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

@@ -1,7 +1,7 @@
 ;Written by Iain McCurdy, 2010
 
-; Modified for QuteCsound by René, November 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, November 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 ;	Add Browser for audio files
@@ -121,13 +121,15 @@ endin
 i 10		0	   3600	;GUI
 i  4      0.1       0	;INIT
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>308</x>
- <y>186</y>
- <width>1143</width>
- <height>411</height>
+ <x>315</x>
+ <y>268</y>
+ <width>1063</width>
+ <height>348</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -147,7 +149,7 @@ i  4      0.1       0	;INIT
   <midicc>0</midicc>
   <label>mincer</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -176,7 +178,7 @@ i  4      0.1       0	;INIT
   <midicc>0</midicc>
   <label>mincer</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -207,7 +209,7 @@ i  4      0.1       0	;INIT
 mincer performs phase vocoding resynthesis on GEN 1 function tables with the option of phase locking. Phase locking can give improved results, particularly when freezing the time pointers progress through the sound. Access to the GEN 1 function table is done by providing the opcode with a time value in seconds. This example interprets the lengths of a variety of sound files so that the pointer always encompasses the entirety of the chosen file. External to the opcode, a phasor is used to move through the file (speed mode) to provide a 'time scaling' type operation using the 'Speed' control. Additional buttons allow the user to freeze progress through the sound file or to restore normal speed. Pitch transposition is also possible by providing a pitch ratio value. An on screen button will return this control to its unison setting. The user can choose  any mono   or stereo sound file, only channel one is loaded. A variety of FFT sizes can be explored - smaller sizes will will result in less time smearing by more spectral distortion larger sizes will result in less spectral distortion but more time smearing. This example can also be activated from a MIDI keyboard in which case MIDI pitch is mapped to the the pitch ratio used by mincer. In this mode the slider for pitch will be ignored. Middle C is the point of no transposition.
 NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPED.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -241,7 +243,7 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -434,12 +436,12 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/808loop.wav</stringvalue>
+  <stringvalue>808loop.wav</stringvalue>
   <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse</objectName>
@@ -451,7 +453,7 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/808loop.wav</label>
+  <label>808loop.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -786,7 +788,7 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <image>/</image>
   <eventLine>i2 0 0 1 </eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -805,7 +807,7 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <image>/</image>
   <eventLine>i2 0 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -824,7 +826,7 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <image>/</image>
   <eventLine>i3 0 0 1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

@@ -1,11 +1,11 @@
 ;Written by Iain McCurdy 2009
 
-; Modified for QuteCsound by René, September 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, September 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 ;	Add table(s) for exp slider
-;	Add Browser for audio files
+;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
 
 
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
@@ -33,30 +33,49 @@ giFFTattributes3	ftgen	4, 0, 4, -2, 4096, 128, 4096, 1
 giExp10000		ftgen	0, 0, 129, -25, 0, 20.0, 128, 10000
 
 
+opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
+	;gives stereo output regardless your soundfile is mono or stereo
+	Sfil, kspeed, iskip, iloop	xin
+	ichn		filenchnls	Sfil
+	if ichn == 1 then
+		aL		diskin2	Sfil, kspeed, iskip, iloop
+		aR		=		aL
+	else
+		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
+	endif
+		xout		aL, aR
+endop
+
+
 instr	10	;GUI
 	ktrig	metro	10
 	if (ktrig == 1)	then
-		gkpow			invalue	"Power"					;init 1.0
-		kfreq			invalue	"Frequency"
-		gkfreq			tablei	kfreq, giExp10000, 1
-						outvalue	"Frequency_Value", gkfreq	;init 250.0	
-		gkmltfreq			invalue	"Mult_Frequency"			;init 1.0
-		gkDrySigGain		invalue	"Dry_Signal"				;init 0.0
-		gkFiltSigGain		invalue	"Filter_Signal"			;init 0.0
-		gkResSigGain		invalue	"Resultant_Signal"			;init 1.0
+		gkpow			invalue		"Power"
+		kfreq			invalue		"Frequency"
+		gkfreq			tablei		kfreq, giExp10000, 1
+						outvalue		"Frequency_Value", gkfreq
+		gkmltfreq			invalue		"Mult_Frequency"
+		gkDrySigGain		invalue		"Dry_Signal"
+		gkFiltSigGain		invalue		"Filter_Signal"
+		gkResSigGain		invalue		"Resultant_Signal"
 
-		gkOnOff			invalue	"On_Off"					;		,i1 0 0.01
-		gkpartials		invalue	"Partials"				;init 8	,i1 0 0.01
-		gkoffset			invalue	"Offset"					;init 0	,i1 0 0.01
+		gkOnOff			invalue		"On_Off"
+		ktrigOn			trigger		gkOnOff, 0.5, 0
+						schedkwhen	ktrigOn, 0, 0, 1, 0, -1		;start instr 1
+		ktrigOff			trigger		gkOnOff, 0.5, 1
+						schedkwhen	ktrigOff, 0, 0, -1, 0, 1		;stop instr 1
+
+		gkpartials		invalue		"Partials"
+		gkoffset			invalue		"Offset"
 
 		ktrig			changed	gkpartials, gkoffset
 		if ktrig = 1 then
 				event "i", 1, 0, 0.01	
 		endif
 
-		gkmode			invalue	"Mode"					;init 1
-		gkinput			invalue	"Input"
-		gkFFTattributes	invalue	"FFTattributes"	
+		gkmode			invalue		"Mode"
+		gkinput			invalue		"Input"
+		gkFFTattributes	invalue		"FFTattributes"	
 	endif
 endin
 
@@ -102,8 +121,8 @@ instr 	3	;FILTERING INSTRUMENT
 		asig		inch		1												;READ AUDIO FROM THE COMPUTER'S LIVE INPUT CHANNEL 1 (LEFT)
 	else																	;IF 'INPUT' SWITCH IS NOT SET TO 'STORED FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
 		Sfile	invalue	"_Browse"
-		;OUTPUT	OPCODE	FILE_PATH | SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig		diskin2	Sfile,      1,      0,        1						;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+		;OUTPUT		OPCODE	FILE_PATH | SPEED | INSKIP | WRAPAROUND (1=ON)
+		asig, asigR	FilePlay2	Sfile,      1,      0,        1					;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 	endif																;END OF 'IF'...'THEN' BRANCHING
 	if		gkOnOff!=0	kgoto	CONTINUE									;SENSE FLTK ON/OFF SWITCH. IF ON, SKIP THE NEXT LINE
 		turnoff															;TURN THIS INSTRUMENT OFF IMMEDIATELY               
@@ -129,7 +148,6 @@ instr 	3	;FILTERING INSTRUMENT
 	aout		sum		asig*gkDrySigGain, aFiltSig*gkFiltSigGain, aresyn*gkResSigGain	;MIXER
 			outs		aout, aout											;SEND THE RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
 			zacl		0,1
-			rireturn
 endin
 </CsInstruments>
 <CsScore>
@@ -139,10 +157,10 @@ i 10		0	   3600	;GUI
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>529</x>
- <y>175</y>
- <width>971</width>
- <height>619</height>
+ <x>683</x>
+ <y>237</y>
+ <width>801</width>
+ <height>571</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -155,14 +173,14 @@ i 10		0	   3600	;GUI
   <x>2</x>
   <y>2</y>
   <width>514</width>
-  <height>550</height>
+  <height>568</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvsfilter</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -184,14 +202,14 @@ i 10		0	   3600	;GUI
   <x>517</x>
   <y>2</y>
   <width>280</width>
-  <height>550</height>
+  <height>568</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvsfilter</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -255,19 +273,19 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <type>event</type>
+  <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>  ON / OFF</text>
   <image>/</image>
-  <eventLine>i 1 0 0.01</eventLine>
+  <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>6</x>
-  <y>478</y>
+  <y>496</y>
   <width>506</width>
   <height>70</height>
   <uuid>{f0c4875d-4e35-4d37-b043-9c1476025645}</uuid>
@@ -296,7 +314,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>169</x>
-  <y>484</y>
+  <y>502</y>
   <width>300</width>
   <height>30</height>
   <uuid>{c2cdd204-e32b-488e-b5c2-70688fb2defa}</uuid>
@@ -325,7 +343,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
  <bsbObject version="2" type="BSBDropdown">
   <objectName>FFTattributes</objectName>
   <x>169</x>
-  <y>504</y>
+  <y>522</y>
   <width>274</width>
   <height>32</height>
   <uuid>{c8c311f9-c1b7-4bbb-becf-9c9f1fa862c9}</uuid>
@@ -693,7 +711,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>246.330</label>
+  <label>246.331</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1050,14 +1068,14 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <x>6</x>
   <y>395</y>
   <width>506</width>
-  <height>82</height>
+  <height>100</height>
   <uuid>{70618fd0-47b8-418a-a344-e579eb1d201e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>Input</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1086,12 +1104,12 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/loop.wav</stringvalue>
-  <text>Browse Mono Audio File</text>
+  <stringvalue>loop.wav</stringvalue>
+  <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>Input</objectName>
@@ -1110,7 +1128,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Sound File</name>
+    <name>Audio File</name>
     <value>1</value>
     <stringvalue/>
    </bsbDropdownItem>
@@ -1128,7 +1146,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/loop.wav</label>
+  <label>loop.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -1144,6 +1162,35 @@ Lower values will result in less time smearing but greater harmonic distortion.<
    <b>226</b>
   </bgcolor>
   <background>nobackground</background>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>179</x>
+  <y>466</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the audio file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

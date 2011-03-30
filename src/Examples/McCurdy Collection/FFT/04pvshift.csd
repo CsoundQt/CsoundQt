@@ -1,11 +1,12 @@
 ;Written by Iain McCurdy 2009
 
-; Modified for QuteCsound by René, September 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, September 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 ;	Add table(s) for exp slider
-;	Add Browser for audio files
+;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
+
 
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
@@ -25,6 +26,20 @@ giFFTattributes2	ftgen	3, 0, 4, -2, 2048, 128, 2048, 1
 giFFTattributes3	ftgen	4, 0, 4, -2, 4096, 128, 4096, 1
 
 giExp20000		ftgen	0, 0, 129, -25, 0, 1.0, 128, 20000		;TABLE FOR EXP SLIDER
+
+
+opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
+	;gives stereo output regardless your soundfile is mono or stereo
+	Sfil, kspeed, iskip, iloop	xin
+	ichn		filenchnls	Sfil
+	if ichn == 1 then
+		aL		diskin2	Sfil, kspeed, iskip, iloop
+		aR		=		aL
+	else
+		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
+	endif
+		xout		aL, aR
+endop
 
 
 instr	10	;GUI
@@ -47,12 +62,12 @@ instr	1	;SOUND PRODUCING AND TRANSFORMING INSTRUMENT
 		asig		inch		1												;READ AUDIO FROM THE COMPUTER'S LIVE INPUT CHANNEL 1 (LEFT)
 	elseif	gkinput=1 	then												;IF 'INPUT' SWITCH IS SET TO 'Voice' THEN IMPLEMENT THE NEXT LINE OF CODE
 		Sfile1	invalue	"_Browse1"
-		;OUTPUT	OPCODE	FILE_PATH       | SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig		diskin2	"AndItsAll.wav",    1,      0,        1					;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+		;OUTPUT		OPCODE	FILE_PATH       | SPEED | INSKIP | WRAPAROUND (1=ON)
+		asig, asigR	FilePlay2	"AndItsAll.wav",    1,      0,        1				;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 	else																	;IF 'INPUT' SWITCH IS NOT SET TO 'STORED FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
 		Sfile2	invalue	"_Browse2"
-		;OUTPUT	OPCODE	FILE_PATH       | SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig		diskin2	"loop.wav",         1,      0,        1					;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+		;OUTPUT		OPCODE	FILE_PATH       | SPEED | INSKIP | WRAPAROUND (1=ON)
+		asig, asigR	FilePlay2	"loop.wav",         1,      0,        1				;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 	endif																;END OF 'IF'...'THEN' BRANCHING
 
 	kSwitch		changed	gkgain, gkkeepform, gkFFTattributes					;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
@@ -68,9 +83,9 @@ instr	1	;SOUND PRODUCING AND TRANSFORMING INSTRUMENT
 	fsig1  		pvsanal	asig, iFFTsize, ioverlap, iwinsize, iwintype									;ANALYSE THE AUDIO SIGNAL THAT WAS CREATED IN INSTRUMENT 1. OUTPUT AN F-SIGNAL.
 	;OUTPUT		OPCODE	INPUT | SHIFT_AMOUNT | LOWEST_EXPECTED_FREQUENCY | FORMANT_MODE  |   GAIN
 	fsig2 		pvshift 	fsig1,    gkshift,              gklowest,          i(gkkeepform),  i(gkgain)		;SHIFT FREQUENCIES OF THE INPUT F-SIGNAL
-				rireturn																		;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
 	;OUTPUT		OPCODE		INPUT
 	aresyn 		pvsynth  	fsig2                      												;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
+				rireturn																		;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
 				outs		aresyn * gkOutGain, aresyn * gkOutGain										;SEND THE RESCALED, RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
 endin
 </CsInstruments>
@@ -78,15 +93,13 @@ endin
 ;INSTR | START | DURATION
 i 10		0	   3600	;GUI
 </CsScore>
-</CsoundSynthesizer>
-
-<bsbPanel>
+</CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>0</x>
- <y>0</y>
- <width>917</width>
- <height>533</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -99,14 +112,14 @@ i 10		0	   3600	;GUI
   <x>2</x>
   <y>2</y>
   <width>516</width>
-  <height>474</height>
+  <height>492</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvshift</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -128,14 +141,14 @@ i 10		0	   3600	;GUI
   <x>519</x>
   <y>2</y>
   <width>357</width>
-  <height>474</height>
+  <height>492</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvshift</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -184,7 +197,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName>ON_OFF</objectName>
+  <objectName/>
   <x>8</x>
   <y>8</y>
   <width>100</width>
@@ -200,7 +213,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>Keepform</objectName>
@@ -229,7 +242,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -271,7 +284,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>20.000</label>
+  <label>0.000</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -302,7 +315,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <minimum>-5000.00000000</minimum>
   <maximum>5000.00000000</maximum>
-  <value>20.00000000</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -475,7 +488,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>10</x>
-  <y>398</y>
+  <y>419</y>
   <width>501</width>
   <height>70</height>
   <uuid>{f0c4875d-4e35-4d37-b043-9c1476025645}</uuid>
@@ -504,7 +517,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>169</x>
-  <y>404</y>
+  <y>425</y>
   <width>300</width>
   <height>30</height>
   <uuid>{c2cdd204-e32b-488e-b5c2-70688fb2defa}</uuid>
@@ -533,7 +546,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
  <bsbObject version="2" type="BSBDropdown">
   <objectName>FFTattributes</objectName>
   <x>169</x>
-  <y>426</y>
+  <y>447</y>
   <width>274</width>
   <height>32</height>
   <uuid>{c8c311f9-c1b7-4bbb-becf-9c9f1fa862c9}</uuid>
@@ -562,7 +575,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -682,7 +695,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.82400000</value>
+  <value>0.73600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -698,7 +711,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>2403.907</label>
+  <label>1464.783</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -730,11 +743,11 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>/home/moi/Samples/AndItsAll.wav</stringvalue>
-  <text>Browse Mono Audio File</text>
+  <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse1</objectName>
@@ -746,7 +759,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/AndItsAll.wav</label>
+  <label>AndItsAll.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -831,7 +844,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/loop.wav</label>
+  <label>loop.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -861,11 +874,69 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>/home/moi/Samples/loop.wav</stringvalue>
-  <text>Browse Mono Audio File</text>
+  <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>182</x>
+  <y>328</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the audio file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>182</x>
+  <y>387</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{e62d8363-f170-4e7d-8db1-ebd5fa7c8afe}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the audio file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

@@ -1,7 +1,7 @@
 ;Written by Iain McCurdy, 2006
 
-; Modified for QuteCsound by René, October 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, October 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 ;	Add table(s) for exp slider
@@ -101,10 +101,10 @@ i  1      0       3600					;INSTRUMENT 1 PLAYS FOR 1 HOUR
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>408</x>
- <y>159</y>
- <width>1111</width>
- <height>578</height>
+ <x>491</x>
+ <y>449</y>
+ <width>1045</width>
+ <height>508</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -124,7 +124,7 @@ i  1      0       3600					;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <midicc>0</midicc>
   <label>pvadd</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -153,7 +153,7 @@ i  1      0       3600					;INSTRUMENT 1 PLAYS FOR 1 HOUR
   <midicc>0</midicc>
   <label>pvadd</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -217,7 +217,7 @@ pvadd performs FFT resynthesis on a analysis data file that has been created usi
   <image>/</image>
   <eventLine>i 2 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Portamento_Amount</objectName>
@@ -307,12 +307,12 @@ pvadd performs FFT resynthesis on a analysis data file that has been created usi
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/Analysis/loop.pvx</stringvalue>
+  <stringvalue>loop.pvx</stringvalue>
   <text>Browse Analysis File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse</objectName>
@@ -324,7 +324,7 @@ pvadd performs FFT resynthesis on a analysis data file that has been created usi
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/Analysis/loop.pvx</label>
+  <label>loop.pvx</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -1082,7 +1082,7 @@ Limit</label>
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">

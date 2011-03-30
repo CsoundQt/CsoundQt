@@ -36,7 +36,7 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
   p.setColor(static_cast<QPalette::ColorRole>(9), QColor(200, 200, 200));
   m_optionsEditor->setPalette(p);
   m_optionsEditor->setTextColor(QColor("darkGreen"));
-  m_filebEditor = new TextEditor(this);
+  m_filebEditor = new FileBEditor(this);
   m_otherEditor = new TextEditor(this);
   p.setColor(QPalette::WindowText, QColor("darkGreen"));
   p.setColor(static_cast<QPalette::ColorRole>(9), QColor(200, 200, 200));
@@ -71,7 +71,7 @@ void BaseView::setFullText(QString text, bool goToTop)
 {
   // Load Embedded Files ------------------------
   // Must be done initially to remove the files for both view modes
-  QString fileText = "";
+  clearFileBText();
   while (text.contains("<CsFileB ") and text.contains("</CsFileB>")) {
     bool endsWithBreak = false;
     if (text.indexOf("</CsFileB>") + 10 < text.size() && text[text.indexOf("</CsFileB>") + 10] == '\n' ) {
@@ -81,9 +81,8 @@ void BaseView::setFullText(QString text, bool goToTop)
                                        text.indexOf("</CsFileB>") - text.indexOf("<CsFileB ") + 10
                                        + (endsWithBreak ? 1:0));
     text.remove(text.indexOf("<CsFileB "), currentFileText.size());
-    fileText += currentFileText;
+    appendFileBText(currentFileText);
   }
-  setFileB(fileText);
   if (m_viewMode < 2) {  // Unified view
     QTextCursor cursor = m_mainEditor->textCursor();
     cursor.select(QTextCursor::Document);
@@ -185,7 +184,7 @@ void BaseView::setFont(QFont font)
   m_orcEditor->setFont(font);
   m_scoreEditor->setFont(font);
   m_optionsEditor->setFont(font);
-  m_filebEditor->setFont(font);
+//  m_filebEditor->setFont(font);
   m_otherEditor->setFont(font);
   m_otherCsdEditor->setFont(font);
   m_widgetEditor->setFont(font);
@@ -197,7 +196,7 @@ void BaseView::setFontPointSize(float size)
   m_orcEditor->setFontPointSize(size);
   m_scoreEditor->setFontPointSize(size);
   m_optionsEditor->setFontPointSize(size);
-  m_filebEditor->setFontPointSize(size);
+//  m_filebEditor->setFontPointSize(size);
   m_otherEditor->setFontPointSize(size);
   m_otherCsdEditor->setFontPointSize(size);
   m_widgetEditor->setFontPointSize(size);
@@ -209,7 +208,7 @@ void BaseView::setTabStopWidth(int width)
   m_orcEditor->setTabStopWidth(width);
   m_scoreEditor->setTabStopWidth(width);
   m_optionsEditor->setTabStopWidth(width);
-  m_filebEditor->setTabStopWidth(width);
+//  m_filebEditor->setTabStopWidth(width);
   m_otherEditor->setTabStopWidth(width);
   m_otherCsdEditor->setTabStopWidth(width);
   m_widgetEditor->setTabStopWidth(width);
@@ -221,7 +220,7 @@ void BaseView::setLineWrapMode(QTextEdit::LineWrapMode mode)
   m_orcEditor->setLineWrapMode(mode);
   m_scoreEditor->setLineWrapMode(mode);
   m_optionsEditor->setLineWrapMode(mode);
-  m_filebEditor->setLineWrapMode(mode);
+//  m_filebEditor->setLineWrapMode(mode);
   m_otherEditor->setLineWrapMode(mode);
   m_otherCsdEditor->setLineWrapMode(mode);
   m_widgetEditor->setLineWrapMode(mode);
@@ -318,9 +317,14 @@ void BaseView::setSco(QString text)
   }
 }
 
-void BaseView::setFileB(QString text)
+void BaseView::clearFileBText()
 {
-  m_filebEditor->setPlainText(text);
+  m_filebEditor->clear();
+}
+
+void BaseView::appendFileBText(QString text)
+{
+  m_filebEditor->appendText(text);
 }
 
 void BaseView::setOptionsText(QString text)

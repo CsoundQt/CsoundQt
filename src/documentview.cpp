@@ -353,10 +353,10 @@ int DocumentView::currentLine()
   else { //  Split view
     // TODO check properly for line number also from other editors
     QWidget *w = this->focusWidget(); // Gives last child of this widget that has had focus.
-    if (w == m_scoreEditor) {
-      qDebug() << "DocumentView::currentLine() not implemented for score editor.";
+    if (w == m_scoreEditor || w == m_filebEditor) {
+      qDebug() << "DocumentView::currentLine() not implemented for score and fileb editor.";
     }
-    else if (w != 0) {
+    else if (w != 0 && editors.contains(w)) { // Somehow this widget can sometimes be invalid... so must check if it is one of the editors
       QTextCursor cursor = static_cast<TextEditor *>(w)->textCursor();
       line = cursor.blockNumber() + 1;
     }

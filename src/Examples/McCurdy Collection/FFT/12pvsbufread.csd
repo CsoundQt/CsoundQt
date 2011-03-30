@@ -1,7 +1,7 @@
 ;Written by Iain McCurdy 2009
 
-; Modified for QuteCsound by René, September 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, September 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 
@@ -119,10 +119,10 @@ i 10		0	   3600	;GUI
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>0</x>
- <y>0</y>
- <width>945</width>
- <height>700</height>
+ <x>280</x>
+ <y>258</y>
+ <width>872</width>
+ <height>618</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -142,7 +142,7 @@ i 10		0	   3600	;GUI
   <midicc>0</midicc>
   <label>pvsbuffer pvsbufread</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -171,7 +171,7 @@ i 10		0	   3600	;GUI
   <midicc>0</midicc>
   <label>pvsbuffer pvsbufread</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -220,7 +220,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName>ON_OFF</objectName>
+  <objectName/>
   <x>8</x>
   <y>8</y>
   <width>100</width>
@@ -236,7 +236,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Input_Gain</objectName>
@@ -324,7 +324,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.010</label>
+  <label>7.006</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -355,7 +355,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <minimum>0.01000000</minimum>
   <maximum>20.00000000</maximum>
-  <value>1.00950000</value>
+  <value>7.00650000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -529,7 +529,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <minimum>-5.00000000</minimum>
   <maximum>5.00000000</maximum>
-  <value>1.00000000</value>
+  <value>2.20000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -545,7 +545,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.000</label>
+  <label>2.200</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -657,7 +657,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <image>/</image>
   <eventLine>i 2 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>Sync_Write</objectName>
@@ -676,7 +676,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>Write_Buffer</objectName>
@@ -695,7 +695,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -714,7 +714,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <image>/</image>
   <eventLine>i 4 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Phasor_Offset</objectName>
@@ -726,7 +726,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.000</label>
+  <label>0.256</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -757,7 +757,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <midicc>0</midicc>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
+  <value>0.25600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -885,7 +885,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <image>/</image>
   <eventLine>i 3 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1154,7 +1154,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.296</label>
+  <label>0.000</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1188,7 +1188,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <xMax>20.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.29605442</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1221,7 +1221,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <xMax>20.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.01831282</xValue>
+  <xValue>5.42406082</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1249,7 +1249,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.018</label>
+  <label>5.424</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>

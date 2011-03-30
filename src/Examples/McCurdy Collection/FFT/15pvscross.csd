@@ -1,10 +1,10 @@
 ;Written by Iain McCurdy, 2009
 
-; Modified for QuteCsound by René, October 2010
-; Tested on Ubuntu 10.04 with csound-double cvs Nov 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, September 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
-;	Add Browser for audio files
+;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
 
 
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
@@ -17,6 +17,20 @@ sr 		= 44100	;SAMPLE RATE
 ksmps 	= 256	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
+
+
+opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
+	;gives stereo output regardless your soundfile is mono or stereo
+	Sfil, kspeed, iskip, iloop	xin
+	ichn		filenchnls	Sfil
+	if ichn == 1 then
+		aL		diskin2	Sfil, kspeed, iskip, iloop
+		aR		=		aL
+	else
+		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
+	endif
+		xout		aL, aR
+endop
 
 
 instr	10	;GUI
@@ -35,13 +49,13 @@ instr 	1
 	kmlt	=	cpsoct(8+gkoct+(gksemi/12))/cpsoct(8)						;DERIVE A PLAYBACK SPEED RATIO FROM TRANSPOSE SETTING
 
 	Sfile1		invalue	"_Browse1"
-	asrcL, asrcR	diskin2	Sfile1, kmlt, 0, 1							;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+	asrcL, asrcR	FilePlay2	Sfile1, kmlt, 0, 1							;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 
 	if		gkinput=0	then											;IF 'INPUT' SELECTOR IS ON 'Live Input'
 		adest	inch	1											;READ AUDIO FROM COMPUTER'S FIRST (LEFT) INPUT CHANNEL
 	elseif	gkinput=1	then											;IF 'INPUT' SELECTOR IS ON 'Drum Loop'
 		Sfile2	invalue	"_Browse2"
-		adest	diskin2	Sfile2, 1, 0, 1							;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+		adest, asigR	FilePlay2	Sfile2, 1, 0, 1						;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 	endif														;END OF CONDITIONAL BRANCHING
 
 	iFFTsize	= 1024												;SET FFT SIZE TO BE USED IN ANALYSIS   
@@ -68,10 +82,10 @@ i 10		0	   3600	;GUI
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>298</x>
- <y>245</y>
- <width>974</width>
- <height>426</height>
+ <x>410</x>
+ <y>283</y>
+ <width>888</width>
+ <height>379</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -84,14 +98,14 @@ i 10		0	   3600	;GUI
   <x>2</x>
   <y>2</y>
   <width>516</width>
-  <height>366</height>
+  <height>375</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvscross</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -113,14 +127,14 @@ i 10		0	   3600	;GUI
   <x>520</x>
   <y>2</y>
   <width>361</width>
-  <height>366</height>
+  <height>375</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvscross</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -168,7 +182,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName>ON_OFF</objectName>
+  <objectName/>
   <x>8</x>
   <y>8</y>
   <width>100</width>
@@ -196,7 +210,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.000</label>
+  <label>0.256</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -227,7 +241,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
+  <value>0.25600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -303,7 +317,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>1.00000000</value>
+  <value>0.25000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -319,7 +333,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.000</label>
+  <label>0.250</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -343,14 +357,14 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <x>6</x>
   <y>262</y>
   <width>508</width>
-  <height>100</height>
+  <height>108</height>
   <uuid>{7e32c815-35f2-47c4-8470-e4c126b6a830}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>Destination Input</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -406,7 +420,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/loop.wav</label>
+  <label>loop.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -435,12 +449,12 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/loop.wav</stringvalue>
-  <text>Browse Mono Audio File</text>
+  <stringvalue>loop.wav</stringvalue>
+  <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>Input</objectName>
@@ -508,12 +522,12 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/synthpad.wav</stringvalue>
-  <text>Browse Stereo Audio File</text>
+  <stringvalue>synthpad.wav</stringvalue>
+  <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse1</objectName>
@@ -525,7 +539,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/synthpad.wav</label>
+  <label>synthpad.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -657,6 +671,64 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <maximum>12</maximum>
   <randomizable group="0">false</randomizable>
   <value>0</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>181</x>
+  <y>236</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the audio file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>181</x>
+  <y>345</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{2f8ad2a3-5b81-43b9-b3c6-ca07d514af68}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the audio file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

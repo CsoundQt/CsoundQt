@@ -1,10 +1,10 @@
 ;Written by Iain McCurdy 2009
 
-; Modified for QuteCsound by René, October 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, September 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
-;	Add Browser for audio files
+;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
 
 
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
@@ -25,12 +25,25 @@ giFFTattributes2	ftgen	3, 0, 4, -2, 2048, 256, 2048, 1
 giFFTattributes3	ftgen	4, 0, 4, -2, 4096, 256, 4096, 1
 
 
+opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
+	;gives stereo output regardless your soundfile is mono or stereo
+	Sfil, kspeed, iskip, iloop	xin
+	ichn		filenchnls	Sfil
+	if ichn == 1 then
+		aL		diskin2	Sfil, kspeed, iskip, iloop
+		aR		=		aL
+	else
+		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
+	endif
+		xout		aL, aR
+endop
+
+
 instr	10	;GUI
 	ktrig	metro	10
 	if (ktrig == 1)	then
 		gkampint			invalue	"Amplitude_Interpolation"
 		gkfrqint			invalue	"Frequency_Interpolation"
-
 		gkoct			invalue	"Octaves"
 		gksemi			invalue	"Semitones"
 		gkinput			invalue	"Input"
@@ -46,14 +59,14 @@ instr 	1
 	UPDATE:															;LABEL
 	kmlt		= cpsoct(8+gkoct+(gksemi/12))/cpsoct(8)							;DERIVE A PLAYBACK SPEED RATIO FROM TRANSPOSE SETTING
 	Sfile1	invalue	"_Browse1"
-	a1L, a1R	diskin2	Sfile1, kmlt, 0, 1									;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+	a1L, a1R	FilePlay2	Sfile1, kmlt, 0, 1									;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 
 	if	gkinput=0	then													;IF 'INPUT' SELECTOR IS ON 'Live Input'
 		a2L		inch	1												;READ AUDIO FROM COMPUTER'S FIRST (LEFT) INPUT CHANNEL
 		a2R		= a2L												;SOURCE IS MONO SO JUST SET RIGHT CHANNEL TO BE THE SAME AS THE LEFT CHANNEL
 	else																;IF 'INPUT' SELECTOR IS ON 'Sound File'
 		Sfile2	invalue	"_Browse2"
-		a2L, a2R	diskin2	Sfile2, 1, 0, 1								;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+		a2L, a2R	FilePlay2	Sfile2, 1, 0, 1								;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 	endif															;END OF CONDITIONAL BRANCHING
 
 	iFFTsize	table	0, i(gkFFTattributes)+1								;READ FFT SIZE FROM APPROPRIATE TABLE
@@ -73,7 +86,6 @@ instr 	1
 	aresynL	pvsynth  	f3L                      							;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
 	aresynR	pvsynth  	f3R                      							;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
 			outs		aresynL, aresynR									;SEND THE RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
-			rireturn													;DENOTES THE END OF A REINITIALISATION PASS
 endin
 </CsInstruments>
 <CsScore>
@@ -83,10 +95,10 @@ i 10		0	   3600	;GUI
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>253</x>
- <y>251</y>
- <width>1076</width>
- <height>485</height>
+ <x>356</x>
+ <y>270</y>
+ <width>904</width>
+ <height>443</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -99,14 +111,14 @@ i 10		0	   3600	;GUI
   <x>2</x>
   <y>2</y>
   <width>514</width>
-  <height>410</height>
+  <height>440</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvsmorph</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -128,14 +140,14 @@ i 10		0	   3600	;GUI
   <x>517</x>
   <y>2</y>
   <width>384</width>
-  <height>410</height>
+  <height>440</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>pvsmorph</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -201,12 +213,12 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>6</x>
-  <y>338</y>
+  <y>367</y>
   <width>506</width>
   <height>70</height>
   <uuid>{f0c4875d-4e35-4d37-b043-9c1476025645}</uuid>
@@ -235,7 +247,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>169</x>
-  <y>344</y>
+  <y>373</y>
   <width>300</width>
   <height>30</height>
   <uuid>{c2cdd204-e32b-488e-b5c2-70688fb2defa}</uuid>
@@ -264,7 +276,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
  <bsbObject version="2" type="BSBDropdown">
   <objectName>FFTattributes</objectName>
   <x>169</x>
-  <y>364</y>
+  <y>393</y>
   <width>274</width>
   <height>32</height>
   <uuid>{c8c311f9-c1b7-4bbb-becf-9c9f1fa862c9}</uuid>
@@ -453,14 +465,14 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <x>6</x>
   <y>134</y>
   <width>506</width>
-  <height>95</height>
+  <height>110</height>
   <uuid>{cdc434d0-b9e7-4f6f-aa90-800ec76dced6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>fsig2 Input</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -480,16 +492,16 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>6</x>
-  <y>230</y>
+  <y>246</y>
   <width>506</width>
-  <height>107</height>
+  <height>120</height>
   <uuid>{70618fd0-47b8-418a-a344-e579eb1d201e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>fsig1 Transpose</label>
   <alignment>left</alignment>
-  <font>Arial Black</font>
+  <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -518,12 +530,12 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/Songpan.wav</stringvalue>
-  <text>Browse Stereo Audio File</text>
+  <stringvalue>Songpan.wav</stringvalue>
+  <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>Input</objectName>
@@ -542,7 +554,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Sound File</name>
+    <name>Audio File</name>
     <value>1</value>
     <stringvalue/>
    </bsbDropdownItem>
@@ -560,7 +572,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/Songpan.wav</label>
+  <label>Songpan.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -580,7 +592,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>300</x>
-  <y>297</y>
+  <y>330</y>
   <width>80</width>
   <height>30</height>
   <uuid>{dc1bccf4-d23b-4470-9c3f-5e576f314662}</uuid>
@@ -609,7 +621,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>Semitones</objectName>
   <x>380</x>
-  <y>297</y>
+  <y>330</y>
   <width>50</width>
   <height>30</height>
   <uuid>{ba683795-bc00-46ba-8540-c6c32edb8bd5}</uuid>
@@ -638,7 +650,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>Octaves</objectName>
   <x>258</x>
-  <y>297</y>
+  <y>330</y>
   <width>40</width>
   <height>30</height>
   <uuid>{90b425e6-cc7a-4b70-bd54-52c1a629ce97}</uuid>
@@ -667,7 +679,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>178</x>
-  <y>297</y>
+  <y>330</y>
   <width>80</width>
   <height>30</height>
   <uuid>{0c5a5f45-e32e-4e9c-b277-3c4e6c3cc04d}</uuid>
@@ -696,14 +708,14 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse1</objectName>
   <x>179</x>
-  <y>260</y>
+  <y>276</y>
   <width>330</width>
   <height>28</height>
   <uuid>{46ab9664-a6cf-46a0-a0e5-fb7790afc984}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/synthpad.wav</label>
+  <label>synthpad.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -723,7 +735,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
  <bsbObject version="2" type="BSBButton">
   <objectName>_Browse1</objectName>
   <x>8</x>
-  <y>259</y>
+  <y>275</y>
   <width>170</width>
   <height>30</height>
   <uuid>{bb0f07b6-bf61-44d7-95b6-5dbb44ff699b}</uuid>
@@ -732,12 +744,70 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/synthpad.wav</stringvalue>
-  <text>Browse Stereo Audio File</text>
+  <stringvalue>synthpad.wav</stringvalue>
+  <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>179</x>
+  <y>220</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the audio file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>179</x>
+  <y>303</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{291555dd-bb9e-419b-b75e-d5a5185c262a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the audio file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

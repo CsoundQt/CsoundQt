@@ -1,7 +1,7 @@
 ;WRITTEN BY IAIN MCCURDY, 2006
 
-; Modified for QuteCsound by René, 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, September 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 ;	Add table(s) for exp slider
@@ -33,15 +33,15 @@ instr	10	;GUI
 	if (ktrig == 1)	then
 		kcps			invalue 	"CPS"
 		gkcps		tablei	kcps, giExp2000, 1
-					outvalue	"CPS_Value", gkcps		;init  200.0		
-		gkptr		invalue 	"Pointer"				;init 0.1
-		gkspd		invalue 	"Speed"				;init 1.0
-		gkdepth		invalue 	"Depth"				;init 1.0
-		gkgain		invalue 	"Gain"				;init 1.0
-		gkmix		invalue 	"Mixer"				;init 1.0
-		gkinput		invalue 	"Input"				;init 1
-		gkwave		invalue 	"Wave"				;init 1
-		gkGate		invalue	"Gate"				;init 1.0
+					outvalue	"CPS_Value", gkcps
+		gkptr		invalue 	"Pointer"
+		gkspd		invalue 	"Speed"
+		gkdepth		invalue 	"Depth"
+		gkgain		invalue 	"Gain"
+		gkmix		invalue 	"Mixer"
+		gkinput		invalue 	"Input"
+		gkwave		invalue 	"Wave"
+		gkGate		invalue	"Gate"
 	endif
 endin
 
@@ -65,10 +65,10 @@ instr	1	;SIGNAL GENERATOR
 		kenv		linsegr	0, .01, 1, .01, 0						;CREATE AN AMPLITUDE ENVELOPE TO PREVENT CLICKS. INCLUDES A MIDI-RELEASE STAGE
 	endif
 
-	if	gkwave=0	then
+	if	gkwave = 0	then
 		asine	oscili	kenv, kcps, gisine 
 		gaexc	=		gaexc + asine							;ADD SINE TONE TO THE GLOBAL AUDIO VARIABLE gaexc. THIS MECHANISM FACILITATES MIDI POLYPHONY
-	elseif	gkwave<=3&&gkwave>0	then
+	elseif	gkwave <=3 && gkwave > 0	then
 		avco		vco 		kenv, kcps, i(gkwave), 0.5, gisine, 1, 0, 22054/sr, 0			;SAWTOOTH WAVEFORM
 		gaexc	=		gaexc + avco							;ADD VCO TONE TO THE GLOBAL AUDIO VARIABLE gaexc. THIS MECHANISM FACILITATES MIDI POLYPHONY
 	else
@@ -78,8 +78,8 @@ instr	1	;SIGNAL GENERATOR
 endin
 
 instr	3
-		if	gkinput>=1 then									;IF 'INPUT' SWITCH IS SET TO 'STORED FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
-		if	gkinput!=1 kgoto	SKIP1
+		if	gkinput >= 1 then									;IF 'INPUT' SWITCH IS SET TO 'STORED FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
+		if	gkinput != 1 kgoto	SKIP1
 
 	SAnalysisFile1	invalue		"_Browse1"
 	ilen1		filelen		SAnalysisFile1						;DERIVE THE FILE LENGTH (IN SECONDS) OF THE CHOSEN ANALYSIS FILE	
@@ -115,12 +115,11 @@ instr	3
 			endif											;END OF 'IF'...'THEN' BRANCHING
 	
 	fexc  	pvsanal	gaexc, 1024, 256, 1024, 1					;ANALYSE THE EXCITATION AUDIO SIGNAL
-	
 	fsig 	pvsvoc 	famp, fexc, gkdepth, gkgain					;CREATE A CROSS-SYNTHESIS BETWEEN THE TWO F-SIGNALS
 	
 	asig 	pvsynth	fsig										;RESYNTHESIZE THE NEW F-SIGNAL INTO AN AUDIO SIGNAL
 	
-	if	gkGate=1	then
+	if	gkGate = 1	then
 		afollow	follow2	gaexc, 0.1, 0.1						;CREATE AN AMPLITUDE FOLLOWING SIGNAL THAT FOLLOWS THE DYNAMIC ENVELOPE OF THE EXCITATION SIGNAL - THIS WILL BE USED TO GATE THE CROSS SYNTHESISED SIGNAL
 		amix		ntrpol	gaexc*0.2, asig*afollow, gkmix			;CREATE A WET DRY MIX BETWEEN THE CROSS SYNTHESIS AND THE EXCITATION SIGNAL
 	else
@@ -142,10 +141,10 @@ i  3		0 		3600		;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERFO
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>295</x>
- <y>199</y>
- <width>973</width>
- <height>704</height>
+ <x>432</x>
+ <y>217</y>
+ <width>860</width>
+ <height>623</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -165,7 +164,7 @@ i  3		0 		3600		;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERFO
   <midicc>0</midicc>
   <label>pvsvoc</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -194,7 +193,7 @@ i  3		0 		3600		;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERFO
   <midicc>0</midicc>
   <label>pvsvoc</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -298,7 +297,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>2</selectedIndex>
+  <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -492,7 +491,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -538,7 +537,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.03854597</xValue>
+  <xValue>0.43013632</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -566,7 +565,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.039</label>
+  <label>0.430</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -707,7 +706,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <image>/</image>
   <eventLine>i 4 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -748,14 +747,14 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <type>event</type>
+  <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>Amplitude Gate</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -843,7 +842,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.012</label>
+  <label>1.020</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -874,7 +873,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>1.01200000</value>
+  <value>1.02000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -997,12 +996,12 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/Analysis/AndItsAll.pvx</stringvalue>
+  <stringvalue>AndItsAll.pvx</stringvalue>
   <text>Browse Analysis File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse1</objectName>
@@ -1014,7 +1013,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/Analysis/AndItsAll.pvx</label>
+  <label>AndItsAll.pvx</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -1099,7 +1098,7 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/Analysis/loop.pvx</label>
+  <label>loop.pvx</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -1128,12 +1127,41 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/Analysis/loop.pvx</stringvalue>
+  <stringvalue>loop.pvx</stringvalue>
   <text>Browse Analysis File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>182</x>
+  <y>55</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the analysis  file(s).</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

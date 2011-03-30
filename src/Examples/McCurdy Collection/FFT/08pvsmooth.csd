@@ -1,10 +1,10 @@
 ;Written by Iain McCurdy
 
-; Modified for QuteCsound by René, September 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, September 2010, updated Feb 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
-;	Add Browser for audio files
+;	Add Browser for audio files and use of FilePlay2 udo, now accept mono or stereo wav files
 
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
@@ -24,6 +24,20 @@ giFFTattributes2	ftgen	3, 0, 4, -2, 1024, 128, 1024, 1
 giFFTattributes3	ftgen	4, 0, 4, -2, 2048, 256, 2048, 1
 
 
+opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz
+	;gives stereo output regardless your soundfile is mono or stereo
+	Sfil, kspeed, iskip, iloop	xin
+	ichn		filenchnls	Sfil
+	if ichn == 1 then
+		aL		diskin2	Sfil, kspeed, iskip, iloop
+		aR		=		aL
+	else
+		aL, aR	diskin2	Sfil, kspeed, iskip, iloop
+	endif
+		xout		aL, aR
+endop
+
+
 instr	10	;GUI
 	ktrig	metro	10
 	if (ktrig == 1)	then
@@ -41,12 +55,12 @@ instr	1
 		asig		inch		1											;READ AUDIO FROM THE COMPUTER'S LIVE INPUT CHANNEL 1 (LEFT)
 	elseif	gkinput=1 	then											;IF 'INPUT' SWITCH IS SET TO 'Voice' THEN IMPLEMENT THE NEXT LINE OF CODE
 		Sfile1	invalue	"_Browse1"
-		;OUTPUT	OPCODE	FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig		diskin2	Sfile1,     1,      0,        1					;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+		;OUTPUT		OPCODE	FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
+		asig, asigR	FilePlay2	Sfile1,     1,      0,        1				;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 	else																;IF 'INPUT' SWITCH IS NOT SET TO 'STORED FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
 		Sfile2	invalue	"_Browse2"
-		;OUTPUT	OPCODE	FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig		diskin2	Sfile2,     1,      0,        1					;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+		;OUTPUT		OPCODE	FILE_PATH| SPEED | INSKIP | WRAPAROUND (1=ON)
+		asig, asigR	FilePlay2	Sfile2,     1,      0,        1				;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 	endif															;END OF 'IF'...'THEN' BRANCHING
 	kSwitch		changed		gkFFTattributes							;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
 	if	kSwitch=1	then													;IF I-RATE VARIABLE CHANGE TRIGGER IS '1'...
@@ -57,14 +71,15 @@ instr	1
 	ioverlap	table	1, i(gkFFTattributes)+1
 	iwinsize	table	2, i(gkFFTattributes)+1
 	iwintype	table	3, i(gkFFTattributes)+1	
+
 	fsig1  	pvsanal	asig, iFFTsize, ioverlap, iwinsize, iwintype				;ANALYSE THE AUDIO SIGNAL THAT WAS CREATED IN INSTRUMENT 1. OUTPUT AN F-SIGNAL.      	
 	
 	fsig2	pvsmooth	fsig1, gkacf, gkfcf
 	
 	aresyn 	pvsynth  	fsig2											;RESYNTHESIZE THE f-SIGNAL AS AN AUDIO SIGNAL
 	amix		ntrpol	asig, aresyn, gkdrywet
-			outs		amix * gkgain, amix * gkgain							;SEND THE RESCALE, RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
 			rireturn													;RETURN FROM REINITIALISATION PASS TO PERFORMANCE TIME PASSES
+			outs		amix * gkgain, amix * gkgain							;SEND THE RESCALE, RESYNTHESIZED SIGNAL TO THE AUDIO OUTPUTS
 endin
 </CsInstruments>
 <CsScore>
@@ -74,10 +89,10 @@ i 10		0	   3600	;GUI
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>0</x>
- <y>0</y>
- <width>939</width>
- <height>556</height>
+ <x>525</x>
+ <y>557</y>
+ <width>812</width>
+ <height>470</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -90,14 +105,14 @@ i 10		0	   3600	;GUI
   <x>1</x>
   <y>2</y>
   <width>518</width>
-  <height>450</height>
+  <height>464</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>pvsmooth (and pvsanal and pvsynth)</label>
+  <label>pvsmooth, pvsanal and pvsynth</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -119,14 +134,14 @@ i 10		0	   3600	;GUI
   <x>520</x>
   <y>2</y>
   <width>284</width>
-  <height>451</height>
+  <height>464</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>pvsmooth (and pvsanal and pvsynth)</label>
+  <label>pvsmooth, pvsanal and pvsynth</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -178,7 +193,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName>ON_OFF</objectName>
+  <objectName/>
   <x>8</x>
   <y>8</y>
   <width>100</width>
@@ -258,7 +273,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>8</x>
-  <y>373</y>
+  <y>390</y>
   <width>502</width>
   <height>70</height>
   <uuid>{f0c4875d-4e35-4d37-b043-9c1476025645}</uuid>
@@ -287,7 +302,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>167</x>
-  <y>379</y>
+  <y>396</y>
   <width>300</width>
   <height>28</height>
   <uuid>{c2cdd204-e32b-488e-b5c2-70688fb2defa}</uuid>
@@ -316,7 +331,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
  <bsbObject version="2" type="BSBDropdown">
   <objectName>FFTattributes</objectName>
   <x>167</x>
-  <y>399</y>
+  <y>416</y>
   <width>274</width>
   <height>32</height>
   <uuid>{c8c311f9-c1b7-4bbb-becf-9c9f1fa862c9}</uuid>
@@ -465,7 +480,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.41200000</value>
+  <value>0.47800000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -481,7 +496,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.412</label>
+  <label>0.478</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -617,7 +632,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.84600000</value>
+  <value>0.85400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -633,7 +648,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.846</label>
+  <label>0.854</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -664,12 +679,12 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/AndItsAll.wav</stringvalue>
-  <text>Browse Mono Audio File</text>
+  <stringvalue>AndItsAll.wav</stringvalue>
+  <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -710,7 +725,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/AndItsAll.wav</label>
+  <label>AndItsAll.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -737,7 +752,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/moi/Samples/loop.wav</label>
+  <label>loop.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -795,12 +810,70 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/loop.wav</stringvalue>
-  <text>Browse Mono Audio File</text>
+  <stringvalue>loop.wav</stringvalue>
+  <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>180</x>
+  <y>307</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{a63909ac-6fa4-41c8-a84b-ba08e76132ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the audio file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>180</x>
+  <y>360</y>
+  <width>330</width>
+  <height>30</height>
+  <uuid>{68bd8dc3-bee1-4444-b350-5d895429d366}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Restart the instrument after changing the audio file.</label>
+  <alignment>left</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
