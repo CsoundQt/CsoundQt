@@ -49,7 +49,6 @@
         <file>../examples/Miscellaneous/SF_Granular.csd</file>
         <file>../examples/Miscellaneous/Oscillator_Aliasing.csd</file>
         <file>../examples/Miscellaneous/Filter_lab.csd</file>
-        <file>../examples/Miscellaneous/Circle.csd</file>
         <file>../examples/Miscellaneous/Pvstencil.csd</file>
         <file>../examples/Miscellaneous/Noise_Reduction.csd</file>
         <file>../examples/Miscellaneous/Rms.csd</file>
@@ -104,144 +103,144 @@
         <file>../examples/Getting Started/Toots/Toot3.csd</file>
         <file>../examples/Getting Started/Toots/Toot4.csd</file>
         <file>../examples/Getting Started/Toots/Toot5.csd</file>
-<file>../examples/FLOSS Manual Examples/01 Basics/01C01.csd</file>
-<file>../examples/FLOSS Manual Examples/01 Basics/01C02.csd</file>
-<file>../examples/FLOSS Manual Examples/01 Basics/01C03.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02A01.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02B01.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02C01.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02C02.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02C03.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02D01.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02D02.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02E01.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02E02.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A01.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A02.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A03.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A04.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A05.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A06.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A07.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A08.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A09.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B01.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B02.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B03.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B04.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B05.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B06.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B07.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B08.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B09.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B10.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B11.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C01.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C02.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C03.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C04.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C05.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C06.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C07.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C08.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C09.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C10.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C11.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C12.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C13.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C14.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C15.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C16.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C17.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C18.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C19.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C20.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D01.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D02.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D03.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D04.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D05.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D06.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D07.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D08.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D09.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D10.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E01.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E02.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E03.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E04.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E05.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E06.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E07.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E08.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E09.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F01.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F02.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F03.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F04.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F05.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F06.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F07.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F08.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F09.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F10.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F11.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F12.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F13.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A01.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A02.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A03.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A04.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A05.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A06.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A07.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A08.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A09.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A10.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05B01.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05B02.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05B03.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05C01.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05C02.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05C03.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05C04.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05D01.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05D02.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05D03.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05D04.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05D05.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05E01.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05E02.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05E03.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05E04.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06A01.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06A02.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06A03.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06B01.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06B02.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06B03.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06B04.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06B05.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07A01.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07B01.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07B02.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07B03.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07B04.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07C01.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07C02.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07C03.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07C04.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07C05.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07D01.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07D02.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07E01.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07E02.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07E03.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07E04.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07E05.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07E06.csd</file>
-       <file>../examples/Synths/Additive_Synth.csd</file>
-       <file>../examples/Synths/Imitative_Additive.csd</file>
+        <file>../examples/FLOSS Manual Examples/01 Basics/01C01.csd</file>
+        <file>../examples/FLOSS Manual Examples/01 Basics/01C02.csd</file>
+        <file>../examples/FLOSS Manual Examples/01 Basics/01C03.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02A01.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02B01.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02C01.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02C02.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02C03.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02D01.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02D02.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02E01.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02E02.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A01.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A02.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A03.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A04.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A05.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A06.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A07.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A08.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A09.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B01.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B02.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B03.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B04.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B05.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B06.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B07.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B08.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B09.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B10.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B11.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C01.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C02.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C03.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C04.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C05.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C06.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C07.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C08.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C09.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C10.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C11.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C12.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C13.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C14.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C15.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C16.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C17.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C18.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C19.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C20.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D01.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D02.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D03.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D04.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D05.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D06.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D07.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D08.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D09.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D10.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E01.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E02.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E03.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E04.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E05.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E06.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E07.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E08.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E09.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F01.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F02.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F03.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F04.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F05.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F06.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F07.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F08.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F09.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F10.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F11.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F12.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F13.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A01.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A02.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A03.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A04.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A05.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A06.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A07.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A08.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A09.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A10.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05B01.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05B02.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05B03.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05C01.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05C02.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05C03.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05C04.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05D01.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05D02.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05D03.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05D04.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05D05.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05E01.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05E02.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05E03.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05E04.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06A01.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06A02.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06A03.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06B01.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06B02.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06B03.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06B04.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06B05.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07A01.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07B01.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07B02.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07B03.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07B04.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07C01.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07C02.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07C03.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07C04.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07C05.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07D01.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07D02.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07E01.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07E02.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07E03.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07E04.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07E05.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07E06.csd</file>
+        <file>../examples/Synths/Additive_Synth.csd</file>
+        <file>../examples/Synths/Imitative_Additive.csd</file>
         <file>../examples/Synths/Simple_Subtractive.csd</file>
         <file>../examples/Synths/Simple_FM_Synth.csd</file>
         <file>../examples/Synths/Phase_Mod_Synth.csd</file>
