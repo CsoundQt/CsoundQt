@@ -19,7 +19,7 @@ nchnls = 2; change here if your device has more channels
   opcode StrayGetEl, ii, Sijj
 ;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
 Stray, ielindx, isepA, isepB xin
-;;DEFINE THE SEPERATORS
+;;DEFINE THE SEPARATORS
 isep1		=		(isepA == -1 ? 32 : isepA)
 isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
 Sep1		sprintf	"%c", isep1
@@ -38,13 +38,13 @@ isep1p		strcmp		Snext, Sep1; returns 0 if Snext is sep1
 isep2p		strcmp		Snext, Sep2; 0 if Snext is sep2
 ;;NEXT SIGN IS NOT SEP1 NOR SEP2
 if isep1p != 0 && isep2p != 0 then
- if iwarleer == 1 then; first character after a seperator 
+ if iwarleer == 1 then; first character after a separator 
   if iel == ielindx then; if searched element index
 istartsel	=		indx; set it
 iwarleer	=		0
   else 			;if not searched element index
 iel		=		iel+1; increase it
-iwarleer	=		0; log that it's not a seperator 
+iwarleer	=		0; log that it's not a separator 
   endif 
  endif 
 ;;NEXT SIGN IS SEP1 OR SEP2
@@ -61,9 +61,9 @@ end: 		xout		istartsel, iendsel
   endop 
 
   opcode StrayLen, i, Sjj
-;returns the number of elements in Stray. elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1
+;returns the number of elements in Stray. elements are defined by two separators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one separator is used, isep2 equals isep1
 Stray, isepA, isepB xin
-;;DEFINE THE SEPERATORS
+;;DEFINE THE SEPARATORS
 isep1		=		(isepA == -1 ? 32 : isepA)
 isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
 Sep1		sprintf	"%c", isep1
@@ -223,10 +223,10 @@ e
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>548</x>
- <y>82</y>
- <width>463</width>
- <height>581</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -1172,9 +1172,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>242</r>
+   <g>241</g>
+   <b>240</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -2032,39 +2032,39 @@ Options:
 
 <MacGUI>
 ioView background {43690, 43690, 32639}
-ioText {30, 56} {399, 124} label 0.000000 0.00100 "" center "Arial" 10 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {324, 316} {96, 76} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {375, 362} {37, 28} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder sec
-ioText {333, 362} {37, 28} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder min
-ioText {364, 339} {17, 27} label 0.000000 0.00100 "" center "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder :
-ioText {379, 339} {33, 26} display 0.000000 0.00100 "sec" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 00
-ioText {333, 339} {33, 26} display 0.000000 0.00100 "min" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 00
-ioText {324, 316} {94, 26} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Time
-ioText {230, 319} {43, 28} editnum 2.000000 1.000000 "numoutch" left "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 2.000000
-ioText {29, 319} {203, 27} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Number Of Output Channels
-ioText {184, 350} {44, 27} editnum 1.000000 1.000000 "firstout" left "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 1.000000
-ioText {29, 350} {156, 27} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder First Output Channel
-ioText {352, 118} {33, 29} label 8.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 8
-ioText {316, 119} {33, 29} label 7.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 7
-ioText {278, 119} {33, 29} label 6.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 6
-ioText {241, 119} {33, 29} label 5.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 5
-ioText {205, 119} {33, 29} label 4.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 4
-ioText {168, 119} {33, 29} label 3.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 3
-ioText {131, 119} {33, 29} label 2.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 2
-ioText {94, 119} {33, 29} label 1.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 1
-ioText {352, 148} {33, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder R
-ioText {94, 147} {33, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder L
-ioText {29, 146} {52, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder OUT
-ioText {29, 118} {52, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder IN
-ioText {30, 59} {397, 59} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Mixes any number of mono soundfiles to any number of output channels by panning. For instance, if you mix 8 channels down to 2, it will be done in this way:
-ioText {73, 11} {308, 42} label 0.000000 0.00100 "" center "Arial" 22 {0, 0, 0} {58624, 58624, 58624} nobackground noborder MIXDOWN PLAYER
-ioText {42, 277} {67, 27} label 0.000000 0.00100 "" right "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Gain
-ioText {370, 278} {47, 27} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder dB
-ioText {320, 277} {52, 28} display 0.000000 0.00100 "db" left "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.000
-ioText {253, 188} {80, 25} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Skiptime
+ioText {30, 56} {399, 124} label 0.000000 0.00100 "" center "Arial" 10 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
+ioText {324, 316} {96, 76} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
+ioText {375, 362} {37, 28} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder sec
+ioText {333, 362} {37, 28} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder min
+ioText {364, 339} {17, 27} label 0.000000 0.00100 "" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder :
+ioText {379, 339} {33, 26} display 0.000000 0.00100 "sec" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 00
+ioText {333, 339} {33, 26} display 0.000000 0.00100 "min" right "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 00
+ioText {324, 316} {94, 26} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Time
+ioText {230, 319} {43, 28} editnum 2.000000 1.000000 "numoutch" left "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2.000000
+ioText {29, 319} {203, 27} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Number Of Output Channels
+ioText {184, 350} {44, 27} editnum 1.000000 1.000000 "firstout" left "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 1.000000
+ioText {29, 350} {156, 27} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder First Output Channel
+ioText {352, 118} {33, 29} label 8.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 8
+ioText {316, 119} {33, 29} label 7.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 7
+ioText {278, 119} {33, 29} label 6.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 6
+ioText {241, 119} {33, 29} label 5.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 5
+ioText {205, 119} {33, 29} label 4.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 4
+ioText {168, 119} {33, 29} label 3.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 3
+ioText {131, 119} {33, 29} label 2.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2
+ioText {94, 119} {33, 29} label 1.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 1
+ioText {352, 148} {33, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder R
+ioText {94, 147} {33, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder L
+ioText {29, 146} {52, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder OUT
+ioText {29, 118} {52, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder IN
+ioText {30, 59} {397, 59} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Mixes any number of mono soundfiles to any number of output channels by panning. For instance, if you mix 8 channels down to 2, it will be done in this way:
+ioText {73, 11} {308, 42} label 0.000000 0.00100 "" center "Arial" 22 {0, 0, 0} {61952, 61696, 61440} nobackground noborder MIXDOWN PLAYER
+ioText {42, 277} {67, 27} label 0.000000 0.00100 "" right "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Gain
+ioText {370, 278} {47, 27} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder dB
+ioText {320, 277} {52, 28} display 0.000000 0.00100 "db" left "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.000
+ioText {253, 188} {80, 25} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Skiptime
 ioSlider {109, 277} {212, 28} -12.000000 12.000000 0.000000 db
-ioText {336, 187} {65, 27} editnum 0.000000 0.001000 "skip" left "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.000000
-ioText {19, 228} {417, 27} edit 0.000000 0.00100 "_MBrowse"  "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
+ioText {336, 187} {65, 27} editnum 0.000000 0.001000 "skip" left "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.000000
+ioText {19, 228} {417, 27} edit 0.000000 0.00100 "_MBrowse"  "Lucida Grande" 12 {0, 0, 0} {58624, 58624, 58624} falsenoborder 
 ioButton {71, 186} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
 ioMeter {32, 419} {25, 100} {0, 59904, 0} "out1" 0.000000 "out1" 0.000000 fill 1 0 mouse
 ioMeter {32, 395} {25, 25} {39680, 768, 0} "over1" 0.000000 "over1" 0.000000 fill 1 0 mouse
@@ -2082,14 +2082,14 @@ ioMeter {228, 419} {25, 100} {0, 59904, 0} "out7" -inf "out7" -inf fill 1 0 mous
 ioMeter {228, 395} {25, 25} {39680, 768, 0} "over7" 0.000000 "over7" 0.000000 fill 1 0 mouse
 ioMeter {260, 419} {25, 100} {0, 59904, 0} "out8" -inf "out8" -inf fill 1 0 mouse
 ioMeter {260, 395} {25, 25} {39680, 768, 0} "over8" 0.000000 "over8" 0.000000 fill 1 0 mouse
-ioText {32, 527} {26, 28} display 0.000000 0.00100 "chn1" center "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {65, 527} {26, 28} display 0.000000 0.00100 "chn2" center "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {96, 527} {26, 28} display 0.000000 0.00100 "chn3" center "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {129, 527} {26, 28} display 0.000000 0.00100 "chn4" center "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {162, 527} {26, 28} display 0.000000 0.00100 "chn5" center "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {195, 527} {26, 28} display 0.000000 0.00100 "chn6" center "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {226, 527} {26, 28} display 0.000000 0.00100 "chn7" center "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {259, 527} {26, 28} display 0.000000 0.00100 "chn8" center "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {324, 531} {80, 25} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Output Channel
-ioText {319, 396} {116, 123} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Make sure your nchnls value in the orchestra header matches the desired number of channels!
+ioText {32, 527} {26, 28} display 0.000000 0.00100 "chn1" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
+ioText {65, 527} {26, 28} display 0.000000 0.00100 "chn2" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
+ioText {96, 527} {26, 28} display 0.000000 0.00100 "chn3" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
+ioText {129, 527} {26, 28} display 0.000000 0.00100 "chn4" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
+ioText {162, 527} {26, 28} display 0.000000 0.00100 "chn5" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
+ioText {195, 527} {26, 28} display 0.000000 0.00100 "chn6" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
+ioText {226, 527} {26, 28} display 0.000000 0.00100 "chn7" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
+ioText {259, 527} {26, 28} display 0.000000 0.00100 "chn8" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
+ioText {324, 531} {80, 25} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Output Channel
+ioText {319, 396} {116, 123} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Make sure your nchnls value in the orchestra header matches the desired number of channels!
 </MacGUI>

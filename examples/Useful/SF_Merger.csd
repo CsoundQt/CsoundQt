@@ -14,7 +14,7 @@ nchnls = 8; THIS DETERMINES THE NUMBER OF CHANNELS IN YOUR MERGE FILE
   opcode StrayGetEl, ii, Sijj
 ;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
 Stray, ielindx, isepA, isepB xin
-;;DEFINE THE SEPERATORS
+;;DEFINE THE SEPARATORS
 isep1		=		(isepA == -1 ? 32 : isepA)
 isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
 Sep1		sprintf	"%c", isep1
@@ -33,13 +33,13 @@ isep1p		strcmp		Snext, Sep1; returns 0 if Snext is sep1
 isep2p		strcmp		Snext, Sep2; 0 if Snext is sep2
 ;;NEXT SIGN IS NOT SEP1 NOR SEP2
 if isep1p != 0 && isep2p != 0 then
- if iwarleer == 1 then; first character after a seperator 
+ if iwarleer == 1 then; first character after a separator 
   if iel == ielindx then; if searched element index
 istartsel	=		indx; set it
 iwarleer	=		0
   else 			;if not searched element index
 iel		=		iel+1; increase it
-iwarleer	=		0; log that it's not a seperator 
+iwarleer	=		0; log that it's not a separator 
   endif 
  endif 
 ;;NEXT SIGN IS SEP1 OR SEP2
@@ -56,9 +56,9 @@ end: 		xout		istartsel, iendsel
   endop 
 
   opcode StrayLen, i, Sjj
-;returns the number of elements in Stray. elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1
+;returns the number of elements in Stray. elements are defined by two separators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one separator is used, isep2 equals isep1
 Stray, isepA, isepB xin
-;;DEFINE THE SEPERATORS
+;;DEFINE THE SEPARATORS
 isep1		=		(isepA == -1 ? 32 : isepA)
 isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
 Sep1		sprintf	"%c", isep1
@@ -124,10 +124,10 @@ e
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>593</x>
- <y>215</y>
- <width>484</width>
- <height>322</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -175,9 +175,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>242</r>
+   <g>241</g>
+   <b>240</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -260,12 +260,6 @@ MAKE SURE YOUR nchnls EQUALS THE NUMBER OF YOU INPUT FILES!
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <objectName/>
- <x>593</x>
- <y>215</y>
- <width>484</width>
- <height>322</height>
- <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
@@ -275,17 +269,18 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 593 215 484 322
+WindowBounds: 72 179 400 200
 CurrentView: io
 IOViewEdit: On
-Options: -b128 -A -s -m167 -R
+Options:
 </MacOptions>
+
 <MacGUI>
 ioView background {43690, 43690, 32639}
 ioButton {364, 69} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
 ioText {17, 72} {345, 24} edit 0.000000 0.00100 "_MBrowse"  "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
 ioButton {104, 104} {184, 30} value 1.000000 "_Render" "Merge!" "/" i1 0 10
-ioText {85, 16} {335, 39} label 0.000000 0.00100 "" center "Arial" 24 {0, 0, 0} {65280, 65280, 65280} nobackground noborder SOUNDFILE MERGER
-ioText {19, 147} {447, 148} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Merges any number of mono files to a multichannel file. The number of channels in the output file is determined by the 'nchnls' parameter in the header of this CSD file.Â¬MAKE SURE YOUR nchnls EQUALS THE NUMBER OF YOU INPUT FILES!Â¬(If nchnls=8 but you just gave 7 mono files as input, it will probably crash.)
+ioText {85, 16} {335, 39} label 0.000000 0.00100 "" center "Arial" 24 {0, 0, 0} {61952, 61696, 61440} nobackground noborder SOUNDFILE MERGER
+ioText {19, 147} {444, 158} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Merges any number of mono files to a multichannel file. The number of channels in the output file is determined by the 'nchnls' parameter in the header of this CSD file.Â¬MAKE SURE YOUR nchnls EQUALS THE NUMBER OF YOU INPUT FILES!Â¬(If nchnls=8 but you just gave 7 mono files as input, it will probably crash.)
 </MacGUI>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="612" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

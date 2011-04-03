@@ -19,7 +19,7 @@ nchnls = 2
   opcode StrayGetEl, ii, Sijj
 ;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
 Stray, ielindx, isepA, isepB xin
-;;DEFINE THE SEPERATORS
+;;DEFINE THE SEPARATORS
 isep1		=		(isepA == -1 ? 32 : isepA)
 isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
 Sep1		sprintf	"%c", isep1
@@ -38,13 +38,13 @@ isep1p		strcmp		Snext, Sep1; returns 0 if Snext is sep1
 isep2p		strcmp		Snext, Sep2; 0 if Snext is sep2
 ;;NEXT SIGN IS NOT SEP1 NOR SEP2
 if isep1p != 0 && isep2p != 0 then
- if iwarleer == 1 then; first character after a seperator 
+ if iwarleer == 1 then; first character after a separator 
   if iel == ielindx then; if searched element index
 istartsel	=		indx; set it
 iwarleer	=		0
   else 			;if not searched element index
 iel		=		iel+1; increase it
-iwarleer	=		0; log that it's not a seperator 
+iwarleer	=		0; log that it's not a separator 
   endif 
  endif 
 ;;NEXT SIGN IS SEP1 OR SEP2
@@ -61,9 +61,9 @@ end: 		xout		istartsel, iendsel
   endop 
 
   opcode StrayLen, i, Sjj
-;returns the number of elements in Stray. elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1
+;returns the number of elements in Stray. elements are defined by two separators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one separator is used, isep2 equals isep1
 Stray, isepA, isepB xin
-;;DEFINE THE SEPERATORS
+;;DEFINE THE SEPARATORS
 isep1		=		(isepA == -1 ? 32 : isepA)
 isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
 Sep1		sprintf	"%c", isep1
@@ -325,10 +325,10 @@ e
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>296</x>
- <y>52</y>
- <width>621</width>
- <height>686</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -1207,9 +1207,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>242</r>
+   <g>241</g>
+   <b>240</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -1283,33 +1283,33 @@ ioMeter {273, 574} {21, 28} {50176, 3584, 3072} "outLover" 0.000000 "outLover" 0
 ioMeter {26, 608} {250, 28} {0, 59904, 0} "outR" -0.031860 "out2_post" 1.000000 fill 1 0 mouse
 ioMeter {273, 608} {21, 28} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
 ioSlider {320, 609} {269, 30} -18.000000 18.000000 -5.553903 db
-ioText {447, 572} {98, 31} display 0.000000 0.00100 "db_disp" right "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder -8.50 dB
-ioText {357, 572} {88, 30} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Volume
-ioText {28, 655} {116, 47} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Time Remaining
+ioText {447, 572} {98, 31} display 0.000000 0.00100 "db_disp" right "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder -8.50 dB
+ioText {357, 572} {88, 30} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Volume
+ioText {28, 655} {116, 47} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Time Remaining
 ioMeter {150, 663} {292, 37} {14848, 16640, 38656} "timrem" 0.999976 "vert23" 0.135135 llif 1 0 mouse
-ioText {453, 676} {37, 28} display 0.000000 0.00100 "tr_min" right "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 00
-ioText {500, 676} {35, 29} display 0.000000 0.00100 "tr_sec" right "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 00
-ioText {488, 676} {14, 27} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder :
-ioText {546, 677} {44, 28} display 0.000000 0.00100 "tr_ms" right "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 000
-ioText {533, 676} {14, 27} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder :
-ioText {453, 656} {39, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder min
-ioText {499, 656} {39, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder sec
-ioText {548, 656} {39, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder ms
-ioText {23, 12} {546, 35} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {58624, 58624, 58624} nobackground noborder JUKEBOX
-ioText {23, 43} {546, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Let Csound play a list of files
-ioText {166, 430} {43, 31} editnum 2.000000 1.000000 "paustim" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 2.000000
-ioText {25, 430} {142, 32} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Make a pause of
-ioText {207, 430} {323, 31} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder seconds before each new file/track
+ioText {453, 676} {37, 28} display 0.000000 0.00100 "tr_min" right "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 00
+ioText {500, 676} {35, 29} display 0.000000 0.00100 "tr_sec" right "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 00
+ioText {488, 676} {14, 27} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder :
+ioText {546, 677} {44, 28} display 0.000000 0.00100 "tr_ms" right "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 000
+ioText {533, 676} {14, 27} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder :
+ioText {453, 656} {39, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder min
+ioText {499, 656} {39, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder sec
+ioText {548, 656} {39, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder ms
+ioText {23, 12} {546, 35} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {61952, 61696, 61440} nobackground noborder JUKEBOX
+ioText {23, 43} {546, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Let Csound play a list of files
+ioText {166, 430} {43, 31} editnum 2.000000 1.000000 "paustim" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2.000000
+ioText {25, 430} {142, 32} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Make a pause of
+ioText {207, 430} {323, 31} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder seconds before each new file/track
 ioCheckbox {541, 399} {20, 20} off random_play
-ioText {456, 396} {96, 31} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Random Play
-ioText {26, 143} {549, 245} display 0.000000 0.00100 "showfiles" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
+ioText {425, 394} {117, 29} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Random Play
+ioText {26, 143} {549, 245} display 0.000000 0.00100 "showfiles" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
 ioCheckbox {404, 399} {20, 20} off loop_play
-ioText {356, 397} {77, 29} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Loop Play
+ioText {328, 394} {77, 29} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Loop Play
 ioButton {25, 394} {78, 29} value 1.000000 "_Play" "Play" "/" 
 ioButton {239, 394} {80, 30} value 1.000000 "_Stop" "Stop" "/" i 1 0 .1
 ioButton {111, 394} {122, 29} value 1.000000 "paus" "Pause/Resume" "/" i 3 0 .1
-ioText {24, 466} {548, 92} display 0.000000 0.00100 "showplay" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {24, 84} {448, 29} edit 0.000000 0.00100 "_MBrowse"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
+ioText {24, 466} {548, 92} display 0.000000 0.00100 "showplay" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
+ioText {24, 84} {448, 29} edit 0.000000 0.00100 "_MBrowse"  "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder 
 ioButton {471, 82} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
-ioText {24, 115} {548, 26} label 0.000000 0.00100 "" center "DejaVu Sans" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder (MP3 files are possible if filenames end as .mp3 but durations may be wrong)
+ioText {24, 115} {548, 26} label 0.000000 0.00100 "" center "DejaVu Sans" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder (MP3 files are possible if filenames end as .mp3 but durations may be wrong)
 </MacGUI>

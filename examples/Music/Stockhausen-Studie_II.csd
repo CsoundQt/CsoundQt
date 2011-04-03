@@ -1557,7 +1557,7 @@ ifteventtyps_5	ftgen		0, 0, -25, -2, 	3, 1, 2, 1, 2,\
 
 ;;ENVELOPES
 ;A) FOR EVENTS OF TYPE 1 (several consecutive notes, each with its own envelope)
-;in total, there are 10 sequences of type 1; seperated by newline here (1=cresc, 2=dim)
+;in total, there are 10 sequences of type 1; separated by newline here (1=cresc, 2=dim)
 iftenv_5_typ1	ftgen		0, 0, -30, -2, 	2,\
 								1, 2, 2, 1, 2,\
 								2, 2, 1, 2,\
@@ -1712,22 +1712,21 @@ f 1 0 4096 10 1; sinus
 i 1 0 1; p3 is computed internally
 e
 </CsScore>
-</CsoundSynthesizer>
-<bsbPanel>
+</CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>457</x>
- <y>25</y>
- <width>434</width>
- <height>733</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="nobackground" >
+ <bgcolor mode="nobackground">
   <r>232</r>
   <g>232</g>
   <b>232</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>34</x>
   <y>102</y>
@@ -1747,7 +1746,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1756,7 +1755,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>34</x>
   <y>349</y>
@@ -1776,7 +1775,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1785,7 +1784,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>vol</objectName>
   <x>41</x>
   <y>492</y>
@@ -1799,11 +1798,11 @@ e
   <maximum>0.50000000</maximum>
   <value>0.20000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>165</x>
   <y>460</y>
@@ -1823,7 +1822,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1832,7 +1831,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>outL</objectName>
   <x>38</x>
   <y>543</y>
@@ -1852,20 +1851,20 @@ e
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>outLover</objectName>
   <x>372</x>
   <y>543</y>
@@ -1885,20 +1884,20 @@ e
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>196</r>
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>outR</objectName>
   <x>38</x>
   <y>570</y>
@@ -1918,20 +1917,20 @@ e
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>outRover</objectName>
   <x>372</x>
   <y>570</y>
@@ -1951,20 +1950,20 @@ e
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
   <color>
    <r>196</r>
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>wdmix</objectName>
   <x>136</x>
   <y>161</y>
@@ -1978,11 +1977,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.44375000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>38</x>
   <y>160</y>
@@ -2002,7 +2001,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2011,7 +2010,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>298</x>
   <y>161</y>
@@ -2031,7 +2030,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2040,7 +2039,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>158</x>
   <y>132</y>
@@ -2060,7 +2059,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2069,7 +2068,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>roomsize</objectName>
   <x>138</x>
   <y>227</y>
@@ -2083,11 +2082,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.52500000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>40</x>
   <y>226</y>
@@ -2107,7 +2106,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2116,7 +2115,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>300</x>
   <y>227</y>
@@ -2136,7 +2135,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2145,7 +2144,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>156</x>
   <y>193</y>
@@ -2165,7 +2164,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2174,7 +2173,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>hfdamp</objectName>
   <x>138</x>
   <y>295</y>
@@ -2188,11 +2187,11 @@ e
   <maximum>1.00000000</maximum>
   <value>0.45625000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>40</x>
   <y>294</y>
@@ -2212,7 +2211,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2221,7 +2220,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>300</x>
   <y>295</y>
@@ -2241,7 +2240,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2250,7 +2249,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>41</x>
   <y>261</y>
@@ -2270,7 +2269,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2279,7 +2278,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider" >
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>panwidth</objectName>
   <x>160</x>
   <y>413</y>
@@ -2293,11 +2292,11 @@ e
   <maximum>1.00000000</maximum>
   <value>1.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>37</x>
   <y>414</y>
@@ -2317,7 +2316,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2326,7 +2325,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>294</x>
   <y>414</y>
@@ -2346,7 +2345,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2355,7 +2354,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>38</x>
   <y>381</y>
@@ -2375,7 +2374,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2384,7 +2383,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>vol</objectName>
   <x>291</x>
   <y>491</y>
@@ -2404,7 +2403,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2413,7 +2412,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>34</x>
   <y>14</y>
@@ -2435,7 +2434,7 @@ Version 1, November 2009</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2444,7 +2443,7 @@ Version 1, November 2009</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox" >
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>printlines</objectName>
   <x>40</x>
   <y>644</y>
@@ -2457,9 +2456,9 @@ Version 1, November 2009</label>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>64</x>
   <y>640</y>
@@ -2479,7 +2478,7 @@ Version 1, November 2009</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2488,7 +2487,7 @@ Version 1, November 2009</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>dbrange</objectName>
   <x>319</x>
   <y>600</y>
@@ -2506,7 +2505,7 @@ Version 1, November 2009</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2514,10 +2513,10 @@ Version 1, November 2009</label>
   <resolution>0.10000000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>40</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>240</x>
   <y>599</y>
@@ -2537,7 +2536,7 @@ Version 1, November 2009</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2546,7 +2545,7 @@ Version 1, November 2009</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>37</x>
   <y>601</y>
@@ -2566,7 +2565,7 @@ Version 1, November 2009</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2575,7 +2574,7 @@ Version 1, November 2009</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>showdb</objectName>
   <x>127</x>
   <y>600</y>
@@ -2598,7 +2597,7 @@ Version 1, November 2009</label>
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
@@ -2609,43 +2608,44 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 457 25 434 733
+WindowBounds: 72 179 400 200
 CurrentView: io
 IOViewEdit: On
 Options:
 </MacOptions>
+
 <MacGUI>
 ioView nobackground {59624, 59624, 59624}
-ioText {34, 102} {365, 236} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Reverb (freeverb)
-ioText {34, 380} {365, 180} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Panning and Volume
+ioText {34, 102} {365, 236} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Reverb (freeverb)
+ioText {34, 349} {365, 180} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Panning and Volume
 ioSlider {41, 492} {250, 29} 0.000000 0.500000 0.200000 vol
-ioText {165, 491} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Volume
+ioText {165, 460} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Volume
 ioMeter {38, 543} {336, 22} {0, 59904, 0} "outL" 0.000000 "out1_post" 0.363636 fill 1 0 mouse
 ioMeter {372, 543} {27, 22} {50176, 3584, 3072} "outLover" 0.000000 "outLover" 0.000000 fill 1 0 mouse
 ioMeter {38, 570} {336, 22} {0, 59904, 0} "outR" 0.000000 "out2_post" 0.526316 fill 1 0 mouse
 ioMeter {372, 570} {27, 22} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
 ioSlider {136, 161} {160, 31} 0.000000 1.000000 0.443750 wdmix
-ioText {38, 160} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Dry
-ioText {298, 161} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Wet
-ioText {158, 132} {110, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Mix
+ioText {38, 160} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Dry
+ioText {298, 161} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Wet
+ioText {158, 132} {110, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Mix
 ioSlider {138, 227} {160, 31} 0.000000 1.000000 0.525000 roomsize
-ioText {40, 226} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Small
-ioText {300, 227} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Large
-ioText {156, 193} {110, 30} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Room Size
+ioText {40, 226} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Small
+ioText {300, 227} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Large
+ioText {156, 193} {110, 30} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Room Size
 ioSlider {138, 295} {160, 31} 0.000000 1.000000 0.456250 hfdamp
-ioText {40, 294} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder No
-ioText {300, 295} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Yes
-ioText {41, 261} {352, 31} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder High Frequency Attenuation
+ioText {40, 294} {97, 32} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder No
+ioText {300, 295} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Yes
+ioText {41, 261} {352, 31} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder High Frequency Attenuation
 ioSlider {160, 413} {132, 32} 0.000000 1.000000 1.000000 panwidth
-ioText {37, 445} {122, 32} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Narrow (Mono)
-ioText {294, 445} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Broad
-ioText {38, 412} {352, 31} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Stereo Panning
-ioText {291, 522} {98, 31} display 0.200000 0.00100 "vol" center "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.2000
-ioText {34, 14} {366, 78} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder KARLHEINZ STOCKHAUSEN: STUDIE IIÂ¬generated in Csound by Joachim HeintzÂ¬Version 1, November 2009
+ioText {37, 414} {122, 32} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Narrow (Mono)
+ioText {294, 414} {97, 31} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Broad
+ioText {38, 381} {352, 31} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Stereo Panning
+ioText {291, 491} {98, 31} display 0.200000 0.00100 "vol" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.2000
+ioText {34, 14} {366, 78} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder KARLHEINZ STOCKHAUSEN: STUDIE IIÂ¬generated in Csound by Joachim HeintzÂ¬Version 1, November 2009
 ioCheckbox {40, 644} {20, 20} off printlines
-ioText {64, 671} {352, 31} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Print all Events in Output Console
-ioText {319, 631} {80, 25} editnum 40.000000 0.100000 "dbrange" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 40.000000
-ioText {240, 630} {80, 26} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder dB-Range
-ioText {37, 632} {91, 25} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Show as
+ioText {64, 640} {352, 31} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Print all Events in Output Console
+ioText {319, 600} {80, 25} editnum 40.000000 0.100000 "dbrange" left "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 40.000000
+ioText {240, 599} {80, 26} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder dB-Range
+ioText {37, 601} {91, 25} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Show as
 ioMenu {127, 600} {109, 26} 1 303 "Amplitudes,dB" showdb
 </MacGUI>

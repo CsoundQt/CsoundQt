@@ -42,7 +42,7 @@ gisine		ftgen		0, 0, 2^10, 10, 1
   opcode StrayGetEl, ii, Sijj
 ;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
 Stray, ielindx, isepA, isepB xin
-;DEFINE THE SEPERATORS
+;DEFINE THE SEPARATORS
 isep1     =         (isepA == -1 ? 32 : isepA)
 isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
 Sep1      sprintf   "%c", isep1
@@ -61,13 +61,13 @@ isep1p    strcmp    Snext, Sep1; returns 0 if Snext is sep1
 isep2p    strcmp    Snext, Sep2; 0 if Snext is sep2
 ;NEXT SIGN IS NOT SEP1 NOR SEP2
 if isep1p != 0 && isep2p != 0 then
- if iwarleer == 1 then; first character after a seperator 
+ if iwarleer == 1 then; first character after a separator 
   if iel == ielindx then; if searched element index
 istartsel =         indx; set it
 iwarleer  =         0
   else 			;if not searched element index
 iel       =         iel+1; increase it
-iwarleer  =         0; log that it's not a seperator 
+iwarleer  =         0; log that it's not a separator 
   endif 
  endif 
 ;NEXT SIGN IS SEP1 OR SEP2
@@ -84,9 +84,9 @@ end:      xout      istartsel, iendsel
   endop 
 
   opcode StrayLen, i, Sjj
-;returns the number of elements in Stray. elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1
+;returns the number of elements in Stray. elements are defined by two separators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one separator is used, isep2 equals isep1
 Stray, isepA, isepB xin
-;DEFINE THE SEPERATORS
+;DEFINE THE SEPARATORS
 isep1     =         (isepA == -1 ? 32 : isepA)
 isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
 Sep1      sprintf   "%c", isep1
@@ -373,7 +373,7 @@ kwritsmp  init      0 ;... or of the selected sample position to the tables
 ;============================================================================;
 
  ;LOADING THE SELECTED FILES IN FUNCTION TABLES 1, 2, ... AND STORING SF LENGTHS
-inumfils  StrayLen  Sfiles, 124 ;how many files (seperated by '|') to load
+inumfils  StrayLen  Sfiles, 124 ;how many files (separated by '|') to load
 giftsflns ftgen     0, 0, -inumfils, -2, 0 ;empty table for sound file lenghths
 iload     =         0
   load:
@@ -819,10 +819,10 @@ i 1 0 36000
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>39</x>
- <y>52</y>
- <width>1324</width>
- <height>637</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -1604,9 +1604,9 @@ L = Live Input,
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>242</r>
+   <g>241</g>
+   <b>240</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -1730,7 +1730,7 @@ L = Live Input,
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <value>6</value>
+  <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -3324,46 +3324,46 @@ Options:
 <MacGUI>
 ioView background {43690, 43690, 32639}
 ioButton {874, 591} {100, 30} event 1.000000 "button1" "play!" "/" i 10 0 5 60 .5
-ioText {734, 71} {247, 255} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Analysis Source
-ioText {268, 335} {247, 171} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Analysis Parameters
-ioText {522, 335} {228, 291} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Playback Parameters
-ioText {756, 335} {225, 147} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Export Parameters
-ioText {769, 584} {107, 42} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Play Reference Pitch as test
-ioText {268, 508} {247, 118} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Envelope
-ioText {756, 485} {225, 99} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Output
-ioText {9, 13} {1299, 49} label 0.000000 0.00100 "" center "Arial" 40 {0, 0, 0} {58624, 58624, 58624} nobackground noborder IMITATIVE ADDITIVE SYNTHESIS
-ioText {10, 71} {255, 555} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {58624, 58624, 58624} nobackground noborder This instrument lets you analyze a number of partials, ordered by their amplitudes, in any sound snapshot in realtime, and play it back with additive synthesis. You can either use any prerecorded sound, or live input, and switch between these sources.Â¬SAMPLE:Â¬Select a list of audio files. Activate the "Sample" button in the "Analysis Source" section. Select one of them by the number box. (If you activate the "Enable Keys" button, you can also select Samples 1-9 by the number keys.) You will see the waveform of the selected sample in the graph widget.Â¬Choose the number of partials you want to analyze, in the "Analysis Parameters" section, and the position in the soundfile. The "Pointer" option lets you choose the position manually (in the bar below the graph widget). The "Random" option will choose a random position in a range, each time a note has been played. The "Hop Move" option will move gradually through the sound.Â¬LIVE:Â¬Select "Live" as analysis source (key "L"). Whenever you push the "Get Live Snapshot!" button (key = "0"), the current live input is analyzed.Â¬PLAYBACK:Â¬Playback is done via midi. At the refence key, the sound will be played back at the same pitch as analyzed. The "Midi Key Cent Deviation" is the transposition to the next midi key, in cents.Â¬EXPORT:Â¬When the "Print current values" button is activated, the analyzed partials are shown at the right side.  For writing the values to a file, you have three different options: export in the same was the values are shown, as war amplitude-frequency values, or as function tables with amplitudes and frequency multipliers. Whenever the "Now!" button is pressed, the current values are written to the text file selected by the "To..." button.
-ioText {995, 119} {312, 502} display 0.000000 0.00100 "values" left "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {990, 70} {319, 556} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Analysis Values
+ioText {734, 71} {247, 255} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Analysis Source
+ioText {268, 335} {247, 171} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Analysis Parameters
+ioText {522, 335} {228, 291} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Playback Parameters
+ioText {756, 335} {225, 147} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Export Parameters
+ioText {769, 584} {107, 42} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Play Reference Pitch as test
+ioText {268, 508} {247, 118} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Envelope
+ioText {756, 485} {225, 99} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Output
+ioText {9, 13} {1299, 49} label 0.000000 0.00100 "" center "Arial" 40 {0, 0, 0} {61952, 61696, 61440} nobackground noborder IMITATIVE ADDITIVE SYNTHESIS
+ioText {10, 71} {255, 555} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {61952, 61696, 61440} nobackground noborder This instrument lets you analyze a number of partials, ordered by their amplitudes, in any sound snapshot in realtime, and play it back with additive synthesis. You can either use any prerecorded sound, or live input, and switch between these sources.Â¬SAMPLE:Â¬Select a list of audio files. Activate the "Sample" button in the "Analysis Source" section. Select one of them by the number box. (If you activate the "Enable Keys" button, you can also select Samples 1-9 by the number keys.) You will see the waveform of the selected sample in the graph widget.Â¬Choose the number of partials you want to analyze, in the "Analysis Parameters" section, and the position in the soundfile. The "Pointer" option lets you choose the position manually (in the bar below the graph widget). The "Random" option will choose a random position in a range, each time a note has been played. The "Hop Move" option will move gradually through the sound.Â¬LIVE:Â¬Select "Live" as analysis source (key "L"). Whenever you push the "Get Live Snapshot!" button (key = "0"), the current live input is analyzed.Â¬PLAYBACK:Â¬Playback is done via midi. At the refence key, the sound will be played back at the same pitch as analyzed. The "Midi Key Cent Deviation" is the transposition to the next midi key, in cents.Â¬EXPORT:Â¬When the "Print current values" button is activated, the analyzed partials are shown at the right side.  For writing the values to a file, you have three different options: export in the same was the values are shown, as war amplitude-frequency values, or as function tables with amplitudes and frequency multipliers. Whenever the "Now!" button is pressed, the current values are written to the text file selected by the "To..." button.
+ioText {995, 119} {312, 502} display 0.000000 0.00100 "values" left "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
+ioText {990, 70} {319, 556} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Analysis Values
 ioMeter {861, 180} {92, 20} {0, 59904, 0} "livein" -inf "livein" -inf fill 1 0 mouse
 ioMeter {947, 180} {20, 20} {65280, 0, 0} "livein_over" 0.000000 "livein_over" 0.000000 fill 1 0 mouse
 ioSlider {861, 205} {80, 20} -12.000000 12.000000 1.584906 gain
 ioButton {861, 230} {106, 41} value 1.000000 "dolive" "Get LiveÂ¬Snapshot!" "/" i1 0 10
-ioText {941, 201} {39, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Gain
+ioText {941, 201} {39, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Gain
 ioButton {738, 114} {104, 30} value 1.000000 "sample" "Sample" "/" 
 ioButton {863, 115} {104, 30} value 1.000000 "live" "Live" "/" i1 0 10
-ioText {862, 149} {62, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Channel
-ioText {927, 148} {40, 27} editnum 1.000000 1.000000 "inch" left "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 1.000000
-ioText {740, 148} {57, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Number
-ioText {802, 147} {40, 27} editnum 1.000000 1.000000 "sampnr" left "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 1.000000
+ioText {862, 149} {62, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Channel
+ioText {927, 148} {40, 27} editnum 1.000000 1.000000 "inch" left "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 1.000000
+ioText {740, 148} {57, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Number
+ioText {802, 147} {40, 27} editnum 1.000000 1.000000 "sampnr" left "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 1.000000
 ioButton {740, 178} {50, 25} event 1.000000 "" "Play it" "/" i 2 0 1
-ioText {740, 225} {104, 102} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {58624, 58624, 58624} nobackground noborder S = Sample Input,Â¬1-9 = Sample Selection,Â¬P/R/H  = Pointer Mode.Â¬L = Live Input,Â¬0 = Snapshot
+ioText {740, 225} {104, 102} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {61952, 61696, 61440} nobackground noborder S = Sample Input,Â¬1-9 = Sample Selection,Â¬P/R/H  = Pointer Mode.Â¬L = Live Input,Â¬0 = Snapshot
 ioButton {740, 205} {104, 21} value 1.000000 "keysel" "Enable Keys" "/" i 2 0 1
 ioButton {797, 178} {45, 25} event 1.000000 "" "Stop" "/" i 9 0 .1
-ioText {268, 71} {458, 255} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Analysis Source
+ioText {268, 71} {458, 255} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Analysis Source
 ioText {275, 75} {343, 29} edit 0.000000 0.00100 "_MBrowse"  "Arial" 12 {0, 0, 0} {58624, 58624, 58624} falsenoborder /home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Glocke_Ganze1.aiff
 ioButton {620, 75} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
 ioMeter {273, 242} {449, 40} {65280, 65280, 65280} "pos" 0.051225 "pos" 0.051225 line 1 0 mouse
-ioText {561, 289} {104, 27} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Position (sec):
-ioText {664, 289} {55, 26} display 0.290342 0.00100 "position" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.290
-ioGraph {272, 109} {450, 138} table 6.000000 1.000000 showtab
-ioText {272, 288} {289, 28} display 0.000000 0.00100 "showname" right "Arial" 16 {65280, 65280, 0} {58624, 58624, 58624} nobackground noborder File selected: 'BratscheMono.aiff'
-ioText {756, 365} {137, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Print current values
-ioText {756, 392} {137, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Export current values
+ioText {561, 289} {104, 27} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Position (sec):
+ioText {664, 289} {55, 26} display 0.290000 0.00100 "position" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.290
+ioGraph {272, 109} {450, 138} table 0.000000 1.000000 showtab
+ioText {272, 288} {289, 28} display 0.000000 0.00100 "showname" right "Arial" 16 {65280, 65280, 0} {61952, 61696, 61440} nobackground noborder File selected: 'BratscheMono.aiff'
+ioText {756, 365} {137, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Print current values
+ioText {756, 392} {137, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Export current values
 ioButton {892, 393} {40, 25} value 1.000000 "_Browse1" "To..." "/" i1 0 10
-ioText {756, 419} {137, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Export as freq-amp
+ioText {756, 419} {137, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Export as freq-amp
 ioButton {892, 420} {40, 25} value 1.000000 "_Browse2" "To..." "/" i1 0 10
-ioText {756, 446} {137, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Export as table
+ioText {756, 446} {137, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Export as table
 ioButton {892, 447} {40, 25} value 1.000000 "_Browse3" "To..." "/" i1 0 10
 ioButton {892, 366} {83, 25} value 1.000000 "print" "Print" "/" i1 0 10
 ioButton {930, 393} {46, 25} value 1.000000 "exp1" "Now!" "/" i1 0 10
@@ -3372,46 +3372,46 @@ ioButton {929, 447} {46, 25} value 1.000000 "exp3" "Now!" "/" i1 0 10
 ioMeter {767, 516} {172, 28} {0, 59904, 0} "out" -inf "out" -inf fill 1 0 mouse
 ioMeter {937, 516} {28, 28} {65280, 0, 0} "out_over" 0.000000 "out_over" 0.000000 fill 1 0 mouse
 ioSlider {768, 551} {149, 21} -12.000000 12.000000 -0.402685 vol
-ioText {915, 548} {54, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder dB
-ioText {275, 370} {189, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Number of Partials to analyze
-ioText {458, 405} {50, 25} editnum 0.100000 0.100000 "fast" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.100000
-ioText {354, 404} {102, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Activation (sec)
-ioText {463, 370} {46, 26} editnum 32.000000 1.000000 "numpartsana" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 32.000000
+ioText {948, 548} {30, 28} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder dB
+ioText {275, 370} {189, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Number of Partials to analyze
+ioText {458, 405} {50, 25} editnum 0.100000 0.100000 "fast" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.100000
+ioText {354, 404} {102, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Activation (sec)
+ioText {463, 370} {46, 26} editnum 32.000000 1.000000 "numpartsana" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 32.000000
 ioButton {275, 435} {90, 28} value 1.000000 "hopmove" "Hop Move" "/" i1 0 10
-ioText {373, 435} {68, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Fraction
-ioText {451, 435} {58, 26} editnum 0.080000 0.010000 "hopmovsiz" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.080000
+ioText {373, 435} {68, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Fraction
+ioText {451, 435} {58, 26} editnum 0.080000 0.010000 "hopmovsiz" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.080000
 ioButton {275, 403} {71, 28} value 1.000000 "manpos" "Pointer" "/" i1 0 10
-ioText {696, 371} {50, 25} editnum 30.000000 1.000000 "numpartspl" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 30.000000
-ioText {696, 425} {50, 25} editnum 60.000000 1.000000 "refpch" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 60.000000
-ioText {528, 424} {139, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Reference Key (midi)
-ioText {696, 449} {50, 25} editnum 100.000000 1.000000 "stcent" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 100.000000
-ioText {528, 449} {156, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Midi Key Cent Deviation
-ioText {528, 369} {167, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Number of Partials to play
-ioText {696, 398} {50, 25} editnum 0.000000 1.000000 "shiftpl" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.000000
-ioText {528, 397} {149, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Playback Partial Offset
-ioText {695, 509} {50, 25} editnum 10.000000 1.000000 "rndfqdv" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 10.000000
-ioText {527, 500} {167, 40} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Partial Random Frequency  Deviation (Cent)
-ioText {695, 548} {50, 25} editnum 6.000000 1.000000 "rndampdv" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 6.000000
-ioText {527, 539} {162, 39} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Partial Random Amplitude  Deviation (dB)
-ioText {695, 584} {50, 25} editnum 50.000000 1.000000 "rnddurdv" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 50.000000
-ioText {527, 577} {158, 41} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Partial Random Duration  Deviation (%)
-ioText {695, 475} {50, 25} editnum 2.500000 0.100000 "maxdur" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 2.500000
-ioText {527, 475} {156, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Maximum Duration (sec)
+ioText {696, 371} {50, 25} editnum 30.000000 1.000000 "numpartspl" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 30.000000
+ioText {696, 425} {50, 25} editnum 60.000000 1.000000 "refpch" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 60.000000
+ioText {528, 424} {139, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Reference Key (midi)
+ioText {696, 449} {50, 25} editnum 100.000000 1.000000 "stcent" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 100.000000
+ioText {528, 449} {156, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Midi Key Cent Deviation
+ioText {528, 369} {167, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Number of Partials to play
+ioText {696, 398} {50, 25} editnum 0.000000 1.000000 "shiftpl" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.000000
+ioText {528, 397} {149, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Playback Partial Offset
+ioText {695, 509} {50, 25} editnum 10.000000 1.000000 "rndfqdv" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 10.000000
+ioText {527, 500} {167, 40} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Partial Random Frequency  Deviation (Cent)
+ioText {695, 548} {50, 25} editnum 6.000000 1.000000 "rndampdv" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 6.000000
+ioText {527, 539} {162, 39} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Partial Random Amplitude  Deviation (dB)
+ioText {695, 584} {50, 25} editnum 50.000000 1.000000 "rnddurdv" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 50.000000
+ioText {527, 577} {158, 41} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Partial Random Duration  Deviation (%)
+ioText {695, 475} {50, 25} editnum 2.500000 0.100000 "maxdur" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2.500000
+ioText {527, 475} {156, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Maximum Duration (sec)
 ioMeter {290, 540} {176, 17} {65280, 43520, 0} "att" 0.041307 "att" 0.041307 fill 1 0 mouse
 ioMeter {290, 559} {176, 17} {65280, 43520, 0} "dec" 0.278409 "dec" 0.278409 fill 1 0 mouse
 ioMeter {290, 578} {176, 17} {65280, 43520, 0} "sus" 0.511364 "sus" 0.511364 fill 1 0 mouse
 ioMeter {290, 598} {176, 17} {65280, 43520, 0} "rel" 0.340909 "rel" 0.340909 fill 1 0 mouse
-ioText {463, 536} {50, 21} display 0.041000 0.00100 "att" left "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.041
-ioText {463, 556} {50, 21} display 0.278000 0.00100 "dec" left "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.278
-ioText {463, 576} {50, 21} display 0.511000 0.00100 "sus" left "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.511
-ioText {463, 595} {50, 21} display 0.341000 0.00100 "rel" left "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.341
-ioText {272, 537} {19, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder A
-ioText {272, 556} {19, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder D
-ioText {272, 575} {19, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder S
-ioText {272, 593} {19, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder R
-ioText {355, 468} {60, 28} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder between
+ioText {463, 536} {50, 21} display 0.041000 0.00100 "att" left "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.041
+ioText {463, 556} {50, 21} display 0.278000 0.00100 "dec" left "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.278
+ioText {463, 576} {50, 21} display 0.511000 0.00100 "sus" left "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.511
+ioText {463, 595} {50, 21} display 0.341000 0.00100 "rel" left "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.341
+ioText {272, 537} {19, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder A
+ioText {272, 556} {19, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder D
+ioText {272, 575} {19, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder S
+ioText {272, 593} {19, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder R
+ioText {355, 468} {60, 28} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder between
 ioButton {275, 467} {77, 28} value 1.000000 "randpos" "Random" "/" i1 0 10
-ioText {413, 470} {50, 25} editnum 0.400000 0.100000 "rndpos1" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.400000
-ioText {461, 470} {50, 25} editnum 0.600000 0.100000 "rndpos2" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.600000
-ioText {269, 70} {80, 25} display -0.402685 0.00100 "vol" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder -0.403
+ioText {413, 470} {50, 25} editnum 0.400000 0.100000 "rndpos1" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.400000
+ioText {461, 470} {50, 25} editnum 0.600000 0.100000 "rndpos2" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.600000
+ioText {916, 548} {33, 29} display -0.403000 0.00100 "vol" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder -0.403
 </MacGUI>

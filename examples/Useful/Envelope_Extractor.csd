@@ -17,7 +17,7 @@ nchnls = 1
   opcode StrayGetEl, ii, Sijj
 ;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
 Stray, ielindx, isepA, isepB xin
-;;DEFINE THE SEPERATORS
+;;DEFINE THE SEPARATORS
 isep1		=		(isepA == -1 ? 32 : isepA)
 isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
 Sep1		sprintf	"%c", isep1
@@ -36,13 +36,13 @@ isep1p		strcmp		Snext, Sep1; returns 0 if Snext is sep1
 isep2p		strcmp		Snext, Sep2; 0 if Snext is sep2
 ;;NEXT SIGN IS NOT SEP1 NOR SEP2
 if isep1p != 0 && isep2p != 0 then
- if iwarleer == 1 then; first character after a seperator 
+ if iwarleer == 1 then; first character after a separator 
   if iel == ielindx then; if searched element index
 istartsel	=		indx; set it
 iwarleer	=		0
   else 			;if not searched element index
 iel		=		iel+1; increase it
-iwarleer	=		0; log that it's not a seperator 
+iwarleer	=		0; log that it's not a separator 
   endif 
  endif 
 ;;NEXT SIGN IS SEP1 OR SEP2
@@ -59,9 +59,9 @@ end: 		xout		istartsel, iendsel
   endop 
 
   opcode StrayLen, i, Sjj
-;returns the number of elements in Stray. elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1
+;returns the number of elements in Stray. elements are defined by two separators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one separator is used, isep2 equals isep1
 Stray, isepA, isepB xin
-;;DEFINE THE SEPERATORS
+;;DEFINE THE SEPARATORS
 isep1		=		(isepA == -1 ? 32 : isepA)
 isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
 Sep1		sprintf	"%c", isep1
@@ -91,7 +91,7 @@ end: 		xout		icount
   opcode StrayGetNum, i, Sijj
 ;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
 Stray, ielindx, isepA, isepB xin
-;;DEFINE THE SEPERATORS
+;;DEFINE THE SEPARATORS
 isep1		=		(isepA == -1 ? 32 : isepA)
 isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
 Sep1		sprintf	"%c", isep1
@@ -110,13 +110,13 @@ isep1p		strcmp		Snext, Sep1; returns 0 if Snext is sep1
 isep2p		strcmp		Snext, Sep2; 0 if Snext is sep2
 ;;NEXT SIGN IS NOT SEP1 NOR SEP2
 if isep1p != 0 && isep2p != 0 then
- if iwarleer == 1 then; first character after a seperator 
+ if iwarleer == 1 then; first character after a separator 
   if iel == ielindx then; if searched element index
 istartsel	=		indx; set it
 iwarleer	=		0
   else 			;if not searched element index
 iel		=		iel+1; increase it
-iwarleer	=		0; log that it's not a seperator 
+iwarleer	=		0; log that it's not a separator 
   endif 
  endif 
 ;;NEXT SIGN IS SEP1 OR SEP2
@@ -221,10 +221,10 @@ i 1 0 1
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>228</x>
- <y>196</y>
- <width>747</width>
- <height>418</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -253,9 +253,9 @@ i 1 0 1
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>242</r>
+   <g>241</g>
+   <b>240</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -299,9 +299,9 @@ i 1 0 1
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>242</r>
+   <g>241</g>
+   <b>240</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -385,9 +385,9 @@ function tables to be created</label>
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>242</r>
+   <g>241</g>
+   <b>240</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -442,9 +442,9 @@ function tables to be created</label>
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>242</r>
+   <g>241</g>
+   <b>240</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -597,15 +597,15 @@ Options:
 ioView background {43690, 43690, 32639}
 ioText {276, 245} {343, 29} edit 0.000000 0.00100 "_MBrowse"  "DejaVu Sans" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder /home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Glocke_Ganze1.aiff
 ioButton {623, 244} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
-ioText {276, 316} {343, 29} edit 100.000000 0.00100 "npoints"  "Arial" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder 100
-ioText {87, 244} {188, 30} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Files to be analyzed
-ioText {36, 310} {239, 43} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Number of points in theÂ¬function tables to be created
+ioText {276, 316} {343, 29} edit 0.000000 0.00100 "npoints"  "Arial" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder 100
+ioText {87, 244} {188, 30} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Files to be analyzed
+ioText {36, 310} {239, 43} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Number of points in theÂ¬function tables to be created
 ioText {276, 359} {343, 29} edit 0.000000 0.00100 "ftnums"  "Arial" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder 4000 4001 4002 4003
-ioText {35, 355} {240, 41} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder identification number of theÂ¬function tables to be created
+ioText {35, 355} {240, 41} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder identification number of theÂ¬function tables to be created
 ioText {276, 279} {343, 29} edit 0.000000 0.00100 "_Browse"  "Arial" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder /home/linux/Desktop/test2.txt
 ioButton {623, 278} {100, 30} value 1.000000 "_Browse" "Select File" "/" 
-ioText {34, 279} {241, 29} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Text file to be written as result
-ioText {21, 7} {699, 56} label 0.000000 0.00100 "" center "Arial" 40 {0, 0, 0} {58624, 58624, 58624} nobackground noborder ENVELOPE EXTRACTOR
-ioText {20, 69} {699, 169} label 0.000000 0.00100 "" left "Arial" 16 {0, 0, 0} {58624, 58624, 58624} nobackground noborder This instrument analyses the envelope(s) of one or more given sample(s) and returns the result as function tables in this format:Â¬gi_'filename' ftgen 'ftnum', 0, 'points', -2, val1, val2, ...Â¬The number of points gives the resolution of your analysis. If the duration of your sample is two seconds, and you write a table of size 100 points, you will get the mean amplitude for each 2/100 = 0.02 seconds.Â¬Select one or some sound files for analyzing, and a text file for writing the result to. Enter the desired number of points for the analysis, and the identification number of the table (for both either one number which is applied to all input files, or one number for each file).
+ioText {34, 279} {241, 29} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Text file to be written as result
+ioText {21, 7} {699, 56} label 0.000000 0.00100 "" center "Arial" 40 {0, 0, 0} {61952, 61696, 61440} nobackground noborder ENVELOPE EXTRACTOR
+ioText {20, 69} {699, 169} label 0.000000 0.00100 "" left "Arial" 16 {0, 0, 0} {61952, 61696, 61440} nobackground noborder This instrument analyses the envelope(s) of one or more given sample(s) and returns the result as function tables in this format:Â¬gi_'filename' ftgen 'ftnum', 0, 'points', -2, val1, val2, ...Â¬The number of points gives the resolution of your analysis. If the duration of your sample is two seconds, and you write a table of size 100 points, you will get the mean amplitude for each 2/100 = 0.02 seconds.Â¬Select one or some sound files for analyzing, and a text file for writing the result to. Enter the desired number of points for the analysis, and the identification number of the table (for both either one number which is applied to all input files, or one number for each file).
 ioButton {623, 315} {100, 74} value 1.000000 "_Render" "AnalyseÂ¬and writeÂ¬to textfile!" "/" 
 </MacGUI>
