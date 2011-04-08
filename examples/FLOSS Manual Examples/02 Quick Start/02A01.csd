@@ -1,4 +1,4 @@
-see http://booki.flossmanuals.net/csound/
+see http://www.flossmanuals.net/csound/ch010_a-make-csound-run
 
 <CsoundSynthesizer>
 <CsOptions>

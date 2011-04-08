@@ -1,4 +1,4 @@
-see http://booki.flossmanuals.net/csound/
+see http://www.flossmanuals.net/csound/ch034_d-delay-and-feedback
 
 <CsoundSynthesizer>
 

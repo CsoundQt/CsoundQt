@@ -1,4 +1,4 @@
-see http://booki.flossmanuals.net/csound/
+see http://www.flossmanuals.net/csound/ch048_d-reading-midi-files
 
 <CsoundSynthesizer>
 <CsOptions>

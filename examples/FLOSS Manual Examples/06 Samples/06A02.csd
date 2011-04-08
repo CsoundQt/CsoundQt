@@ -1,4 +1,4 @@
-see http://booki.flossmanuals.net/csound/
+see http://www.flossmanuals.net/csound/ch041_a-record-and-play-soundfiles
 
 <CsoundSynthesizer>
 

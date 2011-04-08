@@ -1,4 +1,4 @@
-see http://booki.flossmanuals.net/csound/
+see http://www.flossmanuals.net/csound/ch046_c-working-with-controllers
 
 <CsoundSynthesizer>
 <CsOptions>

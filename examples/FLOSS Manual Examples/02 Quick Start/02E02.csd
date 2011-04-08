@@ -1,4 +1,4 @@
-see http://booki.flossmanuals.net/csound/
+see http://www.flossmanuals.net/csound/ch014_e-rendering-to-file
 
 <CsoundSynthesizer>
 <CsOptions>

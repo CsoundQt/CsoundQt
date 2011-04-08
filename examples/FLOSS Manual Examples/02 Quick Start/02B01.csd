@@ -1,4 +1,4 @@
-see http://booki.flossmanuals.net/csound/
+see http://www.flossmanuals.net/csound/ch011_b-csound-syntax
 
 <CsoundSynthesizer>; START OF A CSOUND FILE
 

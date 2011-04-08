@@ -1,4 +1,4 @@
-see http://booki.flossmanuals.net/csound/
+see http://www.flossmanuals.net/csound/ch033_c-filters
 
 <CsoundSynthesizer>
 
