@@ -1,7 +1,7 @@
 ;Written by Iain McCurdy, 2008
 
 ; Modified for QuteCsound by René, September 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 ;	Add table(s) for lin slider for variable maximum
@@ -118,15 +118,13 @@ i  2      0    	-1		;INSTRUMENT 10 (MULTITAP DELAY) PLAYS A HELD NOTE
 
 f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
 </CsScore>
-</CsoundSynthesizer>
-
-<bsbPanel>
+</CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>350</x>
- <y>131</y>
- <width>902</width>
- <height>584</height>
+ <x>373</x>
+ <y>256</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -180,7 +178,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <image>/</image>
   <eventLine>i 1 0 0.1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Live_Input_Gain</objectName>

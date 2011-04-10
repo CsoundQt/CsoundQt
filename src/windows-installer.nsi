@@ -72,6 +72,7 @@ Section "Main" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
   File "..\bin\qutecsound-f.exe"
+  File /a /r "Examples\McCurdy Collection\"
 
 ; Shortcuts
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application

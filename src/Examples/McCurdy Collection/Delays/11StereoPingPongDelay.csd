@@ -6,8 +6,8 @@
 ;ksmps MAY NEED TO BE LOW (AND kr THEREFORE HIGH) WHEN WORKING WITH SHORT DELAY TIMES DEFINED INITIALLY AT KRATE
 
 
-; Modified for QuteCsound by René, September 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Modified for QuteCsound by René, September 2010
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 ;	Add table(s) for exp slider
@@ -108,15 +108,13 @@ i  2      0    	-1		;INSTRUMENT 2 (DELAY INSTRUMENT) PLAYS A HELD NOTE
 
 f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
 </CsScore>
-</CsoundSynthesizer>
-
-<bsbPanel>
+</CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>304</x>
- <y>164</y>
- <width>1011</width>
- <height>368</height>
+ <x>501</x>
+ <y>703</y>
+ <width>933</width>
+ <height>324</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -134,9 +132,9 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>Stereo Ping-Pong Delay</label>
+  <label>     Stereo Ping-Pong Delay</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -170,7 +168,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <image>/</image>
   <eventLine>i 1 0 0.1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Live_Input_Gain</objectName>
@@ -260,7 +258,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>Stereo Ping-Pong Delay</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -290,7 +288,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <label>-------------------------------------------------------------------------------------------------
 This example implements the classic ping-pong delay effect. To implement the effect a total of three delay buffers are required. One for the left channel with its own feedback loop, one for the right channel with its own feedback loop and a third one to create an initial delay offset in the right channel. The first echo we will hear will be in the left channel. The offsetting delay buffer has no feedback loop. The schematic is shown in the csd. The delay time for the offsetting delay is the same as that defined by the on-screen slider for delay time. The delay times for the other two delays with feedback are twice the value defined by the slider. When the echoes alternate the perceived delay time will be the same as that defined by the slider. The input sound for the effect in this example can be either a short synthesised impulse triggered by the button or the computer's live input controlled by the 'Input Gain' slider.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

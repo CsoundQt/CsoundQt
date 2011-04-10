@@ -1,9 +1,10 @@
 ;WRITTEN BY IAIN MCCURDY, 2008
 
 ; Modified for QuteCsound by René, September 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
+
 
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
@@ -66,14 +67,13 @@ i 10		0		-1		;GUI
 
 f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
 </CsScore>
-</CsoundSynthesizer>
-<bsbPanel>
+</CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>262</x>
- <y>175</y>
- <width>1173</width>
- <height>505</height>
+ <x>469</x>
+ <y>508</y>
+ <width>1131</width>
+ <height>444</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -93,7 +93,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>Doppler Effect</label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -127,7 +127,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Frequency_Rotation</objectName>
@@ -217,7 +217,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <label>Doppler EffectCircular Motion Doppler Effect  </label>
   <alignment>center</alignment>
-  <font>Arial Black</font>
+  <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -247,7 +247,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <label>--------------------------------------------------------------------------------------------------------------------------------------------------
 This example uses three LFOs to create the effect of a sound moving in a circle around the listener. The three parameters controlled by these LFOs are amplitude, panning and delay time. The modulation of the delay time also results in a modulation of pitch which is sometimes referred to as the Doppler effect. Crucial to this effect is that that all three LFOs share the same frequency value. Negative frequency values are also allowed - this would represent a change in direction of the source sounds motion around us. Also of crucial importance is the phase relationship between the three LFOs as this defines exactly where the sound source is in relation to the listener. The panning LFO should be at its points of minimum rate of change when the sound source is moving parallel to the direction in which the listener is facing, i.e. directly to the left or to the right of the listener. The delay time LFO (pitch modulation/doppler) should be at its points of minimum rate of change when the sound source is moving perpendicular to the direction in which the listener is facing, i.e. directly in front of or behind the listener. The phase difference between these two LFOs is either 90 or 270, depending on whether the source sound is moving in a clockwise or anticlockwise direction around us. Amplitude modulation comes into play whenever we are not listening from the centre of the circle of motion. The closer to the edge of the circle we are the greater the amount of amplitude modulation we will experience. If the amplitude modulation is extreme then the circle of the source sound's motion must be extremely large. The phase of the amplitude modulation LFO is also adjustable ('Orientation' slider - this define which edge of the circle we are closest to, e.g. upper, lower, left, right etc. It is probably best to always include at least a small amount of amplitude modulation as we perceive sounds directly to our left or to our right to be more loud, even if they remain equidistant from us. In this case the amplitude LFO phase ('Orientation') should be 0.5 (radians). The waveform for all three LFOs is a sine wave. This defines the object's motion as being circular. If we were to use a different waveform this would model non-circular motion. There is interesting potential in experimentation in this direction with this example.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>

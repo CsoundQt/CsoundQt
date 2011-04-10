@@ -1,7 +1,7 @@
 ;WRITTEN BY IAIN MCCURDY 2010
 
 ; Modified for QuteCsound by René, September 2010
-; Tested on Ubuntu 10.04 with csound-double cvs August 2010 and QuteCsound svn rev 733
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 817
 
 ;Notes on modifications from original csd:
 
@@ -136,15 +136,13 @@ i 1		0	   3600	;GUI
 i 2  	0	   3600	;INSTRUMENT 2 INPUT 
 i 4  	0	   3600	;INSTRUMENT 4 CREATES DELAYS
 </CsScore>
-</CsoundSynthesizer>
-
-<bsbPanel>
+</CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>377</x>
- <y>136</y>
- <width>978</width>
- <height>681</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -1171,7 +1169,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>No_Taps</objectName>

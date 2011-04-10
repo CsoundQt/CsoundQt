@@ -1188,7 +1188,16 @@ void DocumentView::jumpToLine(int line)
     m_mainEditor->setTextCursor(cur);
   }
   else {
-    qDebug() << "DocumentView::jumpToLine() not implemented for split view";
+    int lineCount = 1;
+    QTextCursor cur = m_orcEditor->textCursor();
+    cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    while (lineCount < line) {
+      lineCount++;
+      //       cur.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
+      cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+    }
+    m_orcEditor->moveCursor(QTextCursor::End); // go to end to make sure line is put at the top of text
+    m_orcEditor->setTextCursor(cur);
   }
 }
 

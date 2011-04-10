@@ -431,7 +431,7 @@ QString BaseView::getBasicText()
     }
   }
   else {
-    qDebug() << "BaseView::getBasicText() not implemented for split view";
+    text = m_orcEditor->toPlainText();
   }
   return text;
 }

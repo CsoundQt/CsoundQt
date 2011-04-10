@@ -57,7 +57,9 @@ ORIG_APP_NAME=${ORIGINAL_NAME}.app
 APP_NAME=${NEW_NAME}-${QUTECSOUND_VERSION}.app
 
 mv $ORIG_APP_NAME/ $APP_NAME/
-
+mkdir $APP_NAME/Contents/Resources
+cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources
+chmod -R a-w $APP_NAME/Contents/Resources
 
 if [ "$nflag" -ne 1 ]
         then
