@@ -14,8 +14,8 @@
 
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
@@ -63,7 +63,7 @@ aout	= aout * aenv
 	instr 3
 iamp	= ampdb(87+p4)
 ifreq	= p5
-ibw	= ifreq * .01		; filtered pulse's bandwidth 5% of central frequency
+ibw	= ifreq * .01		; filtered pulse's bandwidth 1% of central frequency
 				
 if1	= ifreq-(ibw/3)
 if2	= ifreq+((2*ibw)/3)
@@ -72,15 +72,15 @@ if2	= ifreq+((2*ibw)/3)
 a1	mpulse iamp , 0 
 
 afilt	atonex a1 , if1 , 4
-afilt	tonex afilt*350 , if2 , 4 
-afilt	butterbp afilt*100 , ifreq , ibw*.5
+afilt	tonex afilt*500 , if2 , 4 
+afilt	butterbp afilt*900 , ifreq , ibw*.05
 
 
 aenv	linseg 1 , p3-.01, 1 , .01 , 0
 
 aout	= afilt * aenv 
 
-	out aout
+	out aout*(sr/192000)
 	endin
 ;=============================================
 

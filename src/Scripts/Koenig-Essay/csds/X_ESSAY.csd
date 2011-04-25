@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 	instr 1
@@ -28,14 +28,14 @@ aout	=  a1* .7
 <CsScore>
 t0	4572	
 
-i1	0		3999.9	 	"X_ABSCHNITT_A.wav"
-i1	3753.5		2780.767	"X_ABSCHNITT_B.wav"
-i1	6249.2		807.08		"X_ABSCHNITT_C.wav"
-i1	6998.7		8407.4		"X_ABSCHNITT_D.wav"
+i1	0		4020.4	 	"X_ABSCHNITT_A.wav"
+i1	3753.5		2780.8		"X_ABSCHNITT_B.wav"
+i1	6249.2		1040.8		"X_ABSCHNITT_C.wav"
+i1	6998.7		8388.5		"X_ABSCHNITT_D.wav"
 i1	15421.5 	7643		"X_ABSCHNITT_E.wav"
-i1	19329.12 	3869.76		"X_ABSCHNITT_F.wav"	; 21026-rev.anteriore
-i1	22145.2 	13528.24	"X_ABSCHNITT_G.wav"	; 22135.2-REV ANTERIORE
-i1	34819.4		1693.62		"X_ABSCHNITT_H.wav"
+i1	19319.12 	3498.88		"X_ABSCHNITT_F.wav"	; 21026-rev.anteriore (1706.88)
+i1	21373.2 	13436.8		"X_ABSCHNITT_G.wav"	; 22135.2-REV ANTERIORE (762)
+i1	34790.4		2174.8		"X_ABSCHNITT_H.wav"
 e
 
 </CsScore>

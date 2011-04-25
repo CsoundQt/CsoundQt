@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;===========================================================
@@ -37,8 +37,7 @@ aout	= adist * ampdb(90)
 
 </CsInstruments>
 <CsScore>
-f1 0 4096 10 1
-f2	0	65536	-27	0 -1 20000 -1   45536 1 65536 1
+f2	0	65536	-27	0 -1 20000 -1   45536 1 65536 1	; waveshaping function
 
 t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
 

@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
@@ -31,7 +31,7 @@ ifile	= p6
 a1	diskin2 ifile, 1
 
 afilt	atonex a1, if1
-afilt	tonex afilt*7, if2
+afilt	tonex afilt*12, if2
 
 	out afilt
 	endin

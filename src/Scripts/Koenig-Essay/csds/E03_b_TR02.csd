@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
@@ -26,7 +26,7 @@ ifile	= p5
 
 a1	diskin2 ifile, itrasp
 
-	out a1*1
+	out a1
 	endin
 ;=============================================
 

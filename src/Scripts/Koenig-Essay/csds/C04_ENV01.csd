@@ -13,19 +13,19 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
 ; 235.1 INTENSITY CURVES
 ;=============================================
 	instr 1
-iamp	= ampdb(90+p4)/29442
+iamp	= ampdb(p4)
 
 ifile	= p5
 
-a1	diskin2  ifile, 1, 5.6
+a1	diskin2  ifile, 1
 
 att	linen iamp , .01 , p3 , .01
 aout	=  a1 * att
@@ -41,7 +41,8 @@ t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
 ;			p4	p5	
 ;			iamp1	ifile
 ;			[dB]	
-i1	0	380.6	-10	"C03_REV01.wav"
+i1	0	533	-9	"C03_REV01.wav"	
+
 
 e
 

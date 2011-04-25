@@ -21,20 +21,19 @@ nchnls = 1
 ; 274.19 REVERBERATION
 ;=============================================
 	instr 1
-idel	= 5.6 ; 5.6 s * 76.2 
-iampr1	= ampdb(90+p4)
-iampr2	= ampdb(90+p5)
 
-ifile	= p6
+iampr	= ampdb(p4)
+
+ifile	= p5
 
 a1	diskin2 ifile, 1
 
-ar	convolve a1/ 5325362 , "IR5s.cv", 1
-aenvr	linseg iampr1, idel+20.5, iampr1, 1.5 , iampr2 , p3-idel-22 , iampr2
+ar	nreverb a1, 5, .3
 
-a1	delay a1 , idel
+aenvr	expseg iampr, p3*.4 ,iampr, p3*.4 , .001 , p3*.2 , .001
+aenv	expseg .05, p3*.4 , .25  ,p3*.4 , 1 , p3*.2 , 1
 
-aout	=  (a1*.45) +(ar*aenvr)
+aout	=  (a1*aenv) +(ar*aenvr)
 
 	out aout
 	endin
@@ -44,14 +43,12 @@ aout	=  (a1*.45) +(ar*aenvr)
 <CsScore>
 t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
 
-;durerev= 5.6*76.2 = 426.72
+;			p4	p5
+;			iampr	ifile
+;			[dB]	
+i1	0	2328	-23.5 	"G03_TR19-2.wav"
 
-;			p4	p5	p6
-;			iampr1	iampr2	ifile
-;			[dB]	[dB]
-i1	0	2754.72	-4 	-90	"G03_TR19-2.wav"
 
-; dur 2328
 
 e
 

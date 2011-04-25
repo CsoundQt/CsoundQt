@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;====================================
@@ -24,22 +24,26 @@ nchnls = 1
 ifreq	= p4
 ibw	= ifreq * .05
 
+if1	= ifreq-(ibw/3)
+if2	= ifreq+((2*ibw)/3)
+
 ifile	= p5
 
 a1	diskin2 ifile, 1
 
-
 kfrq	randi .2 , 20 , .99 , 1		; random filtered impulses (I)
 kfrq	= 20 * (1 + kfrq)
 a2	mpulse 1, 1/kfrq 
-afilt	butterbp a2*24,ifreq , ibw
-afilt	butterbp afilt*210 , ifreq , ibw
+
+afilt	atonex a2 , if1 , 2
+afilt	tonex afilt*270 , if2 , 2  
+afilt	butterbp afilt*900 , ifreq , ibw*.01
 
 arm	= afilt * a1
 
-aout	= (arm *.8)+(a1*.8)
+aout	= (arm )+(a1*.7)
 
-	out aout*.8
+	out aout*.65
 	endin
 ;====================================
 

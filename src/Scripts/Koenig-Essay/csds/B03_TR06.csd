@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
@@ -26,7 +26,7 @@ ifile	= p5
 
 a1	diskin2 ifile, itrasp
 
-ifrq	= 96000*p4		; anti-aliasing filter
+ifrq	= sr*p4		; anti-aliasing filter
 a1	tonex a1 , ifrq , 10
 a1	tonex a1 , ifrq , 10
 

@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 	zakinit 1 , 10
@@ -85,7 +85,7 @@ aenv	linseg 1 , p3-.005, 1 , .005 , 0
 
 aout	= afilt * aenv 
 
-	out aout
+	out aout*(sr/192000)
 	endin
 ;=============================================
 

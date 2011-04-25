@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
@@ -60,7 +60,7 @@ aout	= aout * aenv
 ; FILTERED IMPULSES (I)
 ;=============================================
 	instr 3
-iamp	= ampdb(85+p4)
+iamp	= ampdb(86+p4)
 ifreq	= p5
 ibw	= ifreq * .01		; filtered pulse's bandwidth 1% of central frequency
 
@@ -72,14 +72,14 @@ a1	mpulse iamp , 0
 
 afilt	atonex a1 , if1 , 2
 afilt	tonex afilt*100 , if2 , 2  
-afilt	butterbp afilt*95 , ifreq , ibw*.5
+afilt	butterbp afilt*900 , ifreq , ibw*.05
 
 
 aenv	linseg 1 , p3-.01, 1 , .01 , 0
 
 aout	= afilt * aenv 
 
-	out aout
+	out aout*(sr/192000)
 	endin
 ;=============================================
 </CsInstruments>

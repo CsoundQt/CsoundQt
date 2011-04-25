@@ -13,16 +13,16 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
 ; 225.5 INTENSITY CURVES
 ;=============================================
 	instr 1
-iamp1	= ampdb(90+p4)/ 28000
-iamp2	= ampdb(90+p5)/ 28000
+iamp1	= ampdb(p4)
+iamp2	= ampdb(p5)
 
 ifile	= p6
 
@@ -43,8 +43,8 @@ t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
 ;			p4	p5	p6
 ;			iamp1	iamp2	ifile
 ;			[dB]	[dB]
-i1	0	168.7	-5	-30	"B03_TR05.wav"
-e
+i1	0	168.7	-5	-30	"B03_TR05.wav"	
+e							
 
 </CsScore>
 </CsoundSynthesizer>

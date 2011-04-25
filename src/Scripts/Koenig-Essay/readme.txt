@@ -29,9 +29,6 @@ DIST: distortion
 CUT: tape cut
 TRSM: transposition by means of the Springermaschine
 
-The files can be run from the command line, or through the Python Script in QuteCsound. You first need to Render all the files, and then you can view each one individually in Audacity. 
-WARNING! If the files are rendered at 192000 kHz, they will take up several Gigabytes of your disk space!
-
 have a nice journey...mine has been very long
 
 mg.mas(2009)

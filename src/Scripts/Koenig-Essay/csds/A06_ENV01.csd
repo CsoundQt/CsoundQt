@@ -21,18 +21,17 @@ nchnls = 1
 ; 215.1 INTENSITY CURVES
 ;=============================================
 	instr 1
-iamp1	= ampdb(90+p4)/26000
-iamp2	= ampdb(90+p5)/26000
+iamp1	= ampdb(p4)
+iamp2	= ampdb(p5)
 idur	= p3
 
 ifile	= p6
 
-a1	diskin2  ifile, 1 , 5.6
+a1	diskin2  ifile, 1
 
-att	linen 1 , .01 , p3 , .01
 aenv	expseg iamp1,idur,iamp2
 
-aout	=  a1*aenv * att
+aout	=  a1*aenv
 
 	out aout
 	endin
@@ -45,7 +44,7 @@ t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
 ;			p4	p5	p6
 ;			iamp1	iamp2	ifile
 ;			[dB]	[dB]
-i1	0	126	-7	-18	"A05_REV01.wav"
+i1	0	477.2	0	-40	"A05_REV01.wav"
 
 e
 

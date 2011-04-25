@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;====================================
@@ -31,7 +31,7 @@ a2	rand 1, .5 , 1			; filtered noise (N)
 afilt	butterbp a2 , ifreq , ibw
 afilt	butterbp afilt*11 , ifreq , ibw
 
-aout	= (a1 * afilt * .9)+(a1*.7)
+aout	= (a1 * afilt * .7)+(a1*.7)
 
 	out aout
 	endin

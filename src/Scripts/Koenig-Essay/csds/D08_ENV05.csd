@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
@@ -29,10 +29,9 @@ ifile	= p6
 
 a1	diskin2  ifile, 1
 
-att	linen 1 , .01 , p3 , .01
 aenv	expseg iamp1,idur,iamp2
 
-aout	=  a1*aenv * att
+aout	=  a1*aenv 
 
 	out aout
 	endin
@@ -45,7 +44,7 @@ t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
 ;			p4	p5	
 ;			iamp1	iamp2	ifile
 ;			[dB]	[dB]
-i1	0	306.1	-5 	-38	"D07_TR05.wav"
+i1	0	306.1	-5 	-35	"D07_TR05.wav"	
 
 e
 

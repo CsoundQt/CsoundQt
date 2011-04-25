@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;====================================
@@ -29,7 +29,7 @@ a1	diskin2 ifile, 1
 
 a2	oscili a1, p4 , 1	; simus tone (S)
 
-aout	= (a1*.5)+(a2*.5)
+aout	= (a1*.4)+(a2*.6)
 	out aout
 	endin
 ;====================================

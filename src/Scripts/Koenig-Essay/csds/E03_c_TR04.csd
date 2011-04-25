@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
@@ -30,7 +30,7 @@ ifrq	= 96000*p4		; anti-alias filter
 a1	tonex a1 , ifrq , 10
 a1	tonex a1 , ifrq , 10
 
-	out a1*1
+	out a1
 	endin
 ;=============================================
 

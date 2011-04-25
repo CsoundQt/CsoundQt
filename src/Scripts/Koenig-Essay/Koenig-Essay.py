@@ -5,6 +5,7 @@
 # QuteCsound's python scripting facilities
 # You need a version of QuteCsound compiled with PythonQt support
 # to run this. Check the About box for the text "Built with PythonQt support"
+
 import PythonQt.QtGui as pqt
 import PythonQt.QtCore as pqtc
 import glob, os
@@ -15,11 +16,13 @@ sectionBox = 0
 partBox = 0
 parts = ['A', 'B', 'C', 'D', 'E', 'F', 'G', "Complete"]
 srBox = 0
+statusLabel = 0
 renderDir = "Rendered" #Remember no slash at the end
 
 def stop():
     global running
-    print "Stopped."
+    global statusLabel
+    statusLabel.setText("Stopped.")
     running = 0
 
 def renderFile(csdFile):
@@ -32,6 +35,7 @@ def renderFile(csdFile):
 
 def renderFiles():
     global running
+    global statusLabel
     if not os.access(renderDir, os.F_OK):
         os.mkdir(renderDir)
     os.chdir(renderDir)
@@ -40,6 +44,7 @@ def renderFiles():
     running = 1
     for csdFile in csdFiles:
         counter += 1
+        statusLabel.setText("Rendering:" + csdFile)
         #print "Rendering (" + str(counter) + "/" + str(number) + "):" + csdFile
         renderFile("../" + csdFile)
         pqtc.QCoreApplication.instance().processEvents() # Needed to avoid blocking the application
@@ -96,6 +101,7 @@ else:
     stopButton = pqt.QPushButton("Stop Render",w)
     editButton = pqt.QPushButton("Open in Audacity",w)
     text = pqt.QTextBrowser(w)
+    statusLabel = pqt.QLabel(w)
     l.addWidget(pqt.QLabel("Sample Rate"), 0, 0)
     l.addWidget(srBox, 0, 1)
     l.addWidget(renderButton, 1, 0)
@@ -104,7 +110,8 @@ else:
     l.addWidget(partBox, 2, 1)
     l.addWidget(sectionBox, 3, 0)
     l.addWidget(editButton, 3, 1)
-    l.addWidget(text, 4,0,1,2)
+    l.addWidget(statusLabel, 4, 0, 1, 2)
+    l.addWidget(text, 5,0,1,2)
     stopButton.connect("clicked()", stop)
     renderButton.connect("clicked()", renderFiles)
     partBox.connect("currentIndexChanged(int)", partChanged)

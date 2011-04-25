@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;====================================
@@ -22,68 +22,43 @@ nchnls = 1
 ;====================================
 ; NOTE
 ; The functioning principles of the Springermaschine are not given in the score of Essay. The instrument used here
-; is a standard transposition SOLA instrument.
+; is a standard SOLA instrument.
 
 	instr 1
-itrasp	= p4		; transposition (in semitones)
-ifile	= p5
+isamp	= 1		; sample's function
+iwf	= 2		; window function
 
-idurw	= .01		; window length (maximum delay)
-ifw	= 1/idurw	; window frequency (15.625 Hz)
-ist	= 1.059463	; tempered semitone
+iph	= 430870/ftlen(isamp)
 
-interv	= ist^(itrasp)		; transposition factor
-itraspo	= ifw * (interv-1)*(-1)	; phasor's frequency (negative sign inverts phase for transposing up, positive sign
-				; for transpose down)
+aph	poscil3	iph, 1/p3, 3
 
-;	print ifw,interv,itraspo
+idur	= .025
+kdurR	rand .0001, 2, 1
+kdur	= idur + kdurR
+kenv	= kdur * .5
 
-asig	diskin2 ifile, 1	; signal input
+adens	= 167
 
-ifrq	= 96000*interv		; anti-aliasing filter
-asig	tonex asig , ifrq , 10
-asig	tonex asig , ifrq , 10
-asig	= asig*1.5
+a1	fog .55, adens, 1, aph, 0, 0, kenv, kdur, kenv, 5000, isamp, iwf, p3
 
-aph1	phasor	itraspo
-aph2	phasor	itraspo, .5	; 180° out of phase from aph1
-
-a1	table3 aph1 , 1, 1	; windowing signals
-a1	= tanh(a1*5)
-a2	table3 aph2 ,1, 1
-a2	= tanh(a2*5)
-
-adop1	= (aph1)*idurw		; pointers into delay lines
-adop2	= (aph2)*idurw
-
-adel1	delayr .3	
-ad1	deltapx adop1,32
-	delayw asig
-
-adel2	delayr .3	 
-ad2	deltapx adop2,32
-	delayw asig
-
-aout1	= ad1*a1		; applying windowing signals to transposed signals
-aout2	= ad2*a2		
-
-aout	= aout1+aout2
-
-	out aout
+	out a1
 	endin
 ;====================================
 
 
 </CsInstruments>
 <CsScore>
-f1	0	8192	20	7 1 35	; gaussian window
+f1	0	524288	-1	"H01.wav" 0 0 0 	; sample file (430870 samples)
+f2	0	8192	20	7 1 35			; gaussian window
+f3	0	32768	27	0 0 32767 1		; pointer
+
+
 
 t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
 
-;			p4	p5
-;			itrasp	ifile
-;			[st]	
-i1	0	171.5	-48	"H01.wav"
+
+i1	0	2736					; deceleration by 4 octaves
+;		171*(2^4)
 
 e
 

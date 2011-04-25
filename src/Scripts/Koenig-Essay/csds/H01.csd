@@ -13,14 +13,14 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 	instr 1
 ifile	= p4
 a1	diskin2 ifile , 1
-a1	= a1 * .5
+a1	= a1 * .51
 
 	out a1
 	endin

@@ -13,16 +13,16 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
 ; 255.a.4 INTENSITY CURVES
 ;=============================================
 	instr 1
-iamp1	= ampdb(90+p4)/ 31558
-iamp2	= ampdb(90+p5)/ 31558
+iamp1	= ampdb(p4)
+iamp2	= ampdb(p5)
 
 ifile	= p6
 

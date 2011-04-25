@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
@@ -28,7 +28,7 @@ a1	diskin2 ifile , 1
 
 aout	=  a1* iamp
 
-	out aout
+	out aout*.9
 	endin
 ;=============================================
 
@@ -40,15 +40,14 @@ t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
 ; + 10 cm respect to score (?)
 ;			p4	p5
 ;			iamp	ifile
-i1	0	126	.8	"A06_ENV01.wav"	
-i1	126.4	384.7	.8	"A06_ENV02.wav"		; + 116.4
-i1	300.9	3098	.6	"A06_ENV03.wav"		; + 174.5
-i1	890	192.4	.3	"A06_ENV04.wav"		; + 589.1
-i1	1282.7	48.2	.5	"A06_ENV05.wav"		; + 392.7
-i1	1544.5	1539	.8	"A06_ENV06.wav"		; + 261.8
-i1	2869.9	1130	.8	"A06_ENV07.wav"		; + 1325.4
+i1	0	477.2	1 	"A06_ENV01.wav"	
+i1	116.4	384.7	1 	"A06_ENV02.wav"		; + 116.4
+i1	300.9	3459	1 	"A06_ENV03.wav"		; + 174.5
+i1	890	192.4	1 	"A06_ENV04.wav"		; + 589.1
+i1	1282.7	48.2	1 	"A06_ENV05.wav"		; + 392.7
+i1	1544.5	1539	1 	"A06_ENV06.wav"		; + 261.8
+i1	2869.9	1150.5	1 	"A06_ENV07.wav"		; + 1325.4
 							; PART B: + 883.6
-
 ; total length: 3743.5
 e
 

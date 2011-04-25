@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
@@ -45,7 +45,7 @@ t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
 ;			p4	p5	
 ;			iamp1	iamp2	ifile
 ;			[dB]	[dB]
-i1	0	316.4	-10 	0	"D07_TR08.wav"
+i1	0	356.4	-10 	0	"D07_TR08.wav" ; koenig
 
 e
 

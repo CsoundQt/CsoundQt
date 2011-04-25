@@ -30,16 +30,14 @@ ga1	= a1
 	endin
 
 	instr 2
-idel	= 5.6 ; 5.6 s * 76.2 
-iampr	= ampdb(90+p4)
+
+iampr	= ampdb(p4)
 
 a1	=ga1
 
-ar	convolve a1/ 4078253 , "IR5s.cv", 1
+ar	nreverb a1, 5, .3
 
-a1	delay a1, idel 
-
-aout	= (a1*.3) + (ar*iampr)
+aout	= (a1*.15) + (ar*iampr)
 
 	out aout
 	endin
@@ -53,11 +51,12 @@ t0	4572
 
 ;				p4
 ;				ifile
-i1	0	13954.96	"G07_REV-21.wav"
+i1	0	13056		"G07_REV-21.wav"
 ;				iampr
-i2	0	14381.68	0
+i2	0	13437		-19
 
-; dur 12674.8
+;durrev= 5*76.2 = 381
+; dur = 13056 + durrev
 
 e
 

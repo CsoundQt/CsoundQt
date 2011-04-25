@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
@@ -22,16 +22,11 @@ nchnls = 1
 ;=============================================
 	instr 1
 idur	= p3
-ifile1	= p4
-ifile2	= p5
 
-a1	diskin2  ifile1, 1
-a2	diskin2  ifile2, 1
+a1	diskin2  "D07_TR09a.wav", 1
+a2	diskin2  "D07_TR09b.wav", 1
 
-att	linen 1 , .01 , p3 , .01
-
-aout	=  (a1*.75)+(a2*.5) * att
-
+aout	=  (a1*.75)+(a2*.5)
 	out aout
 	endin
 ;=============================================
@@ -40,9 +35,9 @@ aout	=  (a1*.75)+(a2*.5) * att
 <CsScore>
 t0	4572		; 76.2 cm/sec. tape speed (durations in cm)	
 
-;			p4		p5	
-;			ifile1		ifile2
-i1	0	1265.6	"D07_TR09a.wav"	"D07_TR09b.wav"
+;			
+;			
+i1	0	1246.7		
 
 e
 

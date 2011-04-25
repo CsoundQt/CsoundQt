@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;===========================================================
@@ -24,9 +24,10 @@ nchnls = 1
 iskip	= p4/76.2
 icut	= p3
 	print iskip
+
 inum	= p5-1
-a1	diskin2 "D05_TR04.wav" , 1 , iskip + (icut*inum)
-aenv	expseg .001 , .02, 1 , p3-.04, 1 , .02, .001
+a1	diskin2 "D05_TR04.wav" , 1 , (iskip + (icut*inum))
+aenv	linseg 0 , .02, 1 , p3-.04, 1 , .02, 0
 
 aout	= a1*aenv
 	out aout
@@ -35,7 +36,7 @@ aout	= a1*aenv
 
 </CsInstruments>
 <CsScore>
-t0 4572
+t0 4572		; 76.2 cm/sec. tape speed (durations in cm)
 ;test---------------------------------------------------
 
 ;\test---------------------------------------------------

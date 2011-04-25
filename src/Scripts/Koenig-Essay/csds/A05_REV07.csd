@@ -21,36 +21,34 @@ nchnls = 1
 ; 214.7 REVERBERATION
 ;=============================================
 	instr 1
-idel	= 5.6 ; 5.6 s * 76.2 
-iampr	= ampdb(90+p4)
-
-ifile	= p5
+iampr	= ampdb(p4)
+ifile 	= p5
 
 a1	diskin2 ifile, 1
 
-ar	convolve a1/ 2396720 , "IR5s.cv", 1
-
-a1	delay a1 , idel
+ar	nreverb a1, 5, .3
 
 ; increasing reverberation (chiefly at the end)
-aenv	expseg 1,   idel, 1,   8,  .75, 2, .06, p3-idel-9, .001		; dry signal's envelope
-aenvr	expseg .01, idel, .02,  8, .5,  2,  1.5,p3-idel-9, 1.5		; wet signal's envelope
+aenv	expseg 1,   8,  .4,  2, .06, p3-9, .001		; dry signal's envelope
+aenvr	expseg .1,  8,  .7,  2, 1, p3-9, 1		; wet signal's envelope
+aenvr	= aenvr * iampr
 
-aout	=  a1*aenv *.9+(ar*aenvr*iampr)
+aout	=  a1*aenv +(ar*aenvr)
 	out aout
 	endin
 ;=============================================
 
 </CsInstruments>
 <CsScore>
-t0	4572	
-;durerev= 5.6*76.2 + 4*76.2 = 426.72+304.8=731.52
+t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
 
-;			p4	p5			
+;			p4			
 ;			iamp	ifile			
 ;			[dB]
-i1	0	1850	-2.5	"A04_FILT07.wav"
-; dur 769.5
+i1	0	1150.5	-12	"A04_FILT07.wav"
+
+; durrev = 5 * 76,2 = 381
+; dur = 769.5 + durrev
 e
 
 </CsScore>

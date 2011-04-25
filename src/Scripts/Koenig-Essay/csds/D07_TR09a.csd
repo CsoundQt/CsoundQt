@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
@@ -24,9 +24,7 @@ nchnls = 1
 itrasp	= p4
 ifile	= p5
 
-idel	= 5.6
-
-a1	diskin2 ifile, itrasp, idel
+a1	diskin2 ifile, itrasp
 
 aenv	linseg 1, p3-.01, 1 , .01 , 0
 
@@ -40,8 +38,8 @@ t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
 
 ;			p4	p5
 ;			itrasp	ifile
-i1	0	632.8	2	"D04_REV09.wav"; 100/50
-
+i1	0	623.35	2	"D04_REV09.wav"		; 100/50
+;		+ durrev/itrasp
 e
 
 </CsScore>

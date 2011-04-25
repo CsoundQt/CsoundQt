@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 
@@ -28,7 +28,7 @@ ifile	= p6
 
 a1	diskin2 ifile, itrasp
 
-ifrq	= 96000*p4		; anti-aliasing filter
+ifrq	= sr*p4		; anti-aliasing filter
 a1	tonex a1 , ifrq , 10
 a1	tonex a1 , ifrq , 10
 
@@ -38,7 +38,6 @@ a1	tonex a1 , ifrq , 10
 
 </CsInstruments>
 <CsScore>
-f1 0 4096 10 1
 
 t0	4572			; 76.2 cm/sec. tape speed (durations in cm)
 

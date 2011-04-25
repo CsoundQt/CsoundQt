@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
@@ -72,14 +72,14 @@ a1	mpulse iamp , 0
 k1	rms a1
 
 afilt	atonex a1 , if1 , 2
-afilt	tonex afilt*580 , if2 , 2
-afilt	butterbp afilt*600 , ifreq , ibw *.5
+afilt	tonex afilt*1000 , if2 , 2
+afilt	butterbp afilt*3000, ifreq , ibw *.05
 
 aenv	linseg 1 , p3-.01, 1 , .01 , 0
 
 aout	= afilt * aenv 
 
-	out aout
+	out aout*(sr/192000)
 	endin
 ;=============================================
 </CsInstruments>
@@ -121,7 +121,7 @@ q 3 0 1
 i1	0	3.2	0	84	; S
 i3	3.2	2.9	-3.5	102     ; I
 i1	6.1	4.9	0	124     ; S
-i3	11	3.9	-7	151     ; I
+i3	11	3.9	-6	151     ; I
 i1	14.9	3.6	0	183     ; S
 i3	18.5	2.3	-10	223     ; I
 i1	20.8	4.4	0	271     ; S

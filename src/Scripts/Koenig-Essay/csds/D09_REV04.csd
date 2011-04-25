@@ -21,18 +21,15 @@ nchnls = 1
 ; 244.4 REVERBERATION
 ;=============================================
 	instr 1
-idel	= 5.6 ; 5.6 s * 76.2 
-iampr	= ampdb(90+p4)
+iampr	= ampdb(p4)
 
 ifile	= p5
 
 a1	diskin2 ifile, 1
 
-ar	convolve a1/ 1299413 , "IR5s.cv", 1
+ar	nreverb a1, 5, .3
 
-a1	delay a1 , idel
-
-aout	=  a1*.9 +(ar*iampr)
+aout	=  a1*.7 +(ar*iampr)
 
 	out aout
 	endin
@@ -46,9 +43,10 @@ t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
 
 ;			p4	p5
 ;			iampr	ifile
-i1	0	4117.72	-6	"D06_CUT04.wav"
-
-; dur 3462.4
+i1	0	3844.1	-13	"D06_CUT04.wav"
+;		
+;durrev= 5*76.2 = 381
+; dur = 3463.1 + durrev 
 
 e
 

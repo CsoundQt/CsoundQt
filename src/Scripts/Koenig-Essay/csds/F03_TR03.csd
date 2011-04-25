@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
@@ -24,7 +24,7 @@ nchnls = 1
 itrasp	= -p4		; reads backwards
 ifile	= p5
 
-iskip	= 18.296
+iskip	= 11.496
 
 a1	diskin2  ifile, itrasp, iskip
 
@@ -38,8 +38,8 @@ t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
 
 ;			p4	p5
 ;			itrasp	ifile
-i1	0	483.72	2	"F02_REVcancer.wav"	; 100/50
-; riverbero anteriore = 426.72*(1/2)=213.36
+i1	0	438	2	"F02_REVcancer.wav"	; 100/50
+; pre-reverb = 381*(1/2)=190.5
 e
 
 </CsScore>

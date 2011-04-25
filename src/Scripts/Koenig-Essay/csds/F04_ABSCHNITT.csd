@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 
@@ -39,10 +39,10 @@ t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
 
 ;			p4	p5
 ;			iamp	ifile							
-i1	0	3869.76	.9	"F03_TR01.wav"	; A.O. 1706.88				
-i1	1740.86	967.44	.9	"F03_TR02.wav"	; A.O. 2167.58(A.O.TR01+460.7)		
-i1	2159.02	483.72	.9	"F03_TR03.wav"	; A.O. 2372.38(A.O.TR02+204.8)		
-i1	1655.44	1934.88	.9	"F03_TR04.wav"	; A.O. 2508.88(A.O.TR03+136.5) 		
+i1	0	3504	1 	"F03_TR01.wav"	; A.O. 1706.88				
+i1	1786.58	876	1 	"F03_TR02.wav"	; A.O. 2167.58(A.O.TR01+460.7)		
+i1	2181.88	438	1 	"F03_TR03.wav"	; A.O. 2372.38(A.O.TR02+204.8)		
+i1	1746.88	1752	1 	"F03_TR04.wav"	; A.O. 2508.88(A.O.TR03+136.5) 		
 
 ; NOTE
 ; A.O. = start of the original

@@ -13,8 +13,8 @@
 <CsInstruments>
 
 sr     = 192000
-kr     = 19200
-ksmps  = 10
+kr     = 192000
+ksmps  = 1
 nchnls = 1
 
 ;=============================================
@@ -24,11 +24,11 @@ nchnls = 1
 itrasp	= -p4		; reads backwards
 ifile	= p5
 
-iskip	= 18.296
+iskip	= 11.496
 
 a1	diskin2  ifile, itrasp, iskip
 
-ifrq	= 96000*p4			; anti-aliasing filter
+ifrq	= sr*p4			; anti-aliasing filter
 a1	tonex a1 , ifrq , 10
 a1	tonex a1 , ifrq , 10
 
@@ -43,8 +43,8 @@ t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
 
 ;			p4	p5
 ;			itrasp	ifile
-i1	0	3869.76	.25	"F02_REVcancer.wav"	; 12.5/50
-; riverbero anteriore = 426.72*(1/.25)= 1706.88
+i1	0	3504	.25	"F02_REVcancer.wav"	; 12.5/50
+; pre-reverb = 381*(1/.25)= 1524
 e
 
 </CsScore>

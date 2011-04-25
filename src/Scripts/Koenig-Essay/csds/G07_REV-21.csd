@@ -24,23 +24,21 @@ nchnls = 1
 	instr 1
 ifile	= p4
 
-a1	diskin2 ifile , -1, 0,1
+a1	diskin2 ifile , 1, 0,1
 ga1	= a1
-;	out a1
+
 	endin
 
 	instr 2
-idel	= 5.6 ; 5.6 s * 76.2 
-iampr	= ampdb(90+p4)
+
+iampr	= ampdb(p4)
 
 a1	=ga1
 
-ar	convolve a1/ 1498699 , "IR5s.cv", 1
+ar	nreverb a1, 5, .3
 
-a1	delay a1, idel 
-aenv	linseg .5, 90, .5, 15, 0, p3-105, 0
-
-aout	= (a1*.4) + (ar*iampr)
+aout	= (a1*.2) + (ar*iampr)
+aout	atonex aout, 10
 
 	out aout
 	endin
@@ -48,16 +46,17 @@ aout	= (a1*.4) + (ar*iampr)
 
 </CsInstruments>
 <CsScore>
-f1 0 4096 10 1
-t0	4572	
-;durerev= 5.6*76.2 = 426.72
+t0	4572		; 76.2 cm/sec. tape speed (durations in cm)
+
+;durerev= 5.6*76.2 = 426.72 cm
 ;				p4
 ;				ifile
-i1	0	13101.72	"G06_ABSCHNITT-2.wav"
+i1	0	12675		"G06_ABSCHNITT-2.wav"
 ;				iampr
-i2	0	13954.96	-1
+i2	0	13056		-19
 
-; dur 12674.8
+;durrev= 5*76.2 = 381
+; dur = 12675 + durrev
 
 e
 

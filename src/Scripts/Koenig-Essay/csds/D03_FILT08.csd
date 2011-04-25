@@ -31,7 +31,7 @@ ifile	= p6
 a1	diskin2 ifile, 1
 
 afilt	atonex a1, if1
-afilt	tonex afilt*6, if2
+afilt	tonex afilt*10, if2
 
 	out afilt
 	endin
@@ -43,7 +43,7 @@ t0	4572	; 76.2 cm/sec. tape speed (durations in cm)
 
 ;			p4	p5	p6
 ;			if1	if2	ifile
-i1	0	866	141	282	"D02_RM08.wav"
+i1	0	867	141	282	"D02_RM08.wav"
 
 e
 
