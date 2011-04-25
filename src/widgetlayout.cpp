@@ -2817,6 +2817,9 @@ void WidgetLayout::registerWidgetController(QuteWidget *widget, int cc)
 
 void WidgetLayout::registerWidgetChannel(QuteWidget *widget, int chan)
 {
+  if (chan < 0) { // No control
+    return;
+  }
   for (int i = 0; i < registeredControllers.size(); i++) {
     if (registeredControllers[i].widget == widget) {
       registeredControllers[i].chan = chan;

@@ -3676,7 +3676,7 @@ void qutecsound::readSettings()
   m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
   m_options->showTooltips = settings.value("showTooltips", true).toBool();
   m_options->enableFLTK = settings.value("enableFLTK", true).toBool();
-  m_options->terminalFLTK = settings.value("terminalFLTK", false).toBool();
+  m_options->terminalFLTK = settings.value("terminalFLTK", true).toBool();
   m_options->oldFormat = settings.value("oldFormat", true).toBool();
   m_options->openProperties = settings.value("openProperties", true).toBool();
   m_options->fontOffset = settings.value("fontOffset", 0.0).toDouble();
