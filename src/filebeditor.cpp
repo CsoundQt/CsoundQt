@@ -52,7 +52,9 @@ QString FileBEditor::toPlainText()
 {
   QString text;
   foreach(FileB file, m_files) {
-    text += "<CsFileB filename=\"" + file.path + file.fileName + "\">\n";
+    // FIXME should put quotes back once the fix in Csound is released
+//    text += "<CsFileB filename=\"" + file.path + file.fileName + "\">\n";
+    text += "<CsFileB filename=" + file.path + file.fileName + ">\n";
     text += file.encData + "\n";
     text += "</CsFileB>\n";
   }
