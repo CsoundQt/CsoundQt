@@ -66,6 +66,8 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
 #endif
 
   midiInterfaceComboBox->addItem(QString(tr("None", "No MIDI internal interface")), QVariant(9999));
+  int ifIndex = midiInterfaceComboBox->findData(QVariant(m_options->midiInterface));
+  midiInterfaceComboBox->setCurrentIndex(ifIndex);
 
   fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
   fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));

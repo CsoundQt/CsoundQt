@@ -41,6 +41,7 @@ LIBS *= -L$${CSOUND_LIBRARY_DIR}
 LIBS *= -L$${LIBSNDFILE_LIBRARY_DIR}
 rtmidi {
 DEFINES += __LINUX_ALSASEQ__
+LIBS += -lasound
 }
 build32:LCSOUND = -lcsound
 build64:LCSOUND = -lcsound64
