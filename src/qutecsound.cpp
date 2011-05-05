@@ -2766,6 +2766,7 @@ void qutecsound::connectActions()
   connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
   connect(doc, SIGNAL(stopSignal()), this, SLOT(stop()));
   connect(doc, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(statusBarMessage(QString)));
+  connect(doc, SIGNAL(setHelpSignal()), this, SLOT(setHelpEntry()));
 
   disconnect(showWidgetsAct, 0,0,0);
   if (m_options->widgetsIndependent) {

@@ -739,6 +739,7 @@ void DocumentView::createContextMenu(QPoint pos)
     QMenu *menu = m_mainEditor->createStandardContextMenu();
     menu->addSeparator();
     menu->addAction(tr("Evaluate Selection"), this, SLOT(evaluate()));
+    menu->addAction(tr("Opcode Help"), this, SLOT(opcodeHelp()));
     menu->addSeparator();
     QMenu *opcodeMenu = menu->addMenu("Opcodes");
     QMenu *mainMenu = 0;
@@ -1281,6 +1282,11 @@ void DocumentView::destroySyntaxMenu()
 {
   syntaxMenu->hide();
 //  syntaxMenu = 0;
+}
+
+void DocumentView::opcodeHelp()
+{
+  emit setHelp();
 }
 
 MySyntaxMenu::MySyntaxMenu(QWidget * parent) :

@@ -187,6 +187,7 @@ class DocumentPage : public BaseDocument
     void stop();
     int record(int format);
     void perfEnded();
+    void setHelp();
     int runPython();  // Called when file is a python file
 
     void showWidgets(bool show = true);
@@ -290,6 +291,7 @@ class DocumentPage : public BaseDocument
     void modified();  // Triggered whenever the children change
     void stopSignal(); // To tell main application that running has stopped
     void opcodeSyntaxSignal(QString message); // Propagated from view
+    void setHelpSignal(); // Propagated from view
     void setWidgetClipboardSignal(QString text);
     void evaluatePythonSignal(QString code);
 };

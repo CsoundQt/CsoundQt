@@ -1147,6 +1147,7 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 
   m_view = new DocumentView(parent, opcodeTree);
   connect(m_view, SIGNAL(evaluate(QString)), this, SLOT(evaluatePython(QString)));
+  connect(m_view,SIGNAL(setHelp()), this, SLOT(setHelp()));
 
   // For logging of Csound output to file
   connect(m_console, SIGNAL(logMessage(QString)),
@@ -1248,6 +1249,11 @@ int DocumentPage::record(int format)
 void DocumentPage::perfEnded()
 {
   emit stopSignal();
+}
+
+void DocumentPage::setHelp()
+{
+  emit setHelpSignal();
 }
 
 int DocumentPage::runPython()
@@ -1458,7 +1464,6 @@ void DocumentPage::setViewMode(int mode)
 {
   m_view->setViewMode(mode);
 }
-
 
 void DocumentPage::showOrc(bool show)
 {

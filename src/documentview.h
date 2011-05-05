@@ -140,10 +140,12 @@ class DocumentView : public BaseView
 
   private slots:
     void destroySyntaxMenu();
+    void opcodeHelp();
 
   signals:
     void opcodeSyntaxSignal(QString syntax);  // Report an opcode syntax under cursor
     void lineNumberSignal(int number); // Sends current line number when cursor is moved
+    void setHelp(); // Request execute open opcode help action
     void contentsChanged();
     void evaluate(QString code);
 };
