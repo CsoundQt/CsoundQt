@@ -310,6 +310,7 @@
         <file>../examples/Useful/SF_Play_from_buffer_2.csd</file>
         <file>../examples/Useful/SF_Play_from_HD.csd</file>
         <file>../examples/Useful/SF_Play_from_HD_2.csd</file>
+        <file>../examples/Useful/SF_Snippets_Player.csd</file>
         <file>../examples/Useful/Multichannel_Player.csd</file>
         <file>../examples/Useful/Jukebox.csd</file>
         <file>../examples/Useful/SF_Record.csd</file>
