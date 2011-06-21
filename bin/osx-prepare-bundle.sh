@@ -35,21 +35,60 @@ esac
 done
 shift $(($OPTIND - 1))
 
+
+mv $ORIG_APP_NAME/ $APP_NAME/
+
+
+# Build everything just to make sure all versions packaged are synchronized
+
+echo "---------------- Making package with python"
 PRECISION=-f
 ORIGINAL_NAME=qutecsound${PRECISION}
 NEW_NAME=QuteCsound
+ORIG_APP_NAME=${ORIGINAL_NAME}-py.app
+APP_NAME=${NEW_NAME}-${QUTECSOUND_VERSION}${PRECISION}-py.app
 
-# Build everything just to make sure all versions packaged are synchronized
+rm -Rf ${ORIGINAL_APP_NAME}
+rm -Rf ${APP_NAME}
 cd ..
-qmake qcs.pro CONFIG+=rtmidi -spec macx-g++ -r CONFIG+=release
+make clean
+qmake qcs.pro -spec macx-g++ CONFIG+=rtmidi CONFIG+=pythonqt CONFIG+=release
 make
-#qmake qcs.pro CONFIG+=rtmidi CONFIG+=build64 -spec macx-g++ -r CONFIG+=release
-#make
-#qmake qcs.pro CONFIG+=rtmidi CONFIG+=pythonqt
-#make
-#qmake qcs.pro CONFIG+=rtmidi CONFIG+=build64 CONFIG+=pythonqt
-#make
 cd bin
+macdeployqt ${ORIG_APP_NAME}
+# Copy PythonQt which is not found by macdeployqt
+cp libPythonQt.1.dylib ${ORIG_APP_NAME}/Contents/Frameworks
+cp libPythonQt.1.0.0.dylib ${ORIG_APP_NAME}/Contents/Frameworks
+cp libPythonQt_QtAll.1.0.0.dylib ${ORIG_APP_NAME}/Contents/Frameworks
+cp libPythonQt_QtAll.1.dylib ${ORIG_APP_NAME}/Contents/Frameworks
+
+mv $ORIG_APP_NAME/ $APP_NAME/
+otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
+
+macdeployqt ${APP_NAME} -dmg
+
+echo "---------------- Making basic universal package"
+PRECISION=-f
+ORIGINAL_NAME=qutecsound${PRECISION}
+NEW_NAME=QuteCsound
+ORIG_APP_NAME=${ORIGINAL_NAME}.app
+APP_NAME=${NEW_NAME}-${QUTECSOUND_VERSION}${PRECISION}.app
+
+rm -Rf ${ORIGINAL_APP_NAME}
+rm -Rf ${APP_NAME}
+cd ..
+make clean
+qmake qcs.pro -spec macx-g++ CONFIG+=rtmidi CONFIG+=release
+make
+cd bin
+macdeployqt ${ORIG_APP_NAME}
+
+mv $ORIG_APP_NAME/ $APP_NAME/
+otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
+macdeployqt ${APP_NAME} -dmg
+
+exit 0
+
 
 #lipo ${ORIGINAL_NAME}.app/Contents/MacOS/${ORIGINAL_NAME} ${ORIGINAL_NAME_D}.app/Contents/MacOS/${ORIGINAL_NAME_D} -create --output ${ORIGINAL_NAME}.app/Contents/MacOS/qutecsound
 
@@ -61,53 +100,14 @@ mkdir $APP_NAME/Contents/Resources
 cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources
 chmod -R a-w $APP_NAME/Contents/Resources
 
-if [ "$nflag" -ne 1 ]
-        then
-  echo "---------------- Making noQt package"
-  tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}-noQt.tar.gz $APP_NAME &>/dev/null
-fi
-
-mkdir $APP_NAME/Contents/Frameworks
-
 # make version including Qt
-echo "---------------- Making incQt package"
-cp -R /Library/Frameworks/QtCore.framework $APP_NAME/Contents/Frameworks/
-cp -R /Library/Frameworks/QtGui.framework $APP_NAME/Contents/Frameworks/
-cp -R /Library/Frameworks/QtXml.framework $APP_NAME/Contents/Frameworks/
 
-cp -R ../../../../PythonQt2.0.1/lib/libPythonQt${debug}.1.0.0.dylib $APP_NAME/Contents/MacOS/libPythonQt${debug}.1.dylib
 
-install_name_tool -change QtCore.framework/Versions/4/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4/QtCore $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
-install_name_tool -change QtGui.framework/Versions/4/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/4/QtGui $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
-install_name_tool -change QtXml.framework/Versions/4/QtXml @executable_path/../Frameworks/QtXml.framework/Versions/4/QtXml $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
-install_name_tool -change libPythonQt${debug}.1.dylib @executable_path/libPythonQt${debug}.1.dylib $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
 
-install_name_tool -id @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore $APP_NAME/Contents/Frameworks/QtCore.framework/Versions/4/QtCore
-install_name_tool -id @executable_path/../Frameworks/QtGui.framework/Versions/4.0/QtGui $APP_NAME/Contents/Frameworks/QtGui.framework/Versions/4/QtGui
-install_name_tool -id @executable_path/../Frameworks/QtXml.framework/Versions/4.0/QtXml $APP_NAME/Contents/Frameworks/QtXml.framework/Versions/4/QtXml
-
-install_name_tool -change  QtCore.framework/Versions/4/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore $APP_NAME/Contents/Frameworks/QtGui.framework/Versions/4.0/QtGui
-install_name_tool -change  QtCore.framework/Versions/4/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore $APP_NAME/Contents/Frameworks/QtXml.framework/Versions/4.0/QtXml
-
-install_name_tool -change QtCore.framework/Versions/4/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4/QtCore $APP_NAME/Contents/MacOS/libPythonQt${debug}.1.dylib
-install_name_tool -change QtGui.framework/Versions/4/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/4/QtGui $APP_NAME/Contents/MacOS/libPythonQt${debug}.1.dylib
-
-#rm $APP_NAME/Contents/Info.plist
-#cp ../src/MyInfo.plist $APP_NAME/Contents/Info.plist
-
-# Remove debugging info
-rm -Rf $APP_NAME/Contents/Frameworks/QtGui.framework/QtGui_debug.dSYM
-rm -Rf $APP_NAME/Contents/Frameworks/QtGui.framework/Versions/4/QtGui_debug
-rm -Rf $APP_NAME/Contents/Frameworks/QtCore.framework/QtCore_debug.dSYM
-rm -Rf $APP_NAME/Contents/Frameworks/QtCore.framework/Versions/4/QtCore_debug
-rm -Rf $APP_NAME/Contents/Frameworks/QXml.framework/QtXml_debug.dSYM
-rm -Rf $APP_NAME/Contents/Frameworks/QtXml.framework/Versions/4/QtXml_debug
-
-otool -L $APP_NAME/Contents/MacOS/$ORIGINAL_NAME
 
 if [ "$nflag"  -ne 1 ]
         then
-tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}-incQt.tar.gz $APP_NAME &>/dev/null
+tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}.tar.gz $APP_NAME &>/dev/null
 fi
 
 # make Standalone application
@@ -216,7 +216,7 @@ cd ../../../../../../../../
 
 if [ "$nflag" -ne 1 ]
         then
-tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}-full.tar.gz $APP_NAME &>/dev/null
+tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}-Standalone.tar.gz $APP_NAME &>/dev/null
 fi
 
 
