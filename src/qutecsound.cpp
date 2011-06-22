@@ -3685,7 +3685,7 @@ void qutecsound::readSettings()
   m_options->showTooltips = settings.value("showTooltips", true).toBool();
   m_options->enableFLTK = settings.value("enableFLTK", true).toBool();
   m_options->terminalFLTK = settings.value("terminalFLTK", true).toBool();
-  m_options->oldFormat = settings.value("oldFormat", true).toBool();
+  m_options->oldFormat = settings.value("oldFormat", false).toBool();
   m_options->openProperties = settings.value("openProperties", true).toBool();
   m_options->fontOffset = settings.value("fontOffset", 0.0).toDouble();
   m_options->fontScaling = settings.value("fontScaling", 1.0).toDouble();
@@ -4194,13 +4194,14 @@ void qutecsound::makeNewPage(QString fileName, QString text)
 
   if (documentPages[curPage]->setTextString(text, m_options->saveWidgets) == 1
       && fileName.endsWith(".csd")) { // Make backup copy if file has only old format.
-    QFile oldFile(fileName + ".old-format");
-    if (oldFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
-      qDebug() << "qutecsound::loadFile Writing backup file:" << fileName + ".old-format";
-      QTextStream out(&oldFile);
-      out << text;
-      oldFile.close();
-    }
+    // Backup copy seems no longer necessary, and more of a nuisance.
+//    QFile oldFile(fileName + ".old-format");
+//    if (oldFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
+//      qDebug() << "qutecsound::loadFile Writing backup file:" << fileName + ".old-format";
+//      QTextStream out(&oldFile);
+//      out << text;
+//      oldFile.close();
+//    }
   }
   if (!fileName.startsWith(":/")) {  // Don't store internal examples directory as last used dir
     lastUsedDir = fileName;
@@ -4516,8 +4517,13 @@ void qutecsound::insertText(QString text, int index, int section)
   if (index == -1) {
     index = curPage;
   }
-  if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->insertText(text);
+  if (section == -1) {
+    if (index < documentTabs->count() && index >= 0) {
+      documentPages[index]->insertText(text);
+    }
+  }
+  else {
+    qDebug() << "qutecsound::insertText not implemented for sections";
   }
 }
 
@@ -4943,7 +4949,7 @@ EventSheet* qutecsound::getSheet(int index, int sheetIndex)
     return documentPages[index]->getSheet(sheetIndex);
   }
   else {
-    return 0;
+    return NULL;
   }
 }
 
@@ -4956,7 +4962,7 @@ CsoundEngine *qutecsound::getEngine(int index)
     return documentPages[index]->getEngine();
   }
   else {
-    return 0;
+    return NULL;
   }
 }
 
@@ -4969,7 +4975,7 @@ EventSheet* qutecsound::getSheet(int index, QString sheetName)
     return documentPages[index]->getSheet(sheetName);
   }
   else {
-    return 0;
+    return NULL;
   }
 }
 

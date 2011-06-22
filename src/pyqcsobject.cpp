@@ -28,7 +28,7 @@
 
 #include <QMessageBox>
 #include <QDir>
-#include "csound.hpp"
+#include "csound.h"
 
 PyQcsObject::PyQcsObject():QObject(NULL)
 {
@@ -78,12 +78,6 @@ void PyQcsObject::setQuteCsound(qutecsound *qcs)
 //  m.insert("c", 12.);
 //  return m;
 //}
-
-CSOUND* PyQcsObject::getCurrentCsound()
-{
-  CSOUND *cs = m_qcs->getEngine()->getCsound();
-  return cs;
-}
 
 QString PyQcsObject::getVersion()
 {
@@ -327,6 +321,12 @@ QString PyQcsObject::createNewScope(int x, int y, int index)
   return m_qcs->createNewScope(x,y, index);
 }
 
+// TODO add destructor of widgets
+bool PyQcsObject::destroyWidget(QString uuid)
+{
+  return false;
+}
+
 QuteSheet* PyQcsObject::getSheet(int index, int sheetIndex)
 {
   return new QuteSheet(this, m_qcs->getSheet(index,sheetIndex));
@@ -376,6 +376,68 @@ void PyQcsObject::sendEvent(QString events)
 void PyQcsObject::sendEvent(int index, QString events)
 {
   m_qcs->sendEvent(index, events);
+}
+
+CSOUND* PyQcsObject::getCurrentCsound()
+{
+  CSOUND *cs = NULL;
+  CsoundEngine *e = m_qcs->getEngine();
+  if (e != NULL) {
+    CSOUND *cs = e->getCsound();
+  }
+  return cs;
+}
+
+
+double PyQcsObject::getSampleRate(int index)
+{
+  double sr = -1.0;
+  CsoundEngine *e = m_qcs->getEngine(index);
+  if (e != NULL) {
+    CSOUND *cs = e->getCsound();
+    if (cs != NULL) {
+      sr = (double) csoundGetSr (cs);
+    }
+  }
+  return sr;
+}
+
+int PyQcsObject::getKsmps(int index)
+{
+  int ksmps = -1;
+  CsoundEngine *e = m_qcs->getEngine(index);
+  if (e != NULL) {
+    CSOUND *cs = e->getCsound();
+    if (cs != NULL) {
+      ksmps = csoundGetKsmps (cs);
+    }
+  }
+  return ksmps;
+}
+
+int PyQcsObject::getNumChannels(int index)
+{
+  int nchnls = -1;
+  CsoundEngine *e = m_qcs->getEngine(index);
+  if (e != NULL) {
+    CSOUND *cs = e->getCsound();
+    if (cs != NULL) {
+      nchnls = csoundGetNchnls (cs);
+    }
+  }
+  return nchnls;
+}
+
+MYFLT *PyQcsObject::getTableArray(int ftable, int index)
+{
+  // FIXME free this!
+  MYFLT **tablePtr = (MYFLT **) malloc(sizeof(MYFLT *));
+  CsoundEngine *e = m_qcs->getEngine(index);
+  if (e != NULL) {
+    CSOUND *cs = e->getCsound();
+    int ret = csoundGetTable(cs, tablePtr, ftable);
+  }
+  return *tablePtr;
 }
 
 //void PyQcsObject::writeListToTable(int ftable, QVariantList values, int offset, int count)

@@ -48,13 +48,16 @@ void FileBEditor::appendText(QString &text)
   ui->fileListWidget->addItem(file.fileName);
 }
 
-QString FileBEditor::toPlainText()
+QString FileBEditor::toPlainText(bool useQuotes)
 {
   QString text;
   foreach(FileB file, m_files) {
-    // FIXME should put quotes back once the fix in Csound is released
-//    text += "<CsFileB filename=\"" + file.path + file.fileName + "\">\n";
-    text += "<CsFileB filename=" + file.path + file.fileName + ">\n";
+    if (useQuotes) {
+      text += "<CsFileB filename=\"" + file.path + file.fileName + "\">\n";
+    }
+    else {
+      text += "<CsFileB filename=" + file.path + file.fileName + ">\n";
+    }
     text += file.encData + "\n";
     text += "</CsFileB>\n";
   }

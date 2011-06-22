@@ -1,6 +1,5 @@
 RESOURCES = "$${PWD}/application.qrc" \
-    "$${PWD}/pythonscripts.qrc" \
-    "$${PWD}/mccurdy.qrc"
+    "$${PWD}/pythonscripts.qrc"
 FORMS = "$${PWD}/about.ui" \
     "$${PWD}/configdialog.ui" \
     "$${PWD}/findreplace.ui" \

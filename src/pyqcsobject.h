@@ -55,8 +55,6 @@ class PyQcsObject : public QObject {
 //  QObject* findChild(QObject* o, const QString& name);
 //  QVariantMap testMap();
 
-    CSOUND* getCurrentCsound();
-
     QString getVersion();
 
     // Csound controls
@@ -115,6 +113,8 @@ class PyQcsObject : public QObject {
     QString createNewGraph(int x, int y, int index = -1);
     QString createNewScope(int x, int y, int index = -1);
 
+    bool destroyWidget(QString uuid);
+
     // Live Events
     QuteSheet* getSheet(int index = -1, int sheetIndex = -1);  //TODO implement both getSheet functions
     QuteSheet* getSheet(int index, QString sheetName);
@@ -124,7 +124,18 @@ class PyQcsObject : public QObject {
     void sendEvent(int index, QString events);
     void sendEvent(QString events);
 
-    // To/From Csound Engine
+    // To/From Csound
+    CSOUND* getCurrentCsound();
+    double getSampleRate(int index = -1);
+    int getKsmps(int index = -1);
+    int getNumChannels(int index = -1);
+    MYFLT *getTableArray(int ftable, int index = -1);
+    // TODO implement these!
+//    getTablePointer(fn, index = -1)
+//    copyTableToList(fn, index = -1, offset = 0, number = -1)
+//    copyListToTable(list, fn, index = -1, offset = 0)
+
+
 //    void writeListToTable(int ftable, QVariantList values, int offset = 0, int count = -1);
 //    QVariantList readTableToList(int ftable, int offset = 0, int count = -1);
 //    void writeArrayToTable(int ftable, QVariantList values, int offset = 0, int count = -1); // Numpy arrays

@@ -24,7 +24,7 @@ public:
   explicit FileBEditor(QWidget *parent = 0);
   ~FileBEditor();
   void appendText(QString &text);
-  QString toPlainText();
+  QString toPlainText(bool useQuotes = true);
   void clear();
 
 private slots:
