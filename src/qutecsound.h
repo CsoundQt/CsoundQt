@@ -193,8 +193,8 @@ class qutecsound:public QMainWindow
     void showUtilities(bool);
     void getToIn();
     void inToGet();
-    void putCsladspaText();
-    void exportCabbage();
+    void updateCsladspaText();
+    void updateCabbageText();
     void setCurrentAudioFile(const QString fileName);
     void openExternalEditor();
     void openExternalPlayer();

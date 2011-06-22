@@ -3,10 +3,6 @@
 # -------------------------------------------------
 QT += xml
 TEMPLATE = app
-OBJECTS_DIR = "build/obj"
-RCC_DIR = "build/rcc"
-UI_DIR = "build/ui"
-MOC_DIR = "build/moc"
 TMPDIR = "build"
 !build32:!build64:CONFIG += build32
 build32:build64:CONFIG -= build32
@@ -49,11 +45,14 @@ SOURCES += "$${QCSPWD}/configlists.cpp" \
     "$${QCSPWD}/texteditor.cpp" \
     "$${QCSPWD}/widgetlayout.cpp" \
     "$${QCSPWD}/widgetpreset.cpp" \
-    main.cpp \
-    quteapp.cpp \
-    quteappwizard.cpp \
-    simpledocument.cpp \
-    settingsdialog.cpp
+    "$${QCSPWD}/scoreeditor.cpp" \
+    "$${QCSPWD}/filebeditor.cpp" \
+    "$${QCSPWD}/eventsheet.cpp" \
+    "$${PWD}/main.cpp" \
+    "$${PWD}/quteapp.cpp" \
+    "$${PWD}/quteappwizard.cpp" \
+    "$${PWD}/simpledocument.cpp" \
+    "$${PWD}/settingsdialog.cpp"
 HEADERS += "$${QCSPWD}/configlists.h" \
     "$${QCSPWD}/console.h" \
     "$${QCSPWD}/csoundengine.h" \
@@ -84,12 +83,17 @@ HEADERS += "$${QCSPWD}/configlists.h" \
     "$${QCSPWD}/texteditor.h" \
     "$${QCSPWD}/widgetlayout.h" \
     "$${QCSPWD}/widgetpreset.h" \
-    quteapp.h \
-    quteappwizard.h \
-    simpledocument.h \
-    settingsdialog.h
-FORMS += quteappwizard.ui \
-    settingsdialog.ui
+    "$${QCSPWD}/scoreeditor.h" \
+    "$${QCSPWD}/filebeditor.h" \
+    "$${QCSPWD}/eventsheet.h" \
+    "$${PWD}/quteapp.h" \
+    "$${PWD}/quteappwizard.h" \
+    "$${PWD}/simpledocument.h" \
+    "$${PWD}/settingsdialog.h"
+FORMS += "$${PWD}/quteappwizard.ui" \
+    "$${PWD}/settingsdialog.ui" \
+    "$${QCSPWD}/filebeditor.ui"\
+    "$${QCSPWD}/liveeventframe.ui"
 LIBS += $${LCSOUND} \
     $${LSNDFILE} \
     $${RTMIDI}
@@ -103,4 +107,4 @@ DESTDIR = bin
 INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
 INCLUDEPATH *= $${CSOUND_INTERFACES_INCLUDE_DIR}
 INCLUDEPATH *= $${LIBSNDFILE_INCLUDE_DIR}
-RESOURCES += application.qrc
+RESOURCES += "$${PWD}/application.qrc"

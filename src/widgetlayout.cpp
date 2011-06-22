@@ -705,7 +705,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
   }
   else {
     qDebug() << "WidgetLayout::newXmlWidget " << type << " not implemented";
-    QuteDummy *w = new QuteDummy(this);
+//    QuteDummy *w = new QuteDummy(this);
   }
   if (widget == 0) {
     qDebug() << "WidgetLayout::newXmlWidget ERROR widget has not been created!";
@@ -1319,6 +1319,28 @@ QString WidgetLayout::getCsladspaLines()
   }
   widgetsMutex.unlock();
   qDebug() << "WidgetPanel:getCsladspaLines() " << unsupported << " Unsupported widgets";
+  return text;
+}
+
+QString WidgetLayout::getCabbageWidgets()
+{
+  QString title = windowTitle();
+  QString text = "form caption(\"" + title  + "\"),";
+  text += "pos(" + QString::number(m_posx) + "," + QString::number(m_posy) + "),";
+  text += "size(" + QString::number(m_w) + "," + QString::number(m_h) +")\n";
+  int unsupported = 0;
+  widgetsMutex.lock();
+  foreach(QuteWidget *widget, m_widgets) {
+    QString line = widget->getCabbageLine();
+    if (line != "") {
+      text += line + "\n";
+    }
+    else {
+      unsupported++;
+    }
+  }
+  widgetsMutex.unlock();
+  qDebug() << "WidgetPanel:getCabbageWidgets() " << unsupported << " Unsupported widgets";
   return text;
 }
 

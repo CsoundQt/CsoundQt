@@ -54,6 +54,7 @@ class BaseView : public QScrollArea
     void appendFileBText(QString text);
     void setOptionsText(QString text);
     void setLadspaText(QString text);
+    void setCabbageText(QString text);
     void setOtherCsdText(QString text);
     void setOtherText(QString text);
 

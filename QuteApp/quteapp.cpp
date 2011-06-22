@@ -100,18 +100,30 @@ bool QuteApp::loadCsd()
   QApplication::setOverrideCursor(Qt::WaitCursor);
 
   QString text;
+  bool inEncFile = false;
   while (!file.atEnd()) {
     QByteArray line = file.readLine();
-    while (line.contains("\r\n")) {
-      line.replace("\r\n", "\n");  //Change Win returns to line endings
+    if (line.contains("<CsFileB ")) {
+      inEncFile = true;
     }
-    while (line.contains("\r")) {
-      line.replace("\r", "\n");  //Change Mac returns to line endings
+    if (!inEncFile) {
+      while (line.contains("\r\n")) {
+        line.replace("\r\n", "\n");  //Change Win returns to line endings
+      }
+      while (line.contains("\r")) {
+        line.replace("\r", "\n");  //Change Mac returns to line endings
+      }
+      QTextDecoder decoder(QTextCodec::codecForLocale());
+      text = text + decoder.toUnicode(line);
+      if (!line.endsWith("\n"))
+        text += "\n";
     }
-    QTextDecoder decoder(QTextCodec::codecForLocale());
-    text = text + decoder.toUnicode(line);
-    if (!line.endsWith("\n"))
-      text += "\n";
+    else {
+      text += line;
+      if (line.contains("</CsFileB>" && !line.contains("<CsFileB " )) ) {
+        inEncFile = false;
+      }
+    }
   }
 
 //  m_doc->setInitialDir(initialDir);

@@ -58,12 +58,11 @@ QString QuteComboBox::getWidgetLine()
 
 QString QuteComboBox::getCabbageLine()
 {
-//   combobox channel("chanName"),  pos(Top, Left), size(Width, Height), value(val), items("item1", "item2", ...)
   QString line = "combobox channel(\"" + m_channel + "\"),  ";
   line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
   line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
   line += "value(" + QString::number(m_value) + "), ";
-  line += "items(\"" + itemList() + "\")";
+  line += "text(\"" + itemList() + "\")";
   return line;
 }
 

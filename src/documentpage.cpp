@@ -704,6 +704,14 @@ void DocumentPage::updateCsLadspaText()
   m_view->setLadspaText(text);
 }
 
+void DocumentPage::updateCabbageText()
+{
+  QString text = "<Cabbage>\n";
+  text += m_widgetLayouts[0]->getCabbageWidgets();
+  text += "</Cabbage>";
+  m_view->setCabbageText(text);
+}
+
 void DocumentPage::focusWidgets()
 {
   //FIXME allow multiple

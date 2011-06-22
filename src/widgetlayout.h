@@ -68,6 +68,7 @@ class WidgetLayout : public QWidget
     QString getMacWidgetsText(); // With full tags
     QStringList getSelectedMacWidgetsText();
     QString getCsladspaLines();
+    QString getCabbageWidgets();
     bool openMidiPort(int port);
     void closeMidiPort();
 

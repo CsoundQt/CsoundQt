@@ -723,12 +723,12 @@ QString qutecsound::getSaveFileName()
   if (inspectorVisible)
     m_inspector->show(); // Necessary for Mac, as widget Panel covers open dialog
   if (fileName.isEmpty())
-    return false;
+    return QString("");
   if (isOpen(fileName) != -1 && isOpen(fileName) != curPage) {
     QMessageBox::critical(this, tr("QuteCsound"),
                           tr("The file is already open in another tab.\nFile not saved!"),
                              QMessageBox::Ok | QMessageBox::Default);
-    return false;
+    return QString("");
   }
 //  if (!fileName.endsWith(".csd",Qt::CaseInsensitive) && !fileName.endsWith(".orc",Qt::CaseInsensitive)
 //    && !fileName.endsWith(".sco",Qt::CaseInsensitive) && !fileName.endsWith(".txt",Qt::CaseInsensitive)
@@ -1114,14 +1114,14 @@ void qutecsound::getToIn()
   documentPages[curPage]->getToIn();
 }
 
-void qutecsound::putCsladspaText()
+void qutecsound::updateCsladspaText()
 {
   documentPages[curPage]->updateCsLadspaText();
 }
 
-void qutecsound::exportCabbage()
+void qutecsound::updateCabbageText()
 {
-  //TODO finish this
+  documentPages[curPage]->updateCabbageText();
 }
 
 void qutecsound::setCurrentAudioFile(const QString fileName)
@@ -2278,7 +2278,12 @@ void qutecsound::createActions()
   csladspaAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Insert/Update CsLADSPA text"), this);
   csladspaAct->setStatusTip(tr("Insert/Update CsLADSPA section to csd file"));
   csladspaAct->setShortcutContext(Qt::ApplicationShortcut);
-  connect(csladspaAct, SIGNAL(triggered()), this, SLOT(putCsladspaText()));
+  connect(csladspaAct, SIGNAL(triggered()), this, SLOT(updateCsladspaText()));
+
+  cabbageAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Insert/Update Cabbage text"), this);
+  cabbageAct->setStatusTip(tr("Insert/Update Cabbage section to csd file"));
+  cabbageAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(cabbageAct, SIGNAL(triggered()), this, SLOT(updateCabbageText()));
 
   findAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("&Find and Replace"), this);
   findAct->setStatusTip(tr("Find and replace strings in file"));
@@ -2789,7 +2794,7 @@ void qutecsound::createMenus()
   fileMenu->addAction(saveNoWidgetsAct);
   fileMenu->addAction(createAppAct);
   fileMenu->addAction(reloadAct);
-  // fileMenu->addAction(cabbageAct);
+  fileMenu->addAction(cabbageAct);
   fileMenu->addAction(closeTabAct);
   fileMenu->addAction(printAct);
   fileMenu->addAction(infoAct);
@@ -2824,6 +2829,7 @@ void qutecsound::createMenus()
   editMenu->addAction(inToGetAct);
   editMenu->addAction(getToInAct);
   editMenu->addAction(csladspaAct);
+  editMenu->addAction(cabbageAct);
   editMenu->addSeparator();
   editMenu->addAction(editAct);
   editMenu->addSeparator();

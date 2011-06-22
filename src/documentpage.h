@@ -115,6 +115,7 @@ class DocumentPage : public BaseDocument
     bool isRecording();
     bool usesFltk();
     void updateCsLadspaText();
+    void updateCabbageText();
     void focusWidgets();
     QString getFileName();
     QString getCompanionFileName();

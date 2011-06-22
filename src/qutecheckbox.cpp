@@ -107,7 +107,7 @@ QString QuteCheckBox::getCabbageLine()
   line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
   line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
   line += "value(" + (static_cast<QCheckBox *>(m_widget)->isChecked()?
-                      QString::number(property("QCS_pressedValue").toDouble(), 'f', 8):QString("0")) + "), ";
+                      QString("1!"):QString("0")) + "), ";
   line += "caption(\"" +  property("QCS_label").toString() + "\")";
   return line;
 }

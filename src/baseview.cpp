@@ -359,7 +359,7 @@ void BaseView::setLadspaText(QString text)
     QTextCursor cursor;
     cursor = m_mainEditor->textCursor();
     m_mainEditor->moveCursor(QTextCursor::Start);
-    if (m_mainEditor->find("<csLADSPA>") and m_mainEditor->find("</csLADSPA>")) {
+    if (m_mainEditor->find("<csLADSPA>") && m_mainEditor->find("</csLADSPA>")) {
       QString curText = getBasicText();
       int index = curText.indexOf("<csLADSPA>");
       int endIndex = curText.indexOf("</csLADSPA>") + 11;
@@ -381,6 +381,40 @@ void BaseView::setLadspaText(QString text)
     qDebug() << "BaseView::setLadspaText() not implemented for split view";
   }
 }
+
+void BaseView::setCabbageText(QString text)
+{
+  if (m_viewMode < 2) { // View is not split
+    if (m_mode != 0) {
+      qDebug() << "DocumentView::setLadspaText Current file is not a csd file. Text not inserted!";
+      return;
+    }
+    QTextCursor cursor;
+    cursor = m_mainEditor->textCursor();
+    m_mainEditor->moveCursor(QTextCursor::Start);
+    if (m_mainEditor->find("<Cabbage>") && m_mainEditor->find("</Cabbage>")) {
+      QString curText = getBasicText();
+      int index = curText.indexOf("<Cabbage>");
+      int endIndex = curText.indexOf("</Cabbage>") + 10;
+      if (curText.size() > endIndex + 1 && curText[endIndex + 1] == '\n') {
+        endIndex++; // Include last line break
+      }
+      curText.remove(index, endIndex - index);
+      curText.insert(index, text);
+      setBasicText(curText);
+      m_mainEditor->moveCursor(QTextCursor::Start);
+    }
+    else { //Cabbage section not present, or incomplete
+      m_mainEditor->find("<CsoundSynthesizer>"); //cursor moves there
+      m_mainEditor->moveCursor(QTextCursor::EndOfLine);
+      m_mainEditor->insertPlainText(QString("\n") + text + QString("\n"));
+    }
+  }
+  else {
+    qDebug() << "BaseView::setCabbageText() not implemented for split view";
+  }
+}
+
 
 void BaseView::setOtherCsdText(QString text)
 {

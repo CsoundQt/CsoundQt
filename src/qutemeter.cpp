@@ -76,12 +76,12 @@ void QuteMeter::setMidiValue(int value)
     vertical = true;
   }
   if (vertical) {
-    double max = property("QCS_yMax").toDouble();
-    double min = property("QCS_yMin").toDouble();
+    max = property("QCS_yMax").toDouble();
+    min = property("QCS_yMin").toDouble();
   }
   else {
-    double max = property("QCS_xMax").toDouble();
-    double min = property("QCS_xMin").toDouble();
+    max = property("QCS_xMax").toDouble();
+    min = property("QCS_xMin").toDouble();
   }
   double newval = min + ((value / 127.0)* (max - min));
   setValue(newval);

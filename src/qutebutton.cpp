@@ -156,7 +156,6 @@ QString QuteButton::getCabbageLine()
   QString line = "button channel(\"" + m_channel + "\"),  ";
   line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
   line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
-  line += "OnOffCaption(\"" + m_channel + "\")"; // OffCaption is not supported in QuteCsound
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif
