@@ -2887,6 +2887,7 @@ void qutecsound::createMenus()
   QStringList flossman07Files;
   QStringList flossman08Files;
   QStringList flossman09Files;
+  QStringList livecollFiles;
   QStringList widgetFiles;
   QStringList synthFiles;
   QStringList musicFiles;
@@ -2894,6 +2895,15 @@ void qutecsound::createMenus()
   QStringList exampleFiles;
   QList<QStringList> subMenus;
   QStringList subMenuNames;
+
+
+  livecollFiles.append(":/examples/Live Collection/Live_Accordizer.csd");
+  livecollFiles.append(":/examples/Live Collection/Live_Delay_Feedback.csd");
+  livecollFiles.append(":/examples/Live Collection/Live_Granular.csd");
+  livecollFiles.append(":/examples/Live Collection/Live_RM_AM.csd");
+
+  subMenus << livecollFiles;
+  subMenuNames << tr("Live Collection");
 
   widgetFiles.append(":/examples/Widgets/Widget_Panel.csd");
   widgetFiles.append(":/examples/Widgets/Label_Widget.csd");
@@ -2930,6 +2940,7 @@ void qutecsound::createMenus()
   synthFiles.append(":/examples/Synths/Waveform_Mix.csd");
   subMenus << synthFiles;
   subMenuNames << "Synths";
+
 
   musicFiles.append(":/examples/Music/Boulanger-Trapped_in_Convert.csd");
   musicFiles.append(":/examples/Music/Chowning-Stria.csd");
