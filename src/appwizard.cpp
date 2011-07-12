@@ -98,7 +98,7 @@ void AppWizard::accept()
   QString appName =  field("appName").toString();
   QString targetDir =  field("targetDir").toString();
   bool autorun =  field("autorun").toBool();
-  int platform =  field("platform").toBool();
+  int platform =  field("platform").toInt();
   bool useDoubles = field("useDoubles").toBool();
   QString libDir =  field("libDir").toString();
   QString opcodeDir =  field("opcodeDir").toString();

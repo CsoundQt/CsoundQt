@@ -15,15 +15,15 @@
 <context>
     <name>AdditionalFilesPage</name>
     <message>
-        <source>Addional files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Add file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Additional files</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -302,7 +302,7 @@ Aborting.</source>
     </message>
     <message>
         <source>Csound execution</source>
-        <translation>Csound Işleyiş</translation>
+        <translation type="obsolete">Csound Işleyiş</translation>
     </message>
     <message>
         <source>Run Utilities and Render using:</source>
@@ -318,7 +318,7 @@ Aborting.</source>
     </message>
     <message>
         <source>Run in separate thread</source>
-        <translation>Ayrı Threadde çalıştır</translation>
+        <translation type="obsolete">Ayrı Threadde çalıştır</translation>
     </message>
     <message>
         <source>Allow key repeats for sensekey</source>
@@ -538,7 +538,7 @@ Aborting.</source>
     </message>
     <message>
         <source>Interface Language (requires restart)</source>
-        <translation>Arabirim Dili (yeniden başlatma gerektirir)</translation>
+        <translation type="obsolete">Arabirim Dili (yeniden başlatma gerektirir)</translation>
     </message>
     <message>
         <source>Jack client name (use * for current filename)</source>
@@ -658,6 +658,30 @@ Aborting.</source>
         <comment>No MIDI internal interface</comment>
         <translation type="unfinished">Hiçbiri</translation>
     </message>
+    <message>
+        <source>Interface language (Requires restart)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Performance tweaks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No messages to consoles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable recording and scopes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable realtime score events</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable python callback</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConsoleWidget</name>
@@ -729,6 +753,10 @@ Baştan başlamak ister misiniz?</translation>
     </message>
     <message>
         <source>Evaluate Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opcode Help</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1089,6 +1117,54 @@ Baştan başlamak ister misiniz?</translation>
     </message>
     <message>
         <source>Stop running script</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FileBEditor</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save as...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Embedded files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select destination file name for file %1</source>
+        <comment>For saving binary encoded embedded file</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saving embedded file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error saving embedded file. Aborting.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select files to embed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Encoding file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error encoding file. Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2583,11 +2659,11 @@ Francesco
     </message>
     <message>
         <source>Thread</source>
-        <translation>Thread</translation>
+        <translation type="obsolete">Thread</translation>
     </message>
     <message>
         <source>NoThread</source>
-        <translation>NoThread</translation>
+        <translation type="obsolete">NoThread</translation>
     </message>
     <message>
         <source>SaveWidgets</source>
@@ -3385,10 +3461,6 @@ You must restart QuteCsound.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Finnish translation: Niko HumalamÃ¤ki</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>If you find QuteCsound useful, please consider donating to the project:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3442,10 +3514,6 @@ You must restart QuteCsound.</source>
     </message>
     <message>
         <source>Ctrl+K</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Shift+Ctrl+K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3636,43 +3704,171 @@ Extended Python features are not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>3D Audio</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Additive Synthesis</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Convolution</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delays</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Distortion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>FFT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Filters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Scripts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Modulation</source>
+        <source>Python Scratch Pad</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>GranularSynthesis</source>
+        <source>Embedded Files:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Using Csound version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Precision:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Built with PythonQt support.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Finnish translation: Niko Humalam&amp;auml;ki</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Shift+A</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+8</source>
+        <translation type="unfinished">Alt+8</translation>
+    </message>
+    <message>
+        <source>Shift+Alt+K</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert/Update Cabbage text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert/Update Cabbage section to csd file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ScratchPad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Python Scratch Pad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Split View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle between full csd and split text display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Orchestra</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show orchestra panel in split view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Score</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show CsOptions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show CsOptions section panel in split view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Embedded files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Embedded files panel in split view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Information Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show information text panel in split view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Extra Tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show extra tags panel in split view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Widgets Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Widgets text panel in split view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>01 Basics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>04 Sound Synthesis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>05 Sound Modification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>06 Samples</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>08 OSC and WII</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>09 Csound in other Applications</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -60,7 +60,7 @@ void PluginsPage::selectNone()
 void PluginsPage::deselectFltk()
 {
   QList<QString> fltkNames;
-  fltkNames << "libwidgets" << "libvirtual" << "libfluidsynth";
+  fltkNames << "libwidgets" << "libvirtual" << "libfluidOpcodes";
   QList<QListWidgetItem *> selected = ui->pluginsListWidget->selectedItems();
   foreach (QListWidgetItem *item, selected) {
     foreach (QString name, fltkNames) {
