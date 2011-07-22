@@ -23,7 +23,7 @@
     <message>
         <location filename="../additionalfilespage.ui" line="17"/>
         <source>Additional files</source>
-        <translation type="unfinished"></translation>
+        <translation>Zusätzliche Dateien</translation>
     </message>
     <message>
         <location filename="../additionalfilespage.ui" line="29"/>
@@ -184,7 +184,7 @@ Aborting.</translation>
         <location filename="../configdialog.cpp" line="68"/>
         <source>None</source>
         <comment>No MIDI internal interface</comment>
-        <translation>Keine</translation>
+        <translation>Keins</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="578"/>
@@ -473,32 +473,32 @@ Aborting.</translation>
     <message>
         <location filename="../configdialog.ui" line="834"/>
         <source>Interface language (Requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Interface-Sprache (erfordert Neustart)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="857"/>
         <source>Performance tweaks</source>
-        <translation type="unfinished"></translation>
+        <translation>Performance-Einstellungen</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="872"/>
         <source>No messages to consoles</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Meldungen in der Konsole</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="879"/>
         <source>Disable recording and scopes</source>
-        <translation type="unfinished"></translation>
+        <translation>Aufnahme und Oszilloskop deaktivieren</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="886"/>
         <source>Disable realtime score events</source>
-        <translation type="unfinished"></translation>
+        <translation>Echtzeit Score-Ereignisse deaktivieren</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="893"/>
         <source>Disable python callback</source>
-        <translation type="unfinished"></translation>
+        <translation>Python Callback deaktivieren</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1017"/>
@@ -729,7 +729,7 @@ Aborting.</translation>
     <message>
         <location filename="../configdialog.ui" line="795"/>
         <source>Allow simultaneous play (May have problems with portmidi,coreaudio, and alsa audio) </source>
-        <translation>Gleichzeitiges Ausführen erlauben (es kann Probleme mit portmidi, coreaudio und alsa Audio geben)</translation>
+        <translation>Gleichzeitiges Ausführen erlauben (Probleme mit portaudio, coreaudio und alsa Audio sind möglich)</translation>
     </message>
     <message>
         <source>Use new Widget Format (experimental)</source>
@@ -997,7 +997,7 @@ Von Anfang beginnen?</translation>
     <message>
         <location filename="../documentview.cpp" line="742"/>
         <source>Opcode Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Opcode Hilfe</translation>
     </message>
 </context>
 <context>
@@ -1451,58 +1451,58 @@ Von Anfang beginnen?</translation>
     <message>
         <location filename="../filebeditor.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Form</translation>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../filebeditor.ui" line="25"/>
         <source>Save as...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sichern als...</translation>
     </message>
     <message>
         <location filename="../filebeditor.ui" line="32"/>
         <source>Add...</source>
-        <translation type="unfinished"></translation>
+        <translation>Hinzufügen</translation>
     </message>
     <message>
         <location filename="../filebeditor.ui" line="39"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Entfernen</translation>
     </message>
     <message>
         <location filename="../filebeditor.ui" line="64"/>
         <source>Embedded files</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingebettete Dateien</translation>
     </message>
     <message>
         <location filename="../filebeditor.cpp" line="79"/>
         <source>Select destination file name for file %1</source>
         <comment>For saving binary encoded embedded file</comment>
-        <translation type="unfinished"></translation>
+        <translation>Name für Zieldatei%1 auswählen</translation>
     </message>
     <message>
         <location filename="../filebeditor.cpp" line="86"/>
         <source>Saving embedded file</source>
-        <translation type="unfinished"></translation>
+        <translation>Sichere eingebettete Datei</translation>
     </message>
     <message>
         <location filename="../filebeditor.cpp" line="87"/>
         <source>Error saving embedded file. Aborting.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Sichern der eingebetteten Datei. Abbruch.</translation>
     </message>
     <message>
         <location filename="../filebeditor.cpp" line="99"/>
         <source>Select files to embed</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateien für die Einbettung auswählen</translation>
     </message>
     <message>
         <location filename="../filebeditor.cpp" line="107"/>
         <source>Encoding file</source>
-        <translation type="unfinished"></translation>
+        <translation>Codiere Datei</translation>
     </message>
     <message>
         <location filename="../filebeditor.cpp" line="108"/>
         <source>Error encoding file. Aborting.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Codieren der Datei. Abbruch.</translation>
     </message>
 </context>
 <context>
@@ -2846,12 +2846,12 @@ Ist schon in Gebrauch.</translation>
     <message>
         <location filename="../widgetlayout.cpp" line="139"/>
         <source>Center Vertically</source>
-        <translation>Center Vertically</translation>
+        <translation>Senkrecht zentrieren</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="141"/>
         <source>Center Horizontally</source>
-        <translation>Center Horizontally</translation>
+        <translation>Waagerecht zentrieren</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="144"/>
@@ -3625,7 +3625,7 @@ Version </translation>
     <message>
         <location filename="../qutecsound.cpp" line="137"/>
         <source>Python Scratch Pad</source>
-        <translation type="unfinished"></translation>
+        <translation>Python Scratch Pad</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="455"/>
@@ -3691,7 +3691,7 @@ Version </translation>
     <message>
         <location filename="../qutecsound.cpp" line="941"/>
         <source>Embedded Files:</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingebettete Dateien:</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="942"/>
@@ -3737,17 +3737,17 @@ Bitte QuteCsound neu starten.</translation>
     <message>
         <location filename="../qutecsound.cpp" line="1706"/>
         <source>Using Csound version:</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzte Csound Version:</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1707"/>
         <source>Precision:</source>
-        <translation type="unfinished"></translation>
+        <translation>Genauigkeit:</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1709"/>
         <source>Built with PythonQt support.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erstellt mit PythonQt Unterstützung.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1711"/>
@@ -3831,7 +3831,7 @@ Bitte QuteCsound neu starten.</translation>
     <message>
         <location filename="../qutecsound.cpp" line="2064"/>
         <source>Ctrl+Shift+A</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+A</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2068"/>
@@ -3851,47 +3851,47 @@ Bitte QuteCsound neu starten.</translation>
     <message>
         <location filename="../qutecsound.cpp" line="2081"/>
         <source>Alt+8</source>
-        <translation type="unfinished">Alt+8</translation>
+        <translation>Alt+8</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2083"/>
         <source>Shift+Alt+K</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+K</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2084"/>
         <source>Shift+Alt+1</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+1</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2085"/>
         <source>Shift+Alt+2</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+2</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2086"/>
         <source>Shift+Alt+3</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+3</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2087"/>
         <source>Shift+Alt+4</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+4</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2088"/>
         <source>Shift+Alt+5</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+5</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2089"/>
         <source>Shift+Alt+6</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+6</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2090"/>
         <source>Shift+Alt+7</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+7</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2095"/>
@@ -3993,12 +3993,12 @@ Erweiterte Python-Features sind nicht verfügbar</translation>
     <message>
         <location filename="../qutecsound.cpp" line="2283"/>
         <source>Insert/Update Cabbage text</source>
-        <translation type="unfinished"></translation>
+        <translation>Cabbage Text einfügen/aktualisieren</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2284"/>
         <source>Insert/Update Cabbage section to csd file</source>
-        <translation type="unfinished"></translation>
+        <translation>Cabbage Abschnitt in csd Datei einfügen/aktualisieren</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2288"/>
@@ -4098,7 +4098,7 @@ Erweiterte Python-Features sind nicht verfügbar</translation>
     <message>
         <location filename="../qutecsound.cpp" line="1716"/>
         <source>Finnish translation: Niko Humalam&amp;auml;ki</source>
-        <translation type="unfinished"></translation>
+        <translation>Finnische Übersetzung: Niko Humalam&amp;auml;ki</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2050"/>
@@ -4533,12 +4533,12 @@ Francesco</translation>
         <location filename="../qutecsound.cpp" line="2419"/>
         <location filename="../qutecsound.cpp" line="2423"/>
         <source>ScratchPad</source>
-        <translation type="unfinished"></translation>
+        <translation>ScratchPad</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2422"/>
         <source>Show Python Scratch Pad</source>
-        <translation type="unfinished"></translation>
+        <translation>Python Scratch Pad zeigen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2432"/>
@@ -4573,78 +4573,78 @@ Francesco</translation>
     <message>
         <location filename="../qutecsound.cpp" line="2468"/>
         <source>Split View</source>
-        <translation type="unfinished"></translation>
+        <translation>Geteilte Ansicht</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2471"/>
         <source>Toggle between full csd and split text display</source>
-        <translation type="unfinished"></translation>
+        <translation>Zwischen voller csd und geteilter Textansicht umschalten</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2475"/>
         <source>Show Orchestra</source>
-        <translation type="unfinished"></translation>
+        <translation>Orchester zeigen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2479"/>
         <location filename="../qutecsound.cpp" line="2488"/>
         <source>Show orchestra panel in split view</source>
-        <translation type="unfinished"></translation>
+        <translation>Orchester Fenster in geteilter Ansicht zeigen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2484"/>
         <source>Show Score</source>
-        <translation type="unfinished"></translation>
+        <translation>Score zeigen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2493"/>
         <source>Show CsOptions</source>
-        <translation type="unfinished"></translation>
+        <translation>CsOptions zeigen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2497"/>
         <source>Show CsOptions section panel in split view</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeige CsOptions Abschnitt in geteilter Ansicht</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2502"/>
         <source>Show Embedded files</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingebettete Dateien zeigen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2506"/>
         <source>Show Embedded files panel in split view</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingebettete Dateien in geteilter Ansicht zeigen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2511"/>
         <source>Show Information Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Information anzeigen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2515"/>
         <source>Show information text panel in split view</source>
-        <translation type="unfinished"></translation>
+        <translation>Information in geteilter Ansicht zeigen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2520"/>
         <source>Show Extra Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Extra Tags zeigen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2524"/>
         <source>Show extra tags panel in split view</source>
-        <translation type="unfinished"></translation>
+        <translation>Extra Tags in geteilter Ansicht zeigen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2529"/>
         <source>Show Widgets Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Widgets Text zeigen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2533"/>
         <source>Show Widgets text panel in split view</source>
-        <translation type="unfinished"></translation>
+        <translation>Widget Text in geteilter Ansicht zeigen</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2559"/>
@@ -4850,7 +4850,7 @@ wurde verändert.
     <message>
         <location filename="../qutecsound.cpp" line="3077"/>
         <source>01 Basics</source>
-        <translation type="unfinished"></translation>
+        <translation>01 Basics</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3096"/>
@@ -4865,17 +4865,17 @@ wurde verändert.
     <message>
         <location filename="../qutecsound.cpp" line="3222"/>
         <source>04 Sound Synthesis</source>
-        <translation type="unfinished"></translation>
+        <translation>04 Sound Synthesis</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3268"/>
         <source>05 Sound Modification</source>
-        <translation type="unfinished"></translation>
+        <translation>05 Sound Modification</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3286"/>
         <source>06 Samples</source>
-        <translation type="unfinished"></translation>
+        <translation>06 Samples</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3314"/>
@@ -4885,12 +4885,12 @@ wurde verändert.
     <message>
         <location filename="../qutecsound.cpp" line="3325"/>
         <source>08 OSC and WII</source>
-        <translation type="unfinished"></translation>
+        <translation>08 OSC and WII</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3345"/>
         <source>09 Csound in other Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>09 Csound in other Applications</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3380"/>
