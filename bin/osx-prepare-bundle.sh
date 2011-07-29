@@ -36,10 +36,32 @@ done
 shift $(($OPTIND - 1))
 
 
-mv $ORIG_APP_NAME/ $APP_NAME/
-
-
 # Build everything just to make sure all versions packaged are synchronized
+
+echo "---------------- Making package without python"
+PRECISION=-f
+ORIGINAL_NAME=qutecsound${PRECISION}
+NEW_NAME=QuteCsound
+ORIG_APP_NAME=${ORIGINAL_NAME}.app
+APP_NAME=${NEW_NAME}-${QUTECSOUND_VERSION}${PRECISION}.app
+
+rm -Rf ${ORIGINAL_APP_NAME}
+rm -Rf ${APP_NAME}
+cd ..
+make clean
+qmake qcs.pro -spec macx-g++ CONFIG+=rtmidi CONFIG+=release
+make
+cd bin
+macdeployqt ${ORIG_APP_NAME}
+
+mv $ORIG_APP_NAME/ $APP_NAME/
+otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
+#McCurdy collection
+mkdir $APP_NAME/Contents/Resources
+cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
+
+macdeployqt ${APP_NAME} -dmg
+
 
 echo "---------------- Making package with python"
 PRECISION=-f
@@ -95,7 +117,7 @@ macdeployqt ${APP_NAME} -dmg
 
 exit 0
 
-
+#--------------------------------------------------------------
 #lipo ${ORIGINAL_NAME}.app/Contents/MacOS/${ORIGINAL_NAME} ${ORIGINAL_NAME_D}.app/Contents/MacOS/${ORIGINAL_NAME_D} -create --output ${ORIGINAL_NAME}.app/Contents/MacOS/qutecsound
 
 ORIG_APP_NAME=${ORIGINAL_NAME}.app
