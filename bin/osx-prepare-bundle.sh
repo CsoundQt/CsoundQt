@@ -64,6 +64,9 @@ cp libPythonQt_QtAll.1.dylib ${ORIG_APP_NAME}/Contents/Frameworks
 
 mv $ORIG_APP_NAME/ $APP_NAME/
 otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
+#McCurdy collection
+mkdir $APP_NAME/Contents/Resources
+cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
 
 macdeployqt ${APP_NAME} -dmg
 
@@ -85,6 +88,9 @@ macdeployqt ${ORIG_APP_NAME}
 
 mv $ORIG_APP_NAME/ $APP_NAME/
 otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
+#McCurdy collection
+mkdir $APP_NAME/Contents/Resources
+cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
 macdeployqt ${APP_NAME} -dmg
 
 exit 0
