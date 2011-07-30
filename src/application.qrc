@@ -103,494 +103,196 @@
         <file>../examples/Getting Started/Toots/Toot3.csd</file>
         <file>../examples/Getting Started/Toots/Toot4.csd</file>
         <file>../examples/Getting Started/Toots/Toot5.csd</file>
-
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05F01.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A04.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05G01.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05B02.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A03.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05D05.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05E03.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05G02.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05G03.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05I05.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05I02.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A09.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A06.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A08.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05C04.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A10.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05I03.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05E04.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05D02.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05D04.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A01.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A07.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A02.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05C01.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05I04.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05C03.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05D01.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05I01.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05C02.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05B03.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05A05.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05E02.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05B01.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05D03.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05E01.csd</file>
-<file>../examples/FLOSS Manual Examples/05 Sound Modification/05I06.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06B04.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06A01.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06B03.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06A03.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06B05.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06B02.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06B01.csd</file>
-<file>../examples/FLOSS Manual Examples/06 Samples/06A02.csd</file>
-<file>../examples/FLOSS Manual Examples/01 Basics/01C03.csd</file>
-<file>../examples/FLOSS Manual Examples/01 Basics/01C02.csd</file>
-<file>../examples/FLOSS Manual Examples/01 Basics/01B02.csd</file>
-<file>../examples/FLOSS Manual Examples/01 Basics/01B01.csd</file>
-<file>../examples/FLOSS Manual Examples/01 Basics/01A01.csd</file>
-<file>../examples/FLOSS Manual Examples/01 Basics/01C01.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07E02.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07E04.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07E01.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07D02.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07D01.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07B02.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07A01.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07E03.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07B03.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07C01.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07B04.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07B01.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07C02.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07C04.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07E05.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07C05.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07C03.csd</file>
-<file>../examples/FLOSS Manual Examples/07 MIDI/07E06.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02C02.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02C01.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02B01.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02D02.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02E01.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02D01.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02E02.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02A01.csd</file>
-<file>../examples/FLOSS Manual Examples/02 Quick Start/02C03.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C08.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B11.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B04.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D10.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C12.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D06.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F08.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C14.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C11.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A07.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D02.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C06.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B08.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A04.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C09.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C04.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F07.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A09.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C10.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B07.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F09.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E07.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E03.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F12.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F13.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C16.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F01.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A02.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E06.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B10.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B06.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C20.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A01.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B05.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B02.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E08.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E04.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C17.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C05.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D04.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B01.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F10.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E05.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A03.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C13.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D07.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D05.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F02.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F11.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D08.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A06.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E01.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F04.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D03.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E09.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A05.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D01.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B09.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C01.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F05.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C15.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03B03.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C03.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F06.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C07.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03D09.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C18.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C02.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03F03.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03A08.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03E02.csd</file>
-<file>../examples/FLOSS Manual Examples/03 Csound Language/03C19.csd</file>
-<file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09A05.csd</file>
-<file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09A01.csd</file>
-<file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09B02.csd</file>
-<file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09A04.csd</file>
-<file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09B03.csd</file>
-<file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09B05.csd</file>
-<file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09B04.csd</file>
-<file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09A03.csd</file>
-<file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09B01.csd</file>
-<file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09A02.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A06.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D07.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04B01.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A02.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D02.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D08.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D06.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04B03.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04C02.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04C01.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D03.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A08.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04F01.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04F03.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D10.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04C03.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A04.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D09.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04B02.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04F02.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04F04.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04C04.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D05.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A05.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A03.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D01.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A07.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A01.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04F05.csd</file>
-<file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D04.csd</file>
-<file>../examples/FLOSS Manual Examples/08 OSC and Wii/08A01.csd</file>
-
-<file>../examples/McCurdy Collection/3DAudio/hrtfer_hrtfmove_hrtfmove2_hrftstat.csd</file>
-<file>../examples/McCurdy Collection/AdditiveSynthesis/AdditiveSynthesisSpectralSketching.csd</file>
-<file>../examples/McCurdy Collection/AdditiveSynthesis/HarmonicAdditiveSynthesis1.csd</file>
-<file>../examples/McCurdy Collection/AdditiveSynthesis/HarmonicAdditiveSynthesis2.csd</file>
-<file>../examples/McCurdy Collection/AdditiveSynthesis/InharmonicAdditiveSynthesis.csd</file>
-<file>../examples/McCurdy Collection/Convolution/convolve.csd</file>
-<file>../examples/McCurdy Collection/Convolution/dconv.csd</file>
-<file>../examples/McCurdy Collection/Convolution/pconvolve.csd</file>
-<file>../examples/McCurdy Collection/Delays/DelayDoppler.csd</file>
-<file>../examples/McCurdy Collection/Delays/Delays.csd</file>
-<file>../examples/McCurdy Collection/Delays/MultitapDelay.csd</file>
-<file>../examples/McCurdy Collection/Delays/StereoPingPongDelay.csd</file>
-<file>../examples/McCurdy Collection/Delays/delayCompletedPitchShifter.csd</file>
-<file>../examples/McCurdy Collection/Delays/delaySimplePitchShifter.csd</file>
-<file>../examples/McCurdy Collection/Delays/delayStereoChorus.csd</file>
-<file>../examples/McCurdy Collection/Delays/delayThruZeroFlanger.csd</file>
-<file>../examples/McCurdy Collection/Delays/delayfeedback.csd</file>
-<file>../examples/McCurdy Collection/Delays/delayfiltersinloop.csd</file>
-<file>../examples/McCurdy Collection/Delays/delayflanger.csd</file>
-<file>../examples/McCurdy Collection/Delays/delayportamento.csd</file>
-<file>../examples/McCurdy Collection/Delays/delayw_delayr_deltap.csd</file>
-<file>../examples/McCurdy Collection/Distortion/BitDepthReduction.csd</file>
-<file>../examples/McCurdy Collection/Distortion/clip.csd</file>
-<file>../examples/McCurdy Collection/Distortion/distort.csd</file>
-<file>../examples/McCurdy Collection/Distortion/distort1.csd</file>
-<file>../examples/McCurdy Collection/Distortion/fold.csd</file>
-<file>../examples/McCurdy Collection/Distortion/powershape.csd</file>
-<file>../examples/McCurdy Collection/DynamicsProcessing/NoiseGate.csd</file>
-<file>../examples/McCurdy Collection/DynamicsProcessing/compress.csd</file>
-<file>../examples/McCurdy Collection/DynamicsProcessing/dam.csd</file>
-<file>../examples/McCurdy Collection/FFT/ATSadd.csd</file>
-<file>../examples/McCurdy Collection/FFT/mincer.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvadd.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvoc.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvsadsyn.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvsanal_pvsynth.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvsarp.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvsbandp.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvsbandr.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvsblur.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvsbufread.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvscale.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvscross.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvscross1.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvsfilter.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvsfread.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvsfreeze.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvshift.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvshift_pvscale.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvsifd_partials_resyn.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvsmooth.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvsmorph.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvspitch.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvstanal.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvstencil.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvsvoc.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvswarp.csd</file>
-<file>../examples/McCurdy Collection/FFT/pvswrite.csd</file>
-<file>../examples/McCurdy Collection/FFT/temposcal.csd</file>
-<file>../examples/McCurdy Collection/Filters/FormantFilter.csd</file>
-<file>../examples/McCurdy Collection/Filters/areson.csd</file>
-<file>../examples/McCurdy Collection/Filters/atone.csd</file>
-<file>../examples/McCurdy Collection/Filters/atonex.csd</file>
-<file>../examples/McCurdy Collection/Filters/bandpass.csd</file>
-<file>../examples/McCurdy Collection/Filters/bqrez.csd</file>
-<file>../examples/McCurdy Collection/Filters/butterbp.csd</file>
-<file>../examples/McCurdy Collection/Filters/butterbr.csd</file>
-<file>../examples/McCurdy Collection/Filters/butterhp.csd</file>
-<file>../examples/McCurdy Collection/Filters/butterlp.csd</file>
-<file>../examples/McCurdy Collection/Filters/clfilt.csd</file>
-<file>../examples/McCurdy Collection/Filters/eqfil.csd</file>
-<file>../examples/McCurdy Collection/Filters/hilbert.csd</file>
-<file>../examples/McCurdy Collection/Filters/lowpass2.csd</file>
-<file>../examples/McCurdy Collection/Filters/lowres.csd</file>
-<file>../examples/McCurdy Collection/Filters/lowresx.csd</file>
-<file>../examples/McCurdy Collection/Filters/lpf18.csd</file>
-<file>../examples/McCurdy Collection/Filters/moogladder.csd</file>
-<file>../examples/McCurdy Collection/Filters/moogvcf.csd</file>
-<file>../examples/McCurdy Collection/Filters/pareq.csd</file>
-<file>../examples/McCurdy Collection/Filters/rbjeq.csd</file>
-<file>../examples/McCurdy Collection/Filters/reson.csd</file>
-<file>../examples/McCurdy Collection/Filters/reson_resonr_resonz.csd</file>
-<file>../examples/McCurdy Collection/Filters/resony.csd</file>
-<file>../examples/McCurdy Collection/Filters/rezzy.csd</file>
-<file>../examples/McCurdy Collection/Filters/statevar.csd</file>
-<file>../examples/McCurdy Collection/Filters/svfilter.csd</file>
-<file>../examples/McCurdy Collection/Filters/tbvcf.csd</file>
-<file>../examples/McCurdy Collection/Filters/tone.csd</file>
-<file>../examples/McCurdy Collection/Filters/tonex.csd</file>
-<file>../examples/McCurdy Collection/Filters/vlowres.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/MorphingPresets.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/SchedkwhenGranulation.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/diskgrain.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/fof.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/fof2.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/fofx6_Mono.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/fofx6_Poly.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/fog.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/grain.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/grain2.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/grain3.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/granule.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/sndwarp.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/syncgrain.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/syncloop.csd</file>
-<file>../examples/McCurdy Collection/GranularSynthesis/wavelets.csd</file>
-<file>../examples/McCurdy Collection/LiveAudioIn/MIDIKeyboardControlledPitchShifter.csd</file>
-<file>../examples/McCurdy Collection/LiveAudioIn/follow2EnvelopeFilter.csd</file>
-<file>../examples/McCurdy Collection/LiveAudioIn/follow2gate.csd</file>
-<file>../examples/McCurdy Collection/LiveAudioIn/ins.csd</file>
-<file>../examples/McCurdy Collection/LiveAudioIn/meters.csd</file>
-<file>../examples/McCurdy Collection/LiveAudioIn/pitch.csd</file>
-<file>../examples/McCurdy Collection/LiveAudioIn/pitchamdf.csd</file>
-<file>../examples/McCurdy Collection/LiveSampling/DiskRecAndPlayback.csd</file>
-<file>../examples/McCurdy Collection/LiveSampling/DynamicTriggeredRecord.csd</file>
-<file>../examples/McCurdy Collection/LiveSampling/MultiTableRec.csd</file>
-<file>../examples/McCurdy Collection/LiveSampling/TableRecBasic.csd</file>
-<file>../examples/McCurdy Collection/LiveSampling/sndloop.csd</file>
-<file>../examples/McCurdy Collection/MIDI/BasicMonophonicSynth.csd</file>
-<file>../examples/McCurdy Collection/MIDI/LiveQuantize.csd</file>
-<file>../examples/McCurdy Collection/MIDI/MIDIController.csd</file>
-<file>../examples/McCurdy Collection/MIDI/MIDIControllerInitialisation.csd</file>
-<file>../examples/McCurdy Collection/MIDI/MIDIInstrActivate.csd</file>
-<file>../examples/McCurdy Collection/MIDI/MIDILinsegrEnvelope.csd</file>
-<file>../examples/McCurdy Collection/MIDI/MIDIOneControllerTwoOutputs.csd</file>
-<file>../examples/McCurdy Collection/MIDI/MIDIPitchBend.csd</file>
-<file>../examples/McCurdy Collection/MIDI/MIDIReadPitchAndVelocity.csd</file>
-<file>../examples/McCurdy Collection/MIDI/MIDIRescaledController.csd</file>
-<file>../examples/McCurdy Collection/MIDI/MIDITapTempo.csd</file>
-<file>../examples/McCurdy Collection/MIDI/MonoOverlaps.csd</file>
-<file>../examples/McCurdy Collection/MIDI/MonophonicSynth.csd</file>
-<file>../examples/McCurdy Collection/MIDI/PitchBendDiskin1.csd</file>
-<file>../examples/McCurdy Collection/MIDI/PitchBendDiskin2.csd</file>
-<file>../examples/McCurdy Collection/MIDI/PolyphonicSynth.csd</file>
-<file>../examples/McCurdy Collection/MIDI/cpstmid.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/AnalogueVocoder.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/CsoundIsListening.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/DbToAmp.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/DistanceEmulator.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/MultiFX.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/PianoPhaseDemo.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/PitchFormats.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/Rhythmicon.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/Samphold.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/ShuffleTableContents.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/StereoToMono(Offline).csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/StereoToMono.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/TB303.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/Theremin.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/TuningSystems.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/beating.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/date_dates.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/doppler.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/fout.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/ftsave_ftload.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/humanizing.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/limit_mirror_wrap.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/pan2.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/risset_rhythms.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/rtclock.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/sensekey.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/timeinsts.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/trigger.csd</file>
-<file>../examples/McCurdy Collection/Miscellaneous/waveset.csd</file>
-<file>../examples/McCurdy Collection/Modulation/2xModulatorCarrierWithEnvelopes.csd</file>
-<file>../examples/McCurdy Collection/Modulation/FM2ModCar.csd</file>
-<file>../examples/McCurdy Collection/Modulation/FM3ModCar.csd</file>
-<file>../examples/McCurdy Collection/Modulation/FMMod2Car.csd</file>
-<file>../examples/McCurdy Collection/Modulation/FMModCarModCar.csd</file>
-<file>../examples/McCurdy Collection/Modulation/FMModModCar.csd</file>
-<file>../examples/McCurdy Collection/Modulation/FMModModCarEnvelopes.csd</file>
-<file>../examples/McCurdy Collection/Modulation/FMSynthesisVibratoToSideBands.csd</file>
-<file>../examples/McCurdy Collection/Modulation/ModulatorCarrier.csd</file>
-<file>../examples/McCurdy Collection/Modulation/ModulatorCarrierWithEnvelopes.csd</file>
-<file>../examples/McCurdy Collection/Modulation/PhaseModulationSynthesisCf.csd</file>
-<file>../examples/McCurdy Collection/Modulation/PhaseModulationSynthesisMCf.csd</file>
-<file>../examples/McCurdy Collection/Modulation/PhaseModulationSynthesisMMC.csd</file>
-<file>../examples/McCurdy Collection/Modulation/PhaseModulationSynthesisMMMC.csd</file>
-<file>../examples/McCurdy Collection/Modulation/PhaseModulationSynthesisMMM_C.csd</file>
-<file>../examples/McCurdy Collection/Modulation/PhaseModulationSynthesisMM_C.csd</file>
-<file>../examples/McCurdy Collection/Modulation/PhaseModulationSynthesisMfC.csd</file>
-<file>../examples/McCurdy Collection/Modulation/RingModulationAmplitudeModulation.csd</file>
-<file>../examples/McCurdy Collection/Modulation/SimpleModulatorCarrier.csd</file>
-<file>../examples/McCurdy Collection/Modulation/TX81Z.csd</file>
-<file>../examples/McCurdy Collection/Modulation/foscil_foscili.csd</file>
-<file>../examples/McCurdy Collection/Mouse/MouseBass_Synth.csd</file>
-<file>../examples/McCurdy Collection/Mouse/MouseChord_File.csd</file>
-<file>../examples/McCurdy Collection/Mouse/MouseChord_Synth.csd</file>
-<file>../examples/McCurdy Collection/Mouse/MouseKeyboard_File.csd</file>
-<file>../examples/McCurdy Collection/Mouse/MouseKeyboard_Synth.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/PrePiano.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/bamboo.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/barmodel.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/cabasa.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/crunch.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/dripwater.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/gogobel.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/guiro.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/mandol.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/marimba.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/moog.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/pluck.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/repluck.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/sandpaper.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/sekere.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/shaker.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/sleighbells.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/stix.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/tambourine.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/vibes.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/wgbow.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/wgbowedbar.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/wgbrass.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/wgclar.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/wgflute.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/wgpluck.csd</file>
-<file>../examples/McCurdy Collection/PhysicalModels/wgpluck2.csd</file>
-<file>../examples/McCurdy Collection/RealtimeScoreGeneration/DrumSequencerVariableLength.csd</file>
-<file>../examples/McCurdy Collection/RealtimeScoreGeneration/DrunkWalk.csd</file>
-<file>../examples/McCurdy Collection/RealtimeScoreGeneration/NoteClusters.csd</file>
-<file>../examples/McCurdy Collection/RealtimeScoreGeneration/SimpleDrumSequencer.csd</file>
-<file>../examples/McCurdy Collection/RealtimeScoreGeneration/SimpleLoopSequencer.csd</file>
-<file>../examples/McCurdy Collection/RealtimeScoreGeneration/SimpleSchedkwhenNoteGenerator.csd</file>
-<file>../examples/McCurdy Collection/RealtimeScoreGeneration/timedseq.csd</file>
-<file>../examples/McCurdy Collection/Reverbs/GatedReverb.csd</file>
-<file>../examples/McCurdy Collection/Reverbs/SchroederReverb.csd</file>
-<file>../examples/McCurdy Collection/Reverbs/babo.csd</file>
-<file>../examples/McCurdy Collection/Reverbs/comb.csd</file>
-<file>../examples/McCurdy Collection/Reverbs/freeverb.csd</file>
-<file>../examples/McCurdy Collection/Reverbs/nreverb.csd</file>
-<file>../examples/McCurdy Collection/Reverbs/reverb.csd</file>
-<file>../examples/McCurdy Collection/Reverbs/screverb.csd</file>
-<file>../examples/McCurdy Collection/Reverbs/vcomb.csd</file>
-<file>../examples/McCurdy Collection/SoundGenerators/WhiteNoisePinkNoise.csd</file>
-<file>../examples/McCurdy Collection/SoundGenerators/buzz.csd</file>
-<file>../examples/McCurdy Collection/SoundGenerators/gbuzz.csd</file>
-<file>../examples/McCurdy Collection/SoundGenerators/hsboscil.csd</file>
-<file>../examples/McCurdy Collection/SoundGenerators/mode.csd</file>
-<file>../examples/McCurdy Collection/SoundGenerators/pdhalf.csd</file>
-<file>../examples/McCurdy Collection/SoundGenerators/vco.csd</file>
-<file>../examples/McCurdy Collection/SoundGenerators/vco2.csd</file>
-<file>../examples/McCurdy Collection/SoundGenerators/vco_with_PWM_LFO_and_LPF.csd</file>
-<file>../examples/McCurdy Collection/SoundGenerators/wterrain.csd</file>
-<file>../examples/McCurdy Collection/SoundfilePlayback/bbcut.csd</file>
-<file>../examples/McCurdy Collection/SoundfilePlayback/flooper2.csd</file>
-<file>../examples/McCurdy Collection/SoundfilePlayback/loscil_loscil3.csd</file>
-<file>../examples/McCurdy Collection/SoundfilePlayback/lposcilsa.csd</file>
-<file>../examples/McCurdy Collection/SoundfilePlayback/table_tablei_table3.csd</file>
-<file>../examples/McCurdy Collection/SourceMaterials/AndItsAll.pvx</file>
-<file>../examples/McCurdy Collection/SourceMaterials/violins.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/flute.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/Wood.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/MFEM.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/Songpan.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/ooo.aiff</file>
-<file>../examples/McCurdy Collection/SourceMaterials/mandpluk.aiff</file>
-<file>../examples/McCurdy Collection/SourceMaterials/loop.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/StairwellL.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/StairwellR.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/PPhase2.pvx</file>
-<file>../examples/McCurdy Collection/SourceMaterials/PPhase1.pvx</file>
-<file>../examples/McCurdy Collection/SourceMaterials/SynthPad.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/noise.pvx</file>
-<file>../examples/McCurdy Collection/SourceMaterials/Bounce.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/StairwellR.cv</file>
-<file>../examples/McCurdy Collection/SourceMaterials/twopeaks.aiff</file>
-<file>../examples/McCurdy Collection/SourceMaterials/marmstk1.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/fwavblnk.aiff</file>
-<file>../examples/McCurdy Collection/SourceMaterials/ahh.aiff</file>
-<file>../examples/McCurdy Collection/SourceMaterials/BassGuitarC.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/dishL.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/loop.pvx</file>
-<file>../examples/McCurdy Collection/SourceMaterials/hrtf-44100-right.dat</file>
-<file>../examples/McCurdy Collection/SourceMaterials/Mug.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/808loop.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/dishL.cv</file>
-<file>../examples/McCurdy Collection/SourceMaterials/impuls20.aiff</file>
-<file>../examples/McCurdy Collection/SourceMaterials/HRTFcompact</file>
-<file>../examples/McCurdy Collection/SourceMaterials/808loopMono.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/eee.aiff</file>
-<file>../examples/McCurdy Collection/SourceMaterials/sample.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/hrtf-44100-left.dat</file>
-<file>../examples/McCurdy Collection/SourceMaterials/AndItsAll.ats</file>
-<file>../examples/McCurdy Collection/SourceMaterials/Seashore.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/dishR.cv</file>
-<file>../examples/McCurdy Collection/SourceMaterials/choir.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/StairwellL.cv</file>
-<file>../examples/McCurdy Collection/SourceMaterials/ClassicalGuitar.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/AndItsAll.wav</file>
-<file>../examples/McCurdy Collection/SourceMaterials/dishR.wav</file>
-<file>../examples/McCurdy Collection/SpecializedFilters/Phaser1.csd</file>
-<file>../examples/McCurdy Collection/SpecializedFilters/Phaser2.csd</file>
-<file>../examples/McCurdy Collection/Waveguides/streson.csd</file>
-<file>../examples/McCurdy Collection/Waveguides/wguide1.csd</file>
-<file>../examples/McCurdy Collection/Waveguides/wguide2.csd</file>
-
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05F01.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A04.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05G01.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05B02.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A03.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05D05.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05E03.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05G02.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05G03.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05I05.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05I02.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A09.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A06.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A08.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05C04.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A10.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05I03.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05E04.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05D02.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05D04.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A01.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A07.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A02.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05C01.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05I04.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05C03.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05D01.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05I01.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05C02.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05B03.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A05.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05E02.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05B01.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05D03.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05E01.csd</file>
+        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05I06.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06B04.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06A01.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06B03.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06A03.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06B05.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06B02.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06B01.csd</file>
+        <file>../examples/FLOSS Manual Examples/06 Samples/06A02.csd</file>
+        <file>../examples/FLOSS Manual Examples/01 Basics/01C03.csd</file>
+        <file>../examples/FLOSS Manual Examples/01 Basics/01C02.csd</file>
+        <file>../examples/FLOSS Manual Examples/01 Basics/01B02.csd</file>
+        <file>../examples/FLOSS Manual Examples/01 Basics/01B01.csd</file>
+        <file>../examples/FLOSS Manual Examples/01 Basics/01A01.csd</file>
+        <file>../examples/FLOSS Manual Examples/01 Basics/01C01.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07E02.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07E04.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07E01.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07D02.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07D01.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07B02.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07A01.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07E03.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07B03.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07C01.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07B04.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07B01.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07C02.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07C04.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07E05.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07C05.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07C03.csd</file>
+        <file>../examples/FLOSS Manual Examples/07 MIDI/07E06.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02C02.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02C01.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02B01.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02D02.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02E01.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02D01.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02E02.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02A01.csd</file>
+        <file>../examples/FLOSS Manual Examples/02 Quick Start/02C03.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C08.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B11.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B04.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D10.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C12.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D06.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F08.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C14.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C11.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A07.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D02.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C06.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B08.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A04.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C09.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C04.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F07.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A09.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C10.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B07.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F09.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E07.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E03.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F12.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F13.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C16.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F01.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A02.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E06.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B10.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B06.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C20.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A01.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B05.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B02.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E08.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E04.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C17.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C05.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D04.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B01.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F10.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E05.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A03.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C13.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D07.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D05.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F02.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F11.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D08.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A06.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E01.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F04.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D03.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E09.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A05.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D01.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B09.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C01.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F05.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C15.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B03.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C03.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F06.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C07.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D09.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C18.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C02.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F03.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A08.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E02.csd</file>
+        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C19.csd</file>
+        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09A05.csd</file>
+        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09A01.csd</file>
+        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09B02.csd</file>
+        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09A04.csd</file>
+        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09B03.csd</file>
+        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09B05.csd</file>
+        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09B04.csd</file>
+        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09A03.csd</file>
+        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09B01.csd</file>
+        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09A02.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A06.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D07.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04B01.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A02.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D02.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D08.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D06.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04B03.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04C02.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04C01.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D03.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A08.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04F01.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04F03.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D10.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04C03.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A04.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D09.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04B02.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04F02.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04F04.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04C04.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D05.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A05.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A03.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D01.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A07.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A01.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04F05.csd</file>
+        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04D04.csd</file>
+        <file>../examples/FLOSS Manual Examples/08 OSC and Wii/08A01.csd</file>
         <file>../examples/Synths/Additive_Synth.csd</file>
         <file>../examples/Synths/Imitative_Additive.csd</file>
         <file>../examples/Synths/Simple_Subtractive.csd</file>
