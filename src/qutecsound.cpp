@@ -2877,7 +2877,28 @@ void qutecsound::createMenus()
   QStringList basicsFiles;
   QStringList realtimeInteractionFiles;
   QStringList featuresFiles;
-  QStringList mccurdyFiles;
+QStringList mccurdy3DAudioFiles;
+QStringList mccurdyAdditiveSynthesisFiles;
+QStringList mccurdyConvolutionFiles;
+QStringList mccurdyDelaysFiles;
+QStringList mccurdyDistortionFiles;
+QStringList mccurdyDynamicsProcessingFiles;
+QStringList mccurdyFFTFiles;
+QStringList mccurdyFiltersFiles;
+QStringList mccurdyGranularSynthesisFiles;
+QStringList mccurdyLiveAudioInFiles;
+QStringList mccurdyLiveSamplingFiles;
+QStringList mccurdyMIDIFiles;
+QStringList mccurdyMiscellaneousFiles;
+QStringList mccurdyModulationFiles;
+QStringList mccurdyMouseFiles;
+QStringList mccurdyPhysicalModelsFiles;
+QStringList mccurdyRealtimeScoreGenerationFiles;
+QStringList mccurdyReverbsFiles;
+QStringList mccurdySoundGeneratorsFiles;
+QStringList mccurdySoundfilePlaybackFiles;
+QStringList mccurdySpecializedFiltersFiles;
+QStringList mccurdyWaveguidesFiles;
   QStringList flossman01Files;
   QStringList flossman02Files;
   QStringList flossman03Files;
@@ -3361,60 +3382,448 @@ flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Appl
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
 
-  QString mcCurdyPath;
-#ifdef Q_OS_WIN32
-  mcCurdyPath = qApp->applicationDirPath() + "/Examples/McCurdy Collection";
-#endif
-#ifdef Q_OS_MAC
-  mcCurdyPath = qApp->applicationDirPath() + "../Resources/Examples/McCurdy Collection";
-#endif
-#ifdef Q_OS_LINUX
-  mcCurdyPath = qApp->applicationDirPath() + "/Examples/McCurdy Collection";
-  if (!QDir(mcCurdyPath).exists()) {
-    mcCurdyPath = "/usr/share/qutecsound/Examples/McCurdy Collection";
-  }
-  if (!QDir(mcCurdyPath).exists()) {
-    mcCurdyPath = qApp->applicationDirPath() + "/../src/Examples/McCurdy Collection";
-  }
-#endif
-#ifdef Q_OS_SOLARIS
-  mcCurdyPath = qApp->applicationDirPath() + "/Examples/McCurdy Collection";
-  if (!QDir(mcCurdyPath).exists()) {
-    mcCurdyPath = "/usr/share/qutecsound/Examples/McCurdy Collection";
-  }
-  if (!QDir(mcCurdyPath).exists()) {
-    mcCurdyPath = qApp->applicationDirPath() + "/../src/Examples/McCurdy Collection";
-  }
-#endif
 
-  if (QDir(mcCurdyPath).exists()) {
-    QMenu *mccurdyMenu = examplesMenu->addMenu(tr("McCurdy Collection"));
-    QStringList subDirs = QDir(mcCurdyPath).entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
-    foreach (QString subDir, subDirs) {
-      QString dirName = subDir.mid(subDir.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-      submenu = mccurdyMenu->addMenu(dirName);
-      QStringList filters;
-      filters << "*.csd";
-      QStringList mcCurdyFiles = QDir(mcCurdyPath + "/" + subDir).entryList(filters,QDir::Files);
-      foreach (QString fileName, mcCurdyFiles) {
-//        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-        newAction = submenu->addAction(fileName);
-        newAction->setData(mcCurdyPath + "/" + subDir + "/" + fileName);
-        connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-      }
-    }
+   //McCurdy Collection
+  QMenu *mccurdyMenu = examplesMenu->addMenu(tr("McCurdy Collection"));
+//3DAudio
+mccurdy3DAudioFiles.append(":/examples/McCurdy Collection/3DAudio/hrtfer_hrtfmove_hrtfmove2_hrftstat.csd");
+  submenu = mccurdyMenu->addMenu(tr("3DAudio"));
+  foreach (QString fileName, mccurdy3DAudioFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//AdditiveSynthesis
+mccurdyAdditiveSynthesisFiles.append(":/examples/McCurdy Collection/AdditiveSynthesis/AdditiveSynthesisSpectralSketching.csd");
+mccurdyAdditiveSynthesisFiles.append(":/examples/McCurdy Collection/AdditiveSynthesis/HarmonicAdditiveSynthesis2.csd");
+mccurdyAdditiveSynthesisFiles.append(":/examples/McCurdy Collection/AdditiveSynthesis/HarmonicAdditiveSynthesis1.csd");
+mccurdyAdditiveSynthesisFiles.append(":/examples/McCurdy Collection/AdditiveSynthesis/InharmonicAdditiveSynthesis.csd");
+  submenu = mccurdyMenu->addMenu(tr("AdditiveSynthesis"));
+  foreach (QString fileName, mccurdyAdditiveSynthesisFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//Convolution
+mccurdyConvolutionFiles.append(":/examples/McCurdy Collection/Convolution/convolve.csd");
+mccurdyConvolutionFiles.append(":/examples/McCurdy Collection/Convolution/dconv.csd");
+mccurdyConvolutionFiles.append(":/examples/McCurdy Collection/Convolution/pconvolve.csd");
+  submenu = mccurdyMenu->addMenu(tr("Convolution"));
+  foreach (QString fileName, mccurdyConvolutionFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//Delays
+mccurdyDelaysFiles.append(":/examples/McCurdy Collection/Delays/StereoPingPongDelay.csd");
+mccurdyDelaysFiles.append(":/examples/McCurdy Collection/Delays/Delays.csd");
+mccurdyDelaysFiles.append(":/examples/McCurdy Collection/Delays/delayfeedback.csd");
+mccurdyDelaysFiles.append(":/examples/McCurdy Collection/Delays/MultitapDelay.csd");
+mccurdyDelaysFiles.append(":/examples/McCurdy Collection/Delays/delayThruZeroFlanger.csd");
+mccurdyDelaysFiles.append(":/examples/McCurdy Collection/Delays/delayfiltersinloop.csd");
+mccurdyDelaysFiles.append(":/examples/McCurdy Collection/Delays/delayw_delayr_deltap.csd");
+mccurdyDelaysFiles.append(":/examples/McCurdy Collection/Delays/delayStereoChorus.csd");
+mccurdyDelaysFiles.append(":/examples/McCurdy Collection/Delays/delaySimplePitchShifter.csd");
+mccurdyDelaysFiles.append(":/examples/McCurdy Collection/Delays/delayportamento.csd");
+mccurdyDelaysFiles.append(":/examples/McCurdy Collection/Delays/delayCompletedPitchShifter.csd");
+mccurdyDelaysFiles.append(":/examples/McCurdy Collection/Delays/DelayDoppler.csd");
+mccurdyDelaysFiles.append(":/examples/McCurdy Collection/Delays/delayflanger.csd");
+  submenu = mccurdyMenu->addMenu(tr("Delays"));
+  foreach (QString fileName, mccurdyDelaysFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//Distortion
+mccurdyDistortionFiles.append(":/examples/McCurdy Collection/Distortion/distort.csd");
+mccurdyDistortionFiles.append(":/examples/McCurdy Collection/Distortion/clip.csd");
+mccurdyDistortionFiles.append(":/examples/McCurdy Collection/Distortion/fold.csd");
+mccurdyDistortionFiles.append(":/examples/McCurdy Collection/Distortion/distort1.csd");
+mccurdyDistortionFiles.append(":/examples/McCurdy Collection/Distortion/BitDepthReduction.csd");
+mccurdyDistortionFiles.append(":/examples/McCurdy Collection/Distortion/powershape.csd");
+  submenu = mccurdyMenu->addMenu(tr("Distortion"));
+  foreach (QString fileName, mccurdyDistortionFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//DynamicsProcessing
+mccurdyDynamicsProcessingFiles.append(":/examples/McCurdy Collection/DynamicsProcessing/NoiseGate.csd");
+mccurdyDynamicsProcessingFiles.append(":/examples/McCurdy Collection/DynamicsProcessing/compress.csd");
+mccurdyDynamicsProcessingFiles.append(":/examples/McCurdy Collection/DynamicsProcessing/dam.csd");
+  submenu = mccurdyMenu->addMenu(tr("DynamicsProcessing"));
+  foreach (QString fileName, mccurdyDynamicsProcessingFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//FFT
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvstencil.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvscross1.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/ATSadd.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvswrite.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvoc.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvsmooth.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvsifd_partials_resyn.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvsmorph.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/temposcal.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/mincer.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvstanal.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvsfreeze.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvsvoc.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvsarp.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvscale.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvscross.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvshift_pvscale.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvsfread.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvsbufread.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvspitch.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvadd.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvsfilter.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvsbandr.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvsadsyn.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvsbandp.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvshift.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvswarp.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvsblur.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvsanal_pvsynth.csd");
+mccurdyFFTFiles.append(":/examples/McCurdy Collection/FFT/pvswriteFile.pvx");
+  submenu = mccurdyMenu->addMenu(tr("FFT"));
+  foreach (QString fileName, mccurdyFFTFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//Filters
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/lowres.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/tonex.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/atone.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/rbjeq.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/pareq.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/butterhp.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/hilbert.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/statevar.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/butterbr.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/butterlp.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/reson.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/rezzy.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/lpf18.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/lowresx.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/FormantFilter.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/eqfil.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/lowpass2.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/butterbp.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/areson.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/vlowres.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/moogladder.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/moogvcf.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/tbvcf.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/bandpass.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/resony.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/atonex.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/tone.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/clfilt.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/svfilter.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/bqrez.csd");
+mccurdyFiltersFiles.append(":/examples/McCurdy Collection/Filters/reson_resonr_resonz.csd");
+  submenu = mccurdyMenu->addMenu(tr("Filters"));
+  foreach (QString fileName, mccurdyFiltersFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//GranularSynthesis
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/SchedkwhenGranulation.csd");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/fog.csd");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/Preset3.txt");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/syncloop.csd");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/syncgrain.csd");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/grain2.csd");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/fofx6_Mono.csd");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/fof.csd");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/Preset4.txt");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/diskgrain.csd");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/Preset2.txt");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/Preset1.txt");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/wavelets.csd");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/granule.csd");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/fofx6_Poly.csd");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/sndwarp.csd");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/fof2.csd");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/MorphingPresets.csd");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/grain3.csd");
+mccurdyGranularSynthesisFiles.append(":/examples/McCurdy Collection/GranularSynthesis/grain.csd");
+  submenu = mccurdyMenu->addMenu(tr("GranularSynthesis"));
+  foreach (QString fileName, mccurdyGranularSynthesisFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//LiveAudioIn
+mccurdyLiveAudioInFiles.append(":/examples/McCurdy Collection/LiveAudioIn/MIDIKeyboardControlledPitchShifter.csd");
+mccurdyLiveAudioInFiles.append(":/examples/McCurdy Collection/LiveAudioIn/follow2gate.csd");
+mccurdyLiveAudioInFiles.append(":/examples/McCurdy Collection/LiveAudioIn/meters.csd");
+mccurdyLiveAudioInFiles.append(":/examples/McCurdy Collection/LiveAudioIn/pitchamdf.csd");
+mccurdyLiveAudioInFiles.append(":/examples/McCurdy Collection/LiveAudioIn/follow2EnvelopeFilter.csd");
+mccurdyLiveAudioInFiles.append(":/examples/McCurdy Collection/LiveAudioIn/ins.csd");
+mccurdyLiveAudioInFiles.append(":/examples/McCurdy Collection/LiveAudioIn/pitch.csd");
+  submenu = mccurdyMenu->addMenu(tr("LiveAudioIn"));
+  foreach (QString fileName, mccurdyLiveAudioInFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//LiveSampling
+mccurdyLiveSamplingFiles.append(":/examples/McCurdy Collection/LiveSampling/DynamicTriggeredRecord.csd");
+mccurdyLiveSamplingFiles.append(":/examples/McCurdy Collection/LiveSampling/MultiTableRec.csd");
+mccurdyLiveSamplingFiles.append(":/examples/McCurdy Collection/LiveSampling/sndloop.csd");
+mccurdyLiveSamplingFiles.append(":/examples/McCurdy Collection/LiveSampling/TableRecBasic.csd");
+mccurdyLiveSamplingFiles.append(":/examples/McCurdy Collection/LiveSampling/DiskRecAndPlayback.csd");
+  submenu = mccurdyMenu->addMenu(tr("LiveSampling"));
+  foreach (QString fileName, mccurdyLiveSamplingFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//MIDI
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/MIDIOneControllerTwoOutputs.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/MIDIReadPitchAndVelocity.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/MIDIControllerInitialisation.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/cpstmid.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/PitchBendDiskin1.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/MIDIRescaledController.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/MonophonicSynth.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/MIDIPitchBend.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/MonoOverlaps.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/PitchBendDiskin2.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/MIDITapTempo.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/MIDILinsegrEnvelope.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/BasicMonophonicSynth.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/MIDIController.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/MIDIInstrActivate.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/PolyphonicSynth.csd");
+mccurdyMIDIFiles.append(":/examples/McCurdy Collection/MIDI/LiveQuantize.csd");
+  submenu = mccurdyMenu->addMenu(tr("MIDI"));
+  foreach (QString fileName, mccurdyMIDIFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//Miscellaneous
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/StereoToMono(Offline).csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/fout.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/TuningSystems.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/ftsave_ftload.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/Data.txt");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/Theremin.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/StereoToMono.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/ShuffleTableContents.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/Samphold.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/DistanceEmulator.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/doppler.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/waveset.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/trigger.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/limit_mirror_wrap.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/CsoundIsListening.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/humanizing.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/sensekey.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/pan2.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/timeinsts.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/TB303.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/date_dates.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/rtclock.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/risset_rhythms.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/PianoPhaseDemo.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/PitchFormats.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/AnalogueVocoder.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/DbToAmp.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/beating.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/MultiFX.csd");
+mccurdyMiscellaneousFiles.append(":/examples/McCurdy Collection/Miscellaneous/Rhythmicon.csd");
+  submenu = mccurdyMenu->addMenu(tr("Miscellaneous"));
+  foreach (QString fileName, mccurdyMiscellaneousFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//Modulation
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/RingModulationAmplitudeModulation.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/ModulatorCarrierWithEnvelopes.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/2xModulatorCarrierWithEnvelopes.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/FMModModCarEnvelopes.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/FMModCarModCar.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/foscil_foscili.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/TX81Z.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/PhaseModulationSynthesisMfC.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/FMModModCar.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/FM2ModCar.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/FM3ModCar.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/SimpleModulatorCarrier.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/FMSynthesisVibratoToSideBands.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/FMMod2Car.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/PhaseModulationSynthesisCf.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/PhaseModulationSynthesisMMC.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/PhaseModulationSynthesisMCf.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/PhaseModulationSynthesisMMMC.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/ModulatorCarrier.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/PhaseModulationSynthesisMMM_C.csd");
+mccurdyModulationFiles.append(":/examples/McCurdy Collection/Modulation/PhaseModulationSynthesisMM_C.csd");
+  submenu = mccurdyMenu->addMenu(tr("Modulation"));
+  foreach (QString fileName, mccurdyModulationFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//Mouse
+mccurdyMouseFiles.append(":/examples/McCurdy Collection/Mouse/MouseKeyboard_Synth.csd");
+mccurdyMouseFiles.append(":/examples/McCurdy Collection/Mouse/MouseKeyboard_File.csd");
+mccurdyMouseFiles.append(":/examples/McCurdy Collection/Mouse/MouseChord_Synth.csd");
+mccurdyMouseFiles.append(":/examples/McCurdy Collection/Mouse/MouseBass_Synth.csd");
+mccurdyMouseFiles.append(":/examples/McCurdy Collection/Mouse/MouseChord_File.csd");
+  submenu = mccurdyMenu->addMenu(tr("Mouse"));
+  foreach (QString fileName, mccurdyMouseFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//PhysicalModels
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/cabasa.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/sandpaper.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/repluck.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/wgbow.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/gogobel.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/vibes.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/stix.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/wgflute.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/pluck.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/PrePiano.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/sleighbells.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/sekere.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/wgclar.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/barmodel.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/tambourine.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/moog.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/shaker.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/crunch.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/wgbrass.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/wgbowedbar.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/guiro.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/marimba.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/dripwater.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/wgpluck.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/wgpluck2.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/bamboo.csd");
+mccurdyPhysicalModelsFiles.append(":/examples/McCurdy Collection/PhysicalModels/mandol.csd");
+  submenu = mccurdyMenu->addMenu(tr("PhysicalModels"));
+  foreach (QString fileName, mccurdyPhysicalModelsFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//RealtimeScoreGeneration
+mccurdyRealtimeScoreGenerationFiles.append(":/examples/McCurdy Collection/RealtimeScoreGeneration/SimpleSchedkwhenNoteGenerator.csd");
+mccurdyRealtimeScoreGenerationFiles.append(":/examples/McCurdy Collection/RealtimeScoreGeneration/SimpleLoopSequencer.csd");
+mccurdyRealtimeScoreGenerationFiles.append(":/examples/McCurdy Collection/RealtimeScoreGeneration/scale.txt");
+mccurdyRealtimeScoreGenerationFiles.append(":/examples/McCurdy Collection/RealtimeScoreGeneration/SimpleDrumSequencer.csd");
+mccurdyRealtimeScoreGenerationFiles.append(":/examples/McCurdy Collection/RealtimeScoreGeneration/NoteClusters.csd");
+mccurdyRealtimeScoreGenerationFiles.append(":/examples/McCurdy Collection/RealtimeScoreGeneration/DrumSequencerVariableLength.csd");
+mccurdyRealtimeScoreGenerationFiles.append(":/examples/McCurdy Collection/RealtimeScoreGeneration/DrunkWalk.csd");
+mccurdyRealtimeScoreGenerationFiles.append(":/examples/McCurdy Collection/RealtimeScoreGeneration/timedseq.csd");
+  submenu = mccurdyMenu->addMenu(tr("RealtimeScoreGeneration"));
+  foreach (QString fileName, mccurdyRealtimeScoreGenerationFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//Reverbs
+mccurdyReverbsFiles.append(":/examples/McCurdy Collection/Reverbs/SchroederReverb.csd");
+mccurdyReverbsFiles.append(":/examples/McCurdy Collection/Reverbs/vcomb.csd");
+mccurdyReverbsFiles.append(":/examples/McCurdy Collection/Reverbs/freeverb.csd");
+mccurdyReverbsFiles.append(":/examples/McCurdy Collection/Reverbs/nreverb.csd");
+mccurdyReverbsFiles.append(":/examples/McCurdy Collection/Reverbs/GatedReverb.csd");
+mccurdyReverbsFiles.append(":/examples/McCurdy Collection/Reverbs/screverb.csd");
+mccurdyReverbsFiles.append(":/examples/McCurdy Collection/Reverbs/reverb.csd");
+mccurdyReverbsFiles.append(":/examples/McCurdy Collection/Reverbs/babo.csd");
+mccurdyReverbsFiles.append(":/examples/McCurdy Collection/Reverbs/comb.csd");
+  submenu = mccurdyMenu->addMenu(tr("Reverbs"));
+  foreach (QString fileName, mccurdyReverbsFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//SoundfilePlayback
+mccurdySoundfilePlaybackFiles.append(":/examples/McCurdy Collection/SoundfilePlayback/table_tablei_table3.csd");
+mccurdySoundfilePlaybackFiles.append(":/examples/McCurdy Collection/SoundfilePlayback/bbcut.csd");
+mccurdySoundfilePlaybackFiles.append(":/examples/McCurdy Collection/SoundfilePlayback/lposcilsa.csd");
+mccurdySoundfilePlaybackFiles.append(":/examples/McCurdy Collection/SoundfilePlayback/flooper2.csd");
+mccurdySoundfilePlaybackFiles.append(":/examples/McCurdy Collection/SoundfilePlayback/loscil_loscil3.csd");
+  submenu = mccurdyMenu->addMenu(tr("SoundfilePlayback"));
+  foreach (QString fileName, mccurdySoundfilePlaybackFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//SoundGenerators
+mccurdySoundGeneratorsFiles.append(":/examples/McCurdy Collection/SoundGenerators/vco2.csd");
+mccurdySoundGeneratorsFiles.append(":/examples/McCurdy Collection/SoundGenerators/mode.csd");
+mccurdySoundGeneratorsFiles.append(":/examples/McCurdy Collection/SoundGenerators/gbuzz.csd");
+mccurdySoundGeneratorsFiles.append(":/examples/McCurdy Collection/SoundGenerators/vco_with_PWM_LFO_and_LPF.csd");
+mccurdySoundGeneratorsFiles.append(":/examples/McCurdy Collection/SoundGenerators/WhiteNoisePinkNoise.csd");
+mccurdySoundGeneratorsFiles.append(":/examples/McCurdy Collection/SoundGenerators/pdhalf.csd");
+mccurdySoundGeneratorsFiles.append(":/examples/McCurdy Collection/SoundGenerators/buzz.csd");
+mccurdySoundGeneratorsFiles.append(":/examples/McCurdy Collection/SoundGenerators/wterrain.csd");
+mccurdySoundGeneratorsFiles.append(":/examples/McCurdy Collection/SoundGenerators/vco.csd");
+mccurdySoundGeneratorsFiles.append(":/examples/McCurdy Collection/SoundGenerators/hsboscil.csd");
+  submenu = mccurdyMenu->addMenu(tr("SoundGenerators"));
+  foreach (QString fileName, mccurdySoundGeneratorsFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//SpecializedFilters
+mccurdySpecializedFiltersFiles.append(":/examples/McCurdy Collection/SpecializedFilters/Phaser1.csd");
+mccurdySpecializedFiltersFiles.append(":/examples/McCurdy Collection/SpecializedFilters/Phaser2.csd");
+  submenu = mccurdyMenu->addMenu(tr("SpecializedFilters"));
+  foreach (QString fileName, mccurdySpecializedFiltersFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+  }
+//Waveguides
+mccurdyWaveguidesFiles.append(":/examples/McCurdy Collection/Waveguides/wguide1.csd");
+mccurdyWaveguidesFiles.append(":/examples/McCurdy Collection/Waveguides/streson.csd");
+mccurdyWaveguidesFiles.append(":/examples/McCurdy Collection/Waveguides/wguide2.csd");
+  submenu = mccurdyMenu->addMenu(tr("Waveguides"));
+  foreach (QString fileName, mccurdyWaveguidesFiles) {
+    QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+    newAction = submenu->addAction(name);
+    newAction->setData(fileName);
+    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
 
-  // Add the rest
-  for (int i = 0; i < subMenus.size(); i++) {
-    submenu = examplesMenu->addMenu(subMenuNames[i]);
-    foreach (QString fileName, subMenus[i]) {
-      QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-      newAction = submenu->addAction(name);
-      newAction->setData(fileName);
-      connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-    }
-  }
+
+
 
   favoriteMenu = menuBar()->addMenu(tr("Favorites"));
   scriptsMenu = menuBar()->addMenu(tr("Scripts"));
