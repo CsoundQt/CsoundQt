@@ -3822,7 +3822,16 @@ mccurdyWaveguidesFiles.append(":/examples/McCurdy Collection/Waveguides/wguide2.
     connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
   }
 
-
+//add the other example menus
+  for (int i = 0; i < subMenus.size(); i++) {
+    submenu = examplesMenu->addMenu(subMenuNames[i]);
+    foreach (QString fileName, subMenus[i]) {
+      QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+      newAction = submenu->addAction(name);
+      newAction->setData(fileName);
+      connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+    }
+  }
 
 
   favoriteMenu = menuBar()->addMenu(tr("Favorites"));
