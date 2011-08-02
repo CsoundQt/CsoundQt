@@ -15,7 +15,7 @@
 </CsOptions>
 <CsInstruments>
 sr		= 44100		;SAMPLE RATE
-ksmps	= 1			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps	= 10			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -113,10 +113,10 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>73</x>
- <y>206</y>
- <width>815</width>
- <height>473</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -157,8 +157,8 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>5</x>
   <y>5</y>
-  <width>100</width>
-  <height>30</height>
+  <width>123</width>
+  <height>33</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -252,7 +252,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>518</x>
   <y>2</y>
-  <width>297</width>
+  <width>349</width>
   <height>470</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
@@ -281,8 +281,8 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>522</x>
   <y>21</y>
-  <width>287</width>
-  <height>444</height>
+  <width>340</width>
+  <height>450</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -318,7 +318,7 @@ In this example the user can choose between a sound file as input or the compute
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.003</label>
+  <label>0.000</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -378,7 +378,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.45600000</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -600,7 +600,7 @@ In this example the user can choose between a sound file as input or the compute
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.078</label>
+  <label>0.012</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -660,7 +660,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>0.20000000</maximum>
-  <value>0.07760000</value>
+  <value>0.01200000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -678,7 +678,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <minimum>-0.99000000</minimum>
   <maximum>0.99000000</maximum>
-  <value>0.48312000</value>
+  <value>0.78408000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -723,7 +723,7 @@ In this example the user can choose between a sound file as input or the compute
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.483</label>
+  <label>0.784</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -752,7 +752,7 @@ In this example the user can choose between a sound file as input or the compute
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.009</label>
+  <label>0.097</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -812,7 +812,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.40000000</value>
+  <value>0.61600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>

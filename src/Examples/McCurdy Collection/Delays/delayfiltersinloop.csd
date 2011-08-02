@@ -111,10 +111,10 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>73</x>
- <y>206</y>
- <width>751</width>
- <height>498</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -153,10 +153,10 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
-  <x>5</x>
-  <y>5</y>
-  <width>100</width>
-  <height>30</height>
+  <x>3</x>
+  <y>4</y>
+  <width>104</width>
+  <height>35</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -250,8 +250,8 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>519</x>
   <y>2</y>
-  <width>232</width>
-  <height>496</height>
+  <width>277</width>
+  <height>495</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -279,8 +279,8 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>521</x>
   <y>38</y>
-  <width>228</width>
-  <height>440</height>
+  <width>276</width>
+  <height>456</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -800,7 +800,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>6716.438</label>
+  <label>6716.435</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -829,7 +829,7 @@ These were frequently used in Dub Reggae. In this example the user can choose be
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>4376.370</label>
+  <label>4376.368</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>

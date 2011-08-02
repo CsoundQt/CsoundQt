@@ -37,7 +37,7 @@
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
-
+--env:SSDIR+=../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr		= 48000		;SAMPLE RATE
@@ -110,13 +110,14 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
 </CsScore>
 </CsoundSynthesizer>
 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>73</x>
- <y>206</y>
- <width>926</width>
- <height>312</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -252,7 +253,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>527</x>
   <y>2</y>
-  <width>399</width>
+  <width>468</width>
   <height>310</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
@@ -281,8 +282,8 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>530</x>
   <y>28</y>
-  <width>393</width>
-  <height>283</height>
+  <width>465</width>
+  <height>279</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -614,4 +615,4 @@ This example implements the classic ping-pong delay effect. To implement the eff
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

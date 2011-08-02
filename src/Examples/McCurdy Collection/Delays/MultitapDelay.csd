@@ -10,7 +10,7 @@
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
-
+--env:SSDIR+=../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr		= 48000		;SAMPLE RATE
@@ -118,11 +118,13 @@ i  2      0    	-1		;INSTRUMENT 10 (MULTITAP DELAY) PLAYS A HELD NOTE
 
 f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>373</x>
- <y>256</y>
+ <x>72</x>
+ <y>179</y>
  <width>400</width>
  <height>200</height>
  <visible>true</visible>

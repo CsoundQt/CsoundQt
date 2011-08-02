@@ -37,9 +37,6 @@ instr	10	;GUI
 		gkSlider2 	invalue	"Slider2"
 		gkSlider3		invalue	"Slider3"
 		gkSlider33	tablei	gkSlider3, giExp3, 1
-
-		gkSave,ihSave	FLbutton	"Save",			1,    0,     1,     50,     20,    0,  0,   0,      1,     0,       .01
-		gkLoad,ihLoad	FLbutton	"Load",			1,    0,     1,     50,     20,   50,  0,   0,      2,     0,       .01
 	endif
 endin
 
@@ -71,13 +68,16 @@ i 10 0 3600	;GUI
 i  3 0 3600
 </CsScore>
 </CsoundSynthesizer>
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>827</x>
- <y>720</y>
- <width>795</width>
- <height>325</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -126,7 +126,7 @@ i  3 0 3600
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>4.00000000</maximum>
-  <value>0.43200001</value>
+  <value>0.38400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -144,7 +144,7 @@ i  3 0 3600
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.41400000</value>
+  <value>0.65399998</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -162,7 +162,7 @@ i  3 0 3600
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.22000000</value>
+  <value>0.46399999</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>

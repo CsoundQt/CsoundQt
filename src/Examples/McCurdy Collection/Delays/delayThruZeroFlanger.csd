@@ -15,7 +15,7 @@
 </CsOptions>
 <CsInstruments>
 sr		= 44100		;SAMPLE RATE
-ksmps	= 1			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps	= 2			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -88,11 +88,8 @@ instr 	2	;FLANGER-DELAY INSTRUMENT
 	adelsigR 	deltap3	adlt								;TAP THE DELAY LINE AT gkdlt SECONDS
 			delayw	gasigR + (adelsigR*gkfeedamt)			;WRITE AUDIO SOURCE AND FEEDBACK SIGNAL INTO THE BEGINNING OF THE BUFFER
 	
-	asigL	delay	gasigL, 0.0001						;DELAY THE DRY SIGNAL BY AN AMOUNT OF TIME EQUAL TO THE MINIMUM TIME DELAY OFFSET OF THE FLANGER MODULATIONS
-	asigR	delay	gasigR, 0.0001						;DELAY THE DRY SIGNAL BY AN AMOUNT OF TIME EQUAL TO THE MINIMUM TIME DELAY OFFSET OF THE FLANGER MODULATIONS
-
-	aL		ntrpol	asigL, -adelsigL, gkmix				;CREATE DRY/WET MIX
-	aR		ntrpol	asigR, -adelsigR, gkmix		     	;CREATE DRY/WET MIX
+	aL		ntrpol	gasigL, -adelsigL, gkmix				;CREATE DRY/WET MIX
+	aR		ntrpol	gasigR, -adelsigR, gkmix		     	;CREATE DRY/WET MIX
 
 			outs		aL * gkamp, aR * gkamp				;CREATE A MIX BETWEEN THE WET AND THE DRY SIGNALS AT THE OUTPUT
 			clear	gasigL, gasigR						;CLEAR THE GLOBAL AUDIO SEND VARIABLES
@@ -109,10 +106,10 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>73</x>
- <y>206</y>
- <width>810</width>
- <height>462</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -151,10 +148,10 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
-  <x>5</x>
-  <y>5</y>
-  <width>100</width>
-  <height>30</height>
+  <x>4</x>
+  <y>24</y>
+  <width>115</width>
+  <height>37</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -180,7 +177,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.51000000</value>
+  <value>0.54400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -225,7 +222,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.510</label>
+  <label>0.544</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -248,7 +245,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>516</x>
   <y>2</y>
-  <width>294</width>
+  <width>329</width>
   <height>460</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
@@ -277,8 +274,8 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>521</x>
   <y>41</y>
-  <width>283</width>
-  <height>399</height>
+  <width>320</width>
+  <height>417</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -319,7 +316,7 @@ A gain control is provided to control the gain of the live input.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.261</label>
+  <label>0.000</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -379,7 +376,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.85400000</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -525,7 +522,7 @@ A gain control is provided to control the gain of the live input.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.722</label>
+  <label>0.502</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -585,7 +582,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.72200000</value>
+  <value>0.50200000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -601,7 +598,7 @@ A gain control is provided to control the gain of the live input.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.006</label>
+  <label>0.003</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -661,7 +658,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>0.01000000</maximum>
-  <value>0.00630000</value>
+  <value>0.00350000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -679,7 +676,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <minimum>-0.99000000</minimum>
   <maximum>0.99000000</maximum>
-  <value>0.51876000</value>
+  <value>-0.00396000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -724,7 +721,7 @@ A gain control is provided to control the gain of the live input.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.519</label>
+  <label>-0.004</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>

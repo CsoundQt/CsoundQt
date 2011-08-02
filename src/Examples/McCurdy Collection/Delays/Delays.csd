@@ -9,7 +9,7 @@
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
-
+--env:SSDIR+=../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr		= 48000		;SAMPLE RATE
@@ -136,7 +136,10 @@ i 1		0	   3600	;GUI
 i 2  	0	   3600	;INSTRUMENT 2 INPUT 
 i 4  	0	   3600	;INSTRUMENT 4 CREATES DELAYS
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+
+
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>72</x>
@@ -259,7 +262,7 @@ i 4  	0	   3600	;INSTRUMENT 4 CREATES DELAYS
   <objectName/>
   <x>519</x>
   <y>2</y>
-  <width>367</width>
+  <width>381</width>
   <height>630</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
@@ -288,8 +291,8 @@ i 4  	0	   3600	;INSTRUMENT 4 CREATES DELAYS
   <objectName/>
   <x>523</x>
   <y>24</y>
-  <width>360</width>
-  <height>594</height>
+  <width>374</width>
+  <height>605</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>

@@ -10,7 +10,7 @@
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
-
+--env:SSDIR+=../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr		= 44100		;SAMPLE RATE
@@ -19,31 +19,28 @@ nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
 
-gisine		ftgen	0, 0, 131072, 10, 1					;SINE WAVE
+gilfoshape	ftgen	0, 0, 131072, 19, 0.5, 1, 180, 1	;U-SHAPE PARABOLA
 giExp3000		ftgen	0, 0, 129, -25, 0, 20.0, 128, 3000.0	;TABLE FOR EXP SLIDER
 giExp20000	ftgen	0, 0, 129, -25, 0, 20.0, 128, 20000.0	;TABLE FOR EXP SLIDER
 
 
 instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkOscGain		invalue 	"Oscillator_Gain"					;init 0.3
-		kOscFrq		invalue 	"Oscillator_Freq"
-		gkOscFrq		tablei	kOscFrq, giExp3000, 1
+	gkOscGain		invalue 	"Oscillator_Gain"					;init 0.3
+	kOscFrq		invalue 	"Oscillator_Freq"
+	gkOscFrq		tablei	kOscFrq, giExp3000, 1
 					outvalue	"Oscillator_Freq_Value", gkOscFrq		;init 100.0
-		kOscLPF		invalue 	"Tone"
-		gkOscLPF		tablei	kOscLPF, giExp20000, 1
+	kOscLPF		invalue 	"Tone"
+	gkOscLPF		tablei	kOscLPF, giExp20000, 1
 					outvalue	"Tone_Value", gkOscLPF				;init 4000.0
-		gkOscRes		invalue 	"Resonance"						;init 0.4
-		gkmix		invalue 	"Mix"							;init 0.5
-		gkChoDepth	invalue 	"Chorus_Modulation_Depth"			;init 0.001
-		gkChoRate		invalue 	"Chorus_Modulation_Rate"				;init 0.8
-		gkphs		invalue 	"Right_Channel_Phase"				;init 0.5
-	endif
+	gkOscRes		invalue 	"Resonance"						;init 0.4
+	gkmix		invalue 	"Mix"							;init 0.5
+	gkChoDepth	invalue 	"Chorus_Modulation_Depth"			;init 0.001
+	gkChoRate		invalue 	"Chorus_Modulation_Rate"				;init 0.8
+	gkphs		invalue 	"Right_Channel_Phase"				;init 0.5
 endin
 
 instr	1	;GENERATES AUDIO SIGNAL
-	asig		vco 			gkOscGain, gkOscFrq, 1, 0, gisine				;GENERATE A SAWTOOTH WAVE AUDIO SIGNAL
+	asig		vco2 			gkOscGain, gkOscFrq				;GENERATE A SAWTOOTH WAVE AUDIO SIGNAL
 	gasig	moogladder	asig, gkOscLPF, gkOscRes						;LOW-PASS FILTER AUDIO SIGNAL (CREATE A GLOBAL VARIABLE OUTPUT TO BE USED IN INSTRUMENT 2)
 endin
 	
@@ -53,10 +50,10 @@ instr 	2	;CHORUS-DELAY INSTRUMENT
 	kChoDepth	portk	gkChoDepth, kporttime							;SMOOTH VARIABLE CHANGES WITH PORTK
 	aChoDepth	interp	kChoDepth										;INTERPOLATE TO CREATE A-RATE VERSION OF K-RATE VARIABLE
 
-	amodL	osciliktp gkChoRate, gisine, 0
+	amodL	osciliktp gkChoRate, gilfoshape, 0
 	amodL	=		(((amodL*aChoDepth)+aChoDepth)*.5)+.01
 	
-	amodR 	osciliktp gkChoRate, gisine, gkphs							;THE PHASE OF THE RIGHT CHANNEL IS ADJUSTABLE
+	amodR 	osciliktp gkChoRate, gilfoshape, gkphs							;THE PHASE OF THE RIGHT CHANNEL IS ADJUSTABLE
 	amodR	=		(((amodR*kChoDepth)+kChoDepth)*.5)+.01
 	
 	;REMEMBER THAT THE LENGTH OF THE DELAY BUFFER DEFINED WILL HAVE TO TAKE ACCOUNT OF THE SUMMED MAXIMUM OF THE STATIC CONSTANT VALUE AND MODULATING DELAY TIME
@@ -85,13 +82,14 @@ i  2      0         -1		;INSTRUMENT 2 PLAYS A HELD NOTE
 
 f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>355</x>
- <y>339</y>
- <width>859</width>
- <height>394</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -132,7 +130,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>5</x>
   <y>5</y>
-  <width>100</width>
+  <width>127</width>
   <height>30</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
   <visible>true</visible>
@@ -256,8 +254,8 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>525</x>
   <y>36</y>
-  <width>326</width>
-  <height>347</height>
+  <width>325</width>
+  <height>351</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -297,7 +295,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>74.344</label>
+  <label>101.430</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -357,7 +355,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.26200000</value>
+  <value>0.32400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -375,7 +373,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <minimum>0.00100000</minimum>
   <maximum>14.00000000</maximum>
-  <value>2.18484400</value>
+  <value>0.61695600</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -391,7 +389,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>2.185</label>
+  <label>0.617</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -608,7 +606,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>486.525</label>
+  <label>1114.777</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -639,7 +637,7 @@ If the Dry/Wet control is set at 100% wet, and the phase of right hand channel L
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.46200000</value>
+  <value>0.58200000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>

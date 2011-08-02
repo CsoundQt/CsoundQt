@@ -11,7 +11,7 @@
 ;my flags on Ubuntu: -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
-
+--env:SSDIR+=../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr		= 44100	;SAMPLE RATE
@@ -61,13 +61,15 @@ f 0 300
 </CsScore>
 </CsoundSynthesizer>
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>931</x>
- <y>230</y>
- <width>748</width>
- <height>392</height>
+ <x>73</x>
+ <y>206</y>
+ <width>740</width>
+ <height>387</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -696,7 +698,7 @@ Score fragments are read by timedseq using a pointer which in this example is cr
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>12.000</label>
+  <label>5.000</label>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
@@ -747,4 +749,4 @@ Score fragments are read by timedseq using a pointer which in this example is cr
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

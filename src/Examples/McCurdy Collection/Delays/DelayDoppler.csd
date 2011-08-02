@@ -9,11 +9,11 @@
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
-
+--env:SSDIR+=../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr		= 48000		;SAMPLE RATE
-ksmps	= 1			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps	= 10			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -22,15 +22,12 @@ gisine	ftgen	0, 0, 4096, 10, 1	;A SINE WAVE FUNCTION TABLE IS DEFINED
 
 
 instr	10	;GUI
-	ktrig	metro	10
-	if (ktrig == 1)	then
-		gkfreq		invalue	"Frequency_Rotation"		;init 0.2
-		gkAmpDepth	invalue	"Central_Edge"				;init .7
-		gkAmpPhase	invalue	"Orientation"				;init 0.5
-		gkPanDepth	invalue	"Panning_Width"			;init 1
-		gkDopDep		invalue	"Doppler_Depth"			;init .003
-		gkOutGain		invalue	"Output_Gain"				;init 0.7
-	endif
+	gkfreq		invalue	"Frequency_Rotation"		;init 0.2
+	gkAmpDepth	invalue	"Central_Edge"				;init .7
+	gkAmpPhase	invalue	"Orientation"				;init 0.5
+	gkPanDepth	invalue	"Panning_Width"			;init 1
+	gkDopDep		invalue	"Doppler_Depth"			;init .003
+	gkOutGain		invalue	"Output_Gain"				;init 0.7
 endin
 
 instr     1
@@ -38,7 +35,7 @@ instr     1
 	kporttime		linseg	0,0.001,iporttime,1,iporttime				;CREATE 'PORTAMENTO TIME' RISING FUNCTION
 	kAmpPhase		portk	gkAmpPhase, kporttime					;APPLY PORTAMENTO TO gkAmpPhase. CREATE NEW OUTPUT VARIABLE kAmpPhase (GLOBAL VARIABLES CAN'T BE BOTH INPUT AND OUTPUT)
 	kDopDep		portk	gkDopDep, kporttime						;APPLY PORTAMENTO TO gkDopDep. CREATE NEW OUTPUT VARIABLE kDopDep (GLOBAL VARIABLES CAN'T BE BOTH INPUT AND OUTPUT)
-
+	aDopDep		interp	kDopDep
 	asig			pinkish	0.3									;DEFINE SOUND SOURCE (PINK NOISE) FOR THIS EXAMPLE
 	asig			butbp	asig, 500, 10							;BANDPASS FILTER PINK NOISE TO GIVE asig A 'WHISTLING' CHARACTERISTIC. THIS FILTERING CAUSES A LOSS OF SIGNAL POWER WHICH MUST LATER BE COMPENSATED FOR
 
@@ -49,10 +46,10 @@ instr     1
 	aPan			=		aPan + 0.5							;OFFSET PANNING LFO
 
 	iMaxDelay		=		1									;DEFINE A VARIABLE THAT WILL BE USE FOR 'MAXIMUM DELAY TIME' (BUFFER LENGTH)
-	aDelay		oscili	kDopDep, gkfreq, gisine, 0				;AN LFO DEFINES A VARIABLE FOR DELAY TIME (NOTE PHASE AT ZERO)
-	aDelay		=		aDelay + kDopDep						;DELAY TIME  VARIABLE 'aDelay' IS OFFSET TO STAY WITHIN THE POSITIVE DOMAIN	
+	aDelay		oscili	aDopDep, gkfreq, gisine, 0				;AN LFO DEFINES A VARIABLE FOR DELAY TIME (NOTE PHASE AT ZERO)
+	aDelay		=		aDelay + aDopDep						;DELAY TIME  VARIABLE 'aDelay' IS OFFSET TO STAY WITHIN THE POSITIVE DOMAIN	
 	aBuff		delayr	iMaxDelay								;DEFINE DELAY BUFFER STATING ITS LENGTH
-	aDelay		deltap3	aDelay								;TAP DELAY BUFFER
+	aDelay		deltap3	aDelay+0.001								;TAP DELAY BUFFER
 				delayw	asig									;SIGNAL WRITTEN INTO BEGINING OF DELAY BUFFER
 
 	asig			=		aDelay * aAmp * 100 * gkOutGain			;APPLY AMPLITUDE MODULATION RESCALING CONSTANT AND OUTPU GAIN SLIDER TO SIGNAL OUTPUT BY DELAY
@@ -71,10 +68,10 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>176</x>
- <y>183</y>
- <width>1131</width>
- <height>444</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -113,9 +110,9 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
-  <x>5</x>
+  <x>11</x>
   <y>5</y>
-  <width>100</width>
+  <width>112</width>
   <height>30</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
   <visible>true</visible>
@@ -128,7 +125,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Frequency_Rotation</objectName>
@@ -210,8 +207,8 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>518</x>
   <y>2</y>
-  <width>602</width>
-  <height>436</height>
+  <width>714</width>
+  <height>449</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -239,8 +236,8 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>521</x>
   <y>20</y>
-  <width>597</width>
-  <height>416</height>
+  <width>708</width>
+  <height>433</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -579,7 +576,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.030</label>
+  <label>0.042</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -639,7 +636,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>0.10000000</maximum>
-  <value>0.03020000</value>
+  <value>0.04180000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>

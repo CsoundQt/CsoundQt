@@ -124,13 +124,14 @@ endin
 i 2 0 3600	;PARTIAL SPACINGS RANDOM FACTORS INSTRUMENTS PLAY A NOTE FOR 1 HOUR (AND KEEPS PERFORMANCE GOING)
 i 10 0 3600	;GUI
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>256</x>
- <y>278</y>
- <width>1012</width>
- <height>435</height>
+ <x>0</x>
+ <y>0</y>
+ <width>1014</width>
+ <height>432</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -530,8 +531,8 @@ i 10 0 3600	;GUI
   <objectName/>
   <x>8</x>
   <y>8</y>
-  <width>164</width>
-  <height>33</height>
+  <width>176</width>
+  <height>55</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -710,7 +711,7 @@ i 10 0 3600	;GUI
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.42815249</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -755,7 +756,7 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.428</label>
+  <label>1.000</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -786,7 +787,7 @@ i 10 0 3600	;GUI
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.24926686</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -831,7 +832,7 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.249</label>
+  <label>0.000</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -902,8 +903,8 @@ i 10 0 3600	;GUI
   <objectName/>
   <x>606</x>
   <y>17</y>
-  <width>400</width>
-  <height>413</height>
+  <width>408</width>
+  <height>411</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>

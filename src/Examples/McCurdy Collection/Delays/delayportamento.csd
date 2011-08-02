@@ -94,10 +94,10 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>73</x>
- <y>206</y>
- <width>804</width>
- <height>384</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -138,7 +138,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>5</x>
   <y>5</y>
-  <width>100</width>
+  <width>115</width>
   <height>30</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
   <visible>true</visible>
@@ -231,9 +231,9 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>522</x>
+  <x>524</x>
   <y>2</y>
-  <width>282</width>
+  <width>297</width>
   <height>380</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
@@ -262,8 +262,8 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>525</x>
   <y>30</y>
-  <width>278</width>
-  <height>318</height>
+  <width>294</width>
+  <height>349</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -303,7 +303,7 @@ In this example the user can choose between a sound file as input or the compute
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>2.131</label>
+  <label>0.381</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -363,7 +363,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <minimum>0.00100000</minimum>
   <maximum>5.00000000</maximum>
-  <value>2.13057400</value>
+  <value>0.38092400</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -509,7 +509,7 @@ In this example the user can choose between a sound file as input or the compute
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.474</label>
+  <label>0.436</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -569,7 +569,7 @@ In this example the user can choose between a sound file as input or the compute
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.47400000</value>
+  <value>0.43600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>

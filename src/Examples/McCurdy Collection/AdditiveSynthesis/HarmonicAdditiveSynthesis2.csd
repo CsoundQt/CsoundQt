@@ -67,7 +67,7 @@ instr	10	;GUI
 		gkampatt		invalue	"Attack"
 		gkampattlev	invalue	"Att_Lev"
 		gkampdec		invalue	"Decay_1"
-		gkampdeclev	invalue	"Dec_Lev."
+		gkampdeclev	invalue	"Dec_Lev"
 		gkampdec2		invalue	"Decay_2"
 		gkampslev		invalue	"Sustain"
 		gkamprel		invalue	"Release"
@@ -103,7 +103,6 @@ instr	1	;SYNTHESIS INSTRUMENT
 
 	;AMPLITUDE ENVELOPE (WITH MIDI RELEASE SEGMENT)
 	aenv		linsegr	0,i(gkampatt),i(gkampattlev),i(gkampdec),i(gkampdeclev),i(gkampdec2),i(gkampslev),i(gkamprel),0
-	
 	;AMPLITUDE MODULATION (TREMOLO) AND VIBRATO
 	gkTremPhase	= .5													;PHASE OF THE TREMOLO LFO WAVEFORM (IN RADIANS) WITH RESPECT TO THE PHASE OF THE VIBRATO WAVEFORM WHICH IS AT ZERO RADIANS (N.B. .5 RADIANS=180 DEGREES)
 	kmodenv		linseg	0, i(gkmoddel), 0, i(gkmodrise), 1, 1, 1			;ENVELOPE WHICH ALLOWS THE MODULATION FUNCTIONS TO RISE GRADUALLY AFTER THE NOTE HAS BEGUN
@@ -178,7 +177,7 @@ instr	1	;SYNTHESIS INSTRUMENT
 				apart28,\
 				apart29,\
 				apart30
-			outs	amix * aenv, amix * aenv					;SEND MIXED SIGNAL TOaTHE OUTPUTS aND APPLY THE AMPLITUDE ENVELOPE
+			outs	amix * aenv, amix * aenv					;SEND MIXED SIGNAL TO THE OUTPUTS aND APPLY THE AMPLITUDE ENVELOPE
 endin
 	
 instr	3	;PRESETS
@@ -218,13 +217,14 @@ endin
 <CsScore>
 i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>72</x>
- <y>179</y>
- <width>400</width>
- <height>200</height>
+ <x>710</x>
+ <y>71</y>
+ <width>1154</width>
+ <height>692</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -277,7 +277,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.55000000</yValue>
+  <yValue>0.55000001</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -339,7 +339,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.55000000</yValue>
+  <yValue>0.55000001</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -372,7 +372,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.90000000</yValue>
+  <yValue>0.89999998</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -405,7 +405,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.45000000</yValue>
+  <yValue>0.44999999</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -504,7 +504,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.80000000</yValue>
+  <yValue>0.80000001</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -537,7 +537,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.30000000</yValue>
+  <yValue>0.30000001</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -570,7 +570,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.30000000</yValue>
+  <yValue>0.30000001</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -603,7 +603,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.30000000</yValue>
+  <yValue>0.30000001</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -623,9 +623,9 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
  <bsbObject version="2" type="BSBButton">
   <objectName/>
   <x>513</x>
-  <y>475</y>
-  <width>164</width>
-  <height>33</height>
+  <y>467</y>
+  <width>165</width>
+  <height>55</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -652,7 +652,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.33235294</value>
+  <value>0.48235294</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -697,7 +697,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>157.822</label>
+  <label>400.853</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -796,8 +796,8 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <objectName/>
   <x>736</x>
   <y>2</y>
-  <width>387</width>
-  <height>690</height>
+  <width>418</width>
+  <height>689</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -825,8 +825,8 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <objectName/>
   <x>740</x>
   <y>18</y>
-  <width>379</width>
-  <height>670</height>
+  <width>409</width>
+  <height>671</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -936,7 +936,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.26000000</yValue>
+  <yValue>0.25999999</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1679,7 +1679,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <midicc>0</midicc>
   <minimum>0.00100000</minimum>
   <maximum>8.00000000</maximum>
-  <value>0.00100000</value>
+  <value>0.08099000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1724,7 +1724,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.001</label>
+  <label>0.081</label>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1755,7 +1755,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.41000000</value>
+  <value>0.91000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1801,7 +1801,7 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.410</label>
+  <label>0.910</label>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1832,7 +1832,7 @@ Level</label>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
-  <value>7.05000000</value>
+  <value>0.60000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1878,7 +1878,7 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>7.050</label>
+  <label>0.600</label>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1909,7 +1909,7 @@ Level</label>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.12000000</value>
+  <value>0.53000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1955,7 +1955,7 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.120</label>
+  <label>0.530</label>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1986,7 +1986,7 @@ Level</label>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
-  <value>1.00699997</value>
+  <value>4.20000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2032,7 +2032,7 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.007</label>
+  <label>4.200</label>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -2063,7 +2063,7 @@ Level</label>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.63200003</value>
+  <value>0.53000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2108,7 +2108,7 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.632</label>
+  <label>0.530</label>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -2215,7 +2215,7 @@ Level</label>
   <midicc>0</midicc>
   <minimum>0.00100000</minimum>
   <maximum>20.00000000</maximum>
-  <value>2.60087000</value>
+  <value>4.60077000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2261,7 +2261,7 @@ Rate</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>2.601</label>
+  <label>4.601</label>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>

@@ -87,10 +87,10 @@ f  0   3600			;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>73</x>
- <y>206</y>
- <width>1030</width>
- <height>472</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -131,8 +131,8 @@ f  0   3600			;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>5</x>
   <y>5</y>
-  <width>100</width>
-  <height>30</height>
+  <width>120</width>
+  <height>35</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -224,10 +224,10 @@ f  0   3600			;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>520</x>
+  <x>521</x>
   <y>2</y>
-  <width>510</width>
-  <height>470</height>
+  <width>606</width>
+  <height>472</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -255,8 +255,8 @@ f  0   3600			;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>524</x>
   <y>16</y>
-  <width>504</width>
-  <height>450</height>
+  <width>606</width>
+  <height>452</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -294,7 +294,7 @@ A gain control is provided to control the gain of the live input.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.601</label>
+  <label>0.121</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -354,7 +354,7 @@ A gain control is provided to control the gain of the live input.</label>
   <midicc>0</midicc>
   <minimum>0.00100000</minimum>
   <maximum>5.00000000</maximum>
-  <value>1.60068000</value>
+  <value>0.12097600</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>

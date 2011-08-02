@@ -14,7 +14,7 @@
 </CsOptions>
 <CsInstruments>
 sr		= 44100	;SAMPLE RATE
-ksmps	= 1		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
 
@@ -22,30 +22,35 @@ nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
 gisine	ftgen	0,0,4096,10,1	;SINE WAVE
 gkphs	init		0
 
-;FUNCTION TABLE FOR STORAGE OF SEQUENCE DATA FOR SOUND 1
-gi1		ftgen	0,0,128,-2,	0,	0.25, .001,	0,\
-							0,	0.5,	.001,	0,\
-							0,	0.75, .001,	0,\
-							0,	1,	.001,	0,\
-							0,	1.25, .001,	0,\
-							0,	1.5,	.001,	0,\
-							0,	1.75, .001,	0,\
-							0,	2,	.001,	0,\
-							0,	2.25, .001,	0,\
-							0,	2.5,	.001,	0,\
-							0,	2.75, .001,	0,\
-							0,	3,	.001,	0,\
-							0,	3.25, .001,	0,\
-							0,	3.5,	.001,	0,\
-							0,	3.75, .001,	0,\
-							0,	4,	.001,	0,\
-							-1,	4,	-1,	-1
+;FUNCTION TABLE FOR STORAGE OF SEQUENCE DATA FOR SOUND 1 p4=On/Off_Status p5=amplitude
+gi1		ftgen		0,0,128,-2,	0,	1,	0.001,	0,0,\
+						0,	1.25,	0.001,	0,0,\
+						0,	1.5,	0.001,	0,0,\
+						0,	1.75,	0.001,	0,0,\                       
+						0,	2,	0.001,	0,0,\
+						0,	2.25,	0.001,	0,0,\
+						0,	2.5,	0.001,	0,0,\
+						0,	2.75,	0.001,	0,0,\                  
+						0,	3,	0.001,	0,0,\
+						0,	3.25,	0.001,	0,0,\
+						0,	3.5,	0.001,	0,0,\
+						0,	3.75,	0.001,	0,0,\
+						0,	4,	0.001,	0,0,\
+						0,	4.25,	0.001,	0,0,\
+						0,	4.5,	0.001,	0,0,\
+						0,	4.75,	0.001,	0,0,\
+						-1,	5,	-1,	-1,-1
 
 gi2		ftgen	0,0,128,-2,0			;EMPTY TABLES INITIALLY. CONTENTS WILL BE COPIED FROM TABLE gi1
 gi3		ftgen	0,0,128,-2,0			;EMPTY TABLES INITIALLY. CONTENTS WILL BE COPIED FROM TABLE gi1
 gi4		ftgen	0,0,128,-2,0			;EMPTY TABLES INITIALLY. CONTENTS WILL BE COPIED FROM TABLE gi1
 gi5		ftgen	0,0,128,-2,0			;EMPTY TABLES INITIALLY. CONTENTS WILL BE COPIED FROM TABLE gi1
 gi6		ftgen	0,0,128,-2,0			;EMPTY TABLES INITIALLY. CONTENTS WILL BE COPIED FROM TABLE gi1
+		tableicopy 	gi2, gi1	;COPY TABLE 1 INTO ALL OTHER TABLES
+		tableicopy 	gi3, gi1
+		tableicopy 	gi4, gi1
+		tableicopy 	gi5, gi1
+		tableicopy 	gi6, gi1
 
 
 instr	10	;GUI
@@ -53,6 +58,23 @@ instr	10	;GUI
 	if (ktrig == 1)	then
 		gkMasterGain	invalue	"Master"
 		gkBPM		invalue	"Tempo"
+		gkswing	invalue	"swing"
+		gkamp1	invalue	"amp1"
+		gkamp2	invalue	"amp2"
+		gkamp3	invalue	"amp3"
+		gkamp4	invalue	"amp4"
+		gkamp5	invalue	"amp5"
+		gkamp6	invalue	"amp6"
+		gkamp7	invalue	"amp7"
+		gkamp8	invalue	"amp8"
+		gkamp9	invalue	"amp9"
+		gkamp10	invalue	"amp10"
+		gkamp11	invalue	"amp11"
+		gkamp12	invalue	"amp12"
+		gkamp13	invalue	"amp13"
+		gkamp14	invalue	"amp14"
+		gkamp15	invalue	"amp15"
+		gkamp16	invalue	"amp16"
 
 #define	ROW1(COUNT)
 		#
@@ -60,97 +82,97 @@ instr	10	;GUI
 		gk$COUNT_01	invalue	"b$COUNT_01"		;BUTTON VALUE
 		kTrig$COUNT_01	changed	gk$COUNT_01
 		if kTrig$COUNT_01 == 1 then
-			tablew	gk$COUNT_01, ((1-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_01, ((1-1)*5)+3, gi$COUNT 
 		endif
 
 		gk$COUNT_02	invalue	"b$COUNT_02"		;BUTTON VALUE
 		kTrig$COUNT_02	changed	gk$COUNT_02
 		if kTrig$COUNT_02 == 1 then
-			tablew	gk$COUNT_02, ((2-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_02, ((2-1)*5)+3, gi$COUNT 
 		endif
 
 		gk$COUNT_03	invalue	"b$COUNT_03"		;BUTTON VALUE
 		kTrig$COUNT_03	changed	gk$COUNT_03
 		if kTrig$COUNT_03 == 1 then
-			tablew	gk$COUNT_03, ((3-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_03, ((3-1)*5)+3, gi$COUNT 
 		endif
 		
 		gk$COUNT_04	invalue	"b$COUNT_04"		;BUTTON VALUE
 		kTrig$COUNT_04	changed	gk$COUNT_04
 		if kTrig$COUNT_04 == 1 then
-			tablew	gk$COUNT_04, ((4-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_04, ((4-1)*5)+3, gi$COUNT 
 		endif
 
 		gk$COUNT_05	invalue	"b$COUNT_05"		;BUTTON VALUE
 		kTrig$COUNT_05	changed	gk$COUNT_05
 		if kTrig$COUNT_05 == 1 then
-			tablew	gk$COUNT_05, ((5-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_05, ((5-1)*5)+3, gi$COUNT 
 		endif
 
 		gk$COUNT_06	invalue	"b$COUNT_06"		;BUTTON VALUE
 		kTrig$COUNT_06	changed	gk$COUNT_06
 		if kTrig$COUNT_06 == 1 then
-			tablew	gk$COUNT_06, ((6-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_06, ((6-1)*5)+3, gi$COUNT 
 		endif
 
 		gk$COUNT_07	invalue	"b$COUNT_07"		;BUTTON VALUE
 		kTrig$COUNT_07	changed	gk$COUNT_07
 		if kTrig$COUNT_07 == 1 then
-			tablew	gk$COUNT_07, ((7-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_07, ((7-1)*5)+3, gi$COUNT 
 		endif
 
 		gk$COUNT_08	invalue	"b$COUNT_08"		;BUTTON VALUE
 		kTrig$COUNT_08	changed	gk$COUNT_08
 		if kTrig$COUNT_08 == 1 then
-			tablew	gk$COUNT_08, ((8-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_08, ((8-1)*5)+3, gi$COUNT 
 		endif
 
 		gk$COUNT_09	invalue	"b$COUNT_09"		;BUTTON VALUE
 		kTrig$COUNT_09	changed	gk$COUNT_09
 		if kTrig$COUNT_09 == 1 then
-			tablew	gk$COUNT_09, ((9-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_09, ((9-1)*5)+3, gi$COUNT 
 		endif
 
 		gk$COUNT_10	invalue	"b$COUNT_10"		;BUTTON VALUE
 		kTrig$COUNT_10	changed	gk$COUNT_10
 		if kTrig$COUNT_10 == 1 then
-			tablew	gk$COUNT_10, ((10-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_10, ((10-1)*5)+3, gi$COUNT 
 		endif
 
 		gk$COUNT_11	invalue	"b$COUNT_11"		;BUTTON VALUE
 		kTrig$COUNT_11	changed	gk$COUNT_11
 		if kTrig$COUNT_11 == 1 then
-			tablew	gk$COUNT_11, ((11-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_11, ((11-1)*5)+3, gi$COUNT 
 		endif
 
 		gk$COUNT_12	invalue	"b$COUNT_12"		;BUTTON VALUE
 		kTrig$COUNT_12	changed	gk$COUNT_12
 		if kTrig$COUNT_12 == 1 then
-			tablew	gk$COUNT_12, ((12-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_12, ((12-1)*5)+3, gi$COUNT 
 		endif
 
 		gk$COUNT_13	invalue	"b$COUNT_13"		;BUTTON VALUE
 		kTrig$COUNT_13	changed	gk$COUNT_13
 		if kTrig$COUNT_13 == 1 then
-			tablew	gk$COUNT_13, ((13-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_13, ((13-1)*5)+3, gi$COUNT 
 		endif
 
 		gk$COUNT_14	invalue	"b$COUNT_14"		;BUTTON VALUE
 		kTrig$COUNT_14	changed	gk$COUNT_14
 		if kTrig$COUNT_14 == 1 then
-			tablew	gk$COUNT_14, ((14-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_14, ((14-1)*5)+3, gi$COUNT 
 		endif
 
 		gk$COUNT_15	invalue	"b$COUNT_15"		;BUTTON VALUE
 		kTrig$COUNT_15	changed	gk$COUNT_15
 		if kTrig$COUNT_15 == 1 then
-			tablew	gk$COUNT_15, ((15-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_15, ((15-1)*5)+3, gi$COUNT 
 		endif
 
 		gk$COUNT_16	invalue	"b$COUNT_16"		;BUTTON VALUE
 		kTrig$COUNT_16	changed	gk$COUNT_16
 		if kTrig$COUNT_16 == 1 then
-			tablew	gk$COUNT_16, ((16-1)*4)+3, gi$COUNT 
+			tablew	gk$COUNT_16, ((16-1)*5)+3, gi$COUNT 
 		endif
 
 		;SLIDERS
@@ -177,40 +199,72 @@ instr	1	; NOTE TRIGGERING INSTRUMENT
 			outvalue	"Phase", kphs
 	endif
 
-	ktimpnt	=		kphs * isubdiv						;RESCALE POINTER
+	ktimpnt 	=	kphs*isubdiv+0.99						;MULTIPLY PHASE VALUE BY NUMBER OF BEATS, OFFSET BY ALMOST 1 (THIS IS TO ENSURE THE FIRST EVENT ON BEAT ONE IS ALWAYS TRIGGERED)
 	kp1		init		0								;INITIALISE P-FIELD VALUES OUTPUT BY timedseq
 	kp2		init		0					               ;INITIALISE P-FIELD VALUES OUTPUT BY timedseq
 	kp3		init		0         						;INITIALISE P-FIELD VALUES OUTPUT BY timedseq
 	kp4		init		0         						;INITIALISE P-FIELD VALUES OUTPUT BY timedseq
+	kp5		init		0               				;INITIALISE P-FIELD VALUES OUTPUT BY timedseq AS INPUT VARIABLES
 	
-	ktrig	timedseq		ktimpnt,gi1, kp1, kp2,kp3, kp4						;CREATE NOTE TRIGGERS AND P-FIELDS FOR SOUND 1 FROM FUNCTION TABLE gi01 
-	;		OPCODE	 	TRIGGER | MINTIM | MAXNUM | INSNUM | WHEN | DUR | P4 | P5
-			schedkwhen 	ktrig,      0,       0,        2,     0,    kp3,  kp4,  1	;TRIGGER INTERROGATION INSTRUMENT
+#define	LoopTrigger(N)
+	#ktrig   timedseq ktimpnt,gi$N, kp1, kp2,kp3, kp4,kp5	;CREATE NOTE TRIGGERS AND P-FIELDS FOR SOUND 1 FROM FUNCTION TABLE gi1 
+	;OPCODE 	TRIGGER | MINTIM | MAXNUM | INSNUM | WHEN | DUR | P4 | P5 |P6
+	schedkwhen 	ktrig,      0,       0,        2,     0,    kp3,  kp4, kp5, $N	;TRIGGER INTERROGATION INSTRUMENT#
+	;EXPAND MACRO MULTIPLE TIMES FOR EACH SEQUENCER ROW
+	$LoopTrigger(1)
+	$LoopTrigger(2)
+	$LoopTrigger(3)
+	$LoopTrigger(4)
+	$LoopTrigger(5)
+	$LoopTrigger(6)
 	
-	ktrig	timedseq		ktimpnt,gi2, kp1, kp2,kp3, kp4						;CREATE NOTE TRIGGERS AND P-FIELDS FOR SOUND 2 FROM FUNCTION TABLE gi02 
-	;		OPCODE 		TRIGGER | MINTIM | MAXNUM | INSNUM | WHEN | DUR | P4 | P5
-			schedkwhen	ktrig,       0,       0,      2,       0,   kp3,   kp4, 2
+	;--SWING CONTROL------------------------------------------------------------------------------------------------------
+	;TWO NESTED LOOPS ARE EMPLOYED: LOOP 1 APPLIES PROCEDURE FOR EACH ROW. LOOP 2 (WITHIN EACH LOOP1 PASS) FOR EACH COLUMN
+	kSwTrig	changed	gkswing				;IF SWING SLIDER HAS BEEN CHANGED GENERATE A TRIGGER IMPULSE
+	if kSwTrig==1 then				;IF SWING CHANGE TRIGGER HAS BEEN GENERATED...
+		kcount1	=	0			;LOOP 1 COUNTER
+		loop1:					;LOOP 1 BEGINS HERE. REITERATED FOR EACH ROW (INSTRUMENT)
+			kcount2	=	6		;LOOP 2 COUNTER (USED TO REFERENCE START TIME FOR ALTERNATE TABLE NOTE EVENTS HENCE INITIAL VALUE OF 5 AND INCREMENT OF 8
+			loop2:				;LOOP 2 BEGINS HERE. REITERATED FOR EACH COLUMN (INSTRUMENT)
+				tablewkt	1+((kcount2-1)/20) + gkswing, kcount2, gi1+kcount1	;WRITE NEW VALUE
+			loop_le	kcount2,10,5*16,loop2	;LOOP BACK TO LABEL FOR EACH PATTERN COLUMN
+		loop_lt	kcount1,1,6,loop1		;LOOP BACK TO LABEL FOR EACH PATTERN ROW
+	endif
 	
-	ktrig	timedseq		ktimpnt,gi3, kp1, kp2,kp3, kp4						;CREATE NOTE TRIGGERS AND P-FIELDS FOR SOUND 3 FROM FUNCTION TABLE gi03 
-	;		OPCODE 		TRIGGER | MINTIM | MAXNUM | INSNUM | WHEN | DUR | P4 | P5
-			schedkwhen	ktrig,       0,       0,      2,       0,   kp3,   kp4, 3
-	
-	ktrig	timedseq		ktimpnt,gi4, kp1, kp2,kp3, kp4						;CREATE NOTE TRIGGERS AND P-FIELDS FOR SOUND 4 FROM FUNCTION TABLE gi04 
-	;		OPCODE 		TRIGGER | MINTIM | MAXNUM | INSNUM | WHEN | DUR | P4 | P5
-			schedkwhen 	ktrig,       0,       0,      2,       0,   kp3,   kp4, 4
-	
-	ktrig	timedseq		ktimpnt,gi5, kp1, kp2,kp3, kp4						;CREATE NOTE TRIGGERS AND P-FIELDS FOR SOUND 5 FROM FUNCTION TABLE gi05 
-	;		OPCODE 		TRIGGER | MINTIM | MAXNUM | INSNUM | WHEN | DUR | P4 | P5
-			schedkwhen	ktrig,       0,       0,      2,       0,   kp3,   kp4, 5
-	
-	ktrig	timedseq		ktimpnt,gi6, kp1, kp2,kp3, kp4						;CREATE NOTE TRIGGERS AND P-FIELDS FOR SOUND 6 FROM FUNCTION TABLE gi06 
-	;		OPCODE 		TRIGGER | MINTIM | MAXNUM | INSNUM | WHEN | DUR | P4 | P5
-			schedkwhen 	ktrig,       0,       0,      2,       0,   kp3,   kp4, 6
+	;--WRITE AMPS--------------------------------------------------------------------------------------------------------
+	;DEFINE A MACRO...
+#define	WRITE_AMP(N)
+	#
+	ktrig	changed	gkamp$N
+	if ktrig==1 then
+		kcount=0
+		loop3$N:
+		tablewkt	gkamp$N, (5 * $N)-1, gi1+kcount
+		loop_lt	kcount,1,6,loop3$N
+	endif
+	#
+	;EXPAND MACRO MULTIPLE TIMES. ONCE FOR EACH AMPLITUDE FADER
+	$WRITE_AMP(1)
+	$WRITE_AMP(2)
+	$WRITE_AMP(3)
+	$WRITE_AMP(4)
+	$WRITE_AMP(5)
+	$WRITE_AMP(6)
+	$WRITE_AMP(7)
+	$WRITE_AMP(8)
+	$WRITE_AMP(9)
+	$WRITE_AMP(10)
+	$WRITE_AMP(11)
+	$WRITE_AMP(12)
+	$WRITE_AMP(13)
+	$WRITE_AMP(14)
+	$WRITE_AMP(15)
+	$WRITE_AMP(16)	
 endin
 
 instr	2	;INTERROGATE EVENT AND DETERMINE WHETHER A SOUND SHOULD BE PLAYED OR NOT
 	if	p4=1	then										;IF EVENT VARIABLE IS '1'...
-		event_i	"i", p1+p5, 0, p3						;...PLAY A SOUND
+		event_i	"i", p1+p6, 0, p3, p5	;...PLAY A SOUND. (p4=amplitude)
 	endif											;END OF CONDITIONAL BRANCH
 endin
 
@@ -219,14 +273,14 @@ instr	3	;SOUND 1 - BASS DRUM
 	aenv		expon	1,p3,0.001														;AMPLITUDE ENVELOPE - PERCUSSIVE DECAY
 	kcps		expon	200,p3,20															;PITCH GLISSANDO
 	;OUTPUT	OPCODE	AMPLITUDE                             | FREQUENCY | FUNCTION_TABLE
-	asig		oscil	aenv*i(gk1Gain)*i(gkMasterGain)*1.6,     kcps,       gisine 				;OSCILLATOR
+	asig		oscil	aenv*i(gk1Gain)*i(gkMasterGain)*1.6*p4,     kcps,       gisine 				;OSCILLATOR
 			outs		asig, asig														;SEND AUDIO TO OUTPUTS
 endin
 
 instr	4	;SOUND 2 - KALIMBA (BAR MODEL)
 	p3		=		2.6																;DEFINE DURATION FOR THIS SOUND
 	asig 	barmodel	1, 1, 80, 1, 0, 2.6, 0.5, 6000, 0.07									;KALIMBA SOUND CREATED USING barmodel OPCODE (SEE CSOUND MANUAL FOR MORE INFO.)
-			outs		asig*i(gk2Gain)*i(gkMasterGain), asig*i(gk2Gain)*i(gkMasterGain) 			;SEND AUDIO TO OUTPUTS AND ATTENUATE  USING GAIN CONTROLS
+			outs		asig*i(gk2Gain)*i(gkMasterGain)*p4, asig*i(gk2Gain)*i(gkMasterGain)*p4 			;SEND AUDIO TO OUTPUTS AND ATTENUATE  USING GAIN CONTROLS
 endin
 
 instr	5	;SOUND 3 - SNARE
@@ -238,14 +292,17 @@ instr	5	;SOUND 3 - SNARE
 	atne		oscil	aenv*i(gk3Gain)*i(gkMasterGain),kcps*ajit,gisine							;CREATE TONE COMPONENT
 	asig		sum		anse*0.5, atne*5													;MIX NOISE AND TONE SOUND COMPONENTS
 	ares 	vcomb 	asig, 0.02, 0.0035, .1												;PASS SIGNAL THROUGH ACOMB FILTER TO CREATE STATIC HARMONIC RESONANCE
-			outs		ares*aenv*i(gk3Gain)*i(gkMasterGain), ares*aenv*i(gk3Gain)*i(gkMasterGain)		;SEND AUDIO TO OUTPUTS, APPLY ENVELOPE AND ATTENTUATE USING GAIN CONTROLS 
+			outs		ares*aenv*i(gk3Gain)*i(gkMasterGain)*p4, ares*aenv*i(gk3Gain)*i(gkMasterGain)*p4		;SEND AUDIO TO OUTPUTS, APPLY ENVELOPE AND ATTENTUATE USING GAIN CONTROLS 
 endin
 
 instr	6	;SOUND 4 - CLOSED HI-HAT
-			turnoff2	7,0,0															;TURN OFF ALL INSTANCES OF instr 7 (OPEN HI-HAT)
+	ktime	timeinstk
+	if ktime<=1 then
+	  turnoff2 7,0,0	;TURN OFF ALL INSTANCES OF instr 7 (OPEN HI-HAT)
+	endif
 	p3		=		0.1																;DEFINE DURATION FOR THIS SOUND
 	aenv		expon	1,p3,0.001														;AMPLITUDE ENVELOPE - PERCUSSIVE DECAY
-	asig		noise	aenv*i(gk4Gain)*i(gkMasterGain), 0										;CREATE SOUND FOR CLOSED HI-HAT
+	asig		noise	aenv*i(gk4Gain)*i(gkMasterGain)*p4, 0										;CREATE SOUND FOR CLOSED HI-HAT
 	asig		buthp	asig, 7000														;HIGHPASS FILTER SOUND
 			outs		asig, asig														;SEND AUDIO TO OUTPUTS
 endin
@@ -253,23 +310,15 @@ endin
 instr	7	;SOUND 5 - OPEN HI-HAT
 	p3		=		1																;DEFINE DURATION FOR THIS SOUND
 	aenv		expon	1,p3,0.001														;AMPLITUDE ENVELOPE - PERCUSSIVE DECAY
-	asig		noise	aenv*i(gk5Gain)*i(gkMasterGain), 0										;CREATE SOUND FOR CLOSED HI-HAT
+	asig		noise	aenv*i(gk5Gain)*i(gkMasterGain)*p4, 0										;CREATE SOUND FOR CLOSED HI-HAT
 	asig		buthp	asig, 7000														;HIGHPASS FILTER SOUND	
 			outs		asig, asig														;SEND AUDIO TO OUTPUTS
 endin
 
 instr	8	;SOUND 6 - TAMBOURINE
 	p3		=		0.5																;DEFINE DURATION FOR THIS SOUND
-	asig		tambourine	i(gk6Gain)*i(gkMasterGain)*0.3,0.01 ,32, 0.47, 0, 2300 , 5600, 8000		;TAMBOURINE SOUND CREATED USING tambourine PHYSICAL MODELLING OPCODE (SEE CSOUND MANUAL FOR MORE INFO.)
+	asig		tambourine	i(gk6Gain)*i(gkMasterGain)*0.3*p4,0.01 ,32, 0.47, 0, 2300 , 5600, 8000		;TAMBOURINE SOUND CREATED USING tambourine PHYSICAL MODELLING OPCODE (SEE CSOUND MANUAL FOR MORE INFO.)
 			outs		asig, asig														;SEND AUDIO TO OUTPUTS
-endin
-
-instr	100	;COPY TABLE 1 TO ALL OTHER TABLES (PERFORMED ONCE AT THE BEGINNING OF THE PERFORMANCE)
-		tableicopy	gi2, gi1
-		tableicopy	gi3, gi1
-		tableicopy	gi4, gi1
-		tableicopy	gi5, gi1
-		tableicopy	gi6, gi1
 endin
 
 instr	101	;SET INITIAL PATTERN, init Gain sliders and BPM
@@ -354,18 +403,18 @@ endin
 </CsInstruments>
 <CsScore>
 i  10 0	3600		;GUI
-
-i 100 0 0			;TRIGGER INITIALISATION PASS IN INSTR 100 AT THE BEGINNING OF THE PERFORMANCE
 i 101 0 0			;SET INITIAL PATTERN
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>592</x>
- <y>125</y>
- <width>1087</width>
- <height>237</height>
+ <x>0</x>
+ <y>0</y>
+ <width>1055</width>
+ <height>348</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -377,8 +426,8 @@ i 101 0 0			;SET INITIAL PATTERN
   <objectName/>
   <x>2</x>
   <y>2</y>
-  <width>520</width>
-  <height>230</height>
+  <width>519</width>
+  <height>346</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -404,10 +453,10 @@ i 101 0 0			;SET INITIAL PATTERN
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
-  <x>8</x>
-  <y>10</y>
-  <width>80</width>
-  <height>26</height>
+  <x>6</x>
+  <y>9</y>
+  <width>86</width>
+  <height>38</height>
   <uuid>{04d44ebe-12eb-4bb0-a3f5-9e4fd3e7830e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -415,7 +464,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>  On / Off</text>
+  <text>  On/Off</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
@@ -436,7 +485,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.29167607</xValue>
+  <xValue>0.45833313</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -593,7 +642,7 @@ i 101 0 0			;SET INITIAL PATTERN
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>379</x>
+  <x>380</x>
   <y>36</y>
   <width>100</width>
   <height>25</height>
@@ -845,8 +894,8 @@ i 101 0 0			;SET INITIAL PATTERN
   <objectName/>
   <x>523</x>
   <y>2</y>
-  <width>553</width>
-  <height>230</height>
+  <width>532</width>
+  <height>271</height>
   <uuid>{793616e9-fcef-413e-8cea-62f867ee7fe0}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -874,8 +923,8 @@ i 101 0 0			;SET INITIAL PATTERN
   <objectName/>
   <x>526</x>
   <y>18</y>
-  <width>547</width>
-  <height>212</height>
+  <width>523</width>
+  <height>250</height>
   <uuid>{85ea7331-9e49-47fd-a9fd-6deefcf11558}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -932,8 +981,8 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
-  <x>90</x>
-  <y>10</y>
+  <x>101</x>
+  <y>8</y>
   <width>80</width>
   <height>26</height>
   <uuid>{87532365-175f-42d5-9a79-95db88d67a73}</uuid>
@@ -2889,7 +2938,342 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
+ <bsbObject version="2" type="BSBHSlider">
+  <objectName>swing</objectName>
+  <x>345</x>
+  <y>238</y>
+  <width>170</width>
+  <height>27</height>
+  <uuid>{6332920d-9140-4a9c-9896-629c97fc2b13}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>0.12500000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>385</x>
+  <y>266</y>
+  <width>100</width>
+  <height>25</height>
+  <uuid>{f05bcee2-001d-4a80-9fe5-d795d2418a18}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Swing</label>
+  <alignment>center</alignment>
+  <font>Helvetica</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp1</objectName>
+  <x>95</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{6f672087-6675-4e42-9d0d-cd06b815a63a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp2</objectName>
+  <x>111</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{29b49cbe-2b94-4aac-82be-1e72b984231e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp3</objectName>
+  <x>127</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{3301b203-06aa-4d22-882e-662bae7779c0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp4</objectName>
+  <x>142</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{f322adc0-2643-41cf-b730-3b6f4886e37c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp5</objectName>
+  <x>157</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{81af2e76-a3f9-403b-b452-0a409608c3a6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp6</objectName>
+  <x>172</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{31f3a256-de53-4b3c-a30b-168c31d795dd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp7</objectName>
+  <x>187</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{cdc61c97-fa5e-4af6-9329-8b179fae99fc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp8</objectName>
+  <x>202</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{b533c2b8-bff5-41be-b585-04b171cc7647}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp9</objectName>
+  <x>217</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{11b6ecd4-2b96-46bc-b71a-95a87abc3647}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp10</objectName>
+  <x>232</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{61c36160-3754-4a23-90d6-2129e94e1704}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp11</objectName>
+  <x>247</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{e4c4a3ba-5696-4aaa-b076-f9dd05b42ad2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp12</objectName>
+  <x>262</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{3108dabc-8056-4b9c-ac27-19827e160c19}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp13</objectName>
+  <x>277</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{76f84dfd-e882-45f1-a5d8-bcdfe5ca5915}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp14</objectName>
+  <x>292</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{413cb20b-38aa-40c5-96b1-10f1beb32e2a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp15</objectName>
+  <x>307</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{38731aa0-f78d-4ec9-814f-1818cabe0f7b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>amp16</objectName>
+  <x>322</x>
+  <y>218</y>
+  <width>17</width>
+  <height>85</height>
+  <uuid>{32ab8309-fc2c-4ad7-b77a-477b40da4cea}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

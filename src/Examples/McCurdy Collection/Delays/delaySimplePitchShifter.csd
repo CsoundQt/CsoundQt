@@ -23,7 +23,7 @@
 </CsOptions>
 <CsInstruments>
 sr		= 44100		;SAMPLE RATE
-ksmps	= 1			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps	= 10			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -92,10 +92,10 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>73</x>
- <y>206</y>
- <width>951</width>
- <height>302</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -136,8 +136,8 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <objectName/>
   <x>5</x>
   <y>5</y>
-  <width>100</width>
-  <height>30</height>
+  <width>112</width>
+  <height>32</height>
   <uuid>{487d5181-d838-4cce-9628-317fefc350cb}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -297,7 +297,7 @@ Very short settings of this parameter can lead to harmonic distortions of the in
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>-2.976</label>
+  <label>3.264</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -357,7 +357,7 @@ Very short settings of this parameter can lead to harmonic distortions of the in
   <midicc>0</midicc>
   <minimum>-24.00000000</minimum>
   <maximum>24.00000000</maximum>
-  <value>-2.97600000</value>
+  <value>3.26400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>

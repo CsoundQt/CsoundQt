@@ -57,6 +57,7 @@ giAmpWindow1	ftgen	11, 0, 131073, 9, 0.5, 1, 0		;HALF SINE
 giAmpWindow2	ftgen	12, 0, 131073, 20, 3, 1			;BARTLETT (TRIANGLE)
 giAmpWindow3	ftgen	13, 0, 131073, 20,  5, 1			;BLACKMAN-HARRIS
 
+giLongSine		ftgen	0, 0, 131073, 9, 1200, 1, 0
 
 instr	1	;GUI
 	ktrig	metro	10
@@ -83,6 +84,8 @@ instr	1	;GUI
 		ktrig_layer	changed	gklayers
 					schedkwhen	ktrig_layer, 0, 0, 2, 0, .1		;RESTART INSTRUMENT 2
 
+		gkSineOnOff	invalue	"SineOnOff"
+		
 		;MENUS
 		gkAmpWindow	invalue	"AmpWindow"
 
@@ -143,8 +146,7 @@ instr	2
 endin
 
 instr	3
-
-		kSwitch	changed		gkAmpWindow, gklayers	
+		kSwitch	changed		gkAmpWindow, gklayers,gkSineOnOff	
 
 		if gkfile_new == 1 || kSwitch == 1 then
 			gkfile_new = 0
@@ -152,268 +154,61 @@ instr	3
 		endif
 
 	REINIT:
-	ifn	=	giloop
-
-	ilen			=	nsamp(ifn)
+    	if	i(gkSineOnOff)==1 then
+    		ifn	=	giLongSine
+    		ilen	=	ftlen(ifn)
+    	else
+    		ifn	=	giloop
+		ilen			=	nsamp(ifn)
+	endif
+	
 	iAmpWindow	=	i(gkAmpWindow)+11
 	kSpeedRatio	=	sr*gkGSpeed/ilen	;PLAYBACK SPEED RATIO BASED ON FILE LENGTH AND 'GLOBAL SPEED' SLIDER
 	ilayers		=	i(gklayers)
 
 	kupdate		metro	20
-	if	gklayers==2		then
-		kspeed1	phasor	gkrate
-		kspeed2	phasor	gkrate, 1/ilayers
-		kenv1	tablei	kspeed1, iAmpWindow, 1
-		kenv2	tablei	kspeed2, iAmpWindow, 1
+	
+	
+	
+	aout		init	0			;ACCUMULATING AUDIO VARIABLE INITIALISED
 
-		if kupdate == 1	then
-				outvalue	"Amp1", kenv1
-				outvalue	"Amp2", kenv2
-		endif
-				
-		kratio1	=		cpsoct(8+(kspeed1*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio2	=		cpsoct(8+(kspeed2*ilayers)-(ilayers*.5))/cpsoct(8)		
-		aptr1	phasor	kratio1*kSpeedRatio
-		aptr2	phasor	kratio2*kSpeedRatio
-		asig1	tablei	aptr1*ilen, ifn
-		asig2	tablei	aptr2*ilen, ifn		
-		aout		sum		asig1*kenv1*gk1, asig2*kenv2*gk2
-	elseif	gklayers==3	then
-		kspeed1	phasor	gkrate
-		kspeed2	phasor	gkrate, 1/ilayers
-		kspeed3	phasor	gkrate, 2/ilayers
-		kenv1	tablei	kspeed1, iAmpWindow, 1
-		kenv2	tablei	kspeed2, iAmpWindow, 1
-		kenv3	tablei	kspeed3, iAmpWindow, 1
-
-		if kupdate == 1	then
-				outvalue	"Amp1", kenv1
-				outvalue	"Amp2", kenv2
-				outvalue	"Amp3", kenv3
-		endif
-
-		kratio1	=		cpsoct(8+(kspeed1*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio2	=		cpsoct(8+(kspeed2*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio3	=		cpsoct(8+(kspeed3*ilayers)-(ilayers*.5))/cpsoct(8)
-		aptr1	phasor	kratio1*kSpeedRatio
-		aptr2	phasor	kratio2*kSpeedRatio
-		aptr3	phasor	kratio3*kSpeedRatio
-		asig1	tablei	aptr1*ilen, ifn
-		asig2	tablei	aptr2*ilen, ifn		
-		asig3	tablei	aptr3*ilen, ifn		
-		aout		sum		asig1*kenv1*gk1, asig2*kenv2*gk2, asig3*kenv3*gk3
-	elseif	gklayers==4	then
-		kspeed1	phasor	gkrate
-		kspeed2	phasor	gkrate, 1/ilayers
-		kspeed3	phasor	gkrate, 2/ilayers
-		kspeed4	phasor	gkrate, 3/ilayers
-		kenv1	tablei	kspeed1, iAmpWindow, 1
-		kenv2	tablei	kspeed2, iAmpWindow, 1
-		kenv3	tablei	kspeed3, iAmpWindow, 1
-		kenv4	tablei	kspeed4, iAmpWindow, 1
-
-		if kupdate == 1 	then
-				outvalue	"Amp1", kenv1
-				outvalue	"Amp2", kenv2
-				outvalue	"Amp3", kenv3
-				outvalue	"Amp4", kenv4
-		endif
-
-		kratio1	=		cpsoct(8+(kspeed1*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio2	=		cpsoct(8+(kspeed2*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio3	=		cpsoct(8+(kspeed3*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio4	=		cpsoct(8+(kspeed4*ilayers)-(ilayers*.5))/cpsoct(8)
-		aptr1	phasor	kratio1*kSpeedRatio
-		aptr2	phasor	kratio2*kSpeedRatio
-		aptr3	phasor	kratio3*kSpeedRatio
-		aptr4	phasor	kratio4*kSpeedRatio
-		asig1	tablei	aptr1*ilen, ifn
-		asig2	tablei	aptr2*ilen, ifn		
-		asig3	tablei	aptr3*ilen, ifn		
-		asig4	tablei	aptr4*ilen, ifn		
-		aout		sum		asig1*kenv1*gk1, asig2*kenv2*gk2, asig3*kenv3*gk3, asig4*kenv4*gk4      
-	elseif	gklayers==5	then
-		kspeed1	phasor	gkrate
-		kspeed2	phasor	gkrate, 1/ilayers
-		kspeed3	phasor	gkrate, 2/ilayers
-		kspeed4	phasor	gkrate, 3/ilayers
-		kspeed5	phasor	gkrate, 4/ilayers
-		kenv1	tablei	kspeed1, iAmpWindow, 1
-		kenv2	tablei	kspeed2, iAmpWindow, 1
-		kenv3	tablei	kspeed3, iAmpWindow, 1
-		kenv4	tablei	kspeed4, iAmpWindow, 1
-		kenv5	tablei	kspeed5, iAmpWindow, 1
-
-		if kupdate == 1 	then
-				outvalue	"Amp1", kenv1
-				outvalue	"Amp2", kenv2
-				outvalue	"Amp3", kenv3
-				outvalue	"Amp4", kenv4
-				outvalue	"Amp5", kenv5
-		endif
-
-		kratio1	=		cpsoct(8+(kspeed1*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio2	=		cpsoct(8+(kspeed2*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio3	=		cpsoct(8+(kspeed3*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio4	=		cpsoct(8+(kspeed4*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio5	=		cpsoct(8+(kspeed5*ilayers)-(ilayers*.5))/cpsoct(8)
-		aptr1	phasor	kratio1*kSpeedRatio
-		aptr2	phasor	kratio2*kSpeedRatio
-		aptr3	phasor	kratio3*kSpeedRatio
-		aptr4	phasor	kratio4*kSpeedRatio
-		aptr5	phasor	kratio5*kSpeedRatio
-		asig1	tablei	aptr1*ilen, ifn
-		asig2	tablei	aptr2*ilen, ifn		
-		asig3	tablei	aptr3*ilen, ifn		
-		asig4	tablei	aptr4*ilen, ifn		
-		asig5	tablei	aptr5*ilen, ifn		
-		aout		sum		asig1*kenv1*gk1, asig2*kenv2*gk2, asig3*kenv3*gk3, asig4*kenv4*gk4, asig5*kenv5*gk5
-	elseif	gklayers==6	then
-		kspeed1	phasor	gkrate
-		kspeed2	phasor	gkrate, 1/ilayers
-		kspeed3	phasor	gkrate, 2/ilayers
-		kspeed4	phasor	gkrate, 3/ilayers
-		kspeed5	phasor	gkrate, 4/ilayers
-		kspeed6	phasor	gkrate, 5/ilayers
-		kenv1	tablei	kspeed1, iAmpWindow, 1
-		kenv2	tablei	kspeed2, iAmpWindow, 1
-		kenv3	tablei	kspeed3, iAmpWindow, 1
-		kenv4	tablei	kspeed4, iAmpWindow, 1
-		kenv5	tablei	kspeed5, iAmpWindow, 1
-		kenv6	tablei	kspeed6, iAmpWindow, 1
-
-		if kupdate == 1	 then
-				outvalue	"Amp1", kenv1
-				outvalue	"Amp2", kenv2
-				outvalue	"Amp3", kenv3
-				outvalue	"Amp4", kenv4
-				outvalue	"Amp5", kenv5
-				outvalue	"Amp6", kenv6
-		endif
-
-		kratio1	=		cpsoct(8+(kspeed1*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio2	=		cpsoct(8+(kspeed2*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio3	=		cpsoct(8+(kspeed3*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio4	=		cpsoct(8+(kspeed4*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio5	=		cpsoct(8+(kspeed5*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio6	=		cpsoct(8+(kspeed6*ilayers)-(ilayers*.5))/cpsoct(8)
-		aptr1	phasor	kratio1*kSpeedRatio
-		aptr2	phasor	kratio2*kSpeedRatio
-		aptr3	phasor	kratio3*kSpeedRatio
-		aptr4	phasor	kratio4*kSpeedRatio
-		aptr5	phasor	kratio5*kSpeedRatio
-		aptr6	phasor	kratio6*kSpeedRatio
-		asig1	tablei	aptr1*ilen, ifn
-		asig2	tablei	aptr2*ilen, ifn		
-		asig3	tablei	aptr3*ilen, ifn		
-		asig4	tablei	aptr4*ilen, ifn		
-		asig5	tablei	aptr5*ilen, ifn		
-		asig6	tablei	aptr6*ilen, ifn		
-		aout		sum		asig1*kenv1*gk1, asig2*kenv2*gk2, asig3*kenv3*gk3, asig4*kenv4*gk4, asig5*kenv5*gk5, asig6*kenv6*gk6
-	elseif	gklayers==7	then
-		kspeed1	phasor	gkrate
-		kspeed2	phasor	gkrate, 1/ilayers
-		kspeed3	phasor	gkrate, 2/ilayers
-		kspeed4	phasor	gkrate, 3/ilayers
-		kspeed5	phasor	gkrate, 4/ilayers
-		kspeed6	phasor	gkrate, 5/ilayers
-		kspeed7	phasor	gkrate, 6/ilayers
-		kenv1	tablei	kspeed1, iAmpWindow, 1
-		kenv2	tablei	kspeed2, iAmpWindow, 1
-		kenv3	tablei	kspeed3, iAmpWindow, 1
-		kenv4	tablei	kspeed4, iAmpWindow, 1
-		kenv5	tablei	kspeed5, iAmpWindow, 1
-		kenv6	tablei	kspeed6, iAmpWindow, 1
-		kenv7	tablei	kspeed7, iAmpWindow, 1
-
-		if kupdate == 1 	then
-				outvalue	"Amp1", kenv1
-				outvalue	"Amp2", kenv2
-				outvalue	"Amp3", kenv3
-				outvalue	"Amp4", kenv4
-				outvalue	"Amp5", kenv5
-				outvalue	"Amp6", kenv6
-				outvalue	"Amp7", kenv7
-		endif
-
-		kratio1	=		cpsoct(8+(kspeed1*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio2	=		cpsoct(8+(kspeed2*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio3	=		cpsoct(8+(kspeed3*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio4	=		cpsoct(8+(kspeed4*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio5	=		cpsoct(8+(kspeed5*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio6	=		cpsoct(8+(kspeed6*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio7	=		cpsoct(8+(kspeed7*ilayers)-(ilayers*.5))/cpsoct(8)
-		aptr1	phasor	kratio1*kSpeedRatio
-		aptr2	phasor	kratio2*kSpeedRatio
-		aptr3	phasor	kratio3*kSpeedRatio
-		aptr4	phasor	kratio4*kSpeedRatio
-		aptr5	phasor	kratio5*kSpeedRatio
-		aptr6	phasor	kratio6*kSpeedRatio
-		aptr7	phasor	kratio7*kSpeedRatio
-		asig1	tablei	aptr1*ilen, ifn
-		asig2	tablei	aptr2*ilen, ifn		
-		asig3	tablei	aptr3*ilen, ifn		
-		asig4	tablei	aptr4*ilen, ifn		
-		asig5	tablei	aptr5*ilen, ifn		
-		asig6	tablei	aptr6*ilen, ifn		
-		asig7	tablei	aptr7*ilen, ifn		
-		aout		sum		asig1*kenv1*gk1, asig2*kenv2*gk2, asig3*kenv3*gk3, asig4*kenv4*gk4, asig5*kenv5*gk5, asig6*kenv6*gk6, asig7*kenv7*gk7
-	elseif	gklayers==8	then
-		kspeed1	phasor	gkrate
-		kspeed2	phasor	gkrate, 1/ilayers
-		kspeed3	phasor	gkrate, 2/ilayers
-		kspeed4	phasor	gkrate, 3/ilayers
-		kspeed5	phasor	gkrate, 4/ilayers
-		kspeed6	phasor	gkrate, 5/ilayers
-		kspeed7	phasor	gkrate, 6/ilayers
-		kspeed8	phasor	gkrate, 7/ilayers
-		kenv1	tablei	kspeed1, iAmpWindow, 1
-		kenv2	tablei	kspeed2, iAmpWindow, 1
-		kenv3	tablei	kspeed3, iAmpWindow, 1
-		kenv4	tablei	kspeed4, iAmpWindow, 1
-		kenv5	tablei	kspeed5, iAmpWindow, 1
-		kenv6	tablei	kspeed6, iAmpWindow, 1
-		kenv7	tablei	kspeed7, iAmpWindow, 1
-		kenv8	tablei	kspeed8, iAmpWindow, 1
-
-		if kupdate == 1	 then
-				outvalue	"Amp1", kenv1
-				outvalue	"Amp2", kenv2
-				outvalue	"Amp3", kenv3
-				outvalue	"Amp4", kenv4
-				outvalue	"Amp5", kenv5
-				outvalue	"Amp6", kenv6
-				outvalue	"Amp7", kenv7
-				outvalue	"Amp8", kenv8
-		endif
-
-		kratio1	=		cpsoct(8+(kspeed1*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio2	=		cpsoct(8+(kspeed2*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio3	=		cpsoct(8+(kspeed3*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio4	=		cpsoct(8+(kspeed4*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio5	=		cpsoct(8+(kspeed5*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio6	=		cpsoct(8+(kspeed6*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio7	=		cpsoct(8+(kspeed7*ilayers)-(ilayers*.5))/cpsoct(8)
-		kratio8	=		cpsoct(8+(kspeed8*ilayers)-(ilayers*.5))/cpsoct(8)
-		aptr1	phasor	kratio1*kSpeedRatio
-		aptr2	phasor	kratio2*kSpeedRatio
-		aptr3	phasor	kratio3*kSpeedRatio
-		aptr4	phasor	kratio4*kSpeedRatio
-		aptr5	phasor	kratio5*kSpeedRatio
-		aptr6	phasor	kratio6*kSpeedRatio
-		aptr7	phasor	kratio7*kSpeedRatio
-		aptr8	phasor	kratio8*kSpeedRatio
-		asig1	tablei	aptr1*ilen, ifn
-		asig2	tablei	aptr2*ilen, ifn		
-		asig3	tablei	aptr3*ilen, ifn		
-		asig4	tablei	aptr4*ilen, ifn		
-		asig5	tablei	aptr5*ilen, ifn		
-		asig6	tablei	aptr6*ilen, ifn		
-		asig7	tablei	aptr7*ilen, ifn		
-		asig8	tablei	aptr8*ilen, ifn		
-		aout		sum		asig1*kenv1*gk1, asig2*kenv2*gk2, asig3*kenv3*gk3, asig4*kenv4*gk4, asig5*kenv5*gk5, asig6*kenv6*gk6, asig7*kenv7*gk7, asig8*kenv8*gk8
+	;CREATE FIRST LAYER
+	kspeed1	phasor	gkrate				;PHASOR THAT TRACES AMPLITUDE ENVELOPE
+	kenv1	tablei	kspeed1, iAmpWindow, 1		;AMPLITUDE ENVELOPE
+	if kupdate == 1	then
+			outvalue	"Amp1", kenv1
 	endif
-				outs		aout*gkOutGain, aout*gkOutGain
+	kratio1	=		octave((kspeed1*ilayers)-(ilayers*.5))	;MOVING PLAYBACK RATIO
+	aptr1	phasor	kratio1*kSpeedRatio		;PHASOR THAT TRACES MOVEMENT THROUGH THE SOUND FILE
+	asig1	tablei	aptr1*ilen, ifn			;READ AUDIO FROM TABLE
+	aout	=	aout + (asig1*kenv1*gk1)	;ADD AUDIO TO ACCUMULATING AUDIO VARIABLE
+
+;MACRO DEFINED FOR ALL SUBSEQUENT LAYERS
+#define	LAYER(N)
+	#
+	kspeed$N	phasor	gkrate, ($N-1)/ilayers				;PHASOR THAT TRACES AMPLITUDE ENVELOPE
+	kenv$N	tablei	kspeed$N, iAmpWindow, 1                                 ;AMPLITUDE ENVELOPE                   
+	if kupdate == 1	then
+			outvalue	"Amp$N", kenv$N
+	endif
+	kratio$N	=	octave((kspeed$N*ilayers)-(ilayers*.5))		;MOVING PLAYBACK RATIO
+	aptr$N		phasor	kratio$N*kSpeedRatio				;PHASOR THAT TRACES MOVEMENT THROUGH THE SOUND FILE
+	asig$N		tablei	aptr$N*ilen, ifn		                ;READ AUDIO FROM TABLE                             
+	aout	=	aout + (asig$N*kenv$N*gk$N)                             ;ADD AUDIO TO ACCUMULATING AUDIO VARIABLE          
+	if	gklayers==$N	goto	FINISH					;IF THIS IS THE FINAL LAYER JUMP TO 'FINISH' LABEL
+	#
+	;EXECUTE MACRO MULTIPLE TIMES
+	$LAYER(2)
+	$LAYER(3)
+	$LAYER(4)
+	$LAYER(5)
+	$LAYER(6)
+	$LAYER(7)
+	$LAYER(8)
+
+	FINISH:									;'FINISH' LABEL
+	outs	aout*gkOutGain, aout*gkOutGain					;SEND AUDIO TO OUTPUTS
+	clear	aout								;CLEAR ACCUMULATING AUDIO VARIABLE
 endin                                    
 </CsInstruments>
 <CsScore>
@@ -422,13 +217,14 @@ i 1		0		3600		;GUI
 </CsScore>
 </CsoundSynthesizer>
 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>556</x>
- <y>281</y>
+ <y>437</y>
  <width>809</width>
- <height>327</height>
+ <height>325</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -506,7 +302,7 @@ i 1		0		3600		;GUI
   <midicc>0</midicc>
   <minimum>-0.10000000</minimum>
   <maximum>0.10000000</maximum>
-  <value>0.00040000</value>
+  <value>0.00880000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -522,7 +318,7 @@ i 1		0		3600		;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.000</label>
+  <label>0.009</label>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
@@ -674,7 +470,7 @@ i 1		0		3600		;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.000</label>
+  <label>1.000</label>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
@@ -720,7 +516,7 @@ i 1		0		3600		;GUI
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>1</selectedIndex>
+  <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -1148,7 +944,7 @@ i 1		0		3600		;GUI
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.55833333</xValue>
-  <yValue>0.00660009</yValue>
+  <yValue>0.41300270</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1181,7 +977,7 @@ i 1		0		3600		;GUI
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.55833333</xValue>
-  <yValue>0.25660008</yValue>
+  <yValue>0.73008597</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1214,7 +1010,7 @@ i 1		0		3600		;GUI
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.55833333</xValue>
-  <yValue>0.50660008</yValue>
+  <yValue>0.93602026</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1247,7 +1043,7 @@ i 1		0		3600		;GUI
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.55833333</xValue>
-  <yValue>0.75660008</yValue>
+  <yValue>0.99945396</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1280,7 +1076,7 @@ i 1		0		3600		;GUI
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.55833333</xValue>
-  <yValue>0.99339986</yValue>
+  <yValue>0.91072983</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1313,7 +1109,7 @@ i 1		0		3600		;GUI
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.55833333</xValue>
-  <yValue>0.74339986</yValue>
+  <yValue>0.68335539</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1346,7 +1142,7 @@ i 1		0		3600		;GUI
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.55833333</xValue>
-  <yValue>0.49339986</yValue>
+  <yValue>0.35194626</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1379,7 +1175,7 @@ i 1		0		3600		;GUI
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.55833333</xValue>
-  <yValue>0.24339986</yValue>
+  <yValue>0.03304354</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1872,7 +1668,7 @@ i 1		0		3600		;GUI
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>sine.wav</stringvalue>
+  <stringvalue>MFEM.wav</stringvalue>
   <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
@@ -1889,7 +1685,7 @@ i 1		0		3600		;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>sine.wav</label>
+  <label>MFEM.wav</label>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
@@ -1910,7 +1706,7 @@ i 1		0		3600		;GUI
   <objectName/>
   <x>8</x>
   <y>10</y>
-  <width>100</width>
+  <width>109</width>
   <height>30</height>
   <uuid>{acd14897-b49e-4b3e-93d7-fa6e52da70aa}</uuid>
   <visible>true</visible>
@@ -1923,7 +1719,26 @@ i 1		0		3600		;GUI
   <image>/</image>
   <eventLine>i3 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton">
+  <objectName>SineOnOff</objectName>
+  <x>340</x>
+  <y>214</y>
+  <width>164</width>
+  <height>32</height>
+  <uuid>{134b8425-c4e0-4077-9630-678ac8d71669}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Sine Wave On / Off</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>true</latch>
+  <latched>false</latched>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
