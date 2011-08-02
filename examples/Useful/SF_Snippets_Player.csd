@@ -255,10 +255,10 @@ i 1 0 10000
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>72</x>
- <y>179</y>
- <width>400</width>
- <height>200</height>
+ <x>73</x>
+ <y>206</y>
+ <width>444</width>
+ <height>287</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="nobackground">
@@ -276,7 +276,7 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/AkkordeonMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/GlissMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/OrgelMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/PassageMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/SpracheMono.aiff</label>
+  <label/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -305,7 +305,7 @@ i 1 0 10000
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/AkkordeonMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/GlissMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/OrgelMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/PassageMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/SpracheMono.aiff</stringvalue>
+  <stringvalue/>
   <text>Select Files</text>
   <image>/</image>
   <eventLine/>
@@ -335,14 +335,13 @@ i 1 0 10000
   <objectName>messages</objectName>
   <x>193</x>
   <y>171</y>
-  <width>251</width>
+  <width>249</width>
   <height>57</height>
   <uuid>{daf328dd-4a90-4fed-8bb3-ba3b230a754d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>Playing file number 1:
-'AkkordeonMono.aiff'.</label>
+  <label/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -376,8 +375,8 @@ i 1 0 10000
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.30037698</xValue>
-  <yValue>0.30037698</yValue>
+  <xValue>0.29483056</xValue>
+  <yValue>0.29483056</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -442,8 +441,8 @@ i 1 0 10000
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.30037698</xValue>
-  <yValue>0.30037698</yValue>
+  <xValue>0.29875153</xValue>
+  <yValue>0.29875153</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -655,7 +654,7 @@ i 1 0 10000
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Stop</objectName>
@@ -784,37 +783,3 @@ i 1 0 10000
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 72 179 400 200
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView nobackground {52685, 65535, 31611}
-ioText {11, 135} {149, 26} edit 0.000000 0.00100 "_MBrowse"  "Arial" 12 {0, 0, 0} {58624, 58624, 58624} falsenoborder /home/linux/Joachim/Materialien/SamplesKlangbearbeitung/AkkordeonMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/GlissMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/OrgelMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/PassageMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/SpracheMono.aiff
-ioButton {161, 134} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
-ioButton {12, 197} {100, 30} value 1.000000 "next" "NEXT!" "/" 
-ioText {193, 171} {251, 57} display 0.000000 0.00100 "messages" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Playing file number 1:Â¬'AkkordeonMono.aiff'.
-ioMeter {11, 239} {225, 20} {0, 59904, 0} "outL" 0.300377 "outL" 0.300377 fill 1 0 mouse
-ioMeter {230, 239} {25, 20} {50176, 3584, 3072} "outLover" 0.000000 "outLover" 0.000000 fill 1 0 mouse
-ioMeter {11, 265} {225, 20} {0, 59904, 0} "outR" 0.300377 "outR" 0.300377 fill 1 0 mouse
-ioMeter {230, 265} {25, 20} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
-ioText {124, 199} {56, 26} editnum 1.000000 1.000000 "nextfil" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 1.000000
-ioText {11, 169} {100, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Play next file
-ioText {123, 170} {63, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Next file
-ioText {9, 9} {431, 39} label 0.000000 0.00100 "" center "DejaVu Sans" 26 {0, 0, 0} {58624, 58624, 58624} nobackground noborder SOUNDFILE SNIPPETS PLAYER
-ioText {8, 53} {434, 71} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Load the sound snippets. Press START. Push the NEXT! button or the space bar (make sure the focus is in this panel). You can reset the number of the next file by typing in the spin box, or by the 'p'/'n' keys.
-ioButton {269, 134} {100, 30} value 1.000000 "_Play" "START" "/" 
-ioButton {379, 134} {63, 30} value 1.000000 "_Stop" "STOP" "/" 
-ioSlider {267, 263} {176, 24} -12.000000 12.000000 -2.045455 gaindb
-ioText {267, 236} {45, 26} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Gain
-ioText {397, 235} {45, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder dB
-ioText {314, 236} {80, 25} display -2.045000 0.00100 "gaindb" right "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder -2.045
-</MacGUI>

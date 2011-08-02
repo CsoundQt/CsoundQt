@@ -4,7 +4,7 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 16
+ksmps = 128
 nchnls = 2; change this in respect to your audio device
 0dbfs = 1
 
@@ -125,9 +125,7 @@ krecstat	=		1
 		outvalue	"message", "Recording..."
 kinstr		=		100 + kchnsum
 krecinstr	=		kinstr
-		event		"i", kinstr, 0, p3, kformat, \
-				kchn1onoff, kchn2onoff, kchn3onoff, kchn4onoff, kchn5onoff, kchn6onoff, kchn7onoff, kchn8onoff, \
-				kchn1, kchn2, kchn3, kchn4, kchn5, kchn6, kchn7, kchn8
+		event		"i", kinstr, 0, p3, kformat, kchn1onoff, kchn2onoff, kchn3onoff, kchn4onoff, kchn5onoff, kchn6onoff, kchn7onoff, kchn8onoff, kchn1, kchn2, kchn3, kchn4, kchn5, kchn6, kchn7, kchn8
    elseif krecord == 1 && krecstat == 1 && krechanged == 1 then
 		outvalue	"message", "Can't start new record. Stop previous record first."
    endif
@@ -140,14 +138,47 @@ krecstat	=		0
 
 ;display
 kTrigDisp	metro		10; refresh rate of display
+ if kchn1 <= nchnls then ;this check is necessary (csound crashes if inch > nchnls)
 ain1pre	inch		kchn1
+ else
+ain1pre	=		0
+ endif
+ if kchn2 <= nchnls then
 ain2pre	inch		kchn2
+ else
+ain2pre	=		0
+ endif
+ if kchn3 <= nchnls then
 ain3pre	inch		kchn3
+ else
+ain3pre	=		0
+ endif
+ if kchn4 <= nchnls then
 ain4pre	inch		kchn4
+ else
+ain4pre	=		0
+ endif
+ if kchn5 <= nchnls then
 ain5pre	inch		kchn5
+ else
+ain5pre	=		0
+ endif
+ if kchn6 <= nchnls then
 ain6pre	inch		kchn6
+ else
+ain6pre	=		0
+ endif
+ if kchn7 <= nchnls then
 ain7pre	inch		kchn7
+ else
+ain7pre	=		0
+ endif
+ if kchn8 <= nchnls then
 ain8pre	inch		kchn8
+ else
+ain8pre	=		0
+ endif
+
 		ShowLED_a	"in1_pre", ain1pre, kTrigDisp, kampdisp, kdbrange
 		ShowLED_a	"in2_pre", ain2pre, kTrigDisp, kampdisp, kdbrange
 		ShowLED_a	"in3_pre", ain3pre, kTrigDisp, kampdisp, kdbrange
@@ -568,11 +599,12 @@ endin
 i 1 0 36000
 e
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>491</x>
- <y>65</y>
+ <x>495</x>
+ <y>32</y>
  <width>813</width>
  <height>730</height>
  <visible>true</visible>
@@ -592,7 +624,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>/Users/jh/Desktop/record.wav</label>
+  <label>/home/linux/Desktop/record.wav</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -603,9 +635,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>229</r>
+   <g>229</g>
+   <b>229</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -1170,7 +1202,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.59259300</xValue>
-  <yValue>0.18599693</yValue>
+  <yValue>0.26016641</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1236,7 +1268,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.59259300</xValue>
-  <yValue>0.18599693</yValue>
+  <yValue>0.29813814</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1952,7 +1984,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.59259300</xValue>
-  <yValue>0.56099695</yValue>
+  <yValue>0.10023991</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2018,7 +2050,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.59259300</xValue>
-  <yValue>0.56099695</yValue>
+  <yValue>0.13821165</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2629,7 +2661,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>204</label>
+  <label>131</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
@@ -2919,7 +2951,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>19</label>
+  <label>13</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
@@ -3015,7 +3047,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>-18.00 dB</label>
+  <label>+7.68 dB</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
@@ -3046,7 +3078,7 @@ e
   <midicc>-3</midicc>
   <minimum>-18.00000000</minimum>
   <maximum>18.00000000</maximum>
-  <value>-18.00000000</value>
+  <value>7.67647059</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3064,7 +3096,7 @@ e
   <midicc>-3</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
+  <stringvalue>/home/linux/Desktop/record.wav</stringvalue>
   <text>Output File</text>
   <image>/</image>
   <eventLine/>
@@ -3074,104 +3106,3 @@ e
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 491 65 813 730
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioText {27, 131} {324, 24} edit 0.000000 0.00100 "_Browse1"  "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} falsenoborder /Users/jh/Desktop/record.wav
-ioText {440, 559} {129, 33} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Post Fader
-ioText {443, 362} {129, 33} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Pre Fader
-ioText {434, 609} {164, 101} label 0.000000 0.00100 "" left "Lucida Grande" 10 {21504, 28672, 21248} {65280, 65280, 65280} nobackground noborder Note: You can also use the Record Button in the QuteCsound interface for quick simple recording on any csd.
-ioText {606, 296} {164, 390} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Records a soundfile (1-8 channels) with arbitrary input routing. The file will have as many channels as you select to record with the checkboxes. E.g. if you check channels 2, 3, 5 and 8 for recording, a sound file with 4 channels will be written. Set the nchnls in the orchestra header and select your audio device in the CsOptions or in the Configure dialog.
-ioMeter {398, 518} {27, 22} {50176, 3584, 3072} "in8over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {398, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in8_post" -inf fill 1 0 mouse
-ioMeter {344, 518} {27, 22} {50176, 3584, 3072} "in7over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {344, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in7_post" -inf fill 1 0 mouse
-ioMeter {292, 518} {27, 22} {50176, 3584, 3072} "in6over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {292, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in6_post" -inf fill 1 0 mouse
-ioMeter {238, 518} {27, 22} {50176, 3584, 3072} "in5over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {238, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in5_post" -inf fill 1 0 mouse
-ioMeter {182, 518} {27, 22} {50176, 3584, 3072} "in4over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {182, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in4_post" -inf fill 1 0 mouse
-ioMeter {129, 518} {27, 22} {50176, 3584, 3072} "in3over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {129, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in3_post" -inf fill 1 0 mouse
-ioMeter {75, 518} {27, 22} {50176, 3584, 3072} "in2over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {75, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in2_post" 0.185997 fill 1 0 mouse
-ioMeter {21, 518} {27, 22} {50176, 3584, 3072} "in1over_post" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {21, 536} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in1_post" 0.185997 fill 1 0 mouse
-ioText {435, 412} {167, 130} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder LED Display Properties
-ioText {457, 299} {129, 25} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Select Input Channels
-ioMenu {537, 502} {61, 26} 0 303 "dB,raw" ampdisp
-ioText {438, 504} {94, 25} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amp Display
-ioText {559, 114} {212, 104} display 0.000000 0.00100 "message2" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioMenu {391, 197} {83, 25} 1 303 "16bit,24bit,32bit" bitdepth
-ioText {379, 161} {101, 32} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Bit Depth
-ioMenu {389, 127} {83, 25} 0 303 "WAV,AIFF" fileformat
-ioText {371, 90} {116, 32} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File Format
-ioMeter {397, 330} {27, 22} {50176, 3584, 3072} "in8over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {397, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in8_pre" -inf fill 1 0 mouse
-ioMeter {343, 330} {27, 22} {50176, 3584, 3072} "in7over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {343, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in7_pre" -inf fill 1 0 mouse
-ioMeter {291, 330} {27, 22} {50176, 3584, 3072} "in6over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {291, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in6_pre" -inf fill 1 0 mouse
-ioMeter {237, 330} {27, 22} {50176, 3584, 3072} "in5over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {237, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in5_pre" -inf fill 1 0 mouse
-ioMeter {181, 330} {27, 22} {50176, 3584, 3072} "in4over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {181, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in4_pre" -inf fill 1 0 mouse
-ioMeter {128, 330} {27, 22} {50176, 3584, 3072} "in3over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {128, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in3_pre" -inf fill 1 0 mouse
-ioMeter {74, 330} {27, 22} {50176, 3584, 3072} "in2over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {74, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in2_pre" 0.560997 fill 1 0 mouse
-ioMeter {20, 330} {27, 22} {50176, 3584, 3072} "in1over_pre" 0.000000 "in1over" 0.636364 fill 1 0 mouse
-ioMeter {20, 348} {27, 94} {0, 59904, 0} "hor8" 0.592593 "in1_pre" 0.560997 fill 1 0 mouse
-ioCheckbox {407, 272} {20, 20} off chn8onoff
-ioText {396, 298} {46, 24} editnum 8.000000 1.000000 "chn8" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 8.000000
-ioCheckbox {353, 271} {20, 20} off chn7onoff
-ioText {342, 297} {46, 24} editnum 7.000000 1.000000 "chn7" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 7.000000
-ioCheckbox {299, 271} {20, 20} off chn6onoff
-ioText {288, 297} {46, 24} editnum 6.000000 1.000000 "chn6" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 6.000000
-ioCheckbox {245, 270} {20, 20} off chn5onoff
-ioText {234, 296} {46, 24} editnum 5.000000 1.000000 "chn5" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 5.000000
-ioCheckbox {190, 271} {20, 20} off chn4onoff
-ioText {179, 297} {46, 24} editnum 4.000000 1.000000 "chn4" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4.000000
-ioCheckbox {136, 270} {20, 20} off chn3onoff
-ioText {125, 296} {46, 24} editnum 3.000000 1.000000 "chn3" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3.000000
-ioCheckbox {82, 270} {20, 20} on chn2onoff
-ioText {71, 296} {46, 24} editnum 2.000000 1.000000 "chn2" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.000000
-ioCheckbox {28, 269} {20, 20} on chn1onoff
-ioText {133, 227} {189, 30} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Channels to Record
-ioText {17, 295} {46, 24} editnum 1.000000 1.000000 "chn1" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
-ioText {59, 18} {398, 43} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {65280, 65280, 65280} nobackground noborder SOUNDFILE RECORD
-ioText {709, 231} {39, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ms
-ioText {660, 231} {39, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder sec
-ioText {614, 231} {39, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder min
-ioText {569, 231} {39, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder hh
-ioText {694, 259} {14, 29} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder :
-ioText {603, 260} {14, 29} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder :
-ioText {707, 260} {44, 30} display 204.000000 0.00100 "ms" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 204
-ioText {572, 258} {32, 32} display 0.000000 0.00100 "hor" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
-ioText {438, 476} {106, 24} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Peak Hold Time
-ioText {546, 476} {48, 24} editnum 2.000000 0.100000 "peakhold" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.000000
-ioText {438, 449} {87, 28} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder dB Range
-ioText {539, 448} {56, 28} editnum 48.000000 1.000000 "dbrange" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 48.000000
-ioText {612, 49} {102, 31} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Messages
-ioText {560, 80} {208, 28} display 0.000000 0.00100 "message" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Record stopped.
-ioText {58, 465} {65, 32} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder gain
-ioText {649, 259} {14, 29} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder :
-ioText {661, 259} {35, 31} display 19.000000 0.00100 "sec" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 19
-ioText {614, 259} {37, 30} display 0.000000 0.00100 "min" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
-ioButton {189, 174} {80, 25} value 1.000000 "stop" "Stop" "/" 
-ioButton {99, 174} {78, 26} value 1.000000 "record" "Record" "/" 
-ioText {269, 465} {98, 31} display 0.000000 0.00100 "gain_disp" right "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -18.00 dB
-ioSlider {128, 465} {136, 31} -18.000000 18.000000 -18.000000 gain
-ioButton {141, 89} {100, 30} value 1.000000 "_Browse1" "Output File" "/" 
-</MacGUI>
