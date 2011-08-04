@@ -2987,7 +2987,6 @@ void qutecsound::createMenus()
   exampleFiles.append(":/examples/Miscellaneous/Simple_Convolution.csd");
   exampleFiles.append(":/examples/Miscellaneous/Universal_Convolution.csd");
   exampleFiles.append(":/examples/Miscellaneous/Cross_Synthesis.csd");
-  exampleFiles.append(":/examples/Miscellaneous/Live_Granular.csd");
   exampleFiles.append(":/examples/Miscellaneous/SF_Granular.csd");
   exampleFiles.append(":/examples/Miscellaneous/Oscillator_Aliasing.csd");
   exampleFiles.append(":/examples/Miscellaneous/Filter_lab.csd");
