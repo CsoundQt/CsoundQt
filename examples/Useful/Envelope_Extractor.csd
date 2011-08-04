@@ -221,10 +221,10 @@ i 1 0 1
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>72</x>
- <y>179</y>
- <width>400</width>
- <height>200</height>
+ <x>0</x>
+ <y>61</y>
+ <width>198</width>
+ <height>138</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -234,8 +234,8 @@ i 1 0 1
  </bgcolor>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_MBrowse</objectName>
-  <x>276</x>
-  <y>245</y>
+  <x>274</x>
+  <y>261</y>
   <width>343</width>
   <height>29</height>
   <uuid>{fe1e66fe-4105-4aed-9c04-e06ef3c95aa2}</uuid>
@@ -253,16 +253,16 @@ i 1 0 1
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>232</r>
+   <g>232</g>
+   <b>232</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_MBrowse</objectName>
-  <x>623</x>
-  <y>244</y>
+  <x>621</x>
+  <y>260</y>
   <width>100</width>
   <height>30</height>
   <uuid>{7e9d3773-29f5-4906-91f7-3e35e562dfa6}</uuid>
@@ -280,8 +280,8 @@ i 1 0 1
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>npoints</objectName>
-  <x>276</x>
-  <y>316</y>
+  <x>274</x>
+  <y>332</y>
   <width>343</width>
   <height>29</height>
   <uuid>{56ac7a23-6421-41d3-bede-c48a63166f2f}</uuid>
@@ -299,16 +299,16 @@ i 1 0 1
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>232</r>
+   <g>232</g>
+   <b>232</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>87</x>
-  <y>244</y>
+  <x>85</x>
+  <y>260</y>
   <width>188</width>
   <height>30</height>
   <uuid>{c0c2d141-f138-41bc-8c76-f59252e79007}</uuid>
@@ -336,8 +336,8 @@ i 1 0 1
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>36</x>
-  <y>310</y>
+  <x>34</x>
+  <y>326</y>
   <width>239</width>
   <height>43</height>
   <uuid>{59338b2d-457d-4151-9067-70221d3660d1}</uuid>
@@ -366,8 +366,8 @@ function tables to be created</label>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>ftnums</objectName>
-  <x>276</x>
-  <y>359</y>
+  <x>274</x>
+  <y>375</y>
   <width>343</width>
   <height>29</height>
   <uuid>{efef5429-8ce4-477c-b240-24a2627c6e99}</uuid>
@@ -385,16 +385,16 @@ function tables to be created</label>
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>232</r>
+   <g>232</g>
+   <b>232</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>35</x>
-  <y>355</y>
+  <x>33</x>
+  <y>371</y>
   <width>240</width>
   <height>41</height>
   <uuid>{25982a05-2dd6-489a-9fbc-cc5d94250b4a}</uuid>
@@ -423,8 +423,8 @@ function tables to be created</label>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse</objectName>
-  <x>276</x>
-  <y>279</y>
+  <x>274</x>
+  <y>295</y>
   <width>343</width>
   <height>29</height>
   <uuid>{37827e7b-547c-44ee-9ed7-91da451a1bc6}</uuid>
@@ -442,16 +442,16 @@ function tables to be created</label>
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>232</r>
+   <g>232</g>
+   <b>232</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Browse</objectName>
-  <x>623</x>
-  <y>278</y>
+  <x>621</x>
+  <y>294</y>
   <width>100</width>
   <height>30</height>
   <uuid>{9a15fa00-1fac-478d-9857-be9b89935695}</uuid>
@@ -469,8 +469,8 @@ function tables to be created</label>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>34</x>
-  <y>279</y>
+  <x>32</x>
+  <y>295</y>
   <width>241</width>
   <height>29</height>
   <uuid>{5b54c68d-0de1-4915-9029-101af74e6f8d}</uuid>
@@ -529,8 +529,8 @@ function tables to be created</label>
   <objectName/>
   <x>20</x>
   <y>69</y>
-  <width>699</width>
-  <height>169</height>
+  <width>700</width>
+  <height>187</height>
   <uuid>{f02e3ae5-27d7-4d40-b5c2-242497d54eba}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -559,8 +559,8 @@ Select one or some sound files for analyzing, and a text file for writing the re
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Render</objectName>
-  <x>623</x>
-  <y>315</y>
+  <x>621</x>
+  <y>331</y>
   <width>100</width>
   <height>74</height>
   <uuid>{fa20b460-4974-43cd-9729-9bde68d583db}</uuid>
@@ -587,7 +587,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 72 179 400 200
+WindowBounds: 0 61 198 138
 CurrentView: io
 IOViewEdit: On
 Options:
@@ -595,17 +595,17 @@ Options:
 
 <MacGUI>
 ioView background {43690, 43690, 32639}
-ioText {276, 245} {343, 29} edit 0.000000 0.00100 "_MBrowse"  "DejaVu Sans" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder /home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Glocke_Ganze1.aiff
-ioButton {623, 244} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
-ioText {276, 316} {343, 29} edit 0.000000 0.00100 "npoints"  "Arial" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder 100
-ioText {87, 244} {188, 30} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Files to be analyzed
-ioText {36, 310} {239, 43} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Number of points in theÂ¬function tables to be created
-ioText {276, 359} {343, 29} edit 0.000000 0.00100 "ftnums"  "Arial" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder 4000 4001 4002 4003
-ioText {35, 355} {240, 41} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder identification number of theÂ¬function tables to be created
-ioText {276, 279} {343, 29} edit 0.000000 0.00100 "_Browse"  "Arial" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder /home/linux/Desktop/test2.txt
-ioButton {623, 278} {100, 30} value 1.000000 "_Browse" "Select File" "/" 
-ioText {34, 279} {241, 29} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Text file to be written as result
-ioText {21, 7} {699, 56} label 0.000000 0.00100 "" center "Arial" 40 {0, 0, 0} {61952, 61696, 61440} nobackground noborder ENVELOPE EXTRACTOR
-ioText {20, 69} {699, 169} label 0.000000 0.00100 "" left "Arial" 16 {0, 0, 0} {61952, 61696, 61440} nobackground noborder This instrument analyses the envelope(s) of one or more given sample(s) and returns the result as function tables in this format:Â¬gi_'filename' ftgen 'ftnum', 0, 'points', -2, val1, val2, ...Â¬The number of points gives the resolution of your analysis. If the duration of your sample is two seconds, and you write a table of size 100 points, you will get the mean amplitude for each 2/100 = 0.02 seconds.Â¬Select one or some sound files for analyzing, and a text file for writing the result to. Enter the desired number of points for the analysis, and the identification number of the table (for both either one number which is applied to all input files, or one number for each file).
-ioButton {623, 315} {100, 74} value 1.000000 "_Render" "AnalyseÂ¬and writeÂ¬to textfile!" "/" 
+ioText {274, 261} {343, 29} edit 0.000000 0.00100 "_MBrowse"  "DejaVu Sans" 14 {0, 0, 0} {61952, 61696, 61440} falsenoborder /home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Glocke_Ganze1.aiff
+ioButton {621, 260} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
+ioText {274, 332} {343, 29} edit 0.000000 0.00100 "npoints"  "Arial" 14 {0, 0, 0} {61952, 61696, 61440} falsenoborder 100
+ioText {87, 244} {188, 30} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Files to be analyzed
+ioText {36, 310} {239, 43} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Number of points in theÂ¬function tables to be created
+ioText {274, 375} {343, 29} edit 0.000000 0.00100 "ftnums"  "Arial" 14 {0, 0, 0} {61952, 61696, 61440} falsenoborder 4000 4001 4002 4003
+ioText {35, 355} {240, 41} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder identification number of theÂ¬function tables to be created
+ioText {274, 295} {343, 29} edit 0.000000 0.00100 "_Browse"  "Arial" 14 {0, 0, 0} {61952, 61696, 61440} falsenoborder /home/linux/Desktop/test2.txt
+ioButton {621, 294} {100, 30} value 1.000000 "_Browse" "Select File" "/" 
+ioText {34, 279} {241, 29} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Text file to be written as result
+ioText {21, 7} {699, 56} label 0.000000 0.00100 "" center "Arial" 40 {0, 0, 0} {59392, 59392, 59392} nobackground noborder ENVELOPE EXTRACTOR
+ioText {20, 69} {699, 169} label 0.000000 0.00100 "" left "Arial" 16 {0, 0, 0} {59392, 59392, 59392} nobackground noborder This instrument analyses the envelope(s) of one or more given sample(s) and returns the result as function tables in this format:Â¬gi_'filename' ftgen 'ftnum', 0, 'points', -2, val1, val2, ...Â¬The number of points gives the resolution of your analysis. If the duration of your sample is two seconds, and you write a table of size 100 points, you will get the mean amplitude for each 2/100 = 0.02 seconds.Â¬Select one or some sound files for analyzing, and a text file for writing the result to. Enter the desired number of points for the analysis, and the identification number of the table (for both either one number which is applied to all input files, or one number for each file).
+ioButton {621, 331} {100, 74} value 1.000000 "_Render" "AnalyseÂ¬and writeÂ¬to textfile!" "/" 
 </MacGUI>
