@@ -397,7 +397,7 @@ ist, ien  StrayGetEl Sfiles, itable-1, 124
 Sfil      strsub    Sfiles, ist, ien
 ilslash   strrindex Sfil, "/"
 Sname     strsub    Sfil, ilslash+1
-Showname  sprintf   "File selected: '%s'", Sname
+Showname  sprintf   "File selected:\n'%s'", Sname
           rireturn
 knewtable changed   kthissamp
  if knewtable == 1 then
@@ -824,8 +824,8 @@ i 1 0 36000
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>37</x>
- <y>42</y>
+ <x>15</x>
+ <y>69</y>
  <width>1350</width>
  <height>659</height>
  <visible>true</visible>
@@ -852,14 +852,14 @@ i 1 0 36000
   <image>/</image>
   <eventLine>i 10 0 5 60 .5</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>734</x>
   <y>71</y>
   <width>247</width>
-  <height>255</height>
+  <height>262</height>
   <uuid>{fe6e4eec-d24b-4130-ac47-0509d6087482}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1134,7 +1134,40 @@ When the "Print current values" button is activated, the analyzed partials are s
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label/>
+  <label>File 'AkkordeonMono.aiff' at position 3.777237 seconds:
+01) amp = 0.174754, freq = 353.958893, bin = 8
+02) amp = 0.165817, freq = 289.728760, bin = 7
+03) amp = 0.156386, freq = 262.290771, bin = 6
+04) amp = 0.151346, freq = 372.361145, bin = 9
+05) amp = 0.134450, freq = 680.678650, bin = 16
+06) amp = 0.133342, freq = 733.723511, bin = 17
+07) amp = 0.125723, freq = 658.944336, bin = 15
+08) amp = 0.091831, freq = 995.071167, bin = 23
+09) amp = 0.085318, freq = 734.638000, bin = 18
+10) amp = 0.065743, freq = 264.655701, bin = 5
+11) amp = 0.065233, freq = 995.902466, bin = 24
+12) amp = 0.061697, freq = 399.723450, bin = 10
+13) amp = 0.047782, freq = 657.122070, bin = 14
+14) amp = 0.042844, freq = 120.794846, bin = 3
+15) amp = 0.040800, freq = 493.393005, bin = 12
+16) amp = 0.039331, freq = 489.382324, bin = 11
+17) amp = 0.038134, freq = 1986.118530, bin = 46
+18) amp = 0.036955, freq = 997.605591, bin = 22
+19) amp = 0.032988, freq = 1333.921509, bin = 31
+20) amp = 0.032404, freq = 117.310944, bin = 2
+21) amp = 0.029931, freq = 848.655701, bin = 20
+22) amp = 0.028129, freq = 1086.631226, bin = 25
+23) amp = 0.025767, freq = 1109.252075, bin = 26
+24) amp = 0.025415, freq = 2232.084229, bin = 52
+25) amp = 0.024350, freq = 892.828003, bin = 19
+26) amp = 0.024150, freq = 1986.061768, bin = 47
+27) amp = 0.022119, freq = 565.395020, bin = 13
+28) amp = 0.021073, freq = 1585.824097, bin = 37
+29) amp = 0.020997, freq = 1491.676758, bin = 35
+30) amp = 0.020303, freq = 1239.727295, bin = 29
+31) amp = 0.020095, freq = 2116.871338, bin = 49
+32) amp = 0.019902, freq = 1338.452515, bin = 32
+</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -1197,8 +1230,8 @@ When the "Print current values" button is activated, the analyzed partials are s
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.27063164</xValue>
-  <yValue>0.27063164</yValue>
+  <xValue>-inf</xValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1332,7 +1365,7 @@ Snapshot!</text>
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>live</objectName>
@@ -1561,10 +1594,10 @@ L = Live Input,
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>268</x>
+  <x>267</x>
   <y>71</y>
   <width>458</width>
-  <height>255</height>
+  <height>262</height>
   <uuid>{8cbb0d66-be77-44fb-9fea-1c2d42f85655}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1598,7 +1631,7 @@ L = Live Input,
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label/>
+  <label>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/AkkordeonMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/AkkordeonStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Bratsche2Mono.wav|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Bratsche2Stereo.wav|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMonoOneCycle.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -1609,9 +1642,9 @@ L = Live Input,
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>232</r>
-   <g>232</g>
-   <b>232</b>
+   <r>229</r>
+   <g>229</g>
+   <b>229</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -1627,7 +1660,7 @@ L = Live Input,
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
+  <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/AkkordeonMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/AkkordeonStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Bratsche2Mono.wav|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Bratsche2Stereo.wav|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMonoOneCycle.wav</stringvalue>
   <text>Select Files</text>
   <image>/</image>
   <eventLine/>
@@ -1649,8 +1682,8 @@ L = Live Input,
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.04454343</xValue>
-  <yValue>0.04454343</yValue>
+  <xValue>0.25612472</xValue>
+  <yValue>0.25612472</yValue>
   <type>line</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1669,16 +1702,16 @@ L = Live Input,
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>561</x>
-  <y>289</y>
+  <x>591</x>
+  <y>280</y>
   <width>104</width>
-  <height>27</height>
+  <height>25</height>
   <uuid>{47aae0f0-46ca-4f1b-a3ba-5923cc3fb761}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <label>Position (sec):</label>
-  <alignment>right</alignment>
+  <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1698,16 +1731,16 @@ L = Live Input,
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>position</objectName>
-  <x>664</x>
-  <y>289</y>
+  <x>612</x>
+  <y>302</y>
   <width>55</width>
   <height>26</height>
   <uuid>{87aa8561-e21a-4634-9693-ad2680b9d547}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>0.089</label>
-  <alignment>left</alignment>
+  <midicc>0</midicc>
+  <label>3.777</label>
+  <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1735,7 +1768,7 @@ L = Live Input,
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <value>0</value>
+  <value>6</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -1747,18 +1780,19 @@ L = Live Input,
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>showname</objectName>
-  <x>272</x>
-  <y>288</y>
-  <width>289</width>
-  <height>28</height>
+  <x>274</x>
+  <y>282</y>
+  <width>172</width>
+  <height>50</height>
   <uuid>{b7f9aafe-e4c4-4837-aacf-13c309c3899d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>File selected: 'beats.wav'</label>
-  <alignment>right</alignment>
+  <label>File selected:
+'AkkordeonMono.aiff'</label>
+  <alignment>left</alignment>
   <font>Arial</font>
-  <fontsize>16</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>255</r>
@@ -1964,7 +1998,7 @@ L = Live Input,
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>exp1</objectName>
@@ -2346,7 +2380,7 @@ L = Live Input,
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>numpartspl</objectName>
@@ -3311,112 +3345,64 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>pos</objectName>
+  <x>460</x>
+  <y>305</y>
+  <width>92</width>
+  <height>25</height>
+  <uuid>{de3cf7d9-8cc9-47f9-a205-ef243a143424}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>0.00000100</resolution>
+  <minimum>0</minimum>
+  <maximum>1</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>0.256125</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>453</x>
+  <y>280</y>
+  <width>104</width>
+  <height>25</height>
+  <uuid>{141519e4-0af6-4486-895a-b8cc5e5e0462}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Position (0-1):</label>
+  <alignment>center</alignment>
+  <font>Arial</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 37 42 1350 659
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioButton {874, 591} {100, 30} event 1.000000 "button1" "play!" "/" i 10 0 5 60 .5
-ioText {734, 71} {247, 255} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Analysis Source
-ioText {268, 335} {247, 171} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Analysis Parameters
-ioText {522, 335} {228, 291} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Playback Parameters
-ioText {756, 335} {225, 147} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Export Parameters
-ioText {769, 584} {107, 42} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Play Reference Pitch as test
-ioText {268, 508} {247, 118} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Envelope
-ioText {756, 485} {225, 99} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Output
-ioText {9, 13} {1299, 49} label 0.000000 0.00100 "" center "Arial" 40 {0, 0, 0} {59392, 59392, 59392} nobackground noborder IMITATIVE ADDITIVE SYNTHESIS
-ioText {10, 71} {255, 555} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {59392, 59392, 59392} nobackground noborder This instrument lets you analyze a number of partials, ordered by their amplitudes, in any sound snapshot in realtime, and play it back with additive synthesis. You can either use any prerecorded sound, or live input, and switch between these sources.Â¬SAMPLE:Â¬Select a list of audio files. Activate the "Sample" button in the "Analysis Source" section. Select one of them by the number box. (If you activate the "Enable Keys" button, you can also select Samples 1-9 by the number keys.) You will see the waveform of the selected sample in the graph widget.Â¬Choose the number of partials you want to analyze, in the "Analysis Parameters" section, and the position in the soundfile. The "Pointer" option lets you choose the position manually (in the bar below the graph widget). The "Random" option will choose a random position in a range, each time a note has been played. The "Hop Move" option will move gradually through the sound.Â¬LIVE:Â¬Select "Live" as analysis source (key "L"). Whenever you push the "Get Live Snapshot!" button (key = "0"), the current live input is analyzed.Â¬PLAYBACK:Â¬Playback is done via midi. At the refence key, the sound will be played back at the same pitch as analyzed. The "Midi Key Cent Deviation" is the transposition to the next midi key, in cents.Â¬EXPORT:Â¬When the "Print current values" button is activated, the analyzed partials are shown at the right side.  For writing the values to a file, you have three different options: export in the same was the values are shown, as war amplitude-frequency values, or as function tables with amplitudes and frequency multipliers. Whenever the "Now!" button is pressed, the current values are written to the text file selected by the "To..." button.
-ioText {995, 119} {312, 502} display 0.000000 0.00100 "values" left "Arial" 12 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 
-ioText {990, 70} {319, 556} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Analysis Values
-ioMeter {861, 180} {92, 20} {0, 59904, 0} "livein" 0.270632 "livein" 0.270632 fill 1 0 mouse
-ioMeter {947, 180} {20, 20} {65280, 0, 0} "livein_over" 0.000000 "livein_over" 0.000000 fill 1 0 mouse
-ioSlider {861, 205} {80, 20} -12.000000 12.000000 1.584906 gain
-ioButton {861, 230} {106, 41} value 1.000000 "dolive" "Get LiveÂ¬Snapshot!" "/" i1 0 10
-ioText {941, 201} {39, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Gain
-ioButton {738, 114} {104, 30} value 1.000000 "sample" "Sample" "/" 
-ioButton {863, 115} {104, 30} value 1.000000 "live" "Live" "/" i1 0 10
-ioText {862, 149} {62, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Channel
-ioText {927, 148} {40, 27} editnum 1.000000 1.000000 "inch" left "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 1.000000
-ioText {740, 148} {57, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Number
-ioText {802, 147} {40, 27} editnum 1.000000 1.000000 "sampnr" left "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 1.000000
-ioButton {740, 178} {56, 25} event 1.000000 "" "Play it" "/" i 2 0 1
-ioText {740, 225} {104, 102} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {59392, 59392, 59392} nobackground noborder S = Sample Input,Â¬1-9 = Sample Selection,Â¬P/R/H  = Pointer Mode.Â¬L = Live Input,Â¬0 = Snapshot
-ioButton {740, 205} {104, 21} value 1.000000 "keysel" "Enable Keys" "/" i 2 0 1
-ioButton {797, 178} {47, 25} event 1.000000 "" "Stop" "/" i 9 0 .1
-ioText {268, 71} {458, 255} label 0.000000 0.00100 "" center "Arial" 20 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Analysis Source
-ioText {275, 75} {343, 29} edit 0.000000 0.00100 "_MBrowse"  "Arial" 12 {0, 0, 0} {58624, 58624, 58624} falsenoborder 
-ioButton {620, 75} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
-ioMeter {273, 242} {449, 40} {65280, 65280, 65280} "pos" 0.044543 "pos" 0.044543 line 1 0 mouse
-ioText {561, 289} {104, 27} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Position (sec):
-ioText {664, 289} {55, 26} display 0.089000 0.00100 "position" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.089
-ioGraph {272, 109} {450, 138} table 0.000000 1.000000 showtab
-ioText {272, 288} {289, 28} display 0.000000 0.00100 "showname" right "Arial" 16 {65280, 65280, 0} {59392, 59392, 59392} nobackground noborder File selected: 'beats.wav'
-ioText {756, 365} {137, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Print current values
-ioText {756, 392} {137, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Export current values
-ioButton {887, 393} {48, 26} value 1.000000 "_Browse1" "To..." "/" i1 0 10
-ioText {756, 419} {137, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Export as freq-amp
-ioButton {886, 419} {48, 26} value 1.000000 "_Browse2" "To..." "/" i1 0 10
-ioText {756, 446} {137, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Export as table
-ioButton {886, 447} {48, 25} value 1.000000 "_Browse3" "To..." "/" i1 0 10
-ioButton {892, 366} {83, 25} value 1.000000 "print" "Print" "/" i1 0 10
-ioButton {930, 393} {51, 26} value 1.000000 "exp1" "Now!" "/" i1 0 10
-ioButton {929, 420} {52, 25} value 1.000000 "exp2" "Now!" "/" i1 0 10
-ioButton {929, 447} {52, 25} value 1.000000 "exp3" "Now!" "/" i1 0 10
-ioMeter {767, 516} {172, 28} {0, 59904, 0} "out" -inf "out" -inf fill 1 0 mouse
-ioMeter {937, 516} {28, 28} {65280, 0, 0} "out_over" 0.000000 "out_over" 0.000000 fill 1 0 mouse
-ioSlider {768, 551} {149, 21} -12.000000 12.000000 -1.530201 vol
-ioText {948, 548} {30, 28} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder dB
-ioText {275, 370} {189, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Number of Partials to analyze
-ioText {458, 405} {50, 25} editnum 0.100000 0.100000 "fast" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.100000
-ioText {354, 404} {102, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Activation (sec)
-ioText {463, 370} {46, 26} editnum 32.000000 1.000000 "numpartsana" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 32.000000
-ioButton {275, 435} {90, 28} value 1.000000 "hopmove" "Hop Move" "/" i1 0 10
-ioText {373, 435} {68, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Fraction
-ioText {451, 435} {58, 26} editnum 0.080000 0.010000 "hopmovsiz" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.080000
-ioButton {275, 403} {71, 28} value 1.000000 "manpos" "Pointer" "/" i1 0 10
-ioText {696, 371} {50, 25} editnum 32.000000 1.000000 "numpartspl" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 32.000000
-ioText {696, 425} {50, 25} editnum 60.000000 1.000000 "refpch" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 60.000000
-ioText {528, 424} {139, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Reference Key (midi)
-ioText {696, 449} {50, 25} editnum 100.000000 1.000000 "stcent" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 100.000000
-ioText {528, 449} {156, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Midi Key Cent Deviation
-ioText {528, 369} {167, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Number of Partials to play
-ioText {696, 398} {50, 25} editnum 0.000000 1.000000 "shiftpl" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.000000
-ioText {528, 397} {149, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Playback Partial Offset
-ioText {695, 509} {50, 25} editnum 0.000000 1.000000 "rndfqdv" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.000000
-ioText {527, 500} {167, 40} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Partial Random Frequency  Deviation (Cent)
-ioText {695, 548} {50, 25} editnum 0.000000 1.000000 "rndampdv" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.000000
-ioText {527, 539} {162, 39} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Partial Random Amplitude  Deviation (dB)
-ioText {695, 584} {50, 25} editnum 0.000000 1.000000 "rnddurdv" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.000000
-ioText {527, 577} {158, 41} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Partial Random Duration  Deviation (%)
-ioText {695, 475} {50, 25} editnum 3.000000 0.100000 "maxdur" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 3.000000
-ioText {527, 475} {156, 27} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Maximum Duration (sec)
-ioMeter {290, 540} {176, 17} {65280, 43520, 0} "att" 0.017557 "att" 0.017557 fill 1 0 mouse
-ioMeter {290, 559} {176, 17} {65280, 43520, 0} "dec" 0.278409 "dec" 0.278409 fill 1 0 mouse
-ioMeter {290, 578} {176, 17} {65280, 43520, 0} "sus" 0.511364 "sus" 0.511364 fill 1 0 mouse
-ioMeter {290, 598} {176, 17} {65280, 43520, 0} "rel" 0.738636 "rel" 0.738636 fill 1 0 mouse
-ioText {463, 536} {50, 21} display 0.018000 0.00100 "att" left "Arial" 12 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.018
-ioText {463, 556} {50, 21} display 0.278000 0.00100 "dec" left "Arial" 12 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.278
-ioText {463, 576} {50, 21} display 0.511000 0.00100 "sus" left "Arial" 12 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.511
-ioText {463, 595} {50, 21} display 0.739000 0.00100 "rel" left "Arial" 12 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.739
-ioText {272, 537} {19, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder A
-ioText {272, 556} {19, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder D
-ioText {272, 575} {19, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder S
-ioText {272, 593} {19, 24} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder R
-ioText {355, 468} {60, 28} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder between
-ioButton {275, 467} {77, 28} value 1.000000 "randpos" "Random" "/" i1 0 10
-ioText {413, 470} {50, 25} editnum 0.400000 0.100000 "rndpos1" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.400000
-ioText {461, 470} {50, 25} editnum 0.600000 0.100000 "rndpos2" right "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.600000
-ioText {916, 548} {33, 29} display -1.530000 0.00100 "vol" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder -1.530
-</MacGUI>
