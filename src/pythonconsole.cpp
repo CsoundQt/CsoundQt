@@ -64,6 +64,10 @@ void PythonConsole::evaluate(QString evalCode, bool notify)
 
 void PythonConsole::runScript(QString fileName)
 {
+  QDir dir = QDir::currentPath();
+  QDir newDir = QDir(fileName.mid(0, fileName.lastIndexOf(QDir::separator())));
+  qDebug() << newDir.absolutePath();
+  bool set = QDir::setCurrent(newDir.absolutePath());
   PythonQtObjectPtr  mainContext = PythonQt::self()->getMainModule();
 //  PythonQtObjectPtr  mainContext = m_pqcs->getMainModule();
   QFile file(fileName);
@@ -77,7 +81,7 @@ void PythonConsole::runScript(QString fileName)
   printScript += " lines.'";
   mainContext.evalScript(printScript);
   m_console->appendCommandPrompt();
-
+  QDir::setCurrent (dir.absolutePath());
 }
 
 void PythonConsole::initializeInterpreter()

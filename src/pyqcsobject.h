@@ -85,6 +85,7 @@ class PyQcsObject : public QObject {
     QString getOrc(int index = -1);
     QString getSco(int index = -1);
     QString getWidgetsText(int index = -1);
+	QString getSelectedWidgetsText(int index = -1);
     QString getPresetsText(int index = -1);
     QString getOptionsText(int index = -1);
     QString getFileName(int index = -1);

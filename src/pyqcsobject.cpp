@@ -201,6 +201,11 @@ QString PyQcsObject::getWidgetsText(int index)
   return m_qcs->getWidgetsText(index);
 }
 
+QString PyQcsObject::getSelectedWidgetsText(int index)
+{
+  return m_qcs->getSelectedWidgetsText(index);
+}
+
 QString PyQcsObject::getPresetsText(int index)
 {
   return m_qcs->getPresetsText(index);

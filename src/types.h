@@ -143,13 +143,6 @@ class RingBuffer
       mutex.unlock();
     }
 
-//     // Doesn't check bounds
-//     MYFLT get(int index) {
-//       mutex.lock();
-//       return buffer[index]
-//       mutex.unlock();
-//     }
-
     bool copyAvailableBuffer(MYFLT *data, int saveSize) {
       //qDebug() << "RingBuffer::copyAvailableBuffer";
       mutex.lock();

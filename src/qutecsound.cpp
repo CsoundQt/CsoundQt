@@ -516,11 +516,11 @@ void qutecsound::runScriptFromAction()
 
 void qutecsound::runScript(QString fileName)
 {
-    if (!fileName.isEmpty()) {
+  if (!fileName.isEmpty()) {
 #ifdef QCS_PYTHONQT
-  m_pythonConsole->runScript(fileName);
+    m_pythonConsole->runScript(fileName);
 #endif
-    }
+  }
 }
 
 void qutecsound::createCodeGraph()
@@ -4678,6 +4678,18 @@ QString qutecsound::getWidgetsText(int index)
   }
   if (index < documentTabs->count() && index >= 0) {
     text = documentPages[index]->getWidgetsText();
+  }
+  return text;
+}
+
+QString qutecsound::getSelectedWidgetsText(int index)
+{
+  QString text = QString();
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    text = documentPages[index]->getSelectedWidgetsText();
   }
   return text;
 }

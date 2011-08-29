@@ -31,7 +31,7 @@ QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
   m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
   static_cast<QDoubleSpinBox*>(m_widget)->setAccelerated(true);
   static_cast<QDoubleSpinBox*>(m_widget)->setRange(-999999999999.0, 999999999999.0);
-  connect(static_cast<QDoubleSpinBox *>(m_widget), SIGNAL(valueChanged(double)), this, SLOT(valueChanged(double)));
+  connect(static_cast<QDoubleSpinBox *>(m_widget), SIGNAL(editingFinished()), this, SLOT(editingFinishedSlot()));
 //   connect(static_cast<QDoubleSpinBox*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
   m_type = "editnum";
 
@@ -345,6 +345,21 @@ void QuteSpinBox::applyProperties()
 
 void QuteSpinBox::valueChanged(double value)
 {
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.lockForWrite();
+#endif
+  setInternalValue(value);
+  QPair<QString, double> channelValue(m_channel, value);
+#ifdef  USE_WIDGET_MUTEX
+  widgetLock.unlock();
+#endif
+  emit newValue(channelValue);
+}
+
+void QuteSpinBox::editingFinishedSlot()
+{
+  double value = static_cast<QDoubleSpinBox*>(m_widget)->value();
+
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.lockForWrite();
 #endif

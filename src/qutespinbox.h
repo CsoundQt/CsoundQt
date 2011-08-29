@@ -50,6 +50,7 @@ class QuteSpinBox : public QuteText
   protected slots:
     void valueChanged(double value);
     void setInternalValue(double value);
+    void editingFinishedSlot();
 
   private:
     QDoubleSpinBox *minSpinBox;

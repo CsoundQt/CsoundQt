@@ -65,6 +65,7 @@ class DocumentPage : public BaseDocument
     QString getOptionsText();
     QString getDotText();
     QString getWidgetsText();
+	QString getSelectedWidgetsText();
     QString getPresetsText();
     QString getMacWidgetsText();
     QString getMacPresetsText();

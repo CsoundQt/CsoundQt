@@ -96,6 +96,7 @@ class qutecsound:public QMainWindow
     QString getOrc(int index);
     QString getSco(int index);
     QString getWidgetsText(int index);
+	QString getSelectedWidgetsText(int index);
     QString getPresetsText(int index);
     QString getOptionsText(int index);
     QString getFileName(int index);
