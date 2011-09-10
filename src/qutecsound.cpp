@@ -1505,7 +1505,6 @@ void qutecsound::openExternalEditor()
   }
   if (!m_options->waveeditor.isEmpty()) {
     name = "\"" + name + "\"";
-    QString waveeditor = "\"" + m_options->waveeditor + "\"";
     execute(m_options->waveeditor, name);
   }
   else {
@@ -1535,8 +1534,7 @@ void qutecsound::openExternalPlayer()
   }
   if (!m_options->waveplayer.isEmpty()) {
     name = "\"" + name + "\"";
-    QString waveplayer = "\"" + m_options->waveplayer + "\"";
-    execute(waveplayer, name);
+	execute(m_options->waveplayer, name);
   }
   else {
     QDesktopServices::openUrl(QUrl::fromLocalFile (name));
