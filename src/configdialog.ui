@@ -30,7 +30,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -457,7 +457,7 @@
         </rect>
        </property>
        <property name="title">
-        <string>Run Utilities and Render using:</string>
+        <string>Run Utilities using:</string>
        </property>
        <widget class="QWidget" name="layoutWidget_6">
         <property name="geometry">

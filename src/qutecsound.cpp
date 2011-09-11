@@ -1407,30 +1407,6 @@ void qutecsound::sendEvent(int index, QString eventLine, double delay)
   }
 }
 
-// void qutecsound::selectMidiOutDevice(QPoint pos)
-// {
-//   QList<QPair<QString, QString> > devs = ConfigDialog::getMidiInputDevices();
-//   QMenu menu;
-//
-//   for (int i = 0; i < devs.size(); i++) {
-//     QAction *action = menu.addAction(devs[i].first/*, this, SLOT()*/);
-//     action->setData(devs[i].second);
-//   }
-//   menu.exec();
-// }
-//
-// void qutecsound::selectMidiInDevice(QPoint pos)
-// {
-// }
-//
-// void qutecsound::selectAudioOutDevice(QPoint pos)
-// {
-// }
-//
-// void qutecsound::selectAudioInDevice(QPoint pos)
-// {
-// }
-
 void qutecsound::render()
 {
   if (m_options->fileAskFilename) {
