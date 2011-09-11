@@ -36,7 +36,7 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
 
     ~ConfigDialog();
     int currentTab();
-    void setCurrentTab(int index);
+	void setCurrentTab(int index);
 
   public slots:
     void warnOpcodeDir(bool on);

@@ -229,6 +229,13 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   connect(defaultTemplatePushButton,SIGNAL(released()), this, SLOT(defaultTemplate()));
 
   connect(OpcodedirCheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
+
+#ifndef QCS_PYTHONQT
+  pythonDirLineEdit->setEnabled(false);
+  pythonDirToolButton->setEnabled(false);
+  noPythonCheckBox->setEnabled(false);
+  noPythonCheckBox->setChecked(false);
+#endif
 }
 
 ConfigDialog::~ConfigDialog()

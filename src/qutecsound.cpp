@@ -3415,8 +3415,8 @@ flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Appl
   }
 
   favoriteMenu = menuBar()->addMenu(tr("Favorites"));
+#ifdef QCS_PYTHONQT
   scriptsMenu = menuBar()->addMenu(tr("Scripts"));
-#ifndef QCS_PYTHONQT
   scriptsMenu->hide();
 #endif
 
@@ -3508,8 +3508,6 @@ void qutecsound::fillScriptsMenu()
     QStringList filters;
     fillEditScriptsSubMenu(dir.absolutePath(), editMenu, 0);
   }
-#else
-  scriptsMenu->hide();
 #endif
 }
 
