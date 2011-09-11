@@ -11,30 +11,57 @@
        ksmps  = 16
        nchnls = 2
 
+
+giSine   ftgen   0, 0, 1024, 10, 1
+
 ; *****************************************************
 ;                               TRIGGER INSTRUMENT
 ;******************************************************
 
-instr 1 ; MIDI triggered instrument (channel 1)
-icps cpsmidi
-outvalue "f0", icps
-kOpenQ  invalue "OQ"
-kSpeedQ invalue "SQ"
-schedule 10, 0, 3, i(kOpenQ), i(kSpeedQ)
-turnoff
-endin
+massign 0,0
 
-instr   9
+instr   1
 ;               Get value for global source
 kOpenQ  invalue "OQ"
 kSpeedQ invalue "SQ"
 ;               On value
 kon             invalue "on"
-
 ;               Trigger play instrument
-schedkwhen      kon, 2, 1, 10, 0, 3, kOpenQ, kSpeedQ
-kon=1
+konchanged changed kon
+ktrig = kon * konchanged ; only turn on when it's 1 and its just changed to 1
+schedkwhen      ktrig, 0, 2, 10, 0, 100, kOpenQ, kSpeedQ
 
+if (konchanged == 1 && kon == 0) then
+		turnoff2 10, 2, 0
+endif
+
+; MIDI trigger
+kstatus, kchan, kdata1, kdata2 midiin
+if (kstatus == 144) then
+	if (kon == 1) then
+		outvalue "on", 0
+		turnoff2 10, 1, 0
+	endif
+	kcps = 440 * 2 ^((kdata1 - 69)/12)
+	igoto noinit
+	outvalue "f0", kcps
+	noinit:
+	schedkwhen 1, 0, 2, 10, 0, -1, kOpenQ, kSpeedQ
+
+elseif (kstatus == 128) then
+		turnoff2 10, 2, 0
+endif
+
+kspectrum invalue "spectrum"
+kchanged changed kspectrum
+if (kchanged == 1 || (konchanged == 1 && kon == 0) \
+	|| kstatus == 144) then
+	if (kspectrum == 1) then
+		outvalue "graph", 2
+	else
+		outvalue "graph", -102
+	endif
+endif
 endin
 
 
@@ -56,7 +83,7 @@ iflen   =       4096
 
 ;               Get glottal parameters
 iOpenQ  =       p4
-iSQ             =       p5 * 12/14              ; Speed quotient - compensate for the number of open vs closed segments in the ftable linseg
+iSQ     =       p5 * 12/14              ; Speed quotient - compensate for the number of open vs closed segments in the ftable linseg
 
 iOpen   =       iOpenQ * iflen
 iClose  =       iflen - iOpen
@@ -101,7 +128,7 @@ i25     =       .001
 i26     =       0       ;t4
 
 ;               Make ftable for glottal waveform
-isource ftgen   0, 0, iflen, 7, i0, iO, i1, iO, i2, iO, i3, iO, i4, iO, i5, iO, i6, iO, i7, iO, i8, \
+isource ftgen   102, 0, iflen, 7, i0, iO, i1, iO, i2, iO, i3, iO, i4, iO, i5, iO, i6, iO, i7, iO, i8, \
                                        iO, i9, iO,i10,iO,i11,iO,i12,iO,i13,iO,i14,iC,i15, iC, i16, iC, i17,\
                                        iC,i18,iC,i19,iC,i20,iC,i21,iC,i22,iC,i23,iC,i24,iC,i25,iC, i26, iClose, 0
 
@@ -136,14 +163,13 @@ kjit            =       kjit3 * kjitOn
 ;***************************************************************
 ;               VIBRATO
 
-iSine   ftgen   0, 0, 1024, 10, 1
 kvibamp expseg  0.001, p3*.3, 1.5, p3*.7, 2.5
 ivibfrek        =               5.6
 kvibrand        randh   .1, ivibfrek
 kvibfrek        =               ivibfrek + kvibrand
 
 kvibOn  invalue "Vib"
-kvib            oscil   kvibamp * kvibOn, kvibfrek, iSine
+kvib            oscil   kvibamp * kvibOn, kvibfrek, giSine
 
 
 
@@ -236,15 +262,15 @@ endin
 </CsInstruments>
 <CsScore>
 
-i9 0 3000
+i1 0 3600
 </CsScore>
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>433</x>
- <y>146</y>
- <width>789</width>
- <height>621</height>
+ <x>424</x>
+ <y>179</y>
+ <width>782</width>
+ <height>592</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -252,49 +278,78 @@ i9 0 3000
   <g>198</g>
   <b>156</b>
  </bgcolor>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject version="2" type="BSBDisplay">
   <objectName/>
-  <x>6</x>
-  <y>4</y>
-  <width>754</width>
-  <height>230</height>
+  <x>14</x>
+  <y>12</y>
+  <width>755</width>
+  <height>228</height>
+  <uuid>{255f7a90-5a57-4d3c-8c1d-7c73df44b994}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Formant Graph</label>
+  <alignment>center</alignment>
+  <font>Nimbus Sans L</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>5</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBGraph">
+  <objectName>graph</objectName>
+  <x>21</x>
+  <y>18</y>
+  <width>740</width>
+  <height>217</height>
   <uuid>{18cfa587-24cd-4d57-85a2-4fb149824822}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <value>0</value>
+  <midicc>0</midicc>
+  <value>4</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
-  <modex>auto</modex>
-  <modey>auto</modey>
+  <modex>lin</modex>
+  <modey>lin</modey>
   <all>true</all>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>on</objectName>
-  <x>654</x>
-  <y>329</y>
-  <width>104</width>
-  <height>30</height>
+  <x>621</x>
+  <y>337</y>
+  <width>141</width>
+  <height>29</height>
   <uuid>{e772e396-07d1-4fc7-a2ab-a7f75de51839}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>Play</text>
+  <text>  On</text>
   <image>/</image>
   <eventLine/>
-  <latch>false</latch>
-  <latched>false</latched>
+  <latch>true</latch>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>OQ</objectName>
-  <x>7</x>
-  <y>249</y>
+  <x>19</x>
+  <y>258</y>
   <width>120</width>
   <height>20</height>
   <uuid>{ed66615b-352c-4bba-86c0-047060bcb717}</uuid>
@@ -303,7 +358,7 @@ i9 0 3000
   <midicc>-3</midicc>
   <minimum>0.01000000</minimum>
   <maximum>0.99000000</maximum>
-  <value>0.58166667</value>
+  <value>0.83483333</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -311,17 +366,17 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>OQ</objectName>
-  <x>128</x>
-  <y>242</y>
+  <x>140</x>
+  <y>251</y>
   <width>62</width>
   <height>34</height>
   <uuid>{17ac5668-ce2d-4af9-b65e-e0e4612ae64f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>0.582</label>
+  <midicc>0</midicc>
+  <label>0.835</label>
   <alignment>left</alignment>
-  <font>Helvetica</font>
+  <font>Nimbus Sans L</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -335,13 +390,13 @@ i9 0 3000
    <b>255</b>
   </bgcolor>
   <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
+  <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>SQ</objectName>
-  <x>4</x>
-  <y>288</y>
+  <x>16</x>
+  <y>297</y>
   <width>120</width>
   <height>20</height>
   <uuid>{d7218969-08b1-4bd7-a9a0-b628bc11de92}</uuid>
@@ -358,17 +413,17 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>SQ</objectName>
-  <x>127</x>
-  <y>282</y>
+  <x>139</x>
+  <y>291</y>
   <width>64</width>
   <height>34</height>
   <uuid>{0d2e784e-c496-48c0-b1e7-24f7372bf098}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <label>2.933</label>
   <alignment>left</alignment>
-  <font>Helvetica</font>
+  <font>Nimbus Sans L</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -382,13 +437,13 @@ i9 0 3000
    <b>255</b>
   </bgcolor>
   <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
+  <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName/>
-  <x>188</x>
-  <y>242</y>
+  <x>200</x>
+  <y>251</y>
   <width>188</width>
   <height>35</height>
   <uuid>{110eea63-47f6-4b77-8618-75983accf0e2}</uuid>
@@ -416,8 +471,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName/>
-  <x>189</x>
-  <y>282</y>
+  <x>201</x>
+  <y>291</y>
   <width>189</width>
   <height>34</height>
   <uuid>{6b2d94b8-9878-4d4d-a9fb-40ad4a7f2591}</uuid>
@@ -445,8 +500,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Vol</objectName>
-  <x>614</x>
-  <y>234</y>
+  <x>619</x>
+  <y>243</y>
   <width>67</width>
   <height>66</height>
   <uuid>{92ce6e66-959c-4008-b746-b3bf5ec58319}</uuid>
@@ -463,17 +518,17 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName/>
-  <x>5</x>
-  <y>365</y>
+  <x>17</x>
+  <y>374</y>
   <width>178</width>
   <height>200</height>
   <uuid>{fcb57829-45a8-4dcb-b308-c9759c5116a5}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <label>Formant 1</label>
-  <alignment>left</alignment>
-  <font>Helvetica</font>
+  <alignment>center</alignment>
+  <font>Nimbus Sans L</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -487,22 +542,22 @@ i9 0 3000
    <b>255</b>
   </bgcolor>
   <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
+  <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName/>
-  <x>196</x>
-  <y>365</y>
+  <x>208</x>
+  <y>374</y>
   <width>180</width>
   <height>200</height>
   <uuid>{b49cbccf-29fa-4e5d-a241-976f70d0bc96}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <label>Formant 2</label>
-  <alignment>left</alignment>
-  <font>Helvetica</font>
+  <alignment>center</alignment>
+  <font>Nimbus Sans L</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -516,22 +571,22 @@ i9 0 3000
    <b>255</b>
   </bgcolor>
   <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
+  <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName/>
-  <x>390</x>
-  <y>365</y>
+  <x>402</x>
+  <y>374</y>
   <width>173</width>
   <height>200</height>
   <uuid>{c9090fc2-e24b-4f9a-a61e-0df7be4a4a56}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <label>Formant 3</label>
-  <alignment>left</alignment>
-  <font>Helvetica</font>
+  <alignment>center</alignment>
+  <font>Nimbus Sans L</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -545,22 +600,22 @@ i9 0 3000
    <b>255</b>
   </bgcolor>
   <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
+  <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName/>
-  <x>574</x>
-  <y>365</y>
+  <x>586</x>
+  <y>374</y>
   <width>178</width>
   <height>200</height>
   <uuid>{3eaa3afc-6844-4d09-b916-e3216228e124}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <label>Formant 4</label>
-  <alignment>left</alignment>
-  <font>MS Shell Dlg 2</font>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
@@ -574,13 +629,13 @@ i9 0 3000
    <b>255</b>
   </bgcolor>
   <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
+  <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName/>
-  <x>629</x>
-  <y>301</y>
+  <x>634</x>
+  <y>310</y>
   <width>39</width>
   <height>30</height>
   <uuid>{3eefe31b-44dd-4ad9-be42-9bab11c88426}</uuid>
@@ -608,8 +663,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>f0</objectName>
-  <x>547</x>
-  <y>234</y>
+  <x>541</x>
+  <y>243</y>
   <width>65</width>
   <height>68</height>
   <uuid>{c4e01276-4397-4738-883e-f55ed93c22aa}</uuid>
@@ -618,7 +673,7 @@ i9 0 3000
   <midicc>-3</midicc>
   <minimum>90.00000000</minimum>
   <maximum>800.00000000</maximum>
-  <value>452.10000000</value>
+  <value>164.81378174</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -626,8 +681,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName/>
-  <x>561</x>
-  <y>302</y>
+  <x>555</x>
+  <y>311</y>
   <width>39</width>
   <height>30</height>
   <uuid>{8d4841bd-9c74-449f-9f83-a536ba65d3f2}</uuid>
@@ -655,18 +710,18 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>f0</objectName>
-  <x>543</x>
-  <y>325</y>
-  <width>84</width>
-  <height>29</height>
+  <x>537</x>
+  <y>336</y>
+  <width>79</width>
+  <height>31</height>
   <uuid>{0d162f00-d220-41c4-bb2c-a86310f8a725}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>452.100</label>
+  <midicc>0</midicc>
+  <label>164.814</label>
   <alignment>left</alignment>
-  <font>MS Shell Dlg 2</font>
-  <fontsize>18</fontsize>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -679,13 +734,13 @@ i9 0 3000
    <b>255</b>
   </bgcolor>
   <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
+  <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBCheckBox">
   <objectName>Vib</objectName>
-  <x>394</x>
-  <y>242</y>
+  <x>405</x>
+  <y>252</y>
   <width>20</width>
   <height>20</height>
   <uuid>{578bf449-45b0-4a38-a845-d8f0fdeb40a4}</uuid>
@@ -699,8 +754,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName/>
-  <x>416</x>
-  <y>240</y>
+  <x>428</x>
+  <y>249</y>
   <width>78</width>
   <height>31</height>
   <uuid>{8f2ea0c8-50aa-4c3e-a4be-2dd68e87a370}</uuid>
@@ -728,8 +783,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBCheckBox">
   <objectName>JitOn</objectName>
-  <x>393</x>
-  <y>267</y>
+  <x>405</x>
+  <y>280</y>
   <width>20</width>
   <height>20</height>
   <uuid>{41210d11-ef8e-495a-8b5b-8eb153e98144}</uuid>
@@ -743,8 +798,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBCheckBox">
   <objectName>ShimOn</objectName>
-  <x>394</x>
-  <y>291</y>
+  <x>405</x>
+  <y>308</y>
   <width>20</width>
   <height>20</height>
   <uuid>{daac4edc-6702-4f9b-a209-edf0e249dad1}</uuid>
@@ -758,8 +813,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName/>
-  <x>417</x>
-  <y>265</y>
+  <x>429</x>
+  <y>276</y>
   <width>78</width>
   <height>31</height>
   <uuid>{3615fe9d-802f-4ec7-9994-19b7cc60e99d}</uuid>
@@ -787,8 +842,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName/>
-  <x>417</x>
-  <y>288</y>
+  <x>429</x>
+  <y>303</y>
   <width>84</width>
   <height>31</height>
   <uuid>{14eeb36a-51d4-4b86-9f99-5a974e89bf14}</uuid>
@@ -816,8 +871,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBCheckBox">
   <objectName>OShoot</objectName>
-  <x>394</x>
-  <y>315</y>
+  <x>405</x>
+  <y>336</y>
   <width>20</width>
   <height>20</height>
   <uuid>{512c9266-c506-4055-b72c-1e87eec9b966}</uuid>
@@ -831,8 +886,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName/>
-  <x>417</x>
-  <y>313</y>
+  <x>429</x>
+  <y>330</y>
   <width>113</width>
   <height>31</height>
   <uuid>{8bb809a5-548c-47a7-90cf-852b385c12d0}</uuid>
@@ -860,8 +915,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Noise</objectName>
-  <x>5</x>
-  <y>330</y>
+  <x>17</x>
+  <y>339</y>
   <width>120</width>
   <height>20</height>
   <uuid>{af7dfd5c-edac-486c-8b48-ae459f14e99b}</uuid>
@@ -878,17 +933,17 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Noise</objectName>
-  <x>128</x>
-  <y>322</y>
+  <x>140</x>
+  <y>331</y>
   <width>64</width>
   <height>34</height>
   <uuid>{38733e9e-6260-4ebc-9124-6042c99729d2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <label>0.108</label>
   <alignment>left</alignment>
-  <font>Helvetica</font>
+  <font>Nimbus Sans L</font>
   <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
@@ -902,13 +957,13 @@ i9 0 3000
    <b>255</b>
   </bgcolor>
   <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
+  <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName/>
-  <x>191</x>
-  <y>322</y>
+  <x>203</x>
+  <y>331</y>
   <width>187</width>
   <height>33</height>
   <uuid>{cd341f6c-b306-496b-9fbe-71553da12e00}</uuid>
@@ -936,8 +991,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>Cutoff1</objectName>
-  <x>31</x>
-  <y>455</y>
+  <x>43</x>
+  <y>464</y>
   <width>20</width>
   <height>100</height>
   <uuid>{06d7238c-0da6-40ea-bf08-cb6e4bc79f8b}</uuid>
@@ -954,8 +1009,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Cutoff1</objectName>
-  <x>4</x>
-  <y>419</y>
+  <x>16</x>
+  <y>428</y>
   <width>68</width>
   <height>33</height>
   <uuid>{3295fa38-6aed-4320-b28d-151213868426}</uuid>
@@ -983,8 +1038,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>Reson1</objectName>
-  <x>81</x>
-  <y>455</y>
+  <x>93</x>
+  <y>464</y>
   <width>20</width>
   <height>100</height>
   <uuid>{3d0983f2-affa-44a2-b42f-218508a858cb}</uuid>
@@ -993,7 +1048,7 @@ i9 0 3000
   <midicc>-3</midicc>
   <minimum>0.50000000</minimum>
   <maximum>30.00000000</maximum>
-  <value>30.00000000</value>
+  <value>20.85500000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1001,15 +1056,15 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Reson1</objectName>
-  <x>68</x>
-  <y>418</y>
+  <x>80</x>
+  <y>427</y>
   <width>57</width>
   <height>34</height>
   <uuid>{61fe088c-82b2-46d4-bfa2-d72f54632d12}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>30.000</label>
+  <label>20.855</label>
   <alignment>left</alignment>
   <font>Helvetica</font>
   <fontsize>14</fontsize>
@@ -1030,8 +1085,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>Cutoff2</objectName>
-  <x>220</x>
-  <y>455</y>
+  <x>232</x>
+  <y>464</y>
   <width>20</width>
   <height>100</height>
   <uuid>{981b6cc8-b6a4-4a7a-9fad-016cb38601c0}</uuid>
@@ -1048,8 +1103,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Cutoff2</objectName>
-  <x>204</x>
-  <y>418</y>
+  <x>216</x>
+  <y>427</y>
   <width>60</width>
   <height>32</height>
   <uuid>{f14e8678-9689-4206-adbf-0f82d47ed2da}</uuid>
@@ -1077,8 +1132,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>Reson2</objectName>
-  <x>277</x>
-  <y>455</y>
+  <x>289</x>
+  <y>464</y>
   <width>20</width>
   <height>100</height>
   <uuid>{14e724be-7c83-437a-ad88-ffbb3c3b9b6c}</uuid>
@@ -1095,8 +1150,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Reson2</objectName>
-  <x>266</x>
-  <y>418</y>
+  <x>278</x>
+  <y>427</y>
   <width>54</width>
   <height>34</height>
   <uuid>{9dc7d65d-2f09-42e6-a83c-9153878380a5}</uuid>
@@ -1124,8 +1179,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>Cutoff3</objectName>
-  <x>408</x>
-  <y>455</y>
+  <x>420</x>
+  <y>464</y>
   <width>20</width>
   <height>100</height>
   <uuid>{a6388325-f9d1-495d-8d33-3ff029b25a55}</uuid>
@@ -1142,8 +1197,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Cutoff3</objectName>
-  <x>394</x>
-  <y>418</y>
+  <x>406</x>
+  <y>427</y>
   <width>60</width>
   <height>33</height>
   <uuid>{c0b9c7e9-5f92-4310-8aeb-1b984ee0debe}</uuid>
@@ -1171,8 +1226,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>Reson3</objectName>
-  <x>460</x>
-  <y>455</y>
+  <x>472</x>
+  <y>464</y>
   <width>20</width>
   <height>100</height>
   <uuid>{85b92dec-b319-4f02-ab73-4693be8979bb}</uuid>
@@ -1189,8 +1244,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Reson3</objectName>
-  <x>449</x>
-  <y>418</y>
+  <x>461</x>
+  <y>427</y>
   <width>55</width>
   <height>34</height>
   <uuid>{105784c1-a8e2-4e8f-ad99-0491246dc4fb}</uuid>
@@ -1218,8 +1273,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>FormAmp1</objectName>
-  <x>132</x>
-  <y>455</y>
+  <x>144</x>
+  <y>464</y>
   <width>20</width>
   <height>100</height>
   <uuid>{ec3d8b89-15db-4786-a099-88e621fef341}</uuid>
@@ -1236,8 +1291,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>FormAmp1</objectName>
-  <x>126</x>
-  <y>418</y>
+  <x>138</x>
+  <y>427</y>
   <width>56</width>
   <height>33</height>
   <uuid>{b0004b3d-ef72-41d0-854d-25082740501a}</uuid>
@@ -1265,8 +1320,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>FormAmp2</objectName>
-  <x>331</x>
-  <y>455</y>
+  <x>343</x>
+  <y>464</y>
   <width>20</width>
   <height>100</height>
   <uuid>{0f16e259-5c2c-4a3d-933b-b87d6c06a17c}</uuid>
@@ -1283,8 +1338,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>FormAmp2</objectName>
-  <x>318</x>
-  <y>418</y>
+  <x>330</x>
+  <y>427</y>
   <width>54</width>
   <height>34</height>
   <uuid>{30851580-6fe8-4404-b504-3646495d35ac}</uuid>
@@ -1312,8 +1367,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>FormAmp3</objectName>
-  <x>518</x>
-  <y>455</y>
+  <x>530</x>
+  <y>464</y>
   <width>20</width>
   <height>100</height>
   <uuid>{ae3d1154-81df-47e7-8a75-98fc07158a53}</uuid>
@@ -1330,8 +1385,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>FormAmp3</objectName>
-  <x>506</x>
-  <y>418</y>
+  <x>518</x>
+  <y>427</y>
   <width>55</width>
   <height>34</height>
   <uuid>{5dbae9d9-e74f-428e-a1da-6dd0a25db71f}</uuid>
@@ -1359,8 +1414,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>Cutoff4</objectName>
-  <x>596</x>
-  <y>455</y>
+  <x>608</x>
+  <y>464</y>
   <width>20</width>
   <height>100</height>
   <uuid>{666af323-63a7-40c5-87ce-0acf2c8cab2d}</uuid>
@@ -1377,8 +1432,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Cutoff4</objectName>
-  <x>582</x>
-  <y>418</y>
+  <x>594</x>
+  <y>427</y>
   <width>60</width>
   <height>33</height>
   <uuid>{e67f966b-a299-43d8-a1da-a9d54f9a7f22}</uuid>
@@ -1406,8 +1461,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>Reson4</objectName>
-  <x>653</x>
-  <y>455</y>
+  <x>665</x>
+  <y>464</y>
   <width>20</width>
   <height>100</height>
   <uuid>{f42d227d-07ac-4ab8-9f7b-a5920a581e61}</uuid>
@@ -1424,8 +1479,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Reson4</objectName>
-  <x>636</x>
-  <y>418</y>
+  <x>648</x>
+  <y>427</y>
   <width>55</width>
   <height>34</height>
   <uuid>{01add204-7be3-46ff-804b-af16f1de134c}</uuid>
@@ -1453,8 +1508,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>FormAmp4</objectName>
-  <x>706</x>
-  <y>455</y>
+  <x>718</x>
+  <y>464</y>
   <width>20</width>
   <height>100</height>
   <uuid>{7d904e2d-9815-4119-85c7-f5516527c8c5}</uuid>
@@ -1471,8 +1526,8 @@ i9 0 3000
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>FormAmp4</objectName>
-  <x>689</x>
-  <y>418</y>
+  <x>701</x>
+  <y>427</y>
   <width>55</width>
   <height>34</height>
   <uuid>{896bc826-afa3-47db-8cec-be0e37fbb120}</uuid>
@@ -1846,6 +1901,50 @@ i9 0 3000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox">
+  <objectName>spectrum</objectName>
+  <x>711</x>
+  <y>289</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{02172be0-8d6b-45f5-a65e-ef1d2a201b59}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName/>
+  <x>688</x>
+  <y>304</y>
+  <width>91</width>
+  <height>29</height>
+  <uuid>{0bc1f7a7-ffae-4c7b-bf4b-1aadbb10e2a8}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Spectrum</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
@@ -1855,75 +1954,79 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 433 146 789 621
+WindowBounds: 72 179 400 200
 CurrentView: io
 IOViewEdit: On
 Options:
 </MacOptions>
+
 <MacGUI>
 ioView background {54484, 50886, 40092}
-ioGraph {6, 4} {754, 230} table 0.000000 1.000000 
-ioButton {654, 329} {104, 30} value 1.000000 "on" "Play" "/" 
-ioSlider {7, 249} {120, 20} 0.010000 0.990000 0.581667 OQ
-ioText {128, 242} {62, 34} display 0.582000 0.00100 "OQ" left "Helvetica" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.582
-ioSlider {4, 288} {120, 20} 0.800000 4.000000 2.933333 SQ
-ioText {127, 282} {64, 34} display 2.933000 0.00100 "SQ" left "Helvetica" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.933
-ioText {188, 242} {171, 36} display 0.000000 0.00100 "" left "Helvetica" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Open Quotient (OQ)
-ioText {188, 282} {171, 36} display 0.000000 0.00100 "" left "Helvetica" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Speed Quotient (SQ)
-ioKnob {614, 234} {67, 66} 1.000000 0.000000 0.010000 0.505051 Vol
-ioText {5, 365} {178, 200} display 0.000000 0.00100 "" left "Helvetica" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Formant 1
-ioText {196, 365} {180, 200} display 0.000000 0.00100 "" left "Helvetica" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Formant 2
-ioText {390, 365} {173, 200} display 0.000000 0.00100 "" left "Helvetica" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Formant 3
-ioText {574, 365} {178, 209} display 0.000000 0.00100 "" left "MS Shell Dlg 2" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Formant 4
-ioText {613, 301} {39, 30} display 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Vol
-ioKnob {547, 234} {65, 68} 800.000000 90.000000 0.010000 452.100000 f0
-ioText {545, 302} {39, 30} display 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder f0
-ioText {527, 325} {84, 29} display 452.100000 0.00100 "f0" left "MS Shell Dlg 2" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 452.100
-ioCheckbox {394, 242} {20, 20} on Vib
-ioText {389, 240} {78, 31} display 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Vibr
-ioCheckbox {393, 267} {20, 20} off JitOn
-ioCheckbox {394, 291} {20, 20} off ShimOn
-ioText {390, 265} {78, 31} display 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Jit
-ioText {390, 288} {84, 31} display 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Shim
-ioCheckbox {394, 315} {20, 20} off OShoot
-ioText {390, 313} {113, 31} display 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Overshoot
-ioSlider {5, 330} {120, 20} 0.000000 0.200000 0.108333 Noise
-ioText {128, 322} {64, 34} display 0.108000 0.00100 "Noise" left "Helvetica" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.108
-ioText {190, 323} {171, 36} display 0.000000 0.00100 "" left "Helvetica" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Aspiration noise
-ioSlider {31, 455} {20, 100} 250.000000 1200.000000 1143.000000 Cutoff1
-ioText {4, 419} {68, 33} display 1143.000000 0.00100 "Cutoff1" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1143.000
-ioSlider {81, 455} {20, 100} 0.500000 30.000000 30.000000 Reson1
-ioText {68, 418} {57, 34} display 30.000000 0.00100 "Reson1" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 30.000
-ioSlider {220, 455} {20, 100} 800.000000 3200.000000 2816.000000 Cutoff2
-ioText {204, 418} {60, 32} display 2816.000000 0.00100 "Cutoff2" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2816.000
-ioSlider {277, 455} {20, 100} 0.500000 30.000000 30.000000 Reson2
-ioText {266, 418} {54, 34} display 30.000000 0.00100 "Reson2" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 30.000
-ioSlider {408, 455} {20, 100} 2400.000000 3500.000000 3500.000000 Cutoff3
-ioText {394, 416} {60, 33} display 3500.000000 0.00100 "Cutoff3" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3500.000
-ioSlider {460, 455} {20, 100} 0.500000 30.000000 30.000000 Reson3
-ioText {449, 418} {55, 34} display 30.000000 0.00100 "Reson3" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 30.000
-ioSlider {132, 455} {20, 100} 0.000000 1.000000 0.680000 FormAmp1
-ioText {124, 418} {56, 33} display 0.680000 0.00100 "FormAmp1" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.680
-ioSlider {331, 455} {20, 100} 0.000000 1.000000 0.100000 FormAmp2
-ioText {318, 418} {54, 34} display 0.100000 0.00100 "FormAmp2" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.100
-ioSlider {518, 455} {20, 100} 0.000000 1.000000 0.040000 FormAmp3
-ioText {501, 418} {55, 34} display 0.040000 0.00100 "FormAmp3" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.040
-ioSlider {596, 455} {20, 100} 3500.000000 5000.000000 4955.000000 Cutoff4
-ioText {582, 418} {60, 33} display 4955.000000 0.00100 "Cutoff4" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4955.000
-ioSlider {653, 455} {20, 100} 0.500000 50.000000 50.000000 Reson4
-ioText {636, 418} {55, 34} display 50.000000 0.00100 "Reson4" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 50.000
-ioSlider {706, 455} {20, 100} 0.000000 1.000000 0.020000 FormAmp4
-ioText {689, 418} {55, 34} display 0.020000 0.00100 "FormAmp4" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.020
-ioText {21, 399} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frek
-ioText {74, 398} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder BW
-ioText {126, 398} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amp
-ioText {210, 403} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frek
-ioText {269, 402} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder BW
-ioText {320, 403} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amp
-ioText {401, 405} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frek
-ioText {454, 404} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder BW
-ioText {506, 404} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amp
-ioText {587, 409} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frek
-ioText {640, 408} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder BW
-ioText {692, 408} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amp
+ioText {14, 12} {755, 228} display 0.000000 0.00100 "" center "Nimbus Sans L" 22 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Formant Graph
+ioGraph {21, 18} {740, 217} table 4.000000 1.000000 graph
+ioButton {621, 337} {141, 29} value 1.000000 "on" "  On" "/" 
+ioSlider {19, 258} {120, 20} 0.010000 0.990000 0.834833 OQ
+ioText {140, 251} {62, 34} display 0.835000 0.00100 "OQ" left "Nimbus Sans L" 16 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 0.835
+ioSlider {16, 297} {120, 20} 0.800000 4.000000 2.933333 SQ
+ioText {139, 291} {64, 34} display 2.933333 0.00100 "SQ" left "Nimbus Sans L" 16 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 2.933
+ioText {200, 251} {188, 35} display 0.000000 0.00100 "" left "Helvetica" 16 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Open Quotient (OQ)
+ioText {201, 291} {189, 34} display 0.000000 0.00100 "" left "Helvetica" 16 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Speed Quotient (SQ)
+ioKnob {619, 243} {67, 66} 1.000000 0.000000 0.010000 0.505051 Vol
+ioText {17, 374} {178, 200} display 0.000000 0.00100 "" center "Nimbus Sans L" 22 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Formant 1
+ioText {208, 374} {180, 200} display 0.000000 0.00100 "" center "Nimbus Sans L" 22 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Formant 2
+ioText {402, 374} {173, 200} display 0.000000 0.00100 "" center "Nimbus Sans L" 22 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Formant 3
+ioText {586, 374} {178, 200} display 0.000000 0.00100 "" center "DejaVu Sans" 22 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Formant 4
+ioText {634, 310} {39, 30} display 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Vol
+ioKnob {541, 243} {65, 68} 800.000000 90.000000 0.010000 164.813782 f0
+ioText {555, 311} {39, 30} display 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder f0
+ioText {537, 336} {79, 31} display 164.814000 0.00100 "f0" left "DejaVu Sans" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 164.814
+ioCheckbox {405, 252} {20, 20} on Vib
+ioText {428, 249} {78, 31} display 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Vibr
+ioCheckbox {405, 280} {20, 20} off JitOn
+ioCheckbox {405, 308} {20, 20} off ShimOn
+ioText {429, 276} {78, 31} display 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Jit
+ioText {429, 303} {84, 31} display 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Shim
+ioCheckbox {405, 336} {20, 20} off OShoot
+ioText {429, 330} {113, 31} display 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Overshoot
+ioSlider {17, 339} {120, 20} 0.000000 0.200000 0.108333 Noise
+ioText {140, 331} {64, 34} display 0.108000 0.00100 "Noise" left "Nimbus Sans L" 16 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 0.108
+ioText {203, 331} {187, 33} display 0.000000 0.00100 "" left "Helvetica" 16 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Aspiration noise
+ioSlider {43, 464} {20, 100} 250.000000 1200.000000 1143.000000 Cutoff1
+ioText {16, 428} {68, 33} display 1143.000000 0.00100 "Cutoff1" left "Helvetica" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 1143.000
+ioSlider {93, 464} {20, 100} 0.500000 30.000000 20.855000 Reson1
+ioText {80, 427} {57, 34} display 20.855000 0.00100 "Reson1" left "Helvetica" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 20.855
+ioSlider {232, 464} {20, 100} 800.000000 3200.000000 2816.000000 Cutoff2
+ioText {216, 427} {60, 32} display 2816.000000 0.00100 "Cutoff2" left "Helvetica" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 2816.000
+ioSlider {289, 464} {20, 100} 0.500000 30.000000 30.000000 Reson2
+ioText {278, 427} {54, 34} display 30.000000 0.00100 "Reson2" left "Helvetica" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 30.000
+ioSlider {420, 464} {20, 100} 2400.000000 3500.000000 3500.000000 Cutoff3
+ioText {406, 427} {60, 33} display 3500.000000 0.00100 "Cutoff3" left "Helvetica" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 3500.000
+ioSlider {472, 464} {20, 100} 0.500000 30.000000 30.000000 Reson3
+ioText {461, 427} {55, 34} display 30.000000 0.00100 "Reson3" left "Helvetica" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 30.000
+ioSlider {144, 464} {20, 100} 0.000000 1.000000 0.680000 FormAmp1
+ioText {138, 427} {56, 33} display 0.680000 0.00100 "FormAmp1" left "Helvetica" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 0.680
+ioSlider {343, 464} {20, 100} 0.000000 1.000000 0.100000 FormAmp2
+ioText {330, 427} {54, 34} display 0.100000 0.00100 "FormAmp2" left "Helvetica" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 0.100
+ioSlider {530, 464} {20, 100} 0.000000 1.000000 0.040000 FormAmp3
+ioText {518, 427} {55, 34} display 0.040000 0.00100 "FormAmp3" left "Helvetica" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 0.040
+ioSlider {608, 464} {20, 100} 3500.000000 5000.000000 4955.000000 Cutoff4
+ioText {594, 427} {60, 33} display 4955.000000 0.00100 "Cutoff4" left "Helvetica" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 4955.000
+ioSlider {665, 464} {20, 100} 0.500000 50.000000 50.000000 Reson4
+ioText {648, 427} {55, 34} display 50.000000 0.00100 "Reson4" left "Helvetica" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 50.000
+ioSlider {718, 464} {20, 100} 0.000000 1.000000 0.020000 FormAmp4
+ioText {701, 427} {55, 34} display 0.020000 0.00100 "FormAmp4" left "Helvetica" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 0.020
+ioText {17, 398} {53, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Frek
+ioText {74, 398} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder BW
+ioText {126, 398} {54, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Amp
+ioText {210, 398} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Frek
+ioText {269, 398} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder BW
+ioText {320, 398} {54, 28} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Amp
+ioText {401, 398} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Frek
+ioText {454, 398} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder BW
+ioText {506, 398} {57, 28} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Amp
+ioText {587, 398} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Frek
+ioText {640, 398} {48, 27} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder BW
+ioText {692, 398} {58, 26} label 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Amp
+ioCheckbox {711, 289} {20, 20} off spectrum
+ioText {688, 304} {91, 29} display 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Spectrum
 </MacGUI>
