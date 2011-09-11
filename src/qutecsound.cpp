@@ -1627,18 +1627,18 @@ void qutecsound::openManualExample(QString fileName)
 
 void qutecsound::openExternalBrowser(QUrl url)
 {
-  QString text;
   if (!url.isEmpty()) {
     if (!m_options->browser.isEmpty()) {
-      execute(m_options->browser, url.toString());
+	  execute(m_options->browser,"\"" + url.toString() + "\"");
     }
     else {
       QDesktopServices::openUrl(url);
-    }
+	}
   }
   else if (m_options->csdocdir != "") {
-    QString file =  m_options->csdocdir + "/" + documentPages[curPage]->wordUnderCursor() + ".html";
-    execute(m_options->browser, file);
+	url = QUrl ("http://" + m_options->csdocdir + "/"
+				+ documentPages[curPage]->wordUnderCursor() + ".html");
+	execute(m_options->browser, "\"" + url.toString() + "\"");
   }
   else {
     QMessageBox::critical(this,
