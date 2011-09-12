@@ -18,7 +18,7 @@ giSine   ftgen   0, 0, 1024, 10, 1
 ;                               TRIGGER INSTRUMENT
 ;******************************************************
 
-massign 0,0
+massign 1,2
 
 instr   1
 ;               Get value for global source
@@ -35,20 +35,9 @@ if (konchanged == 1 && kon == 0) then
 		turnoff2 10, 2, 0
 endif
 
-; MIDI trigger
+; Turn off MIDI triggered note
 kstatus, kchan, kdata1, kdata2 midiin
-if (kstatus == 144) then
-	if (kon == 1) then
-		outvalue "on", 0
-		turnoff2 10, 1, 0
-	endif
-	kcps = 440 * 2 ^((kdata1 - 69)/12)
-	igoto noinit
-	outvalue "f0", kcps
-	noinit:
-	schedkwhen 1, 0, 2, 10, 0, -1, kOpenQ, kSpeedQ
-
-elseif (kstatus == 128) then
+if (kstatus == 128) then
 		turnoff2 10, 2, 0
 endif
 
@@ -64,6 +53,18 @@ if (kchanged == 1 || (konchanged == 1 && kon == 0) \
 endif
 endin
 
+instr 2 ; MIDI trigger
+; turn off sound from button
+outvalue "on", 0
+turnoff2 10, 1, 0
+
+icps cpsmidi
+outvalue "f0", icps
+kOpenQ  invalue "OQ"
+kSpeedQ invalue "SQ"
+schedkwhen 1, 0, 2, 10, 0, 100, kOpenQ, kSpeedQ
+turnoff
+endin
 
 ; *************************************************************
 ;                       FORMANT SYNTHESIZER INSTRUMENT
@@ -267,8 +268,8 @@ i1 0 3600
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>424</x>
- <y>179</y>
+ <x>23</x>
+ <y>44</y>
  <width>782</width>
  <height>592</height>
  <visible>true</visible>
@@ -317,7 +318,7 @@ i1 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <value>4</value>
+  <value>-102</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -344,7 +345,7 @@ i1 0 3600
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>OQ</objectName>
@@ -673,7 +674,7 @@ i1 0 3600
   <midicc>-3</midicc>
   <minimum>90.00000000</minimum>
   <maximum>800.00000000</maximum>
-  <value>164.81378174</value>
+  <value>220.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -718,7 +719,7 @@ i1 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>164.814</label>
+  <label>220.000</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
@@ -1963,12 +1964,12 @@ Options:
 <MacGUI>
 ioView background {54484, 50886, 40092}
 ioText {14, 12} {755, 228} display 0.000000 0.00100 "" center "Nimbus Sans L" 22 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Formant Graph
-ioGraph {21, 18} {740, 217} table 4.000000 1.000000 graph
+ioGraph {21, 18} {740, 217} table -102.000000 1.000000 graph
 ioButton {621, 337} {141, 29} value 1.000000 "on" "  On" "/" 
 ioSlider {19, 258} {120, 20} 0.010000 0.990000 0.834833 OQ
 ioText {140, 251} {62, 34} display 0.835000 0.00100 "OQ" left "Nimbus Sans L" 16 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 0.835
 ioSlider {16, 297} {120, 20} 0.800000 4.000000 2.933333 SQ
-ioText {139, 291} {64, 34} display 2.933333 0.00100 "SQ" left "Nimbus Sans L" 16 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 2.933
+ioText {139, 291} {64, 34} display 2.933000 0.00100 "SQ" left "Nimbus Sans L" 16 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 2.933
 ioText {200, 251} {188, 35} display 0.000000 0.00100 "" left "Helvetica" 16 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Open Quotient (OQ)
 ioText {201, 291} {189, 34} display 0.000000 0.00100 "" left "Helvetica" 16 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Speed Quotient (SQ)
 ioKnob {619, 243} {67, 66} 1.000000 0.000000 0.010000 0.505051 Vol
@@ -1977,9 +1978,9 @@ ioText {208, 374} {180, 200} display 0.000000 0.00100 "" center "Nimbus Sans L" 
 ioText {402, 374} {173, 200} display 0.000000 0.00100 "" center "Nimbus Sans L" 22 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Formant 3
 ioText {586, 374} {178, 200} display 0.000000 0.00100 "" center "DejaVu Sans" 22 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Formant 4
 ioText {634, 310} {39, 30} display 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Vol
-ioKnob {541, 243} {65, 68} 800.000000 90.000000 0.010000 164.813782 f0
+ioKnob {541, 243} {65, 68} 800.000000 90.000000 0.010000 220.000000 f0
 ioText {555, 311} {39, 30} display 0.000000 0.00100 "" left "MS Shell Dlg 2" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder f0
-ioText {537, 336} {79, 31} display 164.814000 0.00100 "f0" left "DejaVu Sans" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 164.814
+ioText {537, 336} {79, 31} display 220.000000 0.00100 "f0" left "DejaVu Sans" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 220.000
 ioCheckbox {405, 252} {20, 20} on Vib
 ioText {428, 249} {78, 31} display 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Vibr
 ioCheckbox {405, 280} {20, 20} off JitOn
