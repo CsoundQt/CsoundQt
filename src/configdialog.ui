@@ -30,7 +30,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -1127,7 +1127,7 @@
          <item>
           <widget class="QCheckBox" name="widgetsIndependentCheckBox">
            <property name="text">
-            <string>Widgets are an independent window</string>
+            <string>Widgets are an independent window (requires restart)</string>
            </property>
           </widget>
          </item>

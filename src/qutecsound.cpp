@@ -1611,16 +1611,23 @@ void qutecsound::openExternalBrowser(QUrl url)
       QDesktopServices::openUrl(url);
 	}
   }
-  else if (m_options->csdocdir != "") {
-	url = QUrl ("http://" + m_options->csdocdir + "/"
-				+ documentPages[curPage]->wordUnderCursor() + ".html");
-	execute(m_options->browser, "\"" + url.toString() + "\"");
-  }
   else {
-    QMessageBox::critical(this,
-                          tr("Error"),
-                          tr("HTML Documentation directory not set!\n"
-                             "Please go to Edit->Options->Environment and select directory\n"));
+	  if (m_options->csdocdir != "") {
+		  url = QUrl ("file://" + m_options->csdocdir + "/"
+					  + documentPages[curPage]->wordUnderCursor() + ".html");
+		  if (!m_options->browser.isEmpty()) {
+			  execute(m_options->browser, "\"" + url.toString() + "\"");
+		  }
+		  else {
+			QDesktopServices::openUrl(url);
+		  }
+	  }
+	  else {
+		QMessageBox::critical(this,
+							  tr("Error"),
+							  tr("HTML Documentation directory not set!\n"
+								 "Please go to Edit->Options->Environment and select directory\n"));
+	  }
   }
 }
 
