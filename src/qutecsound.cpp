@@ -2912,6 +2912,7 @@ void qutecsound::createMenus()
   synthFiles.append(":/examples/Synths/Simple_FM_Synth.csd");
   synthFiles.append(":/examples/Synths/Phase_Mod_Synth.csd");
   synthFiles.append(":/examples/Synths/Formant_Synth.csd");
+  synthFiles.append(":/examples/Synths/Mono_Synth.csd");
   synthFiles.append(":/examples/Synths/B6_Hammond.csd");
   synthFiles.append(":/examples/Synths/Diffamator.csd");
   synthFiles.append(":/examples/Synths/Sruti-Drone_Box.csd");
