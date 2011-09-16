@@ -16,13 +16,15 @@
 # ##############################################################################
 # ##############################################################################
 # BUILD OPTIONS:
-# CONFIG+=build64    To build doubles version
+# CONFIG+=builddoubles    To build doubles version
+# CONFIG+=build64    To build doubles version (deprecated)
 # CONFIG+=pythonqt   To build with PythonQt support
 # CONFIG+=rtmidi   To build with Portmidi support
 # OS X only OPTIONS:
 # CONFIG+=intel         To build intel only version (Universal is the default)
 # ##############################################################################
 
+builddoubles: CONFIG += build64
 !build32:!build64:CONFIG += build32
 build32:build64:CONFIG -= build32
 unix { 

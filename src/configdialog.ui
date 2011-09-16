@@ -30,7 +30,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -60,7 +60,7 @@
           <height>66</height>
          </rect>
         </property>
-        <layout class="QGridLayout">
+        <layout class="QGridLayout" name="filenamesLayout">
          <item row="0" column="0">
           <widget class="QCheckBox" name="InputFilenameCheckBox">
            <property name="text">
@@ -132,7 +132,7 @@
           <height>70</height>
          </rect>
         </property>
-        <layout class="QGridLayout">
+        <layout class="QGridLayout" name="formatLayout">
          <item row="0" column="0">
           <widget class="QLabel" name="label_9">
            <property name="text">
@@ -164,7 +164,7 @@
           <height>58</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout">
+        <layout class="QVBoxLayout" name="askLayout">
          <item>
           <widget class="QCheckBox" name="AskFilenameCheckBox">
            <property name="text">
@@ -224,7 +224,7 @@
           <height>101</height>
          </rect>
         </property>
-        <layout class="QGridLayout">
+        <layout class="QGridLayout" name="rtadioLayout">
          <item row="1" column="1">
           <widget class="QLineEdit" name="RtInputLineEdit"/>
          </item>
@@ -259,19 +259,15 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
-          <layout class="QHBoxLayout">
-           <item>
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>RT Audio Module</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
          <item row="0" column="1">
           <widget class="QComboBox" name="RtModuleComboBox"/>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>RT Audio Module</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -281,10 +277,10 @@
           <x>340</x>
           <y>60</y>
           <width>311</width>
-          <height>102</height>
+          <height>101</height>
          </rect>
         </property>
-        <layout class="QGridLayout">
+        <layout class="QGridLayout" name="midilayout">
          <item row="1" column="1">
           <widget class="QLineEdit" name="RtMidiInputLineEdit"/>
          </item>
@@ -319,19 +315,15 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
-          <layout class="QHBoxLayout">
-           <item>
-            <widget class="QLabel" name="label_18">
-             <property name="text">
-              <string>RT MIDI Module</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
          <item row="0" column="1">
           <widget class="QComboBox" name="RtMidiModuleComboBox"/>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_18">
+           <property name="text">
+            <string>RT MIDI Module</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -510,7 +502,7 @@
           <height>71</height>
          </rect>
         </property>
-        <layout class="QGridLayout">
+        <layout class="QGridLayout" name="consoleFontLayout">
          <item row="0" column="0">
           <widget class="QLabel" name="label_11">
            <property name="text">
@@ -611,7 +603,7 @@
           <height>61</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout">
+        <layout class="QVBoxLayout" name="fontLayout2">
          <item>
           <widget class="QLabel" name="label_23">
            <property name="text">
@@ -643,7 +635,7 @@
           <height>69</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout">
+        <layout class="QVBoxLayout" name="fontLayout">
          <item>
           <widget class="QPushButton" name="consoleFontColorPushButton">
            <property name="enabled">
@@ -732,7 +724,7 @@
           <height>33</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout">
+        <layout class="QHBoxLayout" name="recordLayout">
          <item>
           <widget class="QLabel" name="label_21">
            <property name="text">
@@ -1465,7 +1457,7 @@
           <height>354</height>
          </rect>
         </property>
-        <layout class="QGridLayout">
+        <layout class="QGridLayout" name="environLayout">
          <item row="0" column="2">
           <widget class="QLineEdit" name="CsdocdirLineEdit"/>
          </item>
@@ -1904,9 +1896,9 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout">
+    <layout class="QHBoxLayout" name="buttonLayout">
      <item>
-      <spacer>
+      <spacer name="buttonSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>

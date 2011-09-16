@@ -54,5 +54,7 @@ LIBS += -framework CoreMidi -framework CoreAudio -framework CoreFoundation
 LCSOUND = -framework $${MAC_LIB}
 LSNDFILE = -lsndfile
 
-QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist
-ICON = $${PWD}/images/qtcs.icns
+#QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist
+QMAKE_INFO_PLIST = src/MyInfo.plist
+#ICON = $${PWD}/images/qtcs.icns
+ICON = images/qtcs.icns

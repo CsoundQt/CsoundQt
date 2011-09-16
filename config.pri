@@ -2,40 +2,40 @@ CONFIG *= thread \
     warn_on
 CONFIG -= stl
 QT *= xml
-CONFIG(debug, debug|release):CONFIG -= release
-CONFIG(release, debug|release):CONFIG -= debug
-debug {
-    CONFIG -= debug
-    CONFIG += debug
-}
-release {
-    CONFIG -= release
-    CONFIG += release
-}
-warn_on {
-    CONFIG -= warn_on
-    CONFIG += warn_on
-}
+#CONFIG(debug, debug|release):CONFIG -= release
+#CONFIG(release, debug|release):CONFIG -= debug
+#debug {
+#    CONFIG -= debug
+#    CONFIG += debug
+#}
+#release {
+#    CONFIG -= release
+#    CONFIG += release
+#}
+#warn_on {
+#    CONFIG -= warn_on
+#    CONFIG += warn_on
+#}
 CONFIG -= lex \
     yacc
 exceptions:CONFIG -= exceptions_off
 rtti:CONFIG -= rtti_off
 thread:CONFIG -= thread_off
-!isEqual(OUT_PWD, $${PWD}):!isEqual(OUT_PWD, $${PWD}/):CONFIG *= shadow_build \
-    no_fixpath
-shadow_build:TMPDIR = $${OUT_PWD}
-!shadow_build:TMPDIR = $${PWD}/build
-build32:TMPDIR = $${TMPDIR}/floats
-build64:TMPDIR = $${TMPDIR}/doubles
-debug:TMPDIR = $${TMPDIR}/debug
-release:TMPDIR = $${TMPDIR}/release
+#!isEqual(OUT_PWD, $${PWD}):!isEqual(OUT_PWD, $${PWD}/):CONFIG *= shadow_build \
+#    no_fixpath
+#shadow_build:TMPDIR = $${OUT_PWD}
+#!shadow_build:TMPDIR = $${PWD}/build
+#build32:TMPDIR = $${TMPDIR}/floats
+#build64:TMPDIR = $${TMPDIR}/doubles
+#debug:TMPDIR = $${TMPDIR}/debug
+#release:TMPDIR = $${TMPDIR}/release
 build64:DEFINES += USE_DOUBLE
-RCC_DIR = "$${TMPDIR}/rcc"
-UI_DIR = "$${TMPDIR}/ui"
-INCDIR += "$${TMPDIR}/ui"
-MOC_DIR = "$${TMPDIR}/moc"
-OBJECTS_DIR = "$${TMPDIR}/obj"
-DESTDIR = "$${PWD}/bin"
+#RCC_DIR = "$${TMPDIR}/rcc"
+#UI_DIR = "$${TMPDIR}/ui"
+#INCDIR += "$${TMPDIR}/ui"
+#MOC_DIR = "$${TMPDIR}/moc"
+#OBJECTS_DIR = "$${TMPDIR}/obj"
+#DESTDIR = "$${PWD}/bin"
 TARGET = qutecsound
 build32:TARGET = $${TARGET}-f
 build64:TARGET = $${TARGET}-d
@@ -61,7 +61,7 @@ exists(config.user.pri) {
     message(CONFIG ...)
     for(flag, CONFIG):message(+ $$flag)
     message()
-    message(QuteCsound build directory is $${OUT_PWD})
+#    message(QuteCsound build directory is $${OUT_PWD})
     message(QuteCsound intermediate file directory is $${TMPDIR})
     message(QuteCsound bin directory is $${DESTDIR})
     message()
