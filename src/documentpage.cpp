@@ -188,7 +188,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     }
   }
   // Load Live Event Panels ------------------------
-  while (text.contains("<EventPanel") and text.contains("</EventPanel>")) {
+  while (text.indexOf("<EventPanel") != -1 && text.indexOf("<EventPanel") < text.indexOf("</EventPanel>")) {
     QString liveEventsText = text.mid(text.indexOf("<EventPanel "),
                                       text.indexOf("</EventPanel>") - text.indexOf("<EventPanel ") + 13
                                       + (text[text.indexOf("</EventPanel>") + 14] == '\n' ? 1:0));
