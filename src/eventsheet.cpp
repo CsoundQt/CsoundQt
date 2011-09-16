@@ -486,9 +486,9 @@ void EventSheet::sendEventsOffset()
 void EventSheet::loopEvents()
 {
   QPair<int, int> rowsRange = getSelectedRowsRange();
-  m_looping = true;
   markLoop(rowsRange.first,rowsRange.second);
-  sendEvents();
+  setLoopActive(true);
+  emit setLoopEnabledFromSheet(true);
 }
 
 void EventSheet::setLoopActive(bool loop)

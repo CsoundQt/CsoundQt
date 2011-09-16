@@ -48,6 +48,8 @@ class LiveEventFrame : public QWidget
     double getTempo();
     QString getName();
     double getLoopLength();
+	double getLoopStart();
+	double getLoopEnd();
     QString getPlainText();
     bool getVisibleEnabled() { return m_visibleEnabled; }
 
@@ -60,6 +62,7 @@ class LiveEventFrame : public QWidget
     void setTempo(double tempo);
     void setLoopLength(double length);
     void setLoopRange(double start, double end);
+	void setLoopEnabled(bool enabled);
     void setModified(bool mod = true);
     void doAction(int action);
     void newFrame();
@@ -68,7 +71,7 @@ class LiveEventFrame : public QWidget
 
     // To pass directly to live event sheet
     void markLoop(double start = -1, double end = -1);
-    void loopPanel(bool loop);
+	void loopPanel(bool loop);
 
   protected:
 //    void changeEvent(QEvent *e);
@@ -97,7 +100,8 @@ class LiveEventFrame : public QWidget
     void setLoopRangeFromPanel(LiveEventFrame *frame, double start, double end);
     void setLoopLengthFromPanel(LiveEventFrame *frame, double length);
     void setTempoFromPanel(LiveEventFrame *frame, double tempo);
-    void closed();  // To inform Live Event Control that live event panel has been closed
+	void setLoopEnabledFromPanel(LiveEventFrame *frame, bool enabled);
+	void closed(bool visible);  // To inform Live Event Control that live event panel has been closed
 };
 
 #endif // LIVEEVENTFRAME_H

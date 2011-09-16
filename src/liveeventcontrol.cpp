@@ -65,6 +65,12 @@ void LiveEventControl::setPanelLoopLength(int index, double length)
   item->setText(QString::number(length));
 }
 
+void LiveEventControl::setPanelLoopEnabled(int index, bool enabled)
+{
+	QTableWidgetItem * item = getItem(index, 2);
+	item->setCheckState(enabled ? Qt::Checked : Qt::Unchecked);
+}
+
 void LiveEventControl::setPanelTempo(int index, double tempo)
 {
   QTableWidgetItem * item = getItem(index, 7);
@@ -77,8 +83,7 @@ void LiveEventControl::removePanel(int index)
   m_ui->panelTableWidget->removeRow(index);
 }
 
-void LiveEventControl::appendPanel(bool visible, bool play, bool loop, int sync,
-                                   QString name, double loopLength, double loopStart, double loopEnd , double tempo)
+void LiveEventControl::appendPanel(LiveEventFrame *e)
 {
   this->blockSignals(true);  // To avoid showing the panels when adding them (e.g. when starting up)
   int newRow = m_ui->panelTableWidget->rowCount();
@@ -87,7 +92,8 @@ void LiveEventControl::appendPanel(bool visible, bool play, bool loop, int sync,
   m_ui->panelTableWidget->setRowHeight(newRow, 20);
   QTableWidgetItem *visibleItem = getItem(newRow, 0);
 //  visibleItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
-  visibleItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
+  visibleItem->setCheckState(e->getVisibleEnabled() ? Qt::Checked : Qt::Unchecked);
+  connect(e, SIGNAL(closed(LiveEventFrame *)), this, SLOT(frameClosed(LiveEventFrame *)) );
   QTableWidgetItem *playItem = getItem(newRow, 1);
   playItem->setIcon(QIcon(":/images/gtk-media-play-ltr.png"));
 //  playItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
@@ -96,14 +102,16 @@ void LiveEventControl::appendPanel(bool visible, bool play, bool loop, int sync,
   QTableWidgetItem *syncItem = getItem(newRow, 3);
 //  loopItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
   QTableWidgetItem *nameItem = getItem(newRow, 4);
-  nameItem->setData(Qt::DisplayRole, QVariant(name));
+  nameItem->setData(Qt::DisplayRole, QVariant(e->getName()));
   QTableWidgetItem *loopLengthItem = getItem(newRow, 5);
-  loopLengthItem->setData(Qt::DisplayRole, QVariant(loopLength));
+  loopLengthItem->setData(Qt::DisplayRole, QVariant(e->getLoopLength()));
+
   QTableWidgetItem *loopRangeItem = getItem(newRow, 6);
-  loopRangeItem->setText(QString::number(loopStart + 1) + "-" + QString::number(loopEnd + 1) );
+  loopRangeItem->setText(QString::number(e->getLoopStart() + 1) + "-"
+						 + QString::number(e->getLoopEnd() + 1) );
 //  loopRangeItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
   QTableWidgetItem *tempoItem = getItem(newRow, 7);
-  tempoItem->setData(Qt::DisplayRole, QVariant(tempo));
+  tempoItem->setData(Qt::DisplayRole, QVariant(e->getTempo()));
 
   this->blockSignals(false);
 //  setPanelProperty(newRow, "LE_visible", visible);
@@ -255,4 +263,10 @@ void  LiveEventControl::cellClickedSlot(int row, int column)
   else if (column == 6) { // Loop Range
     openLoopRangeDialog(row);
   }
+}
+
+void LiveEventControl::frameClosed(LiveEventFrame *e)
+{
+
+	qDebug() << "LiveEventControl::frameClosed not implemented...";
 }

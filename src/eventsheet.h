@@ -183,7 +183,8 @@ class EventSheet : public QTableWidget
 
   signals:
     void sendEvent(QString event);
-    void setLoopRangeFromSheet(double start, double end);
+	void setLoopRangeFromSheet(double start, double end);
+	void setLoopEnabledFromSheet(bool enabled);
 //    void cellDoubleClicked();
     void modified();
 };

@@ -214,8 +214,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     panel->setTempo(tempo);
     panel->setLoopLength(loop);
     panel->setLoopRange(loopStart, loopEnd);
-    m_liveEventControl->appendPanel(visibleEnabled, false, false, 0, panelName,
-                                    loop, loopStart, loopEnd ,tempo);
+	m_liveEventControl->appendPanel(panel);
     if (posx > 5 && posy > 5) {
       panel->move(posx, posy);
     }
@@ -1523,8 +1522,7 @@ void DocumentPage::showWidgetEdit(bool show)
 void DocumentPage::newLiveEventPanel(QString text)
 {
   LiveEventFrame *e = createLiveEventPanel(text);
-  m_liveEventControl->appendPanel(true, false, false, 0, "",
-                                    8.0, 0.0, 0.0 , 60.0);
+  m_liveEventControl->appendPanel(e);
   e->setWindowFlags(Qt::Window);
 //  e->setVisible(false);
   e->show();  //Assume that since slot was called must be visible
@@ -1551,6 +1549,8 @@ LiveEventFrame * DocumentPage::createLiveEventPanel(QString text)
           this, SLOT(setPanelLoopRange(LiveEventFrame *,double, double)));
   connect(e, SIGNAL(setTempoFromPanel(LiveEventFrame *, double)),
           this, SLOT(setPanelTempo(LiveEventFrame *,double)));
+  connect(e, SIGNAL(setLoopEnabledFromPanel(LiveEventFrame *, bool)),
+		  this, SLOT(setPanelLoopEnabled(LiveEventFrame *,bool)));
   connect(e, SIGNAL(setLoopLengthFromPanel(LiveEventFrame *, double)),
           this, SLOT(setPanelLoopLength(LiveEventFrame *,double)));
   connect(e->getSheet(), SIGNAL(sendEvent(QString)),this,SLOT(queueEvent(QString)));
@@ -1650,5 +1650,13 @@ void DocumentPage::opcodeSyntax(QString message)
 
 void DocumentPage::evaluatePython(QString code)
 {
-  emit evaluatePythonSignal(code);
+	emit evaluatePythonSignal(code);
+}
+
+void DocumentPage::setPanelLoopEnabled(LiveEventFrame *panel, bool enabled)
+{
+	int index = m_liveFrames.indexOf(panel);
+	if (index >= 0) {
+	  m_liveEventControl->setPanelLoopEnabled(index, enabled);
+	}
 }

@@ -280,6 +280,7 @@ class DocumentPage : public BaseDocument
     void setPanelLoopRange(LiveEventFrame *panel, double start, double end);
     void setPanelLoopLength(LiveEventFrame *panel, double length);
     void setPanelTempo(LiveEventFrame *panel, double tempo);
+	void setPanelLoopEnabled(LiveEventFrame *panel, bool enabled);
 
     void opcodeSyntax(QString message);
 //    void setWidgetClipboard(QString text);

@@ -50,6 +50,7 @@ LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags
   m_sheet->hide();
   connect(m_sheet,SIGNAL(modified()), this, SLOT(setModified()));
   connect(m_sheet,SIGNAL(setLoopRangeFromSheet(double,double)), this, SLOT(markLoop(double,double)));
+  connect(m_sheet, SIGNAL(setLoopEnabledFromSheet(bool)), this, SLOT(setLoopEnabled(bool)));
 
   m_ui->scrollArea->setWidget(m_sheet);
 
@@ -58,6 +59,8 @@ LiveEventFrame::LiveEventFrame(QString csdName, QWidget *parent, Qt::WindowFlags
 
   m_modified = false;
   m_mode = 0; // Sheet mode by default
+
+  m_ui->loopLengthSpinBox->setKeyboardTracking(false);
 
   connect(m_ui->actionComboBox,SIGNAL(activated(int)), this, SLOT(doAction(int)));
   connect(m_ui->tempoSpinBox,SIGNAL(valueChanged(double)), this, SLOT(setTempo(double)));
@@ -138,6 +141,11 @@ void LiveEventFrame::setLoopRange(double start, double end)
   m_sheet->markLoop(start,end);
   m_loopStart = start;
   m_loopEnd = end;
+}
+
+void LiveEventFrame::setLoopEnabled(bool enabled)
+{
+	emit setLoopEnabledFromPanel(this, enabled);  // Signal from sheet must go a long way to do this line...
 }
 
 void LiveEventFrame::setModified(bool mod)
@@ -297,8 +305,18 @@ void LiveEventFrame::loopPanel(bool loop)
 
 void LiveEventFrame::closeEvent (QCloseEvent * event)
 {
-  emit closed();
+  emit closed(false);
   event->accept();
+}
+
+double LiveEventFrame::getLoopStart()
+{
+	return m_loopStart;
+}
+
+double LiveEventFrame::getLoopEnd()
+{
+	return m_loopEnd;
 }
 
 //void LiveEventFrame::hideEvent (QHideEvent * event)
