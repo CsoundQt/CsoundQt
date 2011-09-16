@@ -1524,6 +1524,7 @@ void DocumentPage::newLiveEventPanel(QString text)
   LiveEventFrame *e = createLiveEventPanel(text);
   m_liveEventControl->appendPanel(e);
   e->setWindowFlags(Qt::Window);
+  e->markLoop(0,0);
 //  e->setVisible(false);
   e->show();  //Assume that since slot was called must be visible
 }

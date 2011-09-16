@@ -182,7 +182,7 @@ void LiveEventFrame::newFrame()
 
 void LiveEventFrame::cloneFrame()
 {
-  emit(newFrameSignal(getPlainText()));
+  emit(newFrameSignal(m_sheet->getPlainText()));
 }
 
 void LiveEventFrame::deleteFrame(bool ask)
@@ -280,6 +280,13 @@ void LiveEventFrame::renameDialog()
 
 void LiveEventFrame::markLoop(double start, double end)
 {
+	QPair<int, int> range = m_sheet->getSelectedRowsRange();
+	if (start == -1) {
+		start = range.first;
+	}
+	if (end == -1) {
+		end = range.second;
+	}
   m_loopStart = start;
   m_loopEnd = end;
   m_sheet->markLoop(start, end);
