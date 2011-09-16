@@ -37,6 +37,7 @@ LiveEventControl::LiveEventControl(QWidget *parent) :
   m_ui->panelTableWidget->setColumnWidth(5,80);
   m_ui->panelTableWidget->setColumnWidth(6,80);
   m_ui->panelTableWidget->setColumnWidth(7,50);
+  m_ui->stopAllButton->hide(); // TODO implement stop all
   connect(m_ui->newButton,SIGNAL(released()), this, SLOT(newButtonReleased()));
   connect(m_ui->panelTableWidget, SIGNAL(cellChanged ( int , int  )), this, SLOT(cellChangedSlot( int , int  )));
   connect(m_ui->panelTableWidget, SIGNAL(cellClicked ( int , int  )), this, SLOT(cellClickedSlot( int , int  )));
