@@ -27,7 +27,7 @@ DEFAULT_PYTHONQT_TREE_DIRS = "$$(PROGRAMFILES)\\PythonQt"
 include(config.pri)
 
 # Use results from config step
-RC_FILE = "/src/qutecsound.rc"
+#RC_FILE = "src/qutecsound.rc"
 INCLUDEPATH += $${PYTHON_INCLUDE_DIR}
 LCSOUND = "$${CSOUND_LIBRARY_DIR}/$${CSOUND_LIB}"
 LSNDFILE = "$${LIBSNDFILE_LIBRARY_DIR}/$${LIBSNDFILE_LIB}"
