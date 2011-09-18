@@ -121,3 +121,8 @@ QString ScoreEditor::getSelection()
   }
   return text;
 }
+
+void ScoreEditor::clearUndoRedoStacks()
+{
+	// TODO implement
+}

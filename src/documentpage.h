@@ -47,15 +47,15 @@ class DocumentPage : public BaseDocument
     ~DocumentPage();
 
     void setFileName(QString name);
-    virtual void setTextString(QString &text);
-    int setTextString(QString text, bool autoCreateMacCsoundSections);
+	virtual void setTextString(QString &text);
     void setCompanionFileName(QString name);
     void setEditorFocus();
     void insertText(QString text, int section = -1);
     void setFullText(QString text);
     void setBasicText(QString text);
     void setOrc(QString text);
-    void setSco(QString text);
+	void setSco(QString text);
+	void loadTextString(QString &text, bool autoCreateMacCsoundSections = false);
 
     QString getFullText();
     QString getBasicText();
@@ -249,6 +249,7 @@ class DocumentPage : public BaseDocument
 
   private:
     virtual void init(QWidget *parent,OpEntryParser *opcodeTree);
+	int setTextString(QString text, bool autoCreateMacCsoundSections);
     CsoundOptions getParentOptions();
     void deleteAllLiveEvents();
     virtual WidgetLayout* newWidgetLayout();

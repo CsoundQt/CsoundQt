@@ -76,7 +76,6 @@ BaseDocument::~BaseDocument()
 
 int BaseDocument::parseTextString(QString &text)
 {
-//  qDebug() << "---- BaseDocument::setTextString";
   int ret = 0;
   bool xmlFormatFound = false;
   QString xmlPanels = QString();
@@ -192,7 +191,13 @@ void BaseDocument::stopRecording()
 void BaseDocument::queueEvent(QString eventLine, int delay)
 {
 //   qDebug("WidgetPanel::queueEvent %s", eventLine.toStdString().c_str());
-  m_csEngine->queueEvent(eventLine, delay);  //TODO  implement passing of timestamp
+	m_csEngine->queueEvent(eventLine, delay);  //TODO  implement passing of timestamp
+}
+
+void BaseDocument::loadTextString(QString &text)
+{
+	setTextString(text);
+	m_view->clearUndoRedoStack();
 }
 
 //void BaseDocument::playParent()

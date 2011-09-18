@@ -27,6 +27,8 @@ public:
   QString toPlainText(bool useQuotes = true);
   void clear();
 
+  void clearUndoRedoStacks();
+
 private slots:
   void saveAs();
   void add();

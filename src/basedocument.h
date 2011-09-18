@@ -43,6 +43,7 @@ class BaseDocument : public QObject
     ~BaseDocument();
 
     virtual void setTextString(QString &text) = 0;
+	virtual void loadTextString(QString &text);
     int parseTextString(QString &text);
     virtual WidgetLayout* newWidgetLayout();
     void widgetsVisible(bool visible);

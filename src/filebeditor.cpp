@@ -123,3 +123,7 @@ void FileBEditor::remove()
     delete item;
   }
 }
+
+void FileBEditor::clearUndoRedoStacks()
+{
+}

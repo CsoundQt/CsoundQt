@@ -430,7 +430,7 @@ void qutecsound::newFile()
 //    loadFile(":/default.csd");
 //  }
   loadFile(":/default.csd");
-  documentPages[curPage]->setTextString(m_options->csdTemplate, false);
+  documentPages[curPage]->loadTextString(m_options->csdTemplate, m_options->saveWidgets);
   documentPages[curPage]->setFileName("");
   setWindowModified(false);
   documentTabs->setTabIcon(curPage, modIcon);
@@ -1078,7 +1078,7 @@ bool qutecsound::join(bool ask)
     text += scoText;
     text += "</CsScore>\n</CsoundSynthesizer>\n";
     newFile();
-    documentPages[curPage]->setTextString(text, m_options->saveWidgets);
+	documentPages[curPage]->loadTextString(text, m_options->saveWidgets);
     return true;
   }
 //   else {
@@ -4182,18 +4182,8 @@ void qutecsound::makeNewPage(QString fileName, QString text)
           this, SLOT(showLineNumber(int)));
   connect(documentPages[curPage], SIGNAL(evaluatePythonSignal(QString)),
           this, SLOT(evaluatePython(QString)));
+  documentPages[curPage]->loadTextString(text, m_options->saveWidgets);
 
-  if (documentPages[curPage]->setTextString(text, m_options->saveWidgets) == 1
-      && fileName.endsWith(".csd")) { // Make backup copy if file has only old format.
-    // Backup copy seems no longer necessary, and more of a nuisance.
-//    QFile oldFile(fileName + ".old-format");
-//    if (oldFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
-//      qDebug() << "qutecsound::loadFile Writing backup file:" << fileName + ".old-format";
-//      QTextStream out(&oldFile);
-//      out << text;
-//      oldFile.close();
-//    }
-  }
   if (!fileName.startsWith(":/")) {  // Don't store internal examples directory as last used dir
     lastUsedDir = fileName;
     lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/]")) + 1);
@@ -4534,7 +4524,7 @@ void qutecsound::setFullText(QString text, int index)
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->setFullText(text);
+	documentPages[index]->setFullText(text);
   }
 }
 

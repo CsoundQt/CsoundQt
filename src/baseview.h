@@ -58,6 +58,8 @@ class BaseView : public QScrollArea
     void setOtherCsdText(QString text);
     void setOtherText(QString text);
 
+	void clearUndoRedoStack();
+
     QString getBasicText();  // What Csound needs (no widgets, misc text, etc.)
 
   signals:

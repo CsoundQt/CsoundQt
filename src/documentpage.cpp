@@ -89,9 +89,14 @@ void DocumentPage::setTextString(QString &text)
   setTextString(text, false);
 }
 
+void DocumentPage::loadTextString(QString &text, bool autoCreateMacCsoundSections)
+{
+	setTextString(text, autoCreateMacCsoundSections);
+	m_view->clearUndoRedoStack();
+}
+
 int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 {
-  // FIXME parsing should rely more on the document view section separator, to avoid code duplication.
   int ret = 0;
   deleteAllLiveEvents();
   if (!fileName.endsWith(".csd") && !fileName.isEmpty()) {
@@ -204,6 +209,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     int posy = panelElement.attribute("y","-1").toDouble();
     int width = panelElement.attribute("width","-1").toDouble();
     int height = panelElement.attribute("height","-1").toDouble();
+	// TODO recall live event panel visibility
     int visibleEnabled = panelElement.attribute("visible","true") == "true";
     int loopStart = panelElement.attribute("loopStart","0.0").toDouble();
     int loopEnd = panelElement.attribute("loopEnd","0.0").toDouble();

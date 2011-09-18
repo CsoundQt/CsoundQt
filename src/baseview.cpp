@@ -74,6 +74,10 @@ void BaseView::setFullText(QString text, bool goToTop)
   clearFileBText();
   while (text.contains("<CsFileB ") and text.contains("</CsFileB>")) {
     bool endsWithBreak = false;
+	if (text.indexOf("</CsFileB>") > text.indexOf("<CsFileB>")) {
+		qDebug() << "BaseView::setFullText: File corrupt, not loading remaining CsFileB sections.";
+		break;
+	}
     if (text.indexOf("</CsFileB>") + 10 < text.size() && text[text.indexOf("</CsFileB>") + 10] == '\n' ) {
       endsWithBreak = true;
     }
@@ -495,5 +499,20 @@ void BaseView::hideAllEditors()
       if (h) {
         h->hide();
       }
-    }
+	}
+}
+
+void BaseView::clearUndoRedoStack()
+{
+	if (m_viewMode < 2) {
+		m_mainEditor->document()->clearUndoRedoStacks();
+	} else {
+		m_orcEditor->document()->clearUndoRedoStacks();
+		m_scoreEditor->clearUndoRedoStacks();
+		m_optionsEditor->document()->clearUndoRedoStacks();
+		m_filebEditor->clearUndoRedoStacks();
+		m_otherEditor->document()->clearUndoRedoStacks();
+		m_otherCsdEditor->document()->clearUndoRedoStacks();
+		m_widgetEditor->document()->clearUndoRedoStacks();
+	}
 }

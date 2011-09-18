@@ -44,6 +44,8 @@ public slots:
   QString getPlainText();
   QString getSelection();
 
+  void clearUndoRedoStacks();
+
 protected:
 
 private:
