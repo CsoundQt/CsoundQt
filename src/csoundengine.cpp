@@ -284,7 +284,7 @@ void CsoundEngine::csThread(void *data)
 {
   CsoundUserData* udata = (CsoundUserData*)data;
   if (!(udata->flags & QCS_NO_COPY_BUFFER)) {
-    udata->outputBuffer = csoundGetSpout(udata->csound);
+	udata->outputBuffer = csoundGetSpout(udata->csound);
     for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
       udata->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
     }

@@ -1370,24 +1370,20 @@ void qutecsound::perfEnded()
   runAct->setChecked(false);
 }
 
-void qutecsound::record()
+void qutecsound::record(bool rec)
 {
-  if (!documentPages[curPage]->isRunning()) {
-    play();
-//    if (!documentPages[curPage]->isRunning()) {
-//      recAct->setChecked(false);
-//      return;
-//    }
-  }
-  if (!recAct->isChecked()) {
-    int ret = documentPages[curPage]->record(m_options->sampleFormat);
-    if (ret != 0) {
-      recAct->setChecked(false);
-    }
-  }
-  else {
-    documentPages[curPage]->stopRecording();
-  }
+	if (rec) {
+		if (!documentPages[curPage]->isRunning()) {
+			play();
+		}
+		int ret = documentPages[curPage]->record(m_options->sampleFormat);
+		if (ret != 0) {
+			recAct->setChecked(false);
+		}
+	}
+	else {
+		documentPages[curPage]->stopRecording();
+	}
 }
 
 
@@ -2327,7 +2323,8 @@ void qutecsound::createActions()
   recAct->setIconText(tr("Record"));
   recAct->setCheckable(true);
   recAct->setShortcutContext(Qt::ApplicationShortcut);
-  connect(recAct, SIGNAL(triggered()), this, SLOT(record()));
+  recAct->setChecked(false);
+  connect(recAct, SIGNAL(toggled(bool)), this, SLOT(record(bool)));
 
   renderAct = new QAction(QIcon(":/images/render.png"), tr("Render to file"), this);
   renderAct->setStatusTip(tr("Render to file"));

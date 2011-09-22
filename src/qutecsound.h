@@ -145,7 +145,7 @@ class qutecsound:public QMainWindow
     void stopAll();
     void perfEnded();
     void render();
-    void record();
+	void record(bool);
     void sendEvent(QString eventLine, double delay = 0);
     void sendEvent(int index, QString line, double delay = 0);
     void changePage(int index);

@@ -25,6 +25,7 @@
 
 #include <QMutex>
 #include <QtGlobal>
+#include <QDebug>
 #include "configlists.h"
 #include <csound.h>
 
@@ -117,7 +118,7 @@ class RingBuffer
     QList<MYFLT> buffer;
     long currentPos;
     long currentReadPos;
-    int size;
+	int size;
     QMutex mutex;
 
     void lock() {
@@ -126,13 +127,14 @@ class RingBuffer
 
     void unlock() {
       mutex.unlock();
-    }
+	}
 
     void put(MYFLT value) {
       //qDebug() << "RingBuffer::put";
       mutex.lock();
       //qDebug() << "RingBuffer::put lock";
       //lock = true;
+//	  qDebug() << "RingBuffer::put currentPos " << currentPos << " value " << value;
       buffer[currentPos] = value;
       currentPos++;
 //       if (currentPos == currentReadPos) {
@@ -143,22 +145,24 @@ class RingBuffer
       mutex.unlock();
     }
 
-    bool copyAvailableBuffer(MYFLT *data, int saveSize) {
-      //qDebug() << "RingBuffer::copyAvailableBuffer";
-      mutex.lock();
-      //qDebug() << "RingBuffer::copyAvailableBuffer lock";
-      currentReadPos = currentReadPos%size;
-      int available = (currentReadPos <= currentPos ?
+	bool copyAvailableBuffer(MYFLT *data, int saveSize) {
+//		qDebug() << "RingBuffer::copyAvailableBuffer saveSize " << saveSize << " currentPos " << currentPos << " currentReadPos " << currentReadPos ;
+	  mutex.lock();
+	  //qDebug() << "RingBuffer::copyAvailableBuffer lock";
+	  int available = (currentReadPos <= currentPos ?
           currentPos - currentReadPos :  currentPos - currentReadPos + size);
 //       qDebug("RingBuffer: Available: %i", available);
       if (available <= saveSize) { //not enough data in buffer
         mutex.unlock();
-        return false;
+		return false;
       }
-      for (int i = 0; i < saveSize; i++) {
+	  for (int i = 0; i < saveSize; i++) {
 //         qDebug("RingBuffer: currentPos %li currentReadPos %li value %f", currentPos, currentReadPos, buffer[currentReadPos%size]);
-        data[i] = buffer[currentReadPos%size];
+		data[i] = buffer[currentReadPos];
         currentReadPos++;
+		if (currentReadPos == size) {
+			currentReadPos = 0;
+		}
       }
       mutex.unlock();
       return true;
@@ -180,7 +184,7 @@ class RingBuffer
         buffer[i] = 0;
       }
       currentReadPos = 0;
-      currentPos = 1;
+	  currentPos = 0;
       mutex.unlock();
     }
 };
