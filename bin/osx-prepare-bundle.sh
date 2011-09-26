@@ -1,57 +1,59 @@
 #!/bin/sh
 
-#mkdir $APP_NAME/Contents/Resources
-#cp ../src/default.csd $APP_NAME/Contents/MacOS
-#cp ../src/opcodes.xml $APP_NAME/Contents/MacOS
-
 #-n don't compress
 #-v version number
-
-clear
-
-echo "Enter version number/name (e.g. 0.7.0-alpha-py):"
-read QUTECSOUND_VERSION
-
-
-#CSOUNDLIBNAME=
+#-b clean and rebuild
 
 nflag=0
 vflag=
+bflag=0
 debug=
-while getopts 'nvd:' OPTION
+while getopts 'bnvd:' OPTION
 do
 case $OPTION in
 n)	nflag=1
+;;
+b)	bflag=1
 ;;
 v)	vflag=1
 bval="$OPTARG"
 ;;
 d)	debug="_d"
 ;;
-?)	printf "Usage: %s: [-d] [-n] [-n version] args\n" $(basename $0) >&2
+?)	printf "Usage: %s: [-b] [-d] [-n] [-n version] args\n" $(basename $0) >&2
 exit 2
 ;;
 esac
 done
+
 shift $(($OPTIND - 1))
 
+clear
 
-# Build everything just to make sure all versions packaged are synchronized
+echo "Enter version number/name (e.g. 0.7.0-alpha-py):"
+read QUTECSOUND_VERSION
 
-echo "---------------- Making package without python"
+# Package without python first
+
 PRECISION=-f
 ORIGINAL_NAME=qutecsound${PRECISION}
 NEW_NAME=QuteCsound
 ORIG_APP_NAME=${ORIGINAL_NAME}.app
-APP_NAME=${NEW_NAME}-${QUTECSOUND_VERSION}${PRECISION}.app
+APP_NAME=${NEW_NAME}${PRECISION}-${QUTECSOUND_VERSION}.app
+
+if [ "$bflag"  -eq 1 ]
+		then
+		echo "---------------- Building floats package without python"
 
 rm -Rf ${ORIGINAL_APP_NAME}
 rm -Rf ${APP_NAME}
 cd ..
 make clean
 qmake qcs.pro -spec macx-g++ CONFIG+=rtmidi CONFIG+=release
-make
+make > build-floats.log
 cd bin
+fi
+
 macdeployqt ${ORIG_APP_NAME}
 
 mv $ORIG_APP_NAME/ $APP_NAME/
@@ -60,22 +62,62 @@ otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
 mkdir $APP_NAME/Contents/Resources
 cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
 
-macdeployqt ${APP_NAME} -dmg
+make clean
+make NAME=${NEW_NAME}${PRECISION} VERSION=${QUTECSOUND_VERSION} SOURCE_DIR=./ SOURCE_FILES=${APP_NAME}
 
 
-echo "---------------- Making package with python"
-PRECISION=-f
+# ----------------------- Now the doubles version
+PRECISION=-d
 ORIGINAL_NAME=qutecsound${PRECISION}
 NEW_NAME=QuteCsound
-ORIG_APP_NAME=${ORIGINAL_NAME}-py.app
-APP_NAME=${NEW_NAME}-${QUTECSOUND_VERSION}${PRECISION}-py.app
+ORIG_APP_NAME=${ORIGINAL_NAME}.app
+APP_NAME=${NEW_NAME}${PRECISION}-${QUTECSOUND_VERSION}.app
+
+if [ "$bflag"  -eq 1 ]
+		then
+		echo "---------------- Building doubles package without python"
 
 rm -Rf ${ORIGINAL_APP_NAME}
 rm -Rf ${APP_NAME}
 cd ..
+make clean > null
+qmake qcs.pro -spec macx-g++ CONFIG+=rtmidi CONFIG+=release CONFIG+=build64
+make > build-doubles.log
+cd bin
+fi
+
+macdeployqt ${ORIG_APP_NAME}
+
+mv $ORIG_APP_NAME/ $APP_NAME/
+otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
+#McCurdy collection
+mkdir $APP_NAME/Contents/Resources
+cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
+
+
 make clean
-qmake qcs.pro -spec macx-g++ CONFIG+=rtmidi CONFIG+=pythonqt CONFIG+=release
-make
+make NAME=${NEW_NAME}${PRECISION} VERSION=${QUTECSOUND_VERSION} SOURCE_DIR=./ SOURCE_FILES=${APP_NAME}
+
+
+
+# ---------------------- With Python
+PRECISION=-d
+ORIGINAL_NAME=qutecsound${PRECISION}
+NEW_NAME=QuteCsound
+ORIG_APP_NAME=${ORIGINAL_NAME}-py.app
+APP_NAME=${NEW_NAME}-${QUTECSOUND_VERSION}${PRECISION}-py.app
+if [ "$bflag"  -eq 1 ]
+then
+		echo "---------------- Making package with python (intel only)"
+
+rm -Rf ${ORIGINAL_APP_NAME}
+rm -Rf ${APP_NAME}
+cd ..
+make clean > null
+qmake qcs.pro -spec macx-g++ CONFIG+=intel CONFIG+=rtmidi CONFIG+=pythonqt CONFIG+=release CONFIG+=build64
+make > build-python.log
+fi
+
 cd bin
 macdeployqt ${ORIG_APP_NAME}
 # Copy PythonQt which is not found by macdeployqt
@@ -90,55 +132,11 @@ otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
 mkdir $APP_NAME/Contents/Resources
 cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
 
-macdeployqt ${APP_NAME} -dmg
-
-echo "---------------- Making basic universal package"
-PRECISION=-f
-ORIGINAL_NAME=qutecsound${PRECISION}
-NEW_NAME=QuteCsound
-ORIG_APP_NAME=${ORIGINAL_NAME}.app
-APP_NAME=${NEW_NAME}-${QUTECSOUND_VERSION}${PRECISION}.app
-
-rm -Rf ${ORIGINAL_APP_NAME}
-rm -Rf ${APP_NAME}
-cd ..
 make clean
-qmake qcs.pro -spec macx-g++ CONFIG+=rtmidi CONFIG+=release
-make
-cd bin
-macdeployqt ${ORIG_APP_NAME}
+make NAME=${NEW_NAME}${PRECISION}-py VERSION=${QUTECSOUND_VERSION} SOURCE_DIR=./ SOURCE_FILES=${APP_NAME}
 
-mv $ORIG_APP_NAME/ $APP_NAME/
-otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
-#McCurdy collection
-mkdir $APP_NAME/Contents/Resources
-cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
-macdeployqt ${APP_NAME} -dmg
-
-exit 0
-
-#--------------------------------------------------------------
-#lipo ${ORIGINAL_NAME}.app/Contents/MacOS/${ORIGINAL_NAME} ${ORIGINAL_NAME_D}.app/Contents/MacOS/${ORIGINAL_NAME_D} -create --output ${ORIGINAL_NAME}.app/Contents/MacOS/qutecsound
-
-ORIG_APP_NAME=${ORIGINAL_NAME}.app
-APP_NAME=${NEW_NAME}-${QUTECSOUND_VERSION}.app
-
-mv $ORIG_APP_NAME/ $APP_NAME/
-mkdir $APP_NAME/Contents/Resources
-cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources
-chmod -R a-w $APP_NAME/Contents/Resources
-
-# make version including Qt
-
-
-
-
-if [ "$nflag"  -ne 1 ]
-        then
-tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}.tar.gz $APP_NAME &>/dev/null
-fi
-
-# make Standalone application
+exit
+# ----------------------------  make Standalone application
 echo "---------------- Making standalone app"
 cp -R /Library/Frameworks/CsoundLib.framework $APP_NAME/Contents/Frameworks/
 cp /usr/local/lib/libsndfile.1.dylib $APP_NAME/Contents/libsndfile.dylib

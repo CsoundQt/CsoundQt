@@ -5,7 +5,9 @@
 	message(Building QuteCsound for Macintosh OS X.)
 }
 
-!intel: CONFIG += PPC
+!intel: !x86_64: CONFIG += PPC
+
+
 
 # DEFINES += MACOSX_PRE_SNOW # Use this if you are building for OS X < 10.6
 # QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.5
@@ -48,13 +50,12 @@ LIBS *= -L$${CSOUND_LIBRARY_DIR}
 LIBS *= -L$${LIBSNDFILE_LIBRARY_DIR}
 rtmidi {
 DEFINES += __MACOSX_CORE__
-LIBS += -framework CoreMidi -framework CoreAudio -framework CoreFoundation
+LIBS += -framework CoreFoundation
+#LIBS += -framework CoreMidi -framework CoreAudio -framework CoreFoundation
 }
 #LIBS += -framework QtCore -framework QtGui -framework QtXml
 LCSOUND = -framework $${MAC_LIB}
 LSNDFILE = -lsndfile
 
-#QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist
-QMAKE_INFO_PLIST = src/MyInfo.plist
-#ICON = $${PWD}/images/qtcs.icns
-ICON = images/qtcs.icns
+QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist
+ICON = $${PWD}/images/qtcs.icns

@@ -2855,7 +2855,6 @@ void qutecsound::createMenus()
   QStringList basicsFiles;
   QStringList realtimeInteractionFiles;
   QStringList featuresFiles;
-  QStringList mccurdyFiles;
   QStringList flossman01Files;
   QStringList flossman02Files;
   QStringList flossman03Files;
@@ -3344,7 +3343,7 @@ flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Appl
   mcCurdyPath = qApp->applicationDirPath() + "/Examples/McCurdy Collection";
 #endif
 #ifdef Q_OS_MAC
-  mcCurdyPath = qApp->applicationDirPath() + "/../Resources/Examples/McCurdy Collection";
+  mcCurdyPath = qApp->applicationDirPath() + "/../Resources/McCurdy Collection";
   qDebug() << mcCurdyPath;
 #endif
 #ifdef Q_OS_LINUX

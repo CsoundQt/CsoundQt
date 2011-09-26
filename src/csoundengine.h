@@ -23,7 +23,6 @@
 #ifndef CSOUNDENGINE_H
 #define CSOUNDENGINE_H
 
-#include <QtCore>
 #include <csound.hpp>
 #include <sndfile.hh>
 #include <cwindow.h> // Necessary for WINDAT struct
@@ -34,6 +33,8 @@
 #ifdef QCS_PYTHONQT
 #include "pythonconsole.h"
 #endif
+
+//#include <QtCore>
 
 class ConsoleWidget;
 class QuteScope;
