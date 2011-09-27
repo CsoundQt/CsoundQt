@@ -88,6 +88,7 @@ void BaseView::setFullText(QString text, bool goToTop)
     appendFileBText(currentFileText);
   }
   if (m_viewMode < 2) {  // Unified view
+	  m_mainEditor->setUndoRedoEnabled(false);
     QTextCursor cursor = m_mainEditor->textCursor();
     cursor.select(QTextCursor::Document);
     cursor.insertText(text);
@@ -95,6 +96,7 @@ void BaseView::setFullText(QString text, bool goToTop)
     if (goToTop) {
       m_mainEditor->moveCursor(QTextCursor::Start);
     }
+	m_mainEditor->setUndoRedoEnabled(true);
   }
   else { // Split view
     int startIndex,endIndex, offset, endoffset;
@@ -112,7 +114,9 @@ void BaseView::setFullText(QString text, bool goToTop)
       sectionText = text.mid(startIndex, endIndex - startIndex + endoffset);
       text.remove(sectionText);
     }
+	m_orcEditor->setUndoRedoEnabled(false);
     setOrc(sectionText.mid(tag.size() + 2 + offset, sectionText.size() - (tag.size()*2) - 5 - offset - endoffset));
+	m_orcEditor->setUndoRedoEnabled(true);
     // Find score section
     sectionText = "";
     tag = "CsScore";
@@ -126,7 +130,9 @@ void BaseView::setFullText(QString text, bool goToTop)
       sectionText = text.mid(startIndex, endIndex - startIndex + endoffset);
       text.remove(sectionText);
     }
+//	m_scoreEditor->setUndoRedoEnabled(false);
     setSco(sectionText.mid(tag.size() + 2 + offset, sectionText.size() - (tag.size()*2) - 5 - offset - endoffset));
+//	m_scoreEditor->setUndoRedoEnabled(true);
     // Set options text
     sectionText = "";
     tag = "CsOptions";
@@ -140,8 +146,9 @@ void BaseView::setFullText(QString text, bool goToTop)
       sectionText = text.mid(startIndex, endIndex - startIndex + endoffset);
       text.remove(sectionText);
     }
+	m_optionsEditor->setUndoRedoEnabled(false);
     setOptionsText(sectionText.mid(tag.size() + 2 + offset, sectionText.size() - (tag.size()*2) - 5 - offset - endoffset));
-
+	m_optionsEditor->setUndoRedoEnabled(true);
 
     // Remaining text inside CsSynthesizer tags
     sectionText = "";
@@ -156,10 +163,13 @@ void BaseView::setFullText(QString text, bool goToTop)
       sectionText = text.mid(startIndex, endIndex - startIndex + endoffset);
       text.remove(sectionText);
     }
+	m_otherCsdEditor->setUndoRedoEnabled(false);
     setOtherCsdText(sectionText.mid(tag.size() + 2 + offset, sectionText.size() - (tag.size()*2) - 5 - offset - endoffset));
-    // Remaining text after all this
+	m_otherCsdEditor->setUndoRedoEnabled(true);
+	// Remaining text after all this
+	m_otherEditor->setUndoRedoEnabled(false);
     setOtherText(text);
-//    otherEditor->setText(text); // Any remaining text
+	m_otherEditor->setUndoRedoEnabled(true);
   }
 }
 
@@ -505,14 +515,22 @@ void BaseView::hideAllEditors()
 void BaseView::clearUndoRedoStack()
 {
 	if (m_viewMode < 2) {
-		m_mainEditor->document()->clearUndoRedoStacks();
+		m_mainEditor->document()->setModified(false);
+//		m_mainEditor->document()->clearUndoRedoStacks();
 	} else {
-		m_orcEditor->document()->clearUndoRedoStacks();
+		m_orcEditor->document()->setModified(false);
 		m_scoreEditor->clearUndoRedoStacks();
-		m_optionsEditor->document()->clearUndoRedoStacks();
+		m_optionsEditor->document()->setModified(false);
 		m_filebEditor->clearUndoRedoStacks();
-		m_otherEditor->document()->clearUndoRedoStacks();
-		m_otherCsdEditor->document()->clearUndoRedoStacks();
-		m_widgetEditor->document()->clearUndoRedoStacks();
+		m_otherEditor->document()->setModified(false);
+		m_otherCsdEditor->document()->setModified(false);
+		m_widgetEditor->document()->setModified(false);
+//		m_orcEditor->document()->clearUndoRedoStacks();
+//		m_scoreEditor->clearUndoRedoStacks();
+//		m_optionsEditor->document()->clearUndoRedoStacks();
+//		m_filebEditor->clearUndoRedoStacks();
+//		m_otherEditor->document()->clearUndoRedoStacks();
+//		m_otherCsdEditor->document()->clearUndoRedoStacks();
+//		m_widgetEditor->document()->clearUndoRedoStacks();
 	}
 }

@@ -323,6 +323,13 @@ void QuteButton::applyInternalProperties()
 //  m_value2 = property("QCS_value2").toDouble();
   m_stringValue = property("QCS_stringvalue").toString();
   QString type = property("QCS_type").toString();
+  static_cast<QPushButton *>(m_widget)->setCheckable(property("QCS_latch").toBool());
+  if (property("QCS_latch").toBool()) { // Set icon here, because it can be overwritten if button is "pict"
+	static_cast<QPushButton *>(m_widget)->setIcon(onIcon);
+  }
+  else {
+	static_cast<QPushButton *>(m_widget)->setIcon(QIcon());
+  }
   if (type == "event" or type == "value") {
     icon = QIcon();
     static_cast<QPushButton *>(m_widget)->setIcon(icon);
@@ -336,13 +343,7 @@ void QuteButton::applyInternalProperties()
     qDebug() << "Warning! QuteButton::applyInternalProperties() unrecognized type:" << type;
   }
   static_cast<QPushButton *>(m_widget)->setText(property("QCS_text").toString());
-  static_cast<QPushButton *>(m_widget)->setCheckable(property("QCS_latch").toBool());
-  if (property("QCS_latch").toBool()) {
-    static_cast<QPushButton *>(m_widget)->setIcon(onIcon);
-  }
-  else {
-    static_cast<QPushButton *>(m_widget)->setIcon(QIcon());
-  }
+
   m_widget->setStyleSheet("QPushButton { border-color:" + property("QCS_color").value<QColor>().name()
                           + "; }");  // Why is this here?
 }

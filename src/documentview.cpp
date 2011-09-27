@@ -40,6 +40,9 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
     connect(editors[i], SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(createContextMenu(QPoint)));
   }
+  connect(m_orcEditor, SIGNAL(textChanged()), this, SLOT(textChanged()));
+  connect(m_orcEditor, SIGNAL(cursorPositionChanged()),
+		  this, SLOT(syntaxCheck()));
   setFocusProxy(m_mainEditor);  // for comment action from main application
   internalChange = false;
 
@@ -462,7 +465,16 @@ void DocumentView::syntaxCheck()
   int line = currentLine();
   emit(lineNumberSignal(line));
 
-  QTextCursor cursor = m_mainEditor->textCursor();
+  TextEditor *editor;
+  if (m_viewMode < 2) {
+	  editor = m_mainEditor;
+  }
+  else { //  Split view
+	  editor = (TextEditor *) sender();
+	  // TODO check properly for line number also from other editors
+	  qDebug() << "DocumentView::insertTextFromAction() not implemented for split view.";
+  }
+  QTextCursor cursor = editor->textCursor();
   cursor.select(QTextCursor::LineUnderCursor);
   QStringList words = cursor.selectedText().split(QRegExp("\\b"));
   foreach(QString word, words) {
@@ -484,15 +496,15 @@ void DocumentView::textChanged()
     internalChange = false;
     return;
   }
+  TextEditor *editor = (TextEditor *) sender();
   unmarkErrorLines();
-  // TODO implement for split view
   if (m_mode == 0 || m_mode == 3) {  // CSD or ORC mode
     if (m_autoComplete) {
-      QTextCursor cursor = m_mainEditor->textCursor();
+	  QTextCursor cursor = editor->textCursor();
       int curIndex = cursor.position();
       cursor.select(QTextCursor::WordUnderCursor);
       QString word = cursor.selectedText();
-      QTextCursor lineCursor = m_mainEditor->textCursor();
+	  QTextCursor lineCursor = editor->textCursor();
       lineCursor.select(QTextCursor::LineUnderCursor);
       QString line = lineCursor.selectedText();
       int commentIndex = -1;
@@ -551,14 +563,14 @@ void DocumentView::textChanged()
                                                  this, SLOT(insertTextFromAction()));
               a->setData(syntaxText);
             }
-            QRect r =  m_mainEditor->cursorRect();
+			QRect r =  editor->cursorRect();
             QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-            QPoint globalPoint =  m_mainEditor->mapToGlobal(p);
+			QPoint globalPoint =  editor->mapToGlobal(p);
             //syntaxMenu->setWindowModality(Qt::NonModal);
             //syntaxMenu->popup(globalPoint);
             syntaxMenu->move(globalPoint);
             syntaxMenu->show();
-            m_mainEditor->setFocus(Qt::OtherFocusReason);
+			editor->setFocus(Qt::OtherFocusReason);
           }
           else {
             destroySyntaxMenu();
@@ -652,46 +664,52 @@ void DocumentView::autoComplete()
 
 void DocumentView::insertTextFromAction()
 {
-  if (m_viewMode < 2) {
-    internalChange = true;
-    QAction *action = static_cast<QAction *>(QObject::sender());
-    bool insertComplete = static_cast<MySyntaxMenu *>(action->parent())->insertComplete;
-    QTextCursor cursor = m_mainEditor->textCursor();
-    cursor.select(QTextCursor::WordUnderCursor);
-    cursor.insertText("");
-    m_mainEditor->setTextCursor(cursor);
+	TextEditor *editor;
+	if (m_viewMode < 2) {
+		editor = m_mainEditor;
+	}
+	else { //  Split view
+		editor = (TextEditor *) focusWidget();
+		// TODO check properly for line number also from other editors
+		qDebug() << "DocumentView::insertTextFromAction() not implemented for split view.";
+	}
+	if (editor != 0) {
+		internalChange = true;
+		QAction *action = static_cast<QAction *>(QObject::sender());
+		bool insertComplete = static_cast<MySyntaxMenu *>(action->parent())->insertComplete;
+		QTextCursor cursor = editor->textCursor();
+		cursor.select(QTextCursor::WordUnderCursor);
+		cursor.insertText("");
+		editor->setTextCursor(cursor);
 
-    QTextCursor cursor2 = m_mainEditor->textCursor();
-    cursor2.movePosition(QTextCursor::StartOfLine,QTextCursor::KeepAnchor);
-    bool noOutargs = false;
-    if (!cursor2.selectedText().simplified().isEmpty()) { // Text before cursor, don't put outargs
-      noOutargs = true;
-    }
-    internalChange = true;
-    if (insertComplete) {
-      if (noOutargs) {
-        QString syntaxText = action->data().toString();
-        int index =syntaxText.indexOf(QRegExp("\\w\\s+\\w"));
-        m_mainEditor->insertPlainText(syntaxText.mid(index + 1).trimmed());  // right returns the whole string if index < 0
-      }
-      else {
-        m_mainEditor->insertPlainText(action->data().toString());
-      }
-    }
-    else {
-      int index = action->text().indexOf(" ");
-      if (index > 0) {
-        m_mainEditor->insertPlainText(action->text().left(index));
-      }
-      else {
-        m_mainEditor->insertPlainText(action->text());
-      }
-    }
-  }
-  else { //  Split view
-    // TODO check properly for line number also from other editors
-    qDebug() << "DocumentView::insertTextFromAction() not implemented for split view.";
-  }
+		QTextCursor cursor2 = editor->textCursor();
+		cursor2.movePosition(QTextCursor::StartOfLine,QTextCursor::KeepAnchor);
+		bool noOutargs = false;
+		if (!cursor2.selectedText().simplified().isEmpty()) { // Text before cursor, don't put outargs
+			noOutargs = true;
+		}
+		internalChange = true;
+		if (insertComplete) {
+			if (noOutargs) {
+				QString syntaxText = action->data().toString();
+				int index =syntaxText.indexOf(QRegExp("\\w\\s+\\w"));
+				editor->insertPlainText(syntaxText.mid(index + 1).trimmed());  // right returns the whole string if index < 0
+			}
+			else {
+				editor->insertPlainText(action->data().toString());
+			}
+		}
+		else {
+			int index = action->text().indexOf(" ");
+			if (index > 0) {
+				editor->insertPlainText(action->text().left(index));
+			}
+			else {
+				editor->insertPlainText(action->text());
+			}
+		}
+
+	}
 }
 
 void DocumentView::findString(QString query)
