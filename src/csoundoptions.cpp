@@ -36,6 +36,9 @@ CsoundOptions::CsoundOptions()
   HwBufferSize = 2048;
   HwBufferSizeActive = false;
   dither = false;
+  newParser = false;
+  multicore = false;
+  numThreads = 1;
   additionalFlags = "";
   additionalFlagsActive = false;
 
@@ -97,6 +100,15 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
   }
   if (dither)
     list << " -Z";
+  if (newParser) {
+	  list << "--new-parser";
+  } else {
+	  list << "--old-parser";
+  }
+  if (multicore) {
+	  list << "--num-threads " + QString::number(numThreads);
+  }
+
   if (rt && rtUseOptions) {
     if (rtOverrideOptions)
       list << "-+ignore_csopts=1";

@@ -30,7 +30,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -363,19 +363,6 @@
         </layout>
        </widget>
       </widget>
-      <widget class="QCheckBox" name="DitherCheckBox">
-       <property name="geometry">
-        <rect>
-         <x>330</x>
-         <y>40</y>
-         <width>121</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Dither</string>
-       </property>
-      </widget>
       <widget class="QWidget" name="layoutWidget7">
        <property name="geometry">
         <rect>
@@ -407,7 +394,7 @@
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>311</width>
+         <width>661</width>
          <height>62</height>
         </rect>
        </property>
@@ -431,6 +418,76 @@
         </item>
         <item row="1" column="1">
          <widget class="QLineEdit" name="HwBufferSizeLineEdit"/>
+        </item>
+        <item row="1" column="3">
+         <widget class="QCheckBox" name="DitherCheckBox">
+          <property name="text">
+           <string>Dither</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QCheckBox" name="newParserCheckBox">
+          <property name="text">
+           <string>Use new parser</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QLabel" name="label_13">
+          <property name="text">
+           <string>Number of threads</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QCheckBox" name="multicoreCheckBox">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Use multicore</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="6">
+         <spacer name="horizontalSpacer_9">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="5">
+         <widget class="QSpinBox" name="numThreadsSpinBox">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>12</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <spacer name="horizontalSpacer_10">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>
@@ -1975,12 +2032,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>88</x>
-     <y>107</y>
+     <x>93</x>
+     <y>134</y>
     </hint>
     <hint type="destinationlabel">
-     <x>255</x>
-     <y>109</y>
+     <x>392</x>
+     <y>137</y>
     </hint>
    </hints>
   </connection>
@@ -1991,12 +2048,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>88</x>
-     <y>139</y>
+     <x>93</x>
+     <y>169</y>
     </hint>
     <hint type="destinationlabel">
-     <x>255</x>
-     <y>141</y>
+     <x>392</x>
+     <y>172</y>
     </hint>
    </hints>
   </connection>
@@ -2007,12 +2064,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>88</x>
-     <y>203</y>
+     <x>93</x>
+     <y>239</y>
     </hint>
     <hint type="destinationlabel">
-     <x>255</x>
-     <y>205</y>
+     <x>392</x>
+     <y>242</y>
     </hint>
    </hints>
   </connection>
@@ -2023,12 +2080,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>88</x>
-     <y>235</y>
+     <x>93</x>
+     <y>274</y>
     </hint>
     <hint type="destinationlabel">
-     <x>255</x>
-     <y>237</y>
+     <x>392</x>
+     <y>277</y>
     </hint>
    </hints>
   </connection>
@@ -2039,12 +2096,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>88</x>
-     <y>171</y>
+     <x>93</x>
+     <y>204</y>
     </hint>
     <hint type="destinationlabel">
-     <x>255</x>
-     <y>173</y>
+     <x>392</x>
+     <y>207</y>
     </hint>
    </hints>
   </connection>
@@ -2125,6 +2182,38 @@
     <hint type="destinationlabel">
      <x>402</x>
      <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>multicoreCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>numThreadsSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>531</x>
+     <y>59</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>615</x>
+     <y>83</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>newParserCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>multicoreCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>399</x>
+     <y>57</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>55</y>
     </hint>
    </hints>
   </connection>

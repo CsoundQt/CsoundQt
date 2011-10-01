@@ -137,6 +137,9 @@ ConfigDialog::ConfigDialog(qutecsound *parent, Options *options)
   HwBufferSizeCheckBox->setChecked(m_options->HwBufferSizeActive);
   HwBufferSizeLineEdit->setEnabled(m_options->HwBufferSizeActive);
   DitherCheckBox->setChecked(m_options->dither);
+  newParserCheckBox->setChecked(m_options->newParser);
+  multicoreCheckBox->setChecked(m_options->multicore);
+  numThreadsSpinBox->setValue(m_options->numThreads);
   AdditionalFlagsCheckBox->setChecked(m_options->additionalFlagsActive);
   AdditionalFlagsLineEdit->setText(m_options->additionalFlags);
   AdditionalFlagsLineEdit->setEnabled(m_options->additionalFlagsActive);
@@ -310,6 +313,9 @@ void ConfigDialog::accept()
   m_options->HwBufferSize = HwBufferSizeLineEdit->text().toInt();
   m_options->HwBufferSizeActive = HwBufferSizeCheckBox->isChecked();
   m_options->dither = DitherCheckBox->isChecked();
+  m_options->newParser = newParserCheckBox->isChecked();
+  m_options->multicore = multicoreCheckBox->isChecked();
+  m_options->numThreads = numThreadsSpinBox->value();
   m_options->additionalFlags = AdditionalFlagsLineEdit->text();
   m_options->additionalFlagsActive = AdditionalFlagsCheckBox->isChecked();
   m_options->fileUseOptions = FileUseOptionsCheckBox->isChecked();

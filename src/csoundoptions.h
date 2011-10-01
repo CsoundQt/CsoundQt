@@ -45,7 +45,10 @@ class CsoundOptions
     bool bufferSizeActive;
     int HwBufferSize;
     bool HwBufferSizeActive;
-    bool dither;
+	bool dither;
+	bool newParser;
+	bool multicore;
+	int numThreads;
     QString additionalFlags;
     bool additionalFlagsActive;
 

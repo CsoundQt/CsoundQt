@@ -1132,35 +1132,40 @@ void qutecsound::setCurrentAudioFile(const QString fileName)
 void qutecsound::play(bool realtime, int index)
 {
   // TODO make csound pause if it is already running
-  int docIndex = index;
-  if (docIndex == -1) {
-    docIndex = curPage;
+  int oldPage = curPage;
+  if (index == -1) {
+	index = curPage;
   }
-  else {
-    qDebug() << "qutecsound::play index not implemented " << docIndex;
-  }
-  if (docIndex < 0 && docIndex >= documentPages.size()) {
-    qDebug() << "qutecsound::play index out of range " << docIndex;
+  if (index < 0 && index >= documentPages.size()) {
+	qDebug() << "qutecsound::play index out of range " << index;
     return;
   }
-  runAct->setChecked(true);  // In case the call comes from a button
+  curPage = index;
+  if (curPage == oldPage) {
+	  runAct->setChecked(true);  // In case the call comes from a button
+  }
   if (documentPages[curPage]->getFileName().isEmpty()) {
     QMessageBox::warning(this, tr("QuteCsound"),
                          tr("This file has not been saved\nPlease select name and location."));
     if (!saveAs()) {
-      runAct->setChecked(false);
+		if (curPage == oldPage) {
+			runAct->setChecked(false);
+		}
+	  curPage = oldPage;
       return;
     }
   }
   else if (documentPages[curPage]->isModified()) {
-    if (m_options->saveChanges)
-      if (!save()) {
-        runAct->setChecked(false);
-        return;
-      }
+	  if (m_options->saveChanges && !save()) {
+		  if (curPage == oldPage) {
+			  runAct->setChecked(false);
+		  }
+		  curPage = oldPage;
+		  return;
+	  }
   }
-  QString fileName, fileName2;
-  fileName = documentPages[curPage]->getFileName();
+  QString fileName = documentPages[curPage]->getFileName();
+  QString fileName2;
   QString msg = "__**__ " + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss");
   msg += " Play: " + fileName + "\n";
   logMessage(msg);
@@ -1175,20 +1180,21 @@ void qutecsound::play(bool realtime, int index)
   if (fileName.endsWith(".py",Qt::CaseInsensitive)) {
     m_pythonConsole->runScript(fileName);
     runAct->setChecked(false);
+	curPage = oldPage;
     return;
   }
 #endif
   if (!fileName.endsWith(".csd",Qt::CaseInsensitive) && !fileName.endsWith(".py",Qt::CaseInsensitive))  {
-    if (documentPages[curPage]->askForFile)
+	if (documentPages[curPage]->askForFile)
       getCompanionFileName();
     // FIXME run orc file when sco companion is currently active
-//    if (fileName.endsWith(".sco",Qt::CaseInsensitive)) {
-//      //Must switch filename order when open file is a sco file
-//      fileName2 = fileName;
-//      fileName = documentPages[curPage]->companionFile;
-//    }
-//    else
-//      fileName2 = documentPages[curPage]->companionFile;
+	if (fileName.endsWith(".sco",Qt::CaseInsensitive)) {
+	  //Must switch filename order when open file is a sco file
+		fileName2 = fileName;
+		fileName = documentPages[curPage]->getCompanionFileName();
+	}
+	else
+		fileName2 = documentPages[curPage]->getCompanionFileName();
   }
   QString runFileName1, runFileName2;
   QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
@@ -1203,7 +1209,7 @@ void qutecsound::play(bool realtime, int index)
       if (!csdFile.open()) {
         qDebug() << "Error creating temporary file " << tmpFileName;
         QMessageBox::critical(this,
-                              tr("QuteCsound"),
+							  tr("QuteCsound"),
                               tr("Error creating temporary file."),
                               QMessageBox::Ok);
         return;
@@ -1260,6 +1266,7 @@ void qutecsound::play(bool realtime, int index)
       }
     }
   }
+  curPage = oldPage;
 }
 
 void qutecsound::runInTerm(bool realtime)
@@ -3696,6 +3703,9 @@ void qutecsound::readSettings()
   m_options->HwBufferSize = settings.value("HwBufferSize", 1024).toInt();
   m_options->HwBufferSizeActive = settings.value("HwBufferSizeActive", false).toBool();
   m_options->dither = settings.value("dither", false).toBool();
+  m_options->newParser = settings.value("newParser", false).toBool();
+  m_options->multicore = settings.value("multicore", false).toBool();
+  m_options->numThreads = settings.value("numThreads", 1).toInt();
   m_options->additionalFlags = settings.value("additionalFlags", "").toString();
   if (settingsVersion < 1)
     m_options->additionalFlags.remove("-d");  // remove old -d preference, as it is fixed now.
@@ -3859,6 +3869,10 @@ void qutecsound::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("HwBufferSize",m_options->HwBufferSize);
     settings.setValue("HwBufferSizeActive", m_options->HwBufferSizeActive);
     settings.setValue("dither", m_options->dither);
+	settings.setValue("newParser", m_options->newParser);
+	settings.setValue("multicore", m_options->multicore);
+	settings.setValue("numThreads", m_options->numThreads);
+
     settings.setValue("additionalFlags", m_options->additionalFlags);
     settings.setValue("additionalFlagsActive", m_options->additionalFlagsActive);
     settings.setValue("fileUseOptions", m_options->fileUseOptions);
