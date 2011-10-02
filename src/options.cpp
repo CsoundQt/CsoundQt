@@ -62,7 +62,7 @@ Options::Options()
   keyRepeat = true;
   debugLiveEvents = false;
   consoleBufferSize = 1024;
-  midiInterface = 0; // For internal QuteCsound MIDI control
+  midiInterface = 0; // For internal CsoundQt MIDI control
 
   csdPath = "./"; //path of active csd needed for setting -o -i paths
 

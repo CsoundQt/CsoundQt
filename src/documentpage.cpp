@@ -711,7 +711,7 @@ void DocumentPage::updateCsLadspaText()
 {
   QString text = "<csLADSPA>\nName=";
   text += fileName.mid(fileName.lastIndexOf("/") + 1) + "\n";
-  text += "Maker=QuteCsound\n";
+  text += "Maker=CsoundQt\n";
   QString id = QString::number(qrand());
   text += "UniqueID=" + id + "\n";
   text += "Copyright=none\n";
@@ -1154,10 +1154,10 @@ void DocumentPage::setPanelLoopRangeSlot(int index, double start, double end)
 void DocumentPage::registerButton(QuteButton *b)
 {
 //  qDebug() << " DocumentPage::registerButton";
-  connect(b, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(play()));
-  connect(b, SIGNAL(render()), static_cast<qutecsound *>(parent()), SLOT(render()));
-  connect(b, SIGNAL(pause()), static_cast<qutecsound *>(parent()), SLOT(pause()));
-  connect(b, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
+  connect(b, SIGNAL(play()), static_cast<CsoundQt *>(parent()), SLOT(play()));
+  connect(b, SIGNAL(render()), static_cast<CsoundQt *>(parent()), SLOT(render()));
+  connect(b, SIGNAL(pause()), static_cast<CsoundQt *>(parent()), SLOT(pause()));
+  connect(b, SIGNAL(stop()), static_cast<CsoundQt *>(parent()), SLOT(stop()));
 }
 
 void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
@@ -1167,7 +1167,7 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
   askForFile = true;
   readOnly = false;
 
-  //TODO this should be set from QuteCsound configuration
+  //TODO this should be set from CsoundQt configuration
   saveLiveEvents = true;
 
   m_view = new DocumentView(parent, opcodeTree);
@@ -1176,7 +1176,7 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 
   // For logging of Csound output to file
   connect(m_console, SIGNAL(logMessage(QString)),
-          static_cast<qutecsound *>(parent), SLOT(logMessage(QString)));
+          static_cast<CsoundQt *>(parent), SLOT(logMessage(QString)));
 
 //  m_widgetLayout->show();
   m_liveEventControl = new LiveEventControl(parent);
@@ -1251,7 +1251,7 @@ int DocumentPage::record(int format)
 {
   if (fileName.startsWith(":/")) {
     QMessageBox::critical(static_cast<QWidget *>(parent()),
-                          tr("QuteCsound"),
+						  tr("CsoundQt"),
                           tr("You must save the examples to use Record."),
                           QMessageBox::Ok);
     return -1;

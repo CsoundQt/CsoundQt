@@ -99,11 +99,11 @@ void PythonConsole::initializeInterpreter()
 
   // add a QObject to the namespace of the main python context
   m_pqcs = new PyQcsObject() ;
-  m_pqcs->setQuteCsound(static_cast<qutecsound *>(parentWidget()));
+  m_pqcs->setCsoundQt(static_cast<CsoundQt *>(parentWidget()));
   PythonQt::self()->registerCPPClass("QuteSheet", "","qs", PythonQtCreateObject<QuteSheet>);
   mainContext.addObject("q", m_pqcs);
   mainContext.evalScript("from PythonQt.qs import QuteSheet");
-//  mainContext.evalScript("print 'QuteCsound Python Interpreter Initialized.'");
+//  mainContext.evalScript("print 'CsoundQt Python Interpreter Initialized.'");
   //  mainContext.evalScript("s = q.schedule");
   //  mainContext.evalScript("import os");
 

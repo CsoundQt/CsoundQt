@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
   QSplashScreen *splash = new QSplashScreen(pixmap);
   splash->show();
   splash->raise();
-  splash->showMessage("Starting QuteCsound");
+  splash->showMessage("Starting CsoundQt");
   app.processEvents();
 
   QSettings settings("csound", "qutecsound");
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
   translator.load(QString(":/translations/qutecsound_") + language);
   app.installTranslator(&translator);
 
-  qutecsound * mw = new qutecsound(fileNames);
+  CsoundQt * mw = new CsoundQt(fileNames);
   splash->finish(mw);
   mw->show();
   filterObj->setMainWindow(mw);

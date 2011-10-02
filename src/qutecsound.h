@@ -58,15 +58,15 @@ class CsoundEngine;
 class RtMidiIn;
 #endif
 
-class qutecsound:public QMainWindow
+class CsoundQt:public QMainWindow
 {
   Q_OBJECT
 
     friend class WidgetPanel; //to pass ud
     friend class FileOpenEater; //to pass curPage
   public:
-    qutecsound(QStringList fileNames);
-    ~qutecsound();
+	CsoundQt(QStringList fileNames);
+	~CsoundQt();
     static void devicesMessageCallback(CSOUND *csound,
                                        int attr,
                                        const char *fmt,
@@ -416,7 +416,7 @@ class FileOpenEater : public QObject
   Q_OBJECT
   public:
     FileOpenEater() {m_mw = 0;}
-    void setMainWindow(qutecsound *mainWindow) {
+	void setMainWindow(CsoundQt *mainWindow) {
       m_mw = mainWindow;
       while (!fileEventQueue.isEmpty()) {
         QString fileName = fileEventQueue.takeFirst();
@@ -443,7 +443,7 @@ class FileOpenEater : public QObject
       }
     }
 
-    qutecsound *m_mw;
+	CsoundQt *m_mw;
 };
 
 #endif

@@ -36,7 +36,7 @@
 
 #define PYQCSVERSION "0.9.0"
 
-class qutecsound;
+class CsoundQt;
 class QuteSheet;
 
 class PyQcsObject : public QObject {
@@ -44,7 +44,8 @@ class PyQcsObject : public QObject {
 
   public:
     PyQcsObject();
-    void setQuteCsound(qutecsound *qcs);
+	~PyQcsObject();
+    void setCsoundQt(CsoundQt *qcs);
 
   public slots:
 //  ! example for passing a PyObject directly from Qt to Python (without extra mashalling)
@@ -146,7 +147,8 @@ class PyQcsObject : public QObject {
     void registerProcessCallback(QString func, int skipPeriods = 0);
 
   private:
-    qutecsound *m_qcs;
+	CsoundQt *m_qcs;
+	MYFLT **m_tablePtr;
 };
 
 #endif // PYQCSOBJECT_H

@@ -714,10 +714,10 @@ int CsoundEngine::runCsound()
 #ifdef Q_OS_MAC
   else {
 #ifdef USE_DOUBLES
-    QString opcodedir = m_initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib64.framework/Resources/Opcodes";
+	QString opcodedir = m_initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib64.framework/Resources/Opcodes";
     QString stdopcode = opcodedir + "/libstdopcod.dylib";
 #else
-    QString opcodedir = m_initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Resources/Opcodes";
+	QString opcodedir = m_initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib.framework/Resources/Opcodes";
     QString stdopcode = opcodedir + "/libstdopcod.dylib";
 #endif
     // TODO is this check robust enough? what if the standard library is not used? is it likely it is not?
@@ -820,7 +820,7 @@ int CsoundEngine::runCsound()
       // Not really sure that this is worth the trouble, as it
       // is used only with chnsend and chnrecv which are unfinished:
       //         qDebug() << "csoundSetChannelIOCallback";
-      //         csoundSetChannelIOCallback(csound, &qutecsound::ioCallback);
+	  //         csoundSetChannelIOCallback(csound, &CsoundQt::ioCallback);
     }
   }
   else {
@@ -831,7 +831,7 @@ int CsoundEngine::runCsound()
   if (ud->threaded) {
     ud->perfThread = new QCsPerfThread(ud->csound);
     ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
-//    qDebug() << "qutecsound::runCsound perfThread->Play";
+//    qDebug() << "CsoundQt::runCsound perfThread->Play";
     ud->perfThread->Play();
   } /*if (ud->thread)*/
   else { // Run in the same thread
@@ -906,7 +906,7 @@ void CsoundEngine::stopCsound()
 
 void CsoundEngine::dispatchQueues()
 {
-//   qDebug("qutecsound::dispatchQueues()");
+//   qDebug("CsoundQt::dispatchQueues()");
   if (!engineMutex.tryLock(2)) {
     QTimer::singleShot(refreshTime, this, SLOT(dispatchQueues()));
     return;
@@ -937,7 +937,7 @@ void CsoundEngine::dispatchQueues()
   messageMutex.lock();
   if (!messageQueue.isEmpty() && m_consoleBufferSize > 0 && counter >= m_consoleBufferSize) {
     messageQueue.clear();
-    messageQueue << "\nQUTECSOUND: Message buffer overflow. Messages discarded!\n";
+	messageQueue << "\nCsoundQt: Message buffer overflow. Messages discarded!\n";
 //    qDebug() << "CsoundEngine::dispatchQueues() " << m_consoleBufferSize << counter;
   }
   messageMutex.unlock();
@@ -994,7 +994,7 @@ void CsoundEngine::recordBuffer()
       samplesWritten += samps;
     }
     else {
-//       qDebug("qutecsound::recordBuffer() : Empty Buffer!");
+//       qDebug("CsoundQt::recordBuffer() : Empty Buffer!");
     }
     recordTimer.singleShot(20, this, SLOT(recordBuffer()));
   }

@@ -31,7 +31,7 @@ class WidgetPanel : public QDockWidget
 {
   Q_OBJECT
 
-  friend class qutecsound;  // To allow edit actions- TODO- can this be done all here?
+  friend class CsoundQt;  // To allow edit actions- TODO- can this be done all here?
   friend class QuteWidget;  // To allow edit actions
   public:
     WidgetPanel(QWidget *parent);

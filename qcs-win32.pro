@@ -2,7 +2,7 @@
 !win32-g++: error(This project file is only for Windows builds using MinGW/g++.)
 !no_messages {
 	message()
-	message(Building QuteCsound for Windows using MinGW/g++.)
+	message(Building CsoundQt for Windows using MinGW/g++.)
 }
 
 CONFIG -= debug_and_release debug_and_release_target \

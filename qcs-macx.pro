@@ -2,7 +2,7 @@
 !macx: error(This project file is only for Macintosh OS X systems.)
 !no_messages {
 	message()
-	message(Building QuteCsound for Macintosh OS X.)
+	message(Building CsoundQt for Macintosh OS X.)
 }
 
 !intel: !x86_64: CONFIG += PPC

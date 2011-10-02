@@ -36,7 +36,7 @@ build64:DEFINES += USE_DOUBLE
 #MOC_DIR = "$${TMPDIR}/moc"
 #OBJECTS_DIR = "$${TMPDIR}/obj"
 #DESTDIR = "$${PWD}/bin"
-TARGET = bin/qutecsound
+TARGET = bin/CsoundQt
 build32:TARGET = $${TARGET}-f
 build64:TARGET = $${TARGET}-d
 pythonqt:TARGET = $${TARGET}-py
@@ -53,17 +53,17 @@ exists(config.user.pri) {
 }
 !no_messages {
     message()
-    build32:message(Building QuteCsound for the single precision version of Csound.)
-    build64:message(Building QuteCsound for the double precision version of Csound.)
+	build32:message(Building CsoundQt for the single precision version of Csound.)
+	build64:message(Building CsoundQt for the double precision version of Csound.)
     debug:message(Building debug version.)
     release:message(Building release version.)
     message()
     message(CONFIG ...)
     for(flag, CONFIG):message(+ $$flag)
     message()
-#    message(QuteCsound build directory is $${OUT_PWD})
-    message(QuteCsound intermediate file directory is $${TMPDIR})
-    message(QuteCsound bin directory is $${DESTDIR})
+#    message(CsoundQt build directory is $${OUT_PWD})
+	message(CsoundQt intermediate file directory is $${TMPDIR})
+	message(CsoundQt bin directory is $${DESTDIR})
     message()
 }
 isEmpty(CSOUND_API_INCLUDE_DIR) {

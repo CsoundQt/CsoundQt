@@ -25,14 +25,14 @@
 
 #include "ui_configdialog.h"
 
-class qutecsound;
+class CsoundQt;
 class Options;
 
 class ConfigDialog : public QDialog, private Ui::ConfigDialog
 {
   Q_OBJECT
   public:
-    ConfigDialog(qutecsound *parent = 0, Options *options = 0);
+    ConfigDialog(CsoundQt *parent = 0, Options *options = 0);
 
     ~ConfigDialog();
     int currentTab();
@@ -42,7 +42,7 @@ class ConfigDialog : public QDialog, private Ui::ConfigDialog
     void warnOpcodeDir(bool on);
 
   private:
-    qutecsound* m_parent;
+    CsoundQt* m_parent;
     Options *m_options;
     void browseFile(QString &destination);
     void browseSaveFile(QString &destination);

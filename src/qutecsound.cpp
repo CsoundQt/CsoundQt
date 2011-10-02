@@ -53,9 +53,9 @@
 #include "widgetlayout.h"
 
 #ifdef Q_OS_WIN32
-static const QString SCRIPT_NAME = "qutecsound_run_script-XXXXXX.bat";
+static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.bat";
 #else
-static const QString SCRIPT_NAME = "qutecsound_run_script-XXXXXX.sh";
+static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.sh";
 #endif
 
 
@@ -81,7 +81,7 @@ static void midiMessageCallback(double deltatime,
 ////csound performance thread function prototype
 //uintptr_t csThread(void *clientData);
 
-qutecsound::qutecsound(QStringList fileNames)
+CsoundQt::CsoundQt(QStringList fileNames)
 {
   m_startingUp = true;
   m_resetPrefs = false;
@@ -90,9 +90,8 @@ qutecsound::qutecsound(QStringList fileNames)
 #ifdef QCS_RTMIDI
   m_midiin = 0;
 #endif
-  qDebug() << "QuteCsound using Csound Version: " << csoundGetVersion();
   initialDir = QDir::current().path();
-  setWindowTitle("QuteCsound[*]");
+  setWindowTitle("CsoundQt[*]");
   resize(780,550);
   setWindowIcon(QIcon(":/images/qtcs.png"));
 
@@ -144,11 +143,11 @@ qutecsound::qutecsound(QStringList fileNames)
 
   bool widgetsVisible = !widgetPanel->isHidden(); // Must be after readSettings() to save last state
   if (widgetsVisible)
-    widgetPanel->hide();  // Hide until QuteCsound has finished loading
+	widgetPanel->hide();  // Hide until CsoundQt has finished loading
 #ifdef QCS_PYTHONQT
   bool scratchPadVisible = !m_scratchPad->isHidden(); // Must be after readSettings() to save last state
   if (scratchPadVisible)
-    m_scratchPad->hide();  // Hide until QuteCsound has finished loading
+	m_scratchPad->hide();  // Hide until CsoundQt has finished loading
 #endif
 
   createMenus();
@@ -216,7 +215,7 @@ qutecsound::qutecsound(QStringList fileNames)
 
   int init = csoundInitialize(0,0,0);
   if (init < 0) {
-    qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nQutecsound will probably crash if you try to run Csound.");
+	qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nCsoundQt will probably crash if you try to run Csound.");
   }
   qApp->processEvents(); // To finish settling dock widgets and other stuff before messing with them (does it actually work?)
   m_startingUp = false;
@@ -232,7 +231,7 @@ qutecsound::qutecsound(QStringList fileNames)
       loadFile(fileName, true);
     }
     else {
-      qDebug() << "qutecsound::qutecsound could not open file:" << fileName;
+	  qDebug() << "CsoundQt::CsoundQt could not open file:" << fileName;
     }
   }
 
@@ -251,13 +250,13 @@ qutecsound::qutecsound(QStringList fileNames)
 #endif
 }
 
-qutecsound::~qutecsound()
+CsoundQt::~CsoundQt()
 {
-  qDebug() << "qutecsound::~qutecsound()";
+  qDebug() << "CsoundQt::~CsoundQt()";
   // This function is not called... see closeEvent()
 }
 
-void qutecsound::devicesMessageCallback(CSOUND *csound,
+void CsoundQt::devicesMessageCallback(CSOUND *csound,
                                          int /*attr*/,
                                          const char *fmt,
                                          va_list args)
@@ -269,7 +268,7 @@ void qutecsound::devicesMessageCallback(CSOUND *csound,
   messages->append(msg);
 }
 
-void qutecsound::utilitiesMessageCallback(CSOUND *csound,
+void CsoundQt::utilitiesMessageCallback(CSOUND *csound,
                                           int /*attr*/,
                                           const char *fmt,
                                           va_list args)
@@ -281,11 +280,11 @@ void qutecsound::utilitiesMessageCallback(CSOUND *csound,
   console->appendMessage(msg);
 }
 
-void qutecsound::changePage(int index)
+void CsoundQt::changePage(int index)
 {
   // Previous page has already been destroyed here (if it was closed)
   // Remember this is called when opening, closing or switching tabs (including loading)
-//  qDebug() << "qutecsound::changePage " << curPage << "--" << index << "-" << documentPages.size();
+//  qDebug() << "CsoundQt::changePage " << curPage << "--" << index << "-" << documentPages.size();
   if (m_startingUp) {  // If starting up or loading many, don't bother with all this as files are being loaded
     return;
   }
@@ -296,7 +295,7 @@ void qutecsound::changePage(int index)
     documentPages[curPage]->hideWidgets();
   }
   if (index < 0) { // No tabs left
-    qDebug() << "qutecsound::changePage index < 0";
+	qDebug() << "CsoundQt::changePage index < 0";
     return;
   }
   curPage = index;
@@ -345,12 +344,12 @@ void qutecsound::changePage(int index)
   m_inspectorNeedsUpdate = true;
 }
 
-void qutecsound::setWidgetTooltipsVisible(bool visible)
+void CsoundQt::setWidgetTooltipsVisible(bool visible)
 {
   documentPages[curPage]->showWidgetTooltips(visible);
 }
 
-void qutecsound::openExample()
+void CsoundQt::openExample()
 {
   QObject *sender = QObject::sender();
   if (sender == 0)
@@ -360,14 +359,14 @@ void qutecsound::openExample()
 //   saveAs();
 }
 
-void qutecsound::logMessage(QString msg)
+void CsoundQt::logMessage(QString msg)
 {
   if (logFile.isOpen()) {
     logFile.write(msg.toAscii());
   }
 }
 
-void qutecsound::closeEvent(QCloseEvent *event)
+void CsoundQt::closeEvent(QCloseEvent *event)
 {
   this->showNormal();  // Don't store full screen size in preferences
   qApp->processEvents();
@@ -416,12 +415,12 @@ void qutecsound::closeEvent(QCloseEvent *event)
   close();
 }
 
-//void qutecsound::keyPressEvent(QKeyEvent *event)
+//void CsoundQt::keyPressEvent(QKeyEvent *event)
 //{
-////  qDebug() << "qutecsound::keyPressEvent " << event->key();
+////  qDebug() << "CsoundQt::keyPressEvent " << event->key();
 //}
 
-void qutecsound::newFile()
+void CsoundQt::newFile()
 {
 //  if (m_options->defaultCsdActive && m_options->defaultCsd.endsWith(".csd",Qt::CaseInsensitive)) {
 //    loadFile(m_options->defaultCsd);
@@ -439,7 +438,7 @@ void qutecsound::newFile()
   connectActions();
 }
 
-void qutecsound::open()
+void CsoundQt::open()
 {
   QStringList fileNames;
   bool widgetsVisible = widgetPanel->isVisible();
@@ -479,7 +478,7 @@ void qutecsound::open()
   }
 }
 
-void qutecsound::reload()
+void CsoundQt::reload()
 {
   if (documentPages[curPage]->isModified()) {
     QString fileName = documentPages[curPage]->getFileName();
@@ -488,13 +487,13 @@ void qutecsound::reload()
   }
 }
 
-void qutecsound::openFromAction()
+void CsoundQt::openFromAction()
 {
   QString fileName = static_cast<QAction *>(sender())->data().toString();
   openFromAction(fileName);
 }
 
-void qutecsound::openFromAction(QString fileName)
+void CsoundQt::openFromAction(QString fileName)
 {
     if (!fileName.isEmpty()) {
       if ( (fileName.endsWith(".sco") || fileName.endsWith(".orc"))
@@ -508,13 +507,13 @@ void qutecsound::openFromAction(QString fileName)
     }
 }
 
-void qutecsound::runScriptFromAction()
+void CsoundQt::runScriptFromAction()
 {
   QString fileName = static_cast<QAction *>(sender())->data().toString();
   runScript(fileName);
 }
 
-void qutecsound::runScript(QString fileName)
+void CsoundQt::runScript(QString fileName)
 {
   if (!fileName.isEmpty()) {
 #ifdef QCS_PYTHONQT
@@ -523,7 +522,7 @@ void qutecsound::runScript(QString fileName)
   }
 }
 
-void qutecsound::createCodeGraph()
+void CsoundQt::createCodeGraph()
 {
   QString command = m_options->dot + " -V";
 #ifdef Q_OS_WIN32
@@ -536,7 +535,7 @@ void qutecsound::createCodeGraph()
 
   int ret = system(command.toAscii());
   if (ret != 0) {
-    QMessageBox::warning(this, tr("QuteCsound"),
+	QMessageBox::warning(this, tr("CsoundQt"),
                          tr("Dot executable not found.\n"
                             "Please install graphviz from\n"
                             "www.graphviz.org"));
@@ -548,10 +547,10 @@ void qutecsound::createCodeGraph()
     return;
   }
   qDebug() << dotText;
-  QTemporaryFile file(QDir::tempPath() + QDir::separator() + "QuteCsound-GraphXXXXXX.dot");
-  QTemporaryFile pngFile(QDir::tempPath() + QDir::separator() + "QuteCsound-GraphXXXXXX.png");
+  QTemporaryFile file(QDir::tempPath() + QDir::separator() + "CsoundQt-GraphXXXXXX.dot");
+  QTemporaryFile pngFile(QDir::tempPath() + QDir::separator() + "CsoundQt-GraphXXXXXX.png");
   if (!file.open() || !pngFile.open()) {
-    QMessageBox::warning(this, tr("QuteCsound"),
+	QMessageBox::warning(this, tr("CsoundQt"),
                          tr("Cannot create temp dot/png file."));
     return;
   }
@@ -576,7 +575,7 @@ void qutecsound::createCodeGraph()
 //   qDebug() << command;
   ret = system(command.toAscii());
   if (ret != 0) {
-    qDebug() << "qutecsound::createCodeGraph() Error running dot";
+	qDebug() << "CsoundQt::createCodeGraph() Error running dot";
   }
   m_graphic = new GraphicWindow(this);
   m_graphic->show();
@@ -584,12 +583,12 @@ void qutecsound::createCodeGraph()
   connect(m_graphic, SIGNAL(destroyed()), this, SLOT(closeGraph()));
 }
 
-void qutecsound::closeGraph()
+void CsoundQt::closeGraph()
 {
-  qDebug("qutecsound::closeGraph()");
+  qDebug("CsoundQt::closeGraph()");
 }
 
-bool qutecsound::save()
+bool CsoundQt::save()
 {
   QString fileName = documentPages[curPage]->getFileName();
   if (fileName.isEmpty() or fileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
@@ -609,7 +608,7 @@ bool qutecsound::save()
   }
 }
 
-void qutecsound::copy()
+void CsoundQt::copy()
 {
   if (helpPanel->hasFocus()) {
     helpPanel->copy();
@@ -622,28 +621,28 @@ void qutecsound::copy()
   }
 }
 
-void qutecsound::cut()
+void CsoundQt::cut()
 {
   documentPages[curPage]->cut();
 }
 
-void qutecsound::paste()
+void CsoundQt::paste()
 {
   documentPages[curPage]->paste();
 }
 
-void qutecsound::undo()
+void CsoundQt::undo()
 {
-//  qDebug() << "qutecsound::undo()";
+//  qDebug() << "CsoundQt::undo()";
   documentPages[curPage]->undo();
 }
 
-void qutecsound::redo()
+void CsoundQt::redo()
 {
   documentPages[curPage]->redo();
 }
 
-void qutecsound::evaluateSection()
+void CsoundQt::evaluateSection()
 {
   if (!m_scratchPad->hasFocus()) {
     evaluatePython(documentPages[curPage]->getActiveSection());
@@ -653,7 +652,7 @@ void qutecsound::evaluateSection()
   }
 }
 
- void qutecsound::evaluatePython(QString code)
+ void CsoundQt::evaluatePython(QString code)
  {
 #ifdef QCS_PYTHONQT
    QString evalCode = QString();
@@ -674,14 +673,14 @@ void qutecsound::evaluateSection()
 #endif
  }
 
-void qutecsound::setWidgetEditMode(bool active)
+void CsoundQt::setWidgetEditMode(bool active)
 {
   for (int i = 0; i < documentPages.size(); i++) {
     documentPages[i]->setWidgetEditMode(active);
   }
 }
 
-//void qutecsound::setWidgetClipboard(QString text)
+//void CsoundQt::setWidgetClipboard(QString text)
 //{
 //  m_widgetClipboard = text;
 //  for (int i = 0; i < documentPages.size(); i++) {
@@ -689,13 +688,13 @@ void qutecsound::setWidgetEditMode(bool active)
 //  }
 //}
 
-void qutecsound::duplicate()
+void CsoundQt::duplicate()
 {
-  qDebug() << "qutecsound::duplicate()";
+  qDebug() << "CsoundQt::duplicate()";
   documentPages[curPage]->duplicateWidgets();
 }
 
-QString qutecsound::getSaveFileName()
+QString CsoundQt::getSaveFileName()
 {
   bool widgetsVisible = widgetPanel->isVisible();
   if (widgetsVisible && widgetPanel->isFloating())
@@ -725,7 +724,7 @@ QString qutecsound::getSaveFileName()
   if (fileName.isEmpty())
     return QString("");
   if (isOpen(fileName) != -1 && isOpen(fileName) != curPage) {
-    QMessageBox::critical(this, tr("QuteCsound"),
+	QMessageBox::critical(this, tr("CsoundQt"),
                           tr("The file is already open in another tab.\nFile not saved!"),
                              QMessageBox::Ok | QMessageBox::Default);
     return QString("");
@@ -741,7 +740,7 @@ QString qutecsound::getSaveFileName()
   return fileName;
 }
 
-void qutecsound::createQuickRefPdf()
+void CsoundQt::createQuickRefPdf()
 {
   QString tempFileName(QDir::tempPath() + QDir::separator() + "QuteCsound Quick Reference.pdf");
 //  if (QFile::exists(tempFileName))
@@ -754,7 +753,7 @@ void qutecsound::createQuickRefPdf()
   if (!QFile::exists(internalFileName)) {
     internalFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
   }
-//  qDebug() << "qutecsound::createQuickRefPdf() Opening " << internalFileName;
+//  qDebug() << "CsoundQt::createQuickRefPdf() Opening " << internalFileName;
   QFile file(internalFileName);
   file.open(QIODevice::ReadOnly);
   QFile quickRefFile(tempFileName);
@@ -764,9 +763,9 @@ void qutecsound::createQuickRefPdf()
   quickRefFileName = tempFileName;
 }
 
-void qutecsound::deleteCurrentTab()
+void CsoundQt::deleteCurrentTab()
 {
-//  qDebug() << "qutecsound::deleteCurrentTab()";
+//  qDebug() << "CsoundQt::deleteCurrentTab()";
   disconnect(showLiveEventsAct, 0,0,0);
   documentPages[curPage]->stop();
   documentPages[curPage]->showLiveEventPanels(false);
@@ -781,7 +780,7 @@ void qutecsound::deleteCurrentTab()
     curPage = 0; // deleting the document page decreases curPage, so must check
 }
 
-void qutecsound::openLogFile()
+void CsoundQt::openLogFile()
 {
   if (logFile.isOpen()) {
     logFile.close();
@@ -792,17 +791,17 @@ void qutecsound::openLogFile()
   if (logFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
     logFile.readAll();
     QString text = "--**-- " + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss")
-                   + " QuteCsound Logging Started: "
+				   + " CsoundQt Logging Started: "
                    + "\n";
     logFile.write(text.toAscii());
   }
   else {
-    qDebug() << "qutecsound::openLogFile() Error. Could not open log file! NO logging. " << logFile.fileName();
+	qDebug() << "CsoundQt::openLogFile() Error. Could not open log file! NO logging. " << logFile.fileName();
   }
 }
 
 
-void qutecsound::setMidiInterface(int number)
+void CsoundQt::setMidiInterface(int number)
 {
   if (number >= 0 && number < 9998) {
     openMidiPort(number);
@@ -812,7 +811,7 @@ void qutecsound::setMidiInterface(int number)
   }
 }
 
-void qutecsound::openMidiPort(int port)
+void CsoundQt::openMidiPort(int port)
 {
 #ifdef QCS_RTMIDI
   try {
@@ -824,7 +823,7 @@ void qutecsound::openMidiPort(int port)
 
   m_midiin = new RtMidiIn();
   try {
-    m_midiin->openPort(port, std::string("QuteCsound"));
+	m_midiin->openPort(port, std::string("CsoundQt"));
   }
   catch ( RtError &error ) {
     qDebug() << "WidgetLayout::openMidiPort Error opening port";
@@ -832,14 +831,14 @@ void qutecsound::openMidiPort(int port)
     m_midiin = 0;
     return;
   }
-//  qDebug() << "qutecsound::openMidiPort opened port " << port;
+//  qDebug() << "CsoundQt::openMidiPort opened port " << port;
   m_midiin->cancelCallback();
   m_midiin->setCallback(&midiMessageCallback, documentPages[curPage]->getWidgetLayout());  //TODO enable multiple layouts
 #endif
 //  m_midiin->ignoreTypes(false, false, false);
 }
 
-void qutecsound::closeMidiPort()
+void CsoundQt::closeMidiPort()
 {
 #ifdef QCS_RTMIDI
   if (m_midiin != 0) {
@@ -850,17 +849,17 @@ void qutecsound::closeMidiPort()
 #endif
 }
 
-void qutecsound::showNewFormatWarning()
+void CsoundQt::showNewFormatWarning()
 {
   QMessageBox::warning(this, tr("New widget format"),
-                       tr("  This version of QuteCsound implements a new format for storing widgets, which "
+					   tr("  This version of CsoundQt implements a new format for storing widgets, which "
                           "enables many of the new widget features you will find now.\n"
                           "  The old format is still read and saved, so you will be able to open files in older versions "
                           "but some of the features will not be passed to older versions.\n"),
                        QMessageBox::Ok);
 }
 
-bool qutecsound::saveAs()
+bool CsoundQt::saveAs()
 {
   QString fileName = getSaveFileName();
   if (fileName != "") {
@@ -873,7 +872,7 @@ bool qutecsound::saveAs()
   return false;
 }
 
-void qutecsound::createApp()
+void CsoundQt::createApp()
 {
   QString opcodeDir;
   if (documentPages[curPage]->isModified()) {
@@ -895,7 +894,7 @@ void qutecsound::createApp()
 #endif
 #ifdef Q_OS_MAC
     opcodeDir = "/Library/Frameworks/CsoundLib64.framework/Resources/Opcodes";
-//    opcodeDir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib64.framework/Resources/Opcodes";
+//    opcodeDir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib64.framework/Resources/Opcodes";
 #endif
 #else
 
@@ -907,7 +906,7 @@ void qutecsound::createApp()
 #endif
 #ifdef Q_OS_MAC
     opcodeDir = "/Library/Frameworks/CsoundLib.framework/Resources/Opcodes";
-//    opcodeDir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Resources/Opcodes";
+//    opcodeDir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib.framework/Resources/Opcodes";
 #endif
 
 
@@ -919,7 +918,7 @@ void qutecsound::createApp()
   wizard.exec();
 }
 
-bool qutecsound::saveNoWidgets()
+bool CsoundQt::saveNoWidgets()
 {
   QString fileName = getSaveFileName();
   if (fileName != "")
@@ -928,7 +927,7 @@ bool qutecsound::saveNoWidgets()
     return false;
 }
 
-void qutecsound::info()
+void CsoundQt::info()
 {
   QString text = tr("Full Path:") + " " + documentPages[curPage]->getFileName() + "\n\n";
   text += tr("Number of lines (Csound Text):") + " " + QString::number(documentPages[curPage]->lineCount(true)) + "\n";
@@ -945,15 +944,15 @@ void qutecsound::info()
                            QMessageBox::Ok);
 }
 
-bool qutecsound::closeTab(bool askCloseApp)
+bool CsoundQt::closeTab(bool askCloseApp)
 {
-//   qDebug("qutecsound::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
+//   qDebug("CsoundQt::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
   if (documentPages.size() > 0 && documentPages[curPage]->isModified()) {
     QString message = tr("The document ")
                       + (documentPages[curPage]->getFileName() != ""
                          ? documentPages[curPage]->getFileName(): "untitled.csd")
                       + tr("\nhas been modified.\nDo you want to save the changes before closing?");
-    int ret = QMessageBox::warning(this, tr("QuteCsound"),
+	int ret = QMessageBox::warning(this, tr("CsoundQt"),
                                    message,
                                    QMessageBox::Yes | QMessageBox::Default,
                                    QMessageBox::No,
@@ -967,8 +966,8 @@ bool qutecsound::closeTab(bool askCloseApp)
   }
   if (!askCloseApp) {
     if (documentPages.size() <= 1) {
-      if (QMessageBox::warning(this, tr("QuteCsound"),
-                               tr("Do you want to exit QuteCsound?"),
+	  if (QMessageBox::warning(this, tr("CsoundQt"),
+							   tr("Do you want to exit CsoundQt?"),
                                QMessageBox::Yes | QMessageBox::Default,
                                QMessageBox::No) == QMessageBox::Yes)
       {
@@ -986,7 +985,7 @@ bool qutecsound::closeTab(bool askCloseApp)
   return true;
 }
 
-void qutecsound::print()
+void CsoundQt::print()
 {
   QPrinter printer;
   QPrintDialog *dialog = new QPrintDialog(&printer, this);
@@ -998,22 +997,22 @@ void qutecsound::print()
   documentPages[curPage]->print(&printer);
 }
 
-void qutecsound::findReplace()
+void CsoundQt::findReplace()
 {
   documentPages[curPage]->findReplace();
 }
 
-void qutecsound::findString()
+void CsoundQt::findString()
 {
   documentPages[curPage]->findString();
 }
 
-void qutecsound::autoComplete()
+void CsoundQt::autoComplete()
 {
   documentPages[curPage]->autoComplete();
 }
 
-bool qutecsound::join(bool ask)
+bool CsoundQt::join(bool ask)
 {
   QDialog dialog(this);
   dialog.resize(700, 350);
@@ -1058,7 +1057,7 @@ bool qutecsound::join(bool ask)
   if (itemList.size() == 0 or itemList.size() == 0) {
     if (!ask) {
       QMessageBox::warning(this, tr("Join"),
-                           tr("Please open the orc and sco files in QuteCsound first!"));
+						   tr("Please open the orc and sco files in CsoundQt first!"));
     }
     return false;
   }
@@ -1082,14 +1081,14 @@ bool qutecsound::join(bool ask)
     return true;
   }
 //   else {
-//     qDebug("qutecsound::join() : No Action");
+//     qDebug("CsoundQt::join() : No Action");
 //   }
   return false;
 }
 
-void qutecsound::showUtilities(bool show)
+void CsoundQt::showUtilities(bool show)
 {
-//  qDebug() << "qutecsound::showUtilities" << show;
+//  qDebug() << "CsoundQt::showUtilities" << show;
   if (!show) {
     if (utilitiesDialog != 0 && utilitiesDialog->close()) {
       utilitiesDialog = 0;
@@ -1104,32 +1103,32 @@ void qutecsound::showUtilities(bool show)
   }
 }
 
-void qutecsound::inToGet()
+void CsoundQt::inToGet()
 {
   documentPages[curPage]->inToGet();
 }
 
-void qutecsound::getToIn()
+void CsoundQt::getToIn()
 {
   documentPages[curPage]->getToIn();
 }
 
-void qutecsound::updateCsladspaText()
+void CsoundQt::updateCsladspaText()
 {
   documentPages[curPage]->updateCsLadspaText();
 }
 
-void qutecsound::updateCabbageText()
+void CsoundQt::updateCabbageText()
 {
   documentPages[curPage]->updateCabbageText();
 }
 
-void qutecsound::setCurrentAudioFile(const QString fileName)
+void CsoundQt::setCurrentAudioFile(const QString fileName)
 {
   currentAudioFile = fileName;
 }
 
-void qutecsound::play(bool realtime, int index)
+void CsoundQt::play(bool realtime, int index)
 {
   // TODO make csound pause if it is already running
   int oldPage = curPage;
@@ -1137,7 +1136,7 @@ void qutecsound::play(bool realtime, int index)
 	index = curPage;
   }
   if (index < 0 && index >= documentPages.size()) {
-	qDebug() << "qutecsound::play index out of range " << index;
+	qDebug() << "CsoundQt::play index out of range " << index;
     return;
   }
   curPage = index;
@@ -1145,7 +1144,7 @@ void qutecsound::play(bool realtime, int index)
 	  runAct->setChecked(true);  // In case the call comes from a button
   }
   if (documentPages[curPage]->getFileName().isEmpty()) {
-    QMessageBox::warning(this, tr("QuteCsound"),
+	QMessageBox::warning(this, tr("CsoundQt"),
                          tr("This file has not been saved\nPlease select name and location."));
     if (!saveAs()) {
 		if (curPage == oldPage) {
@@ -1209,7 +1208,7 @@ void qutecsound::play(bool realtime, int index)
       if (!csdFile.open()) {
         qDebug() << "Error creating temporary file " << tmpFileName;
         QMessageBox::critical(this,
-							  tr("QuteCsound"),
+							  tr("CsoundQt"),
                               tr("Error creating temporary file."),
                               QMessageBox::Ok);
         return;
@@ -1239,13 +1238,13 @@ void qutecsound::play(bool realtime, int index)
   int ret = documentPages[curPage]->play(m_options);
   if (ret == -1) {
     QMessageBox::critical(this,
-                          tr("QuteCsound"),
+						  tr("CsoundQt"),
                           tr("Internal error running Csound."),
                           QMessageBox::Ok);
   }
   else if (ret == -2) { // Error creating temporary file
     runAct->setChecked(false);
-    qDebug() << "qutecsound::play - Error creating temporary file";
+	qDebug() << "CsoundQt::play - Error creating temporary file";
   }
   else if (ret == -3) { // Csound compilation failed
     runAct->setChecked(false);
@@ -1269,14 +1268,14 @@ void qutecsound::play(bool realtime, int index)
   curPage = oldPage;
 }
 
-void qutecsound::runInTerm(bool realtime)
+void CsoundQt::runInTerm(bool realtime)
 {
   QString fileName = documentPages[curPage]->getFileName();
-  QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "QuteCsoundExample-XXXXXX.csd");
+  QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "CsoundQtExample-XXXXXX.csd");
   tempFile.setAutoRemove(false);
   if (fileName.startsWith(":/")) {
     if (!tempFile.open()) {
-      qDebug() << "qutecsound::runCsound() : Error creating temp file";
+	  qDebug() << "CsoundQt::runCsound() : Error creating temp file";
       runAct->setChecked(false);
       return;
     }
@@ -1323,7 +1322,7 @@ void qutecsound::runInTerm(bool realtime)
     tempScriptFiles << scriptFileName;
 }
 
-void qutecsound::pause(int index)
+void CsoundQt::pause(int index)
 {
   int docIndex = index;
   if (docIndex == -1) {
@@ -1337,10 +1336,10 @@ void qutecsound::pause(int index)
 //  }
 }
 
-void qutecsound::stop(int index)
+void CsoundQt::stop(int index)
 {
   // Must guarantee that csound has stopped when it returns
-  qDebug() <<"qutecsound::stop() " <<  index;
+  qDebug() <<"CsoundQt::stop() " <<  index;
   int docIndex = index;
   if (docIndex == -1) {
     docIndex = curPage;
@@ -1363,7 +1362,7 @@ void qutecsound::stop(int index)
   }
 }
 
-void qutecsound::stopAll()
+void CsoundQt::stopAll()
 {
   for (int i = 0; i < documentPages.size(); i++) {
     documentPages[i]->stop();
@@ -1372,12 +1371,12 @@ void qutecsound::stopAll()
   recAct->setChecked(false);
 }
 
-void qutecsound::perfEnded()
+void CsoundQt::perfEnded()
 {
   runAct->setChecked(false);
 }
 
-void qutecsound::record(bool rec)
+void CsoundQt::record(bool rec)
 {
 	if (rec) {
 		if (!documentPages[curPage]->isRunning()) {
@@ -1394,12 +1393,12 @@ void qutecsound::record(bool rec)
 }
 
 
-void qutecsound::sendEvent(QString eventLine, double delay)
+void CsoundQt::sendEvent(QString eventLine, double delay)
 {
   sendEvent(curCsdPage, eventLine, delay);
 }
 
-void qutecsound::sendEvent(int index, QString eventLine, double delay)
+void CsoundQt::sendEvent(int index, QString eventLine, double delay)
 {
   int docIndex = index;
   if (docIndex == -1) {
@@ -1410,7 +1409,7 @@ void qutecsound::sendEvent(int index, QString eventLine, double delay)
   }
 }
 
-void qutecsound::render()
+void CsoundQt::render()
 {
   if (m_options->fileAskFilename) {
     QString defaultFile;
@@ -1437,7 +1436,7 @@ void qutecsound::render()
          m_options->fileOutputFilename += extension;
        }
       if (QFile::exists(m_options->fileOutputFilename)) {
-        int ret = QMessageBox::warning(this, tr("QuteCsound"),
+		int ret = QMessageBox::warning(this, tr("CsoundQt"),
                 tr("The file %1 \nalready exists.\n"
                   "Do you want to overwrite it?").arg(m_options->fileOutputFilename),
                 QMessageBox::Save | QMessageBox::Cancel,
@@ -1462,7 +1461,7 @@ void qutecsound::render()
   play(false);
 }
 
-void qutecsound::openExternalEditor()
+void CsoundQt::openExternalEditor()
 {
   QString name = "";
   if (m_options->sfdirActive) {
@@ -1491,7 +1490,7 @@ void qutecsound::openExternalEditor()
   }
 }
 
-void qutecsound::openExternalPlayer()
+void CsoundQt::openExternalPlayer()
 {
   QString name = "";
   if (m_options->sfdirActive) {
@@ -1520,13 +1519,13 @@ void qutecsound::openExternalPlayer()
   }
 }
 
-void qutecsound::setEditorFocus()
+void CsoundQt::setEditorFocus()
 {
   documentPages[curPage]->setEditorFocus();
   this->raise();
 }
 
-void qutecsound::setHelpEntry()
+void CsoundQt::setHelpEntry()
 {
   QString text = documentPages[curPage]->wordUnderCursor();
   if (text.startsWith('#')) { // For #define and friends
@@ -1537,9 +1536,9 @@ void qutecsound::setHelpEntry()
 #ifdef Q_OS_MAC
   if (dir == "") {
 #ifdef USE_DOUBLES
-    dir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib64.framework/Versions/5.2/Resources/Manual";
+	dir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib64.framework/Versions/5.2/Resources/Manual";
 #else
-    dir = initialDir + "/QuteCsound.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Manual";
+	dir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Manual";
 #endif
   }
 #endif
@@ -1569,7 +1568,7 @@ void qutecsound::setHelpEntry()
   }
 }
 
-void qutecsound::setFullScreen(bool full)
+void CsoundQt::setFullScreen(bool full)
 {
   if (full) {
     this->showFullScreen();
@@ -1579,7 +1578,7 @@ void qutecsound::setFullScreen(bool full)
   }
 }
 
-void qutecsound::splitView(bool split)
+void CsoundQt::splitView(bool split)
 {
   if (split) {
     int mode = showOrcAct->isChecked() ? 2 : 0 ;
@@ -1599,12 +1598,12 @@ void qutecsound::splitView(bool split)
   }
 }
 
-void qutecsound::openManualExample(QString fileName)
+void CsoundQt::openManualExample(QString fileName)
 {
   loadFile(fileName);
 }
 
-void qutecsound::openExternalBrowser(QUrl url)
+void CsoundQt::openExternalBrowser(QUrl url)
 {
   if (!url.isEmpty()) {
     if (!m_options->browser.isEmpty()) {
@@ -1634,7 +1633,7 @@ void qutecsound::openExternalBrowser(QUrl url)
   }
 }
 
-void qutecsound::openQuickRef()
+void CsoundQt::openQuickRef()
 {
   if (!m_options->pdfviewer.isEmpty()) {
 #ifndef Q_WS_MAC
@@ -1654,32 +1653,32 @@ void qutecsound::openQuickRef()
   }
 }
 
-void qutecsound::resetPreferences()
+void CsoundQt::resetPreferences()
 {
   int ret = QMessageBox::question (this, tr("Reset Preferences"),
-                                   tr("Are you sure you want to revert QuteCsound's preferences\nto their initial default values? "),
+								   tr("Are you sure you want to revert CsoundQt's preferences\nto their initial default values? "),
                                    QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok);
   if (ret ==  QMessageBox::Ok) {
     m_resetPrefs = true;
     QMessageBox::information(this, tr("Reset Preferences"),
-                         tr("Preferences have been reset.\nYou must restart QuteCsound."),
+						 tr("Preferences have been reset.\nYou must restart CsoundQt."),
                          QMessageBox::Ok, QMessageBox::Ok);
   }
 }
 
-void qutecsound::openShortcutDialog()
+void CsoundQt::openShortcutDialog()
 {
   KeyboardShortcuts dialog(this, m_keyActions);
   connect(&dialog, SIGNAL(restoreDefaultShortcuts()), this, SLOT(setDefaultKeyboardShortcuts()));
   dialog.exec();
 }
 
-void qutecsound::statusBarMessage(QString message)
+void CsoundQt::statusBarMessage(QString message)
 {
   statusBar()->showMessage(message);
 }
 
-void qutecsound::about()
+void CsoundQt::about()
 {
   About *msgBox = new About(this);
   msgBox->setWindowFlags(msgBox->windowFlags() | Qt::FramelessWindowHint);
@@ -1700,15 +1699,15 @@ void qutecsound::about()
   text += tr("Finnish translation: Niko Humalam&auml;ki") + "<br />";
   text += QString("<center><a href=\"http://qutecsound.sourceforge.net\">qutecsound.sourceforge.net</a></center>");
   text += QString("<center><a href=\"mailto:mantaraya36@gmail.com\">mantaraya36@gmail.com</a></center><br />");
-  text += tr("If you find QuteCsound useful, please consider donating to the project:");
+  text += tr("If you find CsoundQt useful, please consider donating to the project:");
   text += "<br /><center><a href=\"http://sourceforge.net/donate/index.php?group_id=227265\"><img src=\":/images/project-support.jpg\" width=\"88\" height=\"32\" border=\"0\" alt=\"Support This Project\" /></a></center>";
 
   text += tr("Please file bug reports and feature suggestions in the ");
   text += "<a href=\"http://sourceforge.net/tracker/?group_id=227265\">";
-  text += tr("QuteCsound tracker") + "</a>.<br />";
+  text += tr("CsoundQt tracker") + "</a>.<br />";
 
   text +=tr("Mailing Lists:");
-  text += "<br /><a href=\"http://lists.sourceforge.net/lists/listinfo/qutecsound-users\">Join/Read QuteCsound Mailing List</a><br />";
+  text += "<br /><a href=\"http://lists.sourceforge.net/lists/listinfo/qutecsound-users\">Join/Read CsoundQt Mailing List</a><br />";
   text += "<a href=\"http://old.nabble.com/Csound-f480.html\">Join/Read Csound Mailing List</a><br />";
   text += "<a href=\"https://lists.sourceforge.net/lists/listinfo/csound-devel\"> Join/Read Csound Developer List</a><br />";
 
@@ -1729,19 +1728,19 @@ void qutecsound::about()
   delete msgBox;
 }
 
-void qutecsound::donate()
+void CsoundQt::donate()
 {
   openExternalBrowser(QUrl("http://sourceforge.net/donate/index.php?group_id=227265"));
 }
 
-void qutecsound::documentWasModified()
+void CsoundQt::documentWasModified()
 {
   setWindowModified(true);
-//  qDebug() << "qutecsound::documentWasModified()";
+//  qDebug() << "CsoundQt::documentWasModified()";
   documentTabs->setTabIcon(curPage, modIcon);
 }
 
-void qutecsound::configure()
+void CsoundQt::configure()
 {
   ConfigDialog dialog(this, m_options);
   dialog.setCurrentTab(configureTab);
@@ -1751,7 +1750,7 @@ void qutecsound::configure()
   configureTab = dialog.currentTab();
 }
 
-void qutecsound::applySettings()
+void CsoundQt::applySettings()
 {
   for (int i = 0; i < documentPages.size(); i++) {
     setCurrentOptionsForPage(documentPages[i]);
@@ -1776,10 +1775,10 @@ void qutecsound::applySettings()
   currentOptions +=  (m_options->saveWidgets ? tr("SaveWidgets") : tr("DontSaveWidgets")) + " ";
   QString playOptions = " (Audio:" + _configlists.rtAudioNames[m_options->rtAudioModule] + " ";
   playOptions += "MIDI:" +  _configlists.rtMidiNames[m_options->rtMidiModule] + ")";
-  playOptions += " (" + (m_options->rtUseOptions? tr("UseQuteCsoundOptions"): tr("DiscardQuteCsoundOptions"));
+  playOptions += " (" + (m_options->rtUseOptions? tr("UseCsoundQtOptions"): tr("DiscardCsoundQtOptions"));
   playOptions += " " + (m_options->rtOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
   playOptions += currentOptions;
-  QString renderOptions = " (" + (m_options->fileUseOptions? tr("UseQuteCsoundOptions"): tr("DiscardQuteCsoundOptions")) + " ";
+  QString renderOptions = " (" + (m_options->fileUseOptions? tr("UseCsoundQtOptions"): tr("DiscardCsoundQtOptions")) + " ";
   renderOptions +=  "" + (m_options->fileOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
   renderOptions += currentOptions;
   runAct->setStatusTip(tr("Play") + playOptions);
@@ -1798,7 +1797,7 @@ void qutecsound::applySettings()
   }
 }
 
-void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
+void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
 {
   p->setColorVariables(m_options->colorVariables);
   p->setTabStopWidth(m_options->tabWidth);
@@ -1832,9 +1831,9 @@ void qutecsound::setCurrentOptionsForPage(DocumentPage *p)
   p->setFlags(flags);
 }
 
-void qutecsound::runUtility(QString flags)
+void CsoundQt::runUtility(QString flags)
 {
-  qDebug("qutecsound::runUtility");
+  qDebug("CsoundQt::runUtility");
   if (m_options->useAPI) {
 #ifdef MACOSX_PRE_SNOW
 //Remember menu bar to set it after FLTK grabs it
@@ -1848,7 +1847,7 @@ void qutecsound::runUtility(QString flags)
     QStringList indFlags= flags.split(" ",QString::SkipEmptyParts);
     QStringList files = fileFlags.split("\"", QString::SkipEmptyParts);
     if (indFlags.size() < 2) {
-      qDebug("qutecsound::runUtility: Error: empty flags");
+	  qDebug("CsoundQt::runUtility: Error: empty flags");
       return;
     }
     if (indFlags[0] == "-U") {
@@ -1857,7 +1856,7 @@ void qutecsound::runUtility(QString flags)
       indFlags.removeAt(0);
     }
     else {
-      qDebug("qutecsound::runUtility: Error: unexpected flag!");
+	  qDebug("CsoundQt::runUtility: Error: unexpected flag!");
       return;
     }
     int index = 0;
@@ -1876,8 +1875,8 @@ void qutecsound::runUtility(QString flags)
     csoundReset(csoundU);
     csoundSetHostData(csoundU, (void *) m_console);
     csoundPreCompile(csoundU);
-    csoundSetMessageCallback(csoundU, &qutecsound::utilitiesMessageCallback);
-    // Utilities always run in the same thread as QuteCsound
+    csoundSetMessageCallback(csoundU, &CsoundQt::utilitiesMessageCallback);
+	// Utilities always run in the same thread as CsoundQt
     csoundRunUtility(csoundU, name.toStdString().c_str(), argc, argv);
     csoundDestroy(csoundU);
     for (int i = 0; i < argc; i++) {
@@ -1942,9 +1941,9 @@ void qutecsound::runUtility(QString flags)
   }
 }
 
-//void qutecsound::widgetDockStateChanged(bool topLevel)
+//void CsoundQt::widgetDockStateChanged(bool topLevel)
 //{
-//  //   qDebug("qutecsound::widgetDockStateChanged()");
+//  //   qDebug("CsoundQt::widgetDockStateChanged()");
 //  if (documentPages.size() < 1)
 //    return; //necessary check, since widget panel is created early by consructor
 //  //   qApp->processEvents();
@@ -1959,17 +1958,17 @@ void qutecsound::runUtility(QString flags)
 
 
 //
-// void qutecsound::widgetDockLocationChanged(Qt::DockWidgetArea area)
+// void CsoundQt::widgetDockLocationChanged(Qt::DockWidgetArea area)
 // {
-//   qDebug("qutecsound::widgetDockLocationChanged() %i", area);
+//   qDebug("CsoundQt::widgetDockLocationChanged() %i", area);
 // }
 
-void qutecsound::showLineNumber(int lineNumber)
+void CsoundQt::showLineNumber(int lineNumber)
 {
   lineNumberLabel->setText(tr("Line %1").arg(lineNumber));
 }
 
-void qutecsound::updateInspector()
+void CsoundQt::updateInspector()
 {
   if (m_closing) {
     return;  // And don't call this again from the timer
@@ -1979,7 +1978,7 @@ void qutecsound::updateInspector()
     QTimer::singleShot(2000, this, SLOT(updateInspector()));
     return; // Retrigger timer, but do no update
   }
-//  qDebug() << "qutecsound::updateInspector";
+//  qDebug() << "CsoundQt::updateInspector";
   if (!documentPages[curPage]->getFileName().endsWith(".py")) {
     m_inspector->parseText(documentPages[curPage]->getBasicText());
   }
@@ -1990,13 +1989,13 @@ void qutecsound::updateInspector()
   QTimer::singleShot(2000, this, SLOT(updateInspector()));
 }
 
-void qutecsound::markInspectorUpdate()
+void CsoundQt::markInspectorUpdate()
 {
-//  qDebug() << "qutecsound::markInspectorUpdate()";
+//  qDebug() << "CsoundQt::markInspectorUpdate()";
   m_inspectorNeedsUpdate = true;
 }
 
-void qutecsound::setDefaultKeyboardShortcuts()
+void CsoundQt::setDefaultKeyboardShortcuts()
 {
 //   m_keyActions.append(createCodeGraphAct);
   newAct->setShortcut(tr("Ctrl+N"));
@@ -2074,50 +2073,50 @@ void qutecsound::setDefaultKeyboardShortcuts()
   showWidgetEditAct->setShortcut(tr("Shift+Alt+7"));
 }
 
-void qutecsound::showNoPythonQtWarning()
+void CsoundQt::showNoPythonQtWarning()
 {
   QMessageBox::warning(this, tr("No PythonQt support"),
-                       tr("This version of QuteCsound has been compiled without PythonQt support.\n"
+					   tr("This version of CsoundQt has been compiled without PythonQt support.\n"
                           "Extended Python features are not available"));
-  qDebug() << "qutecsound::showNoPythonQtWarning()";
+  qDebug() << "CsoundQt::showNoPythonQtWarning()";
 }
 
-void qutecsound::showOrc(bool show)
+void CsoundQt::showOrc(bool show)
 {
   documentPages[curPage]->showOrc(show);
 }
 
-void qutecsound::showScore(bool show)
+void CsoundQt::showScore(bool show)
 {
   documentPages[curPage]->showScore(show);
 }
 
-void qutecsound::showOptions(bool show)
+void CsoundQt::showOptions(bool show)
 {
   documentPages[curPage]->showOptions(show);
 }
 
-void qutecsound::showFileB(bool show)
+void CsoundQt::showFileB(bool show)
 {
   documentPages[curPage]->showFileB(show);
 }
 
-void qutecsound::showOther(bool show)
+void CsoundQt::showOther(bool show)
 {
   documentPages[curPage]->showOther(show);
 }
 
-void qutecsound::showOtherCsd(bool show)
+void CsoundQt::showOtherCsd(bool show)
 {
   documentPages[curPage]->showOtherCsd(show);
 }
 
-void qutecsound::showWidgetEdit(bool show)
+void CsoundQt::showWidgetEdit(bool show)
 {
   documentPages[curPage]->showWidgetEdit(show);
 }
 
-void qutecsound::createActions()
+void CsoundQt::createActions()
 {
   // Actions that are not connected here depend on the active document, so they are
   // connected with connectActions() and are changed when the document changes.
@@ -2446,7 +2445,7 @@ void qutecsound::createActions()
   viewFullScreenAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("View Full Screen"), this);
   viewFullScreenAct->setCheckable(true);
   viewFullScreenAct->setChecked(false);
-  viewFullScreenAct->setStatusTip(tr("Have QuteCsound occupy all the available screen space"));
+  viewFullScreenAct->setStatusTip(tr("Have CsoundQt occupy all the available screen space"));
   viewFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(viewFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setFullScreen(bool)));
 
@@ -2592,14 +2591,14 @@ void qutecsound::createActions()
   killToEndAct->setStatusTip(tr("Delete everything from cursor to the end of the current line"));
   killToEndAct->setShortcutContext(Qt::ApplicationShortcut);
 
-  aboutAct = new QAction(tr("&About QuteCsound"), this);
+  aboutAct = new QAction(tr("&About CsoundQt"), this);
   aboutAct->setStatusTip(tr("Show the application's About box"));
 //   aboutAct->setIconText(tr("About"));
   aboutAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 
-  donateAct = new QAction(tr("Donate to QuteCsound"), this);
-  donateAct->setStatusTip(tr("Donate to support development of QuteCsound"));
+  donateAct = new QAction(tr("Donate to CsoundQt"), this);
+  donateAct->setStatusTip(tr("Donate to support development of CsoundQt"));
 //   aboutAct->setIconText(tr("About"));
   donateAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(donateAct, SIGNAL(triggered()), this, SLOT(donate()));
@@ -2611,7 +2610,7 @@ void qutecsound::createActions()
   connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
   resetPreferencesAct = new QAction(tr("Reset Preferences"), this);
-  resetPreferencesAct->setStatusTip(tr("Reset QuteCsound's preferences to their original default state"));
+  resetPreferencesAct->setStatusTip(tr("Reset CsoundQt's preferences to their original default state"));
   resetPreferencesAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(resetPreferencesAct, SIGNAL(triggered()), this, SLOT(resetPreferences()));
 
@@ -2622,7 +2621,7 @@ void qutecsound::createActions()
   setKeyboardShortcutsList();
 }
 
-void qutecsound::setKeyboardShortcutsList()
+void CsoundQt::setKeyboardShortcutsList()
 {
   m_keyActions.append(newAct);
   m_keyActions.append(openAct);
@@ -2692,7 +2691,7 @@ void qutecsound::setKeyboardShortcutsList()
   m_keyActions.append(showWidgetEditAct);
 }
 
-void qutecsound::connectActions()
+void CsoundQt::connectActions()
 {
   DocumentPage * doc = documentPages[curPage];
 //  disconnect(undoAct, 0, 0, 0);
@@ -2769,7 +2768,7 @@ void qutecsound::connectActions()
   }
 }
 
-void qutecsound::createMenus()
+void CsoundQt::createMenus()
 {
   fileMenu = menuBar()->addMenu(tr("File"));
   fileMenu->addAction(newAct);
@@ -3430,7 +3429,7 @@ flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Appl
 
 }
 
-void qutecsound::fillFileMenu()
+void CsoundQt::fillFileMenu()
 {
   recentMenu->clear();
   for (int i = 0; i < recentFiles.size(); i++) {
@@ -3441,7 +3440,7 @@ void qutecsound::fillFileMenu()
   }
 }
 
-void qutecsound::fillFavoriteMenu()
+void CsoundQt::fillFavoriteMenu()
 {
   favoriteMenu->clear();
   if (!m_options->favoriteDir.isEmpty()) {
@@ -3451,7 +3450,7 @@ void qutecsound::fillFavoriteMenu()
   }
 }
 
-void qutecsound::fillFavoriteSubMenu(QDir dir, QMenu *m, int depth)
+void CsoundQt::fillFavoriteSubMenu(QDir dir, QMenu *m, int depth)
 {
   QStringList filters;
   filters << "*.csd" << "*.orc" << "*.sco" << "*.udo" << "*.inc" << "*.py";
@@ -3479,7 +3478,7 @@ void qutecsound::fillFavoriteSubMenu(QDir dir, QMenu *m, int depth)
   }
 }
 
-void qutecsound::fillScriptsMenu()
+void CsoundQt::fillScriptsMenu()
 {
 #ifdef QCS_PYTHONQT
   scriptsMenu->clear();
@@ -3498,7 +3497,7 @@ void qutecsound::fillScriptsMenu()
 #endif
 }
 
-void qutecsound::fillScriptsSubMenu(QDir dir, QMenu *m, int depth)
+void CsoundQt::fillScriptsSubMenu(QDir dir, QMenu *m, int depth)
 {
   QStringList filters;
   filters << "*.py";
@@ -3526,7 +3525,7 @@ void qutecsound::fillScriptsSubMenu(QDir dir, QMenu *m, int depth)
   }
 }
 
-void qutecsound::fillEditScriptsSubMenu(QDir dir, QMenu *m, int depth)
+void CsoundQt::fillEditScriptsSubMenu(QDir dir, QMenu *m, int depth)
 {
   QStringList filters;
   filters << "*.py";
@@ -3554,7 +3553,7 @@ void qutecsound::fillEditScriptsSubMenu(QDir dir, QMenu *m, int depth)
   }
 }
 
-void qutecsound::createToolBars()
+void CsoundQt::createToolBars()
 {
   fileToolBar = addToolBar(tr("File"));
   fileToolBar->setObjectName("fileToolBar");
@@ -3602,12 +3601,12 @@ void qutecsound::createToolBars()
   configureToolBar->setToolButtonStyle(toolButtonStyle);
 }
 
-void qutecsound::createStatusBar()
+void CsoundQt::createStatusBar()
 {
   statusBar()->showMessage(tr("Ready"));
 }
 
-void qutecsound::readSettings()
+void CsoundQt::readSettings()
 {
   QSettings settings("csound", "qutecsound");
   int settingsVersion = settings.value("settingsVersion", 0).toInt();
@@ -3782,7 +3781,7 @@ void qutecsound::readSettings()
   }
 }
 
-void qutecsound::writeSettings(QStringList openFiles, int lastIndex)
+void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 {
   QSettings settings("csound", "qutecsound");
   if (!m_resetPrefs) {
@@ -3946,7 +3945,7 @@ void qutecsound::writeSettings(QStringList openFiles, int lastIndex)
   settings.endGroup();
 }
 
-void qutecsound::clearSettings()
+void CsoundQt::clearSettings()
 {
   QSettings settings("csound", "qutecsound");
   settings.remove("");
@@ -3972,9 +3971,9 @@ void qutecsound::clearSettings()
   settings.endGroup();
 }
 
-int qutecsound::execute(QString executable, QString options)
+int CsoundQt::execute(QString executable, QString options)
 {
-//  qDebug() << "qutecsound::execute";
+//  qDebug() << "CsoundQt::execute";
 //  QStringList optionlist;
 
 //  // cd to current directory on all platforms
@@ -3995,7 +3994,7 @@ int qutecsound::execute(QString executable, QString options)
   if (!QProcess::startDetached(commandLine))
       return 1;
 #else
-  qDebug() << "qutecsound::execute   " << commandLine << documentPages[curPage]->getFilePath();
+  qDebug() << "CsoundQt::execute   " << commandLine << documentPages[curPage]->getFilePath();
   QProcess *p = new QProcess(this);
   p->setWorkingDirectory(documentPages[curPage]->getFilePath());
   p->start(commandLine);
@@ -4007,12 +4006,12 @@ int qutecsound::execute(QString executable, QString options)
   return 0;
 }
 
-bool qutecsound::loadFile(QString fileName, bool runNow)
+bool CsoundQt::loadFile(QString fileName, bool runNow)
 {
-//  qDebug() << "qutecsound::loadFile" << fileName;
+//  qDebug() << "CsoundQt::loadFile" << fileName;
   QFile file(fileName);
   if (!file.open(QFile::ReadOnly)) {
-    QMessageBox::warning(this, tr("QuteCsound"),
+	QMessageBox::warning(this, tr("CsoundQt"),
                          tr("Cannot read file %1:\n%2.")
                              .arg(fileName)
                              .arg(file.errorString()));
@@ -4154,7 +4153,7 @@ bool qutecsound::loadFile(QString fileName, bool runNow)
   return true;
 }
 
-void qutecsound::makeNewPage(QString fileName, QString text)
+void CsoundQt::makeNewPage(QString fileName, QString text)
 {
   DocumentPage *newPage = new DocumentPage(this, m_opcodeTree);
   int insertPoint = curPage + 1;
@@ -4206,7 +4205,7 @@ void qutecsound::makeNewPage(QString fileName, QString text)
   }
 }
 
-bool qutecsound::loadCompanionFile(const QString &fileName)
+bool CsoundQt::loadCompanionFile(const QString &fileName)
 {
   QString companionFileName = fileName;
   if (fileName.endsWith(".orc")) {
@@ -4224,9 +4223,9 @@ bool qutecsound::loadCompanionFile(const QString &fileName)
   return false;
 }
 
-bool qutecsound::saveFile(const QString &fileName, bool saveWidgets)
+bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
 {
-//  qDebug("qutecsound::saveFile");
+//  qDebug("CsoundQt::saveFile");
   QString text;
   QApplication::setOverrideCursor(Qt::WaitCursor);
   if (m_options->saveWidgets && saveWidgets)
@@ -4264,7 +4263,7 @@ bool qutecsound::saveFile(const QString &fileName, bool saveWidgets)
   return true;
 }
 
-void qutecsound::setCurrentFile(const QString &fileName)
+void CsoundQt::setCurrentFile(const QString &fileName)
 {
   QString shownName;
   if (fileName.isEmpty())
@@ -4272,17 +4271,17 @@ void qutecsound::setCurrentFile(const QString &fileName)
   else
     shownName = strippedName(fileName);
 
-  setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("QuteCsound")));
+  setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("CsoundQt")));
   documentTabs->setTabText(curPage, shownName);
 //  updateWidgets();
 }
 
-QString qutecsound::strippedName(const QString &fullFileName)
+QString CsoundQt::strippedName(const QString &fullFileName)
 {
   return QFileInfo(fullFileName).fileName();
 }
 
-QString qutecsound::generateScript(bool realtime, QString tempFileName, QString executable)
+QString CsoundQt::generateScript(bool realtime, QString tempFileName, QString executable)
 {
 #ifndef Q_OS_WIN32
   QString script = "#!/bin/sh\n";
@@ -4362,7 +4361,7 @@ QString qutecsound::generateScript(bool realtime, QString tempFileName, QString 
   return script;
 }
 
-void qutecsound::getCompanionFileName()
+void CsoundQt::getCompanionFileName()
 {
   QString fileName = "";
   QDialog dialog(this);
@@ -4415,29 +4414,29 @@ void qutecsound::getCompanionFileName()
     }
   }
 }
-void qutecsound::setWidgetPanelGeometry()
+void CsoundQt::setWidgetPanelGeometry()
 {
   QRect geometry = documentPages[curPage]->getWidgetPanelGeometry();
   if (geometry.width() <= 0 || geometry.width() > 4096) {
     geometry.setWidth(400);
-    qDebug() << "qutecsound::setWidgetPanelGeometry() Warning: width invalid.";
+	qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: width invalid.";
   }
   if (geometry.height() <= 0 || geometry.height() > 4096) {
     geometry.setHeight(300);
-    qDebug() << "qutecsound::setWidgetPanelGeometry() Warning: height invalid.";
+	qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: height invalid.";
   }
   if (geometry.x() < 0 || geometry.x() > 4096) {
     geometry.setX(20);
-    qDebug() << "qutecsound::setWidgetPanelGeometry() Warning: X position invalid.";
+	qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: X position invalid.";
   }
   if (geometry.y() < 30 || geometry.y() > 4096) {
     geometry.setY(30);
-    qDebug() << "qutecsound::setWidgetPanelGeometry() Warning: Y position invalid.";
+	qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: Y position invalid.";
   }
   widgetPanel->setGeometry(geometry);
 }
 
-int qutecsound::isOpen(QString fileName)
+int CsoundQt::isOpen(QString fileName)
 {
   int open = -1;
   int i = 0;
@@ -4450,9 +4449,9 @@ int qutecsound::isOpen(QString fileName)
   return open;
 }
 
-QStringList qutecsound::runCsoundInternally(QStringList flags)
+QStringList CsoundQt::runCsoundInternally(QStringList flags)
 {
-//  qDebug() << "qutecsound::runCsoundInternally() " << flags.join(" ");
+//  qDebug() << "CsoundQt::runCsoundInternally() " << flags.join(" ");
   static char *argv[33];
   int index = 0;
   foreach (QString flag, flags) {
@@ -4470,7 +4469,7 @@ QStringList qutecsound::runCsoundInternally(QStringList flags)
   csoundD=csoundCreate(0);
   csoundReset(csoundD);
   csoundSetHostData(csoundD, (void *) &m_deviceMessages);  // To pass message variable data
-  csoundSetMessageCallback(csoundD, &qutecsound::devicesMessageCallback);
+  csoundSetMessageCallback(csoundD, &CsoundQt::devicesMessageCallback);
   int result = csoundCompile(csoundD,argc,argv);
   if(!result) {
     csoundPerform(csoundD);
@@ -4484,16 +4483,16 @@ QStringList qutecsound::runCsoundInternally(QStringList flags)
 // Put menu bar back
   SetMenuBar(menuBarHandle);
 #endif
-//  qDebug() << "qutecsound::runCsoundInternally done";
+//  qDebug() << "CsoundQt::runCsoundInternally done";
   return m_deviceMessages;
 }
 
-//void *qutecsound::getCurrentCsound()
+//void *CsoundQt::getCurrentCsound()
 //{
 //  return (void *)documentPages[curCsdPage]->getCsound();
 //}
 
-QString qutecsound::setDocument(int index)
+QString CsoundQt::setDocument(int index)
 {
   QString name = QString();
   if (index < documentTabs->count() && index >= 0) {
@@ -4503,7 +4502,7 @@ QString qutecsound::setDocument(int index)
   return name;
 }
 
-void qutecsound::insertText(QString text, int index, int section)
+void CsoundQt::insertText(QString text, int index, int section)
 {
   if (index == -1) {
     index = curPage;
@@ -4514,11 +4513,11 @@ void qutecsound::insertText(QString text, int index, int section)
     }
   }
   else {
-    qDebug() << "qutecsound::insertText not implemented for sections";
+	qDebug() << "CsoundQt::insertText not implemented for sections";
   }
 }
 
-void qutecsound::setCsd(QString text, int index)
+void CsoundQt::setCsd(QString text, int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4528,7 +4527,7 @@ void qutecsound::setCsd(QString text, int index)
   }
 }
 
-void qutecsound::setFullText(QString text, int index)
+void CsoundQt::setFullText(QString text, int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4538,7 +4537,7 @@ void qutecsound::setFullText(QString text, int index)
   }
 }
 
-void qutecsound::setOrc(QString text, int index)
+void CsoundQt::setOrc(QString text, int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4548,7 +4547,7 @@ void qutecsound::setOrc(QString text, int index)
   }
 }
 
-void qutecsound::setSco(QString text, int index)
+void CsoundQt::setSco(QString text, int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4558,22 +4557,22 @@ void qutecsound::setSco(QString text, int index)
   }
 }
 
-void qutecsound::setWidgetsText(QString text, int index)
+void CsoundQt::setWidgetsText(QString text, int index)
 {
-  qDebug() << "qutecsound::setWidgetsText not implemented";
+  qDebug() << "CsoundQt::setWidgetsText not implemented";
 }
 
-void qutecsound::setPresetsText(QString text, int index)
+void CsoundQt::setPresetsText(QString text, int index)
 {
-  qDebug() << "qutecsound::setPresetsText not implemented";
+  qDebug() << "CsoundQt::setPresetsText not implemented";
 }
 
-void qutecsound::setOptionsText(QString text, int index)
+void CsoundQt::setOptionsText(QString text, int index)
 {
-  qDebug() << "qutecsound::setOptionsText not implemented";
+  qDebug() << "CsoundQt::setOptionsText not implemented";
 }
 
-int qutecsound::getDocument(QString name)
+int CsoundQt::getDocument(QString name)
 {
   int index = curPage;
   if (!name.isEmpty()) {
@@ -4590,7 +4589,7 @@ int qutecsound::getDocument(QString name)
   return index;
 }
 
-QString qutecsound::getSelectedText(int index, int section)
+QString CsoundQt::getSelectedText(int index, int section)
 {
   QString text = QString();
   if (index == -1) {
@@ -4602,7 +4601,7 @@ QString qutecsound::getSelectedText(int index, int section)
   return text;
 }
 
-QString qutecsound::getCsd(int index)
+QString CsoundQt::getCsd(int index)
 {
   QString text = QString();
   if (index == -1) {
@@ -4614,7 +4613,7 @@ QString qutecsound::getCsd(int index)
   return text;
 }
 
-QString qutecsound::getFullText(int index)
+QString CsoundQt::getFullText(int index)
 {
   QString text = QString();
   if (index == -1) {
@@ -4626,7 +4625,7 @@ QString qutecsound::getFullText(int index)
   return text;
 }
 
-QString qutecsound::getOrc(int index)
+QString CsoundQt::getOrc(int index)
 {
   QString text = QString();
   if (index == -1) {
@@ -4638,7 +4637,7 @@ QString qutecsound::getOrc(int index)
   return text;
 }
 
-QString qutecsound::getSco(int index)
+QString CsoundQt::getSco(int index)
 {
   QString text = QString();
   if (index == -1) {
@@ -4650,7 +4649,7 @@ QString qutecsound::getSco(int index)
   return text;
 }
 
-QString qutecsound::getWidgetsText(int index)
+QString CsoundQt::getWidgetsText(int index)
 {
   QString text = QString();
   if (index == -1) {
@@ -4662,7 +4661,7 @@ QString qutecsound::getWidgetsText(int index)
   return text;
 }
 
-QString qutecsound::getSelectedWidgetsText(int index)
+QString CsoundQt::getSelectedWidgetsText(int index)
 {
   QString text = QString();
   if (index == -1) {
@@ -4674,7 +4673,7 @@ QString qutecsound::getSelectedWidgetsText(int index)
   return text;
 }
 
-QString qutecsound::getPresetsText(int index)
+QString CsoundQt::getPresetsText(int index)
 {
   QString text = QString();
   if (index == -1) {
@@ -4686,7 +4685,7 @@ QString qutecsound::getPresetsText(int index)
   return text;
 }
 
-QString qutecsound::getOptionsText(int index)
+QString CsoundQt::getOptionsText(int index)
 {
   QString text = QString();
   if (index == -1) {
@@ -4698,7 +4697,7 @@ QString qutecsound::getOptionsText(int index)
   return text;
 }
 
-QString qutecsound::getFileName(int index)
+QString CsoundQt::getFileName(int index)
 {
   QString text = QString();
   if (index == -1) {
@@ -4710,7 +4709,7 @@ QString qutecsound::getFileName(int index)
   return text;
 }
 
-QString qutecsound::getFilePath(int index)
+QString CsoundQt::getFilePath(int index)
 {
   QString text = QString();
   if (index == -1) {
@@ -4722,7 +4721,7 @@ QString qutecsound::getFilePath(int index)
   return text;
 }
 
-void qutecsound::setChannelValue(QString channel, double value, int index)
+void CsoundQt::setChannelValue(QString channel, double value, int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4732,7 +4731,7 @@ void qutecsound::setChannelValue(QString channel, double value, int index)
   }
 }
 
-double qutecsound::getChannelValue(QString channel, int index)
+double CsoundQt::getChannelValue(QString channel, int index)
 {
   double value = 0.0;
   if (index == -1) {
@@ -4744,7 +4743,7 @@ double qutecsound::getChannelValue(QString channel, int index)
   return value;
 }
 
-void qutecsound::setChannelString(QString channel, QString value, int index)
+void CsoundQt::setChannelString(QString channel, QString value, int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4754,7 +4753,7 @@ void qutecsound::setChannelString(QString channel, QString value, int index)
   }
 }
 
-QString qutecsound::getChannelString(QString channel, int index)
+QString CsoundQt::getChannelString(QString channel, int index)
 {
   QString value = "";
   if (index == -1) {
@@ -4766,7 +4765,7 @@ QString qutecsound::getChannelString(QString channel, int index)
   return value;
 }
 
-void qutecsound::setWidgetProperty(QString channel, QString property, QVariant value, int index)
+void CsoundQt::setWidgetProperty(QString channel, QString property, QVariant value, int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4776,7 +4775,7 @@ void qutecsound::setWidgetProperty(QString channel, QString property, QVariant v
   }
 }
 
-QVariant qutecsound::getWidgetProperty(QString channel, QString property, int index)
+QVariant CsoundQt::getWidgetProperty(QString channel, QString property, int index)
 {
   QVariant value;
   if (index == -1) {
@@ -4789,7 +4788,7 @@ QVariant qutecsound::getWidgetProperty(QString channel, QString property, int in
 }
 
 
-QString qutecsound::createNewLabel(int x , int y , int index)
+QString CsoundQt::createNewLabel(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4800,7 +4799,7 @@ QString qutecsound::createNewLabel(int x , int y , int index)
   return QString();
 }
 
-QString qutecsound::createNewDisplay(int x , int y , int index)
+QString CsoundQt::createNewDisplay(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4811,7 +4810,7 @@ QString qutecsound::createNewDisplay(int x , int y , int index)
   return QString();
 }
 
-QString qutecsound::createNewScrollNumber(int x , int y , int index)
+QString CsoundQt::createNewScrollNumber(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4822,7 +4821,7 @@ QString qutecsound::createNewScrollNumber(int x , int y , int index)
   return QString();
 }
 
-QString qutecsound::createNewLineEdit(int x , int y , int index)
+QString CsoundQt::createNewLineEdit(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4833,7 +4832,7 @@ QString qutecsound::createNewLineEdit(int x , int y , int index)
   return QString();
 }
 
-QString qutecsound::createNewSpinBox(int x , int y , int index)
+QString CsoundQt::createNewSpinBox(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4844,7 +4843,7 @@ QString qutecsound::createNewSpinBox(int x , int y , int index)
   return QString();
 }
 
-QString qutecsound::createNewSlider(int x , int y , int index)
+QString CsoundQt::createNewSlider(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4855,7 +4854,7 @@ QString qutecsound::createNewSlider(int x , int y , int index)
   return QString();
 }
 
-QString qutecsound::createNewButton(int x , int y , int index)
+QString CsoundQt::createNewButton(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4866,7 +4865,7 @@ QString qutecsound::createNewButton(int x , int y , int index)
   return QString();
 }
 
-QString qutecsound::createNewKnob(int x , int y , int index)
+QString CsoundQt::createNewKnob(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4877,7 +4876,7 @@ QString qutecsound::createNewKnob(int x , int y , int index)
   return QString();
 }
 
-QString qutecsound::createNewCheckBox(int x , int y , int index)
+QString CsoundQt::createNewCheckBox(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4888,7 +4887,7 @@ QString qutecsound::createNewCheckBox(int x , int y , int index)
   return QString();
 }
 
-QString qutecsound::createNewMenu(int x , int y , int index)
+QString CsoundQt::createNewMenu(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4899,7 +4898,7 @@ QString qutecsound::createNewMenu(int x , int y , int index)
   return QString();
 }
 
-QString qutecsound::createNewMeter(int x , int y , int index)
+QString CsoundQt::createNewMeter(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4910,7 +4909,7 @@ QString qutecsound::createNewMeter(int x , int y , int index)
   return QString();
 }
 
-QString qutecsound::createNewConsole(int x , int y , int index)
+QString CsoundQt::createNewConsole(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4921,7 +4920,7 @@ QString qutecsound::createNewConsole(int x , int y , int index)
   return QString();
 }
 
-QString qutecsound::createNewGraph(int x , int y , int index)
+QString CsoundQt::createNewGraph(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4932,7 +4931,7 @@ QString qutecsound::createNewGraph(int x , int y , int index)
   return QString();
 }
 
-QString qutecsound::createNewScope(int x , int y , int index)
+QString CsoundQt::createNewScope(int x , int y , int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4943,7 +4942,7 @@ QString qutecsound::createNewScope(int x , int y , int index)
   return QString();
 }
 
-EventSheet* qutecsound::getSheet(int index, int sheetIndex)
+EventSheet* CsoundQt::getSheet(int index, int sheetIndex)
 {
   if (index == -1) {
     index = curPage;
@@ -4956,7 +4955,7 @@ EventSheet* qutecsound::getSheet(int index, int sheetIndex)
   }
 }
 
-CsoundEngine *qutecsound::getEngine(int index)
+CsoundEngine *CsoundQt::getEngine(int index)
 {
   if (index == -1) {
     index = curPage;
@@ -4969,7 +4968,7 @@ CsoundEngine *qutecsound::getEngine(int index)
   }
 }
 
-EventSheet* qutecsound::getSheet(int index, QString sheetName)
+EventSheet* CsoundQt::getSheet(int index, QString sheetName)
 {
   if (index == -1) {
     index = curPage;
@@ -4982,7 +4981,7 @@ EventSheet* qutecsound::getSheet(int index, QString sheetName)
   }
 }
 
-//void qutecsound::newCurve(Curve * curve)
+//void CsoundQt::newCurve(Curve * curve)
 //{
 //  newCurveBuffer.append(curve);
 //}

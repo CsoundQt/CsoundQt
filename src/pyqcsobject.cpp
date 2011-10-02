@@ -33,9 +33,15 @@
 PyQcsObject::PyQcsObject():QObject(NULL)
 {
   m_qcs = 0;
+  MYFLT **m_tablePtr = (MYFLT **) malloc(sizeof(MYFLT *));
 }
 
-void PyQcsObject::setQuteCsound(qutecsound *qcs)
+PyQcsObject::~PyQcsObject()
+{
+	free(m_tablePtr);
+}
+
+void PyQcsObject::setCsoundQt(CsoundQt *qcs)
 {
   m_qcs = qcs;
 }
@@ -258,6 +264,7 @@ QVariant PyQcsObject::getWidgetProperty(QString channel, QString property, int i
 
 QString PyQcsObject::createNewLabel(int x, int y, int index)
 {
+	// FIXME all this interaction with widgets must be correctly placed on the widgets undo/redo stack. It's currently not!
   return m_qcs->createNewLabel(x,y, index);
 }
 
@@ -435,14 +442,12 @@ int PyQcsObject::getNumChannels(int index)
 
 MYFLT *PyQcsObject::getTableArray(int ftable, int index)
 {
-  // FIXME free this!
-  MYFLT **tablePtr = (MYFLT **) malloc(sizeof(MYFLT *));
   CsoundEngine *e = m_qcs->getEngine(index);
   if (e != NULL) {
     CSOUND *cs = e->getCsound();
-    int ret = csoundGetTable(cs, tablePtr, ftable);
+	int ret = csoundGetTable(cs, m_tablePtr, ftable);
   }
-  return *tablePtr;
+  return *m_tablePtr;
 }
 
 //void PyQcsObject::writeListToTable(int ftable, QVariantList values, int offset, int count)

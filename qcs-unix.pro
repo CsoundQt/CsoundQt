@@ -1,7 +1,7 @@
 !unix:error(This project file is only for Unix-based systems.)
 !no_messages {
 	message()
-	message(Building QuteCsound for Unix-based system.)
+	message(Building CsoundQt for Unix-based system.)
 }
 
 # Set default paths

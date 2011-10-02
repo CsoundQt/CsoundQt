@@ -31,15 +31,15 @@ shift $(($OPTIND - 1))
 clear
 
 echo "Enter version number/name (e.g. 0.7.0-alpha-py):"
-read QUTECSOUND_VERSION
+read CSOUNDQT_VERSION
 
 # Package without python first
 
 PRECISION=-f
-ORIGINAL_NAME=qutecsound${PRECISION}
-NEW_NAME=QuteCsound
+ORIGINAL_NAME=CsoundQt${PRECISION}
+NEW_NAME=CsoundQt
 ORIG_APP_NAME=${ORIGINAL_NAME}.app
-APP_NAME=${NEW_NAME}${PRECISION}-${QUTECSOUND_VERSION}.app
+APP_NAME=${NEW_NAME}${PRECISION}-${CSOUNDQT_VERSION}.app
 
 if [ "$bflag"  -eq 1 ]
 		then
@@ -63,15 +63,15 @@ mkdir $APP_NAME/Contents/Resources
 cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
 
 make clean
-make NAME=${NEW_NAME}${PRECISION} VERSION=${QUTECSOUND_VERSION} SOURCE_DIR=./ SOURCE_FILES=${APP_NAME}
+make NAME=${NEW_NAME}${PRECISION} VERSION=${CSOUNDQT_VERSION} SOURCE_DIR=./ SOURCE_FILES=${APP_NAME}
 
 
 # ----------------------- Now the doubles version
 PRECISION=-d
-ORIGINAL_NAME=qutecsound${PRECISION}
-NEW_NAME=QuteCsound
+ORIGINAL_NAME=CsoundQt${PRECISION}
+NEW_NAME=CsoundQt
 ORIG_APP_NAME=${ORIGINAL_NAME}.app
-APP_NAME=${NEW_NAME}${PRECISION}-${QUTECSOUND_VERSION}.app
+APP_NAME=${NEW_NAME}${PRECISION}-${CSOUNDQT_VERSION}.app
 
 if [ "$bflag"  -eq 1 ]
 		then
@@ -96,16 +96,16 @@ cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ 
 
 
 make clean
-make NAME=${NEW_NAME}${PRECISION} VERSION=${QUTECSOUND_VERSION} SOURCE_DIR=./ SOURCE_FILES=${APP_NAME}
+make NAME=${NEW_NAME}${PRECISION} VERSION=${CSOUNDQT_VERSION} SOURCE_DIR=./ SOURCE_FILES=${APP_NAME}
 
 
 
 # ---------------------- With Python
 PRECISION=-d
-ORIGINAL_NAME=qutecsound${PRECISION}
-NEW_NAME=QuteCsound
+ORIGINAL_NAME=CsoundQt${PRECISION}
+NEW_NAME=CsoundQt
 ORIG_APP_NAME=${ORIGINAL_NAME}-py.app
-APP_NAME=${NEW_NAME}-${QUTECSOUND_VERSION}${PRECISION}-py.app
+APP_NAME=${NEW_NAME}-${CSOUNDQT_VERSION}${PRECISION}-py.app
 if [ "$bflag"  -eq 1 ]
 then
 		echo "---------------- Making package with python (intel only)"
@@ -133,7 +133,7 @@ mkdir $APP_NAME/Contents/Resources
 cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
 
 make clean
-make NAME=${NEW_NAME}${PRECISION}-py VERSION=${QUTECSOUND_VERSION} SOURCE_DIR=./ SOURCE_FILES=${APP_NAME}
+make NAME=${NEW_NAME}${PRECISION}-py VERSION=${CSOUNDQT_VERSION} SOURCE_DIR=./ SOURCE_FILES=${APP_NAME}
 
 exit
 # ----------------------------  make Standalone application
@@ -242,7 +242,7 @@ cd ../../../../../../../../
 
 if [ "$nflag" -ne 1 ]
         then
-tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}-Standalone.tar.gz $APP_NAME &>/dev/null
+tar -czvf ${NEW_NAME}-${CSOUNDQT_VERSION}-Standalone.tar.gz $APP_NAME &>/dev/null
 fi
 
 
