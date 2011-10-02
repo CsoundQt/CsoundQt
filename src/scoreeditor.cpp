@@ -33,6 +33,8 @@ ScoreEditor::ScoreEditor(QWidget *parent) :
   setMode(1); // Text view by default
   setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
+  connect(m_sheet, SIGNAL(modified()), this, SLOT(modified()));
+  connect(m_textEditor, SIGNAL(textChanged()), this, SLOT(modified()));
   QHBoxLayout *layout = new QHBoxLayout;
   layout->setContentsMargins (5,5,5,5);
   layout->addWidget(m_textEditor);
@@ -125,4 +127,9 @@ QString ScoreEditor::getSelection()
 void ScoreEditor::clearUndoRedoStacks()
 {
 	// TODO implement
+}
+
+void ScoreEditor::modified()
+{
+	emit textChanged();
 }

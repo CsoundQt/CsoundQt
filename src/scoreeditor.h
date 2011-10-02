@@ -45,6 +45,7 @@ public slots:
   QString getSelection();
 
   void clearUndoRedoStacks();
+  void modified();
 
 protected:
 
@@ -54,7 +55,7 @@ private:
   EventSheet *m_sheet;
 
 signals:
-
+  void textChanged();
 };
 
 #endif // SCOREEDITOR_H

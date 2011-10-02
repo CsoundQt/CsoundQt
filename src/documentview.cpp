@@ -471,8 +471,6 @@ void DocumentView::syntaxCheck()
   }
   else { //  Split view
 	  editor = (TextEditor *) sender();
-	  // TODO check properly for line number also from other editors
-	  qDebug() << "DocumentView::insertTextFromAction() not implemented for split view.";
   }
   QTextCursor cursor = editor->textCursor();
   cursor.select(QTextCursor::LineUnderCursor);
