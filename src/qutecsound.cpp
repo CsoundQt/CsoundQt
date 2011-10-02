@@ -1666,6 +1666,28 @@ void CsoundQt::resetPreferences()
   }
 }
 
+void CsoundQt::reportBug()
+{
+	QUrl url("http://sourceforge.net/tracker/?group_id=227265&atid=1070588");
+	if (!m_options->browser.isEmpty()) {
+		execute(m_options->browser,"\"" + url.toString() + "\"");
+	}
+	else {
+		QDesktopServices::openUrl(url);
+	}
+}
+
+void CsoundQt::requestFeature()
+{
+	QUrl url("http://sourceforge.net/tracker/?atid=1070591&group_id=227265&func=browse");
+	if (!m_options->browser.isEmpty()) {
+		execute(m_options->browser,"\"" + url.toString() + "\"");
+	}
+	else {
+		QDesktopServices::openUrl(url);
+	}
+}
+
 void CsoundQt::openShortcutDialog()
 {
   KeyboardShortcuts dialog(this, m_keyActions);
@@ -2614,6 +2636,16 @@ void CsoundQt::createActions()
   resetPreferencesAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(resetPreferencesAct, SIGNAL(triggered()), this, SLOT(resetPreferences()));
 
+  reportBugAct = new QAction(tr("Report a Bug"), this);
+  reportBugAct->setStatusTip(tr("Report a bug in CsoundQt's Bug Tracker"));
+  reportBugAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(reportBugAct, SIGNAL(triggered()), this, SLOT(reportBug()));
+
+  requestFeatureAct = new QAction(tr("Request a Feature"), this);
+  requestFeatureAct->setStatusTip(tr("Request a feature in CsoundQt's Feature Tracker"));
+  requestFeatureAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(requestFeatureAct, SIGNAL(triggered()), this, SLOT(requestFeature()));
+
   duplicateAct = new QAction(tr("Duplicate Widgets"), this);
   duplicateAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
@@ -3422,6 +3454,9 @@ flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Appl
   helpMenu->addAction(openQuickRefAct);
   helpMenu->addSeparator();
   helpMenu->addAction(resetPreferencesAct);
+  helpMenu->addSeparator();
+  helpMenu->addAction(reportBugAct);
+  helpMenu->addAction(requestFeatureAct);
   helpMenu->addSeparator();
   helpMenu->addAction(aboutAct);
   helpMenu->addAction(donateAct);

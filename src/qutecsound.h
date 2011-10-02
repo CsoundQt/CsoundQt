@@ -207,6 +207,8 @@ class CsoundQt:public QMainWindow
     void openExternalBrowser(QUrl url = QUrl());
     void openQuickRef();
     void resetPreferences();
+	void reportBug();
+	void requestFeature();
     void openShortcutDialog();
     void statusBarMessage(QString message);
     void about();
@@ -380,6 +382,8 @@ class CsoundQt:public QMainWindow
     QAction *donateAct;
     QAction *aboutQtAct;
     QAction *resetPreferencesAct;
+	QAction *reportBugAct;
+	QAction *requestFeatureAct;
 
     int curPage;
     int curCsdPage;  // To recall last csd visited

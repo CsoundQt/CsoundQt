@@ -375,15 +375,15 @@ QString WidgetLayout::getSelectedWidgetsText()
 {
   qDebug() << "WidgetLayout::getSelectedWidgetsText not implemented!";
   QString l;
+  l += "<bsbPanel>\n";
   widgetsMutex.lock();
   for (int i = 0; i < editWidgets.size(); i++) {
-    if (editWidgets[i]->isSelected()) {
-      for (int i = 0; i < m_widgets.size(); i++) {
-       l += m_widgets[i]->getWidgetXmlText() + "\n";
-      }
-    }
+	if (editWidgets[i]->isSelected()) {
+		l += m_widgets[i]->getWidgetXmlText() + "\n";
+	}
   }
   widgetsMutex.unlock();
+  l += "</bsbPanel>";
   return l;
 }
 

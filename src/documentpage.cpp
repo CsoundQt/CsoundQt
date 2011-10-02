@@ -375,12 +375,7 @@ QString DocumentPage::getSelectedWidgetsText()
 {
   //FIXME allow multiple
   QString text = m_widgetLayouts[0]->getSelectedWidgetsText();
-  QDomDocument d;
-  d.setContent(text);
-//  QDomElement n = d.firstChildElement("bsbPanel");
-//  if (!n.isNull()) {
-//  }
-  return d.toString();
+  return text;
 }
 
 QString DocumentPage::getPresetsText()
