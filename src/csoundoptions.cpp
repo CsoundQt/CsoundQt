@@ -106,7 +106,7 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 	  list << "--old-parser";
   }
   if (multicore) {
-	  list << "--num-threads " + QString::number(numThreads);
+	  list << "-j " + QString::number(numThreads);
   }
 
   if (rt && rtUseOptions) {

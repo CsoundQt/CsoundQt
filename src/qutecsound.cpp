@@ -2777,7 +2777,7 @@ void qutecsound::createMenus()
   fileMenu->addAction(saveAct);
   fileMenu->addAction(saveAsAct);
   fileMenu->addAction(saveNoWidgetsAct);
-  fileMenu->addAction(createAppAct);
+//  fileMenu->addAction(createAppAct);
   fileMenu->addAction(reloadAct);
   fileMenu->addAction(cabbageAct);
   fileMenu->addAction(closeTabAct);

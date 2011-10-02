@@ -92,8 +92,22 @@ void Inspector::parseText(const QString &text)
   treeItem5 = new TreeItem(m_treeWidget, QStringList(tr("Score")));
   treeItem5->setLine(-1);  // This might be overridden below
   TreeItem *currentInstrument = treeItem3;
+  int commentIndex = 0;
+  bool partOfComment = false;
   QStringList lines = text.split(QRegExp("[\n\r]"));
   for (int i = 0; i< lines.size(); i++) {
+	  if (!partOfComment && lines[i].indexOf("/*") != -1) {
+		  partOfComment = true;
+		  commentIndex = lines[i].indexOf("/*");
+	  }
+	  if (partOfComment) {
+		  if (lines[i].indexOf("*/") != -1) {
+			  partOfComment = false;
+			  commentIndex = -1;
+		  } else {
+			  commentIndex = 0;
+		  }
+	  }
     if (lines[i].trimmed().startsWith("instr")) {
       QString text = lines[i].mid(lines[i].indexOf("instr") + 6);
       QStringList columnslist(QString("instr %1").arg(text).simplified());
@@ -147,7 +161,8 @@ void Inspector::parseText(const QString &text)
       TreeItem *newItem = new TreeItem(treeItem5, columnslist);
       newItem->setLine(i + 1);
     }
-    else if (lines[i].trimmed().contains(QRegExp("[^;]\\w+:"))) {
+	else if (lines[i].trimmed().contains(QRegExp("[^;]\\w+:"))
+			 && (!partOfComment || commentIndex > lines[i].indexOf(":")) ) {
       QString text = lines[i].trimmed();
       QStringList columnslist(text.simplified());
       if (currentInstrument != 0) {
