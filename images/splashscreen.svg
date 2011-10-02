@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -13,7 +14,7 @@
    height="240"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.46"
+   inkscape:version="0.47 r22583"
    version="1.0"
    sodipodi:docname="splashscreen.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
@@ -51,6 +52,22 @@
        r="178.77162"
        gradientTransform="matrix(0.8648709,-0.5019943,0.2655744,0.4575501,-10.571182,149.30119)"
        gradientUnits="userSpaceOnUse" />
+    <inkscape:perspective
+       id="perspective4379"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3159"
+       id="linearGradient4418"
+       x1="56.758389"
+       y1="-159.37054"
+       x2="249.38214"
+       y2="-159.37054"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -60,15 +77,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="-49.848844"
-     inkscape:cy="83.619822"
+     inkscape:cx="122.75009"
+     inkscape:cy="83.928612"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1214"
      inkscape:window-height="726"
      inkscape:window-x="0"
-     inkscape:window-y="25" />
+     inkscape:window-y="25"
+     inkscape:window-maximized="0" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -93,14 +111,14 @@
        y="-10.517831" />
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="45.456863"
-       y="127.87307"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="55.558388"
+       y="134.94414"
        id="text2383"><tspan
          sodipodi:role="line"
          id="tspan2385"
-         x="45.456863"
-         y="127.87307"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold;fill:#187c0f;fill-opacity:1">QuteCsound</tspan></text>
+         x="55.558388"
+         y="134.94414"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#187c0f;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">CsoundQt</tspan></text>
   </g>
 </svg>
