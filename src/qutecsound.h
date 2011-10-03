@@ -137,7 +137,7 @@ class CsoundQt:public QMainWindow
     OpEntryParser *m_opcodeTree;
 
   public slots:
-    bool loadFile(QString fileName, bool runNow = false);
+	int loadFile(QString fileName, bool runNow = false);
     void play(bool realtime = true, int index = -1);
     void runInTerm(bool realtime = true);
     void pause(int index = -1);

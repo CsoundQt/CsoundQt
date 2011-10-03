@@ -69,6 +69,7 @@ class PyQcsObject : public QObject {
 
     // Editor
     void setDocument(int index);
+	int loadDocument(QString name);
     void insertText(QString text, int index = -1, int section = -1);
     void setCsd(QString text, int index = -1);
     void setFullText(QString text, int index = -1);

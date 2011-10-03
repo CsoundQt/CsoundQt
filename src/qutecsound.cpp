@@ -464,17 +464,12 @@ void CsoundQt::open()
     m_inspector->show();
   m_startingUp = true; // To avoid changing all display unnecessarily
   foreach (QString fileName, fileNames) {
-    if (fileNames.last() == fileName)
-      m_startingUp = false;
-    int index = isOpen(fileName);
-    if (index != -1) {
-      documentTabs->setCurrentIndex(index);
-      changePage(index);
-      statusBar()->showMessage(tr("File already open"), 10000);
-    }
-    else if (!fileName.isEmpty()) {
-      loadFile(fileName, true);
-    }
+	if (fileNames.last() == fileName) {
+		m_startingUp = false;
+	}
+	if (!fileName.isEmpty()) {
+	  loadFile(fileName, true);
+	}
   }
 }
 
@@ -1178,8 +1173,8 @@ void CsoundQt::play(bool realtime, int index)
 #ifdef QCS_PYTHONQT
   if (fileName.endsWith(".py",Qt::CaseInsensitive)) {
     m_pythonConsole->runScript(fileName);
-    runAct->setChecked(false);
-	curPage = oldPage;
+	runAct->setChecked(false);
+	curPage = documentTabs->currentIndex();
     return;
   }
 #endif
@@ -4041,7 +4036,7 @@ int CsoundQt::execute(QString executable, QString options)
   return 0;
 }
 
-bool CsoundQt::loadFile(QString fileName, bool runNow)
+int CsoundQt::loadFile(QString fileName, bool runNow)
 {
 //  qDebug() << "CsoundQt::loadFile" << fileName;
   QFile file(fileName);
@@ -4050,14 +4045,14 @@ bool CsoundQt::loadFile(QString fileName, bool runNow)
                          tr("Cannot read file %1:\n%2.")
                              .arg(fileName)
                              .arg(file.errorString()));
-    return false;
+	return -1;
   }
   int index = isOpen(fileName);
   if (index != -1) {
     documentTabs->setCurrentIndex(index);
     changePage(index);
     statusBar()->showMessage(tr("File already open"), 10000);
-    return false;
+	return index;
   }
   QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -4185,7 +4180,7 @@ bool CsoundQt::loadFile(QString fileName, bool runNow)
     play();
   }
 //  qApp->processEvents();  // Is this still needed?
-  return true;
+  return curPage;
 }
 
 void CsoundQt::makeNewPage(QString fileName, QString text)
@@ -4253,7 +4248,7 @@ bool CsoundQt::loadCompanionFile(const QString &fileName)
     return false;
   }
   if (QFile::exists(companionFileName)) {
-    return loadFile(companionFileName);
+	return (loadFile(companionFileName) != -1);
   }
   return false;
 }

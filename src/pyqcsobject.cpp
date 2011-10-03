@@ -126,6 +126,20 @@ void PyQcsObject::setDocument(int index)
   mainContext.evalScript("print 'cd \"" + path + "\"'");
 }
 
+int PyQcsObject::loadDocument(QString name)
+{
+	QDir d(name);
+	d.makeAbsolute();
+	qDebug() << d.absolutePath();
+	if (!QFile::exists(d.absolutePath())) {
+		PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
+		mainContext.evalScript("print 'File not found.'");
+		return -1;
+	} else {
+		return m_qcs->loadFile(d.absolutePath(), false);
+	}
+}
+
 void PyQcsObject::insertText(QString text, int index, int section)
 {
   return m_qcs->insertText(text, index,section);
@@ -496,5 +510,5 @@ void  PyQcsObject::registerProcessCallback(QString func, int skipPeriods)
   m_qcs->getEngine()->registerProcessCallback(func, skipPeriods);
   qDebug() << "PyQcsObject::registerProcessCallback" << func << skipPeriods;
 //  PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
-//  mainContext.evalScript(func);
+  //  mainContext.evalScript(func);
 }
