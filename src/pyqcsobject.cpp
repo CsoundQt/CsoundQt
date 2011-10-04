@@ -90,6 +90,11 @@ QString PyQcsObject::getVersion()
   return QString(PYQCSVERSION);
 }
 
+void PyQcsObject::refresh()
+{
+	qApp->processEvents();
+}
+
 void PyQcsObject::play(int index, bool realtime)
 {
   qDebug() << "PyQcsObject::play " << index << realtime;
@@ -505,10 +510,11 @@ MYFLT *PyQcsObject::getTableArray(int ftable, int index)
 //  return QVariantList();
 //}
 
-void  PyQcsObject::registerProcessCallback(QString func, int skipPeriods)
+void  PyQcsObject::registerProcessCallback(QString func, int skipPeriods, int index)
 {
-  m_qcs->getEngine()->registerProcessCallback(func, skipPeriods);
+  m_qcs->getEngine(index)->registerProcessCallback(func, skipPeriods);
   qDebug() << "PyQcsObject::registerProcessCallback" << func << skipPeriods;
 //  PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
   //  mainContext.evalScript(func);
 }
+

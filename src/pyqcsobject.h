@@ -57,6 +57,7 @@ class PyQcsObject : public QObject {
 //  QVariantMap testMap();
 
     QString getVersion();
+	void refresh();
 
     // Csound controls
     void play(int index = -1, bool realtime = true);
@@ -145,7 +146,7 @@ class PyQcsObject : public QObject {
 //    QVariantList readArrayToList(int ftable, int offset = 0, int count = -1); // Numpy arrays
 
     // Register callback
-    void registerProcessCallback(QString func, int skipPeriods = 0);
+	void registerProcessCallback(QString func, int skipPeriods = 0, int index = -1);
 
   private:
 	CsoundQt *m_qcs;
