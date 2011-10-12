@@ -1773,6 +1773,9 @@ void CsoundQt::configure()
 {
   ConfigDialog dialog(this, m_options);
   dialog.setCurrentTab(configureTab);
+  dialog.newParserCheckBox->setEnabled(csoundGetVersion() > 5125);
+  dialog.multicoreCheckBox->setEnabled(csoundGetVersion() > 5125);
+  dialog.numThreadsSpinBox->setEnabled(csoundGetVersion() > 5125);
   if (dialog.exec() == QDialog::Accepted) {
     applySettings();
   }
@@ -1823,6 +1826,9 @@ void CsoundQt::applySettings()
 #endif
   if (m_options->logFile != logFile.fileName()) {
     openLogFile();
+  }
+  if (csoundGetVersion() < 5140) {
+	  m_options->newParser = -1; // Don't use new parser flags
   }
 }
 

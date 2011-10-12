@@ -313,7 +313,7 @@ void ConfigDialog::accept()
   m_options->HwBufferSize = HwBufferSizeLineEdit->text().toInt();
   m_options->HwBufferSizeActive = HwBufferSizeCheckBox->isChecked();
   m_options->dither = DitherCheckBox->isChecked();
-  m_options->newParser = newParserCheckBox->isChecked();
+  m_options->newParser = newParserCheckBox->isChecked() ? 1 : 0;
   m_options->multicore = multicoreCheckBox->isChecked();
   m_options->numThreads = numThreadsSpinBox->value();
   m_options->additionalFlags = AdditionalFlagsLineEdit->text();
