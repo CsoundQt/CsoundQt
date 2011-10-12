@@ -28,7 +28,7 @@
 class CsoundQt;
 class Options;
 
-class ConfigDialog : public QDialog, private Ui::ConfigDialog
+class ConfigDialog : public QDialog, public Ui::ConfigDialog
 {
   Q_OBJECT
   public:
