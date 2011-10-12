@@ -33,7 +33,7 @@
 PyQcsObject::PyQcsObject():QObject(NULL)
 {
   m_qcs = 0;
-  MYFLT **m_tablePtr = (MYFLT **) malloc(sizeof(MYFLT *));
+  m_tablePtr = (MYFLT **) malloc(sizeof(MYFLT *));
 }
 
 PyQcsObject::~PyQcsObject()
@@ -194,6 +194,27 @@ void PyQcsObject::setOptionsText(QString text, int index)
 int PyQcsObject::getDocument(QString name)
 {
   return m_qcs->getDocument(name);
+}
+
+int PyQcsObject::newDocument(QString name)
+{
+	PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
+
+	if (name.isEmpty()) {
+		mainContext.evalScript("print 'Please specify a filename'");
+		return -1;
+	}
+	QDir d(name);
+	qDebug() << d;
+	if (QFile::exists(d.absolutePath())) {
+		mainContext.evalScript("print 'File already exists. Use openDocument()'");
+		return -1;
+	}
+	m_qcs->newFile();
+	if (!m_qcs->saveFile(d.absolutePath())) {
+		mainContext.evalScript("print 'Error saving file.'");
+	}
+	return m_qcs->getDocument(name);
 }
 
 QString PyQcsObject::getSelectedText(int index, int section)

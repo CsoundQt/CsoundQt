@@ -97,7 +97,7 @@ CsoundEngine::~CsoundEngine()
 //  }
   free(pFields);
   delete ud;
-  delete recBuffer;
+  free(recBuffer);
 }
 
 void CsoundEngine::messageCallbackNoThread(CSOUND *csound,

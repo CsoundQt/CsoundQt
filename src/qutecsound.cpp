@@ -84,6 +84,7 @@ static void midiMessageCallback(double deltatime,
 CsoundQt::CsoundQt(QStringList fileNames)
 {
   m_startingUp = true;
+  m_closing = false;
   m_resetPrefs = false;
   utilitiesDialog = 0;
   curCsdPage = 0;
@@ -1683,6 +1684,17 @@ void CsoundQt::requestFeature()
 	}
 }
 
+void CsoundQt::chat()
+{
+	QUrl url("http://webchat.freenode.net/?channels=#csound");
+	if (!m_options->browser.isEmpty()) {
+		execute(m_options->browser,"\"" + url.toString() + "\"");
+	}
+	else {
+		QDesktopServices::openUrl(url);
+	}
+}
+
 void CsoundQt::openShortcutDialog()
 {
   KeyboardShortcuts dialog(this, m_keyActions);
@@ -2641,6 +2653,11 @@ void CsoundQt::createActions()
   requestFeatureAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(requestFeatureAct, SIGNAL(triggered()), this, SLOT(requestFeature()));
 
+  chatAct = new QAction(tr("Csound IRC Chat"), this);
+  chatAct->setStatusTip(tr("Open the IRC chat channel #csound in your browser"));
+  chatAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(chatAct, SIGNAL(triggered()), this, SLOT(chat()));
+
   duplicateAct = new QAction(tr("Duplicate Widgets"), this);
   duplicateAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
@@ -3452,6 +3469,7 @@ flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Appl
   helpMenu->addSeparator();
   helpMenu->addAction(reportBugAct);
   helpMenu->addAction(requestFeatureAct);
+  helpMenu->addAction(chatAct);
   helpMenu->addSeparator();
   helpMenu->addAction(aboutAct);
   helpMenu->addAction(donateAct);

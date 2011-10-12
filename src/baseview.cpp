@@ -61,6 +61,7 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
   m_mode = 0;
   m_highlighter.setOpcodeNameList(opcodeTree->opcodeNameList());
   m_highlighter.setDocument(m_mainEditor->document());
+  m_viewMode = 0;
 }
 
 BaseView::~BaseView()

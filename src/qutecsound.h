@@ -138,6 +138,8 @@ class CsoundQt:public QMainWindow
 
   public slots:
 	int loadFile(QString fileName, bool runNow = false);
+	void newFile();
+	bool saveFile(const QString &fileName, bool saveWidgets = true);
     void play(bool realtime = true, int index = -1);
     void runInTerm(bool realtime = true);
     void pause(int index = -1);
@@ -160,7 +162,6 @@ class CsoundQt:public QMainWindow
 //    virtual void keyPressEvent(QKeyEvent *event);
 
   private slots:
-    void newFile();
     void open();
     void reload();
     void openFromAction();
@@ -209,6 +210,7 @@ class CsoundQt:public QMainWindow
     void resetPreferences();
 	void reportBug();
 	void requestFeature();
+	void chat();
     void openShortcutDialog();
     void statusBarMessage(QString message);
     void about();
@@ -251,8 +253,7 @@ class CsoundQt:public QMainWindow
     int execute(QString executable, QString options);
 //    bool saveCurrent();
     void makeNewPage(QString fileName, QString text);
-    bool loadCompanionFile(const QString &fileName);
-    bool saveFile(const QString &fileName, bool saveWidgets = true);
+	bool loadCompanionFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
     QString generateScript(bool realtime = true, QString tempFileName = "", QString executable = "");
@@ -384,6 +385,7 @@ class CsoundQt:public QMainWindow
     QAction *resetPreferencesAct;
 	QAction *reportBugAct;
 	QAction *requestFeatureAct;
+	QAction *chatAct;
 
     int curPage;
     int curCsdPage;  // To recall last csd visited

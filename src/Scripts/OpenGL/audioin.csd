@@ -8,8 +8,10 @@ ksmps = 512
 nchnls = 2
 0dbfs = 1
 
+zakinit 2, 2
+
 instr 1
-asig in 1
+asig inch 1
 krms rms asig, 3
 
 outvalue "rms", krms
@@ -24,10 +26,10 @@ i 1 0 3600
 </CsoundSynthesizer><bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>874</x>
- <y>250</y>
- <width>398</width>
- <height>182</height>
+ <x>0</x>
+ <y>0</y>
+ <width>386</width>
+ <height>281</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="nobackground">
@@ -45,7 +47,7 @@ i 1 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.010</label>
+  <label>0.013</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -102,7 +104,7 @@ Render: Real
 Ask: Yes
 Functions: ioObject
 Listing: Window
-WindowBounds: 874 250 398 182
+WindowBounds: 886 250 98 28
 CurrentView: io
 IOViewEdit: On
 Options:
@@ -110,6 +112,6 @@ Options:
 
 <MacGUI>
 ioView nobackground {59367, 11822, 65535}
-ioText {82, 25} {80, 25} display 0.007159 0.00100 "rms" left "Arial" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 0.010
+ioText {82, 25} {80, 25} display 0.012531 0.00100 "rms" left "Arial" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 0.013
 ioText {15, 55} {221, 84} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder This has to be here as a bridge between Csound and the QuteCsound python API, which reads values from widgets, not from Csound.
 </MacGUI>

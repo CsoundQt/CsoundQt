@@ -81,6 +81,7 @@ class PyQcsObject : public QObject {
     void setOptionsText(QString text, int index = -1); // TODO: implement
 
     int getDocument(QString name = ""); // Returns document index. -1 if not current open
+	int newDocument(QString name);
 
     QString getSelectedText(int index = -1, int section = -1);
     QString getCsd(int index = -1);  // -1 uses current tab

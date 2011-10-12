@@ -60,6 +60,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   m_modified = false;
   closing = 0;
   xOffset = yOffset = 0;
+  mouseRelX = mouseRelY = 0;
   m_contained = false;
 
   midiWriteCounter = 0;

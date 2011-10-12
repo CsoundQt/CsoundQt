@@ -29,13 +29,14 @@
 OpEntryParser::OpEntryParser(QString opcodeFile)
   : m_opcodeFile(opcodeFile)
 {
-  m_doc = new QDomDocument("opcodes");
+
+	QDomDocument m_doc("opcodes");
   QFile file(m_opcodeFile);
   if (!file.open(QIODevice::ReadOnly)) {
     qDebug() << "OpEntryParser::OpEntryParser could not find opcode file:" << opcodeFile;
     return;
   }
-  if (!m_doc->setContent(&file)) {
+  if (!m_doc.setContent(&file)) {
     qDebug() << "OpEntryParser::OpEntryParser set content";
     file.close();
     return;
@@ -44,7 +45,7 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
   excludedOpcodes << "|" << "||" << "^" << "+" << "*" << "-" << "/";
 //      << "instr" << "endin" << "opcode" << "endop"
 //      << "sr" << "kr" << "ksmps" << "nchnls" << "0dbfs";
-  QDomElement docElem = m_doc->documentElement();
+  QDomElement docElem = m_doc.documentElement();
   QList<Opcode> opcodesInCategoryList;
 
   QDomElement cat = docElem.firstChildElement("category");

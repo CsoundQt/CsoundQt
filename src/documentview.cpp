@@ -32,6 +32,7 @@
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
     BaseView(parent,opcodeTree)
 {
+	m_autoComplete = true;
   for (int i = 0; i < editors.size(); i++) {
     connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
     splitter->addWidget(editors[i]);

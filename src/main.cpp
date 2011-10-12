@@ -36,8 +36,8 @@ int main(int argc, char *argv[])
     }
   }
 
-  FileOpenEater *filterObj=new FileOpenEater();
-  app.installEventFilter(filterObj);
+  FileOpenEater filterObj;
+  app.installEventFilter(&filterObj);
   QPixmap pixmap(":/images/splashscreen.png");
   QSplashScreen *splash = new QSplashScreen(pixmap);
   splash->show();
@@ -56,7 +56,8 @@ int main(int argc, char *argv[])
 
   CsoundQt * mw = new CsoundQt(fileNames);
   splash->finish(mw);
+  delete splash;
   mw->show();
-  filterObj->setMainWindow(mw);
+  filterObj.setMainWindow(mw);
   return app.exec();
 }
