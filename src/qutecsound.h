@@ -381,7 +381,7 @@ class CsoundQt:public QMainWindow
     QAction *killToEndAct;
     QAction *aboutAct;
     QAction *donateAct;
-    QAction *aboutQtAct;
+//    QAction *aboutQtAct;
     QAction *resetPreferencesAct;
 	QAction *reportBugAct;
 	QAction *requestFeatureAct;

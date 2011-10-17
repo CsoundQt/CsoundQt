@@ -2,20 +2,20 @@ CONFIG *= thread \
     warn_on
 CONFIG -= stl
 QT *= xml
-#CONFIG(debug, debug|release):CONFIG -= release
-#CONFIG(release, debug|release):CONFIG -= debug
-#debug {
-#    CONFIG -= debug
-#    CONFIG += debug
-#}
-#release {
-#    CONFIG -= release
-#    CONFIG += release
-#}
-#warn_on {
-#    CONFIG -= warn_on
-#    CONFIG += warn_on
-#}
+CONFIG(debug, debug|release):CONFIG -= release
+CONFIG(release, debug|release):CONFIG -= debug
+debug {
+	CONFIG -= debug
+	CONFIG += debug
+}
+release {
+	CONFIG -= release
+	CONFIG += release
+}
+warn_on {
+	CONFIG -= warn_on
+	CONFIG += warn_on
+}
 CONFIG -= lex \
     yacc
 exceptions:CONFIG -= exceptions_off
@@ -25,8 +25,8 @@ thread:CONFIG -= thread_off
 #    no_fixpath
 #shadow_build:TMPDIR = $${OUT_PWD}
 #!shadow_build:TMPDIR = $${PWD}/build
-#build32:TMPDIR = $${TMPDIR}/floats
-#build64:TMPDIR = $${TMPDIR}/doubles
+build32:TMPDIR = floats
+build64:TMPDIR = doubles
 #debug:TMPDIR = $${TMPDIR}/debug
 #release:TMPDIR = $${TMPDIR}/release
 build64:DEFINES += USE_DOUBLE
@@ -34,15 +34,15 @@ build64:DEFINES += USE_DOUBLE
 #UI_DIR = "$${TMPDIR}/ui"
 #INCDIR += "$${TMPDIR}/ui"
 #MOC_DIR = "$${TMPDIR}/moc"
-#OBJECTS_DIR = "$${TMPDIR}/obj"
-#DESTDIR = "$${PWD}/bin"
-TARGET = bin/CsoundQt
+OBJECTS_DIR = "$${TMPDIR}/obj"
+DESTDIR = bin
+TARGET = CsoundQt
 build32:TARGET = $${TARGET}-f
 build64:TARGET = $${TARGET}-d
 pythonqt:TARGET = $${TARGET}-py
 debug:TARGET = $${TARGET}-debug
 
-DEFAULT_RTMIDI_DIRNAME="rtmidi-1.0.11"
+DEFAULT_RTMIDI_DIRNAME="rtmidi-1.0.15"
 DEFAULT_RTMIDI_DIRS = $${DEFAULT_RTMIDI_DIRNAME} \
   ../$${DEFAULT_RTMIDI_DIRNAME} \
   ../../../$${DEFAULT_RTMIDI_DIRNAME}
@@ -156,6 +156,7 @@ pythonqt {
                     message()
                 }
                 PYTHON_INCLUDE_DIR = $${dir}
+				DEFINES += QCS_PYTHONQT
                 break()
             }
         }
@@ -169,7 +170,8 @@ pythonqt {
                 !no_messages {
                     message(PYTHONQT_TREE_DIR set to $${dir})
                     message()
-                }
+				}
+				DEFINES += QCS_PYTHONQT
                 PYTHONQT_TREE_DIR = $${dir}
                 break()
             }
@@ -177,6 +179,7 @@ pythonqt {
         isEmpty(PYTHONQT_TREE_DIR):error(A valid PythonQt library directory was not found.)
     }
 }
+rtmidi {
 isEmpty(RTMIDI_DIR) {
     !no_messages:message(RtMidi include directory not specified.)
     for(dir, DEFAULT_RTMIDI_DIRS) {
@@ -187,11 +190,12 @@ isEmpty(RTMIDI_DIR) {
                 message()
             }
             RTMIDI_DIR = $${dir}
-            DEFINES += QCS_RTMIDI
-            CONFIG += rtmidi
+			DEFINES += QCS_RTMIDI
             break()
         }
     }
+}
+!rtmidi: message(Not building RtMidi support)
 }
 win32 {
     CSOUND_INCLUDE_DIR = $$replace(CSOUND_INCLUDE_DIR, \\\\, /)

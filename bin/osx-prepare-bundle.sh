@@ -37,9 +37,8 @@ read CSOUNDQT_VERSION
 
 PRECISION=-f
 ORIGINAL_NAME=CsoundQt${PRECISION}
-NEW_NAME=CsoundQt
-ORIG_APP_NAME=${ORIGINAL_NAME}.app
-APP_NAME=${NEW_NAME}${PRECISION}-${CSOUNDQT_VERSION}.app
+ORIGINAL_APP_NAME=${ORIGINAL_NAME}.app
+APP_NAME=${ORIGINAL_APP_NAME}
 
 if [ "$bflag"  -eq 1 ]
 		then
@@ -47,31 +46,26 @@ if [ "$bflag"  -eq 1 ]
 
 rm -Rf ${ORIGINAL_APP_NAME}
 rm -Rf ${APP_NAME}
-cd ..
-make clean
+make clean > null
 qmake qcs.pro -spec macx-g++ CONFIG+=rtmidi CONFIG+=release
 make > build-floats.log
-cd bin
 fi
 
-macdeployqt ${ORIG_APP_NAME}
-
+cd bin
 mv $ORIG_APP_NAME/ $APP_NAME/
-otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
 #McCurdy collection
 mkdir $APP_NAME/Contents/Resources
-cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
+cp -r ../../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
 
-make clean
-make NAME=${NEW_NAME}${PRECISION} VERSION=${CSOUNDQT_VERSION} SOURCE_DIR=./ SOURCE_FILES=${APP_NAME}
-
+macdeployqt ${APP_NAME} -dmg
+otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
+cd ..
 
 # ----------------------- Now the doubles version
 PRECISION=-d
 ORIGINAL_NAME=CsoundQt${PRECISION}
-NEW_NAME=CsoundQt
-ORIG_APP_NAME=${ORIGINAL_NAME}.app
-APP_NAME=${NEW_NAME}${PRECISION}-${CSOUNDQT_VERSION}.app
+ORIGINAL_APP_NAME=${ORIGINAL_NAME}.app
+APP_NAME=${ORIGINAL_APP_NAME}
 
 if [ "$bflag"  -eq 1 ]
 		then
@@ -79,32 +73,27 @@ if [ "$bflag"  -eq 1 ]
 
 rm -Rf ${ORIGINAL_APP_NAME}
 rm -Rf ${APP_NAME}
-cd ..
 make clean > null
 qmake qcs.pro -spec macx-g++ CONFIG+=rtmidi CONFIG+=release CONFIG+=build64
 make > build-doubles.log
-cd bin
 fi
 
-macdeployqt ${ORIG_APP_NAME}
-
+cd bin
 mv $ORIG_APP_NAME/ $APP_NAME/
-otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
 #McCurdy collection
 mkdir $APP_NAME/Contents/Resources
-cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
+cp -r ../../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
 
+macdeployqt ${APP_NAME} -dmg
+otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
 
-make clean
-make NAME=${NEW_NAME}${PRECISION} VERSION=${CSOUNDQT_VERSION} SOURCE_DIR=./ SOURCE_FILES=${APP_NAME}
-
-
+cd ..
 
 # ---------------------- With Python
 PRECISION=-d
-ORIGINAL_NAME=CsoundQt${PRECISION}
+ORIGINAL_NAME=CsoundQt${PRECISION}-py
 NEW_NAME=CsoundQt
-ORIG_APP_NAME=${ORIGINAL_NAME}-py.app
+ORIG_APP_NAME=${ORIGINAL_NAME}.app
 APP_NAME=${NEW_NAME}-${CSOUNDQT_VERSION}${PRECISION}-py.app
 if [ "$bflag"  -eq 1 ]
 then
@@ -119,21 +108,56 @@ make > build-python.log
 fi
 
 cd bin
-macdeployqt ${ORIG_APP_NAME}
 # Copy PythonQt which is not found by macdeployqt
-cp libPythonQt.1.dylib ${ORIG_APP_NAME}/Contents/Frameworks
-cp libPythonQt.1.0.0.dylib ${ORIG_APP_NAME}/Contents/Frameworks
-cp libPythonQt_QtAll.1.0.0.dylib ${ORIG_APP_NAME}/Contents/Frameworks
-cp libPythonQt_QtAll.1.dylib ${ORIG_APP_NAME}/Contents/Frameworks
+mkdir ${ORIG_APP_NAME}/Contents/Frameworks/
+cp ../libPythonQt.1.dylib ${ORIG_APP_NAME}/Contents/Frameworks/
+cp ../libPythonQt.1.0.0.dylib ${ORIG_APP_NAME}/Contents/Frameworks/
+cp ../libPythonQt_QtAll.1.0.0.dylib ${ORIG_APP_NAME}/Contents/Frameworks/
+cp ../libPythonQt_QtAll.1.dylib ${ORIG_APP_NAME}/Contents/Frameworks/
 
 mv $ORIG_APP_NAME/ $APP_NAME/
-otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
 #McCurdy collection
 mkdir $APP_NAME/Contents/Resources
-cp -r ../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
+cp -r ../../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
 
-make clean
-make NAME=${NEW_NAME}${PRECISION}-py VERSION=${CSOUNDQT_VERSION} SOURCE_DIR=./ SOURCE_FILES=${APP_NAME}
+macdeployqt ${APP_NAME} -dmg
+otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
+cd ..
+
+# And for python floats
+
+PRECISION=-f
+ORIGINAL_NAME=CsoundQt${PRECISION}-py
+NEW_NAME=CsoundQt
+ORIG_APP_NAME=${ORIGINAL_NAME}.app
+APP_NAME=${NEW_NAME}-${CSOUNDQT_VERSION}${PRECISION}-py.app
+if [ "$bflag"  -eq 1 ]
+then
+		echo "---------------- Making package with python (intel only)"
+
+rm -Rf ${ORIGINAL_APP_NAME}
+rm -Rf ${APP_NAME}
+make clean > null
+qmake qcs.pro -spec macx-g++ CONFIG+=intel CONFIG+=rtmidi CONFIG+=pythonqt CONFIG+=release CONFIG+=build64
+make > build-python.log
+fi
+
+cd bin
+# Copy PythonQt which is not found by macdeployqt
+mkdir ${ORIG_APP_NAME}/Contents/Frameworks/
+cp ../libPythonQt.1.dylib ${ORIG_APP_NAME}/Contents/Frameworks/
+cp ../libPythonQt.1.0.0.dylib ${ORIG_APP_NAME}/Contents/Frameworks/
+cp ../libPythonQt_QtAll.1.0.0.dylib ${ORIG_APP_NAME}/Contents/Frameworks/
+cp ../libPythonQt_QtAll.1.dylib ${ORIG_APP_NAME}/Contents/Frameworks/
+
+mv $ORIG_APP_NAME/ $APP_NAME/
+#McCurdy collection
+mkdir $APP_NAME/Contents/Resources
+cp -r ../../src/Examples/McCurdy\ Collection $APP_NAME/Contents/Resources/McCurdy\ Collection
+
+macdeployqt ${APP_NAME} -dmg
+otool -L ${APP_NAME}/Contents/MacOS/$ORIGINAL_NAME
+
 
 exit
 # ----------------------------  make Standalone application

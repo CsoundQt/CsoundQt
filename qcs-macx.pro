@@ -5,8 +5,11 @@
 	message(Building CsoundQt for Macintosh OS X.)
 }
 
-!intel: !x86_64: CONFIG += PPC
-
+!ppc: !x86_64: CONFIG += i386
+universal: {
+CONFIG += i386
+CONFIG += ppc
+}
 
 
 # DEFINES += MACOSX_PRE_SNOW # Use this if you are building for OS X < 10.6
@@ -51,7 +54,7 @@ LIBS *= -L$${LIBSNDFILE_LIBRARY_DIR}
 rtmidi {
 DEFINES += __MACOSX_CORE__
 LIBS += -framework CoreFoundation
-#LIBS += -framework CoreMidi -framework CoreAudio -framework CoreFoundation
+LIBS += -framework CoreMidi -framework CoreAudio
 }
 #LIBS += -framework QtCore -framework QtGui -framework QtXml
 LCSOUND = -framework $${MAC_LIB}

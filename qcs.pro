@@ -16,15 +16,15 @@
 # ##############################################################################
 # ##############################################################################
 # BUILD OPTIONS:
-# CONFIG+=builddoubles    To build doubles version
+# CONFIG+=buildDoubles    To build doubles version
 # CONFIG+=build64    To build doubles version (deprecated)
 # CONFIG+=pythonqt   To build with PythonQt support
 # CONFIG+=rtmidi   To build with Portmidi support
 # OS X only OPTIONS:
-# CONFIG+=intel         To build intel only version (Universal is the default)
+# CONFIG+=universal   To build i386/ppc version. Default is platform default
 # ##############################################################################
 
-builddoubles: CONFIG += build64
+buildDoubles: CONFIG += build64
 !build32:!build64:CONFIG += build32
 build32:build64:CONFIG -= build32
 unix { 
@@ -32,8 +32,7 @@ unix {
     else:include (qcs-unix.pro)
 }
 win32-g++:include (qcs-win32.pro)
-pythonqt:DEFINES += QCS_PYTHONQT
-rtmidi:DEFINES += QCS_RTMIDI
+
 include(src/src.pri)
 TRANSLATIONS = "src/translations/qutecsound_en.ts" \
     "src/translations/qutecsound_es.ts" \

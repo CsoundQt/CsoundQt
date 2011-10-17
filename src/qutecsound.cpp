@@ -2638,11 +2638,11 @@ void CsoundQt::createActions()
   donateAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(donateAct, SIGNAL(triggered()), this, SLOT(donate()));
 
-  aboutQtAct = new QAction(tr("About &Qt"), this);
-  aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
-//   aboutQtAct->setIconText(tr("About Qt"));
-  aboutQtAct->setShortcutContext(Qt::ApplicationShortcut);
-  connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+//  aboutQtAct = new QAction(tr("About &Qt"), this);
+//  aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
+////   aboutQtAct->setIconText(tr("About Qt"));
+//  aboutQtAct->setShortcutContext(Qt::ApplicationShortcut);
+//  connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
   resetPreferencesAct = new QAction(tr("Reset Preferences"), this);
   resetPreferencesAct->setStatusTip(tr("Reset CsoundQt's preferences to their original default state"));
@@ -3479,7 +3479,7 @@ flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Appl
   helpMenu->addSeparator();
   helpMenu->addAction(aboutAct);
   helpMenu->addAction(donateAct);
-  helpMenu->addAction(aboutQtAct);
+//  helpMenu->addAction(aboutQtAct);
 
 }
 
