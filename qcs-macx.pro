@@ -29,7 +29,7 @@ DEFAULT_CSOUND_LIBRARY_DIRS = $${CSOUND_FRAMEWORK_DIR} \
 DEFAULT_LIBSNDFILE_INCLUDE_DIRS = /usr/local/include \
 	/usr/include
 DEFAULT_LIBSNDFILE_LIBRARY_DIRS = /usr/local/lib \
-        /usr/lib
+		/usr/lib
 build32:DEFAULT_CSOUND_LIBS = CsoundLib
 build64:DEFAULT_CSOUND_LIBS = CsoundLib64
 #CSND_LIB = lib_csnd.dylib

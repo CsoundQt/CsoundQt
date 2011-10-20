@@ -98,7 +98,7 @@ void Console::appendMessage(QString msg)
   setTextColor(m_textColor);
 }
 
-void Console::setDefaultFont(QFont font) 
+void Console::setDefaultFont(QFont font)
 {
   document()->setDefaultFont(font);
 }

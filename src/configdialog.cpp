@@ -253,8 +253,8 @@ int ConfigDialog::currentTab()
 void ConfigDialog::warnOpcodeDir(bool on)
 {
   if (on) {
-	QMessageBox::warning(this, "CsoundQt",
-						 tr("Please note that OPCODEDIR will overwrite current settings so you will need to restart CsoundQt to return to default.")
+    QMessageBox::warning(this, "CsoundQt",
+                         tr("Please note that OPCODEDIR will overwrite current settings so you will need to restart CsoundQt to return to default.")
                         );
   }
 }
@@ -653,7 +653,7 @@ QList<QPair<QString, QString> > ConfigDialog::getMidiInputDevices()
     QString jackCSD = QString(file.readAll());
     QString tempText = jackCSD;
     tempText.replace("$SR", "441000");
-	QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
+    QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
     tempFile.open();
     QTextStream out(&tempFile);
     out << tempText;
@@ -739,7 +739,7 @@ QList<QPair<QString, QString> > ConfigDialog::getMidiOutputDevices()
     QString jackCSD = QString(file.readAll());
     QString tempText = jackCSD;
     tempText.replace("$SR", "441000");
-	QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
+    QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
     tempFile.open();
     QTextStream out(&tempFile);
     out << tempText;
@@ -821,7 +821,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioInputDevices()
     QString jackCSD = QString(file.readAll());
     QString tempText = jackCSD;
     tempText.replace("$SR", "1000");
-	QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
+    QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
     tempFile.open();
     QTextStream out(&tempFile);
     out << tempText;
@@ -878,7 +878,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioInputDevices()
     QString jackCSD = QString(file.readAll());
     QString tempText = jackCSD;
     tempText.replace("$SR", "1000");
-	QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
+    QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
     tempFile.open();
     QTextStream out(&tempFile);
     out << tempText;
@@ -976,7 +976,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioOutputDevices()
     QString jackCSD = QString(file.readAll());
     QString tempText = jackCSD;
     tempText.replace("$SR", "1000");
-	QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
+    QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
     tempFile.open();
     QTextStream out(&tempFile);
     out << tempText;
@@ -1032,7 +1032,7 @@ QList<QPair<QString, QString> > ConfigDialog::getAudioOutputDevices()
     QString jackCSD = QString(file.readAll());
     QString tempText = jackCSD;
     tempText.replace("$SR", "1000");
-	QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
+    QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
     tempFile.open();
     QTextStream out(&tempFile);
     out << tempText;

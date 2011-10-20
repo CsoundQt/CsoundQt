@@ -27,7 +27,7 @@
 buildDoubles: CONFIG += build64
 !build32:!build64:CONFIG += build32
 build32:build64:CONFIG -= build32
-unix { 
+unix {
     macx:include (qcs-macx.pro)
     else:include (qcs-unix.pro)
 }
@@ -44,10 +44,10 @@ TRANSLATIONS = "src/translations/qutecsound_en.ts" \
     "src/translations/qutecsound_el.ts" \
     "src/translations/qutecsound_uk.ts" \
     "src/translations/qutecsound_fi.ts"
-pythonqt { 
+pythonqt {
     include ( $${PYTHONQT_TREE_DIR}/build/PythonQt.prf )
     include ( $${PYTHONQT_TREE_DIR}/build/PythonQt_QtAll.prf )
-    
+
     # include ( $${PYTHONQT_TREE_DIR}/build/PythonQt_QtAll.prf )
     win32:INCLUDEPATH *= $${PYTHON_INCLUDE_DIR}
     INCLUDEPATH *= $${PYTHONQT_TREE_DIR}/src

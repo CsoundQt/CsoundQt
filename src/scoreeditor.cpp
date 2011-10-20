@@ -126,10 +126,10 @@ QString ScoreEditor::getSelection()
 
 void ScoreEditor::clearUndoRedoStacks()
 {
-	// TODO implement
+    // TODO implement
 }
 
 void ScoreEditor::modified()
 {
-	emit textChanged();
+    emit textChanged();
 }

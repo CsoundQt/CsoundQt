@@ -144,11 +144,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
   bool widgetsVisible = !widgetPanel->isHidden(); // Must be after readSettings() to save last state
   if (widgetsVisible)
-	widgetPanel->hide();  // Hide until CsoundQt has finished loading
+    widgetPanel->hide();  // Hide until CsoundQt has finished loading
 #ifdef QCS_PYTHONQT
   bool scratchPadVisible = !m_scratchPad->isHidden(); // Must be after readSettings() to save last state
   if (scratchPadVisible)
-	m_scratchPad->hide();  // Hide until CsoundQt has finished loading
+    m_scratchPad->hide();  // Hide until CsoundQt has finished loading
 #endif
 
   createMenus();
@@ -216,7 +216,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
   int init = csoundInitialize(0,0,0);
   if (init < 0) {
-	qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nCsoundQt will probably crash if you try to run Csound.");
+    qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nCsoundQt will probably crash if you try to run Csound.");
   }
   qApp->processEvents(); // To finish settling dock widgets and other stuff before messing with them (does it actually work?)
   m_startingUp = false;
@@ -232,7 +232,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
       loadFile(fileName, true);
     }
     else {
-	  qDebug() << "CsoundQt::CsoundQt could not open file:" << fileName;
+      qDebug() << "CsoundQt::CsoundQt could not open file:" << fileName;
     }
   }
 
@@ -296,7 +296,7 @@ void CsoundQt::changePage(int index)
     documentPages[curPage]->hideWidgets();
   }
   if (index < 0) { // No tabs left
-	qDebug() << "CsoundQt::changePage index < 0";
+    qDebug() << "CsoundQt::changePage index < 0";
     return;
   }
   curPage = index;
@@ -465,12 +465,12 @@ void CsoundQt::open()
     m_inspector->show();
   m_startingUp = true; // To avoid changing all display unnecessarily
   foreach (QString fileName, fileNames) {
-	if (fileNames.last() == fileName) {
-		m_startingUp = false;
-	}
-	if (!fileName.isEmpty()) {
-	  loadFile(fileName, true);
-	}
+    if (fileNames.last() == fileName) {
+        m_startingUp = false;
+    }
+    if (!fileName.isEmpty()) {
+      loadFile(fileName, true);
+    }
   }
 }
 
@@ -531,7 +531,7 @@ void CsoundQt::createCodeGraph()
 
   int ret = system(command.toAscii());
   if (ret != 0) {
-	QMessageBox::warning(this, tr("CsoundQt"),
+    QMessageBox::warning(this, tr("CsoundQt"),
                          tr("Dot executable not found.\n"
                             "Please install graphviz from\n"
                             "www.graphviz.org"));
@@ -546,7 +546,7 @@ void CsoundQt::createCodeGraph()
   QTemporaryFile file(QDir::tempPath() + QDir::separator() + "CsoundQt-GraphXXXXXX.dot");
   QTemporaryFile pngFile(QDir::tempPath() + QDir::separator() + "CsoundQt-GraphXXXXXX.png");
   if (!file.open() || !pngFile.open()) {
-	QMessageBox::warning(this, tr("CsoundQt"),
+    QMessageBox::warning(this, tr("CsoundQt"),
                          tr("Cannot create temp dot/png file."));
     return;
   }
@@ -571,7 +571,7 @@ void CsoundQt::createCodeGraph()
 //   qDebug() << command;
   ret = system(command.toAscii());
   if (ret != 0) {
-	qDebug() << "CsoundQt::createCodeGraph() Error running dot";
+    qDebug() << "CsoundQt::createCodeGraph() Error running dot";
   }
   m_graphic = new GraphicWindow(this);
   m_graphic->show();
@@ -720,7 +720,7 @@ QString CsoundQt::getSaveFileName()
   if (fileName.isEmpty())
     return QString("");
   if (isOpen(fileName) != -1 && isOpen(fileName) != curPage) {
-	QMessageBox::critical(this, tr("CsoundQt"),
+    QMessageBox::critical(this, tr("CsoundQt"),
                           tr("The file is already open in another tab.\nFile not saved!"),
                              QMessageBox::Ok | QMessageBox::Default);
     return QString("");
@@ -787,12 +787,12 @@ void CsoundQt::openLogFile()
   if (logFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
     logFile.readAll();
     QString text = "--**-- " + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss")
-				   + " CsoundQt Logging Started: "
+                   + " CsoundQt Logging Started: "
                    + "\n";
     logFile.write(text.toAscii());
   }
   else {
-	qDebug() << "CsoundQt::openLogFile() Error. Could not open log file! NO logging. " << logFile.fileName();
+    qDebug() << "CsoundQt::openLogFile() Error. Could not open log file! NO logging. " << logFile.fileName();
   }
 }
 
@@ -819,7 +819,7 @@ void CsoundQt::openMidiPort(int port)
 
   m_midiin = new RtMidiIn();
   try {
-	m_midiin->openPort(port, std::string("CsoundQt"));
+    m_midiin->openPort(port, std::string("CsoundQt"));
   }
   catch ( RtError &error ) {
     qDebug() << "WidgetLayout::openMidiPort Error opening port";
@@ -848,7 +848,7 @@ void CsoundQt::closeMidiPort()
 void CsoundQt::showNewFormatWarning()
 {
   QMessageBox::warning(this, tr("New widget format"),
-					   tr("  This version of CsoundQt implements a new format for storing widgets, which "
+                       tr("  This version of CsoundQt implements a new format for storing widgets, which "
                           "enables many of the new widget features you will find now.\n"
                           "  The old format is still read and saved, so you will be able to open files in older versions "
                           "but some of the features will not be passed to older versions.\n"),
@@ -948,7 +948,7 @@ bool CsoundQt::closeTab(bool askCloseApp)
                       + (documentPages[curPage]->getFileName() != ""
                          ? documentPages[curPage]->getFileName(): "untitled.csd")
                       + tr("\nhas been modified.\nDo you want to save the changes before closing?");
-	int ret = QMessageBox::warning(this, tr("CsoundQt"),
+    int ret = QMessageBox::warning(this, tr("CsoundQt"),
                                    message,
                                    QMessageBox::Yes | QMessageBox::Default,
                                    QMessageBox::No,
@@ -962,8 +962,8 @@ bool CsoundQt::closeTab(bool askCloseApp)
   }
   if (!askCloseApp) {
     if (documentPages.size() <= 1) {
-	  if (QMessageBox::warning(this, tr("CsoundQt"),
-							   tr("Do you want to exit CsoundQt?"),
+      if (QMessageBox::warning(this, tr("CsoundQt"),
+                               tr("Do you want to exit CsoundQt?"),
                                QMessageBox::Yes | QMessageBox::Default,
                                QMessageBox::No) == QMessageBox::Yes)
       {
@@ -1053,7 +1053,7 @@ bool CsoundQt::join(bool ask)
   if (itemList.size() == 0 or itemList.size() == 0) {
     if (!ask) {
       QMessageBox::warning(this, tr("Join"),
-						   tr("Please open the orc and sco files in CsoundQt first!"));
+                           tr("Please open the orc and sco files in CsoundQt first!"));
     }
     return false;
   }
@@ -1073,7 +1073,7 @@ bool CsoundQt::join(bool ask)
     text += scoText;
     text += "</CsScore>\n</CsoundSynthesizer>\n";
     newFile();
-	documentPages[curPage]->loadTextString(text, m_options->saveWidgets);
+    documentPages[curPage]->loadTextString(text, m_options->saveWidgets);
     return true;
   }
 //   else {
@@ -1129,35 +1129,35 @@ void CsoundQt::play(bool realtime, int index)
   // TODO make csound pause if it is already running
   int oldPage = curPage;
   if (index == -1) {
-	index = curPage;
+    index = curPage;
   }
   if (index < 0 && index >= documentPages.size()) {
-	qDebug() << "CsoundQt::play index out of range " << index;
+    qDebug() << "CsoundQt::play index out of range " << index;
     return;
   }
   curPage = index;
   if (curPage == oldPage) {
-	  runAct->setChecked(true);  // In case the call comes from a button
+      runAct->setChecked(true);  // In case the call comes from a button
   }
   if (documentPages[curPage]->getFileName().isEmpty()) {
-	QMessageBox::warning(this, tr("CsoundQt"),
+    QMessageBox::warning(this, tr("CsoundQt"),
                          tr("This file has not been saved\nPlease select name and location."));
     if (!saveAs()) {
-		if (curPage == oldPage) {
-			runAct->setChecked(false);
-		}
-	  curPage = oldPage;
+        if (curPage == oldPage) {
+            runAct->setChecked(false);
+        }
+      curPage = oldPage;
       return;
     }
   }
   else if (documentPages[curPage]->isModified()) {
-	  if (m_options->saveChanges && !save()) {
-		  if (curPage == oldPage) {
-			  runAct->setChecked(false);
-		  }
-		  curPage = oldPage;
-		  return;
-	  }
+      if (m_options->saveChanges && !save()) {
+          if (curPage == oldPage) {
+              runAct->setChecked(false);
+          }
+          curPage = oldPage;
+          return;
+      }
   }
   QString fileName = documentPages[curPage]->getFileName();
   QString fileName2;
@@ -1174,22 +1174,22 @@ void CsoundQt::play(bool realtime, int index)
 #ifdef QCS_PYTHONQT
   if (fileName.endsWith(".py",Qt::CaseInsensitive)) {
     m_pythonConsole->runScript(fileName);
-	runAct->setChecked(false);
-	curPage = documentTabs->currentIndex();
+    runAct->setChecked(false);
+    curPage = documentTabs->currentIndex();
     return;
   }
 #endif
   if (!fileName.endsWith(".csd",Qt::CaseInsensitive) && !fileName.endsWith(".py",Qt::CaseInsensitive))  {
-	if (documentPages[curPage]->askForFile)
+    if (documentPages[curPage]->askForFile)
       getCompanionFileName();
     // FIXME run orc file when sco companion is currently active
-	if (fileName.endsWith(".sco",Qt::CaseInsensitive)) {
-	  //Must switch filename order when open file is a sco file
-		fileName2 = fileName;
-		fileName = documentPages[curPage]->getCompanionFileName();
-	}
-	else
-		fileName2 = documentPages[curPage]->getCompanionFileName();
+    if (fileName.endsWith(".sco",Qt::CaseInsensitive)) {
+      //Must switch filename order when open file is a sco file
+        fileName2 = fileName;
+        fileName = documentPages[curPage]->getCompanionFileName();
+    }
+    else
+        fileName2 = documentPages[curPage]->getCompanionFileName();
   }
   QString runFileName1, runFileName2;
   QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
@@ -1204,7 +1204,7 @@ void CsoundQt::play(bool realtime, int index)
       if (!csdFile.open()) {
         qDebug() << "Error creating temporary file " << tmpFileName;
         QMessageBox::critical(this,
-							  tr("CsoundQt"),
+                              tr("CsoundQt"),
                               tr("Error creating temporary file."),
                               QMessageBox::Ok);
         return;
@@ -1234,13 +1234,13 @@ void CsoundQt::play(bool realtime, int index)
   int ret = documentPages[curPage]->play(m_options);
   if (ret == -1) {
     QMessageBox::critical(this,
-						  tr("CsoundQt"),
+                          tr("CsoundQt"),
                           tr("Internal error running Csound."),
                           QMessageBox::Ok);
   }
   else if (ret == -2) { // Error creating temporary file
     runAct->setChecked(false);
-	qDebug() << "CsoundQt::play - Error creating temporary file";
+    qDebug() << "CsoundQt::play - Error creating temporary file";
   }
   else if (ret == -3) { // Csound compilation failed
     runAct->setChecked(false);
@@ -1271,7 +1271,7 @@ void CsoundQt::runInTerm(bool realtime)
   tempFile.setAutoRemove(false);
   if (fileName.startsWith(":/")) {
     if (!tempFile.open()) {
-	  qDebug() << "CsoundQt::runCsound() : Error creating temp file";
+      qDebug() << "CsoundQt::runCsound() : Error creating temp file";
       runAct->setChecked(false);
       return;
     }
@@ -1432,7 +1432,7 @@ void CsoundQt::render()
          m_options->fileOutputFilename += extension;
        }
       if (QFile::exists(m_options->fileOutputFilename)) {
-		int ret = QMessageBox::warning(this, tr("CsoundQt"),
+        int ret = QMessageBox::warning(this, tr("CsoundQt"),
                 tr("The file %1 \nalready exists.\n"
                   "Do you want to overwrite it?").arg(m_options->fileOutputFilename),
                 QMessageBox::Save | QMessageBox::Cancel,
@@ -1508,7 +1508,7 @@ void CsoundQt::openExternalPlayer()
   }
   if (!m_options->waveplayer.isEmpty()) {
     name = "\"" + name + "\"";
-	execute(m_options->waveplayer, name);
+    execute(m_options->waveplayer, name);
   }
   else {
     QDesktopServices::openUrl(QUrl::fromLocalFile (name));
@@ -1532,9 +1532,9 @@ void CsoundQt::setHelpEntry()
 #ifdef Q_OS_MAC
   if (dir == "") {
 #ifdef USE_DOUBLES
-	dir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib64.framework/Versions/5.2/Resources/Manual";
+    dir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib64.framework/Versions/5.2/Resources/Manual";
 #else
-	dir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Manual";
+    dir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Manual";
 #endif
   }
 #endif
@@ -1603,29 +1603,29 @@ void CsoundQt::openExternalBrowser(QUrl url)
 {
   if (!url.isEmpty()) {
     if (!m_options->browser.isEmpty()) {
-	  execute(m_options->browser,"\"" + url.toString() + "\"");
+      execute(m_options->browser,"\"" + url.toString() + "\"");
     }
     else {
       QDesktopServices::openUrl(url);
-	}
+    }
   }
   else {
-	  if (m_options->csdocdir != "") {
-		  url = QUrl ("file://" + m_options->csdocdir + "/"
-					  + documentPages[curPage]->wordUnderCursor() + ".html");
-		  if (!m_options->browser.isEmpty()) {
-			  execute(m_options->browser, "\"" + url.toString() + "\"");
-		  }
-		  else {
-			QDesktopServices::openUrl(url);
-		  }
-	  }
-	  else {
-		QMessageBox::critical(this,
-							  tr("Error"),
-							  tr("HTML Documentation directory not set!\n"
-								 "Please go to Edit->Options->Environment and select directory\n"));
-	  }
+      if (m_options->csdocdir != "") {
+          url = QUrl ("file://" + m_options->csdocdir + "/"
+                      + documentPages[curPage]->wordUnderCursor() + ".html");
+          if (!m_options->browser.isEmpty()) {
+              execute(m_options->browser, "\"" + url.toString() + "\"");
+          }
+          else {
+            QDesktopServices::openUrl(url);
+          }
+      }
+      else {
+        QMessageBox::critical(this,
+                              tr("Error"),
+                              tr("HTML Documentation directory not set!\n"
+                                 "Please go to Edit->Options->Environment and select directory\n"));
+      }
   }
 }
 
@@ -1652,12 +1652,12 @@ void CsoundQt::openQuickRef()
 void CsoundQt::resetPreferences()
 {
   int ret = QMessageBox::question (this, tr("Reset Preferences"),
-								   tr("Are you sure you want to revert CsoundQt's preferences\nto their initial default values? "),
+                                   tr("Are you sure you want to revert CsoundQt's preferences\nto their initial default values? "),
                                    QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok);
   if (ret ==  QMessageBox::Ok) {
     m_resetPrefs = true;
     QMessageBox::information(this, tr("Reset Preferences"),
-						 tr("Preferences have been reset.\nYou must restart CsoundQt."),
+                         tr("Preferences have been reset.\nYou must restart CsoundQt."),
                          QMessageBox::Ok, QMessageBox::Ok);
   }
 }
@@ -1828,7 +1828,7 @@ void CsoundQt::applySettings()
     openLogFile();
   }
   if (csoundGetVersion() < 5140) {
-	  m_options->newParser = -1; // Don't use new parser flags
+      m_options->newParser = -1; // Don't use new parser flags
   }
 }
 
@@ -1882,7 +1882,7 @@ void CsoundQt::runUtility(QString flags)
     QStringList indFlags= flags.split(" ",QString::SkipEmptyParts);
     QStringList files = fileFlags.split("\"", QString::SkipEmptyParts);
     if (indFlags.size() < 2) {
-	  qDebug("CsoundQt::runUtility: Error: empty flags");
+      qDebug("CsoundQt::runUtility: Error: empty flags");
       return;
     }
     if (indFlags[0] == "-U") {
@@ -1891,7 +1891,7 @@ void CsoundQt::runUtility(QString flags)
       indFlags.removeAt(0);
     }
     else {
-	  qDebug("CsoundQt::runUtility: Error: unexpected flag!");
+      qDebug("CsoundQt::runUtility: Error: unexpected flag!");
       return;
     }
     int index = 0;
@@ -1911,7 +1911,7 @@ void CsoundQt::runUtility(QString flags)
     csoundSetHostData(csoundU, (void *) m_console);
     csoundPreCompile(csoundU);
     csoundSetMessageCallback(csoundU, &CsoundQt::utilitiesMessageCallback);
-	// Utilities always run in the same thread as CsoundQt
+    // Utilities always run in the same thread as CsoundQt
     csoundRunUtility(csoundU, name.toStdString().c_str(), argc, argv);
     csoundDestroy(csoundU);
     for (int i = 0; i < argc; i++) {
@@ -2111,7 +2111,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 void CsoundQt::showNoPythonQtWarning()
 {
   QMessageBox::warning(this, tr("No PythonQt support"),
-					   tr("This version of CsoundQt has been compiled without PythonQt support.\n"
+                       tr("This version of CsoundQt has been compiled without PythonQt support.\n"
                           "Extended Python features are not available"));
   qDebug() << "CsoundQt::showNoPythonQtWarning()";
 }
@@ -3922,9 +3922,9 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("HwBufferSize",m_options->HwBufferSize);
     settings.setValue("HwBufferSizeActive", m_options->HwBufferSizeActive);
     settings.setValue("dither", m_options->dither);
-	settings.setValue("newParser", m_options->newParser);
-	settings.setValue("multicore", m_options->multicore);
-	settings.setValue("numThreads", m_options->numThreads);
+    settings.setValue("newParser", m_options->newParser);
+    settings.setValue("multicore", m_options->multicore);
+    settings.setValue("numThreads", m_options->numThreads);
 
     settings.setValue("additionalFlags", m_options->additionalFlags);
     settings.setValue("additionalFlagsActive", m_options->additionalFlagsActive);
@@ -4065,18 +4065,18 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
 //  qDebug() << "CsoundQt::loadFile" << fileName;
   QFile file(fileName);
   if (!file.open(QFile::ReadOnly)) {
-	QMessageBox::warning(this, tr("CsoundQt"),
+    QMessageBox::warning(this, tr("CsoundQt"),
                          tr("Cannot read file %1:\n%2.")
                              .arg(fileName)
                              .arg(file.errorString()));
-	return -1;
+    return -1;
   }
   int index = isOpen(fileName);
   if (index != -1) {
     documentTabs->setCurrentIndex(index);
     changePage(index);
     statusBar()->showMessage(tr("File already open"), 10000);
-	return index;
+    return index;
   }
   QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -4272,7 +4272,7 @@ bool CsoundQt::loadCompanionFile(const QString &fileName)
     return false;
   }
   if (QFile::exists(companionFileName)) {
-	return (loadFile(companionFileName) != -1);
+    return (loadFile(companionFileName) != -1);
   }
   return false;
 }
@@ -4473,19 +4473,19 @@ void CsoundQt::setWidgetPanelGeometry()
   QRect geometry = documentPages[curPage]->getWidgetPanelGeometry();
   if (geometry.width() <= 0 || geometry.width() > 4096) {
     geometry.setWidth(400);
-	qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: width invalid.";
+    qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: width invalid.";
   }
   if (geometry.height() <= 0 || geometry.height() > 4096) {
     geometry.setHeight(300);
-	qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: height invalid.";
+    qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: height invalid.";
   }
   if (geometry.x() < 0 || geometry.x() > 4096) {
     geometry.setX(20);
-	qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: X position invalid.";
+    qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: X position invalid.";
   }
   if (geometry.y() < 30 || geometry.y() > 4096) {
     geometry.setY(30);
-	qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: Y position invalid.";
+    qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: Y position invalid.";
   }
   widgetPanel->setGeometry(geometry);
 }
@@ -4567,7 +4567,7 @@ void CsoundQt::insertText(QString text, int index, int section)
     }
   }
   else {
-	qDebug() << "CsoundQt::insertText not implemented for sections";
+    qDebug() << "CsoundQt::insertText not implemented for sections";
   }
 }
 
@@ -4587,7 +4587,7 @@ void CsoundQt::setFullText(QString text, int index)
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-	documentPages[index]->setFullText(text);
+    documentPages[index]->setFullText(text);
   }
 }
 

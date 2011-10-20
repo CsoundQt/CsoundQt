@@ -75,10 +75,10 @@ void BaseView::setFullText(QString text, bool goToTop)
   clearFileBText();
   while (text.contains("<CsFileB ") and text.contains("</CsFileB>")) {
     bool endsWithBreak = false;
-	if (text.indexOf("</CsFileB>") > text.indexOf("<CsFileB>")) {
-		qDebug() << "BaseView::setFullText: File corrupt, not loading remaining CsFileB sections.";
-		break;
-	}
+    if (text.indexOf("</CsFileB>") > text.indexOf("<CsFileB>")) {
+        qDebug() << "BaseView::setFullText: File corrupt, not loading remaining CsFileB sections.";
+        break;
+    }
     if (text.indexOf("</CsFileB>") + 10 < text.size() && text[text.indexOf("</CsFileB>") + 10] == '\n' ) {
       endsWithBreak = true;
     }
@@ -89,7 +89,7 @@ void BaseView::setFullText(QString text, bool goToTop)
     appendFileBText(currentFileText);
   }
   if (m_viewMode < 2) {  // Unified view
-	  m_mainEditor->setUndoRedoEnabled(false);
+      m_mainEditor->setUndoRedoEnabled(false);
     QTextCursor cursor = m_mainEditor->textCursor();
     cursor.select(QTextCursor::Document);
     cursor.insertText(text);
@@ -97,7 +97,7 @@ void BaseView::setFullText(QString text, bool goToTop)
     if (goToTop) {
       m_mainEditor->moveCursor(QTextCursor::Start);
     }
-	m_mainEditor->setUndoRedoEnabled(true);
+    m_mainEditor->setUndoRedoEnabled(true);
   }
   else { // Split view
     int startIndex,endIndex, offset, endoffset;
@@ -115,9 +115,9 @@ void BaseView::setFullText(QString text, bool goToTop)
       sectionText = text.mid(startIndex, endIndex - startIndex + endoffset);
       text.remove(sectionText);
     }
-	m_orcEditor->setUndoRedoEnabled(false);
+    m_orcEditor->setUndoRedoEnabled(false);
     setOrc(sectionText.mid(tag.size() + 2 + offset, sectionText.size() - (tag.size()*2) - 5 - offset - endoffset));
-	m_orcEditor->setUndoRedoEnabled(true);
+    m_orcEditor->setUndoRedoEnabled(true);
     // Find score section
     sectionText = "";
     tag = "CsScore";
@@ -147,9 +147,9 @@ void BaseView::setFullText(QString text, bool goToTop)
       sectionText = text.mid(startIndex, endIndex - startIndex + endoffset);
       text.remove(sectionText);
     }
-	m_optionsEditor->setUndoRedoEnabled(false);
+    m_optionsEditor->setUndoRedoEnabled(false);
     setOptionsText(sectionText.mid(tag.size() + 2 + offset, sectionText.size() - (tag.size()*2) - 5 - offset - endoffset));
-	m_optionsEditor->setUndoRedoEnabled(true);
+    m_optionsEditor->setUndoRedoEnabled(true);
 
     // Remaining text inside CsSynthesizer tags
     sectionText = "";
@@ -164,13 +164,13 @@ void BaseView::setFullText(QString text, bool goToTop)
       sectionText = text.mid(startIndex, endIndex - startIndex + endoffset);
       text.remove(sectionText);
     }
-	m_otherCsdEditor->setUndoRedoEnabled(false);
+    m_otherCsdEditor->setUndoRedoEnabled(false);
     setOtherCsdText(sectionText.mid(tag.size() + 2 + offset, sectionText.size() - (tag.size()*2) - 5 - offset - endoffset));
-	m_otherCsdEditor->setUndoRedoEnabled(true);
-	// Remaining text after all this
-	m_otherEditor->setUndoRedoEnabled(false);
+    m_otherCsdEditor->setUndoRedoEnabled(true);
+    // Remaining text after all this
+    m_otherEditor->setUndoRedoEnabled(false);
     setOtherText(text);
-	m_otherEditor->setUndoRedoEnabled(true);
+    m_otherEditor->setUndoRedoEnabled(true);
   }
 }
 
@@ -510,7 +510,7 @@ void BaseView::hideAllEditors()
       if (h) {
         h->hide();
       }
-	}
+    }
 }
 
 void BaseView::clearUndoRedoStack()

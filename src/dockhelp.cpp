@@ -135,13 +135,13 @@ void DockHelp::followLink(QUrl url)
       }
       else { // Don't do anything with frames version...
          // This could be fixed using the WebKit rendering engine
-		QMessageBox::warning(this, tr("CsoundQt"),
+        QMessageBox::warning(this, tr("CsoundQt"),
                              tr("Frames version only available in external browser."));
       }
     }
   }
   else {
-	QMessageBox::warning(this, tr("CsoundQt"),
+    QMessageBox::warning(this, tr("CsoundQt"),
                     tr("External links can't be followed in help browser."));
   }
 }

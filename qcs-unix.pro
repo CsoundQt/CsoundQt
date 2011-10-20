@@ -20,7 +20,7 @@ build64:DEFAULT_CSOUND_LIBS = libcsound64.so \
 LIBSNDFILE_LIB = libsndfile.so
 
 DEFAULT_PYTHONQT_INCLUDE_DIRS += /usr/local/include \
-	/usr/include
+    /usr/include
 DEFAULT_PYTHONQT_LIBRARY_DIRS += /usr/local/lib \
         /usr/lib\
         ../../../PythonQt2.0.1 \

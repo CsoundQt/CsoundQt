@@ -68,7 +68,7 @@ class Options: public CsoundOptions{
     bool keyRepeat;
     bool debugLiveEvents;
     int consoleBufferSize;
-	int midiInterface; // For internal CsoundQt MIDI control
+    int midiInterface; // For internal CsoundQt MIDI control
     // Csound engine flags
     bool noBuffer;
     bool noPython;
@@ -159,7 +159,7 @@ class Options: public CsoundOptions{
     QString atsSmrContr;
     int atsFileType;
     int atsWindow;
-    
+
 };
 
 #endif

@@ -105,7 +105,7 @@ private:
 //    }
 //     virtual void contextMenuEvent(QContextMenuEvent *event)
 //     {emit(popUpMenu(event->globalPos()));}
-// 
+//
 //   signals:
 //     void popUpMenu(QPoint pos);
 //};

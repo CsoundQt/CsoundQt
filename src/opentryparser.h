@@ -49,7 +49,7 @@ class OpEntryParser
     bool getOpcodeArgNames(Node &node);
 
   private:
-	QString m_opcodeFile;
+    QString m_opcodeFile;
     QList<Opcode> opcodeList;
     QList< QPair<QString, QList<Opcode> > > opcodeCategoryList;
     QVector<QList<Opcode> > opcodeListCategory;

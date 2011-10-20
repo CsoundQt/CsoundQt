@@ -174,7 +174,7 @@ class WidgetLayout : public QWidget
     QAction *createConsoleAct;
     QAction *createGraphAct;
     QAction *createScopeAct;
-    
+
     // Alignment Actions
     QAction *alignLeftAct;
     QAction *alignRightAct;

@@ -33,7 +33,7 @@ QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
   static_cast<QDoubleSpinBox*>(m_widget)->setRange(-999999999999.0, 999999999999.0);
   static_cast<QDoubleSpinBox*>(m_widget)->setKeyboardTracking (false);
   connect(static_cast<QDoubleSpinBox *>(m_widget), SIGNAL(valueChanged(double)),
-		  this, SLOT(valueChanged(double)));
+          this, SLOT(valueChanged(double)));
 //   connect(static_cast<QDoubleSpinBox*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
   m_type = "editnum";
 

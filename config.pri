@@ -1,5 +1,5 @@
 CONFIG *= thread \
-    warn_on
+	warn_on
 CONFIG -= stl
 QT *= xml
 CONFIG(debug, debug|release):CONFIG -= release
@@ -17,7 +17,7 @@ warn_on {
 	CONFIG += warn_on
 }
 CONFIG -= lex \
-    yacc
+	yacc
 exceptions:CONFIG -= exceptions_off
 rtti:CONFIG -= rtti_off
 thread:CONFIG -= thread_off
@@ -46,19 +46,19 @@ exists(config.user.pri) {
     !no_messages:message(... config.user.pri found)
 }
 !no_messages {
-    message()
+	message()
 	build32:message(Building CsoundQt for the single precision version of Csound.)
 	build64:message(Building CsoundQt for the double precision version of Csound.)
-    debug:message(Building debug version.)
-    release:message(Building release version.)
-    message()
-    message(CONFIG ...)
-    for(flag, CONFIG):message(+ $$flag)
-    message()
+	debug:message(Building debug version.)
+	release:message(Building release version.)
+	message()
+	message(CONFIG ...)
+	for(flag, CONFIG):message(+ $$flag)
+	message()
 #    message(CsoundQt build directory is $${OUT_PWD})
 	message(CsoundQt intermediate file directory is $${TMPDIR})
 	message(CsoundQt bin directory is $${DESTDIR})
-    message()
+	message()
 }
 isEmpty(CSOUND_API_INCLUDE_DIR) {
     !isEmpty(CSOUND_INCLUDE_DIR):CSOUND_API_INCLUDE_DIR = $${CSOUND_INCLUDE_DIR}
@@ -150,7 +150,7 @@ pythonqt {
                     message()
                 }
                 PYTHON_INCLUDE_DIR = $${dir}
-				DEFINES += QCS_PYTHONQT
+                DEFINES += QCS_PYTHONQT
                 break()
             }
         }
@@ -164,8 +164,8 @@ pythonqt {
                 !no_messages {
                     message(PYTHONQT_TREE_DIR set to $${dir})
                     message()
-				}
-				DEFINES += QCS_PYTHONQT
+                }
+                DEFINES += QCS_PYTHONQT
                 PYTHONQT_TREE_DIR = $${dir}
                 break()
             }
@@ -184,7 +184,7 @@ isEmpty(RTMIDI_DIR) {
                 message()
             }
             RTMIDI_DIR = $${dir}
-			DEFINES += QCS_RTMIDI
+            DEFINES += QCS_RTMIDI
             break()
         }
     }

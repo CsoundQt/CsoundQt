@@ -42,12 +42,12 @@ class BaseDocument : public QObject
     BaseDocument(QWidget *parent, OpEntryParser *opcodeTree);
     ~BaseDocument();
 
-    virtual void setTextString(QString &text) = 0;
+	virtual void setTextString(QString &text) = 0;
 	virtual void loadTextString(QString &text);
-    int parseTextString(QString &text);
-    virtual WidgetLayout* newWidgetLayout();
-    void widgetsVisible(bool visible);
-    void setFlags(int flags);
+	int parseTextString(QString &text);
+	virtual WidgetLayout* newWidgetLayout();
+	void widgetsVisible(bool visible);
+	void setFlags(int flags);
 //    void setOpcodeNameList(QStringList opcodeNameList);
 
     // Get internal components

@@ -379,9 +379,9 @@ QString WidgetLayout::getSelectedWidgetsText()
   l += "<bsbPanel>\n";
   widgetsMutex.lock();
   for (int i = 0; i < editWidgets.size(); i++) {
-	if (editWidgets[i]->isSelected()) {
-		l += m_widgets[i]->getWidgetXmlText() + "\n";
-	}
+    if (editWidgets[i]->isSelected()) {
+        l += m_widgets[i]->getWidgetXmlText() + "\n";
+    }
   }
   widgetsMutex.unlock();
   l += "</bsbPanel>";
@@ -437,10 +437,10 @@ void WidgetLayout::setValue(QString channelName, double value)
     if (m_widgets[i]->getChannel2Name() == channelName) {
       m_widgets[i]->setValue2(value);
     }
-	if (m_widgets[i]->getUuid() == channelName) {
-		m_widgets[i]->setValue(value);
-		break;
-	}
+    if (m_widgets[i]->getUuid() == channelName) {
+        m_widgets[i]->setValue(value);
+        break;
+    }
   }
   widgetsMutex.unlock();
 }
@@ -471,7 +471,7 @@ void WidgetLayout::setValue(QString channelName, QString value)
     if (m_widgets[i]->getChannelName() == channelName) {
       m_widgets[i]->setValue(value);
 //       qDebug() << "WidgetPanel::setValue " << value;
-    }
+	}
 	if (m_widgets[i]->getUuid() == channelName) {
 		m_widgets[i]->setValue(value);
 		break;
@@ -513,12 +513,12 @@ QString WidgetLayout::getStringForChannel(QString channelName, bool *modified)
 //        *modified =false;
 //      }
 //      widgetsMutex.unlock();
-      return value;
+	  return value;
 	} else if (m_widgets[i]->getUuid() == channelName) {
 		QString value = m_widgets[i]->getStringValue();
   //      widgetsMutex.unlock();
-		return value;
-	  }
+        return value;
+      }
   }
 //  widgetsMutex.unlock();
   return QString();
@@ -532,11 +532,11 @@ double WidgetLayout::getValueForChannel(QString channelName, bool *modified)
     if (m_widgets[i]->getChannelName() == channelName) {
       double value = m_widgets[i]->getValue();
 //      widgetsMutex.unlock();
-      return value;
+	  return value;
 	} else if (m_widgets[i]->getChannel2Name() == channelName) {
-      double value = m_widgets[i]->getValue2();
+	  double value = m_widgets[i]->getValue2();
 //      widgetsMutex.unlock();
-      return value;
+	  return value;
 	} else if (m_widgets[i]->getUuid() == channelName) {
 	  double value = m_widgets[i]->getValue();
 //      widgetsMutex.unlock();
@@ -607,7 +607,7 @@ void WidgetLayout::setWidgetProperty(QString channel, QString property, QVariant
     }
     else if (m_widgets[i]->getChannelName() == channel) {
       m_widgets[i]->setProperty(property.toAscii().constData(), value);
-	  m_widgets[i]->applyInternalProperties();
+      m_widgets[i]->applyInternalProperties();
     }
   }
 }

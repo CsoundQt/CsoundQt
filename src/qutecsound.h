@@ -65,8 +65,8 @@ class CsoundQt:public QMainWindow
     friend class WidgetPanel; //to pass ud
     friend class FileOpenEater; //to pass curPage
   public:
-	CsoundQt(QStringList fileNames);
-	~CsoundQt();
+    CsoundQt(QStringList fileNames);
+    ~CsoundQt();
     static void devicesMessageCallback(CSOUND *csound,
                                        int attr,
                                        const char *fmt,
@@ -96,7 +96,7 @@ class CsoundQt:public QMainWindow
     QString getOrc(int index);
     QString getSco(int index);
     QString getWidgetsText(int index);
-	QString getSelectedWidgetsText(int index);
+    QString getSelectedWidgetsText(int index);
     QString getPresetsText(int index);
     QString getOptionsText(int index);
     QString getFileName(int index);
@@ -137,9 +137,9 @@ class CsoundQt:public QMainWindow
     OpEntryParser *m_opcodeTree;
 
   public slots:
-	int loadFile(QString fileName, bool runNow = false);
-	void newFile();
-	bool saveFile(const QString &fileName, bool saveWidgets = true);
+    int loadFile(QString fileName, bool runNow = false);
+    void newFile();
+    bool saveFile(const QString &fileName, bool saveWidgets = true);
     void play(bool realtime = true, int index = -1);
     void runInTerm(bool realtime = true);
     void pause(int index = -1);
@@ -147,7 +147,7 @@ class CsoundQt:public QMainWindow
     void stopAll();
     void perfEnded();
     void render();
-	void record(bool);
+    void record(bool);
     void sendEvent(QString eventLine, double delay = 0);
     void sendEvent(int index, QString line, double delay = 0);
     void changePage(int index);
@@ -208,9 +208,9 @@ class CsoundQt:public QMainWindow
     void openExternalBrowser(QUrl url = QUrl());
     void openQuickRef();
     void resetPreferences();
-	void reportBug();
-	void requestFeature();
-	void chat();
+    void reportBug();
+    void requestFeature();
+    void chat();
     void openShortcutDialog();
     void statusBarMessage(QString message);
     void about();
@@ -252,14 +252,14 @@ class CsoundQt:public QMainWindow
     void clearSettings();
     int execute(QString executable, QString options);
 //    bool saveCurrent();
-    void makeNewPage(QString fileName, QString text);
+	void makeNewPage(QString fileName, QString text);
 	bool loadCompanionFile(const QString &fileName);
-    void setCurrentFile(const QString &fileName);
-    QString strippedName(const QString &fullFileName);
-    QString generateScript(bool realtime = true, QString tempFileName = "", QString executable = "");
-    void getCompanionFileName();
-    void setWidgetPanelGeometry();
-    int isOpen(QString fileName);  // Returns index of document if open -1 if not open
+	void setCurrentFile(const QString &fileName);
+	QString strippedName(const QString &fullFileName);
+	QString generateScript(bool realtime = true, QString tempFileName = "", QString executable = "");
+	void getCompanionFileName();
+	void setWidgetPanelGeometry();
+	int isOpen(QString fileName);  // Returns index of document if open -1 if not open
 //    void markErrorLine();
     QString getSaveFileName();
     void createQuickRefPdf();
@@ -382,7 +382,7 @@ class CsoundQt:public QMainWindow
     QAction *aboutAct;
     QAction *donateAct;
 //    QAction *aboutQtAct;
-    QAction *resetPreferencesAct;
+	QAction *resetPreferencesAct;
 	QAction *reportBugAct;
 	QAction *requestFeatureAct;
 	QAction *chatAct;
@@ -422,7 +422,7 @@ class FileOpenEater : public QObject
   Q_OBJECT
   public:
     FileOpenEater() {m_mw = 0;}
-	void setMainWindow(CsoundQt *mainWindow) {
+    void setMainWindow(CsoundQt *mainWindow) {
       m_mw = mainWindow;
       while (!fileEventQueue.isEmpty()) {
         QString fileName = fileEventQueue.takeFirst();
@@ -449,7 +449,7 @@ class FileOpenEater : public QObject
       }
     }
 
-	CsoundQt *m_mw;
+    CsoundQt *m_mw;
 };
 
 #endif

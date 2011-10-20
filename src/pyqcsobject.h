@@ -44,7 +44,7 @@ class PyQcsObject : public QObject {
 
   public:
     PyQcsObject();
-	~PyQcsObject();
+    ~PyQcsObject();
     void setCsoundQt(CsoundQt *qcs);
 
   public slots:
@@ -56,7 +56,7 @@ class PyQcsObject : public QObject {
 //  QObject* findChild(QObject* o, const QString& name);
 //  QVariantMap testMap();
 
-    QString getVersion();
+	QString getVersion();
 	void refresh();
 
     // Csound controls
@@ -70,7 +70,7 @@ class PyQcsObject : public QObject {
 
     // Editor
     void setDocument(int index);
-	int loadDocument(QString name);
+    int loadDocument(QString name);
     void insertText(QString text, int index = -1, int section = -1);
     void setCsd(QString text, int index = -1);
     void setFullText(QString text, int index = -1);
@@ -80,7 +80,7 @@ class PyQcsObject : public QObject {
     void setPresetsText(QString text, int index = -1); //FIXME how to handle parsing errors?
     void setOptionsText(QString text, int index = -1); // TODO: implement
 
-    int getDocument(QString name = ""); // Returns document index. -1 if not current open
+	int getDocument(QString name = ""); // Returns document index. -1 if not current open
 	int newDocument(QString name);
 
     QString getSelectedText(int index = -1, int section = -1);
@@ -89,7 +89,7 @@ class PyQcsObject : public QObject {
     QString getOrc(int index = -1);
     QString getSco(int index = -1);
     QString getWidgetsText(int index = -1);
-	QString getSelectedWidgetsText(int index = -1);
+    QString getSelectedWidgetsText(int index = -1);
     QString getPresetsText(int index = -1);
     QString getOptionsText(int index = -1);
     QString getFileName(int index = -1);
@@ -146,12 +146,12 @@ class PyQcsObject : public QObject {
 //    void writeArrayToTable(int ftable, QVariantList values, int offset = 0, int count = -1); // Numpy arrays
 //    QVariantList readArrayToList(int ftable, int offset = 0, int count = -1); // Numpy arrays
 
-    // Register callback
+	// Register callback
 	void registerProcessCallback(QString func, int skipPeriods = 0, int index = -1);
 
   private:
-	CsoundQt *m_qcs;
-	MYFLT **m_tablePtr;
+    CsoundQt *m_qcs;
+    MYFLT **m_tablePtr;
 };
 
 #endif // PYQCSOBJECT_H

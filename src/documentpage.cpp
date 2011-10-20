@@ -209,7 +209,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     int posy = panelElement.attribute("y","-1").toDouble();
     int width = panelElement.attribute("width","-1").toDouble();
     int height = panelElement.attribute("height","-1").toDouble();
-	// TODO recall live event panel visibility
+    // TODO recall live event panel visibility
     int visibleEnabled = panelElement.attribute("visible","true") == "true";
     int loopStart = panelElement.attribute("loopStart","0.0").toDouble();
     int loopEnd = panelElement.attribute("loopEnd","0.0").toDouble();
@@ -220,7 +220,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
     panel->setTempo(tempo);
     panel->setLoopLength(loop);
     panel->setLoopRange(loopStart, loopEnd);
-	m_liveEventControl->appendPanel(panel);
+    m_liveEventControl->appendPanel(panel);
     if (posx > 5 && posy > 5) {
       panel->move(posx, posy);
     }
@@ -1246,7 +1246,7 @@ int DocumentPage::record(int format)
 {
   if (fileName.startsWith(":/")) {
     QMessageBox::critical(static_cast<QWidget *>(parent()),
-						  tr("CsoundQt"),
+                          tr("CsoundQt"),
                           tr("You must save the examples to use Record."),
                           QMessageBox::Ok);
     return -1;
@@ -1552,7 +1552,7 @@ LiveEventFrame * DocumentPage::createLiveEventPanel(QString text)
   connect(e, SIGNAL(setTempoFromPanel(LiveEventFrame *, double)),
           this, SLOT(setPanelTempo(LiveEventFrame *,double)));
   connect(e, SIGNAL(setLoopEnabledFromPanel(LiveEventFrame *, bool)),
-		  this, SLOT(setPanelLoopEnabled(LiveEventFrame *,bool)));
+          this, SLOT(setPanelLoopEnabled(LiveEventFrame *,bool)));
   connect(e, SIGNAL(setLoopLengthFromPanel(LiveEventFrame *, double)),
           this, SLOT(setPanelLoopLength(LiveEventFrame *,double)));
   connect(e->getSheet(), SIGNAL(sendEvent(QString)),this,SLOT(queueEvent(QString)));

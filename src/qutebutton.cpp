@@ -325,10 +325,10 @@ void QuteButton::applyInternalProperties()
   QString type = property("QCS_type").toString();
   static_cast<QPushButton *>(m_widget)->setCheckable(property("QCS_latch").toBool());
   if (property("QCS_latch").toBool()) { // Set icon here, because it can be overwritten if button is "pict"
-	static_cast<QPushButton *>(m_widget)->setIcon(onIcon);
+    static_cast<QPushButton *>(m_widget)->setIcon(onIcon);
   }
   else {
-	static_cast<QPushButton *>(m_widget)->setIcon(QIcon());
+    static_cast<QPushButton *>(m_widget)->setIcon(QIcon());
   }
   if (type == "event" or type == "value") {
     icon = QIcon();
@@ -451,7 +451,7 @@ void QuteButton::buttonReleased()
 #endif
         emit newValue(QPair<QString, QString>(name, fileName));
       }
-    } 
+    }
     else if (name.startsWith("_MBrowse")) {
       QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select File(s)"));
       if (!fileNames.isEmpty()) {

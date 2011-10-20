@@ -99,15 +99,15 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
     }
   }
   if (dither) {
-	  list << " -Z";
+      list << " -Z";
   }
   if (newParser == 1) {
-	  list << "--new-parser";
-	  if (multicore) {
-		  list << "-j" + QString::number(numThreads);
-	  }
+      list << "--new-parser";
+      if (multicore) {
+          list << "-j" + QString::number(numThreads);
+      }
   } else if (newParser == 0) {
-	  list << "--old-parser";
+      list << "--old-parser";
   }
 
   if (rt && rtUseOptions) {

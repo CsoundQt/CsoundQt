@@ -53,7 +53,7 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
 
 //   setWindowModality(Qt::WindowModal);
 //   m_scene = new QGraphicsScene(this);
-// 
+//
 //   QGraphicsView view(m_scene, this);
 //   view.show();
 }
@@ -206,7 +206,7 @@ void GraphicWindow::createActions()
 
 //   aboutAct = new QAction(tr("&About"), this);
 //   connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
-// 
+//
 //   aboutQtAct = new QAction(tr("About &Qt"), this);
 //   connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 }
@@ -218,14 +218,14 @@ void GraphicWindow::createActions()
 //   fileMenu->addAction(printAct);
 //   fileMenu->addSeparator();
 //   fileMenu->addAction(exitAct);
-// 
+//
 //   viewMenu = new QMenu(tr("&View"), this);
 //   viewMenu->addAction(zoomInAct);
 //   viewMenu->addAction(zoomOutAct);
 //   viewMenu->addAction(normalSizeAct);
 //   viewMenu->addSeparator();
 //   viewMenu->addAction(fitToWindowAct);
-// 
+//
 //   helpMenu = new QMenu(tr("&Help"), this);
 //   helpMenu->addAction(aboutAct);
 //   helpMenu->addAction(aboutQtAct);

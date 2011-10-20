@@ -30,7 +30,7 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
   : m_opcodeFile(opcodeFile)
 {
 
-	QDomDocument m_doc("opcodes");
+    QDomDocument m_doc("opcodes");
   QFile file(m_opcodeFile);
   if (!file.open(QIODevice::ReadOnly)) {
     qDebug() << "OpEntryParser::OpEntryParser could not find opcode file:" << opcodeFile;
@@ -172,7 +172,7 @@ int OpEntryParser::getCategoryCount()
 
 QString OpEntryParser::getCategory(int index)
 {
-  if (index < categoryList.size()) 
+  if (index < categoryList.size())
     return categoryList[index];
   else return QString();
 }

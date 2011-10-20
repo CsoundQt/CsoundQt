@@ -284,7 +284,7 @@ void CsoundEngine::csThread(void *data)
 {
   CsoundUserData* udata = (CsoundUserData*)data;
   if (!(udata->flags & QCS_NO_COPY_BUFFER)) {
-	udata->outputBuffer = csoundGetSpout(udata->csound);
+    udata->outputBuffer = csoundGetSpout(udata->csound);
     for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
       udata->audioOutputBuffer.put(udata->outputBuffer[i]/ udata->zerodBFS);
     }
@@ -714,10 +714,10 @@ int CsoundEngine::runCsound()
 #ifdef Q_OS_MAC
   else {
 #ifdef USE_DOUBLES
-	QString opcodedir = m_initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib64.framework/Resources/Opcodes";
+    QString opcodedir = m_initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib64.framework/Resources/Opcodes";
     QString stdopcode = opcodedir + "/libstdopcod.dylib";
 #else
-	QString opcodedir = m_initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib.framework/Resources/Opcodes";
+    QString opcodedir = m_initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib.framework/Resources/Opcodes";
     QString stdopcode = opcodedir + "/libstdopcod.dylib";
 #endif
     // TODO is this check robust enough? what if the standard library is not used? is it likely it is not?
@@ -820,7 +820,7 @@ int CsoundEngine::runCsound()
       // Not really sure that this is worth the trouble, as it
       // is used only with chnsend and chnrecv which are unfinished:
       //         qDebug() << "csoundSetChannelIOCallback";
-	  //         csoundSetChannelIOCallback(csound, &CsoundQt::ioCallback);
+      //         csoundSetChannelIOCallback(csound, &CsoundQt::ioCallback);
     }
   }
   else {
@@ -937,7 +937,7 @@ void CsoundEngine::dispatchQueues()
   messageMutex.lock();
   if (!messageQueue.isEmpty() && m_consoleBufferSize > 0 && counter >= m_consoleBufferSize) {
     messageQueue.clear();
-	messageQueue << "\nCsoundQt: Message buffer overflow. Messages discarded!\n";
+    messageQueue << "\nCsoundQt: Message buffer overflow. Messages discarded!\n";
 //    qDebug() << "CsoundEngine::dispatchQueues() " << m_consoleBufferSize << counter;
   }
   messageMutex.unlock();

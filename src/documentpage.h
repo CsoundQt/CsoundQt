@@ -46,14 +46,14 @@ class DocumentPage : public BaseDocument
     DocumentPage(QWidget *parent, OpEntryParser *opcodeTree);
     ~DocumentPage();
 
-    void setFileName(QString name);
+	void setFileName(QString name);
 	virtual void setTextString(QString &text);
-    void setCompanionFileName(QString name);
-    void setEditorFocus();
-    void insertText(QString text, int section = -1);
-    void setFullText(QString text);
-    void setBasicText(QString text);
-    void setOrc(QString text);
+	void setCompanionFileName(QString name);
+	void setEditorFocus();
+	void insertText(QString text, int section = -1);
+	void setFullText(QString text);
+	void setBasicText(QString text);
+	void setOrc(QString text);
 	void setSco(QString text);
 	void loadTextString(QString &text, bool autoCreateMacCsoundSections = false);
 
@@ -65,7 +65,7 @@ class DocumentPage : public BaseDocument
     QString getOptionsText();
     QString getDotText();
     QString getWidgetsText();
-	QString getSelectedWidgetsText();
+    QString getSelectedWidgetsText();
     QString getPresetsText();
     QString getMacWidgetsText();
     QString getMacPresetsText();
@@ -249,7 +249,7 @@ class DocumentPage : public BaseDocument
 
   private:
     virtual void init(QWidget *parent,OpEntryParser *opcodeTree);
-	int setTextString(QString text, bool autoCreateMacCsoundSections);
+    int setTextString(QString text, bool autoCreateMacCsoundSections);
     CsoundOptions getParentOptions();
     void deleteAllLiveEvents();
     virtual WidgetLayout* newWidgetLayout();
@@ -281,7 +281,7 @@ class DocumentPage : public BaseDocument
     void setPanelLoopRange(LiveEventFrame *panel, double start, double end);
     void setPanelLoopLength(LiveEventFrame *panel, double length);
     void setPanelTempo(LiveEventFrame *panel, double tempo);
-	void setPanelLoopEnabled(LiveEventFrame *panel, bool enabled);
+    void setPanelLoopEnabled(LiveEventFrame *panel, bool enabled);
 
     void opcodeSyntax(QString message);
 //    void setWidgetClipboard(QString text);

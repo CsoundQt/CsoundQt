@@ -30,9 +30,9 @@
 #include "texteditor.h"
 
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
-    BaseView(parent,opcodeTree)
+	BaseView(parent,opcodeTree)
 {
-	m_autoComplete = true;
+    m_autoComplete = true;
   for (int i = 0; i < editors.size(); i++) {
     connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
     splitter->addWidget(editors[i]);
@@ -43,7 +43,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
   }
   connect(m_orcEditor, SIGNAL(textChanged()), this, SLOT(textChanged()));
   connect(m_orcEditor, SIGNAL(cursorPositionChanged()),
-		  this, SLOT(syntaxCheck()));
+          this, SLOT(syntaxCheck()));
   setFocusProxy(m_mainEditor);  // for comment action from main application
   internalChange = false;
 
@@ -468,10 +468,10 @@ void DocumentView::syntaxCheck()
 
   TextEditor *editor;
   if (m_viewMode < 2) {
-	  editor = m_mainEditor;
+      editor = m_mainEditor;
   }
   else { //  Split view
-	  editor = (TextEditor *) sender();
+      editor = (TextEditor *) sender();
   }
   QTextCursor cursor = editor->textCursor();
   cursor.select(QTextCursor::LineUnderCursor);
@@ -499,11 +499,11 @@ void DocumentView::textChanged()
   unmarkErrorLines();
   if (m_mode == 0 || m_mode == 3) {  // CSD or ORC mode
     if (m_autoComplete) {
-	  QTextCursor cursor = editor->textCursor();
+      QTextCursor cursor = editor->textCursor();
       int curIndex = cursor.position();
       cursor.select(QTextCursor::WordUnderCursor);
       QString word = cursor.selectedText();
-	  QTextCursor lineCursor = editor->textCursor();
+      QTextCursor lineCursor = editor->textCursor();
       lineCursor.select(QTextCursor::LineUnderCursor);
       QString line = lineCursor.selectedText();
       int commentIndex = -1;
@@ -562,14 +562,14 @@ void DocumentView::textChanged()
                                                  this, SLOT(insertTextFromAction()));
               a->setData(syntaxText);
             }
-			QRect r =  editor->cursorRect();
+            QRect r =  editor->cursorRect();
             QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-			QPoint globalPoint =  editor->mapToGlobal(p);
+            QPoint globalPoint =  editor->mapToGlobal(p);
             //syntaxMenu->setWindowModality(Qt::NonModal);
             //syntaxMenu->popup(globalPoint);
             syntaxMenu->move(globalPoint);
             syntaxMenu->show();
-			editor->setFocus(Qt::OtherFocusReason);
+            editor->setFocus(Qt::OtherFocusReason);
           }
           else {
             destroySyntaxMenu();

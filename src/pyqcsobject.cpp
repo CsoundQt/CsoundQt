@@ -38,7 +38,7 @@ PyQcsObject::PyQcsObject():QObject(NULL)
 
 PyQcsObject::~PyQcsObject()
 {
-	free(m_tablePtr);
+    free(m_tablePtr);
 }
 
 void PyQcsObject::setCsoundQt(CsoundQt *qcs)
@@ -92,7 +92,7 @@ QString PyQcsObject::getVersion()
 
 void PyQcsObject::refresh()
 {
-	qApp->processEvents();
+    qApp->processEvents();
 }
 
 void PyQcsObject::play(int index, bool realtime)
@@ -304,7 +304,7 @@ QVariant PyQcsObject::getWidgetProperty(QString channel, QString property, int i
 
 QString PyQcsObject::createNewLabel(int x, int y, int index)
 {
-	// FIXME all this interaction with widgets must be correctly placed on the widgets undo/redo stack. It's currently not!
+    // FIXME all this interaction with widgets must be correctly placed on the widgets undo/redo stack. It's currently not!
   return m_qcs->createNewLabel(x,y, index);
 }
 
@@ -485,7 +485,7 @@ MYFLT *PyQcsObject::getTableArray(int ftable, int index)
   CsoundEngine *e = m_qcs->getEngine(index);
   if (e != NULL) {
     CSOUND *cs = e->getCsound();
-	int ret = csoundGetTable(cs, m_tablePtr, ftable);
+    int ret = csoundGetTable(cs, m_tablePtr, ftable);
   }
   return *m_tablePtr;
 }

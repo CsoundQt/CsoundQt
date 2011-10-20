@@ -234,7 +234,7 @@ void QuteText::applyInternalProperties()
 //  qDebug() << property("QCS_bgcolormode").toBool();
 //  qDebug() << "QuteText::applyInternalProperties() sylesheet" <<  m_widget->styleSheet();
 
-  
+
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
 #endif

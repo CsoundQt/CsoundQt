@@ -39,12 +39,12 @@ class LiveEventControl : public QWidget {
     void renamePanel(int index, QString newName);
     void setPanelLoopRange(int index, double start, double end);
     void setPanelLoopLength(int index, double length);
-	void setPanelLoopEnabled(int index, bool enabled);
+    void setPanelLoopEnabled(int index, bool enabled);
     void setPanelTempo(int index, double tempo);
 
   public slots:
     void removePanel(int index);
-	void appendPanel(LiveEventFrame *e);
+    void appendPanel(LiveEventFrame *e);
     void setPanelProperty(int index, QString property, QVariant value);
 
   protected:
@@ -57,8 +57,8 @@ class LiveEventControl : public QWidget {
     Ui::LiveEventControl *m_ui;
 
   private slots:
-	void newButtonReleased();
-	void frameClosed(LiveEventFrame *e);
+    void newButtonReleased();
+    void frameClosed(LiveEventFrame *e);
     void cellChangedSlot(int row, int column);
     void cellClickedSlot(int row, int column);
 

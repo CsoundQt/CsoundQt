@@ -145,7 +145,7 @@ void LiveEventFrame::setLoopRange(double start, double end)
 
 void LiveEventFrame::setLoopEnabled(bool enabled)
 {
-	emit setLoopEnabledFromPanel(this, enabled);  // Signal from sheet must go a long way to do this line...
+    emit setLoopEnabledFromPanel(this, enabled);  // Signal from sheet must go a long way to do this line...
 }
 
 void LiveEventFrame::setModified(bool mod)
@@ -318,12 +318,12 @@ void LiveEventFrame::closeEvent (QCloseEvent * event)
 
 double LiveEventFrame::getLoopStart()
 {
-	return m_loopStart;
+    return m_loopStart;
 }
 
 double LiveEventFrame::getLoopEnd()
 {
-	return m_loopEnd;
+    return m_loopEnd;
 }
 
 //void LiveEventFrame::hideEvent (QHideEvent * event)

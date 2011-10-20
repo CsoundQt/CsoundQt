@@ -109,7 +109,7 @@ void LiveEventControl::appendPanel(LiveEventFrame *e)
 
   QTableWidgetItem *loopRangeItem = getItem(newRow, 6);
   loopRangeItem->setText(QString::number(e->getLoopStart() + 1) + "-"
-						 + QString::number(e->getLoopEnd() + 1) );
+                         + QString::number(e->getLoopEnd() + 1) );
 //  loopRangeItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
   QTableWidgetItem *tempoItem = getItem(newRow, 7);
   tempoItem->setData(Qt::DisplayRole, QVariant(e->getTempo()));
@@ -269,5 +269,5 @@ void  LiveEventControl::cellClickedSlot(int row, int column)
 void LiveEventControl::frameClosed(LiveEventFrame *e)
 {
 
-	qDebug() << "LiveEventControl::frameClosed not implemented...";
+    qDebug() << "LiveEventControl::frameClosed not implemented...";
 }
