@@ -16,7 +16,6 @@ DEFAULT_LIBSNDFILE_INCLUDE_DIRS = "$$(PROGRAMFILES)\\Mega-Nerd\\libsndfile\\incl
 DEFAULT_LIBSNDFILE_LIBRARY_DIRS = $${DEFAULT_CSOUND_LIBRARY_DIRS}
 build32: DEFAULT_CSOUND_LIBS = csound32.dll.5.2
 build64: DEFAULT_CSOUND_LIBS = csound64.dll.5.2
-#CSND_LIB = csnd.dll
 LIBSNDFILE_LIB = libsndfile-1.dll
 
 DEFAULT_PYTHON_INCLUDE_DIRS = "$$(HOMEDRIVE)\\Python26\\include"
@@ -27,7 +26,7 @@ DEFAULT_PYTHONQT_TREE_DIRS = "$$(PROGRAMFILES)\\PythonQt"
 include(config.pri)
 
 # Use results from config step
-#RC_FILE = "src/qutecsound.rc"
+RC_FILE = "src/qutecsound.rc"
 INCLUDEPATH += $${PYTHON_INCLUDE_DIR}
 LCSOUND = "$${CSOUND_LIBRARY_DIR}/$${CSOUND_LIB}"
 LSNDFILE = "$${LIBSNDFILE_LIBRARY_DIR}/$${LIBSNDFILE_LIB}"

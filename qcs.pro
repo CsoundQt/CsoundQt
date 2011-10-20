@@ -48,24 +48,11 @@ pythonqt {
     include ( $${PYTHONQT_TREE_DIR}/build/PythonQt.prf )
     include ( $${PYTHONQT_TREE_DIR}/build/PythonQt_QtAll.prf )
 
-    # include ( $${PYTHONQT_TREE_DIR}/build/PythonQt_QtAll.prf )
     win32:INCLUDEPATH *= $${PYTHON_INCLUDE_DIR}
     INCLUDEPATH *= $${PYTHONQT_TREE_DIR}/src
     INCLUDEPATH *= $${PYTHONQT_TREE_DIR}/extensions/PythonQt_QtAll
 }
 
-# Override and always use release version of PythonQT even if building for debug
-# win32: LIBS -= $(PYTHON_LIB)/libpython$${PYTHON_VERSION}$${DEBUG_EXT}.a
-# win32: LIBS -= $${PYTHONQT_TREE_DIR}/build/../lib/libPythonQt$${DEBUG_EXT}.a
-# unix: LIBS -= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt$${DEBUG_EXT}
-# win32: LIBS *= $(PYTHON_LIB)/libpython$${PYTHON_VERSION}.a
-# win32: LIBS *= $${PYTHONQT_TREE_DIR}/lib/libPythonQt.a
-# unix: LIBS *= -L$${PYTHONQT_TREE_DIR}/lib -lPythonQt
-# rtmidi {
-# INCLUDEPATH *= $${RTMIDI_INCLUDE_DIR}
-# LIBS += -L$${RTMIDI_LIB_DIR} \
-# -l$${RTMIDI_LIB}
-# }
 INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
 INCLUDEPATH *= $${CSOUND_INTERFACES_INCLUDE_DIR}
 INCLUDEPATH *= $${LIBSNDFILE_INCLUDE_DIR}

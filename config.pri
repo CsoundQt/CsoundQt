@@ -1,39 +1,10 @@
 CONFIG *= thread \
-	warn_on
+    warn_on
 CONFIG -= stl
 QT *= xml
-CONFIG(debug, debug|release):CONFIG -= release
-CONFIG(release, debug|release):CONFIG -= debug
-debug {
-	CONFIG -= debug
-	CONFIG += debug
-}
-release {
-	CONFIG -= release
-	CONFIG += release
-}
-warn_on {
-	CONFIG -= warn_on
-	CONFIG += warn_on
-}
-CONFIG -= lex \
-	yacc
-exceptions:CONFIG -= exceptions_off
-rtti:CONFIG -= rtti_off
-thread:CONFIG -= thread_off
-#!isEqual(OUT_PWD, $${PWD}):!isEqual(OUT_PWD, $${PWD}/):CONFIG *= shadow_build \
-#    no_fixpath
-#shadow_build:TMPDIR = $${OUT_PWD}
-#!shadow_build:TMPDIR = $${PWD}/build
 build32:TMPDIR = floats
 build64:TMPDIR = doubles
-#debug:TMPDIR = $${TMPDIR}/debug
-#release:TMPDIR = $${TMPDIR}/release
 build64:DEFINES += USE_DOUBLE
-#RCC_DIR = "$${TMPDIR}/rcc"
-#UI_DIR = "$${TMPDIR}/ui"
-#INCDIR += "$${TMPDIR}/ui"
-#MOC_DIR = "$${TMPDIR}/moc"
 OBJECTS_DIR = "$${TMPDIR}/obj"
 
 DEFAULT_RTMIDI_DIRNAME="rtmidi-1.0.15"
@@ -49,15 +20,11 @@ exists(config.user.pri) {
 	message()
 	build32:message(Building CsoundQt for the single precision version of Csound.)
 	build64:message(Building CsoundQt for the double precision version of Csound.)
-	debug:message(Building debug version.)
-	release:message(Building release version.)
+	CONFIG(debug, debug|release):message(Building debug version.)
+	CONFIG(release, debug|release):message(Building release version.)
 	message()
 	message(CONFIG ...)
 	for(flag, CONFIG):message(+ $$flag)
-	message()
-#    message(CsoundQt build directory is $${OUT_PWD})
-	message(CsoundQt intermediate file directory is $${TMPDIR})
-	message(CsoundQt bin directory is $${DESTDIR})
 	message()
 }
 isEmpty(CSOUND_API_INCLUDE_DIR) {
@@ -89,7 +56,6 @@ isEmpty(CSOUND_LIBRARY_DIR) {
                 !no_messages:message(... in $${dir} for $${DEFAULT_CSOUND_LIBS})
                 for(csound_lib, DEFAULT_CSOUND_LIBS):exists($${dir}/$${csound_lib}) {
                     !no_messages {
-                        #message(CSOUND_LIB set to $${csound_lib})
                         message(CSOUND_LIBRARY_DIR set to $${dir})
                         message()
                     }
@@ -249,7 +215,6 @@ win32 {
     !csoundApiHeaderExists(csound.hpp):error(csound.hpp not found)
     !csoundApiHeaderExists(cwindow.h):error(cwindow.h not found)
     !csoundLibraryExists($${CSOUND_LIB}):error(Csound API library not found)
-    #!csoundLibraryExists($${CSND_LIB}):error(Csound C++ interface library not found)
     !libsndfileHeaderExists(sndfile.h):error(sndfile.h not found)
     !libsndfileLibraryExists($${LIBSNDFILE_LIB}):error(libsndfile library not found)
 }
