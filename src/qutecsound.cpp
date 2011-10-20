@@ -192,10 +192,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
       }
     }
   }
-  // Initialize buttons to current state of panels
-  showConsoleAct->setChecked(m_console->isVisible());
-  showHelpAct->setChecked(helpPanel->isVisible());
-  showInspectorAct->setChecked(m_inspector->isVisible());
+
+  // Initialize buttons to current state of panels.
+  connect(m_console, SIGNAL(visibilityChanged(bool)), showConsoleAct, SLOT(setChecked(bool)));
+  connect(helpPanel, SIGNAL(visibilityChanged(bool)), showHelpAct, SLOT(setChecked(bool)));
+  connect(m_inspector, SIGNAL(visibilityChanged(bool)), showInspectorAct, SLOT(setChecked(bool)));
 #ifdef QCS_PYTHONQT
   showPythonConsoleAct->setChecked(m_pythonConsole->isVisible());
   showPythonScratchPadAct->setChecked(m_scratchPad->isVisible());
@@ -249,6 +250,15 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_scratchPad->show();
   }
 #endif
+
+  // FIXME: The console did not get shown when readSettings was called due to
+  // there being no document.  The following call to restoreState should really
+  // be in readSettings.
+  QSettings settings("csound", "qutecsound");
+  settings.beginGroup("GUI");
+  if (settings.contains("dockstate")) {
+    restoreState(settings.value("dockstate").toByteArray());
+  }
 }
 
 CsoundQt::~CsoundQt()
@@ -3672,9 +3682,6 @@ void CsoundQt::readSettings()
   QSize size = settings.value("size", QSize(600, 500)).toSize();
   resize(size);
   move(pos);
-  if (settings.contains("dockstate")) {
-    restoreState(settings.value("dockstate").toByteArray());
-  }
   lastUsedDir = settings.value("lastuseddir", "").toString();
   lastFileDir = settings.value("lastfiledir", "").toString();
 //  showLiveEventsAct->setChecked(settings.value("liveEventsActive", true).toBool());
