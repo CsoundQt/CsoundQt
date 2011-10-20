@@ -35,12 +35,6 @@ build64:DEFINES += USE_DOUBLE
 #INCDIR += "$${TMPDIR}/ui"
 #MOC_DIR = "$${TMPDIR}/moc"
 OBJECTS_DIR = "$${TMPDIR}/obj"
-DESTDIR = bin
-TARGET = CsoundQt
-build32:TARGET = $${TARGET}-f
-build64:TARGET = $${TARGET}-d
-pythonqt:TARGET = $${TARGET}-py
-debug:TARGET = $${TARGET}-debug
 
 DEFAULT_RTMIDI_DIRNAME="rtmidi-1.0.15"
 DEFAULT_RTMIDI_DIRS = $${DEFAULT_RTMIDI_DIRNAME} \
