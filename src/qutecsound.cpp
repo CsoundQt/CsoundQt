@@ -142,14 +142,14 @@ CsoundQt::CsoundQt(QStringList fileNames)
   createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
   readSettings();
 
-  bool widgetsVisible = !widgetPanel->isHidden(); // Must be after readSettings() to save last state
-  if (widgetsVisible)
-    widgetPanel->hide();  // Hide until CsoundQt has finished loading
-#ifdef QCS_PYTHONQT
-  bool scratchPadVisible = !m_scratchPad->isHidden(); // Must be after readSettings() to save last state
-  if (scratchPadVisible)
-    m_scratchPad->hide();  // Hide until CsoundQt has finished loading
-#endif
+//  bool widgetsVisible = !widgetPanel->isHidden(); // Must be after readSettings() to save last state
+//  if (widgetsVisible)
+//    widgetPanel->hide();  // Hide until CsoundQt has finished loading
+//#ifdef QCS_PYTHONQT
+//  bool scratchPadVisible = !m_scratchPad->isHidden(); // Must be after readSettings() to save last state
+//  if (scratchPadVisible)
+//    m_scratchPad->hide();  // Hide until CsoundQt has finished loading
+//#endif
 
   createMenus();
   createToolBars();
@@ -194,8 +194,13 @@ CsoundQt::CsoundQt(QStringList fileNames)
   }
 
   // Initialize buttons to current state of panels.
+  showConsoleAct->setChecked(false);
+  showHelpAct->setChecked(false);
+  showWidgetsAct->setChecked(false);
+  showInspectorAct->setChecked(false);
   connect(m_console, SIGNAL(visibilityChanged(bool)), showConsoleAct, SLOT(setChecked(bool)));
   connect(helpPanel, SIGNAL(visibilityChanged(bool)), showHelpAct, SLOT(setChecked(bool)));
+  connect(widgetPanel, SIGNAL(visibilityChanged(bool)), showWidgetsAct, SLOT(setChecked(bool)));
   connect(m_inspector, SIGNAL(visibilityChanged(bool)), showInspectorAct, SLOT(setChecked(bool)));
 #ifdef QCS_PYTHONQT
   showPythonConsoleAct->setChecked(m_pythonConsole->isVisible());
@@ -239,17 +244,17 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
   m_closing = false;
   updateInspector(); //Starts update inspector thread
-  if (!m_options->widgetsIndependent) {
-    if (widgetsVisible) { // Reshow widget panel if necessary
-      widgetPanel->show();
-      showWidgetsAct->setChecked(widgetsVisible);
-    }
-  }
-#ifdef QCS_PYTHONQT
-  if (scratchPadVisible) { // Reshow scratch panel if necessary
-    m_scratchPad->show();
-  }
-#endif
+//  if (!m_options->widgetsIndependent) {
+//    if (widgetsVisible) { // Reshow widget panel if necessary
+//      widgetPanel->show();
+//      showWidgetsAct->setChecked(widgetsVisible);
+//    }
+//  }
+//#ifdef QCS_PYTHONQT
+//  if (scratchPadVisible) { // Reshow scratch panel if necessary
+//    m_scratchPad->show();
+//  }
+//#endif
 
   // FIXME: The console did not get shown when readSettings was called due to
   // there being no document.  The following call to restoreState should really
