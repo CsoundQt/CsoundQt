@@ -409,6 +409,8 @@ QCsPerfThread::~QCsPerfThread()
     // stop performance if it is still running
     if (!status)
       this->Stop();     // FIXME: should handle memory errors here
+    // perfThread is leaking, but it's probably in the Join function
+//	delete perfThread;
     this->Join();
 }
 

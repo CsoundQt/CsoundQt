@@ -46,6 +46,7 @@ PythonConsole::~PythonConsole()
 {
   delete m_console;
   delete m_pqcs;
+  PythonQt::cleanup();
 }
 
 

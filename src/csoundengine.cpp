@@ -50,6 +50,7 @@ CsoundEngine::CsoundEngine()
   pFields = (MYFLT *) calloc(QCS_EVENTS_MAX_PFIELDS, sizeof(MYFLT)); // Maximum number of p-fields for events
 
   m_recording = false;
+  m_consoleBufferSize = 0;
   bufferSize = 4096;
   recBuffer = (MYFLT *) calloc(bufferSize, sizeof(MYFLT));
 

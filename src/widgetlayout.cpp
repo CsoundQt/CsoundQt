@@ -59,6 +59,8 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 
   m_modified = false;
   closing = 0;
+  mouseX = mouseY = mouseRelX = mouseRelY = mouseBut1 = mouseBut2 = 0;
+  m_posx = m_posy =  m_w =  m_h = 0;
   xOffset = yOffset = 0;
   mouseRelX = mouseRelY = 0;
   m_contained = false;
