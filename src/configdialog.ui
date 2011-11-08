@@ -12,7 +12,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>QuteCsound Configuration</string>
+   <string>CsoundQt Configuration</string>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -107,7 +107,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Use QuteCsound options</string>
+         <string>Use CsoundQt options</string>
         </property>
        </widget>
        <widget class="QCheckBox" name="FileOverrideCheckBox">
@@ -337,7 +337,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Use QuteCsound options</string>
+         <string>Use CsoundQt options</string>
         </property>
        </widget>
        <widget class="QWidget" name="layoutWidget6">
@@ -395,7 +395,7 @@
          <x>10</x>
          <y>10</y>
          <width>661</width>
-         <height>62</height>
+         <height>64</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout10">
@@ -1156,7 +1156,7 @@
          <item>
           <widget class="QCheckBox" name="oldFormatCheckBox">
            <property name="toolTip">
-            <string>Store old widget format section in csd file, to allow older versions of QuteCsound to load most of the widget characteristics from the file</string>
+            <string>Store old widget format section in csd file, to allow older versions of CsoundQt to load most of the widget characteristics from the file</string>
            </property>
            <property name="text">
             <string>Store Old Widget Format</string>
