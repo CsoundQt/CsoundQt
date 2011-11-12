@@ -38,8 +38,8 @@ def deployWithPython(PRECISION):
     #chmod -R a-w $APP_NAME/Contents/Resources
     
     os.mkdir(APP_NAME+ '/Contents/Frameworks')
-    shutil.copy('libPythonQt.1.0.0.dylib', APP_NAME + '/Contents/MacOS/libPythonQt.1.dylib')
-    shutil.copy('libPythonQt_QtAll.1.0.0.dylib', APP_NAME + '/Contents/MacOS/libPythonQt_QtAll.1.dylib')
+    shutil.copy('../PythonQt2.0.1/lib/libPythonQt.1.0.0.dylib', APP_NAME + '/Contents/MacOS/libPythonQt.1.dylib')
+    shutil.copy('../PythonQt2.0.1/lib/libPythonQt_QtAll.1.0.0.dylib', APP_NAME + '/Contents/MacOS/libPythonQt_QtAll.1.dylib')
 
     QtLibs = ['QtCore', 'QtGui', 'QtXml', 'QtDBus', 'QtSvg', 'QtSql', 'QtXmlPatterns', 'QtOpenGL', 'QtNetwork', 'QtWebKit', 'phonon']
 
