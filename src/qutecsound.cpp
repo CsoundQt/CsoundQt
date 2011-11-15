@@ -3727,6 +3727,7 @@ void CsoundQt::readSettings()
   m_options->showToolbar = settings.value("showToolbar", true).toBool();
   m_options->wrapLines = settings.value("wrapLines", true).toBool();
   m_options->autoComplete = settings.value("autoComplete", true).toBool();
+  m_options->enableWidgets = settings.value("enableWidgets", true).toBool();
   m_options->useInvalue = settings.value("useInvalue", true).toBool();
   m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
   m_options->showTooltips = settings.value("showTooltips", true).toBool();
@@ -3775,7 +3776,6 @@ void CsoundQt::readSettings()
   m_options->fileOutputFilename = settings.value("fileOutputFilename", "").toString();
   m_options->rtUseOptions = settings.value("rtUseOptions", true).toBool();
   m_options->rtOverrideOptions = settings.value("rtOverrideOptions", false).toBool();
-  m_options->enableWidgets = settings.value("enableWidgets", true).toBool();
   m_options->rtAudioModule = settings.value("rtAudioModule", 0).toInt();
   m_options->rtInputDevice = settings.value("rtInputDevice", "adc").toString();
   m_options->rtOutputDevice = settings.value("rtOutputDevice", "dac").toString();

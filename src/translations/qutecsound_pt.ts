@@ -5,11 +5,11 @@
     <name>About</name>
     <message>
         <source>Dialog</source>
-        <translation>Dialogo</translation>
+        <translation type="obsolete">Dialogo</translation>
     </message>
     <message>
         <source>QuteCsound</source>
-        <translation>QuteCsound</translation>
+        <translation type="obsolete">QuteCsound</translation>
     </message>
 </context>
 <context>
@@ -146,7 +146,7 @@ Aborting.</source>
     </message>
     <message>
         <source>QuteCsound Configuration</source>
-        <translation>Configuração do QuteCsound</translation>
+        <translation type="obsolete">Configuração do QuteCsound</translation>
     </message>
     <message>
         <source>OK</source>
@@ -175,10 +175,6 @@ Aborting.</source>
     <message>
         <source>Output Filename</source>
         <translation>Arquivo de Saída</translation>
-    </message>
-    <message>
-        <source>Use QuteCsound options</source>
-        <translation></translation>
     </message>
     <message>
         <source>Ignore CsOptions</source>
@@ -382,7 +378,7 @@ Aborting.</source>
     </message>
     <message>
         <source>Run Utilities and Render using:</source>
-        <translation>Rodar utilidades e síntese usando:</translation>
+        <translation type="obsolete">Rodar utilidades e síntese usando:</translation>
     </message>
     <message>
         <source>Csound API</source>
@@ -546,7 +542,7 @@ Aborting.</source>
     </message>
     <message>
         <source>Please note that OPCODEDIR will overwrite current settings so you will need to restart QuteCsound to return to default.</source>
-        <translation>Note que OPCODEDIR sobrescreverá a configuração atual, por isso voce precisará fechar e abrir de novo QuteCsound para voltar aos defaults</translation>
+        <translation type="obsolete">Note que OPCODEDIR sobrescreverá a configuração atual, por isso voce precisará fechar e abrir de novo QuteCsound para voltar aos defaults</translation>
     </message>
     <message>
         <source>Jack client name (use * for current filename)</source>
@@ -627,7 +623,7 @@ Aborting.</source>
     </message>
     <message>
         <source>Store old widget format section in csd file, to allow older versions of QuteCsound to load most of the widget characteristics from the file</source>
-        <translation>Guardar o formato antigo de widgets em arquivo csd, para possibilitar versoes antigas de QuteCsound carregarem a maioria das caracteristicas das widgets do arquivo</translation>
+        <translation type="obsolete">Guardar o formato antigo de widgets em arquivo csd, para possibilitar versoes antigas de QuteCsound carregarem a maioria das caracteristicas das widgets do arquivo</translation>
     </message>
     <message>
         <source>Automatically open properties dialog when a new widget is created</source>
@@ -652,10 +648,6 @@ Aborting.</source>
     <message>
         <source>Automatically Join orc/sco files</source>
         <translation>Juntar orc/sco automaticamente</translation>
-    </message>
-    <message>
-        <source>Widgets are an independent window</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Internal MIDI interface</source>
@@ -690,6 +682,42 @@ Aborting.</source>
         <source>Disable python callback</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>CsoundQt Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use CsoundQt options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use new parser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of threads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use multicore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Run Utilities using:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Store old widget format section in csd file, to allow older versions of CsoundQt to load most of the widget characteristics from the file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Widgets are an independent window (requires restart)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please note that OPCODEDIR will overwrite current settings so you will need to restart CsoundQt to return to default.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConsoleWidget</name>
@@ -704,6 +732,1319 @@ Aborting.</source>
         <source>Csound is not running! Event ignored.
 </source>
         <translation>Csound nao esta&apos; rodando! Evento ignorado.</translation>
+    </message>
+</context>
+<context>
+    <name>CsoundQt</name>
+    <message>
+        <source>Python Scratch Pad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open File</source>
+        <translation type="unfinished">Abrir Arquivo</translation>
+    </message>
+    <message>
+        <source>Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Files (*.py);;All Files (*)</source>
+        <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dot executable not found.
+Please install graphviz from
+www.graphviz.org</source>
+        <translation type="unfinished">Programa de grafico não encontrado
+Instale graphviz de www.graphviz.org</translation>
+    </message>
+    <message>
+        <source>Cannot create temp dot/png file.</source>
+        <translation type="unfinished">Não foi possível criar arquivo temp (dot/png)</translation>
+    </message>
+    <message>
+        <source>Save File As</source>
+        <translation type="unfinished">Salve arquivo como</translation>
+    </message>
+    <message>
+        <source>The file is already open in another tab.
+File not saved!</source>
+        <translation type="unfinished">Arquivo já aberto em outra janela
+Arquivo não foi salvo</translation>
+    </message>
+    <message>
+        <source>New widget format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>  This version of CsoundQt implements a new format for storing widgets, which enables many of the new widget features you will find now.
+  The old format is still read and saved, so you will be able to open files in older versions but some of the features will not be passed to older versions.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Full Path:</source>
+        <translation type="unfinished">Path completo:</translation>
+    </message>
+    <message>
+        <source>Number of lines (Csound Text):</source>
+        <translation type="unfinished">Numero de linhas (texto de Csound):</translation>
+    </message>
+    <message>
+        <source>Number of characters (Csound Text):</source>
+        <translation type="unfinished">Numero de caracteres (texo de Csound):</translation>
+    </message>
+    <message>
+        <source>Number of lines (total):</source>
+        <translation type="unfinished">Numero de linhas (total):</translation>
+    </message>
+    <message>
+        <source>Number of characters (total):</source>
+        <translation type="unfinished">Numero de caracteres (total):</translation>
+    </message>
+    <message>
+        <source>Number of instruments:</source>
+        <translation type="unfinished">Numero de instrumentos:</translation>
+    </message>
+    <message>
+        <source>Number of UDOs:</source>
+        <translation type="unfinished">Numerod de UDOs:</translation>
+    </message>
+    <message>
+        <source>Number of Widgets:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Embedded Files:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File Information</source>
+        <translation type="unfinished">Informacao sobre arquivo</translation>
+    </message>
+    <message>
+        <source>The document </source>
+        <translation type="unfinished">O documento</translation>
+    </message>
+    <message>
+        <source>
+has been modified.
+Do you want to save the changes before closing?</source>
+        <translation type="unfinished">
+foi modificado.
+Você quer salvar antes de fechar?</translation>
+    </message>
+    <message>
+        <source>Do you want to exit CsoundQt?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Print Document</source>
+        <translation type="unfinished">Imprimir documento</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished">Ok</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancelar</translation>
+    </message>
+    <message>
+        <source>Join</source>
+        <translation type="unfinished">Juntar</translation>
+    </message>
+    <message>
+        <source>Please open the orc and sco files in CsoundQt first!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This file has not been saved
+Please select name and location.</source>
+        <translation type="unfinished">O arquivo não foi salvo. Selecione nome e local</translation>
+    </message>
+    <message>
+        <source>Error creating temporary file.</source>
+        <translation type="unfinished">Erro ao criar arquivos temporários</translation>
+    </message>
+    <message>
+        <source>Internal error running Csound.</source>
+        <translation type="unfinished">Erro interno executando Csound</translation>
+    </message>
+    <message>
+        <source>Output Filename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The file %1 
+already exists.
+Do you want to overwrite it?</source>
+        <translation type="unfinished">O arquivo %1 já existe. Você quer escrever por cima?</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">Erro</translation>
+    </message>
+    <message>
+        <source>HTML Documentation directory not set!
+Please go to Edit-&gt;Options-&gt;Environment and select directory
+</source>
+        <translation type="unfinished">Diretório de Documentos HTML não definido
+Vá a Editar-&gt;Opções-&gt;Ambiente e selecione o diretório</translation>
+    </message>
+    <message>
+        <source>PDF viewer not found!
+Please go to Edit-&gt;Options-&gt;Environment and select directory
+</source>
+        <translation type="unfinished">Leitor de PDF não encontrado! Vá a Editar-&gt;Opções-&gt;Ambiente e selecione diretório</translation>
+    </message>
+    <message>
+        <source>Reset Preferences</source>
+        <translation type="unfinished">Resetar as preferencias</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to revert CsoundQt&apos;s preferences
+to their initial default values? </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preferences have been reset.
+You must restart CsoundQt.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>by: Andres Cabrera and others</source>
+        <translation type="unfinished">por: Andres Cabrera e outros</translation>
+    </message>
+    <message>
+        <source>Version %1</source>
+        <translation type="unfinished">Versao:%1</translation>
+    </message>
+    <message>
+        <source>Released under the LGPLv2 or GPLv3</source>
+        <translation type="unfinished">Lancado usando LGPLv2 or GPLv3</translation>
+    </message>
+    <message>
+        <source>Using Csound version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Precision:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Built with PythonQt support.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>French translation: Fran&amp;ccedil;ois Pinot</source>
+        <translation type="unfinished">Tradução francesa: Francois Pinot</translation>
+    </message>
+    <message>
+        <source>German translation: Joachim Heintz</source>
+        <translation type="unfinished">Tradução alemã:
+Joachim Heintz
+</translation>
+    </message>
+    <message>
+        <source>Portuguese translation: Victor Lazzarini</source>
+        <translation type="unfinished">Tradução portuguesa: Victor Lazzarini</translation>
+    </message>
+    <message>
+        <source>Italian translation: Francesco</source>
+        <translation type="unfinished">Tradução italiana: Francesco</translation>
+    </message>
+    <message>
+        <source>Turkish translation: Ali Isciler</source>
+        <translation type="unfinished">Tradução Turca: Ali Isciler</translation>
+    </message>
+    <message>
+        <source>Finnish translation: Niko Humalam&amp;auml;ki</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you find CsoundQt useful, please consider donating to the project:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please file bug reports and feature suggestions in the </source>
+        <translation type="unfinished">Reporte bugs em</translation>
+    </message>
+    <message>
+        <source>CsoundQt tracker</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mailing Lists:</source>
+        <translation type="unfinished">Listas de e-mail</translation>
+    </message>
+    <message>
+        <source>Other Resources:</source>
+        <translation type="unfinished">Outros recursos</translation>
+    </message>
+    <message>
+        <source>Supported by:</source>
+        <translation type="unfinished">Suportado por</translation>
+    </message>
+    <message>
+        <source>And other generous users.</source>
+        <translation type="unfinished">E outros usuarios generosos</translation>
+    </message>
+    <message>
+        <source>API</source>
+        <translation type="unfinished">API</translation>
+    </message>
+    <message>
+        <source>Console</source>
+        <translation type="unfinished">Console</translation>
+    </message>
+    <message>
+        <source>SaveWidgets</source>
+        <translation type="unfinished">SalveWidgets</translation>
+    </message>
+    <message>
+        <source>DontSaveWidgets</source>
+        <translation type="unfinished">NãoSalveWidgets</translation>
+    </message>
+    <message>
+        <source>UseCsoundQtOptions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DiscardCsoundQtOptions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OverrideCsOptions</source>
+        <translation type="unfinished">SobreponhaCsOptions</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished">Tocar</translation>
+    </message>
+    <message>
+        <source>Render to file</source>
+        <translation type="unfinished">Síntese para arquivo</translation>
+    </message>
+    <message>
+        <source>Line %1</source>
+        <translation type="unfinished">Linha %1</translation>
+    </message>
+    <message>
+        <source>Ctrl+N</source>
+        <translation type="unfinished">Ctrl+N</translation>
+    </message>
+    <message>
+        <source>Ctrl+O</source>
+        <translation type="unfinished">Ctrl+O</translation>
+    </message>
+    <message>
+        <source>Ctrl+S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Ctrl+S</source>
+        <translation type="unfinished">Shift+Ctrl+S</translation>
+    </message>
+    <message>
+        <source>Ctrl+W</source>
+        <translation type="unfinished">Ctrl+W</translation>
+    </message>
+    <message>
+        <source>Ctrl+P</source>
+        <translation type="unfinished">Ctrl+P</translation>
+    </message>
+    <message>
+        <source>Ctrl+Q</source>
+        <translation type="unfinished">Ctrl+Q</translation>
+    </message>
+    <message>
+        <source>Ctrl+Z</source>
+        <translation type="unfinished">Ctrl+Z</translation>
+    </message>
+    <message>
+        <source>Shift+Ctrl+Z</source>
+        <translation type="unfinished">Shift+Ctrl+Z</translation>
+    </message>
+    <message>
+        <source>Ctrl+X</source>
+        <translation type="unfinished">Ctrl+X</translation>
+    </message>
+    <message>
+        <source>Ctrl+C</source>
+        <translation type="unfinished">Ctrl+C</translation>
+    </message>
+    <message>
+        <source>Ctrl+V</source>
+        <translation type="unfinished">Ctrl+V</translation>
+    </message>
+    <message>
+        <source>Ctrl+D</source>
+        <translation type="unfinished">Ctrl+D</translation>
+    </message>
+    <message>
+        <source>Ctrl+F</source>
+        <translation type="unfinished">Ctrl+F</translation>
+    </message>
+    <message>
+        <source>Ctrl+G</source>
+        <translation type="unfinished">Ctrl+G</translation>
+    </message>
+    <message>
+        <source>Alt+C</source>
+        <translation type="unfinished">Alt+C</translation>
+    </message>
+    <message>
+        <source>CTRL+E</source>
+        <translation type="unfinished">CTRL+E</translation>
+    </message>
+    <message>
+        <source>CTRL+R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+S</source>
+        <translation type="unfinished">Alt+S</translation>
+    </message>
+    <message>
+        <source>Ctrl+.</source>
+        <translation type="unfinished">Ctrl+.</translation>
+    </message>
+    <message>
+        <source>Ctrl+Space</source>
+        <translation type="unfinished">Ctrl+Space</translation>
+    </message>
+    <message>
+        <source>Alt+F</source>
+        <translation type="unfinished">Alt+F</translation>
+    </message>
+    <message>
+        <source>Alt+0</source>
+        <translation type="unfinished">Alt+0</translation>
+    </message>
+    <message>
+        <source>Alt+1</source>
+        <translation type="unfinished">Alt+1</translation>
+    </message>
+    <message>
+        <source>Alt+2</source>
+        <translation type="unfinished">Alt+2</translation>
+    </message>
+    <message>
+        <source>Alt+3</source>
+        <translation type="unfinished">Alt+3</translation>
+    </message>
+    <message>
+        <source>Ctrl+Alt+F</source>
+        <translation type="unfinished">Ctrl+Alt+F</translation>
+    </message>
+    <message>
+        <source>F11</source>
+        <translation type="unfinished">F11</translation>
+    </message>
+    <message>
+        <source>Ctrl+Shift+A</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+4</source>
+        <translation type="unfinished">Alt+4</translation>
+    </message>
+    <message>
+        <source>Alt+5</source>
+        <translation type="unfinished">Alt+5</translation>
+    </message>
+    <message>
+        <source>Alt+6</source>
+        <translation type="unfinished">Alt+6</translation>
+    </message>
+    <message>
+        <source>Alt+9</source>
+        <translation type="unfinished">Alt+9</translation>
+    </message>
+    <message>
+        <source>Shift+F1</source>
+        <translation type="unfinished">Shift+F1</translation>
+    </message>
+    <message>
+        <source>Shift+Alt+F1</source>
+        <translation type="unfinished">Shift+Alt+F1</translation>
+    </message>
+    <message>
+        <source>Ctrl+/</source>
+        <translation type="unfinished">Ctrl+/</translation>
+    </message>
+    <message>
+        <source>Ctrl+I</source>
+        <translation type="unfinished">Ctrl+I</translation>
+    </message>
+    <message>
+        <source>Shift+Ctrl+I</source>
+        <translation type="unfinished">Shift+Ctrl+I</translation>
+    </message>
+    <message>
+        <source>Alt+E</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+E</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+7</source>
+        <translation type="unfinished">Alt+7</translation>
+    </message>
+    <message>
+        <source>Alt+8</source>
+        <translation type="unfinished">Alt+8</translation>
+    </message>
+    <message>
+        <source>Ctrl+K</source>
+        <translation type="unfinished">Ctrl+K</translation>
+    </message>
+    <message>
+        <source>Shift+Alt+K</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No PythonQt support</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This version of CsoundQt has been compiled without PythonQt support.
+Extended Python features are not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;New</source>
+        <translation type="unfinished">&amp;Novo</translation>
+    </message>
+    <message>
+        <source>Create a new file</source>
+        <translation type="unfinished">Criar arquivo novo</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Novo</translation>
+    </message>
+    <message>
+        <source>&amp;Open...</source>
+        <translation type="unfinished">&amp;Abrir</translation>
+    </message>
+    <message>
+        <source>Open an existing file</source>
+        <translation type="unfinished">Abrir um arquivo existente</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished">Abrir</translation>
+    </message>
+    <message>
+        <source>Reload</source>
+        <translation type="unfinished">Recarregar</translation>
+    </message>
+    <message>
+        <source>Reload file from disk, discarding changes</source>
+        <translation type="unfinished">Recarregar arquivo do disco</translation>
+    </message>
+    <message>
+        <source>&amp;Save</source>
+        <translation type="unfinished">&amp;Salvar</translation>
+    </message>
+    <message>
+        <source>Save the document to disk</source>
+        <translation type="unfinished">Salvar o documento para o disco</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Salvar</translation>
+    </message>
+    <message>
+        <source>Save &amp;As...</source>
+        <translation type="unfinished">Salvar &amp;Como</translation>
+    </message>
+    <message>
+        <source>Save the document under a new name</source>
+        <translation type="unfinished">Salvar o documento com um outro nome</translation>
+    </message>
+    <message>
+        <source>Save as</source>
+        <translation type="unfinished">Salvar como</translation>
+    </message>
+    <message>
+        <source>Create App...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create Standalone application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export without widgets</source>
+        <translation type="unfinished">Exportar sem widgets</translation>
+    </message>
+    <message>
+        <source>Save to new file without including widget sections</source>
+        <translation type="unfinished">Salvar em arquivo novo sem incluir widgets</translation>
+    </message>
+    <message>
+        <source>Close current tab</source>
+        <translation type="unfinished">Fechar a janela corrente</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation type="unfinished">Imprimir</translation>
+    </message>
+    <message>
+        <source>Print current document</source>
+        <translation type="unfinished">Imprimir documeto corrente</translation>
+    </message>
+    <message>
+        <source>Show information for the current file</source>
+        <translation type="unfinished">Mostre informacao sonbre o arquivo corrente</translation>
+    </message>
+    <message>
+        <source>E&amp;xit</source>
+        <translation type="unfinished">Sai&amp;r</translation>
+    </message>
+    <message>
+        <source>Exit the application</source>
+        <translation type="unfinished">Sair do programa</translation>
+    </message>
+    <message>
+        <source>View Code &amp;Graph</source>
+        <translation type="unfinished">Ver &amp;Gráfico do Código </translation>
+    </message>
+    <message>
+        <source>View Code Graph</source>
+        <translation type="unfinished">Ver Gráfico do Código</translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished">Desfazer</translation>
+    </message>
+    <message>
+        <source>Undo last action</source>
+        <translation type="unfinished">Desfazer ultima ação</translation>
+    </message>
+    <message>
+        <source>Redo</source>
+        <translation type="unfinished">Refazer</translation>
+    </message>
+    <message>
+        <source>Redo last action</source>
+        <translation type="unfinished">Refazer ultima ação</translation>
+    </message>
+    <message>
+        <source>Cu&amp;t</source>
+        <translation type="unfinished">Cor&amp;tar</translation>
+    </message>
+    <message>
+        <source>Cut the current selection&apos;s contents to the clipboard</source>
+        <translation type="unfinished">Cortar a seleção para o clipboard</translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation type="unfinished">Cortar</translation>
+    </message>
+    <message>
+        <source>&amp;Copy</source>
+        <translation type="unfinished">&amp;Copiar</translation>
+    </message>
+    <message>
+        <source>Copy the current selection&apos;s contents to the clipboard</source>
+        <translation type="unfinished">Copiar  a seleção para o clipboard</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Copiar</translation>
+    </message>
+    <message>
+        <source>&amp;Paste</source>
+        <translation type="unfinished">Co&amp;lar</translation>
+    </message>
+    <message>
+        <source>Paste the clipboard&apos;s contents into the current selection</source>
+        <translation type="unfinished">Colar a seleção para o clipboard</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation type="unfinished">Colar</translation>
+    </message>
+    <message>
+        <source>&amp;Join orc/sco</source>
+        <translation type="unfinished">&amp;Juntar orc/sco</translation>
+    </message>
+    <message>
+        <source>Join orc/sco files in a single csd file</source>
+        <translation type="unfinished">Juntar orc/sco em um único arquivo CSD</translation>
+    </message>
+    <message>
+        <source>Evaluate selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Evaluate selection in Python Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Evaluate section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Evaluate current section in Python Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalue-&gt;Chnget</source>
+        <translation type="unfinished">Invalue-&gt;Chnget</translation>
+    </message>
+    <message>
+        <source>Convert invalue/outvalue to chnget/chnset</source>
+        <translation type="unfinished">Converter  invalue/outvalue em chnget/chnset</translation>
+    </message>
+    <message>
+        <source>Chnget-&gt;Invalue</source>
+        <translation type="unfinished">Chnget-&gt;Invalue</translation>
+    </message>
+    <message>
+        <source>Convert chnget/chnset to invalue/outvalue</source>
+        <translation type="unfinished">Converter chnget/chnset em invalue/outvalue</translation>
+    </message>
+    <message>
+        <source>Insert/Update CsLADSPA text</source>
+        <translation type="unfinished">Inserir/Atualizar texto para CsLADSPA</translation>
+    </message>
+    <message>
+        <source>Insert/Update CsLADSPA section to csd file</source>
+        <translation type="unfinished">Inserir/Atualizar texto para CsLADSPA em arquivo CSD</translation>
+    </message>
+    <message>
+        <source>Insert/Update Cabbage text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert/Update Cabbage section to csd file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Find and Replace</source>
+        <translation type="unfinished">Achar e Substituir</translation>
+    </message>
+    <message>
+        <source>Find and replace strings in file</source>
+        <translation type="unfinished">Achar e substituir texto em arquivo</translation>
+    </message>
+    <message>
+        <source>Find a&amp;gain</source>
+        <translation type="unfinished">Achar de novo</translation>
+    </message>
+    <message>
+        <source>Find next appearance of string</source>
+        <translation type="unfinished">Achar a nova aparição do texto</translation>
+    </message>
+    <message>
+        <source>AutoComplete</source>
+        <translation type="unfinished">Auto-completar</translation>
+    </message>
+    <message>
+        <source>Autocomplete according to Status bar display</source>
+        <translation type="unfinished">Auto-completar de acordo com o display da barra de status</translation>
+    </message>
+    <message>
+        <source>Configuration</source>
+        <translation type="unfinished">Configuração</translation>
+    </message>
+    <message>
+        <source>Open configuration dialog</source>
+        <translation type="unfinished">Abrir janela de configuração</translation>
+    </message>
+    <message>
+        <source>Configure</source>
+        <translation type="unfinished">Configurar</translation>
+    </message>
+    <message>
+        <source>Widget Edit Mode</source>
+        <translation type="unfinished">Modo de Edição de Widgets</translation>
+    </message>
+    <message>
+        <source>Activate Edit Mode for Widget Panel</source>
+        <translation type="unfinished">Modo de Edição Ativo de Widgets</translation>
+    </message>
+    <message>
+        <source>Run Csound</source>
+        <translation type="unfinished">Rodar Csound</translation>
+    </message>
+    <message>
+        <source>Run current file</source>
+        <translation type="unfinished">Rodar arquivo corrente</translation>
+    </message>
+    <message>
+        <source>Run</source>
+        <translation type="unfinished">Rodar</translation>
+    </message>
+    <message>
+        <source>Run in Terminal</source>
+        <translation type="unfinished">Rodar em terminal</translation>
+    </message>
+    <message>
+        <source>Run in external shell</source>
+        <translation type="unfinished">Rodar em terminal externo</translation>
+    </message>
+    <message>
+        <source>Run in Term</source>
+        <translation type="unfinished">Rodar em Term</translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="unfinished">Parar</translation>
+    </message>
+    <message>
+        <source>Stop All</source>
+        <translation type="unfinished">Parar tudo</translation>
+    </message>
+    <message>
+        <source>Stop all running documents</source>
+        <translation type="unfinished">Parar a execucao de todos os documentos </translation>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation type="unfinished">Gravar</translation>
+    </message>
+    <message>
+        <source>Render</source>
+        <translation type="unfinished">Sintetizar</translation>
+    </message>
+    <message>
+        <source>Play Audiofile</source>
+        <translation type="unfinished">Tocar arquivo de audio</translation>
+    </message>
+    <message>
+        <source>Play rendered audiofile in External Editor</source>
+        <translation type="unfinished">Tocar arquivo de audio em editor externo</translation>
+    </message>
+    <message>
+        <source>Ext. Player</source>
+        <translation type="unfinished">Player externo</translation>
+    </message>
+    <message>
+        <source>Edit Audiofile</source>
+        <translation type="unfinished">Editar arquivo de audio</translation>
+    </message>
+    <message>
+        <source>Edit rendered audiofile in External Editor</source>
+        <translation type="unfinished">Editar arquivo de audio em editor externo</translation>
+    </message>
+    <message>
+        <source>Ext. Editor</source>
+        <translation type="unfinished">Editor externo</translation>
+    </message>
+    <message>
+        <source>Widgets</source>
+        <translation type="unfinished">Widgets</translation>
+    </message>
+    <message>
+        <source>Show Realtime Widgets</source>
+        <translation type="unfinished">Mostrar Widgets de Tempo Real</translation>
+    </message>
+    <message>
+        <source>Inspector</source>
+        <translation type="unfinished">Inspetor</translation>
+    </message>
+    <message>
+        <source>Show Inspector</source>
+        <translation type="unfinished">Mostrar inspetor</translation>
+    </message>
+    <message>
+        <source>Focus Text Editor</source>
+        <comment>Give keyboard focus to the text editor</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Give keyboard focus to the text editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Editor</source>
+        <translation type="unfinished">Editor</translation>
+    </message>
+    <message>
+        <source>Help Panel</source>
+        <translation type="unfinished">Painel de Ajuda</translation>
+    </message>
+    <message>
+        <source>Show the Csound Manual Panel</source>
+        <translation type="unfinished">Mostrar o Painel do Manual do Csound</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation type="unfinished">Manual</translation>
+    </message>
+    <message>
+        <source>Live Events</source>
+        <translation type="unfinished">Eventos ao vivo</translation>
+    </message>
+    <message>
+        <source>Show Live Events Panels</source>
+        <translation type="unfinished">Mostrar paineis de eventos ao vivo</translation>
+    </message>
+    <message>
+        <source>Python Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Python Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Python</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ScratchPad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Python Scratch Pad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Csound Manual</source>
+        <translation type="unfinished">Manual de Csound</translation>
+    </message>
+    <message>
+        <source>Show the Csound manual in the help panel</source>
+        <translation type="unfinished">Mostrar o manual de Csound no painel de ajuda</translation>
+    </message>
+    <message>
+        <source>GEN Routines</source>
+        <translation type="unfinished">Rotinas GEN</translation>
+    </message>
+    <message>
+        <source>Show the GEN Routines Manual page</source>
+        <translation type="unfinished">Mostrar a pagina sobre Rotinas GEN</translation>
+    </message>
+    <message>
+        <source>Opcode Overview</source>
+        <translation type="unfinished">Sumário de opcodes</translation>
+    </message>
+    <message>
+        <source>Show opcode overview</source>
+        <translation type="unfinished">Mostrar o sumário de opcodes</translation>
+    </message>
+    <message>
+        <source>Opcode Quick Reference</source>
+        <translation type="unfinished">Referencia rapida de opcodes</translation>
+    </message>
+    <message>
+        <source>Show opcode quick reference page</source>
+        <translation type="unfinished">Mostre a referencia rapida de opcodes</translation>
+    </message>
+    <message>
+        <source>Output Console</source>
+        <translation type="unfinished">Console</translation>
+    </message>
+    <message>
+        <source>Show Csound&apos;s message console</source>
+        <translation type="unfinished">Mostrar o console de mensagens de Csound</translation>
+    </message>
+    <message>
+        <source>View Full Screen</source>
+        <translation type="unfinished">Ver em tela cheia</translation>
+    </message>
+    <message>
+        <source>Have CsoundQt occupy all the available screen space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Split View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle between full csd and split text display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Orchestra</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show orchestra panel in split view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Score</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show CsOptions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show CsOptions section panel in split view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Embedded files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Embedded files panel in split view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Information Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show information text panel in split view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Extra Tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show extra tags panel in split view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Widgets Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Widgets text panel in split view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Opcode Entry</source>
+        <translation type="unfinished">Mostrar a verbete do opcode</translation>
+    </message>
+    <message>
+        <source>Show Opcode Entry in help panel</source>
+        <translation type="unfinished">Mostrar a verbete do opcode no painel de ajuda</translation>
+    </message>
+    <message>
+        <source>Manual for opcode</source>
+        <translation type="unfinished">Manual do opcode</translation>
+    </message>
+    <message>
+        <source>Help Back</source>
+        <translation type="unfinished">Voltar (Ajuda)</translation>
+    </message>
+    <message>
+        <source>Go back in help page</source>
+        <translation type="unfinished">Voltar na pagina de ajuda</translation>
+    </message>
+    <message>
+        <source>Help Forward</source>
+        <translation type="unfinished">Para Frente (Ajuda)</translation>
+    </message>
+    <message>
+        <source>Go forward in help page</source>
+        <translation type="unfinished">Ir para frente na pagina de ajuda</translation>
+    </message>
+    <message>
+        <source>Show Opcode Entry in External Browser</source>
+        <translation type="unfinished">Mostrar a verbete do opcode em navegador externo</translation>
+    </message>
+    <message>
+        <source>Show Opcode Entry in external browser</source>
+        <translation type="unfinished">Mostrar a verbete do opcode em navegador externo</translation>
+    </message>
+    <message>
+        <source>Open Quick Reference Guide</source>
+        <translation type="unfinished">Abrir Guia de Referência Rápida</translation>
+    </message>
+    <message>
+        <source>Open Quick Reference Guide in PDF viewer</source>
+        <translation type="unfinished">Abrir Guia de Referência Rápida no leitor de PDF</translation>
+    </message>
+    <message>
+        <source>Utilities</source>
+        <translation type="unfinished">Utilidades</translation>
+    </message>
+    <message>
+        <source>Show the Csound Utilities dialog</source>
+        <translation type="unfinished">Mostrar a janela de utilidades do Csound</translation>
+    </message>
+    <message>
+        <source>Set Keyboard Shortcuts</source>
+        <translation type="unfinished">Configurar atalhos de teclado</translation>
+    </message>
+    <message>
+        <source>Set Shortcuts</source>
+        <translation type="unfinished">Configurar atalhos</translation>
+    </message>
+    <message>
+        <source>Comment/Uncomment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comment/Uncomment selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Indent</source>
+        <translation type="unfinished">Tabular</translation>
+    </message>
+    <message>
+        <source>Indent selection</source>
+        <translation type="unfinished">Tabular  Seleção</translation>
+    </message>
+    <message>
+        <source>Unindent</source>
+        <translation type="unfinished">Retirar a tabulação</translation>
+    </message>
+    <message>
+        <source>Unindent selection</source>
+        <translation type="unfinished">Retirar a tabulação da seleção</translation>
+    </message>
+    <message>
+        <source>Kill Line</source>
+        <translation type="unfinished">Matar a linha</translation>
+    </message>
+    <message>
+        <source>Completely delete current line</source>
+        <translation type="unfinished">Deletar completamente a linha corrente</translation>
+    </message>
+    <message>
+        <source>Kill to End of Line</source>
+        <translation type="unfinished">Matar ate&apos; o fim da linha</translation>
+    </message>
+    <message>
+        <source>Delete everything from cursor to the end of the current line</source>
+        <translation type="unfinished">Deletar tudo do cursor ao fim da linha</translation>
+    </message>
+    <message>
+        <source>&amp;About CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show the application&apos;s About box</source>
+        <translation type="unfinished">Mostre informação sobre o programa</translation>
+    </message>
+    <message>
+        <source>Donate to CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Donate to support development of CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset CsoundQt&apos;s preferences to their original default state</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Report a Bug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Report a bug in CsoundQt&apos;s Bug Tracker</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Request a Feature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Request a feature in CsoundQt&apos;s Feature Tracker</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Csound IRC Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the IRC chat channel #csound in your browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicate Widgets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File</source>
+        <translation type="unfinished">Arquivo</translation>
+    </message>
+    <message>
+        <source>Recent files</source>
+        <translation type="unfinished">Arquivos recentes</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished">Editar</translation>
+    </message>
+    <message>
+        <source>Control</source>
+        <translation type="unfinished">Controle</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished">Visual</translation>
+    </message>
+    <message>
+        <source>Live Collection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation type="unfinished">Música</translation>
+    </message>
+    <message>
+        <source>Useful</source>
+        <translation type="unfinished">ÚTIL</translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished">Miscelâneos</translation>
+    </message>
+    <message>
+        <source>Examples</source>
+        <translation type="unfinished">Exemplors</translation>
+    </message>
+    <message>
+        <source>Getting Started</source>
+        <translation type="unfinished">Começando</translation>
+    </message>
+    <message>
+        <source>Basics</source>
+        <translation type="unfinished">Elementos Bá sicos</translation>
+    </message>
+    <message>
+        <source>Realtime Interaction</source>
+        <translation type="unfinished">Interação em tempo real</translation>
+    </message>
+    <message>
+        <source>Language Features</source>
+        <translation type="unfinished">Recursos de linguagem</translation>
+    </message>
+    <message>
+        <source>FLOSS Manual Examples</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>01 Basics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>02 Quick Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>03 Csound Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>04 Sound Synthesis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>05 Sound Modification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>06 Samples</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>07 MIDI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>08 OSC and WII</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>09 Csound in other Applications</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>McCurdy Collection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Favorites</source>
+        <translation type="unfinished">Favoritos</translation>
+    </message>
+    <message>
+        <source>Scripts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished">Ajuda</translation>
+    </message>
+    <message>
+        <source>Ready</source>
+        <translation type="unfinished">Pronto</translation>
+    </message>
+    <message>
+        <source>Cannot read file %1:
+%2.</source>
+        <translation type="unfinished">Não foi possível ler o arquivo %1: 
+%2.</translation>
+    </message>
+    <message>
+        <source>File already open</source>
+        <translation type="unfinished">Arquivo já aberto</translation>
+    </message>
+    <message>
+        <source>File loaded</source>
+        <translation type="unfinished">Arquivo carregado</translation>
+    </message>
+    <message>
+        <source>Application</source>
+        <translation type="unfinished">Programa</translation>
+    </message>
+    <message>
+        <source>Cannot write file %1:
+%2.</source>
+        <translation type="unfinished">Não foi possível escrever o arquivo %1: 
+%2.</translation>
+    </message>
+    <message>
+        <source>File saved</source>
+        <translation type="unfinished">Arquivo salvo</translation>
+    </message>
+    <message>
+        <source>%1[*] - %2</source>
+        <translation type="unfinished">%1[*] - %2</translation>
+    </message>
+    <message>
+        <source>Do not ask again</source>
+        <translation type="unfinished">Não me pergunte de novo</translation>
     </message>
 </context>
 <context>
@@ -725,7 +2066,7 @@ Aborting.</source>
     </message>
     <message>
         <source>QuteCsound</source>
-        <translation>QuteCsound</translation>
+        <translation type="obsolete">QuteCsound</translation>
     </message>
     <message>
         <source>External links can&apos;t be followed in help browser.</source>
@@ -735,16 +2076,24 @@ Aborting.</source>
         <source>Frames version only available in external browser.</source>
         <translation>Versão em frames apenas disponível em browser externo</translation>
     </message>
+    <message>
+        <source>CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DocumentPage</name>
     <message>
         <source>QuteCsound</source>
-        <translation>QuteCsound</translation>
+        <translation type="obsolete">QuteCsound</translation>
     </message>
     <message>
         <source>You must save the examples to use Record.</source>
         <translation>Você precisa salvar os exemplos antes de gravar</translation>
+    </message>
+    <message>
+        <source>CsoundQt</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2476,10 +3825,21 @@ CanallH:</translation>
     </message>
 </context>
 <context>
+    <name>dialog</name>
+    <message>
+        <source>About CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>qutecsound</name>
     <message>
         <source>QuteCsound</source>
-        <translation>QuteCsound</translation>
+        <translation type="obsolete">QuteCsound</translation>
     </message>
     <message>
         <source>Error initializing Csound!
@@ -2488,7 +3848,7 @@ Qutecsound will probably crash if you try to run Csound.</source>
     </message>
     <message>
         <source>Open File</source>
-        <translation>Abrir Arquivo</translation>
+        <translation type="obsolete">Abrir Arquivo</translation>
     </message>
     <message>
         <source>Csound Files (*.csd *.orc *.sco);;All Files (*)</source>
@@ -2496,22 +3856,22 @@ Qutecsound will probably crash if you try to run Csound.</source>
     </message>
     <message>
         <source>File already open</source>
-        <translation>Arquivo já aberto</translation>
+        <translation type="obsolete">Arquivo já aberto</translation>
     </message>
     <message>
         <source>Dot executable not found.
 Please install graphviz from
 www.graphviz.org</source>
-        <translation>Programa de grafico não encontrado
+        <translation type="obsolete">Programa de grafico não encontrado
 Instale graphviz de www.graphviz.org</translation>
     </message>
     <message>
         <source>Cannot create temp dot/png file.</source>
-        <translation>Não foi possível criar arquivo temp (dot/png)</translation>
+        <translation type="obsolete">Não foi possível criar arquivo temp (dot/png)</translation>
     </message>
     <message>
         <source>Save File As</source>
-        <translation>Salve arquivo como</translation>
+        <translation type="obsolete">Salve arquivo como</translation>
     </message>
     <message>
         <source>Csound Files (*.csd *.orc *.sco)</source>
@@ -2520,7 +3880,7 @@ Instale graphviz de www.graphviz.org</translation>
     <message>
         <source>The file is already open in another tab.
 File not saved!</source>
-        <translation>Arquivo já aberto em outra janela
+        <translation type="obsolete">Arquivo já aberto em outra janela
 Arquivo não foi salvo</translation>
     </message>
     <message>
@@ -2531,27 +3891,27 @@ Você quer salvar?</translation>
     </message>
     <message>
         <source>Do you want to exit QuteCsound?</source>
-        <translation>Você quer sair do QuteCsound?</translation>
+        <translation type="obsolete">Você quer sair do QuteCsound?</translation>
     </message>
     <message>
         <source>Print Document</source>
-        <translation>Imprimir documento</translation>
+        <translation type="obsolete">Imprimir documento</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation>Ok</translation>
+        <translation type="obsolete">Ok</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation type="obsolete">Cancelar</translation>
     </message>
     <message>
         <source>Join</source>
-        <translation>Juntar</translation>
+        <translation type="obsolete">Juntar</translation>
     </message>
     <message>
         <source>Please open the orc and sco files in QuteCsound first!</source>
-        <translation>Por favor, primeiro abra os arquivos orc e sco em QuteCsound</translation>
+        <translation type="obsolete">Por favor, primeiro abra os arquivos orc e sco em QuteCsound</translation>
     </message>
     <message>
         <source>This file has not been been saved
@@ -2561,7 +3921,7 @@ Por favo, selecione nome e local</translation>
     </message>
     <message>
         <source>Error creating temporary file.</source>
-        <translation>Erro ao criar arquivos temporários</translation>
+        <translation type="obsolete">Erro ao criar arquivos temporários</translation>
     </message>
     <message>
         <source>You must save the examples to use Record.</source>
@@ -2574,23 +3934,23 @@ without Record support!</source>
     </message>
     <message>
         <source>Output Filename</source>
-        <translation>Arquivo de saída</translation>
+        <translation type="obsolete">Arquivo de saída</translation>
     </message>
     <message>
         <source>The file %1 
 already exists.
 Do you want to overwrite it?</source>
-        <translation>O arquivo %1 já existe. Você quer escrever por cima?</translation>
+        <translation type="obsolete">O arquivo %1 já existe. Você quer escrever por cima?</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation>Erro</translation>
+        <translation type="obsolete">Erro</translation>
     </message>
     <message>
         <source>HTML Documentation directory not set!
 Please go to Edit-&gt;Options-&gt;Environment and select directory
 </source>
-        <translation>Diretório de Documentos HTML não definido
+        <translation type="obsolete">Diretório de Documentos HTML não definido
 Vá a Editar-&gt;Opções-&gt;Ambiente e selecione o diretório</translation>
     </message>
     <message>
@@ -2625,11 +3985,11 @@ Joachim Heintz
     </message>
     <message>
         <source>API</source>
-        <translation>API</translation>
+        <translation type="obsolete">API</translation>
     </message>
     <message>
         <source>Console</source>
-        <translation>Console</translation>
+        <translation type="obsolete">Console</translation>
     </message>
     <message>
         <source>Thread</source>
@@ -2641,471 +4001,467 @@ Joachim Heintz
     </message>
     <message>
         <source>SaveWidgets</source>
-        <translation>SalveWidgets</translation>
+        <translation type="obsolete">SalveWidgets</translation>
     </message>
     <message>
         <source>DontSaveWidgets</source>
-        <translation>NãoSalveWidgets</translation>
+        <translation type="obsolete">NãoSalveWidgets</translation>
     </message>
     <message>
         <source>UseQuteCsoundOptions</source>
-        <translation>UseOpçõesQuteCsound</translation>
+        <translation type="obsolete">UseOpçõesQuteCsound</translation>
     </message>
     <message>
         <source>DiscardQuteCsoundOptions</source>
-        <translation>DiscarteOpçõesQuteCsound</translation>
+        <translation type="obsolete">DiscarteOpçõesQuteCsound</translation>
     </message>
     <message>
         <source>OverrideCsOptions</source>
-        <translation>SobreponhaCsOptions</translation>
+        <translation type="obsolete">SobreponhaCsOptions</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation>Tocar</translation>
+        <translation type="obsolete">Tocar</translation>
     </message>
     <message>
         <source>Render to file</source>
-        <translation>Síntese para arquivo</translation>
+        <translation type="obsolete">Síntese para arquivo</translation>
     </message>
     <message>
         <source>Line %1</source>
-        <translation>Linha %1</translation>
+        <translation type="obsolete">Linha %1</translation>
     </message>
     <message>
         <source>&amp;New</source>
-        <translation>&amp;Novo</translation>
+        <translation type="obsolete">&amp;Novo</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
-        <translation>Ctrl+N</translation>
+        <translation type="obsolete">Ctrl+N</translation>
     </message>
     <message>
         <source>Create a new file</source>
-        <translation>Criar arquivo novo</translation>
+        <translation type="obsolete">Criar arquivo novo</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Novo</translation>
+        <translation type="obsolete">Novo</translation>
     </message>
     <message>
         <source>&amp;Open...</source>
-        <translation>&amp;Abrir</translation>
+        <translation type="obsolete">&amp;Abrir</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation>Ctrl+O</translation>
+        <translation type="obsolete">Ctrl+O</translation>
     </message>
     <message>
         <source>Open an existing file</source>
-        <translation>Abrir um arquivo existente</translation>
+        <translation type="obsolete">Abrir um arquivo existente</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation>Abrir</translation>
+        <translation type="obsolete">Abrir</translation>
     </message>
     <message>
         <source>Reload</source>
-        <translation>Recarregar</translation>
+        <translation type="obsolete">Recarregar</translation>
     </message>
     <message>
         <source>Reload file from disk, discarding changes</source>
-        <translation>Recarregar arquivo do disco</translation>
+        <translation type="obsolete">Recarregar arquivo do disco</translation>
     </message>
     <message>
         <source>&amp;Save</source>
-        <translation>&amp;Salvar</translation>
+        <translation type="obsolete">&amp;Salvar</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
-        <translation>Ctrl+S</translation>
+        <translation type="obsolete">Ctrl+S</translation>
     </message>
     <message>
         <source>Save the document to disk</source>
-        <translation>Salvar o documento para o disco</translation>
+        <translation type="obsolete">Salvar o documento para o disco</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Salvar</translation>
+        <translation type="obsolete">Salvar</translation>
     </message>
     <message>
         <source>Save &amp;As...</source>
-        <translation>Salvar &amp;Como</translation>
+        <translation type="obsolete">Salvar &amp;Como</translation>
     </message>
     <message>
         <source>Shift+Ctrl+S</source>
-        <translation>Shift+Ctrl+S</translation>
+        <translation type="obsolete">Shift+Ctrl+S</translation>
     </message>
     <message>
         <source>Save the document under a new name</source>
-        <translation>Salvar o documento com um outro nome</translation>
+        <translation type="obsolete">Salvar o documento com um outro nome</translation>
     </message>
     <message>
         <source>Save as</source>
-        <translation>Salvar como</translation>
+        <translation type="obsolete">Salvar como</translation>
     </message>
     <message>
         <source>Close current tab</source>
-        <translation>Fechar a janela corrente</translation>
+        <translation type="obsolete">Fechar a janela corrente</translation>
     </message>
     <message>
         <source>Ctrl+W</source>
-        <translation>Ctrl+W</translation>
+        <translation type="obsolete">Ctrl+W</translation>
     </message>
     <message>
         <source>Print</source>
-        <translation>Imprimir</translation>
+        <translation type="obsolete">Imprimir</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation>Ctrl+P</translation>
+        <translation type="obsolete">Ctrl+P</translation>
     </message>
     <message>
         <source>Print current document</source>
-        <translation>Imprimir documeto corrente</translation>
+        <translation type="obsolete">Imprimir documeto corrente</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation>Sai&amp;r</translation>
+        <translation type="obsolete">Sai&amp;r</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation>Ctrl+Q</translation>
+        <translation type="obsolete">Ctrl+Q</translation>
     </message>
     <message>
         <source>Exit the application</source>
-        <translation>Sair do programa</translation>
+        <translation type="obsolete">Sair do programa</translation>
     </message>
     <message>
         <source>View Code &amp;Graph</source>
-        <translation>Ver &amp;Gráfico do Código </translation>
+        <translation type="obsolete">Ver &amp;Gráfico do Código </translation>
     </message>
     <message>
         <source>Alt+5</source>
-        <translation>Alt+5</translation>
+        <translation type="obsolete">Alt+5</translation>
     </message>
     <message>
         <source>View Code Graph</source>
-        <translation>Ver Gráfico do Código</translation>
+        <translation type="obsolete">Ver Gráfico do Código</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>Desfazer</translation>
+        <translation type="obsolete">Desfazer</translation>
     </message>
     <message>
         <source>Ctrl+Z</source>
-        <translation>Ctrl+Z</translation>
+        <translation type="obsolete">Ctrl+Z</translation>
     </message>
     <message>
         <source>Undo last action</source>
-        <translation>Desfazer ultima ação</translation>
+        <translation type="obsolete">Desfazer ultima ação</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation>Refazer</translation>
+        <translation type="obsolete">Refazer</translation>
     </message>
     <message>
         <source>Shift+Ctrl+Z</source>
-        <translation>Shift+Ctrl+Z</translation>
+        <translation type="obsolete">Shift+Ctrl+Z</translation>
     </message>
     <message>
         <source>Redo last action</source>
-        <translation>Refazer ultima ação</translation>
+        <translation type="obsolete">Refazer ultima ação</translation>
     </message>
     <message>
         <source>Cu&amp;t</source>
-        <translation>Cor&amp;tar</translation>
+        <translation type="obsolete">Cor&amp;tar</translation>
     </message>
     <message>
         <source>Ctrl+X</source>
-        <translation>Ctrl+X</translation>
+        <translation type="obsolete">Ctrl+X</translation>
     </message>
     <message>
         <source>Cut the current selection&apos;s contents to the clipboard</source>
-        <translation>Cortar a seleção para o clipboard</translation>
+        <translation type="obsolete">Cortar a seleção para o clipboard</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation>Cortar</translation>
+        <translation type="obsolete">Cortar</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
-        <translation>&amp;Copiar</translation>
+        <translation type="obsolete">&amp;Copiar</translation>
     </message>
     <message>
         <source>Ctrl+C</source>
-        <translation>Ctrl+C</translation>
+        <translation type="obsolete">Ctrl+C</translation>
     </message>
     <message>
         <source>Copy the current selection&apos;s contents to the clipboard</source>
-        <translation>Copiar  a seleção para o clipboard</translation>
+        <translation type="obsolete">Copiar  a seleção para o clipboard</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>Copiar</translation>
+        <translation type="obsolete">Copiar</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation>Co&amp;lar</translation>
+        <translation type="obsolete">Co&amp;lar</translation>
     </message>
     <message>
         <source>Ctrl+V</source>
-        <translation>Ctrl+V</translation>
+        <translation type="obsolete">Ctrl+V</translation>
     </message>
     <message>
         <source>Paste the clipboard&apos;s contents into the current selection</source>
-        <translation>Colar a seleção para o clipboard</translation>
+        <translation type="obsolete">Colar a seleção para o clipboard</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation>Colar</translation>
+        <translation type="obsolete">Colar</translation>
     </message>
     <message>
         <source>&amp;Join orc/sco</source>
-        <translation>&amp;Juntar orc/sco</translation>
+        <translation type="obsolete">&amp;Juntar orc/sco</translation>
     </message>
     <message>
         <source>Join orc/sco files in a single csd file</source>
-        <translation>Juntar orc/sco em um único arquivo CSD</translation>
+        <translation type="obsolete">Juntar orc/sco em um único arquivo CSD</translation>
     </message>
     <message>
         <source>Invalue-&gt;Chnget</source>
-        <translation>Invalue-&gt;Chnget</translation>
+        <translation type="obsolete">Invalue-&gt;Chnget</translation>
     </message>
     <message>
         <source>Convert invalue/outvalue to chnget/chnset</source>
-        <translation>Converter  invalue/outvalue em chnget/chnset</translation>
+        <translation type="obsolete">Converter  invalue/outvalue em chnget/chnset</translation>
     </message>
     <message>
         <source>Chnget-&gt;Invalue</source>
-        <translation>Chnget-&gt;Invalue</translation>
+        <translation type="obsolete">Chnget-&gt;Invalue</translation>
     </message>
     <message>
         <source>Convert chnget/chnset to invalue/outvalue</source>
-        <translation>Converter chnget/chnset em invalue/outvalue</translation>
+        <translation type="obsolete">Converter chnget/chnset em invalue/outvalue</translation>
     </message>
     <message>
         <source>Insert/Update CsLADSPA text</source>
-        <translation>Inserir/Atualizar texto para CsLADSPA</translation>
+        <translation type="obsolete">Inserir/Atualizar texto para CsLADSPA</translation>
     </message>
     <message>
         <source>Insert/Update CsLADSPA section to csd file</source>
-        <translation>Inserir/Atualizar texto para CsLADSPA em arquivo CSD</translation>
+        <translation type="obsolete">Inserir/Atualizar texto para CsLADSPA em arquivo CSD</translation>
     </message>
     <message>
         <source>&amp;Find and Replace</source>
-        <translation>Achar e Substituir</translation>
+        <translation type="obsolete">Achar e Substituir</translation>
     </message>
     <message>
         <source>Ctrl+F</source>
-        <translation>Ctrl+F</translation>
+        <translation type="obsolete">Ctrl+F</translation>
     </message>
     <message>
         <source>Find and replace strings in file</source>
-        <translation>Achar e substituir texto em arquivo</translation>
+        <translation type="obsolete">Achar e substituir texto em arquivo</translation>
     </message>
     <message>
         <source>AutoComplete</source>
-        <translation>Auto-completar</translation>
+        <translation type="obsolete">Auto-completar</translation>
     </message>
     <message>
         <source>Alt+C</source>
-        <translation>Alt+C</translation>
+        <translation type="obsolete">Alt+C</translation>
     </message>
     <message>
         <source>Autocomplete according to Status bar display</source>
-        <translation>Auto-completar de acordo com o display da barra de status</translation>
+        <translation type="obsolete">Auto-completar de acordo com o display da barra de status</translation>
     </message>
     <message>
         <source>Configuration</source>
-        <translation>Configuração</translation>
+        <translation type="obsolete">Configuração</translation>
     </message>
     <message>
         <source>Open configuration dialog</source>
-        <translation>Abrir janela de configuração</translation>
+        <translation type="obsolete">Abrir janela de configuração</translation>
     </message>
     <message>
         <source>Configure</source>
-        <translation>Configurar</translation>
+        <translation type="obsolete">Configurar</translation>
     </message>
     <message>
         <source>Run</source>
-        <translation>Rodar</translation>
-    </message>
-    <message>
-        <source>CTRL+R</source>
-        <translation></translation>
+        <translation type="obsolete">Rodar</translation>
     </message>
     <message>
         <source>Run in Terminal</source>
-        <translation>Rodar em terminal</translation>
+        <translation type="obsolete">Rodar em terminal</translation>
     </message>
     <message>
         <source>Run in external shell</source>
-        <translation>Rodar em terminal externo</translation>
+        <translation type="obsolete">Rodar em terminal externo</translation>
     </message>
     <message>
         <source>Run in Term</source>
-        <translation>Rodar em Term</translation>
+        <translation type="obsolete">Rodar em Term</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation>Parar</translation>
+        <translation type="obsolete">Parar</translation>
     </message>
     <message>
         <source>Alt+S</source>
-        <translation>Alt+S</translation>
+        <translation type="obsolete">Alt+S</translation>
     </message>
     <message>
         <source>Record</source>
-        <translation>Gravar</translation>
+        <translation type="obsolete">Gravar</translation>
     </message>
     <message>
         <source>Ctrl+Space</source>
-        <translation>Ctrl+Space</translation>
+        <translation type="obsolete">Ctrl+Space</translation>
     </message>
     <message>
         <source>Alt+F</source>
-        <translation>Alt+F</translation>
+        <translation type="obsolete">Alt+F</translation>
     </message>
     <message>
         <source>Render</source>
-        <translation>Sintetizar</translation>
+        <translation type="obsolete">Sintetizar</translation>
     </message>
     <message>
         <source>Play Audiofile</source>
-        <translation>Tocar arquivo de audio</translation>
+        <translation type="obsolete">Tocar arquivo de audio</translation>
     </message>
     <message>
         <source>Play rendered audiofile in External Editor</source>
-        <translation>Tocar arquivo de audio em editor externo</translation>
+        <translation type="obsolete">Tocar arquivo de audio em editor externo</translation>
     </message>
     <message>
         <source>Ext. Player</source>
-        <translation>Player externo</translation>
+        <translation type="obsolete">Player externo</translation>
     </message>
     <message>
         <source>Edit Audiofile</source>
-        <translation>Editar arquivo de audio</translation>
+        <translation type="obsolete">Editar arquivo de audio</translation>
     </message>
     <message>
         <source>Edit rendered audiofile in External Editor</source>
-        <translation>Editar arquivo de audio em editor externo</translation>
+        <translation type="obsolete">Editar arquivo de audio em editor externo</translation>
     </message>
     <message>
         <source>Ext. Editor</source>
-        <translation>Editor externo</translation>
+        <translation type="obsolete">Editor externo</translation>
     </message>
     <message>
         <source>Widgets</source>
-        <translation>Widgets</translation>
+        <translation type="obsolete">Widgets</translation>
     </message>
     <message>
         <source>Alt+1</source>
-        <translation>Alt+1</translation>
+        <translation type="obsolete">Alt+1</translation>
     </message>
     <message>
         <source>Show Realtime Widgets</source>
-        <translation>Mostrar Widgets de Tempo Real</translation>
+        <translation type="obsolete">Mostrar Widgets de Tempo Real</translation>
     </message>
     <message>
         <source>Help Panel</source>
-        <translation>Painel de Ajuda</translation>
+        <translation type="obsolete">Painel de Ajuda</translation>
     </message>
     <message>
         <source>Alt+2</source>
-        <translation>Alt+2</translation>
+        <translation type="obsolete">Alt+2</translation>
     </message>
     <message>
         <source>Show the Csound Manual Panel</source>
-        <translation>Mostrar o Painel do Manual do Csound</translation>
+        <translation type="obsolete">Mostrar o Painel do Manual do Csound</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manual</translation>
+        <translation type="obsolete">Manual</translation>
     </message>
     <message>
         <source>GEN Routines</source>
-        <translation>Rotinas GEN</translation>
+        <translation type="obsolete">Rotinas GEN</translation>
     </message>
     <message>
         <source>Show the GEN Routines Manual page</source>
-        <translation>Mostrar a pagina sobre Rotinas GEN</translation>
+        <translation type="obsolete">Mostrar a pagina sobre Rotinas GEN</translation>
     </message>
     <message>
         <source>Opcode Overview</source>
-        <translation>Sumário de opcodes</translation>
+        <translation type="obsolete">Sumário de opcodes</translation>
     </message>
     <message>
         <source>Show opcode overview</source>
-        <translation>Mostrar o sumário de opcodes</translation>
+        <translation type="obsolete">Mostrar o sumário de opcodes</translation>
     </message>
     <message>
         <source>Output Console</source>
-        <translation>Console</translation>
+        <translation type="obsolete">Console</translation>
     </message>
     <message>
         <source>Alt+3</source>
-        <translation>Alt+3</translation>
+        <translation type="obsolete">Alt+3</translation>
     </message>
     <message>
         <source>Show Csound&apos;s message console</source>
-        <translation>Mostrar o console de mensagens de Csound</translation>
+        <translation type="obsolete">Mostrar o console de mensagens de Csound</translation>
     </message>
     <message>
         <source>Show Opcode Entry</source>
-        <translation>Mostrar a verbete do opcode</translation>
+        <translation type="obsolete">Mostrar a verbete do opcode</translation>
     </message>
     <message>
         <source>Shift+F1</source>
-        <translation>Shift+F1</translation>
+        <translation type="obsolete">Shift+F1</translation>
     </message>
     <message>
         <source>Show Opcode Entry in help panel</source>
-        <translation>Mostrar a verbete do opcode no painel de ajuda</translation>
+        <translation type="obsolete">Mostrar a verbete do opcode no painel de ajuda</translation>
     </message>
     <message>
         <source>Manual for opcode</source>
-        <translation>Manual do opcode</translation>
+        <translation type="obsolete">Manual do opcode</translation>
     </message>
     <message>
         <source>Help Back</source>
-        <translation>Voltar (Ajuda)</translation>
+        <translation type="obsolete">Voltar (Ajuda)</translation>
     </message>
     <message>
         <source>Go back in help page</source>
-        <translation>Voltar na pagina de ajuda</translation>
+        <translation type="obsolete">Voltar na pagina de ajuda</translation>
     </message>
     <message>
         <source>Help Forward</source>
-        <translation>Para Frente (Ajuda)</translation>
+        <translation type="obsolete">Para Frente (Ajuda)</translation>
     </message>
     <message>
         <source>Go forward in help page</source>
-        <translation>Ir para frente na pagina de ajuda</translation>
+        <translation type="obsolete">Ir para frente na pagina de ajuda</translation>
     </message>
     <message>
         <source>Show Opcode Entry in External Browser</source>
-        <translation>Mostrar a verbete do opcode em navegador externo</translation>
+        <translation type="obsolete">Mostrar a verbete do opcode em navegador externo</translation>
     </message>
     <message>
         <source>Shift+Alt+F1</source>
-        <translation>Shift+Alt+F1</translation>
+        <translation type="obsolete">Shift+Alt+F1</translation>
     </message>
     <message>
         <source>Show Opcode Entry in external browser</source>
-        <translation>Mostrar a verbete do opcode em navegador externo</translation>
+        <translation type="obsolete">Mostrar a verbete do opcode em navegador externo</translation>
     </message>
     <message>
         <source>Utilities</source>
-        <translation>Utilidades</translation>
+        <translation type="obsolete">Utilidades</translation>
     </message>
     <message>
         <source>Alt+4</source>
-        <translation>Alt+4</translation>
+        <translation type="obsolete">Alt+4</translation>
     </message>
     <message>
         <source>Show the Csound Utilities dialog</source>
-        <translation>Mostrar a janela de utilidades do Csound</translation>
+        <translation type="obsolete">Mostrar a janela de utilidades do Csound</translation>
     </message>
     <message>
         <source>Comment</source>
@@ -3117,7 +4473,7 @@ Joachim Heintz
     </message>
     <message>
         <source>Ctrl+D</source>
-        <translation>Ctrl+D</translation>
+        <translation type="obsolete">Ctrl+D</translation>
     </message>
     <message>
         <source>Uncomment</source>
@@ -3133,27 +4489,27 @@ Joachim Heintz
     </message>
     <message>
         <source>Indent</source>
-        <translation>Tabular</translation>
+        <translation type="obsolete">Tabular</translation>
     </message>
     <message>
         <source>Indent selection</source>
-        <translation>Tabular  Seleção</translation>
+        <translation type="obsolete">Tabular  Seleção</translation>
     </message>
     <message>
         <source>Ctrl+I</source>
-        <translation>Ctrl+I</translation>
+        <translation type="obsolete">Ctrl+I</translation>
     </message>
     <message>
         <source>Unindent</source>
-        <translation>Retirar a tabulação</translation>
+        <translation type="obsolete">Retirar a tabulação</translation>
     </message>
     <message>
         <source>Unindent selection</source>
-        <translation>Retirar a tabulação da seleção</translation>
+        <translation type="obsolete">Retirar a tabulação da seleção</translation>
     </message>
     <message>
         <source>Shift+Ctrl+I</source>
-        <translation>Shift+Ctrl+I</translation>
+        <translation type="obsolete">Shift+Ctrl+I</translation>
     </message>
     <message>
         <source>French translation:
@@ -3163,55 +4519,55 @@ Francois Pinot
     </message>
     <message>
         <source>CTRL+E</source>
-        <translation>CTRL+E</translation>
+        <translation type="obsolete">CTRL+E</translation>
     </message>
     <message>
         <source>Run Csound</source>
-        <translation>Rodar Csound</translation>
+        <translation type="obsolete">Rodar Csound</translation>
     </message>
     <message>
         <source>Run current file</source>
-        <translation>Rodar arquivo corrente</translation>
+        <translation type="obsolete">Rodar arquivo corrente</translation>
     </message>
     <message>
         <source>Set Keyboard Shortcuts</source>
-        <translation>Configurar atalhos de teclado</translation>
+        <translation type="obsolete">Configurar atalhos de teclado</translation>
     </message>
     <message>
         <source>Set Shortcuts</source>
-        <translation>Configurar atalhos</translation>
+        <translation type="obsolete">Configurar atalhos</translation>
     </message>
     <message>
         <source>&amp;About QuteCsound</source>
-        <translation>Sobre QuteCsound</translation>
+        <translation type="obsolete">Sobre QuteCsound</translation>
     </message>
     <message>
         <source>Show the application&apos;s About box</source>
-        <translation>Mostre informação sobre o programa</translation>
+        <translation type="obsolete">Mostre informação sobre o programa</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
-        <translation>Sobre &amp;Qt</translation>
+        <translation type="obsolete">Sobre &amp;Qt</translation>
     </message>
     <message>
         <source>Show the Qt library&apos;s About box</source>
-        <translation>Mostre informação sobre a biblioteca Qt</translation>
+        <translation type="obsolete">Mostre informação sobre a biblioteca Qt</translation>
     </message>
     <message>
         <source>File</source>
-        <translation>Arquivo</translation>
+        <translation type="obsolete">Arquivo</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation>Editar</translation>
+        <translation type="obsolete">Editar</translation>
     </message>
     <message>
         <source>Control</source>
-        <translation>Controle</translation>
+        <translation type="obsolete">Controle</translation>
     </message>
     <message>
         <source>View</source>
-        <translation>Visual</translation>
+        <translation type="obsolete">Visual</translation>
     </message>
     <message>
         <source>Synths</source>
@@ -3219,63 +4575,63 @@ Francois Pinot
     </message>
     <message>
         <source>Examples</source>
-        <translation>Exemplors</translation>
+        <translation type="obsolete">Exemplors</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation>Ajuda</translation>
+        <translation type="obsolete">Ajuda</translation>
     </message>
     <message>
         <source>Recent files</source>
-        <translation>Arquivos recentes</translation>
+        <translation type="obsolete">Arquivos recentes</translation>
     </message>
     <message>
         <source>Ready</source>
-        <translation>Pronto</translation>
+        <translation type="obsolete">Pronto</translation>
     </message>
     <message>
         <source>The document </source>
-        <translation>O documento</translation>
+        <translation type="obsolete">O documento</translation>
     </message>
     <message>
         <source>
 has been modified.
 Do you want to save the changes before closing?</source>
-        <translation>
+        <translation type="obsolete">
 foi modificado.
 Você quer salvar antes de fechar?</translation>
     </message>
     <message>
         <source>Cannot read file %1:
 %2.</source>
-        <translation>Não foi possível ler o arquivo %1: 
+        <translation type="obsolete">Não foi possível ler o arquivo %1: 
 %2.</translation>
     </message>
     <message>
         <source>File loaded</source>
-        <translation>Arquivo carregado</translation>
+        <translation type="obsolete">Arquivo carregado</translation>
     </message>
     <message>
         <source>Application</source>
-        <translation>Programa</translation>
+        <translation type="obsolete">Programa</translation>
     </message>
     <message>
         <source>Cannot write file %1:
 %2.</source>
-        <translation>Não foi possível escrever o arquivo %1: 
+        <translation type="obsolete">Não foi possível escrever o arquivo %1: 
 %2.</translation>
     </message>
     <message>
         <source>File saved</source>
-        <translation>Arquivo salvo</translation>
+        <translation type="obsolete">Arquivo salvo</translation>
     </message>
     <message>
         <source>%1[*] - %2</source>
-        <translation>%1[*] - %2</translation>
+        <translation type="obsolete">%1[*] - %2</translation>
     </message>
     <message>
         <source>Do not ask again</source>
-        <translation>Não me pergunte de novo</translation>
+        <translation type="obsolete">Não me pergunte de novo</translation>
     </message>
     <message>
         <source>Portuguese translation:
@@ -3285,33 +4641,33 @@ Victor Lazzarini
     </message>
     <message>
         <source>Export without widgets</source>
-        <translation>Exportar sem widgets</translation>
+        <translation type="obsolete">Exportar sem widgets</translation>
     </message>
     <message>
         <source>Save to new file without including widget sections</source>
-        <translation>Salvar em arquivo novo sem incluir widgets</translation>
+        <translation type="obsolete">Salvar em arquivo novo sem incluir widgets</translation>
     </message>
     <message>
         <source>PDF viewer not found!
 Please go to Edit-&gt;Options-&gt;Environment and select directory
 </source>
-        <translation>Leitor de PDF não encontrado! Vá a Editar-&gt;Opções-&gt;Ambiente e selecione diretório</translation>
+        <translation type="obsolete">Leitor de PDF não encontrado! Vá a Editar-&gt;Opções-&gt;Ambiente e selecione diretório</translation>
     </message>
     <message>
         <source>Csound Manual</source>
-        <translation>Manual de Csound</translation>
+        <translation type="obsolete">Manual de Csound</translation>
     </message>
     <message>
         <source>Show the Csound manual in the help panel</source>
-        <translation>Mostrar o manual de Csound no painel de ajuda</translation>
+        <translation type="obsolete">Mostrar o manual de Csound no painel de ajuda</translation>
     </message>
     <message>
         <source>Open Quick Reference Guide</source>
-        <translation>Abrir Guia de Referência Rápida</translation>
+        <translation type="obsolete">Abrir Guia de Referência Rápida</translation>
     </message>
     <message>
         <source>Open Quick Reference Guide in PDF viewer</source>
-        <translation>Abrir Guia de Referência Rápida no leitor de PDF</translation>
+        <translation type="obsolete">Abrir Guia de Referência Rápida no leitor de PDF</translation>
     </message>
     <message>
         <source>Csound Files (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)</source>
@@ -3329,7 +4685,7 @@ Would you like to start from the top?</source>
     <message>
         <source>This file has not been saved
 Please select name and location.</source>
-        <translation>O arquivo não foi salvo. Selecione nome e local</translation>
+        <translation type="obsolete">O arquivo não foi salvo. Selecione nome e local</translation>
     </message>
     <message>
         <source>Italian translation:
@@ -3339,71 +4695,71 @@ Francesco
     </message>
     <message>
         <source>Ctrl+G</source>
-        <translation>Ctrl+G</translation>
+        <translation type="obsolete">Ctrl+G</translation>
     </message>
     <message>
         <source>Alt+6</source>
-        <translation>Alt+6</translation>
+        <translation type="obsolete">Alt+6</translation>
     </message>
     <message>
         <source>Find a&amp;gain</source>
-        <translation>Achar de novo</translation>
+        <translation type="obsolete">Achar de novo</translation>
     </message>
     <message>
         <source>Find next appearance of string</source>
-        <translation>Achar a nova aparição do texto</translation>
+        <translation type="obsolete">Achar a nova aparição do texto</translation>
     </message>
     <message>
         <source>Inspector</source>
-        <translation>Inspetor</translation>
+        <translation type="obsolete">Inspetor</translation>
     </message>
     <message>
         <source>Show Inspector</source>
-        <translation>Mostrar inspetor</translation>
+        <translation type="obsolete">Mostrar inspetor</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Música</translation>
+        <translation type="obsolete">Música</translation>
     </message>
     <message>
         <source>Useful</source>
-        <translation>ÚTIL</translation>
+        <translation type="obsolete">ÚTIL</translation>
     </message>
     <message>
         <source>Live Events</source>
-        <translation>Eventos ao vivo</translation>
+        <translation type="obsolete">Eventos ao vivo</translation>
     </message>
     <message>
         <source>Show Live Events Panels</source>
-        <translation>Mostrar paineis de eventos ao vivo</translation>
+        <translation type="obsolete">Mostrar paineis de eventos ao vivo</translation>
     </message>
     <message>
         <source>Getting Started</source>
-        <translation>Começando</translation>
+        <translation type="obsolete">Começando</translation>
     </message>
     <message>
         <source>Basics</source>
-        <translation>Elementos Bá sicos</translation>
+        <translation type="obsolete">Elementos Bá sicos</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation>Miscelâneos</translation>
+        <translation type="obsolete">Miscelâneos</translation>
     </message>
     <message>
         <source>Realtime Interaction</source>
-        <translation>Interação em tempo real</translation>
+        <translation type="obsolete">Interação em tempo real</translation>
     </message>
     <message>
         <source>Internal error running Csound.</source>
-        <translation>Erro interno executando Csound</translation>
+        <translation type="obsolete">Erro interno executando Csound</translation>
     </message>
     <message>
         <source>Ctrl+.</source>
-        <translation>Ctrl+.</translation>
+        <translation type="obsolete">Ctrl+.</translation>
     </message>
     <message>
         <source>Ctrl+/</source>
-        <translation>Ctrl+/</translation>
+        <translation type="obsolete">Ctrl+/</translation>
     </message>
     <message>
         <source>Shift+Ctrl+/</source>
@@ -3411,97 +4767,97 @@ Francesco
     </message>
     <message>
         <source>Widget Edit Mode</source>
-        <translation>Modo de Edição de Widgets</translation>
+        <translation type="obsolete">Modo de Edição de Widgets</translation>
     </message>
     <message>
         <source>Activate Edit Mode for Widget Panel</source>
-        <translation>Modo de Edição Ativo de Widgets</translation>
+        <translation type="obsolete">Modo de Edição Ativo de Widgets</translation>
     </message>
     <message>
         <source>Stop All</source>
-        <translation>Parar tudo</translation>
+        <translation type="obsolete">Parar tudo</translation>
     </message>
     <message>
         <source>Stop all running documents</source>
-        <translation>Parar a execucao de todos os documentos </translation>
+        <translation type="obsolete">Parar a execucao de todos os documentos </translation>
     </message>
     <message>
         <source>Favorites</source>
-        <translation>Favoritos</translation>
+        <translation type="obsolete">Favoritos</translation>
     </message>
     <message>
         <source>by: Andres Cabrera and others</source>
-        <translation>por: Andres Cabrera e outros</translation>
+        <translation type="obsolete">por: Andres Cabrera e outros</translation>
     </message>
     <message>
         <source>Version %1</source>
-        <translation>Versao:%1</translation>
+        <translation type="obsolete">Versao:%1</translation>
     </message>
     <message>
         <source>Released under the LGPLv2 or GPLv3</source>
-        <translation>Lancado usando LGPLv2 or GPLv3</translation>
+        <translation type="obsolete">Lancado usando LGPLv2 or GPLv3</translation>
     </message>
     <message>
         <source>French translation: Fran&amp;ccedil;ois Pinot</source>
-        <translation>Tradução francesa: Francois Pinot</translation>
+        <translation type="obsolete">Tradução francesa: Francois Pinot</translation>
     </message>
     <message>
         <source>German translation: Joachim Heintz</source>
-        <translation>Tradução alemã:
+        <translation type="obsolete">Tradução alemã:
 Joachim Heintz
 </translation>
     </message>
     <message>
         <source>Portuguese translation: Victor Lazzarini</source>
-        <translation>Tradução portuguesa: Victor Lazzarini</translation>
+        <translation type="obsolete">Tradução portuguesa: Victor Lazzarini</translation>
     </message>
     <message>
         <source>Italian translation: Francesco</source>
-        <translation>Tradução italiana: Francesco</translation>
+        <translation type="obsolete">Tradução italiana: Francesco</translation>
     </message>
     <message>
         <source>Turkish translation: Ali Isciler</source>
-        <translation>Tradução Turca: Ali Isciler</translation>
+        <translation type="obsolete">Tradução Turca: Ali Isciler</translation>
     </message>
     <message>
         <source>If you find QuteCsound useful, please consider donating to the project:</source>
-        <translation>Por favor considere um donativo ao projeto</translation>
+        <translation type="obsolete">Por favor considere um donativo ao projeto</translation>
     </message>
     <message>
         <source>Please file bug reports and feature suggestions in the </source>
-        <translation>Reporte bugs em</translation>
+        <translation type="obsolete">Reporte bugs em</translation>
     </message>
     <message>
         <source>QuteCsound tracker</source>
-        <translation>Tracker QuteCsound</translation>
+        <translation type="obsolete">Tracker QuteCsound</translation>
     </message>
     <message>
         <source>Mailing Lists:</source>
-        <translation>Listas de e-mail</translation>
+        <translation type="obsolete">Listas de e-mail</translation>
     </message>
     <message>
         <source>Other Resources:</source>
-        <translation>Outros recursos</translation>
+        <translation type="obsolete">Outros recursos</translation>
     </message>
     <message>
         <source>Supported by:</source>
-        <translation>Suportado por</translation>
+        <translation type="obsolete">Suportado por</translation>
     </message>
     <message>
         <source>And other generous users.</source>
-        <translation>E outros usuarios generosos</translation>
+        <translation type="obsolete">E outros usuarios generosos</translation>
     </message>
     <message>
         <source>Donate to QuteCsound</source>
-        <translation>Doe para QuteCsound</translation>
+        <translation type="obsolete">Doe para QuteCsound</translation>
     </message>
     <message>
         <source>Donate to support development of QuteCsound</source>
-        <translation>Doe para suportar desenvolvimento futuro</translation>
+        <translation type="obsolete">Doe para suportar desenvolvimento futuro</translation>
     </message>
     <message>
         <source>Language Features</source>
-        <translation>Recursos de linguagem</translation>
+        <translation type="obsolete">Recursos de linguagem</translation>
     </message>
     <message>
         <source>Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco);;Python Files (*.py);;All Files (*)</source>
@@ -3510,99 +4866,95 @@ Joachim Heintz
     </message>
     <message>
         <source>Reset Preferences</source>
-        <translation>Resetar as preferencias</translation>
+        <translation type="obsolete">Resetar as preferencias</translation>
     </message>
     <message>
         <source>Are you sure you want to revert QuteCsound&apos;s preferences
 to their initial default values? </source>
-        <translation>Tem certeza que voce quer voltar as preferencias iniciais?</translation>
+        <translation type="obsolete">Tem certeza que voce quer voltar as preferencias iniciais?</translation>
     </message>
     <message>
         <source>Preferences have been reset.
 You must restart QuteCsound.</source>
-        <translation>As preferencias foram reiniciadas. Voce deve reabrir o programa.</translation>
+        <translation type="obsolete">As preferencias foram reiniciadas. Voce deve reabrir o programa.</translation>
     </message>
     <message>
         <source>Reset QuteCsound&apos;s preferences to their original default state</source>
-        <translation>Recolocar as preferencias em seu estado original</translation>
+        <translation type="obsolete">Recolocar as preferencias em seu estado original</translation>
     </message>
     <message>
         <source>Alt+7</source>
-        <translation>Alt+7</translation>
-    </message>
-    <message>
-        <source>New widget format</source>
-        <translation></translation>
+        <translation type="obsolete">Alt+7</translation>
     </message>
     <message>
         <source>  This version of QuteCsound implements a new format for storing widgets, which enables many of the new widget features you will find now.
   The old format is still read and saved, so you will be able to open files in older versions but some of the features will not be passed to older versions.
 </source>
-        <translation>Esta versao do programa implementa um novo format de widgets. O formato antigo ainda e&apos; lido e salvo.</translation>
+        <translation type="obsolete">Esta versao do programa implementa um novo format de widgets. O formato antigo ainda e&apos; lido e salvo.</translation>
     </message>
     <message>
         <source>Full Path:</source>
-        <translation>Path completo:</translation>
+        <translation type="obsolete">Path completo:</translation>
     </message>
     <message>
         <source>Number of lines (Csound Text):</source>
-        <translation>Numero de linhas (texto de Csound):</translation>
+        <translation type="obsolete">Numero de linhas (texto de Csound):</translation>
     </message>
     <message>
         <source>Number of characters (Csound Text):</source>
-        <translation>Numero de caracteres (texo de Csound):</translation>
+        <translation type="obsolete">Numero de caracteres (texo de Csound):</translation>
     </message>
     <message>
         <source>Number of lines (total):</source>
-        <translation>Numero de linhas (total):</translation>
+        <translation type="obsolete">Numero de linhas (total):</translation>
     </message>
     <message>
         <source>Number of characters (total):</source>
-        <translation>Numero de caracteres (total):</translation>
+        <translation type="obsolete">Numero de caracteres (total):</translation>
     </message>
     <message>
         <source>Number of instruments:</source>
-        <translation>Numero de instrumentos:</translation>
+        <translation type="obsolete">Numero de instrumentos:</translation>
     </message>
     <message>
         <source>Number of UDOs:</source>
-        <translation>Numerod de UDOs:</translation>
+        <translation type="obsolete">Numerod de UDOs:</translation>
     </message>
     <message>
         <source>File Information</source>
-        <translation>Informacao sobre arquivo</translation>
+        <translation type="obsolete">Informacao sobre arquivo</translation>
     </message>
     <message>
         <source>Ctrl+Alt+F</source>
-        <translation>Ctrl+Alt+F</translation>
+        <translation type="obsolete">Ctrl+Alt+F</translation>
     </message>
     <message>
         <source>F11</source>
-        <translation>F11</translation>
+        <translation type="obsolete">F11</translation>
     </message>
     <message>
         <source>Show information for the current file</source>
-        <translation>Mostre informacao sonbre o arquivo corrente</translation>
+        <translation type="obsolete">Mostre informacao sonbre o arquivo corrente</translation>
     </message>
     <message>
         <source>Opcode Quick Reference</source>
-        <translation>Referencia rapida de opcodes</translation>
+        <translation type="obsolete">Referencia rapida de opcodes</translation>
     </message>
     <message>
         <source>Show opcode quick reference page</source>
-        <translation>Mostre a referencia rapida de opcodes</translation>
+        <translation type="obsolete">Mostre a referencia rapida de opcodes</translation>
     </message>
     <message>
         <source>View Full Screen</source>
-        <translation>Ver em tela cheia</translation>
+        <translation type="obsolete">Ver em tela cheia</translation>
     </message>
     <message>
         <source>Have QuteCsound occupy all the available screen space</source>
-        <translation>Fazer o programa ocupar toda a tela</translation>
+        <translation type="obsolete">Fazer o programa ocupar toda a tela</translation>
     </message>
     <message>
         <source>Ctrl+K</source>
-        <translation>Ctrl+K</translation>
+        <translation type="obsolete">Ctrl+K</translation>
     </message>
     <message>
         <source>Shift+Ctrl+K</source>
@@ -3610,302 +4962,35 @@ You must restart QuteCsound.</source>
     </message>
     <message>
         <source>Kill Line</source>
-        <translation>Matar a linha</translation>
+        <translation type="obsolete">Matar a linha</translation>
     </message>
     <message>
         <source>Kill to End of Line</source>
-        <translation>Matar ate&apos; o fim da linha</translation>
+        <translation type="obsolete">Matar ate&apos; o fim da linha</translation>
     </message>
     <message>
         <source>Delete everything from cursor to the end of the current line</source>
-        <translation>Deletar tudo do cursor ao fim da linha</translation>
+        <translation type="obsolete">Deletar tudo do cursor ao fim da linha</translation>
     </message>
     <message>
         <source>Completely delete current line</source>
-        <translation>Deletar completamente a linha corrente</translation>
-    </message>
-    <message>
-        <source>Number of Widgets:</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Deletar completamente a linha corrente</translation>
     </message>
     <message>
         <source>Alt+9</source>
-        <translation type="unfinished">Alt+9</translation>
-    </message>
-    <message>
-        <source>No PythonQt support</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This version of QuteCsound has been compiled without PythonQt support.
-Extended Python features are not available</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Evaluate selection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Evaluate selection in Python Console</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Python Console</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Python Console</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Python</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Files (*.py);;All Files (*)</source>
-        <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Alt+9</translation>
     </message>
     <message>
         <source>Alt+0</source>
-        <translation type="unfinished">Alt+0</translation>
-    </message>
-    <message>
-        <source>Alt+E</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Shift+Alt+E</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Create App...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Create Standalone application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Evaluate section</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Evaluate current section in Python Console</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Focus Text Editor</source>
-        <comment>Give keyboard focus to the text editor</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Give keyboard focus to the text editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Alt+0</translation>
     </message>
     <message>
         <source>Editor</source>
-        <translation type="unfinished">Editor</translation>
-    </message>
-    <message>
-        <source>Comment/Uncomment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Comment/Uncomment selection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Duplicate Widgets</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>FLOSS Manual Examples</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>02 Quick Start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>03 Csound Language</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>07 MIDI</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>McCurdy Collection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Scripts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Python Scratch Pad</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Embedded Files:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Using Csound version:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Precision:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Built with PythonQt support.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Finnish translation: Niko Humalam&amp;auml;ki</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+A</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Editor</translation>
     </message>
     <message>
         <source>Alt+8</source>
-        <translation type="unfinished">Alt+8</translation>
-    </message>
-    <message>
-        <source>Shift+Alt+K</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Shift+Alt+1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Shift+Alt+2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Shift+Alt+3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Shift+Alt+4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Shift+Alt+5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Shift+Alt+6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Shift+Alt+7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Insert/Update Cabbage text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Insert/Update Cabbage section to csd file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ScratchPad</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Python Scratch Pad</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Split View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Toggle between full csd and split text display</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Orchestra</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show orchestra panel in split view</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Score</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show CsOptions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show CsOptions section panel in split view</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Embedded files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Embedded files panel in split view</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Information Text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show information text panel in split view</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Extra Tags</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show extra tags panel in split view</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Widgets Text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Widgets text panel in split view</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>01 Basics</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>04 Sound Synthesis</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>05 Sound Modification</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>06 Samples</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>08 OSC and WII</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>09 Csound in other Applications</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Alt+8</translation>
     </message>
 </context>
 </TS>

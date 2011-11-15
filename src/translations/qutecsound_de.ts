@@ -4,14 +4,8 @@
 <context>
     <name>About</name>
     <message>
-        <location filename="../about.ui" line="96"/>
-        <source>Dialog</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../about.ui" line="304"/>
         <source>QuteCsound</source>
-        <translation>QuteCsound</translation>
+        <translation type="obsolete">QuteCsound</translation>
     </message>
 </context>
 <context>
@@ -167,10 +161,9 @@ Aborting.</translation>
 <context>
     <name>ConfigDialog</name>
     <message>
-        <location filename="../configdialog.cpp" line="247"/>
         <source>Please note that OPCODEDIR will overwrite current settings so you will need to restart QuteCsound to return to default.</source>
         <oldsource>Please note that OPCODEDIR will only be set when running in an external shell. It won&apos;t be set when using Run or Render.</oldsource>
-        <translation>Achtung! OPCODEDIR wird die laufenden Einstellungen überschreiben so dass ein Neustart nötig ist um zu den Voreinstellungen zurückzukehren.</translation>
+        <translation type="obsolete">Achtung! OPCODEDIR wird die laufenden Einstellungen überschreiben so dass ein Neustart nötig ist um zu den Voreinstellungen zurückzukehren.</translation>
     </message>
     <message>
         <source>QuteCsound</source>
@@ -187,34 +180,38 @@ Aborting.</translation>
         <translation>Keins</translation>
     </message>
     <message>
-        <location filename="../configdialog.cpp" line="578"/>
-        <location filename="../configdialog.cpp" line="585"/>
+        <location filename="../configdialog.cpp" line="257"/>
+        <source>Please note that OPCODEDIR will overwrite current settings so you will need to restart CsoundQt to return to default.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.cpp" line="591"/>
+        <location filename="../configdialog.cpp" line="598"/>
         <source>Select File</source>
         <translation>Datei wählen</translation>
     </message>
     <message>
-        <location filename="../configdialog.cpp" line="592"/>
+        <location filename="../configdialog.cpp" line="605"/>
         <source>Select Directory</source>
         <translation>Verzeichnis/Ordner wählen</translation>
     </message>
     <message>
-        <location filename="../configdialog.cpp" line="632"/>
+        <location filename="../configdialog.cpp" line="645"/>
         <source>Enabled</source>
         <comment>Virtual MIDI keyboard Enabled</comment>
         <translation>aktiviert</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="15"/>
         <source>QuteCsound Configuration</source>
-        <translation>QuteCsound Einstellungen</translation>
+        <translation type="obsolete">QuteCsound Einstellungen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1924"/>
+        <location filename="../configdialog.ui" line="1973"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1937"/>
+        <location filename="../configdialog.ui" line="1986"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
@@ -238,23 +235,23 @@ Aborting.</translation>
         <location filename="../configdialog.ui" line="94"/>
         <location filename="../configdialog.ui" line="234"/>
         <location filename="../configdialog.ui" line="251"/>
-        <location filename="../configdialog.ui" line="294"/>
-        <location filename="../configdialog.ui" line="311"/>
-        <location filename="../configdialog.ui" line="1475"/>
-        <location filename="../configdialog.ui" line="1495"/>
-        <location filename="../configdialog.ui" line="1519"/>
-        <location filename="../configdialog.ui" line="1543"/>
-        <location filename="../configdialog.ui" line="1567"/>
-        <location filename="../configdialog.ui" line="1591"/>
-        <location filename="../configdialog.ui" line="1615"/>
-        <location filename="../configdialog.ui" line="1629"/>
-        <location filename="../configdialog.ui" line="1657"/>
-        <location filename="../configdialog.ui" line="1725"/>
-        <location filename="../configdialog.ui" line="1749"/>
-        <location filename="../configdialog.ui" line="1773"/>
-        <location filename="../configdialog.ui" line="1797"/>
-        <location filename="../configdialog.ui" line="1821"/>
-        <location filename="../configdialog.ui" line="1835"/>
+        <location filename="../configdialog.ui" line="290"/>
+        <location filename="../configdialog.ui" line="307"/>
+        <location filename="../configdialog.ui" line="1524"/>
+        <location filename="../configdialog.ui" line="1544"/>
+        <location filename="../configdialog.ui" line="1568"/>
+        <location filename="../configdialog.ui" line="1592"/>
+        <location filename="../configdialog.ui" line="1616"/>
+        <location filename="../configdialog.ui" line="1640"/>
+        <location filename="../configdialog.ui" line="1664"/>
+        <location filename="../configdialog.ui" line="1678"/>
+        <location filename="../configdialog.ui" line="1706"/>
+        <location filename="../configdialog.ui" line="1774"/>
+        <location filename="../configdialog.ui" line="1798"/>
+        <location filename="../configdialog.ui" line="1822"/>
+        <location filename="../configdialog.ui" line="1846"/>
+        <location filename="../configdialog.ui" line="1870"/>
+        <location filename="../configdialog.ui" line="1884"/>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -264,10 +261,8 @@ Aborting.</translation>
         <translation>Dateiname (Output)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="110"/>
-        <location filename="../configdialog.ui" line="348"/>
         <source>Use QuteCsound options</source>
-        <translation>QuteCsound-Optionen benutzen</translation>
+        <translation type="obsolete">QuteCsound-Optionen benutzen</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="123"/>
@@ -315,278 +310,307 @@ Aborting.</translation>
         <translation>Audio-Input (-i)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="267"/>
+        <location filename="../configdialog.ui" line="268"/>
         <source>RT Audio Module</source>
         <translation>Audio-Modul</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="301"/>
+        <location filename="../configdialog.ui" line="297"/>
         <source>output device (-Q)</source>
         <translation>Midi-Output (-Q)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="318"/>
+        <location filename="../configdialog.ui" line="314"/>
         <source>Input device (-M)</source>
         <translation>Midi-Input (-M)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="327"/>
+        <location filename="../configdialog.ui" line="324"/>
         <source>RT MIDI Module</source>
         <translation>MIDI-Modul</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="384"/>
+        <location filename="../configdialog.ui" line="425"/>
         <source>Dither</source>
         <translation>Dither</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="400"/>
+        <location filename="../configdialog.ui" line="379"/>
         <source>Additional command line flags</source>
         <translation>Zusätzliche Kommandozeilen-Angaben (flags)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="426"/>
+        <location filename="../configdialog.ui" line="405"/>
         <source>Buffer Size (-b)</source>
         <translation>Software-Puffergröße (-b)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="436"/>
+        <location filename="../configdialog.ui" line="415"/>
         <source>HW Buffer Size (-B)</source>
         <translation>Hardware Puffergröße (-B)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="448"/>
+        <location filename="../configdialog.ui" line="497"/>
         <source>General</source>
         <translation>Allgemein</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1170"/>
-        <location filename="../configdialog.ui" line="1182"/>
+        <location filename="../configdialog.ui" line="1219"/>
+        <location filename="../configdialog.ui" line="1231"/>
         <source>Editor</source>
         <translation>Editor</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="517"/>
-        <location filename="../configdialog.ui" line="1197"/>
+        <location filename="../configdialog.ui" line="566"/>
+        <location filename="../configdialog.ui" line="1246"/>
         <source>Font</source>
         <translation>Schrift</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="364"/>
+        <location filename="../configdialog.ui" line="356"/>
         <source>Jack client name (use * for current filename)</source>
         <translation>Jack Client Name (für gegenwärtigen Dateinamen * benutzen)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1052"/>
+        <location filename="../configdialog.ui" line="1101"/>
         <source>Enable FLTK</source>
         <translation>FLTK ermöglichen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="527"/>
-        <location filename="../configdialog.ui" line="1207"/>
+        <location filename="../configdialog.ui" line="576"/>
+        <location filename="../configdialog.ui" line="1256"/>
         <source>Size</source>
         <translation>Größe</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="538"/>
-        <location filename="../configdialog.ui" line="1218"/>
+        <location filename="../configdialog.ui" line="15"/>
+        <source>CsoundQt Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="110"/>
+        <location filename="../configdialog.ui" line="340"/>
+        <source>Use CsoundQt options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="432"/>
+        <source>Use new parser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="439"/>
+        <source>Number of threads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="449"/>
+        <source>Use multicore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="509"/>
+        <source>Run Utilities using:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="587"/>
+        <location filename="../configdialog.ui" line="1267"/>
         <source>6</source>
         <translation>6</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="543"/>
-        <location filename="../configdialog.ui" line="1223"/>
+        <location filename="../configdialog.ui" line="592"/>
+        <location filename="../configdialog.ui" line="1272"/>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="548"/>
-        <location filename="../configdialog.ui" line="1228"/>
+        <location filename="../configdialog.ui" line="597"/>
+        <location filename="../configdialog.ui" line="1277"/>
         <source>9</source>
         <translation>9</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="553"/>
-        <location filename="../configdialog.ui" line="1233"/>
+        <location filename="../configdialog.ui" line="602"/>
+        <location filename="../configdialog.ui" line="1282"/>
         <source>10</source>
         <translation>10</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="558"/>
-        <location filename="../configdialog.ui" line="1238"/>
+        <location filename="../configdialog.ui" line="607"/>
+        <location filename="../configdialog.ui" line="1287"/>
         <source>11</source>
         <translation>11</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="563"/>
-        <location filename="../configdialog.ui" line="1243"/>
+        <location filename="../configdialog.ui" line="612"/>
+        <location filename="../configdialog.ui" line="1292"/>
         <source>12</source>
         <translation>12</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="568"/>
-        <location filename="../configdialog.ui" line="1248"/>
+        <location filename="../configdialog.ui" line="617"/>
+        <location filename="../configdialog.ui" line="1297"/>
         <source>14</source>
         <translation>14</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="573"/>
-        <location filename="../configdialog.ui" line="1253"/>
+        <location filename="../configdialog.ui" line="622"/>
+        <location filename="../configdialog.ui" line="1302"/>
         <source>18</source>
         <translation>18</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="578"/>
-        <location filename="../configdialog.ui" line="1258"/>
+        <location filename="../configdialog.ui" line="627"/>
+        <location filename="../configdialog.ui" line="1307"/>
         <source>20</source>
         <translation>20</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="583"/>
-        <location filename="../configdialog.ui" line="1263"/>
+        <location filename="../configdialog.ui" line="632"/>
+        <location filename="../configdialog.ui" line="1312"/>
         <source>24</source>
         <translation>24</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="588"/>
-        <location filename="../configdialog.ui" line="1268"/>
+        <location filename="../configdialog.ui" line="637"/>
+        <location filename="../configdialog.ui" line="1317"/>
         <source>30</source>
         <translation>30</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="593"/>
-        <location filename="../configdialog.ui" line="1273"/>
+        <location filename="../configdialog.ui" line="642"/>
+        <location filename="../configdialog.ui" line="1322"/>
         <source>36</source>
         <translation>36</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="598"/>
-        <location filename="../configdialog.ui" line="1278"/>
+        <location filename="../configdialog.ui" line="647"/>
+        <location filename="../configdialog.ui" line="1327"/>
         <source>48</source>
         <translation>48</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="811"/>
+        <location filename="../configdialog.ui" line="860"/>
         <source>Internal MIDI interface</source>
         <translation>Internes MIDI Interface</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="834"/>
+        <location filename="../configdialog.ui" line="883"/>
         <source>Interface language (Requires restart)</source>
         <translation>Interface-Sprache (erfordert Neustart)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="857"/>
+        <location filename="../configdialog.ui" line="906"/>
         <source>Performance tweaks</source>
         <translation>Performance-Einstellungen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="872"/>
+        <location filename="../configdialog.ui" line="921"/>
         <source>No messages to consoles</source>
         <translation>Keine Meldungen in der Konsole</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="879"/>
+        <location filename="../configdialog.ui" line="928"/>
         <source>Disable recording and scopes</source>
         <translation>Aufnahme und Oszilloskop deaktivieren</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="886"/>
+        <location filename="../configdialog.ui" line="935"/>
         <source>Disable realtime score events</source>
         <translation>Echtzeit Score-Ereignisse deaktivieren</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="893"/>
+        <location filename="../configdialog.ui" line="942"/>
         <source>Disable python callback</source>
         <translation>Python Callback deaktivieren</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1017"/>
+        <location filename="../configdialog.ui" line="1066"/>
         <source>Make the widget panel visible when a csd is played</source>
         <translation>Widget Fenster zeigen wenn eine Csound Datei gespielt wird</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1110"/>
         <source>Store old widget format section in csd file, to allow older versions of QuteCsound to load most of the widget characteristics from the file</source>
-        <translation>Altes Widget-Format sichern, um älteren Versionen von QuteCsound zu erlauben, die meisten der Eigenschaften zu laden</translation>
+        <translation type="obsolete">Altes Widget-Format sichern, um älteren Versionen von QuteCsound zu erlauben, die meisten der Eigenschaften zu laden</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1113"/>
+        <location filename="../configdialog.ui" line="1162"/>
         <source>Store Old Widget Format</source>
         <translation>Altes Widget Format sichern</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1120"/>
+        <location filename="../configdialog.ui" line="1169"/>
         <source>Automatically open properties dialog when a new widget is created</source>
         <translation>Eigenschaften automatisch öffnen wenn ein neues Widget erzeugt wird</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1123"/>
+        <location filename="../configdialog.ui" line="1172"/>
         <source>Open Properties when creating widget</source>
         <translation>Eigenschaften öffnen wenn Widget erzeugt wird</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1130"/>
         <source>Widgets are an independent window</source>
-        <translation>Widgets sind in eigenem Fenster</translation>
+        <translation type="obsolete">Widgets sind in eigenem Fenster</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1139"/>
+        <location filename="../configdialog.ui" line="1188"/>
         <source>Font scaling</source>
         <translation>Font Skalierung</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1152"/>
+        <location filename="../configdialog.ui" line="1201"/>
         <source>Font offset</source>
         <translation>Font offset</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1286"/>
+        <location filename="../configdialog.ui" line="1335"/>
         <source>Tab Width</source>
         <translation>Tabulatorbreite</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1309"/>
+        <location filename="../configdialog.ui" line="1358"/>
         <source>Line Ending Mode</source>
         <translation>Modus fürs Zeilenende</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1320"/>
+        <location filename="../configdialog.ui" line="1369"/>
         <source>Unix (LF)</source>
         <translation>Unix (LF)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1325"/>
+        <location filename="../configdialog.ui" line="1374"/>
         <source>Windows (CR+LF)</source>
         <translation>Windows (CR+LF)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1348"/>
+        <location filename="../configdialog.ui" line="1397"/>
         <source>Color Variables</source>
         <translation>Variablen einfärben</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1435"/>
+        <location filename="../configdialog.ui" line="1484"/>
         <source>Automatically Join orc/sco files</source>
         <translation>orc/sco automatisch verbinden</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1852"/>
+        <location filename="../configdialog.ui" line="1901"/>
         <source>Template</source>
         <translation>Muster</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1864"/>
+        <location filename="../configdialog.ui" line="1913"/>
         <source>csd Template</source>
         <translation>csd-Musterdatei</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1886"/>
+        <location filename="../configdialog.ui" line="1935"/>
         <source>Clear</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1899"/>
+        <location filename="../configdialog.ui" line="1948"/>
         <source>Default</source>
         <translation>Default</translation>
     </message>
@@ -595,33 +619,33 @@ Aborting.</translation>
         <translation type="obsolete">Selbststart wenn aus Datei geladen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1407"/>
+        <location filename="../configdialog.ui" line="1456"/>
         <source>Save changes automatically on run</source>
         <translation>Veränderungen beim Starten sichern</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1414"/>
+        <location filename="../configdialog.ui" line="1463"/>
         <source>Remember open files from previous session</source>
         <translation>Dateien der vorigen Sitzung wieder öffnen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1421"/>
+        <location filename="../configdialog.ui" line="1470"/>
         <source>Show text for toolbar icons</source>
         <translation>Text für Symbole der Werkzeugleiste zeigen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1355"/>
+        <location filename="../configdialog.ui" line="1404"/>
         <source>Wrap Lines</source>
         <translation>Zeilenumbruch</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="903"/>
-        <location filename="../configdialog.ui" line="915"/>
+        <location filename="../configdialog.ui" line="952"/>
+        <location filename="../configdialog.ui" line="964"/>
         <source>Widgets</source>
         <translation>Widgets</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="930"/>
+        <location filename="../configdialog.ui" line="979"/>
         <source>Enable Widgets</source>
         <translation>Widgets ermöglichen</translation>
     </message>
@@ -630,23 +654,23 @@ Aborting.</translation>
         <translation type="obsolete">invalue/outvalue ermöglichen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1010"/>
+        <location filename="../configdialog.ui" line="1059"/>
         <source>Save widgets in csd file</source>
         <translation>Widgets in csd-Datei sichern</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1020"/>
+        <location filename="../configdialog.ui" line="1069"/>
         <source>Show Widgets on Play</source>
         <translation>Widgets beim Abspielen zeigen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1027"/>
+        <location filename="../configdialog.ui" line="1076"/>
         <source>Show Tooltips for widgets</source>
         <translation>Tooltips für Widgets zeigen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1049"/>
-        <location filename="../configdialog.ui" line="1100"/>
+        <location filename="../configdialog.ui" line="1098"/>
+        <location filename="../configdialog.ui" line="1149"/>
         <source>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</source>
         <translation>Csounds FLTK-Widgets können abstürzen wenn API benutzt wird. Besser nicht aktivieren und Csound beim Benutzen von FLTK-Widgets vom Terminal aus starten.</translation>
     </message>
@@ -655,17 +679,17 @@ Aborting.</translation>
         <translation type="obsolete">FLTK ermöglichen (instabil)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="956"/>
+        <location filename="../configdialog.ui" line="1005"/>
         <source>Use invalue/outvalue</source>
         <translation>invalue/outvalue benutzen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="961"/>
+        <location filename="../configdialog.ui" line="1010"/>
         <source>Use chnget/chnset</source>
         <translation>chnget/chnset benutzen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1103"/>
+        <location filename="../configdialog.ui" line="1152"/>
         <source>Run FLTK csds in Terminal</source>
         <translation>FLTK-csds im Terminal ausführen</translation>
     </message>
@@ -678,17 +702,16 @@ Aborting.</translation>
         <translation type="obsolete">Csound Ausführung</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="460"/>
         <source>Run Utilities and Render using:</source>
-        <translation>Dienstprogramme und Ausrechnen über</translation>
+        <translation type="obsolete">Dienstprogramme und Ausrechnen über</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="475"/>
+        <location filename="../configdialog.ui" line="524"/>
         <source>Csound API</source>
         <translation>Csound API</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="482"/>
+        <location filename="../configdialog.ui" line="531"/>
         <source>External shell</source>
         <translation>Externe Shell</translation>
     </message>
@@ -697,37 +720,37 @@ Aborting.</translation>
         <translation type="obsolete">In eigenem Thread laufen lassen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="778"/>
+        <location filename="../configdialog.ui" line="827"/>
         <source>Allow key repeats for sensekey</source>
         <translation>Tastenwiederholungen für den Opcode sensekey erlauben</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="682"/>
+        <location filename="../configdialog.ui" line="731"/>
         <source>Console Message buffer size</source>
         <translation>Puffergröße für Meldungen in der Konsole</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="696"/>
+        <location filename="../configdialog.ui" line="745"/>
         <source>256</source>
         <translation>256</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="701"/>
+        <location filename="../configdialog.ui" line="750"/>
         <source>1024</source>
         <translation>1024</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="706"/>
+        <location filename="../configdialog.ui" line="755"/>
         <source>No limit</source>
         <translation>Keine Begrenzung</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="502"/>
+        <location filename="../configdialog.ui" line="551"/>
         <source>Console</source>
         <translation>Konsole</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="795"/>
+        <location filename="../configdialog.ui" line="844"/>
         <source>Allow simultaneous play (May have problems with portmidi,coreaudio, and alsa audio) </source>
         <translation>Gleichzeitiges Ausführen erlauben (Probleme mit portaudio, coreaudio und alsa Audio sind möglich)</translation>
     </message>
@@ -736,63 +759,73 @@ Aborting.</translation>
         <translation type="obsolete">Neues Widget-Format benutzen (experimentell)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="618"/>
+        <location filename="../configdialog.ui" line="667"/>
         <source>Font Color</source>
         <translation>Schriftfarbe</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="628"/>
+        <location filename="../configdialog.ui" line="677"/>
         <source>Background Color</source>
         <translation>Hintergrundfarbe</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="724"/>
+        <location filename="../configdialog.ui" line="773"/>
         <source>Record</source>
         <translation>Aufnahme</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="739"/>
+        <location filename="../configdialog.ui" line="788"/>
         <source>Record sample format</source>
         <translation>Aufnahme-Sampleformat</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="747"/>
+        <location filename="../configdialog.ui" line="796"/>
         <source>16 Bit Int</source>
         <translation>16 Bit Int</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="752"/>
+        <location filename="../configdialog.ui" line="801"/>
         <source>24 Bit Int</source>
         <translation>24 Bit Int</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="757"/>
+        <location filename="../configdialog.ui" line="806"/>
         <source>32 bit float</source>
         <translation>32 Bit Float</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="785"/>
+        <location filename="../configdialog.ui" line="834"/>
         <source>Debug mode for Live Event Sheet</source>
         <translation>Debug-Modus für Live Event Blatt</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1362"/>
+        <location filename="../configdialog.ui" line="1159"/>
+        <source>Store old widget format section in csd file, to allow older versions of CsoundQt to load most of the widget characteristics from the file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1179"/>
+        <source>Widgets are an independent window (requires restart)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1411"/>
         <source>Autocomplete menu while typing</source>
         <translation>Vervollständigung beim Eingeben</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1379"/>
+        <location filename="../configdialog.ui" line="1428"/>
         <source>Behavior</source>
         <translation>Verhalten</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1428"/>
+        <location filename="../configdialog.ui" line="1477"/>
         <source>Show Toolbars</source>
         <translation>Werkzeugleiste zeigen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1445"/>
-        <location filename="../configdialog.ui" line="1457"/>
+        <location filename="../configdialog.ui" line="1494"/>
+        <location filename="../configdialog.ui" line="1506"/>
         <source>Environment</source>
         <translation>Umgebung</translation>
     </message>
@@ -801,42 +834,42 @@ Aborting.</translation>
         <translation type="obsolete">Verzeichnisse</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1482"/>
+        <location filename="../configdialog.ui" line="1531"/>
         <source>Select the location of the csound opcode plugin  directory (usually set by the installer)</source>
         <translation>Csound-Opcode-Plugin-Verzeichnis wählen (gewöhnlich durch den Installer gesetzt)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1485"/>
+        <location filename="../configdialog.ui" line="1534"/>
         <source>OPCODEDIR</source>
         <translation>OPCODEDIR</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1505"/>
+        <location filename="../configdialog.ui" line="1554"/>
         <source>SADIR</source>
         <translation>SADIR</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1529"/>
+        <location filename="../configdialog.ui" line="1578"/>
         <source>SSDIR</source>
         <translation>SSDIR</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1553"/>
+        <location filename="../configdialog.ui" line="1602"/>
         <source>SFDIR</source>
         <translation>SFDIR</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1577"/>
+        <location filename="../configdialog.ui" line="1626"/>
         <source>INCDIR</source>
         <translation>INCDIR</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1598"/>
+        <location filename="../configdialog.ui" line="1647"/>
         <source>Selects the location of the html documentation</source>
         <translation>Ort der Html-Dokumentation wählen</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1601"/>
+        <location filename="../configdialog.ui" line="1650"/>
         <source>Html Doc Directory</source>
         <translation>Html-Doku-Verzeichnis</translation>
     </message>
@@ -845,58 +878,58 @@ Aborting.</translation>
         <translation type="obsolete">Default csd</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1622"/>
+        <location filename="../configdialog.ui" line="1671"/>
         <source>Favorite dir</source>
         <translation>Auswahlordner</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1664"/>
+        <location filename="../configdialog.ui" line="1713"/>
         <source>Python Executable</source>
         <translation>Python Executable</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1671"/>
+        <location filename="../configdialog.ui" line="1720"/>
         <source>Python Script Dir </source>
         <translation>Python Skript Verzeichnis</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1643"/>
+        <location filename="../configdialog.ui" line="1692"/>
         <source>Log file</source>
         <translation>Log Datei</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1688"/>
-        <location filename="../configdialog.ui" line="1700"/>
+        <location filename="../configdialog.ui" line="1737"/>
+        <location filename="../configdialog.ui" line="1749"/>
         <source>External programs</source>
         <translation>Externe Programme</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1715"/>
+        <location filename="../configdialog.ui" line="1764"/>
         <source>Terminal</source>
         <translation>Terminal</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1735"/>
+        <location filename="../configdialog.ui" line="1784"/>
         <source>Wave Editor</source>
         <translation>Audio-Editor</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1759"/>
+        <location filename="../configdialog.ui" line="1808"/>
         <source>Wave Player</source>
         <translation>Abspielprogramm</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1790"/>
+        <location filename="../configdialog.ui" line="1839"/>
         <source>Browser</source>
         <translation>Browser</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1807"/>
+        <location filename="../configdialog.ui" line="1856"/>
         <source>Dot</source>
         <translation>Dot</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1828"/>
+        <location filename="../configdialog.ui" line="1877"/>
         <source>PDF viewer</source>
         <translation>PDF-Anzeiger</translation>
     </message>
@@ -905,7 +938,7 @@ Aborting.</translation>
         <translation type="obsolete">Interface-Sprache (erfordert Neustart)</translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1397"/>
+        <location filename="../configdialog.ui" line="1446"/>
         <source>Autoplay files when launched from file</source>
         <translation>Selbststart wenn aus Datei geladen</translation>
     </message>
@@ -920,10 +953,1689 @@ Aborting.</translation>
 <context>
     <name>CsoundEngine</name>
     <message>
-        <location filename="../csoundengine.cpp" line="639"/>
+        <location filename="../csoundengine.cpp" line="640"/>
         <source>Csound is not running! Event ignored.
 </source>
         <translation>Csound läuft nicht! Event wird ignoriert.</translation>
+    </message>
+</context>
+<context>
+    <name>CsoundQt</name>
+    <message>
+        <location filename="../qutecsound.cpp" line="137"/>
+        <source>Python Scratch Pad</source>
+        <translation type="unfinished">Python Scratch Pad</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="454"/>
+        <source>Open File</source>
+        <translation type="unfinished">Datei öffnen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="455"/>
+        <location filename="../qutecsound.cpp" line="709"/>
+        <source>Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Files (*.py);;All Files (*)</source>
+        <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
+        <translation type="unfinished">Bekannte Dateien (*.csd *.orc *.sco *.py);;Csound Dateien (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Dateien (*.py);;All Files (*)</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="534"/>
+        <location filename="../qutecsound.cpp" line="549"/>
+        <location filename="../qutecsound.cpp" line="723"/>
+        <location filename="../qutecsound.cpp" line="951"/>
+        <location filename="../qutecsound.cpp" line="965"/>
+        <location filename="../qutecsound.cpp" line="1143"/>
+        <location filename="../qutecsound.cpp" line="1207"/>
+        <location filename="../qutecsound.cpp" line="1237"/>
+        <location filename="../qutecsound.cpp" line="1435"/>
+        <location filename="../qutecsound.cpp" line="4068"/>
+        <location filename="../qutecsound.cpp" line="4328"/>
+        <source>CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="535"/>
+        <source>Dot executable not found.
+Please install graphviz from
+www.graphviz.org</source>
+        <translation type="unfinished">Dot-Programm nicht gefunden.
+Bitte graphviz von www.graphviz.org installieren.</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="550"/>
+        <source>Cannot create temp dot/png file.</source>
+        <translation type="unfinished">Temporäre dot/png-Datei kann nicht erzeugt werden.</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="707"/>
+        <source>Save File As</source>
+        <translation type="unfinished">Datei sichern als</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="724"/>
+        <source>The file is already open in another tab.
+File not saved!</source>
+        <translation type="unfinished">Datei ist schon in anderem Tab geöffnet.
+Datei wurde nicht gesichert!</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="850"/>
+        <source>New widget format</source>
+        <translation type="unfinished">Neues Widget-Format</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="851"/>
+        <source>  This version of CsoundQt implements a new format for storing widgets, which enables many of the new widget features you will find now.
+  The old format is still read and saved, so you will be able to open files in older versions but some of the features will not be passed to older versions.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="928"/>
+        <source>Full Path:</source>
+        <translation type="unfinished">Kompletter Pfad:</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="929"/>
+        <source>Number of lines (Csound Text):</source>
+        <translation type="unfinished">Anzahl der Zeilen (Csound-Text):</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="930"/>
+        <source>Number of characters (Csound Text):</source>
+        <translation type="unfinished">Anzahl der Zeichen (Csound-Text):</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="931"/>
+        <source>Number of lines (total):</source>
+        <translation type="unfinished">Anzahl der Zeilen (insgesamt):</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="932"/>
+        <source>Number of characters (total):</source>
+        <translation type="unfinished">Anzahl der Zeichen (insgesamt):</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="933"/>
+        <source>Number of instruments:</source>
+        <translation type="unfinished">Anzahl der Instrumente:</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="934"/>
+        <source>Number of UDOs:</source>
+        <translation type="unfinished">Anzahl der UDOs:</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="935"/>
+        <source>Number of Widgets:</source>
+        <translation type="unfinished">Anzahl der Widgets:</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="936"/>
+        <source>Embedded Files:</source>
+        <translation type="unfinished">Eingebettete Dateien:</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="937"/>
+        <location filename="../qutecsound.cpp" line="2219"/>
+        <source>File Information</source>
+        <translation type="unfinished">Datei-Information</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="947"/>
+        <source>The document </source>
+        <translation type="unfinished">Das Dokument</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="950"/>
+        <source>
+has been modified.
+Do you want to save the changes before closing?</source>
+        <translation type="unfinished">
+wurde verändert.
+Änderungen speichern?</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="966"/>
+        <source>Do you want to exit CsoundQt?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="988"/>
+        <source>Print Document</source>
+        <translation type="unfinished">Dokument drucken</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1016"/>
+        <location filename="../qutecsound.cpp" line="4424"/>
+        <source>Ok</source>
+        <translation type="unfinished">Ok</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1017"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Abbrechen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1055"/>
+        <source>Join</source>
+        <translation type="unfinished">Verbinden</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1056"/>
+        <source>Please open the orc and sco files in CsoundQt first!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1144"/>
+        <source>This file has not been saved
+Please select name and location.</source>
+        <translation type="unfinished">Datei wurde nicht gesichert.
+Bitte Name und Ort auswählen.</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1208"/>
+        <source>Error creating temporary file.</source>
+        <translation type="unfinished">Fehler beim Schreiben einer temporären Datei.</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1238"/>
+        <source>Internal error running Csound.</source>
+        <translation type="unfinished">Interner Fehler beim Ausführen von Csound.</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1418"/>
+        <source>Output Filename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1436"/>
+        <source>The file %1 
+already exists.
+Do you want to overwrite it?</source>
+        <translation type="unfinished">Die Datei %1 
+existiert bereits.
+Überschreiben?</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1561"/>
+        <location filename="../qutecsound.cpp" line="1625"/>
+        <location filename="../qutecsound.cpp" line="1638"/>
+        <source>Error</source>
+        <translation type="unfinished">Fehler</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1562"/>
+        <location filename="../qutecsound.cpp" line="1626"/>
+        <source>HTML Documentation directory not set!
+Please go to Edit-&gt;Options-&gt;Environment and select directory
+</source>
+        <translation type="unfinished">HTML-Dokumentationsverzeichnis nicht gesetzt!
+Bitte bei Bearbeiten-&gt;Konfiguration-&gt;Umgebung das Verzeichnis auswählen
+</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1639"/>
+        <source>PDF viewer not found!
+Please go to Edit-&gt;Options-&gt;Environment and select directory
+</source>
+        <translation type="unfinished">Programm zur PDF-Ansicht nicht gefunden!
+Bitte bei Konfiguration-&gt;Umgebung-&gt;PDF-Ansicht auswählen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1654"/>
+        <location filename="../qutecsound.cpp" line="1659"/>
+        <location filename="../qutecsound.cpp" line="2647"/>
+        <source>Reset Preferences</source>
+        <translation type="unfinished">Voreinstellungen zurücksetzen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1655"/>
+        <source>Are you sure you want to revert CsoundQt&apos;s preferences
+to their initial default values? </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1660"/>
+        <source>Preferences have been reset.
+You must restart CsoundQt.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1715"/>
+        <source>by: Andres Cabrera and others</source>
+        <translation type="unfinished">von: Andres Cabrera und anderen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1716"/>
+        <source>Version %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1717"/>
+        <source>Released under the LGPLv2 or GPLv3</source>
+        <translation type="unfinished">Veröffentlicht unter der LGPLv2 oder GPLv3</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1718"/>
+        <source>Using Csound version:</source>
+        <translation type="unfinished">Benutzte Csound Version:</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1719"/>
+        <source>Precision:</source>
+        <translation type="unfinished">Genauigkeit:</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1721"/>
+        <source>Built with PythonQt support.</source>
+        <translation type="unfinished">Erstellt mit PythonQt Unterstützung.</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1723"/>
+        <source>French translation: Fran&amp;ccedil;ois Pinot</source>
+        <translation type="unfinished">Französische Übersetzung: Fran&amp;ccedil;ois Pinot</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1724"/>
+        <source>German translation: Joachim Heintz</source>
+        <translation type="unfinished">Deutsche Übersetzung: Joachim Heintz</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1725"/>
+        <source>Portuguese translation: Victor Lazzarini</source>
+        <translation type="unfinished">Portugiesische Übersetzung: Victor Lazzarini</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1726"/>
+        <source>Italian translation: Francesco</source>
+        <translation type="unfinished">Italienische Übersetzung: Francesco</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1727"/>
+        <source>Turkish translation: Ali Isciler</source>
+        <translation type="unfinished">Türkische Übersetzung: Ali Isciler</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1728"/>
+        <source>Finnish translation: Niko Humalam&amp;auml;ki</source>
+        <translation type="unfinished">Finnische Übersetzung: Niko Humalam&amp;auml;ki</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1731"/>
+        <source>If you find CsoundQt useful, please consider donating to the project:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1734"/>
+        <source>Please file bug reports and feature suggestions in the </source>
+        <translation type="unfinished">Bitte Fehler und Vorschläge hier melden:</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1736"/>
+        <source>CsoundQt tracker</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1738"/>
+        <source>Mailing Lists:</source>
+        <translation type="unfinished">Mailing-Listen:</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1743"/>
+        <source>Other Resources:</source>
+        <translation type="unfinished">Andere Quellen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1748"/>
+        <source>Supported by:</source>
+        <translation type="unfinished">Unterstützt durch:</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1751"/>
+        <source>And other generous users.</source>
+        <translation type="unfinished">Und andere großzügige Benutzer.</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1801"/>
+        <source>API</source>
+        <translation type="unfinished">API</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1801"/>
+        <location filename="../qutecsound.cpp" line="2475"/>
+        <source>Console</source>
+        <translation type="unfinished">Konsole</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1807"/>
+        <source>SaveWidgets</source>
+        <translation type="unfinished">WidgetsSichern</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1807"/>
+        <source>DontSaveWidgets</source>
+        <translation type="unfinished">WidgetsNichtSichern</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1810"/>
+        <location filename="../qutecsound.cpp" line="1813"/>
+        <source>UseCsoundQtOptions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1810"/>
+        <location filename="../qutecsound.cpp" line="1813"/>
+        <source>DiscardCsoundQtOptions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1811"/>
+        <location filename="../qutecsound.cpp" line="1814"/>
+        <source>OverrideCsOptions</source>
+        <translation type="unfinished">CsOptionsÜbergehen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1816"/>
+        <source>Play</source>
+        <translation type="unfinished">In Echtzeit abspielen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1817"/>
+        <location filename="../qutecsound.cpp" line="2370"/>
+        <location filename="../qutecsound.cpp" line="2371"/>
+        <source>Render to file</source>
+        <translation type="unfinished">Ausrechnen und in Audiodatei schreiben</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2003"/>
+        <source>Line %1</source>
+        <translation type="unfinished">Zeile %1</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2036"/>
+        <source>Ctrl+N</source>
+        <translation type="unfinished">Ctrl+N</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2037"/>
+        <source>Ctrl+O</source>
+        <translation type="unfinished">Ctrl+O</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2039"/>
+        <source>Ctrl+S</source>
+        <translation type="unfinished">Ctrl+S</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2040"/>
+        <source>Shift+Ctrl+S</source>
+        <translation type="unfinished">Shift+Ctrl+S</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2042"/>
+        <source>Ctrl+W</source>
+        <translation type="unfinished">Ctrl+W</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2044"/>
+        <source>Ctrl+P</source>
+        <translation type="unfinished">Ctrl+P</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2045"/>
+        <source>Ctrl+Q</source>
+        <translation type="unfinished">Ctrl+Q</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2047"/>
+        <source>Ctrl+Z</source>
+        <translation type="unfinished">Ctrl+Z</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2048"/>
+        <source>Shift+Ctrl+Z</source>
+        <translation type="unfinished">Shift+Ctrl+Z</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2050"/>
+        <source>Ctrl+X</source>
+        <translation type="unfinished">Ctrl+X</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2051"/>
+        <source>Ctrl+C</source>
+        <translation type="unfinished">Ctrl+C</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2052"/>
+        <source>Ctrl+V</source>
+        <translation type="unfinished">Ctrl+V</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2053"/>
+        <source>Ctrl+D</source>
+        <translation type="unfinished">Ctrl+D</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2058"/>
+        <source>Ctrl+F</source>
+        <translation type="unfinished">Ctrl+F</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2059"/>
+        <source>Ctrl+G</source>
+        <translation type="unfinished">Ctrl+G</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2060"/>
+        <source>Alt+C</source>
+        <translation type="unfinished">Alt+C</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2062"/>
+        <source>CTRL+E</source>
+        <translation type="unfinished">Ctrl+E</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2063"/>
+        <source>CTRL+R</source>
+        <translation type="unfinished">CTRL+R</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2065"/>
+        <source>Alt+S</source>
+        <translation type="unfinished">Alt+S</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2066"/>
+        <source>Ctrl+.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2067"/>
+        <source>Ctrl+Space</source>
+        <translation type="unfinished">Ctrl+Leerzeichen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2068"/>
+        <source>Alt+F</source>
+        <translation type="unfinished">Alt+F</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2071"/>
+        <source>Alt+0</source>
+        <translation type="unfinished">Alt+0</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2072"/>
+        <source>Alt+1</source>
+        <translation type="unfinished">Alt+1</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2073"/>
+        <source>Alt+2</source>
+        <translation type="unfinished">Alt+2</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2076"/>
+        <source>Alt+3</source>
+        <translation type="unfinished">Alt+3</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2078"/>
+        <source>Ctrl+Alt+F</source>
+        <translation type="unfinished">Ctrl+Alt+F</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2080"/>
+        <source>F11</source>
+        <translation type="unfinished">F11</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2082"/>
+        <source>Ctrl+Shift+A</source>
+        <translation type="unfinished">Ctrl+Shift+A</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2083"/>
+        <source>Alt+4</source>
+        <translation type="unfinished">Alt+4</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2084"/>
+        <source>Alt+5</source>
+        <translation type="unfinished">Alt+5</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2085"/>
+        <source>Alt+6</source>
+        <translation type="unfinished">Alt+6</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2086"/>
+        <source>Alt+9</source>
+        <translation type="unfinished">Alt+9</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2087"/>
+        <source>Shift+F1</source>
+        <translation type="unfinished">Shift+F1</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2090"/>
+        <source>Shift+Alt+F1</source>
+        <translation type="unfinished">Shift+Alt+F1</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2092"/>
+        <source>Ctrl+/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2094"/>
+        <source>Ctrl+I</source>
+        <translation type="unfinished">Ctrl+I</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2095"/>
+        <source>Shift+Ctrl+I</source>
+        <translation type="unfinished">Shift+Ctrl+I</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2096"/>
+        <source>Alt+E</source>
+        <translation type="unfinished">Alt+E</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2097"/>
+        <source>Shift+Alt+E</source>
+        <translation type="unfinished">Shift+Alt+E</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2098"/>
+        <source>Alt+7</source>
+        <translation type="unfinished">Alt+7</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2099"/>
+        <source>Alt+8</source>
+        <translation type="unfinished">Alt+8</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2100"/>
+        <source>Ctrl+K</source>
+        <translation type="unfinished">Ctrl+K</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2101"/>
+        <source>Shift+Alt+K</source>
+        <translation type="unfinished">Shift+Alt+K</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2102"/>
+        <source>Shift+Alt+1</source>
+        <translation type="unfinished">Shift+Alt+1</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2103"/>
+        <source>Shift+Alt+2</source>
+        <translation type="unfinished">Shift+Alt+2</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2104"/>
+        <source>Shift+Alt+3</source>
+        <translation type="unfinished">Shift+Alt+3</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2105"/>
+        <source>Shift+Alt+4</source>
+        <translation type="unfinished">Shift+Alt+4</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2106"/>
+        <source>Shift+Alt+5</source>
+        <translation type="unfinished">Shift+Alt+5</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2107"/>
+        <source>Shift+Alt+6</source>
+        <translation type="unfinished">Shift+Alt+6</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2108"/>
+        <source>Shift+Alt+7</source>
+        <translation type="unfinished">Shift+Alt+7</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2113"/>
+        <source>No PythonQt support</source>
+        <translation type="unfinished">Keine PythonQt Unterstützung</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2114"/>
+        <source>This version of CsoundQt has been compiled without PythonQt support.
+Extended Python features are not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2158"/>
+        <source>&amp;New</source>
+        <translation type="unfinished">&amp;Neu</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2159"/>
+        <source>Create a new file</source>
+        <translation type="unfinished">Neue Datei erzeugen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2160"/>
+        <source>New</source>
+        <translation type="unfinished">Neu</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2164"/>
+        <source>&amp;Open...</source>
+        <translation type="unfinished">Öffnen...</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2165"/>
+        <source>Open an existing file</source>
+        <translation type="unfinished">Bestehende Datei öffnen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2166"/>
+        <source>Open</source>
+        <translation type="unfinished">Öffnen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2170"/>
+        <source>Reload</source>
+        <translation type="unfinished">Neu laden</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2171"/>
+        <source>Reload file from disk, discarding changes</source>
+        <translation type="unfinished">Datei von der Festplatte neu laden, Änderungen verwerfen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2176"/>
+        <source>&amp;Save</source>
+        <translation type="unfinished">&amp;Sichern</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2177"/>
+        <source>Save the document to disk</source>
+        <translation type="unfinished">Dokument auf der Festplatte sichern</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2178"/>
+        <source>Save</source>
+        <translation type="unfinished">Sichern</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2182"/>
+        <source>Save &amp;As...</source>
+        <translation type="unfinished">Sichern &amp;Als...</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2183"/>
+        <source>Save the document under a new name</source>
+        <translation type="unfinished">Dokument unter neuem Namen sichern</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2184"/>
+        <source>Save as</source>
+        <translation type="unfinished">Sichern als</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2188"/>
+        <source>Create App...</source>
+        <translation type="unfinished">App erzeugen...</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2189"/>
+        <source>Create Standalone application</source>
+        <translation type="unfinished">Standalone Application erzeugen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2193"/>
+        <source>Export without widgets</source>
+        <translation type="unfinished">Exportieren ohne Widgets</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2194"/>
+        <source>Save to new file without including widget sections</source>
+        <translation type="unfinished">In neuer Datei ohne Angaben über die Widgets sichern</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2199"/>
+        <location filename="../qutecsound.cpp" line="2200"/>
+        <source>Close current tab</source>
+        <translation type="unfinished">Diesen Tab schließen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2206"/>
+        <source>Print</source>
+        <translation type="unfinished">Drucken</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2207"/>
+        <source>Print current document</source>
+        <translation type="unfinished">Dieses Dokument drucken</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2220"/>
+        <source>Show information for the current file</source>
+        <translation type="unfinished">Information für diese Datei zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2225"/>
+        <source>E&amp;xit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2226"/>
+        <source>Exit the application</source>
+        <translation type="unfinished">Programm beenden</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2231"/>
+        <source>View Code &amp;Graph</source>
+        <translation type="unfinished">Code &amp;Graph ansehen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2232"/>
+        <source>View Code Graph</source>
+        <translation type="unfinished">Code Graph ansehen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2237"/>
+        <location filename="../qutecsound.cpp" line="2239"/>
+        <source>Undo</source>
+        <translation type="unfinished">Nein</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2238"/>
+        <source>Undo last action</source>
+        <translation type="unfinished">Letzte Aktion rückgängig machen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2243"/>
+        <location filename="../qutecsound.cpp" line="2245"/>
+        <source>Redo</source>
+        <translation type="unfinished">Doch</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2244"/>
+        <source>Redo last action</source>
+        <translation type="unfinished">Letzte Aktion wiederholen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2249"/>
+        <source>Cu&amp;t</source>
+        <translation type="unfinished">Ausschneiden</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2250"/>
+        <source>Cut the current selection&apos;s contents to the clipboard</source>
+        <translation type="unfinished">Auswahl ausschneiden und in der Zwischenablage speichern</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2252"/>
+        <source>Cut</source>
+        <translation type="unfinished">Raus</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2256"/>
+        <source>&amp;Copy</source>
+        <translation type="unfinished">Kopieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2257"/>
+        <source>Copy the current selection&apos;s contents to the clipboard</source>
+        <translation type="unfinished">Auswahl in die Zwischenablage kopieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2259"/>
+        <source>Copy</source>
+        <translation type="unfinished">Kopieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2263"/>
+        <source>&amp;Paste</source>
+        <translation type="unfinished">Einfügen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2264"/>
+        <source>Paste the clipboard&apos;s contents into the current selection</source>
+        <translation type="unfinished">Zwischenablage in Auswahl einsetzen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2266"/>
+        <source>Paste</source>
+        <translation type="unfinished">Rein</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2270"/>
+        <source>&amp;Join orc/sco</source>
+        <translation type="unfinished">orc/sco verbinden</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2271"/>
+        <source>Join orc/sco files in a single csd file</source>
+        <translation type="unfinished">orc/sco-Dateien in einer csd-Datei zusammenführen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2276"/>
+        <source>Evaluate selection</source>
+        <translation type="unfinished">Auswahl evaluieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2277"/>
+        <source>Evaluate selection in Python Console</source>
+        <translation type="unfinished">Auswahl in der Python-Konsole evaluieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2281"/>
+        <source>Evaluate section</source>
+        <translation type="unfinished">Auswahl evaluieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2282"/>
+        <source>Evaluate current section in Python Console</source>
+        <translation type="unfinished">Gegenwärtige Auswahl in der Python-Konsole evaluieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2286"/>
+        <source>Invalue-&gt;Chnget</source>
+        <translation type="unfinished">Invalue-&gt;Chnget</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2287"/>
+        <source>Convert invalue/outvalue to chnget/chnset</source>
+        <translation type="unfinished">Invalue/outvalue in chnget/chnset umwandeln</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2291"/>
+        <source>Chnget-&gt;Invalue</source>
+        <translation type="unfinished">Chnget-&gt;Invalue</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2292"/>
+        <source>Convert chnget/chnset to invalue/outvalue</source>
+        <translation type="unfinished">Chnget/chnset in invalue/outvalue umwandeln</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2296"/>
+        <source>Insert/Update CsLADSPA text</source>
+        <translation type="unfinished">CsLADSPA-Text einfügen/aktualisieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2297"/>
+        <source>Insert/Update CsLADSPA section to csd file</source>
+        <translation type="unfinished">CsLADSPA Abschnitt in csd-Datei einfügen/aktualisieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2301"/>
+        <source>Insert/Update Cabbage text</source>
+        <translation type="unfinished">Cabbage Text einfügen/aktualisieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2302"/>
+        <source>Insert/Update Cabbage section to csd file</source>
+        <translation type="unfinished">Cabbage Abschnitt in csd Datei einfügen/aktualisieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2306"/>
+        <source>&amp;Find and Replace</source>
+        <translation type="unfinished">&amp;Finden und ersetzen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2307"/>
+        <source>Find and replace strings in file</source>
+        <translation type="unfinished">Ausdruck in Datei finden und ersetzen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2312"/>
+        <source>Find a&amp;gain</source>
+        <translation type="unfinished">Erneut finden</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2313"/>
+        <source>Find next appearance of string</source>
+        <translation type="unfinished">Nächstes Vorkommen der Zeichenkette finden</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2318"/>
+        <source>AutoComplete</source>
+        <translation type="unfinished">Vervollständigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2319"/>
+        <source>Autocomplete according to Status bar display</source>
+        <translation type="unfinished">Vervollständigen gemäß Fortschrittsanzeige</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2324"/>
+        <source>Configuration</source>
+        <translation type="unfinished">Konfiguration</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2325"/>
+        <source>Open configuration dialog</source>
+        <translation type="unfinished">Konfigurationsdialog öffnen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2326"/>
+        <location filename="../qutecsound.cpp" line="3636"/>
+        <source>Configure</source>
+        <translation type="unfinished">Konfigurieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2330"/>
+        <source>Widget Edit Mode</source>
+        <translation type="unfinished">Widget-Edit-Modus</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2331"/>
+        <source>Activate Edit Mode for Widget Panel</source>
+        <translation type="unfinished">Edit-Modus für Widget-Panel aktivieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2337"/>
+        <source>Run Csound</source>
+        <translation type="unfinished">Csound ausführen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2338"/>
+        <source>Run current file</source>
+        <translation type="unfinished">Gegenwärtige Datei ausführen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2339"/>
+        <source>Run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2344"/>
+        <source>Run in Terminal</source>
+        <translation type="unfinished">Im Terminal ausführen (Echtzeit)</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2345"/>
+        <source>Run in external shell</source>
+        <translation type="unfinished">In externer Shell ausführen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2346"/>
+        <source>Run in Term</source>
+        <translation type="unfinished">RT im Term</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2350"/>
+        <location filename="../qutecsound.cpp" line="2351"/>
+        <location filename="../qutecsound.cpp" line="2352"/>
+        <source>Stop</source>
+        <translation type="unfinished">Stop</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2356"/>
+        <location filename="../qutecsound.cpp" line="2358"/>
+        <source>Stop All</source>
+        <translation type="unfinished">Alles stoppen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2357"/>
+        <source>Stop all running documents</source>
+        <translation type="unfinished">Alle laufenden Dokumente stoppen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2362"/>
+        <location filename="../qutecsound.cpp" line="2363"/>
+        <location filename="../qutecsound.cpp" line="2364"/>
+        <source>Record</source>
+        <translation type="unfinished">Aufnahme</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2372"/>
+        <source>Render</source>
+        <translation type="unfinished">In Datei</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2376"/>
+        <source>Play Audiofile</source>
+        <translation type="unfinished">Audiodatei abspielen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2377"/>
+        <source>Play rendered audiofile in External Editor</source>
+        <translation type="unfinished">Ausgerechnete Audiodatei in externem Editor abspielen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2378"/>
+        <source>Ext. Player</source>
+        <translation type="unfinished">Ext. Player</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2382"/>
+        <source>Edit Audiofile</source>
+        <translation type="unfinished">Audiodatei bearbeiten</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2383"/>
+        <source>Edit rendered audiofile in External Editor</source>
+        <translation type="unfinished">Ausgerechnete Audiodatei im externen Editor bearbeiten</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2384"/>
+        <source>Ext. Editor</source>
+        <translation type="unfinished">Ext. Editor</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2388"/>
+        <location filename="../qutecsound.cpp" line="2392"/>
+        <source>Widgets</source>
+        <translation type="unfinished">Widgets</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2391"/>
+        <source>Show Realtime Widgets</source>
+        <translation type="unfinished">Echtzeit Widgets zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2395"/>
+        <location filename="../qutecsound.cpp" line="2398"/>
+        <source>Inspector</source>
+        <translation type="unfinished">Inspektor</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2397"/>
+        <source>Show Inspector</source>
+        <translation type="unfinished">Inspektor zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2403"/>
+        <source>Focus Text Editor</source>
+        <comment>Give keyboard focus to the text editor</comment>
+        <translation type="unfinished">Fokus zum Text-Editor</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2404"/>
+        <source>Give keyboard focus to the text editor</source>
+        <translation type="unfinished">Tastatur-Fokus zum Text-Editor geben</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2405"/>
+        <source>Editor</source>
+        <translation type="unfinished">Editor</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2409"/>
+        <source>Help Panel</source>
+        <translation type="unfinished">Manual</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2412"/>
+        <source>Show the Csound Manual Panel</source>
+        <translation type="unfinished">Csound Manual zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2413"/>
+        <source>Manual</source>
+        <translation type="unfinished">Manual</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2418"/>
+        <location filename="../qutecsound.cpp" line="2422"/>
+        <source>Live Events</source>
+        <translation type="unfinished">Echtzeitereignisse</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2421"/>
+        <source>Show Live Events Panels</source>
+        <translation type="unfinished">Fenster für Echtzeitereignisse zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2425"/>
+        <source>Python Console</source>
+        <translation type="unfinished">Python Konsole</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2428"/>
+        <source>Show Python Console</source>
+        <translation type="unfinished">Python Konsole zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2429"/>
+        <source>Python</source>
+        <translation type="unfinished">Python</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2438"/>
+        <location filename="../qutecsound.cpp" line="2442"/>
+        <source>ScratchPad</source>
+        <translation type="unfinished">ScratchPad</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2441"/>
+        <source>Show Python Scratch Pad</source>
+        <translation type="unfinished">Python Scratch Pad zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2451"/>
+        <source>Csound Manual</source>
+        <translation type="unfinished">Csound Manual</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2452"/>
+        <source>Show the Csound manual in the help panel</source>
+        <translation type="unfinished">Csound Manual im Hilfefenster zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2456"/>
+        <source>GEN Routines</source>
+        <translation type="unfinished">GEN Routinen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2457"/>
+        <source>Show the GEN Routines Manual page</source>
+        <translation type="unfinished">Manual-Seite für GEN Routinen anzeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2461"/>
+        <source>Opcode Overview</source>
+        <translation type="unfinished">Opcode Überblick</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2462"/>
+        <source>Show opcode overview</source>
+        <translation type="unfinished">Opcode-Überblick anzeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2466"/>
+        <source>Opcode Quick Reference</source>
+        <translation type="unfinished">Opcode Quick Reference</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2467"/>
+        <source>Show opcode quick reference page</source>
+        <translation type="unfinished">Opcode-Kurzinfo zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2471"/>
+        <source>Output Console</source>
+        <translation type="unfinished">Konsole</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2474"/>
+        <source>Show Csound&apos;s message console</source>
+        <translation type="unfinished">Csound-Meldungen anzeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2480"/>
+        <source>View Full Screen</source>
+        <translation type="unfinished">Ganzer Bildschirm</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2483"/>
+        <source>Have CsoundQt occupy all the available screen space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2487"/>
+        <source>Split View</source>
+        <translation type="unfinished">Geteilte Ansicht</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2490"/>
+        <source>Toggle between full csd and split text display</source>
+        <translation type="unfinished">Zwischen voller csd und geteilter Textansicht umschalten</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2494"/>
+        <source>Show Orchestra</source>
+        <translation type="unfinished">Orchester zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2498"/>
+        <location filename="../qutecsound.cpp" line="2507"/>
+        <source>Show orchestra panel in split view</source>
+        <translation type="unfinished">Orchester Fenster in geteilter Ansicht zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2503"/>
+        <source>Show Score</source>
+        <translation type="unfinished">Score zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2512"/>
+        <source>Show CsOptions</source>
+        <translation type="unfinished">CsOptions zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2516"/>
+        <source>Show CsOptions section panel in split view</source>
+        <translation type="unfinished">Zeige CsOptions Abschnitt in geteilter Ansicht</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2521"/>
+        <source>Show Embedded files</source>
+        <translation type="unfinished">Eingebettete Dateien zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2525"/>
+        <source>Show Embedded files panel in split view</source>
+        <translation type="unfinished">Eingebettete Dateien in geteilter Ansicht zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2530"/>
+        <source>Show Information Text</source>
+        <translation type="unfinished">Information anzeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2534"/>
+        <source>Show information text panel in split view</source>
+        <translation type="unfinished">Information in geteilter Ansicht zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2539"/>
+        <source>Show Extra Tags</source>
+        <translation type="unfinished">Extra Tags zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2543"/>
+        <source>Show extra tags panel in split view</source>
+        <translation type="unfinished">Extra Tags in geteilter Ansicht zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2548"/>
+        <source>Show Widgets Text</source>
+        <translation type="unfinished">Widgets Text zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2552"/>
+        <source>Show Widgets text panel in split view</source>
+        <translation type="unfinished">Widget Text in geteilter Ansicht zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2557"/>
+        <source>Show Opcode Entry</source>
+        <translation type="unfinished">Opcode-Eintrag anzeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2558"/>
+        <source>Show Opcode Entry in help panel</source>
+        <translation type="unfinished">Opcode-Eintrag im Hilfefenster anzeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2559"/>
+        <source>Manual for opcode</source>
+        <translation type="unfinished">Manual für Opcode</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2563"/>
+        <source>Help Back</source>
+        <translation type="unfinished">Hilfe zurück</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2564"/>
+        <source>Go back in help page</source>
+        <translation type="unfinished">Auf Hilfeseite zurückgehen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2568"/>
+        <source>Help Forward</source>
+        <translation type="unfinished">Hilfe vorwärts</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2569"/>
+        <source>Go forward in help page</source>
+        <translation type="unfinished">Auf Hilfeseite vorwärts gehen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2573"/>
+        <source>Show Opcode Entry in External Browser</source>
+        <translation type="unfinished">Opcode-Eintrag im externen Browser zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2574"/>
+        <source>Show Opcode Entry in external browser</source>
+        <translation type="unfinished">Opcode-Eintrag im externen Browser zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2578"/>
+        <source>Open Quick Reference Guide</source>
+        <translation type="unfinished">QuteCsound Erläuterungen (Quick Reference)</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2579"/>
+        <source>Open Quick Reference Guide in PDF viewer</source>
+        <translation type="unfinished">QuteCsound Kurzeinführung im PDF-Anzeiger öffnen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2583"/>
+        <location filename="../qutecsound.cpp" line="2587"/>
+        <source>Utilities</source>
+        <translation type="unfinished">Utilities</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2586"/>
+        <source>Show the Csound Utilities dialog</source>
+        <translation type="unfinished">Dialog für Csound-Hilfsprogramme anzeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2591"/>
+        <location filename="../qutecsound.cpp" line="2592"/>
+        <source>Set Keyboard Shortcuts</source>
+        <translation type="unfinished">Tastenkürzel setzen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2593"/>
+        <source>Set Shortcuts</source>
+        <translation type="unfinished">Tastenkürzel setzen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2597"/>
+        <source>Comment/Uncomment</source>
+        <translation type="unfinished">Kommentieren/Entkommentieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2598"/>
+        <source>Comment/Uncomment selection</source>
+        <translation type="unfinished">Auswahl kommentieren/entkommentieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2609"/>
+        <source>Indent</source>
+        <translation type="unfinished">Einrücken</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2610"/>
+        <source>Indent selection</source>
+        <translation type="unfinished">Auswahl einrücken</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2615"/>
+        <source>Unindent</source>
+        <translation type="unfinished">Einrückung aufheben</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2616"/>
+        <source>Unindent selection</source>
+        <translation type="unfinished">Einrückung der Auswahl aufheben</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2621"/>
+        <source>Kill Line</source>
+        <translation type="unfinished">Zeile löschen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2622"/>
+        <source>Completely delete current line</source>
+        <translation type="unfinished">Zeile vollständig entfernen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2625"/>
+        <source>Kill to End of Line</source>
+        <translation type="unfinished">Bis Ende der Zeile löschen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2626"/>
+        <source>Delete everything from cursor to the end of the current line</source>
+        <translation type="unfinished">Alles vom Cursor bis ans Ende der Zeile löschen.</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2629"/>
+        <source>&amp;About CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2630"/>
+        <source>Show the application&apos;s About box</source>
+        <translation type="unfinished">Informationsfenster des Programms zeigen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2635"/>
+        <source>Donate to CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2636"/>
+        <source>Donate to support development of CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2648"/>
+        <source>Reset CsoundQt&apos;s preferences to their original default state</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2652"/>
+        <source>Report a Bug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2653"/>
+        <source>Report a bug in CsoundQt&apos;s Bug Tracker</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2657"/>
+        <source>Request a Feature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2658"/>
+        <source>Request a feature in CsoundQt&apos;s Feature Tracker</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2662"/>
+        <source>Csound IRC Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2663"/>
+        <source>Open the IRC chat channel #csound in your browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2667"/>
+        <source>Duplicate Widgets</source>
+        <translation type="unfinished">Widgets duplizieren</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2823"/>
+        <location filename="../qutecsound.cpp" line="3612"/>
+        <source>File</source>
+        <translation type="unfinished">Datei</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2839"/>
+        <source>Recent files</source>
+        <translation type="unfinished">Benutzte Dateien</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2841"/>
+        <location filename="../qutecsound.cpp" line="3618"/>
+        <source>Edit</source>
+        <translation type="unfinished">Bearbeiten</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2873"/>
+        <location filename="../qutecsound.cpp" line="3626"/>
+        <source>Control</source>
+        <translation type="unfinished">Steuerung</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2883"/>
+        <source>View</source>
+        <translation type="unfinished">Ansicht</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2939"/>
+        <source>Live Collection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2986"/>
+        <source>Music</source>
+        <translation type="unfinished">Music</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3012"/>
+        <source>Useful</source>
+        <translation type="unfinished">Useful</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3036"/>
+        <source>Miscellaneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3038"/>
+        <source>Examples</source>
+        <translation type="unfinished">Beispiele</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3051"/>
+        <source>Getting Started</source>
+        <translation type="unfinished">Getting Started</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3052"/>
+        <source>Basics</source>
+        <translation type="unfinished">Basics</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3072"/>
+        <source>Realtime Interaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3088"/>
+        <source>Language Features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3111"/>
+        <source>FLOSS Manual Examples</source>
+        <translation type="unfinished">FLOSS Manual Beispiele</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3121"/>
+        <source>01 Basics</source>
+        <translation type="unfinished">01 Basics</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3140"/>
+        <source>02 Quick Start</source>
+        <translation type="unfinished">02 Quick Start</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3222"/>
+        <source>03 Csound Language</source>
+        <translation type="unfinished">03 Csound Language</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3266"/>
+        <source>04 Sound Synthesis</source>
+        <translation type="unfinished">04 Sound Synthesis</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3312"/>
+        <source>05 Sound Modification</source>
+        <translation type="unfinished">05 Sound Modification</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3330"/>
+        <source>06 Samples</source>
+        <translation type="unfinished">06 Samples</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3358"/>
+        <source>07 MIDI</source>
+        <translation type="unfinished">07 MIDI</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3369"/>
+        <source>08 OSC and WII</source>
+        <translation type="unfinished">08 OSC and WII</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3389"/>
+        <source>09 Csound in other Applications</source>
+        <translation type="unfinished">09 Csound in other Applications</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3425"/>
+        <source>McCurdy Collection</source>
+        <translation type="unfinished">McCurdy Collection</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3453"/>
+        <source>Favorites</source>
+        <translation type="unfinished">Favoriten</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3455"/>
+        <source>Scripts</source>
+        <translation type="unfinished">Scripts</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3461"/>
+        <source>Help</source>
+        <translation type="unfinished">Hilfe</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3660"/>
+        <source>Ready</source>
+        <translation type="unfinished">Fertig</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="4069"/>
+        <source>Cannot read file %1:
+%2.</source>
+        <translation type="unfinished">Datei %1 kann nicht gelesen werden:
+%2.</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="4078"/>
+        <source>File already open</source>
+        <translation type="unfinished">Datei ist bereits geöffnet</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="4198"/>
+        <source>File loaded</source>
+        <translation type="unfinished">Datei geladen</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="4304"/>
+        <source>Application</source>
+        <translation type="unfinished">Programm</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="4305"/>
+        <source>Cannot write file %1:
+%2.</source>
+        <translation type="unfinished">Datei %1 kann nicht geschrieben werden:
+%2.</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="4316"/>
+        <source>File saved</source>
+        <translation type="unfinished">Datei gesichert</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="4328"/>
+        <source>%1[*] - %2</source>
+        <translation type="unfinished">%1[*] - %2</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="4430"/>
+        <source>Do not ask again</source>
+        <translation type="unfinished">Nicht noch einmal fragen</translation>
     </message>
 </context>
 <context>
@@ -946,10 +2658,14 @@ Aborting.</translation>
         <translation>Nicht gefunden! Bitte versichern ob der Pfad für die Dokumentation im Konfigurationsdialog richtig gesetzt wurde.</translation>
     </message>
     <message>
+        <source>QuteCsound</source>
+        <translation type="obsolete">QuteCsound</translation>
+    </message>
+    <message>
         <location filename="../dockhelp.cpp" line="138"/>
         <location filename="../dockhelp.cpp" line="144"/>
-        <source>QuteCsound</source>
-        <translation>QuteCsound</translation>
+        <source>CsoundQt</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../dockhelp.cpp" line="139"/>
@@ -965,12 +2681,16 @@ Aborting.</translation>
 <context>
     <name>DocumentPage</name>
     <message>
-        <location filename="../documentpage.cpp" line="1237"/>
         <source>QuteCsound</source>
-        <translation>QuteCsound</translation>
+        <translation type="obsolete">QuteCsound</translation>
     </message>
     <message>
-        <location filename="../documentpage.cpp" line="1238"/>
+        <location filename="../documentpage.cpp" line="1249"/>
+        <source>CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../documentpage.cpp" line="1250"/>
         <source>You must save the examples to use Record.</source>
         <translation>Beispiel muss vor der Aufnahme gesichert werden.</translation>
     </message>
@@ -978,24 +2698,24 @@ Aborting.</translation>
 <context>
     <name>DocumentView</name>
     <message>
-        <location filename="../documentview.cpp" line="713"/>
+        <location filename="../documentview.cpp" line="730"/>
         <source>Find and replace</source>
         <translation>Finden und ersetzen</translation>
     </message>
     <message>
-        <location filename="../documentview.cpp" line="714"/>
+        <location filename="../documentview.cpp" line="731"/>
         <source>The string was not found.
 Would you like to start from the top?</source>
         <translation>Nicht gefunden.
 Von Anfang beginnen?</translation>
     </message>
     <message>
-        <location filename="../documentview.cpp" line="741"/>
+        <location filename="../documentview.cpp" line="758"/>
         <source>Evaluate Selection</source>
         <translation>Auswahl evaluieren</translation>
     </message>
     <message>
-        <location filename="../documentview.cpp" line="742"/>
+        <location filename="../documentview.cpp" line="759"/>
         <source>Opcode Help</source>
         <translation>Opcode Hilfe</translation>
     </message>
@@ -1691,17 +3411,17 @@ Von Anfang beginnen?</translation>
         <translation>Score</translation>
     </message>
     <message>
-        <location filename="../inspector.cpp" line="187"/>
+        <location filename="../inspector.cpp" line="202"/>
         <source>Imports</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../inspector.cpp" line="189"/>
+        <location filename="../inspector.cpp" line="204"/>
         <source>Classes</source>
         <translation>Klassen</translation>
     </message>
     <message>
-        <location filename="../inspector.cpp" line="191"/>
+        <location filename="../inspector.cpp" line="206"/>
         <source>Functions</source>
         <translation>Funktionen</translation>
     </message>
@@ -1722,47 +3442,47 @@ Von Anfang beginnen?</translation>
 <context>
     <name>KeySelectorDialog</name>
     <message>
-        <location filename="../keyselector.ui" line="13"/>
+        <location filename="../keyselector.ui" line="14"/>
         <source>Select shortcut</source>
         <translation>Tastenkombination auswählen</translation>
     </message>
     <message>
-        <location filename="../keyselector.ui" line="47"/>
+        <location filename="../keyselector.ui" line="48"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../keyselector.ui" line="54"/>
+        <location filename="../keyselector.ui" line="55"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../keyselector.ui" line="73"/>
+        <location filename="../keyselector.ui" line="74"/>
         <source>Current Shortcut:    </source>
         <translation>Gegenwärtige Kombination:</translation>
     </message>
     <message>
-        <location filename="../keyselector.ui" line="80"/>
+        <location filename="../keyselector.ui" line="81"/>
         <source>current</source>
         <translation>laufend</translation>
     </message>
     <message>
-        <location filename="../keyselector.ui" line="87"/>
+        <location filename="../keyselector.ui" line="88"/>
         <source>Command</source>
         <translation>Kommando</translation>
     </message>
     <message>
-        <location filename="../keyselector.ui" line="94"/>
+        <location filename="../keyselector.ui" line="95"/>
         <source>Action:   </source>
         <translation>Aktion:</translation>
     </message>
     <message>
-        <location filename="../keyselector.ui" line="101"/>
+        <location filename="../keyselector.ui" line="102"/>
         <source>new</source>
         <translation>neu</translation>
     </message>
     <message>
-        <location filename="../keyselector.ui" line="108"/>
+        <location filename="../keyselector.ui" line="109"/>
         <source>New shortcut:</source>
         <translation>Neues Kürzel:</translation>
     </message>
@@ -1807,72 +3527,72 @@ Ist schon in Gebrauch.</translation>
         <translation>LE Controller</translation>
     </message>
     <message>
-        <location filename="../liveeventcontrol.ui" line="69"/>
+        <location filename="../liveeventcontrol.ui" line="54"/>
         <source>Show</source>
         <translation>Zeigen</translation>
     </message>
     <message>
-        <location filename="../liveeventcontrol.ui" line="80"/>
+        <location filename="../liveeventcontrol.ui" line="65"/>
         <source>Play</source>
         <translation>In Echtzeit abspielen</translation>
     </message>
     <message>
-        <location filename="../liveeventcontrol.ui" line="91"/>
+        <location filename="../liveeventcontrol.ui" line="76"/>
         <source>Loop</source>
         <translation>Loop</translation>
     </message>
     <message>
-        <location filename="../liveeventcontrol.ui" line="101"/>
+        <location filename="../liveeventcontrol.ui" line="86"/>
         <source>Sync</source>
         <translation>Sync</translation>
     </message>
     <message>
-        <location filename="../liveeventcontrol.ui" line="111"/>
+        <location filename="../liveeventcontrol.ui" line="96"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../liveeventcontrol.ui" line="121"/>
+        <location filename="../liveeventcontrol.ui" line="106"/>
         <source>Loop length</source>
         <translation>Loopdauer</translation>
     </message>
     <message>
-        <location filename="../liveeventcontrol.ui" line="131"/>
+        <location filename="../liveeventcontrol.ui" line="116"/>
         <source>Loop Range</source>
         <translation>Loop Range</translation>
     </message>
     <message>
-        <location filename="../liveeventcontrol.ui" line="141"/>
+        <location filename="../liveeventcontrol.ui" line="126"/>
         <source>Tempo</source>
         <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../liveeventcontrol.ui" line="156"/>
+        <location filename="../liveeventcontrol.ui" line="141"/>
         <source>New</source>
         <translation>Neu</translation>
     </message>
     <message>
-        <location filename="../liveeventcontrol.ui" line="163"/>
+        <location filename="../liveeventcontrol.ui" line="148"/>
         <source>Stop All</source>
         <translation>Alles stoppen</translation>
     </message>
     <message>
-        <location filename="../liveeventcontrol.cpp" line="173"/>
+        <location filename="../liveeventcontrol.cpp" line="182"/>
         <source>Loop start</source>
         <translation>Loopstart</translation>
     </message>
     <message>
-        <location filename="../liveeventcontrol.cpp" line="175"/>
+        <location filename="../liveeventcontrol.cpp" line="184"/>
         <source>Loop end</source>
         <translation>Loop Ende</translation>
     </message>
     <message>
-        <location filename="../liveeventcontrol.cpp" line="177"/>
+        <location filename="../liveeventcontrol.cpp" line="186"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="../liveeventcontrol.cpp" line="178"/>
+        <location filename="../liveeventcontrol.cpp" line="187"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
@@ -1940,17 +3660,17 @@ Ist schon in Gebrauch.</translation>
     </message>
     <message>
         <location filename="../liveeventframe.ui" line="41"/>
-        <location filename="../liveeventframe.cpp" line="185"/>
+        <location filename="../liveeventframe.cpp" line="193"/>
         <source>Delete Frame</source>
         <translation>Blatt löschen</translation>
     </message>
     <message>
-        <location filename="../liveeventframe.cpp" line="186"/>
+        <location filename="../liveeventframe.cpp" line="194"/>
         <source>Are you sure you want to delete this frame?</source>
         <translation>Diesen Rahmen wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../liveeventframe.cpp" line="259"/>
+        <location filename="../liveeventframe.cpp" line="267"/>
         <source>Enter new name</source>
         <comment>New name for Live Event panel</comment>
         <translation>Neuen Namen eingeben</translation>
@@ -1995,13 +3715,13 @@ Ist schon in Gebrauch.</translation>
         <translation>Latch</translation>
     </message>
     <message>
-        <location filename="../qutebutton.cpp" line="442"/>
-        <location filename="../qutebutton.cpp" line="477"/>
+        <location filename="../qutebutton.cpp" line="443"/>
+        <location filename="../qutebutton.cpp" line="478"/>
         <source>Select File</source>
         <translation>Datei wählen</translation>
     </message>
     <message>
-        <location filename="../qutebutton.cpp" line="455"/>
+        <location filename="../qutebutton.cpp" line="456"/>
         <source>Select File(s)</source>
         <translation>Datei(en) auswählen</translation>
     </message>
@@ -2114,43 +3834,43 @@ Ist schon in Gebrauch.</translation>
         <translation>Widget-Eigenschaften öffnen</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="289"/>
+        <location filename="../qutewidget.cpp" line="290"/>
         <source>Create New</source>
         <comment>Menu name in widget right-click menu</comment>
         <translation>Neu erzeugen</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="313"/>
+        <location filename="../qutewidget.cpp" line="314"/>
         <source>Presets</source>
         <translation>Presets</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="400"/>
+        <location filename="../qutewidget.cpp" line="401"/>
         <source>Apply</source>
         <translation>Anwenden</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="402"/>
+        <location filename="../qutewidget.cpp" line="403"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="398"/>
+        <location filename="../qutewidget.cpp" line="399"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="367"/>
+        <location filename="../qutewidget.cpp" line="368"/>
         <source>Width =</source>
         <translation>Breite</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="373"/>
+        <location filename="../qutewidget.cpp" line="374"/>
         <source>Height =</source>
         <translation>Höhe</translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="379"/>
+        <location filename="../qutewidget.cpp" line="380"/>
         <source>Channel name =</source>
         <translation>Kanalname</translation>
     </message>
@@ -2699,194 +4419,194 @@ Ist schon in Gebrauch.</translation>
 <context>
     <name>WidgetLayout</name>
     <message>
-        <location filename="../widgetlayout.cpp" line="75"/>
+        <location filename="../widgetlayout.cpp" line="78"/>
         <source>Create Slider</source>
         <translation>Slider erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="77"/>
+        <location filename="../widgetlayout.cpp" line="80"/>
         <source>Create Label</source>
         <translation>Label erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="79"/>
+        <location filename="../widgetlayout.cpp" line="82"/>
         <source>Create Display</source>
         <translation>Display erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="81"/>
+        <location filename="../widgetlayout.cpp" line="84"/>
         <source>Create ScrollNumber</source>
         <translation>ScrollNumber erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="84"/>
+        <location filename="../widgetlayout.cpp" line="87"/>
         <source>Create LineEdit</source>
         <translation>LineEdit erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="86"/>
+        <location filename="../widgetlayout.cpp" line="89"/>
         <source>Create SpinBox</source>
         <translation>SpinBox erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="88"/>
+        <location filename="../widgetlayout.cpp" line="91"/>
         <source>Create Button</source>
         <translation>Button erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="90"/>
+        <location filename="../widgetlayout.cpp" line="93"/>
         <source>Create Knob</source>
         <translation>Knob erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="92"/>
+        <location filename="../widgetlayout.cpp" line="95"/>
         <source>Create Checkbox</source>
         <translation>Checkbox erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="94"/>
+        <location filename="../widgetlayout.cpp" line="97"/>
         <source>Create Menu</source>
         <translation>Menu erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="96"/>
+        <location filename="../widgetlayout.cpp" line="99"/>
         <source>Create Controller</source>
         <translation>Controller erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="98"/>
+        <location filename="../widgetlayout.cpp" line="101"/>
         <source>Create Console</source>
         <translation>Konsole erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="100"/>
+        <location filename="../widgetlayout.cpp" line="103"/>
         <source>Create Graph</source>
         <translation>Graph erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="102"/>
+        <location filename="../widgetlayout.cpp" line="105"/>
         <source>Create Scope</source>
         <translation>Scope erzeugen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="104"/>
+        <location filename="../widgetlayout.cpp" line="107"/>
         <source>Properties</source>
         <translation>Eigenschaften</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="107"/>
+        <location filename="../widgetlayout.cpp" line="110"/>
         <source>Cut</source>
         <translation>Raus</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="110"/>
+        <location filename="../widgetlayout.cpp" line="113"/>
         <source>Copy</source>
         <translation>Kopieren</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="113"/>
+        <location filename="../widgetlayout.cpp" line="116"/>
         <source>Paste</source>
         <translation>Rein</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="116"/>
+        <location filename="../widgetlayout.cpp" line="119"/>
         <source>Duplicate Selected</source>
         <translation>Auswahl duplizieren</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="118"/>
+        <location filename="../widgetlayout.cpp" line="121"/>
         <source>Delete Selected</source>
         <translation>Auswahl löschen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="120"/>
+        <location filename="../widgetlayout.cpp" line="123"/>
         <source>Clear all widgets</source>
         <translation>Alle Widgets entfernen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="122"/>
+        <location filename="../widgetlayout.cpp" line="125"/>
         <source>Select all widgets</source>
         <translation>Alle Widgets auswählen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="125"/>
+        <location filename="../widgetlayout.cpp" line="128"/>
         <source>Align Left</source>
         <translation>Links ausrichten</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="127"/>
+        <location filename="../widgetlayout.cpp" line="130"/>
         <source>Align Right</source>
         <translation>Rechts ausrichten</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="129"/>
+        <location filename="../widgetlayout.cpp" line="132"/>
         <source>Align Top</source>
         <translation>Oben ausrichten</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="131"/>
+        <location filename="../widgetlayout.cpp" line="134"/>
         <source>Align Bottom</source>
         <translation>Unten ausrichten</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="133"/>
+        <location filename="../widgetlayout.cpp" line="136"/>
         <source>Send to back</source>
         <translation>In den Hintergrund rücken</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="135"/>
+        <location filename="../widgetlayout.cpp" line="138"/>
         <source>Distribute Horizontally</source>
         <translation>Waagerecht verteilen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="137"/>
+        <location filename="../widgetlayout.cpp" line="140"/>
         <source>Distribute Vertically</source>
         <translation>Senkrecht verteilen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="139"/>
+        <location filename="../widgetlayout.cpp" line="142"/>
         <source>Center Vertically</source>
         <translation>Senkrecht zentrieren</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="141"/>
+        <location filename="../widgetlayout.cpp" line="144"/>
         <source>Center Horizontally</source>
         <translation>Waagerecht zentrieren</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="144"/>
+        <location filename="../widgetlayout.cpp" line="147"/>
         <source>Store Preset</source>
         <translation>Preset speichern</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="146"/>
-        <location filename="../widgetlayout.cpp" line="2909"/>
-        <location filename="../widgetlayout.cpp" line="3065"/>
+        <location filename="../widgetlayout.cpp" line="149"/>
+        <location filename="../widgetlayout.cpp" line="2926"/>
+        <location filename="../widgetlayout.cpp" line="3082"/>
         <source>New Preset</source>
         <translation>Neues Preset</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="148"/>
+        <location filename="../widgetlayout.cpp" line="151"/>
         <source>Recall Preset</source>
         <translation>Preset zurückholen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="202"/>
+        <location filename="../widgetlayout.cpp" line="205"/>
         <source>Widget Error</source>
         <translation>Widget Fehler</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="203"/>
+        <location filename="../widgetlayout.cpp" line="206"/>
         <source>Widgets can&apos;t be read! No widgets created.</source>
         <translation>Widgets können nicht gelesen werden! Keine Widgets erzeugt.</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="209"/>
+        <location filename="../widgetlayout.cpp" line="212"/>
         <source>More than one panel</source>
         <translation>Mehr als ein Fenster</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="210"/>
+        <location filename="../widgetlayout.cpp" line="213"/>
         <source>The csd file contains more than one widget panel!
 This is not suported by the current version,
 Addtional widget panels will be lost if the file is saved!</source>
@@ -2895,71 +4615,71 @@ Dies wird von der laufenden Version nicht unterstützt.
 Die zusätzlichen Widgetfenster werden verlorengehen wenn die Datei gesichert wird!</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="225"/>
+        <location filename="../widgetlayout.cpp" line="228"/>
         <source>Unrecognized wigdet format</source>
         <translation>Unbekanntes Widget-Format</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="226"/>
+        <location filename="../widgetlayout.cpp" line="229"/>
         <source>There is unrecognized widget information in the file!
 It may be saved with errors.</source>
         <translation>Es gibt unbekannte Widget-Informationen in der Datei!
 Sie wurde möglicherweise fehlerhaft gespeichert.</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="235"/>
+        <location filename="../widgetlayout.cpp" line="238"/>
         <source>Newer Widget Format</source>
         <translation>Neueres Widget-Format</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="236"/>
+        <location filename="../widgetlayout.cpp" line="239"/>
         <source>The file was was saved by a more recent version of QuteCsound.
 Some features may not be available and will not be saved!</source>
         <translation>Die Datei wurde von einer jüngeren Version von QuteCsound gespeichert.
 Einige Features könnten nicht verfügbar sein und werden nicht gesichert!</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="972"/>
+        <location filename="../widgetlayout.cpp" line="989"/>
         <source>ChannelH:</source>
         <translation>KanalHor:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="973"/>
+        <location filename="../widgetlayout.cpp" line="990"/>
         <source>ChannelV:</source>
         <translation>Vertikaler Kanal:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2908"/>
+        <location filename="../widgetlayout.cpp" line="2925"/>
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="2914"/>
+        <location filename="../widgetlayout.cpp" line="2931"/>
         <source>Double-click Preset to Load</source>
         <translation>Preset doppelklicken um zu laden</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="3019"/>
+        <location filename="../widgetlayout.cpp" line="3036"/>
         <source>New Preset Name:</source>
         <translation>Neuer Preset-Name</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="3021"/>
+        <location filename="../widgetlayout.cpp" line="3038"/>
         <source>Number:</source>
         <translation>Nummer:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="3037"/>
+        <location filename="../widgetlayout.cpp" line="3054"/>
         <source>Preset Already Exists</source>
         <translation>Preset existiert schon</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="3038"/>
+        <location filename="../widgetlayout.cpp" line="3055"/>
         <source>Preset %i already exists. Overwrite?</source>
         <translation>Preset %i existiert schon. Überschreiben?</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="3067"/>
+        <location filename="../widgetlayout.cpp" line="3084"/>
         <source>Select Preset to save</source>
         <translation>Preset auswählen um zu sichern</translation>
     </message>
@@ -2970,26 +4690,26 @@ ChannelH:</source>
 Horizontaler Kanal:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="980"/>
+        <location filename="../widgetlayout.cpp" line="997"/>
         <source>Channel:</source>
         <translation>Kanal:</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="1780"/>
+        <location filename="../widgetlayout.cpp" line="1797"/>
         <source>Apply</source>
         <translation>Anwenden</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="1782"/>
-        <location filename="../widgetlayout.cpp" line="3024"/>
-        <location filename="../widgetlayout.cpp" line="3064"/>
+        <location filename="../widgetlayout.cpp" line="1799"/>
+        <location filename="../widgetlayout.cpp" line="3041"/>
+        <location filename="../widgetlayout.cpp" line="3081"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../widgetlayout.cpp" line="1784"/>
-        <location filename="../widgetlayout.cpp" line="3023"/>
-        <location filename="../widgetlayout.cpp" line="3063"/>
+        <location filename="../widgetlayout.cpp" line="1801"/>
+        <location filename="../widgetlayout.cpp" line="3040"/>
+        <location filename="../widgetlayout.cpp" line="3080"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -3168,21 +4888,23 @@ Horizontaler Kanal:</translation>
     </message>
 </context>
 <context>
+    <name>dialog</name>
+    <message>
+        <location filename="../about.ui" line="96"/>
+        <source>About CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../about.ui" line="304"/>
+        <source>CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>qutecsound</name>
     <message>
-        <location filename="../qutecsound.cpp" line="539"/>
-        <location filename="../qutecsound.cpp" line="554"/>
-        <location filename="../qutecsound.cpp" line="728"/>
-        <location filename="../qutecsound.cpp" line="956"/>
-        <location filename="../qutecsound.cpp" line="970"/>
-        <location filename="../qutecsound.cpp" line="1148"/>
-        <location filename="../qutecsound.cpp" line="1206"/>
-        <location filename="../qutecsound.cpp" line="1236"/>
-        <location filename="../qutecsound.cpp" line="1461"/>
-        <location filename="../qutecsound.cpp" line="4014"/>
-        <location filename="../qutecsound.cpp" line="4284"/>
         <source>QuteCsound</source>
-        <translation>QuteCsound</translation>
+        <translation type="obsolete">QuteCsound</translation>
     </message>
     <message>
         <source>Error initializing Csound!
@@ -3191,47 +4913,40 @@ Qutecsound will probably crash if you try to run Csound.</source>
 QuteCsound wird wahrscheinlich abstürzen beim Versuch Csound zu starten.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="454"/>
         <source>Open File</source>
-        <translation>Datei öffnen</translation>
+        <translation type="obsolete">Datei öffnen</translation>
     </message>
     <message>
         <source>Csound Files (*.csd *.orc *.sco);;All Files (*)</source>
         <translation type="obsolete">Csound Dateien (*.csd *.orc *.sco);;Alle Dateien (*)</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="474"/>
-        <location filename="../qutecsound.cpp" line="4024"/>
         <source>File already open</source>
-        <translation>Datei ist bereits geöffnet</translation>
+        <translation type="obsolete">Datei ist bereits geöffnet</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="540"/>
         <source>Dot executable not found.
 Please install graphviz from
 www.graphviz.org</source>
-        <translation>Dot-Programm nicht gefunden.
+        <translation type="obsolete">Dot-Programm nicht gefunden.
 Bitte graphviz von www.graphviz.org installieren.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="555"/>
         <source>Cannot create temp dot/png file.</source>
-        <translation>Temporäre dot/png-Datei kann nicht erzeugt werden.</translation>
+        <translation type="obsolete">Temporäre dot/png-Datei kann nicht erzeugt werden.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="712"/>
         <source>Save File As</source>
-        <translation>Datei sichern als</translation>
+        <translation type="obsolete">Datei sichern als</translation>
     </message>
     <message>
         <source>Csound Files (*.csd *.orc *.sco)</source>
         <translation type="obsolete">Csound Dateien (*.csd *.orc *.sco)</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="729"/>
         <source>The file is already open in another tab.
 File not saved!</source>
-        <translation>Datei ist schon in anderem Tab geöffnet.
+        <translation type="obsolete">Datei ist schon in anderem Tab geöffnet.
 Datei wurde nicht gesichert!</translation>
     </message>
     <message>
@@ -3241,35 +4956,28 @@ Do you want to save it?</source>
 Sichern?</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="971"/>
         <source>Do you want to exit QuteCsound?</source>
-        <translation>QuteCsound beenden?</translation>
+        <translation type="obsolete">QuteCsound beenden?</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="993"/>
         <source>Print Document</source>
-        <translation>Dokument drucken</translation>
+        <translation type="obsolete">Dokument drucken</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1021"/>
-        <location filename="../qutecsound.cpp" line="4380"/>
         <source>Ok</source>
-        <translation>Ok</translation>
+        <translation type="obsolete">Ok</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1022"/>
         <source>Cancel</source>
-        <translation>Abbrechen</translation>
+        <translation type="obsolete">Abbrechen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1060"/>
         <source>Join</source>
-        <translation>Verbinden</translation>
+        <translation type="obsolete">Verbinden</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1061"/>
         <source>Please open the orc and sco files in QuteCsound first!</source>
-        <translation>Bitte zuerst orc- und sco-Dateien öffnen!</translation>
+        <translation type="obsolete">Bitte zuerst orc- und sco-Dateien öffnen!</translation>
     </message>
     <message>
         <source>This file has not been been saved
@@ -3278,9 +4986,8 @@ Please select name and location.</source>
 Bitte Namen und Speicherort auswählen.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1207"/>
         <source>Error creating temporary file.</source>
-        <translation>Fehler beim Schreiben einer temporären Datei.</translation>
+        <translation type="obsolete">Fehler beim Schreiben einer temporären Datei.</translation>
     </message>
     <message>
         <source>You must save the examples to use Record.</source>
@@ -3293,33 +5000,26 @@ without Record support!</source>
 ohne Aufnahmemöglichkeit kompiliert!</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1444"/>
         <source>Output Filename</source>
-        <translation>Output-Dateiname</translation>
+        <translation type="obsolete">Output-Dateiname</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1462"/>
         <source>The file %1 
 already exists.
 Do you want to overwrite it?</source>
-        <translation>Die Datei %1 
+        <translation type="obsolete">Die Datei %1 
 existiert bereits.
 Überschreiben?</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1589"/>
-        <location filename="../qutecsound.cpp" line="1647"/>
-        <location filename="../qutecsound.cpp" line="1659"/>
         <source>Error</source>
-        <translation>Fehler</translation>
+        <translation type="obsolete">Fehler</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1590"/>
-        <location filename="../qutecsound.cpp" line="1648"/>
         <source>HTML Documentation directory not set!
 Please go to Edit-&gt;Options-&gt;Environment and select directory
 </source>
-        <translation>HTML-Dokumentationsverzeichnis nicht gesetzt!
+        <translation type="obsolete">HTML-Dokumentationsverzeichnis nicht gesetzt!
 Bitte bei Bearbeiten-&gt;Konfiguration-&gt;Umgebung das Verzeichnis auswählen
 </translation>
     </message>
@@ -3336,15 +5036,12 @@ Version </translation>
         <translation type="obsolete">Über QuteCsound</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1786"/>
         <source>API</source>
-        <translation>API</translation>
+        <translation type="obsolete">API</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1786"/>
-        <location filename="../qutecsound.cpp" line="2456"/>
         <source>Console</source>
-        <translation>Konsole</translation>
+        <translation type="obsolete">Konsole</translation>
     </message>
     <message>
         <source>Thread</source>
@@ -3355,932 +5052,726 @@ Version </translation>
         <translation type="obsolete">KeinThread</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1792"/>
         <source>SaveWidgets</source>
-        <translation>WidgetsSichern</translation>
+        <translation type="obsolete">WidgetsSichern</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1792"/>
         <source>DontSaveWidgets</source>
-        <translation>WidgetsNichtSichern</translation>
+        <translation type="obsolete">WidgetsNichtSichern</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1795"/>
-        <location filename="../qutecsound.cpp" line="1798"/>
         <source>UseQuteCsoundOptions</source>
-        <translation>QuteCsoundOptionenVerwenden</translation>
+        <translation type="obsolete">QuteCsoundOptionenVerwenden</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1795"/>
-        <location filename="../qutecsound.cpp" line="1798"/>
         <source>DiscardQuteCsoundOptions</source>
-        <translation>QuteCsoundOptionenVerwerfen</translation>
+        <translation type="obsolete">QuteCsoundOptionenVerwerfen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1796"/>
-        <location filename="../qutecsound.cpp" line="1799"/>
         <source>OverrideCsOptions</source>
-        <translation>CsOptionsÜbergehen</translation>
+        <translation type="obsolete">CsOptionsÜbergehen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1801"/>
         <source>Play</source>
-        <translation>In Echtzeit abspielen</translation>
+        <translation type="obsolete">In Echtzeit abspielen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1802"/>
-        <location filename="../qutecsound.cpp" line="2351"/>
-        <location filename="../qutecsound.cpp" line="2352"/>
         <source>Render to file</source>
-        <translation>Ausrechnen und in Audiodatei schreiben</translation>
+        <translation type="obsolete">Ausrechnen und in Audiodatei schreiben</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2140"/>
         <source>&amp;New</source>
-        <translation>&amp;Neu</translation>
+        <translation type="obsolete">&amp;Neu</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2018"/>
         <source>Ctrl+N</source>
-        <translation>Ctrl+N</translation>
+        <translation type="obsolete">Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2141"/>
         <source>Create a new file</source>
-        <translation>Neue Datei erzeugen</translation>
+        <translation type="obsolete">Neue Datei erzeugen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2142"/>
         <source>New</source>
-        <translation>Neu</translation>
+        <translation type="obsolete">Neu</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2146"/>
         <source>&amp;Open...</source>
-        <translation>Öffnen...</translation>
+        <translation type="obsolete">Öffnen...</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2019"/>
         <source>Ctrl+O</source>
-        <translation>Ctrl+O</translation>
+        <translation type="obsolete">Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2147"/>
         <source>Open an existing file</source>
-        <translation>Bestehende Datei öffnen</translation>
+        <translation type="obsolete">Bestehende Datei öffnen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2148"/>
         <source>Open</source>
-        <translation>Öffnen</translation>
+        <translation type="obsolete">Öffnen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2152"/>
         <source>Reload</source>
-        <translation>Neu laden</translation>
+        <translation type="obsolete">Neu laden</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2153"/>
         <source>Reload file from disk, discarding changes</source>
-        <translation>Datei von der Festplatte neu laden, Änderungen verwerfen</translation>
+        <translation type="obsolete">Datei von der Festplatte neu laden, Änderungen verwerfen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2158"/>
         <source>&amp;Save</source>
-        <translation>&amp;Sichern</translation>
+        <translation type="obsolete">&amp;Sichern</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2021"/>
         <source>Ctrl+S</source>
-        <translation>Ctrl+S</translation>
+        <translation type="obsolete">Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2159"/>
         <source>Save the document to disk</source>
-        <translation>Dokument auf der Festplatte sichern</translation>
+        <translation type="obsolete">Dokument auf der Festplatte sichern</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2160"/>
         <source>Save</source>
-        <translation>Sichern</translation>
+        <translation type="obsolete">Sichern</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2164"/>
         <source>Save &amp;As...</source>
-        <translation>Sichern &amp;Als...</translation>
+        <translation type="obsolete">Sichern &amp;Als...</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2022"/>
         <source>Shift+Ctrl+S</source>
-        <translation>Shift+Ctrl+S</translation>
+        <translation type="obsolete">Shift+Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2165"/>
         <source>Save the document under a new name</source>
-        <translation>Dokument unter neuem Namen sichern</translation>
+        <translation type="obsolete">Dokument unter neuem Namen sichern</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2166"/>
         <source>Save as</source>
-        <translation>Sichern als</translation>
+        <translation type="obsolete">Sichern als</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2181"/>
-        <location filename="../qutecsound.cpp" line="2182"/>
         <source>Close current tab</source>
-        <translation>Diesen Tab schließen</translation>
+        <translation type="obsolete">Diesen Tab schließen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2024"/>
         <source>Ctrl+W</source>
-        <translation>Ctrl+W</translation>
+        <translation type="obsolete">Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2188"/>
         <source>Print</source>
-        <translation>Drucken</translation>
+        <translation type="obsolete">Drucken</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2026"/>
         <source>Ctrl+P</source>
-        <translation>Ctrl+P</translation>
+        <translation type="obsolete">Ctrl+P</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2189"/>
         <source>Print current document</source>
-        <translation>Dieses Dokument drucken</translation>
+        <translation type="obsolete">Dieses Dokument drucken</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2207"/>
         <source>E&amp;xit</source>
-        <translation>Beenden</translation>
+        <translation type="obsolete">Beenden</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2027"/>
         <source>Ctrl+Q</source>
-        <translation>Ctrl+Q</translation>
+        <translation type="obsolete">Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2208"/>
         <source>Exit the application</source>
-        <translation>Programm beenden</translation>
+        <translation type="obsolete">Programm beenden</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2213"/>
         <source>View Code &amp;Graph</source>
-        <translation>Code &amp;Graph ansehen</translation>
+        <translation type="obsolete">Code &amp;Graph ansehen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2066"/>
         <source>Alt+5</source>
-        <translation>Alt+5</translation>
+        <translation type="obsolete">Alt+5</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2214"/>
         <source>View Code Graph</source>
-        <translation>Code Graph ansehen</translation>
+        <translation type="obsolete">Code Graph ansehen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2219"/>
-        <location filename="../qutecsound.cpp" line="2221"/>
         <source>Undo</source>
-        <translation>Nein</translation>
+        <translation type="obsolete">Nein</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2029"/>
         <source>Ctrl+Z</source>
-        <translation>Ctrl+Z</translation>
+        <translation type="obsolete">Ctrl+Z</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2220"/>
         <source>Undo last action</source>
-        <translation>Letzte Aktion rückgängig machen</translation>
+        <translation type="obsolete">Letzte Aktion rückgängig machen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2225"/>
-        <location filename="../qutecsound.cpp" line="2227"/>
         <source>Redo</source>
-        <translation>Doch</translation>
+        <translation type="obsolete">Doch</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2030"/>
         <source>Shift+Ctrl+Z</source>
-        <translation>Shift+Ctrl+Z</translation>
+        <translation type="obsolete">Shift+Ctrl+Z</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2226"/>
         <source>Redo last action</source>
-        <translation>Letzte Aktion wiederholen</translation>
+        <translation type="obsolete">Letzte Aktion wiederholen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2231"/>
         <source>Cu&amp;t</source>
-        <translation>Ausschneiden</translation>
+        <translation type="obsolete">Ausschneiden</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2032"/>
         <source>Ctrl+X</source>
-        <translation>Ctrl+X</translation>
+        <translation type="obsolete">Ctrl+X</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2232"/>
         <source>Cut the current selection&apos;s contents to the clipboard</source>
-        <translation>Auswahl ausschneiden und in der Zwischenablage speichern</translation>
+        <translation type="obsolete">Auswahl ausschneiden und in der Zwischenablage speichern</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2234"/>
         <source>Cut</source>
-        <translation>Raus</translation>
+        <translation type="obsolete">Raus</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2238"/>
         <source>&amp;Copy</source>
-        <translation>Kopieren</translation>
+        <translation type="obsolete">Kopieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2033"/>
         <source>Ctrl+C</source>
-        <translation>Ctrl+C</translation>
+        <translation type="obsolete">Ctrl+C</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2239"/>
         <source>Copy the current selection&apos;s contents to the clipboard</source>
-        <translation>Auswahl in die Zwischenablage kopieren</translation>
+        <translation type="obsolete">Auswahl in die Zwischenablage kopieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2241"/>
         <source>Copy</source>
-        <translation>Kopieren</translation>
+        <translation type="obsolete">Kopieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2245"/>
         <source>&amp;Paste</source>
-        <translation>Einfügen</translation>
+        <translation type="obsolete">Einfügen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2034"/>
         <source>Ctrl+V</source>
-        <translation>Ctrl+V</translation>
+        <translation type="obsolete">Ctrl+V</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="137"/>
         <source>Python Scratch Pad</source>
-        <translation>Python Scratch Pad</translation>
+        <translation type="obsolete">Python Scratch Pad</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="455"/>
-        <location filename="../qutecsound.cpp" line="714"/>
         <source>Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Files (*.py);;All Files (*)</source>
         <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
-        <translation>Bekannte Dateien (*.csd *.orc *.sco *.py);;Csound Dateien (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Dateien (*.py);;All Files (*)</translation>
+        <translation type="obsolete">Bekannte Dateien (*.csd *.orc *.sco *.py);;Csound Dateien (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Dateien (*.py);;All Files (*)</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="855"/>
         <source>New widget format</source>
-        <translation>Neues Widget-Format</translation>
+        <translation type="obsolete">Neues Widget-Format</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="856"/>
         <source>  This version of QuteCsound implements a new format for storing widgets, which enables many of the new widget features you will find now.
   The old format is still read and saved, so you will be able to open files in older versions but some of the features will not be passed to older versions.
 </source>
-        <translation>  Diese Version von QuteCsound implementiert ein neues Format zur Speicherung von Widgets,das viele der neuen Widget-Features ermöglicht.
+        <translation type="obsolete">  Diese Version von QuteCsound implementiert ein neues Format zur Speicherung von Widgets,das viele der neuen Widget-Features ermöglicht.
   Das alte Format wird weiterhin gelesen und gespeichert. Es können also weiterhin Dateien aus älteren Versionen geöffnet werden, aber einige der neuen Features (z.B. Presets) können nicht an die älteren Versionen übergeben werden.
 </translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="933"/>
         <source>Full Path:</source>
-        <translation>Kompletter Pfad:</translation>
+        <translation type="obsolete">Kompletter Pfad:</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="934"/>
         <source>Number of lines (Csound Text):</source>
-        <translation>Anzahl der Zeilen (Csound-Text):</translation>
+        <translation type="obsolete">Anzahl der Zeilen (Csound-Text):</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="935"/>
         <source>Number of characters (Csound Text):</source>
-        <translation>Anzahl der Zeichen (Csound-Text):</translation>
+        <translation type="obsolete">Anzahl der Zeichen (Csound-Text):</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="936"/>
         <source>Number of lines (total):</source>
-        <translation>Anzahl der Zeilen (insgesamt):</translation>
+        <translation type="obsolete">Anzahl der Zeilen (insgesamt):</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="937"/>
         <source>Number of characters (total):</source>
-        <translation>Anzahl der Zeichen (insgesamt):</translation>
+        <translation type="obsolete">Anzahl der Zeichen (insgesamt):</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="938"/>
         <source>Number of instruments:</source>
-        <translation>Anzahl der Instrumente:</translation>
+        <translation type="obsolete">Anzahl der Instrumente:</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="939"/>
         <source>Number of UDOs:</source>
-        <translation>Anzahl der UDOs:</translation>
+        <translation type="obsolete">Anzahl der UDOs:</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="940"/>
         <source>Number of Widgets:</source>
-        <translation>Anzahl der Widgets:</translation>
+        <translation type="obsolete">Anzahl der Widgets:</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="941"/>
         <source>Embedded Files:</source>
-        <translation>Eingebettete Dateien:</translation>
+        <translation type="obsolete">Eingebettete Dateien:</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="942"/>
-        <location filename="../qutecsound.cpp" line="2201"/>
         <source>File Information</source>
-        <translation>Datei-Information</translation>
+        <translation type="obsolete">Datei-Information</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1675"/>
-        <location filename="../qutecsound.cpp" line="1680"/>
-        <location filename="../qutecsound.cpp" line="2628"/>
         <source>Reset Preferences</source>
-        <translation>Voreinstellungen zurücksetzen</translation>
+        <translation type="obsolete">Voreinstellungen zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1676"/>
         <source>Are you sure you want to revert QuteCsound&apos;s preferences
 to their initial default values? </source>
-        <translation>Wirklich QuteCsounds Voreinstellungen auf Initialwerte zurücksetzen?</translation>
+        <translation type="obsolete">Wirklich QuteCsounds Voreinstellungen auf Initialwerte zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1681"/>
         <source>Preferences have been reset.
 You must restart QuteCsound.</source>
-        <translation>Voreinstellungen wurden zurückgesetzt.
+        <translation type="obsolete">Voreinstellungen wurden zurückgesetzt.
 Bitte QuteCsound neu starten.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1703"/>
         <source>by: Andres Cabrera and others</source>
-        <translation>von: Andres Cabrera und anderen</translation>
+        <translation type="obsolete">von: Andres Cabrera und anderen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1704"/>
-        <source>Version %1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="1705"/>
         <source>Released under the LGPLv2 or GPLv3</source>
-        <translation>Veröffentlicht unter der LGPLv2 oder GPLv3</translation>
+        <translation type="obsolete">Veröffentlicht unter der LGPLv2 oder GPLv3</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1706"/>
         <source>Using Csound version:</source>
-        <translation>Benutzte Csound Version:</translation>
+        <translation type="obsolete">Benutzte Csound Version:</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1707"/>
         <source>Precision:</source>
-        <translation>Genauigkeit:</translation>
+        <translation type="obsolete">Genauigkeit:</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1709"/>
         <source>Built with PythonQt support.</source>
-        <translation>Erstellt mit PythonQt Unterstützung.</translation>
+        <translation type="obsolete">Erstellt mit PythonQt Unterstützung.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1711"/>
         <source>French translation: Fran&amp;ccedil;ois Pinot</source>
-        <translation>Französische Übersetzung: Fran&amp;ccedil;ois Pinot</translation>
+        <translation type="obsolete">Französische Übersetzung: Fran&amp;ccedil;ois Pinot</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1712"/>
         <source>German translation: Joachim Heintz</source>
-        <translation>Deutsche Übersetzung: Joachim Heintz</translation>
+        <translation type="obsolete">Deutsche Übersetzung: Joachim Heintz</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1713"/>
         <source>Portuguese translation: Victor Lazzarini</source>
-        <translation>Portugiesische Übersetzung: Victor Lazzarini</translation>
+        <translation type="obsolete">Portugiesische Übersetzung: Victor Lazzarini</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1714"/>
         <source>Italian translation: Francesco</source>
-        <translation>Italienische Übersetzung: Francesco</translation>
+        <translation type="obsolete">Italienische Übersetzung: Francesco</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1715"/>
         <source>Turkish translation: Ali Isciler</source>
-        <translation>Türkische Übersetzung: Ali Isciler</translation>
+        <translation type="obsolete">Türkische Übersetzung: Ali Isciler</translation>
     </message>
     <message>
         <source>Finnish translation: Niko HumalamÃ¤ki</source>
         <translation type="obsolete">Finnische Übersetzung: Niko HumalamÃ¤ki</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1719"/>
         <source>If you find QuteCsound useful, please consider donating to the project:</source>
-        <translation>Wenn Sie QuteCsound nützlich finden, denken Sie bitte über eine Spende für dieses Projekt nach:</translation>
+        <translation type="obsolete">Wenn Sie QuteCsound nützlich finden, denken Sie bitte über eine Spende für dieses Projekt nach:</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1722"/>
         <source>Please file bug reports and feature suggestions in the </source>
-        <translation>Bitte Fehler und Vorschläge hier melden:</translation>
+        <translation type="obsolete">Bitte Fehler und Vorschläge hier melden:</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1724"/>
-        <source>QuteCsound tracker</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="1726"/>
         <source>Mailing Lists:</source>
-        <translation>Mailing-Listen:</translation>
+        <translation type="obsolete">Mailing-Listen:</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1731"/>
         <source>Other Resources:</source>
-        <translation>Andere Quellen</translation>
+        <translation type="obsolete">Andere Quellen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1736"/>
         <source>Supported by:</source>
-        <translation>Unterstützt durch:</translation>
+        <translation type="obsolete">Unterstützt durch:</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1739"/>
         <source>And other generous users.</source>
-        <translation>Und andere großzügige Benutzer.</translation>
+        <translation type="obsolete">Und andere großzügige Benutzer.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2053"/>
         <source>Alt+0</source>
-        <translation>Alt+0</translation>
+        <translation type="obsolete">Alt+0</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2060"/>
         <source>Ctrl+Alt+F</source>
-        <translation>Ctrl+Alt+F</translation>
+        <translation type="obsolete">Ctrl+Alt+F</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2062"/>
         <source>F11</source>
-        <translation>F11</translation>
+        <translation type="obsolete">F11</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2064"/>
         <source>Ctrl+Shift+A</source>
-        <translation>Ctrl+Shift+A</translation>
+        <translation type="obsolete">Ctrl+Shift+A</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2068"/>
         <source>Alt+9</source>
-        <translation>Alt+9</translation>
+        <translation type="obsolete">Alt+9</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2078"/>
         <source>Alt+E</source>
-        <translation>Alt+E</translation>
+        <translation type="obsolete">Alt+E</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2079"/>
         <source>Shift+Alt+E</source>
-        <translation>Shift+Alt+E</translation>
+        <translation type="obsolete">Shift+Alt+E</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2081"/>
         <source>Alt+8</source>
-        <translation>Alt+8</translation>
+        <translation type="obsolete">Alt+8</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2083"/>
         <source>Shift+Alt+K</source>
-        <translation>Shift+Alt+K</translation>
+        <translation type="obsolete">Shift+Alt+K</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2084"/>
         <source>Shift+Alt+1</source>
-        <translation>Shift+Alt+1</translation>
+        <translation type="obsolete">Shift+Alt+1</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2085"/>
         <source>Shift+Alt+2</source>
-        <translation>Shift+Alt+2</translation>
+        <translation type="obsolete">Shift+Alt+2</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2086"/>
         <source>Shift+Alt+3</source>
-        <translation>Shift+Alt+3</translation>
+        <translation type="obsolete">Shift+Alt+3</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2087"/>
         <source>Shift+Alt+4</source>
-        <translation>Shift+Alt+4</translation>
+        <translation type="obsolete">Shift+Alt+4</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2088"/>
         <source>Shift+Alt+5</source>
-        <translation>Shift+Alt+5</translation>
+        <translation type="obsolete">Shift+Alt+5</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2089"/>
         <source>Shift+Alt+6</source>
-        <translation>Shift+Alt+6</translation>
+        <translation type="obsolete">Shift+Alt+6</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2090"/>
         <source>Shift+Alt+7</source>
-        <translation>Shift+Alt+7</translation>
+        <translation type="obsolete">Shift+Alt+7</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2095"/>
         <source>No PythonQt support</source>
-        <translation>Keine PythonQt Unterstützung</translation>
+        <translation type="obsolete">Keine PythonQt Unterstützung</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2096"/>
         <source>This version of QuteCsound has been compiled without PythonQt support.
 Extended Python features are not available</source>
-        <translation>Diese Version von QuteCsound wurde ohne PythonQt Unterstützung kompiliert.
+        <translation type="obsolete">Diese Version von QuteCsound wurde ohne PythonQt Unterstützung kompiliert.
 Erweiterte Python-Features sind nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2170"/>
         <source>Create App...</source>
-        <translation>App erzeugen...</translation>
+        <translation type="obsolete">App erzeugen...</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2171"/>
         <source>Create Standalone application</source>
-        <translation>Standalone Application erzeugen</translation>
+        <translation type="obsolete">Standalone Application erzeugen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2202"/>
         <source>Show information for the current file</source>
-        <translation>Information für diese Datei zeigen</translation>
+        <translation type="obsolete">Information für diese Datei zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2246"/>
         <source>Paste the clipboard&apos;s contents into the current selection</source>
-        <translation>Zwischenablage in Auswahl einsetzen</translation>
+        <translation type="obsolete">Zwischenablage in Auswahl einsetzen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2248"/>
         <source>Paste</source>
-        <translation>Rein</translation>
+        <translation type="obsolete">Rein</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2252"/>
         <source>&amp;Join orc/sco</source>
-        <translation>orc/sco verbinden</translation>
+        <translation type="obsolete">orc/sco verbinden</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2253"/>
         <source>Join orc/sco files in a single csd file</source>
-        <translation>orc/sco-Dateien in einer csd-Datei zusammenführen</translation>
+        <translation type="obsolete">orc/sco-Dateien in einer csd-Datei zusammenführen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2258"/>
         <source>Evaluate selection</source>
-        <translation>Auswahl evaluieren</translation>
+        <translation type="obsolete">Auswahl evaluieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2259"/>
         <source>Evaluate selection in Python Console</source>
-        <translation>Auswahl in der Python-Konsole evaluieren</translation>
+        <translation type="obsolete">Auswahl in der Python-Konsole evaluieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2263"/>
         <source>Evaluate section</source>
-        <translation>Auswahl evaluieren</translation>
+        <translation type="obsolete">Auswahl evaluieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2264"/>
         <source>Evaluate current section in Python Console</source>
-        <translation>Gegenwärtige Auswahl in der Python-Konsole evaluieren</translation>
+        <translation type="obsolete">Gegenwärtige Auswahl in der Python-Konsole evaluieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2268"/>
         <source>Invalue-&gt;Chnget</source>
-        <translation>Invalue-&gt;Chnget</translation>
+        <translation type="obsolete">Invalue-&gt;Chnget</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2269"/>
         <source>Convert invalue/outvalue to chnget/chnset</source>
-        <translation>Invalue/outvalue in chnget/chnset umwandeln</translation>
+        <translation type="obsolete">Invalue/outvalue in chnget/chnset umwandeln</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2273"/>
         <source>Chnget-&gt;Invalue</source>
-        <translation>Chnget-&gt;Invalue</translation>
+        <translation type="obsolete">Chnget-&gt;Invalue</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2274"/>
         <source>Convert chnget/chnset to invalue/outvalue</source>
-        <translation>Chnget/chnset in invalue/outvalue umwandeln</translation>
+        <translation type="obsolete">Chnget/chnset in invalue/outvalue umwandeln</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2278"/>
         <source>Insert/Update CsLADSPA text</source>
-        <translation>CsLADSPA-Text einfügen/aktualisieren</translation>
+        <translation type="obsolete">CsLADSPA-Text einfügen/aktualisieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2279"/>
         <source>Insert/Update CsLADSPA section to csd file</source>
-        <translation>CsLADSPA Abschnitt in csd-Datei einfügen/aktualisieren</translation>
+        <translation type="obsolete">CsLADSPA Abschnitt in csd-Datei einfügen/aktualisieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2283"/>
         <source>Insert/Update Cabbage text</source>
-        <translation>Cabbage Text einfügen/aktualisieren</translation>
+        <translation type="obsolete">Cabbage Text einfügen/aktualisieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2284"/>
         <source>Insert/Update Cabbage section to csd file</source>
-        <translation>Cabbage Abschnitt in csd Datei einfügen/aktualisieren</translation>
+        <translation type="obsolete">Cabbage Abschnitt in csd Datei einfügen/aktualisieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2288"/>
         <source>&amp;Find and Replace</source>
-        <translation>&amp;Finden und ersetzen</translation>
+        <translation type="obsolete">&amp;Finden und ersetzen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2040"/>
         <source>Ctrl+F</source>
-        <translation>Ctrl+F</translation>
+        <translation type="obsolete">Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2289"/>
         <source>Find and replace strings in file</source>
-        <translation>Ausdruck in Datei finden und ersetzen</translation>
+        <translation type="obsolete">Ausdruck in Datei finden und ersetzen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2300"/>
         <source>AutoComplete</source>
-        <translation>Vervollständigen</translation>
+        <translation type="obsolete">Vervollständigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2042"/>
         <source>Alt+C</source>
-        <translation>Alt+C</translation>
+        <translation type="obsolete">Alt+C</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2301"/>
         <source>Autocomplete according to Status bar display</source>
-        <translation>Vervollständigen gemäß Fortschrittsanzeige</translation>
+        <translation type="obsolete">Vervollständigen gemäß Fortschrittsanzeige</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2306"/>
         <source>Configuration</source>
-        <translation>Konfiguration</translation>
+        <translation type="obsolete">Konfiguration</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2307"/>
         <source>Open configuration dialog</source>
-        <translation>Konfigurationsdialog öffnen</translation>
+        <translation type="obsolete">Konfigurationsdialog öffnen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2308"/>
-        <location filename="../qutecsound.cpp" line="3589"/>
         <source>Configure</source>
-        <translation>Konfigurieren</translation>
+        <translation type="obsolete">Konfigurieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2321"/>
         <source>Run</source>
-        <translation>Start RT</translation>
+        <translation type="obsolete">Start RT</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2045"/>
         <source>CTRL+R</source>
-        <translation>CTRL+R</translation>
+        <translation type="obsolete">CTRL+R</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2326"/>
         <source>Run in Terminal</source>
-        <translation>Im Terminal ausführen (Echtzeit)</translation>
+        <translation type="obsolete">Im Terminal ausführen (Echtzeit)</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2327"/>
         <source>Run in external shell</source>
-        <translation>In externer Shell ausführen</translation>
+        <translation type="obsolete">In externer Shell ausführen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2328"/>
         <source>Run in Term</source>
-        <translation>RT im Term</translation>
+        <translation type="obsolete">RT im Term</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2332"/>
-        <location filename="../qutecsound.cpp" line="2333"/>
-        <location filename="../qutecsound.cpp" line="2334"/>
         <source>Stop</source>
-        <translation>Stop</translation>
+        <translation type="obsolete">Stop</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2047"/>
         <source>Alt+S</source>
-        <translation>Alt+S</translation>
+        <translation type="obsolete">Alt+S</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2344"/>
-        <location filename="../qutecsound.cpp" line="2345"/>
-        <location filename="../qutecsound.cpp" line="2346"/>
         <source>Record</source>
-        <translation>Aufnahme</translation>
+        <translation type="obsolete">Aufnahme</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2049"/>
         <source>Ctrl+Space</source>
-        <translation>Ctrl+Leerzeichen</translation>
+        <translation type="obsolete">Ctrl+Leerzeichen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1716"/>
         <source>Finnish translation: Niko Humalam&amp;auml;ki</source>
-        <translation>Finnische Übersetzung: Niko Humalam&amp;auml;ki</translation>
+        <translation type="obsolete">Finnische Übersetzung: Niko Humalam&amp;auml;ki</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2050"/>
         <source>Alt+F</source>
-        <translation>Alt+F</translation>
+        <translation type="obsolete">Alt+F</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2353"/>
         <source>Render</source>
-        <translation>In Datei</translation>
+        <translation type="obsolete">In Datei</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2357"/>
         <source>Play Audiofile</source>
-        <translation>Audiodatei abspielen</translation>
+        <translation type="obsolete">Audiodatei abspielen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2358"/>
         <source>Play rendered audiofile in External Editor</source>
-        <translation>Ausgerechnete Audiodatei in externem Editor abspielen</translation>
+        <translation type="obsolete">Ausgerechnete Audiodatei in externem Editor abspielen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2359"/>
         <source>Ext. Player</source>
-        <translation>Ext. Player</translation>
+        <translation type="obsolete">Ext. Player</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2363"/>
         <source>Edit Audiofile</source>
-        <translation>Audiodatei bearbeiten</translation>
+        <translation type="obsolete">Audiodatei bearbeiten</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2364"/>
         <source>Edit rendered audiofile in External Editor</source>
-        <translation>Ausgerechnete Audiodatei im externen Editor bearbeiten</translation>
+        <translation type="obsolete">Ausgerechnete Audiodatei im externen Editor bearbeiten</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2365"/>
         <source>Ext. Editor</source>
-        <translation>Ext. Editor</translation>
+        <translation type="obsolete">Ext. Editor</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2369"/>
-        <location filename="../qutecsound.cpp" line="2373"/>
         <source>Widgets</source>
-        <translation>Widgets</translation>
+        <translation type="obsolete">Widgets</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2054"/>
         <source>Alt+1</source>
-        <translation>Alt+1</translation>
+        <translation type="obsolete">Alt+1</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2372"/>
         <source>Show Realtime Widgets</source>
-        <translation>Echtzeit Widgets zeigen</translation>
+        <translation type="obsolete">Echtzeit Widgets zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2390"/>
         <source>Help Panel</source>
-        <translation>Manual</translation>
+        <translation type="obsolete">Manual</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2055"/>
         <source>Alt+2</source>
-        <translation>Alt+2</translation>
+        <translation type="obsolete">Alt+2</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2393"/>
         <source>Show the Csound Manual Panel</source>
-        <translation>Csound Manual zeigen</translation>
+        <translation type="obsolete">Csound Manual zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2394"/>
         <source>Manual</source>
-        <translation>Manual</translation>
+        <translation type="obsolete">Manual</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2437"/>
         <source>GEN Routines</source>
-        <translation>GEN Routinen</translation>
+        <translation type="obsolete">GEN Routinen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2438"/>
         <source>Show the GEN Routines Manual page</source>
-        <translation>Manual-Seite für GEN Routinen anzeigen</translation>
+        <translation type="obsolete">Manual-Seite für GEN Routinen anzeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2442"/>
         <source>Opcode Overview</source>
-        <translation>Opcode Überblick</translation>
+        <translation type="obsolete">Opcode Überblick</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2443"/>
         <source>Show opcode overview</source>
-        <translation>Opcode-Überblick anzeigen</translation>
+        <translation type="obsolete">Opcode-Überblick anzeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2452"/>
         <source>Output Console</source>
-        <translation>Konsole</translation>
+        <translation type="obsolete">Konsole</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2058"/>
         <source>Alt+3</source>
-        <translation>Alt+3</translation>
+        <translation type="obsolete">Alt+3</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2455"/>
         <source>Show Csound&apos;s message console</source>
-        <translation>Csound-Meldungen anzeigen</translation>
+        <translation type="obsolete">Csound-Meldungen anzeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2538"/>
         <source>Show Opcode Entry</source>
-        <translation>Opcode-Eintrag anzeigen</translation>
+        <translation type="obsolete">Opcode-Eintrag anzeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2069"/>
         <source>Shift+F1</source>
-        <translation>Shift+F1</translation>
+        <translation type="obsolete">Shift+F1</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2539"/>
         <source>Show Opcode Entry in help panel</source>
-        <translation>Opcode-Eintrag im Hilfefenster anzeigen</translation>
+        <translation type="obsolete">Opcode-Eintrag im Hilfefenster anzeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2540"/>
         <source>Manual for opcode</source>
-        <translation>Manual für Opcode</translation>
+        <translation type="obsolete">Manual für Opcode</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2544"/>
         <source>Help Back</source>
-        <translation>Hilfe zurück</translation>
+        <translation type="obsolete">Hilfe zurück</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2545"/>
         <source>Go back in help page</source>
-        <translation>Auf Hilfeseite zurückgehen</translation>
+        <translation type="obsolete">Auf Hilfeseite zurückgehen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2549"/>
         <source>Help Forward</source>
-        <translation>Hilfe vorwärts</translation>
+        <translation type="obsolete">Hilfe vorwärts</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2550"/>
         <source>Go forward in help page</source>
-        <translation>Auf Hilfeseite vorwärts gehen</translation>
+        <translation type="obsolete">Auf Hilfeseite vorwärts gehen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2554"/>
         <source>Show Opcode Entry in External Browser</source>
-        <translation>Opcode-Eintrag im externen Browser zeigen</translation>
+        <translation type="obsolete">Opcode-Eintrag im externen Browser zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2072"/>
         <source>Shift+Alt+F1</source>
-        <translation>Shift+Alt+F1</translation>
+        <translation type="obsolete">Shift+Alt+F1</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2555"/>
         <source>Show Opcode Entry in external browser</source>
-        <translation>Opcode-Eintrag im externen Browser zeigen</translation>
+        <translation type="obsolete">Opcode-Eintrag im externen Browser zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2564"/>
-        <location filename="../qutecsound.cpp" line="2568"/>
         <source>Utilities</source>
-        <translation>Utilities</translation>
+        <translation type="obsolete">Utilities</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2065"/>
         <source>Alt+4</source>
-        <translation>Alt+4</translation>
+        <translation type="obsolete">Alt+4</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2567"/>
         <source>Show the Csound Utilities dialog</source>
-        <translation>Dialog für Csound-Hilfsprogramme anzeigen</translation>
+        <translation type="obsolete">Dialog für Csound-Hilfsprogramme anzeigen</translation>
     </message>
     <message>
         <source>Comment</source>
@@ -4291,9 +5782,8 @@ Erweiterte Python-Features sind nicht verfügbar</translation>
         <translation type="obsolete">Auswahl auskommentieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2035"/>
         <source>Ctrl+D</source>
-        <translation>Ctrl+D</translation>
+        <translation type="obsolete">Ctrl+D</translation>
     </message>
     <message>
         <source>Uncomment</source>
@@ -4308,34 +5798,28 @@ Erweiterte Python-Features sind nicht verfügbar</translation>
         <translation type="obsolete">Shift+Ctrl+D</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2590"/>
         <source>Indent</source>
-        <translation>Einrücken</translation>
+        <translation type="obsolete">Einrücken</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2591"/>
         <source>Indent selection</source>
-        <translation>Auswahl einrücken</translation>
+        <translation type="obsolete">Auswahl einrücken</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2076"/>
         <source>Ctrl+I</source>
-        <translation>Ctrl+I</translation>
+        <translation type="obsolete">Ctrl+I</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2596"/>
         <source>Unindent</source>
-        <translation>Einrückung aufheben</translation>
+        <translation type="obsolete">Einrückung aufheben</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2597"/>
         <source>Unindent selection</source>
-        <translation>Einrückung der Auswahl aufheben</translation>
+        <translation type="obsolete">Einrückung der Auswahl aufheben</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2077"/>
         <source>Shift+Ctrl+I</source>
-        <translation>Shift+Ctrl+I</translation>
+        <translation type="obsolete">Shift+Ctrl+I</translation>
     </message>
     <message>
         <source>Find and replace</source>
@@ -4352,23 +5836,20 @@ Von Anfang beginnen?</translation>
         <translation type="obsolete">Csound Dateien (*.csd *.orc *.sco* *.CSD *.ORC *.SCO)</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1149"/>
         <source>This file has not been saved
 Please select name and location.</source>
-        <translation>Datei wurde nicht gesichert.
+        <translation type="obsolete">Datei wurde nicht gesichert.
 Bitte Name und Ort auswählen.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1237"/>
         <source>Internal error running Csound.</source>
-        <translation>Interner Fehler beim Ausführen von Csound.</translation>
+        <translation type="obsolete">Interner Fehler beim Ausführen von Csound.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1660"/>
         <source>PDF viewer not found!
 Please go to Edit-&gt;Options-&gt;Environment and select directory
 </source>
-        <translation>Programm zur PDF-Ansicht nicht gefunden!
+        <translation type="obsolete">Programm zur PDF-Ansicht nicht gefunden!
 Bitte bei Konfiguration-&gt;Umgebung-&gt;PDF-Ansicht auswählen</translation>
     </message>
     <message>
@@ -4387,436 +5868,329 @@ Francesco
 Francesco</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2041"/>
         <source>Ctrl+G</source>
-        <translation>Ctrl+G</translation>
+        <translation type="obsolete">Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2044"/>
         <source>CTRL+E</source>
-        <translation>Ctrl+E</translation>
+        <translation type="obsolete">Ctrl+E</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2048"/>
-        <source>Ctrl+.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="2067"/>
         <source>Alt+6</source>
-        <translation>Alt+6</translation>
+        <translation type="obsolete">Alt+6</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2080"/>
         <source>Alt+7</source>
-        <translation>Alt+7</translation>
+        <translation type="obsolete">Alt+7</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2074"/>
-        <source>Ctrl+/</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="2082"/>
         <source>Ctrl+K</source>
-        <translation>Ctrl+K</translation>
+        <translation type="obsolete">Ctrl+K</translation>
     </message>
     <message>
         <source>Shift+Ctrl+K</source>
         <translation type="obsolete">Shift+Ctrl+K</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2175"/>
         <source>Export without widgets</source>
-        <translation>Exportieren ohne Widgets</translation>
+        <translation type="obsolete">Exportieren ohne Widgets</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2176"/>
         <source>Save to new file without including widget sections</source>
-        <translation>In neuer Datei ohne Angaben über die Widgets sichern</translation>
+        <translation type="obsolete">In neuer Datei ohne Angaben über die Widgets sichern</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2294"/>
         <source>Find a&amp;gain</source>
-        <translation>Erneut finden</translation>
+        <translation type="obsolete">Erneut finden</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2295"/>
         <source>Find next appearance of string</source>
-        <translation>Nächstes Vorkommen der Zeichenkette finden</translation>
+        <translation type="obsolete">Nächstes Vorkommen der Zeichenkette finden</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2312"/>
         <source>Widget Edit Mode</source>
-        <translation>Widget-Edit-Modus</translation>
+        <translation type="obsolete">Widget-Edit-Modus</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2313"/>
         <source>Activate Edit Mode for Widget Panel</source>
-        <translation>Edit-Modus für Widget-Panel aktivieren</translation>
+        <translation type="obsolete">Edit-Modus für Widget-Panel aktivieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2319"/>
         <source>Run Csound</source>
-        <translation>Csound ausführen</translation>
+        <translation type="obsolete">Csound ausführen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2320"/>
         <source>Run current file</source>
-        <translation>Gegenwärtige Datei ausführen</translation>
+        <translation type="obsolete">Gegenwärtige Datei ausführen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2338"/>
-        <location filename="../qutecsound.cpp" line="2340"/>
         <source>Stop All</source>
-        <translation>Alles stoppen</translation>
+        <translation type="obsolete">Alles stoppen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2339"/>
         <source>Stop all running documents</source>
-        <translation>Alle laufenden Dokumente stoppen</translation>
+        <translation type="obsolete">Alle laufenden Dokumente stoppen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2376"/>
-        <location filename="../qutecsound.cpp" line="2379"/>
         <source>Inspector</source>
-        <translation>Inspektor</translation>
+        <translation type="obsolete">Inspektor</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2378"/>
         <source>Show Inspector</source>
-        <translation>Inspektor zeigen</translation>
+        <translation type="obsolete">Inspektor zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2384"/>
         <source>Focus Text Editor</source>
         <comment>Give keyboard focus to the text editor</comment>
-        <translation>Fokus zum Text-Editor</translation>
+        <translation type="obsolete">Fokus zum Text-Editor</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2385"/>
         <source>Give keyboard focus to the text editor</source>
-        <translation>Tastatur-Fokus zum Text-Editor geben</translation>
+        <translation type="obsolete">Tastatur-Fokus zum Text-Editor geben</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2386"/>
         <source>Editor</source>
-        <translation>Editor</translation>
+        <translation type="obsolete">Editor</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2399"/>
-        <location filename="../qutecsound.cpp" line="2403"/>
         <source>Live Events</source>
-        <translation>Echtzeitereignisse</translation>
+        <translation type="obsolete">Echtzeitereignisse</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2402"/>
         <source>Show Live Events Panels</source>
-        <translation>Fenster für Echtzeitereignisse zeigen</translation>
+        <translation type="obsolete">Fenster für Echtzeitereignisse zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2406"/>
         <source>Python Console</source>
-        <translation>Python Konsole</translation>
+        <translation type="obsolete">Python Konsole</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2409"/>
         <source>Show Python Console</source>
-        <translation>Python Konsole zeigen</translation>
+        <translation type="obsolete">Python Konsole zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2410"/>
         <source>Python</source>
-        <translation>Python</translation>
+        <translation type="obsolete">Python</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2419"/>
-        <location filename="../qutecsound.cpp" line="2423"/>
         <source>ScratchPad</source>
-        <translation>ScratchPad</translation>
+        <translation type="obsolete">ScratchPad</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2422"/>
         <source>Show Python Scratch Pad</source>
-        <translation>Python Scratch Pad zeigen</translation>
+        <translation type="obsolete">Python Scratch Pad zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2432"/>
         <source>Csound Manual</source>
-        <translation>Csound Manual</translation>
+        <translation type="obsolete">Csound Manual</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2433"/>
         <source>Show the Csound manual in the help panel</source>
-        <translation>Csound Manual im Hilfefenster zeigen</translation>
+        <translation type="obsolete">Csound Manual im Hilfefenster zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2447"/>
         <source>Opcode Quick Reference</source>
-        <translation>Opcode Quick Reference</translation>
+        <translation type="obsolete">Opcode Quick Reference</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2448"/>
         <source>Show opcode quick reference page</source>
-        <translation>Opcode-Kurzinfo zeigen</translation>
+        <translation type="obsolete">Opcode-Kurzinfo zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2461"/>
         <source>View Full Screen</source>
-        <translation>Ganzer Bildschirm</translation>
+        <translation type="obsolete">Ganzer Bildschirm</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2464"/>
         <source>Have QuteCsound occupy all the available screen space</source>
-        <translation>QuteCsound den gesamten verfügbaren Platz auf dem Monitor geben</translation>
+        <translation type="obsolete">QuteCsound den gesamten verfügbaren Platz auf dem Monitor geben</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2468"/>
         <source>Split View</source>
-        <translation>Geteilte Ansicht</translation>
+        <translation type="obsolete">Geteilte Ansicht</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2471"/>
         <source>Toggle between full csd and split text display</source>
-        <translation>Zwischen voller csd und geteilter Textansicht umschalten</translation>
+        <translation type="obsolete">Zwischen voller csd und geteilter Textansicht umschalten</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2475"/>
         <source>Show Orchestra</source>
-        <translation>Orchester zeigen</translation>
+        <translation type="obsolete">Orchester zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2479"/>
-        <location filename="../qutecsound.cpp" line="2488"/>
         <source>Show orchestra panel in split view</source>
-        <translation>Orchester Fenster in geteilter Ansicht zeigen</translation>
+        <translation type="obsolete">Orchester Fenster in geteilter Ansicht zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2484"/>
         <source>Show Score</source>
-        <translation>Score zeigen</translation>
+        <translation type="obsolete">Score zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2493"/>
         <source>Show CsOptions</source>
-        <translation>CsOptions zeigen</translation>
+        <translation type="obsolete">CsOptions zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2497"/>
         <source>Show CsOptions section panel in split view</source>
-        <translation>Zeige CsOptions Abschnitt in geteilter Ansicht</translation>
+        <translation type="obsolete">Zeige CsOptions Abschnitt in geteilter Ansicht</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2502"/>
         <source>Show Embedded files</source>
-        <translation>Eingebettete Dateien zeigen</translation>
+        <translation type="obsolete">Eingebettete Dateien zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2506"/>
         <source>Show Embedded files panel in split view</source>
-        <translation>Eingebettete Dateien in geteilter Ansicht zeigen</translation>
+        <translation type="obsolete">Eingebettete Dateien in geteilter Ansicht zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2511"/>
         <source>Show Information Text</source>
-        <translation>Information anzeigen</translation>
+        <translation type="obsolete">Information anzeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2515"/>
         <source>Show information text panel in split view</source>
-        <translation>Information in geteilter Ansicht zeigen</translation>
+        <translation type="obsolete">Information in geteilter Ansicht zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2520"/>
         <source>Show Extra Tags</source>
-        <translation>Extra Tags zeigen</translation>
+        <translation type="obsolete">Extra Tags zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2524"/>
         <source>Show extra tags panel in split view</source>
-        <translation>Extra Tags in geteilter Ansicht zeigen</translation>
+        <translation type="obsolete">Extra Tags in geteilter Ansicht zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2529"/>
         <source>Show Widgets Text</source>
-        <translation>Widgets Text zeigen</translation>
+        <translation type="obsolete">Widgets Text zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2533"/>
         <source>Show Widgets text panel in split view</source>
-        <translation>Widget Text in geteilter Ansicht zeigen</translation>
+        <translation type="obsolete">Widget Text in geteilter Ansicht zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2559"/>
         <source>Open Quick Reference Guide</source>
-        <translation>QuteCsound Erläuterungen (Quick Reference)</translation>
+        <translation type="obsolete">QuteCsound Erläuterungen (Quick Reference)</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2560"/>
         <source>Open Quick Reference Guide in PDF viewer</source>
-        <translation>QuteCsound Kurzeinführung im PDF-Anzeiger öffnen</translation>
+        <translation type="obsolete">QuteCsound Kurzeinführung im PDF-Anzeiger öffnen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2572"/>
-        <location filename="../qutecsound.cpp" line="2573"/>
         <source>Set Keyboard Shortcuts</source>
-        <translation>Tastenkürzel setzen</translation>
+        <translation type="obsolete">Tastenkürzel setzen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2574"/>
         <source>Set Shortcuts</source>
-        <translation>Tastenkürzel setzen</translation>
+        <translation type="obsolete">Tastenkürzel setzen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2578"/>
         <source>Comment/Uncomment</source>
-        <translation>Kommentieren/Entkommentieren</translation>
+        <translation type="obsolete">Kommentieren/Entkommentieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2579"/>
         <source>Comment/Uncomment selection</source>
-        <translation>Auswahl kommentieren/entkommentieren</translation>
+        <translation type="obsolete">Auswahl kommentieren/entkommentieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2602"/>
         <source>Kill Line</source>
-        <translation>Zeile löschen</translation>
+        <translation type="obsolete">Zeile löschen</translation>
     </message>
     <message>
         <source>Completeley delete current line</source>
         <translation type="obsolete">Zeile komplett löschen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2606"/>
         <source>Kill to End of Line</source>
-        <translation>Bis Ende der Zeile löschen</translation>
+        <translation type="obsolete">Bis Ende der Zeile löschen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2607"/>
         <source>Delete everything from cursor to the end of the current line</source>
-        <translation>Alles vom Cursor bis ans Ende der Zeile löschen.</translation>
+        <translation type="obsolete">Alles vom Cursor bis ans Ende der Zeile löschen.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2610"/>
         <source>&amp;About QuteCsound</source>
-        <translation>Über QuteCsound</translation>
+        <translation type="obsolete">Über QuteCsound</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2611"/>
         <source>Show the application&apos;s About box</source>
-        <translation>Informationsfenster des Programms zeigen</translation>
+        <translation type="obsolete">Informationsfenster des Programms zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2616"/>
         <source>Donate to QuteCsound</source>
-        <translation>Für QuteCsound spenden</translation>
+        <translation type="obsolete">Für QuteCsound spenden</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2617"/>
         <source>Donate to support development of QuteCsound</source>
-        <translation>Spenden zur Unterstützung der Weiterentwicklung von QuteCsound</translation>
+        <translation type="obsolete">Spenden zur Unterstützung der Weiterentwicklung von QuteCsound</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2622"/>
         <source>About &amp;Qt</source>
-        <translation>Über &amp;Qt</translation>
+        <translation type="obsolete">Über &amp;Qt</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2623"/>
         <source>Show the Qt library&apos;s About box</source>
-        <translation>Informationsfenster der Qt-Bibliothek zeigen</translation>
+        <translation type="obsolete">Informationsfenster der Qt-Bibliothek zeigen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2629"/>
         <source>Reset QuteCsound&apos;s preferences to their original default state</source>
-        <translation>QuteCsounds Voreinstellungen auf ursprünglichen Wert zurücksetzen</translation>
+        <translation type="obsolete">QuteCsounds Voreinstellungen auf ursprünglichen Wert zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2633"/>
         <source>Duplicate Widgets</source>
-        <translation>Widgets duplizieren</translation>
+        <translation type="obsolete">Widgets duplizieren</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2789"/>
-        <location filename="../qutecsound.cpp" line="3565"/>
         <source>File</source>
-        <translation>Datei</translation>
+        <translation type="obsolete">Datei</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2807"/>
-        <location filename="../qutecsound.cpp" line="3571"/>
         <source>Edit</source>
-        <translation>Bearbeiten</translation>
+        <translation type="obsolete">Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2839"/>
-        <location filename="../qutecsound.cpp" line="3579"/>
         <source>Control</source>
-        <translation>Steuerung</translation>
+        <translation type="obsolete">Steuerung</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2849"/>
         <source>View</source>
-        <translation>Ansicht</translation>
+        <translation type="obsolete">Ansicht</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2941"/>
         <source>Music</source>
-        <translation>Music</translation>
+        <translation type="obsolete">Music</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2967"/>
         <source>Useful</source>
-        <translation>Useful</translation>
+        <translation type="obsolete">Useful</translation>
     </message>
     <message>
         <source>Synths</source>
         <translation type="obsolete">Synths</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2994"/>
         <source>Examples</source>
-        <translation>Beispiele</translation>
+        <translation type="obsolete">Beispiele</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3416"/>
         <source>Help</source>
-        <translation>Hilfe</translation>
+        <translation type="obsolete">Hilfe</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2805"/>
         <source>Recent files</source>
-        <translation>Benutzte Dateien</translation>
+        <translation type="obsolete">Benutzte Dateien</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2992"/>
-        <source>Miscellaneous</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3007"/>
         <source>Getting Started</source>
-        <translation>Getting Started</translation>
+        <translation type="obsolete">Getting Started</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3008"/>
         <source>Basics</source>
-        <translation>Basics</translation>
+        <translation type="obsolete">Basics</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3028"/>
-        <source>Realtime Interaction</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3613"/>
         <source>Ready</source>
-        <translation>Fertig</translation>
+        <translation type="obsolete">Fertig</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="952"/>
         <source>The document </source>
-        <translation>Das Dokument</translation>
+        <translation type="obsolete">Das Dokument</translation>
     </message>
     <message>
         <source>Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco);;Python Files (*.py);;All Files (*)</source>
@@ -4824,78 +6198,60 @@ Francesco</translation>
         <translation type="obsolete">Bekannte Dateien (*.csd *.orc *.sco *.py);;Csound Dateien (*.csd *.orc *.sco);;Python Dateien (*.py);;Alle Dateien (*)</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="955"/>
         <source>
 has been modified.
 Do you want to save the changes before closing?</source>
-        <translation>
+        <translation type="obsolete">
 wurde verändert.
 Änderungen speichern?</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2603"/>
         <source>Completely delete current line</source>
-        <translation>Zeile vollständig entfernen</translation>
+        <translation type="obsolete">Zeile vollständig entfernen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3044"/>
-        <source>Language Features</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3067"/>
         <source>FLOSS Manual Examples</source>
-        <translation>FLOSS Manual Beispiele</translation>
+        <translation type="obsolete">FLOSS Manual Beispiele</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3077"/>
         <source>01 Basics</source>
-        <translation>01 Basics</translation>
+        <translation type="obsolete">01 Basics</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3096"/>
         <source>02 Quick Start</source>
-        <translation>02 Quick Start</translation>
+        <translation type="obsolete">02 Quick Start</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3178"/>
         <source>03 Csound Language</source>
-        <translation>03 Csound Language</translation>
+        <translation type="obsolete">03 Csound Language</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3222"/>
         <source>04 Sound Synthesis</source>
-        <translation>04 Sound Synthesis</translation>
+        <translation type="obsolete">04 Sound Synthesis</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3268"/>
         <source>05 Sound Modification</source>
-        <translation>05 Sound Modification</translation>
+        <translation type="obsolete">05 Sound Modification</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3286"/>
         <source>06 Samples</source>
-        <translation>06 Samples</translation>
+        <translation type="obsolete">06 Samples</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3314"/>
         <source>07 MIDI</source>
-        <translation>07 MIDI</translation>
+        <translation type="obsolete">07 MIDI</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3325"/>
         <source>08 OSC and WII</source>
-        <translation>08 OSC and WII</translation>
+        <translation type="obsolete">08 OSC and WII</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3345"/>
         <source>09 Csound in other Applications</source>
-        <translation>09 Csound in other Applications</translation>
+        <translation type="obsolete">09 Csound in other Applications</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3380"/>
         <source>McCurdy Collection</source>
-        <translation>McCurdy Collection</translation>
+        <translation type="obsolete">McCurdy Collection</translation>
     </message>
     <message>
         <source>3D Audio</source>
@@ -4934,53 +6290,44 @@ wurde verändert.
         <translation type="obsolete">GranularSynthesis</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3408"/>
         <source>Favorites</source>
-        <translation>Favoriten</translation>
+        <translation type="obsolete">Favoriten</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3409"/>
         <source>Scripts</source>
-        <translation>Scripts</translation>
+        <translation type="obsolete">Scripts</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4015"/>
         <source>Cannot read file %1:
 %2.</source>
-        <translation>Datei %1 kann nicht gelesen werden:
+        <translation type="obsolete">Datei %1 kann nicht gelesen werden:
 %2.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4144"/>
         <source>File loaded</source>
-        <translation>Datei geladen</translation>
+        <translation type="obsolete">Datei geladen</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4260"/>
         <source>Application</source>
-        <translation>Programm</translation>
+        <translation type="obsolete">Programm</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4261"/>
         <source>Cannot write file %1:
 %2.</source>
-        <translation>Datei %1 kann nicht geschrieben werden:
+        <translation type="obsolete">Datei %1 kann nicht geschrieben werden:
 %2.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4272"/>
         <source>File saved</source>
-        <translation>Datei gesichert</translation>
+        <translation type="obsolete">Datei gesichert</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4284"/>
         <source>%1[*] - %2</source>
-        <translation>%1[*] - %2</translation>
+        <translation type="obsolete">%1[*] - %2</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4386"/>
         <source>Do not ask again</source>
-        <translation>Nicht noch einmal fragen</translation>
+        <translation type="obsolete">Nicht noch einmal fragen</translation>
     </message>
     <message>
         <source>by: Andres Cabrera
@@ -5001,9 +6348,8 @@ Joachim Heintz
 </translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="1985"/>
         <source>Line %1</source>
-        <translation>Zeile %1</translation>
+        <translation type="obsolete">Zeile %1</translation>
     </message>
     <message>
         <source>Portuguese translation:

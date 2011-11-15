@@ -93,7 +93,7 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>About CsoundQt</string>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -301,7 +301,7 @@
     </font>
    </property>
    <property name="text">
-    <string>QuteCsound</string>
+    <string>CsoundQt</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
