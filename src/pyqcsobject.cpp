@@ -435,7 +435,7 @@ CSOUND* PyQcsObject::getCurrentCsound()
   CSOUND *cs = NULL;
   CsoundEngine *e = m_qcs->getEngine();
   if (e != NULL) {
-    CSOUND *cs = e->getCsound();
+    cs = e->getCsound();
   }
   return cs;
 }
