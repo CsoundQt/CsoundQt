@@ -58,6 +58,7 @@ class ConfigDialog : public QDialog, public Ui::ConfigDialog
     void browseOutputFilename();
     void browseCsdocdir();
     void browseOpcodedir();
+    void browseOpcodedir64();
     void browseSadir();
     void browseSsdir();
     void browseSfdir();

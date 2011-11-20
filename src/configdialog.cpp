@@ -172,6 +172,9 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options)
   OpcodedirCheckBox->setChecked(m_options->opcodedirActive);
   OpcodedirLineEdit->setText(m_options->opcodedir);
   OpcodedirLineEdit->setEnabled(m_options->opcodedirActive);
+  Opcodedir64CheckBox->setChecked(m_options->opcodedir64Active);
+  Opcodedir64LineEdit->setText(m_options->opcodedir64);
+  Opcodedir64LineEdit->setEnabled(m_options->opcodedir64Active);
   SadirCheckBox->setChecked(m_options->sadirActive);
   SadirLineEdit->setText(m_options->sadir);
   SadirLineEdit->setEnabled(m_options->sadirActive);
@@ -206,6 +209,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options)
   connect(outputFilenameToolButton, SIGNAL(clicked()), this, SLOT(browseOutputFilename()));
   connect(csdocdirToolButton, SIGNAL(clicked()), this, SLOT(browseCsdocdir()));
   connect(opcodedirToolButton, SIGNAL(clicked()), this, SLOT(browseOpcodedir()));
+  connect(opcodedir64ToolButton, SIGNAL(clicked()), this, SLOT(browseOpcodedir64()));
   connect(sadirToolButton, SIGNAL(clicked()), this, SLOT(browseSadir()));
   connect(ssdirToolButton, SIGNAL(clicked()), this, SLOT(browseSsdir()));
   connect(sfdirToolButton, SIGNAL(clicked()), this, SLOT(browseSfdir()));
@@ -232,6 +236,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options)
   connect(defaultTemplatePushButton,SIGNAL(released()), this, SLOT(defaultTemplate()));
 
   connect(OpcodedirCheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
+  connect(Opcodedir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
 
 #ifndef QCS_PYTHONQT
   pythonDirLineEdit->setEnabled(false);
@@ -254,7 +259,7 @@ void ConfigDialog::warnOpcodeDir(bool on)
 {
   if (on) {
     QMessageBox::warning(this, "CsoundQt",
-                         tr("Please note that OPCODEDIR will overwrite current settings so you will need to restart CsoundQt to return to default.")
+                         tr("Please note that OPCODEDIR and OPCODEDIR64 will overwrite current settings so you will need to restart CsoundQt to return to default.")
                         );
   }
 }
@@ -344,6 +349,8 @@ void ConfigDialog::accept()
   m_options->csdocdir = CsdocdirLineEdit->text();
   m_options->opcodedirActive = OpcodedirCheckBox->isChecked();
   m_options->opcodedir = OpcodedirLineEdit->text();
+  m_options->opcodedir64Active = Opcodedir64CheckBox->isChecked();
+  m_options->opcodedir64 = Opcodedir64LineEdit->text();
   m_options->sadirActive = SadirCheckBox->isChecked();
   m_options->sadir = SadirLineEdit->text();
   m_options->ssdirActive = SsdirCheckBox->isChecked();
@@ -395,6 +402,12 @@ void ConfigDialog::browseOpcodedir()
 {
   browseDir(m_options->opcodedir);
   OpcodedirLineEdit->setText(m_options->opcodedir);
+}
+
+void ConfigDialog::browseOpcodedir64()
+{
+  browseDir(m_options->opcodedir64);
+  Opcodedir64LineEdit->setText(m_options->opcodedir64);
 }
 
 void ConfigDialog::browseSadir()

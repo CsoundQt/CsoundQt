@@ -878,6 +878,7 @@ void CsoundQt::createApp()
     }
   }
   if (m_options->opcodedirActive) {
+    // FIXME allow for OPCODEDIR64 if built for doubles
     opcodeDir = m_options->opcodedir.toLocal8Bit();
   }
   else {
@@ -1926,16 +1927,26 @@ void CsoundQt::runUtility(QString flags)
     QString script;
 #ifdef Q_OS_WIN32
     script = "";
+#ifdef USE_DOUBLE
+    if (m_options->opcodedir64Active)
+      script += "set OPCODEDIR64=" + m_options->opcodedir64 + "\n";
+#else
     if (m_options->opcodedirActive)
       script += "set OPCODEDIR=" + m_options->opcodedir + "\n";
+#endif
     // Only OPCODEDIR left here as it must be present before csound initializes
 
     script += "cd " + QFileInfo(documentPages[curPage]->getFileName()).absolutePath() + "\n";
     script += "csound " + flags + "\n";
 #else
     script = "#!/bin/sh\n";
+#ifdef USE_DOUBLE
+    if (m_options->opcodedir64Active)
+      script += "set OPCODEDIR64=" + m_options->opcodedir64 + "\n";
+#else
     if (m_options->opcodedirActive)
       script += "export OPCODEDIR=" + m_options->opcodedir + "\n";
+#endif
     // Only OPCODEDIR left here as it must be present before csound initializes
 
     script += "cd " + QFileInfo(documentPages[curPage]->getFileName()).absolutePath() + "\n";
@@ -3793,7 +3804,9 @@ void CsoundQt::readSettings()
   settings.beginGroup("Environment");
   m_options->csdocdir = settings.value("csdocdir", DEFAULT_HTML_DIR).toString();
   m_options->opcodedir = settings.value("opcodedir","").toString();
-  m_options->opcodedirActive = settings.value("opcodedirActive","").toBool();
+  m_options->opcodedirActive = settings.value("opcodedirActive",false).toBool();
+  m_options->opcodedir64 = settings.value("opcodedir64","").toString();
+  m_options->opcodedir64Active = settings.value("opcodedirActive64",false).toBool();
   m_options->sadir = settings.value("sadir","").toString();
   m_options->sadirActive = settings.value("sadirActive","").toBool();
   m_options->ssdir = settings.value("ssdir","").toString();
@@ -3959,6 +3972,8 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("csdocdir", m_options->csdocdir);
     settings.setValue("opcodedir",m_options->opcodedir);
     settings.setValue("opcodedirActive",m_options->opcodedirActive);
+    settings.setValue("opcodedir64",m_options->opcodedir64);
+    settings.setValue("opcodedir64Active",m_options->opcodedir64Active);
     settings.setValue("sadir",m_options->sadir);
     settings.setValue("sadirActive",m_options->sadirActive);
     settings.setValue("ssdir",m_options->ssdir);
@@ -4343,18 +4358,15 @@ QString CsoundQt::generateScript(bool realtime, QString tempFileName, QString ex
   QString script = "";
 #endif
   QString cmdLine = "";
+  // Only OPCODEDIR left here as it must be present before csound initializes
+  // The problem is that it can't be passed when using the API...
+#ifdef USE_DOUBLE
+  if (m_options->opcodedir64Active)
+    script += "export OPCODEDIR64=" + m_options->opcodedir64 + "\n";
+#else
   if (m_options->opcodedirActive)
     script += "export OPCODEDIR=" + m_options->opcodedir + "\n";
-    // Only OPCODEDIR left here as it must be present before csound initializes
-    // The problem is that it can't be passed when using the API...
-//   if (m_options->sadirActive)
-//     script += "export SADIR=" + m_options->sadir + "\n";
-//   if (m_options->ssdirActive)
-//     script += "export SSDIR=" + m_options->ssdir + "\n";
-//   if (m_options->sfdirActive)
-//     script += "export SFDIR=" + m_options->sfdir + "\n";
-//   if (m_options->ssdirActive)
-//     script += "export INCDIR=" + m_options->incdir + "\n";
+#endif
 
 #ifndef Q_OS_WIN32
   script += "cd " + QFileInfo(documentPages[curPage]->getFileName()).absolutePath() + "\n";

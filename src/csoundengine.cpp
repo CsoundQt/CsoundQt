@@ -712,6 +712,11 @@ int CsoundEngine::runCsound()
     // But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
     csoundSetGlobalEnv("OPCODEDIR", m_options.opcodedir.toLocal8Bit().constData());
   }
+  if (m_options.opcodedir64Active) {
+    // csoundGetEnv must be called after Compile or Precompile,
+    // But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
+    csoundSetGlobalEnv("OPCODEDIR64", m_options.opcodedir64.toLocal8Bit().constData());
+  }
 #ifdef Q_OS_MAC
   else {
 #ifdef USE_DOUBLES
@@ -723,7 +728,11 @@ int CsoundEngine::runCsound()
 #endif
     // TODO is this check robust enough? what if the standard library is not used? is it likely it is not?
     if (QFile::exists(stdopcode)) {
+#ifdef USE_DOUBLES
+      csoundSetGlobalEnv("OPCODEDIR64", opcodedir.toLocal8Bit().constData());
+#else
       csoundSetGlobalEnv("OPCODEDIR", opcodedir.toLocal8Bit().constData());
+#endif
     }
   }
 #endif

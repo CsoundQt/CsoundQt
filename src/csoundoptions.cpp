@@ -69,6 +69,8 @@ CsoundOptions::CsoundOptions()
   csdocdir = "";
   opcodedir = "";
   opcodedirActive = false;
+  opcodedir64 = "";
+  opcodedir64Active = false;
   sadir = "";
   sadirActive = false;
   ssdir = "";

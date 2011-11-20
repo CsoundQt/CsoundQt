@@ -79,6 +79,8 @@ class CsoundOptions
     QString csdocdir;
     QString opcodedir;
     bool opcodedirActive;
+    QString opcodedir64;
+    bool opcodedir64Active;
     QString sadir;
     bool sadirActive;
     QString ssdir;
