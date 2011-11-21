@@ -356,70 +356,70 @@ void UtilitiesDialog::setCvanalOutput(QString name)
 
 void UtilitiesDialog::browseAtsaInput()
 {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), atsaInputLineEdit->text());
   if (fileName != "")
     atsaInputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browseAtsaOutput()
 {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Select File"), atsaOutputLineEdit->text());
   if (fileName != "")
     atsaOutputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browsePvInput()
 {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), pvInputLineEdit->text());
   if (fileName != "")
     pvInputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browsePvOutput()
 {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Select File"), pvOutputLineEdit->text());
   if (fileName != "")
     pvOutputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browseHetInput()
 {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), hetInputLineEdit->text());
   if (fileName != "")
     hetInputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browseHetOutput()
 {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Select File"), hetOutputLineEdit->text());
   if (fileName != "")
     hetOutputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browseLpInput()
 {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), lpInputLineEdit->text());
   if (fileName != "")
     lpInputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browseLpOutput()
 {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Select File"), lpOutputLineEdit->text());
   if (fileName != "")
     lpOutputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browseCvInput()
 {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), cvInputLineEdit->text());
   if (fileName != "")
     cvInputLineEdit->setText(fileName);
 }
 
 void UtilitiesDialog::browseCvOutput()
 {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Select File"), cvOutputLineEdit->text());
   if (fileName != "")
     cvOutputLineEdit->setText(fileName);
 }
