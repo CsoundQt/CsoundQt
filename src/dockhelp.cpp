@@ -78,7 +78,7 @@ void DockHelp::loadFile(QString fileName)
   in.setAutoDetectUnicode(true);
   text->setHtml(in.readAll());
 #else
-  text->setSource(QUrl(fileName));
+  text->setSource(QUrl::fromLocalFile(fileName));
 #endif
 
 }

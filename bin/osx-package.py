@@ -5,6 +5,7 @@ import os
 QUTECSOUND_VERSION = '0.7.0-alpha'
 NEW_NAME='CsoundQt'
 QtFrameworksDir = '/Library/Frameworks'
+PythonQtLibPaths = ['../PythonQt2.0.1/lib/', '../../../../PythonQt2.0.1/lib/', './']
 
 # Build everything just to make sure all versions packaged are synchronized
 #cd ..
@@ -29,6 +30,8 @@ def deployWithPython(PRECISION):
     APP_NAME= NEW_NAME + PRECISION + '-py-' + QUTECSOUND_VERSION + '.app'
 
     ORIG_APP_NAME=ORIGINAL_NAME + '.app'
+    if (os.path.exists(APP_NAME)):
+        shutil.rmtree(APP_NAME)
     shutil.copytree(ORIG_APP_NAME, APP_NAME)
     # os.mkdir(APP_NAME + '/Contents/Resources')
     
@@ -38,8 +41,17 @@ def deployWithPython(PRECISION):
     #chmod -R a-w $APP_NAME/Contents/Resources
     
     os.mkdir(APP_NAME+ '/Contents/Frameworks')
-    shutil.copy('../PythonQt2.0.1/lib/libPythonQt.1.0.0.dylib', APP_NAME + '/Contents/MacOS/libPythonQt.1.dylib')
-    shutil.copy('../PythonQt2.0.1/lib/libPythonQt_QtAll.1.0.0.dylib', APP_NAME + '/Contents/MacOS/libPythonQt_QtAll.1.dylib')
+    PythonQtPath = ''
+    for path in PythonQtLibPaths:
+        if os.path.exists(path + 'libPythonQt.1.0.0.dylib'):
+            PythonQtPath = path
+            break
+    if PythonQtPath == '':
+        print "Can't find libPythonQt. Exiting."
+        return
+    print "Using PythonQtPath: " + PythonQtPath 
+    shutil.copy(PythonQtPath + 'libPythonQt.1.0.0.dylib', APP_NAME + '/Contents/MacOS/libPythonQt.1.dylib')
+    shutil.copy(PythonQtPath + 'libPythonQt_QtAll.1.0.0.dylib', APP_NAME + '/Contents/MacOS/libPythonQt_QtAll.1.dylib')
 
     QtLibs = ['QtCore', 'QtGui', 'QtXml', 'QtDBus', 'QtSvg', 'QtSql', 'QtXmlPatterns', 'QtOpenGL', 'QtNetwork', 'QtWebKit', 'phonon']
 
@@ -120,13 +132,13 @@ def deployWithPython(PRECISION):
 
 
 # make version including Qt
-print "---------------- Making floats package"
-
-deployWithPython('-f')
-
 print "---------------- Making doubles package"
 
 deployWithPython('-d')
+
+print "---------------- Making floats package"
+
+deployWithPython('-f')
 
 
 # make Standalone application
