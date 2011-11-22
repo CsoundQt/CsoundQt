@@ -1727,6 +1727,7 @@ void CsoundQt::about()
   text += tr("Italian translation: Francesco") + "<br />";
   text += tr("Turkish translation: Ali Isciler") + "<br />";
   text += tr("Finnish translation: Niko Humalam&auml;ki") + "<br />";
+  text += tr("Russian translation: Gleb Rogozinsky") + "<br />";
   text += QString("<center><a href=\"http://qutecsound.sourceforge.net\">qutecsound.sourceforge.net</a></center>");
   text += QString("<center><a href=\"mailto:mantaraya36@gmail.com\">mantaraya36@gmail.com</a></center><br />");
   text += tr("If you find CsoundQt useful, please consider donating to the project:");
