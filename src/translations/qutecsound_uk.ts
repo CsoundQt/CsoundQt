@@ -2,6 +2,17 @@
 <!DOCTYPE TS>
 <TS version="2.0">
 <context>
+    <name>About</name>
+    <message>
+        <source>About CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AdditionalFilesPage</name>
     <message>
         <source>Add file...</source>
@@ -644,7 +655,11 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Please note that OPCODEDIR will overwrite current settings so you will need to restart CsoundQt to return to default.</source>
+        <source>OPCODEDIR64</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please note that OPCODEDIR and OPCODEDIR64 will overwrite current settings so you will need to restart CsoundQt to return to default.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1957,6 +1972,10 @@ Extended Python features are not available</source>
     </message>
     <message>
         <source>Do not ask again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Russian translation: Gleb Rogozinsky</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3482,17 +3501,6 @@ Some features may not be available and will not be saved!</source>
     </message>
     <message>
         <source>Widgets can&apos;t be read! No widgets created.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>dialog</name>
-    <message>
-        <source>About CsoundQt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CsoundQt</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

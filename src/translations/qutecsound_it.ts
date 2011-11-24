@@ -7,6 +7,14 @@
         <source>QuteCsound</source>
         <translation type="obsolete">QuteCsound</translation>
     </message>
+    <message>
+        <source>About CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AdditionalFilesPage</name>
@@ -711,7 +719,11 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Please note that OPCODEDIR will overwrite current settings so you will need to restart CsoundQt to return to default.</source>
+        <source>OPCODEDIR64</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please note that OPCODEDIR and OPCODEDIR64 will overwrite current settings so you will need to restart CsoundQt to return to default.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2044,6 +2056,10 @@ Extended Python features are not available</source>
     <message>
         <source>Do not ask again</source>
         <translation type="unfinished">Non chiedere di nuovo</translation>
+    </message>
+    <message>
+        <source>Russian translation: Gleb Rogozinsky</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3833,17 +3849,6 @@ CanaleH:</translation>
     <message>
         <source>Distribute Vertically</source>
         <translation type="obsolete">Distribuisci verticalmente</translation>
-    </message>
-</context>
-<context>
-    <name>dialog</name>
-    <message>
-        <source>About CsoundQt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CsoundQt</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
