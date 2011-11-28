@@ -14,12 +14,12 @@
     <message>
         <location filename="../about.ui" line="96"/>
         <source>About CsoundQt</source>
-        <translation type="unfinished">Au sujet de CsoundQt</translation>
+        <translation>Au sujet de CsoundQt</translation>
     </message>
     <message>
         <location filename="../about.ui" line="304"/>
         <source>CsoundQt</source>
-        <translation type="unfinished">CsoundQt</translation>
+        <translation>CsoundQt</translation>
     </message>
 </context>
 <context>
@@ -194,7 +194,7 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.cpp" line="262"/>
         <source>Please note that OPCODEDIR and OPCODEDIR64 will overwrite current settings so you will need to restart CsoundQt to return to default.</source>
-        <translation type="unfinished"></translation>
+        <translation>OPCODEDIR et OPCODEDIR64 écraseront les réglages courants si bien qu&apos;il faut redémarrer CsoundQt pour revenir aux valeurs par défaut.</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="604"/>
@@ -715,7 +715,7 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.ui" line="844"/>
         <source>Allow simultaneous play (May have problems with portmidi,coreaudio, and alsa audio) </source>
-        <translation>Autoriser plusieurs exécutions simultanées (Problèmes possibles avec portmidi, coreaudio et alsa audio</translation>
+        <translation>Autoriser les exécutions simultanées (problèmes possibles avec portaudio, coreaudio et alsa audio)</translation>
     </message>
     <message>
         <source>Use new Widget Format (experimental)</source>
@@ -895,7 +895,7 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.ui" line="1737"/>
         <source>OPCODEDIR64</source>
-        <translation type="unfinished"></translation>
+        <translation>OPCODEDIR64</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1757"/>
@@ -1289,7 +1289,7 @@ Il faut redémarrer CsoundQt.</translation>
     <message>
         <location filename="../qutecsound.cpp" line="1730"/>
         <source>Russian translation: Gleb Rogozinsky</source>
-        <translation type="unfinished"></translation>
+        <translation>Traduction russe : Gleb Rogozinsky</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1733"/>
