@@ -29,6 +29,35 @@
 class TextEditor;
 class OpEntryParser;
 
+class AppProperties {
+public:
+  bool used; // Flag to mark if properties are used
+  QString appName;
+  QString targetDir;
+  QString author;
+  QString version;
+  QString date;
+  QString email;
+  QString website;
+  QString instructions;
+
+  bool autorun;
+  bool showRun;
+  bool saveState;
+  int runMode;
+  bool newParser;
+  bool useDoubles;
+
+  bool forlinux;
+  bool forosx;
+  bool forosx_64;
+  bool forwindows;
+
+  bool useCustomPaths;
+  QString libDir;
+  QString opcodeDir;
+};
+
 class BaseView : public QScrollArea
 {
   Q_OBJECT
@@ -58,6 +87,7 @@ class BaseView : public QScrollArea
     void setOtherCsdText(QString text);
     void setOtherText(QString text);
     void setAppText(QString text);
+    void setAppProperties(AppProperties properties);
 
     QString getFullText();
     QString getOrc();  // Without tags
@@ -67,6 +97,7 @@ class BaseView : public QScrollArea
     QString getExtraCsdText();  // All other tags like version and licence with tags
     QString getExtraText(); // Text outside any known tags
     QString getAppText();
+    AppProperties getAppProperties();
 
     void clearUndoRedoStack();
 
@@ -101,7 +132,8 @@ class BaseView : public QScrollArea
     TextEditor *m_otherEditor;  // Extra text after removing all sections. All this text is to be presented at the start of the csd. Also called information text elsewhere
     TextEditor *m_otherCsdEditor;  // Extra text and tags inside CsoundSynthesizer tags
     TextEditor *m_widgetEditor;
-        TextEditor *m_appEditor;
+    TextEditor *m_appEditor;
+    AppProperties m_appProperties;
 
     int m_orcStartLine;
     int m_scoStartLine;

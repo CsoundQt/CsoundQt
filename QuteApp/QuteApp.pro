@@ -7,13 +7,15 @@ TMPDIR = "build"
 !build32:!build64:CONFIG += build32
 build32:build64:CONFIG -= build32
 CONFIG += is_quteapp # This is for bundling the QuteApp in the main CsoundQt app, so shouldn't be here
+CONFIG -=
 unix { 
     macx:include (../qcs-macx.pro)
     else:include (../qcs-unix.pro)
 }
 win32-g++:include (../qcs-win32.pro)
 
-pythonqt:DEFINES += QCS_PYTHONQT
+# No python for QuteApp for now!
+#pythonqt:DEFINES += QCS_PYTHONQT
 rtmidi:DEFINES += QCS_RTMIDI
 INCLUDEPATH = ../src
 QCSPWD = "../src"

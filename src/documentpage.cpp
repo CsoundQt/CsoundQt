@@ -271,33 +271,33 @@ void DocumentPage::setSco(QString text)
 
 QString DocumentPage::getFullText()
 {
-	QString fullText = BaseDocument::getFullText();
-	if (saveOldFormat) {
-	  QString macOptions = getMacOptionsText();
-	  if (!macOptions.isEmpty()) {
-		fullText += macOptions + "\n";
-	  }
-	  QString macWidgets = getMacWidgetsText();
-	  if (!macWidgets.isEmpty()) {
-		fullText += macWidgets + "\n";
-	  }
-	  QString macPresets = getMacPresetsText();
-	  if (!macPresets.isEmpty()) {
-		fullText += macPresets + "\n";  // Put old format for backward compatibility
-	  }
-	}
-	QString liveEventsText = "";
-	if (saveLiveEvents) { // Only add live events sections if file is a csd file
-	  for (int i = 0; i < m_liveFrames.size(); i++) {
-		liveEventsText += m_liveFrames[i]->getPlainText();
-//        qDebug() << "DocumentPage::getFullText() " <<panel;
-	  }
-	  fullText += liveEventsText;
-	}
-	if (m_lineEnding == 1) { // Windows line ending mode
-		fullText.replace("\n", "\r\n");
-	}
-	return fullText;
+  QString fullText = BaseDocument::getFullText();
+  if (saveOldFormat) {
+    QString macOptions = getMacOptionsText();
+    if (!macOptions.isEmpty()) {
+      fullText += macOptions + "\n";
+    }
+    QString macWidgets = getMacWidgetsText();
+    if (!macWidgets.isEmpty()) {
+      fullText += macWidgets + "\n";
+    }
+    QString macPresets = getMacPresetsText();
+    if (!macPresets.isEmpty()) {
+      fullText += macPresets + "\n";  // Put old format for backward compatibility
+    }
+  }
+  QString liveEventsText = "";
+  if (saveLiveEvents) { // Only add live events sections if file is a csd file
+    for (int i = 0; i < m_liveFrames.size(); i++) {
+      liveEventsText += m_liveFrames[i]->getPlainText();
+      //        qDebug() << "DocumentPage::getFullText() " <<panel;
+    }
+    fullText += liveEventsText;
+  }
+  if (m_lineEnding == 1) { // Windows line ending mode
+    fullText.replace("\n", "\r\n");
+  }
+  return fullText;
 }
 
 QString DocumentPage::getDotText()

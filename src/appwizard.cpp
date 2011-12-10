@@ -46,12 +46,7 @@ AppWizard::AppWizard(QWidget *parent,QString opcodeDir,
   QWizard(parent), m_csd(csd), m_sdkDir(sdkDir)
 {
   int appPage = addPage(new AppDetailsPage(this));
-  QString fullPath = m_csd;
-  QString appDir = fullPath.left(fullPath.lastIndexOf(QDir::separator()) );
-  QString appName = fullPath.mid(fullPath.lastIndexOf(QDir::separator()) + 1);
-  appName = appName.remove(".csd");
-  setField("appName", appName);
-  setField("targetDir", appDir);
+
   setField("opcodeDir", opcodeDir);
   m_pluginsPage = addPage(new PluginsPage(this, field("opcodeDir").toString()));
   m_additionalsPage = addPage(new AdditionalFilesPage(this));
@@ -63,32 +58,7 @@ AppWizard::AppWizard(QWidget *parent,QString opcodeDir,
   connect(static_cast<AppDetailsPage *>(this->page(appPage)), SIGNAL(libDirChangedSignal()),
           static_cast<PluginsPage *>(this->page(m_pluginsPage)), SLOT(updateOpcodeDir()));
 
-  if (m_sdkDir.isEmpty()) {
-    setField("customPaths", true);
-#if defined(Q_OS_LINUX) || defined(Q_OS_SOLARIS)
-  setField("libDir", "/usr/lib");
-  if (opcodeDir.isEmpty()) {
-    setField("opcodeDir", "/usr/lib/csound/plugins");
-  }
-  setField("windows", false);
-  setField("osx",false);
-  setField("osx_64",false);
-#endif
-#ifdef Q_OS_WIN32
-  setField("libDir", "");
-  if (opcodeDir.isEmpty()) {
-    setField("opcodeDir", "");
-  }
-  setField("linux", false);
-  setField("osx",false);
-  setField("osx_64",false);
-#endif
-#ifdef Q_OS_MAC
-  setField("libDir", "/Library/Frameworks");
-  setField("linux", false);
-  setField("windows",false);
-#endif
-  }
+
   m_dataFiles = processDataFiles();
   static_cast<AdditionalFilesPage *>(this->page(m_additionalsPage))->setFiles(m_dataFiles);
 //
@@ -97,16 +67,17 @@ AppWizard::AppWizard(QWidget *parent,QString opcodeDir,
   setWindowTitle(tr("Standalone Application Generator"));
 }
 
-void AppWizard::accept()
+void AppWizard::makeApp()
 {
   QString appName =  field("appName").toString();
   QString targetDir =  field("targetDir").toString();
-  bool autorun =  field("autorun").toBool();
   bool forlinux =  field("linux").toBool();
   bool forosx =  field("osx").toBool();
   bool forosx_64 =  field("osx_64").toBool();
   bool forwindows =  field("windows").toBool();
   bool useDoubles = field("useDoubles").toBool();
+
+  bool autorun =  field("autorun").toBool();
   int runMode = field("runMode").toInt();
   bool saveState = field("saveState").toBool();
   bool newParser = field("newParser").toBool();
@@ -147,8 +118,6 @@ void AppWizard::accept()
     createWinApp(appName, targetDir, dataFiles, plugins, m_sdkDir,
                  libDir, opcodeDir, useDoubles);
   }
-
-  QDialog::accept();
 }
 
 QStringList AppWizard::processDataFiles()

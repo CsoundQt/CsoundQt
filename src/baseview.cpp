@@ -63,6 +63,7 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
   m_highlighter.setOpcodeNameList(opcodeTree->opcodeNameList());
   m_highlighter.setDocument(m_mainEditor->document());
   m_viewMode = 0;
+  m_appProperties.used = false;
 }
 
 BaseView::~BaseView()
@@ -95,18 +96,42 @@ void BaseView::setFullText(QString text, bool goToTop)
   sectionText = "";
   tag = "CsApp";
   startIndex = text.indexOf("<" + tag + ">");
-  offset = text.size() > startIndex + tag.size() + 2
-      && text[startIndex +  tag.size() + 2] == '\n' ? 1: 0;
   endIndex = text.indexOf("</" + tag + ">", startIndex) + tag.size() + 3;
   endoffset = text.size() > endIndex
       && text[endIndex] == '\n' ? 1: 0;
   if (startIndex >= 0 && endIndex > startIndex) {
     sectionText = text.mid(startIndex, endIndex - startIndex + endoffset);
     text.remove(sectionText);
+    QDomDocument d;
+    if (!d.setContent(sectionText)) {
+      qDebug() << "BaseView::setFullText error parsing CsApp. Section will be discarded.";
+    } else {
+      QDomNodeList csapp = d.elementsByTagName("CsApp");
+      QDomElement p = csapp.item(0).toElement();
+      m_appProperties.appName = p.firstChildElement("appName").firstChild().nodeValue();
+      m_appProperties.targetDir = p.firstChildElement("targetDir").firstChild().nodeValue();
+      m_appProperties.author = p.firstChildElement("author").firstChild().nodeValue();
+      m_appProperties.version = p.firstChildElement("version").firstChild().nodeValue();
+      m_appProperties.date = p.firstChildElement("date").firstChild().nodeValue();
+      m_appProperties.email = p.firstChildElement("email").firstChild().nodeValue();
+      m_appProperties.website = p.firstChildElement("website").firstChild().nodeValue();
+      m_appProperties.instructions = p.firstChildElement("instructions").firstChild().nodeValue();
+      m_appProperties.autorun = p.firstChildElement("autorun").firstChild().nodeValue() == "true";
+      m_appProperties.showRun = p.firstChildElement("showRun").firstChild().nodeValue() == "true";
+      m_appProperties.saveState = p.firstChildElement("saveState").firstChild().nodeValue() == "true";
+      m_appProperties.runMode = p.firstChildElement("runMode").firstChild().nodeValue().toInt();
+      m_appProperties.newParser = p.firstChildElement("newParser").firstChild().nodeValue() == "true";
+      m_appProperties.useDoubles = p.firstChildElement("useDoubles").firstChild().nodeValue() == "true";
+      m_appProperties.forlinux = p.firstChildElement("forlinux").firstChild().nodeValue() == "true";
+      m_appProperties.forosx = p.firstChildElement("forosx").firstChild().nodeValue() == "true";
+      m_appProperties.forosx_64 = p.firstChildElement("forosx_64").firstChild().nodeValue() == "true";
+      m_appProperties.forwindows = p.firstChildElement("forwindows").firstChild().nodeValue() == "true";
+      m_appProperties.useCustomPaths = p.firstChildElement("useCustomPaths").firstChild().nodeValue() == "true";
+      m_appProperties.libDir = p.firstChildElement("libDir").firstChild().nodeValue();
+      m_appProperties.opcodeDir = p.firstChildElement("opcodeDir").firstChild().nodeValue();
+      m_appProperties.used = true;
+    }
   }
-  m_appEditor->setUndoRedoEnabled(false);
-  setAppText(sectionText.mid(tag.size() + 2 + offset, sectionText.size() - (tag.size()*2) - 5 - offset - endoffset));
-  m_appEditor->setUndoRedoEnabled(true);
   if (m_viewMode < 2) {  // Unified view
       m_mainEditor->setUndoRedoEnabled(false);
     QTextCursor cursor = m_mainEditor->textCursor();
@@ -494,6 +519,11 @@ void BaseView::setAppText(QString text)
   m_appEditor->setPlainText(text);
 }
 
+void BaseView::setAppProperties(AppProperties properties)
+{
+  m_appProperties = properties;
+}
+
 QString BaseView::getBasicText()
 {
 //   What Csound needs (no widgets, misc text, etc.)
@@ -621,13 +651,48 @@ QString BaseView::getExtraText()
 
 QString BaseView::getAppText()
 {
-  QString appText = m_appEditor->toPlainText();
-  if (appText.isEmpty() || appText == "\n") {
+  if (!m_appProperties.used) {
     return QString();
   }
-  appText.prepend("<CsApp>");
-  appText.append("</CsApp>");
+  QString appText;
+  QXmlStreamWriter s(&appText);
+  s.setAutoFormatting(true);
+  s.writeStartElement("CsApp");
+//  s.writeAttribute("type", getWidgetType());
+
+  s.writeTextElement("appName", m_appProperties.appName);
+  s.writeTextElement("targetDir", m_appProperties.targetDir);
+  s.writeTextElement("author", m_appProperties.author);
+  s.writeTextElement("version", m_appProperties.version);
+  s.writeTextElement("date", m_appProperties.date);
+  s.writeTextElement("email", m_appProperties.email);
+  s.writeTextElement("website", m_appProperties.website);
+  s.writeTextElement("instructions", m_appProperties.instructions);
+
+  s.writeTextElement("autorun", m_appProperties.autorun ? "true" : "false");
+  s.writeTextElement("showRun", m_appProperties.showRun ? "true" : "false");
+  s.writeTextElement("saveState", m_appProperties.saveState ? "true" : "false");
+  s.writeTextElement("runMode", QString::number((int)m_appProperties.runMode));
+  s.writeTextElement("newParser", m_appProperties.newParser ? "true" : "false");
+  s.writeTextElement("useDoubles", m_appProperties.useDoubles ? "true" : "false");
+
+  s.writeTextElement("forlinux", m_appProperties.forlinux ? "true" : "false");
+  s.writeTextElement("forosx", m_appProperties.forosx ? "true" : "false");
+  s.writeTextElement("forosx_64", m_appProperties.forosx_64 ? "true" : "false");
+  s.writeTextElement("forwindows", m_appProperties.forwindows ? "true" : "false");
+
+  s.writeTextElement("useCustomPaths", m_appProperties.useCustomPaths ? "true" : "false");
+  s.writeTextElement("libDir", m_appProperties.libDir);
+  s.writeTextElement("opcodeDir", m_appProperties.opcodeDir);
+
+  s.writeEndElement();
+
   return appText;
+}
+
+AppProperties BaseView::getAppProperties()
+{
+  return m_appProperties;
 }
 
 
@@ -681,5 +746,5 @@ void BaseView::clearUndoRedoStack()
 //		m_otherEditor->document()->clearUndoRedoStacks();
 //		m_otherCsdEditor->document()->clearUndoRedoStacks();
 //		m_widgetEditor->document()->clearUndoRedoStacks();
-	}
+        }
 }

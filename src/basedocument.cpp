@@ -135,6 +135,11 @@ void BaseDocument::setFlags(int flags)
   m_csEngine->setFlags((PerfFlags) flags);
 }
 
+void BaseDocument::setAppProperties(AppProperties properties)
+{
+  m_view->setAppProperties(properties);
+}
+
 QString BaseDocument::getFullText()
 {
   QString fullText;
@@ -264,6 +269,11 @@ void BaseDocument::loadTextString(QString &text)
 void BaseDocument::setFileName(QString name)
 {
   fileName = name;
+}
+
+AppProperties BaseDocument::getAppProperties()
+{
+  return m_view->getAppProperties();
 }
 
 //void BaseDocument::playParent()

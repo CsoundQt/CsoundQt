@@ -39,12 +39,13 @@ class AppWizard : public QWizard
     explicit AppWizard(QWidget *parent, QString opcodeDir,
                        QString csd, QString sdkDir);
 
+  void makeApp();
 //    void setOpcodeDir(QString opcodeDir) {m_opcodeDir = opcodeDir;}
 
   signals:
 
   public slots:
-    virtual void accept();
+//    virtual void accept();
   private:
 //    QString m_opcodeDir;
     QString m_csd;

@@ -871,6 +871,10 @@ bool CsoundQt::saveAs()
 void CsoundQt::createApp()
 {
   QString opcodeDir;
+  if (!documentPages[curPage]->getFileName().endsWith(".csd")) {
+    QMessageBox::critical(this, tr("Error"), tr("You can only create an app with a csd file."));
+    return;
+  }
   if (documentPages[curPage]->isModified()) {
     QMessageBox::StandardButton but =
         QMessageBox::question(this, tr("Save"), tr("Do you want to save before creating app?"),
@@ -878,7 +882,7 @@ void CsoundQt::createApp()
     if (but == QMessageBox::Yes) {
       bool ret = save();
       if (!ret) {
-        QMessageBox::warning(this, tr("Error"), tr("Error saving file. Aborted."));
+        qDebug() << "CsoundQt::createApp() Error saving file";
         return;
       }
     }
@@ -917,7 +921,98 @@ void CsoundQt::createApp()
   }
   QString fullPath = documentPages[curPage]->getFileName();
   AppWizard wizard(this, opcodeDir, fullPath, m_options->sdkDir);
+  AppProperties existingProperties = documentPages[curPage]->getAppProperties();
+  if (existingProperties.used) {
+    wizard.setField("appName", QVariant(existingProperties.appName));
+    wizard.setField("targetDir", QVariant(existingProperties.targetDir));
+    wizard.setField("author", QVariant(existingProperties.author));
+    wizard.setField("version", QVariant(existingProperties.version));
+    wizard.setField("email", QVariant(existingProperties.email));
+    wizard.setField("website", QVariant(existingProperties.website));
+    wizard.setField("instructions", QVariant(existingProperties.instructions));
+    wizard.setField("autorun", QVariant(existingProperties.autorun));
+    wizard.setField("showRun", QVariant(existingProperties.showRun));
+    wizard.setField("saveState", QVariant(existingProperties.saveState));
+    wizard.setField("runMode", QVariant(existingProperties.runMode));
+    wizard.setField("newParser", QVariant(existingProperties.newParser));
+    wizard.setField("useDoubles", QVariant(existingProperties.useDoubles ? 1 : 0));
+    wizard.setField("linux", QVariant(existingProperties.forlinux));
+    wizard.setField("osx", QVariant(existingProperties.forosx));
+    wizard.setField("osx_64", QVariant(existingProperties.forosx_64));
+    wizard.setField("windows", QVariant(existingProperties.forwindows));
+    wizard.setField("useCustomPaths", QVariant(existingProperties.useCustomPaths));
+    wizard.setField("libDir", QVariant(existingProperties.libDir));
+    wizard.setField("opcodeDir", QVariant(existingProperties.opcodeDir));
+  } else { // Put in default values
+    QString appDir = fullPath.left(fullPath.lastIndexOf(QDir::separator()) );
+    if (appDir.startsWith(":/")) { // For embedded examples
+      appDir = QDir::homePath();
+    }
+    QString appName = fullPath.mid(fullPath.lastIndexOf(QDir::separator()) + 1);
+    appName = appName.remove(".csd");
+    wizard.setField("appName", appName);
+    wizard.setField("targetDir", appDir);
+    if (m_options->sdkDir.isEmpty()) { // No sdk,
+      wizard.setField("customPaths", true);
+  #if defined(Q_OS_LINUX) || defined(Q_OS_SOLARIS)
+    wizard.setField("libDir", "/usr/lib");
+    if (opcodeDir.isEmpty()) {
+      wizard.setField("opcodeDir", "/usr/lib/csound/plugins");
+    }
+    wizard.setField("windows", false);
+    wizard.setField("osx",false);
+    wizard.setField("osx_64",false);
+  #endif
+  #ifdef Q_OS_WIN32
+    wizard.setField("libDir", "");
+    if (opcodeDir.isEmpty()) {
+      wizard.setField("opcodeDir", "");
+    }
+    wizard.setField("linux", false);
+    wizard.setField("osx",false);
+    wizard.setField("osx_64",false);
+  #endif
+  #ifdef Q_OS_MAC
+    wizard.setField("libDir", "/Library/Frameworks");
+    wizard.setField("linux", false);
+    wizard.setField("windows",false);
+  #endif
+    }
+  }
   wizard.exec();
+  if (wizard.result() == QDialog::Accepted) {
+    AppProperties properties;
+    properties.used = true;
+    properties.appName = wizard.field("appName").toString();
+    properties.targetDir = wizard.field("targetDir").toString();
+    properties.author = wizard.field("author").toString();
+    properties.version = wizard.field("version").toString();
+    properties.date = QDateTime::currentDateTime().toString("MMMM d yyyy");
+    properties.email = wizard.field("email").toString();
+    properties.website = wizard.field("website").toString();
+    properties.instructions = wizard.field("instructions").toString();
+    properties.autorun = wizard.field("autorun").toBool();
+    properties.showRun = wizard.field("showRun").toBool();
+    properties.saveState = wizard.field("saveState").toBool();
+    properties.runMode = wizard.field("runMode").toInt();
+    properties.newParser = wizard.field("newParser").toBool();
+    properties.useDoubles = wizard.field("useDoubles").toBool();
+    properties.forlinux = wizard.field("linux").toBool();
+    properties.forosx = wizard.field("osx").toBool();
+    properties.forosx_64 = wizard.field("osx_64").toBool();
+    properties.forwindows = wizard.field("windows").toBool();
+    properties.useCustomPaths = wizard.field("useCustomPaths").toBool();
+    properties.libDir = wizard.field("libDir").toString();
+    properties.opcodeDir = wizard.field("opcodeDir").toString();
+
+    documentPages[curPage]->setAppProperties(properties);
+    bool ret = save();
+    if (!ret) { // Save file to store CsApp section
+      qDebug() << "CsoundQt::createApp() Error saving file";
+      return;
+    }
+    wizard.makeApp();
+  }
 }
 
 bool CsoundQt::saveNoWidgets()

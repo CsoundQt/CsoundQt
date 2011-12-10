@@ -44,6 +44,7 @@ AppDetailsPage::AppDetailsPage(QWidget *parent) :
   registerField("saveState", ui->saveStatecheckBox);
   registerField("autorun", ui->autorunCheckBox);
   registerField("newParser", ui->newParserCheckBox);
+  registerField("showRun", ui->showRunCheckBox);
 
   registerField("author", ui->authorLineEdit);
   registerField("version", ui->versionLineEdit);

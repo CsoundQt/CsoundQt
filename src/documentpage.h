@@ -46,24 +46,24 @@ class DocumentPage : public BaseDocument
     DocumentPage(QWidget *parent, OpEntryParser *opcodeTree);
     ~DocumentPage();
 
-	virtual void setFileName(QString name);
-	virtual void setTextString(QString &text);
-	void setCompanionFileName(QString name);
-	void setEditorFocus();
-	void insertText(QString text, int section = -1);
-	void setFullText(QString text);
-	void setBasicText(QString text);
-	void setOrc(QString text);
-	void setSco(QString text);
-	void loadTextString(QString &text, bool autoCreateMacCsoundSections = false);
+    virtual void setFileName(QString name);
+    virtual void setTextString(QString &text);
+    void setCompanionFileName(QString name);
+    void setEditorFocus();
+    void insertText(QString text, int section = -1);
+    void setFullText(QString text);
+    void setBasicText(QString text);
+    void setOrc(QString text);
+    void setSco(QString text);
+    void loadTextString(QString &text, bool autoCreateMacCsoundSections = false);
 
-	virtual QString getFullText();
-	QString getDotText();
+    virtual QString getFullText();
+    QString getDotText();
     QString getMacWidgetsText();
     QString getMacPresetsText();
     QString getMacOptionsText();
-	QString getSelectedText(int section = -1);
-	QString getSelectedWidgetsText();
+    QString getSelectedText(int section = -1);
+    QString getSelectedWidgetsText();
     QString getMacOptions(QString option);
     int getViewMode();
     QString getLiveEventsText();
@@ -178,7 +178,7 @@ class DocumentPage : public BaseDocument
     QVector<QString> widgetHistory;  // Undo/ Redo history
     int widgetHistoryIndex; // Current point in history
 
-  public slots:
+public slots:
     virtual int play(CsoundOptions *options);
     void stop();
     int record(int format);
@@ -236,12 +236,12 @@ class DocumentPage : public BaseDocument
     void setPanelLoopLengthSlot(int index, double length);
     void setPanelLoopRangeSlot(int index, double start, double end);
 
-  protected:
+protected:
 //    virtual void keyPressEvent(QKeyEvent *event);
 //    virtual void contextMenuEvent(QContextMenuEvent *event);
 //    virtual void closeEvent(QCloseEvent *event);
 
-  private:
+private:
     virtual void init(QWidget *parent,OpEntryParser *opcodeTree);
     int setTextString(QString text, bool autoCreateMacCsoundSections);
     CsoundOptions getParentOptions();
@@ -266,7 +266,7 @@ class DocumentPage : public BaseDocument
     bool saveOldFormat;
     int m_lineEnding;
 
-  private slots:
+private slots:
     void textChanged();
     void liveEventControlClosed();
     void renamePanel(LiveEventFrame *panel,QString newName);
@@ -280,7 +280,7 @@ class DocumentPage : public BaseDocument
 //    void setWidgetClipboard(QString text);
     void evaluatePython(QString code);
 
-  signals:
+signals:
     void currentLineChanged(int);
     void currentTextUpdated();  // To let inspector know it must update
     void setCurrentAudioFile(QString name);

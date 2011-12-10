@@ -34,6 +34,7 @@ class DocumentView;
 class OpEntryParser;
 class ConsoleWidget;
 class QuteButton; // For registering buttons with main application
+class AppProperties;
 
 class BaseDocument : public QObject
 {
@@ -42,13 +43,14 @@ class BaseDocument : public QObject
     BaseDocument(QWidget *parent, OpEntryParser *opcodeTree);
     ~BaseDocument();
 
-	virtual void setTextString(QString &text) = 0;
-	virtual void loadTextString(QString &text);
+    virtual void setTextString(QString &text) = 0;
+    virtual void loadTextString(QString &text);
     virtual void setFileName(QString name);
-	int parseTextString(QString &text);
-	virtual WidgetLayout* newWidgetLayout();
-	void widgetsVisible(bool visible);
-	void setFlags(int flags);
+    int parseTextString(QString &text);
+    virtual WidgetLayout* newWidgetLayout();
+    void widgetsVisible(bool visible);
+    void setFlags(int flags);
+    void setAppProperties(AppProperties properties);
 
     virtual QString getFullText();
     QString getBasicText();
@@ -57,6 +59,7 @@ class BaseDocument : public QObject
     QString getOptionsText();
     QString getWidgetsText();
     QString getPresetsText();
+    AppProperties getAppProperties();
 //    void setOpcodeNameList(QStringList opcodeNameList);
 
     // Get internal components
@@ -87,7 +90,6 @@ protected:
     CsoundEngine *m_csEngine;
 
 private:
-
 };
 
 #endif // BASEDOCUMENT_H
