@@ -1,4 +1,4 @@
-RESOURCES = "src/application.qrc" \
+RESOURCES += "src/application.qrc" \
     "src/pythonscripts.qrc"
 FORMS = "src/about.ui" \
     "src/configdialog.ui" \
@@ -136,3 +136,4 @@ rtmidi {
     SOURCES += "src/../$${RTMIDI_DIR}/RtMidi.cpp"
     INCLUDEPATH += src/../$${RTMIDI_DIR}
 }
+

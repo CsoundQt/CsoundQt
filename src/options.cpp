@@ -74,6 +74,7 @@ Options::Options()
   pythonDir = "";
   pythonExecutable = "python";
   logFile = "log.txt";
+  sdkDir = "";
 
   // External applications
   terminal = "";

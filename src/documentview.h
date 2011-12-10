@@ -56,13 +56,7 @@ class DocumentView : public BaseView
     // TODO add all text inputs here as below
 
     QString getSelectedText(int section = -1);
-    QString getFullText();
-    QString getOrc();  // Without tags
-    QString getSco();  // Without tags
-    QString getOptionsText();  // Without tags
-    QString getFileB(); // Embedded files. With tags (for filenames)
-    QString getExtraCsdText();  // All other tags like version and licence with tags
-    QString getExtraText(); // Text outside any known tags
+
     // These two should be used with care as they are only here in case
     // Widgets are being edited in text format. In most cases, you want to
     // get the widgets Text from the widget layout object
@@ -99,6 +93,7 @@ class DocumentView : public BaseView
     void showOther(bool);
     void showOtherCsd(bool);
     void showWidgetEdit(bool);
+        void showAppEdit(bool);
 
     void cut();
     void copy();

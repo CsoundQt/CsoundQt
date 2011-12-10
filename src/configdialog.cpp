@@ -194,6 +194,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options)
   pythonDirLineEdit->setText(m_options->pythonDir);
   pythonExecutableLineEdit->setText(m_options->pythonExecutable);
   logFileLineEdit->setText(m_options->logFile);
+  sdkLineEdit->setText(m_options->sdkDir);
 
   TerminalLineEdit->setText(m_options->terminal);
   browserLineEdit->setText(m_options->browser);
@@ -224,6 +225,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options)
   connect(pdfViewerToolButton, SIGNAL(clicked()), this, SLOT(browsePdfViewer()));
   connect(pythonDirToolButton, SIGNAL(clicked()), this, SLOT(browsePythonDir()));
   connect(logFileToolButton, SIGNAL(clicked()), this, SLOT(browseLogFile()));
+  connect(sdkToolButton, SIGNAL(clicked()), this, SLOT(browseSdkDir()));
+
 //  connect(this, SIGNAL(changeFont()), parent, SLOT(changeFont()));
   connect(audioInputToolButton, SIGNAL(released()), this, SLOT(selectAudioInput()));
   connect(audioOutputToolButton, SIGNAL(released()), this, SLOT(selectAudioOutput()));
@@ -365,6 +368,7 @@ void ConfigDialog::accept()
   m_options->pythonDir = pythonDirLineEdit->text();
   m_options->pythonExecutable = pythonExecutableLineEdit->text();
   m_options->logFile = logFileLineEdit->text();
+  m_options->sdkDir = sdkLineEdit->text();
 
   m_options->terminal = TerminalLineEdit->text();
   m_options->browser = browserLineEdit->text();
@@ -497,6 +501,12 @@ void ConfigDialog::browseLogFile()
 {
   browseSaveFile(m_options->logFile);
   logFileLineEdit->setText(m_options->logFile);
+}
+
+void ConfigDialog::browseSdkDir()
+{
+  browseDir(m_options->sdkDir);
+  sdkLineEdit->setText(m_options->sdkDir);
 }
 
 void ConfigDialog::selectAudioInput()

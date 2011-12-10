@@ -32,6 +32,7 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QDebug>
+#include <QProcess>
 
 
 #include "appwizard.h"
@@ -41,15 +42,16 @@
 
 
 AppWizard::AppWizard(QWidget *parent,QString opcodeDir,
-                     QString csd, QString targetDir) :
-    QWizard(parent), m_csd(csd)
+                     QString csd, QString sdkDir) :
+  QWizard(parent), m_csd(csd), m_sdkDir(sdkDir)
 {
   int appPage = addPage(new AppDetailsPage(this));
   QString fullPath = m_csd;
+  QString appDir = fullPath.left(fullPath.lastIndexOf(QDir::separator()) );
   QString appName = fullPath.mid(fullPath.lastIndexOf(QDir::separator()) + 1);
   appName = appName.remove(".csd");
   setField("appName", appName);
-  setField("targetDir", targetDir);
+  setField("targetDir", appDir);
   setField("opcodeDir", opcodeDir);
   m_pluginsPage = addPage(new PluginsPage(this, field("opcodeDir").toString()));
   m_additionalsPage = addPage(new AdditionalFilesPage(this));
@@ -60,31 +62,33 @@ AppWizard::AppWizard(QWidget *parent,QString opcodeDir,
           static_cast<PluginsPage *>(this->page(m_pluginsPage)), SLOT(updateOpcodeDir()));
   connect(static_cast<AppDetailsPage *>(this->page(appPage)), SIGNAL(libDirChangedSignal()),
           static_cast<PluginsPage *>(this->page(m_pluginsPage)), SLOT(updateOpcodeDir()));
-  QString libDir;
-#ifdef Q_OS_LINUX
-  setField("platform", 0);
-  setField("libDir", "/usr/local/lib");
-  if (opcodeDir.isEmpty()) {
-    setField("opcodeDir", "/usr/local/lib/csound/plugins");
-  }
-#endif
-#ifdef Q_OS_SOLARIS
+
+  if (m_sdkDir.isEmpty()) {
+    setField("customPaths", true);
+#if defined(Q_OS_LINUX) || defined(Q_OS_SOLARIS)
   setField("libDir", "/usr/lib");
   if (opcodeDir.isEmpty()) {
-    setField("opcodeDir", "/usr/local/lib/csound/plugins");
+    setField("opcodeDir", "/usr/lib/csound/plugins");
   }
+  setField("windows", false);
+  setField("osx",false);
+  setField("osx_64",false);
 #endif
 #ifdef Q_OS_WIN32
-  setField("platform", 2);
   setField("libDir", "");
   if (opcodeDir.isEmpty()) {
     setField("opcodeDir", "");
   }
+  setField("linux", false);
+  setField("osx",false);
+  setField("osx_64",false);
 #endif
 #ifdef Q_OS_MAC
-  setField("platform", 1);
   setField("libDir", "/Library/Frameworks");
+  setField("linux", false);
+  setField("windows",false);
 #endif
+  }
   m_dataFiles = processDataFiles();
   static_cast<AdditionalFilesPage *>(this->page(m_additionalsPage))->setFiles(m_dataFiles);
 //
@@ -98,22 +102,50 @@ void AppWizard::accept()
   QString appName =  field("appName").toString();
   QString targetDir =  field("targetDir").toString();
   bool autorun =  field("autorun").toBool();
-  int platform =  field("platform").toInt();
+  bool forlinux =  field("linux").toBool();
+  bool forosx =  field("osx").toBool();
+  bool forosx_64 =  field("osx_64").toBool();
+  bool forwindows =  field("windows").toBool();
   bool useDoubles = field("useDoubles").toBool();
-  QString libDir =  field("libDir").toString();
-  QString opcodeDir =  field("opcodeDir").toString();
+  int runMode = field("runMode").toInt();
+  bool saveState = field("saveState").toBool();
+  bool newParser = field("newParser").toBool();
+
+  QString author = field("author").toString();
+  QString version = field("version").toString();
+  QString email = field("email").toString();
+  QString website = field("website").toString();
+  QString instructions = field("instructions").toString();
+
+  bool customPaths =  field("customPaths").toBool();
+  QString libDir;
+  QString opcodeDir;
+  if (customPaths) {
+    libDir =  field("libDir").toString();
+    opcodeDir =  field("opcodeDir").toString();
+  }
+
   QStringList plugins = this->page(m_pluginsPage)->property("plugins").toStringList();
   QStringList dataFiles = this->page(m_additionalsPage)->property("dataFiles").toStringList();
-  switch (platform) {
-  case 0:
-    createLinuxApp(appName, targetDir, dataFiles, plugins, libDir, opcodeDir, useDoubles);
-    break;
-  case 1:
-    createMacApp(appName, targetDir, dataFiles, plugins, libDir, useDoubles);
-    break;
-  case 2:
-    createWinApp(appName, targetDir, dataFiles, plugins, libDir, opcodeDir, useDoubles);
 
+  if (!QFile::exists(targetDir)) {
+    QMessageBox::critical(this, tr("QuteCsound App Creator"),
+                          tr("The destination directory does not exist!\n"
+                             "Aborting."));
+    return;
+  }
+
+  if (forlinux) {
+    createLinuxApp(appName, targetDir, dataFiles, plugins, m_sdkDir,
+                   libDir, opcodeDir, useDoubles);
+  }
+  if (forosx) {
+    createMacApp(appName, targetDir, dataFiles, plugins, m_sdkDir,
+                 libDir, opcodeDir, useDoubles);
+  }
+  if (forwindows) {
+    createWinApp(appName, targetDir, dataFiles, plugins, m_sdkDir,
+                 libDir, opcodeDir, useDoubles);
   }
 
   QDialog::accept();
@@ -163,15 +195,9 @@ QStringList AppWizard::processDataFiles()
 }
 
 void AppWizard::createWinApp(QString appName, QString appDir, QStringList dataFiles,
-                  QStringList plugins, QString libDir, QString opcodeDir, bool useDoubles)
+                  QStringList plugins, QString sdkDir,  QString libDir, QString opcodeDir, bool useDoubles)
 {
 //  QDir dir(appDir);
-//  if (dir.exists()) {
-//    if (QDir(appDir + QDir::separator() + appName).exists()) {
-//      QMessageBox::critical(this, tr("QuteCsound App Creator"),
-//                            tr("Destination directory exists. Please delete."));
-//      return;
-//    }
 //    if (dir.mkdir(appName)) {
 //      dir.cd(appName);
 //      dir.mkdir("lib");
@@ -196,69 +222,83 @@ void AppWizard::createWinApp(QString appName, QString appDir, QStringList dataFi
 //                            tr("Error creating app directory."));
 //    }
 //  }
-//  else {
-//    QMessageBox::critical(this, tr("QuteCsound App Creator"),
-//                          tr("The destination directory does not exist!\n"
-//                             "Aborting."));
-//  }
 }
 
 void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFiles,
-                  QStringList plugins, QString libDir, bool useDoubles)
+                  QStringList plugins, QString sdkDir,  QString libDir, QString opcodeDir, bool useDoubles)
 {
 
 }
 
 void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList dataFiles,
-                    QStringList plugins, QString libDir, QString opcodeDir, bool useDoubles)
+                    QStringList plugins, QString sdkDir, QString libDir, QString opcodeDir, bool useDoubles)
 {
   qDebug() << "AppWizard::createLinuxApp";
   QDir dir(appDir);
-  if (dir.exists()) {
-    if (QDir(appDir + QDir::separator() + appName).exists()) {
-      QMessageBox::critical(this, tr("QuteCsound App Creator"),
-                            tr("Destination directory exists. Please remove."));
-      return;
+  if (dir.exists(appName + QDir::separator() + "linux")) {
+    int ret = QProcess::execute("rm -fR " + dir.absolutePath() + QDir::separator() + appName + QDir::separator() + "linux");
+    qDebug() << "AppWizard::createLinuxApp deleted directory";
+    if (ret != 0) {
+      QMessageBox::critical(this, tr("Error"), tr("Could not delete old application directory! Aborted."));
     }
-    if (dir.mkdir(appName)) {
-      dir.cd(appName);
-      dir.mkdir("lib");
-      dir.mkdir("data");
-      dir.cd("data");
-      foreach(QString file, dataFiles) {
-        QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
-        if (file.startsWith("/")) { // Absolute path
-          QFile::copy(file, destName);
-        }
-        else { // Relative path
-          QFile::copy(m_csd.left(m_csd.lastIndexOf("/")), destName);
-        }
-        qDebug() << "createLinuxApp data:" << destName;
-      }
-      dir.cd("../lib");
-      QStringList libFiles;
-//      libFiles << "libportaudio.so" << "libportmidi.so";
-      libFiles << "libcsound.so" << "libcsound.so.5.2";
-      foreach(QString file, libFiles) {
-        QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
-        QFile::copy(libDir + QDir::separator() + file, destName);
-        qDebug() << "createLinuxApp " << destName << libDir + QDir::separator() + file;
-      }
-      foreach(QString file, plugins) {
-        QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
-        QFile::copy(opcodeDir + QDir::separator() + file, destName);
-        qDebug() << "createLinuxApp " << destName << opcodeDir + QDir::separator() + file ;
-      }
+  }
+  if (dir.mkpath(appName + QDir::separator() + "linux")) {
+    dir.cd(appName + QDir::separator() + "linux");
+    // Create directories
+    dir.mkdir("lib");
+    dir.mkdir("data");
+    // Copy csd and binaries
+    if (sdkDir.isEmpty()) {
+      QFile::copy(":/res/linux/QuteApp", dir.absolutePath() + QDir::separator() +"lib/QuteApp");
+      QFile::copy(":/res/linux/launch.sh", dir.absolutePath() + QDir::separator() + appName + ".sh");
+      QFile f(dir.absolutePath() + QDir::separator() +"lib/QuteApp");
+      f.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
+                       | QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
+                       | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther);
+      QFile f2(dir.absolutePath() + QDir::separator() + appName + ".sh");
+      f2.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
+                        | QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
+                        | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther);
+    } else {
+      QFile::copy(sdkDir + QDir::separator() + "linux/lib/QuteApp", "lib/QuteApp");
+      QFile::copy(sdkDir + QDir::separator() + "linux/lib/launch.sh", appName + ".sh");
     }
-    else {
-      QMessageBox::critical(this, tr("QuteCsound App Creator"),
-                            tr("Error creating app directory."));
+    dir.cd("data");
+    QFile::copy(m_csd, dir.absolutePath() + QDir::separator() + "quteapp.csd");
+    QFile f(dir.absolutePath() + QDir::separator() + "quteapp.csd");
+    f.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
+                     | QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
+                     | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther);
+
+    // Copy data files
+    foreach(QString file, dataFiles) {
+      QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
+      if (file.startsWith("/")) { // Absolute path
+        QFile::copy(file, destName);
+      }
+      else { // Relative path
+        QFile::copy(m_csd.left(m_csd.lastIndexOf("/")), destName);
+      }
+      qDebug() << "createLinuxApp data:" << destName;
+    }
+    // Copy lib files and plugins
+    dir.cd("../lib");
+    QStringList libFiles;
+    //      libFiles << "libportaudio.so" << "libportmidi.so";
+    libFiles << "libcsound.so" << "libcsound.so.5.2";
+    foreach(QString file, libFiles) {
+      QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
+      QFile::copy(libDir + QDir::separator() + file, destName);
+      qDebug() << "createLinuxApp " << destName << libDir + QDir::separator() + file;
+    }
+    foreach(QString file, plugins) {
+      QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
+      QFile::copy(opcodeDir + QDir::separator() + file, destName);
+      qDebug() << "createLinuxApp " << destName << opcodeDir + QDir::separator() + file ;
     }
   }
   else {
     QMessageBox::critical(this, tr("QuteCsound App Creator"),
-                          tr("The destination directory does not exist!\n"
-                             "Aborting."));
+                          tr("Error creating app directory."));
   }
-
 }

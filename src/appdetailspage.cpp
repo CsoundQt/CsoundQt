@@ -30,15 +30,30 @@ AppDetailsPage::AppDetailsPage(QWidget *parent) :
     ui(new Ui::AppDetailsPage)
 {
   ui->setupUi(this);
+  ui->tabWidget->setCurrentIndex(0);
   registerField("appName", ui->appNameLineEdit);
 
   registerField("targetDir", ui->targetDirLineEdit);
   registerField("autorun", ui->autorunCheckBox);
-  registerField("platform", ui->platformComboBox);
+  registerField("linux", ui->linuxCheckBox);
+  registerField("windows", ui->windowsCheckBox);
+  registerField("osx", ui->osxCheckBox);
+  registerField("osx_64", ui->osx64CheckBox);
   registerField("useDoubles", ui->presicionComboBox);
+  registerField("runMode", ui->runModeComboBox);
+  registerField("saveState", ui->saveStatecheckBox);
+  registerField("autorun", ui->autorunCheckBox);
+  registerField("newParser", ui->newParserCheckBox);
+
+  registerField("author", ui->authorLineEdit);
+  registerField("version", ui->versionLineEdit);
+  registerField("email", ui->emailLineEdit);
+  registerField("website", ui->websiteLineEdit);
+  registerField("instructions", ui->instructionsTextEdit);
+
   registerField("libDir", ui->libLineEdit);
   registerField("opcodeDir", ui->opcodeLineEdit);
-  registerField("sdkDir", ui->sdkLineEdit);
+  registerField("customPaths", ui->customPathsCheckBox);
 
   connect(ui->browseTargetButton,SIGNAL(released()),
           this, SLOT(browseTarget()));
@@ -46,18 +61,16 @@ AppDetailsPage::AppDetailsPage(QWidget *parent) :
           this, SLOT(browseLibrary()));
   connect(ui->browseOpcodesButton,SIGNAL(released()),
           this, SLOT(browseOpcodes()));
-  connect(ui->browseSdkButton,SIGNAL(released()),
-          this, SLOT(browseSdk()));
   connect(ui->opcodeLineEdit, SIGNAL(textChanged(QString)),
           this, SLOT(opcodeDirChanged()));
   connect(ui->libLineEdit, SIGNAL(textChanged(QString)),
           this, SLOT(libDirChanged()));
-#ifdef Q_OS_MAC
-  ui->libLabel->setText("Framework Dir");
-  ui->opcodeLineEdit->hide();
-  ui->browseOpcodesButton->hide();
-  ui->opcodeDirLabel->hide();
-#endif
+//#ifdef Q_OS_MAC
+//  ui->libLabel->setText("Framework Dir");
+//  ui->opcodeLineEdit->hide();
+//  ui->browseOpcodesButton->hide();
+//  ui->opcodeDirLabel->hide();
+//#endif
 }
 
 AppDetailsPage::~AppDetailsPage()

@@ -182,6 +182,7 @@ void DocumentView::setViewMode(int mode)
       m_otherEditor->setVisible(m_viewMode & 32);
       m_otherCsdEditor->setVisible(m_viewMode & 64);
       m_widgetEditor->setVisible(m_viewMode & 128);
+          m_appEditor->setVisible(m_viewMode & 256);
   }
 }
 
@@ -217,114 +218,13 @@ QString DocumentView::getSelectedText(int section)
   case 7:
     text = m_widgetEditor->textCursor().selectedText();
     break;
+  case 8:
+    text = m_appEditor->textCursor().selectedText();
+    break;
   default:
     qDebug() <<"DocumentView::insertText section " << section << " not implemented.";
   }
   return text;
-}
-
-QString DocumentView::getFullText()
-{
-  QString text;
-  if (m_viewMode < 2) { // View is not split
-    text = m_mainEditor->toPlainText();
-    int closeIndex = text.lastIndexOf("</CsoundSynthesizer>");
-    QString fileBText = getFileB();
-    if (!fileBText.isEmpty()) {
-      if (closeIndex > 0) { // Embedded files must be within synthesizer
-        text.insert(closeIndex,fileBText);
-      }
-      else {
-        text += getFileB();
-      }
-    }
-  }
-  else { // Split view
-    QString sectionText;
-    sectionText = m_otherEditor->toPlainText();
-    if (!sectionText.isEmpty()) {
-      text += sectionText;
-    }
-    text += "<CsoundSynthesizer>\n";
-    sectionText = m_optionsEditor->toPlainText();
-    if (!sectionText.isEmpty()) {
-      text += "<CsOptions>\n" + sectionText + "</CsOptions>\n";
-    }
-    text += "<CsInstruments>\n" + m_orcEditor->toPlainText() + "</CsInstruments>\n";
-    text += "<CsScore>\n" + m_scoreEditor->getPlainText() + "</CsScore>\n";
-    sectionText = getFileB();
-    if (!sectionText.isEmpty()) {
-      text += sectionText;
-    }
-    sectionText = m_otherCsdEditor->toPlainText();
-    if (!sectionText.isEmpty()) {
-      text += sectionText;
-    }
-    text += "</CsoundSynthesizer>\n";
-  }
-  return text;
-}
-
-QString DocumentView::getOrc()
-{
-  QString text = "";
-  if (m_viewMode < 2) { // A single editor (orc and sco are not split)
-    text = m_mainEditor->toPlainText();
-    text = text.mid(text.lastIndexOf("<CsInstruments>" )+ 15);
-    text.remove(text.lastIndexOf("</CsInstruments>"), text.size());
-  }
-  else {
-    text = m_orcEditor->toPlainText();
-  }
-  return text;
-}
-
-QString DocumentView::getSco()
-{
-  QString text = "";
-  if (m_viewMode < 2) {
-    text = m_mainEditor->toPlainText();
-    text = text.mid(text.lastIndexOf("<CsScore>") + 9);
-    text.remove(text.lastIndexOf("</CsScore>"), text.size());
-  }
-  else { // Split view
-    text = m_scoreEditor->getPlainText();
-  }
-  return text;
-}
-
-QString DocumentView::getOptionsText()
-{
-  // Returns text without tags
-  QString text = "";
-  if (m_viewMode < 2) {// A single editor (orc and sco are not split)
-    QString edText = m_mainEditor->toPlainText();
-    int index = edText.indexOf("<CsOptions>");
-    if (index >= 0 && edText.contains("</CsOptions>")) {
-      text = edText.mid(index + 11, edText.indexOf("</CsOptions>") - index - 11);
-    }
-  }
-  else { //  Split view
-    text = m_optionsEditor->toPlainText();
-  }
-  return text;
-}
-
-QString DocumentView::getFileB()
-{
-  return m_filebEditor->toPlainText();
-}
-
-QString DocumentView::getExtraCsdText()
-{
-  // All other tags like version and licence with tags. For text that is being edited in the text editor
-  return m_otherCsdEditor->toPlainText();
-}
-
-QString DocumentView::getExtraText()
-{
-  // Text outside any known tags. For text that is being edited in the text editor
-  return m_otherEditor->toPlainText();
 }
 
 QString DocumentView::getMacWidgetsText()
@@ -854,6 +754,14 @@ void DocumentView::showWidgetEdit(bool show)
   // FIXME set m_viewmode
   if (m_viewMode >= 2) {
     m_widgetEditor->setVisible(show);
+  }
+}
+
+void DocumentView::showAppEdit(bool show)
+{
+  // FIXME set m_viewmode
+  if (m_viewMode >= 2) {
+    m_appEditor->setVisible(show);
   }
 }
 

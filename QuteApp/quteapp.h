@@ -29,6 +29,7 @@ class SimpleDocument;
 class CsoundOptions;
 class OpEntryParser;
 class ConsoleWidget;
+class AboutWidget;
 
 class QuteApp : public QMainWindow
 {
@@ -40,6 +41,12 @@ class QuteApp : public QMainWindow
 
     void createMenus();
 
+    typedef enum {
+      RUN_RT_ONLY,
+      RENDER_ONLY,
+      RUN_OR_RENDER
+    } RunMode;
+
   public slots:
     void start();
     void pause();
@@ -49,10 +56,30 @@ class QuteApp : public QMainWindow
 
 private:
     bool loadCsd();
+    bool loadLocalPrefs();
+    void setAboutTexts();
+
     CsoundOptions *m_options;
     SimpleDocument *m_doc;
     ConsoleWidget *m_console;
     OpEntryParser *m_opcodeTree;
+    AboutWidget *m_aboutWidget;
+
+    // Local Preferences
+    QString m_appName;
+    QString m_author;
+    QString m_email;
+    QString m_website;
+    QString m_date;
+    QString m_version;
+    bool m_autorun;
+    bool m_showRunOptions;
+    bool m_saveOnClose;
+    bool m_newParser;
+    RunMode m_runMode;
+    bool m_saveState;
+    QString m_instructions;
+
 };
 
 #endif // QTAPP_H

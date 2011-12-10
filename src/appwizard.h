@@ -36,8 +36,8 @@ class AppWizard : public QWizard
 {
   Q_OBJECT
   public:
-    explicit AppWizard(QWidget *parent = 0, QString opcodeDir = QString(),
-                       QString csd = QString(), QString targetDir = QString());
+    explicit AppWizard(QWidget *parent, QString opcodeDir,
+                       QString csd, QString sdkDir);
 
 //    void setOpcodeDir(QString opcodeDir) {m_opcodeDir = opcodeDir;}
 
@@ -48,6 +48,7 @@ class AppWizard : public QWizard
   private:
 //    QString m_opcodeDir;
     QString m_csd;
+    QString m_sdkDir;
     QString m_fullText;
     int m_pluginsPage;
     int m_additionalsPage;
@@ -56,11 +57,11 @@ class AppWizard : public QWizard
     QStringList processDataFiles();
 
     void createWinApp(QString appName, QString appDir, QStringList dataFiles,
-                      QStringList plugins, QString libDir, QString opcodeDir, bool useDoubles = true);
+                      QStringList plugins, QString sdkDir, QString libDir, QString opcodeDir, bool useDoubles = true);
     void createMacApp(QString appName, QString appDir, QStringList dataFiles,
-                      QStringList plugins, QString libDir, bool useDoubles = true);
+                      QStringList plugins, QString sdkDir,  QString libDir, QString opcodeDir, bool useDoubles = true);
     void createLinuxApp(QString appName, QString appDir, QStringList dataFiles,
-                        QStringList plugins, QString libDir, QString opcodeDir, bool useDoubles = true);
+                        QStringList plugins, QString sdkDir,  QString libDir, QString opcodeDir, bool useDoubles = true);
 
 };
 

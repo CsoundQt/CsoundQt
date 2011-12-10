@@ -57,6 +57,16 @@ class BaseView : public QScrollArea
     void setCabbageText(QString text);
     void setOtherCsdText(QString text);
     void setOtherText(QString text);
+    void setAppText(QString text);
+
+    QString getFullText();
+    QString getOrc();  // Without tags
+    QString getSco();  // Without tags
+    QString getOptionsText();  // Without tags
+    QString getFileB(); // Embedded files. With tags (for filenames)
+    QString getExtraCsdText();  // All other tags like version and licence with tags
+    QString getExtraText(); // Text outside any known tags
+    QString getAppText();
 
     void clearUndoRedoStack();
 
@@ -79,6 +89,7 @@ class BaseView : public QScrollArea
                     // 32 = show remaining Text outside CsoundSynthesizer tag
                     // 64 = show remaining text inside CsoundSynthesizer tag
                     // 128 = show Widget, Preset and Extra Options sections
+                        // 256 = show CsApp section
     Highlighter m_highlighter;
     OpEntryParser *m_opcodeTree;
     QSplitter *splitter;
@@ -90,6 +101,7 @@ class BaseView : public QScrollArea
     TextEditor *m_otherEditor;  // Extra text after removing all sections. All this text is to be presented at the start of the csd. Also called information text elsewhere
     TextEditor *m_otherCsdEditor;  // Extra text and tags inside CsoundSynthesizer tags
     TextEditor *m_widgetEditor;
+        TextEditor *m_appEditor;
 
     int m_orcStartLine;
     int m_scoStartLine;

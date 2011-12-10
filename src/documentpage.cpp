@@ -271,51 +271,50 @@ void DocumentPage::setSco(QString text)
 
 QString DocumentPage::getFullText()
 {
-  QString fullText;
-  fullText = m_view->getFullText();
-//  if (!fullText.endsWith("\n"))
-//    fullText += "\n";
-  if (fileName.endsWith(".csd",Qt::CaseInsensitive) or fileName == "") {
-    fullText += getWidgetsText() ;
-    fullText += getPresetsText() + "\n";
-    if (saveOldFormat) {
-      QString macOptions = getMacOptionsText();
-      if (!macOptions.isEmpty()) {
-        fullText += macOptions + "\n";
-      }
-      QString macWidgets = getMacWidgetsText();
-      if (!macWidgets.isEmpty()) {
-        fullText += macWidgets + "\n";
-      }
-      QString macPresets = getMacPresetsText();
-      if (!macPresets.isEmpty()) {
-        fullText += macPresets + "\n";  // Put old format for backward compatibility
-      }
-    }
-    QString liveEventsText = "";
-    if (saveLiveEvents) { // Only add live events sections if file is a csd file
-      for (int i = 0; i < m_liveFrames.size(); i++) {
-        liveEventsText += m_liveFrames[i]->getPlainText();
+	QString fullText = BaseDocument::getFullText();
+	if (saveOldFormat) {
+	  QString macOptions = getMacOptionsText();
+	  if (!macOptions.isEmpty()) {
+		fullText += macOptions + "\n";
+	  }
+	  QString macWidgets = getMacWidgetsText();
+	  if (!macWidgets.isEmpty()) {
+		fullText += macWidgets + "\n";
+	  }
+	  QString macPresets = getMacPresetsText();
+	  if (!macPresets.isEmpty()) {
+		fullText += macPresets + "\n";  // Put old format for backward compatibility
+	  }
+	}
+	QString liveEventsText = "";
+	if (saveLiveEvents) { // Only add live events sections if file is a csd file
+	  for (int i = 0; i < m_liveFrames.size(); i++) {
+		liveEventsText += m_liveFrames[i]->getPlainText();
 //        qDebug() << "DocumentPage::getFullText() " <<panel;
-      }
-      fullText += liveEventsText;
-    }
-  }
-  else { // Not a csd file
-    foreach (WidgetLayout * wl, m_widgetLayouts) {
-      wl->clearWidgets(); // make sure no widgets are used.
-    }
-  }
-  if (m_lineEnding == 1) { // Windows line ending mode
-    fullText.replace("\n", "\r\n");
-  }
-  return fullText;
+	  }
+	  fullText += liveEventsText;
+	}
+	if (m_lineEnding == 1) { // Windows line ending mode
+		fullText.replace("\n", "\r\n");
+	}
+	return fullText;
 }
 
-QString DocumentPage::getBasicText()
+QString DocumentPage::getDotText()
 {
-  QString text = m_view->getBasicText();
-  return text;
+  if (fileName.endsWith("sco")) {
+	qDebug() << "DocumentPage::getDotText(): No dot for sco files";
+	return QString();
+  }
+  QString orcText = getFullText();
+  if (!fileName.endsWith("orc")) { //asume csd
+	if (orcText.contains("<CsInstruments>") && orcText.contains("</CsInstruments>")) {
+	  orcText = orcText.mid(orcText.indexOf("<CsInstruments>") + 15,
+							orcText.indexOf("</CsInstruments>") - orcText.indexOf("<CsInstruments>") - 15);
+	}
+  }
+  DotGenerator dot(fileName, orcText, m_opcodeTree);
+  return dot.getDotText();
 }
 
 QString DocumentPage::getSelectedText(int section)
@@ -324,64 +323,11 @@ QString DocumentPage::getSelectedText(int section)
   return text;
 }
 
-QString DocumentPage::getOrc()
-{
-  QString text = m_view->getOrc();
-  return text;
-}
-
-QString DocumentPage::getSco()
-{
-  QString text = m_view->getSco();
-  return text;
-}
-
-QString DocumentPage::getOptionsText()
-{
-  QString text = m_view->getOptionsText();
-  return text;
-}
-
-QString DocumentPage::getDotText()
-{
-  if (fileName.endsWith("sco")) {
-    qDebug() << "DocumentPage::getDotText(): No dot for sco files";
-    return QString();
-  }
-  QString orcText = getFullText();
-  if (!fileName.endsWith("orc")) { //asume csd
-    if (orcText.contains("<CsInstruments>") && orcText.contains("</CsInstruments>")) {
-      orcText = orcText.mid(orcText.indexOf("<CsInstruments>") + 15,
-                            orcText.indexOf("</CsInstruments>") - orcText.indexOf("<CsInstruments>") - 15);
-    }
-  }
-  DotGenerator dot(fileName, orcText, m_opcodeTree);
-  return dot.getDotText();
-}
-
-QString DocumentPage::getWidgetsText()
-{
-  //FIXME allow multiple
-  QString text = m_widgetLayouts[0]->getWidgetsText();
-  QDomDocument d;
-  d.setContent(text);
-//  QDomElement n = d.firstChildElement("bsbPanel");
-//  if (!n.isNull()) {
-//  }
-  return d.toString();
-}
-
 QString DocumentPage::getSelectedWidgetsText()
 {
   //FIXME allow multiple
   QString text = m_widgetLayouts[0]->getSelectedWidgetsText();
   return text;
-}
-
-QString DocumentPage::getPresetsText()
-{
-  //FIXME allow multiple
-  return m_widgetLayouts[0]->getPresetsText();
 }
 
 QString DocumentPage::getMacWidgetsText()

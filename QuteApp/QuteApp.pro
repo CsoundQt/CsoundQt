@@ -6,11 +6,13 @@ TEMPLATE = app
 TMPDIR = "build"
 !build32:!build64:CONFIG += build32
 build32:build64:CONFIG -= build32
+CONFIG += is_quteapp # This is for bundling the QuteApp in the main CsoundQt app, so shouldn't be here
 unix { 
     macx:include (../qcs-macx.pro)
     else:include (../qcs-unix.pro)
 }
 win32-g++:include (../qcs-win32.pro)
+
 pythonqt:DEFINES += QCS_PYTHONQT
 rtmidi:DEFINES += QCS_RTMIDI
 INCLUDEPATH = ../src
@@ -23,6 +25,8 @@ SOURCES += "$${QCSPWD}/configlists.cpp" \
     "$${QCSPWD}/dockhelp.cpp" \
     "$${QCSPWD}/basedocument.cpp" \
     "$${QCSPWD}/baseview.cpp" \
+    "$${QCSPWD}/documentview.cpp" \
+    "$${QCSPWD}/findreplace.cpp" \
     "$${QCSPWD}/framewidget.cpp" \
     "$${QCSPWD}/highlighter.cpp" \ # "$${QCSPWD}/keyboardshortcuts.cpp" \
     "$${QCSPWD}/node.cpp" \
@@ -49,10 +53,10 @@ SOURCES += "$${QCSPWD}/configlists.cpp" \
     "$${QCSPWD}/filebeditor.cpp" \
     "$${QCSPWD}/eventsheet.cpp" \
     "$${PWD}/main.cpp" \
-    "$${PWD}/quteapp.cpp" \
-    "$${PWD}/quteappwizard.cpp" \
+	"$${PWD}/quteapp.cpp" \
     "$${PWD}/simpledocument.cpp" \
-    "$${PWD}/settingsdialog.cpp"
+    "$${PWD}/settingsdialog.cpp" \
+    aboutwidget.cpp
 HEADERS += "$${QCSPWD}/configlists.h" \
     "$${QCSPWD}/console.h" \
     "$${QCSPWD}/csoundengine.h" \
@@ -61,6 +65,8 @@ HEADERS += "$${QCSPWD}/configlists.h" \
     "$${QCSPWD}/dockhelp.h" \
     "$${QCSPWD}/basedocument.h" \
     "$${QCSPWD}/baseview.h" \
+    "$${QCSPWD}/documentview.h" \
+    "$${QCSPWD}/findreplace.h" \
     "$${QCSPWD}/framewidget.h" \
     "$${QCSPWD}/highlighter.h" \ # "$${QCSPWD}/keyboardshortcuts.h" \
     "$${QCSPWD}/node.h" \
@@ -86,14 +92,16 @@ HEADERS += "$${QCSPWD}/configlists.h" \
     "$${QCSPWD}/scoreeditor.h" \
     "$${QCSPWD}/filebeditor.h" \
     "$${QCSPWD}/eventsheet.h" \
-    "$${PWD}/quteapp.h" \
-    "$${PWD}/quteappwizard.h" \
+	"$${PWD}/quteapp.h" \
     "$${PWD}/simpledocument.h" \
-    "$${PWD}/settingsdialog.h"
+    "$${PWD}/settingsdialog.h" \
+    aboutwidget.h
 FORMS += "$${PWD}/quteappwizard.ui" \
     "$${PWD}/settingsdialog.ui" \
     "$${QCSPWD}/filebeditor.ui"\
-    "$${QCSPWD}/liveeventframe.ui"
+    "$${QCSPWD}/liveeventframe.ui" \
+    "$${QCSPWD}/findreplace.ui" \
+    "aboutwidget.ui"
 LIBS += $${LCSOUND} \
     $${LSNDFILE} \
     $${RTMIDI}
@@ -108,3 +116,7 @@ INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
 INCLUDEPATH *= $${CSOUND_INTERFACES_INCLUDE_DIR}
 INCLUDEPATH *= $${LIBSNDFILE_INCLUDE_DIR}
 RESOURCES += "$${PWD}/application.qrc"
+
+
+
+

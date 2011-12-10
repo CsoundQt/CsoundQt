@@ -85,6 +85,7 @@ class Options: public CsoundOptions{
     QString pythonDir;
     QString pythonExecutable;
     QString logFile;
+    QString sdkDir;
 
     // External applications
     QString terminal;
@@ -159,7 +160,6 @@ class Options: public CsoundOptions{
     QString atsSmrContr;
     int atsFileType;
     int atsWindow;
-
 };
 
 #endif

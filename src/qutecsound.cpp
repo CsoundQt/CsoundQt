@@ -872,9 +872,15 @@ void CsoundQt::createApp()
 {
   QString opcodeDir;
   if (documentPages[curPage]->isModified()) {
-    bool ret = saveAs();
-    if (!ret) {
-      return;
+    QMessageBox::StandardButton but =
+        QMessageBox::question(this, tr("Save"), tr("Do you want to save before creating app?"),
+                              QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    if (but == QMessageBox::Yes) {
+      bool ret = save();
+      if (!ret) {
+        QMessageBox::warning(this, tr("Error"), tr("Error saving file. Aborted."));
+        return;
+      }
     }
   }
   if (m_options->opcodedirActive) {
@@ -910,8 +916,7 @@ void CsoundQt::createApp()
 #endif
   }
   QString fullPath = documentPages[curPage]->getFileName();
-  QString appDir = fullPath.left(fullPath.lastIndexOf(QDir::separator()) );
-  AppWizard wizard(this, opcodeDir, documentPages[curPage]->getFileName(), appDir);
+  AppWizard wizard(this, opcodeDir, fullPath, m_options->sdkDir);
   wizard.exec();
 }
 
@@ -2838,7 +2843,7 @@ void CsoundQt::createMenus()
   fileMenu->addAction(saveAct);
   fileMenu->addAction(saveAsAct);
   fileMenu->addAction(saveNoWidgetsAct);
-//  fileMenu->addAction(createAppAct);
+  fileMenu->addAction(createAppAct);
   fileMenu->addAction(reloadAct);
   fileMenu->addAction(cabbageAct);
   fileMenu->addAction(closeTabAct);
@@ -3823,6 +3828,7 @@ void CsoundQt::readSettings()
   m_options->pythonDir = settings.value("pythonDir","").toString();
   m_options->pythonExecutable = settings.value("pythonExecutable","python").toString();
   m_options->logFile = settings.value("logFile",DEFAULT_LOG_FILE).toString();
+  m_options->sdkDir = settings.value("sdkDir","").toString();
   m_options->opcodexmldir = settings.value("opcodexmldir", "").toString();
   m_options->opcodexmldirActive = settings.value("opcodexmldirActive","").toBool();
   settings.endGroup();
@@ -3990,6 +3996,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("pythonDir",m_options->pythonDir);
     settings.setValue("pythonExecutable",m_options->pythonExecutable);
     settings.setValue("logFile",m_options->logFile);
+    settings.setValue("sdkDir",m_options->sdkDir);
     settings.setValue("opcodexmldir", m_options->opcodexmldir);
     settings.setValue("opcodexmldirActive",m_options->opcodexmldirActive);
   }

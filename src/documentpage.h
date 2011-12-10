@@ -46,7 +46,7 @@ class DocumentPage : public BaseDocument
     DocumentPage(QWidget *parent, OpEntryParser *opcodeTree);
     ~DocumentPage();
 
-	void setFileName(QString name);
+	virtual void setFileName(QString name);
 	virtual void setTextString(QString &text);
 	void setCompanionFileName(QString name);
 	void setEditorFocus();
@@ -57,19 +57,13 @@ class DocumentPage : public BaseDocument
 	void setSco(QString text);
 	void loadTextString(QString &text, bool autoCreateMacCsoundSections = false);
 
-    QString getFullText();
-    QString getBasicText();
-    QString getSelectedText(int section = -1);
-    QString getOrc();
-    QString getSco();
-    QString getOptionsText();
-    QString getDotText();
-    QString getWidgetsText();
-    QString getSelectedWidgetsText();
-    QString getPresetsText();
+	virtual QString getFullText();
+	QString getDotText();
     QString getMacWidgetsText();
     QString getMacPresetsText();
     QString getMacOptionsText();
+	QString getSelectedText(int section = -1);
+	QString getSelectedWidgetsText();
     QString getMacOptions(QString option);
     int getViewMode();
     QString getLiveEventsText();
@@ -254,7 +248,6 @@ class DocumentPage : public BaseDocument
     void deleteAllLiveEvents();
     virtual WidgetLayout* newWidgetLayout();
 
-    QString fileName;
     QString companionFile;
     QStringList m_macOptions;
     QString m_macPresets;
@@ -266,7 +259,7 @@ class DocumentPage : public BaseDocument
     QList<LiveEventFrame *> m_liveFrames;
     LiveEventControl *m_liveEventControl;
 
-    DocumentView *m_view;
+//    DocumentView *m_view;
 
     // Options
     bool saveLiveEvents;

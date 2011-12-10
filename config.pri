@@ -218,3 +218,17 @@ win32 {
     !libsndfileHeaderExists(sndfile.h):error(sndfile.h not found)
     !libsndfileLibraryExists($${LIBSNDFILE_LIB}):error(libsndfile library not found)
 }
+!is_quteapp {
+win32-g++ {
+exists (src/res/windows/QuteApp.exe) :CONFIG += quteapp
+}
+unix {
+    macx {
+exists (src/res/osx/QuteApp.app) :CONFIG += quteapp
+}
+    else {
+exists (src/res/linux/QuteApp) :CONFIG += quteapp
+}
+}
+!quteapp: message(Not bundling QuteApp. Please put QuteApp in the res/ folder)
+}

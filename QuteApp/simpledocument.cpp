@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "simpledocument.h"
-#include "baseview.h"
+#include "documentview.h"
 #include "widgetlayout.h"
 #include "qutebutton.h"
 #include "quteapp.h"
@@ -32,7 +32,7 @@ SimpleDocument::SimpleDocument(QWidget *parent, OpEntryParser *opcodeTree) :
 
 void SimpleDocument::setTextString(QString &text)
 {
-  m_widgetLayouts[0]->setFontScaling(1.0);
+  m_widgetLayouts[0]->setFontScaling(1.0); // Must come before parsing
   parseTextString(text);
   m_widgetLayouts[0]->show();
   m_widgetLayouts[0]->setWidgetsLocked(true);
@@ -49,6 +49,6 @@ void SimpleDocument::registerButton(QuteButton *b)
 
 void SimpleDocument::init(QWidget *parent, OpEntryParser *opcodeTree)
 {
-  m_view = new BaseView(parent, opcodeTree);
+  m_view = new DocumentView(parent, opcodeTree);
   m_view->hide();
 }

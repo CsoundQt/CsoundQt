@@ -23,7 +23,7 @@
 #include "basedocument.h"
 
 #include "widgetlayout.h"
-#include "baseview.h"
+#include "documentview.h"
 #include "csoundengine.h"
 #include "qutecsound.h"
 #include "qutebutton.h"
@@ -135,6 +135,67 @@ void BaseDocument::setFlags(int flags)
   m_csEngine->setFlags((PerfFlags) flags);
 }
 
+QString BaseDocument::getFullText()
+{
+  QString fullText;
+  fullText = m_view->getFullText();
+//  if (!fullText.endsWith("\n"))
+//    fullText += "\n";
+  if (fileName.endsWith(".csd",Qt::CaseInsensitive) or fileName == "") {
+	fullText += getWidgetsText() ;
+	fullText += getPresetsText() + "\n";
+  }
+  else { // Not a csd file
+	foreach (WidgetLayout * wl, m_widgetLayouts) {
+	  wl->clearWidgets(); // make sure no widgets are used.
+	}
+  }
+  return fullText;
+}
+
+QString BaseDocument::getBasicText()
+{
+  QString text = m_view->getBasicText();
+  return text;
+}
+
+QString BaseDocument::getOrc()
+{
+  QString text = m_view->getOrc();
+  return text;
+}
+
+QString BaseDocument::getSco()
+{
+  QString text = m_view->getSco();
+  return text;
+}
+
+QString BaseDocument::getOptionsText()
+{
+  QString text = m_view->getOptionsText();
+  return text;
+}
+
+QString BaseDocument::getWidgetsText()
+{
+  //FIXME allow multiple
+  QString text = m_widgetLayouts[0]->getWidgetsText();
+  QDomDocument d;
+  d.setContent(text);
+//  QDomElement n = d.firstChildElement("bsbPanel");
+//  if (!n.isNull()) {
+//  }
+  return d.toString();
+}
+
+QString BaseDocument::getPresetsText()
+{
+  //FIXME allow multiple
+  return m_widgetLayouts[0]->getPresetsText();
+}
+
+
 //void BaseDocument::setOpcodeNameList(QStringList opcodeNameList)
 //{
 //  m_view->setOpcodeNameList(opcodeNameList);
@@ -198,6 +259,11 @@ void BaseDocument::loadTextString(QString &text)
 {
 	setTextString(text);
 	m_view->clearUndoRedoStack();
+}
+
+void BaseDocument::setFileName(QString name)
+{
+  fileName = name;
 }
 
 //void BaseDocument::playParent()

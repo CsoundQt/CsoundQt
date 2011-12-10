@@ -28,37 +28,76 @@
 #include "opentryparser.h"
 #include "widgetlayout.h"
 #include "console.h"
+#include "aboutwidget.h"
+
+#define CSD_NAME "data/quteapp.csd"
 
 QuteApp::QuteApp(QWidget *parent)
     : QMainWindow(parent)
 {
+  // TODO remove these test values!
+  m_appName = "My App!";
+  m_author = "Great Author";
+  m_version = "Version 1.0.2";
+  m_email = "email@email.com";
+  m_website = "http://www.hello.com";
+  m_date = "October 10, 1999";
+  m_instructions = "Follow these instructions";
+
+
+  m_autorun = false;
+
   QDir::setCurrent("/data");
+  loadLocalPrefs(); // Must load first as this sets values used later
   m_options = new CsoundOptions;
-  m_options->fileName1 = "data/quteapp.csd";
+  m_options->fileName1 = CSD_NAME;
   OpEntryParser *m_opcodeTree = new OpEntryParser(":/main/opcodes.xml");
   m_doc = new SimpleDocument(this, m_opcodeTree);
   m_console = m_doc->getConsole();
-  m_console->setWindowTitle(tr("Console"));
-  m_console->setWindowFlags(Qt::Window);
-  m_console->show();
+  m_console->setWindowTitle(tr("Csound Console"));
+  m_console->setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
+  m_aboutWidget = new AboutWidget(this);
+  setAboutTexts();
   createMenus();
-  setCentralWidget((QWidget *) m_doc->getWidgetLayout());
   loadCsd();
+  setCentralWidget((QWidget *) m_doc->getWidgetLayout());
+//  m_aboutWidget->setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
+//  m_console->show();
 //  start();
+
+    if (m_autorun) {
+      start();
+    }
 }
 
 QuteApp::~QuteApp()
 {
+  m_doc->stop();
+  if (m_saveState) {
+    QFile f(CSD_NAME);
+    if (f.open(QIODevice::WriteOnly)) {
+      QString fullText = m_doc->getFullText();
+      f.write(fullText.toLocal8Bit());
+      f.close();
+    } else {
+      QMessageBox::critical(this, tr("Error"), tr("Error saving file!"));
+    }
+  }
+  delete m_doc;
   delete m_options;
-  delete m_opcodeTree;
+//  delete m_opcodeTree;
 }
 
 void QuteApp::createMenus()
 {
   QMenu *menu = menuBar()->addMenu(tr("&File"));
-  menu->addAction("Run", this, SLOT(start()), QKeySequence("Ctrl+R"));
-  menu->addAction("Stop", this, SLOT(stop()), QKeySequence("Ctrl+."));
-  menu->addAction("Show Console Output", this, SLOT(showConsole()));
+  if (m_showRunOptions) {
+    menu->addAction(tr("Run"), this, SLOT(start()), QKeySequence("Ctrl+R"));
+    menu->addAction(tr("Stop"), this, SLOT(stop()), QKeySequence("Ctrl+."));
+  }
+  menu->addAction(tr("Show Console Output"), this, SLOT(showConsole()));
+  QMenu *about = menuBar()->addMenu(tr("&Help"));
+  about->addAction(tr("About ..."), m_aboutWidget, SLOT(open()));
 }
 
 void QuteApp::start()
@@ -153,9 +192,104 @@ bool QuteApp::loadCsd()
   QApplication::restoreOverrideCursor();
 //  setWidgetPanelGeometry();
 
-//  if (runNow && m_options->autoPlay) {
-//    play();
-//  }
   this->resize(m_doc->getWidgetLayout()->size());
   return true;
+}
+
+bool QuteApp::loadLocalPrefs()
+{
+  // FIXME load from csd file!
+//    QFile f("prefs.inf");
+//    if (!f.open(QIODevice::ReadOnly)) {
+//        QMessageBox::warning(this, tr("Warning"), tr("Could not find preferences file!"));
+//        return false;
+//    }
+//    QStringList lines = QString(f.readAll()).split("\n");
+//    int index = lines.indexOf("[appName]");
+//    if (index) {
+//      lines.takeAt(index); // remove label
+//      m_appName = lines.takeAt(index);
+//    }
+//    index = lines.indexOf("[author]");
+//    if (index) {
+//      lines.takeAt(index); // remove label
+//      m_author = lines.takeAt(index);
+//    }
+//    index = lines.indexOf("[email]");
+//    if (index) {
+//      lines.takeAt(index); // remove label
+//      m_email = lines.takeAt(index);
+//    }
+//    index = lines.indexOf("[website]");
+//    if (index) {
+//      lines.takeAt(index); // remove label
+//      m_website = lines.takeAt(index);
+//    }
+//    index = lines.indexOf("[date]");
+//    if (index) {
+//      lines.takeAt(index); // remove label
+//      m_date = lines.takeAt(index);
+//    }
+//    index = lines.indexOf("[version]");
+//    if (index) {
+//      lines.takeAt(index); // remove label
+//      m_version = lines.takeAt(index);
+//    }
+//    index = lines.indexOf("[autorun]");
+//    if (index) {
+//      lines.takeAt(index); // remove label
+//      m_autorun = lines.takeAt(index) == "true";
+//    }
+//    index = lines.indexOf("[showRunOptions]");
+//    if (index) {
+//      lines.takeAt(index); // remove label
+//      m_showRunOptions = lines.takeAt(index) == "true";
+//    }
+//    index = lines.indexOf("[saveOnClose]");
+//    if (index) {
+//      lines.takeAt(index); // remove label
+//      m_saveOnClose = lines.takeAt(index) == "true";
+//    }
+//    index = lines.indexOf("[newParser]");
+//    if (index) {
+//      lines.takeAt(index); // remove label
+//      m_newParser = lines.takeAt(index) == "true";
+//    }
+//    index = lines.indexOf("[runMode]");
+//    if (index) {
+//      lines.takeAt(index); // remove label
+//      m_runMode = (RunMode) lines.takeAt(index).toInt();
+//    }
+//    index = lines.indexOf("[saveState]");
+//    if (index) {
+//      lines.takeAt(index); // remove label
+//      m_saveState = lines.takeAt(index) == "true";
+//    }
+//    index = lines.indexOf("[instructions]");
+//    if (index) {
+//      lines.takeAt(index); // remove label
+//      m_instructions = "";
+//      QString line = lines.at(index);
+//      while (!(line.startsWith("[") && line.startsWith("]"))) {
+//        m_instructions.append(line + "\n");
+//        lines.takeAt(index);
+//        if (index == lines.size()) {
+//          break;
+//        }
+//        line = lines.at(index);
+//      }
+//    }
+//    if (lines.size() > 0) {
+//      qDebug() << "QuteApp::loadLocalPrefs() extraneous information in prefs file";
+//    }
+    return true;
+}
+
+void QuteApp::setAboutTexts()
+{
+  QString templateText = "<h1>%1<h1><h2>%2</h2><h2>%3</h2><h3>%4</h3><h3>%5</h3>";
+  QString intro = templateText.arg(m_appName).arg(m_author).arg(m_version)
+      .arg(m_date).arg(m_email);
+  m_aboutWidget->setIntroText(intro);
+  m_aboutWidget->setInstructions(m_instructions);
 }

@@ -48,8 +48,9 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
   m_otherCsdEditor->setPalette(p);
   m_otherCsdEditor->setTextColor(QColor("gray"));
   m_widgetEditor = new TextEditor(this);
+  m_appEditor = new TextEditor(this);
   editors << m_mainEditor << m_orcEditor << m_scoreEditor << m_optionsEditor << m_filebEditor
-      << m_otherEditor << m_otherCsdEditor << m_widgetEditor;
+      << m_otherEditor << m_otherCsdEditor << m_widgetEditor << m_appEditor;
   splitter = new QSplitter(this); // Deleted with parent
   splitter->setOrientation(Qt::Vertical);
   splitter->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -88,6 +89,24 @@ void BaseView::setFullText(QString text, bool goToTop)
     text.remove(text.indexOf("<CsFileB "), currentFileText.size());
     appendFileBText(currentFileText);
   }
+  int startIndex,endIndex, offset, endoffset;
+  QString tag, sectionText;
+  // Get app info text. This text will never be visible in the full editor, so it is here
+  sectionText = "";
+  tag = "CsApp";
+  startIndex = text.indexOf("<" + tag + ">");
+  offset = text.size() > startIndex + tag.size() + 2
+      && text[startIndex +  tag.size() + 2] == '\n' ? 1: 0;
+  endIndex = text.indexOf("</" + tag + ">", startIndex) + tag.size() + 3;
+  endoffset = text.size() > endIndex
+      && text[endIndex] == '\n' ? 1: 0;
+  if (startIndex >= 0 && endIndex > startIndex) {
+    sectionText = text.mid(startIndex, endIndex - startIndex + endoffset);
+    text.remove(sectionText);
+  }
+  m_appEditor->setUndoRedoEnabled(false);
+  setAppText(sectionText.mid(tag.size() + 2 + offset, sectionText.size() - (tag.size()*2) - 5 - offset - endoffset));
+  m_appEditor->setUndoRedoEnabled(true);
   if (m_viewMode < 2) {  // Unified view
       m_mainEditor->setUndoRedoEnabled(false);
     QTextCursor cursor = m_mainEditor->textCursor();
@@ -100,8 +119,6 @@ void BaseView::setFullText(QString text, bool goToTop)
     m_mainEditor->setUndoRedoEnabled(true);
   }
   else { // Split view
-    int startIndex,endIndex, offset, endoffset;
-    QString tag, sectionText;
     // Find orchestra section
     sectionText = "";
     tag = "CsInstruments";
@@ -203,6 +220,7 @@ void BaseView::setFont(QFont font)
   m_otherEditor->setFont(font);
   m_otherCsdEditor->setFont(font);
   m_widgetEditor->setFont(font);
+  m_appEditor->setFont(font);
 }
 
 void BaseView::setFontPointSize(float size)
@@ -215,6 +233,7 @@ void BaseView::setFontPointSize(float size)
   m_otherEditor->setFontPointSize(size);
   m_otherCsdEditor->setFontPointSize(size);
   m_widgetEditor->setFontPointSize(size);
+  m_appEditor->setFontPointSize(size);
 }
 
 void BaseView::setTabStopWidth(int width)
@@ -227,6 +246,7 @@ void BaseView::setTabStopWidth(int width)
   m_otherEditor->setTabStopWidth(width);
   m_otherCsdEditor->setTabStopWidth(width);
   m_widgetEditor->setTabStopWidth(width);
+  m_appEditor->setTabStopWidth(width);
 }
 
 void BaseView::setLineWrapMode(QTextEdit::LineWrapMode mode)
@@ -239,6 +259,7 @@ void BaseView::setLineWrapMode(QTextEdit::LineWrapMode mode)
   m_otherEditor->setLineWrapMode(mode);
   m_otherCsdEditor->setLineWrapMode(mode);
   m_widgetEditor->setLineWrapMode(mode);
+  m_appEditor->setLineWrapMode(mode);
 }
 
 void BaseView::setColorVariables(bool color)
@@ -468,6 +489,11 @@ void BaseView::setOtherText(QString text)
   }
 }
 
+void BaseView::setAppText(QString text)
+{
+  m_appEditor->setPlainText(text);
+}
+
 QString BaseView::getBasicText()
 {
 //   What Csound needs (no widgets, misc text, etc.)
@@ -484,6 +510,126 @@ QString BaseView::getBasicText()
   }
   return text;
 }
+
+QString BaseView::getFullText()
+{
+  QString text;
+  if (m_viewMode < 2) { // View is not split
+	text = m_mainEditor->toPlainText();
+	int closeIndex = text.lastIndexOf("</CsoundSynthesizer>");
+	QString fileBText = getFileB();
+	if (!fileBText.isEmpty()) {
+	  if (closeIndex > 0) { // Embedded files must be within synthesizer
+		text.insert(closeIndex,fileBText);
+	  }
+	  else {
+		text += getFileB();
+	  }
+        }
+  }
+  else { // Split view
+	QString sectionText;
+	sectionText = m_otherEditor->toPlainText();
+	if (!sectionText.isEmpty()) {
+	  text += sectionText;
+	}
+	text += "<CsoundSynthesizer>\n";
+	sectionText = m_optionsEditor->toPlainText();
+	if (!sectionText.isEmpty()) {
+	  text += "<CsOptions>\n" + sectionText + "</CsOptions>\n";
+	}
+	text += "<CsInstruments>\n" + m_orcEditor->toPlainText() + "</CsInstruments>\n";
+	text += "<CsScore>\n" + m_scoreEditor->getPlainText() + "</CsScore>\n";
+	sectionText = getFileB();
+	if (!sectionText.isEmpty()) {
+	  text += sectionText;
+	}
+	sectionText = m_otherCsdEditor->toPlainText();
+	if (!sectionText.isEmpty()) {
+	  text += sectionText;
+	}
+	text += "</CsoundSynthesizer>\n";
+  }
+  if (!text.endsWith("\n")) {
+    text += "\n";
+  }
+  text += getAppText() + "\n";
+  return text;
+}
+
+QString BaseView::getOrc()
+{
+  QString text = "";
+  if (m_viewMode < 2) { // A single editor (orc and sco are not split)
+	text = m_mainEditor->toPlainText();
+	text = text.mid(text.lastIndexOf("<CsInstruments>" )+ 15);
+	text.remove(text.lastIndexOf("</CsInstruments>"), text.size());
+  }
+  else {
+	text = m_orcEditor->toPlainText();
+  }
+  return text;
+}
+
+QString BaseView::getSco()
+{
+  QString text = "";
+  if (m_viewMode < 2) {
+	text = m_mainEditor->toPlainText();
+	text = text.mid(text.lastIndexOf("<CsScore>") + 9);
+	text.remove(text.lastIndexOf("</CsScore>"), text.size());
+  }
+  else { // Split view
+	text = m_scoreEditor->getPlainText();
+  }
+  return text;
+}
+
+QString BaseView::getOptionsText()
+{
+  // Returns text without tags
+  QString text = "";
+  if (m_viewMode < 2) {// A single editor (orc and sco are not split)
+	QString edText = m_mainEditor->toPlainText();
+	int index = edText.indexOf("<CsOptions>");
+	if (index >= 0 && edText.contains("</CsOptions>")) {
+	  text = edText.mid(index + 11, edText.indexOf("</CsOptions>") - index - 11);
+	}
+  }
+  else { //  Split view
+	text = m_optionsEditor->toPlainText();
+  }
+  return text;
+}
+
+QString BaseView::getFileB()
+{
+  return m_filebEditor->toPlainText();
+}
+
+QString BaseView::getExtraCsdText()
+{
+  // All other tags like version and licence with tags. For text that is being edited in the text editor
+  return m_otherCsdEditor->toPlainText();
+}
+
+QString BaseView::getExtraText()
+{
+  // Text outside any known tags. For text that is being edited in the text editor
+  return m_otherEditor->toPlainText();
+}
+
+QString BaseView::getAppText()
+{
+  QString appText = m_appEditor->toPlainText();
+  if (appText.isEmpty() || appText == "\n") {
+    return QString();
+  }
+  appText.prepend("<CsApp>");
+  appText.append("</CsApp>");
+  return appText;
+}
+
 
 //void BaseView::setOpcodeNameList(QStringList list)
 //{
@@ -505,6 +651,7 @@ void BaseView::hideAllEditors()
     m_otherEditor->hide();
     m_otherCsdEditor->hide();
     m_widgetEditor->hide();
+        m_appEditor->hide();
     for (int i = 0; i < 9; i++) {
       QSplitterHandle *h = splitter->handle(i);
       if (h) {
@@ -526,6 +673,7 @@ void BaseView::clearUndoRedoStack()
 		m_otherEditor->document()->setModified(false);
 		m_otherCsdEditor->document()->setModified(false);
 		m_widgetEditor->document()->setModified(false);
+                m_appEditor->document()->setModified(false);
 //		m_orcEditor->document()->clearUndoRedoStacks();
 //		m_scoreEditor->clearUndoRedoStacks();
 //		m_optionsEditor->document()->clearUndoRedoStacks();
