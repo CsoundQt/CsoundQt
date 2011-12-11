@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>res/QuteApp.app</file>
+        <file>res/QuteApp_f.app</file>
     </qresource>
 </RCC>

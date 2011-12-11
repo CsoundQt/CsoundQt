@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>res/linux/launch.sh</file>
-        <file>res/linux/QuteApp</file>
+        <file>res/linux/QuteApp_d</file>
     </qresource>
 </RCC>

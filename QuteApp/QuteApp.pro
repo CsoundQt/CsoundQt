@@ -7,7 +7,7 @@ TMPDIR = "build"
 !build32:!build64:CONFIG += build32
 build32:build64:CONFIG -= build32
 CONFIG += is_quteapp # This is for bundling the QuteApp in the main CsoundQt app, so shouldn't be here
-CONFIG -=
+
 unix { 
     macx:include (../qcs-macx.pro)
     else:include (../qcs-unix.pro)
@@ -112,7 +112,10 @@ rtmidi {
     SOURCES += "$${PWD}/../$${RTMIDI_DIR}/RtMidi.cpp"
     INCLUDEPATH += $${PWD}/../$${RTMIDI_DIR}
 }
-TARGET = QuteApp
+
+build32:TARGET = QuteApp_f
+build64:TARGET = QuteApp_d
+
 DESTDIR = bin
 INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
 INCLUDEPATH *= $${CSOUND_INTERFACES_INCLUDE_DIR}

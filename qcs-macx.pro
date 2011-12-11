@@ -55,6 +55,14 @@ DEFINES += __MACOSX_CORE__
 LIBS += -framework CoreFoundation
 LIBS += -framework CoreMidi -framework CoreAudio
 }
+quteapp_f {
+message(Bundling QuteApp_f)
+RESOURCES += "src/quteapp_f_osx.qrc"
+}
+quteapp_d {
+message(Bundling QuteApp_d)
+RESOURCES += "src/quteapp_d_osx.qrc"
+}
 #LIBS += -framework QtCore -framework QtGui -framework QtXml
 LCSOUND = -framework $${MAC_LIB}
 LSNDFILE = -lsndfile

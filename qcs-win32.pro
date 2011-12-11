@@ -35,3 +35,12 @@ rtmidi {
 DEFINES += __WINDOWS_MM__
 LIBS += -lwinmm
 }
+
+quteapp_f {
+message(Bundling QuteApp_f)
+RESOURCES += "src/quteapp_f_win.qrc"
+}
+quteapp_d {
+message(Bundling QuteApp_d)
+RESOURCES += "src/quteapp_d_win.qrc"
+}

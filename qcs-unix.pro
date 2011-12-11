@@ -42,9 +42,13 @@ rtmidi {
 DEFINES += __LINUX_ALSASEQ__
 LIBS += -lasound
 }
-quteapp {
-message(Bundling QuteApp)
-RESOURCES += "src/quteapp.qrc"
+quteapp_f {
+message(Bundling QuteApp_f)
+RESOURCES += "src/quteapp_f.qrc"
+}
+quteapp_d {
+message(Bundling QuteApp_d)
+RESOURCES += "src/quteapp_d.qrc"
 }
 build32:LCSOUND = -lcsound
 build64:LCSOUND = -lcsound64

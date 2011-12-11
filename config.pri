@@ -220,15 +220,20 @@ win32 {
 }
 !is_quteapp {
 win32-g++ {
-exists (src/res/windows/QuteApp.exe) :CONFIG += quteapp
+exists (src/res/windows/QuteApp_f.exe) :CONFIG += quteapp_f
+exists (src/res/windows/QuteApp_d.exe) :CONFIG += quteapp_d
 }
 unix {
     macx {
-exists (src/res/osx/QuteApp.app) :CONFIG += quteapp
+exists (src/res/osx/QuteApp_f.app) :CONFIG += quteapp_f
+exists (src/res/osx/QuteApp_d.app) :CONFIG += quteapp_d
 }
     else {
-exists (src/res/linux/QuteApp) :CONFIG += quteapp
+exists (src/res/linux/QuteApp_f) :CONFIG += quteapp_f
+exists (src/res/linux/QuteApp_d) :CONFIG += quteapp_d
 }
 }
-!quteapp: message(Not bundling QuteApp. Please put QuteApp in the res/ folder)
+!quteapp_f: message(Not bundling QuteApp_f. Please put QuteApp_f in the res/ folder)
+!quteapp_d: message(Not bundling QuteApp_d. Please put QuteApp_d in the res/ folder)
+
 }

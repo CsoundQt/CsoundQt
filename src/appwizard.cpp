@@ -218,8 +218,17 @@ void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList data
     dir.mkdir("data");
     // Copy csd and binaries
     if (sdkDir.isEmpty()) {
-      QFile::copy(":/res/linux/QuteApp", dir.absolutePath() + QDir::separator() +"lib/QuteApp");
-      QFile::copy(":/res/linux/launch.sh", dir.absolutePath() + QDir::separator() + appName + ".sh");
+      bool ret;
+      if (useDoubles) {
+        ret = QFile::copy(":/res/linux/QuteApp_d", dir.absolutePath() + QDir::separator() +"lib/QuteApp");
+      } else {
+        ret = QFile::copy(":/res/linux/QuteApp_f", dir.absolutePath() + QDir::separator() +"lib/QuteApp");
+      }
+      ret = ret && QFile::copy(":/res/linux/launch.sh", dir.absolutePath() + QDir::separator() + appName + ".sh");
+      if (!ret) {
+        QMessageBox::critical(this, tr("Error"), tr("Could not copy Linux QuteApp executable. Aborting."));
+        return;
+      }
       QFile f(dir.absolutePath() + QDir::separator() +"lib/QuteApp");
       f.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
                        | QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
@@ -229,7 +238,11 @@ void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList data
                         | QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
                         | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther);
     } else {
-      QFile::copy(sdkDir + QDir::separator() + "linux/lib/QuteApp", "lib/QuteApp");
+      if (useDoubles) {
+        QFile::copy(sdkDir + QDir::separator() + "linux/lib/QuteApp_d", dir.absolutePath() + QDir::separator() + "lib/QuteApp");
+      } else {
+        QFile::copy(sdkDir + QDir::separator() + "linux/lib/QuteApp_f", dir.absolutePath() + QDir::separator() + "lib/QuteApp");
+      }
       QFile::copy(sdkDir + QDir::separator() + "linux/lib/launch.sh", appName + ".sh");
     }
     dir.cd("data");
