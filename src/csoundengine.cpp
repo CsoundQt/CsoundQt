@@ -580,8 +580,8 @@ int CsoundEngine::play(CsoundOptions *options)
     return runCsound();
   }
   else {
-    if (ud->threaded) { // TODO is this action correct?
-      ud->perfThread->Play();
+	if (ud->threaded) { // TODO is this action correct?
+		ud->perfThread->TogglePause();
     }
     return 0;
   }
@@ -596,7 +596,7 @@ void CsoundEngine::stop()
 void CsoundEngine::pause()
 {
   if (isRunning() && ud->perfThread->GetStatus() == 0) {
-    ud->perfThread->Pause();
+	ud->perfThread->Pause();
   }
 }
 
