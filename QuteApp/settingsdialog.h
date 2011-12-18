@@ -24,6 +24,10 @@
 #define SETTINGSDIALOG_H
 
 #include <QDialog>
+#include <QMultiHash>
+#include "csound.hpp"
+
+#include "csoundoptions.h"
 
 namespace Ui {
     class SettingsDialog;
@@ -32,14 +36,32 @@ namespace Ui {
 class SettingsDialog : public QDialog {
     Q_OBJECT
 public:
-    SettingsDialog(QWidget *parent = 0);
+    SettingsDialog(QWidget *parent, CsoundOptions *options);
     ~SettingsDialog();
+
+    QStringList getFlags();
+
+public slots:
+    void refreshAudioIn();
+    void refreshAudioOut();
+    void refreshMidiIn();
+    void refreshMidiOut();
+    void refreshMidiControl();
+
+    virtual void accept();
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
     Ui::SettingsDialog *ui;
+    Csound *m_csound;
+    CsoundOptions *m_options;
+
+    QString runCsound(QStringList args);
+    QMultiHash<QString, QString> parsePortAudioIn(QString csOutput);
+    QMultiHash<QString, QString> parsePortAudioOut(QString csOutput);
+    QMultiHash<QString, QString> parseJackAudioIn(QString csOutput);
 };
 
 #endif // SETTINGSDIALOG_H

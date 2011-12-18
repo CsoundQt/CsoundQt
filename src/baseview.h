@@ -48,10 +48,7 @@ public:
   bool newParser;
   bool useDoubles;
 
-  bool forlinux;
-  bool forosx;
-  bool forosx_64;
-  bool forwindows;
+  bool useSdk;
 
   bool useCustomPaths;
   QString libDir;

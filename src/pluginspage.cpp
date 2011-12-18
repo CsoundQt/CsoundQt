@@ -76,31 +76,39 @@ void PluginsPage::updateOpcodeDir()
   QStringList filters;
   QStringList plugins;
   QString opcodeDir = field("opcodeDir").toString();
-  int platform = field("platform").toInt();
 #ifdef Q_OS_MAC
   opcodeDir = field("libDir").toString() + "/CsoundLib";
   if (field("useDoubles").toBool()) {
     opcodeDir += "64";
   }
   opcodeDir += ".framework/Resources/Opcodes";
+  if (!QFile::exists(opcodeDir) && !field("opcodeDir").toString().isEmpty() ) {
+    opcodeDir = field("opcodeDir").toString();
+  }
 #endif
   qDebug() << "PluginsPage::updateOpcodeDir " << opcodeDir;
-  if (platform == 0) { // Linux
+#ifdef Q_OS_LINUX
     filters << "*.so";
-  }
-  else if (platform == 1) { // OS X
+#endif
+#ifdef Q_OS_MAC
     filters << "*.dylib";
-  }
-  else if  (platform == 2) { // Windows
+#endif
+#ifdef Q_OS_WIN32
     filters << "*.dll";
-  }
+#endif
   plugins = QDir(opcodeDir).entryList(filters);
   foreach (QString plugin, plugins) {
     if (!plugin.startsWith(".")) {
       ui->pluginsListWidget->addItem(plugin);
     }
   }
+  m_opcodeDir = opcodeDir;
   ui->pluginsListWidget->selectAll();
+}
+
+QString PluginsPage::getOpcodeDir()
+{
+  return m_opcodeDir;
 }
 
 void PluginsPage::changeEvent(QEvent *e)

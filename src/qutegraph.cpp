@@ -279,10 +279,11 @@ void QuteGraph::changeCurve(int index)
 //  FIXME implement dispx, dispy and modex, modey
   int size = curves[index]->get_size();
   QString caption = curves[index]->get_caption();
-//  qDebug() << "QuteGraph::changeCurve"<< curves[index]->get_caption()<< index <<max<< min<< zoomx<< zoomy << size;
-  view->setResizeAnchor(QGraphicsView::NoAnchor);
+//  qDebug() << "QuteGraph::changeCurve"<< curves[index]->get_caption() << index <<max<< min<< zoomx<< zoomy << size;
+//  view->setResizeAnchor(QGraphicsView::NoAnchor);
   if (caption.contains("ftable")) {
-//    view->setSceneRect (0, min - ((max - min)*0.17),(double) size/zoomx, (max - min)*1.17/zoomy);
+    view->setSceneRect (min, max, (double) size, (max - min));
+    qDebug() << view->sceneRect();
     view->fitInView(0, min - ((max - min)*0.17/zoomy) , (double) size/zoomx, (max - min)*1.17/zoomy);
     int ftable = getTableNumForIndex(index);
     if (m_value2 != ftable) {
@@ -384,6 +385,11 @@ void QuteGraph::addCurve(Curve * curve)
   static_cast<StackedLayoutWidget *>(m_widget)->addWidget(view);
   curves.append(curve);
 //  curveLock.unlock();
+//  double max = - curves.last()->get_min();
+//  double min = - curves.last()->get_max();
+//  double zoomx = property("QCS_zoomx").toDouble();
+//  double zoomy = property("QCS_zoomy").toDouble();
+//  view->fitInView(0, min - ((max - min)*0.17/zoomy) , (double) size/zoomx, (max - min)*1.17/zoomy);
   if (m_value == curves.size() - 1) { // If new curve created corresponds to current stored value
     changeCurve(m_value);
   }
@@ -407,7 +413,7 @@ void QuteGraph::setCurveData(Curve * curve)
 {
   Q_ASSERT(curve != 0);
   int index = getCurveIndex(curve);
-//  qDebug() << "QuteGraph::setCurveData " << index << curve;
+  qDebug() << "QuteGraph::setCurveData " << index << curve;
   if (index >= curves.size() || index < 0) {
     return;
   }
@@ -476,7 +482,7 @@ void QuteGraph::drawCurve(Curve * curve, int index)
 //  bool live = curve->getOriginal() != 0;
   Q_ASSERT(index >= 0);
   QString caption = curve->get_caption();
-//  qDebug() << "QuteGraph::drawCurve" << caption << curve->getOriginal() << curve->get_size() << curve->getOriginal()->npts;
+  qDebug() << "QuteGraph::drawCurve" << caption << curve->getOriginal() << curve->get_size() << curve->getOriginal()->npts << curve->get_max() << curve->get_min();
   if (caption.isEmpty()) {
     return;
   }

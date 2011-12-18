@@ -35,14 +35,10 @@ AppDetailsPage::AppDetailsPage(QWidget *parent) :
 
   registerField("targetDir", ui->targetDirLineEdit);
   registerField("autorun", ui->autorunCheckBox);
-  registerField("linux", ui->linuxCheckBox);
-  registerField("windows", ui->windowsCheckBox);
-  registerField("osx", ui->osxCheckBox);
-  registerField("osx_64", ui->osx64CheckBox);
+  registerField("useSdk", ui->platformComboBox);
   registerField("useDoubles", ui->presicionComboBox);
   registerField("runMode", ui->runModeComboBox);
   registerField("saveState", ui->saveStatecheckBox);
-  registerField("autorun", ui->autorunCheckBox);
   registerField("newParser", ui->newParserCheckBox);
   registerField("showRun", ui->showRunCheckBox);
 
@@ -54,6 +50,7 @@ AppDetailsPage::AppDetailsPage(QWidget *parent) :
 
   registerField("libDir", ui->libLineEdit);
   registerField("opcodeDir", ui->opcodeLineEdit);
+  registerField("qtLibsDir", ui->qtLibsLineEdit);
   registerField("customPaths", ui->customPathsCheckBox);
 
   connect(ui->browseTargetButton,SIGNAL(released()),
@@ -62,10 +59,14 @@ AppDetailsPage::AppDetailsPage(QWidget *parent) :
           this, SLOT(browseLibrary()));
   connect(ui->browseOpcodesButton,SIGNAL(released()),
           this, SLOT(browseOpcodes()));
+  connect(ui->browseQtLibsButton,SIGNAL(released()),
+          this, SLOT(browseQtLibs()));
   connect(ui->opcodeLineEdit, SIGNAL(textChanged(QString)),
           this, SLOT(opcodeDirChanged()));
   connect(ui->libLineEdit, SIGNAL(textChanged(QString)),
           this, SLOT(libDirChanged()));
+  connect(ui->platformComboBox, SIGNAL(currentIndexChanged(int)),
+          SLOT(platformChanged(int)));
 //#ifdef Q_OS_MAC
 //  ui->libLabel->setText("Framework Dir");
 //  ui->opcodeLineEdit->hide();
@@ -118,6 +119,15 @@ void AppDetailsPage::browseOpcodes()
   }
 }
 
+void AppDetailsPage::browseQtLibs()
+{
+    QString destination = field("qtLibsDir").toString();
+    QString dir =  QFileDialog::QFileDialog::getExistingDirectory(this,tr("Select Qt Libraries Directory"),destination);
+    if (dir!="") {
+      setField("qtLibsDir", dir);
+    }
+}
+
 void AppDetailsPage::browseSdk()
 {
   QString destination = field("sdkDir").toString();
@@ -128,9 +138,15 @@ void AppDetailsPage::browseSdk()
 }
 
 
-void AppDetailsPage::platformChanged()
+void AppDetailsPage::platformChanged(int index)
 {
-  emit platformChangedSignal();
+  if (index == 0) {
+    ui->tab_2->setEnabled(true);
+    ui->tab_3->setEnabled(true);
+  } else {
+    ui->tab_2->setEnabled(false);
+    ui->tab_3->setEnabled(false);
+  }
 }
 
 void AppDetailsPage::opcodeDirChanged()

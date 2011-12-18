@@ -875,7 +875,7 @@ void CsoundQt::createApp()
     QMessageBox::critical(this, tr("Error"), tr("You can only create an app with a csd file."));
     return;
   }
-  if (documentPages[curPage]->isModified()) {
+  if (documentPages[curPage]->isModified() || documentPages[curPage]->getFileName().startsWith(":/")) {
     QMessageBox::StandardButton but =
         QMessageBox::question(this, tr("Save"), tr("Do you want to save before creating app?"),
                               QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
@@ -885,14 +885,18 @@ void CsoundQt::createApp()
         qDebug() << "CsoundQt::createApp() Error saving file";
         return;
       }
+    } else {
+      QMessageBox::critical(this, tr("Abort"), tr("You must save the csd before creating the App!"));
+      return;
     }
   }
+
   if (m_options->opcodedirActive) {
     // FIXME allow for OPCODEDIR64 if built for doubles
     opcodeDir = m_options->opcodedir.toLocal8Bit();
   }
   else {
-#ifdef USE_DOUBLES
+#ifdef USE_DOUBLE
 #ifdef Q_OS_LINUX
 #endif
 #ifdef Q_OS_SOLARIS
@@ -936,10 +940,7 @@ void CsoundQt::createApp()
     wizard.setField("runMode", QVariant(existingProperties.runMode));
     wizard.setField("newParser", QVariant(existingProperties.newParser));
     wizard.setField("useDoubles", QVariant(existingProperties.useDoubles ? 1 : 0));
-    wizard.setField("linux", QVariant(existingProperties.forlinux));
-    wizard.setField("osx", QVariant(existingProperties.forosx));
-    wizard.setField("osx_64", QVariant(existingProperties.forosx_64));
-    wizard.setField("windows", QVariant(existingProperties.forwindows));
+    wizard.setField("useSdk", QVariant(existingProperties.useSdk ? 1 : 0));
     wizard.setField("useCustomPaths", QVariant(existingProperties.useCustomPaths));
     wizard.setField("libDir", QVariant(existingProperties.libDir));
     wizard.setField("opcodeDir", QVariant(existingProperties.opcodeDir));
@@ -959,23 +960,15 @@ void CsoundQt::createApp()
     if (opcodeDir.isEmpty()) {
       wizard.setField("opcodeDir", "/usr/lib/csound/plugins");
     }
-    wizard.setField("windows", false);
-    wizard.setField("osx",false);
-    wizard.setField("osx_64",false);
   #endif
   #ifdef Q_OS_WIN32
     wizard.setField("libDir", "");
     if (opcodeDir.isEmpty()) {
       wizard.setField("opcodeDir", "");
     }
-    wizard.setField("linux", false);
-    wizard.setField("osx",false);
-    wizard.setField("osx_64",false);
   #endif
   #ifdef Q_OS_MAC
     wizard.setField("libDir", "/Library/Frameworks");
-    wizard.setField("linux", false);
-    wizard.setField("windows",false);
   #endif
     }
   }
@@ -997,17 +990,14 @@ void CsoundQt::createApp()
     properties.runMode = wizard.field("runMode").toInt();
     properties.newParser = wizard.field("newParser").toBool();
     properties.useDoubles = wizard.field("useDoubles").toBool();
-    properties.forlinux = wizard.field("linux").toBool();
-    properties.forosx = wizard.field("osx").toBool();
-    properties.forosx_64 = wizard.field("osx_64").toBool();
-    properties.forwindows = wizard.field("windows").toBool();
+    properties.useSdk = wizard.field("useSdk").toBool();
     properties.useCustomPaths = wizard.field("useCustomPaths").toBool();
     properties.libDir = wizard.field("libDir").toString();
     properties.opcodeDir = wizard.field("opcodeDir").toString();
 
     documentPages[curPage]->setAppProperties(properties);
-    bool ret = save();
-    if (!ret) { // Save file to store CsApp section
+    bool ret = save(); // Must save to apply properties to file on disk.
+    if (!ret) {
       qDebug() << "CsoundQt::createApp() Error saving file";
       return;
     }
@@ -1632,7 +1622,7 @@ void CsoundQt::setHelpEntry()
   // For self contained app on OS X
 #ifdef Q_OS_MAC
   if (dir == "") {
-#ifdef USE_DOUBLES
+#ifdef USE_DOUBLE
     dir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib64.framework/Versions/5.2/Resources/Manual";
 #else
     dir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Manual";

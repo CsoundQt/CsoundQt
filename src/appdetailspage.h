@@ -45,8 +45,9 @@ class AppDetailsPage : public QWizardPage {
     void browseTarget();
     void browseLibrary();
     void browseOpcodes();
+    void browseQtLibs();
     void browseSdk();
-    void platformChanged();
+    void platformChanged(int index);
     void opcodeDirChanged();
     void libDirChanged();
 

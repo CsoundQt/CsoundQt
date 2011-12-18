@@ -122,10 +122,7 @@ void BaseView::setFullText(QString text, bool goToTop)
       m_appProperties.runMode = p.firstChildElement("runMode").firstChild().nodeValue().toInt();
       m_appProperties.newParser = p.firstChildElement("newParser").firstChild().nodeValue() == "true";
       m_appProperties.useDoubles = p.firstChildElement("useDoubles").firstChild().nodeValue() == "true";
-      m_appProperties.forlinux = p.firstChildElement("forlinux").firstChild().nodeValue() == "true";
-      m_appProperties.forosx = p.firstChildElement("forosx").firstChild().nodeValue() == "true";
-      m_appProperties.forosx_64 = p.firstChildElement("forosx_64").firstChild().nodeValue() == "true";
-      m_appProperties.forwindows = p.firstChildElement("forwindows").firstChild().nodeValue() == "true";
+      m_appProperties.useSdk = p.firstChildElement("useSdk").firstChild().nodeValue() == "true";
       m_appProperties.useCustomPaths = p.firstChildElement("useCustomPaths").firstChild().nodeValue() == "true";
       m_appProperties.libDir = p.firstChildElement("libDir").firstChild().nodeValue();
       m_appProperties.opcodeDir = p.firstChildElement("opcodeDir").firstChild().nodeValue();
@@ -676,10 +673,7 @@ QString BaseView::getAppText()
   s.writeTextElement("newParser", m_appProperties.newParser ? "true" : "false");
   s.writeTextElement("useDoubles", m_appProperties.useDoubles ? "true" : "false");
 
-  s.writeTextElement("forlinux", m_appProperties.forlinux ? "true" : "false");
-  s.writeTextElement("forosx", m_appProperties.forosx ? "true" : "false");
-  s.writeTextElement("forosx_64", m_appProperties.forosx_64 ? "true" : "false");
-  s.writeTextElement("forwindows", m_appProperties.forwindows ? "true" : "false");
+  s.writeTextElement("useSdk", m_appProperties.useSdk ? "true" : "false");
 
   s.writeTextElement("useCustomPaths", m_appProperties.useCustomPaths ? "true" : "false");
   s.writeTextElement("libDir", m_appProperties.libDir);

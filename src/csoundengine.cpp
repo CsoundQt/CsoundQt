@@ -719,7 +719,7 @@ int CsoundEngine::runCsound()
   }
 #ifdef Q_OS_MAC
   else {
-#ifdef USE_DOUBLES
+#ifdef USE_DOUBLE
     QString opcodedir = m_initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib64.framework/Resources/Opcodes";
     QString stdopcode = opcodedir + "/libstdopcod.dylib";
 #else
@@ -728,7 +728,7 @@ int CsoundEngine::runCsound()
 #endif
     // TODO is this check robust enough? what if the standard library is not used? is it likely it is not?
     if (QFile::exists(stdopcode)) {
-#ifdef USE_DOUBLES
+#ifdef USE_DOUBLE
       csoundSetGlobalEnv("OPCODEDIR64", opcodedir.toLocal8Bit().constData());
 #else
       csoundSetGlobalEnv("OPCODEDIR", opcodedir.toLocal8Bit().constData());

@@ -53,10 +53,11 @@ class QuteApp : public QMainWindow
     void stop();
     void save();
     void showConsole();
+	void configure();
+    void info();
 
 private:
     bool loadCsd();
-    bool loadLocalPrefs();
     void setAboutTexts();
 
     CsoundOptions *m_options;

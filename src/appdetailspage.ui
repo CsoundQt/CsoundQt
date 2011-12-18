@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>477</width>
-    <height>319</height>
+    <height>323</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -26,7 +26,7 @@
    <item row="5" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -40,43 +40,13 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
           <item row="2" column="0">
-           <widget class="QCheckBox" name="linuxCheckBox">
-            <property name="text">
-             <string>Linux</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QCheckBox" name="osxCheckBox">
-            <property name="text">
-             <string>OS X</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QCheckBox" name="windowsCheckBox">
-            <property name="text">
-             <string>Windows</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
              <string>Presicion</string>
             </property>
            </widget>
           </item>
-          <item row="6" column="1">
+          <item row="2" column="1">
            <widget class="QComboBox" name="presicionComboBox">
             <item>
              <property name="text">
@@ -90,14 +60,18 @@
             </item>
            </widget>
           </item>
-          <item row="4" column="0">
-           <widget class="QCheckBox" name="osx64CheckBox">
-            <property name="text">
-             <string>OS X (64-bit)</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
+          <item row="0" column="0" colspan="2">
+           <widget class="QComboBox" name="platformComboBox">
+            <item>
+             <property name="text">
+              <string>Local Platform</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>All Platforms (Requires SDK)</string>
+             </property>
+            </item>
            </widget>
           </item>
          </layout>
@@ -366,7 +340,7 @@
          </item>
         </layout>
        </item>
-       <item row="5" column="0">
+       <item row="8" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -398,6 +372,31 @@
           <bool>false</bool>
          </property>
         </widget>
+       </item>
+       <item row="5" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>Qt Libs dir</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="qtLibsLineEdit">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="browseQtLibsButton">
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -436,6 +435,22 @@
     <hint type="destinationlabel">
      <x>200</x>
      <y>168</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>customPathsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>qtLibsLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>46</x>
+     <y>108</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>123</x>
+     <y>204</y>
     </hint>
    </hints>
   </connection>

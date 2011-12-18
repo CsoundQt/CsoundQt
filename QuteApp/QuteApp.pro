@@ -4,6 +4,8 @@
 QT += xml
 TEMPLATE = app
 TMPDIR = "build"
+
+buildDoubles: CONFIG+=build64
 !build32:!build64:CONFIG += build32
 build32:build64:CONFIG -= build32
 CONFIG += is_quteapp # This is for bundling the QuteApp in the main CsoundQt app, so shouldn't be here
@@ -98,8 +100,7 @@ HEADERS += "$${QCSPWD}/configlists.h" \
     "$${PWD}/simpledocument.h" \
     "$${PWD}/settingsdialog.h" \
     aboutwidget.h
-FORMS += "$${PWD}/quteappwizard.ui" \
-    "$${PWD}/settingsdialog.ui" \
+FORMS += "$${PWD}/settingsdialog.ui" \
     "$${QCSPWD}/filebeditor.ui"\
     "$${QCSPWD}/liveeventframe.ui" \
     "$${QCSPWD}/findreplace.ui" \

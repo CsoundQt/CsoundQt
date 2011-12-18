@@ -42,12 +42,14 @@ Q_OBJECT
     void selectNone();
     void deselectFltk();
     void updateOpcodeDir();
+    QString getOpcodeDir();
 
   protected:
     void changeEvent(QEvent *e);
 
   private:
     Ui::PluginsPage *ui;
+    QString m_opcodeDir;
 
   private slots:
     void selectionChanged();

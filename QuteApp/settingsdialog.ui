@@ -41,13 +41,13 @@
    <property name="title">
     <string>Realtime Play</string>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>30</y>
       <width>261</width>
-      <height>109</height>
+      <height>116</height>
      </rect>
     </property>
     <layout class="QGridLayout">
@@ -59,10 +59,10 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QComboBox" name="comboBox"/>
+      <widget class="QComboBox" name="audioInComboBox"/>
      </item>
      <item row="3" column="0">
-      <widget class="QComboBox" name="comboBox_2"/>
+      <widget class="QComboBox" name="audioOutComboBox"/>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_4">
@@ -116,7 +116,7 @@
     </rect>
    </property>
    <property name="title">
-    <string>MIDI interface for automation</string>
+    <string>MIDI interface for GUI control</string>
    </property>
    <widget class="QComboBox" name="midiInterfaceComboBox">
     <property name="geometry">
@@ -141,13 +141,13 @@
    <property name="title">
     <string>MIDI Devices</string>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>30</y>
       <width>281</width>
-      <height>109</height>
+      <height>116</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="_3">
@@ -166,10 +166,10 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QComboBox" name="comboBox_3"/>
+      <widget class="QComboBox" name="midiInComboBox"/>
      </item>
      <item row="3" column="0">
-      <widget class="QComboBox" name="comboBox_4"/>
+      <widget class="QComboBox" name="midiOutComboBox"/>
      </item>
     </layout>
    </widget>
