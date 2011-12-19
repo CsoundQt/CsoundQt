@@ -150,10 +150,6 @@ QString SettingsDialog::runCsound(QStringList args)
   csdFile.open(QFile::ReadOnly);
   f.write(csdFile.readAll());
   f.flush();
-  QString opcodeDir = QDir::currentPath();
-  qDebug() << "...." << opcodeDir;
-  csoundSetGlobalEnv("OPCODEDIR", opcodeDir.toLocal8Bit().data());
-  csoundSetGlobalEnv("OPCODEDIR64", opcodeDir.toLocal8Bit().data());
   m_csound->Compile(f.fileName().toLocal8Bit().data(),
                     args.at(0).toLocal8Bit().data(),
                     args.at(1).toLocal8Bit().data(),

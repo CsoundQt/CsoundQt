@@ -217,6 +217,11 @@ ConsoleWidget *BaseDocument::getConsole()
   return m_console;
 }
 
+CsoundEngine *BaseDocument::getEngine()
+{
+  return m_csEngine;
+}
+
 int BaseDocument::play(CsoundOptions *options)
 {
   if (!m_csEngine->isRunning()) {

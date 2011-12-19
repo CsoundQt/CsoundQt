@@ -33,20 +33,30 @@
 #include "aboutwidget.h"
 #include "settingsdialog.h"
 #include "csound.h"
+#include "csoundengine.h"
 #include "types.h"
 
-#define CSD_NAME "data/quteapp.csd"
+#define CSD_NAME "quteapp.csd"
 
 QuteApp::QuteApp(QWidget *parent)
   : QMainWindow(parent)
 {
-  QDir::setCurrent("/data");
+#ifdef Q_OS_MAC
+  QDir::setCurrent(QDir::current() + QDir::separator() + "data");
+#else
+  QDir::setCurrent(QDir::current().absolutePath() + QDir::separator() + "data");
+#endif
+  qDebug() << "QuteApp::QuteApp " << QDir::current();
+  QString opcodeDir = QDir::currentPath();
+  qDebug() << "...." << opcodeDir;
+  csoundSetGlobalEnv("OPCODEDIR", opcodeDir.toLocal8Bit().data());
+  csoundSetGlobalEnv("OPCODEDIR64", opcodeDir.toLocal8Bit().data());
   m_options = new CsoundOptions;
   m_options->fileName1 = CSD_NAME;
   m_options->rtAudioModule = _configlists.rtAudioNames.indexOf("portaudio");
   OpEntryParser *m_opcodeTree = new OpEntryParser(":/main/opcodes.xml");
   m_doc = new SimpleDocument(this, m_opcodeTree);
-  m_console = m_doc->getConsole();
+  m_doc->getEngine()->setThreaded(true);
   m_console->setWindowTitle(tr("Csound Console"));
   m_console->setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
   m_aboutWidget = new AboutWidget(this);

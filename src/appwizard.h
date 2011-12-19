@@ -56,6 +56,8 @@ class AppWizard : public QWizard
     QStringList m_dataFiles;
 
     QStringList processDataFiles();
+    void copyFolder(QString sourceFolder, QString destFolder);
+
 
     void createWinApp(QString appName, QString appDir, QStringList dataFiles,
                       QStringList plugins, QString sdkDir, QString libDir,

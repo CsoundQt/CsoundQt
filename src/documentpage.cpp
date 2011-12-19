@@ -808,11 +808,6 @@ DocumentView *DocumentPage::getView()
 //  }
 //}
 
-CsoundEngine *DocumentPage::getEngine()
-{
-  return m_csEngine;
-}
-
 void DocumentPage::setTextFont(QFont font)
 {
   m_view->setFont(font);

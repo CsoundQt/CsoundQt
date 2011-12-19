@@ -124,7 +124,6 @@ class DocumentPage : public BaseDocument
 
     // Get internal components
     DocumentView *getView();  // Needed to pass view for placing it as tab widget in main application
-    CsoundEngine *getEngine(); // Needed to pass to python interpreter
 //    void *getCsound();
 
     // Document view properties and actions

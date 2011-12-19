@@ -65,6 +65,7 @@ class BaseDocument : public QObject
     // Get internal components
     WidgetLayout *getWidgetLayout();  // Needed to pass for placing in widget dock panel
     ConsoleWidget *getConsole();  // Needed to pass for placing in console dock panel
+    CsoundEngine *getEngine(); // Needed to pass to python interpreter
 
   public slots:
     virtual int play(CsoundOptions *options);
