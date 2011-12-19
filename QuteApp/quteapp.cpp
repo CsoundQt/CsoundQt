@@ -41,16 +41,6 @@
 QuteApp::QuteApp(QWidget *parent)
   : QMainWindow(parent)
 {
-#ifdef Q_OS_MAC
-  QDir::setCurrent(QDir::current() + QDir::separator() + "data");
-#else
-  QDir::setCurrent(QDir::current().absolutePath() + QDir::separator() + "data");
-#endif
-  qDebug() << "QuteApp::QuteApp " << QDir::current();
-  QString opcodeDir = QDir::currentPath();
-  qDebug() << "...." << opcodeDir;
-  csoundSetGlobalEnv("OPCODEDIR", opcodeDir.toLocal8Bit().data());
-  csoundSetGlobalEnv("OPCODEDIR64", opcodeDir.toLocal8Bit().data());
   m_options = new CsoundOptions;
   m_options->fileName1 = CSD_NAME;
   m_options->rtAudioModule = _configlists.rtAudioNames.indexOf("portaudio");
@@ -61,24 +51,12 @@ QuteApp::QuteApp(QWidget *parent)
   m_console->setWindowTitle(tr("Csound Console"));
   m_console->setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
   m_aboutWidget = new AboutWidget(this);
-  loadCsd();
-  setAboutTexts();
-  createMenus();
-  setCentralWidget((QWidget *) m_doc->getWidgetLayout());
-  //  m_aboutWidget->setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
-  //  m_console->show();
-  //  start();
-  setWindowTitle(m_appName);
-  setAttribute(Qt::WA_DeleteOnClose);
-  if (m_autorun) {
-    start();
-  }
 }
 
 QuteApp::~QuteApp()
 {
   m_doc->stop();
-  if (m_saveState) {
+  if (m_saveState && QFile::exists(CSD_NAME)) {
     QFile f(CSD_NAME);
     if (f.open(QIODevice::WriteOnly)) {
       QString fullText = m_doc->getFullText();
@@ -91,6 +69,39 @@ QuteApp::~QuteApp()
   delete m_doc;
   delete m_options;
   //  delete m_opcodeTree;
+}
+
+void QuteApp::setRunPath(QString path)
+{
+#ifdef Q_OS_MAC
+  path = path.left(path.lastIndexOf("/"));
+#ifdef USE_DOUBLES
+  QString opcodeDir = path + QDir::separator() + "../Frameworks/CsoundLib64.framework/Resources/Opcodes64";
+#else
+  QString opcodeDir = path + QDir::separator() + "../Frameworks/CsoundLib.framework/Resources/Opcodes";
+#endif
+  QDir::setCurrent(path + QDir::separator() + "../Resources/");
+#else //not Q_OS_MAC
+  QDir::setCurrent(QDir::current().absolutePath() + QDir::separator() + "data");
+  QString opcodeDir = QDir::currentPath();
+#endif
+  qDebug() << "QuteApp::QuteApp " << QDir::current() << qApp->applicationFilePath();
+  qDebug() << "...." << opcodeDir;
+  csoundSetGlobalEnv("OPCODEDIR", opcodeDir.toLocal8Bit().data());
+  csoundSetGlobalEnv("OPCODEDIR64", opcodeDir.toLocal8Bit().data());
+
+  loadCsd();
+  setAboutTexts();
+  createMenus();
+  setCentralWidget((QWidget *) m_doc->getWidgetLayout());
+  //  m_aboutWidget->setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
+  //  m_console->show();
+  //  start();
+  setWindowTitle(m_appName);
+//  setAttribute(Qt::WA_DeleteOnClose); // Will cause crashing!
+  if (m_autorun) {
+    start();
+  }
 }
 
 void QuteApp::createMenus()
@@ -160,13 +171,11 @@ bool QuteApp::loadCsd()
   QString fileName = m_options->fileName1;
   QFile file(fileName);
   if (!file.open(QFile::ReadOnly)) {
-    QMessageBox::warning(this, tr("QuteCsound"),
-                         tr("Cannot read file %1:\n%2.")
-                         .arg(fileName)
-                         .arg(file.errorString()));
+    QMessageBox::warning(this, tr("QuteApp"),
+                         tr("Application not built correctly.\ncsd file not in bundle.\n%1").arg(QDir::currentPath()));
     return false;
   }
-  QApplication::setOverrideCursor(Qt::WaitCursor);
+//  QApplication::setOverrideCursor(Qt::WaitCursor);
 
   QString text;
   bool inEncFile = false;
@@ -230,7 +239,7 @@ bool QuteApp::loadCsd()
 
   this->resize(m_doc->getWidgetLayout()->size());
   //  m_doc->readOnly = true;
-  QApplication::restoreOverrideCursor();
+//  QApplication::restoreOverrideCursor();
 
   return true;
 }

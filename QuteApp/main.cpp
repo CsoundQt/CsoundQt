@@ -22,11 +22,13 @@
 
 #include <QtGui/QApplication>
 #include "quteapp.h"
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     QuteApp w;
     w.show();
+    w.setRunPath(argv[0]);
     return a.exec();
 }

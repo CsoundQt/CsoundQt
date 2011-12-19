@@ -39,6 +39,8 @@ class QuteApp : public QMainWindow
     QuteApp(QWidget *parent = 0);
     ~QuteApp();
 
+    void setRunPath(QString path);
+
     void createMenus();
 
     typedef enum {

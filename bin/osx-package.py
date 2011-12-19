@@ -125,8 +125,8 @@ def deployWithPython(PRECISION):
             '%s/Contents/MacOS/%s'%(APP_NAME, ORIGINAL_NAME)]
     retcode = call(['install_name_tool'] + arguments)
 
-	shutil.copytree('../src/res/osx/QuteApp_d.app', '%s/Contents/Resources/'%APP_NAME)
-	shutil.copytree('../src/res/osx/QuteApp_f.app', '%s/Contents/Resources/'%APP_NAME)
+    shutil.copytree('../src/res/osx/QuteApp_d.app', '%s/Contents/Resources/QuteApp_d.app'%APP_NAME)
+    shutil.copytree('../src/res/osx/QuteApp_f.app', '%s/Contents/Resources/QuteApp_f.app'%APP_NAME)
 
     #rm $APP_NAME/Contents/Info.plist
     #cp ../src/MyInfo.plist $APP_NAME/Contents/Info.plist

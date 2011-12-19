@@ -248,10 +248,10 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
     // Copy csd and binaries
     if (sdkDir.isEmpty()) {
       if (useDoubles) {
-        copyList << QPair<QString, QString>(appName + QDir::separator() + "Contents/Resources/QuteApp_d.app",
+        copyList << QPair<QString, QString>(QCoreApplication::applicationDirPath() + QDir::separator() + "../Resources/QuteApp_d.app",
                                             dir.absolutePath() + QDir::separator() + appName + ".app");
       } else {
-        copyList << QPair<QString, QString>(appName + QDir::separator() + "Contents/Resources/QuteApp_f.app",
+        copyList << QPair<QString, QString>(QCoreApplication::applicationDirPath() + QDir::separator() + "../Resources/QuteApp_f.app",
                                             dir.absolutePath() + QDir::separator() + appName + ".app");
       }
     } else {
@@ -264,12 +264,12 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
       }
     }
     // Data files
-    dir.cd(appName + QDir::separator() + "Contents/Resources");
-    copyList << QPair<QString, QString>(m_csd,
-                                        dir.absolutePath() + QDir::separator() + "quteapp.csd");
+    copyList << QPair<QString, QString>
+        (m_csd,
+         dir.absolutePath() + QDir::separator() + appName + ".app" + QDir::separator() + "Contents/Resources" + QDir::separator() + "quteapp.csd");
 
     foreach(QString file, dataFiles) {
-      QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
+      QString destName = dir.absolutePath() + QDir::separator() + appName + ".app" +  QDir::separator() + "Contents/Resources" + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
       if (file.startsWith("/")) { // Absolute path
         copyList << QPair<QString, QString>(file, destName);
       }
@@ -321,7 +321,7 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
         if (QFile::copy((*i).first, (*i).second)) {
           qDebug() << "createMacApp copied:" << (*i).first;
         } else {
-          qDebug() << "createMacApp error copying: " << (*i).first;
+          qDebug() << "createMacApp error copying: " << (*i).first << (*i).second;
         }
       }
     }
@@ -450,7 +450,7 @@ void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList data
       if (QFile::copy((*i).first, (*i).second)) {
         qDebug() << "createLinuxApp copied:" << (*i).first;
       } else {
-        qDebug() << "createLinuxApp error copying: " << (*i).first;
+        qDebug() << "createLinuxApp error copying: " << (*i).first << (*i).second;
       }
     }
     dir.cdUp();

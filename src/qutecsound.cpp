@@ -916,7 +916,11 @@ void CsoundQt::createApp()
 #ifdef Q_OS_WIN32
 #endif
 #ifdef Q_OS_MAC
+#ifdef USE_DOUBLE
     opcodeDir = "/Library/Frameworks/CsoundLib.framework/Resources/Opcodes";
+#else
+    opcodeDir = "/Library/Frameworks/CsoundLib64.framework/Resources/Opcodes";
+#endif
 //    opcodeDir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib.framework/Resources/Opcodes";
 #endif
 
