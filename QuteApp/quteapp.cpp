@@ -57,6 +57,7 @@ QuteApp::QuteApp(QWidget *parent)
   OpEntryParser *m_opcodeTree = new OpEntryParser(":/main/opcodes.xml");
   m_doc = new SimpleDocument(this, m_opcodeTree);
   m_doc->getEngine()->setThreaded(true);
+  m_console = m_doc->getConsole();
   m_console->setWindowTitle(tr("Csound Console"));
   m_console->setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
   m_aboutWidget = new AboutWidget(this);

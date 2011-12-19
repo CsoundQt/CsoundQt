@@ -245,16 +245,13 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
   }
   if (dir.mkpath(appName + QDir::separator() + "osx")) {
     dir.cd(appName + QDir::separator() + "osx");
-//    // Create directories
-//    dir.mkdir("lib");
-//    dir.mkdir("data");
     // Copy csd and binaries
     if (sdkDir.isEmpty()) {
       if (useDoubles) {
-        copyList << QPair<QString, QString>(":/res/osx/QuteApp_d.app",
+        copyList << QPair<QString, QString>(appName + QDir::separator() + "Contents/Resources/QuteApp_d.app",
                                             dir.absolutePath() + QDir::separator() + appName + ".app");
       } else {
-        copyList << QPair<QString, QString>(":/res/osx/QuteApp_f.app",
+        copyList << QPair<QString, QString>(appName + QDir::separator() + "Contents/Resources/QuteApp_f.app",
                                             dir.absolutePath() + QDir::separator() + appName + ".app");
       }
     } else {
@@ -280,57 +277,39 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
         copyList <<  QPair<QString, QString>(m_csd.left(m_csd.lastIndexOf("/")), destName);
       }
     }
-    // Copy lib files and plugins
-    QStringList libFiles;
-    if (useDoubles) {
+    // No need to copy Qt libraries as they should already be deplyed in the QuteApp
+    // Copy lib files and plugins only if libDir is not given
+    if (!libDir.isEmpty()) {
+      QStringList libFiles;
+      if (useDoubles) {
         libFiles << "LibCsound64.framework";
-    } else {
+      } else {
         libFiles << "LibCsound.framework";
-    }
-    libFiles << "libportaudio.so" << "libportmidi.so";
-    QStringList defaultLibDirs;
-    defaultLibDirs << "/usr/lib" << "/usr/local/lib";
-    QStringList libSearchDirs;
-    if (libDir.isEmpty()) {
-      libSearchDirs << defaultLibDirs;
-    } else {
+      }
+      libFiles << "libportaudio.so" << "libportmidi.so";
+      QStringList defaultLibDirs;
+      defaultLibDirs << "/usr/lib" << "/usr/local/lib";
+      QStringList libSearchDirs;
       libSearchDirs << libDir << defaultLibDirs;
-    }
-
-    dir.cd("../Frameworks");
-    foreach(QString file, libFiles) {
-      QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
-      for (int i = 0 ; i < libSearchDirs.size(); i++) {
+      //FIXME this is not really working yet... You need to use the frameworks and libs inside the QuteApp template bundle.
+      qDebug() << "AppWizard::createMacApp Error! libDir not implemented!";
+      dir.cd("../Frameworks");
+      foreach(QString file, libFiles) {
+        QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
+        for (int i = 0 ; i < libSearchDirs.size(); i++) {
           QString libName = libSearchDirs[i] + QDir::separator() + file;
           if (QFile::exists(libName)) {
-              copyList << QPair<QString, QString>(libName,destName);
-              break;
+            copyList << QPair<QString, QString>(libName,destName);
+            break;
           }
+        }
       }
     }
-    // Qt Libs
-    QStringList qtLibFiles;
-    qtLibFiles << "QtCore.framework" << "QtGui.framework" << "QtXml.framework";
-    QStringList defaultQtLibDirs; // No defaults since Qt libraries will not work as they have not been treated to be bundled inside an app
-    QStringList qtLibSearchDirs;
-    if (qtLibsDir.isEmpty()) {
-      qtLibSearchDirs << defaultQtLibDirs;
-    } else {
-      qtLibSearchDirs << qtLibsDir;
-    }
-    foreach(QString file, qtLibFiles) {
-      QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
-      for (int i = 0 ; i < qtLibSearchDirs.size(); i++) {
-          QString libName = qtLibSearchDirs[i] + QDir::separator() + file;
-          if (QFile::exists(libName)) {
-              copyList << QPair<QString, QString>(libName,destName);
-              break;
-          }
+    if (!opcodeDir.isEmpty()) {
+      foreach(QString file, plugins) {
+        QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
+        copyList << QPair<QString, QString>(opcodeDir + QDir::separator() + file, destName);
       }
-    }
-    foreach(QString file, plugins) {
-      QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
-      copyList << QPair<QString, QString>(opcodeDir + QDir::separator() + file, destName);
     }
     QList<QPair<QString,QString> >::const_iterator i;
     for (i = copyList.constBegin(); i != copyList.constEnd(); ++i) {
@@ -347,14 +326,6 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
       }
     }
     dir.cdUp();
-//    QFile f(dir.absolutePath() + QDir::separator() +"lib/QuteApp");
-//    f.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
-//                     | QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
-//                     | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther);
-//    QFile f2(dir.absolutePath() + QDir::separator() + appName + ".sh");
-//    f2.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
-//                      | QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
-//                      | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther);
     QFile f3(dir.absolutePath() + QDir::separator() + "quteapp.csd");
     f3.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
                      | QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
@@ -364,7 +335,6 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
     QMessageBox::critical(this, tr("QuteCsound App Creator"),
                           tr("Error creating app directory."));
   }
-
 }
 
 void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList dataFiles,

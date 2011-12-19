@@ -26,7 +26,7 @@
 #include <QTemporaryFile>
 #include <QFile>
 #include <QDebug>
-#include <QDir>
+#include <QProcess>
 
 
 SettingsDialog::SettingsDialog(QWidget *parent, CsoundOptions *options) :
@@ -190,6 +190,7 @@ QMultiHash<QString, QString> SettingsDialog::parsePortAudioIn(QString csOutput)
       collect = true;
     }
   }
+  devices.insert("No device", "");
   return devices;
 }
 
@@ -215,6 +216,120 @@ QMultiHash<QString, QString> SettingsDialog::parsePortAudioOut(QString csOutput)
       }
     } else if (line.indexOf(startText) >= 0) {
       collect = true;
+    }
+  }
+  devices.insert("No device", "");
+  return devices;
+}
+
+QMultiHash<QString, QString> SettingsDialog::parsePortMidiIn(QString csOutput)
+{
+  QHash<QString, QString> devices;
+  QStringList messages = csOutput.split("\n");
+  QString startText, endText;
+  startText = "The available MIDI";
+  endText = "*** PortMIDI";
+//    else if (module == "winmm") {
+//      startText = "The available MIDI";
+//      endText = "rtmidi: input device number is out of range";
+//    }
+
+  bool collect = false;
+  foreach (QString line, messages) {
+    if (collect) {
+      if (endText.length() > 0 && line.indexOf(endText) >= 0) {
+        collect = false;
+      }
+      else {
+        if (line.indexOf(":") >= 0) {
+          QString args = line.left(line.indexOf(":")).trimmed();
+          devices.insert(line.mid(line.indexOf(":") + 1).trimmed(),args);
+        }
+      }
+    }
+    else if (line.indexOf(startText) >= 0) {
+      collect = true;
+    }
+  }
+  return devices;
+}
+
+QMultiHash<QString, QString> SettingsDialog::parsePortMidiOut(QString csOutput)
+{
+  QHash<QString, QString> devices;
+  QStringList messages = csOutput.split("\n");
+  QString startText, endText;
+  startText = "The available MIDI";
+  endText = "*** PortMIDI";
+//    else if (module == "winmm") {
+//      startText = "The available MIDI";
+//      endText = "rtmidi: output device number is out of range";
+//    }
+
+  bool collect = false;
+  foreach (QString line, messages) {
+    if (collect) {
+      if (endText.length() > 0 && line.indexOf(endText) >= 0) {
+        collect = false;
+      }
+      else {
+        if (line.indexOf(":") >= 0) {
+          QString args = line.left(line.indexOf(":")).trimmed();
+          devices.insert(line.mid(line.indexOf(":") + 1).trimmed(),args);
+        }
+      }
+    }
+    else if (line.indexOf(startText) >= 0) {
+      collect = true;
+    }
+  }
+  return devices;
+}
+
+QMultiHash<QString, QString> SettingsDialog::getAlsaMidiIn()
+{
+  QHash<QString, QString> devices;
+  QProcess amidi;
+  amidi.start("amidi", QStringList() << "-l");
+  if (!amidi.waitForFinished())
+    return devices;
+
+  QByteArray result = amidi.readAllStandardOutput();
+  QString values = QString(result);
+  QStringList st = values.split("\n");
+  st.takeFirst(); // Remove first column lines
+  for (int i = 0; i < st.size(); i++){
+    QStringList parts = st[i].split(" ", QString::SkipEmptyParts);
+    if (parts.size() > 0 && parts[0].contains("I")) {
+      QString deviceName = parts[1]; // Device name
+      parts.takeFirst(); // Remove IO flags
+      QString fullName = parts.join(" ") ; // Full name with description
+      devices.insert(fullName, deviceName);
+    }
+  }
+  devices.insert("All available devices", "a");
+  return devices;
+}
+
+QMultiHash<QString, QString> SettingsDialog::getAlsaMidiOut()
+{
+  QHash<QString, QString> devices;
+  QProcess amidi;
+  amidi.start("amidi", QStringList() << "-l");
+  if (!amidi.waitForFinished())
+    return devices;
+
+  QByteArray result = amidi.readAllStandardOutput();
+  QString values = QString(result);
+  QStringList st = values.split("\n");
+  st.takeFirst(); // Remove first column lines
+  for (int i = 0; i < st.size(); i++){
+    QStringList parts = st[i].split(" ", QString::SkipEmptyParts);
+    if (parts.size() > 0 && parts[0].contains("O")) {
+      QString deviceName = parts[1]; // Device name
+      parts.takeFirst(); // Remove IO flags
+      QString fullName = parts.join(" ") ; // Full name with description
+      devices.insert(fullName, deviceName);
     }
   }
   return devices;
