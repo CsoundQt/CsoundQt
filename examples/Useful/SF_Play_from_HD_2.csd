@@ -9,8 +9,8 @@ nchnls = 2
 0dbfs = 1
 
 /*****Playing a soundfile 2a: Play from the Harddisk with more features*****/
-;written by joachim heintz and andres cabrera
-;mar 2009
+;written by joachim heintz, andres cabrera and victor lazzarini
+;mar 2009 / dec 2011
 
 	opcode	ShowLED_a, 0, Sakik
 ;Shows an audio signal in an outvalue channel.
@@ -87,8 +87,8 @@ gichn		filenchnls	gSfile; is the file mono or stereo
 gifilesr		filesr		gSfile
 kconvertsr	invalue	"convertsr"
 giconvrt	=		i(kconvertsr)
-gktimi10k		init		0; time instr 10 has performed in k-cycles
-gkpaus		init		0; status of the pause button
+gktimi10k		=		p4; time instr 10 has performed in k-cycles
+gkpaus		=		0; status of the pause button
 imaxlen	=		36000; maximum length of loop play 
 
    ;send a message if the sr of the file doesn't match the sr of the orchestra
@@ -108,7 +108,6 @@ Smess	sprintf	"Length = %.3f\nSamplerate = %d\nChannels = %d", gilen, gifilesr, 
 		turnoff
 endin
 
-
 instr 3; pause and resume
   if gkpaus == 0 then
 		turnoff2	4, 0, 0
@@ -116,11 +115,12 @@ instr 3; pause and resume
 gkpaus		=		1
   else
 		turnoff2	10, 0, 0
-		event		"i", 4, 0, 1
+		event		"i", 2, 0, 1, gktimi10k
 gkpaus		=		0
   endif
 		turnoff
 endin
+
 
 
 instr 4
@@ -135,8 +135,9 @@ kloop	invalue	"loop"; value 1 if checked
 iloop		=		i(kloop)
 istart		=		iskip + (itimi10k / kr)
 
-   ;playing
+;playing
 iplaylen	=		(iloop == 1 ? p3 : ilen)
+   
 		event_i	"i", 10, 0, iplaylen, istart, ichn, giconvrt
 
    ;time output
@@ -166,13 +167,15 @@ instr 10
 iskip	=		p4
 ichn		=		p5
 iconvrt	=		(p6 == 1 ? 0 : 1)
+k1 = 1
 
 kdbrange	invalue	"dbrange"  ;dB range for the meters
-kpeakhold	invalue	"peakhold"  ;Duration of clip indicator hold in seconds
+kpeakhold	invalue	"peakhold"  ;Duration of clip indicator hold in seconds;
 	if ichn == 1 then
 aL		diskin2	gSfile, 1, iskip, 1, 0, iconvrt
 aR		=		aL
 	else
+printk2  k1
 aL, aR	diskin2	gSfile, 1, iskip, 1, 0, iconvrt
 	endif
 
@@ -203,10 +206,10 @@ e
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>0</x>
- <y>0</y>
- <width>508</width>
- <height>585</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -220,11 +223,11 @@ e
   <y>113</y>
   <width>351</width>
   <height>23</height>
-  <uuid>{9352ce8f-2e8a-46f8-870d-c31f6c59b41d}</uuid>
+  <uuid>{e34d9fad-e494-4adc-a38c-41fd0dd4cd22}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <label>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/TrommelStereo.aiff</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -235,9 +238,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>242</r>
+   <g>241</g>
+   <b>240</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -247,13 +250,13 @@ e
   <y>111</y>
   <width>100</width>
   <height>30</height>
-  <uuid>{805a2c3d-71a2-45b5-a9cb-351390536f3d}</uuid>
+  <uuid>{f8cc5a8e-5d74-4e6a-b0ef-14b3536bee69}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleStereo.aiff</stringvalue>
+  <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/TrommelStereo.aiff</stringvalue>
   <text>Open File</text>
   <image>/</image>
   <eventLine/>
@@ -266,7 +269,7 @@ e
   <y>262</y>
   <width>136</width>
   <height>31</height>
-  <uuid>{119b0f51-dead-4480-ad22-8586ac9ca73b}</uuid>
+  <uuid>{10f84ac4-d6cc-468a-87f8-92cf47247d27}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -282,15 +285,15 @@ e
   <objectName>db_disp</objectName>
   <x>258</x>
   <y>262</y>
-  <width>110</width>
+  <width>98</width>
   <height>31</height>
-  <uuid>{f416d8c2-8ad1-4f95-bd99-8bdfb128af10}</uuid>
+  <uuid>{d5d4423c-8a1f-45f4-bff6-99b8c93ac27c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>0</midicc>
+  <midicc>-3</midicc>
   <label>+0.00 dB</label>
-  <alignment>left</alignment>
-  <font>DejaVu Sans</font>
+  <alignment>right</alignment>
+  <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -313,7 +316,7 @@ e
   <y>148</y>
   <width>78</width>
   <height>26</height>
-  <uuid>{cb9360a8-6592-4c85-80fe-10f5d6b8d480}</uuid>
+  <uuid>{c0de047a-de03-4e6d-a942-b71b2821460d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -322,7 +325,7 @@ e
   <stringvalue/>
   <text>Play</text>
   <image>/</image>
-  <eventLine>i 2 0 1</eventLine>
+  <eventLine>i 2 0 1 0</eventLine>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
@@ -332,7 +335,7 @@ e
   <y>150</y>
   <width>80</width>
   <height>25</height>
-  <uuid>{aadd5b03-9b0f-4414-8aba-d02812f02654}</uuid>
+  <uuid>{539bf852-6d92-4e53-a7ce-a478772c8a44}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -351,7 +354,7 @@ e
   <y>216</y>
   <width>87</width>
   <height>25</height>
-  <uuid>{8b31a207-4874-440b-b35f-3e779fd32c4d}</uuid>
+  <uuid>{d697a9c4-6c99-4f8a-b884-8d537fc7a24b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -372,7 +375,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0</value>
+  <value>1.409</value>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -380,7 +383,7 @@ e
   <y>149</y>
   <width>80</width>
   <height>25</height>
-  <uuid>{cc7b87a5-896f-4089-bfeb-b40d093b00d1}</uuid>
+  <uuid>{ae8f2ca0-5960-4a9b-853d-22682c1c7916}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -396,10 +399,10 @@ e
  <bsbObject version="2" type="BSBCheckBox">
   <objectName>loop</objectName>
   <x>152</x>
-  <y>223</y>
+  <y>216</y>
   <width>20</width>
   <height>20</height>
-  <uuid>{52ae1225-cca7-4a49-bde4-59bb72657a32}</uuid>
+  <uuid>{855b6884-ed0d-41cc-9a8d-0f3c0315c598}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -414,7 +417,7 @@ e
   <y>348</y>
   <width>37</width>
   <height>30</height>
-  <uuid>{13e6dbc5-b22d-4d3e-81ef-5267fd634105}</uuid>
+  <uuid>{e1155724-576d-4aae-8754-ae799eb0c75f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -443,11 +446,11 @@ e
   <y>348</y>
   <width>35</width>
   <height>31</height>
-  <uuid>{7432e0c0-493c-4e16-b2e3-826227a1a6bf}</uuid>
+  <uuid>{6058c806-9a20-44fa-8bf8-90de2a58b2df}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>05</label>
+  <label>06</label>
   <alignment>right</alignment>
   <font>DejaVu Sans</font>
   <fontsize>18</fontsize>
@@ -472,7 +475,7 @@ e
   <y>348</y>
   <width>14</width>
   <height>29</height>
-  <uuid>{80bbea94-a5ee-4cad-998c-88d82068a8e9}</uuid>
+  <uuid>{e9e4b8b3-f548-4ced-919a-5f6c720396f2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -501,7 +504,7 @@ e
   <y>190</y>
   <width>88</width>
   <height>30</height>
-  <uuid>{ac7b9d9d-b02b-4525-b0c6-3042766282d8}</uuid>
+  <uuid>{bd6fb429-6df6-4f5a-8c1c-4f6dc140ba25}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -530,7 +533,7 @@ e
   <y>192</y>
   <width>59</width>
   <height>30</height>
-  <uuid>{ee7167ab-9828-4991-98e9-c4c40632c09d}</uuid>
+  <uuid>{7a8c2d5d-63af-4119-a8fe-ef9729ae54d7}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -559,7 +562,7 @@ e
   <y>261</y>
   <width>88</width>
   <height>30</height>
-  <uuid>{372b0835-5d0b-4809-a83f-e8c14da04d20}</uuid>
+  <uuid>{aa0fbe1b-dc9c-4327-aea7-150a02671a6c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -585,14 +588,16 @@ e
  <bsbObject version="2" type="BSBDisplay">
   <objectName>message</objectName>
   <x>24</x>
-  <y>458</y>
+  <y>456</y>
   <width>460</width>
-  <height>110</height>
-  <uuid>{998c560a-884d-4686-8d19-f12f00dcfcc8}</uuid>
+  <height>93</height>
+  <uuid>{060268f7-354f-4607-9414-e03dde72fec9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label/>
+  <midicc>-3</midicc>
+  <label>Length = 151.951
+Samplerate = 44100
+Channels = 2</label>
   <alignment>center</alignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
@@ -616,14 +621,14 @@ e
   <x>25</x>
   <y>422</y>
   <width>460</width>
-  <height>36</height>
-  <uuid>{13e8ef01-872e-4b47-97a0-7537389f4e9f}</uuid>
+  <height>35</height>
+  <uuid>{6f1c335f-3050-4a5f-9064-b548712251e3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <label>Messages</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>DejaVu Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
@@ -646,7 +651,7 @@ e
   <y>328</y>
   <width>250</width>
   <height>19</height>
-  <uuid>{c65a1291-fdc8-4c69-b9ad-4bdb7d09b1d5}</uuid>
+  <uuid>{e53212e6-26b1-4255-8dd1-29982a5f376d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -679,7 +684,7 @@ e
   <y>328</y>
   <width>21</width>
   <height>19</height>
-  <uuid>{d0d9feb2-7c2f-41ea-8f40-ab4f56eb83f6}</uuid>
+  <uuid>{1ac98e63-ff22-42c2-b9b4-211a3387ff55}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -712,7 +717,7 @@ e
   <y>355</y>
   <width>250</width>
   <height>19</height>
-  <uuid>{03ddc29c-2cb6-4e34-9982-a40e47dabefd}</uuid>
+  <uuid>{5cbb1b94-11b9-40e7-9138-067e4f80499c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -745,7 +750,7 @@ e
   <y>355</y>
   <width>21</width>
   <height>19</height>
-  <uuid>{0a775571-30fd-4f07-9682-a052ad63fab0}</uuid>
+  <uuid>{b7f5355c-78ed-416f-ac68-29ae4c154f8a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -774,11 +779,11 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>dbrange</objectName>
-  <x>113</x>
-  <y>391</y>
+  <x>109</x>
+  <y>390</y>
   <width>80</width>
   <height>25</height>
-  <uuid>{2c1180c4-0e03-41ba-bb81-52873b5cd0db}</uuid>
+  <uuid>{6d740e31-aaaf-436a-9453-71580162329e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -805,15 +810,15 @@ e
   <objectName/>
   <x>24</x>
   <y>389</y>
-  <width>90</width>
+  <width>131</width>
   <height>27</height>
-  <uuid>{48aafb6b-0383-473f-9556-09826f19f201}</uuid>
+  <uuid>{9fc8a154-0fe8-4fde-bb06-8dba5528d450}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>0</midicc>
+  <midicc>-3</midicc>
   <label>dB Range</label>
   <alignment>left</alignment>
-  <font>Nimbus Sans L</font>
+  <font>Helvetica</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -832,11 +837,11 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>peakhold</objectName>
-  <x>364</x>
-  <y>391</y>
+  <x>357</x>
+  <y>390</y>
   <width>57</width>
   <height>25</height>
-  <uuid>{41d135ce-9265-4db7-9664-b10e18706756}</uuid>
+  <uuid>{b473b128-28a5-4d0d-9b45-72c54f2ed380}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -865,7 +870,7 @@ e
   <y>389</y>
   <width>131</width>
   <height>27</height>
-  <uuid>{bcb2b278-c9d4-4254-bb98-efcd30eb31f5}</uuid>
+  <uuid>{a867c3ca-9514-41aa-aa8d-9ff0601663b5}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -890,11 +895,11 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBCheckBox">
   <objectName>convertsr</objectName>
-  <x>222</x>
-  <y>222</y>
+  <x>224</x>
+  <y>216</y>
   <width>20</width>
   <height>20</height>
-  <uuid>{636209ac-1ef7-4aad-8f4a-b37a0c45ea9b}</uuid>
+  <uuid>{57f660c3-d691-455f-adc2-8dc2b9ad37dc}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -909,7 +914,7 @@ e
   <y>192</y>
   <width>62</width>
   <height>30</height>
-  <uuid>{90092fab-2162-422a-8312-e668e53a7802}</uuid>
+  <uuid>{3c00cb24-4168-42b6-9712-2c3b164a713f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -938,7 +943,7 @@ e
   <y>347</y>
   <width>32</width>
   <height>32</height>
-  <uuid>{dc08795f-c80a-44a0-98a9-fc4f15f1e9e2}</uuid>
+  <uuid>{87ddb84f-bf28-4d96-873e-a0c53debc142}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -967,11 +972,11 @@ e
   <y>349</y>
   <width>44</width>
   <height>30</height>
-  <uuid>{cda45651-749e-48a7-bbce-a9c6880526da}</uuid>
+  <uuid>{8779b080-2fdf-4bbe-bf88-7ae8b8498fa6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>803</label>
+  <label>075</label>
   <alignment>right</alignment>
   <font>DejaVu Sans</font>
   <fontsize>18</fontsize>
@@ -996,7 +1001,7 @@ e
   <y>349</y>
   <width>14</width>
   <height>29</height>
-  <uuid>{128e319c-1d8a-4039-b9fb-092b9be06b37}</uuid>
+  <uuid>{9984c1e1-e917-4c01-83ab-2abc74e18727}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1025,7 +1030,7 @@ e
   <y>348</y>
   <width>14</width>
   <height>29</height>
-  <uuid>{fa28970e-872a-4bd4-af7a-b32581748175}</uuid>
+  <uuid>{12212202-7a08-49ad-ab9a-a782c1cc583f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1054,7 +1059,7 @@ e
   <y>320</y>
   <width>39</width>
   <height>29</height>
-  <uuid>{8d24669e-cb6c-4554-baa9-d16e2b911621}</uuid>
+  <uuid>{cb2a8386-7d8a-48dc-9054-c28ee0f3f3a2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1083,7 +1088,7 @@ e
   <y>320</y>
   <width>39</width>
   <height>29</height>
-  <uuid>{ae3da5a9-1658-4ee6-b52a-95e529583b8f}</uuid>
+  <uuid>{f0b3453f-2fed-4ad0-9770-5b4f474bb9c0}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1112,7 +1117,7 @@ e
   <y>320</y>
   <width>39</width>
   <height>29</height>
-  <uuid>{cdeb16b1-e2af-4312-ba7c-d19c6b7e3a70}</uuid>
+  <uuid>{072b078f-ff66-412c-acf3-e3d3947ef197}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1141,7 +1146,7 @@ e
   <y>320</y>
   <width>39</width>
   <height>29</height>
-  <uuid>{1f0c90eb-9662-4e1c-9a3c-75f572d467a0}</uuid>
+  <uuid>{f1be4380-79a4-40f9-a994-cef2cee3b3c1}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1166,11 +1171,11 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>273</x>
-  <y>192</y>
-  <width>222</width>
-  <height>56</height>
-  <uuid>{0b035b23-8424-440f-876a-5b9c6bb131c7}</uuid>
+  <x>277</x>
+  <y>194</y>
+  <width>187</width>
+  <height>54</height>
+  <uuid>{39ddd5a0-7219-4007-b12b-0c8269b25eab}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1199,7 +1204,7 @@ e
   <y>18</y>
   <width>398</width>
   <height>43</height>
-  <uuid>{034c87b4-7d58-457e-abb6-046886656e1f}</uuid>
+  <uuid>{b6052bac-c509-4ba4-bcea-1249daef98d7}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -1228,7 +1233,7 @@ e
   <y>60</y>
   <width>398</width>
   <height>43</height>
-  <uuid>{dc9424ca-9755-43c5-8b73-f94ca2933f5e}</uuid>
+  <uuid>{45328377-9c80-4d16-b4fa-470ce623a64f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
