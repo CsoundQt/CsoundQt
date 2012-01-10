@@ -6,6 +6,10 @@ def change_link(link,new_link,file_name):
     retcode = call(['install_name_tool'] + arguments)
     print "changed link:", link, 'in', file_name, 'ret:', retcode
 
+def change_id(new_id, file_name):
+    arguments = ['-id',  new_id, file_name]
+    retcode = call(['install_name_tool'] + arguments)
+    print "changed id:", new_id, 'in', file_name, 'ret:', retcode
 
 doubles = True
 def copy_files(app_name, doubles=True):
@@ -15,20 +19,27 @@ def copy_files(app_name, doubles=True):
     cs_framework = '/Library/Frameworks/CsoundLib%s.framework'%
     shutil.copy(cs_framework, app_name + '/Contents/Frameworks/' )
 
+    libs = { 'libsndfile.1.dylib': 'libsndfile.dylib',
+             'libportaudio.2.0.0.dylib': 'libportaudio.dylib',
+             'libportmidi.dylib': 'libportmidi.dylib',
+             'libmpadec.dylib': 'libmpadec.dylib',
+             'liblo.0.6.0.dylib' : 'liblo.dylib',
+             'libfltk.1.1.dylib' : 'libfltk.dylib',
+             'libfltk_images.1.1.dylib' : 'libfltk_images.dylib',
+             'libfluidsynth.1.dylib' : 'libfluidsynth.dylib',
+             'libpng12.0.dylib' : 'libpng12.dylib',
+             'libpng12.0.dylib' : 'libpng12.dylib'}
 
-cp /usr/local/lib/libsndfile.1.dylib $APP_NAME/Contents/libsndfile.dylib
-cp /usr/local/lib/libportaudio.2.0.0.dylib $APP_NAME/Contents/libportaudio.dylib
-cp /usr/local/lib/libportmidi.dylib $APP_NAME/Contents/libportmidi.dylib
-cp /usr/local/lib/libmpadec.dylib $APP_NAME/Contents/libmpadec.dylib
-cp /usr/local/lib/liblo.0.6.0.dylib $APP_NAME/Contents/liblo.dylib
-cp /usr/local/lib/libfltk.1.1.dylib $APP_NAME/Contents/libfltk.dylib
-cp /usr/local/lib/libfltk_images.1.1.dylib $APP_NAME/Contents/libfltk_images.dylib
-cp /usr/local/lib/libfluidsynth.1.dylib $APP_NAME/Contents/libfluidsynth.dylib
-cp /usr/local/lib/libpng12.0.dylib $APP_NAME/Contents/libpng12.dylib
-cp /usr/local/lib/libpng12.0.dylib $APP_NAME/Contents/libpng12.dylib
+    lib_dir = '/usr/local/lib/'
+    for lib, dest_lib in libs.items():
+        shutil.copy(lib_dir + lib, app_name + '/Contents/Frameworks/' + dest_lib )
 
-install_name_tool -id @executable_path/../Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
-install_name_tool -change /Library/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib @executable_path/../Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
+    change_id('@executable_path/../Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix,suffix),
+              app_name + '/Contents/Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix,suffix))
+    change_link(cs_framework,
+                '@executable_path/../Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix,suffix),
+                app_name + '/Contents/MacOS/${ORIGINAL_NAME}')
+    
 install_name_tool -change  /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
 install_name_tool -change /Library/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib @executable_path/../Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
 install_name_tool -change /Library/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib @executable_path/../Frameworks/CsoundLib.framework/Versions/Current/CsoundLib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
