@@ -277,7 +277,7 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
         copyList <<  QPair<QString, QString>(m_csd.left(m_csd.lastIndexOf("/")), destName);
       }
     }
-    // No need to copy Qt libraries as they should already be deplyed in the QuteApp
+    // No need to copy Qt libraries as they should already be deployed in the QuteApp
     // Copy lib files and plugins only if libDir is not given
     if (!libDir.isEmpty()) {
       QStringList libFiles;
@@ -288,7 +288,7 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
       }
       libFiles << "libportaudio.so" << "libportmidi.so";
       QStringList defaultLibDirs;
-      defaultLibDirs << "/usr/lib" << "/usr/local/lib";
+      defaultLibDirs << "/Library/Frameworks" << "/usr/lib" << "/usr/local/lib";
       QStringList libSearchDirs;
       libSearchDirs << libDir << defaultLibDirs;
       //FIXME this is not really working yet... You need to use the frameworks and libs inside the QuteApp template bundle.

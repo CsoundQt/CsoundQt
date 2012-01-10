@@ -1,11 +1,15 @@
 from subprocess import call
 import shutil
 import os
+import pdb
 
 QUTECSOUND_VERSION = '0.7.0-alpha'
 NEW_NAME='CsoundQt'
-QtFrameworksDir = '/Library/Frameworks'
-PythonQtLibPaths = ['../PythonQt2.0.1/lib/', '../../../../PythonQt2.0.1/lib/', './']
+QtFrameworksDir = '/Users/acabrera/QtSDK/Desktop/Qt/473/'
+PythonQtLibPaths = ['../PythonQt-build-desktop-Release/lib/', '../../../../PythonQt-build-desktop-Release/lib/', './']
+
+debug = False
+CsoundQtBinPath = '../../qcs-build-desktop-pythonqt/bin'
 
 # Build everything just to make sure all versions packaged are synchronized
 #cd ..
@@ -27,20 +31,27 @@ def deployWithPython(PRECISION):
     global NEW_NAME, QtFrameworksDir, QUTECSOUND_VERSION
 
     ORIGINAL_NAME = 'CsoundQt' + PRECISION + '-py'
+    if debug:
+        ORIGINAL_NAME += '-debug'
     APP_NAME= NEW_NAME + PRECISION + '-py-' + QUTECSOUND_VERSION + '.app'
 
     ORIG_APP_NAME=ORIGINAL_NAME + '.app'
     if (os.path.exists(APP_NAME)):
         shutil.rmtree(APP_NAME)
-    shutil.copytree(ORIG_APP_NAME, APP_NAME)
+    shutil.copytree(CsoundQtBinPath + '/' + ORIG_APP_NAME, ORIG_APP_NAME)
+    print "Copied ",CsoundQtBinPath + '/' + ORIG_APP_NAME
+    if os.path.exists('../src/res/osx/QuteApp_f.app'):
+        shutil.copytree('../src/res/osx/QuteApp_f.app', ORIG_APP_NAME + '/Contents/Resources/QuteApp_f.app', symlinks=True)
+    if os.path.exists('../src/res/osx/QuteApp_d.app'):
+        shutil.copytree('../src/res/osx/QuteApp_d.app', ORIG_APP_NAME + '/Contents/Resources/QuteApp_d.app', symlinks=True)
     # os.mkdir(APP_NAME + '/Contents/Resources')
-    
     shutil.copytree(
-        '../src/Examples/McCurdy Collection', APP_NAME + '/Contents/Resources/McCurdy Collection')
+        '../src/Examples/McCurdy Collection', ORIG_APP_NAME + '/Contents/Resources/McCurdy Collection')
     
     #chmod -R a-w $APP_NAME/Contents/Resources
+    #pdb.set_trace()
     
-    os.mkdir(APP_NAME+ '/Contents/Frameworks')
+    os.mkdir(ORIG_APP_NAME+ '/Contents/Frameworks')
     PythonQtPath = ''
     for path in PythonQtLibPaths:
         if os.path.exists(path + 'libPythonQt.1.0.0.dylib'):
@@ -50,98 +61,104 @@ def deployWithPython(PRECISION):
         print "Can't find libPythonQt. Exiting."
         return
     print "Using PythonQtPath: " + PythonQtPath 
-    shutil.copy(PythonQtPath + 'libPythonQt.1.0.0.dylib', APP_NAME + '/Contents/MacOS/libPythonQt.1.dylib')
-    shutil.copy(PythonQtPath + 'libPythonQt_QtAll.1.0.0.dylib', APP_NAME + '/Contents/MacOS/libPythonQt_QtAll.1.dylib')
+    shutil.copy(PythonQtPath + 'libPythonQt.1.0.0.dylib', ORIG_APP_NAME + '/Contents/Frameworks/libPythonQt.1.dylib')
+    shutil.copy(PythonQtPath + 'libPythonQt_QtAll.1.0.0.dylib', ORIG_APP_NAME + '/Contents/Frameworks/libPythonQt_QtAll.1.dylib')
+    arguments = ['-id',  '@executable_path/../Frameworks/libPythonQt.1.dylib',
+                 '%s/Contents/Frameworks/libPythonQt.1.dylib'%(ORIG_APP_NAME)]
+    retcode = call(['install_name_tool'] + arguments)
+    arguments = ['-id',  '@executable_path/../Frameworks/libPythonQt_QtAll.1.dylib',
+                 '%s/Contents/Frameworks/libPythonQt_QtAll.1.dylib'%(ORIG_APP_NAME)]
+    retcode = call(['install_name_tool'] + arguments)
 
-    QtLibs = ['QtCore', 'QtGui', 'QtXml', 'QtDBus', 'QtSvg', 'QtSql', 'QtXmlPatterns', 'QtOpenGL', 'QtNetwork', 'QtWebKit', 'phonon']
-    QtDepLibs = ['QtGui', 'QtXml', 'QtDBus', 'QtSvg', 'QtSql', 'QtXmlPatterns', 'QtOpenGL', 'QtNetwork', 'QtWebKit', 'phonon']
-
-    deployQtLibs(APP_NAME, ORIGINAL_NAME, QtLibs, QtLibDeps);
 
     arguments = ['-change',  'libPythonQt.1.dylib',
-            '@executable_path/libPythonQt.1.dylib',
-            '%s/Contents/MacOS/%s'%(APP_NAME, ORIGINAL_NAME)]
+            '@executable_path/../Frameworks/libPythonQt.1.dylib',
+            '%s/Contents/MacOs/%s'%(ORIG_APP_NAME, ORIGINAL_NAME)]
     retcode = call(['install_name_tool'] + arguments)
     arguments = ['-change',  'libPythonQt.1.dylib',
-            '@executable_path/libPythonQt.1.dylib',
-            '%s/Contents/MacOS/libPythonQt_QtAll.1.dylib'%(APP_NAME)]
+            '@executable_path/../Frameworks/libPythonQt.1.dylib',
+            '%s/Contents/Frameworks/libPythonQt_QtAll.1.dylib'%(ORIG_APP_NAME)]
     retcode = call(['install_name_tool'] + arguments)
     arguments = ['-change',  'libPythonQt_QtAll.1.dylib',
-            '@executable_path/libPythonQt_QtAll.1.dylib',
-            '%s/Contents/MacOS/%s'%(APP_NAME, ORIGINAL_NAME)]
+            '@executable_path/../Frameworks/libPythonQt_QtAll.1.dylib',
+            '%s/Contents/MacOS/%s'%(ORIG_APP_NAME, ORIGINAL_NAME)]
     retcode = call(['install_name_tool'] + arguments)
 
-    shutil.copytree('../src/res/osx/QuteApp_d.app', '%s/Contents/Resources/'%APP_NAME)
 
-    QtLibs = ['QtCore', 'QtGui', 'QtXml']
-    QtDepLibs = ['QtGui', 'QtXml']
-    deployQtLibs('QuteApp_d.app', 'QuteApp', QtLibs, QtDepLibs)
+    QtLibs = ['QtCore', 'QtGui', 'QtXml', 'QtDBus', 'QtSvg', 'QtSql', 'QtXmlPatterns', 'QtOpenGL', 'QtNetwork', 'QtWebKit', 'phonon']
+
+    for lib in QtLibs:
+        arguments = ['-change',  '%sgcc/lib/%s.framework/Versions/Current/%s'%(QtFrameworksDir,lib,lib),
+                     '@executable_path/../Frameworks/%s.framework/Versions/4/%s'%(lib,lib),
+                     '%s/Contents/Frameworks/libPythonQt.1.dylib'%(ORIG_APP_NAME)]
+        retcode = call(['install_name_tool'] + arguments)
+        arguments = ['-change',  '%sgcc/lib/%s.framework/Versions/Current/%s'%(QtFrameworksDir,lib,lib),
+                     '@executable_path/../Frameworks/%s.framework/Versions/4/%s'%(lib,lib),
+                     '%s/Contents/Frameworks/libPythonQt_QtAll.1.dylib'%(ORIG_APP_NAME)]
+        retcode = call(['install_name_tool'] + arguments)
+
+    arguments = ['-change',  '@executable_path/../Frameworks/libsndfile.1.dylib',
+                 'libsndfile.1.dylib',
+                 '%s/Contents/MacOS/%s'%(ORIG_APP_NAME, ORIGINAL_NAME)]
+    retcode = call(['install_name_tool'] + arguments)
+
     
-    shutil.copytree('../src/res/osx/QuteApp_f.app', '%s/Contents/Resources/'%APP_NAME)
-
-    QtLibs = ['QtCore', 'QtGui', 'QtXml']
-    QtDepLibs = ['QtGui', 'QtXml']
-    deployQtLibs('QuteApp_f.app', 'QuteApp', QtLibs, QtDepLibs)
-
+    QtLibs = ['QtCore', 'QtGui', 'QtXml', 'QtSvg', 'QtSql', 'QtXmlPatterns', 'QtOpenGL', 'QtNetwork', 'QtWebKit', 'phonon']
+    QtDepLibs = ['QtGui', 'QtXml', 'QtSvg', 'QtSql', 'QtXmlPatterns', 'QtOpenGL', 'QtNetwork', 'QtWebKit', 'phonon']
+    deployQtLibs(ORIG_APP_NAME, ORIGINAL_NAME, QtLibs, QtDepLibs)
+    
+    arguments = [ORIG_APP_NAME, '-verbose=1']
+    retcode = call([QtFrameworksDir + 'gcc/bin/macdeployqt'] + arguments)
+    
+    os.rename(ORIG_APP_NAME, APP_NAME)
     #rm $APP_NAME/Contents/Info.plist
     #cp ../src/MyInfo.plist $APP_NAME/Contents/Info.plist
-    retcode = call(['tar', '-czvf', '%s%s-%s.tar.gz'%(NEW_NAME,PRECISION,QUTECSOUND_VERSION), APP_NAME])
+    
 
-def deployQtLibs(APP:NAME, ORIGINAL_NAME, QtLibs, QtLibDeps):
+def deployQtLibs(APP_NAME, ORIGINAL_NAME, QtLibs, QtDepLibs):
     for lib in QtLibs:
-        shutil.copytree('%s/%s.framework'%(QtFrameworksDir, lib), APP_NAME + '/Contents/Frameworks/%s.framework'%(lib), symlinks=True)
+        shutil.copytree('%s/gcc/lib/%s.framework'%(QtFrameworksDir, lib), APP_NAME + '/Contents/Frameworks/%s.framework'%(lib), symlinks=True)
         arguments = ['-id',  '@executable_path/../Frameworks/%s.framework/Versions/4/%s'%(lib, lib),
                      '%s/Contents/Frameworks/%s.framework/Versions/4/%s'%(APP_NAME, lib, lib)]
-        retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  '%s.framework/Versions/4/%s'%(lib,lib),
-                     '@executable_path/../Frameworks/%s.framework/Versions/4/%s'%(lib,lib),
-                     '%s/Contents/MacOS/%s'%(APP_NAME, ORIGINAL_NAME)]
-        retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  '%s.framework/Versions/4/%s'%(lib,lib),
-                     '@executable_path/../Frameworks/%s.framework/Versions/4/%s'%(lib,lib),
-                     '%s/Contents/MacOS/libPythonQt.1.dylib'%(APP_NAME)]
-        retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  '%s.framework/Versions/4/%s'%(lib,lib),
-                     '@executable_path/../Frameworks/%s.framework/Versions/4/%s'%(lib,lib),
-                     '%s/Contents/MacOS/libPythonQt_QtAll.1.dylib'%(APP_NAME)]
         retcode = call(['install_name_tool'] + arguments)
         os.remove('%s/Contents/Frameworks/%s.framework/%s_debug'%(APP_NAME, lib, lib))
         os.remove('%s/Contents/Frameworks/%s.framework/Versions/Current/%s_debug'%(APP_NAME, lib, lib))
         #	os.remove('%s/Contents/Frameworks/%s.framework/Versions/4.0/%s_debug'%(APP_NAME, lib, lib))
         #	os.remove('%s/Contents/Frameworks/%s.framework/Versions/4/%s_debug'%(APP_NAME, lib, lib))
-        shutil.rmtree('%s/Contents/Frameworks/%s.framework/%s_debug.dSYM'%(APP_NAME, lib, lib))
-        os.remove('%s/Contents/Frameworks/%s.framework/%s_debug.prl'%(APP_NAME, lib, lib))
+        #shutil.rmtree('%s/Contents/Frameworks/%s.framework/%s_debug.dSYM'%(APP_NAME, lib, lib))
+        #os.remove('%s/Contents/Frameworks/%s.framework/%s_debug.prl'%(APP_NAME, lib, lib))
         
     for lib in QtDepLibs:
-        arguments = ['-change',  'QtCore.framework/Versions/4/QtCore',
+        print 'processing: ', lib
+        arguments = ['-change',  '%sgcc/lib/QtCore.framework/Versions/4/QtCore'%QtFrameworksDir,
                      '@executable_path/../Frameworks/QtCore.framework/Versions/4/QtCore',
-                     '%s/Contents/Frameworks/%s.framework/Versions/4/%s'%(APP_NAME, lib, lib)]
+                     '%s/Contents/Frameworks/%s.framework//%s'%(APP_NAME, lib, lib)]
         retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  'QtGui.framework/Versions/4/QtGui',
+        arguments = ['-change',  '%sgcc/lib/QtGui.framework/Versions/4/QtGui'%QtFrameworksDir,
                      '@executable_path/../Frameworks/QtGui.framework/Versions/4/QtGui',
-                     '%s/Contents/Frameworks/%s.framework/Versions/4/%s'%(APP_NAME, lib, lib)]
+                     '%s/Contents/Frameworks/%s.framework/%s'%(APP_NAME, lib, lib)]
         retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  'QtXml.framework/Versions/4/QtXml',
-                     '@executable_path/../Frameworks/QtXml.framework/Versions/4/QtXml',
-                     '%s/Contents/Frameworks/%s.framework/Versions/4/%s'%(APP_NAME, lib, lib)]
+        arguments = ['-change',  '%sgcc/lib/QtXml.framework/Versions/4/QtXml'%QtFrameworksDir,
+                     '@executable_path/../Frameworks/QtXml.framework/Versions/Current/QtXml',
+                     '%s/Contents/Frameworks/%s.framework/%s'%(APP_NAME, lib, lib)]
         retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  'QtDBus.framework/Versions/4/QtDBus',
+        arguments = ['-change',  '%sgcc/lib/QtDbus.framework/Versions/4/QtDbus'%QtFrameworksDir,
                      '@executable_path/../Frameworks/QtDBus.framework/Versions/4/QtDBus',
-                     '%s/Contents/Frameworks/%s.framework/Versions/4/%s'%(APP_NAME, lib, lib)]
+                     '%s/Contents/Frameworks/%s.framework/%s'%(APP_NAME, lib, lib)]
         retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  'QtNetwork.framework/Versions/4/QtNetwork',
+        arguments = ['-change',  '%sgcc/lib/QtNetwork.framework/Versions/4/QtNetwork'%QtFrameworksDir,
                      '@executable_path/../Frameworks/QtNetwork.framework/Versions/4/QtNetwork',
-                     '%s/Contents/Frameworks/%s.framework/Versions/4/%s'%(APP_NAME, lib, lib)]
+                     '%s/Contents/Frameworks/%s.framework/%s'%(APP_NAME, lib, lib)]
         retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  'QtXmlPatterns.framework/Versions/4/QtXmlPatterns',
+        arguments = ['-change',  '%sgcc/lib/QtXmlPatterns.framework/Versions/4/QtXmlPatterns'%QtFrameworksDir,
                      '@executable_path/../Frameworks/QtXmlPatterns.framework/Versions/4/QtXmlPatterns',
-                     '%s/Contents/Frameworks/%s.framework/Versions/4/%s'%(APP_NAME, lib, lib)]
+                     '%s/Contents/Frameworks/%s.framework/%s'%(APP_NAME, lib, lib)]
         retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  'phonon.framework/Versions/4/phonon',
+        arguments = ['-change',  '%sgcc/lib/phonon.framework/Versions/4/phonon'%QtFrameworksDir,
                      '@executable_path/../Frameworks/phonon.framework/Versions/4/phonon',
-                     '%s/Contents/Frameworks/%s.framework/Versions/4/%s'%(APP_NAME, lib, lib)]
+                     '%s/Contents/Frameworks/%s.framework/%s'%(APP_NAME, lib, lib)]
         retcode = call(['install_name_tool'] + arguments)
-
+        
 # make version including Qt
 print "---------------- Making doubles package"
 

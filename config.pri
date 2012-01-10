@@ -225,6 +225,7 @@ exists (src/res/windows/QuteApp_d.exe) :CONFIG += quteapp_d
 }
 unix {
     macx {
+# Nothing here as it's not saved in the qrc in OS X but inside the app bundle
 }
     else {
 exists (src/res/linux/QuteApp_f) :CONFIG += quteapp_f
