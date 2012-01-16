@@ -115,7 +115,7 @@ class CsoundQt:public QMainWindow
     QString createNewScrollNumber(int x = -1, int y = -1, int index = -1);
     QString createNewLineEdit(int x = -1, int y = -1, int index = -1);
     QString createNewSpinBox(int x = -1, int y = -1, int index = -1);
-    QString createNewSlider(int x = -1, int y = -1, int index = -1);
+    QString createNewSlider(int x = -1, int y = -1, QString channel = QString(), int index = -1);
     QString createNewButton(int x = -1, int y = -1, int index = -1);
     QString createNewKnob(int x = -1, int y = -1, int index = -1);
     QString createNewCheckBox(int x = -1, int y = -1, int index = -1);

@@ -108,7 +108,8 @@ class PyQcsObject : public QObject {
     QString createNewScrollNumber(int x, int y, int index = -1);
     QString createNewLineEdit(int x, int y, int index = -1);
     QString createNewSpinBox(int x, int y, int index = -1);
-    QString createNewSlider(int x, int y, int index = -1);
+    QString createNewSlider(QString channel, int index = -1);
+    QString createNewSlider(int x = 0, int y = 0, QString channel = QString(), int index = -1);
     QString createNewButton(int x, int y, int index = -1);
     QString createNewKnob(int x, int y, int index = -1);
     QString createNewCheckBox(int x, int y, int index = -1);

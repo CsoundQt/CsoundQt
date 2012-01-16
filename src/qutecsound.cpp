@@ -5007,13 +5007,13 @@ QString CsoundQt::createNewSpinBox(int x , int y , int index)
   return QString();
 }
 
-QString CsoundQt::createNewSlider(int x , int y , int index)
+QString CsoundQt::createNewSlider(int x, int y, QString channel, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    return documentPages[index]->createNewSlider(x,y);
+    return documentPages[index]->createNewSlider(x,y, channel);
   }
   return QString();
 }

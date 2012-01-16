@@ -454,10 +454,10 @@ QString DocumentPage::createNewSpinBox(int x, int y)
   return m_widgetLayouts[0]->createNewSpinBox(x, y);
 }
 
-QString DocumentPage::createNewSlider(int x, int y)
+QString DocumentPage::createNewSlider(int x, int y, QString channel)
 {
   //FIXME allow multiple
-  return m_widgetLayouts[0]->createNewSlider(x, y);
+  return m_widgetLayouts[0]->createNewSlider(x, y, channel);
 }
 
 QString DocumentPage::createNewButton(int x, int y)

@@ -328,9 +328,14 @@ QString PyQcsObject::createNewSpinBox(int x, int y, int index)
   return m_qcs->createNewSpinBox(x,y, index);
 }
 
-QString PyQcsObject::createNewSlider(int x, int y, int index)
+QString PyQcsObject::createNewSlider(QString channel, int index)
 {
-  return m_qcs->createNewSlider(x,y, index);
+  return m_qcs->createNewSlider(0,0, channel, index);
+}
+
+QString PyQcsObject::createNewSlider(int x, int y, QString channel, int index)
+{
+  return m_qcs->createNewSlider(x,y, channel, index);
 }
 
 QString PyQcsObject::createNewButton(int x, int y, int index)
