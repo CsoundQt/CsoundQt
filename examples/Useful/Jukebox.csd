@@ -7,14 +7,20 @@
 ;example by joachim heintz
 
 sr = 44100
-ksmps = 16
+ksmps = 128
 nchnls = 2
 0dbfs = 1
 
 ;Make sure that you have NOT checked "Ignore CsOptions" in the Configuration Dialog. 
 ;Otherwise the extension of the maximal string length (-+max_str_len=10000) will be ignored and your file list will probably be cutted or confused.
 
+;Please use Csound 5.16 or higher if you want to use mp3 files, as there are problems in previous versions
+
 		seed		0
+			
+/*****************************************/		
+/*************** FUNCTIONS ***************/		
+/*****************************************/		
 
   opcode StrayGetEl, ii, Sijj
 ;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
@@ -168,15 +174,35 @@ aL, aR		diskin2	Sfil, kspeed, iskip, iloop
 endif
 		xout		aL, aR
   endop
+  
+  opcode FilSuf, S, So
+  ;returns the suffix of a filename or path, optional in lower case 
+Sfil,ilow xin
+ipos      strrindex Sfil, "."
+Suf       strsub    Sfil, ipos+1
+ if ilow != 0 then
+Suf       strlower  Suf 
+ endif
+          xout      Suf
+  endop  
+  
+  opcode FilLen, ii, SS
+  ;returns the length of the file (usual audio or mp3)
+  ;and whether it is a mp3 (imp3=1)
+Sfil,Suf  xin
+imp3      strcmp	Suf, "mp3"
+ if imp3 == 0 then
+ilen      mp3len    Sfil
+ else
+ilen		filelen	Sfil
+ endif
+          xout      ilen, imp3+1
+  endop
 
-  opcode SelPlay, aa, Si
-;selects either mp3in or FilePlay2, depending on the file suffix (mp3 file is expected as .mp3)
-Sfil, iskip	xin
-ipos		strrindex	Sfil, "."
-Suf		strsub		Sfil, ipos
-Suf		strlower	Suf
-itest		strcmp		Suf, ".mp3"; 0 if mp3 file
- if itest == 0 then
+  opcode SelPlay, aa, Sii
+;selects either mp3in or FilePlay2, depending on the file suffix (imp3=1)
+Sfil, iskip, imp3	xin
+ if imp3 == 1 then
 aL, aR		mp3in		Sfil, iskip
  else
 aL, aR		FilePlay2	Sfil, 1, iskip, 0
@@ -184,151 +210,246 @@ aL, aR		FilePlay2	Sfil, 1, iskip, 0
 		xout		aL, aR
   endop
   
+  opcode TabFill, i, ip
+  ;creates a function table with inum increasing integers, starting at istart
+inum,istart xin
+itab      ftgen     0, 0, -inum, -2, 0
+indx      =         0
+loop:
+          tabw_i    istart, indx, itab
+istart    =         istart + 1
+          loop_lt   indx, 1, inum, loop
+          xout      itab
+  endop
+  
+  
+  opcode TabPermRand_i, i, i
+;permuts randomly the values of the input table and creates an output table for the result
+iTabin    xin
+itablen   =         ftlen(iTabin)
+iTabout   ftgen     0, 0, -itablen, 2, 0 ;create empty output table
+iCopy     ftgen     0, 0, -itablen, 2, 0 ;create empty copy of input table
+          tableicopy iCopy, iTabin ;write values of iTabin into iCopy
+icplen    init      itablen ;number of values in iCopy
+indxwt    init      0 ;index of writing in iTabout
+loop:
+indxrd    random    0, icplen - .0001; random read index in iCopy 
+indxrd    =         int(indxrd)
+ival      tab_i     indxrd, iCopy; read the value
+          tabw_i    ival, indxwt, iTabout; write it to iTabout
+ shift:           ;shift values in iCopy larger than indxrd one position to the left
+ if indxrd < icplen-1 then ;if indxrd has not been the last table value
+ivalshft  tab_i     indxrd+1, iCopy ;take the value to the right ...
+          tabw_i    ivalshft, indxrd, iCopy ;... and write it to indxrd position
+indxrd    =         indxrd + 1 ;then go to the next position 
+          igoto     shift ;return to shift and see if there is anything left to do
+ endif
+indxwt    =         indxwt + 1 ;increase the index of writing in iTabout
+          loop_gt   icplen, 1, 0, loop ;loop as long as there is a value in iCopy
+          ftfree    iCopy, 0 ;delete the copy table
+          xout      iTabout ;return the number of iTabout
+  endop
 
-instr 1
-   ;;get input from GUI
-Sfiles		invalue	"_MBrowse"
-kpaus		invalue	"paus"
-kpaustim	invalue	"paustim"
-kpaustimk	=		kpaustim * kr; paustim in k-cycles
-kloop		invalue	"loop_play"; 1=loop
-krandom	invalue	"random_play"
-   ;;give play or pause status
-gkplay		init		1
-kchange	changed	kpaus
- if kchange == 1 && kpaus == 1 then
-gkplay		=		(gkplay == 0 ? 1 : 0)
- endif
-   ;;show all files in the GUI and link to a strset number
-inumfils	StrayLen	Sfiles, 124
-istrsetnum	=		1
-Strshow	=		"Files loaded:\n"
-showlist:
-ist, ien	StrayGetEl	Sfiles, istrsetnum-1, 124
-Sel		strsub		Sfiles, ist, ien
-		strset		istrsetnum, Sel
-Strshownew	sprintf	"%s%d: %s\n", Strshow, istrsetnum, Sel
-Strshow	=		Strshownew		
-		loop_lt	istrsetnum, 1, inumfils+1, showlist
-		outvalue	"showfiles", Strshow
-   ;;play files 
-kcount		init		-1
-ktimk		init		0
-newfile:
-icount		=		i(kcount)
-icount		=		icount + 1
- if i(krandom) == 1 then; first, select one of the files
-iwhich		RandInts_i	1, inumfils
- else
-iwhich		=		icount+1
- endif
-Splay		strget		iwhich; actual filename
-ilen		filelen	Splay; get some infos about this file ...
-ilenmin	=		int(ilen/60)
-ilensec	=		int(ilen%60)
-ilenms		=		frac(ilen) * 1000
-Showplay	sprintf	"Selected File:\n%d\n '%s'\nDuration %02d:%02d:%03d (min:sec:ms)", \
-				iwhich, Splay, ilenmin, ilensec, ilenms
-		outvalue	"showplay", Showplay; ... and show it
-		event_i	"i", 10, 0, ilen, iwhich, 0, ilen
+
+
+/*****************************************/		
+/************** INSTRUMENTS **************/
+/*****************************************/		
+
+instr master
  
-ifilenk	=		ilen * kr; length of file in k-cycles
-if gkplay == 0 then; stop the clock if pause button 
-ktim		=		ktim
-else; if no pause
- if ktimk >= ifilenk+kpaustimk then; if end of file plus pause time
-ktimk		=		0; set time to zero
-  if krandom == 1 then; go on if random play
-kcount		=		-1
-  elseif icount == inumfils-1 then; if no random and end has reached
-   if kloop == 1 then; go back if loop
-kcount		=		-1
-   else 
- 		turnoff; stop if no loop
-   endif
-  else ;increase counter if no random and not the last file
-kcount		=		icount
-  endif
+ ;;get input from GUI
+Sfiles    invalue   "_MBrowse"
+kpaus     invalue   "paus"
+kpaustim  invalue   "paustim"
+kpaustimk =         kpaustim * kr; paustim in k-cycles
+kloop     invalue   "loop_play"; 1=loop
+krandom   invalue   "random_play"
+
+ ;;return play or pause status
+gkplay    init      1
+kchange   changed   kpaus
+ if kchange == 1 && kpaus == 1 then
+gkplay    =         (gkplay == 0 ? 1 : 0)
+ endif
+ 
+ ;;show all files in the GUI and link to a strset number
+inumfils  StrayLen  Sfiles, 124
+istrsetnum =        1
+Strshow   =         "Files loaded:\n"
+showlist:
+ist, ien  StrayGetEl Sfiles, istrsetnum-1, 124
+Sel       strsub    Sfiles, ist, ien
+          strset    istrsetnum, Sel
+Strshownew sprintf  "%s%d: %s\n", Strshow, istrsetnum, Sel
+Strshow   =         Strshownew		
+          loop_lt   istrsetnum, 1, inumfils+1, showlist
+          outvalue  "showfiles", Strshow
+  
+ ;;prepare list for random play
+iRowTab   TabFill   inumfils
+iRndTab   TabPermRand_i iRowTab
+          
+ ;;play files 
+kcount    invalue   "firsttrack" ;start with this file number
+ktimk     init      0 ;initialize time
+irndindx  =         0 ;index for random play
+newfile:
+icount    =         i(kcount)
+  ;select one of the files
+ if i(krandom) == 1 then
+iwhich    tab_i     irndindx, iRndTab
  else
-ktimk		=		ktimk+1
- endif		
-endif
+iwhich    =         icount
+ endif
+  ;get filename and suffix
+Splay     strget    iwhich
+Suf       FilSuf    Splay, 1
+  ;get length of file
+ilen,imp3 FilLen    Splay, Suf
+  ;show file infos
+ilenmin   =         int(ilen/60)
+ilensec   =         int(ilen%60)
+ilenms    =         frac(ilen) * 1000
+Showplay  sprintf   "Selected File:\n%d\n '%s'\nDuration %02d:%02d:%03d (min:sec:ms)", \
+                    iwhich, Splay, ilenmin, ilensec, ilenms
+          outvalue  "showplay", Showplay; ... and show it
+  ;call subinstrument to play this file
+          event_i   "i", "play", 0, ilen, iwhich, 0, ilen, imp3
+
+ ;;control
+ifilenk   =         ilen * kr; length of file in k-cycles
+  ;stop the clock if pause button has been pressed
+  if gkplay == 0 then
+ktim      =		ktim
+  ;if no pause
+  else
+    ;if end of file plus pause time has been reached
+    if ktimk >= ifilenk+kpaustimk then
+ktimk     =         0 ;set time to zero
+      ;if random
+      if krandom == 1 then
+        ;if last file has been played
+        if irndindx == inumfils-1 then
+          ;reset random index if loop
+          if kloop == 1 then
+irndindx  =         0
+          ;otherwise stop performance
+          else	
+          turnoff
+          endif
+        ;for any other file before the last get the next element from iRndTab
+        else
+irndindx  =          irndindx + 1
+        endif
+      ;if no random  
+      else
+        ;if last file has been played
+        if icount == inumfils then
+          ;go back if loop
+          if kloop == 1 then
+kcount    =         1
+          ;stop if no loop
+          else 
+          turnoff
+          endif
+        ;otherwise increase counter
+        else
+kcount    =         icount+1
+        endif 
+      endif
+    ;if not end of file plus pause, simply increase time counter
+    else
+ktimk     =         ktimk+1
+    endif		
+  endif
+ 
+ ;;reinit the 'newfile' block if new file starts
  if ktimk == 0 && gkplay == 1 then
  		reinit		newfile
  endif
 
 endin
 
-instr 10; plays one file
-   ;input
-ifil		=		p4
-Sfile		strget		ifil; soundfile
-iskip		=		p5; skiptime
-ilen		=		p6
-idbrange	=		48; range in dB shown by the LED's
-ipeakhold	=		2; peak hold in seconds
-kdb		invalue	"db"; output gain in dB
-   ;volume
-kmult		=		ampdbfs(kdb)
-Sdb_disp	sprintfk	"%+.2f dB", kdb
-		outvalue	"db_disp", Sdb_disp
-   ;audio signal
-aL, aR		SelPlay	Sfile, iskip
-aL		=		aL * kmult
-aR		=		aR * kmult
-		outs 		aL, aR
-   ;show audio output
-kTrigDisp	metro		10
-		ShowLED_a	"outL", aL, kTrigDisp, 1, idbrange
-		ShowLED_a	"outR", aR, kTrigDisp, 1, idbrange
-		ShowOver_a	"outLover", aL, kTrigDisp, ipeakhold
-		ShowOver_a	"outRover", aR, kTrigDisp, ipeakhold
-   ;;show remaining time
-ktimout	timeinsts	; position in the soundfile in seconds
-ktimout	=		ktimout + iskip
-ktimrem	=		ilen - ktimout
-		outvalue	"timrem", 1-ktimrem/ilen
-ktr_min	=		int(ktimrem / 60) 
-Smin		sprintfk	"%02d", ktr_min
-ktr_sec	=		int(ktimrem % 60)
-Ssec		sprintfk	"%02d", ktr_sec
-ktr_ms		=		frac(ktimrem) * 1000
-Sms		sprintfk	"%03d", ktr_ms
-		outvalue	"tr_min", Smin
-		outvalue	"tr_sec", Ssec
-		outvalue	"tr_ms", Sms
-   ;;pause and resume
+
+instr play ;plays one file
+
+ ;;input
+ifil      =         p4
+Sfile     strget    ifil ;soundfile
+iskip     =         p5 ;skiptime
+ilen      =         p6
+imp3      =         p7 ;1 = file is mp3
+idbrange  =         48 ;range in dB shown by the LED's
+ipeakhold =         2 ;peak hold in seconds
+kdb       invalue   "db"; output gain in dB
+
+ ;;volume
+kmult     =         ampdbfs(kdb)
+Sdb_disp  sprintfk  "%+.2f dB", kdb
+          outvalue  "db_disp", Sdb_disp
+    
+ ;;audio signal
+aL, aR    SelPlay   Sfile, iskip, imp3
+          outs      aL*kmult, aR*kmult
+          
+ ;;show audio output
+kTrigDisp metro     10
+          ShowLED_a "outL", aL, kTrigDisp, 1, idbrange
+          ShowLED_a "outR", aR, kTrigDisp, 1, idbrange
+          ShowOver_a "outLover", aL, kTrigDisp, ipeakhold
+          ShowOver_a "outRover", aR, kTrigDisp, ipeakhold
+          
+ ;;show remaining time
+ktimout   timeinsts ;position in the soundfile in seconds
+ktimout   =         ktimout + iskip
+ktimrem   =         ilen - ktimout
+          outvalue  "timrem", 1-ktimrem/ilen
+ktr_min   =         int(ktimrem / 60) 
+Smin      sprintfk  "%02d", ktr_min
+ktr_sec   =         int(ktimrem % 60)
+Ssec      sprintfk  "%02d", ktr_sec
+ktr_ms    =         frac(ktimrem) * 1000
+Sms       sprintfk  "%03d", ktr_ms
+          outvalue  "tr_min", Smin
+          outvalue  "tr_sec", Ssec
+          outvalue  "tr_ms", Sms
+          
+ ;;pause and resume
  if gkplay == 0 then
- 		event		"i", 100, 0, -1, ilen, ifil, ktimout
- 		turnoff
+          event     "i", "pause", 0, -1, ilen, ifil, ktimout
+          turnoff
  endif
 endin
 
-instr 100; activated if there is a pause
-ifildur	=		p4
-ifil		=		p5
-Sfile		strget		ifil
-iskip		=		p6
-irestdur	=		ifildur - iskip
+
+instr pause; activated if there is a pause
+
+ifildur   =         p4
+ifil      =         p5
+Sfile     strget    ifil
+iskip     =         p6
+irestdur  =         ifildur - iskip
  if gkplay == 1 then
- 		event		"i", 10, 0, irestdur, ifil, iskip, ifildur; calls instr 10 back
- 		turnoff
+          event     "i", "play", 0, irestdur, ifil, iskip, ifildur; calls instr 10 back
+          turnoff
  endif
 
 endin
 
 </CsInstruments>
 <CsScore>
-i 1 0 36000
+i "master" 0 99999
 e
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>72</x>
- <y>179</y>
- <width>400</width>
- <height>200</height>
+ <x>302</x>
+ <y>62</y>
+ <width>590</width>
+ <height>705</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -351,7 +472,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-0.03186003</xValue>
+  <xValue>-0.37972087</xValue>
   <yValue>0.57894700</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -417,7 +538,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-0.03186003</xValue>
+  <xValue>-0.39139950</xValue>
   <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -496,7 +617,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>-8.50 dB</label>
+  <label>-5.55 dB</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
@@ -588,7 +709,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.99997604</xValue>
+  <xValue>1.00000000</xValue>
   <yValue>0.13513500</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
@@ -898,8 +1019,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>paustim</objectName>
-  <x>166</x>
-  <y>430</y>
+  <x>528</x>
+  <y>426</y>
   <width>43</width>
   <height>31</height>
   <uuid>{381e4952-cd44-4702-9a61-af843a38667b}</uuid>
@@ -923,50 +1044,21 @@ e
   <minimum>0</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2</value>
+  <value>1</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>25</x>
-  <y>430</y>
-  <width>142</width>
-  <height>32</height>
+  <x>352</x>
+  <y>432</y>
+  <width>174</width>
+  <height>25</height>
   <uuid>{87136530-bd70-4e4e-96f8-1e25d64f0d23}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>Make a pause of</label>
+  <midicc>0</midicc>
+  <label>Pause between tracks</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
-  <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>207</x>
-  <y>430</y>
-  <width>323</width>
-  <height>31</height>
-  <uuid>{dc8ac6dc-8ca3-4bfe-93a5-1b8085663d25}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>seconds before each new file/track</label>
-  <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1036,10 +1128,10 @@ e
   <uuid>{676a19b4-5671-4f8c-9687-75a4de70fba2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1117,7 +1209,7 @@ e
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Stop</objectName>
@@ -1136,7 +1228,7 @@ e
   <image>/</image>
   <eventLine>i 1 0 .1</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>paus</objectName>
@@ -1147,7 +1239,7 @@ e
   <uuid>{82718941-23a6-4bc6-a74b-da0f6aa78951}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1166,10 +1258,10 @@ e
   <uuid>{09471f06-8c4d-4ba3-a277-23ff4a38a352}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1195,10 +1287,10 @@ e
   <uuid>{dcd7f769-c32b-4cc8-bc82-9848d5b36937}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <label/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1225,7 +1317,7 @@ e
   <midicc>-3</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff|/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.mp3</stringvalue>
+  <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/wineStereo.aif|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/WhiteNoise.aif|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/SpracheStereo.mp3|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/SpracheMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.ogg</stringvalue>
   <text>Select Files</text>
   <image>/</image>
   <eventLine/>
@@ -1242,7 +1334,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>(MP3 files are possible if filenames end as .mp3 but durations may be wrong)</label>
+  <label>(MP3 files are possible if filenames end as .mp3)(USE CSOUND 5.16 OR HIGHER!)</label>
   <alignment>center</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
@@ -1261,55 +1353,64 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>firsttrack</objectName>
+  <x>151</x>
+  <y>428</y>
+  <width>43</width>
+  <height>31</height>
+  <uuid>{c516264e-78e2-457a-a802-3c5f3f9bb03f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <alignment>right</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>16</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>1.00000000</resolution>
+  <minimum>1</minimum>
+  <maximum>1e+12</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>1</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>24</x>
+  <y>428</y>
+  <width>130</width>
+  <height>29</height>
+  <uuid>{bb20ec0c-2c9f-4dbc-804d-cbf659855318}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>100</midicc>
+  <label>Start with track</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 72 179 400 200
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioMeter {26, 574} {250, 28} {0, 59904, 0} "outL" -0.031860 "out1_post" 0.578947 fill 1 0 mouse
-ioMeter {273, 574} {21, 28} {50176, 3584, 3072} "outLover" 0.000000 "outLover" 0.000000 fill 1 0 mouse
-ioMeter {26, 608} {250, 28} {0, 59904, 0} "outR" -0.031860 "out2_post" 1.000000 fill 1 0 mouse
-ioMeter {273, 608} {21, 28} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
-ioSlider {320, 609} {269, 30} -18.000000 18.000000 -5.553903 db
-ioText {447, 572} {98, 31} display 0.000000 0.00100 "db_disp" right "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder -8.50 dB
-ioText {357, 572} {88, 30} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Volume
-ioText {28, 655} {116, 47} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Time Remaining
-ioMeter {150, 663} {292, 37} {14848, 16640, 38656} "timrem" 0.999976 "vert23" 0.135135 llif 1 0 mouse
-ioText {453, 676} {37, 28} display 0.000000 0.00100 "tr_min" right "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 00
-ioText {500, 676} {35, 29} display 0.000000 0.00100 "tr_sec" right "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 00
-ioText {488, 676} {14, 27} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder :
-ioText {546, 677} {44, 28} display 0.000000 0.00100 "tr_ms" right "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 000
-ioText {533, 676} {14, 27} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder :
-ioText {453, 656} {39, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder min
-ioText {499, 656} {39, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder sec
-ioText {548, 656} {39, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder ms
-ioText {23, 12} {546, 35} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {61952, 61696, 61440} nobackground noborder JUKEBOX
-ioText {23, 43} {546, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Let Csound play a list of files
-ioText {166, 430} {43, 31} editnum 2.000000 1.000000 "paustim" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2.000000
-ioText {25, 430} {142, 32} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Make a pause of
-ioText {207, 430} {323, 31} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder seconds before each new file/track
-ioCheckbox {541, 399} {20, 20} off random_play
-ioText {425, 394} {117, 29} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Random Play
-ioText {26, 143} {549, 245} display 0.000000 0.00100 "showfiles" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioCheckbox {404, 399} {20, 20} off loop_play
-ioText {328, 394} {77, 29} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Loop Play
-ioButton {25, 394} {78, 29} value 1.000000 "_Play" "Play" "/" 
-ioButton {239, 394} {80, 30} value 1.000000 "_Stop" "Stop" "/" i 1 0 .1
-ioButton {111, 394} {122, 29} value 1.000000 "paus" "Pause/Resume" "/" i 3 0 .1
-ioText {24, 466} {548, 92} display 0.000000 0.00100 "showplay" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioText {24, 84} {448, 29} edit 0.000000 0.00100 "_MBrowse"  "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} falsenoborder 
-ioButton {471, 82} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
-ioText {24, 115} {548, 26} label 0.000000 0.00100 "" center "DejaVu Sans" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder (MP3 files are possible if filenames end as .mp3 but durations may be wrong)
-</MacGUI>
