@@ -1641,6 +1641,8 @@ void CsoundQt::setHelpEntry()
       text = "Zerodbfs";
     else if (text.contains("CsOptions"))
       text = "CommandUnifile";
+    else if (text.startsWith("chn_"))
+      text = "chn";
     helpPanel->docDir = dir;
     QString fileName = dir + "/" + text + ".html";
     if (QFile::exists(fileName)) {
@@ -3902,7 +3904,7 @@ void CsoundQt::readSettings()
   m_options->opcodedir = settings.value("opcodedir","").toString();
   m_options->opcodedirActive = settings.value("opcodedirActive",false).toBool();
   m_options->opcodedir64 = settings.value("opcodedir64","").toString();
-  m_options->opcodedir64Active = settings.value("opcodedirActive64",false).toBool();
+  m_options->opcodedir64Active = settings.value("opcodedir64Active",false).toBool();
   m_options->sadir = settings.value("sadir","").toString();
   m_options->sadirActive = settings.value("sadirActive","").toBool();
   m_options->ssdir = settings.value("ssdir","").toString();

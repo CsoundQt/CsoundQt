@@ -71,6 +71,7 @@ class WidgetLayout : public QWidget
     QString getCabbageWidgets();
     bool openMidiPort(int port);
     void closeMidiPort();
+    QVector<QuteWidget *> getWidgets() {return m_widgets;}
 
     // Data to/from widgets
     void setValue(QString channelName, double value);
@@ -191,6 +192,12 @@ class WidgetLayout : public QWidget
     QAction *newPresetAct;
     QAction *recallPresetAct;
 
+    // Value changes buffer to store all value changes from widgets that have been triggered from the GUI
+    QHash<QString, double> newValues;
+    QHash<QString, QString> newStringValues;
+    QMutex valueMutex;
+    QMutex stringValueMutex;
+
   public slots:
     QString createNewLabel(int x = -1, int y = -1);
     QString createNewDisplay(int x = -1, int y = -1);
@@ -284,10 +291,7 @@ class WidgetLayout : public QWidget
     int startx, starty;
 
   private:
-    QHash<QString, double> newValues;
-    QHash<QString, QString> newStringValues;
-    QMutex valueMutex;
-    QMutex stringValueMutex;
+
     QMutex widgetsMutex;
     QMutex layoutMutex;
     QList<Curve *> newCurveBuffer;  // To store curves from Csound for widget panel Graph widgets

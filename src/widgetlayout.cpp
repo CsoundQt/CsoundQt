@@ -3418,6 +3418,16 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
     }
   }
   widgetsMutex.unlock();
+  if (!channelValue.first.isEmpty()) { // Now store the value in the changes buffer to read from chnget
+    valueMutex.lock();
+    if(newValues.contains(channelValue.first)) {
+      newValues[channelValue.first] = channelValue.second;
+    }
+    else {
+      newValues.insert(channelValue.first, channelValue.second);
+    }
+    valueMutex.unlock();
+  }
 }
 
 //FIXME there's no need to go through here coming from the widgets...
@@ -3429,7 +3439,7 @@ void WidgetLayout::newValue(QPair<QString, QString> channelValue)
     channelName = channelValue.first.left(channelValue.first.indexOf("/"));
   }
   QString path = channelValue.first.mid(channelValue.first.indexOf("/") + 1);
-  widgetsMutex.lock();
+  widgetsMutex.lock();  // Send value to a widget if channel matches
   if (!channelName.isEmpty()) {
     for (int i = 0; i < m_widgets.size(); i++){
       if (m_widgets[i]->getChannelName() == channelName) {
@@ -3443,16 +3453,16 @@ void WidgetLayout::newValue(QPair<QString, QString> channelValue)
     }
   }
   widgetsMutex.unlock();
-//  if (!channelValue.first.isEmpty()) {
-//    stringValueMutex.lock();
-//    if(newStringValues.contains(channelValue.first)) {
-//      newStringValues[channelValue.first] = channelValue.second;
-//    }
-//    else {
-//      newStringValues.insert(channelValue.first, channelValue.second);
-//    }
-//    stringValueMutex.unlock();
-//  }
+  if (!channelValue.first.isEmpty()) { // Now store the value in the changes buffer to read from chnget
+    stringValueMutex.lock();
+    if(newStringValues.contains(channelValue.first)) {
+      newStringValues[channelValue.first] = channelValue.second;
+    }
+    else {
+      newStringValues.insert(channelValue.first, channelValue.second);
+    }
+    stringValueMutex.unlock();
+  }
 }
 
 void WidgetLayout::processNewValues()

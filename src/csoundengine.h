@@ -75,13 +75,11 @@ struct CsoundUserData {
   bool threaded; // Whether running in a separate thread or not
   bool useInvalue; // To select between invalue/outvalue and chnget/chnset
 
-  CsoundChannelListEntry **channelList;
-  int numChannels;
   QList<QString> inputChannelNames;
   QList<QString> outputChannelNames;
-  QList<QVariant> inputValues;
-  QList<QVariant> outputValues;
-  QList<bool> outputValueChanged;
+  QList<QString> outputStringChannelNames;
+  QList<QVariant> previousOutputValues;
+  QList<QVariant> previousStringOutputValues;
 
   QVector<double> mouseValues;
 

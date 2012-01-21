@@ -321,29 +321,51 @@ void CsoundEngine::readWidgetValues(CsoundUserData *ud)
 {
   MYFLT* pvalue;
 
-  for (int i = 0; i < ud->inputChannelNames.size(); i++) {
-    if(csoundGetChannelPtr(ud->csound, &pvalue, ud->inputChannelNames[i].toLocal8Bit().constData(),
-        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-      bool modified = false;
-      double value = ud->wl->getValueForChannel(ud->inputChannelNames[i]);
-      if (modified) {
-        *pvalue = (MYFLT) value;
-      }
-//      *pvalue = (MYFLT) (ud->inputValues[i].toDouble());
-    }
-    else if(csoundGetChannelPtr(ud->csound, &pvalue, ud->inputChannelNames[i].toLocal8Bit().constData(),
-       CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
-      bool modified = false;
-      char *string = (char *) pvalue;
-      QString value = ud->wl->getStringForChannel(ud->inputChannelNames[i]);
-      if (modified) {
-        strcpy(string, value.toLocal8Bit().constData());
+  if (ud->wl->valueMutex.tryLock()) {
+    QHash<QString, double>::const_iterator i;
+    QHash<QString, double>::const_iterator end = ud->wl->newValues.constEnd();
+    for (i = ud->wl->newValues.constBegin(); i != end; ++i) {
+      if(csoundGetChannelPtr(ud->csound, &pvalue, i.key().toLocal8Bit().constData(),
+          CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+        *pvalue = (MYFLT) i.value();
       }
     }
-    else {
-      qDebug() << "CsoundEngine::readWidgetValues invalid input channel: " << ud->inputChannelNames[i];
-    }
+    ud->wl->newValues.clear();
+    ud->wl->valueMutex.unlock();
   }
+  if (ud->wl->stringValueMutex.tryLock()) {
+    QHash<QString, QString>::const_iterator i;
+    QHash<QString, QString>::const_iterator end = ud->wl->newStringValues.constEnd();
+    for (i = ud->wl->newStringValues.constBegin(); i != end; ++i) {
+      if(csoundGetChannelPtr(ud->csound, &pvalue, i.key().toLocal8Bit().constData(),
+          CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
+        char *string = (char *) pvalue;
+        strcpy(string, i.value().toLocal8Bit().constData());
+      }
+    }
+    ud->wl->newStringValues.clear();
+    ud->wl->stringValueMutex.unlock();
+  }
+//  for (int i = 0; i < ud->inputChannelNames.size(); i++) {
+//    if(csoundGetChannelPtr(ud->csound, &pvalue, ud->inputChannelNames[i].toLocal8Bit().constData(),
+//        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+//      double value = ud->wl->getValueForChannel(ud->inputChannelNames[i]);
+//      *pvalue = (MYFLT) value;
+////      *pvalue = (MYFLT) (ud->inputValues[i].toDouble());
+//    }
+//    else if(csoundGetChannelPtr(ud->csound, &pvalue, ud->inputChannelNames[i].toLocal8Bit().constData(),
+//       CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
+//      bool modified = false;
+//      char *string = (char *) pvalue;
+//      QString value = ud->wl->getStringForChannel(ud->inputChannelNames[i]);
+//      if (modified) {
+//        strcpy(string, value.toLocal8Bit().constData());
+//      }
+//    }
+//    else {
+//      qDebug() << "CsoundEngine::readWidgetValues invalid input channel: " << ud->inputChannelNames[i];
+//    }
+//  }
   //FIXME check if mouse tracking is active
 //  if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseX",
 //        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
@@ -800,33 +822,77 @@ int CsoundEngine::runCsound()
 
   if (ud->enableWidgets) {
     ud->inputChannelNames.clear();
-    ud->inputValues.clear();
     ud->outputChannelNames.clear();
-    ud->outputValues.clear();
-    ud->outputValueChanged.clear();
+    ud->outputStringChannelNames.clear();
+    ud->previousOutputValues.clear();
+    ud->previousStringOutputValues.clear();
     if (ud->useInvalue){
       csoundSetInputValueCallback(ud->csound, &CsoundEngine::inputValueCallback);
       csoundSetOutputValueCallback(ud->csound, &CsoundEngine::outputValueCallback);
     }
     else {
       MYFLT *pvalue;
-      ud->channelList = (CsoundChannelListEntry **) malloc(sizeof(CsoundChannelListEntry *));
-      ud->numChannels = csoundListChannels(ud->csound, ud->channelList);
-      CsoundChannelListEntry *chnls = *ud->channelList;
-      for (int i = 0; i < ud->numChannels; i++) {
-        if (csoundGetChannelPtr(ud->csound, &pvalue, chnls->name,
-                                0) & CSOUND_INPUT_CHANNEL) {
-          ud->inputChannelNames << QString(chnls->name);
-          ud->inputValues << QVariant();
+      CsoundChannelListEntry **channelList
+          = (CsoundChannelListEntry **) malloc(sizeof(CsoundChannelListEntry *));
+      int numChannels = csoundListChannels(ud->csound, channelList);
+      CsoundChannelListEntry *entry = *channelList;
+      for (int i = 0; i < numChannels; i++) {
+        int chanType = csoundGetChannelPtr(ud->csound, &pvalue, entry->name,
+                                           0);
+        QVector<QuteWidget *> widgets = ud->wl->getWidgets();
+        if (chanType & CSOUND_INPUT_CHANNEL) {
+          ud->inputChannelNames << QString(entry->name);
+          if (chanType & CSOUND_CONTROL_CHANNEL) {
+            ud->wl->valueMutex.lock();
+            foreach (QuteWidget *w, widgets) {
+              if (!w->getChannelName().isEmpty()) {
+                ud->wl->newValues.insert(w->getChannelName(), w->getValue());
+              }
+              if (!w->getChannel2Name().isEmpty()) {
+                ud->wl->newValues.insert(w->getChannel2Name(), w->getValue2());
+              }
+            }
+            ud->wl->valueMutex.unlock();
+          } else if (chanType & CSOUND_STRING_CHANNEL) {
+            ud->wl->stringValueMutex.lock();
+            foreach (QuteWidget *w, widgets) {
+              if (!w->getChannelName().isEmpty()) {
+                ud->wl->newStringValues.insert(w->getChannelName(), w->getStringValue());
+              }
+            }
+            ud->wl->stringValueMutex.unlock();
+          }
         }
-        else if (csoundGetChannelPtr(ud->csound, &pvalue, chnls->name,
-                                     0) & CSOUND_OUTPUT_CHANNEL) {
-          ud->outputChannelNames << QString(chnls->name);
-          ud->outputValues << QVariant();
-          ud->outputValueChanged << false;
+        if (chanType & CSOUND_OUTPUT_CHANNEL) { // Channels can be input and output at the same time
+          if (chanType & CSOUND_CONTROL_CHANNEL) {
+            ud->outputChannelNames << QString(entry->name);
+            ud->previousOutputValues << 0;
+            foreach (QuteWidget *w, widgets) {
+              if (w->getChannelName() == QString(entry->name)) {
+                ud->previousOutputValues.last() = w->getValue();
+                continue;
+              }
+              if (w->getChannel2Name() == QString(entry->name)) {
+                ud->previousOutputValues.last() = w->getValue2();
+                continue;
+              }
+            }
+          } else if (chanType & CSOUND_STRING_CHANNEL) {
+            ud->outputStringChannelNames << QString(entry->name);
+            ud->previousStringOutputValues << "";
+            foreach (QuteWidget *w, widgets) {
+              if (w->getChannelName() == QString(entry->name)) {
+                ud->previousStringOutputValues.last() = w->getStringValue();
+                continue;
+              }
+            }
+          }
         }
-        chnls++;
+        entry++;
       }
+      qDebug() << "input channel names: " << ud->inputChannelNames;
+      qDebug() << "output channel names: " << ud->outputChannelNames;
+      qDebug() << "output string channel names: " << ud->outputStringChannelNames;
       // Not really sure that this is worth the trouble, as it
       // is used only with chnsend and chnrecv which are unfinished:
       //         qDebug() << "csoundSetChannelIOCallback";
