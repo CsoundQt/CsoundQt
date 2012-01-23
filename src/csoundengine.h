@@ -73,7 +73,6 @@ struct CsoundUserData {
 
   bool enableWidgets; // Whether widget values are processed in the callback
   bool threaded; // Whether running in a separate thread or not
-  bool useInvalue; // To select between invalue/outvalue and chnget/chnset
 
   QList<QString> inputChannelNames;
   QList<QString> outputChannelNames;
@@ -143,7 +142,6 @@ class CsoundEngine : public QObject
     void setWidgetLayout(WidgetLayout *wl);
     void setThreaded(bool threaded);
     // Options safe to change while running
-    void useInvalue(bool use);
     void enableWidgets(bool enable);
     void setInitialDir(QString initialDir);
     void freeze(); // Freeze timers before destroying to avoid access to other destroyed data (e.g. scope data, widget panel, etc.)

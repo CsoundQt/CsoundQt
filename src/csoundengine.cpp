@@ -293,7 +293,7 @@ void CsoundEngine::csThread(void *data)
 //  udata->wl->getValues(&udata->channelNames,
 //                       &udata->values,
 //                       &udata->stringValues);
-  if (!udata->useInvalue) {
+  if (udata->enableWidgets) {
     //        csoundDeleteChannelList(udata->csound, *channelList);
     writeWidgetValues(udata);
     readWidgetValues(udata);
@@ -444,11 +444,6 @@ void CsoundEngine::setWidgetLayout(WidgetLayout *wl)
 void CsoundEngine::setThreaded(bool threaded)
 {
   m_threaded = threaded;
-}
-
-void CsoundEngine::useInvalue(bool use)
-{
-  ud->useInvalue = use;
 }
 
 void CsoundEngine::enableWidgets(bool enable)
@@ -826,82 +821,73 @@ int CsoundEngine::runCsound()
     ud->outputStringChannelNames.clear();
     ud->previousOutputValues.clear();
     ud->previousStringOutputValues.clear();
-    if (ud->useInvalue){
-      csoundSetInputValueCallback(ud->csound, &CsoundEngine::inputValueCallback);
-      csoundSetOutputValueCallback(ud->csound, &CsoundEngine::outputValueCallback);
-    }
-    else {
-      MYFLT *pvalue;
-      CsoundChannelListEntry **channelList
-          = (CsoundChannelListEntry **) malloc(sizeof(CsoundChannelListEntry *));
-      int numChannels = csoundListChannels(ud->csound, channelList);
-      CsoundChannelListEntry *entry = *channelList;
-      for (int i = 0; i < numChannels; i++) {
-        int chanType = csoundGetChannelPtr(ud->csound, &pvalue, entry->name,
-                                           0);
-        QVector<QuteWidget *> widgets = ud->wl->getWidgets();
-        if (chanType & CSOUND_INPUT_CHANNEL) {
-          ud->inputChannelNames << QString(entry->name);
-          if (chanType & CSOUND_CONTROL_CHANNEL) {
-            ud->wl->valueMutex.lock();
-            foreach (QuteWidget *w, widgets) {
-              if (!w->getChannelName().isEmpty()) {
-                ud->wl->newValues.insert(w->getChannelName(), w->getValue());
-              }
-              if (!w->getChannel2Name().isEmpty()) {
-                ud->wl->newValues.insert(w->getChannel2Name(), w->getValue2());
-              }
+    // For invalue/outvalue
+    csoundSetInputValueCallback(ud->csound, &CsoundEngine::inputValueCallback);
+    csoundSetOutputValueCallback(ud->csound, &CsoundEngine::outputValueCallback);
+    // For chnget/chnset
+    MYFLT *pvalue;
+    CsoundChannelListEntry **channelList
+            = (CsoundChannelListEntry **) malloc(sizeof(CsoundChannelListEntry *));
+    int numChannels = csoundListChannels(ud->csound, channelList);
+    CsoundChannelListEntry *entry = *channelList;
+    for (int i = 0; i < numChannels; i++) {
+      int chanType = csoundGetChannelPtr(ud->csound, &pvalue, entry->name,
+                                         0);
+      QVector<QuteWidget *> widgets = ud->wl->getWidgets();
+      if (chanType & CSOUND_INPUT_CHANNEL) {
+        ud->inputChannelNames << QString(entry->name);
+        if (chanType & CSOUND_CONTROL_CHANNEL) {
+          ud->wl->valueMutex.lock();
+          foreach (QuteWidget *w, widgets) {
+            if (!w->getChannelName().isEmpty()) {
+              ud->wl->newValues.insert(w->getChannelName(), w->getValue());
             }
-            ud->wl->valueMutex.unlock();
-          } else if (chanType & CSOUND_STRING_CHANNEL) {
-            ud->wl->stringValueMutex.lock();
-            foreach (QuteWidget *w, widgets) {
-              if (!w->getChannelName().isEmpty()) {
-                ud->wl->newStringValues.insert(w->getChannelName(), w->getStringValue());
-              }
-            }
-            ud->wl->stringValueMutex.unlock();
-          }
-        }
-        if (chanType & CSOUND_OUTPUT_CHANNEL) { // Channels can be input and output at the same time
-          if (chanType & CSOUND_CONTROL_CHANNEL) {
-            ud->outputChannelNames << QString(entry->name);
-            ud->previousOutputValues << 0;
-            foreach (QuteWidget *w, widgets) {
-              if (w->getChannelName() == QString(entry->name)) {
-                ud->previousOutputValues.last() = w->getValue();
-                continue;
-              }
-              if (w->getChannel2Name() == QString(entry->name)) {
-                ud->previousOutputValues.last() = w->getValue2();
-                continue;
-              }
-            }
-          } else if (chanType & CSOUND_STRING_CHANNEL) {
-            ud->outputStringChannelNames << QString(entry->name);
-            ud->previousStringOutputValues << "";
-            foreach (QuteWidget *w, widgets) {
-              if (w->getChannelName() == QString(entry->name)) {
-                ud->previousStringOutputValues.last() = w->getStringValue();
-                continue;
-              }
+            if (!w->getChannel2Name().isEmpty()) {
+              ud->wl->newValues.insert(w->getChannel2Name(), w->getValue2());
             }
           }
+          ud->wl->valueMutex.unlock();
+        } else if (chanType & CSOUND_STRING_CHANNEL) {
+          ud->wl->stringValueMutex.lock();
+          foreach (QuteWidget *w, widgets) {
+            if (!w->getChannelName().isEmpty()) {
+              ud->wl->newStringValues.insert(w->getChannelName(), w->getStringValue());
+            }
+          }
+          ud->wl->stringValueMutex.unlock();
         }
-        entry++;
       }
-      qDebug() << "input channel names: " << ud->inputChannelNames;
-      qDebug() << "output channel names: " << ud->outputChannelNames;
-      qDebug() << "output string channel names: " << ud->outputStringChannelNames;
-      // Not really sure that this is worth the trouble, as it
-      // is used only with chnsend and chnrecv which are unfinished:
-      //         qDebug() << "csoundSetChannelIOCallback";
-      //         csoundSetChannelIOCallback(csound, &CsoundQt::ioCallback);
+      if (chanType & CSOUND_OUTPUT_CHANNEL) { // Channels can be input and output at the same time
+        if (chanType & CSOUND_CONTROL_CHANNEL) {
+          ud->outputChannelNames << QString(entry->name);
+          ud->previousOutputValues << 0;
+          foreach (QuteWidget *w, widgets) {
+            if (w->getChannelName() == QString(entry->name)) {
+              ud->previousOutputValues.last() = w->getValue();
+              continue;
+            }
+            if (w->getChannel2Name() == QString(entry->name)) {
+              ud->previousOutputValues.last() = w->getValue2();
+              continue;
+            }
+          }
+        } else if (chanType & CSOUND_STRING_CHANNEL) {
+          ud->outputStringChannelNames << QString(entry->name);
+          ud->previousStringOutputValues << "";
+          foreach (QuteWidget *w, widgets) {
+            if (w->getChannelName() == QString(entry->name)) {
+              ud->previousStringOutputValues.last() = w->getStringValue();
+              continue;
+            }
+          }
+        }
+      }
+      entry++;
     }
-  }
-  else {
-    csoundSetInputValueCallback(ud->csound, NULL);
-    csoundSetOutputValueCallback(ud->csound, NULL);
+    // Not really sure that this is worth the trouble, as it
+    // is used only with chnsend and chnrecv which are unfinished:
+    //         qDebug() << "csoundSetChannelIOCallback";
+    //         csoundSetChannelIOCallback(csound, &CsoundQt::ioCallback);
   }
 
   if (ud->threaded) {

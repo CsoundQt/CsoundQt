@@ -982,11 +982,6 @@ void DocumentPage::setRunThreaded(bool threaded)
   m_csEngine->setThreaded(threaded);  // This will take effect on next run of the engine
 }
 
-void DocumentPage::useInvalue(bool use)
-{
-  m_csEngine->useInvalue(use);  // This will take effect on next run of the engine
-}
-
 void DocumentPage::useOldFormat(bool use)
 {
 //  qDebug() << "DocumentPage::useXmlFormat " << use;

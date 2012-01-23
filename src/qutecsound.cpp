@@ -1937,7 +1937,6 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
   p->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
   p->setAutoComplete(m_options->autoComplete);
   p->setRunThreaded(m_options->thread);
-  p->useInvalue(m_options->useInvalue);
   p->setWidgetEnabled(m_options->enableWidgets);
   p->showWidgetTooltips(m_options->showTooltips);
   p->setKeyRepeatMode(m_options->keyRepeat);
@@ -3837,7 +3836,6 @@ void CsoundQt::readSettings()
   m_options->wrapLines = settings.value("wrapLines", true).toBool();
   m_options->autoComplete = settings.value("autoComplete", true).toBool();
   m_options->enableWidgets = settings.value("enableWidgets", true).toBool();
-  m_options->useInvalue = settings.value("useInvalue", true).toBool();
   m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
   m_options->showTooltips = settings.value("showTooltips", true).toBool();
   m_options->enableFLTK = settings.value("enableFLTK", true).toBool();
@@ -4001,7 +3999,6 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("wrapLines", m_options->wrapLines);
     settings.setValue("autoComplete", m_options->autoComplete);
     settings.setValue("enableWidgets", m_options->enableWidgets);
-    settings.setValue("useInvalue", m_options->useInvalue);
     settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
     settings.setValue("showTooltips", m_options->showTooltips);
     settings.setValue("enableFLTK", m_options->enableFLTK);

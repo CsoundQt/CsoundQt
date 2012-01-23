@@ -164,7 +164,6 @@ class DocumentPage : public BaseDocument
     void setConsoleBufferSize(int size);
     void setWidgetEnabled(bool enabled);
     void setRunThreaded(bool thread);
-    void useInvalue(bool use);
     void useOldFormat(bool use);
     void setPythonExecutable(QString pythonExec);
 

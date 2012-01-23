@@ -57,7 +57,6 @@ Options::Options()
   useAPI = true;
   enableWidgets = true;
   widgetsIndependent = true;  // Widget layouts in Separate Window (instead of Dock Widget)
-  useInvalue = true; // If false use chnget
   thread = true;
   keyRepeat = true;
   debugLiveEvents = false;

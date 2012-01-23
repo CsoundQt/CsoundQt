@@ -98,7 +98,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options)
   wrapLinesCheckBox->setChecked(m_options->wrapLines);
   autoCompleteCheckBox->setChecked(m_options->autoComplete);
   widgetsCheckBox->setChecked(m_options->enableWidgets);
-  channelComboBox->setCurrentIndex(m_options->useInvalue ? 0: 1);
   showWidgetsOnRunCheckBox->setChecked(m_options->showWidgetsOnRun);
   showTooltipsCheckBox->setChecked(m_options->showTooltips);
   enableFLTKCheckBox->setChecked(m_options->enableFLTK);
@@ -294,7 +293,6 @@ void ConfigDialog::accept()
   m_options->wrapLines = wrapLinesCheckBox->isChecked();
   m_options->autoComplete = autoCompleteCheckBox->isChecked();
   m_options->enableWidgets = widgetsCheckBox->isChecked();
-  m_options->useInvalue = channelComboBox->currentIndex() == 0;
   m_options->showWidgetsOnRun = showWidgetsOnRunCheckBox->isChecked();
   m_options->showTooltips = showTooltipsCheckBox->isChecked();
   m_options->enableFLTK = enableFLTKCheckBox->isChecked();
