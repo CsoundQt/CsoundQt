@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>682</width>
-    <height>589</height>
+    <width>625</width>
+    <height>621</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,16 @@
    <bool>true</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout_5">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>2</number>
+   </property>
+   <property name="topMargin">
+    <number>10</number>
+   </property>
+   <property name="rightMargin">
+    <number>2</number>
+   </property>
+   <property name="bottomMargin">
     <number>2</number>
    </property>
    <item row="0" column="0">
@@ -27,467 +36,373 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
        <string>Run</string>
       </attribute>
-      <widget class="QGroupBox" name="groupBox">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>100</y>
-         <width>661</width>
-         <height>211</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>File (offline render)</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading</set>
-       </property>
-       <widget class="QWidget" name="layoutWidget2">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>138</y>
-          <width>641</width>
-          <height>66</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="filenamesLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_10">
+       <item>
+        <layout class="QGridLayout" name="gridLayout10">
          <item row="0" column="0">
-          <widget class="QCheckBox" name="InputFilenameCheckBox">
+          <widget class="QCheckBox" name="BufferSizeCheckBox">
            <property name="text">
-            <string>Input Filename</string>
+            <string>Buffer Size (-b)</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QLineEdit" name="InputFilenameLineEdit"/>
-         </item>
-         <item row="0" column="2">
-          <widget class="QToolButton" name="inputFilenameToolButton">
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
+          <widget class="QLineEdit" name="BufferSizeLineEdit"/>
          </item>
          <item row="1" column="0">
-          <widget class="QCheckBox" name="OutputFilenameCheckBox">
+          <widget class="QCheckBox" name="HwBufferSizeCheckBox">
            <property name="text">
-            <string>Output Filename</string>
+            <string>HW Buffer Size (-B)</string>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QLineEdit" name="OutputFilenameLineEdit"/>
+          <widget class="QLineEdit" name="HwBufferSizeLineEdit"/>
          </item>
-         <item row="1" column="2">
-          <widget class="QToolButton" name="outputFilenameToolButton">
+         <item row="1" column="3">
+          <widget class="QCheckBox" name="DitherCheckBox">
            <property name="text">
-            <string>...</string>
+            <string>Dither</string>
            </property>
           </widget>
          </item>
-        </layout>
-       </widget>
-       <widget class="QCheckBox" name="FileUseOptionsCheckBox">
-        <property name="geometry">
-         <rect>
-          <x>11</x>
-          <y>30</y>
-          <width>277</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Use CsoundQt options</string>
-        </property>
-       </widget>
-       <widget class="QCheckBox" name="FileOverrideCheckBox">
-        <property name="geometry">
-         <rect>
-          <x>340</x>
-          <y>30</y>
-          <width>276</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Ignore CsOptions</string>
-        </property>
-       </widget>
-       <widget class="QWidget" name="layoutWidget3">
-        <property name="geometry">
-         <rect>
-          <x>340</x>
-          <y>58</y>
-          <width>301</width>
-          <height>70</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="formatLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_9">
+         <item row="0" column="3">
+          <widget class="QCheckBox" name="newParserCheckBox">
            <property name="text">
-            <string>File type</string>
+            <string>Use new parser</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="FileTypeComboBox"/>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_10">
+         <item row="1" column="4">
+          <widget class="QLabel" name="label_13">
            <property name="text">
-            <string>Sample format</string>
+            <string>Number of threads</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QComboBox" name="FileFormatComboBox"/>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="layoutWidget4">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>58</y>
-          <width>321</width>
-          <height>58</height>
-         </rect>
-        </property>
-        <layout class="QVBoxLayout" name="askLayout">
-         <item>
-          <widget class="QCheckBox" name="AskFilenameCheckBox">
-           <property name="text">
-            <string>Ask for filename every time</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="FilePlayFinishedCheckBox">
+         <item row="0" column="4">
+          <widget class="QCheckBox" name="multicoreCheckBox">
            <property name="enabled">
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Play file when finished</string>
+            <string>Use multicore</string>
            </property>
           </widget>
+         </item>
+         <item row="0" column="6">
+          <spacer name="horizontalSpacer_9">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="1" column="5">
+          <widget class="QSpinBox" name="numThreadsSpinBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>12</number>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <spacer name="horizontalSpacer_10">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
-       </widget>
-       <zorder>layoutWidget2</zorder>
-       <zorder>layoutWidget3</zorder>
-       <zorder>layoutWidget4</zorder>
-       <zorder>FileUseOptionsCheckBox</zorder>
-       <zorder>FileOverrideCheckBox</zorder>
-      </widget>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>310</y>
-         <width>661</width>
-         <height>201</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Realtime Play</string>
-       </property>
-       <widget class="QCheckBox" name="RtOverrideCheckBox">
-        <property name="geometry">
-         <rect>
-          <x>340</x>
-          <y>30</y>
-          <width>161</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Ignore CsOptions</string>
-        </property>
-       </widget>
-       <widget class="QWidget" name="layoutWidget5">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>60</y>
-          <width>321</width>
-          <height>101</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="rtadioLayout">
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="RtInputLineEdit"/>
-         </item>
-         <item row="1" column="2">
-          <widget class="QToolButton" name="audioInputToolButton">
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>output device (-o)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="RtOutputLineEdit"/>
-         </item>
-         <item row="2" column="2">
-          <widget class="QToolButton" name="audioOutputToolButton">
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Input device (-i)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="RtModuleComboBox"/>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>RT Audio Module</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="layoutWidget_2">
-        <property name="geometry">
-         <rect>
-          <x>340</x>
-          <y>60</y>
-          <width>311</width>
-          <height>101</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="midilayout">
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="RtMidiInputLineEdit"/>
-         </item>
-         <item row="1" column="2">
-          <widget class="QToolButton" name="midiInputToolButton">
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_8">
-           <property name="text">
-            <string>output device (-Q)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="RtMidiOutputLineEdit"/>
-         </item>
-         <item row="2" column="2">
-          <widget class="QToolButton" name="midiOutputToolButton">
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_12">
-           <property name="text">
-            <string>Input device (-M)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="RtMidiModuleComboBox"/>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_18">
-           <property name="text">
-            <string>RT MIDI Module</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QCheckBox" name="RtUseOptionsCheckBox">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>251</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Use CsoundQt options</string>
-        </property>
-       </widget>
-       <widget class="QWidget" name="layoutWidget6">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>170</y>
-          <width>641</width>
-          <height>29</height>
-         </rect>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLabel" name="label_6">
+          <widget class="QCheckBox" name="AdditionalFlagsCheckBox">
            <property name="text">
-            <string>Jack client name (use * for current filename)</string>
+            <string>Additional command line flags</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="JackNameLineEdit"/>
+          <widget class="QLineEdit" name="AdditionalFlagsLineEdit">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
         </layout>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="layoutWidget7">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>70</y>
-         <width>661</width>
-         <height>29</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QCheckBox" name="AdditionalFlagsCheckBox">
-          <property name="text">
-           <string>Additional command line flags</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="AdditionalFlagsLineEdit">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="layoutWidget8">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>661</width>
-         <height>64</height>
-        </rect>
-       </property>
-       <layout class="QGridLayout" name="gridLayout10">
-        <item row="0" column="0">
-         <widget class="QCheckBox" name="BufferSizeCheckBox">
-          <property name="text">
-           <string>Buffer Size (-b)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="BufferSizeLineEdit"/>
-        </item>
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="HwBufferSizeCheckBox">
-          <property name="text">
-           <string>HW Buffer Size (-B)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="HwBufferSizeLineEdit"/>
-        </item>
-        <item row="1" column="3">
-         <widget class="QCheckBox" name="DitherCheckBox">
-          <property name="text">
-           <string>Dither</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QCheckBox" name="newParserCheckBox">
-          <property name="text">
-           <string>Use new parser</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="4">
-         <widget class="QLabel" name="label_13">
-          <property name="text">
-           <string>Number of threads</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="4">
-         <widget class="QCheckBox" name="multicoreCheckBox">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>Use multicore</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="6">
-         <spacer name="horizontalSpacer_9">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="5">
-         <widget class="QSpinBox" name="numThreadsSpinBox">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>12</number>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <spacer name="horizontalSpacer_10">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>File (offline render)</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading</set>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_15">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="FileUseOptionsCheckBox">
+            <property name="text">
+             <string>Use CsoundQt options</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="FileOverrideCheckBox">
+            <property name="text">
+             <string>Ignore CsOptions</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <layout class="QVBoxLayout" name="askLayout">
+            <item>
+             <widget class="QCheckBox" name="AskFilenameCheckBox">
+              <property name="text">
+               <string>Ask for filename every time</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="FilePlayFinishedCheckBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Play file when finished</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="1">
+           <layout class="QGridLayout" name="formatLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_9">
+              <property name="text">
+               <string>File type</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="FileTypeComboBox"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>Sample format</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QComboBox" name="FileFormatComboBox"/>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <layout class="QGridLayout" name="filenamesLayout">
+            <item row="0" column="0">
+             <widget class="QCheckBox" name="InputFilenameCheckBox">
+              <property name="text">
+               <string>Input Filename</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="InputFilenameLineEdit"/>
+            </item>
+            <item row="0" column="2">
+             <widget class="QToolButton" name="inputFilenameToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QCheckBox" name="OutputFilenameCheckBox">
+              <property name="text">
+               <string>Output Filename</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="OutputFilenameLineEdit"/>
+            </item>
+            <item row="1" column="2">
+             <widget class="QToolButton" name="outputFilenameToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+         <zorder>layoutWidget2</zorder>
+         <zorder>layoutWidget3</zorder>
+         <zorder>layoutWidget4</zorder>
+         <zorder>FileUseOptionsCheckBox</zorder>
+         <zorder>FileOverrideCheckBox</zorder>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Realtime Play</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_16">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="RtUseOptionsCheckBox">
+            <property name="text">
+             <string>Use CsoundQt options</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="RtOverrideCheckBox">
+            <property name="text">
+             <string>Ignore CsOptions</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <layout class="QGridLayout" name="rtadioLayout">
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="RtInputLineEdit"/>
+            </item>
+            <item row="1" column="2">
+             <widget class="QToolButton" name="audioInputToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>output device (-o)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="RtOutputLineEdit"/>
+            </item>
+            <item row="2" column="2">
+             <widget class="QToolButton" name="audioOutputToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Input device (-i)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="RtModuleComboBox"/>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>RT Audio Module</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="1">
+           <layout class="QGridLayout" name="midilayout">
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="RtMidiInputLineEdit"/>
+            </item>
+            <item row="1" column="2">
+             <widget class="QToolButton" name="midiInputToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>output device (-Q)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="RtMidiOutputLineEdit"/>
+            </item>
+            <item row="2" column="2">
+             <widget class="QToolButton" name="midiOutputToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>Input device (-M)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="RtMidiModuleComboBox"/>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_18">
+              <property name="text">
+               <string>RT MIDI Module</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Jack client name (use * for current filename)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="JackNameLineEdit"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -841,6 +756,19 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item row="5" column="0">
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

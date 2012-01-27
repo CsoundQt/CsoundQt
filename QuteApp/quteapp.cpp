@@ -75,7 +75,7 @@ void QuteApp::setRunPath(QString path)
 {
 #ifdef Q_OS_MAC
   path = path.left(path.lastIndexOf("/"));
-#ifdef USE_DOUBLES
+#ifdef USE_DOUBLE
   QString opcodeDir = path + QDir::separator() + "../Frameworks/CsoundLib64.framework/Resources/Opcodes64";
 #else
   QString opcodeDir = path + QDir::separator() + "../Frameworks/CsoundLib.framework/Resources/Opcodes";

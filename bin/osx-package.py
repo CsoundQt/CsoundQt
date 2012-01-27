@@ -114,6 +114,8 @@ def deployWithPython(PRECISION):
     #rm $APP_NAME/Contents/Info.plist
     #cp ../src/MyInfo.plist $APP_NAME/Contents/Info.plist
     
+    retcode = call(['tar', '-czvf', '%s%s-%s.tar.gz'%(NEW_NAME,PRECISION,QUTECSOUND_VERSION), APP_NAME])
+    
 
 def deployQtLibs(APP_NAME, ORIGINAL_NAME, QtLibs, QtDepLibs):
     for lib in QtLibs:
