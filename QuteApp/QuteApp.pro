@@ -96,6 +96,7 @@ HEADERS += "$${QCSPWD}/configlists.h" \
     "$${QCSPWD}/scoreeditor.h" \
     "$${QCSPWD}/filebeditor.h" \
     "$${QCSPWD}/eventsheet.h" \
+	"$${QCSPWD}/types.h" \
 	"$${PWD}/quteapp.h" \
     "$${PWD}/simpledocument.h" \
     "$${PWD}/settingsdialog.h" \

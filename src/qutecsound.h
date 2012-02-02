@@ -67,16 +67,10 @@ class CsoundQt:public QMainWindow
   public:
     CsoundQt(QStringList fileNames);
     ~CsoundQt();
-    static void devicesMessageCallback(CSOUND *csound,
-                                       int attr,
-                                       const char *fmt,
-                                       va_list args);
     static void utilitiesMessageCallback(CSOUND *csound,
                                          int /*attr*/,
                                          const char *fmt,
                                          va_list args);
-
-    QStringList runCsoundInternally(QStringList flags); //returns csound messages
 
     // Editor
     QString setDocument(int index); // Returns document name
@@ -398,7 +392,6 @@ class CsoundQt:public QMainWindow
 
     QStringList tempScriptFiles; //Remember temp files to delete them later
     int lastTabIndex;
-    QStringList m_deviceMessages; //stores messages from csound for device discovery
     bool m_startingUp; // set while starting up
     bool m_resetPrefs; // Flag to reset preferences to default when closing
     bool m_inspectorNeedsUpdate;

@@ -55,17 +55,7 @@ protected:
 
 private:
     Ui::SettingsDialog *ui;
-    Csound *m_csound;
     CsoundOptions *m_options;
-
-    QString runCsound(QStringList args);
-    QMultiHash<QString, QString> parsePortAudioIn(QString csOutput);
-    QMultiHash<QString, QString> parsePortAudioOut(QString csOutput);
-    QMultiHash<QString, QString> parsePortMidiIn(QString csOutput);
-    QMultiHash<QString, QString> parsePortMidiOut(QString csOutput);
-    QMultiHash<QString, QString> getAlsaMidiIn();
-    QMultiHash<QString, QString> getAlsaMidiOut();
-    QMultiHash<QString, QString> parseJackAudioIn(QString csOutput);
 };
 
 #endif // SETTINGSDIALOG_H

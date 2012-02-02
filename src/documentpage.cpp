@@ -269,6 +269,18 @@ void DocumentPage::setSco(QString text)
   return m_view->setSco(text);
 }
 
+void DocumentPage::setWidgetsText(QString text)
+{
+  // TODO support multiple layouts
+  return m_widgetLayouts.at(0)->loadXmlWidgets(text);
+}
+
+void DocumentPage::setPresetsText(QString text)
+{
+  // TODO support multiple layouts
+  return m_widgetLayouts.at(0)->loadXmlPresets(text);
+}
+
 QString DocumentPage::getFullText()
 {
   QString fullText = BaseDocument::getFullText();

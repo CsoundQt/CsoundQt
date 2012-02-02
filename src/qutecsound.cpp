@@ -257,18 +257,6 @@ CsoundQt::~CsoundQt()
   // This function is not called... see closeEvent()
 }
 
-void CsoundQt::devicesMessageCallback(CSOUND *csound,
-                                         int /*attr*/,
-                                         const char *fmt,
-                                         va_list args)
-{
-  QStringList *messages = (QStringList *) csoundGetHostData(csound);
-  QString msg;
-  msg = msg.vsprintf(fmt, args);
-//  qDebug() << msg;
-  messages->append(msg);
-}
-
 void CsoundQt::utilitiesMessageCallback(CSOUND *csound,
                                           int /*attr*/,
                                           const char *fmt,
@@ -4612,44 +4600,6 @@ int CsoundQt::isOpen(QString fileName)
   return open;
 }
 
-QStringList CsoundQt::runCsoundInternally(QStringList flags)
-{
-//  qDebug() << "CsoundQt::runCsoundInternally() " << flags.join(" ");
-  static char *argv[33];
-  int index = 0;
-  foreach (QString flag, flags) {
-    argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
-    strcpy(argv[index],flag.toStdString().c_str());
-    index++;
-  }
-  int argc = flags.size();
-#ifdef MACOSX_PRE_SNOW
-//Remember menu bar to set it after FLTK grabs it
-  menuBarHandle = GetMenuBar();
-#endif
-  m_deviceMessages.clear();
-  CSOUND *csoundD;
-  csoundD=csoundCreate(0);
-  csoundReset(csoundD);
-  csoundSetHostData(csoundD, (void *) &m_deviceMessages);  // To pass message variable data
-  csoundSetMessageCallback(csoundD, &CsoundQt::devicesMessageCallback);
-  int result = csoundCompile(csoundD,argc,argv);
-  if(!result) {
-    csoundPerform(csoundD);
-  }
-//  csoundSetMessageCallback(csoundD, 0);
-//  csoundCleanup(csoundD);
-//  csoundReset(csoundD);
-  csoundDestroy(csoundD);
-
-#ifdef MACOSX_PRE_SNOW
-// Put menu bar back
-  SetMenuBar(menuBarHandle);
-#endif
-//  qDebug() << "CsoundQt::runCsoundInternally done";
-  return m_deviceMessages;
-}
-
 //void *CsoundQt::getCurrentCsound()
 //{
 //  return (void *)documentPages[curCsdPage]->getCsound();
@@ -4722,12 +4672,22 @@ void CsoundQt::setSco(QString text, int index)
 
 void CsoundQt::setWidgetsText(QString text, int index)
 {
-  qDebug() << "CsoundQt::setWidgetsText not implemented";
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->setWidgetText(text);
+  }
 }
 
 void CsoundQt::setPresetsText(QString text, int index)
 {
-  qDebug() << "CsoundQt::setPresetsText not implemented";
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->setPresetsText(text);
+  }
 }
 
 void CsoundQt::setOptionsText(QString text, int index)

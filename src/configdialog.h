@@ -47,10 +47,6 @@ class ConfigDialog : public QDialog, public Ui::ConfigDialog
     void browseFile(QString &destination);
     void browseSaveFile(QString &destination);
     void browseDir(QString &destination);
-    QList<QPair<QString, QString> > getMidiInputDevices();
-    QList<QPair<QString, QString> > getMidiOutputDevices();
-    QList<QPair<QString, QString> > getAudioInputDevices();
-    QList<QPair<QString, QString> > getAudioOutputDevices();
 
   private slots:
     virtual void accept();

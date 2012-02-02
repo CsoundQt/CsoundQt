@@ -1,18 +1,20 @@
 <CsoundSynthesizer>
 <CsOptions>
-
+--env:CSNOSTOP=yes -d
 </CsOptions>
 <CsInstruments>
 
 sr = 44100
-ksmps = 64
+ksmps = 128
+nchnls = 2
 
 instr 1
-turnoff
+
 endin
 
 </CsInstruments>
 <CsScore>
+f 1 0 1024 10 1
 e
 </CsScore>
 </CsoundSynthesizer>

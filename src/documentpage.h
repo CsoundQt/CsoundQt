@@ -55,6 +55,8 @@ class DocumentPage : public BaseDocument
     void setBasicText(QString text);
     void setOrc(QString text);
     void setSco(QString text);
+    void setWidgetsText(QString text);
+    void setPresetsText(QString text);
     void loadTextString(QString &text, bool autoCreateMacCsoundSections = false);
 
     virtual QString getFullText();

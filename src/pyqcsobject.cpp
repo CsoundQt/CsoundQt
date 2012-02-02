@@ -172,15 +172,11 @@ void PyQcsObject::setSco(QString text, int index)
 
 void PyQcsObject::setWidgetsText(QString text, int index)
 {
-  PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
-  mainContext.evalScript("print ''setWidgetsText() not implemented yet.");
   return m_qcs->setWidgetsText(text, index);
 }
 
 void PyQcsObject::setPresetsText(QString text, int index)
 {
-  PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
-  mainContext.evalScript("print ''setPresetsText() not implemented yet.");
   return m_qcs->setPresetsText(text, index);
 }
 

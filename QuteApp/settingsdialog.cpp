@@ -27,15 +27,15 @@
 #include <QFile>
 #include <QDebug>
 #include <QProcess>
+#include <QMessageBox>
 
+#include "types.h"
 
 SettingsDialog::SettingsDialog(QWidget *parent, CsoundOptions *options) :
   QDialog(parent),
   ui(new Ui::SettingsDialog), m_options(options)
 {
   ui->setupUi(this);
-  m_csound = new Csound();
-  m_csound->EnableMessageBuffer(0);
 
   refreshAudioIn();
   refreshAudioOut();
@@ -48,12 +48,22 @@ SettingsDialog::SettingsDialog(QWidget *parent, CsoundOptions *options) :
   ui->midiInComboBox->setCurrentIndex(ui->midiInComboBox->findData(m_options->rtMidiInputDevice));
   ui->midiOutComboBox->setCurrentIndex(ui->midiOutComboBox->findData(m_options->rtMidiOutputDevice));
 
+  if (ui->audioInComboBox->currentIndex() < 0) {
+    ui->audioInComboBox->setCurrentIndex(0);
+  }
+  if (ui->audioOutComboBox->currentIndex() < 0) {
+    ui->audioOutComboBox->setCurrentIndex(0);
+  }
+  if (ui->midiInComboBox->currentIndex() < 0) {
+    ui->midiInComboBox->setCurrentIndex(0);
+  }
+  if (ui->midiOutComboBox->currentIndex() < 0) {
+    ui->midiOutComboBox->setCurrentIndex(0);
+  }
 }
 
 SettingsDialog::~SettingsDialog()
 {
-  m_csound->DestroyMessageBuffer();
-  delete m_csound;
   delete ui;
 }
 
@@ -68,46 +78,139 @@ QStringList SettingsDialog::getFlags()
 
 void SettingsDialog::refreshAudioIn()
 {
-  QStringList args;
-  QString csOut;
-  QMultiHash<QString, QString> devices;
-
+  QStringList rtmodules;
+  int curIndex = ui->audioInComboBox->currentIndex();
   ui->audioInComboBox->clear();
+#ifdef Q_OS_LINUX
+  rtmodules << "alsa" << "portaudio" << "jack";
+#endif
+#ifdef Q_OS_WIN32
+  rtmodules << "portaudio" << "winmme";
+#endif
+#ifdef Q_OS_MAC
+  rtmodules << "auhal" << "portaudio";
+#endif
+  ui->audioInComboBox->addItem("None", "");
+  ui->audioInComboBox->setItemData(ui->audioInComboBox->count() - 1,
+                                   "", Qt::UserRole + 1);
+  ui->audioInComboBox->addItem("default", "adc");
+  ui->audioInComboBox->setItemData(ui->audioInComboBox->count() - 1,
+                                   "", Qt::UserRole + 1);
 
-  args << "-odac" << "-iadc99"<< "-+rtaudio=portaudio";
-  csOut = runCsound(args);
-  devices.unite(parsePortAudioIn(csOut));
-
-  QMultiHash<QString, QString>::const_iterator it;
-  for (it = devices.constBegin(); it != devices.constEnd(); it++ ) {
-    ui->audioInComboBox->addItem(it.key(), it.value());
+  foreach (QString module, rtmodules) {
+    int moduleIndex = _configlists.rtAudioNames.indexOf(module);
+    if (moduleIndex < 0) {continue;}
+    QList<QPair<QString, QString> > deviceList = _configlists.getAudioInputDevices(moduleIndex);
+    for (int i = 0; i < deviceList.size(); i++) {
+      ui->audioInComboBox->addItem(deviceList[i].first+ " (" + module + ")",
+                                   deviceList[i].second);
+      ui->audioInComboBox->setItemData(ui->audioInComboBox->count() - 1,
+                                       module, Qt::UserRole + 1);
+    }
   }
+  ui->audioInComboBox->setCurrentIndex(curIndex);
 }
 
 void SettingsDialog::refreshAudioOut()
 {
-  QStringList args;
-  QString csOut;
-  QMultiHash<QString, QString> devices;
+  QStringList rtmodules;
 
+  int curIndex = ui->audioOutComboBox->currentIndex();
   ui->audioOutComboBox->clear();
+#ifdef Q_OS_LINUX
+  rtmodules << "alsa" << "portaudio" << "jack";
+#endif
+#ifdef Q_OS_WIN32
+  rtmodules << "portaudio" << "winmme";
+#endif
+#ifdef Q_OS_MAC
+  rtmodules << "auhal" << "portaudio";
+#endif
+  ui->audioOutComboBox->addItem("None", "");
+  ui->audioOutComboBox->setItemData(ui->audioOutComboBox->count() - 1,
+                                   "", Qt::UserRole + 1);
+  ui->audioOutComboBox->addItem("default", "dac");
+  ui->audioOutComboBox->setItemData(ui->audioInComboBox->count() - 1,
+                                   "", Qt::UserRole + 1);
+  foreach (QString module, rtmodules) {
+    int moduleIndex = _configlists.rtAudioNames.indexOf(module);
+    if (moduleIndex < 0) {continue;}
+    QList<QPair<QString, QString> > deviceList = _configlists.getAudioOutputDevices(moduleIndex);
 
-  args << "-odac99" << "-+rtaudio=portaudio";
-  csOut = runCsound(args);
-  devices.unite(parsePortAudioOut(csOut));
-
-  QMultiHash<QString, QString>::const_iterator it;
-  for (it = devices.constBegin(); it != devices.constEnd(); it++ ) {
-    ui->audioOutComboBox->addItem(it.key(), it.value());
+    for (int i = 0; i < deviceList.size(); i++) {
+      ui->audioOutComboBox->addItem(deviceList[i].first + " (" + module + ")",
+                                    deviceList[i].second);
+      ui->audioOutComboBox->setItemData(ui->audioOutComboBox->count() - 1,
+                                        module, Qt::UserRole + 1);
+    }
   }
+  ui->audioOutComboBox->setCurrentIndex(curIndex);
 }
 
 void SettingsDialog::refreshMidiIn()
 {
+  QStringList rtmodules;
+  int curIndex = ui->midiInComboBox->currentIndex();
+  ui->midiInComboBox->clear();
+#ifdef Q_OS_LINUX
+  rtmodules << "alsa" << "portmidi";
+#endif
+#ifdef Q_OS_WIN32
+  rtmodules << "winmme" << "portmidi" ;
+#endif
+#ifdef Q_OS_MAC
+  rtmodules << "auhal" << "portmidi";
+#endif
+
+  ui->midiInComboBox->addItem("None", "");
+  ui->midiInComboBox->setItemData(ui->midiInComboBox->count() - 1,
+                                  "", Qt::UserRole + 1);
+  foreach (QString module, rtmodules) {
+    int moduleIndex = _configlists.rtMidiNames.indexOf(module);
+    if (moduleIndex < 0) {continue;}
+    QList<QPair<QString, QString> > deviceList = _configlists.getMidiInputDevices(moduleIndex);
+
+    for (int i = 0; i < deviceList.size(); i++) {
+      ui->midiInComboBox->addItem(deviceList[i].first + " (" + module + ")",
+                                  deviceList[i].second);
+      ui->midiInComboBox->setItemData(ui->midiInComboBox->count() - 1,
+                                      module, Qt::UserRole + 1);
+    }
+  }
+
+  ui->midiInComboBox->setCurrentIndex(curIndex);
 }
 
 void SettingsDialog::refreshMidiOut()
 {
+  QStringList rtmodules;
+  int curIndex = ui->midiOutComboBox->currentIndex();
+  ui->midiOutComboBox->clear();
+#ifdef Q_OS_LINUX
+  rtmodules << "alsa" << "portmidi";
+#endif
+#ifdef Q_OS_WIN32
+  rtmodules << "winmme" << "portmidi" ;
+#endif
+#ifdef Q_OS_MAC
+  rtmodules << "auhal" << "portmidi";
+#endif
+  ui->midiOutComboBox->addItem("None", "");
+  ui->midiOutComboBox->setItemData(ui->midiOutComboBox->count() - 1,
+                                  "", Qt::UserRole + 1);
+  foreach (QString module, rtmodules) {
+    int moduleIndex = _configlists.rtMidiNames.indexOf(module);
+    if (moduleIndex < 0) {continue;}
+    QList<QPair<QString, QString> > deviceList = _configlists.getMidiOutputDevices(moduleIndex);
+
+    for (int i = 0; i < deviceList.size(); i++) {
+      ui->midiOutComboBox->addItem(deviceList[i].first + " (" + module + ")",
+                                   deviceList[i].second);
+      ui->midiOutComboBox->setItemData(ui->midiOutComboBox->count() - 1,
+                                       module, Qt::UserRole + 1);
+    }
+  }
+  ui->midiOutComboBox->setCurrentIndex(curIndex);
 }
 
 void SettingsDialog::refreshMidiControl()
@@ -116,11 +219,38 @@ void SettingsDialog::refreshMidiControl()
 
 void SettingsDialog::accept()
 {
-//  m_options->rtAudioModule = "portaudio";
+  QString audioModule = ui->audioInComboBox->itemData(ui->audioInComboBox->currentIndex(),
+                                                      Qt::UserRole + 1).toString();
+  QString audioModule2 = ui->audioOutComboBox->itemData(ui->audioOutComboBox->currentIndex(),
+                                                        Qt::UserRole + 1).toString();
+  if (!audioModule.isEmpty() && !audioModule2.isEmpty()
+      && audioModule != audioModule2) {
+    QMessageBox::warning(this, tr("Error"),
+                         tr("Please use the same Audio module for input and output device."));
+    return;
+  }
+  QString midiModule = ui->midiInComboBox->itemData(ui->midiInComboBox->currentIndex(),
+                                                    Qt::UserRole + 1).toString();
+  QString midiModule2 = ui->midiOutComboBox->itemData(ui->midiOutComboBox->currentIndex(),
+                                                      Qt::UserRole + 1).toString();
+  if (!midiModule.isEmpty() && !midiModule2.isEmpty()
+      && midiModule != midiModule2) {
+    QMessageBox::warning(this, tr("Error"),
+                         tr("Please use the same MIDI module for input and output device."));
+    return;
+  }
+  m_options->rtAudioModule = _configlists.rtAudioNames.indexOf(audioModule);
+  m_options->rtMidiModule = _configlists.rtMidiNames.indexOf(midiModule);
+  if (m_options->rtAudioModule < 0) {
+    m_options->rtAudioModule = 0;
+  }
+  if (m_options->rtMidiModule < 0) {
+    m_options->rtMidiModule = 0;
+  }
   m_options->rtInputDevice = ui->audioInComboBox->itemData(ui->audioInComboBox->currentIndex()).toString();
   m_options->rtOutputDevice = ui->audioOutComboBox->itemData(ui->audioOutComboBox->currentIndex()).toString();
   m_options->rtMidiInputDevice = ui->midiInComboBox->itemData(ui->midiInComboBox->currentIndex()).toString();
-  m_options->rtMidiInputDevice = ui->midiOutComboBox->itemData(ui->midiInComboBox->currentIndex()).toString();
+  m_options->rtMidiOutputDevice = ui->midiOutComboBox->itemData(ui->midiOutComboBox->currentIndex()).toString();
 
   QDialog::accept();
 }
@@ -136,208 +266,3 @@ void SettingsDialog::changeEvent(QEvent *e)
     break;
   }
 }
-
-QString SettingsDialog::runCsound(QStringList args)
-{
-  QString output;
-
-  QTemporaryFile f("QuteApp-temp-XXXXXX.csd");
-  if (!f.open()) {
-    qDebug() << "SettingsDialog::runCsound error creating temp file. Aborting";
-    return QString();
-  }
-  QFile csdFile(":/main/tester.csd");
-  csdFile.open(QFile::ReadOnly);
-  f.write(csdFile.readAll());
-  f.flush();
-  m_csound->Compile(f.fileName().toLocal8Bit().data(),
-                    args.at(0).toLocal8Bit().data(),
-                    args.at(1).toLocal8Bit().data(),
-                    "--old-parser");
-  m_csound->PerformKsmps();
-
-  while (m_csound->GetMessageCnt() > 0) {
-    output += QString(m_csound->GetFirstMessage());
-    m_csound->PopFirstMessage();
-  }
-  m_csound->Cleanup();
-  m_csound->Reset();
-  qDebug() << output;
-  return output;
-}
-
-QMultiHash<QString, QString> SettingsDialog::parsePortAudioIn(QString csOutput)
-{
-  QHash<QString, QString> devices;
-
-  QStringList messages = csOutput.split("\n");
-
-  QString startText, endText;
-  startText = "PortAudio: available";
-  endText = "error:";
-  bool collect = false;
-  foreach (QString line, messages) {
-    if (collect) {
-      if (endText.length() > 0 && line.indexOf(endText) >= 0) {
-        collect = false;
-      } else {
-        if (line.indexOf(":") >= 0) {
-          QString args = "adc" + line.left(line.indexOf(":")).trimmed();
-          devices.insert(line.mid(line.indexOf(":") + 1).trimmed(),args);
-        }
-      }
-    } else if (line.indexOf(startText) >= 0) {
-      collect = true;
-    }
-  }
-  devices.insert("No device", "");
-  return devices;
-}
-
-QMultiHash<QString, QString> SettingsDialog::parsePortAudioOut(QString csOutput)
-{
-  QHash<QString, QString> devices;
-
-  QStringList messages = csOutput.split("\n");
-
-  QString startText, endText;
-  startText = "PortAudio: available";
-  endText = "error:";
-  bool collect = false;
-  foreach (QString line, messages) {
-    if (collect) {
-      if (endText.length() > 0 && line.indexOf(endText) >= 0) {
-        collect = false;
-      } else {
-        if (line.indexOf(":") >= 0) {
-          QString args = "dac" + line.left(line.indexOf(":")).trimmed();
-          devices.insert(line.mid(line.indexOf(":") + 1).trimmed(),args);
-        }
-      }
-    } else if (line.indexOf(startText) >= 0) {
-      collect = true;
-    }
-  }
-  devices.insert("No device", "");
-  return devices;
-}
-
-QMultiHash<QString, QString> SettingsDialog::parsePortMidiIn(QString csOutput)
-{
-  QHash<QString, QString> devices;
-  QStringList messages = csOutput.split("\n");
-  QString startText, endText;
-  startText = "The available MIDI";
-  endText = "*** PortMIDI";
-//    else if (module == "winmm") {
-//      startText = "The available MIDI";
-//      endText = "rtmidi: input device number is out of range";
-//    }
-
-  bool collect = false;
-  foreach (QString line, messages) {
-    if (collect) {
-      if (endText.length() > 0 && line.indexOf(endText) >= 0) {
-        collect = false;
-      }
-      else {
-        if (line.indexOf(":") >= 0) {
-          QString args = line.left(line.indexOf(":")).trimmed();
-          devices.insert(line.mid(line.indexOf(":") + 1).trimmed(),args);
-        }
-      }
-    }
-    else if (line.indexOf(startText) >= 0) {
-      collect = true;
-    }
-  }
-  return devices;
-}
-
-QMultiHash<QString, QString> SettingsDialog::parsePortMidiOut(QString csOutput)
-{
-  QHash<QString, QString> devices;
-  QStringList messages = csOutput.split("\n");
-  QString startText, endText;
-  startText = "The available MIDI";
-  endText = "*** PortMIDI";
-//    else if (module == "winmm") {
-//      startText = "The available MIDI";
-//      endText = "rtmidi: output device number is out of range";
-//    }
-
-  bool collect = false;
-  foreach (QString line, messages) {
-    if (collect) {
-      if (endText.length() > 0 && line.indexOf(endText) >= 0) {
-        collect = false;
-      }
-      else {
-        if (line.indexOf(":") >= 0) {
-          QString args = line.left(line.indexOf(":")).trimmed();
-          devices.insert(line.mid(line.indexOf(":") + 1).trimmed(),args);
-        }
-      }
-    }
-    else if (line.indexOf(startText) >= 0) {
-      collect = true;
-    }
-  }
-  return devices;
-}
-
-QMultiHash<QString, QString> SettingsDialog::getAlsaMidiIn()
-{
-  QHash<QString, QString> devices;
-  QProcess amidi;
-  amidi.start("amidi", QStringList() << "-l");
-  if (!amidi.waitForFinished())
-    return devices;
-
-  QByteArray result = amidi.readAllStandardOutput();
-  QString values = QString(result);
-  QStringList st = values.split("\n");
-  st.takeFirst(); // Remove first column lines
-  for (int i = 0; i < st.size(); i++){
-    QStringList parts = st[i].split(" ", QString::SkipEmptyParts);
-    if (parts.size() > 0 && parts[0].contains("I")) {
-      QString deviceName = parts[1]; // Device name
-      parts.takeFirst(); // Remove IO flags
-      QString fullName = parts.join(" ") ; // Full name with description
-      devices.insert(fullName, deviceName);
-    }
-  }
-  devices.insert("All available devices", "a");
-  return devices;
-}
-
-QMultiHash<QString, QString> SettingsDialog::getAlsaMidiOut()
-{
-  QHash<QString, QString> devices;
-  QProcess amidi;
-  amidi.start("amidi", QStringList() << "-l");
-  if (!amidi.waitForFinished())
-    return devices;
-
-  QByteArray result = amidi.readAllStandardOutput();
-  QString values = QString(result);
-  QStringList st = values.split("\n");
-  st.takeFirst(); // Remove first column lines
-  for (int i = 0; i < st.size(); i++){
-    QStringList parts = st[i].split(" ", QString::SkipEmptyParts);
-    if (parts.size() > 0 && parts[0].contains("O")) {
-      QString deviceName = parts[1]; // Device name
-      parts.takeFirst(); // Remove IO flags
-      QString fullName = parts.join(" ") ; // Full name with description
-      devices.insert(fullName, deviceName);
-    }
-  }
-  return devices;
-}
-
-QMultiHash<QString, QString> SettingsDialog::parseJackAudioIn(QString csOutput)
-{
-  QHash<QString, QString> devices;
-  return devices;
-}
-

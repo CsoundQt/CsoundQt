@@ -24,6 +24,7 @@
 #define CONFIGLISTS_H
 
 #include <QStringList>
+#include <QPair>
 
 class ConfigLists
 {
@@ -41,6 +42,13 @@ class ConfigLists
     QStringList rtMidiNames;
     QStringList languages;
     QStringList languageCodes;
+
+    QList<QPair<QString, QString> > getMidiInputDevices(int moduleIndex);
+    QList<QPair<QString, QString> > getMidiOutputDevices(int moduleIndex);
+    QList<QPair<QString, QString> > getAudioInputDevices(int moduleIndex);
+    QList<QPair<QString, QString> > getAudioOutputDevices(int moduleIndex);
+
+    QStringList runCsoundInternally(QStringList flags);
 };
 
 #endif
