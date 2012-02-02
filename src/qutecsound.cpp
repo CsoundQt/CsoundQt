@@ -4951,57 +4951,57 @@ QVariant CsoundQt::getWidgetProperty(QString channel, QString property, int inde
 }
 
 
-QString CsoundQt::createNewLabel(int x , int y , int index)
+QString CsoundQt::createNewLabel(int x , int y , QString channel, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    return documentPages[index]->createNewLabel(x,y);
+    return documentPages[index]->createNewLabel(x,y,channel);
   }
   return QString();
 }
 
-QString CsoundQt::createNewDisplay(int x , int y , int index)
+QString CsoundQt::createNewDisplay(int x , int y , QString channel, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    return documentPages[index]->createNewDisplay(x,y);
+    return documentPages[index]->createNewDisplay(x,y,channel);
   }
   return QString();
 }
 
-QString CsoundQt::createNewScrollNumber(int x , int y , int index)
+QString CsoundQt::createNewScrollNumber(int x , int y , QString channel, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    return documentPages[index]->createNewScrollNumber(x,y);
+    return documentPages[index]->createNewScrollNumber(x,y,channel);
   }
   return QString();
 }
 
-QString CsoundQt::createNewLineEdit(int x , int y , int index)
+QString CsoundQt::createNewLineEdit(int x , int y , QString channel, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    return documentPages[index]->createNewLineEdit(x,y);
+    return documentPages[index]->createNewLineEdit(x,y,channel);
   }
   return QString();
 }
 
-QString CsoundQt::createNewSpinBox(int x , int y , int index)
+QString CsoundQt::createNewSpinBox(int x , int y , QString channel, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    return documentPages[index]->createNewSpinBox(x,y);
+    return documentPages[index]->createNewSpinBox(x,y,channel);
   }
   return QString();
 }
@@ -5017,90 +5017,90 @@ QString CsoundQt::createNewSlider(int x, int y, QString channel, int index)
   return QString();
 }
 
-QString CsoundQt::createNewButton(int x , int y , int index)
+QString CsoundQt::createNewButton(int x , int y , QString channel, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    return documentPages[index]->createNewButton(x,y);
+    return documentPages[index]->createNewButton(x,y,channel);
   }
   return QString();
 }
 
-QString CsoundQt::createNewKnob(int x , int y , int index)
+QString CsoundQt::createNewKnob(int x , int y , QString channel, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    return documentPages[index]->createNewKnob(x,y);
+    return documentPages[index]->createNewKnob(x,y,channel);
   }
   return QString();
 }
 
-QString CsoundQt::createNewCheckBox(int x , int y , int index)
+QString CsoundQt::createNewCheckBox(int x , int y , QString channel, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    return documentPages[index]->createNewCheckBox(x,y);
+    return documentPages[index]->createNewCheckBox(x,y,channel);
   }
   return QString();
 }
 
-QString CsoundQt::createNewMenu(int x , int y , int index)
+QString CsoundQt::createNewMenu(int x , int y , QString channel, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    return documentPages[index]->createNewMenu(x,y);
+    return documentPages[index]->createNewMenu(x,y,channel);
   }
   return QString();
 }
 
-QString CsoundQt::createNewMeter(int x , int y , int index)
+QString CsoundQt::createNewMeter(int x , int y , QString channel, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    return documentPages[index]->createNewMeter(x,y);
+    return documentPages[index]->createNewMeter(x,y,channel);
   }
   return QString();
 }
 
-QString CsoundQt::createNewConsole(int x , int y , int index)
+QString CsoundQt::createNewConsole(int x , int y , QString channel, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    return documentPages[index]->createNewConsole(x,y);
+    return documentPages[index]->createNewConsole(x,y,channel);
   }
   return QString();
 }
 
-QString CsoundQt::createNewGraph(int x , int y , int index)
+QString CsoundQt::createNewGraph(int x , int y , QString channel, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    return documentPages[index]->createNewGraph(x,y);
+    return documentPages[index]->createNewGraph(x,y,channel);
   }
   return QString();
 }
 
-QString CsoundQt::createNewScope(int x , int y , int index)
+QString CsoundQt::createNewScope(int x , int y , QString channel, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    return documentPages[index]->createNewScope(x,y);
+    return documentPages[index]->createNewScope(x,y,channel);
   }
   return QString();
 }

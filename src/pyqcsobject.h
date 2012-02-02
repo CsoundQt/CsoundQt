@@ -103,21 +103,21 @@ class PyQcsObject : public QObject {
     void setWidgetProperty(QString channel, QString property, QVariant value, int index= -1);
     QVariant getWidgetProperty(QString channel, QString property, int index= -1);
 
-    QString createNewLabel(int x, int y, int index = -1);
-    QString createNewDisplay(int x, int y, int index = -1);
-    QString createNewScrollNumber(int x, int y, int index = -1);
-    QString createNewLineEdit(int x, int y, int index = -1);
-    QString createNewSpinBox(int x, int y, int index = -1);
+    QString createNewLabel(int x = 0, int y = 0, QString channel = QString(), int index = -1);
+    QString createNewDisplay(int x = 0, int y = 0, QString channel = QString(), int index = -1);
+    QString createNewScrollNumber(int x = 0, int y = 0, QString channel = QString(), int index = -1);
+    QString createNewLineEdit(int x = 0, int y = 0, QString channel = QString(), int index = -1);
+    QString createNewSpinBox(int x = 0, int y = 0, QString channel = QString(), int index = -1);
     QString createNewSlider(QString channel, int index = -1);
     QString createNewSlider(int x = 0, int y = 0, QString channel = QString(), int index = -1);
-    QString createNewButton(int x, int y, int index = -1);
-    QString createNewKnob(int x, int y, int index = -1);
-    QString createNewCheckBox(int x, int y, int index = -1);
-    QString createNewMenu(int x, int y, int index = -1);
-    QString createNewMeter(int x, int y, int index = -1);
-    QString createNewConsole(int x, int y, int index = -1);
-    QString createNewGraph(int x, int y, int index = -1);
-    QString createNewScope(int x, int y, int index = -1);
+    QString createNewButton(int x = 0, int y = 0, QString channel = QString(), int index = -1);
+    QString createNewKnob(int x = 0, int y = 0, QString channel = QString(), int index = -1);
+    QString createNewCheckBox(int x = 0, int y = 0, QString channel = QString(), int index = -1);
+    QString createNewMenu(int x = 0, int y = 0, QString channel = QString(), int index = -1);
+    QString createNewMeter(int x = 0, int y = 0, QString channel = QString(), int index = -1);
+    QString createNewConsole(int x = 0, int y = 0, QString channel = QString(), int index = -1);
+    QString createNewGraph(int x = 0, int y = 0, QString channel = QString(), int index = -1);
+    QString createNewScope(int x = 0, int y = 0, QString channel = QString(), int index = -1);
 
     bool destroyWidget(QString uuid);
 

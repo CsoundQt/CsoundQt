@@ -79,20 +79,20 @@ class DocumentPage : public BaseDocument
     void setWidgetProperty(QString channel, QString property, QVariant value);
     QVariant getWidgetProperty(QString channel, QString property);
 
-    QString createNewLabel(int x = -1, int y = -1);
-    QString createNewDisplay(int x = -1, int y = -1);
-    QString createNewScrollNumber(int x = -1, int y = -1);
-    QString createNewLineEdit(int x = -1, int y = -1);
-    QString createNewSpinBox(int x = -1, int y = -1);
+    QString createNewLabel(int x = -1, int y = -1, QString channel = QString());
+    QString createNewDisplay(int x = -1, int y = -1, QString channel = QString());
+    QString createNewScrollNumber(int x = -1, int y = -1, QString channel = QString());
+    QString createNewLineEdit(int x = -1, int y = -1, QString channel = QString());
+    QString createNewSpinBox(int x = -1, int y = -1, QString channel = QString());
     QString createNewSlider(int x = -1, int y = -1, QString channel = QString());
-    QString createNewButton(int x = -1, int y = -1);
-    QString createNewKnob(int x = -1, int y = -1);
-    QString createNewCheckBox(int x = -1, int y = -1);
-    QString createNewMenu(int x = -1, int y = -1);
-    QString createNewMeter(int x = -1, int y = -1);
-    QString createNewConsole(int x = -1, int y = -1);
-    QString createNewGraph(int x = -1, int y = -1);
-    QString createNewScope(int x = -1, int y = -1);
+    QString createNewButton(int x = -1, int y = -1, QString channel = QString());
+    QString createNewKnob(int x = -1, int y = -1, QString channel = QString());
+    QString createNewCheckBox(int x = -1, int y = -1, QString channel = QString());
+    QString createNewMenu(int x = -1, int y = -1, QString channel = QString());
+    QString createNewMeter(int x = -1, int y = -1, QString channel = QString());
+    QString createNewConsole(int x = -1, int y = -1, QString channel = QString());
+    QString createNewGraph(int x = -1, int y = -1, QString channel = QString());
+    QString createNewScope(int x = -1, int y = -1, QString channel = QString());
 
     EventSheet* getSheet(int sheetIndex);
     EventSheet* getSheet(QString sheetName);

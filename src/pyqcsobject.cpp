@@ -302,30 +302,30 @@ QVariant PyQcsObject::getWidgetProperty(QString channel, QString property, int i
   return m_qcs->getWidgetProperty(channel, property, index);
 }
 
-QString PyQcsObject::createNewLabel(int x, int y, int index)
+QString PyQcsObject::createNewLabel(int x, int y, QString channel, int index)
 {
     // FIXME all this interaction with widgets must be correctly placed on the widgets undo/redo stack. It's currently not!
-  return m_qcs->createNewLabel(x,y, index);
+  return m_qcs->createNewLabel(x,y, channel, index);
 }
 
-QString PyQcsObject::createNewDisplay(int x, int y, int index)
+QString PyQcsObject::createNewDisplay(int x, int y, QString channel, int index)
 {
-  return m_qcs->createNewDisplay(x,y, index);
+  return m_qcs->createNewDisplay(x,y, channel, index);
 }
 
-QString PyQcsObject::createNewScrollNumber(int x, int y, int index)
+QString PyQcsObject::createNewScrollNumber(int x, int y, QString channel, int index)
 {
-  return m_qcs->createNewScrollNumber(x,y, index);
+  return m_qcs->createNewScrollNumber(x,y, channel, index);
 }
 
-QString PyQcsObject::createNewLineEdit(int x, int y, int index)
+QString PyQcsObject::createNewLineEdit(int x, int y, QString channel, int index)
 {
-  return m_qcs->createNewLineEdit(x,y, index);
+  return m_qcs->createNewLineEdit(x,y, channel, index);
 }
 
-QString PyQcsObject::createNewSpinBox(int x, int y, int index)
+QString PyQcsObject::createNewSpinBox(int x, int y, QString channel, int index)
 {
-  return m_qcs->createNewSpinBox(x,y, index);
+  return m_qcs->createNewSpinBox(x,y, channel, index);
 }
 
 QString PyQcsObject::createNewSlider(QString channel, int index)
@@ -338,44 +338,44 @@ QString PyQcsObject::createNewSlider(int x, int y, QString channel, int index)
   return m_qcs->createNewSlider(x,y, channel, index);
 }
 
-QString PyQcsObject::createNewButton(int x, int y, int index)
+QString PyQcsObject::createNewButton(int x, int y, QString channel, int index)
 {
-  return m_qcs->createNewButton(x,y, index);
+  return m_qcs->createNewButton(x,y, channel, index);
 }
 
-QString PyQcsObject::createNewKnob(int x, int y, int index)
+QString PyQcsObject::createNewKnob(int x, int y, QString channel, int index)
 {
-  return m_qcs->createNewKnob(x,y, index);
+  return m_qcs->createNewKnob(x,y, channel, index);
 }
 
-QString PyQcsObject::createNewCheckBox(int x, int y, int index)
+QString PyQcsObject::createNewCheckBox(int x, int y, QString channel, int index)
 {
-  return m_qcs->createNewCheckBox(x,y, index);
+  return m_qcs->createNewCheckBox(x,y, channel, index);
 }
 
-QString PyQcsObject::createNewMenu(int x, int y, int index)
+QString PyQcsObject::createNewMenu(int x, int y, QString channel, int index)
 {
-  return m_qcs->createNewMenu(x,y, index);
+  return m_qcs->createNewMenu(x,y, channel, index);
 }
 
-QString PyQcsObject::createNewMeter(int x, int y, int index)
+QString PyQcsObject::createNewMeter(int x, int y, QString channel, int index)
 {
-  return m_qcs->createNewMeter(x,y, index);
+  return m_qcs->createNewMeter(x,y, channel, index);
 }
 
-QString PyQcsObject::createNewConsole(int x, int y, int index)
+QString PyQcsObject::createNewConsole(int x, int y, QString channel, int index)
 {
-  return m_qcs->createNewConsole(x,y, index);
+  return m_qcs->createNewConsole(x,y, channel, index);
 }
 
-QString PyQcsObject::createNewGraph(int x, int y, int index)
+QString PyQcsObject::createNewGraph(int x, int y, QString channel, int index)
 {
-  return m_qcs->createNewGraph(x,y, index);
+  return m_qcs->createNewGraph(x,y, channel, index);
 }
 
-QString PyQcsObject::createNewScope(int x, int y, int index)
+QString PyQcsObject::createNewScope(int x, int y, QString channel, int index)
 {
-  return m_qcs->createNewScope(x,y, index);
+  return m_qcs->createNewScope(x,y, channel, index);
 }
 
 // TODO add destructor of widgets

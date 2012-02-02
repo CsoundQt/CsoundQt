@@ -110,20 +110,20 @@ class CsoundQt:public QMainWindow
     void setWidgetProperty(QString channel, QString property, QVariant value, int index= -1);
     QVariant getWidgetProperty(QString channel, QString property, int index= -1);
 
-    QString createNewLabel(int x = -1, int y = -1, int index = -1);
-    QString createNewDisplay(int x = -1, int y = -1, int index = -1);
-    QString createNewScrollNumber(int x = -1, int y = -1, int index = -1);
-    QString createNewLineEdit(int x = -1, int y = -1, int index = -1);
-    QString createNewSpinBox(int x = -1, int y = -1, int index = -1);
+    QString createNewLabel(int x = -1, int y = -1, QString channel = QString(), int index = -1);
+    QString createNewDisplay(int x = -1, int y = -1, QString channel = QString(), int index = -1);
+    QString createNewScrollNumber(int x = -1, int y = -1, QString channel = QString(), int index = -1);
+    QString createNewLineEdit(int x = -1, int y = -1, QString channel = QString(), int index = -1);
+    QString createNewSpinBox(int x = -1, int y = -1, QString channel = QString(), int index = -1);
     QString createNewSlider(int x = -1, int y = -1, QString channel = QString(), int index = -1);
-    QString createNewButton(int x = -1, int y = -1, int index = -1);
-    QString createNewKnob(int x = -1, int y = -1, int index = -1);
-    QString createNewCheckBox(int x = -1, int y = -1, int index = -1);
-    QString createNewMenu(int x = -1, int y = -1, int index = -1);
-    QString createNewMeter(int x = -1, int y = -1, int index = -1);
-    QString createNewConsole(int x = -1, int y = -1, int index = -1);
-    QString createNewGraph(int x = -1, int y = -1, int index = -1);
-    QString createNewScope(int x = -1, int y = -1, int index = -1);
+    QString createNewButton(int x = -1, int y = -1, QString channel = QString(), int index = -1);
+    QString createNewKnob(int x = -1, int y = -1, QString channel = QString(), int index = -1);
+    QString createNewCheckBox(int x = -1, int y = -1, QString channel = QString(), int index = -1);
+    QString createNewMenu(int x = -1, int y = -1, QString channel = QString(), int index = -1);
+    QString createNewMeter(int x = -1, int y = -1, QString channel = QString(), int index = -1);
+    QString createNewConsole(int x = -1, int y = -1, QString channel = QString(), int index = -1);
+    QString createNewGraph(int x = -1, int y = -1, QString channel = QString(), int index = -1);
+    QString createNewScope(int x = -1, int y = -1, QString channel = QString(), int index = -1);
 //    int popKeyPressEvent(); // return ASCII code of key press event for Csound or -1 if no event
 //    int popKeyReleaseEvent(); // return ASCII code of key release event for Csound -1 if no
 

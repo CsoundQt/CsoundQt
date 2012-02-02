@@ -424,34 +424,34 @@ QVariant DocumentPage::getWidgetProperty(QString channel, QString property)
   return m_widgetLayouts[0]->getWidgetProperty(channel, property);
 }
 
-QString DocumentPage::createNewLabel(int x, int y)
+QString DocumentPage::createNewLabel(int x, int y, QString channel)
 {
   //FIXME allow multiple
-  return m_widgetLayouts[0]->createNewLabel(x, y);
+  return m_widgetLayouts[0]->createNewLabel(x, y, channel);
 }
 
-QString DocumentPage::createNewDisplay(int x, int y)
+QString DocumentPage::createNewDisplay(int x, int y, QString channel)
 {
   //FIXME allow multiple
-  return m_widgetLayouts[0]->createNewDisplay(x, y);
+  return m_widgetLayouts[0]->createNewDisplay(x, y, channel);
 }
 
-QString DocumentPage::createNewScrollNumber(int x, int y)
+QString DocumentPage::createNewScrollNumber(int x, int y, QString channel)
 {
   //FIXME allow multiple
-  return m_widgetLayouts[0]->createNewScrollNumber(x, y);
+  return m_widgetLayouts[0]->createNewScrollNumber(x, y, channel);
 }
 
-QString DocumentPage::createNewLineEdit(int x, int y)
+QString DocumentPage::createNewLineEdit(int x, int y, QString channel)
 {
   //FIXME allow multiple
-  return m_widgetLayouts[0]->createNewLineEdit(x, y);
+  return m_widgetLayouts[0]->createNewLineEdit(x, y, channel);
 }
 
-QString DocumentPage::createNewSpinBox(int x, int y)
+QString DocumentPage::createNewSpinBox(int x, int y, QString channel)
 {
   //FIXME allow multiple
-  return m_widgetLayouts[0]->createNewSpinBox(x, y);
+  return m_widgetLayouts[0]->createNewSpinBox(x, y, channel);
 }
 
 QString DocumentPage::createNewSlider(int x, int y, QString channel)
@@ -460,52 +460,52 @@ QString DocumentPage::createNewSlider(int x, int y, QString channel)
   return m_widgetLayouts[0]->createNewSlider(x, y, channel);
 }
 
-QString DocumentPage::createNewButton(int x, int y)
+QString DocumentPage::createNewButton(int x, int y, QString channel)
 {
   //FIXME allow multiple
-  return m_widgetLayouts[0]->createNewButton(x, y);
+  return m_widgetLayouts[0]->createNewButton(x, y, channel);
 }
 
-QString DocumentPage::createNewKnob(int x, int y)
+QString DocumentPage::createNewKnob(int x, int y, QString channel)
 {
   //FIXME allow multiple
-  return m_widgetLayouts[0]->createNewKnob(x, y);
+  return m_widgetLayouts[0]->createNewKnob(x, y, channel);
 }
 
-QString DocumentPage::createNewCheckBox(int x, int y)
+QString DocumentPage::createNewCheckBox(int x, int y, QString channel)
 {
   //FIXME allow multiple
-  return m_widgetLayouts[0]->createNewCheckBox(x, y);
+  return m_widgetLayouts[0]->createNewCheckBox(x, y, channel);
 }
 
-QString DocumentPage::createNewMenu(int x, int y)
+QString DocumentPage::createNewMenu(int x, int y, QString channel)
 {
   //FIXME allow multiple
-  return m_widgetLayouts[0]->createNewMenu(x, y);
+  return m_widgetLayouts[0]->createNewMenu(x, y, channel);
 }
 
-QString DocumentPage::createNewMeter(int x, int y)
+QString DocumentPage::createNewMeter(int x, int y, QString channel)
 {
   //FIXME allow multiple
-  return m_widgetLayouts[0]->createNewMeter(x, y);
+  return m_widgetLayouts[0]->createNewMeter(x, y, channel);
 }
 
-QString DocumentPage::createNewConsole(int x, int y)
+QString DocumentPage::createNewConsole(int x, int y, QString channel)
 {
   //FIXME allow multiple
-  return m_widgetLayouts[0]->createNewConsole(x, y);
+  return m_widgetLayouts[0]->createNewConsole(x, y, channel);
 }
 
-QString DocumentPage::createNewGraph(int x, int y)
+QString DocumentPage::createNewGraph(int x, int y, QString channel)
 {
   //FIXME allow multiple
-  return m_widgetLayouts[0]->createNewGraph(x, y);
+  return m_widgetLayouts[0]->createNewGraph(x, y, channel);
 }
 
-QString DocumentPage::createNewScope(int x, int y)
+QString DocumentPage::createNewScope(int x, int y, QString channel)
 {
   //FIXME allow multiple
-  return m_widgetLayouts[0]->createNewScope(x, y);
+  return m_widgetLayouts[0]->createNewScope(x, y, channel);
 }
 
 

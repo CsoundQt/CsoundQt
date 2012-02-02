@@ -611,6 +611,10 @@ void WidgetLayout::setWidgetProperty(QString channel, QString property, QVariant
       m_widgets[i]->setProperty(property.toAscii().constData(), value);
       m_widgets[i]->applyInternalProperties();
     }
+    else if (m_widgets[i]->getUuid() == channel) {
+      m_widgets[i]->setProperty(property.toAscii().constData(), value);
+      m_widgets[i]->applyInternalProperties();
+    }
   }
 }
 
@@ -1525,6 +1529,9 @@ QString WidgetLayout::createNewSlider(int x, int y, QString channel)
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
+  if (channel.isEmpty()) {
+    channel = "slider" + QString::number(m_widgets.size());
+  }
   uuid = createSlider(posx, posy, 20, 100, QString("ioSlider {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 100} 0.000000 1.000000 0.000000 " + channel));
   widgetChanged();
   if (channel.isEmpty() && getOpenProperties()) {
@@ -1534,13 +1541,16 @@ QString WidgetLayout::createNewSlider(int x, int y, QString channel)
   return uuid;
 }
 
-QString WidgetLayout::createNewLabel(int x, int y)
+QString WidgetLayout::createNewLabel(int x, int y, QString channel)
 {
   QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder New Label";
+  if (channel.isEmpty()) {
+    channel = "label" + QString::number(m_widgets.size());
+  }
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} label 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder New Label";
   uuid = createText(posx, posy, 80, 25, line);
   widgetChanged();
   if (getOpenProperties()) {
@@ -1550,13 +1560,16 @@ QString WidgetLayout::createNewLabel(int x, int y)
   return uuid;
 }
 
-QString WidgetLayout::createNewDisplay(int x, int y)
+QString WidgetLayout::createNewDisplay(int x, int y, QString channel)
 {
   QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} display 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border Display";
+  if (channel.isEmpty()) {
+    channel = "display" + QString::number(m_widgets.size());
+  }
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} display 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border Display";
   uuid = createText(posx, posy, 80, 25, line);
   widgetChanged();
   if (getOpenProperties()) {
@@ -1566,13 +1579,16 @@ QString WidgetLayout::createNewDisplay(int x, int y)
   return uuid;
 }
 
-QString WidgetLayout::createNewScrollNumber(int x, int y)
+QString WidgetLayout::createNewScrollNumber(int x, int y, QString channel)
 {
   QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} scroll 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} background border 0.000000";
+  if (channel.isEmpty()) {
+    channel = "scroll" + QString::number(m_widgets.size());
+  }
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} scroll 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} background border 0.000000";
   uuid = createScrollNumber(posx, posy, 80, 25, line);
   widgetChanged();
   if (getOpenProperties()) {
@@ -1582,13 +1598,16 @@ QString WidgetLayout::createNewScrollNumber(int x, int y)
   return uuid;
 }
 
-QString WidgetLayout::createNewLineEdit(int x, int y)
+QString WidgetLayout::createNewLineEdit(int x, int y, QString channel)
 {
   QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 25} edit 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
+  if (channel.isEmpty()) {
+    channel = "line" + QString::number(m_widgets.size());
+  }
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 25} edit 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
   uuid = createLineEdit(posx, posy, 100, 25, line);
   widgetChanged();
   if (getOpenProperties()) {
@@ -1598,13 +1617,16 @@ QString WidgetLayout::createNewLineEdit(int x, int y)
   return uuid;
 }
 
-QString WidgetLayout::createNewSpinBox(int x, int y)
+QString WidgetLayout::createNewSpinBox(int x, int y, QString channel)
 {
   QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} editnum 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
+  if (channel.isEmpty()) {
+    channel = "spinbox" + QString::number(m_widgets.size());
+  }
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} editnum 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
   uuid = createSpinBox(posx, posy, 80, 25, line);
   widgetChanged();
   if (getOpenProperties()) {
@@ -1614,13 +1636,16 @@ QString WidgetLayout::createNewSpinBox(int x, int y)
   return uuid;
 }
 
-QString WidgetLayout::createNewButton(int x, int y)
+QString WidgetLayout::createNewButton(int x, int y, QString channel)
 {
   QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  QString line = "ioButton {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 30} event 1.000000 \"button1\" \"New Button\" \"/\" i1 0 10";
+  if (channel.isEmpty()) {
+    channel = "button" + QString::number(m_widgets.size());
+  }
+  QString line = "ioButton {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 30} event 1.000000 \"" + channel + "\" \"New Button\" \"/\" i1 0 10";
   uuid = createButton(posx, posy, 100, 30, line);
   widgetChanged();
   if (getOpenProperties()) {
@@ -1630,13 +1655,16 @@ QString WidgetLayout::createNewButton(int x, int y)
   return uuid;
 }
 
-QString WidgetLayout::createNewKnob(int x, int y)
+QString WidgetLayout::createNewKnob(int x, int y, QString channel)
 {
   QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  uuid = createKnob(posx, posy, 80, 80, QString("ioKnob {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 knob" +QString::number(m_widgets.size())));
+  if (channel.isEmpty()) {
+    channel = "knob" + QString::number(m_widgets.size());
+  }
+  uuid = createKnob(posx, posy, 80, 80, QString("ioKnob {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 " + channel));
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
@@ -1645,13 +1673,16 @@ QString WidgetLayout::createNewKnob(int x, int y)
   return uuid;
 }
 
-QString WidgetLayout::createNewCheckBox(int x, int y)
+QString WidgetLayout::createNewCheckBox(int x, int y, QString channel)
 {
   QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  uuid = createCheckBox(posx, posy, 20, 20, QString("ioCheckbox {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 20} off checkbox" +QString::number(m_widgets.size())));
+  if (channel.isEmpty()) {
+    channel = "checkbox" + QString::number(m_widgets.size());
+  }
+  uuid = createCheckBox(posx, posy, 20, 20, QString("ioCheckbox {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 20} off " + channel));
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
@@ -1660,13 +1691,16 @@ QString WidgetLayout::createNewCheckBox(int x, int y)
   return uuid;
 }
 
-QString WidgetLayout::createNewMenu(int x, int y)
+QString WidgetLayout::createNewMenu(int x, int y, QString channel)
 {
   QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  uuid = createMenu(posx, posy, 80, 30, QString("ioMenu {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 25} 1 303 \"item1,item2,item3\" menu" +QString::number(m_widgets.size())));
+  if (channel.isEmpty()) {
+    channel = "menu" + QString::number(m_widgets.size());
+  }
+  uuid = createMenu(posx, posy, 80, 30, QString("ioMenu {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 25} 1 303 \"item1,item2,item3\" " + channel));
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
@@ -1675,13 +1709,16 @@ QString WidgetLayout::createNewMenu(int x, int y)
   return uuid;
 }
 
-QString WidgetLayout::createNewMeter(int x, int y)
+QString WidgetLayout::createNewMeter(int x, int y, QString channel)
 {
   QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-  uuid = createMeter(posx, posy, 30, 80, QString("ioMeter {"+ QString::number(posx) +", "+ QString::number(posy) + "} {30, 80} {0, 60000, 0} \"vert" + QString::number(m_widgets.size()) + "\" 0.000000 \"hor" + QString::number(m_widgets.size()) + "\" 0.000000 fill 1 0 mouse"));
+  if (channel.isEmpty()) {
+    channel = "meter" + QString::number(m_widgets.size());
+  }
+  uuid = createMeter(posx, posy, 30, 80, QString("ioMeter {"+ QString::number(posx) +", "+ QString::number(posy) + "} {30, 80} {0, 60000, 0} \"" + channel + "\" 0.000000 \"hor" + QString::number(m_widgets.size()) + "\" 0.000000 fill 1 0 mouse"));
   widgetChanged();
   if (getOpenProperties()) {
     m_widgets.last()->openProperties();
@@ -1690,12 +1727,15 @@ QString WidgetLayout::createNewMeter(int x, int y)
   return uuid;
 }
 
-QString WidgetLayout::createNewConsole(int x, int y)
+QString WidgetLayout::createNewConsole(int x, int y, QString channel)
 {
   QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
+  if (channel.isEmpty()) {
+    channel = "console" + QString::number(m_widgets.size());
+  }
   uuid = createConsole(posx, posy, 320, 400, QString("ioListing {"+ QString::number(posx) +", "+ QString::number(posy) + "} {320, 400}"));
   widgetChanged();
   if (getOpenProperties()) {
@@ -1705,12 +1745,15 @@ QString WidgetLayout::createNewConsole(int x, int y)
   return uuid;
 }
 
-QString WidgetLayout::createNewGraph(int x, int y)
+QString WidgetLayout::createNewGraph(int x, int y, QString channel)
 {
   QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
+  if (channel.isEmpty()) {
+    channel = "graph" + QString::number(m_widgets.size());
+  }
   uuid = createGraph(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150}"));
   widgetChanged();
   if (getOpenProperties()) {
@@ -1720,12 +1763,15 @@ QString WidgetLayout::createNewGraph(int x, int y)
   return uuid;
 }
 
-QString WidgetLayout::createNewScope(int x, int y)
+QString WidgetLayout::createNewScope(int x, int y, QString channel)
 {
   QString uuid;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
+  if (channel.isEmpty()) {
+    channel = "scope" + QString::number(m_widgets.size());
+  }
   uuid = createScope(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150} scope 2.000000 -1.000000"));
   widgetChanged();
   if (getOpenProperties()) {
