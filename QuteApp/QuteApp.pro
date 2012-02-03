@@ -9,6 +9,7 @@ buildDoubles: CONFIG+=build64
 !build32:!build64:CONFIG += build32
 build32:build64:CONFIG -= build32
 CONFIG += is_quteapp # This is for bundling the QuteApp in the main CsoundQt app, so shouldn't be here
+CONFIG += rtmidi #force build rtmidi
 
 unix { 
     macx:include (../qcs-macx.pro)

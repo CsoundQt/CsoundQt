@@ -31,6 +31,11 @@
 
 #include "types.h"
 
+#ifdef QCS_RTMIDI
+#include "RtMidi.h"
+#endif
+
+
 SettingsDialog::SettingsDialog(QWidget *parent, CsoundOptions *options) :
   QDialog(parent),
   ui(new Ui::SettingsDialog), m_options(options)
@@ -60,6 +65,25 @@ SettingsDialog::SettingsDialog(QWidget *parent, CsoundOptions *options) :
   if (ui->midiOutComboBox->currentIndex() < 0) {
     ui->midiOutComboBox->setCurrentIndex(0);
   }
+
+  ui->bufferCheckBox->setChecked(m_options->bufferSizeActive);
+  ui->hwBufferCheckBox->setChecked(m_options->HwBufferSizeActive);
+  ui->bufferComboBox->setCurrentIndex(ui->bufferComboBox->findText(QString::number(m_options->bufferSize)));
+  ui->hwBufferComboBox->setCurrentIndex(ui->hwBufferComboBox->findText(QString::number(m_options->HwBufferSize)));
+
+  ui->midiInterfaceComboBox->hide();
+#ifdef QCS_RTMIDI
+  try {
+    RtMidiIn midiin;
+    for (int i = 0; i < (int) midiin.getPortCount(); i++) {
+      ui->midiInterfaceComboBox->addItem(QString::fromStdString(midiin.getPortName(i)), QVariant(i));
+    }
+  }
+  catch (RtError &error) {
+    // Handle the exception here
+    error.printMessage();
+  }
+#endif
 }
 
 SettingsDialog::~SettingsDialog()
@@ -251,6 +275,14 @@ void SettingsDialog::accept()
   m_options->rtOutputDevice = ui->audioOutComboBox->itemData(ui->audioOutComboBox->currentIndex()).toString();
   m_options->rtMidiInputDevice = ui->midiInComboBox->itemData(ui->midiInComboBox->currentIndex()).toString();
   m_options->rtMidiOutputDevice = ui->midiOutComboBox->itemData(ui->midiOutComboBox->currentIndex()).toString();
+
+  m_options->bufferSizeActive = ui->bufferCheckBox->isChecked();
+  m_options->HwBufferSizeActive = ui->hwBufferCheckBox->isChecked();
+  m_options->bufferSize = ui->bufferComboBox->currentText().toInt();
+  m_options->HwBufferSize = ui->hwBufferComboBox->currentText().toInt();
+
+  // FIXME fix support for midi control of widgets.
+//  m_options->midiInterface = midiInterfaceComboBox->itemData(midiInterfaceComboBox->currentIndex()).toInt();
 
   QDialog::accept();
 }
