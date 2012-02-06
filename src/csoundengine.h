@@ -25,11 +25,11 @@
 
 #include <csound.hpp>
 #include <sndfile.hh>
+#include <csPerfThread.hpp>
 #include <cwindow.h> // Necessary for WINDAT struct
 
 #include "types.h"
 #include "csoundoptions.h"
-#include "qcsperfthread.h"
 #ifdef QCS_PYTHONQT
 #include "pythonconsole.h"
 #endif
@@ -58,7 +58,7 @@ typedef enum {
 struct CsoundUserData {
   int result; //result of csoundCompile()
   CSOUND *csound; // instance of csound
-  QCsPerfThread *perfThread;
+  CsoundPerformanceThread *perfThread;
   CsoundEngine *cs; // Pass engine
   WidgetLayout *wl; // Pass widgets
   /* current configuration */

@@ -56,8 +56,7 @@ HEADERS = "src/about.h" \
     "src/widgetpanel.h" \
     "src/widgetpreset.h" \
     "src/qutesheet.h" \
-    "src/basedocument.h" \
-    "src/qcsperfthread.h" \
+	"src/basedocument.h" \
     "src/baseview.h" \
     "src/appwizard.h" \
     "src/appdetailspage.h" \
@@ -109,8 +108,7 @@ SOURCES = "src/about.cpp" \
     "src/widgetpanel.cpp" \
     "src/widgetpreset.cpp" \
     "src/qutesheet.cpp" \
-    "src/basedocument.cpp" \
-    "src/qcsperfthread.cpp" \
+	"src/basedocument.cpp" \
     "src/baseview.cpp" \
     "src/appwizard.cpp" \
     "src/appdetailspage.cpp" \
@@ -119,6 +117,7 @@ SOURCES = "src/about.cpp" \
     "src/scoreeditor.cpp" \
     "src/filebeditor.cpp"
 LIBS += $${LCSOUND} \
+	$${LCSND} \
     $${LSNDFILE} \
     $${RTMIDI}
 DISTFILES += "src/default.csd" \

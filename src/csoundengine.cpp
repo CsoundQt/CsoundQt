@@ -902,7 +902,7 @@ int CsoundEngine::runCsound()
   }
 
   if (ud->threaded) {
-    ud->perfThread = new QCsPerfThread(ud->csound);
+    ud->perfThread = new CsoundPerformanceThread(ud->csound);
     ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
 //    qDebug() << "CsoundQt::runCsound perfThread->Play";
     ud->perfThread->Play();
@@ -945,7 +945,7 @@ void CsoundEngine::stopCsound()
   if (ud->threaded) {
 //    perfThread->ScoreEvent(0, 'e', 0, 0);
     if (ud->perfThread != 0) {
-      QCsPerfThread *pt = ud->perfThread;
+      CsoundPerformanceThread *pt = ud->perfThread;
       ud->perfThread = 0;
       pt->Stop();
 //      qDebug() << "CsoundEngine::stopCsound() stopped";

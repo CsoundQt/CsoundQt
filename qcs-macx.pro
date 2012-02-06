@@ -65,6 +65,7 @@ RESOURCES += "src/quteapp_d_osx.qrc"
 }
 #LIBS += -framework QtCore -framework QtGui -framework QtXml
 LCSOUND = -framework $${MAC_LIB}
+LCSND = -lcsnd
 LSNDFILE = -lsndfile
 
 QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist

@@ -29,6 +29,7 @@ include(config.pri)
 RC_FILE = "src/qutecsound.rc"
 INCLUDEPATH += $${PYTHON_INCLUDE_DIR}
 LCSOUND = "$${CSOUND_LIBRARY_DIR}/$${CSOUND_LIB}"
+LCSND = "$${CSOUND_LIBRARY_DIR}/libcsnd.dll"
 LSNDFILE = "$${LIBSNDFILE_LIBRARY_DIR}/$${LIBSNDFILE_LIB}"
 
 rtmidi {

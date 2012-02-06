@@ -406,13 +406,15 @@ e
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>407</x>
- <y>74</y>
- <width>784</width>
- <height>641</height>
+ <x>96</x>
+ <y>81</y>
+ <width>782</width>
+ <height>648</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -548,7 +550,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.71778546</value>
+  <value>0.60793877</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -566,7 +568,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>3.00000000</maximum>
-  <value>1.23101774</value>
+  <value>0.87604076</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -584,7 +586,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.40886186</value>
+  <value>0.68532342</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -602,7 +604,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.86407266</value>
+  <value>0.87491655</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -620,7 +622,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>4.00000000</maximum>
-  <value>1.88295287</value>
+  <value>0.24683115</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -653,7 +655,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1</value>
+  <value>3</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -696,7 +698,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.05283310</value>
+  <value>0.71242875</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -714,7 +716,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>3.00000000</maximum>
-  <value>1.63936842</value>
+  <value>1.51931179</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -732,7 +734,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.16656395</value>
+  <value>0.76090300</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -750,7 +752,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.18159133</value>
+  <value>0.27295068</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -768,7 +770,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>4.00000000</maximum>
-  <value>1.42936060</value>
+  <value>0.61171556</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -801,7 +803,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>5</value>
+  <value>0.2</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1308,7 +1310,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.25851989</value>
+  <value>0.82246149</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1355,7 +1357,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>3.00000000</maximum>
-  <value>0.88690905</value>
+  <value>1.93253195</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1373,7 +1375,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.50667589</value>
+  <value>0.21393649</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1391,7 +1393,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.78680740</value>
+  <value>0.91956383</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1409,7 +1411,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>4.00000000</maximum>
-  <value>0.29805235</value>
+  <value>1.47231400</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1456,7 +1458,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.36599067</value>
+  <value>0.41843128</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1489,7 +1491,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>3</value>
+  <value>2</value>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>op1att</objectName>
@@ -1503,7 +1505,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>3.00000000</maximum>
-  <value>0.50664166</value>
+  <value>0.25791028</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1521,7 +1523,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.94121707</value>
+  <value>0.32575035</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1539,7 +1541,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.61838042</value>
+  <value>0.26118517</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1557,7 +1559,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>4.00000000</maximum>
-  <value>0.97353437</value>
+  <value>1.78432512</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1604,7 +1606,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.03119405</value>
+  <value>0.02822053</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1637,7 +1639,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>5</value>
+  <value>1</value>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>op4att</objectName>
@@ -1651,7 +1653,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>3.00000000</maximum>
-  <value>0.83143819</value>
+  <value>1.85546792</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1669,7 +1671,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.83143819</value>
+  <value>1.85546792</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1687,7 +1689,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.83143819</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1705,7 +1707,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>4.00000000</maximum>
-  <value>1.86178446</value>
+  <value>0.80882120</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2303,7 +2305,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.80733961</value>
+  <value>0.88287294</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2321,7 +2323,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>3.00000000</maximum>
-  <value>0.78871372</value>
+  <value>1.85216427</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2339,7 +2341,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.17000116</value>
+  <value>0.12375984</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2357,7 +2359,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.21947320</value>
+  <value>0.01545162</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2375,7 +2377,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>4.00000000</maximum>
-  <value>1.63517308</value>
+  <value>1.01258862</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2408,7 +2410,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.333333</value>
+  <value>0.5</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2625,7 +2627,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.97349986</value>
+  <value>0.61456019</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2658,7 +2660,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1</value>
+  <value>4</value>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>op6att</objectName>
@@ -2672,7 +2674,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>3.00000000</maximum>
-  <value>1.87068630</value>
+  <value>1.79552197</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2690,7 +2692,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.06834970</value>
+  <value>0.56583136</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2708,7 +2710,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.73532856</value>
+  <value>0.70409799</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2726,7 +2728,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>4.00000000</maximum>
-  <value>1.44152324</value>
+  <value>0.91626638</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3000,7 +3002,7 @@ e
   <minimum>0</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>_GetPresetName</objectName>
@@ -3012,7 +3014,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>Fairy Dust</label>
+  <label>Default</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -3159,7 +3161,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.05533870</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>

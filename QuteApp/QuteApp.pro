@@ -108,6 +108,7 @@ FORMS += "$${PWD}/settingsdialog.ui" \
     "$${QCSPWD}/findreplace.ui" \
     "aboutwidget.ui"
 LIBS += $${LCSOUND} \
+	$${LCSND} \
     $${LSNDFILE} \
     $${RTMIDI}
 rtmidi { 
