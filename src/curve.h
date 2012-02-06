@@ -32,27 +32,27 @@ enum Polarity {
   POLARITY_NOPOL,
   POLARITY_NEGPOL,
   POLARITY_POSPOL,
-  POLARITY_BIPOL,
+  POLARITY_BIPOL
 };
 
 class Curve
 {
   public:
     Curve(MYFLT *, size_t, const QString&, Polarity,
-          float, float, float, float, bool, WINDAT *original);
+          MYFLT, MYFLT, MYFLT, MYFLT, bool, WINDAT *original);
     Curve(const Curve&);
     Curve &operator=(const Curve&);
     ~Curve();
 //    uintptr_t get_id() const;
-//     float *get_data() const;
-    float get_data(int index);
+//     MYFLT *get_data() const;
+    MYFLT get_data(int index);
     size_t get_size() const;      // number of points
     QString get_caption() const; // title of curve
     Polarity get_polarity() const; // polarity
-    float get_max() const;        // curve max
-    float get_min() const;        // curve min
-    float get_absmax() const;     // abs max of above
-    float get_y_scale() const;    // Y axis scaling factor
+    MYFLT get_max() const;        // curve max
+    MYFLT get_min() const;        // curve min
+    MYFLT get_absmax() const;     // abs max of above
+    MYFLT get_y_scale() const;    // Y axis scaling factor
     WINDAT * getOriginal();
 
 //    void set_id(uintptr_t id);
@@ -60,10 +60,10 @@ class Curve
     void set_size(size_t size);      // number of points
     void set_caption(QString caption); // title of curve
     void set_polarity(Polarity polarity); // polarity
-    void set_max(float max);        // curve max
-    void set_min(float min);        // curve min
-    void set_absmax(float absmax);     // abs max of above
-    void set_y_scale(float y_scale);    // Y axis scaling factor
+    void set_max(MYFLT max);        // curve max
+    void set_min(MYFLT min);        // curve min
+    void set_absmax(MYFLT absmax);     // abs max of above
+    void set_y_scale(MYFLT y_scale);    // Y axis scaling factor
     void setOriginal(WINDAT *windat);
 
     bool is_divider_dotted() const; // Add dotted divider when true
@@ -75,7 +75,7 @@ class Curve
     size_t m_size;
     QString m_caption;
     Polarity m_polarity;
-    float m_max, m_min, m_absmax, m_y_scale;
+    MYFLT m_max, m_min, m_absmax, m_y_scale;
     bool m_dotted_divider;
     void copy(size_t, MYFLT *);
     void destroy();

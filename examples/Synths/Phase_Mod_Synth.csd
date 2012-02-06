@@ -12,68 +12,129 @@ ksmps = 256
 nchnls = 2
 0dbfs = 1
 
+chn_k "op7amp", 3
+chn_k  "op7ratio", 3
+
+chn_k  "op7att", 3
+chn_k  "op7dec", 3
+chn_k  "op7sus", 3
+chn_k  "op7rel", 3
+
+chn_k  "op6amp", 3
+chn_k  "op6ratio", 3
+
+chn_k  "op6att", 3
+chn_k  "op6dec", 3
+chn_k  "op6sus", 3
+chn_k  "op6rel", 3
+
+chn_k  "op5amp", 3
+chn_k  "op5ratio", 3
+
+chn_k  "op5att", 3
+chn_k  "op5dec", 3
+chn_k  "op5sus", 3
+chn_k  "op5rel", 3
+
+chn_k  "op4amp", 3
+chn_k  "op4ratio", 3
+
+chn_k  "op4att", 3
+chn_k  "op4dec", 3
+chn_k  "op4sus", 3
+chn_k  "op4rel", 3
+
+chn_k  "op3amp", 3
+chn_k  "op3ratio", 3
+
+chn_k  "op3att", 3
+chn_k  "op3dec", 3
+chn_k  "op3sus", 3
+chn_k  "op3rel", 3
+
+chn_k  "op2amp", 3
+chn_k  "op2ratio", 3
+
+chn_k  "op2att", 3
+chn_k  "op2dec", 3
+chn_k  "op2sus", 3
+chn_k  "op2rel", 3
+
+chn_k  "op1amp", 3
+chn_k  "op1ratio", 3
+
+chn_k  "op1att", 3
+chn_k  "op1dec", 3
+chn_k  "op1sus", 3
+chn_k  "op1rel", 3
+
+chn_k "fb1", 3
+
 instr 1
 ;icps cpsmidi
 icps = p4
 
-kop7amp invalue "op7amp"
-kop7ratio invalue "op7ratio"
+kop7amp chnget "op7amp"
+kop7ratio chnget "op7ratio"
 
-kop7att invalue "op7att"
-kop7dec invalue "op7dec"
-kop7sus invalue "op7sus"
-kop7rel invalue "op7rel"
+kop7att chnget "op7att"
+kop7dec chnget "op7dec"
+kop7sus chnget "op7sus"
+kop7rel chnget "op7rel"
 
-kop6amp invalue "op6amp"
-kop6ratio invalue "op6ratio"
+kop6amp chnget "op6amp"
+kop6ratio chnget "op6ratio"
 
-kop6att invalue "op6att"
-kop6dec invalue "op6dec"
-kop6sus invalue "op6sus"
-kop6rel invalue "op6rel"
+kop6att chnget "op6att"
+kop6dec chnget "op6dec"
+kop6sus chnget "op6sus"
+kop6rel chnget "op6rel"
 
-kop5amp invalue "op5amp"
-kop5ratio invalue "op5ratio"
+kop5amp chnget "op5amp"
+kop5ratio chnget "op5ratio"
 
-kop5att invalue "op5att"
-kop5dec invalue "op5dec"
-kop5sus invalue "op5sus"
-kop5rel invalue "op5rel"
+kop5att chnget "op5att"
+kop5dec chnget "op5dec"
+kop5sus chnget "op5sus"
+kop5rel chnget "op5rel"
 
-kop4amp invalue "op4amp"
-kop4ratio invalue "op4ratio"
+kop4amp chnget "op4amp"
+kop4ratio chnget "op4ratio"
 
-kop4att invalue "op4att"
-kop4dec invalue "op4dec"
-kop4sus invalue "op4sus"
-kop4rel invalue "op4rel"
+kop4att chnget "op4att"
+kop4dec chnget "op4dec"
+kop4sus chnget "op4sus"
+kop4rel chnget "op4rel"
 
-kop3amp invalue "op3amp"
-kop3ratio invalue "op3ratio"
+kop3amp chnget "op3amp"
+kop3ratio chnget "op3ratio"
 
-kop3att invalue "op3att"
-kop3dec invalue "op3dec"
-kop3sus invalue "op3sus"
-kop3rel invalue "op3rel"
+kop3att chnget "op3att"
+kop3dec chnget "op3dec"
+kop3sus chnget "op3sus"
+kop3rel chnget "op3rel"
 
-kop2amp invalue "op2amp"
-kop2ratio invalue "op2ratio"
+kop2amp chnget "op2amp"
+kop2ratio chnget "op2ratio"
 
-kop2att invalue "op2att"
-kop2dec invalue "op2dec"
-kop2sus invalue "op2sus"
-kop2rel invalue "op2rel"
+kop2att chnget "op2att"
+kop2dec chnget "op2dec"
+kop2sus chnget "op2sus"
+kop2rel chnget "op2rel"
 
-kop1amp invalue "op1amp"
-kop1ratio invalue "op1ratio"
+kop1amp chnget "op1amp"
+kop1ratio chnget "op1ratio"
 
-kop1att invalue "op1att"
-kop1dec invalue "op1dec"
-kop1sus invalue "op1sus"
-kop1rel invalue "op1rel"
+kop1att chnget "op1att"
+kop1dec chnget "op1dec"
+kop1sus chnget "op1sus"
+kop1rel chnget "op1rel"
 
-afase7 phasor icps*kop7ratio
-aop7 table3 afase7, 1, 1, 0, 1
+kfb1 chnget "fb1"
+aop6 init 0
+
+afase7 phasor icps*kop7ratio 
+aop7 table3 afase7+ (kfb1*aop6), 1, 1, 0, 1
 aenv7 madsr i(kop7att), i(kop7dec), i(kop7sus), i(kop7rel)
 
 afase6 phasor icps*kop6ratio
@@ -105,221 +166,225 @@ endin
 
 instr 99 ; randomize harmonic
 krand random 0, 1
-outvalue "op7amp", krand
+chnset  krand, "op7amp"
 krand random -6, 6
 krand = int(krand)
 krand = (krand < 0 ? 1/krand : krand)
 krand = (krand == 0 ? 1 : abs(krand))
-outvalue "op7ratio", krand
+chnset  krand, "op7ratio"
 
 krand random 0.01, 2
-outvalue "op7att",krand
+chnset  krand, "op7att"
 krand random 0.01, 1
-outvalue "op7dec",krand
+chnset  krand, "op7dec"
 krand random 0.01, 1
-outvalue "op7sus",krand
+chnset  krand, "op7sus"
 krand random 0.01, 2
-outvalue "op7rel",krand
+chnset  krand, "op7rel"
 
 krand random 0, 1
-outvalue "op6amp",krand
+chnset  krand, "op6amp"
 krand random -6, 6
 krand = int(krand)
 krand = (krand < 0 ? 1/krand : krand)
 krand = (krand == 0 ? 1 : abs(krand))
-outvalue "op6ratio",krand
+chnset  krand, "op6ratio"
 
 krand random 0.01, 2
-outvalue "op6att",krand
+chnset  krand, "op6att"
 krand random 0.01, 1
-outvalue "op6dec",krand
+chnset  krand, "op6dec"
 krand random 0.01, 1
-outvalue "op6sus",krand
+chnset  krand, "op6sus"
 krand random 0.01, 2
-outvalue "op6rel",krand
+chnset  krand, "op6rel"
 
 krand random 0, 1
-outvalue "op5amp",krand
+chnset  krand, "op5amp"
 krand random -6, 6
 krand = int(krand)
 krand = (krand < 0 ? 1/krand : krand)
 krand = (krand == 0 ? 1 : abs(krand))
-outvalue "op5ratio",krand
+chnset  krand, "op5ratio"
 
 krand random 0.01, 2
-outvalue "op5att",krand
+chnset  krand, "op5att"
 krand random 0.01, 1
-outvalue "op5dec",krand
+chnset  krand, "op5dec"
 krand random 0.01, 1
-outvalue "op5sus",krand
+chnset  krand, "op5sus"
 krand random 0.01, 2
-outvalue "op5rel",krand
+chnset  krand, "op5rel"
 
 krand random 0, 1
-outvalue "op4amp",krand
+chnset  krand, "op4amp"
 krand random -6, 6
 krand = int(krand)
 krand = (krand < 0 ? 1/krand : krand)
 krand = (krand == 0 ? 1 : abs(krand))
-outvalue "op4ratio",krand
+chnset  krand, "op4ratio"
 
 krand random 0.01, 2
-outvalue "op4att",krand
-outvalue "op4dec",krand
-outvalue "op4sus",krand
+chnset  krand, "op4att"
+chnset  krand, "op4dec"
+chnset  krand, "op4sus"
 krand random 0.01, 2
-outvalue "op4rel",krand
+chnset  krand, "op4rel"
 
 krand random 0, 1
-outvalue "op3amp",krand
+chnset  krand, "op3amp"
 krand random -6, 6
 krand = int(krand)
 krand = (krand < 0 ? 1/krand : krand)
 krand = (krand == 0 ? 1 : abs(krand))
-outvalue "op3ratio",krand
+chnset  krand, "op3ratio"
 
 krand random 0.01, 2
-outvalue "op3att",krand
+chnset  krand, "op3att"
 krand random 0.01, 1
-outvalue "op3dec",krand
+chnset  krand, "op3dec"
 krand random 0.01, 1
-outvalue "op3sus",krand
+chnset  krand, "op3sus"
 krand random 0.01, 2
-outvalue "op3rel",krand
+chnset  krand, "op3rel"
 
 krand random 0, 1
-outvalue "op2amp",krand
+chnset  krand, "op2amp"
 krand random -6, 6
 krand = int(krand)
 krand = (krand < 0 ? 1/krand : krand)
 krand = (krand == 0 ? 1 : abs(krand))
-outvalue "op2ratio",krand
+chnset  krand, "op2ratio"
 
 krand random 0.01, 2
-outvalue "op2att",krand
+chnset  krand, "op2att"
 krand random 0.01, 1
-outvalue "op2dec",krand
+chnset  krand, "op2dec"
 krand random 0.01, 1
-outvalue "op2sus",krand
+chnset  krand, "op2sus"
 krand random 0.01, 2
-outvalue "op2rel",krand
+chnset  krand, "op2rel"
 
 krand random 0, 1
-outvalue "op1amp",krand
+chnset  krand, "op1amp"
 krand random -6, 6
 krand = int(krand)
 krand = (krand < 0 ? 1/krand : krand)
 krand = (krand == 0 ? 1 : abs(krand))
-outvalue "op1ratio",krand
+chnset  krand, "op1ratio"
 
 krand random 0.01, 2
-outvalue "op1att",krand
+chnset  krand, "op1att"
 krand random 0.01, 1
-outvalue "op1dec",krand
+chnset  krand, "op1dec"
 krand random 0.01, 1
-outvalue "op1sus",krand
+chnset  krand, "op1sus"
 krand random 0.01, 2
-outvalue "op1rel",krand
+chnset  krand, "op1rel"
+krand random 0, 0.05
+chnset  krand, "fb1"
 
 turnoff
 endin
 
 instr 100 ; randomize
 krand random 0, 1
-outvalue "op7amp", krand
+chnset  krand, "op7amp"
 krand random 0.1, 6
-outvalue "op7ratio", krand
+chnset  krand, "op7ratio"
 
 krand random 0.01, 2
-outvalue "op7att",krand
+chnset  krand, "op7att"
 krand random 0.01, 1
-outvalue "op7dec",krand
+chnset  krand, "op7dec"
 krand random 0.01, 1
-outvalue "op7sus",krand
+chnset  krand, "op7sus"
 krand random 0.01, 2
-outvalue "op7rel",krand
+chnset  krand, "op7rel"
 
 krand random 0, 1
-outvalue "op6amp",krand
+chnset  krand, "op6amp"
 krand random 0.1, 6
-outvalue "op6ratio",krand
+chnset  krand, "op6ratio"
 
 krand random 0.01, 2
-outvalue "op6att",krand
+chnset  krand, "op6att"
 krand random 0.01, 1
-outvalue "op6dec",krand
+chnset  krand, "op6dec"
 krand random 0.01, 1
-outvalue "op6sus",krand
+chnset  krand, "op6sus"
 krand random 0.01, 2
-outvalue "op6rel",krand
+chnset  krand, "op6rel"
 
 krand random 0, 1
-outvalue "op5amp",krand
+chnset  krand, "op5amp"
 krand random 0.1, 6
-outvalue "op5ratio",krand
+chnset  krand, "op5ratio"
 
 krand random 0.01, 2
-outvalue "op5att",krand
+chnset  krand, "op5att"
 krand random 0.01, 1
-outvalue "op5dec",krand
+chnset  krand, "op5dec"
 krand random 0.01, 1
-outvalue "op5sus",krand
+chnset  krand, "op5sus"
 krand random 0.01, 2
-outvalue "op5rel",krand
+chnset  krand, "op5rel"
 
 krand random 0, 1
-outvalue "op4amp",krand
+chnset  krand, "op4amp"
 krand random 0.1, 6
-outvalue "op4ratio",krand
+chnset  krand, "op4ratio"
 
 krand random 0.01, 2
-outvalue "op4att",krand
-outvalue "op4dec",krand
-outvalue "op4sus",krand
+chnset  krand, "op4att"
+chnset  krand, "op4dec"
+chnset  krand, "op4sus"
 krand random 0.01, 2
-outvalue "op4rel",krand
+chnset  krand, "op4rel"
 
 krand random 0, 1
-outvalue "op3amp",krand
+chnset  krand, "op3amp"
 krand random -6, 6
-outvalue "op3ratio",krand
+chnset  krand, "op3ratio"
 
 krand random 0.01, 2
-outvalue "op3att",krand
+chnset  krand, "op3att"
 krand random 0.01, 1
-outvalue "op3dec",krand
+chnset  krand, "op3dec"
 krand random 0.01, 1
-outvalue "op3sus",krand
+chnset  krand, "op3sus"
 krand random 0.01, 2
-outvalue "op3rel",krand
-
-krand random 0, 1
-outvalue "op2amp",krand
-krand random 0.1, 6
-outvalue "op2ratio",krand
-
-krand random 0.01, 2
-outvalue "op2att",krand
-krand random 0.01, 1
-outvalue "op2dec",krand
-krand random 0.01, 1
-outvalue "op2sus",krand
-krand random 0.01, 2
-outvalue "op2rel",krand
+chnset  krand, "op3rel"
 
 krand random 0, 1
-outvalue "op1amp",krand
+chnset  krand, "op2amp"
 krand random 0.1, 6
-outvalue "op1ratio",krand
+chnset  krand, "op2ratio"
 
 krand random 0.01, 2
-outvalue "op1att",krand
+chnset  krand, "op2att"
 krand random 0.01, 1
-outvalue "op1dec",krand
+chnset  krand, "op2dec"
 krand random 0.01, 1
-outvalue "op1sus",krand
+chnset  krand, "op2sus"
 krand random 0.01, 2
-outvalue "op1rel",krand
+chnset  krand, "op2rel"
+
+krand random 0, 1
+chnset  krand, "op1amp"
+krand random 0.1, 6
+chnset  krand, "op1ratio"
+
+krand random 0.01, 2
+chnset  krand, "op1att"
+krand random 0.01, 1
+chnset  krand, "op1dec"
+krand random 0.01, 1
+chnset  krand, "op1sus"
+krand random 0.01, 2
+chnset  krand, "op1rel"
+krand random 0, 0.1
+chnset  krand, "fb1"
 
 turnoff
 endin
@@ -332,13 +397,22 @@ e
 </CsScore>
 </CsoundSynthesizer>
 
+
+
+
+
+
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>874</x>
- <y>193</y>
- <width>697</width>
- <height>655</height>
+ <x>407</x>
+ <y>74</y>
+ <width>784</width>
+ <height>641</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -474,7 +548,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.60793877</value>
+  <value>0.71778546</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -492,7 +566,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>3.00000000</maximum>
-  <value>0.87604076</value>
+  <value>1.23101774</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -510,7 +584,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.68532342</value>
+  <value>0.40886186</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -528,7 +602,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.87491655</value>
+  <value>0.86407266</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -546,7 +620,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>4.00000000</maximum>
-  <value>0.24683115</value>
+  <value>1.88295287</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -579,7 +653,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>3</value>
+  <value>1</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -622,7 +696,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.71242875</value>
+  <value>0.05283310</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -640,7 +714,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>3.00000000</maximum>
-  <value>1.51931179</value>
+  <value>1.63936842</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -658,7 +732,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.76090300</value>
+  <value>0.16656395</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -676,7 +750,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.27295068</value>
+  <value>0.18159133</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -694,7 +768,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>4.00000000</maximum>
-  <value>0.61171556</value>
+  <value>1.42936060</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -727,7 +801,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.2</value>
+  <value>5</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1234,7 +1308,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.82246149</value>
+  <value>0.25851989</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1281,7 +1355,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>3.00000000</maximum>
-  <value>1.93253195</value>
+  <value>0.88690905</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1299,7 +1373,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.21393649</value>
+  <value>0.50667589</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1317,7 +1391,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.91956383</value>
+  <value>0.78680740</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1335,7 +1409,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>4.00000000</maximum>
-  <value>1.47231400</value>
+  <value>0.29805235</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1382,7 +1456,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.41843128</value>
+  <value>0.36599067</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1415,7 +1489,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2</value>
+  <value>3</value>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>op1att</objectName>
@@ -1429,7 +1503,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>3.00000000</maximum>
-  <value>0.25791028</value>
+  <value>0.50664166</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1447,7 +1521,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.32575035</value>
+  <value>0.94121707</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1465,7 +1539,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.26118517</value>
+  <value>0.61838042</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1483,7 +1557,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>4.00000000</maximum>
-  <value>1.78432512</value>
+  <value>0.97353437</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1530,7 +1604,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.02822053</value>
+  <value>0.03119405</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1563,7 +1637,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1</value>
+  <value>5</value>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>op4att</objectName>
@@ -1577,7 +1651,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>3.00000000</maximum>
-  <value>1.85546792</value>
+  <value>0.83143819</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1595,7 +1669,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>2.00000000</maximum>
-  <value>1.85546792</value>
+  <value>0.83143819</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1613,7 +1687,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>1.00000000</value>
+  <value>0.83143819</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1631,7 +1705,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>4.00000000</maximum>
-  <value>0.80882120</value>
+  <value>1.86178446</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2229,7 +2303,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.88287294</value>
+  <value>0.80733961</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2247,7 +2321,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>3.00000000</maximum>
-  <value>1.85216427</value>
+  <value>0.78871372</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2265,7 +2339,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.12375984</value>
+  <value>0.17000116</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2283,7 +2357,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.01545162</value>
+  <value>0.21947320</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2301,7 +2375,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>4.00000000</maximum>
-  <value>1.01258862</value>
+  <value>1.63517308</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2334,7 +2408,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.5</value>
+  <value>0.333333</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2551,7 +2625,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.61456019</value>
+  <value>0.97349986</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2584,7 +2658,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>4</value>
+  <value>1</value>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>op6att</objectName>
@@ -2598,7 +2672,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>3.00000000</maximum>
-  <value>1.79552197</value>
+  <value>1.87068630</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2616,7 +2690,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.56583136</value>
+  <value>0.06834970</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2634,7 +2708,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.70409799</value>
+  <value>0.73532856</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2652,7 +2726,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000100</minimum>
   <maximum>4.00000000</maximum>
-  <value>0.91626638</value>
+  <value>1.44152324</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2926,7 +3000,7 @@ e
   <minimum>0</minimum>
   <maximum>8</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0</value>
+  <value>1</value>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>_GetPresetName</objectName>
@@ -2938,7 +3012,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>Default</label>
+  <label>Fairy Dust</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -2986,12 +3060,140 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <objectName/>
- <x>874</x>
- <y>193</y>
- <width>697</width>
- <height>655</height>
- <visible>true</visible>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>737</x>
+  <y>333</y>
+  <width>16</width>
+  <height>216</height>
+  <uuid>{df6725b5-7a67-4d71-a249-1407de631f8a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>8</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>51</r>
+   <g>167</g>
+   <b>125</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>5</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>667</x>
+  <y>531</y>
+  <width>84</width>
+  <height>18</height>
+  <uuid>{81a4bc39-f596-4db2-b0b9-d65885a5fa56}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>8</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>51</r>
+   <g>167</g>
+   <b>125</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>5</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>672</x>
+  <y>332</y>
+  <width>81</width>
+  <height>18</height>
+  <uuid>{65c9c9ad-86e2-4c79-9b70-9b2471380fbe}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>8</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>51</r>
+   <g>167</g>
+   <b>125</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>5</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob">
+  <objectName>fb1</objectName>
+  <x>680</x>
+  <y>419</y>
+  <width>57</width>
+  <height>53</height>
+  <uuid>{465a3cbf-594b-494d-9b1b-9ffdbe806def}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.05533870</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName>label109</objectName>
+  <x>675</x>
+  <y>471</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{d622018b-608c-4d90-bbb6-94a8fdd5986b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Feedback</label>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
 </bsbPanel>
 <bsbPresets>
 <preset name="Default" number="0" >
@@ -3412,123 +3614,4 @@ e
 <value id="{beca3791-f6ef-4ca6-8b17-b074357951d5}" mode="4" >0</value>
 </preset>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 874 193 697 655
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {32125, 41634, 41120}
-ioText {22, 5} {653, 64} label 0.000000 0.00100 "" center "Lucida Grande" 40 {0, 0, 0} {45056, 44544, 32512} nobackground noborder Phase ModulationSynth
-ioText {118, 229} {20, 36} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} nobackground noborder 
-ioText {342, 228} {20, 36} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} nobackground noborder 
-ioText {23, 77} {207, 157} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} nobackground noborder OP3
-ioSlider {35, 102} {20, 100} 0.000000 1.000000 0.607939 op3amp
-ioSlider {130, 100} {20, 100} 0.000001 3.000000 0.876041 op3att
-ioSlider {154, 99} {20, 100} 0.000001 2.000000 0.685323 op3dec
-ioSlider {177, 100} {20, 100} 0.000000 1.000000 0.874917 op3sus
-ioSlider {201, 100} {20, 100} 0.000001 4.000000 0.246831 op3rel
-ioText {57, 134} {67, 25} editnum 3.000000 0.001000 "op3ratio" left "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 3.000000
-ioText {251, 78} {205, 154} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} nobackground noborder OP5
-ioSlider {265, 102} {20, 100} 0.000000 1.000000 0.712429 op5amp
-ioSlider {357, 100} {20, 100} 0.000001 3.000000 1.519312 op5att
-ioSlider {380, 100} {20, 100} 0.000001 2.000000 0.760903 op5dec
-ioSlider {403, 100} {20, 100} 0.000000 1.000000 0.272951 op5sus
-ioSlider {428, 100} {20, 100} 0.000001 4.000000 0.611716 op5rel
-ioText {288, 130} {66, 25} editnum 0.201000 0.001000 "op5ratio" left "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.201000
-ioText {129, 201} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder A
-ioText {154, 200} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder D
-ioText {177, 201} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder S
-ioText {201, 201} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder R
-ioText {30, 206} {41, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Amp
-ioText {57, 160} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Ratio
-ioText {357, 201} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder A
-ioText {381, 201} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder D
-ioText {404, 201} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder S
-ioText {429, 201} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder R
-ioText {258, 201} {41, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Amp
-ioText {287, 155} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Ratio
-ioText {105, 414} {20, 36} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} nobackground noborder 
-ioText {346, 414} {20, 36} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} nobackground noborder 
-ioText {227, 441} {20, 36} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} nobackground noborder 
-ioText {105, 434} {262, 16} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} nobackground noborder 
-ioText {23, 262} {204, 157} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} nobackground noborder OP2
-ioSlider {35, 285} {20, 100} 0.000000 1.000000 0.822461 op2amp
-ioText {56, 316} {67, 26} editnum 1.000000 0.001000 "op2ratio" left "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 1.000000
-ioSlider {127, 284} {20, 100} 0.000001 3.000000 1.932532 op2att
-ioSlider {150, 284} {20, 100} 0.000001 2.000000 0.213936 op2dec
-ioSlider {174, 284} {20, 100} 0.000000 1.000000 0.919564 op2sus
-ioSlider {197, 284} {20, 100} 0.000001 4.000000 1.472314 op2rel
-ioText {130, 471} {207, 148} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} nobackground noborder OP1
-ioSlider {145, 490} {20, 100} 0.000000 1.000000 0.418431 op1amp
-ioText {167, 523} {67, 25} editnum 2.000000 0.001000 "op1ratio" left "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 2.000000
-ioSlider {237, 487} {20, 100} 0.000001 3.000000 0.257910 op1att
-ioSlider {260, 487} {20, 100} 0.000001 2.000000 0.325750 op1dec
-ioSlider {283, 487} {20, 100} 0.000000 1.000000 0.261185 op1sus
-ioSlider {308, 487} {20, 100} 0.000001 4.000000 1.784325 op1rel
-ioText {252, 263} {206, 155} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} nobackground noborder OP4
-ioSlider {265, 286} {20, 100} 0.000000 1.000000 0.028221 op4amp
-ioText {289, 320} {66, 25} editnum 1.000000 0.001000 "op4ratio" left "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 1.000000
-ioSlider {359, 285} {20, 100} 0.000001 3.000000 1.855468 op4att
-ioSlider {382, 285} {20, 100} 0.000001 2.000000 1.855468 op4dec
-ioSlider {405, 285} {20, 100} 0.000000 1.000000 1.000000 op4sus
-ioSlider {429, 285} {20, 100} 0.000001 4.000000 0.808821 op4rel
-ioText {126, 385} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder A
-ioText {150, 385} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder D
-ioText {174, 385} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder S
-ioText {197, 385} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder R
-ioText {30, 388} {41, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Amp
-ioText {55, 342} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Ratio
-ioText {359, 387} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder A
-ioText {383, 387} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder D
-ioText {406, 388} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder S
-ioText {430, 387} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder R
-ioText {261, 390} {41, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Amp
-ioText {289, 345} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Ratio
-ioText {236, 588} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder A
-ioText {260, 588} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder D
-ioText {283, 588} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder S
-ioText {307, 588} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder R
-ioText {138, 591} {41, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Amp
-ioText {166, 546} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Ratio
-ioText {560, 391} {19, 76} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} nobackground noborder 
-ioText {470, 264} {205, 154} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} nobackground noborder OP7
-ioSlider {484, 288} {20, 100} 0.000000 1.000000 0.882873 op7amp
-ioSlider {576, 286} {20, 100} 0.000001 3.000000 1.852164 op7att
-ioSlider {599, 286} {20, 100} 0.000001 2.000000 0.123760 op7dec
-ioSlider {622, 286} {20, 100} 0.000000 1.000000 0.015452 op7sus
-ioSlider {647, 286} {20, 100} 0.000001 4.000000 1.012589 op7rel
-ioText {507, 316} {66, 25} editnum 0.500000 0.001000 "op7ratio" left "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.500000
-ioText {576, 387} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder A
-ioText {600, 387} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder D
-ioText {623, 387} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder S
-ioText {648, 387} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder R
-ioText {477, 387} {41, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Amp
-ioText {506, 341} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Ratio
-ioText {464, 458} {206, 155} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {13056, 42752, 32000} nobackground noborder OP6
-ioSlider {477, 481} {20, 100} 0.000000 1.000000 0.614560 op6amp
-ioText {501, 515} {66, 25} editnum 4.000000 0.001000 "op6ratio" left "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 4.000000
-ioSlider {571, 480} {20, 100} 0.000001 3.000000 1.795522 op6att
-ioSlider {594, 480} {20, 100} 0.000001 2.000000 0.565831 op6dec
-ioSlider {617, 480} {20, 100} 0.000000 1.000000 0.704098 op6sus
-ioSlider {641, 480} {20, 100} 0.000001 4.000000 0.916266 op6rel
-ioText {571, 582} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder A
-ioText {595, 582} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder D
-ioText {618, 583} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder S
-ioText {642, 582} {20, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder R
-ioText {473, 585} {41, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Amp
-ioText {501, 540} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Ratio
-ioText {470, 78} {205, 154} label 0.000000 0.00100 "" center "Lucida Grande" 8 {0, 0, 0} {15872, 42240, 42752} nobackground noborder Control
-ioButton {476, 100} {190, 28} event 1.000000 "" "Randomize harmonic" "/" i 99 0 1
-ioButton {476, 129} {190, 28} event 1.000000 "" "Randomize" "/" i 100 0 1
-ioText {478, 193} {42, 30} editnum 0.000000 1.000000 "_SetPreset" left "" 0 {0, 0, 0} {59392, 59392, 59392} nobackground noborder 0.000000
-ioText {526, 193} {139, 29} display 0.000000 0.00100 "_GetPresetName" left "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Default
-ioText {536, 166} {80, 25} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Presets
-</MacGUI>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="381" y="517" width="655" height="346" visible="true" loopStart="0" loopEnd="0">i 1 0 1 440 100 </EventPanel>

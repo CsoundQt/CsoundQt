@@ -4676,7 +4676,7 @@ void CsoundQt::setWidgetsText(QString text, int index)
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->setWidgetText(text);
+    documentPages[index]->setWidgetsText(text);
   }
 }
 

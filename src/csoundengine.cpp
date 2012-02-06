@@ -398,14 +398,25 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
 //   qDebug("qutecsound::writeWidgetValues");
    MYFLT* pvalue;
    for (int i = 0; i < ud->outputChannelNames.size(); i++) {
-     if (ud->outputChannelNames[i] != "") {
-       if(csoundGetChannelPtr(ud->csound, &pvalue, ud->outputChannelNames[i].toLocal8Bit().constData(),
-          CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+     if (ud->outputChannelNames[i] != ""
+         && csoundGetChannelPtr(ud->csound, &pvalue,
+                                ud->outputChannelNames[i].toLocal8Bit().constData(),
+                                CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+       if(ud->previousOutputValues[i] != *pvalue) {
          ud->wl->setValue(ud->outputChannelNames[i],*pvalue);
+         ud->previousOutputValues[i] = *pvalue;
        }
-       else if(csoundGetChannelPtr(ud->csound, &pvalue, ud->outputChannelNames[i].toLocal8Bit().constData(),
-         CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
-         ud->wl->setValue(ud->outputChannelNames[i],QString((char *)pvalue));
+     }
+   }
+   for (int i = 0; i < ud->outputStringChannelNames.size(); i++) {
+     if (ud->outputStringChannelNames[i] != ""
+         && csoundGetChannelPtr(ud->csound, &pvalue,
+                                ud->outputStringChannelNames[i].toLocal8Bit().constData(),
+                                CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
+       QString value = QString((char *)pvalue);
+       if(ud->previousStringOutputValues[i] != value) {
+         ud->wl->setValue(ud->outputStringChannelNames[i],value);
+         ud->previousStringOutputValues[i] = value;
        }
      }
    }

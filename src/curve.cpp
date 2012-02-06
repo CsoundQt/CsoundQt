@@ -40,8 +40,8 @@ void Curve::destroy()
 }
 
 Curve::Curve(MYFLT *data, size_t size, const QString& caption,
-             Polarity polarity, float max, float min, float absmax,
-             float y_scale, bool dotted_divider, WINDAT *original)
+             Polarity polarity, MYFLT max, MYFLT min, MYFLT absmax,
+             MYFLT y_scale, bool dotted_divider, WINDAT *original)
   : m_caption(caption)
 {
   m_size = 0;
@@ -109,15 +109,15 @@ size_t Curve::get_size() const
 //  return m_id;
 //}
 
-// float *Curve::get_data() const
+// MYFLT *Curve::get_data() const
 // {
 //   return m_data;
 // }
 
-float Curve::get_data(int index)
+MYFLT Curve::get_data(int index)
 {
 //   mutex.lock();
-  float out = (float) m_data[index];
+  MYFLT out = m_data[index];
 //   mutex.unlock();
   return out;
 }
@@ -132,22 +132,22 @@ Polarity Curve::get_polarity() const
   return m_polarity;
 }
 
-float Curve::get_max() const
+MYFLT Curve::get_max() const
 {
   return m_max;
 }
 
-float Curve::get_min() const
+MYFLT Curve::get_min() const
 {
   return m_min;
 }
 
-float Curve::get_absmax() const
+MYFLT Curve::get_absmax() const
 {
   return m_absmax;
 }
 
-float Curve::get_y_scale() const
+MYFLT Curve::get_y_scale() const
 {
   return m_y_scale;
 }
@@ -188,21 +188,21 @@ void Curve::set_polarity(Polarity polarity)
   m_polarity = polarity;
 }
 
-void Curve::set_max(float max)
+void Curve::set_max(MYFLT max)
 {
   m_max = max;
 }
-void Curve::set_min(float min)
+void Curve::set_min(MYFLT min)
 {
   m_min = min;
 }
 
-void Curve::set_absmax(float absmax)
+void Curve::set_absmax(MYFLT absmax)
 {
   m_absmax = absmax;
 }
 
-void Curve::set_y_scale(float y_scale)
+void Curve::set_y_scale(MYFLT y_scale)
 {
   m_y_scale = y_scale;
 }

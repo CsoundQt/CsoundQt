@@ -439,7 +439,7 @@ void QuteGraph::setCurveData(Curve * curve)
     for (int i = 0; i < (int) curve->get_size(); i++) { //skip first item, which is base line
       double value;
       if (curve->get_caption().contains("fft")) {
-        value =  20*log10(fabs(curve->get_data(i))/m_ud->zerodBFS);
+        value =  20.0*log10(fabs(curve->get_data(i))/m_ud->zerodBFS);
       }
       else {
         value = curve->get_data(i)/m_ud->zerodBFS;
