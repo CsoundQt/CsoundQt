@@ -3054,12 +3054,45 @@ void WidgetLayout::loadPresetFromIndex(int index)
         int mode = p.getMode(i);
         if (mode & 1) {
           m_widgets[j]->setValue(p.getValue(i));
+          QString channel = m_widgets[j]->getChannelName();
+          if (!channel.isEmpty()) { // Now store the value in the changes buffer to read from chnget
+            valueMutex.lock();
+            if(newValues.contains(channel)) {
+              newValues[channel] = p.getValue(i);
+            }
+            else {
+              newValues.insert(channel, p.getValue(i));
+            }
+            valueMutex.unlock();
+          }
         }
         if (mode & 2) {
           m_widgets[j]->setValue2(p.getValue2(i));
+          QString channel = m_widgets[j]->getChannelName();
+          if (!channel.isEmpty()) { // Now store the value in the changes buffer to read from chnget
+            valueMutex.lock();
+            if(newValues.contains(channel)) {
+              newValues[channel] = p.getValue2(i);
+            }
+            else {
+              newValues.insert(channel, p.getValue2(i));
+            }
+            valueMutex.unlock();
+          }
         }
         if (mode & 4) {
           m_widgets[j]->setValue(p.getStringValue(i));
+          QString channel = m_widgets[j]->getChannelName();
+          if (!channel.isEmpty()) { // Now store the value in the changes buffer to read from chnget
+            stringValueMutex.lock();
+            if(newStringValues.contains(channel)) {
+              newStringValues[channel] = p.getStringValue(i);
+            }
+            else {
+              newStringValues.insert(channel, p.getStringValue(i));
+            }
+            stringValueMutex.unlock();
+          }
         }
       }
     }

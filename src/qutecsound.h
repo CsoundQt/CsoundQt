@@ -281,7 +281,6 @@ class CsoundQt:public QMainWindow
 #ifdef QCS_RTMIDI
     RtMidiIn *m_midiin;
 #endif
-    QToolButton *closeTabButton;
     QFile logFile;
 
     QVector<QAction *> m_keyActions; //Actions which have keyboard shortcuts

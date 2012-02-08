@@ -156,11 +156,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
   createStatusBar();
 
   documentTabs = new QTabWidget (this);
+  documentTabs->setTabsClosable(true);
   connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
+  connect(documentTabs, SIGNAL(tabCloseRequested(int)), documentTabs, SLOT(setCurrentIndex(int)));
+  connect(documentTabs, SIGNAL(tabCloseRequested(int)), closeTabAct, SLOT(trigger()));
   setCentralWidget(documentTabs);
-  closeTabButton = new QToolButton(documentTabs);
-  closeTabButton->setDefaultAction(closeTabAct);
-  documentTabs->setCornerWidget(closeTabButton);
   modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
   modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
 
