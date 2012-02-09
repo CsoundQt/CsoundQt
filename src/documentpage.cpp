@@ -715,7 +715,7 @@ void DocumentPage::copy()
     }
   }
   if (!liveeventfocus) {
-    if (m_view->hasFocus()) {
+    if (m_view->childHasFocus()) {
       m_view->copy();
     }
     else  { // FIXME allow multiple layouts
@@ -732,8 +732,9 @@ void DocumentPage::cut()
       return;
     }
   }
-  if (m_view->hasFocus())
+  if (m_view->childHasFocus()) {
     m_view->cut();
+  }
   else {
     for (int i = 0; i < m_liveFrames.size(); i++) {
       if (m_liveFrames[i]->getSheet()->hasFocus())
@@ -750,10 +751,9 @@ void DocumentPage::paste()
       return;
     }
   }
-  if (m_widgetLayouts[0]->hasFocus())
-    m_widgetLayouts[0]->paste();
-  else if (m_view->hasFocus())
+  if (m_view->childHasFocus()) {
     m_view->paste();
+  }
   else {
     for (int i = 0; i < m_liveFrames.size(); i++) {
       if (m_liveFrames[i]->getSheet()->hasFocus())
@@ -772,9 +772,7 @@ void DocumentPage::undo()
       return;
     }
   }
-  if (m_widgetLayouts[0]->hasFocus()) {
-  }
-  else if (m_view->hasFocus()) {
+  if (m_view->childHasFocus()) {
     m_view->undo();
   }
   else {
@@ -794,7 +792,7 @@ void DocumentPage::redo()
       return;
     }
   }
-  if (m_view->hasFocus())
+  if (m_view->childHasFocus())
     m_view->redo();
   else {
     for (int i = 0; i < m_liveFrames.size(); i++) {

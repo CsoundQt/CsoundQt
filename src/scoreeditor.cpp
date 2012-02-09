@@ -131,5 +131,75 @@ void ScoreEditor::clearUndoRedoStacks()
 
 void ScoreEditor::modified()
 {
-    emit textChanged();
+  emit textChanged();
+}
+
+void ScoreEditor::cut()
+{
+  switch (m_mode) {
+  case 0:
+    m_textEditor->cut();
+    break;
+  case 1:
+    m_sheet->cut();
+    break;
+  default:
+    break;
+  }
+}
+
+void ScoreEditor::copy()
+{
+  switch (m_mode) {
+  case 0:
+    m_textEditor->copy();
+    break;
+  case 1:
+    m_sheet->copy();
+    break;
+  default:
+    break;
+  }
+}
+
+void ScoreEditor::paste()
+{
+  switch (m_mode) {
+  case 0:
+    m_textEditor->paste();
+    break;
+  case 1:
+    m_sheet->paste();
+    break;
+  default:
+    break;
+  }
+}
+
+void ScoreEditor::undo()
+{
+  switch (m_mode) {
+  case 0:
+    m_textEditor->undo();
+    break;
+  case 1:
+    m_sheet->undo();
+    break;
+  default:
+    break;
+  }
+}
+
+void ScoreEditor::redo()
+{
+  switch (m_mode) {
+  case 0:
+    m_textEditor->redo();
+    break;
+  case 1:
+    m_sheet->redo();
+    break;
+  default:
+    break;
+  }
 }

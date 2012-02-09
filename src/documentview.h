@@ -69,6 +69,7 @@ class DocumentView : public BaseView
     QString getActiveText();
     int currentLine();
     bool isModified();
+    bool childHasFocus();
     void print(QPrinter *printer);
 
   public slots:

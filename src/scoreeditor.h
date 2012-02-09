@@ -47,6 +47,13 @@ public slots:
   void clearUndoRedoStacks();
   void modified();
 
+  void cut();
+  void copy();
+  void paste();
+
+  void undo();
+  void redo();
+
 protected:
 
 private:

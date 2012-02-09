@@ -91,6 +91,18 @@ bool DocumentView::isModified()
   return m_isModified;
 }
 
+bool DocumentView::childHasFocus()
+{
+  if (this->hasFocus() || m_scoreEditor->hasFocus()
+      || m_optionsEditor->hasFocus()
+      || m_otherEditor->hasFocus()
+      || m_otherCsdEditor->hasFocus()
+      || m_widgetEditor->hasFocus()) {
+    return true;
+  }
+  return false;
+}
+
 void DocumentView::print(QPrinter *printer)
 {
   m_mainEditor->print(printer);
@@ -771,7 +783,21 @@ void DocumentView::cut()
     m_mainEditor->cut();
   }
   else {
-    qDebug() << "DocumentView::cut() not implemented for split view";
+    if (m_scoreEditor->hasFocus()) {
+      m_scoreEditor->cut();
+    }
+    else if (m_optionsEditor->hasFocus()) {
+      m_optionsEditor->cut();
+    }
+    else if (m_otherEditor->hasFocus() ) {
+      m_otherEditor->cut();
+    }
+    else if (m_otherCsdEditor->hasFocus()) {
+      m_otherCsdEditor->cut();
+    }
+    else if (m_widgetEditor->hasFocus()) {
+      m_widgetEditor->cut();
+    }
   }
 }
 
@@ -781,7 +807,21 @@ void DocumentView::copy()
     m_mainEditor->copy();
   }
   else {
-    qDebug() << "DocumentView::copy() not implemented for split view";
+    if (m_scoreEditor->hasFocus()) {
+      m_scoreEditor->copy();
+    }
+    else if (m_optionsEditor->hasFocus()) {
+      m_optionsEditor->copy();
+    }
+    else if (m_otherEditor->hasFocus() ) {
+      m_otherEditor->copy();
+    }
+    else if (m_otherCsdEditor->hasFocus()) {
+      m_otherCsdEditor->copy();
+    }
+    else if (m_widgetEditor->hasFocus()) {
+      m_widgetEditor->copy();
+    }
   }
 }
 
@@ -791,7 +831,21 @@ void DocumentView::paste()
     m_mainEditor->paste();
   }
   else {
-    qDebug() << "DocumentView::paste() not implemented for split view";
+    if (m_scoreEditor->hasFocus()) {
+      m_scoreEditor->paste();
+    }
+    else if (m_optionsEditor->hasFocus()) {
+      m_optionsEditor->paste();
+    }
+    else if (m_otherEditor->hasFocus() ) {
+      m_otherEditor->paste();
+    }
+    else if (m_otherCsdEditor->hasFocus()) {
+      m_otherCsdEditor->paste();
+    }
+    else if (m_widgetEditor->hasFocus()) {
+      m_widgetEditor->paste();
+    }
   }
 }
 
@@ -801,7 +855,21 @@ void DocumentView::undo()
     m_mainEditor->undo();
   }
   else {
-    qDebug() << "DocumentView::undo() not implemented for split view";
+    if (m_scoreEditor->hasFocus()) {
+      m_scoreEditor->undo();
+    }
+    else if (m_optionsEditor->hasFocus()) {
+      m_optionsEditor->undo();
+    }
+    else if (m_otherEditor->hasFocus() ) {
+      m_otherEditor->undo();
+    }
+    else if (m_otherCsdEditor->hasFocus()) {
+      m_otherCsdEditor->undo();
+    }
+    else if (m_widgetEditor->hasFocus()) {
+      m_widgetEditor->undo();
+    }
   }
 }
 
@@ -811,7 +879,21 @@ void DocumentView::redo()
     m_mainEditor->redo();
   }
   else {
-    qDebug() << "DocumentView::redo() not implemented for split view";
+    if (m_scoreEditor->hasFocus()) {
+      m_scoreEditor->redo();
+    }
+    else if (m_optionsEditor->hasFocus()) {
+      m_optionsEditor->redo();
+    }
+    else if (m_otherEditor->hasFocus() ) {
+      m_otherEditor->redo();
+    }
+    else if (m_otherCsdEditor->hasFocus()) {
+      m_otherCsdEditor->redo();
+    }
+    else if (m_widgetEditor->hasFocus()) {
+      m_widgetEditor->redo();
+    }
   }
 }
 

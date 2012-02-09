@@ -158,7 +158,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
   documentTabs = new QTabWidget (this);
   documentTabs->setTabsClosable(true);
   connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
-  connect(documentTabs, SIGNAL(tabCloseRequested(int)), documentTabs, SLOT(setCurrentIndex(int)));
+  connect(documentTabs, SIGNAL(tabCloseRequested(int)), documentTabs, SLOT(setCurrentIndex(int))); // To force changing to clicked tab before closing
   connect(documentTabs, SIGNAL(tabCloseRequested(int)), closeTabAct, SLOT(trigger()));
   setCentralWidget(documentTabs);
   modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);

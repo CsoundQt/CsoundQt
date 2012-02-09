@@ -612,6 +612,7 @@ void EventSheet::paste()
   if (rowCount <= 1 && columnCount <= 1) {
     rowCount = columnCount = 0;
   }
+  // TODO comments that should be pasted on multiple cells are not.
   setFromText(qApp->clipboard()->text(), lowestRow, lowestColumn, rowCount, columnCount, true);
   markHistory();
 }
