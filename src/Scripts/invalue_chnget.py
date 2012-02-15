@@ -16,6 +16,10 @@ def changeToChnget(text):
             if arg1EndIndex == -1:
                 arg1EndIndex = None
             arg1 = line[arg1Index : arg1EndIndex].strip()
+            if arg1.startswith('"_'): # reserved channels can only be currently used with invalue!
+                line = line.replace("chnget", "invalue") # put it back
+                newText += line + "\n"
+                continue
             if line.strip().startswith('S'):
                 if arg1[1:-1] in strchannels:
                     strchannels[arg1[1:-1]] |= 1
@@ -34,11 +38,15 @@ def changeToChnget(text):
             arg2EndIndex = line.find(";", arg2Index)
             if arg2EndIndex == -1:
                 arg2EndIndex = None
+            comment = line[arg2EndIndex :]
             arg1 = line[arg1Index : arg2Index - 1].strip()
             arg2 = line[arg2Index : arg2EndIndex].strip()
+            if arg1.startswith('"_'): # reserved channels can only be currently used with invalue!
+                line = line.replace("chnset", "outvalue") # put it back
+                newText += line + "\n"
+                continue
             line = line[:arg1Index] + " " +  arg2 + ", " + arg1
             if (arg2EndIndex > 0):
-                comment = line[arg2EndIndex :]
                 line += " " + comment
             if arg2.strip().startswith('S') or arg2.strip().startswith('"'):
                 if arg1[1:-1] in channels:
@@ -77,11 +85,11 @@ def changeToInvalue(text):
             arg2EndIndex = line.find(";", arg2Index)
             if arg2EndIndex == -1:
                 arg2EndIndex = None
+            comment = line[arg2EndIndex :]
             arg1 = line[arg1Index : arg2Index - 1].strip()
             arg2 = line[arg2Index : arg2EndIndex].strip()
             line = line[:arg1Index] + " " +  arg2 + ", " + arg1
             if (arg2EndIndex > 0):
-                comment = line[arg2EndIndex :]
                 line += " " + comment
         if not (line.strip().startswith('chn_k') or line.strip().startswith('chn_S')):
             newText += line + "\n" # skip lines with chn_k
@@ -115,6 +123,7 @@ toInvalueButton.connect("clicked()", toInvalue)
 toChngetButton.connect("clicked()", toChnget)
 
 w.show()
+
 
 
 
