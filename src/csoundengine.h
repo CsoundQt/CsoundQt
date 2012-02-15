@@ -35,6 +35,7 @@
 #endif
 
 //#include <QtCore>
+#include <QTimer>
 
 class ConsoleWidget;
 class QuteScope;
