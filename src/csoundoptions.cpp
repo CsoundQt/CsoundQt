@@ -172,7 +172,7 @@ int CsoundOptions::generateCmdLine(char **argv)
   foreach (QString flag, indFlags) {
     flag = flag.simplified();
     argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
-    strcpy(argv[index],flag.toStdString().c_str());
+    strcpy(argv[index], flag.toLocal8Bit());
     index++;
   }
   argv[index] = (char *) calloc(fileName1.size()+1, sizeof(char));
