@@ -367,7 +367,7 @@ QString DocumentPage::getMacOptions(QString option)
     option += " ";
   int index = m_macOptions.indexOf(QRegExp(option + ".*"));
   if (index < 0) {
-    qDebug("DocumentPage::getMacOptions() Option %s not found!", option.toStdString().c_str());
+    qDebug("DocumentPage::getMacOptions() Option %s not found!", option.toLocal8Bit().constData());
     return QString("");
   }
   return m_macOptions[index].mid(option.size());
@@ -1319,7 +1319,7 @@ void DocumentPage::setMacOption(QString option, QString newValue)
     return;
   }
   m_macOptions[index] = option + newValue;
-  qDebug("DocumentPage::setMacOption() %s", m_macOptions[index].toStdString().c_str());
+  qDebug("DocumentPage::setMacOption() %s", m_macOptions[index].toLocal8Bit().constData());
 }
 
 void DocumentPage::setWidgetPanelPosition(QPoint position)

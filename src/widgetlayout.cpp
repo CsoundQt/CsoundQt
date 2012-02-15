@@ -603,16 +603,16 @@ void WidgetLayout::setWidgetProperty(QString channel, QString property, QVariant
 {
   for (int i = 0; i < m_widgets.size(); i++) {
     if (m_widgets[i]->getUuid() == channel) {
-      m_widgets[i]->setProperty(property.toAscii().constData(), value);
+      m_widgets[i]->setProperty(property.toLocal8Bit(), value);
       m_widgets[i]->applyInternalProperties();
       break;
     }
     else if (m_widgets[i]->getChannelName() == channel) {
-      m_widgets[i]->setProperty(property.toAscii().constData(), value);
+      m_widgets[i]->setProperty(property.toLocal8Bit(), value);
       m_widgets[i]->applyInternalProperties();
     }
     else if (m_widgets[i]->getUuid() == channel) {
-      m_widgets[i]->setProperty(property.toAscii().constData(), value);
+      m_widgets[i]->setProperty(property.toLocal8Bit(), value);
       m_widgets[i]->applyInternalProperties();
     }
   }
@@ -622,10 +622,10 @@ QVariant WidgetLayout::getWidgetProperty(QString channel, QString property)
 {
   for (int i = 0; i < m_widgets.size(); i++) {
     if (m_widgets[i]->getUuid() == channel) {
-      return m_widgets[i]->property(property.toAscii().constData());
+      return m_widgets[i]->property(property.toLocal8Bit());
     }
     else if (m_widgets[i]->getChannelName() == channel) {
-      return m_widgets[i]->property(property.toAscii().constData());
+      return m_widgets[i]->property(property.toLocal8Bit());
     }
   }
   return QVariant();

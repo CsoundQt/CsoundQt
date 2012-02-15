@@ -160,7 +160,7 @@ QList<QPair<QString, QString> > ConfigLists::getMidiInputDevices(int moduleIndex
         }
         else {
           if (line.indexOf(":") >= 0) {
-            qDebug("%s", line.toStdString().c_str());
+            qDebug("%s", line.toLocal8Bit().constData());
             QPair<QString, QString> device;
             device.first = line.mid(line.indexOf(":") + 1).trimmed();
             device.second = line.mid(0,line.indexOf(":")).trimmed();
@@ -245,7 +245,7 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(int moduleInde
         }
         else {
           if (line.indexOf(":") >= 0) {
-            qDebug("%s", line.toStdString().c_str());
+            qDebug("%s", line.toLocal8Bit().constData());
             QPair<QString, QString> device;
             device.first = line.mid(line.indexOf(":") + 1).trimmed();
             device.second = line.mid(0,line.indexOf(":")).trimmed();
@@ -576,7 +576,7 @@ QStringList ConfigLists::runCsoundInternally(QStringList flags)
   int index = 0;
   foreach (QString flag, flags) {
     argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
-    strcpy(argv[index],flag.toStdString().c_str());
+    strcpy(argv[index], flag.toLocal8Bit());
     index++;
   }
   int argc = flags.size();

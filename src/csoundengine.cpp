@@ -573,7 +573,7 @@ void CsoundEngine::processEventQueue()
 //      ud->perfThread->ScoreEvent(0, type, eventElements.size(), pFields);
 //      qDebug() << "CsoundEngine::processEventQueue()" << eventQueue[eventQueueSize];
        ud->perfThread
-           ->InputMessage(eventQueue[eventQueueSize].toStdString().c_str());
+           ->InputMessage(eventQueue[eventQueueSize].toLocal8Bit());
     }
     else {
       char type = eventQueue[eventQueueSize][0].unicode();
@@ -582,7 +582,7 @@ void CsoundEngine::processEventQueue()
       for (int j = 0; j < eventElements.size(); j++) {
         pFields[j] = (MYFLT) eventElements[j].toDouble();
       }
-      qDebug("type %c line: %s", type, eventQueue[eventQueueSize].toStdString().c_str());
+      qDebug("type %c line: %s", type, eventQueue[eventQueueSize].toLocal8Bit().constData());
       csoundScoreEvent(ud->csound, type, pFields, eventElements.size());
     }
   }
@@ -644,8 +644,8 @@ int CsoundEngine::startRecording(int sampleformat, QString fileName)
     format |= SF_FORMAT_FLOAT;
     break;
   }
-  qDebug("start recording: %s", fileName.toStdString().c_str());
-  m_outfile = new SndfileHandle(fileName.toStdString().c_str(), SFM_WRITE, format, channels, sampleRate);
+  qDebug("start recording: %s", fileName.toLocal8Bit().constData());
+  m_outfile = new SndfileHandle(fileName.toLocal8Bit(), SFM_WRITE, format, channels, sampleRate);
   // clip instead of wrap when converting floats to ints
   m_outfile->command(SFC_SET_CLIPPING, NULL, SF_TRUE);
   samplesWritten = 0;

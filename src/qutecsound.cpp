@@ -1982,13 +1982,13 @@ void CsoundQt::runUtility(QString flags)
     int index = 0;
     foreach (QString flag, indFlags) {
       argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
-      strcpy(argv[index],flag.toStdString().c_str());
+      strcpy(argv[index], flag.toLocal8Bit());
       index++;
     }
     argv[index] = (char *) calloc(files[0].size()+1, sizeof(char));
-    strcpy(argv[index++],files[0].toStdString().c_str());
+    strcpy(argv[index++], files[0].toLocal8Bit());
     argv[index] = (char *) calloc(files[2].size()+1, sizeof(char));
-    strcpy(argv[index++],files[2].toStdString().c_str());
+    strcpy(argv[index++],files[2].toLocal8Bit());
     int argc = index;
     CSOUND *csoundU;
     csoundU=csoundCreate(0);
@@ -1997,7 +1997,7 @@ void CsoundQt::runUtility(QString flags)
     csoundPreCompile(csoundU);
     csoundSetMessageCallback(csoundU, &CsoundQt::utilitiesMessageCallback);
     // Utilities always run in the same thread as CsoundQt
-    csoundRunUtility(csoundU, name.toStdString().c_str(), argc, argv);
+    csoundRunUtility(csoundU, name.toLocal8Bit(), argc, argv);
     csoundDestroy(csoundU);
     for (int i = 0; i < argc; i++) {
       free(argv[i]);
