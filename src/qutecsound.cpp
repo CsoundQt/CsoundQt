@@ -5076,7 +5076,7 @@ QStringList CsoundQt::getWidgetUuids(int index)
     if (index < documentTabs->count() && index >= 0) {
       return documentPages[index]->getWidgetUuids();
     }
-
+    return QStringList();
 }
 
 QStringList CsoundQt::listWidgetProperties(QString widgetid, int index)
@@ -5087,6 +5087,7 @@ QStringList CsoundQt::listWidgetProperties(QString widgetid, int index)
     if (index < documentTabs->count() && index >= 0) {
       return documentPages[index]->listWidgetProperties(widgetid);
     }
+    return QStringList();
 }
 
 EventSheet* CsoundQt::getSheet(int index, int sheetIndex)
