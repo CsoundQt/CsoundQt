@@ -11,8 +11,9 @@
 ;please send bug reports and suggestions
 ;to jh at joachimheintz.de
 
-
-ksmps = 16
+sr = 44100
+nchnls = 2
+ksmps = 64
 0dbfs = 1
 
 		seed		0
@@ -156,7 +157,7 @@ endif
 across		pvsynth	fcross
 kvol		invalue	"vol"
 avol		=		across * kvol
-		out		avol
+		outs		avol, avol
 ;;SHOW OUTPUT
 kshowdb	invalue	"showdb"; 0=raw amplitudes, 1=db as display in the widgets
 kdbrange	invalue	"dbrange"; if kshowdb==1: which db range
@@ -169,13 +170,15 @@ endin
 i 1 0 3600
 e
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>123</x>
- <y>28</y>
+ <x>147</x>
+ <y>53</y>
  <width>992</width>
- <height>734</height>
+ <height>753</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -1644,7 +1647,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>1.990</label>
+  <label>2.528</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -1702,7 +1705,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>0.260</label>
+  <label>2.650</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -1765,7 +1768,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.46655932</xValue>
+  <xValue>0.35449717</xValue>
   <yValue>0.54545500</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1990,8 +1993,8 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.72186005</xValue>
-  <yValue>0.09424270</yValue>
+  <xValue>0.91703740</xValue>
+  <yValue>0.96108993</yValue>
   <type>crosshair</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2105,7 +2108,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>/home/linux/Quellen/csound5/Manual/examples/fox.wav</label>
+  <label>/home/linux/Quellen/csoundmanual/examples/fox.wav</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
@@ -2116,9 +2119,9 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>242</r>
+   <g>241</g>
+   <b>240</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -2134,7 +2137,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <midicc>-3</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/linux/Quellen/csound5/Manual/examples/fox.wav</stringvalue>
+  <stringvalue>/home/linux/Quellen/csoundmanual/examples/fox.wav</stringvalue>
   <text>File 1</text>
   <image>/</image>
   <eventLine/>
@@ -2162,9 +2165,9 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>242</r>
+   <g>241</g>
+   <b>240</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -2323,96 +2326,3 @@ Third, select a method of time reading: phasor (constant speed), mouse input or 
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 72 179 400 200
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioMenu {832, 69} {110, 25} 0 303 "Phasor,Live,Random" timreadmeth
-ioText {525, 64} {295, 32} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Select a Method of Time Reading
-ioText {492, 96} {473, 98} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioSlider {551, 126} {339, 28} -2.000000 2.000000 1.008850 phaspeed1
-ioText {889, 128} {70, 26} display 1.008850 0.00100 "phaspeed1" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 1.009
-ioSlider {550, 154} {339, 28} -2.000000 2.000000 1.032448 phaspeed2
-ioText {888, 156} {70, 26} display 1.032448 0.00100 "phaspeed2" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 1.032
-ioText {500, 125} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder File 1
-ioText {499, 152} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder File 2
-ioText {8, 258} {479, 73} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder pvscross
-ioText {8, 397} {479, 70} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder pvsvoc
-ioText {8, 330} {479, 68} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder pvsfilter
-ioText {8, 466} {479, 134} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder pvsmorph
-ioSlider {74, 293} {275, 29} 0.000000 1.000000 0.687273 crossamp
-ioText {406, 295} {70, 26} display 0.570900 0.00100 "crossamp" right "DejaVu Sans" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.5709
-ioText {17, 292} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder File 1
-ioText {146, 265} {160, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Amplitudes from 
-ioText {351, 294} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder File 2
-ioSlider {79, 559} {275, 29} 0.000000 1.000000 0.236364 morphfreq
-ioText {411, 561} {70, 26} display 0.236400 0.00100 "morphfreq" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.2364
-ioText {22, 558} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder File 1
-ioText {88, 531} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Frequencies from 
-ioText {356, 560} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder File 2
-ioMenu {357, 231} {108, 22} 1 303 "pvscross,pvsfilter,pvsvoc,pvsmorph" selcross
-ioText {45, 227} {325, 32} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Select a Method of Cross Synthesis
-ioSlider {73, 362} {275, 29} 0.000000 1.000000 1.000000 filtdepth
-ioText {405, 364} {70, 26} display 1.000000 0.00100 "filtdepth" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 1.000
-ioText {16, 361} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder low
-ioText {82, 336} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Depth of filtering
-ioText {350, 363} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder high
-ioSlider {71, 429} {275, 29} 0.000000 1.000000 1.000000 vocdepth
-ioText {403, 431} {70, 26} display 1.000000 0.00100 "vocdepth" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 1.000
-ioText {14, 428} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder low
-ioText {80, 403} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Depth of vocoding
-ioText {348, 430} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder high
-ioSlider {79, 497} {275, 29} 0.000000 1.000000 0.723636 morphamp
-ioText {411, 499} {70, 26} display 0.723600 0.00100 "morphamp" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.7236
-ioText {22, 496} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder File 1
-ioText {90, 471} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Amplitudes from 
-ioText {356, 498} {52, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder File 2
-ioText {499, 101} {227, 27} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder For Method "Phasor": Set Speed
-ioText {492, 196} {474, 291} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {502, 202} {98, 267} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder For Method "Live":Â¬Set Positions for File 1 from left to right and for File 2 from bottom to top
-ioMeter {631, 201} {313, 280} {0, 59904, 0} "livepos1" 0.619808 "livepos2" 0.678571 crosshair 1 0 mouse
-ioText {492, 490} {474, 110} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {498, 498} {464, 44} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder For Method "Random":Â¬Set Frequency for new Random Positions in File 1 and File 2
-ioSlider {518, 542} {170, 27} 0.000000 2.000000 0.400000 fqnewval1
-ioText {591, 565} {61, 28} display 0.400000 0.00100 "fqnewval1" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.4000
-ioSlider {728, 541} {171, 28} 0.000000 2.000000 0.421053 fqnewval2
-ioText {799, 565} {70, 29} display 0.421100 0.00100 "fqnewval2" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.4211
-ioText {536, 564} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder File 1
-ioText {747, 564} {52, 30} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder File 2
-ioText {8, 603} {736, 150} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {114, 656} {81, 28} display 1.989928 0.00100 "kpnt1" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 1.990
-ioText {12, 642} {103, 43} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Position (sec) in File 1
-ioText {115, 708} {81, 28} display 0.259900 0.00100 "kpnt2" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.260
-ioText {12, 693} {103, 43} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Position (sec) in File 2
-ioMeter {372, 683} {336, 22} {0, 59904, 0} "out" 0.466559 "out2_post" 0.545455 fill 1 0 mouse
-ioMeter {706, 683} {27, 22} {50176, 3584, 3072} "outover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
-ioText {654, 715} {80, 25} editnum 50.000000 0.100000 "dbrange" left "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 50.000000
-ioText {575, 714} {80, 26} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder dB-Range
-ioText {372, 714} {117, 25} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Show LED as
-ioMenu {489, 714} {84, 26} 1 303 "Amplitudes,dB" showdb
-ioSlider {373, 642} {293, 31} 0.000000 4.000000 1.337884 vol
-ioText {396, 618} {307, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Volume
-ioMeter {202, 612} {152, 130} {0, 59904, 0} "showpos1" 0.721860 "showpos2" 0.094243 crosshair 1 0 mouse
-ioText {665, 645} {69, 27} display 1.337884 0.00100 "vol" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 1.338
-ioText {12, 612} {147, 30} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Output
-ioText {8, 96} {480, 123} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {14, 117} {358, 22} edit 0.000000 0.00100 "_Browse1"  "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder /home/linux/Quellen/csound5/Manual/examples/fox.wav
-ioButton {373, 115} {107, 29} value 1.000000 "_Browse1" "File 1" "/" 
-ioText {14, 151} {358, 22} edit 0.000000 0.00100 "_Browse2"  "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder /home/linux/Joachim/Csound/FLOSS/FT_Spectral/wave.wav
-ioButton {373, 149} {107, 29} value 1.000000 "_Browse2" "File 2" "/" 
-ioText {14, 184} {311, 27} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Let File 1 be File 2 and vice versa
-ioCheckbox {324, 187} {27, 19} off changeorder
-ioText {43, 66} {190, 30} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Choose Files
-ioText {8, 14} {958, 49} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {58624, 58624, 58624} nobackground noborder CROSS SYNTHESIS
-ioText {747, 603} {219, 150} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Here you can perform four different methods of Cross Synthesis in Csound.Â¬First, choose two files you want to cross. Second, select a method of cross synthesis (see the relevant manual pages for detailed descriptions).Â¬Third, select a method of time reading: phasor (constant speed), mouse input or random. 
-</MacGUI>
