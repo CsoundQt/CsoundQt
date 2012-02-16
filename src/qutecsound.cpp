@@ -156,11 +156,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
   createStatusBar();
 
   documentTabs = new QTabWidget (this);
-  documentTabs->setTabsClosable(true);
   connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
-  connect(documentTabs, SIGNAL(tabCloseRequested(int)), documentTabs, SLOT(setCurrentIndex(int))); // To force changing to clicked tab before closing
-  connect(documentTabs, SIGNAL(tabCloseRequested(int)), closeTabAct, SLOT(trigger()));
   setCentralWidget(documentTabs);
+  closeTabButton = new QToolButton(documentTabs);
+  closeTabButton->setDefaultAction(closeTabAct);
+  documentTabs->setCornerWidget(closeTabButton);
   modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
   modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
 
@@ -1410,9 +1410,11 @@ void CsoundQt::pause(int index)
   if (docIndex >= 0 && docIndex < documentPages.size()) {
     documentPages[docIndex]->pause();
   }
-//  if (ud->isRunning()) {
-//    perfThread->TogglePause();
-//  }
+/*
+  if (ud->isRunning()) {
+    perfThread->TogglePause();
+  }
+*/
 }
 
 void CsoundQt::stop(int index)
@@ -1982,13 +1984,13 @@ void CsoundQt::runUtility(QString flags)
     int index = 0;
     foreach (QString flag, indFlags) {
       argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
-      strcpy(argv[index], flag.toLocal8Bit());
+      strcpy(argv[index],flag.toStdString().c_str());
       index++;
     }
     argv[index] = (char *) calloc(files[0].size()+1, sizeof(char));
-    strcpy(argv[index++], files[0].toLocal8Bit());
+    strcpy(argv[index++],files[0].toStdString().c_str());
     argv[index] = (char *) calloc(files[2].size()+1, sizeof(char));
-    strcpy(argv[index++],files[2].toLocal8Bit());
+    strcpy(argv[index++],files[2].toStdString().c_str());
     int argc = index;
     CSOUND *csoundU;
     csoundU=csoundCreate(0);
@@ -1997,7 +1999,7 @@ void CsoundQt::runUtility(QString flags)
     csoundPreCompile(csoundU);
     csoundSetMessageCallback(csoundU, &CsoundQt::utilitiesMessageCallback);
     // Utilities always run in the same thread as CsoundQt
-    csoundRunUtility(csoundU, name.toLocal8Bit(), argc, argv);
+    csoundRunUtility(csoundU, name.toStdString().c_str(), argc, argv);
     csoundDestroy(csoundU);
     for (int i = 0; i < argc; i++) {
       free(argv[i]);
@@ -4911,6 +4913,7 @@ QVariant CsoundQt::getWidgetProperty(QString channel, QString property, int inde
 }
 
 
+
 QString CsoundQt::createNewLabel(int x , int y , QString channel, int index)
 {
   if (index == -1) {
@@ -5063,6 +5066,27 @@ QString CsoundQt::createNewScope(int x , int y , QString channel, int index)
     return documentPages[index]->createNewScope(x,y,channel);
   }
   return QString();
+}
+
+QStringList CsoundQt::getWidgetUuids(int index)
+{
+    if (index == -1) {
+      index = curPage;
+    }
+    if (index < documentTabs->count() && index >= 0) {
+      return documentPages[index]->getWidgetUuids();
+    }
+
+}
+
+QStringList CsoundQt::listWidgetProperties(QString widgetid, int index)
+{
+    if (index == -1) {
+      index = curPage;
+    }
+    if (index < documentTabs->count() && index >= 0) {
+      return documentPages[index]->listWidgetProperties(widgetid);
+    }
 }
 
 EventSheet* CsoundQt::getSheet(int index, int sheetIndex)

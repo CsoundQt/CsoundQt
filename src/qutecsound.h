@@ -121,6 +121,10 @@ class CsoundQt:public QMainWindow
 //    int popKeyPressEvent(); // return ASCII code of key press event for Csound or -1 if no event
 //    int popKeyReleaseEvent(); // return ASCII code of key release event for Csound -1 if no
 
+
+    QStringList getWidgetUuids(int index = -1);
+    QStringList listWidgetProperties(QString widgetid, int index = -1); // widgetid can be eihter uuid (prefered) or channel
+
     //Live Event Sheets
     EventSheet* getSheet(int index = -1, int sheetIndex = -1);
     EventSheet* getSheet(int index = -1, QString sheetName = QString());
@@ -281,6 +285,7 @@ class CsoundQt:public QMainWindow
 #ifdef QCS_RTMIDI
     RtMidiIn *m_midiin;
 #endif
+    QToolButton *closeTabButton;
     QFile logFile;
 
     QVector<QAction *> m_keyActions; //Actions which have keyboard shortcuts

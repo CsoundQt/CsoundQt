@@ -603,16 +603,16 @@ void WidgetLayout::setWidgetProperty(QString channel, QString property, QVariant
 {
   for (int i = 0; i < m_widgets.size(); i++) {
     if (m_widgets[i]->getUuid() == channel) {
-      m_widgets[i]->setProperty(property.toLocal8Bit(), value);
+      m_widgets[i]->setProperty(property.toAscii().constData(), value);
       m_widgets[i]->applyInternalProperties();
       break;
     }
     else if (m_widgets[i]->getChannelName() == channel) {
-      m_widgets[i]->setProperty(property.toLocal8Bit(), value);
+      m_widgets[i]->setProperty(property.toAscii().constData(), value);
       m_widgets[i]->applyInternalProperties();
     }
     else if (m_widgets[i]->getUuid() == channel) {
-      m_widgets[i]->setProperty(property.toLocal8Bit(), value);
+      m_widgets[i]->setProperty(property.toAscii().constData(), value);
       m_widgets[i]->applyInternalProperties();
     }
   }
@@ -622,10 +622,10 @@ QVariant WidgetLayout::getWidgetProperty(QString channel, QString property)
 {
   for (int i = 0; i < m_widgets.size(); i++) {
     if (m_widgets[i]->getUuid() == channel) {
-      return m_widgets[i]->property(property.toLocal8Bit());
+      return m_widgets[i]->property(property.toAscii().constData());
     }
     else if (m_widgets[i]->getChannelName() == channel) {
-      return m_widgets[i]->property(property.toLocal8Bit());
+      return m_widgets[i]->property(property.toAscii().constData());
     }
   }
   return QVariant();
@@ -1541,19 +1541,25 @@ QString WidgetLayout::createNewSlider(int x, int y, QString channel)
   return uuid;
 }
 
+
 QString WidgetLayout::createNewLabel(int x, int y, QString channel)
 {
   QString uuid;
+  bool dialog;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
+
   if (channel.isEmpty()) {
     channel = "label" + QString::number(m_widgets.size());
+    dialog = true;
+  } else {
+      dialog = false;
   }
-  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} label 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder New Label";
+  QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder "+ channel;
   uuid = createText(posx, posy, 80, 25, line);
   widgetChanged();
-  if (getOpenProperties()) {
+  if (dialog && getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
@@ -1563,16 +1569,20 @@ QString WidgetLayout::createNewLabel(int x, int y, QString channel)
 QString WidgetLayout::createNewDisplay(int x, int y, QString channel)
 {
   QString uuid;
+  bool dialog;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   if (channel.isEmpty()) {
     channel = "display" + QString::number(m_widgets.size());
+    dialog = true;
+  } else {
+      dialog = false;
   }
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} display 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border Display";
   uuid = createText(posx, posy, 80, 25, line);
   widgetChanged();
-  if (getOpenProperties()) {
+  if (dialog && getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
@@ -1582,16 +1592,20 @@ QString WidgetLayout::createNewDisplay(int x, int y, QString channel)
 QString WidgetLayout::createNewScrollNumber(int x, int y, QString channel)
 {
   QString uuid;
+  bool dialog;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   if (channel.isEmpty()) {
     channel = "scroll" + QString::number(m_widgets.size());
+    dialog = true;
+  } else {
+      dialog = false;
   }
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} scroll 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} background border 0.000000";
   uuid = createScrollNumber(posx, posy, 80, 25, line);
   widgetChanged();
-  if (getOpenProperties()) {
+  if (dialog && getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
@@ -1601,16 +1615,20 @@ QString WidgetLayout::createNewScrollNumber(int x, int y, QString channel)
 QString WidgetLayout::createNewLineEdit(int x, int y, QString channel)
 {
   QString uuid;
+  bool dialog;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   if (channel.isEmpty()) {
-    channel = "line" + QString::number(m_widgets.size());
+    channel = "line" + QString::number(m_widgets.size()); 
+    dialog = true;
+  } else {
+      dialog = false;
   }
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 25} edit 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
   uuid = createLineEdit(posx, posy, 100, 25, line);
   widgetChanged();
-  if (getOpenProperties()) {
+  if (dialog && getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
@@ -1620,16 +1638,20 @@ QString WidgetLayout::createNewLineEdit(int x, int y, QString channel)
 QString WidgetLayout::createNewSpinBox(int x, int y, QString channel)
 {
   QString uuid;
+  bool dialog;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   if (channel.isEmpty()) {
-    channel = "spinbox" + QString::number(m_widgets.size());
+    channel = "spinbox" + QString::number(m_widgets.size()); 
+    dialog = true;
+  } else {
+      dialog = false;
   }
   QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} editnum 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
   uuid = createSpinBox(posx, posy, 80, 25, line);
   widgetChanged();
-  if (getOpenProperties()) {
+  if (dialog && getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
@@ -1639,16 +1661,21 @@ QString WidgetLayout::createNewSpinBox(int x, int y, QString channel)
 QString WidgetLayout::createNewButton(int x, int y, QString channel)
 {
   QString uuid;
+  bool dialog;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   if (channel.isEmpty()) {
     channel = "button" + QString::number(m_widgets.size());
+    dialog = true;
+  } else {
+      dialog = false;
   }
-  QString line = "ioButton {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 30} event 1.000000 \"" + channel + "\" \"New Button\" \"/\" i1 0 10";
+  //IS IT OK if the channel name is alsoset as the text of the button?
+  QString line = "ioButton {"+ QString::number(posx) +", "+ QString::number(posy) +"} {100, 30} event 1.000000 \"" + channel + "\" \"" + channel + "\" \"/\" i1 0 10";
   uuid = createButton(posx, posy, 100, 30, line);
   widgetChanged();
-  if (getOpenProperties()) {
+  if (dialog && getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
@@ -1658,15 +1685,19 @@ QString WidgetLayout::createNewButton(int x, int y, QString channel)
 QString WidgetLayout::createNewKnob(int x, int y, QString channel)
 {
   QString uuid;
+  bool dialog;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   if (channel.isEmpty()) {
     channel = "knob" + QString::number(m_widgets.size());
+    dialog = true;
+  } else {
+      dialog = false;
   }
-  uuid = createKnob(posx, posy, 80, 80, QString("ioKnob {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 " + channel));
+  uuid = createKnob(posx, posy, 80, 80, QString("ioKnob {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 80} 0.000000 1.000000 0.010000 0.000000 " + channel)); 
   widgetChanged();
-  if (getOpenProperties()) {
+  if (dialog && getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
@@ -1676,15 +1707,19 @@ QString WidgetLayout::createNewKnob(int x, int y, QString channel)
 QString WidgetLayout::createNewCheckBox(int x, int y, QString channel)
 {
   QString uuid;
+  bool dialog;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   if (channel.isEmpty()) {
     channel = "checkbox" + QString::number(m_widgets.size());
+    dialog = true;
+  } else {
+      dialog = false;
   }
   uuid = createCheckBox(posx, posy, 20, 20, QString("ioCheckbox {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 20} off " + channel));
   widgetChanged();
-  if (getOpenProperties()) {
+  if (dialog && getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
@@ -1694,15 +1729,19 @@ QString WidgetLayout::createNewCheckBox(int x, int y, QString channel)
 QString WidgetLayout::createNewMenu(int x, int y, QString channel)
 {
   QString uuid;
+  bool dialog;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   if (channel.isEmpty()) {
     channel = "menu" + QString::number(m_widgets.size());
+    dialog = true;
+  } else {
+      dialog = false;
   }
   uuid = createMenu(posx, posy, 80, 30, QString("ioMenu {"+ QString::number(posx) +", "+ QString::number(posy) + "} {80, 25} 1 303 \"item1,item2,item3\" " + channel));
   widgetChanged();
-  if (getOpenProperties()) {
+  if (dialog && getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
@@ -1712,33 +1751,42 @@ QString WidgetLayout::createNewMenu(int x, int y, QString channel)
 QString WidgetLayout::createNewMeter(int x, int y, QString channel)
 {
   QString uuid;
+  bool dialog;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   if (channel.isEmpty()) {
     channel = "meter" + QString::number(m_widgets.size());
+    dialog = true;
+  } else {
+      dialog = false;
   }
   uuid = createMeter(posx, posy, 30, 80, QString("ioMeter {"+ QString::number(posx) +", "+ QString::number(posy) + "} {30, 80} {0, 60000, 0} \"" + channel + "\" 0.000000 \"hor" + QString::number(m_widgets.size()) + "\" 0.000000 fill 1 0 mouse"));
   widgetChanged();
-  if (getOpenProperties()) {
+  if (dialog && getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
   return uuid;
 }
 
+
 QString WidgetLayout::createNewConsole(int x, int y, QString channel)
 {
   QString uuid;
+  bool dialog;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   if (channel.isEmpty()) {
     channel = "console" + QString::number(m_widgets.size());
+    dialog = true;
+  } else {
+      dialog = false;
   }
   uuid = createConsole(posx, posy, 320, 400, QString("ioListing {"+ QString::number(posx) +", "+ QString::number(posy) + "} {320, 400}"));
   widgetChanged();
-  if (getOpenProperties()) {
+  if (dialog && getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
@@ -1748,15 +1796,19 @@ QString WidgetLayout::createNewConsole(int x, int y, QString channel)
 QString WidgetLayout::createNewGraph(int x, int y, QString channel)
 {
   QString uuid;
+  bool dialog;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   if (channel.isEmpty()) {
     channel = "graph" + QString::number(m_widgets.size());
+    dialog = true;
+  } else {
+      dialog = false;
   }
   uuid = createGraph(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150}"));
   widgetChanged();
-  if (getOpenProperties()) {
+  if (dialog && getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
@@ -1766,15 +1818,19 @@ QString WidgetLayout::createNewGraph(int x, int y, QString channel)
 QString WidgetLayout::createNewScope(int x, int y, QString channel)
 {
   QString uuid;
+  bool dialog;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   if (channel.isEmpty()) {
     channel = "scope" + QString::number(m_widgets.size());
+    dialog = true;
+  } else {
+      dialog = false;
   }
   uuid = createScope(posx, posy, 350, 150, QString("ioGraph {"+ QString::number(posx) +", "+ QString::number(posy) + "} {350, 150} scope 2.000000 -1.000000"));
   widgetChanged();
-  if (getOpenProperties()) {
+  if (dialog && getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
@@ -1806,6 +1862,34 @@ void WidgetLayout::clearWidgetLayout()
   scopeWidgets.clear();
   widgetsMutex.unlock();
 }
+
+
+QStringList WidgetLayout::getUuids()
+{   QStringList uuids = QStringList();
+    for (int i=0; i<m_widgets.size(); i++) {
+        uuids.append( m_widgets[i]->getUuid() );
+    }
+    return uuids;
+}
+
+QStringList WidgetLayout::listProperties(QString widgetid)
+{
+
+    QStringList prop_names = QStringList();
+    for (int i = 0; i < m_widgets.size(); i++) {
+      if ( (m_widgets[i]->getUuid() == widgetid) || (m_widgets[i]->getChannelName() == widgetid) ) {
+        QList<QByteArray> props= m_widgets[i]->dynamicPropertyNames();
+
+        foreach (QByteArray prop, props) {
+            prop_names << QString(prop);
+        }
+        return prop_names;
+
+      }
+    }
+
+}
+
 
 void WidgetLayout::propertiesDialog()
 {
@@ -3054,45 +3138,12 @@ void WidgetLayout::loadPresetFromIndex(int index)
         int mode = p.getMode(i);
         if (mode & 1) {
           m_widgets[j]->setValue(p.getValue(i));
-          QString channel = m_widgets[j]->getChannelName();
-          if (!channel.isEmpty()) { // Now store the value in the changes buffer to read from chnget
-            valueMutex.lock();
-            if(newValues.contains(channel)) {
-              newValues[channel] = p.getValue(i);
-            }
-            else {
-              newValues.insert(channel, p.getValue(i));
-            }
-            valueMutex.unlock();
-          }
         }
         if (mode & 2) {
           m_widgets[j]->setValue2(p.getValue2(i));
-          QString channel = m_widgets[j]->getChannelName();
-          if (!channel.isEmpty()) { // Now store the value in the changes buffer to read from chnget
-            valueMutex.lock();
-            if(newValues.contains(channel)) {
-              newValues[channel] = p.getValue2(i);
-            }
-            else {
-              newValues.insert(channel, p.getValue2(i));
-            }
-            valueMutex.unlock();
-          }
         }
         if (mode & 4) {
           m_widgets[j]->setValue(p.getStringValue(i));
-          QString channel = m_widgets[j]->getChannelName();
-          if (!channel.isEmpty()) { // Now store the value in the changes buffer to read from chnget
-            stringValueMutex.lock();
-            if(newStringValues.contains(channel)) {
-              newStringValues[channel] = p.getStringValue(i);
-            }
-            else {
-              newStringValues.insert(channel, p.getStringValue(i));
-            }
-            stringValueMutex.unlock();
-          }
         }
       }
     }

@@ -81,6 +81,12 @@ class DocumentPage : public BaseDocument
     void setWidgetProperty(QString channel, QString property, QVariant value);
     QVariant getWidgetProperty(QString channel, QString property);
 
+
+    QStringList getWidgetUuids();
+    QStringList listWidgetProperties(QString widgetid); // widgetid can be eihter uuid (prefered) or channel
+
+
+
     QString createNewLabel(int x = -1, int y = -1, QString channel = QString());
     QString createNewDisplay(int x = -1, int y = -1, QString channel = QString());
     QString createNewScrollNumber(int x = -1, int y = -1, QString channel = QString());
@@ -95,6 +101,8 @@ class DocumentPage : public BaseDocument
     QString createNewConsole(int x = -1, int y = -1, QString channel = QString());
     QString createNewGraph(int x = -1, int y = -1, QString channel = QString());
     QString createNewScope(int x = -1, int y = -1, QString channel = QString());
+
+
 
     EventSheet* getSheet(int sheetIndex);
     EventSheet* getSheet(QString sheetName);

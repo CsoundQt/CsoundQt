@@ -95,6 +95,8 @@ class PyQcsObject : public QObject {
     QString getFileName(int index = -1);
     QString getFilePath(int index = -1);
 
+
+
     //Widgets
     void setChannelValue(QString channel, double value, int index = -1);
     double getChannelValue(QString channel, int index = -1);
@@ -102,6 +104,9 @@ class PyQcsObject : public QObject {
     QString getChannelString(QString channel, int index = -1);
     void setWidgetProperty(QString channel, QString property, QVariant value, int index= -1);
     QVariant getWidgetProperty(QString channel, QString property, int index= -1);
+
+    QStringList getWidgetUuids(int index = -1);
+    QStringList listWidgetProperties(QString widgetid, int index = -1); // widgetid can be eihter uuid (prefered) or channel
 
     QString createNewLabel(int x = 0, int y = 0, QString channel = QString(), int index = -1);
     QString createNewDisplay(int x = 0, int y = 0, QString channel = QString(), int index = -1);

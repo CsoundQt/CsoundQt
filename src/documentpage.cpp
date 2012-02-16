@@ -367,7 +367,7 @@ QString DocumentPage::getMacOptions(QString option)
     option += " ";
   int index = m_macOptions.indexOf(QRegExp(option + ".*"));
   if (index < 0) {
-    qDebug("DocumentPage::getMacOptions() Option %s not found!", option.toLocal8Bit().constData());
+    qDebug("DocumentPage::getMacOptions() Option %s not found!", option.toStdString().c_str());
     return QString("");
   }
   return m_macOptions[index].mid(option.size());
@@ -436,10 +436,29 @@ QVariant DocumentPage::getWidgetProperty(QString channel, QString property)
   return m_widgetLayouts[0]->getWidgetProperty(channel, property);
 }
 
+
+QStringList DocumentPage::getWidgetUuids()
+{   QStringList uuids = QStringList();
+    for (int i = 0; i < m_widgetLayouts.size(); i++) {
+        uuids <<  m_widgetLayouts[i]->getUuids();  // add up all widgets from all layouts
+    }
+    return uuids;
+}
+
+QStringList DocumentPage::listWidgetProperties(QString widgetid) // widgetid can be eihter uuid (prefered) or channel
+{
+    //FIXME allow multiple
+    return m_widgetLayouts[0]->listProperties(widgetid);
+}
+
+
+
 QString DocumentPage::createNewLabel(int x, int y, QString channel)
 {
   //FIXME allow multiple
+
   return m_widgetLayouts[0]->createNewLabel(x, y, channel);
+
 }
 
 QString DocumentPage::createNewDisplay(int x, int y, QString channel)
@@ -465,7 +484,7 @@ QString DocumentPage::createNewSpinBox(int x, int y, QString channel)
   //FIXME allow multiple
   return m_widgetLayouts[0]->createNewSpinBox(x, y, channel);
 }
-
+//TARMO: added channel
 QString DocumentPage::createNewSlider(int x, int y, QString channel)
 {
   //FIXME allow multiple
@@ -715,7 +734,7 @@ void DocumentPage::copy()
     }
   }
   if (!liveeventfocus) {
-    if (m_view->childHasFocus()) {
+    if (m_view->hasFocus()) {
       m_view->copy();
     }
     else  { // FIXME allow multiple layouts
@@ -732,9 +751,8 @@ void DocumentPage::cut()
       return;
     }
   }
-  if (m_view->childHasFocus()) {
+  if (m_view->hasFocus())
     m_view->cut();
-  }
   else {
     for (int i = 0; i < m_liveFrames.size(); i++) {
       if (m_liveFrames[i]->getSheet()->hasFocus())
@@ -751,9 +769,10 @@ void DocumentPage::paste()
       return;
     }
   }
-  if (m_view->childHasFocus()) {
+  if (m_widgetLayouts[0]->hasFocus())
+    m_widgetLayouts[0]->paste();
+  else if (m_view->hasFocus())
     m_view->paste();
-  }
   else {
     for (int i = 0; i < m_liveFrames.size(); i++) {
       if (m_liveFrames[i]->getSheet()->hasFocus())
@@ -772,7 +791,9 @@ void DocumentPage::undo()
       return;
     }
   }
-  if (m_view->childHasFocus()) {
+  if (m_widgetLayouts[0]->hasFocus()) {
+  }
+  else if (m_view->hasFocus()) {
     m_view->undo();
   }
   else {
@@ -792,7 +813,7 @@ void DocumentPage::redo()
       return;
     }
   }
-  if (m_view->childHasFocus())
+  if (m_view->hasFocus())
     m_view->redo();
   else {
     for (int i = 0; i < m_liveFrames.size(); i++) {
@@ -1319,7 +1340,7 @@ void DocumentPage::setMacOption(QString option, QString newValue)
     return;
   }
   m_macOptions[index] = option + newValue;
-  qDebug("DocumentPage::setMacOption() %s", m_macOptions[index].toLocal8Bit().constData());
+  qDebug("DocumentPage::setMacOption() %s", m_macOptions[index].toStdString().c_str());
 }
 
 void DocumentPage::setWidgetPanelPosition(QPoint position)
