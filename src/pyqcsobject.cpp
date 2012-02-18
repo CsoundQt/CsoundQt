@@ -312,6 +312,7 @@ QStringList PyQcsObject::listWidgetProperties(QString widgetid, int index)
 
 QString PyQcsObject::createNewLabel(int x, int y, QString channel, int index)
 {
+    // FIXME all this interaction with widgets must be correctly placed on the widgets undo/redo stack. It's currently not!
   return m_qcs->createNewLabel(x,y, channel, index);
 }
 
@@ -501,9 +502,6 @@ MYFLT *PyQcsObject::getTableArray(int ftable, int index)
   }
   return *m_tablePtr;
 }
-
-
-
 
 //void PyQcsObject::writeListToTable(int ftable, QVariantList values, int offset, int count)
 //{

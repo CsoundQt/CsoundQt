@@ -199,13 +199,11 @@ class WidgetLayout : public QWidget
     QMutex stringValueMutex;
 
   public slots:
-
     QString createNewLabel(int x = -1, int y = -1, QString channel = QString());
     QString createNewDisplay(int x = -1, int y = -1, QString channel = QString());
     QString createNewScrollNumber(int x = -1, int y = -1, QString channel = QString());
     QString createNewLineEdit(int x = -1, int y = -1, QString channel = QString());
     QString createNewSpinBox(int x = -1, int y = -1, QString channel = QString());
-
     QString createNewSlider(int x = -1, int y = -1, QString channel = QString());
     QString createNewButton(int x = -1, int y = -1, QString channel = QString());
     QString createNewKnob(int x = -1, int y = -1, QString channel = QString());

@@ -603,16 +603,16 @@ void WidgetLayout::setWidgetProperty(QString channel, QString property, QVariant
 {
   for (int i = 0; i < m_widgets.size(); i++) {
     if (m_widgets[i]->getUuid() == channel) {
-      m_widgets[i]->setProperty(property.toAscii().constData(), value);
+      m_widgets[i]->setProperty(property.toLocal8Bit(), value);
       m_widgets[i]->applyInternalProperties();
       break;
     }
     else if (m_widgets[i]->getChannelName() == channel) {
-      m_widgets[i]->setProperty(property.toAscii().constData(), value);
+      m_widgets[i]->setProperty(property.toLocal8Bit(), value);
       m_widgets[i]->applyInternalProperties();
     }
     else if (m_widgets[i]->getUuid() == channel) {
-      m_widgets[i]->setProperty(property.toAscii().constData(), value);
+      m_widgets[i]->setProperty(property.toLocal8Bit(), value);
       m_widgets[i]->applyInternalProperties();
     }
   }
@@ -622,10 +622,10 @@ QVariant WidgetLayout::getWidgetProperty(QString channel, QString property)
 {
   for (int i = 0; i < m_widgets.size(); i++) {
     if (m_widgets[i]->getUuid() == channel) {
-      return m_widgets[i]->property(property.toAscii().constData());
+      return m_widgets[i]->property(property.toLocal8Bit());
     }
     else if (m_widgets[i]->getChannelName() == channel) {
-      return m_widgets[i]->property(property.toAscii().constData());
+      return m_widgets[i]->property(property.toLocal8Bit());
     }
   }
   return QVariant();
@@ -1549,7 +1549,6 @@ QString WidgetLayout::createNewLabel(int x, int y, QString channel)
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
-
   if (channel.isEmpty()) {
     channel = "label" + QString::number(m_widgets.size());
     dialog = true;
@@ -3138,12 +3137,45 @@ void WidgetLayout::loadPresetFromIndex(int index)
         int mode = p.getMode(i);
         if (mode & 1) {
           m_widgets[j]->setValue(p.getValue(i));
+          QString channel = m_widgets[j]->getChannelName();
+          if (!channel.isEmpty()) { // Now store the value in the changes buffer to read from chnget
+            valueMutex.lock();
+            if(newValues.contains(channel)) {
+              newValues[channel] = p.getValue(i);
+            }
+            else {
+              newValues.insert(channel, p.getValue(i));
+            }
+            valueMutex.unlock();
+          }
         }
         if (mode & 2) {
           m_widgets[j]->setValue2(p.getValue2(i));
+          QString channel = m_widgets[j]->getChannelName();
+          if (!channel.isEmpty()) { // Now store the value in the changes buffer to read from chnget
+            valueMutex.lock();
+            if(newValues.contains(channel)) {
+              newValues[channel] = p.getValue2(i);
+            }
+            else {
+              newValues.insert(channel, p.getValue2(i));
+            }
+            valueMutex.unlock();
+          }
         }
         if (mode & 4) {
           m_widgets[j]->setValue(p.getStringValue(i));
+          QString channel = m_widgets[j]->getChannelName();
+          if (!channel.isEmpty()) { // Now store the value in the changes buffer to read from chnget
+            stringValueMutex.lock();
+            if(newStringValues.contains(channel)) {
+              newStringValues[channel] = p.getStringValue(i);
+            }
+            else {
+              newStringValues.insert(channel, p.getStringValue(i));
+            }
+            stringValueMutex.unlock();
+          }
         }
       }
     }

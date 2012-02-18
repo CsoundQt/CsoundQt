@@ -102,8 +102,6 @@ class DocumentPage : public BaseDocument
     QString createNewGraph(int x = -1, int y = -1, QString channel = QString());
     QString createNewScope(int x = -1, int y = -1, QString channel = QString());
 
-
-
     EventSheet* getSheet(int sheetIndex);
     EventSheet* getSheet(QString sheetName);
 
