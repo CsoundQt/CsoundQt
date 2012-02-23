@@ -62,7 +62,9 @@ def changeToChnget(text):
     chnText = ''
     index = 0
     if len(channels) > 0 : # there are channels
-        index = newText.find('instr') # TODO use regex here to find start of line!
+        index = newText.find('opcode') # TODO use regex here to find start of line!
+        if index < 0:
+            index = newText.find('instr') # TODO use regex here to find start of line!
         for chan in sorted(channels):
             chnText += 'chn_k "' + chan + '", ' + str(channels[chan]) + '\n'
     if len(strchannels) > 0 : # there are channels
@@ -128,3 +130,7 @@ w.show()
 
 
 
+
+<MacGUI>
+ioView nobackground {0, 0, 0}
+</MacGUI>

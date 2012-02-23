@@ -4,6 +4,7 @@ import PythonQt.QtGui as pqt
 import PythonQt.QtCore as pqtc
 import glob, os
 from subprocess import call
+import errno
 
 git_bin = 'git'
 git_dir = ''
@@ -38,7 +39,7 @@ def commit():
 def initialize():
     os.chdir(q.getFilePath())
     f = file('git-log.txt', 'w')
-    ret_text = call(["git", "init"], stderr=f, stdout = f)
+    call(["git", "init"], stderr=f, stdout = f)
     f.close()
     f = file('git-log.txt', 'r')
     o = f.readlines()
@@ -50,13 +51,18 @@ def initialize():
 def diff():
     os.chdir(q.getFilePath())
     f = file('git-log.txt', 'w')
-    ret_text = call(["git", "diff"], stderr=f, stdout = f)
+    try:
+        ret_text = call(["git", "diff"], stderr=f, stdout = f)
+    except OSError, ose:
+        if ose.errno != errno.EINTR:
+          raise ose
     f.close()
     f = file('git-log.txt', 'r')
     o = f.readlines()
     full_out = ''
     for line in o:
         full_out += line
+    print full_out
     text.setPlainText(full_out);
 
 def gitk():

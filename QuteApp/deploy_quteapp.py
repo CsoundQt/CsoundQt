@@ -47,6 +47,9 @@ def copy_files(app_name, bin_name, doubles=True):
         shutil.copy(lib_dir + lib, app_name + '/Contents/Frameworks/' + dest_lib )
         adjust_link('/usr/local/lib/' + lib , '@executable_path/../' + dest_lib, app_name, bin_name, suffix)
     
+    change_link('/Library/Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix,suffix),
+            '@executable_path/../Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix,suffix),
+            bin_name)
     change_link('/Library/Frameworks/CsoundLib%s.framework/Versions/5.2/lib_csnd.dylib'%suffix,
             '@executable_path/../Frameworks/CsoundLib%s.framework/Versions/5.2/lib_csnd.dylib'%suffix,
             bin_name)

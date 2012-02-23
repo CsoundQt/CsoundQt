@@ -37,7 +37,6 @@ SOURCES += "$${QCSPWD}/configlists.cpp" \
     "$${QCSPWD}/node.cpp" \
     "$${QCSPWD}/opentryparser.cpp" \
     "$${QCSPWD}/options.cpp" \
-    "$${QCSPWD}/qcsperfthread.cpp" \
     "$${QCSPWD}/qutebutton.cpp" \
     "$${QCSPWD}/qutecheckbox.cpp" \
     "$${QCSPWD}/qutecombobox.cpp" \
@@ -77,7 +76,6 @@ HEADERS += "$${QCSPWD}/configlists.h" \
     "$${QCSPWD}/node.h" \
     "$${QCSPWD}/opentryparser.h" \
     "$${QCSPWD}/options.h" \
-    "$${QCSPWD}/qcsperfthread.h" \
     "$${QCSPWD}/qutebutton.h" \
     "$${QCSPWD}/qutecheckbox.h" \
     "$${QCSPWD}/qutecombobox.h" \
