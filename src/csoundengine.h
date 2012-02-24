@@ -36,6 +36,7 @@
 
 //#include <QtCore>
 #include <QTimer>
+#include <QFuture>
 
 class ConsoleWidget;
 class QuteScope;
