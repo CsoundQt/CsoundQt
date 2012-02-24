@@ -34,21 +34,9 @@ Console::~Console()
   disconnect(this, 0,0,0);
 }
 
-struct CursorUpdater
-{
-    Console &console;
-    CursorUpdater(Console &console_) : console(console_)
-    {
-    }
-    ~CursorUpdater()
-    {
-        console.moveCursor(QTextCursor::End);
-        console.ensureCursorVisible();
-    }
-};
-
 void Console::appendMessage(QString msg)
 {
+//  consoleLock.lock();
   logMessage(msg);
   // Filter unnecessary messages
   if (msg.startsWith("libsndfile-1") || msg.startsWith("UnifiedCSD: ")
@@ -57,9 +45,9 @@ void Console::appendMessage(QString msg)
     || msg.startsWith("PortAudio real-time audio module for Csound")
     || msg.startsWith("virtual_keyboard real time MIDI plugin for Csound")
     || msg.startsWith("Removing temporary file") ) {
+//    consoleLock.unlock();
     return;
   }
-  CursorUpdater cursorUpdater(*this);
   setTextColor(m_textColor);
   if (errorLine) {  // Hack to capture strange message organization from Csound
     errorLineText.append(msg);
@@ -96,6 +84,8 @@ void Console::appendMessage(QString msg)
   }
   insertPlainText(msg);
   setTextColor(m_textColor);
+  moveCursor(QTextCursor::End);
+//  consoleLock.unlock();
 }
 
 void Console::setDefaultFont(QFont font)

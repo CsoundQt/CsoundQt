@@ -961,6 +961,7 @@ void WidgetLayout::appendMessage(QString message)
 {
   for (int i=0; i < consoleWidgets.size(); i++) {
     consoleWidgets[i]->appendMessage(message);
+    consoleWidgets[i]->scrollToEnd();
   }
 }
 
@@ -1243,13 +1244,6 @@ void WidgetLayout::flushGraphBuffer()
   }
   curveUpdateBufferCount = 0;
   layoutMutex.unlock();
-}
-
-void WidgetLayout::refreshConsoles()
-{
-  for (int i=0; i < consoleWidgets.size(); i++) {
-    consoleWidgets[i]->scrollToEnd();
-  }
 }
 
 void WidgetLayout::refreshWidgets()

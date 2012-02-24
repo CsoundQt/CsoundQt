@@ -55,7 +55,6 @@ BaseDocument::~BaseDocument()
   disconnect(m_csEngine, 0,0,0);
   //  disconnect(m_widgetLayout, 0,0,0);
   m_csEngine->stop();
-  m_csEngine->freeze();
   while (!m_widgetLayouts.isEmpty()) {
     WidgetLayout *wl = m_widgetLayouts.takeLast();
     wl->hide();

@@ -122,6 +122,7 @@ pythonqt {
         }
         isEmpty(PYTHON_INCLUDE_DIR):error(A valid Python include directory was not found.)
     }
+    DEFINES += QCS_PYTHONQT
     isEmpty(PYTHONQT_TREE_DIR) {
         !no_messages:message(PythonQt library directory not specified.)
         for(dir, DEFAULT_PYTHONQT_TREE_DIRS) {

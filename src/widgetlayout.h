@@ -89,6 +89,7 @@ class WidgetLayout : public QWidget
     int getMouseBut2();
     void setWidgetProperty(QString channel, QString property, QVariant value);
     QVariant getWidgetProperty(QString channel, QString property);
+    void flush();
 
     // Behavior
     void setKeyRepeatMode(bool repeat);
@@ -119,10 +120,6 @@ class WidgetLayout : public QWidget
     int midiWriteCounter;
     int midiReadCounter;
 
-    // Messages
-    void appendMessage(QString message);
-    void flush();
-
     // Notifiations
     void engineStopped(); // To let the widgets know engine has stopped (to free unused curve buffers)
 
@@ -143,7 +140,6 @@ class WidgetLayout : public QWidget
     void clearGraphs(); // This also frees the memory allocated by curves.
     void flushGraphBuffer();
 
-    void refreshConsoles();
     void refreshWidgets();
     bool isModified();
 //    void passWidgetClipboard(QString text);
@@ -280,6 +276,9 @@ class WidgetLayout : public QWidget
     void newValue(QPair<QString, QString> channelValue);
     void processNewValues();
     void queueEvent(QString eventLine);
+
+    // Messages
+    void appendMessage(QString message);
 
   protected:
     virtual void mousePressEvent(QMouseEvent *event);

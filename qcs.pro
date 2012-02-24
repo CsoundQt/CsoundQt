@@ -16,9 +16,9 @@
 # ##############################################################################
 # ##############################################################################
 # BUILD OPTIONS:
-# CONFIG+=buildDoubles    To build doubles version
+# CONFIG+=buildDoubles #   To build doubles version
 # CONFIG+=build64    To build doubles version (deprecated)
-# CONFIG+=pythonqt   To build with PythonQt support
+# CONFIG+=pythonqt  # To build with PythonQt support
 # CONFIG+=rtmidi   To build with Portmidi support
 # OS X only OPTIONS:
 # CONFIG+=universal   To build i386/ppc version. Default is platform default

@@ -303,7 +303,7 @@ void ScopeData::updateData(int channel, double zoomx, double zoomy, bool freeze)
   CsoundUserData *ud = m_params->ud;
   int width = m_params->width;
   int height = m_params->height;
-  if (ud == 0 or !ud->cs->isRunning() )
+  if (ud == 0 or !ud->csEngine->isRunning() )
     return;
   if (freeze)
     return;
@@ -389,7 +389,7 @@ void LissajouData::updateData(int channel, double zoomx, double zoomy, bool free
   CsoundUserData *ud = m_params->ud;
   int width = m_params->width;
   int height = m_params->height;
-  if (ud == 0 or !ud->cs->isRunning() )
+  if (ud == 0 or !ud->csEngine->isRunning() )
     return;
   if (freeze)
     return;
@@ -459,7 +459,7 @@ void PoincareData::updateData(int channel, double zoomx, double zoomy, bool free
   CsoundUserData *ud = m_params->ud;
   int width = m_params->width;
   int height = m_params->height;
-  if (ud == 0 or !ud->cs->isRunning() )
+  if (ud == 0 or !ud->csEngine->isRunning() )
     return;
   if (freeze)
     return;

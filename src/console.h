@@ -33,7 +33,6 @@ class Console : public QTextEdit
 
     virtual ~Console();
 
-    virtual void appendMessage(QString msg);
     virtual void setDefaultFont(QFont font);
     virtual void setColors(QColor textColor, QColor bgColor);
     void scrollToEnd();
@@ -44,6 +43,7 @@ class Console : public QTextEdit
     QStringList errorTexts;
 
   public slots:
+    virtual void appendMessage(QString msg);
     void reset();
 
   protected:
@@ -57,7 +57,7 @@ class Console : public QTextEdit
     QColor m_textColor;
     QColor m_bgColor;
     bool m_repeatKeys;
-    QMutex lock;
+//    QMutex consoleLock;
 
   signals:
     void keyPressed(QString key);
