@@ -83,6 +83,8 @@ class PyQcsObject : public QObject {
 	int getDocument(QString name = ""); // Returns document index. -1 if not current open
 	int newDocument(QString name);
 
+        int openDocument(QString name, bool autoPlay = false ); // NB! autoPlay has effect only when "Autoplay files" is selected in Configure->Editor
+
     QString getSelectedText(int index = -1, int section = -1);
     QString getCsd(int index = -1);  // -1 uses current tab
     QString getFullText(int index = -1);
@@ -122,7 +124,7 @@ class PyQcsObject : public QObject {
     QString createNewGraph(int x = 0, int y = 0, QString channel = QString(), int index = -1);
     QString createNewScope(int x = 0, int y = 0, QString channel = QString(), int index = -1);
 
-    bool destroyWidget(QString uuid);
+    bool destroyWidget(QString widgetid);
 
     // Live Events
     QuteSheet* getSheet(int index = -1, int sheetIndex = -1);  //TODO implement both getSheet functions

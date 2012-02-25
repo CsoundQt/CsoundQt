@@ -124,6 +124,7 @@ class CsoundQt:public QMainWindow
 
     QStringList getWidgetUuids(int index = -1);
     QStringList listWidgetProperties(QString widgetid, int index = -1); // widgetid can be eihter uuid (prefered) or channel
+    bool destroyWidget(QString widgetid, int  index = -1);
 
     //Live Event Sheets
     EventSheet* getSheet(int index = -1, int sheetIndex = -1);

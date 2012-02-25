@@ -213,6 +213,13 @@ int PyQcsObject::newDocument(QString name)
 	return m_qcs->getDocument(name);
 }
 
+
+int PyQcsObject::openDocument(QString name, bool autoPlay)
+{
+  return m_qcs->loadFile(name, autoPlay);
+}
+
+
 QString PyQcsObject::getSelectedText(int index, int section)
 {
   return m_qcs->getSelectedText(index,section);
@@ -386,10 +393,9 @@ QString PyQcsObject::createNewScope(int x, int y, QString channel, int index)
   return m_qcs->createNewScope(x,y, channel, index);
 }
 
-// TODO add destructor of widgets
-bool PyQcsObject::destroyWidget(QString uuid)
+bool PyQcsObject::destroyWidget(QString widgetid)
 {
-  return false;
+  return m_qcs->destroyWidget(widgetid);
 }
 
 QuteSheet* PyQcsObject::getSheet(int index, int sheetIndex)

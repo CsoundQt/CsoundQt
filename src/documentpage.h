@@ -85,6 +85,7 @@ class DocumentPage : public BaseDocument
     QStringList getWidgetUuids();
     QStringList listWidgetProperties(QString widgetid); // widgetid can be eihter uuid (prefered) or channel
 
+    bool destroyWidget(QString widgetid);
 
 
     QString createNewLabel(int x = -1, int y = -1, QString channel = QString());

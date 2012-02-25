@@ -215,6 +215,7 @@ class WidgetLayout : public QWidget
 
     QStringList getUuids();
     QStringList listProperties(QString widgetid); // widgetid can be eihter uuid (prefered) or channel
+    bool destroyWidget(QString widgetid);
 
     void propertiesDialog();
     void applyProperties();

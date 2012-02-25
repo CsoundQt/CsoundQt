@@ -445,6 +445,13 @@ QStringList DocumentPage::getWidgetUuids()
     return uuids;
 }
 
+bool DocumentPage::destroyWidget(QString widgetid)
+{
+    //FIXME allow multiple
+    return m_widgetLayouts[0]->destroyWidget(widgetid);
+
+}
+
 QStringList DocumentPage::listWidgetProperties(QString widgetid) // widgetid can be eihter uuid (prefered) or channel
 {
     //FIXME allow multiple

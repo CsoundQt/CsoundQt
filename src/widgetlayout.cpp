@@ -1880,9 +1880,24 @@ QStringList WidgetLayout::listProperties(QString widgetid)
 
       }
     }
+    return QStringList();
 
 }
 
+
+bool WidgetLayout::destroyWidget(QString widgetid)
+{
+    for (int i = 0; i < m_widgets.size(); i++) {
+      if ( (m_widgets[i]->getUuid() == widgetid) || (m_widgets[i]->getChannelName() == widgetid) ) {
+          // is it necessary to use widgetsMutex.lock(); / unlock?
+          deleteWidget(m_widgets[i]);
+          markHistory();  // is it necessary here? probably yes, possible to undo
+          return true;
+      }
+    }
+
+    return false;
+}
 
 void WidgetLayout::propertiesDialog()
 {

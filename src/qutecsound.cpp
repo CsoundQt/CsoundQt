@@ -5074,7 +5074,6 @@ QStringList CsoundQt::getWidgetUuids(int index)
       return documentPages[index]->getWidgetUuids();
     }
     return QStringList();
-
 }
 
 QStringList CsoundQt::listWidgetProperties(QString widgetid, int index)
@@ -5086,6 +5085,17 @@ QStringList CsoundQt::listWidgetProperties(QString widgetid, int index)
       return documentPages[index]->listWidgetProperties(widgetid);
     }
     return QStringList();
+}
+
+bool CsoundQt::destroyWidget(QString widgetid,int index)
+{
+    if (index == -1) {
+      index = curPage;
+    }
+    if (index < documentTabs->count() && index >= 0) {
+      return documentPages[index]->destroyWidget(widgetid);
+    }
+    return false;
 }
 
 EventSheet* CsoundQt::getSheet(int index, int sheetIndex)
