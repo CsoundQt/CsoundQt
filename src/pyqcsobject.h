@@ -78,7 +78,7 @@ class PyQcsObject : public QObject {
     void setSco(QString text, int index = -1);
     void setWidgetsText(QString text, int index = -1); //FIXME how to handle parsing errors?
     void setPresetsText(QString text, int index = -1); //FIXME how to handle parsing errors?
-    void setOptionsText(QString text, int index = -1); // TODO: implement
+    void setOptionsText(QString text, int index = -1);
 
 	int getDocument(QString name = ""); // Returns document index. -1 if not current open
 	int newDocument(QString name);

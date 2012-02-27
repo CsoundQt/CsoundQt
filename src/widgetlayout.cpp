@@ -553,38 +553,38 @@ void WidgetLayout::getMouseValues(QVector<double> *values)
 {
   // values must have size of 6 for _MouseX _MouseY _MouseRelX _MouseRelY MouseBut1 and MouseBut2
   if (this->isEnabled()) {
+    mouseLock.lockForRead();
     (*values)[0] = getMouseX();
     (*values)[1] = getMouseY();
     (*values)[2] = getMouseRelX();
     (*values)[3] = getMouseRelY();
     (*values)[4] = getMouseBut1();
     (*values)[5] = getMouseBut2();
+    mouseLock.unlock();
   }
 }
 
 int WidgetLayout::getMouseX()
 {
-  if (mouseX > 0 and mouseX < 4096)
-    return mouseX;
-  else return 0;
+  Q_ASSERT(mouseX >= 0 and mouseX < 4096);
+  return mouseX;
 }
 
 int WidgetLayout::getMouseY()
 {
-  if (mouseY > 0 and mouseY < 4096)
-    return mouseY;
-  else return 0;
+  Q_ASSERT(mouseY >= 0 and mouseY < 4096);
+  return mouseY;
 }
 int WidgetLayout::getMouseRelX()
 {
-  if (mouseRelX > 0 and mouseRelX < 4096)
+  if (mouseRelX >= 0 and mouseRelX < 4096)
     return mouseRelX;
   else return 0;
 }
 
 int WidgetLayout::getMouseRelY()
 {
-  if (mouseRelY > 0 and mouseRelY < 4096)
+  if (mouseRelY >= 0 and mouseRelY < 4096)
     return mouseRelY;
   else return 0;
 }
@@ -2348,10 +2348,12 @@ void WidgetLayout::mousePressEvent(QMouseEvent *event)
 //
 //  }
 //  qDebug() << "WidgetPanel::mouseMoveEvent " << event->x();
+  mouseLock.lockForWrite();
   if (event->button() == Qt::LeftButton)
     mouseBut1 = 1;
   else if (event->button() == Qt::RightButton)
     mouseBut2 = 1;
+  mouseLock.unlock();
 //  QWidget::mousePressEvent(event);
 }
 
@@ -2375,10 +2377,12 @@ void WidgetLayout::mouseMoveEvent(QMouseEvent *event)
     selectionChanged(QRect(x - xOffset, y - yOffset, width, height));
   }
 //  qDebug() << "WidgetPanel::mouseMoveEvent " << event->y();
+  mouseLock.lockForWrite();
   mouseX = event->globalX();
   mouseY = event->globalY();
   mouseRelX = event->x() + xOffset;
   mouseRelY = event->y() + yOffset;
+  mouseLock.unlock();
 }
 
 void WidgetLayout::mouseReleaseEvent(QMouseEvent *event)
@@ -2387,12 +2391,14 @@ void WidgetLayout::mouseReleaseEvent(QMouseEvent *event)
     selectionFrame->hide();
   }
 //  qDebug() << "WidgetPanel::mouseMoveEvent " << event->x();
+  mouseLock.lockForWrite();
   if (event->button() == Qt::LeftButton)
     mouseBut1 = 0;
   else if (event->button() == Qt::RightButton) {
     emit deselectAll();
     mouseBut2 = 0;
   }
+  mouseLock.unlock();
   markHistory();
 //  QWidget::mouseReleaseEvent(event);
 }
@@ -3813,6 +3819,8 @@ void WidgetLayout::updateData()
     closing = 0;
     return;
   }
+
+  refreshWidgets();
   if (!layoutMutex.tryLock(1)) {
     updateTimer.singleShot(30, this, SLOT(updateData()));
     return;

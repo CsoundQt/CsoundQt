@@ -193,6 +193,7 @@ class WidgetLayout : public QWidget
     QHash<QString, QString> newStringValues;
     QMutex valueMutex;
     QMutex stringValueMutex;
+    QReadWriteLock mouseLock;
 
   public slots:
     QString createNewLabel(int x = -1, int y = -1, QString channel = QString());

@@ -127,10 +127,3 @@ toChngetButton.connect("clicked()", toChnget)
 w.show()
 
 
-
-
-
-
-<MacGUI>
-ioView nobackground {0, 0, 0}
-</MacGUI>

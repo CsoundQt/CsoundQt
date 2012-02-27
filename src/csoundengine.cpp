@@ -973,7 +973,6 @@ void CsoundEngine::messageListDispatcher(void *data)
 
   while (ud_local->runDispatcher) {
     ud_local->wl->getMouseValues(&ud_local->mouseValues);
-    ud_local->wl->refreshWidgets();
     int counter = 0;
     ud_local->csEngine->m_messageMutex.lock();
     QString completeMessages;
@@ -992,10 +991,6 @@ void CsoundEngine::messageListDispatcher(void *data)
     }
     ud_local->csEngine->m_messageMutex.unlock();
     emit ud_local->csEngine->passMessages(completeMessages); //Must use signals o make things thread safe
-//    ud_local->wl->refreshConsoles();  // Scroll to end of text all console widgets
-//    for (int i = 0; i < ud_local->csEngine->consoles.size(); i++) {
-//      ud_local->csEngine->consoles[i]->scrollToEnd();
-//    }
 
     if (ud_local->threaded && ud_local->perfThread) {
       if (ud_local->perfThread->GetStatus() != 0) {

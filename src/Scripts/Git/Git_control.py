@@ -62,8 +62,10 @@ def diff():
     full_out = ''
     for line in o:
         full_out += line
-    print full_out
-    text.setPlainText(full_out);
+    if full_out == '':
+        text.setPlainText("No difference.")
+    else:
+        text.setPlainText(full_out);
 
 def gitk():
     os.chdir(q.getFilePath())
@@ -100,6 +102,7 @@ diffButton.connect("clicked()", diff)
 gitkButton.connect("clicked()", gitk)
 
 w.show() # Show main widget
+
 
 
 
