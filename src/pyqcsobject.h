@@ -70,7 +70,7 @@ class PyQcsObject : public QObject {
 
     // Editor
     void setDocument(int index);
-    int loadDocument(QString name);
+    int loadDocument(QString name, bool runNow = false);
     void insertText(QString text, int index = -1, int section = -1);
     void setCsd(QString text, int index = -1);
     void setFullText(QString text, int index = -1);
@@ -82,8 +82,6 @@ class PyQcsObject : public QObject {
 
 	int getDocument(QString name = ""); // Returns document index. -1 if not current open
 	int newDocument(QString name);
-
-        int openDocument(QString name, bool autoPlay = false ); // NB! autoPlay has effect only when "Autoplay files" is selected in Configure->Editor
 
     QString getSelectedText(int index = -1, int section = -1);
     QString getCsd(int index = -1);  // -1 uses current tab

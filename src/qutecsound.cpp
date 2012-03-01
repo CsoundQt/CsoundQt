@@ -229,7 +229,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
   // Open files passed in the command line. Here to make sure they are the active tab.
   foreach (QString fileName, fileNames) {
     if (QFile::exists(fileName)) {
-      loadFile(fileName, true);
+      loadFile(fileName, m_options->autoPlay);
     }
     else {
       qDebug() << "CsoundQt::CsoundQt could not open file:" << fileName;
@@ -457,7 +457,7 @@ void CsoundQt::open()
         m_startingUp = false;
     }
     if (!fileName.isEmpty()) {
-      loadFile(fileName, true);
+      loadFile(fileName, m_options->autoPlay);
     }
   }
 }
@@ -4160,6 +4160,11 @@ int CsoundQt::execute(QString executable, QString options)
   return 0;
 }
 
+int CsoundQt::loadFileFromSystem(QString fileName)
+{
+    return loadFile(fileName,m_options->autoPlay);
+}
+
 int CsoundQt::loadFile(QString fileName, bool runNow)
 {
 //  qDebug() << "CsoundQt::loadFile" << fileName;
@@ -4300,7 +4305,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
 
   // FIXME put back
 //  widgetPanel->clearHistory();
-  if (runNow && m_options->autoPlay) {
+  if (runNow) {
     play();
   }
 //  qApp->processEvents();  // Is this still needed?

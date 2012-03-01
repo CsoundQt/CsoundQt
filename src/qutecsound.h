@@ -137,6 +137,7 @@ class CsoundQt:public QMainWindow
 
   public slots:
     int loadFile(QString fileName, bool runNow = false);
+    int loadFileFromSystem(QString fileName); // checks for m_options->autoPlay, if the function is called from other class
     void newFile();
     bool saveFile(const QString &fileName, bool saveWidgets = true);
     void play(bool realtime = true, int index = -1);
@@ -421,9 +422,10 @@ class FileOpenEater : public QObject
     FileOpenEater() {m_mw = 0;}
     void setMainWindow(CsoundQt *mainWindow) {
       m_mw = mainWindow;
-      while (!fileEventQueue.isEmpty()) {
+      while (!fileEventQueue.isEmpty()) {  
         QString fileName = fileEventQueue.takeFirst();
-        m_mw->loadFile(fileName, true);
+        qDebug() << "FileOpenEater::setMainWindow  opening file " << fileName << endl;
+        m_mw->loadFileFromSystem(fileName);
       }
     }
     QStringList fileEventQueue;
@@ -436,7 +438,7 @@ class FileOpenEater : public QObject
               fileEventQueue << fileEvent->file();
           }
           else {
-              m_mw->loadFile(fileEvent->file(), true);
+              m_mw->loadFileFromSystem(fileEvent->file());
           }
           qDebug() << "FileOpenEater::eventFilter " << fileEvent->file();
           return true;

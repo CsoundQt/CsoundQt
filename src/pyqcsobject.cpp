@@ -131,18 +131,18 @@ void PyQcsObject::setDocument(int index)
   mainContext.evalScript("print 'cd \"" + path + "\"'");
 }
 
-int PyQcsObject::loadDocument(QString name)
+int PyQcsObject::loadDocument(QString name, bool runNow)
 {
-	QDir d(name);
-	d.makeAbsolute();
-	qDebug() << d.absolutePath();
-	if (!QFile::exists(d.absolutePath())) {
-		PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
-		mainContext.evalScript("print 'File not found.'");
-		return -1;
-	} else {
-		return m_qcs->loadFile(d.absolutePath(), false);
-	}
+        QDir d(name);
+        d.makeAbsolute();
+        qDebug() << d.absolutePath();
+        if (!QFile::exists(d.absolutePath())) {
+                PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
+                mainContext.evalScript("print 'File not found.'");
+                return -1;
+        } else {
+                return m_qcs->loadFile(d.absolutePath(), runNow);
+        }
 }
 
 void PyQcsObject::insertText(QString text, int index, int section)
@@ -203,7 +203,7 @@ int PyQcsObject::newDocument(QString name)
 	QDir d(name);
 	qDebug() << d;
 	if (QFile::exists(d.absolutePath())) {
-		mainContext.evalScript("print 'File already exists. Use openDocument()'");
+                mainContext.evalScript("print 'File already exists. Use loadDocument()'");
 		return -1;
 	}
 	m_qcs->newFile();
@@ -212,13 +212,6 @@ int PyQcsObject::newDocument(QString name)
 	}
 	return m_qcs->getDocument(name);
 }
-
-
-int PyQcsObject::openDocument(QString name, bool autoPlay)
-{
-  return m_qcs->loadFile(name, autoPlay);
-}
-
 
 QString PyQcsObject::getSelectedText(int index, int section)
 {
