@@ -4893,24 +4893,24 @@ QString CsoundQt::getChannelString(QString channel, int index)
   return value;
 }
 
-void CsoundQt::setWidgetProperty(QString channel, QString property, QVariant value, int index)
+void CsoundQt::setWidgetProperty(QString widgetid, QString property, QVariant value, int index)
 {
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    documentPages[index]->setWidgetProperty(channel, property, value);
+    documentPages[index]->setWidgetProperty(widgetid, property, value);
   }
 }
 
-QVariant CsoundQt::getWidgetProperty(QString channel, QString property, int index)
+QVariant CsoundQt::getWidgetProperty(QString widgetid, QString property, int index)
 {
   QVariant value;
   if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
-    value = documentPages[index]->getWidgetProperty(channel, property);
+    value = documentPages[index]->getWidgetProperty(widgetid, property);
   }
   return value;
 }

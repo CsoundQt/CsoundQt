@@ -78,8 +78,8 @@ class DocumentPage : public BaseDocument
     double getChannelValue(QString channel);
     void setChannelString(QString channel, QString value);
     QString getChannelString(QString channel);
-    void setWidgetProperty(QString channel, QString property, QVariant value);
-    QVariant getWidgetProperty(QString channel, QString property);
+    void setWidgetProperty(QString widgetid, QString property, QVariant value);
+    QVariant getWidgetProperty(QString widgetid, QString property);
 
 
     QStringList getWidgetUuids();

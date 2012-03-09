@@ -100,12 +100,11 @@ class PyQcsObject : public QObject {
     double getChannelValue(QString channel, int index = -1);
     void setChannelString(QString channel, QString value, int index = -1);
     QString getChannelString(QString channel, int index = -1);
-    void setWidgetProperty(QString channel, QString property, QVariant value, int index= -1);
-    QVariant getWidgetProperty(QString channel, QString property, int index= -1);
+    void setWidgetProperty(QString widgetid, QString property, QVariant value, int index= -1); // widgetid can be eihter uuid (prefered) or channel
+    QVariant getWidgetProperty(QString widgetid, QString property, int index= -1);
 
     QStringList getWidgetUuids(int index = -1);
-    QStringList listWidgetProperties(QString widgetid, int index = -1); // widgetid can be eihter uuid (prefered) or channel
-
+    QStringList listWidgetProperties(QString widgetid, int index = -1);
     QString createNewLabel(int x = 0, int y = 0, QString channel = QString(), int index = -1);
     QString createNewDisplay(int x = 0, int y = 0, QString channel = QString(), int index = -1);
     QString createNewScrollNumber(int x = 0, int y = 0, QString channel = QString(), int index = -1);

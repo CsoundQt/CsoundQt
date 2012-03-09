@@ -87,8 +87,8 @@ class WidgetLayout : public QWidget
     int getMouseRelY();
     int getMouseBut1();
     int getMouseBut2();
-    void setWidgetProperty(QString channel, QString property, QVariant value);
-    QVariant getWidgetProperty(QString channel, QString property);
+    void setWidgetProperty(QString widgetid, QString property, QVariant value);
+    QVariant getWidgetProperty(QString widgetid, QString property);
     void flush();
 
     // Behavior

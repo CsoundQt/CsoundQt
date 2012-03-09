@@ -288,14 +288,24 @@ QString PyQcsObject::getChannelString(QString channel, int index)
   return m_qcs->getChannelString(channel, index);
 }
 
-void PyQcsObject::setWidgetProperty(QString channel, QString property, QVariant value, int index)
+void PyQcsObject::setWidgetProperty(QString widgetid, QString property, QVariant value, int index)
 {
-  return m_qcs->setWidgetProperty(channel, property, value, index);
+  return m_qcs->setWidgetProperty(widgetid, property, value, index);
 }
 
-QVariant PyQcsObject::getWidgetProperty(QString channel, QString property, int index)
+QVariant PyQcsObject::getWidgetProperty(QString widgetid, QString property, int index)
 {
-  return m_qcs->getWidgetProperty(channel, property, index);
+    QStringList properties = listWidgetProperties(widgetid,index);
+    if ( properties.contains(property) ) {
+        return m_qcs->getWidgetProperty(widgetid, property, index);
+
+    } else {
+
+        QString message="Widget "+widgetid+" does not have property "+property+" available properties are: "+properties.join(", ")+".";
+        PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
+        mainContext.evalScript("print \'"+message+"\'");
+    }
+    return (int) -1;
 }
 
 QStringList PyQcsObject::getWidgetUuids(int index)

@@ -101,8 +101,8 @@ class CsoundQt:public QMainWindow
     double getChannelValue(QString channel, int index = -1);
     void setChannelString(QString channel, QString value, int index = -1);
     QString getChannelString(QString channel, int index = -1);
-    void setWidgetProperty(QString channel, QString property, QVariant value, int index= -1);
-    QVariant getWidgetProperty(QString channel, QString property, int index= -1);
+    void setWidgetProperty(QString widgetid, QString property, QVariant value, int index= -1);
+    QVariant getWidgetProperty(QString widgetid, QString property, int index= -1);
 
     QString createNewLabel(int x = -1, int y = -1, QString channel = QString(), int index = -1);
     QString createNewDisplay(int x = -1, int y = -1, QString channel = QString(), int index = -1);

@@ -423,17 +423,17 @@ QString DocumentPage::getChannelString(QString channel)
   return m_widgetLayouts[0]->getStringForChannel(channel);
 }
 
-void DocumentPage::setWidgetProperty(QString channel, QString property, QVariant value)
+void DocumentPage::setWidgetProperty(QString widgetid, QString property, QVariant value)
 {
   for (int i = 0; i < m_widgetLayouts.size(); i++) {
-    m_widgetLayouts[i]->setWidgetProperty(channel, property, value);
+    m_widgetLayouts[i]->setWidgetProperty(widgetid, property, value);
   }
 }
 
-QVariant DocumentPage::getWidgetProperty(QString channel, QString property)
+QVariant DocumentPage::getWidgetProperty(QString widgetid, QString property)
 {
   //FIXME allow multiple
-  return m_widgetLayouts[0]->getWidgetProperty(channel, property);
+  return m_widgetLayouts[0]->getWidgetProperty(widgetid, property);
 }
 
 

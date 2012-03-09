@@ -599,32 +599,21 @@ int WidgetLayout::getMouseBut2()
   return mouseBut2;
 }
 
-void WidgetLayout::setWidgetProperty(QString channel, QString property, QVariant value)
+void WidgetLayout::setWidgetProperty(QString widgetid, QString property, QVariant value)
 {
   for (int i = 0; i < m_widgets.size(); i++) {
-    if (m_widgets[i]->getUuid() == channel) {
+    if ( (m_widgets[i]->getUuid() == widgetid) || (m_widgets[i]->getChannelName() == widgetid) ) {
       m_widgets[i]->setProperty(property.toLocal8Bit(), value);
       m_widgets[i]->applyInternalProperties();
-      break;
-    }
-    else if (m_widgets[i]->getChannelName() == channel) {
-      m_widgets[i]->setProperty(property.toLocal8Bit(), value);
-      m_widgets[i]->applyInternalProperties();
-    }
-    else if (m_widgets[i]->getUuid() == channel) {
-      m_widgets[i]->setProperty(property.toLocal8Bit(), value);
-      m_widgets[i]->applyInternalProperties();
+      widgetChanged();
     }
   }
 }
 
-QVariant WidgetLayout::getWidgetProperty(QString channel, QString property)
+QVariant WidgetLayout::getWidgetProperty(QString widgetid, QString property)
 {
   for (int i = 0; i < m_widgets.size(); i++) {
-    if (m_widgets[i]->getUuid() == channel) {
-      return m_widgets[i]->property(property.toLocal8Bit());
-    }
-    else if (m_widgets[i]->getChannelName() == channel) {
+    if ( (m_widgets[i]->getUuid() == widgetid) || (m_widgets[i]->getChannelName() == widgetid) ) {
       return m_widgets[i]->property(property.toLocal8Bit());
     }
   }
