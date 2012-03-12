@@ -413,7 +413,7 @@ void QuteGraph::setCurveData(Curve * curve)
 {
   Q_ASSERT(curve != 0);
   int index = getCurveIndex(curve);
-  qDebug() << "QuteGraph::setCurveData " << index << curve;
+//  qDebug() << "QuteGraph::setCurveData " << index << curve;
   if (index >= curves.size() || index < 0) {
     return;
   }
@@ -482,7 +482,7 @@ void QuteGraph::drawCurve(Curve * curve, int index)
 //  bool live = curve->getOriginal() != 0;
   Q_ASSERT(index >= 0);
   QString caption = curve->get_caption();
-  qDebug() << "QuteGraph::drawCurve" << caption << curve->getOriginal() << curve->get_size() << curve->getOriginal()->npts << curve->get_max() << curve->get_min();
+//  qDebug() << "QuteGraph::drawCurve" << caption << curve->getOriginal() << curve->get_size() << curve->getOriginal()->npts << curve->get_max() << curve->get_min();
   if (caption.isEmpty()) {
     return;
   }

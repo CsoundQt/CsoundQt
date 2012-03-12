@@ -4697,7 +4697,12 @@ void CsoundQt::setPresetsText(QString text, int index)
 
 void CsoundQt::setOptionsText(QString text, int index)
 {
-  qDebug() << "CsoundQt::setOptionsText not implemented";
+  if (index == -1) {
+    index = curPage;
+  }
+  if (index < documentTabs->count() && index >= 0) {
+    documentPages[index]->setOptionsText(text);
+  }
 }
 
 int CsoundQt::getDocument(QString name)

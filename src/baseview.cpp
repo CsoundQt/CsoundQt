@@ -389,16 +389,26 @@ void BaseView::setOptionsText(QString text)
 {
   if (m_viewMode < 2) { // View is not split
     if (m_mode != 0) {
-      qDebug() << "DocumentView::setLadspaText Current file is not a csd file. Text not inserted!";
+      qDebug() << "BaseView::setOptionsText Current file is not a csd file. Text not inserted!";
       return;
     }
-    QTextCursor cursor;
-    cursor = m_mainEditor->textCursor();
-    // FIXME must remove old options tag if present!
-    m_mainEditor->moveCursor(QTextCursor::Start);
-    m_mainEditor->find("<CsoundSynthesizer>"); //cursor moves there
-    m_mainEditor->moveCursor(QTextCursor::EndOfLine);
-    m_mainEditor->insertPlainText(QString("\n") + text + QString("\n"));
+    // It would be better just to select the CsOptions portion and change that but this should do the trick too.
+    QString csdText = getBasicText();
+    if (csdText.contains("<CsOptions>") and csdText.contains("</CsOptions>")) {
+      QString preText = csdText.mid(0, csdText.indexOf("<CsOptions>") + 11);
+      QString postText = csdText.mid(csdText.lastIndexOf("</CsOptions>"));
+      if (!text.startsWith("\n")) {
+        text.prepend("\n");
+      }
+      if (!text.endsWith("\n")) {
+        text.append("\n");
+      }
+      csdText = preText + text + postText;
+      setBasicText(csdText);
+    }
+    else {
+      qDebug() << "DocumentView::setSco Orchestra section not found in csd. Text not inserted!";
+    }
   }
   else {
     m_optionsEditor->setText(text);

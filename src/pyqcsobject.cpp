@@ -182,8 +182,6 @@ void PyQcsObject::setPresetsText(QString text, int index)
 
 void PyQcsObject::setOptionsText(QString text, int index)
 {
-  PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
-  mainContext.evalScript("print ''setOptionsText() not implemented yet.");
   return m_qcs->setOptionsText(text, index);
 }
 

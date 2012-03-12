@@ -281,6 +281,11 @@ void DocumentPage::setPresetsText(QString text)
   return m_widgetLayouts.at(0)->loadXmlPresets(text);
 }
 
+void DocumentPage::setOptionsText(QString text)
+{
+  m_view->setOptionsText(text);
+}
+
 QString DocumentPage::getFullText()
 {
   QString fullText = BaseDocument::getFullText();
