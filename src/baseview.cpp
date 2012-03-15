@@ -354,8 +354,9 @@ void BaseView::setSco(QString text)
       return;
     }
     QString csdText = getBasicText();
-    if (csdText.contains("<CsScore>") and csdText.contains("</CsScore>")) {
-      QString preText = csdText.mid(0, csdText.indexOf("<CsScore>") + 9);
+    if (csdText.contains("<CsScore") and csdText.contains("</CsScore>")) {
+      int scoreTag = csdText.indexOf("<CsScore");
+      QString preText = csdText.mid(0, csdText.indexOf(">",scoreTag) + 1);
       QString postText = csdText.mid(csdText.lastIndexOf("</CsScore>"));
       if (!text.startsWith("\n")) {
         text.prepend("\n");
@@ -613,7 +614,8 @@ QString BaseView::getSco()
   QString text = "";
   if (m_viewMode < 2) {
 	text = m_mainEditor->toPlainText();
-	text = text.mid(text.lastIndexOf("<CsScore>") + 9);
+    int scoreTag = text.lastIndexOf("<CsScore");
+	text = text.mid(text.indexOf(">",scoreTag) + 1);
 	text.remove(text.lastIndexOf("</CsScore>"), text.size());
   }
   else { // Split view

@@ -1,12 +1,14 @@
 
 import shutil
 import glob
+import os
+import pdb
 from subprocess import call
 
 def change_link(link,new_link, bin_file):
     arguments = ['-change',  link, new_link, bin_file]
     retcode = call(['install_name_tool'] + arguments)
-    if retcode == 0:
+    if retcode != 0:
         print "Failed ---------"
     print "changed link:", link, "to", new_link, 'in', bin_file, 'ret:', retcode
 
@@ -17,11 +19,12 @@ def change_id(new_id, file_name):
 
 def adjust_link(old_link, new_link, app_name, bin_name, suffix = '64'):
 
-    change_id(new_link, app_name + '/Frameworks/' + new_link[new_link.rindex('/') + 1:])
+    change_id(new_link, app_name + '/Contents/Frameworks/' + new_link[new_link.rindex('/') + 1:])
     change_link(old_link, new_link, app_name + '/Contents/Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix, suffix))
     change_link(old_link, new_link, app_name + '/Contents/Frameworks/CsoundLib%s.framework/Versions/5.2/lib_csnd.dylib'%suffix)
     
 def copy_files(app_name, bin_name, doubles=True):
+    pdb.set_trace()
     suffix =''
     if doubles:
         suffix = '64'
@@ -45,7 +48,7 @@ def copy_files(app_name, bin_name, doubles=True):
     lib_dir = '/usr/local/lib/'
     for lib, dest_lib in libs.items():
         shutil.copy(lib_dir + lib, app_name + '/Contents/Frameworks/' + dest_lib )
-        adjust_link('/usr/local/lib/' + lib , '@executable_path/../' + dest_lib, app_name, bin_name, suffix)
+        adjust_link('/usr/local/lib/' + lib , '@executable_path/../Frameworks/' + dest_lib, app_name, bin_name, suffix)
     
     change_link('/Library/Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix,suffix),
             '@executable_path/../Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix,suffix),
@@ -65,8 +68,9 @@ def copy_files(app_name, bin_name, doubles=True):
             '@executable_path/../libpng12.dylib',
             app_name + '/Contents/Frameworks/libfltk_images.dylib')
 
-    opcode_libs = glob.glob(app_name + '/Contents/Frameworks/CsoundLib%s.framework/Versions/5.2/Resources/Opcodes%s/*.dylib'%(suffix,suffix))
-    
+    opcode_dir = '/Library/Frameworks/CsoundLib%s.framework/Resources/Opcodes%s'%(suffix,suffix)
+    opcode_libs = glob.glob(app_name + opcode_dir + '/*.dylib')
+
     for op_lib in opcode_libs:
         for dep_lib, dep_dest_lib in libs.items():
             change_link('/usr/local/lib/' + dep_lib , '@executable_path/../Frameworks/' + dep_dest_lib,
@@ -78,18 +82,35 @@ def copy_files(app_name, bin_name, doubles=True):
                     op_lib)
 
 
+if (not os.path.exists('build')):
+    os.mkdir("build")
+
+os.chdir("build")
+qute_app_dir = 'bin/'
+qmake = "qmake"
+macdeployqt = "macdeployqt"
+
 doubles = False
-qute_app_dir = '../QuteApp-build-desktop/bin/'
+os.system(qmake + " /Users/acabrera/src/qutecsound/trunk/qutecsound/QuteApp/QuteApp.pro -r -spec macx-g++ CONFIG+=release")
+os.system("make clean")
+os.system("make -w")
 binary = 'QuteApp_' + ('d' if doubles else 'f')
-copy_files(qute_app_dir + binary + '.app', qute_app_dir + '/Contents/MacOS/' + binary, doubles)
-shutil.rmtree(qute_app_dir + '../../src/res/osx/' + binary + '.app')
-shutil.copytree(qute_app_dir + binary + '.app', qute_app_dir + '../../src/res/osx/' + binary + '.app' , symlinks=True )
+os.system(macdeployqt + ' ' + qute_app_dir + binary + '.app')
+copy_files(qute_app_dir + binary + '.app', qute_app_dir + binary + '.app/Contents/MacOS/' + binary, doubles)
+if (os.path.exists(qute_app_dir + '../../../src/res/osx/' + binary + '.app')):
+    shutil.rmtree(qute_app_dir + '../../../src/res/osx/' + binary + '.app')
+shutil.copytree(qute_app_dir + binary + '.app', qute_app_dir + '../../../src/res/osx/' + binary + '.app' , symlinks=True )
 
 doubles = True
-qute_app_dir = '../QuteApp-build-desktop/bin/'
+os.system(qmake + " /Users/acabrera/src/qutecsound/trunk/qutecsound/QuteApp/QuteApp.pro -r -spec macx-g++ CONFIG+=release CONFIG+=buildDoubles")
+os.system("make clean")
+os.system("make -w")
 binary = 'QuteApp_' + ('d' if doubles else 'f')
-copy_files(qute_app_dir + binary + '.app', qute_app_dir + '/Contents/MacOS/' + binary, doubles)
-shutil.rmtree(qute_app_dir + '../../src/res/osx/' + binary + '.app')
-shutil.copytree(qute_app_dir + binary + '.app', qute_app_dir + '../../src/res/osx/' + binary + '.app' , symlinks=True )
+os.system(macdeployqt + ' ' + qute_app_dir + binary + '.app')
+binary = 'QuteApp_' + ('d' if doubles else 'f')
+copy_files(qute_app_dir + binary + '.app', qute_app_dir + binary + '.app/Contents/MacOS/' + binary, doubles)
+if (os.path.exists(qute_app_dir + '../../../src/res/osx/' + binary + '.app')):
+    shutil.rmtree(qute_app_dir + '../../../src/res/osx/' + binary + '.app')
+shutil.copytree(qute_app_dir + binary + '.app', qute_app_dir + '../../../src/res/osx/' + binary + '.app' , symlinks=True )
 
 

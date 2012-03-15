@@ -2,7 +2,6 @@
 # Project created by QtCreator 2010-10-16T20:41:09
 # -------------------------------------------------
 QT += xml
-CONFIG += build64
 TEMPLATE = app
 TMPDIR = "build"
 
