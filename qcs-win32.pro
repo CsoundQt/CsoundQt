@@ -1,12 +1,12 @@
 
 !win32-g++: error(This project file is only for Windows builds using MinGW/g++.)
 !no_messages {
-	message()
-	message(Building CsoundQt for Windows using MinGW/g++.)
+    message()
+    message(Building CsoundQt for Windows using MinGW/g++.)
 }
 
 CONFIG -= debug_and_release debug_and_release_target \
-	copy_dir_files precompile_header shared
+    copy_dir_files precompile_header shared
 
 # Set default paths
 DEFAULT_CSOUND_API_INCLUDE_DIRS = "$$(PROGRAMFILES)\\Csound\\include"
@@ -45,3 +45,6 @@ quteapp_d {
 message(Bundling QuteApp_d)
 RESOURCES += "src/quteapp_d_win.qrc"
 }
+
+# For OleInitialize() FLTK bug workaround
+LIBS *= -lole32

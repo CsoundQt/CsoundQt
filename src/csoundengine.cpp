@@ -28,7 +28,8 @@
 #include "qutescope.h"  // Needed for passing the ud to the scope for display data
 #include "qutegraph.h"  // Needed for passing the ud to the graph for display data
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
+#include <ole2.h> // for OleInitialize() FLTK bug workaround
 #include <unistd.h> // for usleep()
 #endif
 
@@ -567,8 +568,8 @@ int CsoundEngine::play(CsoundOptions *options)
     return runCsound();
   }
   else {
-	if (ud->threaded) { // TODO is this action correct?
-		ud->perfThread->TogglePause();
+    if (ud->threaded) { // TODO is this action correct?
+        ud->perfThread->TogglePause();
     }
     return 0;
   }
@@ -583,7 +584,7 @@ void CsoundEngine::stop()
 void CsoundEngine::pause()
 {
   if (isRunning() && ud->perfThread->GetStatus() == 0) {
-	ud->perfThread->Pause();
+    ud->perfThread->Pause();
   }
 }
 
@@ -643,6 +644,12 @@ int CsoundEngine::runCsound()
 #ifdef MACOSX_PRE_SNOW
   //Remember menu bar to set it after FLTK grabs it
   menuBarHandle = GetMenuBar();
+#endif
+#ifdef Q_OS_WIN
+  // Call OleInitialize twice to keep the FLTK opcodes from reducing the COM
+  // reference count to zero.
+  OleInitialize(NULL);
+  OleInitialize(NULL);
 #endif
   eventQueueSize = 0; //Flush events gathered while idle
   ud->audioOutputBuffer.allZero();
