@@ -10,6 +10,7 @@
           <string>orc</string>
           <string>sco</string>
           <string>csd</string>
+          <string>inc</string>
         </array>
         <key>CFBundleTypeIconFile</key>
         <string>qtcs.icns</string>
@@ -34,9 +35,11 @@
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>LSEnvironment</key>
+    <array>
     <dict>
       <key>PATH</key>
       <string>/usr/local/bin</string>
     </dict>
+    </array>
   </dict>
 </plist>

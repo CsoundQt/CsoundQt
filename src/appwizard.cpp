@@ -48,14 +48,16 @@ AppWizard::AppWizard(QWidget *parent,QString opcodeDir,
   int appPage = addPage(new AppDetailsPage(this));
 
   setField("opcodeDir", opcodeDir);
+#ifndef Q_OS_MAC
+  // No plugins page for Mac for now
   m_pluginsPage = addPage(new PluginsPage(this, field("opcodeDir").toString()));
+  //  static_cast<PluginsPage *>(this->page(m_pluginsPage))->
+    connect(static_cast<AppDetailsPage *>(this->page(appPage)), SIGNAL(opcodeDirChangedSignal()),
+            static_cast<PluginsPage *>(this->page(m_pluginsPage)), SLOT(updateOpcodeDir()));
+    connect(static_cast<AppDetailsPage *>(this->page(appPage)), SIGNAL(libDirChangedSignal()),
+            static_cast<PluginsPage *>(this->page(m_pluginsPage)), SLOT(updateOpcodeDir()));
+#endif
   m_additionalsPage = addPage(new AdditionalFilesPage(this));
-//  static_cast<PluginsPage *>(this->page(m_pluginsPage))->
-  connect(static_cast<AppDetailsPage *>(this->page(appPage)), SIGNAL(opcodeDirChangedSignal()),
-          static_cast<PluginsPage *>(this->page(m_pluginsPage)), SLOT(updateOpcodeDir()));
-  connect(static_cast<AppDetailsPage *>(this->page(appPage)), SIGNAL(libDirChangedSignal()),
-          static_cast<PluginsPage *>(this->page(m_pluginsPage)), SLOT(updateOpcodeDir()));
-
 
   m_dataFiles = processDataFiles();
   static_cast<AdditionalFilesPage *>(this->page(m_additionalsPage))->setFiles(m_dataFiles);
@@ -91,7 +93,11 @@ void AppWizard::makeApp()
     qtLibsDir = field("qtLibsDir").toString();
   }
 
+#ifdef Q_OS_MAC
+  QStringList plugins;
+#else
   QStringList plugins = this->page(m_pluginsPage)->property("plugins").toStringList();
+#endif
   QStringList dataFiles = this->page(m_additionalsPage)->property("dataFiles").toStringList();
 
   if (!QFile::exists(targetDir)) {
@@ -111,8 +117,8 @@ void AppWizard::makeApp()
     createWinApp(appName, targetDir, dataFiles, plugins, m_sdkDir,
                  libDir, opcodeDir, qtLibsDir, useDoubles);
   } else {
-    opcodeDir = static_cast<PluginsPage *>(this->page(m_pluginsPage))->getOpcodeDir();
 #ifdef Q_OS_LINUX
+    opcodeDir = static_cast<PluginsPage *>(this->page(m_pluginsPage))->getOpcodeDir();
     createLinuxApp(appName, targetDir, dataFiles, plugins, m_sdkDir,
                    libDir, opcodeDir, qtLibsDir, useDoubles);
 #endif
@@ -121,6 +127,7 @@ void AppWizard::makeApp()
                  libDir, opcodeDir, qtLibsDir, useDoubles);
 #endif
 #ifdef Q_OS_WIN32
+    opcodeDir = static_cast<PluginsPage *>(this->page(m_pluginsPage))->getOpcodeDir();
     createWinApp(appName, targetDir, dataFiles, plugins, m_sdkDir,
                  libDir, opcodeDir, qtLibsDir, useDoubles);
 #endif
@@ -138,7 +145,8 @@ QStringList AppWizard::processDataFiles()
   QTextStream in(&csdFile);
   while (!in.atEnd()) {
     QString line = in.readLine();
-    if (line.count("\"") == 2) {
+    if (line.count("\"") == 2 && !line.contains("invalue") && !line.contains("outvalue")
+         && !line.contains("chnget") && !line.contains("chnset") ) {
       int startIndex = line.indexOf("\"");
       if ((line.contains(";") && (line.indexOf(";") > startIndex)) ||
           !line.contains(";")) { // Quotes are not part of a comment
@@ -158,8 +166,11 @@ QStringList AppWizard::processDataFiles()
           else {
             newDataName += "data/";
           }
-          list << dataName;
-          line.replace(dataName,newDataName);
+          if (QFile::exists(m_csd.left(m_csd.lastIndexOf(QDir::separator()) + 1) + dataName)
+              || QFile::exists(m_csd)) {
+            list << dataName;
+            line.replace(dataName,newDataName);
+          }
         }
       }
     }

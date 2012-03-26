@@ -2,6 +2,8 @@ from subprocess import call
 import shutil
 import os
 import pdb
+import fileinput 
+
 
 QUTECSOUND_VERSION = '0.7.0-alpha'
 NEW_NAME='CsoundQt'
@@ -40,6 +42,24 @@ def deployWithPython(PRECISION):
         shutil.rmtree(APP_NAME)
     shutil.copytree(CsoundQtBinPath + '/' + ORIG_APP_NAME, ORIG_APP_NAME)
     print "Copied ",CsoundQtBinPath + '/' + ORIG_APP_NAME
+
+    add_path = False
+
+    for line in fileinput.input( CsoundQtBinPath + '/' + ORIG_APP_NAME+ '/Contents/Info.plist', inplace=1):
+        if line.strip().startswith('<string>????</string>'):
+            add_path = True
+        else:
+            if add_path:
+                print '''    <key>LSEnvironment</key>
+    <array>
+    <dict>
+      <key>PATH</key>
+      <string>/usr/local/bin</string>
+    </dict>
+    </array>'''
+            add_path = False
+        print line,
+    
     if os.path.exists('../src/res/osx/QuteApp_f.app'):
         shutil.copytree('../src/res/osx/QuteApp_f.app', ORIG_APP_NAME + '/Contents/Resources/QuteApp_f.app', symlinks=True)
     if os.path.exists('../src/res/osx/QuteApp_d.app'):
