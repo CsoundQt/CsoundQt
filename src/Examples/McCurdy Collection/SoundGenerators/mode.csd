@@ -58,7 +58,7 @@ girtos7		ftgen	0,0,-6,-2,	1, 	3.2, 	6.23, 	6.27, 	9.92, 	14.15
 girtos8		ftgen	0,0,-4,-2,	1, 	1.47, 	2.09, 	2.56
 
 ;tubular bell
-girtos9		ftgen	0,0,-10,-2,	272/437,	538/437,	874/437,	1281/437,	1755/437,	2264/437,	2813/437,	3389/437,	4822/437,	5255/437,
+girtos9		ftgen	0,0,-10,-2,	272/437,	538/437,	874/437,	1281/437,	1755/437,	2264/437,	2813/437,	3389/437,	4822/437,	5255/437
 
 ;redwood wood plate
 girtos10		ftgen	0,0,-4,-2,	1, 1.47, 2.11, 2.57
@@ -588,13 +588,14 @@ i 99 	0.0     3600	;UPDATE FUNCTION TABLES FOR INDIVIDUAL Q CONTROL AND AMPLITUD
 i 1000	0.0     3600	;REVERB
 </CsScore>
 </CsoundSynthesizer>
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>72</x>
- <y>179</y>
- <width>400</width>
- <height>200</height>
+ <x>67</x>
+ <y>30</y>
+ <width>1054</width>
+ <height>703</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -670,7 +671,7 @@ i 1000	0.0     3600	;REVERB
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>221.009</label>
+  <label>221.010</label>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
@@ -701,7 +702,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.43507999</value>
+  <value>0.43508000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -746,7 +747,7 @@ i 1000	0.0     3600	;REVERB
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>2200.057</label>
+  <label>2200.056</label>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
@@ -777,7 +778,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.78079998</value>
+  <value>0.78080000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -995,7 +996,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1089,7 +1090,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1183,7 +1184,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1277,7 +1278,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1371,7 +1372,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1465,7 +1466,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1559,7 +1560,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1653,7 +1654,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1747,7 +1748,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1841,7 +1842,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1935,7 +1936,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2029,7 +2030,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2123,7 +2124,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2217,7 +2218,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2311,7 +2312,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2405,7 +2406,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2499,7 +2500,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2593,7 +2594,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2687,7 +2688,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2781,7 +2782,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2875,7 +2876,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2969,7 +2970,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3063,7 +3064,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3157,7 +3158,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99990000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3432,7 +3433,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.30000001</value>
+  <value>0.30000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -3479,7 +3480,7 @@ i 1000	0.0     3600	;REVERB
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.80000001</value>
+  <value>0.80000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -5270,7 +5271,7 @@ i 1000	0.0     3600	;REVERB
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>20000.010</label>
+  <label>20000.000</label>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
