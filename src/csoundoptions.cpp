@@ -104,14 +104,17 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
       list << " -Z";
   }
   if (newParser == 1) {
+#ifndef CSOUND6
       list << "--new-parser";
+#endif
       if (multicore) {
           list << "-j" + QString::number(numThreads);
       }
   } else if (newParser == 0) {
+#ifndef CSOUND6
       list << "--old-parser";
+#endif
   }
-
   if (rt && rtUseOptions) {
     if (rtOverrideOptions)
       list << "-+ignore_csopts=1";

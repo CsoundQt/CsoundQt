@@ -24,6 +24,10 @@
 # CONFIG+=universal   To build i386/ppc version. Default is platform default
 # ##############################################################################
 
+csound6: { # Csound6 requires some internal changes
+DEFINES += CSOUND6
+}
+
 buildDoubles: CONFIG += build64
 !build32:!build64 {
     win32: CONFIG += build64
