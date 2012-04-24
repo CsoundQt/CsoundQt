@@ -94,7 +94,7 @@ class DocumentView : public BaseView
     void showOther(bool);
     void showOtherCsd(bool);
     void showWidgetEdit(bool);
-        void showAppEdit(bool);
+    void showAppEdit(bool);
 
     void cut();
     void copy();
@@ -111,6 +111,7 @@ class DocumentView : public BaseView
     void markErrorLines(QList<QPair<int, QString> > lines);
     void unmarkErrorLines();
     void jumpToLine(int line);
+    void gotoNextLine();
     void opcodeFromMenu();
 
   protected:

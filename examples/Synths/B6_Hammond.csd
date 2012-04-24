@@ -17,110 +17,189 @@ nchnls	= 2
 
 			massign		0,2
 
+chn_k "Acc", 1
+chn_k "Asymm", 1
+chn_k "C", 1
+chn_k "Csound_On", 2
+chn_k "Cutoff", 1
+chn_k "Del", 1
+chn_k "Delay", 1
+chn_k "Depth", 1
+chn_k "Det_L", 1
+chn_k "Dist", 1
+chn_k "Drive", 1
+chn_k "Fdbk", 1
+chn_k "Fq_Sep", 1
+chn_k "Fst", 1
+chn_k "H_16ft_lvl", 1
+chn_k "H_1_23ft_lvl", 1
+chn_k "H_1_35ft_lvl", 1
+chn_k "H_1ft_lvl", 1
+chn_k "H_2_23ft_lvl", 1
+chn_k "H_2ft_lvl", 1
+chn_k "H_4ft_lvl", 1
+chn_k "H_5_13ft_lvl", 1
+chn_k "H_8ft_lvl", 1
+chn_k "H_Acc", 1
+chn_k "H_Att", 1
+chn_k "H_Attack", 1
+chn_k "H_Cut", 1
+chn_k "H_Dec", 1
+chn_k "H_Doppler", 1
+chn_k "H_Fast", 1
+chn_k "H_Harm", 1
+chn_k "H_Leak", 1
+chn_k "H_Level", 1
+chn_k "H_Oct", 1
+chn_k "H_Perc_lvl", 1
+chn_k "H_Q", 1
+chn_k "H_Slow", 1
+chn_k "High", 1
+chn_k "L_16ft_lvl", 1
+chn_k "L_1_23ft_lvl", 1
+chn_k "L_1_35ft_lvl", 1
+chn_k "L_1ft_lvl", 1
+chn_k "L_2_23ft_lvl", 1
+chn_k "L_2ft_lvl", 1
+chn_k "L_4ft_lvl", 1
+chn_k "L_5_13ft_lvl", 1
+chn_k "L_8ft_lvl", 1
+chn_k "L_Acc", 1
+chn_k "L_Att", 1
+chn_k "L_Attack", 1
+chn_k "L_Cut", 1
+chn_k "L_Dec", 1
+chn_k "L_Doppler", 1
+chn_k "L_Fast", 1
+chn_k "L_Harm", 1
+chn_k "L_Leak", 1
+chn_k "L_Level", 1
+chn_k "L_Oct", 1
+chn_k "L_Perc_lvl", 1
+chn_k "L_Q", 1
+chn_k "L_Slow", 1
+chn_k "Low", 1
+chn_k "Main_Vol", 1
+chn_k "Master_Tune", 1
+chn_k "Mix", 1
+chn_k "P_Display", 2
+chn_k "PreEff", 1
+chn_k "Rev", 1
+chn_k "Rot", 1
+chn_k "Scan", 1
+chn_k "Size", 1
+chn_k "Slow_Fast_Rot", 1
+chn_k "Slw", 1
+chn_k "Soft", 1
+chn_k "Split", 1
+chn_k "aM", 1
+chn_k "frq_Att", 1
+chn_k "postGain", 1
+
 opcode	Parameter_Display, 0, k
 
 	kParam		xin
 	ktrig		changed	kParam
 	if (ktrig == 1) then
-		outvalue	"P_Display", kParam
+		chnset	 kParam, "P_Display"
 	endif
 endop
 
 instr	1	;GUI
 
-	kCsound_On	lfo	1, 4, 2
-	outvalue "Csound_On", kCsound_On		;Flickering LED when Csound is running
+	kCsound_On	lfo	1, 1, 2
+	chnset  kCsound_On, "Csound_On" ;Flickering LED when Csound is running
 
 	ktrig		metro	10
 
 	if (ktrig == 1) then
 		;L
-		gkL_16ft_lvl		invalue	"L_16ft_lvl"
-		gkL_8ft_lvl		invalue	"L_8ft_lvl"
-		gkL_5_13ft_lvl		invalue	"L_5_13ft_lvl"
-		gkL_4ft_lvl		invalue	"L_4ft_lvl"
-		gkL_2_23ft_lvl		invalue	"L_2_23ft_lvl"
-		gkL_2ft_lvl		invalue	"L_2ft_lvl"
-		gkL_1_35ft_lvl		invalue	"L_1_35ft_lvl"
-		gkL_1_23ft_lvl		invalue	"L_1_23ft_lvl"
-		gkL_1ft_lvl		invalue	"L_1ft_lvl"
-		gk_L_Att			invalue	"L_Attack"
-		gkL_leak			invalue	"L_Leak"
-		gkL_lvl			invalue	"L_Level"
-		gk_L_perc_Dec		invalue	"L_Dec"
-		gkL_perc_Harm		invalue	"L_Harm"
-		gkL_perc_lvl		invalue	"L_Perc_lvl"
-		gkOct_Lo			invalue	"L_Oct"
+		gkL_16ft_lvl		chnget	"L_16ft_lvl"
+		gkL_8ft_lvl		chnget	"L_8ft_lvl"
+		gkL_5_13ft_lvl		chnget	"L_5_13ft_lvl"
+		gkL_4ft_lvl		chnget	"L_4ft_lvl"
+		gkL_2_23ft_lvl		chnget	"L_2_23ft_lvl"
+		gkL_2ft_lvl		chnget	"L_2ft_lvl"
+		gkL_1_35ft_lvl		chnget	"L_1_35ft_lvl"
+		gkL_1_23ft_lvl		chnget	"L_1_23ft_lvl"
+		gkL_1ft_lvl		chnget	"L_1ft_lvl"
+		gk_L_Att			chnget	"L_Attack"
+		gkL_leak			chnget	"L_Leak"
+		gkL_lvl			chnget	"L_Level"
+		gk_L_perc_Dec		chnget	"L_Dec"
+		gkL_perc_Harm		chnget	"L_Harm"
+		gkL_perc_lvl		chnget	"L_Perc_lvl"
+		gkOct_Lo			chnget	"L_Oct"
 		;H
-		gkH_16ft_lvl		invalue	"H_16ft_lvl"
-		gkH_8ft_lvl		invalue	"H_8ft_lvl"
-		gkH_5_13ft_lvl		invalue	"H_5_13ft_lvl"
-		gkH_4ft_lvl		invalue	"H_4ft_lvl"
-		gkH_2_23ft_lvl		invalue	"H_2_23ft_lvl"
-		gkH_2ft_lvl		invalue	"H_2ft_lvl"
-		gkH_1_35ft_lvl		invalue	"H_1_35ft_lvl"
-		gkH_1_23ft_lvl		invalue	"H_1_23ft_lvl"
-		gkH_1ft_lvl		invalue	"H_1ft_lvl"
-		gk_H_Att			invalue	"H_Attack"
-		gkH_leak			invalue	"H_Leak"
-		gkH_lvl			invalue	"H_Level"
-		gk_H_perc_Dec		invalue	"H_Dec"
-		gkH_perc_Harm		invalue	"H_Harm"
-		gkH_perc_lvl		invalue	"H_Perc_lvl"
-		gkOct_Hi			invalue	"H_Oct"
+		gkH_16ft_lvl		chnget	"H_16ft_lvl"
+		gkH_8ft_lvl		chnget	"H_8ft_lvl"
+		gkH_5_13ft_lvl		chnget	"H_5_13ft_lvl"
+		gkH_4ft_lvl		chnget	"H_4ft_lvl"
+		gkH_2_23ft_lvl		chnget	"H_2_23ft_lvl"
+		gkH_2ft_lvl		chnget	"H_2ft_lvl"
+		gkH_1_35ft_lvl		chnget	"H_1_35ft_lvl"
+		gkH_1_23ft_lvl		chnget	"H_1_23ft_lvl"
+		gkH_1ft_lvl		chnget	"H_1ft_lvl"
+		gk_H_Att			chnget	"H_Attack"
+		gkH_leak			chnget	"H_Leak"
+		gkH_lvl			chnget	"H_Level"
+		gk_H_perc_Dec		chnget	"H_Dec"
+		gkH_perc_Harm		chnget	"H_Harm"
+		gkH_perc_lvl		chnget	"H_Perc_lvl"
+		gkOct_Hi			chnget	"H_Oct"
 		;Gen
-		gkTune			invalue	"Master_Tune"
-		gkDetl			invalue	"Det_L"
-		gkDet_L1			invalue	"Mix"
+		gkTune			chnget	"Master_Tune"
+		gkDetl			chnget	"Det_L"
+		gkDet_L1			chnget	"Mix"
 		;Effect returns
-		gkMain_PreEff		invalue	"PreEff"
-		gkfx_Scan			invalue	"Scan"
-		gkfx_Dist			invalue	"Dist"
-		gkfx_Rot			invalue	"Rot"
-		gkfx_Del			invalue	"Del"
-		gkfx_Rev			invalue	"Rev"
-		gkSlowFast		invalue	"Slow_Fast_Rot"
+		gkMain_PreEff		chnget	"PreEff"
+		gkfx_Scan			chnget	"Scan"
+		gkfx_Dist			chnget	"Dist"
+		gkfx_Rot			chnget	"Rot"
+		gkfx_Del			chnget	"Del"
+		gkfx_Rev			chnget	"Rev"
+		gkSlowFast		chnget	"Slow_Fast_Rot"
 		;Main ctrl
-		gkSplit			invalue	"Split"
-		gkMain_Vol		invalue	"Main_Vol"
+		gkSplit			chnget	"Split"
+		gkMain_Vol		chnget	"Main_Vol"
 		;Scanner
-		gkSc_C			invalue  "C"
-		gkSc_Acc			invalue  "Acc"
-		gkSc_Fst			invalue  "Fst"
-		gkSc_Slw			invalue  "Slw"
-		gkSc_Depth		invalue  "Depth"
-		gkSc_Delay		invalue  "Delay"
+		gkSc_C			chnget  "C"
+		gkSc_Acc			chnget  "Acc"
+		gkSc_Fst			chnget  "Fst"
+		gkSc_Slw			chnget  "Slw"
+		gkSc_Depth		chnget  "Depth"
+		gkSc_Delay		chnget  "Delay"
 		;Distortion
-		gkSoft_Drive		invalue  "Soft"
-		gkDist_Drive		invalue  "Drive"
-		gkDist_Cutoff		invalue  "Cutoff"
-		gkAsymm			invalue  "Asymm"
-		gkDist_postGain	invalue  "postGain"
+		gkSoft_Drive		chnget  "Soft"
+		gkDist_Drive		chnget  "Drive"
+		gkDist_Cutoff		chnget  "Cutoff"
+		gkAsymm			chnget  "Asymm"
+		gkDist_postGain	chnget  "postGain"
 		;Delay
-		gkFlanger_dlt		invalue  "Delay"
-		gkFlanger_fdbk		invalue  "Fdbk"
+		gkFlanger_dlt		chnget  "Delay"
+		gkFlanger_fdbk		chnget  "Fdbk"
 		;Reverb
-		gkRvb_time		invalue  "Size"
-		gkRvb_Attn		invalue  "frq_Att"
+		gkRvb_time		chnget  "Size"
+		gkRvb_Attn		chnget  "frq_Att"
 		;Leslie
-		gkH_Slw			invalue  "H_Slow"
-		gkL_Slw			invalue  "L_Slow"
-		gkH_Fst			invalue  "H_Fast"
-		gkL_Fst			invalue  "L_Fast"
-		gkH_Acc			invalue  "H_Acc"
-		gkL_Acc			invalue  "L_Acc"
-		gkFq_Sep			invalue  "Fq_Sep"
-		gkaM				invalue  "aM"
-		gkH_Att2			invalue  "H_Att"
-		gkL_Att2			invalue  "L_Att"
-		gkHCut			invalue  "H_Cut"
-		gkLCut			invalue  "L_Cut"
-		gkHQ				invalue  "H_Q"
-		gkLQ				invalue  "L_Q"
-		gkHigh			invalue  "High"
-		gkLow			invalue  "Low"
-		gkH_Doppler		invalue  "H_Doppler"
-		gkL_Doppler		invalue  "L_Doppler"
+		gkH_Slw			chnget  "H_Slow"
+		gkL_Slw			chnget  "L_Slow"
+		gkH_Fst			chnget  "H_Fast"
+		gkL_Fst			chnget  "L_Fast"
+		gkH_Acc			chnget  "H_Acc"
+		gkL_Acc			chnget  "L_Acc"
+		gkFq_Sep			chnget  "Fq_Sep"
+		gkaM				chnget  "aM"
+		gkH_Att2			chnget  "H_Att"
+		gkL_Att2			chnget  "L_Att"
+		gkHCut			chnget  "H_Cut"
+		gkLCut			chnget  "L_Cut"
+		gkHQ				chnget  "H_Q"
+		gkLQ				chnget  "L_Q"
+		gkHigh			chnget  "High"
+		gkLow			chnget  "Low"
+		gkH_Doppler		chnget  "H_Doppler"
+		gkL_Doppler		chnget  "L_Doppler"
 	endif
 endin
 
@@ -443,6 +522,7 @@ instr 10	;Param Display
 	Parameter_Display	gkH_Doppler
 	Parameter_Display	gkL_Doppler
 endin
+
 </CsInstruments>
 <CsScore>
 f 1 0 8193 10 1
@@ -462,13 +542,15 @@ i 3 0 3600	;Effects
 i 10 0 3600	;Param Display
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>75</x>
- <y>171</y>
- <width>1084</width>
- <height>438</height>
+ <x>0</x>
+ <y>0</y>
+ <width>1092</width>
+ <height>450</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -604,7 +686,7 @@ i 10 0 3600	;Param Display
   <midicc>-3</midicc>
   <minimum>-1.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>-1.00000000</value>
+  <value>0.89999998</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -651,7 +733,7 @@ i 10 0 3600	;Param Display
   <midicc>-3</midicc>
   <minimum>0.01000000</minimum>
   <maximum>10.00000000</maximum>
-  <value>1.52456999</value>
+  <value>1.20000005</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -698,7 +780,7 @@ i 10 0 3600	;Param Display
   <midicc>-3</midicc>
   <minimum>0.10000000</minimum>
   <maximum>5.00000000</maximum>
-  <value>2.11599994</value>
+  <value>2.29999995</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -803,7 +885,7 @@ i 10 0 3600	;Param Display
   <midicc>-3</midicc>
   <minimum>20.00000000</minimum>
   <maximum>30.00000000</maximum>
-  <value>0.28287801</value>
+  <value>0.30000001</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -850,7 +932,7 @@ i 10 0 3600	;Param Display
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>0.10000000</maximum>
-  <value>0.04400000</value>
+  <value>0.05000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -897,7 +979,7 @@ i 10 0 3600	;Param Display
   <midicc>-3</midicc>
   <minimum>0.10000000</minimum>
   <maximum>5.00000000</maximum>
-  <value>0.12650000</value>
+  <value>0.99500000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -973,7 +1055,7 @@ i 10 0 3600	;Param Display
   <midicc>-3</midicc>
   <minimum>0.01000000</minimum>
   <maximum>0.99000000</maximum>
-  <value>0.01000000</value>
+  <value>0.10000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1021,7 +1103,7 @@ Gain</label>
   <midicc>-3</midicc>
   <minimum>0.12500000</minimum>
   <maximum>8.00000000</maximum>
-  <value>3.20674992</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1039,7 +1121,7 @@ Gain</label>
   <midicc>-3</midicc>
   <minimum>250.00000000</minimum>
   <maximum>4000.00000000</maximum>
-  <value>1669.15002441</value>
+  <value>1000.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1086,7 +1168,7 @@ Gain</label>
   <midicc>-3</midicc>
   <minimum>0.01000000</minimum>
   <maximum>20.00000000</maximum>
-  <value>0.96536201</value>
+  <value>0.10000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1133,7 +1215,7 @@ Gain</label>
   <midicc>0</midicc>
   <minimum>0.06250000</minimum>
   <maximum>0.25000000</maximum>
-  <value>0.16179299</value>
+  <value>0.12500000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1209,7 +1291,7 @@ Gain</label>
   <midicc>-3</midicc>
   <minimum>-0.99900000</minimum>
   <maximum>0.99900000</maximum>
-  <value>-0.41958000</value>
+  <value>-0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1257,7 +1339,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.66000000</value>
+  <value>0.20000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1304,7 +1386,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.10000000</minimum>
   <maximum>15.00000000</maximum>
-  <value>0.10000000</value>
+  <value>2.48400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1322,7 +1404,7 @@ Att</label>
   <midicc>0</midicc>
   <minimum>0.20000000</minimum>
   <maximum>16.00000000</maximum>
-  <value>0.20000000</value>
+  <value>0.33000001</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1369,7 +1451,7 @@ Att</label>
   <midicc>0</midicc>
   <minimum>0.05000000</minimum>
   <maximum>10.00000000</maximum>
-  <value>2.13950000</value>
+  <value>1.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1416,7 +1498,7 @@ Att</label>
   <midicc>0</midicc>
   <minimum>0.10000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.28287801</value>
+  <value>0.30000001</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1492,7 +1574,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.20000000</minimum>
   <maximum>16.00000000</maximum>
-  <value>2.36500001</value>
+  <value>9.72999954</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1510,7 +1592,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.10000000</minimum>
   <maximum>15.00000000</maximum>
-  <value>4.07600021</value>
+  <value>9.63600000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1586,7 +1668,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.01000000</minimum>
   <maximum>10.00000000</maximum>
-  <value>1.90499997</value>
+  <value>0.10000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1680,7 +1762,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.87400001</value>
+  <value>0.42000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1698,7 +1780,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.77100003</value>
+  <value>0.20999999</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1774,7 +1856,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>100.00000000</minimum>
   <maximum>2000.00000000</maximum>
-  <value>489.51000977</value>
+  <value>1638.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1792,7 +1874,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.21400000</value>
+  <value>1.72000003</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1868,7 +1950,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.76200002</value>
+  <value>0.92000002</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1886,7 +1968,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.73500001</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1962,7 +2044,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00100000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00518000</value>
+  <value>0.87000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -1980,7 +2062,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00100000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00853000</value>
+  <value>0.86000001</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2056,7 +2138,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>20.00000000</minimum>
   <maximum>6000.00000000</maximum>
-  <value>247.47000122</value>
+  <value>5153.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2074,7 +2156,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>20.00000000</minimum>
   <maximum>6000.00000000</maximum>
-  <value>165.46200562</value>
+  <value>2599.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2150,7 +2232,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.07000000</value>
+  <value>0.23000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2168,7 +2250,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.05100000</value>
+  <value>0.17000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2247,7 +2329,7 @@ Att</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.09433960</xValue>
+  <xValue>0.51999998</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -2335,7 +2417,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.47999999</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2382,7 +2464,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.12600000</value>
+  <value>0.20000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2458,7 +2540,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.36000001</value>
+  <value>0.64999998</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2476,7 +2558,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>1.00000000</value>
+  <value>0.30000001</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2552,7 +2634,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.05200000</value>
+  <value>0.15000001</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2570,7 +2652,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99000001</value>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2646,7 +2728,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>1.00000000</value>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2758,7 +2840,7 @@ Att</label>
   <midicc>0</midicc>
   <minimum>0.99000000</minimum>
   <maximum>1.01000000</maximum>
-  <value>1.00399995</value>
+  <value>0.99500000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2809,7 +2891,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>1.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2842,7 +2924,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>1.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2875,7 +2957,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>1.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2908,7 +2990,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>1.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2941,7 +3023,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>1.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2974,7 +3056,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>1.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -3007,7 +3089,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -3040,7 +3122,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>1.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -3073,7 +3155,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>1.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -3102,7 +3184,7 @@ Att</label>
   <midicc>0</midicc>
   <minimum>0.00100000</minimum>
   <maximum>10.00000000</maximum>
-  <value>0.00151170</value>
+  <value>0.10000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -3178,7 +3260,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>0.10000000</maximum>
-  <value>0.08200000</value>
+  <value>0.05000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -3225,7 +3307,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.88300002</value>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -3243,7 +3325,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.82999998</value>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -3348,7 +3430,7 @@ Att</label>
   <midicc>0</midicc>
   <minimum>0.01000000</minimum>
   <maximum>10.00000000</maximum>
-  <value>0.24154000</value>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -3791,7 +3873,7 @@ Att</label>
   <minimum>0</minimum>
   <maximum>3</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2</value>
+  <value>1</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -4128,7 +4210,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.01000000</minimum>
   <maximum>10.00000000</maximum>
-  <value>0.13139801</value>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -4233,7 +4315,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.74299997</value>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -4251,7 +4333,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.51099998</value>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -4298,7 +4380,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>0.10000000</maximum>
-  <value>0.08100000</value>
+  <value>0.05000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -4374,7 +4456,7 @@ Att</label>
   <midicc>-3</midicc>
   <minimum>0.00100000</minimum>
   <maximum>10.00000000</maximum>
-  <value>0.00137380</value>
+  <value>0.10000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -4396,7 +4478,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -4429,7 +4511,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -4462,7 +4544,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -4495,7 +4577,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>1.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -4528,7 +4610,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -4561,7 +4643,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>1.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -4594,7 +4676,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>1.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -4627,7 +4709,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>1.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -4660,7 +4742,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>1.00000000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -4716,7 +4798,7 @@ Att</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>-0.420</label>
+  <label>0.420</label>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
@@ -4771,7 +4853,7 @@ Att</label>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>_SetPresetIndex</objectName>
@@ -4850,7 +4932,7 @@ Att</label>
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>6</selectedIndex>
+  <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -4927,7 +5009,7 @@ Att</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>-1.00000000</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -6102,188 +6184,3 @@ Att</label>
 <value id="{fcff35be-96c2-418f-8e79-ecae149d9e16}" mode="1" >0.00000000</value>
 </preset>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 72 179 400 200
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView background {44975, 30583, 17990}
-ioText {2, 2} {648, 432} label 0.000000 0.00100 "" center "Liberation Sans" 20 {61696, 57856, 47360} {63232, 62720, 61952} nobackground noborder DirectHammond
-ioText {654, 189} {426, 180} label 0.000000 0.00100 "" left "Liberation Sans" 14 {61696, 57856, 47360} {63232, 62720, 61952} nobackground noborder Leslie
-ioText {654, 2} {150, 180} label 0.000000 0.00100 "" left "Liberation Sans" 14 {61696, 57856, 47360} {63232, 62720, 61952} nobackground noborder Scanner
-ioText {660, 78} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder C
-ioKnob {660, 36} {45, 45} 1.000000 -1.000000 0.010000 -1.000000 C
-ioText {706, 78} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Acc
-ioKnob {706, 36} {45, 45} 10.000000 0.010000 0.010000 1.524570 Acc
-ioText {752, 78} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Fst
-ioKnob {752, 36} {45, 45} 5.000000 0.100000 0.010000 2.116000 Fst
-ioText {808, 2} {150, 180} label 0.000000 0.00100 "" left "Liberation Sans" 14 {61696, 57856, 47360} {63232, 62720, 61952} nobackground noborder Distortion
-ioText {962, 2} {57, 180} label 0.000000 0.00100 "" left "Liberation Sans" 14 {61696, 57856, 47360} {63232, 62720, 61952} nobackground noborder Delay
-ioText {1023, 2} {57, 180} label 0.000000 0.00100 "" left "Liberation Sans" 14 {61696, 57856, 47360} {63232, 62720, 61952} nobackground noborder Reverb
-ioKnob {752, 104} {45, 45} 30.000000 20.000000 0.010000 0.282878 Delay
-ioText {752, 146} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Delay
-ioKnob {706, 104} {45, 45} 0.100000 0.000000 0.010000 0.044000 Depth
-ioText {706, 146} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Depth
-ioKnob {660, 104} {45, 45} 5.000000 0.100000 0.010000 0.126500 Slw
-ioText {660, 146} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Slw
-ioText {814, 146} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Asym
-ioKnob {814, 104} {45, 45} 0.990000 0.010000 0.010000 0.010000 Asymm
-ioText {860, 146} {45, 33} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder PostÂ¬Gain
-ioKnob {860, 104} {45, 45} 8.000000 0.125000 0.010000 3.206750 postGain
-ioKnob {906, 36} {45, 45} 4000.000000 250.000000 0.010000 1669.150024 Cutoff
-ioText {906, 78} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Cutoff
-ioKnob {860, 36} {45, 45} 20.000000 0.010000 0.010000 0.965362 Drive
-ioText {860, 78} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Drive
-ioKnob {814, 36} {45, 45} 0.250000 0.062500 0.010000 0.161793 Soft
-ioText {814, 78} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Soft
-ioText {967, 146} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Fdbk
-ioKnob {967, 104} {45, 45} 0.999000 -0.999000 0.010000 -0.419580 Fdbk
-ioText {1029, 146} {45, 33} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder FreqÂ¬Att
-ioKnob {1029, 104} {45, 45} 1.000000 0.000000 0.010000 0.660000 frq_Att
-ioText {660, 334} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder L Slow
-ioKnob {660, 292} {45, 45} 15.000000 0.100000 0.010000 0.100000 L_Slow
-ioKnob {660, 224} {45, 45} 16.000000 0.200000 0.010000 0.200000 H_Slow
-ioText {660, 266} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder H Slow
-ioKnob {1029, 36} {45, 45} 10.000000 0.050000 0.010000 2.139500 Size
-ioText {1029, 78} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Size
-ioKnob {967, 36} {45, 45} 1.000000 0.100000 0.010000 0.282878 Delay
-ioText {967, 78} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Delay
-ioText {706, 266} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder H Fast
-ioKnob {706, 224} {45, 45} 16.000000 0.200000 0.010000 2.365000 H_Fast
-ioKnob {706, 292} {45, 45} 15.000000 0.100000 0.010000 4.076000 L_Fast
-ioText {706, 334} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder L Fast
-ioText {752, 266} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder H Acc
-ioKnob {752, 224} {45, 45} 10.000000 0.010000 0.010000 1.905000 H_Acc
-ioKnob {752, 292} {45, 45} 10.000000 0.010000 0.010000 0.110000 L_Acc
-ioText {752, 334} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder L Acc
-ioText {844, 334} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder L Att
-ioKnob {844, 292} {45, 45} 1.000000 0.000000 0.010000 0.874000 L_Att
-ioKnob {844, 224} {45, 45} 1.000000 0.000000 0.010000 0.771000 H_Att
-ioText {844, 266} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder H Att
-ioText {798, 266} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Fq Sep
-ioKnob {798, 224} {45, 45} 2000.000000 100.000000 0.010000 489.510010 Fq_Sep
-ioKnob {798, 292} {45, 45} 2.000000 0.000000 0.010000 0.214000 aM
-ioText {798, 334} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder aM
-ioText {982, 334} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Low
-ioKnob {982, 292} {45, 45} 1.000000 0.000000 0.010000 0.762000 Low
-ioKnob {982, 224} {45, 45} 1.000000 0.000000 0.010000 0.735000 High
-ioText {982, 266} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder High
-ioText {936, 334} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder LQ
-ioKnob {936, 292} {45, 45} 1.000000 0.001000 0.010000 0.005180 L_Q
-ioKnob {936, 224} {45, 45} 1.000000 0.001000 0.010000 0.008530 H_Q
-ioText {936, 266} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder HQ
-ioText {890, 266} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder H Cut
-ioKnob {890, 224} {45, 45} 6000.000000 20.000000 0.010000 247.470001 H_Cut
-ioKnob {890, 292} {45, 45} 6000.000000 20.000000 0.010000 165.462006 L_Cut
-ioText {890, 334} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder L Cut
-ioText {1028, 266} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder H Dop
-ioKnob {1028, 224} {45, 45} 1.000000 0.000000 0.010000 0.070000 H_Doppler
-ioKnob {1028, 292} {45, 45} 1.000000 0.000000 0.010000 0.051000 L_Doppler
-ioText {1028, 334} {45, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder L Dop
-ioText {272, 403} {150, 28} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Slow / Fast Rot
-ioMeter {184, 388} {319, 16} {61696, 57856, 47360} "Slow_Fast_Rot" 0.094340 "" 0.000000 fill 1 0 mouse
-ioText {520, 360} {54, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Split
-ioText {522, 334} {50, 20} editnum 0.000000 1.000000 "Split" center "" 0 {19200, 9472, 4096} {61696, 57856, 47360} nobackground noborder 0.000000
-ioKnob {582, 314} {60, 60} 1.000000 0.000000 0.010000 0.480000 Main_Vol
-ioText {582, 373} {60, 30} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Main Vol
-ioKnob {453, 320} {45, 45} 1.000000 0.000000 0.010000 0.126000 Rev
-ioText {449, 360} {54, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Rev
-ioText {290, 360} {54, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Dist
-ioKnob {295, 320} {45, 45} 1.000000 0.000000 0.010000 0.360000 Dist
-ioKnob {241, 320} {45, 45} 1.000000 0.000000 0.010000 1.000000 Scan
-ioText {237, 360} {54, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Scan
-ioText {396, 360} {54, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Del
-ioKnob {401, 320} {45, 45} 1.000000 0.000000 0.010000 0.052000 Del
-ioKnob {348, 320} {45, 45} 1.000000 0.000000 0.010000 0.990000 Rot
-ioText {343, 360} {54, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Rot
-ioText {115, 384} {54, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Mix
-ioKnob {119, 344} {45, 45} 1.000000 0.000000 0.010000 1.000000 Mix
-ioKnob {189, 320} {45, 45} 1.000000 0.001000 0.010000 0.995000 PreEff
-ioText {184, 360} {54, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Pre Eff
-ioText {8, 384} {54, 40} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Master Tune
-ioKnob {13, 344} {45, 45} 1.059000 0.944000 0.010000 1.000000 Master_Tune
-ioKnob {66, 344} {45, 45} 1.010000 0.990000 0.010000 1.004000 Det_L
-ioText {62, 384} {54, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Det L
-ioMeter {330, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "H_16ft_lvl" 1.000000 fill 1 0 mouse
-ioMeter {353, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "H_8ft_lvl" 1.000000 fill 1 0 mouse
-ioMeter {376, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "H_5_13ft_lvl" 1.000000 fill 1 0 mouse
-ioMeter {399, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "H_4ft_lvl" 1.000000 fill 1 0 mouse
-ioMeter {422, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "H_2_23ft_lvl" 1.000000 fill 1 0 mouse
-ioMeter {445, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "H_2ft_lvl" 1.000000 fill 1 0 mouse
-ioMeter {468, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "H_1_35ft_lvl" 0.000000 fill 1 0 mouse
-ioMeter {491, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "H_1_23ft_lvl" 1.000000 fill 1 0 mouse
-ioMeter {514, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "H_1ft_lvl" 1.000000 fill 1 0 mouse
-ioKnob {537, 44} {45, 45} 10.000000 0.001000 0.010000 0.001512 H_Attack
-ioText {530, 84} {60, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Attack
-ioText {530, 154} {60, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Leak
-ioKnob {537, 114} {45, 45} 0.100000 0.000000 0.010000 0.082000 H_Leak
-ioText {530, 224} {60, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Level
-ioKnob {537, 184} {45, 45} 1.000000 0.000000 0.010000 0.883000 H_Level
-ioKnob {595, 184} {45, 45} 1.000000 0.000000 0.010000 0.830000 H_Perc_lvl
-ioText {588, 224} {60, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Perc
-ioText {588, 154} {60, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder 2nd / 3rd
-ioText {588, 84} {60, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Decay
-ioKnob {595, 44} {45, 45} 10.000000 0.010000 0.010000 0.241540 H_Dec
-ioText {597, 128} {40, 20} editnum 2.000000 1.000000 "H_Harm" center "" 0 {19200, 9472, 4096} {61696, 57856, 47360} nobackground noborder 2.000000
-ioText {324, 244} {25, 24} label 16.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder 16
-ioText {348, 244} {25, 25} label 8.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder 8
-ioText {394, 244} {25, 24} label 4.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder 4
-ioText {372, 244} {25, 35} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder  5Â¬1/3
-ioText {464, 244} {25, 35} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder  1Â¬3/5
-ioText {486, 244} {25, 35} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder  1Â¬1/3
-ioText {441, 244} {25, 24} label 2.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder 2
-ioText {418, 244} {25, 35} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder  2Â¬2/3
-ioText {510, 244} {25, 24} label 1.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder 1
-ioText {401, 274} {131, 26} label 0.000000 0.00100 "" center "Liberation Sans" 16 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Upper Drawbars
-ioText {328, 276} {40, 20} editnum 1.000000 1.000000 "H_Oct" center "" 0 {19200, 9472, 4096} {61696, 57856, 47360} nobackground noborder 1.000000
-ioText {365, 276} {35, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Oct
-ioText {48, 276} {35, 25} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Oct
-ioText {11, 276} {40, 20} editnum 2.000000 1.000000 "L_Oct" center "" 0 {19200, 9472, 4096} {61696, 57856, 47360} nobackground noborder 2.000000
-ioText {84, 274} {131, 26} label 0.000000 0.00100 "" center "Liberation Sans" 16 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Lower Drawbars
-ioText {193, 244} {25, 24} label 1.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder 1
-ioText {101, 244} {25, 35} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder  2Â¬2/3
-ioText {124, 244} {25, 24} label 2.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder 2
-ioText {169, 244} {25, 35} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder  1Â¬1/3
-ioText {147, 244} {25, 35} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder  1Â¬3/5
-ioText {55, 244} {25, 35} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder  5Â¬1/3
-ioText {77, 244} {25, 24} label 4.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder 4
-ioText {31, 244} {25, 20} label 8.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder 8
-ioText {7, 244} {25, 24} label 16.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder 16
-ioText {279, 128} {40, 20} editnum 2.000000 1.000000 "L_Harm" center "" 0 {19200, 9472, 4096} {61696, 57856, 47360} nobackground noborder 2.000000
-ioKnob {277, 44} {45, 45} 10.000000 0.010000 0.010000 0.131398 L_Dec
-ioText {270, 84} {60, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Decay
-ioText {270, 154} {60, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder 2nd / 3rd
-ioText {270, 224} {60, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Perc
-ioKnob {277, 184} {45, 45} 1.000000 0.000000 0.010000 0.743000 L_Perc_lvl
-ioKnob {220, 184} {45, 45} 1.000000 0.000000 0.010000 0.511000 L_Level
-ioText {213, 224} {60, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Level
-ioKnob {220, 114} {45, 45} 0.100000 0.000000 0.010000 0.081000 L_Leak
-ioText {213, 154} {60, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Leak
-ioText {213, 84} {60, 24} label 0.000000 0.00100 "" center "Liberation Sans" 10 {14336, 6912, 2816} {63232, 62720, 61952} nobackground noborder Attack
-ioKnob {220, 44} {45, 45} 10.000000 0.001000 0.010000 0.001374 L_Attack
-ioMeter {197, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "L_1ft_lvl" 0.000000 fill 1 0 mouse
-ioMeter {174, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "L_1_23ft_lvl" 0.000000 fill 1 0 mouse
-ioMeter {151, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "L_1_35ft_lvl" 0.000000 fill 1 0 mouse
-ioMeter {128, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "L_2ft_lvl" 1.000000 fill 1 0 mouse
-ioMeter {105, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "L_2_23ft_lvl" 0.000000 fill 1 0 mouse
-ioMeter {82, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "L_4ft_lvl" 1.000000 fill 1 0 mouse
-ioMeter {59, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "L_5_13ft_lvl" 1.000000 fill 1 0 mouse
-ioMeter {36, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "L_8ft_lvl" 1.000000 fill 1 0 mouse
-ioMeter {13, 44} {16, 200} {61696, 57856, 47360} "" 0.000000 "L_16ft_lvl" 1.000000 fill 1 0 mouse
-ioText {654, 377} {426, 57} label 0.000000 0.00100 "" left "Liberation Sans" 18 {61696, 57856, 47360} {63232, 62720, 61952} nobackground noborder 
-ioText {675, 400} {80, 25} display -0.419580 0.00100 "P_Display" center "Liberation Sans" 10 {14336, 6912, 2816} {61696, 57856, 47360} nobackground noborder -0.420
-ioButton {950, 400} {60, 25} value 1.000000 "_Play" "Play" "/" 
-ioButton {1012, 400} {60, 25} value 1.000000 "_Stop" "Stop" "/" 
-ioMenu {781, 400} {150, 25} 6 303 "Organ1,Organ2,Organ3,Organ4,Organ5,Organ6,Organ7,Organ8,Organ9,Organ10,Organ11,Free,Free" _SetPresetIndex
-ioText {670, 376} {98, 27} label 0.000000 0.00100 "" left "Liberation Sans" 14 {61696, 57856, 47360} {63232, 62720, 61952} nobackground noborder Param value
-ioText {780, 376} {61, 27} label 0.000000 0.00100 "" left "Liberation Sans" 14 {61696, 57856, 47360} {63232, 62720, 61952} nobackground noborder Presets
-ioMeter {954, 408} {10, 10} {65280, 0, 0} "" 0.000000 "Csound_On" -1.000000 fill 1 0 mouse
-</MacGUI>

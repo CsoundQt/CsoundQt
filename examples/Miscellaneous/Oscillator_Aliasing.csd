@@ -8,13 +8,21 @@ ksmps = 128
 nchnls = 2
 0dbfs = 1
 
+chn_k "family", 1
+chn_k "freq", 1
+chn_k "graph_index", 2
+chn_k "lvl", 1
+chn_k "table", 1
+chn_k "type", 1
+chn_k "vco2type", 1
+
 instr 1
-kfreq invalue "freq" 
-klvl invalue "lvl" 
-kfamily invalue "family"
-ktype invalue "type"
-kvco2type invalue "vco2type"
-ktable invalue "table"
+kfreq chnget "freq" 
+klvl chnget "lvl" 
+kfamily chnget "family"
+ktype chnget "type"
+kvco2type chnget "vco2type"
+ktable chnget "table"
 ktrig changed ktable, kvco2type
 if ktrig == 1 then
 	reinit contin
@@ -38,9 +46,10 @@ endif
 rireturn
 
 dispfft  aout*3, 0.3, 4096
-outvalue "graph_index", 9
+chnset  9, "graph_index"
 outs aout, aout
 endin
+
 
 </CsInstruments>
 <CsScore>
@@ -56,13 +65,15 @@ f 9 0 2048 7 1 2048 -1
 i 1 0 3600
 e
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>694</x>
- <y>193</y>
- <width>653</width>
- <height>715</height>
+ <x>168</x>
+ <y>24</y>
+ <width>632</width>
+ <height>686</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -278,7 +289,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>5</selectedIndex>
+  <selectedIndex>8</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -544,34 +555,3 @@ e
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 694 193 653 715
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {32125, 41634, 41120}
-ioKnob {23, 17} {77, 64} 6000.000000 40.000000 0.010000 457.200000 freq
-ioText {22, 79} {80, 25} display 457.200000 0.00100 "freq" center "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 457.200
-ioGraph {10, 124} {614, 392} table 9.000000 1.000000 graph_index
-ioMenu {225, 44} {124, 24} 0 303 "oscil,vco2" family
-ioText {362, 18} {132, 98} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {40192, 46336, 41472} nobackground noborder Oscil family
-ioMenu {368, 40} {114, 25} 2 303 "no interp,linear,cubic" type
-ioMenu {369, 78} {114, 25} 5 303 "sine 128 pts,sine 256 pts,sine 512 pts,sine 1024 pts,sine 2048 pts,square 128,square 2048,saw 128,saw 2048" table
-ioText {501, 19} {122, 97} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {40192, 46336, 41472} nobackground noborder Vco2 family
-ioMenu {510, 42} {97, 25} 1 303 "saw, square" vco2type
-ioText {224, 17} {124, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Oscillator family
-ioMenu {225, 44} {124, 24} 0 303 "oscil,vco2" family
-ioText {225, 71} {126, 47} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Oscil are table oscillators. Vco2 are bandlimited oscillators
-ioGraph {11, 522} {613, 150} scope 2.000000 -255 
-ioText {22, 96} {80, 25} label 0.000000 0.00100 "" center "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Freq
-ioKnob {116, 18} {77, 64} 1.000000 0.000000 0.010000 0.090000 lvl
-ioText {115, 80} {80, 25} display 0.090000 0.00100 "lvl" center "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.090
-ioText {115, 97} {80, 25} label 0.000000 0.00100 "" center "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Level
-</MacGUI>

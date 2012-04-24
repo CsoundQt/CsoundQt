@@ -19,7 +19,7 @@ def stopsong():
     q.stop(index)
 
 1/0 # To force stopping here!
-#You should now be able to run any of these to enjoy 8-bit glory!
+##You should now be able to run any of these to enjoy 8-bit glory!
 
 
 bytesong('kt*((kt>>12|kt>>8)&63&kt>>4)')                         # by viznut
@@ -43,6 +43,7 @@ bytesong('(kt>>7|kt|kt>>6)*10+4*(kt&kt>>13|kt>>6)')               # by viznut
 
 # And execute the following line to stop the song
 stopsong()
+
 
 
 

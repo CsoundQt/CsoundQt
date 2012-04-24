@@ -444,7 +444,7 @@ void CsoundQt::open()
                                                 "Be careful to respect spacing parenthesis and usage of punctuation"));
   if (widgetsVisible) {
     if (!m_options->widgetsIndependent) {
-      widgetPanel->show();
+//      widgetPanel->show();
     }
   }
   if (helpVisible)
@@ -643,6 +643,9 @@ void CsoundQt::evaluateSection()
    if (code == QString()) { //evaluate current selection in current document
      if (!m_scratchPad->hasFocus()) {
        evalCode = documentPages[curPage]->getActiveText();
+       if (evalCode.count("\n") <= 1) {
+         documentPages[curPage]->gotoNextRow();
+       }
      }
      else {
        evalCode = static_cast<DocumentView *>(m_scratchPad->widget())->getActiveText();
@@ -652,6 +655,7 @@ void CsoundQt::evaluateSection()
      evalCode = code;
    }
    m_pythonConsole->evaluate(evalCode);
+
 #else
    showNoPythonQtWarning();
 #endif
@@ -1219,9 +1223,6 @@ void CsoundQt::play(bool realtime, int index)
     return;
   }
   curPage = index;
-  if (curPage == oldPage) {
-      runAct->setChecked(true);  // In case the call comes from a button
-  }
   if (documentPages[curPage]->getFileName().isEmpty()) {
     QMessageBox::warning(this, tr("CsoundQt"),
                          tr("This file has not been saved\nPlease select name and location."));
@@ -1312,7 +1313,9 @@ void CsoundQt::play(bool realtime, int index)
 //      or _configlists.rtMidiNames[m_options->rtMidiModule] == "portmidi") {
   if (!m_options->simultaneousRun) {
     stopAll();
-    runAct->setChecked(true);  // mark it correctly again after stopping...
+  }
+  if (curPage == oldPage) {
+      runAct->setChecked(true);  // In case the call comes from a button
   }
   int ret = documentPages[curPage]->play(m_options);
   if (ret == -1) {
@@ -1329,7 +1332,7 @@ void CsoundQt::play(bool realtime, int index)
     runAct->setChecked(false);
   }
   else if (ret == 0) { // No problem
-    if (m_options->enableWidgets and m_options->showWidgetsOnRun && !runFileName1.endsWith(".py")) {
+    if (m_options->enableWidgets and m_options->showWidgetsOnRun && fileName.endsWith(".csd")) {
       showWidgetsAct->setChecked(true);
       if (!documentPages[curPage]->usesFltk()) { // Don't bring up widget panel if there's an FLTK panel
         if (!m_options->widgetsIndependent) {

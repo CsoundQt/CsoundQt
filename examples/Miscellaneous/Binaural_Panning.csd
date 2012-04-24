@@ -28,7 +28,7 @@ elseif ksource == 1 then
 	asig pinkish kamp * 0.7
 
 elseif ksource == 2 then
-	asig vco2 kamp, kpfreq, 
+	asig vco2 kamp, kpfreq
 
 elseif ksource == 3 then
 	kphs phasor 1
@@ -89,10 +89,10 @@ e
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>922</x>
- <y>327</y>
- <width>715</width>
- <height>488</height>
+ <x>0</x>
+ <y>0</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -987,50 +987,4 @@ e
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 922 327 715 488
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {40606, 52428, 62451}
-ioMeter {399, 35} {231, 218} {0, 59904, 0} "z" 0.834862 "y" 0.100917 point 3 0 mouse
-ioMeter {59, 34} {231, 218} {0, 59904, 0} "x" -0.030303 "z" 0.834862 point 3 0 mouse
-ioText {357, 128} {43, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Back
-ioText {500, 6} {43, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Up
-ioText {496, 260} {43, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Down
-ioText {140, 3} {74, 32} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Front
-ioText {154, 260} {53, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Back
-ioText {296, 129} {43, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Right
-ioText {13, 126} {43, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Left
-ioMenu {14, 392} {115, 25} 3 303 "white noise,pink noise,pulse,noise bursts,voice" source
-ioKnob {185, 320} {83, 81} 600.000000 0.000000 0.010000 200.000000 pfreq
-ioText {188, 402} {80, 25} label 212.121200 0.00100 "pfreq" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 212.1212
-ioSlider {147, 301} {20, 100} 0.000000 0.300000 0.198000 amp
-ioText {307, 185} {80, 25} label 357.921265 0.00100 "az" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 357.921
-ioText {309, 238} {80, 25} label 6.887930 0.00100 "el" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 6.888
-ioSlider {503, 150} {20, 63} 0.000000 1.000000 0.444444 slider21
-ioSlider {144, 126} {65, 27} 0.000000 1.000000 0.446154 slider21
-ioText {309, 161} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Azimuth
-ioText {309, 214} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Elevation
-ioMenu {14, 341} {111, 26} 1 303 "hrtfer,hrtfmove2,amp pan" hrtfmethod
-ioButton {280, 317} {147, 30} value 1.000000 "_Play" "Start" "/" 
-ioButton {280, 346} {147, 29} value 1.000000 "_Stop" "Stop" "/" 
-ioText {14, 316} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Method
-ioText {14, 368} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Signal
-ioText {441, 316} {187, 117} label 0.000000 0.00100 "" center "Lucida Grande" 28 {0, 0, 0} {39168, 60672, 65280} nobackground noborder Binaural panning
-ioText {140, 402} {42, 26} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Level
-ioText {497, 396} {97, 36} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Listen on headphones!
-ioText {632, 126} {71, 37} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Front
-ioText {388, 272} {32, 30} label 0.000000 0.00100 "" center "Lucida Grande" 28 {0, 0, 0} {39168, 60672, 65280} nobackground noborder 
-ioText {491, 120} {40, 40} label 0.000000 0.00100 "" center "Lucida Grande" 28 {0, 0, 0} {39168, 60672, 65280} nobackground noborder 
-ioText {530, 150} {26, 11} label 0.000000 0.00100 "" center "Lucida Grande" 28 {0, 0, 0} {39168, 60672, 65280} nobackground noborder 
-ioText {156, 120} {40, 40} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {39168, 60672, 65280} nobackground noborder 
-</MacGUI>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="622" y="48" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

@@ -1209,6 +1209,11 @@ void DocumentView::jumpToLine(int line)
   }
 }
 
+void DocumentView::gotoNextLine()
+{
+  m_mainEditor->moveCursor(QTextCursor::Down);
+}
+
 void DocumentView::opcodeFromMenu()
 {
   QAction *action = (QAction *) QObject::sender();

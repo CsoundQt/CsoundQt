@@ -30,7 +30,7 @@ def renderFile(csdFile):
     sr = srBox.currentText
     ret = os.system("csound " + csdFile + " -d -r" + sr + " -k" + sr )
     if ret != 0:
-        print "File: " + csdFile + " returned: " + str(ret)
+        print "Error! File: " + csdFile + " returned: " + str(ret)
     return ret
 
 def renderFiles():
@@ -45,7 +45,7 @@ def renderFiles():
     for csdFile in csdFiles:
         counter += 1
         statusLabel.setText("Rendering:" + csdFile)
-        #print "Rendering (" + str(counter) + "/" + str(number) + "):" + csdFile
+        print "Rendering (" + str(counter) + "/" + str(number) + "):" + csdFile
         renderFile("../" + csdFile)
         pqtc.QCoreApplication.instance().processEvents() # Needed to avoid blocking the application
         if running == 0:
@@ -76,10 +76,10 @@ def edit():
         if ret != 0:
             print "Error opening audacity"
 
-filepath = currentScript[:currentScript.rfind('/')]
-print filepath
+q.loadDocument("Koenig-Essay.py")
+filepath = q.getFilePath()
 
-os.chdir(filepath)  # Move to the directory of this file (only works if the file is open in a tab)
+os.chdir(filepath)  # Move to the directory of this file
 
 csdFiles = glob.glob("csds/*.csd") # Get list of csd files
 csdFiles.sort() # Sort the list alphabetically
@@ -126,6 +126,7 @@ for part in parts:
 for file in csdFiles:
     sectionBox.addItem(file) # Fill ComboBox with file list
 
-#renderFiles(csdFiles)
 w.show() # Show main widget
+
+
 

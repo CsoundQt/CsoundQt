@@ -95,6 +95,9 @@ void CsoundEngine::messageCallbackNoThread(CSOUND *csound,
   CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
   QString msg;
   msg = msg.vsprintf(fmt, args);
+  if (msg.isEmpty()) {
+    return;
+  }
   for (int i = 0; i < ud->csEngine->consoles.size(); i++) {
     ud->csEngine->consoles[i]->appendMessage(msg);
   }
@@ -110,6 +113,9 @@ void CsoundEngine::messageCallbackThread(CSOUND *csound,
   if (!(ud->flags & QCS_NO_CONSOLE_MESSAGES)) {
     QString msg;
     msg = msg.vsprintf(fmt, args);
+    if (msg.isEmpty()) {
+      return;
+    }
     ud->csEngine->queueMessage(msg);
   }
 }

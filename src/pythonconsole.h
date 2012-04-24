@@ -47,6 +47,8 @@ class PythonConsole : public QDockWidget
 
   private:
 //    void runCurrentCommand();
+    int countLines(QString evalCode);
+
     PyQcsObject *m_pqcs;
     PythonQtScriptingConsole *m_console;
 //    QTextEdit *m_text;

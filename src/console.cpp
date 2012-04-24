@@ -84,7 +84,9 @@ void Console::appendMessage(QString msg)
   }
   insertPlainText(msg);
   setTextColor(m_textColor);
-  moveCursor(QTextCursor::End);
+  if (!msg.isEmpty()) {
+    moveCursor(QTextCursor::End);
+  }
 //  consoleLock.unlock();
 }
 
@@ -193,13 +195,9 @@ bool DockConsole::widgetHasFocus()
 void DockConsole::appendMessage(QString msg)
 {
   static_cast<Console *>(widget())->appendMessage(msg);
-  static_cast<Console *>(widget())->scrollToEnd();
+//  static_cast<Console *>(widget())->scrollToEnd();
 }
 
-//void DockConsole::reset()
-//{
-//  widget()->clear();
-//}
 
 void DockConsole::closeEvent(QCloseEvent * /*event*/)
 {

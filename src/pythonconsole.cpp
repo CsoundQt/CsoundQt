@@ -56,8 +56,7 @@ void PythonConsole::evaluate(QString evalCode, bool notify)
 //  PythonQtObjectPtr  mainContext = m_pqcs->getMainModule();
   mainContext.evalScript(evalCode.trimmed() + "\n");
   if (notify) {
-    QString printScript = "print 'Evaluated " + QString::number(evalCode.count("\n") + 1 );
-    printScript += " lines.'";
+    QString printScript = "print 'Evaluated " + QString::number(countLines(evalCode)) + " lines.'";
     mainContext.evalScript(printScript);
     m_console->appendCommandPrompt();
   }
@@ -70,7 +69,7 @@ void PythonConsole::runScript(QString fileName)
   qDebug() << newDir.absolutePath();
   bool set = QDir::setCurrent(newDir.absolutePath());
   PythonQtObjectPtr  mainContext = PythonQt::self()->getMainModule();
-  mainContext.addVariable("currentScript", QVariant(fileName));
+//  mainContext.addVariable("currentScript", QVariant(fileName));
 //  PythonQtObjectPtr  mainContext = m_pqcs->getMainModule();
   QFile file(fileName);
   if (!file.open(QIODevice::ReadOnly)) {
@@ -79,11 +78,11 @@ void PythonConsole::runScript(QString fileName)
   }
   QString evalCode = QString(file.readAll());
   mainContext.evalScript(evalCode);
-  QString printScript = "print 'Evaluated " + QString::number(evalCode.count("\n") + 1 );
+  QString printScript = "print 'Evaluated " + QString::number(countLines(evalCode));
   printScript += " lines.'";
   mainContext.evalScript(printScript);
   m_console->appendCommandPrompt();
-  mainContext.removeVariable("currentScript");
+//  mainContext.removeVariable("currentScript");
   QDir::setCurrent (dir.absolutePath());
 }
 
@@ -118,6 +117,15 @@ void PythonConsole::initializeInterpreter()
 void PythonConsole::closeEvent(QCloseEvent * /*event*/)
 {
   emit Close(false);
+}
+
+int PythonConsole::countLines(QString evalCode)
+{
+  int lines = evalCode.count("\n");
+  if (!evalCode.endsWith("\n")) {
+    lines++;
+  }
+  return lines;
 }
 
 //void PythonConsole::runCommand(QString command)

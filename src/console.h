@@ -76,7 +76,6 @@ class DockConsole : public QDockWidget
     void appendMessage(QString msg);
 
   public slots:
-//    void reset();
 
   protected:
     virtual void closeEvent(QCloseEvent * event);
@@ -86,29 +85,6 @@ private:
   signals:
     void Close(bool visible);
 };
-
-
-//class MyQTextEdit : public QTextEdit
-//{
-//  Q_OBJECT
-//  public:
-//    MyQTextEdit(QWidget* parent) : QTextEdit(parent) {}
-//    ~MyQTextEdit() {}
-//
-//  protected:
-//    virtual void contextMenuEvent(QContextMenuEvent *event)
-//    {
-//      QMenu *menu = createStandardContextMenu();
-//      menu->addAction("Clear", this, SLOT(clear()));
-//      menu->exec(event->globalPos());
-//      delete menu;
-//    }
-//     virtual void contextMenuEvent(QContextMenuEvent *event)
-//     {emit(popUpMenu(event->globalPos()));}
-//
-//   signals:
-//     void popUpMenu(QPoint pos);
-//};
 
 class ConsoleWidget : public Console
 {

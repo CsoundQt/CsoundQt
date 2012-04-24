@@ -831,6 +831,27 @@ void DocumentPage::redo()
   }
 }
 
+void DocumentPage::gotoNextRow()
+{
+  foreach (WidgetLayout *wl, m_widgetLayouts) {
+    if (wl->hasFocus()) {
+      wl->redo();
+      wl->setFocus(Qt::OtherFocusReason);  // Why is this here?
+      return;
+    }
+  }
+  if (m_view->childHasFocus())
+    m_view->gotoNextLine();
+  else {
+    // Not worth implementing for live event sheets, as this is used only
+    // when running a single line for the python interpreter
+//    for (int i = 0; i < m_liveFrames.size(); i++) {
+//      if (m_liveFrames[i]->getSheet()->hasFocus())
+//        m_liveFrames[i]->getSheet()->redo();
+//    }
+  }
+}
+
 DocumentView *DocumentPage::getView()
 {
   Q_ASSERT(m_view != 0);
