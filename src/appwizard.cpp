@@ -197,14 +197,24 @@ void AppWizard::copyFolder(QString sourceFolder, QString destFolder)
   for(int i = 0; i< files.count(); i++) {
     QString srcName = sourceFolder + QDir::separator() + files[i];
     QString destName = destFolder + QDir::separator() + files[i];
-    QFile::copy(srcName, destName);
+    QString symLinkTarget = QFile::symLinkTarget(srcName);
+    if (symLinkTarget.isEmpty()) {
+      QFile::copy(srcName, destName);
+    } else {
+      QFile::link(symLinkTarget, destName);
+    }
   }
   files.clear();
   files = sourceDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
   for(int i = 0; i< files.count(); i++) {
     QString srcName = sourceFolder + QDir::separator() + files[i];
     QString destName = destFolder + QDir::separator() + files[i];
-    copyFolder(srcName, destName);
+    QString symLinkTarget = QFile::symLinkTarget(srcName);
+    if (symLinkTarget.isEmpty()) {
+      copyFolder(srcName, destName);
+    } else {
+      QFile::link(symLinkTarget, destName);
+    }
   }
 }
 
@@ -336,6 +346,7 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
         }
       }
     }
+
     dir.cdUp();
     QFile f3(dir.absolutePath() + QDir::separator() + "quteapp.csd");
     f3.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner

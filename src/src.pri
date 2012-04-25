@@ -116,10 +116,6 @@ SOURCES = "src/about.cpp" \
     "src/additionalfilespage.cpp" \
     "src/scoreeditor.cpp" \
     "src/filebeditor.cpp"
-LIBS += $${LCSOUND} \
-	$${LCSND} \
-    $${LSNDFILE} \
-    $${RTMIDI}
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
     "src/qutecsound.rc" \
@@ -135,4 +131,9 @@ rtmidi {
     SOURCES += "src/../$${RTMIDI_DIR}/RtMidi.cpp"
     INCLUDEPATH += src/../$${RTMIDI_DIR}
 }
+
+LIBS += $${LCSOUND} \
+	$${LCSND} \
+    $${LSNDFILE} \
+    $${RTMIDI}
 

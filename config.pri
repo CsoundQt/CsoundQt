@@ -2,6 +2,7 @@ CONFIG *= thread \
     warn_on
 CONFIG -= stl
 QT *= xml
+
 build32:TMPDIR = floats
 build64:TMPDIR = doubles
 build64:DEFINES += USE_DOUBLE

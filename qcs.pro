@@ -59,6 +59,7 @@ pythonqt {
     win32:INCLUDEPATH *= $${PYTHON_INCLUDE_DIR}
     INCLUDEPATH *= $${PYTHONQT_TREE_DIR}/src
     INCLUDEPATH *= $${PYTHONQT_TREE_DIR}/extensions/PythonQt_QtAll
+    QT += svg sql webkit xmlpatterns opengl
 }
 
 INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}

@@ -6,13 +6,17 @@ TEMPLATE = app
 TMPDIR = "build"
 
 buildDoubles: CONFIG+=build64
-!build32:!build64:CONFIG += build32
+buildFloats: CONFIG+=build32
+!build32:!build64:CONFIG += build64
 build32:build64:CONFIG -= build32
 CONFIG += is_quteapp # This is for bundling the QuteApp in the main CsoundQt app, so shouldn't be here
 CONFIG += rtmidi #force build rtmidi
 
 unix { 
-    macx:include (../qcs-macx.pro)
+    macx {
+        include (../qcs-macx.pro)
+        QMAKE_INFO_PLIST = Info.plist
+    }
     else:include (../qcs-unix.pro)
 }
 win32-g++:include (../qcs-win32.pro)
@@ -123,6 +127,9 @@ INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
 INCLUDEPATH *= $${CSOUND_INTERFACES_INCLUDE_DIR}
 INCLUDEPATH *= $${LIBSNDFILE_INCLUDE_DIR}
 RESOURCES += "$${PWD}/application.qrc"
+
+OTHER_FILES += \
+    Info.plist
 
 
 

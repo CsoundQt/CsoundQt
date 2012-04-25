@@ -2,16 +2,17 @@ from subprocess import call
 import shutil
 import os
 import pdb
-import fileinput 
+import fileinput
+import glob 
 
 
 QUTECSOUND_VERSION = '0.7.0-alpha'
 NEW_NAME='CsoundQt'
-QtFrameworksDir = '/Users/acabrera/QtSDK/Desktop/Qt/473/'
-PythonQtLibPaths = ['../PythonQt-build-desktop-Release/lib/', '../../../../PythonQt-build-desktop-Release/lib/', './']
+QtFrameworksDir = '/Users/acabrera/QtSDK/Desktop/Qt/4.8.1/'
+PythonQtLibPaths = ['/usr/local/lib/', '../PythonQt-build-desktop-Release/lib/', '../../../../PythonQt-build-desktop-Release/lib/', './']
 
 debug = False
-CsoundQtBinPath = '../../qcs-build-desktop-pythonqt/bin'
+CsoundQtBinPath = '../../qcs-build-desktop-Desktop_Qt_4_8_1_for_GCC__Qt_SDK__Release/bin'
 
 # Build everything just to make sure all versions packaged are synchronized
 #cd ..
@@ -19,15 +20,32 @@ CsoundQtBinPath = '../../qcs-build-desktop-pythonqt/bin'
 #make
 #qmake qcs.pro CONFIG+=rtmidi CONFIG+=build64 -spec macx-g++ -r CONFIG+=release
 #make
-#qmake qcs.pro CONFIG+=rtmidi CONFIG+=pythonqt
+#qmake qcs.pro CONFIG+=rtmidi CONFIG+=pythonqt PYTHONQT_TREE_DIR=../../../pythonqt/trunk
 #make
-#qmake qcs.pro CONFIG+=rtmidi CONFIG+=build64 CONFIG+=pythonqt
+#qmake qcs.pro CONFIG+=rtmidi CONFIG+=build64 CONFIG+=pythonqt PYTHONQT_TREE_DIR=../../../pythonqt/trunk
 #make
 #cd bin
 
 #lipo ${ORIGINAL_NAME}.app/Contents/MacOS/${ORIGINAL_NAME} ${ORIGINAL_NAME_D}.app/Contents/MacOS/${ORIGINAL_NAME_D} -create --output ${ORIGINAL_NAME}.app/Contents/MacOS/qutecsound
 
 
+def change_link(link,new_link, bin_file):
+    arguments = ['-change',  link, new_link, bin_file]
+    retcode = call(['install_name_tool'] + arguments)
+    if retcode != 0:
+        print "Failed ---------"
+    print "changed link:", link, "to", new_link, 'in', bin_file, 'ret:', retcode
+
+def change_id(new_id, file_name):
+    arguments = ['-id',  new_id, file_name]
+    retcode = call(['install_name_tool'] + arguments)
+    print "changed id:", new_id, 'in', file_name, 'ret:', retcode
+
+def adjust_link(old_link, new_link, app_name, bin_name, suffix = '64'):
+
+    change_id(new_link, app_name + '/Contents/Frameworks/' + new_link[new_link.rindex('/') + 1:])
+    change_link(old_link, new_link, app_name + '/Contents/Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix, suffix))
+    change_link(old_link, new_link, app_name + '/Contents/Frameworks/CsoundLib%s.framework/Versions/5.2/lib_csnd.dylib'%suffix)
 
 def deployWithPython(PRECISION):
     global NEW_NAME, QtFrameworksDir, QUTECSOUND_VERSION
@@ -38,10 +56,13 @@ def deployWithPython(PRECISION):
     APP_NAME= NEW_NAME + PRECISION + '-py-' + QUTECSOUND_VERSION + '.app'
 
     ORIG_APP_NAME=ORIGINAL_NAME + '.app'
-    if (os.path.exists(APP_NAME)):
-        shutil.rmtree(APP_NAME)
+    if (os.path.exists(ORIG_APP_NAME)):
+        shutil.rmtree(ORIG_APP_NAME)
     shutil.copytree(CsoundQtBinPath + '/' + ORIG_APP_NAME, ORIG_APP_NAME)
     print "Copied ",CsoundQtBinPath + '/' + ORIG_APP_NAME
+
+    arguments = [ORIG_APP_NAME, '-verbose=1']
+    retcode = call([QtFrameworksDir + 'gcc/bin/macdeployqt'] + arguments)
 
     add_path = False
 
@@ -70,8 +91,9 @@ def deployWithPython(PRECISION):
     
     #chmod -R a-w $APP_NAME/Contents/Resources
     #pdb.set_trace()
-    
-    os.mkdir(ORIG_APP_NAME+ '/Contents/Frameworks')
+
+    #os.mkdir(ORIG_APP_NAME+ '/Contents/Frameworks')
+    # PythonQt is not copied by macdeployqt so copy it manually
     PythonQtPath = ''
     for path in PythonQtLibPaths:
         if os.path.exists(path + 'libPythonQt.1.0.0.dylib'):
@@ -91,212 +113,110 @@ def deployWithPython(PRECISION):
     retcode = call(['install_name_tool'] + arguments)
 
 
-    arguments = ['-change',  'libPythonQt.1.dylib',
+    change_link('libPythonQt.1.dylib',
             '@executable_path/../Frameworks/libPythonQt.1.dylib',
-            '%s/Contents/MacOs/%s'%(ORIG_APP_NAME, ORIGINAL_NAME)]
-    retcode = call(['install_name_tool'] + arguments)
-    arguments = ['-change',  'libPythonQt.1.dylib',
+            '%s/Contents/MacOs/%s'%(ORIG_APP_NAME, ORIGINAL_NAME))
+    change_link('libPythonQt.1.dylib',
             '@executable_path/../Frameworks/libPythonQt.1.dylib',
-            '%s/Contents/Frameworks/libPythonQt_QtAll.1.dylib'%(ORIG_APP_NAME)]
-    retcode = call(['install_name_tool'] + arguments)
-    arguments = ['-change',  'libPythonQt_QtAll.1.dylib',
+            '%s/Contents/Frameworks/libPythonQt_QtAll.1.dylib'%(ORIG_APP_NAME))
+    change_link('libPythonQt_QtAll.1.dylib',
             '@executable_path/../Frameworks/libPythonQt_QtAll.1.dylib',
-            '%s/Contents/MacOS/%s'%(ORIG_APP_NAME, ORIGINAL_NAME)]
-    retcode = call(['install_name_tool'] + arguments)
+            '%s/Contents/MacOS/%s'%(ORIG_APP_NAME, ORIGINAL_NAME))
 
+    change_link('libsndfile.1.dylib',
+                 '@executable_path/../Frameworks/libsndfile.1.dylib',
+                 '%s/Contents/MacOS/%s'%(ORIG_APP_NAME, ORIGINAL_NAME))
 
+    deployCsound(ORIG_APP_NAME , '%s/Contents/MacOS/%s'%(ORIG_APP_NAME, ORIGINAL_NAME), PRECISION == '-d')
+
+    #QtLibs = ['QtCore', 'QtGui', 'QtXml', 'QtSvg', 'QtSql', 'QtXmlPatterns', 'QtOpenGL', 'QtNetwork', 'QtWebKit', 'phonon']
+    #QtDepLibs = ['QtGui', 'QtXml', 'QtSvg', 'QtSql', 'QtXmlPatterns', 'QtOpenGL', 'QtNetwork', 'QtWebKit', 'phonon']
+    #deployQtLibs(ORIG_APP_NAME, ORIGINAL_NAME, QtLibs, QtDepLibs)
+
+    # Now fix dependencies for copied libs
     QtLibs = ['QtCore', 'QtGui', 'QtXml', 'QtDBus', 'QtSvg', 'QtSql', 'QtXmlPatterns', 'QtOpenGL', 'QtNetwork', 'QtWebKit', 'phonon']
 
     for lib in QtLibs:
-        arguments = ['-change',  '%sgcc/lib/%s.framework/Versions/Current/%s'%(QtFrameworksDir,lib,lib),
+        change_link('%sgcc/lib/%s.framework/Versions/4/%s'%(QtFrameworksDir,lib,lib),
                      '@executable_path/../Frameworks/%s.framework/Versions/4/%s'%(lib,lib),
-                     '%s/Contents/Frameworks/libPythonQt.1.dylib'%(ORIG_APP_NAME)]
-        retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  '%sgcc/lib/%s.framework/Versions/Current/%s'%(QtFrameworksDir,lib,lib),
+                     '%s/Contents/Frameworks/libPythonQt.1.dylib'%(ORIG_APP_NAME))
+        change_link('%sgcc/lib/%s.framework/Versions/4/%s'%(QtFrameworksDir,lib,lib),
                      '@executable_path/../Frameworks/%s.framework/Versions/4/%s'%(lib,lib),
-                     '%s/Contents/Frameworks/libPythonQt_QtAll.1.dylib'%(ORIG_APP_NAME)]
-        retcode = call(['install_name_tool'] + arguments)
-
-    arguments = ['-change',  '@executable_path/../Frameworks/libsndfile.1.dylib',
-                 'libsndfile.1.dylib',
-                 '%s/Contents/MacOS/%s'%(ORIG_APP_NAME, ORIGINAL_NAME)]
-    retcode = call(['install_name_tool'] + arguments)
+                     '%s/Contents/Frameworks/libPythonQt_QtAll.1.dylib'%(ORIG_APP_NAME))
 
     
-    QtLibs = ['QtCore', 'QtGui', 'QtXml', 'QtSvg', 'QtSql', 'QtXmlPatterns', 'QtOpenGL', 'QtNetwork', 'QtWebKit', 'phonon']
-    QtDepLibs = ['QtGui', 'QtXml', 'QtSvg', 'QtSql', 'QtXmlPatterns', 'QtOpenGL', 'QtNetwork', 'QtWebKit', 'phonon']
-    deployQtLibs(ORIG_APP_NAME, ORIGINAL_NAME, QtLibs, QtDepLibs)
-    
-    arguments = [ORIG_APP_NAME, '-verbose=1']
-    retcode = call([QtFrameworksDir + 'gcc/bin/macdeployqt'] + arguments)
-    
+    if (os.path.exists(APP_NAME)):
+        shutil.rmtree(APP_NAME)
     os.rename(ORIG_APP_NAME, APP_NAME)
     #rm $APP_NAME/Contents/Info.plist
     #cp ../src/MyInfo.plist $APP_NAME/Contents/Info.plist
     
     retcode = call(['tar', '-czvf', '%s%s-%s.tar.gz'%(NEW_NAME,PRECISION,QUTECSOUND_VERSION), APP_NAME])
     
+def deployCsound(app_name, bin_name, doubles=True):
+    suffix = '64' if doubles else ''
+    cs_framework = '/Library/Frameworks/CsoundLib%s.framework'%suffix
+    try:
+        shutil.copytree(cs_framework, app_name + '/Contents/Frameworks/CsoundLib%s.framework'%suffix, symlinks=True )
+    except Exception:
+        print "Warning: Csound Framework not copied"
+        pass
+    
+    libs = { 'libsndfile.1.dylib': 'libsndfile.1.dylib',
+             'libportaudio.2.dylib': 'libportaudio.dylib',
+             'libportmidi.dylib': 'libportmidi.dylib',
+             #'libmpadec.dylib': 'libmpadec.dylib',
+             'liblo.0.dylib' : 'liblo.dylib',
+             'libfltk.1.3.dylib' : 'libfltk.dylib',
+             'libfltk_images.1.3.dylib' : 'libfltk_images.dylib',
+             'libfluidsynth.1.dylib' : 'libfluidsynth.dylib',
+             'libpng12.0.dylib' : 'libpng12.dylib',
+             'libfluidsynth.1.dylib' : 'libfluidsynth.dylib'}
 
-def deployQtLibs(APP_NAME, ORIGINAL_NAME, QtLibs, QtDepLibs):
-    for lib in QtLibs:
-        shutil.copytree('%s/gcc/lib/%s.framework'%(QtFrameworksDir, lib), APP_NAME + '/Contents/Frameworks/%s.framework'%(lib), symlinks=True)
-        arguments = ['-id',  '@executable_path/../Frameworks/%s.framework/Versions/4/%s'%(lib, lib),
-                     '%s/Contents/Frameworks/%s.framework/Versions/4/%s'%(APP_NAME, lib, lib)]
-        retcode = call(['install_name_tool'] + arguments)
-        os.remove('%s/Contents/Frameworks/%s.framework/%s_debug'%(APP_NAME, lib, lib))
-        os.remove('%s/Contents/Frameworks/%s.framework/Versions/Current/%s_debug'%(APP_NAME, lib, lib))
-        #	os.remove('%s/Contents/Frameworks/%s.framework/Versions/4.0/%s_debug'%(APP_NAME, lib, lib))
-        #	os.remove('%s/Contents/Frameworks/%s.framework/Versions/4/%s_debug'%(APP_NAME, lib, lib))
-        #shutil.rmtree('%s/Contents/Frameworks/%s.framework/%s_debug.dSYM'%(APP_NAME, lib, lib))
-        #os.remove('%s/Contents/Frameworks/%s.framework/%s_debug.prl'%(APP_NAME, lib, lib))
-        
-    for lib in QtDepLibs:
-        print 'processing: ', lib
-        arguments = ['-change',  '%sgcc/lib/QtCore.framework/Versions/4/QtCore'%QtFrameworksDir,
-                     '@executable_path/../Frameworks/QtCore.framework/Versions/4/QtCore',
-                     '%s/Contents/Frameworks/%s.framework//%s'%(APP_NAME, lib, lib)]
-        retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  '%sgcc/lib/QtGui.framework/Versions/4/QtGui'%QtFrameworksDir,
-                     '@executable_path/../Frameworks/QtGui.framework/Versions/4/QtGui',
-                     '%s/Contents/Frameworks/%s.framework/%s'%(APP_NAME, lib, lib)]
-        retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  '%sgcc/lib/QtXml.framework/Versions/4/QtXml'%QtFrameworksDir,
-                     '@executable_path/../Frameworks/QtXml.framework/Versions/Current/QtXml',
-                     '%s/Contents/Frameworks/%s.framework/%s'%(APP_NAME, lib, lib)]
-        retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  '%sgcc/lib/QtDbus.framework/Versions/4/QtDbus'%QtFrameworksDir,
-                     '@executable_path/../Frameworks/QtDBus.framework/Versions/4/QtDBus',
-                     '%s/Contents/Frameworks/%s.framework/%s'%(APP_NAME, lib, lib)]
-        retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  '%sgcc/lib/QtNetwork.framework/Versions/4/QtNetwork'%QtFrameworksDir,
-                     '@executable_path/../Frameworks/QtNetwork.framework/Versions/4/QtNetwork',
-                     '%s/Contents/Frameworks/%s.framework/%s'%(APP_NAME, lib, lib)]
-        retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  '%sgcc/lib/QtXmlPatterns.framework/Versions/4/QtXmlPatterns'%QtFrameworksDir,
-                     '@executable_path/../Frameworks/QtXmlPatterns.framework/Versions/4/QtXmlPatterns',
-                     '%s/Contents/Frameworks/%s.framework/%s'%(APP_NAME, lib, lib)]
-        retcode = call(['install_name_tool'] + arguments)
-        arguments = ['-change',  '%sgcc/lib/phonon.framework/Versions/4/phonon'%QtFrameworksDir,
-                     '@executable_path/../Frameworks/phonon.framework/Versions/4/phonon',
-                     '%s/Contents/Frameworks/%s.framework/%s'%(APP_NAME, lib, lib)]
-        retcode = call(['install_name_tool'] + arguments)
+    lib_dir = '/usr/local/lib/'
+    for lib, dest_lib in libs.items():
+        shutil.copy(lib_dir + lib, app_name + '/Contents/Frameworks/' + dest_lib )
+        adjust_link('/usr/local/lib/' + lib , '@executable_path/../Frameworks/' + dest_lib, app_name, bin_name, suffix)
+    
+    change_link('/Library/Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix,suffix),
+            '@executable_path/../Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix,suffix),
+            bin_name)
+    change_link('/Library/Frameworks/CsoundLib%s.framework/Versions/5.2/lib_csnd.dylib'%suffix,
+            '@executable_path/../Frameworks/CsoundLib%s.framework/Versions/5.2/lib_csnd.dylib'%suffix,
+            bin_name)
+    change_link('/Library/Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix,suffix),
+            '@executable_path/../Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix,suffix),
+            app_name + '/Contents/Frameworks/CsoundLib%s.framework/Versions/5.2/lib_csnd.dylib'%suffix)
+                
+    
+    change_link('/usr/local/lib/libfltk.1.3.dylib',
+            '@executable_path/../libfltk.dylib',
+            app_name + '/Contents/Frameworks/libfltk_images.dylib')
+    change_link('/usr/local/lib/libpng12.0.dylib',
+            '@executable_path/../libpng12.dylib',
+            app_name + '/Contents/Frameworks/libfltk_images.dylib')
+
+    opcode_dir = app_name +'/Contents/Frameworks/CsoundLib%s.framework/Resources/Opcodes%s'%(suffix,suffix)
+    opcode_libs = glob.glob(opcode_dir + '/*.dylib')
+    
+    for op_lib in opcode_libs:
+        for dep_lib, dep_dest_lib in libs.items():
+            change_link('/usr/local/lib/' + dep_lib , '@executable_path/../Frameworks/' + dep_dest_lib,
+                    op_lib)
+            change_link('/usr/local/lib/' + dep_lib , '@executable_path/../Frameworks/' + dep_dest_lib,
+                    op_lib)
+            change_link('/Library/Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix,suffix),
+                    '@executable_path/../Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix,suffix),
+                    op_lib)
+
+
         
 # make version including Qt
 print "---------------- Making doubles package"
-
 deployWithPython('-d')
 
 print "---------------- Making floats package"
 
+call([QtFrameworksDir + 'gcc/bin/macdeployqt', "CsoundQt-d-py.app"])
 deployWithPython('-f')
-
-
-# make Standalone application
-# echo "---------------- Making standalone app"
-# cp -R /Library/Frameworks/CsoundLib.framework $APP_NAME/Contents/Frameworks/
-# cp /usr/local/lib/libsndfile.1.dylib $APP_NAME/Contents/libsndfile.dylib
-# cp /usr/local/lib/libportaudio.2.0.0.dylib $APP_NAME/Contents/libportaudio.dylib
-# cp /usr/local/lib/libportmidi.dylib $APP_NAME/Contents/libportmidi.dylib
-# cp /usr/local/lib/libmpadec.dylib $APP_NAME/Contents/libmpadec.dylib
-# cp /usr/local/lib/liblo.0.6.0.dylib $APP_NAME/Contents/liblo.dylib
-# cp /usr/local/lib/libfltk.1.1.dylib $APP_NAME/Contents/libfltk.dylib
-# cp /usr/local/lib/libfltk_images.1.1.dylib $APP_NAME/Contents/libfltk_images.dylib
-# cp /usr/local/lib/libfluidsynth.1.dylib $APP_NAME/Contents/libfluidsynth.dylib
-# cp /usr/local/lib/libpng12.0.dylib $APP_NAME/Contents/libpng12.dylib
-# cp /usr/local/lib/libpng12.0.dylib $APP_NAME/Contents/libpng12.dylib
-
-# install_name_tool -id @executable_path/../Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
-# install_name_tool -change /Library/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib @executable_path/../Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
-# install_name_tool -change  /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
-# install_name_tool -change /Library/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib @executable_path/../Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
-# install_name_tool -change /Library/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib @executable_path/../Frameworks/CsoundLib.framework/Versions/Current/CsoundLib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
-
-
-# install_name_tool -id @executable_path/../libsndfile.dylib $APP_NAME/Contents/libsndfile.dylib
-# install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
-# install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
-# install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
-
-# install_name_tool -id @executable_path/../libportaudio.dylib $APP_NAME/Contents/libportaudio.dylib
-# install_name_tool -change /usr/local/lib/libportaudio.2.dylib @executable_path/../libportaudio.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
-# install_name_tool -change /usr/local/lib/libportaudio.2.dylib @executable_path/../libportaudio.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
-
-# install_name_tool -id @executable_path/../libportmidi.dylib $APP_NAME/Contents/libportmidi.dylib
-# install_name_tool -change /usr/local/lib/libportmidi.dylib @executable_path/../libportmidi.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
-# install_name_tool -change /usr/local/lib/libportmidi.dylib @executable_path/../libportmidi.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
-
-# install_name_tool -id @executable_path/../libmpadec.dylib $APP_NAME/Contents/libmpadec.dylib
-# install_name_tool -change /usr/local/lib/libmpadec.dylib @executable_path/../libmpadec.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
-# install_name_tool -change /usr/local/lib/libmpadec.2.dylib @executable_path/../libmpadec.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
-
-# install_name_tool -id @executable_path/../liblo.dylib $APP_NAME/Contents/liblo.dylib
-# install_name_tool -change /usr/local/lib/liblo.0.dylib @executable_path/../liblo.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
-# install_name_tool -change /usr/local/lib/liblo.0.dylib @executable_path/../liblo.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
-
-# install_name_tool -id @executable_path/../libfltk.dylib $APP_NAME/Contents/libfltk.dylib
-# install_name_tool -change /usr/local/lib/libfltk.1.1.dylib @executable_path/../libfltk.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
-# install_name_tool -change /usr/local/lib/libfltk.1.1.dylib @executable_path/../libfltk.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
-
-# install_name_tool -id @executable_path/../libfltk_images.dylib $APP_NAME/Contents/libfltk_images.dylib
-# install_name_tool -change /usr/local/lib/libfltk_images.1.1.dylib @executable_path/../libfltk_images.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
-# install_name_tool -change /usr/local/lib/libfltk_images.1.1.dylib @executable_path/../libfltk_images.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
-# install_name_tool -change /usr/local/lib/libfltk.1.1.dylib @executable_path/../libfltk.dylib $APP_NAME/Contents/libfltk_images.dylib
-# install_name_tool -change /usr/local/lib/libpng12.0.dylib @executable_path/../libpng12.dylib $APP_NAME/Contents/libfltk_images.dylib
-
-# install_name_tool -id @executable_path/../libpng12.dylib $APP_NAME/Contents/libpng12.dylib
-
-# install_name_tool -id @executable_path/../libfluidsynth.dylib $APP_NAME/Contents/libfluidsynth.dylib
-# install_name_tool -change /usr/local/lib/libfluidsynth.1.dylib @executable_path/../libfluidsynth.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/lib_csnd.dylib
-# install_name_tool -change /usr/local/lib/libfluidsynth.1.dylib @executable_path/../libfluidsynth.dylib $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/CsoundLib
-
-# # TODO include dot and Jack installers in an optional directory.
-
-# otool -L $APP_NAME/Contents/MacOS/${ORIGINAL_NAME}
-# otool -L $APP_NAME/Contents/libsndfile.dylib
-# otool -L $APP_NAME/Contents/libportaudio.dylib
-# otool -L $APP_NAME/Contents/libportmidi.dylib
-# otool -L $APP_NAME/Contents/libmpadec.dylib
-# otool -L $APP_NAME/Contents/liblo.dylib
-# otool -L $APP_NAME/Contents/libpng12.dylib
-# otool -L $APP_NAME/Contents/libfltk_images.dylib
-# otool -L $APP_NAME/Contents/libfluidsynth.dylib
-
-# # Process plugin opcodes dylibs
-
-# cd $APP_NAME/Contents/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Opcodes/
-
-# for f in *
-# do
-#   echo "---------------- Processing $f file..."
-#   # take action on each file. $f stores current file name
-
-# install_name_tool -id @executable_path/../Frameworks/CsoundLib.framework/Versions/5.2/Resources/Opcodes/$f $f
-# install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../libsndfile.dylib $f
-# install_name_tool -change /usr/local/lib/libportaudio.2.dylib @executable_path/../libportaudio.dylib $f
-# install_name_tool -change /usr/local/lib/libfltk.1.1.dylib @executable_path/../libfltk.dylib $f
-# install_name_tool -change libmpadec.dylib @executable_path/../libmpadec.dylib $f
-# otool -L $f
-# #  cat $f
-# done
-
-# # Extra changes for plugins with dependencies
-
-# install_name_tool -change /usr/local/lib/libfluidsynth.1.dylib @executable_path/../libfluidsynth.dylib libfluidOpcodes.dylib
-
-# install_name_tool -change /usr/local/lib/liblo.0.dylib @executable_path/../liblo.dylib libimage.dylib
-# install_name_tool -change /usr/local/lib/libpng12.0.dylib @executable_path/../libpng12.dylib libimage.dylib
-
-# install_name_tool -change /usr/local/lib/liblo.0.dylib @executable_path/../liblo.dylib libosc.dylib
-# install_name_tool -change /usr/local/lib/libpng12.0.dylib @executable_path/../libpng12.dylib libosc.dylib
-
-# install_name_tool -change /usr/local/lib/libportmidi.dylib @executable_path/../libportmidi.dylib libpmidi.dylib
-
-# cd ../../../../../../../../
-
-# # Compress final archive
-
-# if [ "$nflag" -ne 1 ]
-# 		then
-# tar -czvf ${NEW_NAME}-${QUTECSOUND_VERSION}-full.tar.gz $APP_NAME &>/dev/null
-# fi
 

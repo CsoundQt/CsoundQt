@@ -18,7 +18,7 @@
    version="1.0"
    sodipodi:docname="splashscreen.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   inkscape:export-filename="/home/andres/src/qutecsound/trunk/qutecsound/images/splashscreen.png"
+   inkscape:export-filename="/Users/acabrera/src/qutecsound/trunk/qutecsound/images/splashscreen.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -26,7 +26,7 @@
     <linearGradient
        id="linearGradient3159">
       <stop
-         style="stop-color:#388426;stop-opacity:0.59210527;"
+         style="stop-color:#388426;stop-opacity:1;"
          offset="0"
          id="stop3161" />
       <stop
@@ -76,16 +76,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="122.75009"
-     inkscape:cy="83.928612"
+     inkscape:zoom="1.979899"
+     inkscape:cx="110.66125"
+     inkscape:cy="53.261616"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1214"
      inkscape:window-height="726"
-     inkscape:window-x="0"
-     inkscape:window-y="25"
+     inkscape:window-x="133"
+     inkscape:window-y="34"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata7">
@@ -95,6 +95,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -103,7 +104,7 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="fill:url(#radialGradient3167);fill-opacity:1.0;stroke:#d8d8d8;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:url(#radialGradient3167);fill-opacity:1;stroke:none;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect2387"
        width="352.54324"
        height="267.69043"
@@ -111,14 +112,17 @@
        y="-10.517831" />
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#fbfffb;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
        x="55.558388"
        y="134.94414"
-       id="text2383"><tspan
+       id="text2383"
+       inkscape:export-filename="/Users/acabrera/src/qutecsound/trunk/qutecsound/images/splashscreen.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan2385"
          x="55.558388"
          y="134.94414"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#187c0f;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">CsoundQt</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#fbfffb;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">CsoundQt</tspan></text>
   </g>
 </svg>
