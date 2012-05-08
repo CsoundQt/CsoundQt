@@ -82,6 +82,17 @@ ConfigLists::~ConfigLists()
 {
 }
 
+void ConfigLists::msgCallback(CSOUND *csound, int attr, const char *fmt, va_list args)
+{
+  QString *ud = (QString *) csoundGetHostData(csound);
+  QString msg;
+  msg = msg.vsprintf(fmt, args);
+  if (msg.isEmpty()) {
+    return;
+  }
+  ud->append(msg);
+}
+
 QList<QPair<QString, QString> > ConfigLists::getMidiInputDevices(int moduleIndex)
 {
   // based on code by Steven Yi
@@ -584,20 +595,13 @@ QStringList ConfigLists::runCsoundInternally(QStringList flags)
 //Remember menu bar to set it after FLTK grabs it
   menuBarHandle = GetMenuBar();
 #endif
-  QStringList deviceMessages;
   CSOUND *csoundD;
   csoundD=csoundCreate(0);
-  csoundEnableMessageBuffer(csoundD, 1);
+  csoundSetHostData(csoundD, &m_messages);
 
   int result = csoundCompile(csoundD,argc,argv);
   if(!result) {
     csoundPerform(csoundD);
-  }
-
-  int messageCount = csoundGetMessageCnt(csoundD);
-  for (int i = 0; i < messageCount; i++) {
-    deviceMessages << QString(csoundGetFirstMessage(csoundD));
-    csoundPopFirstMessage(csoundD);
   }
 
 //  csoundDestroyMessageBuffer(csoundD); // This should be here but it is crashing!!
@@ -607,5 +611,5 @@ QStringList ConfigLists::runCsoundInternally(QStringList flags)
 // Put menu bar back
   SetMenuBar(menuBarHandle);
 #endif
-  return deviceMessages;
+  return m_messages.split("\n");
 }

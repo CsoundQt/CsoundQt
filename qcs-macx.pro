@@ -5,12 +5,15 @@
 	message(Building CsoundQt for Macintosh OS X.)
 }
 
-!ppc: !x86_64: CONFIG += i386
+!ppc: !x86_64:  {
+CONFIG += i386
+QMAKE_CXXFLAGS += -arch i386
+}
 universal: {
+QMAKE_CXXFLAGS += -arch i386
 CONFIG += i386
 CONFIG += ppc
 }
-
 
 # DEFINES += MACOSX_PRE_SNOW # Use this if you are building for OS X < 10.6
 # QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.5

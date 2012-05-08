@@ -26,12 +26,19 @@
 #include <QStringList>
 #include <QPair>
 
+typedef struct CSOUND_ CSOUND;
+
 class ConfigLists
 {
   public:
     ConfigLists();
 
     ~ConfigLists();
+
+    static void msgCallback(CSOUND *csound,
+                            int attr,
+                            const char *fmt,
+                            va_list args);
 
     QStringList fileTypeNames;
     QStringList fileTypeExtensions;
@@ -49,6 +56,9 @@ class ConfigLists
     QList<QPair<QString, QString> > getAudioOutputDevices(int moduleIndex);
 
     QStringList runCsoundInternally(QStringList flags);
+
+private:
+    QString m_messages;
 };
 
 #endif

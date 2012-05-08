@@ -42,7 +42,6 @@ int main(int argc, char *argv[])
   QSplashScreen *splash = new QSplashScreen(pixmap);
   splash->show();
   splash->raise();
-  splash->showMessage("Starting CsoundQt");
   app.processEvents();
 
   QSettings settings("csound", "qutecsound");
