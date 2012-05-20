@@ -1509,15 +1509,19 @@ void WidgetLayout::selectionChanged(QRect selection)
 QString WidgetLayout::createNewSlider(int x, int y, QString channel)
 {
   QString uuid;
+  bool dialog;
   int posx = x >= 0 ? x : currentPosition.x();
   int posy = y >= 0 ? y : currentPosition.y();
   deselectAll();
   if (channel.isEmpty()) {
     channel = "slider" + QString::number(m_widgets.size());
+    dialog = true;
+  } else {
+      dialog = false;
   }
   uuid = createSlider(posx, posy, 20, 100, QString("ioSlider {"+ QString::number(posx) +", "+ QString::number(posy) + "} {20, 100} 0.000000 1.000000 0.000000 " + channel));
   widgetChanged();
-  if (channel.isEmpty() && getOpenProperties()) {
+ if (dialog && getOpenProperties()) {
     m_widgets.last()->openProperties();
   }
   markHistory();
