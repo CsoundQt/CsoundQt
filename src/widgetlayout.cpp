@@ -161,6 +161,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
   m_uuid = "";
   m_visible = true;
 
+  setBackground(false, QColor("white"));
   updateData(); // Starts updataData timer
 //  qDebug() << "WidgetLayout::WidgetLayout " << this << " updateTimer " << &updateTimer;
 }
