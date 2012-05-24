@@ -240,6 +240,7 @@ void QuteWidget::applyInternalProperties()
   m_channel2 = property("QCS_objectName2").toString();
   m_midicc = property("QCS_midicc").toInt();
   m_midichan = property("QCS_midichan").toInt();
+  setVisible(property("QCS_visible").toBool());
   m_valueChanged = true;
 #ifdef  USE_WIDGET_MUTEX
   widgetLock.unlock();
