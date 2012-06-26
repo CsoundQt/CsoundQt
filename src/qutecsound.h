@@ -158,7 +158,7 @@ class CsoundQt:public QMainWindow
 //    void registerLiveEvent(QWidget *e);
 
   protected:
-    virtual void closeEvent(QCloseEvent *event);
+	virtual void closeEvent(QCloseEvent *event);
 //    virtual void keyPressEvent(QKeyEvent *event);
 
   private slots:

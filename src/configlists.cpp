@@ -599,6 +599,7 @@ QStringList ConfigLists::runCsoundInternally(QStringList flags)
   csoundD=csoundCreate(0);
   csoundSetHostData(csoundD, &m_messages);
 
+  csoundSetMessageCallback(csoundD, msgCallback);
   int result = csoundCompile(csoundD,argc,argv);
   if(!result) {
     csoundPerform(csoundD);

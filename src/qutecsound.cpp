@@ -118,12 +118,14 @@ CsoundQt::CsoundQt(QStringList fileNames)
   widgetPanel->setFocusPolicy(Qt::NoFocus);
   widgetPanel->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea |Qt::LeftDockWidgetArea);
   widgetPanel->setObjectName("widgetPanel");
+  widgetPanel->show();
   addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
 //  connect(widgetPanel,SIGNAL(topLevelChanged(bool)), this, SLOT(widgetDockStateChanged(bool)));
 
   m_inspector = new Inspector(this);
   m_inspector->parseText(QString());
   m_inspector->setObjectName("Inspector");
+  m_inspector->show();
   addDockWidget(Qt::LeftDockWidgetArea, m_inspector);
 
 #ifdef QCS_PYTHONQT
@@ -192,14 +194,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
       }
     }
   }
-  // Initialize buttons to current state of panels
-  showConsoleAct->setChecked(m_console->isVisible());
-  showHelpAct->setChecked(helpPanel->isVisible());
-  showInspectorAct->setChecked(m_inspector->isVisible());
-#ifdef QCS_PYTHONQT
-  showPythonConsoleAct->setChecked(m_pythonConsole->isVisible());
-  showPythonScratchPadAct->setChecked(m_scratchPad->isVisible());
-#endif
 
   if (documentPages.size() == 0) { // No files yet open. Open default
     newFile();
@@ -248,6 +242,14 @@ CsoundQt::CsoundQt(QStringList fileNames)
   if (scratchPadVisible) { // Reshow scratch panel if necessary
     m_scratchPad->show();
   }
+#endif
+  // Initialize buttons to current state of panels
+  showConsoleAct->setChecked(!m_console->isHidden());
+  showHelpAct->setChecked(!helpPanel->isHidden());
+  showInspectorAct->setChecked(!m_inspector->isHidden());
+#ifdef QCS_PYTHONQT
+  showPythonConsoleAct->setChecked(!m_pythonConsole->isHidden());
+  showPythonScratchPadAct->setChecked(!m_scratchPad->isHidden());
 #endif
 }
 
@@ -359,36 +361,36 @@ void CsoundQt::closeEvent(QCloseEvent *event)
 {
   this->showNormal();  // Don't store full screen size in preferences
   qApp->processEvents();
+  QStringList files;
+  if (m_options->rememberFile) {
+	for (int i = 0; i < documentPages.size(); i++ ) {
+	  files.append(documentPages[i]->getFileName());
+	}
+  }
+  int lastIndex = documentTabs->currentIndex();
+  writeSettings(files, lastIndex);
   showWidgetsAct->setChecked(false);
   showLiveEventsAct->setChecked(false); // These two give faster shutdown times as the panels don't have to be called up as the tabs close
 
-  QStringList files;
-  if (m_options->rememberFile) {
-    for (int i = 0; i < documentPages.size(); i++ ) {
-      files.append(documentPages[i]->getFileName());
-    }
-  }
-  int lastIndex = documentTabs->currentIndex();
   while (!documentPages.isEmpty()) {
 //    if (!saveCurrent()) {
 //      event->ignore();
 //      return; // Action canceled
 //    }
-    if (!closeTab(true)) { // Don't ask for closing app
-      event->ignore();
-      return;
-    }
+	if (!closeTab(true)) { // Don't ask for closing app
+	  event->ignore();
+	  return;
+	}
   }
   //delete quickRefFile;quickRefFile = 0;
   // Delete all temporary files.
   foreach (QString tempFile, tempScriptFiles) {
-    QDir().remove(tempFile);
+	QDir().remove(tempFile);
   }
   if (logFile.isOpen()) {
-    logFile.close();
+	logFile.close();
   }
   showUtilities(false);  // Close utilities dialog if open
-  writeSettings(files, lastIndex);
   delete helpPanel;
 //  delete closeTabButton;
   delete m_options;
