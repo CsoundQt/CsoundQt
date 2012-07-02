@@ -46,45 +46,6 @@ void PyQcsObject::setCsoundQt(CsoundQt *qcs)
   m_qcs = qcs;
 }
 
-//PyObject* PyQcsObject::getMainModule() {
-//  return PythonQt::self()->getMainModule();
-//}
-
-//void PyQcsObject::showInformation(const QString& str)
-//{
-// QMessageBox::information ( NULL, "Test", str);
-//}
-
-//QStringList PyQcsObject::readDirectory(const QString& dir)
-//{
-//  QDir d(dir);
-//  return d.entryList();
-//}
-
-//QMainWindow* PyQcsObject::createWindow()
-//{
-//  QMainWindow* m = new QMainWindow();
-//  QPushButton* b = new QPushButton(m);
-//  b->setObjectName("button1");
-//
-//  m->show();
-//  return m;
-//}
-
-//QObject* PyQcsObject::findChild(QObject* o, const QString& name)
-//{
-//  return qFindChild<QObject*>(o, name);
-//}
-
-//QVariantMap PyQcsObject::testMap()
-//{
-//  QVariantMap m;
-//  m.insert("a", QStringList() << "test1" << "test2");
-//  m.insert("b", 12);
-//  m.insert("c", 12.);
-//  return m;
-//}
-
 QString PyQcsObject::getVersion()
 {
   return QString(PYQCSVERSION);

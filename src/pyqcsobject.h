@@ -48,14 +48,6 @@ class PyQcsObject : public QObject {
     void setCsoundQt(CsoundQt *qcs);
 
   public slots:
-//  ! example for passing a PyObject directly from Qt to Python (without extra mashalling)
-//    PyObject* getMainModule();
-//  void showInformation(const QString& str);
-//  QStringList readDirectory(const QString& dir);
-//  QMainWindow* createWindow();
-//  QObject* findChild(QObject* o, const QString& name);
-//  QVariantMap testMap();
-
 	QString getVersion();
 	void refresh();
 
@@ -95,9 +87,7 @@ class PyQcsObject : public QObject {
     QString getFileName(int index = -1);
     QString getFilePath(int index = -1);
 
-    //Widgets
-    //void setChannel(QString csChannel, double value);
-    //double getChannel(QString csChannel);
+	//Widgets
     void setChannelValue(QString channel, double value, int index = -1);
     double getChannelValue(QString channel, int index = -1);
     void setChannelString(QString channel, QString value, int index = -1);
