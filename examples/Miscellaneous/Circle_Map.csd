@@ -18,7 +18,7 @@
 ; Also, note that that font is Courier New 8 point with "tab size" 28.
 
 sr      = 44100
-ksmps   = 10
+ksmps   = 1
 nchnls  = 2
 0dbfs   = 10
 
@@ -87,13 +87,14 @@ f 0 36000
 </CsScore>
 </CsoundSynthesizer>
 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>811</x>
- <y>206</y>
- <width>354</width>
- <height>559</height>
+ <x>708</x>
+ <y>53</y>
+ <width>443</width>
+ <height>415</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -142,7 +143,7 @@ f 0 36000
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>20000.00000000</maximum>
-  <value>6349.20634921</value>
+  <value>16084.65608466</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -189,7 +190,7 @@ f 0 36000
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>10.00000000</maximum>
-  <value>3.17460317</value>
+  <value>0.95560000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -236,7 +237,7 @@ f 0 36000
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>15000.00000000</maximum>
-  <value>1587.30158730</value>
+  <value>6904.76190476</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -283,7 +284,7 @@ f 0 36000
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.25000000</maximum>
-  <value>0.67460317</value>
+  <value>0.84656085</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -424,7 +425,7 @@ f 0 36000
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>10.00000000</maximum>
-  <value>2.06349206</value>
+  <value>1.85185185</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -457,7 +458,7 @@ f 0 36000
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>3.1746</value>
+  <value>0.9556</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>kin_frequency</objectName>
@@ -486,7 +487,7 @@ f 0 36000
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>6349.21</value>
+  <value>16084.7</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>kin_filter_frequency</objectName>
@@ -515,7 +516,7 @@ f 0 36000
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1587.3</value>
+  <value>6904.76</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>kin_master_level</objectName>
@@ -544,7 +545,7 @@ f 0 36000
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2.06349</value>
+  <value>1.85185</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>kin_filter_q</objectName>
@@ -573,7 +574,7 @@ f 0 36000
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.674603</value>
+  <value>0.846561</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>kin_reverb_wet</objectName>
@@ -672,7 +673,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.144</label>
+  <label>0.365</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -728,7 +729,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1475.153</label>
+  <label>640.704</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -784,7 +785,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>-14.139</label>
+  <label>-31.103</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
