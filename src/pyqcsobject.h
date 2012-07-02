@@ -96,12 +96,16 @@ class PyQcsObject : public QObject {
     QString getFilePath(int index = -1);
 
     //Widgets
+    //void setChannel(QString csChannel, double value);
+    //double getChannel(QString csChannel);
     void setChannelValue(QString channel, double value, int index = -1);
     double getChannelValue(QString channel, int index = -1);
     void setChannelString(QString channel, QString value, int index = -1);
     QString getChannelString(QString channel, int index = -1);
     void setWidgetProperty(QString widgetid, QString property, QVariant value, int index= -1); // widgetid can be eihter uuid (prefered) or channel
     QVariant getWidgetProperty(QString widgetid, QString property, int index= -1);
+
+    void loadPreset(int preSetIndex, int index = -1);
 
     QStringList getWidgetUuids(int index = -1);
     QStringList listWidgetProperties(QString widgetid, int index = -1);

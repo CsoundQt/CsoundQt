@@ -88,6 +88,7 @@ class DocumentPage : public BaseDocument
 
     bool destroyWidget(QString widgetid);
 
+    void loadPreset(int preSetIndex);
 
     QString createNewLabel(int x = -1, int y = -1, QString channel = QString());
     QString createNewDisplay(int x = -1, int y = -1, QString channel = QString());
@@ -186,6 +187,7 @@ class DocumentPage : public BaseDocument
 
     QVector<QString> widgetHistory;  // Undo/ Redo history
     int widgetHistoryIndex; // Current point in history
+
 
 public slots:
     virtual int play(CsoundOptions *options);

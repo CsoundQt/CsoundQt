@@ -464,6 +464,10 @@ QStringList DocumentPage::listWidgetProperties(QString widgetid) // widgetid can
 }
 
 
+void DocumentPage::loadPreset(int preSetIndex) {
+    //FIXME allow multiple
+    return m_widgetLayouts[0]->loadPresetFromIndex(preSetIndex);
+}
 
 QString DocumentPage::createNewLabel(int x, int y, QString channel)
 {

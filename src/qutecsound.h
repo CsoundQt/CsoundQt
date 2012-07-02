@@ -125,6 +125,7 @@ class CsoundQt:public QMainWindow
     QStringList getWidgetUuids(int index = -1);
     QStringList listWidgetProperties(QString widgetid, int index = -1); // widgetid can be eihter uuid (prefered) or channel
     bool destroyWidget(QString widgetid, int  index = -1);
+    void loadPreset(int preSetIndex, int index);
 
     //Live Event Sheets
     EventSheet* getSheet(int index = -1, int sheetIndex = -1);
@@ -135,7 +136,8 @@ class CsoundQt:public QMainWindow
 
     OpEntryParser *m_opcodeTree;
 
-  public slots:
+
+public slots:
     int loadFile(QString fileName, bool runNow = false);
     int loadFileFromSystem(QString fileName); // checks for m_options->autoPlay, if the function is called from other class
     void newFile();

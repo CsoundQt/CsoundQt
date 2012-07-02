@@ -4860,9 +4860,12 @@ QString CsoundQt::getFilePath(int index)
   return text;
 }
 
+
+
 void CsoundQt::setChannelValue(QString channel, double value, int index)
 {
-  if (index == -1) {
+
+    if (index == -1) {
     index = curPage;
   }
   if (index < documentTabs->count() && index >= 0) {
@@ -5158,3 +5161,15 @@ EventSheet* CsoundQt::getSheet(int index, QString sheetName)
 //  newCurveBuffer.append(curve);
 //}
 //
+
+void CsoundQt::loadPreset(int preSetIndex, int index) {
+    if (index == -1) {
+      index = curPage;
+    }
+    if (index < documentTabs->count() && index >= 0) {
+        return documentPages[index]->loadPreset(preSetIndex);
+    }
+    else {
+      return;
+    }
+}

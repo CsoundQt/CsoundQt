@@ -268,8 +268,9 @@ QString PyQcsObject::getFilePath(int index)
 
 void PyQcsObject::setChannelValue(QString channel, double value, int index)
 {
-  return m_qcs->setChannelValue(channel, value, index);
+    return m_qcs->setChannelValue(channel, value, index);
 }
+
 
 double PyQcsObject::getChannelValue(QString channel, int index)
 {
@@ -558,4 +559,11 @@ void  PyQcsObject::registerProcessCallback(QString func, int skipPeriods, int in
 //  PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
   //  mainContext.evalScript(func);
 }
+
+void PyQcsObject::loadPreset(int preSetIndex,int index)
+{
+    m_qcs->loadPreset(preSetIndex, index);
+}
+
+
 
