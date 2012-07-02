@@ -6,13 +6,7 @@ import fileinput
 import glob 
 
 
-QUTECSOUND_VERSION = '0.7.0-alpha'
-NEW_NAME='CsoundQt'
-QtFrameworksDir = '/Users/acabrera/QtSDK/Desktop/Qt/4.8.1/'
 PythonQtLibPaths = ['/usr/local/lib/', '../PythonQt-build-desktop-Release/lib/', '../../../../PythonQt-build-desktop-Release/lib/', './']
-
-debug = False
-CsoundQtBinPath = '../../qcs-build-desktop-Desktop_Qt_4_8_1_for_GCC__Qt_SDK__Release/bin'
 
 # Build everything just to make sure all versions packaged are synchronized
 #cd ..
@@ -47,9 +41,7 @@ def adjust_link(old_link, new_link, app_name, bin_name, suffix = '64'):
     change_link(old_link, new_link, app_name + '/Contents/Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix, suffix))
     change_link(old_link, new_link, app_name + '/Contents/Frameworks/CsoundLib%s.framework/Versions/5.2/lib_csnd.dylib'%suffix)
 
-def deployWithPython(PRECISION):
-    global NEW_NAME, QtFrameworksDir, QUTECSOUND_VERSION
-
+def deployWithPython(PRECISION, NEW_NAME, QUTECSOUND_VERSION, QtFrameworksDir, CsoundQtBinPath, debug=False):
     ORIGINAL_NAME = 'CsoundQt' + PRECISION + '-py'
     if debug:
         ORIGINAL_NAME += '-debug'
@@ -209,14 +201,18 @@ def deployCsound(app_name, bin_name, doubles=True):
                     '@executable_path/../Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix,suffix),
                     op_lib)
 
+if __name__=='main':
+    # make version including Qt
+    QUTECSOUND_VERSION = '0.7.0-alpha'
+    NEW_NAME='CsoundQt'
+    QtFrameworksDir = '/Users/acabrera/QtSDK/Desktop/Qt/4.8.1/'
+    CsoundQtBinPath = '../../qcs-build-desktop-Desktop_Qt_4_8_1_for_GCC__Qt_SDK__Release/bin'
 
-        
-# make version including Qt
-print "---------------- Making doubles package"
-deployWithPython('-d')
-
-print "---------------- Making floats package"
-
-call([QtFrameworksDir + 'gcc/bin/macdeployqt', "CsoundQt-d-py.app"])
-deployWithPython('-f')
+    print "---------------- Making doubles package"
+    deployWithPython('-d', NEW_NAME, QUTECSOUND_VERSION, CsoundQtBinPath, QtFrameworksDir)
+    
+    print "---------------- Making floats package"
+    
+    call([QtFrameworksDir + 'gcc/bin/macdeployqt', "CsoundQt-d-py.app"])
+    deployWithPython('-f', NEW_NAME, QUTECSOUND_VERSION, CsoundQtBinPath, QtFrameworksDir)
 
