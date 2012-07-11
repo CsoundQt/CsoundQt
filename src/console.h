@@ -54,6 +54,7 @@ class Console : public QTextEdit
     bool error;
     bool errorLine;
     QString errorLineText;
+    QString messageLine;
     QColor m_textColor;
     QColor m_bgColor;
     bool m_repeatKeys;

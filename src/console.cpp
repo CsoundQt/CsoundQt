@@ -44,48 +44,54 @@ void Console::appendMessage(QString msg)
      || msg.startsWith("PortMIDI real time MIDI plugin for Csound")
     || msg.startsWith("PortAudio real-time audio module for Csound")
     || msg.startsWith("virtual_keyboard real time MIDI plugin for Csound")
-    || msg.startsWith("Removing temporary file") ) {
+          || msg.startsWith("Removing temporary file")
+          || msg.startsWith("Csound version")
+          || msg.startsWith("STARTING")
+          || msg.startsWith("Creating")
+          || msg.startsWith("Parsing")
+          || msg.startsWith("0dBFS")
+          || msg.startsWith("add a global")
+          || msg.startsWith("rtaudio:")
+          ) {
 //    consoleLock.unlock();
     return;
   }
   setTextColor(m_textColor);
-  if (errorLine) {  // Hack to capture strange message organization from Csound
-    errorLineText.append(msg);
-    if (msg == "\n" || errorLineText.contains("\n")) {
-      errorTexts.append(errorLineText.remove("\n"));
-      errorLineText.clear();
-      errorLine = false;
+  if ( msg.contains("(token") ) // if "unexpected token error", remove this newline, otherwise line number stays in next messageLine
+      msg.remove("\n");
+  messageLine.append(msg);
+
+  if (messageLine.contains("\n")) { // line finished, analyze it now
+      // qDebug() << "Messageline: " << messageLine;
+      if (messageLine.contains("error:", Qt::CaseInsensitive) && messageLine.contains("line ")) { // kas vahel ka nii, et rea numbrit pole?
+        errorTexts.append(messageLine); // .remove("\n")
+        errorTexts.last().remove("\n");
+
+        QStringList parts = messageLine.split("line "); // get the line number
+        QString lnr = parts.last().remove(">>>"); // somehow all the .removes in one line did not always work correctly
+        lnr = lnr.remove(":");
+        lnr = lnr.trimmed();
+        errorLines.append(lnr.toInt());
+        qDebug() << "error line appended --- " << lnr.toInt();
+
     }
-  }
-  if (error) {
-    setTextColor(QColor("red"));
-    if (msg.contains("line ")) {
-      QStringList parts = msg.split("line ");
-      int lineNumber = parts.last().remove(":").trimmed().toInt();
-      errorLines.append(lineNumber);
-      qDebug() << "error line appended --- " << lineNumber;  //FIXME why are lines appended twice? (two consoles??)
-      error = false;
-      errorLine = true;
-    }
-  }
-  if (msg.startsWith("B ") or msg.contains("rtevent", Qt::CaseInsensitive)) {
+      if (messageLine.startsWith("B ") or messageLine.contains("rtevent", Qt::CaseInsensitive)) {
     setTextColor(QColor("blue"));
   }
-  if (msg.contains("error:", Qt::CaseInsensitive)) {
-    error = true;
+      if (messageLine.contains("overall samples out of range")
+              or messageLine.contains("disabled")
+              or messageLine.contains("error", Qt::CaseInsensitive)) { // any error
     setTextColor(QColor("red"));
   }
-  if (msg.contains("overall samples out of range")
-      or msg.contains("disabled")) {
-    setTextColor(QColor("red"));
-  }
-  if (msg.contains("warning", Qt::CaseInsensitive)) {
+      if (messageLine.contains("warning", Qt::CaseInsensitive)) {
     setTextColor(QColor("orange"));
   }
-  insertPlainText(msg);
+
+      insertPlainText(messageLine);
   setTextColor(m_textColor);
-  if (!msg.isEmpty()) {
     moveCursor(QTextCursor::End);
+      messageLine.clear();
+
   }
 //  consoleLock.unlock();
 }
