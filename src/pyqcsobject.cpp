@@ -267,13 +267,13 @@ QString PyQcsObject::getFilePath(int index)
 }
 
 void PyQcsObject::setChannelValue(QString channel, double value, int index)
-{
-    return m_qcs->setChannelValue(channel, value, index);
+{ 
+  return m_qcs->setChannelValue(channel, value, index);
 }
 
 
 double PyQcsObject::getChannelValue(QString channel, int index)
-{
+{   
   return m_qcs->getChannelValue(channel, index);
 }
 
@@ -285,6 +285,79 @@ void PyQcsObject::setChannelString(QString channel, QString value, int index)
 QString PyQcsObject::getChannelString(QString channel, int index)
 {
   return m_qcs->getChannelString(channel, index);
+}
+
+void PyQcsObject::setCsChannel(QString channel, double value, int index)
+{
+    CsoundEngine *e = m_qcs->getEngine(index);
+    MYFLT *p;
+    if (e != NULL) {
+      CSOUND *cs = e->getCsound();
+      if (cs != NULL && !(csoundGetChannelPtr(cs, &p, channel.toLocal8Bit(), CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL))) {
+          *p = (MYFLT) value;
+          return;
+       }
+    }
+    QString message="Could not set value " + QString::number(value) + " into channel "+channel;
+    PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
+    mainContext.evalScript("print \'"+message+"\'");
+
+}
+
+void PyQcsObject::setCsChannel(QString channel, QString stringValue, int index) // code taken from csound.hpp of csound source, does not work!
+{
+    CsoundEngine *e = m_qcs->getEngine(index);
+    MYFLT *p;
+    if (e != NULL) {
+        CSOUND *cs = e->getCsound();
+        if (cs != NULL && !(csoundGetChannelPtr(cs, &p, channel.toLocal8Bit().constData(), CSOUND_STRING_CHANNEL | CSOUND_INPUT_CHANNEL))) {
+            strcpy((char*) p,stringValue.toLocal8Bit().constData() );
+            return;
+        }
+    }
+    QString message="Could not set string into channel "+channel;
+    PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
+    mainContext.evalScript("print \'"+message+"\'");
+}
+
+
+double PyQcsObject::getCsChannel(QString channel, int index)
+{
+    CsoundEngine *e = m_qcs->getEngine(index);
+    MYFLT *value =  new MYFLT;
+    //*value = 0;
+    if (e != NULL) {
+      CSOUND *cs = e->getCsound();
+      if (cs != NULL ) {
+        if ( !( csoundGetChannelPtr(cs,&value,channel.toLocal8Bit(),
+                            CSOUND_CONTROL_CHANNEL | CSOUND_OUTPUT_CHANNEL)))
+            return (double) *value;
+      }
+    }
+
+    QString message="Could not read from channel "+channel;
+    PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
+    mainContext.evalScript("print \'"+message+"\'");
+    return 0;//m_qcs->getCsChannel(channel, index);
+}
+
+QString PyQcsObject::getCsStringChannel(QString channel, int index)
+{
+    CsoundEngine *e = m_qcs->getEngine(index);
+    if (e != NULL) {
+      CSOUND *cs = e->getCsound();
+      if (cs != NULL) {
+          char *value = new char[csoundGetStrVarMaxLen(cs)];
+          if ( !( csoundGetChannelPtr(cs,(MYFLT **) &value,channel.toLocal8Bit(),
+                              CSOUND_STRING_CHANNEL | CSOUND_OUTPUT_CHANNEL))) {
+              return QString(value);
+          }
+      }
+    }
+    QString message="Could not read from channel "+channel;
+    PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
+    mainContext.evalScript("print \'"+message+"\'");
+    return QString();//m_qcs->getCsChannel(channel, index);
 }
 
 void PyQcsObject::setWidgetProperty(QString widgetid, QString property, QVariant value, int index)
@@ -560,10 +633,11 @@ void  PyQcsObject::registerProcessCallback(QString func, int skipPeriods, int in
   //  mainContext.evalScript(func);
 }
 
-void PyQcsObject::loadPreset(int preSetIndex,int index)
+void PyQcsObject::loadPreset(int presetIndex,int index)
 {
-    m_qcs->loadPreset(preSetIndex, index);
+    m_qcs->loadPreset(presetIndex, index);
 }
+
 
 
 
