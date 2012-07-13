@@ -56,8 +56,8 @@ public slots:
 //  QObject* findChild(QObject* o, const QString& name);
 //  QVariantMap testMap();
 
-	QString getVersion();
-	void refresh();
+    QString getVersion();
+    void refresh();
 
     // Csound controls
     void play(int index = -1, bool realtime = true);

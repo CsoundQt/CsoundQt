@@ -1125,28 +1125,17 @@ void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
         //       cur.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
         cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
       }
+      // don't do double checking, assume that the errorline reported is correct, mark it
       cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-      if (cur.selectedText().simplified() == text.simplified()) {
+      qDebug() <<"Line: " << line << " error: " << text;
         cur.mergeCharFormat(errorFormat);
         internalChange = true;
         m_mainEditor->setTextCursor(cur);
-        cur.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor);
-        cur.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor);
-        cur.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor);
-        cur.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor);
-        cur.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor); // go up 5 lines
-        cur.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         errorMarked = true;
         if (!originallyMod) {
           m_mainEditor->document()->setModified(false);
         }
       }
-      else {
-        qDebug() << "DocumentView::markErrorLines: Error line text doesn't match\n" << text;
-      }
-    }
-    //  internalChange = true;
-    //  editors[0]->setTextCursor(cur);
   }
   else {
     qDebug() << "DocumentView::markErrorLines() not implemented for split view";

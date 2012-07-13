@@ -282,10 +282,10 @@ void QuteGraph::changeCurve(int index)
 //  qDebug() << "QuteGraph::changeCurve"<< curves[index]->get_caption() << index <<max<< min<< zoomx<< zoomy << size;
 //  view->setResizeAnchor(QGraphicsView::NoAnchor);
   if (caption.contains("ftable")) {
-    view->setSceneRect (min, max, (double) size, (max - min));
+	view->setSceneRect (0, min - (max - min)*0.17, (double) size, (max - min)*1.17);
     qDebug() << view->sceneRect();
-    view->fitInView(0, min - ((max - min)*0.17/zoomy) , (double) size/zoomx, (max - min)*1.17/zoomy);
-    int ftable = getTableNumForIndex(index);
+	view->fitInView(0, min, (double) size/zoomx, (max - min)*1.17/zoomy);
+	int ftable = getTableNumForIndex(index);
     if (m_value2 != ftable) {
       m_value2 = ftable;
       m_value2Changed = true;
@@ -304,7 +304,7 @@ void QuteGraph::changeCurve(int index)
     }
   }
   QString text = QString::number(size) + " pts Max=";
-  text += QString::number(-max) + " Min =" + QString::number(-min);
+  text += QString::number(max) + " Min =" + QString::number(min);
   m_label->setText(text);
 }
 
