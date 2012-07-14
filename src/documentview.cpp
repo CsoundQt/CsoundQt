@@ -1115,24 +1115,18 @@ void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
     QTextCharFormat errorFormat;
     errorFormat.setBackground(QBrush(QColor(255, 182, 193)));
     QTextCursor cur = m_mainEditor->textCursor();
-    cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-    int lineCount = 1;
+    cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor); // TODO: viimane line
     for(int i = 0; i < lines.size(); i++) {
       int line = lines[i].first;
       QString text = lines[i].second;
-      while (lineCount < line) {
-        lineCount++;
-        //       cur.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
-        cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
-      }
-      // don't do double checking, assume that the errorline reported is correct, mark it
-      cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
       qDebug() <<"Line: " << line << " error: " << text;
-        cur.mergeCharFormat(errorFormat);
-        internalChange = true;
-        m_mainEditor->setTextCursor(cur);
-        errorMarked = true;
-        if (!originallyMod) {
+      cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor,line-1);
+      cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+      cur.mergeCharFormat(errorFormat);
+      internalChange = true;
+      m_mainEditor->setTextCursor(cur);
+      errorMarked = true;
+      if (!originallyMod) {
           m_mainEditor->document()->setModified(false);
         }
       }
