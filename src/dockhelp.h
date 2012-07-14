@@ -28,6 +28,7 @@
 #include "types.h"
 
 class QTextBrowser;
+class QLineEdit;
 
 class DockHelp : public QDockWidget
 {
@@ -45,6 +46,7 @@ class DockHelp : public QDockWidget
 
   private:
     QTextBrowser *text;
+    QLineEdit *findLine;
     virtual void closeEvent(QCloseEvent * event);
 
   signals:
@@ -60,6 +62,7 @@ class DockHelp : public QDockWidget
     void browseForward();
     void followLink(QUrl url);
     void copy();
+    void findText();
 };
 
 #endif
