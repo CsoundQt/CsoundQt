@@ -22,13 +22,14 @@
 
 #include "dockhelp.h"
 
-#include <QTextBrowser>
-#include <QTextDocument>
-#include <QTextStream>
-#include <QPushButton>
-#include <QFile>
-#include <QMessageBox>
-#include <QDir>
+//#include <QTextBrowser>
+//#include <QTextDocument>
+//#include <QTextStream>
+//#include <QPushButton>
+//#include <QFile>
+//#include <QMessageBox>
+//#include <QDir>
+#include <QtGui>
 
 DockHelp::DockHelp(QWidget *parent)
   : QDockWidget(parent)
@@ -48,6 +49,14 @@ DockHelp::DockHelp(QWidget *parent)
   forwardButton->move(130, 3);
   forwardButton->resize(25, 25);
   connect(forwardButton, SIGNAL(released()), this, SLOT(browseForward()));
+
+  QLabel *findLabel = new QLabel(tr("Search:"),this);
+  findLabel->move(200,0);
+  findLine = new QLineEdit(this);
+  findLine->setText("Otsi siit");
+  findLine->setFixedHeight(25);
+  findLine->move(240,0);
+  connect(findLine,SIGNAL(returnPressed()),this,SLOT(findText()));
 }
 
 DockHelp::~DockHelp()
@@ -149,4 +158,16 @@ void DockHelp::followLink(QUrl url)
 void DockHelp::copy()
 {
   text->copy();
+}
+
+
+void DockHelp::findText()
+{
+    QTextCursor tmpCursor = text->textCursor();
+    if (!text->find(findLine->text())) { // if not found, try from start
+        text->moveCursor(QTextCursor::Start);
+            if (!text->find(findLine->text())) {
+                text->setTextCursor(tmpCursor); // if not found at all, restore position
+            }
+    }
 }
