@@ -26,9 +26,11 @@
 #include <QDockWidget>
 #include <QUrl>
 #include "types.h"
+#include <QTextDocument>
+#include <QToolBar>
+#include <QLineEdit>
 
 class QTextBrowser;
-class QLineEdit;
 
 class DockHelp : public QDockWidget
 {
@@ -43,12 +45,13 @@ class DockHelp : public QDockWidget
     void loadFile(QString fileName);
     bool externalBrowser;
     QString docDir;
-
-  private:
+private:
     QTextBrowser *text;
     QLineEdit *findLine;
+    QToolBar *findBar;
+    QTextDocument::FindFlags findFlags;
     virtual void closeEvent(QCloseEvent * event);
-
+    void findText(QString expr); // bool backward = false, bool caseSensitive = false, bool wholeWords = false);
   signals:
     void Close(bool visible);
     void openManualExample(QString fileName);
@@ -62,7 +65,13 @@ class DockHelp : public QDockWidget
     void browseForward();
     void followLink(QUrl url);
     void copy();
-    void findText();
+    void onReturnPressed();
+    void onNextButtonPressed();
+    void onPreviousButtonPressed();
+    void toggleFindBarVisible();
+    void onWholeWordBoxChanged(int value);
+    void onCaseBoxChanged(int value);
+
 };
 
 #endif

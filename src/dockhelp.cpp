@@ -21,26 +21,50 @@
 */
 
 #include "dockhelp.h"
-
-//#include <QTextBrowser>
-//#include <QTextDocument>
-//#include <QTextStream>
-//#include <QPushButton>
-//#include <QFile>
-//#include <QMessageBox>
-//#include <QDir>
 #include <QtGui>
 
 DockHelp::DockHelp(QWidget *parent)
   : QDockWidget(parent)
 {
+  findFlags = 0;
   setWindowTitle("Opcode Help");
   setMinimumSize(400,200);
-  text = new QTextBrowser(this);
+  QGroupBox *helpBox = new QGroupBox;
+  QVBoxLayout *helpLayout = new QVBoxLayout;
+  helpBox->setLayout(helpLayout);
+
+  text = new QTextBrowser();
   text->setAcceptRichText(true);
   text->setOpenLinks(false);
   connect(text, SIGNAL(anchorClicked(QUrl)), this, SLOT(followLink(QUrl)));
-  setWidget (text);
+  helpLayout->addWidget(text);
+
+  findBar = new QToolBar("findBar");
+  findBar->setMaximumHeight(20);
+  QLabel *findLabel = new QLabel(tr("Find:"));
+  findBar->addWidget(findLabel);
+  findLine = new QLineEdit();
+  findLine->setMaximumWidth(120);
+  connect(findLine,SIGNAL(returnPressed()),this,SLOT(onReturnPressed()));
+  findBar->addWidget(findLine);
+  QAction *previousAction = findBar->addAction(QIcon(":/images/gtk-go-back-ltr.png"), "Previous");
+  previousAction->setShortcut(QKeySequence::FindPrevious);
+  QAction *nextAction = findBar->addAction(QIcon(":/images/gtk-go-forward-ltr.png"), "Next");
+  nextAction->setShortcut(QKeySequence::FindNext);
+  connect(previousAction,SIGNAL(triggered()),this,SLOT(onPreviousButtonPressed()));
+  connect(nextAction,SIGNAL(triggered()),this,SLOT(onNextButtonPressed()));
+  QCheckBox *caseBox = new QCheckBox("&Match case");
+  connect(caseBox,SIGNAL(stateChanged(int)),this,SLOT(onCaseBoxChanged(int)));
+  findBar->addWidget(caseBox);
+  QCheckBox *wholeWordBox = new QCheckBox("&Whole words");
+  connect(wholeWordBox,SIGNAL(stateChanged(int)),this,SLOT(onWholeWordBoxChanged(int)));
+  findBar->addWidget(wholeWordBox);
+  //TODO: add functionality of hide/show
+  //QAction *closeAction = findBar->addAction(QIcon(":/images/gtk-close.png"), "Close");
+  //connect(closeAction,SIGNAL(triggered()),this,SLOT(toggleFindBarVisible()) );
+  helpLayout->addWidget(findBar);
+  setWidget(helpBox);
+
   QPushButton* backButton = new QPushButton(QIcon(":/images/gtk-media-play-trl.png"), "", this);
   backButton->move(100, 3);
   backButton->resize(25, 25);
@@ -50,13 +74,6 @@ DockHelp::DockHelp(QWidget *parent)
   forwardButton->resize(25, 25);
   connect(forwardButton, SIGNAL(released()), this, SLOT(browseForward()));
 
-  QLabel *findLabel = new QLabel(tr("Search:"),this);
-  findLabel->move(200,0);
-  findLine = new QLineEdit(this);
-  findLine->setText("Otsi siit");
-  findLine->setFixedHeight(25);
-  findLine->move(240,0);
-  connect(findLine,SIGNAL(returnPressed()),this,SLOT(findText()));
 }
 
 DockHelp::~DockHelp()
@@ -160,13 +177,51 @@ void DockHelp::copy()
   text->copy();
 }
 
+void DockHelp::onReturnPressed()
+{
+    findFlags &= 6; // first bit (FindBackward) to zero
+    findText(findLine->text());
+}
 
-void DockHelp::findText()
+void DockHelp::onNextButtonPressed()
+{
+    findFlags &= 6; // first bit to zero
+    findText(findLine->text());
+}
+
+void DockHelp::onPreviousButtonPressed()
+{
+    findFlags |= QTextDocument::FindBackward;
+    findText(findLine->text());
+}
+
+void DockHelp::toggleFindBarVisible()
+{
+    findBar->setVisible(!findBar->isVisible());
+}
+
+void DockHelp::onCaseBoxChanged(int value)
+{
+    if (value)
+        findFlags |=  QTextDocument::FindCaseSensitively;
+    else
+        findFlags &= 5; // set 2 bit to 0
+}
+
+void DockHelp::onWholeWordBoxChanged(int value)
+{
+    if (value)
+        findFlags |=  QTextDocument::FindWholeWords;
+    else
+        findFlags &= 3; // set 3rd bit to 0
+}
+
+void DockHelp::findText(QString expr)
 {
     QTextCursor tmpCursor = text->textCursor();
-    if (!text->find(findLine->text())) { // if not found, try from start
+    if (!text->find(expr,findFlags)) { // if not found, try from start
         text->moveCursor(QTextCursor::Start);
-            if (!text->find(findLine->text())) {
+            if (!text->find(findLine->text(),findFlags)) {
                 text->setTextCursor(tmpCursor); // if not found at all, restore position
             }
     }
