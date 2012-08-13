@@ -29,8 +29,11 @@ DockHelp::DockHelp(QWidget *parent)
   findFlags = 0;
   setWindowTitle("Opcode Help");
   setMinimumSize(400,200);
+  setContentsMargins(3,3,3,3);
+
   QGroupBox *helpBox = new QGroupBox;
   QVBoxLayout *helpLayout = new QVBoxLayout;
+  helpLayout->setContentsMargins(3,3,3,3);
   helpBox->setLayout(helpLayout);
 
   text = new QTextBrowser();
@@ -40,7 +43,7 @@ DockHelp::DockHelp(QWidget *parent)
   helpLayout->addWidget(text);
 
   findBar = new QToolBar("findBar");
-  findBar->setMaximumHeight(20);
+//  findBar->setMaximumHeight(30);
   QLabel *findLabel = new QLabel(tr("Find:"));
   findBar->addWidget(findLabel);
   findLine = new QLineEdit();
