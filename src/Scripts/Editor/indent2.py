@@ -19,9 +19,18 @@ def exceptions(line, excptlis):
     else:
         return False
         
-def comment(line):
+def long_comment(line, prevState):
+    """returns 1 if a '/* ...*/' comment is active, 0 otherwise"""
+    if line.lstrip()[0:2] == '/*':
+        return 1
+    elif line.rstrip()[0:2] == '*/':
+        return 0
+    else:
+        return prevState
+        
+def comment(line, longComment):
     """returns t if line is a comment"""
-    if line.lstrip()[0] == ';' or line.lstrip()[0:2] == '/*' or line.lstrip()[0:2] == '*/':
+    if longComment == 1 or line.lstrip()[0] == ';' or line.rstrip()[0:2] == '*/':
         return True
     else:
         return False
@@ -29,8 +38,10 @@ def comment(line):
 def listUdos(orcText):
     """list all udo names in orcText"""
     res = []
+    prev = 0
     for line in orcText.splitlines():
-        if line.strip() and not comment(line):
+        long = long_comment(line, prev)
+        if line.strip() and not comment(line, long):
             #stop if orc header has ended
             if line.split()[0] == "instr":
                 break
@@ -38,6 +49,7 @@ def listUdos(orcText):
             elif line.split()[0] == "opcode":
                 udonam = line.split()[1].rstrip(',')
                 res.append(udonam)
+        prev = long
     return res
 
         
@@ -50,9 +62,11 @@ def indent():
         orcText = selection
 
     newOrcText = ""
+    prev = 0 #initial value for long comment
     for line in orcText.splitlines():
         #do nothing if empty line, comment or exception
-        if line.strip() == "" or comment(line) or exceptions(line, excpList):
+        longComment = long_comment(line, prev)
+        if line.strip() == "" or comment(line, longComment) or exceptions(line, excpList):
             newline = line
         else:
             words = line.split()
@@ -85,6 +99,7 @@ def indent():
                     newline = '%s%s ' % (newline, word)
                     pos = pos + len(word) + 1
         newOrcText = "%s\n%s" % (newOrcText, newline)
+        prev = longComment #reset prev for analysing long comments
 
     #remove starting newline
     newOrcText = newOrcText[1:]
@@ -130,6 +145,7 @@ Joachim Heintz 2012, using code by Andres Cabrera"""
 text.setText(info)
 
 w.show()
+
 
 
 
