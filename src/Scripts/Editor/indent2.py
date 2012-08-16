@@ -21,16 +21,16 @@ def exceptions(line, excptlis):
         
 def long_comment(line, prevState):
     """returns 1 if a '/* ...*/' comment is active, 0 otherwise"""
-    if line.lstrip()[0:2] == '/*':
-        return 1
-    elif line.rstrip()[0:2] == '*/':
+    if line.rstrip()[-2:] == '*/':
         return 0
+    elif line.lstrip()[0:2] == '/*':
+        return 1
     else:
         return prevState
         
 def comment(line, longComment):
     """returns t if line is a comment"""
-    if longComment == 1 or line.lstrip()[0] == ';' or line.rstrip()[0:2] == '*/':
+    if longComment == 1 or line.lstrip()[0] == ';' or line.rstrip()[-2:] == '*/':
         return True
     else:
         return False
@@ -89,7 +89,7 @@ def indent():
                 #word is the first argument
                 elif firstarg == 1:
                     if pos - opcdpos < space_left.value and pos < space_right.value:
-                        format = '%%-%ds%%s' % space_right.value
+                        format = '%%-%ds%%s ' % space_right.value
                         newline = format % (newline, word)
                     else:
                         newline = '%s %s ' % (newline, word)
@@ -98,7 +98,7 @@ def indent():
                 else:
                     newline = '%s%s ' % (newline, word)
                     pos = pos + len(word) + 1
-        newOrcText = "%s\n%s" % (newOrcText, newline)
+        newOrcText = "%s\n%s" % (newOrcText, newline.rstrip())
         prev = longComment #reset prev for analysing long comments
 
     #remove starting newline
@@ -145,6 +145,8 @@ Joachim Heintz 2012, using code by Andres Cabrera"""
 text.setText(info)
 
 w.show()
+
+
 
 
 
