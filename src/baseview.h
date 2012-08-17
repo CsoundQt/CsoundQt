@@ -121,8 +121,8 @@ class BaseView : public QScrollArea
     Highlighter m_highlighter;
     OpEntryParser *m_opcodeTree;
     QSplitter *splitter;
-    TextEditor *m_mainEditor;
-    TextEditor *m_orcEditor;
+		TextEditLineNumbers *m_mainEditor;
+		TextEditor *m_orcEditor;
     ScoreEditor *m_scoreEditor;
     TextEditor *m_optionsEditor;
     FileBEditor *m_filebEditor;
@@ -139,3 +139,4 @@ class BaseView : public QScrollArea
 };
 
 #endif // BASEVIEW_H
+

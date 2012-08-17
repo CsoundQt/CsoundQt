@@ -24,6 +24,7 @@
 #define TEXTEDITOR_H
 
 #include <QTextEdit>
+#include <QAction>
 
 class TextEditor : public QTextEdit
 {
@@ -36,6 +37,47 @@ class TextEditor : public QTextEdit
 //    virtual void dropEvent(QDropEvent *event);  // See note on code
 //    virtual void dragEnterEvent(QDragEnterEvent *event);
 //    virtual void dragMoveEvent(QDragMoveEvent *event);
+};
+
+class LineNumberArea;
+
+class TextEditLineNumbers : public TextEditor
+{
+		Q_OBJECT
+public:
+		TextEditLineNumbers(QWidget *parent = 0);
+		int getAreaWidth();
+		void setLineAreaVisble(bool visible);
+		bool lineAreaVisble() {return m_lineAreaVisble;}
+		QAction *toggleAction;
+
+protected:
+		void resizeEvent(QResizeEvent *e);
+
+private:
+		LineNumberArea *lineNumberArea;
+		bool m_lineAreaVisble;
+
+private slots:
+		void toggleLineAreaVisible();
+		void updateLineArea(int);
+		void updateLineArea();
+};
+
+class LineNumberArea : public QWidget
+{
+		Q_OBJECT
+
+public:
+		LineNumberArea(TextEditLineNumbers *editor) : QWidget(editor) {
+				codeEditor = editor;
+		}
+
+protected:
+		void paintEvent(QPaintEvent *event);
+
+private:
+		TextEditLineNumbers *codeEditor;
 };
 
 #endif // TEXTEDITOR_H

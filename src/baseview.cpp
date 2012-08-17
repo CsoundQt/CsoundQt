@@ -27,8 +27,9 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
     QScrollArea(parent), m_opcodeTree(opcodeTree)
 {
   QPalette p = palette();
-  m_mainEditor = new TextEditor(this);
-  m_orcEditor = new TextEditor(this);
+	m_mainEditor = new TextEditLineNumbers(this);
+	m_mainEditor->setLineAreaVisble(true);
+	m_orcEditor = new TextEditor(this);
   m_scoreEditor = new ScoreEditor(this);
   m_optionsEditor = new TextEditor(this);
   m_optionsEditor->setMaximumHeight(60);
