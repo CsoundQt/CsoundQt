@@ -45,16 +45,6 @@ void Console::appendMessage(QString msg)
     || msg.startsWith("PortAudio real-time audio module for Csound")
     || msg.startsWith("virtual_keyboard real time MIDI plugin for Csound")
           || msg.startsWith("Removing temporary file")
-<<<<<<< HEAD
-          || msg.startsWith("Csound version")
-          || msg.startsWith("STARTING")
-          || msg.startsWith("Creating")
-          || msg.startsWith("Parsing")
-          || msg.startsWith("0dBFS")
-          || msg.startsWith("add a global")
-          || msg.startsWith("rtaudio:")
-          ) {
-=======
 //          || msg.startsWith("Csound version")
           || msg.startsWith("STARTING")
           || msg.startsWith("Creating")
@@ -64,7 +54,6 @@ void Console::appendMessage(QString msg)
           || msg.startsWith("rtaudio:")
           ) {
 	  // This filtering should ideally happen inside Csound!
->>>>>>> 221bc57a6a2b6a3a4b59b4af0f63bb0b8ce8a38f
 //    consoleLock.unlock();
     return;
   }
