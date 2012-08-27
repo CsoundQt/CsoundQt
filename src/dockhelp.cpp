@@ -27,31 +27,40 @@ DockHelp::DockHelp(QWidget *parent)
   : QDockWidget(parent)
 {
   findFlags = 0;
-  setWindowTitle("Opcode Help");
+  setWindowTitle("Opcode Help"); // titlebar and overall layout
   setMinimumSize(400,200);
+  QPushButton* toggleFindButton = new QPushButton(QIcon(":/images/gtk-search.png"), "", this);
+  toggleFindButton->resize(25,25);
+  toggleFindButton->move(fontMetrics().width("Opcode help")+10 ,0);
+  toggleFindButton->setFlat(true);
+  connect(toggleFindButton, SIGNAL(released()), this, SLOT(toggleFindBarVisible()));
+  backButton = new QPushButton(QIcon(":/images/gtk-media-play-trl.png"), "", this);
+  backButton->move(frameGeometry().width()/2-25, 0);
+  backButton->resize(25, 25);
+  backButton->setFlat(true); // no border
+  connect(backButton, SIGNAL(released()), this, SLOT(browseBack()));
+  forwardButton = new QPushButton(QIcon(":/images/gtk-media-play-ltr.png"), "", this);
+  forwardButton->move(this->width()/2, 0);
+  forwardButton->resize(25, 25);
+  forwardButton->setFlat(true);
+  connect(forwardButton, SIGNAL(released()), this, SLOT(browseForward()));
   setContentsMargins(3,3,3,3);
   QGroupBox *helpBox = new QGroupBox;
   QVBoxLayout *helpLayout = new QVBoxLayout;
   helpLayout->setContentsMargins(3,3,3,3);
   helpBox->setLayout(helpLayout);
 
-  text = new QTextBrowser();
-  text->setAcceptRichText(true);
-  text->setOpenLinks(false);
-  connect(text, SIGNAL(anchorClicked(QUrl)), this, SLOT(followLink(QUrl)));
-  helpLayout->addWidget(text);
-
-  findBar = new QToolBar("findBar");
-//  findBar->setMaximumHeight(30);
+  findBar = new QToolBar("findBar");   // search bar, hidden by default
+  findBar->setIconSize(QSize(10,10));
   QLabel *findLabel = new QLabel(tr("Find:"));
   findBar->addWidget(findLabel);
   findLine = new QLineEdit();
-  findLine->setMaximumWidth(120);
+  //findLine->setMaximumWidth(120);
   connect(findLine,SIGNAL(returnPressed()),this,SLOT(onReturnPressed()));
   findBar->addWidget(findLine);
-  QAction *previousAction = findBar->addAction(QIcon(":/images/gtk-go-back-ltr.png"), "Previous");
+  QAction *previousAction = findBar->addAction(QIcon(":/images/br_prev.png"), "Previous");
   previousAction->setShortcut(QKeySequence::FindPrevious);
-  QAction *nextAction = findBar->addAction(QIcon(":/images/gtk-go-forward-ltr.png"), "Next");
+  QAction *nextAction = findBar->addAction(QIcon(":/images/br_next.png"), "Next");
   nextAction->setShortcut(QKeySequence::FindNext);
   connect(previousAction,SIGNAL(triggered()),this,SLOT(onPreviousButtonPressed()));
   connect(nextAction,SIGNAL(triggered()),this,SLOT(onNextButtonPressed()));
@@ -61,21 +70,15 @@ DockHelp::DockHelp(QWidget *parent)
   QCheckBox *wholeWordBox = new QCheckBox("&Whole words");
   connect(wholeWordBox,SIGNAL(stateChanged(int)),this,SLOT(onWholeWordBoxChanged(int)));
   findBar->addWidget(wholeWordBox);
-  //TODO: add functionality of hide/show
-  //QAction *closeAction = findBar->addAction(QIcon(":/images/gtk-close.png"), "Close");
-  //connect(closeAction,SIGNAL(triggered()),this,SLOT(toggleFindBarVisible()) );
+  findBar->setVisible(false);
   helpLayout->addWidget(findBar);
+
+  text = new QTextBrowser();  // text area
+  text->setAcceptRichText(true);
+  text->setOpenLinks(false);
+  connect(text, SIGNAL(anchorClicked(QUrl)), this, SLOT(followLink(QUrl)));
+  helpLayout->addWidget(text);
   setWidget(helpBox);
-
-  QPushButton* backButton = new QPushButton(QIcon(":/images/gtk-media-play-trl.png"), "", this);
-  backButton->move(100, 3);
-  backButton->resize(25, 25);
-  connect(backButton, SIGNAL(released()), this, SLOT(browseBack()));
-  QPushButton* forwardButton = new QPushButton(QIcon(":/images/gtk-media-play-ltr.png"), "", this);
-  forwardButton->move(130, 3);
-  forwardButton->resize(25, 25);
-  connect(forwardButton, SIGNAL(released()), this, SLOT(browseForward()));
-
 }
 
 DockHelp::~DockHelp()
@@ -226,5 +229,12 @@ void DockHelp::findText(QString expr)
             if (!text->find(findLine->text(),findFlags)) {
                 text->setTextCursor(tmpCursor); // if not found at all, restore position
             }
-    }
+	}
+}
+
+void DockHelp::resizeEvent(QResizeEvent *e)
+{
+	QDockWidget::resizeEvent(e);
+	backButton->move(frameGeometry().width()/2-25, 0);
+	forwardButton->move(frameGeometry().width()/2, 0);
 }
