@@ -59,7 +59,6 @@ private:
 		bool m_lineAreaVisble;
 
 private slots:
-		void toggleLineAreaVisible();
 		void updateLineArea(int);
 		void updateLineArea();
 };

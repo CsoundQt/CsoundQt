@@ -181,6 +181,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
    padview->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
    padview->setFileType(1); // Python type (for highlighting and completion)
    padview->show();
+   padview->showLineArea(true);
    padview->setFullText("");
    connect(padview, SIGNAL(evaluate(QString)), m_pythonConsole, SLOT(evaluate(QString)));
    m_scratchPad->setWidget(padview);
@@ -2206,6 +2207,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
   showOtherAct->setShortcut(tr("Shift+Alt+5"));
   showOtherCsdAct->setShortcut(tr("Shift+Alt+6"));
   showWidgetEditAct->setShortcut(tr("Shift+Alt+7"));
+  lineNumbersAct->setShortcut(tr("Shift+Alt+L"));
 }
 
 void CsoundQt::showNoPythonQtWarning()
@@ -2248,7 +2250,12 @@ void CsoundQt::showOtherCsd(bool show)
 
 void CsoundQt::showWidgetEdit(bool show)
 {
-  documentPages[curPage]->showWidgetEdit(show);
+    documentPages[curPage]->showWidgetEdit(show);
+}
+
+void CsoundQt::toggleLineArea()
+{
+    documentPages[curPage]->toggleLineArea();
 }
 
 void CsoundQt::createActions()
@@ -2768,6 +2775,10 @@ void CsoundQt::createActions()
   duplicateAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(duplicateAct, SIGNAL(triggered()), this, SLOT(duplicate()));
 
+  lineNumbersAct = new QAction(tr("Show/hide line number area"),this);
+  lineNumbersAct->setShortcutContext(Qt::ApplicationShortcut);
+  connect(lineNumbersAct,SIGNAL(triggered()), this, SLOT(toggleLineArea()));
+
   setKeyboardShortcutsList();
 }
 
@@ -2839,6 +2850,7 @@ void CsoundQt::setKeyboardShortcutsList()
   m_keyActions.append(showOtherAct);
   m_keyActions.append(showOtherCsdAct);
   m_keyActions.append(showWidgetEditAct);
+  m_keyActions.append(lineNumbersAct);
 }
 
 void CsoundQt::connectActions()
@@ -2958,6 +2970,7 @@ void CsoundQt::createMenus()
   editMenu->addAction(unindentAct);
   editMenu->addAction(killLineAct);
   editMenu->addAction(killToEndAct);
+  editMenu->addAction(lineNumbersAct);
   editMenu->addSeparator();
   editMenu->addAction(joinAct);
   editMenu->addAction(inToGetAct);

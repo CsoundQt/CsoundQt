@@ -28,7 +28,6 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
 {
   QPalette p = palette();
 	m_mainEditor = new TextEditLineNumbers(this);
-	m_mainEditor->setLineAreaVisble(true);
 	m_orcEditor = new TextEditor(this);
   m_scoreEditor = new ScoreEditor(this);
   m_optionsEditor = new TextEditor(this);
@@ -530,7 +529,17 @@ void BaseView::setAppText(QString text)
 
 void BaseView::setAppProperties(AppProperties properties)
 {
-  m_appProperties = properties;
+    m_appProperties = properties;
+}
+
+void BaseView::toggleLineArea()
+{
+    showLineArea(!m_mainEditor->lineAreaVisble());
+}
+
+void BaseView::showLineArea(bool visible)
+{
+    m_mainEditor->setLineAreaVisble(visible);
 }
 
 QString BaseView::getBasicText()

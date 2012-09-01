@@ -83,13 +83,8 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 TextEditLineNumbers::TextEditLineNumbers(QWidget *parent)
 		: TextEditor(parent)
 {
-		setLineAreaVisble(false);
+        setLineAreaVisble(false);
 		lineNumberArea = new LineNumberArea(this);
-		toggleAction = new QAction(this);
-		toggleAction->setShortcut(QKeySequence(tr("Ctrl+F11"))); //TODO: put into user choiices
-		toggleAction->setShortcutContext(Qt::WidgetShortcut); // works only when the widget has focus
-		addAction(toggleAction);
-		connect(toggleAction,SIGNAL(triggered()),this,SLOT(toggleLineAreaVisible()));
 		connect(this->document(),SIGNAL(blockCountChanged(int)),this,SLOT(updateLineArea(int)));
 		connect(this->verticalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(updateLineArea(int)));
 		connect(this,SIGNAL(cursorPositionChanged()),this,SLOT(updateLineArea()));
@@ -119,11 +114,6 @@ void TextEditLineNumbers::setLineAreaVisble(bool visible)
 		else {
 				setViewportMargins(0,0,0,0);
 		}
-}
-
-void TextEditLineNumbers::toggleLineAreaVisible()
-{
-		setLineAreaVisble(!m_lineAreaVisble);
 }
 
 void TextEditLineNumbers::updateLineArea(int)

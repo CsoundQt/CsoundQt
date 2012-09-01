@@ -85,6 +85,7 @@ class BaseView : public QScrollArea
     void setOtherText(QString text);
     void setAppText(QString text);
     void setAppProperties(AppProperties properties);
+    void showLineArea(bool visible);
 
     QString getFullText();
     QString getOrc();  // Without tags
@@ -100,10 +101,12 @@ class BaseView : public QScrollArea
 
     QString getBasicText();  // What Csound needs (no widgets, misc text, etc.)
 
-  signals:
 
-  public slots:
-  protected:
+signals:
+
+public slots:
+  void toggleLineArea();
+protected:
     void hideAllEditors();
 
     int m_mode; //type of text 0=csound 1=python 2=xml 3=orc 4=sco   -1=anything else

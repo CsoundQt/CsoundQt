@@ -235,6 +235,7 @@ public slots:
     void showOther(bool);
     void showOtherCsd(bool);
     void showWidgetEdit(bool);
+    void toggleLineArea();
 
   private:
     void createActions();
@@ -387,6 +388,7 @@ public slots:
 	QAction *reportBugAct;
 	QAction *requestFeatureAct;
 	QAction *chatAct;
+    QAction *lineNumbersAct;
 
     int curPage;
     int curCsdPage;  // To recall last csd visited

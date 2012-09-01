@@ -46,6 +46,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
     BaseDocument(parent, opcodeTree)
 {
   init(parent, opcodeTree);
+  m_view->showLineArea(true);
 }
 
 DocumentPage::~DocumentPage()
@@ -92,7 +93,12 @@ void DocumentPage::setTextString(QString &text)
 void DocumentPage::loadTextString(QString &text, bool autoCreateMacCsoundSections)
 {
 	setTextString(text, autoCreateMacCsoundSections);
-	m_view->clearUndoRedoStack();
+    m_view->clearUndoRedoStack();
+}
+
+void DocumentPage::toggleLineArea()
+{
+    m_view->toggleLineArea();
 }
 
 int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
