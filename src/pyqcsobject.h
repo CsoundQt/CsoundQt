@@ -47,16 +47,27 @@ class PyQcsObject : public QObject {
     ~PyQcsObject();
     void setCsoundQt(CsoundQt *qcs);
 
-  public slots:
-	QString getVersion();
-	void refresh();
+public slots:
+//  ! example for passing a PyObject directly from Qt to Python (without extra mashalling)
+//    PyObject* getMainModule();
+//  void showInformation(const QString& str);
+//  QStringList readDirectory(const QString& dir);
+//  QMainWindow* createWindow();
+//  QObject* findChild(QObject* o, const QString& name);
+//  QVariantMap testMap();
+
+    QString getVersion();
+    void refresh();
 
     // Csound controls
     void play(int index = -1, bool realtime = true);
     void pause(int index = -1);
     void stop(int index = -1);
     void stopAll();
-
+    void setCsChannel(QString channel, double value, int index = -1); // sends value directly to Csound channel
+    void setCsChannel(QString channel, QString value, int index = -1);
+    double getCsChannel(QString channel, int index = -1);
+    QString getCsStringChannel(QString channel, int index = -1);
     //Csound Language
     bool opcodeExists(QString opcodeName);
 
@@ -87,7 +98,7 @@ class PyQcsObject : public QObject {
     QString getFileName(int index = -1);
     QString getFilePath(int index = -1);
 
-	//Widgets
+    //Widgets
     void setChannelValue(QString channel, double value, int index = -1);
     double getChannelValue(QString channel, int index = -1);
     void setChannelString(QString channel, QString value, int index = -1);
@@ -95,7 +106,7 @@ class PyQcsObject : public QObject {
     void setWidgetProperty(QString widgetid, QString property, QVariant value, int index= -1); // widgetid can be eihter uuid (prefered) or channel
     QVariant getWidgetProperty(QString widgetid, QString property, int index= -1);
 
-    void loadPreset(int preSetIndex, int index = -1);
+    void loadPreset(int presetIndex, int index = -1);
 
     QStringList getWidgetUuids(int index = -1);
     QStringList listWidgetProperties(QString widgetid, int index = -1);

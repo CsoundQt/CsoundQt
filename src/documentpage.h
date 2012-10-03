@@ -59,6 +59,7 @@ class DocumentPage : public BaseDocument
     void setPresetsText(QString text);
     void setOptionsText(QString text);
     void loadTextString(QString &text, bool autoCreateMacCsoundSections = false);
+    void toggleLineArea();
 
     virtual QString getFullText();
     QString getDotText();

@@ -29,6 +29,7 @@
 #include <QTextDocument>
 #include <QToolBar>
 #include <QLineEdit>
+#include <QPushButton>
 
 class QTextBrowser;
 
@@ -50,11 +51,15 @@ private:
     QLineEdit *findLine;
     QToolBar *findBar;
     QTextDocument::FindFlags findFlags;
+	QPushButton *backButton, *forwardButton;
     virtual void closeEvent(QCloseEvent * event);
     void findText(QString expr); // bool backward = false, bool caseSensitive = false, bool wholeWords = false);
   signals:
     void Close(bool visible);
     void openManualExample(QString fileName);
+
+  protected:
+	void resizeEvent(QResizeEvent *);
 
   public slots:
     void showManual();
