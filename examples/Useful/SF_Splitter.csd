@@ -138,13 +138,14 @@ i 1 0 1
 e
 </CsScore>
 </CsoundSynthesizer>
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>565</x>
- <y>191</y>
- <width>498</width>
- <height>243</height>
+ <x>0</x>
+ <y>0</y>
+ <width>524</width>
+ <height>263</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -192,9 +193,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -215,7 +216,7 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -255,8 +256,8 @@ e
   <uuid>{e54e17da-3808-49a3-84a6-608f476c3200}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>Splits any stereo or multichannel soundfile in mono files. Just browse your file and press the Split! button.</label>
+  <midicc>0</midicc>
+  <label>Splits any stereo or multichannel soundfile in mono files. Just browse your file and press the Split! button. Find the split files in the same folder as the source file.</label>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -275,32 +276,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <objectName/>
- <x>565</x>
- <y>191</y>
- <width>498</width>
- <height>243</height>
- <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 565 191 498 243
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioButton {364, 69} {100, 30} value 1.000000 "_Browse1" "Select File" "/" 
-ioText {17, 72} {345, 24} edit 0.000000 0.00100 "_Browse1"  "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
-ioButton {163, 107} {151, 31} value 1.000000 "_Render" "Split!" "/" i1 0 10
-ioText {92, 24} {312, 33} label 0.000000 0.00100 "" center "Arial" 24 {0, 0, 0} {65280, 65280, 65280} nobackground noborder SOUNDFILE SPLITTER
-ioText {19, 147} {446, 81} label 0.000000 0.00100 "" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Splits any stereo or multichannel soundfile in mono files. Just browse your file and press the Split! button.
-</MacGUI>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="612" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="612" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

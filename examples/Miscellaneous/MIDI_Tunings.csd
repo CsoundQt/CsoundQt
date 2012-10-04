@@ -1,38 +1,38 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac -Ma -b128 -B512 --midi-key=4 --midi-velocity-amp=5 -m0 -+max_str_len=1000
+-+max_str_len=10000 -m128
 </CsOptions>
 <CsInstruments>
-ksmps = 64
-nchnls = 2
-0dbfs = 1
+ksmps =   128 
+nchnls =  2 
+0dbfs =   1 
 
+;============================================================================;
 ;============================================================================;
 ;                    PLAYING SCALES WITH A MIDI KEYBOARD                     ;
 ;============================================================================;
 ;                  by Joachim Heintz and Richard Boulanger                   ;
-;                                October 2010                                ;
+;                                 2010 / 2012                                ;
+;============================================================================;
 ;============================================================================;
 
 
-;;SOME GLOBAL VARIABLES AND ASSIGNMENTS
-
-giSine		ftgen		0, 0, 8192, 10, 1
-giSaw		ftgen		0, 0, 8192, 10, 1, 1/2, 1/3, 1/4, 1/5, 1/6, 1/7, 1/8, 1/9
-giSquare	ftgen		0, 0, 8192, 10, 1, 0, 1/3, 0, 1/5, 0, 1/7, 0, 1/9, 0, 1/11
-		massign 	0, 10; send all midi noteon/noteoff events to instr 10
-gkscale	init		1
-gkreftone	init		69
-gktunfreq	init		440
-gksound	init		0
-		turnon		1
-		turnon		2
-		turnon		3
-		turnon		4
-		turnon		100
 
 
-;;OPCODE DEFINITIONS
+;============================================================================;
+;                   SOME GLOBAL VARIABLES AND ASSIGNMENTS                    ;
+;============================================================================;
+
+giSine    ftgen     0, 0, 8192, 10, 1 
+giSaw     ftgen     0, 0, 8192, 10, 1, 1/2, 1/3, 1/4, 1/5, 1/6, 1/7, 1/8, 1/9 
+giSquare  ftgen     0, 0, 8192, 10, 1, 0, 1/3, 0, 1/5, 0, 1/7, 0, 1/9, 0, 1/11 
+          massign   0, "play"; send all midi noteon/noteoff events to instr 'play' 
+
+
+
+;============================================================================;
+;                             OPCODE DEFINITIONS                             ;
+;============================================================================;
 
   opcode FreqByEqScale, i, iiii
 ;;frequency calculation for one step of an equal tempered scale. the unit for the scale can be an octave, a duodecim, or whatever
@@ -40,9 +40,9 @@ gksound	init		0
 ;iumult:	unit multiplier (2 = octave, 3 = Bohlen-Pierce scale, 5 = stockhausen scale in Studie2)
 ;istepspu:	steps per unit (12 for semitones, 13 for complete Bohlen-Pierce scale, 25 for studie2 scale)
 ;istep:	selected step (0 = reference frequency, 1 = one step higher, -1 = one step lower)
-iref_freq, iumult, istepspu, istep xin
-ifreq		=		iref_freq * (iumult ^ (istep / istepspu))
-		xout		ifreq
+iref_freq, iumult, istepspu, istep xin 
+ifreq     =         iref_freq * (iumult ^ (istep / istepspu)) 
+          xout      ifreq 
   endop
 
   opcode FreqByCentTab, i, iiii
@@ -53,15 +53,15 @@ ifreq		=		iref_freq * (iumult ^ (istep / istepspu))
 ;iref_freq:	reference frequency (= for istep == 0)
 ;iumult:	unit multiplier (2 = octave, 3 = duodecime or whatever)
 ;istep:	selected step (0 = reference frequency, 1 = one step higher, -1 = one step lower)
-iftcent, iref_freq, iumult, istep xin
-itablen	=		ftlen(iftcent)
-ipos 		=		floor(istep/itablen); "octave" position
-ibasfreq	=		(iumult ^ ipos) * iref_freq; base freq of istep
-icentindx	=		istep % itablen; position of the appropriate centvalue ...
-icentindx	=		(icentindx < 0 ? (itablen + icentindx) : icentindx); ... in the table
-icent		tab_i		icentindx, iftcent; get cent value
-ifreq		=		ibasfreq * cent(icent); get frequency
-		xout		ifreq
+iftcent, iref_freq, iumult, istep xin 
+itablen   =         ftlen(iftcent) 
+ipos      =         floor(istep/itablen); "octave" position 
+ibasfreq  =         (iumult ^ ipos) * iref_freq; base freq of istep 
+icentindx =         istep % itablen; position of the appropriate centvalue ... 
+icentindx =         (icentindx < 0 ? (itablen + icentindx) : icentindx); ... in the table 
+icent     tab_i     icentindx, iftcent; get cent value 
+ifreq     =         ibasfreq * cent(icent); get frequency 
+          xout      ifreq 
   endop
 
   opcode FreqByRatioTab, i, iiii
@@ -72,28 +72,28 @@ ifreq		=		ibasfreq * cent(icent); get frequency
 ;iref_freq:	reference frequency (= for istep == 0)
 ;iumult:	unit multiplier (2 = octave, 3 = duodecime or whatever)
 ;istep:	selected step (0 = reference frequency, 1 = one step higher, -1 = one step lower)
-iftprops, iref_freq, iumult, istep xin
-itablen	=		ftlen(iftprops)
-ipos 		=		floor(istep/itablen); "octave" position
-ibasfreq	=		(iumult ^ ipos) * iref_freq; base freq of istep
-ipropindx	=		istep % itablen; position of the appropriate proportion ...
-ipropindx	=		(ipropindx < 0 ? (itablen + ipropindx) : ipropindx); ... in the table
-iprop		tab_i		ipropindx, iftprops; get proportion
-ifreq		=		ibasfreq * iprop; get frequency
-		xout		ifreq
+iftprops, iref_freq, iumult, istep xin 
+itablen   =         ftlen(iftprops) 
+ipos      =         floor(istep/itablen); "octave" position 
+ibasfreq  =         (iumult ^ ipos) * iref_freq; base freq of istep 
+ipropindx =         istep % itablen; position of the appropriate proportion ... 
+ipropindx =         (ipropindx < 0 ? (itablen + ipropindx) : ipropindx); ... in the table 
+iprop     tab_i     ipropindx, iftprops; get proportion 
+ifreq     =         ibasfreq * iprop; get frequency 
+          xout      ifreq 
   endop
 
   opcode TabMkPartCp_i, i, iiio
   ;copies ihowmany values starting from index istrtindx in isrc to a new function table (starting at index istrtwrite which defaults to 0) and returns its number
-isrc, istrtindx, ihowmany, istrtwrite xin
-icop		ftgen		0, 0, -(ihowmany + istrtwrite), -2, 0
-ireadindx	=		istrtindx
-loop:
-ival		tab_i		ireadindx, isrc
-		tabw_i		ival, istrtwrite, icop
-istrtwrite	=		istrtwrite + 1
-		loop_lt	ireadindx, 1, istrtindx+ihowmany, loop
-		xout		icop
+isrc, istrtindx, ihowmany, istrtwrite xin 
+icop      ftgen     0, 0, -(ihowmany + istrtwrite), -2, 0 
+ireadindx =         istrtindx 
+loop: 
+ival      tab_i     ireadindx, isrc 
+          tabw_i    ival, istrtwrite, icop 
+istrtwrite =        istrtwrite + 1 
+          loop_lt   ireadindx, 1, istrtindx+ihowmany, loop 
+          xout      icop 
   endop
 
   opcode FreqByECRTab, i, iii
@@ -101,190 +101,190 @@ istrtwrite	=		istrtwrite + 1
 ;if the second value is 0, ift is considered to be a centlist
 ;if the second value is 1, ift is considered to be a list of proportions
 ;else the second value is read as the number of equal tempered steps in the unit multiplier (e.g. 12 gives the usual keyboard tuning with a ratio of 12th root by 2 for each step when the first table value is 2)
-ift, iref_freq, istep xin
-ifirst		tab_i		0, ift; unit multiplier
-isecond	tab_i		1, ift; 0=centlist, 1=ratios, else=equal tempered
+ift, iref_freq, istep xin 
+ifirst    tab_i     0, ift; unit multiplier 
+isecond   tab_i     1, ift; 0=centlist, 1=ratios, else=equal tempered 
 if isecond == 0 then
-iftcent	TabMkPartCp_i ift, 1, ftlen(ift)-1
-ifreq		FreqByCentTab iftcent, iref_freq, ifirst, istep
+iftcent TabMkPartCp_i ift, 1, ftlen(ift)-1 
+ifreq FreqByCentTab iftcent, iref_freq, ifirst, istep 
 elseif isecond == 1 then
-iftratios	TabMkPartCp_i ift, 1, ftlen(ift)-1
-ifreq		FreqByRatioTab iftratios, iref_freq, ifirst, istep
-else
-ifreq		FreqByEqScale iref_freq, ifirst, isecond, istep
+iftratios TabMkPartCp_i ift, 1, ftlen(ift)-1 
+ifreq FreqByRatioTab iftratios, iref_freq, ifirst, istep 
+          else 
+ifreq FreqByEqScale iref_freq, ifirst, isecond, istep 
 endif
-		xout		ifreq
+          xout      ifreq 
   endop
 
   opcode MidiNoteIn, kkk, 0
   ;returns channel, key and velocity from a MIDI Note-On event. if no note-on event is received, -1 is returned for all three output values
-keventin, kchanin, knotin, kvelin midiin
+keventin, kchanin, knotin, kvelin midiin 
 if keventin == 144 then
-kchan		=		kchanin
-knot		=		knotin
-kvel		=		kvelin
-else
-kchan		=		-1
-knot		=		-1
-kvel		=		-1
+kchan     =         kchanin 
+knot      =         knotin 
+kvel      =         kvelin 
+          else 
+kchan     =         -1 
+knot      =         -1 
+kvel      =         -1 
 endif
-		xout		kchan, knot, kvel
+          xout      kchan, knot, kvel 
   endop
 
   opcode StrayGetEl, ii, Sijj
   ;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
-Stray, ielindx, isepA, isepB xin
+Stray, ielindx, isepA, isepB xin 
  ;DEFINE THE SEPARATORS
-isep1		=		(isepA == -1 ? 32 : isepA)
-isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-Sep1		sprintf	"%c", isep1
-Sep2		sprintf	"%c", isep2
+isep1     =         (isepA == -1 ? 32 : isepA) 
+isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB)) 
+Sep1      sprintf   "%c", isep1 
+Sep2      sprintf   "%c", isep2 
  ;INITIALIZE SOME PARAMETERS
-ilen		strlen		Stray
-istartsel	=		-1; startindex for searched element
-iendsel	=		-1; endindex for searched element
-iel		=		0; actual number of element while searching
-iwarleer	=		1
-indx		=		0
+ilen      strlen    Stray 
+istartsel =         -1; startindex for searched element 
+iendsel   =         -1; endindex for searched element 
+iel       =         0; actual number of element while searching 
+iwarleer  =         1 
+indx      =         0 
  if ilen == 0 igoto end ;don't go into the loop if Stray is empty
-loop:
-Snext		strsub		Stray, indx, indx+1; next sign
-isep1p		strcmp		Snext, Sep1; returns 0 if Snext is sep1
-isep2p		strcmp		Snext, Sep2; 0 if Snext is sep2
+loop: 
+Snext     strsub    Stray, indx, indx+1; next sign 
+isep1p    strcmp    Snext, Sep1; returns 0 if Snext is sep1 
+isep2p    strcmp    Snext, Sep2; 0 if Snext is sep2 
  ;NEXT SIGN IS NOT SEP1 NOR SEP2
 if isep1p != 0 && isep2p != 0 then
  if iwarleer == 1 then; first character after a separator 
   if iel == ielindx then; if searched element index
-istartsel	=		indx; set it
-iwarleer	=		0
-  else 			;if not searched element index
-iel		=		iel+1; increase it
-iwarleer	=		0; log that it's not a separator 
+istartsel =         indx; set it 
+iwarleer  =         0 
+          else      ;if not searched element index 
+iel       =         iel+1; increase it 
+iwarleer  =         0; log that it's not a separator 
   endif 
  endif 
  ;NEXT SIGN IS SEP1 OR SEP2
-else 
+          else 
  if istartsel > -1 then; if this is first selector after searched element
-iendsel	=		indx; set iendsel
-		igoto		end ;break
- else	
-iwarleer	=		1
+iendsel   =         indx; set iendsel 
+          igoto     end ;break 
+          else 
+iwarleer  =         1 
  endif 
 endif
-		loop_lt	indx, 1, ilen, loop 
-end: 		xout		istartsel, iendsel
+          loop_lt   indx, 1, ilen, loop 
+end:      xout      istartsel, iendsel 
   endop 
 
   opcode StrayLen, i, Sjj
   ;returns the number of elements in Stray. elements are defined by two separators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one separator is used, isep2 equals isep1
-Stray, isepA, isepB xin
+Stray, isepA, isepB xin 
  ;DEFINE THE SEPARATORS
-isep1		=		(isepA == -1 ? 32 : isepA)
-isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-Sep1		sprintf	"%c", isep1
-Sep2		sprintf	"%c", isep2
+isep1     =         (isepA == -1 ? 32 : isepA) 
+isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB)) 
+Sep1      sprintf   "%c", isep1 
+Sep2      sprintf   "%c", isep2 
  ;INITIALIZE SOME PARAMETERS
-ilen		strlen		Stray
-icount		=		0; number of elements
-iwarsep	=		1
-indx		=		0
+ilen      strlen    Stray 
+icount    =         0; number of elements 
+iwarsep   =         1 
+indx      =         0 
  if ilen == 0 igoto end ;don't go into the loop if String is empty
-loop:
-Snext		strsub		Stray, indx, indx+1; next sign
-isep1p		strcmp		Snext, Sep1; returns 0 if Snext is sep1
-isep2p		strcmp		Snext, Sep2; 0 if Snext is sep2
+loop: 
+Snext     strsub    Stray, indx, indx+1; next sign 
+isep1p    strcmp    Snext, Sep1; returns 0 if Snext is sep1 
+isep2p    strcmp    Snext, Sep2; 0 if Snext is sep2 
  if isep1p == 0 || isep2p == 0 then; if sep1 or sep2
-iwarsep	=		1; tell the log so
- else 				; if not 
+iwarsep   =         1; tell the log so 
+          else      ; if not 
   if iwarsep == 1 then	; and has been sep1 or sep2 before
-icount		=		icount + 1; increase counter
-iwarsep	=		0; and tell you are ot sep1 nor sep2 
+icount    =         icount + 1; increase counter 
+iwarsep   =         0; and tell you are ot sep1 nor sep2 
   endif 
  endif	
-		loop_lt	indx, 1, ilen, loop 
-end: 		xout		icount
+          loop_lt   indx, 1, ilen, loop 
+end:      xout      icount 
   endop 
 
   opcode StrayNumToFt, ii, Sojj
   ;puts all numbers in Stray (which must not contain non-numerical elements) in a function table and returns its variable ift (which is produced by iftno, default=0) and the length of the elements written in it ilen. simple math expressions like +, -, *, /, ^ and % are allowed (no parentheses at the moment). elements are defined by two separators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one separator is used, isep2 equals isep1.
 ;requires the UDOs StrayLen and StrayGetEl
-Stray, iftno, isepA, isepB xin
-isep1		=		(isepA == -1 ? 32 : isepA)
-isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-Sep1		sprintf	"%c", isep1
-Sep2		sprintf	"%c", isep2
-ilen		StrayLen	Stray, isep1, isep2
-iftsize	=		(ilen < 2 ? 2 : ilen)
-ift		ftgen		iftno, 0, -iftsize, -2, 0 
+Stray, iftno, isepA, isepB xin 
+isep1     =         (isepA == -1 ? 32 : isepA) 
+isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB)) 
+Sep1      sprintf   "%c", isep1 
+Sep2      sprintf   "%c", isep2 
+ilen StrayLen Stray, isep1, isep2 
+iftsize   =         (ilen < 2 ? 2 : ilen) 
+ift       ftgen     iftno, 0, -iftsize, -2, 0 
 if ilen == 0 igoto end 
-indx		=		0
-loop:	
-istrt, iend	StrayGetEl	Stray, indx, isep1, isep2
-Snum		strsub		Stray, istrt, iend
+indx      =         0 
+loop: 
+istrt, iend StrayGetEl Stray, indx, isep1, isep2 
+Snum      strsub    Stray, istrt, iend 
 ;test if Snum is an math expression
-isum		strindex	Snum, "+"; sum
-idif		strindex	Snum, "-"; difference
-ipro		strindex	Snum, "*"; product
-irat		strindex	Snum, "/"; ratio
-ipow		strindex	Snum, "^"; power
-imod		strindex	Snum, "%"; modulo
+isum      strindex  Snum, "+"; sum 
+idif      strindex  Snum, "-"; difference 
+ipro      strindex  Snum, "*"; product 
+irat      strindex  Snum, "/"; ratio 
+ipow      strindex  Snum, "^"; power 
+imod      strindex  Snum, "%"; modulo 
  if ipow > -1 then
-ifirst		strindex	Snum, "^"
-S1		strsub		Snum, 0, ifirst
-S2		strsub		Snum, ifirst+1
-iratio		strindex	S2, "/"
-ifirst		strtod		S1
+ifirst    strindex  Snum, "^" 
+S1        strsub    Snum, 0, ifirst 
+S2        strsub    Snum, ifirst+1 
+iratio    strindex  S2, "/" 
+ifirst    strtod    S1 
   if iratio == -1 then
-isec		strtod		S2
-  else
-Snumer		strsub		S2, 0, iratio
-Sdenom		strsub		S2, iratio+1
-inumer		strtod		Snumer
-idenom		strtod		Sdenom
-isec		=		inumer / idenom
+isec      strtod    S2 
+          else 
+Snumer    strsub    S2, 0, iratio 
+Sdenom    strsub    S2, iratio+1 
+inumer    strtod    Snumer 
+idenom    strtod    Sdenom 
+isec      =         inumer / idenom 
   endif
-inum		=		ifirst ^ isec
+inum      =         ifirst ^ isec 
  elseif imod > -1 then
-ifirst		strindex	Snum, "%"
-S1		strsub		Snum, 0, ifirst
-S2		strsub		Snum, ifirst+1
-ifirst		strtod		S1
-isec		strtod		S2
-inum		=		ifirst % isec
+ifirst    strindex  Snum, "%" 
+S1        strsub    Snum, 0, ifirst 
+S2        strsub    Snum, ifirst+1 
+ifirst    strtod    S1 
+isec      strtod    S2 
+inum      =         ifirst % isec 
  elseif ipro > -1 then
-ifirst		strindex	Snum, "*"
-S1		strsub		Snum, 0, ifirst
-S2		strsub		Snum, ifirst+1
-ifirst		strtod		S1
-isec		strtod		S2
-inum		=		ifirst * isec
+ifirst    strindex  Snum, "*" 
+S1        strsub    Snum, 0, ifirst 
+S2        strsub    Snum, ifirst+1 
+ifirst    strtod    S1 
+isec      strtod    S2 
+inum      =         ifirst * isec 
  elseif irat > -1 then
-ifirst		strindex	Snum, "/"
-S1		strsub		Snum, 0, ifirst
-S2		strsub		Snum, ifirst+1
-ifirst		strtod		S1
-isec		strtod		S2
-inum		=		ifirst / isec
+ifirst    strindex  Snum, "/" 
+S1        strsub    Snum, 0, ifirst 
+S2        strsub    Snum, ifirst+1 
+ifirst    strtod    S1 
+isec      strtod    S2 
+inum      =         ifirst / isec 
  elseif isum > -1 then 
-ifirst		strindex	Snum, "+"
-S1		strsub		Snum, 0, ifirst
-S2		strsub		Snum, ifirst+1
-ifirst		strtod		S1
-isec		strtod		S2
-inum		=		ifirst + isec
+ifirst    strindex  Snum, "+" 
+S1        strsub    Snum, 0, ifirst 
+S2        strsub    Snum, ifirst+1 
+ifirst    strtod    S1 
+isec      strtod    S2 
+inum      =         ifirst + isec 
  elseif idif > -1 then
-ifirst		strrindex	Snum, "-";(last occurrence: -3-4 is possible, but not 3--4)
-S1		strsub		Snum, 0, ifirst
-S2		strsub		Snum, ifirst+1
-ifirst		strtod		S1
-isec		strtod		S2
-inum		=		ifirst - isec
- else
-inum		strtod		Snum
+ifirst    strrindex Snum, "-";(last occurrence: -3-4 is possible, but not 3--4) 
+S1        strsub    Snum, 0, ifirst 
+S2        strsub    Snum, ifirst+1 
+ifirst    strtod    S1 
+isec      strtod    S2 
+inum      =         ifirst - isec 
+          else 
+inum      strtod    Snum 
  endif
-		tabw_i 	inum, indx, ift;write correct value as float in iftout
-		loop_lt	indx, 1, ilen, loop 
-end:		xout		ift, ilen
+          tabw_i    inum, indx, ift;write correct value as float in iftout 
+          loop_lt   indx, 1, ilen, loop 
+end:      xout      ift, ilen 
   endop 
 
   opcode ShowLED_a, 0, Sakkk
@@ -295,15 +295,15 @@ end:		xout		ift, ilen
 ;kdispfreq: refresh frequency (Hz)
 ;kdb: 1 = show in dB, 0 = show in raw amplitudes (both in the range 0-1)
 ;kdbrange: if idb=1: how many db-steps are shown (e.g. if 36 you will not see anything from a signal below -36 dB)
-Soutchan, asig, kdispfreq, kdb, kdbrange	xin
-kdispval	max_k	asig, kdispfreq, 1
+Soutchan, asig, kdispfreq, kdb, kdbrange xin 
+kdispval  max_k     asig, kdispfreq, 1 
 	if kdb != 0 then
-kdb 		= 		dbfsamp(kdispval)
-kval 		= 		(kdbrange + kdb) / kdbrange
-	else
-kval		=		kdispval
+kdb       =         dbfsamp(kdispval) 
+kval      =         (kdbrange + kdb) / kdbrange 
+          else 
+kval      =         kdispval 
 	endif
-			outvalue	Soutchan, kval
+          outvalue  Soutchan, kval 
   endop
 
   opcode ShowOver_a, 0, Sakk
@@ -313,333 +313,375 @@ kval		=		kdispval
 ;asig: audio signal which is to displayed
 ;kdispfreq: refresh frequency (Hz)
 ;khold: time in seconds to "hold the red light"
-Soutchan, asig, kdispfreq, khold	xin
-kon		init		0
-ktim		times
-kstart		init		0
-kend		init		0
-khold		=		(khold < .01 ? .01 : khold); avoiding too short hold times
-kmax		max_k		asig, kdispfreq, 1
+Soutchan, asig, kdispfreq, khold xin 
+kon       init      0 
+ktim      times 
+kstart    init      0 
+kend      init      0 
+khold     =         (khold < .01 ? .01 : khold); avoiding too short hold times 
+kmax      max_k     asig, kdispfreq, 1 
 	if kon == 0 && kmax > 1 then
-kstart		=		ktim
-kend		=		kstart + khold
-		outvalue	Soutchan, kmax
-kon		=		1
+kstart    =         ktim 
+kend      =         kstart + khold 
+          outvalue  Soutchan, kmax 
+kon       =         1 
 	endif
 	if kon == 1 && ktim > kend then
-		outvalue	Soutchan, 0
-kon		=		0
+          outvalue  Soutchan, 0 
+kon       =         0 
 	endif
   endop
 
 
-instr 1; building and refreshing function tables containing scale values
-;;BUILDING FUNCTION TABLES 1-30 FROM THE LINE EDIT WIDGETS
-build:
-istart 	= 		1
-loop:
-Sinvchn 	sprintf 	"scale%d", istart
-Stray 		invalue 	Sinvchn
-ift, ilen StrayNumToFt 	Stray, istart
-		loop_lt 	istart, 1, 31, loop
-		rireturn
-;;REINITIALIZE IF A SCALE HAS BEEN CHANGED
-knew		invalue	"new"
-kchange	changed	knew
+
+
+;============================================================================;
+;                                 INSTRUMENTS                                ;
+;============================================================================;
+
+  instr init
+;;INITIALIZE FUNCTION TABLES
+          event_i   "i", "refresh", 0, 1 
+;;INITIALIZE MENUS AND MESSAGES
+          outvalue  "equal_tmprd", 0 
+          outvalue  "various", 0 
+          outvalue  "bohlen-pierce", 0 
+          outvalue  "midi_event", "" 
+;;INITIALIZE SOME GLOBAL VALUES
+gkscale   init      1 
+gkreftone init      69 
+gktunfreq init      440 
+gksound   init      0 
+;;SHOW VALUES OF FIRST SCALE
+          event_i   "i", "show", 0, 1 
+;;TURN ON MASTER AND REVERB INSTRUMENT
+          event_i   "i", "master", 0, 99999 
+          event_i   "i", "reverb", 0, 99999 
+          turnoff 
+  endin
+
+
+  instr master
+
+;reduce rate to query widgets for saving cpu power
+ktrig     metro     5 
+  if ktrig == 1 then
+
+
+;;GENERAL VALUES 
+gkreftone invalue   "reftone"; any midi note number 
+gktunfreq invalue   "tunfreq"; any frequency for it 
+gksound   invalue   "sound"; select sound by menu 
+
+;;SELECT SCALE BY MENU IF CHANGED 
+kscale1   invalue   "equal_tmprd" 
+kscale2   invalue   "various" 
+kscale3   invalue   "bohlen-pierce" 
+kscact1   changed   kscale1 
+kscact2   changed   kscale2 
+kscact3   changed   kscale3 
+gkscale   =         (kscact1==1 ? kscale1+1 : (kscact2==1 ? kscale2+11 : (kscact3==1 ? kscale3+21 : gkscale))); set gkscale to new menu value if change 
+;;SHOW SELECTED SCALE TYPE AND OTHER INFOS
+ if kscact1 == 1 || kscact2 == 1 || kscact3 == 1 then
+          event     "i", "show", 0, 1 
+ endif
+ 
+;;REFRESH FTABLES IF A SCALE HAS BEEN CHANGED
+knew      invalue   "new" 
+kchange   changed   knew 
  if knew == 1 && kchange == 1 then
- 		reinit		build
+          event     "i", "refresh", 0, 1 
  endif
-endin
+
+;;READ USER INPUT FOR SELECTING SCALES BY MIDI
+gkgm1_scl invalue   "gm1_scale" 
+gkgm1_key invalue   "gm1_key" 
+gkgm1_chn invalue   "gm1_chn" 
+gkgm2_scl invalue   "gm2_scale" 
+gkgm2_key invalue   "gm2_key" 
+gkgm2_chn invalue   "gm2_chn" 
+gkgm3_scl invalue   "gm3_scale" 
+gkgm3_key invalue   "gm3_key" 
+gkgm3_chn invalue   "gm3_chn" 
+gkgm4_scl invalue   "gm4_scale" 
+gkgm4_key invalue   "gm4_key" 
+gkgm4_chn invalue   "gm4_chn" 
+gkgm5_scl invalue   "gm5_scale" 
+gkgm5_key invalue   "gm5_key" 
+gkgm5_chn invalue   "gm5_chn" 
+gkgm6_scl invalue   "gm6_scale" 
+gkgm6_key invalue   "gm6_key" 
+gkgm6_chn invalue   "gm6_chn" 
+gkgm7_scl invalue   "gm7_scale" 
+gkgm7_key invalue   "gm7_key" 
+gkgm7_chn invalue   "gm7_chn" 
+gkgm8_scl invalue   "gm8_scale" 
+gkgm8_key invalue   "gm8_key" 
+gkgm8_chn invalue   "gm8_chn" 
+
+ endif ;end of cpu saving ...
+  endin
 
 
-instr 2; select scales by midi
-;;GIVE GENERAL INFORMATION ABOUT KEY PRESSED
-kstatus, kchanin, kdata1, kdata2  midiin 
-if kstatus == 128 then
-Status		sprintfk	"%s", "Note Off"
-elseif kstatus == 144 then
-Status		sprintfk	"%s", "Note On"
-elseif kstatus == 160 then
-Status		sprintfk	"%s", "Poly Aftertouch"
-elseif kstatus == 176 then
-Status		sprintfk	"%s", "Control Change"
-elseif kstatus == 192 then
-Status		sprintfk	"%s", "Program Change"
-elseif kstatus == 208 then 
-Status 	sprintfk	"%s", "Channel Aftertouch"
-elseif kstatus == 224 then
-Status		sprintfk	"%s", "Pitch Bend"
-endif
-if kstatus > 0 then
-Smidi_event	sprintfk	"%s\nChannel = %d\nData1 = %d\nData2 = %d", Status, kchanin, kdata1, kdata2
-else
-Smidi_event	=		""
-endif
-		outvalue	"midi_event", Smidi_event
+  instr refresh; building and refreshing function tables containing scale values
+;;BUILDING FUNCTION TABLES 1-30 FROM THE LINE EDIT WIDGETS
+istart    =         1 
+loop: 
+Sinvchn   sprintf   "scale%d", istart 
+Stray     invalue   Sinvchn 
+ift, ilen StrayNumToFt Stray, istart 
+          loop_lt   istart, 1, 31, loop 
+          turnoff 
+  endin
 
-;;SELECT SCALES BY MIDI IF DESIRED KEY IS PRESSED
-kgm1_scale	invalue	"gm1_scale"
-kgm1_key	invalue	"gm1_key"
-kgm1_chn	invalue	"gm1_chn"
-kgm2_scale	invalue	"gm2_scale"
-kgm2_key	invalue	"gm2_key"
-kgm2_chn	invalue	"gm2_chn"
-kgm3_scale	invalue	"gm3_scale"
-kgm3_key	invalue	"gm3_key"
-kgm3_chn	invalue	"gm3_chn"
-kgm4_scale	invalue	"gm4_scale"
-kgm4_key	invalue	"gm4_key"
-kgm4_chn	invalue	"gm4_chn"
-kgm5_scale	invalue	"gm5_scale"
-kgm5_key	invalue	"gm5_key"
-kgm5_chn	invalue	"gm5_chn"
-kgm6_scale	invalue	"gm6_scale"
-kgm6_key	invalue	"gm6_key"
-kgm6_chn	invalue	"gm6_chn"
-kgm7_scale	invalue	"gm7_scale"
-kgm7_key	invalue	"gm7_key"
-kgm7_chn	invalue	"gm7_chn"
-kgm8_scale	invalue	"gm8_scale"
-kgm8_key	invalue	"gm8_key"
-kgm8_chn	invalue	"gm8_chn"
-kchan, key, k0 MidiNoteIn; get midi channel and key number from the current note-on event
-if key == -1 kgoto end; don't do anything if no note-on received
-if kchan == kgm1_chn && key == kgm1_key then
-kscale		=		kgm1_scale
-kchange	=		1
-elseif kchan == kgm2_chn && key == kgm2_key then
-kscale		=		kgm2_scale
-kchange	=		1
-elseif kchan == kgm3_chn && key == kgm3_key then
-kscale		=		kgm3_scale
-kchange	=		1
-elseif kchan == kgm4_chn && key == kgm4_key then
-kscale		=		kgm4_scale
-kchange	=		1
-elseif kchan == kgm5_chn && key == kgm5_key then
-kscale		=		kgm5_scale
-kchange	=		1
-elseif kchan == kgm6_chn && key == kgm6_key then
-kscale		=		kgm6_scale
-kchange	=		1
-elseif kchan == kgm7_chn && key == kgm7_key then
-kscale		=		kgm7_scale
-kchange	=		1
-elseif kchan == kgm8_chn && key == kgm8_key then
-kscale		=		kgm8_scale
-kchange	=		1
-else; if key pressed but not one of the defined
-kchange	=		0
-endif
-if kchange == 1 then; if one of the defined keys has been pressed
-gkscale	= kscale+1; set gkscale to the new value
-endif
-end:
-endin
-
-instr 3; set general values by widgets and select scale by menu
-;;GENERAL VALUES
-gkreftone	invalue	"reftone"; any midi note number
-gktunfreq	invalue	"tunfreq"; any frequency for it
-gksound	invalue	"sound"; select sound by menu
-;;SELECT SCALE BY MENU IF CHANGED
-kscale1	invalue	"equal_tmprd"
-kscale2	invalue	"various"
-kscale3	invalue	"bohlen-pierce"
-kscactive1	changed	kscale1
-kscactive2	changed	kscale2
-kscactive3	changed	kscale3
-gkscale	=		(kscactive1==1 ? kscale1+1 : (kscactive2==1 ? kscale2+11 : (kscactive3==1 ? kscale3+21 : gkscale))); set gkscale to new menu value if changed
-		outvalue	"scsel1", (gkscale < 11 ? 1 : 0)
-		outvalue	"scsel2", (gkscale > 10 && gkscale < 21 ? 1 : 0)
-		outvalue	"scsel3", (gkscale > 20 ? 1 : 0)
-endin
-
-instr 4; show scale info and set menu if changed by MIDI (instr 2)
- ;EQUAL TEMPERED
- if gkscale == 1 then	;halftone
-Sinfo		sprintfk	"1 Halftone\n12 steps per octave with a ratio of 12th root of 2 = %f...", 2^(1/12)
-		outvalue	"equal_tmprd", 0
- elseif gkscale == 2 then	;thirdtone
-Sinfo		sprintfk	"2 Thirdtone\n18 steps per octave with a ratio of 18th root of 2 = %f...", 2^(1/18)
-		outvalue	"equal_tmprd", 1
- elseif gkscale == 3 then	;quartertone
-Sinfo		sprintfk	"3 Quartertone\n24 steps per octave with a ratio of 24th root of 2 = %f...", 2^(1/24)
-		outvalue	"equal_tmprd", 2
- elseif gkscale == 4 then	;fifthtone
-Sinfo		sprintfk	"4 Fifthtone\n30 steps per octave with a ratio of 30th root of 2 = %f...", 2^(1/30)
-		outvalue	"equal_tmprd", 3
- elseif gkscale == 5 then	;sixthtone
-Sinfo		sprintfk	"5 Sixthtone\n36 steps per octave with a ratio of 36th root of 2 = %f...", 2^(1/36)
-		outvalue	"equal_tmprd", 4
- elseif gkscale == 6 then	;eighttone
-Sinfo		sprintfk	"6 Eighttone\n48 steps per octave with a ratio of 48th root of 2 = %f...", 2^(1/48)
-		outvalue	"equal_tmprd", 5
- elseif gkscale == 7 then	;twelfsttone
-Sinfo		sprintfk	"7 Twelfsttone\n72 steps per octave with a ratio of 72th root of 2 = %f...", 2^(1/72)
-		outvalue	"equal_tmprd", 6
- elseif gkscale == 8 then	;sixteenthtone
-Sinfo		sprintfk	"8 Sixteenthtone\n96 steps per octave with a ratio of 96th root of 2 = %f...", 2^(1/96)
-		outvalue	"equal_tmprd", 7
- elseif gkscale == 9 then	;stockhausen scale in "studie ii"
-Sinfo		sprintfk	"9 Stockhausen Scale in 'Studie II'\n25 steps per 1:5 with a ratio of 25th root of 5 = %f...", 5^(1/25)
-		outvalue	"equal_tmprd", 8
- elseif gkscale == 10 then	;user defined
-Sinfo		sprintfk	"%s", "10 User defined\nYou can add your own description in the code at instr 4"
-		outvalue	"equal_tmprd", 9
+  
+  instr show; show scale info and set menu if changed
+  ;EQUAL TEMPERED
+ if i(gkscale) == 1 then	;halftone
+Sinfo     sprintf   "1 Halftone\n12 steps per octave with a ratio of 12th root of 2 = %f...", 2^(1/12) 
+          outvalue  "equal_tmprd", 0 
+ elseif i(gkscale) == 2 then	;thirdtone
+Sinfo     sprintf   "2 Thirdtone\n18 steps per octave with a ratio of 18th root of 2 = %f...", 2^(1/18) 
+          outvalue  "equal_tmprd", 1 
+ elseif i(gkscale) == 3 then	;quartertone
+Sinfo     sprintf   "3 Quartertone\n24 steps per octave with a ratio of 24th root of 2 = %f...", 2^(1/24) 
+          outvalue  "equal_tmprd", 2 
+ elseif i(gkscale) == 4 then	;fifthtone
+Sinfo     sprintf   "4 Fifthtone\n30 steps per octave with a ratio of 30th root of 2 = %f...", 2^(1/30) 
+          outvalue  "equal_tmprd", 3 
+ elseif i(gkscale) == 5 then	;sixthtone
+Sinfo     sprintf   "5 Sixthtone\n36 steps per octave with a ratio of 36th root of 2 = %f...", 2^(1/36) 
+          outvalue  "equal_tmprd", 4 
+ elseif i(gkscale) == 6 then	;eighttone
+Sinfo     sprintf   "6 Eighttone\n48 steps per octave with a ratio of 48th root of 2 = %f...", 2^(1/48) 
+          outvalue  "equal_tmprd", 5 
+ elseif i(gkscale) == 7 then	;twelfsttone
+Sinfo     sprintf   "7 Twelfsttone\n72 steps per octave with a ratio of 72th root of 2 = %f...", 2^(1/72) 
+          outvalue  "equal_tmprd", 6 
+ elseif i(gkscale) == 8 then	;sixteenthtone
+Sinfo     sprintf   "8 Sixteenthtone\n96 steps per octave with a ratio of 96th root of 2 = %f...", 2^(1/96) 
+          outvalue  "equal_tmprd", 7 
+ elseif i(gkscale) == 9 then	;stockhausen scale in "studie ii"
+Sinfo     sprintf   "9 Stockhausen Scale in 'Studie II'\n25 steps per 1:5 with a ratio of 25th root of 5 = %f...", 5^(1/25) 
+          outvalue  "equal_tmprd", 8 
+ elseif i(gkscale) == 10 then	;user defined
+Sinfo     sprintf   "%s", "10 User defined\nYou can add your own description in the code at instr 4" 
+          outvalue  "equal_tmprd", 9 
  ;VARIOUS TEMPERED
- elseif gkscale == 11 then		;pythagorean
-Sinfo		sprintfk	"%s", "11 Pythagorean chromatic scale (14th century) with ratios\n1, 2187/2048, 9/8, 32/27, 81/64, 4/3, 729/512, 3/2, 6561/4096, 27/16, 16/9, 243/128\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 41)"
-		outvalue	"various", 0
- elseif gkscale == 12 then	;zarlino / meantone
-Sinfo		sprintfk	"%s", "12 Meantone temperature after Zarlino 1571 with cent values\n0, 76, 193, 310, 386, 503, 579, 697, 773, 890, 1007, 1083\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 68)"
-		outvalue	"various", 1
- elseif gkscale == 13 then	;werckmeister III
-Sinfo		sprintfk	"%s", "13 Werckmeister III temperature (1691) with cent values\n0, 90, 192, 294, 390, 498, 588, 696, 792, 888, 996, 1092\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 97)"
-		outvalue	"various", 2
- elseif gkscale == 14 then	;kirnberger II
-Sinfo		sprintfk	"%s", "14 Kirnberger II temperature (1771) with cent values\n0, 90, 204, 294, 386, 498, 590, 702, 792, 895, 996, 1088\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 100)"
-		outvalue	"various", 3
- elseif gkscale == 15 then	;sruti I
-Sinfo		sprintfk	"%s", "15 Sruti I:\n22 steps per octave in indian classical music with cent values \n0, 90, 112, 182, 204, 294, 316, 386, 408, 498, 520, 590, 610, 702, 792, 814, 884, 906, 996, 1018, 1088, 1110\n(after P. Sambamoorthy, South Indian, Music, Book IV, Second Edition, Madras 1954, pp 95-97)"
-		outvalue	"various", 4
- elseif gkscale == 16 then	;sruti II
-Sinfo		sprintfk	"%s", "16 Sruti II:\n22 steps per octave in indian clssical music with cent values\n0, 68.6, 135.3, 200.21, 263.46, 325.13, 385.33, 444.13, 501.62, 557.85, 612.91, 666.85, 719.73, 771.6, 822.5, 872.48, 921.59, 969.86, 1017.33, 1064.04, 1110.01, 1155.28\n(after Narsing R. Eswara, Tonal Foundations of Indian Music, 2007, Appendix A.4)"
-		outvalue	"various", 5
- elseif gkscale == 17 then	;user defined
-Sinfo		sprintfk	"%s", "17 User defined\nYou can add your own description in the code at instr 4"
-		outvalue	"various", 6
- elseif gkscale == 18 then	;user defined
-Sinfo		sprintfk	"%s", "18 User defined\nYou can add your own description in the code at instr 4"
-		outvalue	"various", 7
- elseif gkscale == 19 then	;user defined
-Sinfo		sprintfk	"%s", "19 User defined\nYou can add your own description in the code at instr 4"
-		outvalue	"various", 8
- elseif gkscale == 20 then	;user defined
-Sinfo		sprintfk	"%s", "20 User defined\nYou can add your own description in the code at instr 4"
-		outvalue	"various", 9
+ elseif i(gkscale) == 11 then		;pythagorean
+Sinfo     sprintf   "%s", "11 Pythagorean chromatic scale (14th century) with ratios\n1, 2187/2048, 9/8, 32/27, 81/64, 4/3, 729/512, 3/2, 6561/4096, 27/16, 16/9, 243/128\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 41)" 
+          outvalue  "various", 0 
+ elseif i(gkscale) == 12 then	;zarlino / meantone
+Sinfo     sprintf   "%s", "12 Meantone temperature after Zarlino 1571 with cent values\n0, 76, 193, 310, 386, 503, 579, 697, 773, 890, 1007, 1083\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 68)" 
+          outvalue  "various", 1 
+ elseif i(gkscale) == 13 then	;werckmeister III
+Sinfo     sprintf   "%s", "13 Werckmeister III temperature (1691) with cent values\n0, 90, 192, 294, 390, 498, 588, 696, 792, 888, 996, 1092\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 97)" 
+          outvalue  "various", 2 
+ elseif i(gkscale) == 14 then	;kirnberger II
+Sinfo     sprintf   "%s", "14 Kirnberger II temperature (1771) with cent values\n0, 90, 204, 294, 386, 498, 590, 702, 792, 895, 996, 1088\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 100)" 
+          outvalue  "various", 3 
+ elseif i(gkscale) == 15 then	;sruti I
+Sinfo     sprintf   "%s", "15 Sruti I:\n22 steps per octave in indian classical music with cent values \n0, 90, 112, 182, 204, 294, 316, 386, 408, 498, 520, 590, 610, 702, 792, 814, 884, 906, 996, 1018, 1088, 1110\n(after P. Sambamoorthy, South Indian, Music, Book IV, Second Edition, Madras 1954, pp 95-97)" 
+          outvalue  "various", 4 
+ elseif i(gkscale) == 16 then	;sruti II
+Sinfo     sprintf   "%s", "16 Sruti II:\n22 steps per octave in indian clssical music with cent values\n0, 68.6, 135.3, 200.21, 263.46, 325.13, 385.33, 444.13, 501.62, 557.85, 612.91, 666.85, 719.73, 771.6, 822.5, 872.48, 921.59, 969.86, 1017.33, 1064.04, 1110.01, 1155.28\n(after Narsing R. Eswara, Tonal Foundations of Indian Music, 2007, Appendix A.4)" 
+          outvalue  "various", 5 
+ elseif i(gkscale) == 17 then	;user defined
+Sinfo     sprintf   "%s", "17 User defined\nYou can add your own description in the code at instr 4" 
+          outvalue  "various", 6 
+ elseif i(gkscale) == 18 then	;user defined
+Sinfo     sprintf   "%s", "18 User defined\nYou can add your own description in the code at instr 4" 
+          outvalue  "various", 7 
+ elseif i(gkscale) == 19 then	;user defined
+Sinfo     sprintf   "%s", "19 User defined\nYou can add your own description in the code at instr 4" 
+          outvalue  "various", 8 
+ elseif i(gkscale) == 20 then	;user defined
+Sinfo     sprintf   "%s", "20 User defined\nYou can add your own description in the code at instr 4" 
+          outvalue  "various", 9 
  ;BOHLEN-PIERCE
- elseif gkscale == 21 then	;equal tempered (13 steps)
-Sinfo		sprintfk	"21 Bohlen-Pierce Equal Tempered:\n13 steps per 3:1 (duodecima) with a ratio of 13th root of 3 = %f...", 3^(1/13)
-		outvalue	"bohlen-pierce", 0
- elseif gkscale == 22 then	;ratios (13 steps)
-Sinfo		sprintfk	"%s", "22 Bohlen-Pierce Ratios:\n13 steps per 3:1 (duodecima) with ratios 1, 27/25, 25/21, 9/7, 7/5, 75/49, 5/3, 9/5, 49/25, 15/7, 7/3, 63/25, 25/9"
-		outvalue	"bohlen-pierce", 1
- elseif gkscale == 23 then	;Dur I (9 steps)
-Sinfo		sprintfk	"%s", "23 Bohlen-Pierce Dur I Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 49/25, 7/3, 63/25"
-		outvalue	"bohlen-pierce", 2
- elseif gkscale == 24 then	;Dur II (9 steps)
-Sinfo		sprintfk	"%s", "24 Bohlen-Pierce Dur II Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 25/21, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 63/25"
-		outvalue	"bohlen-pierce", 3
- elseif gkscale == 25 then	;Moll I (9 steps)
-Sinfo		sprintfk	"%s", "25 Bohlen-Pierce Moll I Mode (Delta):\n9 steps per 3:1 (duodecima) with ratios 1, 25/21, 9/7, 75/49, 5/3, 9/5, 15/7, 7/3, 25/9"
-		outvalue	"bohlen-pierce", 4
- elseif gkscale == 26 then	;Moll II (9 steps)
-Sinfo		sprintfk	"%s", "26 Bohlen-Pierce Moll II Mode (Pierce):\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 25/9"
-		outvalue	"bohlen-pierce", 5
- elseif gkscale == 27 then	;Gamma (9 steps)
-Sinfo		sprintfk	"%s", "27 Bohlen-Pierce Gamma Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 49/25, 7/3, 25/9"
-		outvalue	"bohlen-pierce", 6
- elseif gkscale == 28 then	;Harmonic (9 steps)
-Sinfo		sprintfk	"%s", "28 Bohlen-Pierce Harmonic Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 63/25"
-		outvalue	"bohlen-pierce", 7
- elseif gkscale == 29 then	;Lambda (9 steps)
-Sinfo		sprintfk	"%s", "29 Bohlen-Pierce Lambda Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 25/21, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 25/9"
-		outvalue	"bohlen-pierce", 8
- elseif gkscale == 30 then	;user defined
-Sinfo		sprintfk	"%s", "30 User defined\nYou can add your own description in the code at instr 4"
-		outvalue	"bohlen-pierce", 9
+ elseif i(gkscale) == 21 then	;equal tempered (13 steps)
+Sinfo     sprintf   "21 Bohlen-Pierce Equal Tempered:\n13 steps per 3:1 (duodecima) with a ratio of 13th root of 3 = %f...", 3^(1/13) 
+          outvalue  "bohlen-pierce", 0 
+ elseif i(gkscale) == 22 then	;ratios (13 steps)
+Sinfo     sprintf   "%s", "22 Bohlen-Pierce Ratios:\n13 steps per 3:1 (duodecima) with ratios 1, 27/25, 25/21, 9/7, 7/5, 75/49, 5/3, 9/5, 49/25, 15/7, 7/3, 63/25, 25/9" 
+          outvalue  "bohlen-pierce", 1 
+ elseif i(gkscale) == 23 then	;Dur I (9 steps)
+Sinfo     sprintf   "%s", "23 Bohlen-Pierce Dur I Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 49/25, 7/3, 63/25" 
+          outvalue  "bohlen-pierce", 2 
+ elseif i(gkscale) == 24 then	;Dur II (9 steps)
+Sinfo     sprintf   "%s", "24 Bohlen-Pierce Dur II Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 25/21, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 63/25" 
+          outvalue  "bohlen-pierce", 3 
+ elseif i(gkscale) == 25 then	;Moll I (9 steps)
+Sinfo     sprintf   "%s", "25 Bohlen-Pierce Moll I Mode (Delta):\n9 steps per 3:1 (duodecima) with ratios 1, 25/21, 9/7, 75/49, 5/3, 9/5, 15/7, 7/3, 25/9" 
+          outvalue  "bohlen-pierce", 4 
+ elseif i(gkscale) == 26 then	;Moll II (9 steps)
+Sinfo     sprintf   "%s", "26 Bohlen-Pierce Moll II Mode (Pierce):\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 25/9" 
+          outvalue  "bohlen-pierce", 5 
+ elseif i(gkscale) == 27 then	;Gamma (9 steps)
+Sinfo     sprintf   "%s", "27 Bohlen-Pierce Gamma Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 49/25, 7/3, 25/9" 
+          outvalue  "bohlen-pierce", 6 
+ elseif i(gkscale) == 28 then	;Harmonic (9 steps)
+Sinfo     sprintf   "%s", "28 Bohlen-Pierce Harmonic Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 63/25" 
+          outvalue  "bohlen-pierce", 7 
+ elseif i(gkscale) == 29 then	;Lambda (9 steps)
+Sinfo     sprintf   "%s", "29 Bohlen-Pierce Lambda Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 25/21, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 25/9" 
+          outvalue  "bohlen-pierce", 8 
+ elseif i(gkscale) == 30 then	;user defined
+Sinfo     sprintf   "%s", "30 User defined\nYou can add your own description in the code at instr 4" 
+          outvalue  "bohlen-pierce", 9 
  endif
-		outvalue	"info", Sinfo
-endin
+          outvalue  "scsel1", (i(gkscale) < 11 ? 1 : 0) 
+          outvalue  "scsel2", (i(gkscale) > 10 && i(gkscale) < 21 ? 1 : 0) 
+          outvalue  "scsel3", (i(gkscale) > 20 ? 1 : 0) 
+          outvalue  "info", Sinfo 
+          turnoff 
+  endin
 
-instr 10; playing one note
+
+  instr show_mid_event
+ikey      =         p4 
+ivel      =         p5 
+ichn      =         p6 
+Smidi_event sprintf "Key = %d\nVelocity = %d\nChannel = %d\n", ikey, ivel, ichn 
+          outvalue  "midi_event", Smidi_event 
+          turnoff 
+  endin
+  
+  
+
+  instr show_output 
+;;SHOW OUTPUT OUT THE CURRENT EVENT 
+ikey      =         p4 
+ifreq     =         p5 
+Skey      sprintf   "%d", ikey 
+          outvalue  "key", Skey; key pressed 
+icent     =         (log(ifreq / i(gktunfreq)) * 1200) / log(2) 
+Scent     sprintf   "%.1f", icent 
+          outvalue  "cent", Scent; cent difference in relation to the reference frequency 
+          outvalue  "freq", ifreq 
+inormfreq =         cpsmidinn(ikey); usual freq of the pressed key 
+          outvalue  "normfreq", inormfreq 
+icentdiff =         1200 * (log(ifreq/inormfreq) / log(2)); centdifference ifreq to inormfreq 
+Scentdiff sprintf   "%.1f", icentdiff 
+          outvalue  "centdiff", Scentdiff 
+          turnoff 
+  endin 
+
+  instr play; playing one note
+  
 ;;INPUT
-ikey		=		p4
-ivel		=		p5
-ireftone	=		i(gkreftone)
-itunfreq	=		i(gktunfreq)
-iscale		=		i(gkscale); 1-30
-istep		=		ikey - ireftone; how many steps (keys) higher or lower than the reftone
-ifreq		FreqByECRTab	iscale, itunfreq, istep; calculation of the frequency
+ikey      notnum 
+ivel      veloc 
+ichn      midichn 
+          event_i   "i", "show_mid_event", 0, 1, ikey, ivel, ichn ;show values 
+          
+;;IS THIS A NOTE TO SELECT A SCALE (= NOT TO BE PLAYED)?
+ if ikey == i(gkgm1_key) && ichn == i(gkgm1_chn) then
+gkscale   =         gkgm1_scl+1; set gkscale to the new value 
+          event_i   "i", "show", 0, 1 
+ elseif ikey == i(gkgm2_key) && ichn == i(gkgm2_chn) then
+gkscale   =         gkgm2_scl+1 
+          event_i   "i", "show", 0, 1 
+ elseif ikey == i(gkgm3_key) && ichn == i(gkgm3_chn) then
+gkscale   =         gkgm3_scl+1 
+          event_i   "i", "show", 0, 1 
+ elseif ikey == i(gkgm4_key) && ichn == i(gkgm4_chn) then
+gkscale   =         gkgm4_scl+1 
+          event_i   "i", "show", 0, 1 
+ elseif ikey == i(gkgm5_key) && ichn == i(gkgm5_chn) then
+gkscale   =         gkgm5_scl+1 
+          event_i   "i", "show", 0, 1 
+ elseif ikey == i(gkgm6_key) && ichn == i(gkgm6_chn) then
+gkscale   =         gkgm6_scl+1 
+          event_i   "i", "show", 0, 1 
+ elseif ikey == i(gkgm7_key) && ichn == i(gkgm7_chn) then
+gkscale   =         gkgm7_scl+1 
+          event_i   "i", "show", 0, 1 
+ elseif ikey == i(gkgm8_key) && ichn == i(gkgm8_chn) then
+gkscale   =         gkgm8_scl+1 
+          event_i   "i", "show", 0, 1 
+          
+          else 
+;;PLAY THE USUAL NOTE
+ivel      =         ivel/127 
+ireftone  =         i(gkreftone) 
+itunfreq  =         i(gktunfreq) 
+iscale    =         i(i(gkscale)); 1-30 
+istep     =         ikey - ireftone; how many steps (keys) higher or lower than the reftone 
+ifreq     FreqByECRTab iscale, itunfreq, istep; calculation of the frequency 
+
 ;;SELECT OUTPUT SOUND
-if gksound == 0 then; sine
-anote		oscil3		ivel, ifreq, giSine
-elseif gksound == 1 then; saw
-;anote		vco2		ivel, ifreq, 10
-anote		oscil3		ivel, ifreq, giSaw
-elseif gksound == 2 then; square
-anote		oscil3		ivel, ifreq, giSquare
-elseif gksound == 3 then; square vco2
-anote		vco2		ivel, ifreq, 10
-elseif gksound == 4 then; waveguide clarinet
- kstiff = -0.3
-  iatt = 0.1
-  idetk = 0.1
-  kngain = 0.2
-  kvibf = 5.735
-  kvamp = 0.01
-  anote wgclar ivel, ifreq, kstiff, iatt, idetk, kngain, kvibf, kvamp, giSine
-elseif gksound == 5 then; pluck
-anote		pluck		ivel, ifreq, ifreq, 0, 1
-endif
-aenv		linsegr	0, .1, 1, p3-0.1, 1, .1, 0
-aout		=		anote * aenv; calculate sound
-gadryL		init		0
-gadryR		init		0
-gadryL		=		gadryL + aout; add to global audio signal
-gadryR		=		gadryR + aout	
-;;SHOW OUTPUT
-Skey		sprintf	"%d", ikey
-		outvalue	"key", Skey; key pressed
-icent		=		(log(ifreq / i(gktunfreq)) * 1200) / log(2)
-Scent		sprintf	"%.1f", icent
-		outvalue	"cent", Scent; cent difference in relation to the reference frequency
-		outvalue	"freq", ifreq
-inormfreq	=		cpsmidinn(p4); usual freq of the pressed key
-		outvalue	"normfreq", inormfreq
-icentdiff	=		1200 * (log(ifreq/inormfreq) / log(2)); centdifference ifreq to inormfreq
-Scentdiff	sprintf	"%.1f", icentdiff
-		outvalue	"centdiff", Scentdiff
-endin
+  if gksound == 0 then; sine
+anote     poscil    ivel, ifreq, giSine 
+  elseif gksound == 1 then; saw
+anote     poscil    ivel, ifreq, giSaw 
+  elseif gksound == 2 then; square
+anote     poscil    ivel, ifreq, giSquare 
+  elseif gksound == 3 then; square vco2
+anote     vco2      ivel, ifreq, 10 
+  elseif gksound == 4 then; pluck
+anote     pluck     ivel, ifreq, ifreq, 0, 1 
+  endif
+aenv      linsegr   0, .1, 1, p3-0.1, 1, .1, 0 
+aout      =         anote * aenv; calculate sound 
+gadry     init      0
+gadry     =         gadry + aout; add to global audio signal 
+
+;;CALL SUBINSTRUMENT TO SHOW OUTPUT
+          event_i   "i", "show_output", 0, 1, ikey, ifreq 
+          
+ endif
+  endin
 
 
-instr 100; global reverb and display
+  instr reverb; global reverb and display
+  
 ;;GUI INPUT
-kwdmix		invalue	"wdmix";(between 0=dry und 1=reverberating)
-kroomsize	invalue	"roomsize"; 0-1 (for freeverb)
-khfdamp	invalue	"hfdamp"; attenuation of high frequencies (0-1) (for freeverb)
-kvol		invalue	"vol" ;volume slider
-kvol		port		kvol, .1 ;smooth changes
+kwdmix    invalue   "wdmix";(between 0=dry und 1=reverberating) 
+kroomsize invalue   "roomsize"; 0-1 (for freeverb) 
+khfdamp   invalue   "hfdamp"; attenuation of high frequencies (0-1) (for freeverb) 
+kvol      invalue   "vol" ;volume slider 
+kvol      port      kvol, .1 ;smooth changes 
 ;;REVERB AND AUDIO OUTPUT
-awetL, awetR	freeverb	gadryL, gadryR, kroomsize, khfdamp
-aoutL		=		(1-kwdmix) * gadryL + (kwdmix * awetL)
-aoutR		=		(1-kwdmix) * gadryR + (kwdmix * awetR)
-aoutL		=		aoutL * kvol
-aoutR		=		aoutR * kvol
-		outs		aoutL, aoutR
+awetL, awetR freeverb gadry, gadry, kroomsize, khfdamp 
+aoutL     =         (1-kwdmix) * gadry + (kwdmix * awetL) 
+aoutR     =         (1-kwdmix) * gadry + (kwdmix * awetR) 
+aoutL     =         aoutL * kvol 
+aoutR     =         aoutR * kvol 
+          outs      aoutL, aoutR 
 ;;SEND TO GUI
-kTrigDisp	metro		10
-		ShowLED_a	"outL", aoutL, kTrigDisp, 1, 50
-		ShowLED_a	"outR", aoutR, kTrigDisp, 1, 50
-		ShowOver_a	"outLover", aoutL/0dbfs, kTrigDisp, 1
-		ShowOver_a	"outRover", aoutR/0dbfs, kTrigDisp, 1
+kTrigDisp metro     10 
+          ShowLED_a "outL", aoutL, kTrigDisp, 1, 50 
+          ShowLED_a "outR", aoutR, kTrigDisp, 1, 50 
+          ShowOver_a "outLover", aoutL/0dbfs, kTrigDisp, 1 
+          ShowOver_a "outRover", aoutR/0dbfs, kTrigDisp, 1 
+		
 ;;RESET GLOBAL AUDIO
-gadryL		=		0	
-gadryR		=		0
-endin
+gadry     =         0 
 
+  endin
 </CsInstruments>
 <CsScore>
-e 36000
+i "init" 0 1
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+
+
+
+
+
+
+
+
+
+
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>72</x>
- <y>179</y>
- <width>400</width>
- <height>200</height>
+ <x>115</x>
+ <y>28</y>
+ <width>1054</width>
+ <height>663</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -686,7 +728,7 @@ e 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>53</label>
+  <label>72</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -744,7 +786,7 @@ e 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>-1200.0</label>
+  <label>600.0</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -802,7 +844,7 @@ e 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>130.812</label>
+  <label>369.994</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -854,15 +896,15 @@ e 36000
   <objectName/>
   <x>736</x>
   <y>44</y>
-  <width>131</width>
+  <width>201</width>
   <height>28</height>
   <uuid>{0a533a2f-56e9-45c3-b5c5-87962ec7dcf2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>jh &amp;&amp; rb 10/2010</label>
+  <label>jh &amp;&amp; rb 2010/2012</label>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -889,7 +931,7 @@ e 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>174.609</label>
+  <label>523.251</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -947,7 +989,7 @@ e 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>-500.0</label>
+  <label>-600.0</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -1042,7 +1084,7 @@ e 36000
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Stop</objectName>
@@ -1061,7 +1103,7 @@ e 36000
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>vol</objectName>
@@ -1125,7 +1167,7 @@ e 36000
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-inf</xValue>
+  <xValue>-11.26282215</xValue>
   <yValue>0.36363600</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1191,7 +1233,7 @@ e 36000
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-inf</xValue>
+  <xValue>-11.00927296</xValue>
   <yValue>0.52631600</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1517,7 +1559,7 @@ The SECOND VALUE lets you choose between three cases:
   <uuid>{fcbc67a7-51c0-4ca5-94e3-98229024c81a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>sine</name>
@@ -1540,17 +1582,12 @@ The SECOND VALUE lets you choose between three cases:
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>waveguide-clarinet</name>
+    <name>pluck</name>
     <value>4</value>
     <stringvalue/>
    </bsbDropdownItem>
-   <bsbDropdownItem>
-    <name>pluck</name>
-    <value>5</value>
-    <stringvalue/>
-   </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>5</selectedIndex>
+  <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -2041,7 +2078,7 @@ The SECOND VALUE lets you choose between three cases:
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>9</selectedIndex>
+  <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -2136,7 +2173,7 @@ The SECOND VALUE lets you choose between three cases:
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>9</selectedIndex>
+  <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -4139,7 +4176,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.48750000</value>
+  <value>0.43125000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -4244,7 +4281,7 @@ The SECOND VALUE lets you choose between three cases:
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.30434800</value>
+  <value>0.42857143</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -4463,9 +4500,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -4519,9 +4556,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -4575,9 +4612,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -4631,9 +4668,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -4687,9 +4724,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -4743,9 +4780,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -4799,9 +4836,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -4855,9 +4892,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -4911,9 +4948,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -4956,7 +4993,7 @@ The SECOND VALUE lets you choose between three cases:
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>2 7</label>
+  <label>2 17</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -4967,9 +5004,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5023,9 +5060,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5079,9 +5116,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5135,9 +5172,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5191,9 +5228,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5247,9 +5284,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5303,9 +5340,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5359,9 +5396,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5415,9 +5452,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5471,9 +5508,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5527,9 +5564,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5583,9 +5620,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5639,9 +5676,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5695,9 +5732,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5751,9 +5788,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5807,9 +5844,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5863,9 +5900,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5919,9 +5956,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -5975,9 +6012,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -6031,9 +6068,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -6087,9 +6124,9 @@ The SECOND VALUE lets you choose between three cases:
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -6267,7 +6304,10 @@ The SECOND VALUE lets you choose between three cases:
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <label>Key = 72
+Velocity = 114
+Channel = 1
+</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -6289,174 +6329,3 @@ The SECOND VALUE lets you choose between three cases:
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 72 179 400 200
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView background {48830, 48316, 36751}
-ioText {1010, 17} {374, 773} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Scale Pool
-ioText {846, 595} {62, 27} display 53.000000 0.00100 "key" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 53
-ioText {391, 595} {457, 28} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Key Pressed
-ioText {847, 623} {82, 27} display -1200.000000 0.00100 "cent" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder -1200.0
-ioText {307, 623} {539, 27} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Cent Difference in Relation to the Reference Frequency
-ioText {847, 649} {82, 27} display 130.812000 0.00100 "freq" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 130.812
-ioText {306, 649} {542, 29} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Frequency of this Key
-ioText {736, 44} {131, 28} label 0.000000 0.00100 "" right "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder jh && rb 10/2010
-ioText {847, 675} {82, 28} display 174.609000 0.00100 "normfreq" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 174.609
-ioText {307, 675} {541, 29} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Usual Frequency of this Key
-ioText {847, 701} {82, 30} display -500.000000 0.00100 "centdiff" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder -500.0
-ioText {307, 701} {541, 31} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Cent Difference Real Frequency to Usual Frequency
-ioText {316, 476} {639, 103} display 0.000000 0.00100 "info" center "Lucida Grande" 14 {0, 0, 0} {60672, 43264, 27392} nobackground noborder 1 HalftoneÂ¬12 steps per octave with a ratio of 12th root of 2 = 1.059463...
-ioButton {466, 45} {91, 27} value 1.000000 "_Play" "START" "/" i1 0 10
-ioButton {580, 45} {91, 27} value 1.000000 "_Stop" "STOP" "/" i1 0 10
-ioSlider {314, 769} {250, 28} 0.000000 1.000000 0.548000 vol
-ioText {349, 740} {97, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Volume
-ioMeter {579, 745} {336, 22} {0, 59904, 0} "outL" -inf "out1_post" 0.363636 fill 1 0 mouse
-ioMeter {913, 745} {27, 22} {50176, 3584, 3072} "outLover" 0.000000 "outLover" 0.000000 fill 1 0 mouse
-ioMeter {579, 771} {336, 22} {0, 59904, 0} "outR" -inf "out2_post" 0.526316 fill 1 0 mouse
-ioMeter {913, 771} {27, 22} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
-ioText {444, 740} {98, 27} display 0.548000 0.00100 "vol" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.5480
-ioText {447, 7} {449, 38} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {61952, 61696, 61440} nobackground noborder PLAYING SCALES WITH A MIDI KEYBOARD
-ioText {430, 71} {576, 38} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder This CSD was designed to let you play virtually any scale with a standard MIDI keyboard. 
-ioText {431, 108} {158, 25} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder PLAYING
-ioText {431, 131} {578, 78} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Just connect your MIDI keyboard (see the Configuration panel to select the MIDI input). Press START, select a scale from one of the menus on the left, and select a sound. If you wish, you can associate and trigger up to 8 scales with specific MIDI keys thereby allowing for fast switching and easy comparison.
-ioText {431, 207} {466, 27} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder ADDING USER DEFINED or NEW SCALES
-ioText {431, 233} {583, 155} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder In the Scale Pool at the right you find a number of predefined scales. You can add any scale in the "User Defined" slots (10,17,18,19,20,30), or you can change or replace any of the scales in the following way:Â¬Type in the FIRST VALUE as the UNIT MULTIPLIER (2 = octave, 3 = perfect 12th, etc.).Â¬The SECOND VALUE lets you choose between three cases:Â¬1) if you type 0 you are giving a list of CENT values;Â¬2) if you type 1 you are giving a list of PROPORTIONS;Â¬3) any other value indicates an Equal Tempered Scale and gives as the second value the number of steps per Unit Multiplier.
-ioText {431, 387} {584, 78} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder NOTE: When you select a BP mode, it consists of 9 pitches (a unique subset of the 13 BP chromatic tones) and it is played on a MIDI keyboard chromatically starting from the REFERENCE KEY.  The 10th pitch is the "tritave" - a pure perfect 12th (an octave plus 5th) or a 3:1 frequency ratio.
-ioText {3, 33} {422, 217} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioMenu {201, 220} {165, 25} 5 303 "sine,saw,square,square vco2,waveguide-clarinet,pluck" sound
-ioText {43, 216} {160, 31} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Select Sound
-ioMeter {23, 189} {104, 23} {0, 59904, 0} "scsel1" 1.000000 "vert34" 0.434783 fill 1 0 mouse
-ioMeter {154, 189} {104, 23} {0, 59904, 0} "scsel2" 0.000000 "vert34" 0.434783 fill 1 0 mouse
-ioMeter {285, 189} {104, 23} {0, 59904, 0} "scsel3" 0.000000 "vert34" 0.434783 fill 1 0 mouse
-ioText {313, 44} {107, 26} editnum 261.625000 0.000001 "tunfreq" left "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 261.625000
-ioText {206, 44} {108, 28} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Related Pitch
-ioText {227, 65} {72, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder (Hertz)
-ioMenu {12, 167} {126, 24} 0 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 UserDefined" equal_tmprd
-ioText {10, 93} {393, 30} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Select Scale By Menu
-ioText {136, 44} {62, 26} editnum 60.000000 1.000000 "reftone" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 60.000000
-ioText {8, 44} {130, 28} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Reference Key
-ioText {8, 67} {129, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder (Midi-Number)
-ioText {15, 120} {121, 47} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Equal TemperedÂ¬(1-10)
-ioMenu {141, 167} {132, 24} 9 303 "11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined" various
-ioText {148, 120} {121, 47} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder VariousÂ¬(11-20)
-ioMenu {275, 167} {136, 24} 9 303 "21 Equal Tempered,22 Ratios,23 Dur I Mode,24 Dur II Mode,25 Moll I (Delta) Mode,26 Moll II (Pierce) Mode,27 Gamma Mode,28 Harmonic Mode,29 Lambda Mode,30 User Defined" bohlen-pierce
-ioText {278, 120} {121, 47} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Bohlen-PierceÂ¬(21-30)
-ioText {4, 256} {261, 311} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioMenu {10, 323} {108, 25} 0 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I (Delta) Mode,26 BP Moll II (Pierce) Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm1_scale
-ioText {124, 323} {61, 25} editnum 36.000000 1.000000 "gm1_key" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 36.000000
-ioText {188, 323} {61, 25} editnum 2.000000 1.000000 "gm1_chn" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2.000000
-ioText {18, 293} {83, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Scale
-ioText {125, 293} {50, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Key
-ioText {181, 293} {73, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Channel
-ioMenu {10, 354} {108, 25} 11 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I (Delta) Mode,26 BP Moll II (Pierce) Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm2_scale
-ioText {124, 354} {61, 25} editnum 37.000000 1.000000 "gm2_key" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 37.000000
-ioText {188, 354} {61, 25} editnum 2.000000 1.000000 "gm2_chn" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2.000000
-ioMenu {10, 382} {108, 25} 20 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I Mode,26 BP Moll II Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm3_scale
-ioText {124, 382} {61, 25} editnum 38.000000 1.000000 "gm3_key" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 38.000000
-ioText {188, 382} {61, 25} editnum 2.000000 1.000000 "gm3_chn" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2.000000
-ioMenu {10, 413} {108, 25} 2 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I (Delta) Mode,26 BP Moll II (Pierce) Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm4_scale
-ioText {124, 413} {61, 25} editnum 40.000000 1.000000 "gm4_key" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 40.000000
-ioText {188, 413} {61, 25} editnum 2.000000 1.000000 "gm4_chn" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2.000000
-ioMenu {10, 441} {108, 25} 25 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I Mode,26 BP Moll II Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm5_scale
-ioText {124, 441} {61, 25} editnum 41.000000 1.000000 "gm5_key" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 41.000000
-ioText {188, 441} {61, 25} editnum 2.000000 1.000000 "gm5_chn" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2.000000
-ioMenu {10, 472} {108, 25} 10 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I (Delta) Mode,26 BP Moll II (Pierce) Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm6_scale
-ioText {124, 472} {61, 25} editnum 43.000000 1.000000 "gm6_key" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 43.000000
-ioText {188, 472} {61, 25} editnum 2.000000 1.000000 "gm6_chn" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2.000000
-ioMenu {10, 500} {108, 25} 12 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I (Delta) Mode,26 BP Moll II (Pierce) Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm7_scale
-ioText {124, 500} {61, 25} editnum 45.000000 1.000000 "gm7_key" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 45.000000
-ioText {188, 500} {61, 25} editnum 2.000000 1.000000 "gm7_chn" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2.000000
-ioMenu {10, 531} {108, 25} 4 303 "1 Halftones,2 Thirdtones,3 Quartertones,4 Fifthtones,5 Sixthtones,6 Eighttones,7 Twelfthtones,8 Sixteenthtones,9 Stockhausen Studie II,10 User Defined,11 Pythagorean,12 Zarlino 1/4 Comma,13 Werckmeister III,14 Kirnberger II,15 Indian Sruti I,16 Indian Sruti II,17 User Defined,18 User Defined,19 User Defined,20 User Defined,21 BP Equal Tempered,22 BP Ratios,23 BP Dur I Mode,24 BP Dur II Mode,25 BP Moll I (Delta) Mode,26 BP Moll II (Pierce) Mode,27 BP Gamma Mode,28 BP Harmonic Mode,29 BP Lambda Mode,30 User Defined" gm8_scale
-ioText {124, 531} {61, 25} editnum 47.000000 1.000000 "gm8_key" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 47.000000
-ioText {188, 531} {61, 25} editnum 2.000000 1.000000 "gm8_chn" right "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2.000000
-ioText {9, 263} {252, 31} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Select Scale By MIDI Keys
-ioText {2, 597} {261, 201} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Reverb (freeverb)
-ioSlider {52, 642} {160, 28} 0.000000 1.000000 0.487500 wdmix
-ioText {3, 643} {49, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Dry
-ioText {212, 644} {48, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Wet
-ioText {73, 619} {109, 24} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Mix
-ioSlider {51, 694} {161, 30} 0.000000 1.000000 0.304348 roomsize
-ioText {1, 696} {50, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Small
-ioText {210, 696} {52, 24} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Large
-ioText {72, 670} {110, 24} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Room Size
-ioSlider {46, 753} {160, 31} 0.000000 1.000000 0.368750 hfdamp
-ioText {2, 756} {44, 26} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder No
-ioText {204, 757} {59, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Yes
-ioText {40, 723} {175, 30} label 0.000000 0.00100 "" center "Lucida Grande" 10 {0, 0, 0} {61952, 61696, 61440} nobackground noborder High Frequency Attenuation
-ioText {1156, 51} {220, 24} edit 0.000000 0.00100 "scale1"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 12
-ioText {1018, 50} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 1 Halftones
-ioText {1156, 75} {220, 24} edit 0.000000 0.00100 "scale2"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 18
-ioText {1018, 75} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2 Thirdtones
-ioText {1156, 99} {220, 24} edit 0.000000 0.00100 "scale3"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 24
-ioText {1018, 99} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 3 Quartertones
-ioText {1156, 124} {220, 24} edit 0.000000 0.00100 "scale4"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 30
-ioText {1018, 124} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 4 Fifthtones
-ioText {1156, 148} {220, 24} edit 0.000000 0.00100 "scale5"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 36
-ioText {1018, 148} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 5 Sixthtones
-ioText {1156, 173} {220, 24} edit 0.000000 0.00100 "scale6"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 48
-ioText {1018, 173} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 6 Eighttones
-ioText {1156, 197} {220, 24} edit 0.000000 0.00100 "scale7"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 72
-ioText {1018, 197} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 7 Twelfthtones
-ioText {1156, 222} {220, 24} edit 0.000000 0.00100 "scale8"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 96
-ioText {1018, 222} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 8 Sixteenthtones
-ioText {1156, 245} {220, 24} edit 0.000000 0.00100 "scale9"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 5 25
-ioText {1018, 245} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 9 Stockhausen Studie II
-ioText {1156, 270} {220, 24} edit 0.000000 0.00100 "scale10"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 7
-ioText {1018, 270} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 10 User Defined
-ioText {1156, 294} {220, 24} edit 0.000000 0.00100 "scale11"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 1 2187/2048 9/8 32/27 81/64 4/3 729/512 3/2 6561/4096 27/16 16/9 243/128
-ioText {1018, 294} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 11 Pythagorean
-ioText {1156, 319} {220, 24} edit 0.000000 0.00100 "scale12"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 0 76 193 310 386 503 579 697 773 890 1007 1083
-ioText {1018, 319} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 12 Zarlino 1/4 Comma
-ioText {1156, 343} {220, 24} edit 0.000000 0.00100 "scale13"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 0 90 192 294 390 498 588 696 792 888 996 1092
-ioText {1018, 343} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 13 Werckmeister III
-ioText {1156, 368} {220, 24} edit 0.000000 0.00100 "scale14"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 0 90 204 294 386 498 590 702 792 895 996 1088
-ioText {1018, 368} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 14 Kirnberger II
-ioText {1156, 392} {220, 24} edit 0.000000 0.00100 "scale15"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 0 90 112 182 204 294 316 386 408 498 520 590 610 702 792 814 884 906 996 1018 1088 1110
-ioText {1018, 392} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 15 Indian Sruti I
-ioText {1156, 417} {220, 24} edit 0.000000 0.00100 "scale16"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 0 68.6 135.3 200.21 263.46 325.13 385.33 444.13 501.62 557.85 612.91 666.85 719.73 771.6 822.5 872.48 921.59 969.86 1017.33 1064.04 1110.01 1155.28
-ioText {1018, 417} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 16 Indian Sruti II
-ioText {1156, 440} {220, 24} edit 0.000000 0.00100 "scale17"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 1 2^1/12 2^1/11 2^1/10 2^1/9 2^1/8 2^1/7 2^1/6 2^1/5 2^1/4 2^1/3 2^1/2 
-ioText {1018, 440} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 17 User Defined
-ioText {1156, 465} {220, 24} edit 0.000000 0.00100 "scale18"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 12
-ioText {1018, 465} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 18 User Defined
-ioText {1156, 489} {220, 24} edit 0.000000 0.00100 "scale19"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 12
-ioText {1018, 489} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 19 User Defined
-ioText {1156, 514} {220, 24} edit 0.000000 0.00100 "scale20"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 2 12
-ioText {1018, 514} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 20 User Defined
-ioText {1156, 538} {220, 24} edit 0.000000 0.00100 "scale21"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 13
-ioText {1018, 538} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 21 BP Equal Tempered
-ioText {1156, 563} {220, 24} edit 0.000000 0.00100 "scale22"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 27/25 25/21 9/7 7/5 75/49 5/3 9/5 49/25 15/7 7/3 63/25 25/9
-ioText {1018, 563} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 22 BP Ratios
-ioText {1156, 586} {220, 24} edit 0.000000 0.00100 "scale23"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 27/25 9/7 7/5 5/3 9/5 49/25 7/3 63/25
-ioText {1018, 586} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 23 BP Dur I Mode
-ioText {1156, 611} {220, 24} edit 0.000000 0.00100 "scale24"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 25/21 9/7 7/5 5/3 9/5 15/7 7/3 63/25
-ioText {1018, 611} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 24 BP Dur II Mode
-ioText {1156, 635} {220, 24} edit 0.000000 0.00100 "scale25"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 25/21 9/7 75/49 5/3 9/5 15/7 7/3 25/9
-ioText {1018, 635} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 25 BP Moll I (Pierce) Mode 
-ioText {1156, 660} {220, 24} edit 0.000000 0.00100 "scale26"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 27/25 9/7 7/5 5/3 9/5 15/7 7/3 25/9
-ioText {1018, 660} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 26 BP Moll II (Delta) Mode
-ioText {1156, 684} {220, 24} edit 0.000000 0.00100 "scale27"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 27/25 9/7 7/5 5/3 9/5 49/25 7/3 25/9
-ioText {1018, 684} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 27 BP Gamma Mode
-ioText {1156, 709} {220, 24} edit 0.000000 0.00100 "scale28"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 27/25 9/7 7/5 5/3 9/5 15/7 7/3 63/25
-ioText {1018, 709} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 28 BP Harmonic Mode
-ioText {1156, 733} {220, 24} edit 0.000000 0.00100 "scale29"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 1 25/21 9/7 7/5 5/3 9/5 15/7 7/3 25/9
-ioText {1018, 733} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 29 BP Lambda Mode
-ioText {1156, 758} {220, 24} edit 0.000000 0.00100 "scale30"  "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} falsenoborder 3 13
-ioText {1018, 758} {138, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 30 User Defined
-ioText {267, 375} {162, 93} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioText {270, 378} {156, 59} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Click here if you changed scales while Csound is running
-ioButton {297, 436} {100, 30} value 1.000000 "new" "New Values!" "/" i1 0 10
-ioText {268, 257} {161, 111} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioText {277, 265} {137, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Current MIDI Event
-ioText {278, 288} {137, 71} display 0.000000 0.00100 "midi_event" center "Lucida Grande" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-</MacGUI>

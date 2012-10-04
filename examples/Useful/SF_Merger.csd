@@ -121,13 +121,14 @@ i 1 0 1
 e
 </CsScore>
 </CsoundSynthesizer>
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>72</x>
- <y>179</y>
- <width>400</width>
- <height>200</height>
+ <x>313</x>
+ <y>195</y>
+ <width>464</width>
+ <height>325</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -147,7 +148,7 @@ e
   <midicc>-3</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/Joachim/Csound/Hui/8kanaltest/Audio_1.aiff|/Joachim/Csound/Hui/8kanaltest/Audio_2.aiff|/Joachim/Csound/Hui/8kanaltest/Audio_3.aiff|/Joachim/Csound/Hui/8kanaltest/Audio_4.aiff|/Joachim/Csound/Hui/8kanaltest/Audio_5.aiff|/Joachim/Csound/Hui/8kanaltest/Audio_6.aiff|/Joachim/Csound/Hui/8kanaltest/Audio_7.aiff|/Joachim/Csound/Hui/8kanaltest/Audio_8.aiff</stringvalue>
+  <stringvalue/>
   <text>Select Files</text>
   <image>/</image>
   <eventLine/>
@@ -175,9 +176,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -198,7 +199,7 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -233,15 +234,15 @@ e
   <objectName/>
   <x>19</x>
   <y>147</y>
-  <width>444</width>
-  <height>158</height>
+  <width>445</width>
+  <height>178</height>
   <uuid>{e54e17da-3808-49a3-84a6-608f476c3200}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <label>Merges any number of mono files to a multichannel file. The number of channels in the output file is determined by the 'nchnls' parameter in the header of this CSD file.
-MAKE SURE YOUR nchnls EQUALS THE NUMBER OF YOU INPUT FILES!
-(If nchnls=8 but you just gave 7 mono files as input, it will probably crash.)</label>
+MAKE SURE YOUR nchnls EQUALS THE NUMBER OF YOU INPUT FILES! (If nchnls=8 but you just gave 7 mono files as input, it will probably crash.)
+The merge file will be written as specified in the Configure > Run tab ("Output Filename").</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -263,24 +264,4 @@ MAKE SURE YOUR nchnls EQUALS THE NUMBER OF YOU INPUT FILES!
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 72 179 400 200
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioButton {364, 69} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
-ioText {17, 72} {345, 24} edit 0.000000 0.00100 "_MBrowse"  "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
-ioButton {104, 104} {184, 30} value 1.000000 "_Render" "Merge!" "/" i1 0 10
-ioText {85, 16} {335, 39} label 0.000000 0.00100 "" center "Arial" 24 {0, 0, 0} {61952, 61696, 61440} nobackground noborder SOUNDFILE MERGER
-ioText {19, 147} {444, 158} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Merges any number of mono files to a multichannel file. The number of channels in the output file is determined by the 'nchnls' parameter in the header of this CSD file.Â¬MAKE SURE YOUR nchnls EQUALS THE NUMBER OF YOU INPUT FILES!Â¬(If nchnls=8 but you just gave 7 mono files as input, it will probably crash.)
-</MacGUI>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="612" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="612" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

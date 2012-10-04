@@ -218,13 +218,15 @@ endin
 <CsScore>
 i 1 0 1
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>0</x>
- <y>61</y>
- <width>198</width>
- <height>138</height>
+ <y>0</y>
+ <width>788</width>
+ <height>466</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -242,7 +244,7 @@ i 1 0 1
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Glocke_Ganze1.aiff</label>
+  <label>/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMonoOneCycle.wav|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/Glocke_Ganze1.aiff|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/Kontrabass.aif</label>
   <alignment>right</alignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
@@ -253,9 +255,9 @@ i 1 0 1
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>232</r>
-   <g>232</g>
-   <b>232</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -271,7 +273,7 @@ i 1 0 1
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Glocke_Ganze1.aiff</stringvalue>
+  <stringvalue>/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMonoOneCycle.wav|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/Glocke_Ganze1.aiff|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/Kontrabass.aif</stringvalue>
   <text>Select Files</text>
   <image>/</image>
   <eventLine/>
@@ -299,9 +301,9 @@ i 1 0 1
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>232</r>
-   <g>232</g>
-   <b>232</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -385,9 +387,9 @@ function tables to be created</label>
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>232</r>
-   <g>232</g>
-   <b>232</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -431,7 +433,7 @@ function tables to be created</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/linux/Desktop/test2.txt</label>
+  <label>/home/jh/env_out.txt</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -442,9 +444,9 @@ function tables to be created</label>
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>232</r>
-   <g>232</g>
-   <b>232</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -460,7 +462,7 @@ function tables to be created</label>
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/linux/Desktop/test2.txt</stringvalue>
+  <stringvalue>/home/jh/env_out.txt</stringvalue>
   <text>Select File</text>
   <image>/</image>
   <eventLine/>
@@ -537,7 +539,7 @@ function tables to be created</label>
   <midicc>0</midicc>
   <label>This instrument analyses the envelope(s) of one or more given sample(s) and returns the result as function tables in this format:
 gi_'filename' ftgen 'ftnum', 0, 'points', -2, val1, val2, ...
-The number of points gives the resolution of your analysis. If the duration of your sample is two seconds, and you write a table of size 100 points, you will get the mean amplitude for each 2/100 = 0.02 seconds.
+The number of points determines the resolution of your analysis. If the duration of your sample is two seconds, and you write a table of size 100 points, you will get the mean amplitude for each 2/100 = 0.02 seconds.
 Select one or some sound files for analyzing, and a text file for writing the result to. Enter the desired number of points for the analysis, and the identification number of the table (for both either one number which is applied to all input files, or one number for each file).</label>
   <alignment>left</alignment>
   <font>Arial</font>
@@ -576,36 +578,8 @@ to textfile!</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 0 61 198 138
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioText {274, 261} {343, 29} edit 0.000000 0.00100 "_MBrowse"  "DejaVu Sans" 14 {0, 0, 0} {61952, 61696, 61440} falsenoborder /home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Glocke_Ganze1.aiff
-ioButton {621, 260} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
-ioText {274, 332} {343, 29} edit 0.000000 0.00100 "npoints"  "Arial" 14 {0, 0, 0} {61952, 61696, 61440} falsenoborder 100
-ioText {87, 244} {188, 30} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Files to be analyzed
-ioText {36, 310} {239, 43} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Number of points in theÂ¬function tables to be created
-ioText {274, 375} {343, 29} edit 0.000000 0.00100 "ftnums"  "Arial" 14 {0, 0, 0} {61952, 61696, 61440} falsenoborder 4000 4001 4002 4003
-ioText {35, 355} {240, 41} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder identification number of theÂ¬function tables to be created
-ioText {274, 295} {343, 29} edit 0.000000 0.00100 "_Browse"  "Arial" 14 {0, 0, 0} {61952, 61696, 61440} falsenoborder /home/linux/Desktop/test2.txt
-ioButton {621, 294} {100, 30} value 1.000000 "_Browse" "Select File" "/" 
-ioText {34, 279} {241, 29} label 0.000000 0.00100 "" right "Arial" 14 {0, 0, 0} {59392, 59392, 59392} nobackground noborder Text file to be written as result
-ioText {21, 7} {699, 56} label 0.000000 0.00100 "" center "Arial" 40 {0, 0, 0} {59392, 59392, 59392} nobackground noborder ENVELOPE EXTRACTOR
-ioText {20, 69} {699, 169} label 0.000000 0.00100 "" left "Arial" 16 {0, 0, 0} {59392, 59392, 59392} nobackground noborder This instrument analyses the envelope(s) of one or more given sample(s) and returns the result as function tables in this format:Â¬gi_'filename' ftgen 'ftnum', 0, 'points', -2, val1, val2, ...Â¬The number of points gives the resolution of your analysis. If the duration of your sample is two seconds, and you write a table of size 100 points, you will get the mean amplitude for each 2/100 = 0.02 seconds.Â¬Select one or some sound files for analyzing, and a text file for writing the result to. Enter the desired number of points for the analysis, and the identification number of the table (for both either one number which is applied to all input files, or one number for each file).
-ioButton {621, 331} {100, 74} value 1.000000 "_Render" "AnalyseÂ¬and writeÂ¬to textfile!" "/" 
-</MacGUI>
