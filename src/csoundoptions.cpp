@@ -119,7 +119,14 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
     if (rtOverrideOptions)
       list << "-+ignore_csopts=1";
     if (_configlists.rtAudioNames[rtAudioModule] != "none") {
-      list << "-+rtaudio=" + _configlists.rtAudioNames[rtAudioModule];
+		QString module;
+		module = _configlists.rtAudioNames[rtAudioModule];
+#ifdef Q_OS_MAC
+		if (module=="portaudio") {
+			module = "pa_bl"; // Force pa_bl on OS X as it crashes otherwise!
+		}
+#endif
+	  list << "-+rtaudio=" + module;
       if (rtInputDevice != "") {
         list << "-i" + rtInputDevice;
       }

@@ -669,6 +669,7 @@ void DocumentView::createContextMenu(QPoint pos)
     menu->addSeparator();
     menu->addAction(tr("Evaluate Selection"), this, SLOT(evaluate()));
     menu->addAction(tr("Opcode Help"), this, SLOT(opcodeHelp()));
+    menu->addAction(tr("Show/hide line numbers"), this, SLOT(toggleLineArea()));
     menu->addSeparator();
     QMenu *opcodeMenu = menu->addMenu("Opcodes");
     QMenu *mainMenu = 0;
