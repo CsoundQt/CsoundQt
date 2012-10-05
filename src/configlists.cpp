@@ -50,13 +50,13 @@ ConfigLists::ConfigLists()
   fileFormatNames << "24 Bit" << "16 Bit (short)" << "unsigned 8-bit"
       << "signed 8-bit" << "32 bit float"<< "long (32-bit)";
 #ifdef Q_OS_LINUX
-  rtAudioNames << "alsa" << "jack" << "portaudio" << "pulse" << "none";
+  rtAudioNames << "portaudio" << "alsa" << "jack" << "pulse" << "none";
 #endif
 #ifdef Q_OS_SOLARIS
   rtAudioNames << "portaudio" << "pulse" << "none";
 #endif
 #ifdef Q_WS_MAC
-  rtAudioNames << "portaudio" << "auhal" << "coreaudio" << "jack" << "none";
+  rtAudioNames << "coreaudio" << "portaudio" << "auhal" << "jack" << "none";
 #endif
 #ifdef Q_OS_WIN32
   rtAudioNames << "portaudio" << "winmm" << "jack" <<  "none";
