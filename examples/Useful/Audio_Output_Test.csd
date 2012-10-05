@@ -6,181 +6,190 @@
 
 /*****OUTPUT TEST*****/
 /*example for qutecsound
-written by joachim heintz
-jan 2009*/
+written by joachim heintz 
+jan 2009*/ 
 
 sr = 44100
 ksmps = 128
 nchnls = 2; change here if your output device has more channels
 0dbfs = 1
 
-giSine		ftgen		0, 0, 2^10, 10, 1 
+giSine     ftgen      0,0, 2^10, 10, 1 
 
 	opcode	ShowLED_a, 0, Sakii
 /*Shows an audio signal in an outvalue channel.
-You can choose to show the value in dB or in raw amplitudes.
+You can choose to show the value in dB or in raw amplitudes. 
 */
 /*Input:
-Soutchan: string with the name of the outvalue channel
-asig: audio signal which is to displayed
-kdispfreq: refresh frequency (Hz)
-idb: 1 = show in dB, 0 = show in raw amplitudes (both in the range 0-1)
-idbrange: if idb=1: how many db-steps are shown (e.g. if 36 you will not see anything from a signal below -36 dB)
+Soutchan: string with the name of the outvaluechannel
+asig: audio signal which is to displayed 
+kdispfreq: refresh frequency (Hz) 
+idb: 1 = show in dB,0 = show in  raw amplitudes (both in  the range 0-1) 
+idbrange:  if idb=1:how many db-steps are shown (e.g. if  36 you will not see anything from a  signal below -36 dB) 
 */
-Soutchan, asig, kdispfreq, idb, idbrange	xin
-kdispval	max_k	asig, kdispfreq, 1
+Soutchan, asig, kdispfreq, idb, idbrange xin
+kdispval   max_k      asig,kdispfreq, 1 
 	if idb != 0 then
-kdb 		= 		dbfsamp(kdispval)
-kval 		= 		(idbrange + kdb) / idbrange
-	else
-kval		=		kdispval
+kdb        =          dbfsamp(kdispval)
+kval       =          (idbrange+ kdb) / idbrange 
+           else
+kval       =          kdispval
 	endif
-			outvalue	Soutchan, kval
+           outvalue   Soutchan,kval 
 	endop
 
 	opcode ShowOver_a, 0, Sakk
 /*Shows if the incoming audio signal was more than 1 and stays there for some time*/
 /*Input:
-Soutchan: string with the name of the outvalue channel
-asig: audio signal which is to displayed
-kdispfreq: refresh frequency (Hz)
-khold: time in seconds to "hold the red light"
+Soutchan: string with the name of the outvaluechannel
+asig: audio signal which is to displayed 
+kdispfreq: refresh frequency (Hz) 
+khold: time in seconds to "hold the red light" 
 */
-Soutchan, asig, kdispfreq, khold	xin
-kon		init		0
-ktim		times
-kstart		init		0
-kend		init		0
-khold		=		(khold < .01 ? .01 : khold); avoiding too short hold times
-kmax		max_k		asig, kdispfreq, 1
+Soutchan, asig, kdispfreq, khold xin
+kon        init       0
+ktim       times
+kstart     init       0
+kend       init       0
+khold      =          (khold< .01? .01 : khold); avoiding too short hold times 
+kmax       max_k      asig,kdispfreq, 1 
 	if kon == 0 && kmax > 1 then
-kstart		=		ktim
-kend		=		kstart + khold
-		outvalue	Soutchan, kmax
-kon		=		1
+kstart     =          ktim
+kend       =          kstart+ khold 
+           outvalue   Soutchan,kmax 
+kon        =          1
 	endif
 	if kon == 1 && ktim > kend then
-		outvalue	Soutchan, 0
-kon		=		0
+           outvalue   Soutchan,0 
+kon        =          0
 	endif
 	endop
 	
 	opcode OutToAll, 0, aiik
 ;outputs asig to all channels from ichnA to ichnZ, and activates the display
 asig, ichnA, ichnZ, kTrigDisp xin
-		outch		ichnA, asig
-Sout		sprintf	"out%d", ichnA
-Soutover	sprintf	"out%dover", ichnA
-		ShowLED_a	Sout, asig, kTrigDisp, 1, 48
-		ShowOver_a	Soutover, asig, kTrigDisp, 0
+           outch      ichnA,asig 
+Sout       sprintf    "out%d",ichnA 
+Soutover   sprintf    "out%dover",ichnA 
+           ShowLED_a  Sout,asig, kTrigDisp, 1, 48 
+           ShowOver_a Soutover,asig, kTrigDisp, 0 
  if ichnA < ichnZ then
- 		OutToAll	asig, ichnA+1, ichnZ, kTrigDisp
+           OutToAll   asig,ichnA+1, ichnZ, kTrigDisp 
  endif
 	endop
 	
 	opcode ClearAll, 0, ii
 ;clears the display for all channels between A and Z
 ichnA, ichnZ xin
-asig		=		0
-Sout		sprintf	"out%d", ichnA
-Soutover	sprintf	"out%dover", ichnA
-		ShowLED_a	Sout, asig, 1, 1, 48
-		ShowOver_a	Soutover, asig, 1, 0
+asig       =          0
+Sout       sprintf    "out%d",ichnA 
+Soutover   sprintf    "out%dover",ichnA 
+           ShowLED_a  Sout,asig, 1, 1, 48 
+           ShowOver_a Soutover,asig, 1, 0 
  if ichnA < ichnZ then
- 		ClearAll	ichnA+1, ichnZ
+           ClearAll   ichnA+1,ichnZ 
  endif
 	endop
 
 
 instr 1
 ;GUI input
-kSel		invalue	"signal"; 0-4 for the selected signals2
-kChnA		invalue	"chnA"; first channel to be tested
-kChnZ		invalue	"chnZ"; last channel to be tested
-kVol		invalue	"vol"; volume in dB
-kSigDur	invalue	"sigdur"; duration of the test signal
-kPausDur	invalue	"pausdur"; duration of the pause
-kAll		invalue	"all"; 1 = send to all available channels 
-iNewChn	init		i(kChnA)
-kTrigDisp	metro		20; refresh rate for the LED's
-iPaus		init		0; pause status
-kcheckchng	changed	kAll; whether checkbox has changed or not
+kSel       invalue    "signal";0-4 for the selected signals2 
+kChnA      invalue    "chnA";first channel to be tested 
+kChnZ      invalue    "chnZ";last channel to be tested 
+kVol       invalue    "vol";volume in  dB 
+kSigDur    invalue    "sigdur";duration of the test signal 
+kPausDur   invalue    "pausdur";duration of the pause 
+kAll       invalue    "all";1 =  send to all available channels 
+iNewChn    init       i(kChnA)
+kTrigDisp  metro      20;refresh rate for the LED's 
+iPaus      init       0;pause status 
+kcheckchng changed    kAll;whether checkbox  has changed  or not 
+kSigchng   changed    kSel ;signal type has changed
 
+;make live signal change possible
+if kSigchng == 1 then
+           reinit     signal
+endif
+
+signal:
 ;calculate audio
  if i(kSel) == 0 then; white noise
-asig		rnd31		ampdbfs(kVol), 0
+asig       rnd31      ampdbfs(kVol),0 
  elseif i(kSel) == 1 then; pink noise
-asig		pinkish	ampdbfs(kVol)
+asig       pinkish    ampdbfs(kVol)
  elseif i(kSel) == 2 then; 10 KHz
-asig		oscili		ampdbfs(kVol), 10000, giSine
-asig		linen		asig, .005, p3, .005
+asig       oscili     ampdbfs(kVol),10000, giSine 
+asig       linen      asig,.005, p3, .005 
  elseif i(kSel) == 3 then; 1 kHz
-asig		oscili		ampdbfs(kVol), 1000, giSine
-asig		linen		asig, .005, p3, .005
- else ;100 Hz
-asig		oscili		ampdbfs(kVol), 100, giSine
-asig		linen		asig, .005, p3, .005
+asig       oscili     ampdbfs(kVol),1000, giSine 
+asig       linen      asig,.005, p3, .005 
+           else       ;100Hz 
+asig       oscili     ampdbfs(kVol),100, giSine 
+asig       linen      asig,.005, p3, .005 
  endif
+           rireturn
 
 ;renew values for channels if changed
-kchanged	changed	kChnA, kChnZ
+kchanged   changed    kChnA,kChnZ 
 if kchanged == 1 then
-		reinit		all
+           reinit     all
 endif
 
 ;send to all channels if checkbox is on
-all:
+all: 
  if kAll == 1 then
-		OutToAll 	asig, i(kChnA), i(kChnZ), kTrigDisp
-		rireturn
+           OutToAll   asig,i(kChnA), i(kChnZ), kTrigDisp 
+           rireturn
 		
 ;if checkbox if off:
- else
+           else
  
 ;clear display if checkbox has changed from 1 to 0
   if kcheckchng == 1 && kAll == 0 then
-  		ClearAll	i(kChnA), i(kChnZ)
+           ClearAll   i(kChnA),i(kChnZ) 
   endif
 
 ;loop over the desired output channels
-loop:		
-iSigDur	=		i(kSigDur)
-iPausDur	=		i(kPausDur)
-ilen		=		(iPaus == 0 ? iSigDur : iPausDur)
-		timout		0, ilen, play
-		reinit		loop
-play:
+loop: 
+iSigDur    =          i(kSigDur)
+iPausDur   =          i(kPausDur)
+ilen       =          (iPaus== 0? iSigDur : iPausDur) 
+           timout     0,ilen, play 
+           reinit     loop
+play: 
 ;calculate audio signal
  if iPaus == 1 then; pause
-asig		=		0
+asig       =          0
  endif
 ;send to output and show
-ichn		=		iNewChn
-		outch		ichn, asig
-Sout		sprintf	"out%d", ichn
-Soutover	sprintf	"out%dover", ichn
-		ShowLED_a	Sout, asig, kTrigDisp, 1, 48
-		ShowOver_a	Soutover, asig, kTrigDisp, 0
+ichn       =          iNewChn
+           outch      ichn,asig 
+Sout       sprintf    "out%d",ichn 
+Soutover   sprintf    "out%dover",ichn 
+           ShowLED_a  Sout,asig, kTrigDisp, 1, 48 
+           ShowOver_a Soutover,asig, kTrigDisp, 0 
 ;reset values for next turn
-iChnA		=		i(kChnA)
-iChnZ		=		i(kChnZ)
-iNewChn	=		(iPaus == 1 ? (ichn >= iChnZ ? iChnA : ichn + 1) : ichn)
-iPaus		=		(iPaus == 1 ? 0 : 1)
+iChnA      =          i(kChnA)
+iChnZ      =          i(kChnZ)
+iNewChn    =          (iPaus== 1? (ichn >=  iChnZ ? iChnA : ichn + 1) : ichn) 
+iPaus      =          (iPaus== 1? 0 : 1) 
  endif
 endin
-
 </CsInstruments>
 <CsScore>
 i 1 0 9999
 e
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>612</x>
- <y>184</y>
- <width>610</width>
- <height>471</height>
+ <x>0</x>
+ <y>0</y>
+ <width>628</width>
+ <height>414</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -452,7 +461,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.95000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -518,7 +527,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.95000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2935,114 +2944,6 @@ all channels</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <objectName/>
- <x>612</x>
- <y>184</y>
- <width>610</width>
- <height>471</height>
- <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 612 184 610 471
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioText {19, 64} {67, 48} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder first channel
-ioText {89, 64} {67, 48} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder last channel
-ioText {158, 65} {67, 48} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder volume (dB)
-ioText {166, 114} {52, 25} scroll -20.000000 0.100000 "vol" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioText {240, 66} {60, 47} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder signal type
-ioMenu {220, 114} {112, 27} 0 303 "white noise,pink noise,sine 10kHz,sine1kHz,sine 100Hz" signal
-ioText {27, 293} {552, 53} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder This file tests whether your outputs are working. Â¬Make sure the nchnls (number of channels) parameter in the orchestra header is adjusted correctly, and the audio device is chosen in the configuration dialog.
-ioText {145, 18} {299, 44} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {65280, 65280, 65280} nobackground noborder OUTPUT TESTER
-ioMeter {25, 192} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out1" 0.000000 fill 1 0 mouse
-ioMeter {25, 174} {20, 20} {50176, 3584, 3072} "DelayMute" 0.350000 "out1over" 0.000000 fill 1 0 mouse
-ioMeter {47, 192} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out2" 0.000000 fill 1 0 mouse
-ioMeter {47, 174} {20, 20} {50176, 3584, 3072} "DelayMute" 0.000000 "out2over" 0.000000 fill 1 0 mouse
-ioMeter {69, 192} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out3" -inf fill 1 0 mouse
-ioMeter {69, 174} {20, 20} {50176, 3584, 3072} "DelayMute" 0.450000 "out3over" 0.000000 fill 1 0 mouse
-ioMeter {91, 192} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out4" -inf fill 1 0 mouse
-ioMeter {91, 174} {20, 20} {50176, 3584, 3072} "DelayMute" 0.000000 "out4over" 0.000000 fill 1 0 mouse
-ioMeter {113, 192} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out5" -inf fill 1 0 mouse
-ioMeter {113, 174} {20, 20} {50176, 3584, 3072} "DelayMute" 0.350000 "out5over" 0.000000 fill 1 0 mouse
-ioMeter {135, 192} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out6" -inf fill 1 0 mouse
-ioMeter {135, 174} {20, 20} {50176, 3584, 3072} "DelayMute" 0.000000 "out6over" 0.000000 fill 1 0 mouse
-ioMeter {157, 192} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out7" -inf fill 1 0 mouse
-ioMeter {157, 174} {20, 20} {50176, 3584, 3072} "DelayMute" 0.350000 "out7over" 0.000000 fill 1 0 mouse
-ioMeter {179, 192} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out8" -inf fill 1 0 mouse
-ioMeter {179, 174} {20, 20} {50176, 3584, 3072} "DelayMute" 0.000000 "out8over" 0.000000 fill 1 0 mouse
-ioMeter {213, 192} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out9" -inf fill 1 0 mouse
-ioMeter {213, 174} {20, 20} {50176, 3584, 3072} "DelayMute" 0.350000 "out9over" 0.000000 fill 1 0 mouse
-ioMeter {235, 192} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out10" -inf fill 1 0 mouse
-ioMeter {235, 174} {20, 20} {50176, 3584, 3072} "DelayMute" 0.000000 "out10over" 0.000000 fill 1 0 mouse
-ioMeter {257, 192} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out11" -inf fill 1 0 mouse
-ioMeter {257, 174} {20, 20} {50176, 3584, 3072} "DelayMute" 0.350000 "out11over" 0.000000 fill 1 0 mouse
-ioMeter {280, 191} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out12" -inf fill 1 0 mouse
-ioMeter {280, 173} {20, 20} {50176, 3584, 3072} "DelayMute" 0.000000 "out12over" 0.000000 fill 1 0 mouse
-ioMeter {302, 191} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out13" 0.000000 fill 1 0 mouse
-ioMeter {302, 173} {20, 20} {50176, 3584, 3072} "DelayMute" 0.350000 "out13over" 0.000000 fill 1 0 mouse
-ioMeter {324, 191} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out14" 0.000000 fill 1 0 mouse
-ioMeter {324, 173} {20, 20} {50176, 3584, 3072} "DelayMute" 0.000000 "out14over" 0.000000 fill 1 0 mouse
-ioMeter {346, 191} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out15" 0.000000 fill 1 0 mouse
-ioMeter {346, 173} {20, 20} {50176, 3584, 3072} "DelayMute" 0.350000 "out15over" 0.000000 fill 1 0 mouse
-ioMeter {368, 191} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out16" 0.000000 fill 1 0 mouse
-ioMeter {368, 173} {20, 20} {50176, 3584, 3072} "DelayMute" 0.000000 "out16over" 0.000000 fill 1 0 mouse
-ioMeter {402, 191} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out17" 0.000000 fill 1 0 mouse
-ioMeter {402, 173} {20, 20} {50176, 3584, 3072} "DelayMute" 0.350000 "out17over" 0.000000 fill 1 0 mouse
-ioMeter {424, 191} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out18" 0.000000 fill 1 0 mouse
-ioMeter {424, 173} {20, 20} {50176, 3584, 3072} "DelayMute" 0.000000 "out18over" 0.000000 fill 1 0 mouse
-ioMeter {446, 191} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out19" 0.000000 fill 1 0 mouse
-ioMeter {446, 173} {20, 20} {50176, 3584, 3072} "DelayMute" 0.350000 "out19over" 0.000000 fill 1 0 mouse
-ioMeter {468, 191} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out20" 0.000000 fill 1 0 mouse
-ioMeter {468, 173} {20, 20} {50176, 3584, 3072} "DelayMute" 0.000000 "out20over" 0.000000 fill 1 0 mouse
-ioMeter {490, 191} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out21" 0.000000 fill 1 0 mouse
-ioMeter {490, 173} {20, 20} {50176, 3584, 3072} "DelayMute" 0.350000 "out21over" 0.000000 fill 1 0 mouse
-ioMeter {512, 191} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out22" 0.000000 fill 1 0 mouse
-ioMeter {512, 173} {20, 20} {50176, 3584, 3072} "DelayMute" 0.000000 "out22over" 0.000000 fill 1 0 mouse
-ioMeter {536, 191} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out23" 0.000000 fill 1 0 mouse
-ioMeter {536, 173} {20, 20} {50176, 3584, 3072} "DelayMute" 0.350000 "out23over" 0.000000 fill 1 0 mouse
-ioMeter {558, 191} {20, 80} {0, 59904, 0} "hor8" 0.950000 "out24" 0.000000 fill 1 0 mouse
-ioMeter {558, 173} {20, 20} {50176, 3584, 3072} "DelayMute" 0.000000 "out24over" 0.000000 fill 1 0 mouse
-ioText {25, 146} {20, 23} label 1.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1
-ioText {47, 146} {20, 23} label 2.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2
-ioText {69, 146} {20, 23} label 3.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3
-ioText {91, 146} {20, 23} label 4.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4
-ioText {113, 146} {20, 23} label 5.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 5
-ioText {135, 146} {20, 23} label 6.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 6
-ioText {157, 146} {20, 23} label 7.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 7
-ioText {179, 146} {20, 23} label 8.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 8
-ioText {208, 147} {28, 24} label 9.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 9
-ioText {230, 147} {28, 24} label 10.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 10
-ioText {252, 147} {28, 24} label 11.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 11
-ioText {274, 147} {28, 24} label 12.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 12
-ioText {297, 146} {28, 24} label 13.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 13
-ioText {319, 146} {28, 24} label 14.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 14
-ioText {341, 146} {28, 24} label 15.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 15
-ioText {363, 146} {28, 24} label 16.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 16
-ioText {398, 145} {28, 24} label 17.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 17
-ioText {420, 145} {28, 24} label 18.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 18
-ioText {442, 145} {28, 24} label 19.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 19
-ioText {464, 145} {28, 24} label 20.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 20
-ioText {486, 145} {28, 24} label 21.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 21
-ioText {508, 145} {28, 24} label 22.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 22
-ioText {532, 145} {28, 24} label 23.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 23
-ioText {554, 145} {28, 24} label 24.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 24
-ioText {30, 113} {50, 24} editnum 1.000000 1.000000 "chnA" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
-ioText {98, 113} {50, 24} editnum 2.000000 1.000000 "chnZ" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2.000000
-ioCheckbox {529, 114} {20, 20} off all
-ioText {488, 64} {104, 47} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder signal to Â¬all channels
-ioText {344, 113} {50, 24} editnum 1.000000 0.100000 "sigdur" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
-ioText {327, 63} {67, 48} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder signal duration
-ioText {421, 114} {50, 24} editnum 1.000000 0.100000 "pausdur" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
-ioText {404, 63} {77, 48} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder pause duration
-</MacGUI>

@@ -20,95 +20,95 @@ nchnls = 2; change here if your device has more channels
 ;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
 Stray, ielindx, isepA, isepB xin
 ;;DEFINE THE SEPARATORS
-isep1		=		(isepA == -1 ? 32 : isepA)
-isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-Sep1		sprintf	"%c", isep1
-Sep2		sprintf	"%c", isep2
+isep1      =          (isepA== -1? 32 : isepA) 
+isep2      =          (isepA== -1&& isepB== -1? 9 : (isepB ==  -1 ? isep1 : isepB)) 
+Sep1       sprintf    "%c",isep1 
+Sep2       sprintf    "%c",isep2 
 ;;INITIALIZE SOME PARAMETERS
-ilen		strlen		Stray
-istartsel	=		-1; startindex for searched element
-iendsel	=		-1; endindex for searched element
-iel		=		0; actual number of element while searching
-iwarleer	=		1
-indx		=		0
+ilen       strlen     Stray
+istartsel  =          -1;startindex for searched element 
+iendsel    =          -1;endindex for searched element 
+iel        =          0;actual number of element while searching 
+iwarleer   =          1
+indx       =          0
  if ilen == 0 igoto end ;don't go into the loop if Stray is empty
-loop:
-Snext		strsub		Stray, indx, indx+1; next sign
-isep1p		strcmp		Snext, Sep1; returns 0 if Snext is sep1
-isep2p		strcmp		Snext, Sep2; 0 if Snext is sep2
+loop: 
+Snext      strsub     Stray,indx, indx+1; next sign 
+isep1p     strcmp     Snext,Sep1; returns 0 if  Snext is sep1 
+isep2p     strcmp     Snext,Sep2; 0 if  Snext is sep2 
 ;;NEXT SIGN IS NOT SEP1 NOR SEP2
 if isep1p != 0 && isep2p != 0 then
  if iwarleer == 1 then; first character after a separator 
   if iel == ielindx then; if searched element index
-istartsel	=		indx; set it
-iwarleer	=		0
-  else 			;if not searched element index
-iel		=		iel+1; increase it
-iwarleer	=		0; log that it's not a separator 
+istartsel  =          indx;set it 
+iwarleer   =          0
+           else       ;ifnot searched element index 
+iel        =          iel+1;increase it 
+iwarleer   =          0;log thatit's not a  separator 
   endif 
  endif 
 ;;NEXT SIGN IS SEP1 OR SEP2
-else 
+           else
  if istartsel > -1 then; if this is first selector after searched element
-iendsel	=		indx; set iendsel
-		igoto		end ;break
- else	
-iwarleer	=		1
+iendsel    =          indx;set iendsel 
+           igoto      end;break 
+           else
+iwarleer   =          1
  endif 
 endif
-		loop_lt	indx, 1, ilen, loop 
-end: 		xout		istartsel, iendsel
+           loop_lt    indx,1, ilen, loop 
+end:       xout       istartsel,iendsel 
   endop 
 
   opcode StrayLen, i, Sjj
 ;returns the number of elements in Stray. elements are defined by two separators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one separator is used, isep2 equals isep1
 Stray, isepA, isepB xin
 ;;DEFINE THE SEPARATORS
-isep1		=		(isepA == -1 ? 32 : isepA)
-isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-Sep1		sprintf	"%c", isep1
-Sep2		sprintf	"%c", isep2
+isep1      =          (isepA== -1? 32 : isepA) 
+isep2      =          (isepA== -1&& isepB== -1? 9 : (isepB ==  -1 ? isep1 : isepB)) 
+Sep1       sprintf    "%c",isep1 
+Sep2       sprintf    "%c",isep2 
 ;;INITIALIZE SOME PARAMETERS
-ilen		strlen		Stray
-icount		=		0; number of elements
-iwarsep	=		1
-indx		=		0
+ilen       strlen     Stray
+icount     =          0;number of elements 
+iwarsep    =          1
+indx       =          0
  if ilen == 0 igoto end ;don't go into the loop if String is empty
-loop:
-Snext		strsub		Stray, indx, indx+1; next sign
-isep1p		strcmp		Snext, Sep1; returns 0 if Snext is sep1
-isep2p		strcmp		Snext, Sep2; 0 if Snext is sep2
+loop: 
+Snext      strsub     Stray,indx, indx+1; next sign 
+isep1p     strcmp     Snext,Sep1; returns 0 if  Snext is sep1 
+isep2p     strcmp     Snext,Sep2; 0 if  Snext is sep2 
  if isep1p == 0 || isep2p == 0 then; if sep1 or sep2
-iwarsep	=		1; tell the log so
- else 				; if not 
+iwarsep    =          1;tell the log  so 
+           else       ;if not
   if iwarsep == 1 then	; and has been sep1 or sep2 before
-icount		=		icount + 1; increase counter
-iwarsep	=		0; and tell you are ot sep1 nor sep2 
+icount     =          icount+ 1; increase counter 
+iwarsep    =          0;and tell you are ot sep1 nor sep2 
   endif 
  endif	
-		loop_lt	indx, 1, ilen, loop 
-end: 		xout		icount
+           loop_lt    indx,1, ilen, loop 
+end:       xout       icount
   endop 
 
   opcode MxdwnPlay, 0, Siiiiki
 Stray, ilen, ichnls, ifirstchn, iel, kvol, iskip xin
-ipan 		=		iel * ((ichnls-1)/(ilen-1))
-ioutch1	=		int(ipan)+ifirstchn
-ioutch2	=		ioutch1+1
-Soutch1	sprintf	"outchn%d", ioutch1
-Soutch2	sprintf	"outchn%d", ioutch2
-ipan2		=		frac(ipan)
-ist, ien	StrayGetEl	Stray, iel, 124
-Sel		strsub		Stray, ist, ien
-asig		soundin	Sel, iskip
-iscale		=		ichnls / ilen
-a1, a2		pan2		asig*iscale*kvol, ipan2
-		chnmix 	a1, Soutch1
+ipan       =          iel* ((ichnls-1)/(ilen-1)) 
+ioutch1    =          int(ipan)+ifirstchn
+ioutch2    =          ioutch1+1
+Soutch1    sprintf    "outchn%d",ioutch1 
+Soutch2    sprintf    "outchn%d",ioutch2 
+ipan2      =          frac(ipan)
+ist, ien   StrayGetEl Stray,iel, 124 
+Sel        strsub     Stray,ist, ien 
+asig       soundin    Sel,iskip 
+iscale     =          ichnls/ ilen 
+a1, a2     pan2       asig*iscale*kvol,ipan2 
+           chnmix     a1,Soutch1 
 if ipan != 0 then
-		chnmix 	a2, Soutch2
+           chnmix     a2,Soutch2 
 endif
 if iel < ilen-1 then
-		MxdwnPlay 	Stray, ilen, ichnls, ifirstchn, iel+1, kvol, iskip
+           MxdwnPlay  Stray,ilen, ichnls, ifirstchn, iel+1, kvol, iskip 
 endif
   endop
 
@@ -120,15 +120,15 @@ endif
 ;kdispfreq: refresh frequency (Hz)
 ;kdb: 1 = show in dB, 0 = show in raw amplitudes (both in the range 0-1)
 ;kdbrange: if idb=1: how many db-steps are shown (e.g. if 36 you will not see anything from a signal below -36 dB)
-Soutchan, asig, kdispfreq, kdb, kdbrange	xin
-kdispval	max_k	asig, kdispfreq, 1
+Soutchan, asig, kdispfreq, kdb, kdbrange xin
+kdispval   max_k      asig,kdispfreq, 1 
 	if kdb != 0 then
-kdb 		= 		dbfsamp(kdispval)
-kval 		= 		(kdbrange + kdb) / kdbrange
-	else
-kval		=		kdispval
+kdb        =          dbfsamp(kdispval)
+kval       =          (kdbrange+ kdb) / kdbrange 
+           else
+kval       =          kdispval
 	endif
-			outvalue	Soutchan, kval
+           outvalue   Soutchan,kval 
   endop
 
 
@@ -139,82 +139,81 @@ kval		=		kdispval
 ;asig: audio signal which is to displayed
 ;kdispfreq: refresh frequency (Hz)
 ;khold: time in seconds to "hold the red light"
-Soutchan, asig, kdispfreq, khold	xin
-kon		init		0
-ktim		times
-kstart		init		0
-kend		init		0
-khold		=		(khold < .01 ? .01 : khold); avoiding too short hold times
-kmax		max_k		asig, kdispfreq, 1
+Soutchan, asig, kdispfreq, khold xin
+kon        init       0
+ktim       times
+kstart     init       0
+kend       init       0
+khold      =          (khold< .01? .01 : khold); avoiding too short hold times 
+kmax       max_k      asig,kdispfreq, 1 
 	if kon == 0 && kmax > 1 then
-kstart		=		ktim
-kend		=		kstart + khold
-		outvalue	Soutchan, kmax
-kon		=		1
+kstart     =          ktim
+kend       =          kstart+ khold 
+           outvalue   Soutchan,kmax 
+kon        =          1
 	endif
 	if kon == 1 && ktim > kend then
-		outvalue	Soutchan, 0
-kon		=		0
+           outvalue   Soutchan,0 
+kon        =          0
 	endif
   endop
 
   opcode CollectShowClear, 0, iiikiii
 ;collect the audio channels, sends them to the display, and clears the global audio channel
 ichnls, ifirstout, icount, ktrigdisp, idboramp, idbrange, icliphold xin
-Soutchn	sprintf	"outchn%d", icount+ifirstout
-Sdisp		sprintf	"out%d", icount+1
-Sover		sprintf	"over%d", icount+1
-Schn		sprintf	"chn%d", icount+1
-Schnval	sprintf	"%d", ifirstout+icount
-acollect	chnget		Soutchn
-		outch		ifirstout+icount, acollect
-		ShowLED_a	Sdisp, acollect, ktrigdisp, idboramp, idbrange
-		ShowOver_a	Sover, acollect, ktrigdisp, icliphold
-		outvalue	Schn, Schnval
-		chnclear	Soutchn
+Soutchn    sprintf    "outchn%d",icount+ifirstout 
+Sdisp      sprintf    "out%d",icount+1 
+Sover      sprintf    "over%d",icount+1 
+Schn       sprintf    "chn%d",icount+1 
+Schnval    sprintf    "%d",ifirstout+icount 
+acollect   chnget     Soutchn
+           outch      ifirstout+icount,acollect 
+           ShowLED_a  Sdisp,acollect, ktrigdisp, idboramp, idbrange 
+           ShowOver_a Sover,acollect, ktrigdisp, icliphold 
+           outvalue   Schn,Schnval 
+           chnclear   Soutchn
  if icount+1 < ichnls then
- 		CollectShowClear ichnls, ifirstout, icount+1, ktrigdisp, idboramp, idbrange, icliphold
+           CollectShowClear ichnls, ifirstout, icount+1, ktrigdisp, idboramp, idbrange, icliphold 
  endif
   endop
 
 instr 1
 ;input values
-Stray 		invalue	"_MBrowse"
-ist, ien	StrayGetEl	Stray, 0, 124; get duration from the first element
-Sfirst		strsub		Stray, ist, ien
-idur		filelen	Sfirst
-ilen		StrayLen	Stray, 124
-kchnls		invalue	"numoutch"
-kfirstout	invalue	"firstout"
-kskip		invalue	"skip"
-kdb		invalue	"db"
-kvol		=		ampdb(kdb)
-ichnls		=		i(kchnls)
-ifirstout	=		i(kfirstout)
-iskip 		=		i(kskip)
-p3		=		idur - iskip
+Stray      invalue    "_MBrowse"
+ist, ien   StrayGetEl Stray,0, 124; get duration from the first element 
+Sfirst     strsub     Stray,ist, ien 
+idur       filelen    Sfirst
+ilen       StrayLen   Stray,124 
+kchnls     invalue    "numoutch"
+kfirstout  invalue    "firstout"
+kskip      invalue    "skip"
+kdb        invalue    "db"
+kvol       =          ampdb(kdb)
+ichnls     =          i(kchnls)
+ifirstout  =          i(kfirstout)
+iskip      =          i(kskip)
+p3         =          idur- iskip 
 
 ;play as many channels as there are monofiles given, and pan to the output channels
-		MxdwnPlay	Stray, ilen, ichnls, ifirstout, 0, kvol, iskip
+           MxdwnPlay  Stray,ilen, ichnls, ifirstout, 0, kvol, iskip 
 
 ;;display time
-ktim		timeinsts
-kplaypos	=		iskip + ktim
-kposmin	=		floor(kplaypos/60)
-kpossec	=		floor(kplaypos%60)
-Smin		sprintfk	"%02d", kposmin
-Ssec		sprintfk	"%02d", kpossec
-		outvalue	"min", Smin
-		outvalue	"sec", Ssec
+ktim       timeinsts
+kplaypos   =          iskip+ ktim 
+kposmin    =          floor(kplaypos/60)
+kpossec    =          floor(kplaypos%60)
+Smin       sprintfk   "%02d",kposmin 
+Ssec       sprintfk   "%02d",kpossec 
+           outvalue   "min",Smin 
+           outvalue   "sec",Ssec 
 		
 ;;collect and display mixdown audio signals
-idboramp	=		1; 0=raw amps, 1=db
-idbrange	=		48
-icliphold	=		2
-ktrigdisp	metro		10
-		CollectShowClear ichnls, ifirstout, 0, ktrigdisp, idboramp, idbrange, icliphold
+idboramp   =          1;0=raw amps, 1=db 
+idbrange   =          48
+icliphold  =          2
+ktrigdisp  metro      10
+           CollectShowClear ichnls, ifirstout, 0, ktrigdisp, idboramp, idbrange, icliphold 
 endin
-
 </CsInstruments>
 <CsScore>
 i 1 0 1
@@ -223,13 +222,15 @@ e
 </CsoundSynthesizer>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>0</x>
  <y>0</y>
- <width>517</width>
- <height>620</height>
+ <width>473</width>
+ <height>587</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -392,7 +393,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>49</label>
+  <label>59</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -421,7 +422,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>00</label>
+  <label>02</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -1215,8 +1216,8 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-1.27569873</xValue>
-  <yValue>-1.27569873</yValue>
+  <xValue>-0.75150371</xValue>
+  <yValue>-0.75150371</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1281,8 +1282,8 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-1.26623944</xValue>
-  <yValue>-1.26623944</yValue>
+  <xValue>-0.80731731</xValue>
+  <yValue>-0.80731731</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
