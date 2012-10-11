@@ -163,7 +163,7 @@ QString QuteKnob::getCabbageLine()
   widgetLock.lockForWrite();
 #endif
   QString line = "rslider ";
-  line = "chan(\"" + m_channel + "\"),  ";
+  line += "chan(\"" + m_channel + "\"),  ";
   line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
   line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
   line += "min("+ QString::number(property("QCS_minimum").toDouble(), 'f', 8) +"), ";
