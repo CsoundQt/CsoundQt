@@ -1,5 +1,6 @@
 RESOURCES += "src/application.qrc" \
-    "src/pythonscripts.qrc"
+    "src/pythonscripts.qrc" \
+	"src/icons.qrc"
 FORMS = "src/about.ui" \
     "src/configdialog.ui" \
     "src/findreplace.ui" \

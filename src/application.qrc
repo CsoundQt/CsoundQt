@@ -1,41 +1,13 @@
 <RCC>
     <qresource prefix="/">
         <file>../images/splashscreen.png</file>
-        <file>../images/gtk-copy.png</file>
-        <file>../images/gtk-cut.png</file>
-        <file>../images/gtk-new.png</file>
-        <file>../images/gnome-folder.png</file>
-        <file>../images/gnome-dev-floppy.png</file>
-        <file>../images/gtk-undo.png</file>
-        <file>../images/gtk-redo.png</file>
-        <file>../images/gtk-paste.png</file>
-        <file>../images/gtk-media-play-ltr.png</file>
-        <file>../images/gtk-media-play-ltr2.png</file>
-        <file>../images/gtk-media-play-trl.png</file>
-        <file>../images/render.png</file>
-        <file>../images/editfile.png</file>
-        <file>../images/playfile.png</file>
-        <file>../images/gtk-media-stop.png</file>
-        <file>../images/gtk-media-record.png</file>
-        <file>../images/gtk-reload.png</file>
-        <file>../images/control-center2.png</file>
-        <file>../images/gksu-root-terminal.png</file>
-        <file>../images/gnome-devel.png</file>
-        <file>../images/gnome-mime-application-x-diagram.png</file>
-        <file>../images/gtk-info.png</file>
         <file>../images/modIcon.png</file>
         <file>../images/modIcon2.png</file>
         <file>../images/qtcs.png</file>
-        <file>../images/cross.png</file>
-        <file>../images/edit-find.png</file>
-        <file>../images/note.png</file>
         <file>../images/project-support.jpg</file>
-        <file>../images/pyroom.png</file>
-        <file>../images/scratchpad.png</file>
-	<file>../images/gtk-close.png</file>
-	<file>../images/br_next.png</file>
-	<file>../images/br_prev.png</file>
-	<file>../images/gtk-search.png</file>	
+        <file>../images/br_next.png</file>
+        <file>../images/br_prev.png</file>
+        <file>../images/gtk-search.png</file>
         <file>opcodes.xml</file>
         <file>default.csd</file>
         <file>test.csd</file>
@@ -58,7 +30,7 @@
         <file>../examples/Miscellaneous/Reinit_Example.csd</file>
         <file>../examples/Miscellaneous/No_Reinit.csd</file>
         <file>../examples/Miscellaneous/Mincer_Loop.csd</file>
-		<file>../examples/Miscellaneous/Circle_Map.csd</file>
+        <file>../examples/Miscellaneous/Circle_Map.csd</file>
         <file>../examples/Miscellaneous/Binaural_Panning.csd</file>
         <file>../examples/Miscellaneous/Spatialization.csd</file>
         <file>../examples/Widgets/Widget_Panel.csd</file>

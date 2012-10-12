@@ -7,6 +7,7 @@
 # LIBSNDFILE_INCLUDE_DIR
 # LIBSNDFILE_LIBRARY_DIR
 # RTMIDI_DIR
+# PYTHONQT_TREE_DIR
 # If the Csound headers and libraries you are using were built from source but
 # not installed, set CSOUND_SOURCE_TREE to the directory containing the Csound
 # source tree.  In this case, the CSOUND_INCLUDE_DIR and CSOUND_LIBRARY_DIR
@@ -19,7 +20,7 @@
 # CONFIG+=buildDoubles #   To build doubles version
 # CONFIG+=build64    To build doubles version (deprecated)
 # CONFIG+=pythonqt  # To build with PythonQt support
-# CONFIG+=rtmidi   To build with Portmidi support
+# CONFIG+=rtmidi   To build with RtMidi support
 # OS X only OPTIONS:
 # CONFIG+=universal   To build i386/ppc version. Default is platform default
 # ##############################################################################

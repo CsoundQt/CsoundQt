@@ -20,95 +20,95 @@ nchnls = 2; change here if your device has more channels
 ;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
 Stray, ielindx, isepA, isepB xin
 ;;DEFINE THE SEPARATORS
-isep1		=		(isepA == -1 ? 32 : isepA)
-isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-Sep1		sprintf	"%c", isep1
-Sep2		sprintf	"%c", isep2
+isep1      =          (isepA== -1? 32 : isepA) 
+isep2      =          (isepA== -1&& isepB== -1? 9 : (isepB ==  -1 ? isep1 : isepB)) 
+Sep1       sprintf    "%c",isep1 
+Sep2       sprintf    "%c",isep2 
 ;;INITIALIZE SOME PARAMETERS
-ilen		strlen		Stray
-istartsel	=		-1; startindex for searched element
-iendsel	=		-1; endindex for searched element
-iel		=		0; actual number of element while searching
-iwarleer	=		1
-indx		=		0
+ilen       strlen     Stray
+istartsel  =          -1;startindex for searched element 
+iendsel    =          -1;endindex for searched element 
+iel        =          0;actual number of element while searching 
+iwarleer   =          1
+indx       =          0
  if ilen == 0 igoto end ;don't go into the loop if Stray is empty
-loop:
-Snext		strsub		Stray, indx, indx+1; next sign
-isep1p		strcmp		Snext, Sep1; returns 0 if Snext is sep1
-isep2p		strcmp		Snext, Sep2; 0 if Snext is sep2
+loop: 
+Snext      strsub     Stray,indx, indx+1; next sign 
+isep1p     strcmp     Snext,Sep1; returns 0 if  Snext is sep1 
+isep2p     strcmp     Snext,Sep2; 0 if  Snext is sep2 
 ;;NEXT SIGN IS NOT SEP1 NOR SEP2
 if isep1p != 0 && isep2p != 0 then
  if iwarleer == 1 then; first character after a separator 
   if iel == ielindx then; if searched element index
-istartsel	=		indx; set it
-iwarleer	=		0
-  else 			;if not searched element index
-iel		=		iel+1; increase it
-iwarleer	=		0; log that it's not a separator 
+istartsel  =          indx;set it 
+iwarleer   =          0
+           else       ;ifnot searched element index 
+iel        =          iel+1;increase it 
+iwarleer   =          0;log thatit's not a  separator 
   endif 
  endif 
 ;;NEXT SIGN IS SEP1 OR SEP2
-else 
+           else
  if istartsel > -1 then; if this is first selector after searched element
-iendsel	=		indx; set iendsel
-		igoto		end ;break
- else	
-iwarleer	=		1
+iendsel    =          indx;set iendsel 
+           igoto      end;break 
+           else
+iwarleer   =          1
  endif 
 endif
-		loop_lt	indx, 1, ilen, loop 
-end: 		xout		istartsel, iendsel
+           loop_lt    indx,1, ilen, loop 
+end:       xout       istartsel,iendsel 
   endop 
 
   opcode StrayLen, i, Sjj
 ;returns the number of elements in Stray. elements are defined by two separators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one separator is used, isep2 equals isep1
 Stray, isepA, isepB xin
 ;;DEFINE THE SEPARATORS
-isep1		=		(isepA == -1 ? 32 : isepA)
-isep2		=		(isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-Sep1		sprintf	"%c", isep1
-Sep2		sprintf	"%c", isep2
+isep1      =          (isepA== -1? 32 : isepA) 
+isep2      =          (isepA== -1&& isepB== -1? 9 : (isepB ==  -1 ? isep1 : isepB)) 
+Sep1       sprintf    "%c",isep1 
+Sep2       sprintf    "%c",isep2 
 ;;INITIALIZE SOME PARAMETERS
-ilen		strlen		Stray
-icount		=		0; number of elements
-iwarsep	=		1
-indx		=		0
+ilen       strlen     Stray
+icount     =          0;number of elements 
+iwarsep    =          1
+indx       =          0
  if ilen == 0 igoto end ;don't go into the loop if String is empty
-loop:
-Snext		strsub		Stray, indx, indx+1; next sign
-isep1p		strcmp		Snext, Sep1; returns 0 if Snext is sep1
-isep2p		strcmp		Snext, Sep2; 0 if Snext is sep2
+loop: 
+Snext      strsub     Stray,indx, indx+1; next sign 
+isep1p     strcmp     Snext,Sep1; returns 0 if  Snext is sep1 
+isep2p     strcmp     Snext,Sep2; 0 if  Snext is sep2 
  if isep1p == 0 || isep2p == 0 then; if sep1 or sep2
-iwarsep	=		1; tell the log so
- else 				; if not 
+iwarsep    =          1;tell the log  so 
+           else       ;if not
   if iwarsep == 1 then	; and has been sep1 or sep2 before
-icount		=		icount + 1; increase counter
-iwarsep	=		0; and tell you are ot sep1 nor sep2 
+icount     =          icount+ 1; increase counter 
+iwarsep    =          0;and tell you are ot sep1 nor sep2 
   endif 
  endif	
-		loop_lt	indx, 1, ilen, loop 
-end: 		xout		icount
+           loop_lt    indx,1, ilen, loop 
+end:       xout       icount
   endop 
 
   opcode MxdwnPlay, 0, Siiiiki
-Stray, ilen, ichnls, ifirstchn iel, kvol, iskip xin
-ipan 		=		iel * ((ichnls-1)/(ilen-1))
-ioutch1	=		int(ipan)+ifirstchn
-ioutch2	=		ioutch1+1
-Soutch1	sprintf	"outchn%d", ioutch1
-Soutch2	sprintf	"outchn%d", ioutch2
-ipan2		=		frac(ipan)
-ist, ien	StrayGetEl	Stray, iel, 124
-Sel		strsub		Stray, ist, ien
-asig		soundin	Sel, iskip
-iscale		=		ichnls / ilen
-a1, a2		pan2		asig*iscale*kvol, ipan2
-		chnmix 	a1, Soutch1
+Stray, ilen, ichnls, ifirstchn, iel, kvol, iskip xin
+ipan       =          iel* ((ichnls-1)/(ilen-1)) 
+ioutch1    =          int(ipan)+ifirstchn
+ioutch2    =          ioutch1+1
+Soutch1    sprintf    "outchn%d",ioutch1 
+Soutch2    sprintf    "outchn%d",ioutch2 
+ipan2      =          frac(ipan)
+ist, ien   StrayGetEl Stray,iel, 124 
+Sel        strsub     Stray,ist, ien 
+asig       soundin    Sel,iskip 
+iscale     =          ichnls/ ilen 
+a1, a2     pan2       asig*iscale*kvol,ipan2 
+           chnmix     a1,Soutch1 
 if ipan != 0 then
-		chnmix 	a2, Soutch2
+           chnmix     a2,Soutch2 
 endif
 if iel < ilen-1 then
-		MxdwnPlay 	Stray, ilen, ichnls, ifirstchn, iel+1, kvol, iskip
+           MxdwnPlay  Stray,ilen, ichnls, ifirstchn, iel+1, kvol, iskip 
 endif
   endop
 
@@ -120,15 +120,15 @@ endif
 ;kdispfreq: refresh frequency (Hz)
 ;kdb: 1 = show in dB, 0 = show in raw amplitudes (both in the range 0-1)
 ;kdbrange: if idb=1: how many db-steps are shown (e.g. if 36 you will not see anything from a signal below -36 dB)
-Soutchan, asig, kdispfreq, kdb, kdbrange	xin
-kdispval	max_k	asig, kdispfreq, 1
+Soutchan, asig, kdispfreq, kdb, kdbrange xin
+kdispval   max_k      asig,kdispfreq, 1 
 	if kdb != 0 then
-kdb 		= 		dbfsamp(kdispval)
-kval 		= 		(kdbrange + kdb) / kdbrange
-	else
-kval		=		kdispval
+kdb        =          dbfsamp(kdispval)
+kval       =          (kdbrange+ kdb) / kdbrange 
+           else
+kval       =          kdispval
 	endif
-			outvalue	Soutchan, kval
+           outvalue   Soutchan,kval 
   endop
 
 
@@ -139,94 +139,98 @@ kval		=		kdispval
 ;asig: audio signal which is to displayed
 ;kdispfreq: refresh frequency (Hz)
 ;khold: time in seconds to "hold the red light"
-Soutchan, asig, kdispfreq, khold	xin
-kon		init		0
-ktim		times
-kstart		init		0
-kend		init		0
-khold		=		(khold < .01 ? .01 : khold); avoiding too short hold times
-kmax		max_k		asig, kdispfreq, 1
+Soutchan, asig, kdispfreq, khold xin
+kon        init       0
+ktim       times
+kstart     init       0
+kend       init       0
+khold      =          (khold< .01? .01 : khold); avoiding too short hold times 
+kmax       max_k      asig,kdispfreq, 1 
 	if kon == 0 && kmax > 1 then
-kstart		=		ktim
-kend		=		kstart + khold
-		outvalue	Soutchan, kmax
-kon		=		1
+kstart     =          ktim
+kend       =          kstart+ khold 
+           outvalue   Soutchan,kmax 
+kon        =          1
 	endif
 	if kon == 1 && ktim > kend then
-		outvalue	Soutchan, 0
-kon		=		0
+           outvalue   Soutchan,0 
+kon        =          0
 	endif
   endop
 
   opcode CollectShowClear, 0, iiikiii
 ;collect the audio channels, sends them to the display, and clears the global audio channel
 ichnls, ifirstout, icount, ktrigdisp, idboramp, idbrange, icliphold xin
-Soutchn	sprintf	"outchn%d", icount+ifirstout
-Sdisp		sprintf	"out%d", icount+1
-Sover		sprintf	"over%d", icount+1
-Schn		sprintf	"chn%d", icount+1
-Schnval	sprintf	"%d", ifirstout+icount
-acollect	chnget		Soutchn
-		outch		ifirstout+icount, acollect
-		ShowLED_a	Sdisp, acollect, ktrigdisp, idboramp, idbrange
-		ShowOver_a	Sover, acollect, ktrigdisp, icliphold
-		outvalue	Schn, Schnval
-		chnclear	Soutchn
+Soutchn    sprintf    "outchn%d",icount+ifirstout 
+Sdisp      sprintf    "out%d",icount+1 
+Sover      sprintf    "over%d",icount+1 
+Schn       sprintf    "chn%d",icount+1 
+Schnval    sprintf    "%d",ifirstout+icount 
+acollect   chnget     Soutchn
+           outch      ifirstout+icount,acollect 
+           ShowLED_a  Sdisp,acollect, ktrigdisp, idboramp, idbrange 
+           ShowOver_a Sover,acollect, ktrigdisp, icliphold 
+           outvalue   Schn,Schnval 
+           chnclear   Soutchn
  if icount+1 < ichnls then
- 		CollectShowClear ichnls, ifirstout, icount+1, ktrigdisp, idboramp, idbrange, icliphold
+           CollectShowClear ichnls, ifirstout, icount+1, ktrigdisp, idboramp, idbrange, icliphold 
  endif
   endop
 
 instr 1
 ;input values
-Stray 		invalue	"_MBrowse"
-ist, ien	StrayGetEl	Stray, 0, 124; get duration from the first element
-Sfirst		strsub		Stray, ist, ien
-idur		filelen	Sfirst
-ilen		StrayLen	Stray, 124
-kchnls		invalue	"numoutch"
-kfirstout	invalue	"firstout"
-kskip		invalue	"skip"
-kdb		invalue	"db"
-kvol		=		ampdb(kdb)
-ichnls		=		i(kchnls)
-ifirstout	=		i(kfirstout)
-iskip 		=		i(kskip)
-p3		=		idur - iskip
+Stray      invalue    "_MBrowse"
+ist, ien   StrayGetEl Stray,0, 124; get duration from the first element 
+Sfirst     strsub     Stray,ist, ien 
+idur       filelen    Sfirst
+ilen       StrayLen   Stray,124 
+kchnls     invalue    "numoutch"
+kfirstout  invalue    "firstout"
+kskip      invalue    "skip"
+kdb        invalue    "db"
+kvol       =          ampdb(kdb)
+ichnls     =          i(kchnls)
+ifirstout  =          i(kfirstout)
+iskip      =          i(kskip)
+p3         =          idur- iskip 
 
 ;play as many channels as there are monofiles given, and pan to the output channels
-		MxdwnPlay	Stray, ilen, ichnls, ifirstout, 0, kvol, iskip
+           MxdwnPlay  Stray,ilen, ichnls, ifirstout, 0, kvol, iskip 
 
 ;;display time
-ktim		timeinsts
-kplaypos	=		iskip + ktim
-kposmin	=		floor(kplaypos/60)
-kpossec	=		floor(kplaypos%60)
-Smin		sprintfk	"%02d", kposmin
-Ssec		sprintfk	"%02d", kpossec
-		outvalue	"min", Smin
-		outvalue	"sec", Ssec
+ktim       timeinsts
+kplaypos   =          iskip+ ktim 
+kposmin    =          floor(kplaypos/60)
+kpossec    =          floor(kplaypos%60)
+Smin       sprintfk   "%02d",kposmin 
+Ssec       sprintfk   "%02d",kpossec 
+           outvalue   "min",Smin 
+           outvalue   "sec",Ssec 
 		
 ;;collect and display mixdown audio signals
-idboramp	=		1; 0=raw amps, 1=db
-idbrange	=		48
-icliphold	=		2
-ktrigdisp	metro		10
-		CollectShowClear ichnls, ifirstout, 0, ktrigdisp, idboramp, idbrange, icliphold
+idboramp   =          1;0=raw amps, 1=db 
+idbrange   =          48
+icliphold  =          2
+ktrigdisp  metro      10
+           CollectShowClear ichnls, ifirstout, 0, ktrigdisp, idboramp, idbrange, icliphold 
 endin
-
 </CsInstruments>
 <CsScore>
 i 1 0 1
 e
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+
+
+
+
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>72</x>
- <y>179</y>
- <width>400</width>
- <height>200</height>
+ <x>0</x>
+ <y>0</y>
+ <width>473</width>
+ <height>587</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -389,7 +393,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>00</label>
+  <label>59</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -418,7 +422,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>00</label>
+  <label>02</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -1172,9 +1176,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -1212,8 +1216,8 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>-0.75150371</xValue>
+  <yValue>-0.75150371</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1278,8 +1282,8 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>-0.80731731</xValue>
+  <yValue>-0.80731731</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1311,8 +1315,8 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.04000000</xValue>
-  <yValue>0.04000000</yValue>
+  <xValue>0.00000000</xValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1735,7 +1739,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <label>1</label>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -1764,7 +1768,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <label>2</label>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -2018,78 +2022,3 @@ e
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 72 179 400 200
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioText {30, 56} {399, 124} label 0.000000 0.00100 "" center "Arial" 10 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioText {324, 316} {96, 76} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioText {375, 362} {37, 28} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder sec
-ioText {333, 362} {37, 28} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder min
-ioText {364, 339} {17, 27} label 0.000000 0.00100 "" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder :
-ioText {379, 339} {33, 26} display 0.000000 0.00100 "sec" left "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 00
-ioText {333, 339} {33, 26} display 0.000000 0.00100 "min" right "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 00
-ioText {324, 316} {94, 26} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Time
-ioText {230, 319} {43, 28} editnum 2.000000 1.000000 "numoutch" left "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2.000000
-ioText {29, 319} {203, 27} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Number Of Output Channels
-ioText {184, 350} {44, 27} editnum 1.000000 1.000000 "firstout" left "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 1.000000
-ioText {29, 350} {156, 27} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder First Output Channel
-ioText {352, 118} {33, 29} label 8.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 8
-ioText {316, 119} {33, 29} label 7.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 7
-ioText {278, 119} {33, 29} label 6.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 6
-ioText {241, 119} {33, 29} label 5.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 5
-ioText {205, 119} {33, 29} label 4.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 4
-ioText {168, 119} {33, 29} label 3.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 3
-ioText {131, 119} {33, 29} label 2.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 2
-ioText {94, 119} {33, 29} label 1.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 1
-ioText {352, 148} {33, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder R
-ioText {94, 147} {33, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder L
-ioText {29, 146} {52, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder OUT
-ioText {29, 118} {52, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder IN
-ioText {30, 59} {397, 59} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Mixes any number of mono soundfiles to any number of output channels by panning. For instance, if you mix 8 channels down to 2, it will be done in this way:
-ioText {73, 11} {308, 42} label 0.000000 0.00100 "" center "Arial" 22 {0, 0, 0} {61952, 61696, 61440} nobackground noborder MIXDOWN PLAYER
-ioText {42, 277} {67, 27} label 0.000000 0.00100 "" right "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Gain
-ioText {370, 278} {47, 27} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder dB
-ioText {320, 277} {52, 28} display 0.000000 0.00100 "db" left "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.000
-ioText {253, 188} {80, 25} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Skiptime
-ioSlider {109, 277} {212, 28} -12.000000 12.000000 0.000000 db
-ioText {336, 187} {65, 27} editnum 0.000000 0.001000 "skip" left "" 0 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 0.000000
-ioText {19, 228} {417, 27} edit 0.000000 0.00100 "_MBrowse"  "Lucida Grande" 12 {0, 0, 0} {58624, 58624, 58624} falsenoborder 
-ioButton {71, 186} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
-ioMeter {32, 419} {25, 100} {0, 59904, 0} "out1" 0.000000 "out1" 0.000000 fill 1 0 mouse
-ioMeter {32, 395} {25, 25} {39680, 768, 0} "over1" 0.000000 "over1" 0.000000 fill 1 0 mouse
-ioMeter {64, 419} {25, 100} {0, 59904, 0} "out2" 0.000000 "out2" 0.000000 fill 1 0 mouse
-ioMeter {64, 395} {25, 25} {39680, 768, 0} "over2" 0.040000 "over2" 0.040000 fill 1 0 mouse
-ioMeter {97, 419} {25, 100} {0, 59904, 0} "out3" -inf "out3" -inf fill 1 0 mouse
-ioMeter {97, 395} {25, 25} {39680, 768, 0} "over3" 0.000000 "over3" 0.000000 fill 1 0 mouse
-ioMeter {129, 419} {25, 100} {0, 59904, 0} "out4" -inf "out4" -inf fill 1 0 mouse
-ioMeter {129, 395} {25, 25} {39680, 768, 0} "over4" 0.000000 "over4" 0.000000 fill 1 0 mouse
-ioMeter {163, 419} {25, 100} {0, 59904, 0} "out5" -inf "out5" -inf fill 1 0 mouse
-ioMeter {163, 395} {25, 25} {39680, 768, 0} "over5" 0.000000 "over5" 0.000000 fill 1 0 mouse
-ioMeter {195, 419} {25, 100} {0, 59904, 0} "out6" -inf "out6" -inf fill 1 0 mouse
-ioMeter {195, 395} {25, 25} {39680, 768, 0} "over6" 0.000000 "over6" 0.000000 fill 1 0 mouse
-ioMeter {228, 419} {25, 100} {0, 59904, 0} "out7" -inf "out7" -inf fill 1 0 mouse
-ioMeter {228, 395} {25, 25} {39680, 768, 0} "over7" 0.000000 "over7" 0.000000 fill 1 0 mouse
-ioMeter {260, 419} {25, 100} {0, 59904, 0} "out8" -inf "out8" -inf fill 1 0 mouse
-ioMeter {260, 395} {25, 25} {39680, 768, 0} "over8" 0.000000 "over8" 0.000000 fill 1 0 mouse
-ioText {32, 527} {26, 28} display 0.000000 0.00100 "chn1" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioText {65, 527} {26, 28} display 0.000000 0.00100 "chn2" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioText {96, 527} {26, 28} display 0.000000 0.00100 "chn3" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioText {129, 527} {26, 28} display 0.000000 0.00100 "chn4" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioText {162, 527} {26, 28} display 0.000000 0.00100 "chn5" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioText {195, 527} {26, 28} display 0.000000 0.00100 "chn6" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioText {226, 527} {26, 28} display 0.000000 0.00100 "chn7" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioText {259, 527} {26, 28} display 0.000000 0.00100 "chn8" center "Arial" 14 {0, 0, 0} {61952, 61696, 61440} nobackground noborder 
-ioText {324, 531} {80, 25} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Output Channel
-ioText {319, 396} {116, 123} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {61952, 61696, 61440} nobackground noborder Make sure your nchnls value in the orchestra header matches the desired number of channels!
-</MacGUI>

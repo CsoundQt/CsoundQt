@@ -46,7 +46,7 @@ class DockHelp : public QDockWidget
     void loadFile(QString fileName);
     bool externalBrowser;
     QString docDir;
-  private:
+private:
     QTextBrowser *text;
     QLineEdit *findLine;
     QToolBar *findBar;

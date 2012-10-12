@@ -600,13 +600,14 @@ i 1 0 36000
 e
 </CsScore>
 </CsoundSynthesizer>
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>495</x>
- <y>32</y>
- <width>813</width>
- <height>730</height>
+ <x>0</x>
+ <y>0</y>
+ <width>771</width>
+ <height>710</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -616,15 +617,15 @@ e
  </bgcolor>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse1</objectName>
-  <x>27</x>
-  <y>131</y>
+  <x>26</x>
+  <y>147</y>
   <width>324</width>
   <height>24</height>
   <uuid>{13ef4f41-afd7-401f-af30-ce7f8c53c3f1}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>/home/linux/Desktop/record.wav</label>
+  <label>/home/jh/record.wav</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -635,9 +636,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -1202,7 +1203,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.59259300</xValue>
-  <yValue>0.26016641</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1268,7 +1269,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.59259300</xValue>
-  <yValue>0.29813814</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1984,7 +1985,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.59259300</xValue>
-  <yValue>0.10023991</yValue>
+  <yValue>-0.01969341</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2050,7 +2051,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.59259300</xValue>
-  <yValue>0.13821165</yValue>
+  <yValue>-0.08401508</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2450,8 +2451,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>59</x>
-  <y>18</y>
+  <x>60</x>
+  <y>4</y>
   <width>398</width>
   <height>43</height>
   <uuid>{f3f21629-5cab-4c50-a594-46213a503e87}</uuid>
@@ -2661,7 +2662,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>131</label>
+  <label>000</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
@@ -2858,15 +2859,15 @@ e
   <objectName>message</objectName>
   <x>560</x>
   <y>80</y>
-  <width>208</width>
-  <height>28</height>
+  <width>210</width>
+  <height>42</height>
   <uuid>{3a1133e2-10fd-4f4c-ae93-037ed64cb051}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>Record stopped.</label>
+  <midicc>0</midicc>
+  <label/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -2951,7 +2952,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>13</label>
+  <label>00</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
@@ -3001,8 +3002,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>stop</objectName>
-  <x>189</x>
-  <y>174</y>
+  <x>188</x>
+  <y>190</y>
   <width>80</width>
   <height>25</height>
   <uuid>{ffae3ed8-07b3-4b32-b5c8-e207d5948519}</uuid>
@@ -3020,8 +3021,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>record</objectName>
-  <x>99</x>
-  <y>174</y>
+  <x>98</x>
+  <y>190</y>
   <width>78</width>
   <height>26</height>
   <uuid>{17b5a29b-6c4d-46e0-b743-23f8dcd30d46}</uuid>
@@ -3086,8 +3087,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Browse1</objectName>
-  <x>141</x>
-  <y>89</y>
+  <x>140</x>
+  <y>105</y>
   <width>100</width>
   <height>30</height>
   <uuid>{f9e7606f-af68-4856-9eae-13c95f9d334f}</uuid>
@@ -3096,12 +3097,41 @@ e
   <midicc>-3</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/linux/Desktop/record.wav</stringvalue>
+  <stringvalue>/home/jh/record.wav</stringvalue>
   <text>Output File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>9</x>
+  <y>46</y>
+  <width>545</width>
+  <height>47</height>
+  <uuid>{d54cb51a-9937-4d7c-aeca-8a9ff7836ef0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Select output file and input channels. Run Csound. Push the Record button to start recording.</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
