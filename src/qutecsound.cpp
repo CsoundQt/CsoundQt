@@ -937,8 +937,7 @@ void CsoundQt::createApp()
     wizard.setField("showRun", QVariant(existingProperties.showRun));
     wizard.setField("saveState", QVariant(existingProperties.saveState));
     wizard.setField("runMode", QVariant(existingProperties.runMode));
-    wizard.setField("newParser", QVariant(existingProperties.newParser));
-    wizard.setField("useDoubles", QVariant(existingProperties.useDoubles ? 1 : 0));
+	wizard.setField("newParser", QVariant(existingProperties.newParser));
     wizard.setField("useSdk", QVariant(existingProperties.useSdk ? 1 : 0));
     wizard.setField("useCustomPaths", QVariant(existingProperties.useCustomPaths));
     wizard.setField("libDir", QVariant(existingProperties.libDir));
@@ -987,8 +986,7 @@ void CsoundQt::createApp()
     properties.showRun = wizard.field("showRun").toBool();
     properties.saveState = wizard.field("saveState").toBool();
     properties.runMode = wizard.field("runMode").toInt();
-    properties.newParser = wizard.field("newParser").toBool();
-    properties.useDoubles = wizard.field("useDoubles").toBool();
+	properties.newParser = wizard.field("newParser").toBool();
     properties.useSdk = wizard.field("useSdk").toBool();
     properties.useCustomPaths = wizard.field("useCustomPaths").toBool();
     properties.libDir = wizard.field("libDir").toString();
@@ -2262,25 +2260,27 @@ void CsoundQt::createActions()
 {
   // Actions that are not connected here depend on the active document, so they are
   // connected with connectActions() and are changed when the document changes.
-  newAct = new QAction(QIcon(":/images/gtk-new.png"), tr("&New"), this);
+  QString theme = "boring";
+  QString prefix = ":/themes/" + theme + "/";
+  newAct = new QAction(QIcon(prefix + "gtk-new.png"), tr("&New"), this);
   newAct->setStatusTip(tr("Create a new file"));
   newAct->setIconText(tr("New"));
   newAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));
 
-  openAct = new QAction(QIcon(":/images/gnome-folder.png"), tr("&Open..."), this);
+  openAct = new QAction(QIcon(prefix + "gnome-folder.png"), tr("&Open..."), this);
   openAct->setStatusTip(tr("Open an existing file"));
   openAct->setIconText(tr("Open"));
   openAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
-  reloadAct = new QAction(QIcon(":/images/gtk-reload.png"), tr("Reload"), this);
+  reloadAct = new QAction(QIcon(prefix + "gtk-reload.png"), tr("Reload"), this);
   reloadAct->setStatusTip(tr("Reload file from disk, discarding changes"));
 //   reloadAct->setIconText(tr("Reload"));
   reloadAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(reloadAct, SIGNAL(triggered()), this, SLOT(reload()));
 
-  saveAct = new QAction(QIcon(":/images/gnome-dev-floppy.png"), tr("&Save"), this);
+  saveAct = new QAction(QIcon(prefix + "gnome-dev-floppy.png"), tr("&Save"), this);
   saveAct->setStatusTip(tr("Save the document to disk"));
   saveAct->setIconText(tr("Save"));
   saveAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -2306,14 +2306,14 @@ void CsoundQt::createActions()
   closeTabAct = new QAction(tr("Close current tab"), this);
   closeTabAct->setStatusTip(tr("Close current tab"));
 //   closeTabAct->setIconText(tr("Close"));
-  closeTabAct->setIcon(QIcon(":/images/cross.png"));
+  closeTabAct->setIcon(QIcon(prefix + "gtk-close.png"));
   closeTabAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(closeTabAct, SIGNAL(triggered()), this, SLOT(closeTab()));
 
   printAct = new QAction(tr("Print"), this);
   printAct->setStatusTip(tr("Print current document"));
 //   printAct->setIconText(tr("Print"));
-//   closeTabAct->setIcon(QIcon(":/images/cross.png"));
+//   closeTabAct->setIcon(QIcon(prefix + "gtk-close.png"));
   printAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(printAct, SIGNAL(triggered()), this, SLOT(print()));
 
@@ -2341,82 +2341,82 @@ void CsoundQt::createActions()
   createCodeGraphAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(createCodeGraphAct, SIGNAL(triggered()), this, SLOT(createCodeGraph()));
 
-  undoAct = new QAction(QIcon(":/images/gtk-undo.png"), tr("Undo"), this);
+  undoAct = new QAction(QIcon(prefix + "gtk-undo.png"), tr("Undo"), this);
   undoAct->setStatusTip(tr("Undo last action"));
   undoAct->setIconText(tr("Undo"));
   undoAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(undoAct, SIGNAL(triggered()), this, SLOT(undo()));
 
-  redoAct = new QAction(QIcon(":/images/gtk-redo.png"), tr("Redo"), this);
+  redoAct = new QAction(QIcon(prefix + "gtk-redo.png"), tr("Redo"), this);
   redoAct->setStatusTip(tr("Redo last action"));
   redoAct->setIconText(tr("Redo"));
   redoAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(redoAct, SIGNAL(triggered()), this, SLOT(redo()));
 
-  cutAct = new QAction(QIcon(":/images/gtk-cut.png"), tr("Cu&t"), this);
+  cutAct = new QAction(QIcon(prefix + "gtk-cut.png"), tr("Cu&t"), this);
   cutAct->setStatusTip(tr("Cut the current selection's contents to the "
       "clipboard"));
   cutAct->setIconText(tr("Cut"));
   cutAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
 
-  copyAct = new QAction(QIcon(":/images/gtk-copy.png"), tr("&Copy"), this);
+  copyAct = new QAction(QIcon(prefix + "gtk-copy.png"), tr("&Copy"), this);
   copyAct->setStatusTip(tr("Copy the current selection's contents to the "
       "clipboard"));
   copyAct->setIconText(tr("Copy"));
   copyAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
 
-  pasteAct = new QAction(QIcon(":/images/gtk-paste.png"), tr("&Paste"), this);
+  pasteAct = new QAction(QIcon(prefix + "gtk-paste.png"), tr("&Paste"), this);
   pasteAct->setStatusTip(tr("Paste the clipboard's contents into the current "
       "selection"));
   pasteAct->setIconText(tr("Paste"));
   pasteAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
 
-  joinAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("&Join orc/sco"), this);
+  joinAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("&Join orc/sco"), this);
   joinAct->setStatusTip(tr("Join orc/sco files in a single csd file"));
 //   joinAct->setIconText(tr("Join"));
   joinAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(joinAct, SIGNAL(triggered()), this, SLOT(join()));
 
-  evaluateAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Evaluate selection"), this);
+  evaluateAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Evaluate selection"), this);
   evaluateAct->setStatusTip(tr("Evaluate selection in Python Console"));
   evaluateAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(evaluateAct, SIGNAL(triggered()), this, SLOT(evaluatePython()));
 
-  evaluateSectionAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Evaluate section"), this);
+  evaluateSectionAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Evaluate section"), this);
   evaluateSectionAct->setStatusTip(tr("Evaluate current section in Python Console"));
   evaluateSectionAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(evaluateSectionAct, SIGNAL(triggered()), this, SLOT(evaluateSection()));
 
-  inToGetAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Invalue->Chnget"), this);
+  inToGetAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Invalue->Chnget"), this);
   inToGetAct->setStatusTip(tr("Convert invalue/outvalue to chnget/chnset"));
   inToGetAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(inToGetAct, SIGNAL(triggered()), this, SLOT(inToGet()));
 
-  getToInAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Chnget->Invalue"), this);
+  getToInAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Chnget->Invalue"), this);
   getToInAct->setStatusTip(tr("Convert chnget/chnset to invalue/outvalue"));
   getToInAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(getToInAct, SIGNAL(triggered()), this, SLOT(getToIn()));
 
-  csladspaAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Insert/Update CsLADSPA text"), this);
+  csladspaAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Insert/Update CsLADSPA text"), this);
   csladspaAct->setStatusTip(tr("Insert/Update CsLADSPA section to csd file"));
   csladspaAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(csladspaAct, SIGNAL(triggered()), this, SLOT(updateCsladspaText()));
 
-  cabbageAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Insert/Update Cabbage text"), this);
+  cabbageAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Insert/Update Cabbage text"), this);
   cabbageAct->setStatusTip(tr("Insert/Update Cabbage section to csd file"));
   cabbageAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(cabbageAct, SIGNAL(triggered()), this, SLOT(updateCabbageText()));
 
-  findAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("&Find and Replace"), this);
+  findAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("&Find and Replace"), this);
   findAct->setStatusTip(tr("Find and replace strings in file"));
 //   findAct->setIconText(tr("Find"));
   findAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(findAct, SIGNAL(triggered()), this, SLOT(findReplace()));
 
-  findAgainAct = new QAction(/*QIcon(":/images/gtk-paste.png"),*/ tr("Find a&gain"), this);
+  findAgainAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Find a&gain"), this);
   findAgainAct->setStatusTip(tr("Find next appearance of string"));
 //   findAct->setIconText(tr("Find"));
   findAgainAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -2428,45 +2428,45 @@ void CsoundQt::createActions()
   autoCompleteAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(autoCompleteAct, SIGNAL(triggered()), this, SLOT(autoComplete()));
 
-  configureAct = new QAction(QIcon(":/images/control-center2.png"), tr("Configuration"), this);
+  configureAct = new QAction(QIcon(prefix + "control-center2.png"), tr("Configuration"), this);
   configureAct->setStatusTip(tr("Open configuration dialog"));
   configureAct->setIconText(tr("Configure"));
   configureAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(configureAct, SIGNAL(triggered()), this, SLOT(configure()));
 
-  editAct = new QAction(/*QIcon(":/images/gtk-media-play-ltr.png"),*/ tr("Widget Edit Mode"), this);
+  editAct = new QAction(/*QIcon(prefix + "gtk-media-play-ltr.png"),*/ tr("Widget Edit Mode"), this);
   editAct->setStatusTip(tr("Activate Edit Mode for Widget Panel"));
   //   editAct->setIconText("Play");
   editAct->setCheckable(true);
   editAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(editAct, SIGNAL(triggered(bool)), this, SLOT(setWidgetEditMode(bool)));
 
-  runAct = new QAction(QIcon(":/images/gtk-media-play-ltr.png"), tr("Run Csound"), this);
+  runAct = new QAction(QIcon(prefix + "gtk-media-play-ltr.png"), tr("Run Csound"), this);
   runAct->setStatusTip(tr("Run current file"));
   runAct->setIconText(tr("Run"));
   runAct->setCheckable(true);
   runAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(runAct, SIGNAL(triggered()), this, SLOT(play()));
 
-  runTermAct = new QAction(QIcon(":/images/gtk-media-play-ltr2.png"), tr("Run in Terminal"), this);
+  runTermAct = new QAction(QIcon(prefix + "gtk-media-play-ltr2.png"), tr("Run in Terminal"), this);
   runTermAct->setStatusTip(tr("Run in external shell"));
   runTermAct->setIconText(tr("Run in Term"));
   runTermAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(runTermAct, SIGNAL(triggered()), this, SLOT(runInTerm()));
 
-  stopAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop"), this);
+  stopAct = new QAction(QIcon(prefix + "gtk-media-stop.png"), tr("Stop"), this);
   stopAct->setStatusTip(tr("Stop"));
   stopAct->setIconText(tr("Stop"));
   stopAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(stopAct, SIGNAL(triggered()), this, SLOT(stop()));
 
-  stopAllAct = new QAction(QIcon(":/images/gtk-media-stop.png"), tr("Stop All"), this);
+  stopAllAct = new QAction(QIcon(prefix + "gtk-media-stop.png"), tr("Stop All"), this);
   stopAllAct->setStatusTip(tr("Stop all running documents"));
   stopAllAct->setIconText(tr("Stop All"));
   stopAllAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(stopAllAct, SIGNAL(triggered()), this, SLOT(stopAll()));
 
-  recAct = new QAction(QIcon(":/images/gtk-media-record.png"), tr("Record"), this);
+  recAct = new QAction(QIcon(prefix + "gtk-media-record.png"), tr("Record"), this);
   recAct->setStatusTip(tr("Record"));
   recAct->setIconText(tr("Record"));
   recAct->setCheckable(true);
@@ -2474,32 +2474,32 @@ void CsoundQt::createActions()
   recAct->setChecked(false);
   connect(recAct, SIGNAL(toggled(bool)), this, SLOT(record(bool)));
 
-  renderAct = new QAction(QIcon(":/images/render.png"), tr("Render to file"), this);
+  renderAct = new QAction(QIcon(prefix + "render.png"), tr("Render to file"), this);
   renderAct->setStatusTip(tr("Render to file"));
   renderAct->setIconText(tr("Render"));
   renderAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(renderAct, SIGNAL(triggered()), this, SLOT(render()));
 
-  externalPlayerAct = new QAction(QIcon(":/images/playfile.png"), tr("Play Audiofile"), this);
+  externalPlayerAct = new QAction(QIcon(prefix + "playfile.png"), tr("Play Audiofile"), this);
   externalPlayerAct->setStatusTip(tr("Play rendered audiofile in External Editor"));
   externalPlayerAct->setIconText(tr("Ext. Player"));
   externalPlayerAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(externalPlayerAct, SIGNAL(triggered()), this, SLOT(openExternalPlayer()));
 
-  externalEditorAct = new QAction(QIcon(":/images/editfile.png"), tr("Edit Audiofile"), this);
+  externalEditorAct = new QAction(QIcon(prefix + "editfile.png"), tr("Edit Audiofile"), this);
   externalEditorAct->setStatusTip(tr("Edit rendered audiofile in External Editor"));
   externalEditorAct->setIconText(tr("Ext. Editor"));
   externalEditorAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(externalEditorAct, SIGNAL(triggered()), this, SLOT(openExternalEditor()));
 
-  showWidgetsAct = new QAction(QIcon(":/images/gnome-mime-application-x-diagram.png"), tr("Widgets"), this);
+  showWidgetsAct = new QAction(QIcon(prefix + "gnome-mime-application-x-diagram.png"), tr("Widgets"), this);
   showWidgetsAct->setCheckable(true);
   //showWidgetsAct->setChecked(true);
   showWidgetsAct->setStatusTip(tr("Show Realtime Widgets"));
   showWidgetsAct->setIconText(tr("Widgets"));
   showWidgetsAct->setShortcutContext(Qt::ApplicationShortcut);
 
-  showInspectorAct = new QAction(QIcon(":/images/edit-find.png"), tr("Inspector"), this);
+  showInspectorAct = new QAction(QIcon(prefix + "edit-find.png"), tr("Inspector"), this);
   showInspectorAct->setCheckable(true);
   showInspectorAct->setStatusTip(tr("Show Inspector"));
   showInspectorAct->setIconText(tr("Inspector"));
@@ -2513,7 +2513,7 @@ void CsoundQt::createActions()
   focusEditorAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(focusEditorAct, SIGNAL(triggered()), this, SLOT(setEditorFocus()));
 
-  showHelpAct = new QAction(QIcon(":/images/gtk-info.png"), tr("Help Panel"), this);
+  showHelpAct = new QAction(QIcon(prefix + "gtk-info.png"), tr("Help Panel"), this);
   showHelpAct->setCheckable(true);
   showHelpAct->setChecked(true);
   showHelpAct->setStatusTip(tr("Show the Csound Manual Panel"));
@@ -2522,14 +2522,14 @@ void CsoundQt::createActions()
   connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
   connect(helpPanel, SIGNAL(Close(bool)), showHelpAct, SLOT(setChecked(bool)));
 
-  showLiveEventsAct = new QAction(QIcon(":/images/note.png"), tr("Live Events"), this);
+  showLiveEventsAct = new QAction(QIcon(prefix + "note.png"), tr("Live Events"), this);
   showLiveEventsAct->setCheckable(true);
 //  showLiveEventsAct->setChecked(true);  // Unnecessary because it is set by options
   showLiveEventsAct->setStatusTip(tr("Show Live Events Panels"));
   showLiveEventsAct->setIconText(tr("Live Events"));
   showLiveEventsAct->setShortcutContext(Qt::ApplicationShortcut);
 
-  showPythonConsoleAct = new QAction(QIcon(":/images/pyroom.png"), tr("Python Console"), this);
+  showPythonConsoleAct = new QAction(QIcon(prefix + "pyroom.png"), tr("Python Console"), this);
   showPythonConsoleAct->setCheckable(true);
 //  showPythonConsoleAct->setChecked(true);  // Unnecessary because it is set by options
   showPythonConsoleAct->setStatusTip(tr("Show Python Console"));
@@ -2542,7 +2542,7 @@ void CsoundQt::createActions()
   connect(showPythonConsoleAct, SIGNAL(triggered()), this, SLOT(showNoPythonQtWarning()));
 #endif
 
-  showPythonScratchPadAct = new QAction(QIcon(":/images/scratchpad.png"), tr("ScratchPad"), this);
+  showPythonScratchPadAct = new QAction(QIcon(prefix + "scratchpad.png"), tr("ScratchPad"), this);
   showPythonScratchPadAct->setCheckable(true);
 //  showPythonConsoleAct->setChecked(true);  // Unnecessary because it is set by options
   showPythonScratchPadAct->setStatusTip(tr("Show Python Scratch Pad"));
@@ -2555,27 +2555,27 @@ void CsoundQt::createActions()
   connect(showPythonScratchPadAct, SIGNAL(triggered()), this, SLOT(showNoPythonQtWarning()));
 #endif
 
-  showManualAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("Csound Manual"), this);
+  showManualAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */tr("Csound Manual"), this);
   showManualAct->setStatusTip(tr("Show the Csound manual in the help panel"));
   showManualAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(showManualAct, SIGNAL(triggered()), helpPanel, SLOT(showManual()));
 
-  showGenAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("GEN Routines"), this);
+  showGenAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */tr("GEN Routines"), this);
   showGenAct->setStatusTip(tr("Show the GEN Routines Manual page"));
   showGenAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(showGenAct, SIGNAL(triggered()), helpPanel, SLOT(showGen()));
 
-  showOverviewAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("Opcode Overview"), this);
+  showOverviewAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */tr("Opcode Overview"), this);
   showOverviewAct->setStatusTip(tr("Show opcode overview"));
   showOverviewAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(showOverviewAct, SIGNAL(triggered()), helpPanel, SLOT(showOverview()));
 
-  showOpcodeQuickRefAct = new QAction(/*QIcon(":/images/gtk-info.png"), */tr("Opcode Quick Reference"), this);
+  showOpcodeQuickRefAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */tr("Opcode Quick Reference"), this);
   showOpcodeQuickRefAct->setStatusTip(tr("Show opcode quick reference page"));
   showOpcodeQuickRefAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(showOpcodeQuickRefAct, SIGNAL(triggered()), helpPanel, SLOT(showOpcodeQuickRef()));
 
-  showConsoleAct = new QAction(QIcon(":/images/gksu-root-terminal.png"), tr("Output Console"), this);
+  showConsoleAct = new QAction(QIcon(prefix + "gksu-root-terminal.png"), tr("Output Console"), this);
   showConsoleAct->setCheckable(true);
   showConsoleAct->setChecked(true);
   showConsoleAct->setStatusTip(tr("Show Csound's message console"));
@@ -2584,21 +2584,21 @@ void CsoundQt::createActions()
   connect(showConsoleAct, SIGNAL(toggled(bool)), m_console, SLOT(setVisible(bool)));
   connect(m_console, SIGNAL(Close(bool)), showConsoleAct, SLOT(setChecked(bool)));
 
-  viewFullScreenAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("View Full Screen"), this);
+  viewFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View Full Screen"), this);
   viewFullScreenAct->setCheckable(true);
   viewFullScreenAct->setChecked(false);
   viewFullScreenAct->setStatusTip(tr("Have CsoundQt occupy all the available screen space"));
   viewFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(viewFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setFullScreen(bool)));
 
-  splitViewAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Split View"), this);
+  splitViewAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Split View"), this);
   splitViewAct->setCheckable(true);
   splitViewAct->setChecked(false);
   splitViewAct->setStatusTip(tr("Toggle between full csd and split text display"));
   splitViewAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(splitViewAct, SIGNAL(toggled(bool)), this, SLOT(splitView(bool)));
 
-  showOrcAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show Orchestra"), this);
+  showOrcAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Orchestra"), this);
   showOrcAct->setCheckable(true);
   showOrcAct->setChecked(true);
   showOrcAct->setEnabled(false);
@@ -2607,7 +2607,7 @@ void CsoundQt::createActions()
   connect(showOrcAct, SIGNAL(toggled(bool)), this, SLOT(showOrc(bool)));
   connect(splitViewAct, SIGNAL(toggled(bool)), showOrcAct, SLOT(setEnabled(bool)));
 
-  showScoreAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show Score"), this);
+  showScoreAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Score"), this);
   showScoreAct->setCheckable(true);
   showScoreAct->setChecked(true);
   showScoreAct->setEnabled(false);
@@ -2616,7 +2616,7 @@ void CsoundQt::createActions()
   connect(showScoreAct, SIGNAL(toggled(bool)), this, SLOT(showScore(bool)));
   connect(splitViewAct, SIGNAL(toggled(bool)), showScoreAct, SLOT(setEnabled(bool)));
 
-  showOptionsAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show CsOptions"), this);
+  showOptionsAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show CsOptions"), this);
   showOptionsAct->setCheckable(true);
   showOptionsAct->setChecked(true);
   showOptionsAct->setEnabled(false);
@@ -2625,7 +2625,7 @@ void CsoundQt::createActions()
   connect(showOptionsAct, SIGNAL(toggled(bool)), this, SLOT(showOptions(bool)));
   connect(splitViewAct, SIGNAL(toggled(bool)), showOptionsAct, SLOT(setEnabled(bool)));
 
-  showFileBAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show Embedded files"), this);
+  showFileBAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Embedded files"), this);
   showFileBAct->setCheckable(true);
   showFileBAct->setChecked(false);
   showFileBAct->setEnabled(false);
@@ -2634,7 +2634,7 @@ void CsoundQt::createActions()
   connect(showFileBAct, SIGNAL(toggled(bool)), this, SLOT(showFileB(bool)));
   connect(splitViewAct, SIGNAL(toggled(bool)), showFileBAct, SLOT(setEnabled(bool)));
 
-  showOtherAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show Information Text"), this);
+  showOtherAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Information Text"), this);
   showOtherAct->setCheckable(true);
   showOtherAct->setChecked(false);
   showOtherAct->setEnabled(false);
@@ -2643,7 +2643,7 @@ void CsoundQt::createActions()
   connect(showOtherAct, SIGNAL(toggled(bool)), this, SLOT(showOther(bool)));
   connect(splitViewAct, SIGNAL(toggled(bool)), showOtherAct, SLOT(setEnabled(bool)));
 
-  showOtherCsdAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show Extra Tags"), this);
+  showOtherCsdAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Extra Tags"), this);
   showOtherCsdAct->setCheckable(true);
   showOtherCsdAct->setChecked(false);
   showOtherCsdAct->setEnabled(false);
@@ -2652,7 +2652,7 @@ void CsoundQt::createActions()
   connect(showOtherCsdAct, SIGNAL(toggled(bool)), this, SLOT(showOtherCsd(bool)));
   connect(splitViewAct, SIGNAL(toggled(bool)), showOtherCsdAct, SLOT(setEnabled(bool)));
 
-  showWidgetEditAct = new QAction(/*QIcon(":/images/gksu-root-terminal.png"),*/ tr("Show Widgets Text"), this);
+  showWidgetEditAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Widgets Text"), this);
   showWidgetEditAct->setCheckable(true);
   showWidgetEditAct->setChecked(false);
   showWidgetEditAct->setEnabled(false);
@@ -2661,7 +2661,7 @@ void CsoundQt::createActions()
   connect(showWidgetEditAct, SIGNAL(toggled(bool)), this, SLOT(showWidgetEdit(bool)));
   connect(splitViewAct, SIGNAL(toggled(bool)), showWidgetEditAct, SLOT(setEnabled(bool)));
 
-  setHelpEntryAct = new QAction(QIcon(":/images/gtk-info.png"), tr("Show Opcode Entry"), this);
+  setHelpEntryAct = new QAction(QIcon(prefix + "gtk-info.png"), tr("Show Opcode Entry"), this);
   setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
   setHelpEntryAct->setIconText(tr("Manual for opcode"));
   setHelpEntryAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -2677,17 +2677,17 @@ void CsoundQt::createActions()
   browseForwardAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(browseForwardAct, SIGNAL(triggered()), helpPanel, SLOT(browseForward()));
 
-  externalBrowserAct = new QAction(/*QIcon(":/images/gtk-info.png"), */ tr("Show Opcode Entry in External Browser"), this);
+  externalBrowserAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("Show Opcode Entry in External Browser"), this);
   externalBrowserAct->setStatusTip(tr("Show Opcode Entry in external browser"));
   externalBrowserAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(externalBrowserAct, SIGNAL(triggered()), this, SLOT(openExternalBrowser()));
 
-  openQuickRefAct = new QAction(/*QIcon(":/images/gtk-info.png"), */ tr("Open Quick Reference Guide"), this);
+  openQuickRefAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("Open Quick Reference Guide"), this);
   openQuickRefAct->setStatusTip(tr("Open Quick Reference Guide in PDF viewer"));
   openQuickRefAct->setShortcutContext(Qt::ApplicationShortcut);
   connect(openQuickRefAct, SIGNAL(triggered()), this, SLOT(openQuickRef()));
 
-  showUtilitiesAct = new QAction(QIcon(":/images/gnome-devel.png"), tr("Utilities"), this);
+  showUtilitiesAct = new QAction(QIcon(prefix + "gnome-devel.png"), tr("Utilities"), this);
   showUtilitiesAct->setCheckable(true);
   showUtilitiesAct->setChecked(false);
   showUtilitiesAct->setStatusTip(tr("Show the Csound Utilities dialog"));
@@ -2938,7 +2938,7 @@ void CsoundQt::createMenus()
   fileMenu->addAction(saveAct);
   fileMenu->addAction(saveAsAct);
   fileMenu->addAction(saveNoWidgetsAct);
-  fileMenu->addAction(createAppAct);
+//  fileMenu->addAction(createAppAct);
   fileMenu->addAction(reloadAct);
   fileMenu->addAction(cabbageAct);
   fileMenu->addAction(closeTabAct);
