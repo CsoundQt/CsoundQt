@@ -1,23 +1,23 @@
 /*
-    Copyright (C) 2008, 2009 Andres Cabrera
-    mantaraya36@gmail.com
+	Copyright (C) 2008, 2009 Andres Cabrera
+	mantaraya36@gmail.com
 
-    This file is part of QuteCsound.
+	This file is part of QuteCsound.
 
-    QuteCsound is free software; you can redistribute it
-    and/or modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+	QuteCsound is free software; you can redistribute it
+	and/or modify it under the terms of the GNU Lesser General Public
+	License as published by the Free Software Foundation; either
+	version 2.1 of the License, or (at your option) any later version.
 
-    QuteCsound is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
+	QuteCsound is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public
-    License along with Csound; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-    02111-1307 USA
+	You should have received a copy of the GNU Lesser General Public
+	License along with Csound; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+	02111-1307 USA
 */
 
 #ifndef CONSOLE_H
@@ -27,90 +27,90 @@
 
 class Console : public QTextEdit
 {
-  Q_OBJECT
-  public:
-    Console(QWidget *parent = 0);
+	Q_OBJECT
+public:
+	Console(QWidget *parent = 0);
 
-    virtual ~Console();
+	virtual ~Console();
 
-    virtual void setDefaultFont(QFont font);
-    virtual void setColors(QColor textColor, QColor bgColor);
-    void scrollToEnd();
-    void setKeyRepeatMode(bool repeat);
-//     void refresh();
+	virtual void setDefaultFont(QFont font);
+	virtual void setColors(QColor textColor, QColor bgColor);
+	void scrollToEnd();
+	void setKeyRepeatMode(bool repeat);
+	//     void refresh();
 
-    QList<int> errorLines;
-    QStringList errorTexts;
+	QList<int> errorLines;
+	QStringList errorTexts;
 
-  public slots:
-    virtual void appendMessage(QString msg);
-    void reset();
+public slots:
+	virtual void appendMessage(QString msg);
+	void reset();
 
-  protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event);
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent *event);
+protected:
+	virtual void contextMenuEvent(QContextMenuEvent *event);
+	virtual void keyPressEvent(QKeyEvent *event);
+	virtual void keyReleaseEvent(QKeyEvent *event);
 
-    bool error;
-    bool errorLine;
-    QString errorLineText;
-    QString messageLine;
-    QColor m_textColor;
-    QColor m_bgColor;
-    bool m_repeatKeys;
-//    QMutex consoleLock;
+	bool error;
+	bool errorLine;
+	QString errorLineText;
+	QString messageLine;
+	QColor m_textColor;
+	QColor m_bgColor;
+	bool m_repeatKeys;
+	//    QMutex consoleLock;
 
-  signals:
-    void keyPressed(QString key);
-    void keyReleased(QString key);
-    void logMessage(QString msg);
+signals:
+	void keyPressed(QString key);
+	void keyReleased(QString key);
+	void logMessage(QString msg);
 };
 
 class DockConsole : public QDockWidget
 {
-  Q_OBJECT
-  public:
-    DockConsole(QWidget * parent);
-    ~DockConsole();
-    void copy();
-    bool widgetHasFocus();
-    void appendMessage(QString msg);
+	Q_OBJECT
+public:
+	DockConsole(QWidget * parent);
+	~DockConsole();
+	void copy();
+	bool widgetHasFocus();
+	void appendMessage(QString msg);
 
-  public slots:
+public slots:
 
-  protected:
-    virtual void closeEvent(QCloseEvent * event);
+protected:
+	virtual void closeEvent(QCloseEvent * event);
 
 private:
-    Console *text;
-  signals:
-    void Close(bool visible);
+	Console *text;
+signals:
+	void Close(bool visible);
 };
 
 class ConsoleWidget : public Console
 {
-  Q_OBJECT
-  public:
-    ConsoleWidget(QWidget * parent = 0): Console(parent)
-    {
-      setReadOnly(true);
-      setFontItalic(false);
+	Q_OBJECT
+public:
+	ConsoleWidget(QWidget * parent = 0): Console(parent)
+	{
+		setReadOnly(true);
+		setFontItalic(false);
 #ifdef Q_WS_MAC
-      document()->setDefaultFont(QFont("Courier", 10));
+		document()->setDefaultFont(QFont("Courier", 10));
 #else
-      document()->setDefaultFont(QFont("Courier New", 7));
+		document()->setDefaultFont(QFont("Courier New", 7));
 #endif
-//       connect(text, SIGNAL(popUpMenu(QPoint)), this, SLOT(emitPopUpMenu(QPoint)));
-    }
+		//       connect(text, SIGNAL(popUpMenu(QPoint)), this, SLOT(emitPopUpMenu(QPoint)));
+	}
 
-    ~ConsoleWidget() {;}
+	~ConsoleWidget() {;}
 
-    virtual void setWidgetGeometry(int x,int y,int width,int height);
-  protected:
-//   private slots:
-//     void emitPopUpMenu(QPoint point) {emit(popUpMenu(point));}
-  signals:
-//     void popUpMenu(QPoint pos);
+	virtual void setWidgetGeometry(int x,int y,int width,int height);
+protected:
+	//   private slots:
+	//     void emitPopUpMenu(QPoint point) {emit(popUpMenu(point));}
+signals:
+	//     void popUpMenu(QPoint pos);
 
 };
 

@@ -25,17 +25,17 @@
 
 class SimpleDocument : public BaseDocument
 {
-Q_OBJECT
+	Q_OBJECT
 public:
-    explicit SimpleDocument(QWidget *parent = 0, OpEntryParser *opcodeTree = 0);
-    virtual void setTextString(QString &text);
-    virtual void registerButton(QuteButton *button);
+	explicit SimpleDocument(QWidget *parent = 0, OpEntryParser *opcodeTree = 0);
+	virtual void setTextString(QString &text);
+	virtual void registerButton(QuteButton *button);
 
 signals:
 
 public slots:
 protected:
-    virtual void init(QWidget *parent, OpEntryParser *opcodeTree);
+	virtual void init(QWidget *parent, OpEntryParser *opcodeTree);
 };
 
 #endif // SIMPLEDOCUMENT_H

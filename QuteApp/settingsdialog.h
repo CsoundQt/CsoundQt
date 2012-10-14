@@ -1,23 +1,23 @@
 /*
-    Copyright (C) 2010 Andres Cabrera
-    mantaraya36@gmail.com
+	Copyright (C) 2010 Andres Cabrera
+	mantaraya36@gmail.com
 
-    This file is part of QuteCsound.
+	This file is part of QuteCsound.
 
-    QuteCsound is free software; you can redistribute it
-    and/or modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+	QuteCsound is free software; you can redistribute it
+	and/or modify it under the terms of the GNU Lesser General Public
+	License as published by the Free Software Foundation; either
+	version 2.1 of the License, or (at your option) any later version.
 
-    QuteCsound is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
+	QuteCsound is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public
-    License along with Csound; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-    02111-1307 USA
+	You should have received a copy of the GNU Lesser General Public
+	License along with Csound; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+	02111-1307 USA
 */
 
 #ifndef SETTINGSDIALOG_H
@@ -30,32 +30,32 @@
 #include "csoundoptions.h"
 
 namespace Ui {
-    class SettingsDialog;
+class SettingsDialog;
 }
 
 class SettingsDialog : public QDialog {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    SettingsDialog(QWidget *parent, CsoundOptions *options);
-    ~SettingsDialog();
+	SettingsDialog(QWidget *parent, CsoundOptions *options);
+	~SettingsDialog();
 
-    QStringList getFlags();
+	QStringList getFlags();
 
 public slots:
-    void refreshAudioIn();
-    void refreshAudioOut();
-    void refreshMidiIn();
-    void refreshMidiOut();
-    void refreshMidiControl();
+	void refreshAudioIn();
+	void refreshAudioOut();
+	void refreshMidiIn();
+	void refreshMidiOut();
+	void refreshMidiControl();
 
-    virtual void accept();
+	virtual void accept();
 
 protected:
-    void changeEvent(QEvent *e);
+	void changeEvent(QEvent *e);
 
 private:
-    Ui::SettingsDialog *ui;
-    CsoundOptions *m_options;
+	Ui::SettingsDialog *ui;
+	CsoundOptions *m_options;
 };
 
 #endif // SETTINGSDIALOG_H

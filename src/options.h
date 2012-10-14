@@ -1,23 +1,23 @@
 /*
-    Copyright (C) 2008, 2009 Andres Cabrera
-    mantaraya36@gmail.com
+	Copyright (C) 2008, 2009 Andres Cabrera
+	mantaraya36@gmail.com
 
-    This file is part of QuteCsound.
+	This file is part of QuteCsound.
 
-    QuteCsound is free software; you can redistribute it
-    and/or modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+	QuteCsound is free software; you can redistribute it
+	and/or modify it under the terms of the GNU Lesser General Public
+	License as published by the Free Software Foundation; either
+	version 2.1 of the License, or (at your option) any later version.
 
-    QuteCsound is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
+	QuteCsound is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public
-    License along with Csound; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-    02111-1307 USA
+	You should have received a copy of the GNU Lesser General Public
+	License along with Csound; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+	02111-1307 USA
 */
 
 #ifndef OPTIONS_H
@@ -29,137 +29,137 @@
 #include "csoundoptions.h"
 
 class Options: public CsoundOptions{
-  public:
-    Options();
-    ~Options();
+public:
+	Options();
+	~Options();
 
-    QString font;
-    float fontPointSize;
-    int lineEnding; // 0=Unix (LF) 1=Windows(CR+LF)
-    QString consoleFont;
-    float consoleFontPointSize;
-    QColor consoleFontColor;
-    QColor consoleBgColor;
-    int tabWidth;
-    bool colorVariables;
-    bool autoPlay;
-    bool autoJoin;
-    bool saveChanges;
-    bool rememberFile;
-    bool saveWidgets;
-    bool iconText;
-    bool showToolbar;
-    bool wrapLines;
-    bool autoComplete;
+	QString font;
+	float fontPointSize;
+	int lineEnding; // 0=Unix (LF) 1=Windows(CR+LF)
+	QString consoleFont;
+	float consoleFontPointSize;
+	QColor consoleFontColor;
+	QColor consoleBgColor;
+	int tabWidth;
+	bool colorVariables;
+	bool autoPlay;
+	bool autoJoin;
+	bool saveChanges;
+	bool rememberFile;
+	bool saveWidgets;
+	bool iconText;
+	bool showToolbar;
+	bool wrapLines;
+	bool autoComplete;
 
-    bool showWidgetsOnRun;
-    bool showTooltips;
-    bool terminalFLTK;
-    bool oldFormat;  // Store old MacCsound widget format
-    bool openProperties;  // Open properties automatically when creating a widget
-    double fontScaling;
-    double fontOffset;
+	bool showWidgetsOnRun;
+	bool showTooltips;
+	bool terminalFLTK;
+	bool oldFormat;  // Store old MacCsound widget format
+	bool openProperties;  // Open properties automatically when creating a widget
+	double fontScaling;
+	double fontOffset;
 
-    bool useAPI;
-    bool enableWidgets;
-    bool widgetsIndependent;  // Widget layouts in Separate Window (instead of Dock Widget)
-    bool useInvalue; // If false use chnget
-    bool thread;
-    bool keyRepeat;
-    bool debugLiveEvents;
-    int consoleBufferSize;
-    int midiInterface; // For internal CsoundQt MIDI control
-    // Csound engine flags
-    bool noBuffer;
-    bool noPython;
-    bool noMessages;
-    bool noEvents;
+	bool useAPI;
+	bool enableWidgets;
+	bool widgetsIndependent;  // Widget layouts in Separate Window (instead of Dock Widget)
+	bool useInvalue; // If false use chnget
+	bool thread;
+	bool keyRepeat;
+	bool debugLiveEvents;
+	int consoleBufferSize;
+	int midiInterface; // For internal CsoundQt MIDI control
+	// Csound engine flags
+	bool noBuffer;
+	bool noPython;
+	bool noMessages;
+	bool noEvents;
 
-    QString csdPath; //path of active csd needed for setting -o -i paths
+	QString csdPath; //path of active csd needed for setting -o -i paths
 
-    QString defaultCsd;
-    bool defaultCsdActive;
-    QString opcodexmldir;
-    bool opcodexmldirActive;
-    QString favoriteDir;
-    QString pythonDir;
-    QString pythonExecutable;
-    QString logFile;
-    QString sdkDir;
+	QString defaultCsd;
+	bool defaultCsdActive;
+	QString opcodexmldir;
+	bool opcodexmldirActive;
+	QString favoriteDir;
+	QString pythonDir;
+	QString pythonExecutable;
+	QString logFile;
+	QString sdkDir;
 
-    // External applications
-    QString terminal;
-    QString browser;
-    QString dot;
-    QString waveeditor;
-    QString waveplayer;
-    QString pdfviewer;
-    int language;  // Interface language
+	// External applications
+	QString terminal;
+	QString browser;
+	QString dot;
+	QString waveeditor;
+	QString waveplayer;
+	QString pdfviewer;
+	int language;  // Interface language
 
-    QString csdTemplate;
+	QString csdTemplate;
 
-    // Csound Utilities options
-    QString cvInputName;
-    QString cvOutputName;
-    QString cvSampleRate;
-    QString cvBeginTime;
-    QString cvDuration;
-    QString cvChannels;
+	// Csound Utilities options
+	QString cvInputName;
+	QString cvOutputName;
+	QString cvSampleRate;
+	QString cvBeginTime;
+	QString cvDuration;
+	QString cvChannels;
 
-    QString hetInputName;
-    QString hetOutputName;
-    QString hetSampleRate;
-    QString hetChannel;
-    QString hetBeginTime;
-    QString hetDuration;
-    QString hetStartFrequency;
-    QString hetNumPartials;
-    QString hetMaxAmplitude;
-    QString hetMinAplitude;
-    QString hetNumBreakPoints;
-    QString hetFilterCutoff;
+	QString hetInputName;
+	QString hetOutputName;
+	QString hetSampleRate;
+	QString hetChannel;
+	QString hetBeginTime;
+	QString hetDuration;
+	QString hetStartFrequency;
+	QString hetNumPartials;
+	QString hetMaxAmplitude;
+	QString hetMinAplitude;
+	QString hetNumBreakPoints;
+	QString hetFilterCutoff;
 
-    QString lpInputName;
-    QString lpOutputName;
-    QString lpSampleRate;
-    QString lpChannel;
-    QString lpBeginTime;
-    QString lpDuration;
-    QString lpNumPoles;
-    QString lpHopSize;
-    QString lpLowestFreq;
-    int lpVerbosity;
-    bool lpAlternateStorage;
+	QString lpInputName;
+	QString lpOutputName;
+	QString lpSampleRate;
+	QString lpChannel;
+	QString lpBeginTime;
+	QString lpDuration;
+	QString lpNumPoles;
+	QString lpHopSize;
+	QString lpLowestFreq;
+	int lpVerbosity;
+	bool lpAlternateStorage;
 
-    QString pvInputName;
-    QString pvOutputName;
-    QString pvSampleRate;
-    QString pvChannel;
-    QString pvBeginTime;
-    QString pvDuration;
-    QString pvFrameSize;
-    QString pvOverlap;
-    int pvWindow;
-    QString pvBeta;
+	QString pvInputName;
+	QString pvOutputName;
+	QString pvSampleRate;
+	QString pvChannel;
+	QString pvBeginTime;
+	QString pvDuration;
+	QString pvFrameSize;
+	QString pvOverlap;
+	int pvWindow;
+	QString pvBeta;
 
-    QString atsInputName;
-    QString atsOutputName;
-    QString atsBeginTime;
-    QString atsEndTime;
-    QString atsLowestFreq;
-    QString atsHighestFreq;
-    QString atsFreqDeviat;
-    QString atsWinCycle;
-    QString atsHopSize;
-    QString atsLowestMag;
-    QString atsTrackLen;
-    QString atsMinSegLen;
-    QString atsMinGapLen;
-    QString atsSmrThresh;
-    QString atsLastPkCon;
-    QString atsSmrContr;
-    int atsFileType;
-    int atsWindow;
+	QString atsInputName;
+	QString atsOutputName;
+	QString atsBeginTime;
+	QString atsEndTime;
+	QString atsLowestFreq;
+	QString atsHighestFreq;
+	QString atsFreqDeviat;
+	QString atsWinCycle;
+	QString atsHopSize;
+	QString atsLowestMag;
+	QString atsTrackLen;
+	QString atsMinSegLen;
+	QString atsMinGapLen;
+	QString atsSmrThresh;
+	QString atsLastPkCon;
+	QString atsSmrContr;
+	int atsFileType;
+	int atsWindow;
 };
 
 #endif

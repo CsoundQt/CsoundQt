@@ -29,7 +29,7 @@ csound6: { # Csound6 requires some internal changes
 DEFINES += CSOUND6
 }
 
-buildDoubles: message(Doubles is now built by default, no need to specify buildDoubles option)
+buildDoubles: message("Doubles is now built by default, no need to specify buildDoubles option")
 
 !build32: CONFIG += build64
 !build32:!build64 {

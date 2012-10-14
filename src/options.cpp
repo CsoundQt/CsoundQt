@@ -1,23 +1,23 @@
 /*
-    Copyright (C) 2008, 2009 Andres Cabrera
-    mantaraya36@gmail.com
+	Copyright (C) 2008, 2009 Andres Cabrera
+	mantaraya36@gmail.com
 
-    This file is part of QuteCsound.
+	This file is part of QuteCsound.
 
-    QuteCsound is free software; you can redistribute it
-    and/or modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+	QuteCsound is free software; you can redistribute it
+	and/or modify it under the terms of the GNU Lesser General Public
+	License as published by the Free Software Foundation; either
+	version 2.1 of the License, or (at your option) any later version.
 
-    QuteCsound is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
+	QuteCsound is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public
-    License along with Csound; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-    02111-1307 USA
+	You should have received a copy of the GNU Lesser General Public
+	License along with Csound; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+	02111-1307 USA
 */
 
 #include "options.h"
@@ -27,127 +27,127 @@
 
 Options::Options()
 {
-  font = "Courier";
-  fontPointSize = 10;
-  lineEnding = 0; // 0=Unix (LF) 1=Windows(CR+LF)
-  consoleFont = "Courier";
-  consoleFontPointSize = 10;
-  consoleFontColor = Qt::black;
-  consoleBgColor = Qt::white;
-  tabWidth = 8;
-  colorVariables = true;
-  autoPlay = true;
-  autoJoin = false;
-  saveChanges = true;
-  rememberFile = true;
-  saveWidgets = true;
-  iconText = true;
-  showToolbar = true;
-  wrapLines = true;
-  autoComplete = true;
+	font = "Courier";
+	fontPointSize = 10;
+	lineEnding = 0; // 0=Unix (LF) 1=Windows(CR+LF)
+	consoleFont = "Courier";
+	consoleFontPointSize = 10;
+	consoleFontColor = Qt::black;
+	consoleBgColor = Qt::white;
+	tabWidth = 8;
+	colorVariables = true;
+	autoPlay = true;
+	autoJoin = false;
+	saveChanges = true;
+	rememberFile = true;
+	saveWidgets = true;
+	iconText = true;
+	showToolbar = true;
+	wrapLines = true;
+	autoComplete = true;
 
-  showWidgetsOnRun = true;
-  showTooltips = false;
-  terminalFLTK = false;
-  oldFormat = false;  // Store old MacCsound widget format
-  openProperties = true;  // Open properties automatically when creating a widget
-  fontScaling = 1.0;
-  fontOffset = 0.0;
+	showWidgetsOnRun = true;
+	showTooltips = false;
+	terminalFLTK = false;
+	oldFormat = false;  // Store old MacCsound widget format
+	openProperties = true;  // Open properties automatically when creating a widget
+	fontScaling = 1.0;
+	fontOffset = 0.0;
 
-  useAPI = true;
-  enableWidgets = true;
-  widgetsIndependent = true;  // Widget layouts in Separate Window (instead of Dock Widget)
-  thread = true;
-  keyRepeat = true;
-  debugLiveEvents = false;
-  consoleBufferSize = 1024;
-  midiInterface = 0; // For internal CsoundQt MIDI control
+	useAPI = true;
+	enableWidgets = true;
+	widgetsIndependent = true;  // Widget layouts in Separate Window (instead of Dock Widget)
+	thread = true;
+	keyRepeat = true;
+	debugLiveEvents = false;
+	consoleBufferSize = 1024;
+	midiInterface = 0; // For internal CsoundQt MIDI control
 
-  csdPath = "./"; //path of active csd needed for setting -o -i paths
+	csdPath = "./"; //path of active csd needed for setting -o -i paths
 
-  defaultCsd = "";
-  defaultCsdActive = false;
-  opcodexmldir = "";
-  opcodexmldirActive = false;
-  favoriteDir = "";
-  pythonDir = "";
-  pythonExecutable = "python";
-  logFile = "log.txt";
-  sdkDir = "";
+	defaultCsd = "";
+	defaultCsdActive = false;
+	opcodexmldir = "";
+	opcodexmldirActive = false;
+	favoriteDir = "";
+	pythonDir = "";
+	pythonExecutable = "python";
+	logFile = "log.txt";
+	sdkDir = "";
 
-  // External applications
-  terminal = "";
-  browser = "";
-  dot = "";
-  waveeditor = "";
-  waveplayer = "";
-  pdfviewer = "";
-  language = 0;  // Interface language
+	// External applications
+	terminal = "";
+	browser = "";
+	dot = "";
+	waveeditor = "";
+	waveplayer = "";
+	pdfviewer = "";
+	language = 0;  // Interface language
 
-  csdTemplate = "";
+	csdTemplate = "";
 
-  // Csound Utilities options
-   cvInputName = "input.wav";
-   cvOutputName = "input.cv";
-   cvSampleRate = "44100";
-   cvBeginTime = "0.0";
-   cvDuration = "0.0";
-   cvChannels = "";
+	// Csound Utilities options
+	cvInputName = "input.wav";
+	cvOutputName = "input.cv";
+	cvSampleRate = "44100";
+	cvBeginTime = "0.0";
+	cvDuration = "0.0";
+	cvChannels = "";
 
-   hetInputName = "input.wav";
-   hetOutputName = "output.het";
-   hetSampleRate = "44100";
-   hetChannel = "1";
-   hetBeginTime = "0.0";
-   hetDuration = "0.0";
-   hetStartFrequency = "0.0";
-   hetNumPartials = "10";
-   hetMaxAmplitude = "32767";
-   hetMinAplitude = "64";
-   hetNumBreakPoints = "256";
-   hetFilterCutoff = "0";
+	hetInputName = "input.wav";
+	hetOutputName = "output.het";
+	hetSampleRate = "44100";
+	hetChannel = "1";
+	hetBeginTime = "0.0";
+	hetDuration = "0.0";
+	hetStartFrequency = "0.0";
+	hetNumPartials = "10";
+	hetMaxAmplitude = "32767";
+	hetMinAplitude = "64";
+	hetNumBreakPoints = "256";
+	hetFilterCutoff = "0";
 
-   lpInputName = "input.wav";
-   lpOutputName = "output.lp";
-   lpSampleRate ="44100" ;
-   lpChannel = "1";
-   lpBeginTime = "0.0";
-   lpDuration = "0.0";
-   lpNumPoles = "34";
-   lpHopSize = "200";
-   lpLowestFreq = "";
-   lpVerbosity = 0;
-   lpAlternateStorage = true;
+	lpInputName = "input.wav";
+	lpOutputName = "output.lp";
+	lpSampleRate ="44100" ;
+	lpChannel = "1";
+	lpBeginTime = "0.0";
+	lpDuration = "0.0";
+	lpNumPoles = "34";
+	lpHopSize = "200";
+	lpLowestFreq = "";
+	lpVerbosity = 0;
+	lpAlternateStorage = true;
 
-   pvInputName = "input.wav";
-   pvOutputName = "output.pvx";
-   pvSampleRate = "";
-   pvChannel = "1";
-   pvBeginTime = "0.0";
-   pvDuration = "0.0";
-   pvFrameSize = "1024";
-   pvOverlap = "4";
-   pvWindow = 0;
-   pvBeta = "6.4";
+	pvInputName = "input.wav";
+	pvOutputName = "output.pvx";
+	pvSampleRate = "";
+	pvChannel = "1";
+	pvBeginTime = "0.0";
+	pvDuration = "0.0";
+	pvFrameSize = "1024";
+	pvOverlap = "4";
+	pvWindow = 0;
+	pvBeta = "6.4";
 
-   atsInputName = "input.wav";
-   atsOutputName = "output.ats";
-   atsBeginTime = "0.0";
-   atsEndTime = "0.0";
-   atsLowestFreq = "20";
-   atsHighestFreq = "20000";
-   atsFreqDeviat = "0.1";
-   atsWinCycle = "4";
-   atsHopSize = "0.25";
-   atsLowestMag = "-60";
-   atsTrackLen = "3";
-   atsMinSegLen = "3";
-   atsMinGapLen = "3";
-  atsSmrThresh = "30";
-  atsLastPkCon = "0.0";
-  atsSmrContr = "0.5";
-  atsFileType = 0;
-  atsWindow = 0;
+	atsInputName = "input.wav";
+	atsOutputName = "output.ats";
+	atsBeginTime = "0.0";
+	atsEndTime = "0.0";
+	atsLowestFreq = "20";
+	atsHighestFreq = "20000";
+	atsFreqDeviat = "0.1";
+	atsWinCycle = "4";
+	atsHopSize = "0.25";
+	atsLowestMag = "-60";
+	atsTrackLen = "3";
+	atsMinSegLen = "3";
+	atsMinGapLen = "3";
+	atsSmrThresh = "30";
+	atsLastPkCon = "0.0";
+	atsSmrContr = "0.5";
+	atsFileType = 0;
+	atsWindow = 0;
 }
 
 

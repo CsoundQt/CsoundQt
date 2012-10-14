@@ -5,38 +5,38 @@
 #include <QString>
 
 namespace Ui {
-  class FileBEditor;
+class FileBEditor;
 }
 
 class FileB
 {
 public:
-  QString fileName;
-  QString path;
-  QString encData;
+	QString fileName;
+	QString path;
+	QString encData;
 };
 
 class FileBEditor : public QWidget
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
-  explicit FileBEditor(QWidget *parent = 0);
-  ~FileBEditor();
-  void appendText(QString &text);
-  QString toPlainText(bool useQuotes = true);
-  void clear();
+	explicit FileBEditor(QWidget *parent = 0);
+	~FileBEditor();
+	void appendText(QString &text);
+	QString toPlainText(bool useQuotes = true);
+	void clear();
 
-  void clearUndoRedoStacks();
+	void clearUndoRedoStacks();
 
 private slots:
-  void saveAs();
-  void add();
-  void remove();
+	void saveAs();
+	void add();
+	void remove();
 
 private:
-  Ui::FileBEditor *ui;
-  QVector<FileB> m_files;
+	Ui::FileBEditor *ui;
+	QVector<FileB> m_files;
 };
 
 #endif // FILEBEDITOR_H
