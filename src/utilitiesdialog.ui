@@ -23,24 +23,24 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
      <string>CVANAL</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="layoutWidget_">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>0</y>
-       <width>421</width>
-       <height>401</height>
+       <width>260</width>
+       <height>402</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <layout class="QGridLayout">
+       <layout class="QGridLayout" name="vertical">
         <property name="verticalSpacing">
          <number>0</number>
         </property>
@@ -91,57 +91,57 @@
       <item row="1" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <layout class="QGridLayout">
-          <item row="0" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
            <widget class="QLabel" name="label_3">
             <property name="text">
              <string>Sample Rate (-s)</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item>
            <widget class="QLineEdit" name="cvSrLineEdit">
             <property name="text">
              <string>44100</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item>
            <widget class="QLabel" name="label_4">
             <property name="text">
              <string>Begin Time (-b)</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item>
            <widget class="QLineEdit" name="cvBeginLineEdit">
             <property name="text">
              <string>0.0</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
+          <item>
            <widget class="QLabel" name="label_5">
             <property name="text">
              <string>Duration (-d)</string>
             </property>
            </widget>
           </item>
-          <item row="5" column="0">
+          <item>
            <widget class="QLineEdit" name="cvDurationLineEdit">
             <property name="text">
              <string>0.0</string>
             </property>
            </widget>
           </item>
-          <item row="6" column="0">
+          <item>
            <widget class="QLabel" name="label_59">
             <property name="text">
              <string>Channels (-c)</string>
             </property>
            </widget>
           </item>
-          <item row="7" column="0">
+          <item>
            <widget class="QLineEdit" name="cvChannelLineEdit"/>
           </item>
          </layout>
@@ -162,7 +162,7 @@
        </layout>
       </item>
       <item row="3" column="0">
-       <layout class="QHBoxLayout">
+       <layout class="QHBoxLayout" name="layout">
         <item>
          <widget class="QPushButton" name="cvResetPushButton">
           <property name="text">
@@ -208,7 +208,7 @@
        <height>49</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout">
+     <layout class="QHBoxLayout" name="layout_5">
       <item>
        <widget class="QPushButton" name="hetResetPushButton">
         <property name="text">
@@ -225,7 +225,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="layoutWidget__">
      <property name="geometry">
       <rect>
        <x>230</x>
@@ -234,7 +234,7 @@
        <height>261</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout">
+     <layout class="QVBoxLayout" name="layout_2">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -310,7 +310,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="layoutWidget___">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -319,7 +319,7 @@
        <height>101</height>
       </rect>
      </property>
-     <layout class="QGridLayout">
+     <layout class="QGridLayout" name="layout_3">
       <property name="verticalSpacing">
        <number>0</number>
       </property>
@@ -367,7 +367,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="layoutWidget____">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -376,7 +376,7 @@
        <height>261</height>
       </rect>
      </property>
-     <layout class="QGridLayout">
+     <layout class="QGridLayout" name="layout_4">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -457,7 +457,7 @@
     <attribute name="title">
      <string>LPANAL</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="layoutWidget_____">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -466,7 +466,7 @@
        <height>101</height>
       </rect>
      </property>
-     <layout class="QGridLayout">
+     <layout class="QGridLayout" name="layout_6">
       <property name="verticalSpacing">
        <number>0</number>
       </property>
@@ -523,7 +523,7 @@
        <height>261</height>
       </rect>
      </property>
-     <layout class="QGridLayout">
+     <layout class="QGridLayout" name="layout_7">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -608,7 +608,7 @@
        <height>221</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout">
+     <layout class="QVBoxLayout" name="layout_8">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -707,7 +707,7 @@
        <height>49</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout">
+     <layout class="QHBoxLayout" name="layout_9">
       <item>
        <widget class="QPushButton" name="lpResetPushButton">
         <property name="text">
@@ -738,7 +738,7 @@
        <height>49</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout">
+     <layout class="QHBoxLayout" name="layout_13">
       <item>
        <widget class="QPushButton" name="pvResetPushButton">
         <property name="text">
@@ -764,7 +764,7 @@
        <height>261</height>
       </rect>
      </property>
-     <layout class="QGridLayout">
+     <layout class="QGridLayout" name="layout_12">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -849,7 +849,7 @@
        <height>101</height>
       </rect>
      </property>
-     <layout class="QGridLayout">
+     <layout class="QGridLayout" name="layout_10">
       <property name="verticalSpacing">
        <number>0</number>
       </property>
@@ -906,7 +906,7 @@
        <height>161</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout">
+     <layout class="QVBoxLayout" name="layout_11">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -980,7 +980,7 @@
        <height>49</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout">
+     <layout class="QHBoxLayout" name="layout_18__">
       <item>
        <widget class="QPushButton" name="atsaResetPushButton">
         <property name="text">
@@ -1006,7 +1006,7 @@
        <height>101</height>
       </rect>
      </property>
-     <layout class="QGridLayout">
+     <layout class="QGridLayout" name="layout_15">
       <property name="verticalSpacing">
        <number>0</number>
       </property>
@@ -1063,7 +1063,7 @@
        <height>272</height>
       </rect>
      </property>
-     <layout class="QGridLayout">
+     <layout class="QGridLayout" name="layout_16">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -1162,7 +1162,7 @@
        <height>272</height>
       </rect>
      </property>
-     <layout class="QGridLayout">
+     <layout class="QGridLayout" name="layout_17">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -1243,11 +1243,11 @@
       <rect>
        <x>290</x>
        <y>101</y>
-       <width>141</width>
+       <width>144</width>
        <height>271</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout">
+     <layout class="QVBoxLayout" name="layout_14">
       <property name="spacing">
        <number>0</number>
       </property>
