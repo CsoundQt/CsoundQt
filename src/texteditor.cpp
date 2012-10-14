@@ -92,7 +92,7 @@ TextEditLineNumbers::TextEditLineNumbers(QWidget *parent)
 
 int TextEditLineNumbers::getAreaWidth()
 {
-		return 8 + this->fontMetrics().width(QLatin1Char('9')) * 4; //space of 4 digits, add some padding
+		return (2 + this->fontMetrics().width(QLatin1Char('9'))) * 4; //space of 4 digits, add some padding
 }
 
 void TextEditLineNumbers::resizeEvent(QResizeEvent *e)
