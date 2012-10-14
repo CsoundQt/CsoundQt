@@ -72,7 +72,6 @@ void AppWizard::makeApp()
   QString appName =  field("appName").toString();
   QString targetDir =  field("targetDir").toString();
   bool useSdk = field("useSdk").toInt() == 1;
-  bool useDoubles = field("useDoubles").toBool();
 
   bool autorun =  field("autorun").toBool();
   int runMode = field("runMode").toInt();
@@ -91,6 +90,10 @@ void AppWizard::makeApp()
     libDir =  field("libDir").toString();
     opcodeDir =  field("opcodeDir").toString();
     qtLibsDir = field("qtLibsDir").toString();
+  } else {
+	  libDir = "";
+	  opcodeDir = "";
+	  qtLibsDir = "";
   }
 
 #ifdef Q_OS_MAC
@@ -110,26 +113,30 @@ void AppWizard::makeApp()
   qDebug() << "AppWizard::makeApp() " << targetDir;
   if (useSdk) {
     createLinuxApp(appName, targetDir, dataFiles, plugins, m_sdkDir,
-                   libDir, opcodeDir, qtLibsDir, useDoubles);
+				   "", "", "");
     // TODO create two Mac Apps (one for 32 bit plaforms to support PPC)
     createMacApp(appName, targetDir, dataFiles, plugins, m_sdkDir,
-                 libDir, opcodeDir, qtLibsDir, useDoubles);
+				 "", "", "");
     createWinApp(appName, targetDir, dataFiles, plugins, m_sdkDir,
-                 libDir, opcodeDir, qtLibsDir, useDoubles);
+				 "", "", "");
   } else {
+#ifdef USE_DOUBLE
 #ifdef Q_OS_LINUX
-    opcodeDir = static_cast<PluginsPage *>(this->page(m_pluginsPage))->getOpcodeDir();
-    createLinuxApp(appName, targetDir, dataFiles, plugins, m_sdkDir,
-                   libDir, opcodeDir, qtLibsDir, useDoubles);
+	  createLinuxApp(appName, targetDir, dataFiles, plugins, "",
+					 libDir, opcodeDir, qtLibsDir);
 #endif
 #ifdef Q_OS_MAC
-    createMacApp(appName, targetDir, dataFiles, plugins, m_sdkDir,
-                 libDir, opcodeDir, qtLibsDir, useDoubles);
+	  createMacApp(appName, targetDir, dataFiles, plugins, "",
+				   libDir, opcodeDir, qtLibsDir);
 #endif
 #ifdef Q_OS_WIN32
-    opcodeDir = static_cast<PluginsPage *>(this->page(m_pluginsPage))->getOpcodeDir();
-    createWinApp(appName, targetDir, dataFiles, plugins, m_sdkDir,
-                 libDir, opcodeDir, qtLibsDir, useDoubles);
+	  createWinApp(appName, targetDir, dataFiles, plugins, "",
+				   libDir, opcodeDir, qtLibsDir);
+#endif
+#else // If not doubles version, can't build for local platform
+	  QMessageBox::critical(this, tr("Can't build"),
+							tr("Can't build for local platform for single presicion. Aborted."));
+	  return;
 #endif
   }
   QMessageBox::information(this, tr("Done"), tr("App Creation finished!"));
@@ -221,7 +228,7 @@ void AppWizard::copyFolder(QString sourceFolder, QString destFolder)
 
 void AppWizard::createWinApp(QString appName, QString appDir, QStringList dataFiles,
                              QStringList plugins, QString sdkDir,  QString libDir,
-                             QString opcodeDir, QString qtLibsDir, bool useDoubles)
+							 QString opcodeDir, QString qtLibsDir)
 {
 //  QDir dir(appDir);
 //    if (dir.mkdir(appName)) {
@@ -252,7 +259,7 @@ void AppWizard::createWinApp(QString appName, QString appDir, QStringList dataFi
 
 void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFiles,
                              QStringList plugins, QString sdkDir,  QString libDir,
-                             QString opcodeDir, QString qtLibsDir, bool useDoubles)
+							 QString opcodeDir, QString qtLibsDir)
 {
   qDebug() << "AppWizard::createMacApp";
   QDir dir(appDir);
@@ -267,22 +274,12 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
   if (dir.mkpath(appName + QDir::separator() + "osx")) {
     dir.cd(appName + QDir::separator() + "osx");
     // Copy csd and binaries
-    if (sdkDir.isEmpty()) {
-      if (useDoubles) {
-        copyList << QPair<QString, QString>(QCoreApplication::applicationDirPath() + QDir::separator() + "../Resources/QuteApp_d.app",
-                                            dir.absolutePath() + QDir::separator() + appName + ".app");
-      } else {
-        copyList << QPair<QString, QString>(QCoreApplication::applicationDirPath() + QDir::separator() + "../Resources/QuteApp_f.app",
-                                            dir.absolutePath() + QDir::separator() + appName + ".app");
-      }
-    } else {
-      if (useDoubles) {
-        copyList << QPair<QString, QString>(sdkDir + QDir::separator() + "osx/QuteApp_d.app",
-                                            dir.absolutePath() + QDir::separator() + appName + ".app");
-      } else {
-        copyList << QPair<QString, QString>(sdkDir + QDir::separator() + "osx/QuteApp_f.app",
-                                            dir.absolutePath() + QDir::separator() + appName + ".app");
-      }
+	if (sdkDir.isEmpty()) {
+		copyList << QPair<QString, QString>(QCoreApplication::applicationDirPath() + QDir::separator() + "../Resources/QuteApp_d.app",
+											dir.absolutePath() + QDir::separator() + appName + ".app");
+	} else {
+		copyList << QPair<QString, QString>(sdkDir + QDir::separator() + "osx/QuteApp_d.app",
+											dir.absolutePath() + QDir::separator() + appName + ".app");
     }
     // Data files
     copyList << QPair<QString, QString>
@@ -301,12 +298,8 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
     // No need to copy Qt libraries as they should already be deployed in the QuteApp
     // Copy lib files and plugins only if libDir is not given
     if (!libDir.isEmpty()) {
-      QStringList libFiles;
-      if (useDoubles) {
-        libFiles << "LibCsound64.framework";
-      } else {
-        libFiles << "LibCsound.framework";
-      }
+	  QStringList libFiles;
+	  libFiles << "LibCsound64.framework";
       libFiles << "libportaudio.so" << "libportmidi.so";
       QStringList defaultLibDirs;
       defaultLibDirs << "/Library/Frameworks" << "/usr/lib" << "/usr/local/lib";
@@ -361,7 +354,7 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
 
 void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList dataFiles,
                                QStringList plugins, QString sdkDir, QString libDir,
-                               QString opcodeDir, QString qtLibsDir, bool useDoubles)
+							   QString opcodeDir, QString qtLibsDir)
 {
   qDebug() << "AppWizard::createLinuxApp";
   QDir dir(appDir);
@@ -379,26 +372,16 @@ void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList data
     dir.mkdir("lib");
     dir.mkdir("data");
     // Copy csd and binaries
-    if (sdkDir.isEmpty()) {
-      if (useDoubles) {
-        copyList << QPair<QString, QString>(":/res/linux/QuteApp_d",
-                                            dir.absolutePath() + QDir::separator() +"lib/QuteApp");
-      } else {
-        copyList << QPair<QString, QString>(":/res/linux/QuteApp_f",
-                                            dir.absolutePath() + QDir::separator() +"lib/QuteApp");
-      }
-      copyList << QPair<QString, QString>(":/res/linux/launch.sh",
-                                          dir.absolutePath() + QDir::separator() + appName + ".sh");
-    } else {
-      if (useDoubles) {
-        copyList << QPair<QString, QString>(sdkDir + QDir::separator() + "linux/lib/QuteApp_d",
-                                            dir.absolutePath() + QDir::separator() +"lib/QuteApp");
-      } else {
-        copyList << QPair<QString, QString>(sdkDir + QDir::separator() + "linux/lib/QuteApp_f",
-                                            dir.absolutePath() + QDir::separator() +"lib/QuteApp");
-      }
-      copyList << QPair<QString, QString>(sdkDir + QDir::separator() + "linux/lib/launch.sh",
-                                          dir.absolutePath() + QDir::separator() + appName + ".sh");
+	if (sdkDir.isEmpty()) {
+		copyList << QPair<QString, QString>(":/res/linux/QuteApp_d",
+											dir.absolutePath() + QDir::separator() +"lib/QuteApp");
+		copyList << QPair<QString, QString>(":/res/linux/launch.sh",
+											dir.absolutePath() + QDir::separator() + appName + ".sh");
+	} else {
+		copyList << QPair<QString, QString>(sdkDir + QDir::separator() + "linux/lib/QuteApp_d",
+											dir.absolutePath() + QDir::separator() +"lib/QuteApp");
+		copyList << QPair<QString, QString>(sdkDir + QDir::separator() + "linux/lib/launch.sh",
+											dir.absolutePath() + QDir::separator() + appName + ".sh");
     }
     // Data files
     dir.cd("data");
@@ -415,17 +398,13 @@ void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList data
       }
     }
     // Copy lib files and plugins
-    QStringList libFiles;
-    if (useDoubles) {
-        libFiles << "libcsound64.so" << "libcsound64.so.5.2";
-    } else {
-        libFiles << "libcsound.so" << "libcsound.so.5.2";
-    }
+	QStringList libFiles;
+	libFiles << "libcsound64.so" << "libcsound64.so.5.2";
     libFiles << "libportaudio.so" << "libportmidi.so";
     QStringList defaultLibDirs;
     defaultLibDirs << "/usr/lib" << "/usr/local/lib";
     QStringList libSearchDirs;
-    if (libDir.isEmpty()) {
+	if (sdkDir.isEmpty()) { // If sdk dir is not given, it means that local installation is used
       libSearchDirs << defaultLibDirs;
     } else {
       libSearchDirs << libDir;

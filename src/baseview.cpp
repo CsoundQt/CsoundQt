@@ -120,8 +120,7 @@ void BaseView::setFullText(QString text, bool goToTop)
       m_appProperties.showRun = p.firstChildElement("showRun").firstChild().nodeValue() == "true";
       m_appProperties.saveState = p.firstChildElement("saveState").firstChild().nodeValue() == "true";
       m_appProperties.runMode = p.firstChildElement("runMode").firstChild().nodeValue().toInt();
-      m_appProperties.newParser = p.firstChildElement("newParser").firstChild().nodeValue() == "true";
-      m_appProperties.useDoubles = p.firstChildElement("useDoubles").firstChild().nodeValue() == "true";
+	  m_appProperties.newParser = p.firstChildElement("newParser").firstChild().nodeValue() == "true";
       m_appProperties.useSdk = p.firstChildElement("useSdk").firstChild().nodeValue() == "true";
       m_appProperties.useCustomPaths = p.firstChildElement("useCustomPaths").firstChild().nodeValue() == "true";
       m_appProperties.libDir = p.firstChildElement("libDir").firstChild().nodeValue();
@@ -596,12 +595,12 @@ QString BaseView::getFullText()
 	if (!sectionText.isEmpty()) {
 	  text += sectionText;
 	}
-	text += "</CsoundSynthesizer>\n";
+	text += "</CsoundSynthesizer>";
   }
   if (!text.endsWith("\n")) {
-    text += "\n";
+	text += "\n";
   }
-  text += getAppText() + "\n";
+  text += getAppText();
   return text;
 }
 
@@ -693,7 +692,6 @@ QString BaseView::getAppText()
   s.writeTextElement("saveState", m_appProperties.saveState ? "true" : "false");
   s.writeTextElement("runMode", QString::number((int)m_appProperties.runMode));
   s.writeTextElement("newParser", m_appProperties.newParser ? "true" : "false");
-  s.writeTextElement("useDoubles", m_appProperties.useDoubles ? "true" : "false");
 
   s.writeTextElement("useSdk", m_appProperties.useSdk ? "true" : "false");
 
@@ -703,6 +701,7 @@ QString BaseView::getAppText()
 
   s.writeEndElement();
 
+  appText += "\n";
   return appText;
 }
 

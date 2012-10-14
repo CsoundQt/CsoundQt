@@ -61,13 +61,13 @@ class AppWizard : public QWizard
 
     void createWinApp(QString appName, QString appDir, QStringList dataFiles,
                       QStringList plugins, QString sdkDir, QString libDir,
-                      QString opcodeDir,  QString qtLibsDir, bool useDoubles = true);
+					  QString opcodeDir,  QString qtLibsDir);
     void createMacApp(QString appName, QString appDir, QStringList dataFiles,
                       QStringList plugins, QString sdkDir,  QString libDir,
-                      QString opcodeDir, QString qtLibsDir, bool useDoubles = true);
+					  QString opcodeDir, QString qtLibsDir);
     void createLinuxApp(QString appName, QString appDir, QStringList dataFiles,
                         QStringList plugins, QString sdkDir,  QString libDir,
-                        QString opcodeDir, QString qtLibsDir, bool useDoubles = true);
+						QString opcodeDir, QString qtLibsDir);
 
     void getLinuxLibDeps(QString libname);
 };

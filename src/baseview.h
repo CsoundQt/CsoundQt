@@ -46,7 +46,6 @@ public:
   bool saveState;
   int runMode;
   bool newParser;
-  bool useDoubles;
 
   bool useSdk;
 

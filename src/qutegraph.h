@@ -69,6 +69,7 @@ class QuteGraph : public QuteWidget
 
   private:
     void drawCurve(Curve * curve, int index);
+	void scaleGraph(int index);
     int getTableNumForIndex(int index);
     int getIndexForTableNum(int ftable);
     void setInternalValue(double value);

@@ -36,7 +36,6 @@ AppDetailsPage::AppDetailsPage(QWidget *parent) :
   registerField("targetDir", ui->targetDirLineEdit);
   registerField("autorun", ui->autorunCheckBox);
   registerField("useSdk", ui->platformComboBox);
-  registerField("useDoubles", ui->presicionComboBox);
   registerField("runMode", ui->runModeComboBox);
   registerField("saveState", ui->saveStatecheckBox);
   registerField("newParser", ui->newParserCheckBox);

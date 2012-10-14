@@ -3525,6 +3525,9 @@ flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Appl
   if (!QDir(mcCurdyPath).exists()) {
     mcCurdyPath = qApp->applicationDirPath() + "/../src/Examples/McCurdy Collection";
   }
+  if (!QDir(mcCurdyPath).exists()) { // for out of tree builds
+	mcCurdyPath = qApp->applicationDirPath() + "/../../csoundqt/src/Examples/McCurdy Collection";
+  }
 #endif
 #ifdef Q_OS_SOLARIS
   mcCurdyPath = qApp->applicationDirPath() + "/Examples/McCurdy Collection";

@@ -269,12 +269,9 @@ void QuteGraph::changeCurve(int index)
   m_pageComboBox->blockSignals(false);
   drawCurve(curves[index], index);
   m_value = index;
-  QGraphicsView *view = (QGraphicsView *) static_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
 
   double max = - curves[index]->get_min();
   double min = - curves[index]->get_max();
-  double zoomx = property("QCS_zoomx").toDouble();
-  double zoomy = property("QCS_zoomy").toDouble();
 //  double span = max - min;
 //  FIXME implement dispx, dispy and modex, modey
   int size = curves[index]->get_size();
@@ -282,9 +279,6 @@ void QuteGraph::changeCurve(int index)
 //  qDebug() << "QuteGraph::changeCurve"<< curves[index]->get_caption() << index <<max<< min<< zoomx<< zoomy << size;
 //  view->setResizeAnchor(QGraphicsView::NoAnchor);
   if (caption.contains("ftable")) {
-	view->setSceneRect (0, min - (max - min)*0.17, (double) size, (max - min)*1.17);
-    qDebug() << view->sceneRect();
-	view->fitInView(0, min, (double) size/zoomx, (max - min)*1.17/zoomy);
 	int ftable = getTableNumForIndex(index);
     if (m_value2 != ftable) {
       m_value2 = ftable;
@@ -292,17 +286,14 @@ void QuteGraph::changeCurve(int index)
     }
   }
   else {
-    if (caption.contains("fft")) {
-      view->setSceneRect (0, 0, size, 90.);
-      view->fitInView(0, -30. , (double) size/zoomx, 100./zoomy);
+	if (caption.contains("fft")) {
       m_value2 = -1;
     }
-    else { //from display opcode
-      view->setSceneRect (0, -1, size, 2);
-      view->fitInView(0, -10./zoomy, (double) size/zoomx, 10./zoomy);
+	else { //from display opcode
       m_value2 = -1;
     }
   }
+  scaleGraph(index);
   QString text = QString::number(size) + " pts Max=";
   text += QString::number(max) + " Min =" + QString::number(min);
   m_label->setText(text);
@@ -459,8 +450,8 @@ void QuteGraph::setCurveData(Curve * curve)
   if (index == m_pageComboBox->currentIndex()) {
     changeCurve(-2); //update curve
   }
-  view->horizontalScrollBar()->setValue(viewPosx);
-  view->verticalScrollBar()->setValue(viewPosy);
+//  view->horizontalScrollBar()->setValue(viewPosx);
+//  view->verticalScrollBar()->setValue(viewPosy);
 
 //  changeCurve(-2);
 }
@@ -532,6 +523,37 @@ void QuteGraph::drawCurve(Curve * curve, int index)
       line->show();
     }
   }
+  scaleGraph(index);
+}
+
+void QuteGraph::scaleGraph(int index)
+{
+	double max = - curves[index]->get_min();
+	double min = - curves[index]->get_max();
+	double zoomx = property("QCS_zoomx").toDouble();
+	double zoomy = property("QCS_zoomy").toDouble();
+  //  double span = max - min;
+  //  FIXME implement dispx, dispy and modex, modey
+	int size = curves[index]->get_size();
+	QString caption = curves[index]->get_caption();
+	QGraphicsView *view = (QGraphicsView *) static_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
+	qDebug() << "QuteGraph::scaleGraph"<< curves[index]->get_caption() << index <<max<< min<< zoomx<< zoomy << size;
+  //  view->setResizeAnchor(QGraphicsView::NoAnchor);
+	if (caption.contains("ftable")) {
+	  view->setSceneRect (0, min - (max - min)*0.17, (double) size, (max - min)*1.17);
+	  qDebug() << view->sceneRect();
+	  view->fitInView(0, min, (double) size/zoomx, (max - min)*1.17/zoomy);
+	}
+	else {
+	  if (caption.contains("fft")) {
+		view->setSceneRect (0, 0, size, 90.);
+		view->fitInView(0, -30. , (double) size/zoomx, 100./zoomy);
+	  }
+	  else { //from display opcode
+		view->setSceneRect (0, -1, size, 2);
+		view->fitInView(0, -10./zoomy, (double) size/zoomx, 10./zoomy);
+	  }
+	}
 }
 
 int QuteGraph::getTableNumForIndex(int index)
