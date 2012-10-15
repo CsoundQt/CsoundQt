@@ -450,8 +450,8 @@ void QuteGraph::setCurveData(Curve * curve)
 	if (index == m_pageComboBox->currentIndex()) {
 		changeCurve(-2); //update curve
 	}
-	//  view->horizontalScrollBar()->setValue(viewPosx);
-	//  view->verticalScrollBar()->setValue(viewPosy);
+	view->horizontalScrollBar()->setValue(viewPosx);
+	view->verticalScrollBar()->setValue(viewPosy);
 
 	//  changeCurve(-2);
 }

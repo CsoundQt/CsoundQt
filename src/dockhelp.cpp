@@ -34,12 +34,12 @@ DockHelp::DockHelp(QWidget *parent)
 	toggleFindButton->move(fontMetrics().width("Opcode help")+10 ,0);
 	toggleFindButton->setFlat(true);
 	connect(toggleFindButton, SIGNAL(released()), this, SLOT(toggleFindBarVisible()));
-	backButton = new QPushButton(QIcon(":/images/gtk-media-play-trl.png"), "", this);
+	backButton = new QPushButton(QIcon(":/images/br_prev.png"), "", this);
 	backButton->move(frameGeometry().width()/2-25, 0);
 	backButton->resize(25, 25);
 	backButton->setFlat(true); // no border
 	connect(backButton, SIGNAL(released()), this, SLOT(browseBack()));
-	forwardButton = new QPushButton(QIcon(":/images/gtk-media-play-ltr.png"), "", this);
+	forwardButton = new QPushButton(QIcon(":/images/br_next.png"), "", this);
 	forwardButton->move(this->width()/2, 0);
 	forwardButton->resize(25, 25);
 	forwardButton->setFlat(true);

@@ -17,8 +17,7 @@
 # ##############################################################################
 # ##############################################################################
 # BUILD OPTIONS:
-# CONFIG+=buildDoubles #   To build doubles version
-# CONFIG+=build64    To build doubles version (deprecated)
+# CONFIG+=build32    To build floats version
 # CONFIG+=pythonqt  # To build with PythonQt support
 # CONFIG+=rtmidi   To build with RtMidi support
 # OS X only OPTIONS:

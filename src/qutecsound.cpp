@@ -3528,6 +3528,9 @@ void CsoundQt::createMenus()
 	if (!QDir(mcCurdyPath).exists()) { // for out of tree builds
 		mcCurdyPath = qApp->applicationDirPath() + "/../../csoundqt/src/Examples/McCurdy Collection";
 	}
+	if (!QDir(mcCurdyPath).exists()) { // for out of tree builds
+		mcCurdyPath = qApp->applicationDirPath() + "/../../qutecsound/src/Examples/McCurdy Collection";
+	}
 #endif
 #ifdef Q_OS_SOLARIS
 	mcCurdyPath = qApp->applicationDirPath() + "/Examples/McCurdy Collection";
@@ -3946,7 +3949,7 @@ void CsoundQt::readSettings()
 										  ).toString();
 	settings.endGroup();
 	settings.beginGroup("Template");
-	m_options->csdTemplate = settings.value("csdTemplate", "").toString();
+	m_options->csdTemplate = settings.value("csdTemplate", QCS_DEFAULT_TEMPLATE).toString();
 	settings.endGroup();
 	settings.endGroup();
 	if (settingsVersion < 3 && settingsVersion > 0) {

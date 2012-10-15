@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
--fdm0 -odac -b1024 -B2048 --expression-opt -+rtaudio=alsa -+rtmidi=alsa -Ma --midi-key=4
+-fdm0 --midi-key=4
 </CsOptions>
 <CsInstruments>
 ;Physical Waveguide Midi synth with Qutecsound GUI by René Djack 2009.
@@ -16,6 +16,60 @@ gaIn_Reverb	init	0
 
 ; all midi channels to instrument 1
 massign		0, 1
+
+chn_k "kC1", 1
+chn_k "kC10", 1
+chn_k "kC11", 1
+chn_k "kC12", 1
+chn_k "kC13", 1
+chn_k "kC14", 1
+chn_k "kC15", 1
+chn_k "kC16", 1
+chn_k "kC17", 1
+chn_k "kC18", 1
+chn_k "kC19", 1
+chn_k "kC2", 1
+chn_k "kC20", 1
+chn_k "kC21", 1
+chn_k "kC22", 1
+chn_k "kC23", 1
+chn_k "kC24", 1
+chn_k "kC25", 1
+chn_k "kC26", 1
+chn_k "kC27", 1
+chn_k "kC28", 1
+chn_k "kC29", 1
+chn_k "kC3", 1
+chn_k "kC30", 1
+chn_k "kC31", 1
+chn_k "kC32", 1
+chn_k "kC33", 1
+chn_k "kC34", 1
+chn_k "kC35", 1
+chn_k "kC36", 1
+chn_k "kC37", 1
+chn_k "kC38", 1
+chn_k "kC39", 1
+chn_k "kC4", 1
+chn_k "kC40", 1
+chn_k "kC41", 1
+chn_k "kC42", 1
+chn_k "kC43", 1
+chn_k "kC44", 1
+chn_k "kC45", 1
+chn_k "kC46", 1
+chn_k "kC47", 1
+chn_k "kC48", 1
+chn_k "kC49", 1
+chn_k "kC5", 1
+chn_k "kC50", 1
+chn_k "kC6", 1
+chn_k "kC7", 1
+chn_k "kC8", 1
+chn_k "kC9", 1
+chn_k "tempo", 2
+chn_k "vu_Left", 2
+chn_k "vu_Right", 2
 
 opcode	PIPE, a, iiiiiiikkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
 
@@ -563,60 +617,60 @@ endop
 instr	1	;Pipe (physical waveguide)
 ;ctrl reading
 ;ENV
-kAtt_ENV		invalue	"kC1"	;knob Att
-kDec_ENV		invalue	"kC2"	;knob Dec
-kSus_ENV		invalue	"kC3"	;knob Sus
-kRel_ENV		invalue	"kC4"	;knob Rel
-kVel_ENV		invalue	"kC5"	;knob Vel
-kScaling_ENV	invalue	"kC6"	;knob Scaling
+iAtt_ENV		chnget	"kC1"	;knob Att
+iDec_ENV		chnget	"kC2"	;knob Dec
+iSus_ENV		chnget	"kC3"	;knob Sus
+iRel_ENV		chnget	"kC4"	;knob Rel
+iVel_ENV		chnget	"kC5"	;knob Vel
+iScaling_ENV	chnget	"kC6"	;knob Scaling
 ;GEN
-kDC_Noise_GEN	invalue	"kC7"	;knob DC/Noise
-kCut_GEN		invalue	"kC8"	;knob Cut
-kRes_GEN		invalue	"kC9"	;knob Res
-kK_Track_GEN	invalue	"kC10"	;knob K-Track
-kV_Track_GEN	invalue	"kC11"	;knob V-Track
-k1_Pole_GEN	invalue	"kC12"	;button 1-Pole
+kDC_Noise_GEN	chnget	"kC7"	;knob DC/Noise
+kCut_GEN		chnget	"kC8"	;knob Cut
+kRes_GEN		chnget	"kC9"	;knob Res
+kK_Track_GEN	chnget	"kC10"	;knob K-Track
+kV_Track_GEN	chnget	"kC11"	;knob V-Track
+k1_Pole_GEN	chnget	"kC12"	;button 1-Pole
 ;Pipe
-kCtr_MW		invalue	"kC13"	;knob ModWheel
-kPolarity		invalue	"kC14"	;button Polarity
+kCtr_MW		chnget	"kC13"	;knob ModWheel
+iPolarity		chnget	"kC14"	;button Polarity
 ;Pipe DELTUNE
-kTune_DT		invalue	"kC15"	;knob Tune
-kFine_DT		invalue	"kC16"	;knob Fine
-kSREC_DT		invalue	"kC17"	;knob Srec
-kMW_DT		invalue	"kC18"	;knob MW
+kTune_DT		chnget	"kC15"	;knob Tune
+kFine_DT		chnget	"kC16"	;knob Fine
+kSREC_DT		chnget	"kC17"	;knob Srec
+kMW_DT		chnget	"kC18"	;knob MW
 ;Pipe FEEDBACK
-kRT_FB		invalue	"kC19"	;knob RT
-kK_TrackFB	invalue	"kC20"	;knob K-Track
-kDamp_FB		invalue	"kC21"	;knob Damp
+kRT_FB		chnget	"kC19"	;knob RT
+kK_TrackFB	chnget	"kC20"	;knob K-Track
+kDamp_FB		chnget	"kC21"	;knob Damp
 ;Pipe ALLPASS TUNE
-kTune_AP		invalue	"kC22"	;knob Tune
-kFine_AP		invalue	"kC23"	;knob Fine
-kSREC_AP		invalue	"kC24"	;knob Srec
-kMW_AP		invalue	"kC25"	;knob MW
+kTune_AP		chnget	"kC22"	;knob Tune
+kFine_AP		chnget	"kC23"	;knob Fine
+kSREC_AP		chnget	"kC24"	;knob Srec
+kMW_AP		chnget	"kC25"	;knob MW
 ;Pipe ALLPASS
-kDffs_AP		invalue	"kC26"	;knob Dffs
-kPower_AP		invalue	"kC27"	;button Power
+kDffs_AP		chnget	"kC26"	;knob Dffs
+kPower_AP		chnget	"kC27"	;button Power
 ;Pipe PUSH PULL
-kOffset		invalue	"kC28"	;knob Offset
-kPush		invalue	"kC29"	;knob Push
+kOffset		chnget	"kC28"	;knob Offset
+kPush		chnget	"kC29"	;knob Push
 ;Pipe SATURATION
-kSoftHard		invalue	"kC30"	;knob Soft/Hard
-kSym			invalue	"kC31"	;knob Sym
+kSoftHard		chnget	"kC30"	;knob Soft/Hard
+kSym			chnget	"kC31"	;knob Sym
 ;Pipe MW FILTER
-kHP0			invalue	"kC32"	;knob HP0
-kHP1			invalue	"kC33"	;knob HP1
-kK_TrackH		invalue	"kC34"	;knob K-Track
-kLP0			invalue	"kC35"	;knob LP0
-kLP1			invalue	"kC36"	;knob LP1
-kK_TrackL		invalue	"kC37"	;knob K-Track
+kHP0			chnget	"kC32"	;knob HP0
+kHP1			chnget	"kC33"	;knob HP1
+kK_TrackH		chnget	"kC34"	;knob K-Track
+kLP0			chnget	"kC35"	;knob LP0
+kLP1			chnget	"kC36"	;knob LP1
+kK_TrackL		chnget	"kC37"	;knob K-Track
 
-kMain_Vol		invalue	"kC50"	;knob Main Vol
+kMain_Vol		chnget	"kC50"	;knob Main Vol
 
-kPolarity		= 1 - 2*i(kPolarity)
+kPolarity		= 1 - 2*iPolarity
 
 iPitch = p4			;iPitch, midi note from 36 to 84 with midi keyboard
 
-aout_Pipe		PIPE	iPitch, i(kAtt_ENV), i(kDec_ENV), i(kSus_ENV), i(kRel_ENV), i(kVel_ENV), i(kScaling_ENV), kDC_Noise_GEN, kCut_GEN, kRes_GEN, kK_Track_GEN, kV_Track_GEN, k1_Pole_GEN, kCtr_MW, kPolarity, kTune_DT, kFine_DT, kSREC_DT, kMW_DT, kRT_FB, kK_TrackFB, kDamp_FB, kTune_AP, kFine_AP, kSREC_AP, kMW_AP, kDffs_AP, kPower_AP, kOffset, kPush, kSoftHard, kSym, kHP0, kHP1, kK_TrackH, kLP0, kLP1, kK_TrackL
+aout_Pipe		PIPE	iPitch, iAtt_ENV, iDec_ENV, iSus_ENV, iRel_ENV, iVel_ENV, iScaling_ENV, kDC_Noise_GEN, kCut_GEN, kRes_GEN, kK_Track_GEN, kV_Track_GEN, k1_Pole_GEN, kCtr_MW, kPolarity, kTune_DT, kFine_DT, kSREC_DT, kMW_DT, kRT_FB, kK_TrackFB, kDamp_FB, kTune_AP, kFine_AP, kSREC_AP, kMW_AP, kDffs_AP, kPower_AP, kOffset, kPush, kSoftHard, kSym, kHP0, kHP1, kK_TrackH, kLP0, kLP1, kK_TrackL
 
 		gaIn_Reverb	= gaIn_Reverb + aout_Pipe * kMain_Vol
 endin
@@ -625,21 +679,21 @@ instr	99		;Reverb unit
 
 ;Running LED, just for fun ***********************
 ktempo		lfo		1, 0.5, 2
-			outvalue	"tempo", ktempo
+			chnset	 ktempo, "tempo"
 ;**********************************************
 
-kTime_Rev		invalue	"kC38"	;knob Time
-kLR_Rev		invalue	"kC39"	;knob L/R
-kSize_Rev		invalue	"kC40"	;knob Size
-kRT_Rev		invalue	"kC41"	;knob RT
-kLP_Rev		invalue	"kC42"	;knob LP
-kLD_Rev		invalue	"kC43"	;knob LD
-kHD_Rev		invalue	"kC44"	;knob HD
-kFrq_Rev		invalue	"kC45"	;knob Frq,	LFO sinus frequency
-kSpin_Rev		invalue	"kC46"	;knob Spin,	LFO sinus amplitude
-kDizzy_Rev	invalue	"kC47"	;knob Dizzy,	Slow Random amplitude
-kPos_Rev		invalue	"kC48"	;knob Pos,	0 to 1
-kMix_Rev		invalue	"kC49"	;knob Mix,	0 to 1
+kTime_Rev		chnget	"kC38"	;knob Time
+kLR_Rev		chnget	"kC39"	;knob L/R
+kSize_Rev		chnget	"kC40"	;knob Size
+kRT_Rev		chnget	"kC41"	;knob RT
+kLP_Rev		chnget	"kC42"	;knob LP
+kLD_Rev		chnget	"kC43"	;knob LD
+kHD_Rev		chnget	"kC44"	;knob HD
+kFrq_Rev		chnget	"kC45"	;knob Frq,	LFO sinus frequency
+kSpin_Rev		chnget	"kC46"	;knob Spin,	LFO sinus amplitude
+kDizzy_Rev	chnget	"kC47"	;knob Dizzy,	Slow Random amplitude
+kPos_Rev		chnget	"kC48"	;knob Pos,	0 to 1
+kMix_Rev		chnget	"kC49"	;knob Mix,	0 to 1
 
 			denorm			gaIn_Reverb
 
@@ -648,13 +702,14 @@ aoutL, aoutR	REVERB	gaIn_Reverb, kTime_Rev, kLR_Rev, kSize_Rev, kRT_Rev, kLP_Rev
 ;vu-meters
 kLeft		rms		aoutL
 kRight		rms		aoutR
-			outvalue	"vu_Left", kLeft
-			outvalue	"vu_Right", kRight
+			chnset	 kLeft, "vu_Left"
+			chnset	 kRight, "vu_Right"
 
 			outs		aoutL*10000, aoutR*10000
 
 gaIn_Reverb	= 0
 endin
+
 
 </CsInstruments>
 <CsScore>
@@ -672,24 +727,13 @@ i 99 0 3600
 
 </CsScore>
 </CsoundSynthesizer>
-
-
-
-
-
-
-
-
-
-
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>952</x>
- <y>77</y>
- <width>483</width>
- <height>387</height>
+ <x>216</x>
+ <y>100</y>
+ <width>949</width>
+ <height>641</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -4765,7 +4809,7 @@ i 99 0 3600
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.42857099</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>0.00009271</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -4798,7 +4842,7 @@ i 99 0 3600
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.42857099</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>0.00006818</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -5094,7 +5138,7 @@ i 99 0 3600
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Play</objectName>
@@ -5113,7 +5157,7 @@ i 99 0 3600
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
@@ -8394,22 +8438,22 @@ i 99 0 3600
 <value id="{4868e68a-6bc0-4401-b7d3-978bdfba9fae}" mode="4" >Synth2 + Reverb 3</value>
 </preset>
 </bsbPresets>
-<EventPanel name="New" tempo="100.00000000" loop="8.00000000" x="530" y="48" width="582" height="724" visible="true" loopStart="0" loopEnd="0">i 1 0 0.4 64 
-i 1 0.5 0.4 68 
-i 1 1 0.4 71 
-i 1 1.5 0.4 69 
-i 1 2 0.4 60 
-i 1 2.5 0.4 61 
-i 1 3 0.4 61 
-i 1 3.5 0.4 68 
-i 1 4 0.4 61 
-i 1 4.5 0.4 67 
-i 1 5 0.4 68 
-i 1 5.5 0.1 97 
-i 1 6 0.1 60 
-i 1 6.5 0.1 73 
-i 1 7 0.1 66 
-i 1 7.5 0.1 61 
+<EventPanel name="New" tempo="100.00000000" loop="8.00000000" x="0" y="0" width="582" height="720" visible="true" loopStart="0" loopEnd="0">i 1 0 0.4 40 
+i 1 0.5 0.4 44 
+i 1 1 0.4 47 
+i 1 1.5 0.4 45 
+i 1 2 0.4 36 
+i 1 2.5 0.4 37 
+i 1 3 0.4 37 
+i 1 3.5 0.4 44 
+i 1 4 0.4 37 
+i 1 4.5 0.4 43 
+i 1 5 0.4 44 
+i 1 5.5 0.1 73 
+i 1 6 0.1 36 
+i 1 6.5 0.1 49 
+i 1 7 0.1 42 
+i 1 7.5 0.1 37 
     
     
     
@@ -8420,5 +8464,4 @@ i 1 7.5 0.1 61
     
     
     </EventPanel>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="260" y="314" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="55" y="301" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="118" y="351" width="655" height="346" visible="true" loopStart="0" loopEnd="0">i 1 0 0.1 73 </EventPanel>

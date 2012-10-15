@@ -30,7 +30,7 @@ nchnls = 2
 
 ; Feedback Delay which forces the instrument stay active as long as the delay plays
 opcode MyFeedbackDelay,a,akki		; a= one audio output / akki= one audioinput, two k-rate inputs, one i-rate	
-ain kDryWet, kDelTime, iFeedback xin	; Inputs: Audio-In, DryWet-Mix(0-1), Delay-Time(sec), Feedback-Amount (0-0.95)
+ain, kDryWet, kDelTime, iFeedback xin	; Inputs: Audio-In, DryWet-Mix(0-1), Delay-Time(sec), Feedback-Amount (0-0.95)
 iFeedback = (iFeedback > 0.95 ? 0.95 : iFeedback) ; limiting Feedback maximum to 0.95
 aDelay delayr 1					; a delayline, with 1 second maximum delay-time is initialised
 aWet	deltapi kDelTime				; data at a flexible position is read from the delayline 
