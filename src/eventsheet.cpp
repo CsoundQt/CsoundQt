@@ -323,7 +323,6 @@ QList< QList<QVariant> > EventSheet::getData()
 
 void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int numRows, int numColumns, bool noHistoryMark)
 {
-	this->clear();
 	// Separataion is stored in UserRole of items
 	// remember to treat comments and formulas properly
 	QStringList lines = text.split("\n");
@@ -375,7 +374,6 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
 		}
 	}
 	// column names mus be reset here as the names have been cleared
-	columnNames << tr("Event") << "p1 (instr)" << "p2 (start)" << "p3 (dur)";
 	this->setHorizontalHeaderLabels(columnNames);
 	this->blockSignals(false);
 	if (!noHistoryMark) {

@@ -254,9 +254,9 @@ void QuteGraph::changeCurve(int index)
 			index = (int) m_value;
 		}
 	}
-	else if (stacked->currentIndex() == index) {
-		return;
-	}
+//	else if (stacked->currentIndex() == index) {
+//		return;
+//	} // This check causes a single graph to be scaled incorrectly...
 	if (index < 0  || index >= curves.size()
 			|| curves.size() <= 0 || curves[index]->get_caption().isEmpty()) { // Invalid index
 		return;
@@ -453,7 +453,7 @@ void QuteGraph::setCurveData(Curve * curve)
 	view->horizontalScrollBar()->setValue(viewPosx);
 	view->verticalScrollBar()->setValue(viewPosy);
 
-	//  changeCurve(-2);
+//	changeCurve(-2);
 }
 
 void QuteGraph::setUd(CsoundUserData *ud)

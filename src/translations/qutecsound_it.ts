@@ -54,39 +54,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Linux</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mac</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Windows</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Presicion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>floats</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>doubles</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Csound Lib Dir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Opcode Dir</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>QuteCsound SDK Dir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -105,6 +77,90 @@
         <source>Select QuteCsound SDK Directory</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Properties</source>
+        <translation type="unfinished">Proprietà</translation>
+    </message>
+    <message>
+        <source>Local Platform</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All Platforms (Requires SDK)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Run mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Realtime only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Render only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Render or RT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save state</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Run in Menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use new parser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Additional</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Author</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>e-mail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Website</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Instructions (html allowed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Advanced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Leave these settings unchanged if you don&apos;t need a special configuration.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use custom Paths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Qt Libs dir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select Qt Libraries Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AppWizard</name>
@@ -117,16 +173,36 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Destination directory exists. Please remove.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error creating app directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The destination directory does not exist!
 Aborting.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can&apos;t build</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can&apos;t build for local platform for single presicion. Aborted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>App Creation finished!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">Errore</translation>
+    </message>
+    <message>
+        <source>Could not delete old application directory! Aborted.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -382,11 +458,11 @@ Aborting.</source>
     </message>
     <message>
         <source>Use invalue/outvalue</source>
-        <translation>Usa invalue/outvalue</translation>
+        <translation type="obsolete">Usa invalue/outvalue</translation>
     </message>
     <message>
         <source>Use chnget/chnset</source>
-        <translation>Usa chnget/chnset</translation>
+        <translation type="obsolete">Usa chnget/chnset</translation>
     </message>
     <message>
         <source>Run FLTK csds in Terminal</source>
@@ -551,11 +627,6 @@ Aborting.</source>
     <message>
         <source>Please note that OPCODEDIR will overwrite current settings so you will need to restart QuteCsound to return to default.</source>
         <translation type="obsolete">Notate che OPCODEDIR sovrascriverà le impostazioni attuali perciò dovrete riavviare QuteCsound per ritornare al default.</translation>
-    </message>
-    <message>
-        <source>Enabled</source>
-        <comment>Virtual MIDI keyboard Enabled</comment>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Jack client name (use * for current filename)</source>
@@ -724,6 +795,14 @@ Aborting.</source>
     </message>
     <message>
         <source>Please note that OPCODEDIR and OPCODEDIR64 will overwrite current settings so you will need to restart CsoundQt to return to default.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>QuteApp SDK Dir</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2061,6 +2140,30 @@ Extended Python features are not available</source>
         <source>Russian translation: Gleb Rogozinsky</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>You can only create an app with a csd file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you want to save before creating app?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You must save the csd before creating the App!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+L</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show/hide line number area</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DockConsole</name>
@@ -2093,6 +2196,10 @@ Extended Python features are not available</source>
     </message>
     <message>
         <source>CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Find:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2129,6 +2236,17 @@ Volete partire dall&apos;inizio?</translation>
     </message>
     <message>
         <source>Opcode Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show/hide line numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Enabled</name>
+    <message>
+        <source>Virtual MIDI keyboard Enabled</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
