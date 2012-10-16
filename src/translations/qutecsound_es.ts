@@ -14,12 +14,12 @@
     <message>
         <location filename="../about.ui" line="96"/>
         <source>About CsoundQt</source>
-        <translation type="unfinished">Acerca de CsoundQt</translation>
+        <translation>Acerca de CsoundQt</translation>
     </message>
     <message>
         <location filename="../about.ui" line="304"/>
         <source>CsoundQt</source>
-        <translation type="unfinished">CsoundQt</translation>
+        <translation>CsoundQt</translation>
     </message>
 </context>
 <context>
@@ -49,17 +49,17 @@
     <message>
         <location filename="../appdetailspage.ui" line="33"/>
         <source>Properties</source>
-        <translation type="unfinished">Propiedades</translation>
+        <translation>Propiedades</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="46"/>
         <source>Local Platform</source>
-        <translation type="unfinished"></translation>
+        <translation>Plataforma Local</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="51"/>
         <source>All Platforms (Requires SDK)</source>
-        <translation type="unfinished"></translation>
+        <translation>Todas las plataformas (requiere SDK)</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="77"/>
@@ -82,27 +82,27 @@
     <message>
         <location filename="../appdetailspage.ui" line="114"/>
         <source>Run mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo de ejecución</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="122"/>
         <source>Realtime only</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo tiempo real</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="127"/>
         <source>Render only</source>
-        <translation type="unfinished"></translation>
+        <translation>Render</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="132"/>
         <source>Render or RT</source>
-        <translation type="unfinished"></translation>
+        <translation>Ambos modos</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="153"/>
         <source>Save state</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar estado</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="163"/>
@@ -112,62 +112,62 @@
     <message>
         <location filename="../appdetailspage.ui" line="170"/>
         <source>Show Run in Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar &quot;Correr&quot; en menú</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="177"/>
         <source>Use new parser</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar nuevo parser</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="213"/>
         <source>Additional</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicional</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="219"/>
         <source>Author</source>
-        <translation type="unfinished"></translation>
+        <translation>Autor</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="229"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versión</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="239"/>
         <source>e-mail</source>
-        <translation type="unfinished"></translation>
+        <translation>e-mail</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="249"/>
         <source>Website</source>
-        <translation type="unfinished"></translation>
+        <translation>Página web</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="259"/>
         <source>Instructions (html allowed)</source>
-        <translation type="unfinished"></translation>
+        <translation>Instrucciones (html permitido)</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="270"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Avanzado</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="351"/>
         <source>Leave these settings unchanged if you don&apos;t need a special configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Estas opciones normalmente no necesitan ser modificadas.</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="361"/>
         <source>Use custom Paths</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar rutas personalizadas</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="373"/>
         <source>Qt Libs dir</source>
-        <translation type="unfinished"></translation>
+        <translation>Directorio de Qt</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="39"/>
@@ -210,7 +210,7 @@
     <message>
         <location filename="../appdetailspage.cpp" line="124"/>
         <source>Select Qt Libraries Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar directorio de librerías Qt</translation>
     </message>
     <message>
         <location filename="../appdetailspage.cpp" line="133"/>
@@ -235,34 +235,34 @@
     <message>
         <location filename="../appwizard.cpp" line="137"/>
         <source>Can&apos;t build</source>
-        <translation type="unfinished"></translation>
+        <translation>No fué posible crear la aplicación</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="138"/>
         <source>Can&apos;t build for local platform for single presicion. Aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>No es posible crear la aplicación para plataforma local y presición de 32 bits. Abortado.</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="142"/>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Hecho</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="142"/>
         <source>App Creation finished!</source>
-        <translation type="unfinished"></translation>
+        <translation>La aplicación ha sido creada!</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="271"/>
         <location filename="../appwizard.cpp" line="366"/>
         <source>Error</source>
-        <translation type="unfinished">Error</translation>
+        <translation>Error</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="271"/>
         <location filename="../appwizard.cpp" line="366"/>
         <source>Could not delete old application directory! Aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>No fue posible borrar el directorio de la aplicación antigua. Abortado.</translation>
     </message>
     <message>
         <source>Destination directory exists. Please remove.</source>
@@ -306,7 +306,7 @@ Abortando.</translation>
     <message>
         <location filename="../configdialog.cpp" line="265"/>
         <source>Please note that OPCODEDIR and OPCODEDIR64 will overwrite current settings so you will need to restart CsoundQt to return to default.</source>
-        <translation type="unfinished"></translation>
+        <translation>OPCODEDIR y OPCODEDIR64 sobreescribiran la configuración actual. Es necesario reiniciar CsoundQt para regresar a los valores por defecto.</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="612"/>
@@ -510,33 +510,33 @@ Abortando.</translation>
     <message>
         <location filename="../configdialog.ui" line="15"/>
         <source>CsoundQt Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuración de CsoundQt</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="170"/>
         <location filename="../configdialog.ui" line="281"/>
         <source>Use CsoundQt options</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar opciones de CsoundQt</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="78"/>
         <source>Use new parser</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar nuevo parser</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="85"/>
         <source>Number of threads</source>
-        <translation type="unfinished"></translation>
+        <translation>Número de hilos</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="95"/>
         <source>Use multicore</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar multi-procesador</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="415"/>
         <source>Run Utilities using:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ejecutar utilidades usando:</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="578"/>
@@ -722,17 +722,17 @@ Abortando.</translation>
     <message>
         <location filename="../configdialog.ui" line="1465"/>
         <source>OPCODEDIR64</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1482"/>
         <source>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecciona el directorio del SDK de CsoundQt para permitir la generación de aplicaciones multiplataforma.</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1485"/>
         <source>QuteApp SDK Dir</source>
-        <translation type="unfinished"></translation>
+        <translation>Directorio SDK</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1675"/>
@@ -939,12 +939,12 @@ Abortando.</translation>
     <message>
         <location filename="../configdialog.ui" line="901"/>
         <source>Store old widget format section in csd file, to allow older versions of CsoundQt to load most of the widget characteristics from the file</source>
-        <translation type="unfinished"></translation>
+        <translation>Guarda el formato de widgets viejo en el archivo csd, para permitir que versiones anteriores de CsoundQt carguen la mayoría de las características de los widgets</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="921"/>
         <source>Widgets are an independent window (requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Widgets en ventana independiente (requiere reiniciar)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1148"/>
@@ -1104,7 +1104,7 @@ Abortando.</translation>
     <message>
         <location filename="../qutecsound.cpp" line="139"/>
         <source>Python Scratch Pad</source>
-        <translation type="unfinished"></translation>
+        <translation>Bloc Python</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="445"/>
@@ -1410,7 +1410,7 @@ Debe reiniciar CsoundQt.</translation>
     <message>
         <location filename="../qutecsound.cpp" line="1818"/>
         <source>Russian translation: Gleb Rogozinsky</source>
-        <translation type="unfinished"></translation>
+        <translation>Traducción rusa: Gleb Rogozinsky</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1821"/>
@@ -1521,97 +1521,97 @@ Debe reiniciar CsoundQt.</translation>
     <message>
         <location filename="../qutecsound.cpp" line="2139"/>
         <source>Shift+Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2141"/>
         <source>Ctrl+W</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2143"/>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2144"/>
         <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2146"/>
         <source>Ctrl+Z</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2147"/>
         <source>Shift+Ctrl+Z</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2149"/>
         <source>Ctrl+X</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2150"/>
         <source>Ctrl+C</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2151"/>
         <source>Ctrl+V</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2152"/>
         <source>Ctrl+D</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2157"/>
         <source>Ctrl+F</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2158"/>
         <source>Ctrl+G</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2159"/>
         <source>Alt+C</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2161"/>
         <source>CTRL+E</source>
-        <translation type="unfinished">CTRL+E</translation>
+        <translation>CTRL+E</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2162"/>
         <source>CTRL+R</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2164"/>
         <source>Alt+S</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2165"/>
         <source>Ctrl+.</source>
-        <translation type="unfinished">Ctrl+.</translation>
+        <translation>Ctrl+.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2166"/>
         <source>Ctrl+Space</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2167"/>
         <source>Alt+F</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2170"/>
@@ -1671,103 +1671,104 @@ Debe reiniciar CsoundQt.</translation>
     <message>
         <location filename="../qutecsound.cpp" line="2186"/>
         <source>Shift+F1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2189"/>
         <source>Shift+Alt+F1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2191"/>
         <source>Ctrl+/</source>
-        <translation type="unfinished">Ctrl+/</translation>
+        <translation>Ctrl+/</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2193"/>
         <source>Ctrl+I</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2194"/>
         <source>Shift+Ctrl+I</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2195"/>
         <source>Alt+E</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2196"/>
         <source>Shift+Alt+E</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2197"/>
         <source>Alt+7</source>
-        <translation type="unfinished">Alt+7</translation>
+        <translation>Alt+7</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2198"/>
         <source>Alt+8</source>
-        <translation type="unfinished">Alt+8</translation>
+        <translation>Alt+8</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2199"/>
         <source>Ctrl+K</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2200"/>
         <source>Shift+Alt+K</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2201"/>
         <source>Shift+Alt+1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2202"/>
         <source>Shift+Alt+2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2203"/>
         <source>Shift+Alt+3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2204"/>
         <source>Shift+Alt+4</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2205"/>
         <source>Shift+Alt+5</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2206"/>
         <source>Shift+Alt+6</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2207"/>
         <source>Shift+Alt+7</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2213"/>
         <source>No PythonQt support</source>
-        <translation type="unfinished">Sin soporte de PythonQt</translation>
+        <translation>Sin soporte de PythonQt</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2214"/>
         <source>This version of CsoundQt has been compiled without PythonQt support.
 Extended Python features are not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Esta versión de CsoundQt ha sido compilada sin soporte para PythonQt.
+Las funciones Python no están disponibles</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2265"/>
@@ -1828,27 +1829,27 @@ Extended Python features are not available</source>
     <message>
         <location filename="../qutecsound.cpp" line="870"/>
         <source>You can only create an app with a csd file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sólo es posible crear una aplicación a partir de un archivo csd.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="875"/>
         <source>Do you want to save before creating app?</source>
-        <translation type="unfinished"></translation>
+        <translation>Desea salvar antes de generar la aplicación?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="884"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>Abortado</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="884"/>
         <source>You must save the csd before creating the App!</source>
-        <translation type="unfinished"></translation>
+        <translation>Debe salvar la aplicación antes de crear la aplicación!</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2208"/>
         <source>Shift+Alt+L</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2289"/>
@@ -2026,7 +2027,7 @@ Extended Python features are not available</source>
     <message>
         <location filename="../qutecsound.cpp" line="2393"/>
         <source>Invalue-&gt;Chnget</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2394"/>
@@ -2036,7 +2037,7 @@ Extended Python features are not available</source>
     <message>
         <location filename="../qutecsound.cpp" line="2398"/>
         <source>Chnget-&gt;Invalue</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2399"/>
@@ -2177,7 +2178,7 @@ Extended Python features are not available</source>
     <message>
         <location filename="../qutecsound.cpp" line="2479"/>
         <source>Render</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2483"/>
@@ -2292,12 +2293,12 @@ Extended Python features are not available</source>
         <location filename="../qutecsound.cpp" line="2545"/>
         <location filename="../qutecsound.cpp" line="2549"/>
         <source>ScratchPad</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2548"/>
         <source>Show Python Scratch Pad</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar Python Scratch Pad</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2558"/>
@@ -2625,7 +2626,7 @@ Extended Python features are not available</source>
     <message>
         <location filename="../qutecsound.cpp" line="2778"/>
         <source>Show/hide line number area</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostar/esconder número de línea</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2935"/>
@@ -2846,7 +2847,7 @@ Extended Python features are not available</source>
     <message>
         <location filename="../dockhelp.cpp" line="55"/>
         <source>Find:</source>
-        <translation type="unfinished"></translation>
+        <translation>Encontrar:</translation>
     </message>
     <message>
         <location filename="../dockhelp.cpp" line="169"/>
@@ -2909,7 +2910,7 @@ Desea iniciar desde el principio?</translation>
     <message>
         <location filename="../documentview.cpp" line="672"/>
         <source>Show/hide line numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar/esconder número de línea</translation>
     </message>
 </context>
 <context>
