@@ -262,9 +262,6 @@
            </layout>
           </item>
          </layout>
-         <zorder>layoutWidget2</zorder>
-         <zorder>layoutWidget3</zorder>
-         <zorder>layoutWidget4</zorder>
          <zorder>FileUseOptionsCheckBox</zorder>
          <zorder>FileOverrideCheckBox</zorder>
         </widget>

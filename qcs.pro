@@ -7,7 +7,7 @@
 # LIBSNDFILE_INCLUDE_DIR
 # LIBSNDFILE_LIBRARY_DIR
 # RTMIDI_DIR
-# PYTHONQT_TREE_DIR
+# PYTHONQT_SRC_DIR
 # If the Csound headers and libraries you are using were built from source but
 # not installed, set CSOUND_SOURCE_TREE to the directory containing the Csound
 # source tree.  In this case, the CSOUND_INCLUDE_DIR and CSOUND_LIBRARY_DIR
@@ -55,12 +55,16 @@ TRANSLATIONS = "src/translations/qutecsound_en.ts" \
     "src/translations/qutecsound_fi.ts" \
     "src/translations/qutecsound_ru.ts"
 pythonqt {
-    include ( $${PYTHONQT_TREE_DIR}/build/PythonQt.prf )
-    include ( $${PYTHONQT_TREE_DIR}/build/PythonQt_QtAll.prf )
+    include ( $${PYTHONQT_SRC_DIR}/build/PythonQt.prf )
+    include ( $${PYTHONQT_SRC_DIR}/build/PythonQt_QtAll.prf )
 
+    LIBS *= -L$${PYTHONQT_LIB_DIR} -l$${PYTHONQT_LIB}
+
+# Note, this is Python, not PythonQt include dir!
     win32:INCLUDEPATH *= $${PYTHON_INCLUDE_DIR}
-    INCLUDEPATH *= $${PYTHONQT_TREE_DIR}/src
-    INCLUDEPATH *= $${PYTHONQT_TREE_DIR}/extensions/PythonQt_QtAll
+
+    INCLUDEPATH *= $${PYTHONQT_SRC_DIR}/src
+    INCLUDEPATH *= $${PYTHONQT_SRC_DIR}/extensions/PythonQt_QtAll
     QT += svg sql webkit xmlpatterns opengl
 }
 
