@@ -35,6 +35,7 @@ public:
 
 	QString font;
 	float fontPointSize;
+	bool showLineNumberArea;
 	int lineEnding; // 0=Unix (LF) 1=Windows(CR+LF)
 	QString consoleFont;
 	float consoleFontPointSize;

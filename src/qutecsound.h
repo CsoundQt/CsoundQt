@@ -223,7 +223,7 @@ private slots:
 	void setCurrentOptionsForPage(DocumentPage *p);
 	void runUtility(QString flags);
 	//     void widgetDockLocationChanged(Qt::DockWidgetArea area);
-	void showLineNumber(int lineNumber);
+	void displayLineNumber(int lineNumber);
 	void updateInspector();
 	void markInspectorUpdate(); // Notification that inspector needs update
 	void setDefaultKeyboardShortcuts();

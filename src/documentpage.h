@@ -50,6 +50,7 @@ public:
 	virtual void setTextString(QString &text);
 	void setCompanionFileName(QString name);
 	void setEditorFocus();
+	void showLineNumbers(bool show);
 	void insertText(QString text, int section = -1);
 	void setFullText(QString text);
 	void setBasicText(QString text);

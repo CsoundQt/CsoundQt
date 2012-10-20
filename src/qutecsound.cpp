@@ -239,6 +239,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 			showWidgetsAct->setChecked(widgetsVisible);
 		}
 	}
+
 #ifdef QCS_PYTHONQT
 	if (scratchPadVisible) { // Reshow scratch panel if necessary
 		m_scratchPad->show();
@@ -1947,6 +1948,7 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
 	p->setPythonExecutable(m_options->pythonExecutable);
 	p->useOldFormat(m_options->oldFormat);
 	p->setConsoleBufferSize(m_options->consoleBufferSize);
+	p->showLineNumbers(m_options->showLineNumberArea);
 
 	int flags = m_options->noBuffer ? QCS_NO_COPY_BUFFER : 0;
 	flags |= m_options->noPython ? QCS_NO_PYTHON_CALLBACK : 0;
@@ -2097,7 +2099,7 @@ void CsoundQt::runUtility(QString flags)
 //   qDebug("CsoundQt::widgetDockLocationChanged() %i", area);
 // }
 
-void CsoundQt::showLineNumber(int lineNumber)
+void CsoundQt::displayLineNumber(int lineNumber)
 {
 	lineNumberLabel->setText(tr("Line %1").arg(lineNumber));
 }
@@ -3826,6 +3828,7 @@ void CsoundQt::readSettings()
 	settings.beginGroup("Editor");
 	m_options->font = settings.value("font", "Courier").toString();
 	m_options->fontPointSize = settings.value("fontsize", 12).toDouble();
+	m_options->showLineNumberArea = settings.value("showLineNumberArea", true).toBool();
 #ifdef Q_OS_WIN32
 	m_options->lineEnding = settings.value("lineEnding", 1).toInt();
 #else
@@ -3994,6 +3997,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 	if (!m_resetPrefs) {
 		settings.setValue("font", m_options->font );
 		settings.setValue("fontsize", m_options->fontPointSize);
+		settings.setValue("showLineNumberArea", m_options->showLineNumberArea);
 		settings.setValue("lineEnding", m_options->lineEnding);
 		settings.setValue("consolefont", m_options->consoleFont );
 		settings.setValue("consolefontsize", m_options->consoleFontPointSize);
@@ -4366,13 +4370,13 @@ void CsoundQt::makeNewPage(QString fileName, QString text)
 	connectActions();
 	connect(documentPages[curPage], SIGNAL(currentTextUpdated()), this, SLOT(markInspectorUpdate()));
 	connect(documentPages[curPage], SIGNAL(modified()), this, SLOT(documentWasModified()));
-	connect(documentPages[curPage], SIGNAL(currentLineChanged(int)), this, SLOT(showLineNumber(int)));
+	connect(documentPages[curPage], SIGNAL(currentLineChanged(int)), this, SLOT(displayLineNumber(int)));
 	//  connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
 	//          this, SLOT(setWidgetClipboard(QString)));
 	connect(documentPages[curPage], SIGNAL(setCurrentAudioFile(QString)),
 			this, SLOT(setCurrentAudioFile(QString)));
 	connect(documentPages[curPage]->getView(), SIGNAL(lineNumberSignal(int)),
-			this, SLOT(showLineNumber(int)));
+			this, SLOT(displayLineNumber(int)));
 	connect(documentPages[curPage], SIGNAL(evaluatePythonSignal(QString)),
 			this, SLOT(evaluatePython(QString)));
 	documentPages[curPage]->loadTextString(text, m_options->saveWidgets);

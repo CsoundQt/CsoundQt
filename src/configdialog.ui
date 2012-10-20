@@ -36,7 +36,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -164,20 +164,6 @@
           <set>Qt::AlignLeading</set>
          </property>
          <layout class="QGridLayout" name="gridLayout_15">
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="FileUseOptionsCheckBox">
-            <property name="text">
-             <string>Use CsoundQt options</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="FileOverrideCheckBox">
-            <property name="text">
-             <string>Ignore CsOptions</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="0">
            <layout class="QVBoxLayout" name="askLayout">
             <item>
@@ -261,12 +247,21 @@
             </item>
            </layout>
           </item>
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="FileUseOptionsCheckBox">
+            <property name="text">
+             <string>Use CsoundQt options</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="FileOverrideCheckBox">
+            <property name="text">
+             <string>Ignore CsOptions</string>
+            </property>
+           </widget>
+          </item>
          </layout>
-         <zorder>layoutWidget2</zorder>
-         <zorder>layoutWidget3</zorder>
-         <zorder>layoutWidget4</zorder>
-         <zorder>FileUseOptionsCheckBox</zorder>
-         <zorder>FileOverrideCheckBox</zorder>
         </widget>
        </item>
        <item>
@@ -1146,6 +1141,13 @@
              <widget class="QCheckBox" name="autoCompleteCheckBox">
               <property name="text">
                <string>Autocomplete menu while typing</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="lineNumbersCheckBox">
+              <property name="text">
+               <string>Show line numbers</string>
               </property>
              </widget>
             </item>
