@@ -33,6 +33,7 @@ public:
 	Options();
 	~Options();
 
+	QString theme;  // Icon theme name
 	QString font;
 	float fontPointSize;
 	bool showLineNumberArea;

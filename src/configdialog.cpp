@@ -70,6 +70,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options)
 	int ifIndex = midiInterfaceComboBox->findData(QVariant(m_options->midiInterface));
 	midiInterfaceComboBox->setCurrentIndex(ifIndex);
 
+	themeComboBox->setCurrentIndex(themeComboBox->findText(m_options->theme));
 	fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
 	fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));
 	lineNumbersCheckBox->setChecked(m_options->showLineNumberArea);
@@ -277,6 +278,7 @@ void ConfigDialog::setCurrentTab(int index)
 
 void ConfigDialog::accept()
 {
+	m_options->theme = themeComboBox->currentText();
 	m_options->font = fontComboBox->currentText();
 	m_options->fontPointSize = fontSizeComboBox->currentText().toDouble();
 	m_options->showLineNumberArea = lineNumbersCheckBox->isChecked();

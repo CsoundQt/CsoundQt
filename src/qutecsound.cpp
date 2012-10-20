@@ -140,6 +140,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #endif
 
 	connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
+	QSettings settings("csound", "qutecsound");
+	settings.beginGroup("GUI");
+	m_options->theme = settings.value("theme", "boring").toString();
 
 	createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
 	readSettings();
@@ -2262,7 +2265,7 @@ void CsoundQt::createActions()
 {
 	// Actions that are not connected here depend on the active document, so they are
 	// connected with connectActions() and are changed when the document changes.
-	QString theme = "boring";
+	QString theme = m_options->theme;
 	QString prefix = ":/themes/" + theme + "/";
 	newAct = new QAction(QIcon(prefix + "gtk-new.png"), tr("&New"), this);
 	newAct->setStatusTip(tr("Create a new file"));
@@ -3791,6 +3794,7 @@ void CsoundQt::readSettings()
 	// Version 2 to save default keyboard shortcuts (weren't saved previously)
 	// Version 2 to add "*" to jack client name
 	settings.beginGroup("GUI");
+	m_options->theme = settings.value("theme", "boring").toString();
 	QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
 	QSize size = settings.value("size", QSize(600, 500)).toSize();
 	resize(size);
@@ -3982,6 +3986,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 		settings.setValue("language", _configlists.languageCodes[m_options->language]);
 		//  settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
 		settings.setValue("recentFiles", recentFiles);
+		settings.setValue("theme", m_options->theme);
 	}
 	else {
 		settings.remove("");

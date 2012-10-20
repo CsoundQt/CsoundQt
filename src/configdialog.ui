@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>625</width>
-    <height>621</height>
+    <height>623</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,7 +36,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -752,7 +752,7 @@
          </item>
         </layout>
        </item>
-       <item row="5" column="0">
+       <item row="10" column="0">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -764,6 +764,34 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="6" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QLabel" name="label_31">
+           <property name="text">
+            <string>Theme (requires restart)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="themeComboBox">
+           <item>
+            <property name="text">
+             <string>boring</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>fun</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>

@@ -27,8 +27,10 @@
 
 Options::Options()
 {
+	theme = "boring";
 	font = "Courier";
 	fontPointSize = 10;
+	showLineNumberArea = true;
 	lineEnding = 0; // 0=Unix (LF) 1=Windows(CR+LF)
 	consoleFont = "Courier";
 	consoleFontPointSize = 10;
