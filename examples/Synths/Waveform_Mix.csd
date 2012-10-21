@@ -1,51 +1,51 @@
 <CsoundSynthesizer>
 <CsOptions>
---midi-key-cps=4 --midi-velocity-amp=5 -m0
+--midi-key-cps=4 --midi-velocity-amp=5 -m128
 </CsOptions>
 <CsInstruments>
 /*****WAVEFORM MIX*****/
 ;example for qutecsound
 ;written by joachim heintz
-;feb 2010
+;feb 2010 / oct 2012
 
 sr = 44100
-ksmps = 64
+ksmps = 128
 nchnls = 2
 0dbfs = 1
 
-massign 0, 2; assigns all incoming MIDI to instr 2
+           massign    0, 2; assigns all incoming MIDI to instr  2
 
   opcode SinesToSSTI, i, pooo
 ;produces the waveforms saw (iwf=1, which is also the default), square (iwf=2), triangle (3), impulse (4) by the addition of inparts sinusoides (default = 10) and returns the result in a function table of itabsiz length (must be a power-of-2 or a power-of-2 plus 1, the default is 1024 points) with number ifno (default = 0 which means the number is given automatically)
 iwf, inparts, itabsiz, ifno xin
-inparts	=		(inparts == 0 ? 10 : inparts)
-itabsiz	=		(itabsiz == 0 ? 1024 : itabsiz)
-iftemp		ftgen		0, 0, -(inparts * 3), -2, 0;temp ftab for writing the str-pna-phas vals
-indx		=		1
+inparts    =          (inparts == 0 ? 10 : inparts)
+itabsiz    =          (itabsiz == 0 ? 1024 : itabsiz)
+iftemp     ftgen      0, 0, -(inparts * 3), -2, 0;temp ftab for writing the str-pna-phas vals
+indx       =          1
 loop:
 if iwf == 1 then ; saw = 1, -1/2, 1/3, -1/4, ... as strength of partials
-		tabw_i		1/(indx % 2 == 0 ? -indx : indx), (indx-1)*3, iftemp; writes strength of partial
-		tabw_i		indx, (indx-1)*3+1, iftemp; writes partial number
+           tabw_i     1/(indx % 2 ==  0 ? -indx : indx), (indx-1)*3, iftemp; writes strength of partial
+           tabw_i     indx, (indx-1)*3+1, iftemp; writes partial number
 elseif iwf == 2 then ; square = 1, 1/3, 1/5, ... for odd partials
-		tabw_i		1/(indx*2-1), (indx-1)*3, iftemp; writes strength of partial
-		tabw_i		indx*2-1, (indx-1)*3+1, iftemp; writes partial number
+           tabw_i     1/(indx*2-1), (indx-1)*3, iftemp; writes strength of partial
+           tabw_i     indx*2-1, (indx-1)*3+1, iftemp; writes partial number
 elseif iwf == 3 then ; triangle = 1, -1/9, 1/25, -1/49, 1/81, ... for odd partials
-ieven		=		indx % 2; 0 = even index, 1 = odd index
-istr		=		(ieven == 0 ? -1/(indx*2-1)^2 : 1/(indx*2-1)^2); results in 1, -1/9, 1/25, ...
-		tabw_i		istr, (indx-1)*3, iftemp; writes strength of partial
-		tabw_i		indx*2-1, (indx-1)*3+1, iftemp; writes partial number
+ieven      =          indx % 2; 0 = even index, 1 =  odd index
+istr       =          (ieven == 0 ? -1/(indx*2-1)^2 : 1/(indx*2-1)^2); results in  1, -1/9, 1/25, ...
+           tabw_i     istr, (indx-1)*3, iftemp; writes strength of partial
+           tabw_i     indx*2-1, (indx-1)*3+1, iftemp; writes partial number
 elseif iwf == 4 then ; impulse = 1, 1, 1, ... for all partials
-		tabw_i		1, (indx-1)*3, iftemp; writes strength of partial (always 1)
-		tabw_i		indx, (indx-1)*3+1, iftemp; writes partial number
+           tabw_i     1, (indx-1)*3, iftemp; writes strength of partial (always 1)
+           tabw_i     indx, (indx-1)*3+1, iftemp; writes partial number
 endif
 
-		loop_le	indx, 1, inparts, loop
+           loop_le    indx, 1, inparts, loop
 
-iftout		ftgen		ifno, 0, itabsiz, 34, iftemp, inparts, 1; write table with GEN34 
-		ftfree		iftemp, 0; remove iftemp
-		xout		iftout
+iftout     ftgen      ifno, 0, itabsiz, 34, iftemp, inparts, 1; write table  with GEN34
+           ftfree     iftemp, 0; remove  iftemp
+           xout       iftout
   endop
-  	
+
   opcode ShowLED_a, 0, Sakkk
 ;Shows an audio signal in an outvalue channel. You can choose to show the value in dB or in raw amplitudes.
 ;;Input:
@@ -54,15 +54,15 @@ iftout		ftgen		ifno, 0, itabsiz, 34, iftemp, inparts, 1; write table with GEN34
 ;kdispfreq: refresh frequency (Hz)
 ;kdb: 1 = show in dB, 0 = show in raw amplitudes (both in the range 0-1)
 ;kdbrange: if idb=1: how many db-steps are shown (e.g. if 36 you will not see anything from a signal below -36 dB)
-Soutchan, asig, kdispfreq, kdb, kdbrange	xin
-kdispval	max_k	asig, kdispfreq, 1
+Soutchan, asig, kdispfreq, kdb, kdbrange xin
+kdispval   max_k      asig, kdispfreq, 1
 	if kdb != 0 then
-kdb 		= 		dbfsamp(kdispval)
-kval 		= 		(kdbrange + kdb) / kdbrange
-	else
-kval		=		kdispval
+kdb        =          dbfsamp(kdispval)
+kval       =          (kdbrange + kdb) / kdbrange
+           else
+kval       =          kdispval
 	endif
-			outvalue	Soutchan, kval
+           outvalue   Soutchan, kval
   endop
 
   opcode ShowOver_a, 0, Sakk
@@ -72,117 +72,121 @@ kval		=		kdispval
 ;asig: audio signal which is to displayed
 ;kdispfreq: refresh frequency (Hz)
 ;khold: time in seconds to "hold the red light"
-Soutchan, asig, kdispfreq, khold	xin
-kon		init		0
-ktim		times
-kstart		init		0
-kend		init		0
-khold		=		(khold < .01 ? .01 : khold); avoiding too short hold times
-kmax		max_k		asig, kdispfreq, 1
+Soutchan, asig, kdispfreq, khold xin
+kon        init       0
+ktim       times
+kstart     init       0
+kend       init       0
+khold      =          (khold < .01 ? .01 : khold); avoiding too short hold times
+kmax       max_k      asig, kdispfreq, 1
 	if kon == 0 && kmax > 1 then
-kstart		=		ktim
-kend		=		kstart + khold
-		outvalue	Soutchan, kmax
-kon		=		1
+kstart     =          ktim
+kend       =          kstart + khold
+           outvalue   Soutchan, kmax
+kon        =          1
 	endif
 	if kon == 1 && ktim > kend then
-		outvalue	Soutchan, 0
-kon		=		0
+           outvalue   Soutchan, 0
+kon        =          0
 	endif
   endop
 
 
-instr 1;;RECEIVE GUI INPUT AN GENERATE WAVEFORMS
-iftlen		=		4097; length of a function table with the shape of a waveform
+instr 1;;RECEIVE GUI INPUT AND GENERATE WAVEFORMS
+iftlen     =          4097; length of a  function table  with the shape of a  waveform
 ;GENERATE SINE WAVEFORM
-giftsin	ftgen		1, 0, iftlen, 10, 1
+giftsin    ftgen      1, 0, iftlen, 10, 1
 ;RECEIVE NUMBER OF PARTIALS FOR SAW, SQUARE, TRIANGLE AN IMPULSE
-knp_saw	invalue	"np_saw"
-knp_squ	invalue	"np_squ"
-knp_tri	invalue	"np_tri"
-knp_imp	invalue	"np_imp"
+knp_saw    invalue    "np_saw"
+knp_squ    invalue    "np_squ"
+knp_tri    invalue    "np_tri"
+knp_imp    invalue    "np_imp"
 
 ;LOOK IF AN OF THIS VALUES HAS CHANGED
-knewsaw		changed	knp_saw
-knewsqu		changed	knp_squ
-knewtri		changed	knp_tri
-knewimp		changed	knp_imp
+knewsaw    changed    knp_saw
+knewsqu    changed    knp_squ
+knewtri    changed    knp_tri
+knewimp    changed    knp_imp
 
 ;IF YES GO AGAIN TO THE "new" BLOCK AND RECALCULATE THE WAVEFORMS
  if knewsaw == 1 then
-		reinit		newsaw
+           reinit     newsaw
  endif
  if knewsqu == 1 then
-		reinit		newsqu
+           reinit     newsqu
  endif
  if knewtri == 1 then
-		reinit		newtri
+           reinit     newtri
  endif
  if knewimp == 1 then
-		reinit		newimp
+           reinit     newimp
  endif
 ;CALCULATION OF SAW, SQUARE, TRIANGLE AN IMPULSE ACCORDING TO THE DESIRED NUMBER OF PARTIALS
 newsaw:
-inp_saw	=		i(knp_saw)
-giftsaw	SinesToSSTI	1, inp_saw, iftlen, 2
-		rireturn
-
+inp_saw    =          i(knp_saw)
+giftsaw    SinesToSSTI 1, inp_saw, iftlen, 2
+           event_i    "i", "ShowTables", 0, 1
+           rireturn
 newsqu:
-inp_squ	=		i(knp_squ)
-giftsqu	SinesToSSTI	2, inp_squ, iftlen, 3
-		rireturn
-
+inp_squ    =          i(knp_squ)
+giftsqu    SinesToSSTI 2, inp_squ, iftlen, 3
+           event_i    "i", "ShowTables", 0, 1
+           rireturn
 newtri:
-inp_tri	=		i(knp_tri)
-gifttri	SinesToSSTI	3, inp_tri, iftlen, 4
-		rireturn
-
+inp_tri    =          i(knp_tri)
+gifttri    SinesToSSTI 3, inp_tri, iftlen, 4
+           event_i    "i", "ShowTables", 0, 1
+           rireturn
 newimp:
-inp_imp	=		i(knp_imp)
-giftimp	SinesToSSTI	4, inp_imp, iftlen, 5
-		rireturn
+inp_imp    =          i(knp_imp)
+giftimp    SinesToSSTI 4, inp_imp, iftlen, 5
+           event_i    "i", "ShowTables", 0, 1
+           rireturn
 
 ;RECEIVE RELATIVE AMPLITUDES, AND MASTER VOLUME FROM THE GUI
-gkamp_sin	invalue	"amp_sin"
-gkamp_saw	invalue	"amp_saw"
-gkamp_squ	invalue	"amp_squ"
-gkamp_tri	invalue	"amp_tri"
-gkamp_imp	invalue	"amp_imp"
-gk_vol		invalue	"vol"; master volume
+gkamp_sin  invalue    "amp_sin"
+gkamp_saw  invalue    "amp_saw"
+gkamp_squ  invalue    "amp_squ"
+gkamp_tri  invalue    "amp_tri"
+gkamp_imp  invalue    "amp_imp"
+gk_vol     invalue    "vol"; master volume
 ;SMOOTH AMPLTUDE CHANGES
-gkamp_sin	port		gkamp_sin, .1
-gkamp_saw	port		gkamp_saw, .1
-gkamp_squ	port		gkamp_squ, .1
-gkamp_tri	port		gkamp_tri, .1
-gkamp_imp	port		gkamp_imp, .1
-gk_vol		port		gk_vol, .1
-;LET THE GRAPH WIDGET SHOW THE WAVEFORMS
-		outvalue	"sine", -1
-		outvalue	"saw", -2
-		outvalue	"square", -3
-		outvalue	"triangle", -4
-		outvalue	"impulse", -5
+gkamp_sin  port       gkamp_sin, .1
+gkamp_saw  port       gkamp_saw, .1
+gkamp_squ  port       gkamp_squ, .1
+gkamp_tri  port       gkamp_tri, .1
+gkamp_imp  port       gkamp_imp, .1
+gk_vol     port       gk_vol, .1
 endin
 
 instr 2;;PLAY ONE NOTE
 ;GENERATE THE FIVE AUDIO SIGNALS
-asin		poscil		p5, p4, giftsin
-asaw		poscil		p5, p4, giftsaw
-asqu		poscil		p5, p4, giftsqu
-atri		poscil		p5, p4, gifttri
-aimp		poscil		p5, p4, giftimp
+asin       poscil     p5, p4, giftsin
+asaw       poscil     p5, p4, giftsaw
+asqu       poscil     p5, p4, giftsqu
+atri       poscil     p5, p4, gifttri
+aimp       poscil     p5, p4, giftimp
 ;MIX THEM, APPLY A SIMPLE ENVELOPE AND SEND THE MIX OUT
-amix		sum		asin*gkamp_sin, asaw*gkamp_saw, asqu*gkamp_squ, atri*gkamp_tri, aimp*gkamp_imp
-kenv		linsegr	0, .1, 1, p3-.1, 1, .1, 0; simple envelope
-aenv		=		amix*kenv*gk_vol; apply alo master volume
-		outs		aenv, aenv
+amix       sum        asin*gkamp_sin, asaw*gkamp_saw, asqu*gkamp_squ, atri*gkamp_tri, aimp*gkamp_imp
+kenv       linsegr    0, .1, 1, p3-.1, 1, .1, 0; simple envelope
+aenv       =          amix*kenv*gk_vol; apply alo master volume
+           outs       aenv, aenv
 endin
 
 instr 3; SHOW THE SUM OF ALL SINGLE NOTES TO SEE CLIPPING
-aL,aR		monitor
-kTrigDisp	metro		10
-		ShowLED_a	"out", aL, kTrigDisp, 1, 50
-		ShowOver_a	"outover", aL, kTrigDisp, 1
+aL,aR      monitor
+kTrigDisp  metro      10
+           ShowLED_a  "out", aL, kTrigDisp, 1, 50
+           ShowOver_a "outover", aL, kTrigDisp, 1
+endin
+
+instr ShowTables
+           outvalue   "sine", -1
+           outvalue   "saw", -2
+           outvalue   "square", -3
+           outvalue   "triangle", -4
+           outvalue   "impulse", -5
+           turnoff
 endin
 
 </CsInstruments>
@@ -192,13 +196,15 @@ i 3 0 36000
 e
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>131</x>
- <y>85</y>
- <width>1134</width>
- <height>629</height>
+ <x>67</x>
+ <y>45</y>
+ <width>98</width>
+ <height>28</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -274,7 +280,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>-1</value>
+  <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -323,7 +329,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>-2</value>
+  <value>2</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -372,7 +378,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>-3</value>
+  <value>4</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -421,7 +427,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>-4</value>
+  <value>6</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -470,7 +476,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>-5</value>
+  <value>8</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -507,7 +513,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>8</value>
+  <value>4</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>np_squ</objectName>
@@ -536,7 +542,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>8</value>
+  <value>4</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>np_tri</objectName>
@@ -565,7 +571,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>8</value>
+  <value>4</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>np_imp</objectName>
@@ -594,7 +600,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>8</value>
+  <value>4</value>
  </bsbObject>
  <bsbObject version="2" type="BSBScope">
   <objectName/>
@@ -630,7 +636,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.32258100</xValue>
-  <yValue>0.19277108</yValue>
+  <yValue>0.47590361</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -663,7 +669,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.32258100</xValue>
-  <yValue>0.16265060</yValue>
+  <yValue>0.57228916</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -762,7 +768,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.32258100</xValue>
-  <yValue>0.72289157</yValue>
+  <yValue>0.35542169</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -820,7 +826,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.54545455</value>
+  <value>1.26060606</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1098,55 +1104,7 @@ Volume</label>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 72 179 400 200
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioText {34, 265} {1028, 44} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {73, 116} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Sine
-ioGraph {35, 161} {178, 96} table -1.000000 1.000000 sine
-ioText {290, 116} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Saw
-ioGraph {252, 161} {178, 96} table -2.000000 1.000000 saw
-ioText {509, 115} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Square
-ioGraph {471, 160} {178, 96} table -3.000000 1.000000 square
-ioText {713, 115} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Triangle
-ioGraph {675, 160} {178, 96} table -4.000000 1.000000 triangle
-ioText {922, 114} {91, 35} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Impulse
-ioGraph {884, 159} {178, 96} table -5.000000 1.000000 impulse
-ioText {314, 272} {59, 28} editnum 8.000000 1.000000 "np_saw" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 8.000000
-ioText {533, 272} {59, 28} editnum 8.000000 1.000000 "np_squ" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 8.000000
-ioText {740, 272} {59, 28} editnum 8.000000 1.000000 "np_tri" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 8.000000
-ioText {949, 272} {59, 28} editnum 8.000000 1.000000 "np_imp" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 8.000000
-ioGraph {26, 407} {766, 165} scope 1.000000 -1 
-ioMeter {824, 405} {31, 166} {0, 59904, 0} "hor21" 0.322581 "amp_sin" 0.192771 fill 1 0 mouse
-ioMeter {855, 405} {31, 166} {0, 59904, 0} "hor21" 0.322581 "amp_saw" 0.162651 fill 1 0 mouse
-ioMeter {886, 405} {31, 166} {0, 59904, 0} "hor21" 0.322581 "amp_squ" 0.265060 fill 1 0 mouse
-ioMeter {917, 405} {31, 166} {0, 59904, 0} "hor21" 0.322581 "amp_tri" 0.409639 fill 1 0 mouse
-ioMeter {947, 405} {31, 166} {0, 59904, 0} "hor21" 0.322581 "amp_imp" 0.722892 fill 1 0 mouse
-ioText {824, 345} {148, 54} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Relative Strength of the Five Waveforms
-ioSlider {1008, 406} {22, 165} 0.000000 2.000000 0.545455 vol
-ioMeter {1039, 424} {18, 147} {0, 59904, 0} "out" -inf "out" -inf fill 1 0 mouse
-ioMeter {1039, 406} {18, 23} {50176, 3584, 3072} "outover" 0.000000 "outover" 0.000000 fill 1 0 mouse
-ioText {999, 346} {64, 55} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder MasterÂ¬Volume
-ioText {63, 368} {214, 33} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Scope Resulting Waveform
-ioButton {372, 363} {91, 27} value 1.000000 "_Play" "START" "/" i1 0 10
-ioButton {486, 363} {91, 27} value 1.000000 "_Stop" "STOP" "/" i1 0 10
-ioText {35, 273} {176, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Number of Harmonics:
-ioText {91, 59} {903, 53} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Standard Waveforms are built here by superposition of harmonics. The higher the number of harmonics, the sharper the shape. You can change here in realtime the number of harmonics and the relative strength of the five shapes in the resulting mix.
-ioText {190, 11} {712, 43} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Waveform Mix
-ioButton {592, 363} {199, 28} event 1.000000 "" "MAKE AUDIO" "/" i2 0 3 440 0.2
-</MacGUI>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="543" y="318" width="614" height="322" visible="true" loopStart="0" loopEnd="0">i 1 0 3 
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="543" y="318" width="614" height="322" visible="false" loopStart="0" loopEnd="0">i 1 0 3 
     
     
     

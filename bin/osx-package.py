@@ -5,9 +5,6 @@ import pdb
 import fileinput
 import glob 
 
-
-PythonQtLibPaths = ['/usr/local/lib/', '../PythonQt-build-desktop-Release/lib/', '../../../../PythonQt-build-desktop-Release/lib/', './']
-
 # Build everything just to make sure all versions packaged are synchronized
 #cd ..
 #qmake qcs.pro CONFIG+=rtmidi -spec macx-g++ -r CONFIG+=release
@@ -41,20 +38,20 @@ def adjust_link(old_link, new_link, app_name, bin_name, suffix = '64'):
     change_link(old_link, new_link, app_name + '/Contents/Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix, suffix))
     change_link(old_link, new_link, app_name + '/Contents/Frameworks/CsoundLib%s.framework/Versions/5.2/lib_csnd.dylib'%suffix)
 
-def deployWithPython(PRECISION, NEW_NAME, QUTECSOUND_VERSION, QtFrameworksDir, CsoundQtBinPath, debug=False):
+def deployWithPython(PRECISION, NEW_NAME, QUTECSOUND_VERSION, QtFrameworksDir, CsoundQtBinPath, PythonQtLibPaths, debug=False):
     ORIGINAL_NAME = 'CsoundQt' + PRECISION + '-py'
     if debug:
         ORIGINAL_NAME += '-debug'
     APP_NAME= NEW_NAME + PRECISION + '-py-' + QUTECSOUND_VERSION + '.app'
 
     ORIG_APP_NAME=ORIGINAL_NAME + '.app'
-    if (os.path.exists(ORIG_APP_NAME)):
-        shutil.rmtree(ORIG_APP_NAME)
-    shutil.copytree(CsoundQtBinPath + '/' + ORIG_APP_NAME, ORIG_APP_NAME)
-    print "Copied ",CsoundQtBinPath + '/' + ORIG_APP_NAME
+    # if (os.path.exists(ORIG_APP_NAME)):
+    #     shutil.rmtree(ORIG_APP_NAME)
+    #shutil.copytree(CsoundQtBinPath + '/' + ORIG_APP_NAME, ORIG_APP_NAME)
+    #print "Copied ",CsoundQtBinPath + '/' + ORIG_APP_NAME
 
     arguments = [ORIG_APP_NAME, '-verbose=1']
-    retcode = call([QtFrameworksDir + 'gcc/bin/macdeployqt'] + arguments)
+    retcode = call([QtBinDir + '/macdeployqt'] + arguments)
 
     add_path = False
 
@@ -119,7 +116,7 @@ def deployWithPython(PRECISION, NEW_NAME, QUTECSOUND_VERSION, QtFrameworksDir, C
                  '@executable_path/../Frameworks/libsndfile.1.dylib',
                  '%s/Contents/MacOS/%s'%(ORIG_APP_NAME, ORIGINAL_NAME))
 
-    deployCsound(ORIG_APP_NAME , '%s/Contents/MacOS/%s'%(ORIG_APP_NAME, ORIGINAL_NAME), PRECISION == '-d')
+        #deployCsound(ORIG_APP_NAME , '%s/Contents/MacOS/%s'%(ORIG_APP_NAME, ORIGINAL_NAME), PRECISION == '-d')
 
     #QtLibs = ['QtCore', 'QtGui', 'QtXml', 'QtSvg', 'QtSql', 'QtXmlPatterns', 'QtOpenGL', 'QtNetwork', 'QtWebKit', 'phonon']
     #QtDepLibs = ['QtGui', 'QtXml', 'QtSvg', 'QtSql', 'QtXmlPatterns', 'QtOpenGL', 'QtNetwork', 'QtWebKit', 'phonon']
@@ -129,10 +126,16 @@ def deployWithPython(PRECISION, NEW_NAME, QUTECSOUND_VERSION, QtFrameworksDir, C
     QtLibs = ['QtCore', 'QtGui', 'QtXml', 'QtDBus', 'QtSvg', 'QtSql', 'QtXmlPatterns', 'QtOpenGL', 'QtNetwork', 'QtWebKit', 'phonon']
 
     for lib in QtLibs:
-        change_link('%sgcc/lib/%s.framework/Versions/4/%s'%(QtFrameworksDir,lib,lib),
+        change_link('%s/gcc/lib/%s.framework/Versions/4/%s'%(QtFrameworksDir,lib,lib),
                      '@executable_path/../Frameworks/%s.framework/Versions/4/%s'%(lib,lib),
                      '%s/Contents/Frameworks/libPythonQt.1.dylib'%(ORIG_APP_NAME))
-        change_link('%sgcc/lib/%s.framework/Versions/4/%s'%(QtFrameworksDir,lib,lib),
+        change_link('%s.framework/Versions/4/%s'%(lib,lib),
+                     '@executable_path/../Frameworks/%s.framework/Versions/4/%s'%(lib,lib),
+                     '%s/Contents/Frameworks/libPythonQt_QtAll.1.dylib'%(ORIG_APP_NAME))
+        change_link('%s.framework/Versions/4/%s'%(lib,lib),
+                     '@executable_path/../Frameworks/%s.framework/Versions/4/%s'%(lib,lib),
+                     '%s/Contents/Frameworks/libPythonQt.1.dylib'%(ORIG_APP_NAME))
+        change_link('%s/gcc/lib/%s.framework/Versions/4/%s'%(QtFrameworksDir,lib,lib),
                      '@executable_path/../Frameworks/%s.framework/Versions/4/%s'%(lib,lib),
                      '%s/Contents/Frameworks/libPythonQt_QtAll.1.dylib'%(ORIG_APP_NAME))
 
@@ -201,18 +204,20 @@ def deployCsound(app_name, bin_name, doubles=True):
                     '@executable_path/../Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix,suffix),
                     op_lib)
 
-if __name__=='main':
+if __name__=='__main__':
     # make version including Qt
+    print "start"
     QUTECSOUND_VERSION = '0.7.0-alpha'
     NEW_NAME='CsoundQt'
-    QtFrameworksDir = '/Users/acabrera/QtSDK/Desktop/Qt/4.8.1/'
+    QtFrameworksDir = '/Users/andres/QtSDK/Desktop/Qt/4.8.1/'
+    QtBinDir = '/Users/andres/QtSDK/Desktop/Qt/4.8.1/gcc/bin'
     CsoundQtBinPath = '../../qcs-build-desktop-Desktop_Qt_4_8_1_for_GCC__Qt_SDK__Release/bin'
+    # for non QtSDK libs 
+    QtFrameworksDir = '/Library/Frameworks'
+    QtBinDir = '/usr/bin'
+    CsoundQtBinPath = './'
+    
+    PythonQtLibPaths = ['/usr/local/lib/', '../../PythonQt2.1_Qt4.8/lib/', '../../../../PythonQt2.1_Qt4.8/lib/', './']
 
     print "---------------- Making doubles package"
-    deployWithPython('-d', NEW_NAME, QUTECSOUND_VERSION, CsoundQtBinPath, QtFrameworksDir)
-    
-    print "---------------- Making floats package"
-    
-    call([QtFrameworksDir + 'gcc/bin/macdeployqt', "CsoundQt-d-py.app"])
-    deployWithPython('-f', NEW_NAME, QUTECSOUND_VERSION, CsoundQtBinPath, QtFrameworksDir)
-
+    deployWithPython('-d', NEW_NAME, QUTECSOUND_VERSION, QtFrameworksDir, CsoundQtBinPath,PythonQtLibPaths)

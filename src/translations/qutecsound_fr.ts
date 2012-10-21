@@ -49,17 +49,17 @@
     <message>
         <location filename="../appdetailspage.ui" line="33"/>
         <source>Properties</source>
-        <translation type="unfinished">Propriétés</translation>
+        <translation>Propriétés</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="46"/>
         <source>Local Platform</source>
-        <translation type="unfinished"></translation>
+        <translation>Plate-forme locale</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="51"/>
         <source>All Platforms (Requires SDK)</source>
-        <translation type="unfinished"></translation>
+        <translation>Toutes les plates-formes (nécessite le SDK)</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="77"/>
@@ -82,27 +82,27 @@
     <message>
         <location filename="../appdetailspage.ui" line="114"/>
         <source>Run mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode exécution</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="122"/>
         <source>Realtime only</source>
-        <translation type="unfinished"></translation>
+        <translation>Temps-réel seulement</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="127"/>
         <source>Render only</source>
-        <translation type="unfinished"></translation>
+        <translation>Restitution seulement</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="132"/>
         <source>Render or RT</source>
-        <translation type="unfinished"></translation>
+        <translation>Restitution ou TR</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="153"/>
         <source>Save state</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder l&apos;état</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="163"/>
@@ -112,62 +112,62 @@
     <message>
         <location filename="../appdetailspage.ui" line="170"/>
         <source>Show Run in Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer l&apos;exécution dans le menu</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="177"/>
         <source>Use new parser</source>
-        <translation type="unfinished">Utiliser le nouveau parseur</translation>
+        <translation>Utiliser le nouveau parseur</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="213"/>
         <source>Additional</source>
-        <translation type="unfinished"></translation>
+        <translation>Supplément</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="219"/>
         <source>Author</source>
-        <translation type="unfinished"></translation>
+        <translation>Auteur</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="229"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="239"/>
         <source>e-mail</source>
-        <translation type="unfinished"></translation>
+        <translation>e-mail</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="249"/>
         <source>Website</source>
-        <translation type="unfinished"></translation>
+        <translation>Site web</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="259"/>
         <source>Instructions (html allowed)</source>
-        <translation type="unfinished"></translation>
+        <translation>Instructions (html autorisé)</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="270"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="351"/>
         <source>Leave these settings unchanged if you don&apos;t need a special configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Garder ces réglages inchangés si une configuration spéciale n&apos;est pas nécessaire.</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="361"/>
         <source>Use custom Paths</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser des chemins particuliers</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="373"/>
         <source>Qt Libs dir</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire des bibliothèques de Qt</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="39"/>
@@ -230,7 +230,7 @@
     <message>
         <location filename="../appdetailspage.cpp" line="124"/>
         <source>Select Qt Libraries Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisir le répertoire des bibliothèques de Qt</translation>
     </message>
     <message>
         <location filename="../appdetailspage.cpp" line="133"/>
@@ -255,34 +255,34 @@
     <message>
         <location filename="../appwizard.cpp" line="137"/>
         <source>Can&apos;t build</source>
-        <translation type="unfinished"></translation>
+        <translation>Construction impossible</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="138"/>
         <source>Can&apos;t build for local platform for single presicion. Aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Construction impossible sur la plate-forme locale en simple précision. Annulée.</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="142"/>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Terminé</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="142"/>
         <source>App Creation finished!</source>
-        <translation type="unfinished"></translation>
+        <translation>Création de l&apos;app terminée !</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="271"/>
         <location filename="../appwizard.cpp" line="366"/>
         <source>Error</source>
-        <translation type="unfinished">Erreur</translation>
+        <translation>Erreur</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="271"/>
         <location filename="../appwizard.cpp" line="366"/>
         <source>Could not delete old application directory! Aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;effacer l&apos;ancien répertoire de l&apos;application. Annulé.</translation>
     </message>
     <message>
         <source>Destination directory exists. Please remove.</source>
@@ -1030,12 +1030,12 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.ui" line="1482"/>
         <source>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisir le répertoire du SDK de QuteApp pour construire des applications multi-plates-formes autonomes.</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1485"/>
         <source>QuteApp SDK Dir</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire du SDK de QuteApp</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1508"/>
@@ -1848,27 +1848,27 @@ Les fonctionnalités étendues de Python ne sont pas disponibles</translation>
     <message>
         <location filename="../qutecsound.cpp" line="870"/>
         <source>You can only create an app with a csd file.</source>
-        <translation type="unfinished"></translation>
+        <translation>On ne peut que créer une app avec un fichier csd.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="875"/>
         <source>Do you want to save before creating app?</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder avant de créer l&apos;app ?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="884"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="884"/>
         <source>You must save the csd before creating the App!</source>
-        <translation type="unfinished"></translation>
+        <translation>Il faut enregistrer le csd avant de créer l&apos;app !</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2208"/>
         <source>Shift+Alt+L</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+L</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2289"/>
@@ -2645,7 +2645,7 @@ Les fonctionnalités étendues de Python ne sont pas disponibles</translation>
     <message>
         <location filename="../qutecsound.cpp" line="2778"/>
         <source>Show/hide line number area</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer/cacher les numéros de ligne</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2935"/>
@@ -2857,7 +2857,7 @@ Les fonctionnalités étendues de Python ne sont pas disponibles</translation>
     <message>
         <location filename="../dockhelp.cpp" line="55"/>
         <source>Find:</source>
-        <translation type="unfinished"></translation>
+        <translation>Trouver :</translation>
     </message>
     <message>
         <location filename="../dockhelp.cpp" line="101"/>
@@ -2929,7 +2929,7 @@ Voulez-vous chercher depuis le début ?</translation>
     <message>
         <location filename="../documentview.cpp" line="672"/>
         <source>Show/hide line numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer/cacher les numéros</translation>
     </message>
 </context>
 <context>
@@ -2937,7 +2937,7 @@ Voulez-vous chercher depuis le début ?</translation>
     <message>
         <location filename="../configlists.cpp" line="131"/>
         <source>Virtual MIDI keyboard Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavier MIDI virtuel activé</translation>
     </message>
 </context>
 <context>
