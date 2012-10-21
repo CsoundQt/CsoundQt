@@ -208,6 +208,7 @@ private slots:
 	void splitView(bool split);
 	void openManualExample(QString fileName);
 	void openExternalBrowser(QUrl url = QUrl());
+	void openFLOSSManual();
 	void openQuickRef();
 	void resetPreferences();
 	void reportBug();

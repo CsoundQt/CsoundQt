@@ -1722,6 +1722,11 @@ void CsoundQt::openExternalBrowser(QUrl url)
 	}
 }
 
+void CsoundQt::openFLOSSManual()
+{
+	openExternalBrowser(QUrl("http://en.flossmanuals.net/csound/"));
+}
+
 void CsoundQt::openQuickRef()
 {
 	if (!m_options->pdfviewer.isEmpty()) {
@@ -3229,6 +3234,9 @@ void CsoundQt::createMenus()
 
 	//FLOSS Manual Examples
 	QMenu *flossmanMenu = examplesMenu->addMenu(tr("FLOSS Manual Examples"));
+
+	flossmanMenu->addAction(tr("Read FLOSS Manual Online"),this, SLOT(openFLOSSManual()));
+	flossmanMenu->addSeparator();
 
 	//01
 	flossman01Files.append(":/examples/FLOSS Manual Examples/01 Basics/01A01.csd");
